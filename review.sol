@@ -1,13 +1,20 @@
-pragma solidity ^0.4.11;
-
-
-
 /**
- * Dentacoin extended ERC20 token contract created on February the 14th, 2017 by Dentacoin B.V. in the Netherlands
+ * Dentacoin Review Platform contract created on July the xth, 2017 by Dentacoin B.V. in the Netherlands
  *
  * For terms and conditions visit https://dentacoin.com
  */
 
+
+
+pragma solidity ^0.4.11;
+
+
+
+ //Dentacoin token import
+ contract dcnToken {
+   function transfer(address, uint256) returns (bool) {  }
+   function balanceOf(address) constant returns (uint256) {  }
+ }
 
 
 contract owned {
