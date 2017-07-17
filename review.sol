@@ -1,4 +1,4 @@
-pragma solidity ^0.4.8;
+pragma solidity ^0.4.11;
 
 
 
@@ -61,7 +61,7 @@ contract SafeMath {
 }
 
 
-contract feedback is owned, SafeMath {
+contract Review is owned, SafeMath {
 
 /* Global variables */
   struct Feedback {
@@ -79,7 +79,7 @@ contract feedback is owned, SafeMath {
   }
   mapping (uint256 => Feedback) feedbackID;
 
-  function feedback() {
+  function Review() {
 
   }
 
