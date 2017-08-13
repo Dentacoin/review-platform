@@ -1,4 +1,6 @@
 /**
+
+Rinkeby TESTNET
  * Dentacoin Review Platform contract created on July the xth, 2017 by Dentacoin B.V. in the Netherlands
  *
  * For terms and conditions visit https://dentacoin.com
