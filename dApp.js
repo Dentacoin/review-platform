@@ -70,9 +70,6 @@ window.addEventListener('load', function() {
     var account = web3.eth.accounts[0];
 
 
-
-
-
     var accountInterval = setInterval(function() {
 
       //auto refresh account
@@ -153,25 +150,22 @@ window.addEventListener('load', function() {
             console.log("Transfer Details", dAddress, dId, content, submitSecret, inviteSecret);
 
             // submit function
-            token.transfer(account, amount, transactionObject, function(error, transactionHash){
+            contract.submitReview(dAddress, dId, content, submitSecret, inviteSecret, transactionObject, function(error, transactionHash){
                 if(error) {
-                    $("#transferTokenResponse").show();
-                    return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
+                    //return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
                 }
 
-                $("#transferTokenResponse").show();
                 //return $("#transferTokenResponse_body").html("Your token is being transfered with tx hash: " + String(transactionHash));
-                return $("#transferTokenResponse_body").html("Ok, pending transaction. Give it a minute and check for confirmation on <a href='https://etherscan.io/tx/" + String(transactionHash) + "' target='_blank'>Etherscan</a> ");
+                //return $("#transferTokenResponse_body").html("Ok, pending transaction. Give it a minute and check for confirmation on <a href='https://etherscan.io/tx/" + String(transactionHash) + "' target='_blank'>Etherscan</a> ");
             });
 
-            token.Transfer({}, function(error, result){
+            contract.SubmitEvent({}, function(error, result){
                 if(error) {
-                    $("#transferTokenResponse").show();
-                    return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
+                    //return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
                 }
 
                 $("#transferTokenResponse").show();
-                return $("#transferTokenResponse_body").html("Your Dentacoins have been transfered! " + String(result.transactionHash));
+                //return $("#transferTokenResponse_body").html("Your Dentacoins have been transfered! " + String(result.transactionHash));
             });
         });
     //- Transfer Dentacoins
