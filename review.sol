@@ -85,6 +85,7 @@ contract Review is owned, SafeMath {
   uint256 i = 0;
   uint256 public dcnAmount;
   uint256 public dcnAmountTrusted;
+  bytes32 public hashedSecret;
 
 
   struct Reviews {
@@ -101,13 +102,13 @@ contract Review is owned, SafeMath {
   mapping (address => bool) public dentistWhitelist;
 
   mapping (bytes32 => bool) public hashedSubmitSecrets;
-  mapping (bytes32 => bool) public inviteSecret;
+  mapping (bytes32 => bool) public hashedInviteSecret;
 
 
   function Review() {
-    tokenAddress = dcnToken(0x571280B600bBc3e2484F8AC80303F033b762048f);       // Define Dentacoin token address
+    tokenAddress = dcnToken(0x2Debb13BCF5526e0cF5E3A4E5049100E3F7c2AE5);       // Define Dentacoin token address Rinkeby
     // hash of secret "123" to submit reviews for testing !remove in main net version!
-    hashedSubmitSecrets[0xc2a35ca9e5d39261afa025579772e8bd1db37727ff795331ae2c4770cb90fe8e] = true;
+    hashedSubmitSecrets[0x64e604787cbf194841e7b68d7cd28786f6c9a0a3ab9f8b0a0e87cb4387ab0107] = true;
   }
 
 // Setter and Getter -----------------------------------------------------------
@@ -121,8 +122,8 @@ contract Review is owned, SafeMath {
     function setInviteSecret(bytes32 _secret) {
       require (dentistWhitelist[msg.sender]);
       require (_secret != "");
-      bytes32 public hashedSecret = keccak256(_secret);
-      inviteSecret[hashedSecret] = true;
+      hashedSecret = keccak256(_secret);
+      hashedInviteSecret[hashedSecret] = true;
     }
 
     function setDentistOnWhitelist (address _dentist) onlyOwner {
@@ -136,12 +137,12 @@ contract Review is owned, SafeMath {
 
   function () payable onlyOwner{}
 
-  function submitReview(address _to, uint256 _toID, bytes32 _content, bytes32 _secret) {
+  function submitReview(address _to, uint256 _toID, bytes32 _content, string _submitSecret, bytes32 _inviteSecret) {
     //Check if review comes from actual user of review.dentacoin.com
-    require (hashedSubmitSecrets[keccak256(_secret)]);
+    require (hashedSubmitSecrets[keccak256(_submitSecret)]);
 
     // Check if review contains any answers
-    require (_content != "");
+    //require (_content != "");
 
     //Check if Dentist is whitelisted
     require (dentistWhitelist[_to]);
@@ -157,8 +158,8 @@ contract Review is owned, SafeMath {
     reviewID[i].content = _content;
 
     //Check if review is trusted by comparing hashed Secret from invite email with db
-    bytes32 hashedSecret = keccak256(_secret);
-    if (inviteSecret[hashedSecret]) {
+    hashedSecret = keccak256(_inviteSecret);
+    if (hashedInviteSecret[hashedSecret]) {
       reviewID[i].trusted = true;
       tokenAddress.transfer(msg.sender, dcnAmountTrusted);
     } else {
