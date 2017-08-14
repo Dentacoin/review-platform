@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAMA,UAAW;EALT,eAAe,EAAE,OAAO;EACxB,mBAAmB,EAAE,GAAG;EACxB,iBAAiB,EAAE,SAAS;EAK5B,QAAQ,EAAE,QAAQ;EAClB,OAAO,EAAE,YAAY;EACrB,KAAK,EAAE,SAAa;EACpB,WAAW,EAAE,GAAG;EAChB,iBAAS;IACP,OAAO,EAAE,OAAO;EAElB,4BAAoB;IAClB,KAAK,EAAE,GAAG",
+"sources": ["../sass/flag-icon-base.scss"],
+"names": [],
+"file": "flag-icon-base.css"
+}

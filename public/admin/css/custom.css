@@ -1,0 +1,101 @@
+.panel.template .panel-body {
+    background: #d9e0e7;
+}
+
+.form-group.block-btns {
+    border-top: 1px solid white;
+    padding-top: 30px;
+}
+
+div.dataTables_wrapper div.dataTables_length select {
+	width: auto;
+}
+
+table.table .table-search {
+	width: 100%;
+	display: inline-block;
+}
+
+#image_thumb {
+	display: block;
+	margin-bottom: 10px;
+}
+
+.ck-holder {
+	background-size: cover;
+	background-position: 50% 50%;
+}
+
+.my-gallery .image {
+    width: 25%;
+    display: block;
+    margin-right: -10px;
+    padding: 10px;
+    float: left;
+}
+
+
+.my-gallery .image img {
+	width: 100%;
+}
+
+.my-gallery .image-inner {
+    position: relative;
+    background: #fff;
+    border-radius: 3px 3px 0 0;
+}
+.my-gallery .image-caption {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    background: url(../img/transparent/black-0.6.png);
+    background: rgba(0,0,0,.6);
+    color: #fff;
+    padding: 5px 15px;
+    margin: 0;
+}
+
+.my-gallery .image-info {
+    background: #fff;
+    padding: 15px;
+    -webkit-border-radius: 0 0 3px 3px;
+    -moz-border-radius: 0 0 3px 3px;
+    border-radius: 0 0 3px 3px;
+}
+
+.my-gallery .image-info .title {
+    margin: 0 0 10px;
+    line-height: 18px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.my-gallery .image-info .desc {
+    line-height: 16px;
+    font-size: 12px;
+    height: 48px;
+    overflow: hidden;
+}
+
+.cke_editable {
+    cursor: text;
+    width: 100%;
+}
+
+.cke_editable.p-none {
+    padding: 0px 10px;
+}
+.cke_editable.p-small {
+    padding: 20px 10px;
+}
+.cke_editable.p-medium {
+    padding: 40px 10px;
+}
+.cke_editable.p-big {
+    padding: 80px 10px;
+}
+.cke_editable.p-huge {
+    padding: 160px 10px;
+}

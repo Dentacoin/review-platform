@@ -1,0 +1,892 @@
+.clearfix:after {
+  content: '';
+  display: block;
+  clear: both;
+  width: 0px;
+  height: 0px; }
+
+/*
+    Header & Layout
+*/
+.phone-code-holder {
+  height: 36px;
+  line-height: 36px;
+  text-align: right;
+  padding-right: 0px; }
+  @media (max-width: 992px) {
+    .phone-code-holder {
+      text-align: left; } }
+
+.lang-dropdown {
+  display: none !important; }
+
+.btn-group-justified .btn {
+  width: 50%; }
+  @media (max-width: 600px) {
+    .btn-group-justified .btn {
+      width: 100%; } }
+  .btn-group-justified .btn label {
+    width: 100%;
+    margin: 0px;
+    padding: 10px 0px;
+    cursor: pointer; }
+    .btn-group-justified .btn label input {
+      display: none; }
+
+.location {
+  position: relative; }
+  .location .location-suggester {
+    position: absolute;
+    width: 100%;
+    background: white;
+    padding: 10px;
+    display: none;
+    z-index: 1;
+    border: 1px solid #ccd0d2;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
+    .location .location-suggester .loader {
+      display: none;
+      text-align: center; }
+    .location .location-suggester .results a {
+      display: block;
+      line-height: 30px;
+      padding: 0px 10px; }
+  .location.visible .location-suggester, .location.loading .location-suggester {
+    display: block; }
+  .location.loading .loader {
+    display: none; }
+
+i {
+  width: 20px;
+  text-align: center; }
+
+a {
+  color: #126585; }
+
+/*
+.panel-body {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+*/
+@media (max-width: 992px) {
+  .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {
+    padding-left: 0px;
+    padding-right: 0px; } }
+
+.alert {
+  clear: both; }
+
+.modal-body {
+  border-bottom: 1px solid #e5e5e5; }
+  .modal-body:last-child {
+    border-bottom: 0px; }
+  .modal-body h3 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 18px; }
+  .modal-body .alert {
+    margin-bottom: 0px; }
+
+.nav-pills li:hover a,
+.nav-pills li:hover a:hover,
+.nav-pills li.active a,
+.nav-pills li.active a:hover {
+  background-color: #126585;
+  color: white; }
+
+body {
+  color: black; }
+
+.navbar-brand {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-weight: bold;
+  line-height: 40px;
+  font-size: 20px;
+  margin-right: 20px; }
+  @media (min-width: 768px) and (max-width: 991px) {
+    .navbar-brand {
+      font-size: 0px; } }
+  @media (max-width: 420px) {
+    .navbar-brand {
+      font-size: 0px; } }
+  .navbar-brand img {
+    height: 40px;
+    display: inline-block;
+    margin-right: 10px; }
+
+.header,
+.navbar,
+.navbar-collapse {
+  background: white; }
+
+.navbar {
+  border-radius: 0px;
+  margin-bottom: 0px;
+  border: none;
+  box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.25); }
+  .navbar .header-avatar {
+    width: 36px;
+    height: auto;
+    border-radius: 50%;
+    margin-right: 5px; }
+
+.navbar-fixed-top .navbar-collapse {
+  max-height: none; }
+
+.navbar-default .navbar-nav li a {
+  line-height: 50px;
+  padding: 0px 20px;
+  border-bottom: 5px solid white;
+  height: 50px;
+  font-size: 16px;
+  font-weight: bold; }
+  .navbar-default .navbar-nav li a:hover {
+    color: #126585; }
+.navbar-default .navbar-nav li.active a {
+  color: #126585;
+  border-color: #126585;
+  background: white;
+  box-shadow: none; }
+  .navbar-default .navbar-nav li.active a:hover {
+    background-color: white; }
+.navbar-default .navbar-nav .open a {
+  background: white;
+  box-shadow: none; }
+  .navbar-default .navbar-nav .open a:hover, .navbar-default .navbar-nav .open a:focus {
+    background: white;
+    box-shadow: none; }
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a {
+    background: none; } }
+
+.footer {
+  background: white;
+  box-shadow: 0px -3px 5px 0px rgba(0, 0, 0, 0.25);
+  padding: 20px 0px; }
+  .footer .logo-col {
+    text-align: center;
+    margin-bottom: 20px; }
+    .footer .logo-col .logo {
+      display: block; }
+      .footer .logo-col .logo img {
+        width: auto;
+        height: auto; }
+  .footer .icons-col {
+    text-align: center; }
+    @media (max-width: 992px) {
+      .footer .icons-col .col-md-1 {
+        width: 25%;
+        float: left;
+        padding: 15px; } }
+    @media (max-width: 420px) {
+      .footer .icons-col .col-md-1 {
+        width: 50%; } }
+    .footer .icons-col .col-md-1 a {
+      display: inline-block; }
+      .footer .icons-col .col-md-1 a img {
+        width: 80%;
+        height: auto; }
+  .footer .form-group {
+    clear: both; }
+  .footer .col-links {
+    text-align: center;
+    padding: 20px 0px; }
+    .footer .col-links a {
+      color: #126585;
+      display: inline-block;
+      padding: 0px 20px;
+      border-right: 1px solid #126585; }
+      .footer .col-links a:last-child {
+        border-right: none; }
+      @media (max-width: 767px) {
+        .footer .col-links a {
+          display: block;
+          border: none; } }
+  .footer .col-copyrights {
+    text-align: center;
+    color: gray; }
+
+.site-content {
+  margin-top: 50px;
+  margin-bottom: 50px; }
+
+.list-group-item.active,
+.list-group-item.active:focus,
+.list-group-item.active:hover,
+.btn-primary {
+  color: #fff;
+  background-color: #126585;
+  border-color: #126585; }
+  .list-group-item.active:hover,
+  .list-group-item.active:focus:hover,
+  .list-group-item.active:hover:hover,
+  .btn-primary:hover {
+    background-color: #2a88bd;
+    border-color: #2a88bd; }
+
+/*
+    Pages
+*/
+/*
+    Logins
+*/
+.panel {
+  box-shadow: 0px 0px 5px 0px rgba(18, 101, 133, 0.5);
+  background: white;
+  margin-top: 50px;
+  border-radius: 5px;
+  border: none; }
+  .panel .panel-heading {
+    box-shadow: 0px 0px 5px 0px rgba(18, 101, 133, 0.5);
+    border: none;
+    background-image: none;
+    background: #126585;
+    color: white; }
+    .panel .panel-heading.subheading {
+      border-radius: 0px; }
+  .panel .panel-title {
+    font-size: 20px; }
+  .panel .divider {
+    margin-top: 10px;
+    padding-top: 20px;
+    border-top: 2px solid #126585; }
+  .panel ul {
+    margin-bottom: 0px; }
+    .panel ul li.hidden {
+      display: none; }
+
+.page-add h1,
+.page-login h1,
+.page-register h1,
+.page-forgot-password h1,
+.page-recover h1 {
+  text-align: center;
+  border-bottom: 2px solid #126585;
+  padding-bottom: 10px;
+  margin: 0px 0px 20px 0px;
+  color: #126585; }
+@media (max-width: 992px) {
+  .page-add .form-group,
+  .page-login .form-group,
+  .page-register .form-group,
+  .page-forgot-password .form-group,
+  .page-recover .form-group {
+    padding-left: 15px;
+    padding-right: 15px; } }
+.page-add .form-group > div,
+.page-login .form-group > div,
+.page-register .form-group > div,
+.page-forgot-password .form-group > div,
+.page-recover .form-group > div {
+  padding-bottom: 10px; }
+
+@media (max-width: 992px) {
+  .modal-dialog .form-group,
+  .page-profile .form-group {
+    padding-left: 15px;
+    padding-right: 15px; } }
+
+/*
+    Profile
+*/
+.page-profile .site-content .container {
+  padding-top: 50px; }
+  .page-profile .site-content .container h1,
+  .page-profile .site-content .container h2 {
+    margin-top: 0px; }
+  .page-profile .site-content .container h1 {
+    color: white;
+    margin: 0px;
+    padding: 0px;
+    text-align: left; }
+  .page-profile .site-content .container .panel {
+    margin-top: 0px; }
+    .page-profile .site-content .container .panel .panel-body p:last-child {
+      margin-bottom: 0px; }
+    .page-profile .site-content .container .panel .panel-body .alert:last-child {
+      margin-bottom: 0px; }
+  .page-profile .site-content .container .form-control-checkboxes {
+    border: none;
+    box-shadow: none;
+    margin: 0px; }
+  .page-profile .site-content .container .gallery-pic {
+    padding-top: 100%;
+    position: relative;
+    background: #545454;
+    color: white;
+    padding: 100% 0 0 0; }
+    .page-profile .site-content .container .gallery-pic input {
+      display: none; }
+    .page-profile .site-content .container .gallery-pic img {
+      width: 100%;
+      height: auto;
+      position: absolute;
+      left: 0;
+      top: 0; }
+    .page-profile .site-content .container .gallery-pic .loader,
+    .page-profile .site-content .container .gallery-pic .uploader {
+      width: 100%;
+      position: absolute;
+      left: 0;
+      position: absolute;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+      display: none;
+      text-align: center;
+      cursor: pointer; }
+      .page-profile .site-content .container .gallery-pic .loader i,
+      .page-profile .site-content .container .gallery-pic .uploader i {
+        width: auto;
+        font-size: 64px;
+        display: block;
+        margin: 0 auto 10px auto; }
+    .page-profile .site-content .container .gallery-pic .loader {
+      display: none; }
+    .page-profile .site-content .container .gallery-pic .editor,
+    .page-profile .site-content .container .gallery-pic .deleter {
+      position: absolute;
+      z-index: 3;
+      top: 5px;
+      right: 5px;
+      border-radius: 50%;
+      height: 30px;
+      line-height: 30px;
+      width: 30px;
+      background: #bb0000;
+      display: none;
+      color: white;
+      text-align: center; }
+    .page-profile .site-content .container .gallery-pic .editor {
+      right: 45px;
+      background: #126585; }
+    .page-profile .site-content .container .gallery-pic:hover .editor,
+    .page-profile .site-content .container .gallery-pic:hover .deleter {
+      display: block; }
+      @media (max-width: 991px) {
+        .page-profile .site-content .container .gallery-pic:hover .editor,
+        .page-profile .site-content .container .gallery-pic:hover .deleter {
+          display: none; } }
+    .page-profile .site-content .container .gallery-pic.empty img,
+    .page-profile .site-content .container .gallery-pic.empty .editor,
+    .page-profile .site-content .container .gallery-pic.empty .deleter {
+      display: none; }
+    .page-profile .site-content .container .gallery-pic.empty .uploader {
+      display: block; }
+    .page-profile .site-content .container .gallery-pic.loading img,
+    .page-profile .site-content .container .gallery-pic.loading .deleter,
+    .page-profile .site-content .container .gallery-pic.loading .editor,
+    .page-profile .site-content .container .gallery-pic.loading .uploader {
+      display: none; }
+    .page-profile .site-content .container .gallery-pic.loading .loader {
+      display: block; }
+    .page-profile .site-content .container .gallery-pic .mobile-btns {
+      display: none;
+      background: white;
+      padding: 10px; }
+      @media (max-width: 991px) {
+        .page-profile .site-content .container .gallery-pic .mobile-btns {
+          display: block; } }
+    @media (max-width: 991px) {
+      .page-profile .site-content .container .gallery-pic.empty .mobile-btns, .page-profile .site-content .container .gallery-pic.loading .mobile-btns {
+        display: none; } }
+  .page-profile .site-content .container .avatar-add {
+    position: relative; }
+    .page-profile .site-content .container .avatar-add label.user-avatar {
+      width: 100%;
+      padding-top: 100%;
+      background: #545454;
+      position: relative;
+      cursor: pointer; }
+      .page-profile .site-content .container .avatar-add label.user-avatar input[type="file"] {
+        display: none; }
+      .page-profile .site-content .container .avatar-add label.user-avatar .label,
+      .page-profile .site-content .container .avatar-add label.user-avatar .loader {
+        position: absolute;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        color: white;
+        text-align: center;
+        width: 100%;
+        font-size: 16px;
+        white-space: initial; }
+      .page-profile .site-content .container .avatar-add label.user-avatar .loader {
+        display: none; }
+        .page-profile .site-content .container .avatar-add label.user-avatar .loader i {
+          width: auto;
+          margin: 0 auto 10px auto;
+          display: block; }
+      .page-profile .site-content .container .avatar-add label.user-avatar img {
+        width: 100%;
+        height: auto;
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1; }
+    .page-profile .site-content .container .avatar-add .changer,
+    .page-profile .site-content .container .avatar-add a.deleter {
+      display: none;
+      position: absolute;
+      bottom: 20px;
+      z-index: 1;
+      width: 80%;
+      left: 10%; }
+      @media (max-width: 991px) {
+        .page-profile .site-content .container .avatar-add .changer,
+        .page-profile .site-content .container .avatar-add a.deleter {
+          display: block;
+          position: static;
+          width: 100%;
+          margin-bottom: 10px; } }
+    .page-profile .site-content .container .avatar-add .changer {
+      bottom: 65px; }
+    .page-profile .site-content .container .avatar-add.loading label.user-avatar .label {
+      display: none; }
+    .page-profile .site-content .container .avatar-add.loading label.user-avatar .loader {
+      display: block; }
+    .page-profile .site-content .container .avatar-add.has-image label.user-avatar .label {
+      display: none; }
+    .page-profile .site-content .container .avatar-add.has-image label.user-avatar .loader {
+      display: none; }
+    .page-profile .site-content .container .avatar-add.has-image label.user-avatar img {
+      display: block; }
+    .page-profile .site-content .container .avatar-add.has-image:hover .changer,
+    .page-profile .site-content .container .avatar-add.has-image:hover a.deleter {
+      display: block; }
+
+#write-review-form .rating {
+  color: red; }
+
+/*
+    Stars / ratings
+*/
+.ratings {
+  margin-top: 10px; }
+  .ratings .stars {
+    width: 222px;
+    height: 30px;
+    display: inline-block;
+    background: url("../img/star-empty.png") 50% 50% no-repeat; }
+    .ratings .stars .bar {
+      background: url("../img/star-full.png") 0% 50% no-repeat;
+      height: 30px; }
+  .ratings .rating {
+    margin-bottom: 5px; }
+
+/*
+    User photos & partners
+*/
+.avatar {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 10px; }
+  @media (max-width: 600px) {
+    .avatar {
+      width: 100%;
+      display: block;
+      padding-right: 0px;
+      padding-left: 0px; } }
+  .avatar img {
+    width: 100%;
+    border-radius: 5px; }
+
+.partner {
+  font-size: 16px;
+  position: absolute;
+  top: 15px; }
+  @media (max-width: 600px) {
+    .partner {
+      position: static;
+      margin-bottom: 10px;
+      display: block; } }
+
+/*
+    Search
+*/
+.page-dentists .form-group {
+  margin-left: 0px;
+  margin-right: 0px; }
+.page-dentists .main-panel-body .panel {
+  position: relative;
+  margin: 0px 0px 20px 0px; }
+  .page-dentists .main-panel-body .panel .dentist a .media-left img {
+    width: 150px; }
+    @media (max-width: 600px) {
+      .page-dentists .main-panel-body .panel .dentist a .media-left img {
+        width: 100%; } }
+  .page-dentists .main-panel-body .panel .dentist a:hover {
+    text-decoration: none; }
+  .page-dentists .main-panel-body .panel:hover {
+    background: rgba(18, 101, 133, 0.1); }
+
+/*
+    Dentist profile
+*/
+.page-profile.sp-reviews .btn-claim,
+.page-dentist .btn-claim {
+  margin-top: -10px;
+  margin-bottom: 10px; }
+.page-profile.sp-reviews .alert-success,
+.page-dentist .alert-success {
+  margin: 20px 15px -20px 15px; }
+.page-profile.sp-reviews .label-partner,
+.page-dentist .label-partner {
+  margin: 0px 0px 10px 0px;
+  border-radius: 5px; }
+.page-profile.sp-reviews .map,
+.page-dentist .map {
+  width: 100%;
+  padding-top: 100%;
+  margin-bottom: 10px; }
+.page-profile.sp-reviews .rating-panel,
+.page-dentist .rating-panel {
+  padding-bottom: 0px; }
+  .page-profile.sp-reviews .rating-panel:last-child,
+  .page-dentist .rating-panel:last-child {
+    padding-bottom: 15px; }
+  .page-profile.sp-reviews .rating-panel h2,
+  .page-dentist .rating-panel h2 {
+    font-size: 24px;
+    color: #126585;
+    width: 50%;
+    text-align: center;
+    padding-bottom: 5px;
+    margin: 0 auto 10px auto;
+    border-bottom: 2px solid #126585; }
+  @media (max-width: 992px) {
+    .page-profile.sp-reviews .rating-panel .aggregation .rating-line:first-child,
+    .page-dentist .rating-panel .aggregation .rating-line:first-child {
+      border-top: 1px solid #126585;
+      padding-top: 15px; } }
+  @media (max-width: 992px) {
+    .page-profile.sp-reviews .rating-panel .rating-line,
+    .page-dentist .rating-panel .rating-line {
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #126585; }
+      .page-profile.sp-reviews .rating-panel .rating-line.pre-aggregation, .page-profile.sp-reviews .rating-panel .rating-line:last-child,
+      .page-dentist .rating-panel .rating-line.pre-aggregation,
+      .page-dentist .rating-panel .rating-line:last-child {
+        border-bottom: 0px;
+        padding-top: 10px; } }
+  .page-profile.sp-reviews .rating-panel .rating-line .rating-left,
+  .page-profile.sp-reviews .rating-panel .rating-line .rating-right,
+  .page-dentist .rating-panel .rating-line .rating-left,
+  .page-dentist .rating-panel .rating-line .rating-right {
+    float: left;
+    font-size: 16px;
+    width: 286px;
+    padding-top: 3px; }
+    @media (max-width: 1200px) {
+      .page-profile.sp-reviews .rating-panel .rating-line .rating-left,
+      .page-profile.sp-reviews .rating-panel .rating-line .rating-right,
+      .page-dentist .rating-panel .rating-line .rating-left,
+      .page-dentist .rating-panel .rating-line .rating-right {
+        width: 211px; } }
+    @media (max-width: 992px) {
+      .page-profile.sp-reviews .rating-panel .rating-line .rating-left,
+      .page-profile.sp-reviews .rating-panel .rating-line .rating-right,
+      .page-dentist .rating-panel .rating-line .rating-left,
+      .page-dentist .rating-panel .rating-line .rating-right {
+        width: 50%;
+        margin-bottom: 10px; } }
+  .page-profile.sp-reviews .rating-panel .rating-line .rating-left,
+  .page-dentist .rating-panel .rating-line .rating-left {
+    padding-right: 10px; }
+    @media (max-width: 992px) {
+      .page-profile.sp-reviews .rating-panel .rating-line .rating-left,
+      .page-dentist .rating-panel .rating-line .rating-left {
+        border-right: 1px solid #126585; } }
+  .page-profile.sp-reviews .rating-panel .rating-line .rating-right,
+  .page-dentist .rating-panel .rating-line .rating-right {
+    padding-left: 10px;
+    text-align: right; }
+  .page-profile.sp-reviews .rating-panel .rating-line .ratings,
+  .page-dentist .rating-panel .rating-line .ratings {
+    margin: 0px;
+    float: left; }
+    @media (max-width: 992px) {
+      .page-profile.sp-reviews .rating-panel .rating-line .ratings,
+      .page-dentist .rating-panel .rating-line .ratings {
+        margin: 0px auto;
+        float: none;
+        clear: both;
+        text-align: center; } }
+    .page-profile.sp-reviews .rating-panel .rating-line .ratings .rating,
+    .page-dentist .rating-panel .rating-line .ratings .rating {
+      margin: 5px 0px 0px 0px;
+      text-align: center; }
+.page-profile.sp-reviews .user-login-upvote h3,
+.page-profile.sp-reviews #review-form h3,
+.page-dentist .user-login-upvote h3,
+.page-dentist #review-form h3 {
+  margin-top: 0px;
+  font-size: 18px; }
+  .page-profile.sp-reviews .user-login-upvote h3 span,
+  .page-profile.sp-reviews #review-form h3 span,
+  .page-dentist .user-login-upvote h3 span,
+  .page-dentist #review-form h3 span {
+    color: #126585; }
+.page-profile.sp-reviews .user-login-upvote .ratings,
+.page-profile.sp-reviews #review-form .ratings,
+.page-dentist .user-login-upvote .ratings,
+.page-dentist #review-form .ratings {
+  cursor: pointer; }
+.page-profile.sp-reviews .review,
+.page-dentist .review {
+  position: relative;
+  box-shadow: 0px 5px 5px -5px rgba(18, 101, 133, 0.5); }
+  .page-profile.sp-reviews .review:last-child,
+  .page-dentist .review:last-child {
+    box-shadow: none; }
+  @media (max-width: 992px) {
+    .page-profile.sp-reviews .review .media-left,
+    .page-dentist .review .media-left {
+      width: 100%;
+      padding-right: 0px;
+      display: block;
+      margin-bottom: 10px; } }
+  .page-profile.sp-reviews .review .media-left img,
+  .page-dentist .review .media-left img {
+    width: 120px; }
+    @media (max-width: 992px) {
+      .page-profile.sp-reviews .review .media-left img,
+      .page-dentist .review .media-left img {
+        width: 100%; } }
+  .page-profile.sp-reviews .review .media-left .label,
+  .page-dentist .review .media-left .label {
+    display: block;
+    margin-top: 5px;
+    padding: 5px 0px; }
+  .page-profile.sp-reviews .review .media-body p,
+  .page-dentist .review .media-body p {
+    margin-bottom: 5px; }
+  .page-profile.sp-reviews .review .useful,
+  .page-dentist .review .useful {
+    position: absolute;
+    top: 15px; }
+    @media (max-width: 992px) {
+      .page-profile.sp-reviews .review .useful,
+      .page-dentist .review .useful {
+        position: static;
+        display: block;
+        margin-bottom: 10px; } }
+  .page-profile.sp-reviews .review .ratings,
+  .page-dentist .review .ratings {
+    text-align: center; }
+    .page-profile.sp-reviews .review .ratings .rating,
+    .page-dentist .review .ratings .rating {
+      text-align: left; }
+  .page-profile.sp-reviews .review .sharer,
+  .page-dentist .review .sharer {
+    position: absolute;
+    bottom: 15px;
+    text-align: right; }
+    @media (max-width: 992px) {
+      .page-profile.sp-reviews .review .sharer,
+      .page-dentist .review .sharer {
+        position: static;
+        display: block;
+        text-align: center; } }
+    .page-profile.sp-reviews .review .sharer span,
+    .page-dentist .review .sharer span {
+      display: block;
+      margin-bottom: 5px; }
+    .page-profile.sp-reviews .review .sharer i,
+    .page-dentist .review .sharer i {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      border: 1px solid #126585;
+      text-align: center;
+      border-radius: 50%;
+      margin-left: 5px; }
+      .page-profile.sp-reviews .review .sharer i:hover,
+      .page-dentist .review .sharer i:hover {
+        text-decoration: none;
+        background: #126585;
+        color: white; }
+  .page-profile.sp-reviews .review .rating-panel,
+  .page-dentist .review .rating-panel {
+    padding-left: 0px;
+    padding-right: 0px; }
+    .page-profile.sp-reviews .review .rating-panel .rating-left,
+    .page-profile.sp-reviews .review .rating-panel .rating-right,
+    .page-dentist .review .rating-panel .rating-left,
+    .page-dentist .review .rating-panel .rating-right {
+      width: 271px; }
+      @media (max-width: 1200px) {
+        .page-profile.sp-reviews .review .rating-panel .rating-left,
+        .page-profile.sp-reviews .review .rating-panel .rating-right,
+        .page-dentist .review .rating-panel .rating-left,
+        .page-dentist .review .rating-panel .rating-right {
+          width: 196px; } }
+      @media (max-width: 992px) {
+        .page-profile.sp-reviews .review .rating-panel .rating-left,
+        .page-profile.sp-reviews .review .rating-panel .rating-right,
+        .page-dentist .review .rating-panel .rating-left,
+        .page-dentist .review .rating-panel .rating-right {
+          width: 50%;
+          margin-bottom: 10px; } }
+  .page-profile.sp-reviews .review .form-group:last-child,
+  .page-dentist .review .form-group:last-child {
+    margin-bottom: 0px; }
+.page-profile.sp-reviews .reviews-panel .panel,
+.page-dentist .reviews-panel .panel {
+  margin-bottom: 20px;
+  margin-top: 0px; }
+  .page-profile.sp-reviews .reviews-panel .panel:last-child,
+  .page-dentist .reviews-panel .panel:last-child {
+    margin-bottom: 0px; }
+
+/*
+    Index
+*/
+.page-index .jumbotron {
+  background: url("../img/home-background.jpg") 50% 50% no-repeat;
+  background-size: cover;
+  min-height: 600px;
+  position: relative;
+  margin-bottom: 0px; }
+  .page-index .jumbotron .search-bar {
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0px 0px 20px 0px; }
+    .page-index .jumbotron .search-bar h1 {
+      color: white;
+      text-align: center;
+      padding: 0px 0px 20px 0px;
+      font-size: 43px; }
+    @media (max-width: 992px) {
+      .page-index .jumbotron .search-bar .col-md-3,
+      .page-index .jumbotron .search-bar .col-md-5 {
+        padding-top: 10px;
+        padding-bottom: 10px; } }
+.page-index .container.reasons {
+  padding-top: 40px;
+  padding-bottom: 40px; }
+  .page-index .container.reasons h2 {
+    font-size: 28px;
+    color: #126585;
+    text-align: center;
+    padding-bottom: 10px;
+    margin: 0 auto 20px auto; }
+  .page-index .container.reasons h3 {
+    border-bottom: 2px solid #126585;
+    padding-bottom: 10px; }
+  .page-index .container.reasons h4 {
+    display: inline;
+    font-weight: bold;
+    color: #126585; }
+  .page-index .container.reasons .media-left {
+    width: 74px;
+    text-align: center;
+    display: block;
+    float: left; }
+    .page-index .container.reasons .media-left i {
+      color: #126585;
+      width: 64px;
+      font-size: 48px; }
+
+.page-page .page-image {
+  width: 100%;
+  height: auto; }
+.page-page h1 {
+  text-align: center; }
+.page-page .p-small {
+  padding-top: 20px;
+  padding-bottom: 20px; }
+.page-page .p-medium {
+  padding-top: 40px;
+  padding-bottom: 40px; }
+.page-page .p-big {
+  padding-top: 80px;
+  padding-bottom: 80px; }
+.page-page .p-huge {
+  padding-top: 160px;
+  padding-bottom: 160px; }
+
+/*
+    rtl
+*/
+.rtl .ratings .stars .bar {
+  background-position: 100% 50%; }
+.rtl .partner {
+  left: 15px; }
+.rtl .navbar-header,
+.rtl .navbar-nav,
+.rtl .navbar-nav > li,
+.rtl .col-md-1, .rtl .col-md-2, .rtl .col-md-3, .rtl .col-md-4, .rtl .col-md-5, .rtl .col-md-6, .rtl .col-md-7, .rtl .col-md-8, .rtl .col-md-9, .rtl .col-md-10, .rtl .col-md-11, .rtl .col-md-12 {
+  float: right; }
+@media (max-width: 992px) {
+  .rtl .col-md-1, .rtl .col-md-2, .rtl .col-md-3, .rtl .col-md-4, .rtl .col-md-5, .rtl .col-md-6, .rtl .col-md-7, .rtl .col-md-8, .rtl .col-md-9, .rtl .col-md-10, .rtl .col-md-11, .rtl .col-md-12 {
+    float: none; } }
+.rtl .navbar-brand {
+  margin-left: 20px !important;
+  margin-right: 0px !important; }
+  @media (max-width: 992px) {
+    .rtl .navbar-brand {
+      margin-left: 0px !important; } }
+.rtl .navbar-right {
+  float: left !important; }
+.rtl.page-dentist .rating-panel .rating-line .rating-left {
+  text-align: right;
+  float: right; }
+  @media (max-width: 992px) {
+    .rtl.page-dentist .rating-panel .rating-line .rating-left {
+      border: none; } }
+.rtl.page-dentist .rating-panel .rating-line .rating-right {
+  text-align: left;
+  float: left; }
+  @media (max-width: 992px) {
+    .rtl.page-dentist .rating-panel .rating-line .rating-right {
+      border-right: 1px solid #126585; } }
+.rtl.page-dentist .rating-panel .rating-line .ratings {
+  float: right; }
+  @media (max-width: 992px) {
+    .rtl.page-dentist .rating-panel .rating-line .ratings {
+      float: none; } }
+.rtl.page-dentist .review .sharer,
+.rtl.page-dentist .review .useful {
+  left: 15px; }
+.rtl.page-dentist .review .sharer {
+  text-align: left; }
+.rtl.page-index .container.reasons .media-left {
+  float: right; }
+.rtl.page-index .container.reasons .media-right {
+  float: left; }
+.rtl .close {
+  float: left; }
+.rtl .form-horizontal .control-label {
+  text-align: left; }
+@media (max-width: 767px) {
+  .rtl .navbar-fixed-top .navbar-collapse {
+    float: none;
+    clear: both; }
+  .rtl .navbar-fixed-top .navbar-nav {
+    float: none !important; }
+  .rtl .navbar-fixed-top .nav > li {
+    float: none; }
+    .rtl .navbar-fixed-top .nav > li > a {
+      float: none; } }
+.rtl .navbar-nav .open .dropdown-menu {
+  text-align: right; }
+
+.ltr .partner {
+  right: 15px; }
+.ltr.page-profile.sp-reviews .review .sharer,
+.ltr.page-profile.sp-reviews .review .useful, .ltr.page-dentist .review .sharer,
+.ltr.page-dentist .review .useful {
+  right: 15px; }

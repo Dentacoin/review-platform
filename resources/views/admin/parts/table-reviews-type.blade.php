@@ -1,0 +1,1 @@
+{{ $item->verified ? trans('admin.review-type.verified') : trans('admin.review-type.unverified') }}
