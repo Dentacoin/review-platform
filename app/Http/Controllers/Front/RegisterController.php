@@ -97,6 +97,8 @@ class RegisterController extends FrontController
 
                 $user->save();
 
+                $user->sendTemplate( $user->is_dentist ? 3 : 4 );
+
                 Auth::login($user, true);
 
                 Request::session()->flash('success-message', trans('front.page.registration.profile-confirmed'));

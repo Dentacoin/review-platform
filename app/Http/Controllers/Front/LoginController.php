@@ -162,7 +162,7 @@ class LoginController extends FrontController
                 }
             }
 
-            $newuser->sendTemplate( $newuser->is_dentist ? 1 : 2 );
+            $newuser->sendTemplate( $newuser->is_dentist ? 3 : 4 );
 
             Auth::login($newuser, true);
 

@@ -57,7 +57,7 @@
                             <div class="form-group">
                                 <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.edit.content') }}</label>
                                 <div class="col-md-10">
-                                    {{ Form::textarea('content_'.$langkey, !empty($item) ? stripslashes($item->{'content:'.$langkey}) : null, array('maxlength' => 256, 'class' => 'form-control')) }}
+                                    {{ Form::textarea('content_'.$langkey, !empty($item) ? stripslashes($item->{'content:'.$langkey}) : null, array('class' => 'form-control')) }}
                                 </div>
                             </div>
                         </fieldset>
