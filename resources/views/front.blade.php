@@ -99,7 +99,7 @@
 						        <ul class="dropdown-menu">
 									@if($user)
 								    	<li  {!! $current_page=='profile' && $current_subpage=='home' ? 'class="active"' : '' !!} >
-				                            <a href="{{ getLangUrl('profile') }}">
+				                            <a href="{{ $user->getLink() }}">
 				                            	{{ trans('front.common.profile') }}
 				                            </a>
 								    	</li>

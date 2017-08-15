@@ -120,7 +120,8 @@ class ProfileController extends FrontController
             'no_reviews' => !$this->user->is_dentist && $this->user->reviews_out->isEmpty(),
             'no_address' => $this->user->is_dentist && (!$this->user->city_id || !$this->user->address),
             'js' => [
-                'profile.js'
+                'profile.js',
+                'dApp.js'
             ]
 		]);
     }
@@ -363,7 +364,8 @@ class ProfileController extends FrontController
 		return $this->ShowView('profile-wallet', [
 			'menu' => $this->user->is_dentist == 1 ? $this->menu_dentist : $this->menu_patient,
             'js' => [
-                'profile.js'
+                'profile.js',
+                'dApp.js'
             ],
 		]);
     }

@@ -63,6 +63,7 @@ $(document).ready(function(){
         }
         ajax_is_running = true;
 
+        r = confirm(areYouSure);
         if(r) {
             $.ajax( {
                 url: $(this).attr('href'),
@@ -108,6 +109,7 @@ $(document).ready(function(){
 
         return false;
     } );
+
 
 });
 

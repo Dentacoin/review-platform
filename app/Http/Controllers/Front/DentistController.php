@@ -171,7 +171,8 @@ class DentistController extends FrontController
             ]),
             'canonical' => $item->getLink().($review_id ? '/'.$review_id : ''),
             'js' => [
-                'dentist.js'
+                'dentist.js',
+                'dApp.js'
             ],
         ]);
 
