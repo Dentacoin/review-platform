@@ -181,7 +181,7 @@ class UsersController extends AdminController
 
             if(Request::isMethod('post')) {
             	foreach ($this->fields as $key => $value) {
-            		if(empty($value['disabled']) && $this->request->has($key) && $value['type']!='avatar') {
+            		if(empty($value['disabled']) && $value['type']!='avatar' && $key!='category_id') {
                 		$item->$key = $this->request->input($key);
             		}
             	}

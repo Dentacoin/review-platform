@@ -6,6 +6,6 @@ return array(
   'port' => 587,
   'from' => array('address' => 'hello@dentacoin.com', 'name' => 'DentaCoin'),
   'encryption' => 'tls',
-  'username' => 'dentacoin',
-  'password' => 'dcn2017Dentacoin$',
+  'username' => env('SENDGRID_USERNAME'),
+  'password' => env('SENDGRID_PASSWORD'),
 );
