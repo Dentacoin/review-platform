@@ -1,5 +1,5 @@
 /*
-Reviews dApp for dentist and patient wallet
+Reviews dApp for dentist / patient wallet / submit / admin
 
 */
 
@@ -19,7 +19,11 @@ window.addEventListener('load', function() {
   }
 
 
-
+  // setup transaction object
+  var transactionObject = {
+      from: web3.eth.accounts[0],
+      gas: 100000
+  };
 
 // Dentacoin token integration -------------------------------------------------
 
@@ -43,10 +47,10 @@ window.addEventListener('load', function() {
 
 // review.sol integration ------------------------------------------------------
 
-  const contractAdr = ""; //Rinkeby Testnet
+  const contractAdr = "0x1841381F27789fb10662f633025b875C0c77Ffcb"; //Rinkeby Testnet
 
 
-  const abi = [ { "constant": true, "inputs": [], "name": "lockTime", "outputs": [ { "name": "", "type": "uint256", "value": "600" } ], "payable": false, "type": "function" }, { "constant": false, "inputs": [], "name": "withdraw", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "startTime", "outputs": [ { "name": "", "type": "uint256", "value": "1502497439" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0x8196cd5fe0eec770de925be7a6d0fc79d06ef891" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "tokenAddress", "outputs": [ { "name": "", "type": "address", "value": "0x2debb13bcf5526e0cf5e3a4e5049100e3f7c2ae5" } ], "payable": false, "type": "function" }, { "inputs": [], "payable": false, "type": "constructor" }, { "payable": true, "type": "fallback" } ];
+  const abi = [ { "constant": true, "inputs": [], "name": "count", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "hashedInviteSecret", "outputs": [ { "name": "", "type": "bool", "value": false } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "hashedInSecret", "outputs": [ { "name": "", "type": "bytes32", "value": "0x0000000000000000000000000000000000000000000000000000000000000000" } ], "payable": false, "type": "function" }, { "constant": false, "inputs": [ { "name": "_dentist", "type": "address" } ], "name": "setDentistOnWhitelist", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "dcnAmount", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "hashedSubmitSecrets", "outputs": [ { "name": "", "type": "bytes32", "value": "0x" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "dcnAmountTrusted", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0x8196cd5fe0eec770de925be7a6d0fc79d06ef891" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "dentistWhitelist", "outputs": [ { "name": "", "type": "bool", "value": false } ], "payable": false, "type": "function" }, { "constant": false, "inputs": [ { "name": "_arrayOfHashedSecrets", "type": "bytes32[]" } ], "name": "addSubmitSecrets", "outputs": [], "payable": false, "type": "function" }, { "constant": false, "inputs": [ { "name": "_secret", "type": "bytes32" } ], "name": "setInviteSecret", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "tokenAddress", "outputs": [ { "name": "", "type": "address", "value": "0x2debb13bcf5526e0cf5e3a4e5049100e3f7c2ae5" } ], "payable": false, "type": "function" }, { "constant": false, "inputs": [ { "name": "_to", "type": "address" }, { "name": "_toID", "type": "uint256" }, { "name": "_content", "type": "bytes32" }, { "name": "_submitSecret", "type": "bytes16" }, { "name": "_inviteSecret", "type": "bytes32" } ], "name": "submitReview", "outputs": [ { "name": "success", "type": "bool" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "uint256" } ], "name": "reviewID", "outputs": [ { "name": "timeStamp", "type": "uint256", "value": "0" }, { "name": "writtenByAddress", "type": "address", "value": "0x0000000000000000000000000000000000000000" }, { "name": "writtenForAddress", "type": "address", "value": "0x0000000000000000000000000000000000000000" }, { "name": "writtenForID", "type": "uint256", "value": "0" }, { "name": "content", "type": "bytes32", "value": "0x0000000000000000000000000000000000000000000000000000000000000000" }, { "name": "trusted", "type": "bool", "value": false } ], "payable": false, "type": "function" }, { "constant": false, "inputs": [ { "name": "_dcnAmount", "type": "uint256" }, { "name": "_dcnAmountTrusted", "type": "uint256" } ], "name": "setDCNAmounts", "outputs": [], "payable": false, "type": "function" }, { "constant": false, "inputs": [ { "name": "newOwner", "type": "address" } ], "name": "transferOwnership", "outputs": [], "payable": false, "type": "function" }, { "inputs": [], "payable": false, "type": "constructor" }, { "payable": true, "type": "fallback" } ];
 
   // setup review contract
   const Contract = web3.eth.contract(abi);
@@ -137,28 +141,34 @@ window.addEventListener('load', function() {
 
 
 
+
+
+
+
+
+
+
 // Patients - submit reviews ---------------------------------------------------
 
     // Submit review
         $("#_submit").click(function(){
-            var dAddress = $("#_dentistAddress").val();
-            var dId = $("#_dentistId").val();
-            var content = $("#_reviewContent").val();
-            var submitSecret = $("#_submitSecret").val();
-            var inviteSecret = $("#_inviteSecret").val();
+            var dAddress = $("#_dentistAddress").val();                         // eth address
+            var dId = $("#_dentistId").val();                                   // integer
+            var content = $("#_reviewContent").val();                           // 32 digit bytes (hash)
+            var submitSecret = $("#_submitSecret").val();                       // 16 digit bytes
+            var inviteSecret = $("#_inviteSecret").val();                       //
 
-            console.log("Transfer Details", dAddress, dId, content, submitSecret, inviteSecret);
+            console.log("Submit Details", dAddress, dId, content, submitSecret, inviteSecret);
 
             // submit function
-            contract.submitReview(dAddress, dId, content, submitSecret, inviteSecret, transactionObject, function(error, transactionHash){
+            contract.submitReview(dAddress, dId, content, submitSecret, inviteSecret, transactionObject, function(error, confirmed){
                 if(error) {
-                    //return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
+                    return $("#submitResult").html("There was an error transfering your Review: " + String(error));
                 }
 
-                //return $("#transferTokenResponse_body").html("Your token is being transfered with tx hash: " + String(transactionHash));
-                //return $("#transferTokenResponse_body").html("Ok, pending transaction. Give it a minute and check for confirmation on <a href='https://etherscan.io/tx/" + String(transactionHash) + "' target='_blank'>Etherscan</a> ");
+                return $("#submitResult").html("Your review is confirmed: " + String(confirmed));
             });
-
+/*
             contract.SubmitEvent({}, function(error, result){
                 if(error) {
                     //return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
@@ -167,6 +177,7 @@ window.addEventListener('load', function() {
                 $("#transferTokenResponse").show();
                 //return $("#transferTokenResponse_body").html("Your Dentacoins have been transfered! " + String(result.transactionHash));
             });
+*/
         });
     //- Transfer Dentacoins
 
@@ -178,5 +189,30 @@ window.addEventListener('load', function() {
 
 // Dentists - invite patients --------------------------------------------------
 
+    // Set inviteSecret
+        $("#_invite").click(function(){
+            var inviteSec = $("#_inviteSec").val();                         // eth address
+
+            console.log("Invite Details", inviteSec);
+
+            // submit function
+            contract.setInviteSecret(inviteSec, transactionObject, function(error, confirmed){
+                if(error) {
+                    return $("#inviteResult").html("There was an error sending the invite: " + String(error));
+                }
+
+                return $("#inviteResult").html("Your invite is confirmed: " + String(confirmed));
+            });
+    /*
+            contract.SubmitEvent({}, function(error, result){
+                if(error) {
+                    //return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
+                }
+
+                $("#transferTokenResponse").show();
+                //return $("#transferTokenResponse_body").html("Your Dentacoins have been transfered! " + String(result.transactionHash));
+            });
+    */
+        });
 
 });
