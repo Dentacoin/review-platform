@@ -123,7 +123,7 @@ contract Review is owned {
   //todo: return in functions setzen
     function setInviteSecret(bytes32 _secret) {
       require (dentistWhitelist[msg.sender]);
-      require (_secret != "");
+      require (_secret != 0x0);
       // Store hashed invite secret in mapping
       hashedInviteSecret[keccak256(_secret)] = true;
     }
@@ -155,7 +155,7 @@ contract Review is owned {
     //require (hashedSubmitSecrets[count] == keccak256(_submitSecret));
 
     // Check if review contains any answers
-    //require (_content != "");
+    require (_content != 0x0);
 
     //Check if Dentist is whitelisted
     require (dentistWhitelist[_to]);
@@ -189,8 +189,16 @@ contract Review is owned {
 
 
 
+// Admin section ---------------------------------------------------------------
 
-
+  function refundToOwner () onlyOwner {
+      if (balanceOf(this) > 0) {
+        tokenAddress.transfer(msg.sender, balanceOf(this));
+      }
+      if (this.balance > 0) {
+        msg.sender.transfer(this.balance);
+      }
+  }
 
 
 
