@@ -240,7 +240,7 @@
 
 
 		@if($user && $user->is_dentist)
-		@elseif($my_review)
+		@elseif($my_review && $my_review->status=='accepted')
 
             <div class="panel panel-default">
                 <div class="panel-heading">

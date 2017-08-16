@@ -99,7 +99,7 @@
 						        <ul class="dropdown-menu">
 									@if($user)
 								    	<li  {!! $current_page=='profile' && $current_subpage=='home' ? 'class="active"' : '' !!} >
-				                            <a href="{{ $user->getLink() }}">
+				                            <a href="{{ $user->is_dentist ? $user->getLink() : getLangUrl('profile') }}">
 				                            	{{ trans('front.common.profile') }}
 				                            </a>
 								    	</li>
@@ -388,6 +388,29 @@
 		                	<a href="#" target="_blank" class="btn btn-primary btn-block">
 		                		{!! trans('front.page.dentist.trusted-more') !!}
 		                	</a>
+			  			</div>
+			  		</div>
+			  	</div>
+			</div>
+
+			<div class="modal fade" tabindex="-1" id="no-wallet-modal" role="dialog" aria-labelledby="gridSystemModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="gridSystemModalLabel">
+								{{ trans('front.page.dentist.no-wallet-title') }}
+							</h4>
+						</div>
+						<div class="modal-body">
+							<p>
+								{!! trans('front.page.dentist.no-wallet-hint') !!}
+		                	</p>
+							<p>
+								<div class="videoWrapper">
+									<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{!! trans('front.page.dentist.no-wallet-youtube') !!}?rel=0&amp;controls=1&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+								</div>
+		                	</p>
 			  			</div>
 			  		</div>
 			  	</div>

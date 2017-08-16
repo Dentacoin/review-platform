@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Question;
+use App\Models\Secret;
 use App\Models\Review;
 use App\Models\ReviewUpvote;
 use App\Models\ReviewAnswer;
@@ -20,6 +21,39 @@ use Auth;
 
 class DentistController extends FrontController
 {
+    public function confirmReview($locale=null, $slug, $secret) {
+        $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
+
+        if(empty($item)) {
+            return redirect( getLangUrl('dentists') );
+        }
+
+        $old_review = $this->user->hasReviewTo($item->id);
+        if($old_review && $old_review->status=='pending' && $old_review->secret->secret==$secret) {
+            $old_review->status = 'accepted';
+            $old_review->secret->used = true;
+            $old_review->secret->save();
+            $old_review->save();
+
+                        
+            $item->sendTemplate(6, [
+                'review_id' => $old_review->id,
+            ]);
+
+            $old_review->dentist->recalculateRating();
+            
+            Request::session()->flash('success-message', trans('front.page.dentist.review-submitted'));
+
+            return Response::json( [
+                'success' => true,
+            ] );
+        }
+        
+        return Response::json( [
+            'success' => false,
+        ] );
+    }
+
 
     public function list($locale=null, $slug, $review_id=null) {
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
@@ -61,49 +95,72 @@ class DentistController extends FrontController
                 return Response::json( $ret );
             } else {
                 if($this->user->phone_verified && !$this->user->is_dentist) {
-                    $review = new Review;
-                    $review->user_id = $this->user->id;
-                    $review->dentist_id = $item->id;
-                    $review->rating = 0;
-                    $review->answer = strip_tags(Request::input( 'answer' ));
-                    $review->verified = $this->user->invited_by == $item->id;
-                    $review->save();
 
-                    $total = 0;
-                    $answer_rates = [];
-                    foreach ($questions as $question) {
+                    $old_review = $this->user->hasReviewTo($item->id);
+                    if($old_review && $old_review->status=='accepted') {
 
-                        $answer_rates[$question->id] = 0;
-                        $option_answers = [];
-                        $options = json_decode($question['options'], true);
-                        foreach ($options as $i => $nosense) {
-                            $r = Request::input( 'option.'.$question->id.'.'.$i );;
-                            $option_answers[] = $r;
-                            $answer_rates[$question->id] += $r;
+                    } else {
+                        $secret = Secret::getNext();
+
+                        if($old_review && $old_review->status=='pending') {
+                            $review = $old_review;
+                        } else {
+                            $review = new Review;
+                            $review->user_id = $this->user->id;
+                            $review->dentist_id = $item->id;
+                            
                         }
 
-                        $answer_rates[$question->id] /= count($options);
-                        
-                        $answer = new ReviewAnswer;
-                        $answer->review_id = $review->id;
-                        $answer->question_id = $question->id;
-                        $answer->options = json_encode($option_answers);
-                        $answer->save();
+                        $review->rating = 0;
+                        $review->answer = strip_tags(Request::input( 'answer' ));
+                        $review->verified = $this->user->invited_by == $item->id;
+                        $review->status = 'pending';
+                        $review->secret_id = $secret->id;
+                        $review->save();
+
+                        $total = 0;
+                        $answer_rates = [];
+                        foreach ($questions as $question) {
+
+                            $answer_rates[$question->id] = 0;
+                            $option_answers = [];
+                            $options = json_decode($question['options'], true);
+                            foreach ($options as $i => $nosense) {
+                                $r = Request::input( 'option.'.$question->id.'.'.$i );;
+                                $option_answers[] = $r;
+                                $answer_rates[$question->id] += $r;
+                            }
+
+                            $answer_rates[$question->id] /= count($options);
+                            
+                            if($old_review) {
+                                $answer = ReviewAnswer::where([
+                                    ['review_id', $review->id],
+                                    ['question_id', $question->id],
+                                ])->first();
+                            } else {
+                                $answer = new ReviewAnswer;
+                            }
+                            $answer->review_id = $review->id;
+                            $answer->question_id = $question->id;
+                            $answer->options = json_encode($option_answers);
+                            $answer->save();
+                        }
+
+                        $review->rating = array_sum($answer_rates) / count($answer_rates);
+                        $review->save();
+
                     }
 
-                    $review->rating = array_sum($answer_rates) / count($answer_rates);
-                    $review->save();
-
-                    $item->sendTemplate(6, [
-                        'review_id' => $review->id,
-                    ]);
-
-                    $review->dentist->recalculateRating();
                 }
 
-                Request::session()->flash('success-message', trans('front.page.dentist.review-submitted'));
 
-                return Response::json( ['success' => true] );
+                return Response::json( [
+                    'success' => true,
+                    'dentist_id' => $item->id,
+                    'review_text' => strip_tags(Request::input( 'answer' )),
+                    'submit_secret' => $secret ? $secret->secret : '',
+                ] );
             }
         }
 
@@ -150,6 +207,8 @@ class DentistController extends FrontController
                 $aggregated_rates_total[$key] = array_sum($value)/count($value);
             }
         }
+
+        //dd( $this->user->hasReviewTo($item->id) );
 
         return $this->ShowView('dentist', [
             'item' => $item,

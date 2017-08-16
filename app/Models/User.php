@@ -63,10 +63,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasOne('App\Models\User', 'id', 'invited_by');        
     }
     public function reviews_out() {
-        return $this->hasMany('App\Models\Review', 'user_id', 'id')->orderBy('id', "DESC");
+        return $this->hasMany('App\Models\Review', 'user_id', 'id')->where('status', 'accepted')->orderBy('id', "DESC");
     }
     public function reviews_in() {
-        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')->orderBy('verified', "DESC")->orderBy('upvotes', "DESC");
+        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')->where('status', 'accepted')->orderBy('verified', "DESC")->orderBy('upvotes', "DESC");
     }
     public function upvotes() {
         return $this->hasMany('App\Models\ReviewUpvote', 'user_id', 'id');

@@ -26,6 +26,9 @@ return [
         'rewards' => array(
             'icon' => 'bitcoin',
         ),
+        'secrets' => array(
+            'icon' => 'key',
+        ),
         'admins' => array(
             'icon' => 'user-plus',
         ),

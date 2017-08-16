@@ -22,6 +22,8 @@ class CreateReviewsTable extends Migration
             $table->boolean('verified')->nullable();
             $table->text('answer')->nullable();
             $table->text('reply')->nullable();
+            $table->integer('secret_id')->nullable();
+            $table->enum('status', ['pending', 'accepted'])->nullable();
             
             $table->timestamps();
             $table->softDeletes();

@@ -4,6 +4,8 @@ $(document).ready(function(){
 
 		if($(this).hasClass('verify-phone')) {
 			$('#phone-verify-modal').modal();
+        } else if(typeof(account)=='undefined' || !account) {
+            $('#no-wallet-modal').modal();
 		} else {
 			$('#review-form').show();
 			$(this).closest('.panel-body').remove();
@@ -53,8 +55,10 @@ $(document).ready(function(){
 			;
 		} else if($(this).hasClass('needs-login')) {
 			$(this).closest('.panel').find('.user-login-upvote').show();
-		} else if($(this).hasClass('verify-phone')) {
-			$('#phone-verify-modal').modal();
+        } else if($(this).hasClass('verify-phone')) {
+            $('#phone-verify-modal').modal();
+		} else if(typeof(account)=='undefined' || !account) {
+            $('#no-wallet-modal').modal();
 		} else {
 			var that = this;
 			$.ajax( {
@@ -122,6 +126,7 @@ $(document).ready(function(){
 	$('#write-review-form').submit( function(e) {
 		e.preventDefault();
 
+        $('#review-crypto-error').hide();
 		$('#review-answer-error').hide();
 		$('#review-error').hide();
 
@@ -160,7 +165,43 @@ $(document).ready(function(){
             $(this).serialize() , 
             function( data ) {
                 if(data.success) {
-                	window.location.reload();
+                    reviewSubmitedReward(account, data.dentist_id, data.review_text, data.submit_secret, null, function(error, confirmed){
+                        ajax_is_running = false;
+                        console.log('aleeee');
+                        if(error) {
+                            console.log("There was an error transfering your Review: " + String(error));
+
+                            
+                            $('#review-crypto-error').show();
+
+                            $('html, body').animate({
+                                scrollTop: $('#review-crypto-error').closest('.panel-body').offset().top - 60
+                            }, 500);
+                            return;
+                        }
+
+
+                        console.log("Your review is confirmed: " + String(confirmed));
+                        $.ajax( {
+                            url: $('#review-confirm-action').val() + '/confirm-review/' + data.submit_secret,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: (function( data ) {
+                                console.log(data);
+                                if(data.success) {
+                                    window.location.reload();
+                                } else {
+                                    $('#review-crypto-error').show();
+
+                                    $('html, body').animate({
+                                        scrollTop: $('#review-crypto-error').closest('.panel-body').offset().top - 60
+                                    }, 500);
+                                    return;
+                                }
+                            })
+                        });
+                        
+                    });
                 } else {
                 	$('#review-error').show();
 
@@ -338,8 +379,11 @@ $(document).ready(function(){
     
 
     $('.btn-show-review').click(function() {
-    	$(this).next().show();
-    	$(this).remove();
+    	$(this).prev().toggle();
+        var newT = $(this).attr('data-alt-text').trim();
+        $(this).attr( 'data-alt-text', $(this).html().trim() )
+        $(this).html(newT);
+        
     });
 
     $('#review-form .ratings').mousemove( function(e) {

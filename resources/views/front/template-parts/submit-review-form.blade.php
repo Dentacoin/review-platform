@@ -3,8 +3,9 @@
 		{{ trans('front.page.dentist.review-form-hint') }}
 	</p>
 </div>
+<input type="hidden" id="review-confirm-action" value="{{ $item->getLink() }}">
 {!! Form::open(array('url' => $item->getLink(), 'id' => 'write-review-form', 'method' => 'post', 'class' => 'form-horizontal')) !!}
-	@foreach($questions as $question)
+	@foreach($questions as $qid => $question)
 		<div class="panel-body review rating-panel">
 			<div class="form-group">
 				<div class="col-md-12">
@@ -21,9 +22,9 @@
 
 					<div class="ratings">
 						<div class="stars">
-							<div class="bar" style="width: 0px;">
+							<div class="bar" style="width: {{ $my_review ? getStarWidth(json_decode($my_review->answers[$qid]->options, true)[$i]) : 0 }}px;">
 							</div>
-							<input type="hidden" name="option[{{ $question['id'] }}][]" value="" />
+							<input type="hidden" name="option[{{ $question['id'] }}][]" value="{{ $my_review ? json_decode($my_review->answers[$qid]->options, true)[$i] : '' }}" />
 							<div class="rating" style="display: none;">
 								{{ trans('front.page.dentist.review-form-answer-all') }}
 							</div>
@@ -61,14 +62,19 @@
                 	{{ trans('front.page.dentist.review-form-answer-all') }}
                 </div>
 
-                {{ Form::textarea( 'answer', '', array( 'id' => 'review-answer', 'class' => 'form-control', 'placeholder' => trans( 'front.page.dentist.review-form-last-question-placeholder' ) )) }}
+                <div class="alert alert-warning" id="review-crypto-error" style="display: none;">
+                	{{ trans('front.page.dentist.review-form-crypto-error') }}
+                </div>
+
+                {{ Form::textarea( 'answer', $my_review ? $my_review->answer : '', array( 'id' => 'review-answer', 'class' => 'form-control', 'placeholder' => trans( 'front.page.dentist.review-form-last-question-placeholder' ) )) }}
 			</div>
 		</div>
 		<div class="form-group">
 			<div class="col-md-12">
-				<h3>
-	                {{ Form::submit( trans('front.page.dentist.review-form-submit'), array('class' => 'btn btn-primary btn-block' )) }}
-				</h3>
+	            <p>
+	            	* {{ trans('front.page.dentist.review-form-submit-hint') }}
+	            </p>
+	            {{ Form::submit( trans('front.page.dentist.review-form-submit'), array('class' => 'btn btn-primary btn-block' )) }}
 			</div>
 		</div>
 	</div>

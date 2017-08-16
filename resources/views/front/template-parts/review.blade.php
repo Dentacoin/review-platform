@@ -148,9 +148,6 @@
 	</div>
 @endif
 <div class="panel-body review" >
-	<a href="javascript:;" class="btn btn-primary btn-block btn-show-review">
-		{{ trans('front.page.dentist.review-show-all') }}
-	</a>
 	<div style="display: none;">
 		@foreach($review->answers as $answer)
 			<div class="panel-body rating-panel">
@@ -176,4 +173,7 @@
         	</div>
 		@endforeach
 	</div>
+	<a href="javascript:;" class="btn btn-primary btn-block btn-show-review" data-alt-text="{{ trans('front.page.dentist.review-hide-all') }}">
+		{{ trans('front.page.dentist.review-show-all') }}
+	</a>
 </div>

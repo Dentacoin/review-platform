@@ -33,6 +33,10 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('admins/edit/{id}',					'AdminsController@update');
 	Route::post('admins/add',						'AdminsController@add');
 
+	Route::get('secrets', 							'SecretsController@list');
+	Route::post('secrets', 							'SecretsController@add');
+	Route::get('secrets/delete/{id}',				'SecretsController@delete');
+
 	Route::get('users', 							'UsersController@list');
 	Route::any('users/loginas/{id}', 				'UsersController@loginas');
 	Route::any('users/edit/{id}', 					'UsersController@edit');
@@ -111,6 +115,7 @@ Route::group(['prefix' => '{locale?}'], function(){
 		Route::get('dentists/p/{page?}', 					'DentistsController@paginate');
 		Route::get('dentists/{country?}/{city?}', 			'DentistsController@list');
 
+		Route::get('dentist/{slug}/confirm-review/{secret}', 	'DentistController@confirmReview');
 		Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');
 		Route::post('dentist/{slug}/claim-phone', 			'DentistController@claim');
 		Route::post('dentist/{slug}/claim-code', 			'DentistController@code');

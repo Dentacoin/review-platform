@@ -110,6 +110,11 @@ $(document).ready(function(){
         return false;
     } );
 
+    //Wallet
+    $('#transfer-button').click( function() {
+        console.log('ale');
+    } );
+
 
 });
 

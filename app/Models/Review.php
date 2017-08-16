@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\User;
+use App\Models\Secret;
 use App\Models\ReviewAnswer;
 
 class Review extends Model {
@@ -21,6 +22,8 @@ class Review extends Model {
         'reply',
         'verified',
         'upvotes',
+        'secret_id',
+        'status',
     ];
 
     protected $dates = [
@@ -29,12 +32,16 @@ class Review extends Model {
         'deleted_at'
     ];
 
+    public function secret() {
+        return $this->hasOne('App\Models\Secret', 'id', 'secret_id')->withTrashed();
+    }
+
     public function user() {
-        return $this->hasOne('App\Models\User', 'id', 'user_id');
+        return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();
     }
     
     public function dentist() {
-        return $this->hasOne('App\Models\User', 'id', 'dentist_id');
+        return $this->hasOne('App\Models\User', 'id', 'dentist_id')->withTrashed();
     }
 
     public function answers() {
