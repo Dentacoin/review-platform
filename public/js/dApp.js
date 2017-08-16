@@ -21,6 +21,7 @@ const contract = Contract.at(contractAdr);
 
 //Function "prototypes"
 var reviewSubmitedReward = null;
+var sendDCN = null;
 
 // web3 loader Metamask/Mist ---------------------------------------------------
 window.addEventListener('load', function() {
@@ -88,60 +89,58 @@ window.addEventListener('load', function() {
 
     // Dentists - invite patients --------------------------------------------------
     // Set inviteSecret
-        $("#_invite").click(function(){
-            var inviteSec = $("#_inviteSec").val();                         // eth address
+    $("#_invite").click(function(){
+        var inviteSec = $("#_inviteSec").val();                         // eth address
 
-            console.log("Invite Details", inviteSec);
+        console.log("Invite Details", inviteSec);
 
-            // submit function
-            contract.setInviteSecret(inviteSec, transactionObject, function(error, confirmed){
-                if(error) {
-                    return console.log("There was an error sending the invite: " + String(error));
-                }
+        // submit function
+        contract.setInviteSecret(inviteSec, transactionObject, function(error, confirmed){
+            if(error) {
+                return console.log("There was an error sending the invite: " + String(error));
+            }
 
-                console.log("Your invite is confirmed: " + String(confirmed));
-            });
-
-            /*
-                contract.SubmitEvent({}, function(error, result){
-                    if(error) {
-                        //return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
-                    }
-                    $("#transferTokenResponse").show();
-                    //return $("#transferTokenResponse_body").html("Your Dentacoins have been transfered! " + String(result.transactionHash));
-                });
-            */
+            console.log("Your invite is confirmed: " + String(confirmed));
         });
+
+        /*
+            contract.SubmitEvent({}, function(error, result){
+                if(error) {
+                    //return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
+                }
+                $("#transferTokenResponse").show();
+                //return $("#transferTokenResponse_body").html("Your Dentacoins have been transfered! " + String(result.transactionHash));
+            });
+        */
+    });
         
-     // Transfer Dentacoins
-         $("#_transfer").click(function(){
-             var account = $("#_transferAccount").val(),
-                     amount = parseInt($("#_transferAmount").val());
- 
-             console.log("Transfer Details", account, amount);
- 
-             // transfer tokens
-             token.transfer(account, amount, transactionObject, function(error, transactionHash){
-                 if(error) {
-                     $("#transferTokenResponse").show();
-                     return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
-                 }
- 
+    // Transfer Dentacoins
+    sendDCN = function(dcn_address, amount, callback) {
+        console.log("Transfer Details", dcn_address, amount);
+        
+        var transactionObject = {
+            from: account,
+            to: dcn_address,
+            gas: 100000,
+            amount: amount
+        };
+
+        console.log(transactionObject);
+
+
+         // transfer tokens
+         token.transfer(account, amount, transactionObject, callback);
+
+         token.Transfer({}, function(error, result){
+             if(error) {
                  $("#transferTokenResponse").show();
-                 //return $("#transferTokenResponse_body").html("Your token is being transfered with tx hash: " + String(transactionHash));
-                 return $("#transferTokenResponse_body").html("Ok, pending transaction. Give it a minute and check for confirmation on <a href='https://etherscan.io/tx/" + String(transactionHash) + "' target='_blank'>Etherscan</a> ");
-             });
- 
-             token.Transfer({}, function(error, result){
-                 if(error) {
-                     $("#transferTokenResponse").show();
-                     return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
-                 }
- 
-                 $("#transferTokenResponse").show();
-                 return $("#transferTokenResponse_body").html("Your Dentacoins have been transfered! " + String(result.transactionHash));
-             });
+                 return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
+             }
+
+             $("#transferTokenResponse").show();
+             return $("#transferTokenResponse_body").html("Your Dentacoins have been transfered! " + String(result.transactionHash));
          });
-     //- Transfer Dentacoins
+    }
+    //- Transfer Dentacoins
 
 });

@@ -24,7 +24,6 @@ $(document).ready(function(){
 	});
 
     $('.changer').click( function() {
-        console.log('asd');
         $('#add-avatar').trigger('click'); 
     } )
 
@@ -112,8 +111,21 @@ $(document).ready(function(){
 
     //Wallet
     $('#transfer-button').click( function() {
-        console.log('ale');
-    } );
+
+        $('#transfer-succcess').hide();
+        $('#transfer-error').hide();
+
+        sendDCN( $('#transfer-wallet-address').val(), $('#transfer-wallet-amount').val(), function(error, transactionHash){
+             if(error) {
+                $('#transfer-error').show();
+                $('#transfer-reason').show().html( String(error) );
+                return;
+             }
+
+             $('#transfer-succcess').show();
+        });
+        
+    });
 
 
 });
