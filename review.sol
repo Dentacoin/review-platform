@@ -142,7 +142,11 @@ contract Review is owned {
 
     function getContractBalance() constant returns (uint256 balance) {
        return tokenAddress.balanceOf(this);
-   }
+     }
+
+   function getReviewCount() constant returns (uint256 reviewCount) {
+      return count;
+    }
 
 
 // Main Functions --------------------------------------------------------------
