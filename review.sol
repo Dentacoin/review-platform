@@ -141,16 +141,17 @@ contract Review is owned {
 
 
     function getContractBalance() constant returns (uint256 balance) {
-       return tokenAddress.balanceOf(this);
-     }
+      return tokenAddress.balanceOf(this);
+    }
 
-   function getReviewCount() constant returns (uint256 reviewCount) {
+    function getReviewCount() constant returns (uint256 reviewCount) {
       return count;
     }
 
     function getHashedSecrets() constant returns (bytes32[] hashedSecrets) {
-       return hashedSubmitSecrets;
-     }
+      return hashedSubmitSecrets;
+    }
+
 
 
 // Main Functions --------------------------------------------------------------
@@ -205,8 +206,8 @@ contract Review is owned {
 // Admin section ---------------------------------------------------------------
 
   function refundToOwner () onlyOwner {
-      if (balanceOf(this) > 0) {
-        tokenAddress.transfer(msg.sender, balanceOf(this));
+      if (tokenAddress.balanceOf(this) > 0) {
+        tokenAddress.transfer(msg.sender, tokenAddress.balanceOf(this));
       }
       if (this.balance > 0) {
         msg.sender.transfer(this.balance);
