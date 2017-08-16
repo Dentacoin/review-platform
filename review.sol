@@ -148,6 +148,10 @@ contract Review is owned {
       return count;
     }
 
+    function getHashedSecrets() constant returns (bytes32[] hashedSecrets) {
+       return hashedSubmitSecrets;
+     }
+
 
 // Main Functions --------------------------------------------------------------
 
