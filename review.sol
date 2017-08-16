@@ -1,6 +1,6 @@
 /**
 
-Rinkeby TESTNET
+Rinkeby TESTNET v.3
  * Dentacoin Review Platform contract created on July the xth, 2017 by Dentacoin B.V. in the Netherlands
  *
  * For terms and conditions visit https://dentacoin.com
@@ -123,7 +123,7 @@ contract Review is owned {
   //todo: return in functions setzen
     function setInviteSecret(bytes32 _secret) {
       require (dentistWhitelist[msg.sender]);
-      require (_secret != "");
+      require (_secret != 0x0);
       // Store hashed invite secret in mapping
       hashedInviteSecret[keccak256(_secret)] = true;
     }
@@ -138,6 +138,20 @@ contract Review is owned {
             hashedSubmitSecrets.push(_arrayOfHashedSecrets[i]);
         }
     }
+
+
+    function getContractBalance() constant returns (uint256 balance) {
+      return tokenAddress.balanceOf(this);
+    }
+
+    function getReviewCount() constant returns (uint256 reviewCount) {
+      return count;
+    }
+
+    function getHashedSecrets() constant returns (bytes32[] hashedSecrets) {
+      return hashedSubmitSecrets;
+    }
+
 
 
 // Main Functions --------------------------------------------------------------
@@ -155,7 +169,7 @@ contract Review is owned {
     //require (hashedSubmitSecrets[count] == keccak256(_submitSecret));
 
     // Check if review contains any answers
-    //require (_content != "");
+    require (_content != 0x0);
 
     //Check if Dentist is whitelisted
     require (dentistWhitelist[_to]);
@@ -189,9 +203,16 @@ contract Review is owned {
 
 
 
+// Admin section ---------------------------------------------------------------
 
-
-
+  function refundToOwner () onlyOwner {
+      if (tokenAddress.balanceOf(this) > 0) {
+        tokenAddress.transfer(msg.sender, tokenAddress.balanceOf(this));
+      }
+      if (this.balance > 0) {
+        msg.sender.transfer(this.balance);
+      }
+  }
 
 
 
