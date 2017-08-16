@@ -66,7 +66,7 @@ window.addEventListener('load', function() {
 
         var transactionObject = {
             from: account,
-            gas: 100000
+            gas: 200000
         };
 
         // submit function
