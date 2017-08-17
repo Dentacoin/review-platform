@@ -30,42 +30,6 @@ pragma solidity ^0.4.11;
       }
   }
 
-  /**
-   * Overflow aware uint math functions.
-
-  contract SafeMath {
-    //internals
-    function safeMul(uint a, uint b) internal returns (uint) {
-      uint c = a * b;
-      assert(a == 0 || c / a == b);
-      return c;
-    }
-    function safeSub(uint a, uint b) internal returns (uint) {
-      assert(b <= a);
-      return a - b;
-    }
-    function safeAdd(uint a, uint b) internal returns (uint) {
-      uint c = a + b;
-      assert(c>=a && c>=b);
-      return c;
-    }
-  }
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -109,9 +73,7 @@ contract Review is owned {
 
 
   function Review() {
-    tokenAddress = dcnToken(0x2Debb13BCF5526e0cF5E3A4E5049100E3F7c2AE5);       // Define Dentacoin token address Rinkeby
-    // hash of secret "123" to submit reviews for testing !remove in main net version!
-    //hashedSubmitSecrets[0x64e604787cbf194841e7b68d7cd28786f6c9a0a3ab9f8b0a0e87cb4387ab0107] = true;
+    tokenAddress = dcnToken(0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6);
   }
 
 // Setter and Getter -----------------------------------------------------------
