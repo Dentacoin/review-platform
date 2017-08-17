@@ -45,12 +45,21 @@ class UsersController extends AdminController
             'is_verified' => [
                 'type' => 'bool',
             ],
-            'verification_code' => [
-                'type' => 'text',
-            ],
     		'verified_on' => [
     			'type' => 'datetimepicker',
     		],
+            'phone_verified' => [
+                'type' => 'bool',
+            ],
+            'phone_verified_on' => [
+                'type' => 'datetimepicker',
+            ],
+            'verification_code' => [
+                'type' => 'text',
+            ],
+            'website' => [
+                'type' => 'text',
+            ],
     		'country_id' => [
     			'type' => 'country',
     		],
@@ -70,9 +79,6 @@ class UsersController extends AdminController
             'ratings' => [
                 'type' => 'text',
                 'disabled' => true,
-            ],
-            'website' => [
-                'type' => 'text',
             ],
             'category_id' => [
                 'type' => 'select',

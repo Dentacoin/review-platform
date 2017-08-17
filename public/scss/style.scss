@@ -850,6 +850,7 @@ body {
     Dentist profile
 */
 
+.page-profile.sp-home,
 .page-profile.sp-reviews,
 .page-dentist {
 
@@ -1362,6 +1363,7 @@ body {
         right: 15px;
     }
 
+    &.page-profile.sp-home,
     &.page-profile.sp-reviews,
     &.page-dentist {
         .review {

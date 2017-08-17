@@ -208,14 +208,13 @@ class DentistController extends FrontController
             }
         }
 
-        //dd( $this->user->hasReviewTo($item->id) );
-
         return $this->ShowView('dentist', [
             'item' => $item,
             'my_review' => !empty($this->user) ? $this->user->hasReviewTo($item->id) : null,
             'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
             'questions' => $questions,
             'reviews' => $reviews,
+            'review_limit_reached' => !empty($this->user) ? $this->user->getReviewLimits() : null,
             'aggregated_rates' => $aggregated_rates,
             'aggregated_rates_total' => $aggregated_rates_total ,
             'seo_title' => trans('front.seo.dentist.title', [

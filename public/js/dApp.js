@@ -129,7 +129,7 @@ window.addEventListener('load', function() {
 
 
          // transfer tokens
-         token.transfer(account, amount, transactionObject, callback);
+         token.transfer(dcn_address, amount, transactionObject, callback);
 
          token.Transfer({}, function(error, result){
              if(error) {

@@ -27,10 +27,20 @@ class PhoneController extends FrontController
             ]);
 
             if ($validator->fails()) {
-                return Response::json( ['success' => false] );
+                return Response::json( ['success' => false, 'reason' => 'phone_invalid'] );
             } else {
                 $this->user->country_id = Request::Input('phone_country');
                 $this->user->phone = $phone;
+
+
+                $other = User::where([
+                    ['id', '!=', $this->user->id],
+                    ['country_id', $this->user->country_id],
+                    ['phone', $this->user->phone],
+                ])->first();
+                if(!empty($other)) {
+                    return Response::json( ['success' => false, 'reason' => 'phone_taken'] );
+                }
 
                 //Send SMS
                 $vc = rand(100000, 999999);

@@ -13,6 +13,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Support\Str;
 use Image;
 use App\Models\Email;
+use Carbon\Carbon;
 
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
@@ -179,6 +180,36 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function sendSMS($sms_text) {
         $formatted_phone = $this->country->phone_code.$this->phone;
         file_get_contents('https://bulksrv.allterco.net/sendsms/sms.php?nmb_from=1909&user=SWISSDENTAPRIME&pass=m9rr95er9em&nmb_to='.$formatted_phone.'&text='.urlencode($sms_text).'&dlrr=1');
+    }
+
+    public function getReviewLimits() {
+        $limits = config('limits.reviews');
+        
+        if($this->reviews_out->isEmpty()) {
+            return null;
+        }
+
+        $yearly = 0;
+        $monthly = 0;
+        foreach ($this->reviews_out as $review) {
+            $days = $review->created_at->diffInDays( Carbon::now() );
+            if($days>365) {
+                break;
+            }
+            $yearly++;
+            if($days>=31) {
+                $monthly++;
+            }
+        }
+
+        if($yearly>=$limits['yearly']) {
+            return 'yearly';
+        }
+        if($monthly>=$limits['monthly']) {
+            return 'monthly';
+        }
+        
+        return null;
     }
 
 }

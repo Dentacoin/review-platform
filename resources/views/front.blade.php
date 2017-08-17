@@ -429,7 +429,7 @@
 						</div>
 						<div class="modal-body">
 							<p>
-								{!! trans('front.page.dentist.verify-hint') !!}
+								{!! nl2br(trans('front.page.dentist.verify-hint')) !!}
 		                	</p>
 
 			  			</div>
@@ -439,7 +439,7 @@
 								<div class="form-group">
 									<div class="col-md-12">
 										<h3>
-											{{ trans('front.page.dentist.verify-phone') }}
+											{!! nl2br(trans('front.page.dentist.verify-phone')) !!}
 										</h3>
 									</div>
 								</div>
@@ -456,8 +456,11 @@
 	                                    <input type="submit" name="save-phone" value="{{ trans('front.page.dentist.verify-phone-submit') }}" class="btn btn-primary btn-block" />
 									</div>
 								</div>
-								<div class="alert alert-warning" style="display: none;">
+								<div class="alert alert-warning" id="phone-invalid" style="display: none;">
 									{{ trans('front.page.dentist.verify-phone-invalid') }}
+								</div>
+								<div class="alert alert-warning" id="phone-taken" style="display: none;">
+									{{ trans('front.common.phone-already-used') }}
 								</div>
 			  				{!! Form::close() !!}
 
