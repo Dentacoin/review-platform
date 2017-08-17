@@ -94,11 +94,7 @@ window.addEventListener('load', function() {
             if(error) {
                 console.log("There was an error transfering your Review: " + String(error));
 
-<<<<<<< HEAD
 
-=======
-                
->>>>>>> b15daa7974f02259e00adf29ab932057c81908ec
                 $('#review-crypto-error').show();
 
                 $('html, body').animate({
@@ -127,11 +123,7 @@ window.addEventListener('load', function() {
                     }
                 })
             });
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> b15daa7974f02259e00adf29ab932057c81908ec
         });
 
         /*
