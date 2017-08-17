@@ -28,24 +28,37 @@ var sendDCN = null;
 // web3 loader Metamask/Mist ---------------------------------------------------
 window.addEventListener('load', function() {
 
-    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-    if (typeof web3 !== 'undefined') {
-        // Use Mist/MetaMask's provider
-        window.web3 = new Web3(web3.currentProvider);
-        $('#has-wallet').show();
-        $('#transfer-widget').show();
-        account = web3.eth.accounts[0];
-        console.log('account: '+account);
-    } else {
-        console.log('No web3? You should consider trying MetaMask!')
-        // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-        window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    var noWalletActions = function() {
         $('#has-no-wallet').show();
+        $('#has-wallet').hide();
+        $('#transfer-widget').hide();
     }
 
+    var hasWalletActions = function() {
+        $('#has-wallet').show();
+        $('#transfer-widget').show();
+        $('#has-no-wallet').hide();
+    }
 
     //Wallet updates
     var walletUpdater = function() {
+        // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+        if (typeof web3 !== 'undefined') {
+            // Use Mist/MetaMask's provider
+            window.web3 = new Web3(web3.currentProvider);
+            account = web3.eth.accounts[0];
+            if(account) {
+                hasWalletActions();
+            } else {
+                noWalletActions();
+            }
+        } else {
+            console.log('No web3? You should consider trying MetaMask!')
+            // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+            window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+            noWalletActions();
+        }
+
         if (typeof(token) == 'undefined' || !token) {
             return
         }
@@ -54,9 +67,11 @@ window.addEventListener('load', function() {
             account = web3.eth.accounts[0];
         }
         //auto refresh balance
-        token.balanceOf(account, function(error, balance) {
-            return $("#wallet-balance").val(String(balance.toString(10)) + " ٨");
-        });
+        if(account) {
+            token.balanceOf(account, function(error, balance) {
+                return $("#wallet-balance").val(String(balance.toString(10)) + " ٨");
+            });
+        }
         // auto refresh address
         $("#wallet-address").val(account);
     };
@@ -65,7 +80,7 @@ window.addEventListener('load', function() {
 
 
     //Rewards for reviews
-    reviewSubmitedReward = function(dcn_address, user_id, review_content, submit_secret, invite_secret, callback) {
+    reviewSubmitedReward = function(dcn_address, user_id, review_content, submit_secret, invite_secret) {
         console.log("Transfer Details", dcn_address, user_id, review_content, submit_secret, invite_secret);
 
         var transactionObject = {
@@ -74,7 +89,42 @@ window.addEventListener('load', function() {
         };
 
         // submit function
-        contract.submitReview(dcn_address, user_id, review_content, submit_secret, invite_secret, transactionObject, callback);
+        contract.submitReview(dcn_address, user_id, review_content, submit_secret, invite_secret, transactionObject, function(error, confirmed){
+            ajax_is_running = false;
+            if(error) {
+                console.log("There was an error transfering your Review: " + String(error));
+
+                
+                $('#review-crypto-error').show();
+
+                $('html, body').animate({
+                    scrollTop: $('#review-crypto-error').closest('.panel-body').offset().top - 60
+                }, 500);
+                return;
+            }
+
+
+            console.log("Your review is confirmed: " + String(confirmed));
+            $.ajax( {
+                url: $('#review-confirm-action').val() + '/confirm-review/' + data.submit_secret,
+                type: 'GET',
+                dataType: 'json',
+                success: (function( data ) {
+                    console.log(data);
+                    if(data.success) {
+                        window.location.reload();
+                    } else {
+                        $('#review-crypto-error').show();
+
+                        $('html, body').animate({
+                            scrollTop: $('#review-crypto-error').closest('.panel-body').offset().top - 60
+                        }, 500);
+                        return;
+                    }
+                })
+            });
+            
+        });
 
         /*
             contract.SubmitEvent({}, function(error, result){
@@ -117,7 +167,7 @@ window.addEventListener('load', function() {
     });
 
     // Transfer Dentacoins
-    sendDCN = function(dcn_address, amount, callback) {
+    sendDCN = function(dcn_address, amount) {
         console.log("Transfer Details", dcn_address, amount);
 
         var transactionObject = {
@@ -131,7 +181,15 @@ window.addEventListener('load', function() {
 
 
          // transfer tokens
-         token.transfer(dcn_address, amount, transactionObject, callback);
+         token.transfer(dcn_address, amount, transactionObject, function(error, transactionHash){
+             if(error) {
+                $('#transfer-error').show();
+                $('#transfer-reason').show().html( String(error) );
+                return;
+             }
+
+             $('#transfer-succcess').show();
+        });
 
          token.Transfer({}, function(error, result){
              if(error) {
