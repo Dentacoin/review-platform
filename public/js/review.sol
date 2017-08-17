@@ -85,10 +85,11 @@ contract Review is owned {
   // Address of the DCN token: 0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6
   dcnToken public tokenAddress;
   uint256 public count = 0;
+  uint256 public secretCount = 0;
   uint256 public dcnAmount;
   uint256 public dcnAmountTrusted;
   bytes32 public hashedInSecret;
-  bytes32[] public hashedSubmitSecrets;
+  bytes8[] public hashedSubmitSecrets;
 
 
   struct Reviews {
@@ -121,11 +122,12 @@ contract Review is owned {
     }
 
   //todo: return in functions setzen
-    function setInviteSecret(bytes32 _secret) {
+    function setInviteSecret(string _secret) returns (bytes32 result){
       require (dentistWhitelist[msg.sender]);
-      require (_secret != 0x0);
+      require (bytes(_secret).length != 0);
       // Store hashed invite secret in mapping
       hashedInviteSecret[keccak256(_secret)] = true;
+      return keccak256(_secret);
     }
 
     function setDentistOnWhitelist (address _dentist) onlyOwner {
@@ -133,7 +135,7 @@ contract Review is owned {
       dentistWhitelist[_dentist] = true;
     }
 
-    function addSubmitSecrets (bytes32[] _arrayOfHashedSecrets) onlyOwner {
+    function addSubmitSecrets (bytes8[] _arrayOfHashedSecrets) onlyOwner {
       for (uint i = 0; i < _arrayOfHashedSecrets.length; i++) {
             hashedSubmitSecrets.push(_arrayOfHashedSecrets[i]);
         }
@@ -148,7 +150,7 @@ contract Review is owned {
       return count;
     }
 
-    function getHashedSecrets() constant returns (bytes32[] hashedSecrets) {
+    function getHashedSecrets() constant returns (bytes8[] hashedSecrets) {
       return hashedSubmitSecrets;
     }
 
@@ -159,13 +161,13 @@ contract Review is owned {
 
   function () payable onlyOwner{}
 
-  function submitReview(address _to, uint256 _toID, bytes32 _content, bytes16 _submitSecret, bytes32 _inviteSecret) returns (bool success) {
+  function submitReview(address _to, uint256 _toID, bytes32 _content, string _submitSecret, string _inviteSecret) returns (bool success) {
 
     // Check if reviewer is not a dentist
     require (!dentistWhitelist[msg.sender]);
 
     //Check if review comes from actual user of reviews.dentacoin.com
-    require (hashedSubmitSecrets[0] == keccak256(_submitSecret));               //Testnet
+    require (hashedSubmitSecrets[secretCount] == bytes8(keccak256(_submitSecret)));               //Testnet
     //require (hashedSubmitSecrets[count] == keccak256(_submitSecret));
 
     // Check if review contains any answers
@@ -184,18 +186,24 @@ contract Review is owned {
     reviewID[count].writtenForID = _toID;
     reviewID[count].content = _content;
 
+    count++;
+
+    if (secretCount < 99) {
+      secretCount++;
+    } else {
+      secretCount = 0;
+    }
+
     //Check if review is trusted by comparing hashed Secret from invite email with db
     if (hashedInviteSecret[keccak256(_inviteSecret)]) {
       reviewID[count].trusted = true;
       // remove
       hashedInviteSecret[keccak256(_inviteSecret)] = false;
       tokenAddress.transfer(msg.sender, dcnAmountTrusted);
-      count++;
       return true;
 
     } else {
       tokenAddress.transfer(msg.sender, dcnAmount);
-      count++;
       return true;
     }
 
