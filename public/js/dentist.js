@@ -57,8 +57,8 @@ $(document).ready(function(){
 			$(this).closest('.panel').find('.user-login-upvote').show();
         } else if($(this).hasClass('verify-phone')) {
             $('#phone-verify-modal').modal();
-		} else if(typeof(account)=='undefined' || !account) {
-            $('#no-wallet-modal').modal();
+		//} else if(typeof(account)=='undefined' || !account) {
+        //    $('#no-wallet-modal').modal();
 		} else {
 			var that = this;
 			$.ajax( {
@@ -66,12 +66,16 @@ $(document).ready(function(){
 				type: 'GET',
 				dataType: 'json',
 				success: (function( data ) {
-					$(that).addClass('upvote-done').removeClass('btn-primary').addClass('btn-success').html( $(that).attr('data-done-text') );
-					var oc = parseInt($(that).closest('.media').find('.upvote-count').html());
-					if(oc) {
-						$(that).closest('.media').find('.upvote-count').html( ++oc );
-						$(that).closest('.media').find('.upvote-wrpapper').show();
-					}
+                    if(data.limit) {
+                        ;
+                    } else {
+                        $(that).addClass('upvote-done').removeClass('btn-primary').addClass('btn-success').html( $(that).attr('data-done-text') );
+    					var oc = parseInt($(that).closest('.media').find('.upvote-count').html());
+    					if(oc) {
+    						$(that).closest('.media').find('.upvote-count').html( ++oc );
+    						$(that).closest('.media').find('.upvote-wrpapper').show();
+    					}
+                    }
 				}).bind(that)
 			});			
 		}
@@ -165,43 +169,8 @@ $(document).ready(function(){
             $(this).serialize() , 
             function( data ) {
                 if(data.success) {
-                    reviewSubmitedReward(account, data.dentist_id, data.review_text, data.submit_secret, null, function(error, confirmed){
-                        ajax_is_running = false;
-                        console.log('aleeee');
-                        if(error) {
-                            console.log("There was an error transfering your Review: " + String(error));
-
-                            
-                            $('#review-crypto-error').show();
-
-                            $('html, body').animate({
-                                scrollTop: $('#review-crypto-error').closest('.panel-body').offset().top - 60
-                            }, 500);
-                            return;
-                        }
-
-
-                        console.log("Your review is confirmed: " + String(confirmed));
-                        $.ajax( {
-                            url: $('#review-confirm-action').val() + '/confirm-review/' + data.submit_secret,
-                            type: 'GET',
-                            dataType: 'json',
-                            success: (function( data ) {
-                                console.log(data);
-                                if(data.success) {
-                                    window.location.reload();
-                                } else {
-                                    $('#review-crypto-error').show();
-
-                                    $('html, body').animate({
-                                        scrollTop: $('#review-crypto-error').closest('.panel-body').offset().top - 60
-                                    }, 500);
-                                    return;
-                                }
-                            })
-                        });
-                        
-                    });
+                    //Dentist's ETH address goes here
+                    reviewSubmitedReward('0x635c8CF5b944415b964B0451580857FE017F42dE', data.dentist_id, data.review_text, data.submit_secret, null);
                 } else {
                 	$('#review-error').show();
 
@@ -225,6 +194,8 @@ $(document).ready(function(){
 			return;
 		}
 		ajax_is_running = true;
+        
+        $('#phone-verify-send-form').find('.alert').hide();
 
         $.post( 
             $(this).attr('action'), 
@@ -234,7 +205,11 @@ $(document).ready(function(){
                     $('#phone-verify-send-form').hide();
                     $('#phone-verify-code-form').show();
                 } else {
-                    $('#phone-verify-send-form').find('.alert').show();
+                    if(data.reason && data.reason=='phone_taken') {
+                        $('#phone-taken').show();
+                    } else {
+                        $('#phone-invalid').show();
+                    }
                 }
                 ajax_is_running = false;
             }, "json"

@@ -545,28 +545,35 @@ body {
 /*
     Dentist profile
 */
+.page-profile.sp-home .btn-claim,
 .page-profile.sp-reviews .btn-claim,
 .page-dentist .btn-claim {
   margin-top: -10px;
   margin-bottom: 10px; }
+.page-profile.sp-home .alert-success,
 .page-profile.sp-reviews .alert-success,
 .page-dentist .alert-success {
   margin: 20px 15px -20px 15px; }
+.page-profile.sp-home .label-partner,
 .page-profile.sp-reviews .label-partner,
 .page-dentist .label-partner {
   margin: 0px 0px 10px 0px;
   border-radius: 5px; }
+.page-profile.sp-home .map,
 .page-profile.sp-reviews .map,
 .page-dentist .map {
   width: 100%;
   padding-top: 100%;
   margin-bottom: 10px; }
+.page-profile.sp-home .rating-panel,
 .page-profile.sp-reviews .rating-panel,
 .page-dentist .rating-panel {
   padding-bottom: 0px; }
+  .page-profile.sp-home .rating-panel:last-child,
   .page-profile.sp-reviews .rating-panel:last-child,
   .page-dentist .rating-panel:last-child {
     padding-bottom: 15px; }
+  .page-profile.sp-home .rating-panel h2,
   .page-profile.sp-reviews .rating-panel h2,
   .page-dentist .rating-panel h2 {
     font-size: 24px;
@@ -577,21 +584,27 @@ body {
     margin: 0 auto 10px auto;
     border-bottom: 2px solid #126585; }
   @media (max-width: 992px) {
+    .page-profile.sp-home .rating-panel .aggregation .rating-line:first-child,
     .page-profile.sp-reviews .rating-panel .aggregation .rating-line:first-child,
     .page-dentist .rating-panel .aggregation .rating-line:first-child {
       border-top: 1px solid #126585;
       padding-top: 15px; } }
   @media (max-width: 992px) {
+    .page-profile.sp-home .rating-panel .rating-line,
     .page-profile.sp-reviews .rating-panel .rating-line,
     .page-dentist .rating-panel .rating-line {
       padding-bottom: 5px;
       margin-bottom: 10px;
       border-bottom: 1px solid #126585; }
-      .page-profile.sp-reviews .rating-panel .rating-line.pre-aggregation, .page-profile.sp-reviews .rating-panel .rating-line:last-child,
+      .page-profile.sp-home .rating-panel .rating-line.pre-aggregation, .page-profile.sp-home .rating-panel .rating-line:last-child,
+      .page-profile.sp-reviews .rating-panel .rating-line.pre-aggregation,
+      .page-profile.sp-reviews .rating-panel .rating-line:last-child,
       .page-dentist .rating-panel .rating-line.pre-aggregation,
       .page-dentist .rating-panel .rating-line:last-child {
         border-bottom: 0px;
         padding-top: 10px; } }
+  .page-profile.sp-home .rating-panel .rating-line .rating-left,
+  .page-profile.sp-home .rating-panel .rating-line .rating-right,
   .page-profile.sp-reviews .rating-panel .rating-line .rating-left,
   .page-profile.sp-reviews .rating-panel .rating-line .rating-right,
   .page-dentist .rating-panel .rating-line .rating-left,
@@ -601,120 +614,151 @@ body {
     width: 286px;
     padding-top: 3px; }
     @media (max-width: 1200px) {
+      .page-profile.sp-home .rating-panel .rating-line .rating-left,
+      .page-profile.sp-home .rating-panel .rating-line .rating-right,
       .page-profile.sp-reviews .rating-panel .rating-line .rating-left,
       .page-profile.sp-reviews .rating-panel .rating-line .rating-right,
       .page-dentist .rating-panel .rating-line .rating-left,
       .page-dentist .rating-panel .rating-line .rating-right {
         width: 211px; } }
     @media (max-width: 992px) {
+      .page-profile.sp-home .rating-panel .rating-line .rating-left,
+      .page-profile.sp-home .rating-panel .rating-line .rating-right,
       .page-profile.sp-reviews .rating-panel .rating-line .rating-left,
       .page-profile.sp-reviews .rating-panel .rating-line .rating-right,
       .page-dentist .rating-panel .rating-line .rating-left,
       .page-dentist .rating-panel .rating-line .rating-right {
         width: 50%;
         margin-bottom: 10px; } }
+  .page-profile.sp-home .rating-panel .rating-line .rating-left,
   .page-profile.sp-reviews .rating-panel .rating-line .rating-left,
   .page-dentist .rating-panel .rating-line .rating-left {
     padding-right: 10px; }
     @media (max-width: 992px) {
+      .page-profile.sp-home .rating-panel .rating-line .rating-left,
       .page-profile.sp-reviews .rating-panel .rating-line .rating-left,
       .page-dentist .rating-panel .rating-line .rating-left {
         border-right: 1px solid #126585; } }
+  .page-profile.sp-home .rating-panel .rating-line .rating-right,
   .page-profile.sp-reviews .rating-panel .rating-line .rating-right,
   .page-dentist .rating-panel .rating-line .rating-right {
     padding-left: 10px;
     text-align: right; }
+  .page-profile.sp-home .rating-panel .rating-line .ratings,
   .page-profile.sp-reviews .rating-panel .rating-line .ratings,
   .page-dentist .rating-panel .rating-line .ratings {
     margin: 0px;
     float: left; }
     @media (max-width: 992px) {
+      .page-profile.sp-home .rating-panel .rating-line .ratings,
       .page-profile.sp-reviews .rating-panel .rating-line .ratings,
       .page-dentist .rating-panel .rating-line .ratings {
         margin: 0px auto;
         float: none;
         clear: both;
         text-align: center; } }
+    .page-profile.sp-home .rating-panel .rating-line .ratings .rating,
     .page-profile.sp-reviews .rating-panel .rating-line .ratings .rating,
     .page-dentist .rating-panel .rating-line .ratings .rating {
       margin: 5px 0px 0px 0px;
       text-align: center; }
+.page-profile.sp-home .user-login-upvote h3,
+.page-profile.sp-home #review-form h3,
 .page-profile.sp-reviews .user-login-upvote h3,
 .page-profile.sp-reviews #review-form h3,
 .page-dentist .user-login-upvote h3,
 .page-dentist #review-form h3 {
   margin-top: 0px;
   font-size: 18px; }
+  .page-profile.sp-home .user-login-upvote h3 span,
+  .page-profile.sp-home #review-form h3 span,
   .page-profile.sp-reviews .user-login-upvote h3 span,
   .page-profile.sp-reviews #review-form h3 span,
   .page-dentist .user-login-upvote h3 span,
   .page-dentist #review-form h3 span {
     color: #126585; }
+.page-profile.sp-home .user-login-upvote .ratings,
+.page-profile.sp-home #review-form .ratings,
 .page-profile.sp-reviews .user-login-upvote .ratings,
 .page-profile.sp-reviews #review-form .ratings,
 .page-dentist .user-login-upvote .ratings,
 .page-dentist #review-form .ratings {
   cursor: pointer; }
+.page-profile.sp-home .review,
 .page-profile.sp-reviews .review,
 .page-dentist .review {
   position: relative;
   box-shadow: 0px 5px 5px -5px rgba(18, 101, 133, 0.5); }
+  .page-profile.sp-home .review:last-child,
   .page-profile.sp-reviews .review:last-child,
   .page-dentist .review:last-child {
     box-shadow: none; }
   @media (max-width: 992px) {
+    .page-profile.sp-home .review .media-left,
     .page-profile.sp-reviews .review .media-left,
     .page-dentist .review .media-left {
       width: 100%;
       padding-right: 0px;
       display: block;
       margin-bottom: 10px; } }
+  .page-profile.sp-home .review .media-left img,
   .page-profile.sp-reviews .review .media-left img,
   .page-dentist .review .media-left img {
     width: 120px; }
     @media (max-width: 992px) {
+      .page-profile.sp-home .review .media-left img,
       .page-profile.sp-reviews .review .media-left img,
       .page-dentist .review .media-left img {
         width: 100%; } }
+  .page-profile.sp-home .review .media-left .label,
   .page-profile.sp-reviews .review .media-left .label,
   .page-dentist .review .media-left .label {
     display: block;
     margin-top: 5px;
     padding: 5px 0px; }
+  .page-profile.sp-home .review .media-body p,
   .page-profile.sp-reviews .review .media-body p,
   .page-dentist .review .media-body p {
     margin-bottom: 5px; }
+  .page-profile.sp-home .review .useful,
   .page-profile.sp-reviews .review .useful,
   .page-dentist .review .useful {
     position: absolute;
     top: 15px; }
     @media (max-width: 992px) {
+      .page-profile.sp-home .review .useful,
       .page-profile.sp-reviews .review .useful,
       .page-dentist .review .useful {
         position: static;
         display: block;
         margin-bottom: 10px; } }
+  .page-profile.sp-home .review .ratings,
   .page-profile.sp-reviews .review .ratings,
   .page-dentist .review .ratings {
     text-align: center; }
+    .page-profile.sp-home .review .ratings .rating,
     .page-profile.sp-reviews .review .ratings .rating,
     .page-dentist .review .ratings .rating {
       text-align: left; }
+  .page-profile.sp-home .review .sharer,
   .page-profile.sp-reviews .review .sharer,
   .page-dentist .review .sharer {
     position: absolute;
     bottom: 15px;
     text-align: right; }
     @media (max-width: 992px) {
+      .page-profile.sp-home .review .sharer,
       .page-profile.sp-reviews .review .sharer,
       .page-dentist .review .sharer {
         position: static;
         display: block;
         text-align: center; } }
+    .page-profile.sp-home .review .sharer span,
     .page-profile.sp-reviews .review .sharer span,
     .page-dentist .review .sharer span {
       display: block;
       margin-bottom: 5px; }
+    .page-profile.sp-home .review .sharer i,
     .page-profile.sp-reviews .review .sharer i,
     .page-dentist .review .sharer i {
       display: inline-block;
@@ -725,40 +769,51 @@ body {
       text-align: center;
       border-radius: 50%;
       margin-left: 5px; }
+      .page-profile.sp-home .review .sharer i:hover,
       .page-profile.sp-reviews .review .sharer i:hover,
       .page-dentist .review .sharer i:hover {
         text-decoration: none;
         background: #126585;
         color: white; }
+  .page-profile.sp-home .review .rating-panel,
   .page-profile.sp-reviews .review .rating-panel,
   .page-dentist .review .rating-panel {
     padding-left: 0px;
     padding-right: 0px; }
+    .page-profile.sp-home .review .rating-panel .rating-left,
+    .page-profile.sp-home .review .rating-panel .rating-right,
     .page-profile.sp-reviews .review .rating-panel .rating-left,
     .page-profile.sp-reviews .review .rating-panel .rating-right,
     .page-dentist .review .rating-panel .rating-left,
     .page-dentist .review .rating-panel .rating-right {
       width: 271px; }
       @media (max-width: 1200px) {
+        .page-profile.sp-home .review .rating-panel .rating-left,
+        .page-profile.sp-home .review .rating-panel .rating-right,
         .page-profile.sp-reviews .review .rating-panel .rating-left,
         .page-profile.sp-reviews .review .rating-panel .rating-right,
         .page-dentist .review .rating-panel .rating-left,
         .page-dentist .review .rating-panel .rating-right {
           width: 196px; } }
       @media (max-width: 992px) {
+        .page-profile.sp-home .review .rating-panel .rating-left,
+        .page-profile.sp-home .review .rating-panel .rating-right,
         .page-profile.sp-reviews .review .rating-panel .rating-left,
         .page-profile.sp-reviews .review .rating-panel .rating-right,
         .page-dentist .review .rating-panel .rating-left,
         .page-dentist .review .rating-panel .rating-right {
           width: 50%;
           margin-bottom: 10px; } }
+  .page-profile.sp-home .review .form-group:last-child,
   .page-profile.sp-reviews .review .form-group:last-child,
   .page-dentist .review .form-group:last-child {
     margin-bottom: 0px; }
+.page-profile.sp-home .reviews-panel .panel,
 .page-profile.sp-reviews .reviews-panel .panel,
 .page-dentist .reviews-panel .panel {
   margin-bottom: 20px;
   margin-top: 0px; }
+  .page-profile.sp-home .reviews-panel .panel:last-child,
   .page-profile.sp-reviews .reviews-panel .panel:last-child,
   .page-dentist .reviews-panel .panel:last-child {
     margin-bottom: 0px; }
@@ -902,7 +957,8 @@ body {
 
 .ltr .partner {
   right: 15px; }
-.ltr.page-profile.sp-reviews .review .sharer,
+.ltr.page-profile.sp-home .review .sharer,
+.ltr.page-profile.sp-home .review .useful, .ltr.page-profile.sp-reviews .review .sharer,
 .ltr.page-profile.sp-reviews .review .useful, .ltr.page-dentist .review .sharer,
 .ltr.page-dentist .review .useful {
   right: 15px; }

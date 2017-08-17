@@ -110,20 +110,10 @@ $(document).ready(function(){
     } );
 
     //Wallet
-    $('#transfer-button').click( function() {
+    $('#transfer-form').submit( function(e) {
+        e.preventDefault();
 
-        $('#transfer-succcess').hide();
-        $('#transfer-error').hide();
-
-        sendDCN( $('#transfer-wallet-address').val(), $('#transfer-wallet-amount').val(), function(error, transactionHash){
-             if(error) {
-                $('#transfer-error').show();
-                $('#transfer-reason').show().html( String(error) );
-                return;
-             }
-
-             $('#transfer-succcess').show();
-        });
+        sendDCN( $('#transfer-wallet-address').val(), $('#transfer-wallet-amount').val() );
         
     });
 

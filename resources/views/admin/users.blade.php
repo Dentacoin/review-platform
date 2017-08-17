@@ -60,6 +60,7 @@
                             'is_partner'                => array('format' => 'bool'),
                             'ratings'                => array('template' => 'admin.parts.table-users-ratings'),
                             'link'                => array('template' => 'admin.parts.table-users-link'),
+                            'login'                => array('template' => 'admin.parts.table-users-login'),
 							'update'			=> array('format' => 'update'),
 							'delete'			=> array('format' => 'delete'),
 						],

@@ -91,6 +91,19 @@ class AddController extends FrontController
                 ->withErrors($validator);
             } else {
 
+
+                $phone = ltrim( str_replace(' ', '', Request::Input('phone')), '0');
+
+                $other = User::where([
+                    ['country_id', Request::input('country_id')],
+                    ['phone', $phone],
+                ])->first();
+                if(!empty($other)) {
+                    return redirect( getLangUrl('add') )
+                    ->withInput()
+                    ->withErrors(['phone' => trans('front.common.phone-already-used')]);
+                }
+
                 $newuser = new User;
                 $newuser->is_dentist = 1;
                 $newuser->password = bcrypt(Request::input('name').Request::input('email'));
@@ -100,7 +113,6 @@ class AddController extends FrontController
                 foreach ($this->fields as $key => $value) {
                     if($key=='categories') {
                     } else if($key=='phone') {
-                        $phone = ltrim( str_replace(' ', '', Request::Input('phone')), '0');
                         $newuser->phone = $phone;
                     } else {
                         $newuser->$key = Request::input($key);

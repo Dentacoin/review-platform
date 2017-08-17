@@ -20,7 +20,7 @@
 	    			{{ trans('front.page.profile.wallet.transfer-hint') }}<br/>
 	    		</p>
 
-	    		<form class="form-horizontal">
+	    		<form class="form-horizontal" id="transfer-form">
 
 		            <div class="form-group">
 		                <label class="col-md-3 control-label">{{ trans('front.page.profile.wallet.transfer-address') }}</label>
@@ -37,11 +37,14 @@
 		            </div>
 		            <div class="form-group">
 		                <div class="col-md-12">
-		                    <a href="javascript:;" class="btn btn-primary btn-block" id="transfer-button">
+		                    <button type="submit" class="btn btn-primary btn-block">
 		                    	{{ trans('front.page.profile.wallet.transfer-submit') }}
-		                    </a>
+		                    </button>
 		                    <div class="alert alert-success" id="transfer-succcess" style="display: none;">
 		                    	{{ trans('front.page.profile.wallet.transfer-succcess') }}
+		                    </div>
+		                    <div class="alert alert-warning" id="transfer-invalid" style="display: none;">
+		                    	{{ trans('front.page.profile.wallet.transfer-invalid') }}
 		                    </div>
 		                    <div class="alert alert-warning" id="transfer-error" style="display: none;">
 		                    	{{ trans('front.page.profile.wallet.transfer-error') }}<br/>

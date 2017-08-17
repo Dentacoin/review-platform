@@ -22,8 +22,8 @@
 						'table_fields' => [
 							'id'			=> array(),
                             'secret'        => array(),
+							'used'			=> array(),
                             'created_at'       => array('format' => 'datetime'),
-							'used'			=> array('format' => 'bool'),
 							'delete'		=> array('format' => 'delete'),
 						],
                         'table_data' => $list,

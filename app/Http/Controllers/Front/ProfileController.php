@@ -119,6 +119,8 @@ class ProfileController extends FrontController
             'needs_avatar' => !$this->user->hasimage,
             'no_reviews' => !$this->user->is_dentist && $this->user->reviews_out->isEmpty(),
             'no_address' => $this->user->is_dentist && (!$this->user->city_id || !$this->user->address),
+            'my_reviews' => null,
+            'my_upvotes' => null,
             'js' => [
                 'profile.js',
                 'dApp.js'
@@ -162,9 +164,24 @@ class ProfileController extends FrontController
 	            ->withErrors($validator);
 	        } else {
 
-	        	$send_validate_email = $this->user->email != Request::input('email');
+                $phone = '';
+                if(Request::Input('phone')) {
+                    $phone = ltrim( str_replace(' ', '', Request::Input('phone')), '0');
+                    $other = User::where([
+                        ['id', '!=', $this->user->id],
+                        ['country_id', Request::input('country_id')],
+                        ['phone', $phone],
+                    ])->first();
+                    if(!empty($other)) {
+                        return redirect( getLangUrl('profile/info') )
+                        ->withInput()
+                        ->withErrors(['phone' => trans('front.common.phone-already-used')]);
+                    }
+                }
 
-        		foreach ($fields as $key => $value) {
+                $send_validate_email = $this->user->email != Request::input('email');
+
+                foreach ($fields as $key => $value) {
                     if($key=='categories') {
                         UserCategory::where('user_id', $this->user->id)->delete();
                         if(!empty(Request::input($key))) {
@@ -176,7 +193,6 @@ class ProfileController extends FrontController
                             }
                         }
                     } else if($key=='phone') {
-                        $phone = ltrim( str_replace(' ', '', Request::Input('phone')), '0');
                         $this->user->phone = $phone;
                     } else {
         			    $this->user->$key = Request::input($key);

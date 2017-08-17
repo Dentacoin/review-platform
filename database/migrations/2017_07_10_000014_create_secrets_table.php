@@ -15,8 +15,8 @@ class CreateSecretsTable extends Migration
 	{
 		Schema::create('secrets', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('secret', 64);
-            $table->boolean('used')->nullable()->index();
+            $table->string('secret', 16);
+            $table->integer('used')->index();
             $table->timestamps();
             $table->softDeletes();
 		});

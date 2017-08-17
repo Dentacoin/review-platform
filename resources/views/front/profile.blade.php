@@ -39,11 +39,8 @@
 			</div>
 		</div>
 
-
-		@if(!$needs_avatar && !$no_reviews && !$no_address)
-			@include('front.template-parts.profile-wallet')
-			@include('front.template-parts.profile-reviews')
-		@endif
+		@include('front.template-parts.profile-wallet')
+		@include('front.template-parts.profile-reviews')
 	</div>
 </div>
 

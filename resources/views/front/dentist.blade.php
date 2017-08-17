@@ -273,7 +273,13 @@
 				</div>
 				<div id="review-form" style="display: none;">
 					@if($user)
-  						@include('front.template-parts.submit-review-form')
+						@if($review_limit_reached)
+							<div class="alert alert-info">
+								{{ trans('front.page.'.$current_page.'.write-review-limit-'.$review_limit_reached) }}
+							</div>
+						@else
+  							@include('front.template-parts.submit-review-form')
+						@endif
 					@else
   						<div class="panel-body review login-form">
 							<h3>
