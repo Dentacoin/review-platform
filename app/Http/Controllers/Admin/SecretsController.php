@@ -13,7 +13,7 @@ class SecretsController extends AdminController
     public function list( ) {
 
     	return $this->showView('secrets', array(
-        	'list' => Secret::orderBy('id', 'DESC')->take(50)->get()
+        	'list' => Secret::orderBy('id', 'DESC')->get()
         ));
     }
 
@@ -25,7 +25,7 @@ class SecretsController extends AdminController
                 if(!empty($secret)) {
                     $sec = new Secret;
                     $sec->secret = $secret;
-                    $sec->used = false;
+                    $sec->used = 0;
                     $sec->save();
                 }
             }

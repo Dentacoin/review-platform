@@ -22,12 +22,7 @@ class Secret extends Model {
     ];
 
     public static function getNext() {
-        $found = self::where('used', false)->orderBy('id', 'ASC')->first();
-        if($found) {
-            return $found;
-        } else {
-            return self::where('used', true)->orderBy('id', 'DESC')->first();
-        }
+        return self::orderBy('used', 'ASC')->orderBy('id', 'ASC')->first();
     }
 }
 
