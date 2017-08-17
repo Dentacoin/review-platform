@@ -110,10 +110,8 @@ $(document).ready(function(){
     } );
 
     //Wallet
-    $('#transfer-button').click( function() {
-
-        $('#transfer-succcess').hide();
-        $('#transfer-error').hide();
+    $('#transfer-form').submit( function(e) {
+        e.preventDefault();
 
         sendDCN( $('#transfer-wallet-address').val(), $('#transfer-wallet-amount').val() );
         

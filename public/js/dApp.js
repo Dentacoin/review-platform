@@ -168,7 +168,19 @@ window.addEventListener('load', function() {
 
     // Transfer Dentacoins
     sendDCN = function(dcn_address, amount) {
+        $('#transfer-succcess').hide();
+        $('#transfer-error').hide();
+        $('#transfer-invalid').hide();
+
         console.log("Transfer Details", dcn_address, amount);
+
+        amount = amount.replace(',', '.');
+        var isAddress = web3.isAddress(dcn_address);
+        var isAmount = parseFloat(amount);
+        if (!isAddress || !isAmount) {
+            $('#transfer-invalid').show();
+            return;
+        }
 
         var transactionObject = {
             from: account,
