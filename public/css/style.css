@@ -361,7 +361,8 @@ body {
   .page-profile .site-content .container .form-control-checkboxes {
     border: none;
     box-shadow: none;
-    margin: 0px; }
+    margin: 0px;
+    padding-top: 0px; }
   .page-profile .site-content .container .panel-body-wallet .alert {
     margin-top: 10px;
     margin-bottom: 0px; }
@@ -582,15 +583,15 @@ body {
 /*
     Dentist profile
 */
+.page-profile.sp-home .alert-success,
+.page-profile.sp-reviews .alert-success,
+.page-dentist .alert-success {
+  margin: 20px 15px -20px 15px; }
 .page-profile.sp-home .btn-claim,
 .page-profile.sp-reviews .btn-claim,
 .page-dentist .btn-claim {
   margin-top: -10px;
   margin-bottom: 10px; }
-.page-profile.sp-home .alert-success,
-.page-profile.sp-reviews .alert-success,
-.page-dentist .alert-success {
-  margin: 20px 15px -20px 15px; }
 .page-profile.sp-home .label-partner,
 .page-profile.sp-reviews .label-partner,
 .page-dentist .label-partner {

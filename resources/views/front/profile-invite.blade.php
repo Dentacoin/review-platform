@@ -19,7 +19,7 @@
                 	{{ trans('front.page.profile.'.$current_subpage.'.hint') }}
                 </p>
 
-				{!! Form::open(array('method' => 'post', 'class' => 'form-horizontal', 'id' => 'invite-patient-form' )) !!}
+				{!! Form::open(array('method' => 'post', 'class' => 'form-horizontal clearfix', 'id' => 'invite-patient-form' )) !!}
 					<div class="col-md-5">
                         {{ Form::text( 'name', '', array('class' => 'form-control', 'id' => 'invite-name', 'placeholder' => trans('front.page.profile.'.$current_subpage.'.name') ) ) }}
 					</div>
@@ -29,7 +29,11 @@
 					<div class="col-md-2">
 						{{ Form::submit( trans('front.page.profile.'.$current_subpage.'.submit'), array('class' => 'form-control btn btn-primary' ) ) }}
 					</div>
+					<input type="hidden" name="invite-secret" id="invite-secret" value="">
 				{!! Form::close() !!}
+				<div class="alert alert-warning" id="invite-alert-secret" style="display: none; margin-top: 20px;">
+                	{{ trans('front.page.profile.'.$current_subpage.'.accept-transaction') }}
+				</div>
 				<div class="alert" id="invite-alert" style="display: none; margin-top: 20px;">
 				</div>
 			</div>

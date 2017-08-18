@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->string('address', 128)->nullable();
             $table->string('phone', 15)->nullable();
             $table->string('website', 512)->nullable();
+            $table->text('work_hours')->nullable();
 
 
             
@@ -45,6 +46,7 @@ class CreateUsersTable extends Migration
             $table->float('avg_rating')->nullable()->index();
             $table->integer('ratings')->nullable()->index();
             $table->integer('invited_by')->nullable();
+            $table->string('invite_secret', 16)->nullable();
 
             $table->boolean('hasimage')->nullable();
 

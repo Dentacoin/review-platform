@@ -94,7 +94,7 @@
 					</p>
 				@endif
 
-				@if($item->verified)
+				@if($item->is_verified)
 					@if($item->phone)
 						<p>
 							<i class="fa fa-phone"></i> 
@@ -108,6 +108,28 @@
 							<a href="{{ $item->website }}" target="_blank">{{ $item->website }}</a>
 						</p>
 					@endif
+
+					@if( !empty(json_decode($item->work_hours, true)) )
+						<p>
+							<i class="fa fa-clock-o"></i> 
+							{{ trans('front.page.dentist.work-hours') }}
+						</p>
+
+						<table class="table table-striped">
+	                        @for($day=1;$day<=7;$day++)
+	                        	<tr>
+	                        		<td>
+	                        			{{ date('l', strtotime("Sunday +{$day} days")) }}
+	                        		</td>
+	                        		<td>
+	                        			{{ !empty(json_decode($item->work_hours, true)[$day]) ? json_decode($item->work_hours, true)[$day][0].' - '.json_decode($item->work_hours, true)[$day][1] : trans('front.page.dentist.work-hours-closed') }}
+	                        		</td>
+	                        	</tr>
+	                        @endfor
+						</table>
+					@endif
+
+
 				@endif
 			</div>
 			@if($item->photos->isNotEmpty())

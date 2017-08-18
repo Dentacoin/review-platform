@@ -144,6 +144,9 @@ class LoginController extends FrontController
             if(!empty(session('invited_by'))) {
                 $newuser->invited_by = session('invited_by');
             }
+            if(!empty(session('invite_secret'))) {
+                $newuser->invite_secret = session('invite_secret');
+            }
             
             $newuser->save();
 
@@ -167,7 +170,7 @@ class LoginController extends FrontController
             Auth::login($newuser, true);
 
             if($newuser->invited_by) {
-                Request::session()->flash('success-message', trans('front.page.registration.completed-by-invite'));
+                Request::session()->flash('success-message', trans('front.page.registration.completed-by-invite', ['name' => $newuser->invitor->getName()]));
             } else {
                 Request::session()->flash('success-message', trans('front.page.registration.completed'));
             }

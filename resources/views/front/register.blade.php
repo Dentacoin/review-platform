@@ -16,6 +16,8 @@
 						<p>
 							{{ trans('front.page.'.$current_page.'.hint') }}								
 						</p>
+						
+						@include('front.errors')
 
 						<div class="form-group">
 
@@ -37,6 +39,7 @@
 							</div>
 
 						</div>
+
 
 						<div {!! count($errors) ? '' : 'style="display: none;"' !!} id="register-form">
 
@@ -89,9 +92,6 @@
 										</button>
 									</div>
 								</div>
-
-
-								@include('front.errors')
 
 
 

@@ -155,7 +155,7 @@ class Email extends Model
 				'[invitelink]',
 				'[/invitelink]',
 			), array(
-				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token()).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$this->meta['secret']).'">',
 				'</a>',
 			), $content);
 		}

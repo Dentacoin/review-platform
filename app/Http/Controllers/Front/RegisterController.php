@@ -53,6 +53,9 @@ class RegisterController extends FrontController
             if(!empty(session('invited_by'))) {
                 $newuser->invited_by = session('invited_by');
             }
+            if(!empty(session('invite_secret'))) {
+                $newuser->invite_secret = session('invite_secret');
+            }
 
             $newuser->save();
 
@@ -61,7 +64,7 @@ class RegisterController extends FrontController
             Auth::login($newuser, Request::input('remember'));
 
             if($newuser->invited_by) {
-                Request::session()->flash('success-message', trans('front.page.registration.success-by-invite'));
+                Request::session()->flash('success-message', trans('front.page.registration.success-by-invite', ['name' => $newuser->invitor->getName()]  ));
             } else {
                 Request::session()->flash('success-message', trans('front.page.registration.success'));
             }
@@ -69,7 +72,7 @@ class RegisterController extends FrontController
         }
     }
 
-    public function invite_accept($locale=null, $id, $hash) {
+    public function invite_accept($locale=null, $id, $hash, $secret) {
 
         $user = User::find($id);
 
@@ -77,7 +80,10 @@ class RegisterController extends FrontController
 
             if ($hash == $user->get_invite_token()) {
 
-                session(['invited_by' => $user->id]);
+                session([
+                    'invited_by' => $user->id,
+                    'invite_secret' => $secret,
+                ]);
 
                 Request::session()->flash('success-message', trans('front.page.registration.invitation', [ 'name' => $user->name ]));
                 return redirect( getLangUrl('register'));

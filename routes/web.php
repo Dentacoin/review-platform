@@ -80,7 +80,7 @@ Route::group(['prefix' => '{locale?}'], function(){
 	Route::group(['namespace' => 'Front'], function () {
 		Route::get('/', 									'IndexController@home');
 		
-		Route::any('invite/{id}/{hash}', 					'RegisterController@invite_accept');
+		Route::any('invite/{id}/{hash}/{secret}', 			'RegisterController@invite_accept');
 		Route::any('claim/{id}/{hash}', 					'RegisterController@claim');
 
 		Route::post('phone/save', 							'PhoneController@save');

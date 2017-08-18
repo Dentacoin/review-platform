@@ -84,9 +84,23 @@ $(document).ready(function(){
     $('#invite-patient-form').submit( function(e) {
         e.preventDefault();
 
+        $('#invite-alert').hide();
+        $('#invite-alert-secret').hide();
+
         if(ajax_is_running) {
             return;
         }
+
+        if(typeof(account)=='undefined' || !account) {
+            $('#no-wallet-modal').modal();
+        }
+
+        if(!$('#invite-secret').val().trim().length) {
+            generateInviteCode();
+            return;
+        }
+
+
         ajax_is_running = true;
 
         $('#invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
@@ -96,6 +110,7 @@ $(document).ready(function(){
             $(this).serialize() , 
             function( data ) {
                 if(data.success) {
+                    $('#invite-secret').val('');
                     $('#invite-email').val('');
                     $('#invite-name').val('').focus();
                     $('#invite-alert').show().addClass('alert-success').html(data.message);
@@ -116,6 +131,18 @@ $(document).ready(function(){
         sendDCN( $('#transfer-wallet-address').val(), $('#transfer-wallet-amount').val() );
         
     });
+
+    //Profile info
+    $('.work-hour-cb').change( function() {
+        var active = $(this).is(':checked');
+        console.log(active);
+        var texts = $(this).closest('.form-group').find('input[type="text"]');
+        if(active) {
+            texts.prop("disabled", false);
+        } else {
+            texts.attr('disabled', 'disabled');
+        }
+    } )
 
 
 });

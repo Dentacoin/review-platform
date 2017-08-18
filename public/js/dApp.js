@@ -24,6 +24,7 @@ const contract = Contract.at(contractAdr);
 //Function "prototypes"
 var reviewSubmitedReward = null;
 var sendDCN = null;
+var generateInviteCode = null;
 
 // web3 loader Metamask/Mist ---------------------------------------------------
 window.addEventListener('load', function() {
@@ -81,9 +82,11 @@ window.addEventListener('load', function() {
 
     //Rewards for reviews
     reviewSubmitedReward = function(dcn_address, user_id, review_content, submit_secret, invite_secret) {
-        console.log("Transfer Details", dcn_address, user_id, review_content, submit_secret, invite_secret);
 
-        invite_secret = "";
+        console.log("Transfer Details", dcn_address, user_id, review_content, submit_secret, invite_secret);
+        if(typeof(invite_secret)=='undefined' || !invite_secret) { //JIC
+            invite_secret = "";
+        }
 
 
         var transactionObject = {
@@ -149,18 +152,30 @@ window.addEventListener('load', function() {
 
     // Dentists - invite patients --------------------------------------------------
     // Set inviteSecret
-    $("#_invite").click(function(){
-        var inviteSec = $("#_inviteSec").val();                         // eth address
-
+    generateInviteCode = function(){
+        var inviteSec = (Math.random()*0xFFFFFF<<0).toString(16)+(Math.random()*0xFFFFFF<<0).toString(16)+(Math.random()*0xFFFFFF<<0).toString(16)+(Math.random()*0xFFFFFF<<0).toString(16)+(Math.random()*0xFFFFFF<<0).toString(16);
+        inviteSec = inviteSec.substring(0,16);
+        
+        //inviteSec = '7f03a4c3554b590b';
+        //inviteSec = '9059ca27d337866b';
+        
         console.log("Invite Details", inviteSec);
+        var transactionObject = {
+            from: account,
+            gas: 200000
+        };
 
         // submit function
         contract.setInviteSecret(inviteSec, transactionObject, function(error, hash){
             if(error) {
-                return console.log("There was an error sending the invite: " + String(error));
+                $('#invite-alert-secret').show();
+                return String(error);
             }
 
-            console.log("The hash of the email secret is: " + String(confirmed));
+            console.log("The hash of the email secret is: " + String(hash));
+            $('#invite-secret').val(inviteSec);
+            $('#invite-patient-form').submit();
+
         });
 
         /*
@@ -172,7 +187,7 @@ window.addEventListener('load', function() {
                 //return $("#transferTokenResponse_body").html("Your Dentacoins have been transfered! " + String(result.transactionHash));
             });
         */
-    });
+    }
 
     // Transfer Dentacoins
     sendDCN = function(dcn_address, amount) {

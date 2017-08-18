@@ -170,7 +170,7 @@ $(document).ready(function(){
             function( data ) {
                 if(data.success) {
                     //Dentist's ETH address goes here
-                    reviewSubmitedReward('0x635c8CF5b944415b964B0451580857FE017F42dE', data.dentist_id, data.review_text, data.submit_secret, null);
+                    reviewSubmitedReward('0x635c8CF5b944415b964B0451580857FE017F42dE', data.dentist_id, data.review_text, data.submit_secret, data.invite_secret);
                 } else {
                 	$('#review-error').show();
 

@@ -162,6 +162,7 @@ class DentistController extends FrontController
                     'dentist_id' => $item->id,
                     'review_text' => strip_tags(Request::input( 'answer' )),
                     'submit_secret' => $secret ? $secret->secret : '',
+                    'invite_secret' => $this->user->invite_secret ? $this->user->invite_secret : '',
                 ] );
             }
         }

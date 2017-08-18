@@ -397,7 +397,9 @@
 			  		</div>
 			  	</div>
 			</div>
+        @endif
 
+        @if( $current_page=='dentist' || ($current_page=='profile' && !empty($current_subpage) && $current_subpage=='invite' ) )
 			<div class="modal fade" tabindex="-1" id="no-wallet-modal" role="dialog" aria-labelledby="gridSystemModalLabel">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">

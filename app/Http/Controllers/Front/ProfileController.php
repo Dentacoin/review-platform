@@ -78,9 +78,12 @@ class ProfileController extends FrontController
             'website' => [
                 'type' => 'text',
             ],
-    		'categories' => [
-    			'type' => 'checkboxes',
+            'categories' => [
+                'type' => 'checkboxes',
                 'values' => $this->categories
+            ],
+    		'work_hours' => [
+    			'type' => 'work_hours'
     		],
     	];
 
@@ -192,6 +195,16 @@ class ProfileController extends FrontController
                                 $newc->save();
                             }
                         }
+                    } else if($key=='work_hours') {
+                        $wh = Request::input($key);
+                        if(!empty($wh) && is_array($wh)) {
+                            foreach ($wh as $k => $v) {
+                                if(is_array($v) && ( empty($v[0]) || empty($v[1]) ) ) {
+                                    unset($wh[$k]);
+                                }
+                            }
+                        }
+                        $this->user->work_hours = json_encode($wh);
                     } else if($key=='phone') {
                         $this->user->phone = $phone;
                     } else {
@@ -279,6 +292,7 @@ class ProfileController extends FrontController
         if(Request::isMethod('post')) {
             $validator = Validator::make(Request::all(), [
                 'email' => ['required', 'email'],
+                'invite-secret' => ['required', 'string'],
                 'name' => ['required', 'string'],
             ]);
 
@@ -292,7 +306,10 @@ class ProfileController extends FrontController
                 $this->user->email = Request::Input('email');
                 $this->user->save();
 
-                $this->user->sendTemplate(7, ['dentist_name' => $dentist_name]);
+                $this->user->sendTemplate(7, [
+                    'dentist_name' => $dentist_name,
+                    'secret' => Request::Input('invite-secret')
+                ]);
 
                 //Back to original
                 $this->user->name = $dentist_name;
@@ -305,7 +322,8 @@ class ProfileController extends FrontController
 		return $this->ShowView('profile-invite', [
 			'menu' => $this->menu_dentist,
             'js' => [
-                'profile.js'
+                'profile.js',
+                'dApp.js',
             ],
 		]);
     }
