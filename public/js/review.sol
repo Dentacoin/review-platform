@@ -76,6 +76,10 @@ contract Review is owned {
     tokenAddress = dcnToken(0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6);
   }
 
+// Events-----------------------------------------------------------------------
+
+  event SubmitEvent(address indexed _from, address indexed _to, uint256 _value);
+
 // Setter and Getter -----------------------------------------------------------
 
     function setDCNAmounts (uint256 _dcnAmount, uint256 _dcnAmountTrusted) onlyOwner {
