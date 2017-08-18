@@ -166,10 +166,12 @@ contract Review is owned {
       // remove
       hashedInviteSecret[keccak256(_inviteSecret)] = false;
       tokenAddress.transfer(msg.sender, dcnAmountTrusted);
+      SubmitEvent(this, msg.sender, dcnAmountTrusted);
       return true;
 
     } else {
       tokenAddress.transfer(msg.sender, dcnAmount);
+      SubmitEvent(this, msg.sender, dcnAmount);
       return true;
     }
 
