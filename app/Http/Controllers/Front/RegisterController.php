@@ -60,8 +60,12 @@ class RegisterController extends FrontController
 
             Auth::login($newuser, Request::input('remember'));
 
-            Request::session()->flash('success-message', trans('front.page.registration.success'));
-            return redirect(getLangUrl('profile'));
+            if($newuser->invited_by) {
+                Request::session()->flash('success-message', trans('front.page.registration.success-by-invite'));
+            } else {
+                Request::session()->flash('success-message', trans('front.page.registration.success'));
+            }
+            return redirect( $newuser->invitor->getLink() ? : getLangUrl('profile') );
         }
     }
 

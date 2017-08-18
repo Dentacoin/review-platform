@@ -77,12 +77,17 @@
 	                            <a href="{{ getLangUrl('add') }}">
 	                            	{{ trans('front.common.add-dentist') }}
 	                            </a>
-	                        </li>
 				            @foreach ($pages_header as $key => $page)
 				                <li {!! $current_page==$page->slug ? 'class="active"' : '' !!} >
 				                    <a href="{{ getLangUrl($page['slug']) }}" role="button">{{ $page['title'] }}</a>
 				                </li>
 				            @endforeach
+	                        </li>
+				        	<li>
+	                            <a href="{{ url('MetaMaskInstructions.pdf') }}" target="_blank">
+	                            	{{ trans('front.common.metamask-instructions') }}
+	                            </a>
+	                        </li>
 				        </ul>
 
 						<ul class="nav navbar-nav navbar-right">
@@ -90,7 +95,7 @@
 	                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 	                            	@if($user)
 		                            	<img class="header-avatar" src="{{ $user->getImageUrl(true) }}">
-		                            	{{ $user->getName() }}
+		                            	{{ $user->getNameShort() }}
 	                            	@else
 	                            		{{ trans('front.common.profile') }}
 	                            	@endif

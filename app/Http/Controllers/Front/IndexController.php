@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 use App\Models\Country;
 use App\Models\City;
+use App\Models\User;
 
 use App;
 
@@ -22,7 +23,8 @@ class IndexController extends FrontController
 		}
 
 		return $this->ShowView('index', array(
-			'placeholder' => $placeholder
+			'placeholder' => $placeholder,
+			'users_count' => User::count()
         ));	
 	}
 

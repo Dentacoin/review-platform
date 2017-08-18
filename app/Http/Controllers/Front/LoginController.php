@@ -166,8 +166,12 @@ class LoginController extends FrontController
 
             Auth::login($newuser, true);
 
-            Request::session()->flash('success-message', trans('front.page.registration.completed'));
-            return redirect( getLangUrl('profile') );
+            if($newuser->invited_by) {
+                Request::session()->flash('success-message', trans('front.page.registration.completed-by-invite'));
+            } else {
+                Request::session()->flash('success-message', trans('front.page.registration.completed'));
+            }
+            return redirect( $newuser->invitor->getLink() ? : getLangUrl('profile') );
         }
     }
 }

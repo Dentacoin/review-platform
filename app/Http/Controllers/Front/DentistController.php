@@ -98,7 +98,9 @@ class DentistController extends FrontController
 
                     $old_review = $this->user->hasReviewTo($item->id);
                     if($old_review && $old_review->status=='accepted') {
-
+                        ; //dgd
+                    } else if( $this->user->getReviewLimits() ) {
+                        ; //dgd
                     } else {
                         $secret = Secret::getNext();
 

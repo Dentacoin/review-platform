@@ -5,6 +5,43 @@
   width: 0px;
   height: 0px; }
 
+/* 
+    Trigger menu earlier
+*/
+@media (max-width: 1000px) {
+  .navbar-header {
+    float: none; }
+
+  .navbar-left, .navbar-right {
+    float: none !important; }
+
+  .navbar-toggle {
+    display: block; }
+
+  .navbar-collapse {
+    border-top: 1px solid transparent;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+
+  .navbar-fixed-top {
+    top: 0;
+    border-width: 0 0 1px; }
+
+  .navbar-collapse.collapse {
+    display: none !important; }
+
+  .navbar-nav {
+    float: none !important;
+    margin-top: 7.5px; }
+
+  .navbar-nav > li {
+    float: none; }
+
+  .navbar-nav > li > a {
+    padding-top: 10px;
+    padding-bottom: 10px; }
+
+  .collapse.in {
+    display: block !important; } }
 /*
     Header & Layout
 */
@@ -826,7 +863,8 @@ body {
   background-size: cover;
   min-height: 600px;
   position: relative;
-  margin-bottom: 0px; }
+  margin-bottom: 0px;
+  padding-top: 0px; }
   .page-index .jumbotron .search-bar {
     width: 100%;
     position: absolute;
@@ -845,6 +883,39 @@ body {
       .page-index .jumbotron .search-bar .col-md-5 {
         padding-top: 10px;
         padding-bottom: 10px; } }
+.page-index .ribbon-container {
+  position: relative; }
+  .page-index .ribbon-container .ribbon {
+    position: absolute;
+    top: 0px;
+    left: 15px;
+    padding: 10px 20px;
+    background: #126585;
+    color: white;
+    width: 140px;
+    text-align: center; }
+    @media (max-width: 767px) {
+      .page-index .ribbon-container .ribbon {
+        left: 50%;
+        margin-left: -70px; } }
+    .page-index .ribbon-container .ribbon b {
+      display: block;
+      font-size: 20px; }
+    .page-index .ribbon-container .ribbon .right-t,
+    .page-index .ribbon-container .ribbon .left-t {
+      position: absolute;
+      bottom: -30px;
+      width: 0;
+      height: 0;
+      border-style: solid; }
+    .page-index .ribbon-container .ribbon .left-t {
+      left: 0px;
+      border-width: 30px 70px 0 0;
+      border-color: #126585 transparent transparent transparent; }
+    .page-index .ribbon-container .ribbon .right-t {
+      right: 0px;
+      border-width: 0 70px 30px 0;
+      border-color: transparent #126585 transparent transparent; }
 .page-index .container.reasons {
   padding-top: 40px;
   padding-bottom: 40px; }

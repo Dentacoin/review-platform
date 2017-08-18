@@ -80,6 +80,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->title.' '.$this->name;
     }
 
+    public function getNameShort() {
+        return explode(' ', $this->name)[0];
+    }
+
     public function getMaskedPhone() {
         return '0'.substr($this->phone, 0, 3).' **** '.substr($this->phone, mb_strlen($this->phone)-2, 2);
     }

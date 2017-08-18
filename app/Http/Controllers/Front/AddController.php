@@ -132,7 +132,7 @@ class AddController extends FrontController
                 $newuser->sendTemplate( 9 );
                 
                 Request::session()->flash('success-message', trans('front.page.add.dentists-added'));
-                return redirect( getLangUrl('add') );
+                return redirect( $newuser->getLink() );
             }
         }
 

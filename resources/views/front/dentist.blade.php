@@ -177,7 +177,7 @@
 
 								<div class="ratings">
 									<div class="stars">
-										<div class="bar" style="width: {{ getStarWidth($aggregated_rates_total[$question->id]) }}px;">
+										<div class="bar" style="width: {{ !empty($aggregated_rates_total[$question->id]) ? getStarWidth($aggregated_rates_total[$question->id]) : 0 }}px;">
 										</div>
 									</div>
 									<div class="rating">
@@ -202,7 +202,7 @@
 
 										<div class="ratings">
 											<div class="stars">
-												<div class="bar" style="width: {{ getStarWidth($aggregated_rates[$question->id][$i]) }}px;">
+												<div class="bar" style="width: {{ !empty($aggregated_rates[$question->id][$i]) ? getStarWidth($aggregated_rates[$question->id][$i]) : 0 }}px;">
 												</div>
 											</div>
 										</div>

@@ -3,6 +3,14 @@
 @section('content')
 
 <div class="jumbotron">
+	<div class="container ribbon-container">
+		<div class="ribbon">
+			<b>{{ $users_count }}</b>
+			{{ trans('front.page.index.users-count') }}
+			<div class="left-t"></div>
+			<div class="right-t"></div>
+		</div>
+	</div>
 	<div class="search-bar">
 		<div class="container">
 			<h1>
