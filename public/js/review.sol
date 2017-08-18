@@ -76,6 +76,10 @@ contract Review is owned {
     tokenAddress = dcnToken(0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6);
   }
 
+// Events-----------------------------------------------------------------------
+
+  event SubmitEvent(address indexed _from, address indexed _to, uint256 _value);
+
 // Setter and Getter -----------------------------------------------------------
 
     function setDCNAmounts (uint256 _dcnAmount, uint256 _dcnAmountTrusted) onlyOwner {
@@ -162,10 +166,12 @@ contract Review is owned {
       // remove
       hashedInviteSecret[keccak256(_inviteSecret)] = false;
       tokenAddress.transfer(msg.sender, dcnAmountTrusted);
+      SubmitEvent(this, msg.sender, dcnAmountTrusted);
       return true;
 
     } else {
       tokenAddress.transfer(msg.sender, dcnAmount);
+      SubmitEvent(this, msg.sender, dcnAmount);
       return true;
     }
 
