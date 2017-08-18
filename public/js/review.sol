@@ -60,10 +60,7 @@ contract Review is owned {
     // date of the review
     uint256 timeStamp;
     address writtenByAddress;
-    address writtenForAddress;
-    uint256 writtenForID;
     bytes32 content;
-    bool trusted;
   }
 
   mapping (uint256 => Reviews) public reviewID;
@@ -75,6 +72,9 @@ contract Review is owned {
   function Review() {
     tokenAddress = dcnToken(0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6);
   }
+
+// Events-----------------------------------------------------------------------
+  event SubmitEvent(address indexed _from, address indexed _to, uint256 _value);
 
 // Setter and Getter -----------------------------------------------------------
 
@@ -123,7 +123,7 @@ contract Review is owned {
 
   function () payable onlyOwner{}
 
-  function submitReview(address _to, uint256 _toID, bytes32 _content, string _submitSecret, string _inviteSecret) returns (bool success) {
+  function submitReview(address _to, bytes32 _content, string _submitSecret, string _inviteSecret) returns (string trusted) {
 
     // Check if reviewer is not a dentist
     require (!dentistWhitelist[msg.sender]);
@@ -144,8 +144,6 @@ contract Review is owned {
     //Store review details
     reviewID[count].timeStamp = now;
     reviewID[count].writtenByAddress = msg.sender;
-    reviewID[count].writtenForAddress = _to;
-    reviewID[count].writtenForID = _toID;
     reviewID[count].content = _content;
 
     count++;
@@ -156,17 +154,19 @@ contract Review is owned {
       secretCount = 0;
     }
 
+
     //Check if review is trusted by comparing hashed Secret from invite email with db
     if (hashedInviteSecret[keccak256(_inviteSecret)]) {
-      reviewID[count].trusted = true;
       // remove
       hashedInviteSecret[keccak256(_inviteSecret)] = false;
       tokenAddress.transfer(msg.sender, dcnAmountTrusted);
-      return true;
+      SubmitEvent(this, msg.sender, dcnAmountTrusted);
+      return "trusted";
 
     } else {
       tokenAddress.transfer(msg.sender, dcnAmount);
-      return true;
+      SubmitEvent(this, msg.sender, dcnAmount);
+      return "untrusted";
     }
 
   }
