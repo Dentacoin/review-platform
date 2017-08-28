@@ -59,7 +59,7 @@ contract Review is owned {
     // date of the review
     uint256 timeStamp;
     address writtenByAddress;
-    bytes32 content;
+    bytes48 content;
   }
   mapping (uint256 => Reviews) public reviewID;
 
@@ -126,7 +126,7 @@ contract Review is owned {
 
   function () payable onlyOwner{}
 
-  function submitReview(address _to, bytes32 _content, string _submitSecret, string _inviteSecret) returns (string trusted) {
+  function submitReview(address _to, bytes48 _content, string _submitSecret, string _inviteSecret) returns (string trusted) {
 
     // Check if reviewer is not a dentist
     require (!dentistWhitelist[msg.sender]);
