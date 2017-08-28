@@ -1,5 +1,5 @@
 /**
-
+Rinkeby! TESTNET
  v.3
  * Dentacoin Review Platform contract created on July the xth, 2017 by Dentacoin B.V. in the Netherlands
  *
@@ -69,7 +69,7 @@ contract Review is owned {
 
 
   function Review() {
-    tokenAddress = dcnToken(0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6);
+    tokenAddress = dcnToken(0x2Debb13BCF5526e0cF5E3A4E5049100E3F7c2AE5);
   }
 
 // Events-----------------------------------------------------------------------
