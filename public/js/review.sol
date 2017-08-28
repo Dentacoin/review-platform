@@ -54,6 +54,8 @@ contract Review is owned {
   uint256 public dcnAmountTrusted;
   bytes32 public hashedInSecret;
   bytes8[] public hashedSubmitSecrets;
+  address[] public untrustedAddress;
+  address[] public trustedAddress;
 
 
   struct Reviews {
@@ -66,6 +68,7 @@ contract Review is owned {
 
   mapping (address => bool) public dentistWhitelist;
   mapping (bytes32 => bool) public hashedInviteSecret;
+
 
 
   function Review() {
@@ -160,12 +163,12 @@ contract Review is owned {
     if (hashedInviteSecret[keccak256(_inviteSecret)]) {
       // remove
       hashedInviteSecret[keccak256(_inviteSecret)] = false;
-      tokenAddress.transfer(msg.sender, dcnAmountTrusted);
+      untrustedAddress.push(msg.sender);
       SubmitEvent(this, msg.sender, dcnAmountTrusted);
       return "trusted";
 
     } else {
-      tokenAddress.transfer(msg.sender, dcnAmount);
+      trustedAddress.push(msg.sender);
       SubmitEvent(this, msg.sender, dcnAmount);
       return "untrusted";
     }
@@ -175,6 +178,19 @@ contract Review is owned {
 
 
 // Admin section ---------------------------------------------------------------
+
+  function transferRewards () onlyOwner {
+    for (uint i = 0; i < trustedAddress.length; i++) {
+      tokenAddress.transfer(trustedAddress[i], dcnAmountTrusted);
+      delete trustedAddress[i];
+      trustedAddress.length--;
+      }
+    for (uint ii = 0; ii < untrustedAddress.length; ii++) {
+      tokenAddress.transfer(untrustedAddress[ii], dcnAmount);
+      delete untrustedAddress[ii];
+      untrustedAddress.length--;
+      }
+  }
 
   function refundToOwner () onlyOwner {
       if (tokenAddress.balanceOf(this) > 0) {
