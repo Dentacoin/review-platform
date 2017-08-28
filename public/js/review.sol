@@ -95,6 +95,11 @@ contract Review is owned {
       require (_dentist != 0x0);
       dentistWhitelist[_dentist] = true;
     }
+    function removeDentistFromWhitelist (address _dentist) onlyOwner {
+      require (_dentist != 0x0);
+      dentistWhitelist[_dentist] = false;
+    }
+
 
     function addSubmitSecrets (bytes8[] _arrayOfHashedSecrets) onlyOwner {
       for (uint i = 0; i < _arrayOfHashedSecrets.length; i++) {
