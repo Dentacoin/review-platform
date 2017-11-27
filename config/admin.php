@@ -23,12 +23,25 @@ return [
         'emails' => array(
             'icon' => 'envelope',
         ),
+        'vox' => array(
+            'icon' => 'bullhorn',
+            'subpages' => array(
+                'list' => 'list',
+                'add' => 'add',
+                'ideas' => 'ideas',
+            ),
+            'js' => array(
+                'vox.js'
+            ),
+        ),
+        /*
         'rewards' => array(
             'icon' => 'bitcoin',
         ),
         'secrets' => array(
             'icon' => 'key',
         ),
+        */
         'admins' => array(
             'icon' => 'user-plus',
         ),
@@ -40,6 +53,7 @@ return [
             'subpages' => array(
                 'admin' => 'admin',
                 'front' => 'front',
+                'vox' => 'vox',
                 'validation' => 'validation',
             )
         ),

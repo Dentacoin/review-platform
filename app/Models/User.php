@@ -13,7 +13,12 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Support\Str;
 use Image;
 use App\Models\Email;
+use App\Models\Reward;
+use App\Models\VoxReward;
+use App\Models\VoxCashout;
+use App\Models\UserBan;
 use Carbon\Carbon;
+use Auth;
 
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
@@ -33,6 +38,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'website',
         'city_id',
         'country_id',
+        'gender',
+        'birthyear',
         'avg_rating',
         'ratings',
         'invited_by',
@@ -42,11 +49,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'verification_code',
         'phone_verified',
         'phone_verified_on',
+        'register_reward',
+        'register_tx',
+        'vox_address',
+        'vox_active',
     ];
     protected $dates = [
         'created_at',
         'updated_at',
-    	'deleted_at',
+        'deleted_at',
         'verified_on',
         'phone_verified_on',
     ];
@@ -75,6 +86,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function photos() {
         return $this->hasMany('App\Models\UserPhoto', 'user_id', 'id');
     }
+    public function bans() {
+        return $this->hasMany('App\Models\UserBan', 'user_id', 'id');
+    }
+    public function invites() {
+        return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
+
+    public function getWebsiteUrl() {
+        return mb_strpos( $this->website, 'http' )!==false ? $this->website : 'http://'.$this->website;
+    }
 
     public function getName() {
         return $this->title.' '.$this->name;
@@ -90,6 +111,44 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function getMaskedEmail() {
         $mail_arr = explode('@', $this->email);
         return substr($mail_arr[0], 0, 3).'****@'.$mail_arr[1];
+    }
+
+    public function isBanned($domain) {
+        foreach ($this->bans as $ban) {
+            if($ban->domain==$domain && Carbon::now()->lt( $ban->expires ) ) {
+                return $ban;
+            }
+        }
+
+        return false;
+    }
+
+    public function banUser($domain) {
+        $times = 0;
+        foreach ($this->bans as $ban) {
+            if($ban->domain==$domain) {
+                $times++;
+            }
+        }
+
+        if($times==0 || $times==1) {
+            $ban = new UserBan;
+            $ban->user_id = $this->id;
+            $ban->domain = $domain;
+            $ban->expires = Carbon::now()->addDays( $times==0 ? 1 : 3 );
+            $ban->save();
+            $this->sendTemplate(15, [
+                'expires' => $ban->expires->toTimeString().' '.$ban->expires->toFormattedDateString()
+            ]);
+
+            session([
+                'ban-expires' => $ban->expires->toTimeString().' '.$ban->expires->toFormattedDateString()
+            ]);
+        } else {
+            self::destroy( $this->id );
+            $this->sendTemplate(16);                                    
+        }
+        Auth::guard('web')->logout();
     }
 
     public function hasReviewTo($dentist_id) {
@@ -187,6 +246,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getReviewLimits() {
+        if( Auth::guard('admin')->user() ) {
+            return null;
+        }
+
         $limits = config('limits.reviews');
         
         if($this->reviews_out->isEmpty()) {
@@ -214,6 +277,98 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
         
         return null;
+    }
+
+    public function my_address() {
+        $my_dcn_address = $this->register_reward ? $this->register_reward : ( $this->vox_address ? $this->vox_address : null );
+        if(!$my_dcn_address) {
+            foreach ($this->reviews_out as $ro) {
+                if($ro->reward_address) {
+                    $my_dcn_address = $ro->reward_address;
+                    break;
+                }
+            }
+        }
+
+        return $my_dcn_address;        
+    }
+
+    public function canIuseAddress( $address ) {
+        $used = self::where('register_reward', 'LIKE', $address)->first();
+        if($used && $used->id!=$this->id) {
+            return false;
+        }
+
+        $used_vox = self::where('vox_address', 'LIKE', $address)->first();
+        if($used_vox && $used_vox->id!=$this->id) {
+            return false;
+        }
+
+        $used_reward = Review::where('reward_address', 'LIKE', $address)->first();
+        if($used_reward && $used_reward->user_id!=$this->id) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function getBalance($address) {
+
+        $ret = [
+            'success' => false
+        ];
+        $curl = file_get_contents('https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address='.$address.'&tag=latest&apikey=NBI9SGSW6P1NZQGYT8BD8DDN5UQ7AIM4E9');
+        if(!empty($curl)) {
+            $curl = json_decode($curl, true);
+            if($curl['status']) {
+                $ret['success'] = true;
+                $ret['result'] = $curl['result'];
+            }
+        }
+
+        return $ret;
+    }
+
+    //
+    //
+    // Vox 
+    //
+    //
+
+    public function getVoxBalance() {
+        $income = VoxReward::where('user_id', $this->id)->sum('reward');
+        $cashouts = VoxCashout::where('user_id', $this->id)->sum('reward');
+
+        return $income - $cashouts;
+    }
+
+    public function madeTest($id) {
+        return VoxReward::where('user_id', $this->id)
+        ->where('vox_id', $id)
+        ->first();
+    }
+
+    public function vox_cashouts() {
+        return $this->hasMany('App\Models\VoxCashout', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
+    public function vox_rewards() {
+        return $this->hasMany('App\Models\VoxReward', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
+
+    public function vox_should_ban() {
+        $tests = VoxReward::where('user_id', $this->id)
+        ->where('is_scam', '1')
+        ->where('created_at', '>', Carbon::now()->subDays(7))
+        ->count();
+
+
+        $answers = VoxAnswer::where('user_id', $this->id)
+        ->where('is_scam', '1')
+        ->where('created_at', '>', Carbon::now()->subDays(7))
+        ->count();
+
+        return $tests>=3 || $answers>=3;
+
     }
 
 }

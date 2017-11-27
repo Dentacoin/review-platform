@@ -62,19 +62,49 @@
                 	{{ trans('front.page.dentist.review-form-answer-all') }}
                 </div>
 
-                <div class="alert alert-warning" id="review-crypto-error" style="display: none;">
-                	{{ trans('front.page.dentist.review-form-crypto-error') }}
-                </div>
-
                 {{ Form::textarea( 'answer', $my_review ? $my_review->answer : '', array( 'id' => 'review-answer', 'class' => 'form-control', 'placeholder' => trans( 'front.page.dentist.review-form-last-question-placeholder' ) )) }}
 			</div>
 		</div>
 		<div class="form-group">
 			<div class="col-md-12">
 	            <p>
-	            	* {{ trans('front.page.dentist.review-form-submit-hint') }}
+	            	@if($my_dcn_address)
+	            		{!! nl2br(trans('front.page.dentist.review-form-submit-hint-hasaddress', ['address' => $my_dcn_address])) !!}
+	            	@else
+	            		{!! nl2br(trans('front.page.dentist.review-form-submit-hint')) !!}
+	            	@endif
 	            </p>
-	            {{ Form::submit( trans('front.page.dentist.review-form-submit'), array('class' => 'btn btn-primary btn-block' )) }}
+
+	            @if(!$my_dcn_address)
+	                {{ Form::text( 'reviewer-address', $user->register_reward ? $user->register_reward : '', array( 'id' => 'reviewer-address', 'class' => 'form-control', 'placeholder' => trans( 'front.page.dentist.review-form-address-placeholder' ) )) }}
+	                <br/>
+                @endif
+
+	            {{ Form::submit( trans('front.page.dentist.review-form-submit'), array('class' => 'btn btn-primary btn-block', 'id' => 'review-submit-button' )) }}
+
+                <div class="alert alert-warning" id="review-crypto-error" style="display: none;">
+                	{{ trans('front.page.dentist.review-form-crypto-error') }}
+	            	<span class="error-info" style="display: block; margin: 10px 0px;">
+	            	</span>
+                </div>
+	            <div class="alert alert-info" id="review-pending" style="display: none;">
+	            	{{ trans('front.page.dentist.review-form-pending') }}
+	            	<a href="{{ $item->getLink() }}" style="display: block; margin: 10px 0px;">
+	            		{{ trans('front.page.dentist.review-form-my-review') }}
+	            	</a>
+	            	<a class="etherscan-link" target="_blank" href="{{ $item->getLink() }}" style="display: block; margin: 10px 0px;">
+	            		{{ trans('front.page.dentist.review-form-etherscan') }}
+	            	</a>
+	            </div>
+	            <div class="alert alert-info" id="review-confirmed" style="display: none;">
+	            	{{ trans('front.page.dentist.review-form-done') }}
+	            	<a href="{{ $item->getLink() }}" style="display: block; margin: 10px 0px;">
+	            		{{ trans('front.page.dentist.review-form-my-review') }}
+	            	</a>
+	            	<a class="etherscan-link" target="_blank" href="{{ $item->getLink() }}" style="display: block; margin: 10px 0px;">
+	            		{{ trans('front.page.dentist.review-form-etherscan') }}
+	            	</a>
+	            </div>
 			</div>
 		</div>
 	</div>

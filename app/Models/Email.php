@@ -88,15 +88,27 @@ class Email extends Model
 		$subtitle = $this->addPlaceholders($subtitle);
 		$subject = $this->addPlaceholders($subject);
 
+		$vox_tempalates = [
+			11,
+			12,
+			13,
+			14,
+			15,
+			16,
+		];
+
+		$platform = in_array($this->template->id, $vox_tempalates) ? 'vox' : 'reviews';
+
 		Mail::send('emails.template', [
 				'user' => $this->user,
 				'content' => $content,
 				'title' => $title,
 				'subtitle' => $subtitle,
-			], function ($message) use ($subject) {
+				'platform' => $platform,
+			], function ($message) use ($subject, $platform) {
 
-				$sender = config('mail.from.address');
-				$sender_name = config('mail.from.name');
+				$sender = $platform=='vox' ? config('mail.from.address-vox') : config('mail.from.address');
+				$sender_name = $platform=='vox' ? config('mail.from.name-vox') : config('mail.from.name');
 
 			    $message->from($sender, $sender_name);
 			    $message->to( $this->user->email );
@@ -111,7 +123,7 @@ class Email extends Model
 
 	private function addPlaceholders($content) {
 
-		if($this->template->id==1 || $this->template->id==2) { //Verify
+		if($this->template->id==1 || $this->template->id==2 || $this->template->id==11) { //Verify
 			$content = str_replace(array(
 				'[verifylink]',
 				'[/verifylink]',
@@ -121,7 +133,17 @@ class Email extends Model
 			), $content);
 		}
 
-		if($this->template->id==5) { //Recover
+		if($this->template->id==3 || $this->template->id==4) { //Reward
+			$content = str_replace(array(
+				'[rewardlink]',
+				'[/rewardlink]',
+			), array(
+				'<a '.$this->button_style.' href="'.getLangUrl('profile/reward').'">',
+				'</a>',
+			), $content);
+		}
+
+		if($this->template->id==5 || $this->template->id==13) { //Recover
 			$content = str_replace(array(
 				'[recoverlink]',
 				'[/recoverlink]',
@@ -155,7 +177,7 @@ class Email extends Model
 				'[invitelink]',
 				'[/invitelink]',
 			), array(
-				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$this->meta['secret']).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$this->meta['invitation_id']).'">',
 				'</a>',
 			), $content);
 		}
@@ -171,6 +193,10 @@ class Email extends Model
 				'<a '.$this->button_style.' href="'.getLangUrl('claim/'.$this->user->id.'/'.$this->user->get_invite_token()).'">',
 				'</a>',
 			), $content);
+		}
+
+		if($this->template->id==15) { //Ban
+			$content = str_replace('[expires]', $this->meta['expires'], $content);
 		}
 
 		return $content;

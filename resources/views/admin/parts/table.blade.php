@@ -31,7 +31,7 @@
                                     @elseif($v['format']=='datetime')
                                         <td>{{ !empty($row[$k]->timestamp) && $row[$k]->timestamp>0 ? date('H:i d.m.Y', $row[$k]->timestamp) : trans('admin.table.na') }}</td>
                                     @elseif($v['format']=='bool')
-                                        <td>{!! $row[$k] ? '<span class="label label-success">Yes</span>' : '<span class="label label-warning">No</span>' !!}</td>
+                                        <td>{!! $row[$k] ? '<span class="label label-success">'.trans('admin.common.yes').'</span>' : '<span class="label label-warning">'.trans('admin.common.no').'</span>' !!}</td>
                                     @elseif($v['format']=='set')
                                         <td>
                                             @foreach($row[$k] as $setval)
@@ -56,7 +56,7 @@
                                         </td>
                                     @elseif($v['format']=='user')
                                         @if($row->$k)
-                                            <td><a href="/admin/users/edit/{{ $row->$k->id }}" target="_blank">{{ $row->$k->firstname.' '.$row->$k->lastname }}</a></td>
+                                            <td><a href="{{ url('cms/users/edit/'.$row->$k->id) }}" target="_blank">{{ $row->$k->name }}</a></td>
                                         @else
                                             <td>-</td>
                                         @endif

@@ -20,9 +20,11 @@ $(document).ready(function(){
 		var screen_bottom = $(window).scrollTop() + $(window).height();
 
 		if( content_end - $(window).height()/2 < screen_bottom ) {
+			console.log('in');
 			if (ajax_is_running || end) {
 				return;
 			}
+			console.log('in2');
 			ajax_is_running = true;
 			page_num++;
 	        $('#loading').show();

@@ -30,7 +30,7 @@
                                 @elseif( $info['type'] == 'bool')
                                     {{ Form::checkbox( $key, 1, $item->$key, array('class' => 'form-control', (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled' )) }}
                                 @elseif( $info['type'] == 'datepicker')
-                                    {{ Form::text( $key, !empty($item->$key) ? $item->$key->format('Y.m.d') : '' , array('class' => 'form-control datepicker' , (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled')) }}
+                                    {{ Form::text( $key, !empty($item->$key) ? $item->$key->format('d.m.Y') : '' , array('class' => 'form-control datepicker', 'data-date-format' => 'dd.mm.yyyy' , (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled')) }}
                                 @elseif( $info['type'] == 'datetimepicker')
                                     {{ Form::text( $key, !empty($item->$key) ? $item->$key->format('Y.m.d H:i:s') : '' , array('class' => 'form-control datetimepicker' , (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled')) }}
                                 @elseif( $info['type'] == 'country')  
@@ -181,6 +181,64 @@
         </div>
     </div>
 
+@endif
+
+
+@if($item->vox_rewards->isNotEmpty())
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-vox-rewards') }} </h4>
+                </div>
+                <div class="panel-body">
+                    @include('admin.parts.table', [
+                        'table_id' => 'vox-rewards',
+                        'table_fields' => [
+                            'created_at'        => array('format' => 'datetime'),
+                            'vox_id'              => array('template' => 'admin.parts.table-vox-rewards-user'),
+                            'reward'           => array(),
+                        ],
+                        'table_data' => $item->vox_rewards,
+                        'table_pagination' => false,
+                        'pagination_link' => array()
+                    ])
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if($item->vox_cashouts->isNotEmpty())
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-vox-cashouts') }} </h4>
+                </div>
+                <div class="panel-body">
+                    @include('admin.parts.table', [
+                        'table_id' => 'vox-cashouts',
+                        'table_fields' => [
+                            'created_at'        => array('format' => 'datetime'),
+                            'reward'           => array(),
+                            'address'           => array(),
+                            'tx_hash'           => array(),
+                        ],
+                        'table_data' => $item->vox_cashouts,
+                        'table_pagination' => false,
+                        'pagination_link' => array()
+                    ])
+                </div>
+            </div>
+        </div>
+    </div>
 @endif
 
 @endsection

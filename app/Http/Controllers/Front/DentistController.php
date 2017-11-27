@@ -15,12 +15,27 @@ use App\Models\Secret;
 use App\Models\Review;
 use App\Models\ReviewUpvote;
 use App\Models\ReviewAnswer;
+use App\Models\Dcn;
 use Carbon\Carbon;
 use Auth;
+use Cloutier\PhpIpfsApi\IPFS;
 
 
 class DentistController extends FrontController
 {
+    public function test($locale=null) {
+        $ipfs = new IPFS("127.0.0.1", "8080", "5001");
+        $hash = $ipfs->add(json_encode([
+            'bla' => 123,
+            'foo' => 'bar',
+            'obj' => [
+                'a' => 1,
+                'b' => 2,
+            ]
+        ]));
+        dd($hash);
+    }
+
     public function confirmReview($locale=null, $slug, $secret) {
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
 
@@ -29,6 +44,7 @@ class DentistController extends FrontController
         }
 
         $old_review = $this->user->hasReviewTo($item->id);
+        //dd($old_review);
         if($old_review && $old_review->status=='pending' && $old_review->secret->secret==$secret) {
             $old_review->status = 'accepted';
             $old_review->secret->used = true;
@@ -68,6 +84,9 @@ class DentistController extends FrontController
 
         if(Request::isMethod('post')) {
 
+            $ret = array(
+                'success' => false
+            );
             $validator_arr = [
                 'answer' => ['required', 'string']
             ];
@@ -77,24 +96,26 @@ class DentistController extends FrontController
                 }
                 $validator_arr['option.'.$question->id.'.'.$i] = ['required', 'numeric', 'min:1', 'max:5'];
             }
+            $my_dcn_address = $this->user->my_address();
+            if(!$my_dcn_address) {
+                $validator_arr['reviewer-address'] = ['required', 'string', 'size:42'];
+            }
 
             $validator = Validator::make(Request::all(), $validator_arr);
 
             if ($validator->fails()) {
 
                 $msg = $validator->getMessageBag()->toArray();
-                $ret = array(
-                    'success' => false,
-                    'messages' => array()
-                );
-
+                $ret['messages'] = [];
                 foreach ($msg as $field => $errors) {
                     $ret['messages'][$field] = implode(', ', $errors);
                 }           
 
                 return Response::json( $ret );
             } else {
-                if($this->user->phone_verified && !$this->user->is_dentist) {
+                $ret['valid_input'] = true;
+
+                if( (($this->user->phone_verified && $this->user->is_verified) || $this->user->fb_id) && !$this->user->is_dentist) {
 
                     $old_review = $this->user->hasReviewTo($item->id);
                     if($old_review && $old_review->status=='accepted') {
@@ -102,6 +123,7 @@ class DentistController extends FrontController
                     } else if( $this->user->getReviewLimits() ) {
                         ; //dgd
                     } else {
+
                         $secret = Secret::getNext();
 
                         if($old_review && $old_review->status=='pending') {
@@ -122,8 +144,10 @@ class DentistController extends FrontController
 
                         $total = 0;
                         $answer_rates = [];
+                        $crypto_data = [];
+                        $crypto_data['answer'] = strip_tags(Request::input( 'answer' ));
                         foreach ($questions as $question) {
-
+                            $crypto_data['question-'.$question->id] = [];
                             $answer_rates[$question->id] = 0;
                             $option_answers = [];
                             $options = json_decode($question['options'], true);
@@ -146,25 +170,46 @@ class DentistController extends FrontController
                             $answer->review_id = $review->id;
                             $answer->question_id = $question->id;
                             $answer->options = json_encode($option_answers);
+                            $crypto_data['question-'.$question->id] = $option_answers;
                             $answer->save();
                         }
 
                         $review->rating = array_sum($answer_rates) / count($answer_rates);
                         $review->save();
 
+                        $ipfs = new IPFS("127.0.0.1", "8080", "5001");
+                        $review->ipfs = $ipfs->add(json_encode($crypto_data));
+                        $review->save();
+
+                        
+                        //Send & confirm
+                        $amount = $review->verified ? 25000 : 5000;
+                        $ra = $my_dcn_address ? $my_dcn_address : Request::input('reviewer-address');
+                        
+
+                        $ret = Dcn::send($this->user, $ra, $amount);
+                        $ret['valid_input'] = true; //was overridden
+                        if($ret['success']) {
+
+                            $review->reward_tx = $ret['message'];
+                            $review->reward_address = $ra;
+                            $review->status = 'accepted';
+                            $review->secret->used = true;
+                            $review->secret->save();
+                            $review->save();
+                                        
+                            $item->sendTemplate(6, [
+                                'review_id' => $review->id,
+                            ]);
+
+                            $review->dentist->recalculateRating();
+                        }
+
                     }
-
                 }
-
-
-                return Response::json( [
-                    'success' => true,
-                    'dentist_id' => $item->id,
-                    'review_text' => strip_tags(Request::input( 'answer' )),
-                    'submit_secret' => $secret ? $secret->secret : '',
-                    'invite_secret' => $this->user->invite_secret ? $this->user->invite_secret : '',
-                ] );
             }
+
+            return Response::json( $ret );
         }
 
 
@@ -211,12 +256,15 @@ class DentistController extends FrontController
             }
         }
 
+        $my_dcn_address = !empty($this->user) ? $this->user->my_address() : null;
+
         return $this->ShowView('dentist', [
             'item' => $item,
             'my_review' => !empty($this->user) ? $this->user->hasReviewTo($item->id) : null,
             'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
             'questions' => $questions,
             'reviews' => $reviews,
+            'my_dcn_address' => $my_dcn_address,
             'review_limit_reached' => !empty($this->user) ? $this->user->getReviewLimits() : null,
             'aggregated_rates' => $aggregated_rates,
             'aggregated_rates_total' => $aggregated_rates_total ,
@@ -274,7 +322,7 @@ class DentistController extends FrontController
 
         $code = trim( Request::input( 'code' ) );
 
-        if($code==$item->verification_code) {
+        if($item->verification_code && $item->phone && $code==$item->verification_code) {
             $item->phone_verified = true;
             $item->phone_verified_on = Carbon::now();
             $item->save();
@@ -344,7 +392,7 @@ class DentistController extends FrontController
         if(!empty($review)) {
             $myvotes = $this->user->usefulVotesForDenist($review->dentist_id);
             if(!in_array($review_id, $myvotes)) {
-                if($this->user->phone_verified) {
+                if($this->user->phone_verified || $this->user->fb_id) {
                     $review->upvotes++;
                     $review->save();
                     $uv = new ReviewUpvote;

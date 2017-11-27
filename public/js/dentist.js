@@ -4,8 +4,6 @@ $(document).ready(function(){
 
 		if($(this).hasClass('verify-phone')) {
 			$('#phone-verify-modal').modal();
-        } else if(typeof(account)=='undefined' || !account) {
-            $('#no-wallet-modal').modal();
 		} else {
 			$('#review-form').show();
 			$(this).closest('.panel-body').remove();
@@ -159,6 +157,8 @@ $(document).ready(function(){
 			}
 		}
 
+
+
 		if(ajax_is_running || !allgood) {
 			return;
 		}
@@ -168,15 +168,25 @@ $(document).ready(function(){
             $(this).attr('action'), 
             $(this).serialize() , 
             function( data ) {
+                console.log(data);
                 if(data.success) {
-                    //Dentist's ETH address goes here
-                    reviewSubmitedReward('0x635c8CF5b944415b964B0451580857FE017F42dE', data.dentist_id, data.review_text, data.submit_secret, data.invite_secret);
+                    $('#review-submit-button').hide();
+                    $('#review-pending').show().find('a.etherscan-link').attr('href', data.link);
                 } else {
-                	$('#review-error').show();
+                    if(data.valid_input) {
+                        $('#review-crypto-error').show();
+                        $('#review-crypto-error span').html(data.message);
 
-	                $('html, body').animate({
-	                	scrollTop: $('#review-answer').closest('.panel-body').offset().top - 60
-	                }, 500);
+                        $('html, body').animate({
+                            scrollTop: $('#review-crypto-error').closest('.panel-body').offset().top - 60
+                        }, 500);                        
+                    } else {
+                    	$('#review-error').show();
+
+    	                $('html, body').animate({
+    	                	scrollTop: $('#review-answer').closest('.panel-body').offset().top - 60
+    	                }, 500);
+                    }
                 }
                 ajax_is_running = false;
             }, "json"

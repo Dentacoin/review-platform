@@ -31,6 +31,11 @@
 						{{ trans('front.page.profile.alert-write-review') }}
 					</div>
 				@endif
+				@if($no_invites)
+					<div class="alert alert-info">
+						{{ trans('front.page.profile.alert-invite-patients') }}
+					</div>
+				@endif
 				@if($no_address)
 					<div class="alert alert-info">
 						{{ trans('front.page.profile.alert-needs-address') }}

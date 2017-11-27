@@ -60,7 +60,7 @@ class AddController extends FrontController
 	public function list($locale=null) {
 
 
-        if(Request::isMethod('post')) {
+        if(Request::isMethod('post') && !empty($this->user) && $this->user->is_verified) {
 
             $validator_arr = [];
             foreach ($this->fields as $key => $value) {

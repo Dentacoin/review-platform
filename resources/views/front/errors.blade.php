@@ -13,12 +13,12 @@
 @if(Session::has('error-message'))
     <!-- Form Error List -->
     <div class="alert alert-warning">
-        <strong>{{ Session::get('error-message') }}</strong>
+        <strong>{!! Session::get('error-message') !!}</strong>
     </div>
 @endif
 @if(Session::has('success-message'))
     <!-- Form Success List -->
     <div class="alert alert-success">
-        <strong>{{ Session::get('success-message') }}</strong>
+        <strong>{!! Session::get('success-message') !!}</strong>
     </div>
 @endif

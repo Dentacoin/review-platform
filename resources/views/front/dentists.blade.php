@@ -35,7 +35,7 @@
 								Location
 							</label>
 							<div class="location">
-								{{ Form::text( 'location' , $placeholder , array('class' => 'form-control location-input', 'autocomplete' => 'off') ) }}
+								{{ Form::text( 'location' , $placeholder , array('class' => 'form-control location-input', 'autocomplete' => 'off', ($all_locations ? 'disabled' : 'something') => 'disabled' ) ) }}
 								{{ Form::hidden( 'country' , !empty($country) ? $country->id : null, ['class' => 'country_id']  ) }}
 								{{ Form::hidden( 'city' , !empty($city) ? $city->id : null, ['class' => 'city_id']  ) }}
 								<div class="location-suggester">
@@ -47,6 +47,10 @@
 									</div>
 								</div>
 							</div>
+							<label for="all-locations">
+								{{ Form::checkbox( 'all_locations' , 1, $all_locations, ['id' => 'all-locations'] ) }}
+								Show dentists from all locations								
+							</label>
 						</div>
 					</div>
 					<div class="form-group">
@@ -193,10 +197,12 @@
 												<b>{{ trans('front.common.no-reviews') }}</b>
 											@endif
 										</div>
-										<div class="stars">
-											<div class="bar" style="width: {{ getStarWidth($item->avg_rating) }}px;">
+										@if($item->ratings)
+											<div class="stars">
+												<div class="bar" style="width: {{ getStarWidth($item->avg_rating) }}px;">
+												</div>
 											</div>
-										</div>
+										@endif
 									</div>
 
 								</div>
@@ -208,14 +214,17 @@
 		@endif
 @if(!$is_ajax)
 			</div>
-		</div>
-	</div>
 
-	<div id="loading" class="alert alert-info" style="display: none;">
-		{{ trans('front.common.loading') }}
-	</div>
-	<div id="end-page" class="alert alert-warning" style="display: none;">
-		{{ trans('front.common.no-more') }}
+		</div>
+		<div id="loading" class="alert alert-info" style="display: none;">
+			{{ trans('front.common.loading') }}
+		</div>
+		<div id="end-page" class="alert alert-info" {!! $items->count() < $ppp && $items->isNotEmpty() ? '' : 'style="display: none;"' !!} >
+			{!! trans('front.common.no-more', [
+				'link' => '<a href="'.getLangUrl('add').'">',
+				'endlink' => '</a>',
+			]) !!}
+		</div>
 	</div>
 </div>
 

@@ -8,6 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use Auth;
 use Lang;
 use Validator;
+use Response;
+use App\Models\User as RealUser;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -53,6 +55,34 @@ class AuthenticateUser extends FrontController
             return redirect( getLangUrl('login') )
             ->withInput()
             ->with('error-message', trans('front.page.login.error'));
+        }
+    }
+
+    public function postLoginVox(Request $request)
+    {
+
+        if (Auth::guard('web')->attempt( ['email' => $request->input('email'), 'password' => $request->input('password') ], $request->input('remember') )) {
+            if($ban_info = Auth::guard('web')->user()->isBanned('vox')) {
+
+                session([
+                    'ban-expires' => $ban_info->expires->toTimeString().' '.$ban_info->expires->toFormattedDateString()
+                ]);
+                Auth::guard('web')->logout();
+                return Response::json( [
+                    'success' => false,
+                    'banned' => getLangUrl('banned')
+                ] );
+            }
+            return Response::json( [
+                'success' => true,
+                'url' => getLangUrl('/')
+            ] );
+        } else {
+            $banned = RealUser::where('email', 'LIKE', $request->input('email'))->withTrashed()->first();
+            return Response::json( [
+                'success' => false,
+                'banned' => !empty($banned) && !empty($banned->deleted_at) ? getLangUrl('banned') : false
+            ] );
         }
     }
 

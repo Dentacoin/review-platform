@@ -55,15 +55,13 @@ $(document).ready(function(){
     			city_select.attr('disabled', false)
 			    .find('option')
 			    .remove();
-			    for(var i in data) {
-    				city_select.append('<option value="'+i+'">'+data[i]+'</option>');
+			    for(var i in data.cities) {
+    				city_select.append('<option value="'+i+'">'+data.cities[i]+'</option>');
 			    }
 				//city_select
 				//$('#modal-message .modal-body').html(data);
 			}
 		});
-    	$.ajax
-
     } );
 
 

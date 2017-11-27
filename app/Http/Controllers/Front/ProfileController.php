@@ -8,12 +8,15 @@ use Response;
 use Request;
 use Route;
 use Hash;
+use Auth;
 use Image;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 use App\Models\User;
 use App\Models\UserCategory;
 use App\Models\UserPhoto;
+use App\Models\UserInvite;
+use App\Models\Dcn;
 
 
 class ProfileController extends FrontController
@@ -27,9 +30,9 @@ class ProfileController extends FrontController
 			'info' => trans('front.page.profile.dentist.info'),
 			'gallery' => trans('front.page.profile.dentist.gallery'),
 			'password' => trans('front.page.profile.dentist.password'),
-			//'reviews' => trans('front.page.profile.dentist.reviews'),
             'wallet' => trans('front.page.profile.dentist.wallet'),
-			'invite' => trans('front.page.profile.dentist.invite'),
+            'invite' => trans('front.page.profile.dentist.invite'),
+			'reward' => trans('front.page.profile.dentist.reward'),
 		];
 
 		$this->menu_patient = [
@@ -38,6 +41,7 @@ class ProfileController extends FrontController
 			'password' => trans('front.page.profile.patient.password'),
 			'reviews' => trans('front.page.profile.patient.reviews'),
 			'wallet' => trans('front.page.profile.patient.wallet'),
+            'reward' => trans('front.page.profile.dentist.reward'),
 		];
 
 		$this->dentist_fields = [
@@ -113,8 +117,9 @@ class ProfileController extends FrontController
 
     public function home($locale=null) {
 
-        if (empty($this->user->is_verified)) {
-         	return $this->ShowView('profile-verified');
+        if($this->user->register_reward) {
+            unset($this->menu_dentist['reward']);
+            unset($this->menu_patient['reward']);
         }
 
 		return $this->ShowView('profile', [
@@ -122,6 +127,7 @@ class ProfileController extends FrontController
             'needs_avatar' => !$this->user->hasimage,
             'no_reviews' => !$this->user->is_dentist && $this->user->reviews_out->isEmpty(),
             'no_address' => $this->user->is_dentist && (!$this->user->city_id || !$this->user->address),
+            'no_invites' => $this->user->is_dentist && $this->user->invites->isEmpty(),
             'my_reviews' => null,
             'my_upvotes' => null,
             'js' => [
@@ -133,8 +139,9 @@ class ProfileController extends FrontController
 
     public function info($locale=null) {
 
-    	if (empty($this->user->is_verified)) {
-         	return $this->ShowView('profile-verified');
+        if($this->user->register_reward) {
+            unset($this->menu_dentist['reward']);
+            unset($this->menu_patient['reward']);
         }
 
         $fields =  $this->user->is_dentist == 1 ? $this->dentist_fields : $this->patient_fields;
@@ -148,7 +155,8 @@ class ProfileController extends FrontController
         			$arr[] = 'required';
         		}
         		if (!empty($value['is_email'])) {
-        			$arr[] = 'email';
+                    $arr[] = 'email';
+                    $arr[] = 'unique:users,email,'.$this->user->id;
         		}
         		if (!empty($value['min'])) {
         			$arr[] = 'min:'.$value['min'];
@@ -235,11 +243,12 @@ class ProfileController extends FrontController
 
     public function gallery($locale=null, $position=null) {
 
-        if (empty($this->user->is_verified)) {
-            return $this->ShowView('profile-verified');
-        }
         if (!$this->user->is_dentist) {
             return redirect( getLangUrl('profile') );
+        }
+        if($this->user->register_reward) {
+            unset($this->menu_dentist['reward']);
+            unset($this->menu_patient['reward']);
         }
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
@@ -266,11 +275,12 @@ class ProfileController extends FrontController
 
     public function gallery_delete($locale=null, $position=null) {
 
-        if (empty($this->user->is_verified)) {
-            return $this->ShowView('profile-verified');
-        }
         if (!$this->user->is_dentist) {
             return redirect( getLangUrl('profile') );
+        }
+        if($this->user->register_reward) {
+            unset($this->menu_dentist['reward']);
+            unset($this->menu_patient['reward']);
         }
 
         if(!empty($this->user->photos[$position])) {
@@ -280,25 +290,46 @@ class ProfileController extends FrontController
         return Response::json([ 'success' => true ] );
     }
 
+    public function resend($locale=null) {
+        $this->user->sendTemplate( $this->user->is_dentist ? 1 : 2 );
+
+        return Response::json( ['success' => true] );
+    }
+
     public function invite($locale=null) {
 
-        if (empty($this->user->is_verified)) {
-            return $this->ShowView('profile-verified');
-        }
     	if (!$this->user->is_dentist) {
          	return redirect( getLangUrl('profile') );
         }
+        if($this->user->register_reward) {
+            unset($this->menu_dentist['reward']);
+            unset($this->menu_patient['reward']);
+        }
 
-        if(Request::isMethod('post')) {
+        if(Request::isMethod('post') && $this->user->is_verified) {
             $validator = Validator::make(Request::all(), [
                 'email' => ['required', 'email'],
-                'invite-secret' => ['required', 'string'],
                 'name' => ['required', 'string'],
             ]);
 
             if ($validator->fails()) {
                 return Response::json(['success' => false, 'message' => trans('front.page.profile.'.$this->current_subpage.'.failure') ] );
             } else {
+                $already = UserInvite::where([
+                    ['user_id', $this->user->id],
+                    ['invited_email', 'LIKE', Request::Input('email')],
+                ])->first();
+
+                if($already) {
+                    return Response::json(['success' => false, 'message' => trans('front.page.profile.'.$this->current_subpage.'.already-invited') ] );                    
+                }
+
+                $invitation = new UserInvite;
+                $invitation->user_id = $this->user->id;
+                $invitation->invited_email = Request::Input('email');
+                $invitation->invited_name = Request::Input('name');
+                $invitation->save();
+
                 //Mega hack
                 $dentist_name = $this->user->name;
                 $dentist_email = $this->user->email;
@@ -308,13 +339,14 @@ class ProfileController extends FrontController
 
                 $this->user->sendTemplate(7, [
                     'dentist_name' => $dentist_name,
-                    'secret' => Request::Input('invite-secret')
+                    'invitation_id' => $invitation->id
                 ]);
 
                 //Back to original
                 $this->user->name = $dentist_name;
                 $this->user->email = $dentist_email;
                 $this->user->save();
+
                 return Response::json(['success' => true, 'message' => trans('front.page.profile.'.$this->current_subpage.'.success') ] );
             }
         }
@@ -328,10 +360,43 @@ class ProfileController extends FrontController
 		]);
     }
 
+    public function balance($locale=null) {
+        return Response::json( User::getBalance( Request::input('balance-address') ) );
+    }
+
+
+    public function reward($locale=null) {
+
+        if($this->user->register_reward) {
+            return redirect( getLangUrl('profile') );
+        }
+
+        if(Request::isMethod('post')) {
+
+            $ret = Dcn::send($this->user, Request::input('reward-address'), 5000);
+            if($ret['success']) {
+                $this->user->register_tx = $ret['message'];
+                $this->user->register_reward = Request::input('reward-address');
+                $this->user->save();
+            }
+
+            return Response::json($ret);
+        }
+
+        return $this->ShowView('profile-reward', [
+            'menu' => $this->user->is_dentist == 1 ? $this->menu_dentist : $this->menu_patient,
+            'js' => [
+                'profile.js',
+                'dApp.js',
+            ],
+        ]);
+    }
+
     public function password($locale=null) {
 
-    	if (empty($this->user->is_verified)) {
-         	return $this->ShowView('profile-verified');
+        if($this->user->register_reward) {
+            unset($this->menu_dentist['reward']);
+            unset($this->menu_patient['reward']);
         }
 
 		return $this->ShowView('profile-password', [
@@ -344,8 +409,9 @@ class ProfileController extends FrontController
 
     public function change_password($locale=null) {
 
-    	if (empty($this->user->is_verified)) {
-         	return $this->ShowView('profile-verified');
+        if($this->user->register_reward) {
+            unset($this->menu_dentist['reward']);
+            unset($this->menu_patient['reward']);
         }
 
         $validator = Validator::make(Request::all(), [
@@ -374,8 +440,9 @@ class ProfileController extends FrontController
 
     public function reviews($locale=null) {
 
-    	if (empty($this->user->is_verified)) {
-         	return $this->ShowView('profile-verified');
+        if($this->user->register_reward) {
+            unset($this->menu_dentist['reward']);
+            unset($this->menu_patient['reward']);
         }
 
         return $this->ShowView('profile-reviews', [
@@ -391,8 +458,9 @@ class ProfileController extends FrontController
 
     public function wallet($locale=null) {
 
-    	if (empty($this->user->is_verified)) {
-         	return $this->ShowView('profile-verified');
+        if($this->user->register_reward) {
+            unset($this->menu_dentist['reward']);
+            unset($this->menu_patient['reward']);
         }
 
 		return $this->ShowView('profile-wallet', [
@@ -409,6 +477,10 @@ class ProfileController extends FrontController
             $img = Image::make( Input::file('image') )->orientate();
             $this->user->addImage($img);
             return Response::json(['success' => true, 'url' => $this->user->getImageUrl(true)]);
+        }
+        if($this->user->register_reward) {
+            unset($this->menu_dentist['reward']);
+            unset($this->menu_patient['reward']);
         }
 
         return Response::json(['success' => false]); 

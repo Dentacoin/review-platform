@@ -127,6 +127,8 @@ a {
 
 .alert {
   clear: both; }
+  .alert a {
+    text-decoration: underline; }
 
 .modal-body {
   border-bottom: 1px solid #e5e5e5; }
@@ -326,12 +328,12 @@ body {
   .page-recover .form-group {
     padding-left: 15px;
     padding-right: 15px; } }
-.page-add .form-group > div,
-.page-login .form-group > div,
-.page-register .form-group > div,
-.page-forgot-password .form-group > div,
-.page-recover .form-group > div {
-  padding-bottom: 10px; }
+
+.page-register .btn-group label {
+  height: 40px;
+  line-height: 40px; }
+  .page-register .btn-group label input[type="radio"] {
+    display: none; }
 
 @media (max-width: 992px) {
   .modal-dialog .form-group,
@@ -583,10 +585,6 @@ body {
 /*
     Dentist profile
 */
-.page-profile.sp-home .alert-success,
-.page-profile.sp-reviews .alert-success,
-.page-dentist .alert-success {
-  margin: 20px 15px -20px 15px; }
 .page-profile.sp-home .btn-claim,
 .page-profile.sp-reviews .btn-claim,
 .page-dentist .btn-claim {
@@ -884,6 +882,18 @@ body {
       .page-index .jumbotron .search-bar .col-md-5 {
         padding-top: 10px;
         padding-bottom: 10px; } }
+    .page-index .jumbotron .search-bar .all-locations {
+      color: white;
+      height: 20px;
+      line-height: 20px;
+      margin-bottom: 0px;
+      margin-top: 5px;
+      font-weight: normal;
+      display: block; }
+      .page-index .jumbotron .search-bar .all-locations input {
+        position: relative;
+        top: 2px;
+        margin: 0; }
 .page-index .ribbon-container {
   position: relative; }
   .page-index .ribbon-container .ribbon {
@@ -901,7 +911,13 @@ body {
         margin-left: -70px; } }
     .page-index .ribbon-container .ribbon b {
       display: block;
-      font-size: 20px; }
+      font-size: 20px;
+      margin: 0;
+      line-height: 20px; }
+      .page-index .ribbon-container .ribbon b.second {
+        margin-top: 5px;
+        padding-top: 5px;
+        border-top: 2px solid white; }
     .page-index .ribbon-container .ribbon .right-t,
     .page-index .ribbon-container .ribbon .left-t {
       position: absolute;

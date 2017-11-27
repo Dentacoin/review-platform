@@ -46,6 +46,35 @@
                         <div class="col-md-4">
                             {{ Form::text('email', $item->email, array('class' => 'form-control')) }}
                         </div>
+                        <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.role') }}</label>
+                        <div class="col-md-4">
+                            {{ Form::select('role', $roles, $item->role, array('class' => 'form-control')) }}
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.lang_from') }}</label>
+                        <div class="col-md-4">
+                            {{ Form::select('lang_from', $langslist, $item->lang_from, array('class' => 'form-control')) }}
+                        </div>
+                        <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.lang_to') }}</label>
+                        <div class="col-md-4">
+                            {{ Form::select('lang_to', $langslist, $item->lang_to, array('class' => 'form-control')) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.text_domain') }}</label>
+                        <div class="col-md-4">
+                            @foreach($domainlist as $k => $v)
+                                <label for="dl-{{ $k }}">
+                                    <input id="dl-{{ $k }}" type="checkbox" name="text_domain[]" value="{{ $k }}" {!! in_array($k, explode(',', $item->text_domain)) ? 'checked="checked"' : '' !!} />
+                                    {{ $v }}
+                                </label>
+                                <br/>
+                            @endforeach
+                        </div>
                     </div>
 
                     <div class="form-group">

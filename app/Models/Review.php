@@ -24,6 +24,9 @@ class Review extends Model {
         'upvotes',
         'secret_id',
         'status',
+        'reward_address',
+        'reward_tx',
+        'ipfs',
     ];
 
     protected $dates = [

@@ -58,12 +58,32 @@ class AdminController extends BaseController
     }
 
     public function ShowView($page, $params=array()) {
-		$params['current_page'] = $this->current_page;
-		$params['current_subpage'] = $this->current_subpage;
- 		$params['request'] = $this->request;
-        $params['admin'] = Auth::guard('admin')->user();
+
+
+        $params['current_page'] = $this->current_page;
+        $params['current_subpage'] = $this->current_subpage;
+        $params['request'] = $this->request;
+        $params['admin'] = $this->user;
         $params['langs'] = $this->langs;
 
+        if($params['admin']->role=='translator') {
+            $menu = config('admin.pages');
+            foreach ($menu as $key => $value) {
+                if($key!='translations') {
+                    unset($menu[$key]);
+                } else {
+                    foreach ($menu[$key]['subpages'] as $sk => $sv) {
+                        if(!in_array($sk, explode(',', $params['admin']->text_domain))) {
+                            unset( $menu[$key]['subpages'][$sk] );
+                        }
+                    }
+                }
+            }
+
+            config([
+                'admin.pages' => $menu
+            ]);
+        }
 
 
 		return view('admin.'.$page, $params);

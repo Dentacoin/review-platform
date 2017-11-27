@@ -43,6 +43,21 @@
 				{!! config('langs')[App::getLocale()]['font_css'] !!}
 			}
 		</style>
+
+		@if($current_page=='register')
+		<script src='https://www.google.com/recaptcha/api.js'></script>
+		@endif
+
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108398439-1"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', 'UA-108398439-1');
+		</script>
+
     </head>
 
     <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($satic_page) ? 'page-page' : '' }} {{ (config('langs')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }}">
@@ -195,7 +210,7 @@
                         </a>
 		            </div>
 		            <div class="col-md-1">
-		            	<a href="https://www.facebook.com/dentacoin/" target="_blank" data-toggle="tooltip" data-placement="top" title="Facebook">
+		            	<a href="https://fb.me/dentacoin.trusted.reviews" target="_blank" data-toggle="tooltip" data-placement="top" title="Facebook">
 		            		<img src="https://dentacoin.com/contact-img/facebook.png">
                         </a>
 		            </div>
@@ -205,7 +220,7 @@
                         </a>
 		            </div>
 		            <div class="col-md-1">
-		            	<a href="https://join.slack.com/t/dentacoin/shared_invite/MjA5Nzk0MzU1OTg2LTE0OTk0ODk4MzQtNzViNzFiZjk4OQ" target="_blank" data-toggle="tooltip" data-placement="top" title="Slack">
+		            	<a href="https://join.slack.com/t/dentacoin/shared_invite/MjM2MjYyNjI5NTIwLTE1MDQ2OTg0NDAtNWMxYzUzN2FjNg" target="_blank" data-toggle="tooltip" data-placement="top" title="Slack">
 		            		<img src="https://dentacoin.com/contact-img/slack.png">
                         </a>
 		            </div>

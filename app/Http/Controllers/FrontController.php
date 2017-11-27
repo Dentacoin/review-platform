@@ -105,7 +105,23 @@ class FrontController extends BaseController
         }
     }
 
+    public function ShowVoxView($page, $params=array()) {
+        $this->PrepareViewData($page, $params, 'vox');
+
+        $params['genders'] = [
+            'm' => trans('vox.common.gender.m'),
+            'f' => trans('vox.common.gender.f'),
+        ];
+        $params['years'] = range( date('Y'), date('Y')-90 );
+
+        return view('vox.'.$page, $params);
+    }
+
     public function ShowView($page, $params=array()) {
+        $this->PrepareViewData($page, $params, 'front');
+        return view('front.'.$page, $params);
+    }    
+    public function PrepareViewData($page, &$params, $text_domain) {
 
         $params['country_id'] = $this->country_id;
         $params['city_id'] = $this->city_id;
@@ -128,18 +144,21 @@ class FrontController extends BaseController
         $params['pages_header'] = Page::translatedIn(App::getLocale())->where('header','>',0)->orderBy('header', 'asc')->get();
         $params['pages_footer'] = Page::translatedIn(App::getLocale())->where('footer','>',0)->orderBy('footer', 'asc')->get();
 
-        $params['seo_title'] = !empty($params['seo_title']) ? $params['seo_title'] : trans('front.seo.'.$this->current_page.'.title');
-        $params['seo_description'] = !empty($params['seo_description']) ? $params['seo_description'] : trans('front.seo.'.$this->current_page.'.description');
+        $params['seo_title'] = !empty($params['seo_title']) ? $params['seo_title'] : trans($text_domain.'.seo.'.$this->current_page.'.title');
+        $params['seo_description'] = !empty($params['seo_description']) ? $params['seo_description'] : trans($text_domain.'.seo.'.$this->current_page.'.description');
 
-        $params['social_title'] = !empty($params['social_title']) ? $params['social_title'] : trans('front.social.'.$this->current_page.'.title');
-        $params['social_description'] = !empty($params['social_description']) ? $params['social_description'] : trans('front.social.'.$this->current_page.'.description');
+        $params['social_title'] = !empty($params['social_title']) ? $params['social_title'] : trans($text_domain.'.social.'.$this->current_page.'.title');
+        $params['social_description'] = !empty($params['social_description']) ? $params['social_description'] : trans($text_domain.'.social.'.$this->current_page.'.description');
 
         $params['canonical'] = !empty($params['canonical']) ? $params['canonical'] : getLangUrl($this->current_page);
-        $params['social_image'] = !empty($params['social_image']) ? $params['social_image'] : url('/img/logo.png');
+        $params['social_image'] = !empty($params['social_image']) ? $params['social_image'] : url( $text_domain=='front' ? '/img/logo.png' : '/img-vox/logo-text.png'  );
         //dd($params['pages_header']);
 
+        if( $text_domain=='vox' && !empty($this->user) && !$this->user->vox_active) {
+            $this->user->vox_active = true;
+            $this->user->save();
+        }
 
-        return view('front.'.$page, $params);
     }
 
 }

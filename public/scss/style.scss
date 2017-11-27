@@ -184,6 +184,9 @@ a {
 
 .alert {
     clear: both;
+    a {
+        text-decoration: underline;
+    }
 }
 
 .modal-body {
@@ -483,9 +486,18 @@ body {
             padding-left: 15px;
             padding-right: 15px;
         }
+    }
+}
 
-        &>div {
-            padding-bottom: 10px;
+.page-register {
+    .btn-group {
+        label {
+            height: 40px;
+            line-height: 40px;
+            
+            input[type="radio"] {
+                display: none;
+            }
         }
     }
 }
@@ -896,10 +908,6 @@ body {
 .page-profile.sp-reviews,
 .page-dentist {
 
-    .alert-success {
-        margin: 20px 15px -20px 15px;
-    }
-
     .btn-claim {
         margin-top: -10px;
         margin-bottom: 10px;        
@@ -1192,6 +1200,22 @@ body {
                 }
             }
 
+            .all-locations {
+                color: white;
+                height: 20px;
+                line-height: 20px;
+                margin-bottom: 0px;
+                margin-top: 5px;
+                font-weight: normal;
+                display: block;
+
+                input {
+                    position: relative;
+                    top: 2px;
+                    margin: 0;
+                }
+            }
+
         }
     }
 
@@ -1216,6 +1240,14 @@ body {
             b {
                 display: block;
                 font-size: 20px;
+                margin: 0;
+                line-height: 20px;
+
+                &.second {
+                    margin-top: 5px;
+                    padding-top: 5px;
+                    border-top: 2px solid white;
+                }
             }
 
             .right-t,

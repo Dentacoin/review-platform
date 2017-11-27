@@ -27,10 +27,11 @@
 				@if( $item->invited_by && !$item->verified ) 
 					<div class="alert alert-info">
 						{{ trans('front.page.dentist.claim-info') }}
+						<br/>
+						<a class="btn btn-primary btn-block btn-claim" style="margin: 0px;" href="javascript:;">
+							{{ trans('front.page.dentist.claim-button') }}
+						</a>
 					</div>
-					<a class="btn btn-primary btn-block btn-claim" href="javascript:;">
-						{{ trans('front.page.dentist.claim-button') }}
-					</a>
 				@endif
 
 				@if(!empty($item->country)) 
@@ -94,43 +95,49 @@
 					</p>
 				@endif
 
-				@if($item->is_verified)
+				@if($item->is_verified || $item->fb_id)
 					@if($item->phone)
 						<p>
 							<i class="fa fa-phone"></i> 
 							{{ $item->country ? '+'.$item->country->phone_code : '' }} {{ $item->phone }}
 						</p>
 					@endif
-
-					@if($item->website)
-						<p>
-							<i class="fa fa-external-link"></i> 
-							<a href="{{ $item->website }}" target="_blank">{{ $item->website }}</a>
-						</p>
-					@endif
-
-					@if( !empty(json_decode($item->work_hours, true)) )
-						<p>
-							<i class="fa fa-clock-o"></i> 
-							{{ trans('front.page.dentist.work-hours') }}
-						</p>
-
-						<table class="table table-striped">
-	                        @for($day=1;$day<=7;$day++)
-	                        	<tr>
-	                        		<td>
-	                        			{{ date('l', strtotime("Sunday +{$day} days")) }}
-	                        		</td>
-	                        		<td>
-	                        			{{ !empty(json_decode($item->work_hours, true)[$day]) ? json_decode($item->work_hours, true)[$day][0].' - '.json_decode($item->work_hours, true)[$day][1] : trans('front.page.dentist.work-hours-closed') }}
-	                        		</td>
-	                        	</tr>
-	                        @endfor
-						</table>
-					@endif
-
-
+					<p>
+						<i class="fa fa-envelope"></i> 
+						<a href="mailto:{{ $item->email }}">
+							{{ $item->email }}
+						</a>
+					</p>
 				@endif
+
+				@if($item->website)
+					<p>
+						<i class="fa fa-external-link"></i> 
+						<a href="{{ $item->getWebsiteUrl() }}" target="_blank">{{ $item->website }}</a>
+					</p>
+				@endif
+
+				@if( !empty(json_decode($item->work_hours, true)) )
+					<p>
+						<i class="fa fa-clock-o"></i> 
+						{{ trans('front.page.dentist.work-hours') }}
+					</p>
+
+					<table class="table table-striped">
+                        @for($day=1;$day<=7;$day++)
+                        	<tr>
+                        		<td>
+                        			{{ date('l', strtotime("Sunday +{$day} days")) }}
+                        		</td>
+                        		<td>
+                        			{{ !empty(json_decode($item->work_hours, true)[$day]) ? json_decode($item->work_hours, true)[$day][0].' - '.json_decode($item->work_hours, true)[$day][1] : trans('front.page.dentist.work-hours-closed') }}
+                        		</td>
+                        	</tr>
+                        @endfor
+					</table>
+				@endif
+
+
 			</div>
 			@if($item->photos->isNotEmpty())
 				<div class="panel-heading">
@@ -289,18 +296,34 @@
 					<p>
 						{{ trans('front.page.'.$current_page.'.write-review-hint') }}
 					</p>
-					<a class="btn btn-primary btn-block {{ $user && !$user->phone_verified ? 'verify-phone' : '' }}" id="write-review-btn" href="javascript:;">
+					<a class="btn btn-primary btn-block {{ $user && !($user->phone_verified || $user->fb_id) ? 'verify-phone' : '' }}" id="write-review-btn" href="javascript:;">
 						{{ trans('front.page.'.$current_page.'.write-review-button') }}
 					</a>
 				</div>
 				<div id="review-form" style="display: none;">
 					@if($user)
 						@if($review_limit_reached)
-							<div class="alert alert-info">
-								{{ trans('front.page.'.$current_page.'.write-review-limit-'.$review_limit_reached) }}
-							</div>
+							<div class="panel-body review rating-panel">
+								<div class="alert alert-info">
+									{{ trans('front.page.'.$current_page.'.write-review-limit-'.$review_limit_reached) }}
+								</div>
+			                </div>
+						@elseif( !empty($user) && !($user->is_verified || $user->fb_id) )
+							<div class="panel-body review rating-panel">
+			                    @include('front.template-parts.verify-email', [
+			                    	'cta' => trans('front.page.'.$current_page.'.not-verified',[
+			                    		'email' => '<b>'.$user->email.'</b>'
+			                    	])
+			                    ])							
+			                </div>
 						@else
-  							@include('front.template-parts.submit-review-form')
+							@if(false)
+								<div class="alert alert-info">
+									We are currently working on fixing errors related to the Dentacoin transactions. Please come by again tomorrow.
+								</div>
+							@else
+  								@include('front.template-parts.submit-review-form')
+							@endif
 						@endif
 					@else
   						<div class="panel-body review login-form">

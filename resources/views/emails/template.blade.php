@@ -74,7 +74,7 @@
 																<tbody>
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
-																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;"><img src="{{ url('/img/logo.png') }}"></div>
+																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;"><img src="{{ url($platform=='reviews' ? '/img/logo.png' : 'img-vox/logo-text.png') }}"></div>
 																		</td>
 																	</tr>
 																</tbody>

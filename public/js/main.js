@@ -5,6 +5,15 @@ $(document).ready(function(){
 
 	$('[data-toggle="tooltip"]').tooltip();
 
+	$('#all-locations').change( function() {
+		var active = $(this).is(':checked');
+		if(active) {
+			$(this).closest('form').find('.location-input').attr('disabled', 'disabled');
+		} else {
+			$(this).closest('form').find('.location-input').prop("disabled", false);
+		}
+	} )
+
 	$('.country-select').change( function() {
 		if(ajax_is_running) {
 			return;
@@ -23,7 +32,7 @@ $(document).ready(function(){
 			    .remove();
     			city_select.append('<option value="">-</option>');
 			    for(var i in data.cities) {
-    				city_select.append('<option value="'+i+'">'+data[i]+'</option>');
+    				city_select.append('<option value="'+i+'">'+data.cities[i]+'</option>');
 			    }
 			    $('.phone-code-holder').html(data.code);
 			    ajax_is_running = false;
@@ -33,6 +42,27 @@ $(document).ready(function(){
 		});
 
     } );
+
+    $('#btn-resend').click( function() {
+
+    	if(ajax_is_running || $(this).attr('sent')) {
+			return;
+		}
+		ajax_is_running = true;
+		var that = $(this);
+
+    	$.ajax( {
+			url: lang + '/profile/resend',
+			type: 'GET',
+			dataType: 'json',
+			success: (function( data ) {
+				$(this).attr('sent', 'true');
+				$(this).removeClass('btn-default');
+				$(this).html( $(this).attr('data-alt-text') );
+			    ajax_is_running = false;
+			}).bind(that)
+		});
+    } )
 
     function fixRatings() {
     		console.log('ale')
@@ -60,8 +90,6 @@ $(document).ready(function(){
 			return;
 		}
 		ajax_is_running = true;
-
-		console.log('PRE-AJAX');
 
 		$(this).closest('.location').addClass('loading');
 

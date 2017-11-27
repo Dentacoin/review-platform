@@ -85,21 +85,10 @@ $(document).ready(function(){
         e.preventDefault();
 
         $('#invite-alert').hide();
-        $('#invite-alert-secret').hide();
 
         if(ajax_is_running) {
             return;
         }
-
-        if(typeof(account)=='undefined' || !account) {
-            $('#no-wallet-modal').modal();
-        }
-
-        if(!$('#invite-secret').val().trim().length) {
-            generateInviteCode();
-            return;
-        }
-
 
         ajax_is_running = true;
 
@@ -110,7 +99,6 @@ $(document).ready(function(){
             $(this).serialize() , 
             function( data ) {
                 if(data.success) {
-                    $('#invite-secret').val('');
                     $('#invite-email').val('');
                     $('#invite-name').val('').focus();
                     $('#invite-alert').show().addClass('alert-success').html(data.message);
@@ -132,6 +120,72 @@ $(document).ready(function(){
         
     });
 
+    //Rewards
+    
+    $('#reward-form').submit( function(e) {
+        e.preventDefault();
+
+        $('.panel-body-reward .alert').hide();
+
+        var dcn_address = $('#transfer-reward-address').val();
+        if ( typeof web3 !== 'undefined' && !web3.isAddress(dcn_address) ) {
+            $('#reward-invalid').show();
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function (data) {
+                if(data.success) {
+                    $('#reward-succcess').show();
+                    $('#reward-succcess a').attr('href', data.link);
+                    $('#reward-succcess a').html(data.link);
+                    $('#reward-form').remove();
+                } else {
+                    $('#reward-error').show();
+                    if(data.message) {
+                        $('#reward-reason').show().html( data.message );
+                    }
+                }
+            },
+            error: function (error) {
+                $('#reward-error').show();
+            }
+        });
+        
+    });
+
+    $('#balance-form').submit( function(e) {
+        e.preventDefault();
+
+        $('#has-no-wallet .alert').hide();
+
+        var dcn_address = $('#transfer-balance-address').val();
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function (data) {
+                if(data.success) {
+                    $('#balance-succcess').show();
+                    $('#balance-amount').html(data.result + ' DCN');
+                    $('#balance-succcess a').attr('href', 'https://etherscan.io/token/0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6?a=' + dcn_address);
+                } else {
+                    $('#balance-error').show();
+                }
+            },
+            error: function (error) {
+                $('#balance-error').show();
+            }
+        });
+        
+    });
+
     //Profile info
     $('.work-hour-cb').change( function() {
         var active = $(this).is(':checked');
@@ -143,6 +197,8 @@ $(document).ready(function(){
             texts.attr('disabled', 'disabled');
         }
     } )
+
+
 
 
 });

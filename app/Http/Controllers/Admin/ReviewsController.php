@@ -21,6 +21,12 @@ class ReviewsController extends AdminController
         if(!empty($this->request->input('search-rate_to'))) {
             $reviews = $reviews->where('rating', '<=', $this->request->input('search-rate_to'));
         }
+        if(!empty($this->request->input('search-address'))) {
+            $reviews = $reviews->where('reward_address', 'LIKE', '%'.$this->request->input('search-address').'%');
+        }
+        if(!empty($this->request->input('search-tx'))) {
+            $reviews = $reviews->where('reward_tx', 'LIKE', '%'.$this->request->input('search-tx').'%');
+        }
 
         if(!empty($this->request->input('search-country_id'))) {
             $reviews = $reviews->whereHas('dentist', function ($query) {
@@ -46,6 +52,8 @@ class ReviewsController extends AdminController
             'search_rate_to' => $this->request->input('search-rate_to'),
             'search_country_id' => $this->request->input('search-country_id'),
             'search_city_id' => $this->request->input('search-city_id'),
+            'search_tx' => $this->request->input('search-tx'),
+            'search_address' => $this->request->input('search-address'),
         ));
     }
 

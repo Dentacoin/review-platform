@@ -7,6 +7,8 @@
 		<div class="ribbon">
 			<b>{{ $users_count }}</b>
 			{{ trans('front.page.index.users-count') }}
+			<b class="second">{{ $dentist_count }}</b>
+			{{ trans('front.page.index.dentist-count') }}
 			<div class="left-t"></div>
 			<div class="right-t"></div>
 		</div>
@@ -37,6 +39,10 @@
 							</div>
 						</div>
 					</div>
+					<label for="all-locations" class="all-locations">
+						<input type="checkbox" name="all_locations" id="all-locations" value="1" />
+						Show dentists from all locations
+					</label>
 				</div>
 				<div class="col-md-3">
                     {{ Form::submit( trans('front.page.index.submit'), ['class' => 'btn btn-primary btn-block'] ) }}

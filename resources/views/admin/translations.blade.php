@@ -6,6 +6,7 @@
 <!-- end page-header -->
 
 <!-- begin row -->
+@if($admin->role!='translator')
 <div class="row">
     <!-- begin col-6 -->
     <div class="col-md-6">
@@ -42,6 +43,7 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <button type="submit" class="btn btn-sm btn-success">{{ trans('admin.page.'.$current_page.'.choose_submit') }}</button>
+                            <a target="_blank" href="{{ url('cms/'.$current_page.'/'.$current_subpage.'/export/'.$source) }}" class="btn btn-sm btn-default pull-right">{{ trans('admin.page.'.$current_page.'.export') }}</a>
                         </div>
                     </div>
                 </form>
@@ -89,6 +91,7 @@
     </div>
     <!-- end col-6 -->
 </div>
+@endif
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-inverse">

@@ -3,7 +3,7 @@
 return [
     'reviews' => [
         //'daily' => 5,
-        'monthly' => 11,
-        'yearly' => 33,
+        'monthly' => 1,
+        'yearly' => 3,
     ],
 ];

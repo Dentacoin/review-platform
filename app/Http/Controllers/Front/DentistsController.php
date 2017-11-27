@@ -23,8 +23,9 @@ class DentistsController extends FrontController
 
         $page = max(1, $page);
         $ppp = 12;
+        $all_locations = Request::input('all_locations');
         $city = null;
-        $country = $this->request->attributes->get('country_id') ? Country::find($this->request->attributes->get('country_id')) : null; //$this->country_id;
+        $country = !$all_locations && $this->request->attributes->get('country_id') ? Country::find($this->request->attributes->get('country_id')) : null; //$this->country_id;
         $order = 'rating';
         $name = '';
         $partner = '';
@@ -35,10 +36,10 @@ class DentistsController extends FrontController
         if( Request::input('name') ) {
             $name = Request::input('name');
         }
-        if( Request::input('city') ) {
+        if( Request::input('city') && !$all_locations ) {
             $city = City::find(Request::input('city'));
         }
-        if( Request::input('country') ) {
+        if( Request::input('country') && !$all_locations ) {
             $country = Country::find(Request::input('country'));
         }
         if( Request::input('category') ) {
@@ -98,6 +99,7 @@ class DentistsController extends FrontController
 		return $this->ShowView('dentists', [
 			'items' => $items,
             'search_location' => !empty($city) && !empty($country) ? $city->name.', '.$country->name : ( !empty($country) ? $country->name : ''),
+            'all_locations' => $all_locations,
             'city' => $city,
             'country' => $country,
             'name' => $name,

@@ -51,30 +51,29 @@
             <div class="panel-body">
                 <form class="form-horizontal" id="admin-add" method="post" action="{{ url('cms/admins/add') }}">
                 	{!! csrf_field() !!}
+                    
                     <div class="form-group">
-                        <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.username') }}</label>
-                        <div class="col-md-9">
-                            <input class="form-control" type="text" name="username" value="{{ old('username') }}" />
+                        <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.username') }}</label>
+                        <div class="col-md-4">
+                            {{ Form::text('username', '', array('class' => 'form-control')) }}
+                        </div>
+                        <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.password') }}</label>
+                        <div class="col-md-4">
+                            {{ Form::text('password', '', array('class' => 'form-control')) }}
                         </div>
                     </div>
+
                     <div class="form-group">
-                        <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.password') }}</label>
-                        <div class="col-md-9">
-                            <input class="form-control" type="text" name="password" value="{{ old('password') }}" />
+                        <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.email') }}</label>
+                        <div class="col-md-4">
+                            {{ Form::text('email', '', array('class' => 'form-control')) }}
+                        </div>
+                        <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.role') }}</label>
+                        <div class="col-md-4">
+                            {{ Form::select('role', $roles, null, array('class' => 'form-control')) }}
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.email') }}</label>
-                        <div class="col-md-9">
-                            <input class="form-control" type="text" name="email" value="{{ old('email') }}" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.comments') }}</label>
-                        <div class="col-md-9">
-                            <textarea class="form-control"  name="comments" value="{{ old('comments') }}"></textarea>
-                        </div>
-                    </div>
+
                     <div class="form-group">
                         <label class="col-md-3 control-label"></label>
                         <div class="col-md-9">

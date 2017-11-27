@@ -42,11 +42,15 @@ class EmailTemplate extends Model
             '[homepage]Click here[/homepage]',
         ];
 
-        if($this->id==1 || $this->id==2) {
+        if($this->id==1 || $this->id==2 || $this->id==11) {
             $codes[] = '[verifylink]Click here[/verifylink]';
         }
 
-        if($this->id==5) {
+        if($this->id==3 || $this->id==4) {
+            $codes[] = '[rewardlink]Click here[/rewardlink]';            
+        }
+
+        if($this->id==5 || $this->id==13) {
             $codes[] = '[recoverlink]Click here[/recoverlink]';
         } 
 
@@ -64,6 +68,10 @@ class EmailTemplate extends Model
         if($this->id==9) {
             $codes[] = '[inviter_name]';
             $codes[] = '[claimlink]Click here[/claimlink]';
+        } 
+        
+        if($this->id==15) {
+            $codes[] = '[expires]';
         } 
 
         return $codes;

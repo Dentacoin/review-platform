@@ -5,30 +5,42 @@ namespace App\Http\Controllers\Admin;
 use Validator;
 use App\Http\Controllers\AdminController;
 use App\Models\Admin;
+use Illuminate\Http\Request;
 
 
 class AdminsController extends AdminController
 {
-    public function list( ) {
-        $roles_list = [];
-        foreach ($this->roles as $role) {
-            $roles_list[$role] = trans('admin.page.'.$this->current_page.'.role-'.$role);
+    public function __construct(Request $request) {
+        parent::__construct($request);
+        $this->langslist = ['' => '-'];
+        foreach(config('langs') as $k=> $v) {
+            $this->langslist[$k] = $v['name'];
         }
 
+        $this->roles = [
+            'admin' => trans('admin.page.'.$this->current_page.'.role-admin'),
+            'translator' => trans('admin.page.'.$this->current_page.'.role-translator'),
+        ];
+
+        $this->domainlist = [];
+        foreach( config('admin.pages.translations.subpages') as $k => $sp) {
+            $this->domainlist[$k] = trans('admin.page.translations.'.$k.'.title');
+        }
+
+        foreach(config('langs') as $k=> $v) {
+            $this->langslist[$k] = $v['name'];
+        }
+    }
+
+    public function list( ) {
     	return $this->showView('admins', array(
         	'admins_list' => Admin::get(),
-            'roles' => $roles_list
+            'roles' => $this->roles,
         ));
     }
 
-    public $roles = [
-        'admin',
-        'editor',
-    ];
-
     public function add( ) {
         $validator = Validator::make($this->request->all(), [
-            'role' => array('required', 'in:'.implode(',' , $this->roles)),
             'username' => array('required', 'unique:admins,username', 'min:3'),
             'password' => array('required', 'min:6'),
             'email' => array('required', 'email', 'unique:admins,email')
@@ -41,11 +53,10 @@ class AdminsController extends AdminController
         } else {
             
             $newadmin = new Admin;
-            $newadmin->role = $this->request->input('role');
             $newadmin->username = $this->request->input('username');
             $newadmin->password = bcrypt($this->request->input('password'));
             $newadmin->email = $this->request->input('email');
-            $newadmin->comments = $this->request->input('comments');
+            $newadmin->role = $this->request->input('role');
             $newadmin->save();
 
             $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.added') );
@@ -64,14 +75,12 @@ class AdminsController extends AdminController
         $item = Admin::find($id);
 
         if(!empty($item)) {
-            $roles_list = [];
-            foreach ($this->roles as $role) {
-                $roles_list[$role] = trans('admin.page.'.$this->current_page.'.role-'.$role);
-            }
 
             return $this->showView('admins-edit', array(
                 'item' => $item,
-                'roles' => $roles_list,
+                'langslist' => $this->langslist,
+                'roles' => $this->roles,
+                'domainlist' => $this->domainlist,
             ));
         } else {
             return redirect('cms/admins');
@@ -83,25 +92,26 @@ class AdminsController extends AdminController
 
         if(!empty($item)) {
         	$validator = Validator::make($this->request->all(), [
-                'role' => array('required', 'in:'.implode(',' , $this->roles)),
                 'username' => array('required', 'string'),
                 'email' => array('email'),
-                'comments' => array('string'),
             ]);
 
             if ($validator->fails()) {
-                return redirect('cms/admins')
+                return redirect('cms/admins/edit/'.$item->id)
                 ->withInput()
                 ->withErrors($validator);
             } else {
                 
                 $item->username = $this->request->input('username');
-                $item->role = $this->request->input('role');
                 if(!empty( $this->request->input('password') )) {
                     $item->password = bcrypt($this->request->input('password'));
                 }
                 $item->email = $this->request->input('email');
                 $item->comments = $this->request->input('comments');
+                $item->role = $this->request->input('role');
+                $item->lang_from = $this->request->input('lang_from');
+                $item->lang_to = $this->request->input('lang_to');
+                $item->text_domain = !empty($this->request->input('text_domain')) ? implode(',', $this->request->input('text_domain')) : '';
                 $item->save();
 
                 $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.updated') );

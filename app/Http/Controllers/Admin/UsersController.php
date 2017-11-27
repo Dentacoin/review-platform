@@ -9,6 +9,8 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\UserCategory;
 
+use Carbon\Carbon;
+
 use Request;
 use Route;
 use Auth;
@@ -18,6 +20,13 @@ class UsersController extends AdminController
     private $fields;
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
         parent::__construct($request, $route, $locale);
+
+        $this->genders = [
+            '' => null,
+            'm' => trans('admin.common.gender.m'),
+            'f' => trans('admin.common.gender.f'),
+        ];
+
     	$this->fields = [
             'title' => [
                 'type' => 'select',
@@ -63,8 +72,15 @@ class UsersController extends AdminController
     		'country_id' => [
     			'type' => 'country',
     		],
-    		'city_id' => [
-    			'type' => 'city',
+            'city_id' => [
+                'type' => 'city',
+            ],
+            'gender' => [
+                'type' => 'select',
+                'values' => $this->genders
+            ],
+    		'birthyear' => [
+    			'type' => 'text'
     		],
     		'zip' => [
     			'type' => 'text',
@@ -88,6 +104,12 @@ class UsersController extends AdminController
     		'avatar' => [
     			'type' => 'avatar'
     		],
+            'register_reward' => [
+                'type' => 'text',
+            ],
+            'register_tx' => [
+                'type' => 'text',
+            ],
     	];
     }
 
@@ -104,6 +126,24 @@ class UsersController extends AdminController
         if(!empty($this->request->input('search-email'))) {
             $users = $users->where('email', 'LIKE', '%'.trim($this->request->input('search-email')).'%');
         }
+        if(!empty($this->request->input('search-id'))) {
+            $users = $users->where('id', $this->request->input('search-id') );
+        }
+
+        if(!empty($this->request->input('search-register-from'))) {
+            $firstday = new Carbon($this->request->input('search-register-from'));
+            $users = $users->where('created_at', '>=', $firstday);
+        }
+        if(!empty($this->request->input('search-register-to'))) {
+            $firstday = new Carbon($this->request->input('search-register-to'));
+            $users = $users->where('created_at', '<=', $firstday);
+        }
+        if(!empty($this->request->input('search-address'))) {
+            $users = $users->where('register_reward', 'LIKE', '%'.trim($this->request->input('search-address')).'%');
+        }
+        if(!empty($this->request->input('search-tx'))) {
+            $users = $users->where('register_tx', 'LIKE', '%'.trim($this->request->input('search-tx')).'%');
+        }
 
         if(!empty($this->request->input('search-deleted'))) {
             $users = $users->onlyTrashed();
@@ -114,9 +154,14 @@ class UsersController extends AdminController
 
         return $this->showView('users', array(
             'users' => $users,
+            'search_register_from' => $this->request->input('search-register-from'),
+            'search_register_to' => $this->request->input('search-register-to'),
             'search_email' => $this->request->input('search-email'),
             'search_phone' => $this->request->input('search-phone'),
             'search_name' => $this->request->input('search-name'),
+            'search_id' => $this->request->input('search-id'),
+            'search_address' => $this->request->input('search-address'),
+            'search_tx' => $this->request->input('search-tx'),
         ));
     }
 
@@ -188,7 +233,11 @@ class UsersController extends AdminController
             if(Request::isMethod('post')) {
             	foreach ($this->fields as $key => $value) {
             		if(empty($value['disabled']) && $value['type']!='avatar' && $key!='category_id') {
-                		$item->$key = $this->request->input($key);
+                        if($value['type']=='datepicker') {
+                	       $item->$key = $this->request->input($key) ? new Carbon( $this->request->input($key) ) : null;
+                        } else {
+                           $item->$key = $this->request->input($key);                            
+                        }
             		}
             	}
                 $item->save();

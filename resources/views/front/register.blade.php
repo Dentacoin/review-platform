@@ -11,7 +11,7 @@
 						{{ trans('front.page.'.$current_page.'.title') }}
 					</h1>
 
-					<form action="{{ getLangUrl('register') }}" method="post" role="form" data-toggle="validator" class="form-horizontal">
+					<form action="{{ getLangUrl('register') }}" id="register-form" method="post" role="form" data-toggle="validator" class="form-horizontal">
 
 						<p>
 							{{ trans('front.page.'.$current_page.'.hint') }}								
@@ -19,81 +19,49 @@
 						
 						@include('front.errors')
 
-						<div class="form-group">
+						<div id="register-error" class="alert alert-warning" style="display: none;">
+							{{ trans('front.page.'.$current_page.'.register-error')  }}<br/>
+							<span>
 
-							<div class="col-md-12">
-							  	<div class="btn-group btn-group-justified" role="group" aria-label="...">
-									<button type="button" class="btn {!! old('is_dentist') ? 'btn-primary' : 'btn-default' !!}">
-										<label for="radio-dentist">
-						    				<input type="radio" name="is_dentist" id="radio-dentist" class="register-type" {!! old('is_dentist') ? 'checked="checked"' : '' !!} value="1"> 
+							</span>
+						</div>
+
+						@if($invitation_email)
+							<input type="hidden" name="is_dentist" value="0"> 
+						@else
+							<div class="form-group">
+
+								<div class="col-md-12">
+								  	<div class="btn-group btn-group-justified" role="group" aria-label="...">
+										<label for="radio-dentist" class="btn {!! count($errors) && old('is_dentist') ? 'btn-primary' : 'btn-default' !!}">
+						    				<input type="radio" name="is_dentist" id="radio-dentist" class="register-type" {!! count($errors) && old('is_dentist') ? 'checked="checked"' : '' !!} value="1"> 
 											{{ trans('front.page.'.$current_page.'.is_dentist') }}
 										</label>
-									</button>
-									<button type="button" class="btn {!! count($errors) && !old('is_dentist') ? 'btn-primary' : 'btn-default' !!}">
-										<label for="radio-patient">
+										<label for="radio-patient" class="btn {!! count($errors) && !old('is_dentist') ? 'btn-primary' : 'btn-default' !!}">
 									    	<input type="radio" name="is_dentist" id="radio-patient" class="register-type" {!! count($errors) && !old('is_dentist') ? 'checked="checked"' : '' !!} value="0"> 
 											{{ trans('front.page.'.$current_page.'.is_patient') }}
 									  	</label>
-									</button>
-								</div>
-							</div>
-
-						</div>
-
-
-						<div {!! count($errors) ? '' : 'style="display: none;"' !!} id="register-form">
-
-							<div class="form-group">
-							  	<div class="col-md-12 text-center">
-									<a class="btn register-social btn-default" title="{{ trans('front.page.'.$current_page.'.facebook') }}" href="{{ getLangUrl('register/facebook') }}"><i class="fa fa-facebook"></i></a>
-									<a class="btn register-social btn-default" href="{{ getLangUrl('register/twitter') }}" title="{{ trans('front.page.'.$current_page.'.twitter') }}"><i class="fa fa-twitter"></i></a>
-									<a class="btn register-social btn-default" href="{{ getLangUrl('register/gplus') }}" title="{{ trans('front.page.'.$current_page.'.gplus') }}"><i class="fa fa-google-plus"></i></a>
-								</div>
-							</div>
-
-								{!! csrf_field() !!}
-
-								<div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-								  	<label class="control-label col-md-4">
-								  		{{ trans('front.page.'.$current_page.'.name') }}
-								  	</label>
-								  	<div class="col-md-8">
-								  		<input type="text" name="name" value="{{ old('name') }}" class="form-control">
-								    </div>
-								</div>
-								<div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-								  	<label class="control-label col-md-4">
-								  		{{ trans('front.page.'.$current_page.'.email')  }}
-								  	</label>
-								  	<div class="col-md-8">
-								    	<input type="email" name="email" value="{{ old('email') }}" class="form-control">
-								    </div>
-								</div>
-							  	<div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
-								  	<label class="control-label col-md-4">
-								  		{{ trans('front.page.'.$current_page.'.password')  }}
-								  	</label>
-								  	<div class="col-md-8">
-								    	<input type="password" name="password" class="form-control">
-								    </div>
-								</div>
-							  	<div class="form-group {{ $errors->has('password-repeat') ? 'has-error' : '' }}">
-								  	<label class="control-label col-md-4">
-								  		{{ trans('front.page.'.$current_page.'.password-repeat') }} 
-								  	</label>
-								  	<div class="col-md-8">
-								    	<input type="password" name="password-repeat" class="form-control">
-								    </div>
-								</div>
-								<div class="form-group">
-									<div class="col-md-12">
-										<button class="btn btn-primary btn-block" type="submit">
-											{{ trans('front.page.'.$current_page.'.submit')  }}
-										</button>
 									</div>
 								</div>
 
+							</div>
+						@endif
 
+
+						<div {!! count($errors) || $invitation_email ? '' : 'style="display: none;"' !!} id="register-div">
+
+							<div class="form-group">
+							  	<div class="col-md-12">
+									<p>
+										{{ trans('front.page.'.$current_page.'.why-facebook') }}								
+									</p>
+							  	</div>
+							  	<div class="col-md-12 text-center">
+									<a class="btn register-social btn-default" title="{{ trans('front.page.'.$current_page.'.facebook') }}" href="{{ getLangUrl('register/facebook') }}">
+										<i class="fa fa-facebook"></i> Register with Facebook
+									</a>
+								</div>
+							</div>
 
 						</div>
 

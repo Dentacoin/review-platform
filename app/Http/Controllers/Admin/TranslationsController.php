@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController;
 use Lang;
 use Validator;
 use Illuminate\Support\Facades\Input;
+use Excel;
 
 class TranslationsController extends AdminController
 {
@@ -67,6 +68,35 @@ class TranslationsController extends AdminController
         }
 	}
 
+    public function export($subpage=null, $source=null) {
+
+        $list = Lang::get($this->current_subpage, array(), $source);
+        //dd($list);
+        $flist = [];
+        foreach ($list as $key => $value) {
+            $flist[] = [$key,$value];
+        }
+        //dd($flist);
+
+        $dir = storage_path().'/app/public/xls/';
+        if(!is_dir($dir)) {
+            mkdir($dir);
+        }
+        $fname = $dir.'export';
+
+        Excel::create($fname, function($excel) use ($flist) {
+
+            $excel->sheet('Sheet1', function($sheet) use ($flist) {
+
+                $sheet->fromArray($flist);
+
+            });
+
+        })->export('xls');
+
+        //dd('aleee');
+    }
+
 	public function delete($subpage=null, $source=null, $target=null, $delid=null) {
         foreach (config('langs') as $lang => $bla) {
             $keysarr = Lang::get($this->current_subpage, array(), $lang);
@@ -82,8 +112,13 @@ class TranslationsController extends AdminController
 
     public function list($subpage=null, $source=null, $target=null) {
         $available_langs = config('langs');
-        $source = isset($available_langs[$source]) ? $source : key($available_langs);
-        $target = isset($available_langs[$target]) ? $target : key($available_langs);
+        if($this->user->role=='translator') {
+            $source = $this->user->lang_from;
+            $target = $this->user->lang_to;
+        } else {
+            $source = isset($available_langs[$source]) ? $source : key($available_langs);
+            $target = isset($available_langs[$target]) ? $target : key($available_langs);
+        }
 
         $sa = Lang::get($this->current_subpage, array(), $source);
         if(!is_array($sa)) {
