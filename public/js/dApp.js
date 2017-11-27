@@ -1,5 +1,5 @@
 // web3 loader Metamask/Mist ---------------------------------------------------
-  // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+// Checking if Web3 has been injected by the browser (Mist/MetaMask)
 
 //Function "prototypes"
 var reviewSubmitedReward = null;
@@ -11,12 +11,6 @@ window.addEventListener('load', function() {
         $('#has-no-wallet').show();
         $('#has-wallet').hide();
         $('#transfer-widget').hide();
-    }
-
-    var hasWalletActions = function() {
-        $('#has-wallet').show();
-        $('#transfer-widget').show();
-        $('#has-no-wallet').hide();
     }
 
     if(typeof Web3 == 'undefined') {
@@ -66,22 +60,6 @@ window.addEventListener('load', function() {
 
     //Wallet updates
     var walletUpdater = function() {
-        /*Checking if Web3 has been injected by the browser (Mist/MetaMask)
-        if (typeof web3 !== 'undefined') {
-            // Use Mist/MetaMask's provider
-            window.web3 = new Web3(web3.currentProvider);
-            account = web3.eth.accounts[0];
-            if(account) {
-                hasWalletActions();
-            } else {
-                noWalletActions();
-            }
-        } else {
-            console.log('No web3? You should consider trying MetaMask!')
-            // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-            window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-            noWalletActions();
-        }*/
 
         if (typeof(token) == 'undefined' || !token) {
             return
@@ -107,127 +85,6 @@ window.addEventListener('load', function() {
     };
     walletUpdater();
     setInterval(walletUpdater, 2000);
-
-
-    //Rewards for reviews
-    reviewSubmitedReward = function(dcn_address, review_content, submit_secret, invite_secret) {
-        //review_content="test";
-        if(typeof(invite_secret)=='undefined' || !invite_secret) { //JIC
-            invite_secret = "";
-        }
-        console.log("Transfer Details");
-        console.log('DCN address', dcn_address);
-        console.log('Review hash', review_content);
-        console.log('Submit secret', submit_secret);
-        console.log('Invite secret', invite_secret);
-
-        var transactionObject = {
-            from: account,
-            gas: 200000
-        };
-
-        // submit function
-        try {
-            contract.submitReview(dcn_address, review_content, submit_secret, invite_secret, transactionObject, function(error, trusted){
-                ajax_is_running = false;
-                if(error) {
-                    console.log("There was an error transfering your Review: " + String(error));
-
-
-                    $('#review-crypto-error').show();
-
-                    $('html, body').animate({
-                        scrollTop: $('#review-crypto-error').closest('.panel-body').offset().top - 60
-                    }, 500);
-                    return error;
-                }
-
-
-                console.log("Your review is confirmed: ", trusted);
-                $.ajax( {
-                    url: $('#review-confirm-action').val() + '/confirm-review/' + submit_secret,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: (function( data ) {
-                        console.log(data);
-                        if(data.success) {
-                            $('#review-submit-button').hide();
-                            $('#review-pending').show().find('a.etherscan-link').attr('href', 'https://etherscan.io/tx/'+trusted);
-                        } else {
-                            $('#review-crypto-error').show();
-
-                            $('html, body').animate({
-                                scrollTop: $('#review-crypto-error').closest('.panel-body').offset().top - 60
-                            }, 500);
-                            return;
-                        }
-                    })
-                });
-
-            });
-
-        } catch(e) {
-            console.log(e);
-        }
-
-
-            contract.SubmitEvent({}, function(error, trusted){
-                if(error) {
-                    console.log("There was an error transfering your Review: " + String(error));
-                    $('#review-crypto-error').show();
-
-                    $('html, body').animate({
-                        scrollTop: $('#review-crypto-error').closest('.panel-body').offset().top - 60
-                    }, 500);
-                    return;
-                }
-                console.log("Your review is confirmed: ", trusted);
-                $('#review-submit-button').hide();
-                $('#review-pending').hide();
-                $('#review-confirmed').show().find('a.etherscan-link').attr('href', 'https://etherscan.io/tx/'+trusted);
-            });
-
-    }
-
-
-    // Dentists - invite patients --------------------------------------------------
-    // Set inviteSecret
-    generateInviteCode = function(){
-        var inviteSec = (Math.random()*0xFFFFFF<<0).toString(16)+(Math.random()*0xFFFFFF<<0).toString(16)+(Math.random()*0xFFFFFF<<0).toString(16)+(Math.random()*0xFFFFFF<<0).toString(16)+(Math.random()*0xFFFFFF<<0).toString(16);
-        inviteSec = inviteSec.substring(0,16);
-
-        //inviteSec = '7f03a4c3554b590b';
-        //inviteSec = '9059ca27d337866b';
-
-        console.log("Invite Details", inviteSec);
-        var transactionObject = {
-            from: account,
-            gas: 200000
-        };
-
-        // submit function
-        contract.setInviteSecret(inviteSec, transactionObject, function(error, hash){
-            if(error) {
-                $('#invite-alert-secret').show();
-                return String(error);
-            }
-
-            console.log("The hash of the email secret is: " + String(hash));
-            $('#invite-secret').val(inviteSec);
-            $('#invite-patient-form').submit();
-
-        });
-
-        /*
-            contract.SubmitEvent({}, function(error, result){
-                if(error) {
-                    //return $("#transferTokenResponse_body").html("There was an error transfering your Dentacoins: " + String(error));
-                }
-                $("#transferTokenResponse").show();
-                //return $("#transferTokenResponse_body").html("Your Dentacoins have been transfered! " + String(result.transactionHash));
-            });
-        */
-    }
 
     // Transfer Dentacoins
     sendDCN = function(dcn_address, amount) {
@@ -275,10 +132,6 @@ window.addEventListener('load', function() {
            $("#transferTokenResponse").show();
            return $("#transferTokenResponse_body").html("Your Dentacoins have been transfered! " + String(result.transactionHash));
        });
-     }
-
-    //- Transfer Dentacoins
-
+    }
 
 })
-  // Dentacoin token integration -------------------------------------------------

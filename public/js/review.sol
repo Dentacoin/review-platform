@@ -1,12 +1,11 @@
 /**
-
-Rinkeby TESTNET v.3
+ v.3
  * Dentacoin Review Platform contract created on July the xth, 2017 by Dentacoin B.V. in the Netherlands
  *
  * For terms and conditions visit https://dentacoin.com
  */
 
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.13;
 
 
    //Dentacoin token import
@@ -60,15 +59,11 @@ contract Review is owned {
     // date of the review
     uint256 timeStamp;
     address writtenByAddress;
-    address writtenForAddress;
-    uint256 writtenForID;
-    bytes32 content;
-    bool trusted;
+    bytes48 content;
   }
-
   mapping (uint256 => Reviews) public reviewID;
-  mapping (address => bool) public dentistWhitelist;
 
+  mapping (address => bool) public dentistWhitelist;
   mapping (bytes32 => bool) public hashedInviteSecret;
 
 
@@ -77,7 +72,6 @@ contract Review is owned {
   }
 
 // Events-----------------------------------------------------------------------
-
   event SubmitEvent(address indexed _from, address indexed _to, uint256 _value);
 
 // Setter and Getter -----------------------------------------------------------
@@ -100,6 +94,11 @@ contract Review is owned {
       require (_dentist != 0x0);
       dentistWhitelist[_dentist] = true;
     }
+    function removeDentistFromWhitelist (address _dentist) onlyOwner {
+      require (_dentist != 0x0);
+      dentistWhitelist[_dentist] = false;
+    }
+
 
     function addSubmitSecrets (bytes8[] _arrayOfHashedSecrets) onlyOwner {
       for (uint i = 0; i < _arrayOfHashedSecrets.length; i++) {
@@ -127,14 +126,13 @@ contract Review is owned {
 
   function () payable onlyOwner{}
 
-  function submitReview(address _to, uint256 _toID, bytes32 _content, string _submitSecret, string _inviteSecret) returns (bool success) {
+  function submitReview(address _to, bytes48 _content, string _submitSecret, string _inviteSecret) returns (string trusted) {
 
     // Check if reviewer is not a dentist
     require (!dentistWhitelist[msg.sender]);
 
     //Check if review comes from actual user of reviews.dentacoin.com
-    require (hashedSubmitSecrets[secretCount] == bytes8(keccak256(_submitSecret)));               //Testnet
-    //require (hashedSubmitSecrets[count] == keccak256(_submitSecret));
+    require (hashedSubmitSecrets[secretCount] == bytes8(keccak256(_submitSecret)));
 
     // Check if review contains any answers
     require (_content != 0x0);
@@ -142,14 +140,10 @@ contract Review is owned {
     //Check if Dentist is whitelisted
     require (dentistWhitelist[_to]);
 
-    //Remove secret from list after using it once !uncomment in main net version!
-    //hashedSubmitSecrets[keccak256(_secret)] = false;
 
     //Store review details
     reviewID[count].timeStamp = now;
     reviewID[count].writtenByAddress = msg.sender;
-    reviewID[count].writtenForAddress = _to;
-    reviewID[count].writtenForID = _toID;
     reviewID[count].content = _content;
 
     count++;
@@ -160,19 +154,19 @@ contract Review is owned {
       secretCount = 0;
     }
 
+
     //Check if review is trusted by comparing hashed Secret from invite email with db
     if (hashedInviteSecret[keccak256(_inviteSecret)]) {
-      reviewID[count].trusted = true;
       // remove
       hashedInviteSecret[keccak256(_inviteSecret)] = false;
       tokenAddress.transfer(msg.sender, dcnAmountTrusted);
       SubmitEvent(this, msg.sender, dcnAmountTrusted);
-      return true;
+      return "trusted";
 
     } else {
       tokenAddress.transfer(msg.sender, dcnAmount);
       SubmitEvent(this, msg.sender, dcnAmount);
-      return true;
+      return "untrusted";
     }
 
   }
@@ -189,37 +183,6 @@ contract Review is owned {
         msg.sender.transfer(this.balance);
       }
   }
-
-
-
-
-
-
-
-
-
-
-  //Dentist section
-
-    //if address true then dentist is whitelisted
-
-/*
-    struct Dentist {
-
-    }
-
-    function updateAddress(uint256 _id, address _address) {
-      require (dentistWhitelist[_id])
-    }
-
-*/
-
-
-
-
-
-
-
 
 
 
