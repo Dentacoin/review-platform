@@ -12,3 +12,4 @@ yarn-error.log
 .env
 /App/Models/Dcn.php
 composer.lock
+artisan
