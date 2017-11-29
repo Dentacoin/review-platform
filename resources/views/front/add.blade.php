@@ -11,7 +11,7 @@
 						{{ trans('front.page.'.$current_page.'.title') }}
 					</h1>
 					@if($user)
-						@if($user->is_verified)
+						@if($user->is_verified || $user->fb_id)
 							<p>
 								{{ trans('front.page.'.$current_page.'.hint') }}
 							</p>

@@ -25,6 +25,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('translations/{subpage?}/add', 									'TranslationsController@add');
 	Route::post('translations/{subpage?}/update', 								'TranslationsController@update');
 	Route::get('translations/{subpage?}/export/{source}', 					'TranslationsController@export');
+	Route::post('translations/{subpage?}/import/{source}', 					'TranslationsController@import');
 	Route::get('translations/{subpage?}/{source?}/{target?}', 					'TranslationsController@list');
 	Route::get('translations/{subpage?}/{source?}/{target?}/del/{delkey?}', 	'TranslationsController@delete');
 
@@ -104,7 +105,6 @@ Route::domain('reviews.dentacoin.com')->group(function () {
 			Route::get('useful/{id}', 							'DentistController@useful');
 
 			Route::get('register', 								'RegisterController@register');
-			Route::post('register', 							'RegisterController@register_form');
 			Route::get('verify/{id}/{hash}', 					'RegisterController@register_verify');
 			Route::get('forgot-password', 						'RegisterController@forgot');
 			Route::post('forgot-password', 						'RegisterController@forgot_form');

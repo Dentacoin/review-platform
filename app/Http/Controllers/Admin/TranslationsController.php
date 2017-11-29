@@ -74,7 +74,7 @@ class TranslationsController extends AdminController
         //dd($list);
         $flist = [];
         foreach ($list as $key => $value) {
-            $flist[] = [$key,$value];
+            $flist[] = [$key, $value ];
         }
         //dd($flist);
 
@@ -89,12 +89,36 @@ class TranslationsController extends AdminController
             $excel->sheet('Sheet1', function($sheet) use ($flist) {
 
                 $sheet->fromArray($flist);
+                //$sheet->setWrapText(true);
+                //$sheet->getStyle('D1:E999')->getAlignment()->setWrapText(true); 
 
             });
+
+
 
         })->export('xls');
 
         //dd('aleee');
+    }
+
+    public function import($subpage=null, $source=null) {
+
+        $list = Lang::get($this->current_subpage, array(), $source);
+        Excel::load( Input::file('table')->path() , function($reader) use ($source) {
+
+            // Getting all results
+            $results = $reader->toArray();
+            $proper = [];
+            foreach($results as $k => $v) {
+                $proper[$v[0]] = str_replace('"', '', $v[1]);
+            }
+            $this->translations_save($source, $proper);
+
+            $this->request->session()->flash('success-message', trans('admin.page.translations.imported'));
+
+        });
+        
+        return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/'.$source.'/'.$source);
     }
 
 	public function delete($subpage=null, $source=null, $target=null, $delid=null) {

@@ -297,6 +297,7 @@ $(document).ready(function(){
                 if(data.success) {
                     $('#claim-phone-code-form').hide();
                     $('#claim-phone-password-form').show();
+                    $('#go-to-claim').attr('href', data.link);
                 } else {
                     $('#claim-phone-code-form').find('.alert').show();
                 }

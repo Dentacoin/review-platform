@@ -8,6 +8,8 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Models\Article;
 use Carbon\Carbon;
 use DB;
+use Spatie\Sitemap\SitemapGenerator;
+use Spatie\Sitemap\Tags\Url;
 
 class Kernel extends ConsoleKernel
 {
@@ -86,10 +88,25 @@ class Kernel extends ConsoleKernel
             }
 
             echo 'DONE!';
-        })->everyMinute();
+        //})->everyMinute();
         //})->everyFiveMinutes();
-        //})->hourly();
+        })->hourly();
 
+        
+        $schedule->call(function () {
+            return;
+            SitemapGenerator::create('https://reviews.dentacoin.com')
+            ->hasCrawled(function (Url $url) {
+                return $url;                
+            })->writeToFile(public_path().'/sitemaps/sitemap-reviews.xml');
+
+            SitemapGenerator::create('https://dentavox.dentacoin.com')
+            ->hasCrawled(function (Url $url) {
+                return $url;                
+            })->writeToFile(public_path().'/sitemaps/sitemap-vox.xml');
+
+            echo 'DONE!';
+        })->cron("0 5 * * *"); //05:00h
     }
 
     /**

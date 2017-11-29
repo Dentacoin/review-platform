@@ -9,7 +9,7 @@
 @if($admin->role!='translator')
 <div class="row">
     <!-- begin col-6 -->
-    <div class="col-md-6">
+    <div class="col-md-4">
         <!-- begin panel -->
         <div class="panel panel-inverse">
             <div class="panel-heading">
@@ -43,7 +43,6 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <button type="submit" class="btn btn-sm btn-success">{{ trans('admin.page.'.$current_page.'.choose_submit') }}</button>
-                            <a target="_blank" href="{{ url('cms/'.$current_page.'/'.$current_subpage.'/export/'.$source) }}" class="btn btn-sm btn-default pull-right">{{ trans('admin.page.'.$current_page.'.export') }}</a>
                         </div>
                     </div>
                 </form>
@@ -53,7 +52,7 @@
     </div>
     <!-- end col-6 -->
     <!-- begin col-6 -->
-    <div class="col-md-6">
+    <div class="col-md-4">
         <!-- begin panel -->
         <div class="panel panel-inverse">
             <div class="panel-heading">
@@ -90,6 +89,40 @@
         <!-- end panel -->
     </div>
     <!-- end col-6 -->
+    <div class="col-md-4">
+        <!-- begin panel -->
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <div class="panel-heading-btn">
+                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                </div>
+                <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.export-import') }}</h4>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" id="translations-import" method="post" action="{{ url('cms/'.$current_page.'/'.$current_subpage.'/import/'.$source) }}" enctype="multipart/form-data">
+                    {!! csrf_field() !!}
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.export', ['lang' => $langs[$source]['name'] ]) }}</label>
+                        <div class="col-md-9">
+                            <a target="_blank" href="{{ url('cms/'.$current_page.'/'.$current_subpage.'/export/'.$source) }}" class="btn btn-sm btn-primary">{{ trans('admin.page.'.$current_page.'.export-btn') }}</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.import', ['lang' => $langs[$source]['name'] ]) }}</label>
+                        <div class="col-md-9">
+                            <input type="file" name="table" accept=".xls" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <button type="submit" name="add" class="btn btn-sm btn-success">{{ trans('admin.page.'.$current_page.'.import-submit') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- end panel -->
+    </div>
 </div>
 @endif
 <div class="row">

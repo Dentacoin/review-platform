@@ -161,6 +161,22 @@ class LoginController extends FrontController
             return redirect(getLangUrl('profile'));
         } else {
 
+
+            $claiming = session('claim_id');
+            if($claiming) {
+                $newuser = User::find($claiming);
+                $newuser->is_verified = true;
+                $newuser->verified_on = Carbon::now();
+                $newuser->fb_id = $s_user->getId();
+                $newuser->save();
+
+                $newuser->sendTemplate( 3 );
+
+                Auth::login($newuser, true);
+                Request::session()->flash('success-message', trans('front.page.registration.completed-by-claim'));
+                return redirect( getLangUrl('profile') );
+            }
+
             $name = $s_user->getName() ? $s_user->getName() : explode('@', $s_user->getEmail() )[0];
 
             $password = $name.date('WY');

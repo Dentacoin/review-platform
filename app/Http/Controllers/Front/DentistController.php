@@ -327,7 +327,10 @@ class DentistController extends FrontController
             $item->phone_verified_on = Carbon::now();
             $item->save();
 
-            return Response::json( ['success' => true] );
+            return Response::json( [
+                'success' => true,
+                'link' => getLangUrl('claim/'.$item->id.'/'.$item->get_invite_token())
+            ] );
         }
 
 

@@ -341,17 +341,9 @@
 				                	</p>
 									<div class="form-group">
 										<div class="col-md-12">
-											{{ Form::password( 'password', '', array('class' => 'form-control', 'placeholder' => trans('front.page.dentist.claim-phone-password-placeholder') )) }}
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											{{ Form::password( 'password-repeat', '', array('class' => 'form-control', 'placeholder' => trans('front.page.dentist.claim-phone-password-repeat-placeholder') )) }}
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-		                                    <input type="submit" name="save-phone" value="{{ trans('front.page.dentist.claim-phone-password-submit') }}" class="btn btn-primary btn-block" />
+		                                    <a href="" id="go-to-claim" class="btn btn-primary btn-block">
+		                                    	{{ trans('front.page.dentist.claim-phone-password-submit') }}
+		                                    </a>
 										</div>
 									</div>
 									<div class="alert alert-warning" style="display: none;">

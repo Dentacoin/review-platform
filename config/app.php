@@ -185,6 +185,7 @@ return [
         \Torann\GeoIP\GeoIPServiceProvider::class,
         Propaganistas\LaravelPhone\PhoneServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Spatie\Sitemap\SitemapServiceProvider::class,
 
     ],
 

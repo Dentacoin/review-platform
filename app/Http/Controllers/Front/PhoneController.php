@@ -59,7 +59,7 @@ class PhoneController extends FrontController
 
     public function check($locale=null) {
 
-        if ($this->user->verification_code && $this->user->phone && Request::Input('code')!=$this->user->verification_code) {
+        if ($this->user->verification_code && $this->user->phone && Request::Input('code')==$this->user->verification_code) {
             $this->user->phone_verified = true;
             $this->user->phone_verified_on = Carbon::now();
             $this->user->save();
