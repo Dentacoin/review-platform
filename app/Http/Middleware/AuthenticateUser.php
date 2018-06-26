@@ -15,6 +15,7 @@ class AuthenticateUser
                 return response('Unauthorized.', 401);
             } else {
                 return redirect('login');
+                
             }
         }
 

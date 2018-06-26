@@ -15,8 +15,11 @@ class VoxQuestion extends Model {
 
     protected $fillable = [
         'vox_id',
+        'type',
+        'question_trigger',
         'question',
         'answers',
+        'vox_scale_id',
         'is_control',
         'order',
     ];

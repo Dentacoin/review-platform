@@ -15,7 +15,7 @@
 		        </h1>
 		    </div>
 		    <div class="panel-body panel-body-reward">
-	    		@if($user->is_verified || $user->fb_id)
+	    		@if($user->is_verified && $user->email)
 		    		<p>
 		    			{{ trans('front.page.profile.reward.transfer-hint') }}<br/>
 		    		</p>
@@ -31,7 +31,7 @@
 			            </div>
 			            <div class="form-group">
 			                <div class="col-md-12">
-			                    <button type="submit" class="btn btn-primary btn-block">
+			                    <button type="submit" class="btn btn-primary btn-block" data-loading="{{ trans('front.common.loading') }}">
 			                    	{{ trans('front.page.profile.reward.transfer-submit') }}
 			                    </button>
 			                </div>
@@ -39,6 +39,9 @@
 
 		            </form>
 
+		            <div class="alert alert-success" style="display: none;" id="reward-pending">
+                    	{{ trans('front.page.profile.reward.transfer-pending') }}
+                    </div>
 	                <div class="alert alert-success" id="reward-succcess" style="display: none;">
 	                    {{ trans('front.page.profile.reward.transfer-succcess') }}
 	                    <a href="" target="_blank"></a>

@@ -25,6 +25,9 @@
                             <div class="col-md-4">
                                 @if( $info['type'] == 'text')
                                     {{ Form::text( $key, $item->$key, array('class' => 'form-control', (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled' )) }}
+                                    @if($key=='fb_id' && $item->$key)
+                                        <a href="https://facebook.com/{{ $item->$key }}" target="_blank">Open FB profile</a>
+                                    @endif
                                 @elseif( $info['type'] == 'textarea')
                                     {{ Form::textarea( $key, $item->$key, array('class' => 'form-control', (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled' )) }}
                                 @elseif( $info['type'] == 'bool')
@@ -65,12 +68,42 @@
                             @endif
                         @endforeach
                         </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.form-created-at') }}</label>
+                            <div class="col-md-4">
+                                {{ $item->created_at->toDateTimeString() }}
+                            </div>
+                            <label class="col-md-2 control-label"></label>
+                            <div class="col-md-4">
+                                
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.form-self-deleted') }}</label>
+                            <div class="col-md-4">
+                                @if($item->self_deleted)
+                                    <span style="color: red; font-weight: bold; font-size: 16px;">
+                                        Yes
+                                    </span>
+                                @else
+                                    No
+                                @endif
+                            </div>
+                            <label class="col-md-2 control-label"></label>
+                            <div class="col-md-4">
+                                
+                            </div>
+                        </div>
 
                     <div class="form-group">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <a href="{{ url('cms/users/user-data/'.$item->id) }}" target="_blank" class="btn btn-sm btn-warning form-control">Export Personal Data</a>
+                        </div>
+                        <div class="col-md-4">
                             <a href="{{ url('cms/users/loginas/'.$item->id) }}" target="_blank" class="btn btn-sm btn-primary form-control"> {{ trans('admin.page.profile.loginas') }} </a>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <button type="submit" name="update" class="btn btn-block btn-sm btn-success form-control"> {{ trans('admin.common.save') }} </button>
                         </div>
                     </div>
@@ -139,6 +172,7 @@
                             'link'              => array('template' => 'admin.parts.table-reviews-link'),
                             'delete'            => array('format' => 'delete'),
                         ],
+                        'table_subpage' => 'reviews',
                         'table_data' => $item->reviews_in,
                         'table_pagination' => false,
                         'pagination_link' => array()
@@ -172,6 +206,7 @@
                             'link'              => array('template' => 'admin.parts.table-reviews-link'),
                             'delete'            => array('format' => 'delete'),
                         ],
+                        'table_subpage' => 'reviews',
                         'table_data' => $item->reviews_out,
                         'table_pagination' => false,
                         'pagination_link' => array()
@@ -201,8 +236,10 @@
                             'created_at'        => array('format' => 'datetime'),
                             'vox_id'              => array('template' => 'admin.parts.table-vox-rewards-user'),
                             'reward'           => array(),
+                            'delete'              => array('template' => 'admin.parts.table-vox-rewards-delete'),
                         ],
                         'table_data' => $item->vox_rewards,
+                        'table_subpage' => 'vox-rewards',
                         'table_pagination' => false,
                         'pagination_link' => array()
                     ])
@@ -212,6 +249,76 @@
     </div>
 @endif
 
+@if($item->history->isNotEmpty())
+    
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title-transactions') }}</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="panel-body">
+                        @include('admin.parts.table', [
+                            'table_id' => 'transactions',
+                            'table_fields' => [
+                                'created_at'        => array('format' => 'datetime'),
+                                'amount'              => array(),
+                                'address'              => array(),
+                                'tx_hash'              => array('template' => 'admin.parts.table-transactions-hash'),
+                                'status'              => array(),
+                                'type'              => array(),
+                            ],
+                            'table_data' => $item->history,
+                            'table_pagination' => false,
+                            'pagination_link' => array()
+                        ])
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if($item->bans->isNotEmpty())
+    
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title-bans') }}</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="panel-body">
+                        @include('admin.parts.table', [
+                            'table_id' => 'bans',
+                            'table_fields' => [
+                                'created_at'        => array('format' => 'datetime'),
+                                'domain'              => array(),
+                                'expires'              => array('template' => 'admin.parts.table-bans-expires'),
+                                'type'              => array(),
+                                'delete'              => array('template' => 'admin.parts.table-bans-delete'),
+                            ],
+                            'table_data' => $item->bans,
+                            'table_pagination' => false,
+                            'pagination_link' => array()
+                        ])
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+
 @if($item->vox_cashouts->isNotEmpty())
     <div class="row">
         <div class="col-md-12">
@@ -220,7 +327,7 @@
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-vox-cashouts') }} </h4>
+                    <h4 class="panel-title">OLD! {{ trans('admin.page.'.$current_page.'.title-vox-cashouts') }} OLD!</h4>
                 </div>
                 <div class="panel-body">
                     @include('admin.parts.table', [
@@ -240,5 +347,6 @@
         </div>
     </div>
 @endif
+
 
 @endsection

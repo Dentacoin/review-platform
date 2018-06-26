@@ -12,8 +12,23 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
+        'test',
         'location',
+        'user-name',
+        'suggest-clinic',
+        'suggest-dentist',
+        'wait',
+        'civic',
+        'mobident',
         'cms/*',
+        '*/register/upload',
         '*/questionnaire/*',
+        '*/paid-surveys/*',
+        '*/profile/avatar',
+        '*/youtube',
+        '*/profile/jwt',
+        '*/profile/gallery/*',
+        '*/profile/clinics/*',
+        '*/profile/dentists/*',
     ];
 }

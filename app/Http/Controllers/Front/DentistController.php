@@ -15,7 +15,11 @@ use App\Models\Secret;
 use App\Models\Review;
 use App\Models\ReviewUpvote;
 use App\Models\ReviewAnswer;
+use App\Models\UserInvite;
+use App\Models\UserAsk;
 use App\Models\Dcn;
+use App\Models\Reward;
+use App\Models\TrpReward;
 use Carbon\Carbon;
 use Auth;
 use Cloutier\PhpIpfsApi\IPFS;
@@ -23,19 +27,6 @@ use Cloutier\PhpIpfsApi\IPFS;
 
 class DentistController extends FrontController
 {
-    public function test($locale=null) {
-        $ipfs = new IPFS("127.0.0.1", "8080", "5001");
-        $hash = $ipfs->add(json_encode([
-            'bla' => 123,
-            'foo' => 'bar',
-            'obj' => [
-                'a' => 1,
-                'b' => 2,
-            ]
-        ]));
-        dd($hash);
-    }
-
     public function confirmReview($locale=null, $slug, $secret) {
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
 
@@ -70,11 +61,76 @@ class DentistController extends FrontController
         ] );
     }
 
+    public function fullReview($locale=null, $id) {
+        $item = Review::where('user_id', 'LIKE', $id)->firstOrFail();
+
+        if(empty($item)) {
+            return redirect( getLangUrl('dentists') );
+        } else {
+
+            return $this->ShowView('template-parts.entire-review', [
+                'item' => $item,
+            ]);
+        }
+    }
+
+    public function youtube($locale=null) {
+
+        $fn = microtime(true).'-'.$this->user->id;
+        $fileName   = storage_path(). '/app/public/'.$fn.'.webm';
+        //echo 'https://reviews.dentacoin.com/storage/qqfile.webm';
+        //dd($fileName);
+
+        if ($this->request->hasFile('qqfile')) {
+            $image      = $this->request->file('qqfile');
+            copy($image, $fileName);
+        } else {
+            dd('upload a video first');
+        }
+
+
+
+        // Define an object that will be used to make all API requests.
+        $client = $this->getClient();
+        $service = new \Google_Service_YouTube($client);
+
+        if (isset($_SESSION['token'])) {
+            $client->setAccessToken($_SESSION['token']);
+        }
+
+        if (!$client->getAccessToken()) {
+            print("no access token");
+            exit;
+        }
+
+
+        $url = $this->videosInsert($client,
+            $service,
+            $fileName,
+            array('snippet.categoryId' => '22',
+                   'snippet.defaultLanguage' => '',
+                   'snippet.description' => $this->user->getName().'\'s video review on ',
+                   'snippet.tags[]' => '',
+                   'snippet.title' => 'Dentist review by '.$this->user->getName(),
+                   'status.embeddable' => '',
+                   'status.license' => '',
+                   'status.privacyStatus' => 'unlisted',
+                   'status.publicStatsViewable' => ''),
+            'snippet,status', array());
+
+
+
+        return Response::json( [
+            'url' => $url
+        ] );
+    }
+
+
 
     public function list($locale=null, $slug, $review_id=null) {
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
 
-        if(empty($item)) {
+        if(empty($item) || !$item->is_dentist) {
             return redirect( getLangUrl('dentists') );
         }
 
@@ -88,17 +144,14 @@ class DentistController extends FrontController
                 'success' => false
             );
             $validator_arr = [
-                'answer' => ['required', 'string']
+                'answer' => ['required_without:youtube_id'],
+                'youtube_id' => ['required_without:answer']
             ];
             foreach ($questions as $question) {
                 $opts = json_decode($question['options'], true);
                 foreach ($opts as $i => $nosense) {
                 }
                 $validator_arr['option.'.$question->id.'.'.$i] = ['required', 'numeric', 'min:1', 'max:5'];
-            }
-            $my_dcn_address = $this->user->my_address();
-            if(!$my_dcn_address) {
-                $validator_arr['reviewer-address'] = ['required', 'string', 'size:42'];
             }
 
             $validator = Validator::make(Request::all(), $validator_arr);
@@ -113,6 +166,15 @@ class DentistController extends FrontController
 
                 return Response::json( $ret );
             } else {
+
+                $real_text = strip_tags(Request::input( 'answer' ));
+                $real_text_words = explode(' ', $real_text);
+                if( empty(Request::input( 'youtube_id' )) && (mb_strlen($real_text)<100 || count($real_text_words)<20) ) {
+                    $ret['short_text'] = true;
+                    return Response::json( $ret );
+
+                }
+
                 $ret['valid_input'] = true;
 
                 if( (($this->user->phone_verified && $this->user->is_verified) || $this->user->fb_id) && !$this->user->is_dentist) {
@@ -121,6 +183,8 @@ class DentistController extends FrontController
                     if($old_review && $old_review->status=='accepted') {
                         ; //dgd
                     } else if( $this->user->getReviewLimits() ) {
+                        ; //dgd
+                    } else if( $this->user->cantReviewDentist($item->id) ) {
                         ; //dgd
                     } else {
 
@@ -137,7 +201,8 @@ class DentistController extends FrontController
 
                         $review->rating = 0;
                         $review->answer = strip_tags(Request::input( 'answer' ));
-                        $review->verified = $this->user->invited_by == $item->id;
+                        $review->youtube_id = strip_tags(Request::input( 'youtube_id' ));
+                        $review->verified = !empty($this->user->wasInvitedBy($item->id));
                         $review->status = 'pending';
                         $review->secret_id = $secret->id;
                         $review->save();
@@ -183,27 +248,30 @@ class DentistController extends FrontController
 
                         
                         //Send & confirm
-                        $amount = $review->verified ? 25000 : 5000;
-                        $ra = $my_dcn_address ? $my_dcn_address : Request::input('reviewer-address');
+                        $is_video = $review->youtube_id ? '_video' : '';
+                        $amount = $review->verified ? Reward::getReward('review'.$is_video.'_trusted') : Reward::getReward('review'.$is_video);
                         
-
-                        $ret = Dcn::send($this->user, $ra, $amount);
-                        $ret['valid_input'] = true; //was overridden
-                        if($ret['success']) {
-
-                            $review->reward_tx = $ret['message'];
-                            $review->reward_address = $ra;
-                            $review->status = 'accepted';
-                            $review->secret->used = true;
-                            $review->secret->save();
-                            $review->save();
-                                        
-                            $item->sendTemplate(6, [
-                                'review_id' => $review->id,
-                            ]);
-
-                            $review->dentist->recalculateRating();
+                        if(!$is_video) {
+                            $reward = new TrpReward();
+                            $reward->user_id = $this->user->id;
+                            $reward->reward = $amount;
+                            $reward->type = 'review';
+                            $reward->reference_id = $review->id;
+                            $reward->save();                            
                         }
+
+                        //$ret = Dcn::send($this->user, $ra, $amount, 'review', $review->id);
+                        
+                        $review->status = 'accepted';
+                        $review->secret->used = true;
+                        $review->secret->save();
+                        $review->save();
+
+                        if(!$review->youtube_id) {
+                            $review->afterSubmitActions();
+                        }
+
+                        $ret['success'] = true;
 
                     }
                 }
@@ -256,7 +324,11 @@ class DentistController extends FrontController
             }
         }
 
-        $my_dcn_address = !empty($this->user) ? $this->user->my_address() : null;
+        $dentist_limit_reached = !empty($this->user) ? $this->user->cantReviewDentist($item->id) : null;
+        $has_asked_dentist = false;
+        if($dentist_limit_reached) {
+            $has_asked_dentist = $this->user->hasAskedDentist($item->id);
+        }
 
         return $this->ShowView('dentist', [
             'item' => $item,
@@ -264,8 +336,9 @@ class DentistController extends FrontController
             'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
             'questions' => $questions,
             'reviews' => $reviews,
-            'my_dcn_address' => $my_dcn_address,
             'review_limit_reached' => !empty($this->user) ? $this->user->getReviewLimits() : null,
+            'dentist_limit_reached' => $dentist_limit_reached,
+            'has_asked_dentist' => $has_asked_dentist,
             'aggregated_rates' => $aggregated_rates,
             'aggregated_rates_total' => $aggregated_rates_total ,
             'seo_title' => trans('front.seo.dentist.title', [
@@ -280,11 +353,41 @@ class DentistController extends FrontController
             ]),
             'canonical' => $item->getLink().($review_id ? '/'.$review_id : ''),
             'js' => [
+                'videojs.record.min.js',
                 'dentist.js',
-                'dApp.js'
+                'dApp.js',
             ],
         ]);
 
+    }
+
+
+    public function ask($locale=null, $slug) {
+        $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
+
+        if(empty($item)) {
+            return redirect( getLangUrl('dentists') );
+        }
+
+        if(!empty($this->user) && $this->user->cantReviewDentist($item->id)) {
+            $ask = $this->user->hasAskedDentist($item->id);
+            if(empty($ask)) {
+                $ask = new UserAsk;
+                $ask->user_id = $this->user->id;
+                $ask->dentist_id = $item->id;
+                $ask->status = 'waiting';
+                $ask->save();
+
+                $item->sendTemplate( 23 ,[
+                    'patient_name' => $this->user->name
+                ] );
+            }
+        }
+
+
+
+        Request::session()->flash('success-message', trans('front.page.dentist.asked') );
+        return redirect( $item->getLink() );
     }
 
     public function claim($locale=null, $slug) {
@@ -420,6 +523,140 @@ class DentistController extends FrontController
         }
 
         return Response::json( ['success' => true, 'reply' => nl2br( $review->reply )] );
+    }
+
+
+    //
+    //Youtube boilerplate
+    //
+
+
+
+    function videosInsert($client, $service, $media_file, $properties, $part, $params) {
+        $params = array_filter($params);
+        $propertyObject = $this->createResource($properties); // See full sample for function
+        $resource = new \Google_Service_YouTube_Video($propertyObject);
+        $client->setDefer(true);
+        $request = $service->videos->insert($part, $resource, $params);
+        $client->setDefer(false);
+        $response = $this->uploadMedia($client, $request, $media_file, 'video/*');
+        return $response->id;
+    }
+
+
+
+    function getClient() {
+        $client = new \Google_Client();
+        $client->setApplicationName('API Samples');
+        $client->setScopes('https://www.googleapis.com/auth/youtube.force-ssl');
+        // Set to name/location of your client_secrets.json file.
+        $client->setAuthConfig( storage_path() . '/client_secrets.json');
+        $client->setAccessType('offline');
+
+        // Load previously authorized credentials from a file.
+        $credentialsPath = storage_path() . 'yt-oauth2.json';
+        if (file_exists($credentialsPath)) {
+            $accessToken = json_decode(file_get_contents($credentialsPath), true);
+        } else {
+            // Request authorization from the user.
+            $authUrl = $client->createAuthUrl();
+            printf("Open the following link in your browser:\n%s\n", $authUrl);
+            print 'Enter verification code: ';
+
+
+            if (isset($_GET['code'])) {
+
+
+                $credentialsPath = storage_path() . 'yt-oauth2.json';
+                // Exchange authorization code for an access token.
+                $accessToken = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+
+                // Store the credentials to disk.
+                if(!file_exists(dirname($credentialsPath))) {
+                    mkdir(dirname($credentialsPath), 0700, true);
+                }
+                file_put_contents($credentialsPath, json_encode($accessToken));
+            }
+
+            return;
+        }
+        $client->setAccessToken($accessToken);
+
+        // Refresh the token if it's expired.
+        if ($client->isAccessTokenExpired()) {
+            $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
+            file_put_contents($credentialsPath, json_encode($client->getAccessToken()));
+        }
+        return $client;
+    }
+
+    // Add a property to the resource.
+    function addPropertyToResource(&$ref, $property, $value) {
+        $keys = explode(".", $property);
+        $is_array = false;
+        foreach ($keys as $key) {
+            // For properties that have array values, convert a name like
+            // "snippet.tags[]" to snippet.tags, and set a flag to handle
+            // the value as an array.
+            if (substr($key, -2) == "[]") {
+                $key = substr($key, 0, -2);
+                $is_array = true;
+            }
+            $ref = &$ref[$key];
+        }
+
+        // Set the property value. Make sure array values are handled properly.
+        if ($is_array && $value) {
+            $ref = $value;
+            $ref = explode(",", $value);
+        } elseif ($is_array) {
+            $ref = array();
+        } else {
+            $ref = $value;
+        }
+    }
+
+    // Build a resource based on a list of properties given as key-value pairs.
+    function createResource($properties) {
+        $resource = array();
+        foreach ($properties as $prop => $value) {
+            if ($value) {
+                $this->addPropertyToResource($resource, $prop, $value);
+            }
+        }
+        return $resource;
+    }
+
+    function uploadMedia($client, $request, $filePath, $mimeType) {
+        // Specify the size of each chunk of data, in bytes. Set a higher value for
+        // reliable connection as fewer chunks lead to faster uploads. Set a lower
+        // value for better recovery on less reliable connections.
+        $chunkSizeBytes = 1 * 1024 * 1024;
+
+        // Create a MediaFileUpload object for resumable uploads.
+        // Parameters to MediaFileUpload are:
+        // client, request, mimeType, data, resumable, chunksize.
+        $media = new \Google_Http_MediaFileUpload(
+            $client,
+            $request,
+            $mimeType,
+            null,
+            true,
+            $chunkSizeBytes
+        );
+        $media->setFileSize(filesize($filePath));
+
+
+        // Read the media file and upload it chunk by chunk.
+        $status = false;
+        $handle = fopen($filePath, "rb");
+        while (!$status && !feof($handle)) {
+          $chunk = fread($handle, $chunkSizeBytes);
+          $status = $media->nextChunk($chunk);
+        }
+
+        fclose($handle);
+        return $status;
     }
 
 }

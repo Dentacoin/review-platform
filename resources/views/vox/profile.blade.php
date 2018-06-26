@@ -21,37 +21,52 @@
 	                		{{ trans('vox.page.profile.my-questionnaires') }}
 		                </h3>
 		            </div>
-		            <div class="panel-body hosizontal-scroll">
-						<div class="another-questions">
-							<div class="questions-wrapper">
-		            			<div class="carousel" data-flickity='{ "wrapAround": true, "cellAlign": "left", "adaptiveHeight": "true" }'>
-									@foreach($user->vox_rewards as $completed)
-										<div class="another-question carousel-cell {!! $loop->first ? 'active' : '' !!}">
-											<div class="another-question-header clearfix">
-												<div class="left">
-													<span class="bold">{{ $completed->reward }} DCN</span>
-												</div>
-												<div class="right">
-													<p>{{ $completed->vox->formatDuration() }}</p>
-													<p>
-														{{ trans('vox.common.questions-count', ['count' => $completed->vox->questions->count()]) }}
-													</p>
-												</div>
-											</div>
-											<h4 class="bold">{{ $completed->vox->title }}</h4>
-											<div class="another-question-content">
-												<a class="statistics" href="{{ getLangUrl('questionnaire/'.$completed->vox->id) }}">
-													{{ trans('vox.common.check-statictics') }}
-												</a>
-											</div>
-										</div>
-									@endforeach
-								</div>
-							</div>
-						</div>
-						<a href="{{ getLangUrl('/') }}" class="show-questions">
-							{{ trans('vox.page.profile.show-all') }}
-						</a>
+		            <div class="panel-body">
+		            	<table class="table">
+		            		<thead>
+		            			<tr>
+			            			<th>
+			            				{{ trans('vox.page.profile.'.$current_subpage.'.list-date') }}
+			            			</th>
+			            			<th>
+			            				{{ trans('vox.page.profile.'.$current_subpage.'.list-time') }}
+			            			</th>
+			            			<th>
+			            				{{ trans('vox.page.profile.'.$current_subpage.'.list-questionnaire') }}
+			            			</th>
+			            			<th>
+			            				{{ trans('vox.page.profile.'.$current_subpage.'.list-time-spent') }}
+			            			</th>
+			            			<th>
+			            				{{ trans('vox.page.profile.'.$current_subpage.'.list-reward') }}
+			            			</th>
+		            			</tr>
+		            		</thead>
+		            		<tbody>
+								@foreach($user->vox_rewards as $completed)
+		            				<tr>
+		            					<td>
+		            						{{ $completed->created_at->toDateString() }}
+		            					</td>
+		            					<td>
+		            						{{ $completed->created_at->toTimeString() }}
+		            					</td>
+		            					<td>
+											<a href="{{ $completed->vox->getLink() }}" target="_blank">
+												{{ $completed->vox->title }}
+											</a>
+		            					</td>
+		            					<td>
+		            						{{ $completed->formatDuration() }}
+		            					</td>
+		            					<td>
+		            						{{ $completed->reward ? $completed->reward : '-' }}
+		            					</td>
+		            				</tr>
+		            			@endforeach
+		            		</tbody>
+		            	</table>
+						
 					</div>
 			  	</div>
 		  	@endif
@@ -73,7 +88,7 @@
 						    </div>
 						</div>
 						<div class="form-group">
-							<div class="col-md-12">
+							<div class="col-md-12 tac">
 		                        <button type="submit" name="submit" class="btn btn-primary form-control">
 		                        	{{ trans('vox.page.profile.send-idea-submit') }}
 		                        </button>

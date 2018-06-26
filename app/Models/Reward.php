@@ -12,6 +12,10 @@ class Reward extends Model {
     ];
 
     public $timestamps = false;
+
+    public static function getReward($type) {
+    	return self::where('reward_type', $type)->first()->dcn;
+    }
 }
 
 ?>

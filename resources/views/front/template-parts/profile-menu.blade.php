@@ -29,30 +29,41 @@
 	
 		<p>
 			<i class="fa fa-user"></i>
-			@if($user['is_dentist'] == 1) 
+			@if($user['is_dentist'] == 1 && $user['is_clinic'] == 0)
 				{{ trans('front.common.dentist') }}
+			@elseif($user['is_dentist'] == 1 && $user['is_clinic'] == 1)
+				{{ trans('front.common.clinic') }}
 			@else
 				{{ trans('front.common.patient') }}
 			@endif
 		</p>
 		
 		@if(!empty($user->country)) 
-		<p>
-			<i class="fa fa-map-marker"></i>
-			@if(!empty($user->city)) 
-				{{ $user->city->name }}, 
-			@endif
-			{{ $user->country->name }}
-		</p>
+			<p>
+				<i class="fa fa-map-marker"></i>
+				@if(!empty($user->city)) 
+					{{ $user->city->name }}, 
+				@endif
+				{{ $user->country->name }}
+			</p>
 		@endif
+
+		<p>
+			<i class="fa fa-bitcoin"></i>
+			{{ trans('front.common.balance') }}: 
+			<span class="profile-balance">{{ $user->getTrpBalance() }}</span> DCN
+		</p>
 	</div>
 </div>
 
 <div class="list-group">
 	@foreach($menu as $key => $profile_menu)
-		<a href="{{ getLangUrl('profile/'.$key) }}" class="list-group-item {!! $current_subpage == $key ? 'active' : '' !!}">
-			{{ $profile_menu }}
-		</a>
+		@if($user->register_reward && $key=='reward')
+		@else
+			<a href="{{ getLangUrl('profile/'.$key) }}" class="list-group-item {!! $current_subpage == $key ? 'active' : '' !!}">
+				{{ $profile_menu }}
+			</a>
+		@endif
 	@endforeach
 	@if($user->is_dentist)
 		<a href="{{ $user->getLink() }}" class="list-group-item">

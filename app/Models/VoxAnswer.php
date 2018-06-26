@@ -14,6 +14,7 @@ class VoxAnswer extends Model {
         'vox_id',
         'question_id',
         'answer',
+        'scale',
         'country_id',
         'is_scam',
     ];

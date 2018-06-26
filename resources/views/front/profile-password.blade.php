@@ -15,9 +15,7 @@
                 </h1>
             </div>
             <div class="panel-body">
-                <p>
-                    {{ trans('front.page.profile.'.$current_subpage.'.hint') }}
-                </p>
+            	<br/>
 				<form action="{{ getLangUrl('profile/password') }}" method="post" class="form-horizontal">
 	  				{!! csrf_field() !!}
 	  				
@@ -39,8 +37,11 @@
 					    	<input type="password" name="new-password-repeat" class="form-control" required>
 					    </div>
 					</div>
-					<div class="form-group">
-						<div class="col-md-12">
+					<div class="form-group mrt">
+						<div class="col-md-8">
+	                        <p>{{ trans('front.page.profile.'.$current_subpage.'.hint') }}</p>
+						</div>
+						<div class="col-md-4">
 	                        <button type="submit" name="update" class="btn btn-primary form-control"> {{ trans('front.page.'.$current_page.'.change-password-submit') }} </button>
 						</div>
 					</div>

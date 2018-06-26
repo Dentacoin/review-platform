@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App;
+use App\Models\VoxToCategory;
+use App\Models\Reward;
+
 class Vox extends Model {
     
     use \Dimsav\Translatable\Translatable;
@@ -18,7 +22,11 @@ class Vox extends Model {
     protected $fillable = [
         'title',
         'description',
+        'seo_title',
+        'seo_description',
+        'slug',
         'reward',
+        'reward_usd',
         'duration',
         'type',
     ];
@@ -42,7 +50,22 @@ class Vox extends Model {
     }
 
     public function formatDuration() {
-        return ($this->duration>=60 ? floor($this->duration/60).' hours ' : '').( $this->duration%60 ? ($this->duration%60).' min' : '' );
+        return '~'.ceil( $this->questions()->count()/6 ).' minutes';
+    }
+
+    public function getRewardPerQuestion() {
+        return Reward::where('reward_type', 'vox_question')->first();
+    }
+    public function getRewardTotal($inusd = false) {
+        return ( $inusd ? $this->getRewardPerQuestion()->amount : $this->getRewardPerQuestion()->dcn) * $this->questions->count();
+    }
+
+    public function categories() {
+        return $this->hasMany('App\Models\VoxToCategory', 'vox_id', 'id');
+    }
+
+    public function getLink() {
+        return $this->type=='hidden' || $this->type=='normal' ? getLangUrl('paid-surveys/'.$this->translate(App::getLocale(), true)->slug ) : getLangUrl( $this->translate(App::getLocale(), true)->slug );        
     }
     
 }
@@ -53,6 +76,9 @@ class VoxTranslation extends Model {
     protected $fillable = [
         'title',
         'description',
+        'seo_title',
+        'seo_description',
+        'slug',
     ];
 
 }

@@ -2,7 +2,9 @@
 
 @section('content')
 
-<h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
+<h1 class="page-header">
+    {{ trans('admin.page.'.$current_page.'.title') }}
+</h1>
 <!-- end page-header -->
 
 <div class="row">
@@ -21,8 +23,10 @@
 						'table_fields' => [
                             'id'                => array(),
                             'title'              => array(),
-                            'reward'              => array(),
-                            'duration'              => array('admin.parts.table-voxs-duration'),
+                            'category'              => array('template' => 'admin.parts.table-voxes-category'),
+                            'count'              => array('template' => 'admin.parts.table-voxes-count'),
+                            'reward'              => array('template' => 'admin.parts.table-voxs-reward'),
+                            'duration'              => array('template' => 'admin.parts.table-voxs-duration'),
                             'type'              => array('format' => 'enum'),
 							'update'			=> array('format' => 'update'),
 							'delete'			=> array('format' => 'delete'),
@@ -36,4 +40,14 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    
+    window.onload = function(e){ 
+        $('.table').DataTable({
+            "pageLength": 25
+        });
+    }
+</script>
+
 @endsection

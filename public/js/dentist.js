@@ -1,4 +1,23 @@
+var videoStart, videoLength;
+var slider = null;
+var sliderTO = null;
+
 $(document).ready(function(){
+
+    $('.show-map').click( function() {
+        $('.insert-map').append( $('.map') );
+        $('.map').show();
+        $('.hide-map').css('display', 'inline-block');
+        initMap();
+        $(this).hide();
+    } );
+
+    $('.hide-map').click( function() {
+        $('.map').hide();
+        $('.show-map').css('display', 'inline-block');
+        $(this).hide();
+    } );
+
 	$('#write-review-btn').click( function(e) {
 		e.preventDefault();
 
@@ -10,6 +29,147 @@ $(document).ready(function(){
 		}
 
 	} );
+
+
+    if( $('.gallery-slider').length ) {
+        if (window.innerWidth > 1200) {
+
+            slider = $('.gallery-slider').bxSlider({
+                useCSS: true,
+                responsive: true,
+                minSlides: 1,
+                maxSlides: 3,
+                moveSlides: 1,
+                slideWidth: 380,
+                adaptiveHeight: true
+            });
+            sliderTO = setInterval( function() {
+                slider.redrawSlider();
+                if($('.gallery-slider img').height()>0) {
+                    clearInterval(sliderTO);
+                }
+            }, 500);
+        } else {
+            slider = $('.gallery-slider').bxSlider({
+                useCSS: true,
+                responsive: true,
+                pager: true,
+            });
+            sliderTO = setInterval( function() {
+                slider.redrawSlider();
+                if($('.gallery-slider img').height()>0) {
+                    clearInterval(sliderTO);
+                }
+            }, 500);
+        }
+    }
+
+
+    $('.btn-show-review').click(function() {
+        $(this).prev().toggle();
+        var newT = $(this).attr('data-alt-text').trim();
+        $(this).attr( 'data-alt-text', $(this).html().trim() )
+        $(this).html(newT);
+        
+    });
+
+    if( $('#civic-widget').length ) {
+
+        // Step 2: Instantiate instance of civic.sip
+        var civicSip = new civic.sip({ appId: 'rkvErCDdf' });
+
+
+         // Step 3: Start scope request.
+        var button = document.querySelector('#signupButton');
+        button.addEventListener('click', function () {
+            $('#withdraw-widget .alert').hide();
+            $('#signupButton').hide();
+            civicSip.signup({ style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP });
+        });
+
+        var civicError = function() {
+            $('#signupButton').show();
+            $('#civic-wait').hide();
+            $('html, body').animate({
+                scrollTop: $("#signupButton").offset().top
+            }, 500);
+        }
+
+        // Listen for data
+        civicSip.on('auth-code-received', function (event) {
+            console.log(event);
+            var jwtToken = event.response;
+            //sendAuthCode(jwtToken);
+
+            $.ajax({
+                type: "POST",
+                url: 'https://dentacoin.net/civic',
+                data: {
+                    jwtToken: jwtToken
+                },
+                dataType: 'json',
+                success: function(ret) {
+                    if(!ret.userId) {
+                        $('#civic-error').show();
+                        civicError();
+                    } else {
+                        $('#civic-wait').show();
+                        $('#signupButton').hide();
+
+                        console.log(jwtToken);
+                        setTimeout(function() {
+                            $.post( 
+                                $('#jwtAddress').val(), 
+                                {
+                                    jwtToken: jwtToken
+                                }, 
+                                function( data ) {
+                                    if(data.weak) {
+                                        $('#civic-weak').show();
+                                        civicError();
+                                    } else if(data.duplicate) {
+                                        $('#civic-duplicate').show();
+                                        civicError();
+                                    } else if(data.success) {
+                                        window.location.reload();
+                                    } else {
+                                        $('#civic-error').show();
+                                        civicError();
+                                    }
+                                }, "json"
+                            )
+                            .fail(function(xhr, status, error) {
+                                $('#civic-error').show();
+                                civicError();
+                            });
+                        }, 3000);
+                    }
+                },
+                error: function(ret) {
+                    $('#civic-error').show();
+                    civicError();
+                }
+            });
+
+        });
+
+        civicSip.on('user-cancelled', function (event) {
+            $('#civic-cancelled').show();
+            civicError();
+        });
+
+        civicSip.on('read', function (event) {
+            $('#civic-wait').show();
+            console.log('read');
+        });
+
+        civicSip.on('civic-sip-error', function (error) {
+            $('#civic-error').show();
+            civicError();
+            console.log('   Error type = ' + error.type);
+            console.log('   Error message = ' + error.message);
+        });
+    }
 
     $('#show-whole-review').click( function() {
         var newT = $(this).attr('data-alt-text').trim();
@@ -129,13 +289,15 @@ $(document).ready(function(){
 		e.preventDefault();
 
         $('#review-crypto-error').hide();
-		$('#review-answer-error').hide();
+        $('#review-answer-error').hide();
+		$('#review-short-text').hide();
 		$('#review-error').hide();
+        $('#video-not-agree').hide();
 
 		var allgood = true;
 
 		$(this).find('input[type="hidden"]').each( function() {
-			if( !parseInt($(this).val()) && $(this).attr('name')!='_token' ) {
+			if( !parseInt($(this).val()) && $(this).attr('name')!='_token' && $(this).attr('name')!='youtube_id' ) {
 				allgood = false;
 				console.log( $(this) );
 				$(this).closest('.stars').find('.rating').show();
@@ -146,8 +308,17 @@ $(document).ready(function(){
 			}
 		} );
 
+        if( $('#youtube_id').val().trim().length && !$('#video-agree').is(':checked') ) {
+            allgood = false;
+            $('#video-not-agree').show();
+            $('html, body').animate({
+                scrollTop: $('#video-agree').offset().top - 80
+            }, 500);
+
+        }
+
 		if(allgood) {
-			if( !$('#review-answer').val().trim().length ) {
+			if( !$('#review-answer').val().trim().length && !$('#youtube_id').val().trim().length ) {
 				allgood = false;
 				$('#review-answer-error').show();
 				$('html, body').animate({
@@ -164,14 +335,26 @@ $(document).ready(function(){
 		}
 		ajax_is_running = true;
 
+
+        var btn = $(this).find('[type="submit"]').first();
+        console.log(btn);
+        btn.attr('data-old', btn.html());
+        btn.html('<i class="fa fa-spinner fa-pulse fa-fw"></i> '+btn.attr('data-loading'));
+
         $.post( 
             $(this).attr('action'), 
             $(this).serialize() , 
             function( data ) {
                 console.log(data);
                 if(data.success) {
+
+                    if(data.link) {
+                        $('#review-confirmed').show().find('a.etherscan-link').attr('href', data.link);
+                    } else {
+                        $('#review-pending').show();
+                    }
+                    
                     $('#review-submit-button').hide();
-                    $('#review-pending').show().find('a.etherscan-link').attr('href', data.link);
                 } else {
                     if(data.valid_input) {
                         $('#review-crypto-error').show();
@@ -179,6 +362,12 @@ $(document).ready(function(){
 
                         $('html, body').animate({
                             scrollTop: $('#review-crypto-error').closest('.panel-body').offset().top - 60
+                        }, 500);    
+                    } else if(data.short_text) {
+                        $('#review-short-text').show();
+
+                        $('html, body').animate({
+                            scrollTop: $('#review-short-text').closest('.panel-body').offset().top - 60
                         }, 500);                        
                     } else {
                     	$('#review-error').show();
@@ -188,6 +377,8 @@ $(document).ready(function(){
     	                }, 500);
                     }
                 }
+                
+                btn.html( btn.attr('data-old') );
                 ajax_is_running = false;
             }, "json"
         );			
@@ -362,15 +553,6 @@ $(document).ready(function(){
     } );
 
 
-    
-
-    $('.btn-show-review').click(function() {
-    	$(this).prev().toggle();
-        var newT = $(this).attr('data-alt-text').trim();
-        $(this).attr( 'data-alt-text', $(this).html().trim() )
-        $(this).html(newT);
-        
-    });
 
     $('#review-form .ratings').mousemove( function(e) {
     	var rate = offsetToRate(e.offsetX);
@@ -389,6 +571,152 @@ $(document).ready(function(){
     		$(this).find('.stars .bar').css('width', 0 );
     	}
     } );
+
+
+
+    //Video reviews
+
+    $('#review-type-nav a').click( function() {
+        $('#review-type-nav li').removeClass('active');
+        $(this).parent().addClass('active');
+        $('.review-type-content').hide();
+        $('#review-option-' + $(this).attr('data-type')).show();
+    } );
+
+    if($('#myVideo').length) {
+        var player = videojs("myVideo", {
+            controls: false,
+            //width: 720,
+            //height: 405,
+            fluid: true,
+            plugins: {
+                record: {
+                    audio: true,
+                    video: true,
+                    maxLength: 600,
+                    debug: true
+                }
+            }
+        }, function(){
+            // print version information at startup
+            videojs.log('Using video.js', videojs.VERSION,
+                'with videojs-record', videojs.getPluginVersion('record'),
+                'and recordrtc', RecordRTC.version);
+        });
+        
+        $('#init-video').click( function() {
+            var hm = player.record().getDevice();
+        } );
+        $('#start-video').click( function() {
+            player.record().start();
+            $('#start-video').hide();
+            $('#stop-video').show();
+            $('#review-option-video .alert').hide();
+        } );
+        $('#stop-video').click( function() {
+            player.record().stop();
+            $('#wrapper').hide();
+
+        });
+
+        // error handling
+        player.on('deviceError', function() {       
+            console.log('device error:', player.deviceErrorCode);
+            if(player.deviceErrorCode.name && player.deviceErrorCode.name=="NotAllowedError") {
+                $('#video-denied').show();
+            }
+        });
+
+        player.on('error', function(error) {
+            console.log('error:', error);
+            
+        });
+        player.on('startRecord', function() {
+            videoStart = Date.now();
+            console.log('started recording!');
+        });
+
+
+        // user clicked the record button and started recording
+        player.on('deviceReady', function() {
+            $('#init-video').hide();
+            $('#start-video').show();
+            console.log('deviceReady!');
+        });
+
+        // user completed recording and stream is available
+        player.on('finishRecord', function() {
+            videoLength = Date.now() - videoStart;
+            console.log(videoLength);
+            if(videoLength<15000) {
+                videoLength = null;
+                videoStart = null;
+                $('#start-video').show();
+                $('#stop-video').hide();
+                $('#video-short').show();
+                return;
+            }
+            console.log('finished recording: ', player.recordedData, player.recordedData.video);
+
+            $('#stop-video').hide();
+            $('#video-progress').show();
+
+
+            var fd = new FormData();
+            fd.append('qqfile', player.recordedData.video ? player.recordedData.video : player.recordedData);
+            $.ajax({
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function(evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total * 100;
+                            //Do something with upload progress here
+                            $('#video-progress-percent').html(Math.ceil(percentComplete));
+                            console.log(percentComplete);
+                            if( Math.ceil(percentComplete)==100 ) {
+                                $('#video-progress').hide();
+                                $('#video-youtube').show();
+                            }
+                        }
+                        }, false);
+
+                    xhr.addEventListener("progress", function(evt) {
+                       if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total * 100;
+                            //Do something with download progress
+                            $('#video-progress-percent').html(Math.ceil(percentComplete));
+                            console.log(percentComplete);
+                            if( Math.ceil(percentComplete)==100 ) {
+                                $('#video-progress').hide();
+                                $('#video-youtube').show();
+                            }
+                       }
+                    }, false);
+
+                    return xhr;
+                },
+                type: 'POST',
+                url: lang + '/youtube',
+                data: fd,
+                processData: false,
+                contentType: false,
+                dataType: 'json'
+            }).done(function(responseJSON) {
+                if (responseJSON.url) {
+                    $('#video-uploaded').show();
+                    $('#video-youtube').hide();
+                    $('#youtube_id').val(responseJSON.url);
+                } else {
+                    $('#video-error').show();
+                    $('#start-video').show();
+                }
+            }).fail( function() {
+                $('#video-error').show();
+                $('#start-video').show();
+            } );
+        });
+    }
+
 
 });
 

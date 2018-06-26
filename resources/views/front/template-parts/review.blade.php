@@ -51,9 +51,6 @@
 
 
 		<div class="sharer" data-href="{{ $item->getLink().'/'.$review->id }}">
-			<span>
-				{{ trans('front.page.dentist.share') }}
-			</span>
 			<a class="fb" href="javascript:;">
 				<i class="fa fa-facebook"></i>
 			</a>
@@ -63,6 +60,9 @@
 			<a class="gp" href="javascript:;">
 				<i class="fa fa-google-plus"></i>
 			</a>
+			<span>
+				{{ trans('front.page.dentist.share') }}
+			</span>
 		</div>
 
 
@@ -95,14 +95,35 @@
 			</div>
 		</div>
 		<div class="rating">
-			<b>
-				@if(empty($reviews_out))
-					{{ trans('front.page.dentist.review-comment', ['name' => $review->$user_field->getName()]) }}:
+			@if($review->answer)
+				<b>
+					@if(empty($reviews_out))
+						{{ trans('front.page.dentist.review-comment', ['name' => $review->$user_field->getName()]) }}:
+					@else
+						{{ trans('front.page.dentist.review-comment-out', ['name' => $review->$user_field->getName()]) }}:
+					@endif
+				</b> 
+				{!! nl2br($review->answer) !!}
+				<br/>
+			@endif
+			@if($review->youtube_id)
+				<b>
+					@if(empty($reviews_out))
+						{{ trans('front.page.dentist.review-video', ['name' => $review->$user_field->getName()]) }}:
+					@else
+						{{ trans('front.page.dentist.review-video-out', ['name' => $review->$user_field->getName()]) }}:
+					@endif
+				</b> 
+				@if($review->youtube_approved || (!empty($user) && $user->id==$review->user_id ) )
+					<div class="videoWrapper">
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ $review->youtube_id }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+					</div>
 				@else
-					{{ trans('front.page.dentist.review-comment-out', ['name' => $review->$user_field->getName()]) }}:
+					<div class="alert alert-info">
+						{{ trans('front.page.dentist.review-video-unapproved') }}
+					</div>
 				@endif
-			</b> 
-			{!! nl2br($review->answer) !!}
+			@endif
 		</div>
 	</div>
 </div>
@@ -158,16 +179,16 @@
 	                		{{ $option[0] }}
 	                	</div>
 
+	                	<div class="rating-right">
+	                		{{ $option[1] }}
+	                	</div>
+
 						<div class="ratings">
 							<div class="stars">
 								<div class="bar" style="width: {{ getStarWidth(json_decode($answer->options, true)[$i]) }}px;">
 								</div>
 							</div>
 						</div>
-
-	                	<div class="rating-right">
-	                		{{ $option[1] }}
-	                	</div>
                 	</div>
             	@endforeach
         	</div>

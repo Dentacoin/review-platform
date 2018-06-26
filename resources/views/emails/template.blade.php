@@ -118,13 +118,19 @@
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
 																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;">
-																				@if($title)
-																					<h1>{{ $title }}</h1>
-																				@endif
-																				@if($subtitle)
-																					<h2>{{ $subtitle }}</h2>
-																				@endif
-																				{!! stripslashes(nl2br($content)) !!}
+																					@if($title)
+																						<h1>{{ $title }}</h1>
+																					@endif
+																					@if($subtitle)
+																						<h2>{{ $subtitle }}</h2>
+																					@endif
+																			</div>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:left;">
+																					{!! stripslashes(nl2br($content)) !!}
 																			</div>
 																		</td>
 																	</tr>

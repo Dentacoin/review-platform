@@ -34,15 +34,22 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
 		{!! config('langs')[App::getLocale()]['font'] !!}
-		<link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
-		<link rel="stylesheet" type="text/css" href="{{ url('/css/style.css') }}" />
-		<link rel="stylesheet" type="text/css" href="{{ url('/css/lightbox.css') }}" />
+		<link rel="stylesheet" type="text/css" href="{{ url('/bxslider/jquery.bxslider.css').'?ver='.$cache_version }}" />
+		<link rel="stylesheet" type="text/css" href="{{ url('/css/app.css').'?ver='.$cache_version }}" />
+		<link rel="stylesheet" type="text/css" href="{{ url('/css/style.css').'?ver='.$cache_version }}" />
+		<link rel="stylesheet" type="text/css" href="{{ url('/css/lightbox.css').'?ver='.$cache_version }}" />
 
 		<style type="text/css">
 			body {
 				{!! config('langs')[App::getLocale()]['font_css'] !!}
 			}
 		</style>
+		
+        @if(!empty($csscdn) && is_array($csscdn))
+            @foreach($csscdn as $file)
+				<link rel="stylesheet" type="text/css" href="{{ $file }}" />
+            @endforeach
+        @endif
 
 		@if($current_page=='register')
 		<script src='https://www.google.com/recaptcha/api.js'></script>
@@ -58,9 +65,48 @@
 		  gtag('config', 'UA-108398439-1');
 		</script>
 
+		<!-- Facebook Pixel Code -->
+		<script>
+			!function(f,b,e,v,n,t,s)
+			{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+			n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+			if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+			n.queue=[];t=b.createElement(e);t.async=!0;
+			t.src=v;s=b.getElementsByTagName(e)[0];
+			s.parentNode.insertBefore(t,s)}(window,document,'script',
+			'https://connect.facebook.net/en_US/fbevents.js');
+			fbq('init', '2010503399201502'); 
+			fbq('track', 'PageView');
+
+			@if($just_registered)
+            	fbq('track', 'CompleteRegistration');
+            @endif
+		</script>
+		<!-- End Facebook Pixel Code -->
+		<link rel="apple-touch-icon" sizes="57x57" href="{{ url('trp-fav/apple-icon-57x57.png') }}">
+		<link rel="apple-touch-icon" sizes="60x60" href="{{ url('trp-fav/apple-icon-60x60.png') }}">
+		<link rel="apple-touch-icon" sizes="72x72" href="{{ url('trp-fav/apple-icon-72x72.png') }}">
+		<link rel="apple-touch-icon" sizes="76x76" href="{{ url('trp-fav/apple-icon-76x76.png') }}">
+		<link rel="apple-touch-icon" sizes="114x114" href="{{ url('trp-fav/apple-icon-114x114.png') }}">
+		<link rel="apple-touch-icon" sizes="120x120" href="{{ url('trp-fav/apple-icon-120x120.png') }}">
+		<link rel="apple-touch-icon" sizes="144x144" href="{{ url('trp-fav/apple-icon-144x144.png') }}">
+		<link rel="apple-touch-icon" sizes="152x152" href="{{ url('trp-fav/apple-icon-152x152.png') }}">
+		<link rel="apple-touch-icon" sizes="180x180" href="{{ url('trp-fav/apple-icon-180x180.png') }}">
+		<link rel="icon" type="image/png" sizes="192x192"  href="{{ url('trp-fav/android-icon-192x192.png') }}">
+		<link rel="icon" type="image/png" sizes="32x32" href="{{ url('trp-fav/favicon-32x32.png') }}">
+		<link rel="icon" type="image/png" sizes="96x96" href="{{ url('trp-fav/favicon-96x96.png') }}">
+		<link rel="icon" type="image/png" sizes="16x16" href="{{ url('trp-fav/favicon-16x16.png') }}">
+		<link rel="manifest" href="{{ url('trp-fav/manifest.json') }}">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="{{ url('trp-fav/ms-icon-144x144.png') }}">
+		<meta name="theme-color" content="#ffffff">
+
     </head>
 
     <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($satic_page) ? 'page-page' : '' }} {{ (config('langs')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }}">
+		<noscript>
+			<img height="1" width="1" src="https://www.facebook.com/tr?id=2010503399201502&ev=PageView&noscript=1"/>
+		</noscript>
     
 	    <header class="header">
 	       	<nav class="navbar navbar-default navbar-fixed-top">
@@ -88,24 +134,32 @@
 	                            	{{ trans('front.common.search') }}
 	                            </a>
 	                        </li>
-				        	<li {!! $current_page=='add' ? 'class="active"' : '' !!} >
-	                            <a href="{{ getLangUrl('add') }}">
-	                            	{{ trans('front.common.add-dentist') }}
-	                            </a>
 				            @foreach ($pages_header as $key => $page)
 				                <li {!! $current_page==$page->slug ? 'class="active"' : '' !!} >
 				                    <a href="{{ getLangUrl($page['slug']) }}" role="button">{{ $page['title'] }}</a>
 				                </li>
 				            @endforeach
-	                        </li>
-				        	<li>
-	                            <a href="{{ url('MetaMaskInstructions.pdf') }}" target="_blank">
-	                            	{{ trans('front.common.metamask-instructions') }}
-	                            </a>
-	                        </li>
+	                        @if(empty($user))
+					        	<li>
+		                            <a href="{{ url('MetaMaskInstructions.pdf') }}" target="_blank">
+		                            	{{ trans('front.common.metamask-instructions') }}
+		                            </a>
+		                        </li>
+	                        @endif
 				        </ul>
 
 						<ul class="nav navbar-nav navbar-right">
+							<li class="dcn-info">
+								@if($user)
+									<a href="{{ getLangUrl('profile/wallet') }}">
+										<span id="header-balance">{{ $user->getTrpBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTrpBalance() * $dcn_price) }}</span>
+									</a>
+								@endif
+								<p class="{{ $user ? '' : 'mt' }}">
+									1 DCN = $<span id="header-rate">{{ sprintf('%.4F', $dcn_price) }}</span> 
+									<span id="header-change">({{ $dcn_change }}%)</span>
+								</p>
+							</li>
 				        	<li class="dropdown" >
 	                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 	                            	@if($user)
@@ -206,42 +260,42 @@
 		            </div>
 		            <div class="col-md-1">
 		            	<a href="mailto:admin@dentacoin.com" data-toggle="tooltip" data-placement="top" title="Email: admin@dentacoin.com">
-		            		<img src="https://dentacoin.com/contact-img/mail.png">
+		            		<img src="{{ url('img/socials/mail.png') }}">
                         </a>
 		            </div>
 		            <div class="col-md-1">
 		            	<a href="https://fb.me/dentacoin.trusted.reviews" target="_blank" data-toggle="tooltip" data-placement="top" title="Facebook">
-		            		<img src="https://dentacoin.com/contact-img/facebook.png">
+		            		<img src="{{ url('img/socials/facebook.png') }}">
                         </a>
 		            </div>
 		            <div class="col-md-1">
-		            	<a href="https://twitter.com/dentacoin" target="_blank" data-toggle="tooltip" data-placement="top" title="Dentacoin">
-		            		<img src="https://dentacoin.com/contact-img/twitter.png">
+		            	<a href="https://twitter.com/dentacoin" target="_blank" data-toggle="tooltip" data-placement="top" title="Twitter">
+		            		<img src="{{ url('img/socials/twitter.png') }}">
                         </a>
 		            </div>
 		            <div class="col-md-1">
-		            	<a href="https://join.slack.com/t/dentacoin/shared_invite/MjM2MjYyNjI5NTIwLTE1MDQ2OTg0NDAtNWMxYzUzN2FjNg" target="_blank" data-toggle="tooltip" data-placement="top" title="Slack">
-		            		<img src="https://dentacoin.com/contact-img/slack.png">
+		            	<a href="https://t.me/dentacoin" target="_blank" data-toggle="tooltip" data-placement="top" title="Telegram">
+		            		<img src="{{ url('img/socials/telegram.png') }}">
                         </a>
 		            </div>
 		            <div class="col-md-1">
 		            	<a href="https://github.com/Dentacoin" target="_blank"  title="Github" data-toggle="tooltip" data-placement="top" title="GitHub">
-		            		<img src="https://dentacoin.com/contact-img/github.png">
+		            		<img src="{{ url('img/socials/github.png') }}">
                         </a>
 		            </div>
 		            <div class="col-md-1">
 		            	<a href="https://steemit.com/@dentacoin" target="_blank" data-toggle="tooltip" data-placement="top" title="Steemit">
-		            		<img src="https://dentacoin.com/contact-img/steemit.png">
+		            		<img src="{{ url('img/socials/steemit.png') }}">
                         </a>
 		            </div>
 		            <div class="col-md-1">
 		            	<a href="https://medium.com/@dentacoin/" target="_blank" data-toggle="tooltip" data-placement="top" title="Medium">
-		            		<img src="https://dentacoin.com/contact-img/medium.png">
+		            		<img src="{{ url('img/socials/medium.png') }}">
                         </a>
 		            </div>
 		            <div class="col-md-1">
 		            	<a href="https://www.reddit.com/r/Dentacoin/" target="_blank" data-toggle="tooltip" data-placement="top" title="Reddit">
-		            		<img src="https://dentacoin.com/contact-img/reddit.png">
+		            		<img src="{{ url('img/socials/reddit.png') }}">
                         </a>
 		            </div>
 		            <div class="col-md-2">
@@ -252,6 +306,7 @@
 			            @foreach ($pages_footer as $key => $page)
 			                <a href="{{ getLangUrl($page['slug']) }}" role="button">{{ $page['title'] }}</a>
 			            @endforeach
+						<a href="https://dentacoin.com/privacy/" target="_blank">{{ trans('front.footer.privacy') }}</a>
 	                </div>
 		        </div>
 				<div class="form-group col-copyrights">
@@ -406,6 +461,33 @@
 			</div>
         @endif
 
+
+        @if($user && !$user->gdpr_privacy)
+        	<div class="modal active" tabindex="-1" id="gdprPopup" role="dialog" aria-labelledby="gridSystemModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-body">
+							<img src="{{ url('img/popups/GDPR-policy.png') }}">
+							<h2>
+								{{ trans('front.page.gdpr.title') }}
+							</h2>
+							<p>
+								{!! nl2br(trans('front.page.gdpr.description', [
+									'gdrplink' => '<a href="https://www.eugdpr.org/" target="_blank">' ,
+									'endgdrplink' => '</a>' ,
+									'privacylink' => '<a href="https://dentacoin.com/privacy/" target="_blank">', 
+									'endprivacylink' => '</a>'
+								])) !!}
+							</p>
+
+							<a href="javascript:;" class="agree-gdpr">{{ trans('front.page.gdpr.agree') }}</a>
+						</div>
+					</div>
+				</div>
+			</div>
+        @endif
+			
+
         @if( $current_page=='dentist' || ($current_page=='profile' && !empty($current_subpage) && $current_subpage=='invite' ) )
 			<div class="modal fade" tabindex="-1" id="no-wallet-modal" role="dialog" aria-labelledby="gridSystemModalLabel">
 				<div class="modal-dialog" role="document">
@@ -513,18 +595,43 @@
 
         <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-		<script src="{{ url('/js/lightbox.js') }}"></script>
-		<script src="{{ url('/js/main.js') }}"></script>
+		<script src="{{ url('/js/lightbox.js').'?ver='.$cache_version }}"></script>
+		<script src="{{ url('/js/main.js').'?ver='.$cache_version }}"></script>
+        @if( $current_page=='dentist' )
+			<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+			<script src="//vjs.zencdn.net/6.4.0/video.min.js"></script>
+			<script src="//cdn.WebRTC-Experiment.com/RecordRTC.js"></script>
+			<script src="//webrtc.github.io/adapter/adapter-latest.js"></script>
+        @endif
         @if(!empty($js) && is_array($js))
             @foreach($js as $file)
-                <script src="{{ url('/js/'.$file) }}"></script>
+                <script src="{{ url('/js/'.$file).'?ver='.$cache_version }}"></script>
             @endforeach
         @endif
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&callback=initMap" async defer></script>
+        @if(!empty($jscdn) && is_array($jscdn))
+            @foreach($jscdn as $file)
+                <script src="{{ $file }}"></script>
+            @endforeach
+        @endif
+        
+		<script src="{{ url('/bxslider/jquery.bxslider.js').'?ver='.$cache_version }}"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPkGoYKU_yq1H6Z5IjojyDO-WoLOTSsjs&libraries=places&callback=initMap&language=en" async defer></script>
         <script type="text/javascript">
         	var areYouSure = '{{ trans('front.common.sure') }}';
         	var lang = '{{ App::getLocale() }}';
         </script>
+
+        @if(!$user)
+        	
+			<div id="fb-root"></div>
+			<script>(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=1906201509652855&autoLogAppEvents=1';
+			fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));</script>
+        @endif
     </body>
 </html>
 @endif

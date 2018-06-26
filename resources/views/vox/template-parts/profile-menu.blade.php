@@ -6,17 +6,11 @@
 	</div>
 	<div class="panel-body">
 		<p class="tac city">
-			@if(!empty($user->city_id))
-				{{ $user->city->name }}, 
-			@endif
-
-			@if(!empty($user->country_id))
-				{{ $user->country->name }}
-			@endif
+			{{ trans('vox.page.profile.balance') }}
 		</p>
 		<div class="price">
 			<img src="{{ url('img-vox/dc-logo.png') }}"/>
-			<span class="coins" id="menu-balance">{{ $user->getVoxBalance() }} DCN</span>
+			<span class="coins" id="menu-balance">{{ $user->getVoxBalance() }}</span>
 		</div>
 	</div>
 </div>

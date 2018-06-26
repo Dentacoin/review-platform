@@ -15,14 +15,46 @@ use App\Models\Country;
 use App\Models\User;
 use App\Models\Vox;
 use App\Models\VoxReward;
+use App\Models\VoxAnswer;
+use App\Models\VoxCategory;
 
 
 class StatsController extends FrontController
 {
-	public function home($locale=null, $id) {
+	public function home($locale=null, $id=null, $question_id=null) {
+
+        if ($_SERVER['SERVER_NAME'] == 'dentavox.dentacoin.com') {
+            if ($_SERVER['REMOTE_ADDR'] != '85.187.122.160') {
+                echo '<h1>DentaVox is currently down for maintenance. </h1>
+                    <h2>Your favorite website for paid surveys will be back up shortly! Thank you for your patience!</h2>
+                ';
+
+                exit;
+            }
+        }
+        
 		$vox = Vox::find($id);
 		if(empty($vox)) {
 			return redirect( getLangUrl('/') );
+		}
+
+		$question = null;
+		$next = null;
+		$prev = null;
+		if(!empty($question_id)) {
+			$question = $vox->questions->find($question_id);
+		}
+		if(empty($question)) {
+			$question = $vox->questions->first();	
+		}
+
+		$voxarr = $vox->questions->toArray();
+		foreach ($voxarr as $k => $v) {
+			if($v['id'] == $question->id) {
+				$prev = $k==0 ? $voxarr[ count($voxarr)-1 ]['id'] : $voxarr[ $k-1 ]['id'];
+				$next = $k== count($voxarr)-1 ? $voxarr[0]['id'] : $voxarr[ $k+1 ]['id'];
+				break;
+			}
 		}
 
 		$colors = [
@@ -31,14 +63,28 @@ class StatsController extends FrontController
 			'#0E4749',
 			'#95C623',
 			'#E55812',
-			'#EFE7DA',
+			//'#EFE7DA',
 			'#624CAB',
 			'#DB5461',
+			'#000000',
+			'#FF0000',
+			'#00FF00',
+			'#0000FF',
 		];
 
 		$voxes = Vox::where('type', 'normal')->get();
+		$voxes = $voxes->reject(function($element) use($vox) {
+		    return $element->id == $vox->id;
+		});
+		$voxes->prepend($vox);
+
 		$answered = [];
 		if($this->user) {
+
+	        if($this->user->isBanned('vox')) {
+	            return redirect(getLangUrl('profile/bans'));
+	        }
+
 			$answered = VoxReward::where('user_id', $this->user->id)->get()->pluck('vox_id')->toArray();
 		}
 
@@ -92,8 +138,9 @@ class StatsController extends FrontController
 		}
 
 		$answer_res = DB::table('vox_answers')
-		    ->selectRaw('question_id, answer, COUNT(*) as cnt, '.$dategroup)
+		    ->selectRaw('answer, COUNT(*) as cnt, '.$dategroup)
 		    ->where('vox_id', $vox->id)
+		    ->where('question_id', $question->id)
 		    ->where('created_at', '>=', $startobj)
 		    ->where('created_at', '<=', $endobj);
 
@@ -101,58 +148,66 @@ class StatsController extends FrontController
 			$answer_res = $answer_res->where('country_id', $country);			
 		}
 
-		$answer_res = $answer_res->groupBy('question_id', 'date', 'answer')
+		$answer_res = $answer_res->groupBy('date', 'answer')
 		    ->get();
 
 		$answer_data = [];
 		$answer_aggregates = [];
 		$chart_data = [];
 		foreach ($answer_res as $res) {
-			if(!isset($answer_data[$res->question_id])) {
-				$answer_data[$res->question_id] = [];
+			if(!isset( $answer_data[$res->date] )) {
+				$answer_data[$res->date] = [];
 			}
-			if(!isset($answer_aggregates[$res->question_id])) {
-				$answer_aggregates[$res->question_id] = [];
-			}
-			
-			if(!isset( $answer_data[$res->question_id][$res->date] )) {
-				$answer_data[$res->question_id][$res->date] = [];
-			}
-			if(!isset( $answer_aggregates[$res->question_id][$res->answer] )) {
-				$answer_aggregates[$res->question_id][$res->answer] = 0;
+			if(!isset( $answer_aggregates[$res->answer] )) {
+				$answer_aggregates[$res->answer] = 0;
 			}
 
-			$answer_data[$res->question_id][$res->date][$res->answer] = $res->cnt;
-			$answer_aggregates[$res->question_id][$res->answer] += $res->cnt;
+			$answer_data[$res->date][$res->answer] = $res->cnt;
+			$answer_aggregates[$res->answer] += $res->cnt;
 		}
 
-		foreach ($vox->questions as $queston) {
-			$chart_data[$queston->id] = [];
-			$answers = json_decode($queston->answers, true);
-			foreach ($answers as $i => $ans) {
-				$ans_data = [
-		            'x' => [],
-		            'y' => [],
-		            'type' => 'scatter',
-		            'name' => $ans,
-		            'line' => [
-		            	'color' =>  $colors[$i]
-		            ]
-		        ];
-		        foreach ($dates as $date) {
-		        	$ans_data['x'][] = $date;
-		        	$ans_data['y'][] = isset($answer_data[$queston->id][$date][($i+1)]) ? $answer_data[$queston->id][$date][($i+1)] : 0;
-		        }
-				$chart_data[$queston->id][] = $ans_data;
+		$chart_data = [];
+		$answers = json_decode($question->answers, true);
+		foreach ($answers as $i => $ans) {
+			$ans_data = [
+	            'x' => [],
+	            'y' => [],
+	            'type' => 'scatter',
+	            'name' => $ans,
+	            'line' => [
+	            	'color' =>  $colors[$i]
+	            ]
+	        ];
+	        foreach ($dates as $date) {
+	        	$ans_data['x'][] = $date;
+	        	$ans_data['y'][] = isset($answer_data[$date][($i+1)]) ? $answer_data[$date][($i+1)] : 0;
+	        }
+			$chart_data[] = $ans_data;
+		}
+
+		$my_answer = null;
+		if($this->user) {
+			$my_answer = VoxAnswer::where([
+				['user_id', $this->user->id],
+				['question_id', $question->id],
+			])->first();
+			if(!empty($my_answer)) {
+				$my_answer = $my_answer->answer;
 			}
+			//dd($my_answer);
 		}
 
 		return $this->ShowVoxView('stats', array(
+			'cats' => VoxCategory::get(),
 			'start' => $start,
 			'end' => $end,
 			'country' => $country,
 			'countryobj' => $countryobj,
 			'vox' => $vox,
+			'prev' => $prev,
+			'next' => $next,
+			'question' => $question,
+			'my_answer' => $my_answer,
 			'voxes' => $voxes,
 			'answered' => $answered,
 			'answer_aggregates' => $answer_aggregates,

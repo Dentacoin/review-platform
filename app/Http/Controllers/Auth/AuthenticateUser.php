@@ -50,6 +50,12 @@ class AuthenticateUser extends FrontController
     {
 
         if (Auth::guard('web')->attempt( ['email' => $request->input('email'), 'password' => $request->input('password') ], $request->input('remember') )) {
+            if( $ban_info = Auth::guard('web')->user()->isBanned('vox') ) {
+                Auth::guard('web')->logout();
+                return redirect( getLangUrl('login') )
+                ->withInput()
+                ->with('error-message', trans('front.page.login.vox-ban'));
+            }
             return redirect()->intended('/');
         } else {
             return redirect( getLangUrl('login') )
@@ -62,26 +68,14 @@ class AuthenticateUser extends FrontController
     {
 
         if (Auth::guard('web')->attempt( ['email' => $request->input('email'), 'password' => $request->input('password') ], $request->input('remember') )) {
-            if($ban_info = Auth::guard('web')->user()->isBanned('vox')) {
-
-                session([
-                    'ban-expires' => $ban_info->expires->toTimeString().' '.$ban_info->expires->toFormattedDateString()
-                ]);
-                Auth::guard('web')->logout();
-                return Response::json( [
-                    'success' => false,
-                    'banned' => getLangUrl('banned')
-                ] );
-            }
             return Response::json( [
                 'success' => true,
                 'url' => getLangUrl('/')
             ] );
         } else {
-            $banned = RealUser::where('email', 'LIKE', $request->input('email'))->withTrashed()->first();
             return Response::json( [
                 'success' => false,
-                'banned' => !empty($banned) && !empty($banned->deleted_at) ? getLangUrl('banned') : false
+                'banned' => false
             ] );
         }
     }

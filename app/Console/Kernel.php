@@ -6,10 +6,14 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use App\Models\Article;
+use App\Models\User;
+use App\Models\Dcn;
+use App\Models\DcnTransaction;
 use Carbon\Carbon;
 use DB;
 use Spatie\Sitemap\SitemapGenerator;
 use Spatie\Sitemap\Tags\Url;
+use Mail;
 
 class Kernel extends ConsoleKernel
 {
@@ -107,6 +111,145 @@ class Kernel extends ConsoleKernel
 
             echo 'DONE!';
         })->cron("0 5 * * *"); //05:00h
+        
+        $schedule->call(function () {
+            $price = null;
+            for($i=0;$i<5;$i++) {
+                $info = @file_get_contents('https://api.coinmarketcap.com/v1/ticker/dentacoin/');
+                $p = json_decode($info, true);
+                if(!empty($p) && !empty($p[0]['price_usd'])) {
+                    $price = floatval($p[0]['price_usd']);
+                    file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
+                }
+                if(!empty($p) && !empty($p[0]['percent_change_24h'])) {
+                    $pc = floatval($p[0]['percent_change_24h']);
+                    file_put_contents('/tmp/dcn_change', $pc);
+                }
+                
+                if($i!=4) {
+                    sleep(10);
+                }                
+            }
+
+            if(!empty($price)) {
+                DB::table('voxes')
+                ->where('reward_usd', '>', 0)
+                ->update([
+                    'reward' =>  DB::raw( 'CEIL(`reward_usd` / '.$price.')' )
+                ]);
+                DB::table('rewards')
+                ->update([
+                    'dcn' =>  DB::raw( 'CEIL(`amount` / '.$price.')' )
+                ]);
+            }
+
+            echo 'DONE!';
+
+        })->cron("* * * * *"); //05:00h
+        
+        $schedule->call(function () {
+            $transactions = DcnTransaction::where('status', '!=', 'completed')->get();
+            foreach ($transactions as $trans) {
+                $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
+
+                if($trans->status=='failed' || $trans->status=='new') {
+                    if($trans->shouldRetry()) {
+                        Dcn::retry($trans);
+                        echo $log.'
+NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
+';
+                        //sleep(2);
+                    }
+                } else if($trans->status=='unconfirmed') {
+                    $found = false;
+                    $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
+                    if(!empty($curl)) {
+                        $curl = json_decode($curl, true);
+                        if($curl['status']) {
+                            if(!empty($curl['result']['status'])) {
+                                $trans->status = 'completed';
+                                $trans->save();
+                                if( $trans->user ) {
+                                    $trans->user->sendTemplate( 20, [
+                                        'transaction_platform' => $trans->type=='vox-cashout' ? 'vox' : 'reviews',
+                                        'transaction_amount' => $trans->amount,
+                                        'transaction_address' => $trans->address,
+                                        'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
+                                    ] );
+                                }
+                                $found = true;
+                                echo $log.'
+COMPLETED!
+';
+                                sleep(1);
+                            }
+                        }
+                    }
+
+                    if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*24) {
+                        Dcn::retry($trans);
+                        echo $log.'
+NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
+';
+                        //sleep(2);
+                    }
+                }
+            }
+
+            echo 'DONE!';
+        })->cron("*/10 * * * *"); //05:00h
+
+
+        $schedule->call(function () {
+
+            $alerts = [
+                'DCN' => [
+                    'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0xfb7442ac247ae842238b3e060cd8a5798c1969e3&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'limit' => 200000
+                ],
+                'ETH' => [
+                    'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0xfb7442ac247ae842238b3e060cd8a5798c1969e3&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'limit' => 250000000000000000
+                ],
+            ];
+
+            foreach ($alerts as $currency => $data) {
+                $curl = file_get_contents($data['url']);
+                if(!empty($curl)) {
+                    $curl = json_decode($curl, true);
+                    if(!empty(intval($curl['result']))) {
+                        if( intval($curl['result']) < $data['limit'] ) { //0.25
+
+                            Mail::send('emails.template', [
+                                    'user' => User::find(4232),
+                                    'content' => $currency.' balance is running low: '.( intval($curl['result']) / 1000000000000000000 ),
+                                    'title' => $currency.' balance is running low',
+                                    'subtitle' => '',
+                                    'platform' => 'reviews',
+                                ], function ($message) {
+
+                                    $sender = config('mail.from.address');
+                                    $sender_name = 'Low Balance Alert';
+
+                                    $message->from($sender, $sender_name);
+                                    $message->to( 'official@youpluswe.com' );
+                                    $message->cc( [
+                                        'grenzebach@protonmail.com',
+                                        'rafat.hamud@dentacoin.com',
+                                    ] );
+                                    //$message->to( 'dokinator@gmail.com' );
+                                    $message->replyTo($sender, $sender_name);
+                                    $message->subject('ETH balance is running low');
+                            });
+                        }
+                    }
+                }
+            }
+
+
+
+        //})->cron("* * * * *"); //05:00h
+        })->cron("30 10 * * *"); //05:00h
     }
 
     /**

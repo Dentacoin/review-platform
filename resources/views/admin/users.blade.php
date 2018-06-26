@@ -44,11 +44,8 @@
                     <div class="col-md-3">
                         <input type="text" class="form-control" name="search-register-to" value="{{ $search_register_to }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-register-to') }}">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="{{ trans('admin.page.'.$current_page.'.title-filter-submit') }}">
-                    </div>
-                    <div class="col-md-3">
-                        <input type="submit" class="btn btn-secondary btn-sm btn-block" name="search-deleted" value="{{ trans('admin.page.'.$current_page.'.title-filter-deleted') }}">
                     </div>
                 </div>
                 </form>

@@ -12,7 +12,7 @@
 		@else
 			@foreach($user->reviews_out as $review)
 				<div class="panel panel-default">
-					@include('front.template-parts.review', [
+					@include('front.template-parts.review-new', [
 						'item' => $review->dentist,
 						'user_field' => 'dentist',
 						'reviews_out' => true

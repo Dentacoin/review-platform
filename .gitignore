@@ -13,3 +13,5 @@ yarn-error.log
 /App/Models/Dcn.php
 composer.lock
 artisan
+sitemaps
+lang

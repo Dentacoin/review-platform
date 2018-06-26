@@ -5,6 +5,7 @@ use App\Http\Controllers\FrontController;
 use App\Models\User;
 use App\Models\Country;
 use App\Models\City;
+use App\Models\UserInvite;
 use Carbon\Carbon;
 
 use Socialite;
@@ -22,7 +23,7 @@ class LoginController extends FrontController
 
     public function facebook_callback() {
         if (!Request::has('code') || Request::has('denied')) {
-            return redirect( getLangUrl('login'));
+            return redirect( getLangUrl('/'));
         }
     	config(['services.facebook.redirect' => getLangUrl('login/callback/facebook')]);
         return $this->try_social_login(Socialite::driver('facebook')->user());
@@ -30,21 +31,19 @@ class LoginController extends FrontController
 
     private function try_social_login($s_user) {
 
-        $user = User::where( 'fb_id','LIKE', $s_user->getId() )->first();
-        if(empty($user)) {
+        if($s_user->getId()) {
+            $user = User::where( 'fb_id','LIKE', $s_user->getId() )->first();            
+        }
+        if(empty($user) && $s_user->getEmail()) {
             $user = User::where( 'email','LIKE', $s_user->getEmail() )->where('id', '<', 5200)->first();            
         }
 
         if ($user) {
-            if($user->isBanned('vox')) {
-                return redirect( getLangUrl('banned'));
-            }
-
             Auth::login($user, true);
             return redirect( getLangUrl('/'));
         } else {
             Request::session()->flash('error-message', trans('front.page.login.error'));
-            return redirect( getLangUrl('/'));
+            return redirect( getLangUrl('/').'#login');
         }
     }
 
@@ -71,6 +70,8 @@ class LoginController extends FrontController
 
     private function try_social_register($s_user, $network) {
 
+        //dd($s_user);
+
         $allset = isset($s_user->user['verified']) && isset($s_user->user['friends']);
         if(!$allset) {
             $url = 'https://graph.facebook.com/v2.5/me/permissions?access_token='. $s_user->token;
@@ -91,11 +92,16 @@ class LoginController extends FrontController
             return redirect(getLangUrl('/').'#register');
         }
 
-        $user = User::where( 'fb_id','LIKE', $s_user->getId() )->first();
-        if(empty($user)) {
+
+        if($s_user->getId()) {
+            $user = User::where( 'fb_id','LIKE', $s_user->getId() )->first();
+        }
+        if(empty($user) && $s_user->getEmail()) {
             $user = User::where( 'email','LIKE', $s_user->getEmail() )->where('id', '<', 5200)->first();            
         }
 
+        $city_id = null;
+        $country_id = null;
         if ($user) {
             if($user->isBanned('vox')) {
                 return redirect( getLangUrl('banned'));
@@ -105,16 +111,7 @@ class LoginController extends FrontController
             Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
             return redirect(getLangUrl('/'));
         } else {
-            $name = $s_user->getName() ? $s_user->getName() : explode('@', $s_user->getEmail() )[0];
-
-            if(!empty($s_user->user['location']['name'])) {
-                $loc_info = explode(',', $s_user->user['location']['name']);
-                $fb_country = trim($loc_info[(count($loc_info)-1)]);
-                $fb_city = trim($loc_info[0]);
-            } else {
-                $city_id = null;
-                $country_id = null;
-            }
+            $name = $s_user->getName() ? $s_user->getName() : (!empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' );
 
             $gender = $s_user->user['gender']=='male' ? 'm' : 'f';
             $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
@@ -138,26 +135,64 @@ class LoginController extends FrontController
                         
                 }
 
-            } else {
-                $city_id = null;
-                $country_id = null;
             }
-
 
             $password = $name.date('WY');
             $newuser = new User;
             $newuser->name = $name;
-            $newuser->email = $s_user->getEmail();
+            $newuser->email = $s_user->getEmail() ? $s_user->getEmail() : '';
+            $newuser->is_verified = $s_user->getEmail() ? true : false;
             $newuser->password = bcrypt($password);
             $newuser->country_id = $country_id;
             $newuser->city_id = $city_id;
             $newuser->gender = $gender;
             $newuser->birthyear = $birthyear;
             $newuser->fb_id = $s_user->getId();
+            $newuser->gdpr_privacy = true;
+            $newuser->platform = 'vox';
+
+            if(!empty(session('invited_by'))) {
+                $newuser->invited_by = session('invited_by');
+            }
+            if(!empty(session('invite_secret'))) {
+                $newuser->invite_secret = session('invite_secret');
+            }
             
             $newuser->save();
 
-            $newuser->sendTemplate( 11 );
+
+            if($newuser->invited_by) {
+                $inv_id = session('invitation_id');
+                if($inv_id) {
+                    $inv = UserInvite::find($inv_id);
+                } else {
+                    $inv = new UserInvite;
+                    $inv->user_id = $newuser->invited_by;
+                    $inv->invited_email = $newuser->email;
+                    $inv->invited_name = $newuser->name;
+                    $inv->save();
+                }
+
+                $inv->invited_id = $newuser->id;
+                $inv->save();
+
+                $newuser->invitor->sendTemplate( 26, [
+                    'who_joined_name' => $newuser->getName()
+                ] );
+            }
+
+            $sess = [
+                'invited_by' => null,
+                'invitation_name' => null,
+                'invitation_email' => null,
+                'invitation_id' => null,
+                'just_registered' => true,
+            ];
+            session($sess);
+
+            if( $newuser->email ) {
+                $newuser->sendTemplate( 12 );                
+            }
 
             Auth::login($newuser, true);
             Request::session()->flash('success-message', trans('vox.page.registration.success'));

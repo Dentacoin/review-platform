@@ -11,12 +11,17 @@ class UserInvite extends Model {
         'invited_email',
         'invited_name',
         'invited_id',
+        'rewarded',
     ];
 
     protected $dates = [
         'created_at',
         'updated_at',
     ];
+
+    public function invited() {
+        return $this->hasOne('App\Models\User', 'id', 'invited_id')->withTrashed();
+    }
 }
 
 

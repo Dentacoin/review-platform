@@ -19,16 +19,22 @@ class DentistsController extends FrontController
     }
 
     public function list($locale=null, $country=null, $city=null, $page=null, $ajax=null) {
-        $items = User::where('is_dentist', 1);
+        // $rec = User::where('is_dentist', 1)->get();
+        // foreach ($rec as $u) {
+        //     $u->updateStrength();
+        // }
+
+        $items = User::where('is_dentist', 1)->where('is_approved', true);
 
         $page = max(1, $page);
         $ppp = 12;
         $all_locations = Request::input('all_locations');
         $city = null;
-        $country = !$all_locations && $this->request->attributes->get('country_id') ? Country::find($this->request->attributes->get('country_id')) : null; //$this->country_id;
+        $country = null;
         $order = 'rating';
         $name = '';
         $partner = '';
+        $type = '';
 
         if( Request::input('partner') ) {
             $partner = Request::input('partner');
@@ -44,10 +50,18 @@ class DentistsController extends FrontController
         }
         if( Request::input('category') ) {
             $category = Request::input('category');
-            
         }
+        if( Request::input('type') ) {
+            $type = Request::input('type');
+        }
+        // if( Request::input('show-dentist') ) {
+        //     $show_dentist = Request::input('show-dentist');
+        // }
+        // if( Request::input('show-clinic') ) {
+        //     $show_clinic = Request::input('show-clinic');
+        // }
 
-        if( Request::input('order') && ( Request::input('order')=='reviews' || Request::input('order')=='name' ) ) {
+        if( Request::input('order') && ( Request::input('order')=='reviews' || Request::input('order')=='name' || Request::input('order')=='strength' ) ) {
             $order = Request::input('order');
         }
 
@@ -69,6 +83,22 @@ class DentistsController extends FrontController
             });
         }
 
+        if(!empty($type)) {
+            if( $type=='clinic' ) {
+                $items = $items->where('is_clinic', 1);
+            } else {
+                $items = $items->where(function ($query) {
+                    $query->where('is_clinic', 0)
+                    ->orWhereNull('is_clinic');
+                });
+            }
+        }
+        // if(!empty($show_dentist)) {
+        //     $items = $items->where('is_clinic', false);
+        // }
+        // if(!empty($show_clinic)) {
+        //     $items = $items->where('is_clinic', true);
+        // }
 
         if($order=='rating') {
             $items->orderBy('avg_rating', 'DESC');
@@ -78,6 +108,9 @@ class DentistsController extends FrontController
         }
         if($order=='name') {
             $items->orderBy('name', 'ASC');
+        }
+        if($order=='strength') {
+            $items->orderBy('strength', 'DESC');
         }
 
         $items = $items->take($ppp)->skip( ($page-1)*$ppp )->get();
@@ -96,12 +129,18 @@ class DentistsController extends FrontController
             $placeholder = $country->name;
         }
 
+        $this->types = [
+            'clinic' => trans('front.common.clinic'),
+            'dentist' => trans('front.common.dentist'),
+        ];
+
 		return $this->ShowView('dentists', [
 			'items' => $items,
             'search_location' => !empty($city) && !empty($country) ? $city->name.', '.$country->name : ( !empty($country) ? $country->name : ''),
             'all_locations' => $all_locations,
             'city' => $city,
             'country' => $country,
+            'countries' => Country::get(),
             'name' => $name,
             'category' => Request::input('category'),
             'order' => $order,
@@ -111,10 +150,13 @@ class DentistsController extends FrontController
             'ppp' => $ppp,
             'page_num' => $page,
             'placeholder' => $placeholder,
+            'types' => $this->types,
+            'type' => $type,
             'orders' => [
                 'rating',
                 'reviews',
                 'name',
+                'strength',
             ],
             'is_ajax' => $ajax,
             'js' => [

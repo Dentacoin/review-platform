@@ -27,19 +27,22 @@
 				<div class="row questions-header clearfix">
 					<div class="col-md-6">
 						<span class="bold">
-							{{ trans('vox.common.step') }}
-							<span id="current-question-num"></span>
-							 / 
-							{{ $vox->questions->count() }}
+							{!! trans('vox.common.estimated_time', [
+								'time' => '<span id="current-question-num"></span>'
+							]) !!}
 						</span>
 					</div>
 					<div class="col-md-6 tar">
 						<span class="bold">
-							<span id="current-question-reward">
-								
+							<span id="dcn-test-reward-before">
+								{!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->reward }}
 							</span>
-							 / 
-							{{ $vox->reward }} DCN
+							<span id="dcn-test-reward-after" style="display: none;">
+								{!! trans('vox.common.dcn_collected') !!}:
+								<span id="current-question-reward">
+									
+								</span>
+							</span>
 						</span>
 					</div>
 				</div>
@@ -63,18 +66,18 @@
 					</div>
 				</div>
 
-				<div class="question-hints" {!! $has_test ? 'style="display: none;"' : ''  !!}>
+				<!-- <div class="question-hints" {!! $has_test ? 'style="display: none;"' : ''  !!}>
 					<p class="hint">
-						{{ trans('vox.page.'.$current_page.'.finish-all', ['reward' => $vox->reward]) }}
+						{{ trans('vox.page.'.$current_page.'.finish-all', ['reward' => $vox->getRewardTotal()]) }}
 					</p>
-				</div>
+				</div> -->
 			</div>
 		</div>
 
 		<script type="text/javascript">
 			var vox = {
 				count: {{ $vox->questions->count() }},
-				reward: {{ $vox->reward }},
+				reward: {{ $vox->getRewardTotal() }},
 				current: {{ $has_test ? $vox->questions->count() : '1' }}
 			}
 		</script>
@@ -91,8 +94,8 @@
 							{{ trans('vox.page.'.$current_page.'.just-won') }}
 						</p>
 						<div class="price">
-							<img src="img/dc-logo.png"/>
-							<span class="coins">{{ $vox->reward }} DCN</span>
+							<img src="{{ url('img/dc-logo.png') }}"/>
+							<span class="coins">{{ $vox->getRewardTotal() }} DCN</span>
 						</div>
 						<p class="popup-third-title">
 							{{ trans('vox.page.'.$current_page.'.ready-to-get') }}

@@ -15,10 +15,14 @@ use Request;
 use Route;
 use Cookie;
 
+use Carbon\Carbon;
+
 use App\Models\Page;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\City;
+use App\Models\VoxAnswer;
+use App\Models\Vox;
 
 class FrontController extends BaseController
 {
@@ -48,6 +52,7 @@ class FrontController extends BaseController
         if(empty($this->current_page)) {
             $this->current_page='index';
         }
+        
         $this->current_subpage = isset($path[2]) ? $path[2] : null;
         if(empty($this->current_subpage)) {
             $this->current_subpage='home';
@@ -88,6 +93,14 @@ class FrontController extends BaseController
             }
 
 
+            if($this->user) {
+                $details_vox = Vox::where('type', 'user_details')->first();
+                if( !empty($this->admin) && !empty($details_vox) && !$this->user->madeTest(  $details_vox->id ) && $request->fullUrl() != getLangUrl('questionnaire/'.$details_vox->id) ) {
+                    $this->welcome_test = getLangUrl('questionnaire/'.$details_vox->id);
+                }
+            }
+
+
             $request->attributes->add([
                 'admin' => $this->admin,
                 'user' => $this->user,
@@ -103,6 +116,7 @@ class FrontController extends BaseController
         foreach ($clist as $cat) {
             $this->categories[$cat] = trans('front.categories.'.$cat);
         }
+
     }
 
     public function ShowVoxView($page, $params=array()) {
@@ -113,16 +127,34 @@ class FrontController extends BaseController
             'f' => trans('vox.common.gender.f'),
         ];
         $params['years'] = range( date('Y'), date('Y')-90 );
+        $params['header_questions'] = VoxAnswer::count();
+        //dd($params['header_questions']);
 
+        $params['cache_version'] = '20180615-2';
+
+        $params['show_tutorial'] = false;
+        // if($this->user) {
+        //     if(empty($_COOKIE['show_tutorial3'])) {
+        //         $params['show_tutorial'] = true;
+        //         setcookie('show_tutorial3', time(), time()+86400*7);
+        //     }
+        // }
         return view('vox.'.$page, $params);
     }
 
     public function ShowView($page, $params=array()) {
         $this->PrepareViewData($page, $params, 'front');
+
+        $params['cache_version'] = '20180607';
+        // "2018-05-05 00:00:00.000000"
+        
         return view('front.'.$page, $params);
     }    
     public function PrepareViewData($page, &$params, $text_domain) {
 
+        $params['dcn_price'] = file_get_contents('/tmp/dcn_price');
+        $params['dcn_change'] = file_get_contents('/tmp/dcn_change');
+        $params['welcome_test'] = !empty($this->welcome_test) ? $this->welcome_test : null;
         $params['country_id'] = $this->country_id;
         $params['city_id'] = $this->city_id;
         $params['categories'] = $this->categories;
@@ -159,6 +191,14 @@ class FrontController extends BaseController
             $this->user->save();
         }
 
+
+        $params['just_registered'] = false;
+        if( session('just_registered') ) {
+            $params['just_registered'] = true;
+            session([
+                'just_registered' => false
+            ]);
+        }
     }
 
 }

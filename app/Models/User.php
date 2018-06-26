@@ -17,6 +17,9 @@ use App\Models\Reward;
 use App\Models\VoxReward;
 use App\Models\VoxCashout;
 use App\Models\UserBan;
+use App\Models\UserAsk;
+use App\Models\UserTeam;
+use App\Models\DcnTransaction;
 use Carbon\Carbon;
 use Auth;
 
@@ -32,6 +35,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'is_partner',
         'title',
         'name',
+        'description',
         'zip',
         'address',
         'phone',
@@ -42,8 +46,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'birthyear',
         'avg_rating',
         'ratings',
+        'strength',
+        'widget_activated',
         'invited_by',
         'hasimage',
+        'is_approved',
         'is_verified',
         'verified_on',
         'verification_code',
@@ -53,6 +60,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'register_tx',
         'vox_address',
         'vox_active',
+        'fb_id',
+        'civic_id',
+        'platform',
+        'gdpr_privacy',
+        'self_deleted',
     ];
     protected $dates = [
         'created_at',
@@ -87,10 +99,22 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserPhoto', 'user_id', 'id');
     }
     public function bans() {
-        return $this->hasMany('App\Models\UserBan', 'user_id', 'id');
+        return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->orderBy('id', 'DESC');
     }
     public function invites() {
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
+    public function asks() {
+        return $this->hasMany('App\Models\UserAsk', 'dentist_id', 'id')->orderBy('id', 'DESC');
+    }
+    public function history() {
+        return $this->hasMany('App\Models\DcnTransaction', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
+    public function team() {
+        return $this->hasMany('App\Models\UserTeam', 'user_id', 'id');
+    }
+    public function my_workplace() {
+        return $this->hasOne('App\Models\UserTeam', 'dentist_id', 'id');
     }
 
     public function getWebsiteUrl() {
@@ -98,7 +122,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getName() {
-        return $this->title.' '.$this->name;
+        return ($this->title ? $this->title.' ' : '').$this->name;
     }
 
     public function getNameShort() {
@@ -113,9 +137,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return substr($mail_arr[0], 0, 3).'****@'.$mail_arr[1];
     }
 
+    public function wasInvitedBy($user_id) {
+        return $this->hasMany('App\Models\UserInvite', 'invited_id', 'id')->where('user_id', $user_id)->first();
+    }
+
+    public function hasAskedDentist($dentist_id) {
+        return $this->hasMany('App\Models\UserAsk', 'user_id', 'id')->where('dentist_id', $dentist_id)->first();
+    }
+
     public function isBanned($domain) {
         foreach ($this->bans as $ban) {
-            if($ban->domain==$domain && Carbon::now()->lt( $ban->expires ) ) {
+            if($ban->domain==$domain && ($ban->expires===null || Carbon::now()->lt( $ban->expires ) ) ) {
                 return $ban;
             }
         }
@@ -123,7 +155,44 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return false;
     }
 
-    public function banUser($domain) {
+    public function getStrength() {
+        $ret = [];
+
+        if($this->is_dentist) {
+            $ret['photo-dentist'] = $this->hasimage ? true : false;
+            $ret['info'] = ($this->name && $this->phone && $this->description && $this->email && $this->country_id && $this->city_id && $this->zip && $this->address && $this->website) ? true : false;
+            $ret['gallery'] = $this->photos->isNotEmpty() ? true : false;
+            $ret['wallet'] = $this->my_address() ? true : false;
+            $ret['invite-dentist'] = $this->invites->isNotEmpty() ? true : false;
+            $ret['widget'] = $this->widget_activated ? true : false;
+        } else {
+            $ret['photo-patient'] = $this->hasimage ? true : false;
+            $ret['wallet'] = $this->my_address() ? true : false;
+            $ret['review'] = $this->reviews_out->isNotEmpty() ? true : false;
+            $ret['invite-patient'] = $this->invites->isNotEmpty() ? true : false;
+        }
+        return $ret;
+    }
+
+    public function getStrengthNumber() {
+            
+        $num = 0;
+        $s = $this->getStrength();
+        foreach ($s as $val) {
+            if ($val == true) {
+                $num++;
+            }            
+        }
+
+        return $num;
+    }
+
+    public function updateStrength() {
+        $this->strength = $this->getStrengthNumber();
+        $this->save();
+    }
+
+    public function banUser($domain, $reason='') {
         $times = 0;
         foreach ($this->bans as $ban) {
             if($ban->domain==$domain) {
@@ -131,24 +200,26 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
+        $ban = new UserBan;
+        $ban->user_id = $this->id;
+        $ban->domain = $domain;
         if($times==0 || $times==1) {
-            $ban = new UserBan;
-            $ban->user_id = $this->id;
-            $ban->domain = $domain;
-            $ban->expires = Carbon::now()->addDays( $times==0 ? 1 : 3 );
-            $ban->save();
+            $ban->expires = Carbon::now()->addDays( 1 );
+        }
+        if($reason) {
+            $ban->type = $reason;
+        }
+        $ban->save();
+
+        if($times<2) {
             $this->sendTemplate(15, [
                 'expires' => $ban->expires->toTimeString().' '.$ban->expires->toFormattedDateString()
             ]);
-
-            session([
-                'ban-expires' => $ban->expires->toTimeString().' '.$ban->expires->toFormattedDateString()
-            ]);
         } else {
-            self::destroy( $this->id );
-            $this->sendTemplate(16);                                    
+            $this->sendTemplate(16);              
         }
-        Auth::guard('web')->logout();
+
+        return ($times==0 || $times==1) ? 'temporary' : 'permanent';
     }
 
     public function hasReviewTo($dentist_id) {
@@ -176,6 +247,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function get_token() {
         //dd($this->email.$this->id);
         $token = md5($this->email.$this->id.date('WY').env('SALT'));
+        $token = preg_replace("/[^a-zA-Z0-9]/", "", $token);
+        return $token;
+    }
+    public function get_widget_token() {
+        //dd($this->email.$this->id);
+        $token = md5($this->email.$this->id.date('WY').env('SALT_WIDGET'));
         $token = preg_replace("/[^a-zA-Z0-9]/", "", $token);
         return $token;
     }
@@ -215,7 +292,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getImageUrl($thumb = false) {
-        return $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg') : url('img/no-photo.jpg');
+        return $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg') : url('img/no-avatar-photo.png');
     }
     public function getImagePath($thumb = false) {
         $folder = storage_path().'/app/public/avatars/'.($this->id%100);
@@ -238,6 +315,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $img->fit( 400, 400 );
         $img->save($to_thumb);
         $this->hasimage = true;
+        $this->updateStrength();
         $this->save();
     }
 
@@ -269,26 +347,51 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
 
         $yearly = 0;
-        $monthly = 0;
+        $quarterly = 0;
+        //$monthly = 0;
         foreach ($this->reviews_out as $review) {
             $days = $review->created_at->diffInDays( Carbon::now() );
             if($days>365) {
                 break;
             }
             $yearly++;
-            if($days>=31) {
-                $monthly++;
+            // if($days>=31) {
+            //     $monthly++;
+            // }
+            if($days<=93) {
+                $quarterly++;
             }
         }
 
+        if($quarterly>=$limits['quarterly']) {
+            return 'quarterly';
+        }
         if($yearly>=$limits['yearly']) {
             return 'yearly';
         }
-        if($monthly>=$limits['monthly']) {
-            return 'monthly';
-        }
         
         return null;
+    }
+
+    public function cantReviewDentist($dentist_id) {        
+        if($this->reviews_out->isEmpty()) {
+            return null;
+        }        
+        if($this->hasReviewTo($dentist_id)) {
+            return null;
+        }
+        if($this->wasInvitedBy($dentist_id)) {
+            return null;
+        }
+
+        $nonverified = [];
+        foreach ($this->reviews_out as $review) {
+            if(!$review->verified) {
+                $nonverified[$review->dentist_id] = $review->dentist_id;
+            }
+        }
+
+        return count($nonverified)>=3 ? true : null;
     }
 
     public function my_address() {
@@ -320,6 +423,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if($used_reward && $used_reward->user_id!=$this->id) {
             return false;
         }
+        $used_transaction = DcnTransaction::where('address', 'LIKE', $address)->first();
+        if($used_transaction && $used_transaction->user_id!=$this->id) {
+            return false;
+        }
 
         return true;
     }
@@ -329,7 +436,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $ret = [
             'success' => false
         ];
-        $curl = file_get_contents('https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address='.$address.'&tag=latest&apikey=NBI9SGSW6P1NZQGYT8BD8DDN5UQ7AIM4E9');
+        $curl = file_get_contents('https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address='.$address.'&tag=latest&apikey='.env('ETHERSCAN_API'));
         if(!empty($curl)) {
             $curl = json_decode($curl, true);
             if($curl['status']) {
@@ -339,6 +446,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
 
         return $ret;
+    }
+
+    public function getTrpBalance() {
+        $income = TrpReward::where('user_id', $this->id)->sum('reward');
+        $cashouts = TrpCashout::where('user_id', $this->id)->sum('reward');
+
+        return $income - $cashouts;
     }
 
     //
@@ -358,6 +472,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return VoxReward::where('user_id', $this->id)
         ->where('vox_id', $id)
         ->first();
+    }
+
+    public function filledVoxes() {
+        return VoxReward::where('user_id', $this->id)->get()->pluck('vox_id')->toArray();
     }
 
     public function vox_cashouts() {
@@ -381,6 +499,40 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         return $tests>=3 || $answers>=3;
 
+    }
+
+
+
+    public static function getTempImageName() {
+        return md5( microtime(false) ).'.jpg';
+    }
+    public static function getTempImageUrl($name, $thumb = false) {
+        return url('/storage/tmp/'.($thumb ? 'thumb-' : '').$name);
+    }
+    public static function getTempImagePath($name, $thumb = false) {
+        $folder = storage_path().'/app/public/tmp';
+        if(!is_dir($folder)) {
+            mkdir($folder);
+        }
+        return $folder.'/'.($thumb ? 'thumb-' : '').$name;
+    }
+
+    public static function addTempImage($img) {
+        $name = self::getTempImageName();
+        $to = self::getTempImagePath($name);
+        $to_thumb = self::getTempImagePath($name, true);
+
+        $img->resize(1920, null, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+        $img->save($to);
+        $img->heighten(400, function ($constraint) {
+            $constraint->upsize();
+        });
+        $img->save($to_thumb);
+        
+        return [ self::getTempImageUrl($name, true), self::getTempImageUrl($name), $name ];
     }
 
 }

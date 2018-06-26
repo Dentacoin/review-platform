@@ -110,8 +110,14 @@ class TranslationsController extends AdminController
             $results = $reader->toArray();
             $proper = [];
             foreach($results as $k => $v) {
-                $proper[$v[0]] = str_replace('"', '', $v[1]);
+                $key = current($v);
+                next($v);
+                $text = current($v);
+                if(!empty($text)) {
+                    $proper[$key] = str_replace('"', '', $text);
+                }
             }
+            //dd($proper);
             $this->translations_save($source, $proper);
 
             $this->request->session()->flash('success-message', trans('admin.page.translations.imported'));

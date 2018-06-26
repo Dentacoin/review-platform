@@ -5,15 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
 use App\Models\User;
+use App\Models\UserBan;
+use App\Models\VoxAnswer;
+use App\Models\VoxReward;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\UserCategory;
+use App\Models\Review;
+use App\Models\ReviewAnswer;
 
 use Carbon\Carbon;
 
 use Request;
 use Route;
 use Auth;
+use DB;
 
 class UsersController extends AdminController
 {
@@ -110,6 +116,18 @@ class UsersController extends AdminController
             'register_tx' => [
                 'type' => 'text',
             ],
+            'civic_id' => [
+                'type' => 'text',
+            ],
+            'fb_id' => [
+                'type' => 'text',
+            ],
+            'gdpr_privacy' => [
+                'type' => 'bool',
+            ],
+            'is_approved' => [
+                'type' => 'bool',
+            ],
     	];
     }
 
@@ -145,12 +163,7 @@ class UsersController extends AdminController
             $users = $users->where('register_tx', 'LIKE', '%'.trim($this->request->input('search-tx')).'%');
         }
 
-        if(!empty($this->request->input('search-deleted'))) {
-            $users = $users->onlyTrashed();
-        }
-
-        
-        $users = $users->take(50)->get();
+        $users = $users->withTrashed()->take(50)->get();
 
         return $this->showView('users', array(
             'users' => $users,
@@ -166,6 +179,7 @@ class UsersController extends AdminController
     }
 
 
+
     public function delete( $id ) {
         $item = User::find($id);
 
@@ -178,7 +192,7 @@ class UsersController extends AdminController
     }
 
     public function delete_avatar( $id ) {
-        $item = User::find($id);
+        $item = User::withTrashed()->find($id);
 
         if(!empty($item)) {
             $item->hasimage = false;
@@ -190,7 +204,7 @@ class UsersController extends AdminController
     }
 
     public function delete_photo( $id, $position ) {
-        $item = User::find($id);
+        $item = User::withTrashed()->find($id);
 
         if(!empty($item)) {
             if(!empty($item->photos[$position])) {
@@ -201,6 +215,57 @@ class UsersController extends AdminController
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.photo-deleted') );
         return redirect('cms/'.$this->current_page.'/edit/'.$id);
     }
+
+    public function delete_ban( $id, $ban_id ) {
+        $item = User::withTrashed()->find($id);
+        $ban = UserBan::find($ban_id);
+
+        if(!empty($ban) && !empty($item) && $ban->user_id == $item->id) {
+            UserBan::destroy( $ban_id );
+        }
+
+        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.ban-deleted') );
+        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+    }
+
+    public function delete_vox( $id, $reward_id ) {
+        $item = User::withTrashed()->find($id);
+        $reward = VoxReward::find($reward_id);
+
+        if(!empty($reward) && !empty($item) && $reward->user_id == $item->id) {
+            VoxAnswer::where([
+                ['user_id', $item->id],
+                ['vox_id', $reward->vox_id],
+            ])
+            ->delete();
+            VoxReward::destroy( $reward_id );
+        }
+
+        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.reward-deleted') );
+        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+    }
+
+    public function delete_review( $review_id ) {
+        $item = Review::find($review_id);
+        
+        if(!empty($item)) {
+            $uid = $item->user_id;
+            ReviewAnswer::where([
+                ['review_id', $item->id],
+            ])
+            ->delete();
+            $dentist = User::find($item->dentist_id);
+            Review::destroy( $review_id );
+            if( $dentist ) {
+                $dentist->recalculateRating();
+            }
+        }
+
+        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.review-deleted') );
+        return redirect('cms/'.$this->current_page.'/edit/'.$uid);
+    }
+
+
 
     public function restore( $id ) {
         $item = User::onlyTrashed()->find($id);
@@ -224,9 +289,28 @@ class UsersController extends AdminController
         return redirect('/');
     }
 
+    public function personal_data( $id ) {
+        $item = User::withTrashed()->find($id);
+
+        // dd($item->vox_rewards);
+
+        if(!empty($item)) {
+
+            return $this->showView('users-data', array(
+                'item' => $item,
+                'genders' => $this->genders,
+            ));
+        } else {
+            return redirect('cms/users');
+        }
+    }
+
 
     public function edit( $id ) {
-        $item = User::find($id);
+        $item = User::withTrashed()->find($id);
+
+        //dd(bcrypt('my$tronGpass!'));
+        //$2y$10$.AunhByiNrBlkkbAC7pG3.oTp06Lz6Z4aoRIjJmQqr95/c.Hs3akW
 
         if(!empty($item)) {
 

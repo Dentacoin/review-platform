@@ -74,7 +74,44 @@
 				    <div class="panel-body panel-body-wallet">
 				    	<div id="has-wallet">
 
-				    		@if(!$user->phone_verified && !$user->fb_id)
+				    		@if(!$user->civic_id)
+					    		<p class="personal-description">
+									{!! nl2br(trans('vox.page.'.$current_page.'.civic-hint')) !!}
+			                	</p>
+			                	<p class="personal-description">
+			                		{!! nl2br(trans('vox.page.'.$current_page.'.civic-buttons')) !!}
+			                	</p>
+			                	<p  class="personal-description">
+			                		<a href="https://play.google.com/store/apps/details?id=com.civic.sip" target="_blank" class="civic-download civic-android"></a>
+			                		<a href="https://itunes.apple.com/us/app/civic-secure-identity/id1141956958?mt=8" target="_blank" class="civic-download civic-ios"></a>
+			                	</p>
+			                	<p class="personal-description">
+			                		{!! nl2br(trans('vox.page.'.$current_page.'.civic-login')) !!}
+			                	</p>
+
+			                	<p class="tac">
+									<button id="signupButton" class="civic-button-a medium" type="button">
+										<span style="color: white;">{!! nl2br(trans('vox.page.'.$current_page.'.civic-button')) !!}</span>
+									</button>
+								</p>
+
+								<div id="civic-cancelled" class="alert alert-info" style="display: none;">
+									{!! nl2br(trans('vox.page.'.$current_page.'.civic-cancelled')) !!}
+								</div>
+								<div id="civic-error" class="alert alert-warning" style="display: none;">
+									{!! nl2br(trans('vox.page.'.$current_page.'.civic-error')) !!}
+								</div>
+								<div id="civic-weak" class="alert alert-warning" style="display: none;">
+									{!! nl2br(trans('vox.page.'.$current_page.'.civic-weak')) !!}
+								</div>
+								<div id="civic-wait" class="alert alert-info" style="display: none;">
+									{!! nl2br(trans('vox.page.'.$current_page.'.civic-wait')) !!}
+								</div>
+								<div id="civic-duplicate" class="alert alert-warning" style="display: none;">
+									{!! nl2br(trans('vox.page.'.$current_page.'.civic-duplicate')) !!}
+								</div>
+								<input type="hidden" id="jwtAddress" value="{{ getLangUrl('profile/jwt') }}" />
+				    		@elseif(!$user->phone_verified && !$user->fb_id)
 					    		<p class="personal-description">
 									{!! nl2br(trans('vox.page.'.$current_page.'.verify-hint')) !!}
 			                	</p>
@@ -147,12 +184,15 @@
 						            </div>
 									<div class="form-group">
 										<div class="col-md-12">
-					                        <button type="submit" name="update" class="btn btn-primary form-control">
+					                        <button type="submit" name="update" class="btn btn-primary form-control" data-loading="{{ trans('vox.common.loading') }}">
 					                        	{{ trans('vox.page.profile.wallet-withdraw-submit') }}
 					                        </button>
 										</div>
 									</div>
 
+			                        <div class="alert alert-success" style="display: none;" id="withdraw-pending">
+			                        	{{ trans('vox.page.profile.wallet-withdraw-pending') }}
+			                        </div>
 			                        <div class="alert alert-success" style="display: none;" id="withdraw-success">
 			                        	{{ trans('vox.page.profile.wallet-withdraw-success') }}
 			                        	<a target="_blank">
@@ -163,9 +203,9 @@
 			                        	<div id="withdraw-reason">
 			                        	</div>
 			                        </div>
+				            	</form>
 				    		@endif
 
-				            </form>
 
 				    	</div>
 				    </div>
@@ -181,7 +221,7 @@
 				    	<div id="has-wallet">
 				    		<p class="personal-description">
 				    			{!! nl2br(trans('vox.page.profile.wallet-new-address-hint',[
-				    				'link' => '<a target="_blank" href="'.url('MetaMaskInstructions.pdf').'">',
+				    				'link' => '<a target="_blank" href="'.url('DentavoxMetamask.pdf').'">',
 				    				'endlink' => '</a>',
 				    			])) !!}
 				    		</p>

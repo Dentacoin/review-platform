@@ -19,22 +19,27 @@
             <div class="panel-body">
                 <form class="form-horizontal" id="admin-add" method="post" action="{{ url('cms/'.$current_page) }}">
                 	{!! csrf_field() !!}
+                    <div class="form-group">
+                        <label class="col-md-4">{{ trans('admin.page.'.$current_page.'.type') }}</label>
+                        <label class="col-md-4">{{ trans('admin.page.'.$current_page.'.amount') }}</label>
+                        <label class="col-md-4">{{ trans('admin.page.'.$current_page.'.dcn') }}</label>
+                    </div>
                     @foreach($rewards as $reward)
                         <div class="form-group">
-                            <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.type') }}</label>
                             <div class="col-md-4">
                                 <input class="form-control" type="text" name="none" disabled="disabled" value="{{ trans('admin.page.'.$current_page.'.reward-'.$reward->reward_type) }}" />
                             </div>
-                            <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.amount') }}</label>
                             <div class="col-md-4">
                                 <input class="form-control" type="text" name="rewards[{{ $reward->reward_type }}]" value="{{ $reward->amount }}" />
+                            </div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" disabled="disabled" value="{{ $reward->dcn }}" />
                             </div>
                         </div>
                     @endforeach
                     <div class="form-group">
-                        <label class="col-md-10 control-label"></label>
-                        <div class="col-md-1">
-                            <button type="submit" class="btn btn-sm btn-success">{{ trans('admin.page.'.$current_page.'.submit') }}</button>
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-sm btn-success btn-block">{{ trans('admin.page.'.$current_page.'.submit') }}</button>
                         </div>
                     </div>
                 </form>

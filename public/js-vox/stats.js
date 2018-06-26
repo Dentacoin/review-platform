@@ -1,31 +1,5 @@
 $(document).ready(function(){
 
-    scrollToActive();
-
-    $('.previous-question').click( function() {
-        var cur = $('.statistics-block:visible').first();
-        var cur_title = $('.all-titles .statistics-question:visible').first();
-        var other = cur.prev().length ? cur.prev() : cur.parent().find('.statistics-block').last();
-        var other_title = cur.prev().length ? cur_title.prev() : cur_title.parent().find('.statistics-question').last();
-        cur.hide();
-        cur_title.hide();
-        other.show();
-        other_title.show();
-        moveQuestionBar();
-    } );
-    $('.next-question').click( function() {
-        var cur = $('.statistics-block:visible').first();
-        var cur_title = $('.all-titles .statistics-question:visible').first();
-        var other = cur.next().length ? cur.next() : cur.parent().find('.statistics-block').first();
-        var other_title = cur.next().length ? cur_title.next() : cur_title.parent().find('.statistics-question').first();
-        cur.hide();
-        cur_title.hide();
-        other.show();
-        other_title.show();
-        moveQuestionBar();
-    } );
-
-
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
@@ -72,13 +46,12 @@ $(document).ready(function(){
         var left = ( 100 / parseInt($('#current-question-bar').attr('data-count')) ) * (cnt-1);
         $('#current-question-bar').css('margin-left', left+'%');
 
-        var data = chart_data[cur.attr('data-id')];
+        var data = chart_data;
         console.log(data);
 
         var layout = {
             showlegend: false,
             xaxis: {
-                range: ['{{ $start }}', '{{ $end }}'],
                 type: 'date'
             },
             yaxis: {

@@ -24,7 +24,13 @@
 							</div>
 							<div class="form-group">
 							  	<div class="col-md-12 text-center">
-									<a class="btn btn-default" href="{{ getLangUrl('login/facebook') }}" title="{{ trans('front.page.'.$current_page.'.facebook') }}"><i class="fa fa-facebook"></i></a>
+									<div class="fb-button-inside">
+										<a href="{{ getLangUrl('login/facebook') }}" class="">
+										</a>
+										<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+									</div>
+								</div>
+							  	<div class="col-md-12 text-center">
 									<a class="btn btn-default" href="{{ getLangUrl('login/twitter') }}" title="{{ trans('front.page.'.$current_page.'.twitter') }}"><i class="fa fa-twitter"></i></a>
 									<a class="btn btn-default" href="{{ getLangUrl('login/gplus') }}" title="{{ trans('front.page.'.$current_page.'.gplus') }}"><i class="fa fa-google-plus"></i></a>
 								</div>

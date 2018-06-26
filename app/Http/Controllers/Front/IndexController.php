@@ -29,4 +29,12 @@ class IndexController extends FrontController
         ));	
 	}
 
+	public function gdpr($locale=null) {
+
+		$this->user->gdpr_privacy = true;
+		$this->user->save();
+
+		return redirect( getLangUrl('/') );
+	}
+
 }

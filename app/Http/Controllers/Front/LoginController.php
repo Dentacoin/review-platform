@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 use App\Models\User;
+use App\Models\Dcn;
+use App\Models\UserInvite;
 use Carbon\Carbon;
 
 use Socialite;
@@ -52,12 +54,21 @@ class LoginController extends FrontController
 
     private function try_social_login($s_user) {
 
-        $user = User::where( 'fb_id','LIKE', $s_user->getId() )->first();
-        if(empty($user)) {
+        if($s_user->getId()) {
+            $user = User::where( 'fb_id','LIKE', $s_user->getId() )->first();
+        }
+        if(empty($user) && $s_user->getEmail()) {
             $user = User::where( 'email','LIKE', $s_user->getEmail() )->where('id', '<', 5200)->first();            
         }
 
         if ($user) {
+            
+            if( $user->isBanned('vox') ) {
+                return redirect( getLangUrl('login') )
+                ->withInput()
+                ->with('error-message', trans('front.page.login.vox-ban'));
+            }
+
             Auth::login($user, true);
 
             Request::session()->flash('success-message', trans('front.page.login.success'));
@@ -71,8 +82,25 @@ class LoginController extends FrontController
 
 
 
-    public function facebook_register($locale=null, $is_dentist) {
-    	session(['is_dentist' => $is_dentist ]);
+    public function facebook_register($locale=null, $type) {
+        if($type=='patient') {
+            session([
+                'is_dentist' => false,
+                'is_clinic' => false, 
+            ]);            
+        } else if($type=='dentist') {
+            session([
+                'is_dentist' => true,
+                'is_clinic' => false, 
+            ]);            
+        } else if($type=='clinic') {
+            session([
+                'is_dentist' => true,
+                'is_clinic' => true, 
+            ]);            
+        } else {
+            return redirect( getLangUrl('register'));
+        }
         config(['services.facebook.redirect' => getLangUrl('register/callback/facebook') ]);
         return Socialite::driver('facebook')
         ->scopes(['user_friends'])
@@ -123,6 +151,7 @@ class LoginController extends FrontController
 */
 
     private function try_social_register($s_user, $network) {
+        //dd($s_user);
 
         $allset = isset($s_user->user['verified']) && isset($s_user->user['friends']);
         if(!$allset) {
@@ -145,12 +174,21 @@ class LoginController extends FrontController
         }
 
         $is_dentist = session('is_dentist');
-        $user = User::where( 'fb_id','LIKE', $s_user->getId() )->first();
-        if(empty($user)) {
+        $is_clinic = session('is_clinic');
+        if($s_user->getId()) {
+            $user = User::where( 'fb_id','LIKE', $s_user->getId() )->first();
+        }
+        if(empty($user) && $s_user->getEmail()) {
             $user = User::where( 'email','LIKE', $s_user->getEmail() )->where('id', '<', 5200)->first();            
         }
 
         if ($user) {
+            if( $user->isBanned('vox') ) {
+                Request::session()->flash('error-message', trans('front.page.login.vox-ban'));
+                return redirect( getLangUrl('register') )
+                ->withInput()
+                ->with('error-message', trans('front.page.login.vox-ban'));
+            }
             Auth::login($user, true);
             if(empty($user->fb_id)) {
                 $user->fb_id = $s_user->getId();
@@ -177,18 +215,21 @@ class LoginController extends FrontController
                 return redirect( getLangUrl('profile') );
             }
 
-            $name = $s_user->getName() ? $s_user->getName() : explode('@', $s_user->getEmail() )[0];
+            $name = $s_user->getName() ? $s_user->getName() : ( !empty($s_user->user['first_name']) && !empty($s_user->user['last_name']) ? $s_user->user['first_name'].' '.$s_user->user['last_name'] : ( !empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' ) );
 
             $password = $name.date('WY');
             $newuser = new User;
             $newuser->name = $name;
-            $newuser->email = $s_user->getEmail();
+            $newuser->email = $s_user->getEmail() ? $s_user->getEmail() : '';
+            $newuser->is_verified = $s_user->getEmail() ? true : false;
             $newuser->password = bcrypt($password);
             $newuser->is_dentist = $is_dentist;
-            $newuser->is_verified = true;
+            $newuser->is_clinic = $is_clinic;
             $newuser->verified_on = Carbon::now();
             $newuser->country_id = $this->country_id;
             $newuser->fb_id = $s_user->getId();
+            $newuser->gdpr_privacy = true;
+            $newuser->platform = 'trp';
             
             if(!empty(session('invited_by'))) {
                 $newuser->invited_by = session('invited_by');
@@ -214,16 +255,48 @@ class LoginController extends FrontController
                 }
             }
 
-            $newuser->sendTemplate( $newuser->is_dentist ? 3 : 4 );
+
+            if($newuser->invited_by) {
+                $inv_id = session('invitation_id');
+                if($inv_id) {
+                    $inv = UserInvite::find($inv_id);
+                } else {
+                    $inv = new UserInvite;
+                    $inv->user_id = $newuser->invited_by;
+                    $inv->invited_email = $newuser->email;
+                    $inv->invited_name = $newuser->name;
+                    $inv->save();
+                }
+
+                $inv->invited_id = $newuser->id;
+                $inv->save();
+
+                $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
+                    'who_joined_name' => $newuser->getName()
+                ] );
+            }
+
+            $sess = [
+                'invited_by' => null,
+                'invitation_name' => null,
+                'invitation_email' => null,
+                'invitation_id' => null,
+                'just_registered' => true,
+            ];
+            session($sess);
+
+            if( $newuser->email ) {
+                $newuser->sendTemplate( $newuser->is_dentist ? 3 : 4 );                
+            }
 
             Auth::login($newuser, true);
 
-            if($newuser->invited_by) {
+            if($newuser->invited_by && $newuser->invitor->is_dentist) {
                 Request::session()->flash('success-message', trans('front.page.registration.completed-by-invite', ['name' => $newuser->invitor->getName()]));
             } else {
                 Request::session()->flash('success-message', trans('front.page.registration.completed'));
             }
-            return redirect( $newuser->invited_by ? $newuser->invitor->getLink() : getLangUrl('profile') );
+            return redirect( $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('profile') );
         }
     }
 }

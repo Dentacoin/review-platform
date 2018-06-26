@@ -9,33 +9,66 @@ use Request;
 use Route;
 use Hash;
 use Auth;
+use App;
 use Mail;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Vox;
 use App\Models\VoxAnswer;
 use App\Models\VoxReward;
+use App\Models\VoxScale;
+use App\Models\UserInvite;
+use App\Models\Dcn;
+use App\Models\Reward;
 
 
 class VoxController extends FrontController
 {
 	public function home($locale=null, $id) {
 		$vox = Vox::find($id);
-		if(empty($vox)) {
+		return $this->dovox($locale, $vox);
+	}
+	public function home_slug($locale=null, $slug) {
+		$vox = Vox::whereTranslationLike('slug', $slug)->first();
+		return $this->dovox($locale, $vox);
+	}
+	public function dovox($locale=null, $vox) {
+		$this->current_page = 'questionnaire';
+
+		if(empty($vox) || !($this->user->email && $this->user->is_verified) ) {
 			return redirect( getLangUrl('/') );
-		} else if( $this->user->madeTest($id) ) {
+		} else if( $this->user->madeTest($vox->id) ) {
 			return redirect( getLangUrl('stats/'.$vox->id) );			
 		}
+
+
+        if($this->user->isBanned('vox')) {
+            return redirect(getLangUrl('profile/bans'));
+        }
 
 		$list = VoxAnswer::where('vox_id', $vox->id)
 		->where('user_id', $this->user->id)
 		->get();
 		$answered = [];
 		foreach ($list as $l) {
-			$answered[$l->question_id] = $l;
+			if(!isset( $answered[$l->question_id] )) {
+				$answered[$l->question_id] = $l->answer; //3
+			} else {
+				if(!is_array($answered[$l->question_id])) {
+					$answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
+				}
+				$answered[$l->question_id][] = $l->answer; // [3,5,7]
+			}
 		}
 
 		$not_bot = session('not_not-'.$vox->id);
+
+
+		$slist = VoxScale::get();
+		$scales = [];
+		foreach ($slist as $sitem) {
+			$scales[$sitem->id] = $sitem;
+		}
 
         if(Request::isMethod('post')) {
         	$ret = [
@@ -44,7 +77,7 @@ class VoxController extends FrontController
         	if(Request::input('captcha')) {
 	            $captcha = false;
 	            $cpost = [
-	                'secret' => '6LdmpjQUAAAAAF_3NBc2XtM_VdKp0g0BNsaeWFD3',
+	                'secret' => env('CAPTCHA_SECRET'),
 	                'response' => Request::input('captcha'),
 	                'remoteip' => Request::ip()
 	            ];
@@ -67,14 +100,14 @@ class VoxController extends FrontController
 	            	$ret['success'] = false;
 	            } else {
 	            	session([
-	            		'not_not-'.$vox->id => true
+	            		'not_not-'.$vox->id => true,
+	            		'reward-for-'.$vox->id => $vox->getRewardTotal()
 	            	]);
 	            }
 
         	} else {
 
 	        	$q = Request::input('question');
-	        	$a = intval(Request::input('answer'));
 
 
 	        	if(!isset( $answered[$q] ) && $not_bot) {
@@ -87,46 +120,146 @@ class VoxController extends FrontController
 		        	}
 
 		        	if($found) {
-		        		if( $a>=1 && $a<=count(json_decode($question->answers)) ) {
-							$answer = new VoxAnswer;
-					        $answer->user_id = $this->user->id;
-					        $answer->vox_id = $vox->id;
-					        $answer->question_id = $q;
-					        $answer->answer = $a;
-					        $answer->country_id = $this->user->country_id;
-					        if($question->is_control) {
-					        	$answer->is_scam = $question->is_control!=$a;
-					        }
-				        	if($answer->is_scam && $question->go_back) {
-				        		$wrongs = intval(session('wrongs'));
-				        		$wrongs++;
-				            	session([
-				            		'wrongs' => $wrongs
-				            	]);
+		        		$valid = false;
+		        		$type = Request::input('type');
 
-		        				$ret['wrong'] = true;
-		        				$ret['go_back'] = $question->go_back;
-		        				$counter = 0;
-		        				foreach ($answered as $key => $value) {
-		        					$counter++;
-		        					if($counter>=$question->go_back) {
-		        						$value->delete();
-		        					}
+
+		        		$answer_count = count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true) );
+
+		        		if ($type == 'skip') {
+		        			$valid = true;
+		        			$a = 0;
+		        		} else if ($type == 'location-question') {
+		        			//answer = 71,2312
+		        			list($country_id, $city_id) = explode(',', Request::input('answer'));
+		        			$this->user->city_id = $city_id;
+		        			$this->user->country_id = $country_id;
+		        			$this->user->save();
+		        			$a = $city_id;
+		        			$valid = true;
+
+		        		} else if ($type == 'multiple') {
+
+		        			$valid = true;
+		        			$a = Request::input('answer');
+		        			foreach ($a as $value) {
+		        				if (!($value>=1 && $value<=$answer_count)) {
+		        					$valid = false; 
+		        					break;
 		        				}
-		        				if($wrongs>3) {
-	            					$this->user->banUser('vox');
-	            					$ret['ban'] = getLangUrl('banned');
+		        			}
+		        			
+		        		} else if($type == 'scale') {
+	        				
+		        			$valid = true;
+		        			$a = Request::input('answer');
+		        			foreach ($a as $k => $value) {
+		        				if (!($value>=1 && $value<=$answer_count)) {
+		        					$valid = false; 
+		        					break;
 		        				}
-				        	} else {
-					        	$answer->save();
+		        			}
+
+		        		} else if ($type == 'single') {
+	        				$a = intval(Request::input('answer'));
+	        				$valid = $a>=1 && $a<=$answer_count;
+		        		}
+
+		        		if( $valid ) {
+		        			VoxAnswer::where('user_id', $this->user->id )->where('vox_id',$vox->id )->where('question_id', $q)->delete();
+
+		        			if($type == 'single') {
+
+								$answer = new VoxAnswer;
+						        $answer->user_id = $this->user->id;
+						        $answer->vox_id = $vox->id;
+						        $answer->question_id = $q;
+						        $answer->answer = $a;
+						        $answer->country_id = $this->user->country_id;
+						        if($question->is_control) {
+						        	$answer->is_scam = $question->is_control!=$a;
+						        }
+					        	if($answer->is_scam && $question->go_back) {
+					        		$wrongs = intval(session('wrongs'));
+					        		$wrongs++;
+					            	session([
+					            		'wrongs' => $wrongs
+					            	]);
+
+					        		$wrongs_test = intval(session('wrongs-'.$vox->id));
+					        		$wrongs_test++;
+					            	session([
+					            		'wrongs-'.$vox->id => $wrongs_test
+					            	]);
+
+			        				$ret['wrong'] = true;
+			        				$ret['go_back'] = $question->go_back;
+			        				$ret['mistake_count'] = $wrongs_test;
+			        				$ret['mistakes_left'] = 10-$wrongs_test;
+			        				$counter = 0;
+			        				foreach ($answered as $key => $value) {
+			        					$counter++;
+			        					// if($counter>=$question->go_back) {
+			        					// 	$value->delete();
+			        					// }
+			        				}
+			        				if($wrongs>10) {
+		            					$ret['ban_type'] = $this->user->banUser('vox', 'mistakes');
+		            					$ret['ban'] = getLangUrl('profile/bans');
+			        				}
+					        	} else {
+						        	$answer->save();
+							        $answered[$q] = $a;
+						        }
+
+		        			} else if($type == 'location-question') {
+		        				$answer = new VoxAnswer;
+						        $answer->user_id = $this->user->id;
+						        $answer->vox_id = $vox->id;
+						        $answer->question_id = $q;
+						        $answer->answer = $a;
+						        $answer->country_id = $this->user->country_id;
+						        $answer->save();
 						        $answered[$q] = $a;
-					        }
+		        			} else if($type == 'skip') {
+		        				$answer = new VoxAnswer;
+						        $answer->user_id = $this->user->id;
+						        $answer->vox_id = $vox->id;
+						        $answer->question_id = $q;
+						        $answer->answer = 0;
+						        $answer->country_id = $this->user->country_id;
+						        $answer->save();
+						        $answered[$q] = 0;
+		        			} else if($type == 'multiple') {
+		        				foreach ($a as $value) {
+		        					$answer = new VoxAnswer;
+							        $answer->user_id = $this->user->id;
+							        $answer->vox_id = $vox->id;
+							        $answer->question_id = $q;
+							        $answer->answer = $value;
+							        $answer->country_id = $this->user->country_id;
+							        $answer->save();
+		        				}
+							    $answered[$q] = $a;
+		        			} else if($type == 'scale') {
+		        				foreach ($a as $k => $value) {
+		        					$answer = new VoxAnswer;
+							        $answer->user_id = $this->user->id;
+							        $answer->vox_id = $vox->id;
+							        $answer->question_id = $q;
+							        $answer->answer = $k+1;
+							        $answer->scale = $value;
+							        $answer->country_id = $this->user->country_id;
+							        $answer->save();
+		        				}
+							    $answered[$q] = $a;
+		        			}
 
 
 	        				if( $answer->is_scam ) {
 	        					if($this->user->vox_should_ban()) {
-	            					$this->user->banUser('vox');
-		        					$ret['ban'] = getLangUrl('banned');
+	            					$ret['ban_type'] = $this->user->banUser('vox', 'mistakes');
+	            					$ret['ban'] = getLangUrl('profile/bans');
 		        				}
 	        				}
 
@@ -134,22 +267,39 @@ class VoxController extends FrontController
 								$reward = new VoxReward;
 						        $reward->user_id = $this->user->id;
 						        $reward->vox_id = $vox->id;
-						        $reward->reward = $vox->reward;
+						        $reward->reward = $vox->getRewardTotal();
+						        $reward->mistakes = intval(session('wrongs-'.$vox->id));
 						        $start = $list->first()->created_at;
 						        $diff = Carbon::now()->diffInSeconds( $start );
 						        $normal = count($vox->questions)*5;
 						        if($normal > $diff) {
 						        	$reward->is_scam = true;
 						        }
+						        $reward->seconds = $diff;
 
 						        $reward->save();
 		        				$ret['balance'] = $this->user->getVoxBalance();
 
 		        				if( $reward->is_scam ) {
 		        					if($this->user->vox_should_ban()) {
-	            						$this->user->banUser('vox');
-			        					$ret['ban'] = getLangUrl('banned');
+	            						$ret['ban_type'] = $this->user->banUser('vox', 'too-fast');
+	            						$ret['ban'] = getLangUrl('profile/bans');
 			        				}
+		        				} else {
+
+		                            if($this->user->invited_by) {
+		                                $inv = UserInvite::where('user_id', $this->user->invited_by)->where('invited_id', $this->user->id)->first();
+		                                if(!empty($inv) && !$inv->rewarded) {
+		                                    $tmp = Dcn::send($this->user->invitor, $this->user->invitor->my_address(), Reward::getReward('reward_invite'), 'invite-reward', $inv->id, true);
+		                                    $inv->rewarded = true;
+		                                    $inv->save();
+
+		                                    $this->user->invitor->sendTemplate( 22, [
+		                                        'who_joined_name' => $this->user->getName()
+		                                    ] );
+		                                }
+		                            }
+
 		        				}
 					        }
 		        		} else {
@@ -180,6 +330,7 @@ class VoxController extends FrontController
 		return $this->ShowVoxView('vox', array(
 			'not_bot' => $not_bot,
 			'vox' => $vox,
+			'scales' => $scales,
 			'answered' => $answered,
 			'first_question' => $first_question,
 			'first_question_num' => $first_question_num,
@@ -187,20 +338,20 @@ class VoxController extends FrontController
 				'vox.js'
 			],
             'seo_title' => trans('vox.seo.questionnaire.title', [
-                'title' => $vox->title,
-                'description' => $vox->description
+                'title' => $vox->translate(App::getLocale())->seo_title,
+                'description' => $vox->translate(App::getLocale())->seo_description
             ]),
             'seo_description' => trans('vox.seo.questionnaire.description', [
-                'title' => $vox->title,
-                'description' => $vox->description
+                'title' => $vox->translate(App::getLocale())->seo_title,
+                'description' => $vox->translate(App::getLocale())->seo_description
             ]),
             'social_title' => trans('vox.social.questionnaire.title', [
-                'title' => $vox->title,
-                'description' => $vox->description
+                'title' => $vox->translate(App::getLocale())->seo_title,
+                'description' => $vox->translate(App::getLocale())->seo_description
             ]),
             'social_description' => trans('vox.social.questionnaire.description', [
-                'title' => $vox->title,
-                'description' => $vox->description
+                'title' => $vox->translate(App::getLocale())->seo_title,
+                'description' => $vox->translate(App::getLocale())->seo_description
             ]),
         ));
 	}

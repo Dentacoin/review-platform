@@ -6,18 +6,25 @@ var reviewSubmitedReward = null;
 var sendDCN = null;
 var generateInviteCode = null;
 var account = null;
+
+var hasWalletActions = function() {
+  //$('#has-no-wallet').hide();
+  //$('#has-wallet').show();
+  $('#transfer-widget').show();
+}
+
+var noWalletActions = function() {
+  //$('#has-no-wallet').show();
+  //$('#has-wallet').hide();
+  $('#transfer-widget').hide();
+}
+
 window.addEventListener('load', function() {
-    var noWalletActions = function() {
-        $('#has-no-wallet').show();
-        $('#has-wallet').hide();
-        $('#transfer-widget').hide();
-    }
 
     if(typeof Web3 == 'undefined') {
         noWalletActions();
         return;
     }
-
 
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof web3 !== 'undefined') {
@@ -52,36 +59,50 @@ window.addEventListener('load', function() {
 
 
     web3.eth.getAccounts(function(error, accounts){
-      console.log(accounts);
       account = accounts[0];
-      $('#transfer-reward-address').val( account );
-      $('#reviewer-address').val(account);
+      $('.fill-address').each( function() {
+        if( $(this).is( "input" ) ) {
+          if(!$(this).val().length) {
+            $(this).val(account);
+          }          
+        } else {
+          $(this).html(account);
+        }
+      } );
     });
 
     //Wallet updates
     var walletUpdater = function() {
 
-        if (typeof(token) == 'undefined' || !token) {
-            return
-        }
-        //auto refresh account
-        if (!account) {
-              noWalletActions();
-              web3.eth.getAccounts(function(error, accounts){
-              console.log(accounts);
-              account = accounts[0];
-            });
-        } else {
-          hasWalletActions();
-        }
-        //auto refresh balance
-        if(account) {
-            token.balanceOf(account, function(error, balance) {
-                return $("#wallet-balance").val(String(balance.toString(10)) + " ^");
-            });
-        }
-        // auto refresh address
-        $("#wallet-address").val(account);
+      if (typeof(token) == 'undefined' || !token) {
+        return;
+      }
+      //auto refresh account
+      if (!account) {
+        noWalletActions();
+        web3.eth.getAccounts(function(error, accounts){
+          //console.log(accounts);
+          account = accounts[0];
+        });
+      } else {
+        hasWalletActions();
+      }
+      //auto refresh balance
+      if(account) {
+          token.balanceOf(account, function(error, balance) {
+            $(".fill-balance").html( String(balance.toString(10)) );
+          });
+          // auto refresh address
+          $('.fill-address').each( function() {
+            if( $(this).is( "input" ) ) {
+              if(!$(this).val().length) {
+                $(this).val(account);
+              }          
+            } else {
+              $(this).html(account);
+            }
+          } );
+      }
     };
     walletUpdater();
     setInterval(walletUpdater, 2000);

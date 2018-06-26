@@ -19,7 +19,7 @@
 	      				<p>
 	      					{{ trans('vox.page.'.$current_page.'.hint') }}
 	      				</p>
-		  				<br/>
+		  			<br/>
 	      				
 	        			<div class="form-group">
 						  	<label class="control-label col-md-4">

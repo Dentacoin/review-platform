@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 use App\Models\Admin;
+use App\Models\Review;
 
 use Auth;
 use DB;
@@ -84,6 +85,11 @@ class AdminController extends BaseController
                 'admin.pages' => $menu
             ]);
         }
+
+        //Counts
+        $params['counters'] = [];
+        $params['counters']['youtube'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
+        //dd($params['counters']);
 
 
 		return view('admin.'.$page, $params);

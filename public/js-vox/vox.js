@@ -3,7 +3,7 @@ var recaptchaCode = null;
 var sendValidation;
 
 $(document).ready(function(){
-
+    
     sendValidation = function() {
         if(recaptchaCode) { // && $('#iagree').is(':checked')
             $.post( 
@@ -34,7 +34,8 @@ $(document).ready(function(){
 
     VoxTest.handleNextQuestion();
 
-    $('.question-group a.answer').click( function() {
+    sendAnswer = function() {
+
         if(ajax_is_running) {
             return;
         }
@@ -43,22 +44,85 @@ $(document).ready(function(){
 
         var group = $(this).closest('.question-group');
         var qid = parseInt(group.attr('data-id'));
-        var answer = $(this).attr('data-num');
-        $('#wrong-control').hide();
+        var type = null;
 
+        if(vox.current>=1) {
+            $('.questionnaire-description').hide();
+        }
+
+        if( group.attr('skipped') ) {
+            var answer = 0;
+            type = 'skip';
+
+        } else if (group.hasClass('location-question')) {
+
+            if ($('select').length == $('select option:selected').length) {
+                var answer = $('.country-select option:selected').val() + ',' + $('.city-select option:selected').val();
+                type = 'location-question';
+            } else {
+                $('.answer-error').show().insertAfter($(this));
+                ajax_is_running = false;
+                return;
+            }
+
+        } else if (group.hasClass('single-choice')) {
+
+            var answer = $(this).attr('data-num');
+            type = 'single';
+
+        } else if(group.hasClass('multiple-choice')) {
+
+            type = 'multiple';
+            if ( $( group.find('input[name="answer"]:checked') ).length ) {
+
+                var answer = [];
+                group.find('input[name="answer"]:checked').each( function() {
+                    answer.push($(this).val());
+                });
+            } else {
+                $('.answer-error').show().insertAfter($(this));
+                ajax_is_running = false;
+                return;
+            }
+
+        } else if(group.hasClass('scale')) {
+
+            type = 'scale';
+            if (group.find('.answer-radios-group').length == group.find('.answer:checked').length ) {
+
+                var answer = [];
+                group.find('.answer-radios-group').each( function() {
+                    answer.push($(this).find('.answer:checked').val());
+                });
+            } else {
+                $('.answer-error').show().insertAfter($(this));
+                ajax_is_running = false;
+                return;
+            }
+        }
+        
+        $('#wrong-control').hide();
+        group.find('.answers').append('<div class="loader"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div>');
 
         $.post( 
             VoxTest.url, 
             {
                 question: qid,
                 answer: answer,
+                type: type,
             }, 
             function( data ) {
                 if(data.success) {
-                    group.hide();
+                    var should_skip = false;
 
                     if(data.ban) {
-                        window.location.href = data.ban;
+                        if(data.ban_type=='permanent') {                  
+                            $('.popup-permanent-ban').addClass('active');                            
+                            $('.popup-permanent-ban a').attr('href', data.ban);          
+                        } else {
+                            $('.popup-temporary-ban').addClass('active');
+                            $('.popup-temporary-ban a').attr('href', data.ban);                            
+                        }
                         return;
                     }
 
@@ -69,13 +133,76 @@ $(document).ready(function(){
                             go_back_group = go_back_group.next();
                         }
                         go_back_group.show();
-                        $('#wrong-control').show();
+                        
+                        $('.popup-mistakes').addClass('active');
+                        $('#mistakes-left').html(data.mistakes_left);
+                        $('.popup-mistakes a').click( function() {
+                            $('.popup-mistakes').removeClass('active');
+                        } );
+
                     } else {
-                        if( group.next().hasClass('question-hints') ) {
+                        
+                        if (group.hasClass('single-choice')) {
+                            group.attr('data-answer', answer);
+                        } else if(group.hasClass('multiple-choice')) {
+                            console.log(answer);
+                            group.attr('data-answer', !answer ? '' : answer.join(','));
+                        }
+
+                        //hasClass('question-hints')
+                        if( !group.next().length ) {
+                            if($('.dentacoin-info').length) {
+                                if(group.attr('data-answer') == '2') {
+                                    $('.dentacoin-info').show();
+                                }
+                            }
                             $("#question-meta").hide();
                             $("#question-done").show();
                         } else {
-                            group.next().show();
+
+                            var trigger = group.next().attr('data-trigger');
+                            if(trigger) {
+                                should_skip = true;
+                                var trigger_list = trigger.split(';');
+                                for(var i in trigger_list) {
+                                    var parts = trigger_list[i].trim().split(':');
+                                    var trigger_question = parts[0].trim(); // 15 въпрос
+                                    var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
+                                    var parsed_given_answer = given_answer.length && given_answer!="0" ? given_answer.split(',') : null;
+                                    console.log(parsed_given_answer);
+                                    if( parsed_given_answer ) {
+                                        if( parts[1] ) {
+                                            var trigger_answers = parts[1].split(','); // 2,6 // [2,6]
+                                            for(var i in trigger_answers) {
+                                                if( given_answer.indexOf(trigger_answers[i].trim())!=-1 ) {
+                                                    should_skip = false;
+                                                    break;
+                                                }
+                                            }
+                                        } else {
+                                            should_skip = false;
+                                        }
+                                    }
+                                    if(!should_skip) {
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (!should_skip) {
+                                $('.question-group').find('.loader').remove();
+                                $('.question-group').hide();
+                                group.next().show();
+                                if( group.next().find('.question').offset().top < $(window).scrollTop() ) {
+                                    $('html, body').stop().animate({
+                                        scrollTop: parseInt(group.next().find('.question').offset().top)
+                                    }, 500);
+                                }
+                                VoxTest.handleNextQuestion();
+                            } else {
+                                console.log('SKIP IT!');
+                                group.next().attr('skipped', 'skipped');
+                            }
                             vox.current++;            
                         }
                     }
@@ -85,15 +212,80 @@ $(document).ready(function(){
                     }
 
 
-                    VoxTest.handleNextQuestion();
                 } else {
                     console.log(data);
                 }
                 ajax_is_running = false;
+                if (should_skip) {
+                    console.log('skipvame li?');
+                    sendAnswer.bind(group.next().children().first())();
+                }
             }, "json"
         );
-        
-        
+    }
+
+    $('.question-group a.answer').click( sendAnswer );
+    $('.question-group a.next-answer').click( sendAnswer );
+
+    $('.question-group .answer-checkbox').click( function() {
+        if( $(this).find('input').prop('disabled') ) {
+            $(this).closest('.question-group').find('input.answer').prop('disabled', false).prop('checked', false);
+            $(this).prop('checked', 'checked');
+        }
     } )
+
+    $('.question-group input.disabler').change( function() {
+        if( $(this).is(':checked') ) {
+            $(this).closest('.question-group').find('input.answer').prop('checked', false).prop('disabled', 'disabled');
+            $(this).prop('disabled', false).prop('checked', 'checked');
+        } else {
+            $(this).closest('.question-group').find('input.answer').prop('disabled', false);               
+        }
+    } );
+
+    $('.question-group.scale .answer').change( function() {
+        $(this).closest('.answer-radios-group').find('.answer-radio').each( function() {
+            if( $(this).find('input').is(':checked') ) {
+                $(this).addClass('active-label');
+            } else {
+                $(this).removeClass('active-label');
+            }
+        } );
+    } );
+
+
+    if (navigator.share !== undefined) {
+        $('.has-mobile-share').show();
+
+        navigator.share({
+            title: document.title,
+            url: shareUrl
+        }).then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing:', error));
+    } else {
+        $('.no-mobile-share').show();
+    }
+
+    $('.country-select').change( function() {
+        var city_select = $(this).closest('.answers').find('.city-select').first();
+        city_select.attr('disabled', 'disabled');
+        $.ajax( {
+            url: '/cities/' + $(this).val(),
+            type: 'GET',
+            dataType: 'json',
+            success: function( data ) {
+                console.log(data);
+                city_select.attr('disabled', false)
+                .find('option')
+                .remove();
+                for(var i in data.cities) {
+                    console.log( fb_city_id, data.cities[i] );
+                    city_select.append('<option value="'+i+'" '+(fb_city_id && fb_city_id==data.cities[i] ? 'selected="selected"' : '' )+'>'+data.cities[i]+'</option>');
+                }
+                //city_select
+                //$('#modal-message .modal-body').html(data);
+            }
+        });
+    } );
 
 });

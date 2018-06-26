@@ -14,6 +14,8 @@ class VoxReward extends Model {
         'vox_id',
         'reward',
         'is_scam',
+        'mistakes',
+        'seconds',
     ];
 
     protected $dates = [
@@ -24,6 +26,10 @@ class VoxReward extends Model {
 
     public function vox() {
         return $this->hasOne('App\Models\Vox', 'id', 'vox_id');        
+    }
+
+    public function formatDuration() {
+        return ($this->seconds>=60 ? floor($this->seconds/60).' min ' : '').( $this->seconds%60 ? ($this->seconds%60).' sec' : '' );
     }
     
     

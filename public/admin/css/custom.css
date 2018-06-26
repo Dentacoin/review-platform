@@ -107,3 +107,8 @@ table.table .table-search {
     padding: 10px;
     border-bottom: 1px solid #ddd;
 }
+
+.spending-table th,
+.spending-table td {
+    text-align: right;
+}

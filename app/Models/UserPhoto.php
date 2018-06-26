@@ -36,7 +36,9 @@ class UserPhoto extends Model {
             $constraint->upsize();
         });
         $img->save($to);
-        $img->fit( 400, 400 );
+        $img->heighten(400, function ($constraint) {
+            $constraint->upsize();
+        });
         $img->save($to_thumb);
         $this->save();
     }

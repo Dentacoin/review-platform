@@ -20,12 +20,25 @@
 			</h1>
 			{!! Form::open(array('url' => getLangUrl('dentists'), 'method' => 'get', 'class' => 'form-horizontal')) !!}
 				<div class="col-md-3">
+					<div class="location">
+						{{ Form::text( 'username' , null , array('class' => 'form-control user-input', 'autocomplete' => 'off', 'placeholder' =>  trans('front.page.'.$current_page.'.name')) ) }}
+						<div class="location-suggester">
+							<div class="loader">
+								<i class="fa fa fa-circle-o-notch fa-spin fa-2x fa-fw">
+								</i>
+							</div>
+							<div class="results">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
 					{{ Form::select( 'category' , ['' => 'Any dentist'] + $categories , null , array('class' => 'form-control') ) }}
 				</div>
 				<div class="col-md-1" style="text-align: center; line-height: 36px; color: white; font-size: 14px;">
 					{{ trans('front.page.'.$current_page.'.from') }}
 				</div>
-				<div class="col-md-5">
+				<div class="col-md-3">
 					<div class="location">
 						{{ Form::text( 'location' , $placeholder , array('class' => 'form-control location-input', 'autocomplete' => 'off') ) }}
 						{{ Form::hidden( 'country' , $country_id, ['class' => 'country_id']  ) }}
@@ -44,7 +57,7 @@
 						Show dentists from all locations
 					</label>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-2">
                     {{ Form::submit( trans('front.page.index.submit'), ['class' => 'btn btn-primary btn-block'] ) }}
 				</div>
 			{!! Form::close() !!}

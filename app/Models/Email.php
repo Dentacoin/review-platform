@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Models\EmailTemplate;
 use App\Models\User;
 use App\Models\Review;
+use App\Models\Reward;
 use Mail;
 use Session;
 
@@ -36,16 +37,33 @@ class Email extends Model
 
 	public function send() {
 
+		if(!$this->user->email) {
+			return;
+		}
+
 		$title = stripslashes($this->template['title']);
 		$subtitle = stripslashes($this->template['subtitle']);
 		$subject = stripslashes($this->template['subject']);
 		if(empty($subject)) {
 			$subject = $title;
 		}
-		if(empty($subtitle)) {
-			$subtitle = $title;
-		}
 		$content = $this->template['content'];
+
+
+		$vox_tempalates = [
+			11,
+			12,
+			13,
+			14,
+			15,
+			16,
+			25,
+			26,
+			27,
+			30,
+			32,
+		];
+		$platform = $this->template->id==20 ? $this->meta['transaction_platform'] : ( in_array($this->template->id, $vox_tempalates) ? 'vox' : 'reviews' );
 
 		$deafult_searches = array(
 			'[name]',
@@ -61,6 +79,8 @@ class Email extends Model
 			'[/h2]',
 			'[homepage]',
 			'[/homepage]',
+			'[metamask]',
+			'[/metamask]',
 		);
 		$deafult_replaces = array(
 			$this->user->name,
@@ -76,6 +96,8 @@ class Email extends Model
 			'</div>',
 			'<a '.$this->button_style.' href="'.getLangUrl('/').'">',
 			'</a>',
+			'<a href="'.url($platform=='vox' ? 'DentavoxMetamask.pdf' : 'MetaMaskInstructions.pdf').'">',
+			'</a>'
 		);
 
 		$title = str_replace($deafult_searches, $deafult_replaces, $title);
@@ -88,16 +110,7 @@ class Email extends Model
 		$subtitle = $this->addPlaceholders($subtitle);
 		$subject = $this->addPlaceholders($subject);
 
-		$vox_tempalates = [
-			11,
-			12,
-			13,
-			14,
-			15,
-			16,
-		];
 
-		$platform = in_array($this->template->id, $vox_tempalates) ? 'vox' : 'reviews';
 
 		Mail::send('emails.template', [
 				'user' => $this->user,
@@ -125,9 +138,11 @@ class Email extends Model
 
 		if($this->template->id==1 || $this->template->id==2 || $this->template->id==11) { //Verify
 			$content = str_replace(array(
+				'[register_reward]',
 				'[verifylink]',
 				'[/verifylink]',
 			), array(
+				Reward::getReward('reward_register'),
 				'<a '.$this->button_style.' href="'.getLangUrl('verify/'.$this->user->id.'/'.$this->user->get_token()).'">',
 				'</a>',
 			), $content);
@@ -135,9 +150,11 @@ class Email extends Model
 
 		if($this->template->id==3 || $this->template->id==4) { //Reward
 			$content = str_replace(array(
+				'[register_reward]',
 				'[rewardlink]',
 				'[/rewardlink]',
 			), array(
+				Reward::getReward('reward_register'),
 				'<a '.$this->button_style.' href="'.getLangUrl('profile/reward').'">',
 				'</a>',
 			), $content);
@@ -153,7 +170,7 @@ class Email extends Model
 			), $content);
 		}
 
-		if($this->template->id==6 || $this->template->id==8) { //New review & review reply
+		if($this->template->id==6 || $this->template->id==8 || $this->template->id==21) { //New review & review reply
 			$review = Review::find($this->meta['review_id']);
 
 
@@ -172,11 +189,13 @@ class Email extends Model
 			), $content);
 		}
 
-		if($this->template->id==7) { //Invite
+		if($this->template->id==7 || $this->template->id==17 || $this->template->id==25) { //Invite
 			$content = str_replace(array(
+				'[friend_name]',
 				'[invitelink]',
 				'[/invitelink]',
 			), array(
+				$this->meta['friend_name'],
 				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$this->meta['invitation_id']).'">',
 				'</a>',
 			), $content);
@@ -197,6 +216,138 @@ class Email extends Model
 
 		if($this->template->id==15) { //Ban
 			$content = str_replace('[expires]', $this->meta['expires'], $content);
+		}
+
+		if($this->template->id==18 || $this->template->id==19 || $this->template->id==22 || $this->template->id==26 || $this->template->id==27) { //Invitation accepted
+			$content = str_replace(array(
+				'[who_joined_name]',
+			), array(
+				$this->meta['who_joined_name']
+			), $content);
+		}
+
+		if($this->template->id==20) { //Transaction completed
+			$content = str_replace(array(
+				'[transaction_amount]',
+				'[transaction_address]',
+				'[transaction_link]',
+				'[/transaction_link]',
+			), array(
+				$this->meta['transaction_amount'],
+				$this->meta['transaction_address'],
+				'<a href="'.$this->meta['transaction_link'].'" target="_blank">',
+				'</a>',
+			), $content);
+		}
+
+		if($this->template->id==23) { //user asks Dentist
+			$content = str_replace(array(
+				'[patient_name]',
+				'[invitation_link]',
+				'[/invitation_link]',
+			), array(
+				$this->meta['patient_name'],
+				'<a '.$this->button_style.' href="'.getLangUrl('profile/asks').'">',
+				'</a>',				
+			), $content);
+		}
+
+		if($this->template->id==24) { //Dentist approves user request
+			$content = str_replace(array(
+				'[dentist_name]',
+				'[dentist_link]',
+				'[/dentist_link]',
+			), array(
+				$this->meta['dentist_name'],
+				'<a '.$this->button_style.' href="'.$this->meta['dentist_link'].'">',
+				'</a>',
+			), $content);
+		}
+
+		if($this->template->id==28) { //Civic
+			$content = str_replace(array(
+				'[reward]',
+				'[/reward]',
+			), array(
+				'<a '.$this->button_style.' href="'.getLangurl('profile/wallet').'">',
+				'</a>',
+			), $content);
+		}
+
+		if($this->template->id==31 || $this->template->id==32) { //Transaction completed
+			$content = str_replace(array(
+				'[agree]',
+				'[/agree]',
+				'[privacy]',
+				'[/privacy]',
+			), array(
+				'<a '.$this->button_style.' href="http://'.($this->template->id==31 ? 'reviews' : 'dentavox').'.dentacoin.com/en/gdpr" target="_blank">',
+				'</a>',
+				'<a href="https://dentacoin.com/privacy/" target="_blank">',
+				'</a>',
+			), $content);
+		}
+
+
+		if($this->template->id==33) { //Invite Dentist to Join Clinic
+			$content = str_replace(array(
+				'[clinic-name]',
+				'[profile-link]',
+				'[/profile-link]',
+			), array(
+				$this->meta['clinic-name'],
+				'<a '.$this->button_style.' href="'.getLangurl('profile/clinics').'">',
+				'</a>',
+			), $content);
+		}
+
+
+		if($this->template->id==34) { //Dentist Wants to Join Clinic
+			$content = str_replace(array(
+				'[dentist-name]',
+				'[profile-link]',
+				'[/profile-link]',
+			), array(
+				$this->meta['dentist-name'],
+				'<a '.$this->button_style.' href="'.getLangurl('profile/dentists').'">',
+				'</a>',
+			), $content);
+		}
+
+
+		if($this->template->id==35) { //Clinic Accepts Dentist Request
+			$content = str_replace(array(
+				'[clinic-name]',
+			), array(
+				$this->meta['clinic-name'],
+			), $content);
+		}
+
+
+		if($this->template->id==36) { //Clinic Rejects Dentist Request
+			$content = str_replace(array(
+				'[clinic-name]',
+			), array(
+				$this->meta['clinic-name'],
+			), $content);
+		}
+
+
+		if($this->template->id==37) { //Clinic Deletes Dentist Request
+			$content = str_replace(array(
+				'[clinic-name]',
+			), array(
+				$this->meta['clinic-name'],
+			), $content);
+		}
+
+
+		if($this->template->id==38) { //Dentist Leaves Clinic
+			$content = str_replace(array(
+				'[dentist-name]',
+			), array(
+				$this->meta['dentist-name'],
+			), $content);
 		}
 
 		return $content;

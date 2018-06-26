@@ -5,6 +5,12 @@ return [
         'users' => array(
             'icon' => 'users',
         ),
+        'transactions' => array(
+            'icon' => 'bitcoin',
+        ),
+        'spending' => array(
+            'icon' => 'area-chart',
+        ),
         'questions' => array(
             'icon' => 'question-circle',
             'js' => array(
@@ -28,16 +34,21 @@ return [
             'subpages' => array(
                 'list' => 'list',
                 'add' => 'add',
+                'categories' => 'categories',
+                'scales' => 'scales',
                 'ideas' => 'ideas',
             ),
             'js' => array(
                 'vox.js'
             ),
         ),
-        /*
         'rewards' => array(
             'icon' => 'bitcoin',
         ),
+        'youtube' => array(
+            'icon' => 'film',
+        ),
+        /*
         'secrets' => array(
             'icon' => 'key',
         ),
@@ -56,6 +67,9 @@ return [
                 'vox' => 'vox',
                 'validation' => 'validation',
             )
+        ),
+        'registrations' => array(
+            'icon' => 'plus-circle',
         ),
     )
 ];

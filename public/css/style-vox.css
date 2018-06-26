@@ -4,7 +4,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   border: 0;
   vertical-align: baseline;
   line-height: normal;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Nunito', sans-serif;
   color: black; }
 
 /* HTML5 display-role reset for older browsers */
@@ -82,6 +82,11 @@ b {
 .inline-block {
   display: inline-block; }
 
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 20px; }
+
 header {
   height: 90px;
   border-bottom: 3px solid #e6e6e6; }
@@ -89,7 +94,7 @@ header {
     header {
       height: 70px; } }
   header .navbar .logo {
-    width: 20%;
+    width: 30%;
     display: block;
     float: left;
     padding-top: 12px;
@@ -100,44 +105,56 @@ header {
         header .navbar .logo img {
           height: 40px; } }
   header .navbar .header-title {
-    width: 60%;
+    width: 40%;
     float: left;
     text-align: center;
-    line-height: 85px;
-    font-weight: bold;
-    font-size: 30px; }
+    font-size: 18px; }
     @media screen and (max-width: 768px) {
       header .navbar .header-title {
         display: none; } }
-    header .navbar .header-title img {
-      width: 130px; }
+    header .navbar .header-title a {
+      width: 130px;
+      margin: 15px auto;
+      display: block; }
+      header .navbar .header-title a img {
+        width: 100%; }
+    header .navbar .header-title span {
+      color: #bfbfbf; }
   header .navbar .sign-in {
-    width: 20%;
+    width: 230px;
     float: right;
     display: block;
     text-align: center;
-    line-height: 85px;
+    line-height: 38px;
     font-weight: bold;
     font-size: 20px;
     color: black;
-    transition: all 0.3s ease; }
+    transition: all 0.3s ease;
+    margin-bottom: 10px; }
+    @media screen and (max-width: 1200px) {
+      header .navbar .sign-in {
+        width: 186px; } }
+    @media screen and (max-width: 992px) {
+      header .navbar .sign-in {
+        width: 146px; } }
     @media screen and (max-width: 768px) {
       header .navbar .sign-in {
-        line-height: 65px;
+        line-height: 35px;
         width: 100px;
-        text-align: right; } }
+        text-align: right;
+        margin-bottom: 0px; } }
     header .navbar .sign-in:hover {
       color: #4d86a4;
       transition: all 0.3s ease; }
   header .navbar .header-right {
     float: right;
-    width: 20%;
+    width: 30%;
     text-align: right;
-    margin-top: 20px; }
+    margin-top: 10px; }
     @media screen and (max-width: 768px) {
       header .navbar .header-right {
-        width: 30%;
-        margin-top: 10px; } }
+        width: 70%;
+        margin-top: 5px; } }
     header .navbar .header-right .header-a {
       color: black;
       transition: all 0.3s ease; }
@@ -156,8 +173,16 @@ header {
         color: black;
         transition: all 0.3s ease; }
     header .navbar .header-right p {
-      margin-top: 5px; }
+      font-size: 14px;
+      margin-top: 7px;
+      clear: both; }
+      @media screen and (max-width: 768px) {
+        header .navbar .header-right p {
+          margin-top: 2px; } }
+      header .navbar .header-right p span {
+        font-size: 14px; }
       header .navbar .header-right p a {
+        font-size: 14px;
         color: #5c5c5c;
         transition: all 0.3s ease; }
         header .navbar .header-right p a:hover {
@@ -169,7 +194,8 @@ header {
   padding-top: 38%;
   background-size: cover;
   background-position: 50%;
-  position: relative; }
+  position: relative;
+  overflow: hidden; }
   .full .first-absolute {
     font-size: 30px;
     color: #333333;
@@ -313,51 +339,112 @@ header {
     border-width: 26px 15px 0 15px;
     border-color: #bdbdbd transparent transparent transparent; }
   .questions .questions-header {
-    margin-bottom: 110px; }
-    @media screen and (max-width: 992px) {
-      .questions .questions-header {
-        margin-bottom: 50px; } }
+    margin-bottom: 20px; }
     @media screen and (max-width: 768px) {
       .questions .questions-header .col-md-6 {
         text-align: center; } }
     .questions .questions-header .col-md-6 span {
-      font-size: 25px;
+      font-size: 18px;
       color: #5c5c5c; }
+  .questions .question-group {
+    text-align: center; }
   .questions .question {
     width: 819px;
     margin: 0 auto;
-    font-size: 18px;
     font-weight: bold;
-    text-align: center; }
+    text-align: center;
+    font-size: 18px; }
     @media screen and (max-width: 992px) {
       .questions .question {
         width: 100%; } }
   .questions .answers {
-    margin-top: 29px; }
-    .questions .answers .answer {
+    margin: 20px auto 0 auto;
+    display: inline-block;
+    position: relative; }
+    .questions .answers .loader {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.3);
+      text-align: center; }
+      .questions .answers .loader i {
+        position: absolute;
+        top: 50%;
+        color: white;
+        margin-left: -21px;
+        margin-top: -21px; }
+    .questions .answers select {
       display: block;
       width: 309px;
-      padding: 5px;
+      margin: 1px auto;
+      border: 1px solid #767676;
+      border-radius: 10px;
+      font-weight: normal;
+      color: #343434; }
+      @media screen and (max-width: 768px) {
+        .questions .answers select {
+          width: 100%; } }
+    .questions .answers .answer-radios-group {
+      text-align: left; }
+    .questions .answers .answer-radio,
+    .questions .answers .answer-checkbox,
+    .questions .answers .answer {
+      display: block;
+      padding: 5px 20px;
       margin: 1px auto;
       border: 1px solid #767676;
       text-align: center;
       border-radius: 10px;
-      font-size: 20px;
+      font-size: 16px;
       font-weight: normal;
-      color: #343434; }
-      @media screen and (max-width: 768px) {
-        .questions .answers .answer {
-          width: 100%; } }
+      color: #343434;
+      cursor: pointer; }
+      .questions .answers .answer-radio.active-label, .questions .answers .answer-radio:hover,
+      .questions .answers .answer-checkbox.active-label,
+      .questions .answers .answer-checkbox:hover,
+      .questions .answers .answer.active-label,
       .questions .answers .answer:hover {
-        width: 389px;
-        padding: 5px 45px;
         background-color: #5a99ba;
         color: white;
         border-color: #5a99ba; }
-        @media screen and (max-width: 768px) {
-          .questions .answers .answer:hover {
-            width: 100%;
-            padding: 5px; } }
+    .questions .answers .answer-radio,
+    .questions .answers .answer-checkbox {
+      text-align: left; }
+      .questions .answers .answer-radio input.answer,
+      .questions .answers .answer-checkbox input.answer {
+        display: inline-block;
+        width: auto;
+        vertical-align: baseline; }
+    .questions .answers .answer-radio {
+      width: auto;
+      display: inline-block;
+      margin-bottom: 10px;
+      margin-right: 10px; }
+      .questions .answers .answer-radio:hover {
+        width: auto; }
+    .questions .answers h3 {
+      margin-bottom: 10px;
+      margin-top: 20px;
+      font-style: italic;
+      text-align: left; }
+  .questions .next-answer {
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+    background-color: #5a99ba;
+    padding: 5px 0px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    border: 2px solid #5a99ba;
+    border-radius: 10px;
+    font-size: 20px;
+    margin-top: 40px; }
+    .questions .next-answer:hover {
+      background-color: white;
+      color: #5a99ba; }
   .questions .hint {
     width: 331px;
     margin: 40px auto 0px auto;
@@ -375,22 +462,13 @@ header {
     .main-title {
       padding: 20px; } }
   .main-title .title {
-    width: 450px;
     margin: 0 auto;
     text-align: center; }
-    @media screen and (max-width: 768px) {
-      .main-title .title {
-        width: 100%; } }
 
 .another-questions {
   padding-top: 130px;
   padding-bottom: 200px;
   text-align: center; }
-  @media screen and (max-width: 992px) {
-    .another-questions {
-      display: none;
-      padding-top: 20px;
-      padding-bottom: 20px; } }
   .another-questions .gray-border {
     width: 270px;
     height: 3px;
@@ -568,7 +646,7 @@ header {
         font-size: 50px;
         right: 10px; } }
   .modal-body .popup-title {
-    font-size: 53px;
+    font-size: 60px;
     font-weight: bold;
     margin-bottom: 10px; }
     @media screen and (max-width: 768px) {
@@ -577,12 +655,12 @@ header {
         font-size: 42px;
         margin-bottom: 20px; } }
   .modal-body .popup-second-title {
-    font-size: 32px;
+    font-size: 30px;
     color: #575757; }
   .modal-body .price {
     margin-top: 15px; }
     .modal-body .price .coins {
-      font-size: 30px;
+      font-size: 20px;
       font-weight: bold;
       text-transform: uppercase;
       vertical-align: top;
@@ -592,19 +670,20 @@ header {
       color: #575757; }
   .modal-body .popup-third-title {
     margin-top: 50px;
-    font-size: 32px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: normal;
     color: #575757; }
     @media screen and (max-width: 768px) {
       .modal-body .popup-third-title {
-        margin-top: 20px; } }
+        margin-top: 20px;
+        font-size: 17px; } }
   .modal-body .popup-buttons {
     margin: 40px 0px; }
     .modal-body .popup-buttons .popup-button {
-      font-size: 40px;
+      font-size: 24px;
       font-weight: bold;
       padding: 5px 40px;
-      border-radius: 15px;
+      border-radius: 6px;
       background-color: #4d86a4;
       color: white;
       display: inline-block;
@@ -612,17 +691,31 @@ header {
       transition: all 0.3s ease; }
       @media screen and (max-width: 768px) {
         .modal-body .popup-buttons .popup-button {
-          font-size: 30px;
+          font-size: 20px;
           margin-right: 0px; } }
+      .modal-body .popup-buttons .popup-button:nth-child(1) {
+        background-color: white;
+        color: #b7b7b7;
+        border: 2px solid #b7b7b7;
+        padding: 5px 50px;
+        margin-right: 0px;
+        margin-left: 0px; }
+        .modal-body .popup-buttons .popup-button:nth-child(1):hover {
+          background-color: #59a5cd;
+          color: white;
+          border: 2px solid  #59a5cd;
+          transition: all 0.3s ease; }
       .modal-body .popup-buttons .popup-button:nth-child(2) {
         margin-right: 0px;
-        margin-left: 25px; }
+        margin-left: 0px;
+        border: 2px solid #4d86a4; }
         @media screen and (max-width: 768px) {
           .modal-body .popup-buttons .popup-button:nth-child(2) {
             margin-top: 10px;
             margin-left: 0px; } }
       .modal-body .popup-buttons .popup-button:hover {
         background-color: #59a5cd;
+        border-color: #59a5cd;
         transition: all 0.3s ease; }
   .modal-body .sign-title {
     font-size: 50px;
@@ -726,10 +819,6 @@ header {
       color: #4d86a4;
       transition: all 0.3s ease; }
 
-@media screen and (max-width: 992px) {
-  .page-index .another-questions {
-    display: block; } }
-
 .page-questions .questions-back {
   margin-top: 10px;
   margin-bottom: 70px;
@@ -749,7 +838,7 @@ header {
   margin-bottom: 35px;
   margin-top: 5px; }
 .page-questions .questions-dots {
-  margin-bottom: 50px; }
+  margin-bottom: 10px; }
 
 .page-questions-done {
   margin-bottom: 200px; }
@@ -799,28 +888,28 @@ header {
     .page-questions-done .button-wallet:hover {
       background-color: #5b9fc2;
       transition: all 0.3s ease; }
+  .page-questions-done input[type="text"] {
+    margin-top: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: center; }
+  .page-questions-done i {
+    color: white;
+    margin-right: 5px; }
 
 .page-statistics {
   margin-top: 170px;
   margin-bottom: 200px; }
-  .page-statistics #mobile-questions {
-    display: none;
-    height: 310px; }
+  .page-statistics .questions-list {
+    float: left; }
     @media screen and (max-width: 992px) {
-      .page-statistics #mobile-questions {
-        display: block; } }
-    .page-statistics #mobile-questions .response {
-      margin-bottom: 10px; }
-    .page-statistics #mobile-questions .another-question {
-      width: 340px; }
-      @media screen and (max-width: 500px) {
-        .page-statistics #mobile-questions .another-question {
-          width: 100%;
-          box-shadow: none;
-          transform: none;
-          margin-right: 0px; } }
-      .page-statistics #mobile-questions .another-question .question-description {
-        display: none; }
+      .page-statistics .questions-list {
+        float: none; } }
+  .page-statistics .stats-col {
+    float: right; }
+    @media screen and (max-width: 992px) {
+      .page-statistics .stats-col {
+        float: none; } }
   @media screen and (max-width: 992px) {
     .page-statistics {
       margin-top: 70px;
@@ -848,6 +937,29 @@ header {
     color: #5a99ba;
     text-align: center;
     margin-bottom: 10px; }
+  .page-statistics .list-group .list-group-item {
+    text-align: left; }
+    .page-statistics .list-group .list-group-item.selected {
+      background: white;
+      font-weight: bold; }
+      .page-statistics .list-group .list-group-item.selected a {
+        color: #5b9fc2; }
+  .page-statistics .panel-default > .panel-heading .panel-title {
+    text-align: left;
+    font-size: 16px; }
+    .page-statistics .panel-default > .panel-heading .panel-title i {
+      color: white;
+      margin-left: 0px; }
+    .page-statistics .panel-default > .panel-heading .panel-title a {
+      display: block;
+      line-height: 23px; }
+      .page-statistics .panel-default > .panel-heading .panel-title a span {
+        font-size: 16px;
+        line-height: 23px;
+        float: right;
+        color: white; }
+        .page-statistics .panel-default > .panel-heading .panel-title a span i {
+          margin-left: 10px; }
   @media screen and (max-width: 768px) {
     .page-statistics .form-group {
       display: inline-block; } }
@@ -879,9 +991,11 @@ header {
       transition: all 0.3s ease; }
   .page-statistics .response {
     margin-bottom: 50px; }
+    .page-statistics .response .clearfix:first-child {
+      margin-bottom: 10px;
+      border-bottom: 2px solid #5a99ba; }
     .page-statistics .response p {
       font-size: 20px;
-      font-weight: bold;
       margin-bottom: 10px; }
     .page-statistics .response .previous,
     .page-statistics .response .next {
@@ -944,12 +1058,36 @@ header {
         display: block; } }
   .page-statistics .another-questions {
     padding: 0px; }
-    .page-statistics .another-questions .gray-border {
-      margin-bottom: 20px; }
 
 .page-profile .questions-wrapper {
   height: initial;
   overflow: initial; }
+.page-profile .panel-default .panel-body p {
+  line-height: 20px; }
+  .page-profile .panel-default .panel-body p a.text {
+    color: #216a94; }
+    .page-profile .panel-default .panel-body p a.text:hover {
+      text-decoration: underline !important; }
+.page-profile .panel-default .panel-body label.btn-primary {
+  color: white; }
+.page-profile .panel-default .panel-body label.multiple:not(.btn-primary):hover {
+  color: #636b6f;
+  background-color: #d4d4d4;
+  border-color: #8c8c8c; }
+.page-profile .btn-primary i {
+  color: white; }
+.page-profile #contacts-results-list {
+  max-height: 100vh;
+  overflow-y: auto; }
+  .page-profile #contacts-results-list label {
+    line-height: 36px;
+    padding: 0px 10px;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 10px; }
+    .page-profile #contacts-results-list label:hover {
+      background: #f5f5f5; }
 
 .panel-default {
   border-top-right-radius: 10px;
@@ -972,6 +1110,8 @@ header {
     @media screen and (max-width: 768px) {
       .panel-default .panel-body {
         padding: 20px; } }
+    .panel-default .panel-body button[type="submit"] i {
+      color: white; }
     .panel-default .panel-body .alert {
       margin-top: 22px;
       margin-bottom: 0px; }
@@ -997,8 +1137,8 @@ header {
         .panel-default .panel-body input[name="idea"] {
           width: 100%; } }
     .panel-default .panel-body .show-questions,
+    .panel-default .panel-body a.btn,
     .panel-default .panel-body button[type="submit"] {
-      display: block;
       text-align: center;
       background-color: #5b9fc2;
       background-image: none;
@@ -1010,12 +1150,20 @@ header {
       height: 44px;
       font-weight: bold;
       font-size: 23px;
-      transition: all 0.3s ease; }
+      transition: all 0.3s ease;
+      display: inline-block;
+      width: auto;
+      padding-left: 40px;
+      padding-right: 40px;
+      margin-left: auto;
+      margin-right: auto; }
       @media screen and (max-width: 768px) {
         .panel-default .panel-body .show-questions,
+        .panel-default .panel-body a.btn,
         .panel-default .panel-body button[type="submit"] {
           font-size: 16px; } }
       .panel-default .panel-body .show-questions:hover,
+      .panel-default .panel-body a.btn:hover,
       .panel-default .panel-body button[type="submit"]:hover {
         background-color: #6bb6dc;
         transition: all 0.3s ease; }
@@ -1038,41 +1186,6 @@ header {
           .panel-default .panel-body .price span {
             font-size: 21px;
             vertical-align: bottom; } }
-
-.hosizontal-scroll .another-questions {
-  margin: 0px 0px 20px 0px;
-  padding: 0px;
-  height: auto; }
-  @media screen and (max-width: 992px) {
-    .hosizontal-scroll .another-questions {
-      display: block; } }
-  .hosizontal-scroll .another-questions .questions-wrapper {
-    height: auto;
-    overflow: auto; }
-    .hosizontal-scroll .another-questions .questions-wrapper .carousel {
-      height: auto; }
-      .hosizontal-scroll .another-questions .questions-wrapper .carousel .another-question {
-        width: 360px;
-        margin-right: 15px;
-        margin-bottom: 20px;
-        padding: 15px;
-        transform: translateX(10px) translateY(10px); }
-        @media screen and (max-width: 500px) {
-          .hosizontal-scroll .another-questions .questions-wrapper .carousel .another-question {
-            width: 100%;
-            box-shadow: none;
-            transform: none;
-            margin-right: 0px; } }
-        .hosizontal-scroll .another-questions .questions-wrapper .carousel .another-question h4 {
-          margin: 30px 0px; }
-        .hosizontal-scroll .another-questions .questions-wrapper .carousel .another-question .another-question-content {
-          display: block; }
-      .hosizontal-scroll .another-questions .questions-wrapper .carousel .another-question.active .another-question-content {
-        display: block; }
-        .hosizontal-scroll .another-questions .questions-wrapper .carousel .another-question.active .another-question-content .statistics {
-          background-color: #4d86a4; }
-      .hosizontal-scroll .another-questions .questions-wrapper .carousel .flickity-page-dots {
-        display: none; }
 
 .panel-default.personal-panel label {
   text-align: right;
@@ -1138,7 +1251,7 @@ footer {
     width: 70%;
     text-align: center;
     font-size: 13px;
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 35px; }
     @media screen and (max-width: 992px) {
       footer .footer-text {
@@ -1206,3 +1319,263 @@ footer {
     right: 20px; }
   .flickity-prev-next-button.previous {
     left: 20px; }
+
+@media (max-width: 768px) {
+  .table > thead {
+    display: none; } }
+
+@media (max-width: 768px) {
+  .table > tbody > tr {
+    border-top: 1px solid #ddd; } }
+
+@media (max-width: 768px) {
+  .table > tbody > tr > td {
+    display: block;
+    border: none; } }
+
+.civic-download {
+  height: 50px;
+  width: 168px;
+  display: inline-block;
+  margin: 0px 10px;
+  background: url("../img-vox/download-android.png") 50% 50% no-repeat;
+  opacity: 0.9;
+  background-size: contain; }
+  .civic-download:hover {
+    opacity: 1; }
+  .civic-download.civic-ios {
+    background-image: url("../img-vox/download-itunes.png"); }
+
+.civic-button-a {
+  background: #3aaf46;
+  line-height: 40px;
+  border-radius: 20px;
+  padding: 0px 20px;
+  outline: none;
+  box-shadow: none; }
+
+.fb-button-inside {
+  display: inline-block;
+  position: relative;
+  margin-top: 20px; }
+  .fb-button-inside a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 123; }
+
+.page-index .tutorial {
+  text-align: center; }
+  .page-index .tutorial h1 {
+    margin: 50px 0px 20px 0px;
+    font-weight: bold; }
+  .page-index .tutorial h2 {
+    margin: 0px 0px 50px 0px;
+    font-weight: bold; }
+  .page-index .tutorial p {
+    margin: 20px 0px; }
+  .page-index .tutorial b {
+    display: block; }
+  .page-index .tutorial .active-btn {
+    margin-top: 30px; }
+
+.new-popup {
+  display: none;
+  opacity: 0;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.25);
+  transition: all 0.5s ease; }
+  .new-popup .new-popup-wrapper {
+    text-align: center;
+    z-index: 200;
+    opacity: 0;
+    background: white;
+    padding: 50px 30px;
+    border: 2px solid #b7b7b7;
+    border-radius: 3px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-80%) translateX(-50%);
+    transition: all 0.5s ease;
+    max-width: 100%; }
+    @media screen and (max-width: 768px) {
+      .new-popup .new-popup-wrapper {
+        transform: translateY(-80%) translateX(0%);
+        padding: 20px 20px;
+        left: 10px;
+        right: 10px; } }
+    .new-popup .new-popup-wrapper .step img {
+      margin: 0px auto 45px auto; }
+      @media screen and (max-width: 768px) {
+        .new-popup .new-popup-wrapper .step img {
+          max-width: 120px; } }
+    .new-popup .new-popup-wrapper .step h2 {
+      font-size: 35px;
+      font-weight: bold;
+      color: #353535;
+      margin: 0px auto 25px auto; }
+      .new-popup .new-popup-wrapper .step h2 span {
+        font-size: inherit;
+        font-weight: inherit;
+        color: inherit; }
+    .new-popup .new-popup-wrapper .step p {
+      font-size: 17px;
+      color: #575757;
+      margin-bottom: 65px; }
+    .new-popup .new-popup-wrapper .closer {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      color: black;
+      z-index: 300;
+      font-size: 20px;
+      cursor: pointer; }
+  .new-popup.active {
+    opacity: 1;
+    display: block; }
+    .new-popup.active .new-popup-wrapper {
+      opacity: 1;
+      transform: translateY(-50%) translateX(-50%); }
+      @media screen and (max-width: 768px) {
+        .new-popup.active .new-popup-wrapper {
+          transform: translateY(-50%) translateX(0%); } }
+
+.active-btn {
+  display: block;
+  text-align: center;
+  background-color: #5b9fc2;
+  background-image: none;
+  color: white;
+  text-shadow: none;
+  border-radius: 10px;
+  border: none;
+  height: 44px;
+  line-height: 44px;
+  font-weight: bold;
+  font-size: 23px;
+  transition: all 0.3s ease;
+  max-width: 400px;
+  margin: 0 auto;
+  cursor: pointer; }
+  @media screen and (max-width: 768px) {
+    .active-btn {
+      font-size: 16px; } }
+  .active-btn:hover {
+    color: white;
+    background-color: #6bb6dc;
+    transition: all 0.3s ease; }
+
+.category-title {
+  margin-bottom: 10px; }
+
+#gdprPopupVox {
+  background-color: #00000096; }
+  @media screen and (max-width: 768px) {
+    #gdprPopupVox {
+      overflow-y: scroll; } }
+  #gdprPopupVox.active {
+    display: block; }
+  #gdprPopupVox .modal-dialog {
+    width: 570px; }
+    @media screen and (max-width: 768px) {
+      #gdprPopupVox .modal-dialog {
+        width: 100%; } }
+    #gdprPopupVox .modal-dialog img {
+      width: 100px; }
+    #gdprPopupVox .modal-dialog h2 {
+      font-weight: bold;
+      font-family: 'Open-sans', sans-serif;
+      text-transform: uppercase;
+      margin-top: 30px;
+      margin-bottom: 30px; }
+    #gdprPopupVox .modal-dialog p {
+      font-size: 14px;
+      text-align: center;
+      font-family: 'Open-sans', sans-serif;
+      color: #575757; }
+      #gdprPopupVox .modal-dialog p a {
+        font-size: 14px;
+        font-weight: bold;
+        font-family: 'Open-sans', sans-serif;
+        color: #487b95; }
+    #gdprPopupVox .modal-dialog .agree-gdpr {
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-family: 'Open-sans', sans-serif;
+      background-color: #5a99ba;
+      border: 2px solid #5a99ba;
+      color: white;
+      padding: 10px 60px;
+      display: inline-block;
+      clear: both;
+      margin-top: 20px;
+      border-radius: 5px; }
+      @media screen and (max-width: 768px) {
+        #gdprPopupVox .modal-dialog .agree-gdpr {
+          padding: 8px 20px;
+          margin-bottom: 20px; } }
+      #gdprPopupVox .modal-dialog .agree-gdpr:hover {
+        background-color: white;
+        color: #5a99ba;
+        text-decoration: none; }
+
+.reg-privacy {
+  margin-top: 30px; }
+  .reg-privacy a {
+    color: #216a94; }
+
+.page-page .page-image {
+  width: 100%;
+  height: auto; }
+.page-page h1 {
+  text-align: center;
+  margin-bottom: 30px; }
+.page-page .p-small {
+  padding-top: 20px;
+  padding-bottom: 20px; }
+.page-page .p-medium {
+  padding-top: 40px;
+  padding-bottom: 40px; }
+.page-page .p-big {
+  padding-top: 80px;
+  padding-bottom: 80px; }
+.page-page .p-huge {
+  padding-top: 160px;
+  padding-bottom: 160px; }
+.page-page ul {
+  display: block;
+  list-style-type: disc;
+  -webkit-margin-after: 1em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  -webkit-padding-start: 40px; }
+
+.alert-update {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin-bottom: 0px; }
+
+.modal .modal-dialog {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateY(-25%) translateX(-50%);
+  bottom: 20px; }
+.modal.fade .modal-dialog {
+  transform: translateY(-25%) translateX(-50%); }
+.modal.active .modal-dialog, .modal.in .modal-dialog {
+  transform: translateY(0%) translateX(-50%); }
+
+.modal-content {
+  max-height: 100%;
+  overflow: auto; }

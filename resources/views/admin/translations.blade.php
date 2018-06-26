@@ -110,7 +110,7 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.import', ['lang' => $langs[$source]['name'] ]) }}</label>
                         <div class="col-md-9">
-                            <input type="file" name="table" accept=".xls" />
+                            <input type="file" name="table" accept=".xls, .xlsx" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -135,6 +135,13 @@
                 <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.list') }}</h4>
             </div>
             <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="text" name="search-translations" id="search-translations" class="form-control" placeholder="{{ trans('admin.page.'.$current_page.'.search') }}">
+                    </div>
+                    <br/>
+                    <br/>
+                </div>
                 <form class="form-horizontal" id="translations-save" method="post"  action="{{ url('cms/'.$current_page.'/'.$current_subpage.'/update') }}">
                     {!! csrf_field() !!}
                     <input type="hidden" name="target" value="{{ $target }}" />

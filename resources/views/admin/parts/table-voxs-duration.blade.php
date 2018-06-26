@@ -1,5 +1,1 @@
-@if($item->duration>60)
-	{{ ceil($item/60) }}h
-@endif
-
-{{ $item%60 }}min
+~{{ ceil($item->questions()->count()/6) }}min

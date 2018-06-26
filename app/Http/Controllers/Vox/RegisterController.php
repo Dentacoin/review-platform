@@ -57,7 +57,7 @@ class RegisterController extends FrontController
 
             $captcha = false;
             $cpost = [
-                'secret' => '6LdmpjQUAAAAAF_3NBc2XtM_VdKp0g0BNsaeWFD3',
+                'secret' => env('CAPTCHA_SECRET'),
                 'response' => Request::input('g-recaptcha-response'),
                 'remoteip' => Request::ip()
             ];
@@ -107,6 +107,58 @@ class RegisterController extends FrontController
                 'success' => true,
                 'url' => getLangUrl('/'),
             ] );
+        }
+    }
+
+
+    public function invite_accept($locale=null, $id, $hash, $inv_id=null) {
+
+        $user = User::find($id);
+
+        if (!empty($user)) {
+
+            if ($hash == $user->get_invite_token()) {
+
+                if($this->user) {
+                    if($this->user->id==$user->id) {
+                        Request::session()->flash('success-message', trans('vox.page.registration.invite-yourself'));
+                    } else {
+                        if(!$this->user->wasInvitedBy($user->id)) {
+                            $inv = UserInvite::find($inv_id);
+                            if(empty($inv)) {
+                                $inv = UserInvite::where('user_id', $user->id)->where('invited_email', 'LIKE', $this->user->email)->first();
+                            }
+                            if(empty($inv)) {
+                                $inv = new UserInvite;
+                                $inv->user_id = $user->id;
+                            }
+                            $inv->invited_name = $this->user->name;
+                            $inv->invited_email = $this->user->email;
+                            $inv->invited_id = $this->user->id;
+                            $inv->save();
+                        }
+                        Request::session()->flash('success-message', trans('vox.page.registration.invitation-registered', [ 'name' => $user->name ]));
+                    }
+                    return redirect( getLangUrl('/') );
+                } else {
+                    $sess = [
+                        'invited_by' => $user->id,
+                    ];
+                    $inv = UserInvite::find($inv_id);
+                    if(!empty($inv)) {
+                        $sess['invitation_name'] = $inv->invited_name;
+                        $sess['invitation_email'] = $inv->invited_email;
+                        $sess['invitation_id'] = $inv->id;
+                    }
+                    session($sess);
+
+                    Request::session()->flash('success-message', trans('vox.page.registration.invitation', [ 'name' => $user->name ]));
+                    return redirect( getLangUrl('/').'#register' ); 
+                }
+
+            }
+        } else {
+            return redirect('/');
         }
     }
 

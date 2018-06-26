@@ -3,12 +3,34 @@
 namespace App\Http\Controllers;
 use Illuminate\Routing\Controller as BaseController;
 use App\Models\Country;
+use App\Models\User;
+use App\Models\UserTeam;
 use App\Models\City;
+use App\Models\VoxAnswer;
+use App\Models\Wait;
 use Response;
 use Request;
+use Validator;
 
 class CitiesController extends BaseController
 {
+
+	public function getUsername() {
+
+		$username = trim(Request::input('username'));
+		$users = User::where('is_dentist', true)->where('name', 'LIKE', '%'.$username.'%')->take(10)->get();
+		$user_list = [];
+		foreach ($users as $user) {
+			$user_list[] = [
+				'name' => $user->getName(),
+				'link' => $user->getLink(),
+				'type' => $user->is_clinic ? trans('front.common.clinic') : trans('front.common.dentist'),
+				'is_clinic' => $user->is_clinic
+			];
+		}
+
+		return Response::json($user_list);
+	}
 
 	public function getCities($id, $empty=false) {
 
@@ -80,6 +102,84 @@ class CitiesController extends BaseController
 
     	return Response::json($ret);
 
+	}
+
+	public function getQuestions() {
+        $dcn_price = file_get_contents('/tmp/dcn_price');
+        $dcn_change = file_get_contents('/tmp/dcn_change');
+
+		$ret = [
+			'question_count' => number_format(VoxAnswer::count(), 0, '', ' '),
+			'dcn_price' => sprintf('%.4F', $dcn_price),
+			'dcn_price_full' => sprintf('%.10F', $dcn_price),
+			'dcn_change' => $dcn_change,
+		];
+    	return Response::json($ret);
+	}
+
+
+	public function wait() {
+        $ret = [
+        	'success' => false
+        ];
+
+
+        $validator_arr = [
+            'email' => ['required', 'email'],
+            'name' => ['required']
+        ];
+        $validator = Validator::make(Request::all(), $validator_arr);
+
+        if ($validator->fails()) {
+            $msg = $validator->getMessageBag()->toArray();
+            $ret['messages'] = [];
+            foreach ($msg as $key => $value) {
+            	$ret['messages'][] = implode(', ', $value);
+            }
+        } else {
+        	$wait = new Wait;
+        	$wait->email = Request::input('email');
+        	$wait->name = Request::input('name');
+        	$wait->save();
+        	$ret['success'] = true;
+        }
+
+        return Response::json($ret);
+	}
+
+	public function getClinic() {
+
+		$joinclinic = trim(Request::input('joinclinic'));
+		$clinics = User::where('is_clinic', true)->where('name', 'LIKE', $joinclinic.'%')->take(10)->get();
+		$clinic_list = [];
+		foreach ($clinics as $clinic) {
+			$clinic_list[] = [
+				'name' => $clinic->getName(),
+				'id' => $clinic->id,
+			];
+		}
+
+		return Response::json($clinic_list);
+	}
+
+	public function getDentist() {
+
+		$invitedentist = trim(Request::input('invitedentist'));
+
+		$dentists = User::where(function($query) use ($invitedentist) {
+			$query->where('is_clinic', '=', 0 )
+			->orWhereNull('is_clinic');
+		})->where('is_dentist', true)->doesntHave('my_workplace')->where('name', 'LIKE', $invitedentist.'%')->take(10)->get();
+
+		$dentist_list = [];
+		foreach ($dentists as $dentist) {
+			$dentist_list[] = [
+				'name' => $dentist->getName(),
+				'id' => $dentist->id,
+			];
+		}
+
+		return Response::json($dentist_list);
 	}
 
 }
