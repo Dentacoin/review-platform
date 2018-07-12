@@ -93,12 +93,12 @@ class FrontController extends BaseController
             }
 
 
-            if($this->user) {
-                $details_vox = Vox::where('type', 'user_details')->first();
-                if( !empty($this->admin) && !empty($details_vox) && !$this->user->madeTest(  $details_vox->id ) && $request->fullUrl() != getLangUrl('questionnaire/'.$details_vox->id) ) {
-                    $this->welcome_test = getLangUrl('questionnaire/'.$details_vox->id);
-                }
-            }
+            // if($this->user) {
+            //     $details_vox = Vox::where('type', 'user_details')->first();
+            //     if( !empty($this->admin) && !empty($details_vox) && !$this->user->madeTest(  $details_vox->id ) && $request->fullUrl() != getLangUrl('questionnaire/'.$details_vox->id) ) {
+            //         $this->welcome_test = getLangUrl('questionnaire/'.$details_vox->id);
+            //     }
+            // }
 
 
             $request->attributes->add([
@@ -127,7 +127,7 @@ class FrontController extends BaseController
             'f' => trans('vox.common.gender.f'),
         ];
         $params['years'] = range( date('Y'), date('Y')-90 );
-        $params['header_questions'] = VoxAnswer::count();
+        $params['header_questions'] = VoxAnswer::getCount();
         //dd($params['header_questions']);
 
         $params['cache_version'] = '20180615-2';
@@ -145,7 +145,7 @@ class FrontController extends BaseController
     public function ShowView($page, $params=array()) {
         $this->PrepareViewData($page, $params, 'front');
 
-        $params['cache_version'] = '20180607';
+        $params['cache_version'] = '20180710';
         // "2018-05-05 00:00:00.000000"
         
         return view('front.'.$page, $params);

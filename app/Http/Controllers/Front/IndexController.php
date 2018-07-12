@@ -24,7 +24,7 @@ class IndexController extends FrontController
 
 		return $this->ShowView('index', array(
 			'placeholder' => $placeholder,
-			'users_count' => User::count(),
+			'users_count' => User::getCount('trp'),
 			'dentist_count' => User::where('is_dentist', 1)->count(),
         ));	
 	}

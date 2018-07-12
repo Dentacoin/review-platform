@@ -24,6 +24,16 @@ class VoxAnswer extends Model {
         'updated_at',
         'deleted_at'
     ];
+
+    public static function getCount() {
+        $fn = storage_path('vox_count');
+        $t = file_exists($fn) ? filemtime($fn) : null;
+        if(!$t || $t < time()-300) {
+            $cnt = self::count();
+            file_put_contents($fn, $cnt);
+        }
+        return file_get_contents($fn);
+    }
     
 }
 

@@ -22,16 +22,6 @@ use App\Models\VoxCategory;
 class StatsController extends FrontController
 {
 	public function home($locale=null, $id=null, $question_id=null) {
-
-        if ($_SERVER['SERVER_NAME'] == 'dentavox.dentacoin.com') {
-            if ($_SERVER['REMOTE_ADDR'] != '85.187.122.160') {
-                echo '<h1>DentaVox is currently down for maintenance. </h1>
-                    <h2>Your favorite website for paid surveys will be back up shortly! Thank you for your patience!</h2>
-                ';
-
-                exit;
-            }
-        }
         
 		$vox = Vox::find($id);
 		if(empty($vox)) {

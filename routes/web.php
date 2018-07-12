@@ -19,8 +19,8 @@ Route::get('cities/{id}/{empty?}', 					'CitiesController@getCities');
 Route::post('location', 							'CitiesController@getLocation');
 Route::post('user-name', 							'CitiesController@getUsername');
 Route::get('question-count', 						'CitiesController@getQuestions');
-Route::any('suggest-clinic', 						'CitiesController@getClinic');
-Route::any('suggest-dentist', 						'CitiesController@getDentist');
+Route::any('suggest-clinic/{id}', 					'CitiesController@getClinic');
+Route::any('suggest-dentist/{id}', 					'CitiesController@getDentist');
 
 
 Route::post('wait', 									'CitiesController@wait');
@@ -90,6 +90,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/edit/{id}', 					'VoxesController@edit');
 	Route::any('vox/edit/{id}/export', 				'VoxesController@export');
 	Route::any('vox/edit/{id}/import', 				'VoxesController@import');
+	Route::any('vox/edit/{id}/import-quick', 				'VoxesController@import_quick');
 	Route::get('vox/delete/{id}', 					'VoxesController@delete');
 	Route::post('vox/edit/{id}/question/add', 		'VoxesController@add_question');
 	Route::any('vox/edit/{id}/question/{question_id}', 		'VoxesController@edit_question');
@@ -231,7 +232,7 @@ Route::domain('reviews.dentacoin.com')->group(function () {
 });
 
 Route::domain('dentavox.dentacoin.com')->group(function () {
-	//Route::any('test', 									'Front\YouTubeController@test');
+	Route::any('test', 									'Front\YouTubeController@test');
 
 	Route::group(['prefix' => '{locale?}'], function(){
 

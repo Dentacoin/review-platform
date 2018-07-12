@@ -111,63 +111,11 @@
 									{!! nl2br(trans('vox.page.'.$current_page.'.civic-duplicate')) !!}
 								</div>
 								<input type="hidden" id="jwtAddress" value="{{ getLangUrl('profile/jwt') }}" />
-				    		@elseif(!$user->phone_verified && !$user->fb_id)
-					    		<p class="personal-description">
-									{!! nl2br(trans('vox.page.'.$current_page.'.verify-hint')) !!}
-			                	</p>
-
-				  				{!! Form::open(array('url' => getLangUrl('phone/save'), 'method' => 'post', 'class' => 'form-horizontal', 'id' => 'phone-verify-send-form' )) !!}
-									<div class="form-group">
-										<div class="col-md-3">
-											{{ Form::select( 'phone_country', $phone_codes, $user->country_id, array('class' => 'form-control' )) }}
-										</div>
-										<div class="col-md-9">
-											{{ Form::text( 'phone', $user->phone, array('class' => 'form-control', 'placeholder' => trans('vox.page.'.$current_page.'.verify-phone-placeholder') )) }}
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-		                                    <button type="submit" name="save-phone" class="btn btn-primary form-control btn-block">
-		                                    	{{ trans('vox.page.'.$current_page.'.verify-phone-submit') }}
-		                                    </button>
-										</div>
-									</div>
-									<div class="alert alert-warning" id="phone-invalid" style="display: none;">
-										{{ trans('vox.page.'.$current_page.'.verify-phone-invalid') }}
-									</div>
-									<div class="alert alert-warning" id="phone-taken" style="display: none;">
-										{{ trans('vox.common.phone-already-used') }}
-									</div>
-				  				{!! Form::close() !!}
-
-				  				{!! Form::open(array('url' => getLangUrl('phone/check'), 'method' => 'post', 'style' => 'display: none', 'class' => 'form-horizontal', 'id' => 'phone-verify-code-form' )) !!}
-									<div class="form-group">
-										<div class="col-md-12">
-											<h3>
-												{{ trans('vox.page.'.$current_page.'.verify-sms-sent') }}
-											</h3>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											{{ Form::text( 'code', '', array('class' => 'form-control', 'placeholder' => trans('vox.page.'.$current_page.'.verify-code-placeholder') )) }}
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-		                                    <button type="submit" name="save-phone" class="btn btn-primary btn-block">
-		                                    	{{ trans('vox.page.'.$current_page.'.verify-code-submit') }}
-		                                    </button>
-										</div>
-									</div>
-									<div class="alert alert-warning" style="display: none;">
-										{{ trans('vox.page.'.$current_page.'.verify-code-invalid') }}
-									</div>
-				  				{!! Form::close() !!}
 				    		@else
 					    		<p class="personal-description">
 					    			{!! nl2br(trans('vox.page.profile.wallet-withdraw-hint',[
-					    				'balance' => $user->getVoxBalance()
+					    				'balance' => '<b>'.$user->getVoxBalance().'</b>',
+					    				'minimum' => '<b>'.env('VOX_MIN_WITHDRAW').'</b>'
 					    			])) !!}
 					    		</p>
 

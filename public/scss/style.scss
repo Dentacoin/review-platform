@@ -116,9 +116,14 @@ $accent-color-shadow: rgba(18, 101, 133, 0.5);
     }
 }
 
+.username-search,
+.dentist-suggester,
+.clinic-suggester,
 .location {
     position: relative;
 
+    .dentist-suggests,
+    .clinic-suggests,
     .location-suggester {
         position: absolute;
         width: 100%;
@@ -140,6 +145,12 @@ $accent-color-shadow: rgba(18, 101, 133, 0.5);
                 display: block;
                 line-height: 30px;
                 padding: 0px 10px;
+
+                &:hover {
+                    background-color: #126585;
+                    color: white;
+                    text-decoration: none;
+                }
             }
         }
 
@@ -147,6 +158,8 @@ $accent-color-shadow: rgba(18, 101, 133, 0.5);
     
     &.visible,
     &.loading {
+        .dentist-suggests,
+        .clinic-suggests,
         .location-suggester {
             display: block;
         }
@@ -158,6 +171,7 @@ $accent-color-shadow: rgba(18, 101, 133, 0.5);
         }
     }
 }
+
 
 i {
     width: 20px;
@@ -520,6 +534,7 @@ body {
 
 }
 
+.page-claim,
 .page-add,
 .page-login,
 .page-register,
@@ -1912,6 +1927,22 @@ body {
     }
 }
 
+.search-bar {
+    .results {
+        span {
+            float: right;
+
+            &.dentist-color {
+                color: $accent-color;
+            }
+
+            &.clinic-color {
+                color: #2c9385;
+            }
+        }
+    }
+}
+
 .search-box-after {
     display: none;
 
@@ -2972,11 +3003,112 @@ body {
     position: absolute;
     top: 20px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) !important;
     bottom: 20px;
 }
 
 .modal-content {
     max-height: 100%;
     overflow: auto;
+}
+
+.work-wrapper {
+    a:hover {
+        text-decoration: none;
+    }
+    
+    img {
+        max-width: 30px;
+        vertical-align: top;
+    }
+
+    h4 {
+        display: inline-block;
+        margin: 0px;
+        margin-left: 10px;
+        line-height: 36px;
+    }
+}
+
+.work-buttons {
+    p {
+        line-height: 36px;
+        text-align: right;
+
+        @media screen and (max-width: 768px) {
+            text-align: left;
+        }
+    }
+
+    .rejected-button {
+        float: right;
+
+        @media screen and (max-width: 768px) {
+            float: none;
+        }
+    }
+}
+
+#dentists-tab:after {
+    content: '';
+    display: block;
+    clear: both;
+    width: 0px;
+    height: 0px;
+}
+
+
+.clinic-dentists-wrapper {
+    display: block;
+    padding: 20px 30px;
+    border-radius: 10px;
+    background-color: white;
+    margin-bottom: 20px;
+
+    @media screen and (max-width: 600px) {
+        text-align: center;
+    }
+
+    &:focus,
+    &:hover {
+        text-decoration: none;
+        box-shadow: 0px 0px 5px 0px rgba(18, 101, 133, 0.5);
+    }
+
+    &:last-child {
+        margin-bottom: 0px;
+    }
+
+    .avatar {
+        margin-right: 0px;
+        height: auto;
+        background-color: transparent;
+        border-radius: 0px;
+
+        img {
+            width: 150px;
+            border-radius: 0px;
+            margin-right: 40px;
+            position: initial;
+            left: 0px;
+            top: 0px;
+            transform: initial;
+
+            @media screen and (max-width: 600px) {
+                margin-right: 0px;
+            }
+        }
+    }
+}
+
+label[for="radio-patient"],
+label[for="radio-dentist"],
+label[for="radio-clinic"] {
+    @media screen and (max-width: 380px) {
+        display: block !important;
+        width: 100% !important;
+        float: left !important;
+        line-height: 25px !important;
+        border-radius: 5px;
+    }
 }

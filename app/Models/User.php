@@ -114,7 +114,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserTeam', 'user_id', 'id');
     }
     public function my_workplace() {
-        return $this->hasOne('App\Models\UserTeam', 'dentist_id', 'id');
+        return $this->hasMany('App\Models\UserTeam', 'dentist_id', 'id');
     }
 
     public function getWebsiteUrl() {
@@ -501,7 +501,35 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     }
 
+    public function canInvite($platform) {
+        if($platform == 'trp') {
+            return ($this->is_verified || $this->fb_id) && !( $this->is_dentist && !$this->is_approved );
+        } else {
+            return $this->is_verified || $this->fb_id;            
+        }
+    }
 
+    public function canWithdraw($platform) {
+        if($platform == 'trp') {
+            return $this->is_verified && $this->email && $this->civic_id && !( $this->is_dentist && !$this->is_approved );
+        } else {
+            return $this->is_verified && $this->email && $this->civic_id;
+        }
+    }
+
+    public static function getCount($type) {
+        $fn = storage_path('user-count-'.$type);
+        $t = file_exists($fn) ? filemtime($fn) : null;
+        if(!$t || $t < time()-300) {
+            $cnt = self::where('platform', $type)->count();
+            file_put_contents($fn, $cnt);
+        }
+        return file_get_contents($fn);
+
+    }
+
+
+ 
 
     public static function getTempImageName() {
         return md5( microtime(false) ).'.jpg';

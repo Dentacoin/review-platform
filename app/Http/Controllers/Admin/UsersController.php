@@ -51,8 +51,13 @@ class UsersController extends AdminController
     		'phone' => [
     			'type' => 'text',
     		],
-    		'is_dentist' => [
-    			'type' => 'bool',
+    		'type' => [
+                'type' => 'select',
+                'values' => [
+                    'patient' => 'Patient',
+                    'dentist' => 'Dentist',
+                    'clinic' => 'Clinic'
+                ]
     		],
             'is_partner' => [
                 'type' => 'bool',
@@ -317,7 +322,18 @@ class UsersController extends AdminController
             if(Request::isMethod('post')) {
             	foreach ($this->fields as $key => $value) {
             		if(empty($value['disabled']) && $value['type']!='avatar' && $key!='category_id') {
-                        if($value['type']=='datepicker') {
+                        if($key=='type') {
+                            if( $this->request->input($key)=='dentist' ) {
+                                $item->is_dentist = true;
+                                $item->is_clinic = false;
+                            } else if( $this->request->input($key)=='clinic' ) {
+                                $item->is_dentist = true;
+                                $item->is_clinic = true;
+                            } else {
+                                $item->is_dentist = false;
+                                $item->is_clinic = false;
+                            }
+                        } else if($value['type']=='datepicker') {
                 	       $item->$key = $this->request->input($key) ? new Carbon( $this->request->input($key) ) : null;
                         } else {
                            $item->$key = $this->request->input($key);                            

@@ -20,10 +20,29 @@
 	      					{!! nl2br(trans('front.page.'.$current_page.'.hint')) !!}
 	      				</p>
   				
-					  	<div class="col-md-12 text-center">
-							<a class="btn register-social btn-default" title="{{ trans('front.page.'.$current_page.'.facebook') }}" href="{{ getLangUrl('register/facebook/1') }}">
-								<i class="fa fa-facebook"></i> Register with Facebook
-							</a>
+					  	<div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
+						  	<label class="control-label col-md-4">
+						  		{{ trans('front.page.'.$current_page.'.password')  }}
+						  	</label>
+						  	<div class="col-md-8">
+						    	<input type="password" name="password" class="form-control">
+						    </div>
+						</div>
+					  	<div class="form-group {{ $errors->has('password-repeat') ? 'has-error' : '' }}">
+						  	<label class="control-label col-md-4">
+						  		{{ trans('front.page.'.$current_page.'.password-repeat') }} 
+						  	</label>
+						  	<div class="col-md-8">
+						    	<input type="password" name="password-repeat" class="form-control">
+						    </div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-md-12">
+								<button class="btn btn-primary btn-block" type="submit">
+									{{ trans('front.page.'.$current_page.'.submit')  }}
+								</button>
+							</div>
 						</div>
 	      			</form>
 	      		</div>

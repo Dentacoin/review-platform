@@ -19,8 +19,28 @@
     </div>
     <div class="form-group clearfix">
         <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.question-trigger') }}</label>
+        <div class="col-md-9 triggers-list">
+            <!-- {{ Form::text('question_trigger', !empty($question) ? $question->question_trigger : '', array('class' => 'form-control', 'placeholder' => trans('admin.page.'.$current_page.'.question-trigger-placeholder')  )) }} -->
+            @if(!empty($question) && !empty($question->question_trigger) )
+                @foreach(explode(';',$question->question_trigger) as $trigger)
+                    <div class="input-group">
+                        <div class="template-box clearfix"> 
+                            {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), explode(':', $trigger)[0], array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
+                            {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Question number')) }}
+                        </div>
+                        <div class="input-group-btn">
+                            <button class="btn btn-default btn-remove-trigger" type="button">
+                                <i class="glyphicon glyphicon-remove"></i>
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+        </div>
+        <label class="col-md-3">
+        </label>
         <div class="col-md-9">
-            {{ Form::text('question_trigger', !empty($question) ? $question->question_trigger : '', array('class' => 'form-control', 'placeholder' => trans('admin.page.'.$current_page.'.question-trigger-placeholder')  )) }}
+            <a href="javascript:;" class="btn btn-success btn-block btn-add-trigger" style="margin-top: 10px;">{{ trans('admin.page.'.$current_page.'.trigger-add') }}</a>
         </div>
         <label class="col-md-3">
         </label>
@@ -116,7 +136,7 @@
                 <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.question-go-back') }}</label>
                 <div class="col-md-9">
                     {{ trans('admin.page.'.$current_page.'.question-go-back-hint') }}<br/>
-                    {{ Form::text('go_back', !empty($question) ? $question->go_back : '', array('maxlength' => 256, 'class' => 'form-control input-title')) }}
+                    {{ Form::select('go_back', ['' => '-'] + $item->questions->pluck('question', 'id')->toArray(), !empty($question) ? $question->go_back : '', array('class' => 'form-control')) }}
                 </div>
             </div>
 
@@ -137,6 +157,20 @@
         {{ Form::text('something', '', array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong')) }}
         <div class="input-group-btn">
             <button class="btn btn-default btn-remove-answer" type="button">
+                <i class="glyphicon glyphicon-remove"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div style="display: none;">
+    <div class="input-group" id="trigger-group-template" >
+        <div class="template-box clearfix"> 
+            {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
+            {{ Form::text('answers-number[]', '', array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Question number')) }}
+        </div>
+        <div class="input-group-btn">
+            <button class="btn btn-default btn-remove-trigger" type="button">
                 <i class="glyphicon glyphicon-remove"></i>
             </button>
         </div>

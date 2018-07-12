@@ -32,8 +32,6 @@ $(document).ready(function(){
         sendValidation();
     }
 
-    VoxTest.handleNextQuestion();
-
     sendAnswer = function() {
 
         if(ajax_is_running) {
@@ -127,6 +125,9 @@ $(document).ready(function(){
                     }
 
                     if(data.wrong && data.go_back) {
+                        $('.question-group').find('.loader').remove();
+                        $('.question-group').hide();
+                        
                         vox.current = data.go_back;
                         var go_back_group = $('.question-group').first();
                         for(var i=1;i<vox.current;i++) {
@@ -168,6 +169,7 @@ $(document).ready(function(){
                                     var parts = trigger_list[i].trim().split(':');
                                     var trigger_question = parts[0].trim(); // 15 въпрос
                                     var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
+                                    console.log(given_answer.length);
                                     var parsed_given_answer = given_answer.length && given_answer!="0" ? given_answer.split(',') : null;
                                     console.log(parsed_given_answer);
                                     if( parsed_given_answer ) {
@@ -251,6 +253,11 @@ $(document).ready(function(){
                 $(this).removeClass('active-label');
             }
         } );
+
+        if( $(this).closest('.flickity').length ) {
+            $(this).closest('.flickity').flickity('next');
+        }
+
     } );
 
 

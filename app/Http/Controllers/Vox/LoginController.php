@@ -71,8 +71,9 @@ class LoginController extends FrontController
     private function try_social_register($s_user, $network) {
 
         //dd($s_user);
+        //isset($s_user->user['verified']) && 
 
-        $allset = isset($s_user->user['verified']) && isset($s_user->user['friends']);
+        $allset = isset($s_user->user['friends']);
         if(!$allset) {
             $url = 'https://graph.facebook.com/v2.5/me/permissions?access_token='. $s_user->token;
             $ch = curl_init();
@@ -86,7 +87,8 @@ class LoginController extends FrontController
             return redirect(getLangUrl('/').'#register');
         }
 
-        $verified = !empty($s_user->user['verified']) && !empty($s_user->user['friends']['summary']['total_count']) && $s_user->user['friends']['summary']['total_count']>50;
+        //!empty($s_user->user['verified']) &&
+        $verified = !empty($s_user->user['friends']['summary']['total_count']) && $s_user->user['friends']['summary']['total_count']>50;
         if(!$verified) {
             Request::session()->flash('error-message', trans('vox.popup.register.fake-facebook') );
             return redirect(getLangUrl('/').'#register');
@@ -113,7 +115,7 @@ class LoginController extends FrontController
         } else {
             $name = $s_user->getName() ? $s_user->getName() : (!empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' );
 
-            $gender = $s_user->user['gender']=='male' ? 'm' : 'f';
+            $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
             $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
 
             if(!empty($s_user->user['location']['name'])) {
@@ -161,7 +163,7 @@ class LoginController extends FrontController
             $newuser->save();
 
 
-            if($newuser->invited_by) {
+            if($newuser->invited_by && $newuser->invitor->canInvite('vox')) {
                 $inv_id = session('invitation_id');
                 if($inv_id) {
                     $inv = UserInvite::find($inv_id);

@@ -109,7 +109,7 @@ class CitiesController extends BaseController
         $dcn_change = file_get_contents('/tmp/dcn_change');
 
 		$ret = [
-			'question_count' => number_format(VoxAnswer::count(), 0, '', ' '),
+			'question_count' => number_format( VoxAnswer::getCount() , 0, '', ' '),
 			'dcn_price' => sprintf('%.4F', $dcn_price),
 			'dcn_price_full' => sprintf('%.10F', $dcn_price),
 			'dcn_change' => $dcn_change,
@@ -147,10 +147,13 @@ class CitiesController extends BaseController
         return Response::json($ret);
 	}
 
-	public function getClinic() {
+	public function getClinic($id) {
 
 		$joinclinic = trim(Request::input('joinclinic'));
-		$clinics = User::where('is_clinic', true)->where('name', 'LIKE', $joinclinic.'%')->take(10)->get();
+		$clinics = User::where('is_clinic', true)->whereDoesntHave('team', function ($query) use ($id) {
+            $query->where('dentist_id', $id);
+        })->where('name', 'LIKE', $joinclinic.'%')->take(10)->get();
+
 		$clinic_list = [];
 		foreach ($clinics as $clinic) {
 			$clinic_list[] = [
@@ -162,14 +165,16 @@ class CitiesController extends BaseController
 		return Response::json($clinic_list);
 	}
 
-	public function getDentist() {
+	public function getDentist($id) {
 
 		$invitedentist = trim(Request::input('invitedentist'));
 
 		$dentists = User::where(function($query) use ($invitedentist) {
 			$query->where('is_clinic', '=', 0 )
 			->orWhereNull('is_clinic');
-		})->where('is_dentist', true)->doesntHave('my_workplace')->where('name', 'LIKE', $invitedentist.'%')->take(10)->get();
+		})->whereDoesntHave('my_workplace', function ($query) use ($id) {
+            $query->where('user_id', $id);
+        })->where('name', 'LIKE', $invitedentist.'%')->take(10)->get();
 
 		$dentist_list = [];
 		foreach ($dentists as $dentist) {

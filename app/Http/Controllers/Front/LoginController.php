@@ -153,7 +153,8 @@ class LoginController extends FrontController
     private function try_social_register($s_user, $network) {
         //dd($s_user);
 
-        $allset = isset($s_user->user['verified']) && isset($s_user->user['friends']);
+        //isset($s_user->user['verified']) && 
+        $allset = isset($s_user->user['friends']);
         if(!$allset) {
             $url = 'https://graph.facebook.com/v2.5/me/permissions?access_token='. $s_user->token;
             $ch = curl_init();
@@ -167,7 +168,8 @@ class LoginController extends FrontController
             return redirect(getLangUrl('register'));
         }
 
-        $verified = !empty($s_user->user['verified']) && !empty($s_user->user['friends']['summary']['total_count']) && $s_user->user['friends']['summary']['total_count']>50;
+        //!empty($s_user->user['verified']) && 
+        $verified = !empty($s_user->user['friends']['summary']['total_count']) && $s_user->user['friends']['summary']['total_count']>50;
         if(!$verified) {
             Request::session()->flash('error-message', trans('front.page.registration.fake-facebook'));
             return redirect(getLangUrl('register'));
@@ -256,7 +258,7 @@ class LoginController extends FrontController
             }
 
 
-            if($newuser->invited_by) {
+            if($newuser->invited_by && $newuser->invitor->canInvite('trp')) {
                 $inv_id = session('invitation_id');
                 if($inv_id) {
                     $inv = UserInvite::find($inv_id);

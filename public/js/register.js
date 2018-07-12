@@ -15,9 +15,13 @@ $(document).ready(function(){
 	    	if( $('#radio-clinic:checked').length ) {
 		    	$('#clinic-name-label').show();
 		    	$('#dentist-name-label').hide();
+		    	$('.clinic-show').show();
+		    	$('.dentist-show').hide();
 	    	} else {
 		    	$('#clinic-name-label').hide();
-		    	$('#dentist-name-label').show();	    		
+		    	$('#dentist-name-label').show();
+		    	$('.clinic-show').hide();
+		    	$('.dentist-show').show();	    		
 	    	}
 	    }
 	    e.stopPropagation();

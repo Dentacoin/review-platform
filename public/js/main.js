@@ -1,5 +1,6 @@
 var ajax_is_running = false;
 var locationTO = null;
+var clinicTO = null;
 var addressTO = null;
 var addressRunning = null;
 var address_selector = 'select[name="country_id"], select[name="city_id"], input[name="address"], input[name="zip"]';
@@ -212,19 +213,29 @@ $(document).ready(function(){
 				that.closest('.location').removeClass('loading').addClass('visible');
 				var container = that.closest('.location').find('.results').first();
 				console.log(container);
-				container.html('');
+
+				var len = 0;
 				for(var i in data) {
-					container.append('<a href="javascript:;" data-country="'+data[i].country+'" data-city="'+data[i].city+'" >'+data[i].name+'</a>');
-					if(i>10) {
-						break;
-					}
+					len++;
 				}
-				container.find('a').click( function() {
-					$(this).closest('form').find('.country_id').val( $(this).attr('data-country') );
-					$(this).closest('form').find('.city_id').val( $(this).attr('data-city') );
-					$(this).closest('.location').removeClass('visible');
-					$(this).closest('form').find('input.location-input').val( $(this).html().replace('<b>', '').replace('</b>', '') );
-				} );
+
+				if (len) {
+					container.html('');
+					for(var i in data) {
+						container.append('<a href="javascript:;" data-country="'+data[i].country+'" data-city="'+data[i].city+'" >'+data[i].name+'</a>');
+						if(i>10) {
+							break;
+						}
+					}
+					container.find('a').click( function() {
+						$(this).closest('form').find('.country_id').val( $(this).attr('data-country') );
+						$(this).closest('form').find('.city_id').val( $(this).attr('data-city') );
+						$(this).closest('.location').removeClass('visible');
+						$(this).closest('form').find('input.location-input').val( $(this).html().replace('<b>', '').replace('</b>', '') );
+					} );
+				} else {
+					container.html('No places found by that name');
+				}
 			    ajax_is_running = false;
 			}).bind(that)
 		});
@@ -263,9 +274,13 @@ $(document).ready(function(){
 			success: (function( data ) {
 				that.closest('.location').removeClass('loading').addClass('visible');
 				var container = that.closest('.location').find('.results').first();
-				container.html('');
-				for(var i in data) {
-					container.append('<a href="'+data[i].link+'" >'+data[i].name+'<span '+((data[i].is_clinic == 1) ? "class='clinc-color'" : "class='dentist-color'") +'">'+data[i].type+'</span></a>');
+				if (data.length) {
+					container.html('');
+					for(var i in data) {
+						container.append('<a href="'+data[i].link+'" >'+data[i].name+'<span '+((data[i].is_clinic == 1) ? "class='clinic-color'" : "class='dentist-color'") +'">'+data[i].type+'</span></a>');
+					}
+				} else {
+					container.html('No clinic/dentist found by that name');
 				}
 			    ajax_is_running = false;
 			}).bind(that)
@@ -279,6 +294,82 @@ $(document).ready(function(){
 
     	locationTO = setTimeout(userSuggester.bind(this), 300);
     } );
+
+    var clinicSuggester = function() {
+        if( $(this).val().trim().length < 4 ) {
+            return;
+        }
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $(this).closest('.clinic-suggester').addClass('loading');
+
+        var that = $(this);
+
+        $.ajax( {
+            url: 'suggest-clinic/'+user_id,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                joinclinic: $(this).val()
+            },
+            success: (function( data ) {
+            	console.log(data);
+	            that.closest('.clinic-suggester').removeClass('loading').addClass('visible');
+	            var container = that.closest('.clinic-suggester').find('.results').first();
+
+            	if (data.length) {
+	                container.html('');
+	                for(var i in data) {
+	                    container.append('<a href="javascript:;" data-id="'+data[i].id+'">'+data[i].name+'</a>');
+	                }
+
+	                container.find('a').click( function() {
+	                    $('#joinclinicid').val( $(this).attr('data-id') );
+	                    $(this).closest('.clinic-suggester').removeClass('visible');
+	                    $(this).closest('form').find('#joinclinic').val( $(this).html() );
+	                } );
+	            } else {
+	            	container.html('No clinics found by that name');
+	            }
+	            ajax_is_running = false;
+
+            }).bind(that)
+        });
+    };
+
+    $('#joinclinic').keydown( function(event) {
+
+        if( event.keyCode == 13) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+
+        if(clinicTO) {
+            clearTimeout(clinicTO);
+        }
+
+        clinicTO = setTimeout(clinicSuggester.bind(this), 300);
+    } );
+
+
+	$('body').click( function(e) {
+		if (!$(e.target).closest('.dentist-suggester').length) {
+			$('.dentist-suggester').removeClass('visible');
+		}
+
+		if (!$(e.target).closest('.clinic-suggester').length) {
+			$('.clinic-suggester').removeClass('visible');
+		}
+
+		if (!$(e.target).closest('.location').length) {
+			$('.location').removeClass('visible');
+		}
+	});
 
 
     $('.open-search-box').click( function() {

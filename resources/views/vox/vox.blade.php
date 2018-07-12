@@ -11,6 +11,9 @@
 
 				<h1 class="questionnaire-title">
 					{{ $vox->title }}
+					@if(!empty($admin))
+						<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
+					@endif
 				</h1>
 				<p class="questionnaire-description" {!! !empty($answered) && count($answered)>1 ? 'style="display: none;"' : '' !!} >
 					{{ $vox->description }}
@@ -32,7 +35,7 @@
 							<div class="col-md-6 tar">
 								<span class="bold">
 										<span id="dcn-test-reward-before">
-											{!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->reward }}
+											{!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
 										</span>
 										<span id="dcn-test-reward-after" style="display: none;">
 											{!! trans('vox.common.dcn_collected') !!}:
@@ -64,7 +67,7 @@
 								</div>
 							-->
 							<div class="answers tac">
-								<div class="g-recaptcha" id="g-recaptcha" data-callback="sendReCaptcha" style="display: inline-block;" data-sitekey="6LdmpjQUAAAAAMlVjnFzaKp5nyKsGcalxhS_hcDd"></div>
+								<div class="g-recaptcha" id="g-recaptcha" data-callback="sendReCaptcha" style="display: inline-block;" data-sitekey="6LfmCmEUAAAAAH20CTYH0Dg6LGOH7Ko7Wv1DZlO0"></div>
 								<div class="alert alert-warning" id="captcha-error" style="display: none;">
 									{!! trans('vox.page.'.$current_page.'.not-robot-invalid') !!}
 								</div>					
@@ -86,7 +89,7 @@
 								<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
 							</div>
 						@elseif($question->type == 'multiple_choice')
-							<div class="question-group question-group-{{ $loop->iteration }} multiple-choice" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}>
+							<div class="question-group question-group-{{ $question->id }} multiple-choice" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}>
 								<div class="question">
 									{!! nl2br($question->question) !!}
 								</div>
@@ -102,7 +105,7 @@
 								<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
 							</div>
 						@elseif($question->type == 'scale')
-							<div class="question-group question-group-{{ $loop->iteration }} scale" data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? 'data-trigger="'.$question->question_trigger.'"' : "" !!}>
+							<div class="question-group question-group-{{ $question->id }} scale" data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? 'data-trigger="'.$question->question_trigger.'"' : "" !!}>
 								<div class="question">
 									{!! nl2br($question->question) !!}
 								</div>
@@ -144,7 +147,7 @@
 								<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
 							</div>
 						@else
-							<div class="question-group question-group-{{ $loop->iteration }} single-choice" {!! isset($answered[$question->id]) ? 'data-answer="'.$answered[$question->id].'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}>
+							<div class="question-group question-group-{{ $question->id }} single-choice" {!! isset($answered[$question->id]) ? 'data-answer="'.$answered[$question->id].'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}>
 								<div class="question">
 									{!! nl2br($question->question) !!}
 								</div>

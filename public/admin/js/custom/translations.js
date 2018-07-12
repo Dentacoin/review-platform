@@ -1,5 +1,38 @@
+var searchTO;
+
 $(document).ready(function(){
-	console.log('hihih');
+
+	var goSearch = function() {
+		var text = $(this).val();
+		if(text.length>3) {
+			$('tr').show();
+			$('tr.info').hide();
+			$('tr:not(.info)').each( function() {
+				//console.log( $(this).html().toLowerCase() );
+				if( $(this).html().toLowerCase().indexOf(text)!=-1 ) {
+					console.log('ok');
+					$(this).show();
+				} else {
+					console.log('not');
+					$(this).hide();
+				}
+			} );
+		} else {
+			$('tr:not(.info)').show();
+			$('tr').hide();
+			$('tr.info').show();
+		}
+
+		$('.bnt-tr').show();
+	}
+
+
+	$('#search-translations').on('change keyup', function() {
+		if( searchTO ) {
+			clearTimeout(searchTO);
+		}
+		searchTO = setTimeout(goSearch.bind(this), 1000);
+	});
 
 	$('#translations-change').submit( function(e) {
 		e.preventDefault();

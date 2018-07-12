@@ -77,7 +77,7 @@ class ProfileController extends FrontController
 
 
     public function home($locale=null) {
-        if(!($this->user->is_verified || $this->user->fb_id)) {
+        if(!$this->user->is_verified || !$this->user->email) {
             return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
@@ -136,7 +136,7 @@ class ProfileController extends FrontController
     }
 
     public function info($locale=null) {
-        if(!($this->user->is_verified || $this->user->fb_id)) {
+        if(!$this->user->is_verified || !$this->user->email) {
             return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
@@ -205,7 +205,7 @@ class ProfileController extends FrontController
 
 
     public function privacy($locale=null) {
-        if(!($this->user->is_verified || $this->user->fb_id)) {
+        if(!$this->user->is_verified || !$this->user->email) {
             return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
@@ -251,7 +251,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function password($locale=null) {
-        if(!($this->user->is_verified || $this->user->fb_id)) {
+        if(!$this->user->is_verified || !$this->user->email) {
             return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
@@ -262,7 +262,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     }
 
     public function change_password($locale=null) {
-        if(!($this->user->is_verified || $this->user->fb_id)) {
+        if(!$this->user->is_verified || !$this->user->email) {
             return redirect(getLangUrl('/'));
         }
 
@@ -296,7 +296,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             return redirect(getLangUrl('profile/bans'));
         }
         
-        if(!($this->user->is_verified || $this->user->fb_id)) {
+        if(!$this->user->is_verified || !$this->user->email) {
             return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
@@ -339,7 +339,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             return Response::json( $ret );
         }
         
-        if(!($this->user->is_verified || $this->user->fb_id)) {
+        if(!$this->user->is_verified || !$this->user->email) {
             $ret['message'] = 'not-verified';
             return Response::json( $ret );
         }
@@ -394,7 +394,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function withdraw($locale=null) {
-        if($this->user->isBanned('vox')) {
+        if($this->user->isBanned('vox') || !$this->user->canWithdraw('vox') ) {
             return ;
         }
 
@@ -403,6 +403,13 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $ret = [
                 'success' => false,
                 'message' => trans('vox.page.profile.amount-too-high')
+            ];
+        } else if($amount<env('VOX_MIN_WITHDRAW')) {
+            $ret = [
+                'success' => false,
+                'message' => trans('vox.page.profile.amount-too-low', [
+                    'minimum' => '<b>'.env('VOX_MIN_WITHDRAW').'</b>'
+                ])
             ];
         } else {
             $cashout = new VoxCashout;
@@ -430,6 +437,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     }
 
     public function history($locale=null) {
+        if(!$this->user->is_verified || !$this->user->email) {
+            return redirect(getLangUrl('/'));
+        }
+
         $this->handleMenu();
 
         return $this->ShowVoxView('profile-history', [
@@ -449,9 +460,13 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
     
     public function invite($locale=null) {
+        if(!$this->user->canInvite('vox')) {
+            return redirect(getLangUrl('/'));
+        }
+
         $this->handleMenu();
 
-        if(Request::isMethod('post') && ( $this->user->is_verified || $this->user->fb_id) ) {
+        if(Request::isMethod('post') && $this->user->canInvite('vox') ) {
 
             if(Request::Input('is_contacts')) {
                 if(empty(Request::Input('contacts')) || !is_array( Request::Input('contacts') ) ) {

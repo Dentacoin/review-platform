@@ -113,6 +113,7 @@ class Kernel extends ConsoleKernel
         })->cron("0 5 * * *"); //05:00h
         
         $schedule->call(function () {
+            return;
             $price = null;
             for($i=0;$i<5;$i++) {
                 $info = @file_get_contents('https://api.coinmarketcap.com/v1/ticker/dentacoin/');
@@ -213,6 +214,7 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
                 ],
             ];
 
+
             foreach ($alerts as $currency => $data) {
                 $curl = file_get_contents($data['url']);
                 if(!empty($curl)) {
@@ -234,8 +236,11 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
                                     $message->from($sender, $sender_name);
                                     $message->to( 'official@youpluswe.com' );
                                     $message->cc( [
-                                        'grenzebach@protonmail.com',
-                                        'rafat.hamud@dentacoin.com',
+                                        'jeremias.grenzebach@dentacoin.com', 
+                                        'philipp@dentacoin.com', 
+                                        'donika.kraeva@dentacoin.com', 
+                                        'ludwig.mair@dentacoin.com', 
+                                        'stoyan.georgiev@dentaprime.com'
                                     ] );
                                     //$message->to( 'dokinator@gmail.com' );
                                     $message->replyTo($sender, $sender_name);
@@ -246,10 +251,7 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
                 }
             }
 
-
-
-        //})->cron("* * * * *"); //05:00h
-        })->cron("30 10 * * *"); //05:00h
+        })->cron("30 7 * * *"); //10:30h BG Time
     }
 
     /**

@@ -177,7 +177,7 @@ class DentistController extends FrontController
 
                 $ret['valid_input'] = true;
 
-                if( (($this->user->phone_verified && $this->user->is_verified) || $this->user->fb_id) && !$this->user->is_dentist) {
+                if( $this->user->is_verified && $this->user->email && !$this->user->is_dentist) {
 
                     $old_review = $this->user->hasReviewTo($item->id);
                     if($old_review && $old_review->status=='accepted') {
@@ -390,31 +390,6 @@ class DentistController extends FrontController
         return redirect( $item->getLink() );
     }
 
-    public function claim($locale=null, $slug) {
-        $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
-
-        if(empty($item)) {
-            return redirect( getLangUrl('dentists') );
-        }
-
-        $phone = ltrim( str_replace(' ', '', Request::input( 'phone' )), '0');
-
-        if($phone==$item->phone) {
-            $vc = rand(100000, 999999);
-            $item->verification_code = $vc;
-            $item->save();
-
-            $sms_text = trans('front.common.sms-claim', ['code' => $vc]);
-
-            $item->sendSMS($sms_text);
-
-            return Response::json( ['success' => true] );
-        }
-
-
-        return Response::json( ['success' => false] );
-    }
-
 
     public function code($locale=null, $slug) {
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
@@ -498,7 +473,7 @@ class DentistController extends FrontController
         if(!empty($review)) {
             $myvotes = $this->user->usefulVotesForDenist($review->dentist_id);
             if(!in_array($review_id, $myvotes)) {
-                if($this->user->phone_verified || $this->user->fb_id) {
+                if($this->user->is_verified && $this->user->email) {
                     $review->upvotes++;
                     $review->save();
                     $uv = new ReviewUpvote;

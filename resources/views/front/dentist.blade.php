@@ -124,6 +124,11 @@
     <li class="active">
     	<a href="#review-tab" data-toggle="tab">{{ trans('front.page.'.$current_page.'.write-review-button') }}</a>
     </li>
+    @if($item->is_clinic && $item->team->isNotEmpty())
+    	<li class="dentists-tab-btn">
+        	<a href="#dentists-tab" data-toggle="tab" aria-expanded="false">Dentists</a>
+        </li>
+    @endif
 </ul>
 <div class="tab-content dentist-tab-content profile-content">
 	<div class="container">
@@ -149,10 +154,66 @@
         	<h3>{{ trans('front.page.'.$current_page.'.write-review-title', ['name' => $item->name]) }}</h3>
     		<p>{{ trans('front.page.'.$current_page.'.write-review-hint') }}</p>
 
-    		<a class="btn btn-primary write-review {{ $user && !($user->phone_verified || $user->fb_id) ? 'verify-phone' : '' }}" id="write-review-btn" href="javascript:;">
-				{{ trans('front.page.'.$current_page.'.write-review-button') }}
-			</a>
+    		@if($item->is_clinic)
+	    		<a class="btn btn-primary write-review" id="write-review-btn" href="javascript:;">
+					{{ trans('front.page.'.$current_page.'.write-review-button') }}
+				</a>
+			@endif
         </div>
+	    @if($item->is_clinic && $item->team->isNotEmpty())
+	        <div class="tab-pane fade" id="dentists-tab">
+
+	        	@foreach($item->team as $team)
+			    	<a class="clinic-dentists-wrapper col-md-8 col-md-offset-2" href="{{ $team->clinicTeam->getLink() }}">
+						<div class="media">
+							<div class="media-left avatar">
+								<img src="{{ $team->clinicTeam->getImageUrl(true) }}" />
+							</div>
+							<div class="media-body">
+								<h2 class="media-heading">
+									{{ $team->clinicTeam->name }}
+								</h2>
+
+								@if($team->clinicTeam->country)
+									<div class="location">
+										<i class="fa fa-map-marker"></i> 
+										@if($team->clinicTeam->city)
+											{{ $team->clinicTeam->city->name }}, {{ $team->clinicTeam->country->name }}
+										@else
+											{{ $team->clinicTeam->country->name }}
+										@endif
+									</div>
+								@endif
+
+								@if($team->clinicTeam->categories->isNotEmpty())
+									<div class="categories">
+										<i class="fa fa-graduation-cap"></i> 
+										{{ implode(', ', $team->clinicTeam->parseCategories($categories) ) }}
+									</div>
+								@endif
+
+								<div class="ratings">
+									@if($team->clinicTeam->ratings)
+										<div class="stars">
+											<div class="bar" style="width: {{ getStarWidth($team->clinicTeam->avg_rating) }}px;">
+											</div>
+										</div>
+									@endif
+									<div class="rating">
+										@if($team->clinicTeam->ratings)
+											{!! trans('front.page.'.$current_page.'.rating', [ 'rating' => '<b>'.$team->clinicTeam->avg_rating.'</b>', 'reviews' => '<b>'.$team->clinicTeam->ratings.'</b>' ] ) !!}
+										@else
+											<b>{{ trans('front.common.no-reviews') }}</b>
+										@endif
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</a>
+				@endforeach
+	        </div>
+	    @endif
     </div>
 </div>
 
@@ -162,9 +223,11 @@
 			<h2 class="review-title">{{ trans('front.page.'.$current_page.'.reviews-title', [ 'name' => $item->name ]) }}</h2>
 		</div>
 		<div class="col-md-4">
-			<a class="write-review {{ $user && !($user->phone_verified || $user->fb_id) ? 'verify-phone' : '' }}" id="write-review-btn" href="javascript:;">
-				{{ trans('front.page.'.$current_page.'.write-review-button') }}
-			</a>
+			@if($item->is_clinic)
+				<a class="write-review" id="write-review-btn" href="javascript:;">
+					{{ trans('front.page.'.$current_page.'.write-review-button') }}
+				</a>
+			@endif
 		</div>
 	</div>  		
     <div class="reviews-panel">
@@ -278,7 +341,7 @@
 											<div class="sharer" data-href="{{ $item->getLink().'/'.$review->id }}">
 												
 												@if( !($my_upvotes && in_array($review->id, $my_upvotes) ) && !( !empty($user) && $review->user_id == $user->id ) )
-													<a class="useful {{ !$user ? 'needs-login' : '' }} {{ $user && !($user->phone_verified || $user->fb_id) ? 'verify-phone' : '' }}" href="javascript:;" data-review-id="{{ $review->id }}" data-done-text="{{ trans('front.page.dentist.helpful-button-clicked') }}">
+													<a class="useful {{ !$user ? 'needs-login' : '' }}" href="javascript:;" data-review-id="{{ $review->id }}" data-done-text="{{ trans('front.page.dentist.helpful-button-clicked') }}">
 														<i class="fa fa-heart"></i>
 													</a>
 												@endif

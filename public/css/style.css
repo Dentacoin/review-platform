@@ -83,8 +83,22 @@
     .btn-group-justified .btn label input {
       display: none; }
 
+.username-search,
+.dentist-suggester,
+.clinic-suggester,
 .location {
   position: relative; }
+  .username-search .dentist-suggests,
+  .username-search .clinic-suggests,
+  .username-search .location-suggester,
+  .dentist-suggester .dentist-suggests,
+  .dentist-suggester .clinic-suggests,
+  .dentist-suggester .location-suggester,
+  .clinic-suggester .dentist-suggests,
+  .clinic-suggester .clinic-suggests,
+  .clinic-suggester .location-suggester,
+  .location .dentist-suggests,
+  .location .clinic-suggests,
   .location .location-suggester {
     position: absolute;
     width: 100%;
@@ -95,15 +109,77 @@
     border: 1px solid #ccd0d2;
     border-radius: 4px;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
+    .username-search .dentist-suggests .loader,
+    .username-search .clinic-suggests .loader,
+    .username-search .location-suggester .loader,
+    .dentist-suggester .dentist-suggests .loader,
+    .dentist-suggester .clinic-suggests .loader,
+    .dentist-suggester .location-suggester .loader,
+    .clinic-suggester .dentist-suggests .loader,
+    .clinic-suggester .clinic-suggests .loader,
+    .clinic-suggester .location-suggester .loader,
+    .location .dentist-suggests .loader,
+    .location .clinic-suggests .loader,
     .location .location-suggester .loader {
       display: none;
       text-align: center; }
+    .username-search .dentist-suggests .results a,
+    .username-search .clinic-suggests .results a,
+    .username-search .location-suggester .results a,
+    .dentist-suggester .dentist-suggests .results a,
+    .dentist-suggester .clinic-suggests .results a,
+    .dentist-suggester .location-suggester .results a,
+    .clinic-suggester .dentist-suggests .results a,
+    .clinic-suggester .clinic-suggests .results a,
+    .clinic-suggester .location-suggester .results a,
+    .location .dentist-suggests .results a,
+    .location .clinic-suggests .results a,
     .location .location-suggester .results a {
       display: block;
       line-height: 30px;
       padding: 0px 10px; }
-  .location.visible .location-suggester, .location.loading .location-suggester {
+      .username-search .dentist-suggests .results a:hover,
+      .username-search .clinic-suggests .results a:hover,
+      .username-search .location-suggester .results a:hover,
+      .dentist-suggester .dentist-suggests .results a:hover,
+      .dentist-suggester .clinic-suggests .results a:hover,
+      .dentist-suggester .location-suggester .results a:hover,
+      .clinic-suggester .dentist-suggests .results a:hover,
+      .clinic-suggester .clinic-suggests .results a:hover,
+      .clinic-suggester .location-suggester .results a:hover,
+      .location .dentist-suggests .results a:hover,
+      .location .clinic-suggests .results a:hover,
+      .location .location-suggester .results a:hover {
+        background-color: #126585;
+        color: white;
+        text-decoration: none; }
+  .username-search.visible .dentist-suggests,
+  .username-search.visible .clinic-suggests,
+  .username-search.visible .location-suggester, .username-search.loading .dentist-suggests,
+  .username-search.loading .clinic-suggests,
+  .username-search.loading .location-suggester,
+  .dentist-suggester.visible .dentist-suggests,
+  .dentist-suggester.visible .clinic-suggests,
+  .dentist-suggester.visible .location-suggester,
+  .dentist-suggester.loading .dentist-suggests,
+  .dentist-suggester.loading .clinic-suggests,
+  .dentist-suggester.loading .location-suggester,
+  .clinic-suggester.visible .dentist-suggests,
+  .clinic-suggester.visible .clinic-suggests,
+  .clinic-suggester.visible .location-suggester,
+  .clinic-suggester.loading .dentist-suggests,
+  .clinic-suggester.loading .clinic-suggests,
+  .clinic-suggester.loading .location-suggester,
+  .location.visible .dentist-suggests,
+  .location.visible .clinic-suggests,
+  .location.visible .location-suggester,
+  .location.loading .dentist-suggests,
+  .location.loading .clinic-suggests,
+  .location.loading .location-suggester {
     display: block; }
+  .username-search.loading .loader,
+  .dentist-suggester.loading .loader,
+  .clinic-suggester.loading .loader,
   .location.loading .loader {
     display: none; }
 
@@ -345,6 +421,7 @@ body {
     .panel ul li.hidden {
       display: none; }
 
+.page-claim h1,
 .page-add h1,
 .page-login h1,
 .page-register h1,
@@ -356,6 +433,7 @@ body {
   margin: 0px 0px 20px 0px;
   color: #126585; }
 @media (max-width: 992px) {
+  .page-claim .form-group,
   .page-add .form-group,
   .page-login .form-group,
   .page-register .form-group,
@@ -1347,6 +1425,13 @@ body {
       .search-box .username-search .results a span.clinic-color {
         color: #2c9385; }
 
+.search-bar .results span {
+  float: right; }
+  .search-bar .results span.dentist-color {
+    color: #126585; }
+  .search-bar .results span.clinic-color {
+    color: #2c9385; }
+
 .search-box-after {
   display: none; }
   .search-box-after .search-box {
@@ -2027,9 +2112,80 @@ body {
   position: absolute;
   top: 20px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) !important;
   bottom: 20px; }
 
 .modal-content {
   max-height: 100%;
   overflow: auto; }
+
+.work-wrapper a:hover {
+  text-decoration: none; }
+.work-wrapper img {
+  max-width: 30px;
+  vertical-align: top; }
+.work-wrapper h4 {
+  display: inline-block;
+  margin: 0px;
+  margin-left: 10px;
+  line-height: 36px; }
+
+.work-buttons p {
+  line-height: 36px;
+  text-align: right; }
+  @media screen and (max-width: 768px) {
+    .work-buttons p {
+      text-align: left; } }
+.work-buttons .rejected-button {
+  float: right; }
+  @media screen and (max-width: 768px) {
+    .work-buttons .rejected-button {
+      float: none; } }
+
+#dentists-tab:after {
+  content: '';
+  display: block;
+  clear: both;
+  width: 0px;
+  height: 0px; }
+
+.clinic-dentists-wrapper {
+  display: block;
+  padding: 20px 30px;
+  border-radius: 10px;
+  background-color: white;
+  margin-bottom: 20px; }
+  @media screen and (max-width: 600px) {
+    .clinic-dentists-wrapper {
+      text-align: center; } }
+  .clinic-dentists-wrapper:focus, .clinic-dentists-wrapper:hover {
+    text-decoration: none;
+    box-shadow: 0px 0px 5px 0px rgba(18, 101, 133, 0.5); }
+  .clinic-dentists-wrapper:last-child {
+    margin-bottom: 0px; }
+  .clinic-dentists-wrapper .avatar {
+    margin-right: 0px;
+    height: auto;
+    background-color: transparent;
+    border-radius: 0px; }
+    .clinic-dentists-wrapper .avatar img {
+      width: 150px;
+      border-radius: 0px;
+      margin-right: 40px;
+      position: initial;
+      left: 0px;
+      top: 0px;
+      transform: initial; }
+      @media screen and (max-width: 600px) {
+        .clinic-dentists-wrapper .avatar img {
+          margin-right: 0px; } }
+
+@media screen and (max-width: 380px) {
+  label[for="radio-patient"],
+  label[for="radio-dentist"],
+  label[for="radio-clinic"] {
+    display: block !important;
+    width: 100% !important;
+    float: left !important;
+    line-height: 25px !important;
+    border-radius: 5px; } }

@@ -43,7 +43,7 @@
 
 
 		@if( !($my_upvotes && in_array($review->id, $my_upvotes) ) && !( !empty($user) && $review->user_id == $user->id ) )
-			<a class="btn btn-primary useful {{ !$user ? 'needs-login' : '' }} {{ $user && !($user->phone_verified || $user->fb_id) ? 'verify-phone' : '' }}" href="javascript:;" data-review-id="{{ $review->id }}" data-done-text="{{ trans('front.page.dentist.helpful-button-clicked') }}">
+			<a class="btn btn-primary useful {{ !$user ? 'needs-login' : '' }}" href="javascript:;" data-review-id="{{ $review->id }}" data-done-text="{{ trans('front.page.dentist.helpful-button-clicked') }}">
 				<i class="fa fa-heart"></i> 
 				{{ trans('front.page.dentist.helpful-button') }}
 			</a>

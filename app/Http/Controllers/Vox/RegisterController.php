@@ -115,7 +115,7 @@ class RegisterController extends FrontController
 
         $user = User::find($id);
 
-        if (!empty($user)) {
+        if (!empty($user) && $user->canInvite('vox')) {
 
             if ($hash == $user->get_invite_token()) {
 

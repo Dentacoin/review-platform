@@ -271,7 +271,7 @@
 								  		{{ trans('front.page.'.$current_page.'.captcha') }} 
 								  	</label>
 								  	<div class="col-md-8">
-								    	<div class="g-recaptcha" id="g-recaptcha" data-callback="sendReCaptcha" style="display: inline-block;" data-sitekey="6LdmpjQUAAAAAMlVjnFzaKp5nyKsGcalxhS_hcDd"></div>
+								    	<div class="g-recaptcha" id="g-recaptcha" data-callback="sendReCaptcha" style="display: inline-block;" data-size="compact" data-sitekey="6LfmCmEUAAAAAH20CTYH0Dg6LGOH7Ko7Wv1DZlO0"></div>
 								    </div>
 								</div>
 

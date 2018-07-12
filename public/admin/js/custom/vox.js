@@ -24,44 +24,16 @@ $(document).ready(function(){
 
 		$('.answers-list .input-group:nth-child('+num+')').remove();
 	} );
+
+
+	$('.questions-form .btn-add-trigger').click( function() {
+		var newinput = $('#trigger-group-template').clone(true).removeAttr('id');
+		$('.questions-form').find('.triggers-list').append(newinput);
+	} );
+
+
+	$('.btn-remove-trigger').click( function() {
+		$(this).closest('.input-group').remove();
+	} );
 	
-
-	$('.question-number').on('keypress', function(e) {
-	    var code = e.keyCode || e.which;
-	    if (code == 13) {
-	        $(this).blur();
-	        return false;
-	    }
-	});
-
-	$('.question-number').on('change blur', function() {
-		console.log( $(this).attr('data-qid'), $(this).val() );
-
-        if(ajax_action) {
-            return;
-        }
-        ajax_action = true;
-        $('.question-number').attr('disabled', 'disabled');
-
-        $.ajax({
-            url     : $('#page-add').attr('action') + '/change-number/'+$(this).attr('data-qid')+'/'+$(this).val(),
-            type    : 'GET',
-            dataType: 'json',
-            success : function( res ) {
-                ajax_action = false;
-                var $trs = $('.table-question-list tbody tr');
-                $trs.sort(function(a,b) {
-					return parseInt($(a).find('.question-number').val()) < parseInt($(b).find('.question-number').val()) ? -1 : 1;
-				})
-				$trs.detach().appendTo( $('.table-question-list tbody') );
-        		$('.question-number').removeAttr('disabled');
-            },
-            error : function( data ) {
-                ajax_action = false;
-        		$('.question-number').removeAttr('disabled');
-            }
-        });
-
-
-	});
 });

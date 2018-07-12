@@ -1,0 +1,66 @@
+$(document).ready(function(){
+	if($('#user-save').length) {
+		var country = $('#countries option:selected' ).text();
+		$("#states").children("optgroup[label!='" + country + "']").hide();
+
+		var state = $('#states option:selected' ).text();
+		$("#cities").children("optgroup[label!='" + state + "']").hide();
+
+		var city = $('#cities option:selected' ).text();
+		$("#districts").children("optgroup[label!='" + city + "']").hide();
+
+		$('#countries').change(function() {
+			var country = $('#countries option:selected' ).text();
+			$("#states").children("optgroup").hide();
+			$("#states").children("optgroup[label='" + country + "']").show();
+			$("#states").val( $("#states").children("optgroup[label='" + country + "']").children('option').first().val() );
+
+			$("#states").change();
+			$("#cities").change();
+		});
+
+		$('#states').change(function() {
+			var state = $('#states option:selected' ).text();
+			$("#cities").children("optgroup").hide();
+			$("#cities").children("optgroup[label='" + state + "']").show();
+			$("#cities").val( $("#cities").children("optgroup[label='" + state + "']").children('option').first().val() );
+
+			$("#cities").change();
+		});
+
+		$('#cities').change(function() {
+			var city = $('#cities option:selected' ).text();
+			$("#districts").children("optgroup").hide();
+			$("#districts").children("optgroup[label='" + city + "']").show();
+			if( $("#districts").children("optgroup[label='" + city + "']").children('option').length ) {
+				$("#districts").val( $("#districts").children("optgroup[label='" + city + "']").children('option').first().val() );
+			} else {
+				$("#districts").val('');
+			}
+		});
+	}
+
+	if($('#user-petsitter').length) {
+		$('.service-checkbox').each( function() {
+			var id = $(this).attr('id')+'-price';
+			$('#'+id).prop( "disabled", !$(this).is(':checked') );			
+		});
+
+		$('.service-checkbox').change( function() {
+			var id = $(this).attr('id')+'-price';
+			$('#'+id).prop( "disabled", !$(this).is(':checked') );			
+		});
+	}
+
+	$('.user-messages-load-more').click( function() {
+		$('#modal-message .modal-body').html('Loading');
+		$.ajax( {
+			url: $(this).attr('data-ajax-href'),
+			type: 'GET',
+			success: function( data ) {
+				console.log(data);
+				$('#modal-message .modal-body').html(data);
+			}
+		});
+	});
+});

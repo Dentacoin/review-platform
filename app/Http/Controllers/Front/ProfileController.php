@@ -351,7 +351,7 @@ class ProfileController extends FrontController
     public function invite($locale=null) {
         $this->handleMenu();
 
-        if(Request::isMethod('post') && ( $this->user->is_verified || $this->user->fb_id) ) {
+        if(Request::isMethod('post') && $this->user->canInvite('trp') ) {
 
             if(Request::Input('is_contacts')) {
                 if(empty(Request::Input('contacts')) || !is_array( Request::Input('contacts') ) ) {
@@ -629,7 +629,7 @@ class ProfileController extends FrontController
             return Response::json( $ret );
         }
         
-        if(!($this->user->is_verified || $this->user->fb_id)) {
+        if(!$this->user->is_verified || !$this->user->email) {
             $ret['message'] = 'not-verified';
             return Response::json( $ret );
         }
@@ -659,7 +659,7 @@ class ProfileController extends FrontController
 
     public function withdraw($locale=null) {
 
-        if(!($this->user->is_verified && $this->user->email && $this->user->civic_id)) {
+        if(!$this->user->canWithdraw('trp')) {
             return ;
         }
 

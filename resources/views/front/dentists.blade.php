@@ -43,7 +43,7 @@
 									{{ trans('front.page.'.$current_page.'.name') }}
 								</label>
 								<div class="location">
-									{{ Form::text( 'username' , null , array('class' => 'form-control user-input', 'autocomplete' => 'off') ) }}
+									{{ Form::text( 'username' , null , array('class' => 'form-control user-input', 'autocomplete' => 'off', 'placeholder' =>  trans('front.page.'.$current_page.'.name')) ) }}
 									<div class="location-suggester">
 										<div class="loader">
 											<i class="fa fa fa-circle-o-notch fa-spin fa-2x fa-fw">
@@ -53,7 +53,6 @@
 										</div>
 									</div>
 								</div>
-								
 							</div>
 						</div>
 						<div class="form-group col-md-6 col-sm-6">
@@ -71,8 +70,8 @@
 								</label>
 								<div class="location">
 									<input type="text" name="location" value="{{ $placeholder }}" class="form-control location-input" autocomplete="off" {!! $all_locations ? 'disabled="disabled"' : '' !!} >
-									{{ Form::hidden( 'city' , !empty($city) ? $city->id : null, ['class' => 'city_id']  ) }}
-									{{ Form::hidden( 'country' , !empty($country) ? $country->id : null, ['class' => 'country_id']  ) }}
+									{{ Form::hidden( 'country' , $country_id, ['class' => 'country_id']  ) }}
+									{{ Form::hidden( 'city' , $city_id, ['class' => 'city_id']  ) }}
 									<div class="location-suggester">
 										<div class="loader">
 											<i class="fa fa fa-circle-o-notch fa-spin fa-2x fa-fw">

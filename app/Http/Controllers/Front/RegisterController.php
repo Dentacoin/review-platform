@@ -82,7 +82,7 @@ class RegisterController extends FrontController
 
         $user = User::find($id);
 
-        if (!empty($user)) {
+        if (!empty($user) && $user->canInvite('trp')) {
 
             if ($hash == $user->get_invite_token()) {
 
@@ -412,8 +412,28 @@ class RegisterController extends FrontController
                     } else {
                         
                         $user->is_verified = true;
+                        $user->is_approved = 0;
                         $user->password = bcrypt(Request::input('password'));
                         $user->save();
+
+                        $mtext = 'Dentist/Clinic just claimed its profile:
+
+                        '.url('https://reviews.dentacoin.com/cms/users/edit/'.$user->id).'
+
+                        ';
+
+                        Mail::raw($mtext, function ($message) use ($user) {
+
+                            $receiver = 'ali.hashem@dentacoin.com';
+                            $sender = config('mail.from.address');
+                            $sender_name = config('mail.from.name');
+
+                            $message->from($sender, $sender_name);
+                            $message->to( $receiver );
+                            //$message->to( 'dokinator@gmail.com' );
+                            $message->replyTo($receiver, $user->getName());
+                            $message->subject('Profile claimed');
+                        });
 
                         Auth::login($user, true);
 

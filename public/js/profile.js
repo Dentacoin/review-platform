@@ -1,3 +1,5 @@
+var dentistTO = null;
+var user_id;
 $(document).ready(function(){
 
     $('.bxslider').bxSlider({
@@ -512,6 +514,66 @@ $(document).ready(function(){
 
     $('.widget-modes input').change(refreshWidgetCode);
     refreshWidgetCode();
+
+    var dentistSuggester = function() {
+        if( $(this).val().trim().length < 4 ) {
+            return;
+        }
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $(this).closest('.dentist-suggester').addClass('loading');
+
+        var that = $(this);
+
+        $.ajax( {
+            url: 'suggest-dentist/'+user_id,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                invitedentist: $(this).val()
+            },
+            success: (function( data ) {
+                console.log(data);
+                that.closest('.dentist-suggester').removeClass('loading').addClass('visible');
+                var container = that.closest('.dentist-suggester').find('.results').first();
+
+                if (data.length) {
+                    container.html('');
+                    for(var i in data) {
+                        container.append('<a href="javascript:;" data-id="'+data[i].id+'">'+data[i].name+'</a>');
+                    }
+
+                    container.find('a').click( function() {
+                        $('#invitedentistid').val( $(this).attr('data-id') );
+                        $(this).closest('.dentist-suggester').removeClass('visible');
+                        $(this).closest('form').find('#invitedentist').val( $(this).html() );
+                    } );
+                } else {
+                    container.html('No dentist found by that name');
+                }
+                ajax_is_running = false;
+            }).bind(that)
+        });
+    };
+
+    $('#invitedentist').keydown( function(event) {
+
+        if( event.keyCode == 13) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+
+        if(dentistTO) {
+            clearTimeout(dentistTO);
+        }
+
+        dentistTO = setTimeout(dentistSuggester.bind(this), 300);
+    } );
 
 
 });

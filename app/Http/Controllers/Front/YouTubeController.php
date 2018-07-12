@@ -10,6 +10,8 @@ use DB;
 use App\Models\Dcn;
 use App\Models\DcnTransaction;
 use App\Models\User;
+use App\Models\Vox;
+use App\Models\VoxQuestion;
 use App\Models\VoxCashout;
 use App\Models\TrpReward;
 use App\Models\Email;
@@ -18,7 +20,80 @@ class YouTubeController extends FrontController
 {
     public function test() {
 
+        exit;
 
+        $questions = VoxQuestion::get();
+
+        foreach ($questions as $question) {
+            if ($question->go_back) {
+                echo $question->question.'<br/>';
+                echo $question->id.': Question Number: '.$question->go_back.'<br/>';
+
+                $new_question = VoxQuestion::where('order', $question->go_back )->where('vox_id', $question->vox_id )->first();
+
+                if($new_question) {
+                    echo '<b>';
+                    echo 'New ID: '.$new_question->id;
+
+                    echo '</b><br/>';
+                    $question->go_back = $new_question->id;
+                    $question->save();
+                }
+
+                // echo 'NEW GO BACK: '. $question->go_back.'<br/>';
+                echo '<br/>';
+                echo '<br/>';
+            }
+        }
+
+
+
+
+
+
+        exit;
+
+        //Triggers
+        $questions = VoxQuestion::get();
+
+        $questions_trigger = [];
+        foreach ($questions as $question) {
+            if ($question->question_trigger) {
+                echo $question->question.'<br/>';
+                $trigger_info = explode(';', $question->question_trigger);
+                foreach ($trigger_info as $i => $ti) {
+                    $arr = explode(':', trim($ti));
+                    echo $question->id.': Question Number: '.$arr[0];
+                    if(!empty($arr[1])) {
+                        echo ' / Answers: '.$arr[1];
+                    }
+                    echo '<br/>';
+
+                    $new_question = VoxQuestion::where('order', $arr[0] )->where('vox_id', $question->vox_id )->first();
+
+                    //Търсиш в questions където номерът е $arr[0] и въпросникът е същия като на този въпрос.
+                    //Взимаш id-то и го показваш
+                    if($new_question) {
+                        echo '<b>';
+                        echo 'New ID: '.$new_question->id;
+
+                        echo '</b><br/>';
+
+                        $arr[0] = $new_question->id;
+                        $trigger_info[$i] = implode(':', $arr);
+                    }
+
+                };
+
+                $question->question_trigger = implode(';', $trigger_info);
+                echo 'NEW TRIGGERS: '.$question->question_trigger.'<br/>';
+                $question->save();
+                echo '<br/>';
+                echo '<br/>';
+            }
+        }
+
+        exit;
 
         //Logins
         $users = DB::select( DB::raw('

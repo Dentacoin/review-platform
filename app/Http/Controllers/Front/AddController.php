@@ -60,7 +60,7 @@ class AddController extends FrontController
 	public function list($locale=null) {
 
 
-        if(Request::isMethod('post') && !empty($this->user) && ($this->user->is_verified || $this->user->fb_id) ) {
+        if(Request::isMethod('post') && !empty($this->user) && $this->user->is_verified $this->user->email ) {
 
             $validator_arr = [];
             foreach ($this->fields as $key => $value) {

@@ -76,6 +76,28 @@ class VoxesController extends AdminController
 
         if(!empty($item)) {
 
+            $triggers = [];
+
+            foreach($item->questions as $question) {
+                $triggers[$question->id] = '';
+                if ($question->question_trigger) {
+
+                    foreach (explode(';', $question->question_trigger) as $v) {
+                        $question_id = explode(':',$v)[0];
+
+                        $q = VoxQuestion::find($question_id);
+
+                        if (!empty(explode(':',$v)[1])) {
+                            $answ = explode(':',$v)[1];
+                            $triggers[$question->id] .= $q->question.': '.$answ.'<br/>';
+                        } else {
+                            $triggers[$question->id] .= $q->question.'<br/>';
+                        }
+                        
+                    }
+                }
+            }
+
             if(Request::isMethod('post')) {
 
                 $this->saveOrUpdate($item);
@@ -90,6 +112,7 @@ class VoxesController extends AdminController
                 'question_types' => $this->question_types,
                 'item' => $item,
                 'category_list' => VoxCategory::get(),
+                'triggers' => $triggers,
             ));
         } else {
             return redirect('cms/'.$this->current_page);
@@ -199,6 +222,8 @@ class VoxesController extends AdminController
                         'type' => intval(current($results)[$i]['type']),
                         'is_control' => current($results)[$i]['valid_answer'],
                         'go_back' => current($results)[$i]['go_back_to'],
+                        'question_scale' => null,
+                        'question_trigger' => null,
                     ];
                     foreach ($results as $lang => $list) {
                         $qdata['question-'.$lang] = !empty($list[$i]['question']) ? $list[$i]['question'] : null;
@@ -220,6 +245,77 @@ class VoxesController extends AdminController
 
                     $that->saveOrUpdateQuestion($qobj, $qdata);
                 }
+
+                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.imported'));
+
+            });
+            
+            return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
+
+        } else {
+            return redirect('cms/'.$this->current_page);
+        }
+    }
+
+    public function import_quick( $id ) {
+        $item = Vox::find($id);
+
+        if(!empty($item) && Input::file('table')) {
+
+            global $i;
+            $i = $item->questions->last() ? intval($item->questions->last()->order)+1 : 1;
+
+            $that = $this;
+
+            Excel::load( Input::file('table')->path() , function($reader) use ($item, $that)  { //
+
+                // Getting all results
+                global $results, $i;
+                $results = [];
+                $reader->each(function($sheet) {
+                    global $results;
+                    $results[] = $sheet->toArray();
+                });
+
+                if(!empty($results)) {
+                    $q = null;
+                    $a = [];
+                    foreach ($results as $row) {
+                        $text = current($row);
+                        if(empty($text)) {
+                            if($q && !empty($a)) {
+                                $qdata = [
+                                    'order' => $i,
+                                    'type' => 'single_choice',
+                                    'is_control' => null,
+                                    'go_back' => null,
+                                    'question_scale' => null,
+                                    'question_trigger' => null,
+                                    'question-en' => $q,
+                                    'answers-en' => $a,
+                                ];
+
+                                $qobj = new VoxQuestion;
+                                $qobj->vox_id = $item->id;
+                                $that->saveOrUpdateQuestion($qobj, $qdata);
+
+                                //var_dump($qdata);
+
+                                $q=null;
+                                $a=[];
+                                $i++;
+                            }
+                        } else {
+                            if(empty($q)) {
+                                $q = $text;
+                            } else {
+                                $a[] = $text;
+                            }
+                        }
+                    }                    
+                }
+
+                //exit;
 
                 $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.imported'));
 
@@ -254,7 +350,8 @@ class VoxesController extends AdminController
 
         if(!empty($question) && $question->vox->id==$id) {
 
-            //dd($question);
+            $questions = Vox::find($id);
+
 
             if(Request::isMethod('post')) {
 
@@ -355,7 +452,17 @@ class VoxesController extends AdminController
         $question->go_back = $data['go_back'];
         $question->order = $data['order'];
         $question->vox_scale_id = $data['question_scale'];
-        $question->question_trigger = $data['question_trigger'];
+
+        if(!empty( $data['triggers'] )) {
+            $help_array = [];
+            foreach($data['triggers'] as $i => $trg) {
+                $help_array[] = $trg.( !empty( $data['answers-number'][$i] ) ? ':'.$data['answers-number'][$i] : '' );
+            }
+            $question->question_trigger = implode(';', $help_array);
+        } else {
+            $question->question_trigger = '';
+        }
+        
         $question->save();
 
         foreach ($this->langs as $key => $value) {

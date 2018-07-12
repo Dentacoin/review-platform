@@ -139,34 +139,53 @@
             <h3>Import / Export</h3>
             <div class="panel panel-inverse">
                 <div class="panel-heading">
-                    <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.questions-export') }}</h4>
+                    Import / Export Options
                 </div>
                 <div class="tab-content">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
+                            <h4>{{ trans('admin.page.'.$current_page.'.questions-export') }}</h4>
                             <a class="btn btn-primary btn-block" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/export') }}" target="_blank">
                                 {{ trans('admin.page.'.$current_page.'.questions-export') }}
                             </a>
                         </div>
-                    </div>
-                </div>
-                <div class="panel-heading">
-                    <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.questions-import') }}</h4>
-                </div>
-                <div class="tab-content">
-                    <form class="form-horizontal" id="translations-import" method="post" action="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/import') }}" enctype="multipart/form-data">
-                        {!! csrf_field() !!}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <input type="file" class="btn-block form-control" name="table" accept=".xls" />
-                            </div>
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-success btn-block">
-                                    {{ trans('admin.page.'.$current_page.'.questions-import') }}
-                                </button>
-                            </div>
+                        <div class="col-md-4">
+                            <h4>{{ trans('admin.page.'.$current_page.'.questions-import') }}</h4>
+                            <form class="form-horizontal" id="translations-import" method="post" action="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/import') }}" enctype="multipart/form-data">
+                                {!! csrf_field() !!}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="file" class="btn-block form-control" name="table" accept=".xls, .xlsx" />
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-success btn-block">
+                                            {{ trans('admin.page.'.$current_page.'.questions-import') }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <br/>
+                            <i>* Export a translation file and fill the texts in it</i>
                         </div>
-                    </form>
+                        <div class="col-md-4">
+                            <h4>Quick import</h4>
+                            <form class="form-horizontal" id="translations-import-quick" method="post" action="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/import-quick') }}" enctype="multipart/form-data">
+                                {!! csrf_field() !!}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="file" class="btn-block form-control" name="table" accept=".xls, .xlsx" />
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-success btn-block">
+                                            Quick Import
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <br/>
+                            <a href="{{ url('test-excel.xlsx') }}">Download sample</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -201,9 +220,15 @@
                                         <td>
                                             <textarea style="min-width: 360px;" class="form-control question-question" data-qid="{{ $question->id }}">{{ $question->question }}</textarea>
                                         </td>
-                                        <td>{{ trans( 'admin.common.'.( $question->is_control ? 'yes' : 'no' ) ).( $question->go_back ? ' -> go back to '.$question->go_back : '' ) }}</td>
+                                        <td>
+                                            {{ trans( 'admin.common.'.( $question->is_control ? 'yes' : 'no' ) ) }}
+                                            @if($question->go_back)
+                                                , go back to <br/> &raquo;
+                                                {{ App\Models\VoxQuestion::find($question->go_back)->question }}
+                                            @endif
+                                        </td>
                                         <td>{{ trans('admin.enums.question-type.'.$question->type) }}</td>
-                                        <td>{{ $question->question_trigger }}</td>
+                                        <td>{!! $triggers[$question->id] !!}</td>
                                         <td>
                                             <a class="btn btn-sm btn-success" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.$question->id) }}">
                                                 <i class="fa fa-pencil"></i>

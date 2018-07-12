@@ -5,9 +5,42 @@ var scrollToActive;
 var FB_status;
 var fbLogin;
 var fb_city_id;
+var checkFilledDots;
 
 $(document).ready(function(){
+
 	$.cookie.json = true;
+
+	checkFilledDots = function( event, index) {
+		console.log('alee');
+		var goods = new Array;
+		var flickity = $('.flickity:visible');
+		var missing = false;
+		if( flickity.length ) {
+			flickity.find('.answer-radios-group').each( function() {
+	            if( $(this).find('.answer-radio.active-label').length ) {
+	                goods.push(true);
+	            } else {
+	                goods.push(false);
+	                missing = true;
+	            }
+	        } );
+	        console.log(goods);
+	        var i=0;
+	        flickity.find('.flickity-page-dots .dot').each( function() {
+	            if(goods[i]) {
+	                $(this).addClass('filled');
+	            } else {
+	                $(this).removeClass('filled');
+	            }
+	            i++;
+	        } );
+
+	        if(!missing) {
+				$('.question-group:visible .next-answer').show();
+	        }
+		}
+	}
 
 	VoxTest.handleNextQuestion = function() {
 		$('#current-question-bar').css('width', ((vox.current / vox.count)*100)+'%');
@@ -19,10 +52,28 @@ $(document).ready(function(){
 			$('#dcn-test-reward-before').hide();
 			$('#dcn-test-reward-after').show();
 		}
+
+		if (window.innerWidth < 768) {
+
+			$('.question-group:visible .flickity').flickity({
+				wrapAround: true,
+				adaptiveHeight: true,
+				draggable: false
+			});
+
+
+			$('.question-group:visible .flickity').on( 'select.flickity', checkFilledDots);
+
+			$('.question-group:visible .next-answer').hide();
+		}
+
+		
 	}
 	if(typeof(vox)!='undefined') {
 		VoxTest.handleNextQuestion();		
 	}
+
+
 
     $('.country-select').change( function() {
     	var city_select = $(this).closest('form').find('.city-select').first();

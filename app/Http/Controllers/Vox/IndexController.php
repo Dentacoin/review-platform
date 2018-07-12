@@ -71,28 +71,29 @@ class IndexController extends FrontController
 				$viewparams['cats'] = VoxCategory::whereHas('voxes')->get();
 			} else {
 
-				$voxes = Vox::where('type', 'normal')
-	    		->whereNotIn('id', $this->user->vox_rewards->pluck('vox_id'))
-	    		->get();
-				if($sort=='newest') {
-					$voxes = $voxes->sortBy(function($reward) {
-					    return $reward->id;
-					}, SORT_REGULAR, true);
-				} else if($sort=='reward') {
-					$voxes = $voxes->sortBy(function($reward) {
-					    return $reward->getRewardTotal();
-					}, SORT_REGULAR, true);
-				} else if($sort=='duration') {
-					$voxes = $voxes->sortBy(function($reward) {
-					    return $reward->duration;
-					}, SORT_REGULAR, true);
-				} else if($sort=='popular') {
-					$voxes = $voxes->sortBy(function($reward) {
-					    return $reward->rewards->count();
-					}, SORT_REGULAR, true);
+				if($sort=='popular') {
+					$voxes = Vox::where('type', 'normal')->withCount('rewards')->orderBy('rewards_count', 'desc')->get();
+				} else {
+
+					$voxes = Vox::where('type', 'normal')->get();
+		    		
+					if($sort=='newest') {
+						$voxes = $voxes->sortBy(function($reward) {
+						    return $reward->id;
+						}, SORT_REGULAR, true);
+					} else if($sort=='reward') {
+						$voxes = $voxes->sortBy(function($reward) {
+						    return $reward->getRewardTotal();
+						}, SORT_REGULAR, true);
+					} else if($sort=='duration') {
+						$voxes = $voxes->sortBy(function($reward) {
+						    return $reward->duration;
+						}, SORT_REGULAR, true);
+					} 
 				}
 				$viewparams['voxes'] = $voxes;
 			}
+
 			return $this->ShowVoxView('home', $viewparams);
 
 		} else {
@@ -103,7 +104,7 @@ class IndexController extends FrontController
 			return $this->ShowVoxView('index', array(
 				'vox' => $first,
 				'has_test' => $has_test,
-				'users_count' => User::where('vox_active', 1)->count(),
+				'users_count' => User::getCount('vox'),
 				'js' => [
 					'index.js'
 				]

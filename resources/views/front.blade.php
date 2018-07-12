@@ -329,88 +329,9 @@
 							</h4>
 						</div>
 						<div class="modal-body">
-							<p>
-								{!! trans('front.page.dentist.claim-hint') !!}
-		                	</p>
-						  	<div class="btn-group btn-group-justified" role="group" aria-label="...">
-								<button type="button" class="btn btn-default">
-									<label for="radio-phone">
-					    				<input type="radio" name="type" id="radio-phone" class="claim-type" data-type="phone" value="1"> 
-										{{ trans('front.page.'.$current_page.'.use-phone') }}
-									</label>
-								</button>
-								<button type="button" class="btn btn-default">
-									<label for="radio-email">
-								    	<input type="radio" name="type" id="radio-email" class="claim-type" data-type="email" value="1"> 
-										{{ trans('front.page.'.$current_page.'.use-email') }}
-								  	</label>
-								</button>
-							</div>
-							<div class="type-div type-phone" style="display: none;">
-				  				{!! Form::open(array('url' => $item->getLink().'/claim-phone', 'method' => 'post', 'class' => 'form-horizontal', 'id' => 'claim-phone-send-form' )) !!}
-				  					<p>
-				  						<br/>
-										{!! trans('front.page.dentist.claim-phone-hint', [ 'phone' => $item->getMaskedPhone(), 'name' => $item->name  ]) !!}
-				  					</p>
-				        			<div class="form-group">
-									  	<div class="col-md-12">
-									  		<input type="text" name="phone" class="form-control" placeholder="{{ trans('front.page.'.$current_page.'.phone') }}" required>
-									    </div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-		                                    <input type="submit" name="save-phone" value="{{ trans('front.page.dentist.claim-phone-submit') }}" class="btn btn-primary btn-block" />
-										</div>
-									</div>
-									<div class="alert alert-warning" style="display: none;">
-										{{ trans('front.page.dentist.claim-phone-invalid') }}
-									</div>
-				  				{!! Form::close() !!}
-				  				{!! Form::open(array('url' => $item->getLink().'/claim-code', 'method' => 'post', 'style' => 'display: none', 'class' => 'form-horizontal', 'id' => 'claim-phone-code-form' )) !!}
-				  					<br/>
-									<div class="form-group">
-										<div class="col-md-12">
-											<h3>
-												{{ trans('front.page.dentist.claim-phone-sms-sent') }}
-											</h3>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											{{ Form::text( 'code', '', array('class' => 'form-control', 'placeholder' => trans('front.page.dentist.claim-phone-code-placeholder') )) }}
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-		                                    <input type="submit" name="save-phone" value="{{ trans('front.page.dentist.claim-phone-code-submit') }}" class="btn btn-primary btn-block" />
-										</div>
-									</div>
-									<div class="alert alert-warning" style="display: none;">
-										{{ trans('front.page.dentist.claim-phone-code-error') }}
-									</div>
-				  				{!! Form::close() !!}
-				  				{!! Form::open(array('url' => $item->getLink().'/claim-password', 'method' => 'post', 'style' => 'display: none', 'class' => 'form-horizontal', 'id' => 'claim-phone-password-form' )) !!}
-									<p>
-				  						<br/>
-										{{ trans('front.page.dentist.claim-phone-password') }}
-				                	</p>
-									<div class="form-group">
-										<div class="col-md-12">
-		                                    <a href="" id="go-to-claim" class="btn btn-primary btn-block">
-		                                    	{{ trans('front.page.dentist.claim-phone-password-submit') }}
-		                                    </a>
-										</div>
-									</div>
-									<div class="alert alert-warning" style="display: none;">
-										{{ trans('front.page.dentist.claim-phone-password-invalid') }}
-									</div>
-				  				{!! Form::close() !!}
-
-							</div>
-							<div class="type-div type-email" style="display: none;">
+							<div class="type-div type-email">
 				  				{!! Form::open(array('url' => $item->getLink().'/claim-email', 'method' => 'post', 'class' => 'form-horizontal', 'id' => 'claim-email-send-form' )) !!}
 				  					<p>
-				  						<br/>
 										{!! trans('front.page.dentist.claim-email-hint', [ 'email' => $item->getMaskedEmail(), 'name' => $item->name  ]) !!}
 				  					</p>
 				        			<div class="form-group tbh-div">
@@ -598,7 +519,6 @@
 		<script src="{{ url('/js/lightbox.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js/main.js').'?ver='.$cache_version }}"></script>
         @if( $current_page=='dentist' )
-			<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 			<script src="//vjs.zencdn.net/6.4.0/video.min.js"></script>
 			<script src="//cdn.WebRTC-Experiment.com/RecordRTC.js"></script>
 			<script src="//webrtc.github.io/adapter/adapter-latest.js"></script>
@@ -619,6 +539,7 @@
         <script type="text/javascript">
         	var areYouSure = '{{ trans('front.common.sure') }}';
         	var lang = '{{ App::getLocale() }}';
+        	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         </script>
 
         @if(!$user)

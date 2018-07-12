@@ -23,7 +23,12 @@
                         @foreach( $fields as $key => $info)
                             <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.form-'.$key) }}</label>
                             <div class="col-md-4">
-                                @if( $info['type'] == 'text')
+                                @if( $key == 'type')
+                                    {{ Form::select( $key , $info['values'] , ($item->is_dentist ? ( $item->is_clinic ? 'clinic' : 'dentist' ) : 'patient') , array(
+                                        'class' => 'form-control',
+                                        'style' => ''.(!empty($info['multiple']) ? 'height: 200px;' : '')
+                                    )) }}
+                                @elseif( $info['type'] == 'text')
                                     {{ Form::text( $key, $item->$key, array('class' => 'form-control', (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled' )) }}
                                     @if($key=='fb_id' && $item->$key)
                                         <a href="https://facebook.com/{{ $item->$key }}" target="_blank">Open FB profile</a>

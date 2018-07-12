@@ -35,7 +35,7 @@ class VoxController extends FrontController
 	public function dovox($locale=null, $vox) {
 		$this->current_page = 'questionnaire';
 
-		if(empty($vox) || !($this->user->email && $this->user->is_verified) ) {
+		if(empty($vox) || (!$this->user->is_verified || !$this->user->email) ) {
 			return redirect( getLangUrl('/') );
 		} else if( $this->user->madeTest($vox->id) ) {
 			return redirect( getLangUrl('stats/'.$vox->id) );			
@@ -45,6 +45,8 @@ class VoxController extends FrontController
         if($this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/bans'));
         }
+
+
 
 		$list = VoxAnswer::where('vox_id', $vox->id)
 		->where('user_id', $this->user->id)
@@ -63,6 +65,22 @@ class VoxController extends FrontController
 
 		$not_bot = session('not_not-'.$vox->id);
 
+
+		if(Request::input('goback') && !empty($this->admin)) {
+			if(!empty($answered)) {
+				$lastkey = null;
+				foreach ($answered as $lastkey => $bla) {
+					;
+				}
+				$list = VoxAnswer::where('vox_id', $vox->id)
+				->where('user_id', $this->user->id)
+				->where('question_id', $lastkey)
+				->delete();
+			}
+
+            return redirect( $vox->getLink() );
+
+		}
 
 		$slist = VoxScale::get();
 		$scales = [];
