@@ -117,8 +117,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 
 //Empty route
-
-Route::domain('reviews.dentacoin.com')->group(function () {
+$reviewRoutes = function () {
 	
 	Route::any('test', 									'Front\YouTubeController@test');
 	Route::any('civic', 								'CivicController@add');
@@ -229,7 +228,11 @@ Route::domain('reviews.dentacoin.com')->group(function () {
 			Route::get('{slug}', 								'PagesController@home');
 		});
 	});
-});
+};
+
+
+Route::domain('reviews.dentacoin.com')->group($reviewRoutes);
+Route::domain('dev-reviews.dentacoin.com')->group($reviewRoutes);
 
 Route::domain('dentavox.dentacoin.com')->group(function () {
 	Route::any('test', 									'Front\YouTubeController@test');
