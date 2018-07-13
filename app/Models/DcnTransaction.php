@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-
+use App\Models\User;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -51,7 +51,7 @@ class DcnTransaction extends Model {
         $times = intval($this->retries)+1;
         $period = 5*pow(2, $times);
         $period = min(86400, $period);
-        return Carbon::now()->diffInMinutes($this->updated_at) > $period;
+        return !User::isGasExpensive() && Carbon::now()->diffInMinutes($this->updated_at) > $period;
     }
 }
 

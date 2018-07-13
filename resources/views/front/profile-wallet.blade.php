@@ -136,7 +136,7 @@
 							                    {{ Form::text( 'withdraw-amount', $user->getTrpBalance(), array('class' => 'form-control', 'id' => 'transfer-withdraw-amount' )) }}
 							                </div>
 							            </div>
-							            @if($user->gasPrice())
+							            @if($user->isGasExpensive())
 								            <div class="alert alert-warning">
 								            	{{ trans('vox.page.profile.wallet-withdraw-gas') }}
 					                        </div>

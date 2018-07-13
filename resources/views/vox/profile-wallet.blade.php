@@ -130,7 +130,7 @@
 						                    <input class="form-control" id="wallet-amount" name="wallet-amount" type="text" value="">
 						                </div>
 						            </div>
-						            @if($user->gasPrice())
+						            @if($user->isGasExpensive())
 							            <div class="alert alert-warning">
 							            	{{ trans('vox.page.profile.wallet-withdraw-gas') }}
 				                        </div>

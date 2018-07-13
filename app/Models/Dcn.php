@@ -5,6 +5,7 @@ namespace App\Models;
 use Request;
 
 use App\Models\DcnTransaction;
+use App\Models\User;
 
 class Dcn
 {
@@ -43,6 +44,10 @@ class Dcn
 
                 if($dontsend) {
                     return true;
+                }
+
+                if(User::isGasExpensive()) {
+                    return $ret;
                 }
 
                 $post = array(

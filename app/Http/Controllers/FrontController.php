@@ -145,7 +145,7 @@ class FrontController extends BaseController
     public function ShowView($page, $params=array()) {
         $this->PrepareViewData($page, $params, 'front');
 
-        $params['cache_version'] = '20180710';
+        $params['cache_version'] = '20180713';
         // "2018-05-05 00:00:00.000000"
         
         return view('front.'.$page, $params);
