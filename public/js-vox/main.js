@@ -61,18 +61,22 @@ $(document).ready(function(){
 				draggable: false
 			});
 
-
 			$('.question-group:visible .flickity').on( 'select.flickity', checkFilledDots);
-
 			$('.question-group:visible .next-answer').hide();
 		}
 
+		if($('.question-group:visible').hasClass('shuffle')) {
+			var parent = $('.question-group:visible .answers');
+		    var divs = parent.children();
+		    while (divs.length) {
+		        parent.append(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+		    }
+		}
 		
 	}
 	if(typeof(vox)!='undefined') {
 		VoxTest.handleNextQuestion();		
 	}
-
 
 
     $('.country-select').change( function() {

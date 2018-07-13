@@ -563,4 +563,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return [ self::getTempImageUrl($name, true), self::getTempImageUrl($name), $name ];
     }
 
+    public static function gasPrice() {
+
+        $url = file_get_contents('https://dentacoin.net/gas-price');
+
+        $gas = json_decode($url, true);
+
+        if(intVal($gas['gasPrice']) > intVal($gas['treshold']) ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

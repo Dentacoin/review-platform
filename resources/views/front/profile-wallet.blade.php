@@ -136,6 +136,11 @@
 							                    {{ Form::text( 'withdraw-amount', $user->getTrpBalance(), array('class' => 'form-control', 'id' => 'transfer-withdraw-amount' )) }}
 							                </div>
 							            </div>
+							            @if($user->gasPrice())
+								            <div class="alert alert-warning">
+								            	{{ trans('vox.page.profile.wallet-withdraw-gas') }}
+					                        </div>
+					                    @endif
 							            <div class="form-group">
 							                <div class="col-md-12">
 							                    <button type="submit" class="btn btn-primary btn-block" data-loading="{{ trans('front.common.loading') }}">

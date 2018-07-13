@@ -447,7 +447,13 @@ class VoxesController extends AdminController
         if(empty($data)) {
             $data = $this->request->input();
         }
-        $question->is_control = $data['is_control'];
+
+        if(!empty($data['is_control_prev'])) {
+            $question->is_control = $data['is_control_prev'];
+        } else {
+            $question->is_control = $data['is_control'];
+        }
+        
         $question->type = $data['type'];
         $question->go_back = $data['go_back'];
         $question->order = $data['order'];

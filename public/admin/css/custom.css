@@ -112,3 +112,7 @@ table.table .table-search {
 .spending-table td {
     text-align: right;
 }
+
+.template-box .select2.select2-container {
+    float: left;
+}

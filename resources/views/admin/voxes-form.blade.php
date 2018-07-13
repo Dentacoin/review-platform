@@ -144,6 +144,24 @@
                 <div class="tab-content">
                     <div class="row">
                         <div class="col-md-4">
+                            <h4>Quick import</h4>
+                            <form class="form-horizontal" id="translations-import-quick" method="post" action="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/import-quick') }}" enctype="multipart/form-data">
+                                {!! csrf_field() !!}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="file" class="btn-block form-control" name="table" accept=".xls, .xlsx" />
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-success btn-block">
+                                            Quick Import
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <br/>
+                            <a href="{{ url('survey-import-template.xlsx') }}">Download sample</a>
+                        </div>
+                        <div class="col-md-4">
                             <h4>{{ trans('admin.page.'.$current_page.'.questions-export') }}</h4>
                             <a class="btn btn-primary btn-block" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/export') }}" target="_blank">
                                 {{ trans('admin.page.'.$current_page.'.questions-export') }}
@@ -166,24 +184,6 @@
                             </form>
                             <br/>
                             <i>* Export a translation file and fill the texts in it</i>
-                        </div>
-                        <div class="col-md-4">
-                            <h4>Quick import</h4>
-                            <form class="form-horizontal" id="translations-import-quick" method="post" action="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/import-quick') }}" enctype="multipart/form-data">
-                                {!! csrf_field() !!}
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <input type="file" class="btn-block form-control" name="table" accept=".xls, .xlsx" />
-                                    </div>
-                                    <div class="col-md-12">
-                                        <button type="submit" class="btn btn-success btn-block">
-                                            Quick Import
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                            <br/>
-                            <a href="{{ url('test-excel.xlsx') }}">Download sample</a>
                         </div>
                     </div>
                 </div>

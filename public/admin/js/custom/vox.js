@@ -29,11 +29,33 @@ $(document).ready(function(){
 	$('.questions-form .btn-add-trigger').click( function() {
 		var newinput = $('#trigger-group-template').clone(true).removeAttr('id');
 		$('.questions-form').find('.triggers-list').append(newinput);
+		$('.triggers-list .input-group').each( function() {
+			if (!($(this).find('select').hasClass('select2'))) {
+				$(this).find('select').addClass('select2');
+				$(".select2").select2();
+			}
+		});
 	} );
 
 
 	$('.btn-remove-trigger').click( function() {
 		$(this).closest('.input-group').remove();
 	} );
+
+	$(".select2").select2();
+
+
+	controlQuestion = function() {
+		if($('#is_control_prev').is(":checked")) {
+			$('#is_control_prev').closest('.form-group').find('input[name="is_control"]').attr("disabled", true);
+		} else {
+			$('#is_control_prev').closest('.form-group').find('input[name="is_control"]').attr("disabled", false);
+		}
+	}
+	controlQuestion();
+
+	$('#is_control_prev').click( function() {
+		controlQuestion();
+	});
 	
 });

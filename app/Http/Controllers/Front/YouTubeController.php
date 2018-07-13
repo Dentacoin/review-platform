@@ -22,6 +22,7 @@ class YouTubeController extends FrontController
 
         exit;
 
+        //Control questions
         $questions = VoxQuestion::get();
 
         foreach ($questions as $question) {
@@ -45,9 +46,6 @@ class YouTubeController extends FrontController
                 echo '<br/>';
             }
         }
-
-
-
 
 
 

@@ -25,8 +25,8 @@
                 @foreach(explode(';',$question->question_trigger) as $trigger)
                     <div class="input-group">
                         <div class="template-box clearfix"> 
-                            {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), explode(':', $trigger)[0], array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
-                            {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Question number')) }}
+                            {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), explode(':', $trigger)[0], array('class' => 'form-control select2', 'style' => 'width: 50%; float: left;')) }} 
+                            {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer number')) }}
                         </div>
                         <div class="input-group-btn">
                             <button class="btn btn-default btn-remove-trigger" type="button">
@@ -128,15 +128,23 @@
             <div class="form-group">
                 <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.question-control') }}</label>
                 <div class="col-md-9">
-                    {{ Form::text('is_control', !empty($question) ? $question->is_control : '', array('maxlength' => 256, 'class' => 'form-control input-title')) }}
-                    {{ trans('admin.page.'.$current_page.'.question-control-hint') }}
+                    {{ Form::text('is_control', !empty($question) && ($question->is_control != '-1') ? $question->is_control : '', array('maxlength' => 256, 'class' => 'form-control input-title')) }}
+
+                    <label for="is_control_prev">
+                        <input type="checkbox" name="is_control_prev" value="-1" id="is_control_prev" style="vertical-align: sub;" {!! !empty($question->is_control) && ($question->is_control == '-1') ? 'checked="checked"' : '' !!} />
+                        Same as previous question
+                    </label>
+
+                    <p>
+                        {{ trans('admin.page.'.$current_page.'.question-control-hint') }}
+                    </p>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.question-go-back') }}</label>
                 <div class="col-md-9">
                     {{ trans('admin.page.'.$current_page.'.question-go-back-hint') }}<br/>
-                    {{ Form::select('go_back', ['' => '-'] + $item->questions->pluck('question', 'id')->toArray(), !empty($question) ? $question->go_back : '', array('class' => 'form-control')) }}
+                    {{ Form::select('go_back', ['' => '-'] + $item->questions->pluck('question', 'id')->toArray(), !empty($question) ? $question->go_back : '', array('class' => 'form-control select2')) }}
                 </div>
             </div>
 
@@ -167,7 +175,7 @@
     <div class="input-group" id="trigger-group-template" >
         <div class="template-box clearfix"> 
             {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
-            {{ Form::text('answers-number[]', '', array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Question number')) }}
+            {{ Form::text('answers-number[]', '', array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer number')) }}
         </div>
         <div class="input-group-btn">
             <button class="btn btn-default btn-remove-trigger" type="button">

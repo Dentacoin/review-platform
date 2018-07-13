@@ -68,14 +68,19 @@ class IndexController extends FrontController
 	        );
 	        
 			if($sort=='category') {
-				$viewparams['cats'] = VoxCategory::whereHas('voxes')->get();
+				$viewparams['cats'] = VoxCategory::whereHas('voxes')
+				->whereNotIn('id', $this->user->vox_rewards->pluck('vox_id'))
+				->get();
 			} else {
 
 				if($sort=='popular') {
-					$voxes = Vox::where('type', 'normal')->withCount('rewards')->orderBy('rewards_count', 'desc')->get();
+					$voxes = Vox::where('type', 'normal')
+					->whereNotIn('id', $this->user->vox_rewards->pluck('vox_id'))
+					->withCount('rewards')->orderBy('rewards_count', 'desc')->get();
 				} else {
-
-					$voxes = Vox::where('type', 'normal')->get();
+					$voxes = Vox::where('type', 'normal')
+					->whereNotIn('id', $this->user->vox_rewards->pluck('vox_id'))
+					->get();
 		    		
 					if($sort=='newest') {
 						$voxes = $voxes->sortBy(function($reward) {

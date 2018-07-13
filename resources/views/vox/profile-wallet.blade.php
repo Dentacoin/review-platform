@@ -130,6 +130,11 @@
 						                    <input class="form-control" id="wallet-amount" name="wallet-amount" type="text" value="">
 						                </div>
 						            </div>
+						            @if($user->gasPrice())
+							            <div class="alert alert-warning">
+							            	{{ trans('vox.page.profile.wallet-withdraw-gas') }}
+				                        </div>
+				                    @endif
 									<div class="form-group">
 										<div class="col-md-12">
 					                        <button type="submit" name="update" class="btn btn-primary form-control" data-loading="{{ trans('vox.common.loading') }}">

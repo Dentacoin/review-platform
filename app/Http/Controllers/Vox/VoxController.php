@@ -195,7 +195,12 @@ class VoxController extends FrontController
 						        $answer->answer = $a;
 						        $answer->country_id = $this->user->country_id;
 						        if($question->is_control) {
-						        	$answer->is_scam = $question->is_control!=$a;
+
+						        	if ($question->is_control == '-1') {
+						        		$answer->is_scam = end($answered) != $a;
+						        	} else {
+						        		$answer->is_scam = $question->is_control!=$a;
+						        	}
 						        }
 					        	if($answer->is_scam && $question->go_back) {
 					        		$wrongs = intval(session('wrongs'));

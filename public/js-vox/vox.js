@@ -128,11 +128,17 @@ $(document).ready(function(){
                         $('.question-group').find('.loader').remove();
                         $('.question-group').hide();
                         
-                        vox.current = data.go_back;
                         var go_back_group = $('.question-group').first();
-                        for(var i=1;i<vox.current;i++) {
+                        var i = 1;
+                        do {
+                            if( go_back_group.hasClass('question-group-'+data.go_back) ) {
+                                vox.current = i;
+                                break;                                
+                            }
                             go_back_group = go_back_group.next();
-                        }
+                            i++;
+                        } while(go_back_group.length);
+
                         go_back_group.show();
                         
                         $('.popup-mistakes').addClass('active');
@@ -140,6 +146,8 @@ $(document).ready(function(){
                         $('.popup-mistakes a').click( function() {
                             $('.popup-mistakes').removeClass('active');
                         } );
+
+                        VoxTest.handleNextQuestion();
 
                     } else {
                         

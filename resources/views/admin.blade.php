@@ -32,6 +32,7 @@
         <link href="admin/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet" />
         <link href="admin/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet" />
         <link href="admin/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet" />
+        <link href="admin/plugins/select2/dist/css/select2.min.css" rel="stylesheet"/>
         
         <link href="admin/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet" />
         <link href="admin/plugins/jquery-file-upload/css/jquery.fileupload.css" rel="stylesheet" />
