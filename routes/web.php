@@ -229,12 +229,12 @@ $reviewRoutes = function () {
 		});
 	});
 };
-
-
 Route::domain('reviews.dentacoin.com')->group($reviewRoutes);
 Route::domain('dev-reviews.dentacoin.com')->group($reviewRoutes);
 
-Route::domain('dentavox.dentacoin.com')->group(function () {
+
+$voxRoutes = function () {
+	
 	Route::any('test', 									'Front\YouTubeController@test');
 
 	Route::group(['prefix' => '{locale?}'], function(){
@@ -297,4 +297,6 @@ Route::domain('dentavox.dentacoin.com')->group(function () {
 
 		});
 	});
-});
+};
+Route::domain('dentavox.dentacoin.com')->group($voxRoutes);
+Route::domain('dev-dentavox.dentacoin.com')->group($voxRoutes);
