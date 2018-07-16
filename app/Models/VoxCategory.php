@@ -26,6 +26,14 @@ class VoxCategory extends Model {
         });
     }
 
+    public function voxesWithoutAnswer($user) {
+        $answer_ids = $user->vox_rewards->pluck('vox_id')->toArray();
+
+        return $this->voxes->filter(function($vox) use ($answer_ids) {
+            return !in_array($vox->vox_id, $answer_ids);
+        });
+    }
+
 }
 
 class VoxCategoryTranslation extends Model {

@@ -20,7 +20,6 @@
     <div class="form-group clearfix">
         <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.question-trigger') }}</label>
         <div class="col-md-9 triggers-list">
-            <!-- {{ Form::text('question_trigger', !empty($question) ? $question->question_trigger : '', array('class' => 'form-control', 'placeholder' => trans('admin.page.'.$current_page.'.question-trigger-placeholder')  )) }} -->
             @if(!empty($question) && !empty($question->question_trigger) )
                 @foreach(explode(';',$question->question_trigger) as $trigger)
                     <div class="input-group">
@@ -174,7 +173,7 @@
 <div style="display: none;">
     <div class="input-group" id="trigger-group-template" >
         <div class="template-box clearfix"> 
-            {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
+            {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), !empty($prev_question) ? $prev_question->id : null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
             {{ Form::text('answers-number[]', '', array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer number')) }}
         </div>
         <div class="input-group-btn">

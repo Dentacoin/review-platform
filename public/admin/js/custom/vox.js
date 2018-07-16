@@ -1,5 +1,17 @@
 $(document).ready(function(){
 
+	var handleScaleChanges = function() {
+		var qtype = $('.question-type-input').val();
+		if(qtype!='scale' && $('.question-scale-input').val().length ) {
+			$('.answers-group, .answers-group-add').hide();
+		} else {
+			$('.answers-group, .answers-group-add').show();
+		}
+	}
+
+	$('.question-type-input, .question-scale-input').change(handleScaleChanges);
+	handleScaleChanges();
+
 	$('.questions-form .btn-add-answer').click( function() {
 		$('.questions-form .tab-pane').each( function() {
 			var code = $(this).attr('data-code');
@@ -56,6 +68,59 @@ $(document).ready(function(){
 
 	$('#is_control_prev').click( function() {
 		controlQuestion();
+	});
+
+	$('.question-number, .question-question').on('keypress', function(e) {
+	    var code = e.keyCode || e.which;
+	    if (code == 13) {
+	        $(this).blur();
+	        return false;
+	    }
+	});
+
+	$('.question-number, .question-question').on('change blur', function() {
+		console.log( $(this).attr('data-qid'), $(this).val() );
+
+        if(ajax_action) {
+            return;
+        }
+        ajax_action = true;
+        var urlpart;
+        if( $(this).hasClass('question-question') ) {
+        	$(this).attr('disabled', 'disabled');
+        	urlpart = 'question';
+        } else {
+        	$('.question-number').attr('disabled', 'disabled');	
+        	urlpart = 'number';
+        }
+        
+
+        $.ajax({
+            url     : $('#page-add').attr('action') + '/change-'+urlpart+'/'+$(this).attr('data-qid'),
+            type    : 'POST',
+            data 	: {
+            	val: $(this).val()
+            },
+            dataType: 'json',
+            success : (function( res ) {
+                ajax_action = false;
+
+                if( $(this).hasClass('question-number') ) {
+	                var $trs = $('.table-question-list tbody tr');
+	                $trs.sort(function(a,b) {
+						return parseInt($(a).find('.question-number').val()) < parseInt($(b).find('.question-number').val()) ? -1 : 1;
+					})
+					$trs.detach().appendTo( $('.table-question-list tbody') );
+                }
+        		$('.question-number, .question-question').removeAttr('disabled');
+            }).bind( this ),
+            error : function( data ) {
+                ajax_action = false;
+        		$('.question-number, .question-question').removeAttr('disabled');
+            }
+        });
+
+
 	});
 	
 });

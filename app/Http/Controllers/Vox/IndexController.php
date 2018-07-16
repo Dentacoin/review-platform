@@ -68,9 +68,7 @@ class IndexController extends FrontController
 	        );
 	        
 			if($sort=='category') {
-				$viewparams['cats'] = VoxCategory::whereHas('voxes')
-				->whereNotIn('id', $this->user->vox_rewards->pluck('vox_id'))
-				->get();
+				$viewparams['cats'] = VoxCategory::whereHas('voxes')->get();
 			} else {
 
 				if($sort=='popular') {

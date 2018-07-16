@@ -126,8 +126,6 @@ class VoxesController extends AdminController
 
             $flist = [];
 
-
-
             foreach(config('langs') as $code => $lang_info) {
                 $flist[$code] = [];
 
@@ -352,6 +350,11 @@ class VoxesController extends AdminController
 
             $questions = Vox::find($id);
 
+            if ($question->order != '1') {
+                $prev_question = VoxQuestion::where('order', intVal($question->order) - 1 )->where('vox_id', $id)->first();
+            } else {
+                $prev_question = null;
+            }
 
             if(Request::isMethod('post')) {
 
@@ -366,6 +369,7 @@ class VoxesController extends AdminController
                 'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
                 'item' => $question->vox,
                 'question_types' => $this->question_types,
+                'prev_question' => $prev_question,
             ));
 
         } else {

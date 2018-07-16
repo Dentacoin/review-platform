@@ -26,9 +26,9 @@
 
 								@if($sort=='category')
 									@foreach( $cats as $cat )
-										@if($cat->voxes->isNotEmpty())
+										@if($cat->voxesWithoutAnswer($user)->isNotEmpty())
 											<h3 class="category-title">{{ $cat->name }}</h3>
-											@foreach( $cat->voxes as $vox_to_cat)
+											@foreach( $cat->voxesWithoutAnswer($user) as $vox_to_cat)
 												<div class="another-question {{ $loop->parent->first && $loop->first ? 'active' : '' }}">
 													<div class="another-question-header clearfix">
 														<div class="left">
