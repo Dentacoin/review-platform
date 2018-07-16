@@ -177,8 +177,7 @@ $(document).ready(function(){
                                     var parts = trigger_list[i].trim().split(':');
                                     var trigger_question = parts[0].trim(); // 15 въпрос
                                     var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
-                                    console.log(given_answer.length);
-                                    var parsed_given_answer = given_answer.length && given_answer!="0" ? given_answer.split(',') : null;
+                                    var parsed_given_answer = given_answer && given_answer.length && given_answer!="0" ? given_answer.split(',') : null;
                                     console.log(parsed_given_answer);
                                     if( parsed_given_answer ) {
                                         if( parts[1] ) {
