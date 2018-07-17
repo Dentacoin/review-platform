@@ -3,11 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class VoxAnswer extends Model {
-    
-    use SoftDeletes;
     
     protected $fillable = [
         'user_id',
@@ -22,7 +19,6 @@ class VoxAnswer extends Model {
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
     ];
 
     public static function getCount() {

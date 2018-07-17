@@ -63,10 +63,21 @@ $(document).ready(function(){
                 return;
             }
 
+        } else if (group.hasClass('birthyear-question')) {
+
+            if ( $('#birthyear-answer').val().length && parseInt( $('#birthyear-answer').val() ) > 1900 && parseInt( $('#birthyear-answer').val() ) < 2000 ) {
+                var answer = $('#birthyear-answer').val();
+                type = 'birthyear-question';
+            } else {
+                $('.answer-error').show().insertAfter($(this));
+                ajax_is_running = false;
+                return;
+            }
+
         } else if (group.hasClass('single-choice')) {
 
             var answer = $(this).attr('data-num');
-            type = 'single';
+            type = group.hasClass('gender-question') ? 'gender-question' : 'single';
 
         } else if(group.hasClass('multiple-choice')) {
 

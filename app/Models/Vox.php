@@ -45,6 +45,7 @@ class Vox extends Model {
     public function questionsReal() {
         return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->whereNull('is_control')->orderBy('order', 'ASC');
     }
+
     public function rewards() {
         return $this->hasMany('App\Models\VoxReward', 'vox_id', 'id')->orderBy('id', 'DESC');
     }
@@ -56,8 +57,13 @@ class Vox extends Model {
     public function getRewardPerQuestion() {
         return Reward::where('reward_type', 'vox_question')->first();
     }
+
     public function getRewardTotal($inusd = false) {
-        return ( $inusd ? $this->getRewardPerQuestion()->amount : $this->getRewardPerQuestion()->dcn) * $this->questions->count();
+        if ($this->type == 'user_details') {
+            return 0;
+        } else {
+            return ( $inusd ? $this->getRewardPerQuestion()->amount : $this->getRewardPerQuestion()->dcn) * $this->questions->count();
+        }        
     }
 
     public function categories() {

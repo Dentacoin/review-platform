@@ -537,6 +537,18 @@ header {
       .questions .hint {
         width: 100%; } }
 
+#birthyear_answer {
+  display: block;
+  padding: 5px;
+  padding-left: 20px;
+  margin: 1px auto;
+  border: 1px solid #767676;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: normal;
+  color: #343434;
+  text-align: left; }
+
 .main-title {
   padding: 30px;
   border-bottom: 3px solid #e6e6e6; }

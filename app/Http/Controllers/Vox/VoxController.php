@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\Vox;
 use App\Models\VoxAnswer;
 use App\Models\VoxReward;
+use App\Models\VoxQuestion;
 use App\Models\VoxScale;
 use App\Models\UserInvite;
 use App\Models\Dcn;
@@ -34,18 +35,37 @@ class VoxController extends FrontController
 	}
 	public function dovox($locale=null, $vox) {
 		$this->current_page = 'questionnaire';
+		$doing_details = false;
+		$doing_asl = false;
 
 		if(empty($vox) || (!$this->user->is_verified || !$this->user->email) ) {
 			return redirect( getLangUrl('/') );
 		} else if( $this->user->madeTest($vox->id) ) {
-			return redirect( getLangUrl('stats/'.$vox->id) );			
-		}
+		    $qtype = Request::input('type');
+		    if(
+		    	$qtype=='gender-question' ||
+		    	$qtype=='birthyear-question' ||
+		    	$qtype=='location-question'
+			) {
+		    	//I'm doing ASL questions!
+				$doing_asl = true;
+			} else {
 
+				$q = Request::input('question');
+				$qobj = VoxQuestion::find($q);
+				if($qobj && $qobj->vox_id==34) {
+					$vox = Vox::find(34);
+					//I'm doing demographics
+					$doing_details = true;
+				} else {
+					return redirect( getLangUrl('stats/'.$vox->id) );					
+				}
+			}
+		}
 
         if($this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/bans'));
         }
-
 
 
 		$list = VoxAnswer::where('vox_id', $vox->id)
@@ -79,7 +99,6 @@ class VoxController extends FrontController
 			}
 
             return redirect( $vox->getLink() );
-
 		}
 
 		$slist = VoxScale::get();
@@ -128,8 +147,9 @@ class VoxController extends FrontController
 	        	$q = Request::input('question');
 
 
-	        	if(!isset( $answered[$q] ) && $not_bot) {
-		        	$found = false;
+	        	if($doing_details || (!isset( $answered[$q] ) && $not_bot)) {
+
+		        	$found = $doing_asl ? true : false;
 		        	foreach ($vox->questions as $question) {
 		        		if($question->id == $q) {
 		        			$found = $question;
@@ -141,12 +161,12 @@ class VoxController extends FrontController
 		        		$valid = false;
 		        		$type = Request::input('type');
 
-
 		        		$answer_count = count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true) );
 
 		        		if ($type == 'skip') {
 		        			$valid = true;
 		        			$a = 0;
+
 		        		} else if ($type == 'location-question') {
 		        			//answer = 71,2312
 		        			list($country_id, $city_id) = explode(',', Request::input('answer'));
@@ -155,6 +175,19 @@ class VoxController extends FrontController
 		        			$this->user->save();
 		        			$a = $city_id;
 		        			$valid = true;
+		        		
+		        		} else if ($type == 'birthyear-question') {
+
+		        			$this->user->birthyear = Request::input('answer');
+		        			$this->user->save();
+		        			$valid = true;
+		        			$a = Request::input('answer');
+
+		        		} else if ($type == 'gender-question') {
+		        			$this->user->gender = Request::input('answer');
+		        			$this->user->save();
+		        			$valid = true;
+		        			$a = Request::input('answer');
 
 		        		} else if ($type == 'multiple') {
 
@@ -182,6 +215,8 @@ class VoxController extends FrontController
 	        				$a = intval(Request::input('answer'));
 	        				$valid = $a>=1 && $a<=$answer_count;
 		        		}
+
+
 
 		        		if( $valid ) {
 		        			VoxAnswer::where('user_id', $this->user->id )->where('vox_id',$vox->id )->where('question_id', $q)->delete();
@@ -235,15 +270,9 @@ class VoxController extends FrontController
 							        $answered[$q] = $a;
 						        }
 
-		        			} else if($type == 'location-question') {
-		        				$answer = new VoxAnswer;
-						        $answer->user_id = $this->user->id;
-						        $answer->vox_id = $vox->id;
-						        $answer->question_id = $q;
-						        $answer->answer = $a;
-						        $answer->country_id = $this->user->country_id;
-						        $answer->save();
-						        $answered[$q] = $a;
+		        			} else if($type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
+		        				$answered[$q] = 1;
+		        				$answer = null;
 		        			} else if($type == 'skip') {
 		        				$answer = new VoxAnswer;
 						        $answer->user_id = $this->user->id;
@@ -279,12 +308,15 @@ class VoxController extends FrontController
 		        			}
 
 
-	        				if( $answer->is_scam ) {
+	        				if( $answer && $answer->is_scam ) {
 	        					if($this->user->vox_should_ban()) {
 	            					$ret['ban_type'] = $this->user->banUser('vox', 'mistakes');
 	            					$ret['ban'] = getLangUrl('profile/bans');
 		        				}
 	        				}
+
+
+	        				// dd($answered, count($vox->questions));
 
 					        if(count($answered) == count($vox->questions)) {
 								$reward = new VoxReward;
@@ -350,11 +382,36 @@ class VoxController extends FrontController
 	    	$first_question_num++;
         }
 
+
+        $details_test = null;
+
+        if(!$this->user->madeTest(34)) {        	
+        	$details_test = Vox::find(34);
+        }
+
+
+        $real_questions = $vox->questions->count();
+
+        if (!$this->user->birthyear) {
+        	$real_questions++;
+        }
+        if (!$this->user->city_id && !$this->user->country_id) {
+        	$real_questions++;
+        }
+        if (!$this->user->gender) {
+        	$real_questions++;
+        }
+        if(!$this->user->madeTest(34)) {        	
+        	$real_questions += Vox::find(34)->questions->count();
+        }
+
 		return $this->ShowVoxView('vox', array(
 			'not_bot' => $not_bot,
 			'vox' => $vox,
 			'scales' => $scales,
 			'answered' => $answered,
+			'details_test' => $details_test,
+			'real_questions' => $real_questions,
 			'first_question' => $first_question,
 			'first_question_num' => $first_question_num,
 			'js' => [

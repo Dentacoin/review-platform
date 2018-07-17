@@ -14,7 +14,7 @@
 		</div>
 		<div class="col-md-9">
 
-			@if($user->vox_rewards->isNotEmpty())
+			@if($histories->isNotEmpty())
 		        <div class="panel panel-default">
 		            <div class="panel-heading">
 		                <h3 class="panel-title bold">
@@ -43,7 +43,7 @@
 		            			</tr>
 		            		</thead>
 		            		<tbody>
-								@foreach($user->vox_rewards as $completed)
+								@foreach($histories as $completed)
 		            				<tr>
 		            					<td>
 		            						{{ $completed->created_at->toDateString() }}

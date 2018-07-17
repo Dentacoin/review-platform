@@ -87,12 +87,12 @@ $(document).ready(function(){
 			type: 'GET',
 			dataType: 'json',
 			success: function( data ) {
-				console.log(data);
+				// console.log(data);
     			city_select.attr('disabled', false)
 			    .find('option')
 			    .remove();
 			    for(var i in data.cities) {
-			    	console.log( fb_city_id, data.cities[i] );
+			    	// console.log( fb_city_id, data.cities[i] );
     				city_select.append('<option value="'+i+'" '+(fb_city_id && fb_city_id==data.cities[i] ? 'selected="selected"' : '' )+'>'+data.cities[i]+'</option>');
 			    }
 				//city_select

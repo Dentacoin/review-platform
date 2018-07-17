@@ -87,6 +87,8 @@ class ProfileController extends FrontController
         //     return redirect(getLangUrl('profile/bans'));
         // }
 
+        $histories = $this->user->vox_rewards->where('vox_id', '!=', 34);
+
         if(Request::isMethod('post')) {
             $ideatext = trim( Request::input('idea') );
 
@@ -128,6 +130,7 @@ class ProfileController extends FrontController
         }
 
 		return $this->ShowVoxView('profile', [
+            'histories' => $histories,
 			'menu' => $this->menu,
             'js' => [
                 'profile.js',

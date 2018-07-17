@@ -3,11 +3,9 @@
 @section('content')
 
 		<div class="container page-questions">
-			@if($vox->type!='user_details')
-				<a href="{{ getLangUrl('/') }}" class="questions-back"><i class="fa fa-arrow-left"></i> {{ trans('vox.common.questionnaires') }}</a>
-			@endif
+			<a href="{{ getLangUrl('/') }}" class="questions-back"><i class="fa fa-arrow-left"></i> {{ trans('vox.common.questionnaires') }}</a>
 
-			<div id="question-meta" style="{{ $vox->type=='user_details' ? 'margin-top: 40px;' : '' }}">
+			<div id="question-meta">
 
 				<h1 class="questionnaire-title">
 					{{ $vox->title }}
@@ -31,21 +29,19 @@
 								]) !!}
 							</span>
 						</div>
-						@if($vox->type!='user_details')
-							<div class="col-md-6 tar">
-								<span class="bold">
-										<span id="dcn-test-reward-before">
-											{!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
+						<div class="col-md-6 tar">
+							<span class="bold">
+									<span id="dcn-test-reward-before">
+										{!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
+									</span>
+									<span id="dcn-test-reward-after" style="display: none;">
+										{!! trans('vox.common.dcn_collected') !!}:
+										<span id="current-question-reward">
+											
 										</span>
-										<span id="dcn-test-reward-after" style="display: none;">
-											{!! trans('vox.common.dcn_collected') !!}:
-											<span id="current-question-reward">
-												
-											</span>
-										</span>
-								</span>
-							</div>
-						@endif
+									</span>
+							</span>
+						</div>
 					</div>
 
 
@@ -76,94 +72,61 @@
 					@endif
 
 					@foreach( $vox->questions as $question )
-						@if($vox->type=='user_details' && $loop->iteration == 3)
-							<div class="question-group location-question question-group-{{ $loop->iteration }}" data-id="{{ $question->id }}" style="display: none;">
-								<div class="question">
-									{!! nl2br($question->question) !!}
-								</div>
-								<div class="answers">
-									{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'form-control country-select') ) }}
-                                    {{ Form::select( 'city_id' , $user->country_id ? \App\Models\City::where('country_id', $user->country_id)->get()->pluck('name', 'id')->toArray() : ['' => trans('vox.common.select-country')] , $user->city_id , array('class' => 'form-control city-select') ) }}
-								</div>
-
-								<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
-							</div>
-						@elseif($question->type == 'multiple_choice')
-							<div class="question-group question-group-{{ $question->id }} multiple-choice" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}>
-								<div class="question">
-									{!! nl2br($question->question) !!}
-								</div>
-								<div class="answers">
-									@foreach( $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $answer)
-										<label class="answer-checkbox" for="answer-{{ $question->id }}-{{ $loop->index+1 }}">
-											<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="checkbox" name="answer" class="answer{!! mb_substr($answer, 0, 1)=='!' ? ' disabler' : '' !!}" value="{{ $loop->index+1 }}">
-											{{ mb_substr($answer, 0, 1)=='!' ? mb_substr($answer, 1) : $answer }}											
-										</label>
-									@endforeach
-								</div>
-
-								<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
-							</div>
-						@elseif($question->type == 'scale')
-							<div class="question-group question-group-{{ $question->id }} scale" data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? 'data-trigger="'.$question->question_trigger.'"' : "" !!}>
-								<div class="question">
-									{!! nl2br($question->question) !!}
-								</div>
-								<div class="answers">
-
-									<div class="answers-inner">
-
-										<div class="clearfix mobile-hide">
-											<div class="answer-title" style="width: 20%;">
-												&nbsp;
-											</div>
-											@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $ans)											
-												<div class="answer-title" style="width: {{ (100 - 20) / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
-													<span>{{ $ans }}</span>
-												</div>
-											@endforeach
-										</div>
-
-										<div class="flickity">
-											@foreach(json_decode($question->answers, true) as $k => $answer)
-												<div class="answer-radios-group clearfix">
-													<div class="answer-question">
-														<h3>{{ $answer }}</h3>
-													</div>
-													@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $ans)
-														<div class="tac answer-inner" style="width: {{ (100 - 20) / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
-															<label class="answer-radio" for="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}">
-																<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}" type="radio" name="answer-{{ $k }}" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
-																{{ $ans }}											
-															</label>
-														</div>
-													@endforeach
-												</div>
-											@endforeach
-										</div>
-									</div>
-								</div>
-
-								<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
-							</div>
-						@else
-							<div class="question-group question-group-{{ $question->id }} single-choice {{ $question->is_control == -1 ? 'shuffle' : '' }}" {!! isset($answered[$question->id]) ? 'data-answer="'.$answered[$question->id].'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}>
-								<div class="question">
-									{!! nl2br($question->question) !!}
-								</div>
-								<div class="answers">
-									@foreach($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $answer)
-										<a class="answer answer-checkbox" data-num="{{ $loop->index+1 }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}">
-											<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="radio" name="answer" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
-											{{ $answer }}											
-										</a>
-									@endforeach
-								</div>
-							</div>
-						@endif
+						@include('vox.template-parts.vox-question')
 					@endforeach
+
+					@if(!$user->birthyear)
+						<div class="question-group birthyear-question" style="display: none;">
+							<div class="question">
+								What's your year of birth?
+							</div>
+							<div class="answers">
+								<input type="number" name="birthyear-answer" id="birthyear-answer" min="{{ date('Y')-100 }}" max="{{ date('Y')-18 }}">
+							</div>
+
+							<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
+						</div>
+					@endif
+
+					@if(!$user->gender)
+						<div class="question-group gender-question single-choice" style="display: none;">
+							<div class="question">
+								What's your gender?
+							</div>
+							<div class="answers">
+								<a class="answer answer-checkbox" for="answer-gende-m" data-num="m">
+									<input id="answer-gender-m" type="radio" name="gender-answer" class="answer" value="m" style="display: none;">
+									Male										
+								</a>
+								<a class="answer answer-checkbox" for="answer-gender-f" data-num="f">
+									<input id="answer-gender-f" type="radio" name="gender-answer" class="answer" value="f" style="display: none;">
+									Female										
+								</a>
+							</div>
+						</div>
+					@endif
+
+					@if(!$user->city_id && !$user->country_id )
+						<div class="question-group location-question" style="display: none;">
+							<div class="question">
+								Where do you live?
+							</div>
+							<div class="answers">
+								{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'form-control country-select') ) }}
+                                {{ Form::select( 'city_id' , $user->country_id ? \App\Models\City::where('country_id', $user->country_id)->get()->pluck('name', 'id')->toArray() : ['' => trans('vox.common.select-country')] , $user->city_id , array('class' => 'form-control city-select') ) }}
+							</div>
+
+							<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
+						</div>
+					@endif
+
+					@if($details_test)
+						@foreach( $details_test->questions as $question )
+							@include('vox.template-parts.vox-question')
+						@endforeach
+					@endif
 <!-- 
-					<div class="question-hints" style="{{ $vox->type=='user_details' ? 'display: none;' : '' }}">
+					<div class="question-hints">
 						<p class="hint">
 							{{ trans('vox.page.'.$current_page.'.finish-all', ['reward' => $vox->getRewardTotal()]) }}
 						</p>
@@ -181,36 +144,19 @@
 					<p class="popup-title">
 						{{ trans('vox.page.'.$current_page.'.good-job') }}
 					</p>
-					@if($vox->type!='user_details')
-						<p class="popup-second-title bold">
-							{{ trans('vox.page.'.$current_page.'.just-won') }}
-						</p>
-						<div class="price">
-							<img src="img-vox/dc-logo.png"/>
-							<span class="coins">{{ $vox->getRewardTotal() }} DCN</span>
-						</div>
-					@endif
-				</div>
-
-				@if($vox->type=='user_details')
-					<div class="dentacoin-info alert alert-info" style="display: none;">
-						<p class="buttons-description">
-							{{ trans('vox.page.'.$current_page.'.dentacoin-info') }}							
-						</p>
-						<a href="https://dentacoin.com/" style="margin-bottom: 10px;" target="_blank" class="button-questionnaries">{{ trans('vox.page.'.$current_page.'.learn-more') }}</a>
+					<p class="popup-second-title bold">
+						{{ trans('vox.page.'.$current_page.'.just-won') }}
+					</p>
+					<div class="price">
+						<img src="img-vox/dc-logo.png"/>
+						<span class="coins">{{ $vox->getRewardTotal() }} DCN</span>
 					</div>
-
-					<p class="buttons-description">
-						{{ trans('vox.page.'.$current_page.'.try-another-user-details') }}
-					</p>
-					<a href="{{ getLangUrl('/') }}" class="button-questionnaries">{{ trans('vox.common.questionnaires') }}</a>
-				@else
-					<p class="buttons-description">
-						{{ trans('vox.page.'.$current_page.'.try-another') }}
-					</p>
-					<a href="{{ getLangUrl('/') }}" class="button-questionnaries">{{ trans('vox.common.questionnaires') }}</a>
+				</div>
 				
-				@endif
+				<p class="buttons-description">
+					{{ trans('vox.page.'.$current_page.'.try-another') }}
+				</p>
+				<a href="{{ getLangUrl('/') }}" class="button-questionnaries">{{ trans('vox.common.questionnaires') }}</a>
 
 				<p class="buttons-description">
 					{{ trans('vox.page.'.$current_page.'.withdraw') }}
@@ -276,7 +222,7 @@
 
 		<script type="text/javascript">
 			var vox = {
-				count: {{ $vox->questions->count() }},
+				count: {{ $real_questions }},
 				reward: {{ intval($vox->getRewardTotal()) }},
 				current: {{ $first_question_num }},
 				url: '{{ $vox->getLink() }}'

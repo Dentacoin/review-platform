@@ -26,22 +26,62 @@ class IndexController extends FrontController
 
 			$rewarded_for_first = false;
 			if( $has_test ) {
+
+
 				$first = Vox::where('type', 'home')->first();
+				$first_question_ids = $first->questions->pluck('id')->toArray();
+				$details = Vox::where('type', 'user_details')->first();
+				$details_question_ids = $details->questions->pluck('id')->toArray();
+
+
 				if(!$this->user->madeTest($first->id)) {
 					foreach ($has_test as $q_id => $a_id) {
-						$answer = new VoxAnswer;
-				        $answer->user_id = $this->user->id;
-				        $answer->vox_id = $first->id;
-				        $answer->question_id = $q_id;
-				        $answer->answer = $a_id;
-				        $answer->country_id = $this->user->country_id;
-				        $answer->save();
+
+						if($q_id == 'location') {
+							list($country_id, $city_id) = explode(',', $a_id);
+		        			$this->user->city_id = $city_id;
+		        			$this->user->country_id = $country_id;
+		        			$this->user->save();
+						} else if($q_id == 'birthyear') {
+							$this->user->birthyear = $a_id;
+		        			$this->user->save();
+						} else if($q_id == 'gender') {
+							$this->user->gender = $a_id;
+		        			$this->user->save();
+						} else {
+							$vox_id = null;
+							if( in_array($q_id, $first_question_ids) ) {
+								$vox_id = $first->id;
+							} else if( in_array($q_id, $details_question_ids) ) {
+								$vox_id = $details->id;
+							}
+
+							if($vox_id) {
+								$answer = new VoxAnswer;
+						        $answer->user_id = $this->user->id;
+						        $answer->vox_id = $vox_id;
+						        $answer->question_id = $q_id;
+						        $answer->answer = $a_id;
+						        $answer->country_id = $this->user->country_id;
+						        $answer->save();
+						    }							
+						}
 					}
 					$reward = new VoxReward;
 			        $reward->user_id = $this->user->id;
 			        $reward->vox_id = $first->id;
 			        $reward->reward = $first->getRewardTotal();
 			        $reward->save();
+
+			        if(!$this->user->madeTest($details->id)) {
+						$reward = new VoxReward;
+				        $reward->user_id = $this->user->id;
+				        $reward->vox_id = $details->id;
+				        $reward->reward = $details->getRewardTotal();
+				        $reward->save();			        	
+			        }
+
+
 			        $rewarded_for_first = true;
 				}
 			    setcookie('first_test', null, time()-600);
@@ -103,9 +143,15 @@ class IndexController extends FrontController
 
 			$first = Vox::where('type', 'home')->first();
 
+			$details_test = Vox::find(34);
+
+			$real_questions = $first->questions->count() + 3;
+			$real_questions += Vox::find(34)->questions->count();
 			
 			return $this->ShowVoxView('index', array(
 				'vox' => $first,
+				'real_questions' => $real_questions,
+				'details_test' => $details_test,
 				'has_test' => $has_test,
 				'users_count' => User::getCount('vox'),
 				'js' => [

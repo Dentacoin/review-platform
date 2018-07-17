@@ -59,11 +59,68 @@
 						</div>
 					</div>
 				@endforeach
+
+				<div class="question-group birthyear-question" data-id="birthyear" style="display: none;">
+					<div class="question">
+						What's your year of birth?
+					</div>
+					<div class="answers">
+						<input type="number" name="birthyear-answer" id="birthyear-answer" min="{{ date('Y')-100 }}" max="{{ date('Y')-18 }}">
+					</div>
+
+					<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
+				</div>
+
+				<div class="question-group gender-question" data-id="gender" style="display: none;">
+					<div class="question">
+						What's your gender?
+					</div>
+					<div class="answers">
+						<a class="answer answer-checkbox" for="answer-gende-m" data-num="m">
+							<input id="answer-gender-m" type="radio" name="gender-answer" class="answer" value="m" style="display: none;">
+							Male										
+						</a>
+						<a class="answer answer-checkbox" for="answer-gender-f" data-num="f">
+							<input id="answer-gender-f" type="radio" name="gender-answer" class="answer" value="f" style="display: none;">
+							Female										
+						</a>
+					</div>
+				</div>
+
+				<div class="question-group location-question" data-id="location" style="display: none;">
+					<div class="question">
+						Where do you live?
+					</div>
+					<div class="answers">
+						{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , null , array('class' => 'form-control country-select') ) }}
+                        {{ Form::select( 'city_id' , ['' => trans('vox.common.select-country')] , null , array('class' => 'form-control city-select') ) }}
+					</div>
+
+					<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
+				</div>
+
+				@foreach( $details_test->questions as $question )
+					<div class="question-group" data-id="{{ $question->id }}" style="display: none;" >
+						<div class="question">
+							{!! nl2br($question->question) !!}
+						</div>
+						<div class="answers">
+							@foreach(json_decode($question->answers, true) as $answer)
+								<a href="javascript:;" class="answer" data-num="{{ $loop->index+1 }}">{{ $answer }}</a>
+							@endforeach
+						</div>
+					</div>
+				@endforeach
+
 				
 				<div class="question-done" {!! $has_test ? '' : 'style="display: none;"' !!}>
 					<div class="question tac">
 						{!! nl2br(trans('vox.page.'.$current_page.'.thank-you')) !!}
 					</div>
+				</div>
+
+				<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-danger">
+					{!! trans('vox.page.questionnaire.answer-error') !!}
 				</div>
 
 				<!-- <div class="question-hints" {!! $has_test ? 'style="display: none;"' : ''  !!}>
@@ -76,7 +133,7 @@
 
 		<script type="text/javascript">
 			var vox = {
-				count: {{ $vox->questions->count() }},
+				count: {{ $real_questions }},
 				reward: {{ $vox->getRewardTotal() }},
 				current: {{ $has_test ? $vox->questions->count() : '1' }}
 			}
