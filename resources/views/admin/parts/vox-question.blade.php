@@ -173,8 +173,8 @@
 <div style="display: none;">
     <div class="input-group" id="trigger-group-template" >
         <div class="template-box clearfix"> 
-            {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), !empty($prev_question) ? $prev_question->id : null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
-            {{ Form::text('answers-number[]', '', array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer number')) }}
+            {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), !empty($trigger_question_id) ? $trigger_question_id : null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
+            {{ Form::text('answers-number[]', !empty($trigger_valid_answers) ? $trigger_valid_answers : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer number')) }}
         </div>
         <div class="input-group-btn">
             <button class="btn btn-default btn-remove-trigger" type="button">

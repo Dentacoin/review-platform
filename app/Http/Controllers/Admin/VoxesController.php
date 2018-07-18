@@ -106,6 +106,20 @@ class VoxesController extends AdminController
                 return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
             }
 
+
+            $trigger_question_id = null;
+            $trigger_valid_answers = null;
+            foreach ($question->vox->questions as $q) {
+                if ($q->question_trigger) {
+                    $trigger_list = explode(';', $q->question_trigger);
+                    $first_triger = explode(':', $trigger_list[0]);
+                    $trigger_question_id = $first_triger[0];
+                    $trigger_valid_answers = !empty($first_triger[1]) ? $first_triger[1] : null;
+                }
+            }
+
+
+
             return $this->showView('voxes-form', array(
                 'types' => $this->types,
                 'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
@@ -113,6 +127,8 @@ class VoxesController extends AdminController
                 'item' => $item,
                 'category_list' => VoxCategory::get(),
                 'triggers' => $triggers,
+                'trigger_question_id' => $trigger_question_id,
+                'trigger_valid_answers' => $trigger_valid_answers
             ));
         } else {
             return redirect('cms/'.$this->current_page);
@@ -348,12 +364,27 @@ class VoxesController extends AdminController
 
         if(!empty($question) && $question->vox->id==$id) {
 
-            $questions = Vox::find($id);
+            $trigger_question_id = null;
+            $trigger_valid_answers = null;
 
-            if ($question->order != '1') {
-                $prev_question = VoxQuestion::where('order', intVal($question->order) - 1 )->where('vox_id', $id)->first();
-            } else {
-                $prev_question = null;
+            foreach ($question->vox->questions as $q) {
+                if ($q->question_trigger) {
+                    $trigger_list = explode(';', $q->question_trigger);
+                    $first_triger = explode(':', $trigger_list[0]);
+                    $trigger_question_id = $first_triger[0];
+                    $trigger_valid_answers = !empty($first_triger[1]) ? $first_triger[1] : null;
+                }
+
+                if($q->order>=$question->order) {
+                    break;
+                }
+            }
+
+
+            if(empty( $trigger_question_id )) {
+                $prev_question = VoxQuestion::where('vox_id', $id)->where('order', '<', intVal($question->order) )->orderBy('order', 'DESC')->first();
+                $trigger_question_id = $prev_question->id;
+                $trigger_valid_answers = null;
             }
 
             if(Request::isMethod('post')) {
@@ -369,7 +400,8 @@ class VoxesController extends AdminController
                 'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
                 'item' => $question->vox,
                 'question_types' => $this->question_types,
-                'prev_question' => $prev_question,
+                'trigger_question_id' => $trigger_question_id,
+                'trigger_valid_answers' => $trigger_valid_answers
             ));
 
         } else {
