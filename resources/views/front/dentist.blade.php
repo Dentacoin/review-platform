@@ -154,7 +154,7 @@
         	<h3>{{ trans('front.page.'.$current_page.'.write-review-title', ['name' => $item->name]) }}</h3>
     		<p>{{ trans('front.page.'.$current_page.'.write-review-hint') }}</p>
 
-    		@if($item->is_clinic)
+    		@if(!empty($user) && !$user->is_dentist && empty($my_review))
 	    		<a class="btn btn-primary write-review" id="write-review-btn" href="javascript:;">
 					{{ trans('front.page.'.$current_page.'.write-review-button') }}
 				</a>
@@ -223,7 +223,7 @@
 			<h2 class="review-title">{{ trans('front.page.'.$current_page.'.reviews-title', [ 'name' => $item->name ]) }}</h2>
 		</div>
 		<div class="col-md-4">
-			@if($item->is_clinic)
+    		@if(!empty($user) && !$user->is_dentist && empty($my_review))
 				<a class="write-review" id="write-review-btn" href="javascript:;">
 					{{ trans('front.page.'.$current_page.'.write-review-button') }}
 				</a>
