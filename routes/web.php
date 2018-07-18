@@ -55,6 +55,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('users/edit/{id}/deletephoto/{position}', 'UsersController@delete_photo');
 	Route::any('users/edit/{id}/deleteban/{banid}', 'UsersController@delete_ban');
 	Route::get('users/edit/{id}/delete-reward/{rewardid}', 	'UsersController@delete_vox');
+	Route::get('users/edit/{id}/delete-unfinished/{vox_id}', 	'UsersController@delete_unfinished');
 	Route::any('users/delete/{id}', 				'UsersController@delete');
 	Route::any('users/restore/{id}', 				'UsersController@restore');
 	Route::any('users/reviews/delete/{id}', 		'UsersController@delete_review');

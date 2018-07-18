@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
 use App\Models\User;
+use App\Models\Vox;
 use App\Models\UserBan;
 use App\Models\VoxAnswer;
 use App\Models\VoxReward;
@@ -250,6 +251,21 @@ class UsersController extends AdminController
         return redirect('cms/'.$this->current_page.'/edit/'.$id);
     }
 
+    public function delete_unfinished( $id, $vox_id ) {
+        $item = User::withTrashed()->find($id);
+        
+        if(!empty($item)) {
+            VoxAnswer::where([
+                ['user_id', $item->id],
+                ['vox_id', $vox_id],
+            ])
+            ->delete();
+        }
+
+        $this->request->session()->flash('success-message', 'Survey answers deleted!' );
+        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+    }
+
     public function delete_review( $review_id ) {
         $item = Review::find($review_id);
         
@@ -359,10 +375,21 @@ class UsersController extends AdminController
                 return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
             }
 
+            $all_questions_answerd = VoxAnswer::where('user_id', $id)
+            ->groupBy('vox_id')
+            ->get();
+            $rewarder_questions = VoxReward::where('user_id', $id)->get();
+            $unanswerd_questions = array_diff($all_questions_answerd->pluck('vox_id')->toArray(), $rewarder_questions->pluck('vox_id')->toArray() );
+            $unfinished = Vox::whereIn('id', $unanswerd_questions)->get();
+            foreach ($unfinished as $k => $v) {
+                $unfinished[$k]->user_id = $item->id;
+            }
+
             return $this->showView('users-form', array(
                 'item' => $item,
                 'categories' => $this->categories,
                 'fields' => $this->fields,
+                'unfinished' => $unfinished
             ));
         } else {
             return redirect('cms/'.$this->current_page);

@@ -254,6 +254,35 @@
     </div>
 @endif
 
+
+@if($unfinished->isNotEmpty())
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title"> Unfinished surveys </h4>
+                </div>
+                <div class="panel-body">
+                    @include('admin.parts.table', [
+                        'table_id' => 'vox-unfinished',
+                        'table_fields' => [
+                            'title'              => array(),
+                            'delete'              => array('template' => 'admin.parts.table-vox-unfinished-delete'),
+                        ],
+                        'table_data' => $unfinished,
+                        'table_subpage' => 'vox-unfinished',
+                        'table_pagination' => false,
+                        'pagination_link' => array()
+                    ])
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 @if($item->history->isNotEmpty())
     
 
