@@ -17,37 +17,40 @@
             </div>
             <div class="panel-body">
                 <form method="get" action="{{ url('cms/'.$current_page) }}" >
-                <div class="row">
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="search-name" value="{{ $search_name }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-name') }}">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="search-name" value="{{ $search_name }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-name') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-email') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="search-phone" value="{{ $search_phone }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-phone') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="search-id" value="{{ $search_id }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-id') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="search-address" value="{{ $search_address }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-address') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="search-tx" value="{{ $search_tx }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-tx') }}">
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-email') }}">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="results-number" value="{{ $results_number }}" placeholder="Results ( enter 0 to show all )">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" name="search-register-from" value="{{ $search_register_from }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-register-from') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" name="search-register-to" value="{{ $search_register_to }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-register-to') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="{{ trans('admin.page.'.$current_page.'.title-filter-submit') }}">
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="search-phone" value="{{ $search_phone }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-phone') }}">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="search-id" value="{{ $search_id }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-id') }}">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="search-address" value="{{ $search_address }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-address') }}">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" name="search-tx" value="{{ $search_tx }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-tx') }}">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" name="search-register-from" value="{{ $search_register_from }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-register-from') }}">
-                    </div>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" name="search-register-to" value="{{ $search_register_to }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-register-to') }}">
-                    </div>
-                    <div class="col-md-6">
-                        <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="{{ trans('admin.page.'.$current_page.'.title-filter-submit') }}">
-                    </div>
-                </div>
                 </form>
             </div>
         </div>

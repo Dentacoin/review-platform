@@ -39,18 +39,20 @@
         <label class="col-md-3">
         </label>
         <div class="col-md-9">
-            <a href="javascript:;" class="btn btn-success btn-block btn-add-trigger" style="margin-top: 10px;">
-                <!-- {{ trans('admin.page.'.$current_page.'.trigger-add') }} -->
-                Add previous trigger
-            </a>
-            <a href="javascript:;" class="btn btn-white btn-block btn-add-new-trigger" style="margin-top: 10px;">
-                {{ trans('admin.page.'.$current_page.'.trigger-add') }}
-            </a>
+            To enable a trigger, first select the question from the dropdown and then type the number of the answer(s) that will trigger the present question.<br/>
+            Example: "Question text?" / One trigger answer: 1 (for the first answer), 2 (for the second answer, etc.); 2+ answers: 1, 2, 3, 4<br/>
+            To enable a previously selected trigger, click Add previous trigger.
         </div>
         <label class="col-md-3">
         </label>
         <div class="col-md-9">
-            {!! nl2br(trans('admin.page.'.$current_page.'.question-trigger-hint')) !!}
+            <a href="javascript:;" class="btn btn-white btn-block btn-add-new-trigger" style="margin-top: 10px;">
+                Аdd new trigger
+            </a>
+            <a href="javascript:;" class="btn btn-success btn-block btn-add-trigger" style="margin-top: 10px;">
+                <!-- {{ trans('admin.page.'.$current_page.'.trigger-add') }} -->
+                Add previous trigger
+            </a>
         </div>
     </div>
     <div class="form-group clearfix">

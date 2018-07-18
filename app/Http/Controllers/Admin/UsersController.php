@@ -168,8 +168,19 @@ class UsersController extends AdminController
         if(!empty($this->request->input('search-tx'))) {
             $users = $users->where('register_tx', 'LIKE', '%'.trim($this->request->input('search-tx')).'%');
         }
+        if( null !== $this->request->input('results-number')) {
+            $results = trim($this->request->input('results-number'));
+        } else {
+            $results = 50;
+        }
 
-        $users = $users->withTrashed()->take(50)->get();
+        // dd($results);
+
+        if($results == 0) {
+            $users = $users->withTrashed()->take(1000)->get();
+        } else {
+            $users = $users->withTrashed()->take($results)->get();
+        }        
 
         return $this->showView('users', array(
             'users' => $users,
@@ -181,6 +192,7 @@ class UsersController extends AdminController
             'search_id' => $this->request->input('search-id'),
             'search_address' => $this->request->input('search-address'),
             'search_tx' => $this->request->input('search-tx'),
+            'results_number' => $this->request->input('results-number'),
         ));
     }
 
