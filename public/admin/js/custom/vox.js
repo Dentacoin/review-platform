@@ -49,6 +49,17 @@ $(document).ready(function(){
 		});
 	} );
 
+	$('.questions-form .btn-add-new-trigger').click( function() {
+		var newinput = $('#new-trigger-group-template').clone(true).removeAttr('id');
+		$('.questions-form').find('.triggers-list').append(newinput);
+		$('.triggers-list .input-group').each( function() {
+			if (!($(this).find('select').hasClass('select2'))) {
+				$(this).find('select').addClass('select2');
+				$(".select2").select2();
+			}
+		});
+	} );
+
 
 	$('.btn-remove-trigger').click( function() {
 		$(this).closest('.input-group').remove();
