@@ -287,6 +287,7 @@ $voxRoutes = function () {
 				Route::any('profile/setEmail', 					'ProfileController@setEmail');
 				Route::post('profile/jwt', 						'ProfileController@jwt');
 				Route::any('profile/privacy', 					'ProfileController@privacy');
+				Route::any('profile/privacy-download', 			'ProfileController@privacy_download');
 				
 				Route::get('gdpr', 								'ProfileController@gdpr');
 			});

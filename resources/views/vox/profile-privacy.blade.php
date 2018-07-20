@@ -56,16 +56,9 @@
 		    		</p>
 		    		<br/>
 
-					<form action="{{ getLangUrl('profile/privacy') }}" method="post" class="form-horizontal">
-		  				{!! csrf_field() !!}
-		  				
-						<div class="form-group">
-							<div class="col-md-12">
-		                        <button type="submit" name="action" value="download" class="btn btn-primary form-control"> {{ trans('vox.page.'.$current_page.'.privacy-download-submit') }} </button>
-							</div>
-						</div>
-		    			
-		  			</form>
+		    		<a href="{{ getLangUrl('profile/privacy-download') }}" target="_blank" class="btn btn-primary form-control">
+		    			{{ trans('vox.page.'.$current_page.'.privacy-download-submit') }}
+		    		</a>
 		  		</div>
 		  	</div>
 

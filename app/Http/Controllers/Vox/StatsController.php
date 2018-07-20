@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\Vox;
 use App\Models\VoxReward;
 use App\Models\VoxAnswer;
+use App\Models\VoxQuestion;
 use App\Models\VoxCategory;
 
 
@@ -38,14 +39,32 @@ class StatsController extends FrontController
 			$question = $vox->questions->first();	
 		}
 
-		$voxarr = $vox->questions->toArray();
-		foreach ($voxarr as $k => $v) {
-			if($v['id'] == $question->id) {
-				$prev = $k==0 ? $voxarr[ count($voxarr)-1 ]['id'] : $voxarr[ $k-1 ]['id'];
-				$next = $k== count($voxarr)-1 ? $voxarr[0]['id'] : $voxarr[ $k+1 ]['id'];
-				break;
-			}
+		$next_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '>', $question->order)->first();
+		$prev_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '<', $question->order)->orderBy('id', 'desc')->first();
+
+		if ($next_q) {
+			$next = $next_q->id;
+		} else {
+			$first_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '<', $question->order)->first();
+			$next = $first_q->id;
 		}
+
+		if($prev_q) {
+			$prev = $prev_q->id;
+		} else {
+			$last_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '>', $question->order)->orderBy('id', 'desc')->first();
+			$prev = $last_q->id;
+		}
+		
+		// $voxarr = $vox->questions->toArray();
+		// foreach ($voxarr as $k => $v) {
+		// 	if($v['id'] == $question->id) {
+		// 		$prev = $k==0 ? $voxarr[ count($voxarr)-1 ]['id'] : $voxarr[ $k-1 ]['id'];
+		// 		$next = $k== count($voxarr)-1 ? $voxarr[0]['id'] : $voxarr[ $k+1 ]['id'];
+		// 		break;
+		// 	}
+		// }
+
 
 		$colors = [
 			'#8FD694',

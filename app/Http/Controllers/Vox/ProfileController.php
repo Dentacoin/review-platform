@@ -67,6 +67,12 @@ class ProfileController extends FrontController
                 ]
             ],
     	];
+
+        $this->genders = [
+            '' => null,
+            'm' => trans('admin.common.gender.m'),
+            'f' => trans('admin.common.gender.f'),
+        ];
     }
 
     private function handleMenu() {
@@ -223,26 +229,6 @@ class ProfileController extends FrontController
                     User::destroy( $this->user->id );
                     Auth::guard('web')->logout();
                     return redirect( getLangUrl('/') );
-                } else if( Request::input('action')=='download' ) {
-
-                    $mtext = $this->user->getName().' just requested his/hers personal information<br/>
-User\'s email is: '.$this->user->email.'<br/>
-Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$this->user->id;
-
-                    Mail::send([], [], function ($message) use ($mtext) {
-                        $sender = config('mail.from.address-vox');
-                        $sender_name = config('mail.from.name-vox');
-
-                        $message->from($sender, $sender_name);
-                        $message->to( 'privacy@dentacoin.com' ); //$sender
-                        //$message->to( 'dokinator@gmail.com' );
-                        $message->replyTo($sender, $sender_name);
-                        $message->subject('New Personal Data Download Request');
-                        $message->setBody($mtext, 'text/html'); // for HTML rich messages
-                    });
-
-                    Request::session()->flash('success-message', trans('vox.page.profile.privacy-download-requested'));
-                    return redirect( getLangUrl('profile/privacy') );
                 }
             }
         }
@@ -250,6 +236,52 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         return $this->ShowVoxView('profile-privacy', [
             'menu' => $this->menu,
         ]);
+    }
+
+    public function privacy_download($locale=null) {
+
+        $html = $this->showView('users-data', array(
+            'genders' => $this->genders,
+        ))->render();
+
+        $tmp_path = '/tmp/'.$this->user->id;
+        if(!is_dir($tmp_path)) {
+            mkdir($tmp_path);
+        }
+
+        file_put_contents($tmp_path.'/my-private-info.html', $html);
+
+        if($this->user->hasimage) {
+            copy( $this->user->getImagePath(), $tmp_path.'/'.$this->user->id.'.jpg' );
+        }
+
+        if($this->user->photos->isNotEmpty()) {
+            foreach ($this->user->photos as $photo) {
+                copy( $photo->getImagePath(), $tmp_path.'/'.$photo->id.'.jpg' );
+            }
+        }
+
+        exec('zip -rj0 '.$tmp_path.'.zip '.$tmp_path.'/*');
+        exec('rm -rf '.$tmp_path);
+
+        $mtext = $this->user->getName().' just requested his/hers personal information<br/>
+User\'s email is: '.$this->user->email.'<br/>
+Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$this->user->id;
+
+        Mail::send([], [], function ($message) use ($mtext) {
+            $sender = config('mail.from.address');
+            $sender_name = config('mail.from.name');
+
+            $message->from($sender, $sender_name);
+            $message->to( 'privacy@dentacoin.com' ); //$sender
+            //$message->to( 'dokinator@gmail.com' );
+            $message->replyTo($sender, $sender_name);
+            $message->subject('New Personal Data Download Request');
+            $message->attach('/tmp/'.$this->user->id.'.zip');
+            $message->setBody($mtext, 'text/html'); // for HTML rich messages
+        });
+
+        return Response::download($tmp_path.'.zip', 'your-private-info.zip');
     }
 
 

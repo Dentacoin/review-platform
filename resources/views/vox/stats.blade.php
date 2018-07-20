@@ -170,11 +170,13 @@
 											<div id="collapse-{{ $loopvox->vox->id }}" class="panel-collapse collapse {{ $loopvox->vox->id==$vox->id ? 'in' : '' }}" role="tabpanel" aria-labelledby="headingOne">
 												<ul class="list-group"> 
 													@foreach($loopvox->vox->questions as $loopquestion)
-														<li class="list-group-item {{ $loopquestion->id == $question->id ? 'selected' : '' }}">
-															<a href="{{ getLangUrl('stats/'.$loopvox->vox->id.'/'.$loopquestion->id) }}">
-																{{ $loopquestion->question }}
-															</a>
-														</li>
+														@if(empty($loopquestion->is_control))
+															<li class="list-group-item {{ $loopquestion->id == $question->id ? 'selected' : '' }}">
+																<a href="{{ getLangUrl('stats/'.$loopvox->vox->id.'/'.$loopquestion->id) }}">
+																	{{ $loopquestion->question }}
+																</a>
+															</li>
+														@endif
 													@endforeach
 												</ul>
 											</div>
