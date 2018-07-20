@@ -168,7 +168,7 @@
 {{ Form::close() }}
 
 <div style="display: none;">
-    <div class="input-group" id="input-group-template" >
+    <div class="input-group ui-sortable-handle" id="input-group-template" >
         {{ Form::text('something', '', array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong')) }}
         <div class="input-group-btn">
             <button class="btn btn-default btn-remove-answer" type="button">

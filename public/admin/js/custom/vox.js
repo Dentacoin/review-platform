@@ -18,7 +18,7 @@ $(document).ready(function(){
 			var newinput = $('#input-group-template').clone(true).removeAttr('id')
 			newinput.find('input').attr('name', 'answers-'+code+'[]');
 			$(this).find('.answers-list').append(newinput);
-		} )
+		} );
 	} );
 
 	$('.btn-remove-answer').click( function() {

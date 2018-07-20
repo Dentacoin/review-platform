@@ -95,11 +95,15 @@ $(document).ready(function(){
 		}
 	} );
 	*/
+
+	
+
 	$( init );
 
 	function init() {
 	  $( ".answers-draggable" ).sortable().disableSelection();
 	}
+	
 
 });
 
