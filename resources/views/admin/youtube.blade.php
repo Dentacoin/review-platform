@@ -31,9 +31,16 @@
                                         {{ $review->created_at->toTimeString() }} {{ $review->created_at->toFormattedDateString() }}<br/>
                                         {{ $review->user->getName() }}
                                         ->
-                                        <a href="{{ $review->dentist->getLink() }}" target="_blank">
-                                            {{ $review->dentist->getName() }}
-                                        </a>
+                                        @if($review->clinic_id)
+                                            <a href="{{ $review->clinic->getLink() }}" target="_blank">
+                                                {{ $review->clinic->getName() }}
+                                            </a>
+                                        @endif
+                                        @if($review->dentist_id)
+                                            <a href="{{ $review->dentist->getLink() }}" target="_blank">
+                                                {{ $review->dentist->getName() }}
+                                            </a>
+                                        @endif
                                         <br/>
                                         {{ trans('admin.page.'.$current_page.'.rating') }}: {{ $review->rating }}
                                     </td>

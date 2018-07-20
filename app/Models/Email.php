@@ -173,6 +173,7 @@ class Email extends Model
 		if($this->template->id==6 || $this->template->id==8 || $this->template->id==21) { //New review & review reply
 			$review = Review::find($this->meta['review_id']);
 
+			$dentist_or_clinic = $this->user_id == $review->dentist_id ? $review->dentist : $review->clinic;
 
 			$content = str_replace(array(
 				'[author_name]',
@@ -182,9 +183,9 @@ class Email extends Model
 				'[/reviewlink]',
 			), array(
 				$review->user->name,
-				$review->dentist->name,
+				$dentist_or_clinic->name,
 				$review->rating,
-				'<a '.$this->button_style.' href="'.$review->dentist->getLink().'/'.$review->id.'">',
+				'<a '.$this->button_style.' href="'.$dentist_or_clinic->getLink().'/'.$review->id.'">',
 				'</a>',
 			), $content);
 		}

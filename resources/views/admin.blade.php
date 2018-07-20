@@ -196,7 +196,7 @@
         <script src="admin/plugins/jquery-jvectormap/jquery-jvectormap-world-mill-en.js"></script>
         <script src="admin/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
         <script src="admin/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
-
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
         <script src="admin/plugins/DataTables/media/js/jquery.dataTables.js"></script>
         <script src="admin/plugins/DataTables/media/js/dataTables.bootstrap.min.js"></script>

@@ -20,6 +20,7 @@ class Review extends Model {
     protected $fillable = [
         'user_id',
         'dentist_id',
+        'clinic_id',
         'rating',
         'youtube_id',
         'youtube_approved',
@@ -51,6 +52,10 @@ class Review extends Model {
     public function dentist() {
         return $this->hasOne('App\Models\User', 'id', 'dentist_id')->withTrashed();
     }
+    
+    public function clinic() {
+        return $this->hasOne('App\Models\User', 'id', 'clinic_id')->withTrashed();
+    }
 
     public function answers() {
         return $this->hasMany('App\Models\ReviewAnswer', 'review_id', 'id')->with('question');
@@ -62,9 +67,16 @@ class Review extends Model {
 
     public function afterSubmitActions() {
 
-        $this->dentist->sendTemplate( $this->verified ? 21 : 6, [
-            'review_id' => $this->id,
-        ]);
+        if( $this->dentist ) {
+            $this->dentist->sendTemplate( $this->verified ? 21 : 6, [
+                'review_id' => $this->id,
+            ]);            
+        }
+        if( $this->clinic ) {
+            $this->clinic->sendTemplate( $this->verified ? 21 : 6, [
+                'review_id' => $this->id,
+            ]);            
+        }
 
         if($this->verified) {
             $reward = new TrpReward();
@@ -93,7 +105,12 @@ class Review extends Model {
             }
         }
 
-        $this->dentist->recalculateRating();
+        if( $this->dentist ) {
+            $this->dentist->recalculateRating();
+        }
+        if( $this->clinic ) {
+            $this->clinic->recalculateRating();
+        }
     }
 }
 

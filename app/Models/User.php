@@ -89,8 +89,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function reviews_out() {
         return $this->hasMany('App\Models\Review', 'user_id', 'id')->where('status', 'accepted')->orderBy('id', "DESC");
     }
+    public function reviews_in_dentist() {
+        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')->where('status', 'accepted');
+    }
+    public function reviews_in_clinic() {
+        return $this->hasMany('App\Models\Review', 'clinic_id', 'id')->where('status', 'accepted');
+    }
     public function reviews_in() {
-        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')->where('status', 'accepted')->orderBy('verified', "DESC")->orderBy('upvotes', "DESC");
+        return $this->reviews_in_dentist->merge($this->reviews_in_clinic)->sortBy(function ($review, $key) {
+
+            if($review->verified) {
+                return -$review->upvotes;
+            } else {
+                return 99999 - $review->upvotes;
+            }
+        });
     }
     public function upvotes() {
         return $this->hasMany('App\Models\ReviewUpvote', 'user_id', 'id');
@@ -223,10 +236,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function hasReviewTo($dentist_id) {
-        return Review::where([
+        $dr = Review::where([
             ['user_id', $this->id],
             ['dentist_id', $dentist_id],
         ])->first();
+        $cr = Review::where([
+            ['user_id', $this->id],
+            ['clinic_id', $dentist_id],
+        ])->first();
+        return $dr ? $dr : ( $cr ? $cr : null );
     }
 
     public function usefulVotesForDenist($dentist_id) {
@@ -321,12 +339,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function recalculateRating() {
         $rating = 0;
-        foreach ($this->reviews_in as $review) {
+        foreach ($this->reviews_in() as $review) {
             $rating += $review->rating;
         }
 
-        $this->avg_rating = $this->reviews_in->count() ? $rating / $this->reviews_in->count() : 0;
-        $this->ratings = $this->reviews_in->count();
+        $this->avg_rating = $this->reviews_in()->count() ? $rating / $this->reviews_in()->count() : 0;
+        $this->ratings = $this->reviews_in()->count();
         $this->save();
     }
 
@@ -387,7 +405,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $nonverified = [];
         foreach ($this->reviews_out as $review) {
             if(!$review->verified) {
-                $nonverified[$review->dentist_id] = $review->dentist_id;
+                if($review->dentist_id) {
+                    $nonverified[$review->dentist_id] = $review->dentist_id;
+                }
+                if($review->clinic_id) {
+                    $nonverified[$review->clinic_id] = $review->clinic_id;
+                }
             }
         }
 

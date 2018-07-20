@@ -116,7 +116,7 @@ class YoutubeController extends AdminController
             $updateVideo = $videos[0];
             $updateVideo['status']['privacyStatus'] = 'public';
             $updateVideo['snippet']['title'] = 'Video review by '.$review->user->getName();
-            $updateVideo['snippet']['description'] = $review->user->getName().'\'s video review on '.$review->dentist->getName();
+            $updateVideo['snippet']['description'] = $review->user->getName().'\'s video review on '.($review->clinic_id ? $review->clinic->getName() : $review->dentist->getName());
             $videoUpdateResponse = $service->videos->update("status,snippet", $updateVideo);
         }
 

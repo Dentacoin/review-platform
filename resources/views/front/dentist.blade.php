@@ -171,7 +171,7 @@
 							</div>
 							<div class="media-body">
 								<h2 class="media-heading">
-									{{ $team->clinicTeam->name }}
+									{{ $team->clinicTeam->getName() }}
 								</h2>
 
 								@if($team->clinicTeam->country)
@@ -201,7 +201,7 @@
 									@endif
 									<div class="rating">
 										@if($team->clinicTeam->ratings)
-											{!! trans('front.page.'.$current_page.'.rating', [ 'rating' => '<b>'.$team->clinicTeam->avg_rating.'</b>', 'reviews' => '<b>'.$team->clinicTeam->ratings.'</b>' ] ) !!}
+											{!! trans('front.page.dentists.rating', [ 'rating' => '<b>'.$team->clinicTeam->avg_rating.'</b>', 'reviews' => '<b>'.$team->clinicTeam->ratings.'</b>' ] ) !!}
 										@else
 											<b>{{ trans('front.common.no-reviews') }}</b>
 										@endif
@@ -232,201 +232,199 @@
 	</div>  		
     <div class="reviews-panel">
 
-		@if($item->reviews_in->isNotEmpty() && !(!empty($user) && $my_review && $item->reviews_in->count()==1) )
+		@if($item->reviews_in()->isNotEmpty() )
 			@foreach($reviews as $review)
-				@if(!empty($user) && $review->user_id==$user->id)
-				@else
-					<div class="profile-review">
-						<div class="review main-review">
-							<div class="media">
-								<div class="col-md-2 hidden-sm hidden-xs ">
-									<div class="media-left">
-										<img src="{{ $review->user->getImageUrl(true) }}" />
-										@if($review->verified)
-											<span class="label label-success label-trusted" title="{{ trans('front.common.trusted-review') }}">
-												{{ trans('front.common.trusted-review') }}
-											</span>
-										@endif
-									</div>
-								</div>
-								<div class="col-md-3 hidden-sm hidden-xs ">
-									<div class="media-body">
-										<h2 class="media-heading">
-											@if(!empty($reviews_out))
-												<a href="{{ $review->user->getLink() }}">
-											@endif
-											{{ $review->user->name }}
-											@if(!empty($reviews_out))
-												</a>
-											@endif
-										</h2>
-
-										@if($review->user->country)
-											<p>
-												<i class="fa fa-map-marker"></i>
-												<span class="gray">
-													@if($review->user->city)
-														{{ $review->user->city->name }}, {{ $review->user->country->name }}
-													@else
-														{{ $review->user->country->name }}
-													@endif
-												</span>														
-											</p>
-										@endif
-										<p>
-											<i class="fa fa-calendar"></i>
-											<span class="gray">
-												{{ $review->created_at ? trans('front.common.date-on', ['date' => $review->created_at->toFormattedDateString() ]) : '-' }}
-											</span>
-										</p>
-
-
-										<p class="upvote-wrpapper" {!! $review->upvotes ? '' : 'style="display: none;"' !!} >
-											<i class="fa fa-heart"></i> 
-											{!! trans('front.page.dentist.people-find-useful', [ 'count' => '<span class="upvote-count">'.intval($review->upvotes).'</span>' ]) !!}
-										</p>
-									</div>
-								</div>
-								<div class="hidden-lg hidden-md col-sm-12 media-left">
+				
+				<div class="profile-review">
+					<div class="review main-review">
+						<div class="media">
+							<div class="col-md-2 hidden-sm hidden-xs ">
+								<div class="media-left">
 									<img src="{{ $review->user->getImageUrl(true) }}" />
-									<span class="mobile-user-title">{{ $review->user->name }}</span>
-								</div>
-
-								<div class="col-md-7 col-sm-12">
-									<div class="media-body review" >
-										<div class="ratings">
-											<div class="stars">
-												<div class="bar" style="width: {{ getStarWidth($review->rating) }}px;">
-												</div>
-											</div>
-											<span class="hidden-lg hidden-md label label-success label-trusted" title="{{ trans('front.common.trusted-review') }}">
-												{{ trans('front.common.trusted-review') }}
-											</span>
-											<div class="rating">
-												@if($review->answer)
-													<b>
-														@if(empty($reviews_out))
-															{{ trans('front.page.dentist.review-comment', ['name' => $review->user->getName()]) }}:
-														@else
-															{{ trans('front.page.dentist.review-comment-out', ['name' => $review->user->getName()]) }}:
-														@endif
-													</b> 
-													{!! nl2br($review->answer) !!}
-													<br/>
-												@endif
-												@if($review->youtube_id)
-													<b>
-														@if(empty($reviews_out))
-															{{ trans('front.page.dentist.review-video', ['name' => $review->user->getName()]) }}:
-														@else
-															{{ trans('front.page.dentist.review-video-out', ['name' => $review->user->getName()]) }}:
-														@endif
-													</b> 
-													@if($review->youtube_approved || (!empty($user) && $user->id==$review->user_id ) )
-														<div class="videoWrapper">
-															<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ $review->youtube_id }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-														</div>
-													@else
-														<div class="alert alert-info">
-															{{ trans('front.page.dentist.review-video-unapproved') }}
-														</div>
-													@endif
-												@endif
-
-												<a href="javascript:;" class="new-btn-show-review" data-alt-text="{{ trans('front.page.dentist.review-hide-all') }}" data-user-id="{{ $review->user->id }}">
-													{{ trans('front.page.dentist.review-show-all') }}
-												</a>
-											</div>
-
-											<div class="sharer" data-href="{{ $item->getLink().'/'.$review->id }}">
-												
-												@if( !($my_upvotes && in_array($review->id, $my_upvotes) ) && !( !empty($user) && $review->user_id == $user->id ) )
-													<a class="useful {{ !$user ? 'needs-login' : '' }}" href="javascript:;" data-review-id="{{ $review->id }}" data-done-text="{{ trans('front.page.dentist.helpful-button-clicked') }}">
-														<i class="fa fa-heart"></i>
-													</a>
-												@endif
-												<a class="fb" href="javascript:;">
-													<i class="fa fa-facebook"></i>
-												</a>
-												<a class="tw" href="javascript:;">
-													<i class="fa fa-twitter"></i>
-												</a>
-												<a class="gp" href="javascript:;">
-													<i class="fa fa-google-plus"></i>
-												</a>
-												<!-- <span>
-													{{ trans('front.page.dentist.share') }}
-												</span> -->
-											</div>
-										</div>
-									</div>
-									@if($review->reply || ( !empty($user) && $review->dentist_id==$user->id ) )
-										<div class="panel-body review" >
-											<div class="ratings">
-												<div class="rating">
-													@if(!$review->reply)
-														{!! Form::open(array('url' => $item->getLink().'/reply/'.$review->id, 'method' => 'post', 'class' => 'form-horizontal reply-form')) !!}
-															<div class="form-group">
-																<div class="col-md-12">
-																	<p>
-																		@if(empty($reviews_out))
-																			{{ trans('front.page.dentist.review-write-reply', [ 'name' => $review->user->getName() ] ) }}
-																		@else
-																			{{ trans('front.page.dentist.review-reply-out', [ 'name' => $review->user->getName() ] ) }}
-																		@endif									
-																	</p>
-
-													                <div class="alert alert-warning" style="display: none;">
-													                	{{ trans('front.page.dentist.review-reply-invalid') }}
-													                </div>
-
-													                {{ Form::textarea( 'reply', '', array( 'class' => 'form-control review-reply', 'placeholder' => trans('front.page.dentist.review-reply-placeholder') ) ) }}
-
-																	<h3>
-														                {{ Form::submit( trans('front.page.dentist.review-reply-submit') , array('class' => 'btn btn-primary btn-block' )) }}
-																	</h3>
-																</div>
-															</div>
-														{!! Form::close() !!}
-													@endif
-													<div class="the-reply" {!! !$review->reply ? 'style="display: none;"' : '' !!} >
-														<b>
-															{{ trans('front.page.dentist.review-reply', ['name' => $review->dentist->getName() ]) }}:
-														</b> 
-														<span class="reply-content">
-															{!! nl2br($review->reply) !!}
-														</span>
-													</div>
-												</div>
-											</div>
-										</div>
+									@if($review->verified)
+										<span class="label label-success label-trusted" title="{{ trans('front.common.trusted-review') }}">
+											{{ trans('front.common.trusted-review') }}
+										</span>
 									@endif
 								</div>
+							</div>
+							<div class="col-md-3 hidden-sm hidden-xs ">
+								<div class="media-body">
+									<h2 class="media-heading">
+										@if(!empty($reviews_out))
+											<a href="{{ $review->user->getLink() }}">
+										@endif
+										{{ $review->user->name }}
+										@if(!empty($reviews_out))
+											</a>
+										@endif
+									</h2>
 
+									@if($review->user->country)
+										<p>
+											<i class="fa fa-map-marker"></i>
+											<span class="gray">
+												@if($review->user->city)
+													{{ $review->user->city->name }}, {{ $review->user->country->name }}
+												@else
+													{{ $review->user->country->name }}
+												@endif
+											</span>														
+										</p>
+									@endif
+									<p>
+										<i class="fa fa-calendar"></i>
+										<span class="gray">
+											{{ $review->created_at ? trans('front.common.date-on', ['date' => $review->created_at->toFormattedDateString() ]) : '-' }}
+										</span>
+									</p>
+
+
+									<p class="upvote-wrpapper" {!! $review->upvotes ? '' : 'style="display: none;"' !!} >
+										<i class="fa fa-heart"></i> 
+										{!! trans('front.page.dentist.people-find-useful', [ 'count' => '<span class="upvote-count">'.intval($review->upvotes).'</span>' ]) !!}
+									</p>
+								</div>
+							</div>
+							<div class="hidden-lg hidden-md col-sm-12 media-left">
+								<img src="{{ $review->user->getImageUrl(true) }}" />
+								<span class="mobile-user-title">{{ $review->user->name }}</span>
+							</div>
+
+							<div class="col-md-7 col-sm-12">
+								<div class="media-body review" >
+									<div class="ratings">
+										<div class="stars">
+											<div class="bar" style="width: {{ getStarWidth($review->rating) }}px;">
+											</div>
+										</div>
+										<span class="hidden-lg hidden-md label label-success label-trusted" title="{{ trans('front.common.trusted-review') }}">
+											{{ trans('front.common.trusted-review') }}
+										</span>
+										<div class="rating">
+											@if($review->answer)
+												<b>
+													@if(empty($reviews_out))
+														{{ trans('front.page.dentist.review-comment', ['name' => $review->user->getName()]) }}:
+													@else
+														{{ trans('front.page.dentist.review-comment-out', ['name' => $review->user->getName()]) }}:
+													@endif
+												</b> 
+												{!! nl2br($review->answer) !!}
+												<br/>
+											@endif
+											@if($review->youtube_id)
+												<b>
+													@if(empty($reviews_out))
+														{{ trans('front.page.dentist.review-video', ['name' => $review->user->getName()]) }}:
+													@else
+														{{ trans('front.page.dentist.review-video-out', ['name' => $review->user->getName()]) }}:
+													@endif
+												</b> 
+												@if($review->youtube_approved || (!empty($user) && $user->id==$review->user_id ) )
+													<div class="videoWrapper">
+														<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ $review->youtube_id }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+													</div>
+												@else
+													<div class="alert alert-info">
+														{{ trans('front.page.dentist.review-video-unapproved') }}
+													</div>
+												@endif
+											@endif
+
+											<a href="javascript:;" class="new-btn-show-review" data-alt-text="{{ trans('front.page.dentist.review-hide-all') }}" data-user-id="{{ $review->user->id }}">
+												{{ trans('front.page.dentist.review-show-all') }}
+											</a>
+										</div>
+
+										<div class="sharer" data-href="{{ $item->getLink().'/'.$review->id }}">
+											
+											@if( !($my_upvotes && in_array($review->id, $my_upvotes) ) && !( !empty($user) && $review->user_id == $user->id ) )
+												<a class="useful {{ !$user ? 'needs-login' : '' }}" href="javascript:;" data-review-id="{{ $review->id }}" data-done-text="{{ trans('front.page.dentist.helpful-button-clicked') }}">
+													<i class="fa fa-heart"></i>
+												</a>
+											@endif
+											<a class="fb" href="javascript:;">
+												<i class="fa fa-facebook"></i>
+											</a>
+											<a class="tw" href="javascript:;">
+												<i class="fa fa-twitter"></i>
+											</a>
+											<a class="gp" href="javascript:;">
+												<i class="fa fa-google-plus"></i>
+											</a>
+											<!-- <span>
+												{{ trans('front.page.dentist.share') }}
+											</span> -->
+										</div>
+									</div>
+								</div>
+								@if($review->reply || ( !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) ) )
+									<div class="panel-body review" >
+										<div class="ratings">
+											<div class="rating">
+												@if(!$review->reply)
+													{!! Form::open(array('url' => $item->getLink().'/reply/'.$review->id, 'method' => 'post', 'class' => 'form-horizontal reply-form')) !!}
+														<div class="form-group">
+															<div class="col-md-12">
+																<p>
+																	@if(empty($reviews_out))
+																		{{ trans('front.page.dentist.review-write-reply', [ 'name' => $review->user->getName() ] ) }}
+																	@else
+																		{{ trans('front.page.dentist.review-reply-out', [ 'name' => $review->user->getName() ] ) }}
+																	@endif									
+																</p>
+
+												                <div class="alert alert-warning" style="display: none;">
+												                	{{ trans('front.page.dentist.review-reply-invalid') }}
+												                </div>
+
+												                {{ Form::textarea( 'reply', '', array( 'class' => 'form-control review-reply', 'placeholder' => trans('front.page.dentist.review-reply-placeholder') ) ) }}
+
+																<h3>
+													                {{ Form::submit( trans('front.page.dentist.review-reply-submit') , array('class' => 'btn btn-primary btn-block' )) }}
+																</h3>
+															</div>
+														</div>
+													{!! Form::close() !!}
+												@endif
+												<div class="the-reply" {!! !$review->reply ? 'style="display: none;"' : '' !!} >
+													<b>
+														{{ trans('front.page.dentist.review-reply', ['name' => $review->dentist_id ? $review->dentist->getName() : $review->clinic->getName() ]) }}:
+													</b> 
+													<span class="reply-content">
+														{!! nl2br($review->reply) !!}
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								@endif
+							</div>
+
+						</div>
+					</div>
+					@if(!$user)
+						<div class="panel-body review login-form user-login-upvote" style="display: none;">
+							<h3>
+								{{ trans('front.page.dentist.review-login-title') }}
+							</h3>
+							<p>
+								{{ trans('front.page.dentist.review-login-hint') }}
+							</p>
+							<div class="col-md-6">
+								<a class="btn btn-primary btn-block" href="{{ getLangUrl('register') }}">
+									{{ trans('front.page.dentist.review-login-register') }}
+								</a>
+							</div>
+							<div class="col-md-6">
+								<a class="btn btn-default btn-block" href="{{ getLangUrl('login') }}">
+									{{ trans('front.page.dentist.review-login-login') }} 
+								</a>
 							</div>
 						</div>
-						@if(!$user)
-							<div class="panel-body review login-form user-login-upvote" style="display: none;">
-								<h3>
-									{{ trans('front.page.dentist.review-login-title') }}
-								</h3>
-								<p>
-									{{ trans('front.page.dentist.review-login-hint') }}
-								</p>
-								<div class="col-md-6">
-									<a class="btn btn-primary btn-block" href="{{ getLangUrl('register') }}">
-										{{ trans('front.page.dentist.review-login-register') }}
-									</a>
-								</div>
-								<div class="col-md-6">
-									<a class="btn btn-default btn-block" href="{{ getLangUrl('login') }}">
-										{{ trans('front.page.dentist.review-login-login') }} 
-									</a>
-								</div>
-							</div>
-						@endif
-					</div>
-				@endif
+					@endif
+				</div>
 			@endforeach
 			@else 
 		    	<div class="alert alert-info">
@@ -476,17 +474,11 @@
 	                    	])
 	                    ])							
 	                </div>
-				@else
-					@if(false)
-						<div class="alert alert-info">
-							{{ trans('front.page.'.$current_page.'.alert-fixing-problem') }}
-						</div>
-					@else
-							@include('front.template-parts.submit-review-form')
-					@endif
+				@elseif(!empty($user) && !$user->is_dentist && empty($my_review))
+					@include('front.template-parts.submit-review-form')
 				@endif
 			@else
-					<div class="panel-body review login-form">
+				<div class="panel-body review login-form">
 					<h3>
 						{{ trans('front.page.'.$current_page.'.write-review-login-title') }}
 					</h3>

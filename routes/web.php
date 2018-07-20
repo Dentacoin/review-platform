@@ -220,6 +220,7 @@ $reviewRoutes = function () {
 				Route::post('profile/jwt', 						'ProfileController@jwt');
 				Route::post('profile/withdraw', 				'ProfileController@withdraw');
 				Route::any('profile/privacy', 					'ProfileController@privacy');
+				Route::any('profile/privacy-download', 			'ProfileController@privacy_download');
 
 				Route::get('gdpr', 								'ProfileController@gdpr');
 

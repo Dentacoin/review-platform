@@ -99,7 +99,7 @@
 					  	<div class="col-md-12">
 					  		<h3>{{ trans('front.page.profile.'.$current_subpage.'.title-preview') }}</h3>
 							<p>
-						  		<iframe style="width: 100%; height: 50vh; border: none; outline: none;" src="{{ getLangUrl('widget/'.$user->id.'/'.$user->get_widget_token().'/1') }}"></iframe>
+						  		<iframe style="width: 100%; height: 50vh; border: none; outline: none;" src="{{ getLangUrl('widget/'.$user->id.'/'.$user->get_widget_token().'/0') }}"></iframe>
 						  	</p>
 					  	</div>
 					</div>

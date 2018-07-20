@@ -41,7 +41,7 @@ class WidgetController extends BaseController
 
 
             $params['user'] = $user;
-            $params['reviews'] = intval($mode) ? $user->reviews_in->where('verified', 1) : $user->reviews_in;
+            $params['reviews'] = intval($mode) ? $user->reviews_in()->where('verified', 1) : $user->reviews_in();
             return response()->view('widget.widget', $params)
             ->header('Access-Control-Allow-Origin', '*');
         } else {

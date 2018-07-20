@@ -27,9 +27,15 @@ $(document).ready(function(){
 			$('#review-form').show();
 			$(this).closest('.panel-body').remove();
 		}
-
 	} );
 
+    $('#clinic_dentists').change( function() {
+        if ($(this).val()) {
+            $('.hidden-review-question').show();
+        } else {
+            $('.hidden-review-question').hide();
+        }
+    });
 
     if( $('.gallery-slider').length ) {
         if (window.innerWidth > 1200) {
@@ -293,26 +299,39 @@ $(document).ready(function(){
 		$('#review-short-text').hide();
 		$('#review-error').hide();
         $('#video-not-agree').hide();
+        $('.rating-panel .rating').hide();
 
 		var allgood = true;
 
 		$(this).find('input[type="hidden"]').each( function() {
-			if( !parseInt($(this).val()) && $(this).attr('name')!='_token' && $(this).attr('name')!='youtube_id' ) {
-				allgood = false;
-				console.log( $(this) );
-				$(this).closest('.stars').find('.rating').show();
-				$('html, body').animate({
-                    scrollTop: $(this).closest('.panel-body').offset().top - 60
-                }, 500);
-				return false;
-			}
+            if ($(this).closest('.review').hasClass('hidden-review-question') && !$('#clinic_dentists').val()) {
+                console.log('Skip 4th question'); //don't check because it's 4th question and I didn't pick a dentist
+            } else {
+    			if( !parseInt($(this).val()) && $(this).attr('name')!='_token' && $(this).attr('name')!='youtube_id' ) {
+    				allgood = false;
+    				console.log( $(this) );
+    				$(this).closest('.panel-body').find('.rating').show();
+
+                    var popupWrapper = $(this).closest('.new-popup-wrapper');
+
+                    var scrollTop = popupWrapper.scrollTop() + $(this).closest('.panel-body').offset().top - popupWrapper.offset().top - 20;
+
+    				popupWrapper.animate({
+                        scrollTop: scrollTop
+                    }, 500);
+    				return false;
+    			}
+            }
 		} );
 
         if( $('#youtube_id').val().trim().length && !$('#video-agree').is(':checked') ) {
             allgood = false;
             $('#video-not-agree').show();
-            $('html, body').animate({
-                scrollTop: $('#video-agree').offset().top - 80
+            var popupWrapper = $('#review-option-video').closest('.new-popup-wrapper');
+
+            var scrollTop = popupWrapper.scrollTop() + $('#review-option-video').closest('.panel-body').offset().top - popupWrapper.offset().top;
+            popupWrapper.animate({
+                scrollTop: scrollTop
             }, 500);
 
         }
@@ -327,8 +346,6 @@ $(document).ready(function(){
 
 			}
 		}
-
-
 
 		if(ajax_is_running || !allgood) {
 			return;
@@ -347,6 +364,7 @@ $(document).ready(function(){
             function( data ) {
                 console.log(data);
                 if(data.success) {
+                    console.log('success');
 
                     if(data.link) {
                         $('#review-confirmed').show().find('a.etherscan-link').attr('href', data.link);
@@ -356,6 +374,7 @@ $(document).ready(function(){
                     
                     $('#review-submit-button').hide();
                 } else {
+                    console.log('false');
                     if(data.valid_input) {
                         $('#review-crypto-error').show();
                         $('#review-crypto-error span').html(data.message);
@@ -562,6 +581,7 @@ $(document).ready(function(){
     	var rate = offsetToRate(e.offsetX);
     	$(this).find('input').val(rate);
     	$(this).closest('.ratings').find('.rating').hide();
+        $(this).find('.stars .bar').css('width', (rate * 30) + ((rate-1) * 18) );
     } );
     $('#review-form .ratings').mouseout( function(e) {
     	var rate = parseInt($(this).find('input').val());

@@ -47,7 +47,12 @@ class DentistController extends FrontController
                 'review_id' => $old_review->id,
             ]);
 
-            $old_review->dentist->recalculateRating();
+            if( $old_review->dentist_id ) {
+                $old_review->dentist->recalculateRating();                
+            }
+            if( $old_review->clinic_id ) {
+                $old_review->clinic->recalculateRating();                
+            }
             
             Request::session()->flash('success-message', trans('front.page.dentist.review-submitted'));
 
@@ -138,6 +143,7 @@ class DentistController extends FrontController
 
         $questions = Question::get();
 
+
         if(Request::isMethod('post')) {
 
             $ret = array(
@@ -148,9 +154,16 @@ class DentistController extends FrontController
                 'youtube_id' => ['required_without:answer']
             ];
             foreach ($questions as $question) {
+                if($question->id == 4 && $item->is_clinic && empty( Request::input( 'clinic_dentists' ) )  ) {
+                    continue;
+                }
+
+                    
                 $opts = json_decode($question['options'], true);
+
                 foreach ($opts as $i => $nosense) {
                 }
+
                 $validator_arr['option.'.$question->id.'.'.$i] = ['required', 'numeric', 'min:1', 'max:5'];
             }
 
@@ -195,7 +208,17 @@ class DentistController extends FrontController
                         } else {
                             $review = new Review;
                             $review->user_id = $this->user->id;
-                            $review->dentist_id = $item->id;
+                            if($item->is_clinic) {
+                                $review->clinic_id = $item->id;
+                                if(!empty(Request::input( 'clinic_dentists' ))) {
+                                    $review->dentist_id = Request::input( 'clinic_dentists' );
+                                }
+                            } else {
+                                $review->dentist_id = $item->id;
+                                if(!empty(Request::input( 'dentist_clinics' ))) {
+                                    $review->clinic_id = Request::input( 'dentist_clinics' );
+                                }
+                            }
                             
                         }
 
@@ -212,6 +235,11 @@ class DentistController extends FrontController
                         $crypto_data = [];
                         $crypto_data['answer'] = strip_tags(Request::input( 'answer' ));
                         foreach ($questions as $question) {
+                            
+                            if($question->id == 4 && $item->is_clinic && empty( Request::input( 'clinic_dentists' ) )  ) {
+                                continue;
+                            }
+
                             $crypto_data['question-'.$question->id] = [];
                             $answer_rates[$question->id] = 0;
                             $option_answers = [];
@@ -282,7 +310,7 @@ class DentistController extends FrontController
 
 
 
-        $reviews = $item->reviews_in;
+        $reviews = $item->reviews_in();
         if($review_id) {
             $review = Review::find($review_id);
             if(!empty($review) && !empty($reviews)) {
@@ -489,7 +517,7 @@ class DentistController extends FrontController
 
     public function reply($locale=null, $slug, $review_id) {
         $review = Review::find($review_id);
-        if(!empty($review) && $this->user->id==$review->dentist_id) {
+        if(!empty($review) && ($this->user->id==$review->clinic_id || $this->user->id==$review->dentist_id ) ) {
             $review->reply = strip_tags(Request::input( 'reply' ));
             $review->save();
             $review->user->sendTemplate(8, [

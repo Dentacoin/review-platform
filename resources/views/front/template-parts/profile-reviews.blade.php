@@ -13,8 +13,8 @@
 			@foreach($user->reviews_out as $review)
 				<div class="panel panel-default">
 					@include('front.template-parts.review-new', [
-						'item' => $review->dentist,
-						'user_field' => 'dentist',
+						'item' => $review->dentist_id ? $review->dentist : $review->clinic,
+						'user_field' => $review->dentist_id ? 'dentist' : 'clinic',
 						'reviews_out' => true
 					])
 				</div>

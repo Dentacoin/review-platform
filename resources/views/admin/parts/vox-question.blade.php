@@ -91,7 +91,7 @@
                     </div>
                     <div class="form-group answers-group">
                         <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.question-answers') }}</label>
-                        <div class="col-md-9 answers-list">
+                        <div class="col-md-9 answers-list answers-draggable">
                             @if(!empty($question) && !empty($question->{'answers:'.$code}) )
                                 @foreach(json_decode($question->{'answers:'.$code}, true) as $ans)
                                     <div class="input-group">

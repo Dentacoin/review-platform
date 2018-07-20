@@ -117,7 +117,7 @@
 		</div>
 	</div>
 </div>
-@if($review->reply || ( !empty($user) && $review->dentist_id==$user->id ) )
+@if($review->reply || ( !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) ) )
 	<div class="panel-body review" >
 		<div class="ratings">
 			<div class="rating">
@@ -148,7 +148,7 @@
 				@endif
 				<div class="the-reply" {!! !$review->reply ? 'style="display: none;"' : '' !!} >
 					<b>
-						{{ trans('front.page.dentist.review-reply', ['name' => $review->dentist->getName() ]) }}:
+						{{ trans('front.page.dentist.review-reply', ['name' => $review->dentist_id ? $review->dentist->getName() : $review->clinic->getName() ]) }}:
 					</b> 
 					<span class="reply-content">
 						{!! nl2br($review->reply) !!}

@@ -158,7 +158,7 @@
 				@endif
 				<div class="the-reply" {!! !$review->reply ? 'style="display: none;"' : '' !!} >
 					<b>
-						{{ trans('front.page.dentist.review-reply', ['name' => $review->dentist->getName() ]) }}:
+						{{ trans('front.page.dentist.review-reply', ['name' => $review->dentist_id ? $review->dentist->getName() : $review->clinic->getName() ]) }}:
 					</b> 
 					<span class="reply-content">
 						{!! nl2br($review->reply) !!}

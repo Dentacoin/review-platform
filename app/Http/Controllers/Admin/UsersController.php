@@ -287,10 +287,18 @@ class UsersController extends AdminController
                 ['review_id', $item->id],
             ])
             ->delete();
-            $dentist = User::find($item->dentist_id);
+            if($item->dentist_id) {
+                $dentist = User::find($item->dentist_id);
+            }
+            if($item->clinic_id) {
+                $clinic = User::find($item->clinic_id);
+            }
             Review::destroy( $review_id );
-            if( $dentist ) {
+            if( !empty($dentist) ) {
                 $dentist->recalculateRating();
+            }
+            if( !empty($clinic) ) {
+                $clinic->recalculateRating();
             }
         }
 

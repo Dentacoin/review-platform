@@ -11,12 +11,56 @@
 	</div>
 	<input type="hidden" id="review-confirm-action" value="{{ $item->getLink() }}">
 	{!! Form::open(array('url' => $item->getLink(), 'id' => 'write-review-form', 'method' => 'post', 'class' => 'form-horizontal')) !!}
-		@foreach($questions as $qid => $question)
-			<div class="panel-body review rating-panel">
+
+		@if($item->is_dentist && !$item->is_clinic && $item->my_workplace->isNotEmpty() && $item->my_workplace->count() > 1)	
+
+			<div class="form-group clearfix">
 				<div class="form-group">
 					<div class="col-md-12">
 						<h3>
-							<span>{{ $question->order }}.</span> {{ str_replace('{name}', $item->name, $question->question) }}
+							Where did you visit {{ $item->getName() }} ?
+						</h3>
+					</div>
+				</div>
+		        <div class="col-md-12">		        
+		            <select name="dentist_clinics" class="form-control">
+						<option value="">In his/her own cabinet</option>
+						@foreach($item->my_workplace as $workplace)
+							<option value="{{ $workplace->clinic->id }}">{{ $workplace->clinic->getName() }}</option>
+						@endforeach
+					</select>
+		        </div>
+		    </div>
+
+		@endif
+
+		@foreach($questions as $qid => $question)
+			@if($item->is_clinic && $item->team->isNotEmpty() && $item->team->count() > 1 && $loop->iteration == 4 )
+
+				<div class="form-group clearfix">
+			        <div class="form-group">
+						<div class="col-md-12">
+							<h3>
+								Which doctor treated you?
+							</h3>
+						</div>
+					</div>
+			        <div class="col-md-12">
+			            <select name="clinic_dentists" class="form-control" id="clinic_dentists">
+							<option value="">I don't remember</option>
+							@foreach($item->team as $team)
+								<option value="{{ $team->clinicTeam->id }}">{{ $team->clinicTeam->getName() }}</option>
+							@endforeach
+						</select>
+			        </div>
+			    </div>
+			@endif
+
+			<div class="panel-body review rating-panel {{ $item->is_clinic && $item->team->isNotEmpty() && $item->team->count() > 1 && $loop->iteration == 4 ? 'hidden-review-question' : '' }}" {{ $item->is_clinic && $item->team->isNotEmpty() && $item->team->count() > 1 && $loop->iteration == 4 ? 'style=display:none;' : '' }}>
+				<div class="form-group">
+					<div class="col-md-12">
+						<h3>
+							{{ str_replace('{name}', $item->name, $question->question) }}
 						</h3>
 					</div>
 				</div>
@@ -35,15 +79,13 @@
 								<div class="bar" style="width: {{ $my_review ? getStarWidth(json_decode($my_review->answers[$qid]->options, true)[$i]) : 0 }}px;">
 								</div>
 								<input type="hidden" name="option[{{ $question['id'] }}][]" value="{{ $my_review ? json_decode($my_review->answers[$qid]->options, true)[$i] : '' }}" />
-								<div class="rating" style="display: none;">
-									{{ trans('front.page.dentist.review-form-answer-all') }}
-								</div>
 							</div>
 						</div>
-
-
 		        	</div>
 		    	@endforeach
+				<div class="rating" style="display: none;">
+					{{ trans('front.page.dentist.review-form-answer-all') }}
+				</div>
 			</div>
 		@endforeach
 		<div class="panel-body review rating-panel">

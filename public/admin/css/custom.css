@@ -116,3 +116,8 @@ table.table .table-search {
 .template-box .select2.select2-container {
     float: left;
 }
+
+.ui-sortable-handle {
+    padding: 5px;
+    border: 1px solid rgb(182, 194, 201);
+}

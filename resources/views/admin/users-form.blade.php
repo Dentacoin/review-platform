@@ -178,7 +178,7 @@
                             'delete'            => array('format' => 'delete'),
                         ],
                         'table_subpage' => 'reviews',
-                        'table_data' => $item->reviews_in,
+                        'table_data' => $item->reviews_in(),
                         'table_pagination' => false,
                         'pagination_link' => array()
                     ])
