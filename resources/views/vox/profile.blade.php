@@ -57,7 +57,7 @@
 											</a>
 		            					</td>
 		            					<td>
-		            						{{ $completed->formatDuration() }}
+		            						{{ gmdate("H:i:s", intVal($completed->seconds))  }}
 		            					</td>
 		            					<td>
 		            						{{ $completed->reward ? $completed->reward : '-' }}

@@ -474,8 +474,9 @@ header {
     		bottom: 0;
     		left: 0;
     		right: 0;
-    		background: rgba(0,0,0,0.3);
+    		background: rgba(144, 185, 207, 0.53);
     		text-align: center;
+    		border-radius: 10px;
 
     		i {
     			position: absolute;
@@ -2335,4 +2336,14 @@ footer {
 .modal-content {
     max-height: 100%;
     overflow: auto;
+}
+
+.vox-address {
+	@media screen and (max-width: 768px) {
+		width: 270px;
+	    word-wrap: break-word;
+	}
+	@media screen and (max-width: 350px) {
+		width: 210px;
+	}
 }

@@ -53,7 +53,7 @@
 		            						{{ $trans->amount }} DCN
 		            					</td>
 		            					<td>
-		            						{{ $trans->address }}
+		            						<div class="vox-address">{{ $trans->address }}</div>
 		            					</td>
 		            					<td>
 		            						@if($trans->status=='new')

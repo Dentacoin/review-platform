@@ -325,7 +325,7 @@ $(document).ready(function(){
 			type: 'GET',
 			dataType: 'json',
 			success: function( data ) {
-				console.log(data);
+				// console.log(data);
 				var my_amount = parseInt($('#header-balance').html()) * data.dcn_price_full
 
 				$('#header_questions').html(data.question_count);
