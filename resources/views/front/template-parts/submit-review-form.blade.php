@@ -18,13 +18,13 @@
 				<div class="form-group">
 					<div class="col-md-12">
 						<h3>
-							Where did you visit {{ $item->getName() }} ?
+							{{ trans('front.page.dentist.dentist-visit', ['name' => $item->getName() ]) }}
 						</h3>
 					</div>
 				</div>
 		        <div class="col-md-12">		        
 		            <select name="dentist_clinics" class="form-control">
-						<option value="">In his/her own cabinet</option>
+						<option value="">{{ trans('front.page.dentist.dentist-cabinet') }}</option>
 						@foreach($item->my_workplace_approved as $workplace)
 							<option value="{{ $workplace->clinic->id }}">{{ $workplace->clinic->getName() }}</option>
 						@endforeach
@@ -41,13 +41,13 @@
 			        <div class="form-group">
 						<div class="col-md-12">
 							<h3>
-								Which doctor treated you?
+								{{ trans('front.page.dentist.dentist-treat') }}
 							</h3>
 						</div>
 					</div>
 			        <div class="col-md-12">
 			            <select name="clinic_dentists" class="form-control" id="clinic_dentists">
-							<option value="">I don't remember</option>
+							<option value="">{{ trans('front.page.dentist.dentist-not-remembered') }}</option>
 							@foreach($item->teamApproved as $team)
 								<option value="{{ $team->clinicTeam->id }}">{{ $team->clinicTeam->getName() }}</option>
 							@endforeach

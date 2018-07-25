@@ -54,7 +54,7 @@
 					</div>
 					<label for="all-locations" class="all-locations">
 						<input type="checkbox" name="all_locations" id="all-locations" value="1" />
-						Show dentists from all locations
+						{{ trans('front.page.dentists.dentists-all-locations') }}
 					</label>
 				</div>
 				<div class="col-md-2">

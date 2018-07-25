@@ -113,22 +113,22 @@
 <ul class="nav nav-tabs dentist-tabs container">
 	@if($item->description)
         <li>
-        	<a href="#about-tab" data-toggle="tab" aria-expanded="true">About us</a>
+        	<a href="#about-tab" data-toggle="tab" aria-expanded="true">{{ trans('front.page.'.$current_page.'.about-tab') }}</a>
         </li>
     @endif
     @if($item->photos->isNotEmpty())
         <li class="gallery-tab-btn">
-        	<a href="#gallery-tab" data-toggle="tab" aria-expanded="false">Gallery</a>
+        	<a href="#gallery-tab" data-toggle="tab" aria-expanded="false">{{ trans('front.page.'.$current_page.'.gallery-tab') }}</a>
         </li>
     @endif
     @if($item->is_clinic && $item->teamApproved->isNotEmpty())
     	<li class="dentists-tab-btn">
-        	<a href="#dentists-tab" data-toggle="tab" aria-expanded="false">Dentists</a>
+        	<a href="#dentists-tab" data-toggle="tab" aria-expanded="false">{{ trans('front.page.'.$current_page.'.dentists-tab') }}</a>
         </li>
     @endif
     @if($item->is_dentist && !$item->is_clinic && $item->my_workplace_approved->isNotEmpty())
     	<li class="clinics-tab-btn">
-        	<a href="#clinics-tab" data-toggle="tab" aria-expanded="false">My workplace</a>
+        	<a href="#clinics-tab" data-toggle="tab" aria-expanded="false">{{ trans('front.page.'.$current_page.'.clinics-tab') }}</a>
         </li>
     @endif
     <li class="active">
