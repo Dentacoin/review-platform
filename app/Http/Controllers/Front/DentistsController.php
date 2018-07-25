@@ -39,8 +39,8 @@ class DentistsController extends FrontController
         if( Request::input('partner') ) {
             $partner = Request::input('partner');
         }
-        if( Request::input('name') ) {
-            $name = Request::input('name');
+        if( Request::input('username') ) {
+            $name = Request::input('username');
         }
         if( Request::input('city') && !$all_locations ) {
             $city = City::find(Request::input('city'));

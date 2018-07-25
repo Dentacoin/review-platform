@@ -160,10 +160,10 @@
 				</a>
 			@endif
         </div>
-	    @if($item->is_clinic && $item->team->isNotEmpty())
+	    @if($item->is_clinic && $item->teamApproved->isNotEmpty())
 	        <div class="tab-pane fade" id="dentists-tab">
 
-	        	@foreach($item->team as $team)
+	        	@foreach($item->teamApproved as $team)
 			    	<a class="clinic-dentists-wrapper col-md-8 col-md-offset-2" href="{{ $team->clinicTeam->getLink() }}">
 						<div class="media">
 							<div class="media-left avatar">

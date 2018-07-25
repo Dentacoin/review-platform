@@ -12,7 +12,7 @@
 	<input type="hidden" id="review-confirm-action" value="{{ $item->getLink() }}">
 	{!! Form::open(array('url' => $item->getLink(), 'id' => 'write-review-form', 'method' => 'post', 'class' => 'form-horizontal')) !!}
 
-		@if($item->is_dentist && !$item->is_clinic && $item->my_workplace->isNotEmpty() && $item->my_workplace->count() > 1)	
+		@if($item->is_dentist && !$item->is_clinic && $item->my_workplace_approved->isNotEmpty())	
 
 			<div class="form-group clearfix">
 				<div class="form-group">
@@ -25,7 +25,7 @@
 		        <div class="col-md-12">		        
 		            <select name="dentist_clinics" class="form-control">
 						<option value="">In his/her own cabinet</option>
-						@foreach($item->my_workplace as $workplace)
+						@foreach($item->my_workplace_approved as $workplace)
 							<option value="{{ $workplace->clinic->id }}">{{ $workplace->clinic->getName() }}</option>
 						@endforeach
 					</select>
@@ -35,7 +35,7 @@
 		@endif
 
 		@foreach($questions as $qid => $question)
-			@if($item->is_clinic && $item->team->isNotEmpty() && $item->team->count() > 1 && $loop->iteration == 4 )
+			@if($item->is_clinic && $item->teamApproved->isNotEmpty() && $loop->iteration == 4 )
 
 				<div class="form-group clearfix">
 			        <div class="form-group">
@@ -48,7 +48,7 @@
 			        <div class="col-md-12">
 			            <select name="clinic_dentists" class="form-control" id="clinic_dentists">
 							<option value="">I don't remember</option>
-							@foreach($item->team as $team)
+							@foreach($item->teamApproved as $team)
 								<option value="{{ $team->clinicTeam->id }}">{{ $team->clinicTeam->getName() }}</option>
 							@endforeach
 						</select>
