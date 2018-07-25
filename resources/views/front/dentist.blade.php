@@ -121,14 +121,19 @@
         	<a href="#gallery-tab" data-toggle="tab" aria-expanded="false">Gallery</a>
         </li>
     @endif
-    <li class="active">
-    	<a href="#review-tab" data-toggle="tab">{{ trans('front.page.'.$current_page.'.write-review-button') }}</a>
-    </li>
-    @if($item->is_clinic && $item->team->isNotEmpty())
+    @if($item->is_clinic && $item->teamApproved->isNotEmpty())
     	<li class="dentists-tab-btn">
         	<a href="#dentists-tab" data-toggle="tab" aria-expanded="false">Dentists</a>
         </li>
     @endif
+    @if($item->is_dentist && !$item->is_clinic && $item->my_workplace_approved->isNotEmpty())
+    	<li class="clinics-tab-btn">
+        	<a href="#clinics-tab" data-toggle="tab" aria-expanded="false">My workplace</a>
+        </li>
+    @endif
+    <li class="active">
+    	<a href="#review-tab" data-toggle="tab">{{ trans('front.page.'.$current_page.'.write-review-button') }}</a>
+    </li>
 </ul>
 <div class="tab-content dentist-tab-content profile-content">
 	<div class="container">
@@ -150,16 +155,6 @@
 				</div>
 	    	</div>
 	    @endif
-        <div class="tab-pane fade active in" id="review-tab">
-        	<h3>{{ trans('front.page.'.$current_page.'.write-review-title', ['name' => $item->name]) }}</h3>
-    		<p>{{ trans('front.page.'.$current_page.'.write-review-hint') }}</p>
-
-    		@if(!empty($user) && !$user->is_dentist && empty($my_review))
-	    		<a class="btn btn-primary write-review" id="write-review-btn" href="javascript:;">
-					{{ trans('front.page.'.$current_page.'.write-review-button') }}
-				</a>
-			@endif
-        </div>
 	    @if($item->is_clinic && $item->teamApproved->isNotEmpty())
 	        <div class="tab-pane fade" id="dentists-tab">
 
@@ -214,6 +209,70 @@
 				@endforeach
 	        </div>
 	    @endif
+	    @if($item->is_dentist && !$item->is_clinic && $item->my_workplace_approved->isNotEmpty())
+	        <div class="tab-pane fade" id="clinics-tab">
+
+	        	@foreach($item->my_workplace_approved as $workplace)
+			    	<a class="clinic-dentists-wrapper col-md-8 col-md-offset-2" href="{{ $workplace->clinic->getLink() }}">
+						<div class="media">
+							<div class="media-left avatar">
+								<img src="{{ $workplace->clinic->getImageUrl(true) }}" />
+							</div>
+							<div class="media-body">
+								<h2 class="media-heading">
+									{{ $workplace->clinic->getName() }}
+								</h2>
+
+								@if($workplace->clinic->country)
+									<div class="location">
+										<i class="fa fa-map-marker"></i> 
+										@if($workplace->clinic->city)
+											{{ $workplace->clinic->city->name }}, {{ $workplace->clinic->country->name }}
+										@else
+											{{ $workplace->clinic->country->name }}
+										@endif
+									</div>
+								@endif
+
+								@if($workplace->clinic->categories->isNotEmpty())
+									<div class="categories">
+										<i class="fa fa-graduation-cap"></i> 
+										{{ implode(', ', $workplace->clinic->parseCategories($categories) ) }}
+									</div>
+								@endif
+
+								<div class="ratings">
+									@if($workplace->clinic->ratings)
+										<div class="stars">
+											<div class="bar" style="width: {{ getStarWidth($workplace->clinic->avg_rating) }}px;">
+											</div>
+										</div>
+									@endif
+									<div class="rating">
+										@if($workplace->clinic->ratings)
+											{!! trans('front.page.dentists.rating', [ 'rating' => '<b>'.$workplace->clinic->avg_rating.'</b>', 'reviews' => '<b>'.$workplace->clinic->ratings.'</b>' ] ) !!}
+										@else
+											<b>{{ trans('front.common.no-reviews') }}</b>
+										@endif
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</a>
+				@endforeach
+	        </div>
+	    @endif
+        <div class="tab-pane fade active in" id="review-tab">
+        	<h3>{{ trans('front.page.'.$current_page.'.write-review-title', ['name' => $item->name]) }}</h3>
+    		<p>{{ trans('front.page.'.$current_page.'.write-review-hint') }}</p>
+
+    		@if(!empty($user) && !$user->is_dentist && empty($my_review))
+	    		<a class="btn btn-primary write-review" id="write-review-btn" href="javascript:;">
+					{{ trans('front.page.'.$current_page.'.write-review-button') }}
+				</a>
+			@endif
+        </div>
     </div>
 </div>
 

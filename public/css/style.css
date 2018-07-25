@@ -752,9 +752,10 @@ body {
       background: url("../img/blue-star-full.png") 0% 50% no-repeat;
       height: 30px; }
     .ratings .stars.green-stars {
-      background-image: url("../img/green-star-empty.png"); }
+      background: url("../img/green-star-empty.png") 50% 50% no-repeat;
+      width: 221px; }
       .ratings .stars.green-stars .bar {
-        background-image: url("../img/green-star-full.png"); }
+        background: url("../img/green-star-full.png") 0% 50% no-repeat; }
   .ratings .rating {
     margin-bottom: 5px; }
 
@@ -2142,6 +2143,7 @@ body {
     .work-buttons .rejected-button {
       float: none; } }
 
+#clinics-tab:after,
 #dentists-tab:after {
   content: '';
   display: block;

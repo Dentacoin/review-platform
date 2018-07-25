@@ -55,7 +55,7 @@ $accent-color-shadow: rgba(18, 101, 133, 0.5);
         padding-bottom: 10px;
     }
     .collapse.in{
-        display:block !important;
+        display: block !important;
     }
 }
 
@@ -1055,10 +1055,11 @@ body {
         }
 
         &.green-stars {
-            background-image: url('../img/green-star-empty.png');
+            background: url('../img/green-star-empty.png') 50% 50% no-repeat;
+            width: 221px;
 
             .bar {
-                background-image: url('../img/green-star-full.png');
+                background: url('../img/green-star-full.png') 0% 50% no-repeat;
             }
         }
     }
@@ -3049,6 +3050,7 @@ body {
     }
 }
 
+#clinics-tab:after,
 #dentists-tab:after {
     content: '';
     display: block;
