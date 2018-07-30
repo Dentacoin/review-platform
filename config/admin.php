@@ -5,6 +5,9 @@ return [
         'users' => array(
             'icon' => 'users',
         ),
+        'scammers' => array(
+            'icon' => 'transgender-alt',
+        ),
         'transactions' => array(
             'icon' => 'bitcoin',
         ),

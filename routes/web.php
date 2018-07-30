@@ -46,6 +46,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('secrets', 							'SecretsController@add');
 	Route::get('secrets/delete/{id}',				'SecretsController@delete');
 
+	Route::get('scammers', 							'ScammersController@list');
+
 	Route::get('users', 							'UsersController@list');
 	Route::get('users/byweek', 						'UsersController@byweek');
 	Route::any('users/loginas/{id}', 				'UsersController@loginas');

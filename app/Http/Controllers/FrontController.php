@@ -23,6 +23,7 @@ use App\Models\Country;
 use App\Models\City;
 use App\Models\VoxAnswer;
 use App\Models\Vox;
+use App\Models\UserLogin;
 
 class FrontController extends BaseController
 {
@@ -62,6 +63,16 @@ class FrontController extends BaseController
         $this->middleware(function ($request, $next) {
             $this->admin = Auth::guard('admin')->user();
             $this->user = Auth::guard('web')->user();
+
+            if($this->user && !session('login-logged')){
+                $ul = new UserLogin;
+                $ul->user_id = $this->user->id;
+                $ul->ip = Request::ip();
+                $ul->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
+                $ul->save();
+                session(['login-logged' => time()]);
+            }
+
 
             $this->country_id = !empty($this->user->country_id) ? $this->user->country_id : session('country_id');
             $this->city_id = !empty($this->user->city_id) ? $this->user->city_id : session('city_id');
