@@ -153,6 +153,12 @@ class UsersController extends AdminController
         if(!empty($this->request->input('search-id'))) {
             $users = $users->where('id', $this->request->input('search-id') );
         }
+        if(!empty($this->request->input('search-ip-address'))) {
+            $ip = $this->request->input('search-ip-address');
+            $users = $users->whereHas('logins', function ($query) use ($ip) {
+                $query->where('ip', 'like', $ip);
+            });
+        }
 
         if(!empty($this->request->input('search-register-from'))) {
             $firstday = new Carbon($this->request->input('search-register-from'));
@@ -193,6 +199,7 @@ class UsersController extends AdminController
             'search_address' => $this->request->input('search-address'),
             'search_tx' => $this->request->input('search-tx'),
             'results_number' => $this->request->input('results-number'),
+            'search_ip_address' => $this->request->input('search-ip-address'),
         ));
     }
 
@@ -206,6 +213,15 @@ class UsersController extends AdminController
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
+        return redirect('cms/'.$this->current_page);
+    }
+
+    public function massdelete(  ) {
+        if( Request::input('ids') ) {
+            User::whereIn('id', Request::input('ids'))->delete();            
+        }
+
+        $this->request->session()->flash('success-message', 'All selected users and now deleted' );
         return redirect('cms/'.$this->current_page);
     }
 

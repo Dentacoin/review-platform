@@ -49,6 +49,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('scammers', 							'ScammersController@list');
 
 	Route::get('users', 							'UsersController@list');
+	Route::post('users/mass-delete', 				'UsersController@massdelete');
 	Route::get('users/byweek', 						'UsersController@byweek');
 	Route::any('users/loginas/{id}', 				'UsersController@loginas');
 	Route::any('users/user-data/{id}', 				'UsersController@personal_data');

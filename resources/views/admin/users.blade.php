@@ -41,10 +41,13 @@
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="results-number" value="{{ $results_number }}" placeholder="Results ( enter 0 to show all )">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="search-ip-address" value="{{ $search_ip_address }}" placeholder="IP Address">
+                        </div>
+                        <div class="col-md-2">
                             <input type="text" class="form-control" name="search-register-from" value="{{ $search_register_from }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-register-from') }}">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <input type="text" class="form-control" name="search-register-to" value="{{ $search_register_to }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-register-to') }}">
                         </div>
                         <div class="col-md-4">
@@ -70,27 +73,33 @@
             </div>
             <div class="panel-body">
         		<div class="panel-body">
-					@include('admin.parts.table', [
-						'table_id' => 'users',
-						'table_fields' => [
-                            'id'                => array(),
-                            'name'              => array(),
-                            'email'              => array(),
-                            'phone'              => array('template' => 'admin.parts.table-users-phone'),
-                            'city_id'                => array('format' => 'city'),
-							'country_id'				=> array('format' => 'country'),
-                            'is_dentist'                => array('format' => 'bool'),
-                            'is_partner'                => array('format' => 'bool'),
-                            'ratings'                => array('template' => 'admin.parts.table-users-ratings'),
-                            'link'                => array('template' => 'admin.parts.table-users-link'),
-                            'login'                => array('template' => 'admin.parts.table-users-login'),
-							'update'			=> array('format' => 'update'),
-							'delete'			=> array('format' => 'delete'),
-						],
-                        'table_data' => $users,
-						'table_pagination' => false,
-                        'pagination_link' => array()
-					])
+                    <form method="post" action="{{ url('cms/users/mass-delete') }}" >
+                        {!! csrf_field() !!}
+    					@include('admin.parts.table', [
+    						'table_id' => 'users',
+    						'table_fields' => [
+                                'selector'                => array('format' => 'selector'),
+                                'id'                => array(),
+                                'name'              => array(),
+                                'email'              => array(),
+                                'phone'              => array('template' => 'admin.parts.table-users-phone'),
+                                'city_id'                => array('format' => 'city'),
+    							'country_id'				=> array('format' => 'country'),
+                                'is_dentist'                => array('format' => 'bool'),
+                                'is_partner'                => array('format' => 'bool'),
+                                'ratings'                => array('template' => 'admin.parts.table-users-ratings'),
+                                'link'                => array('template' => 'admin.parts.table-users-link'),
+                                'login'                => array('template' => 'admin.parts.table-users-login'),
+    							'update'			=> array('format' => 'update'),
+    							'delete'			=> array('format' => 'delete'),
+    						],
+                            'table_data' => $users,
+    						'table_pagination' => false,
+                            'pagination_link' => array()
+    					])
+
+                        <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" onclick="return confirm('Are you sure?');">Delete selected users</button>
+                    </form>
                 </div>
             </div>
         </div>

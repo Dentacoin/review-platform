@@ -123,6 +123,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function history() {
         return $this->hasMany('App\Models\DcnTransaction', 'user_id', 'id')->orderBy('id', 'DESC');
     }
+    public function logins() {
+        return $this->hasMany('App\Models\UserLogin', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
     public function team() {
         return $this->hasMany('App\Models\UserTeam', 'user_id', 'id');
     }

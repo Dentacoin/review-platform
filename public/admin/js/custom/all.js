@@ -20,6 +20,16 @@ $(document).ready(function(){
 		}
 	});
 
+	$('.table-select-all').click( function() {
+		var active = $(this).closest('table').find('input[type="checkbox"]').first().is(':checked');
+		console.log( active );
+		if(active) {
+			$(this).closest('table').find('input[type="checkbox"]').attr('checked', false);
+		} else {
+			$(this).closest('table').find('input[type="checkbox"]').attr('checked', 'checked');			
+		}
+	} );
+
 	$('.open-popup').click( function() {
 		last_popup_btn = $(this);
 

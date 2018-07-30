@@ -17,9 +17,13 @@
             <div class="panel-body">
         		<div class="panel-body">
                     @foreach($list as $ip => $users)
-                        <h3>{{ $ip }}</h3>
+                        <h3>
+                            <a href="{{ url('cms/users?search-ip-address='.$ip.'&search=Search') }}">
+                                {{ $ip }}
+                            </a>
+                        </h3>
                         @foreach($users as $user)
-                            <a target="_blank" href="{{ url('cms/users/edit/'.$user->id) }}"><b>{{ $user->getName() }}</b> ({{ $user->email }})</a><br/>
+                            <a target="_blank" {!! $user->deleted_at ? 'style="text-decoration: line-through;"' : '' !!} href="{{ url('cms/users/edit/'.$user->id) }}"><b>{{ $user->getName() }}</b> ({{ $user->email }})</a><br/>
                         @endforeach
                     @endforeach
                 </div>

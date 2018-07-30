@@ -6,7 +6,11 @@
                     <tr>
                     	@foreach($table_fields as $k => $v)
                            	<th>
-                                {{ trans('admin.page.'.$current_page.'.table.'.$k) }}
+                                @if($k=='selector')
+                                    <a href="javascript:;" class="table-select-all">All / None</a>
+                                @else
+                                    {{ trans('admin.page.'.$current_page.'.table.'.$k) }}
+                                @endif
                             </th>
                         @endforeach
                     </tr>
@@ -18,7 +22,11 @@
                                 @if(!empty($v['template']))
                                     <td>@include($v['template'], array('item' => $row) )</td>
                                 @elseif(!empty($v['format']))
-                                    @if($v['format']=='update')
+                                    @if($v['format']=='selector')
+                                        <td>
+                                            <input type="checkbox" name="ids[]" value="{{ $row->id }}" />
+                                        </td>
+                                    @elseif($v['format']=='update')
                                         <td><a class="btn btn-sm btn-primary" href="{{ url('cms/'.$current_page.( !empty($table_subpage) ? '/'.$table_subpage : '' ).'/edit/'.$row->id) }}">{{ trans('admin.table.edit') }}</a></td>
                                     @elseif($v['format']=='delete')
                                         @if(!empty($row->deleted_at))
