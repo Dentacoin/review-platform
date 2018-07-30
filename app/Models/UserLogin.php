@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class UserLogin extends Model {
         
@@ -17,6 +18,16 @@ class UserLogin extends Model {
         'updated_at'
     ];
     
+    public function getUsersCount() {
+        $ips = DB::select("
+            SELECT 
+                COUNT(DISTINCT `user_id`) as `count`
+            FROM  `user_logins`
+            WHERE `ip` LIKE '".$this->ip."'
+        ");
+
+        return !empty($ips) ? current($ips)->count : 1;
+    }
 }
 
 ?>

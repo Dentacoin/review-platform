@@ -2,7 +2,12 @@
 
 @section('content')
 
-<h1 class="page-header"> {{ trans('admin.page.'.$current_page.'.title-edit') }} </h1>
+<h1 class="page-header"> 
+    {{ trans('admin.page.'.$current_page.'.title-edit') }} 
+    @if( $item->getSameIPUsers() )
+        <a class="label label-danger" href="{{ url('cms/users/edit/'.$item->id) }}#logins-list">Click for Suspicious Logins</a>
+    @endif
+</h1>
 <!-- end page-header -->
 
 
@@ -373,6 +378,34 @@
                             'tx_hash'           => array(),
                         ],
                         'table_data' => $item->vox_cashouts,
+                        'table_pagination' => false,
+                        'pagination_link' => array()
+                    ])
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if($item->logins->isNotEmpty())
+    <div class="row" id="logins-list">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">User Logins</h4>
+                </div>
+                <div class="panel-body">
+                    @include('admin.parts.table', [
+                        'table_id' => 'vox-cashouts',
+                        'table_fields' => [
+                            'created_at'        => array('format' => 'datetime'),
+                            'ip'           => array('template' => 'admin.parts.table-logins-user'),
+                            'platform'           => array()
+                        ],
+                        'table_data' => $item->logins,
                         'table_pagination' => false,
                         'pagination_link' => array()
                     ])

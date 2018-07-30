@@ -20,6 +20,7 @@ use App\Models\UserBan;
 use App\Models\UserAsk;
 use App\Models\UserTeam;
 use App\Models\DcnTransaction;
+use App\Models\UserLogin;
 use Carbon\Carbon;
 use Auth;
 
@@ -547,6 +548,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         } else {
             return $this->is_verified && $this->email && $this->civic_id;
         }
+    }
+
+    public function getSameIPUsers() {
+        if( $this->logins->pluck('ip')->toArray() ) {
+            $list = UserLogin::where('user_id', '!=', $this->id)->whereIn('ip', $this->logins->pluck('ip')->toArray() )->groupBy('user_id')->get();
+            return $list->count();
+        }
+        return false;
     }
 
     public static function getCount($type) {
