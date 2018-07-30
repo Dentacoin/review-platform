@@ -8,6 +8,9 @@ return [
         'scammers' => array(
             'icon' => 'transgender-alt',
         ),
+        'blacklist' => array(
+            'icon' => 'umbrella',
+        ),
         'transactions' => array(
             'icon' => 'bitcoin',
         ),
