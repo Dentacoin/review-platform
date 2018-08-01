@@ -3,7 +3,7 @@
     
     <div class="form-group">
         <label class="col-md-2 control-label">
-            Pattern (use ? as wildcard)
+            Pattern (use * as wildcard)
         </label>
         <div class="col-md-4">
             {{ Form::text('pattern', !empty($item) ? $item->pattern : '', array('class' => 'form-control')) }}

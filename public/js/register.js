@@ -205,6 +205,11 @@ $(document).ready(function(){
 
     } );
 
+    $('#register-form input').on('focus', function(e){
+    	console.log($(this).closest('.form-group'));
+	    $(this).closest('.form-group').removeClass('has-error');
+	});
+
 
     //Gallery
     $('#add-avatar').change( function() {

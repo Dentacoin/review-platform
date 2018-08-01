@@ -19,10 +19,11 @@
 					@include('admin.parts.table', [
 						'table_id' => 'blacklist',
 						'table_fields' => [
-                            'pattern'              => array(),
-                            'field'              => array(),
+                            'pattern'               => array(),
+                            'field'                 => array(),
                             'comments'              => array(),
-							'delete'			=> array('format' => 'delete'),
+                            'blocked'               => array('template' => 'admin.parts.table-blacklist-people'),
+							'delete'			    => array('format' => 'delete'),
 						],
                         'table_data' => $items,
 						'table_pagination' => false,

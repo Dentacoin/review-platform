@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\BlacklistBlock;
+
 class Blacklist extends Model {
     
     protected $fillable = [
@@ -17,6 +19,15 @@ class Blacklist extends Model {
         'updated_at',
         'deleted_at'
     ];
+
+    public function blacklistBlock() {
+        return $this->hasMany('App\Models\BlacklistBlock', 'blacklist_id', 'id');
+    }
+
+    public function delete() {
+        $this->blacklistBlock()->delete();
+        parent::delete();
+    }
     
 }
 

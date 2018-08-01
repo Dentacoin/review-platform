@@ -9,6 +9,8 @@ use App\Models\UserInvite;
 use App\Models\UserTeam;
 use App\Models\Country;
 use App\Models\City;
+use App\Models\Blacklist;
+use App\Models\BlacklistBlock;
 use Carbon\Carbon;
 
 use Validator;
@@ -28,7 +30,6 @@ class RegisterController extends FrontController
             return redirect(getLangUrl('profile'));
         }
 
-        
 		return $this->ShowView('register', [
 			'js' => [
 				'register.js'
@@ -63,6 +64,43 @@ class RegisterController extends FrontController
 
             return Response::json( $ret );
         } else {
+
+            foreach (Blacklist::get() as $b) {
+                if ($b['field'] == 'name') {
+                    if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower(Request::input('name'))) == true) {
+
+                        $new_blacklist_block = new BlacklistBlock;
+                        $new_blacklist_block->blacklist_id = $b['id'];
+                        $new_blacklist_block->name = Request::input('name');
+                        $new_blacklist_block->email = Request::input('email');
+                        $new_blacklist_block->save();
+
+                        return Response::json( [
+                            'success' => false, 
+                            'messages' => [
+                                'name' => trans('front.page.registration.error-name')
+                            ]
+                        ] );
+                    }
+                } else {
+                    if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower(Request::input('email'))) == true) {
+
+                        $new_blacklist_block = new BlacklistBlock;
+                        $new_blacklist_block->blacklist_id = $b['id'];
+                        $new_blacklist_block->name = Request::input('name');
+                        $new_blacklist_block->email = Request::input('email');
+                        $new_blacklist_block->save();
+
+                        return Response::json( [
+                            'success' => false, 
+                            'messages' => [
+                                'email' => trans('front.page.registration.error-email')
+                            ]
+                        ] );
+                    }
+                }
+            }
+
             return Response::json( ['success' => true] );
         }
 

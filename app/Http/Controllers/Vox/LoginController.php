@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\Country;
 use App\Models\City;
 use App\Models\UserInvite;
+use App\Models\Blacklist;
+use App\Models\BlacklistBlock;
 use Carbon\Carbon;
 
 use Socialite;
@@ -46,8 +48,6 @@ class LoginController extends FrontController
             return redirect( getLangUrl('/').'#login');
         }
     }
-
-
 
 
     public function facebook_register($locale=null) {
@@ -114,6 +114,35 @@ class LoginController extends FrontController
             return redirect(getLangUrl('/'));
         } else {
             $name = $s_user->getName() ? $s_user->getName() : (!empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' );
+
+            foreach (Blacklist::get() as $b) {
+                if ($b['field'] == 'name') {
+                    if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower($name)) == true) {
+
+                        $new_blacklist_block = new BlacklistBlock;
+                        $new_blacklist_block->blacklist_id = $b['id'];
+                        $new_blacklist_block->name = $name;
+                        $new_blacklist_block->email = $s_user->getEmail();
+                        $new_blacklist_block->save();
+
+                        Request::session()->flash('error-message', trans('front.page.login.blocked-name') );
+                        return redirect(getLangUrl('/').'#register');
+                    }
+                } else {
+                    if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower($s_user->getEmail())) == true) {
+
+                        $new_blacklist_block = new BlacklistBlock;
+                        $new_blacklist_block->blacklist_id = $b['id'];
+                        $new_blacklist_block->name = $name;
+                        $new_blacklist_block->email = $s_user->getEmail();
+                        $new_blacklist_block->save();
+                        
+                        Request::session()->flash('error-message', trans('front.page.login.blocked-email') );
+                        return redirect(getLangUrl('/').'#register');
+                    }
+                }
+            }
+
 
             $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
             $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
