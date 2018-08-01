@@ -182,31 +182,35 @@ $(document).ready(function(){
 
                             var trigger = group.next().attr('data-trigger');
                             if(trigger) {
-                                should_skip = true;
+                                var trigger_statuses = [];
                                 var trigger_list = trigger.split(';');
                                 for(var i in trigger_list) {
+                                    var trigger_status = false;
                                     var parts = trigger_list[i].trim().split(':');
                                     var trigger_question = parts[0].trim(); // 15 въпрос
                                     var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
                                     var parsed_given_answer = given_answer && given_answer.length && given_answer!="0" ? given_answer.split(',') : null;
                                     console.log(parsed_given_answer);
                                     if( parsed_given_answer ) {
+                                        console.log(parts);
                                         if( parts[1] ) {
                                             var trigger_answers = parts[1].split(','); // 2,6 // [2,6]
+                                            console.log('trigger answers', trigger_answers);
                                             for(var i in trigger_answers) {
                                                 if( given_answer.indexOf(trigger_answers[i].trim())!=-1 ) {
-                                                    should_skip = false;
+                                                    console.log('tuk!111');
+                                                    trigger_status = true;
                                                     break;
                                                 }
                                             }
                                         } else {
-                                            should_skip = false;
+                                            console.log('tuk!');
+                                            trigger_status = true;
                                         }
                                     }
-                                    if(!should_skip) {
-                                        break;
-                                    }
+                                    trigger_statuses.push(trigger_status);
                                 }
+                                should_skip = trigger_statuses.indexOf(false)!=-1;
                             }
 
                             if (!should_skip) {
