@@ -176,6 +176,7 @@ $(document).ready(function(){
                                     $('.dentacoin-info').show();
                                 }
                             }
+                            VoxTest.handleNextQuestion();
                             $("#question-meta").hide();
                             $("#question-done").show();
                         } else {
@@ -213,6 +214,7 @@ $(document).ready(function(){
                                 should_skip = trigger_statuses.indexOf(false)!=-1;
                             }
 
+                            vox.current++;   
                             if (!should_skip) {
                                 $('.question-group').find('.loader').remove();
                                 $('.question-group').hide();
@@ -226,8 +228,7 @@ $(document).ready(function(){
                             } else {
                                 console.log('SKIP IT!');
                                 group.next().attr('skipped', 'skipped');
-                            }
-                            vox.current++;            
+                            }         
                         }
                     }
 

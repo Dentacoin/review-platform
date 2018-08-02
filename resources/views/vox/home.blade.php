@@ -26,43 +26,41 @@
 
 								@if($sort=='category')
 									@foreach( $cats as $cat )
-										@if($cat->voxesWithoutAnswer($user)->isNotEmpty())
-											<h3 class="category-title">{{ $cat->name }}</h3>
-											@foreach( $cat->voxesWithoutAnswer($user) as $vox_to_cat)
-												<div class="another-question {{ $loop->parent->first && $loop->first ? 'active' : '' }}">
-													<div class="another-question-header clearfix">
-														<div class="left">
-															<span class="bold">{{ $vox_to_cat->vox->getRewardTotal() }} DCN</span>
-														</div>
-														<div class="right">
-															<p>{{ $vox_to_cat->vox->formatDuration() }}</p>
-															<p>
-																{{ trans('vox.common.questions-count', ['count' => $vox_to_cat->vox->questions->count()]) }}
-															</p>
-														</div>
+										<h3 class="category-title">{{ $cat->name }}</h3>
+										@foreach( $cat->voxesWithoutAnswer($user) as $vox_to_cat)
+											<div class="another-question {{ $loop->parent->first && $loop->first ? 'active' : '' }}">
+												<div class="another-question-header clearfix">
+													<div class="left">
+														<span class="bold">{{ !empty($vox_to_cat->vox->complex) ? 'max ' : '' }} {{ $vox_to_cat->vox->getRewardTotal() }} DCN</span>
 													</div>
-													<h4 class="bold">{{ $vox_to_cat->vox->title }}</h4>
-													<div class="another-question-content">
-														<p class="question-description">{{ $vox_to_cat->vox->description }}</p>
-														<a class="statistics" href="{{ getLangUrl('stats/'.$vox_to_cat->vox->id) }}">
-															{{ trans('vox.common.check-statictics') }}
-														</a>
-														@if(!in_array($vox_to_cat->vox_id, $taken))
-															<a class="opinion" href="{{ $vox_to_cat->vox->getLink() }}">
-																{{ trans('vox.common.take-the-test') }}
-															</a>
-														@endif
+													<div class="right">
+														<p>{{ $vox_to_cat->vox->formatDuration() }}</p>
+														<p>
+															{{ trans('vox.common.questions-count', ['count' => $vox_to_cat->vox->questions->count()]) }}
+														</p>
 													</div>
 												</div>
-											@endforeach
-										@endif
+												<h4 class="bold">{{ $vox_to_cat->vox->title }}</h4>
+												<div class="another-question-content">
+													<p class="question-description">{{ $vox_to_cat->vox->description }}</p>
+													<a class="statistics" href="{{ getLangUrl('stats/'.$vox_to_cat->vox->id) }}">
+														{{ trans('vox.common.check-statictics') }}
+													</a>
+													@if(!in_array($vox_to_cat->vox_id, $taken))
+														<a class="opinion" href="{{ $vox_to_cat->vox->getLink() }}">
+															{{ trans('vox.common.take-the-test') }}
+														</a>
+													@endif
+												</div>
+											</div>
+										@endforeach
 									@endforeach
 								@else
 									@foreach( $voxes as $vox)
 										<div class="another-question {{ $loop->first ? 'active' : '' }}">
 											<div class="another-question-header clearfix">
 												<div class="left">
-													<span class="bold">{{ $vox->getRewardTotal() }} DCN</span>
+													<span class="bold">{{ !empty($vox->complex) ? 'max ' : '' }} {{ $vox->getRewardTotal() }} DCN</span>
 												</div>
 												<div class="right">
 													<p>{{ $vox->formatDuration() }}</p>

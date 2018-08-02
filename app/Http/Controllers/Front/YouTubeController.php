@@ -22,6 +22,18 @@ class YouTubeController extends FrontController
 
         exit;
 
+        $all = [];
+
+        $vox = Vox::get();
+
+        foreach ($vox as $v) {
+            $v->checkComplex();
+            $all[] = $v->complex;
+        }
+        dd($all);
+
+        exit;
+
         //Control questions
         $questions = VoxQuestion::get();
 

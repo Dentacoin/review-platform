@@ -29,6 +29,7 @@ class Vox extends Model {
         'reward_usd',
         'duration',
         'type',
+        'complex',
     ];
 
     protected $dates = [
@@ -66,12 +67,33 @@ class Vox extends Model {
         }        
     }
 
+    public function getRewardForUser($user_id) {
+        if ($this->type == 'user_details') {
+            return 0;
+        } else {
+            $how_many_questions = VoxAnswer::where('vox_id', $this->id)->where('user_id', $user_id)->where('answer', '!=' , 0)->groupBy('question_id')->get()->count();
+            $reward_per_question = Reward::where('reward_type', 'vox_question')->first()->dcn;
+
+            return $how_many_questions * $reward_per_question;
+        }        
+    }
+
     public function categories() {
         return $this->hasMany('App\Models\VoxToCategory', 'vox_id', 'id');
     }
 
     public function getLink() {
         return $this->type=='hidden' || $this->type=='normal' ? getLangUrl('paid-surveys/'.$this->translate(App::getLocale(), true)->slug ) : getLangUrl( $this->translate(App::getLocale(), true)->slug );        
+    }
+
+    public function checkComplex() {
+
+        foreach ($this->questions as $q) {
+            if($q->question_trigger) {
+                $this->complex = 1;
+                $this->save();
+            }
+        }
     }
     
 }

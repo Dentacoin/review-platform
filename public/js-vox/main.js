@@ -47,10 +47,21 @@ $(document).ready(function(){
 		var mins = Math.ceil( (vox.count - vox.current)/6 );
 		$('#current-question-num').html( mins<2 ? '<1' : '~'+mins );
 		if(vox.current>1) {
-			var reward = ( (vox.current-1) / vox.count) * vox.reward;
+
+			var answerd_q = 0;
+			$('.question-group').each( function() {
+				if( $(this).attr('data-answer') && $(this).attr('data-answer')!='0' ) {
+					answerd_q++;
+				}
+			});
+
+			var reward_per_question = ( vox.reward / vox.count );
+			var reward = reward_per_question * answerd_q;
+
 			$('#current-question-reward').html( Math.round(reward) );
 			$('#dcn-test-reward-before').hide();
 			$('#dcn-test-reward-after').show();
+			$('#coins-test').html( Math.round(reward) );
 		}
 
 		if (window.innerWidth < 768) {

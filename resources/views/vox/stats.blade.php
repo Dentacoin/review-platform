@@ -162,7 +162,7 @@
 														{{ $loopvox->vox->title }} 
 														<span>
 															<i class="fa fa-clock-o"></i> {{ $loopvox->vox->formatDuration() }}
-															<i class="fa fa-trophy"></i> {{ $loopvox->vox->getRewardTotal() }} DCN
+															<i class="fa fa-trophy"></i>{{ !empty($loopvox->vox->complex) ? ' max ' : '' }}  {{ $loopvox->vox->getRewardTotal() }} DCN
 														</span>
 													</a>
 												</h4>

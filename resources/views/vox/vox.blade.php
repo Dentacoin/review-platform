@@ -149,7 +149,7 @@
 					</p>
 					<div class="price">
 						<img src="img-vox/dc-logo.png"/>
-						<span class="coins">{{ $vox->getRewardTotal() }} DCN</span>
+						<span class="coins"><span class="coins" id="coins-test" style="margin-top: 0px;">{{ $vox->getRewardTotal() }}</span> DCN</span>
 					</div>
 				</div>
 				

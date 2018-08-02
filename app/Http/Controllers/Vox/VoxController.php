@@ -322,7 +322,7 @@ class VoxController extends FrontController
 								$reward = new VoxReward;
 						        $reward->user_id = $this->user->id;
 						        $reward->vox_id = $vox->id;
-						        $reward->reward = $vox->getRewardTotal();
+						        $reward->reward = $vox->getRewardForUser($this->user->id);
 						        $reward->mistakes = intval(session('wrongs-'.$vox->id));
 						        $start = $list->first()->created_at;
 						        $diff = Carbon::now()->diffInSeconds( $start );

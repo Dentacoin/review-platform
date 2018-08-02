@@ -109,6 +109,11 @@ class IndexController extends FrontController
 	        
 			if($sort=='category') {
 				$viewparams['cats'] = VoxCategory::whereHas('voxes')->get();
+				foreach ($viewparams['cats'] as $key => $cat) {
+					if( $cat->voxesWithoutAnswer($this->user)->isEmpty() ) {
+						unset($viewparams['cats'][$key]);
+					}
+				}
 			} else {
 
 				if($sort=='popular') {

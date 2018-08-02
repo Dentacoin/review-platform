@@ -350,6 +350,7 @@ class VoxesController extends AdminController
             $question = new VoxQuestion;
             $question->vox_id = $item->id;
             $this->saveOrUpdateQuestion($question);
+            $item->checkComplex();
         
             Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-added'));
             return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
@@ -391,6 +392,7 @@ class VoxesController extends AdminController
             if(Request::isMethod('post')) {
 
                 $this->saveOrUpdateQuestion($question);
+                $question->vox->checkComplex();
             
                 Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-updated'));
                 return redirect('cms/'.$this->current_page.'/edit/'.$id);
@@ -416,6 +418,7 @@ class VoxesController extends AdminController
         if(!empty($question) && $question->vox->id==$id) {
 
             $question->delete();
+            $question->vox->checkComplex();
 
             Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-deleted'));
             return redirect('cms/'.$this->current_page.'/edit/'.$id);
