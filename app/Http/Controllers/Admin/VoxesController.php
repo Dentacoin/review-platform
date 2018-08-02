@@ -385,7 +385,7 @@ class VoxesController extends AdminController
 
             if(empty( $trigger_question_id )) {
                 $prev_question = VoxQuestion::where('vox_id', $id)->where('order', '<', intVal($question->order) )->orderBy('order', 'DESC')->first();
-                $trigger_question_id = $prev_question->id;
+                $trigger_question_id = $prev_question ? $prev_question->id : $question->id;
                 $trigger_valid_answers = null;
             }
 
@@ -498,6 +498,7 @@ class VoxesController extends AdminController
         $question->go_back = $data['go_back'];
         $question->order = $data['order'];
         $question->vox_scale_id = $data['question_scale'];
+        $question->trigger_type = $data['trigger_type'];
 
         if(!empty( $data['triggers'] )) {
             $help_array = [];

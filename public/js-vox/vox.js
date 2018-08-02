@@ -164,7 +164,7 @@ $(document).ready(function(){
                         
                         if (group.hasClass('single-choice')) {
                             group.attr('data-answer', answer);
-                        } else if(group.hasClass('multiple-choice')) {
+                        } else {
                             console.log(answer);
                             group.attr('data-answer', !answer ? '' : answer.join(','));
                         }
@@ -182,6 +182,7 @@ $(document).ready(function(){
                         } else {
 
                             var trigger = group.next().attr('data-trigger');
+                            var trigger_type = group.next().attr('trigger-type');
                             if(trigger) {
                                 var trigger_statuses = [];
                                 var trigger_list = trigger.split(';');
@@ -198,10 +199,19 @@ $(document).ready(function(){
                                             var trigger_answers = parts[1].split(','); // 2,6 // [2,6]
                                             console.log('trigger answers', trigger_answers);
                                             for(var i in trigger_answers) {
-                                                if( given_answer.indexOf(trigger_answers[i].trim())!=-1 ) {
-                                                    console.log('tuk!111');
-                                                    trigger_status = true;
-                                                    break;
+                                                if( trigger_answers[i].indexOf('-')!=-1 ) {
+                                                    var range = trigger_answers[i].split('-');
+                                                    for(var qnum=range[0]; qnum<=range[1]; qnum++) {
+                                                        if( given_answer.indexOf(qnum)!=-1 ) {
+                                                            trigger_status = true;
+                                                            break;
+                                                        }    
+                                                    }
+                                                } else {
+                                                    if( given_answer.indexOf(trigger_answers[i].trim())!=-1 ) {
+                                                        trigger_status = true;
+                                                        break;
+                                                    }
                                                 }
                                             }
                                         } else {
@@ -211,7 +221,11 @@ $(document).ready(function(){
                                     }
                                     trigger_statuses.push(trigger_status);
                                 }
-                                should_skip = trigger_statuses.indexOf(false)!=-1;
+                                if( trigger_type=='or' ) {
+                                    should_skip = !(trigger_statuses.indexOf(true)!=-1);
+                                } else { //and
+                                    should_skip = trigger_statuses.indexOf(false)!=-1;                                    
+                                }
                             }
 
                             vox.current++;   

@@ -17,6 +17,7 @@ class VoxQuestion extends Model {
         'vox_id',
         'type',
         'question_trigger',
+        'trigger_type',
         'question',
         'answers',
         'vox_scale_id',

@@ -32,6 +32,7 @@ $(document).ready(function(){
         }
 
         first_test[ qid ] = answer;
+        group.attr('data-answer', answer);
         group.hide();
         group.next().show();
 

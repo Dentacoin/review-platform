@@ -32,7 +32,7 @@
 						<div class="col-md-6 tar">
 							<span class="bold">
 									<span id="dcn-test-reward-before">
-										{!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
+										{{ $vox->complex ? 'Max ' : '' }} {!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
 									</span>
 									<span id="dcn-test-reward-after" style="display: none;">
 										{!! trans('vox.common.dcn_collected') !!}:

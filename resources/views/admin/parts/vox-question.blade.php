@@ -36,6 +36,8 @@
                 @endforeach
             @endif
         </div>
+    </div>
+    <div class="form-group clearfix">
         <label class="col-md-3">
         </label>
         <div class="col-md-9">
@@ -43,6 +45,8 @@
             Example: "Question text?" / One trigger answer: 1 (for the first answer), 2 (for the second answer, etc.); 2+ answers: 1, 2, 3, 4<br/>
             To enable a previously selected trigger, click Add previous trigger.
         </div>
+    </div>
+    <div class="form-group clearfix">
         <label class="col-md-3">
         </label>
         <div class="col-md-9">
@@ -53,6 +57,21 @@
                 <!-- {{ trans('admin.page.'.$current_page.'.trigger-add') }} -->
                 Add previous trigger
             </a>
+        </div>
+    </div>
+    <div class="form-group clearfix">
+        <label class="col-md-3 control-label">
+            Trigger Logic
+        </label>
+        <div class="col-md-9">
+            <label for="trigger-type-yes" style="display: block;">
+                <input type="radio" id="trigger-type-yes" name="trigger_type" value="or" {!! empty($question) || $question->trigger_type=='or' ? 'checked="checked"' : '' !!} />
+                ANY of the conditions should be met (A or B or C)
+            </label>
+            <label for="trigger-type-no" style="display: block;">
+                <input type="radio" id="trigger-type-no" name="trigger_type" value="and" {!! !empty($question) && $question->trigger_type=='and' ? 'checked="checked"' : '' !!} />
+                ALL the conditions should be met (A and B and C)
+            </label>
         </div>
     </div>
     <div class="form-group clearfix">
