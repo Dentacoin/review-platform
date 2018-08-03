@@ -402,8 +402,8 @@
                         'table_id' => 'vox-cashouts',
                         'table_fields' => [
                             'created_at'        => array('format' => 'datetime'),
-                            'ip'           => array('template' => 'admin.parts.table-logins-user'),
-                            'platform'           => array()
+                            'ip'                => array('template' => 'admin.parts.table-logins-user'),
+                            'platform'          => array(),
                         ],
                         'table_data' => $item->logins,
                         'table_pagination' => false,

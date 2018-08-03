@@ -134,6 +134,9 @@ class UsersController extends AdminController
             'is_approved' => [
                 'type' => 'bool',
             ],
+            'allow_withdraw' => [
+                'type' => 'bool',
+            ],
     	];
     }
 

@@ -299,6 +299,7 @@ $voxRoutes = function () {
 			});
 
 			Route::get('/', 									'IndexController@home');
+			Route::any('appeal', 								'IndexController@appeal');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
 			Route::get('stats/{id}/{question}', 				'StatsController@home');
 			Route::get('stats/{id}', 							'StatsController@home');

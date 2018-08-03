@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
 use App\Models\Vox;
 use App\Models\User;
+use App\Models\UserLogin;
 use App\Models\VoxAnswer;
 use App\Models\VoxReward;
 use App\Models\VoxCategory;
 
+use Mail;
 use App;
 use Cookie;
 use Request;
+use Response;
 
 class IndexController extends FrontController
 {
@@ -173,6 +176,31 @@ class IndexController extends FrontController
 		$this->user->save();
 
 		return redirect( getLangUrl('/') );
+	}
+
+
+	public function appeal($locale=null) {
+
+		$user_login = UserLogin::where('user_id', $this->user->id )->first();
+
+		$mtext = $this->user->getName().' wants to withdraw or do a survey, but is blocked due to bad IP.
+                
+        Link to CMS: '.url("/cms/users/edit/".$this->user->id).'
+        IP address: '.$user_login->ip;
+
+        Mail::raw($mtext, function ($message) {
+
+            $sender = 'petar.stoykov@dentacoin.com';
+            $sender_name = config('mail.from.name-vox');
+
+            $message->from($sender, $sender_name);
+            $message->to( $sender );
+            $message->replyTo($sender, $sender_name);
+            $message->subject('Scammer Appeal');
+        });
+
+        Request::session()->flash('success-message', trans('vox.common.appeal-sent'));
+        return Response::json(['success' => true]);
 	}
 
 }

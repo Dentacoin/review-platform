@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Illuminate\Support\Str;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-use Illuminate\Support\Str;
-use Image;
 use App\Models\Email;
 use App\Models\Reward;
 use App\Models\VoxReward;
@@ -22,6 +21,9 @@ use App\Models\UserTeam;
 use App\Models\DcnTransaction;
 use App\Models\UserLogin;
 use Carbon\Carbon;
+
+use Request;
+use Image;
 use Auth;
 
 
@@ -66,6 +68,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'platform',
         'gdpr_privacy',
         'self_deleted',
+        'allow_withdraw'
     ];
     protected $dates = [
         'created_at',
@@ -611,6 +614,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $gas = json_decode($url, true);
 
         if(intVal($gas['gasPrice']) > intVal($gas['treshold']) ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function loggedFromBadIp() {
+        $users_with_same_ip = UserLogin::where('ip', 'like', Request::ip())->where('user_id', '!=', $this->ip)->groupBy('user_id')->get()->count();
+
+        if ($users_with_same_ip >=3 && !$this->allow_withdraw ) {
             return true;
         } else {
             return false;

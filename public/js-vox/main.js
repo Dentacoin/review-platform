@@ -492,6 +492,32 @@ $(document).ready(function(){
 	    } );		
 	}
 
+	$('#bad-ip-appeal').click( function(e) {
+		e.preventDefault();
+		if(ajax_is_running) {
+			return;
+		}
+
+		ajax_is_running = true;
+
+		var that = $(this);
+
+        $.ajax( {
+			url: that.attr('href'),
+			type: 'GET',
+			dataType: 'json',
+			success: function( data ) {
+				window.location.reload();
+				ajax_is_running = false;
+			},
+			error: function(data) {
+				console.log('error');
+                ajax_is_running = false;
+            }
+		});
+
+	} );
+
 });
 
 
