@@ -9,6 +9,7 @@ use Auth;
 use Lang;
 use Validator;
 use Response;
+use Session;
 use App\Models\User as RealUser;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -76,6 +77,11 @@ class AuthenticateUser extends FrontController
     public function postLoginVox(Request $request)
     {
         if (Auth::guard('web')->attempt( ['email' => $request->input('email'), 'password' => $request->input('password') ], $request->input('remember') )) {
+
+            session([
+                'our-intended' => null
+            ]);
+
             return Response::json( [
                 'success' => true,
                 'url' => getLangUrl('/')

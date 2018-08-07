@@ -10,6 +10,7 @@ use App\Models\Blacklist;
 use App\Models\BlacklistBlock;
 use Carbon\Carbon;
 
+use Session;
 use Socialite;
 use Auth;
 use Request;
@@ -42,7 +43,8 @@ class LoginController extends FrontController
 
         if ($user) {
             Auth::login($user, true);
-            return redirect( getLangUrl('/'));
+            $intended = session()->pull('our-intended');
+            return redirect( $intended ? $intended : getLangUrl('/') );
         } else {
             Request::session()->flash('error-message', trans('front.page.login.error'));
             return redirect( getLangUrl('/').'#login');

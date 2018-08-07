@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Session;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -59,6 +60,11 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
+
+
+        session([
+            'our-intended' => $request->url()
+        ]);
 
         return redirect( getLangUrl('login') );
     }
