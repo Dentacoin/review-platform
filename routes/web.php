@@ -247,7 +247,7 @@ $voxRoutes = function () {
 
 	Route::group(['prefix' => '{locale?}'], function(){
 
-		Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginForm'] );
+		Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginFormVox'] );
 		Route::post('login',									'Auth\AuthenticateUser@postLoginVox');
 		Route::get('logout',									'Auth\AuthenticateUser@getLogout');
 
@@ -257,7 +257,10 @@ $voxRoutes = function () {
 
 			Route::any('invite/{id}/{hash}/{inv_id?}', 			'RegisterController@invite_accept');
 			
-			Route::post('register', 							'RegisterController@register');
+			Route::any('register', 								'RegisterController@register');
+			Route::post('register/step1', 						'RegisterController@check_step_one');
+			Route::post('register/upload', 						'RegisterController@upload');
+
 			Route::get('verify/{id}/{hash}', 					'RegisterController@register_verify');
 			Route::get('forgot-password', 						'RegisterController@forgot');
 			Route::post('forgot-password', 						'RegisterController@forgot_form');
@@ -272,6 +275,8 @@ $voxRoutes = function () {
 
 			
 			Route::group(['middleware' => 'auth:web'], function () {
+				Route::get('register-success', 					'RegisterController@register_success');
+
 				Route::any('questionnaire/{id}', 				'VoxController@home');
 				Route::any('paid-surveys/{id}', 				'VoxController@home_slug');
 
@@ -299,6 +304,7 @@ $voxRoutes = function () {
 			});
 
 			Route::get('/', 									'IndexController@home');
+			Route::get('welcome', 								'IndexController@welcome');
 			Route::any('appeal', 								'IndexController@appeal');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
 			Route::get('stats/{id}/{question}', 				'StatsController@home');
