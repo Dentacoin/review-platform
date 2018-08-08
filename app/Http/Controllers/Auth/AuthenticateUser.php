@@ -78,13 +78,11 @@ class AuthenticateUser extends FrontController
     {
         if (Auth::guard('web')->attempt( ['email' => $request->input('email'), 'password' => $request->input('password') ], $request->input('remember') )) {
 
-            session([
-                'our-intended' => null
-            ]);
+            $intended = session()->pull('our-intended');
 
             return Response::json( [
                 'success' => true,
-                'url' => getLangUrl('/')
+                'url' => $intended ? $intended : getLangUrl('/')
             ] );
         } else {
             return Response::json( [
