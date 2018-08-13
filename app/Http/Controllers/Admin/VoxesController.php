@@ -87,7 +87,7 @@ class VoxesController extends AdminController
 
                         $q = VoxQuestion::find($question_id);
                         if(empty($q)) {
-                            $question->question_trigger = [];
+                            $question->question_trigger = '';
                             $question->save();
                             break;
                         } else {
