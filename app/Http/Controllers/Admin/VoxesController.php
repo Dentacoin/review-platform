@@ -86,14 +86,18 @@ class VoxesController extends AdminController
                         $question_id = explode(':',$v)[0];
 
                         $q = VoxQuestion::find($question_id);
-
-                        if (!empty(explode(':',$v)[1])) {
-                            $answ = explode(':',$v)[1];
-                            $triggers[$question->id] .= $q->question.': '.$answ.'<br/>';
+                        if(empty($q)) {
+                            $question->question_trigger = [];
+                            $question->save();
+                            break;
                         } else {
-                            $triggers[$question->id] .= $q->question.'<br/>';
-                        }
-                        
+                            if (!empty(explode(':',$v)[1])) {
+                                $answ = explode(':',$v)[1];
+                                $triggers[$question->id] .= $q->question.': '.$answ.'<br/>';
+                            } else {
+                                $triggers[$question->id] .= $q->question.'<br/>';
+                            }                            
+                        }                        
                     }
                 }
             }
