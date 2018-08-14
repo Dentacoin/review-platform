@@ -501,8 +501,12 @@ class VoxesController extends AdminController
         $question->type = $data['type'];
         $question->go_back = $data['go_back'];
         $question->order = $data['order'];
-        $question->vox_scale_id = $data['question_scale'];
-        $question->trigger_type = $data['trigger_type'];
+        if(!empty($data['question_scale'])) {
+            $question->vox_scale_id = $data['question_scale'];
+        }
+        if(!empty($data['trigger_type'])) {
+            $question->trigger_type = $data['trigger_type'];            
+        }
 
         if(!empty( $data['triggers'] )) {
             $help_array = [];
