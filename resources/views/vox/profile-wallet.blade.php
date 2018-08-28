@@ -17,7 +17,12 @@
 		  						
 		  	@include('front.errors')
 
-			@if($user->loggedFromBadIp())
+			@if( $user->is_dentist && !$user->is_approved )
+				<div class="alert alert-warning">
+					You account is currently being verified by our team. You won't be able to withdraw until this process is complete. Thank you for your patience.
+				</div>
+
+			@elseif($user->loggedFromBadIp())
 
 				<div class="alert alert-warning">
 					{{ trans('vox.page.profile.wallet-bad-ip') }}

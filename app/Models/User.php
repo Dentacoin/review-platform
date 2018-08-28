@@ -549,7 +549,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if($platform == 'trp') {
             return $this->is_verified && $this->email && $this->civic_id && !( $this->is_dentist && !$this->is_approved );
         } else {
-            return $this->is_verified && $this->email && $this->civic_id;
+            return $this->is_verified && $this->email && $this->civic_id && !( $this->is_dentist && !$this->is_approved );
         }
     }
 
