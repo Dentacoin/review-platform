@@ -169,6 +169,8 @@ class RegisterController extends FrontController
 
     public function register_form($locale=null) {
 
+        return;
+
         $validator = Validator::make(Request::all(), [
             'name' => array('required', 'min:3'),
             'email' => array('required', 'email', 'unique:users,email'),
