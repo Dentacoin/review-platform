@@ -158,6 +158,7 @@ class LoginController extends FrontController
         ->withInput()
         ->with('error-message', 'Due to the overwhelming surge in popularity, new registrations on Trusted Review Platform are currently disabled to allow for infrastructure & security upgrades. Thank you for your understanding!');
 
+
         //isset($s_user->user['verified']) && 
         $allset = isset($s_user->user['friends']);
         if(!$allset) {

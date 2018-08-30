@@ -11,12 +11,14 @@ use App;
 use Auth;
 use Session;
 use DB;
+use Redirect;
 use Request;
 use Route;
 use Cookie;
 
 use Carbon\Carbon;
 
+use App\Models\User;
 use App\Models\Page;
 use App\Models\Category;
 use App\Models\Country;
@@ -34,7 +36,6 @@ class FrontController extends BaseController
     public $user;
 
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
-
         $roter_params = $request->route()->parameters();
         if(empty($roter_params['locale'])) {
             $locale = 'en';
@@ -58,6 +59,27 @@ class FrontController extends BaseController
         if(empty($this->current_subpage)) {
             $this->current_subpage='home';
         }
+
+        //VPNs
+        $myips = session('my-ips');
+       
+        if( !isset( $myips[Request::ip()] ) ) {
+            if(!is_array($myips)) {
+                $myips = [];
+            }
+            $myips[Request::ip()] = User::checkForBlockedIP();
+            session(['my-ips' => $myips]);
+        }
+        if( $myips[Request::ip()] && $this->current_page!='vpn' ) {
+            Redirect::to( getLangUrl('vpn') )->send();
+        }
+        if( !$myips[Request::ip()] && $this->current_page=='vpn' ) {
+            Redirect::to( getLangUrl('/') )->send();
+        }
+
+
+
+
 
         //$this->user = Auth::guard('web')->user();
         $this->middleware(function ($request, $next) {
@@ -118,7 +140,12 @@ class FrontController extends BaseController
                 'country_id' => $this->country_id,
                 'city_id' => $this->city_id,
             ]);
-
+ 
+            if( ( mb_strpos(Request::url(), '//dev-') || mb_strpos(Request::url(), '//urgent-') ) && !$this->admin) {
+                echo '<a href="'.str_replace([ '//dev-', '//urgent-' ], '//', Request::url()).'">Click here</a> or <a href="'.url('cms').'"> log in as admin </a>';
+                exit;
+            }
+ 
             return $next($request);
         });
 

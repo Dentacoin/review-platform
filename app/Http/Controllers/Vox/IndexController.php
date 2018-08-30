@@ -76,12 +76,20 @@ class IndexController extends FrontController
 			        $reward->reward = $first->getRewardTotal();
 			        $reward->save();
 
+					VoxAnswer::where('vox_id', $first->id)
+					->where('user_id', $this->user->id)
+					->update(['is_completed', true]);
+
 			        if(!$this->user->madeTest($details->id)) {
 						$reward = new VoxReward;
 				        $reward->user_id = $this->user->id;
 				        $reward->vox_id = $details->id;
 				        $reward->reward = $details->getRewardTotal();
-				        $reward->save();			        	
+				        $reward->save();
+				        
+						VoxAnswer::where('vox_id', $details->id)
+						->where('user_id', $this->user->id)
+						->update(['is_completed', true]);	        	
 			        }
 
 

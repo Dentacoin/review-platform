@@ -131,9 +131,9 @@ class StatsController extends FrontController
 		$dates = [];
 
 		if($diff>31) {
-			$dategroup = ' DATE_FORMAT(`created_at`, "%Y-%m") `date`';
+			$dategroup = ' DATE_FORMAT(`vox_answers`.`created_at`, "%Y-%m") `date`';
 		} else {
-			$dategroup = ' DATE_FORMAT(`created_at`, "%Y-%m-%d") `date`';
+			$dategroup = ' DATE_FORMAT(`vox_answers`.`created_at`, "%Y-%m-%d") `date`';
 		}
 
 		$curdate = $startobj->copy();
@@ -146,12 +146,22 @@ class StatsController extends FrontController
 			}
 		}
 
+		// $allrewards = VoxReward::where('vox_id', $vox->id)->get();
+		// foreach ($allrewards as $r) {
+		// 	VoxAnswer::where('vox_id', $vox->id)->where('user_id', $r->user_id)->update(['is_completed' => true]);
+		// }
+
+		$t = microtime(true);
+
 		$answer_res = DB::table('vox_answers')
-		    ->selectRaw('answer, COUNT(*) as cnt, '.$dategroup)
-		    ->where('vox_id', $vox->id)
-		    ->where('question_id', $question->id)
-		    ->where('created_at', '>=', $startobj)
-		    ->where('created_at', '<=', $endobj);
+		->join('users', 'users.id', '=', 'vox_answers.user_id')
+	    ->selectRaw('answer, COUNT(*) as cnt, '.$dategroup)
+	    ->where('vox_answers.vox_id', $vox->id)
+	    ->where('question_id', $question->id)
+	    ->where('is_completed', true)
+	    ->where('vox_answers.created_at', '>=', $startobj)
+	    ->where('vox_answers.created_at', '<=', $endobj)
+	    ->whereNull('users.deleted_at');
 
 		if($country) {
 			$answer_res = $answer_res->where('country_id', $country);			
@@ -159,6 +169,8 @@ class StatsController extends FrontController
 
 		$answer_res = $answer_res->groupBy('date', 'answer')
 		    ->get();
+
+		//dd( microtime(true) - $t);
 
 		$answer_data = [];
 		$answer_aggregates = [];

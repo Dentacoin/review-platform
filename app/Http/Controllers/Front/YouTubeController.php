@@ -20,6 +20,8 @@ class YouTubeController extends FrontController
 {
     public function test() {
 
+        dd('Your IP is: '.Request::ip());
+
         exit;
 
         $all = [];

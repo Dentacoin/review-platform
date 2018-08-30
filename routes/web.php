@@ -191,6 +191,8 @@ $reviewRoutes = function () {
 			Route::any('youtube', 								'DentistController@youtube');
 			Route::any('full-review/{id}',						'DentistController@fullReview');
 
+			Route::get('vpn', 									'VpnController@list');
+
 			Route::group(['middleware' => 'auth:web'], function () {
 				Route::get('profile', 							'ProfileController@home');
 				Route::get('profile/home', 						'ProfileController@home');
@@ -239,6 +241,7 @@ $reviewRoutes = function () {
 };
 Route::domain('reviews.dentacoin.com')->group($reviewRoutes);
 Route::domain('dev-reviews.dentacoin.com')->group($reviewRoutes);
+Route::domain('urgent-reviews.dentacoin.com')->group($reviewRoutes);
 
 
 $voxRoutes = function () {
@@ -273,6 +276,7 @@ $voxRoutes = function () {
 			Route::get('register/facebook', 					'LoginController@facebook_register');
 			Route::get('register/callback/facebook', 			'LoginController@facebook_callback_register');
 
+			Route::get('vpn', 									'VpnController@list');
 			
 			Route::group(['middleware' => 'auth:web'], function () {
 				Route::get('register-success', 					'RegisterController@register_success');
@@ -316,3 +320,4 @@ $voxRoutes = function () {
 };
 Route::domain('dentavox.dentacoin.com')->group($voxRoutes);
 Route::domain('dev-dentavox.dentacoin.com')->group($voxRoutes);
+Route::domain('urgent-dentavox.dentacoin.com')->group($voxRoutes);

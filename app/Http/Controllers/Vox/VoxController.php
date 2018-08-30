@@ -355,6 +355,11 @@ class VoxController extends FrontController
 		                                }
 		                            }
 
+
+									VoxAnswer::where('vox_id', $vox->id)
+									->where('user_id', $this->user->id)
+									->update(['is_completed', true]);
+
 		        				}
 					        }
 		        		} else {

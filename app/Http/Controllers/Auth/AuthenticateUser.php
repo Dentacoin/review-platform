@@ -93,6 +93,7 @@ class AuthenticateUser extends FrontController
     }
 
     public function getLogout() {
+        session(['login-logged' => null]);
         Auth::guard('web')->logout();
         return redirect('/');
     }
