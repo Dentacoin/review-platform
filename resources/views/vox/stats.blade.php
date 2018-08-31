@@ -123,20 +123,20 @@
 						<p class="blue tac">
 							{{ trans('vox.page.'.$current_page.'.change-questions') }}
 						</p>
-						<a href="{{ getLangUrl('stats/'.$vox->id.'/'.$prev) }}" class="previous previous-question">
+						<a href="{{ getLangUrl('stats/'.$vox->id.'/'.$prev).'?'.Request::getQueryString() }}" class="previous previous-question">
 							<< {{ trans('vox.page.'.$current_page.'.previous') }}
 						</a>
-						<a href="{{ getLangUrl('stats/'.$vox->id.'/'.$next) }}" class="next next-question">
+						<a href="{{ getLangUrl('stats/'.$vox->id.'/'.$next).'?'.Request::getQueryString() }}" class="next next-question">
 							{{ trans('vox.page.'.$current_page.'.next') }} >></a>
 					</div>
 					<div class="response tac clearfix">
 						<p class="blue tac">
 							{{ trans('vox.page.'.$current_page.'.share') }}
 						</p>
-						<a href="{{ getLangUrl('stats/'.$vox->id.'/'.$prev) }}" class="previous previous-question"><< {{ trans('vox.page.'.$current_page.'.previous') }}</a>
+						<a href="{{ getLangUrl('stats/'.$vox->id.'/'.$prev).'?'.Request::getQueryString() }}" class="previous previous-question"><< {{ trans('vox.page.'.$current_page.'.previous') }}</a>
 						<a href="javascript:;" class="share fb"><i class="fa fa-facebook"></i></a>
 						<a href="javascript:;" class="share twt"><i class="fa fa-twitter"></i></a>
-						<a href="{{ getLangUrl('stats/'.$vox->id.'/'.$next) }}" class="next next-question">{{ trans('vox.page.'.$current_page.'.next') }} >></a>
+						<a href="{{ getLangUrl('stats/'.$vox->id.'/'.$next).'?'.Request::getQueryString() }}" class="next next-question">{{ trans('vox.page.'.$current_page.'.next') }} >></a>
 					</div>
 				</div>
 

@@ -39,20 +39,20 @@ class StatsController extends FrontController
 			$question = $vox->questions->first();	
 		}
 
-		$next_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '>', $question->order)->first();
-		$prev_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '<', $question->order)->orderBy('id', 'desc')->first();
+		$next_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '>', $question->order)->orderBy('order', 'asc')->first();
+		$prev_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '<', $question->order)->orderBy('order', 'desc')->first();
 
 		if ($next_q) {
 			$next = $next_q->id;
 		} else {
-			$first_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '<', $question->order)->first();
+			$first_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '<', $question->order)->orderBy('order', 'asc')->first();
 			$next = $first_q->id;
 		}
 
 		if($prev_q) {
 			$prev = $prev_q->id;
 		} else {
-			$last_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '>', $question->order)->orderBy('id', 'desc')->first();
+			$last_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '>', $question->order)->orderBy('order', 'desc')->first();
 			$prev = $last_q->id;
 		}
 		
@@ -164,7 +164,7 @@ class StatsController extends FrontController
 	    ->whereNull('users.deleted_at');
 
 		if($country) {
-			$answer_res = $answer_res->where('country_id', $country);			
+			$answer_res = $answer_res->where('vox_answers.country_id', $country);			
 		}
 
 		$answer_res = $answer_res->groupBy('date', 'answer')
