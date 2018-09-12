@@ -362,6 +362,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function sendSMS($sms_text) {
+        return;
         $formatted_phone = $this->country->phone_code.$this->phone;
         file_get_contents('https://bulksrv.allterco.net/sendsms/sms.php?nmb_from=1909&user=SWISSDENTAPRIME&pass=m9rr95er9em&nmb_to='.$formatted_phone.'&text='.urlencode($sms_text).'&dlrr=1');
     }
