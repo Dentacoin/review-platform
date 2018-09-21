@@ -94,10 +94,18 @@ class VoxController extends FrontController
 						$lastkey = $aq->question_id;
 					}
 				}
-				$list = VoxAnswer::where('vox_id', $vox->id)
-				->where('user_id', $this->user->id)
-				->where('question_id', $lastkey)
-				->delete();
+				$found = false;
+				foreach ($vox->questions as $question) {
+					if($question->id==$lastkey) {
+						$found = true;
+					}
+					if($found) {
+						VoxAnswer::where('vox_id', $vox->id)
+						->where('user_id', $this->user->id)
+						->where('question_id', $question->id)
+						->delete();
+					}
+				}
 			}
 
             return redirect( $vox->getLink() );
