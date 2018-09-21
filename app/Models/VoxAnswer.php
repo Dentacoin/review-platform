@@ -15,6 +15,7 @@ class VoxAnswer extends Model {
         'country_id',
         'is_scam',
         'is_completed',
+        'is_skipped',
     ];
 
     protected $dates = [

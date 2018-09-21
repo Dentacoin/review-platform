@@ -89,8 +89,10 @@ class VoxController extends FrontController
 		if(Request::input('goback') && !empty($this->admin)) {
 			if(!empty($answered)) {
 				$lastkey = null;
-				foreach ($answered as $lastkey => $bla) {
-					;
+				foreach ($list as $aq) {
+					if(!$aq->is_skipped) {
+						$lastkey = $aq->question_id;
+					}
 				}
 				$list = VoxAnswer::where('vox_id', $vox->id)
 				->where('user_id', $this->user->id)
@@ -279,6 +281,7 @@ class VoxController extends FrontController
 						        $answer->vox_id = $vox->id;
 						        $answer->question_id = $q;
 						        $answer->answer = 0;
+						        $answer->is_skipped = true;
 						        $answer->country_id = $this->user->country_id;
 						        $answer->save();
 						        $answered[$q] = 0;
