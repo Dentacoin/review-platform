@@ -169,7 +169,7 @@ class RegisterController extends FrontController
 
     public function register_form($locale=null) {
 
-        return;
+        //return;
 
         $validator = Validator::make(Request::all(), [
             'name' => array('required', 'min:3'),

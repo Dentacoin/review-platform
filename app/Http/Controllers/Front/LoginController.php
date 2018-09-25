@@ -154,9 +154,9 @@ class LoginController extends FrontController
 
     private function try_social_register($s_user, $network) {
         //dd($s_user);
-        return redirect( getLangUrl('register') )
-        ->withInput()
-        ->with('error-message', 'Due to the overwhelming surge in popularity, new registrations on Trusted Review Platform are currently disabled to allow for infrastructure & security upgrades. Thank you for your understanding!');
+        // return redirect( getLangUrl('register') )
+        // ->withInput()
+        // ->with('error-message', 'Due to the overwhelming surge in popularity, new registrations on Trusted Review Platform are currently disabled to allow for infrastructure & security upgrades. Thank you for your understanding!');
 
 
         //isset($s_user->user['verified']) && 

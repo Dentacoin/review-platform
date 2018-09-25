@@ -71,8 +71,8 @@ class LoginController extends FrontController
     }
 
     private function try_social_register($s_user, $network) {
-        Request::session()->flash('error-message', 'Due to the overwhelming surge in popularity, new registrations on DentaVox are currently disabled to allow for infrastructure & security upgrades. Thank you for your understanding!' );
-        return redirect(getLangUrl('/').'#register');
+        // Request::session()->flash('error-message', 'Due to the overwhelming surge in popularity, new registrations on DentaVox are currently disabled to allow for infrastructure & security upgrades. Thank you for your understanding!' );
+        // return redirect(getLangUrl('/').'#register');
 
         //dd($s_user);
         //isset($s_user->user['verified']) && 
