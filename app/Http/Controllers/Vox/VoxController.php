@@ -70,6 +70,7 @@ class VoxController extends FrontController
 
 		$list = VoxAnswer::where('vox_id', $vox->id)
 		->where('user_id', $this->user->id)
+		->orderBy('id', 'ASC')
 		->get();
 		$answered = [];
 		foreach ($list as $l) {
@@ -231,101 +232,105 @@ class VoxController extends FrontController
 		        		if( $valid ) {
 		        			VoxAnswer::where('user_id', $this->user->id )->where('vox_id',$vox->id )->where('question_id', $q)->delete();
 
-		        			if($type == 'single') {
+		        			$is_scam = false;
+					        if($question->is_control) {
 
-								$answer = new VoxAnswer;
-						        $answer->user_id = $this->user->id;
-						        $answer->vox_id = $vox->id;
-						        $answer->question_id = $q;
-						        $answer->answer = $a;
-						        $answer->country_id = $this->user->country_id;
-						        if($question->is_control) {
-
-						        	if ($question->is_control == '-1') {
-						        		$answer->is_scam = end($answered) != $a;
-						        	} else {
-						        		$answer->is_scam = $question->is_control!=$a;
+					        	if ($question->is_control == '-1') {
+			        				if($type == 'single') {
+						        		$is_scam = end($answered) != $a;
+						        	} else if($type == 'multiple') {
+						        		$is_scam = !empty(array_diff( end($answered), $a ));
 						        	}
-						        }
-					        	if($answer->is_scam && $question->go_back) {
-					        		$wrongs = intval(session('wrongs'));
-					        		$wrongs++;
-					            	session([
-					            		'wrongs' => $wrongs
-					            	]);
-
-					        		$wrongs_test = intval(session('wrongs-'.$vox->id));
-					        		$wrongs_test++;
-					            	session([
-					            		'wrongs-'.$vox->id => $wrongs_test
-					            	]);
-
-			        				$ret['wrong'] = true;
-			        				$ret['go_back'] = $question->go_back;
-			        				$ret['mistake_count'] = $wrongs_test;
-			        				$ret['mistakes_left'] = 10-$wrongs_test;
-			        				$counter = 0;
-			        				foreach ($answered as $key => $value) {
-			        					$counter++;
-			        					// if($counter>=$question->go_back) {
-			        					// 	$value->delete();
-			        					// }
-			        				}
-			        				if($wrongs>10) {
-		            					$ret['ban_type'] = $this->user->banUser('vox', 'mistakes');
-		            					$ret['ban'] = getLangUrl('profile/bans');
-			        				}
 					        	} else {
-						        	$answer->save();
-							        $answered[$q] = $a;
-						        }
+			        				if($type == 'single') {
+					        			$is_scam = $question->is_control!=$a;
+						        	} else if($type == 'multiple') {
+						        		$is_scam = !empty(array_diff( explode(',', $question->is_control), $a ));
+						        	}
+					        	}
+					        }
 
-		        			} else if($type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
-		        				$answered[$q] = 1;
-		        				$answer = null;
-		        			} else if($type == 'skip') {
-		        				$answer = new VoxAnswer;
-						        $answer->user_id = $this->user->id;
-						        $answer->vox_id = $vox->id;
-						        $answer->question_id = $q;
-						        $answer->answer = 0;
-						        $answer->is_skipped = true;
-						        $answer->country_id = $this->user->country_id;
-						        $answer->save();
-						        $answered[$q] = 0;
-		        			} else if($type == 'multiple') {
-		        				foreach ($a as $value) {
-		        					$answer = new VoxAnswer;
-							        $answer->user_id = $this->user->id;
-							        $answer->vox_id = $vox->id;
-							        $answer->question_id = $q;
-							        $answer->answer = $value;
-							        $answer->country_id = $this->user->country_id;
-							        $answer->save();
+
+				        	if($is_scam && $question->go_back) {
+				        		$wrongs = intval(session('wrongs'));
+				        		$wrongs++;
+				            	session([
+				            		'wrongs' => $wrongs
+				            	]);
+
+				        		$wrongs_test = intval(session('wrongs-'.$vox->id));
+				        		$wrongs_test++;
+				            	session([
+				            		'wrongs-'.$vox->id => $wrongs_test
+				            	]);
+
+		        				$ret['wrong'] = true;
+		        				$ret['go_back'] = $question->go_back;
+		        				$ret['mistake_count'] = $wrongs_test;
+		        				$ret['mistakes_left'] = 10-$wrongs_test;
+		        				$counter = 0;
+		        				foreach ($answered as $key => $value) {
+		        					$counter++;
+		        					// if($counter>=$question->go_back) {
+		        					// 	$value->delete();
+		        					// }
 		        				}
-							    $answered[$q] = $a;
-		        			} else if($type == 'scale') {
-		        				foreach ($a as $k => $value) {
-		        					$answer = new VoxAnswer;
-							        $answer->user_id = $this->user->id;
-							        $answer->vox_id = $vox->id;
-							        $answer->question_id = $q;
-							        $answer->answer = $k+1;
-							        $answer->scale = $value;
-							        $answer->country_id = $this->user->country_id;
-							        $answer->save();
-		        				}
-							    $answered[$q] = $a;
-		        			}
-
-
-	        				if( $answer && $answer->is_scam ) {
-	        					if($this->user->vox_should_ban()) {
+		        				if($wrongs>10) {
 	            					$ret['ban_type'] = $this->user->banUser('vox', 'mistakes');
 	            					$ret['ban'] = getLangUrl('profile/bans');
 		        				}
-	        				}
+				        	} else {
 
+			        			if($type == 'single') {
+
+									$answer = new VoxAnswer;
+							        $answer->user_id = $this->user->id;
+							        $answer->vox_id = $vox->id;
+							        $answer->question_id = $q;
+							        $answer->answer = $a;
+							        $answer->country_id = $this->user->country_id;
+						        	$answer->save();
+							        $answered[$q] = $a;
+
+			        			} else if($type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
+			        				$answered[$q] = 1;
+			        				$answer = null;
+			        			} else if($type == 'skip') {
+			        				$answer = new VoxAnswer;
+							        $answer->user_id = $this->user->id;
+							        $answer->vox_id = $vox->id;
+							        $answer->question_id = $q;
+							        $answer->answer = 0;
+							        $answer->is_skipped = true;
+							        $answer->country_id = $this->user->country_id;
+							        $answer->save();
+							        $answered[$q] = 0;
+			        			} else if($type == 'multiple') {
+			        				foreach ($a as $value) {
+			        					$answer = new VoxAnswer;
+								        $answer->user_id = $this->user->id;
+								        $answer->vox_id = $vox->id;
+								        $answer->question_id = $q;
+								        $answer->answer = $value;
+								        $answer->country_id = $this->user->country_id;
+								        $answer->save();
+			        				}
+								    $answered[$q] = $a;
+			        			} else if($type == 'scale') {
+			        				foreach ($a as $k => $value) {
+			        					$answer = new VoxAnswer;
+								        $answer->user_id = $this->user->id;
+								        $answer->vox_id = $vox->id;
+								        $answer->question_id = $q;
+								        $answer->answer = $k+1;
+								        $answer->scale = $value;
+								        $answer->country_id = $this->user->country_id;
+								        $answer->save();
+			        				}
+								    $answered[$q] = $a;
+			        			}
+
+					        }
 
 	        				// dd($answered, count($vox->questions));
 

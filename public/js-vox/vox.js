@@ -137,6 +137,7 @@ $(document).ready(function(){
 
                     if(data.wrong && data.go_back) {
                         $('.question-group').find('.loader').remove();
+                        $('.question-group').find('input').prop('checked', false);
                         $('.question-group').hide();
                         
                         var go_back_group = $('.question-group').first();

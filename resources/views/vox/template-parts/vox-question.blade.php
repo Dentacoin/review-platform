@@ -1,5 +1,5 @@
 @if($question->type == 'multiple_choice')
-	<div class="question-group question-group-{{ $question->id }} multiple-choice" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  trigger-type="{{ $question->trigger_type }}" >
+	<div class="question-group question-group-{{ $question->id }} multiple-choice {{ $question->is_control == -1 ? 'shuffle' : '' }}" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  trigger-type="{{ $question->trigger_type }}" >
 		<div class="question">
 			{!! nl2br($question->question) !!}
 		</div>
@@ -15,7 +15,7 @@
 		<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
 	</div>
 @elseif($question->type == 'scale')
-	<div class="question-group question-group-{{ $question->id }} scale" data-id="{{ $question->id }}" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? 'data-trigger="'.$question->question_trigger.'"' : "" !!} trigger-type="{{ $question->trigger_type }}" >
+	<div class="question-group question-group-{{ $question->id }} scale {{ $question->is_control == -1 ? 'shuffle' : '' }}" data-id="{{ $question->id }}" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? 'data-trigger="'.$question->question_trigger.'"' : "" !!} trigger-type="{{ $question->trigger_type }}" >
 		<div class="question">
 			{!! nl2br($question->question) !!}
 		</div>
