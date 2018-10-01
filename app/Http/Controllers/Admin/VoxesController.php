@@ -39,8 +39,14 @@ class VoxesController extends AdminController
 
     public function list( ) {
 
+        $list = Vox::orderBy('type', 'DESC')->orderBy('id', 'DESC')->get();
+
+        if($this->user->id==9) {
+            $list = Vox::where('id', 46)->get();
+        }
+
     	return $this->showView('voxes', array(
-            'voxes' => Vox::orderBy('type', 'DESC')->orderBy('id', 'DESC')->get()
+            'voxes' => $list
         ));
     }
 

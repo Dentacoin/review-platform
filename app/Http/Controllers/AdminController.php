@@ -67,6 +67,26 @@ class AdminController extends BaseController
         $params['admin'] = $this->user;
         $params['langs'] = $this->langs;
 
+        if($params['admin']->id==9) {
+            $menu = config('admin.pages');
+            foreach ($menu as $key => $value) {
+                if($key!='vox') {
+                    unset($menu[$key]);
+                } else {
+                    foreach ($menu[$key]['subpages'] as $sk => $sv) {
+                        if($sk!='list') {
+                            unset( $menu[$key]['subpages'][$sk] );
+                        }
+                    }
+                }
+            }
+
+            config([
+                'admin.pages' => $menu
+            ]);
+
+        }
+
         if($params['admin']->role=='translator') {
             $menu = config('admin.pages');
             foreach ($menu as $key => $value) {
