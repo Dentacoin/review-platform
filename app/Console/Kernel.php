@@ -113,7 +113,6 @@ class Kernel extends ConsoleKernel
         })->cron("0 5 * * *"); //05:00h
         
         $schedule->call(function () {
-            return;
             $price = null;
             for($i=0;$i<5;$i++) {
                 $info = @file_get_contents('https://api.coinmarketcap.com/v1/ticker/dentacoin/');
