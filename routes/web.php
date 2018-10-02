@@ -51,6 +51,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('blacklist', 						'BlacklistController@list');
 	Route::get('blacklist/delete/{id}', 			'BlacklistController@delete');
 
+	Route::get('account', 							'UsersController@martin');
+
 	Route::get('users', 							'UsersController@list');
 	Route::post('users/mass-delete', 				'UsersController@massdelete');
 	Route::get('users/byweek', 						'UsersController@byweek');

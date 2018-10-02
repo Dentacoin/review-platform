@@ -81,6 +81,10 @@ class AdminController extends BaseController
                 }
             }
 
+            $menu['account'] = array(
+                'icon' => 'users',
+            );
+
             config([
                 'admin.pages' => $menu
             ]);
