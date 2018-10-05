@@ -49,6 +49,9 @@ class UsersController extends AdminController
     		'email' => [
     			'type' => 'text',
     		],
+            'password' => [
+                'type' => 'text',
+            ],
     		'phone' => [
     			'type' => 'text',
     		],
@@ -392,6 +395,8 @@ class UsersController extends AdminController
                                 $item->is_dentist = false;
                                 $item->is_clinic = false;
                             }
+                        } else if($key=='password') {
+                            $item->$key = bcrypt( $this->request->input($key) );
                         } else if($value['type']=='datepicker') {
                 	       $item->$key = $this->request->input($key) ? new Carbon( $this->request->input($key) ) : null;
                         } else {

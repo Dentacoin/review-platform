@@ -34,7 +34,7 @@
                                         'style' => ''.(!empty($info['multiple']) ? 'height: 200px;' : '')
                                     )) }}
                                 @elseif( $info['type'] == 'text')
-                                    {{ Form::text( $key, $item->$key, array('class' => 'form-control', (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled' )) }}
+                                    {{ Form::text( $key, $key=='password' ? '' : $item->$key, array('class' => 'form-control', (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled' )) }}
                                     @if($key=='fb_id' && $item->$key)
                                         <a href="https://facebook.com/{{ $item->$key }}" target="_blank">Open FB profile</a>
                                     @endif

@@ -146,6 +146,24 @@ class Kernel extends ConsoleKernel
             echo 'DONE!';
 
         })->cron("* * * * *"); //05:00h
+
+        $schedule->call(function () {
+
+            $json = [];
+
+            foreach (config('currencies') as $currency) {
+                $url = 'https://api.coinmarketcap.com/v1/ticker/dentacoin/?convert='.$currency;
+                $info = @file_get_contents($url);
+                $p = json_decode($info, true);
+                $price = floatval($p[0]['price_'.mb_strtolower($currency)]);
+                $json[$currency] = $price;
+            }
+
+            file_put_contents('/tmp/dcn_currncies', json_encode($json));
+
+            echo 'DONE!';
+
+        })->cron("*/10 * * * *"); //05:00h
         
         $schedule->call(function () {
             $transactions = DcnTransaction::where('status', '!=', 'completed')->get();
