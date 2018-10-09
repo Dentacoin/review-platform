@@ -145,6 +145,19 @@ class UsersController extends AdminController
 
     public function list() {
 
+        $user_types = [
+            '' => 'All user types',
+            'patient' => 'Patients',
+            'dentist' => 'Dentists',
+            'clinic' => 'Clinics',
+        ];
+
+        $user_statuses = [
+            '' => 'Normal & Deleted',
+            'deleted' => 'Only deleted',
+            'normal' => 'Only normal',
+        ];
+
         $users = User::orderBy('id', 'DESC');
 
         if(!empty($this->request->input('search-name'))) {
@@ -180,6 +193,37 @@ class UsersController extends AdminController
         if(!empty($this->request->input('search-tx'))) {
             $users = $users->where('register_tx', 'LIKE', '%'.trim($this->request->input('search-tx')).'%');
         }
+
+        if(!empty($this->request->input('search-type'))) {
+            $type = $this->request->input('search-type');
+            if( $type=='patient' ) {
+                $users = $users->where(function ($query) {
+                    $query->where('is_dentist', 0)
+                    ->orWhereNull('is_dentist');
+                });
+            } else if( $type=='clinic' ) {
+                $users = $users->where('is_dentist', 1)
+                ->where('is_clinic', 1);
+            } else if( $type=='dentist' ) {
+                $users = $users->where('is_dentist', 1)->where(function ($query) {
+                    $query->where('is_clinic', 0)
+                    ->orWhereNull('is_clinic');
+                });
+            }
+
+        }
+
+
+        if(!empty($this->request->input('search-status'))) {
+            $status = $this->request->input('search-status');
+            if( $status=='deleted' ) {
+                $users = $users->withTrashed();
+            }
+        } else {
+            $users = $users->withTrashed();
+        }
+
+
         if( null !== $this->request->input('results-number')) {
             $results = trim($this->request->input('results-number'));
         } else {
@@ -189,13 +233,15 @@ class UsersController extends AdminController
         // dd($results);
 
         if($results == 0) {
-            $users = $users->withTrashed()->take(1000)->get();
+            $users = $users->take(3000)->get();
         } else {
-            $users = $users->withTrashed()->take($results)->get();
+            $users = $users->take($results)->get();
         }        
 
         return $this->showView('users', array(
             'users' => $users,
+            'user_types' => $user_types,
+            'user_statuses' => $user_statuses,
             'search_register_from' => $this->request->input('search-register-from'),
             'search_register_to' => $this->request->input('search-register-to'),
             'search_email' => $this->request->input('search-email'),
@@ -206,6 +252,8 @@ class UsersController extends AdminController
             'search_tx' => $this->request->input('search-tx'),
             'results_number' => $this->request->input('results-number'),
             'search_ip_address' => $this->request->input('search-ip-address'),
+            'search_type' => $this->request->input('search-type'),
+            'search_status' => $this->request->input('search-status'),
         ));
     }
 
