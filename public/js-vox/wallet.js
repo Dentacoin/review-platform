@@ -71,7 +71,7 @@ $(document).ready(function(){
     button.addEventListener('click', function () {
         $('#has-wallet .alert').hide();
         $('#signupButton').hide();
-        civicSip.signup({ style: 'popup', scopeRequest: civicSip.ScopeRequests.PROOF_OF_IDENTITY });
+        civicSip.signup({ style: 'popup', scopeRequest: user_id==28444 ? civicSip.ScopeRequests.PROOF_OF_IDENTITY : civicSip.ScopeRequests.BASIC_SIGNUP });
     });
 
     var civicError = function() {

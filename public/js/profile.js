@@ -345,7 +345,7 @@ $(document).ready(function(){
             button.addEventListener('click', function () {
                 $('#withdraw-widget .alert').hide();
                 $('#signupButton').hide();
-                civicSip.signup({ style: 'popup', scopeRequest: civicSip.ScopeRequests.PROOF_OF_IDENTITY });
+                civicSip.signup({ style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP });
             });
 
             var civicError = function() {
