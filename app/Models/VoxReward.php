@@ -25,7 +25,7 @@ class VoxReward extends Model {
     ];
 
     public function vox() {
-        return $this->hasOne('App\Models\Vox', 'id', 'vox_id');        
+        return $this->hasOne('App\Models\Vox', 'id', 'vox_id')->withTrashed();        
     }
 
     public function formatDuration() {
