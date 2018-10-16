@@ -705,5 +705,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
 
-
+    public static function checkForBlockedIP() {
+        include_once("/var/www/html/blocked/blockscript/detector.php");
+        return !empty($_SERVER['blockscript_blocked']) && $_SERVER['blockscript_blocked']=='YES';
+    }
 }
