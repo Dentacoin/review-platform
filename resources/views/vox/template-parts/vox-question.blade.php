@@ -65,14 +65,16 @@
 							<div class="answer-question">
 								<h3>{{ $answer }}</h3>
 							</div>
-							@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $ans)
-								<div class="tac answer-inner" style="width: {{ (100 - 20) / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
-									<label class="answer-radio" for="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}">
-										<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}" type="radio" name="answer-{{ $k }}" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
-										{{ $ans }}											
-									</label>
-								</div>
-							@endforeach
+							<div class="buttons-list"> 
+								@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $ans)
+									<div class="tac answer-inner" style="width: {{ (100 - 20) / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
+										<label class="answer-radio" for="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}">
+											<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}" type="radio" name="answer-{{ $k }}" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
+											{{ $ans }}											
+										</label>
+									</div>
+								@endforeach
+							</div> 
 						</div>
 					@endforeach
 				</div>

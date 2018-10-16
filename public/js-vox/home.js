@@ -42,10 +42,22 @@ $(document).ready(function(){
 		} else if (sort == 'featured') {
 			list.hide().attr("found", 0);
 
+			list.sort(function(a, b) {
+				if( parseInt($(a).attr('published')) > parseInt($(b).attr('published')) ) {
+					return -1;
+				} else {
+					return 1;
+				}
+			});
+			
 			list.each( function() {
 				if ($(this).attr('featured')=='1') {
 					$(this).show().attr("found", 1)
 				}
+			});
+
+			list.each(function() {
+			    wrapper.append(this);
 			});
 
 		} else {

@@ -1433,6 +1433,10 @@ header {
 					left: 30px;
 					padding-right: 8px;
 					color: #bdbdbd;
+
+					@media #{$phone} {
+						top: 4px;
+					}
 				}
 
 			    input.answer {
@@ -1459,17 +1463,8 @@ header {
 				padding: 10px;
 				border-radius: 50%;
 			    border-color: #45b1ff;
-				margin-bottom: 20px;
-				margin-top: 30px;
-
-			    @media screen and (max-width: 768px) {
-					font-size: 18px;
-					border-radius: 10px;
-					padding: 5px 20px;
-					width: 100%;
-	    			text-align: center;
-	    		    margin: 1px auto;
-				}
+			    margin-bottom: 30px;
+			    margin-top: 20px;
 
 				&:hover {
 					width: auto;
@@ -1507,53 +1502,103 @@ header {
 		    		}
 				}
 
-				.flickity {
-					@media screen and (max-width: 768px) {
-						width: 100%;
-						margin: 0 auto;
-					}
+				@media #{$phone} {
+					.flickity {
+						margin: 0px -30px;
+					    width: auto;
 
-					.answer-question {
-						margin-bottom: 30px;
-					}
+						.flickity-page-dots {
+	    					top: 30px;
+							bottom: auto;
 
-					.flickity-page-dots {
-						top: 75px;
-						bottom: auto;
+							.dot {
+								margin: 0px 2px;
+								width: 19px;
+								height: 5px;
+								border-radius: 2px;
+								background: #cfcfcf;
+								opacity: 1;
+							}
 
-						.dot.filled:not(.is-selected) {
-							background: #5a99ba;
-							opacity: 1;
+							.dot.is-selected {
+								background: #11689e;
+								opacity: 1;
+							}
+							.dot.filled:not(.is-selected) {
+								background: #38a6eb;
+								opacity: 1;
+							}
+						}
+
+						.answer-radios-group {
+							width: 100%;
+							margin-right: 10px;
+							border-radius: 5px;
+							counter-increment: carousel-cell;
+
+							&:before {
+								display: block;
+								text-align: center;
+								line-height: 200px;
+								font-size: 80px;
+								color: white;
+							}
+
+
+							.answer-question {
+								margin-bottom: 18px;
+								background: #ddf1ff;
+								padding: 5px 0px 15px 0px;
+								width: 100%;
+
+								h3 {
+								    text-align: center;
+									padding: 0px 20px;
+									margin: 0px 0px 5px 0px;
+								}
+							}
+
+							.buttons-list {
+								margin: 0px 30px;
+
+								.answer-inner {
+									width: 100% !important;
+								}
+
+								.answer-radio {
+									display: block;
+								    padding: 4px 30px;
+								    margin: 1px auto;
+								    border: 1px solid #bdbdbd;
+								    text-align: center;
+								    border-radius: 10px;
+								    color: #333;
+								    cursor: pointer;
+								    font-weight: 600;
+								    font-size: 15px;
+								    margin-bottom: 10px;
+
+									&.active-label {
+								    	padding: 4px 30px;
+		    							margin-top: 1px;
+		    							color: white;
+									}
+								}
+							}
+
+						}
+
+						.flickity-prev-next-button {
+							display: none;
 						}
 					}
 				}
 
 				.answer-radios-group {
 
-					@media screen and (max-width: 768px) {
-						width: 100%;
-						margin-right: 10px;
-						border-radius: 5px;
-						counter-increment: carousel-cell;
-					}
-
-					&:before {
-						@media screen and (max-width: 768px) {
-							display: block;
-							text-align: center;
-							line-height: 200px;
-							font-size: 80px;
-							color: white;
-						}
-					}
-
 					.answer-question {
 						width: 20%;
 						float: left;
-
-						@media screen and (max-width: 768px) {
-							width: 100% !important;
-						}
 
 						h3 {
 							margin-bottom: 30px;
@@ -1562,21 +1607,11 @@ header {
 							font-size: 18px;
 							font-weight: bold;
 							text-align: right;
-
-							@media screen and (max-width: 768px) {
-							    text-align: center;
-							    padding: 0px 40px;
-								margin-bottom: 30px;
-							}
 						}
 					}
 
 					.answer-inner {
 						float: left;
-
-						@media screen and (max-width: 768px) {
-							width: 100% !important;
-						}
 
 						.answer-radio {
 
