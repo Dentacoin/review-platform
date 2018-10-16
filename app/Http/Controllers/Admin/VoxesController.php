@@ -143,7 +143,7 @@ class VoxesController extends AdminController
 
             $trigger_question_id = null;
             $trigger_valid_answers = null;
-            foreach ($question->vox->questions as $q) {
+            foreach ($vox->questions as $q) {
                 if ($q->question_trigger) {
                     $trigger_list = explode(';', $q->question_trigger);
                     $first_triger = explode(':', $trigger_list[0]);
