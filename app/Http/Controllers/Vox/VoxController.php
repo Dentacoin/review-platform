@@ -11,6 +11,7 @@ use Hash;
 use Auth;
 use App;
 use Mail;
+use DB;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Vox;
@@ -25,6 +26,14 @@ use App\Models\Reward;
 
 class VoxController extends FrontController
 {
+
+    public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
+
+        parent::__construct($request, $route, $locale);
+
+    	$this->details_fields = config('vox.details_fields');
+	}
+
 	public function home($locale=null, $id) {
 		$vox = Vox::find($id);
 		return $this->dovox($locale, $vox);
@@ -37,12 +46,17 @@ class VoxController extends FrontController
 		$this->current_page = 'questionnaire';
 		$doing_details = false;
 		$doing_asl = false;
+		$first = Vox::where('type', 'home')->first();
 
-		if(empty($vox) || (!$this->user->is_verified || !$this->user->email) ) {
+		if(empty($vox) || (!$this->user->is_verified || !$this->user->email) || !$this->user->madeTest($first->id) ) {
+			if(!$this->user->is_verified || !$this->user->email) {
+            	Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
+			}
 			return redirect( getLangUrl('/') );
 		} else if( $this->user->madeTest($vox->id) ) {
 		    $qtype = Request::input('type');
-		    if(
+		    if( 
+		    	isset( $this->details_fields[$qtype] ) ||
 		    	$qtype=='gender-question' ||
 		    	$qtype=='birthyear-question' ||
 		    	$qtype=='location-question'
@@ -50,27 +64,17 @@ class VoxController extends FrontController
 		    	//I'm doing ASL questions!
 				$doing_asl = true;
 			} else {
-
-				$q = Request::input('question');
-				$qobj = VoxQuestion::find($q);
-				if($qobj && $qobj->vox_id==34) {
-					$vox = Vox::find(34);
-					//I'm doing demographics
-					$doing_details = true;
-				} else {
-					return redirect( getLangUrl('stats/'.$vox->id) );					
-				}
+				return redirect( $vox->getStatsList() );	
 			}
 		}
 
         if($this->user->isBanned('vox')) {
-            return redirect(getLangUrl('profile/bans'));
+            return redirect(getLangUrl('profile'));
         }
 
 
 		$list = VoxAnswer::where('vox_id', $vox->id)
 		->where('user_id', $this->user->id)
-		->orderBy('id', 'ASC')
 		->get();
 		$answered = [];
 		foreach ($list as $l) {
@@ -84,30 +88,11 @@ class VoxController extends FrontController
 			}
 		}
 
-		$not_bot = session('not_not-'.$vox->id);
+		$not_bot = !empty($this->admin) || session('not_not-'.$vox->id);
 
 
 		if(Request::input('goback') && !empty($this->admin)) {
-			if(!empty($answered)) {
-				$lastkey = null;
-				foreach ($list as $aq) {
-					if(!$aq->is_skipped) {
-						$lastkey = $aq->question_id;
-					}
-				}
-				$found = false;
-				foreach ($vox->questions as $question) {
-					if($question->id==$lastkey) {
-						$found = true;
-					}
-					if($found) {
-						VoxAnswer::where('vox_id', $vox->id)
-						->where('user_id', $this->user->id)
-						->where('question_id', $question->id)
-						->delete();
-					}
-				}
-			}
+			$this->goBack($answered, $list, $vox);
 
             return redirect( $vox->getLink() );
 		}
@@ -158,7 +143,7 @@ class VoxController extends FrontController
 	        	$q = Request::input('question');
 
 
-	        	if($doing_details || (!isset( $answered[$q] ) && $not_bot)) {
+	        	if( !isset( $answered[$q] ) && $not_bot ) {
 
 		        	$found = $doing_asl ? true : false;
 		        	foreach ($vox->questions as $question) {
@@ -178,25 +163,56 @@ class VoxController extends FrontController
 		        			$valid = true;
 		        			$a = 0;
 
+		        		} else if ( isset( $this->details_fields[$type] ) ) {
+
+		        			$this->user->$type = Request::input('answer');
+		        			$this->user->save();
+		        			if( isset( config('vox.stats_scales')[$type] ) ) {
+		        				VoxAnswer::where('user_id', $this->user->id)->update([
+			        				$type => Request::input('answer')
+			        			]);
+		        			}
+		        			$valid = true;
+		        			$a = Request::input('answer');
+
+		        			$reward = Reward::where('reward_type', 'vox_question')->first()->dcn;
+		        			VoxReward::where('user_id', $this->user->id )->where('vox_id',$vox->id )->update(
+		        				array(
+		        					'reward' => DB::raw('`reward` + '.$reward
+		        				))
+		        			);
+
 		        		} else if ($type == 'location-question') {
 		        			//answer = 71,2312
-		        			list($country_id, $city_id) = explode(',', Request::input('answer'));
-		        			$this->user->city_id = $city_id;
+		        			$country_id = Request::input('answer');
 		        			$this->user->country_id = $country_id;
+		        			VoxAnswer::where('user_id', $this->user->id)->update([
+		        				'country_id' => $country_id
+		        			]);
 		        			$this->user->save();
-		        			$a = $city_id;
+		        			$a = $country_id;
 		        			$valid = true;
 		        		
 		        		} else if ($type == 'birthyear-question') {
 
 		        			$this->user->birthyear = Request::input('answer');
 		        			$this->user->save();
+
+		        			$agegroup = $this->getAgeGroup(Request::input('answer'));
+
+		        			VoxAnswer::where('user_id', $this->user->id)->update([
+		        				'age' => $agegroup
+		        			]);
+
 		        			$valid = true;
 		        			$a = Request::input('answer');
 
 		        		} else if ($type == 'gender-question') {
 		        			$this->user->gender = Request::input('answer');
 		        			$this->user->save();
+		        			VoxAnswer::where('user_id', $this->user->id)->update([
+		        				'gender' => Request::input('answer')
+		        			]);
 		        			$valid = true;
 		        			$a = Request::input('answer');
 
@@ -250,34 +266,81 @@ class VoxController extends FrontController
 					        	}
 					        }
 
-
-				        	if($is_scam && $question->go_back) {
+				        	if($is_scam) {
+				        		
 				        		$wrongs = intval(session('wrongs'));
 				        		$wrongs++;
 				            	session([
 				            		'wrongs' => $wrongs
 				            	]);
 
-				        		$wrongs_test = intval(session('wrongs-'.$vox->id));
-				        		$wrongs_test++;
-				            	session([
-				            		'wrongs-'.$vox->id => $wrongs_test
-				            	]);
-
 		        				$ret['wrong'] = true;
-		        				$ret['go_back'] = $question->go_back;
-		        				$ret['mistake_count'] = $wrongs_test;
-		        				$ret['mistakes_left'] = 10-$wrongs_test;
-		        				$counter = 0;
-		        				foreach ($answered as $key => $value) {
-		        					$counter++;
-		        					// if($counter>=$question->go_back) {
-		        					// 	$value->delete();
-		        					// }
+		        				$prev_bans = $this->user->getPrevBansCount();
+
+		        				if($wrongs==1 && !$prev_bans) {
+		        					$ret['go_back'] = $this->goBack($answered, $list, $vox);		        					
+		        				} else {
+									VoxAnswer::where('vox_id', $vox->id)
+									->where('user_id', $this->user->id)
+									->delete();
+		        					$ret['go_back'] = $vox->questions->first()->id;
 		        				}
-		        				if($wrongs>10) {
-	            					$ret['ban_type'] = $this->user->banUser('vox', 'mistakes');
-	            					$ret['ban'] = getLangUrl('profile/bans');
+
+
+
+		        				if($wrongs==1 || ($wrongs==2 && !$prev_bans) ) {
+		        					$ret['warning'] = true;
+		        					$ret['img'] = url('new-vox-img/mistakes'.($prev_bans+1).'.png');
+		        					$titles = [
+		        						'Oops! Wrong answer!',
+		        						'Oops! Wrong answer!',
+		        						'Oops! Wrong answer!',
+		        						'Oops! Wrong answer!',
+			        				];
+		        					$contents = [
+		        						'Hm! Seems like you’re not very concentrated! A next mistake will bring you back to the start.',
+		        						'Hm! Seems like you’re not very concentrated! Next time you will have to sit it out for 72 hours and lose your DCN reward.',
+		        						'Hm! Seems like you’re not very concentrated! Next time you will have to sit it out for 168 hours and lose your DCN reward.',
+		        						'Seems like you’re not very focused! The next ban will be permanent and you will lose the DCN you haven’t yet withdrawn.',
+		        					];
+		        					if( $wrongs==2 && !$prev_bans ) {
+		        						$ret['zman'] = url('new-vox-img/mistake2.png');
+		        						$ret['title'] = 'Oops! You did it again!';
+			        					$ret['content'] = 'This answer is wrong. Please, focus! Next time you will have to sit it out for 24 hours and lose your DCN reward.';
+		        					} else {
+		        						$ret['zman'] = url('new-vox-img/mistake1.png');
+		        						$ret['title'] = $titles[$prev_bans];
+			        					$ret['content'] = $contents[$prev_bans];
+		        					}
+
+		        				} else {
+					            	session([
+					            		'wrongs' => null
+					            	]);
+	            					$ban = $this->user->banUser('vox', 'mistakes');
+	            					$ret['ban'] = true;
+	            					$ret['ban_duration'] = $ban['days'];
+	            					$ret['ban_times'] = $ban['times'];
+		        					$ret['img'] = url('new-vox-img/ban'.($prev_bans+1).'.png');
+		        					$titles = [
+		        						'Third mistake!',
+		        						'Wrong answer again!',
+		        						'Wrong answer again!',
+		        						'So long, '.$this->user->getName().'!',
+		        					];
+		        					$ret['title'] = $titles[$prev_bans];
+		        					$contents = [
+		        						'Obviously, you’re not taking this seriously. You will not earn DCN for inconsistent answers. Have a break to refocus!',
+		        						'Hm... Obviously, you’re not taking this survey seriously. Hence, you are not getting any DCN reward. Have a break and come back when you\'re more focused!',
+		        						'Take a break and come back when you\'re more focused. Please, be aware that the next ban will be permanent.',
+		        						'Too bad you have to leave! You\'ve been banned 3 times. This was your last chance to prove that you are taking our surveys seriously. You have also lost the DCN amounts you haven\'t yet withdrawn.',
+		        					];
+		        					$ret['content'] = $contents[$prev_bans];
+
+		        					//Delete all answers
+									VoxAnswer::where('vox_id', $vox->id)
+									->where('user_id', $this->user->id)
+									->delete();
 		        				}
 				        	} else {
 
@@ -289,10 +352,21 @@ class VoxController extends FrontController
 							        $answer->question_id = $q;
 							        $answer->answer = $a;
 							        $answer->country_id = $this->user->country_id;
+							        foreach (config('vox.stats_scales') as $df => $dv) {
+							        	if($df=='age') {
+		        							$agegroup = $this->getAgeGroup($this->user->birthyear);
+		        							$answer->$df = $agegroup;
+							        	} else {
+							        		if($this->user->$df) {
+								        		$answer->$df = $this->user->$df;
+								        	}
+							        	}
+							        }
+
 						        	$answer->save();
 							        $answered[$q] = $a;
 
-			        			} else if($type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
+			        			} else if(isset( $this->details_fields[$type] ) || $type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
 			        				$answered[$q] = 1;
 			        				$answer = null;
 			        			} else if($type == 'skip') {
@@ -330,7 +404,90 @@ class VoxController extends FrontController
 								    $answered[$q] = $a;
 			        			}
 
-					        }
+			        		}
+
+
+
+	        				$reallist = $list->filter(function ($value, $key) {
+							    return !$value->is_skipped;
+							});
+
+		        			if( $reallist->count() && $reallist->count()%15==0 ) {
+
+		        				$pagenum = $reallist->count()/15;
+		        				$start = $reallist->forPage($pagenum, 15)->first();
+		        				
+						        $diff = Carbon::now()->diffInSeconds( $start->created_at );
+						        $normal = 15*5;
+						        if($normal > $diff) {
+
+						        	$warned_before = session('too-fast');
+						        	if(!$warned_before) {
+						        		session([
+						            		'too-fast' => true
+						            	]);
+						        	} else {
+						        		session([
+						            		'too-fast' => null
+						            	]);
+						        	}
+
+		        					$prev_bans = $this->user->getPrevBansCount();
+			        				$ret['toofast'] = true;
+			        				if($warned_before) {
+			        					$ret['warning'] = true;
+			        					$ret['img'] = url('new-vox-img/ban-warning-fast-'.($prev_bans+1).'.png');
+			        					$titles = [
+			        						'Slow down, take your time!',
+			        						'Slow down, take a breath!',
+			        						'Slow down, take it easy!',
+			        						'What\'s the rush?',
+			        					];
+			        					$ret['title'] = $titles[$prev_bans];
+			        					$contents = [
+			        						'Looks like you have rushed through the questions. Next time you will have to sit it out for <b>24 hours</b> and <b>lose your DCN reward</b>.',
+			        						'You rushed through the questions yet again! Next time you will have to sit it out for <b>72 hours</b> and <b>lose your DCN reward</b>.',
+			        						'Looks like you have rushed through the questions again. Next time you will have to sit it out for <b>168 hours</b> and <b>lose your DCN reward</b>.',
+			        						'You’ve answered these questions way too fast! Be aware that the next ban <b>will be permanent</b>. You will also <b>lose all DCN amounts</b> still not withdrawn.',
+			        					];
+			        					$ret['content'] = $contents[$prev_bans];
+
+			        				} else {
+		            					$ban = $this->user->banUser('vox', 'too-fast');
+		            					$ret['ban'] = true;
+		            					$ret['ban_duration'] = $ban['days'];
+		            					$ret['ban_times'] = $ban['times'];
+			        					$ret['img'] = url('new-vox-img/ban'.($prev_bans+1).'.png');
+			        					$titles = [
+			        						'Wow! That was fast!',
+			        						'Wow! That was fast!',
+			        						'Wow! That was fast!',
+			        						'So long, '.$this->user->getName().'!',
+			        					];
+			        					$ret['title'] = $titles[$prev_bans];
+			        					$contents = [
+			        						'Haste makes waste. You\'d better take a break and try not to rush through the questions next time.',
+			        						'Haste makes waste. You\'d better take a break and try not to rush through the questions next time.',
+			        						'Haste makes waste. You\'d better take a break and try not to rush through the questions next time. Otherwise you will get banned for good. ',
+			        						'Too bad you have to leave! You\'ve been banned 3 times. This was your last chance to prove that you are taking our surveys seriously. You have also lost the DCN amounts you haven\'t yet withdrawn.',
+			        					];
+			        					$ret['content'] = $contents[$prev_bans];
+
+			        					//Delete all answers
+										VoxAnswer::where('vox_id', $vox->id)
+										->where('user_id', $this->user->id)
+										->delete();
+			        				}
+						        }
+		        			}
+
+	        				// if( $answer && $answer->is_scam ) {
+	        				// 	if($this->user->vox_should_ban()) {
+	            // 					$ret['ban_type'] = $this->user->banUser('vox', 'mistakes');
+	            // 					$ret['ban'] = getLangUrl('profile');
+		        			// 	}
+	        				// }
+
 
 	        				// dd($answered, count($vox->questions));
 
@@ -342,7 +499,7 @@ class VoxController extends FrontController
 						        $reward->mistakes = intval(session('wrongs-'.$vox->id));
 						        $start = $list->first()->created_at;
 						        $diff = Carbon::now()->diffInSeconds( $start );
-						        $normal = count($vox->questions)*5;
+						        $normal = count($vox->questions)*3;
 						        if($normal > $diff) {
 						        	$reward->is_scam = true;
 						        }
@@ -354,7 +511,7 @@ class VoxController extends FrontController
 		        				if( $reward->is_scam ) {
 		        					if($this->user->vox_should_ban()) {
 	            						$ret['ban_type'] = $this->user->banUser('vox', 'too-fast');
-	            						$ret['ban'] = getLangUrl('profile/bans');
+	            						$ret['ban'] = getLangUrl('profile');
 			        				}
 		        				} else {
 
@@ -371,18 +528,12 @@ class VoxController extends FrontController
 		                                }
 		                            }
 
-
-									VoxAnswer::where('vox_id', $vox->id)
-									->where('user_id', $this->user->id)
-									->update(['is_completed', true]);
-
 		        				}
 					        }
 		        		} else {
 		        			$ret['success'] = false;
 		        		}
 		        	}
-	        		
 	        	}
         	}
 
@@ -404,19 +555,12 @@ class VoxController extends FrontController
         }
 
 
-        $details_test = null;
-
-        if(!$this->user->madeTest(34)) {        	
-        	$details_test = Vox::find(34);
-        }
-
-
         $real_questions = $vox->questions->count();
 
         if (!$this->user->birthyear) {
         	$real_questions++;
         }
-        if (!$this->user->city_id && !$this->user->country_id) {
+        if (!$this->user->country_id) {
         	$real_questions++;
         }
         if (!$this->user->gender) {
@@ -426,12 +570,18 @@ class VoxController extends FrontController
         	$real_questions += Vox::find(34)->questions->count();
         }
 
+        foreach ($this->details_fields as $key => $value) {
+        	if(empty($this->user->$key)) {
+        		$real_questions++;		
+        	}
+        }
+
 		return $this->ShowVoxView('vox', array(
 			'not_bot' => $not_bot,
+			'details_fields' => $this->details_fields,
 			'vox' => $vox,
 			'scales' => $scales,
 			'answered' => $answered,
-			'details_test' => $details_test,
 			'real_questions' => $real_questions,
 			'first_question' => $first_question,
 			'first_question_num' => $first_question_num,
@@ -455,5 +605,53 @@ class VoxController extends FrontController
                 'description' => $vox->translate(App::getLocale())->seo_description
             ]),
         ));
+	}
+
+	private function getAgeGroup($by) {
+
+		$years = date('Y') - intval($by);
+		$agegroup = 'more';
+		if($years<=24) {
+			$agegroup = '24';
+		} else if($years<=34) {
+			$agegroup = '34';
+		} else if($years<=44) {
+			$agegroup = '44';
+		} else if($years<=54) {
+			$agegroup = '54';
+		} else if($years<=64) {
+			$agegroup = '64';
+		} else if($years<=74) {
+			$agegroup = '74';
+		}
+
+		return $years;
+
+	}
+
+	private function goBack($answered, $list, $vox) {
+
+		$lastkey = null;
+		if(!empty($answered)) {
+			foreach ($list as $aq) {
+				if(!$aq->is_skipped) {
+					$lastkey = $aq->question_id;
+				}
+			}
+			$found = false;
+			foreach ($vox->questions as $question) {
+				if($question->id==$lastkey) {
+					$found = true;
+				}
+				if($found) {
+					VoxAnswer::where('vox_id', $vox->id)
+					->where('user_id', $this->user->id)
+					->where('question_id', $question->id)
+					->delete();
+				}
+			}
+		}
+
+		return $lastkey;
 	}
 }

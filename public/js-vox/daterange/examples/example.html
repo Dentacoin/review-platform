@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <title>DatePicker Example Page</title>
+        
+        <!-- JAVASCRIPT INCLUDES -->        
+        <!-- Include jQuery from Google APIs. -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        
+        <!-- Include our javascript file. -->
+        <script type="text/javascript" src="../js/datepicker.js"></script>
+		<script type="text/javascript" src="../js/DateRange.js"></script>
+		<script type="text/javascript" src="../js/DateRangesWidget.js"></script>
+        
+        <!-- STYLE SHEETS -->
+        <link rel="stylesheet" href="../css/datepicker/base.css" />
+		<!-- <link rel="stylesheet" href="../css/datepicker/clean.css" /> -->
+		<link rel="stylesheet" href="../css/DateRangesWidget/base.css" />
+        <link rel="stylesheet" href="example.css" />
+
+        <!-- Google code prettification -->
+        <link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" rel="stylesheet" type="text/css" />
+        <script src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js" type="text/javascript"></script>
+        
+        <!-- Create the date pickers. -->
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.pickerContainer.basic').DatePicker({mode:"single", date: new Date(), inline: true});
+                $('.pickerContainer.range').DatePicker({mode:"range", date: ['2012-10-20', new Date()], inline: true, calendars: 2});
+				$('.pickerContainer.tworanges').DatePicker({mode:"tworanges", date: ['2012-10-20', '2012-10-29', '2012-10-10', '2012-10-19'], inline: true, calendars: 2});
+				$('.pickerContainer.widget').DateRangesWidget();
+                prettyPrint();
+            });
+        </script>
+    </head>
+    <body>
+        <div id="container">
+            <div class="item">
+                <h2>Basic DatePicker</h2>
+                <div class="comment">DatePicker in the most basic form.</div>
+                <div class="pickerContainer basic"></div>
+                <div class="codeLabel">Code:</div>
+                <pre class="pickerCode basic prettyprint">$('#datepicker').DatePicker({<br />&nbsp;&nbsp;mode:"single",<br />&nbsp;&nbsp;date: new Date(),<br />&nbsp;&nbsp;inline: true<br />});</pre>
+            </div>
+            <div class="item">
+                <h2>Range DatePicker</h2>
+                <div class="comment">Allows picking between two dates. Click a date to mark an endpoint, then another to set other end point.</div>
+                <div class="pickerContainer range"></div>
+                <div class="codeLabel">Code:</div>
+                <pre class="pickerCode range prettyprint">$('#datepicker').DatePicker({<br />&nbsp;&nbsp;mode:"range",<br />&nbsp;&nbsp;date: ['2012-10-20', new Date()],<br />&nbsp;&nbsp;inline: true,<br />&nbsp;&nbsp;calendars: 2<br />});</pre>
+            </div>
+			<div class="item">
+                <h2>Two Ranges DatePicker</h2>
+                <div class="comment">Demonstrates the new functionality of two date ranges.</div>
+                <div class="pickerContainer tworanges"></div>
+                <div class="codeLabel">Code:</div>
+                <pre class="pickerCode range prettyprint">$('#datepicker').DatePicker({<br />&nbsp;&nbsp;mode:"tworanges",<br />&nbsp;&nbsp;date: ['2012-10-20', '2012-10-29',<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'2012-10-10', '2012-10-19'],<br />&nbsp;&nbsp;inline: true,<br />&nbsp;&nbsp;calendars: 2<br />});</pre>
+            </div>
+			<div class="item">
+                <h2>DateRangesWidget</h2>
+                <div class="comment">Demonstrates the new functionality of DateRangesWidget.</div>
+                <div class="pickerContainer widget"></div>
+				<!--
+                <div class="codeLabel">Code:</div>
+                <pre class="pickerCode range prettyprint">$('#datepicker').DatePicker({<br />&nbsp;&nbsp;mode:"tworanges",<br />&nbsp;&nbsp;date: ['2012-10-20', '2012-10-29',<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'2012-10-10', '2012-10-19'],<br />&nbsp;&nbsp;inline: true,<br />&nbsp;&nbsp;calendars: 2<br />});</pre>
+				-->
+            </div>
+        </div>
+    </body>
+</html>        

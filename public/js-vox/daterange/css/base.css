@@ -1,0 +1,143 @@
+
+
+#datepicker-dropdown {
+	font-size: 12px;
+}
+
+/* Style the calendar custom widget */
+.date-range {
+	position:relative;
+}
+.date-range-field {
+	/*height: 22px;*/
+	overflow: hidden;
+	position: relative;
+	cursor:pointer;
+	border: 1px solid #CCCCCC;
+	border-radius: 5px 5px 5px 5px;
+	background-color: white;
+}
+.date-range-field a  {
+	color:#D2D2D2;
+	/*background-color:#F7F7F7;*/
+	text-align:center;
+	display: block;
+	position: absolute;
+	width: 26px;
+	/*height: 23px;*/
+	top: 0;
+	right: 0;
+	text-decoration: none;
+	padding-top:2px;
+	border-radius: 0 5px 5px 0;
+}
+.date-range-field span {
+	font-size: 12px;
+	font-weight: bold;
+	color: #404040;
+	position: relative;
+	top: 0;
+	/*height: 26px;
+	line-height: 26px;
+ */
+	left: 5px;
+	text-align: center;
+}
+
+#datepicker-dropdown {
+	position: absolute;
+	top: 23px;
+	left: 0;
+	overflow: hidden;
+	width: 750px;
+	/*height:300px;*/
+	background-color: #F7F7F7;
+	border: 1px solid #CCCCCC;
+	display:none;
+	padding:10px 0 0 10px;
+}
+
+/* Remove default border from the custom widget since we're adding our own.  TBD: rework the dropdown calendar to use the default borders */
+#datepicker-dropdown div.datepicker {
+	background-color: transparent;
+	border: none;
+	border-radius: 0;
+	padding: 0;
+}
+
+#datepicker-dropdown select {
+     width: auto;
+    height: 20px;
+     font-size: 90%;
+     vertical-align: top;
+    padding: 0;
+ }
+
+#datepicker-dropdown input {
+    width: auto;
+    height: 10px;
+    font-size: 90%;
+    vertical-align: top;
+}
+
+.datepicker-calendar {
+	float: left;
+}
+
+.datepicker-compare-calendar {
+	clear: both;
+	float: left;
+}
+
+/*.date-range-field span.comparison-divider, */
+.date-range-field span.comparison {
+	text-align: left;
+	display: block;
+	color: gray;
+	font-weight: normal;
+	font-size: 60%;
+}
+
+#datepicker-dropdown .right {
+	float:left;
+}
+
+#datepicker-dropdown input[type=text] {
+	width: 7em;
+}
+
+.datepicker, .date-ranges-form {
+	float: left;
+}
+
+.date-ranges-form {
+    margin-left: 10px;
+    float: right;
+}
+
+
+.dr1.active {
+	border-color: #07C
+}
+.dr2.active {
+	border-color: #86BE2B
+}
+
+#datepicker-dropdown input.daterange-preset-parameter1 {
+    width: 40px;
+    height: 18px;
+    font-size: 90%;
+    vertical-align: top;
+    padding: 0;
+}
+
+span.aggregation {
+	background: #eee;
+	border: #ccc 1px solid;
+	border-radius: 4px;
+	margin-right: 5px;
+	margin-top: 4px;
+	padding: 2px 3px 0 3px;
+	float: left;
+	height: 20px;
+}

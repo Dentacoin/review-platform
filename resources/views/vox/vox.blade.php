@@ -2,45 +2,48 @@
 
 @section('content')
 
-		<div class="container page-questions">
+	<div class="page-questions">
 
-			@if($user->loggedFromBadIp())
-
+		@if($user->loggedFromBadIp())
+			<div class="container">
 				<div class="alert alert-warning" style="margin-top: 100px;">
 					{{ trans('vox.page.'.$current_page.'.vox-bad-ip') }}
 
 					<a id="bad-ip-appeal" href="{{ getLangUrl('appeal') }}"> {{ trans('vox.page.'.$current_page.'.vox-bad-ip-button') }} </a>
 				</div>
+			</div>
+		@else
 
-			@else
-				<a href="{{ getLangUrl('/') }}" class="questions-back"><i class="fa fa-arrow-left"></i> {{ trans('vox.common.questionnaires') }}</a>
+			<div class="container" id="question-meta">
+				<div class="questions">
 
-				<div id="question-meta">
-
-					<h1 class="questionnaire-title">
-						{{ $vox->title }}
-						@if(!empty($admin))
-							<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
-						@endif
-					</h1>
-					<p class="questionnaire-description" {!! !empty($answered) && count($answered)>1 ? 'style="display: none;"' : '' !!} >
-						{{ $vox->description }}
-					</p>
-					<div class="questions">
+					<div class="col-md-8 col-md-offset-2 clearfix">
+						<h1 class="questionnaire-title tac">
+							- {{ $vox->title }} -
+							@if($admin)
+								<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
+							@endif
+						</h1>
+						<p class="questionnaire-description tac" {!! !empty($answered) && count($answered)>1 ? 'style="display: none;"' : '' !!} >
+							{{ $vox->description }}
+						</p>
+						<p class="demographic-questionnaire-description tac" style="display: none;" >
+							You're almost done! Help us complete your demographic profile to ensure quality dental survey results!
+						</p>
 
 						<div class="questions-dots">
 							<div class="dot" id="current-question-bar" style="width: 0%;"></div>
 						</div>
 						<div class="row questions-header clearfix">
 							<div class="col-md-6">
-								<span class="bold">
+								<span>
 									{!! trans('vox.common.estimated_time', [
 										'time' => '<span id="current-question-num"></span>'
 									]) !!}
 								</span>
 							</div>
 							<div class="col-md-6 tar">
-								<span class="bold">
+								<span>
 									<span id="dcn-test-reward-before">
 										{{ $vox->complex ? 'Max ' : '' }} {!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
 									</span>
@@ -57,6 +60,8 @@
 						<div id="wrong-control" class="alert alert-warning" style="display: none;">
 							{!! trans('vox.page.'.$current_page.'.wrong-answer') !!}
 						</div>
+					</div>
+					<div class="col-md-12 clearfix">
 
 						@if(!$not_bot)
 							<div class="question-group" data-id="bot" id="bot-group">
@@ -85,12 +90,12 @@
 						@endforeach
 
 						@if(!$user->birthyear)
-							<div class="question-group birthyear-question" style="display: none;">
+							<div class="question-group birthyear-question tac" style="display: none;">
 								<div class="question">
 									What's your year of birth?
 								</div>
 								<div class="answers">
-									<input type="number" name="birthyear-answer" id="birthyear-answer" min="{{ date('Y')-100 }}" max="{{ date('Y')-18 }}">
+									<input type="number" name="birthyear-answer" class="answer" id="birthyear-answer" min="{{ date('Y')-100 }}" max="{{ date('Y')-18 }}">
 								</div>
 
 								<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
@@ -100,14 +105,14 @@
 						@if(!$user->gender)
 							<div class="question-group gender-question single-choice" style="display: none;">
 								<div class="question">
-									What's your gender?
+									What's your biological sex?
 								</div>
 								<div class="answers">
-									<a class="answer answer-checkbox" for="answer-gende-m" data-num="m">
+									<a class="answer answer" for="answer-gende-m" data-num="m">
 										<input id="answer-gender-m" type="radio" name="gender-answer" class="answer" value="m" style="display: none;">
 										Male										
 									</a>
-									<a class="answer answer-checkbox" for="answer-gender-f" data-num="f">
+									<a class="answer answer" for="answer-gender-f" data-num="f">
 										<input id="answer-gender-f" type="radio" name="gender-answer" class="answer" value="f" style="display: none;">
 										Female										
 									</a>
@@ -115,181 +120,205 @@
 							</div>
 						@endif
 
-						@if(!$user->city_id && !$user->country_id )
+						@if(!$user->country_id )
 							<div class="question-group location-question" style="display: none;">
 								<div class="question">
 									Where do you live?
 								</div>
 								<div class="answers">
-									{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'form-control country-select') ) }}
-	                                {{ Form::select( 'city_id' , $user->country_id ? \App\Models\City::where('country_id', $user->country_id)->get()->pluck('name', 'id')->toArray() : ['' => trans('vox.common.select-country')] , $user->city_id , array('class' => 'form-control city-select') ) }}
+									{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'form-control') ) }}
 								</div>
 
 								<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
 							</div>
 						@endif
 
-						@if($details_test)
-							@foreach( $details_test->questions as $question )
-								@include('vox.template-parts.vox-question')
-							@endforeach
-						@endif
-	<!-- 
-						<div class="question-hints">
-							<p class="hint">
-								{{ trans('vox.page.'.$current_page.'.finish-all', ['reward' => $vox->getRewardTotal()]) }}
-							</p>
-						</div>
-	 -->
-					</div>
-					<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-danger">
-						{!! trans('vox.page.'.$current_page.'.answer-error') !!}
+						@foreach( $details_fields as $key => $info )
+							@if(empty($user->$key))
+								@include('vox.template-parts.vox-question', [
+									'details_question' => $info,
+									'details_question_id' => $key
+								])
+							@endif
+						@endforeach
+	 				</div>
+				</div>
+				<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-danger">
+					{!! trans('vox.page.'.$current_page.'.answer-error') !!}
+				</div>
+			</div>
+
+
+			<div class="question-done page-questions-done" id="question-done" style="display: none;">
+
+				<div class="container done-section">
+
+					<div class="col-md-3">
+						<img class="image-left" src="{{ url('new-vox-img/well-done.png') }}">
 					</div>
 
+					<div class="col-md-9 tac">
+						<h3 class="done-title">Well done, <span class="blue-text"> {{ $user->getName() }}!</span></h3>
+						<h4>
+							You’ve just earned <span id="coins-test">{{ $vox->getRewardTotal() }}</span> DCN! Thank you for sharing your valuable insights! To review / withdraw your reward, go to your <a href="{{ getLangUrl('profile/wallet') }}">Dentacoin Wallet.</a>
+						</h4>
+
+						<p class="next-title">What do you feel like doing next?</p>
+
+						<div class="wrapper-buttons">
+							<a class="white-button" href="{{ getLangUrl('/') }}">Take another survey</a>
+							@if($vox->stats_questions->isNotEmpty())
+								<a class="white-button" href="{{ $vox->getStatsList() }}">View stats</a>
+							@endif
+							<a class="white-button" id="invite-button" href="javascript:;">Invite friends</a>
+							<div class="invite-link" style="display: none;">
+								<p>
+									Use this link to refer friends and earn DCN for each new registration!
+								</p>
+								{{ Form::text( 'link', getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()), array('class' => 'form-control select-me', 'id' => 'invite-url' ) ) }}
+								<div class="share-wrap tal">
+									<a class="copy-link" href="javascript:;">
+										<img src="{{ url('new-vox-img/copy-icon.png') }}">
+										Copy link
+									</a>
+									<a class="share fb" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
+										<img src="{{ url('new-vox-img/fb-icon.png') }}">
+										Share on Facebook
+									</a>
+									<a class="share twt" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
+										<img src="{{ url('new-vox-img/twitter-icon.png') }}">
+										Share on Twitter
+									</a>
+									<a class="share messenger" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
+										<img src="{{ url('new-vox-img/messenger-icon.png') }}">
+										Send via Messenger
+									</a>										
+									<a href="https://mail.google.com/mail/?view=cm&fs=1&su={!! urlencode(trans('vox.page.'.$current_page.'.invite-gmail-subject')) !!}&body={!! urlencode( trans('vox.page.'.$current_page.'.invite-gmail-body' , ['link' => getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) ]) ) !!}" target="_blank">
+										<img src="{{ url('new-vox-img/gmail-icon.png') }}">
+										Send via Gmail
+									</a>
+								</div>
+							</div>
+						</div>
+						
+
+					</div>
 				</div>
 
-				<div class="question-done page-questions-done" id="question-done" style="display: none;">
-					<div class="modal-body">
-						<p class="popup-title">
-							{{ trans('vox.page.'.$current_page.'.good-job') }}
-						</p>
-						<p class="popup-second-title bold">
-							{{ trans('vox.page.'.$current_page.'.just-won') }}
-						</p>
-						<div class="price">
-							<img src="img-vox/dc-logo.png"/>
-							<span class="coins"><span class="coins" id="coins-test" style="margin-top: 0px;">{{ $vox->getRewardTotal() }}</span> DCN</span>
-						</div>
+				<div class="section-stats">
+					<div class="container">
+						<img src="{{ url('new-vox-img/stats-front.png') }}">
+						<h3>Curious to see other survey stats?</h3>
+						<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">Check stats</a>
 					</div>
+				</div>
+			</div>
+		@endif
+
+	</div>
+
+
+	<script type="text/javascript">
+		var vox = {
+			count: {{ $real_questions }},
+			reward: {{ intval($vox->getRewardTotal()) }},
+			current: {{ $first_question_num }},
+			url: '{{ $vox->getLink() }}'
+		}
+	</script>
+
+
+	<div class="popup ban">
+		<div class="wrapper">
+			<img src="" class="zman" />
+			<div class="inner">
+				<h2></h2>
+				<p>
+				</p>
+				<small>
+					Note: Bans are irreversible. Please, do not send appeals to our Support.
+				</small>
+				<h3 class="hours-countdown">
+					Return to DentaVox in: <span></span>
+				</h3>
+			</div>
+			<a class="closer x">
+				<i class="fas fa-times"></i>
+			</a>
+		</div>
+	</div>
+	<div class="popup warning">
+		<div class="wrapper">
+			<img src="" class="zman" />
+			<div class="inner">
+				<h2></h2>
+				<p>
 					
-					<p class="buttons-description">
-						{{ trans('vox.page.'.$current_page.'.try-another') }}
-					</p>
-					<a href="{{ getLangUrl('/') }}" class="button-questionnaries">{{ trans('vox.common.questionnaires') }}</a>
+				</p>
+				<a class="btn inactive closer simple-countdown" alt-text="Continue">
+					Continue in: <span>10</span>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="popcircle warning">
+		<img src="" class="zman" />
+		<div class="wrapper">
+			<h2></h2>
+			<p>
+				
+			</p>
+			<a class="btn closer">
+				<i class="far fa-arrow-alt-circle-left"></i> Roll Back
+			</a>
+		</div>
+	</div>
 
-					<p class="buttons-description">
-						{{ trans('vox.page.'.$current_page.'.withdraw') }}
-					</p>
-					<a href="{{ getLangUrl('profile/wallet') }}" class="button-wallet">{{ trans('vox.page.'.$current_page.'.wallet') }}</a>
+	@if(!empty($user->filledVoxes()) && false)
 
-					<p class="buttons-description">
-						{{ trans('vox.page.'.$current_page.'.invite') }}
-					</p>
-
-	    			@if(!$user->my_address())
-						<a href="{{ getLangUrl('profile/invite') }}" class="button-wallet">{{ trans('vox.page.'.$current_page.'.invite-no-address') }}</a>
-	    			@else
-
-		    			<div id="invite-wrapper">
-							{{ Form::text( 'link', getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()), array('class' => 'form-control select-me' ) ) }}
-							<p class="buttons-description">
-								{{ trans('vox.page.'.$current_page.'.invite-share') }}
-							</p>
-							<br/>
-							<div class="no-mobile-share tac" style="display: none;">
-								<a class="btn btn-primary share fb" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
-									<i class="fa fa-facebook">
-									</i>
-									Facebook
-								</a>
-								<a class="btn btn-primary share twt" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
-									<i class="fa fa-twitter">
-									</i>
-									Twitter
-								</a>
-								<a class="btn btn-primary share google" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
-									<i class="fa fa-google-plus">
-									</i>
-									Google+
-								</a>
-								<a class="btn btn-primary" href="{{ getLangUrl('profile/invite') }}">
-									<i class="fa fa-envelope">
-									</i>
-									Email
-								</a>
-							</div>
-							<div class="has-mobile-share tac" style="display: none;">
-								<a class="btn btn-primary native-share" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
-									<i class="fa fa-share">
-									</i>
-									Share
-								</a>
-								<a class="btn btn-primary" href="{{ getLangUrl('profile/invite') }}">
-									<i class="fa fa-envelope">
-									</i>
-									Email
-								</a>				
-							</div>
+		<div class="popup active first-test">
+			<div class="wrapper">
+				<div class="inner">
+					<h2 class="tac">DentaVox rules</h2>
+					<div class="flex rules">
+						<div class="col flex flex-center">
+							Take your time
+							<img src="{{ url('new-vox-img/popup-time.png') }}" />
 						</div>
-
-					@endif
-
-				</div>
-			@endif
-
-		</div>
-
-
-		<script type="text/javascript">
-			var vox = {
-				count: {{ $real_questions }},
-				reward: {{ intval($vox->getRewardTotal()) }},
-				current: {{ $first_question_num }},
-				url: '{{ $vox->getLink() }}'
-			}
-		</script>
-
-
-		<div class="new-popup popup-permanent-ban">
-			<div class="new-popup-wrapper">
-				<div class="step">
-					<img src="{{ url('img/popups/permanent-ban.jpg') }}" />
-					<h2>
-						{!! nl2br(trans('vox.page.'.$current_page.'.popup.permanent-ban.title')) !!}
-					</h2>
-					<p>
-						{!! nl2br(trans('vox.page.'.$current_page.'.popup.permanent-ban.content')) !!}
-					</p>
-					<a class="active-btn step-btn">
-						{!! nl2br(trans('vox.page.'.$current_page.'.popup.close')) !!}
-					</a>
+						<div class="col flex flex-center">
+							<img src="{{ url('new-vox-img/popup-focused.png') }}" />
+							Stay Focused
+						</div>
+					</div>
+					<h3 class="tac">or you'll get banned</h3>
+					<div class="flex icons">
+						<div class="col">
+							<img src="{{ url('new-vox-img/popup-sign-1.png') }}" />
+							24h
+						</div>
+						<div class="col">
+							<img src="{{ url('new-vox-img/popup-sign-2.png') }}" />
+							72h
+						</div>
+						<div class="col">
+							<img src="{{ url('new-vox-img/popup-sign-3.png') }}" />
+							168h
+						</div>
+						<div class="col">
+							<img src="{{ url('new-vox-img/popup-sign-4.png') }}" />
+							<b>permaban</b>
+						</div>
+					</div>
+					<div class="tac">
+						<a class="btn closer">
+							Got it
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="new-popup popup-temporary-ban">
-			<div class="new-popup-wrapper">
-				<div class="step">
-					<img src="{{ url('img/popups/temporary-ban.jpg') }}" />
-					<h2>
-						{!! nl2br(trans('vox.page.'.$current_page.'.popup.temporary-ban.title')) !!}
-					</h2>
-					<p>
-						{!! nl2br(trans('vox.page.'.$current_page.'.popup.temporary-ban.content')) !!}
-					</p>
-					<a class="active-btn step-btn">
-						{!! nl2br(trans('vox.page.'.$current_page.'.popup.close')) !!}
-					</a>
-				</div>
-			</div>
-		</div>
-
-		<div class="new-popup popup-mistakes">
-			<div class="new-popup-wrapper">
-				<div class="step">
-					<img src="{{ url('img/popups/mistakes.jpg') }}" />
-					<h2>
-						{!! trans('vox.page.'.$current_page.'.popup.mistakes.title', ['count' => '<span id="mistakes-left"></span>']) !!}
-					</h2>
-					<p>
-						{!! nl2br(trans('vox.page.'.$current_page.'.popup.mistakes.content')) !!}
-					</p>
-					<a class="active-btn step-btn">
-						{!! nl2br(trans('vox.page.'.$current_page.'.popup.close')) !!}
-					</a>
-				</div>
-			</div>
-		</div>
+	@endif
     	
 
 @endsection

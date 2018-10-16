@@ -11,6 +11,7 @@ use App\Models\VoxQuestion;
 use App\Models\VoxToCategory;
 use App\Models\VoxScale;
 use Illuminate\Support\Facades\Input;
+use Image;
 use Request;
 use Response;
 use Route;
@@ -35,18 +36,17 @@ class VoxesController extends AdminController
             'multiple_choice' => trans('admin.enums.question-type.multiple_choice'),
             'scale' => trans('admin.enums.question-type.scale'),
         ];
+        $this->stat_types = [
+            '' => 'No',
+            'standard' => 'Yes',
+            'dependency' => 'Yes + Relationship',
+        ];
     }
 
     public function list( ) {
 
-        $list = Vox::orderBy('type', 'DESC')->orderBy('id', 'DESC')->get();
-
-        if($this->user->id==9) {
-            $list = Vox::where('id', 46)->get();
-        }
-
     	return $this->showView('voxes', array(
-            'voxes' => $list
+            'voxes' => Vox::orderBy('type', 'DESC')->orderBy('id', 'DESC')->get(),
         ));
     }
 
@@ -67,6 +67,7 @@ class VoxesController extends AdminController
             'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
             'category_list' => VoxCategory::get(),
             'question_types' => $this->question_types,
+            'stat_types' => $this->stat_types,
         ));
     }
 
@@ -75,6 +76,33 @@ class VoxesController extends AdminController
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
         return redirect('cms/'.$this->current_page);
+    }
+
+    public function delpic( $id ) {
+        $item = Vox::find($id);
+
+        if(!empty($item)) {
+
+            $item->hasimage = false;
+            $item->save();
+        }
+
+        $this->request->session()->flash('success-message', 'Photo deleted!' );
+        return redirect('cms/'.$this->current_page.'/edit/'.$id);
+    }
+
+    public function edit_field( $id, $field, $value ) {
+        $item = Vox::find($id);
+
+        if(!empty($item)) {
+            if($field=='featured') {
+                $item->$field = $value=='0' ? 0 : 1;
+            }
+            if($field=='type') {
+                $item->$field = $value=='0' ? 'hidden' : 'normal';
+            }
+            $item->save();
+        }
     }
 
     public function edit( $id ) {
@@ -92,18 +120,14 @@ class VoxesController extends AdminController
                         $question_id = explode(':',$v)[0];
 
                         $q = VoxQuestion::find($question_id);
-                        if(empty($q)) {
-                            $question->question_trigger = '';
-                            $question->save();
-                            break;
+
+                        if (!empty(explode(':',$v)[1])) {
+                            $answ = explode(':',$v)[1];
+                            $triggers[$question->id] .= $q->question.': '.$answ.'<br/>';
                         } else {
-                            if (!empty(explode(':',$v)[1])) {
-                                $answ = explode(':',$v)[1];
-                                $triggers[$question->id] .= $q->question.': '.$answ.'<br/>';
-                            } else {
-                                $triggers[$question->id] .= $q->question.'<br/>';
-                            }                            
-                        }                        
+                            $triggers[$question->id] .= $q->question.'<br/>';
+                        }
+                        
                     }
                 }
             }
@@ -119,7 +143,7 @@ class VoxesController extends AdminController
 
             $trigger_question_id = null;
             $trigger_valid_answers = null;
-            foreach ($item->questions as $q) {
+            foreach ($question->vox->questions as $q) {
                 if ($q->question_trigger) {
                     $trigger_list = explode(';', $q->question_trigger);
                     $first_triger = explode(':', $trigger_list[0]);
@@ -134,6 +158,7 @@ class VoxesController extends AdminController
                 'types' => $this->types,
                 'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
                 'question_types' => $this->question_types,
+                'stat_types' => $this->stat_types,
                 'item' => $item,
                 'category_list' => VoxCategory::get(),
                 'triggers' => $triggers,
@@ -404,8 +429,14 @@ class VoxesController extends AdminController
                 $this->saveOrUpdateQuestion($question);
                 $question->vox->checkComplex();
             
-                Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-updated'));
-                return redirect('cms/'.$this->current_page.'/edit/'.$id);
+
+                if(request('used_for_stats')=='standard' && !request('stats_fields')) {
+                    Request::session()->flash('success-message', 'Please, select the demographic details which should be used for the statistics.');
+                    return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
+                } else {
+                    Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-updated'));
+                    return redirect('cms/'.$this->current_page.'/edit/'.$id);
+                }
             }
 
             return $this->showView('voxes-form-question', array(
@@ -413,6 +444,7 @@ class VoxesController extends AdminController
                 'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
                 'item' => $question->vox,
                 'question_types' => $this->question_types,
+                'stat_types' => $this->stat_types,
                 'trigger_question_id' => $trigger_question_id,
                 'trigger_valid_answers' => $trigger_valid_answers
             ));
@@ -450,6 +482,22 @@ class VoxesController extends AdminController
         }
     }
 
+    public function reorder($id) {
+
+        $list = Request::input('list');
+        $i=1;
+        foreach ($list as $qid) {
+            $question = VoxQuestion::find($qid);
+            if($question->vox_id==$id) {
+                $question->order = $i;
+                $question->save();
+                $i++;
+            }
+        }
+
+        return Response::json( ['success' => true] );
+    }
+
     public function change_question_text( $id, $question_id ) {
         $question = VoxQuestion::find($question_id);
 
@@ -464,7 +512,10 @@ class VoxesController extends AdminController
     }
 
     private function saveOrUpdate($item) {
+
         $item->type = $this->request->input('type');
+        $item->featured = $this->request->input('featured');
+        $item->stats_featured = $this->request->input('stats_featured');
         $item->save();
 
         VoxToCategory::where('vox_id', $item->id)->delete();
@@ -484,12 +535,19 @@ class VoxesController extends AdminController
                 $translation->slug = $this->request->input('slug-'.$key);
                 $translation->title = $this->request->input('title-'.$key);
                 $translation->description = $this->request->input('description-'.$key);
+                $translation->stats_description = $this->request->input('stats_description-'.$key);
                 $translation->seo_title = $this->request->input('seo_title-'.$key);
                 $translation->seo_description = $this->request->input('seo_description-'.$key);
                 $translation->save();
             }
         }
         $item->save();
+
+        if( Input::file('photo') ) {
+            $img = Image::make( Input::file('photo') )->orientate();
+            $item->addImage($img);
+        }
+
 
     }
 
@@ -507,12 +565,14 @@ class VoxesController extends AdminController
         $question->type = $data['type'];
         $question->go_back = $data['go_back'];
         $question->order = $data['order'];
-        if(!empty($data['question_scale'])) {
-            $question->vox_scale_id = $data['question_scale'];
-        }
-        if(!empty($data['trigger_type'])) {
-            $question->trigger_type = $data['trigger_type'];            
-        }
+        $question->stats_featured = !empty($data['stats_featured']);
+        $question->stats_fields = !empty($data['stats_fields']) ? $data['stats_fields'] : [];
+        $question->vox_scale_id = $data['question_scale'];
+        $question->trigger_type = $data['trigger_type'];
+
+        $question->used_for_stats = $data['used_for_stats'];
+        $question->stats_relation_id = $question->used_for_stats=='dependency' ? $data['stats_relation_id'] : null;
+        $question->stats_answer_id = $question->used_for_stats=='dependency' ? $data['stats_answer_id'] : null;
 
         if(!empty( $data['triggers'] )) {
             $help_array = [];
@@ -531,6 +591,7 @@ class VoxesController extends AdminController
                 $translation = $question->translateOrNew($key);
                 $translation->vox_question_id = $question->id;
                 $translation->question = $data['question-'.$key];
+                $translation->stats_title = $data['stats_title-'.$key];
 
                 if(!empty( $data['answers-'.$key] )) {
                     $translation->answers = json_encode( $data['answers-'.$key] );
@@ -681,6 +742,29 @@ class VoxesController extends AdminController
         }
 
     }
+
+    public function faq() {
+
+        $pathToFile = base_path().'/resources/lang/en/faq.php';
+        $content = json_decode( file_get_contents($pathToFile), true );
+
+
+        if(Request::isMethod('post') && request('faq')) {
+            file_put_contents($pathToFile, json_encode(request('faq')));
+            $this->request->session()->flash('success-message', 'FAQs are saved!');
+
+            return Response::json( [
+                'success' => true
+            ] );
+        }
+            
+
+        return $this->showView('voxes-faq', array(
+            'content' => $content
+        ));
+
+    }
+
 
 
 }

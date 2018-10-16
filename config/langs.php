@@ -4,7 +4,7 @@ return [
   'en' => [
     'name' => 'English',
     'flag' => 'GB',
-    'font' => '<link href="https://fonts.googleapis.com/css?family=Nunito:400,700&amp;subset=latin-ext" rel="stylesheet">',
+    'font' => '<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800,900&amp;subset=latin-ext" rel="stylesheet">',
     'font_css' => "font-family: 'Nunito', sans-serif;",
     'rtl' => false,
   ],

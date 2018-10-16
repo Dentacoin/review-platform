@@ -1,0 +1,113 @@
+/* Datepicker border styling */
+.datepicker {
+  background-color: #F7F7F7;
+  border: 1px solid #CCCCCC;
+  border-radius: 5px 5px 5px 5px;
+  padding: 10px;
+}
+
+/* Tighten up the spacing between multiple calendars */
+.datepickerSpace div {
+  width:2px;
+}
+
+/* Grey background behind Month Name row, and blue text */
+div.datepicker th {
+  background-color: #38a2e5;
+}
+div.datepicker th a.datepickerMonth {
+  color:#38a2e5;
+  font-weight:normal;
+}
+
+/* style the day of week header cells */
+div.datepicker th {
+  color: white;
+  font-weight: bold;
+}
+
+div.datepicker th span {
+  color: white;
+}
+
+div.datepicker table thead tr.datepickerDoW th span {
+  color: #666666;
+}
+
+/* grey underline beneath day of week row */
+div.datepicker table thead tr.datepickerDoW th {
+  border-bottom: 1px solid #CCCCCC;
+  background: none;
+}
+
+/* Black text, white background, and grey borders around day cells */
+div.datepicker a,
+div.datepicker a:hover {
+  color: black;
+}
+div.datepicker table.datepickerViewDays,
+div.datepicker table.datepickerViewMonths,
+div.datepicker table.datepickerViewYears {
+  background-color:white;
+}
+div.datepicker table tbody.datepickerDays td {
+  border: 1px solid #F7F7F7;
+}
+
+/* blue cell color for selected days */
+tbody.datepickerDays td.datepickerSelected {
+  background-color:#0077CC;
+}
+
+/* Grey out dates in the future */
+div.datepicker td.datepickerFuture a {
+  color:#DDDDDD;
+}
+
+/* yellow cell background on hover */
+div.datepicker tbody.datepickerDays td:hover {
+  background-color: #FFCC33;
+}
+
+/* Bold today's date */
+div.datepicker td.datepickerToday a {
+  font-weight:bold;
+}
+
+/* cells are wider in the clean style */
+.datepickerYears a, .datepickerMonths a {
+  width: 42px;
+}
+.datepickerMonths td:first-child a,
+.datepickerYears td:first-child a {
+  width:39px;
+}
+div.datepicker th a.datepickerMonth {
+  width:121px;
+}
+
+div.datepicker tbody.datepickerDays td:hover a,
+div.datepicker tbody.datepickerDays td:hover a span,
+div.datepicker td.datepickerSelected a span,
+div.datepicker td.datepickerSelected a {
+  color: white;
+}
+
+.datepickerDays a {
+  width: 22px;
+  line-height: 20px;
+  height: 20px;
+  padding-right: 0px;
+
+}
+
+div.datepicker td.datepickerNotInMonth a:hover span,
+div.datepicker td.datepickerNotInMonth a:hover,
+div.datepicker td.datepickerNotInMonth a span {
+  display: inline-block;
+  color: transparent;
+}
+
+div.datepicker tbody.datepickerDays td:hover {
+  background-color: rgba(0, 119, 204, 0.5);
+}

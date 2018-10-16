@@ -16,6 +16,7 @@ use App\Models\UserInvite;
 use App\Models\VoxCashout;
 use App\Models\Dcn;
 use App\Models\Civic;
+use Carbon\Carbon;
 
 
 class ProfileController extends FrontController
@@ -27,11 +28,10 @@ class ProfileController extends FrontController
         $this->menu = [
         	'home' => trans('vox.page.profile.dentist.home'),
 			'info' => trans('vox.page.profile.dentist.info'),
-			'password' => trans('vox.page.profile.dentist.password'),
-            'wallet' => trans('front.page.profile.dentist.wallet'),
-			'history' => trans('front.page.profile.dentist.history'),
-            'invite' => trans('front.page.profile.patient.invite'),
             'privacy' => trans('front.page.profile.patient.privacy'),
+            'invite' => trans('front.page.profile.patient.invite'),
+            'wallet' => trans('front.page.profile.dentist.wallet'),
+            'vox' => trans('vox.page.profile.dentist.vox'),
 		];
 
 		$this->profile_fields = [
@@ -75,69 +75,18 @@ class ProfileController extends FrontController
         ];
     }
 
-    private function handleMenu() {
-        if($this->user->bans->isNotEmpty()) {
-            $this->menu['bans'] = trans('vox.page.profile.dentist.bans');
-        }
-    }
-
-
     public function home($locale=null) {
         if(!$this->user->is_verified || !$this->user->email) {
+            Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
             return redirect(getLangUrl('/'));
         }
-        $this->handleMenu();
-
-        // if($this->user->id==4232) {
-        //     $this->user->banUser('vox', 'mistakes');
-        //     return redirect(getLangUrl('profile/bans'));
-        // }
-
-        $histories = $this->user->vox_rewards->where('vox_id', '!=', 34);
-
-        if(Request::isMethod('post')) {
-            $ideatext = trim( Request::input('idea') );
-
-            if(!empty($ideatext)) {
-                $idea = new VoxIdea;
-                $idea->user_id = $this->user->id;
-                $idea->idea = $ideatext;
-                $idea->save();
-
-                $mtext = 'New idea submitted:
-                
-                '.$ideatext.'
-
-                More info at:
-                https://reviews.dentacoin.com/cms/vox/ideas';
-
-                Mail::raw($mtext, function ($message) {
-
-                    $sender = config('mail.from.address-vox');
-                    $sender_name = config('mail.from.name');
-
-                    $message->from($sender, $sender_name);
-                    $message->to( $sender );
-                    //$message->to( 'dokinator@gmail.com' );
-                    $message->replyTo($sender, $sender_name);
-                    $message->subject('New Questionnaire Idea Submitted');
-                });
-
-                $this->user->sendTemplate( 14 );
-
-
-                return Response::json( [
-                    'success' => true
-                ] );
-            }
-            return Response::json( [
-                'success' => false
-            ] );
+        if($this->user->isBanned('vox')) {
+            return redirect(getLangUrl('profile/vox'));
         }
 
 		return $this->ShowVoxView('profile', [
-            'histories' => $histories,
 			'menu' => $this->menu,
+            'currencies' => file_get_contents('/tmp/dcn_currncies'),
             'js' => [
                 'profile.js',
             ]
@@ -146,9 +95,13 @@ class ProfileController extends FrontController
 
     public function info($locale=null) {
         if(!$this->user->is_verified || !$this->user->email) {
+            Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
             return redirect(getLangUrl('/'));
         }
-        $this->handleMenu();
+        if($this->user->isBanned('vox')) {
+            return redirect(getLangUrl('profile/vox'));
+        }
+        
 
         if(Request::isMethod('post')) {
 
@@ -209,15 +162,22 @@ class ProfileController extends FrontController
 		return $this->ShowVoxView('profile-info', [
             'menu' => $this->menu,
 			'fields' => $this->profile_fields,
+            'js' => [
+                'profile.js',
+            ],
 		]);
     }
 
 
     public function privacy($locale=null) {
         if(!$this->user->is_verified || !$this->user->email) {
+            Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
             return redirect(getLangUrl('/'));
         }
-        $this->handleMenu();
+        if($this->user->isBanned('vox')) {
+            return redirect(getLangUrl('profile/vox'));
+        }
+        
 
 
         if(Request::isMethod('post')) {
@@ -235,6 +195,9 @@ class ProfileController extends FrontController
 
         return $this->ShowVoxView('profile-privacy', [
             'menu' => $this->menu,
+            'js' => [
+                'profile.js',
+            ],
         ]);
     }
 
@@ -284,21 +247,13 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         return Response::download($tmp_path.'.zip', 'your-private-info.zip');
     }
 
-
-    public function password($locale=null) {
-        if(!$this->user->is_verified || !$this->user->email) {
-            return redirect(getLangUrl('/'));
-        }
-        $this->handleMenu();
-
-		return $this->ShowVoxView('profile-password', [
-            'menu' => $this->menu,
-		]);
-    }
-
     public function change_password($locale=null) {
         if(!$this->user->is_verified || !$this->user->email) {
+            Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
             return redirect(getLangUrl('/'));
+        }
+        if($this->user->isBanned('vox')) {
+            return redirect(getLangUrl('profile/vox'));
         }
 
         $validator = Validator::make(Request::all(), [
@@ -308,33 +263,34 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         ]);
 
         if ($validator->fails()) {
-            return redirect( getLangUrl('profile/password') )
+            return redirect( getLangUrl('profile/info') )
             ->withInput()
             ->withErrors($validator);
         } else {
         	if ( !Hash::check(Request::input('cur-password'), $this->user->password) ) {
         		Request::session()->flash('error-message', trans('vox.page.profile.wrong-password'));
-	    		return redirect( getLangUrl('profile/password') );
+	    		return redirect( getLangUrl('profile/info') );
         	}
             
             $this->user->password = bcrypt(Request::input('new-password'));
             $this->user->save();
 			
 			Request::session()->flash('success-message', trans('vox.page.profile.password-updated'));
-    		return redirect( getLangUrl('profile/password'));
+    		return redirect( getLangUrl('profile/info'));
 	    }
 	}
 
 
     public function wallet($locale=null) {
-        if($this->user->isBanned('vox')) {
-            return redirect(getLangUrl('profile/bans'));
-        }
-        
         if(!$this->user->is_verified || !$this->user->email) {
+            Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
             return redirect(getLangUrl('/'));
         }
-        $this->handleMenu();
+        
+        if($this->user->isBanned('vox')) {
+            return redirect(getLangUrl('profile/vox'));
+        }
+        
 
         if(Request::isMethod('post')) {
             $va = trim(Request::input('vox-address'));
@@ -353,8 +309,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
         return $this->ShowVoxView('profile-wallet', [
             'menu' => $this->menu,
+            'history' => $this->user->history->where('type', '=', 'vox-cashout'),
             'js' => [
                 'wallet.js',
+                'profile.js',
             ],
             'jscdn' => [
                 'https://hosted-sip.civic.com/js/civic.sip.min.js',
@@ -471,21 +429,53 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         return Response::json( $ret );
     }
 
-    public function history($locale=null) {
-        if(!$this->user->is_verified || !$this->user->email) {
-            return redirect(getLangUrl('/'));
+    public function vox($locale=null) {
+
+        $current_ban = $this->user->isBanned('vox');
+        $prev_bans = $this->user->getPrevBansCount();
+        $time_left = '';
+
+        $ban_reson = '';
+        if( $current_ban ) {
+            if($current_ban->type=='mistakes') {
+                if($prev_bans<=3) {
+                    $ban_reson = 'You\'ve been banned for answering inconsistently.';
+                } else {
+                    $ban_reson = 'You\'ve been banned for answering inconsistently several times';
+                }
+            } else {
+                if($prev_bans<=3) {
+                    $ban_reson = 'You\'ve been banned for answering too fast.';
+                } else {
+                    $ban_reson = 'You\'ve been banned for answering too fast several times';
+                }
+            }
+
+            if( $current_ban->expires ) {
+                $now = Carbon::now();
+                $time_left = $current_ban->expires->diffInHours($now).':'.
+                str_pad($current_ban->expires->diffInMinutes($now)%60, 2, '0', STR_PAD_LEFT).':'.
+                str_pad($current_ban->expires->diffInSeconds($now)%60, 2, '0', STR_PAD_LEFT);
+            } else {
+                $time_left = null;
+            }
         }
 
-        $this->handleMenu();
-
-        return $this->ShowVoxView('profile-history', [
+        return $this->ShowVoxView('profile-vox', [
             'menu' => $this->menu,
-            'history' => $this->user->history->where('type', '=', 'vox-cashout')
+            'prev_bans' => $prev_bans,
+            'current_ban' => $current_ban,
+            'time_left' => $time_left,
+            'histories' => $this->user->vox_rewards->where('vox_id', '!=', 34),
+            'payouts' => $this->user->history->where('type', '=', 'vox-cashout'),
+            'js' => [
+                'profile.js',
+            ]
         ]);
     }
 
     public function bans($locale=null) {
-        $this->handleMenu();
+        
 
         return $this->ShowVoxView('profile-bans', [
             'menu' => $this->menu,
@@ -496,10 +486,14 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     
     public function invite($locale=null) {
         if(!$this->user->canInvite('vox')) {
+            Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
             return redirect(getLangUrl('/'));
         }
+        if($this->user->isBanned('vox')) {
+            return redirect(getLangUrl('profile/vox'));
+        }
 
-        $this->handleMenu();
+        
 
         if(Request::isMethod('post') && $this->user->canInvite('vox') ) {
 

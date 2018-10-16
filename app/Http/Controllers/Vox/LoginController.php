@@ -71,8 +71,6 @@ class LoginController extends FrontController
     }
 
     private function try_social_register($s_user, $network) {
-        // Request::session()->flash('error-message', 'Due to the overwhelming surge in popularity, new registrations on DentaVox are currently disabled to allow for infrastructure & security upgrades. Thank you for your understanding!' );
-        // return redirect(getLangUrl('/').'#register');
 
         //dd($s_user);
         //isset($s_user->user['verified']) && 
@@ -231,7 +229,7 @@ class LoginController extends FrontController
 
             Auth::login($newuser, true);
             Request::session()->flash('success-message', trans('vox.page.registration.success'));
-            return redirect(getLangUrl('/'));
+            return redirect(getLangUrl('welcome-to-dentavox'));
         }
     }
 }

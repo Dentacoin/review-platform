@@ -1463,8 +1463,7 @@ footer {
 
 .fb-button-inside {
   display: inline-block;
-  position: relative;
-  margin-top: 20px; }
+  position: relative; }
   .fb-button-inside a {
     position: absolute;
     width: 100%;

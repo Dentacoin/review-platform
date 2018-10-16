@@ -3,15 +3,16 @@ var first_test = {};
 $(document).ready(function(){
 
     VoxTest.handleNextQuestion();
-
-    if( $.cookie('first_test') ) {
-        $("#first-test-done").modal({backdrop: 'static', keyboard: false});
-    }
 	
     $('.question-group a.answer, .question-group a.next-answer').click( function() {
         var group = $(this).closest('.question-group');
         var qid = group.attr('data-id');
         var answer = null;
+
+        if( group.next().hasClass('birthyear-question') || group.hasClass('location-question') ) {
+            $('.questionnaire-description').hide();
+            $('.demographic-questionnaire-description').show();
+        }
 
         if( group.hasClass('birthyear-question') ) {
             if (!( $('#birthyear-answer').val().length && parseInt( $('#birthyear-answer').val() ) > 1900 && parseInt( $('#birthyear-answer').val() ) < 2000 )) {
@@ -22,26 +23,38 @@ $(document).ready(function(){
 
         } else if (group.hasClass('location-question')) {
 
-            if (!($('select').length == $('select option:selected').length && $('select option:selected').val())) {
+            if ( !$('.country-select option:selected').length ) {
                 $('.answer-error').show().insertAfter($(this));
                 return;
             }
-            answer = $('.country-select option:selected').val() + ',' + $('.city-select option:selected').val();
+            answer = $('.country-select option:selected').val();
         } else {
             answer = $(this).attr('data-num');
         }
 
         first_test[ qid ] = answer;
         group.attr('data-answer', answer);
-        group.hide();
-        group.next().show();
 
         if( group.next().hasClass('question-done') ) {
-            $.cookie('first_test', first_test, { expires: 1 });
-            $('.question-hints').hide();
-            $("#first-test-done").modal({backdrop: 'static', keyboard: false});
+            $.cookie('first_test', first_test, { expires: 1, path: '/' });
+
+            $.ajax( {
+                url: lang,
+                type: 'GET'
+            } );
+
+            if (user_id) {
+                $('.question-hints').hide();
+                $('.section-welcome').hide();
+                $('.section-welcome-done').show();
+            } else {
+                window.location.href = register_url;
+            }
+            // $("#first-test-done").modal({backdrop: 'static', keyboard: false});
 
         } else {
+            group.hide();
+            group.next().show();
             vox.current++;            
         }
 

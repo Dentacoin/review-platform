@@ -1,41 +1,40 @@
 $(document).ready(function(){
 
-	$('#idea-form').submit( function(e) {
-		e.preventDefault();
-		if(ajax_is_running) {
-			return;
-		}
-
-		ajax_is_running = true;
-        $('#idea-form alert').hide();
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            function( data ) {
-                if(data.success) {
-                	$('#idea').val('');
-                	$('#idea-success').show();
-                } else {
-                	$('#idea-error').show();
-                }
-                ajax_is_running = false;
-            }, "json"
-        );
-
-	} );
-
+    //Mobile menu
+    var mobileMenuClick = function( e ) {
+        console.log( $(window).width()<992, $(this).hasClass('active') );
+        if( $(window).width()<992 && $(this).hasClass('active')  ) {
+            e.preventDefault();
+            $('.menu-list').toggleClass('open');        
+        }
+    }
+    $('.menu-list a').click(mobileMenuClick);
 
     //Invites
 
-    $('.btn-group-justified label').click( function() {
+    $('#invite-wrapper .step .btn').click( function() {
         var id = $(this).attr('for');
-        $('.option-div').hide();
-        $('#option-mode').show();
-        $('#widget-preview').show();
-        $('#'+id).show();
-        $('.btn-group-justified .btn').removeClass('btn-primary');
-        $(this).addClass('btn-primary');
+        if( $(window).width()<992 ) {
+            $(this).closest('.step').append( $('#'+id) )
+            $('#'+id).show();
+            $(this).remove();
+        } else {
+            $('.option-div').hide();
+            $('#'+id).show();
+            $('#invite-wrapper .step .btn').removeClass('btn-primary').addClass('btn-inactive');
+            $(this).addClass('btn-primary').removeClass('btn-inactive');
+        }
     } );
+
+
+    $('.copy-invite-link').click( function() {
+        // var $temp = $("<input>");
+        // $("body").append($temp);
+        $('.select-me').select();
+        document.execCommand("copy");
+        $('.select-me').blur();        
+    } );
+
 
 
     if( $('#invite-patient-form').length ) {
@@ -167,6 +166,28 @@ $(document).ready(function(){
             }
         } );
 
+    }
+
+    //Bans
+    if( $('.popup.banned').length ) {
+        hoursCountdown();
+    }
+
+    //Currency
+    if( $('.balance').length ) {
+        var convertDcn = function() {
+            var currency = $('.balance .active-currency').text().trim();
+            $('.balance .convertor-value').html( (parseInt( $('.balance .dcn-amount').text() ) * currency_rates[currency]).toFixed(2) );
+        }
+
+        $('.balance .expander a').click( function() {
+            $('.balance .expander a').removeClass('active');
+            $(this).addClass('active');
+            $('.balance .active-currency').html( $(this).attr('currency') );
+            convertDcn();
+        } )
+
+        convertDcn();
     }
 
 });

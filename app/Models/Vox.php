@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App;
 use App\Models\VoxToCategory;
 use App\Models\Reward;
+use App\Models\VoxReward;
 
 class Vox extends Model {
     
@@ -22,6 +23,7 @@ class Vox extends Model {
     protected $fillable = [
         'title',
         'description',
+        'stats_description',
         'seo_title',
         'seo_description',
         'slug',
@@ -30,6 +32,10 @@ class Vox extends Model {
         'duration',
         'type',
         'complex',
+        'featured',
+        'stats_featured',
+        'has_stats',
+        'hasimage',
     ];
 
     protected $dates = [
@@ -42,7 +48,19 @@ class Vox extends Model {
     public function questions() {
         return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->orderBy('order', 'ASC');
     }
+
+    public function stats_questions() {
+        return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->where('used_for_stats', '!=', '')->orderBy('order', 'ASC');
+    }
     
+    public function stats_main_question() {
+        return $this->hasOne('App\Models\VoxQuestion', 'vox_id', 'id')->where('stats_featured', '1');
+    }
+    
+    public function respondentsCount() {
+        return VoxReward::where('vox_id', $this->id)->count();
+    }
+
     public function questionsReal() {
         return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->whereNull('is_control')->orderBy('order', 'ASC');
     }
@@ -52,7 +70,7 @@ class Vox extends Model {
     }
 
     public function formatDuration() {
-        return '~'.ceil( $this->questions()->count()/6 ).' minutes';
+        return ceil( $this->questions()->count()/6 ).' min';
     }
 
     public function getRewardPerQuestion() {
@@ -60,7 +78,9 @@ class Vox extends Model {
     }
 
     public function getRewardTotal($inusd = false) {
-        if ($this->type == 'user_details') {
+        if ($this->type == 'home') {
+            return 100;
+        } else if ($this->type == 'user_details') {
             return 0;
         } else {
             return ( $inusd ? $this->getRewardPerQuestion()->amount : $this->getRewardPerQuestion()->dcn) * $this->questions->count();
@@ -82,8 +102,11 @@ class Vox extends Model {
         return $this->hasMany('App\Models\VoxToCategory', 'vox_id', 'id');
     }
 
+    public function getStatsList() {
+        return getLangUrl('dental-survey-stats/'.$this->translate(App::getLocale(), true)->slug );        
+    }
     public function getLink() {
-        return $this->type=='hidden' || $this->type=='normal' ? getLangUrl('paid-surveys/'.$this->translate(App::getLocale(), true)->slug ) : getLangUrl( $this->translate(App::getLocale(), true)->slug );        
+        return $this->type=='hidden' || $this->type=='normal' ? getLangUrl('paid-dental-surveys/'.$this->translate(App::getLocale(), true)->slug ) : getLangUrl( $this->translate(App::getLocale(), true)->slug );        
     }
 
     public function checkComplex() {
@@ -95,6 +118,34 @@ class Vox extends Model {
             }
         }
     }
+
+
+    public function getImageUrl($thumb = false) {
+        return $this->hasimage ? url('/storage/voxes/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg') : url('new-vox-img/stats-dummy.png');
+    }
+    public function getImagePath($thumb = false) {
+        $folder = storage_path().'/app/public/voxes/'.($this->id%100);
+        if(!is_dir($folder)) {
+            mkdir($folder);
+        }
+        return $folder.'/'.$this->id.($thumb ? '-thumb' : '').'.jpg';
+    }
+
+    public function addImage($img) {
+
+        $to = $this->getImagePath();
+        $to_thumb = $this->getImagePath(true);
+
+        $img->resize(1920, null, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+        $img->save($to);
+        $img->fit( 520, 352 );
+        $img->save($to_thumb);
+        $this->hasimage = true;
+        $this->save();
+    }
     
 }
 
@@ -104,6 +155,7 @@ class VoxTranslation extends Model {
     protected $fillable = [
         'title',
         'description',
+        'stats_description',
         'seo_title',
         'seo_description',
         'slug',

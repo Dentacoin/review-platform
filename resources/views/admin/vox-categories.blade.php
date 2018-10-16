@@ -26,6 +26,12 @@
 					                       	<th>
 					                            {{ trans('admin.page.'.$current_page.'.table.category.name') }}
 					                        </th>
+					                       	<th>
+					                            Number of Surveys
+					                        </th>
+					                       	<th>
+					                            Surveys
+					                        </th>
 					                        <th>
 					                            {{ trans('admin.page.'.$current_page.'.table.category.update') }}
 					                        </th>
@@ -39,6 +45,17 @@
 					                    	<tr>
 					                            <td>
 					                                {{ $row->name }}
+					                            </td>
+					                            <td>
+					                                {{ $row->voxes->count() }}
+					                            </td>
+					                            <td>
+					                            	@foreach($row->voxes as $vox)
+					                            	<a href="{{ url('cms/vox/edit/'.$vox->vox_id) }}" target="_blank">
+					                                	{{ $vox->vox->title }}
+					                            	</a>
+					                            	<br/>
+					                                @endforeach
 					                            </td>
 					                            <td>
 					                                <a class="btn btn-sm btn-primary" href="{{ url('cms/'.$current_page.'/categories/edit/'.$row->id) }}">{{ trans('admin.table.edit') }}</a>

@@ -11,10 +11,10 @@ use App;
 use Auth;
 use Session;
 use DB;
-use Redirect;
 use Request;
 use Route;
 use Cookie;
+use Redirect;
 
 use Carbon\Carbon;
 
@@ -36,6 +36,7 @@ class FrontController extends BaseController
     public $user;
 
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
+
         $roter_params = $request->route()->parameters();
         if(empty($roter_params['locale'])) {
             $locale = 'en';
@@ -60,6 +61,7 @@ class FrontController extends BaseController
             $this->current_subpage='home';
         }
 
+        
         //VPNs
         $myips = session('my-ips');
        
@@ -93,6 +95,15 @@ class FrontController extends BaseController
                 $ul->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
                 $ul->save();
                 session(['login-logged' => time()]);
+
+                if( !$this->user->isBanned('vox') && $this->user->bans->isNotEmpty() ) {
+                    $last = $this->user->bans->last();
+                    if(!$last->notified) {
+                        $last->notified = true;
+                        $last->save();
+                        session(['unbanned' => true]);
+                    }
+                }
             }
 
 
@@ -140,12 +151,12 @@ class FrontController extends BaseController
                 'country_id' => $this->country_id,
                 'city_id' => $this->city_id,
             ]);
- 
-            if( ( mb_strpos(Request::url(), '//dev-') || mb_strpos(Request::url(), '//urgent-') ) && !$this->admin) {
-                echo '<a href="'.str_replace([ '//dev-', '//urgent-' ], '//', Request::url()).'">Click here</a> or <a href="'.url('cms').'"> log in as admin </a>';
+
+            if(mb_strpos(Request::url(), '//dev-') && !$this->admin) {
+                echo '<a href="'.str_replace('//dev-', '//', Request::url()).'">Click here</a> or <a href="'.url('cms').'"> log in as admin </a>';
                 exit;
             }
- 
+
             return $next($request);
         });
 
@@ -158,6 +169,24 @@ class FrontController extends BaseController
     }
 
     public function ShowVoxView($page, $params=array()) {
+
+        if( session('login-logged') && $this->user && !Cookie::get('prev-login') ) {
+            Cookie::queue('prev-login', $this->user->id, 60*24*31);
+        }
+
+        if( $this->current_page=='welcome-survey' ) {
+            if( Cookie::get('prev-login') ) {
+                $params['prev_user'] = User::find( Cookie::get('prev-login') );
+            }
+
+            if(empty( $params['prev_user'] )) {
+                $uid = User::lastLoginUserId();
+                if($uid) {
+                    $params['prev_user'] = User::find( $uid->user_id );
+                }
+            }
+        }
+
         $this->PrepareViewData($page, $params, 'vox');
 
         $params['genders'] = [
@@ -166,6 +195,7 @@ class FrontController extends BaseController
         ];
         $params['years'] = range( date('Y'), date('Y')-90 );
         $params['header_questions'] = VoxAnswer::getCount();
+        $params['users_count'] = User::getCount('vox');
         //dd($params['header_questions']);
 
         $params['cache_version'] = '20180615-2';
@@ -177,6 +207,25 @@ class FrontController extends BaseController
         //         setcookie('show_tutorial3', time(), time()+86400*7);
         //     }
         // }
+
+        if( session('unbanned') ) {
+            session(['unbanned' => null]);
+            $params['unbanned'] = true;
+            $params['unbanned_times'] = $this->user->getPrevBansCount();
+            if( $params['unbanned_times']==1 ) {
+                $params['unbanned_text'] = 'Now you can fill out surveys again and earn DCN by giving your honest answers!<br/>
+                <br/>
+                <b>Just take your time and focus!</b>';
+            } else if( $params['unbanned_times']==2 ) {
+                $params['unbanned_text'] = 'Ready to take surveys again? Hope you had enough time to refocus and will now give your earnest answers. <br/>
+                <br/>
+                <b>Just pick a topic and get it started!</b>';
+            } else {
+                $params['unbanned_text'] = 'Did you enjoy your week off? This is your last chance to prove that your answers are genuine and that you really want to help improve global dental care.<br/>
+                <br/>
+                <b>Your next ban will be permanent.</b>';
+            }
+        }
         return view('vox.'.$page, $params);
     }
 

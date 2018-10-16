@@ -34,14 +34,8 @@
                             <input type="text" class="form-control" name="search-address" value="{{ $search_address }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-address') }}">
                         </div>
                         <div class="col-md-2">
-                            <select class="form-control" name="search-status">
-                                @foreach($user_statuses as $k => $type)
-                                    <option value="{{ $k }}" {!! $k==$search_status ? 'selected="selected"' : '' !!}>{{ $type }}</option>
-                                @endforeach
-                            </select>
+                            <input type="text" class="form-control" name="search-tx" value="{{ $search_tx }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-tx') }}">
                         </div>
-
-                        
                     </div>
                     <div class="row">
                         <div class="col-md-2">
@@ -56,14 +50,7 @@
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="search-register-to" value="{{ $search_register_to }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-register-to') }}">
                         </div>
-                        <div class="col-md-2">
-                            <select class="form-control" name="search-type">
-                                @foreach($user_types as $k => $type)
-                                    <option value="{{ $k }}" {!! $k==$search_type ? 'selected="selected"' : '' !!}>{{ $type }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="{{ trans('admin.page.'.$current_page.'.title-filter-submit') }}">
                         </div>
                     </div>
@@ -98,7 +85,7 @@
                                 'phone'              => array('template' => 'admin.parts.table-users-phone'),
                                 'city_id'                => array('format' => 'city'),
     							'country_id'				=> array('format' => 'country'),
-                                'type'                => array('template' => 'admin.parts.table-users-type'),
+                                'is_dentist'                => array('format' => 'bool'),
                                 'is_partner'                => array('format' => 'bool'),
                                 'ratings'                => array('template' => 'admin.parts.table-users-ratings'),
                                 'link'                => array('template' => 'admin.parts.table-users-link'),

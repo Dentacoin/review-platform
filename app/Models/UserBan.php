@@ -11,6 +11,7 @@ class UserBan extends Model {
         'domain',
         'expires',
         'type',
+        'notified',
     ];
 
     protected $dates = [

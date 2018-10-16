@@ -28,7 +28,7 @@ $(document).ready(function(){
         
         var btn = $(this).find('button[type="submit"]').first();
         btn.attr('data-old', btn.html());
-        btn.html('<i class="fa fa-spinner fa-pulse fa-fw"></i> '+btn.attr('data-loading'));
+        btn.html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
 
         $.post( 
             $(this).attr('action'), 
@@ -71,7 +71,7 @@ $(document).ready(function(){
     button.addEventListener('click', function () {
         $('#has-wallet .alert').hide();
         $('#signupButton').hide();
-        civicSip.signup({ style: 'popup', scopeRequest: user_id==28444 ? civicSip.ScopeRequests.PROOF_OF_IDENTITY : civicSip.ScopeRequests.BASIC_SIGNUP });
+        civicSip.signup({ style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP });
     });
 
     var civicError = function() {

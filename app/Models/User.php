@@ -218,7 +218,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->save();
     }
 
-    public function banUser($domain, $reason='') {
+    public function getPrevBansCount($domain='vox') {
         $times = 0;
         foreach ($this->bans as $ban) {
             if($ban->domain==$domain) {
@@ -226,26 +226,45 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
+        return $times;
+    }
+
+    public function banUser($domain, $reason='') {
+        $times = $this->getPrevBansCount();
         $ban = new UserBan;
         $ban->user_id = $this->id;
         $ban->domain = $domain;
-        if($times==0 || $times==1) {
-            $ban->expires = Carbon::now()->addDays( 1 );
+        $days = 0;
+        if($times==0) {
+            $days = 1;
+            $ban->expires = Carbon::now()->addDays( $days );
+        } else if($times==1) {
+            $days = 3;
+            $ban->expires = Carbon::now()->addDays( $days );
+        } else if($times==2) {
+            $days = 7;
+            $ban->expires = Carbon::now()->addDays( $days );
         }
         if($reason) {
             $ban->type = $reason;
         }
         $ban->save();
 
-        if($times<2) {
+        if($times<3) {
             $this->sendTemplate(15, [
-                'expires' => $ban->expires->toTimeString().' '.$ban->expires->toFormattedDateString()
+                'expires' => $ban->expires->toTimeString().' '.$ban->expires->toFormattedDateString(),
+                'ban_days' => $days,
+                'ban_hours' => $days*24
             ]);
         } else {
             $this->sendTemplate(16);              
         }
 
-        return ($times==0 || $times==1) ? 'temporary' : 'permanent';
+        return [
+            'ban' => $ban,
+            'times' => $times,
+            'days' => $days,
+        ];
     }
 
     public function hasReviewTo($dentist_id) {
@@ -323,7 +342,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getImageUrl($thumb = false) {
-        return $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg') : url('img/no-avatar-photo.png');
+        return $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg') : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
     }
     public function getImagePath($thumb = false) {
         $folder = storage_path().'/app/public/avatars/'.($this->id%100);
@@ -362,7 +381,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function sendSMS($sms_text) {
-        return;
         $formatted_phone = $this->country->phone_code.$this->phone;
         file_get_contents('https://bulksrv.allterco.net/sendsms/sms.php?nmb_from=1909&user=SWISSDENTAPRIME&pass=m9rr95er9em&nmb_to='.$formatted_phone.'&text='.urlencode($sms_text).'&dlrr=1');
     }
@@ -512,7 +530,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function filledVoxes() {
-        return VoxReward::where('user_id', $this->id)->get()->pluck('vox_id')->toArray();
+        return VoxReward::where('user_id', $this->id)->with('vox')->whereHas('vox', function ($query) {
+            $query->where('type', 'normal');
+        })->get()->pluck('vox_id')->toArray();
     }
 
     public function vox_cashouts() {
@@ -550,7 +570,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if($platform == 'trp') {
             return $this->is_verified && $this->email && $this->civic_id && !( $this->is_dentist && !$this->is_approved );
         } else {
-            return $this->is_verified && $this->email && $this->civic_id && !( $this->is_dentist && !$this->is_approved );
+            return $this->is_verified && $this->email && $this->civic_id;
         }
     }
 
@@ -631,9 +651,59 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
 
-    public static function checkForBlockedIP() {
-        include_once("/var/www/html/blocked/blockscript/detector.php");
-        return !empty($_SERVER['blockscript_blocked']) && $_SERVER['blockscript_blocked']=='YES';
+    public static function lastLoginUserId() {
+        return UserLogin::where('ip', 'like', Request::ip())->orderBy('id', 'DESC')->first();
     }
+
+
+    public function checkForWelcomeCompletion() {
+
+        $first = Vox::where('type', 'home')->first();
+        $has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
+        if( $has_test ) {
+
+            $first_question_ids = $first->questions->pluck('id')->toArray();
+
+            if(!$this->madeTest($first->id)) {
+                foreach ($has_test as $q_id => $a_id) {
+
+                    if($q_id == 'location') {
+                        $country_id = $a_id;
+                        $this->country_id = $country_id;
+                        $this->save();
+                    } else if($q_id == 'birthyear') {
+                        $this->birthyear = $a_id;
+                        $this->save();
+                    } else if($q_id == 'gender') {
+                        $this->gender = $a_id;
+                        $this->save();
+                    } else {
+                        $vox_id = null;
+                        if( in_array($q_id, $first_question_ids) ) {
+                            $vox_id = $first->id;
+                        } else
+
+                        if($vox_id) {
+                            $answer = new VoxAnswer;
+                            $answer->user_id = $this->id;
+                            $answer->vox_id = $vox_id;
+                            $answer->question_id = $q_id;
+                            $answer->answer = $a_id;
+                            $answer->country_id = $this->country_id;
+                            $answer->save();
+                        }                           
+                    }
+                }
+                $reward = new VoxReward;
+                $reward->user_id = $this->id;
+                $reward->vox_id = $first->id;
+                $reward->reward = $first->getRewardTotal();
+                $reward->save();
+            }
+            setcookie('first_test', null, time()-600, '/');
+
+        }
+    }
+
 
 }

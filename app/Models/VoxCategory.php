@@ -26,6 +26,12 @@ class VoxCategory extends Model {
         });
     }
 
+    public function stats_voxes() {
+        return $this->hasMany('App\Models\VoxToCategory', 'vox_category_id', 'id')->with('vox.stats_questions')->whereHas('vox', function ($query) {
+            $query->where('type', 'normal')->whereHas( 'stats_questions' );
+        });
+    }
+
     public function voxesWithoutAnswer($user) {
         $answer_ids = $user->vox_rewards->pluck('vox_id')->toArray();
 

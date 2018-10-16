@@ -11,6 +11,7 @@ use Hash;
 use Mail;
 use DB;
 use Carbon\Carbon;
+use App\Models\Dcn;
 use App\Models\Country;
 use App\Models\User;
 use App\Models\Vox;
@@ -22,222 +23,247 @@ use App\Models\VoxCategory;
 
 class StatsController extends FrontController
 {
-	public function home($locale=null, $id=null, $question_id=null) {
-        
-		$vox = Vox::find($id);
+	public function home($locale=null) {
+
+        $this->current_page = 'stats';
+
+		// $ret = Dcn::send($this->user, $this->user->vox_address, 100, 'vox-cashout', null);
+		// dd($ret);
+
+		$sorts = [
+			'featured' => trans('vox.page.home.sort-featured'),
+			'newest' => trans('vox.page.home.sort-newest'),
+			'popular' => trans('vox.page.home.sort-popular'),
+		];
+
+		return $this->ShowVoxView('stats', array(
+			'voxes' => Vox::with('stats_main_question', 'stats_questions')->get(),
+			'cats' => VoxCategory::with('voxes.vox')->get(),
+			'sorts' => $sorts,
+
+            'seo_title' => trans('vox.seo.stats-all.title'),
+            'seo_description' => trans('vox.seo.stats-all.description'),
+            'social_title' => trans('vox.social.stats-all.title'),
+            'social_description' => trans('vox.social.stats-all.description'),
+
+			'js' => [
+				'stats.js'
+			]
+		));
+	}
+
+	public function stats($locale=null, $slug=null, $question_id=null) {
+        $this->current_page = 'stats';
+
+		$vox = Vox::whereTranslationLike('slug', $slug)->first();
+
 		if(empty($vox)) {
 			return redirect( getLangUrl('/') );
 		}
 
-		$question = null;
-		$next = null;
-		$prev = null;
-		if(!empty($question_id)) {
-			$question = $vox->questions->find($question_id);
-		}
-		if(empty($question)) {
-			$question = $vox->questions->first();	
-		}
+        if($this->user && $this->user->isBanned('vox')) {
+            return redirect(getLangUrl('profile/vox'));
+        }
 
-		$next_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '>', $question->order)->orderBy('order', 'asc')->first();
-		$prev_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '<', $question->order)->orderBy('order', 'desc')->first();
+        if(Request::isMethod('post')) {
+        	$dates = Request::input('timeframe');
+            $answer_id = Request::input('answer_id');
+        	$question_id = Request::input('question_id');
+        	$question = VoxQuestion::find($question_id);
+        	$scale = Request::input('scale');
+        	$type = $question->used_for_stats;
 
-		if ($next_q) {
-			$next = $next_q->id;
-		} else {
-			$first_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '<', $question->order)->orderBy('order', 'asc')->first();
-			$next = $first_q->id;
-		}
+        	$results = $this->prepareQuery($question_id, $dates);
 
-		if($prev_q) {
-			$prev = $prev_q->id;
-		} else {
-			$last_q = VoxQuestion::where('vox_id', $id)->whereNull('is_control')->where('order', '>', $question->order)->orderBy('order', 'desc')->first();
-			$prev = $last_q->id;
-		}
-		
-		// $voxarr = $vox->questions->toArray();
-		// foreach ($voxarr as $k => $v) {
-		// 	if($v['id'] == $question->id) {
-		// 		$prev = $k==0 ? $voxarr[ count($voxarr)-1 ]['id'] : $voxarr[ $k-1 ]['id'];
-		// 		$next = $k== count($voxarr)-1 ? $voxarr[0]['id'] : $voxarr[ $k+1 ]['id'];
-		// 		break;
-		// 	}
-		// }
+    		$main_chart = [];
+    		$second_chart = [];
+    		$third_chart = [];
+    		$relation_info = [];
+    		$total = 0;
+    		$totalf = 0;
+    		$totalm = 0;
+    		$answers = json_decode($question->answers);
+
+        	if($type=='dependency') {
+                $answer_id = null;
+
+        		$results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
+        		$results = $results->get();
+
+        		foreach ($results as $res) {
+        			$second_chart[ $answers[ $res->answer-1 ] ] = $res->cnt;
+        		}
+
+        		$relation_info['answer'] = $question->stats_answer_id-1;
 
 
-		$colors = [
-			'#8FD694',
-			'#002626',
-			'#0E4749',
-			'#95C623',
-			'#E55812',
-			//'#EFE7DA',
-			'#624CAB',
-			'#DB5461',
-			'#000000',
-			'#FF0000',
-			'#00FF00',
-			'#0000FF',
+        		$answers_related = json_decode($question->related->answers);
+        		$results = $this->prepareQuery($question->stats_relation_id, $dates);
+        		$results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
+        		$results = $results->get();
+        		foreach ($results as $res) {
+        			$main_chart[ $answers_related[ $res->answer-1 ] ] = $res->cnt;
+        			$total += $res->cnt;
+        		}
+        		
+
+        	} else if($scale=='gender') {
+                $answer_id = null;
+        		$results = $results->groupBy('answer', 'gender')->selectRaw('answer, gender, COUNT(*) as cnt');
+                $results = $results->get();
+        		foreach ($results as $res) {
+        			if(!isset($main_chart[ $answers[ $res->answer-1 ] ])) {
+        				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
+        				$second_chart[ $answers[ $res->answer-1 ] ] = 0; //m
+        				$third_chart[ $answers[ $res->answer-1 ] ] = 0; //f
+        			}
+        			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
+        			$total += $res->cnt;
+        			if($res->gender=='f') {
+        				$totalf += $res->cnt;
+        				$second_chart[ $answers[ $res->answer-1 ] ] += $res->cnt; //m
+        			}
+        			if($res->gender=='m') {
+        				$totalm += $res->cnt;
+        				$third_chart[ $answers[ $res->answer-1 ] ] += $res->cnt; //f
+        			}
+        		}
+        	} else if($scale=='country_id') {
+        		$countries = Country::get()->pluck('name', 'id')->toArray();
+
+        		$results = $results->groupBy('answer', 'country_id')->selectRaw('answer, country_id, COUNT(*) as cnt');
+        		$results = $results->get();
+
+        		foreach ($results as $res) {
+        			if(!isset($main_chart[ $answers[ $res->answer-1 ] ])) {
+        				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
+        			}
+        			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
+        			$total += $res->cnt;
+
+        			if( $res->country_id ) {
+        				if(!isset($second_chart[ $countries[$res->country_id]])) {
+        					$second_chart[$countries[$res->country_id]] = 0;
+        				}
+                        if(empty($answer_id) || $res->answer==$answer_id) {
+        				    $second_chart[$countries[$res->country_id]] += $res->cnt;
+                        }
+        			}
+        		}
+        	} else if($scale=='age') {
+        		$results = $results->groupBy('answer', 'age')->selectRaw('answer, age, COUNT(*) as cnt');
+        		$results = $results->get();
+
+        		$age_to_group = config('vox.age_groups');
+				foreach ($age_to_group as $k => $v) {
+					$second_chart[ $v ] = [];
+					foreach ($answers as $a) {
+						$second_chart[ $v ][$a] = 0;
+					}
+				}
+
+        		foreach ($results as $res) {
+        			if(!isset($main_chart[ $answers[ $res->answer-1 ] ])) {
+        				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
+        			}
+        			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
+        			$total += $res->cnt;
+
+
+        			if( $res->age ) {
+	        			$second_chart[ $age_to_group[$res->age] ][ $answers[ $res->answer-1 ] ] = $res->cnt; //m
+        			}
+        		}
+        	} else {
+        		$results = $results->groupBy('answer', $scale)->selectRaw('answer, '.$scale.', COUNT(*) as cnt');
+        		$results = $results->get();
+
+        		$age_to_group = config('vox.details_fields.'.$scale.'.values');
+				foreach ($age_to_group as $k => $v) {
+					$second_chart[ $v ] = [];
+					foreach ($answers as $a) {
+                        if(empty($answer_id) || $a==$answer_id) {
+    						$second_chart[ $v ][$a] = 0;
+                        }
+					}
+				}
+
+        		foreach ($results as $res) {
+        			if(!isset($main_chart[ $answers[ $res->answer-1 ] ])) {
+        				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
+        			}
+        			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
+        			$total += $res->cnt;
+
+
+        			if( $res->$scale ) {
+    	        		$second_chart[ $age_to_group[$res->$scale] ][ $answers[ $res->answer-1 ] ] = $res->cnt; //m
+        			}
+        		}
+        	}
+
+        	return Response::json( [
+        		'main_chart' => $main_chart,
+        		'second_chart' => $second_chart,
+        		'third_chart' => $third_chart,
+        		'total' => $total,
+        		'totalm' => $totalm,
+        		'totalf' => $totalf,
+                'relation_info' => $relation_info,
+        		'answer_id' => $answer_id,
+        	] );
+        }
+
+
+
+		$filters = [
+			'all' => 'All times',
+			'last7' => 'Last 7 days',
+			'last30' => 'Last 30 days',
+			'last365' => 'Last year',
 		];
-
-		$voxes = Vox::where('type', 'normal')->get();
-		$voxes = $voxes->reject(function($element) use($vox) {
-		    return $element->id == $vox->id;
-		});
-		$voxes->prepend($vox);
-
-		$answered = [];
-		if($this->user) {
-
-	        if($this->user->isBanned('vox')) {
-	            return redirect(getLangUrl('profile/bans'));
-	        }
-
-			$answered = VoxReward::where('user_id', $this->user->id)->get()->pluck('vox_id')->toArray();
+		$active_filter = Request::input('filter');
+		if(!isset($filters[$active_filter])) {
+			$active_filter = key($filters);
 		}
 
-
-		$start = Request::input('start');
-		if($start) {
-			try {
-				$startobj = new Carbon($start);			
-			} catch( \Exception $e) {}			
-		}
-		if(empty($startobj)) {
-			$startobj = Carbon::now()->subDays(14);
-			$start = $startobj->format('d-m-Y'); 			
-		}
-
-
-		$end = Request::input('end');
-		if($end) {
-			try {
-				$endobj = new Carbon($end.' 23:59:59');			
-			} catch( \Exception $e) {}
-		}
-		if(empty($endobj)) {
-			$endobj = new Carbon();
-			$end = $endobj->format('d-m-Y'); 
-		}
-		
-		$country = Request::input('country');
-		$countryobj = Country::find($country);
-		if(empty($countryobj)) {
-			$country = null;
-		}
-
-		$diff = $endobj->diffInDays($startobj);
-		$dates = [];
-
-		if($diff>31) {
-			$dategroup = ' DATE_FORMAT(`vox_answers`.`created_at`, "%Y-%m") `date`';
-		} else {
-			$dategroup = ' DATE_FORMAT(`vox_answers`.`created_at`, "%Y-%m-%d") `date`';
-		}
-
-		$curdate = $startobj->copy();
-		while($curdate->lte($endobj)) {
-			$dates[] = $curdate->format( $diff>31 ? 'Y-m' : 'Y-m-d');
-			if($diff>31) {
-				$curdate->addMonth();
-			} else {
-				$curdate->addDay();
-			}
-		}
-
-		// $allrewards = VoxReward::where('vox_id', $vox->id)->get();
-		// foreach ($allrewards as $r) {
-		// 	VoxAnswer::where('vox_id', $vox->id)->where('user_id', $r->user_id)->update(['is_completed' => true]);
-		// }
-
-		$t = microtime(true);
-
-		$answer_res = DB::table('vox_answers')
-		->join('users', 'users.id', '=', 'vox_answers.user_id')
-	    ->selectRaw('answer, COUNT(*) as cnt, '.$dategroup)
-	    ->where('vox_answers.vox_id', $vox->id)
-	    ->where('question_id', $question->id)
-	    ->where('is_completed', true)
-	    ->where('vox_answers.created_at', '>=', $startobj)
-	    ->where('vox_answers.created_at', '<=', $endobj)
-	    ->whereNull('users.deleted_at');
-
-		if($country) {
-			$answer_res = $answer_res->where('vox_answers.country_id', $country);			
-		}
-
-		$answer_res = $answer_res->groupBy('date', 'answer')
-		    ->get();
-
-		//dd( microtime(true) - $t);
-
-		$answer_data = [];
-		$answer_aggregates = [];
-		$chart_data = [];
-		foreach ($answer_res as $res) {
-			if(!isset( $answer_data[$res->date] )) {
-				$answer_data[$res->date] = [];
-			}
-			if(!isset( $answer_aggregates[$res->answer] )) {
-				$answer_aggregates[$res->answer] = 0;
-			}
-
-			$answer_data[$res->date][$res->answer] = $res->cnt;
-			$answer_aggregates[$res->answer] += $res->cnt;
-		}
-
-		$chart_data = [];
-		$answers = json_decode($question->answers, true);
-		foreach ($answers as $i => $ans) {
-			$ans_data = [
-	            'x' => [],
-	            'y' => [],
-	            'type' => 'scatter',
-	            'name' => $ans,
-	            'line' => [
-	            	'color' =>  $colors[$i]
-	            ]
-	        ];
-	        foreach ($dates as $date) {
-	        	$ans_data['x'][] = $date;
-	        	$ans_data['y'][] = isset($answer_data[$date][($i+1)]) ? $answer_data[$date][($i+1)] : 0;
-	        }
-			$chart_data[] = $ans_data;
-		}
-
-		$my_answer = null;
-		if($this->user) {
-			$my_answer = VoxAnswer::where([
-				['user_id', $this->user->id],
-				['question_id', $question->id],
-			])->first();
-			if(!empty($my_answer)) {
-				$my_answer = $my_answer->answer;
-			}
-			//dd($my_answer);
-		}
-
-		return $this->ShowVoxView('stats', array(
-			'cats' => VoxCategory::get(),
-			'start' => $start,
-			'end' => $end,
-			'country' => $country,
-			'countryobj' => $countryobj,
+		return $this->ShowVoxView('stats-survey', array(
+			'filters' => $filters,
+			'active_filter' => $active_filter,
 			'vox' => $vox,
-			'prev' => $prev,
-			'next' => $next,
-			'question' => $question,
-			'my_answer' => $my_answer,
-			'voxes' => $voxes,
-			'answered' => $answered,
-			'answer_aggregates' => $answer_aggregates,
-			'chart_data' => $chart_data,
-			'colors' => $colors,
-			'plotly' => true,
+			'scales' => config('vox.stats_scales'),
+
+
+			// 'cats' => VoxCategory::get(),
+			// 'start' => $start,
+			// 'end' => $end,
+			// 'country' => $country,
+			// 'countryobj' => $countryobj,
+			// 'prev' => $prev,
+			// 'next' => $next,
+			// 'question' => $question,
+			// 'my_answer' => $my_answer,
+			// 'voxes' => $voxes,
+			// 'answered' => $answered,
+			// 'answer_aggregates' => $answer_aggregates,
+			// 'chart_data' => $chart_data,
+			// 'colors' => $colors,
+			// 'plotly' => true,
+			'jscdn' => [
+				'https://www.gstatic.com/charts/loader.js',
+			],
 			'js' => [
 				'stats.js',
+				'daterange/js/datepicker.js',
+				'daterange/js/DateRange.js',
+				//'daterange/js/DateRangesWidget.js',
 			],
+			'css' => [
+				'../js-vox/daterange/css/datepicker/base.css',
+				'../js-vox/daterange/css/datepicker/clean.css',
+				//'../js/daterange/css/DateRangesWidget/base.css',
+			],
+
             'seo_title' => trans('vox.seo.stats.title', [
                 'title' => $vox->title,
                 'description' => $vox->description
@@ -255,5 +281,23 @@ class StatsController extends FrontController
                 'description' => $vox->description
             ]),
         ));
+	}
+
+	private function prepareQuery($question_id, $dates) {
+
+    	$results = VoxAnswer::where('question_id', $question_id)
+    	->where('is_completed', 1)
+    	->where('is_skipped', 0);
+
+    	if(is_array($dates)) {
+    		$from = Carbon::parse($dates[0]);
+    		$to = Carbon::parse($dates[1]);
+    		$results = $results->where('created_at', '>=', $from)->where('created_at', '<=', $to);
+    	} else if($dates) {
+    		$from = Carbon::parse($dates);
+    		$results = $results->where('created_at', '>=', $from);
+    	}
+
+    	return $results;
 	}
 }

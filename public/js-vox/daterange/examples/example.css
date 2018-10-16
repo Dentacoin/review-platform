@@ -1,0 +1,46 @@
+body {
+    font-family: Helvetica, arial, sans-serif;
+}
+
+#container {
+    width: 700px;
+    margin: 0 auto;
+}
+
+.item {
+    height: 200px;
+    border-bottom: 1px solid #D1D3D4;
+}
+
+.pickerContainer {
+    float: left;
+    width: 200px;
+}
+.pickerContainer.widget {
+	width: 230px;
+}
+
+div.comment {
+    margin: -15px 0 10px 0;
+
+    color: #505050;
+    font-size: 12px;
+}
+
+.pickerContainer.range,
+.pickerContainer.tworanges{
+    width: 375px;
+}
+
+#container .pickerCode {
+    float: right;
+    width: 494px;
+    border: 1px dashed #D1D3D4;
+    
+    margin: 0;
+    padding: 2px;
+}
+
+#container .pickerCode.range {
+    width: 319px;
+}

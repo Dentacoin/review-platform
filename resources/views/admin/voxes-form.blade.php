@@ -11,8 +11,7 @@
 <div class="row">
     <!-- begin col-6 -->
     <div class="col-md-12 ui-sortable">
-        {{ Form::open(array('id' => 'page-add', 'class' => 'form-horizontal', 'method' => 'post')) }}
-
+        {{ Form::open(array('id' => 'page-add', 'class' => 'form-horizontal', 'method' => 'post', 'files' => true)) }}
 
             <!-- begin panel -->
             <div class="panel panel-inverse">
@@ -45,9 +44,8 @@
                             {{ Form::select('type', $types, !empty($item) ? $item->type : null, array('class' => 'form-control')) }}
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.categories') }}</label>
+                        <label class="col-md-3 control-label" style="padding-top: 0px;">{{ trans('admin.page.'.$current_page.'.categories') }}</label>
                         <div class="col-md-9">
                             @foreach($category_list as $cat)
                                 <label class="col-md-3" for="cat-{{ $cat->id }}">
@@ -57,6 +55,34 @@
                                     {{ $cat->name }}
                                 </label>
                             @endforeach
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Featured</label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="featured" value="1" id="featured" {!! !empty($item) && $item->featured ? 'checked="checked"' : '' !!} >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Featured in Stats</label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="stats_featured" value="1" id="stats_featured" {!! !empty($item) && $item->stats_featured ? 'checked="checked"' : '' !!} >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Stats Image</label>
+                        <div class="col-md-9">
+                            {{ Form::file('photo', ['id' => 'photo', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
+                            * Size: 520х352px, up to 2 MB<br/>
+                            @if(!empty($item) && $item->hasimage)
+                                <a target="_blank" href="{{ $item->getImageUrl() }}">
+                                    <img src="{{ $item->getImageUrl(true) }}" style="background: #2f7de1; width: 200px;" />
+                                </a>
+                                <br/>
+                                <a href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/delpic') }}">Delete photo</a>
+                            @endif
                         </div>
                     </div>
 
@@ -110,6 +136,12 @@
                                     {{ Form::textarea('seo_description-'.$code, !empty($item) ? $item->translateOrNew($code)->seo_description : null, array('maxlength' => 2048, 'class' => 'form-control input-description')) }}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Stats description</label>
+                                <div class="col-md-4">
+                                    {{ Form::textarea('stats_description-'.$code, !empty($item) ? $item->translateOrNew($code)->stats_description : null, array('maxlength' => 2048, 'class' => 'form-control input-stats_description')) }}
+                                </div>
+                            </div>
 
                         </div>
                     @endforeach
@@ -117,8 +149,7 @@
             </div>
 
             <div class="form-group">
-                <label class="col-md-10 control-label"></label>
-                <div class="col-md-2">
+                <div class="col-md-12">
                     <button type="submit" class="btn btn-sm btn-success btn-block">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}</button>
                 </div>
             </div>
@@ -128,68 +159,6 @@
 
 
         @if(!empty($item))
-
-            <h3>Add question</h3>
-            
-            @include('admin.parts.vox-question', [
-                'question' => null,
-                'next' => $item->questions->count()+1
-            ])
-
-            <h3>Import / Export</h3>
-            <div class="panel panel-inverse">
-                <div class="panel-heading">
-                    Import / Export Options
-                </div>
-                <div class="tab-content">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <h4>Quick import</h4>
-                            <form class="form-horizontal" id="translations-import-quick" method="post" action="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/import-quick') }}" enctype="multipart/form-data">
-                                {!! csrf_field() !!}
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <input type="file" class="btn-block form-control" name="table" accept=".xls, .xlsx" />
-                                    </div>
-                                    <div class="col-md-12">
-                                        <button type="submit" class="btn btn-success btn-block">
-                                            Quick Import
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                            <br/>
-                            <a href="{{ url('survey-import-template.xlsx') }}">Download sample</a>
-                        </div>
-                        <div class="col-md-4">
-                            <h4>{{ trans('admin.page.'.$current_page.'.questions-export') }}</h4>
-                            <a class="btn btn-primary btn-block" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/export') }}" target="_blank">
-                                {{ trans('admin.page.'.$current_page.'.questions-export') }}
-                            </a>
-                        </div>
-                        <div class="col-md-4">
-                            <h4>{{ trans('admin.page.'.$current_page.'.questions-import') }}</h4>
-                            <form class="form-horizontal" id="translations-import" method="post" action="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/import') }}" enctype="multipart/form-data">
-                                {!! csrf_field() !!}
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <input type="file" class="btn-block form-control" name="table" accept=".xls, .xlsx" />
-                                    </div>
-                                    <div class="col-md-12">
-                                        <button type="submit" class="btn btn-success btn-block">
-                                            {{ trans('admin.page.'.$current_page.'.questions-import') }}
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                            <br/>
-                            <i>* Export a translation file and fill the texts in it</i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
 
             @if($item->questions->isNotEmpty())
                 <h3>Questions</h3>
@@ -205,15 +174,16 @@
                                     <th>{{ trans('admin.page.'.$current_page.'.question-num') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-title') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-control') }}</th>
+                                    <th>{{ trans('admin.page.'.$current_page.'.question-stats') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-type') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-trigger') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-edit') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-delete') }}</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="questions-draggable">
                                 @foreach($item->questions as $question)
-                                    <tr>
+                                    <tr question-id="{{ $question->id }}">
                                         <td>
                                             <input type="text" class="form-control question-number" style="width: 60px;" data-qid="{{ $question->id }}" value="{{ $question->order }}" />
                                         </td>
@@ -222,9 +192,12 @@
                                         </td>
                                         <td>
                                             {{ trans( 'admin.common.'.( $question->is_control ? 'yes' : 'no' ) ) }}
-                                            @if($question->go_back)
-                                                , go back to <br/> &raquo;
-                                                {{ App\Models\VoxQuestion::find($question->go_back)->question }}
+                                        </td>
+                                        <td>
+                                            @if($question->used_for_stats=='standard')
+                                                Yes
+                                            @elseif($question->used_for_stats=='dependency')
+                                                Related to: {{ $question->related->question }}
                                             @endif
                                         </td>
                                         <td>{{ trans('admin.enums.question-type.'.$question->type) }}</td>
@@ -246,6 +219,82 @@
                     </div>
                 </div>
             @endif
+
+
+
+            <a class="btn btn-primary btn-block" href="javascript: $('#add-new-question').show(); $('#add-new-question').prev().hide();">
+                Add Question
+            </a>
+            <div id="add-new-question" style="display: none;">
+                <h3>Add question</h3>
+                
+                @include('admin.parts.vox-question', [
+                    'question' => null,
+                    'next' => $item->questions->count()+1
+                ])
+            </div>
+
+            <br/>
+
+            <a class="btn btn-primary btn-block" href="javascript: $('#import-questions').show(); $('#import-questions').prev().hide();">
+                Import / Export
+            </a>
+            <div id="import-questions" style="display: none;">
+                <h3>Import / Export</h3>
+                <div class="panel panel-inverse">
+                    <div class="panel-heading">
+                        Import / Export Options
+                    </div>
+                    <div class="tab-content">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h4>Quick import</h4>
+                                <form class="form-horizontal" id="translations-import-quick" method="post" action="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/import-quick') }}" enctype="multipart/form-data">
+                                    {!! csrf_field() !!}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input type="file" class="btn-block form-control" name="table" accept=".xls, .xlsx" />
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-success btn-block">
+                                                Quick Import
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <br/>
+                                <a href="{{ url('survey-import-template.xlsx') }}">Download sample</a>
+                            </div>
+                            <div class="col-md-4">
+                                <h4>{{ trans('admin.page.'.$current_page.'.questions-export') }}</h4>
+                                <a class="btn btn-primary btn-block" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/export') }}" target="_blank">
+                                    {{ trans('admin.page.'.$current_page.'.questions-export') }}
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <h4>{{ trans('admin.page.'.$current_page.'.questions-import') }}</h4>
+                                <form class="form-horizontal" id="translations-import" method="post" action="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/import') }}" enctype="multipart/form-data">
+                                    {!! csrf_field() !!}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input type="file" class="btn-block form-control" name="table" accept=".xls, .xlsx" />
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-success btn-block">
+                                                {{ trans('admin.page.'.$current_page.'.questions-import') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <br/>
+                                <i>* Export a translation file and fill the texts in it</i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         @endif
 
 

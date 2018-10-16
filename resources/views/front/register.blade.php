@@ -80,12 +80,6 @@
 
 						<div {!! count($errors) ? '' : 'style="display: none;"' !!} id="register-div">
 
-						<!--
-						<div class="alert alert-warning">
-							Due to the overwhelming surge in popularity, new registrations on Trusted Review Platform are currently disabled to allow for infrastructure & security upgrades. Thank you for your understanding!
-						</div>
-						-->
-
 							<div id="step-1">
 								<p>
 									{{ trans('front.page.'.$current_page.'.step-1-hint') }}								
@@ -303,13 +297,11 @@
 								</div>
 							</div>
 
-
 						</div>
 
 						<!--
 
 						-->
-
 
 						<div class="form-group">
 							<div class="col-md-12">

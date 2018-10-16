@@ -1,5 +1,5 @@
 @if($item->categories)
 	@foreach($item->categories as $cat)
-		{{ $cat->category->name }} 
+		{{ !empty($cat->category) ? $cat->category->name : 'Deleted' }} 
 	@endforeach
 @endif

@@ -217,6 +217,8 @@ class Email extends Model
 
 		if($this->template->id==15) { //Ban
 			$content = str_replace('[expires]', $this->meta['expires'], $content);
+			$content = str_replace('[ban_days]', $this->meta['ban_days'], $content);
+			$content = str_replace('[ban_hours]', $this->meta['ban_hours'], $content);
 		}
 
 		if($this->template->id==18 || $this->template->id==19 || $this->template->id==22 || $this->template->id==26 || $this->template->id==27) { //Invitation accepted

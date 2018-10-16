@@ -76,6 +76,8 @@ class EmailTemplate extends Model
         
         if($this->id==15) {
             $codes[] = '[expires]';
+            $codes[] = '[ban_hours]';
+            $codes[] = '[ban_days]';
         } 
 
         if($this->id==18 || $this->id==19 || $this->id==22 || $this->id==26 || $this->id==27) {

@@ -2,173 +2,91 @@
 
 @section('content')
 
-		<div class="container container-ribbon">
-			<div class="ribbon clearfix">
-				<div class="left-t"></div>
-				<div class="right-t"></div>
-					<b>{{ $users_count }}</b>
-					{{ trans('vox.page.index.users-count') }}
+	<div class="full">
+		<p class="first-absolute">
+			<span>
+				EARN DENTACOIN <br/> by taking surveys
+			</span>
+			<br/>
+			<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">Start now</a>
+		</p>
+		<a href="javascript:;" class="second-absolute">
+			More
+		</a>
+	</div>
+	<div class="container section-work">
+
+		<h2>How it works</h2>		
+
+		<div class="row">
+			<div class="col-md-3 tac" style="{{ $user ? 'margin-left: 12%' : '' }}">
+				<div class="image-wrapper warm-image">
+					<img src="{{ url('new-vox-img/warm-up.png') }}">
+				</div>
+				<div>
+					<h4>1. WARM UP</h4>
+					<p>Answer a few “welcome” questions about your dental care habits to get your first 100 DCN!</p>
+				</div>
+			</div>
+			@if(!$user)
+				<div class="col-md-3 tac">
+					<div class="image-wrapper sign-image">
+						<img src="{{ url('new-vox-img/sign-up.png') }}">
+					</div>
+					<div>
+						<h4>2. SIGN UP</h4>
+						<p>Register quickly and easily with your Facebook profile. This is to make sure you are a real person.</p>
+					</div>
+				</div>
+			@endif
+			<div class="col-md-3 tac">
+				<div class="image-wrapper grab-image">
+					<img src="{{ url('new-vox-img/grab-reward.png') }}">
+				</div>
+				<div>
+					<h4>{{ $user ? '2' : '3' }}. GRAB REWARD</h4>
+					@if($user)
+						<p>Go to your Dentacoin Wallet to review add withdraw your reward.</p>
+					@else
+						<p>Upon registration, 100 DCN will be assigned to your profle. You can withdraw them anytime!</p>
+					@endif
+				</div>
+			</div>
+			<div class="col-md-3 tac">
+				<div class="image-wrapper no-image">
+					<img src="{{ url('new-vox-img/take-surveys.png') }}">
+				</div>
+				<div>
+					<h4>{{ $user ? '3' : '4' }}. TAKE SURVEYS</h4>
+					<p>Each survey will give you coins. The more questions you answer, the bigger your reward. Ready?</p>
+				</div>
 			</div>
 		</div>
-		<div class="full">
-			<p class="first-absolute">
-				{{ trans('vox.page.'.$current_page.'.title') }}
-			</p>
-			<p class="second-absolute">
-				{{ trans('vox.page.'.$current_page.'.title-voice') }}
-			</p>
+
+		<div class="row tac">
+			<div class="col-md-12">
+				<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">Start now</a>
+			</div>
 		</div>
+	</div>
+
+	<div class="section-stats">
 		<div class="container">
-			<div class="questions">
-				<div class="questions-dots">
-					<div class="dot" id="current-question-bar" style="width: 0%;"></div>
-				</div>
-				<div class="triangle"></div>
-				<div class="row questions-header clearfix">
-					<div class="col-md-6">
-						<span class="bold">
-							{!! trans('vox.common.estimated_time', [
-								'time' => '<span id="current-question-num"></span>'
-							]) !!}
-						</span>
-					</div>
-					<div class="col-md-6 tar">
-						<span class="bold">
-							<span id="dcn-test-reward-before">
-								{!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
-							</span>
-							<span id="dcn-test-reward-after" style="display: none;">
-								{!! trans('vox.common.dcn_collected') !!}:
-								<span id="current-question-reward">
-									
-								</span>
-							</span>
-						</span>
-					</div>
-				</div>
-
-				@foreach( $vox->questions as $question )
-					<div class="question-group" data-id="{{ $question->id }}" {!! $loop->first && !$has_test ? '' : 'style="display: none;"' !!} >
-						<div class="question">
-							{!! nl2br($question->question) !!}
-						</div>
-						<div class="answers">
-							@foreach(json_decode($question->answers, true) as $answer)
-								<a href="javascript:;" class="answer" data-num="{{ $loop->index+1 }}">{{ $answer }}</a>
-							@endforeach
-						</div>
-					</div>
-				@endforeach
-
-				<div class="question-group birthyear-question" data-id="birthyear" style="display: none;">
-					<div class="question">
-						What's your year of birth?
-					</div>
-					<div class="answers">
-						<input type="number" name="birthyear-answer" id="birthyear-answer" min="{{ date('Y')-100 }}" max="{{ date('Y')-18 }}">
-					</div>
-
-					<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
-				</div>
-
-				<div class="question-group gender-question" data-id="gender" style="display: none;">
-					<div class="question">
-						What's your gender?
-					</div>
-					<div class="answers">
-						<a class="answer answer-checkbox" for="answer-gende-m" data-num="m">
-							<input id="answer-gender-m" type="radio" name="gender-answer" class="answer" value="m" style="display: none;">
-							Male										
-						</a>
-						<a class="answer answer-checkbox" for="answer-gender-f" data-num="f">
-							<input id="answer-gender-f" type="radio" name="gender-answer" class="answer" value="f" style="display: none;">
-							Female										
-						</a>
-					</div>
-				</div>
-
-				<div class="question-group location-question" data-id="location" style="display: none;">
-					<div class="question">
-						Where do you live?
-					</div>
-					<div class="answers">
-						{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , null , array('class' => 'form-control country-select') ) }}
-                        {{ Form::select( 'city_id' , ['' => trans('vox.common.select-country')] , null , array('class' => 'form-control city-select') ) }}
-					</div>
-
-					<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
-				</div>
-
-				@foreach( $details_test->questions as $question )
-					<div class="question-group" data-id="{{ $question->id }}" style="display: none;" >
-						<div class="question">
-							{!! nl2br($question->question) !!}
-						</div>
-						<div class="answers">
-							@foreach(json_decode($question->answers, true) as $answer)
-								<a href="javascript:;" class="answer" data-num="{{ $loop->index+1 }}">{{ $answer }}</a>
-							@endforeach
-						</div>
-					</div>
-				@endforeach
-
-				
-				<div class="question-done" {!! $has_test ? '' : 'style="display: none;"' !!}>
-					<div class="question tac">
-						{!! nl2br(trans('vox.page.'.$current_page.'.thank-you')) !!}
-					</div>
-				</div>
-
-				<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-danger">
-					{!! trans('vox.page.questionnaire.answer-error') !!}
-				</div>
-
-				<!-- <div class="question-hints" {!! $has_test ? 'style="display: none;"' : ''  !!}>
-					<p class="hint">
-						{{ trans('vox.page.'.$current_page.'.finish-all', ['reward' => $vox->getRewardTotal()]) }}
-					</p>
-				</div> -->
-			</div>
+			<img src="{{ url('new-vox-img/stats-front.png') }}">
+			<h3>Curious to see our dental survey stats?</h3>
+			<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">Check stats</a>
 		</div>
+	</div>
 
-		<script type="text/javascript">
-			var vox = {
-				count: {{ $real_questions }},
-				reward: {{ $vox->getRewardTotal() }},
-				current: {{ $has_test ? $vox->questions->count() : '1' }}
-			}
-		</script>
-
-
-		<div id="first-test-done" class="modal fade" role="dialog">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-body">
-						<p class="popup-title">
-							{{ trans('vox.page.'.$current_page.'.good-job') }}
-						</p>
-						<p class="popup-second-title">
-							{{ trans('vox.page.'.$current_page.'.just-won') }}
-						</p>
-						<div class="price">
-							<img src="{{ url('img/dc-logo.png') }}"/>
-							<span class="coins">{{ $vox->getRewardTotal() }} DCN</span>
-						</div>
-						<p class="popup-third-title">
-							{{ trans('vox.page.'.$current_page.'.ready-to-get') }}
-						</p>
-
-						<div class="popup-buttons">
-							<a class="popup-button" data-toggle="modal" data-target="#loginPopup" href="javascript:;">
-								{{ trans('vox.page.'.$current_page.'.log-in') }}
-							</a>
-							<a class="popup-button" data-toggle="modal" data-target="#registerPopup" href="javascript:;">
-								{{ trans('vox.page.'.$current_page.'.register') }}
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+	<div class="container section-about">
+		<h2 class="tac">About Dentavox</h2>
+		<h4>PROVIDING VALUABLE PATIENT INSIGHTS TO help improve global dental health</h4>
+		<p>
+			DentaVox is a market research platform developed by the <a href="https://dentacoin.com/" target="_blank">Dentacoin Foundation.</a> The web app collects customer wisdom through surveys on various dental care topics. After each questionnaire you take, you are rewarded with a different amount of Dentacoin (DCN), the first cryptocurrency created for the dental industry.
+		</p>
+		<p>
+			You can store the DCN collected in your wallet, exchange it to other altcoins and/or currencies or use them to pay for dental services in multiple <a href="https://dentacoin.com/partner-network" target="_blank">partner dental practices</a> across the world.
+		</p>
+	</div>
     	
 @endsection

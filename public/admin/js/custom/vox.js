@@ -1,15 +1,46 @@
 $(document).ready(function(){
 
+
+	$('.toggler').change( function() {
+		var id = $(this).attr('id');
+		var field = $(this).attr('field');
+        $.ajax({
+            url     : 'cms/vox/edit-field/'+id+'/'+field+'/'+( $(this).is(':checked') ? 1 : 0 ),
+            type    : 'GET'
+        });
+
+	} );
+
+
 	var handleScaleChanges = function() {
 		var qtype = $('.question-type-input').val();
+		if(!qtype) {
+			return;
+		}
+
 		if(qtype!='scale' && $('.question-scale-input').val().length ) {
 			$('.answers-group, .answers-group-add').hide();
 		} else {
 			$('.answers-group, .answers-group-add').show();
 		}
+
+		var stats = $('.question-stats-input').val();
+		if(stats=='dependency') {
+			$('#stat_relations').show();
+			$('#stat_title').show();
+			$('#stat_standard').hide();
+		} else if(stats=='standard') {
+			$('#stat_relations').hide();
+			$('#stat_title').show();
+			$('#stat_standard').show();
+		} else {
+			$('#stat_standard').hide();
+			$('#stat_relations').hide();
+			$('#stat_title').hide();
+		}
 	}
 
-	$('.question-type-input, .question-scale-input').change(handleScaleChanges);
+	$('.question-type-input, .question-scale-input, .question-stats-input').change(handleScaleChanges);
 	handleScaleChanges();
 
 	$('.questions-form .btn-add-answer').click( function() {
@@ -134,4 +165,92 @@ $(document).ready(function(){
 
 	});
 	
+
+
+	$( ".answers-draggable" ).sortable().disableSelection();
+	$( ".questions-draggable" ).sortable({
+		update: function( event, ui ) {	
+			console.log('update');
+			setTimeout( function(){
+				var ids = [];
+				$('.questions-draggable tr').each( function() {
+					ids.push( $(this).attr('question-id') );
+				} )
+
+		        $.ajax({
+		            url     : $('#page-add').attr('action') + '/change-all',
+		            type    : 'POST',
+		            data 	: {
+		            	list: ids
+		            },
+		            dataType: 'json',
+		            success : (function( res ) {
+		            	var i=1;
+		            	$('.questions-draggable tr').each( function() {
+							$(this).find('.question-number').val(i);
+							i++;
+						} )
+		            }).bind( this ),
+		            error : function( data ) {
+		            }
+		        });
+			}, 0);
+		},
+	}).disableSelection();
+
+	$('.add-faq').click( function() {
+		$('#faq-accordion').append( $('#accordion-template').html() );
+		handleFaqQuestions();
+	} );
+
+	var handleFaqQuestions = function() {
+		$('.btn-new-faq').off('click').click( function() {
+			$(this).closest('.panel-body').find('.panel-group').append( $('#question-template').html() );
+		} );
+	}
+	handleFaqQuestions();
+
+	$('.save-faq').click( function() {
+		var data = [];
+		$('.main-panel').each( function() {
+
+			if( $(this).closest('#accordion-template').length ) {
+				return;
+			}
+
+			var section = {
+				title: $(this).find('.section-title').val(),
+				questions: []
+			};
+
+			$(this).find('.question-panel').each( function() {
+				section.questions.push([
+					$(this).find('input[type="text"]').val(),
+					$(this).find('textarea').val(),
+				])
+			} );
+
+			data.push(section);
+
+		} );
+
+
+        $.ajax({
+            url     : window.location.href,
+            type    : 'POST',
+            data 	: {
+            	'faq': data
+            },
+            dataType: 'json',
+            success : (function( res ) {
+                ajax_action = false;
+                window.location.href = window.location.href;
+            }).bind( this ),
+            error : function( data ) {
+                ajax_action = false;
+                alert('Something went wrong!');
+            }
+        });
+
+	} );
 });

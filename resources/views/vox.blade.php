@@ -23,7 +23,7 @@
         <meta name="twitter:description" content="{{ $social_description }}" />
         <meta name="twitter:image" content="{{ $social_image }}"/>
 
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
         @if(config('langs')[App::getLocale()]['rtl'])
         	<link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css" crossorigin="anonymous">
         @else
@@ -34,8 +34,14 @@
 		{!! config('langs')[App::getLocale()]['font'] !!}
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/app.css').'?ver='.$cache_version }}" />
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/flickity.min.css').'?ver='.$cache_version }}" />
-		<link rel="stylesheet" type="text/css" href="{{ url('/css/datepicker.css').'?ver='.$cache_version }}" />
-		<link rel="stylesheet" type="text/css" href="{{ url('/css/style-vox.css').'?ver='.$cache_version }}" />
+		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-vox.css').'?ver='.$cache_version }}" />
+		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/style-vox.css').'?ver='.$cache_version }}" /> -->
+
+        @if(!empty($css) && is_array($css))
+            @foreach($css as $file)
+				<link rel="stylesheet" type="text/css" href="{{ url('/css/'.$file).'?ver='.$cache_version }}" />
+            @endforeach
+        @endif
 
         @if(!empty($csscdn) && is_array($csscdn))
             @foreach($csscdn as $file)
@@ -99,319 +105,172 @@
 
     </head>
 
-    <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($satic_page) ? 'page-page' : '' }} {{ (config('langs')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }}">
+    <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($satic_page) ? 'page-page' : '' }} {{ (config('langs')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }} {{ !empty($user) ? 'logged-in' : 'logged-out' }}">
 		<noscript>
 			<img height="1" width="1" src="https://www.facebook.com/tr?id=2010503399201502&ev=PageView&noscript=1"/>
 		</noscript>
 		
-		<header>
-			<div class="container">
-				<div class="navbar clearfix">
-					<a href="{{ getLangUrl('/') }}" class="logo">
-						<img src="{{ url('img-vox/logo.png') }}">
-					</a>
-					<div class="header-title">
-						<a href="{{ getLangUrl('/') }}">
-							<img src="{{ url('img-vox/text-logo.png') }}">
+		<div class="above-fold">
+			<header>
+				<div class="container">
+					<div class="navbar clearfix">
+						<a href="{{ getLangUrl('/') }}" class="logo col-md-4">
+							<img src="{{ url('new-vox-img/logo-vox.png') }}" class="desktop">
+							<img src="{{ url('new-vox-img/logo-vox-mobile.png') }}" class="mobile">
 						</a>
-						<span>
-							{!! trans('vox.header.question-count', ['count' => '<b id="header_questions">'.number_format($header_questions, 0, '', ' ').'</b>' ]) !!}
-						</span>
-					</div>
-					<div class="header-right">
-						@if(!empty($user))
-								<a class="header-a" href="{{ getLangUrl('profile') }}">
-									{{ $user->name }}
-								</a>
-								<a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fa fa-sign-out "></i></a>
-								<p><a href="{{ getLangUrl('profile/wallet') }}">
-									<span id="header-balance">{{ $user->getVoxBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getVoxBalance() * $dcn_price) }}</span>
-								</a></p>
-						@else
-							<a href="javascript:;" data-toggle="modal" data-target="#loginPopup" class="sign-in">
-								{{ trans('vox.header.sign-in') }}
-							</a>
-						@endif
-						<p>
-							1 DCN = $<span id="header-rate">{{ sprintf('%.4F', $dcn_price) }}</span> 
-							<span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span>
-						</p>
+						<div class="header-title col-md-4">
+							@if($current_page=='index')
+								<table>
+									<tr>
+										<td class="tar"><b>{{ number_format($users_count, 0, '', ' ') }}</b></td>
+										<td>{{ trans('vox.page.index.users-count') }}</td>
+									</tr>
+									<tr>
+										<td class="tar"><b id="header_questions">{{ number_format($header_questions, 0, '', ' ') }}</b></td>
+										<td>{!! trans('vox.header.question-count', ['count' => '' ]) !!}</td>
+									</tr>
+								</table>
+							@endif
+						</div>
+						<div class="header-right col-md-4 tar flex">
+							@if($current_page=='welcome-survey')
+								@if($prev_user)
+									<div class="twerk-it">
+										<div class="user-and-price header-a">
+											<span class="tar">
+												Already been here?
+											</span>
+											<br/>
+											<a class="my-name" style="font-weight: bold;" href="{{ getLangUrl('login') }}">
+												Log into your Profile!
+											</a>
+										</div>
+										<a class="header-a" href="{{ getLangUrl('login') }}">
+											<img class="header-avatar{!! $prev_user->hasimage ? '' : ' default' !!}" src="{{ $prev_user->getImageUrl(true) }}">
+										</a>
+									</div>
+
+								@endif
+							@elseif( $current_page!='register' )
+								@if($user)
+									<div class="user-and-price header-a">
+										<a class="my-name" href="{{ getLangUrl('profile') }}">
+											Hello, {{ $user->getName() }}
+										</a>
+										<a href="{{ getLangUrl('profile/wallet') }}">
+											<span id="header-balance">{{ $user->getVoxBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getVoxBalance() * $dcn_price) }}</span>
+										</a>
+									</div>
+									<a class="header-a" >
+										<img class="header-avatar{!! $user->hasimage ? '' : ' default' !!}" src="{{ $user->getImageUrl(true) }}">
+									</a>
+
+									<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
+									<div class="expander{!! $user->hasimage ? ' has-image' : '' !!}">
+										<a href="{{ getLangUrl('logout') }}">
+											<i class="fas fa-power-off"></i>
+											Log out
+										</a>
+										<a class="btn" href="{{ getLangUrl('profile') }}">
+											My Account
+										</a>
+										@if(!$user->is_verified || !$user->email)
+											<span>
+												* You cannot access your Profile until it's approved.
+											</span>
+										@endif
+									</div>
+								@else
+									<span class="dcn-rate">
+										1 DCN = $<span id="header-rate">{{ sprintf('%.4F', $dcn_price) }}</span> 
+										<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
+									</span>
+									<a href="{{ getLangUrl('login') }}" class="start-button">
+										Log in
+									</a>
+								@endif
+							@endif
+						</div>
 					</div>
 				</div>
+			</header>
+
+			<div class="site-content">
+		   
+				@yield('content')
+
 			</div>
-		</header>
-
-
-		<div class="site-content">
-	   
-			@yield('content')
-
 		</div>
 
-		@if(empty($user))
-			<div id="fb-root"></div>
-			<script>(function(d, s, id) {
-			var js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) return;
-			js = d.createElement(s); js.id = id;
-			js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=1906201509652855&autoLogAppEvents=1';
-			fjs.parentNode.insertBefore(js, fjs);
-			}(document, 'script', 'facebook-jssdk'));</script>
 
-
-			<div id="loginPopup" class="modal fade" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-body">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<p class="popup-title">
-								{{ trans('vox.popup.login.title') }}
-							</p>
-							<b><p class="popup-second-title">
-								{{ trans('vox.popup.login.subtitle') }}
-							</p><b>
-							<p class="sign-title">
-								{{ trans('vox.popup.login.sign-in') }}
-							</p>
-							<div class="fb-button-inside">
-								<a href="{{ getLangUrl('login/facebook') }}" class="">
-								</a>
-								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+		@if(!empty($unbanned))
+			<div class="popup unbanned active">
+				<div class="wrapper">
+					<img src="{{ url('new-vox-img/back-from-ban'.$unbanned_times.'.png') }}" class="zman" />
+					<div class="inner">
+						<h2>Welcome back, {{ $user->getName() }}!</h2>
+						<p>
+							{!! $unbanned_text !!}
+						</p>
+						<div class="flex">
+							<div class="bans-received">
+								Bans received:
+								<div class="flex">
+									@for($i=1;$i<=4;$i++)
+										<img src="{{ url('new-vox-img/popup-sign-'.($i==4 ? '5' : ( $i<=$unbanned_times ? $i : '0' )).'.png') }}" />
+									@endfor
+								</div>
 							</div>
-
-							<form action="{{ getLangUrl('login') }}" method="post" id="login-form">
-								{!! csrf_field() !!}
-								<div class="form-group">
-									{{ trans('vox.popup.login.or') }}
-								</div>
-								<div class="form-group">
-									<input type="text" class="form-control" name="email" id="email" placeholder="{{ trans('vox.popup.login.placeholder-email') }}">
-								</div>
-								<div class="form-group">
-									<input type="password" class="form-control" name="password" id="password" placeholder="{{ trans('vox.popup.login.placeholder-password') }}">
-								</div>
-							    <input id="remember" type="hidden" name="remember" value="1" >
-
-								<div class="alert alert-warning" id="login-error" style="display: none;">
-									{{ trans('vox.popup.login.error') }}
-								</div>
-								<button type="submit" class="btn btn-primary">
-									{{ trans('vox.popup.login.button') }}
-								</button>
-                				@include('front.errors')
-							</form>
-							<a href="javascript:;" data-toggle="modal" data-target="#registerPopup" class="blue-link">
-								{{ trans('vox.popup.login.register') }}
-							</a>
-							<br/>
-							<br/>
-							<a href="{{ getLangUrl('forgot-password') }}" class="blue-link">
-								{{ trans('vox.popup.login.recover-password') }}
+							<a class="btn closer btn-unban btn-unban-{{ $unbanned_times }}">
+								Take Surveys
 							</a>
 						</div>
 					</div>
-				</div>
-			</div>
-
-			<div id="registerPopup" class="modal fade" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-body">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<b><p class="popup-second-title">
-								{{ trans('vox.popup.register.title') }}
-							</p><b>
-								<p class="sign-title">
-									{{ trans('vox.popup.register.subtitle') }}
-								</p>
-								<p>
-									{!! nl2br(trans('vox.popup.register.fb-only')) !!}
-								</p>
-
-							<!--
-							<br/>
-							<br/>
-							<div class="alert alert-info" >
-								We are currently improving our fake accounts detection mechanism. Therefore, no new registrations are possible until further notice. Please enter your contact information for updates:
-							</div>
-
-							<div class="form-group">
-							  	<div class="col-md-12" style="float: none; margin-bottom: 10px;">
-							    	<input type="email" id="stop-email" name="email" class="form-control" placeholder="Your email address">
-							    </div>
-							</div>
-						  	<div class="form-group">
-							  	<div class="col-md-12" style="float: none; margin-bottom: 10px;">
-							    	<input type="text" id="stop-name" name="name" class="form-control" placeholder="Your name">
-							    </div>
-							</div>
-						  	<div class="form-group">
-						  		<div class="col-md-12" style="float: none; margin-bottom: 10px;">
-							    	<button type="submit" id="stop-submit" name="submit" class="btn btn-primary btn-block">Keep me posted</button>
-							    </div>
-							</div>
-							-->
-
-							<label for="read-privacy" class="reg-privacy">
-								<input id="read-privacy" type="checkbox" name="read-privacy">
-								{!! nl2br(trans('vox.popup.register.agree-privacy', [
-									'privacylink' => '<a href="'.getLangUrl('privacy').'">', 
-									'endprivacylink' => '</a>'
-								])) !!}
-							</label>
-
-							<div class="fb-button-inside" style="display: none;">
-								<a href="{{ getLangUrl('register/facebook') }}" class="">
-								</a>
-								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
-							</div>
-
-							<br/>
-							<br/>
-                			@include('front.errors')
-						</div>
-					</div>
-				</div>
-			</div>
-		@endif
-
-        @if($user && !$user->gdpr_privacy)
-			<div id="gdprPopupVox" class="modal active" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-body">
-							<img src="{{ url('img/popups/GDPR-policy.png') }}">
-							<h2>
-								{{ trans('vox.popup.gdpr.title') }}
-							</h2>
-							<p>
-								{!! nl2br(trans('vox.popup.gdrp.description', [
-									'gdrplink' => '<a href="https://www.eugdpr.org/" target="_blank">' ,
-									'endgdrplink' => '</a>' ,
-									'privacylink' => '<a href="https://dentacoin.com/privacy/" target="_blank">', 
-									'endprivacylink' => '</a>'
-								])) !!}
-							</p>
-
-							<a href="javascript:;" class="agree-gdpr">{{ trans('vox.popup.gdpr.agree') }}</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		@elseif(!empty($welcome_test))
-			<div class="new-popup popup-welcome">
-				<div class="new-popup-wrapper">
-					<div class="step">
-						<img src="{{ url('img/popups/tutorial-1.jpg') }}" />
-						<h2>
-							{{ trans('vox.welcome.title') }}
-						</h2>
-						<p>
-							{!! nl2br(trans('vox.welcome.content')) !!}
-							
-						</p>
-						<a class="active-btn step-btn" href="{{ $welcome_test }}">{{ trans('vox.welcome.button') }}</a>
-					</div>
-				</div>
-			</div>
-		@elseif($show_tutorial)
-			<div class="new-popup popup-tutorial">
-				<div class="new-popup-wrapper">
-					<div class="step">
-						<img src="{{ url('img/popups/tutorial-1.jpg') }}" />
-						<h2>
-							{{ trans('vox.tutorial.step1.title') }}
-						</h2>
-						<p>
-							{!! nl2br(trans('vox.tutorial.step1.content')) !!}
-							
-						</p>
-						<a class="active-btn step-btn">{{ trans('vox.tutorial.next') }}</a>
-					</div>
-					<div class="step" style="display: none;">
-						<img src="{{ url('img/popups/tutorial-2.jpg') }}" />
-						<h2>
-							{{ trans('vox.tutorial.step2.title') }}							
-						</h2>
-						<p>
-							{!! nl2br(trans('vox.tutorial.step2.content')) !!}
-						</p>
-						<a class="active-btn step-btn">{{ trans('vox.tutorial.next') }}</a>
-					</div>
-					<div class="step" style="display: none;">
-						<img src="{{ url('img/popups/tutorial-3.jpg') }}" />
-						<h2>
-							{{ trans('vox.tutorial.step3.title') }}
-						</h2>
-						<p>
-							{!! nl2br(trans('vox.tutorial.step3.content')) !!}
-						</p>
-						<a class="active-btn step-btn">{{ trans('vox.tutorial.next') }}</a>
-					</div>
-					<div class="step" style="display: none;">
-						<img src="{{ url('img/popups/tutorial-4.jpg') }}" />
-						<h2>
-							{{ trans('vox.tutorial.step4.title') }}
-						</h2>
-						<p>
-							{!! nl2br(trans('vox.tutorial.step4.content')) !!}
-						</p>
-						<a class="active-btn step-btn">{{ trans('vox.tutorial.next') }}</a>
-					</div>
-					<div class="step" style="display: none;">
-						<img src="{{ url('img/popups/tutorial-5.jpg') }}" />
-						<h2>
-							{{ trans('vox.tutorial.step5.title') }}
-						</h2>
-						<p>
-							{!! nl2br(trans('vox.tutorial.step5.content')) !!}
-						</p>
-						<a class="active-btn step-btn">{{ trans('vox.tutorial.finish') }}</a>
-					</div>
-					<a href="javascript:;" class="closer">
-						<i class="fa fa-remove"></i>
+					<a class="closer x">
+						<i class="fas fa-times"></i>
 					</a>
 				</div>
 			</div>
+
 		@endif
-
-		<footer>
-			<div class="container clearfix">
-				<a href="https://dentacoin.com/" target="_blank" class="footer-logo">
-					<img src="{{ url('img-vox/dc-logo.png') }}">
-					<p class="bold">
-						{{ trans('vox.footer.company-name') }}
-					</p>
-				</a>
-				<div class="footer-text">
-					{{ trans('vox.footer.company-info') }}
-					<br/>
-					<a href="https://dentacoin.com/privacy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
+		
+		<div class="footer-expander">
+			<footer>
+				<div class="container clearfix">
+					<a href="https://dentacoin.com/" target="_blank" class="footer-logo col-md-3 flex flex-center">
+						<img src="{{ url('img-vox/dc-logo.png') }}">
+						<p class="bold">
+							{{ trans('vox.footer.company-name') }}
+						</p>
+					</a>
+					<div class="footer-text col-md-6 tac">
+						<div class="footer-menu">
+							<a href="{{ getLangUrl('faq') }}">FAQ</a>
+							<a href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
+							<a href="https://play.google.com/store/apps/details?id=com.dentacoin.dentacare" target="_blank">DentaCare</a>
+							<a href="https://reviews.dentacoin.com/" target="_blank">Trusted Reviews</a>
+						</div>
+						<small>
+							®Dentacoin Foundation. All rights reserved. 2018
+						</small>
+					</div>
+					<div class="socials col-md-3">
+						Stay in the loop: &nbsp;
+						<a class="social" href="https://t.me/dentacoin" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+						<a class="social" href="https://www.facebook.com/DentaVox-1578351428897849/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+					</div>
 				</div>
-				<div class="socials">
-					<select id="language-selector" class="form-control lang-select" name="languages" style="display: none;">
-			            @foreach (config('langs') as $key => $lang)
-							<option {!! App::getLocale()==$key ? 'selected="selected"' : '' !!} value="{{ $key }}">{{ $lang['name'] }}</option>
-					    @endforeach
-					</select>
-					<br/>
-					Follow us on &nbsp;
-					<a class="social" href="https://www.facebook.com/DentaVox-1578351428897849/"><i class="fa fa-facebook"></i></a>
-					<!--
-						<a class="social" href="javascript:;"><i class="fa fa-twitter"></i></a>
-					-->
-				</div>
-			</div>
-		</footer>
+			</footer>
+		</div>
 
-		@if(empty($_COOKIE['show-update']))
+		<!-- @if(empty($_COOKIE['show-update']))
 			<div class="alert alert-warning alert-update" style="text-align: center;">
 				UPDATE IN PROGRESS: We’re improving DentaVox and working on new surveys. There might be some temporary technical issues. Sorry for any inconvenience and thank you for your understanding!
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-		@endif
+		@endif -->
 
         <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -434,6 +293,7 @@
         @endif
         <script type="text/javascript">
         	var lang = '{{ App::getLocale() }}';
+        	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         </script>
     </body>
 </html>

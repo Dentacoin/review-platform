@@ -53,7 +53,7 @@ class AuthenticateUser extends FrontController
             return redirect(getLangUrl('profile'));
         }
         
-        return redirect(getLangUrl('/'));
+        return $this->ShowVoxView('login');
     }
 
     public function postLogin(Request $request)
@@ -78,24 +78,24 @@ class AuthenticateUser extends FrontController
     {
         if (Auth::guard('web')->attempt( ['email' => $request->input('email'), 'password' => $request->input('password') ], $request->input('remember') )) {
 
+            if(Auth::guard('web')->user()->isBanned('vox')) {
+                return redirect( getLangUrl('banned'));
+            }
+            
             $intended = session()->pull('our-intended');
 
-            return Response::json( [
-                'success' => true,
-                'url' => $intended ? $intended : getLangUrl('/')
-            ] );
+            return redirect( $intended ? $intended : getLangUrl('/') );
         } else {
-            return Response::json( [
-                'success' => false,
-                'banned' => false
-            ] );
+            return redirect( getLangUrl('login') )
+            ->withInput()
+            ->with('error-message', trans('front.page.login.error'));         
         }
     }
 
     public function getLogout() {
         session(['login-logged' => null]);
         Auth::guard('web')->logout();
-        return redirect('/');
+        return redirect( getLangUrl('/') );
     }
 
 }

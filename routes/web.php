@@ -51,8 +51,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('blacklist', 						'BlacklistController@list');
 	Route::get('blacklist/delete/{id}', 			'BlacklistController@delete');
 
-	Route::get('account', 							'UsersController@martin');
-
 	Route::get('users', 							'UsersController@list');
 	Route::post('users/mass-delete', 				'UsersController@massdelete');
 	Route::get('users/byweek', 						'UsersController@byweek');
@@ -96,7 +94,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('vox', 								'VoxesController@list');
 	Route::get('vox/list', 							'VoxesController@list');
 	Route::any('vox/add', 							'VoxesController@add');
+	Route::any('vox/edit-field/{id}/{field}/{value}', 					'VoxesController@edit_field');
 	Route::any('vox/edit/{id}', 					'VoxesController@edit');
+	Route::any('vox/edit/{id}/delpic', 				'VoxesController@delpic');
 	Route::any('vox/edit/{id}/export', 				'VoxesController@export');
 	Route::any('vox/edit/{id}/import', 				'VoxesController@import');
 	Route::any('vox/edit/{id}/import-quick', 				'VoxesController@import_quick');
@@ -104,6 +104,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('vox/edit/{id}/question/add', 		'VoxesController@add_question');
 	Route::any('vox/edit/{id}/question/{question_id}', 		'VoxesController@edit_question');
 	Route::get('vox/edit/{id}/question-del/{question_id}', 		'VoxesController@delete_question');
+	Route::any('vox/edit/{id}/change-all', 			'VoxesController@reorder');
 	Route::any('vox/edit/{id}/change-number/{question_id}', 		'VoxesController@order_question');
 	Route::any('vox/edit/{id}/change-question/{question_id}', 		'VoxesController@change_question_text');
 	Route::get('vox/ideas', 						'VoxesController@ideas');
@@ -114,6 +115,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('vox/scales', 						'VoxesController@scales');
 	Route::any('vox/scales/add', 					'VoxesController@add_scale');
 	Route::any('vox/scales/edit/{id}', 				'VoxesController@edit_scale');
+	Route::any('vox/faq', 							'VoxesController@faq');
 
 	Route::get('emails', 							'EmailsController@list');
 	Route::get('emails/edit/{id}', 					'EmailsController@edit');
@@ -193,8 +195,6 @@ $reviewRoutes = function () {
 			Route::any('youtube', 								'DentistController@youtube');
 			Route::any('full-review/{id}',						'DentistController@fullReview');
 
-			Route::get('vpn', 									'VpnController@list');
-
 			Route::group(['middleware' => 'auth:web'], function () {
 				Route::get('profile', 							'ProfileController@home');
 				Route::get('profile/home', 						'ProfileController@home');
@@ -243,7 +243,6 @@ $reviewRoutes = function () {
 };
 Route::domain('reviews.dentacoin.com')->group($reviewRoutes);
 Route::domain('dev-reviews.dentacoin.com')->group($reviewRoutes);
-Route::domain('urgent-reviews.dentacoin.com')->group($reviewRoutes);
 
 
 $voxRoutes = function () {
@@ -258,17 +257,19 @@ $voxRoutes = function () {
 
 		Route::group(['namespace' => 'Vox'], function () {
 
+			Route::get('faq', 									'FaqController@home');
+
 			Route::get('banned', 								'BannedController@home');
 
 			Route::any('invite/{id}/{hash}/{inv_id?}', 			'RegisterController@invite_accept');
 			
-			Route::any('register', 								'RegisterController@register');
-			Route::post('register/step1', 						'RegisterController@check_step_one');
-			Route::post('register/upload', 						'RegisterController@upload');
+			Route::any('registration', 								'RegisterController@register');
+			Route::post('registration/step1', 						'RegisterController@check_step_one');
+			Route::post('registration/upload', 						'RegisterController@upload');
 
 			Route::get('verify/{id}/{hash}', 					'RegisterController@register_verify');
-			Route::get('forgot-password', 						'RegisterController@forgot');
-			Route::post('forgot-password', 						'RegisterController@forgot_form');
+			Route::get('recover-password', 						'RegisterController@forgot');
+			Route::post('recover-password', 						'RegisterController@forgot_form');
 			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
 			Route::post('recover/{id}/{hash}', 					'RegisterController@recover_form');
 
@@ -278,27 +279,25 @@ $voxRoutes = function () {
 			Route::get('register/facebook', 					'LoginController@facebook_register');
 			Route::get('register/callback/facebook', 			'LoginController@facebook_callback_register');
 
-			Route::get('vpn', 									'VpnController@list');
 			
 			Route::group(['middleware' => 'auth:web'], function () {
-				Route::get('register-success', 					'RegisterController@register_success');
+				Route::get('welcome-to-dentavox', 					'RegisterController@register_success');
 
 				Route::any('questionnaire/{id}', 				'VoxController@home');
-				Route::any('paid-surveys/{id}', 				'VoxController@home_slug');
+				Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');
 
 				Route::post('phone/save', 						'PhoneController@save');
 				Route::post('phone/check', 						'PhoneController@check');
 
 				Route::any('profile', 							'ProfileController@home');
 				Route::post('profile/address', 					'ProfileController@address');
+				Route::any('profile/vox', 						'ProfileController@vox');
 				Route::any('profile/home', 						'ProfileController@home');
 				Route::any('profile/info', 						'ProfileController@info');
-				Route::get('profile/password', 					'ProfileController@password');
 				Route::post('profile/password', 				'ProfileController@change_password');
 				Route::any('profile/wallet', 					'ProfileController@wallet');
 				Route::post('profile/balance', 					'ProfileController@balance');
 				Route::post('profile/withdraw', 				'ProfileController@withdraw');
-				Route::get('profile/history', 					'ProfileController@history');
 				Route::get('profile/bans', 						'ProfileController@bans');
 				Route::any('profile/invite', 					'ProfileController@invite');
 				Route::any('profile/setEmail', 					'ProfileController@setEmail');
@@ -310,11 +309,11 @@ $voxRoutes = function () {
 			});
 
 			Route::get('/', 									'IndexController@home');
-			Route::get('welcome', 								'IndexController@welcome');
+			Route::get('welcome-survey', 								'IndexController@welcome');
 			Route::any('appeal', 								'IndexController@appeal');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
-			Route::get('stats/{id}/{question}', 				'StatsController@home');
-			Route::get('stats/{id}', 							'StatsController@home');
+			Route::any('dental-survey-stats', 								'StatsController@home');
+			Route::any('dental-survey-stats/{id}', 							'StatsController@stats');
 			Route::get('{slug}', 								'PagesController@home');
 
 		});
@@ -322,4 +321,3 @@ $voxRoutes = function () {
 };
 Route::domain('dentavox.dentacoin.com')->group($voxRoutes);
 Route::domain('dev-dentavox.dentacoin.com')->group($voxRoutes);
-Route::domain('urgent-dentavox.dentacoin.com')->group($voxRoutes);

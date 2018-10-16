@@ -14,14 +14,16 @@ class VoxAnswer extends Model {
         'scale',
         'country_id',
         'is_scam',
-        'is_completed',
-        'is_skipped',
     ];
 
     protected $dates = [
         'created_at',
         'updated_at',
     ];
+
+    public function user() {
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
 
     public static function getCount() {
         $fn = storage_path('vox_count');

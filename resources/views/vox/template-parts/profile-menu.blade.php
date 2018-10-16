@@ -1,25 +1,26 @@
-<div class="panel panel-default">
-	<div class="panel-heading">
-		<h3 class="panel-title tac bold">
-			{{ $user->name }}
-		</h3>
-	</div>
-	<div class="panel-body">
-		<p class="tac city">
-			{{ trans('vox.page.profile.balance') }}
-		</p>
-		<div class="price">
-			<img src="{{ url('img-vox/dc-logo.png') }}"/>
-			<span class="coins" id="menu-balance">{{ $user->getVoxBalance() }}</span>
+<div class="profile-menu">
+	<div class="heading flex">
+		<img src="{{ $user->getImageUrl(true) }}" />
+		<div>
+			<b>
+				Welcome, <br/>
+				{{ $user->name }}
+			</b>
+			@if(!empty($admin))
+				Admin
+			@endif
 		</div>
 	</div>
-</div>
-
-<div class="list-group">
-
-	@foreach($menu as $key => $profile_menu)
-		<a href="{{ getLangUrl('profile/'.$key) }}" class="list-group-item {!! $current_subpage == $key ? 'active' : '' !!}">
-			{{ $profile_menu }}
+	<div class="menu-list"> 
+		@foreach($menu as $key => $profile_menu)
+			<a href="{{ getLangUrl('profile/'.$key) }}" class="list-item {!! $current_subpage == $key ? 'active' : '' !!}">
+				<img src="{{ url('new-vox-img/profile-'.$key.'.png') }}" />
+				{{ $profile_menu }}
+			</a>
+		@endforeach
+		<a href="{{ getLangUrl('logout') }}" class="list-item">
+			<img src="{{ url('new-vox-img/profile-logout.png') }}" />
+			Log out
 		</a>
-	@endforeach
-</div>	
+	</div>
+</div>

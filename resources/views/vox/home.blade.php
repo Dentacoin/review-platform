@@ -2,120 +2,95 @@
 
 @section('content')
 
-		<div class="container">
-			<div class="another-questions">
+	<div class="container">
+		<div class="another-questions">
 
-	  			@include('front.errors')
-	  			
-				@if($user->email && $user->is_verified)
-						<h3 class="bold">
-							{{ trans('vox.page.home.try-another') }}
-						</h3>
-						<div class="gray-border"></div>
-						<div class="questions-menu">
-							<span class="bold">
-								{{ trans('vox.page.home.sort') }}
-							</span>
-							@foreach($sorts as $key => $val)
-								<a href="{{ getLangUrl('/') }}?sort={{ $key }}" {!! $key==$sort ? 'class="active"' : '' !!}>{{ $val }}</a>
-							@endforeach
-						</div>
-						<a href="javascript:;" class="triangle-up"></a>
-						<div class="questions-wrapper" id="questions-wrapper">
-							<div class="questions-inner" id="questions-inner">
+  			@include('front.errors')
+  			
+			<h1 class="bold">
+				SELECT A SURVEY
+			</h1>
 
-								@if($sort=='category')
-									@foreach( $cats as $cat )
-										<h3 class="category-title">{{ $cat->name }}</h3>
-										@foreach( $cat->voxesWithoutAnswer($user) as $vox_to_cat)
-											<div class="another-question {{ $loop->parent->first && $loop->first ? 'active' : '' }}">
-												<div class="another-question-header clearfix">
-													<div class="left">
-														<span class="bold">{{ !empty($vox_to_cat->vox->complex) ? 'max ' : '' }} {{ $vox_to_cat->vox->getRewardTotal() }} DCN</span>
-													</div>
-													<div class="right">
-														<p>{{ $vox_to_cat->vox->formatDuration() }}</p>
-														<p>
-															{{ trans('vox.common.questions-count', ['count' => $vox_to_cat->vox->questions->count()]) }}
-														</p>
-													</div>
-												</div>
-												<h4 class="bold">{{ $vox_to_cat->vox->title }}</h4>
-												<div class="another-question-content">
-													<p class="question-description">{{ $vox_to_cat->vox->description }}</p>
-													<a class="statistics" href="{{ getLangUrl('stats/'.$vox_to_cat->vox->id) }}">
-														{{ trans('vox.common.check-statictics') }}
-													</a>
-													@if(!in_array($vox_to_cat->vox_id, $taken))
-														<a class="opinion" href="{{ $vox_to_cat->vox->getLink() }}">
-															{{ trans('vox.common.take-the-test') }}
-														</a>
-													@endif
-												</div>
-											</div>
-										@endforeach
-									@endforeach
-								@else
-									@foreach( $voxes as $vox)
-										<div class="another-question {{ $loop->first ? 'active' : '' }}">
-											<div class="another-question-header clearfix">
-												<div class="left">
-													<span class="bold">{{ !empty($vox->complex) ? 'max ' : '' }} {{ $vox->getRewardTotal() }} DCN</span>
-												</div>
-												<div class="right">
-													<p>{{ $vox->formatDuration() }}</p>
-													<p>
-														{{ trans('vox.common.questions-count', ['count' => $vox->questions->count()]) }}
-													</p>
-												</div>
-											</div>
-											<h4 class="bold">{{ $vox->title }}</h4>
-											<div class="another-question-content">
-												<p class="question-description">{{ $vox->description }}</p>
-												<a class="statistics" href="{{ getLangUrl('stats/'.$vox->id) }}">
-													{{ trans('vox.common.check-statictics') }}
-												</a>
-												@if(!in_array($vox->id, $taken))
-													<a class="opinion" href="{{ $vox->getLink() }}">
-														{{ trans('vox.common.take-the-test') }}
-													</a>
-												@endif
-											</div>
-										</div>
-									@endforeach
-								@endif
-							</div>
-						</div>
-						<a href="javascript:;" class="triangle-down"></a>
-
-						@if($user->vox_rewards->isNotEmpty())
-							<br/>
-							<br/>
-							<div class="alert alert-info">
-								{{ trans('vox.page.home.looking-for-stats') }}
-								<br/>
-								<a href="{{ getLangUrl('profile') }}">
-									{{ trans('vox.page.home.looking-for-stats-link') }}
-								</a>
-							</div>
-						@endif
-				@else
-
-		        	<div class="panel panel-default personal-panel">
-			            <div class="panel-heading">
-			                <h3 class="panel-title bold">
-			                	{{ trans('vox.common.no-email-title') }}
-			                </h3>
-			            </div>
-		            	<div class="panel-body">
-		                    @include('vox.template-parts.verify-email', [
-		                    	'cta' => trans('vox.page.home.no-email')
-		                    ])
-		            	</div>
-		            </div>
-				@endif
+			<div class="search-survey tal">
+				<i class="fas fa-search"></i>
+				<input type="text" id="survey-search" name="survey-search">
 			</div>
+			<div class="questions-menu">
+				<div class="sort-menu tal"> 
+					@foreach($sorts as $key => $val)
+						@if($key == 'taken' && empty($taken))
+
+						@else
+							<a href="javascript:;" sort="{{ $key }}"  {!! $key == 'featured' ? 'class="active"' : '' !!}>
+
+								@if($key == 'featured')
+									<i class="fas fa-star"></i>
+								@endif
+
+								{{ $val }}
+							</a>
+						@endif
+					@endforeach
+				</div>
+				<div class="sort-category tar"> 
+					<span>Filter by category:</span>
+					{{ Form::select('category', ['all' => 'All'] + $vox_categories, null , ['id' => 'surveys-categories']) }} 
+				</div>
+			</div>
+			<div class="questions-wrapper" id="questions-wrapper">
+				<div class="questions-inner" id="questions-inner">
+					@foreach( $voxes as $vox)
+						<div class="another-question" featured="{{ intval($vox->featured) }}" published="{{ $vox->created_at->timestamp }}" popular="{{ intval($vox->rewards()->count()) }}" dcn="{{ intval($vox->getRewardTotal()) }}" duration="{{ ceil( $vox->questions()->count()/6 ) }}" taken="{{ intval(!in_array($vox->id, $taken) ? 0 : 1) }}" {!! $vox->featured ? '' : 'style="display: none;"' !!}>
+							@if($vox->featured)
+								<img src="{{ url('new-vox-img/star.png') }}">
+							@endif
+							<div class="another-question-header clearfix">
+								<div class="left">
+									<h4 class="survey-title bold">{{ $vox->title }}</h4>
+									<div class="survey-cats"> 
+										@foreach( $vox->categories as $c)
+											<span class="survey-cat" cat-id="{{ $c->category->id }}">{{ $c->category->name }}</span>
+										@endforeach
+									</div>
+									<p class="question-description">{{ $vox->description }}</p>										
+								</div>
+								<div class="right">
+									<span class="bold">{{ !empty($vox->complex) ? 'max ' : '' }} {{ $vox->getRewardTotal() }} DCN</span>
+									<p>{{ $vox->formatDuration() }}</p>
+									<!-- <p>
+										{{ trans('vox.common.questions-count', ['count' => $vox->questions->count()]) }}
+									</p> -->
+									<div class="btns">
+										@if($vox->stats_questions->isNotEmpty())
+										<a class="statistics blue-button secondary" href="{{ $vox->getStatsList() }}">
+											<!-- {{ trans('vox.common.check-statictics') }} -->
+											Check Stats
+										</a>
+										@endif
+										@if(!in_array($vox->id, $taken))
+											<a class="opinion blue-button" href="{{ $vox->getLink() }}">
+												Take survey
+												<!-- {{ trans('vox.common.take-the-test') }} -->
+											</a>
+										@endif
+									</div>
+								</div>
+							</div>
+						</div>
+					@endforeach
+				</div>
+
+				<a class="give-me-more" id="survey-more" href="javascript:;" style="display: none;">
+					load more
+				</a>
+
+				<div class="alert alert-info" id="survey-not-found" style="display: none;">
+					Unfortunately there aren't any Surveys that match your filters
+				</div>
+			</div>
+	            
 		</div>
+	</div>
     	
     	
 @endsection
