@@ -14,7 +14,7 @@
 				<div class="flex">
 					@foreach( $block['questions'] as $question )
 						<div class="col">
-							<h3>&bull; {{ $question[0] }}</h3>
+							<h3> <span>&bull;</span> {{ $question[0] }}</h3>
 							<p>{!! nl2br($question[1]) !!}</p>
 						</div>
 						@if($loop->iteration && $loop->iteration%2==0 && !$loop->last)

@@ -4429,10 +4429,26 @@ header {
 	.faq-block {
 		min-height: 750px;
 
+		@media #{$phone} {
+			min-height: 0;
+		}
+
 		.container {
 			width: 1030px;
 			padding-left: 330px;
 			position: relative;
+
+			@media #{$tablet} {
+				width: 740px;
+				padding-left: 220px;
+			}
+
+			@media #{$phone} {
+				width: 100%;
+				padding-left: 20px;
+				padding-right: 20px;
+				padding-bottom: 40px;
+			}
 
 			.ball {
 				content: '';
@@ -4449,9 +4465,22 @@ header {
 				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#38ace5', endColorstr='#aee2ff',GradientType=0 ); /* IE6-9 */
 				opacity: 0.3;
 
+				@media #{$tablet} {
+					right: 600px;
+				}
+				@media #{$phone} {
+					display: none;
+				}
+
 				&.bigger {
 					height: 130%;
 					top: -15%;
+				}
+			}
+
+			@media #{$phone} {
+				.flex {
+					display: block;
 				}
 			}
 
@@ -4460,6 +4489,20 @@ header {
 
 				&:nth-child(2) {
 					padding-left: 120px;
+					@media #{$tablet} {
+						padding-left: 40px;
+					}
+					@media #{$phone} {
+						padding-left: 0px;
+					}
+				}
+
+				@media #{$phone} {
+					&.active {
+						p {
+							display: block;
+						}
+					}
 				}
 			}
 
@@ -4469,6 +4512,13 @@ header {
 				color: #060606;
 				text-transform: uppercase;
 				margin-bottom: 50px;
+
+				@media #{$phone} {
+					font-size: 22px;
+					font-weight: normal;
+					margin-bottom: 30px;
+					text-align: center;
+				}
 			}
 
 			h3 {
@@ -4476,6 +4526,38 @@ header {
 				font-size: 18px;
 				color: #060606;
 				margin-bottom: 18px;
+
+				@media #{$phone} {
+					font-size: 14px;
+				}
+
+				span {
+					font-size: 18px;
+
+					@media #{$phone} {
+						width: 15px;
+						height: 15px;
+						border-radius: 50%;
+						background: $main-color;
+						font-size: 0px;
+						line-height: 15px;
+					    display: block;
+					    float: left;
+					    margin-right: 10px;
+					    text-align: center;
+					    color: white;
+
+					    &:after {
+					    	position: absolute;
+					    	content: '-';
+							top: 0px;
+							left: 0px;
+						    line-height: 14px;
+						    width: 15px;
+						    font-size: 20px;
+					    }
+					}
+				}
 			}
 
 			p {
@@ -4484,8 +4566,20 @@ header {
 				color: #555;
 				margin-bottom: 55px;
 
+				@media #{$phone} {
+					font-size: 10px;
+					font-weight: bold;
+					margin-bottom: 18px;
+					display: none;
+				}
+
 				a {
 					text-decoration: none;
+
+					@media #{$phone} {
+						font-size: 10px;
+						font-weight: bold;
+					}
 
 					&:hover {
 						text-decoration: underline !important;
@@ -4498,11 +4592,26 @@ header {
 			.container {
 				padding-right: 330px;
 				padding-left: 0px;
+
+				@media #{$tablet} {
+					padding-right: 220px;
+					padding-left: 0px;
+				}
+
+				@media #{$phone} {
+					padding-right: 20px;
+					padding-left: 20px;
+				}
 			}
 
 			.ball {
 				right: auto;
 				left: 790px;
+
+				@media #{$tablet} {
+					right: auto;
+					left: 600px;
+				}
 			}
 		}
 	}

@@ -10,4 +10,8 @@ $(document).ready(function(){
 	handleBlueBalls();
 	$(window).resize(handleBlueBalls);
 
+	$('.col h3').click( function() {
+		$(this).closest('.col').toggleClass('active');
+	} );
+
 });
