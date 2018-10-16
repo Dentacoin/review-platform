@@ -21,6 +21,7 @@ use App\Models\VoxQuestion;
 use App\Models\VoxScale;
 use App\Models\UserInvite;
 use App\Models\Dcn;
+use App\Models\Email;
 use App\Models\Reward;
 
 
@@ -75,6 +76,7 @@ class VoxController extends FrontController
 
 		$list = VoxAnswer::where('vox_id', $vox->id)
 		->where('user_id', $this->user->id)
+		->orderBy('id', 'ASC')
 		->get();
 		$answered = [];
 		foreach ($list as $l) {
@@ -576,6 +578,14 @@ class VoxController extends FrontController
         	}
         }
 
+        
+        $em = new Email;
+        $em->user_id = $this->user->id;
+        $em->template_id = 25;
+		list($email_content, $email_title, $email_subtitle, $email_subject) = $em->prepareContent();
+
+		$email_content = preg_replace('#(<a\s.*href=[\'"])(.*?)([\'"].*>)(.*?)(</a>)#', '$2', $email_content);
+
 		return $this->ShowVoxView('vox', array(
 			'not_bot' => $not_bot,
 			'details_fields' => $this->details_fields,
@@ -604,6 +614,12 @@ class VoxController extends FrontController
                 'title' => $vox->translate(App::getLocale())->seo_title,
                 'description' => $vox->translate(App::getLocale())->seo_description
             ]),
+            'email_data' => [
+            	'title' => $email_subject,
+            	'content' => $email_content,
+            ]
+
+
         ));
 	}
 

@@ -30,7 +30,7 @@ class ProfileController extends FrontController
 			'info' => trans('vox.page.profile.dentist.info'),
             'privacy' => trans('front.page.profile.patient.privacy'),
             'invite' => trans('front.page.profile.patient.invite'),
-            'wallet' => trans('front.page.profile.dentist.wallet'),
+            //'wallet' => trans('front.page.profile.dentist.wallet'),
             'vox' => trans('vox.page.profile.dentist.vox'),
 		];
 
@@ -84,13 +84,36 @@ class ProfileController extends FrontController
             return redirect(getLangUrl('profile/vox'));
         }
 
-		return $this->ShowVoxView('profile', [
-			'menu' => $this->menu,
+        if(Request::isMethod('post')) {
+            $va = trim(Request::input('vox-address'));
+            if(empty($va) || mb_strlen($va)!=42) {
+                Request::session()->flash('error-message', trans('vox.page.profile.address-invalid'));
+            } else if(!$this->user->canIuseAddress($va)) {
+                Request::session()->flash('error-message', trans('vox.page.profile.address-used'));
+            } else {
+                $this->user->vox_address = Request::input('vox-address');
+                $this->user->save();
+                Request::session()->flash('success-message', trans('vox.page.profile.address-saved'));
+            }
+            
+            return redirect( getLangUrl('profile'));
+        }
+
+        return $this->ShowVoxView('profile', [
+            'menu' => $this->menu,
             'currencies' => file_get_contents('/tmp/dcn_currncies'),
+            'history' => $this->user->history->where('type', '=', 'vox-cashout'),
             'js' => [
+                'wallet.js',
                 'profile.js',
-            ]
-		]);
+            ],
+            'jscdn' => [
+                'https://hosted-sip.civic.com/js/civic.sip.min.js',
+            ],
+            'csscdn' => [
+                'https://hosted-sip.civic.com/css/civic-modal.min.css',
+            ],
+        ]);
     }
 
     public function info($locale=null) {
@@ -281,48 +304,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 	}
 
 
-    public function wallet($locale=null) {
-        if(!$this->user->is_verified || !$this->user->email) {
-            Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
-            return redirect(getLangUrl('/'));
-        }
-        
-        if($this->user->isBanned('vox')) {
-            return redirect(getLangUrl('profile/vox'));
-        }
-        
-
-        if(Request::isMethod('post')) {
-            $va = trim(Request::input('vox-address'));
-            if(empty($va) || mb_strlen($va)!=42) {
-                Request::session()->flash('error-message', trans('vox.page.profile.address-invalid'));
-            } else if(!$this->user->canIuseAddress($va)) {
-                Request::session()->flash('error-message', trans('vox.page.profile.address-used'));
-            } else {
-                $this->user->vox_address = Request::input('vox-address');
-                $this->user->save();
-                Request::session()->flash('success-message', trans('vox.page.profile.address-saved'));
-            }
-            
-            return redirect( getLangUrl('profile/wallet'));
-        }
-
-        return $this->ShowVoxView('profile-wallet', [
-            'menu' => $this->menu,
-            'history' => $this->user->history->where('type', '=', 'vox-cashout'),
-            'js' => [
-                'wallet.js',
-                'profile.js',
-            ],
-            'jscdn' => [
-                'https://hosted-sip.civic.com/js/civic.sip.min.js',
-            ],
-            'csscdn' => [
-                'https://hosted-sip.civic.com/css/civic-modal.min.css',
-            ],
-        ]);
-    }
-
     public function jwt($locale=null) {
         $ret = [
             'success' => false
@@ -390,6 +371,25 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         if($this->user->isBanned('vox') || !$this->user->canWithdraw('vox') ) {
             return ;
         }
+
+        $va = trim(Request::input('vox-address'));
+        if(empty($va) || mb_strlen($va)!=42) {
+            $ret = [
+                'success' => false,
+                'message' => trans('vox.page.profile.address-invalid')
+            ];
+            return Response::json( $ret );
+        } else if(!$this->user->canIuseAddress($va)) {
+            $ret = [
+                'success' => false,
+                'message' => trans('vox.page.profile.address-used')
+            ];
+            return Response::json( $ret );
+        } else {
+            $this->user->vox_address = Request::input('vox-address');
+            $this->user->save();
+        }
+        
 
         $amount = intval(Request::input('wallet-amount'));
         if($amount>$this->user->getVoxBalance()) {
@@ -473,16 +473,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             ]
         ]);
     }
-
-    public function bans($locale=null) {
-        
-
-        return $this->ShowVoxView('profile-bans', [
-            'menu' => $this->menu,
-            'ban_info' => $this->user->isBanned('vox')
-        ]);
-    }
-
     
     public function invite($locale=null) {
         if(!$this->user->canInvite('vox')) {

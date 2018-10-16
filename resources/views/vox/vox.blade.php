@@ -143,7 +143,7 @@
 						@endforeach
 	 				</div>
 				</div>
-				<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-danger">
+				<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-warning">
 					{!! trans('vox.page.'.$current_page.'.answer-error') !!}
 				</div>
 			</div>
@@ -160,7 +160,7 @@
 					<div class="col-md-9 tac">
 						<h3 class="done-title">Well done, <span class="blue-text"> {{ $user->getName() }}!</span></h3>
 						<h4>
-							You’ve just earned <span id="coins-test">{{ $vox->getRewardTotal() }}</span> DCN! Thank you for sharing your valuable insights! To review / withdraw your reward, go to your <a href="{{ getLangUrl('profile/wallet') }}">Dentacoin Wallet.</a>
+							You’ve just earned <span id="coins-test">{{ $vox->getRewardTotal() }}</span> DCN! Thank you for sharing your valuable insights! To review / withdraw your reward, go to your <a href="{{ getLangUrl('profile') }}">Dentacoin Wallet.</a>
 						</h4>
 
 						<p class="next-title">What do you feel like doing next?</p>
@@ -193,7 +193,7 @@
 										<img src="{{ url('new-vox-img/messenger-icon.png') }}">
 										Send via Messenger
 									</a>										
-									<a href="https://mail.google.com/mail/?view=cm&fs=1&su={!! urlencode(trans('vox.page.'.$current_page.'.invite-gmail-subject')) !!}&body={!! urlencode( trans('vox.page.'.$current_page.'.invite-gmail-body' , ['link' => getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) ]) ) !!}" target="_blank">
+									<a href="https://mail.google.com/mail/?view=cm&fs=1&su={!! urlencode( $email_data['title'] ) !!}&body={!! urlencode( $email_data['content'] ) !!}" target="_blank">
 										<img src="{{ url('new-vox-img/gmail-icon.png') }}">
 										Send via Gmail
 									</a>

@@ -65,7 +65,7 @@ return array(
 		'employment' => [
 			'label' => 'Current employment status:',
 			'values' => [
-				'employed' => 'Salaried Employee',
+				'employed' => 'Salaried employee',
 				'self_employed' => 'Self - employed',
 				'looking_for' => 'Looking for work',
 				'not_looking_for' => 'Not looking for work',

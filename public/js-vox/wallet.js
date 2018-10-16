@@ -17,6 +17,19 @@ $(document).ready(function(){
         balanceUpdater();
     }
 
+    $('#wallet-amount').on('blur onchange', function() {
+        $(this).removeClass("has-error");
+    });
+
+    $('#wallet-amount').on('blur onchange', function() {
+        var val = parseInt( $(this).val() );
+        if(isNaN(val) || val<3000) {
+            $(this).addClass('has-error')
+            $(this).closest('form').find('button').addClass('btn-inactive').removeClass('btn-primary');
+        } else {
+            $(this).closest('form').find('button').removeClass('btn-inactive').addClass('btn-primary');
+        }
+    } );
 
     $('#withdraw-form').submit( function(e) {
         e.preventDefault();

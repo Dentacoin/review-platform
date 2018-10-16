@@ -111,8 +111,11 @@
 						</div>
 					</div>
 
-					<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-danger">
+					<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-warning">
 						{!! trans('vox.page.questionnaire.answer-error') !!}
+					</div>
+					<div style="display: none; margin-top: 10px;text-align: center;" class="birthday-answer-error alert alert-warning">
+						You must be at least 18 to register
 					</div>
 
 				</div>
@@ -139,9 +142,9 @@
 				</div>
 
 				<div class="col-md-9 tac">
-					<h3 class="done-title">Good job, <span class="blue-text"> {{ $user->getName() }}!</span></h3>
 					<h4>
-						You’ve just earned <span id="coins-test">{{ $vox->getRewardTotal() }}</span> DCN! To withdraw your <br/> reward, just go to your <a href="{{ getLangUrl('profile/wallet') }}">Wallet.</a> Ready to get more <br/> Dentacoin tokens?
+					<h3 class="done-title">Good job, <span class="blue-text"> {{ $user->getName() }}!</span></h3>
+						You’ve just earned <span id="coins-test">{{ $vox->getRewardTotal() }}</span> DCN! To withdraw your <br/> reward, just go to your <a href="{{ getLangUrl('profile') }}">Wallet.</a> Ready to get more <br/> Dentacoin tokens?
 					</h4>
 
 					<a class="blue-button gradient-line" href="{{ getLangUrl('/') }}">Take me to the surveys</a>

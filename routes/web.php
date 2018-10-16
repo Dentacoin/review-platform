@@ -295,10 +295,8 @@ $voxRoutes = function () {
 				Route::any('profile/home', 						'ProfileController@home');
 				Route::any('profile/info', 						'ProfileController@info');
 				Route::post('profile/password', 				'ProfileController@change_password');
-				Route::any('profile/wallet', 					'ProfileController@wallet');
 				Route::post('profile/balance', 					'ProfileController@balance');
 				Route::post('profile/withdraw', 				'ProfileController@withdraw');
-				Route::get('profile/bans', 						'ProfileController@bans');
 				Route::any('profile/invite', 					'ProfileController@invite');
 				Route::any('profile/setEmail', 					'ProfileController@setEmail');
 				Route::post('profile/jwt', 						'ProfileController@jwt');

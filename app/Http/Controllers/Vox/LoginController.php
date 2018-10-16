@@ -47,7 +47,7 @@ class LoginController extends FrontController
             return redirect( $intended ? $intended : getLangUrl('/') );
         } else {
             Request::session()->flash('error-message', trans('front.page.login.error'));
-            return redirect( getLangUrl('/').'#login');
+            return redirect( getLangUrl('login'));
         }
     }
 
@@ -86,14 +86,14 @@ class LoginController extends FrontController
             curl_close($ch);
             
             Request::session()->flash('error-message', trans('vox.popup.register.incomplete-facebook') );
-            return redirect(getLangUrl('/').'#register');
+            return redirect(getLangUrl('registration'));
         }
 
         //!empty($s_user->user['verified']) &&
         $verified = !empty($s_user->user['friends']['summary']['total_count']) && $s_user->user['friends']['summary']['total_count']>50;
         if(!$verified) {
             Request::session()->flash('error-message', trans('vox.popup.register.fake-facebook') );
-            return redirect(getLangUrl('/').'#register');
+            return redirect(getLangUrl('registration'));
         }
 
 
@@ -128,7 +128,7 @@ class LoginController extends FrontController
                         $new_blacklist_block->save();
 
                         Request::session()->flash('error-message', trans('front.page.login.blocked-name') );
-                        return redirect(getLangUrl('/').'#register');
+                        return redirect(getLangUrl('registration'));
                     }
                 } else {
                     if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower($s_user->getEmail())) == true) {
@@ -140,7 +140,7 @@ class LoginController extends FrontController
                         $new_blacklist_block->save();
                         
                         Request::session()->flash('error-message', trans('front.page.login.blocked-email') );
-                        return redirect(getLangUrl('/').'#register');
+                        return redirect(getLangUrl('registration'));
                     }
                 }
             }
@@ -148,6 +148,11 @@ class LoginController extends FrontController
 
             $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
             $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
+
+            if($birthyear && $birthyear - intval(date('Y'))<18 ) {
+                Request::session()->flash('error-message', 'You must be at least 18 years old to register.');
+                return redirect(getLangUrl('registration'));
+            }
 
             if(!empty($s_user->user['location']['name'])) {
                 $loc_info = explode(',', $s_user->user['location']['name']);

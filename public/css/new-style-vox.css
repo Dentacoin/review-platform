@@ -1056,6 +1056,17 @@ header {
       .questions .question-group .answers .answer.active-label i,
       .questions .question-group .answers .answer:hover i {
         color: white; }
+    .questions .question-group .answers .answer-radio#birthyear-answer,
+    .questions .question-group .answers .answer-checkbox#birthyear-answer,
+    .questions .question-group .answers .answer#birthyear-answer {
+      padding-right: 1px;
+      padding-left: 10px;
+      text-align: left;
+      color: black; }
+      .questions .question-group .answers .answer-radio#birthyear-answer:hover,
+      .questions .question-group .answers .answer-checkbox#birthyear-answer:hover,
+      .questions .question-group .answers .answer#birthyear-answer:hover {
+        background: white; }
     .questions .question-group .answers select {
       padding: 0px 15px; }
     .questions .question-group .answers .answer-radio,
@@ -2083,6 +2094,13 @@ header {
           vertical-align: middle;
           margin-right: 5px;
           width: 17px; }
+        .section-welcome-done .wrapper-buttons .invite-link .share-wrap a.messenger,
+        .page-questions-done .wrapper-buttons .invite-link .share-wrap a.messenger {
+          display: none; }
+          @media screen and (max-width: 768px) {
+            .section-welcome-done .wrapper-buttons .invite-link .share-wrap a.messenger,
+            .page-questions-done .wrapper-buttons .invite-link .share-wrap a.messenger {
+              display: block; } }
 
 .done-section {
   min-height: 616px; }
@@ -3088,6 +3106,8 @@ header {
     .page-profile .site-content .form-horizontal {
       margin-top: 20px;
       margin-bottom: 40px; } }
+.page-profile .site-content .separated {
+  margin-top: 30px; }
 .page-profile .site-content .control-label {
   font-size: 16px;
   color: #a6a6a6;
@@ -3099,8 +3119,16 @@ header {
       line-height: 34px;
       font-size: 12px;
       padding-left: 30px; } }
+  .page-profile .site-content .control-label.top-label {
+    color: #777777;
+    font-size: 14px;
+    margin-bottom: 12px;
+    text-align: left;
+    padding-left: 15px;
+    line-height: normal; }
 .page-profile .site-content input[type="password"].form-control,
 .page-profile .site-content input[type="text"].form-control,
+.page-profile .site-content input[type="number"].form-control,
 .page-profile .site-content select.form-control {
   height: 43px;
   line-height: 43px;
@@ -3111,13 +3139,32 @@ header {
   color: black;
   padding: 0px 15px;
   font-weight: normal; }
+  .page-profile .site-content input[type="password"].form-control.style-2,
+  .page-profile .site-content input[type="text"].form-control.style-2,
+  .page-profile .site-content input[type="number"].form-control.style-2,
+  .page-profile .site-content select.form-control.style-2 {
+    box-shadow: none;
+    height: 40px;
+    line-height: 40px;
+    border-color: #acacac;
+    font-size: 16px;
+    color: #333333; }
+  .page-profile .site-content input[type="password"].form-control.has-error,
+  .page-profile .site-content input[type="text"].form-control.has-error,
+  .page-profile .site-content input[type="number"].form-control.has-error,
+  .page-profile .site-content select.form-control.has-error {
+    color: red;
+    border-color: red; }
   @media screen and (max-width: 992px) {
     .page-profile .site-content input[type="password"].form-control,
     .page-profile .site-content input[type="text"].form-control,
+    .page-profile .site-content input[type="number"].form-control,
     .page-profile .site-content select.form-control {
       height: 34px;
       line-height: 34px;
       font-size: 12px; } }
+.page-profile .site-content input[type="number"].form-control {
+  padding-right: 1px; }
 .page-profile .site-content .btn {
   height: 46px;
   line-height: 46px;
@@ -3131,6 +3178,10 @@ header {
   width: auto;
   border: none;
   margin-top: 30px; }
+  .page-profile .site-content .btn.style-2 {
+    height: 40px;
+    line-height: 40px;
+    box-shadow: none; }
   @media screen and (max-width: 992px) {
     .page-profile .site-content .btn {
       display: block;
@@ -3158,7 +3209,7 @@ header {
   background-color: #9d9d9d;
   color: white; }
   .page-profile .site-content .btn-inactive:hover {
-    background-color: #80b8dc; }
+    background-color: #9d9d9d; }
 .page-profile .site-content .privacy-row {
   padding: 50px 0px;
   border-bottom: 3px solid black; }
@@ -3263,90 +3314,77 @@ header {
       .page-profile .site-content #invite-wrapper .option-div {
         margin-top: 0px;
         clear: both; } }
-.page-profile .site-content .profile-home-content .balance {
-  display: flex;
-  justify-content: space-between; }
-  @media screen and (max-width: 992px) {
-    .page-profile .site-content .profile-home-content .balance {
-      display: block; } }
-.page-profile .site-content .profile-home-content h3 {
-  font-size: 25px;
-  color: black;
-  font-weight: bold;
-  margin-bottom: 35px; }
-  @media screen and (max-width: 992px) {
-    .page-profile .site-content .profile-home-content h3 {
-      margin-bottom: 20px;
-      font-size: initial; } }
-.page-profile .site-content .profile-home-content b {
-  font-size: 50px;
-  color: black;
-  font-weight: bold;
-  display: block; }
-  .page-profile .site-content .profile-home-content b span {
-    font-size: 50px; }
+.page-profile .site-content .profile-home-content {
+  padding-top: 30px; }
+  .page-profile .site-content .profile-home-content b {
+    font-size: 50px;
+    color: black;
+    font-weight: bold;
+    display: block; }
+    .page-profile .site-content .profile-home-content b span {
+      font-size: 50px; }
+      @media screen and (max-width: 992px) {
+        .page-profile .site-content .profile-home-content b span {
+          font-size: 20px; } }
     @media screen and (max-width: 992px) {
-      .page-profile .site-content .profile-home-content b span {
+      .page-profile .site-content .profile-home-content b {
         font-size: 20px; } }
-  @media screen and (max-width: 992px) {
-    .page-profile .site-content .profile-home-content b {
-      font-size: 20px; } }
-.page-profile .site-content .profile-home-content .convertor,
-.page-profile .site-content .profile-home-content .convertor * {
-  color: #333333;
-  font-size: 30px;
-  font-weight: bold; }
-.page-profile .site-content .profile-home-content .convertor .convertor-currnecy {
-  padding-right: 26px;
-  position: relative;
-  padding-bottom: 20px; }
-  .page-profile .site-content .profile-home-content .convertor .convertor-currnecy:after {
-    content: '';
-    position: absolute;
-    right: 0px;
-    top: 14px;
-    border-style: solid;
-    border-width: 14px 6px 0 6px;
-    border-color: #616161 transparent transparent transparent; }
-  .page-profile .site-content .profile-home-content .convertor .convertor-currnecy .expander {
-    display: none;
-    position: absolute;
-    top: 50px;
-    left: 0px;
-    right: 0px;
-    padding: 14px;
-    background: white;
-    z-index: 20;
-    border: 1px solid #e8e8e8;
-    box-shadow: 0px 0px 7px 3px rgba(234, 234, 234, 0.5); }
-    .page-profile .site-content .profile-home-content .convertor .convertor-currnecy .expander:before {
+  .page-profile .site-content .profile-home-content .convertor,
+  .page-profile .site-content .profile-home-content .convertor * {
+    color: #333333;
+    font-size: 30px;
+    font-weight: bold; }
+  .page-profile .site-content .profile-home-content .convertor .convertor-currnecy {
+    padding-right: 26px;
+    position: relative;
+    padding-bottom: 20px; }
+    .page-profile .site-content .profile-home-content .convertor .convertor-currnecy:after {
       content: '';
       position: absolute;
-      left: 50%;
-      margin-left: -5px;
-      top: -4px;
-      width: 0;
-      height: 0;
+      right: 0px;
+      top: 14px;
       border-style: solid;
-      border-width: 0 5px 4px 5px;
-      border-color: transparent transparent #ffffff transparent; }
-    .page-profile .site-content .profile-home-content .convertor .convertor-currnecy .expander a {
-      font-size: 20px;
-      text-align: left;
-      display: block;
-      cursor: pointer;
-      padding-bottom: 5px; }
-      .page-profile .site-content .profile-home-content .convertor .convertor-currnecy .expander a:hover, .page-profile .site-content .profile-home-content .convertor .convertor-currnecy .expander a.active {
-        color: #38ace5; }
-      .page-profile .site-content .profile-home-content .convertor .convertor-currnecy .expander a:last-child {
-        padding-bottom: none; }
-  .page-profile .site-content .profile-home-content .convertor .convertor-currnecy:hover .expander {
-    display: block; }
-.page-profile .site-content .profile-home-content .btn {
-  margin-top: 10px; }
-  @media screen and (max-width: 992px) {
-    .page-profile .site-content .profile-home-content .btn {
-      margin-top: 20px; } }
+      border-width: 14px 6px 0 6px;
+      border-color: #616161 transparent transparent transparent; }
+    .page-profile .site-content .profile-home-content .convertor .convertor-currnecy .expander {
+      display: none;
+      position: absolute;
+      top: 50px;
+      left: 0px;
+      right: 0px;
+      padding: 14px;
+      background: white;
+      z-index: 20;
+      border: 1px solid #e8e8e8;
+      box-shadow: 0px 0px 7px 3px rgba(234, 234, 234, 0.5); }
+      .page-profile .site-content .profile-home-content .convertor .convertor-currnecy .expander:before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        margin-left: -5px;
+        top: -4px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 5px 4px 5px;
+        border-color: transparent transparent #ffffff transparent; }
+      .page-profile .site-content .profile-home-content .convertor .convertor-currnecy .expander a {
+        font-size: 20px;
+        text-align: left;
+        display: block;
+        cursor: pointer;
+        padding-bottom: 5px; }
+        .page-profile .site-content .profile-home-content .convertor .convertor-currnecy .expander a:hover, .page-profile .site-content .profile-home-content .convertor .convertor-currnecy .expander a.active {
+          color: #38ace5; }
+        .page-profile .site-content .profile-home-content .convertor .convertor-currnecy .expander a:last-child {
+          padding-bottom: none; }
+    .page-profile .site-content .profile-home-content .convertor .convertor-currnecy:hover .expander {
+      display: block; }
+  .page-profile .site-content .profile-home-content .btn {
+    margin-top: 10px; }
+    @media screen and (max-width: 992px) {
+      .page-profile .site-content .profile-home-content .btn {
+        margin-top: 20px; } }
 
 .page-faq .site-content {
   overflow: hidden; }

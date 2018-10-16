@@ -15,10 +15,15 @@ $(document).ready(function(){
         }
 
         if( group.hasClass('birthyear-question') ) {
-            if (!( $('#birthyear-answer').val().length && parseInt( $('#birthyear-answer').val() ) > 1900 && parseInt( $('#birthyear-answer').val() ) < 2000 )) {
+            if (!( $('#birthyear-answer').val().length && parseInt( $('#birthyear-answer').val() ) > 1900) ) {
                 $('.answer-error').show().insertAfter($(this));
                 return;
             }
+            if( parseInt( $('#birthyear-answer').val() ) > (new Date()).getFullYear()-18 ) {
+                $('.birthday-answer-error').show().insertAfter($(this));
+                return;   
+            }
+            
             answer = $('#birthyear-answer').val();
 
         } else if (group.hasClass('location-question')) {

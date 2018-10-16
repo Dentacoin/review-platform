@@ -41,6 +41,33 @@ class Email extends Model
 			return;
 		}
 
+		list($content, $title, $subtitle, $subject) = $this->prepareContent();
+
+
+		Mail::send('emails.template', [
+				'user' => $this->user,
+				'content' => $content,
+				'title' => $title,
+				'subtitle' => $subtitle,
+				'platform' => $platform,
+			], function ($message) use ($subject, $platform) {
+
+				$sender = $platform=='vox' ? config('mail.from.address-vox') : config('mail.from.address');
+				$sender_name = $platform=='vox' ? config('mail.from.name-vox') : config('mail.from.name');
+
+			    $message->from($sender, $sender_name);
+			    $message->to( $this->user->email );
+			    //$message->to( 'dokinator@gmail.com' );
+				$message->replyTo($sender, $sender_name);
+				$message->subject($subject);
+        });
+
+		$this->sent = 1;
+		$this->save();
+	}
+
+	public function prepareContent() {
+
 		$title = stripslashes($this->template['title']);
 		$subtitle = stripslashes($this->template['subtitle']);
 		$subject = stripslashes($this->template['subject']);
@@ -110,28 +137,7 @@ class Email extends Model
 		$subtitle = $this->addPlaceholders($subtitle);
 		$subject = $this->addPlaceholders($subject);
 
-
-
-		Mail::send('emails.template', [
-				'user' => $this->user,
-				'content' => $content,
-				'title' => $title,
-				'subtitle' => $subtitle,
-				'platform' => $platform,
-			], function ($message) use ($subject, $platform) {
-
-				$sender = $platform=='vox' ? config('mail.from.address-vox') : config('mail.from.address');
-				$sender_name = $platform=='vox' ? config('mail.from.name-vox') : config('mail.from.name');
-
-			    $message->from($sender, $sender_name);
-			    $message->to( $this->user->email );
-			    //$message->to( 'dokinator@gmail.com' );
-				$message->replyTo($sender, $sender_name);
-				$message->subject($subject);
-        });
-
-		$this->sent = 1;
-		$this->save();
+		return [$content, $title, $subtitle, $subject];
 	}
 
 	private function addPlaceholders($content) {

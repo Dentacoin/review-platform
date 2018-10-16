@@ -1414,6 +1414,17 @@ header {
 				    }
 				}
 
+				&#birthyear-answer {
+					padding-right: 1px;
+				    padding-left: 10px;
+				    text-align: left;
+				    color: black;
+
+					&:hover {
+						background: white;
+					}
+				}
+
 			}
 
 			select {
@@ -2844,6 +2855,13 @@ header {
     					margin-right: 5px;
     				    width: 17px;
     				}
+
+    				&.messenger {
+    					display: none;
+	    				@media #{$phone} {
+	    					display: block;
+	    				}
+    				}
     			}
 	    	}
 	    }
@@ -4085,6 +4103,10 @@ header {
 		}
 	}
 
+	.separated {
+		margin-top: 30px;
+	}
+
 	.control-label {
 		font-size: 16px;
 		color: #a6a6a6;
@@ -4097,10 +4119,20 @@ header {
 			font-size: 12px;
     		padding-left: 30px;
 		}
+
+		&.top-label {
+			color: #777777;
+			font-size: 14px;
+			margin-bottom: 12px;
+		    text-align: left;
+		    padding-left: 15px;
+		    line-height: normal;
+		}
 	}
 
 	input[type="password"].form-control,
 	input[type="text"].form-control,
+	input[type="number"].form-control,
 	select.form-control {
 		height: 43px;
 		line-height: 43px;
@@ -4112,11 +4144,29 @@ header {
 		padding: 0px 15px;
 		font-weight: normal;
 
+		&.style-2 {
+			box-shadow: none;
+			height: 40px;
+			line-height: 40px;
+			border-color: #acacac;
+			font-size: 16px;
+			color: #333333;
+		}
+
+		&.has-error {
+			color: red;
+			border-color: red;
+		}
+
 		@media screen and (max-width: 992px) {
 			height: 34px;
 			line-height: 34px;
 			font-size: 12px;
 		}
+	}
+
+	input[type="number"].form-control {
+		padding-right: 1px;
 	}
 
 	.btn {
@@ -4132,6 +4182,12 @@ header {
 	    width: auto;
 	    border: none;
 	    margin-top: 30px;
+
+		&.style-2 {
+			height: 40px;
+			line-height: 40px;
+    		box-shadow: none;
+		}
 
 		@media screen and (max-width: 992px) {
 	    	display: block;
@@ -4173,7 +4229,7 @@ header {
 		color: white;
 
 	    &:hover {
-			background-color: #80b8dc;
+			background-color: #9d9d9d;
 	    }
 	}
 
@@ -4326,26 +4382,7 @@ header {
 
 	.profile-home-content {
 
-		.balance {
-			display: flex;
-			justify-content: space-between;
-
-			@media screen and (max-width: 992px) {
-				display: block;
-			}
-		}
-
-		h3 {
-			font-size: 25px;
-			color: black;
-			font-weight: bold;
-			margin-bottom: 35px;
-
-			@media screen and (max-width: 992px) {
-				margin-bottom: 20px;
-				font-size: initial;
-			}
-		}
+		padding-top: 30px;
 
 		b {
 			font-size: 50px;

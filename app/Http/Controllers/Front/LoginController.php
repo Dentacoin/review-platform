@@ -256,6 +256,17 @@ class LoginController extends FrontController
                 }
             }
 
+
+
+            $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
+            $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
+
+            if($birthyear && $birthyear - intval(date('Y'))<18 ) {
+                return redirect( getLangUrl('register') )
+                ->withInput()
+                ->with('error-message', 'You must be at least 18 years old to register.');
+            }
+
             $password = $name.date('WY');
             $newuser = new User;
             $newuser->name = $name;
