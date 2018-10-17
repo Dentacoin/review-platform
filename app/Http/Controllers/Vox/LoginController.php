@@ -152,7 +152,7 @@ class LoginController extends FrontController
             $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
             $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
 
-            if($birthyear && $birthyear - intval(date('Y'))<18 ) {
+            if($birthyear && ($birthyear - intval(date('Y'))) < 18 ) {
                 Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')).' BD returned: '.$birthyear );
                 return redirect(getLangUrl('registration'));
             }
