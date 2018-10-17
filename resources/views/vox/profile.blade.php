@@ -8,7 +8,7 @@
 		</div>
 		<div class="col-md-9">
 			<h2 class="page-title">
-				<img src="{{ url('new-vox-img/profile-wallet.png') }}" />
+				<img src="{{ url('new-vox-img/profile-home.png') }}" />
 				My Wallet
 			</h2>
 
