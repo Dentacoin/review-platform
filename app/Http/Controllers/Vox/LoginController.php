@@ -101,22 +101,29 @@ class LoginController extends FrontController
 
 
         if($s_user->getId()) {
-            $user = User::where( 'fb_id','LIKE', $s_user->getId() )->first();
+            $user = User::where( 'fb_id','LIKE', $s_user->getId() )->withTrashed()->first();
         }
         if(empty($user) && $s_user->getEmail()) {
-            $user = User::where( 'email','LIKE', $s_user->getEmail() )->where('id', '<', 5200)->first();            
+            $user = User::where( 'email','LIKE', $s_user->getEmail() )->where('id', '<', 5200)->withTrashed()->first();            
         }
 
         $city_id = null;
         $country_id = null;
         if ($user) {
-            if($user->isBanned('vox')) {
-                return redirect( getLangUrl('banned'));
-            }
-            Auth::login($user, true);
+            if($user->deleted_at) {
+                Request::session()->flash('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
+                return redirect(getLangUrl('registration'));
+            } else {
 
-            Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
-            return redirect(getLangUrl('/'));
+                if($user->isBanned('vox')) {
+                    return redirect( getLangUrl('profile'));
+                }
+                Auth::login($user, true);
+
+                Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
+                return redirect(getLangUrl('/'));
+                
+            }
         } else {
             $name = $s_user->getName() ? $s_user->getName() : (!empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' );
 
@@ -153,7 +160,7 @@ class LoginController extends FrontController
             $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
 
             if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
-                Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')).' BD returned: '.$birthyear );
+                Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')) );
                 return redirect(getLangUrl('registration'));
             }
 

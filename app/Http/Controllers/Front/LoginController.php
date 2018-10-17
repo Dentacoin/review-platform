@@ -187,13 +187,21 @@ class LoginController extends FrontController
         $is_dentist = session('is_dentist');
         $is_clinic = session('is_clinic');
         if($s_user->getId()) {
-            $user = User::where( 'fb_id','LIKE', $s_user->getId() )->first();
+            $user = User::where( 'fb_id','LIKE', $s_user->getId() )->withTrashed()->first();
         }
         if(empty($user) && $s_user->getEmail()) {
-            $user = User::where( 'email','LIKE', $s_user->getEmail() )->where('id', '<', 5200)->first();            
+            $user = User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->where('id', '<', 5200)->first();            
         }
 
         if ($user) {
+
+            if($user->deleted_at) {
+                Request::session()->flash('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
+                return redirect( getLangUrl('register') )
+                ->withInput()
+                ->with('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
+            } 
+
             if( $user->isBanned('vox') ) {
                 Request::session()->flash('error-message', trans('front.page.login.vox-ban'));
                 return redirect( getLangUrl('register') )
@@ -264,7 +272,7 @@ class LoginController extends FrontController
             $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
             $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
 
-            if($birthyear && $birthyear - intval(date('Y'))<18 ) {
+            if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
                 return redirect( getLangUrl('register') )
                 ->withInput()
                 ->with('error-message', nl2br(trans('front.page.login.over18')) );
