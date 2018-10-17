@@ -41,9 +41,11 @@
 
 			@if($user->loggedFromBadIp())
 
-				<div class="alert alert-warning">
-					{{ trans('vox.page.profile.wallet-bad-ip') }}
-					<a id="bad-ip-appeal" href="{{ getLangUrl('appeal') }}"> {{ trans('vox.page.profile.wallet-bad-ip-button') }} </a>
+				<div class="form-horizontal">
+					<div class="alert alert-warning">
+						{{ trans('vox.page.profile.wallet-bad-ip') }}
+						<a id="bad-ip-appeal" href="{{ getLangUrl('appeal') }}"> {{ trans('vox.page.profile.wallet-bad-ip-button') }} </a>
+					</div>
 				</div>
 
 			@else

@@ -91,6 +91,9 @@ class StatsController extends FrontController
         		$results = $results->get();
 
         		foreach ($results as $res) {
+                    if(!isset( $answers[ $res->answer-1 ] )) {
+                        continue;
+                    }
         			$second_chart[ $answers[ $res->answer-1 ] ] = $res->cnt;
         		}
 
@@ -112,6 +115,10 @@ class StatsController extends FrontController
         		$results = $results->groupBy('answer', 'gender')->selectRaw('answer, gender, COUNT(*) as cnt');
                 $results = $results->get();
         		foreach ($results as $res) {
+                    if(!isset( $answers[ $res->answer-1 ] )) {
+                        continue;
+                    }
+
         			if(!isset($main_chart[ $answers[ $res->answer-1 ] ])) {
         				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
         				$second_chart[ $answers[ $res->answer-1 ] ] = 0; //m
@@ -135,6 +142,10 @@ class StatsController extends FrontController
         		$results = $results->get();
 
         		foreach ($results as $res) {
+                    if(!isset( $answers[ $res->answer-1 ] )) {
+                        continue;
+                    }
+
         			if(!isset($main_chart[ $answers[ $res->answer-1 ] ])) {
         				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
         			}
@@ -163,6 +174,10 @@ class StatsController extends FrontController
 				}
 
         		foreach ($results as $res) {
+                    if(!isset( $answers[ $res->answer-1 ] )) {
+                        continue;
+                    }
+                    
         			if(!isset($main_chart[ $answers[ $res->answer-1 ] ])) {
         				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
         			}
