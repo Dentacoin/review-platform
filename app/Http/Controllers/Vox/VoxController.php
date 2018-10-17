@@ -65,7 +65,7 @@ class VoxController extends FrontController
 		    	//I'm doing ASL questions!
 				$doing_asl = true;
 			} else {
-				return redirect( $vox->getStatsList() );	
+				return redirect( getLangUrl('/') );	
 			}
 		}
 
@@ -557,24 +557,21 @@ class VoxController extends FrontController
         }
 
 
-        $real_questions = $vox->questions->count();
+        $total_questions = $vox->questions->count();
 
         if (!$this->user->birthyear) {
-        	$real_questions++;
+        	$total_questions++;
         }
         if (!$this->user->country_id) {
-        	$real_questions++;
+        	$total_questions++;
         }
         if (!$this->user->gender) {
-        	$real_questions++;
-        }
-        if(!$this->user->madeTest(34)) {        	
-        	$real_questions += Vox::find(34)->questions->count();
+        	$total_questions++;
         }
 
         foreach ($this->details_fields as $key => $value) {
-        	if(empty($this->user->$key)) {
-        		$real_questions++;		
+        	if($this->user->$key==null) {
+        		$total_questions++;		
         	}
         }
 
@@ -582,6 +579,9 @@ class VoxController extends FrontController
         $em = new Email;
         $em->user_id = $this->user->id;
         $em->template_id = 25;
+        $em->meta = [
+        	'friend_name' => ''
+        ];
 		list($email_content, $email_title, $email_subtitle, $email_subject) = $em->prepareContent();
 
 		$email_content = preg_replace('#(<a\s.*href=[\'"])(.*?)([\'"].*>)(.*?)(</a>)#', '$2', $email_content);
@@ -592,7 +592,8 @@ class VoxController extends FrontController
 			'vox' => $vox,
 			'scales' => $scales,
 			'answered' => $answered,
-			'real_questions' => $real_questions,
+			'real_questions' => $vox->questions->count(),
+			'total_questions' => $total_questions,
 			'first_question' => $first_question,
 			'first_question_num' => $first_question_num,
 			'js' => [

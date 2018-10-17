@@ -48,6 +48,12 @@ $(document).ready(function(){
 		$('#current-question-bar').css('width', ((vox.current / vox.count)*100)+'%');
 		var mins = Math.ceil( (vox.count - vox.current)/6 );
 		$('#current-question-num').html( mins<2 ? '<1' : '~'+mins );
+
+		if( vox.current > vox.count_real ) {
+			$('#dcn-test-reward-bonus').show();
+
+		}
+
 		if(vox.current>1) {
 
 			var answerd_q = 0;
@@ -57,13 +63,26 @@ $(document).ready(function(){
 				}
 			});
 
-			var reward_per_question = ( vox.reward / vox.count );
-			var reward = reward_per_question * answerd_q;
+			if( vox.current > (vox.count_real+1) ) {
+				var old = parseInt( $('#bonus-question-reward').text().trim() );
+				$('#bonus-question-reward').html( old + vox.reward_single );
 
-			$('#current-question-reward').html( Math.round(reward) );
-			$('#dcn-test-reward-before').hide();
-			$('#dcn-test-reward-after').show();
-			$('#coins-test').html( Math.round(reward) );
+				old = parseInt( $('#coins-test').text().trim() );
+				$('#coins-test').html( old + vox.reward_single );
+			} else {
+				var reward = 0;
+				if( $('body').hasClass('page-welcome-survey') ) {
+					var reward_per_question = ( vox.reward / vox.count_real );
+					reward = reward_per_question * answerd_q;
+				} else {
+					reward = vox.reward_single * answerd_q;					
+				}
+
+				$('#current-question-reward').html( Math.round(reward) );
+				$('#dcn-test-reward-before').hide();
+				$('#dcn-test-reward-after').show();
+				$('#coins-test').html( Math.round(reward) );
+			}
 		}
 
 		if (window.innerWidth < 768 && $('.question-group:visible').hasClass('scale')) {

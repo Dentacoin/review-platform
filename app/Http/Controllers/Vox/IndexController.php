@@ -111,15 +111,11 @@ class IndexController extends FrontController
 
 			}
 
-			$details_test = Vox::find(34);
-
-			$real_questions = $first->questions->count() + 3;
-			$real_questions += Vox::find(34)->questions->count();
+			$total_questions = $first->questions->count() + 3;
 			
 			return $this->ShowVoxView('welcome', array(
 				'vox' => $first,
-				'real_questions' => $real_questions,
-				'details_test' => $details_test,
+				'total_questions' => $total_questions,
 				'js' => [
 					'index.js'
 				]

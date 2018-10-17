@@ -44,6 +44,13 @@
 										
 									</span>
 								</span>
+								<span id="dcn-test-reward-bonus" style="display: none;">
+									/ 
+									{!! trans('vox.common.dcn_bonus') !!}:
+									<span id="bonus-question-reward">
+										0
+									</span>
+								</span>
 							</span>
 						</div>
 					</div>
@@ -125,8 +132,10 @@
 
 	<script type="text/javascript">
 		var vox = {
-			count: {{ $real_questions }},
+			count: {{ $total_questions }},
+			count_real: {{ $total_questions }},
 			reward: {{ $vox->getRewardTotal() }},
+			reward_single: {{ $vox->getRewardPerQuestion()->dcn }},
 			current: 1
 		}
 		var register_url = '{{ getLangUrl('registration') }}';

@@ -68,7 +68,7 @@
 		    					By using an invitation link - just send it or share it over Skype, email or your favorite social network 
 		    				</p>
 
-							<a href="javascript:;" for="option-link" class="btn btn-inactive">
+							<a href="javascript:;" for="option-link" class="btn btn-inactive{!! $user->my_address() ? '' : ' no-hover' !!}">
 								{{ trans('vox.page.profile.'.$current_subpage.'.option-link') }}
 							</a>
 	    				</div>
@@ -79,7 +79,7 @@
 	    						By entering the email addresses of the people who you'd like to invite 
 	    					</p>
 
-							<a href="javascript:;" for="option-email" class="btn btn-inactive">
+							<a href="javascript:;" for="option-email" class="btn btn-inactive{!! $user->my_address() ? '' : ' no-hover' !!}">
 								{{ trans('vox.page.profile.'.$current_subpage.'.option-email') }}
 						  	</a>
 	    				</div>
@@ -90,7 +90,7 @@
 	    						By giving you access to your contact list and choosing who to invite. A super easy way to invite many people at once.
 	    					</p>
 
-							<a href="javascript:;" for="option-contacts" class="btn btn-inactive">
+							<a href="javascript:;" for="option-contacts" class="btn btn-inactive{!! $user->my_address() ? '' : ' no-hover' !!}">
 								{{ trans('vox.page.profile.'.$current_subpage.'.option-contacts') }}
 						  	</a>
 	    				</div>

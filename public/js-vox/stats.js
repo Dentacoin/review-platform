@@ -352,13 +352,6 @@ $(document).ready(function(){
                     options.slices[data.relation_info.answer] = {
                         offset: 0.2
                     };
-
-                    options.chartArea = {
-                        left:'10%',
-                        top:'20%',
-                        width:'80%',
-                        height:'65%'
-                    };
                 } else {
                     if(data.answer_id) {
                         options.slices = {};
@@ -368,10 +361,22 @@ $(document).ready(function(){
                     }
                 }
 
+                if( scale!='gender' ) {
+
+                    options.chartArea = {
+                        left:'10%',
+                        top:'20%',
+                        width:'80%',
+                        height:'65%'
+                    };
+                }
+
                 drawChart(rows, $(this).find('.main-chart')[0], options, true);
 
                 $(this).find('.total-m').hide();
                 $(this).find('.total-f').hide();
+                $(this).find('.hint').hide();
+                $(this).find('.map-hint').hide();
 
                 $(this).find('.total-all b').html(data.total);
 
@@ -435,6 +440,8 @@ $(document).ready(function(){
                     drawMap(rows, $(this).find('.second-chart')[0]);
                     $(this).find('.third-chart').html('');
                     setupLegend($(this).find('.legend'), legend, data.answer_id);
+                    $(this).find('.hint').html('Click on a pie slice to see the geo spread of the respective answer.').show();
+                    $(this).find('.map-hint').show();
                 } else {
 
                     var rows = [];
@@ -470,6 +477,7 @@ $(document).ready(function(){
 
                     $(this).find('.third-chart').html('');
                     setupLegend($(this).find('.legend'), legend, data.answer_id);
+                    $(this).find('.hint').html('Click on a pie slice to see data only for the respective answer.').show();
                 }
 
                 $(this).find('.second-chart').attr('class', 'chart second-chart '+(type=='dependency' ? 'dependency' : scale) );
@@ -654,7 +662,7 @@ $(document).ready(function(){
             width: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : 490),
             height: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : 260),
             colorAxis: {
-                colors: ['#e4f2e0', '#116996']
+                colors: ['#f5f5f5', '#333']
             },
             magnifyingGlass: {
                 enable: true, 

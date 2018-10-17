@@ -53,6 +53,13 @@
 											
 										</span>
 									</span>
+									<span id="dcn-test-reward-bonus" style="display: none;">
+										/ 
+										{!! trans('vox.common.dcn_bonus') !!}:
+										<span id="bonus-question-reward">
+											0
+										</span>
+									</span>
 								</span>
 							</div>
 						</div>
@@ -134,7 +141,7 @@
 						@endif
 
 						@foreach( $details_fields as $key => $info )
-							@if(empty($user->$key))
+							@if($user->$key==null)
 								@include('vox.template-parts.vox-question', [
 									'details_question' => $info,
 									'details_question_id' => $key
@@ -220,8 +227,10 @@
 
 	<script type="text/javascript">
 		var vox = {
-			count: {{ $real_questions }},
+			count: {{ $total_questions }},
+			count_real: {{ $real_questions }},
 			reward: {{ intval($vox->getRewardTotal()) }},
+			reward_single: {{ $vox->getRewardPerQuestion()->dcn }},
 			current: {{ $first_question_num }},
 			url: '{{ $vox->getLink() }}'
 		}

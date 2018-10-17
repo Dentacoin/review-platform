@@ -1876,6 +1876,8 @@ header {
         left: 0px;
         text-align: center;
         z-index: 20; }
+      .page-statistics .stats .stat .contents .graphs .map-hint,
+      .page-statistics .stats .stat .contents .graphs .hint,
       .page-statistics .stats .stat .contents .graphs .total {
         color: #020202;
         font-size: 15px;
@@ -1886,9 +1888,27 @@ header {
         display: block;
         transform: translateX(-50%);
         width: 100%; }
+        .page-statistics .stats .stat .contents .graphs .map-hint b,
+        .page-statistics .stats .stat .contents .graphs .hint b,
         .page-statistics .stats .stat .contents .graphs .total b {
           color: #1c96d5;
           font-weight: bold; }
+      .page-statistics .stats .stat .contents .graphs .hint {
+        bottom: auto;
+        top: 10px;
+        font-style: italic;
+        font-size: 14px; }
+      .page-statistics .stats .stat .contents .graphs .map-hint {
+        transform: none;
+        left: 24px;
+        z-index: 100;
+        text-align: left;
+        font-size: 14px;
+        bottom: 5px; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats .stat .contents .graphs .map-hint {
+            left: 6px;
+            bottom: 30px; } }
       .page-statistics .stats .stat .contents .graphs .icon {
         width: 47px;
         height: 77px;
@@ -1907,6 +1927,9 @@ header {
         .page-statistics .stats .stat .contents .graphs .chart.dependency, .page-statistics .stats .stat .contents .graphs .chart.age, .page-statistics .stats .stat .contents .graphs .chart.country_id, .page-statistics .stats .stat .contents .graphs .chart.marital_status, .page-statistics .stats .stat .contents .graphs .chart.children, .page-statistics .stats .stat .contents .graphs .chart.education {
           padding-top: 20px;
           padding-left: 20px; }
+          @media screen and (max-width: 768px) {
+            .page-statistics .stats .stat .contents .graphs .chart.dependency, .page-statistics .stats .stat .contents .graphs .chart.age, .page-statistics .stats .stat .contents .graphs .chart.country_id, .page-statistics .stats .stat .contents .graphs .chart.marital_status, .page-statistics .stats .stat .contents .graphs .chart.children, .page-statistics .stats .stat .contents .graphs .chart.education {
+              padding-left: 0px; } }
         .page-statistics .stats .stat .contents .graphs .chart svg > g > g:last-child {
           pointer-events: none; }
       .page-statistics .stats .stat .contents .graphs .main-chart {
@@ -2565,21 +2588,25 @@ header {
     z-index: 123; }
 
 .black-line-title {
-  position: relative; }
-  .black-line-title::after {
-    content: '';
-    height: 3px;
-    background-color: black;
-    width: 100%;
-    z-index: -1;
-    position: absolute;
-    top: 13px;
-    left: 0px; }
+  position: relative;
+  overflow: hidden; }
   .black-line-title h4 {
     display: inline-block;
-    background-color: white;
     padding-right: 7px;
-    margin-bottom: 25px; }
+    margin-bottom: 25px;
+    position: relative; }
+    .black-line-title h4::after {
+      content: '';
+      height: 3px;
+      background-color: black;
+      width: 100%;
+      z-index: -1;
+      position: absolute;
+      top: 3px;
+      top: 50%;
+      left: 100%;
+      width: 2000px;
+      margin-top: -1px; }
   .black-line-title table {
     margin-bottom: 50px; }
     .black-line-title table a {
@@ -3211,8 +3238,10 @@ header {
 .page-profile .site-content .btn-inactive {
   background-color: #9d9d9d;
   color: white; }
-  .page-profile .site-content .btn-inactive:hover {
+  .page-profile .site-content .btn-inactive:hover.no-hover {
     background-color: #9d9d9d; }
+  .page-profile .site-content .btn-inactive:hover:not(.no-hover) {
+    background-color: #80b8dc; }
 .page-profile .site-content .privacy-row {
   padding: 50px 0px;
   border-bottom: 3px solid black; }

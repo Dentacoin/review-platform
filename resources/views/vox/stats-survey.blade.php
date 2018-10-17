@@ -76,6 +76,8 @@
 									<div class="total total-all">
 										Total respondents: <b></b>
 									</div>
+									<div class="hint">
+									</div>
 								</div>
 								<div class="chart">
 									<div class="second-chart"></div>
@@ -84,6 +86,9 @@
 											Total women: <b></b>
 										</div>
 										<div class="icon total-m">
+										</div>
+										<div class="map-hint">
+											Respondents
 										</div>
 									@endif
 								</div>

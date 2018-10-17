@@ -2558,6 +2558,8 @@ header {
 						z-index: 20;
 					}
 
+					.map-hint,
+					.hint,
 					.total {
 						color: #020202;
 						font-size: 15px;
@@ -2573,6 +2575,28 @@ header {
 							color: #1c96d5;
 							font-weight: bold;
 						}
+					}
+
+					.hint {
+						bottom: auto;
+						top: 10px;
+						font-style: italic;;
+						font-size: 14px;
+					}
+
+
+					.map-hint {
+						transform: none;
+					    left: 24px;
+					    z-index: 100;
+					    text-align: left;
+					    font-size: 14px;
+					    bottom: 5px;
+
+					    @media #{$phone} {
+					    	left: 6px;
+					    	bottom: 30px;
+					    }
 					}
 
 					.icon {
@@ -2605,6 +2629,9 @@ header {
 						&.education {
 							padding-top: 20px;
 							padding-left: 20px;
+							@media #{$phone} {
+								padding-left: 0px;
+							}
 						}
 
 						svg > g > g:last-child { pointer-events: none }
@@ -3304,23 +3331,27 @@ header {
 
 .black-line-title {
 	position: relative;
-
-	&::after {
-		content: '';
-		height: 3px;
-		background-color: black;
-		width: 100%;
-		z-index: -1;
-		position: absolute;
-		top: 13px;
-		left: 0px;
-	}
+	overflow: hidden;
 
 	h4 {
 		display: inline-block;
-		background-color: white;
 		padding-right: 7px;
 		margin-bottom: 25px;
+		position: relative;
+
+		&::after {
+			content: '';
+			height: 3px;
+			background-color: black;
+			width: 100%;
+			z-index: -1;
+			position: absolute;
+			top: 3px;
+		    top: 50%;
+		    left: 100%;
+			width: 2000px;
+			margin-top: -1px;
+		}
 	}
 
 	table {
@@ -4234,7 +4265,12 @@ header {
 		color: white;
 
 	    &:hover {
-			background-color: #9d9d9d;
+	    	&.no-hover {
+				background-color: #9d9d9d;   		
+	    	}
+	    	&:not(.no-hover) {
+				background-color: #80b8dc;   		
+	    	}
 	    }
 	}
 
