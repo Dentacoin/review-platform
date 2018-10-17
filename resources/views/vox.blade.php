@@ -142,7 +142,7 @@
 										<span id="header-balance">{{ $user->getVoxBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getVoxBalance() * $dcn_price) }}</span>
 									</a>
 								</div>
-								<a class="header-a" >
+								<a class="header-a" href="{{ getLangUrl('profile/info') }}" >
 									<img class="header-avatar{!! $user->hasimage ? '' : ' default' !!}" src="{{ $user->getImageUrl(true) }}">
 								</a>
 
