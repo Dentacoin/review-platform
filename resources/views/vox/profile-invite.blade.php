@@ -12,8 +12,24 @@
 
 		<h2 class="page-title">
 			<img src="{{ url('new-vox-img/profile-invite.png') }}" />
-			Invite Friends
+			@if($user->is_dentist)
+				Invite Patients
+			@else
+				Invite Friends
+			@endif
 		</h2>
+
+		@if(!$user->my_address())
+			<div class="form-horizontal">
+                <div class="alert alert-info" id="wallet-needed">
+					@if($user->is_dentist)
+                		In order to be able to invite patients, you need to have entered your DCN address. <br/> If you haven't done it yet, please go to <a href="{{ getLangUrl('profile') }}">My Wallet</a>
+					@else
+						In order to be able to invite friends, you need to have entered your DCN address. <br/> If you haven't done it yet, please go to <a href="{{ getLangUrl('profile') }}">My Wallet</a>
+					@endif
+				</div>
+			</div>
+		@endif
 
 
 		<div class="form-horizontal">
@@ -24,17 +40,21 @@
                 	'cta' => trans('vox.page.profile.'.$current_subpage.'.no-email')
                 ])
 			@else
-    			@if(!$user->my_address())
-                    @include('vox.template-parts.provide-address')
-    			@endif
-
-    			<div id="invite-wrapper" {!! !$user->my_address() ? 'style="display: none;"' : '' !!}>
+    			<div id="invite-wrapper">
 
 					<h3>
-						{{ trans('vox.page.profile.'.$current_subpage.'.title') }}
+						@if($user->is_dentist)
+							Invite patients and get rewards
+						@else
+							Invite friends and get rewards
+						@endif
 					</h3>
 
-    				Inviting your friends is a great way to spread the Dentacoin mission and help improve dental care worldwide. On the top of it all, for every friend who joins the platform, you will receive Dentacoins.
+					@if($user->is_dentist)
+						Inviting your patients is a great way to spread the Dentacoin mission and help improve dental care worldwide. On the top of it all, for every patient who joins the platform, you will receive Dentacoins.
+					@else
+						Inviting your friends is a great way to spread the Dentacoin mission and help improve dental care worldwide. On the top of it all, for every friend who joins the platform, you will receive Dentacoins.
+					@endif
 
     				<b>
 	    				There are 3 ways you can easily invite people. Just pick one of the options below and follow the instructions. 

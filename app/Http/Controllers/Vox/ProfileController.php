@@ -75,6 +75,12 @@ class ProfileController extends FrontController
         ];
     }
 
+    public function handleMenu() {
+        if($this->user->is_dentist) {
+            $this->menu['invite'] = 'Invite Patients';
+        }
+    }
+
     public function home($locale=null) {
         if(!$this->user->is_verified || !$this->user->email) {
             Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
@@ -83,6 +89,7 @@ class ProfileController extends FrontController
         if($this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/vox'));
         }
+        $this->handleMenu();
 
         if(Request::isMethod('post')) {
             $va = trim(Request::input('vox-address'));
@@ -124,6 +131,7 @@ class ProfileController extends FrontController
         if($this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/vox'));
         }
+        $this->handleMenu();
         
 
         if(Request::isMethod('post')) {
@@ -200,6 +208,7 @@ class ProfileController extends FrontController
         if($this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/vox'));
         }
+        $this->handleMenu();
         
 
 
@@ -431,6 +440,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
     public function vox($locale=null) {
 
+        $this->handleMenu();
         $current_ban = $this->user->isBanned('vox');
         $prev_bans = $this->user->getPrevBansCount();
         $time_left = '';
@@ -482,6 +492,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         if($this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/vox'));
         }
+        $this->handleMenu();
 
         
 
