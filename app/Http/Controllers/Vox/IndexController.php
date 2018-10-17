@@ -19,9 +19,12 @@ class IndexController extends FrontController
 {
 
 	public function home($locale=null) {
-
+		$first = Vox::where('type', 'home')->first();
 		if(!empty($this->user)) {
-			$this->user->checkForWelcomeCompletion();
+			$this->user->checkForWelcomeCompletion();			
+		}
+
+		if(!empty($this->user) && $this->user->madeTest($first->id)) {
 
 	        if($this->user->isBanned('vox')) {
 	            return redirect(getLangUrl('profile'));
@@ -100,7 +103,12 @@ class IndexController extends FrontController
 			$has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
 
 			if($has_test) {
-				return redirect(getLangUrl('registration'));
+				if($this->user) {
+					return redirect(getLangUrl('/'));
+				} else {
+					return redirect(getLangUrl('registration'));					
+				}
+
 			}
 
 			$details_test = Vox::find(34);

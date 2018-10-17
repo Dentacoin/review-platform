@@ -53,11 +53,11 @@
 						</a>
 					</div>
 
-					<div class="reg-wrapper row clearfix">
+					<div class="errors-wrapper">
+						@include('front.errors')
+					</div>
 
-						<div class="errors-wrapper">
-							@include('front.errors')
-						</div>
+					<div class="reg-wrapper row clearfix">
 
 						<div class="reg-patients col-md-6 tac">
 							<h4>Users (Patients)</h4>

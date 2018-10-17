@@ -133,7 +133,35 @@
 							@endif
 						</div>
 						<div class="header-right col-md-4 tar flex">
-							@if($current_page=='welcome-survey')
+							@if($user)
+								<div class="user-and-price header-a">
+									<a class="my-name" href="{{ getLangUrl('profile') }}">
+										Hello, {{ $user->getName() }}
+									</a>
+									<a href="{{ getLangUrl('profile') }}">
+										<span id="header-balance">{{ $user->getVoxBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getVoxBalance() * $dcn_price) }}</span>
+									</a>
+								</div>
+								<a class="header-a" >
+									<img class="header-avatar{!! $user->hasimage ? '' : ' default' !!}" src="{{ $user->getImageUrl(true) }}">
+								</a>
+
+								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
+								<div class="expander{!! $user->hasimage ? ' has-image' : '' !!}">
+									<a href="{{ getLangUrl('logout') }}">
+										<i class="fas fa-power-off"></i>
+										Log out
+									</a>
+									<a class="btn" href="{{ getLangUrl('profile') }}">
+										My Account
+									</a>
+									@if(!$user->is_verified || !$user->email)
+										<span>
+											* You cannot access your Profile until it's approved.
+										</span>
+									@endif
+								</div>
+							@elseif($current_page=='welcome-survey')
 								@if($prev_user)
 									<div class="twerk-it">
 										<div class="user-and-price header-a">
@@ -152,43 +180,13 @@
 
 								@endif
 							@elseif( $current_page!='register' )
-								@if($user)
-									<div class="user-and-price header-a">
-										<a class="my-name" href="{{ getLangUrl('profile') }}">
-											Hello, {{ $user->getName() }}
-										</a>
-										<a href="{{ getLangUrl('profile/wallet') }}">
-											<span id="header-balance">{{ $user->getVoxBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getVoxBalance() * $dcn_price) }}</span>
-										</a>
-									</div>
-									<a class="header-a" >
-										<img class="header-avatar{!! $user->hasimage ? '' : ' default' !!}" src="{{ $user->getImageUrl(true) }}">
-									</a>
-
-									<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
-									<div class="expander{!! $user->hasimage ? ' has-image' : '' !!}">
-										<a href="{{ getLangUrl('logout') }}">
-											<i class="fas fa-power-off"></i>
-											Log out
-										</a>
-										<a class="btn" href="{{ getLangUrl('profile') }}">
-											My Account
-										</a>
-										@if(!$user->is_verified || !$user->email)
-											<span>
-												* You cannot access your Profile until it's approved.
-											</span>
-										@endif
-									</div>
-								@else
-									<span class="dcn-rate">
-										1 DCN = $<span id="header-rate">{{ sprintf('%.4F', $dcn_price) }}</span> 
-										<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
-									</span>
-									<a href="{{ getLangUrl('login') }}" class="start-button">
-										Log in
-									</a>
-								@endif
+								<span class="dcn-rate">
+									1 DCN = $<span id="header-rate">{{ sprintf('%.4F', $dcn_price) }}</span> 
+									<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
+								</span>
+								<a href="{{ getLangUrl('login') }}" class="start-button">
+									Log in
+								</a>
 							@endif
 						</div>
 					</div>

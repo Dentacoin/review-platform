@@ -260,9 +260,10 @@ $(document).ready(function(){
             return;
         }
         var stat = $(this).closest('.stat');
-        stat.toggleClass('active');
-        if( stat.hasClass('active') ) {
+        if( !stat.hasClass('active') ) {
             reloadGraph( stat );
+        } else {
+            stat.removeClass('active');
         }
     } );
 
@@ -331,6 +332,8 @@ $(document).ready(function(){
                 }
                 $('#daterange-error').hide();
 
+
+                $(this).addClass('active');
 
                 var type = $(this).attr('stat-type');
                 var scale = $(this).find('.scales a.active').attr('scale');
@@ -654,5 +657,5 @@ $(document).ready(function(){
 
 
 
-    $('.stats .stat:first-child a.title').trigger('click');
+    $('.stats .stat:first-child').addClass('active');
 });

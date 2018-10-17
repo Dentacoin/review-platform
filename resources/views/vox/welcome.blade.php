@@ -142,8 +142,8 @@
 				</div>
 
 				<div class="col-md-9 tac">
-					<h4>
 					<h3 class="done-title">Good job, <span class="blue-text"> {{ $user->getName() }}!</span></h3>
+					<h4>
 						You’ve just earned <span id="coins-test">{{ $vox->getRewardTotal() }}</span> DCN! To withdraw your <br/> reward, just go to your <a href="{{ getLangUrl('profile') }}">Wallet.</a> Ready to get more <br/> Dentacoin tokens?
 					</h4>
 

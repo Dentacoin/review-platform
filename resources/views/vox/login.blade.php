@@ -28,9 +28,6 @@
 
 				<form action="{{ getLangUrl('login') }}" method="post" class="form-horizontal">
 					{!! csrf_field() !!}
-					<div class="errors-wrapper">
-						@include('front.errors')
-					</div>
 
 					<div class="user-type-mobile">
 						<a href="javascript:;" type="reg-patients">
@@ -39,6 +36,10 @@
 						<a href="javascript:;" type="reg-dentists">
 							I'm a dentist
 						</a>
+					</div>
+					
+					<div class="errors-wrapper">
+						@include('front.errors')
 					</div>
 
 					<div class="reg-wrapper row clearfix">

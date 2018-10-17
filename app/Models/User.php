@@ -689,20 +689,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         $this->gender = $a_id;
                         $this->save();
                     } else {
-                        $vox_id = null;
-                        if( in_array($q_id, $first_question_ids) ) {
-                            $vox_id = $first->id;
-                        } else
-
-                        if($vox_id) {
-                            $answer = new VoxAnswer;
-                            $answer->user_id = $this->id;
-                            $answer->vox_id = $vox_id;
-                            $answer->question_id = $q_id;
-                            $answer->answer = $a_id;
-                            $answer->country_id = $this->country_id;
-                            $answer->save();
-                        }                           
+                        $answer = new VoxAnswer;
+                        $answer->user_id = $this->id;
+                        $answer->vox_id = $first->id;
+                        $answer->question_id = $q_id;
+                        $answer->answer = $a_id;
+                        $answer->country_id = $this->country_id;
+                        $answer->save();
                     }
                 }
                 $reward = new VoxReward;
