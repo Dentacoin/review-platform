@@ -1436,7 +1436,8 @@ header {
               border-radius: 10px;
               font-weight: 600;
               margin-top: 10px;
-              display: inline-block; }
+              display: inline-block;
+              cursor: pointer; }
           .another-questions .questions-wrapper .another-question .another-question-header .left h4 {
             color: #060606;
             text-transform: uppercase;
@@ -3588,7 +3589,8 @@ header {
   font-size: 18px;
   padding: 25px 20px 25px 80px;
   text-align: left;
-  position: relative; }
+  position: relative;
+  word-break: break-word; }
   @media screen and (max-width: 768px) {
     .alert {
       padding: 10px 10px 10px 40px; } }
@@ -3634,3 +3636,9 @@ header {
       font-family: "Font Awesome 5 Free";
       font-weight: 900;
       content: "\f05a"; }
+  .alert a {
+    color: inherit;
+    text-decoration: underline; }
+    .alert a:hover {
+      color: inherit;
+      text-decoration: underline; }

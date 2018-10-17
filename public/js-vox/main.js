@@ -115,7 +115,6 @@ $(document).ready(function(){
     } );
 
 	$('.alert-update button').click( function() {
-		console.log('aleee');
 		Cookies.set('show-update', 'ok', { expires: 365 });
 	} );
 
@@ -157,6 +156,8 @@ $(document).ready(function(){
 
 	if( Cookies.get('user-type') ) {
 		$('.user-type-mobile a[type="'+Cookies.get('user-type')+'"]').trigger('click');
+	} else {
+		$('.user-type-mobile a[type="reg-patients"]').trigger('click');
 	}
 
 	$('#go-to-2').click( function(e) {

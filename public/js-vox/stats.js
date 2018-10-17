@@ -562,6 +562,14 @@ $(document).ready(function(){
     }
 
     var drawColumns = function(rows, container, more_options, fixedColor) {
+        
+        var biggerLabels = false;
+        if( rows.length<=5 && $(window).width()>768 ) {
+            biggerLabels = true;
+            for(var i in rows) {
+                rows[i][0] = rows[i][0].replace(new RegExp('\n', 'g'), ' ').replace(new RegExp('\r', 'g'), ' ')
+            }
+        }
 
         var data = google.visualization.arrayToDataTable(rows);
 
@@ -579,8 +587,8 @@ $(document).ready(function(){
             legend: {
                 position: 'none'
             },
-            width: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : 540),
-            height: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : 260),
+            width: 540,
+            height: 260,
             vAxis: {
                 format: 'percent',
                 title: null,
@@ -597,7 +605,7 @@ $(document).ready(function(){
                 slantedTextAngle: 90,
                 textStyle: { 
                     //color: 'red',
-                    fontSize: 10,
+                    fontSize: biggerLabels ? 15 : 10,
                     // bold: <boolean>,
                     // italic: <boolean> 
                 }
@@ -620,6 +628,10 @@ $(document).ready(function(){
                 options[i] = more_options[i];
             }
         }
+
+        options.width = $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : options.width),
+        options.height = $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : options.height),
+            
 
         console.log( options );
         var chart = new google.charts.Bar( container );

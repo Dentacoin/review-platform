@@ -46,7 +46,10 @@ class LoginController extends FrontController
             $intended = session()->pull('our-intended');
             return redirect( $intended ? $intended : getLangUrl('/') );
         } else {
-            Request::session()->flash('error-message', trans('front.page.login.error'));
+            Request::session()->flash('error-message', trans('vox.page.login.error-fb', [
+                'link' => '<a href="'.getLangUrl('/').'">',
+                'endlink' => '</a>',
+            ]));
             return redirect( getLangUrl('login'));
         }
     }
@@ -150,7 +153,7 @@ class LoginController extends FrontController
             $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
 
             if($birthyear && $birthyear - intval(date('Y'))<18 ) {
-                Request::session()->flash('error-message', 'You must be at least 18 years old to register.');
+                Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')).' BD returned: '.$birthyear );
                 return redirect(getLangUrl('registration'));
             }
 

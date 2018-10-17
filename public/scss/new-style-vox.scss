@@ -1943,6 +1943,7 @@ header {
 						    font-weight: 600;
 						    margin-top: 10px;
 						    display: inline-block;
+						    cursor: pointer;
 						}
 						
 					}
@@ -4745,6 +4746,7 @@ header {
 	padding: 25px 20px 25px 80px;
 	text-align: left;
 	position: relative;
+    word-break: break-word;
 
 
 	@media #{$phone} {
@@ -4797,6 +4799,16 @@ header {
 		}
 		&:before {
     		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f05a";
+		}
+	}
+
+	a {
+		color: inherit;
+		text-decoration: underline;
+
+		&:hover {
+			color: inherit;
+			text-decoration: underline;
 		}
 	}
 }

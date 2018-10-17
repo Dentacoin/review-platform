@@ -18,6 +18,10 @@ $(document).ready(function(){
 		handleSearch();
 	});
 
+	$('.survey-cats span').click( function() {
+		$('#surveys-categories').val( $(this).attr('cat-id') ).trigger('change');
+	} );
+
 	var handleFilters = function() {
 		if(!$('.sort-menu a.active').length) {
 			return;
