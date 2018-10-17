@@ -3317,12 +3317,12 @@ header {
 .page-profile .site-content .profile-home-content {
   padding-top: 30px; }
   .page-profile .site-content .profile-home-content b {
-    font-size: 50px;
+    font-size: 42px;
     color: black;
     font-weight: bold;
     display: block; }
     .page-profile .site-content .profile-home-content b span {
-      font-size: 50px; }
+      font-size: 42px; }
       @media screen and (max-width: 992px) {
         .page-profile .site-content .profile-home-content b span {
           font-size: 20px; } }

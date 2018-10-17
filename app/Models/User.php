@@ -593,6 +593,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     }
 
+    public static function getDentistCount() {
+        $fn = storage_path('dentist-count-'.$type);
+        $t = file_exists($fn) ? filemtime($fn) : null;
+        if(!$t || $t < time()-300) {
+            $cnt = self::where('is_dentist', 1)->where('is_approved', 1)->count();
+            file_put_contents($fn, $cnt);
+        }
+        return file_get_contents($fn);
+
+    }
+
 
  
 

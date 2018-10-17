@@ -8,8 +8,8 @@
 		</div>
 		<div class="col-md-9">
 			<h2 class="page-title">
-				<img src="{{ url('new-vox-img/profile-home.png') }}" />
-				Overview
+				<img src="{{ url('new-vox-img/profile-wallet.png') }}" />
+				My Wallet
 			</h2>
 
 			<div class="form-horizontal black-line-title">
