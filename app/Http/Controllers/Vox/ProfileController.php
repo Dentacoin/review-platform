@@ -26,7 +26,7 @@ class ProfileController extends FrontController
         parent::__construct($request, $route, $locale);
 
         $this->menu = [
-        	'home' => trans('vox.page.profile.dentist.home'),
+        	'home' => trans('vox.page.profile.dentist.wallet'),
 			'info' => trans('vox.page.profile.dentist.info'),
             'privacy' => trans('front.page.profile.patient.privacy'),
             'invite' => trans('front.page.profile.patient.invite'),
