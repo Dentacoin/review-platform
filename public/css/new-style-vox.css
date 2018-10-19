@@ -2577,9 +2577,9 @@ header {
     z-index: 123; }
 
 .black-line-title {
-  position: relative;
-  overflow: hidden; }
+  position: relative; }
   .black-line-title h4 {
+    overflow: hidden;
     display: inline-block;
     padding-right: 7px;
     margin-bottom: 25px;

@@ -190,7 +190,7 @@ $(document).ready(function(){
     if( $('.balance').length ) {
         var convertDcn = function() {
             var currency = $('.balance .active-currency').text().trim();
-            $('.balance .convertor-value').html( (parseInt( $('.balance .dcn-amount').text() ) * currency_rates[currency]).toFixed(2) );
+            $('.balance .convertor-value').html( (parseInt( $('.balance .dcn-amount').text().replace(' ', '') ) * currency_rates[currency]).toFixed(2) );
         }
 
         $('.balance .expander a').click( function() {
