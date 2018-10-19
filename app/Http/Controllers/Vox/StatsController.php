@@ -57,7 +57,7 @@ class StatsController extends FrontController
 
 		$vox = Vox::whereTranslationLike('slug', $slug)->first();
 
-		if(empty($vox)) {
+		if(empty($vox) || $vox->stats_questions->isEmpty()) {
 			return redirect( getLangUrl('/') );
 		}
 

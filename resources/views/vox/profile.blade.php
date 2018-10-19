@@ -9,12 +9,12 @@
 		<div class="col-md-9">
 			<h2 class="page-title">
 				<img src="{{ url('new-vox-img/profile-home.png') }}" />
-				My Wallet
+				{{ trans('vox.page.profile.home.title') }}
 			</h2>
 
 			<div class="form-horizontal black-line-title">
                 <h4 class="bold">
-                	Dentacoin Balance
+                	{{ trans('vox.page.profile.home.balance') }}
                 </h4>
 
 				<div class="profile-home-content">
@@ -43,8 +43,8 @@
 
 				<div class="form-horizontal">
 					<div class="alert alert-warning">
-						{{ trans('vox.page.profile.wallet-bad-ip') }}
-						<a id="bad-ip-appeal" href="{{ getLangUrl('appeal') }}"> {{ trans('vox.page.profile.wallet-bad-ip-button') }} </a>
+						{{ trans('vox.page.profile.home.wallet-bad-ip') }}
+						<a id="bad-ip-appeal" href="{{ getLangUrl('appeal') }}"> {{ trans('vox.page.profile.home.wallet-bad-ip-button') }} </a>
 					</div>
 				</div>
 
@@ -55,17 +55,17 @@
 	        	@if($user->vox_address)
 					<div class="form-horizontal black-line-title">
 		                <h4 class="bold">
-		                	Withdraw Dentacoin
+		                	{{ trans('vox.page.profile.home.withdraw.title') }}		                	
 		                </h4>
 
 			    		@if(!$user->civic_id)
 				    		<p class="personal-description">
-								{!! nl2br(trans('vox.page.'.$current_page.'.civic-hint')) !!}
+								{!! nl2br(trans('vox.page.profile.home.civic-hint')) !!}
 								<br/>
 								<br/>
 		                	</p>
 		                	<p class="personal-description">
-		                		{!! nl2br(trans('vox.page.'.$current_page.'.civic-buttons')) !!}
+		                		{!! nl2br(trans('vox.page.profile.home.civic-buttons')) !!}
 								<br/>
 								<br/>
 		                	</p>
@@ -76,54 +76,58 @@
 								<br/>
 		                	</p>
 		                	<p class="personal-description">
-		                		{!! nl2br(trans('vox.page.'.$current_page.'.civic-login')) !!}
+		                		{!! nl2br(trans('vox.page.profile.home.civic-login')) !!}
 								<br/>
 								<br/>
 		                	</p>
 
 							<button id="signupButton" class="civic-button-a medium" type="button">
-								<span style="color: white;">{!! nl2br(trans('vox.page.'.$current_page.'.civic-button')) !!}</span>
+								<span style="color: white;">{!! nl2br(trans('vox.page.profile.home.civic-button')) !!}</span>
 							</button>
 
 							<div id="civic-cancelled" class="alert alert-info" style="display: none;">
-								{!! nl2br(trans('vox.page.'.$current_page.'.civic-cancelled')) !!}
+								{!! nl2br(trans('vox.page.profile.home.civic-cancelled')) !!}
 							</div>
 							<div id="civic-error" class="alert alert-warning" style="display: none;">
-								{!! nl2br(trans('vox.page.'.$current_page.'.civic-error')) !!}
+								{!! nl2br(trans('vox.page.profile.home.civic-error')) !!}
 							</div>
 							<div id="civic-weak" class="alert alert-warning" style="display: none;">
-								{!! nl2br(trans('vox.page.'.$current_page.'.civic-weak')) !!}
+								{!! nl2br(trans('vox.page.profile.home.civic-weak')) !!}
 							</div>
 							<div id="civic-wait" class="alert alert-info" style="display: none;">
-								{!! nl2br(trans('vox.page.'.$current_page.'.civic-wait')) !!}
+								{!! nl2br(trans('vox.page.profile.home.civic-wait')) !!}
 							</div>
 							<div id="civic-duplicate" class="alert alert-warning" style="display: none;">
-								{!! nl2br(trans('vox.page.'.$current_page.'.civic-duplicate')) !!}
+								{!! nl2br(trans('vox.page.profile.home.civic-duplicate')) !!}
 							</div>
 							<input type="hidden" id="jwtAddress" value="{{ getLangUrl('profile/jwt') }}" />
 			    		@else
 				    		<p class="personal-description">
-				    			Please select the DCN amount you want to withdraw.
+				    			{{ trans('vox.page.profile.home.withdraw.hint') }}
 				    		</p>
 
 				    		<form id="withdraw-form" method="post" class="form-horizontal" action="{{ getLangurl('profile/withdraw') }}">
 	                			{!! csrf_field() !!}
 
 					            <div class="form-group">
-					  				<label class="control-label top-label col-md-12">Dentacoin address</label>
+					  				<label class="control-label top-label col-md-12">
+					  					{{ trans('vox.page.profile.home.withdraw.address') }}
+					  				</label>
 					                <div class="col-md-12">
 					                    <input class="form-control style-2" id="vox-address" name="vox-address" type="text" value="{{ $user->vox_address }}">
 					                </div>
 					            </div>
 
 					            <div class="form-group separated">
-					  				<label class="control-label top-label col-md-12">Withdraw amount (Min: 3 000 DCN)</label>
+					  				<label class="control-label top-label col-md-12">
+					  					{{ trans('vox.page.profile.home.withdraw.amount') }}
+					  				</label>
 					                <div class="col-md-9">
 					                    <input class="form-control style-2" id="wallet-amount" name="wallet-amount" type="number" value="" placeholder="{{ trans('vox.page.profile.wallet-withdraw-amount') }}">
 					                </div>
 									<div class="col-md-3">
 				                        <button type="submit" name="update" class="btn btn-inactive form-control nom style-2" data-loading="{{ trans('vox.common.loading') }}">
-				                        	Withdraw
+					  						{{ trans('vox.page.profile.home.withdraw.button') }}
 				                        </button>
 									</div>
 					            </div>
@@ -154,11 +158,11 @@
 					<div class="form-horizontal black-line-title">
 
 		                <h4 class="bold">
-		                	Dentacoin Address
+		                	{{ trans('vox.page.profile.home.address.title') }}		                	
 		                </h4>
 
 	                	<p class="personal-description">
-	                		You can only use one DCN address. <a href="{{ url('DentavoxMetamask.pdf') }}" target="_blank">Here</a> is how to create one.
+	                		{{ trans('vox.page.profile.home.address.hint') }}
 	                	</p>
 
 
@@ -171,7 +175,8 @@
 				                </div>
 				                <div class="col-md-2">
 			                        <button type="submit" name="update" class="btn btn-primary form-control nom">
-			                        	Save
+			                        	{{ trans('vox.page.profile.home.address.button') }}
+			                        	
 			                        </button>
 				                </div>
 				            </div>
@@ -185,7 +190,7 @@
 
 					<div class="form-horizontal black-line-title">
 		                <h4 class="bold">
-		                	{{ trans('vox.page.profile.title-history') }}
+		                	{{ trans('vox.page.profile.home.history.title') }}
 		                </h4>
 		            	<table class="table">
 		            		<thead>

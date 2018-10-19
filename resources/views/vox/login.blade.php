@@ -20,10 +20,10 @@
 
 			<div class="col-md-9">
 				<h3 class="tac">
-					Login
+					{{ trans('vox.page.login.title')  }}
 				</h3>
 				<p class="reg-desc">
-					Welcome back! To access your profile and get full access to the platform, just log in using one of the options below.
+					{{ trans('vox.page.login.subtitle')  }}
 				</p>
 
 				<form action="{{ getLangUrl('login') }}" method="post" class="form-horizontal">
@@ -31,10 +31,10 @@
 
 					<div class="user-type-mobile">
 						<a href="javascript:;" type="reg-patients">
-							I'm a patient
+							{{ trans('vox.common.type-patient-mobile')  }}
 						</a>
 						<a href="javascript:;" type="reg-dentists">
-							I'm a dentist
+							{{ trans('vox.common.type-dentist-mobile')  }}
 						</a>
 					</div>
 					
@@ -46,7 +46,9 @@
 
 
 						<div class="reg-patients col-md-6 tac">
-							<h4>Users (Patients)</h4>
+							<h4>
+								{{ trans('vox.common.type-patient')  }}
+							</h4>
 
 							<div class="fb-button-inside">
 								<a href="{{ getLangUrl('login/facebook') }}" class="">
@@ -79,24 +81,26 @@
 						</div>
 
 						<div class="reg-dentists col-md-6">
-							<h4 class="tac">Dentists</h4>
+							<h4 class="tac">
+								{{ trans('vox.common.type-dentist')  }}
+							</h4>
 
 							<div id="register-error" class="alert alert-warning" style="display: none;">						
-								{{ trans('front.page.'.$current_page.'.register-error')  }}<br/>
+								{{ trans('front.page.login.register-error')  }}<br/>
 								<span></span>
 							</div>
 
 							<div class="form-group">
-								<input type="text" name="email" value="{{ old('email') }}" class="form-control" placeholder="{{ trans('front.page.'.$current_page.'.email') }}">
+								<input type="text" name="email" value="{{ old('email') }}" class="form-control" placeholder="{{ trans('vox.page.login.email') }}">
 							</div>
 							<div class="form-group">
-								<input type="password" name="password" class="form-control" placeholder="{{ trans('front.page.'.$current_page.'.password') }}">
+								<input type="password" name="password" class="form-control" placeholder="{{ trans('vox.page.login.password') }}">
 							</div>
 							
 
 							<div class="form-group">
 								<button class="btn btn-primary btn-block" type="submit">
-									{{ trans('front.page.'.$current_page.'.submit') }}
+									{{ trans('vox.page.login.submit') }}
 								</button>
 							</div>
 							
@@ -105,14 +109,14 @@
 									<label for="remember" class="active">
 										<i class="far fa-square"></i>
 								    	<input id="remember" type="checkbox" name="remember" class="input-checkbox" checked>
-										{{ trans('front.page.'.$current_page.'.remember') }}
+										{{ trans('vox.page.login.remember') }}
 									</label>
 								</div>
 							</div>
 
 							<div class="form-group tac">
 				            	<a class="recover-text" href="{{ getLangUrl('recover-password') }}">
-				            		{{ trans('front.page.'.$current_page.'.recover') }}
+				            		{{ trans('vox.page.login.recover') }}
 				            	</a>
 				            </div>
 						</div>

@@ -13,9 +13,9 @@
 		<h2 class="page-title">
 			<img src="{{ url('new-vox-img/profile-invite.png') }}" />
 			@if($user->is_dentist)
-				Invite Patients
+				{{ trans('vox.page.profile.invite.title-dentist') }}
 			@else
-				Invite Friends
+				{{ trans('vox.page.profile.invite.title-patient') }}
 			@endif
 		</h2>
 
@@ -23,9 +23,15 @@
 			<div class="form-horizontal">
                 <div class="alert alert-info" id="wallet-needed">
 					@if($user->is_dentist)
-                		In order to be able to invite patients, you need to have entered your DCN address. <br/> If you haven't done it yet, please go to <a href="{{ getLangUrl('profile') }}">My Wallet</a>
+						{!! nl2br(trans('vox.page.profile.invite.no-address-dentist', [
+							'link' => '<a href="{{ getLangUrl('profile') }}">',
+							'endlink' => '</a>',
+						])) !!}                		
 					@else
-						In order to be able to invite friends, you need to have entered your DCN address. <br/> If you haven't done it yet, please go to <a href="{{ getLangUrl('profile') }}">My Wallet</a>
+						{!! nl2br(trans('vox.page.profile.invite.no-address-patient', [
+							'link' => '<a href="{{ getLangUrl('profile') }}">',
+							'endlink' => '</a>',
+						])) !!}
 					@endif
 				</div>
 			</div>
@@ -34,185 +40,182 @@
 
 		<div class="form-horizontal">
 
+			<div id="invite-wrapper">
 
-			@if(!($user->email && $user->is_verified))
-                @include('vox.template-parts.verify-email', [
-                	'cta' => trans('vox.page.profile.'.$current_subpage.'.no-email')
-                ])
-			@else
-    			<div id="invite-wrapper">
-
-					<h3>
-						@if($user->is_dentist)
-							Invite patients and get rewards
-						@else
-							Invite friends and get rewards
-						@endif
-					</h3>
-
+				<h3>
 					@if($user->is_dentist)
-						Inviting your patients is a great way to spread the Dentacoin mission and help improve dental care worldwide. On the top of it all, for every patient who joins the platform, you will receive Dentacoins.
+						{!! nl2br(trans('vox.page.profile.invite.subtitle-dentist') !!}
 					@else
-						Inviting your friends is a great way to spread the Dentacoin mission and help improve dental care worldwide. On the top of it all, for every friend who joins the platform, you will receive Dentacoins.
+						{!! nl2br(trans('vox.page.profile.invite.subtitle-patient') !!}
 					@endif
+				</h3>
 
-    				<b>
-	    				There are 3 ways you can easily invite people. Just pick one of the options below and follow the instructions. 
-	    			</b>
+				@if($user->is_dentist)
+					{!! nl2br(trans('vox.page.profile.invite.hint-dentist') !!}
+				@else
+					{!! nl2br(trans('vox.page.profile.invite.hint-patient') !!}
+				@endif
 
-	    			<div class="steps flex">
-	    				<div class="step tal">
-	    					<div class="number">01</div>
+				<b>
+					{!! nl2br(trans('vox.page.profile.invite.hint-2') !!}
+    			</b>
 
-	    					<p>
-		    					By using an invitation link - just send it or share it over Skype, email or your favorite social network 
-		    				</p>
+    			<div class="steps flex">
+    				<div class="step tal">
+    					<div class="number">01</div>
 
-							<a href="javascript:;" for="option-link" class="btn btn-inactive{!! $user->my_address() ? '' : ' no-hover' !!}">
-								{{ trans('vox.page.profile.'.$current_subpage.'.option-link') }}
-							</a>
-	    				</div>
-	    				<div class="step tac">
-	    					<div class="number">02</div>
-	    					
-	    					<p>
-	    						By entering the email addresses of the people who you'd like to invite 
-	    					</p>
+    					<p>
+    						{{ trans('vox.page.profile.invite.option-link-hint') }}
+	    				</p>
 
-							<a href="javascript:;" for="option-email" class="btn btn-inactive{!! $user->my_address() ? '' : ' no-hover' !!}">
-								{{ trans('vox.page.profile.'.$current_subpage.'.option-email') }}
-						  	</a>
-	    				</div>
-	    				<div class="step tar">
-	    					<div class="number">03</div>
-	    					
-	    					<p>
-	    						By giving you access to your contact list and choosing who to invite. A super easy way to invite many people at once.
-	    					</p>
+						<a href="javascript:;" for="option-link" class="btn btn-inactive{!! $user->my_address() ? '' : ' no-hover' !!}">
+							{{ trans('vox.page.profile.invite.option-link') }}
+						</a>
+    				</div>
+    				<div class="step tac">
+    					<div class="number">02</div>
+    					
+    					<p>
+    						{{ trans('vox.page.profile.invite.option-email-hint') }}
+    						
+    					</p>
 
-							<a href="javascript:;" for="option-contacts" class="btn btn-inactive{!! $user->my_address() ? '' : ' no-hover' !!}">
-								{{ trans('vox.page.profile.'.$current_subpage.'.option-contacts') }}
-						  	</a>
-	    				</div>
-	    			</div>
+						<a href="javascript:;" for="option-email" class="btn btn-inactive{!! $user->my_address() ? '' : ' no-hover' !!}">
+							{{ trans('vox.page.profile.invite.option-email') }}
+					  	</a>
+    				</div>
+    				<div class="step tar">
+    					<div class="number">03</div>
+    					
+    					<p>
+    						{{ trans('vox.page.profile.invite.option-contacts-hint') }}
+    					</p>
 
-					<div style="display: none;" id="option-link" class="option-div">
-
-						<div class="form-group clearfix">
-						  	<div class="col-md-12">
-						  		<p>
-	                				{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.instructions-link')) !!}				
-	                				<br/>						  			
-	                				<br/>						  						  			
-						  		</p>
-						  	</div>
-						</div>
-						<div class="form-group clearfix">
-						  	<div class="col-md-10">
-			                    {{ Form::text( 'link', getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()), array('class' => 'form-control select-me' ) ) }}
-						  	</div>
-						  	<div class="col-md-2">
-			                    <a class="btn btn-primary nom copy-invite-link"><i class="fa fa-copy"></i> Copy</a>
-						  	</div>
-						</div>
-
-					</div>
-
-					<div style="display: none;" id="option-email" class="option-div">
-						<div class="form-group clearfix">
-						  	<div class="col-md-12">
-						  		<p>
-	                				{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.instructions-email')) !!}
-	                				<br/>						  			
-	                				<br/>						  			
-						  		</p>
-						  	</div>
-							{!! Form::open(array('method' => 'post', 'class' => 'form-horizontal clearfix', 'id' => 'invite-patient-form' )) !!}
-								<div class="col-md-5">
-			                        {{ Form::text( 'name', '', array('class' => 'form-control', 'id' => 'invite-name', 'placeholder' => trans('vox.page.profile.'.$current_subpage.'.name') ) ) }}
-								</div>
-								<div class="col-md-5">
-			                        {{ Form::text( 'email', '', array('class' => 'form-control', 'id' => 'invite-email', 'placeholder' => trans('vox.page.profile.'.$current_subpage.'.email') ) ) }}
-								</div>
-								<div class="col-md-2">
-									{{ Form::submit( trans('vox.page.profile.'.$current_subpage.'.submit'), array('class' => 'form-control btn btn-primary nom' ) ) }}
-								</div>
-							{!! Form::close() !!}
-							<div class="alert" id="invite-alert" style="display: none; margin-top: 20px;">
-							</div>
-						</div>
-
-					</div>
-
-					<div style="display: none;" id="option-contacts" class="option-div">
-
-						<div class="form-group clearfix">
-						  	<div class="col-md-12">
-						  		<p>
-	                				{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.instructions-contacts')) !!}	
-	                				<br/>						  			
-	                				<br/>						  									  			
-						  		</p>
-						  	</div>
-						  	<div class="col-md-4">
-						  		<a class="btn btn-primary btn-block btn-google btn-share-contacts nom" data-netowrk="google" href="javascript:;">
-						  			<i class="fab fa-google"></i>
-						  			GMail
-						  		</a>
-						  	</div>
-						  	<div class="col-md-4">
-						  		<a class="btn btn-primary btn-block btn-yahoo btn-share-contacts nom" data-netowrk="yahoo" href="javascript:;">
-						  			<i class="fab fa-yahoo"></i>
-						  			Yahoo
-						  		</a>
-						  	</div>
-						  	<div class="col-md-4">
-						  		<a class="btn btn-primary btn-block btn-outlook btn-share-contacts nom" data-netowrk="windows" href="javascript:;">
-						  			<i class="fab fa-windows"></i>
-						  			Outlook / Hotmail
-						  		</a>
-						  	</div>
-						</div>
-						{!! Form::open(array('method' => 'post', 'class' => 'form-horizontal clearfix', 'id' => 'share-contacts-form' )) !!}
-							<input type="hidden" name="is_contacts" value="1" />
-							<div class="form-group clearfix">
-							  	<div id="contacts-results" style="display: none;">							  		
-								  	<div class="col-md-12">
-								  		<p>
-			                				{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.contacts-choose')) !!}	
-			                				<br/>						  			
-			                				<br/>						  									  			
-								  		</p>
-								  	</div>					  		
-								  	<div class="col-md-12">
-			                        	{{ Form::text( 'search-contacts', '', array('class' => 'form-control', 'id' => 'search-contacts', 'placeholder' => trans('vox.page.profile.'.$current_subpage.'.search-contacts') ) ) }}
-			                        	<br/>
-								  	</div>
-							  		<div class="col-md-12" id="contacts-results-list">
-
-							  		</div>
-							  		<div class="col-md-12">
-							  			<br/>
-								  		<button type="submit" class="btn btn-primary btn-block btn-outlook">
-	                						{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.contacts-invite-btn')) !!}	
-								  		</button>
-							  		</div>
-							  	</div>
-							</div>
-						  	<div id="contacts-alert" class="alert" style="display: none;">
-						  	</div>
-						  	<div id="contacts-error" class="alert alert-info" style="display: none;">
-						  		{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.contacts-error')) !!}	
-						  	</div>
-						  	<div id="contacts-results-empty" class="alert alert-info" style="display: none;">
-						  		{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.contacts-empty')) !!}	
-						  	</div>
-						{!! Form::close() !!}
-
-					</div>
-
+						<a href="javascript:;" for="option-contacts" class="btn btn-inactive{!! $user->my_address() ? '' : ' no-hover' !!}">
+							{{ trans('vox.page.profile.invite.option-contacts') }}
+					  	</a>
+    				</div>
     			</div>
-			@endif
+
+				<div style="display: none;" id="option-link" class="option-div">
+
+					<div class="form-group clearfix">
+					  	<div class="col-md-12">
+					  		<p>
+                				{!! nl2br(trans('vox.page.profile.invite.instructions-link')) !!}				
+                				<br/>						  			
+                				<br/>						  						  			
+					  		</p>
+					  	</div>
+					</div>
+					<div class="form-group clearfix">
+					  	<div class="col-md-10">
+		                    {{ Form::text( 'link', getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()), array('class' => 'form-control select-me' ) ) }}
+					  	</div>
+					  	<div class="col-md-2">
+		                    <a class="btn btn-primary nom copy-invite-link">
+		                    	<i class="fa fa-copy"></i> 
+		                    	{!! nl2br(trans('vox.page.profile.invite.copy')) !!}
+		                    </a>
+					  	</div>
+					</div>
+
+				</div>
+
+				<div style="display: none;" id="option-email" class="option-div">
+					<div class="form-group clearfix">
+					  	<div class="col-md-12">
+					  		<p>
+                				{!! nl2br(trans('vox.page.profile.invite.instructions-email')) !!}
+                				<br/>						  			
+                				<br/>						  			
+					  		</p>
+					  	</div>
+						{!! Form::open(array('method' => 'post', 'class' => 'form-horizontal clearfix', 'id' => 'invite-patient-form' )) !!}
+							<div class="col-md-5">
+		                        {{ Form::text( 'name', '', array('class' => 'form-control', 'id' => 'invite-name', 'placeholder' => trans('vox.page.profile.invite.email-name') ) ) }}
+							</div>
+							<div class="col-md-5">
+		                        {{ Form::text( 'email', '', array('class' => 'form-control', 'id' => 'invite-email', 'placeholder' => trans('vox.page.profile.invite.email-email') ) ) }}
+							</div>
+							<div class="col-md-2">
+								{{ Form::submit( trans('vox.page.profile.invite.email-submit'), array('class' => 'form-control btn btn-primary nom' ) ) }}
+							</div>
+						{!! Form::close() !!}
+						<div class="alert" id="invite-alert" style="display: none; margin-top: 20px;">
+						</div>
+					</div>
+
+				</div>
+
+				<div style="display: none;" id="option-contacts" class="option-div">
+
+					<div class="form-group clearfix">
+					  	<div class="col-md-12">
+					  		<p>
+                				{!! nl2br(trans('vox.page.profile.invite.instructions-contacts')) !!}	
+                				<br/>						  			
+                				<br/>						  									  			
+					  		</p>
+					  	</div>
+					  	<div class="col-md-4">
+					  		<a class="btn btn-primary btn-block btn-google btn-share-contacts nom" data-netowrk="google" href="javascript:;">
+					  			<i class="fab fa-google"></i>
+					  			GMail
+					  		</a>
+					  	</div>
+					  	<div class="col-md-4">
+					  		<a class="btn btn-primary btn-block btn-yahoo btn-share-contacts nom" data-netowrk="yahoo" href="javascript:;">
+					  			<i class="fab fa-yahoo"></i>
+					  			Yahoo
+					  		</a>
+					  	</div>
+					  	<div class="col-md-4">
+					  		<a class="btn btn-primary btn-block btn-outlook btn-share-contacts nom" data-netowrk="windows" href="javascript:;">
+					  			<i class="fab fa-windows"></i>
+					  			Outlook / Hotmail
+					  		</a>
+					  	</div>
+					</div>
+					{!! Form::open(array('method' => 'post', 'class' => 'form-horizontal clearfix', 'id' => 'share-contacts-form' )) !!}
+						<input type="hidden" name="is_contacts" value="1" />
+						<div class="form-group clearfix">
+						  	<div id="contacts-results" style="display: none;">							  		
+							  	<div class="col-md-12">
+							  		<p>
+		                				{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.contacts-choose')) !!}	
+		                				<br/>						  			
+		                				<br/>						  									  			
+							  		</p>
+							  	</div>					  		
+							  	<div class="col-md-12">
+		                        	{{ Form::text( 'search-contacts', '', array('class' => 'form-control', 'id' => 'search-contacts', 'placeholder' => trans('vox.page.profile.'.$current_subpage.'.contacts-search') ) ) }}
+		                        	<br/>
+							  	</div>
+						  		<div class="col-md-12" id="contacts-results-list">
+
+						  		</div>
+						  		<div class="col-md-12">
+						  			<br/>
+							  		<button type="submit" class="btn btn-primary btn-block btn-outlook">
+                						{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.contacts-invite-btn')) !!}	
+							  		</button>
+						  		</div>
+						  	</div>
+						</div>
+					  	<div id="contacts-alert" class="alert" style="display: none;">
+					  	</div>
+					  	<div id="contacts-error" class="alert alert-info" style="display: none;">
+					  		{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.contacts-error')) !!}	
+					  	</div>
+					  	<div id="contacts-results-empty" class="alert alert-info" style="display: none;">
+					  		{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.contacts-empty')) !!}	
+					  	</div>
+					{!! Form::close() !!}
+
+				</div>
+
+			</div>
 
 		</div>
 

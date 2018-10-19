@@ -67,7 +67,7 @@ a {
 
     &:focus,
     &:hover {
-    	text-decoration: none !important;
+    	text-decoration: none;
     	color: #38a2e5;
     }
 }
@@ -3231,10 +3231,6 @@ header {
 	.register-dentist-left {
 		padding-left: 80px !important;
 
-		@media #{$tablet} {
-			order: 2;
-		}
-
 		@media #{$phone} {
 			padding-left: 15px !important;
 		}
@@ -3242,12 +3238,8 @@ header {
 
 	.register-dentist-right {
 		margin-top: 80px;
-    	margin-left: 60px;
+    	padding-left: 60px;
     	position: relative;
-
-		@media #{$tablet} {
-			margin-top: 0px;
-		}
 
 		@media #{$phone} {
 			display: none;
@@ -3261,11 +3253,10 @@ header {
 			display: block;
 			position: absolute;
 			top: -8px;
-			left: -20px;
+			left: 40px;
 
 			@media #{$tablet} {
-				left: auto;
-				right: -20px;
+				height: 192px;
 			}
 		}
 
@@ -3994,6 +3985,15 @@ header {
 
 			.alert {
 				margin-top: 22px;
+			}
+		}
+	}
+
+	table {
+		a {
+			color: $main-color;
+			&:hover {
+				text-decoration: underline;
 			}
 		}
 	}

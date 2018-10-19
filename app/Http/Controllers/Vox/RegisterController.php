@@ -151,9 +151,9 @@ class RegisterController extends FrontController
                     $inv->invited_id = $newuser->id;
                     $inv->save();
 
-                    $newuser->invitor->sendTemplate( 26, [
-                        'who_joined_name' => $newuser->getName()
-                    ] );
+                    // $newuser->invitor->sendTemplate( 26, [
+                    //     'who_joined_name' => $newuser->getName()
+                    // ] );
                 }
 
                 $sess = [

@@ -5,18 +5,22 @@
 	<div class="full">
 		<p class="first-absolute">
 			<span>
-				EARN DENTACOIN <br/> by taking surveys
+				{!! nl2br(trans('vox.page.index.title')) !!}
 			</span>
 			<br/>
-			<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">Start now</a>
+			<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">
+				{!! nl2br(trans('vox.page.index.start')) !!}
+			</a>
 		</p>
 		<a href="javascript:;" class="second-absolute">
-			More
+			{!! nl2br(trans('vox.page.index.more')) !!}
 		</a>
 	</div>
 	<div class="container section-work">
 
-		<h2>How it works</h2>		
+		<h2>
+			{!! nl2br(trans('vox.page.index.how-works')) !!}
+		</h2>		
 
 		<div class="row">
 			<div class="col-md-3 tac" style="{{ $user ? 'margin-left: 12%' : '' }}">
@@ -24,8 +28,12 @@
 					<img src="{{ url('new-vox-img/warm-up.png') }}">
 				</div>
 				<div>
-					<h4>1. WARM UP</h4>
-					<p>Answer a few “welcome” questions about your dental care habits to get your first 100 DCN!</p>
+					<h4>
+						1. {!! nl2br(trans('vox.page.index.how-works.1.title')) !!}
+					</h4>
+					<p>
+						{!! nl2br(trans('vox.page.index.how-works.1.content')) !!}
+					</p>
 				</div>
 			</div>
 			@if(!$user)
@@ -34,8 +42,12 @@
 						<img src="{{ url('new-vox-img/sign-up.png') }}">
 					</div>
 					<div>
-						<h4>2. SIGN UP</h4>
-						<p>Register quickly and easily with your Facebook profile. This is to make sure you are a real person.</p>
+						<h4>
+							2. {!! nl2br(trans('vox.page.index.how-works.2.title')) !!}
+						</h4>
+						<p>
+							{!! nl2br(trans('vox.page.index.how-works.2.content')) !!}
+						</p>
 					</div>
 				</div>
 			@endif
@@ -44,11 +56,18 @@
 					<img src="{{ url('new-vox-img/grab-reward.png') }}">
 				</div>
 				<div>
-					<h4>{{ $user ? '2' : '3' }}. GRAB REWARD</h4>
+					<h4>
+						{{ $user ? '2' : '3' }}. 
+						{!! nl2br(trans('vox.page.index.how-works.3.title')) !!}
+					</h4>
 					@if($user)
-						<p>Go to your Dentacoin Wallet to review add withdraw your reward.</p>
+						<p>
+							{!! nl2br(trans('vox.page.index.how-works.3.content-logged')) !!}
+						</p>
 					@else
-						<p>Upon registration, 100 DCN will be assigned to your profle. You can withdraw them anytime!</p>
+						<p>
+							{!! nl2br(trans('vox.page.index.how-works.3.content')) !!}
+						</p>
 					@endif
 				</div>
 			</div>
@@ -57,15 +76,22 @@
 					<img src="{{ url('new-vox-img/take-surveys.png') }}">
 				</div>
 				<div>
-					<h4>{{ $user ? '3' : '4' }}. TAKE SURVEYS</h4>
-					<p>Each survey will give you coins. The more questions you answer, the bigger your reward. Ready?</p>
+					<h4>
+						{{ $user ? '3' : '4' }}. 
+						{!! nl2br(trans('vox.page.index.how-works.4.title')) !!}
+					</h4>
+					<p>
+						{!! nl2br(trans('vox.page.index.how-works.4.content')) !!}
+					</p>
 				</div>
 			</div>
 		</div>
 
 		<div class="row tac">
 			<div class="col-md-12">
-				<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">Start now</a>
+				<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">
+					{!! nl2br(trans('vox.page.index.start')) !!}
+				</a>
 			</div>
 		</div>
 	</div>
@@ -73,19 +99,27 @@
 	<div class="section-stats">
 		<div class="container">
 			<img src="{{ url('new-vox-img/stats-front.png') }}">
-			<h3>Curious to see our dental survey stats?</h3>
-			<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">Check stats</a>
+			<h3>
+				{!! nl2br(trans('vox.page.index.curious')) !!}
+			</h3>
+			<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">
+				{{ trans('vox.common.check-statictics') }}
+			</a>
 		</div>
 	</div>
 
 	<div class="container section-about">
-		<h2 class="tac">About Dentavox</h2>
-		<h4>PROVIDING VALUABLE PATIENT INSIGHTS TO help improve global dental health</h4>
+		<h2 class="tac">
+			{!! nl2br(trans('vox.page.index.about')) !!}
+		</h2>
+		<h4>
+			{!! nl2br(trans('vox.page.index.about.title')) !!}
+		</h4>
 		<p>
-			DentaVox is a market research platform developed by the <a href="https://dentacoin.com/" target="_blank">Dentacoin Foundation.</a> The web app collects customer wisdom through surveys on various dental care topics. After each questionnaire you take, you are rewarded with a different amount of Dentacoin (DCN), the first cryptocurrency created for the dental industry.
+			{!! nl2br(trans('vox.page.index.about.content-1')) !!}
 		</p>
 		<p>
-			You can store the DCN collected in your wallet, exchange it to other altcoins and/or currencies or use them to pay for dental services in multiple <a href="https://dentacoin.com/partner-network" target="_blank">partner dental practices</a> across the world.
+			{!! nl2br(trans('vox.page.index.about.content-2')) !!}
 		</p>
 	</div>
     	

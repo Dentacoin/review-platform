@@ -123,7 +123,7 @@
 								<table>
 									<tr>
 										<td class="tar"><b>{{ number_format($users_count, 0, '', ' ') }}</b></td>
-										<td>{{ trans('vox.page.index.users-count') }}</td>
+										<td>{{ trans('vox.header.users-count') }}</td>
 									</tr>
 									<tr>
 										<td class="tar"><b id="header_questions">{{ number_format($header_questions, 0, '', ' ') }}</b></td>

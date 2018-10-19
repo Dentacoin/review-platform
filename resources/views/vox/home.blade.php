@@ -8,7 +8,7 @@
   			@include('front.errors')
   			
 			<h1 class="bold">
-				SELECT A SURVEY
+				{{ trans('vox.page.home.title') }}
 			</h1>
 
 			<div class="search-survey tal">
@@ -33,7 +33,9 @@
 					@endforeach
 				</div>
 				<div class="sort-category tar"> 
-					<span>Filter by category:</span>
+					<span>
+						{{ trans('vox.page.home.filter') }}:
+					</span>
 					{{ Form::select('category', ['all' => 'All'] + $vox_categories, null , ['id' => 'surveys-categories']) }} 
 				</div>
 			</div>
@@ -57,20 +59,15 @@
 								<div class="right">
 									<span class="bold">{{ !empty($vox->complex) ? 'max ' : '' }} {{ $vox->getRewardTotal() }} DCN</span>
 									<p>{{ $vox->formatDuration() }}</p>
-									<!-- <p>
-										{{ trans('vox.common.questions-count', ['count' => $vox->questions->count()]) }}
-									</p> -->
 									<div class="btns">
 										@if($vox->stats_questions->isNotEmpty())
 										<a class="statistics blue-button secondary" href="{{ $vox->getStatsList() }}">
-											<!-- {{ trans('vox.common.check-statictics') }} -->
-											Check Stats
+											{{ trans('vox.common.check-statictics') }}
 										</a>
 										@endif
 										@if(!in_array($vox->id, $taken))
 											<a class="opinion blue-button" href="{{ $vox->getLink() }}">
-												Take survey
-												<!-- {{ trans('vox.common.take-the-test') }} -->
+												{{ trans('vox.common.take-the-test') }}
 											</a>
 										@endif
 									</div>
@@ -81,11 +78,11 @@
 				</div>
 
 				<a class="give-me-more" id="survey-more" href="javascript:;" style="display: none;">
-					load more
+					{{ trans('vox.common.load-more') }}					
 				</a>
 
 				<div class="alert alert-info" id="survey-not-found" style="display: none;">
-					Unfortunately there aren't any Surveys that match your filters
+					{{ trans('vox.page.home.no-results') }}
 				</div>
 			</div>
 	            

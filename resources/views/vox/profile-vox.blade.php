@@ -10,28 +10,32 @@
 
 			<h2 class="page-title">
 				<img src="{{ url('new-vox-img/profile-vox.png') }}" />
-				DentaVox
+				{{ trans('vox.page.profile.vox.title') }}
+				
 			</h2>
 
 			@if($histories->isNotEmpty())
 		        <div class="history-section black-line-title form-horizontal">
 	                <h4 class="bold">
-	                	Surveys Completed
-                		<!-- {{ trans('vox.page.profile.my-questionnaires') }} -->
+	                	{{ trans('vox.page.profile.vox.list-title') }}
 	                </h4>
 	            	<table class="table">
 	            		<thead>
 	            			<tr>
 		            			<th>
-		            				Date & Time
-		            				<!-- {{ trans('vox.page.profile.'.$current_subpage.'.list-date') }} -->
+		            				
+		            				{{ trans('vox.page.profile.vox.list-date') }}
 		            			</th>
 		            			<th>
-		            				Survey
-		            				<!-- {{ trans('vox.page.profile.'.$current_subpage.'.list-questionnaire') }} -->
+		            				
+		            				{{ trans('vox.page.profile.vox.list-questionnaire') }}
 		            			</th>
 		            			<th>
-		            				{{ trans('vox.page.profile.'.$current_subpage.'.list-reward') }}
+		            				
+		            				{{ trans('vox.page.profile.vox.list-stats') }}
+		            			</th>
+		            			<th>
+		            				DCN
 		            			</th>
 	            			</tr>
 	            		</thead>
@@ -43,9 +47,14 @@
 		            						{{ $completed->created_at->toDateString().', '.$completed->created_at->toTimeString() }}
 		            					</td>
 		            					<td>
-											<a href="{{ $completed->vox->getLink() }}" target="_blank">
-												{{ $completed->vox->title }}
+											{{ $completed->vox->title }}
+		            					</td>
+		            					<td>
+		            						@if($completed->vox->stats_questions->isNotEmpty())
+											<a href="{{ $completed->vox->getStatsList() }}" target="_blank">
+												{{ trans('vox.page.profile.vox.list-check') }}
 											</a>
+											@endif
 		            					</td>
 		            					<td>
 		            						{{ $completed->reward ? $completed->reward : '-' }}
@@ -123,26 +132,23 @@
 
 	        	<div class="bans-section black-line-title">
 	                <h4 class="bold">
-	                	Bans
-	                	<!-- {{ trans('vox.page.profile.title-bans') }} -->
+	                	{{ trans('vox.page.profile.vox.bans-title') }}
 	                </h4>
 	            	<table class="table">
 	            		<thead>
 	            			<tr>
 		            			<th>
-		            				Date & Time
-		            				<!-- {{ trans('vox.page.profile.bans.list-date') }} -->
+		            				{{ trans('vox.page.profile.vox.ban-date') }}
 		            			</th>
 	            				<th>
-	            					Ban
+		            				{{ trans('vox.page.profile.vox.ban-duration') }}
+	            					
 	            				</th>
 		            			<th>
-		            				Reason
-		            				<!-- {{ trans('vox.page.profile.bans.list-reason') }} -->
+		            				{{ trans('vox.page.profile.vox.ban-reason') }}
 		            			</th>
 		            			<th>
-		            				Time left
-		            				<!-- {{ trans('vox.page.profile.bans.list-expires') }} -->
+		            				{{ trans('vox.page.profile.vox.ban-expires') }}
 		            			</th>
 	            			</tr>
 	            		</thead>
@@ -156,18 +162,14 @@
 	            						{{ $ban->created_at->diffInHours($ban->expires)  }}h
 	            					</td>
 	            					<td>
-	            						{{ trans('vox.page.profile.bans.ban-reason-'.$ban->type) }}
+	            						{{ trans('vox.page.profile.vox.ban-reason-'.$ban->type) }}
 	            					</td>
 	            					<td>
 	            						@if($ban->expires==null)
-	            							{{ trans('vox.page.profile.bans.ban-permanent') }}
+	            							{{ trans('vox.page.profile.vox.ban-permanent') }}
 	            						@elseif($ban->expires->lt( Carbon\Carbon::now() ))
-	            							{{ trans('vox.page.profile.bans.ban-expired') }}
+	            							{{ trans('vox.page.profile.vox.ban-expired') }}
 	            						@else
-	            							<!-- {{ trans('vox.page.profile.bans.ban-until', [
-	            								'expires' => $ban->expires->toDateString()
-	            							]) }} -->
-
 	            							{{ str_pad(\Carbon\Carbon::now()->diffInHours($ban->expires), 2, "0", STR_PAD_LEFT)}}:{{ str_pad(\Carbon\Carbon::now()->diffInMinutes($ban->expires) % 60 , 2, "0", STR_PAD_LEFT)}}:{{ str_pad(\Carbon\Carbon::now()->diffInSeconds($ban->expires) % 60 , 2, "0", STR_PAD_LEFT)}}
 	            						@endif
 	            					</td>

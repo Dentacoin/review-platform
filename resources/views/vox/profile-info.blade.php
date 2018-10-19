@@ -11,7 +11,7 @@
 
 			<h2 class="page-title">
 				<img src="{{ url('new-vox-img/profile-info.png') }}" />
-				Edit Account
+				{{ trans('vox.page.profile.info.title') }}
 			</h2>
                
             @include('front.errors')
@@ -22,7 +22,7 @@
                     @foreach( $fields as $key => $info)
                         <div class="form-group {{ $errors->has($key) ? 'has-error' : '' }}" >
                             <label class="col-md-2 control-label">
-                            	{{ trans('vox.page.'.$current_page.'.form-'.$key) }}
+                            	{{ trans('vox.page.profile.info.form-'.$key) }}
                             </label>
                             <div class="col-md-10">
                                 @if( $info['type'] == 'text')
@@ -51,7 +51,7 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <button type="submit" name="update" class="btn btn-block btn-primary form-control">
-                                {{ trans('vox.page.'.$current_page.'.form-save') }} 
+                                {{ trans('vox.page.'.$current_page.'.info.form-save') }} 
                             </button>
                         </div>
                     </div>
@@ -65,26 +65,26 @@
 	  				{!! csrf_field() !!}
 	  				
 	  				<div class="form-group">
-					  	<label class="control-label col-md-2">{{ trans('vox.page.'.$current_page.'.change-password-current') }}</label>
+					  	<label class="control-label col-md-2">{{ trans('vox.page.'.$current_page.'.info.change-password-current') }}</label>
 					  	<div class="col-md-10">
 					    	<input type="password" name="cur-password" class="form-control" required>
 					    </div>
 					</div>
 	    			<div class="form-group">
-					  	<label class="control-label col-md-2">{{ trans('vox.page.'.$current_page.'.change-password-new') }}</label>
+					  	<label class="control-label col-md-2">{{ trans('vox.page.'.$current_page.'.info.change-password-new') }}</label>
 					  	<div class="col-md-10">
 					    	<input type="password" name="new-password" class="form-control" required>
 					    </div>
 					</div>
 				  	<div class="form-group">
-					  	<label class="control-label col-md-2">{{ trans('vox.page.'.$current_page.'.change-password-repeat') }}</label>
+					  	<label class="control-label col-md-2">{{ trans('vox.page.'.$current_page.'.info.change-password-repeat') }}</label>
 					  	<div class="col-md-10">
 					    	<input type="password" name="new-password-repeat" class="form-control" required>
 					    </div>
 					</div>
 					<div class="form-group">
 						<div class="col-md-12">
-	                        <button type="submit" name="update" class="btn btn-primary form-control"> {{ trans('vox.page.'.$current_page.'.change-password-submit') }} </button>
+	                        <button type="submit" name="update" class="btn btn-primary form-control"> {{ trans('vox.page.'.$current_page.'.info.change-password-submit') }} </button>
 						</div>
 					</div>
 	    			

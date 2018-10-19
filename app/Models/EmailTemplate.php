@@ -80,7 +80,12 @@ class EmailTemplate extends Model
             $codes[] = '[ban_days]';
         } 
 
-        if($this->id==18 || $this->id==19 || $this->id==22 || $this->id==26 || $this->id==27) {
+        
+        if($this->id==26) {
+            $codes[] = '[welcome_link]Click here[/welcome_link]';
+        } 
+
+        if($this->id==18 || $this->id==19 || $this->id==22) {
             $codes[] = '[who_joined_name]';
         } 
         

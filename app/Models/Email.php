@@ -86,7 +86,6 @@ class Email extends Model
 			16,
 			25,
 			26,
-			27,
 			30,
 			32,
 		];
@@ -227,7 +226,7 @@ class Email extends Model
 			$content = str_replace('[ban_hours]', $this->meta['ban_hours'], $content);
 		}
 
-		if($this->template->id==18 || $this->template->id==19 || $this->template->id==22 || $this->template->id==26 || $this->template->id==27) { //Invitation accepted
+		if($this->template->id==18 || $this->template->id==19 || $this->template->id==22 || $this->template->id==27) { //Invitation accepted
 			$content = str_replace(array(
 				'[who_joined_name]',
 			), array(
@@ -246,6 +245,16 @@ class Email extends Model
 				$this->meta['transaction_address'],
 				'<a href="'.$this->meta['transaction_link'].'" target="_blank">',
 				'</a>',
+			), $content);
+		}
+
+		if($this->template->id==26) { //Dentist approved
+			$content = str_replace(array(
+				'[welcome_link]',
+				'[/welcome_link]',
+			), array(
+				'<a '.$this->button_style.' href="'.getLangUrl('welcome-to-dentavox').'">',
+				'</a>',				
 			), $content);
 		}
 

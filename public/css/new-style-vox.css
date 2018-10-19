@@ -54,7 +54,7 @@ button:focus {
 a {
   text-decoration: none; }
   a:focus, a:hover {
-    text-decoration: none !important;
+    text-decoration: none;
     color: #38a2e5; }
 
 .clearfix:after {
@@ -2494,11 +2494,6 @@ header {
 .section-login .register-dentist-left,
 .section-register .register-dentist-left {
   padding-left: 80px !important; }
-  @media screen and (max-width: 1080px) {
-    .section-recover .register-dentist-left,
-    .section-login .register-dentist-left,
-    .section-register .register-dentist-left {
-      order: 2; } }
   @media screen and (max-width: 768px) {
     .section-recover .register-dentist-left,
     .section-login .register-dentist-left,
@@ -2508,13 +2503,8 @@ header {
 .section-login .register-dentist-right,
 .section-register .register-dentist-right {
   margin-top: 80px;
-  margin-left: 60px;
+  padding-left: 60px;
   position: relative; }
-  @media screen and (max-width: 1080px) {
-    .section-recover .register-dentist-right,
-    .section-login .register-dentist-right,
-    .section-register .register-dentist-right {
-      margin-top: 0px; } }
   @media screen and (max-width: 768px) {
     .section-recover .register-dentist-right,
     .section-login .register-dentist-right,
@@ -2530,13 +2520,12 @@ header {
     display: block;
     position: absolute;
     top: -8px;
-    left: -20px; }
+    left: 40px; }
     @media screen and (max-width: 1080px) {
       .section-recover .register-dentist-right::after,
       .section-login .register-dentist-right::after,
       .section-register .register-dentist-right::after {
-        left: auto;
-        right: -20px; } }
+        height: 192px; } }
   .section-recover .register-dentist-right p,
   .section-login .register-dentist-right p,
   .section-register .register-dentist-right p {
@@ -3047,6 +3036,10 @@ header {
     padding: 0px; }
     .page-profile .site-content .container .alert {
       margin-top: 22px; } }
+.page-profile .site-content table a {
+  color: #38ace5; }
+  .page-profile .site-content table a:hover {
+    text-decoration: underline; }
 .page-profile .site-content .profile-menu {
   border: 1px solid #f3f3f3;
   box-shadow: 0px 0px 10px 2px #f3f3f3;
