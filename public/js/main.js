@@ -114,9 +114,11 @@ $(document).ready(function(){
 
     $('#read-privacy').change( function(e) {
     	if ($(this).is(':checked')) {
-    		$(this).parent().next().css('display', 'block');
+    		$(this).parent().parent().find('#register-civic-button').css('display', 'inline-block');
+    		$(this).parent().parent().find('.fb-button-inside').css('display', 'block');
     	} else {
-    		$(this).parent().next().hide();
+    		$(this).parent().parent().find('#register-civic-button').hide();
+    		$(this).parent().parent().find('.fb-button-inside').hide();
     	}
     });
 

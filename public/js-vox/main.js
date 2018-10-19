@@ -138,16 +138,7 @@ $(document).ready(function(){
 	} );
 
 
-    $('#read-privacy').change( function(e) {
-    	if ($(this).is(':checked')) {
-    		$(this).parent().next().css('display', 'block');
-    	} else {
-    		$(this).parent().next().hide();
-    	}
-    });
-
-
-	$('.second-absolute').click( function(e) {
+    $('.second-absolute').click( function(e) {
 		$('html, body').animate({
         	scrollTop: $('.section-work').offset().top
         }, 500);
@@ -307,23 +298,25 @@ $(document).ready(function(){
 	});
 
 
-    setInterval( function() {
-		$.ajax( {
-			url: '/question-count',
-			type: 'GET',
-			dataType: 'json',
-			success: function( data ) {
-				// console.log(data);
-				var my_amount = parseInt($('#header-balance').html()) * data.dcn_price_full
+	if( $('#header_questions').length ) {
+		setInterval( function() {
+			$.ajax( {
+				url: '/question-count',
+				type: 'GET',
+				dataType: 'json',
+				success: function( data ) {
+					// console.log(data);
+					var my_amount = parseInt($('#header-balance').html()) * data.dcn_price_full
 
-				$('#header_questions').html(data.question_count);
-				$('#header-rate').html(data.dcn_price);
-				$('#header-change').html('('+data.dcn_change+'%)').css('color', parseFloat(data.dcn_change)>0 ? '#4caf50' : '#e91e63' );
-				$('#header-usd').html( '$' + parseFloat(my_amount).toFixed(2) );
-			}
-		});
+					$('#header_questions').html(data.question_count);
+					$('#header-rate').html(data.dcn_price);
+					$('#header-change').html('('+data.dcn_change+'%)').css('color', parseFloat(data.dcn_change)>0 ? '#4caf50' : '#e91e63' );
+					$('#header-usd').html( '$' + parseFloat(my_amount).toFixed(2) );
+				}
+			});
 
-    }, 10000 );
+	    }, 10000 );
+	}
 
 
     //Selects

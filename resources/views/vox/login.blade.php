@@ -53,6 +53,29 @@
 								</a>
 								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
 							</div>
+
+					
+							<div class="civic-button" id="register-civic-button">
+								<i class="fas fa-circle-notch fa-spin"></i>
+								Continue with Civic
+							</div>
+							<br/>
+							<br/>
+
+							<div id="civic-cancelled" class="alert alert-info" style="display: none;">
+								{!! nl2br(trans('front.common.civic.cancelled')) !!}
+							</div>
+							<div id="civic-error" class="alert alert-warning" style="display: none;">
+								{!! nl2br(trans('front.common.civic.error')) !!}
+								<span></span>
+							</div>
+							<div id="civic-weak" class="alert alert-warning" style="display: none;">
+								{!! nl2br(trans('front.common.civic.weak')) !!}
+							</div>
+							<div id="civic-wait" class="alert alert-info" style="display: none;">
+								{!! nl2br(trans('front.common.civic.wait')) !!}
+							</div>
+							<input type="hidden" id="jwtAddress" value="{{ getLangUrl('login/civic') }}" />
 						</div>
 
 						<div class="reg-dentists col-md-6">

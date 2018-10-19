@@ -164,6 +164,7 @@ $reviewRoutes = function () {
 			Route::get('login/facebook', 						'LoginController@facebook_login');
 			Route::get('login/twitter', 						'LoginController@twitter_login');
 			Route::get('login/gplus', 							'LoginController@gplus_login');
+			Route::post('login/civic', 							'LoginController@civic');
 
 			Route::get('login/callback/facebook', 				'LoginController@facebook_callback');
 			Route::get('login/callback/twitter', 				'LoginController@twitter_callback');
@@ -179,6 +180,8 @@ $reviewRoutes = function () {
 
 			Route::post('register/step1', 						'RegisterController@check_step_one');
 			Route::post('register/upload', 						'RegisterController@upload');
+
+			Route::post('register/civic', 						'RegisterController@civic');
 
 			Route::get('dentists/p/{page?}', 					'DentistsController@paginate');
 			Route::get('dentists/{country?}/{city?}', 			'DentistsController@list');
@@ -275,7 +278,9 @@ $voxRoutes = function () {
 
 			Route::get('login/facebook', 						'LoginController@facebook_login');
 			Route::get('login/callback/facebook', 				'LoginController@facebook_callback');
+			Route::post('login/civic', 							'LoginController@civic');
 
+			Route::post('register/civic', 						'RegisterController@civic');
 			Route::get('register/facebook', 					'LoginController@facebook_register');
 			Route::get('register/callback/facebook', 			'LoginController@facebook_callback_register');
 

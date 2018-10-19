@@ -20,6 +20,8 @@ use App\Models\UserAsk;
 use App\Models\UserTeam;
 use App\Models\DcnTransaction;
 use App\Models\UserLogin;
+use App\Models\Blacklist;
+use App\Models\BlacklistBlock;
 use Carbon\Carbon;
 
 use Request;
@@ -712,5 +714,36 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public static function checkForBlockedIP() {
         include_once("/var/www/html/blocked/blockscript/detector.php");
         return !empty($_SERVER['blockscript_blocked']) && $_SERVER['blockscript_blocked']=='YES';
+    }
+
+    public static function checkBlocks($name, $email) {
+
+        foreach (Blacklist::get() as $b) {
+            if ($b['field'] == 'name') {
+                if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower($name)) == true) {
+
+                    $new_blacklist_block = new BlacklistBlock;
+                    $new_blacklist_block->blacklist_id = $b['id'];
+                    $new_blacklist_block->name = $name;
+                    $new_blacklist_block->email = $email;
+                    $new_blacklist_block->save();
+
+                    return trans('front.page.login.blocked-name');
+                }
+            } else {
+                if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower($email)) == true) {
+
+                    $new_blacklist_block = new BlacklistBlock;
+                    $new_blacklist_block->blacklist_id = $b['id'];
+                    $new_blacklist_block->name = $name;
+                    $new_blacklist_block->email = $email;
+                    $new_blacklist_block->save();
+                    
+                    return trans('front.page.login.blocked-email');
+                }
+            }
+        }
+
+        return null;
     }
 }

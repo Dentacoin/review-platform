@@ -167,6 +167,11 @@ class VoxController extends FrontController
 
 		        		} else if ( isset( $this->details_fields[$type] ) ) {
 
+		        			$should_reward = false;
+		        			if($this->user->$type==null) {
+		        				$should_reard = true;
+		        			}
+
 		        			$this->user->$type = Request::input('answer');
 		        			$this->user->save();
 		        			if( isset( config('vox.stats_scales')[$type] ) ) {
@@ -177,12 +182,14 @@ class VoxController extends FrontController
 		        			$valid = true;
 		        			$a = Request::input('answer');
 
-		        			$reward = Reward::where('reward_type', 'vox_question')->first()->dcn;
-		        			VoxReward::where('user_id', $this->user->id )->where('vox_id',$vox->id )->update(
-		        				array(
-		        					'reward' => DB::raw('`reward` + '.$reward
-		        				))
-		        			);
+		        			if( $should_reward ) {
+		        				$reward = Reward::where('reward_type', 'vox_question')->first()->dcn;
+			        			VoxReward::where('user_id', $this->user->id )->where('vox_id',$vox->id )->update(
+			        				array(
+			        					'reward' => DB::raw('`reward` + '.$reward
+			        				))
+			        			);
+		        			}
 
 		        		} else if ($type == 'location-question') {
 		        			//answer = 71,2312

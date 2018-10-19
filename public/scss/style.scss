@@ -3114,3 +3114,32 @@ label[for="radio-clinic"] {
         border-radius: 5px;
     }
 }
+
+.civic-button {
+    display: inline-block;
+    min-width: 254px;
+    height: 40px;
+    line-height: 40px;
+    color: white;
+    border-radius: 5px;
+    background: url('../img/civic-white.png') 10px 50% no-repeat #3ab03e;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+
+    i {
+        display: none;
+    }
+
+    &.loading {
+        font-size: 0px;
+        background-image: none;
+
+        i {
+            display: inline-block;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+    }
+    
+}

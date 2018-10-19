@@ -9,8 +9,7 @@ use App\Models\UserInvite;
 use App\Models\UserTeam;
 use App\Models\Country;
 use App\Models\City;
-use App\Models\Blacklist;
-use App\Models\BlacklistBlock;
+use App\Models\Civic;
 use Carbon\Carbon;
 
 use Validator;
@@ -34,6 +33,12 @@ class RegisterController extends FrontController
 			'js' => [
 				'register.js'
 			],
+            'jscdn' => [
+                'https://hosted-sip.civic.com/js/civic.sip.min.js',
+            ],
+            'csscdn' => [
+                'https://hosted-sip.civic.com/css/civic-modal.min.css',
+            ],
             'countries' => Country::get(),
             'categories' => $this->categories,
             'invitation_email' => session('invitation_email'),
@@ -65,41 +70,17 @@ class RegisterController extends FrontController
             return Response::json( $ret );
         } else {
 
-            foreach (Blacklist::get() as $b) {
-                if ($b['field'] == 'name') {
-                    if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower(Request::input('name'))) == true) {
 
-                        $new_blacklist_block = new BlacklistBlock;
-                        $new_blacklist_block->blacklist_id = $b['id'];
-                        $new_blacklist_block->name = Request::input('name');
-                        $new_blacklist_block->email = Request::input('email');
-                        $new_blacklist_block->save();
-
-                        return Response::json( [
-                            'success' => false, 
-                            'messages' => [
-                                'name' => trans('front.page.registration.error-name')
-                            ]
-                        ] );
-                    }
-                } else {
-                    if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower(Request::input('email'))) == true) {
-
-                        $new_blacklist_block = new BlacklistBlock;
-                        $new_blacklist_block->blacklist_id = $b['id'];
-                        $new_blacklist_block->name = Request::input('name');
-                        $new_blacklist_block->email = Request::input('email');
-                        $new_blacklist_block->save();
-
-                        return Response::json( [
-                            'success' => false, 
-                            'messages' => [
-                                'email' => trans('front.page.registration.error-email')
-                            ]
-                        ] );
-                    }
-                }
+            $is_blocked = User::checkBlocks( Request::input('name') , Request::input('email') );
+            if( $is_blocked ) {
+                return Response::json( [
+                    'success' => false, 
+                    'messages' => [
+                        'name' => $is_blocked
+                    ]
+                ] );
             }
+
 
             return Response::json( ['success' => true] );
         }
@@ -518,5 +499,151 @@ class RegisterController extends FrontController
                 }
             }
         }
+    }
+
+    
+
+    public function civic() {
+        $ret = [
+            'success' => false
+        ];
+
+        $jwt = Request::input('jwtToken');
+        $civic = Civic::where('jwtToken', 'LIKE', $jwt)->first();
+        if(!empty($civic)) {
+            $data = json_decode($civic->response, true);
+            if(!empty($data['userId'])) {
+
+                //dd($data);
+                $email = null;
+                $phone = null;
+
+                if(!empty($data['data'])) {
+                    foreach ($data['data'] as $dd) {
+                        if($dd['label'] == 'contact.personal.email' && $dd['isOwner'] && $dd['isValid']) {
+                            $email = $dd['value'];
+                        }
+                        if($dd['label'] == 'contact.personal.phoneNumber' && $dd['isOwner'] && $dd['isValid']) {
+                            $phone = $dd['value'];
+                        }
+                    }
+                }
+
+                if(empty($email)) {
+                    $ret['weak'] = true;
+                } else {
+
+                    $user = User::where( 'civic_id','LIKE', $data['userId'] )->withTrashed()->first();
+                    if(empty($user) && $email) {
+                        $user = User::where( 'email','LIKE', $email )->withTrashed()->first();            
+                    }
+
+
+                    if( $user ) {
+                        if($user->deleted_at) {
+                            $ret['message'] = 'You have been permanently banned and cannot return to the Review platform anymore.';
+                        } else if( $user->isBanned('vox') ) {
+                            $ret['message'] = trans('front.page.login.vox-ban');
+                        } else {
+                            Auth::login($user, true);
+                            if(empty($user->civic_id)) {
+                                $user->civic_id = $data['userId'];
+                                $user->save();      
+                            }
+
+                            Request::session()->flash('success-message', trans('front.page.registration.have-account'));
+                            $ret['success'] = true;
+                            $ret['redirect'] = getLangUrl('profile');
+                        }
+                    } else {
+
+                        $name = explode('@', $email)[0];
+
+
+                        $is_blocked = User::checkBlocks( $name , $email );
+                        if( $is_blocked ) {
+                            return Response::json( [
+                                'success' => false, 
+                                'messages' => [
+                                    'name' => $is_blocked
+                                ]
+                            ] );
+                        }
+
+                        $password = $name.date('WY');
+                        $newuser = new User;
+                        $newuser->name = $name;
+                        $newuser->email = $email ? $email : '';
+                        $newuser->is_verified = true;
+                        $newuser->password = bcrypt($password);
+                        $newuser->is_dentist = 0;
+                        $newuser->is_clinic = 0;
+                        $newuser->verified_on = Carbon::now();
+                        $newuser->civic_id = $data['userId'];
+                        $newuser->gdpr_privacy = true;
+                        $newuser->platform = 'trp';
+                        
+                        if(!empty(session('invited_by'))) {
+                            $newuser->invited_by = session('invited_by');
+                        }
+                        if(!empty(session('invite_secret'))) {
+                            $newuser->invite_secret = session('invite_secret');
+                        }
+                        
+                        $newuser->save();
+
+                        if($newuser->invited_by && $newuser->invitor->canInvite('trp')) {
+                            $inv_id = session('invitation_id');
+                            if($inv_id) {
+                                $inv = UserInvite::find($inv_id);
+                            } else {
+                                $inv = new UserInvite;
+                                $inv->user_id = $newuser->invited_by;
+                                $inv->invited_email = $newuser->email;
+                                $inv->invited_name = $newuser->name;
+                                $inv->save();
+                            }
+
+                            $inv->invited_id = $newuser->id;
+                            $inv->save();
+
+                            $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
+                                'who_joined_name' => $newuser->getName()
+                            ] );
+                        }
+
+                        $sess = [
+                            'invited_by' => null,
+                            'invitation_name' => null,
+                            'invitation_email' => null,
+                            'invitation_id' => null,
+                            'just_registered' => true,
+                        ];
+                        session($sess);
+
+                        if( $newuser->email ) {
+                            $newuser->sendTemplate( $newuser->is_dentist ? 3 : 4 );                
+                        }
+
+                        Auth::login($newuser, true);
+
+                        if($newuser->invited_by && $newuser->invitor->is_dentist) {
+                            Request::session()->flash('success-message', trans('front.page.registration.completed-by-invite', ['name' => $newuser->invitor->getName()]));
+                        } else {
+                            Request::session()->flash('success-message', trans('front.page.registration.completed'));
+                        }
+                        $ret['success'] = true;
+                        $ret['redirect'] = $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('profile');
+                    }
+                    
+                }
+
+            } else {
+                $ret['weak'] = true;
+            }
+        }
+
+        
+        return Response::json( $ret );
     }
 }

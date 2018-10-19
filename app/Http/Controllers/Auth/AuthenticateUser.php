@@ -45,7 +45,17 @@ class AuthenticateUser extends FrontController
             return redirect(getLangUrl('profile'));
         }
         
-        return $this->ShowView('login');
+        return $this->ShowView('login',[
+            'js' => [
+                'login.js'
+            ],
+            'jscdn' => [
+                'https://hosted-sip.civic.com/js/civic.sip.min.js',
+            ],
+            'csscdn' => [
+                'https://hosted-sip.civic.com/css/civic-modal.min.css',
+            ],
+        ]);
     }
     public function showLoginFormVox()
     {
@@ -53,7 +63,17 @@ class AuthenticateUser extends FrontController
             return redirect(getLangUrl('profile'));
         }
         
-        return $this->ShowVoxView('login');
+        return $this->ShowVoxView('login',[
+            'js' => [
+                'login.js'
+            ],
+            'jscdn' => [
+                'https://hosted-sip.civic.com/js/civic.sip.min.js',
+            ],
+            'csscdn' => [
+                'https://hosted-sip.civic.com/css/civic-modal.min.css',
+            ],
+        ]);
     }
 
     public function postLogin(Request $request)

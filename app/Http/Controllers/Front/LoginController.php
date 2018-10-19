@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 use App\Models\User;
 use App\Models\Dcn;
+use App\Models\Civic;
 use App\Models\UserInvite;
-use App\Models\Blacklist;
-use App\Models\BlacklistBlock;
 use Carbon\Carbon;
 
 use Socialite;
 use Auth;
+use Response;
 use Request;
 use Image;
 
@@ -235,36 +235,12 @@ class LoginController extends FrontController
 
             $name = $s_user->getName() ? $s_user->getName() : ( !empty($s_user->user['first_name']) && !empty($s_user->user['last_name']) ? $s_user->user['first_name'].' '.$s_user->user['last_name'] : ( !empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' ) );
 
-            foreach (Blacklist::get() as $b) {
-                if ($b['field'] == 'name') {
-                    if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower($name)) == true) {
 
-                        $new_blacklist_block = new BlacklistBlock;
-                        $new_blacklist_block->blacklist_id = $b['id'];
-                        $new_blacklist_block->name = $name;
-                        $new_blacklist_block->email = $s_user->getEmail();
-                        $new_blacklist_block->save();
-
-                        Request::session()->flash('error-message', trans('front.page.login.blocked-name'));
-                        return redirect( getLangUrl('register') )
-                        ->withInput()
-                        ->with('error-message', trans('front.page.login.blocked-name'));
-                    }
-                } else {
-                    if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower($s_user->getEmail())) == true) {
-
-                        $new_blacklist_block = new BlacklistBlock;
-                        $new_blacklist_block->blacklist_id = $b['id'];
-                        $new_blacklist_block->name = $name;
-                        $new_blacklist_block->email = $s_user->getEmail();
-                        $new_blacklist_block->save();
-                        
-                        Request::session()->flash('error-message', trans('front.page.login.blocked-email'));
-                        return redirect( getLangUrl('register') )
-                        ->withInput()
-                        ->with('error-message', trans('front.page.login.blocked-email'));
-                    }
-                }
+            $is_blocked = User::checkBlocks( $name , $s_user->getEmail() );
+            if( $is_blocked ) {
+                return redirect( getLangUrl('register') )
+                ->withInput()
+                ->with('error-message', $is_blocked);
             }
 
 
@@ -359,5 +335,68 @@ class LoginController extends FrontController
             }
             return redirect( $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('profile') );
         }
+    }
+
+    public function civic() {
+        $ret = [
+            'success' => false
+        ];
+
+        $jwt = Request::input('jwtToken');
+        $civic = Civic::where('jwtToken', 'LIKE', $jwt)->first();
+        if(!empty($civic)) {
+            $data = json_decode($civic->response, true);
+            if(!empty($data['userId'])) {
+
+                //dd($data);
+                $email = null;
+                $phone = null;
+
+                if(!empty($data['data'])) {
+                    foreach ($data['data'] as $dd) {
+                        if($dd['label'] == 'contact.personal.email' && $dd['isOwner'] && $dd['isValid']) {
+                            $email = $dd['value'];
+                        }
+                        if($dd['label'] == 'contact.personal.phoneNumber' && $dd['isOwner'] && $dd['isValid']) {
+                            $phone = $dd['value'];
+                        }
+                    }
+                }
+
+                if(empty($email)) {
+                    $ret['weak'] = true;
+                } else {
+
+                    $user = User::where( 'civic_id','LIKE', $data['userId'] )->first();
+                    if(empty($user) && $email) {
+                        $user = User::where( 'email','LIKE', $email )->first();            
+                    }
+
+
+                    if ($user) {
+                        if( $user->isBanned('vox') ) {
+                            $ret['message'] = trans('front.page.login.vox-ban');
+                        } else {
+                            Auth::login($user, true);
+                            if(empty($user->civic_id)) {
+                                $user->civic_id = $data['userId'];
+                                $user->save();      
+                            }
+
+                            $ret['success'] = true;
+                            $ret['redirect'] = getLangUrl('profile');
+                        }
+                    } else {
+                        $ret['message'] = trans('front.common.civic.not-found');
+                    }
+                }
+
+            } else {
+                $ret['weak'] = true;
+            }
+        }
+
+        
+        return Response::json( $ret );
     }
 }
