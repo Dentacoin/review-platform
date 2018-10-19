@@ -83,6 +83,7 @@ $(document).ready(function(){
 
          // Step 3: Start scope request.
         $('#signupButton').click(function () {
+            $('#civic-error').hide();
             $('#has-wallet .alert').hide();
             $('#signupButton').hide();
             civicSip.signup({ style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP }); //PROOF_OF_IDENTITY
