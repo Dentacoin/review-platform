@@ -107,13 +107,20 @@
                         </div>
 
                     <div class="form-group">
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <a href="{{ url('cms/users/user-data/'.$item->id) }}" target="_blank" class="btn btn-sm btn-warning form-control">Export Personal Data</a>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <a href="{{ url('cms/users/loginas/'.$item->id) }}" target="_blank" class="btn btn-sm btn-primary form-control"> {{ trans('admin.page.profile.loginas') }} </a>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-2">
+                            @if($item->deleted_at)
+                                <a href="{{ url('cms/users/restore/'.$item->id) }}" class="btn btn-sm btn-info form-control"> Restore </a>
+                            @else
+                                <a href="{{ url('cms/users/delete/'.$item->id) }}" class="btn btn-sm btn-danger form-control"> Delete </a>
+                            @endif
+                        </div>
+                        <div class="col-md-6">
                             <button type="submit" name="update" class="btn btn-block btn-sm btn-success form-control"> {{ trans('admin.common.save') }} </button>
                         </div>
                     </div>
