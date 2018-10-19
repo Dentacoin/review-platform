@@ -37,6 +37,7 @@ $(document).ready(function(){
                     $('#civic-error').show();
                     civicError();
                 } else {
+                    alert('All good');
                     $('#civic-wait').show();
                     $('#signupButton').hide();
 
