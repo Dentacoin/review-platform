@@ -7,12 +7,12 @@
 		@include('front.errors')	
 		<h1 class="bold">
 			<a class="back-home" href="{{ getLangUrl('/') }}">
-				Surveys
+				{!! trans('vox.page.stats.go-back-surveys') !!}
 			</a> 
-			SURVEY STATISTICS
+			{!! trans('vox.page.stats.title') !!}
 		</h1>
 		<h2>
-			Find results. See trends. Patient insights at a glance.
+			{!! nl2br(trans('vox.page.stats.subtitle')) !!}
 		</h2>
 
 		<div class="search-survey">
@@ -37,7 +37,9 @@
 
 		<div class="flex stats-list">
 			<div class="stats-holder">
-				<b template=":what Stats">Featured Stats</b>
+				<b template=":what Stats">
+					{!! trans('vox.page.stats.featured') !!}
+				</b>
 				@foreach($voxes as $vox)
 					@if($vox->stats_questions->isNotEmpty())
 						<div class="vox-stat flex" featured="{{ intval($vox->stats_featured) }}" published="{{ $vox->created_at->timestamp }}" popular="{{ intval($vox->rewards()->count()) }}" {!! $vox->stats_featured ? '' : 'style="display: none;"' !!}>
@@ -60,7 +62,7 @@
 							</div>
 							<div class="stats-cta flex">
 								<a href="{{ $vox->getStatsList() }}">
-									Check Stats
+									{!! trans('vox.common.check-statictics') !!}
 								</a>
 							</div>
 						</div>
@@ -68,11 +70,13 @@
 				@endforeach
 
 				<div class="alert alert-info" id="survey-not-found" style="display: none;">
-					Unfortunately there aren't any Surveys that match your filters
+					{!! trans('vox.page.stats.no-results') !!}
 				</div>
 			</div>
 			<div class="stats-cats">
-				<b>Browse by Category</b>
+				<b>
+					{!! trans('vox.page.stats.browse-category') !!}
+				</b>
 				@foreach($cats as $cat)
 					@if($cat->stats_voxes->isNotEmpty())
 						<a class="cat">

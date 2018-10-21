@@ -6,23 +6,26 @@
 
 		<h1>
 			<a class="back-home" href="{{ getLangUrl('dental-survey-stats') }}">
-				All Stats
+				{!! trans('vox.page.stats.go-back-stats') !!}
+				
 			</a> 
-			{{ trans('vox.page.'.$current_page.'.statistics', [
+			{{ trans('vox.page.stats.title-single', [
 				'name' => $vox->title
 			]) }}
 		</h1>
 
 		<div class="filters-wrapper">
 			<div class="filters">
-				<b>Select Period:</b>
+				<b>
+					{!! trans('vox.page.stats.period') !!}:
+				</b>
 				@foreach($filters as $filterkey => $filter)
 					<a href="{{ $vox->getStatsList() }}?filter={{ $filterkey }}" filter="{{ $filterkey }}" {!! $active_filter==$filterkey ? 'class="active"' : '' !!}>
 						{{ $filter }}
 					</a>
 				@endforeach
 				<a href="javascript:;" filter="custom">
-					Custom
+					{!! trans('vox.page.stats.period-custom') !!}
 				</a>
 			</div>
 
@@ -36,14 +39,14 @@
 						<input type="text" id="date-to">
 					</div>
 					<a href="javascript:;" id="custom-dates-save" class="btn">
-						Show Stats
+						{!! trans('vox.page.stats.period-custom-submit') !!}
 					</a>						
 				</div>
 			</div>
 		</div>
 
 		<div class="alert alert-info" id="daterange-error" style="display: none;">
-			There are no results for this period yet. Please, select another period.
+			{!! trans('vox.page.stats.no-results-single') !!}
 		</div>
 
 		<div class="stats">
@@ -56,7 +59,7 @@
 						<div class="contents">
 							@if($question->used_for_stats=='standard')
 								<div class="scales flex flex-center">
-									Show results by: 
+									{!! trans('vox.page.stats.scale-by') !!}:									
 									@foreach( $question->stats_fields as $sk)
 										<a {!! $loop->first ? 'class="active"' : '' !!} scale="{{ $sk }}">
 											{{ $scales[$sk] }}
@@ -74,7 +77,7 @@
 								<div class="chart">
 									<div class="main-chart"></div>
 									<div class="total total-all">
-										Total respondents: <b></b>
+										{!! trans('vox.page.stats.total') !!}: <b></b>
 									</div>
 									<div class="hint">
 									</div>
@@ -83,12 +86,13 @@
 									<div class="second-chart"></div>
 									@if($question->used_for_stats=='standard')
 										<div class="total total-f">
-											Total women: <b></b>
+											{!! trans('vox.page.stats.total-women') !!}: <b></b>
 										</div>
 										<div class="icon total-m">
 										</div>
 										<div class="map-hint">
-											Respondents
+											{!! trans('vox.page.stats.respondents') !!}
+											
 										</div>
 									@endif
 								</div>
@@ -96,7 +100,7 @@
 									<div class="third-chart"></div>
 									@if($question->used_for_stats=='standard')
 										<div class="total total-m">
-											Total men: <b></b>
+											{!! trans('vox.page.stats.total-men') !!}: <b></b>
 										</div>
 										<div class="icon total-f">
 										</div>

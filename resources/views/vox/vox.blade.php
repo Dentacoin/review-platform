@@ -7,9 +7,9 @@
 		@if($user->loggedFromBadIp())
 			<div class="container">
 				<div class="alert alert-warning" style="margin-top: 100px;">
-					{{ trans('vox.page.'.$current_page.'.vox-bad-ip') }}
+					{{ trans('vox.page.questionnaire.vox-bad-ip') }}
 
-					<a id="bad-ip-appeal" href="{{ getLangUrl('appeal') }}"> {{ trans('vox.page.'.$current_page.'.vox-bad-ip-button') }} </a>
+					<a id="bad-ip-appeal" href="{{ getLangUrl('appeal') }}"> {{ trans('vox.page.questionnaire.vox-bad-ip-button') }} </a>
 				</div>
 			</div>
 		@else
@@ -28,7 +28,7 @@
 							{{ $vox->description }}
 						</p>
 						<p class="demographic-questionnaire-description tac" style="display: none;" >
-							You're almost done! Help us complete your demographic profile to ensure quality dental survey results!
+							{{ trans('vox.common.demographics') }}
 						</p>
 
 						<div class="questions-dots">
@@ -65,7 +65,7 @@
 						</div>
 
 						<div id="wrong-control" class="alert alert-warning" style="display: none;">
-							{!! trans('vox.page.'.$current_page.'.wrong-answer') !!}
+							{!! trans('vox.page.questionnaire.wrong-answer') !!}
 						</div>
 					</div>
 					<div class="col-md-12 clearfix">
@@ -73,20 +73,12 @@
 						@if(!$not_bot)
 							<div class="question-group" data-id="bot" id="bot-group">
 								<div class="question">
-									{!! trans('vox.page.'.$current_page.'.not-robot') !!}
+									{!! trans('vox.page.questionnaire.not-robot') !!}
 								</div>
-								<!--
-									<div class="answers tac">
-										<label for="iagree">
-											<input type="checkbox" id="iagree" />
-											{!! trans('vox.page.'.$current_page.'.iagree') !!}	
-										</label>
-									</div>
-								-->
 								<div class="answers tac">
 									<div class="g-recaptcha" id="g-recaptcha" data-callback="sendReCaptcha" style="display: inline-block;" data-sitekey="6LfmCmEUAAAAAH20CTYH0Dg6LGOH7Ko7Wv1DZlO0"></div>
 									<div class="alert alert-warning" id="captcha-error" style="display: none;">
-										{!! trans('vox.page.'.$current_page.'.not-robot-invalid') !!}
+										{!! trans('vox.page.questionnaire.not-robot-invalid') !!}
 									</div>					
 								</div>
 							</div>
@@ -105,7 +97,7 @@
 									<input type="number" name="birthyear-answer" class="answer" id="birthyear-answer" min="{{ date('Y')-100 }}" max="{{ date('Y')-18 }}">
 								</div>
 
-								<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
+								<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
 							</div>
 						@endif
 
@@ -136,7 +128,7 @@
 									{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'form-control') ) }}
 								</div>
 
-								<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
+								<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
 							</div>
 						@endif
 
@@ -151,7 +143,7 @@
 	 				</div>
 				</div>
 				<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-warning">
-					{!! trans('vox.page.'.$current_page.'.answer-error') !!}
+					{!! trans('vox.page.questionnaire.answer-error') !!}
 				</div>
 			</div>
 
@@ -165,44 +157,70 @@
 					</div>
 
 					<div class="col-md-9 tac">
-						<h3 class="done-title">Well done, <span class="blue-text"> {{ $user->getName() }}!</span></h3>
+						<h3 class="done-title">
+							{!! trans('vox.page.questionnaire.well-done', [
+								'who' => '<span class="blue-text">'.$user->getName().'</span>'
+							]) !!}
+						</h3>
 						<h4>
-							You’ve just earned <span id="coins-test">{{ $vox->getRewardTotal() }}</span> DCN! Thank you for sharing your valuable insights! To review / withdraw your reward, go to your <a href="{{ getLangUrl('profile') }}">Dentacoin Wallet.</a>
+							{!! trans('vox.page.questionnaire.well-done-content', [
+								'amount' => '<span id="coins-test">'.$vox->getRewardTotal().'</span>',
+								'link' => '<a href="'.getLangUrl('profile').'">',
+								'endlink' => '</a>',
+							]) !!}
 						</h4>
 
-						<p class="next-title">What do you feel like doing next?</p>
+						<p class="next-title">
+							{!! trans('vox.page.questionnaire.what-next') !!}
+							
+						</p>
 
 						<div class="wrapper-buttons">
-							<a class="white-button" href="{{ getLangUrl('/') }}">Take another survey</a>
+							<a class="white-button" href="{{ getLangUrl('/') }}">
+								{!! trans('vox.page.questionnaire.what-next-another') !!}
+								
+							</a>
 							@if($vox->stats_questions->isNotEmpty())
-								<a class="white-button" href="{{ $vox->getStatsList() }}">View stats</a>
+								<a class="white-button" href="{{ $vox->getStatsList() }}">
+									{!! trans('vox.page.questionnaire.what-next-stats') !!}
+									
+								</a>
 							@endif
-							<a class="white-button" id="invite-button" href="javascript:;">Invite friends</a>
+							<a class="white-button" id="invite-button" href="javascript:;">
+								{!! trans('vox.page.questionnaire.what-next-invite') !!}
+								
+							</a>
 							<div class="invite-link" style="display: none;">
 								<p>
-									Use this link to refer friends and earn DCN for each new registration!
+									{!! trans('vox.page.questionnaire.what-next-invite-hint') !!}
+									
 								</p>
 								{{ Form::text( 'link', getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()), array('class' => 'form-control select-me', 'id' => 'invite-url' ) ) }}
 								<div class="share-wrap tal">
 									<a class="copy-link" href="javascript:;">
 										<img src="{{ url('new-vox-img/copy-icon.png') }}">
-										Copy link
+										{!! trans('vox.page.questionnaire.what-next-copy') !!}
+										
 									</a>
 									<a class="share fb" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
 										<img src="{{ url('new-vox-img/fb-icon.png') }}">
-										Share on Facebook
+										{!! trans('vox.page.questionnaire.what-next-fb') !!}
+										
 									</a>
 									<a class="share twt" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
 										<img src="{{ url('new-vox-img/twitter-icon.png') }}">
-										Share on Twitter
+										{!! trans('vox.page.questionnaire.what-next-tw') !!}
+										
 									</a>
 									<a class="share messenger" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
 										<img src="{{ url('new-vox-img/messenger-icon.png') }}">
-										Send via Messenger
+										{!! trans('vox.page.questionnaire.what-next-me') !!}
+										
 									</a>										
 									<a href="https://mail.google.com/mail/?view=cm&fs=1&su={!! urlencode( $email_data['title'] ) !!}&body={!! urlencode( $email_data['content'] ) !!}" target="_blank">
 										<img src="{{ url('new-vox-img/gmail-icon.png') }}">
-										Send via Gmail
+										{!! trans('vox.page.questionnaire.what-next-gm') !!}
+										
 									</a>
 								</div>
 							</div>
@@ -215,8 +233,13 @@
 				<div class="section-stats">
 					<div class="container">
 						<img src="{{ url('new-vox-img/stats-front.png') }}">
-						<h3>Curious to see other survey stats?</h3>
-						<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">Check stats</a>
+						<h3>
+							{!! trans('vox.page.questionnaire.curious') !!}
+							
+						</h3>
+						<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">
+							{{ trans('vox.common.check-statictics') }}
+						</a>
 					</div>
 				</div>
 			</div>

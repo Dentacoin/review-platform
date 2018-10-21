@@ -24,10 +24,11 @@
 
 				<div class="col-md-9">
 					<h3 class="tac">
-						Create Your Profile
+						{!! trans('vox.page.register.title') !!}
+						
 					</h3>
 					<p class="reg-desc">
-						Thank you for taking our Welcome Questionnaire! To complete your registration and get your reward, just sign up using some of the options below.
+						{!! nl2br(trans('vox.page.register.subtitle')) !!}
 					</p>
 
 					<div class="form-group {{ $errors->has('privacy') ? 'has-error' : '' }}">
@@ -46,10 +47,10 @@
 
 					<div class="user-type-mobile">
 						<a href="javascript:;" type="reg-patients">
-							I'm a patient
+							{{ trans('vox.common.type-patient-mobile')  }}
 						</a>
 						<a href="javascript:;" type="reg-dentists">
-							I'm a dentist
+							{{ trans('vox.common.type-dentist-mobile')  }}
 						</a>
 					</div>
 
@@ -60,7 +61,9 @@
 					<div class="reg-wrapper row clearfix">
 
 						<div class="reg-patients col-md-6 tac">
-							<h4>Users (Patients)</h4>
+							<h4>
+								{{ trans('vox.common.type-patient')  }}
+							</h4>
 
 							<div class="fb-button-inside">
 								<a href="{{ getLangUrl('register/facebook') }}" class="fb-register">
@@ -92,7 +95,9 @@
 						</div>
 
 						<div class="reg-dentists col-md-6">
-							<h4 class="tac">Dentists</h4>
+							<h4 class="tac">
+								{{ trans('vox.common.type-dentist')  }}
+							</h4>
 
 							<div id="register-error" class="alert alert-warning" style="display: none;">						
 								{{ trans('front.page.'.$current_page.'.register-error')  }}<br/>
@@ -100,36 +105,28 @@
 							</div>
 
 							<div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-								<input type="text" class="form-control" name="name" id="name" placeholder="{{ trans('vox.popup.register.placeholder-name') }}">
+								<input type="text" class="form-control" name="name" id="name" placeholder="{!! trans('vox.page.register.name') !!}">
 								<span class="error-message" id="name-error"></span>
 							</div>
 							<div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-								<input type="text" class="form-control" name="email" id="email" placeholder="{{ trans('vox.popup.register.placeholder-email') }}">
+								<input type="text" class="form-control" name="email" id="email" placeholder="{!! trans('vox.page.register.email') !!}">
 								<span class="error-message" id="email-error"></span>
 							</div>
 							<div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
-								<input type="password" class="form-control" name="password" id="password" placeholder="{{ trans('vox.popup.register.placeholder-password') }}
+								<input type="password" class="form-control" name="password" id="password" placeholder="{!! trans('vox.page.register.password') !!}
 								">
 								<span class="error-message" id="password-error"></span>
 							</div>
 							<div class="form-group {{ $errors->has('password-repeat') ? 'has-error' : '' }}">
-								<input type="password" class="form-control" name="password-repeat" id="password-repeat" placeholder="{{ trans('vox.popup.register.placeholder-password-repeat') }}">
+								<input type="password" class="form-control" name="password-repeat" id="password-repeat" placeholder="{!! trans('vox.page.register.password-repeat') !!}">
 								<span class="error-message" id="password-repeat-error"></span>
 							</div>
 
 							<div class="form-group tac">
 								<button class="btn" id="go-to-2" data-validator="{{ getLangUrl('registration/step1') }}">
-									Sign up
+									{!! trans('vox.page.register.sign-up') !!}
 								</button>
 							</div>
-							
-							<!--
-								<div class="tac">
-									<a class="login-text" href="{{ getLangUrl('login') }}">
-										{{ trans('front.page.'.$current_page.'.login') }}
-									</a>
-								</div>
-					        -->
 						</div>
 					</div>
 
@@ -145,10 +142,10 @@
 				<div class="col-md-9 clearfix">
 
 					<h3 class="tac">
-						Registration for Dentists
+						{!! trans('vox.page.register.title-dentist') !!}
 					</h3>
 					<p class="reg-desc">
-						By creating a profile on DentaVox, you also get full access to all <br/> Dentacoin tools and features. Manage all your activities from a single place!
+						{!! nl2br(trans('vox.page.register.subtitle-dentist')) !!}
 					</p>
 
 					<div class="clearfix reg-step-2-wrapper">
@@ -161,7 +158,7 @@
 							</div>
 
 						  	<div class="form-group {{ $errors->has('country_id') ? 'has-error' : '' }}">
-						  		<select name="country_id" id="dentist-country" class="form-control country-select" placeholder="{{ trans('front.page.'.$current_page.'.country') }}">
+						  		<select name="country_id" id="dentist-country" class="form-control country-select" placeholder="{!! trans('vox.page.register.country') !!}">
 						  			@if(!$country_id)
 						  				<option>-</option>
 						  			@endif
@@ -177,23 +174,25 @@
 							</div>
 
 						  	<div class="form-group {{ $errors->has('zip') ? 'has-error' : '' }}">
-							    <input type="text" name="zip" id="dentist-zip" class="form-control" placeholder="{{ trans('front.page.'.$current_page.'.zip') }} ">
+							    <input type="text" name="zip" id="dentist-zip" class="form-control" placeholder="{!! trans('vox.page.register.zip') !!} ">
 							    <span class="error-message" id="zip-error"></span>
 							</div>
 
 						  	<div class="form-group {{ $errors->has('address') ? 'has-error' : '' }}">
-							    <input type="text" name="address" id="dentist-address" class="form-control" placeholder="{{ trans('front.page.'.$current_page.'.address') }} ">
+							    <input type="text" name="address" id="dentist-address" class="form-control" placeholder="{!! trans('vox.page.register.address') !!} ">
 							    <span class="error-message" id="address-error"></span>
 							</div>                                    
 
 						  	<div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
-							    <input type="text" name="phone" id="dentist-phone" class="form-control" placeholder="{{ trans('front.page.'.$current_page.'.phone') }}">
-					    		<i>+ [country code] [area / provider code] [phone number]</i>
+							    <input type="text" name="phone" id="dentist-phone" class="form-control" placeholder="{!! trans('vox.page.register.phone') !!}">
+					    		<i>
+					    			{!! trans('vox.page.register.phone-hint') !!}
+					    		</i>
 							    <span class="error-message" id="phone-error"></span>
 							</div>
 
 						  	<div class="form-group {{ $errors->has('website') ? 'has-error' : '' }}">
-							    <input type="text" name="website" id="dentist-website" class="form-control" placeholder="{{ trans('front.page.'.$current_page.'.website') }} ">
+							    <input type="text" name="website" id="dentist-website" class="form-control" placeholder="{!! trans('vox.page.register.website') !!} ">
 							    <span class="error-message" id="website-error"></span>
 							</div>
 
@@ -201,18 +200,22 @@
 						    	<label class="add-photo" for="add-avatar">
 						    		<div class="photo-cta">
 						    			<i class="fa fa-plus"></i>
-						    			{{ trans('front.page.'.$current_page.'.photo-add') }} 
+						    			{!! trans('vox.page.register.photo-add') !!}
 						    		</div> 
 						    		<div class="loader">
 						    			<i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i>
 						    		</div>
 						    		<input id="add-avatar" name="image" type="file">
 						    	</label>
-					    		<i>* Supported formats: PNG, JPG, GIF, up to 4MB</i>
+					    		<i>
+					    			{!! trans('vox.page.register.photo-hint') !!}
+					    			
+					    		</i>
 								<input type="hidden" id="photo-name" name="photo" >
 								<span class="error-message" id="photo-error"></span>
 								<div id="photo-upload-error" style="display: none;" class="alert alert-warning">
-									Uh, an error occured during upload. Please try again or use a different photo.
+									{!! trans('vox.page.register.photo-error') !!}
+									
 								</div>
 							</div>
 
@@ -222,15 +225,23 @@
 							</div>
 
 							<button class="btn btn-block" id="go-to-3" type="submit">
-								{{ trans('front.page.'.$current_page.'.submit')  }}
+								{!! trans('vox.page.register.sign-up') !!}
 							</button>
 						</div>
 
 						<div class="col-md-6 register-dentist-right">
-							<p>Earn DCN by referring patients</p>
-							<p>Check real-time survey stats</p>
-							<p>Improve your dental practice</p>
-							<p>Order custom surveys</p>
+							<p>
+								{!! trans('vox.page.register.dentist-perk-1') !!}
+							</p>
+							<p>
+								{!! trans('vox.page.register.dentist-perk-2') !!}
+							</p>
+							<p>
+								{!! trans('vox.page.register.dentist-perk-3') !!}
+							</p>
+							<p>
+								{!! trans('vox.page.register.dentist-perk-4') !!}
+							</p>
 						</div>
 					</div>
 				</div>
