@@ -86,7 +86,7 @@ $(document).ready(function(){
             $('#civic-error').hide();
             $('#has-wallet .alert').hide();
             $('#signupButton').hide();
-            civicSip.signup({ style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP }); //PROOF_OF_IDENTITY
+            civicSip.signup({ style: 'popup', scopeRequest: civicSip.ScopeRequests.PROOF_OF_IDENTITY }); //BASIC_SIGNUP
         });
 
         var civicError = function() {
