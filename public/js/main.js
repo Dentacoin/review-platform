@@ -648,7 +648,7 @@ Upload.prototype.doUpload = function () {
         },
         success: this.success,
         error: function (error) {
-            // handle error
+            ajax_is_running = false;
         },
         async: true,
         data: formData,

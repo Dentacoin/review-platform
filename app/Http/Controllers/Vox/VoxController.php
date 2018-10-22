@@ -44,6 +44,11 @@ class VoxController extends FrontController
 		return $this->dovox($locale, $vox);
 	}
 	public function dovox($locale=null, $vox) {
+		
+        if(!$this->user->is_verified) {
+            return redirect(getLangUrl('welcome-to-dentavox'));
+        }
+		
 		$this->current_page = 'questionnaire';
 		$doing_details = false;
 		$doing_asl = false;

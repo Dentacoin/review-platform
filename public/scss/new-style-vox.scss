@@ -1193,6 +1193,60 @@ header {
 			display: none;
 		}
 	}
+
+	&.success-dentist {
+		img {
+			position: absolute;
+			left: -140px;
+			top: 0px;
+
+			@media #{$phone} {
+				position: static;
+				display: block;
+				max-width: 100%;
+				width: 140px;
+			    margin: 0 auto 0px auto;
+			}
+		}
+
+		.right-content {
+			margin-left: 330px;
+			@media #{$phone} {
+				margin-left: 0px;
+			}
+
+			h2 {
+				margin-top: 100px;
+				margin-bottom: 60px;
+				font-size: 30px;
+				@media #{$phone} {
+					margin-top: 20px;
+					margin-bottom: 20px;
+					font-size: 20px;
+				}
+			}
+
+			h4 {
+				font-size: 18px;
+				margin-bottom: 60px;
+				@media #{$phone} {
+					margin-bottom: 20px;
+					font-size: 14px;
+				}
+			}
+
+		}
+
+		.blue-button {
+			padding-left: 75px;
+			padding-right: 75px;
+			@media #{$phone} {
+				padding-left: 30px;
+				padding-right: 30px;
+				margin-bottom: 60px;
+			}
+		}
+	}
 }
 
 .section-manage {
@@ -3310,6 +3364,8 @@ header {
 .fb-button-inside {
 	display: inline-block;
 	position: relative;
+    min-height: 40px;
+    width: 100%;
 
 	a {
 		position: absolute;

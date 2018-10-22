@@ -286,7 +286,7 @@ $voxRoutes = function () {
 
 			
 			Route::group(['middleware' => 'auth:web'], function () {
-				Route::get('welcome-to-dentavox', 					'RegisterController@register_success');
+				Route::any('welcome-to-dentavox', 					'RegisterController@register_success');
 
 				Route::any('questionnaire/{id}', 				'VoxController@home');
 				Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');

@@ -43,7 +43,7 @@ class Email extends Model
 
 		list($content, $title, $subtitle, $subject) = $this->prepareContent();
 
-
+		$platform = $this->getPlatform();
 		Mail::send('emails.template', [
 				'user' => $this->user,
 				'content' => $content,
@@ -66,17 +66,7 @@ class Email extends Model
 		$this->save();
 	}
 
-	public function prepareContent() {
-
-		$title = stripslashes($this->template['title']);
-		$subtitle = stripslashes($this->template['subtitle']);
-		$subject = stripslashes($this->template['subject']);
-		if(empty($subject)) {
-			$subject = $title;
-		}
-		$content = $this->template['content'];
-
-
+	private function getPlatform() {
 		$vox_tempalates = [
 			11,
 			12,
@@ -89,7 +79,20 @@ class Email extends Model
 			30,
 			32,
 		];
-		$platform = $this->template->id==20 ? $this->meta['transaction_platform'] : ( in_array($this->template->id, $vox_tempalates) ? 'vox' : 'reviews' );
+		return $this->template->id==20 ? $this->meta['transaction_platform'] : ( in_array($this->template->id, $vox_tempalates) ? 'vox' : 'reviews' );
+
+	}
+
+	public function prepareContent() {
+
+		$title = stripslashes($this->template['title']);
+		$subtitle = stripslashes($this->template['subtitle']);
+		$subject = stripslashes($this->template['subject']);
+		if(empty($subject)) {
+			$subject = $title;
+		}
+		$content = $this->template['content'];
+		$platform = $this->getPlatform();
 
 		$deafult_searches = array(
 			'[name]',

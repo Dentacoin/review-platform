@@ -133,7 +133,8 @@
 							@endif
 						</div>
 						<div class="header-right col-md-4 tar flex">
-							@if($user)
+							@if( $user->is_dentist && !$user->is_approved )
+							@elseif($user)
 								<div class="user-and-price header-a">
 									<a class="my-name" href="{{ getLangUrl('profile') }}">
 										Hello, {{ $user->getName() }}

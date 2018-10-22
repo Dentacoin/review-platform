@@ -25,6 +25,10 @@ class IndexController extends FrontController
 		}
 
 		if(!empty($this->user) && $this->user->madeTest($first->id)) {
+			
+	        if(!$this->user->is_verified) {
+	            return redirect(getLangUrl('welcome-to-dentavox'));
+	        }
 
 	        if($this->user->isBanned('vox')) {
 	            return redirect(getLangUrl('profile'));

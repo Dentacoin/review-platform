@@ -25,6 +25,10 @@ class StatsController extends FrontController
 {
 	public function home($locale=null) {
 
+        if(!$this->user->is_verified) {
+            return redirect(getLangUrl('welcome-to-dentavox'));
+        }
+
         $this->current_page = 'stats';
 
 		// $ret = Dcn::send($this->user, $this->user->vox_address, 100, 'vox-cashout', null);
@@ -53,6 +57,11 @@ class StatsController extends FrontController
 	}
 
 	public function stats($locale=null, $slug=null, $question_id=null) {
+
+        if(!$this->user->is_verified) {
+            return redirect(getLangUrl('welcome-to-dentavox'));
+        }
+        
         $this->current_page = 'stats';
 
 		$vox = Vox::whereTranslationLike('slug', $slug)->first();

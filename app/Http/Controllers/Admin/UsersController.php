@@ -443,6 +443,11 @@ class UsersController extends AdminController
                                 $item->is_dentist = false;
                                 $item->is_clinic = false;
                             }
+                        } else if($key=='is_verified') {
+                            if( $this->request->input($key) && !$item->$key ) {
+                                $item->sendTemplate(26);
+                            }
+                            $item->$key = $this->request->input($key);
                         } else if($key=='password') {
                             $item->$key = bcrypt( $this->request->input($key) );
                         } else if($value['type']=='datepicker') {

@@ -87,9 +87,8 @@ class ProfileController extends FrontController
     //
 
     public function home($locale=null) {
-        if(!$this->user->is_verified || !$this->user->email) {
-            Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
-            return redirect(getLangUrl('/'));
+        if(!$this->user->is_verified) {
+            return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/vox'));
@@ -197,6 +196,9 @@ class ProfileController extends FrontController
     //
 
     public function vox($locale=null) {
+        if(!$this->user->is_verified) {
+            return redirect(getLangUrl('welcome-to-dentavox'));
+        }
 
         $this->handleMenu();
         $current_ban = $this->user->isBanned('vox');
@@ -248,9 +250,8 @@ class ProfileController extends FrontController
 
 
     public function privacy($locale=null) {
-        if(!$this->user->is_verified || !$this->user->email) {
-            Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
-            return redirect(getLangUrl('/'));
+        if(!$this->user->is_verified) {
+            return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/vox'));
@@ -333,9 +334,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function invite($locale=null) {
-        if(!$this->user->canInvite('vox')) {
-            Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
-            return redirect(getLangUrl('/'));
+        if(!$this->user->is_verified) {
+            return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/vox'));
@@ -456,9 +456,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function info($locale=null) {
-        if(!$this->user->is_verified || !$this->user->email) {
-            Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
-            return redirect(getLangUrl('/'));
+        if(!$this->user->is_verified) {
+            return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/vox'));
@@ -533,9 +532,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function change_password($locale=null) {
-        if(!$this->user->is_verified || !$this->user->email) {
-            Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
-            return redirect(getLangUrl('/'));
+        if(!$this->user->is_verified) {
+            return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/vox'));
@@ -575,7 +573,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             return Response::json( $ret );
         }
         
-        if(!$this->user->is_verified || !$this->user->email) {
+        if(!$this->user->is_verified) {
             $ret['message'] = 'not-verified';
             return Response::json( $ret );
         }

@@ -174,25 +174,6 @@ class RegisterController extends FrontController
                     $newuser->sendTemplate( 12 );
                 }
 
-                $mtext = 'New Dentavox dentist/clinic registration:
-
-                '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
-
-                ';
-
-                Mail::raw($mtext, function ($message) use ($newuser) {
-
-                    $receiver = 'ali.hashem@dentacoin.com';
-                    $sender = config('mail.from.address-vox');
-                    $sender_name = config('mail.from.name-vox');
-
-                    $message->from($sender, $sender_name);
-                    $message->to( $receiver );
-                    //$message->to( 'dokinator@gmail.com' );
-                    $message->replyTo($receiver, $newuser->getName());
-                    $message->subject('New Dentavox Dentist/Clinic registration');
-                });
-
                 Auth::login($newuser, Request::input('remember'));
 
                 Request::session()->flash('success-message', trans('front.page.registration.success-dentist'));
@@ -270,7 +251,43 @@ class RegisterController extends FrontController
 
     public function register_success($locale=null) {
         $this->user->checkForWelcomeCompletion();
-        return $this->ShowVoxView('register-success');
+        if($this->user->is_dentist && !$this->user->is_approved) {
+            if(Request::isMethod('post')) {
+
+                $newuser = $this->user;
+
+                $mtext = 'New Dentavox dentist/clinic registration:
+
+                '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
+
+                ';
+
+                Mail::raw($mtext, function ($message) use ($newuser) {
+
+                    //$receiver = 'official@youpluswe.com';
+                    $receiver = 'ali.hashem@dentacoin.com';
+                    $sender = config('mail.from.address-vox');
+                    $sender_name = config('mail.from.name-vox');
+
+                    $message->from($sender, $sender_name);
+                    $message->to( $receiver );
+                    //$message->to( 'dokinator@gmail.com' );
+                    $message->replyTo($receiver, $newuser->getName());
+                    $message->subject('New Dentavox Dentist/Clinic registration');
+                });
+
+                session([
+                    'approval-request-sent' => true
+                ]);
+            }
+
+
+            return $this->ShowVoxView('register-success-dentist',[
+                'request_sent' => session('approval-request-sent')
+            ]);
+        } else {
+            return $this->ShowVoxView('register-success');            
+        }
     }
 
     public function invite_accept($locale=null, $id, $hash, $inv_id=null) {

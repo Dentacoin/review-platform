@@ -22,6 +22,7 @@ class VerifyCsrfToken extends BaseVerifier
         'mobident',
         'cms/*',
         '*/dental-survey-stats/*',
+        '*/register/upload',
         '*/registration/upload',
         '*/questionnaire/*',
         '*/paid-dental-surveys/*',
