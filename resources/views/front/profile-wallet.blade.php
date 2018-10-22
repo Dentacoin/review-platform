@@ -74,39 +74,39 @@
 				    		@if(!$user->civic_kyc)
 				    			<div id="civic-widget">
 						    		<p class="personal-description">
-										{!! nl2br(trans('vox.page.'.$current_page.'.civic-hint')) !!}
+										{!! nl2br(trans('vox.page.'.$current_page.'.home.civic-hint')) !!}
 				                	</p>
 				                	<p class="personal-description">
-				                		{!! nl2br(trans('vox.page.'.$current_page.'.civic-buttons')) !!}
+				                		{!! nl2br(trans('vox.page.'.$current_page.'.home.civic-buttons')) !!}
 				                	</p>
 				                	<p  class="personal-description">
 				                		<a href="https://play.google.com/store/apps/details?id=com.civic.sip" target="_blank" class="civic-download civic-android"></a>
 				                		<a href="https://itunes.apple.com/us/app/civic-secure-identity/id1141956958?mt=8" target="_blank" class="civic-download civic-ios"></a>
 				                	</p>
 				                	<p class="personal-description">
-				                		{!! nl2br(trans('vox.page.'.$current_page.'.civic-login')) !!}
+				                		{!! nl2br(trans('vox.page.'.$current_page.'.home.civic-login')) !!}
 				                	</p>
 
 				                	<p class="tac">
 										<button id="signupButton" class="civic-button-a medium" type="button">
-											<span style="color: white;">{!! nl2br(trans('vox.page.'.$current_page.'.civic-button')) !!}</span>
+											<span style="color: white;">{!! nl2br(trans('vox.page.'.$current_page.'.home.civic-button')) !!}</span>
 										</button>
 									</p>
 
 									<div id="civic-cancelled" class="alert alert-info" style="display: none;">
-										{!! nl2br(trans('vox.page.'.$current_page.'.civic-cancelled')) !!}
+										{!! nl2br(trans('vox.page.'.$current_page.'.home.civic-cancelled')) !!}
 									</div>
 									<div id="civic-error" class="alert alert-warning" style="display: none;">
-										{!! nl2br(trans('vox.page.'.$current_page.'.civic-error')) !!}
+										{!! nl2br(trans('vox.page.'.$current_page.'.home.civic-error')) !!}
 									</div>
 									<div id="civic-weak" class="alert alert-warning" style="display: none;">
-										{!! nl2br(trans('vox.page.'.$current_page.'.civic-weak')) !!}
+										{!! nl2br(trans('vox.page.'.$current_page.'.home.civic-weak')) !!}
 									</div>
 									<div id="civic-wait" class="alert alert-info" style="display: none;">
-										{!! nl2br(trans('vox.page.'.$current_page.'.civic-wait')) !!}
+										{!! nl2br(trans('vox.page.'.$current_page.'.home.civic-wait')) !!}
 									</div>
 									<div id="civic-duplicate" class="alert alert-warning" style="display: none;">
-										{!! nl2br(trans('vox.page.'.$current_page.'.civic-duplicate')) !!}
+										{!! nl2br(trans('vox.page.'.$current_page.'.home.civic-duplicate')) !!}
 									</div>
 									<input type="hidden" id="jwtAddress" value="{{ getLangUrl('profile/jwt') }}" />
 								</div>

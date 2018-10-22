@@ -8,7 +8,7 @@ return array(
   	'address' => 'reviews@dentacoin.com', 
   	'name' => 'Dentacoin Trusted Review Platform',
   	'address-vox' => 'dentavox@dentacoin.com', 
-  	'name-vox' => 'DentaVox Opinion Platform',
+  	'name-vox' => 'DentaVox Market Research Platform',
   ),
   'encryption' => 'tls',
   'username' => env('SENDGRID_USERNAME'),

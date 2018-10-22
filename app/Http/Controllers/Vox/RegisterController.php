@@ -170,9 +170,9 @@ class RegisterController extends FrontController
                     $newuser->addImage($img);
                 }
 
-                if( $newuser->email ) {
-                    $newuser->sendTemplate( 12 );
-                }
+                // if( $newuser->email ) {
+                //     $newuser->sendTemplate( 12 );
+                // }
 
                 Auth::login($newuser, Request::input('remember'));
 

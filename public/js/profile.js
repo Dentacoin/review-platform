@@ -343,6 +343,7 @@ $(document).ready(function(){
              // Step 3: Start scope request.
             var button = document.querySelector('#signupButton');
             button.addEventListener('click', function () {
+                clearInterval( currencyUpdaterTO );
                 $('#withdraw-widget .alert').hide();
                 $('#signupButton').hide();
                 civicSip.signup({ style: 'popup', scopeRequest: civicSip.ScopeRequests.PROOF_OF_IDENTITY }); //BASIC_SIGNUP
