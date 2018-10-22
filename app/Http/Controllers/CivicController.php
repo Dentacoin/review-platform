@@ -26,10 +26,10 @@ class CivicController extends BaseController
 					}
 				}
 			}
-			var_dump($data);
 			$c->response = json_encode($data);
 			$c->save();
 		}
-		exit;
+
+		return Response::json( $data );
 	}
 }
