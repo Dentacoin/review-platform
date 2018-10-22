@@ -58,7 +58,7 @@
 		                	{{ trans('vox.page.profile.home.withdraw.title') }}		                	
 		                </h4>
 
-			    		@if(!$user->civic_id)
+			    		@if(!$user->civic_kyc)
 				    		<p class="personal-description">
 								{!! nl2br(trans('vox.page.profile.home.civic-hint')) !!}
 								<br/>

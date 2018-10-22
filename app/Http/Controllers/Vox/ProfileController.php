@@ -582,13 +582,24 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         $civic = Civic::where('jwtToken', 'LIKE', $jwt)->first();
         if(!empty($civic)) {
             $data = json_decode($civic->response, true);
+            $ret['weak'] = true;
+
             if(empty($data['data'])) {
-                $ret['weak'] = true;
-            } else if(!empty($data['userId'])) {
+                foreach ($data['data'] as $key => $value) {
+                    if( mb_strpos( $value['label'], 'documents.' ) !==false ) {
+                        unset($ret['weak']);
+                        break;
+                    }
+                }
+            } 
+
+
+            if(empty($ret['weak']) && !empty($data['userId'])) {
                 $u = User::where('civic_id', 'LIKE', $data['userId'])->first();
-                if(!empty($u)) {
+                if(!empty($u) && $u->id != $this->user->id) {
                     $ret['duplicate'] = true;
                 } else {
+                    $this->user->civic_kyc = 1;
                     $this->user->civic_id = $data['userId'];
                     $this->user->save();
                     $ret['success'] = true;

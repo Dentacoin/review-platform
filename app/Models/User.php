@@ -67,6 +67,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'vox_active',
         'fb_id',
         'civic_id',
+        'civic_kyc',
         'platform',
         'gdpr_privacy',
         'self_deleted',

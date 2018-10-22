@@ -11,6 +11,7 @@ class CivicController extends BaseController
 {
 
 	public function add() {
+        header('Access-Control-Allow-Origin: *');
 		if( Request::input('jwtToken') && Request::input('data') ) {
 			$c = Civic::where('jwtToken', 'LIKE', Request::input('jwtToken'))->first();
 			if(empty($c)) {
@@ -18,13 +19,17 @@ class CivicController extends BaseController
 			}
 			$c->jwtToken = Request::input('jwtToken');
 			$data = Request::input('data');
-			dd($data);
-			foreach ($data as $key => $value) {
+			if(!empty( $data['data'] )) {
+				foreach ($data['data'] as $key => $value) {
+					if( mb_strpos( $value['label'], 'documents.' ) !==false ) {
+						$data['data'][$key]['value'] = 'Masked';
+					}
+				}
 			}
-			$c->response = json_encode();
+			var_dump($data);
+			$c->response = json_encode($data);
 			$c->save();
 		}
-		var_dump(Request::input());
 		exit;
 	}
 }
