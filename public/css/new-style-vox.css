@@ -238,7 +238,7 @@ select:focus > option:checked {
   min-height: calc(100vh - 147px); }
 
 .error-message {
-  text-align: center;
+  text-align: left;
   color: #a94442;
   display: block;
   font-size: 14px; }
@@ -2281,6 +2281,16 @@ header {
     .section-login .reg-wrapper,
     .section-register .reg-wrapper {
       margin-top: 0px; } }
+  .section-recover .reg-wrapper .error-message,
+  .section-login .reg-wrapper .error-message,
+  .section-register .reg-wrapper .error-message {
+    width: 300px;
+    margin: 0 auto; }
+    @media screen and (max-width: 768px) {
+      .section-recover .reg-wrapper .error-message,
+      .section-login .reg-wrapper .error-message,
+      .section-register .reg-wrapper .error-message {
+        width: 100%; } }
   .section-recover .reg-wrapper h4,
   .section-login .reg-wrapper h4,
   .section-register .reg-wrapper h4 {

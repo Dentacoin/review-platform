@@ -301,7 +301,7 @@ select:focus > option:checked {
 }
 
 .error-message {
-	text-align: center;
+	text-align: left;
 	color: #a94442;
 	display: block;
     font-size: 14px;
@@ -3071,6 +3071,15 @@ header {
 
 		@media #{$phone} {
 			margin-top: 0px;
+		}
+
+		.error-message {
+		    width: 300px;
+		    margin: 0 auto;
+
+			@media #{$phone} {
+				width: 100%;
+			}
 		}
 
 
