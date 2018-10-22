@@ -644,13 +644,23 @@ class ProfileController extends FrontController
         $civic = Civic::where('jwtToken', 'LIKE', $jwt)->first();
         if(!empty($civic)) {
             $data = json_decode($civic->response, true);
-            if(empty($data['data'])) {
-                $ret['weak'] = true;
-            } else if(!empty($data['userId'])) {
+            $ret['weak'] = true;
+
+            if(!empty($data['data'])) {
+                foreach ($data['data'] as $key => $value) {
+                    if( mb_strpos( $value['label'], 'documents.' ) !==false ) {
+                        unset($ret['weak']);
+                        break;
+                    }
+                }
+            }
+
+            if(empty($ret['weak']) && !empty($data['userId'])) {
                 $u = User::where('civic_id', 'LIKE', $data['userId'])->first();
-                if(!empty($u)) {
+                if(!empty($u) && $u->id != $this->user->id) {
                     $ret['duplicate'] = true;
                 } else {
+                    $this->user->civic_kyc = 1;
                     $this->user->civic_id = $data['userId'];
                     $this->user->save();
                     $ret['success'] = true;

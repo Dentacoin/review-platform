@@ -584,7 +584,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $data = json_decode($civic->response, true);
             $ret['weak'] = true;
 
-            if(empty($data['data'])) {
+            if(!empty($data['data'])) {
                 foreach ($data['data'] as $key => $value) {
                     if( mb_strpos( $value['label'], 'documents.' ) !==false ) {
                         unset($ret['weak']);

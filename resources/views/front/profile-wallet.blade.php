@@ -71,7 +71,7 @@
 				    <div class="panel-body panel-body-reward">
 			    		@if($user->is_verified && $user->email)
 
-				    		@if(!$user->civic_id)
+				    		@if(!$user->civic_kyc)
 				    			<div id="civic-widget">
 						    		<p class="personal-description">
 										{!! nl2br(trans('vox.page.'.$current_page.'.civic-hint')) !!}
