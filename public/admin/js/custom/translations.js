@@ -9,7 +9,7 @@ $(document).ready(function(){
 			$('tr.info').hide();
 			$('tr:not(.info)').each( function() {
 				//console.log( $(this).html().toLowerCase() );
-				if( $(this).html().toLowerCase().indexOf(text)!=-1 ) {
+				if( $(this).html().toLowerCase().indexOf(text.toLowerCase())!=-1 ) {
 					console.log('ok');
 					$(this).show();
 				} else {

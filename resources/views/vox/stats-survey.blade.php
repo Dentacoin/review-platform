@@ -88,7 +88,7 @@
 										<div class="total total-f">
 											{!! trans('vox.page.stats.total-women') !!}: <b></b>
 										</div>
-										<div class="icon total-m">
+										<div class="icon total-f">
 										</div>
 										<div class="map-hint">
 											{!! trans('vox.page.stats.respondents') !!}
@@ -102,7 +102,7 @@
 										<div class="total total-m">
 											{!! trans('vox.page.stats.total-men') !!}: <b></b>
 										</div>
-										<div class="icon total-f">
+										<div class="icon total-m">
 										</div>
 									@endif
 								</div>
