@@ -74,7 +74,7 @@
 																<tbody>
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
-																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;"><img src="{{ url($platform=='reviews' ? '/img/logo.png' : 'img-vox/logo-text.png') }}"></div>
+																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;"><img src="{{ url($platform=='reviews' ? '/img/logo.png' : 'new-vox-img/logo-email.jpg') }}"></div>
 																		</td>
 																	</tr>
 																</tbody>
@@ -119,10 +119,10 @@
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
 																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;">
 																					@if($title)
-																						<h1>{{ $title }}</h1>
+																						<h1 style="font-size: 16px;">{{ $title }}</h1>
 																					@endif
 																					@if($subtitle)
-																						<h2>{{ $subtitle }}</h2>
+																						<h2 style="font-size: 14px;">{{ $subtitle }}</h2>
 																					@endif
 																			</div>
 																		</td>

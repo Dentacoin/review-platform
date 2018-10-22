@@ -17,7 +17,11 @@ class CivicController extends BaseController
 				$c = new Civic;				
 			}
 			$c->jwtToken = Request::input('jwtToken');
-			$c->response = json_encode(Request::input('data'));
+			$data = Request::input('data');
+			dd($data);
+			foreach ($data as $key => $value) {
+			}
+			$c->response = json_encode();
 			$c->save();
 		}
 		var_dump(Request::input());

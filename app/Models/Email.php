@@ -33,6 +33,7 @@ class Email extends Model
 	}
 
 	private $button_style = 'style="text-decoration:none;background:#126585;color:#FFFFFF;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;font-weight:normal;line-height:120%;text-transform:none;margin:0px;border:none;border-radius:5px;color:#FFFFFF;cursor:auto;padding:10px 30px;"';
+	private $text_style = 'style="text-decoration:underline; color: #38a2e5;"';
 																						
 
 	public function send() {
@@ -256,7 +257,7 @@ class Email extends Model
 				'[welcome_link]',
 				'[/welcome_link]',
 			), array(
-				'<a '.$this->button_style.' href="'.getLangUrl('welcome-to-dentavox').'">',
+				'<a '.$this->text_style.' href="'.getLangUrl('welcome-to-dentavox').'">',
 				'</a>',				
 			), $content);
 		}
