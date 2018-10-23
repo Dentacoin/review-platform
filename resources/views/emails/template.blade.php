@@ -174,10 +174,8 @@
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
 																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;">Follow us on:
-																				<a href="https://facebook.com">Facebook</a> |
-																				<a href="https://facebook.com">Twitter</a> |
-																				<a href="https://facebook.com">Google+</a> |
-																				<a href="https://facebook.com">Something else</a>
+																				<a href="https://www.facebook.com/DentaVox-1578351428897849/">Facebook</a> |
+																				<a href="https://t.me/dentacoin">Telegram</a>
 																			</div>
 																		</td>
 																	</tr>
@@ -263,7 +261,7 @@
 																	<tr>
 																		<td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="center">
 																			<div style="cursor:auto;color:#555;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;text-align:center;">
-																				{{ trans('front.page.emails.copyrights') }}
+																				{!! nl2br(trans('front.page.emails.copyrights')) !!}
 																			</div>
 																		</td>
 																	</tr>

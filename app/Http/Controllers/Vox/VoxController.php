@@ -590,7 +590,7 @@ class VoxController extends FrontController
         
         $em = new Email;
         $em->user_id = $this->user->id;
-        $em->template_id = 25;
+        $em->template_id = $this->user->is_dentist ? 27 : 25;
         $em->meta = [
         	'friend_name' => ''
         ];

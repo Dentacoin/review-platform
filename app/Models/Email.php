@@ -24,6 +24,20 @@ class Email extends Model
     	"sent",
 	];
 
+
+	public static $vox_tempalates = [
+		12,
+		13,
+		14,
+		15,
+		16,
+		25,
+		26,
+		30,
+		32,
+		27,
+	];
+
 	public function template() {
         return $this->hasOne('App\Models\EmailTemplate', 'id', 'template_id');		
 	}
@@ -68,19 +82,7 @@ class Email extends Model
 	}
 
 	private function getPlatform() {
-		$vox_tempalates = [
-			11,
-			12,
-			13,
-			14,
-			15,
-			16,
-			25,
-			26,
-			30,
-			32,
-		];
-		return $this->template->id==20 ? $this->meta['transaction_platform'] : ( in_array($this->template->id, $vox_tempalates) ? 'vox' : 'reviews' );
+		return $this->template->id==20 ? $this->meta['transaction_platform'] : ( in_array($this->template->id, self::$vox_tempalates) ? 'vox' : 'reviews' );
 
 	}
 
@@ -145,7 +147,7 @@ class Email extends Model
 
 	private function addPlaceholders($content) {
 
-		if($this->template->id==1 || $this->template->id==2 || $this->template->id==11) { //Verify
+		if($this->template->id==1 || $this->template->id==2) { //Verify
 			$content = str_replace(array(
 				'[register_reward]',
 				'[verifylink]',
@@ -199,7 +201,7 @@ class Email extends Model
 			), $content);
 		}
 
-		if($this->template->id==7 || $this->template->id==17 || $this->template->id==25) { //Invite
+		if($this->template->id==7 || $this->template->id==17 || $this->template->id==25 || $this->template->id==27) { //Invite
 			$content = str_replace(array(
 				'[friend_name]',
 				'[invitelink]',

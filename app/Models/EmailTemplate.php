@@ -43,7 +43,7 @@ class EmailTemplate extends Model
             '[metamask] Instructions [/metamask]',
         ];
 
-        if($this->id==1 || $this->id==2 || $this->id==11) {
+        if($this->id==1 || $this->id==2) {
             $codes[] = '[register_reward]';
             $codes[] = '[verifylink]Click here[/verifylink]';
         }
@@ -64,7 +64,7 @@ class EmailTemplate extends Model
             $codes[] = '[rating]';
         } 
 
-        if($this->id==7 || $this->id==17 || $this->id==25) {
+        if($this->id==7 || $this->id==17 || $this->id==25 || $this->id==27) {
             $codes[] = '[friend_name]';
             $codes[] = '[invitelink]Click here[/invitelink]';
         } 

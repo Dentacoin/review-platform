@@ -44,7 +44,6 @@
 				<div class="form-horizontal">
 					<div class="alert alert-warning">
 						{!! trans('vox.page.profile.home.wallet-bad-ip') !!}
-						<a id="bad-ip-appeal" href="{!! getLangUrl('appeal') !!}"> {!! trans('vox.page.profile.home.wallet-bad-ip-button') !!} </a>
 					</div>
 				</div>
 

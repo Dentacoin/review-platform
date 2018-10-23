@@ -6,13 +6,19 @@ use Validator;
 use App\Http\Controllers\AdminController;
 
 use App\Models\EmailTemplate;
+use App\Models\Email;
 
 use Illuminate\Http\Request;
 
 class EmailsController extends AdminController
 {
-    public function list(  ) {
-        $templates = EmailTemplate::get();
+    public function list( $what=null ) {
+
+        if($what=='vox') {
+            $templates = EmailTemplate::whereIn('id', Email::$vox_tempalates)->get();
+        } else {
+            $templates = EmailTemplate::whereNotIn('id', Email::$vox_tempalates)->get();
+        }
 
     	return $this->showView('emails', array(
             'templates' => $templates,

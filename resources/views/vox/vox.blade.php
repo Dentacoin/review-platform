@@ -8,8 +8,6 @@
 			<div class="container">
 				<div class="alert alert-warning" style="margin-top: 100px;">
 					{{ trans('vox.page.questionnaire.vox-bad-ip') }}
-
-					<a id="bad-ip-appeal" href="{{ getLangUrl('appeal') }}"> {{ trans('vox.page.questionnaire.vox-bad-ip-button') }} </a>
 				</div>
 			</div>
 		@else

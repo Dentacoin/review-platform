@@ -378,7 +378,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         $this->user->email = $email;
                         $this->user->save();
 
-                        $this->user->sendTemplate(25, [
+                        $this->user->sendTemplate( $this->user->is_dentist ? 27 : 25, [
                             'friend_name' => $dentist_name,
                             'invitation_id' => $invitation->id
                         ]);
@@ -423,7 +423,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $this->user->email = Request::Input('email');
                     $this->user->save();
 
-                    $this->user->sendTemplate(25, [
+                    $this->user->sendTemplate( $this->user->is_dentist ? 27 : 25 , [
                         'friend_name' => $dentist_name,
                         'invitation_id' => $invitation->id
                     ]);

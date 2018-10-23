@@ -34,6 +34,10 @@ return [
         ),
         'emails' => array(
             'icon' => 'envelope',
+            'subpages' => array(
+                'trp' => 'trp',
+                'vox' => 'vox',
+            ),
         ),
         'vox' => array(
             'icon' => 'bullhorn',

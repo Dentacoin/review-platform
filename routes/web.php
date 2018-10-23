@@ -118,6 +118,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/faq', 							'VoxesController@faq');
 
 	Route::get('emails', 							'EmailsController@list');
+	Route::get('emails/{what?}', 					'EmailsController@list');
 	Route::get('emails/edit/{id}', 					'EmailsController@edit');
 	Route::post('emails/edit/{id}', 				'EmailsController@save');
 
