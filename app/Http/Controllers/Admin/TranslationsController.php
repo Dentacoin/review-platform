@@ -36,8 +36,8 @@ class TranslationsController extends AdminController
             }
             $this->translations_save($this->request->input('source'), $oldfile);
 
-            $this->request->session()->flash('success-message', trans('admin.page.translations.added'));
-            return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/'.$this->request->input('source').'/'.$this->request->input('target'));
+            $this->request->session()->flash('warning-message', 'Sentence added. Please wait for reload.');
+            return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/'.$this->request->input('source').'/'.$this->request->input('target').'/?reload=1');
         }
 	}
 
@@ -63,8 +63,8 @@ class TranslationsController extends AdminController
 
             $this->translations_save($this->request->input('target'), $newfile);
 
-            $this->request->session()->flash('success-message', trans('admin.page.translations.saved'));
-            return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/'.$this->request->input('source').'/'.$this->request->input('target'));
+            $this->request->session()->flash('warning-message', 'Sentence updated. Please wait for reload.');
+            return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/'.$this->request->input('source').'/'.$this->request->input('target').'/?reload=1');
         }
 	}
 
@@ -136,8 +136,8 @@ class TranslationsController extends AdminController
             }
         }
 
-        $this->request->session()->flash('success-message', trans('admin.page.translations.deleted'));
-        return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/'.$source.'/'.$target);
+        $this->request->session()->flash('warning-message', 'Sentence deleted. Please wait for reload.');
+        return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/'.$source.'/'.$target.'/?reload=1');
 	}
 
     public function list($subpage=null, $source=null, $target=null) {
@@ -179,7 +179,9 @@ class TranslationsController extends AdminController
             'target' => $target,
             'langs' => $available_langs,
             'source_arr' => $sa_new,
-            'target_arr' => $ta
+            'target_arr' => $ta,
+            'reload' => request('reload'),
+            'reloaded' => request('reloaded'),
         );
 
         return $this->ShowView('translations', $attrs);

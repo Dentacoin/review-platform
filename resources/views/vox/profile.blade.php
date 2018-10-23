@@ -8,18 +8,18 @@
 		</div>
 		<div class="col-md-9">
 			<h2 class="page-title">
-				<img src="{{ url('new-vox-img/profile-home.png') }}" />
-				{{ trans('vox.page.profile.home.title') }}
+				<img src="{!! url('new-vox-img/profile-home.png') !!}" />
+				{!! trans('vox.page.profile.home.title') !!}
 			</h2>
 
 			<div class="form-horizontal black-line-title">
                 <h4 class="bold">
-                	{{ trans('vox.page.profile.home.balance') }}
+                	{!! trans('vox.page.profile.home.balance') !!}
                 </h4>
 
 				<div class="profile-home-content">
 					<div class="balance">
-						<b><span class="dcn-amount">{{ number_format( $user->getVoxBalance(), 0, '.', ' ') }}</span> DCN</b>
+						<b><span class="dcn-amount">{!! number_format( $user->getVoxBalance(), 0, '.', ' ') !!}</span> DCN</b>
 						<div class="convertor">
 							= <span class="convertor-value"></span>
 							<span class="convertor-currnecy">
@@ -29,7 +29,7 @@
 
 								<div class="expander">
 									@foreach( config('currencies') as $currency )
-										<a currency="{{ $currency }}" {!! $currency=='USD' ? 'class="active"' : '' !!}>{{ $currency }}</a>
+										<a currency="{!! $currency !!}" {!! $currency=='USD' ? 'class="active"' : '' !!}>{!! $currency !!}</a>
 									@endforeach
 								</div>
 							</span>
@@ -43,8 +43,8 @@
 
 				<div class="form-horizontal">
 					<div class="alert alert-warning">
-						{{ trans('vox.page.profile.home.wallet-bad-ip') }}
-						<a id="bad-ip-appeal" href="{{ getLangUrl('appeal') }}"> {{ trans('vox.page.profile.home.wallet-bad-ip-button') }} </a>
+						{!! trans('vox.page.profile.home.wallet-bad-ip') !!}
+						<a id="bad-ip-appeal" href="{!! getLangUrl('appeal') !!}"> {!! trans('vox.page.profile.home.wallet-bad-ip-button') !!} </a>
 					</div>
 				</div>
 
@@ -55,7 +55,7 @@
 	        	@if($user->vox_address)
 					<div class="form-horizontal black-line-title">
 		                <h4 class="bold">
-		                	{{ trans('vox.page.profile.home.withdraw.title') }}		                	
+		                	{!! trans('vox.page.profile.home.withdraw.title') !!}		                	
 		                </h4>
 
 			    		@if(!$user->civic_kyc)
@@ -100,53 +100,53 @@
 							<div id="civic-duplicate" class="alert alert-warning" style="display: none;">
 								{!! nl2br(trans('vox.page.profile.home.civic-duplicate')) !!}
 							</div>
-							<input type="hidden" id="jwtAddress" value="{{ getLangUrl('profile/jwt') }}" />
+							<input type="hidden" id="jwtAddress" value="{!! getLangUrl('profile/jwt') !!}" />
 			    		@else
 				    		<p class="personal-description">
-				    			{{ trans('vox.page.profile.home.withdraw.hint') }}
+				    			{!! trans('vox.page.profile.home.withdraw.hint') !!}
 				    		</p>
 
-				    		<form id="withdraw-form" method="post" class="form-horizontal" action="{{ getLangurl('profile/withdraw') }}">
+				    		<form id="withdraw-form" method="post" class="form-horizontal" action="{!! getLangurl('profile/withdraw') !!}">
 	                			{!! csrf_field() !!}
 
 					            <div class="form-group">
 					  				<label class="control-label top-label col-md-12">
-					  					{{ trans('vox.page.profile.home.withdraw.address') }}
+					  					{!! trans('vox.page.profile.home.withdraw.address') !!}
 					  				</label>
 					                <div class="col-md-12">
-					                    <input class="form-control style-2" id="vox-address" name="vox-address" type="text" value="{{ $user->vox_address }}">
+					                    <input class="form-control style-2" id="vox-address" name="vox-address" type="text" value="{!! $user->vox_address !!}">
 					                </div>
 					            </div>
 
 					            <div class="form-group separated">
 					  				<label class="control-label top-label col-md-12">
-					  					{{ trans('vox.page.profile.home.withdraw.amount') }}
+					  					{!! trans('vox.page.profile.home.withdraw.amount') !!}
 					  				</label>
 					                <div class="col-md-9">
-					                    <input class="form-control style-2" id="wallet-amount" name="wallet-amount" type="number" value="" placeholder="{{ trans('vox.page.profile.wallet-withdraw-amount') }}">
+					                    <input class="form-control style-2" id="wallet-amount" name="wallet-amount" type="number" value="" placeholder="{!! trans('vox.page.profile.wallet-withdraw-amount') !!}">
 					                </div>
 									<div class="col-md-3">
-				                        <button type="submit" name="update" class="btn btn-inactive form-control nom style-2" data-loading="{{ trans('vox.common.loading') }}">
-					  						{{ trans('vox.page.profile.home.withdraw.button') }}
+				                        <button type="submit" name="update" class="btn btn-inactive form-control nom style-2" data-loading="{!! trans('vox.common.loading') !!}">
+					  						{!! trans('vox.page.profile.home.withdraw.button') !!}
 				                        </button>
 									</div>
 					            </div>
 					            @if($user->isGasExpensive())
 						            <div class="alert alert-warning">
-						            	{{ trans('vox.page.profile.wallet-withdraw-gas') }}
+						            	{!! trans('vox.page.profile.wallet-withdraw-gas') !!}
 			                        </div>
 			                    @endif
 
 		                        <div class="alert alert-success" style="display: none;" id="withdraw-pending">
-		                        	{{ trans('vox.page.profile.wallet-withdraw-pending') }}
+		                        	{!! trans('vox.page.profile.wallet-withdraw-pending') !!}
 		                        </div>
 		                        <div class="alert alert-success" style="display: none;" id="withdraw-success">
-		                        	{{ trans('vox.page.profile.wallet-withdraw-success') }}
+		                        	{!! trans('vox.page.profile.wallet-withdraw-success') !!}
 		                        	<a target="_blank">
 		                        	</a>
 		                        </div>
 		                        <div class="alert alert-warning" style="display: none;" id="withdraw-error">
-		                        	{{ trans('vox.page.profile.wallet-withdraw-error') }}
+		                        	{!! trans('vox.page.profile.wallet-withdraw-error') !!}
 		                        	<div id="withdraw-reason">
 		                        	</div>
 		                        </div>
@@ -158,11 +158,11 @@
 					<div class="form-horizontal black-line-title">
 
 		                <h4 class="bold">
-		                	{{ trans('vox.page.profile.home.address.title') }}		                	
+		                	{!! trans('vox.page.profile.home.address.title') !!}		                	
 		                </h4>
 
 	                	<p class="personal-description">
-	                		{{ trans('vox.page.profile.home.address.hint') }}
+	                		{!! trans('vox.page.profile.home.address.hint') !!}
 	                	</p>
 
 
@@ -171,11 +171,11 @@
 			                {!! csrf_field() !!}
 				            <div class="form-group">
 				                <div class="col-md-10">
-				                    <input class="form-control" id="vox-address" name="vox-address" type="text" value="{{ $user->vox_address }}">
+				                    <input class="form-control" id="vox-address" name="vox-address" type="text" value="{!! $user->vox_address !!}">
 				                </div>
 				                <div class="col-md-2">
 			                        <button type="submit" name="update" class="btn btn-primary form-control nom">
-			                        	{{ trans('vox.page.profile.home.address.button') }}
+			                        	{!! trans('vox.page.profile.home.address.button') !!}
 			                        	
 			                        </button>
 				                </div>
@@ -190,22 +190,22 @@
 
 					<div class="form-horizontal black-line-title">
 		                <h4 class="bold">
-		                	{{ trans('vox.page.profile.home.history.title') }}
+		                	{!! trans('vox.page.profile.home.history.title') !!}
 		                </h4>
 		            	<table class="table">
 		            		<thead>
 		            			<tr>
 			            			<th>
-			            				{{ trans('front.page.profile.history.list-date') }}
+			            				{!! trans('front.page.profile.history.list-date') !!}
 			            			</th>
 			            			<th>
-			            				{{ trans('front.page.profile.history.list-amount') }}
+			            				{!! trans('front.page.profile.history.list-amount') !!}
 			            			</th>
 			            			<th>
-			            				{{ trans('front.page.profile.history.list-address') }}
+			            				{!! trans('front.page.profile.history.list-address') !!}
 			            			</th>
 			            			<th>
-			            				{{ trans('front.page.profile.history.list-status') }}
+			            				{!! trans('front.page.profile.history.list-status') !!}
 			            			</th>
 		            			</tr>
 		            		</thead>
@@ -213,27 +213,27 @@
 		            			@foreach( $history as $trans )
 		            				<tr>
 		            					<td>
-		            						{{ $trans->created_at->toDateString() }}
+		            						{!! $trans->created_at->toDateString() !!}
 		            					</td>
 		            					<td>
-		            						{{ $trans->amount }} DCN
+		            						{!! $trans->amount !!} DCN
 		            					</td>
 		            					<td>
-		            						<div class="vox-address">{{ $trans->address }}</div>
+		            						<div class="vox-address">{!! $trans->address !!}</div>
 		            					</td>
 		            					<td>
 		            						@if($trans->status=='new')
-		            							{{ trans('front.page.profile.history.status-new') }}
+		            							{!! trans('front.page.profile.history.status-new') !!}
 		            						@elseif($trans->status=='failed')
-		            							{{ trans('front.page.profile.history.status-failed') }}
+		            							{!! trans('front.page.profile.history.status-failed') !!}
 		            						@elseif($trans->status=='unconfirmed')
-		            							<a href="https://etherscan.io/tx/{{ $trans->tx_hash }}" target="_blank">
-		            								{{ trans('front.page.profile.history.status-unconfirmed') }}
+		            							<a href="https://etherscan.io/tx/{!! $trans->tx_hash !!}" target="_blank">
+		            								{!! trans('front.page.profile.history.status-unconfirmed') !!}
 		            								<i class="fa fa-share-square-o"></i>
 		            							</a>
 		            						@elseif($trans->status=='completed')
-		            							<a href="https://etherscan.io/tx/{{ $trans->tx_hash }}" target="_blank">
-		            								{{ trans('front.page.profile.history.status-completed') }}		            								
+		            							<a href="https://etherscan.io/tx/{!! $trans->tx_hash !!}" target="_blank">
+		            								{!! trans('front.page.profile.history.status-completed') !!}		            								
 		            								<i class="fa fa-share-square-o"></i>
 		            							</a>
 		            						@endif

@@ -2,6 +2,12 @@ var searchTO;
 
 $(document).ready(function(){
 
+	if( typeof(should_reload)!='undefined' ) {
+		setTimeout( function() {
+			window.location.href = window.location.href.split('?')[0] + '?reloaded=1';			
+		}, 1000 );
+	}
+
 	var goSearch = function() {
 		var text = $(this).val();
 		if(text.length>3) {

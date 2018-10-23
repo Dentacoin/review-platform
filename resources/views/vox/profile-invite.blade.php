@@ -24,12 +24,12 @@
                 <div class="alert alert-info" id="wallet-needed">
 					@if($user->is_dentist)
 						{!! nl2br(trans('vox.page.profile.invite.no-address-dentist', [
-							'link' => '<a href="{{ getLangUrl('profile') }}">',
+							'link' => '<a href="'.getLangUrl('profile').'">',
 							'endlink' => '</a>',
 						])) !!}                		
 					@else
 						{!! nl2br(trans('vox.page.profile.invite.no-address-patient', [
-							'link' => '<a href="{{ getLangUrl('profile') }}">',
+							'link' => '<a href="'.getLangUrl('profile').'">',
 							'endlink' => '</a>',
 						])) !!}
 					@endif
@@ -44,20 +44,20 @@
 
 				<h3>
 					@if($user->is_dentist)
-						{!! nl2br(trans('vox.page.profile.invite.subtitle-dentist') !!}
+						{!! nl2br(trans('vox.page.profile.invite.subtitle-dentist')) !!}
 					@else
-						{!! nl2br(trans('vox.page.profile.invite.subtitle-patient') !!}
+						{!! nl2br(trans('vox.page.profile.invite.subtitle-patient')) !!}
 					@endif
 				</h3>
 
 				@if($user->is_dentist)
-					{!! nl2br(trans('vox.page.profile.invite.hint-dentist') !!}
+					{!! nl2br(trans('vox.page.profile.invite.hint-dentist')) !!}
 				@else
-					{!! nl2br(trans('vox.page.profile.invite.hint-patient') !!}
+					{!! nl2br(trans('vox.page.profile.invite.hint-patient')) !!}
 				@endif
 
 				<b>
-					{!! nl2br(trans('vox.page.profile.invite.hint-2') !!}
+					{!! nl2br(trans('vox.page.profile.invite.hint-2')) !!}
     			</b>
 
     			<div class="steps flex">

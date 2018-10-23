@@ -2,6 +2,12 @@
 
 @section('content')
 
+@if($reloaded)
+    <div class="alert alert-success">
+        <b>You can do more changes now</b>
+    </div>
+@endif
+
 <h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
 <!-- end page-header -->
 
@@ -176,10 +182,10 @@
                                         @endforeach
                                     @endforeach
                                     <tr class="bnt-tr">
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <button type="submit" name="update" class="btn btn-sm btn-success">{{ trans('admin.page.'.$current_page.'.list_submit') }}</button>
+                                        <td colspan="3">
+                                            <button type="submit" name="update" class="btn btn-block btn-sm btn-success">
+                                                {{ trans('admin.page.'.$current_page.'.list_submit') }}
+                                            </button>
                                         </td>
                                     </tr>
                                 @endif
@@ -191,5 +197,11 @@
         </div>
     </div>
 </div>
+
+@if(!empty($reload))
+    <script type="text/javascript">
+        var should_reload = 1;
+    </script>
+@endif
 
 @endsection

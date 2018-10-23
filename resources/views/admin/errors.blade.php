@@ -22,6 +22,12 @@
         <strong>{{ Session::get('success-message') }}</strong>
     </div>
 @endif
+@if(Session::has('warning-message'))
+    <!-- Form Success List -->
+    <div class="alert alert-warning m-b-15">
+        <strong>{{ Session::get('warning-message') }}</strong>
+    </div>
+@endif
 
 <div id="error-message" class="alert alert-danger m-b-15" style="display: none;">
 </div>

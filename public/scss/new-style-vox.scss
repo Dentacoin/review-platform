@@ -3387,9 +3387,9 @@ header {
 
 .black-line-title {
 	position: relative;
+	overflow: hidden;
 
 	h4 {
-		overflow: hidden;
 		display: inline-block;
 		padding-right: 7px;
 		margin-bottom: 25px;
