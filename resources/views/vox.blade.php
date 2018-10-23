@@ -207,13 +207,17 @@
 				<div class="wrapper">
 					<img src="{{ url('new-vox-img/back-from-ban'.$unbanned_times.'.png') }}" class="zman" />
 					<div class="inner">
-						<h2>Welcome back, {{ $user->getName() }}!</h2>
+						<h2>
+							{!! nl2br(trans('vox.page.bans.unbanned-title', [
+								'name' => $user->getName()
+							])) !!}
+						</h2>
 						<p>
 							{!! $unbanned_text !!}
 						</p>
-						<div class="flex">
+						<div class="flex break-mobile">
 							<div class="bans-received">
-								Bans received:
+								{!! nl2br(trans('vox.page.bans.unbanned-received')) !!}
 								<div class="flex">
 									@for($i=1;$i<=4;$i++)
 										<img src="{{ url('new-vox-img/popup-sign-'.($i==4 ? '5' : ( $i<=$unbanned_times ? $i : '0' )).'.png') }}" />
@@ -221,7 +225,7 @@
 								</div>
 							</div>
 							<a class="btn closer btn-unban btn-unban-{{ $unbanned_times }}">
-								Take Surveys
+								{!! nl2br(trans('vox.page.bans.unbanned-button')) !!}
 							</a>
 						</div>
 					</div>

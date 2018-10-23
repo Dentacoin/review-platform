@@ -154,9 +154,9 @@ $(document).ready(function(){
                         return;
                     }
 
-                    if(data.wrong && data.go_back) {
+                    if(data.wrong) {
                         $('.question-group').find('.loader').remove();
-                        $('.question-group').hide();
+                        $('.question-group:visible a:nth-child('+parseInt(answer)+')').addClass('wrong');
                         
                         var go_back_group = $('.question-group').first();
                         var i = 1;
@@ -169,15 +169,20 @@ $(document).ready(function(){
                             i++;
                         } while(go_back_group.length);
 
-                        go_back_group.show();
-
                         $('.popcircle .wrapper').css('background-image', 'url('+data.img+')');
                         $('.popcircle h2').html(data.title);
                         $('.popcircle p').html(data.content);
                         $('.popcircle .zman').attr('src', data.zman);
+                        $('.popcircle .btn.back-btn').hide();
+                        $('.popcircle .btn.back-btn.btn-'+data.action).show();
+                        $('.popcircle .btn.back-btn.btn-'+data.action).off('click').click( (function() {
+                            $('.question-group a.wrong').removeClass('wrong');
+                            $('.popcircle').removeClass('active');
+                            $('.question-group').hide();
+                            $('.question-group-'+this.go_back).show();
+                            VoxTest.handleNextQuestion();
+                        }).bind(data) );
                         $('.popcircle').addClass('active');
-
-                        VoxTest.handleNextQuestion();
 
                     } else {
                         

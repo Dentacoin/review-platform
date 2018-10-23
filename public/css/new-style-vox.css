@@ -1082,6 +1082,13 @@ header {
           margin-bottom: 10px;
           padding-top: 4px;
           padding-bottom: 4px; } }
+      .questions .question-group .answers select.wrong,
+      .questions .question-group .answers .answer-radio.wrong,
+      .questions .question-group .answers .answer-checkbox.wrong,
+      .questions .question-group .answers .answer.wrong {
+        background: #f33651;
+        border-color: #f33651;
+        color: white; }
     .questions .question-group .answers .answer-radio.active-label, .questions .question-group .answers .answer-radio:hover,
     .questions .question-group .answers .answer-checkbox.active-label,
     .questions .question-group .answers .answer-checkbox:hover,
@@ -2830,8 +2837,8 @@ header {
   .popup .wrapper {
     position: absolute;
     max-height: 90%;
-    max-width: 80%;
-    width: 80%;
+    max-width: 95%;
+    width: 1130px;
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
@@ -2839,6 +2846,9 @@ header {
     border-radius: 10px;
     box-shadow: 0px 0px 20px 5px #cad5d9;
     padding: 30px; }
+    @media screen and (max-width: 768px) {
+      .popup .wrapper {
+        padding: 15px; } }
     .popup .wrapper .x {
       position: absolute;
       top: -22px;
@@ -2852,26 +2862,76 @@ header {
       text-align: center;
       box-shadow: 0px 0px 10px 2px #cad5d9;
       cursor: pointer; }
+      @media screen and (max-width: 768px) {
+        .popup .wrapper .x {
+          top: 10px;
+          right: 10px;
+          width: 22px;
+          height: 22px;
+          line-height: 0; } }
       .popup .wrapper .x i {
         color: black;
         font-size: 30px; }
+        @media screen and (max-width: 768px) {
+          .popup .wrapper .x i {
+            line-height: 10px; } }
     .popup .wrapper .zman {
       position: absolute;
-      left: -10%;
+      left: -135px;
       top: 50%;
-      height: 130%;
+      height: 630px;
       transform: translateY(-50%); }
+      @media screen and (max-width: 1100px) {
+        .popup .wrapper .zman {
+          left: -115px;
+          height: 510px; } }
+      @media screen and (max-width: 860px) {
+        .popup .wrapper .zman {
+          left: -15px;
+          height: 340px; } }
+      @media screen and (max-width: 768px) {
+        .popup .wrapper .zman {
+          position: static;
+          display: block;
+          margin: 0px auto;
+          max-width: 180px;
+          transform: none;
+          height: auto; } }
     .popup .wrapper .inner {
-      max-width: 660px;
+      max-width: calc(100% - 440px);
       margin: 0 auto; }
+      @media screen and (max-width: 1100px) {
+        .popup .wrapper .inner {
+          max-width: calc(100% - 330px); } }
+      @media screen and (max-width: 860px) {
+        .popup .wrapper .inner {
+          max-width: calc(100% - 270px); } }
+      @media screen and (max-width: 768px) {
+        .popup .wrapper .inner {
+          max-width: 100%; } }
       .popup .wrapper .inner h3,
       .popup .wrapper .inner h2 {
         color: #060606;
         font-size: 35px;
-        font-weight: 800;
-        text-transform: uppercase; }
+        font-weight: 800; }
+        @media screen and (max-width: 1100px) {
+          .popup .wrapper .inner h3,
+          .popup .wrapper .inner h2 {
+            font-size: 30px; } }
+        @media screen and (max-width: 768px) {
+          .popup .wrapper .inner h3,
+          .popup .wrapper .inner h2 {
+            font-size: 20px;
+            text-align: center; } }
       .popup .wrapper .inner h3 {
         font-size: 20px; }
+        @media screen and (max-width: 1100px) {
+          .popup .wrapper .inner h3 {
+            font-size: 18px; } }
+        @media screen and (max-width: 768px) {
+          .popup .wrapper .inner h3 {
+            font-size: 16px;
+            text-align: center; } }
       .popup .wrapper .inner .btn {
         height: 48px;
         line-height: 48px;
@@ -2882,6 +2942,17 @@ header {
         color: #fdfefd;
         text-transform: uppercase;
         padding: 0px 60px; }
+        @media screen and (max-width: 1100px) {
+          .popup .wrapper .inner .btn {
+            padding: 0px 40px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 18px; } }
+        @media screen and (max-width: 768px) {
+          .popup .wrapper .inner .btn {
+            height: 36px;
+            line-height: 36px;
+            font-size: 16px; } }
         .popup .wrapper .inner .btn.inactive {
           background: #9e9e9e; }
         .popup .wrapper .inner .btn span {
@@ -2893,31 +2964,51 @@ header {
         text-transform: uppercase;
         text-align: center; }
         .popup .wrapper .inner .bans-received .flex {
-          margin-top: 15px; }
+          margin-top: 15px;
+          justify-content: center; }
           .popup .wrapper .inner .bans-received .flex img {
             width: 30px;
             height: 30px;
             margin: 0px 5px; }
-  .popup.unbanned .wrapper, .popup.ban .wrapper, .popup.warning .wrapper {
-    max-width: 1130px;
-    width: 1130px; }
-    .popup.unbanned .wrapper .inner, .popup.ban .wrapper .inner, .popup.warning .wrapper .inner {
-      margin: 60px 0 30px auto; }
-      .popup.unbanned .wrapper .inner p, .popup.ban .wrapper .inner p, .popup.warning .wrapper .inner p {
-        margin-top: 55px;
-        margin-bottom: 75px;
-        font-size: 20px;
-        color: #060606; }
+  .popup.unbanned .wrapper .inner, .popup.ban .wrapper .inner, .popup.warning .wrapper .inner {
+    margin: 60px 0 30px auto; }
+    @media screen and (max-width: 768px) {
+      .popup.unbanned .wrapper .inner, .popup.ban .wrapper .inner, .popup.warning .wrapper .inner {
+        margin: 10px 0 0px auto; } }
+    .popup.unbanned .wrapper .inner p, .popup.ban .wrapper .inner p, .popup.warning .wrapper .inner p {
+      margin-top: 55px;
+      margin-bottom: 75px;
+      font-size: 20px;
+      color: #060606; }
+      @media screen and (max-width: 1100px) {
+        .popup.unbanned .wrapper .inner p, .popup.ban .wrapper .inner p, .popup.warning .wrapper .inner p {
+          font-size: 16px; } }
+      @media screen and (max-width: 768px) {
+        .popup.unbanned .wrapper .inner p, .popup.ban .wrapper .inner p, .popup.warning .wrapper .inner p {
+          font-size: 12px;
+          text-align: center;
+          margin-top: 15px;
+          margin-bottom: 25px; } }
   .popup.ban .wrapper .inner p {
     margin-top: 55px;
     margin-bottom: 20px;
     font-size: 20px;
     color: #060606; }
+    @media screen and (max-width: 768px) {
+      .popup.ban .wrapper .inner p {
+        font-size: 12px;
+        text-align: center;
+        margin-top: 15px;
+        margin-bottom: 25px; } }
   .popup.ban .wrapper .inner small {
     display: block;
     color: #353637;
     font-size: 15px;
     margin-bottom: 50px; }
+    @media screen and (max-width: 768px) {
+      .popup.ban .wrapper .inner small {
+        font-size: 12px;
+        font-weight: 600; } }
   .popup.ban .wrapper .inner h3 span {
     font-size: 30px; }
   .popup.first-test .wrapper .inner .rules {
@@ -2926,11 +3017,26 @@ header {
     font-size: 18px;
     color: #333;
     text-transform: uppercase; }
+    @media screen and (max-width: 768px) {
+      .popup.first-test .wrapper .inner .rules {
+        display: block;
+        margin-top: 30px;
+        margin-bottom: 30px; } }
+    @media screen and (max-width: 768px) {
+      .popup.first-test .wrapper .inner .rules .col {
+        margin: 20px 0px; } }
+    @media screen and (max-width: 768px) {
+      .popup.first-test .wrapper .inner .rules .col:first-child img {
+        order: -1; } }
     .popup.first-test .wrapper .inner .rules img {
       margin: 0px 20px; }
+      @media screen and (max-width: 768px) {
+        .popup.first-test .wrapper .inner .rules img {
+          height: 50px;
+          margin: 0px 20px 0px 0px; } }
   .popup.first-test .wrapper .inner .icons {
-    margin-top: 30px;
-    margin-bottom: 30px; }
+    margin: 30px auto;
+    max-width: 460px; }
     .popup.first-test .wrapper .inner .icons .col {
       text-align: center; }
       .popup.first-test .wrapper .inner .icons .col img {
@@ -2939,8 +3045,11 @@ header {
         margin-bottom: 18px;
         display: block;
         margin: 0 auto 15px auto; }
+        @media screen and (max-width: 768px) {
+          .popup.first-test .wrapper .inner .icons .col img {
+            width: 30px; } }
   .popup.banned .wrapper {
-    max-width: 1130px;
+    max-width: 95%;
     width: 1130px;
     overflow: hidden;
     min-height: 487px; }
@@ -2948,19 +3057,48 @@ header {
       top: 5px;
       right: 5px; }
     .popup.banned .wrapper .zman {
-      left: -50%;
-      top: 90%;
-      height: 200%; }
+      left: -720px;
+      top: 440px;
+      height: 1100px; }
+      @media screen and (max-width: 1100px) {
+        .popup.banned .wrapper .zman {
+          left: -820px; } }
+      @media screen and (max-width: 768px) {
+        .popup.banned .wrapper .zman {
+          position: absolute;
+          width: 500px;
+          height: 500px;
+          left: -290px;
+          top: auto;
+          max-width: none;
+          bottom: -360px; } }
     .popup.banned .wrapper .inner {
       margin: 30px 0 0 auto;
-      max-width: 900px;
+      max-width: calc(100% - 250px);
       text-align: center; }
+      @media screen and (max-width: 1100px) {
+        .popup.banned .wrapper .inner {
+          max-width: calc(100% - 210px); } }
+      @media screen and (max-width: 768px) {
+        .popup.banned .wrapper .inner {
+          max-width: 100%; } }
       .popup.banned .wrapper .inner h2 {
         text-transform: none; }
+        @media screen and (max-width: 768px) {
+          .popup.banned .wrapper .inner h2 {
+            font-size: 22px; } }
       .popup.banned .wrapper .inner h3 {
-        text-transform: none; }
+        text-transform: none;
+        margin-top: 10px;
+        font-weight: 600; }
+        @media screen and (max-width: 768px) {
+          .popup.banned .wrapper .inner h3 {
+            margin-top: 25px; } }
       .popup.banned .wrapper .inner .countdown {
         margin: 55px auto; }
+        @media screen and (max-width: 768px) {
+          .popup.banned .wrapper .inner .countdown {
+            margin: 25px auto; } }
         .popup.banned .wrapper .inner .countdown .hours-countdown {
           display: inline-block;
           margin: 0 auto;
@@ -2971,6 +3109,9 @@ header {
           font-size: 20px;
           color: #010101;
           font-weight: 900; }
+          @media screen and (max-width: 768px) {
+            .popup.banned .wrapper .inner .countdown .hours-countdown {
+              font-size: 0px; } }
           .popup.banned .wrapper .inner .countdown .hours-countdown span {
             font-size: 30px; }
       .popup.banned .wrapper .inner .alternatives {
@@ -2986,16 +3127,42 @@ header {
         position: absolute;
         bottom: 25px;
         right: 40px; }
+        @media screen and (max-width: 1100px) {
+          .popup.banned .wrapper .inner .bans-received {
+            position: static;
+            margin-top: 20px; } }
+        @media screen and (max-width: 768px) {
+          .popup.banned .wrapper .inner .bans-received {
+            margin-top: 30px;
+            float: right; } }
   .popup.unbanned .wrapper .inner h2 {
     text-transform: none; }
   .popup.unbanned .wrapper .inner p {
     margin-top: 35px;
     margin-bottom: 55px; }
+    @media screen and (max-width: 768px) {
+      .popup.unbanned .wrapper .inner p {
+        font-size: 12px;
+        text-align: center;
+        margin-top: 15px;
+        margin-bottom: 25px; } }
   .popup.unbanned .wrapper .inner .btn-unban {
     margin-left: 60px;
     height: 57px;
     line-height: 57px;
-    font-weight: 900; }
+    font-weight: 900;
+    font-size: 20px; }
+    @media screen and (max-width: 1100px) {
+      .popup.unbanned .wrapper .inner .btn-unban {
+        margin-left: 40px;
+        font-size: 18px; } }
+    @media screen and (max-width: 768px) {
+      .popup.unbanned .wrapper .inner .btn-unban {
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 16px;
+        order: -1;
+        margin-bottom: 15px; } }
     .popup.unbanned .wrapper .inner .btn-unban.btn-unban-1 {
       /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#69d3be+0,4ab19d+100 */
       background: #69d3be;
@@ -3039,7 +3206,7 @@ header {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(229, 243, 247, 0.2);
   z-index: 1000;
   display: none;
   overflow: hidden; }
@@ -3048,8 +3215,13 @@ header {
   .popcircle .zman {
     position: absolute;
     bottom: 0px;
-    right: 280px;
+    right: 295px;
     z-index: 1050; }
+    @media screen and (max-width: 768px) {
+      .popcircle .zman {
+        right: 50%;
+        transform: translateX(50%);
+        bottom: -100px; } }
   .popcircle .wrapper {
     position: absolute;
     z-index: 1100;
@@ -3060,16 +3232,37 @@ header {
     height: 550px;
     background-position: 50% 50%;
     background-size: contain; }
+    @media screen and (max-width: 768px) {
+      .popcircle .wrapper {
+        width: 500px;
+        height: 500px;
+        min-width: 0;
+        bottom: -320px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 50px 120px; } }
     .popcircle .wrapper h2 {
       color: #060606;
       font-size: 25px;
       font-weight: 800;
-      margin-bottom: 35px; }
+      margin-bottom: 20px; }
+      @media screen and (max-width: 768px) {
+        .popcircle .wrapper h2 {
+          font-size: 22px;
+          text-align: center;
+          margin-bottom: 10px; } }
     .popcircle .wrapper p {
       color: #090909;
       font-size: 20px;
       margin-bottom: 25px;
-      width: 300px; }
+      width: 300px;
+      line-height: 1.2; }
+      @media screen and (max-width: 768px) {
+        .popcircle .wrapper p {
+          font-size: 12px;
+          text-align: center;
+          width: auto;
+          margin-bottom: 10px; } }
     .popcircle .wrapper .btn {
       height: 57px;
       line-height: 57px;
@@ -3082,6 +3275,17 @@ header {
       box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.22);
       border-radius: 9px;
       text-transform: uppercase; }
+      @media screen and (max-width: 768px) {
+        .popcircle .wrapper .btn {
+          height: 40px;
+          line-height: 40px;
+          display: block;
+          font-size: 14px;
+          text-align: center; } }
+      .popcircle .wrapper .btn i {
+        color: #050505; }
+        .popcircle .wrapper .btn i.fa-redo {
+          transform: rotate(180deg); }
 
 @media screen and (max-width: 768px) {
   .page-profile .site-content .container {

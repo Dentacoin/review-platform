@@ -87,7 +87,7 @@ class ProfileController extends FrontController
     //
 
     public function home($locale=null) {
-        if(!$this->user->is_verified) {
+        if($this->user->is_dentist && !$this->user->is_approved) {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
@@ -196,7 +196,7 @@ class ProfileController extends FrontController
     //
 
     public function vox($locale=null) {
-        if(!$this->user->is_verified) {
+        if($this->user->is_dentist && !$this->user->is_approved) {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
 
@@ -205,20 +205,43 @@ class ProfileController extends FrontController
         $prev_bans = $this->user->getPrevBansCount();
         $time_left = '';
 
-        $ban_reson = '';
+        $ban_reason = '';
+        $ban_alternatives = '';
+        $ban_alternatives_buttons = '';
         if( $current_ban ) {
             if($current_ban->type=='mistakes') {
-                if($prev_bans<=3) {
-                    $ban_reson = 'You\'ve been banned for answering inconsistently.';
-                } else {
-                    $ban_reson = 'You\'ve been banned for answering inconsistently several times';
-                }
+                $ban_reason = trans('vox.page.bans.banned-mistakes-title-'.$prev_bans);
             } else {
-                if($prev_bans<=3) {
-                    $ban_reson = 'You\'ve been banned for answering too fast.';
-                } else {
-                    $ban_reson = 'You\'ve been banned for answering too fast several times';
-                }
+                $ban_reason = trans('vox.page.bans.banned-too-fast-title-'.$prev_bans);
+            }
+
+            if($prev_bans==1) {
+                $ban_alternatives = trans('vox.page.bans.banned-alternative-1');
+                $ban_alternatives_buttons = '
+                <a href="https://dentacare.dentacoin.com/" target="_blank">
+                    <img src="'.url('new-vox-img/bans-dentacare.png').'" />
+                </a>';
+            } else if($prev_bans==2) {
+                $ban_alternatives = trans('vox.page.bans.banned-alternative-2');
+                $ban_alternatives_buttons = '
+                <a href="https://reviews.dentacoin.com/" target="_blank">
+                    <img src="'.url('new-vox-img/bans-trp.png').'" />
+                </a>';
+            } else if($prev_bans==3) {
+                $ban_alternatives = trans('vox.page.bans.banned-alternative-3');
+                $ban_alternatives_buttons = '
+                <a href="https://dentacare.dentacoin.com/" target="_blank">
+                    <img src="'.url('new-vox-img/bans-dentacare.png').'" />
+                </a>';
+            } else {
+                $ban_alternatives = trans('vox.page.bans.banned-alternative-4');
+                $ban_alternatives_buttons = '
+                <a href="https://dentacare.dentacoin.com/" target="_blank">
+                    <img src="'.url('new-vox-img/bans-dentacare.png').'" />
+                </a>
+                <a href="https://reviews.dentacoin.com/" target="_blank">
+                    <img src="'.url('new-vox-img/bans-trp.png').'" />
+                </a>';
             }
 
             if( $current_ban->expires ) {
@@ -235,6 +258,9 @@ class ProfileController extends FrontController
             'menu' => $this->menu,
             'prev_bans' => $prev_bans,
             'current_ban' => $current_ban,
+            'ban_reason' => $ban_reason,
+            'ban_alternatives' => $ban_alternatives,
+            'ban_alternatives_buttons' => $ban_alternatives_buttons,
             'time_left' => $time_left,
             'histories' => $this->user->vox_rewards->where('vox_id', '!=', 34),
             'payouts' => $this->user->history->where('type', '=', 'vox-cashout'),
@@ -250,7 +276,7 @@ class ProfileController extends FrontController
 
 
     public function privacy($locale=null) {
-        if(!$this->user->is_verified) {
+        if($this->user->is_dentist && !$this->user->is_approved) {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
@@ -334,7 +360,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function invite($locale=null) {
-        if(!$this->user->is_verified) {
+        if($this->user->is_dentist && !$this->user->is_approved) {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
@@ -456,7 +482,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function info($locale=null) {
-        if(!$this->user->is_verified) {
+        if($this->user->is_dentist && !$this->user->is_approved) {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
@@ -532,7 +558,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function change_password($locale=null) {
-        if(!$this->user->is_verified) {
+        if($this->user->is_dentist && !$this->user->is_approved) {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
@@ -573,7 +599,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             return Response::json( $ret );
         }
         
-        if(!$this->user->is_verified) {
+        if($this->user->is_dentist && !$this->user->is_approved) {
             $ret['message'] = 'not-verified';
             return Response::json( $ret );
         }

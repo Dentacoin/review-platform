@@ -289,44 +289,43 @@ class VoxController extends FrontController
 				            	]);
 
 		        				$ret['wrong'] = true;
-		        				$prev_bans = $this->user->getPrevBansCount();
-
-		        				if($wrongs==1 && !$prev_bans) {
-		        					$ret['go_back'] = $this->goBack($answered, $list, $vox);		        					
-		        				} else {
-									VoxAnswer::where('vox_id', $vox->id)
-									->where('user_id', $this->user->id)
-									->delete();
-		        					$ret['go_back'] = $vox->questions->first()->id;
-		        				}
-
-
+		        				$prev_bans = $this->user->getPrevBansCount('mistakes');
 
 		        				if($wrongs==1 || ($wrongs==2 && !$prev_bans) ) {
 		        					$ret['warning'] = true;
 		        					$ret['img'] = url('new-vox-img/mistakes'.($prev_bans+1).'.png');
 		        					$titles = [
-		        						'Oops! Wrong answer!',
-		        						'Oops! Wrong answer!',
-		        						'Oops! Wrong answer!',
-		        						'Oops! Wrong answer!',
+		        						trans('vox.page.bans.warning-mistakes-title-1'),
+		        						trans('vox.page.bans.warning-mistakes-title-2'),
+		        						trans('vox.page.bans.warning-mistakes-title-3'),
+		        						trans('vox.page.bans.warning-mistakes-title-4'),
 			        				];
 		        					$contents = [
-		        						'Hm! Seems like you’re not very concentrated! A next mistake will bring you back to the start.',
-		        						'Hm! Seems like you’re not very concentrated! Next time you will have to sit it out for 72 hours and lose your DCN reward.',
-		        						'Hm! Seems like you’re not very concentrated! Next time you will have to sit it out for 168 hours and lose your DCN reward.',
-		        						'Seems like you’re not very focused! The next ban will be permanent and you will lose the DCN you haven’t yet withdrawn.',
+		        						trans('vox.page.bans.warning-mistakes-content-1'),
+		        						trans('vox.page.bans.warning-mistakes-content-2'),
+		        						trans('vox.page.bans.warning-mistakes-content-3'),
+		        						trans('vox.page.bans.warning-mistakes-content-4'),
 		        					];
 		        					if( $wrongs==2 && !$prev_bans ) {
 		        						$ret['zman'] = url('new-vox-img/mistake2.png');
-		        						$ret['title'] = 'Oops! You did it again!';
-			        					$ret['content'] = 'This answer is wrong. Please, focus! Next time you will have to sit it out for 24 hours and lose your DCN reward.';
+		        						$ret['title'] = trans('vox.page.bans.warning-mistakes-title-1-second');
+		        						$ret['content'] = trans('vox.page.bans.warning-mistakes-content-1-second');
 		        					} else {
 		        						$ret['zman'] = url('new-vox-img/mistake1.png');
 		        						$ret['title'] = $titles[$prev_bans];
 			        					$ret['content'] = $contents[$prev_bans];
 		        					}
 
+		        					if( $wrongs==1 && !$prev_bans ) {
+		        						$ret['action'] = 'roll-back';
+		        						$ret['go_back'] = $this->goBack($answered, $list, $vox);
+		        					} else {
+		        						$ret['action'] = 'start-over';
+		        						$ret['go_back'] = $vox->questions->first()->id;
+										VoxAnswer::where('vox_id', $vox->id)
+										->where('user_id', $this->user->id)
+										->delete();
+		        					}
 		        				} else {
 					            	session([
 					            		'wrongs' => null
@@ -337,17 +336,19 @@ class VoxController extends FrontController
 	            					$ret['ban_times'] = $ban['times'];
 		        					$ret['img'] = url('new-vox-img/ban'.($prev_bans+1).'.png');
 		        					$titles = [
-		        						'Third mistake!',
-		        						'Wrong answer again!',
-		        						'Wrong answer again!',
-		        						'So long, '.$this->user->getName().'!',
+		        						trans('vox.page.bans.ban-mistakes-title-1'),
+		        						trans('vox.page.bans.ban-mistakes-title-2'),
+		        						trans('vox.page.bans.ban-mistakes-title-3'),
+		        						trans('vox.page.bans.ban-mistakes-title-4', [
+		        							'name' => $this->user->getName()
+		        						]),
 		        					];
 		        					$ret['title'] = $titles[$prev_bans];
 		        					$contents = [
-		        						'Obviously, you’re not taking this seriously. You will not earn DCN for inconsistent answers. Have a break to refocus!',
-		        						'Hm... Obviously, you’re not taking this survey seriously. Hence, you are not getting any DCN reward. Have a break and come back when you\'re more focused!',
-		        						'Take a break and come back when you\'re more focused. Please, be aware that the next ban will be permanent.',
-		        						'Too bad you have to leave! You\'ve been banned 3 times. This was your last chance to prove that you are taking our surveys seriously. You have also lost the DCN amounts you haven\'t yet withdrawn.',
+		        						trans('vox.page.bans.ban-mistakes-content-1'),
+		        						trans('vox.page.bans.ban-mistakes-content-2'),
+		        						trans('vox.page.bans.ban-mistakes-content-3'),
+		        						trans('vox.page.bans.ban-mistakes-content-4'),
 		        					];
 		        					$ret['content'] = $contents[$prev_bans];
 
@@ -446,23 +447,23 @@ class VoxController extends FrontController
 						            	]);
 						        	}
 
-		        					$prev_bans = $this->user->getPrevBansCount();
+		        					$prev_bans = $this->user->getPrevBansCount('too-fast');
 			        				$ret['toofast'] = true;
-			        				if($warned_before) {
+			        				if(!$warned_before) {
 			        					$ret['warning'] = true;
 			        					$ret['img'] = url('new-vox-img/ban-warning-fast-'.($prev_bans+1).'.png');
 			        					$titles = [
-			        						'Slow down, take your time!',
-			        						'Slow down, take a breath!',
-			        						'Slow down, take it easy!',
-			        						'What\'s the rush?',
+		        							trans('vox.page.bans.warning-too-fast-title-1'),
+		        							trans('vox.page.bans.warning-too-fast-title-2'),
+		        							trans('vox.page.bans.warning-too-fast-title-3'),
+		        							trans('vox.page.bans.warning-too-fast-title-4'),
 			        					];
 			        					$ret['title'] = $titles[$prev_bans];
 			        					$contents = [
-			        						'Looks like you have rushed through the questions. Next time you will have to sit it out for <b>24 hours</b> and <b>lose your DCN reward</b>.',
-			        						'You rushed through the questions yet again! Next time you will have to sit it out for <b>72 hours</b> and <b>lose your DCN reward</b>.',
-			        						'Looks like you have rushed through the questions again. Next time you will have to sit it out for <b>168 hours</b> and <b>lose your DCN reward</b>.',
-			        						'You’ve answered these questions way too fast! Be aware that the next ban <b>will be permanent</b>. You will also <b>lose all DCN amounts</b> still not withdrawn.',
+		        							trans('vox.page.bans.warning-too-fast-content-1'),
+		        							trans('vox.page.bans.warning-too-fast-content-2'),
+		        							trans('vox.page.bans.warning-too-fast-content-3'),
+		        							trans('vox.page.bans.warning-too-fast-content-4'),
 			        					];
 			        					$ret['content'] = $contents[$prev_bans];
 
@@ -473,17 +474,19 @@ class VoxController extends FrontController
 		            					$ret['ban_times'] = $ban['times'];
 			        					$ret['img'] = url('new-vox-img/ban'.($prev_bans+1).'.png');
 			        					$titles = [
-			        						'Wow! That was fast!',
-			        						'Wow! That was fast!',
-			        						'Wow! That was fast!',
-			        						'So long, '.$this->user->getName().'!',
+		        							trans('vox.page.bans.ban-too-fast-title-1'),
+		        							trans('vox.page.bans.ban-too-fast-title-2'),
+		        							trans('vox.page.bans.ban-too-fast-title-3'),
+		        							trans('vox.page.bans.ban-too-fast-title-4',[
+		        								'name' => $this->user->getName()
+		        							]),
 			        					];
 			        					$ret['title'] = $titles[$prev_bans];
 			        					$contents = [
-			        						'Haste makes waste. You\'d better take a break and try not to rush through the questions next time.',
-			        						'Haste makes waste. You\'d better take a break and try not to rush through the questions next time.',
-			        						'Haste makes waste. You\'d better take a break and try not to rush through the questions next time. Otherwise you will get banned for good. ',
-			        						'Too bad you have to leave! You\'ve been banned 3 times. This was your last chance to prove that you are taking our surveys seriously. You have also lost the DCN amounts you haven\'t yet withdrawn.',
+		        							trans('vox.page.bans.ban-too-fast-content-1'),
+		        							trans('vox.page.bans.ban-too-fast-content-2'),
+		        							trans('vox.page.bans.ban-too-fast-content-3'),
+		        							trans('vox.page.bans.ban-too-fast-content-4'),
 			        					];
 			        					$ret['content'] = $contents[$prev_bans];
 
@@ -494,14 +497,6 @@ class VoxController extends FrontController
 			        				}
 						        }
 		        			}
-
-	        				// if( $answer && $answer->is_scam ) {
-	        				// 	if($this->user->vox_should_ban()) {
-	            // 					$ret['ban_type'] = $this->user->banUser('vox', 'mistakes');
-	            // 					$ret['ban'] = getLangUrl('profile');
-		        			// 	}
-	        				// }
-
 
 	        				// dd($answered, count($vox->questions));
 
@@ -598,7 +593,16 @@ class VoxController extends FrontController
 
 		$email_content = preg_replace('#(<a\s.*href=[\'"])(.*?)([\'"].*>)(.*?)(</a>)#', '$2', $email_content);
 
+
+		$welcomerules = !session('vox-welcome');
+		if($welcomerules) {
+        	session([
+        		'vox-welcome' => true
+        	]);
+		}
+
 		return $this->ShowVoxView('vox', array(
+			'welcomerules' => $welcomerules,
 			'not_bot' => $not_bot,
 			'details_fields' => $this->details_fields,
 			'vox' => $vox,

@@ -25,7 +25,7 @@ class StatsController extends FrontController
 {
 	public function home($locale=null) {
 
-        if(!$this->user->is_verified) {
+        if($this->user->is_dentist && !$this->user->is_approved) {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
 

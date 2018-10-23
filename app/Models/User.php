@@ -221,10 +221,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->save();
     }
 
-    public function getPrevBansCount($domain='vox') {
+    public function getPrevBansCount($domain='vox', $type=null) {
         $times = 0;
         foreach ($this->bans as $ban) {
-            if($ban->domain==$domain) {
+            if($ban->domain==$domain && (!$type || $type==$ban->type) ) {
                 $times++;
             }
         }

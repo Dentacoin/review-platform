@@ -277,6 +277,7 @@
 			</a>
 		</div>
 	</div>
+
 	<div class="popup warning">
 		<div class="wrapper">
 			<img src="" class="zman" />
@@ -285,12 +286,15 @@
 				<p>
 					
 				</p>
-				<a class="btn inactive closer simple-countdown" alt-text="Continue">
-					Continue in: <span>10</span>
-				</a>
+				<div class="tac">
+					<a class="btn inactive closer simple-countdown" alt-text="Continue">
+						Continue in: <span>10</span>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
+
 	<div class="popcircle warning">
 		<img src="" class="zman" />
 		<div class="wrapper">
@@ -298,29 +302,41 @@
 			<p>
 				
 			</p>
-			<a class="btn closer">
+			<a class="btn back-btn btn-start-over closer">
+				<i class="fas fa-redo"></i>
+				Start over
+			</a>
+			<a class="btn back-btn btn-roll-back closer">
 				<i class="far fa-arrow-alt-circle-left"></i> Roll Back
 			</a>
 		</div>
 	</div>
 
-	@if(!empty($user->filledVoxes()) && false)
+	@if($welcomerules)
 
 		<div class="popup active first-test">
 			<div class="wrapper">
 				<div class="inner">
-					<h2 class="tac">DentaVox rules</h2>
+					<h2 class="tac">
+						{!! trans('vox.page.bans.rules-title') !!}
+						
+					</h2>
 					<div class="flex rules">
 						<div class="col flex flex-center">
-							Take your time
+							{!! trans('vox.page.bans.rules-time') !!}
+							
 							<img src="{{ url('new-vox-img/popup-time.png') }}" />
 						</div>
 						<div class="col flex flex-center">
 							<img src="{{ url('new-vox-img/popup-focused.png') }}" />
-							Stay Focused
+							{!! trans('vox.page.bans.rules-focus') !!}
+							
 						</div>
 					</div>
-					<h3 class="tac">or you'll get banned</h3>
+					<h3 class="tac">
+						{!! trans('vox.page.bans.rules-banned') !!}
+						
+					</h3>
 					<div class="flex icons">
 						<div class="col">
 							<img src="{{ url('new-vox-img/popup-sign-1.png') }}" />
@@ -336,12 +352,16 @@
 						</div>
 						<div class="col">
 							<img src="{{ url('new-vox-img/popup-sign-4.png') }}" />
-							<b>permaban</b>
+							<b>
+								{!! trans('vox.page.bans.rules-permaban') !!}
+								
+							</b>
 						</div>
 					</div>
 					<div class="tac">
 						<a class="btn closer">
-							Got it
+							{!! trans('vox.page.bans.rules-got-it') !!}
+							
 						</a>
 					</div>
 				</div>

@@ -213,17 +213,11 @@ class FrontController extends BaseController
             $params['unbanned'] = true;
             $params['unbanned_times'] = $this->user->getPrevBansCount();
             if( $params['unbanned_times']==1 ) {
-                $params['unbanned_text'] = 'Now you can fill out surveys again and earn DCN by giving your honest answers!<br/>
-                <br/>
-                <b>Just take your time and focus!</b>';
+                $params['unbanned_text'] = nl2br(trans('vox.page.bans.unbanned-text-1'));
             } else if( $params['unbanned_times']==2 ) {
-                $params['unbanned_text'] = 'Ready to take surveys again? Hope you had enough time to refocus and will now give your earnest answers. <br/>
-                <br/>
-                <b>Just pick a topic and get it started!</b>';
+                $params['unbanned_text'] = nl2br(trans('vox.page.bans.unbanned-text-2'));
             } else {
-                $params['unbanned_text'] = 'Did you enjoy your week off? This is your last chance to prove that your answers are genuine and that you really want to help improve global dental care.<br/>
-                <br/>
-                <b>Your next ban will be permanent.</b>';
+                $params['unbanned_text'] = nl2br(trans('vox.page.bans.unbanned-text-3'));
             }
         }
         return view('vox.'.$page, $params);

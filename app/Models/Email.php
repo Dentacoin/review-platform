@@ -115,7 +115,7 @@ class Email extends Model
 			'[/metamask]',
 		);
 		$deafult_replaces = array(
-			$this->user->name,
+			$this->user->getName(),
 			'<i>',
 			'</i>',
 			'<span style="text-decoration: underline;">',
