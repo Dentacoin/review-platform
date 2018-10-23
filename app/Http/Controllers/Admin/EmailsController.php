@@ -15,9 +15,9 @@ class EmailsController extends AdminController
     public function list( $what=null ) {
 
         if($what=='vox') {
-            $templates = EmailTemplate::whereIn('id', Email::$vox_tempalates)->get();
+            $templates = EmailTemplate::whereIn('id', Email::$vox_tempalates)->orderBy('updated_at', 'ASC')->get();
         } else {
-            $templates = EmailTemplate::whereNotIn('id', Email::$vox_tempalates)->get();
+            $templates = EmailTemplate::whereNotIn('id', Email::$vox_tempalates)->orderBy('updated_at', 'ASC')->get();
         }
 
     	return $this->showView('emails', array(
