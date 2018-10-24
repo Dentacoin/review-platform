@@ -647,7 +647,7 @@ $(document).ready(function(){
         chart.draw(data, google.charts.Bar.convertOptions(options));
     }
 
-    
+
 
     var drawMap = function(rows, container) {
 
@@ -679,4 +679,29 @@ $(document).ready(function(){
 
 
     $('.stats .stat:first-child').addClass('active');
+
+    $('.copy-invite-link').click( function() {
+        // var $temp = $("<input>");
+        // $("body").append($temp);
+        $('.select-me').select();
+        document.execCommand("copy");
+        $('.select-me').blur();        
+    } );
+
+    $('.social-share').click( function() {
+        $('.share-popup').addClass('active');
+    });
+
+    $('.share-buttons .share').click( function() {
+        console.log(document.title);
+        var href = $(this).closest('.share-buttons').attr('data-href');
+        if ($(this).parent().hasClass('fb')) {
+            var url = 'https://www.facebook.com/dialog/share?app_id=1906201509652855&display=popup&href=' + escape(href);
+        } else if ($(this).parent().hasClass('twt')) {
+            var url = 'https://twitter.com/share?url=' + escape(href);
+        } else if ($(this).parent().hasClass('google')) {
+            var url = 'https://plus.google.com/share?url=' + escape(href);
+        }
+        window.open( url , 'ShareWindow', 'height=450, width=550, top=' + (jQuery(window).height() / 2 - 275) + ', left=' + (jQuery(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+    });
 });

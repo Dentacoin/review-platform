@@ -2581,6 +2581,25 @@ header {
 					    flex-direction: column;
 					}
 
+					.social-share {
+						position: absolute;
+						z-index: 100;
+						right: 10px;
+						top: 10px;
+						background-color: #f6f6f7;
+						padding: 5px;
+						border: 1px solid #f6f6f7;
+						border-radius: 3px;
+
+						&:focus,
+						&:hover {
+							border-color: #38a2e5;
+							i {
+								color: #38a2e5;
+							}
+						}
+					}
+
 					.nav {
 						position: absolute;
 						top: 50%;
@@ -3852,6 +3871,142 @@ header {
 			}
 		}
 	}
+
+
+	&.share-popup {
+		.wrapper {
+			width: 970px;
+			padding: 0px;
+
+			.inner {
+				margin: 0px;
+				max-width: 100%;
+
+				h2 {
+					margin-top: 30px;
+
+					@media #{$phone} {
+						margin-top: 15px;
+					}
+				}
+
+				.share-info {
+					background-color: #eeeeee;
+					padding: 5px 0px;					
+
+					span {
+						color: #333333;
+						font-size: 20px;
+
+						@media #{$phone} {
+							font-size: 16px;
+						}
+					}
+				}
+
+				.share-inner {
+					max-width: calc(100% - 200px);
+    				margin: 0 auto;
+    				display: block;
+
+    				@media #{$phone} {
+						max-width: 100%;
+						padding: 0px 15px;
+					}
+
+    				&.share-content {
+    					padding-top: 15px;
+    					padding-bottom: 35px;
+    				}
+				}
+
+				.btn {
+					width: 100px;
+				    padding: 0px;
+				    height: 40px;
+				    line-height: 40px;
+				    font-size: 20px;
+				    border-radius: 3px;
+				    float: right;
+				    transition: all 0.3s ease;
+
+				    &:hover {
+						opacity: 0.8;
+						transition: all 0.3s ease;
+					}
+				}
+
+				input {
+					width: calc(100% - 100px);
+				    float: left;
+				    height: 40px;
+				}
+
+				p {
+					margin-bottom: 30px;
+				}
+
+				.share-buttons {
+					margin-top: 35px;
+
+					.col {
+						padding-top: 5px;
+    					padding-bottom: 5px;
+    					transition: all 0.3s ease;
+
+    					&:hover {
+    						opacity: 0.8;
+    						transition: all 0.3s ease;
+    					}
+
+						&.fb {
+							background-color: #3a559f;
+							border-top-left-radius: 3px;
+							border-bottom-left-radius: 3px;
+						}
+
+						&.twt {
+							background-color: #50abf1;
+						}
+
+						&.google {
+							background-color: #dd4b39;
+							border-top-right-radius: 3px;
+							border-bottom-right-radius: 3px;
+						}
+
+						a {
+							display: block;
+
+							i {
+								color: white;
+
+								&:before {
+									font-size: 30px;
+
+									@media #{$phone} {
+										font-size: 19px;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				.closer {
+					position: absolute;
+				    right: 10px;
+				    top: 5px;
+				    padding: 10px;
+
+				    i {
+    					font-size: 20px;
+				    }
+				}
+			}
+		}
+	}
+
 
 	&.unbanned,
 	&.ban,
