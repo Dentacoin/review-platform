@@ -202,13 +202,14 @@ class ProfileController extends FrontController
 
         $this->handleMenu();
         $current_ban = $this->user->isBanned('vox');
-        $prev_bans = $this->user->getPrevBansCount();
+        $prev_bans = null; 
         $time_left = '';
 
         $ban_reason = '';
         $ban_alternatives = '';
         $ban_alternatives_buttons = '';
         if( $current_ban ) {
+            $prev_bans = $this->user->getPrevBansCount('vox', $current_ban->type);
             if($current_ban->type=='mistakes') {
                 $ban_reason = trans('vox.page.bans.banned-mistakes-title-'.$prev_bans);
             } else {
