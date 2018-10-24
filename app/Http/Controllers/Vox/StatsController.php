@@ -288,6 +288,8 @@ class StatsController extends FrontController
 				//'../js/daterange/css/DateRangesWidget/base.css',
 			],
 
+            'canonical' => $vox->getStatsList(),
+            'social_image' => $vox->getImageUrl(),
             'seo_title' => trans('vox.seo.stats.title', [
                 'title' => $vox->title,
                 'description' => $vox->description
