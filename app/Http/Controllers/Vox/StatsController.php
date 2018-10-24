@@ -25,7 +25,7 @@ class StatsController extends FrontController
 {
 	public function home($locale=null) {
 
-        if($this->user->is_dentist && !$this->user->is_approved) {
+        if(!empty($this->user) && $this->user->is_dentist && !$this->user->is_approved) {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
 
@@ -58,7 +58,7 @@ class StatsController extends FrontController
 
 	public function stats($locale=null, $slug=null, $question_id=null) {
 
-        if(!$this->user->is_verified) {
+        if(!empty($this->user) && !$this->user->is_verified) {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
         
@@ -70,7 +70,7 @@ class StatsController extends FrontController
 			return redirect( getLangUrl('/') );
 		}
 
-        if($this->user && $this->user->isBanned('vox')) {
+        if(!empty($this->user) && $this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/vox'));
         }
 

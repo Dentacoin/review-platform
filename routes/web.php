@@ -284,9 +284,9 @@ $voxRoutes = function () {
 			Route::post('register/civic', 						'RegisterController@civic');
 			Route::get('register/facebook', 					'LoginController@facebook_register');
 			Route::get('register/callback/facebook', 			'LoginController@facebook_callback_register');
-			
-			Route::any('dental-survey-stats', 								'StatsController@home');
-			Route::any('dental-survey-stats/{id}', 							'StatsController@stats');
+
+			Route::any('dental-survey-stats', 					'StatsController@home');
+			Route::any('dental-survey-stats/{id}', 				'StatsController@stats');
 
 			
 			Route::group(['middleware' => 'auth:web'], function () {
