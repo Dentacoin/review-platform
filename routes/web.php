@@ -284,6 +284,9 @@ $voxRoutes = function () {
 			Route::post('register/civic', 						'RegisterController@civic');
 			Route::get('register/facebook', 					'LoginController@facebook_register');
 			Route::get('register/callback/facebook', 			'LoginController@facebook_callback_register');
+			
+			Route::any('dental-survey-stats', 								'StatsController@home');
+			Route::any('dental-survey-stats/{id}', 							'StatsController@stats');
 
 			
 			Route::group(['middleware' => 'auth:web'], function () {
@@ -316,8 +319,6 @@ $voxRoutes = function () {
 			Route::get('welcome-survey', 								'IndexController@welcome');
 			Route::any('appeal', 								'IndexController@appeal');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
-			Route::any('dental-survey-stats', 								'StatsController@home');
-			Route::any('dental-survey-stats/{id}', 							'StatsController@stats');
 			Route::get('{slug}', 								'PagesController@home');
 
 		});
