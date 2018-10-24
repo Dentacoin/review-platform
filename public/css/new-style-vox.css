@@ -1897,19 +1897,41 @@ header {
       @media screen and (max-width: 768px) {
         .page-statistics .stats .stat .contents .graphs {
           flex-direction: column; } }
-      .page-statistics .stats .stat .contents .graphs .social-share {
+      .page-statistics .stats .stat .contents .graphs .share-buttons {
         position: absolute;
-        z-index: 100;
         right: 10px;
         top: 10px;
-        background-color: #f6f6f7;
-        padding: 5px;
-        border: 1px solid #f6f6f7;
-        border-radius: 3px; }
-        .page-statistics .stats .stat .contents .graphs .social-share:focus, .page-statistics .stats .stat .contents .graphs .social-share:hover {
-          border-color: #38a2e5; }
-          .page-statistics .stats .stat .contents .graphs .social-share:focus i, .page-statistics .stats .stat .contents .graphs .social-share:hover i {
-            color: #38a2e5; }
+        align-items: center;
+        z-index: 100; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats .stat .contents .graphs .share-buttons {
+            position: static;
+            display: block;
+            order: -2;
+            padding: 20px; } }
+        .page-statistics .stats .stat .contents .graphs .share-buttons span {
+          margin-right: 5px; }
+        .page-statistics .stats .stat .contents .graphs .share-buttons .col {
+          padding-left: 5px;
+          padding-right: 5px; }
+          @media screen and (max-width: 768px) {
+            .page-statistics .stats .stat .contents .graphs .share-buttons .col {
+              display: inline-block; } }
+          .page-statistics .stats .stat .contents .graphs .share-buttons .col.fb a {
+            background-color: #3a559f; }
+          .page-statistics .stats .stat .contents .graphs .share-buttons .col.twt a {
+            background-color: #50abf1; }
+        .page-statistics .stats .stat .contents .graphs .share-buttons a {
+          border-radius: 3px;
+          display: block;
+          background-color: #3a559f;
+          color: white;
+          width: 24px;
+          height: 24px;
+          text-align: center;
+          line-height: 24px; }
+          .page-statistics .stats .stat .contents .graphs .share-buttons a i {
+            color: white; }
       .page-statistics .stats .stat .contents .graphs .nav {
         position: absolute;
         top: 50%;
@@ -2983,90 +3005,6 @@ header {
             width: 30px;
             height: 30px;
             margin: 0px 5px; }
-  .popup.share-popup .wrapper {
-    width: 970px;
-    padding: 0px; }
-    .popup.share-popup .wrapper .inner {
-      margin: 0px;
-      max-width: 100%; }
-      .popup.share-popup .wrapper .inner h2 {
-        margin-top: 30px; }
-        @media screen and (max-width: 768px) {
-          .popup.share-popup .wrapper .inner h2 {
-            margin-top: 15px; } }
-      .popup.share-popup .wrapper .inner .share-info {
-        background-color: #eeeeee;
-        padding: 5px 0px; }
-        .popup.share-popup .wrapper .inner .share-info span {
-          color: #333333;
-          font-size: 20px; }
-          @media screen and (max-width: 768px) {
-            .popup.share-popup .wrapper .inner .share-info span {
-              font-size: 16px; } }
-      .popup.share-popup .wrapper .inner .share-inner {
-        max-width: calc(100% - 200px);
-        margin: 0 auto;
-        display: block; }
-        @media screen and (max-width: 768px) {
-          .popup.share-popup .wrapper .inner .share-inner {
-            max-width: 100%;
-            padding: 0px 15px; } }
-        .popup.share-popup .wrapper .inner .share-inner.share-content {
-          padding-top: 15px;
-          padding-bottom: 35px; }
-      .popup.share-popup .wrapper .inner .btn {
-        width: 100px;
-        padding: 0px;
-        height: 40px;
-        line-height: 40px;
-        font-size: 20px;
-        border-radius: 3px;
-        float: right;
-        transition: all 0.3s ease; }
-        .popup.share-popup .wrapper .inner .btn:hover {
-          opacity: 0.8;
-          transition: all 0.3s ease; }
-      .popup.share-popup .wrapper .inner input {
-        width: calc(100% - 100px);
-        float: left;
-        height: 40px; }
-      .popup.share-popup .wrapper .inner p {
-        margin-bottom: 30px; }
-      .popup.share-popup .wrapper .inner .share-buttons {
-        margin-top: 35px; }
-        .popup.share-popup .wrapper .inner .share-buttons .col {
-          padding-top: 5px;
-          padding-bottom: 5px;
-          transition: all 0.3s ease; }
-          .popup.share-popup .wrapper .inner .share-buttons .col:hover {
-            opacity: 0.8;
-            transition: all 0.3s ease; }
-          .popup.share-popup .wrapper .inner .share-buttons .col.fb {
-            background-color: #3a559f;
-            border-top-left-radius: 3px;
-            border-bottom-left-radius: 3px; }
-          .popup.share-popup .wrapper .inner .share-buttons .col.twt {
-            background-color: #50abf1; }
-          .popup.share-popup .wrapper .inner .share-buttons .col.google {
-            background-color: #dd4b39;
-            border-top-right-radius: 3px;
-            border-bottom-right-radius: 3px; }
-          .popup.share-popup .wrapper .inner .share-buttons .col a {
-            display: block; }
-            .popup.share-popup .wrapper .inner .share-buttons .col a i {
-              color: white; }
-              .popup.share-popup .wrapper .inner .share-buttons .col a i:before {
-                font-size: 30px; }
-                @media screen and (max-width: 768px) {
-                  .popup.share-popup .wrapper .inner .share-buttons .col a i:before {
-                    font-size: 19px; } }
-      .popup.share-popup .wrapper .inner .closer {
-        position: absolute;
-        right: 10px;
-        top: 5px;
-        padding: 10px; }
-        .popup.share-popup .wrapper .inner .closer i {
-          font-size: 20px; }
   .popup.unbanned .wrapper .inner, .popup.ban .wrapper .inner, .popup.warning .wrapper .inner {
     margin: 60px 0 30px auto; }
     @media screen and (max-width: 768px) {

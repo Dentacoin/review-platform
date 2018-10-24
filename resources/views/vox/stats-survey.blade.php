@@ -67,11 +67,23 @@
 									@endforeach
 								</div>
 							@endif
-							<div class="graphs flex">
-								<a href="javascript:;" class="social-share">
-									<i class="fas fa-share"></i>
-									{!! trans('vox.page.stats.share') !!}
-								</a>
+							<div class="graphs flex">							
+
+								<div class="share-buttons flex" data-href="{{ $vox->getStatsList() }}">
+									<span>
+										{!! trans('vox.page.stats.share') !!}
+									</span>
+									<div class="col fb tac">
+										<a class="share" href="javascript:;">
+											<i class="fab fa-facebook-f"></i>
+										</a>
+									</div>
+									<div class="col twt tac">
+										<a class="share" href="javascript:;">
+											<i class="fab fa-twitter"></i>
+										</a>
+									</div>
+								</div>
 								@if($question->used_for_stats=='standard')
 									<a class="nav nav-left">
 									</a>
@@ -123,53 +135,6 @@
 					</div>
 				@endif
 			@endforeach
-		</div>
-	</div>
-
-
-	<div class="popup share-popup">
-		<div class="wrapper">
-			<div class="inner">
-				<a class="closer" href="javascript:;">
-					<i class="fas fa-times"></i>
-				</a>
-				<h2 class="tac">
-					{!! trans('vox.page.share.title') !!}
-				</h2>
-				<div class="share-info">
-					<span class="share-inner">
-						{!! trans('vox.page.share.info') !!}
-					</span>
-				</div>
-				<div class="share-inner share-content">					
-					<p>{!! nl2br(trans('vox.page.share.description')) !!}</p>
-
-					<div class="form-group clearfix">
-	                    {{ Form::text( 'link', $vox->getStatsList(), array('class' => 'form-control select-me' ) ) }}
-	                    <a class="btn btn-primary nom copy-invite-link">
-	                    	{!! nl2br(trans('vox.page.profile.invite.copy')) !!}
-	                    </a>
-					</div>
-
-					<div class="share-buttons flex" data-href="{{ $vox->getStatsList() }}">
-						<div class="col fb tac">
-							<a class="share" href="javascript:;">
-								<i class="fab fa-facebook-f"></i>
-							</a>
-						</div>
-						<div class="col twt tac">
-							<a class="share" href="javascript:;">
-								<i class="fab fa-twitter"></i>
-							</a>
-						</div>
-						<div class="col google tac">
-							<a class="share" href="javascript:;">
-								<i class="fab fa-google-plus-g"></i>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 

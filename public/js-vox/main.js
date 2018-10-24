@@ -442,6 +442,14 @@ $(document).ready(function(){
 
 
 
+	$('.popup.close-on-shield').click( function(e) {
+		if($(e.target).hasClass('popup')) {
+			$(this).removeClass('active');
+		}
+	} );
+
+
+
 	$('.popup .closer').click( function() {
 		if($(this).hasClass('inactive')) {
 			return;
