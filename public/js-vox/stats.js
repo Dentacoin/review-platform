@@ -647,6 +647,8 @@ $(document).ready(function(){
         chart.draw(data, google.charts.Bar.convertOptions(options));
     }
 
+    
+
     var drawMap = function(rows, container) {
 
         var data = google.visualization.arrayToDataTable(rows);
@@ -674,7 +676,6 @@ $(document).ready(function(){
 
         chart.draw(data, options);
     }
-
 
 
     $('.stats .stat:first-child').addClass('active');
