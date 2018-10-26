@@ -233,7 +233,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function banUser($domain, $reason='') {
-        $times = $this->getPrevBansCount();
+        $times = $this->getPrevBansCount($domain, $reason);
         $ban = new UserBan;
         $ban->user_id = $this->id;
         $ban->domain = $domain;
@@ -255,7 +255,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         if($times<3) {
             $this->sendTemplate(15, [
-                'expires' => $ban->expires->toTimeString().' '.$ban->expires->toFormattedDateString(),
+                'expires' => $ban->expires->toFormattedDateString().', '.$ban->expires->toTimeString(),
                 'ban_days' => $days,
                 'ban_hours' => $days*24
             ]);

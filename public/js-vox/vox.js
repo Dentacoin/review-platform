@@ -169,6 +169,8 @@ $(document).ready(function(){
                             i++;
                         } while(go_back_group.length);
 
+                        $('.question-group .answer-checkbox.active').removeClass('active');
+
                         $('.popcircle .wrapper').css('background-image', 'url('+data.img+')');
                         $('.popcircle h2').html(data.title);
                         $('.popcircle p').html(data.content);
