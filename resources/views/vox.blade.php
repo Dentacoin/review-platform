@@ -248,17 +248,18 @@
 					</a>
 					<div class="footer-text col-md-6 tac">
 						<div class="footer-menu">
-							<a href="{{ getLangUrl('faq') }}">FAQ</a>
+							<a href="{{ getLangUrl('faq') }}">{{ trans('vox.footer.faq') }}</a>
 							<a href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
 							<a href="https://reviews.dentacoin.com/" target="_blank">{{ trans('vox.footer.trp') }}</a>
 							<a href="https://play.google.com/store/apps/details?id=com.dentacoin.dentacare" target="_blank">{{ trans('vox.footer.dentacare') }}</a>
 						</div>
 						<small>
-							®Dentacoin Foundation. All rights reserved. 2018
+							{{ trans('vox.footer.copyrights') }}
 						</small>
 					</div>
 					<div class="socials col-md-3">
-						Stay in the loop: &nbsp;
+						{{ trans('vox.footer.socials') }}
+						 &nbsp;
 						<a class="social" href="https://t.me/dentacoin" target="_blank"><i class="fab fa-telegram-plane"></i></a>
 						<a class="social" href="https://www.facebook.com/DentaVox-1578351428897849/" target="_blank"><i class="fab fa-facebook-f"></i></a>
 					</div>
