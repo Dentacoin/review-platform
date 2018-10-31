@@ -198,7 +198,7 @@ class FrontController extends BaseController
         $params['users_count'] = User::getCount('vox');
         //dd($params['header_questions']);
 
-        $params['cache_version'] = '20181024-3';
+        $params['cache_version'] = '20181031';
 
         $params['show_tutorial'] = false;
         // if($this->user) {
@@ -226,7 +226,7 @@ class FrontController extends BaseController
     public function ShowView($page, $params=array()) {
         $this->PrepareViewData($page, $params, 'front');
 
-        $params['cache_version'] = '20181024-3';
+        $params['cache_version'] = '20181031';
         // "2018-05-05 00:00:00.000000"
         
         return view('front.'.$page, $params);
