@@ -349,10 +349,11 @@
                         @include('admin.parts.table', [
                             'table_id' => 'bans',
                             'table_fields' => [
-                                'created_at'        => array('format' => 'datetime'),
-                                'domain'              => array(),
-                                'expires'              => array('template' => 'admin.parts.table-bans-expires'),
+                                'created_at'        => array('format' => 'datetime', 'label' => 'Received'),
                                 'type'              => array(),
+                                'duration'              => array('template' => 'admin.parts.table-bans-duration'),
+                                //'domain'              => array(),
+                                'expires'              => array('template' => 'admin.parts.table-bans-expires'),
                                 'delete'              => array('template' => 'admin.parts.table-bans-delete'),
                             ],
                             'table_data' => $item->bans,

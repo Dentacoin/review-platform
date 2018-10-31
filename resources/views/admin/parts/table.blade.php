@@ -8,6 +8,8 @@
                            	<th>
                                 @if($k=='selector')
                                     <a href="javascript:;" class="table-select-all">All / None</a>
+                                @elseif(!empty($v['label']))
+                                    {{ $v['label'] }}
                                 @else
                                     {{ trans('admin.page.'.$current_page.'.table.'.$k) }}
                                 @endif
@@ -37,7 +39,7 @@
                                     @elseif($v['format']=='date')
                                         <td>{{ !empty($row[$k]->timestamp) && $row[$k]->timestamp>0 ? date('d.m.Y', $row[$k]->timestamp) : trans('admin.table.na') }}</td>
                                     @elseif($v['format']=='datetime')
-                                        <td>{{ !empty($row[$k]->timestamp) && $row[$k]->timestamp>0 ? date('H:i d.m.Y', $row[$k]->timestamp) : trans('admin.table.na') }}</td>
+                                        <td>{{ !empty($row[$k]->timestamp) && $row[$k]->timestamp>0 ? date('d.m.Y, H:i:s', $row[$k]->timestamp) : trans('admin.table.na') }}</td>
                                     @elseif($v['format']=='bool')
                                         <td>{!! $row[$k] ? '<span class="label label-success">'.trans('admin.common.yes').'</span>' : '<span class="label label-warning">'.trans('admin.common.no').'</span>' !!}</td>
                                     @elseif($v['format']=='set')
