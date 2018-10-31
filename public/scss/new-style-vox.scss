@@ -3983,6 +3983,10 @@ header {
 						margin-top: 15px;
 						margin-bottom: 25px;
 					}
+
+					@media screen and (max-width: 310px) {
+						margin-bottom: 15px;
+					}
 				}
 
 				small {
@@ -3995,6 +3999,11 @@ header {
 					@media #{$phone} {
 						font-size: 12px;
 						font-weight: 600;
+						text-align: center;
+					}
+
+					@media screen and (max-width: 310px) {
+						margin-bottom: 20px;
 					}
 				}
 
@@ -4057,6 +4066,15 @@ header {
 					.col {
 						text-align: center;
 
+
+						@media screen and (max-width: 310px) {
+							font-size: 12px;
+
+							b {
+								font-size: 12px;
+							}
+						}
+
 						img {
 							width: 60px;
 							height: auto;
@@ -4066,6 +4084,10 @@ header {
 
 							@media #{$phone} {
 								width: 30px;
+							}
+
+							@media screen and (max-width: 310px) {
+								width: 20px;
 							}
 						}
 					}
@@ -4101,7 +4123,7 @@ header {
 					position: absolute;
 					width: 500px;
 				    height: 500px;
-				    left: -290px;
+				    left: -320px;
 				    top: auto;
 				    max-width: none;
 				    bottom: -360px;
@@ -4135,7 +4157,7 @@ header {
 					font-weight: 600;
 
 					@media #{$phone} {
-	    				margin-top: 25px;
+	    				margin-top: 15px;
 					}
 				}
 
@@ -4174,11 +4196,19 @@ header {
 					max-width: 600px;
 
 					div {
-						margin-bottom: 45px;						
+						margin-bottom: 45px;
+						
+						@media #{$phone} {
+							margin-bottom: 20px;
+						}
 					}
 
 					img {
-						margin-right: 20px;						
+						margin: 0px 10px;						
+
+						@media #{$phone} {
+							max-width: 120px;
+						}
 					}
 				}
 
@@ -4295,7 +4325,7 @@ header {
 		@media #{$phone} {
 			right: 50%;
 		    transform: translateX(50%);
-		    bottom: -100px;
+		    bottom: -90px;
 		}
 	}
 
@@ -4314,7 +4344,7 @@ header {
 			width: 500px;
 		    height: 500px;
 		    min-width: 0;
-		    bottom: -320px;
+		    bottom: -310px;
 		    left: 50%;
 		    transform: translateX(-50%);
 		    padding: 50px 120px;

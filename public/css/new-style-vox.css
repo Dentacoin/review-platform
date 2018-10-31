@@ -3050,6 +3050,9 @@ header {
         text-align: center;
         margin-top: 15px;
         margin-bottom: 25px; } }
+    @media screen and (max-width: 310px) {
+      .popup.ban .wrapper .inner p {
+        margin-bottom: 15px; } }
   .popup.ban .wrapper .inner small {
     display: block;
     color: #353637;
@@ -3058,7 +3061,11 @@ header {
     @media screen and (max-width: 768px) {
       .popup.ban .wrapper .inner small {
         font-size: 12px;
-        font-weight: 600; } }
+        font-weight: 600;
+        text-align: center; } }
+    @media screen and (max-width: 310px) {
+      .popup.ban .wrapper .inner small {
+        margin-bottom: 20px; } }
   .popup.ban .wrapper .inner h3 span {
     font-size: 30px; }
   .popup.first-test .wrapper .inner .rules {
@@ -3089,6 +3096,11 @@ header {
     max-width: 460px; }
     .popup.first-test .wrapper .inner .icons .col {
       text-align: center; }
+      @media screen and (max-width: 310px) {
+        .popup.first-test .wrapper .inner .icons .col {
+          font-size: 12px; }
+          .popup.first-test .wrapper .inner .icons .col b {
+            font-size: 12px; } }
       .popup.first-test .wrapper .inner .icons .col img {
         width: 60px;
         height: auto;
@@ -3098,6 +3110,9 @@ header {
         @media screen and (max-width: 768px) {
           .popup.first-test .wrapper .inner .icons .col img {
             width: 30px; } }
+        @media screen and (max-width: 310px) {
+          .popup.first-test .wrapper .inner .icons .col img {
+            width: 20px; } }
   .popup.banned .wrapper {
     max-width: 95%;
     width: 1130px;
@@ -3118,7 +3133,7 @@ header {
           position: absolute;
           width: 500px;
           height: 500px;
-          left: -290px;
+          left: -320px;
           top: auto;
           max-width: none;
           bottom: -360px; } }
@@ -3143,7 +3158,7 @@ header {
         font-weight: 600; }
         @media screen and (max-width: 768px) {
           .popup.banned .wrapper .inner h3 {
-            margin-top: 25px; } }
+            margin-top: 15px; } }
       .popup.banned .wrapper .inner .countdown {
         margin: 55px auto; }
         @media screen and (max-width: 768px) {
@@ -3171,8 +3186,14 @@ header {
         max-width: 600px; }
         .popup.banned .wrapper .inner .alternatives div {
           margin-bottom: 45px; }
+          @media screen and (max-width: 768px) {
+            .popup.banned .wrapper .inner .alternatives div {
+              margin-bottom: 20px; } }
         .popup.banned .wrapper .inner .alternatives img {
-          margin-right: 20px; }
+          margin: 0px 10px; }
+          @media screen and (max-width: 768px) {
+            .popup.banned .wrapper .inner .alternatives img {
+              max-width: 120px; } }
       .popup.banned .wrapper .inner .bans-received {
         position: absolute;
         bottom: 25px;
@@ -3271,7 +3292,7 @@ header {
       .popcircle .zman {
         right: 50%;
         transform: translateX(50%);
-        bottom: -100px; } }
+        bottom: -90px; } }
   .popcircle .wrapper {
     position: absolute;
     z-index: 1100;
@@ -3287,7 +3308,7 @@ header {
         width: 500px;
         height: 500px;
         min-width: 0;
-        bottom: -320px;
+        bottom: -310px;
         left: 50%;
         transform: translateX(-50%);
         padding: 50px 120px; } }

@@ -280,7 +280,7 @@ class VoxController extends FrontController
 					        	}
 					        }
 
-				        	if($is_scam) {
+				        	if(true || $is_scam) {
 				        		
 				        		$wrongs = intval(session('wrongs'));
 				        		$wrongs++;
@@ -427,13 +427,14 @@ class VoxController extends FrontController
 							    return !$value->is_skipped;
 							});
 
-		        			if( $reallist->count() && $reallist->count()%15==0 ) {
+	        				$ppp = 5;
+		        			if( $reallist->count() && $reallist->count()%$ppp==0 ) {
 
-		        				$pagenum = $reallist->count()/15;
-		        				$start = $reallist->forPage($pagenum, 15)->first();
+		        				$pagenum = $reallist->count()/$ppp;
+		        				$start = $reallist->forPage($pagenum, $ppp)->first();
 		        				
 						        $diff = Carbon::now()->diffInSeconds( $start->created_at );
-						        $normal = 15*5;
+						        $normal = $ppp*3;
 						        if($normal > $diff) {
 
 						        	$warned_before = session('too-fast');
