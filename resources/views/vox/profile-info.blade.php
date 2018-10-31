@@ -60,35 +60,36 @@
                 {!! Form::close() !!}
 
 
-
-				<form action="{{ getLangUrl('profile/password') }}" method="post" class="form-horizontal">
-	  				{!! csrf_field() !!}
-	  				
-	  				<div class="form-group">
-					  	<label class="control-label col-md-2">{{ trans('vox.page.'.$current_page.'.info.change-password-current') }}</label>
-					  	<div class="col-md-10">
-					    	<input type="password" name="cur-password" class="form-control" required>
-					    </div>
-					</div>
-	    			<div class="form-group">
-					  	<label class="control-label col-md-2">{{ trans('vox.page.'.$current_page.'.info.change-password-new') }}</label>
-					  	<div class="col-md-10">
-					    	<input type="password" name="new-password" class="form-control" required>
-					    </div>
-					</div>
-				  	<div class="form-group">
-					  	<label class="control-label col-md-2">{{ trans('vox.page.'.$current_page.'.info.change-password-repeat') }}</label>
-					  	<div class="col-md-10">
-					    	<input type="password" name="new-password-repeat" class="form-control" required>
-					    </div>
-					</div>
-					<div class="form-group">
-						<div class="col-md-12">
-	                        <button type="submit" name="update" class="btn btn-primary form-control"> {{ trans('vox.page.'.$current_page.'.info.change-password-submit') }} </button>
+                @if($user->is_dentist)
+					<form action="{{ getLangUrl('profile/password') }}" method="post" class="form-horizontal">
+		  				{!! csrf_field() !!}
+		  				
+		  				<div class="form-group">
+						  	<label class="control-label col-md-2">{{ trans('vox.page.'.$current_page.'.info.change-password-current') }}</label>
+						  	<div class="col-md-10">
+						    	<input type="password" name="cur-password" class="form-control" required>
+						    </div>
 						</div>
-					</div>
-	    			
-	  			</form>
+		    			<div class="form-group">
+						  	<label class="control-label col-md-2">{{ trans('vox.page.'.$current_page.'.info.change-password-new') }}</label>
+						  	<div class="col-md-10">
+						    	<input type="password" name="new-password" class="form-control" required>
+						    </div>
+						</div>
+					  	<div class="form-group">
+						  	<label class="control-label col-md-2">{{ trans('vox.page.'.$current_page.'.info.change-password-repeat') }}</label>
+						  	<div class="col-md-10">
+						    	<input type="password" name="new-password-repeat" class="form-control" required>
+						    </div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-12">
+		                        <button type="submit" name="update" class="btn btn-primary form-control"> {{ trans('vox.page.'.$current_page.'.info.change-password-submit') }} </button>
+							</div>
+						</div>
+		    			
+		  			</form>
+	  			@endif
 
 		</div>
 	</div>

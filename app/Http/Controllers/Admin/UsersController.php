@@ -49,9 +49,6 @@ class UsersController extends AdminController
     		'email' => [
     			'type' => 'text',
     		],
-            'password' => [
-                'type' => 'text',
-            ],
     		'phone' => [
     			'type' => 'text',
     		],
@@ -426,6 +423,11 @@ class UsersController extends AdminController
 
     public function edit( $id ) {
         $item = User::withTrashed()->find($id);
+        if($item->is_dentist) {
+            $this->fields['password'] = [
+                'type' => 'password',
+            ];
+        }
 
         //dd(bcrypt('my$tronGpass!'));
         //$2y$10$.AunhByiNrBlkkbAC7pG3.oTp06Lz6Z4aoRIjJmQqr95/c.Hs3akW
@@ -451,7 +453,7 @@ class UsersController extends AdminController
                                 $item->sendTemplate(26);
                             }
                             $item->$key = $this->request->input($key);
-                        } else if($key=='password') {
+                        } else if($value['type']=='password') {
                             $item->$key = bcrypt( $this->request->input($key) );
                         } else if($value['type']=='datepicker') {
                 	       $item->$key = $this->request->input($key) ? new Carbon( $this->request->input($key) ) : null;
