@@ -280,7 +280,7 @@ class VoxController extends FrontController
 					        	}
 					        }
 
-				        	if(true || $is_scam) {
+				        	if($is_scam) {
 				        		
 				        		$wrongs = intval(session('wrongs'));
 				        		$wrongs++;
