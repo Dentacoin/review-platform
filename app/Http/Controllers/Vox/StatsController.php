@@ -31,9 +31,6 @@ class StatsController extends FrontController
 
         $this->current_page = 'stats';
 
-		// $ret = Dcn::send($this->user, $this->user->vox_address, 100, 'vox-cashout', null);
-		// dd($ret);
-
 		$sorts = [
 			'featured' => trans('vox.page.home.sort-featured'),
 			'newest' => trans('vox.page.home.sort-newest'),

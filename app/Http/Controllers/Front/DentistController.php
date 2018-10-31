@@ -288,8 +288,6 @@ class DentistController extends FrontController
                             $reward->save();                            
                         }
 
-                        //$ret = Dcn::send($this->user, $ra, $amount, 'review', $review->id);
-                        
                         $review->status = 'accepted';
                         $review->secret->used = true;
                         $review->secret->save();
