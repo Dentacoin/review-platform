@@ -906,7 +906,6 @@ header {
 		padding-bottom: 130px;
 
 		@media #{$phone} {
-			text-align: left;
 			padding-bottom: 22px;
 			margin-left: 20px;
 		}
@@ -1050,10 +1049,11 @@ header {
 	    margin-left: 15px;
 
 		@media #{$phone} {
-	    	margin-left: 0px;
-			width: 60px;
-			height: 54px;
-			float: none;
+			display: none;
+	  //   	margin-left: 0px;
+			// width: 60px;
+			// height: 54px;
+			// float: none;
 		}
 	}
 
@@ -1067,10 +1067,11 @@ header {
 	    transform: translateY(-50%) translateX(-50%);
 
 		@media #{$phone} {
+			margin-left: auto;
+			margin-right: auto;
 			position: static;
 			transform: none;
 			font-size: 14px;
-			margin-left: 20px;
 		}
 	}
 
@@ -1131,7 +1132,6 @@ header {
 		padding-bottom: 85px;
 		
 		@media #{$phone} {
-			text-align: left;
 			padding-bottom: 25px;
 		}
 	}
@@ -1141,7 +1141,7 @@ header {
 		margin-bottom: 60px;
 
 		@media #{$phone} {
-			text-align: left;
+			text-align: center;
 			margin-bottom: 18px;
 		}
 	}
@@ -1152,6 +1152,7 @@ header {
 		line-height: 30px;
 
 		@media #{$phone} {
+			text-align: center;
 			margin-bottom: 16px;
 			line-height: 1.15;
 		}
@@ -2438,6 +2439,7 @@ header {
 				@media #{$phone} {
 	    			margin-bottom: 3px;
 	    			display: inline-block;
+	    			border-width: 1px;
 
 	    			&[filter="custom"] {
 	    				display: none;
@@ -3553,6 +3555,10 @@ header {
 				display: flex;
     			align-items: flex-start;
 			}
+
+			@media #{$phone} {
+				padding: 0px;
+			}
 		}
 
 
@@ -3563,13 +3569,17 @@ header {
 			    display: block;
 			    text-align: center;
 			    width: 100%;
-			    margin-top: 45px;
+			    margin-top: 25px;
 			}
 
 			img {
 				width: 37px;
 				height: 37px;
 				margin-right: 13px;
+
+				@media #{$phone} {
+					margin-right: 0px;
+				}
 			}
 
 			p {
@@ -3592,7 +3602,7 @@ header {
 				margin: 7px 0px 10px 0px;
 			}
 			@media #{$phone} {
-				margin: 0px 0px 30px 0px;
+				margin: 0px 0px 20px 0px;
 			}
 
 			a {
@@ -3667,6 +3677,12 @@ header {
 			    transition: all 0.3s ease;
 			    margin-left: 5px;
 
+			    @media #{$phone} {
+					width: 40px;
+			    	height: 40px;
+			    	margin-left: 0px;
+				}
+
 			    i {
 				    position: relative;
 				    line-height:30px;
@@ -3674,13 +3690,25 @@ header {
 				    color: white;
 
 					@media #{$phone} {
-						line-height: 25px;
+						line-height: 38px;
+					}
+
+					&:before {
+						@media #{$phone} {
+							font-size: 20px;
+						}
 					}
 				}
 
 			    &:hover {
 				    background-color: #38a2e5;
 				    transition: all 0.3s ease;
+				}
+
+				&:first-child {
+					@media #{$phone} {
+						margin-left: 15px;
+					}
 				}
 			}
 		}
@@ -4416,6 +4444,8 @@ header {
     			position: relative;
 
 			    .list-item.active {
+			    	position: relative;
+			    	
 			    	&:after {
 					    display: inline-block;
 					    font-style: normal;
@@ -4427,7 +4457,7 @@ header {
 					    top: 1px;
 					    font-size: 40px;
     					font-family: "Font Awesome 5 Free"; font-weight: 900; 
-    					content: "\f107";
+    					content: "\f106";
 
 			    	}
 			    }
@@ -4439,7 +4469,7 @@ header {
 
 				    .list-item.active {
 				    	&:after {
-    						content: "\f106";
+    						content: "\f107";
 				    	}
 				    }
 			    }
@@ -4613,6 +4643,10 @@ header {
 			margin-top: 10px;
 	    }
 
+	    @media screen and (max-width: 768px) {
+	    	font-size: 11px;
+	    }
+
 	    &:hover {
 	    	background-color: #38ace5;
 	    }
@@ -4630,7 +4664,8 @@ header {
 	}
 
 	.btn-primary {
-		background-color: #80b8dc;
+		background-color: #42b0e6 !important;
+		background-image: none;
 		color: white;
 
 	    &:hover {
@@ -5058,8 +5093,7 @@ header {
 				margin-bottom: 55px;
 
 				@media #{$phone} {
-					font-size: 10px;
-					font-weight: bold;
+					font-weight: normal;
 					margin-bottom: 18px;
 					display: none;
 				}
@@ -5068,7 +5102,7 @@ header {
 					text-decoration: none;
 
 					@media #{$phone} {
-						font-size: 10px;
+						font-size: 14px;
 						font-weight: bold;
 					}
 
