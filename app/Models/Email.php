@@ -26,6 +26,7 @@ class Email extends Model
 
 
 	public static $vox_tempalates = [
+		11,
 		12,
 		13,
 		14,
