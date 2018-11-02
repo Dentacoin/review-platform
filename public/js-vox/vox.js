@@ -150,7 +150,11 @@ $(document).ready(function(){
                         wpopup.find('p').html(data.content);
                         wpopup.find('img').attr('src', data.img);
                         wpopup.addClass('active');
-                        hoursCountdown();
+                        if(data.ban_duration) {
+                            hoursCountdown();                            
+                        } else {
+                            $('.hours-countdown').hide();
+                        }
                         return;
                     }
 

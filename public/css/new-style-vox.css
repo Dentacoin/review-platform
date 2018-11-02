@@ -378,7 +378,6 @@ select:focus > option:checked {
     .white-button {
       font-size: 14px;
       padding: 4px 20px;
-      text-transform: none;
       width: 100%;
       display: block; } }
 
@@ -3057,7 +3056,8 @@ header {
     display: block;
     color: #353637;
     font-size: 15px;
-    margin-bottom: 50px; }
+    margin-bottom: 50px;
+    font-style: italic; }
     @media screen and (max-width: 768px) {
       .popup.ban .wrapper .inner small {
         font-size: 12px;
@@ -3068,6 +3068,10 @@ header {
         margin-bottom: 20px; } }
   .popup.ban .wrapper .inner h3 span {
     font-size: 30px; }
+    @media screen and (max-width: 768px) {
+      .popup.ban .wrapper .inner h3 span {
+        display: block;
+        font-size: 24px; } }
   .popup.first-test .wrapper .inner .rules {
     margin-top: 50px;
     margin-bottom: 50px;
@@ -3287,12 +3291,15 @@ header {
     position: absolute;
     bottom: 0px;
     right: 295px;
-    z-index: 1050; }
+    z-index: 1050;
+    transform: scale(0.5);
+    transform-origin: 100% 100%; }
     @media screen and (max-width: 768px) {
       .popcircle .zman {
         right: 50%;
-        transform: translateX(50%);
-        bottom: -90px; } }
+        transform: translateX(50%) scale(0.5);
+        transform-origin: 50% 100%;
+        bottom: -80px; } }
   .popcircle .wrapper {
     position: absolute;
     z-index: 1100;
@@ -3308,7 +3315,7 @@ header {
         width: 500px;
         height: 500px;
         min-width: 0;
-        bottom: -310px;
+        bottom: -300px;
         left: 50%;
         transform: translateX(-50%);
         padding: 50px 120px; } }

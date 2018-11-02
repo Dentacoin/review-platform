@@ -202,6 +202,9 @@
 							<span>{{ $time_left }}</span>
 						</div>
 					</div>
+				@else
+					<br/>
+					<br/>
 				@endif
 				<div class="alternatives">
 					<div>

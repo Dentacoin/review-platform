@@ -289,7 +289,7 @@ class VoxController extends FrontController
 				            	]);
 
 		        				$ret['wrong'] = true;
-		        				$prev_bans = $this->user->getPrevBansCount('mistakes');
+		        				$prev_bans = $this->user->getPrevBansCount('vox', 'mistakes');
 
 		        				if($wrongs==1 || ($wrongs==2 && !$prev_bans) ) {
 		        					$ret['warning'] = true;
@@ -448,7 +448,7 @@ class VoxController extends FrontController
 						            	]);
 						        	}
 
-		        					$prev_bans = $this->user->getPrevBansCount('too-fast');
+		        					$prev_bans = $this->user->getPrevBansCount('vox', 'too-fast');
 			        				$ret['toofast'] = true;
 			        				if(!$warned_before) {
 			        					$ret['warning'] = true;
