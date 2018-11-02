@@ -303,6 +303,7 @@ $voxRoutes = function () {
 				Route::any('profile/vox', 						'ProfileController@vox');
 				Route::any('profile/home', 						'ProfileController@home');
 				Route::any('profile/info', 						'ProfileController@info');
+				Route::post('profile/info/upload', 				'ProfileController@upload');
 				Route::post('profile/password', 				'ProfileController@change_password');
 				Route::post('profile/balance', 					'ProfileController@balance');
 				Route::post('profile/withdraw', 				'ProfileController@withdraw');

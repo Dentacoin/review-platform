@@ -29,6 +29,7 @@ class VerifyCsrfToken extends BaseVerifier
         '*/profile/avatar',
         '*/youtube',
         '*/profile/jwt',
+        '*/profile/info/upload',
         '*/profile/gallery/*',
         '*/profile/clinics/*',
         '*/profile/dentists/*',

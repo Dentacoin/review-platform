@@ -12,10 +12,13 @@
 				{!! trans('vox.page.profile.home.title') !!}
 			</h2>
 
-			<div class="form-horizontal black-line-title">
-                <h4 class="bold">
-                	{!! trans('vox.page.profile.home.balance') !!}
-                </h4>
+			<div class="form-horizontal">
+
+				<div class="black-line-title">
+	                <h4 class="bold">
+	                	{!! trans('vox.page.profile.home.balance') !!}
+	                </h4>
+	            </div>
 
 				<div class="profile-home-content">
 					<div class="balance">
@@ -52,10 +55,13 @@
             	@include('front.errors')
 
 	        	@if($user->vox_address)
-					<div class="form-horizontal black-line-title">
-		                <h4 class="bold">
-		                	{!! trans('vox.page.profile.home.withdraw.title') !!}		                	
-		                </h4>
+					<div class="form-horizontal">
+
+						<div class="black-line-title">
+			                <h4 class="bold">
+			                	{!! trans('vox.page.profile.home.withdraw.title') !!}		                	
+			                </h4>
+			            </div>
 
 			    		@if(!$user->civic_kyc)
 				    		<p class="personal-description">
@@ -154,11 +160,14 @@
 				@else
 
 
-					<div class="form-horizontal black-line-title">
+					<div class="form-horizontal">
 
-		                <h4 class="bold">
-		                	{!! trans('vox.page.profile.home.address.title') !!}		                	
-		                </h4>
+
+						<div class="black-line-title">
+			                <h4 class="bold">
+			                	{!! trans('vox.page.profile.home.address.title') !!}		                	
+			                </h4>
+			            </div>
 
 	                	<p class="personal-description">
 	                		{!! trans('vox.page.profile.home.address.hint') !!}
@@ -187,10 +196,13 @@
 
                 @if($history->isNotEmpty())
 
-					<div class="form-horizontal black-line-title">
-		                <h4 class="bold">
-		                	{!! trans('vox.page.profile.home.history.title') !!}
-		                </h4>
+					<div class="form-horizontal">
+
+						<div class="black-line-title">
+			                <h4 class="bold">
+			                	{!! trans('vox.page.profile.home.history.title') !!}
+			                </h4>
+			            </div>
 		            	<table class="table">
 		            		<thead>
 		            			<tr>

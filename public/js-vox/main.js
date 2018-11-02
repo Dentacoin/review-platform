@@ -186,6 +186,7 @@ $(document).ready(function(){
                 if(data.success) {
                 	$('#step-1').hide();
                 	$('#step-2').show();
+                	$(window).scrollTop(0);
 
 					var request = {
 						type: ['dentist'],
@@ -274,13 +275,26 @@ $(document).ready(function(){
 
         var file = $(this)[0].files[0];
         var upload = new Upload(file, upload_url, function(data) {
-            console.log(data);
             $('.add-photo').removeClass('loading');
-            $('.add-photo').css('background-image', "url('"+data.thumb+"')");
-            if($('.add-photo').find('.photo-cta').length) {
-            	$('.add-photo').find('.photo-cta').remove();
+	        $('.add-photo').css('background-image', "url('"+data.thumb+"')");
+
+            if( $('body').hasClass('page-profile') ) {
+            	console.log('waaat');
+            	$('img.header-avatar').attr('src', data.thumb);
+            	$('.add-photo').find('.photo-cta').hide();
+
+            	setTimeout( (function() {
+            		$('.add-photo').find('.photo-cta').show();
+            		$('.add-photo').css('background-image', "radial-gradient( rgba(255,255,255,1), rgba(255,255,255,1), rgba(255,255,255,0) ), url('"+this+"')");
+            	}).bind(data.thumb), 3000 );
+            } else {
+            	
+	            if($('.add-photo').find('.photo-cta').length) {
+	            	$('.add-photo').find('.photo-cta').remove();
+	            }
+	            $('#photo-name').val( data.name );
             }
-            $('#photo-name').val( data.name );
+
             ajax_is_running = false;
         });
 
@@ -549,6 +563,17 @@ $(document).ready(function(){
 		}
 		
 	});
+
+	$('.header-a').click( function(e) {
+		if( $(window).width()<768 ) {
+			if( $('.menu-list a.active').length ) {
+				$('.menu-list a.active').trigger('click');
+			}
+
+			e.preventDefault();
+			return false;
+		}
+	} );
 
 
 

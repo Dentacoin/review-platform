@@ -1,5 +1,5 @@
 <div class="profile-menu">
-	<div class="heading flex">
+	<div class="heading flex flex-center">
 		<img src="{{ $user->getImageUrl(true) }}" />
 		<div>
 			<b>

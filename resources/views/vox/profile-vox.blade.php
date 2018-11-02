@@ -15,10 +15,12 @@
 			</h2>
 
 			@if($histories->isNotEmpty())
-		        <div class="history-section black-line-title form-horizontal">
-	                <h4 class="bold">
-	                	{{ trans('vox.page.profile.vox.list-title') }}
-	                </h4>
+		        <div class="history-section form-horizontal">
+					<div class="black-line-title">
+		                <h4 class="bold">
+		                	{{ trans('vox.page.profile.vox.list-title') }}
+		                </h4>
+		            </div>
 	            	<table class="table">
 	            		<thead>
 	            			<tr>
@@ -71,10 +73,13 @@
 
 
         	@if($payouts->isNotEmpty())
-		        <div class="payputs-section black-line-title">
-	                <h4 class="bold">
-	                	Payouts
-	                </h4>
+		        <div class="payputs-section">
+
+					<div class="black-line-title">
+		                <h4 class="bold">
+		                	Payouts
+		                </h4>
+		            </div>
 	            	<table class="table">
 	            		<thead>
 	            			<tr>
@@ -130,10 +135,13 @@
 
 		  	@if($user->bans->isNotEmpty())
 
-	        	<div class="bans-section black-line-title">
-	                <h4 class="bold">
-	                	{{ trans('vox.page.profile.vox.bans-title') }}
-	                </h4>
+	        	<div class="bans-section">
+
+					<div class="black-line-title">
+		                <h4 class="bold">
+		                	{{ trans('vox.page.profile.vox.bans-title') }}
+		                </h4>
+		            </div>
 	            	<table class="table">
 	            		<thead>
 	            			<tr>

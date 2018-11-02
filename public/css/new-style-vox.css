@@ -881,11 +881,20 @@ header {
       font-size: 12px; } }
 .section-register-success .blue-button {
   margin: 0px 25px; }
+  @media screen and (max-width: 768px) {
+    .section-register-success .blue-button {
+      width: 100%;
+      margin: 0px 0px 20px 0px;
+      display: block; } }
 .section-register-success img {
   margin-bottom: 40px; }
   @media screen and (max-width: 768px) {
     .section-register-success img {
-      display: none; } }
+      max-width: 60%;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 20px;
+      display: block; } }
 .section-register-success.success-dentist img {
   position: absolute;
   left: -140px;
@@ -1753,11 +1762,8 @@ header {
     background-image: url(../new-vox-img/stats-back-hover.png); }
   @media screen and (max-width: 768px) {
     .back-home {
-      top: -6px;
-      font-size: 0px;
-      width: 30px;
-      display: block;
-      height: 30px; } }
+      top: -26px;
+      display: block; } }
 
 .page-statistics h1 {
   font-size: 25px;
@@ -1838,6 +1844,8 @@ header {
   border-bottom: 1px solid #f3f3f3; }
   .page-statistics .stats .stat:last-child {
     border-bottom: none; }
+  .page-statistics .stats .stat:first-child .contents .graphs .share-buttons {
+    visibility: visible; }
   .page-statistics .stats .stat a.title {
     font-size: 20px;
     color: #999;
@@ -1899,21 +1907,27 @@ header {
         right: 10px;
         top: 10px;
         align-items: center;
-        z-index: 100; }
+        z-index: 100;
+        visibility: hidden; }
         @media screen and (max-width: 768px) {
           .page-statistics .stats .stat .contents .graphs .share-buttons {
-            position: static;
             display: block;
-            order: -2;
-            padding: 20px; } }
+            right: 5px;
+            top: 3px; } }
         .page-statistics .stats .stat .contents .graphs .share-buttons span {
           margin-right: 5px; }
+          @media screen and (max-width: 768px) {
+            .page-statistics .stats .stat .contents .graphs .share-buttons span {
+              margin-right: 0px;
+              display: block;
+              text-align: center; } }
         .page-statistics .stats .stat .contents .graphs .share-buttons .col {
           padding-left: 5px;
           padding-right: 5px; }
           @media screen and (max-width: 768px) {
             .page-statistics .stats .stat .contents .graphs .share-buttons .col {
-              display: inline-block; } }
+              display: inline-block;
+              padding: 0px; } }
           .page-statistics .stats .stat .contents .graphs .share-buttons .col.fb a {
             background-color: #3a559f; }
           .page-statistics .stats .stat .contents .graphs .share-buttons .col.twt a {
@@ -2215,6 +2229,11 @@ header {
 .section-register h3 {
   color: #060606;
   margin-bottom: 10px; }
+  @media screen and (max-width: 768px) {
+    .section-recover h3,
+    .section-login h3,
+    .section-register h3 {
+      font-size: 20px; } }
 .section-recover .reg-desc,
 .section-login .reg-desc,
 .section-register .reg-desc {
@@ -2226,7 +2245,7 @@ header {
     .section-recover .reg-desc,
     .section-login .reg-desc,
     .section-register .reg-desc {
-      font-size: 12px;
+      font-size: 16px;
       margin-bottom: 20px; } }
 .section-recover .reg-privacy,
 .section-login .reg-privacy,
@@ -2451,7 +2470,8 @@ header {
     .section-register input[type="password"],
     .section-register input[type="email"] {
       width: 100%;
-      height: 43px; } }
+      height: 43px;
+      font-size: 12px; } }
 .section-recover button,
 .section-login button,
 .section-register button {
@@ -2468,7 +2488,8 @@ header {
   border-radius: 5px;
   text-shadow: none;
   transition: all 0.3s ease;
-  color: white; }
+  color: white;
+  background-image: none; }
   .section-recover button:hover,
   .section-login button:hover,
   .section-register button:hover {
@@ -2480,7 +2501,8 @@ header {
     .section-login button,
     .section-register button {
       width: 100%;
-      height: 43px; } }
+      height: 43px;
+      margin-top: 20px; } }
 .section-recover .login-text,
 .section-recover .recover-text,
 .section-login .login-text,
@@ -2507,62 +2529,6 @@ header {
     .section-register .login-text,
     .section-register .recover-text {
       font-size: 12px; } }
-.section-recover .add-photo,
-.section-login .add-photo,
-.section-register .add-photo {
-  width: 200px;
-  height: 200px;
-  position: relative;
-  border-radius: 50%;
-  cursor: pointer;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-color: #ebf2f6; }
-  .section-recover .add-photo .photo-cta,
-  .section-login .add-photo .photo-cta,
-  .section-register .add-photo .photo-cta {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateY(-50%) translateX(-50%);
-    color: #5b5b5b;
-    text-align: center; }
-    .section-recover .add-photo .photo-cta i,
-    .section-login .add-photo .photo-cta i,
-    .section-register .add-photo .photo-cta i {
-      display: block;
-      margin: 0px auto 5px auto;
-      font-size: 20px;
-      color: #38ace5; }
-  .section-recover .add-photo .loader,
-  .section-login .add-photo .loader,
-  .section-register .add-photo .loader {
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateY(-50%) translateX(-50%);
-    text-align: center;
-    padding: 20px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.3);
-    color: white;
-    width: 100px;
-    height: 100px;
-    line-height: 80px; }
-  .section-recover .add-photo.loading .loader,
-  .section-login .add-photo.loading .loader,
-  .section-register .add-photo.loading .loader {
-    display: block; }
-  .section-recover .add-photo.loading .photo-cta,
-  .section-login .add-photo.loading .photo-cta,
-  .section-register .add-photo.loading .photo-cta {
-    display: none; }
-  .section-recover .add-photo input,
-  .section-login .add-photo input,
-  .section-register .add-photo input {
-    display: none; }
 .section-recover #step-2 button,
 .section-recover #step-2 select,
 .section-recover #step-2 input[type="text"],
@@ -2633,6 +2599,51 @@ header {
       width: 18px;
       height: 18px;
       background-size: cover; }
+
+.add-photo {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  border-radius: 50%;
+  cursor: pointer;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #ebf2f6;
+  display: block;
+  margin-bottom: 5px; }
+  .add-photo .photo-cta {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    color: #5b5b5b;
+    text-align: center; }
+    .add-photo .photo-cta i {
+      display: block;
+      margin: 0px auto 5px auto;
+      font-size: 20px;
+      color: #38ace5; }
+  .add-photo .loader {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    text-align: center;
+    padding: 20px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    width: 100px;
+    height: 100px;
+    line-height: 80px; }
+  .add-photo.loading .loader {
+    display: block; }
+  .add-photo.loading .photo-cta {
+    display: none; }
+  .add-photo input {
+    display: none; }
 
 .section-login {
   padding-top: 50px;
@@ -3366,6 +3377,10 @@ header {
           transform: rotate(180deg); }
 
 @media screen and (max-width: 768px) {
+  .page-profile header .header-right:hover .expander {
+    display: none; } }
+
+@media screen and (max-width: 768px) {
   .page-profile .site-content .container {
     padding: 0px; }
     .page-profile .site-content .container .alert {
@@ -3386,8 +3401,10 @@ header {
     color: #bbbbbb;
     padding: 20px; }
     @media screen and (max-width: 992px) {
-      .page-profile .site-content .profile-menu .heading br {
-        display: none; } }
+      .page-profile .site-content .profile-menu .heading {
+        padding: 10px; }
+        .page-profile .site-content .profile-menu .heading br {
+          display: none; } }
     .page-profile .site-content .profile-menu .heading b {
       display: block;
       font-size: 16px;
@@ -3397,6 +3414,10 @@ header {
       height: 43px;
       margin-right: 10px;
       border-radius: 50%; }
+      @media screen and (max-width: 992px) {
+        .page-profile .site-content .profile-menu .heading img {
+          width: 63px;
+          height: 63px; } }
   @media screen and (max-width: 992px) {
     .page-profile .site-content .profile-menu .menu-list {
       position: relative; }
@@ -3414,11 +3435,11 @@ header {
           font-size: 40px;
           font-family: "Font Awesome 5 Free";
           font-weight: 900;
-          content: "\f106"; }
+          content: "\f107"; }
       .page-profile .site-content .profile-menu .menu-list.open .list-item {
         display: block; }
       .page-profile .site-content .profile-menu .menu-list.open .list-item.active:after {
-        content: "\f107"; } }
+        content: "\f106"; } }
   .page-profile .site-content .profile-menu .menu-list .list-item {
     display: block;
     padding-left: 50px;
@@ -3559,6 +3580,9 @@ header {
     margin-top: 0px;
     display: block;
     width: 100%; }
+    @media screen and (max-width: 992px) {
+      .page-profile .site-content .btn.nom {
+        margin-top: 10px; } }
   .page-profile .site-content .btn i {
     color: white;
     font-weight: normal; }
@@ -3611,7 +3635,7 @@ header {
   color: #333333; }
   @media screen and (max-width: 992px) {
     .page-profile .site-content #invite-wrapper {
-      font-size: 12px; } }
+      font-size: 14px; } }
   .page-profile .site-content #invite-wrapper h3 {
     color: black;
     font-weight: bold;
@@ -3956,7 +3980,8 @@ header {
   word-break: break-word; }
   @media screen and (max-width: 768px) {
     .alert {
-      padding: 10px 10px 10px 40px; } }
+      padding: 10px 10px 10px 40px;
+      font-size: 14px; } }
   .alert:before {
     display: inline-block;
     font-style: normal;

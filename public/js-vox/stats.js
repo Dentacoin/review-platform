@@ -119,7 +119,7 @@ $(document).ready(function(){
         gc_loaded = true;
         $('.stat.active').each( function() {
             reloadGraph(this);
-        } );        
+        } );
     });
 
     var handleFilterChange  = function() {
@@ -704,4 +704,10 @@ $(document).ready(function(){
         }
         window.open( url , 'ShareWindow', 'height=450, width=550, top=' + (jQuery(window).height() / 2 - 275) + ', left=' + (jQuery(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
     });
+
+    $(window).resize( function() {
+        $('.stat.active').each( function() {
+            reloadGraph(this);
+        } );
+    } )
 });

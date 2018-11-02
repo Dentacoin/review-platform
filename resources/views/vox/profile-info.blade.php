@@ -14,10 +14,11 @@
 				{{ trans('vox.page.profile.info.title') }}
 			</h2>
                
-            @include('front.errors')
 
       			{!! Form::open(array('url' => getLangUrl('profile/info'), 'method' => 'post', 'class' => 'form-horizontal')) !!}
                     {!! csrf_field() !!}
+            		
+            		@include('front.errors')
 
                     @foreach( $fields as $key => $info)
                         <div class="form-group {{ $errors->has($key) ? 'has-error' : '' }}" >
@@ -47,6 +48,42 @@
                             </div>
                         </div>
                     @endforeach
+
+                    <div class="form-group {{ $errors->has($key) ? 'has-error' : '' }}" >
+                        <label class="col-md-2 control-label">
+                        	{{ trans('vox.page.profile.info.form-photo') }}
+                        </label>
+                        <div class="col-md-10">
+					    	<label class="add-photo" for="add-avatar" {!! $user->hasimage ? 'style="background-image: radial-gradient( rgba(255,255,255,1), rgba(255,255,255,1), rgba(255,255,255,0) ), url('.$user->getImageUrl(true).')"' : '' !!} >
+					    		<div class="photo-cta">
+					    			<i class="fa fa-plus"></i>
+					    			@if( $user->hasimage )
+					    				{!! trans('vox.page.profile.info.photo-edit') !!}
+					    			@else
+					    				{!! trans('vox.page.profile.info.photo-add') !!}
+					    			@endif
+					    		</div> 
+					    		<div class="loader">
+					    			<i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i>
+					    		</div>
+					    		<input id="add-avatar" name="image" type="file">
+					    	</label>
+				    		<i>
+				    			{!! trans('vox.page.profile.info.photo-hint') !!}
+				    			
+				    		</i>
+							<input type="hidden" id="photo-name" name="photo" >
+							<span class="error-message" id="photo-error"></span>
+							<div id="photo-upload-error" style="display: none;" class="alert alert-warning">
+								{!! trans('vox.page.profile.info.photo-error') !!}
+								
+							</div>
+                        </div>
+                    </div>
+
+					<script type="text/javascript">
+						var upload_url = '{{ getLangUrl('profile/info/upload') }}';
+					</script>
 
                     <div class="form-group">
                         <div class="col-md-12">

@@ -345,7 +345,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getImageUrl($thumb = false) {
-        return $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg') : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
+        return $this->hasimage ? url('/storage/avatars/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : url('new-vox-img/no-avatar-'.($this->is_dentist ? '1' : '0').'.png');
     }
     public function getImagePath($thumb = false) {
         $folder = storage_path().'/app/public/avatars/'.($this->id%100);

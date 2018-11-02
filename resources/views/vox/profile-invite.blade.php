@@ -221,10 +221,12 @@
 
 		@if($user->invites->isNotEmpty())
 
-			<div class="form-horizontal black-line-title">
-	            <h4 class="bold">
-	            	{{ trans('vox.page.profile.'.$current_subpage.'.list-title') }}
-	            </h4>
+			<div class="form-horizontal">
+				<div class="black-line-title">
+		            <h4 class="bold">
+		            	{{ trans('vox.page.profile.'.$current_subpage.'.list-title') }}
+		            </h4>
+		        </div>
 
 	        	<table class="table">
 	        		<thead>

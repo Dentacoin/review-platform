@@ -10,6 +10,8 @@ use Route;
 use Hash;
 use Mail;
 use Auth;
+use Image;
+use Illuminate\Support\Facades\Input;
 use App\Models\User;
 use App\Models\UserInvite;
 use App\Models\VoxCashout;
@@ -480,6 +482,24 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     //Info
     //
 
+    public function upload($locale=null) {
+        if($this->user->is_dentist && !$this->user->is_approved) {
+            return Response::json(['success' => false ]);
+        }
+        if($this->user->isBanned('vox')) {
+            return Response::json(['success' => false ]);
+        }
+        $this->handleMenu();
+
+        if( Request::file('image') && Request::file('image')->isValid() ) {
+            $img = Image::make( Input::file('image') )->orientate();
+            $this->user->addImage($img);
+            return Response::json(['success' => true, 'thumb' => $this->user->getImageUrl(true), 'name' => '' ]);
+        }
+    
+        
+    }
+    
 
     public function info($locale=null) {
         if($this->user->is_dentist && !$this->user->is_approved) {
