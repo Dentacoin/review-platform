@@ -18,8 +18,9 @@ class AdminsController extends AdminController
         }
 
         $this->roles = [
-            'admin' => trans('admin.page.'.$this->current_page.'.role-admin'),
-            'translator' => trans('admin.page.'.$this->current_page.'.role-translator'),
+            'admin' => 'Admin',
+            'translator' => 'Translator',
+            'voxer' => 'Voxer',
         ];
 
         $this->domainlist = [];

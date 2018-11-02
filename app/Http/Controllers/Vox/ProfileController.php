@@ -11,7 +11,6 @@ use Hash;
 use Mail;
 use Auth;
 use App\Models\User;
-use App\Models\VoxIdea;
 use App\Models\UserInvite;
 use App\Models\VoxCashout;
 use App\Models\Dcn;

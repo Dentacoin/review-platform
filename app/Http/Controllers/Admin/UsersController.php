@@ -416,11 +416,6 @@ class UsersController extends AdminController
         }
     }
 
-    public function martin() {
-        $this->current_page = 'users';
-        return $this->edit(6465);
-    }
-
     public function edit( $id ) {
         $item = User::withTrashed()->find($id);
         if($item->is_dentist) {

@@ -46,7 +46,6 @@ return [
                 'add' => 'add',
                 'categories' => 'categories',
                 'scales' => 'scales',
-                'ideas' => 'ideas',
                 'faq' => 'faq',
             ),
             'js' => array(
@@ -64,8 +63,8 @@ return [
             'icon' => 'key',
         ),
         */
-        'admins' => array(
-            'icon' => 'user-plus',
+        'registrations' => array(
+            'icon' => 'plus-circle',
         ),
         'translations' => array(
             'icon' => 'globe',
@@ -79,8 +78,8 @@ return [
                 'validation' => 'validation',
             )
         ),
-        'registrations' => array(
-            'icon' => 'plus-circle',
+        'admins' => array(
+            'icon' => 'user-plus',
         ),
     )
 ];

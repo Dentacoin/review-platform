@@ -67,32 +67,9 @@ class AdminController extends BaseController
         $params['admin'] = $this->user;
         $params['langs'] = $this->langs;
 
-        if($params['admin']->id==9) {
-            $menu = config('admin.pages');
-            foreach ($menu as $key => $value) {
-                if($key!='vox') {
-                    unset($menu[$key]);
-                } else {
-                    foreach ($menu[$key]['subpages'] as $sk => $sv) {
-                        if($sk!='list') {
-                            unset( $menu[$key]['subpages'][$sk] );
-                        }
-                    }
-                }
-            }
-
-            $menu['account'] = array(
-                'icon' => 'users',
-            );
-
-            config([
-                'admin.pages' => $menu
-            ]);
-
-        }
-
+        $menu = config('admin.pages');
+        
         if($params['admin']->role=='translator') {
-            $menu = config('admin.pages');
             foreach ($menu as $key => $value) {
                 if($key!='translations') {
                     unset($menu[$key]);
@@ -105,11 +82,27 @@ class AdminController extends BaseController
                 }
             }
 
-            config([
-                'admin.pages' => $menu
-            ]);
         }
 
+        if($params['admin']->role=='voxer') {
+            foreach ($menu as $key => $value) {
+                if($key!='vox') {
+                    unset($menu[$key]);
+                } else {
+                    foreach ($menu[$key]['subpages'] as $sk => $sv) {
+                        if($sk=='categories' || $sk=='faq') {
+                            unset( $menu[$key]['subpages'][$sk] );
+                        }
+                    }
+                }
+            }
+
+        }
+        
+        config([
+            'admin.pages' => $menu
+        ]);
+        
         //Counts
         $params['counters'] = [];
         $params['counters']['youtube'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();

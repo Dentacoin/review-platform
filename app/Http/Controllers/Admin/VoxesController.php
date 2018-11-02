@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use Validator;
 use App\Http\Controllers\AdminController;
 use App\Models\Vox;
-use App\Models\VoxIdea;
 use App\Models\VoxCategory;
 use App\Models\VoxQuestion;
 use App\Models\VoxToCategory;
@@ -604,13 +603,6 @@ class VoxesController extends AdminController
         }
         $question->save();
 
-    }
-
-    public function ideas( ) {
-
-        return $this->showView('vox-ideas', array(
-            'ideas' => VoxIdea::orderBy('id', 'DESC')->get()
-        ));
     }
 
     public function categories( ) {
