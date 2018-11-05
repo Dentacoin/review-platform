@@ -103,7 +103,8 @@ class StatsController extends FrontController
         			$second_chart[ $answers[ $res->answer-1 ] ] = $res->cnt;
         		}
 
-        		$relation_info['answer'] = $question->stats_answer_id-1;
+                $relation_info['answer'] = $question->stats_answer_id-1;
+        		$relation_info['question'] = $question->related->question;
 
 
         		$answers_related = json_decode($question->related->answers);
@@ -288,20 +289,20 @@ class StatsController extends FrontController
             'canonical' => $vox->getStatsList(),
             'social_image' => $vox->getImageUrl(),
             'seo_title' => trans('vox.seo.stats.title', [
-                'title' => $vox->title,
-                'description' => $vox->description
+                'title' => $vox->seo_stats_title,
+                'description' => $vox->seo_stats_description
             ]),
             'seo_description' => trans('vox.seo.stats.description', [
-                'title' => $vox->title,
-                'description' => $vox->description
+                'title' => $vox->seo_stats_title,
+                'description' => $vox->seo_stats_description
             ]),
             'social_title' => trans('vox.social.stats.title', [
-                'title' => $vox->title,
-                'description' => $vox->description
+                'title' => $vox->social_stats_title,
+                'description' => $vox->social_stats_description
             ]),
             'social_description' => trans('vox.social.stats.description', [
-                'title' => $vox->title,
-                'description' => $vox->description
+                'title' => $vox->social_stats_title,
+                'description' => $vox->social_stats_description
             ]),
         ));
 	}

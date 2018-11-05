@@ -240,8 +240,6 @@ $(document).ready(function(){
                     width: 'auto'
                 });
 
-                $('.datepicker').css('display', 'flex');
-
                 $('.datepickerContainer').after( $('#datepicker-extras') );
 
                 $('#custom-datepicker').attr('inited', '1')
@@ -401,8 +399,9 @@ $(document).ready(function(){
                     var options = {
                         width: 750
                     }
-                    drawColumns(rows, $(this).find('.second-chart')[0], options, data.relation_info.answer+1);
 
+                    drawColumns(rows, $(this).find('.second-chart')[0], options, data.relation_info.answer+1, true);
+                    $(this).find('.hint').html( data.relation_info.question ).show();
                     $(this).find('.third-chart').html('');
 
 
@@ -480,8 +479,8 @@ $(document).ready(function(){
                     $(this).find('.hint').html('Click on a pie slice to see data only for the respective answer.').show();
                 }
 
-                $(this).find('.second-chart').attr('class', 'chart second-chart '+(type=='dependency' ? 'dependency' : scale) );
-                $(this).find('.third-chart').attr('class', 'chart third-chart '+(type=='dependency' ? 'dependency' : scale) );
+                $(this).find('.second-chart').attr('class', 'second-chart '+(type=='dependency' ? 'dependency' : scale) );
+                $(this).find('.third-chart').attr('class', 'third-chart '+(type=='dependency' ? 'dependency' : scale) );
 
             }).bind(elm)
         );
@@ -569,82 +568,136 @@ $(document).ready(function(){
 
     }
 
-    var drawColumns = function(rows, container, more_options, fixedColor) {
-        
-        var biggerLabels = false;
-        if( rows.length<=5 && $(window).width()>768 ) {
-            biggerLabels = true;
-            for(var i in rows) {
-                rows[i][0] = rows[i][0].replace(new RegExp('\n', 'g'), ' ').replace(new RegExp('\r', 'g'), ' ')
-            }
-        }
+    var drawColumns = function(rows, container, more_options, fixedColor, dependency) {
 
-        var data = google.visualization.arrayToDataTable(rows);
+        if( $(window).width()<1200 || dependency ) {
+            $(container).html('<div class="mobile-chart"></div>');
+            container = $(container).find('.mobile-chart');
 
-        console.log(data);
+            var width = $(window).width()<1200 ? $(container).closest('.graphs').innerWidth() : (more_options && more_options.width ? more_options.width : 540);
 
-        var options = {
-            backgroundColor: 'transparent',
-            chartArea: {
-                left:'10%',
-                top:'10%',
-                width:'80%',
-                height:'80%'
-            },
-            colors: fixedColor ? [ chart_colors[fixedColor-1] ] : chart_colors,
-            legend: {
-                position: 'none'
-            },
-            width: 540,
-            height: 260,
-            vAxis: {
-                format: 'percent',
-                title: null,
-                textPosition: 'none',
-                slantedText: true,
-                slantedTextAngle:45,
-            },
-            hAxis: {
-                //format: 'percent',
-                title: null,
-                textPosition: 'none',
-                showTextEvery: 1, 
-                slantedText: true, 
-                slantedTextAngle: 90,
-                textStyle: { 
-                    //color: 'red',
-                    fontSize: biggerLabels ? 15 : 10,
-                    // bold: <boolean>,
-                    // italic: <boolean> 
-                }
-            },
-            axes: {
-                 x: {
-                     0: { 
-                        side: 'bottom', 
-                        label: "",
-                        slantedText: true,
-                        slantedTextAngle:45,
-                        showTextEvery: 1, 
+            $(container).css('width', width );
+            if( typeof(rows[0][ rows[0].length-1 ])=='object' ) {
+
+                var max = 0;
+                for(var i=1; i<rows.length; i++) {
+                    if(rows[i][1] > max) {
+                        max = rows[i][1];
                     }
-                 }
-            }
-        };
 
-        if(more_options) {
-            for(var i in more_options) {
-                options[i] = more_options[i];
+                }
+
+                for(var i=1; i<rows.length; i++) {
+                    $(container).append('<div class="group-heading">'+rows[i][0]+'</div>');
+                    var pl = 80*rows[i][1]/max;
+                    var color = rows[i][2];
+                    $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+parseInt(rows[i][1]*100)+'%</div>');
+                }
+                console.log(rows);
+
+            } else {
+
+                for(var i=1; i<rows.length; i++) {
+                    $(container).append('<div class="group-heading">'+rows[i][0]+'</div>');
+                    var max = 0;
+
+
+                    for(var j=1; j<rows[i].length; j++) {
+
+                        if(rows[i][j] > max) {
+                            max = rows[i][j];
+                        }
+                    }
+                    for(var j=1; j<rows[i].length; j++) {
+                        var pl = 80*rows[i][j]/max;
+                        var color = fixedColor ? chart_colors[fixedColor-1] : chart_colors[j-1];
+                        if( typeof(rows[0][j])!='object' ) {
+                            $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+parseInt(rows[i][j]*100)+'%</div>');
+                        }
+                    }
+                }
+                console.log(rows);
+                
             }
+
+        } else {
+
+
+            var biggerLabels = false;
+            if( rows.length<=5 && $(window).width()>768 ) {
+                biggerLabels = true;
+                for(var i in rows) {
+                    rows[i][0] = rows[i][0].replace(new RegExp('\n', 'g'), ' ').replace(new RegExp('\r', 'g'), ' ')
+                }
+            }
+
+            var data = google.visualization.arrayToDataTable(rows);
+
+            console.log(data);
+
+            var options = {
+                backgroundColor: 'transparent',
+                chartArea: {
+                    left:'10%',
+                    top:'10%',
+                    width:'80%',
+                    height:'80%'
+                },
+                colors: fixedColor ? [ chart_colors[fixedColor-1] ] : chart_colors,
+                legend: {
+                    position: 'none'
+                },
+                width: 540,
+                height: 260,
+                vAxis: {
+                    format: 'percent',
+                    title: null,
+                    textPosition: 'none',
+                    slantedText: true,
+                    slantedTextAngle:45,
+                },
+                hAxis: {
+                    //format: 'percent',
+                    title: null,
+                    textPosition: 'none',
+                    showTextEvery: 1, 
+                    slantedText: true, 
+                    slantedTextAngle: 90,
+                    textStyle: { 
+                        //color: 'red',
+                        fontSize: biggerLabels ? 15 : 10,
+                        // bold: <boolean>,
+                        // italic: <boolean> 
+                    }
+                },
+                axes: {
+                     x: {
+                         0: { 
+                            side: 'bottom', 
+                            label: "",
+                            slantedText: true,
+                            slantedTextAngle:45,
+                            showTextEvery: 1, 
+                        }
+                     }
+                }
+            };
+
+            if(more_options) {
+                for(var i in more_options) {
+                    options[i] = more_options[i];
+                }
+            }
+
+            options.width = $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth() : options.width),
+            options.height = $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : options.height),
+                
+
+            console.log( options );
+            var chart = new google.charts.Bar( container );
+            //chart.draw(data, options);
+            chart.draw(data, google.charts.Bar.convertOptions(options));
         }
-
-        options.width = $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : options.width),
-        options.height = $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : options.height),
-            
-
-        console.log( options );
-        var chart = new google.charts.Bar( container );
-        //chart.draw(data, options);
-        chart.draw(data, google.charts.Bar.convertOptions(options));
     }
 
 
@@ -661,7 +714,7 @@ $(document).ready(function(){
                 width:'80%',
                 height:'80%'
             },
-            width: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : 490),
+            width: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth() : 490),
             height: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : 260),
             colorAxis: {
                 colors: ['#f5f5f5', '#333']

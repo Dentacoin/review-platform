@@ -117,32 +117,59 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.lang-title') }}</label>
+                                <label class="col-md-4 "><b>Survey page</b></label>
+                                <label class="col-md-4 ">Survey SEO</label>
+                                <label class="col-md-4 ">Survey Social</label>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-md-4">
-                                    {{ Form::text('title-'.$code, !empty($item) ? $item->{'title:'.$code} : null, array('maxlength' => 256, 'class' => 'form-control input-title')) }}
+                                    {{ Form::text('title-'.$code, !empty($item) ? $item->{'title:'.$code} : null, array('maxlength' => 256, 'class' => 'form-control input-title', 'placeholder' => 'Title for Survey page - Website')) }}
                                 </div>
-                                <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.lang-seo-title') }}</label>
                                 <div class="col-md-4">
-                                    {{ Form::text('seo_title-'.$code, !empty($item) ? $item->translateOrNew($code)->seo_title : null, array('maxlength' => 256, 'class' => 'form-control input-title')) }}
+                                    {{ Form::text('seo_title-'.$code, !empty($item) ? $item->translateOrNew($code)->seo_title : null, array('maxlength' => 256, 'class' => 'form-control input-title', 'placeholder' => 'Title for Survey page - SEO')) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ Form::text('social_title-'.$code, !empty($item) ? $item->translateOrNew($code)->social_title : null, array('maxlength' => 256, 'class' => 'form-control input-title', 'placeholder' => 'Title for Survey page - Socials')) }}
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.lang-description') }}</label>
                                 <div class="col-md-4">
-                                    {{ Form::textarea('description-'.$code, !empty($item) ? $item->{'description:'.$code} : null, array('maxlength' => 2048, 'class' => 'form-control input-description')) }}
+                                    {{ Form::textarea('description-'.$code, !empty($item) ? $item->{'description:'.$code} : null, array('maxlength' => 2048, 'class' => 'form-control input-description', 'placeholder' => 'Description for Survey page - Website')) }}
                                 </div>
-                                <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.lang-seo-description') }}</label>
                                 <div class="col-md-4">
-                                    {{ Form::textarea('seo_description-'.$code, !empty($item) ? $item->translateOrNew($code)->seo_description : null, array('maxlength' => 2048, 'class' => 'form-control input-description')) }}
+                                    {{ Form::textarea('seo_description-'.$code, !empty($item) ? $item->translateOrNew($code)->seo_description : null, array('maxlength' => 2048, 'class' => 'form-control input-description', 'placeholder' => 'Description for Survey page - SEO')) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ Form::textarea('social_description-'.$code, !empty($item) ? $item->translateOrNew($code)->social_description : null, array('maxlength' => 2048, 'class' => 'form-control input-description', 'placeholder' => 'Description for Survey page - Socials')) }}
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label">Stats description</label>
+                                <label class="col-md-4 "><b>Stats page</b></label>
+                                <label class="col-md-4 ">Stats SEO</label>
+                                <label class="col-md-4 ">Stats Social</label>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-md-4">
-                                    {{ Form::textarea('stats_description-'.$code, !empty($item) ? $item->translateOrNew($code)->stats_description : null, array('maxlength' => 2048, 'class' => 'form-control input-stats_description')) }}
+                                    {{ Form::text('stats_title-'.$code, 'Same as survey title', array('maxlength' => 256, 'class' => 'form-control input-title', 'disabled' => 'disabled', 'placeholder' => 'Title for Stats page - Website')) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ Form::text('seo_stats_title-'.$code, !empty($item) ? $item->translateOrNew($code)->seo_stats_title : null, array('maxlength' => 256, 'class' => 'form-control input-title', 'placeholder' => 'Title for Stats page - SEO')) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ Form::text('social_stats_title-'.$code, !empty($item) ? $item->translateOrNew($code)->social_stats_title : null, array('maxlength' => 256, 'class' => 'form-control input-title', 'placeholder' => 'Title for Stats page - Socials')) }}
                                 </div>
                             </div>
-
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    {{ Form::textarea('stats_description-'.$code, !empty($item) ? $item->translateOrNew($code)->stats_description : null, array('maxlength' => 2048, 'class' => 'form-control input-stats_description', 'placeholder' => 'Description for Stats page - Website')) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ Form::textarea('seo_stats_description-'.$code, !empty($item) ? $item->translateOrNew($code)->seo_stats_description : null, array('maxlength' => 2048, 'class' => 'form-control input-description', 'placeholder' => 'Description for Stats page - SEO')) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ Form::textarea('social_stats_description-'.$code, !empty($item) ? $item->translateOrNew($code)->social_stats_description : null, array('maxlength' => 2048, 'class' => 'form-control input-description', 'placeholder' => 'Description for Stats page - Socials' )) }}
+                                </div>
+                            </div>
                         </div>
                     @endforeach
                 </div>

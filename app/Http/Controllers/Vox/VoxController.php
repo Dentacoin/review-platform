@@ -625,12 +625,12 @@ class VoxController extends FrontController
                 'description' => $vox->translate(App::getLocale())->seo_description
             ]),
             'social_title' => trans('vox.social.questionnaire.title', [
-                'title' => $vox->translate(App::getLocale())->seo_title,
-                'description' => $vox->translate(App::getLocale())->seo_description
+                'title' => $vox->translate(App::getLocale())->social_title,
+                'description' => $vox->translate(App::getLocale())->social_description
             ]),
             'social_description' => trans('vox.social.questionnaire.description', [
-                'title' => $vox->translate(App::getLocale())->seo_title,
-                'description' => $vox->translate(App::getLocale())->seo_description
+                'title' => $vox->translate(App::getLocale())->social_title,
+                'description' => $vox->translate(App::getLocale())->social_description
             ]),
             'email_data' => [
             	'title' => $email_subject,

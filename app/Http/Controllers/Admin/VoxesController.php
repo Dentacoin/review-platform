@@ -537,6 +537,14 @@ class VoxesController extends AdminController
                 $translation->stats_description = $this->request->input('stats_description-'.$key);
                 $translation->seo_title = $this->request->input('seo_title-'.$key);
                 $translation->seo_description = $this->request->input('seo_description-'.$key);
+                $translation->social_title = $this->request->input('social_title-'.$key);
+                $translation->social_description = $this->request->input('social_description-'.$key);
+
+                $translation->seo_stats_title = $this->request->input('seo_stats_title-'.$key);
+                $translation->seo_stats_description = $this->request->input('seo_stats_description-'.$key);
+                $translation->social_stats_title = $this->request->input('social_stats_title-'.$key);
+                $translation->social_stats_description = $this->request->input('social_stats_description-'.$key);
+                
                 $translation->save();
             }
         }

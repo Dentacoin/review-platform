@@ -67,29 +67,7 @@
 									@endforeach
 								</div>
 							@endif
-							<div class="graphs flex">							
-
-								<div class="share-buttons flex" data-href="{{ $vox->getStatsList() }}">
-									<span>
-										{!! trans('vox.page.stats.share') !!}
-									</span>
-									<div class="col fb tac">
-										<a class="share" href="javascript:;">
-											<i class="fab fa-facebook-f"></i>
-										</a>
-									</div>
-									<div class="col twt tac">
-										<a class="share" href="javascript:;">
-											<i class="fab fa-twitter"></i>
-										</a>
-									</div>
-								</div>
-								@if($question->used_for_stats=='standard')
-									<a class="nav nav-left">
-									</a>
-									<a class="nav nav-right">
-									</a>
-								@endif
+							<div class="graphs flex">						
 								<div class="chart">
 									<div class="main-chart"></div>
 									<div class="total total-all">
@@ -129,6 +107,28 @@
 									<div class="main-title">
 										{{ $question->related->question }}
 									</div>
+								@endif	
+
+								<div class="share-buttons flex" data-href="{{ $vox->getStatsList() }}">
+									<span>
+										{!! trans('vox.page.stats.share') !!}
+									</span>
+									<div class="col fb tac">
+										<a class="share" href="javascript:;">
+											<i class="fab fa-facebook-f"></i>
+										</a>
+									</div>
+									<div class="col twt tac">
+										<a class="share" href="javascript:;">
+											<i class="fab fa-twitter"></i>
+										</a>
+									</div>
+								</div>
+								@if($question->used_for_stats=='standard')
+									<a class="nav nav-left">
+									</a>
+									<a class="nav nav-right">
+									</a>
 								@endif
 							</div>
 						</div>

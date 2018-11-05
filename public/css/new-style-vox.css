@@ -1802,9 +1802,7 @@ header {
         .page-statistics .filters-wrapper .filters a {
           margin-bottom: 3px;
           display: inline-block;
-          border-width: 1px; }
-          .page-statistics .filters-wrapper .filters a[filter="custom"] {
-            display: none; } }
+          border-width: 1px; } }
       .page-statistics .filters-wrapper .filters a:last-child {
         border-right: none; }
       .page-statistics .filters-wrapper .filters a.active, .page-statistics .filters-wrapper .filters a:hover {
@@ -1812,6 +1810,16 @@ header {
   .page-statistics .filters-wrapper .filters-custom #custom-datepicker {
     display: inline-block;
     margin: 15px auto 0 auto; }
+    .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepicker {
+      display: flex; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepicker {
+          display: block; } }
+    @media screen and (max-width: 768px) {
+      .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepickerSpace,
+      .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepickerBlock,
+      .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepickerContainer > table > tbody > tr {
+        display: block; } }
   .page-statistics .filters-wrapper .filters-custom #datepicker-extras {
     margin-left: 25px;
     padding-top: 42px; }
@@ -1998,7 +2006,7 @@ header {
         text-align: left;
         font-size: 14px;
         bottom: 5px; }
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 1200px) {
           .page-statistics .stats .stat .contents .graphs .map-hint {
             left: 6px;
             bottom: 30px; } }
@@ -2016,24 +2024,54 @@ header {
           background-image: url(../new-vox-img/stats-females.png); }
       .page-statistics .stats .stat .contents .graphs .chart {
         z-index: 10;
-        position: relative; }
+        position: relative;
+        order: 2; }
+        @media screen and (max-width: 1200px) {
+          .page-statistics .stats .stat .contents .graphs .chart {
+            order: 3; } }
+        .page-statistics .stats .stat .contents .graphs .chart:first-child {
+          order: 1; }
+          @media screen and (max-width: 768px) {
+            .page-statistics .stats .stat .contents .graphs .chart:first-child {
+              order: 2; } }
         .page-statistics .stats .stat .contents .graphs .chart.dependency, .page-statistics .stats .stat .contents .graphs .chart.age, .page-statistics .stats .stat .contents .graphs .chart.country_id, .page-statistics .stats .stat .contents .graphs .chart.marital_status, .page-statistics .stats .stat .contents .graphs .chart.children, .page-statistics .stats .stat .contents .graphs .chart.education {
           padding-top: 20px;
           padding-left: 20px; }
-          @media screen and (max-width: 768px) {
+          @media screen and (max-width: 1200px) {
             .page-statistics .stats .stat .contents .graphs .chart.dependency, .page-statistics .stats .stat .contents .graphs .chart.age, .page-statistics .stats .stat .contents .graphs .chart.country_id, .page-statistics .stats .stat .contents .graphs .chart.marital_status, .page-statistics .stats .stat .contents .graphs .chart.children, .page-statistics .stats .stat .contents .graphs .chart.education {
               padding-left: 0px; } }
         .page-statistics .stats .stat .contents .graphs .chart svg > g > g:last-child {
           pointer-events: none; }
+        .page-statistics .stats .stat .contents .graphs .chart .mobile-chart {
+          padding: 0px 20px 20px 20px; }
+          .page-statistics .stats .stat .contents .graphs .chart .mobile-chart .custombar {
+            display: block;
+            width: 100%;
+            font-size: 12px;
+            line-height: 20px; }
+            .page-statistics .stats .stat .contents .graphs .chart .mobile-chart .custombar span {
+              display: block;
+              height: 10px;
+              margin-right: 10px;
+              transform: translateY(50%);
+              float: left; }
+          .page-statistics .stats .stat .contents .graphs .chart .mobile-chart .group-heading {
+            display: block;
+            margin-top: 5px;
+            font-weight: 600; }
       .page-statistics .stats .stat .contents .graphs .main-chart {
         background: #f6f6f6; }
       .page-statistics .stats .stat .contents .graphs .legend {
         flex-direction: column;
         justify-content: center;
-        margin-left: 20px; }
+        margin-left: 20px;
+        order: 3; }
+        @media screen and (max-width: 1200px) {
+          .page-statistics .stats .stat .contents .graphs .legend {
+            order: 2; } }
         @media screen and (max-width: 768px) {
           .page-statistics .stats .stat .contents .graphs .legend {
-            order: -1;
+            order: 1;
             padding: 10px 0px; } }
         .page-statistics .stats .stat .contents .graphs .legend div {
           color: #070707;
@@ -3377,10 +3415,6 @@ header {
           transform: rotate(180deg); }
 
 @media screen and (max-width: 768px) {
-  .page-profile header .header-right:hover .expander {
-    display: none; } }
-
-@media screen and (max-width: 768px) {
   .page-profile .site-content .container {
     padding: 0px; }
     .page-profile .site-content .container .alert {
@@ -3418,28 +3452,6 @@ header {
         .page-profile .site-content .profile-menu .heading img {
           width: 63px;
           height: 63px; } }
-  @media screen and (max-width: 992px) {
-    .page-profile .site-content .profile-menu .menu-list {
-      position: relative; }
-      .page-profile .site-content .profile-menu .menu-list .list-item.active {
-        position: relative; }
-        .page-profile .site-content .profile-menu .menu-list .list-item.active:after {
-          display: inline-block;
-          font-style: normal;
-          font-variant: normal;
-          text-rendering: auto;
-          -webkit-font-smoothing: antialiased;
-          position: absolute;
-          right: 10px;
-          top: 1px;
-          font-size: 40px;
-          font-family: "Font Awesome 5 Free";
-          font-weight: 900;
-          content: "\f107"; }
-      .page-profile .site-content .profile-menu .menu-list.open .list-item {
-        display: block; }
-      .page-profile .site-content .profile-menu .menu-list.open .list-item.active:after {
-        content: "\f106"; } }
   .page-profile .site-content .profile-menu .menu-list .list-item {
     display: block;
     padding-left: 50px;
@@ -3451,17 +3463,11 @@ header {
     @media screen and (max-width: 1200px) {
       .page-profile .site-content .profile-menu .menu-list .list-item {
         padding-left: 20px; } }
-    @media screen and (max-width: 992px) {
-      .page-profile .site-content .profile-menu .menu-list .list-item {
-        display: none; } }
     .page-profile .site-content .profile-menu .menu-list .list-item:hover, .page-profile .site-content .profile-menu .menu-list .list-item.active {
       background: #f0f9ff;
       color: #80b8dc; }
     .page-profile .site-content .profile-menu .menu-list .list-item.active {
       border-color: #80b8dc; }
-      @media screen and (max-width: 992px) {
-        .page-profile .site-content .profile-menu .menu-list .list-item.active {
-          display: block; } }
     .page-profile .site-content .profile-menu .menu-list .list-item img {
       width: 14px;
       height: 14px;
@@ -3473,7 +3479,8 @@ header {
     vertical-align: sub; }
   @media screen and (max-width: 992px) {
     .page-profile .site-content h2.page-title {
-      display: none; } }
+      font-size: 22px;
+      margin-top: 20px; } }
 .page-profile .site-content .container > .col-md-9 {
   background-image: url(../new-vox-img/profile-background.png);
   background-size: cover;

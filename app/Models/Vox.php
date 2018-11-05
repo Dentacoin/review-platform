@@ -18,6 +18,15 @@ class Vox extends Model {
     public $translatedAttributes = [
         'title',
         'description',
+        'stats_description',
+        'seo_title',
+        'seo_description',
+        'social_title',
+        'social_description',
+        'seo_stats_title',
+        'seo_stats_description',
+        'social_stats_title',
+        'social_stats_description',
     ];
 
     protected $fillable = [
@@ -26,6 +35,12 @@ class Vox extends Model {
         'stats_description',
         'seo_title',
         'seo_description',
+        'social_title',
+        'social_description',
+        'seo_stats_title',
+        'seo_stats_description',
+        'social_stats_title',
+        'social_stats_description',
         'slug',
         'reward',
         'reward_usd',

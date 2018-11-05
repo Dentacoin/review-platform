@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
     //Mobile menu
+    /*
     var mobileMenuClick = function( e ) {
         console.log( $(window).width()<992, $(this).hasClass('active') );
         if( $(window).width()<992 && $(this).hasClass('active')  ) {
@@ -9,6 +10,14 @@ $(document).ready(function(){
         }
     }
     $('.menu-list a').click(mobileMenuClick);
+    */
+
+    if( $('.list-item.active').length && $(window).width()<992 ) {
+        history.scrollRestoration = "manual";
+        $('html, body').animate({
+            scrollTop: $('.page-title').offset().top - 20
+        }, 500);
+    }
 
     //Invites
 

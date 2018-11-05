@@ -2446,10 +2446,6 @@ header {
 	    			margin-bottom: 3px;
 	    			display: inline-block;
 	    			border-width: 1px;
-
-	    			&[filter="custom"] {
-	    				display: none;
-	    			}
 	    		}
 
 				&:last-child {
@@ -2467,6 +2463,22 @@ header {
 			#custom-datepicker {
 				display: inline-block;
 				margin: 15px auto 0 auto;
+
+				.datepicker {
+					display: flex;
+
+					@media #{$phone} {
+						display: block;
+					}
+				}
+
+				@media #{$phone} {
+					.datepickerSpace,
+					.datepickerBlock,
+					.datepickerContainer > table > tbody > tr {
+						display: block;
+					}
+				}
 			}
 
 			#datepicker-extras {
@@ -2728,7 +2740,7 @@ header {
 					    font-size: 14px;
 					    bottom: 5px;
 
-					    @media #{$phone} {
+						@media screen and (max-width: 1200px) {
 					    	left: 6px;
 					    	bottom: 30px;
 					    }
@@ -2755,6 +2767,19 @@ header {
 					.chart {
 						z-index: 10;
 					    position: relative;
+					    order: 2;
+
+						@media screen and (max-width: 1200px) {
+				    		order: 3;
+				    	}
+
+					    &:first-child {
+					    	order: 1;
+
+							@media #{$phone} {
+						    	order: 2;
+						    }
+					    }
 
 						&.dependency,
 						&.age,
@@ -2764,12 +2789,37 @@ header {
 						&.education {
 							padding-top: 20px;
 							padding-left: 20px;
-							@media #{$phone} {
+							@media screen and (max-width: 1200px) {
 								padding-left: 0px;
 							}
 						}
 
 						svg > g > g:last-child { pointer-events: none }
+
+						.mobile-chart {
+							padding: 0px 20px 20px 20px;
+
+							.custombar {
+								display: block;
+								width: 100%;
+								font-size: 12px;
+								line-height: 20px;
+
+								span {
+									display: block;
+									height: 10px;
+								    margin-right: 10px;
+								    transform: translateY(50%);
+								    float: left;
+								}
+							}
+
+							.group-heading {
+								display: block;
+								margin-top: 5px;
+								font-weight: 600;
+							}
+						}
 					}
 
 					.main-chart {
@@ -2780,9 +2830,13 @@ header {
 					    flex-direction: column;
 					    justify-content: center;
 					    margin-left: 20px;
+					    order: 3;
 
+						@media screen and (max-width: 1200px) {
+					    	order: 2;
+					    }
 						@media #{$phone} {
-					    	order: -1;
+					    	order: 1;
     						padding: 10px 0px;
 					    }
 
@@ -4453,14 +4507,6 @@ header {
 
 }
 
-.page-profile {
-	header .header-right:hover .expander {
-		@media #{$phone} {
-			display: none;
-		}
-	}
-}
-
 .page-profile .site-content {
 
 	@media #{$phone} {
@@ -4526,40 +4572,6 @@ header {
 
 		
 		.menu-list {
-			@media screen and (max-width: 992px) {
-    			position: relative;
-
-			    .list-item.active {
-			    	position: relative;
-			    	
-			    	&:after {
-					    display: inline-block;
-					    font-style: normal;
-					    font-variant: normal;
-					    text-rendering: auto;
-					    -webkit-font-smoothing: antialiased;
-					    position: absolute;
-    					right: 10px;
-					    top: 1px;
-					    font-size: 40px;
-    					font-family: "Font Awesome 5 Free"; font-weight: 900; 
-    					content: "\f107";
-
-			    	}
-			    }
-
-			    &.open {
-			    	.list-item {
-			    		display: block;
-			    	}
-
-				    .list-item.active {
-				    	&:after {
-    						content: "\f106";
-				    	}
-				    }
-			    }
-			}
 
 			.list-item {
 				display: block;
@@ -4574,11 +4586,6 @@ header {
 					padding-left: 20px;
 				}
 
-
-				@media screen and (max-width: 992px) {
-					display: none;
-				}
-
 				&:hover,
 				&.active {
 					background: #f0f9ff;
@@ -4587,10 +4594,6 @@ header {
 
 				&.active {
 					border-color: #80b8dc;
-					
-					@media screen and (max-width: 992px) {
-						display: block;
-					}
 				}
 
 				img {
@@ -4612,7 +4615,8 @@ header {
 		}
 
 		@media screen and (max-width: 992px) {
-			display: none;
+			font-size: 22px;
+			margin-top: 20px;
 		}
 	}
 

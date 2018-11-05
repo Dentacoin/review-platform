@@ -566,9 +566,10 @@ $(document).ready(function(){
 
 	$('.header-a').click( function(e) {
 		if( $(window).width()<768 ) {
-			if( $('.menu-list a.active').length ) {
-				$('.menu-list a.active').trigger('click');
-			}
+			
+			// if( $('.menu-list a.active').length ) {
+			// 	$('.menu-list a.active').trigger('click');
+			// }
 
 			e.preventDefault();
 			return false;
