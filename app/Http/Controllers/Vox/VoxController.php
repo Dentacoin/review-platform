@@ -616,22 +616,10 @@ class VoxController extends FrontController
 			'js' => [
 				'vox.js'
 			],
-            'seo_title' => trans('vox.seo.questionnaire.title', [
-                'title' => $vox->translate(App::getLocale())->seo_title,
-                'description' => $vox->translate(App::getLocale())->seo_description
-            ]),
-            'seo_description' => trans('vox.seo.questionnaire.description', [
-                'title' => $vox->translate(App::getLocale())->seo_title,
-                'description' => $vox->translate(App::getLocale())->seo_description
-            ]),
-            'social_title' => trans('vox.social.questionnaire.title', [
-                'title' => $vox->translate(App::getLocale())->social_title,
-                'description' => $vox->translate(App::getLocale())->social_description
-            ]),
-            'social_description' => trans('vox.social.questionnaire.description', [
-                'title' => $vox->translate(App::getLocale())->social_title,
-                'description' => $vox->translate(App::getLocale())->social_description
-            ]),
+            'seo_title' => $vox->translate(App::getLocale())->seo_title,
+            'seo_description' => $vox->translate(App::getLocale())->seo_description,
+            'social_title' => $vox->translate(App::getLocale())->social_title,
+            'social_description' => $vox->translate(App::getLocale())->social_description,
             'email_data' => [
             	'title' => $email_subject,
             	'content' => $email_content,
