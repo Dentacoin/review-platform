@@ -616,6 +616,8 @@ class VoxController extends FrontController
 			'js' => [
 				'vox.js'
 			],
+            'canonical' => $vox->getLink(),
+            'social_image' => $vox->getSocialImageUrl('survey'),
             'seo_title' => $vox->translate(App::getLocale())->seo_title,
             'seo_description' => $vox->translate(App::getLocale())->seo_description,
             'social_title' => $vox->translate(App::getLocale())->social_title,

@@ -47,6 +47,7 @@ return [
                 'categories' => 'categories',
                 'scales' => 'scales',
                 'faq' => 'faq',
+                'badges' => 'badges',
             ),
             'js' => array(
                 'vox.js'

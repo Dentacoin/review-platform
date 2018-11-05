@@ -9,6 +9,7 @@ use App\Models\VoxCategory;
 use App\Models\VoxQuestion;
 use App\Models\VoxToCategory;
 use App\Models\VoxScale;
+use App\Models\VoxBadge;
 use Illuminate\Support\Facades\Input;
 use Image;
 use Request;
@@ -554,6 +555,10 @@ class VoxesController extends AdminController
             $img = Image::make( Input::file('photo') )->orientate();
             $item->addImage($img);
         }
+        if( Input::file('photo-social') ) {
+            $img = Image::make( Input::file('photo-social') )->orientate();
+            $item->addSocialImage($img);
+        }
 
 
     }
@@ -761,6 +766,30 @@ class VoxesController extends AdminController
 
         return $this->showView('voxes-faq', array(
             'content' => $content
+        ));
+
+    }
+
+
+
+    public function badges() {
+            
+        if( Input::file('photo') && request('id') ) {
+            $item = VoxBadge::find( request('id') );
+            if($item) {
+                $img = Image::make( Input::file('photo') )->orientate();
+                $item->addImage($img);
+
+                $voxes = Vox::whereNotNull('hasimage_social')->get();
+                foreach ($voxes as $v) {
+                    $v->regenerateSocialImages();
+                }
+            }
+        }
+
+
+        return $this->showView('voxes-badges', array(
+            'items' => VoxBadge::get()
         ));
 
     }

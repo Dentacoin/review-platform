@@ -34,13 +34,24 @@
 				</div>
 				<div id="datepicker-extras">
 					<div class="flex">
-						<input type="text" id="date-from">
+						<div>
+							{!! trans('vox.page.stats.period-from') !!}:<br/>
+							<input type="text" id="date-from">
+						</div>
 						-
-						<input type="text" id="date-to">
+						<div>
+							{!! trans('vox.page.stats.period-to') !!}:<br/>
+							<input type="text" id="date-to">
+						</div>
 					</div>
-					<a href="javascript:;" id="custom-dates-save" class="btn">
-						{!! trans('vox.page.stats.period-custom-submit') !!}
-					</a>						
+					<div class="button-holder">
+						<a href="javascript:;" id="custom-dates-save" class="btn">
+							{!! trans('vox.page.stats.period-custom-submit') !!}
+						</a>						
+						<a class="text">
+							{!! trans('vox.page.stats.period-clear') !!}
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>

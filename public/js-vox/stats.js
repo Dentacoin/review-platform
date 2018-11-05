@@ -149,6 +149,13 @@ $(document).ready(function(){
         } )
     }
 
+    $('.button-holder .text').click( function() {
+        $('#date-from').val('');
+        $('#date-to').val('');
+        $('#custom-datepicker').DatePickerClear();
+        //handleFilterChange();
+    } ) 
+
     $('.filters a').click( function(e) {
         e.preventDefault();
 

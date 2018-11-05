@@ -2467,12 +2467,25 @@ header {
 				.datepicker {
 					display: flex;
 
-					@media #{$phone} {
+					@media screen and (max-width: 992px) {
 						display: block;
+					}
+
+					table {
+						@media screen and (max-width: 992px) {
+							width: 100%;
+						}
+					}
+
+					tbody.datepickerDays a {
+						@media screen and (max-width: 992px) {
+						    text-align: center;
+						    width: 100%;
+						}
 					}
 				}
 
-				@media #{$phone} {
+				@media screen and (max-width: 992px) {
 					.datepickerSpace,
 					.datepickerBlock,
 					.datepickerContainer > table > tbody > tr {
@@ -2485,8 +2498,59 @@ header {
 				margin-left: 25px;
     			padding-top: 42px;
 
+				@media screen and (max-width: 992px) {
+					margin-left: 0px;
+				}
+
     			.flex {
     				line-height: 30px;
+					align-items: baseline;
+    			}
+
+    			.button-holder {
+    				display: flex;
+    				align-items: center;
+					margin-top: 35px;
+
+					@media screen and (max-width: 992px) {
+    					display: block;
+					}
+
+					.btn {
+					    height: 30px;
+					    line-height: 30px;
+						border-radius: 15px;
+						color: white;
+						background: $main-color;
+						padding: 0px 20px;
+						text-align: center;
+						display: inline-block;
+						float: left;
+						margin-left: 10px;
+
+						@media screen and (max-width: 992px) {
+						    float: none;
+						    display: block;
+						}
+					}
+
+					.text {
+						display: inline-block;
+						margin-left: 10px;
+						cursor: pointer;
+						color: $main-color;
+
+						&:hover {
+							text-decoration: underline;
+						}
+
+						@media screen and (max-width: 992px) {
+						    display: block;
+						    text-align: center;
+						    margin-left: 0px;
+						    margin-top: 10px;
+						}
+					}
     			}
 
 				input {
@@ -2502,19 +2566,6 @@ header {
 					text-align: center;
 				}
 
-				.btn {
-					margin-top: 35px;
-				    height: 30px;
-				    line-height: 30px;
-					border-radius: 15px;
-					color: white;
-					background: $main-color;
-					padding: 0px 20px;
-					text-align: center;
-					display: inline-block;
-					float: left;
-					margin-left: 10px;
-				}
 			}
 		}
 	}

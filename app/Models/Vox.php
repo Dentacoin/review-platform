@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Image;
+
 use App;
 use App\Models\VoxToCategory;
 use App\Models\Reward;
 use App\Models\VoxReward;
+use App\Models\VoxBadge;
 
 class Vox extends Model {
     
@@ -51,6 +54,7 @@ class Vox extends Model {
         'stats_featured',
         'has_stats',
         'hasimage',
+        'hasimage_social',
     ];
 
     protected $dates = [
@@ -160,6 +164,43 @@ class Vox extends Model {
         $img->save($to_thumb);
         $this->hasimage = true;
         $this->save();
+    }
+
+    public function getSocialImageUrl($type = 'social') {
+        return $this->hasimage_social ? url('/storage/voxes/'.($this->id%100).'/'.$this->id.'-'.$type.'.png') : url('new-vox-img/stats-dummy.png');
+    }
+    public function getSocialImagePath($type = 'social') {
+        $folder = storage_path().'/app/public/voxes/'.($this->id%100);
+        if(!is_dir($folder)) {
+            mkdir($folder);
+        }
+        return $folder.'/'.$this->id.'-'.$type.'.png';
+    }
+
+    public function addSocialImage($img) {
+
+        $to = $this->getSocialImagePath();
+
+        $img->fit(1200, 628);
+        $img->save($to);
+        $this->hasimage_social = true;
+        $this->save();
+
+        $this->regenerateSocialImages();
+    }
+
+    public function regenerateSocialImages() {
+        $types = [
+            'survey' => 1, 
+            'stats' => 2
+        ];
+
+        foreach ($types as $type => $tid) {
+            $original = Image::make( $this->getSocialImagePath() );
+            $badge = VoxBadge::find($tid);
+            $original->insert( $badge->getImagePath(), 'bottom-right', 20, 20);
+            $original->save( $this->getSocialImagePath($type) );
+        }
     }
     
 }

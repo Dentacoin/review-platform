@@ -1812,10 +1812,17 @@ header {
     margin: 15px auto 0 auto; }
     .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepicker {
       display: flex; }
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 992px) {
         .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepicker {
           display: block; } }
-    @media screen and (max-width: 768px) {
+      @media screen and (max-width: 992px) {
+        .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepicker table {
+          width: 100%; } }
+      @media screen and (max-width: 992px) {
+        .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepicker tbody.datepickerDays a {
+          text-align: center;
+          width: 100%; } }
+    @media screen and (max-width: 992px) {
       .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepickerSpace,
       .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepickerBlock,
       .page-statistics .filters-wrapper .filters-custom #custom-datepicker .datepickerContainer > table > tbody > tr {
@@ -1823,8 +1830,47 @@ header {
   .page-statistics .filters-wrapper .filters-custom #datepicker-extras {
     margin-left: 25px;
     padding-top: 42px; }
+    @media screen and (max-width: 992px) {
+      .page-statistics .filters-wrapper .filters-custom #datepicker-extras {
+        margin-left: 0px; } }
     .page-statistics .filters-wrapper .filters-custom #datepicker-extras .flex {
-      line-height: 30px; }
+      line-height: 30px;
+      align-items: baseline; }
+    .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder {
+      display: flex;
+      align-items: center;
+      margin-top: 35px; }
+      @media screen and (max-width: 992px) {
+        .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder {
+          display: block; } }
+      .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder .btn {
+        height: 30px;
+        line-height: 30px;
+        border-radius: 15px;
+        color: white;
+        background: #38ace5;
+        padding: 0px 20px;
+        text-align: center;
+        display: inline-block;
+        float: left;
+        margin-left: 10px; }
+        @media screen and (max-width: 992px) {
+          .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder .btn {
+            float: none;
+            display: block; } }
+      .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder .text {
+        display: inline-block;
+        margin-left: 10px;
+        cursor: pointer;
+        color: #38ace5; }
+        .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder .text:hover {
+          text-decoration: underline; }
+        @media screen and (max-width: 992px) {
+          .page-statistics .filters-wrapper .filters-custom #datepicker-extras .button-holder .text {
+            display: block;
+            text-align: center;
+            margin-left: 0px;
+            margin-top: 10px; } }
     .page-statistics .filters-wrapper .filters-custom #datepicker-extras input {
       height: 30px;
       line-height: 30px;
@@ -1836,18 +1882,6 @@ header {
       padding: 0px 5px;
       border: 1px solid #38a2e5;
       text-align: center; }
-    .page-statistics .filters-wrapper .filters-custom #datepicker-extras .btn {
-      margin-top: 35px;
-      height: 30px;
-      line-height: 30px;
-      border-radius: 15px;
-      color: white;
-      background: #38ace5;
-      padding: 0px 20px;
-      text-align: center;
-      display: inline-block;
-      float: left;
-      margin-left: 10px; }
 .page-statistics .stats .stat {
   border-bottom: 1px solid #f3f3f3; }
   .page-statistics .stats .stat:last-child {

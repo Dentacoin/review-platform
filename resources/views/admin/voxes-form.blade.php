@@ -86,6 +86,25 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Socials Image</label>
+                        <div class="col-md-9">
+                            {{ Form::file('photo-social', ['id' => 'photo-social', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
+                            * Size: 1200x628, up to 2 MB<br/>
+                            @if(!empty($item) && $item->hasimage_social)
+                                <a target="_blank" href="{{ $item->getSocialImageUrl() }}">
+                                    <img src="{{ $item->getSocialImageUrl() }}" style="background: #2f7de1; width: 200px;" />
+                                </a>
+                                <a target="_blank" href="{{ $item->getSocialImageUrl('survey') }}">
+                                    <img src="{{ $item->getSocialImageUrl('survey') }}" style="background: #2f7de1; width: 200px;" />
+                                </a>
+                                <a target="_blank" href="{{ $item->getSocialImageUrl('stats') }}">
+                                    <img src="{{ $item->getSocialImageUrl('stats') }}" style="background: #2f7de1; width: 200px;" />
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- end panel -->

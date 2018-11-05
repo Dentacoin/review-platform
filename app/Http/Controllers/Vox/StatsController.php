@@ -287,7 +287,7 @@ class StatsController extends FrontController
 			],
 
             'canonical' => $vox->getStatsList(),
-            'social_image' => $vox->getImageUrl(),
+            'social_image' => $vox->getSocialImageUrl('stats'),
             'seo_title' => $vox->seo_stats_title,
             'seo_description' => $vox->seo_stats_description,
             'social_title' => $vox->social_stats_title,

@@ -90,7 +90,7 @@ class AdminController extends BaseController
                     unset($menu[$key]);
                 } else {
                     foreach ($menu[$key]['subpages'] as $sk => $sv) {
-                        if($sk=='categories' || $sk=='faq') {
+                        if($sk=='categories' || $sk=='faq' || $sk=='badges') {
                             unset( $menu[$key]['subpages'][$sk] );
                         }
                     }
