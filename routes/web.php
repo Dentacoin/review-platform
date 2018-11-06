@@ -67,6 +67,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('users/reviews/delete/{id}', 		'UsersController@delete_review');
 
 	Route::get('reviews', 							'ReviewsController@list');
+	Route::post('reviews/mass-delete', 							'ReviewsController@massdelete');
 	Route::any('reviews/add', 						'ReviewsController@add');
 	Route::any('reviews/delete/{id}', 				'ReviewsController@delete');
 	Route::any('reviews/restore/{id}', 				'ReviewsController@restore');
@@ -291,7 +292,7 @@ $voxRoutes = function () {
 
 			Route::any('questionnaire/{id}', 				'VoxController@home');
 			Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');
-			
+
 			Route::group(['middleware' => 'auth:web'], function () {
 				Route::any('welcome-to-dentavox', 					'RegisterController@register_success');
 

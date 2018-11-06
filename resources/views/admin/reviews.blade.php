@@ -52,22 +52,27 @@
                 <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title') }}</h4>
             </div>
             <div class="panel-body">
-				@include('admin.parts.table', [
-					'table_id' => 'users',
-					'table_fields' => [
-                        'created_at'        => array('format' => 'datetime'),
-                        'user'              => array('template' => 'admin.parts.table-reviews-user'),
-                        'dentist'           => array('template' => 'admin.parts.table-reviews-dentist'),
-                        'rating'            => array(),
-                        'verified'              => array('format' => 'bool'),
-                        'answer'              => array('template' => 'admin.parts.table-reviews-tx'),
-                        'status'              => array(),
-						'delete'			=> array('format' => 'delete'),
-					],
-                    'table_data' => $reviews,
-					'table_pagination' => false,
-                    'pagination_link' => array()
-				])
+                <form method="post" action="{{ url('cms/reviews/mass-delete') }}" >
+    				@include('admin.parts.table', [
+    					'table_id' => 'users',
+    					'table_fields' => [
+                            'selector'                => array('format' => 'selector'),
+                            'created_at'        => array('format' => 'datetime'),
+                            'user'              => array('template' => 'admin.parts.table-reviews-user'),
+                            'dentist'           => array('template' => 'admin.parts.table-reviews-dentist'),
+                            'rating'            => array(),
+                            'verified'              => array('format' => 'bool'),
+                            'answer'              => array('template' => 'admin.parts.table-reviews-tx'),
+                            'status'              => array(),
+    						'delete'			=> array('format' => 'delete'),
+    					],
+                        'table_data' => $reviews,
+    					'table_pagination' => false,
+                        'pagination_link' => array()
+    				])
+
+                    <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" onclick="return confirm('Are you sure?');">Delete selected reviews</button>
+                </form>
             </div>
         </div>
     </div>

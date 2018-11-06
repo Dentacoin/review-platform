@@ -19,7 +19,8 @@
 
 			<div class="vox-not-logged">
 				<h2>
-					Take Surveys & Get Rewards 
+					{{ trans('vox.page.questionnaire.not-logged-title') }}
+					
 				</h2>
 
 				<div class="flex break-mobile">
@@ -27,13 +28,13 @@
 						<img src="{{ url('new-vox-img/vox-not-logged-register.png') }}" />
 						<div>
 							<h3>
-								Don't have an account yet?
+								{{ trans('vox.page.questionnaire.not-logged-register-title') }}
 							</h3>
 							<p>
-								To start taking surveys on DentaVox, you need to answer a quick Welcome Questionnaire and log in using your Facebook or Civic account. 
+								{{ trans('vox.page.questionnaire.not-logged-register-content') }}
 							</p>
 							<a class="btn" href="{{ getLangUrl('welcome-survey') }}">
-								GET STARTED
+								{{ trans('vox.page.questionnaire.not-logged-register-button') }}
 							</a>
 						</div>
 					</div>
@@ -41,13 +42,13 @@
 						<img src="{{ url('new-vox-img/vox-not-logged-login.png') }}" />
 						<div>
 							<h3>
-								Already have an account?
+								{{ trans('vox.page.questionnaire.not-logged-login-title') }}
 							</h3>
 							<p>
-								Glad to see you on DentaVox again! Looks like you have logged out from your Profile. Click on the button below to log in and start your next round!
+								{{ trans('vox.page.questionnaire.not-logged-login-content') }}
 							</p>
 							<a class="btn" href="{{ getLangUrl('login') }}">
-								GO TO LOGIN
+								{{ trans('vox.page.questionnaire.not-logged-login-button') }}
 							</a>
 						</div>
 					</div>

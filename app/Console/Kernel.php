@@ -221,12 +221,40 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
         $schedule->call(function () {
 
             $alerts = [
-                'DCN' => [
+                [
+                    'currency' => 'DCN',
+                    'address' => '0xfb7442ac247ae842238b3e060cd8a5798c1969e3',
                     'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0xfb7442ac247ae842238b3e060cd8a5798c1969e3&tag=latest&apikey='.env('ETHERSCAN_API'),
                     'limit' => 200000
                 ],
-                'ETH' => [
+                [
+                    'currency' => 'ETH',
+                    'address' => '0xfb7442ac247ae842238b3e060cd8a5798c1969e3',
                     'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0xfb7442ac247ae842238b3e060cd8a5798c1969e3&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'limit' => 250000000000000000
+                ],
+                [
+                    'currency' => 'DCN',
+                    'address' => '0xb20c179bb3675d0c1035db98ed6591f6a645df2a',
+                    'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0xb20c179bb3675d0c1035db98ed6591f6a645df2a&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'limit' => 200000
+                ],
+                [
+                    'currency' => 'ETH',
+                    'address' => '0xb20c179bb3675d0c1035db98ed6591f6a645df2a',
+                    'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0xb20c179bb3675d0c1035db98ed6591f6a645df2a&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'limit' => 250000000000000000
+                ],
+                [
+                    'currency' => 'DCN',
+                    'address' => '0x10714e939fa7b0232de065003cd827fd4e28e5de',
+                    'url' => 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address=0x10714e939fa7b0232de065003cd827fd4e28e5de&tag=latest&apikey='.env('ETHERSCAN_API'),
+                    'limit' => 200000
+                ],
+                [
+                    'currency' => 'ETH',
+                    'address' => '0x10714e939fa7b0232de065003cd827fd4e28e5de',
+                    'url' => 'https://api.etherscan.io/api?module=account&action=balance&address=0x10714e939fa7b0232de065003cd827fd4e28e5de&tag=latest&apikey='.env('ETHERSCAN_API'),
                     'limit' => 250000000000000000
                 ],
             ];
@@ -237,15 +265,16 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
                 if(!empty($curl)) {
                     $curl = json_decode($curl, true);
                     if(!empty(intval($curl['result']))) {
-                        if( intval($curl['result']) < $data['limit'] ) { //0.25
+                        if( true || intval($curl['result']) < $data['limit'] ) { //0.25
+                            $currency = $data['currency'];
 
                             Mail::send('emails.template', [
                                     'user' => User::find(4232),
-                                    'content' => $currency.' balance is running low: '.( intval($curl['result']) / 1000000000000000000 ),
+                                    'content' => 'Address: '.$data['address'].': '.$currency.' balance is running low: '.( intval($curl['result']) / 1000000000000000000 ),
                                     'title' => $currency.' balance is running low',
                                     'subtitle' => '',
                                     'platform' => 'reviews',
-                                ], function ($message) {
+                                ], function ($message) use ($currency) {
 
                                     $sender = config('mail.from.address');
                                     $sender_name = 'Low Balance Alert';
@@ -261,14 +290,14 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
                                     ] );
                                     //$message->to( 'dokinator@gmail.com' );
                                     $message->replyTo($sender, $sender_name);
-                                    $message->subject('ETH balance is running low');
+                                    $message->subject($currency.' balance is running low');
                             });
                         }
                     }
                 }
             }
 
-        })->cron("30 7 * * *"); //10:30h BG Time
+        })->cron("* * * * *"); //10:30h BG Time
     }
 
     /**

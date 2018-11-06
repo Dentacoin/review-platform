@@ -76,6 +76,16 @@ class ReviewsController extends AdminController
         return redirect('cms/'.$this->current_page);
     }
 
+    public function massdelete(  ) {
+        if( Request::input('ids') ) {
+            Review::whereIn('id', Request::input('ids'))->delete();            
+        }
+
+        $this->request->session()->flash('success-message', 'All selected reviews and now deleted' );
+        return redirect('cms/'.$this->current_page);
+    }
+
+
     public function restore( $id ) {
         $item = Review::onlyTrashed()->find($id);
 
