@@ -22,28 +22,12 @@ class Vox extends Model {
         'title',
         'description',
         'stats_description',
-        'seo_title',
-        'seo_description',
-        'social_title',
-        'social_description',
-        'seo_stats_title',
-        'seo_stats_description',
-        'social_stats_title',
-        'social_stats_description',
     ];
 
     protected $fillable = [
         'title',
         'description',
         'stats_description',
-        'seo_title',
-        'seo_description',
-        'social_title',
-        'social_description',
-        'seo_stats_title',
-        'seo_stats_description',
-        'social_stats_title',
-        'social_stats_description',
         'slug',
         'reward',
         'reward_usd',
@@ -198,7 +182,7 @@ class Vox extends Model {
         foreach ($types as $type => $tid) {
             $original = Image::make( $this->getSocialImagePath() );
             $badge = VoxBadge::find($tid);
-            $original->insert( $badge->getImagePath(), 'bottom-right', 20, 20);
+            $original->insert( $badge->getImagePath(), 'bottom-left', 0, 0);
             $original->save( $this->getSocialImagePath($type) );
         }
     }
