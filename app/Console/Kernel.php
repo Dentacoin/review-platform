@@ -260,12 +260,12 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
             ];
 
 
-            foreach ($alerts as $currency => $data) {
+            foreach ($alerts as $data) {
                 $curl = file_get_contents($data['url']);
                 if(!empty($curl)) {
                     $curl = json_decode($curl, true);
                     if(!empty(intval($curl['result']))) {
-                        if( true || intval($curl['result']) < $data['limit'] ) { //0.25
+                        if( intval($curl['result']) < $data['limit'] ) { //0.25
                             $currency = $data['currency'];
 
                             Mail::send('emails.template', [
@@ -277,7 +277,7 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
                                 ], function ($message) use ($currency) {
 
                                     $sender = config('mail.from.address');
-                                    $sender_name = 'Low Balance Alert';
+                                    $sender_name = 'Low '.$currency.' Alert';
 
                                     $message->from($sender, $sender_name);
                                     $message->to( 'official@youpluswe.com' );
@@ -286,7 +286,8 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
                                         'philipp@dentacoin.com', 
                                         'donika.kraeva@dentacoin.com', 
                                         'ludwig.mair@dentacoin.com', 
-                                        'stoyan.georgiev@dentaprime.com'
+                                        'stoyan.georgiev@dentaprime.com',
+                                        'admin@dentacoin.com'
                                     ] );
                                     //$message->to( 'dokinator@gmail.com' );
                                     $message->replyTo($sender, $sender_name);
