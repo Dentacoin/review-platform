@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Stats Image</label>
+                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Thumb</label>
                         <div class="col-md-9">
                             {{ Form::file('photo', ['id' => 'photo', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
                             * Size: 520х352px, up to 2 MB<br/>
@@ -87,23 +87,35 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Socials Image</label>
+                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Social Image</label>
                         <div class="col-md-9">
                             {{ Form::file('photo-social', ['id' => 'photo-social', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
                             * Size: 1200x628, up to 2 MB<br/>
-                            @if(!empty($item) && $item->hasimage_social)
-                                <a target="_blank" href="{{ $item->getSocialImageUrl() }}">
-                                    <img src="{{ $item->getSocialImageUrl() }}" style="background: #2f7de1; width: 200px;" />
-                                </a>
-                                <a target="_blank" href="{{ $item->getSocialImageUrl('survey') }}">
-                                    <img src="{{ $item->getSocialImageUrl('survey') }}" style="background: #2f7de1; width: 200px;" />
-                                </a>
-                                <a target="_blank" href="{{ $item->getSocialImageUrl('stats') }}">
-                                    <img src="{{ $item->getSocialImageUrl('stats') }}" style="background: #2f7de1; width: 200px;" />
-                                </a>
-                            @endif
                         </div>
                     </div>
+                    @if(!empty($item) && $item->hasimage_social)
+                        <div class="form-group">
+                            <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">&nbsp;</label>
+                            <div class="col-md-3">
+                                Original image<br/>
+                                <a target="_blank" href="{{ $item->getSocialImageUrl() }}">
+                                    <img src="{{ $item->getSocialImageUrl() }}" style="background: #2f7de1; width: 100%;" />
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                Survey Social<br/>
+                                <a target="_blank" href="{{ $item->getSocialImageUrl('survey') }}">
+                                    <img src="{{ $item->getSocialImageUrl('survey') }}" style="background: #2f7de1; width: 100%;" />
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                Stats Social<br/>
+                                <a target="_blank" href="{{ $item->getSocialImageUrl('stats') }}">
+                                    <img src="{{ $item->getSocialImageUrl('stats') }}" style="background: #2f7de1; width: 100%;" />
+                                </a>
+                            </div>
+                        </div>
+                    @endif
 
                 </div>
             </div>
