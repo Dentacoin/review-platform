@@ -621,22 +621,22 @@ class VoxController extends FrontController
 
             'seo_title' => trans('vox.seo.questionnaire.title', [
                 'title' => $vox->title,
-                'description' => $vox->description
+                'description' => $vox->description,
                 'stats_description' => $vox->stats_description
             ]),
             'seo_description' => trans('vox.seo.questionnaire.description', [
                 'title' => $vox->title,
-                'description' => $vox->description
+                'description' => $vox->description,
                 'stats_description' => $vox->stats_description
             ]),
             'social_title' => trans('vox.social.questionnaire.title', [
                 'title' => $vox->title,
-                'description' => $vox->description
+                'description' => $vox->description,
                 'stats_description' => $vox->stats_description
             ]),
             'social_description' => trans('vox.social.questionnaire.description', [
                 'title' => $vox->title,
-                'description' => $vox->description
+                'description' => $vox->description,
                 'stats_description' => $vox->stats_description
             ]),
 

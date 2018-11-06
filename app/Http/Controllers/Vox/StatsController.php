@@ -290,22 +290,22 @@ class StatsController extends FrontController
             'social_image' => $vox->getSocialImageUrl('stats'),
             'seo_title' => trans('vox.seo.stats.title', [
                 'title' => $vox->title,
-                'description' => $vox->description
+                'description' => $vox->description,
                 'stats_description' => $vox->stats_description
             ]),
             'seo_description' => trans('vox.seo.stats.description', [
                 'title' => $vox->title,
-                'description' => $vox->description
+                'description' => $vox->description,
                 'stats_description' => $vox->stats_description
             ]),
             'social_title' => trans('vox.social.stats.title', [
                 'title' => $vox->title,
-                'description' => $vox->description
+                'description' => $vox->description,
                 'stats_description' => $vox->stats_description
             ]),
             'social_description' => trans('vox.social.stats.description', [
                 'title' => $vox->title,
-                'description' => $vox->description
+                'description' => $vox->description,
                 'stats_description' => $vox->stats_description
             ]),
         ));
