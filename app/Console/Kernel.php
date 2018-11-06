@@ -297,7 +297,7 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
                 }
             }
 
-        })->cron("* * * * *"); //10:30h BG Time
+        })->cron("30 7 * * *"); //10:30h BG Time
     }
 
     /**
