@@ -975,6 +975,70 @@ header {
     .section-manage .col-md-6 .row:last-child {
       margin-bottom: 0; }
 
+.vox-not-logged {
+  padding: 50px 30px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 5px 5px rgba(234, 234, 234, 0.75);
+  clear: both;
+  text-align: center; }
+  .vox-not-logged h2 {
+    margin-bottom: 55px;
+    font-size: 30px;
+    font-weight: bold;
+    color: black; }
+    @media screen and (max-width: 768px) {
+      .vox-not-logged h2 {
+        margin-bottom: 30px;
+        font-size: 24px; } }
+  .vox-not-logged img {
+    margin-right: 23px;
+    width: 78px;
+    height: 64px; }
+    @media screen and (max-width: 768px) {
+      .vox-not-logged img {
+        margin: 0 auto 20px auto;
+        display: block; } }
+  .vox-not-logged h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #090909; }
+    @media screen and (max-width: 768px) {
+      .vox-not-logged h3 {
+        margin-bottom: 10px;
+        font-size: 18px; } }
+  .vox-not-logged p {
+    font-size: 18px;
+    color: #090909; }
+    @media screen and (max-width: 768px) {
+      .vox-not-logged p {
+        font-size: 14px; } }
+  .vox-not-logged .flex .col {
+    padding: 0px 15px;
+    display: flex;
+    text-align: left; }
+    @media screen and (max-width: 768px) {
+      .vox-not-logged .flex .col {
+        padding: 20px 0px;
+        display: block;
+        text-align: center; } }
+  .vox-not-logged a.btn {
+    height: 45px;
+    line-height: 45px;
+    background: #3daee6;
+    color: white;
+    min-width: 180px;
+    padding: 0px 20px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-top: 40px; }
+    @media screen and (max-width: 768px) {
+      .vox-not-logged a.btn {
+        margin-top: 10px; } }
+
 .questions h3 {
   color: #060606;
   margin-bottom: 10px; }

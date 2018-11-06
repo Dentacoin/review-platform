@@ -289,12 +289,11 @@ $voxRoutes = function () {
 			Route::any('dental-survey-stats', 					'StatsController@home');
 			Route::any('dental-survey-stats/{id}', 				'StatsController@stats');
 
+			Route::any('questionnaire/{id}', 				'VoxController@home');
+			Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');
 			
 			Route::group(['middleware' => 'auth:web'], function () {
 				Route::any('welcome-to-dentavox', 					'RegisterController@register_success');
-
-				Route::any('questionnaire/{id}', 				'VoxController@home');
-				Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');
 
 				Route::post('phone/save', 						'PhoneController@save');
 				Route::post('phone/check', 						'PhoneController@check');
