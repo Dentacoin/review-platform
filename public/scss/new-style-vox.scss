@@ -2919,15 +2919,14 @@ header {
 						    }
 					    }
 
-						.dependency {
-							display: flex;
-							flex-direction: column;
-						}
+						display: flex;
+						flex-direction: column;
+						justify-content: space-around;
 
 						svg > g > g:last-child { pointer-events: none }
 
 						.mobile-chart {
-							padding: 0px 20px 20px 20px;
+							padding: 20px;
 
 							.custombar {
 								display: block;
