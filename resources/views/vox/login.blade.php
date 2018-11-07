@@ -13,6 +13,60 @@
 
 	<div class="section-login">
 
+
+		<div class="new-auth pre-login">
+			<div class="wrapper">
+				<div class="inner">
+					@include('front.errors')
+					<h2>
+						New Authentication Requirements
+					</h2>
+					<div class="flex break-mobile">
+						<p>
+							The new version of DentaVox requires your authentication through Facebook or Civic. If you don’t have an account on any of these platforms yet, we will give a one-month grace period to create one.<br/>
+							<br/>
+							After it’s over, you won’t be able to log into DentaVox with your email, and your Profile will be deactivated unless you log in using Facebook or Civic. <br/>
+							<br/>
+							Thank you for staying with us!
+
+						</p>
+						<form action="{{ getLangUrl('login') }}" method="post" class="form-horizontal">
+							{!! csrf_field() !!}
+							<div class="form-group">
+								<input type="text" name="email" value="{{ old('email') }}" class="form-control" placeholder="{{ trans('vox.page.login.email') }}">
+							</div>
+							<div class="form-group">
+								<input type="password" name="password" class="form-control" placeholder="{{ trans('vox.page.login.password') }}">
+							</div>
+							
+
+							<div class="form-group">
+								<button class="btn btn-primary btn-block" type="submit">
+									{{ trans('vox.page.login.submit') }}
+								</button>
+							</div>
+							
+							<div class="form-group tac">
+								<div class="checkbox tac">
+									<label for="remember" class="active">
+										<i class="far fa-square"></i>
+								    	<input id="remember" type="checkbox" name="remember" class="input-checkbox" checked>
+										{{ trans('vox.page.login.remember') }}
+									</label>
+								</div>
+							</div>
+
+							<div class="form-group tac">
+				            	<a class="recover-text" href="{{ getLangUrl('recover-password') }}">
+				            		{{ trans('vox.page.login.recover') }}
+				            	</a>
+				            </div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="container">
 			<div class="col-md-3">
 				<img class="image-left" src="{{ url('new-vox-img/register-dentist.png') }}">
@@ -61,8 +115,6 @@
 								<i class="fas fa-circle-notch fa-spin"></i>
 								Continue with Civic
 							</div>
-							<br/>
-							<br/>
 
 							<div id="civic-cancelled" class="alert alert-info" style="display: none;">
 								{!! nl2br(trans('front.common.civic.cancelled')) !!}
@@ -78,6 +130,12 @@
 								{!! nl2br(trans('front.common.civic.wait')) !!}
 							</div>
 							<input type="hidden" id="jwtAddress" value="{{ getLangUrl('login/civic') }}" />
+
+
+					
+							<div class="grace-button" id="register-grace-button">
+								Login with Email and Password
+							</div>
 						</div>
 
 						<div class="reg-dentists col-md-6">
@@ -125,5 +183,7 @@
 			</div>
 		</div>
 	</div>
+
+
 	
 @endsection

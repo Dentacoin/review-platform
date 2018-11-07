@@ -17,7 +17,6 @@ use Image;
 class LoginController extends FrontController
 {
     public function facebook_login($locale=null) {
-
     	config(['services.facebook.redirect' => getLangUrl('login/callback/facebook')]);
         return Socialite::driver('facebook')->redirect();
     }
@@ -56,32 +55,52 @@ class LoginController extends FrontController
 
     private function try_social_login($s_user) {
 
-        if($s_user->getId()) {
-            $user = User::where( 'fb_id','LIKE', $s_user->getId() )->first();
-        }
-        if(empty($user) && $s_user->getEmail()) {
-            $user = User::where( 'email','LIKE', $s_user->getEmail() )->where('id', '<', 5200)->first();            
-        }
+        if( session('new_auth') ) {
+            $user = $this->user;
 
-        if ($user) {
-            
-            if( $user->isBanned('vox') ) {
-                return redirect( getLangUrl('login') )
-                ->withInput()
-                ->with('error-message', trans('front.page.login.vox-ban'));
+            $duplicate = User::where('fb_id', $s_user->getId() )->first();
+
+            if( $duplicate ) {
+                Request::session()->flash('error-message', 'There\'s another profile registered with this Facebook Account');
+                return redirect( getLangUrl('/'));
+
+            } else {
+                $user->fb_id = $s_user->getId();
+                $user->save();
+                session(['new_auth' => null]);
+
+                Request::session()->flash('success-message');
+                return redirect('/');
             }
 
-            Auth::login($user, true);
-
-            Request::session()->flash('success-message', trans('front.page.login.success'));
-            return redirect('/');
         } else {
-            Request::session()->flash('error-message', trans('front.page.login.error-fb', [
-                'link' => '<a href="'.getLangUrl('register').'">',
-                'endlink' => '</a>',
-            ]));
-            return redirect( getLangUrl('login'));
+            if($s_user->getId()) {
+                $user = User::where( 'fb_id','LIKE', $s_user->getId() )->first();
+            }
+            if(empty($user) && $s_user->getEmail()) {
+                $user = User::where( 'email','LIKE', $s_user->getEmail() )->where('id', '<', 5200)->first();            
+            }
+
+            if ($user) {
+                if( $user->isBanned('vox') ) {
+                    return redirect( getLangUrl('login') )
+                    ->withInput()
+                    ->with('error-message', trans('front.page.login.vox-ban'));
+                }
+
+                Auth::login($user, true);
+
+                Request::session()->flash('success-message', trans('front.page.login.success'));
+                return redirect('/');
+            } else {
+                Request::session()->flash('error-message', trans('front.page.login.error-fb', [
+                    'link' => '<a href="'.getLangUrl('register').'">',
+                    'endlink' => '</a>',
+                ]));
+                return redirect( getLangUrl('login'));
+            }
         }
+
     }
 
 
@@ -367,27 +386,48 @@ class LoginController extends FrontController
                     $ret['weak'] = true;
                 } else {
 
-                    $user = User::where( 'civic_id','LIKE', $data['userId'] )->first();
-                    if(empty($user) && $email) {
-                        $user = User::where( 'email','LIKE', $email )->first();            
-                    }
 
+                    if( session('new_auth') ) {
+                        $user = $this->user;
 
-                    if ($user) {
-                        if( $user->isBanned('vox') ) {
-                            $ret['message'] = trans('front.page.login.vox-ban');
+                        $duplicate = User::where('civic_id', $data['userId'] )->first();
+
+                        if( $duplicate ) {
+                            $ret['message'] = 'There\'s another profile registered with this Civic Account';
                         } else {
-                            Auth::login($user, true);
-                            if(empty($user->civic_id)) {
-                                $user->civic_id = $data['userId'];
-                                $user->save();      
-                            }
+                            $user->civic_id = $data['userId'];
+                            $user->save();
+                            session(['new_auth' => null]);
 
                             $ret['success'] = true;
                             $ret['redirect'] = getLangUrl('profile');
                         }
+
                     } else {
-                        $ret['message'] = trans('front.common.civic.not-found');
+
+                        $user = User::where( 'civic_id','LIKE', $data['userId'] )->first();
+                        if(empty($user) && $email) {
+                            $user = User::where( 'email','LIKE', $email )->first();            
+                        }
+
+
+                        if ($user) {
+                            if( $user->isBanned('vox') ) {
+                                $ret['message'] = trans('front.page.login.vox-ban');
+                            } else {
+                                Auth::login($user, true);
+                                if(empty($user->civic_id)) {
+                                    $user->civic_id = $data['userId'];
+                                    $user->save();      
+                                }
+
+                                $ret['success'] = true;
+                                $ret['redirect'] = getLangUrl('profile');
+                            }
+                        } else {
+                            $ret['message'] = trans('front.common.civic.not-found');
+                        }
+
                     }
                 }
 

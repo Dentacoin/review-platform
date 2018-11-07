@@ -71,13 +71,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'platform',
         'gdpr_privacy',
         'self_deleted',
-        'allow_withdraw'
+        'allow_withdraw',
+        'grace_end',
     ];
     protected $dates = [
         'created_at',
         'updated_at',
         'deleted_at',
         'verified_on',
+        'grace_end',
         'phone_verified_on',
     ];
 

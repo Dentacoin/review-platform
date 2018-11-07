@@ -203,6 +203,7 @@ $reviewRoutes = function () {
 
 			Route::group(['middleware' => 'auth:web'], function () {
 				Route::get('profile', 							'ProfileController@home');
+				Route::get('profile/setGrace', 					'ProfileController@setGrace');
 				Route::get('profile/home', 						'ProfileController@home');
 				Route::post('profile/avatar', 					'ProfileController@avatar');
 				Route::any('profile/info', 						'ProfileController@info');
@@ -300,6 +301,7 @@ $voxRoutes = function () {
 				Route::post('phone/check', 						'PhoneController@check');
 
 				Route::any('profile', 							'ProfileController@home');
+				Route::get('profile/setGrace', 					'ProfileController@setGrace');
 				Route::post('profile/address', 					'ProfileController@address');
 				Route::any('profile/vox', 						'ProfileController@vox');
 				Route::any('profile/home', 						'ProfileController@home');

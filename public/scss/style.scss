@@ -1,3 +1,130 @@
+$tablet: "screen and (max-width: 1080px)";
+$phone: "screen and (max-width: 768px)";
+
+
+/*
+Flexes
+*/
+
+
+.flex-mobile,
+.flex {
+    display: flex;
+
+    &.wrap {
+        flex-flow: row wrap;        
+    }
+
+    &.wrap-mobile {
+        @media #{$phone} {
+            flex-flow: row wrap;
+        }
+    }
+
+    .col {
+        flex: 1;
+        padding-left: 10px;
+        padding-right: 10px;
+        position: relative;
+    }
+
+    .flex-2 {
+        flex: 2;
+    }
+
+    .flex-3 {
+        flex: 3;
+    }
+
+    .flex-5 {
+        flex: 5;
+    }
+
+    .flex-8 {
+        flex: 8;
+    }
+
+
+    &.break-tablet {
+        @media #{$tablet} {
+            flex-direction: column;
+
+
+            &>.col,
+            &>.flex-3,
+            &>.flex-5,
+            &>.flex-8 {
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+        }
+    }
+
+    &.break-mobile {
+        @media #{$phone} {
+            flex-direction: column;
+
+            &>.col,
+            &>.flex-3,
+            &>.flex-5,
+            &>.flex-8 {
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+        }
+    }
+
+    .line-break {
+        flex-basis: 100%;
+        width: 0px; 
+        height: 0px; 
+        overflow: hidden;
+    }
+    
+    .line-break-tablet {
+        @media #{$tablet} {
+            flex-basis: 100%;
+            width: 0px; 
+            height: 0px; 
+            overflow: hidden;
+        }
+    }
+    .line-break-mobile {
+        @media #{$phone} {
+            flex-basis: 100%;
+            width: 0px; 
+            height: 0px; 
+            overflow: hidden;
+        }
+    }
+}
+
+.flex-mobile {
+    display: block;
+    @media #{$phone} {
+        display: flex;
+    }
+}
+
+.flex-center {
+    align-items: center;
+}
+.flex-text-center {
+    justify-content: center;
+}
+
+.flex-bottom {
+    align-items: flex-end;
+}
+
+.flex-item-right {
+    margin-left: auto;
+}
+.flex-item-left {
+    margin-right: auto;
+}
+
+
 @mixin vertical-align($position: relative) {
     position: $position;
     top: 50%;
@@ -200,6 +327,10 @@ a {
     clear: both;
     a {
         text-decoration: underline;
+    }
+
+    span {
+        display: block;
     }
 }
 
@@ -3115,6 +3246,7 @@ label[for="radio-clinic"] {
     }
 }
 
+.grace-button,
 .civic-button {
     display: inline-block;
     min-width: 254px;
@@ -3126,6 +3258,7 @@ label[for="radio-clinic"] {
     font-size: 16px;
     text-align: center;
     cursor: pointer;
+    margin-bottom: 20px;
 
     i {
         display: none;
@@ -3144,6 +3277,10 @@ label[for="radio-clinic"] {
     
 }
 
+.grace-button {
+    background: #3daee6;
+}
+
 
 .civic-button-a {
     background: #3aaf46;
@@ -3153,4 +3290,83 @@ label[for="radio-clinic"] {
     outline: none;
     box-shadow: none;
     border: none;
+}
+
+
+.new-auth {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(229, 243, 247, 0.5);
+    z-index: 1000;
+    display: block;
+
+    .wrapper {
+        position: absolute;
+        max-height: 90%;
+        max-width: 95%;
+        width: 1130px;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 0px 20px 5px rgba(202,213,217,1);
+        padding: 80px 60px;
+        text-align: center;
+
+
+        @media #{$phone} {
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .inner {
+
+            h2 {
+                color: #000000;
+                font-size: 30px;
+                font-weight: bold;
+                margin-bottom: 35px;
+                text-align: center;
+
+                @media #{$phone} {
+                    font-size: 20px;
+                }
+            }
+
+            p {
+                color: #000000;
+                font-size: 18px;
+                @media #{$phone} {
+                    font-size: 14px;
+                }
+
+                b {
+                    font-weight: 600;
+                    font-size: 20px;
+
+                    @media #{$phone} {
+                        font-size: 16px;
+                    }
+
+                    .blue {
+                        color: #3daee6;
+                        font-size: 20px;
+
+                        @media #{$phone} {
+                            font-size: 16px;
+                        }
+                    }
+                }
+
+            }
+
+            .buttons {
+                margin-top: 30px;
+            }
+        }
+    }
 }

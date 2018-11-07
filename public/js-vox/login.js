@@ -66,6 +66,7 @@ $(document).ready(function(){
                                     	}
                                     } else {
                                         $('#civic-error').show();
+                                        $('#civic-error span').html(data.message);
                                         civicError();
                                     }
                                 }, "json"
@@ -103,6 +104,17 @@ $(document).ready(function(){
         });
     }
 
+    $('#register-grace-button').click( function() {
+        $('.new-auth').addClass('active');
+    } );
 
+
+    $('#grace-button').click( function() {
+        $.ajax({
+            type: "GET",
+            url: lang + '/profile/setGrace',
+        });
+        $('.new-auth').remove();
+    } );
 
 });

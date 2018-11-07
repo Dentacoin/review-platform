@@ -104,6 +104,10 @@ class FrontController extends BaseController
                         session(['unbanned' => true]);
                     }
                 }
+
+                if( !$this->user->fb_id && !$this->user->civic_id && !$this->user->is_dentist ) {
+                    session(['new_auth' => true]);
+                }
             }
 
 
@@ -279,6 +283,25 @@ class FrontController extends BaseController
             session([
                 'just_registered' => false
             ]);
+        }
+
+        $params['new_auth'] = false;
+        if( session('new_auth') ) {
+            $params['new_auth'] = true;
+            if(is_array($params['js'])) {
+                $params['js'][] = 'login.js';
+            } else {
+                $params['js'] = ['login.js'];
+
+            }
+
+
+            $params['jscdn'] = [
+                'https://hosted-sip.civic.com/js/civic.sip.min.js',
+            ];
+            $params['csscdn'] = [
+                'https://hosted-sip.civic.com/css/civic-modal.min.css',
+            ];
         }
     }
 

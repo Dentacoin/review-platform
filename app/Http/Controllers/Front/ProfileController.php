@@ -11,6 +11,7 @@ use Hash;
 use Auth;
 use Mail;
 use Image;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 use App\Models\User;
@@ -157,6 +158,14 @@ class ProfileController extends FrontController
         }
     }
 
+
+    public function setGrace($locale=null) {
+        if(empty($this->user->grace_end)) {
+            $this->user->grace_end = Carbon::now();
+            $this->user->save();
+        }
+        session(['new_auth' => null]);
+    }
 
     public function home($locale=null) {
         $this->handleMenu();

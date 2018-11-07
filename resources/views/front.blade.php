@@ -317,47 +317,6 @@
 	        </div>
         </footer>
 
-        @if( $current_page=='dentist' && $item->invited_by && !$item->verified )
-
-			<div class="modal fade" tabindex="-1" id="claim-modal" role="dialog" aria-labelledby="gridSystemModalLabel">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title" id="gridSystemModalLabel">
-								{{ trans('front.page.dentist.claim-title') }}
-							</h4>
-						</div>
-						<div class="modal-body">
-							<div class="type-div type-email">
-				  				{!! Form::open(array('url' => $item->getLink().'/claim-email', 'method' => 'post', 'class' => 'form-horizontal', 'id' => 'claim-email-send-form' )) !!}
-				  					<p>
-										{!! trans('front.page.dentist.claim-email-hint', [ 'email' => $item->getMaskedEmail(), 'name' => $item->name  ]) !!}
-				  					</p>
-				        			<div class="form-group tbh-div">
-									  	<div class="col-md-12">
-									  		<input type="email" name="email" class="form-control" placeholder="{{ trans('front.page.'.$current_page.'.email') }}" required>
-									    </div>
-									</div>
-									<div class="form-group tbh-div">
-										<div class="col-md-12">
-		                                    <input type="submit" name="save-phone" value="{{ trans('front.page.dentist.claim-email-submit') }}" class="btn btn-primary btn-block" />
-										</div>
-									</div>
-									<div class="alert alert-warning" style="display: none;">
-										{{ trans('front.page.dentist.claim-email-invalid') }}
-									</div>
-									<div class="alert alert-success" style="display: none; margin: 0px;">
-										{{ trans('front.page.dentist.claim-email-success') }}
-									</div>
-				  				{!! Form::close() !!}
-							</div>
-			  			</div>
-			  		</div>
-			  	</div>
-			</div>
-        @endif
-
         @if($current_page=='dentist')
 
 			<div class="modal fade" tabindex="-1" id="trusted-modal" role="dialog" aria-labelledby="gridSystemModalLabel">
@@ -434,85 +393,80 @@
 			</div>
         @endif
 
-        @if($user && !$user->phone_verified)
-			<div class="modal fade" tabindex="-1" id="phone-verify-modal" role="dialog" aria-labelledby="gridSystemModalLabel">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title" id="gridSystemModalLabel">
-								{{ trans('front.page.dentist.verify-title') }}
-							</h4>
+        @if(!empty($user) && $new_auth)
+			<div class="new-auth">
+				<div class="wrapper">
+					<div class="inner">
+						@include('front.errors')
+						<h2>
+							New Authentication Requirements
+						</h2>
+						<p>
+							<b>Dear <span class="blue">{{ $user->getName() }}</span>,</b><br/>
+							<br/>
+							@if( $user->grace_end && $user->grace_end->timestamp+86400*31 < time() )
+								To keep using Trusted Review Platform, we kindly ask you to log in with Facebook or Civic. This will connect your existing profile with your preferred authentication account.<br/>
+								<br/>
+								Next time you will be able to log in directly with Facebook / Civic. No need to remember passwords anymore!
+							@else
+								To keep using Trusted Review Platform, we kindly ask you to log in with one of the options below. <br/>
+								This is required as an additional fraud protection measure. If you don’t have an account on any of these platforms, you can request a one-month grace period to create one. Otherwise your account will be deactivated.  <br/>
+								Thank you for staying with us!
+							@endif
+
+						</p>
+							
+						<div class="form-group buttons flex break-mobile">
+						  	<div class="col-md-12 text-center">
+								<div class="fb-button-inside">
+									<a href="{{ getLangUrl('login/facebook') }}" class="">
+									</a>
+									<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+								</div>
+							</div>
+
+						  	<div class="col-md-12 text-center">
+
+								<form action="{{ getLangUrl('login') }}" method="post">
+									<div class="civic-button" id="register-civic-button">
+										<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
+										Continue with Civic
+									</div>
+									{!! csrf_field() !!}
+								</form>
+
+								<div id="civic-cancelled" class="alert alert-info" style="display: none;">
+									{!! nl2br(trans('front.common.civic.cancelled')) !!}
+								</div>
+								<div id="civic-error" class="alert alert-warning" style="display: none;">
+									{!! nl2br(trans('front.common.civic.error')) !!}
+									<span></span>
+								</div>
+								<div id="civic-weak" class="alert alert-warning" style="display: none;">
+									{!! nl2br(trans('front.common.civic.weak')) !!}
+								</div>
+								<div id="civic-wait" class="alert alert-info" style="display: none;">
+									{!! nl2br(trans('front.common.civic.wait')) !!}
+								</div>
+								<input type="hidden" id="jwtAddress" value="{{ getLangUrl('login/civic') }}" />
+							</div>
+
+							@if( $user->grace_end && $user->grace_end->timestamp+86400*31 < time() )
+							@else
+							  	<div class="col-md-12 text-center">
+									<div class="grace-button" id="grace-button">
+										Do this later
+									</div>
+							  	</div>
+							@endif
+
 						</div>
-						<div class="modal-body">
-							<p>
-								{!! nl2br(trans('front.page.dentist.verify-hint')) !!}
-		                	</p>
+					</div>
+				</div>
+			</div>
 
-			  			</div>
-						<div class="modal-body">
+        @endif
 
-			  				{!! Form::open(array('url' => getLangUrl('phone/save'), 'method' => 'post', 'class' => 'form-horizontal', 'id' => 'phone-verify-send-form' )) !!}
-								<div class="form-group">
-									<div class="col-md-12">
-										<h3>
-											{!! nl2br(trans('front.page.dentist.verify-phone')) !!}
-										</h3>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="col-md-3">
-										{{ Form::select( 'phone_country', $phone_codes, $user->country_id ? $user->country_id : $country_id, array('class' => 'form-control' )) }}
-									</div>
-									<div class="col-md-9">
-										{{ Form::text( 'phone', $user->phone, array('class' => 'form-control', 'placeholder' => trans('front.page.dentist.verify-phone-placeholder') )) }}
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="col-md-12">
-	                                    <input type="submit" name="save-phone" value="{{ trans('front.page.dentist.verify-phone-submit') }}" class="btn btn-primary btn-block" />
-									</div>
-								</div>
-								<div class="alert alert-warning" id="phone-invalid" style="display: none;">
-									{{ trans('front.page.dentist.verify-phone-invalid') }}
-								</div>
-								<div class="alert alert-warning" id="phone-taken" style="display: none;">
-									{{ trans('front.common.phone-already-used') }}
-								</div>
-			  				{!! Form::close() !!}
-
-			  				{!! Form::open(array('url' => getLangUrl('phone/check'), 'method' => 'post', 'style' => 'display: none', 'class' => 'form-horizontal', 'id' => 'phone-verify-code-form' )) !!}
-								<div class="form-group">
-									<div class="col-md-12">
-										<h3>
-											{{ trans('front.page.dentist.verify-sms-sent') }}
-										</h3>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="col-md-12">
-										{{ Form::text( 'code', '', array('class' => 'form-control', 'placeholder' => trans('front.page.dentist.verify-code-placeholder') )) }}
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="col-md-12">
-	                                    <input type="submit" name="save-phone" value="{{ trans('front.page.dentist.verify-code-submit') }}" class="btn btn-primary btn-block" />
-									</div>
-								</div>
-								<div class="alert alert-warning" style="display: none;">
-									{{ trans('front.page.dentist.verify-code-sent') }}
-								</div>
-			  				{!! Form::close() !!}
-
-			  				<div class="alert alert-info" style="display: none;" id="phone-verify-success">
-			  					{{ trans('front.page.dentist.verify-success') }}
-			  				</div>
-			  				
-			  			</div>
-					</div><!-- /.modal-content -->
-				</div><!-- /.modal-dialog -->
-			</div><!-- /.modal -->
-		@endif
 
         <script  src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -542,7 +496,7 @@
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         </script>
 
-        @if(!$user)
+        @if(!$user || $new_auth)
         	
 			<div id="fb-root"></div>
 			<script>(function(d, s, id) {
