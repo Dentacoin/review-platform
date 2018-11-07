@@ -2919,17 +2919,9 @@ header {
 						    }
 					    }
 
-						&.dependency,
-						&.age,
-						&.country_id,
-						&.marital_status,
-						&.children,
-						&.education {
-							padding-top: 20px;
-							padding-left: 20px;
-							@media screen and (max-width: 1200px) {
-								padding-left: 0px;
-							}
+						.dependency {
+							display: flex;
+							flex-direction: column;
 						}
 
 						svg > g > g:last-child { pointer-events: none }

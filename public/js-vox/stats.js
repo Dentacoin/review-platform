@@ -597,7 +597,7 @@ $(document).ready(function(){
                 for(var i=1; i<rows.length; i++) {
                     $(container).append('<div class="group-heading">'+rows[i][0]+'</div>');
                     var pl = 80*rows[i][1]/max;
-                    var color = rows[i][2];
+                    var color = fixedColor ? chart_colors[fixedColor-1] : rows[i][2];
                     $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+parseInt(rows[i][1]*100)+'%</div>');
                 }
                 console.log(rows);

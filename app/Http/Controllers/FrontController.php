@@ -107,6 +107,8 @@ class FrontController extends BaseController
 
                 if( !$this->user->fb_id && !$this->user->civic_id && !$this->user->is_dentist ) {
                     session(['new_auth' => true]);
+                } else {
+                    session(['new_auth' => null]);
                 }
             }
 
@@ -202,7 +204,7 @@ class FrontController extends BaseController
         $params['users_count'] = User::getCount('vox');
         //dd($params['header_questions']);
 
-        $params['cache_version'] = '20181102';
+        $params['cache_version'] = '20181107';
 
         $params['show_tutorial'] = false;
         // if($this->user) {
@@ -230,7 +232,7 @@ class FrontController extends BaseController
     public function ShowView($page, $params=array()) {
         $this->PrepareViewData($page, $params, 'front');
 
-        $params['cache_version'] = '20181102';
+        $params['cache_version'] = '20181107';
         // "2018-05-05 00:00:00.000000"
         
         return view('front.'.$page, $params);
