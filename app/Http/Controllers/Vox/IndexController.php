@@ -19,6 +19,7 @@ class IndexController extends FrontController
 {
 
 	public function home($locale=null) {
+
 		$first = Vox::where('type', 'home')->first();
 		if(!empty($this->user)) {
 			$this->user->checkForWelcomeCompletion();			

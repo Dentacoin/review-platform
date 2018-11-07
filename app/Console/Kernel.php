@@ -299,6 +299,21 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
             }
 
         })->cron("30 7 * * *"); //10:30h BG Time
+
+
+
+        $schedule->call(function () {
+
+            $notify = User::where( 'grace_end', '>', Carbon::now()->addDays(23) )->whereNull('grace_notified')->get();
+            if($notify->isNotEmpty()) {
+                foreach ($notify as $nuser) {
+                    $nuser->sendTemplate( $nuser->platform=='vox' ? 11 : 39 ); 
+                    $nuser->grace_notified = true;
+                    $nuser->save();
+                }
+            }
+
+        })->cron("30 10 * * *"); //13:30h BG Time
     }
 
     /**

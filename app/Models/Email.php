@@ -375,6 +375,20 @@ class Email extends Model
 			), $content);
 		}
 
+
+
+		if($this->template->id==11 || $this->template->id==39) { //New Auth
+			$content = str_replace(array(
+				'[grace_expiration_date]',
+				'[login]',
+				'[/login]',
+			), array(
+				date('d F Y', time()+86400*7),
+				'<a '.$this->text_style.' href="'.getLangurl( $this->template->id==11 ? 'login' : '/' ).'">',
+				'</a>',
+			), $content);
+		}
+
 		return $content;
 	}
 

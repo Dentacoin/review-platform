@@ -73,6 +73,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'self_deleted',
         'allow_withdraw',
         'grace_end',
+        'grace_notified',
     ];
     protected $dates = [
         'created_at',

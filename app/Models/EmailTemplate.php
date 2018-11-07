@@ -137,6 +137,11 @@ class EmailTemplate extends Model
             $codes[] = '[dentist-name]';
         }
 
+        if($this->id==11 || $this->id==39) {
+            $codes[] = '[grace_expiration_date]';
+            $codes[] = '[login]Click here[/login]';
+        }
+
         return $codes;
     }
 }

@@ -286,7 +286,7 @@ class FrontController extends BaseController
         }
 
         $params['new_auth'] = false;
-        if( session('new_auth') ) {
+        if( session('new_auth') && !empty($this->user) && empty($this->user->fb_id) && empty($this->user->civic_id) ) {
             $params['new_auth'] = true;
             if(is_array($params['js'])) {
                 $params['js'][] = 'login.js';
