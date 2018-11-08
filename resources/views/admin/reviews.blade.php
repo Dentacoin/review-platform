@@ -23,11 +23,14 @@
                     <div class="col-md-2">
                         <input type="text" class="form-control" name="search-name-user" value="{{ $search_name_user }}" placeholder="Patient name">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <input type="text" class="form-control" name="search-reviews-to" value="{{ $search_reviews_to }}" placeholder="Written before date">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <input type="text" class="form-control" name="search-reviews-from" value="{{ $search_reviews_from }}" placeholder="Written after date">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" name="search-answer" value="{{ $search_answer }}" placeholder="Review content">
                     </div>
                     <div class="col-md-2">
                         <input type="text" class="form-control" name="results-number" value="{{ $results_number }}" placeholder="Results ( enter 0 to show all )">
@@ -62,7 +65,7 @@
                             'dentist'           => array('template' => 'admin.parts.table-reviews-dentist'),
                             'rating'            => array(),
                             'verified'              => array('format' => 'bool'),
-                            'answer'              => array('template' => 'admin.parts.table-reviews-tx'),
+                            'answer'              => array('format' => 'break-word'),
                             'status'              => array(),
     						'delete'			=> array('format' => 'delete'),
     					],

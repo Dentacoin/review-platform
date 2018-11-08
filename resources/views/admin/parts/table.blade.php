@@ -72,6 +72,8 @@
                                         @endif
                                     @elseif($v['format']=='set')
                                         <td>{{ implode(', ', $row[$k]) }}</td>
+                                    @elseif($v['format']=='break-word')
+                                        <td style="word-break: break-word;">{{ $row[$k] }}</td>
                                     @endif
                                 @elseif(count(explode('.', $k))==2)
                                     <td>{{ $row[explode('.', $k)[0]][explode('.', $k)[1]] }}</td>

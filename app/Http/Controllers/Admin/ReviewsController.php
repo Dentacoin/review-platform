@@ -38,6 +38,10 @@ class ReviewsController extends AdminController
             $reviews = $reviews->where('created_at', '<=', $firstday);
         }
 
+        if(!empty($this->request->input('search-answer'))) {
+            $reviews = $reviews->where('answer', 'like', '%'.$this->request->input('search-answer').'%');
+        }
+
         if(!empty($this->request->input('search-deleted'))) {
             $reviews = $reviews->onlyTrashed();
         }
@@ -61,6 +65,7 @@ class ReviewsController extends AdminController
             'results_number' => $this->request->input('results-number'),
             'search_reviews_from' => $this->request->input('search-reviews-from'),
             'search_reviews_to' => $this->request->input('search-reviews-to'),
+            'search_answer' => $this->request->input('search-answer'),
         ));
     }
 
