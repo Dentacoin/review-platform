@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Image;
 
 use App;
+use Carbon\Carbon;
 use App\Models\VoxToCategory;
 use App\Models\Reward;
 use App\Models\VoxReward;
@@ -151,7 +152,7 @@ class Vox extends Model {
     }
 
     public function getSocialImageUrl($type = 'social') {
-        return $this->hasimage_social ? url('/storage/voxes/'.($this->id%100).'/'.$this->id.'-'.$type.'.png') : url('new-vox-img/stats-dummy.png');
+        return $this->hasimage_social ? url('/storage/voxes/'.($this->id%100).'/'.$this->id.'-'.$type.'.png').'?rev='.$this->updated_at->timestamp : url('new-vox-img/stats-dummy.png');
     }
     public function getSocialImagePath($type = 'social') {
         $folder = storage_path().'/app/public/voxes/'.($this->id%100);
@@ -181,10 +182,14 @@ class Vox extends Model {
 
         foreach ($types as $type => $tid) {
             $original = Image::make( $this->getSocialImagePath() );
-            $badge = VoxBadge::find($tid);
-            $original->insert( $badge->getImagePath(), 'bottom-left', 0, 0);
+            $badge_file = VoxBadge::find($tid)->getImagePath();
+            if(file_exists($badge_file)) {
+                $original->insert( $badge_file, 'bottom-left', 0, 0);                
+            }
             $original->save( $this->getSocialImagePath($type) );
         }
+
+        $this->updated_at = Carbon::now();
     }
     
 }

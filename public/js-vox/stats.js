@@ -598,7 +598,7 @@ $(document).ready(function(){
                     $(container).append('<div class="group-heading">'+rows[i][0]+'</div>');
                     var pl = 80*rows[i][1]/max;
                     var color = fixedColor ? chart_colors[fixedColor-1] : rows[i][2];
-                    $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+parseInt(rows[i][1]*100)+'%</div>');
+                    $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][1]*100).toFixed(2)+'%</div>');
                 }
                 console.log(rows);
 
@@ -619,7 +619,7 @@ $(document).ready(function(){
                         var pl = 80*rows[i][j]/max;
                         var color = fixedColor ? chart_colors[fixedColor-1] : chart_colors[j-1];
                         if( typeof(rows[0][j])!='object' ) {
-                            $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+parseInt(rows[i][j]*100)+'%</div>');
+                            $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(2)+'%</div>');
                         }
                     }
                 }

@@ -25,10 +25,6 @@ class StatsController extends FrontController
 {
 	public function home($locale=null) {
 
-        if(!empty($this->user) && $this->user->is_dentist && !$this->user->is_approved) {
-            return redirect(getLangUrl('welcome-to-dentavox'));
-        }
-
         $this->current_page = 'stats';
 
 		$sorts = [
@@ -54,10 +50,6 @@ class StatsController extends FrontController
 	}
 
 	public function stats($locale=null, $slug=null, $question_id=null) {
-
-        if(!empty($this->user) && !$this->user->is_verified) {
-            return redirect(getLangUrl('welcome-to-dentavox'));
-        }
         
         $this->current_page = 'stats';
 

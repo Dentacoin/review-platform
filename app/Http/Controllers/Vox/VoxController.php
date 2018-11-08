@@ -77,11 +77,7 @@ class VoxController extends FrontController
 	        ));
 
 		}
-		
-        if(!$this->user->is_verified) {
-            return redirect(getLangUrl('welcome-to-dentavox'));
-        }
-		
+				
 		$this->current_page = 'questionnaire';
 		$doing_details = false;
 		$doing_asl = false;

@@ -245,53 +245,57 @@
 					<div class="inner">
 						@include('front.errors')
 						<h2>
-							New Authentication Requirements
+							{!! trans('vox.page.auth.after-login.title') !!}
 						</h2>
-						<p>
-							<b>Dear <span class="blue">{{ $user->getName() }}</span>,</b><br/>
-							<br/>
-							@if( $user->grace_end && $user->grace_end->timestamp+86400*31 < time() )
-								To keep using DentaVox, we kindly ask you to log in with Facebook or Civic. This will connect your existing profile with your preferred authentication account.<br/>
+						<div class="flex break-mobile">
+							<p>
+								<b>
+									{!! trans('vox.page.auth.after-login.dear', [
+										'name' => '<span class="blue">'.$user->getName().'</span>'
+									]) !!}
+								</b>
 								<br/>
-								Next time you will be able to log in directly with Facebook / Civic. No need to remember passwords anymore!
-							@else
-								To keep using DentaVox, we kindly ask you to log in with one of the options below. <br/>
-								This is required as an additional fraud protection measure. If you don’t have an account on any of these platforms, you can request a one-month grace period to create one. Otherwise your account will be deactivated.  <br/>
-								Thank you for staying with us!
-							@endif
+								<br/>
+								@if( $user->grace_end && $user->grace_end->timestamp+86400*31 < time() )
+									{!! nl2br(trans('vox.page.auth.after-login.hint-expired')) !!}
+								@else
+									{!! nl2br(trans('vox.page.auth.after-login.hint-grace')) !!}
+								@endif
 
-						</p>
-							
-						<div class="form-group buttons flex break-mobile">
-						  	<div class="col-md-12 text-center">
-								<div class="fb-button-inside">
-									<a href="{{ getLangUrl('login/facebook') }}" class="">
-									</a>
-									<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
-								</div>
-							</div>
-
-						  	<div class="col-md-12 text-center">
-
-								<form action="{{ getLangUrl('login') }}" method="post">
-									<div class="civic-button" id="register-civic-button">
-										<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
-										Continue with Civic
-									</div>
-									{!! csrf_field() !!}
-								</form>
-								<input type="hidden" id="jwtAddress" value="{{ getLangUrl('login/civic') }}" />
-							</div>
-
-							@if( $user->grace_end && $user->grace_end->timestamp+86400*31 < time() )
-							@else
+							</p>
+								
+							<div class="form-group buttons">
 							  	<div class="col-md-12 text-center">
-									<div class="grace-button" id="grace-button">
-										Do this later
+									<div class="fb-button-inside">
+										<a href="{{ getLangUrl('login/facebook') }}" class="">
+										</a>
+										<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
 									</div>
-							  	</div>
-							@endif
+								</div>
 
+							  	<div class="col-md-12 text-center">
+
+									<form action="{{ getLangUrl('login') }}" method="post">
+										<div class="civic-button" id="register-civic-button">
+											<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
+											Continue with Civic
+										</div>
+										{!! csrf_field() !!}
+									</form>
+									<input type="hidden" id="jwtAddress" value="{{ getLangUrl('login/civic') }}" />
+								</div>
+
+								@if( $user->grace_end && $user->grace_end->timestamp+86400*31 < time() )
+								@else
+								  	<div class="col-md-12 text-center">
+										<div class="grace-button" id="grace-button">
+											{!! trans('vox.page.auth.after-login.button-grace') !!}
+											
+										</div>
+								  	</div>
+								@endif
+
+							</div>
 						</div>
 
 						<div id="civic-cancelled" class="alert alert-info" style="display: none;">

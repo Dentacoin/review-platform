@@ -570,10 +570,12 @@ class VoxesController extends AdminController
         $question->order = $data['order'];
         $question->stats_featured = !empty($data['stats_featured']);
         $question->stats_fields = !empty($data['stats_fields']) ? $data['stats_fields'] : [];
-        $question->vox_scale_id = $data['question_scale'];
-        $question->trigger_type = $data['trigger_type'];
+        $question->vox_scale_id = !empty($data['question_scale']) ? $data['question_scale'] : null;;
+        if( !empty($data['trigger_type']) ) {
+            $question->trigger_type = $data['trigger_type'];
+        }
 
-        $question->used_for_stats = $data['used_for_stats'];
+        $question->used_for_stats = !empty($data['used_for_stats']) ? $data['used_for_stats'] : null;;
         $question->stats_relation_id = $question->used_for_stats=='dependency' ? $data['stats_relation_id'] : null;
         $question->stats_answer_id = $question->used_for_stats=='dependency' ? $data['stats_answer_id'] : null;
 
@@ -594,7 +596,9 @@ class VoxesController extends AdminController
                 $translation = $question->translateOrNew($key);
                 $translation->vox_question_id = $question->id;
                 $translation->question = $data['question-'.$key];
-                $translation->stats_title = $data['stats_title-'.$key];
+                if(!empty( $data['stats_title-'.$key] )) {
+                    $translation->stats_title = $data['stats_title-'.$key];                    
+                }
 
                 if(!empty( $data['answers-'.$key] )) {
                     $translation->answers = json_encode( $data['answers-'.$key] );
@@ -782,6 +786,24 @@ class VoxesController extends AdminController
         return $this->showView('voxes-badges', array(
             'items' => VoxBadge::get()
         ));
+
+    }
+
+
+    public function delbadge($id) {
+            
+        $item = VoxBadge::find( $id );
+        if($item) {
+            $item->delImage();
+
+            $voxes = Vox::whereNotNull('hasimage_social')->get();
+            foreach ($voxes as $v) {
+                $v->regenerateSocialImages();
+            }
+        }
+
+        Request::session()->flash('success-message', 'Badge deleted');
+        return redirect('cms/'.$this->current_page.'/badges');
 
     }
 

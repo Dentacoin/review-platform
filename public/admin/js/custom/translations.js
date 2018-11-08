@@ -5,7 +5,7 @@ $(document).ready(function(){
 	if( typeof(should_reload)!='undefined' ) {
 		setTimeout( function() {
 			window.location.href = window.location.href.split('?')[0] + '?reloaded=1';			
-		}, 1000 );
+		}, 2000 );
 	}
 
 	var goSearch = function() {

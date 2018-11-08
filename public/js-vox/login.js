@@ -117,4 +117,8 @@ $(document).ready(function(){
         $('.new-auth').remove();
     } );
 
+    $('.new-auth .x').click( function() {
+        $('.new-auth').removeClass('active');
+    } );
+
 });

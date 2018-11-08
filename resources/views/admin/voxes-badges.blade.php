@@ -24,9 +24,17 @@
 	                    <div class="col-md-9">
 	                        {{ Form::file('photo', ['id' => 'photo', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
 	                        * PNG file with transparency, up to 2 MB, will be placed on 1200x628px canvas<br/>
-                            <a target="_blank" href="{{ $item->getImageUrl() }}">
-                                <img src="{{ $item->getImageUrl() }}" style="width: 200px;" />
-                            </a>
+                            @if(file_exists( $item->getImagePath() ))
+                                <a target="_blank" href="{{ $item->getImageUrl() }}">
+                                    <img src="{{ $item->getImageUrl() }}" style="width: 200px;" />
+                                </a>
+                                &nbsp;
+                                &nbsp;
+                                &nbsp;
+                                <a href="{{ url('cms/'.$current_page.'/badges/delete/'.$item->id) }}" onclick="return confirm('Are you sure?');">
+                                    Delete badge
+                                </a>
+                            @endif
 	                    </div>
 	                </div>
 

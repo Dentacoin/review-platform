@@ -27,6 +27,10 @@ class VoxBadge extends Model {
         $to = $this->getImagePath();
         $img->save($to);
     }    
+    public function delImage() {
+        $to = $this->getImagePath();
+        unlink($to);
+    }    
 }
 
 

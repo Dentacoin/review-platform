@@ -3650,6 +3650,7 @@ header {
 	position: relative;
     min-height: 40px;
     width: 100%;
+    margin-bottom: 6px;
 
 	a {
 		position: absolute;
@@ -5506,7 +5507,7 @@ header {
     text-align: center;
     cursor: pointer;
     margin-left: 1px;
-    margin-top: 28px;
+    margin-top: 22px;
 
     i {
         display: none;
@@ -5566,13 +5567,16 @@ header {
     		overflow-y: auto;
         }
 
+
         .inner {
+
 
             h2 {
                 color: #000000;
                 font-size: 30px;
                 font-weight: bold;
                 margin-bottom: 35px;
+                margin-top: 0px;
                 text-align: center;
 
                 @media #{$phone} {
@@ -5584,7 +5588,13 @@ header {
             p {
                 color: #000000;
                 font-size: 18px;
+	    		text-align: left;
+	    		margin-right: 50px;
+
                 @media #{$phone} {
+	    			text-align: center;
+	                margin-right: 0px;
+	                margin-bottom: 20px;
                     font-size: 14px;
                 }
 
@@ -5609,12 +5619,13 @@ header {
             }
 
             .buttons {
-                margin-top: 30px;
+                margin-top: 0px;
             }
 
             .grace-button, 
             .civic-button,
             .fb-button-inside {
+            	margin-bottom: 0px;
             	margin-top: 10px;
 				line-height: 40px;
 				height: 40px;
@@ -5623,19 +5634,41 @@ header {
         }
     }
 
+    .x {
+		position: absolute;
+		top: -22px;
+		right: -22px;
+		height: 44px;
+		line-height: 56px;
+		width: 44px;
+		display: block;
+		background: white;
+		border-radius: 50%;
+		text-align: center;
+		box-shadow: 0px 0px 10px 2px rgba(202,213,217,1);
+		cursor: pointer;
+		
+		@media #{$phone} {
+		    top: 10px;
+		    right: 10px;
+		    width: 22px;
+		    height: 22px;
+		    line-height: 0;
+		}
+
+		i {
+			color: black;
+			font-size: 30px;	
+		
+			@media #{$phone} {
+			    line-height: 10px;
+			}			
+		}
+	}
+
 
 
     &.pre-login {
-    	p {
-    		text-align: left;
-    		margin-right: 50px;
-
-            @media #{$phone} {
-    			text-align: center;
-                margin-right: 0px;
-                margin-bottom: 20px;
-            }
-    	}
     	
         form {
 			padding: 0px 15px;

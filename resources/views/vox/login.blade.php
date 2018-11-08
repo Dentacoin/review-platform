@@ -19,16 +19,11 @@
 				<div class="inner">
 					@include('front.errors')
 					<h2>
-						New Authentication Requirements
+						{!! trans('vox.page.auth.before-login.title') !!}
 					</h2>
 					<div class="flex break-mobile">
 						<p>
-							The new version of DentaVox requires your authentication through Facebook or Civic. If you don’t have an account on any of these platforms yet, we will give a one-month grace period to create one.<br/>
-							<br/>
-							After it’s over, you won’t be able to log into DentaVox with your email, and your Profile will be deactivated unless you log in using Facebook or Civic. <br/>
-							<br/>
-							Thank you for staying with us!
-
+							{!! nl2br(trans('vox.page.auth.before-login.hint')) !!}
 						</p>
 						<form action="{{ getLangUrl('login') }}" method="post" class="form-horizontal">
 							{!! csrf_field() !!}
@@ -48,9 +43,9 @@
 							
 							<div class="form-group tac">
 								<div class="checkbox tac">
-									<label for="remember" class="active">
+									<label for="remember-popup" class="active">
 										<i class="far fa-square"></i>
-								    	<input id="remember" type="checkbox" name="remember" class="input-checkbox" checked>
+								    	<input id="remember-popup" type="checkbox" name="remember" class="input-checkbox" checked>
 										{{ trans('vox.page.login.remember') }}
 									</label>
 								</div>
@@ -64,6 +59,9 @@
 						</form>
 					</div>
 				</div>
+				<a class="closer x">
+					<i class="fas fa-times"></i>
+				</a>
 			</div>
 		</div>
 
@@ -134,7 +132,7 @@
 
 					
 							<div class="grace-button" id="register-grace-button">
-								Login with Email and Password
+								{!! trans('vox.page.login.email-pass') !!}
 							</div>
 						</div>
 

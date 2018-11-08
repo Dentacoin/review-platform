@@ -117,7 +117,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/scales/add', 					'VoxesController@add_scale');
 	Route::any('vox/scales/edit/{id}', 				'VoxesController@edit_scale');
 	Route::any('vox/faq', 							'VoxesController@faq');
-	Route::any('vox/badges', 							'VoxesController@badges');
+	Route::any('vox/badges', 						'VoxesController@badges');
+	Route::any('vox/badges/delete/{id}', 			'VoxesController@delbadge');
 
 	Route::get('emails', 							'EmailsController@list');
 	Route::get('emails/{what?}', 					'EmailsController@list');
