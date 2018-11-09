@@ -134,6 +134,9 @@ class UsersController extends AdminController
             'civic_kyc' => [
                 'type' => 'bool',
             ],
+            'dcn_address' => [
+                'type' => 'text',
+            ],
     	];
     }
 
@@ -162,6 +165,9 @@ class UsersController extends AdminController
         }
         if(!empty($this->request->input('search-email'))) {
             $users = $users->where('email', 'LIKE', '%'.trim($this->request->input('search-email')).'%');
+        }
+        if(!empty($this->request->input('search-address'))) {
+            $users = $users->where('dcn_address', 'LIKE', '%'.trim($this->request->input('search-address')).'%');
         }
         if(!empty($this->request->input('search-id'))) {
             $users = $users->where('id', $this->request->input('search-id') );
