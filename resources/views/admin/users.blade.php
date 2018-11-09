@@ -99,7 +99,7 @@
                                 'type'                => array('template' => 'admin.parts.table-users-type'),
                                 'is_partner'                => array('format' => 'bool'),
                                 'ratings'                => array('template' => 'admin.parts.table-users-ratings'),
-                                'link'                => array('template' => 'admin.parts.table-users-link'),
+                                'created_at'                => array('format' => 'datetime', 'label' => 'Registered'),
                                 'login'                => array('template' => 'admin.parts.table-users-login'),
     							'update'			=> array('format' => 'update'),
     							'delete'			=> array('format' => 'delete'),
