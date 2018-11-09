@@ -187,7 +187,6 @@ class VoxesController extends AdminController
                         $frow['Type'] = $question->type;
                         $frow['Question'] = $question->{'question:'.$code};
                         $frow['Valid answer'] = $question->is_control;
-                        $frow['Go back to'] = $question->go_back;
                         $a = json_decode($question->{'answers:'.$code});
                         foreach ($a as $i => $ans) {
                             $frow['Answer '.($i+1)] = $ans;
@@ -270,7 +269,6 @@ class VoxesController extends AdminController
                         'order' => intval(current($results)[$i]['number']),
                         'type' => intval(current($results)[$i]['type']),
                         'is_control' => current($results)[$i]['valid_answer'],
-                        'go_back' => current($results)[$i]['go_back_to'],
                         'question_scale' => null,
                         'question_trigger' => null,
                     ];
@@ -337,7 +335,6 @@ class VoxesController extends AdminController
                                     'order' => $i,
                                     'type' => 'single_choice',
                                     'is_control' => null,
-                                    'go_back' => null,
                                     'question_scale' => null,
                                     'question_trigger' => null,
                                     'question-en' => $q,
@@ -566,7 +563,6 @@ class VoxesController extends AdminController
         }
         
         $question->type = $data['type'];
-        $question->go_back = $data['go_back'];
         $question->order = $data['order'];
         $question->stats_featured = !empty($data['stats_featured']);
         $question->stats_fields = !empty($data['stats_fields']) ? $data['stats_fields'] : [];

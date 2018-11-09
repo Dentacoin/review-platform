@@ -226,14 +226,6 @@
                     </p>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.question-go-back') }}</label>
-                <div class="col-md-9">
-                    {{ trans('admin.page.'.$current_page.'.question-go-back-hint') }}<br/>
-                    {{ Form::select('go_back', ['' => '-'] + $item->questions->pluck('question', 'id')->toArray(), !empty($question) ? $question->go_back : '', array('class' => 'form-control select2')) }}
-                </div>
-            </div>
-
 
         </div>
     </div>
