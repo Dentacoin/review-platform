@@ -26,7 +26,7 @@
 	            </div>
 	            <div class="panel-body">
 		    		@if($user->is_verified && $user->email)
-		    			@if($user->register_reward)
+		    			@if($user->dcn_address)
 			                <p>
 		    					@if($user->is_dentist)
 			                		{!! nl2br(trans('front.page.profile.'.$current_subpage.'.hint')) !!}

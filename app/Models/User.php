@@ -61,9 +61,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'verification_code',
         'phone_verified',
         'phone_verified_on',
-        'register_reward',
-        'register_tx',
-        'vox_address',
         'vox_active',
         'fb_id',
         'civic_id',
@@ -74,6 +71,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'allow_withdraw',
         'grace_end',
         'grace_notified',
+        'dcn_address',
     ];
     protected $dates = [
         'created_at',
@@ -194,12 +192,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $ret['photo-dentist'] = $this->hasimage ? true : false;
             $ret['info'] = ($this->name && $this->phone && $this->description && $this->email && $this->country_id && $this->city_id && $this->zip && $this->address && $this->website) ? true : false;
             $ret['gallery'] = $this->photos->isNotEmpty() ? true : false;
-            $ret['wallet'] = $this->my_address() ? true : false;
+            $ret['wallet'] = $this->dcn_address ? true : false;
             $ret['invite-dentist'] = $this->invites->isNotEmpty() ? true : false;
             $ret['widget'] = $this->widget_activated ? true : false;
         } else {
             $ret['photo-patient'] = $this->hasimage ? true : false;
-            $ret['wallet'] = $this->my_address() ? true : false;
+            $ret['wallet'] = $this->dcn_address ? true : false;
             $ret['review'] = $this->reviews_out->isNotEmpty() ? true : false;
             $ret['invite-patient'] = $this->invites->isNotEmpty() ? true : false;
         }
@@ -455,37 +453,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return count($nonverified)>=3 ? true : null;
     }
 
-    public function my_address() {
-        $my_dcn_address = $this->register_reward ? $this->register_reward : ( $this->vox_address ? $this->vox_address : null );
-        if(!$my_dcn_address) {
-            foreach ($this->reviews_out as $ro) {
-                if($ro->reward_address) {
-                    $my_dcn_address = $ro->reward_address;
-                    break;
-                }
-            }
-        }
-
-        return $my_dcn_address;        
-    }
-
     public function canIuseAddress( $address ) {
-        $used = self::where('register_reward', 'LIKE', $address)->first();
+        $used = self::where('dcn_address', 'LIKE', $address)->first();
         if($used && $used->id!=$this->id) {
-            return false;
-        }
-
-        $used_vox = self::where('vox_address', 'LIKE', $address)->first();
-        if($used_vox && $used_vox->id!=$this->id) {
-            return false;
-        }
-
-        $used_reward = Review::where('reward_address', 'LIKE', $address)->first();
-        if($used_reward && $used_reward->user_id!=$this->id) {
-            return false;
-        }
-        $used_transaction = DcnTransaction::where('address', 'LIKE', $address)->first();
-        if($used_transaction && $used_transaction->user_id!=$this->id) {
             return false;
         }
 

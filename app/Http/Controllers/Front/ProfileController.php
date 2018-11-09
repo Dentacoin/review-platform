@@ -201,7 +201,7 @@ class ProfileController extends FrontController
             'no_reviews' => !$this->user->is_dentist && $this->user->reviews_out->isEmpty(),
             'no_address' => $this->user->is_dentist && (!$this->user->city_id || !$this->user->address),
             'no_invites' => $this->user->invites->isEmpty(),
-            'no_reward' => !$this->user->register_reward,
+            'no_reward' => !$this->user->dcn_address,
 
             'buttons_link' => $this->user->is_dentist ? $arr_dentist : $arr_patient,
 
@@ -535,37 +535,6 @@ class ProfileController extends FrontController
         return Response::json( User::getBalance( Request::input('balance-address') ) );
     }
 
-
-    public function reward($locale=null) {
-
-        $ret = [
-            'success' => false,
-            'message' => 'An error occured. Please try again later.'
-        ];
-
-        if(Request::isMethod('post') && !$this->user->register_reward) {
-
-            if( !$this->user->canIuseAddress( Request::input('reward-address') ) ) {
-                $ret['message'] = trans('front.common.address-used');
-            } else {
-                // $reward = new TrpReward();
-                // $reward->user_id = $this->user->id;
-                // $reward->reward = Reward::getReward('reward_register');
-                // $reward->type = 'registration';
-                // $reward->reference_id = null;
-                // $reward->save();
-
-                $this->user->register_reward = Request::input('reward-address');
-                $this->user->save();
-
-                $ret['success'] = true;
-                Request::session()->flash('success-message', trans('front.page.profile.reward.done'));
-            }
-
-        }
-        return Response::json($ret);
-    }
-
     public function password($locale=null) {
         $this->handleMenu();
 
@@ -698,10 +667,10 @@ class ProfileController extends FrontController
             $cashout = new TrpCashout;
             $cashout->user_id = $this->user->id;
             $cashout->reward = $amount;
-            $cashout->address = $this->user->my_address();
+            $cashout->address = $this->user->dcn_address;
             $cashout->save();
 
-            $ret = Dcn::send($this->user, $this->user->my_address(), $amount, 'trp-cashout', $cashout->id);
+            $ret = Dcn::send($this->user, $this->user->dcn_address, $amount, 'trp-cashout', $cashout->id);
             $ret['balance'] = $this->user->getTrpBalance();
             
             if($ret['success']) {

@@ -1,4 +1,4 @@
-@if($user->my_address())
+@if($user->dcn_address)
     <div class="panel panel-default" style="clear: both;">
         <div class="panel-heading">
             <h1 class="panel-title">
@@ -18,7 +18,7 @@
                             {{ trans('front.page.profile.wallet.address') }}
                         </label>
     	                <div class="col-md-9">
-    	                    {{ Form::text( 'wallet-address', $user->my_address(), array('class' => 'form-control', 'id' => 'wallet-address', 'disabled' => 'disabled' )) }}
+    	                    {{ Form::text( 'wallet-address', $user->dcn_address, array('class' => 'form-control', 'id' => 'wallet-address', 'disabled' => 'disabled' )) }}
     	                </div>
     	            </div>
 
@@ -27,7 +27,7 @@
                             {{ trans('front.page.profile.wallet.balance') }}
                         </label>
     	                <div class="col-md-9">
-    	                    {{ Form::text( 'wallet-balance', $user->getBalance($user->my_address())['result'], array('class' => 'form-control', 'id' => 'wallet-balance', 'disabled' => 'disabled' )) }}
+    	                    {{ Form::text( 'wallet-balance', $user->getBalance($user->dcn_address)['result'], array('class' => 'form-control', 'id' => 'wallet-balance', 'disabled' => 'disabled' )) }}
     	                </div>
     	            </div>
 

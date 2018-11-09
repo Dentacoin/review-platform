@@ -54,7 +54,7 @@
             	
             	@include('front.errors')
 
-	        	@if($user->vox_address)
+	        	@if($user->dcn_address)
 					<div class="form-horizontal">
 
 						<div class="black-line-title">
@@ -119,7 +119,7 @@
 					  					{!! trans('vox.page.profile.home.withdraw.address') !!}
 					  				</label>
 					                <div class="col-md-12">
-					                    <input class="form-control style-2" id="vox-address" name="vox-address" type="text" value="{!! $user->vox_address !!}">
+					                    <input class="form-control style-2" id="vox-address" name="vox-address" type="text" value="{!! $user->dcn_address !!}">
 					                </div>
 					            </div>
 
@@ -179,7 +179,7 @@
 			                {!! csrf_field() !!}
 				            <div class="form-group">
 				                <div class="col-md-10">
-				                    <input class="form-control" id="vox-address" name="vox-address" type="text" value="{!! $user->vox_address !!}">
+				                    <input class="form-control" id="vox-address" name="vox-address" type="text" value="{!! $user->dcn_address !!}">
 				                </div>
 				                <div class="col-md-2">
 			                        <button type="submit" name="update" class="btn btn-primary form-control nom">

@@ -14,7 +14,7 @@
 				{{ trans('front.page.profile.reward.wait-for-approval') }}
 			</div>
 		@else
-			@if(!$user->register_reward)
+			@if(!$user->dcn_address)
 				<div class="panel panel-default" id="reward-widget">
 				    <div class="panel-heading">
 				        <h1 class="panel-title">
@@ -121,7 +121,7 @@
 							            <div class="form-group">
 							                <label class="col-md-3 control-label">{{ trans('front.page.profile.wallet.withdraw-address') }}</label>
 							                <div class="col-md-9">
-							                    {{ Form::text( 'withdraw-address', $user->my_address(), array('class' => 'form-control', 'disabled' => 'disabled' )) }}
+							                    {{ Form::text( 'withdraw-address', $user->dcn_address, array('class' => 'form-control', 'disabled' => 'disabled' )) }}
 							                </div>
 							            </div>
 							            <div class="form-group">

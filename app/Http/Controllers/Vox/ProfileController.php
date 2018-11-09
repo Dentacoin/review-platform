@@ -110,7 +110,7 @@ class ProfileController extends FrontController
             } else if(!$this->user->canIuseAddress($va)) {
                 Request::session()->flash('error-message', trans('vox.page.profile.home.address-used'));
             } else {
-                $this->user->vox_address = Request::input('vox-address');
+                $this->user->dcn_address = Request::input('vox-address');
                 $this->user->save();
                 Request::session()->flash('success-message', trans('vox.page.profile.home.address-saved'));
             }
@@ -155,7 +155,7 @@ class ProfileController extends FrontController
             ];
             return Response::json( $ret );
         } else {
-            $this->user->vox_address = Request::input('vox-address');
+            $this->user->dcn_address = Request::input('vox-address');
             $this->user->save();
         }
         
@@ -177,10 +177,10 @@ class ProfileController extends FrontController
             $cashout = new VoxCashout;
             $cashout->user_id = $this->user->id;
             $cashout->reward = $amount;
-            $cashout->address = $this->user->vox_address;
+            $cashout->address = $this->user->dcn_address;
             $cashout->save();
 
-            $ret = Dcn::send($this->user, $this->user->vox_address, $amount, 'vox-cashout', $cashout->id);
+            $ret = Dcn::send($this->user, $this->user->dcn_address, $amount, 'vox-cashout', $cashout->id);
             $ret['balance'] = $this->user->getVoxBalance();
             
             if($ret['success']) {

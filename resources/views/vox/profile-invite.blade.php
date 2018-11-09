@@ -19,7 +19,7 @@
 			@endif
 		</h2>
 
-		@if(!$user->my_address())
+		@if(!$user->dcn_address)
 			<div class="form-horizontal">
                 <div class="alert alert-info" id="wallet-needed">
 					@if($user->is_dentist)
@@ -68,7 +68,7 @@
     						{{ trans('vox.page.profile.invite.option-link-hint') }}
 	    				</p>
 
-						<a href="javascript:;" for="option-link" class="btn btn-inactive{!! $user->my_address() ? '' : ' no-hover' !!}">
+						<a href="javascript:;" for="option-link" class="btn btn-inactive{!! $user->dcn_address ? '' : ' no-hover' !!}">
 							{{ trans('vox.page.profile.invite.option-link') }}
 						</a>
     				</div>
@@ -80,7 +80,7 @@
     						
     					</p>
 
-						<a href="javascript:;" for="option-email" class="btn btn-inactive{!! $user->my_address() ? '' : ' no-hover' !!}">
+						<a href="javascript:;" for="option-email" class="btn btn-inactive{!! $user->dcn_address ? '' : ' no-hover' !!}">
 							{{ trans('vox.page.profile.invite.option-email') }}
 					  	</a>
     				</div>
@@ -91,7 +91,7 @@
     						{{ trans('vox.page.profile.invite.option-contacts-hint') }}
     					</p>
 
-						<a href="javascript:;" for="option-contacts" class="btn btn-inactive{!! $user->my_address() ? '' : ' no-hover' !!}">
+						<a href="javascript:;" for="option-contacts" class="btn btn-inactive{!! $user->dcn_address ? '' : ' no-hover' !!}">
 							{{ trans('vox.page.profile.invite.option-contacts') }}
 					  	</a>
     				</div>

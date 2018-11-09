@@ -116,12 +116,6 @@ class UsersController extends AdminController
     		'avatar' => [
     			'type' => 'avatar'
     		],
-            'register_reward' => [
-                'type' => 'text',
-            ],
-            'register_tx' => [
-                'type' => 'text',
-            ],
             'civic_id' => [
                 'type' => 'text',
             ],
@@ -186,12 +180,6 @@ class UsersController extends AdminController
         if(!empty($this->request->input('search-register-to'))) {
             $firstday = new Carbon($this->request->input('search-register-to'));
             $users = $users->where('created_at', '<=', $firstday);
-        }
-        if(!empty($this->request->input('search-address'))) {
-            $users = $users->where('register_reward', 'LIKE', '%'.trim($this->request->input('search-address')).'%');
-        }
-        if(!empty($this->request->input('search-tx'))) {
-            $users = $users->where('register_tx', 'LIKE', '%'.trim($this->request->input('search-tx')).'%');
         }
 
         if(!empty($this->request->input('search-type'))) {

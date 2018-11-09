@@ -58,7 +58,7 @@
 
 <div class="list-group">
 	@foreach($menu as $key => $profile_menu)
-		@if($user->register_reward && $key=='reward')
+		@if($user->dcn_address && $key=='reward')
 		@else
 			<a href="{{ getLangUrl('profile/'.$key) }}" class="list-group-item {!! $current_subpage == $key ? 'active' : '' !!}">
 				{{ $profile_menu }}

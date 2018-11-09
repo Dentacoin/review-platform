@@ -183,10 +183,10 @@
 						<td> {{ $item->civic_id }} </td>
 					</tr>
 				@endif
-				@if($item->my_address())
+				@if($item->dcn_address)
 					<tr class="row">
 						<td> <b> Wallet address </b> </td>
-						<td> {{ $item->my_address() }} </td>
+						<td> {{ $item->dcn_address }} </td>
 					</tr>
 				@endif			
 				<tr class="row">
