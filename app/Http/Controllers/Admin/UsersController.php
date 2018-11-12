@@ -142,6 +142,11 @@ class UsersController extends AdminController
 
     public function list() {
 
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            return redirect('cms/users/edit/'.Auth::guard('admin')->user()->user_id);            
+        }
+
+
         $user_types = [
             '' => 'All user types',
             'patient' => 'Patients',

@@ -58,6 +58,7 @@ class AdminsController extends AdminController
             $newadmin->password = bcrypt($this->request->input('password'));
             $newadmin->email = $this->request->input('email');
             $newadmin->role = $this->request->input('role');
+            $newadmin->user_id = $this->request->input('user_id');
             $newadmin->save();
 
             $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.added') );
@@ -113,6 +114,7 @@ class AdminsController extends AdminController
                 $item->lang_from = $this->request->input('lang_from');
                 $item->lang_to = $this->request->input('lang_to');
                 $item->text_domain = !empty($this->request->input('text_domain')) ? implode(',', $this->request->input('text_domain')) : '';
+                $item->user_id = $this->request->input('user_id');
                 $item->save();
 
                 $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.updated') );

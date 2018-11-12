@@ -86,17 +86,18 @@ class AdminController extends BaseController
 
         if($params['admin']->role=='voxer') {
             foreach ($menu as $key => $value) {
-                if($key!='vox') {
+                if($key!='vox' && $key!='users') {
                     unset($menu[$key]);
                 } else {
-                    foreach ($menu[$key]['subpages'] as $sk => $sv) {
-                        if($sk=='categories' || $sk=='faq' || $sk=='badges') {
-                            unset( $menu[$key]['subpages'][$sk] );
+                    if( isset( $menu[$key]['subpages'] ) ) {
+                        foreach ($menu[$key]['subpages'] as $sk => $sv) {
+                            if($sk=='categories' || $sk=='faq' || $sk=='badges') {
+                                unset( $menu[$key]['subpages'][$sk] );
+                            }
                         }
                     }
                 }
             }
-
         }
         
         config([
@@ -107,6 +108,10 @@ class AdminController extends BaseController
         $params['counters'] = [];
         $params['counters']['youtube'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
         //dd($params['counters']);
+
+        if($this->current_page!='home' && !isset($menu[$this->current_page])) {
+            return redirect('cms');
+        }
 
 
 		return view('admin.'.$page, $params);

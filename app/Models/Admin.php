@@ -19,7 +19,12 @@ class Admin extends Model implements AuthenticatableContract, CanResetPasswordCo
     	'username', 
     	'email', 
     	'password', 
-    	'comments',
+        'comments',
+        'role',
+        'lang_from',
+        'lang_to',
+        'text_domain',
+    	'user_id',
     ];
     protected $dates = [
         'created_at',

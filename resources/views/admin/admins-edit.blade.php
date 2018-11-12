@@ -75,6 +75,10 @@
                                 <br/>
                             @endforeach
                         </div>
+                        <label class="col-md-2 control-label">Website account ID</label>
+                        <div class="col-md-4">
+                            {{ Form::text('user_id', $item->user_id, array('class' => 'form-control')) }}
+                        </div>
                     </div>
 
                     <div class="form-group">
