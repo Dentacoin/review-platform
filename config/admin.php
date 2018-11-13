@@ -37,6 +37,7 @@ return [
             'subpages' => array(
                 'trp' => 'trp',
                 'vox' => 'vox',
+                'common' => 'common',
             ),
         ),
         'vox' => array(

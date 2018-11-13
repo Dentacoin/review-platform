@@ -25,18 +25,8 @@ class Email extends Model
 	];
 
 
-	public static $vox_tempalates = [
-		11,
-		12,
-		13,
-		14,
-		15,
-		16,
-		25,
-		26,
-		30,
-		32,
-		27,
+	public static $template_types = [
+		'trp', 'vox', 'common'
 	];
 
 	public function template() {
@@ -83,7 +73,11 @@ class Email extends Model
 	}
 
 	private function getPlatform() {
-		return $this->template->id==20 ? $this->meta['transaction_platform'] : ( in_array($this->template->id, self::$vox_tempalates) ? 'vox' : 'reviews' );
+		if($this->template->id==20) {
+			return $this->meta['transaction_platform'];
+		} else {
+			return $this->template->type=='common' ? $this->user->platform : $this->template->type;
+		}
 
 	}
 
@@ -306,7 +300,7 @@ class Email extends Model
 				'[privacy]',
 				'[/privacy]',
 			), array(
-				'<a '.$this->button_style.' href="http://'.($this->template->id==31 ? 'reviews' : 'dentavox').'.dentacoin.com/en/gdpr" target="_blank">',
+				'<a '.$this->button_style.' href="https://dentacoin.com/privacy-policy" target="_blank">',
 				'</a>',
 				'<a href="https://dentacoin.com/privacy/" target="_blank">',
 				'</a>',

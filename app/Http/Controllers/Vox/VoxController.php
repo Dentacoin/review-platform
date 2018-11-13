@@ -23,6 +23,7 @@ use App\Models\UserInvite;
 use App\Models\Dcn;
 use App\Models\Email;
 use App\Models\Reward;
+use App\Models\Admin;
 
 
 class VoxController extends FrontController
@@ -177,6 +178,7 @@ class VoxController extends FrontController
         	} else {
 
 	        	$q = Request::input('question');
+	        	$admin_ids = Admin::getAdminProfileIds();
 
 
 	        	if( !isset( $answered[$q] ) && $not_bot ) {
@@ -309,7 +311,7 @@ class VoxController extends FrontController
 					        	}
 					        }
 
-				        	if($is_scam) {
+				        	if($is_scam && !in_array($this->user->id, $admin_ids)) {
 				        		
 				        		$wrongs = intval(session('wrongs'));
 				        		$wrongs++;
@@ -457,7 +459,7 @@ class VoxController extends FrontController
 							});
 
 	        				$ppp = 5;
-		        			if( $reallist->count() && $reallist->count()%$ppp==0 ) {
+		        			if( $reallist->count() && $reallist->count()%$ppp==0 && !in_array($this->user->id, $admin_ids) ) {
 
 		        				$pagenum = $reallist->count()/$ppp;
 		        				$start = $reallist->forPage($pagenum, $ppp)->first();
@@ -539,7 +541,7 @@ class VoxController extends FrontController
 						        $start = $list->first()->created_at;
 						        $diff = Carbon::now()->diffInSeconds( $start );
 						        $normal = count($vox->questions)*3;
-						        if($normal > $diff) {
+						        if($normal > $diff && !in_array($this->user->id, $admin_ids)) {
 						        	$reward->is_scam = true;
 						        }
 						        $reward->seconds = $diff;

@@ -13,12 +13,11 @@ use Illuminate\Http\Request;
 class EmailsController extends AdminController
 {
     public function list( $what=null ) {
-
-        if($what=='vox') {
-            $templates = EmailTemplate::whereIn('id', Email::$vox_tempalates)->orderBy('updated_at', 'ASC')->get();
-        } else {
-            $templates = EmailTemplate::whereNotIn('id', Email::$vox_tempalates)->orderBy('updated_at', 'ASC')->get();
+        if(!in_array($what, Email::$template_types)) {
+            return redirect('cms/'.$this->current_page.'/'.current(Email::$template_types));
         }
+
+        $templates = EmailTemplate::where('type', $what)->orderBy('updated_at', 'ASC')->get();
 
     	return $this->showView('emails', array(
             'templates' => $templates,
@@ -53,7 +52,7 @@ class EmailsController extends AdminController
             $template->save();
 
             $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.saved'));
-            return redirect('cms/'.$this->current_page);
+            return redirect('cms/'.$this->current_page.'/'.$template->type);
         } else {
             return redirect('cms/'.$this->current_page);
         }

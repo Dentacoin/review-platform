@@ -31,4 +31,8 @@ class Admin extends Model implements AuthenticatableContract, CanResetPasswordCo
         'updated_at',
     	'deleted_at',
     ];
+
+    public function getAdminProfileIds() {
+        return self::whereNotNull('user_id')->pluck('user_id')->toArray();
+    }
 }
