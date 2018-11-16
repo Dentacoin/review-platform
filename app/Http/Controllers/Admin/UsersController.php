@@ -460,8 +460,11 @@ class UsersController extends AdminController
                         } else if($key=='status') {
                             if( $this->request->input($key) && $item->$key!=$this->request->input($key) ) {
                                 if( $this->request->input($key)=='approved' ) {
+                                    if( $item->deleted_at ) {
+                                        $item->restore();
+                                    }
                                     $item->sendTemplate(26);
-                                } else if( $this->request->input($key)=='penging' ) {
+                                } else if( $this->request->input($key)=='pending' ) {
                                     $item->sendTemplate(40);
                                 } if( $this->request->input($key)=='rejected' ) {
                                     $item->sendTemplate(14);
