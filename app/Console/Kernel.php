@@ -189,11 +189,10 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
                                 $trans->save();
                                 if( $trans->user ) {
                                     $trans->user->sendTemplate( 20, [
-                                        'transaction_platform' => $trans->type=='vox-cashout' ? 'vox' : 'reviews',
                                         'transaction_amount' => $trans->amount,
                                         'transaction_address' => $trans->address,
                                         'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
-                                    ] );
+                                    ], $trans->type=='vox-cashout' ? 'vox' : 'trp' );
                                 }
                                 $found = true;
                                 echo $log.'
@@ -307,7 +306,7 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
             $notify = User::where( 'grace_end', '>', Carbon::now()->addDays(23) )->whereNull('grace_notified')->get();
             if($notify->isNotEmpty()) {
                 foreach ($notify as $nuser) {
-                    $nuser->sendTemplate( $nuser->platform=='vox' ? 11 : 39 ); 
+                    $nuser->sendTemplate( $nuser->platform=='vox' ? 11 : 39, null, ($nuser->platform=='vox' ? 'vox' : 'trp') ); 
                     $nuser->grace_notified = true;
                     $nuser->save();
                 }

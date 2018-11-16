@@ -296,13 +296,6 @@ class ProfileController extends FrontController
 
                 $this->user->save();
 
-
-        		// if ($send_validate_email) {
-        		// 	$this->user->sendTemplate( $this->user->is_dentist ? 1 : 2 );
-        		// 	$this->user->is_verified = null;
-        		// 	$this->user->verified_on = null;
-        		// 	$this->user->save();
-        		// }
                 Request::session()->flash('success-message', trans('front.page.profile.info-updated'));
                 return redirect( getLangUrl('profile/info') );
 	        }
@@ -612,11 +605,6 @@ class ProfileController extends FrontController
             $ret['message'] = 'banned';
             return Response::json( $ret );
         }
-        
-        if(!$this->user->is_verified || !$this->user->email) {
-            $ret['message'] = 'not-verified';
-            return Response::json( $ret );
-        }
 
         $jwt = Request::input('jwtToken');
         $civic = Civic::where('jwtToken', 'LIKE', $jwt)->first();
@@ -729,35 +717,6 @@ class ProfileController extends FrontController
         return redirect( getLangUrl('profile'));
     }
 
-    public function setEmail($locale=null) {
-        $ret = [
-            'success' => false
-        ];
-        if($this->user->is_verified) {
-            $ret['success'] = true;
-            $ret['verified'] = true;
-        } else {
-            $validator_arr = [
-                'email' => ['required', 'email', 'unique:users,email,'.$this->user->id]
-            ];
-            $validator = Validator::make(Request::all(), $validator_arr);
-
-            if ($validator->fails()) {
-                $msg = $validator->getMessageBag()->toArray();
-                $ret['message'] = implode(', ', $msg['email']);
-            } else {
-                $this->user->email = Request::input('email');
-                $this->user->save();
-                $this->user->sendTemplate( $this->user->is_dentist ? 1 : 2 );
-                $ret['success'] = true;
-            }
-
-        }
-
-
-        return Response::json($ret);
-    }
-
     public function privacy($locale=null) {
         $this->handleMenu();
 
@@ -768,6 +727,7 @@ class ProfileController extends FrontController
                     $this->user->sendTemplate( 29 );
                     $this->user->self_deleted = 1;
                     $this->user->save();
+                    $this->user->deleteActions();
                     User::destroy( $this->user->id );
                     Auth::guard('web')->logout();
                     return redirect( getLangUrl('/') );

@@ -46,7 +46,7 @@ class IndexController extends FrontController
 					'taken' => trans('vox.page.home.sort-taken'),
 				],
 				'taken' => $this->user->filledVoxes(),
-	        	'voxes' => Vox::where('type', 'normal')->with('stats_questions')->orderBy('created_at', 'DESC')->get(),
+	        	'voxes' => Vox::where('type', 'normal')->orderBy('created_at', 'DESC')->get(),
 	        	'vox_categories' => VoxCategory::whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
 	        	'js' => [
 	        		'home.js'

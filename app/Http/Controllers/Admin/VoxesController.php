@@ -513,6 +513,7 @@ class VoxesController extends AdminController
         $item->type = $this->request->input('type');
         $item->featured = $this->request->input('featured');
         $item->stats_featured = $this->request->input('stats_featured');
+        $item->has_stats = $this->request->input('has_stats');
         $item->save();
 
         VoxToCategory::where('vox_id', $item->id)->delete();

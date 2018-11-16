@@ -39,6 +39,8 @@ class RegisterController extends FrontController
                 'address' =>  array('required', 'string'),
                 'privacy' =>  array('required', 'accepted'),
                 'photo' =>  array('required'),
+                'website' =>  array('required', 'url'),
+                'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
             ]);
 
             if ($validator->fails()) {
@@ -123,8 +125,6 @@ class RegisterController extends FrontController
                 
                 $newuser->gdpr_privacy = true;
                 $newuser->is_dentist = 1;
-                $newuser->phone_verified = true;
-                $newuser->phone_verified_on = Carbon::now();
 
                 if(!empty(session('invited_by'))) {
                     $newuser->invited_by = session('invited_by');
@@ -341,32 +341,6 @@ class RegisterController extends FrontController
         }
     }
 
-    public function register_verify($locale=null, $id, $hash) {
-
-        $user = User::find($id);
-
-        if (!empty($user) && !$user->is_verified) {
-
-            if ($hash == $user->get_token()) {
-
-                $user->verified_on = Carbon::now();
-                $user->is_verified = true;
-
-                $user->save();
-
-                $user->sendTemplate( 12 );
-
-                Auth::login($user, true);
-
-                Request::session()->flash('success-message', trans('vox.page.registration.profile-confirmed'));
-                return redirect( getLangUrl('/'));
-            }
-        }
-        else {
-            return redirect('/');
-        }
-    }
-
     public function forgot($locale=null) {
         $this->current_page = 'forgot-password';
         return $this->ShowVoxView('forgot-password');
@@ -511,14 +485,13 @@ class RegisterController extends FrontController
                         $newuser = new User;
                         $newuser->name = $name;
                         $newuser->email = $email ? $email : '';
-                        $newuser->is_verified = true;
                         $newuser->password = bcrypt($password);
                         $newuser->is_dentist = 0;
                         $newuser->is_clinic = 0;
-                        $newuser->verified_on = Carbon::now();
                         $newuser->civic_id = $data['userId'];
                         $newuser->gdpr_privacy = true;
                         $newuser->platform = 'trp';
+                        $newuser->status = 'approved';
                         
                         if(!empty(session('invited_by'))) {
                             $newuser->invited_by = session('invited_by');

@@ -34,6 +34,13 @@ class UsersController extends AdminController
             'f' => trans('admin.common.gender.f'),
         ];
 
+        $this->statuses = [
+            'new' => 'New',
+            'approved' => 'Approved', 
+            'pending' => 'Suspicious', 
+            'rejected' => 'Rejected'
+        ];
+
     	$this->fields = [
             'title' => [
                 'type' => 'select',
@@ -62,21 +69,6 @@ class UsersController extends AdminController
     		],
             'is_partner' => [
                 'type' => 'bool',
-            ],
-            'is_verified' => [
-                'type' => 'bool',
-            ],
-    		'verified_on' => [
-    			'type' => 'datetimepicker',
-    		],
-            'phone_verified' => [
-                'type' => 'bool',
-            ],
-            'phone_verified_on' => [
-                'type' => 'datetimepicker',
-            ],
-            'verification_code' => [
-                'type' => 'text',
             ],
             'website' => [
                 'type' => 'text',
@@ -125,9 +117,6 @@ class UsersController extends AdminController
             'gdpr_privacy' => [
                 'type' => 'bool',
             ],
-            'is_approved' => [
-                'type' => 'bool',
-            ],
             'allow_withdraw' => [
                 'type' => 'bool',
             ],
@@ -136,6 +125,10 @@ class UsersController extends AdminController
             ],
             'dcn_address' => [
                 'type' => 'text',
+            ],
+            'status' => [
+                'type' => 'select',
+                'values' => $this->statuses
             ],
     	];
     }
@@ -150,8 +143,16 @@ class UsersController extends AdminController
         $user_types = [
             '' => 'All user types',
             'patient' => 'Patients',
-            'dentist' => 'Dentists',
-            'clinic' => 'Clinics',
+            'dentist.all' => 'Dentists (All)',
+            'dentist.new' => 'Dentists (New)',
+            'dentist.pending' => 'Dentists (Suspicious)',
+            'dentist.approved' => 'Dentists (Approved)',
+            'dentist.rejected' => 'Dentists (Rejected)',
+            'clinic.all' => 'Clinics (All)',
+            'clinic.new' => 'Clinics (New)',
+            'clinic.pending' => 'Clinics (Suspicious)',
+            'clinic.approved' => 'Clinics (Approved)',
+            'clinic.rejected' => 'Clinics (Rejected)',
         ];
 
         $user_statuses = [
@@ -194,7 +195,9 @@ class UsersController extends AdminController
         }
 
         if(!empty($this->request->input('search-type'))) {
-            $type = $this->request->input('search-type');
+            $tmp = explode('.', $this->request->input('search-type'));
+            $type = $tmp[0];
+            $status = isset($tmp[1]) && isset( $this->statuses[ $tmp[1] ] ) ? $tmp[1] : null;
             if( $type=='patient' ) {
                 $users = $users->where(function ($query) {
                     $query->where('is_dentist', 0)
@@ -208,6 +211,10 @@ class UsersController extends AdminController
                     $query->where('is_clinic', 0)
                     ->orWhereNull('is_clinic');
                 });
+            }
+
+            if( $status ) {
+                $users = $users->where('status', $status);
             }
 
         }
@@ -231,14 +238,17 @@ class UsersController extends AdminController
 
         // dd($results);
 
+        $total_count = $users->count();
         if($results == 0) {
             $users = $users->take(3000)->get();
         } else {
             $users = $users->take($results)->get();
         }        
+        //$total_count = isset( $total_count[0]->cnt ) ? $total_count[0]->cnt : 0;
 
         return $this->showView('users', array(
             'users' => $users,
+            'total_count' => $total_count,
             'user_types' => $user_types,
             'user_statuses' => $user_statuses,
             'search_register_from' => $this->request->input('search-register-from'),
@@ -262,6 +272,7 @@ class UsersController extends AdminController
         $item = User::find($id);
 
         if(!empty($item)) {
+            $item->deleteActions();
             User::destroy( $id );
         }
 
@@ -271,7 +282,11 @@ class UsersController extends AdminController
 
     public function massdelete(  ) {
         if( Request::input('ids') ) {
-            User::whereIn('id', Request::input('ids'))->delete();            
+            $delusers = User::whereIn('id', Request::input('ids'))->get();
+            foreach ($delusers as $du) {
+                $du->deleteActions();
+                $du->delete();
+            }
         }
 
         $this->request->session()->flash('success-message', 'All selected users and now deleted' );
@@ -442,9 +457,15 @@ class UsersController extends AdminController
                                 $item->is_dentist = false;
                                 $item->is_clinic = false;
                             }
-                        } else if($key=='is_verified') {
-                            if( $this->request->input($key) && !$item->$key ) {
-                                $item->sendTemplate(26);
+                        } else if($key=='status') {
+                            if( $this->request->input($key) && $item->$key!=$this->request->input($key) ) {
+                                if( $this->request->input($key)=='approved' ) {
+                                    $item->sendTemplate(26);
+                                } else if( $this->request->input($key)=='penging' ) {
+                                    $item->sendTemplate(40);
+                                } if( $this->request->input($key)=='rejected' ) {
+                                    $item->sendTemplate(14);
+                                }
                             }
                             $item->$key = $this->request->input($key);
                         } else if($value['type']=='password') {
@@ -469,6 +490,11 @@ class UsersController extends AdminController
                         $newc->category_id = $cat;
                         $newc->save();
                     }
+                }
+
+                if($item->status=='rejected' && empty($item->deleted_at)) {
+                    $item->deleteActions();
+                    User::destroy( $item->id );
                 }
 
                 Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.updated'));

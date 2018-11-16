@@ -248,8 +248,6 @@ class RegisterController extends FrontController
             $newuser->gdpr_privacy = true;
             $newuser->is_dentist = 1;
             $newuser->is_clinic = Request::input('type')=='clinic' ? 1 : 0;
-            $newuser->phone_verified = true;
-            $newuser->phone_verified_on = Carbon::now();
 
             if(!empty(session('invited_by'))) {
                 $newuser->invited_by = session('invited_by');
@@ -338,32 +336,6 @@ class RegisterController extends FrontController
         }
     }
 
-    public function register_verify($locale=null, $id, $hash) {
-
-        $user = User::find($id);
-
-        if (!empty($user)) {
-
-            if ($hash == $user->get_token()) {
-
-                $user->verified_on = Carbon::now();
-                $user->is_verified = true;
-
-                $user->save();
-
-                $user->sendTemplate( $user->is_dentist ? 3 : 4 );
-
-                Auth::login($user, true);
-
-                Request::session()->flash('success-message', trans('front.page.registration.profile-confirmed'));
-                return redirect( getLangUrl('profile'));
-            }
-        }
-        else {
-            return redirect('/');
-        }
-    }
-
     public function forgot($locale=null) {
 
 		return $this->ShowView('forgot-password');
@@ -403,74 +375,6 @@ class RegisterController extends FrontController
         else {
             return redirect('');
         }
-    }
-    
-    public function claim($locale=null, $id, $hash) {
-
-        $user = User::find($id);
-
-        if (!empty($user) && $user->is_dentist && !$user->is_verified) {
-
-            if ($hash == $user->get_invite_token()) {
-
-                session([
-                    'claim_id' => $user->id,
-                ]);
-
-
-                if(Request::isMethod('post')) {
-                    $validator = Validator::make(Request::all(), [
-                        'password' => array('required', 'min:6'),
-                        'password-repeat' => 'required|same:password',
-                    ]);
-
-                    if ($validator->fails()) {
-                        return redirect( getLangUrl('claim/'.$id.'/'.$hash))
-                        ->withInput()
-                        ->withErrors($validator);
-                    } else {
-                        
-                        $user->is_verified = true;
-                        $user->is_approved = 0;
-                        $user->password = bcrypt(Request::input('password'));
-                        $user->save();
-
-                        $mtext = 'Dentist/Clinic just claimed its profile:
-
-                        '.url('https://reviews.dentacoin.com/cms/users/edit/'.$user->id).'
-
-                        ';
-
-                        Mail::raw($mtext, function ($message) use ($user) {
-
-                            $receiver = 'ali.hashem@dentacoin.com';
-                            $sender = config('mail.from.address');
-                            $sender_name = config('mail.from.name');
-
-                            $message->from($sender, $sender_name);
-                            $message->to( $receiver );
-                            //$message->to( 'dokinator@gmail.com' );
-                            $message->replyTo($receiver, $user->getName());
-                            $message->subject('Profile claimed');
-                        });
-
-                        Auth::login($user, true);
-
-                        Request::session()->flash('success-message', trans('front.page.claim.success'));
-                        return redirect( getLangUrl('profile') );
-                    }
-
-                }
-
-                return $this->ShowView('claim', array(
-                    'id' => $id,
-                    'hash' => $hash,
-                    'future_profile' => $user
-                ));
-            }
-        }
-
-        return redirect('/');
     }
 
     public function recover_form($locale=null, $id, $hash) {
@@ -574,14 +478,13 @@ class RegisterController extends FrontController
                         $newuser = new User;
                         $newuser->name = $name;
                         $newuser->email = $email ? $email : '';
-                        $newuser->is_verified = true;
                         $newuser->password = bcrypt($password);
                         $newuser->is_dentist = 0;
                         $newuser->is_clinic = 0;
-                        $newuser->verified_on = Carbon::now();
                         $newuser->civic_id = $data['userId'];
                         $newuser->gdpr_privacy = true;
                         $newuser->platform = 'trp';
+                        $newuser->status = 'approved';
                         
                         if(!empty(session('invited_by'))) {
                             $newuser->invited_by = session('invited_by');

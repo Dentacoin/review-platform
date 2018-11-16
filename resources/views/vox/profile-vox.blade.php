@@ -52,7 +52,7 @@
 											{{ $completed->vox->title }}
 		            					</td>
 		            					<td>
-		            						@if($completed->vox->stats_questions->isNotEmpty())
+		            						@if($completed->vox->has_stats)
 											<a href="{{ $completed->vox->getStatsList() }}" target="_blank">
 												{{ trans('vox.page.profile.vox.list-check') }}
 											</a>

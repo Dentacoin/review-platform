@@ -186,7 +186,6 @@ class LoginController extends FrontController
             $newuser = new User;
             $newuser->name = $name;
             $newuser->email = $s_user->getEmail() ? $s_user->getEmail() : '';
-            $newuser->is_verified = $s_user->getEmail() ? true : false;
             $newuser->password = bcrypt($password);
             $newuser->country_id = $country_id;
             $newuser->city_id = $city_id;
@@ -195,6 +194,7 @@ class LoginController extends FrontController
             $newuser->fb_id = $s_user->getId();
             $newuser->gdpr_privacy = true;
             $newuser->platform = 'vox';
+            $newuser->status = 'approved';
 
             if(!empty(session('invited_by'))) {
                 $newuser->invited_by = session('invited_by');

@@ -84,8 +84,8 @@ class VoxController extends FrontController
 		$doing_asl = false;
 		$first = Vox::where('type', 'home')->first();
 
-		if(empty($vox) || (!$this->user->is_verified || !$this->user->email) || !$this->user->madeTest($first->id) ) {
-			if(!$this->user->is_verified || !$this->user->email) {
+		if(empty($vox) || $this->user->status!='approved' || !$this->user->madeTest($first->id) ) {
+			if($this->user->status!='approved') {
             	Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
 			}
 			return redirect( getLangUrl('/') );
@@ -311,7 +311,7 @@ class VoxController extends FrontController
 					        	}
 					        }
 
-				        	if($is_scam && !in_array($this->user->id, $admin_ids)) {
+				        	if($is_scam && !in_array($this->user->id, $admin_ids) && !$this->user->is_partner) {
 				        		
 				        		$wrongs = intval(session('wrongs'));
 				        		$wrongs++;
@@ -458,14 +458,14 @@ class VoxController extends FrontController
 							    return !$value->is_skipped;
 							});
 
-	        				$ppp = 5;
-		        			if( $reallist->count() && $reallist->count()%$ppp==0 && !in_array($this->user->id, $admin_ids) ) {
+	        				$ppp = 10;
+		        			if( $reallist->count() && $reallist->count()%$ppp==0 && !in_array($this->user->id, $admin_ids) && !$this->user->is_partner ) {
 
 		        				$pagenum = $reallist->count()/$ppp;
 		        				$start = $reallist->forPage($pagenum, $ppp)->first();
 		        				
 						        $diff = Carbon::now()->diffInSeconds( $start->created_at );
-						        $normal = $ppp*3;
+						        $normal = $ppp*2;
 						        if($normal > $diff) {
 
 						        	$warned_before = session('too-fast');
@@ -540,8 +540,8 @@ class VoxController extends FrontController
 						        $reward->mistakes = intval(session('wrongs-'.$vox->id));
 						        $start = $list->first()->created_at;
 						        $diff = Carbon::now()->diffInSeconds( $start );
-						        $normal = count($vox->questions)*3;
-						        if($normal > $diff && !in_array($this->user->id, $admin_ids)) {
+						        $normal = count($vox->questions)*2;
+						        if($normal > $diff && !in_array($this->user->id, $admin_ids) && !$this->user->is_partner) {
 						        	$reward->is_scam = true;
 						        }
 						        $reward->seconds = $diff;

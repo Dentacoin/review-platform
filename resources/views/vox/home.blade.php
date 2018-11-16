@@ -60,7 +60,7 @@
 									<span class="bold">{{ !empty($vox->complex) ? 'max ' : '' }} {{ $vox->getRewardTotal() }} DCN</span>
 									<p>{{ $vox->formatDuration() }}</p>
 									<div class="btns">
-										@if($vox->stats_questions->isNotEmpty())
+										@if($vox->has_stats)
 										<a class="statistics blue-button secondary" href="{{ $vox->getStatsList() }}">
 											{{ trans('vox.common.check-statictics') }}
 										</a>

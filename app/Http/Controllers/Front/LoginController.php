@@ -237,21 +237,6 @@ class LoginController extends FrontController
             return redirect(getLangUrl('profile'));
         } else {
 
-            $claiming = session('claim_id');
-            if($claiming) {
-                $newuser = User::find($claiming);
-                $newuser->is_verified = true;
-                $newuser->verified_on = Carbon::now();
-                $newuser->fb_id = $s_user->getId();
-                $newuser->save();
-
-                $newuser->sendTemplate( 3 );
-
-                Auth::login($newuser, true);
-                Request::session()->flash('success-message', trans('front.page.registration.completed-by-claim'));
-                return redirect( getLangUrl('profile') );
-            }
-
             $name = $s_user->getName() ? $s_user->getName() : ( !empty($s_user->user['first_name']) && !empty($s_user->user['last_name']) ? $s_user->user['first_name'].' '.$s_user->user['last_name'] : ( !empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' ) );
 
 
@@ -277,15 +262,14 @@ class LoginController extends FrontController
             $newuser = new User;
             $newuser->name = $name;
             $newuser->email = $s_user->getEmail() ? $s_user->getEmail() : '';
-            $newuser->is_verified = $s_user->getEmail() ? true : false;
             $newuser->password = bcrypt($password);
             $newuser->is_dentist = $is_dentist;
             $newuser->is_clinic = $is_clinic;
-            $newuser->verified_on = Carbon::now();
             $newuser->country_id = $this->country_id;
             $newuser->fb_id = $s_user->getId();
             $newuser->gdpr_privacy = true;
             $newuser->platform = 'trp';
+            $newuser->status = 'approved';
             
             if(!empty(session('invited_by'))) {
                 $newuser->invited_by = session('invited_by');

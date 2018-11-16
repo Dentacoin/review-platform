@@ -190,10 +190,12 @@ class DentistController extends FrontController
 
                 $ret['valid_input'] = true;
 
-                if( $this->user->is_verified && $this->user->email && !$this->user->is_dentist) {
+                if( !$this->user->is_dentist) {
 
                     $old_review = $this->user->hasReviewTo($item->id);
                     if($old_review && $old_review->status=='accepted') {
+                        ; //dgd
+                    } else if( $this->user->loggedFromBadIp() ) {
                         ; //dgd
                     } else if( $this->user->getReviewLimits() ) {
                         ; //dgd
@@ -416,97 +418,17 @@ class DentistController extends FrontController
         return redirect( $item->getLink() );
     }
 
-
-    public function code($locale=null, $slug) {
-        $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
-
-        if(empty($item)) {
-            return redirect( getLangUrl('dentists') );
-        }
-
-        $code = trim( Request::input( 'code' ) );
-
-        if($item->verification_code && $item->phone && $code==$item->verification_code) {
-            $item->phone_verified = true;
-            $item->phone_verified_on = Carbon::now();
-            $item->save();
-
-            return Response::json( [
-                'success' => true,
-                'link' => getLangUrl('claim/'.$item->id.'/'.$item->get_invite_token())
-            ] );
-        }
-
-
-        return Response::json( ['success' => false] );
-    }
-
-
-    public function email($locale=null, $slug) {
-        $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
-
-        if(empty($item)) {
-            return redirect( getLangUrl('dentists') );
-        }
-
-
-        if(trim( Request::input( 'email' ) ) == $item->email) {
-            $item->sendTemplate( 9 );
-
-            return Response::json( ['success' => true] );
-        }
-
-
-        return Response::json( ['success' => false] ); //, 'bla' => Request::input( 'email' ).' -- '.$item->email
-
-    }
-
-    public function password($locale=null, $slug) {
-        $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
-
-        if(empty($item)) {
-            return redirect( getLangUrl('dentists') );
-        }
-
-        $validator = Validator::make(Request::all(), [
-            'password' => array('required', 'min:6'),
-            'password-repeat' => 'required|same:password',
-        ]);
-
-        if ($validator->fails()) {
-            return Response::json( ['success' => false] );
-        } else {
-            $item->password = bcrypt(Request::input('password'));
-            $item->is_verified = true;
-            $item->verified_on = Carbon::now();
-            $item->save();
-
-            Auth::login($item, true);
-
-            Request::session()->flash('success-message', trans('front.page.claim.success'));
-
-            return Response::json( [
-                'success' => true,
-                'url' => getLangUrl('profile'),
-            ] );
-        }
-
-
-    }
-
     public function useful($locale=null, $review_id) {
         $review = Review::find($review_id);
         if(!empty($review)) {
             $myvotes = $this->user->usefulVotesForDenist($review->dentist_id);
             if(!in_array($review_id, $myvotes)) {
-                if($this->user->is_verified && $this->user->email) {
-                    $review->upvotes++;
-                    $review->save();
-                    $uv = new ReviewUpvote;
-                    $uv->review_id = $review_id;
-                    $uv->user_id = $this->user->id;
-                    $uv->save();
-                }
+                $review->upvotes++;
+                $review->save();
+                $uv = new ReviewUpvote;
+                $uv->review_id = $review_id;
+                $uv->user_id = $this->user->id;
+                $uv->save();
             }
         }
 

@@ -153,13 +153,10 @@ $reviewRoutes = function () {
 			Route::any('invite/{id}/{hash}/{inv_id?}', 			'RegisterController@invite_accept');
 			Route::any('claim/{id}/{hash}', 					'RegisterController@claim');
 
-			Route::post('phone/save', 							'PhoneController@save');
-			Route::post('phone/check', 							'PhoneController@check');
 			Route::get('useful/{id}', 							'DentistController@useful');
 
 			Route::get('register', 								'RegisterController@register');
 			Route::post('register', 							'RegisterController@register_form');
-			Route::get('verify/{id}/{hash}', 					'RegisterController@register_verify');
 			Route::get('forgot-password', 						'RegisterController@forgot');
 			Route::post('forgot-password', 						'RegisterController@forgot_form');
 			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
@@ -192,10 +189,6 @@ $reviewRoutes = function () {
 
 			Route::get('dentist/{slug}/confirm-review/{secret}', 	'DentistController@confirmReview');
 			Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');
-			Route::post('dentist/{slug}/claim-phone', 			'DentistController@claim');
-			Route::post('dentist/{slug}/claim-code', 			'DentistController@code');
-			Route::post('dentist/{slug}/claim-password', 		'DentistController@password');
-			Route::post('dentist/{slug}/claim-email', 			'DentistController@email');
 			Route::get('dentist/{slug}/ask', 					'DentistController@ask');
 			Route::any('dentist/{slug}/{review_id}', 			'DentistController@list');
 			Route::any('dentist/{slug}', 						'DentistController@list');
@@ -275,7 +268,6 @@ $voxRoutes = function () {
 			Route::post('registration/step1', 						'RegisterController@check_step_one');
 			Route::post('registration/upload', 						'RegisterController@upload');
 
-			Route::get('verify/{id}/{hash}', 					'RegisterController@register_verify');
 			Route::get('recover-password', 						'RegisterController@forgot');
 			Route::post('recover-password', 						'RegisterController@forgot_form');
 			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
@@ -297,9 +289,6 @@ $voxRoutes = function () {
 
 			Route::group(['middleware' => 'auth:web'], function () {
 				Route::any('welcome-to-dentavox', 					'RegisterController@register_success');
-
-				Route::post('phone/save', 						'PhoneController@save');
-				Route::post('phone/check', 						'PhoneController@check');
 
 				Route::any('profile', 							'ProfileController@home');
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');

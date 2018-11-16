@@ -268,11 +268,6 @@ $(document).ready(function(){
         $('.panel-body-reward .alert').hide();
 
         var dcn_address = $('#transfer-reward-address').val();
-        if ( typeof web3 !== 'undefined' && !web3.isAddress(dcn_address) ) {
-            $('#reward-invalid').show();
-            ajax_is_running = false;
-            return;
-        }
 
         var btn = $(this).find('button[type="submit"]').first();
         btn.attr('data-old', btn.html());

@@ -84,6 +84,9 @@
             </div>
             <div class="panel-body">
         		<div class="panel-body">
+                    <b>
+                        Showing {{ $users->isNotEmpty() ? $users->count() : '0' }} out of total {{ $total_count }} profiles that match this search
+                    </b>
                     <form method="post" action="{{ url('cms/users/mass-delete') }}" >
                         {!! csrf_field() !!}
     					@include('admin.parts.table', [
@@ -97,6 +100,7 @@
                                 'city_id'                => array('format' => 'city'),
     							'country_id'				=> array('format' => 'country'),
                                 'type'                => array('template' => 'admin.parts.table-users-type'),
+                                'status'                => array('template' => 'admin.parts.table-users-status', 'label' => 'Status'),
                                 'is_partner'                => array('format' => 'bool'),
                                 'ratings'                => array('template' => 'admin.parts.table-users-ratings'),
                                 'created_at'                => array('format' => 'datetime', 'label' => 'Registered'),

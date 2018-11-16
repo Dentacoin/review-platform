@@ -24,7 +24,7 @@ class DentistsController extends FrontController
         //     $u->updateStrength();
         // }
 
-        $items = User::where('is_dentist', 1)->where('is_approved', true);
+        $items = User::where('is_dentist', 1)->where('status', 'approved');
 
         $page = max(1, $page);
         $ppp = 12;

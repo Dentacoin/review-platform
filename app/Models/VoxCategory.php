@@ -27,8 +27,8 @@ class VoxCategory extends Model {
     }
 
     public function stats_voxes() {
-        return $this->hasMany('App\Models\VoxToCategory', 'vox_category_id', 'id')->with('vox.stats_questions')->whereHas('vox', function ($query) {
-            $query->where('type', 'normal')->whereHas( 'stats_questions' );
+        return $this->hasMany('App\Models\VoxToCategory', 'vox_category_id', 'id')->whereHas('vox', function ($query) {
+            $query->where('type', 'normal')->where( 'has_stats', 1 );
         });
     }
 

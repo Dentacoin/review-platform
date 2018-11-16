@@ -41,7 +41,7 @@
 					{!! trans('vox.page.stats.featured') !!}
 				</b>
 				@foreach($voxes as $vox)
-					@if($vox->stats_questions->isNotEmpty())
+					@if($vox->has_stats)
 						<div class="vox-stat flex" featured="{{ intval($vox->stats_featured) }}" published="{{ $vox->created_at->timestamp }}" popular="{{ intval($vox->rewards()->count()) }}" {!! $vox->stats_featured ? '' : 'style="display: none;"' !!}>
 							@if($vox->stats_featured)
 								<img class="featured" src="{{ url('new-vox-img/star.png') }}">

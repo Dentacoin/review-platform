@@ -56,11 +56,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'invited_by',
         'hasimage',
         'is_approved',
-        'is_verified',
-        'verified_on',
-        'verification_code',
-        'phone_verified',
-        'phone_verified_on',
         'vox_active',
         'fb_id',
         'civic_id',
@@ -77,9 +72,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'created_at',
         'updated_at',
         'deleted_at',
-        'verified_on',
         'grace_end',
-        'phone_verified_on',
     ];
 
     public function city() {
@@ -311,11 +304,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $token;
     }
 
-    public function sendTemplate($template_id, $params=null) {
+    public function sendTemplate($template_id, $params=null, $platform=null) {
         $item = new Email;
         $item->user_id = $this->id;
         $item->template_id = $template_id;
         $item->meta = $params;
+        $item->platform = $platform ? $platform : (mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp');
         $item->save();
         $item->send();
     }
@@ -534,20 +528,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     }
 
-    public function canInvite($platform) {
-        if($platform == 'trp') {
-            return ($this->is_verified || $this->fb_id) && !( $this->is_dentist && !$this->is_approved );
-        } else {
-            return $this->is_verified || $this->fb_id;            
+    public function deleteActions() {
+        foreach ($this->reviews_out as $r) {
+            $r->delete();
         }
     }
 
+    public function canInvite($platform) {
+        return $this->status=='approved' && $this->civic_kyc && !$this->loggedFromBadIp();
+    }
+
     public function canWithdraw($platform) {
-        if($platform == 'trp') {
-            return $this->is_verified && $this->email && $this->civic_id && !( $this->is_dentist && !$this->is_approved );
-        } else {
-            return $this->is_verified && $this->email && $this->civic_id;
-        }
+        return $this->status=='approved' && $this->civic_kyc && !$this->loggedFromBadIp();
     }
 
     public function getSameIPUsers() {
@@ -631,7 +623,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function loggedFromBadIp() {
         $users_with_same_ip = UserLogin::where('ip', 'like', Request::ip())->where('user_id', '!=', $this->ip)->groupBy('user_id')->get()->count();
 
-        if ($users_with_same_ip >=3 && !$this->allow_withdraw ) {
+        if ($users_with_same_ip >=3 && !$this->allow_withdraw && !$this->is_dentist ) {
             return true;
         } else {
             return false;

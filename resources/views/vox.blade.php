@@ -133,7 +133,7 @@
 							@endif
 						</div>
 						<div class="header-right col-md-4 tar flex">
-							@if( $user->is_dentist && !$user->is_approved )
+							@if( $user && $user->status!='approved' )
 							@elseif($user)
 								<div class="user-and-price header-a">
 									<a class="my-name" href="{{ getLangUrl('profile') }}">
@@ -156,7 +156,7 @@
 									<a class="btn" href="{{ getLangUrl('profile') }}">
 										My Account
 									</a>
-									@if(!$user->is_verified || !$user->email)
+									@if($user->status!='approved')
 										<span>
 											* You cannot access your Profile until it's approved.
 										</span>

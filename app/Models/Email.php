@@ -22,6 +22,7 @@ class Email extends Model
     	"template_id",
     	"meta",
     	"sent",
+    	"platform",
 	];
 
 
@@ -49,18 +50,19 @@ class Email extends Model
 
 		list($content, $title, $subtitle, $subject) = $this->prepareContent();
 
-		$platform = $this->getPlatform();
+		$platform = $this->platform;
+		$sender = $platform=='vox' ? config('mail.from.address-vox') : config('mail.from.address');
+		if($this->template_id==40) {
+			$sender = 'ali.hashem@dentacoin.com';
+		}
+		$sender_name = $platform=='vox' ? config('mail.from.name-vox') : config('mail.from.name');
 		Mail::send('emails.template', [
 				'user' => $this->user,
 				'content' => $content,
 				'title' => $title,
 				'subtitle' => $subtitle,
 				'platform' => $platform,
-			], function ($message) use ($subject, $platform) {
-
-				$sender = $platform=='vox' ? config('mail.from.address-vox') : config('mail.from.address');
-				$sender_name = $platform=='vox' ? config('mail.from.name-vox') : config('mail.from.name');
-
+			], function ($message) use ($subject, $platform, $sender, $sender_name) {
 			    $message->from($sender, $sender_name);
 			    $message->to( $this->user->email );
 			    //$message->to( 'dokinator@gmail.com' );
@@ -72,15 +74,6 @@ class Email extends Model
 		$this->save();
 	}
 
-	private function getPlatform() {
-		if($this->template->id==20) {
-			return $this->meta['transaction_platform'];
-		} else {
-			return $this->template->type=='common' ? $this->user->platform : $this->template->type;
-		}
-
-	}
-
 	public function prepareContent() {
 
 		$title = stripslashes($this->template['title']);
@@ -90,10 +83,15 @@ class Email extends Model
 			$subject = $title;
 		}
 		$content = $this->template['content'];
-		$platform = $this->getPlatform();
+		$platform_names = [
+			'vox' => 'DentaVox',
+			'trp' => 'Trusted Reviews',
+			'dentacare' => 'DentaCare',
+		];
 
 		$deafult_searches = array(
 			'[name]',
+			'[platform]',
 			'[i]',
 			'[/i]',
 			'[u]',
@@ -111,6 +109,7 @@ class Email extends Model
 		);
 		$deafult_replaces = array(
 			$this->user->getName(),
+			$platform_names[$this->platform],
 			'<i>',
 			'</i>',
 			'<span style="text-decoration: underline;">',
@@ -123,7 +122,7 @@ class Email extends Model
 			'</div>',
 			'<a '.$this->button_style.' href="'.getLangUrl('/').'">',
 			'</a>',
-			'<a href="'.url($platform=='vox' ? 'DentavoxMetamask.pdf' : 'MetaMaskInstructions.pdf').'">',
+			'<a href="'.url($this->platform=='vox' ? 'DentavoxMetamask.pdf' : 'MetaMaskInstructions.pdf').'">',
 			'</a>'
 		);
 
@@ -166,7 +165,7 @@ class Email extends Model
 			), $content);
 		}
 
-		if($this->template->id==5 || $this->template->id==13) { //Recover
+		if($this->template->id==13) { //Recover
 			$content = str_replace(array(
 				'[recoverlink]',
 				'[/recoverlink]',
@@ -208,19 +207,6 @@ class Email extends Model
 			), $content);
 		}
 
-		if($this->template->id==9) { //Add dentist
-			$inviter = User::find($this->user->invited_by);
-			$content = str_replace(array(
-				'[inviter_name]',
-				'[claimlink]',
-				'[/claimlink]',
-			), array(
-				$inviter->getName(),
-				'<a '.$this->button_style.' href="'.getLangUrl('claim/'.$this->user->id.'/'.$this->user->get_invite_token()).'">',
-				'</a>',
-			), $content);
-		}
-
 		if($this->template->id==15) { //Ban
 			$content = str_replace('[expires]', $this->meta['expires'], $content);
 			$content = str_replace('[ban_days]', $this->meta['ban_days'], $content);
@@ -249,12 +235,16 @@ class Email extends Model
 			), $content);
 		}
 
-		if($this->template->id==26) { //Dentist approved
+		if($this->template->id==26 || $this->template->id==40 || $this->template->id==14) { //Dentist approved
 			$content = str_replace(array(
 				'[welcome_link]',
 				'[/welcome_link]',
+				'[become_dcn_dentist]',
+				'[/become_dcn_dentist]',
 			), array(
 				'<a '.$this->text_style.' href="'.getLangUrl('welcome-to-dentavox').'">',
+				'</a>',		
+				'<a '.$this->button_style.' target="_blank" href="https://dentists.dentacoin.com/#contacts">',
 				'</a>',				
 			), $content);
 		}

@@ -65,6 +65,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="has_stats" class="col-md-3 control-label" style="padding-top: 0px;">Stats Enabled</label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="has_stats" value="1" id="has_stats" {!! !empty($item) && $item->has_stats ? 'checked="checked"' : '' !!} >
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Featured in Stats</label>
                         <div class="col-md-9">
                             <input type="checkbox" name="stats_featured" value="1" id="stats_featured" {!! !empty($item) && $item->stats_featured ? 'checked="checked"' : '' !!} >

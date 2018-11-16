@@ -48,15 +48,6 @@
 			</p>
 		@endif
 
-		@if( $item->invited_by && !$item->verified ) 
-			<div>
-				<a class="btn-claim" style="margin: 0px;" href="javascript:;">
-					<i class="fa fa-question-circle"></i>
-					{{ trans('front.page.dentist.claim-info') }} {{ trans('front.page.dentist.claim-button') }}
-				</a>
-			</div>
-		@endif
-
 		@if($item->country && $item->city && ($item->address || $item->zip) )
 			<a href="javascript:;" class="show-map">
 				<!-- <i class="fa fa-map"></i> -->
@@ -519,19 +510,17 @@
 							@endif
 						</div>
 	                </div>
+				@elseif($user->loggedFromBadIp())
+					<div class="panel-body review rating-panel">
+						<div class="alert alert-info">
+							{!! trans('front.page.'.$current_page.'.write-review-bad-ip') !!}
+						</div>
+	                </div>				
 				@elseif($review_limit_reached)
 					<div class="panel-body review rating-panel">
 						<div class="alert alert-info">
 							{{ trans('front.page.'.$current_page.'.write-review-limit-'.$review_limit_reached) }}
 						</div>
-	                </div>
-				@elseif( !empty($user) && !($user->is_verified && $user->email) )
-					<div class="panel-body review rating-panel">
-	                    @include('front.template-parts.verify-email', [
-	                    	'cta' => trans('front.page.'.$current_page.'.not-verified',[
-	                    		'email' => '<b>'.$user->email.'</b>'
-	                    	])
-	                    ])							
 	                </div>
 				@elseif(!empty($user) && !$user->is_dentist && empty($my_review))
 					@include('front.template-parts.submit-review-form')

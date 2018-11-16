@@ -138,7 +138,7 @@ class ProfileController extends FrontController
 
     public function withdraw($locale=null) {
         if($this->user->isBanned('vox') || !$this->user->canWithdraw('vox') ) {
-            return ;
+            return;
         }
 
         $va = trim(Request::input('vox-address'));
@@ -161,7 +161,7 @@ class ProfileController extends FrontController
         
 
         $amount = intval(Request::input('wallet-amount'));
-        if($amount>$this->user->getVoxBalance()) {
+        if($amount > $this->user->getVoxBalance()) {
             $ret = [
                 'success' => false,
                 'message' => trans('vox.page.profile.home.amount-too-high')
@@ -301,6 +301,7 @@ class ProfileController extends FrontController
                     $this->user->sendTemplate( 30 );
                     $this->user->self_deleted = 1;
                     $this->user->save();
+                    $this->user->deleteActions();
                     User::destroy( $this->user->id );
                     Auth::guard('web')->logout();
                     return redirect( getLangUrl('/') );
@@ -563,12 +564,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         		}
         		$this->user->save();
 
-        		// if ($send_validate_email) {
-        		// 	$this->user->sendTemplate( $this->user->is_dentist ? 1 : 2 );
-        		// 	$this->user->is_verified = null;
-        		// 	$this->user->verified_on = null;
-        		// 	$this->user->save();
-        		// }
                 Request::session()->flash('success-message', trans('vox.page.profile.info.updated'));
                 return redirect( getLangUrl('profile/info') );
 	        }
@@ -667,38 +662,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
     public function balance($locale=null) {
         return Response::json( User::getBalance( Request::input('vox-address') ) );
-    }
-
-
-    
-
-    public function setEmail($locale=null) {
-        $ret = [
-            'success' => false
-        ];
-        if($this->user->is_verified) {
-            $ret['success'] = true;
-            $ret['verified'] = true;
-        } else {
-            $validator_arr = [
-                'email' => ['required', 'email', 'unique:users,email,'.$this->user->id]
-            ];
-            $validator = Validator::make(Request::all(), $validator_arr);
-
-            if ($validator->fails()) {
-                $msg = $validator->getMessageBag()->toArray();
-                $ret['message'] = implode(', ', $msg['email']);
-            } else {
-                $this->user->email = Request::input('email');
-                $this->user->save();
-                $this->user->sendTemplate( 11 );
-                $ret['success'] = true;
-            }
-
-        }
-
-
-        return Response::json($ret);
     }
 
     public function gdpr($locale=null) {

@@ -178,7 +178,7 @@
 								{!! trans('vox.page.questionnaire.what-next-another') !!}
 								
 							</a>
-							@if($vox->stats_questions->isNotEmpty())
+							@if($vox->has_stats)
 								<a class="white-button" href="{{ $vox->getStatsList() }}">
 									{!! trans('vox.page.questionnaire.what-next-stats') !!}
 									

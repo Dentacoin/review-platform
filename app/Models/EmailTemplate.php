@@ -34,6 +34,7 @@ class EmailTemplate extends Model
     public function shortcodes() {
         $codes = [
             '[name]',
+            '[platform]',
             '[b]bold[/b]',
             '[i]italic[/i]',
             '[u]underline[/u]',
@@ -53,7 +54,7 @@ class EmailTemplate extends Model
             $codes[] = '[rewardlink]Click here[/rewardlink]';            
         }
 
-        if($this->id==5 || $this->id==13) {
+        if($this->id==13) {
             $codes[] = '[recoverlink]Click here[/recoverlink]';
         } 
 
@@ -68,11 +69,6 @@ class EmailTemplate extends Model
             $codes[] = '[friend_name]';
             $codes[] = '[invitelink]Click here[/invitelink]';
         } 
-
-        if($this->id==9) {
-            $codes[] = '[inviter_name]';
-            $codes[] = '[claimlink]Click here[/claimlink]';
-        } 
         
         if($this->id==15) {
             $codes[] = '[expires]';
@@ -81,8 +77,9 @@ class EmailTemplate extends Model
         } 
 
         
-        if($this->id==26) {
+        if($this->id==14 || $this->id==26 || $this->id==40) {
             $codes[] = '[welcome_link]Click here[/welcome_link]';
+            $codes[] = '[become_dcn_dentist]Click here[/become_dcn_dentist]';
         } 
 
         if($this->id==18 || $this->id==19 || $this->id==22) {
