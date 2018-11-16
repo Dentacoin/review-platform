@@ -436,10 +436,9 @@ class UsersController extends AdminController
             $this->fields['password'] = [
                 'type' => 'password',
             ];
+        } else {
+            unset( $this->fields['status'] );
         }
-
-        //dd(bcrypt('my$tronGpass!'));
-        //$2y$10$.AunhByiNrBlkkbAC7pG3.oTp06Lz6Z4aoRIjJmQqr95/c.Hs3akW
 
         if(!empty($item)) {
 

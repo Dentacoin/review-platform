@@ -309,7 +309,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $item->user_id = $this->id;
         $item->template_id = $template_id;
         $item->meta = $params;
-        $item->platform = $platform ? $platform : (mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp');
+        if($platform) {
+            $item->platform = $platform;            
+        } else {
+             if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
+                $item->platform = $this->platform;
+             } else {
+                $item->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
+             }
+        }
         $item->save();
         $item->send();
     }
@@ -531,6 +539,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function deleteActions() {
         foreach ($this->reviews_out as $r) {
             $r->delete();
+        }
+
+        if(!$this->is_dentist) {
+            $this->sendTemplate(9);
         }
     }
 
