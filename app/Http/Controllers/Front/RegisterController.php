@@ -241,6 +241,7 @@ class RegisterController extends FrontController
             $newuser->city_id = Request::input('city_id');
             $newuser->password = bcrypt(Request::input('password'));
             $newuser->phone = $phone;
+            $newuser->platform = 'trp';
             $newuser->zip = Request::input('zip');
             $newuser->address = Request::input('address');
             $newuser->website = Request::input('website');

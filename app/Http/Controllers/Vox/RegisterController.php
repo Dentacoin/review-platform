@@ -119,6 +119,7 @@ class RegisterController extends FrontController
                 $newuser->city_id = Request::input('city_id');
                 $newuser->password = bcrypt(Request::input('password'));
                 $newuser->phone = $phone;
+                $newuser->platform = 'vox';
                 $newuser->zip = Request::input('zip');
                 $newuser->address = Request::input('address');
                 $newuser->website = Request::input('website');
@@ -490,7 +491,7 @@ class RegisterController extends FrontController
                         $newuser->is_clinic = 0;
                         $newuser->civic_id = $data['userId'];
                         $newuser->gdpr_privacy = true;
-                        $newuser->platform = 'trp';
+                        $newuser->platform = 'vox';
                         $newuser->status = 'approved';
                         
                         if(!empty(session('invited_by'))) {
@@ -502,7 +503,7 @@ class RegisterController extends FrontController
                         
                         $newuser->save();
 
-                        if($newuser->invited_by && $newuser->invitor->canInvite('trp')) {
+                        if($newuser->invited_by && $newuser->invitor->canInvite('vox')) {
                             $inv_id = session('invitation_id');
                             if($inv_id) {
                                 $inv = UserInvite::find($inv_id);
