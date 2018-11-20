@@ -204,8 +204,8 @@ class VoxController extends FrontController
 		        		} else if ( isset( $this->details_fields[$type] ) ) {
 
 		        			$should_reward = false;
-		        			if($this->user->$type==null) {
-		        				$should_reard = true;
+		        			if($this->user->$type===null) {
+		        				$should_reward = true;
 		        			}
 
 		        			$this->user->$type = Request::input('answer');
@@ -403,7 +403,7 @@ class VoxController extends FrontController
 		        							$agegroup = $this->getAgeGroup($this->user->birthyear);
 		        							$answer->$df = $agegroup;
 							        	} else {
-							        		if($this->user->$df) {
+							        		if($this->user->$df!==null) {
 								        		$answer->$df = $this->user->$df;
 								        	}
 							        	}
@@ -700,7 +700,7 @@ class VoxController extends FrontController
 			$agegroup = '74';
 		}
 
-		return $years;
+		return $agegroup;
 
 	}
 
