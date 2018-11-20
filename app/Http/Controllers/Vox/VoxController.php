@@ -556,6 +556,8 @@ class VoxController extends FrontController
 			        				}
 		        				} else {
 
+		        					VoxAnswer::where('user_id', $this->user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
+
 		                            if($this->user->invited_by) {
 		                                $inv = UserInvite::where('user_id', $this->user->invited_by)->where('invited_id', $this->user->id)->first();
 		                                if(!empty($inv) && !$inv->rewarded) {
