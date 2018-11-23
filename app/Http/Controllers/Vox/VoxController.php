@@ -46,6 +46,13 @@ class VoxController extends FrontController
 	}
 	public function dovox($locale=null, $vox) {
 
+		// $users = User::whereNotNull('gender')->skip(20000)->take(10000)->get();
+		// foreach ($users as $i => $user) {
+		// 	echo $i.'<br/>';
+		// 	VoxAnswer::where('user_id', $user->id)->update(['age' => $this->getAgeGroup($user->birthyear)]);
+		// }
+		// dd('done'); //$users
+
 		if(!$this->user) {
 			return $this->ShowVoxView('vox-public', array(
 				'vox' => $vox,

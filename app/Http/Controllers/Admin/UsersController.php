@@ -21,6 +21,7 @@ use Request;
 use Route;
 use Auth;
 use DB;
+use Excel;
 
 class UsersController extends AdminController
 {
@@ -178,6 +179,9 @@ class UsersController extends AdminController
         if(!empty($this->request->input('search-id'))) {
             $users = $users->where('id', $this->request->input('search-id') );
         }
+        if(!empty($this->request->input('search-platform'))) {
+            $users = $users->where('platform', $this->request->input('search-platform') );
+        }
         if(!empty($this->request->input('search-ip-address'))) {
             $ip = $this->request->input('search-ip-address');
             $users = $users->whereHas('logins', function ($query) use ($ip) {
@@ -239,12 +243,55 @@ class UsersController extends AdminController
         // dd($results);
 
         $total_count = $users->count();
-        if($results == 0) {
+        if( request()->input('export') ) {
+            ini_set("memory_limit",-1);
+            $users = $users->select(['title', 'name', 'email', 'platform'])->get();
+        } else if($results == 0) {
             $users = $users->take(3000)->get();
         } else {
             $users = $users->take($results)->get();
         }        
         //$total_count = isset( $total_count[0]->cnt ) ? $total_count[0]->cnt : 0;
+
+        if( request()->input('export') ) {
+
+            $flist = [];
+            $flist[] = [
+                'Title',
+                'Name',
+                'Email',
+                'Platform',
+            ];
+            foreach ($users as $user) {
+                $flist[] = [
+                    $user->title ? $user->title : ( $user->gender=='m' ? 'Mr.' : ( $user->gender=='f' ? 'Mrs.' : '' ) ),
+                    $user->name,
+                    $user->email,
+                    $user->platform,
+                ];
+            }
+
+            $dir = storage_path().'/app/public/xls/';
+            if(!is_dir($dir)) {
+                mkdir($dir);
+            }
+            $fname = $dir.'export';
+
+            Excel::create($fname, function($excel) use ($flist) {
+
+                $excel->sheet('Sheet1', function($sheet) use ($flist) {
+
+                    $sheet->fromArray($flist);
+                    //$sheet->setWrapText(true);
+                    //$sheet->getStyle('D1:E999')->getAlignment()->setWrapText(true); 
+
+                });
+
+
+
+            })->export('xls');
+
+        }
 
         return $this->showView('users', array(
             'users' => $users,
@@ -263,6 +310,7 @@ class UsersController extends AdminController
             'search_ip_address' => $this->request->input('search-ip-address'),
             'search_type' => $this->request->input('search-type'),
             'search_status' => $this->request->input('search-status'),
+            'search_platform' => $this->request->input('search-platform'),
         ));
     }
 

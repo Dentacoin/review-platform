@@ -2,7 +2,10 @@
 
 @section('content')
 
-<h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
+<h1 class="page-header">
+    {{ trans('admin.page.'.$current_page.'.title') }}
+    <a href="javascript:;" class="btn btn-primary pull-right btn-export">Export</a>
+</h1>
 <!-- end page-header -->
 
 
@@ -42,8 +45,15 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <input type="text" class="form-control" name="results-number" value="{{ $results_number }}" placeholder="Results ( enter 0 to show all )">
+                        </div>
+                        <div class="col-md-1">
+                            <select class="form-control" name="search-platform">
+                                <option value="">All Websites</option>
+                                <option value="trp" {!! 'trp'==$search_platform ? 'selected="selected"' : '' !!}>Trusted Review</option>
+                                <option value="vox" {!! 'vox'==$search_platform ? 'selected="selected"' : '' !!}>DentaVox</option>
+                            </select>
                         </div>
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="search-ip-address" value="{{ $search_ip_address }}" placeholder="IP Address">

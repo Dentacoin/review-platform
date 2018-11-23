@@ -14,6 +14,11 @@ $(document).ready(function(){
 		$(this).parent().parent().hide();
 	});
 
+	$('.btn-export').click( function(e) {
+		var extra = window.location.href.indexOf('?')==-1 ? '?export=1' : '&export=1';
+		window.open(window.location.href+extra);
+	});
+
 	$('.table-filters').each( function (e) {
 		if($(this).find('.form-group:visible').length) {
 			$(this).find('legend').show();

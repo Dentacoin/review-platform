@@ -12,7 +12,6 @@ $(document).ready(function(){
                     captcha: recaptchaCode
                 },
                 function( data ) {
-                    console.log(data);
                     if(data.success) {
                         $('#bot-group').next().show();
                         $('#bot-group').remove();
@@ -203,7 +202,6 @@ $(document).ready(function(){
                         } else if (group.hasClass('single-choice')) {
                             group.attr('data-answer', answer);
                         } else {
-                            console.log(answer);
                             group.attr('data-answer', !answer ? '' : answer.join(','));
                         }
 
@@ -230,17 +228,14 @@ $(document).ready(function(){
                                     var trigger_question = parts[0].trim(); // 15 въпрос
                                     var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
                                     var parsed_given_answer = given_answer && given_answer.length && given_answer!="0" ? given_answer.split(',') : null;
-                                    console.log(parsed_given_answer);
                                     if( parsed_given_answer ) {
-                                        console.log(parts);
                                         if( parts[1] ) {
                                             var trigger_answers = parts[1].split(','); // 2,6 // [2,6]
-                                            console.log('trigger answers', trigger_answers);
                                             for(var i in trigger_answers) {
                                                 if( trigger_answers[i].indexOf('-')!=-1 ) {
                                                     var range = trigger_answers[i].split('-');
                                                     for(var qnum=range[0]; qnum<=range[1]; qnum++) {
-                                                        if( given_answer.indexOf(qnum)!=-1 ) {
+                                                        if( parsed_given_answer.indexOf(qnum.toString())!=-1 ) {
                                                             trigger_status = true;
                                                             break;
                                                         }    
@@ -253,12 +248,12 @@ $(document).ready(function(){
                                                 }
                                             }
                                         } else {
-                                            console.log('tuk!');
                                             trigger_status = true;
                                         }
                                     }
                                     trigger_statuses.push(trigger_status);
                                 }
+
                                 if( trigger_type=='or' ) {
                                     should_skip = !(trigger_statuses.indexOf(true)!=-1);
                                 } else { //and
@@ -288,7 +283,6 @@ $(document).ready(function(){
                                 }
                                 VoxTest.handleNextQuestion();
                             } else {
-                                console.log('SKIP IT!');
                                 group.next().attr('skipped', 'skipped');
                             }         
                         }
@@ -304,7 +298,6 @@ $(document).ready(function(){
                 }
                 ajax_is_running = false;
                 if (should_skip) {
-                    console.log('skipvame li?');
                     sendAnswer.bind(group.next().children().first())();
                 }
             }, "json"
@@ -373,12 +366,10 @@ $(document).ready(function(){
             type: 'GET',
             dataType: 'json',
             success: function( data ) {
-                console.log(data);
                 city_select.attr('disabled', false)
                 .find('option')
                 .remove();
                 for(var i in data.cities) {
-                    console.log( fb_city_id, data.cities[i] );
                     city_select.append('<option value="'+i+'" '+(fb_city_id && fb_city_id==data.cities[i] ? 'selected="selected"' : '' )+'>'+data.cities[i]+'</option>');
                 }
                 //city_select
