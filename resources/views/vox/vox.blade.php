@@ -123,7 +123,7 @@
 									Where do you live?
 								</div>
 								<div class="answers">
-									{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'form-control') ) }}
+									{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'country-select form-control') ) }}
 								</div>
 
 								<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
