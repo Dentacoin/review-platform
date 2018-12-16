@@ -95,7 +95,7 @@ class ProfileController extends FrontController
     //
 
     public function home($locale=null) {
-        if($this->user->is_dentist && !$this->user->is_approved) {
+        if($this->user->is_dentist && $this->user->status!='approved') {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
@@ -204,7 +204,7 @@ class ProfileController extends FrontController
     //
 
     public function vox($locale=null) {
-        if($this->user->is_dentist && !$this->user->is_approved) {
+        if($this->user->is_dentist && $this->user->status!='approved') {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
 
@@ -285,7 +285,7 @@ class ProfileController extends FrontController
 
 
     public function privacy($locale=null) {
-        if($this->user->is_dentist && !$this->user->is_approved) {
+        if($this->user->is_dentist && $this->user->status!='approved') {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
@@ -370,7 +370,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function invite($locale=null) {
-        if($this->user->is_dentist && !$this->user->is_approved) {
+        if($this->user->is_dentist && $this->user->status!='approved') {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
@@ -491,7 +491,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     //
 
     public function upload($locale=null) {
-        if($this->user->is_dentist && !$this->user->is_approved) {
+        if($this->user->is_dentist && $this->user->status!='approved') {
             return Response::json(['success' => false ]);
         }
         if($this->user->isBanned('vox')) {
@@ -510,7 +510,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     
 
     public function info($locale=null) {
-        if($this->user->is_dentist && !$this->user->is_approved) {
+        if($this->user->is_dentist && $this->user->status!='approved') {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
@@ -580,7 +580,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function change_password($locale=null) {
-        if($this->user->is_dentist && !$this->user->is_approved) {
+        if($this->user->is_dentist && $this->user->status!='approved') {
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
         if($this->user->isBanned('vox')) {
@@ -621,7 +621,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             return Response::json( $ret );
         }
         
-        if($this->user->is_dentist && !$this->user->is_approved) {
+        if($this->user->is_dentist && $this->user->status!='approved') {
             $ret['message'] = 'not-verified';
             return Response::json( $ret );
         }

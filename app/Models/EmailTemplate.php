@@ -69,6 +69,10 @@ class EmailTemplate extends Model
             $codes[] = '[friend_name]';
             $codes[] = '[invitelink]Click here[/invitelink]';
         } 
+
+        if($this->id==10) {
+            $codes[] = '[link]Click here[/link]';
+        }
         
         if($this->id==15) {
             $codes[] = '[expires]';

@@ -128,6 +128,7 @@ $(document).ready(function(){
     				city_select.append('<option value="'+i+'" '+(fb_city_id && fb_city_id==data.cities[i] ? 'selected="selected"' : '' )+'>'+data.cities[i]+'</option>');
 			    }
 				//city_select
+                $('.phone-code-holder').html(data.code);
 				//$('#modal-message .modal-body').html(data);
 			}
 		});

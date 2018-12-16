@@ -252,7 +252,7 @@ class RegisterController extends FrontController
 
     public function register_success($locale=null) {
         $this->user->checkForWelcomeCompletion();
-        if($this->user->is_dentist && !$this->user->is_approved) {
+        if($this->user->is_dentist && $this->user->status!='approved') {
             if(Request::isMethod('post')) {
 
                 $newuser = $this->user;
@@ -533,7 +533,7 @@ class RegisterController extends FrontController
                         session($sess);
 
                         if( $newuser->email ) {
-                            $newuser->sendTemplate( $newuser->is_dentist ? 3 : 4 );                
+                            $newuser->sendTemplate( 12 );
                         }
 
                         Auth::login($newuser, true);

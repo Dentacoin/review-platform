@@ -236,7 +236,7 @@ class LoginController extends FrontController
             session($sess);
 
             if( $newuser->email ) {
-                $newuser->sendTemplate( 12 );                
+                $newuser->sendTemplate( 12 );
             }
 
             Auth::login($newuser, true);

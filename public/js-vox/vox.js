@@ -358,26 +358,6 @@ $(document).ready(function(){
         $('.no-mobile-share').show();
     }
 
-    $('.country-select').change( function() {
-        var city_select = $(this).closest('.answers').find('.city-select').first();
-        city_select.attr('disabled', 'disabled');
-        $.ajax( {
-            url: '/cities/' + $(this).val(),
-            type: 'GET',
-            dataType: 'json',
-            success: function( data ) {
-                city_select.attr('disabled', false)
-                .find('option')
-                .remove();
-                for(var i in data.cities) {
-                    city_select.append('<option value="'+i+'" '+(fb_city_id && fb_city_id==data.cities[i] ? 'selected="selected"' : '' )+'>'+data.cities[i]+'</option>');
-                }
-                //city_select
-                //$('#modal-message .modal-body').html(data);
-            }
-        });
-    } );
-
 
     $('.copy-link').click( function() {
         var $temp = $("<input>");

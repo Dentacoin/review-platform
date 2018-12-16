@@ -15,7 +15,9 @@ class VerifyCsrfToken extends BaseVerifier
         'test',
         'location',
         'user-name',
+        'suggest-clinic',
         'suggest-clinic/*',
+        'suggest-dentist',
         'suggest-dentist/*',
         'wait',
         'civic',
@@ -30,7 +32,7 @@ class VerifyCsrfToken extends BaseVerifier
         '*/youtube',
         '*/profile/jwt',
         '*/profile/info/upload',
-        '*/profile/gallery/*',
+        '*/profile/gallery',
         '*/profile/clinics/*',
         '*/profile/dentists/*',
     ];

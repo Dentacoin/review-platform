@@ -19,8 +19,8 @@ Route::get('cities/{id}/{empty?}', 					'CitiesController@getCities');
 Route::post('location', 							'CitiesController@getLocation');
 Route::post('user-name', 							'CitiesController@getUsername');
 Route::get('question-count', 						'CitiesController@getQuestions');
-Route::any('suggest-clinic/{id}', 					'CitiesController@getClinic');
-Route::any('suggest-dentist/{id}', 					'CitiesController@getDentist');
+Route::any('suggest-clinic/{id?}', 					'CitiesController@getClinic');
+Route::any('suggest-dentist/{id?}', 				'CitiesController@getDentist');
 
 
 Route::post('wait', 									'CitiesController@wait');
@@ -92,6 +92,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('youtube/approve/{id}', 				'YoutubeController@approve');
 	Route::any('youtube/delete/{id}', 				'YoutubeController@delete');
 
+	Route::any('trp-faq', 							'FaqController@faq');
+
 	Route::get('vox', 								'VoxesController@list');
 	Route::get('vox/list', 							'VoxesController@list');
 	Route::any('vox/add', 							'VoxesController@add');
@@ -148,12 +150,15 @@ $reviewRoutes = function () {
 
 		Route::group(['namespace' => 'Front'], function () {
 			Route::get('/', 									'IndexController@home');
+			Route::get('pending-dentist', 						'IndexController@pending');
+			Route::get('welcome-dentist', 						'IndexController@dentist');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
-			
-			Route::any('invite/{id}/{hash}/{inv_id?}', 			'RegisterController@invite_accept');
-			Route::any('claim/{id}/{hash}', 					'RegisterController@claim');
 
+			Route::any('invite/{id}/{hash}/{inv_id?}', 			'RegisterController@invite_accept');
+
+			Route::get('review/{id}', 							'DentistController@fullReview');
 			Route::get('useful/{id}', 							'DentistController@useful');
+			Route::get('unuseful/{id}', 						'DentistController@unuseful');
 
 			Route::get('register', 								'RegisterController@register');
 			Route::post('register', 							'RegisterController@register_form');
@@ -171,21 +176,22 @@ $reviewRoutes = function () {
 			Route::get('login/callback/twitter', 				'LoginController@twitter_callback');
 			Route::get('login/callback/gplus', 					'LoginController@gplus_callback');
 
-			Route::get('register/facebook/{is_dentist}', 		'LoginController@facebook_register');
-			Route::get('register/twitter/{is_dentist}', 		'LoginController@twitter_register');
-			Route::get('register/gplus/{is_dentist}', 			'LoginController@gplus_register');
+			Route::get('register/facebook/{is_dentist?}', 		'LoginController@facebook_register');
+			Route::get('register/twitter/{is_dentist?}', 		'LoginController@twitter_register');
+			Route::get('register/gplus/{is_dentist?}', 			'LoginController@gplus_register');
 
 			Route::get('register/callback/facebook', 			'LoginController@facebook_callback_register');
 			Route::get('register/callback/twitter', 			'LoginController@twitter_callback_register');
 			Route::get('register/callback/gplus', 				'LoginController@gplus_callback_register');
 
 			Route::post('register/step1', 						'RegisterController@check_step_one');
+			Route::post('register/step2', 						'RegisterController@check_step_two');
+			Route::post('register/step3', 						'RegisterController@check_step_three');
 			Route::post('register/upload', 						'RegisterController@upload');
 
 			Route::post('register/civic', 						'RegisterController@civic');
 
-			Route::get('dentists/p/{page?}', 					'DentistsController@paginate');
-			Route::get('dentists/{country?}/{city?}', 			'DentistsController@list');
+			Route::get('dentists/{query?}/{latlon?}', 			'DentistsController@search');
 
 			Route::get('dentist/{slug}/confirm-review/{secret}', 	'DentistController@confirmReview');
 			Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');
@@ -195,39 +201,24 @@ $reviewRoutes = function () {
 			Route::any('youtube', 								'DentistController@youtube');
 			Route::any('full-review/{id}',						'DentistController@fullReview');
 
+			Route::get('faq', 									'FaqController@home');
+
 			Route::group(['middleware' => 'auth:web'], function () {
-				Route::get('profile', 							'ProfileController@home');
+				Route::any('profile', 							'ProfileController@home');
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');
-				Route::get('profile/home', 						'ProfileController@home');
-				Route::post('profile/avatar', 					'ProfileController@avatar');
+				Route::any('profile/home', 						'ProfileController@home');
+				Route::post('profile/info/upload', 				'ProfileController@upload');
+				Route::post('profile/gallery', 					'ProfileController@gallery');
 				Route::any('profile/info', 						'ProfileController@info');
-				Route::get('profile/gallery', 					'ProfileController@gallery');
-				Route::get('profile/gallery/delete/{position}', 'ProfileController@gallery_delete');
-				Route::post('profile/gallery/{position}', 		'ProfileController@gallery');
 				Route::get('profile/password', 					'ProfileController@password');
 				Route::post('profile/password', 				'ProfileController@change_password');
-				Route::get('profile/reviews', 					'ProfileController@reviews');
+				Route::get('profile/trp', 						'ProfileController@trp');
 				Route::get('profile/wallet', 					'ProfileController@wallet');
 				Route::any('profile/invite', 					'ProfileController@invite');
-				Route::any('profile/remove-avatar', 			'ProfileController@remove_avatar');
-				Route::post('profile/balance', 					'ProfileController@balance');
-				Route::get('profile/resend', 					'ProfileController@resend');
-				Route::get('profile/widget', 					'ProfileController@widget');
-				Route::get('profile/history', 					'ProfileController@history');
 				Route::get('profile/asks', 						'ProfileController@asks');
 				Route::get('profile/asks/accept/{id}', 			'ProfileController@asks_accept');
 				Route::get('profile/asks/deny/{id}', 			'ProfileController@asks_deny');
-				Route::any('profile/dentists', 					'ProfileController@dentists');
-				Route::any('profile/dentists/reject/{id}', 		'ProfileController@dentists_reject');
-				Route::any('profile/dentists/delete/{id}', 		'ProfileController@dentists_delete');
-				Route::any('profile/dentists/accept/{id}', 		'ProfileController@dentists_accept');
-				Route::any('profile/dentists/invite', 			'ProfileController@inviteDentist');
-				Route::any('profile/clinics', 					'ProfileController@clinics');
-				Route::any('profile/clinics/delete/{id}', 		'ProfileController@clinics_delete');
-				Route::any('profile/clinics/invite', 			'ProfileController@inviteClinic');
 
-				Route::any('profile/reward', 					'ProfileController@reward');
-				Route::any('profile/setEmail', 					'ProfileController@setEmail');
 				Route::post('profile/jwt', 						'ProfileController@jwt');
 				Route::post('profile/withdraw', 				'ProfileController@withdraw');
 				Route::any('profile/privacy', 					'ProfileController@privacy');
@@ -235,6 +226,7 @@ $reviewRoutes = function () {
 
 				Route::get('gdpr', 								'ProfileController@gdpr');
 
+				Route::post('share', 								'MiscController@share');
 				
 			});
 

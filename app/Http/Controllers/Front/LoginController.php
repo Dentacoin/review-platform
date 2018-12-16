@@ -61,9 +61,8 @@ class LoginController extends FrontController
             $duplicate = User::where('fb_id', $s_user->getId() )->first();
 
             if( $duplicate ) {
-                Request::session()->flash('error-message', 'There\'s another profile registered with this Facebook Account');
-                return redirect( getLangUrl('/'));
-
+                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
+                    ->withInput();
             } else {
                 $user->fb_id = $s_user->getId();
                 $user->save();
@@ -83,9 +82,8 @@ class LoginController extends FrontController
 
             if ($user) {
                 if( $user->isBanned('vox') ) {
-                    return redirect( getLangUrl('login') )
-                    ->withInput()
-                    ->with('error-message', trans('front.page.login.vox-ban'));
+                    return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
+                    ->withInput();
                 }
 
                 Auth::login($user, true);
@@ -93,11 +91,12 @@ class LoginController extends FrontController
                 Request::session()->flash('success-message', trans('front.page.login.success'));
                 return redirect('/');
             } else {
-                Request::session()->flash('error-message', trans('front.page.login.error-fb', [
+                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-login']))
+                    ->withInput()
+                    ->with('error-message', trans('front.page.login.error-fb', [
                     'link' => '<a href="'.getLangUrl('register').'">',
                     'endlink' => '</a>',
-                ]));
-                return redirect( getLangUrl('login'));
+                ]) );
             }
         }
 
@@ -106,25 +105,7 @@ class LoginController extends FrontController
 
 
 
-    public function facebook_register($locale=null, $type) {
-        if($type=='patient') {
-            session([
-                'is_dentist' => false,
-                'is_clinic' => false, 
-            ]);            
-        } else if($type=='dentist') {
-            session([
-                'is_dentist' => true,
-                'is_clinic' => false, 
-            ]);            
-        } else if($type=='clinic') {
-            session([
-                'is_dentist' => true,
-                'is_clinic' => true, 
-            ]);            
-        } else {
-            return redirect( getLangUrl('register'));
-        }
+    public function facebook_register($locale=null, $type='patient') {
         config(['services.facebook.redirect' => getLangUrl('register/callback/facebook') ]);
         return Socialite::driver('facebook')
         ->scopes(['user_friends'])
@@ -191,16 +172,18 @@ class LoginController extends FrontController
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $result = curl_exec($ch);
             curl_close($ch);
-            
-            Request::session()->flash('error-message', trans('front.page.registration.incomplete-facebook') );
-            return redirect(getLangUrl('register'));
+
+            return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
+            ->withInput()
+            ->with('error-message', trans('front.page.registration.incomplete-facebook'));
         }
 
         //!empty($s_user->user['verified']) && 
         $verified = !empty($s_user->user['friends']['summary']['total_count']) && $s_user->user['friends']['summary']['total_count']>50;
         if(!$verified) {
-            Request::session()->flash('error-message', trans('front.page.registration.fake-facebook'));
-            return redirect(getLangUrl('register'));
+            return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
+            ->withInput()
+            ->with('error-message', trans('front.page.registration.fake-facebook'));
         }
 
         $is_dentist = session('is_dentist');
@@ -214,19 +197,11 @@ class LoginController extends FrontController
 
         if ($user) {
 
-            if($user->deleted_at) {
-                Request::session()->flash('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
-                return redirect( getLangUrl('register') )
-                ->withInput()
-                ->with('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
-            } 
-
-            if( $user->isBanned('vox') ) {
-                Request::session()->flash('error-message', trans('front.page.login.vox-ban'));
-                return redirect( getLangUrl('register') )
-                ->withInput()
-                ->with('error-message', trans('front.page.login.vox-ban'));
+            if($user->deleted_at || $user->isBanned('vox')) {
+                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
+                ->withInput();
             }
+            
             Auth::login($user, true);
             if(empty($user->fb_id)) {
                 $user->fb_id = $s_user->getId();
@@ -242,9 +217,9 @@ class LoginController extends FrontController
 
             $is_blocked = User::checkBlocks( $name , $s_user->getEmail() );
             if( $is_blocked ) {
-                return redirect( getLangUrl('register') )
+                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
                 ->withInput()
-                ->with('error-message', $is_blocked);
+                ->with('error-message', $is_blocked );
             }
 
 
@@ -253,7 +228,7 @@ class LoginController extends FrontController
             $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
 
             if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
-                return redirect( getLangUrl('register') )
+                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
                 ->withInput()
                 ->with('error-message', nl2br(trans('front.page.login.over18')) );
             }
@@ -263,8 +238,6 @@ class LoginController extends FrontController
             $newuser->name = $name;
             $newuser->email = $s_user->getEmail() ? $s_user->getEmail() : '';
             $newuser->password = bcrypt($password);
-            $newuser->is_dentist = $is_dentist;
-            $newuser->is_clinic = $is_clinic;
             $newuser->country_id = $this->country_id;
             $newuser->fb_id = $s_user->getId();
             $newuser->gdpr_privacy = true;
@@ -280,19 +253,17 @@ class LoginController extends FrontController
             
             $newuser->save();
 
-            if(!$newuser->is_dentist) {                
-                $avatarurl = $s_user->getAvatar();
-                if($network=='fb') {
-                    $avatarurl .= '&width=600&height=600';                
-                } else if($network=='gp') {
-                    $avatarurl = str_replace('sz=50', 'sz=600', $avatarurl);
-                } else if($network=='tw') {
-                    $avatarurl = str_replace('_normal', '', $avatarurl);
-                }
-                if(!empty($avatarurl)) {
-                    $img = Image::make($avatarurl);
-                    $newuser->addImage($img);
-                }
+            $avatarurl = $s_user->getAvatar();
+            if($network=='fb') {
+                $avatarurl .= '&width=600&height=600';                
+            } else if($network=='gp') {
+                $avatarurl = str_replace('sz=50', 'sz=600', $avatarurl);
+            } else if($network=='tw') {
+                $avatarurl = str_replace('_normal', '', $avatarurl);
+            }
+            if(!empty($avatarurl)) {
+                $img = Image::make($avatarurl);
+                $newuser->addImage($img);
             }
 
 
@@ -326,7 +297,7 @@ class LoginController extends FrontController
             session($sess);
 
             if( $newuser->email ) {
-                $newuser->sendTemplate( $newuser->is_dentist ? 3 : 4 );                
+                $newuser->sendTemplate( 4 );
             }
 
             Auth::login($newuser, true);
@@ -397,7 +368,7 @@ class LoginController extends FrontController
 
                         if ($user) {
                             if( $user->isBanned('vox') ) {
-                                $ret['message'] = trans('front.page.login.vox-ban');
+                                $ret['popup'] = 'suspended-popup';
                             } else {
                                 Auth::login($user, true);
                                 if(empty($user->civic_id)) {

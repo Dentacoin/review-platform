@@ -44,18 +44,7 @@ class AuthenticateUser extends FrontController
         if(!empty($this->user)) {
             return redirect(getLangUrl('profile'));
         }
-        
-        return $this->ShowView('login',[
-            'js' => [
-                'login.js'
-            ],
-            'jscdn' => [
-                'https://hosted-sip.civic.com/js/civic.sip.min.js',
-            ],
-            'csscdn' => [
-                'https://hosted-sip.civic.com/css/civic-modal.min.css',
-            ],
-        ]);
+        return redirect( getLangUrl('/').'?popup=popup-login' );
     }
     public function showLoginFormVox()
     {
@@ -78,19 +67,32 @@ class AuthenticateUser extends FrontController
 
     public function postLogin(Request $request)
     {
-
         if (Auth::guard('web')->attempt( ['email' => $request->input('email'), 'password' => $request->input('password') ], $request->input('remember') )) {
+            
             if( $ban_info = Auth::guard('web')->user()->isBanned('vox') ) {
                 Auth::guard('web')->logout();
-                return redirect( getLangUrl('login') )
-                ->withInput()
-                ->with('error-message', trans('front.page.login.vox-ban'));
+                return Response::json( [
+                    'success' => false, 
+                    'popup' => 'suspended-popup'
+                ] );
             }
-            return redirect()->intended('/');
+
+            if( Auth::guard('web')->user()->is_dentist && Auth::guard('web')->user()->status!='approved' ) {
+                Auth::guard('web')->logout();
+                return Response::json( [
+                    'success' => false, 
+                    'popup' => 'verification-popup'
+                ] );
+            }
+
+            return Response::json( [
+                'success' => true
+            ] );
         } else {
-            return redirect( getLangUrl('login') )
-            ->withInput()
-            ->with('error-message', trans('front.page.login.error'));
+            return Response::json( [
+                'success' => false, 
+                'message' => trans('front.page.login.error')
+            ] );
         }
     }
 

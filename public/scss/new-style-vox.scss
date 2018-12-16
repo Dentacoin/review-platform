@@ -3419,6 +3419,10 @@ header {
 		@media #{$phone} {
 			margin-bottom: 10px;
 		}
+
+		.phone-code-holder {
+    		padding-right: 20px;
+		}
 	}
 
 	select,

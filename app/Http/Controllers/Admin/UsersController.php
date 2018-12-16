@@ -519,7 +519,9 @@ class UsersController extends AdminController
                             }
                             $item->$key = $this->request->input($key);
                         } else if($value['type']=='password') {
-                            $item->$key = bcrypt( $this->request->input($key) );
+                            if( $this->request->input($key) ) {
+                                $item->$key = bcrypt( $this->request->input($key) );                                
+                            }
                         } else if($value['type']=='datepicker') {
                 	       $item->$key = $this->request->input($key) ? new Carbon( $this->request->input($key) ) : null;
                         } else {

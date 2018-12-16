@@ -12,20 +12,73 @@ class IndexController extends FrontController
 {
 
 	public function home($locale=null) {
+		if(!empty($this->user) && $this->user->is_dentist) {
+			return redirect( $this->user->getLink() );
+		}
 
-		$placeholder = '';
-		if($this->city_id) {
-			$c = City::find($this->city_id);
-			$placeholder = $c->name.', '.$c->country->name;
-		} else if($this->country_id) {
-			$c = Country::find($this->country_id);
-			$placeholder = $c->name;
+
+		$featured = User::where('is_dentist', 1)->where('status', 'approved')->orderBy('avg_rating', 'DESC');
+		$refined = clone $featured;
+		if( !empty($this->user) ) {
+			if( $this->user->country_id ) {
+				$refined->where('country_id', $this->user->country_id);
+				if( $this->user->city_id ) {
+					$refined->where('city_id', $this->user->city_id);
+				}
+			}
+		} else {
+			if( $this->country_id ) {
+				$refined->where('country_id', $this->country_id);
+				if( $this->city_id ) {
+					$refined->where('city_id', $this->city_id);
+				}
+			}
+		}
+
+		$refined = $refined->take(12)->get();
+
+		if($refined->isEmpty()) {
+			$refined = clone $featured;
+			if( !empty($this->user) ) {
+				if( $this->user->country_id ) {
+					$refined->where('country_id', $this->user->country_id);
+				}
+			} else {
+				if( $this->country_id ) {
+					$refined->where('country_id', $this->country_id);
+				}
+			}
+			$refined = $refined->take(12)->get();
+		}
+
+
+		if($refined->isEmpty()) {
+			$refined = clone $featured;
+			$refined = $refined->take(12)->get();
 		}
 
 		return $this->ShowView('index', array(
-			'placeholder' => $placeholder,
-			'users_count' => User::getCount('trp'),
-			'dentist_count' => User::getDentistCount(),
+			'featured' => $refined,
+			'js' => [
+				'index.js',
+                'search.js'
+			],
+			'jscdn' => [
+				'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
+			]
+        ));	
+	}
+
+	public function dentist($locale=null) {
+		if(!empty($this->user)) {
+			return redirect( getLangUrl('/') );
+		}
+
+		return $this->ShowView('index-dentist', array(
+			'extra_body_class' => 'white-header',
+			'js' => [
+				'index-dentist.js'
+			]
         ));	
 	}
 

@@ -2554,6 +2554,10 @@ header {
     .section-login .form-group,
     .section-register .form-group {
       margin-bottom: 10px; } }
+  .section-recover .form-group .phone-code-holder,
+  .section-login .form-group .phone-code-holder,
+  .section-register .form-group .phone-code-holder {
+    padding-right: 20px; }
 .section-recover select,
 .section-recover input[type="text"],
 .section-recover input[type="password"],

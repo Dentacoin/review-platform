@@ -60,7 +60,6 @@ class FrontController extends BaseController
         if(empty($this->current_subpage)) {
             $this->current_subpage='home';
         }
-
         
         //VPNs
         $myips = session('my-ips');
@@ -78,9 +77,6 @@ class FrontController extends BaseController
         if( !$myips[Request::ip()] && $this->current_page=='vpn' ) {
             Redirect::to( getLangUrl('/') )->send();
         }
-
-
-
 
 
         //$this->user = Auth::guard('web')->user();
@@ -158,7 +154,7 @@ class FrontController extends BaseController
                 'city_id' => $this->city_id,
             ]);
 
-            if(mb_strpos(Request::url(), '//dev-') && !$this->admin) {
+            if(false && mb_strpos(Request::url(), '//dev-') && !$this->admin) {
                 echo '<a href="'.str_replace('//dev-', '//', Request::url()).'">Click here</a> or <a href="'.url('cms').'"> log in as admin </a>';
                 exit;
             }
@@ -230,12 +226,43 @@ class FrontController extends BaseController
     }
 
     public function ShowView($page, $params=array()) {
-        $this->PrepareViewData($page, $params, 'front');
+        $this->PrepareViewData($page, $params, 'trp');
 
         $params['cache_version'] = '20181123';
         // "2018-05-05 00:00:00.000000"
+
+        if( empty( $this->user ) ) {
+
+            if(is_array($params['js'])) {
+                if( array_search('login.js', $params['js'])===false ) {
+                    $params['js'][] = 'login.js';                    
+                }
+                if( array_search('upload.js', $params['js'])===false ) {
+                    $params['js'][] = 'upload.js';                    
+                }
+            } else {
+                $params['js'] = ['login.js', 'upload.js'];
+            }
+            $params['countries'] = Country::get();
+            
+            if(is_array($params['jscdn'])) {
+                $params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
+            } else {
+                $params['jscdn'] = [
+                    'https://hosted-sip.civic.com/js/civic.sip.min.js',
+                ];
+            }
+            
+            if(is_array($params['csscdn'])) {
+                $params['csscdn'][] = 'https://hosted-sip.civic.com/css/civic-modal.min.css';
+            } else {
+                $params['csscdn'] = [
+                    'https://hosted-sip.civic.com/css/civic-modal.min.css',
+                ];
+            }
+        }
         
-        return view('front.'.$page, $params);
+        return view('trp.'.$page, $params);
     }    
     public function PrepareViewData($page, &$params, $text_domain) {
 
@@ -294,16 +321,24 @@ class FrontController extends BaseController
                 $params['js'][] = 'login.js';
             } else {
                 $params['js'] = ['login.js'];
-
             }
 
 
-            $params['jscdn'] = [
-                'https://hosted-sip.civic.com/js/civic.sip.min.js',
-            ];
-            $params['csscdn'] = [
-                'https://hosted-sip.civic.com/css/civic-modal.min.css',
-            ];
+            if(is_array($params['jscdn'])) {
+                $params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
+            } else {
+                $params['jscdn'] = [
+                    'https://hosted-sip.civic.com/js/civic.sip.min.js',
+                ];
+            }
+
+            if(is_array($params['csscdn'])) {
+                $params['csscdn'][] = 'https://hosted-sip.civic.com/css/civic-modal.min.css';
+            } else {
+                $params['csscdn'] = [
+                    'https://hosted-sip.civic.com/css/civic-modal.min.css',
+                ];
+            }
         }
     }
 

@@ -67,6 +67,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'grace_end',
         'grace_notified',
         'dcn_address',
+        'lat',
+        'lon',
     ];
     protected $dates = [
         'created_at',
@@ -90,6 +92,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function reviews_out() {
         return $this->hasMany('App\Models\Review', 'user_id', 'id')->where('status', 'accepted')->orderBy('id', "DESC");
     }
+    public function reviews_out_standard() {
+        return $this->reviews_out->reject(function($item) {
+            return $item->youtube_id;
+        });
+    }
+    public function reviews_out_video() {
+        return $this->reviews_out->reject(function($item) {
+            return !$item->youtube_id;
+        });
+    }
     public function reviews_in_dentist() {
         return $this->hasMany('App\Models\Review', 'dentist_id', 'id')->where('status', 'accepted');
     }
@@ -104,6 +116,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             } else {
                 return 99999 - $review->upvotes;
             }
+        });
+    }
+    public function reviews_in_standard() {
+        return $this->reviews_in()->reject(function($item) {
+            return $item->youtube_id;
+        });
+    }
+    public function reviews_in_video() {
+        return $this->reviews_in()->reject(function($item) {
+            return !$item->youtube_id;
         });
     }
     public function upvotes() {
@@ -145,7 +167,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getName() {
-        return ($this->title ? $this->title.' ' : '').$this->name;
+        $titles = [
+            'dr' => 'Dr.',
+            'prof' => 'Prof. Dr.'
+        ];
+        return ($this->title ? $titles[$this->title].' ' : '').$this->name;
     }
 
     public function getNameShort() {
@@ -284,6 +310,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $query->where('user_id', $myid);
         })->get()->pluck('id')->toArray();
     }
+    public function unusefulVotesForDenist($dentist_id) {
+        $myid = $this->id;
+        return Review::where([
+            ['dentist_id', $dentist_id],
+        ])->whereHas('downvotes', function ($query) use ($myid) {
+            $query->where('user_id', $myid);
+        })->get()->pluck('id')->toArray();
+    }
     
     public function get_invite_token() {
         //dd($this->email.$this->id);
@@ -322,10 +356,36 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $item->send();
     }
 
+    public function getWorkHoursAttribute() {
+        return json_decode($this->attributes['work_hours'], true);
+    }
+    public function setWorkHoursAttribute($value) {
+        $this->attributes['work_hours'] = $value ? json_encode($value) : '';
+    }
     public function setNameAttribute($value) {
         $this->attributes['name'] = $value;
         $this->attributes['slug'] = $this->makeSlug();
         //
+    }
+    public function setAddressAttribute($value) {
+        $this->attributes['address'] = $value;
+        if( $this->country && $this->city) {
+            $query = $this->country->name.', '.$this->city->name.', '.($this->zip ? $this->zip.', ' : null).$this->address;
+            //dd($query);
+
+            $geores = \GoogleMaps::load('geocoding')
+            ->setParam ([
+                'address'    => $query,
+            ])
+            ->get();
+
+            $geores = json_decode($geores);
+            //dd($geores);
+            if(!empty($geores->results[0]->geometry->location)) {
+                $this->attributes['lat'] = $geores->results[0]->geometry->location->lat;
+                $this->attributes['lon'] = $geores->results[0]->geometry->location->lng;
+            }    
+        }
     }
 
     private function makeSlug() {
@@ -547,7 +607,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function canInvite($platform) {
-        return $this->status=='approved' && $this->civic_kyc && !$this->loggedFromBadIp();
+        return $this->status=='approved' && !$this->loggedFromBadIp();
     }
 
     public function canWithdraw($platform) {
@@ -723,5 +783,54 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
 
         return null;
+    }
+
+    public function getWorkHoursText() {
+        $dows = [
+            1=> 'Mon',
+            'Tue',
+            'Wed',
+            'Thur',
+            'Fri',
+            'Sat',
+            'Sun',
+        ];
+        $opens = null;
+
+        if( $this->work_hours && $this->country) {
+
+            $identifiers = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, mb_strtoupper($this->country->code));
+            if(!empty($identifiers)) {
+                $tz = current($identifiers);
+                $date = Carbon::now($tz);
+                $dow = $date->dayOfWeekIso;
+                if( isset( $this->work_hours[$dow] ) ) {
+                    $oa = explode(':', $this->work_hours[$dow][0]);
+                    $open = Carbon::createFromTime( intval($oa[0]), intval($oa[1]), 0, $tz );
+                    $ca = explode(':', $this->work_hours[$dow][1]);
+                    $close = Carbon::createFromTime( intval($ca[0]), intval($ca[1]), 0, $tz );
+                    if( $date->lessThan($close) && $date->greaterThan($open) ) {
+                        $opens = '<span class="green-text">Open now</span> <span>('.$this->work_hours[$dow][0].' - '.$this->work_hours[$dow][1].')</span>';
+                    }
+                } 
+
+                if( empty($opens) ) {
+                    while($dow<=7) {
+                        $dow++;
+                        if( isset( $this->work_hours[$dow] ) ) {
+                            $opens = '<span>Opens on '.$dows[$dow].' at '.$this->work_hours[$dow][0].'</span>';
+                            break;
+                        }
+                    }
+                    if(empty($opens)) {
+                        reset($this->work_hours);
+                        $dow = key( $this->work_hours );
+                        $opens = '<span>Opens on '.$dows[$dow].' at '.$this->work_hours[$dow][0].'</span>';
+                    }
+                }
+            }
+        }
+
+        return $opens;
     }
 }

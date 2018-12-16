@@ -18,14 +18,19 @@ class CitiesController extends BaseController
 	public function getUsername() {
 
 		$username = trim(Request::input('username'));
-		$users = User::where('is_dentist', true)->where('name', 'LIKE', '%'.$username.'%')->where('is_approved', true)->take(10)->get();
+		$users = User::where('is_dentist', true)->where('name', 'LIKE', '%'.$username.'%')->where('status', 'approved')->take(10)->get();
 		$user_list = [];
 		foreach ($users as $user) {
 			$user_list[] = [
 				'name' => $user->getName(),
 				'link' => $user->getLink(),
 				'type' => $user->is_clinic ? trans('front.common.clinic') : trans('front.common.dentist'),
-				'is_clinic' => $user->is_clinic
+				'is_clinic' => $user->is_clinic,
+				'rating' => $user->avg_rating,
+				'reviews' => $user->ratings,
+				'location' => $user->city->name.', '.$user->country->name,
+				'lat' => $user->lat,
+				'lon' => $user->lon,
 			];
 		}
 
@@ -147,12 +152,16 @@ class CitiesController extends BaseController
         return Response::json($ret);
 	}
 
-	public function getClinic($id) {
+	public function getClinic($id=null) {
 
 		$joinclinic = trim(Request::input('joinclinic'));
-		$clinics = User::where('is_clinic', true)->whereDoesntHave('team', function ($query) use ($id) {
-            $query->where('dentist_id', $id);
-        })->where('name', 'LIKE', $joinclinic.'%')->take(10)->get();
+		$clinics = User::where('is_clinic', true);
+		if( $id ) {
+			$clinics->whereDoesntHave('team', function ($query) use ($id) {
+	            $query->where('dentist_id', $id);
+	        });
+		}
+		$clinics = $clinics->where('name', 'LIKE', $joinclinic.'%')->take(10)->get();
 
 		$clinic_list = [];
 		foreach ($clinics as $clinic) {
@@ -165,16 +174,22 @@ class CitiesController extends BaseController
 		return Response::json($clinic_list);
 	}
 
-	public function getDentist($id) {
+	public function getDentist($id=null) {
 
 		$invitedentist = trim(Request::input('invitedentist'));
 
 		$dentists = User::where(function($query) use ($invitedentist) {
 			$query->where('is_clinic', '=', 0 )
 			->orWhereNull('is_clinic');
-		})->whereDoesntHave('my_workplace', function ($query) use ($id) {
-            $query->where('user_id', $id);
-        })->where('name', 'LIKE', $invitedentist.'%')->take(10)->get();
+		});
+
+		if( $id ) {
+			$dentists->whereDoesntHave('my_workplace', function ($query) use ($id) {
+	            $query->where('user_id', $id);
+	        });
+		}
+
+        $dentists = $dentists->where('name', 'LIKE', $invitedentist.'%')->take(10)->get();
 
 		$dentist_list = [];
 		foreach ($dentists as $dentist) {

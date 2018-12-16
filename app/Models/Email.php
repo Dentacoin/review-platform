@@ -44,7 +44,7 @@ class Email extends Model
 
 	public function send() {
 
-		if(!$this->user->email) {
+		if(!$this->user || !$this->user->email) {
 			return;
 		}
 
@@ -165,6 +165,16 @@ class Email extends Model
 			), $content);
 		}
 
+		if($this->template->id==10) { //Share
+			$content = str_replace(array(
+				'[link]',
+				'[/link]',
+			), array(
+				'<a '.$this->button_style.' href="'.$this->meta['link'].'">',
+				'</a>',
+			), $content);
+		}
+
 		if($this->template->id==13) { //Recover
 			$content = str_replace(array(
 				'[recoverlink]',
@@ -178,7 +188,7 @@ class Email extends Model
 		if($this->template->id==6 || $this->template->id==8 || $this->template->id==21) { //New review & review reply
 			$review = Review::find($this->meta['review_id']);
 
-			$dentist_or_clinic = $this->user_id == $review->dentist_id ? $review->dentist : $review->clinic;
+			$dentist_or_clinic = $review->dentist_id ? $review->dentist : $review->clinic;
 
 			$content = str_replace(array(
 				'[author_name]',

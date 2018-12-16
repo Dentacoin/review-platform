@@ -14,6 +14,7 @@ use App\Models\Question;
 use App\Models\Secret;
 use App\Models\Review;
 use App\Models\ReviewUpvote;
+use App\Models\ReviewDownvote;
 use App\Models\ReviewAnswer;
 use App\Models\UserInvite;
 use App\Models\UserAsk;
@@ -67,14 +68,18 @@ class DentistController extends FrontController
     }
 
     public function fullReview($locale=null, $id) {
-        $item = Review::where('user_id', 'LIKE', $id)->firstOrFail();
+        $review = Review::find($id);
 
-        if(empty($item)) {
-            return redirect( getLangUrl('dentists') );
+        if(empty($review)) {
+            return '';
         } else {
+            $item = $review->dentist_id ? User::find($review->dentist_id) : User::find($review->clinic_id);
 
-            return $this->ShowView('template-parts.entire-review', [
+            return $this->ShowView('popups.detailed-review-content', [
                 'item' => $item,
+                'review' => $review,
+                'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
+                'my_downvotes' => !empty($this->user) ? $this->user->unusefulVotesForDenist($item->id) : null,            
             ]);
         }
     }
@@ -225,6 +230,7 @@ class DentistController extends FrontController
                         }
 
                         $review->rating = 0;
+                        $review->title = strip_tags(Request::input( 'title' ));
                         $review->answer = strip_tags(Request::input( 'answer' ));
                         $review->youtube_id = strip_tags(Request::input( 'youtube_id' ));
                         $review->verified = !empty($this->user->wasInvitedBy($item->id));
@@ -358,12 +364,25 @@ class DentistController extends FrontController
             $has_asked_dentist = $this->user->hasAskedDentist($item->id);
         }
 
-        return $this->ShowView('dentist', [
+
+        if( $this->user ) {
+            $review_reward = $this->user->wasInvitedBy($item->id) ? Reward::getReward('review_trusted') : Reward::getReward('review');
+            $review_reward_video = $this->user->wasInvitedBy($item->id) ? Reward::getReward('review_video_trusted') : Reward::getReward('review_video');
+        } else {
+            $review_reward = $review_reward_video = 0;
+        }
+
+
+
+        $view_params = [
             'item' => $item,
             'my_review' => !empty($this->user) ? $this->user->hasReviewTo($item->id) : null,
             'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
+            'my_downvotes' => !empty($this->user) ? $this->user->unusefulVotesForDenist($item->id) : null,
             'questions' => $questions,
             'reviews' => $reviews,
+            'review_reward' => $review_reward,
+            'review_reward_video' => $review_reward_video,
             'review_limit_reached' => !empty($this->user) ? $this->user->getReviewLimits() : null,
             'dentist_limit_reached' => $dentist_limit_reached,
             'has_asked_dentist' => $has_asked_dentist,
@@ -382,10 +401,45 @@ class DentistController extends FrontController
             'canonical' => $item->getLink().($review_id ? '/'.$review_id : ''),
             'js' => [
                 'videojs.record.min.js',
-                'dentist.js',
-                'dApp.js',
+                'user.js',
+                'search.js',
             ],
-        ]);
+            'jscdn' => [],
+        ];
+
+        if(!empty($this->user) && $this->user->id==$item->id) {
+            $view_params['js'][] = 'upload.js';
+            $view_params['hours'] = [
+            ];
+            for($i=0;$i<=23;$i++) {
+                $h = str_pad($i, 2, "0", STR_PAD_LEFT);
+                $view_params['hours'][$h] = $h;
+            }
+
+            $view_params['minutes'] = [
+                '00' => '00',
+                '10' => '10',
+                '20' => '20',
+                '30' => '30',
+                '40' => '40',
+                '50' => '50',
+            ];
+        }
+
+        if($item->lat && $item->lon) {
+            $view_params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
+        }
+
+
+        if(!empty($this->user) && !$this->user->civic_id) {
+            $view_params['js'][] = 'civic.js';
+            $view_params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
+            $view_params['csscdn'] = [
+                'https://hosted-sip.civic.com/css/civic-modal.min.css',
+            ];
+        }
+
+        return $this->ShowView('user', $view_params);
 
     }
 
@@ -426,6 +480,24 @@ class DentistController extends FrontController
                 $review->upvotes++;
                 $review->save();
                 $uv = new ReviewUpvote;
+                $uv->review_id = $review_id;
+                $uv->user_id = $this->user->id;
+                $uv->save();
+            }
+        }
+
+        return Response::json( ['success' => true] );
+    }
+
+
+    public function unuseful($locale=null, $review_id) {
+        $review = Review::find($review_id);
+        if(!empty($review)) {
+            $myvotes = $this->user->unusefulVotesForDenist($review->dentist_id);
+            if(!in_array($review_id, $myvotes)) {
+                $review->downvotes++;
+                $review->save();
+                $uv = new ReviewDownvote;
                 $uv->review_id = $review_id;
                 $uv->user_id = $this->user->id;
                 $uv->save();

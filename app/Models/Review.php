@@ -24,6 +24,7 @@ class Review extends Model {
         'rating',
         'youtube_id',
         'youtube_approved',
+        'title',
         'answer',
         'reply',
         'verified',
@@ -63,6 +64,10 @@ class Review extends Model {
 
     public function upvotes() {
         return $this->hasMany('App\Models\ReviewUpvote', 'review_id', 'id');
+    }
+    
+    public function downvotes() {
+        return $this->hasMany('App\Models\ReviewDownvote', 'review_id', 'id');
     }
 
     public function afterSubmitActions() {

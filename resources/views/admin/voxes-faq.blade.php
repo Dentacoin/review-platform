@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1 class="page-header">Vox FAQ</h1>
+<h1 class="page-header">FAQ</h1>
 <!-- end page-header -->
 
 
@@ -13,6 +13,9 @@
             <h4 class="panel-title">
                 <input type="text" name="titles[]" class="form-control section-title" placeholder="Section title" value="{{ $section['title'] }}">
             </h4>
+            <a class="closer">
+                X
+            </a>
         </div>
         <div id="" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="">
             <div class="panel-body">
@@ -23,6 +26,9 @@
                                 <h4 class="panel-title">
                                     <input type="text" name="titles[]" class="form-control" placeholder="Question" value="{{ $question[0] }}">
                                 </h4>
+                                <a class="closer">
+                                    X
+                                </a>
                             </div>
                             <div id="" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="">
                                 <div class="panel-body">
@@ -64,6 +70,9 @@
             <h4 class="panel-title" style="display: flex;">
                 <input type="text" name="titles[]" class="form-control section-title" placeholder="Section title">
             </h4>
+            <a class="closer">
+                X
+            </a>
         </div>
         <div id="" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="">
             <div class="panel-body">
@@ -86,6 +95,9 @@
             <h4 class="panel-title">
                 <input type="text" name="titles[]" class="form-control" placeholder="Question">
             </h4>
+            <a class="closer">
+                X
+            </a>
         </div>
         <div id="" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="">
             <div class="panel-body">

@@ -184,10 +184,15 @@
 							</div>                                    
 
 						  	<div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
-							    <input type="text" name="phone" id="dentist-phone" class="form-control" placeholder="{!! trans('vox.page.register.phone') !!}">
-					    		<i>
-					    			{!! trans('vox.page.register.phone-hint') !!}
-					    		</i>
+						  		<div class="flex flex-center">
+						  			<div class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</div>
+								    <input type="text" name="phone" id="dentist-phone" class="form-control" placeholder="{!! trans('vox.page.register.phone') !!}">
+								</div>
+								<!--
+						    		<i>
+						    			{!! trans('vox.page.register.phone-hint') !!}
+						    		</i>
+						    	-->
 							    <span class="error-message" id="phone-error"></span>
 							</div>
 

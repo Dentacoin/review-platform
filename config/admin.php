@@ -26,6 +26,12 @@ return [
         'reviews' => array(
             'icon' => 'edit',
         ),
+        'trp-faq' => array(
+            'icon' => 'comments',
+            'js' => array(
+                'faq.js',
+            ),
+        ),
         'pages' => array(
             'icon' => 'copy',
             'js' => array(
@@ -51,7 +57,8 @@ return [
                 'badges' => 'badges',
             ),
             'js' => array(
-                'vox.js'
+                'vox.js',
+                'faq.js',
             ),
         ),
         'rewards' => array(
