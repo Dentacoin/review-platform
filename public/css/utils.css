@@ -379,10 +379,10 @@ h4 {
       font-family: "Font Awesome 5 Free";
       font-weight: 900;
       content: "\f05a"; }
-  .alert a {
+  .alert a:not(.button) {
     color: inherit;
     text-decoration: underline; }
-    .alert a:hover {
+    .alert a:not(.button):hover {
       color: inherit;
       text-decoration: underline; }
   .alert span {

@@ -112,12 +112,25 @@
 							@endif
 
 	                        @if(!empty($user))
-								<a href="{{ getLangUrl('profile') }}">
+								<a href="{{ getLangUrl('profile') }}" class="profile-btn">
 									<span class="name">
 										{{ $user->getNameShort() }}
 									</span>
 									<img src="{{ $user->getImageUrl(true) }}" {!! $user->hasimage ? '' : 'class="default-avatar"' !!}>
 								</a>
+
+								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
+								<div class="expander-wrapper{!! $user->hasimage ? ' has-image' : '' !!}">
+									<div class="expander">
+										<a href="{{ getLangUrl('logout') }}">
+											<i class="fas fa-power-off"></i>
+											Log out
+										</a>
+										<a class="btn" href="{{ getLangUrl('profile') }}">
+											My Account
+										</a>
+									</div>
+								</div>
 	                        @else
 	                        	@if($current_page=='welcome-dentist')
 	                        		<a href="{{ getLangUrl('/') }}" class="button-dentists">

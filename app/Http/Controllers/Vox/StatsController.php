@@ -81,6 +81,11 @@ class StatsController extends FrontController
     		$totalf = 0;
     		$totalm = 0;
     		$answers = json_decode($question->answers);
+            foreach ($answers as $key => $value) {
+                if(mb_strpos($value, '!')===0) {
+                    $answers[$key] = mb_substr($value, 1);
+                }
+            }
 
         	if($type=='dependency') {
                 $answer_id = null;
@@ -100,6 +105,11 @@ class StatsController extends FrontController
 
 
         		$answers_related = json_decode($question->related->answers);
+                foreach ($answers_related as $key => $value) {
+                    if(mb_strpos($value, '!')===0) {
+                        $answers_related[$key] = mb_substr($value, 1);
+                    }
+                }
         		$results = $this->prepareQuery($question->stats_relation_id, $dates);
         		$results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
         		$results = $results->get();

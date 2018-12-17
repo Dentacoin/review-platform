@@ -11,7 +11,7 @@ jQuery(document).ready(function($){
 		$('body').addClass('dark');
 	});
 
-	$('#search-input').focusout( function(e) {
+	$('.black-overflow').click( function(e) {
 		$('body').removeClass('dark');
 		$('.search-form .results').hide();
 	});
@@ -213,14 +213,14 @@ jQuery(document).ready(function($){
 					for(var i in data) {
 						$('.search-form .results .dentists-results .list').append('\
 							<a class="clearfix" href="'+data[i].link+'">\
-								'+data[i].name+' - '+data[i].location+'  (2000 km away)\
+								'+data[i].name+' - '+data[i].location+'\
 								<div class="ratings">\
 									<div class="stars">\
-										<div class="bar" style="width: '+(parseFloat(data[i].rating)/5*100)+'%;">\
+										<div class="bar" style="width: '+(data[i].rating ? parseFloat(data[i].rating)/5*100 : 0)+'%;">\
 										</div>\
 									</div>\
 									<span class="rating">\
-										('+data[i].reviews+' reviews)\
+										('+(data[i].reviews ? data[i].reviews : '0')+' reviews)\
 									</span>\
 								</div>\
 							</a>\
@@ -228,6 +228,7 @@ jQuery(document).ready(function($){
 						
 					}
 				}
+				//  (2000 km away)
 			},
 			error: function(data) {
 				;

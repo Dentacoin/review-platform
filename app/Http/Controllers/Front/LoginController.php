@@ -88,12 +88,11 @@ class LoginController extends FrontController
 
                 Auth::login($user, true);
 
-                Request::session()->flash('success-message', trans('front.page.login.success'));
                 return redirect('/');
             } else {
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-login']))
                     ->withInput()
-                    ->with('error-message', trans('front.page.login.error-fb', [
+                    ->with('error-message', trans('trp.popup.login.error-fb', [
                     'link' => '<a href="'.getLangUrl('register').'">',
                     'endlink' => '</a>',
                 ]) );
@@ -175,7 +174,7 @@ class LoginController extends FrontController
 
             return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
             ->withInput()
-            ->with('error-message', trans('front.page.registration.incomplete-facebook'));
+            ->with('error-message', trans('trp.popup.registration.incomplete-facebook'));
         }
 
         //!empty($s_user->user['verified']) && 
@@ -183,7 +182,7 @@ class LoginController extends FrontController
         if(!$verified) {
             return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
             ->withInput()
-            ->with('error-message', trans('front.page.registration.fake-facebook'));
+            ->with('error-message', trans('trp.popup.registration.fake-facebook'));
         }
 
         $is_dentist = session('is_dentist');
@@ -208,7 +207,7 @@ class LoginController extends FrontController
                 $user->save();      
             }
 
-            Request::session()->flash('success-message', trans('front.page.registration.have-account'));
+            Request::session()->flash('success-message', trans('trp.popup.registration.have-account'));
             return redirect(getLangUrl('profile'));
         } else {
 
@@ -230,7 +229,7 @@ class LoginController extends FrontController
             if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
                 ->withInput()
-                ->with('error-message', nl2br(trans('front.page.login.over18')) );
+                ->with('error-message', nl2br(trans('trp.popup.login.over18')) );
             }
 
             $password = $name.date('WY');
@@ -302,11 +301,6 @@ class LoginController extends FrontController
 
             Auth::login($newuser, true);
 
-            if($newuser->invited_by && $newuser->invitor->is_dentist) {
-                Request::session()->flash('success-message', trans('front.page.registration.completed-by-invite', ['name' => $newuser->invitor->getName()]));
-            } else {
-                Request::session()->flash('success-message', trans('front.page.registration.completed'));
-            }
             return redirect( $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('profile') );
         }
     }
@@ -380,7 +374,7 @@ class LoginController extends FrontController
                                 $ret['redirect'] = getLangUrl('profile');
                             }
                         } else {
-                            $ret['message'] = trans('front.common.civic.not-found');
+                            $ret['message'] = trans('trp.common.civic.not-found');
                         }
 
                     }

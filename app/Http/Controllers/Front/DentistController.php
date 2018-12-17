@@ -55,7 +55,7 @@ class DentistController extends FrontController
                 $old_review->clinic->recalculateRating();                
             }
             
-            Request::session()->flash('success-message', trans('front.page.dentist.review-submitted'));
+            Request::session()->flash('success-message', trans('trp.page.dentist.review-submitted'));
 
             return Response::json( [
                 'success' => true,
@@ -145,6 +145,7 @@ class DentistController extends FrontController
         }
 
         //$item->recalculateRating();
+        $isTrusted = !empty($this->user) ? $this->user->wasInvitedBy($item->id) : false;
 
         $questions = Question::get();
 
@@ -233,7 +234,7 @@ class DentistController extends FrontController
                         $review->title = strip_tags(Request::input( 'title' ));
                         $review->answer = strip_tags(Request::input( 'answer' ));
                         $review->youtube_id = strip_tags(Request::input( 'youtube_id' ));
-                        $review->verified = !empty($this->user->wasInvitedBy($item->id));
+                        $review->verified = !empty($isTrusted);
                         $review->status = 'pending';
                         $review->secret_id = $secret->id;
                         $review->save();
@@ -359,15 +360,11 @@ class DentistController extends FrontController
         }
 
         $dentist_limit_reached = !empty($this->user) ? $this->user->cantReviewDentist($item->id) : null;
-        $has_asked_dentist = false;
-        if($dentist_limit_reached) {
-            $has_asked_dentist = $this->user->hasAskedDentist($item->id);
-        }
-
+        $has_asked_dentist = $this->user->hasAskedDentist($item->id);
 
         if( $this->user ) {
-            $review_reward = $this->user->wasInvitedBy($item->id) ? Reward::getReward('review_trusted') : Reward::getReward('review');
-            $review_reward_video = $this->user->wasInvitedBy($item->id) ? Reward::getReward('review_video_trusted') : Reward::getReward('review_video');
+            $review_reward = $isTrusted ? Reward::getReward('review_trusted') : Reward::getReward('review');
+            $review_reward_video = $isTrusted ? Reward::getReward('review_video_trusted') : Reward::getReward('review_video');
         } else {
             $review_reward = $review_reward_video = 0;
         }
@@ -376,6 +373,7 @@ class DentistController extends FrontController
 
         $view_params = [
             'item' => $item,
+            'is_trusted' => $isTrusted,
             'my_review' => !empty($this->user) ? $this->user->hasReviewTo($item->id) : null,
             'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
             'my_downvotes' => !empty($this->user) ? $this->user->unusefulVotesForDenist($item->id) : null,
@@ -388,12 +386,12 @@ class DentistController extends FrontController
             'has_asked_dentist' => $has_asked_dentist,
             'aggregated_rates' => $aggregated_rates,
             'aggregated_rates_total' => $aggregated_rates_total ,
-            'seo_title' => trans('front.seo.dentist.title', [
+            'seo_title' => trans('trp.seo.dentist.title', [
                 'name' => $item->getName(),
                 'country' => $item->country ? $item->country->name : '',
                 'city' => $item->city ? $item->city->name : '',
             ]),
-            'social_title' => trans('front.social.dentist.title', [
+            'social_title' => trans('trp.social.dentist.title', [
                 'name' => $item->getName(),
                 'country' => $item->country ? $item->country->name : '',
                 'city' => $item->city ? $item->city->name : '',
@@ -447,29 +445,30 @@ class DentistController extends FrontController
     public function ask($locale=null, $slug) {
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
 
-        if(empty($item)) {
-            return redirect( getLangUrl('dentists') );
-        }
+        if(!empty($item)) {
 
-        if(!empty($this->user) && $this->user->cantReviewDentist($item->id)) {
-            $ask = $this->user->hasAskedDentist($item->id);
-            if(empty($ask)) {
-                $ask = new UserAsk;
-                $ask->user_id = $this->user->id;
-                $ask->dentist_id = $item->id;
-                $ask->status = 'waiting';
-                $ask->save();
 
-                $item->sendTemplate( 23 ,[
-                    'patient_name' => $this->user->name
-                ] );
+            if(!empty($this->user) && !$this->user->cantReviewDentist($item->id)) {
+
+                $ask = $this->user->hasAskedDentist($item->id);
+                if(empty($ask)) {
+                    $ask = new UserAsk;
+                    $ask->user_id = $this->user->id;
+                    $ask->dentist_id = $item->id;
+                    $ask->status = 'waiting';
+                    $ask->save();
+
+                    $item->sendTemplate( 23 ,[
+                        'patient_name' => $this->user->name
+                    ] );
+
+                    return Response::json( ['success' => true] );
+                }
             }
+
         }
 
-
-
-        Request::session()->flash('success-message', trans('front.page.dentist.asked') );
-        return redirect( $item->getLink() );
+        return Response::json( ['success' => false] );
     }
 
     public function useful($locale=null, $review_id) {

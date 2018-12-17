@@ -79,12 +79,13 @@
 					{{ trans('front.page.'.$current_page.'.write-review-limit-dentists', ['name' => $item->getName()]) }}
 					<br/>
 					<br/>
-					<a href="{{ $item->getLink().'/ask' }}" class="btn btn-primary btn-block">
-						{!! trans('front.page.'.$current_page.'.write-review-limit-dentists-ask', [
-							'name' => $item->getName(),
-						]) !!}
+					<a href="{{ $item->getLink().'/ask' }}" class="button ask-dentist">
+						SEND REQUEST
 					</a>
 				@endif
+			</div>
+			<div class="alert alert-success ask-success" style="display: none;">
+				Your request was sent. We'll let you know as soon as {{ $item->getName() }} approves it
 			</div>
 		@elseif($user->loggedFromBadIp())
 			<div class="alert alert-info">
@@ -118,13 +119,13 @@
 				<div class="questions-wrapper">
 
 					@if($item->is_dentist && !$item->is_clinic && $item->my_workplace_approved->isNotEmpty())	
-						<div class="question">
+						<div class="question skippable">
 							<h4 class="popup-title">
 								{{ trans('front.page.dentist.dentist-visit', ['name' => $item->getName() ]) }}
 							</h4>
 							<div class="review-answers">
 								<div class="clearfix subquestion">
-								   <select name="dentist_clinics" class="form-control">
+								   <select name="dentist_clinics" class="input">
 										<option value="">{{ trans('front.page.dentist.dentist-cabinet') }}</option>
 										@foreach($item->my_workplace_approved as $workplace)
 											<option value="{{ $workplace->clinic->id }}">{{ $workplace->clinic->getName() }}</option>
@@ -137,13 +138,13 @@
 
 					@foreach($questions as $qid => $question)
 						@if($item->is_clinic && $item->teamApproved->isNotEmpty() && $loop->iteration == 4 )
-							<div class="question">
+							<div class="question skippable">
 								<h4 class="popup-title">
 									{{ trans('front.page.dentist.dentist-treat') }}
 								</h4>
 								<div class="review-answers">
 									<div class="clearfix subquestion">
-							            <select name="clinic_dentists" class="form-control" id="clinic_dentists">
+							            <select name="clinic_dentists" class="input" id="clinic_dentists">
 											<option value="">{{ trans('front.page.dentist.dentist-not-remembered') }}</option>
 											@foreach($item->teamApproved as $team)
 												<option value="{{ $team->clinicTeam->id }}">{{ $team->clinicTeam->getName() }}</option>
@@ -282,9 +283,9 @@
 												]) !!}
 											</div>
 											
-											<span id="video-youtube" style="display: none;">
+											<div id="video-youtube" style="display: none;">
 												{{ trans('front.page.dentist.review-form-video-youtube') }}
-											</span>
+											</div>
 											
 											<div class="alert alert-success" style="display: none;" id="video-uploaded">
 												{{ trans('front.page.dentist.review-form-video-uploaded') }}

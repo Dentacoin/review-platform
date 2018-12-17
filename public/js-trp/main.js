@@ -180,7 +180,7 @@ jQuery(document).ready(function($){
 				if(ok) {
 					$(this).closest('.question').next().removeClass('hidden');
 
-					if( !$(this).closest('.question').next().next().hasClass('question') ) {
+					if( !$(this).closest('.question').next().next().hasClass('question') || $(this).closest('.question').next().hasClass('skippable') ) {
 						$(this).closest('.question').next().next().removeClass('hidden');
 					}
 				}
@@ -385,8 +385,17 @@ jQuery(document).ready(function($){
 			} );
 			$(this).find('.slider-wrapper').css('height', mh+'px');
 		} );
+
+
 	}
 	$(window).resize( fixFlickty );
+	fixFlickty();
+
+	$('header .profile-btn').click( function(e) {
+		if($(window).width()<768) {
+			e.preventDefault();
+		}
+	} );
 
 
 });

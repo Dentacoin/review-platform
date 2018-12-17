@@ -169,7 +169,7 @@ class RegisterController extends FrontController
 
                 if($this->user) {
                     if($this->user->id==$user->id) {
-                        Request::session()->flash('success-message', trans('front.page.registration.invite-yourself'));
+                        Request::session()->flash('success-message', trans('trp.popup.registration.invite-yourself'));
                     } else {
                         if(!$this->user->wasInvitedBy($user->id)) {
                             $inv = UserInvite::find($inv_id);
@@ -185,7 +185,7 @@ class RegisterController extends FrontController
                             $inv->invited_id = $this->user->id;
                             $inv->save();
                         }
-                        Request::session()->flash('success-message', trans('front.page.registration.invitation-registered', [ 'name' => $user->name ]));
+                        Request::session()->flash('success-message', trans('trp.popup.registration.invitation-registered', [ 'name' => $user->name ]));
                     }
                     return redirect( $user->getLink() );
                 } else {
@@ -202,7 +202,7 @@ class RegisterController extends FrontController
 
                     return redirect()->to(getLangurl('/').'?'. http_build_query(['popup'=>'popup-register']))
                     ->withInput()
-                    ->with('success-message', trans('front.page.registration.invitation', [ 'name' => $user->name ]) );
+                    ->with('success-message', trans('trp.popup.registration.invitation', [ 'name' => $user->name ]) );
                 }
 
             }
@@ -270,7 +270,7 @@ class RegisterController extends FrontController
                 $ret = array(
                     'success' => false,
                     'messages' => array(
-                        'captcha' => trans('front.page.registration.captcha')
+                        'captcha' => trans('trp.popup.registration.captcha')
                     )
                 );
 
@@ -292,7 +292,7 @@ class RegisterController extends FrontController
                     return Response::json( [
                         'success' => false, 
                         'messages' => [
-                            'phone' => trans('front.page.registration.phone')
+                            'phone' => trans('trp.popup.registration.phone')
                         ]
                     ] );
                 }
@@ -408,13 +408,13 @@ class RegisterController extends FrontController
         ])->first();
 
     	if(empty($user->id)) {
-            Request::session()->flash('error-message', trans('front.page.registration.email-error'));
+            Request::session()->flash('error-message', trans('trp.popup.registration.email-error'));
             return redirect( getLangUrl('forgot-password') );
         }
 
         $user->sendTemplate(13);
 
-        Request::session()->flash('success-message', trans('front.page.registration.email-success'));
+        Request::session()->flash('success-message', trans('trp.popup.registration.email-success'));
         return redirect( getLangUrl('forgot-password') );
     }
 
@@ -518,7 +518,7 @@ class RegisterController extends FrontController
                                 $user->save();      
                             }
 
-                            Request::session()->flash('success-message', trans('front.page.registration.have-account'));
+                            Request::session()->flash('success-message', trans('trp.popup.registration.have-account'));
                             $ret['success'] = true;
                             $ret['redirect'] = getLangUrl('profile');
                         }
@@ -593,11 +593,6 @@ class RegisterController extends FrontController
 
                         Auth::login($newuser, true);
 
-                        if($newuser->invited_by && $newuser->invitor->is_dentist) {
-                            Request::session()->flash('success-message', trans('front.page.registration.completed-by-invite', ['name' => $newuser->invitor->getName()]));
-                        } else {
-                            Request::session()->flash('success-message', trans('front.page.registration.completed'));
-                        }
                         $ret['success'] = true;
                         $ret['redirect'] = $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('profile');
                     }

@@ -466,6 +466,8 @@ $(document).ready(function(){
                         var line = Object.values(data.second_chart[i]);
                         var newline = [];
                         var sum = line.reduce(function(a, b) { return a + b; }, 0);
+                        console.log('LINE: ', line);
+                        console.log('SUM: ', sum);
                         for(var j in line) {
                             if(!data.answer_id || j==data.answer_id-1 ) {
                                 newline.push( line[j] ? line[j]/sum : 0 );
@@ -476,9 +478,25 @@ $(document).ready(function(){
                         var newi = arr.join('\n\r');
                         newline.unshift(newi.trim());
                         rows.push( newline );
-                    }   
+                    }
 
-                    console.log(rows);
+                    if( data.answer_id ) {
+                        var total = 0;
+                        for(var i in rows) {
+                            if(i!=0) {
+                                total += rows[i][1];
+                            }
+                        }
+
+                        for(var i in rows) {
+                            if(i!=0) {
+                                rows[i][1] = rows[i][1] / total;
+                            }
+                        }
+                    }
+
+                    console.log( rows );
+
                     drawColumns(rows, $(this).find('.second-chart')[0], null, data.answer_id);
 
                     $(this).find('.third-chart').html('');
@@ -584,14 +602,30 @@ $(document).ready(function(){
             var width = $(window).width()<1200 ? $(container).closest('.graphs').innerWidth() : (more_options && more_options.width ? more_options.width : 540);
 
             $(container).css('width', width );
+
+            //Dependency + Answer ID
+            var globalMax = null;
+            if( rows[0].length==2 ) {
+                var globalMax = 0 ;
+                for(var i=1;i<rows.length;i++) {
+                    if( rows[i][1] > globalMax) {
+                        globalMax = rows[i][1];
+                    }
+                }
+            }
+
             if( typeof(rows[0][ rows[0].length-1 ])=='object' ) {
 
-                var max = 0;
-                for(var i=1; i<rows.length; i++) {
-                    if(rows[i][1] > max) {
-                        max = rows[i][1];
-                    }
+                if( globalMax ) {
+                    var max = globalMax;
+                } else {
+                    var max = 0;
+                    for(var i=1; i<rows.length; i++) {
+                        if(rows[i][1] > max) {
+                            max = rows[i][1];
+                        }
 
+                    }
                 }
 
                 for(var i=1; i<rows.length; i++) {
@@ -606,16 +640,20 @@ $(document).ready(function(){
 
                 for(var i=1; i<rows.length; i++) {
                     $(container).append('<div class="group-heading">'+rows[i][0]+'</div>');
-                    var max = 0;
 
-
-                    for(var j=1; j<rows[i].length; j++) {
-
-                        if(rows[i][j] > max) {
-                            max = rows[i][j];
+                    if( globalMax ) {
+                        var max = globalMax;
+                    } else {
+                        var max = 0;
+                        for(var j=1; j<rows[i].length; j++) {
+                            if(rows[i][j] > max) {
+                                max = rows[i][j];
+                            }
                         }
                     }
+
                     for(var j=1; j<rows[i].length; j++) {
+                        console.log('MAX', rows[i][j], max);
                         var pl = 80*rows[i][j]/max;
                         var color = fixedColor ? chart_colors[fixedColor-1] : chart_colors[j-1];
                         if( typeof(rows[0][j])!='object' ) {

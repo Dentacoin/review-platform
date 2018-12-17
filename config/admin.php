@@ -83,6 +83,7 @@ return [
             'subpages' => array(
                 'admin' => 'admin',
                 'front' => 'front',
+                'trp' => 'trp',
                 'vox' => 'vox',
                 'validation' => 'validation',
             )

@@ -488,7 +488,7 @@ h4 {
 		}
 	}
 
-	a {
+	a:not(.button) {
 		color: inherit;
 		text-decoration: underline;
 

@@ -186,6 +186,11 @@
 					<a href="javascript:;" class="button" data-popup-logged="submit-review-popup">
 						Submit review
 					</a>
+					@if(!$isTrusted && !$has_asked_dentist)
+						<a href="javascript:;" class="button button-inner-white button-ask" data-popup-logged="popup-ask-dentist">
+							Request Invite
+						</a>
+					@endif
 				@endif
 			</div>
 		</div>
@@ -331,6 +336,11 @@
 				<a href="javascript:;" class="button" data-popup-logged="submit-review-popup">
 					Submit review
 				</a>
+				@if(!$isTrusted && !$has_asked_dentist)
+					<a href="javascript:;" class="button button-inner-white button-ask" data-popup-logged="popup-ask-dentist">
+						Request Invite
+					</a>
+				@endif
 			@endif
 
 		</div>
@@ -696,6 +706,9 @@
 		@endif
 	@else
 		@include('trp.popups.submit-review')
+		@if(!$isTrusted && !$has_asked_dentist)
+			@include('trp.popups.ask-dentist')
+		@endif
 	@endif
 @endif
 @include('trp.popups.detailed-review')

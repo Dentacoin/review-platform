@@ -30,10 +30,10 @@ class ProfileController extends FrontController
         parent::__construct($request, $route, $locale);
 
         $this->menu = [
-            'home' => trans('vox.page.profile.menu.wallet'),
-            'info' => trans('vox.page.profile.menu.info'),
-            'privacy' => trans('vox.page.profile.menu.privacy'),
-            'invite' => trans('vox.page.profile.menu.invite-patient'),
+            'home' => trans('trp.page.profile.menu.wallet'),
+            'info' => trans('trp.page.profile.menu.info'),
+            'privacy' => trans('trp.page.profile.menu.privacy'),
+            'invite' => trans('trp.page.profile.menu.invite-patient'),
         ];
 
         $this->profile_fields = [
@@ -95,17 +95,17 @@ class ProfileController extends FrontController
 
     public function handleMenu() {
         if($this->user->is_dentist) {
-            $this->menu['invite'] = trans('vox.page.profile.menu.invite-dentist');
+            $this->menu['invite'] = trans('trp.page.profile.menu.invite-dentist');
             
             if( $this->user->is_clinic ) {
                 unset($this->profile_fields['title']);
             }
 
             if($this->user->asks->isNotEmpty()) {
-                $this->menu['asks'] = trans('front.page.profile.dentist.asks');
+                $this->menu['asks'] = trans('trp.page.profile.menu.asks');
             }
         } else {
-            $this->menu['trp'] = trans('front.page.profile.dentist.trp');
+            $this->menu['trp'] = trans('trp.page.profile.menu.trp');
             unset($this->profile_fields['title']);
             unset($this->profile_fields['phone']);
             unset($this->profile_fields['address']);
@@ -137,9 +137,9 @@ class ProfileController extends FrontController
             $va = trim(Request::input('vox-address'));
             $error = null;
             if(empty($va) || mb_strlen($va)!=42) {
-                $error = trans('vox.page.profile.home.address-invalid');
+                $error = trans('trp.page.profile.home.address-invalid');
             } else if(!$this->user->canIuseAddress($va)) {
-                $error = trans('vox.page.profile.home.address-used');
+                $error = trans('trp.page.profile.home.address-used');
             } else {
                 $this->user->dcn_address = Request::input('vox-address');
                 $this->user->save();
@@ -148,14 +148,14 @@ class ProfileController extends FrontController
             if(Request::input('json')) {
                 $ret = [
                     'success' => !$error,
-                    'message' => $error ? $error : trans('vox.page.profile.home.address-saved')
+                    'message' => $error ? $error : trans('trp.page.profile.home.address-saved')
                 ];
                 return Response::json( $ret );
             } else {
                 if($error) {
                     Request::session()->flash('error-message', $error);                    
                 } else {
-                    Request::session()->flash('success-message', trans('vox.page.profile.home.address-saved'));
+                    Request::session()->flash('success-message', trans('trp.page.profile.home.address-saved'));
                 }
                 
                 return redirect( getLangUrl('profile'));
@@ -199,13 +199,13 @@ class ProfileController extends FrontController
         if(empty($va) || mb_strlen($va)!=42) {
             $ret = [
                 'success' => false,
-                'message' => trans('vox.page.profile.home.address-invalid')
+                'message' => trans('trp.page.profile.home.address-invalid')
             ];
             return Response::json( $ret );
         } else if(!$this->user->canIuseAddress($va)) {
             $ret = [
                 'success' => false,
-                'message' => trans('vox.page.profile.home.address-used')
+                'message' => trans('trp.page.profile.home.address-used')
             ];
             return Response::json( $ret );
         } else {
@@ -218,12 +218,12 @@ class ProfileController extends FrontController
         if($amount > $this->user->getVoxBalance()) {
             $ret = [
                 'success' => false,
-                'message' => trans('vox.page.profile.home.amount-too-high')
+                'message' => trans('trp.page.profile.home.amount-too-high')
             ];
         } else if($amount<env('VOX_MIN_WITHDRAW')) {
             $ret = [
                 'success' => false,
-                'message' => trans('vox.page.profile.home.amount-too-low', [
+                'message' => trans('trp.page.profile.home.amount-too-low', [
                     'minimum' => '<b>'.env('VOX_MIN_WITHDRAW').'</b>'
                 ])
             ];
@@ -350,7 +350,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
             if(Request::Input('is_contacts')) {
                 if(empty(Request::Input('contacts')) || !is_array( Request::Input('contacts') ) ) {
-                    return Response::json(['success' => false, 'message' => trans('vox.page.profile.'.$this->current_subpage.'.contacts-none-selected') ] );
+                    return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.contacts-none-selected') ] );
                 }
 
                 foreach (Request::Input('contacts') as $inv_info) {
@@ -394,7 +394,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
                 }
 
-                return Response::json(['success' => true, 'message' => trans('vox.page.profile.'.$this->current_subpage.'.contacts-success') ] );
+                return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.contacts-success') ] );
             } else {
                 $validator = Validator::make(Request::all(), [
                     'email' => ['required', 'email'],
@@ -402,7 +402,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 ]);
 
                 if ($validator->fails()) {
-                    return Response::json(['success' => false, 'message' => trans('vox.page.profile.'.$this->current_subpage.'.failure') ] );
+                    return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
                 } else {
                     $already = UserInvite::where([
                         ['user_id', $this->user->id],
@@ -410,7 +410,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     ])->first();
 
                     if($already) {
-                        return Response::json(['success' => false, 'message' => trans('vox.page.profile.'.$this->current_subpage.'.already-invited') ] );                    
+                        return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited') ] );                    
                     }
 
                     $invitation = new UserInvite;
@@ -436,7 +436,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $this->user->email = $dentist_email;
                     $this->user->save();
 
-                    return Response::json(['success' => true, 'message' => trans('vox.page.profile.'.$this->current_subpage.'.success') ] );
+                    return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
                 }
             }
 
@@ -586,7 +586,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     return Response::json($ret);
                 }
 
-                Request::session()->flash('success-message', trans('vox.page.profile.info.updated'));
+                Request::session()->flash('success-message', trans('trp.page.profile.info.updated'));
                 return redirect( getLangUrl('profile/info') );
 
             }
@@ -623,14 +623,14 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             ->withErrors($validator);
         } else {
             if ( !Hash::check(Request::input('cur-password'), $this->user->password) ) {
-                Request::session()->flash('error-message', trans('vox.page.profile.wrong-password'));
+                Request::session()->flash('error-message', trans('trp.page.profile.wrong-password'));
                 return redirect( getLangUrl('profile/info') );
             }
             
             $this->user->password = bcrypt(Request::input('new-password'));
             $this->user->save();
             
-            Request::session()->flash('success-message', trans('vox.page.profile.info.password-updated'));
+            Request::session()->flash('success-message', trans('trp.page.profile.info.password-updated'));
             return redirect( getLangUrl('profile/info'));
         }
     }
@@ -686,7 +686,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             ]);
         }
         
-        Request::session()->flash('success-message', trans('front.page.profile.password-updated'));
+        Request::session()->flash('success-message', trans('trp.page.profile.asks.accepted'));
         return redirect( getLangUrl('profile/asks'));
     }
     public function asks_deny($locale=null, $ask_id) {
@@ -707,7 +707,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $ask->save();
         }
         
-        Request::session()->flash('success-message', trans('front.page.profile.password-updated'));
+        Request::session()->flash('success-message', trans('trp.page.profile.asks.denied'));
         return redirect( getLangUrl('profile/asks'));
     }
 
@@ -798,7 +798,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $this->user->civic_id = $data['userId'];
                     $this->user->save();
                     $ret['success'] = true;
-                    Request::session()->flash('success-message', trans('vox.page.profile.wallet.civic-validated'));                    
+                    Request::session()->flash('success-message', trans('trp.page.profile.wallet.civic-validated'));                    
                 }
             }
         }
@@ -814,7 +814,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     public function gdpr($locale=null) {
         $this->user->gdpr_privacy = true;
         $this->user->save();
-        Request::session()->flash('success-message', trans('vox.page.profile.gdpr-done'));
+        Request::session()->flash('success-message', trans('trp.page.profile.gdpr-done'));
         return redirect( getLangUrl('profile'));
     }
 

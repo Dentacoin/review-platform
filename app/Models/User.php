@@ -489,7 +489,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return null;
     }
 
-    public function cantReviewDentist($dentist_id) {        
+    public function cantReviewDentist($dentist_id) {   
         if($this->reviews_out->isEmpty()) {
             return null;
         }        

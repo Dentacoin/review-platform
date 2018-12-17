@@ -473,6 +473,29 @@ $(document).ready(function(){
         return false;
     });
 
+    //Ask for trusted
+
+    $('.ask-dentist').click( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+        $.get( 
+            $(this).attr('href'), 
+            function( data ) {
+                if(data.success) {
+                    $('.ask-dentist').closest('.alert').hide();
+                    $('.ask-success').show();
+                    $('.button-ask').remove();
+                } else {
+
+                }
+            }
+        );
+    } )
+
 
     //
     //End Popups
@@ -592,7 +615,7 @@ $(document).ready(function(){
                 record: {
                     audio: true,
                     video: true,
-                    maxLength: 600,
+                    maxLength: 736,
                     debug: true
                 }
             }
