@@ -57,7 +57,10 @@ $(document).ready(function(){
                     var cls = $(this).closest('[role="editor"]').attr('class');
                     $('.'+cls+'[role="editor"]').hide();
                     $('.'+cls+'[role="presenter"]').show();
-                    $('.'+cls+'[role="presenter"] .value-here').html(data.value);
+                    console.log( data.value );
+                    if(data.value.length) {
+                        $('.'+cls+'[role="presenter"] .value-here').html(data.value);                        
+                    }
                 } else {
                     $(this).find('.alert').show();
 
