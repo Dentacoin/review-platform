@@ -5,8 +5,14 @@
 				<img src="{{ url('img-trp/big-x.png') }}">
 			</div>
 			<div class="content">
-				<p class="h1">Your profile has been suspended</p>
-				<h3>We have detected multiple accounts created with the same IP. You can no longer use any Dentacoin tool.</h3>
+				<p class="h1">
+					{!! nl2br(trans('trp.popup.suspended-popup.title')) !!}
+					
+				</p>
+				<h3>
+					{!! nl2br(trans('trp.popup.suspended-popup.hint')) !!}
+					
+				</h3>
 			</div>
 		</div>
 	</div>

@@ -7,31 +7,40 @@
 		<div class="popup-mobile-buttons">
 			<a href="javascript:;" class="close-popup">< back</a>
 		</div>
-		<h2>Add Team Member</h2>
+		<h2>
+			{!! nl2br(trans('trp.popup.add-team-popup.title')) !!}
+			
+		</h2>
 
-		<h4 class="popup-title">Show the world your dream team! </h4>
+		<h4 class="popup-title">
+			{!! nl2br(trans('trp.popup.add-team-popup.subtitle')) !!}
+			
+		</h4>
 
 		<p class="popup-desc">
-			Inviting all dentists in your clinic to link their profile with your main clinic's profile will make it easier for patients to find the right specialist. 
+			{!! nl2br(trans('trp.popup.add-team-popup.hint')) !!}
+			
 		</p>
 
 		<div class="search-dentist">
 			<i class="fas fa-search"></i>
-			<input type="text" class="input" name="search-dentist" placeholder="Search for registered dentists...">
+			<input type="text" class="input" name="search-dentist" placeholder="{!! nl2br(trans('trp.popup.add-team-popup.search')) !!}">
 		</div>
 
 		<div id="invite-option-email" class="invite-content">
 			<p class="info">
-				<img src="img/info.png"/> You couldn't find anything? Invite your team members to register via email.
+				<img src="img/info.png"/>
+				{!! nl2br(trans('trp.popup.add-team-popup.invite')) !!}
+				 
 			</p>
 
 			{!! Form::open(array('method' => 'post', 'id' => 'invite-patient-form', 'class' => 'search-dentist-form', 'url' => getLangUrl('profile/invite') )) !!}
 				<div class="flex">
 					<div class="col">
-						<input type="text" name="name" placeholder="Name" class="input">
+						<input type="text" name="name" placeholder="{!! nl2br(trans('trp.popup.add-team-popup.name')) !!}" class="input">
 					</div>
 					<div class="col">
-						<input type="email" name="email" placeholder="Email address" class="input">
+						<input type="email" name="email" placeholder="{!! nl2br(trans('trp.popup.add-team-popup.email')) !!}" class="input">
 					</div>
 				</div>
 
@@ -39,11 +48,14 @@
 				<a href="javascript:;" class="add-dentist">+ Add another dentist</a>
 			-->
 				<div class="tac">
-					<input type="submit" class="button" value="Send">
+					<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.add-team-popup.send')) !!}">
 				</div>
 			{!! Form::close() !!}
 
-			<h4 class="popup-title">Invited dentists:</h4>
+			<h4 class="popup-title">
+				{!! nl2br(trans('trp.popup.add-team-popup.list')) !!}
+				
+			</h4>
 
 			<div class="invited-dentists">
 				<div class="flex">
@@ -77,7 +89,10 @@
 			</div>
 
 			<div class="tac">
-				<button type="submit" class="button">Add to your team</button>
+				<button type="submit" class="button">
+					{!! nl2br(trans('trp.popup.add-team-popup.add')) !!}
+					
+				</button>
 			</div>
 		</div>
 	</div>

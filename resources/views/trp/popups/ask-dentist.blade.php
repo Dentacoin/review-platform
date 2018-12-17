@@ -5,19 +5,22 @@
 		</div>
 
 		<div class="popup-mobile-buttons">
-			<a href="javascript:;" class="close-popup">< back</a>
+			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
 
 		<div class="alert alert-info">
-			Requesting an invitation from Dr. [XYZ] proves that you have been their patient and thus allows you to earn Dentacoin (DCN) for your review. Once you've sent the invite request, you must wait for approval by Dr. [XYZ]. Check your email inbox.
+			{!! nl2br(trans('trp.popup.popup-ask-dentist.hint', [ 'name' => $item->getName() ])) !!}
+			
 			<br/>
 			<br/>
 			<a href="{{ $item->getLink().'/ask' }}" class="button ask-dentist">
-				SEND REQUEST
+				{!! nl2br(trans('trp.popup.popup-ask-dentist.send')) !!}
+				
 			</a>
 		</div>
 		<div class="alert alert-success ask-success" style="display: none;">
-			Your request was sent. We'll let you know as soon as {{ $item->getName() }} approves it
+			{!! nl2br(trans('trp.popup.popup-ask-dentist.sent', [ 'name' => $item->getName() ])) !!}
+			
 		</div>
 
 	</div>

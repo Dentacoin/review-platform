@@ -163,7 +163,7 @@ class TranslationsController extends AdminController
         $sa_new = [];
         foreach ($sa as $key => $value) {
             $arr = explode('.', $key);
-            if($arr[0]=='page' || $arr[0]=='enums') {
+            if($arr[0]=='popup' || $arr[0]=='page' || $arr[0]=='enums') {
                 $nk = $arr[0].'.'.$arr[1];
             } else {
                 $nk = $arr[0];

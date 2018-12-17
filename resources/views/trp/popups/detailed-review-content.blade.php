@@ -5,7 +5,8 @@
 			<span class="review-name">{{ $review->user->name }}: </span>
 			@if($review->verified)
 				<div class="trusted-sticker mobile-sticker">
-					Trusted Review
+					{!! nl2br(trans('trp.common.trusted-review')) !!}
+					
 				</div>
 			@endif
 			@if($review->title)
@@ -15,7 +16,7 @@
 			@endif
 			@if($review->verified)
 				<div class="trusted-sticker">
-					Trusted Review
+					{!! nl2br(trans('trp.common.trusted-review')) !!}
 				</div>
 			@endif
 		</div>
@@ -42,7 +43,8 @@
 				@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
 					<a class="reply-review" href="javascript:;">
 						<span>
-							Reply
+							{!! nl2br(trans('trp.popup.view-review-popup.reply')) !!}
+							
 						</span>
 					</a>
 				@endif
@@ -79,10 +81,10 @@
 					<div class="review-content">
 						<form method="post" action="{{ $item->getLink() }}/reply/{{ $review->id }}" class="reply-form-element">
 							{!! csrf_field() !!}
-							<textarea class="input" name="reply" placeholder="Enter your reply here"></textarea>
-							<button class="button" type="submit" name="">Submit</button>
+							<textarea class="input" name="reply" placeholder="{!! nl2br(trans('trp.popup.view-review-popup.enter-reply')) !!}"></textarea>
+							<button class="button" type="submit" name="">{!! nl2br(trans('trp.popup.view-review-popup.submit')) !!}</button>
 							<div class="alert alert-warning" style="display: none;">
-								Please enter your reply in the box above
+								{!! nl2br(trans('trp.popup.view-review-popup.reply-error')) !!}
 							</div>
 						</form>
 					</div>
@@ -126,7 +128,9 @@
 
 <div class="overview-wrapper">
 	<div class="mobile-tac">
-		<h4 class="black-left-line">Overview</h4>
+		<h4 class="black-left-line">
+			{!! nl2br(trans('trp.popup.view-review-popup.overview')) !!}
+		</h4>
 	</div>
 
 	<div class="review-container clearfix">
@@ -151,7 +155,9 @@
 </div>
 <div class="detailed-review-wrapper">
 	<div class="mobile-tac">
-		<h4 class="black-left-line">Detailed review</h4>
+		<h4 class="black-left-line">
+			{!! nl2br(trans('trp.popup.view-review-popup.detailed-review')) !!}
+		</h4>
 	</div>
 
 	<div class="review-container">

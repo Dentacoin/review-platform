@@ -3,8 +3,14 @@
 
 
 		<div class="mobile-buttons flex-mobile">
-			<a href="javascript:;" class="button col switch-forms-mobile" data-form="user-form">I'm a user</a>
-			<a href="javascript:;" class="button col switch-forms-mobile" data-form="dentist-form">I'm a dentist</a>
+			<a href="javascript:;" class="button col switch-forms-mobile" data-form="user-form">
+				{!! nl2br(trans('trp.popup.popup-register.user')) !!}
+				
+			</a>
+			<a href="javascript:;" class="button col switch-forms-mobile" data-form="dentist-form">
+				{!! nl2br(trans('trp.popup.popup-register.dentist')) !!}
+				
+			</a>
 			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
 		</div>
 		<div class="forms flex">
@@ -12,29 +18,38 @@
 				<a class="switch-forms user-choice" href="javascript:;">
 					<img src="img-trp/play-black.png"/>
 				</a>
-				<a href="javascript:;" class="form-button">I'm a user</a>
+				<a href="javascript:;" class="form-button">
+					{!! nl2br(trans('trp.popup.popup-register.user')) !!}
+					
+				</a>
 				<form id="signin-form-popup-left" class="signin-form blue-form">
 					{!! csrf_field() !!}
 					<div class="form-inner">
 
 						<div class="cta">
 							<i class="fas fa-sign-in-alt"></i>
-							You need to log in or register to do this action.
+							{!! nl2br(trans('trp.popup.popup-register.cta')) !!}
+							
 						</div>
 
-						<h2>Sign up</h2>
+						<h2>
+							{!! nl2br(trans('trp.popup.popup-register.signup')) !!}
+							
+						</h2>
 
 						<a href="{{ getLangUrl('register/facebook') }}" class="fb-login log-button">
 							<span>
 								<img src="img-trp/fb.png">
 							</span>
-							with Facebook
+							{!! nl2br(trans('trp.popup.popup-register.facebook')) !!}
+							
 						</a>
 						<a href="javascript:;" class="civic-login log-button register-civic-button">
 							<span>
 								<img src="img-trp/civic.png">
 							</span>
-							with Civic
+							{!! nl2br(trans('trp.popup.popup-register.civic')) !!}
+							
 						</a>
 						<!-- <a href="javascript:;" class="uport-login log-button">
 							<span>
@@ -63,12 +78,21 @@
 						<label class="checkbox-label agree-label" for="register-agree">
 							<input type="checkbox" class="special-checkbox" id="register-agree" name="agree" value="agree">
 							<i class="far fa-square"></i>
-							By continuing you agree to our <a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">Privacy Policy</a>
+							{!! nl2br(trans('trp.popup.popup-register.privacy', [
+								'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
+								'endlink' => '</a>',
+							])) !!}
+							
 						</label>
 					</div>
 
 					<p class="have-account">
-						Already have an account? <a class="log-in-button" href="javascript:;">Log in</a>
+						{!! nl2br(trans('trp.popup.popup-register.have-account')) !!}
+						
+						<a class="log-in-button" href="javascript:;">
+							{!! nl2br(trans('trp.popup.popup-register.login')) !!}
+							
+						</a>
 					</p>
 	    		</form>
 	    		<form id="login-form-popup-left" class="signin-form blue-form" style="display: none;">
@@ -77,22 +101,25 @@
 
 						<div class="cta">
 							<i class="fas fa-sign-in-alt"></i>
-							You need to log in or register to do this action.
+							{!! nl2br(trans('trp.popup.popup-register.cta')) !!}
 						</div>
 
-						<h2>Log in</h2>
+						<h2>
+							{!! nl2br(trans('trp.popup.popup-register.login')) !!}
+						</h2>
 
 						<a href="{{ getLangUrl('login/facebook') }}" class="fb-login log-button">
 							<span>
 								<img src="img-trp/fb.png">
 							</span>
-							with Facebook
+							{!! nl2br(trans('trp.popup.popup-register.facebook')) !!}
 						</a>
 						<a href="javascript:;" class="civic-login log-button register-civic-button">
 							<span>
 								<img src="img-trp/civic.png">
 							</span>
-							with Civic
+							{!! nl2br(trans('trp.popup.popup-register.civic')) !!}
+							
 						</a>
 						<!-- <a href="javascript:;" class="uport-login log-button">
 							<span>
@@ -121,7 +148,12 @@
 					</div>
 
 					<p class="have-account">
-						Don't have an account? <a class="sign-in-button" href="javascript:;">Sign up</a>
+						{!! nl2br(trans('trp.popup.popup-register.no-account')) !!}
+						
+						<a class="sign-in-button" href="javascript:;">
+							{!! nl2br(trans('trp.popup.popup-register.signup')) !!}
+							
+						</a>
 					</p>
 	    		</form>
 	    	</div>
@@ -129,7 +161,9 @@
 				<a class="switch-forms dentist-choice" href="javascript:;">
 					<img src="img-trp/play.png"/>
 				</a>
-				<a href="javascript:;" class="form-button white-form-button">I'm a dentist</a>
+				<a href="javascript:;" class="form-button white-form-button">
+					{!! nl2br(trans('trp.popup.popup-register.dentist')) !!}
+				</a>
 				<form id="signin-form-popup" class="signin-form" action="{{ getLangUrl('register') }}" method="post">
 					{!! csrf_field() !!}
 
@@ -137,10 +171,12 @@
 						
 						<div class="cta">
 							<i class="fas fa-sign-in-alt"></i>
-							You need to log in or register to do this action.
+							{!! nl2br(trans('trp.popup.popup-register.cta')) !!}
 						</div>
 
-						<h2>Sign up</h2>
+						<h2>
+							{!! nl2br(trans('trp.popup.popup-register.signup')) !!}
+						</h2>
 						@include('front.errors')
 						<div id="register-error" class="alert alert-warning" style="display: none;">
 							{{ trans('front.page.'.$current_page.'.register-error')  }}<br/>
@@ -149,12 +185,15 @@
 							</span>
 						</div>
 						<div class="sign-in-step active" id="step-1">
-							<input type="text" name="name" id="dentist-name" placeholder="Full name" class="input" value="{{ old('name') }}">
-							<input type="email" name="email" id="dentist-email" placeholder="Email address" class="input" value="{{ old('email') }}">
-							<input type="password" name="password" id="dentist-password" placeholder="Password" class="input" value="{{ old('password') }}">
-							<input type="password" name="password-repeat" id="dentist-password-repeat" placeholder="Repeat password" class="input" value="{{ old('password-repeat') }}">
+							<input type="text" name="name" id="dentist-name" placeholder="{!! nl2br(trans('trp.popup.popup-register.name')) !!}" class="input" value="{{ old('name') }}">
+							<input type="email" name="email" id="dentist-email" placeholder="{!! nl2br(trans('trp.popup.popup-register.email')) !!}" class="input" value="{{ old('email') }}">
+							<input type="password" name="password" id="dentist-password" placeholder="{!! nl2br(trans('trp.popup.popup-register.password')) !!}" class="input" value="{{ old('password') }}">
+							<input type="password" name="password-repeat" id="dentist-password-repeat" placeholder="{!! nl2br(trans('trp.popup.popup-register.repeat-password')) !!}" class="input" value="{{ old('password-repeat') }}">
 							<div class="form-info clearfix">
-								<a href="javascript:;" class="button next go-to-next" data-validator="{{ getLangUrl('register/step1') }}">Next</a>
+								<a href="javascript:;" class="button next go-to-next" data-validator="{{ getLangUrl('register/step1') }}">
+									{!! nl2br(trans('trp.common.next')) !!}
+									
+								</a>
 							</div>
 						</div>
 						<div class="sign-in-step" id="step-2">
@@ -164,21 +203,24 @@
 								  	<label for="mode-dentist">
 										<i class="far fa-circle"></i>
 								    	<input class="type-radio" type="radio" name="mode" id="mode-dentist" value="dentist">
-								    	I work as an independent dental practitioner
+								    	{!! nl2br(trans('trp.popup.popup-register.type.dentist')) !!}
+								    	
 								  	</label>
 								</div>
 								<div class="radio-label">
 								  	<label for="mode-clinic">
 										<i class="far fa-circle"></i>
 								    	<input class="type-radio" type="radio" name="mode" id="mode-clinic" value="clinic">
-								    	I represent a dental practice/clinic with more than one dentist.
+								    	{!! nl2br(trans('trp.popup.popup-register.type.clinic')) !!}
+								    	
 								  	</label>
 								</div>
 								<div class="radio-label">
 								  	<label for="mode-in-clinic">
 										<i class="far fa-circle"></i>
 								    	<input class="type-radio" type="radio" name="mode" id="mode-in-clinic" value="in-clinic">
-								    	I work as an associate dentist at a dental clinic.
+								    	{!! nl2br(trans('trp.popup.popup-register.type.associate')) !!}
+								    	
 								  	</label>
 								</div>
 							</div>
@@ -204,8 +246,8 @@
 							</div>
 							<input type="text" name="website" placeholder="Website" id="dentist-website" class="input">
 							<div class="form-info clearfix">
-								<a class="back" href="javascript:;">< Back</a>
-								<a href="javascript:;" class="button next go-to-next" data-validator="{{ getLangUrl('register/step2') }}">Next</a>
+								<a class="back" href="javascript:;">< {!! nl2br(trans('trp.common.back')) !!}</a>
+								<a href="javascript:;" class="button next go-to-next" data-validator="{{ getLangUrl('register/step2') }}">{!! nl2br(trans('trp.common.next')) !!}</a>
 							</div>
 						</div>
 						<div class="sign-in-step" id="step-3">
@@ -214,7 +256,10 @@
 									<label for="add-avatar" class="image-label">
 										<div class="centered-hack">
 											<i class="fas fa-plus"></i>
-											<p>Add profile photo</p>
+											<p>
+												{!! nl2br(trans('trp.popup.popup-register.add-photo')) !!}
+												
+											</p>
 										</div>
 							    		<div class="loader">
 							    			<i class="fas fa-circle-notch fa-spin"></i>
@@ -225,7 +270,10 @@
 								</div>
 								<div class="col">
 									<div class="specilializations">
-										<p class="checkbox-question">Specialization</p>
+										<p class="checkbox-question">
+											{!! nl2br(trans('trp.popup.popup-register.specialization')) !!}
+											
+										</p>
 								    	@foreach($categories as $k => $v)
 											<label class="checkbox-label" for="checkbox-{{ $k }}">
 												<input type="checkbox" class="special-checkbox" id="checkbox-{{ $k }}" name="specialization[]" value="{{ $loop->index }}">
@@ -239,10 +287,11 @@
 
 							<div class="search-input" id="clinic-widget">
 								<label>
-									If the clinic you work in has a profile, you can find and join it.
+									{!! nl2br(trans('trp.popup.popup-register.join-clinic')) !!}
+									
 									<div class="input-wrapper cilnic-suggester-wrapper suggester-wrapper">
 										<i class="fas fa-search"></i>
-										<input type="text" class="input cilnic-suggester suggester-input" placeholder="Search for clinic...">
+										<input type="text" class="input cilnic-suggester suggester-input" placeholder="{!! nl2br(trans('trp.popup.popup-register.search-clinic')) !!}">
 										<div class="suggest-results">
 										</div>
 										<input type="hidden" class="suggester-hidden" name="clinic_id" value="">
@@ -251,8 +300,10 @@
 							</div>
 
 							<div class="form-info clearfix">
-								<a class="back" href="javascript:;">< Back</a>
-								<a href="javascript:;" class="button next go-to-next" data-validator="{{ getLangUrl('register/step3') }}">Next</a>
+								<a class="back" href="javascript:;">< {!! nl2br(trans('trp.common.back')) !!}</a>
+								<a href="javascript:;" class="button next go-to-next" data-validator="{{ getLangUrl('register/step3') }}">
+									{!! nl2br(trans('trp.common.next')) !!}
+								</a>
 							</div>
 						</div>
 						<div class="sign-in-step tac" id="step-4">
@@ -264,14 +315,17 @@
 							</label>
 
 							<div class="form-info clearfix">
-								<a class="back" href="javascript:;">< Back</a>
+								<a class="back" href="javascript:;">< {!! nl2br(trans('trp.common.back')) !!}</a>
 								<input type="submit" value="Create profile" class="button next"/>
 							</div>
 						</div>
 					</div>
 
 					<p class="have-account">
-						Already have an account? <a class="log-in-button" href="javascript:;">Log in</a>
+						{!! nl2br(trans('trp.popup.popup-register.have-account')) !!}
+						<a class="log-in-button" href="javascript:;">
+							{!! nl2br(trans('trp.popup.popup-register.login')) !!}
+						</a>
 					</p>
 
 	    		</form>
@@ -282,16 +336,16 @@
 
 						<div class="cta">
 							<i class="fas fa-sign-in-alt"></i>
-							You need to log in or register to do this action.
+							{!! nl2br(trans('trp.popup.popup-register.cta')) !!}
 						</div>
 						
-						<h2>Log in</h2>
+						<h2>{!! nl2br(trans('trp.popup.popup-register.login')) !!}</h2>
 						@include('front.errors')
-						<input type="email" name="email" placeholder="Email address" class="input">
-						<input type="password" name="password" placeholder="Password" class="input">
+						<input type="email" name="email" placeholder="{!! nl2br(trans('trp.popup.popup-register.email')) !!}" class="input">
+						<input type="password" name="password" placeholder="{!! nl2br(trans('trp.popup.popup-register.password')) !!}" class="input">
 
 						<div class="form-info tac">
-							<input class="button login-button" type="submit" value="Log in"/>
+							<input class="button login-button" type="submit" value="{!! nl2br(trans('trp.popup.popup-register.login')) !!}"/>
 							<div class="alert alert-warning login-error" style="display: none;">
 								
 							</div>
@@ -299,9 +353,15 @@
 					</div>
 
 					<p class="have-account">
-						<a href="{{ getLangUrl('forgot-password') }}">Forgotten password?</a>
+						<a href="{{ getLangUrl('forgot-password') }}">
+							{!! nl2br(trans('trp.popup.popup-register.forgot')) !!}
+							
+						</a>
 						 | 
-						Don't have an account? <a class="sign-in-button" href="javascript:;">Sign up</a>
+						{!! nl2br(trans('trp.popup.popup-register.no-account')) !!}
+						<a class="sign-in-button" href="javascript:;">
+							{!! nl2br(trans('trp.popup.popup-register.signup')) !!}
+						</a>
 					</p>
 
 	    		</form>

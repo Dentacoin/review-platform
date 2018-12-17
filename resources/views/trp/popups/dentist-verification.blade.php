@@ -5,11 +5,13 @@
 				<img src="{{ url('img-trp/verification-check.png') }}">
 			</div>
 			<div class="content">
-				<p class="h1">Dentist Profile Verification</p>
+				<p class="h1">
+					{!! nl2br(trans('trp.popup.verification-popup.title')) !!}
+					
+				</p>
 				<h4>
-					Thank you for submitting your registration form! Our onboarding team will now assess the data you have provided to ensure that  you are a real dentist.
-					<br/><br/>
-					You will receive an email notification as soon as the verification processis completed. Then you will be able to use all Trusted Reviews functionlities.
+					{!! nl2br(trans('trp.popup.verification-popup.hint')) !!}
+					
 				</h4>
 			</div>
 		</div>

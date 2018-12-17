@@ -5,15 +5,21 @@
 		</div>
 
 		<div class="popup-mobile-buttons">
-			<a href="javascript:;" class="close-popup">< back</a>
+			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
-		<h2>Invite Patients</h2>
+		<h2>
+			{!! nl2br(trans('trp.popup.popup-invite.title')) !!}
+			
+		</h2>
 
-		<h4 class="popup-title">Learn and earn from your patients' feedback!</h4>
+		<h4 class="popup-title">
+			{!! nl2br(trans('trp.popup.popup-invite.subtitle')) !!}
+			
+		</h4>
 
 		<p class="popup-desc">
-			Invite patients via email.<br/> 
-			Each review, submitted after your invitation, will give you invaluable feedback to improve upon, as well as an amount of Dentacoin (DCN).
+			{!! nl2br(trans('trp.popup.popup-invite.hint')) !!}
+			
 		</p>
 
 		@if($user->dcn_address)
@@ -33,17 +39,18 @@
 			<div id="invite-option-email" class="invite-content" style="">
 				<p class="info">
 					<img src="img/info.png"/>
-					Just enter a name and email address and we’ll send an email with invitation link.
+					{!! nl2br(trans('trp.popup.popup-invite.instructions')) !!}
+					
 				</p>
 
 				{!! Form::open(array('method' => 'post', 'id' => 'invite-patient-form', 'url' => getLangUrl('profile/invite') )) !!}
 					{!! csrf_field() !!}
 					<div class="flex">
 						<div class="col">
-							<input type="text" name="name" placeholder="Name" class="input" id="invite-name">
+							<input type="text" name="name" placeholder="{!! nl2br(trans('trp.popup.popup-invite.name')) !!}" class="input" id="invite-name">
 						</div>
 						<div class="col">
-							<input type="email" name="email" placeholder="Email address" id="invite-email" class="input">
+							<input type="email" name="email" placeholder="{!! nl2br(trans('trp.popup.popup-invite.email')) !!}" id="invite-email" class="input">
 						</div>
 					</div>
 
@@ -54,7 +61,7 @@
 					-->
 
 					<div class="tac">
-						<input type="submit" class="button" value="Send">
+						<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!}">
 					</div>
 				{!! Form::close() !!}
 			</div>
@@ -85,19 +92,23 @@
 				<p class="info">
 					<img src="img/info.png"/>
 					<span>
-						In order to send invitations and receive rewads, we need to know your DCN address. Enter yours below or <a href="{{ url('DentavoxMetamask.pdf') }}" target="_blank">click here</a> if you don't know how to create one.
+						{!! nl2br(trans('trp.popup.popup-invite.no-address.title', [
+							'link' => '<a href="'.url('DentavoxMetamask.pdf').'" target="_blank">',
+							'endlink' => '</a>',
+						])) !!}
+						
 					</span>
 				</p>
 
 				{!! Form::open(array('method' => 'post', 'id' => 'invite-no-address', 'url' => getLangUrl('profile') )) !!}
 					{!! csrf_field() !!}
-					<input type="text" name="vox-address" placeholder="Your DCN address" class="input" id="invite-name">
+					<input type="text" name="vox-address" placeholder="{!! nl2br(trans('trp.popup.popup-invite.no-address.address')) !!}" class="input" id="invite-name">
 					<!--
 						<a href="javascript:;" class="add-patient">+ Add another patient</a>
 					-->
 
 					<div class="tac">
-						<input type="submit" class="button" value="Save">
+						<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.no-address.save')) !!}">
 					</div>
 
 					<input type="hidden" name="json" value="1" />
