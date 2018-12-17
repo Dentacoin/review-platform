@@ -12,19 +12,23 @@
 		<h4 class="popup-title">Learn and earn from your patients' feedback!</h4>
 
 		<p class="popup-desc">
-			Invite patients via email or get a referral link to share anywhere you like.<br/> 
+			Invite patients via email.<br/> 
 			Each review, submitted after your invitation, will give you invaluable feedback to improve upon, as well as an amount of Dentacoin (DCN).
 		</p>
 
 		@if($user->dcn_address)
-			<div class="popup-tabs invite-tabs flex flex-mobile">
-				<a class="active col" href="javascript:;" data-invite="email">
-					Invite via email
-				</a>
-				<a class="col" href="javascript:;" data-invite="link">
-					Get a referral link
-				</a>
-			</div>
+			@if(false)
+				<div class="popup-tabs invite-tabs flex flex-mobile">
+					<a class="active col" href="javascript:;" data-invite="email">
+						Invite via email
+					</a>
+					<a class="col" href="javascript:;" data-invite="link">
+						Get a referral link
+					</a>
+				</div>
+			@endif
+			<br/>
+			<br/>
 
 			<div id="invite-option-email" class="invite-content" style="">
 				<p class="info">
@@ -54,6 +58,8 @@
 					</div>
 				{!! Form::close() !!}
 			</div>
+
+			@if(false)
 			<div id="invite-option-link" class="invite-content" style="display: none;">
 				<p class="info">
 					<img src="img/info.png"/>
@@ -71,6 +77,7 @@
 					</div>
 				</div>
 			</div>
+			@endif
 		@else
 			<br/>
 			<br/>
