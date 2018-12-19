@@ -5,9 +5,12 @@
 		</div>
 
 		<div class="popup-mobile-buttons">
-			<a href="javascript:;" class="close-popup">< back</a>
+			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
-		<h2>Working Hours</h2>
+		<h2>
+            {!! nl2br(trans('trp.popup.popup-wokring-time.title')) !!}
+            
+        </h2>
 
 		{!! Form::open(array('method' => 'post', 'url' => getLangUrl('profile/info') )) !!}
 			{!! csrf_field() !!}
@@ -72,7 +75,7 @@
 			<input type="hidden" name="json" value="1" />
 			<input type="hidden" name="field" value="work_hours" />
 			<div class="tac">
-				<input type="submit" class="button" value="Save">
+				<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-wokring-time.save')) !!}">
 			</div>
 
 		{!! Form::close() !!}

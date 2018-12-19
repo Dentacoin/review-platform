@@ -12,6 +12,8 @@ use App\Models\Reward;
 use App\Models\TrpReward;
 use App\Models\ReviewAnswer;
 
+use Image;
+
 class Review extends Model {
     
     use SoftDeletes;
@@ -85,7 +87,7 @@ class Review extends Model {
 
         if($this->verified) {
             $reward = new TrpReward();
-            $reward->user_id = $this->dentist_id;
+            $reward->user_id = $this->dentist_id ? $this->dentist_id : $this->clinic_id;
             $reward->reward = Reward::getReward('reward_dentist');
             $reward->type = 'dentist-review';
             $reward->reference_id = $this->id;
@@ -116,6 +118,100 @@ class Review extends Model {
         if( $this->clinic ) {
             $this->clinic->recalculateRating();
         }
+    }
+
+    public function generateSocialCover() {
+
+        $path = $this->getSocialCoverPath();
+
+        $img = Image::canvas(1200, 628, '#fff');
+
+        if( $this->title && false ) {
+            $img->insert( public_path().'/img-trp/cover-review.png');
+            $title = $this->title;
+            //$title = 'ale ale ale';
+            $title = wordwrap('“'.$title.'”', 40); 
+            $lines = count(explode("\n", $title));
+            $top = 91;
+            $top -= $lines*38;
+            $img->text($title, 123, $top, function($font) {
+                $font->file(public_path().'/fonts/Calibri-Italic.ttf');
+                $font->size(60);
+                $font->color('#000000');
+                $font->align('left');
+                $font->valign('top');
+            });
+
+            $voffset = (3 - $lines)*40;
+        } else {
+            $img->insert( public_path().'/img-trp/cover-review-notitle.png');
+            $voffset = 0;
+        }
+
+
+        $answer = $this->answer;
+        $answer = mb_strlen($answer)>170 ? mb_substr($answer, 0, 167).'...' : $answer;
+        $answer = wordwrap('"'.$answer.'"', 60);
+        $lines = count(explode("\n", $answer));
+        $top = 335;
+        $top -= $lines*38;
+
+        $img->text($answer, 218, $top - $voffset, function($font) {
+            $font->file(public_path().'/fonts/Calibri.ttf');
+            $font->size(38);
+            $font->color('#000000');
+            $font->align('left');
+            $font->valign('top');
+        });
+
+        $avatar_image = Image::make( $this->user->hasimage ? $this->user->getImagePath(true) : public_path().'/new-vox-img/no-avatar-0.png' );
+        $avatar_image->resize(70, 70);
+        $avatar = Image::canvas(70, 70, '#fff');
+        $avatar->insert( $avatar_image, 'top-left', 0, 0 );
+        $avatar->insert( public_path().'/img-trp/cover-avatar-mask.png' , 'top-left', 0, 0 );
+        $img->insert( $avatar , 'top-left', 123, 280 - $voffset );
+
+
+
+        $names = 'by: '.$this->user->getName();
+        $img->text($names, 506, 472, function($font) use ($names_size) {
+            $font->file(public_path().'/fonts/Calibri.ttf');
+            $font->size(38);
+            $font->color('#000000');
+            $font->align('left');
+            $font->valign('top');
+        });
+
+
+        $step = 73;
+        $start = 122;
+        for($i=1;$i<=$this->rating;$i++) {
+            $img->insert( public_path().'/img-trp/cover-star-review.png' , 'top-left', $start, 450 );
+            $start += $step;
+        }
+
+        $rest = ( $this->rating - floor( $this->rating ) );
+        if($rest) {
+            $halfstar = Image::canvas(65*$rest, 67, '#fff');
+            $halfstar->insert( public_path().'/img-trp/cover-star-review.png', 'top-left', 0, 0 );
+            $img->insert($halfstar , 'top-left', $start, 450 );
+        }
+
+        $img->save($path);
+    }
+
+    public function getSocialCoverPath() {
+        $folder = storage_path().'/app/public/reviews/'.($this->id%100);
+        if(!is_dir($folder)) {
+            mkdir($folder);
+        }
+        return $folder.'/'.$this->id.'-cover.jpg';
+    }
+    public function getSocialCover() {
+        if(!$this->hasimage_social) {
+            $this->generateSocialCover();
+        }
+        return url('/storage/reviews/'.($this->id%100).'/'.$this->id.'-cover.jpg').'?rev='.$this->updated_at->timestamp;
     }
 }
 

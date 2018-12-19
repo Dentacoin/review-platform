@@ -228,6 +228,7 @@ $(document).ready(function(){
                                     var trigger_question = parts[0].trim(); // 15 въпрос
                                     var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
                                     var parsed_given_answer = given_answer && given_answer.length && given_answer!="0" ? given_answer.split(',') : null;
+                                    console.log(trigger_question, parts[1], given_answer, parsed_given_answer);
                                     if( parsed_given_answer ) {
                                         if( parts[1] ) {
                                             var trigger_answers = parts[1].split(','); // 2,6 // [2,6]
@@ -241,7 +242,7 @@ $(document).ready(function(){
                                                         }    
                                                     }
                                                 } else {
-                                                    if( given_answer.indexOf(trigger_answers[i].trim())!=-1 ) {
+                                                    if( parsed_given_answer.indexOf(trigger_answers[i].trim().toString())!=-1 ) {
                                                         trigger_status = true;
                                                         break;
                                                     }

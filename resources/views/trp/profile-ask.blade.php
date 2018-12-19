@@ -12,14 +12,14 @@
 
 			<h2 class="page-title">
 				<img src="{{ url('new-vox-img/profile-asks.png') }}" />
-	            Patient requests
+	            {{ trans('trp.page.profile.'.$current_subpage.'.title') }}
 			</h2>
 
 			@if($user->asks->isNotEmpty())		        
 				<div class="form-horizontal">
 					<div class="black-line-title">
 			            <h4 class="bold">
-			            	Patient requests
+			            	{{ trans('trp.page.profile.'.$current_subpage.'.title') }}
 			            </h4>
 			        </div>
 
@@ -27,13 +27,13 @@
 	            		<thead>
 	            			<tr>
 		            			<th>
-		            				{{ trans('front.page.profile.'.$current_subpage.'.list-date') }}
+		            				{{ trans('trp.page.profile.'.$current_subpage.'.list-date') }}
 		            			</th>
 		            			<th>
-		            				{{ trans('front.page.profile.'.$current_subpage.'.list-name') }}
+		            				{{ trans('trp.page.profile.'.$current_subpage.'.list-name') }}
 		            			</th>
 		            			<th>
-		            				{{ trans('front.page.profile.'.$current_subpage.'.list-status') }}
+		            				{{ trans('trp.page.profile.'.$current_subpage.'.list-status') }}
 		            			</th>
 	            			</tr>
 	            		</thead>
@@ -50,15 +50,15 @@
 	            						@if($ask->status=='waiting')
 	            							<a class="btn btn-primary compact" href="{{ getLangUrl('profile/asks/accept/'.$ask->id) }}">
 	            								<i class="fas fa-thumbs-up"></i>
-		            							{{ trans('front.page.profile.'.$current_subpage.'.accept') }}
+		            							{{ trans('trp.page.profile.'.$current_subpage.'.accept') }}
 	            							</a>
 	            							<a class="btn btn-inactive compact" href="{{ getLangUrl('profile/asks/deny/'.$ask->id) }}">
 	            								<i class="fas fa-thumbs-down"></i>
-		            							{{ trans('front.page.profile.'.$current_subpage.'.deny') }}
+		            							{{ trans('trp.page.profile.'.$current_subpage.'.deny') }}
 	            							</a>
 	            						@else
 	            							<span class="label label-{{ $ask->status=='yes' ? 'success' : 'warning' }}">
-		            							{{ trans('front.page.profile.'.$current_subpage.'.status-'.$ask->status) }}
+		            							{{ trans('trp.page.profile.'.$current_subpage.'.status-'.$ask->status) }}
 	            							</span>
 	            						@endif
 	            					</td>

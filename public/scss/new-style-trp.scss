@@ -69,6 +69,16 @@ body.logged-in {
 	}
 }
 
+a.text {
+	color: #126585;
+	text-decoration: underline;
+    font-size: inherit;
+
+	&:hover {
+		color: #268db5;
+	}
+}
+
 .site-content {
 	overflow-x: hidden; 
 }
@@ -240,6 +250,7 @@ header {
 			background-image: url('../img-trp/logo-mobile.png');
 			width: 25px;
 			height: 24px;
+    		background-size: contain;
 		}
 	}
 
@@ -460,6 +471,7 @@ body.white-header {
 				background-image: url('../img-trp/logo-blue-mobile.png');
 				width: 31px;
 				height: 30px;
+   				background-size: contain;
 			}
 		}
 
@@ -760,14 +772,18 @@ body.blur {
     			margin-bottom: 15px;
     		}
 
-    		p {
+    		.p {
     			margin-bottom: 5px;
     			font-size: 14px;
+    			display: flex;
 
-    			img {
-    				vertical-align: middle;
-    				margin-right: 10px;
-    			}
+    			.img {
+					width: 25px;
+
+					img {
+						height: 14px;
+					}
+				}
 
     			span {
     				font-size: 14px;
@@ -1253,6 +1269,14 @@ body.blur {
 
     	@media #{$phone} {
     		display: none;
+    	}
+
+    	input:not([type="submit"]) {
+    		min-width: 320px;
+    		background: white;
+    		@media #{$phone} {
+    			min-width: 240px;
+    		}
     	}
 
     	input[type="submit"] {
@@ -2213,6 +2237,7 @@ textarea.input {
 
 			img {
 				vertical-align: middle;
+				height: 14px;
 			}
 		}
 
@@ -2415,15 +2440,11 @@ textarea.input {
 			    margin-top: 0px;
 			}
 
-			p {
+			.p {
 				font-size: 13px;
 
 				span {
 					font-size: 13px;
-				}
-
-				img {
-					margin-right: 4px;
 				}
 			}
 			.ratings {
@@ -3803,6 +3824,7 @@ textarea.input {
     	margin-bottom: 10px;
     	display: block;
     	margin-top: 2px;
+		display: flex;
     	
     	@media #{$phone} {
 			display: none;
@@ -3813,9 +3835,14 @@ textarea.input {
     		font-size: 14px;
     	}
 
-    	img {
-    	    vertical-align: baseline;
-    	}
+		.img {
+			width: 25px;
+
+			img {
+				height: 14px;
+			}
+		}
+
     }
 
     .dentist-website {
@@ -3824,20 +3851,20 @@ textarea.input {
 		}
     }
 
-    p {
+    .p {
 		margin-bottom: 5px;
 		font-size: 14px;
+		display: flex;
 
 		@media #{$phone} {
 			font-size: 12px;
 		}
 
-		img {
-			vertical-align: middle;
-			margin-right: 10px;
+		.img {
+			width: 25px;
 
-			@media #{$phone} {
-				margin-right: 5px;
+			img {
+				height: 14px;
 			}
 		}
 
@@ -4082,11 +4109,20 @@ textarea.input {
     	display: block;
     	padding-bottom: 10px;
     	border-bottom: 1px solid #d7d7d7;
+    	display: flex;
 
     	span {
     		font-size: 16px;
     		color: #777777;
     	}
+
+		.img {
+			width: 25px;
+
+			img {
+				height: 14px;
+			}
+		}
     }
 
     .claim {
@@ -4112,19 +4148,24 @@ textarea.input {
 
     	a,
     	span,
-    	p {
+    	.p {
     		font-size: 12px;
     	}
 
-    	p {
+    	.p {
     		margin-bottom: 10px;
     		word-break: break-word;
+    		display: flex;
+
+			.img {
+				width: 25px;
+
+				img {
+					height: 14px;
+				}
+			}
     	}
 
-    	img {
-			vertical-align: sub;
-			margin-right: 9px;
-    	}
 
 
 		.flex {
@@ -4266,21 +4307,33 @@ textarea.input {
 	.type {
 		color: #9f9f9f;
 		margin-bottom: 15px;
-		display: block;
+		display: flex;
 
 		span {
 			color: #9f9f9f;
 		}
+
+		.img {
+			width: 25px;
+
+			img {
+				height: 14px;
+			}
+		}
 	}
 
-	p {
+	.p {
 		font-size: 14px;
 		margin-bottom: 10px;
 		word-break: break-word;
+		display: flex;
 
-		img {
-			margin-right: 10px;
-			vertical-align: middle;
+		.img {
+			width: 25px;
+
+			img {
+				height: 14px;
+			}
 		}
 	}
 

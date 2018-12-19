@@ -5,10 +5,10 @@
 	<div class="container conatiner-centered">
 		<div class="centered-form">
 	    	<h2>
-	    		{{ trans('front.page.'.$current_page.'.title') }}
+	    		{{ trans('trp.page.'.$current_page.'.title') }}
 	    	</h2>
 	    	<p>
-	    		{{ trans('front.page.'.$current_page.'.hint') }}
+	    		{{ trans('trp.page.'.$current_page.'.hint') }}
 	    	</p>
 
 
@@ -16,8 +16,8 @@
     			{!! csrf_field() !!}
 
 				<div class="form-inner">
-					<input type="email" name="email" placeholder="Email address" class="input">
-					<button type="submit" class="button">Reset password</button>
+					<input type="email" name="email" placeholder="{{ trans('trp.page.'.$current_page.'.email') }}" class="input">
+					<button type="submit" class="button">{{ trans('trp.page.'.$current_page.'.submit') }}</button>
 				</div>
 
     		</form>

@@ -565,13 +565,7 @@ $(document).ready(function(){
             function( data ) {
                 if(data.success) {
                     console.log('success');
-
-                    if(data.link) {
-                        $('#review-confirmed').show().find('a.etherscan-link').attr('href', data.link);
-                    } else {
-                        $('#review-pending').show();
-                    }
-                    
+                    $('#review-confirmed').show();
                     $('#review-submit-button').hide();
                 } else {
                     if(data.valid_input) {

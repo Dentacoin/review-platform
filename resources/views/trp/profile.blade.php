@@ -11,14 +11,14 @@
 		<div class="flex-3">
 			<h2 class="page-title">
 				<img src="{!! url('new-vox-img/profile-home.png') !!}" />
-				{!! trans('vox.page.profile.home.title') !!}
+				{!! trans('trp.page.profile.home.title') !!}
 			</h2>
 
 			<div class="form-horizontal">
 
 				<div class="black-line-title">
 	                <h4 class="bold">
-	                	{!! trans('vox.page.profile.home.balance') !!}
+	                	{!! trans('trp.page.profile.home.balance') !!}
 	                </h4>
 	            </div>
 
@@ -48,7 +48,7 @@
 
 				<div class="form-horizontal">
 					<div class="alert alert-warning">
-						{!! trans('vox.page.profile.home.wallet-bad-ip') !!}
+						{!! trans('trp.page.profile.home.wallet-bad-ip') !!}
 					</div>
 				</div>
 
@@ -61,18 +61,18 @@
 
 						<div class="black-line-title">
 			                <h4 class="bold">
-			                	{!! trans('vox.page.profile.home.withdraw.title') !!}		                	
+			                	{!! trans('trp.page.profile.home.withdraw.title') !!}		                	
 			                </h4>
 			            </div>
 
 			    		@if(!$user->civic_kyc)
 				    		<p class="personal-description">
-								{!! nl2br(trans('vox.page.profile.home.civic-hint')) !!}
+								{!! nl2br(trans('trp.page.profile.home.civic-hint')) !!}
 								<br/>
 								<br/>
 		                	</p>
 		                	<p class="personal-description">
-		                		{!! nl2br(trans('vox.page.profile.home.civic-buttons')) !!}
+		                		{!! nl2br(trans('trp.page.profile.home.civic-buttons')) !!}
 								<br/>
 								<br/>
 		                	</p>
@@ -83,34 +83,34 @@
 								<br/>
 		                	</p>
 		                	<p class="personal-description">
-		                		{!! nl2br(trans('vox.page.profile.home.civic-login')) !!}
+		                		{!! nl2br(trans('trp.page.profile.home.civic-login')) !!}
 								<br/>
 								<br/>
 		                	</p>
 
 							<button id="signupButton" class="civic-button-a medium" type="button" scope="PROOF_OF_IDENTITY">
-								<span style="color: white;">{!! nl2br(trans('vox.page.profile.home.civic-button')) !!}</span>
+								<span style="color: white;">{!! nl2br(trans('trp.page.profile.home.civic-button')) !!}</span>
 							</button>
 
 							<div id="civic-cancelled" class="alert alert-info" style="display: none;">
-								{!! nl2br(trans('vox.page.profile.home.civic-cancelled')) !!}
+								{!! nl2br(trans('trp.page.profile.home.civic-cancelled')) !!}
 							</div>
 							<div id="civic-error" class="alert alert-warning" style="display: none;">
-								{!! nl2br(trans('vox.page.profile.home.civic-error')) !!}
+								{!! nl2br(trans('trp.page.profile.home.civic-error')) !!}
 							</div>
 							<div id="civic-weak" class="alert alert-warning" style="display: none;">
-								{!! nl2br(trans('vox.page.profile.home.civic-weak')) !!}
+								{!! nl2br(trans('trp.page.profile.home.civic-weak')) !!}
 							</div>
 							<div id="civic-wait" class="alert alert-info" style="display: none;">
-								{!! nl2br(trans('vox.page.profile.home.civic-wait')) !!}
+								{!! nl2br(trans('trp.page.profile.home.civic-wait')) !!}
 							</div>
 							<div id="civic-duplicate" class="alert alert-warning" style="display: none;">
-								{!! nl2br(trans('vox.page.profile.home.civic-duplicate')) !!}
+								{!! nl2br(trans('trp.page.profile.home.civic-duplicate')) !!}
 							</div>
 							<input type="hidden" id="jwtAddress" value="{!! getLangUrl('profile/jwt') !!}" />
 			    		@else
 				    		<p class="personal-description">
-				    			{!! trans('vox.page.profile.home.withdraw.hint') !!}
+				    			{!! trans('trp.page.profile.home.withdraw.hint') !!}
 				    		</p>
 
 				    		<form id="withdraw-form" method="post" class="form-horizontal" action="{!! getLangurl('profile/withdraw') !!}">
@@ -118,42 +118,42 @@
 
 					            <div class="form-group">
 					  				<label class="control-label top-label">
-					  					{!! trans('vox.page.profile.home.withdraw.address') !!}
+					  					{!! trans('trp.page.profile.home.withdraw.address') !!}
 					  				</label>
 					                <input class="form-control style-2" id="vox-address" name="vox-address" type="text" value="{!! $user->dcn_address !!}">
 					            </div>
 
 					            <div class="form-group separated">
 					  				<label class="control-label top-label">
-					  					{!! trans('vox.page.profile.home.withdraw.amount') !!}
+					  					{!! trans('trp.page.profile.home.withdraw.amount') !!}
 					  				</label>
 					  				<div class="flex break-tablet">
 						                <div class="flex-3">
-						                    <input class="form-control style-2" id="wallet-amount" name="wallet-amount" type="number" value="" placeholder="{!! trans('vox.page.profile.wallet-withdraw-amount') !!}">
+						                    <input class="form-control style-2" id="wallet-amount" name="wallet-amount" type="number" value="" placeholder="{!! trans('trp.page.profile.wallet-withdraw-amount') !!}">
 						                </div>
 										<div class="col">
-					                        <button type="submit" name="update" class="btn btn-inactive form-control nom style-2" data-loading="{!! trans('vox.common.loading') !!}">
-						  						{!! trans('vox.page.profile.home.withdraw.button') !!}
+					                        <button type="submit" name="update" class="btn btn-inactive form-control nom style-2" data-loading="{!! trans('trp.common.loading') !!}">
+						  						{!! trans('trp.page.profile.home.withdraw.button') !!}
 					                        </button>
 										</div>
 									</div>
 					            </div>
 					            @if($user->isGasExpensive())
 						            <div class="alert alert-warning">
-						            	{!! trans('vox.page.profile.wallet-withdraw-gas') !!}
+						            	{!! trans('trp.page.profile.wallet-withdraw-gas') !!}
 			                        </div>
 			                    @endif
 
 		                        <div class="alert alert-success" style="display: none;" id="withdraw-pending">
-		                        	{!! trans('vox.page.profile.wallet-withdraw-pending') !!}
+		                        	{!! trans('trp.page.profile.wallet-withdraw-pending') !!}
 		                        </div>
 		                        <div class="alert alert-success" style="display: none;" id="withdraw-success">
-		                        	{!! trans('vox.page.profile.wallet-withdraw-success') !!}
+		                        	{!! trans('trp.page.profile.wallet-withdraw-success') !!}
 		                        	<a target="_blank">
 		                        	</a>
 		                        </div>
 		                        <div class="alert alert-warning" style="display: none;" id="withdraw-error">
-		                        	{!! trans('vox.page.profile.wallet-withdraw-error') !!}
+		                        	{!! trans('trp.page.profile.wallet-withdraw-error') !!}
 		                        	<div id="withdraw-reason">
 		                        	</div>
 		                        </div>
@@ -167,12 +167,12 @@
 
 						<div class="black-line-title">
 			                <h4 class="bold">
-			                	{!! trans('vox.page.profile.home.address.title') !!}		                	
+			                	{!! trans('trp.page.profile.home.address.title') !!}		                	
 			                </h4>
 			            </div>
 
 	                	<p class="personal-description">
-	                		{!! trans('vox.page.profile.home.address.hint') !!}
+	                		{!! trans('trp.page.profile.home.address.hint') !!}
 	                	</p>
 
 
@@ -186,7 +186,7 @@
 					                </div>
 					                <div class="col">
 				                        <button type="submit" name="update" class="btn btn-primary form-control nom">
-				                        	{!! trans('vox.page.profile.home.address.button') !!}				                        	
+				                        	{!! trans('trp.page.profile.home.address.button') !!}				                        	
 				                        </button>
 					                </div>
 				                </div>
@@ -203,23 +203,23 @@
 
 						<div class="black-line-title">
 			                <h4 class="bold">
-			                	{!! trans('vox.page.profile.home.history.title') !!}
+			                	{!! trans('trp.page.profile.home.history.title') !!}
 			                </h4>
 			            </div>
 		            	<table class="table">
 		            		<thead>
 		            			<tr>
 			            			<th>
-			            				{!! trans('front.page.profile.history.list-date') !!}
+			            				{!! trans('trp.page.profile.history.list-date') !!}
 			            			</th>
 			            			<th>
-			            				{!! trans('front.page.profile.history.list-amount') !!}
+			            				{!! trans('trp.page.profile.history.list-amount') !!}
 			            			</th>
 			            			<th>
-			            				{!! trans('front.page.profile.history.list-address') !!}
+			            				{!! trans('trp.page.profile.history.list-address') !!}
 			            			</th>
 			            			<th>
-			            				{!! trans('front.page.profile.history.list-status') !!}
+			            				{!! trans('trp.page.profile.history.list-status') !!}
 			            			</th>
 		            			</tr>
 		            		</thead>
@@ -237,17 +237,17 @@
 		            					</td>
 		            					<td>
 		            						@if($trans->status=='new')
-		            							{!! trans('front.page.profile.history.status-new') !!}
+		            							{!! trans('trp.page.profile.history.status-new') !!}
 		            						@elseif($trans->status=='failed')
-		            							{!! trans('front.page.profile.history.status-failed') !!}
+		            							{!! trans('trp.page.profile.history.status-failed') !!}
 		            						@elseif($trans->status=='unconfirmed')
 		            							<a class="unconfirmed" href="https://etherscan.io/tx/{!! $trans->tx_hash !!}" target="_blank">
-		            								{!! trans('front.page.profile.history.status-unconfirmed') !!}
+		            								{!! trans('trp.page.profile.history.status-unconfirmed') !!}
 		            								<i class="fa fa-share-square-o"></i>
 		            							</a>
 		            						@elseif($trans->status=='completed')
 		            							<a class="completed" href="https://etherscan.io/tx/{!! $trans->tx_hash !!}" target="_blank">
-		            								{!! trans('front.page.profile.history.status-completed') !!}		            								
+		            								{!! trans('trp.page.profile.history.status-completed') !!}		            								
 		            								<i class="fa fa-share-square-o"></i>
 		            							</a>
 		            						@endif

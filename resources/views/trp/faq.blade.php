@@ -4,7 +4,9 @@
 
 	<div class="faq-title">
 		<div class="container">
-			<h1>Frequently Asked Questions</h1>
+			<h1>
+				{!! nl2br(trans('trp.page.faq.title')) !!}
+			</h1>
 		</div>
 	</div>
 

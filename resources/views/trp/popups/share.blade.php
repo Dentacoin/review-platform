@@ -5,15 +5,21 @@
 		</div>
 
 		<div class="popup-mobile-buttons">
-			<a href="javascript:;" class="close-popup">< back</a>
+			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
-		<h2>Share</h2>
+		<h2>
+			{!! nl2br(trans('trp.popup.popup-share.title')) !!}
+			
+		</h2>
 
-		<h4 class="popup-title">You can share this with others.</h4>
+		<h4 class="popup-title">
+			{!! nl2br(trans('trp.popup.popup-share.subtitle')) !!}
+			
+		</h4>
 
 		<p class="popup-desc">
-			Even if they don’t have Trusted Reviews account, they will still be able to see it.<br/>
-			You can directly copy the link below and send it or you can choose from the other options.
+			{!! nl2br(trans('trp.popup.popup-share.hint')) !!}
+			
 		</p>
 
 		<div class="flex copy-wrapper">
@@ -40,22 +46,30 @@
 		@if(!empty($user))
 			<form method="post" class="copy-wrapper" action="{{ getLangUrl('share') }}" id="share-link-form">
 				{!! csrf_field() !!}
-				<p>Or send it to a friends email.</p>
+				<p>
+					{!! nl2br(trans('trp.popup.popup-share.email-title')) !!}
+					
+				</p>
 				<div class="flex">
 					<div class="flex-9">
-						<input type="email" class="input" name="email" placeholder="Email address...">
+						<input type="email" class="input" name="email" placeholder="{!! nl2br(trans('trp.popup.popup-share.email')) !!}">
 					</div>
 					<div class="flex-3">
-						<input type="submit" class="button" value="Send by email">
+						<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-share.send')) !!}">
 					</div>
 				</div>
-				<p class="small-info">They won’t receive any other emails from us besides this one. </p>
+				<p class="small-info">
+					{!! nl2br(trans('trp.popup.popup-share.no-spam')) !!}
+					
+				</p>
 				<input type="hidden" name="address" id="share-address">
 				<div class="alert alert-success" style="display: none;">
-					Link shared. If you want to share it with someone else - just enter their email address above
+					{!! nl2br(trans('trp.popup.popup-share.email-success')) !!}
+					
 				</div>
 				<div class="alert alert-warning" style="display: none;">
-					Please enter a valid email address
+					{!! nl2br(trans('trp.popup.popup-share.email-failure')) !!}
+					
 				</div>
 			</form>
 		@endif

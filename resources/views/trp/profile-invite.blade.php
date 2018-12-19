@@ -14,9 +14,9 @@
 		<h2 class="page-title">
 			<img src="{{ url('new-vox-img/profile-invite.png') }}" />
 			@if($user->is_dentist)
-				{{ trans('vox.page.profile.invite.title-dentist') }}
+				{{ trans('trp.page.profile.invite.title-dentist') }}
 			@else
-				{{ trans('vox.page.profile.invite.title-patient') }}
+				{{ trans('trp.page.profile.invite.title-patient') }}
 			@endif
 		</h2>
 
@@ -24,12 +24,12 @@
 			<div class="form-horizontal">
                 <div class="alert alert-info" id="wallet-needed">
 					@if($user->is_dentist)
-						{!! nl2br(trans('vox.page.profile.invite.no-address-dentist', [
+						{!! nl2br(trans('trp.page.profile.invite.no-address-dentist', [
 							'link' => '<a href="'.getLangUrl('profile').'">',
 							'endlink' => '</a>',
 						])) !!}                		
 					@else
-						{!! nl2br(trans('vox.page.profile.invite.no-address-patient', [
+						{!! nl2br(trans('trp.page.profile.invite.no-address-patient', [
 							'link' => '<a href="'.getLangUrl('profile').'">',
 							'endlink' => '</a>',
 						])) !!}
@@ -45,23 +45,23 @@
 
 				<h3>
 					@if($user->is_dentist)
-						{!! nl2br(trans('vox.page.profile.invite.subtitle-dentist')) !!}
+						{!! nl2br(trans('trp.page.profile.invite.subtitle-dentist')) !!}
 					@else
-						{!! nl2br(trans('vox.page.profile.invite.subtitle-patient')) !!}
+						{!! nl2br(trans('trp.page.profile.invite.subtitle-patient')) !!}
 					@endif
 				</h3>
 
 				<p>
 					@if($user->is_dentist)
-						{!! nl2br(trans('vox.page.profile.invite.hint-dentist')) !!}
+						{!! nl2br(trans('trp.page.profile.invite.hint-dentist')) !!}
 					@else
-						{!! nl2br(trans('vox.page.profile.invite.hint-patient')) !!}
+						{!! nl2br(trans('trp.page.profile.invite.hint-patient')) !!}
 					@endif
 				</p>
 
 				@if(!$user->is_dentist)
 					<b>
-						{!! nl2br(trans('vox.page.profile.invite.hint-2')) !!}
+						{!! nl2br(trans('trp.page.profile.invite.hint-2')) !!}
 	    			</b>
 
 	    			<div class="steps flex">
@@ -69,34 +69,34 @@
 	    					<div class="number">01</div>
 
 	    					<p>
-	    						{{ trans('vox.page.profile.invite.option-link-hint') }}
+	    						{{ trans('trp.page.profile.invite.option-link-hint') }}
 		    				</p>
 
 							<a href="javascript:;" for="option-link" class="btn btn-inactive{!! $user->dcn_address ? '' : ' no-hover' !!}">
-								{{ trans('vox.page.profile.invite.option-link') }}
+								{{ trans('trp.page.profile.invite.option-link') }}
 							</a>
 	    				</div>
 	    				<div class="step tac">
 	    					<div class="number">02</div>
 	    					
 	    					<p>
-	    						{{ trans('vox.page.profile.invite.option-email-hint') }}
+	    						{{ trans('trp.page.profile.invite.option-email-hint') }}
 	    						
 	    					</p>
 
 							<a href="javascript:;" for="option-email" class="btn btn-inactive{!! $user->dcn_address ? '' : ' no-hover' !!}">
-								{{ trans('vox.page.profile.invite.option-email') }}
+								{{ trans('trp.page.profile.invite.option-email') }}
 						  	</a>
 	    				</div>
 	    				<div class="step tar">
 	    					<div class="number">03</div>
 	    					
 	    					<p>
-	    						{{ trans('vox.page.profile.invite.option-contacts-hint') }}
+	    						{{ trans('trp.page.profile.invite.option-contacts-hint') }}
 	    					</p>
 
 							<a href="javascript:;" for="option-contacts" class="btn btn-inactive{!! $user->dcn_address ? '' : ' no-hover' !!}">
-								{{ trans('vox.page.profile.invite.option-contacts') }}
+								{{ trans('trp.page.profile.invite.option-contacts') }}
 						  	</a>
 	    				</div>
 	    			</div>
@@ -105,7 +105,7 @@
 
 						<div class="form-group clearfix">
 					  		<p>
-	            				{!! nl2br(trans('vox.page.profile.invite.instructions-link')) !!}				
+	            				{!! nl2br(trans('trp.page.profile.invite.instructions-link')) !!}				
 	            				<br/>						  			
 	            				<br/>						  						  			
 					  		</p>
@@ -117,7 +117,7 @@
 						  	<div class="col">
 			                    <a class="btn btn-primary nom copy-invite-link">
 			                    	<i class="fa fa-copy"></i> 
-			                    	{!! nl2br(trans('vox.page.profile.invite.copy')) !!}
+			                    	{!! nl2br(trans('trp.page.profile.invite.copy')) !!}
 			                    </a>
 						  	</div>
 						</div>
@@ -129,19 +129,19 @@
 				<div{!! $user->is_dentist ? '' : ' style="display: none;"' !!} id="option-email" class="option-div">
 					<div class="form-group clearfix">
 				  		<p>
-            				{!! nl2br(trans('vox.page.profile.invite.instructions-email')) !!}
+            				{!! nl2br(trans('trp.page.profile.invite.instructions-email')) !!}
             				<br/>						  			
             				<br/>						  			
 				  		</p>
 						{!! Form::open(array('method' => 'post', 'class' => ($user->is_dentist ? '' : 'form-horizontal').' clearfix flex break-tablet', 'id' => 'invite-patient-form' )) !!}
 							<div class="flex-5">
-		                        {{ Form::text( 'name', '', array('class' => 'form-control', 'id' => 'invite-name', 'placeholder' => trans('vox.page.profile.invite.email-name') ) ) }}
+		                        {{ Form::text( 'name', '', array('class' => 'form-control', 'id' => 'invite-name', 'placeholder' => trans('trp.page.profile.invite.email-name') ) ) }}
 							</div>
 							<div class="flex-5">
-		                        {{ Form::text( 'email', '', array('class' => 'form-control', 'id' => 'invite-email', 'placeholder' => trans('vox.page.profile.invite.email-email') ) ) }}
+		                        {{ Form::text( 'email', '', array('class' => 'form-control', 'id' => 'invite-email', 'placeholder' => trans('trp.page.profile.invite.email-email') ) ) }}
 							</div>
 							<div class="flex-2">
-								{{ Form::submit( trans('vox.page.profile.invite.email-submit'), array('class' => 'form-control btn btn-primary nom' ) ) }}
+								{{ Form::submit( trans('trp.page.profile.invite.email-submit'), array('class' => 'form-control btn btn-primary nom' ) ) }}
 							</div>
 						{!! Form::close() !!}
 						<div class="alert" id="invite-alert" style="display: none; margin-top: 20px;">
@@ -156,7 +156,7 @@
 
 						<div class="form-group clearfix">
 					  		<p>
-	            				{!! nl2br(trans('vox.page.profile.invite.instructions-contacts')) !!}	
+	            				{!! nl2br(trans('trp.page.profile.invite.instructions-contacts')) !!}	
 	            				<br/>						  			
 	            				<br/>						  									  			
 					  		</p>
@@ -186,12 +186,12 @@
 							<div class="form-group clearfix">
 							  	<div id="contacts-results" style="display: none;">							  		
 							  		<p>
-		                				{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.contacts-choose')) !!}	
+		                				{!! nl2br(trans('trp.page.profile.'.$current_subpage.'.contacts-choose')) !!}	
 		                				<br/>						  			
 		                				<br/>						  									  			
 							  		</p>
 
-			                        {{ Form::text( 'search-contacts', '', array('class' => 'form-control', 'id' => 'search-contacts', 'placeholder' => trans('vox.page.profile.'.$current_subpage.'.contacts-search') ) ) }}
+			                        {{ Form::text( 'search-contacts', '', array('class' => 'form-control', 'id' => 'search-contacts', 'placeholder' => trans('trp.page.profile.'.$current_subpage.'.contacts-search') ) ) }}
 			                        <br/>
 							  		
 							  		<div id="contacts-results-list">
@@ -200,17 +200,17 @@
 
 						  			<br/>
 							  		<button type="submit" class="btn btn-primary btn-block btn-outlook">
-	            						{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.contacts-invite-btn')) !!}	
+	            						{!! nl2br(trans('trp.page.profile.'.$current_subpage.'.contacts-invite-btn')) !!}	
 							  		</button>
 							  	</div>
 							</div>
 						  	<div id="contacts-alert" class="alert" style="display: none;">
 						  	</div>
 						  	<div id="contacts-error" class="alert alert-info" style="display: none;">
-						  		{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.contacts-error')) !!}	
+						  		{!! nl2br(trans('trp.page.profile.'.$current_subpage.'.contacts-error')) !!}	
 						  	</div>
 						  	<div id="contacts-results-empty" class="alert alert-info" style="display: none;">
-						  		{!! nl2br(trans('vox.page.profile.'.$current_subpage.'.contacts-empty')) !!}	
+						  		{!! nl2br(trans('trp.page.profile.'.$current_subpage.'.contacts-empty')) !!}	
 						  	</div>
 						{!! Form::close() !!}
 
@@ -227,7 +227,7 @@
 			<div class="form-horizontal">
 				<div class="black-line-title">
 		            <h4 class="bold">
-		            	{{ trans('vox.page.profile.'.$current_subpage.'.list-title') }}
+		            	{{ trans('trp.page.profile.'.$current_subpage.'.list-title') }}
 		            </h4>
 		        </div>
 
@@ -235,16 +235,16 @@
 	        		<thead>
 	        			<tr>
 	            			<th>
-	            				{{ trans('vox.page.profile.'.$current_subpage.'.list-date') }}
+	            				{{ trans('trp.page.profile.'.$current_subpage.'.list-date') }}
 	            			</th>
 	            			<th>
-	            				{{ trans('vox.page.profile.'.$current_subpage.'.list-name') }}
+	            				{{ trans('trp.page.profile.'.$current_subpage.'.list-name') }}
 	            			</th>
 	            			<th>
-	            				{{ trans('vox.page.profile.'.$current_subpage.'.list-email') }}
+	            				{{ trans('trp.page.profile.'.$current_subpage.'.list-email') }}
 	            			</th>
 	            			<th>
-	            				{{ trans('vox.page.profile.'.$current_subpage.'.list-status') }}
+	            				{{ trans('trp.page.profile.'.$current_subpage.'.list-status') }}
 	            			</th>
 	        			</tr>
 	        		</thead>
@@ -263,11 +263,11 @@
 	        					<td>
 	        						@if($inv->invited_id)
 	        							<span class="label label-success">
-	            							{{ trans('vox.common.yes') }}	            								
+	            							{{ trans('trp.common.yes') }}	            								
 	        							</span>
 	        						@else
 	        							<span class="label label-warning">
-	            							{{ trans('vox.common.no') }}	            								
+	            							{{ trans('trp.common.no') }}	            								
 	        							</span>
 	        						@endif
 	        					</td>

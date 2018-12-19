@@ -12,12 +12,13 @@
 
 			<h2 class="page-title">
 				<img src="{{ url('new-vox-img/profile-trp.png') }}" />
-	            My Reviews
+				{!! nl2br(trans('trp.page.profile.trp.title')) !!}
+	            
 			</h2>
 
 			@if($user->reviews_out->isEmpty())
 				<div class="alert alert-info">
-					{{ trans('front.page.profile.reviews.no-reviews') }}
+					{!! nl2br(trans('trp.page.profile.trp.no-reviews')) !!}
 				</div>
 			@else
 			    <div class="details-wrapper profile-reviews-space">
@@ -30,7 +31,7 @@
 				    			<span class="review-name">to {{ $review->dentist ? $review->dentist->name : $review->clinic->name }}: </span>
 								@if($review->verified)
 					    			<div class="trusted-sticker mobile-sticker">
-					    				Trusted Review
+					    				{!! nl2br(trans('trp.common.trusted')) !!}
 					    			</div>
 				    			@endif
 				    			@if($review->title)
@@ -40,7 +41,7 @@
 				    			@endif
 								@if($review->verified)
 					    			<div class="trusted-sticker">
-					    				Trusted Review
+					    				{!! nl2br(trans('trp.common.trusted')) !!}
 					    			</div>
 				    			@endif
 			    			</div>
@@ -60,7 +61,10 @@
 							</div>
 							<div class="review-content">
 								{!! nl2br($review->answer) !!}
-								<a href="{{ $review->dentist ? $review->dentist->getLink() : $review->clinic->getLink() }}?review_id={{ $review->id }}" class="more">Show entire review</a>
+								<a href="{{ $review->dentist ? $review->dentist->getLink() : $review->clinic->getLink() }}?review_id={{ $review->id }}" class="more">
+									{!! nl2br(trans('trp.page.profile.trp.show-entire')) !!}
+									
+								</a>
 							</div>
 
 			    		</div>

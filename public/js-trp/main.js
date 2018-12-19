@@ -216,6 +216,7 @@ jQuery(document).ready(function($){
 
 		}
 
+		$('.popup').removeClass('active');
 		$('#'+id+'.popup').addClass('active');
 		handlePopups();
 		$('body').addClass('popup-visible');

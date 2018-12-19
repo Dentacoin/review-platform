@@ -35,13 +35,15 @@ class YoutubeController extends AdminController
             
             if($status) {
 
-                $amount = $review->verified ? Reward::getReward('review_video_trusted') : Reward::getReward('review_video');
-                $reward = new TrpReward();
-                $reward->user_id = $review->user_id;
-                $reward->reward = $amount;
-                $reward->type = 'review';
-                $reward->reference_id = $review->id;
-                $reward->save();
+                if( $review->verified ) {
+                    $amount = Reward::getReward('review_video_trusted');
+                    $reward = new TrpReward();
+                    $reward->user_id = $review->user_id;
+                    $reward->reward = $amount;
+                    $reward->type = 'review';
+                    $reward->reference_id = $review->id;
+                    $reward->save();
+                }
                 
                 $review->youtube_approved = true;
                 $review->save();

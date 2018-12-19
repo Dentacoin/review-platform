@@ -6,13 +6,9 @@
 <div class="black-overflow" style="display: none;">
 </div>
 <div class="home-search-form">
-	<div class="tac" style="display: none;">
-    	<h1>Find your dentist</h1>
-    	<h2>Earn Dentacoin by Reviewing Your Dentist</h2>
-    </div>
 	<form class="front-form search-form">
 		<i class="fas fa-search"></i>
-		<input id="search-input" type="text" name="location" value="{{ $query }}" placeholder="Search by location or name..." autocomplete="off" />
+		<input id="search-input" type="text" name="location" value="{{ $query }}" placeholder="{!! nl2br(trans('trp.common.search-placeholder')) !!}" autocomplete="off" />
 		<input type="submit" value="">			    		
 		<div class="loader">
 			<i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i>
@@ -20,7 +16,7 @@
 		<div class="results" style="display: none;">
 			<div class="locations-results results-type">
 				<span class="result-title">
-					Locations
+					{!! nl2br(trans('trp.common.search-locations')) !!}
 				</span>
 
 				<div class="clearfix list">
@@ -28,7 +24,7 @@
 			</div>
 			<div class="dentists-results results-type">
 				<span class="result-title">
-					Clinics / Dentists
+					{!! nl2br(trans('trp.common.search-dentists')) !!}
 				</span>
 
 				<div class="clearfix list">
@@ -54,9 +50,11 @@
 								<i class="fas fa-camera"></i>
 								<p>
 			    					@if( !$user->hasimage )
-						    			Add profile photo
+			    						{!! nl2br(trans('trp.page.user.add-photo')) !!}
+						    			
 				    				@else
-					    				Change profile photo
+				    					{!! nl2br(trans('trp.page.user.change-photo')) !!}
+					    				
 									@endif
 					    		</p>
 							</div>
@@ -77,7 +75,7 @@
 			                    'prof' => 'Prof. Dr.'
 			                ] , $user->title , array('class' => 'input') ) }}
 						@endif
-						<input type="text" name="name" class="input dentist-name" placeholder="Name" value="{{ $user->name }}">
+						<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
 					</div>		
 				</div>
 				<div class="profile-details">
@@ -85,21 +83,21 @@
 						{{ Form::select( 'country_id' , \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'input country-select') ) }}
 						{{ Form::select( 'city_id' , $user->country_id ? \App\Models\City::where('country_id', $user->country_id)->get()->pluck('name', 'id')->toArray() : ['' => trans('vox.common.select-country')] , $user->city_id , array('class' => 'input city-select') ) }}
 					</div>
-				    	<input type="text" name="address" class="input" placeholder="City, Street" value="{{ $user->address }}">
-			    	<input type="text" name="open" class="input" placeholder="Open hours" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time">
+				    <input type="text" name="address" class="input" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
+			    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time">
 			    	<div class="flex phone-widget">
 				    	<span class="phone-code-holder">{{ $user->country_id ? '+'.$user->country->phone_code : '' }}</span>
-						<input type="tel" name="phone" class="input" placeholder="Phone number" value="{{ $user->phone }}">
+						<input type="tel" name="phone" class="input" placeholder="{!! nl2br(trans('trp.page.user.phone')) !!}" value="{{ $user->phone }}">
 					</div>
-			    	<input type="text" name="website" class="input" placeholder="Your website" value="{{ $user->website }}">
+			    	<input type="text" name="website" class="input" placeholder="{!! nl2br(trans('trp.page.user.website')) !!}" value="{{ $user->website }}">
 			    	<input type="hidden" name="email" value="{{ $user->email }}">
 				</div>
 				<div class="edit-buttons">
 					<button class="button" type="submit">
-						Save changes
+						{!! nl2br(trans('trp.page.user.save')) !!}
 					</button>
 					<a href="javascript:;" class="cancel-edit open-edit">
-						Cancel
+						{!! nl2br(trans('trp.page.user.cancel')) !!}
 					</a>
 				</div>
 				<input type="hidden" name="json" value="1">
@@ -124,43 +122,55 @@
 					</h3>
 					<span class="type">
 						@if($item->is_partner)
-							<img class="black-filter" src="{{ url('img-trp/mini-logo.png') }}"><span> Partner</span> 
+		    				<div class="img">
+								<img class="black-filter" src="{{ url('img-trp/mini-logo.png') }}">
+							</div>
+							<span>
+								{!! nl2br(trans('trp.page.user.partner')) !!}
+							</span> 
 						@endif
 						{{ $item->is_clinic ? 'Clinic' : 'Dentist' }}
 					</span>
 					@if(!empty($user) && $user->id==$item->id)
 						<a class="edit-button open-edit" href="javascript:;">
-							<i class="fas fa-edit"></i>Edit profile
+							<i class="fas fa-edit"></i>
+							{!! nl2br(trans('trp.page.user.edit-profile')) !!}
+							
 						</a>
 					@endif
 				</div>		
 			</div>
 			<div class="profile-details">
-				<p>
-					<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
+				<div class="p">
+		    		<div class="img">
+						<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
+					</div>
 					{{ $item->city->name }}, {{ $item->country->name }} 
 					<!-- <span class="gray-text">(2 km away)</span> -->
-				</p>
+				</div>
 		    	@if( $time = $item->getWorkHoursText() )
-		    		<p>
-		    			<img class="black-filter" src="{{ url('img-trp/open.png') }}">
+		    		<div class="p">
+			    		<div class="img">
+			    			<img class="black-filter" src="{{ url('img-trp/open.png') }}">
+			    		</div>
 		    			{!! $time !!}
-		    		</p>
+		    		</div>
 		    	@endif
 		    	@if( $item->phone )
-		    	<p>
-		    		<a href="tel:{{ $item->phone }}">
-		    			<img class="black-filter" src="{{ url('img-trp/phone.png') }}">{{ $item->phone }}
-		    		</a>
-		    	</p>
+		    	<a href="tel:{{ $item->phone }}" class="p">
+		    		<div class="img">
+		    			<img class="black-filter" src="{{ url('img-trp/phone.png') }}">
+		    		</div>
+		    		{{ $item->phone }}
+		    	</a>
 		    	@endif
 		    	@if( $item->website )
-		    	<p>
-		    		<a href="{{ $item->getWebsiteUrl() }}" target="_blank">
+		    	<a href="{{ $item->getWebsiteUrl() }}" target="_blank" class="p">
+		    		<div class="img">
 		    			<img class="black-filter" src="{{ url('img-trp/site.png') }}">
-		    			{{ $item->website }}
-		    		</a>
-		    	</p>
+		    		</div>
+			    	{{ $item->website }}
+		    	</a>
 		    	@endif
 			</div>
 			<div class="profile-rating col tac">
@@ -177,18 +187,22 @@
 
 				@if(!empty($user) && $user->id==$item->id)
 					<a href="javascript:;" class="button" data-popup-logged="popup-invite">
-						Invite patients
+						{!! nl2br(trans('trp.page.user.invite')) !!}
+						
 					</a>
 					<a href="javascript:;" class="button button-inner-white" data-popup-logged="popup-widget">
-						Add to website
+						{!! nl2br(trans('trp.page.user.widget')) !!}
+						
 					</a>
 				@elseif( empty($user) || !$user->is_dentist )
 					<a href="javascript:;" class="button" data-popup-logged="submit-review-popup">
-						Submit review
+						{!! nl2br(trans('trp.page.user.submit-review')) !!}
+						
 					</a>
 					@if(!$isTrusted && !$has_asked_dentist)
 						<a href="javascript:;" class="button button-inner-white button-ask" data-popup-logged="popup-ask-dentist">
-							Request Invite
+							{!! nl2br(trans('trp.page.user.request-invite')) !!}
+							
 						</a>
 					@endif
 				@endif
@@ -200,7 +214,7 @@
     	<div class="profile-info col">
 
 			<a href="javascript:;" class="share-button" data-popup="popup-share">
-				<img src="img-trp/share.png"> Share
+				<img src="img-trp/share.png"> {!! nl2br(trans('trp.common.share')) !!}
 			</a>
 
 			@if(!empty($user) && $user->id==$item->id)
@@ -211,9 +225,9 @@
 				    			<i class="fas fa-camera"></i>
 								<p>
 			    					@if( !$user->hasimage )
-						    			Add profile photo
+			    						{!! nl2br(trans('trp.page.user.add-photo')) !!}
 				    				@else
-					    				Change profile photo
+			    						{!! nl2br(trans('trp.page.user.change-photo')) !!}
 									@endif
 					    		</p>
 							</div>
@@ -231,31 +245,31 @@
 				                    'dr' => 'Dr.',
 				                    'prof' => 'Prof. Dr.'
 				                ] , $user->title , array('class' => 'input') ) }}
-								<input type="text" name="name" class="input dentist-name" placeholder="Name" value="{{ $user->name }}">
+								<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
 							</div>
 						@else
-							<input type="text" name="name" class="input dentist-name" placeholder="Name" value="{{ $user->name }}">
+							<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
 						@endif
 						<div class="flex">
 							{{ Form::select( 'country_id' , \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'input country-select') ) }}
 				    		{{ Form::select( 'city_id' , $user->country_id ? \App\Models\City::where('country_id', $user->country_id)->get()->pluck('name', 'id')->toArray() : ['' => trans('vox.common.select-country')] , $user->city_id , array('class' => 'input city-select') ) }}
 						</div>
-				    	<input type="text" name="address" class="input" placeholder="City, Street" value="{{ $user->address }}">
-				    	<input type="text" name="open" class="input" placeholder="Open hours" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time">
+				    	<input type="text" name="address" class="input" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
+				    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time">
 				    	<div class="flex phone-widget">
 					    	<span class="phone-code-holder">{{ $user->country_id ? '+'.$user->country->phone_code : '' }}</span>
-							<input type="tel" name="phone" class="input" placeholder="Phone number" value="{{ $user->phone }}">
+							<input type="tel" name="phone" class="input" placeholder="{!! nl2br(trans('trp.page.user.phone')) !!}" value="{{ $user->phone }}">
 						</div>
-				    	<input type="text" name="website" class="input" placeholder="Your website" value="{{ $user->website }}">
+				    	<input type="text" name="website" class="input" placeholder="{!! nl2br(trans('trp.page.user.website')) !!}" value="{{ $user->website }}">
 				    	<input type="hidden" name="email" value="{{ $user->email }}">
 					</div>
 					<div class="clearfix">
 						<div class="edit-buttons">
 							<button class="button" type="submit">
-								Save changes
+								{!! nl2br(trans('trp.page.user.save')) !!}
 							</button>
 							<a href="javascript:;" class="cancel-edit open-edit">
-								Cancel
+								{!! nl2br(trans('trp.page.user.cancel')) !!}
 							</a>
 						</div>
 					</div>
@@ -273,42 +287,51 @@
 					</h3>
 					<span class="type">
 						@if($item->is_partner)
-							<img class="black-filter" src="{{ url('img-trp/mini-logo.png') }}"><span> Partner</span> 
+			    			<div class="img">
+								<img class="black-filter" src="{{ url('img-trp/mini-logo.png') }}">
+							</div>
+							<span> {!! nl2br(trans('trp.page.user.partner')) !!}</span> 
 						@endif
 						{{ $item->is_clinic ? 'Clinic' : 'Dentist' }}
 					</span>
 
-					<p>
-						<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
+					<div class="p">
+						<div class="img">
+							<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
+						</div>
 						{{ $item->city->name }}, {{ $item->country->name }} 
 						<!-- <span class="gray-text">(2 km away)</span> -->
-					</p>
+					</div>
 			    	@if( $time = $item->getWorkHoursText() )
-			    		<p>
-			    			<img class="black-filter" src="{{ url('img-trp/open.png') }}">
+			    		<div class="p">
+			    			<div class="img">
+				    			<img class="black-filter" src="{{ url('img-trp/open.png') }}">
+				    		</div>
 			    			{!! $time !!}
-			    		</p>
+			    		</div>
 			    	@endif
 			    	@if( $item->phone )
-			    	<p>
-			    		<a href="tel:{{ $item->phone }}">
-			    			<img class="black-filter" src="{{ url('img-trp/phone.png') }}">{{ $item->phone }}
+			    		<a class="p" href="tel:{{ $item->phone }}">
+			    			<div class="img">
+			    				<img class="black-filter" src="{{ url('img-trp/phone.png') }}">
+			    			</div>
+			    			{{ $item->phone }}
 			    		</a>
-			    	</p>
 			    	@endif
 			    	@if( $item->website )
-			    	<p>
-			    		<a href="{{ $item->getWebsiteUrl() }}" target="_blank">
-			    			<img class="black-filter" src="{{ url('img-trp/site.png') }}">
+			    		<a class="p" href="{{ $item->getWebsiteUrl() }}" target="_blank">
+			    			<div class="img">
+			    				<img class="black-filter" src="{{ url('img-trp/site.png') }}">
+			    			</div>
 			    			{{ $item->website }}
 			    		</a>
-			    	</p>
 			    	@endif
 				</div>
 			</div>
 			@if(!empty($user) && $user->id==$item->id)
 				<a class="edit-button open-edit" href="javascript:;">
-					<i class="fas fa-edit"></i>Edit profile
+					<i class="fas fa-edit"></i>
+					{!! nl2br(trans('trp.page.user.edit-profile')) !!}
 				</a>
 			@endif
 		</div>
@@ -327,21 +350,21 @@
 
 			@if(!empty($user) && $user->id==$item->id)
 				<a href="javascript:;" class="button" data-popup-logged="popup-invite">
-					Invite patients
+					{!! nl2br(trans('trp.page.user.invite')) !!}
 				</a>
 				<a href="javascript:;" class="button button-inner-white" data-popup-logged="popup-widget">
-					Add to website
+					{!! nl2br(trans('trp.page.user.submit-review')) !!}
 				</a>
 			@elseif( empty($user) || !$user->is_dentist )
 				<a href="javascript:;" class="button" data-popup-logged="submit-review-popup">
-					Submit review
+					{!! nl2br(trans('trp.page.user.submit-review')) !!}
 				</a>
 				@if(!$isTrusted && !$has_asked_dentist)
 					<a href="javascript:;" class="button button-inner-white button-ask" data-popup-logged="popup-ask-dentist">
-						Request Invite
+						{!! nl2br(trans('trp.page.user.request-invite')) !!}
 					</a>
 				@endif
-			@endif
+			@endif							
 
 		</div>
     </div>
@@ -350,23 +373,30 @@
     <div class="profile-tabs">
     	@if( $item->reviews_in_standard()->count() )
 	    	<a class="tab" data-tab="reviews" href="javascript:;">
-	    		Reviews ({{ $item->reviews_in_standard()->count() }})
+	    		{!! nl2br(trans('trp.page.user.reviews')) !!}
+	    		
+	    		({{ $item->reviews_in_standard()->count() }})
 	    	</a>
     	@endif
     	@if( $item->reviews_in_video()->count() )
 	    	<a class="tab" data-tab="videos" href="javascript:;">
-	    		Videos ({{ $item->reviews_in_video()->count() }})
+	    		{!! nl2br(trans('trp.page.user.videos')) !!}
+	    		
+	    		({{ $item->reviews_in_video()->count() }})
 	    	</a>
     	@endif
     	<a class="tab" data-tab="about" href="javascript:;">
-    		About us
+    		{!! nl2br(trans('trp.page.user.about')) !!}
+    		
     	</a>
     </div>
 
     <div class="details-wrapper profile-reviews-space">
     	@if($item->reviews_in_standard()->isNotEmpty() )
 	    	<div class="tab-container" id="reviews">
-	    		<h2 class="black-left-line section-title">Reviews</h2>
+	    		<h2 class="black-left-line section-title">
+	    			{!! nl2br(trans('trp.page.user.reviews')) !!}
+	    		</h2>
 				@foreach($item->reviews_in_standard() as $review)
 
 			    	<div class="review review-wrapper" review-id="{{ $review->id }}">
@@ -375,7 +405,7 @@
 			    			<span class="review-name">{{ $review->user->name }}: </span>
 							@if($review->verified)
 				    			<div class="trusted-sticker mobile-sticker">
-				    				Trusted Review
+				    				{!! nl2br(trans('trp.common.trusted')) !!}
 				    			</div>
 			    			@endif
 			    			@if($review->title)
@@ -385,7 +415,7 @@
 			    			@endif
 							@if($review->verified)
 				    			<div class="trusted-sticker">
-				    				Trusted Review
+				    				{!! nl2br(trans('trp.common.trusted')) !!}
 				    			</div>
 			    			@endif
 		    			</div>
@@ -405,19 +435,26 @@
 						</div>
 						<div class="review-content">
 							{!! nl2br($review->answer) !!}
-							<a href="javascript:;" class="more">Show entire review</a>
+							<a href="javascript:;" class="more">
+								{!! nl2br(trans('trp.page.user.show-entire')) !!}
+								
+							</a>
 						</div>
 
 						<div class="review-footer flex flex-mobile break-mobile">
 
 							@if($review->reply)
-								<a class="reply-button show-hide" href="javascript:;" alternative="▾ Show replies" >▴ Hide replies</a>
+								<a class="reply-button show-hide" href="javascript:;" alternative="▾ Show replies" >
+									▴ {!! nl2br(trans('trp.page.user.hire-replies')) !!}
+									
+								</a>
 							@endif
 							<div class="col">
 								@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
 									<a class="reply-review" href="javascript:;">
 										<span>
-											Reply
+											{!! nl2br(trans('trp.page.user.reply')) !!}
+											
 										</span>
 									</a>
 								@endif
@@ -438,7 +475,7 @@
 								<a class="share-review" href="javascript:;" data-popup="popup-share" share-href="{{ $item->getLink() }}?review_id={{ $review->id }}">
 									<img src="{{ url('img-trp/share-review.png') }}">
 									<span>
-										Share
+										{!! nl2br(trans('trp.common.share')) !!}
 									</span>
 								</a>
 							</div>
@@ -454,10 +491,11 @@
 									<div class="review-content">
 										<form method="post" action="{{ $item->getLink() }}/reply/{{ $review->id }}" class="reply-form-element">
 											{!! csrf_field() !!}
-											<textarea class="input" name="reply" placeholder="Enter your reply here"></textarea>
-											<button class="button" type="submit" name="">Submit</button>
+											<textarea class="input" name="reply" placeholder="{!! nl2br(trans('trp.page.user.reply-enter')) !!}"></textarea>
+											<button class="button" type="submit" name="">{!! nl2br(trans('trp.page.user.reply-submit')) !!}</button>
 											<div class="alert alert-warning" style="display: none;">
-												Please enter your reply in the box above
+												{!! nl2br(trans('trp.page.user.reply-error')) !!}
+												
 											</div>
 										</form>
 									</div>
@@ -503,7 +541,10 @@
 
     	@if( $item->reviews_in_video()->count() )
 	    	<div class="tab-container" id="videos">
-	    		<h2 class="black-left-line section-title">Video Reviews</h2>
+	    		<h2 class="black-left-line section-title">
+	    			{!! nl2br(trans('trp.page.user.reviews-video')) !!}
+	    			
+	    		</h2>
 
 	    		<div class="video-review-container clearfix">
 					@foreach($item->reviews_in_video() as $review)
@@ -524,7 +565,7 @@
 								</div>
 								@if($review->verified)
 									<div class="trusted-sticker">
-					    				Trusted Review
+					    				{!! nl2br(trans('trp.common.trusted')) !!}
 					    			</div>
 				    			@endif
 				    		</div>
@@ -539,14 +580,19 @@
     	@endif
 
     	<div class="tab-container" id="about">
-    		<h2 class="black-left-line section-title">About {{ $item->getName() }}</h2>
+    		<h2 class="black-left-line section-title">
+    			{!! nl2br(trans('trp.page.user.about-who',[
+    				'name' => $item->getName()
+    			])) !!}
+    			
+    		</h2>
 
     		<div class="about-container">
 				@if($item->categories->isNotEmpty() || (!empty($user) && $item->id==$user->id))
 	    			<div class="specialization" role="presenter">
 						<img src="{{ url('img-trp/graduate-hat.png') }}">
 		    			<span class="value-here">
-		    				{{ $item->categories->isNotEmpty() ? implode(', ', $item->parseCategories($categories)) : 'Click on the pencil icon to select your specialty' }}
+		    				{{ $item->categories->isNotEmpty() ? implode(', ', $item->parseCategories($categories)) : nl2br(trans('trp.page.user.specialty-empty')) }}
 	    				</span>
 	    				@if(!empty($user) && $item->id==$user->id)
 	    					<a>
@@ -568,7 +614,9 @@
                                 <br/>
                                 <input type="hidden" name="field" value="specialization" />
                                 <input type="hidden" name="json" value="1" />
-								<button type="submit" class="button">Save</button>
+								<button type="submit" class="button">
+									{!! nl2br(trans('trp.page.user.save')) !!}
+								</button>
 								<div class="alert alert-warning" style="display: none;">
 								</div>
 							{!! Form::close() !!}
@@ -578,7 +626,7 @@
     			@if($item->description || (!empty($user) && $item->id==$user->id) )
 	    			<div class="about-content" role="presenter">
 	    				<span class="value-here">
-		    				{!! $item->description ? nl2br($item->description) : 'Click on the pencil icon to enter a detailed description for your practice' !!}
+		    				{!! $item->description ? nl2br($item->description) : nl2br(trans('trp.page.user.description-empty')) !!}
 		    			</span>
 	    				@if(!empty($user) && $item->id==$user->id)
 	    					<a>
@@ -590,10 +638,10 @@
 		    			<div class="about-content" role="editor" style="display: none;">
 							{{ Form::open(array('class' => 'edit-description', 'method' => 'post', 'url' => getLangUrl('profile/info') )) }}
 								{!! csrf_field() !!}
-								<textarea class="input" name="description" placeholder="Use this field to tell a bit more about your practice">{{ $item->description }}</textarea>
+								<textarea class="input" name="description" placeholder="{!! nl2br(trans('trp.page.user.description-placeholder')) !!}">{{ $item->description }}</textarea>
                                 <input type="hidden" name="field" value="description" />
                                 <input type="hidden" name="json" value="1" />
-								<button type="submit" class="button">Save</button>
+								<button type="submit" class="button">{!! nl2br(trans('trp.page.user.save')) !!}</button>
 								<div class="alert alert-warning" style="display: none;">
 								</div>
 							{!! Form::close() !!}
@@ -609,7 +657,7 @@
 										<label for="add-gallery-photo" class="add-gallery-image slider-image cover image-label">
 											<div class="plus-gallery-image">
 												<i class="fas fa-plus"></i>
-												<span>Image</span>
+												<span>{!! nl2br(trans('trp.page.user.reviews-image')) !!}</span>
 											</div>
 								    		<div class="loader">
 								    			<i class="fas fa-circle-notch fa-spin"></i>
@@ -631,7 +679,9 @@
 
 
 		    @if($item->is_clinic && ( (!empty($user) && $item->id==$user->id) || $item->teamApproved->isNotEmpty() ) )
-	    		<h2 class="black-left-line">Team</h2>
+	    		<h2 class="black-left-line">
+	    			{!! nl2br(trans('trp.page.user.team')) !!}
+	    		</h2>
 
 	    		<div class="team-container">
 		    		<div class="flickity">
@@ -640,13 +690,15 @@
 								<a href="javascript:;" class="slider-image add-team-member"  data-popup-logged="add-team-popup">
 									<div class="plus-team">
 										<img src="{{ url('img-trp/add-member.png') }}">
-										<span>Team member</span>
+										<span>
+											{!! nl2br(trans('trp.page.user.team-add')) !!}
+										</span>
 									</div>
 								</a>
 							</div>
 						@endif
 			        	@foreach($item->teamApproved as $team)
-							<div class="slider-wrapper">
+							<a class="slider-wrapper" href="{{ $team->clinicTeam->getLink() }}">
 								<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 									@if( $team->clinicTeam->is_partner )
 										<img src="img-trp/mini-logo.png"/>
@@ -665,14 +717,14 @@
 									</div>
 							    </div>
 						    	<div class="flickity-buttons clearfix">
-						    		<a href="{{ $team->clinicTeam->getLink() }}">
-						    			See profile
-						    		</a>
-						    		<a href="{{ $team->clinicTeam->getLink() }}?popup-loged=submit-review-popup">
-						    			Submit review
-						    		</a>
+						    		<div>
+						    			{!! nl2br(trans('trp.common.see-profile')) !!}
+						    		</div>
+						    		<div href="{{ $team->clinicTeam->getLink() }}?popup-loged=submit-review-popup">
+						    			{!! nl2br(trans('trp.common.submit-review')) !!}
+						    		</div>
 						    	</div>
-							</div>
+							</a>
 						@endforeach
 					</div>
 				</div>
@@ -680,14 +732,21 @@
 		    @endif
 
 		    @if( ($item->lat && $item->lon) || ( !empty($user) && $user->id==$item->id) )
-				<h2 class="black-left-line">How to find us</h2>
+				<h2 class="black-left-line">
+					{!! nl2br(trans('trp.page.user.how-to-find')) !!}
+					
+				</h2>
 
 				@if( ($item->lat && $item->lon) )
 					<div class="map-container" id="profile-map" lat="{{ $item->lat }}" lon="{{ $item->lon }}">
 					</div>
 				@else
 					<div class="alert alert-info">
-						<a href="javascript:;" class="open-edit">Edit your profile</a> and enter your address to have a map appear here.
+						{!! nl2br(trans('trp.page.user.map-missing', [
+							'link' => '<a href="javascript:;" class="open-edit">',
+							'endlink' => '</a>',
+						])) !!}
+						
 					</div>
 				@endif
 			@endif

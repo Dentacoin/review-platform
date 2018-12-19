@@ -12,7 +12,7 @@
 
 			<h2 class="page-title">
 				<img src="{{ url('new-vox-img/profile-info.png') }}" />
-				{{ trans('vox.page.profile.info.title') }}
+				{{ trans('trp.page.profile.info.title') }}
 			</h2>
                
 				@if($user->is_dentist)
@@ -21,16 +21,23 @@
 					<div class="form-horizontal">
 						<div class="black-line-title">
 			                <h4 class="bold">
-			                	Your dentist profile
+			                	{{ trans('trp.page.profile.info.dentist-title') }}
+			                	
 			                </h4>
 			            </div>
 
 		    			<div class="form-group flex">
-						  	<label class="control-label col">You can edit all your information in your public profile. Just scroll to the information you'd like to change and hit the Edit button.</label>
+						  	<label class="control-label col">
+						  		{{ trans('trp.page.profile.info.dentist-hint') }}
+						  		
+						  	</label>
 						</div>
 
 						<div class="form-group clearfix">
-		                    <a href="{{ $user->getLink() }}" class="btn btn-primary form-control">Open my profile</a>
+		                    <a href="{{ $user->getLink() }}" class="btn btn-primary form-control">
+		                    	{{ trans('trp.page.profile.info.dentist-open') }}
+		                    	
+		                    </a>
 						</div>
 					</div>
 	            	
@@ -42,18 +49,22 @@
 
 						<div class="black-line-title">
 			                <h4 class="bold">
-			                	Your email address
+			                	{{ trans('trp.page.profile.info.email-title') }}
+			                	
 			                </h4>
 			            </div>
 		  				
 		  				<div class="form-group flex">
-						  	<label class="control-label col">Email address</label>
+						  	<label class="control-label col">{{ trans('trp.page.profile.info.email-address') }}</label>
 						  	<div class="flex-5">
-						    	<input type="text" name="email" class="form-control" value="{{ $user->email }}" placeholder="Your email address" required>
+						    	<input type="text" name="email" class="form-control" value="{{ $user->email }}" placeholder="{{ trans('trp.page.profile.info.email-placeholder') }}Your email address" required>
 						    </div>
 						</div>
 						<div class="form-group">
-		                    <button type="submit" name="update" class="btn btn-primary form-control"> Update </button>
+		                    <button type="submit" name="update" class="btn btn-primary form-control"> 
+		                    	{{ trans('trp.page.profile.info.email-update') }}
+		                    	
+		                    </button>
 						</div>
 		    			
 		  			</form>
@@ -66,30 +77,31 @@
 
 						<div class="black-line-title">
 			                <h4 class="bold">
-			                	Your password
+			                	{{ trans('trp.page.'.$current_page.'.info.change-password-title') }}
+			                	
 			                </h4>
 			            </div>
 		  				
 		  				<div class="form-group flex">
-						  	<label class="control-label col">{{ trans('vox.page.'.$current_page.'.info.change-password-current') }}</label>
+						  	<label class="control-label col">{{ trans('trp.page.'.$current_page.'.info.change-password-current') }}</label>
 						  	<div class="flex-5">
 						    	<input type="password" name="cur-password" class="form-control" required>
 						    </div>
 						</div>
 		    			<div class="form-group flex">
-						  	<label class="control-label col">{{ trans('vox.page.'.$current_page.'.info.change-password-new') }}</label>
+						  	<label class="control-label col">{{ trans('trp.page.'.$current_page.'.info.change-password-new') }}</label>
 						  	<div class="flex-5">
 						    	<input type="password" name="new-password" class="form-control" required>
 						    </div>
 						</div>
 					  	<div class="form-group flex">
-						  	<label class="control-label col">{{ trans('vox.page.'.$current_page.'.info.change-password-repeat') }}</label>
+						  	<label class="control-label col">{{ trans('trp.page.'.$current_page.'.info.change-password-repeat') }}</label>
 						  	<div class="flex-5">
 						    	<input type="password" name="new-password-repeat" class="form-control" required>
 						    </div>
 						</div>
 						<div class="form-group">
-		                    <button type="submit" name="update" class="btn btn-primary form-control"> {{ trans('vox.page.'.$current_page.'.info.change-password-submit') }} </button>
+		                    <button type="submit" name="update" class="btn btn-primary form-control"> {{ trans('trp.page.'.$current_page.'.info.change-password-submit') }} </button>
 						</div>
 		    			
 		  			</form>
@@ -102,7 +114,7 @@
 	                        @if( empty($info['hide']) )
 		                        <div class="form-group flex break-tablet {{ $errors->has($key) ? 'has-error' : '' }}" >
 		                            <label class="col control-label">
-		                            	{{ trans('vox.page.profile.info.form-'.$key) }}
+		                            	{{ trans('trp.page.profile.info.form-'.$key) }}
 		                            </label>
 		                            <div class="flex-5">
 		                                @if( $info['type'] == 'text')
@@ -120,7 +132,7 @@
 		                                @elseif( $info['type'] == 'country')  
 		                                    {{ Form::select( $key , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->$key , array('class' => 'form-control country-select') ) }}
 		                                @elseif( $info['type'] == 'city')  
-		                                    {{ Form::select( $key , $user->country_id ? \App\Models\City::where('country_id', $user->country_id)->get()->pluck('name', 'id')->toArray() : ['' => trans('vox.common.select-country')] , $user->$key , array('class' => 'form-control city-select') ) }}
+		                                    {{ Form::select( $key , $user->country_id ? \App\Models\City::where('country_id', $user->country_id)->get()->pluck('name', 'id')->toArray() : ['' => trans('trp.common.select-country')] , $user->$key , array('class' => 'form-control city-select') ) }}
 		                                @elseif( $info['type'] == 'select')
 		                                    {{ Form::select( $key , $info['values'] , $user->$key , array('class' => 'form-control'.(!empty($info['multiple']) ? ' multiple' : '')  , (!empty($info['multiple']) ? 'multiple' : 'nothing') => 'multiple')) }}
 		                                @endif
@@ -131,7 +143,7 @@
 
 	                    <div class="form-group flex break-tablet {{ $errors->has($key) ? 'has-error' : '' }}" >
 	                        <label class="col control-label">
-	                        	{{ trans('vox.page.profile.info.form-photo') }}
+	                        	{{ trans('trp.page.profile.info.form-photo') }}
 	                        </label>
 	                        <div class="flex-5">
 
@@ -140,7 +152,8 @@
 										<div class="centered-hack">
 											<i class="fas fa-plus"></i>
 											<p>
-								    			Add profile photo
+												{{ trans('trp.page.profile.info.form-photo-add') }}
+								    			
 								    		</p>
 										</div>
 									@endif
@@ -152,13 +165,13 @@
 								<input type="hidden" id="photo-name" name="photo" >
 
 					    		<i>
-					    			{!! trans('vox.page.profile.info.photo-hint') !!}
+					    			{!! trans('trp.page.profile.info.photo-hint') !!}
 					    			
 					    		</i>
 								<input type="hidden" id="photo-name" name="photo" >
 								<span class="error-message" id="photo-error"></span>
 								<div id="photo-upload-error" style="display: none;" class="alert alert-warning">
-									{!! trans('vox.page.profile.info.photo-error') !!}
+									{!! trans('trp.page.profile.info.photo-error') !!}
 									
 								</div>
 	                        </div>
@@ -170,7 +183,7 @@
 
 	                    <div class="form-group">
 	                        <button type="submit" name="update" class="btn btn-block btn-primary form-control">
-	                            {{ trans('vox.page.'.$current_page.'.info.form-save') }} 
+	                            {{ trans('trp.page.'.$current_page.'.info.form-save') }} 
 	                        </button>
 	                    </div>
 

@@ -288,7 +288,7 @@ class DentistController extends FrontController
                         $is_video = $review->youtube_id ? '_video' : '';
                         $amount = $review->verified ? Reward::getReward('review'.$is_video.'_trusted') : Reward::getReward('review'.$is_video);
                         
-                        if(!$is_video) {
+                        if(!$is_video && $review->verified) {
                             $reward = new TrpReward();
                             $reward->user_id = $this->user->id;
                             $reward->reward = $amount;
@@ -360,7 +360,7 @@ class DentistController extends FrontController
         }
 
         $dentist_limit_reached = !empty($this->user) ? $this->user->cantReviewDentist($item->id) : null;
-        $has_asked_dentist = $this->user->hasAskedDentist($item->id);
+        $has_asked_dentist = $this->user ? $this->user->hasAskedDentist($item->id) : null;
 
         if( $this->user ) {
             $review_reward = $isTrusted ? Reward::getReward('review_trusted') : Reward::getReward('review');
@@ -369,6 +369,17 @@ class DentistController extends FrontController
             $review_reward = $review_reward_video = 0;
         }
 
+
+        $social_image = $item->getSocialCover();
+        $is_review = false;
+        if( request('review_id') && $current_review = $reviews->find(request('review_id')) ) {
+            $current_review->generateSocialCover();
+            $social_image = $current_review->getSocialCover();
+            $is_review = true;
+        }
+
+//
+//https://dev-reviews.dentacoin.com/en/dentist/teeth-care-centre-dental-hospital?review_id=6505
 
 
         $view_params = [
@@ -386,17 +397,8 @@ class DentistController extends FrontController
             'has_asked_dentist' => $has_asked_dentist,
             'aggregated_rates' => $aggregated_rates,
             'aggregated_rates_total' => $aggregated_rates_total ,
-            'seo_title' => trans('trp.seo.dentist.title', [
-                'name' => $item->getName(),
-                'country' => $item->country ? $item->country->name : '',
-                'city' => $item->city ? $item->city->name : '',
-            ]),
-            'social_title' => trans('trp.social.dentist.title', [
-                'name' => $item->getName(),
-                'country' => $item->country ? $item->country->name : '',
-                'city' => $item->city ? $item->city->name : '',
-            ]),
-            'canonical' => $item->getLink().($review_id ? '/'.$review_id : ''),
+            'social_image' => $social_image,
+            'canonical' => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
             'js' => [
                 'videojs.record.min.js',
                 'user.js',
@@ -404,6 +406,49 @@ class DentistController extends FrontController
             ],
             'jscdn' => [],
         ];
+
+        if( $is_review ) {
+            $view_params['seo_title'] = trans('trp.seo.review.title', [
+                'dentist_name' => $item->getName(),
+                'user_name' => $current_review->user->getName(),
+            ]);
+            $view_params['social_title'] = trans('trp.social.review.title', [
+                'dentist_name' => $item->getName(),
+                'user_name' => $current_review->user->getName(),
+            ]);
+            $view_params['seo_description'] = trans('trp.seo.review.description', [
+                'review_title' => $current_review->title,
+                'review_text' => $current_review->answer,
+            ]);
+            $view_params['social_description'] = trans('trp.social.review.description', [
+                'review_title' => $current_review->title,
+                'review_text' => $current_review->answer,
+            ]);
+
+        } else {
+            $view_params['seo_title'] = trans('trp.seo.dentist.title', [
+                'name' => $item->getName(),
+                'country' => $item->country ? $item->country->name : '',
+                'city' => $item->city ? $item->city->name : '',
+            ]);
+            $view_params['social_title'] = trans('trp.social.dentist.title', [
+                'name' => $item->getName(),
+                'country' => $item->country ? $item->country->name : '',
+                'city' => $item->city ? $item->city->name : '',
+            ]);
+
+            $view_params['seo_description'] = trans('trp.seo.dentist.description', [
+                'name' => $item->getName(),
+                'country' => $item->country ? $item->country->name : '',
+                'city' => $item->city ? $item->city->name : '',
+            ]);
+            $view_params['social_description'] = trans('trp.social.dentist.description', [
+                'name' => $item->getName(),
+                'country' => $item->country ? $item->country->name : '',
+                'city' => $item->city ? $item->city->name : '',
+            ]);   
+        }
+        
 
         if(!empty($this->user) && $this->user->id==$item->id) {
             $view_params['js'][] = 'upload.js';

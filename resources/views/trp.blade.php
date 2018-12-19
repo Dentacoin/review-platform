@@ -22,6 +22,8 @@
         <meta name="twitter:title" content="{{ $social_title }}" />
         <meta name="twitter:description" content="{{ $social_description }}" />
         <meta name="twitter:image" content="{{ $social_image }}"/>
+        
+        <meta name="fb:app_id" content="1906201509652855"/>
 
 
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
