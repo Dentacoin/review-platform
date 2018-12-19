@@ -841,7 +841,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $folder.'/'.$this->id.'-cover.jpg';
     }
     public function getSocialCover() {
-        if(!$this->hasimage_social || true) {
+        if(!$this->hasimage_social) {
             $this->generateSocialCover();
         }
         return url('/storage/avatars/'.($this->id%100).'/'.$this->id.'-cover.jpg').'?rev='.$this->updated_at->timestamp;
