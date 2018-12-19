@@ -843,9 +843,11 @@ body.blur .site-content {
       .results .ratings {
         display: none; } }
     .results .ratings .stars {
-      background: url("../img-trp/stars-gray.png") 50% 50% no-repeat; }
+      background: url("../img-trp/stars-gray.png") 50% 50% no-repeat;
+      background-size: contain; }
       .results .ratings .stars .bar {
-        background: url("../img-trp/stars-black.png") 0% 50% no-repeat; }
+        background: url("../img-trp/stars-black.png") 0% 50% no-repeat;
+        background-size: cover; }
     .results .ratings .rating {
       vertical-align: top; }
 
@@ -1157,9 +1159,11 @@ body.blur .site-content {
     width: 74px;
     height: 14px;
     display: inline-block;
-    background: url("../img-trp/stars-gray.png") 50% 50% no-repeat; }
+    background: url("../img-trp/stars-gray.png") 50% 50% no-repeat;
+    background-size: contain; }
     .ratings .stars .bar {
       background: url("../img-trp/stars-blue.png") 0% 50% no-repeat;
+      background-size: cover;
       height: 14px; }
   .ratings .rating {
     font-size: 12px;
@@ -1167,16 +1171,20 @@ body.blur .site-content {
   .ratings.big .stars {
     width: 186px;
     height: 35px;
-    background: url("../img-trp/stars-gray-big.png") 50% 50% no-repeat; }
+    background: url("../img-trp/stars-gray-big.png") 50% 50% no-repeat;
+    background-size: contain; }
     .ratings.big .stars .bar {
       background: url("../img-trp/stars-blue-big.png") 0% 50% no-repeat;
+      background-size: cover;
       height: 35px; }
   .ratings.average .stars {
     width: 130px;
     height: 25px;
-    background: url("../img-trp/stars-gray-average.png") 50% 50% no-repeat; }
+    background: url("../img-trp/stars-gray-average.png") 50% 50% no-repeat;
+    background-size: contain; }
     .ratings.average .stars .bar {
       background: url("../img-trp/stars-blue-average.png") 0% 50% no-repeat;
+      background-size: cover;
       height: 25px; }
 
 .signin-top {
@@ -1862,10 +1870,12 @@ textarea.input {
     width: 74px;
     height: 14px;
     vertical-align: middle;
-    background: url(../img-trp/stars-gray.png) 50% 50% no-repeat; } }
+    background: url(../img-trp/stars-gray.png) 50% 50% no-repeat;
+    background-size: contain; } }
 @media screen and (max-width: 768px) {
   #view-review-popup .average .stars .bar {
     background: url(../img-trp/stars-blue.png) 0% 50% no-repeat;
+    background-size: cover;
     height: 14px; } }
 @media screen and (max-width: 768px) {
   #view-review-popup .average .rating {
@@ -2126,9 +2136,11 @@ textarea.input {
     .fixed-popup .popup-inner .review-container .ratings {
       margin-top: 0px; }
       .fixed-popup .popup-inner .review-container .ratings .stars {
-        background: url("../img-trp/stars-gray.png") 50% 50% no-repeat; }
+        background: url("../img-trp/stars-gray.png") 50% 50% no-repeat;
+        background-size: contain; }
         .fixed-popup .popup-inner .review-container .ratings .stars .bar {
-          background: url("../img-trp/stars-black.png") 0% 50% no-repeat; }
+          background: url("../img-trp/stars-black.png") 0% 50% no-repeat;
+          background-size: cover; }
       .fixed-popup .popup-inner .review-container .ratings .rating {
         vertical-align: top;
         font-size: 14px;
@@ -2980,7 +2992,8 @@ textarea.input {
         display: none; } }
     .result-container .type span {
       color: #9f9f9f;
-      font-size: 14px; }
+      font-size: 14px;
+      margin-right: 3px; }
     .result-container .type .img {
       width: 25px; }
       .result-container .type .img img {
@@ -3171,7 +3184,8 @@ textarea.input {
     display: flex; }
     .profile-info-mobile .type span {
       font-size: 16px;
-      color: #777777; }
+      color: #777777;
+      margin-right: 3px; }
     .profile-info-mobile .type .img {
       width: 25px; }
       .profile-info-mobile .type .img img {
@@ -3303,7 +3317,8 @@ textarea.input {
     margin-bottom: 15px;
     display: flex; }
     .profile-info .type span {
-      color: #9f9f9f; }
+      color: #9f9f9f;
+      margin-right: 3px; }
     .profile-info .type .img {
       width: 25px; }
       .profile-info .type .img img {

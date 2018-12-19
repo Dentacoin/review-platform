@@ -688,9 +688,11 @@ body.blur {
 
 	    .stars {
 	        background: url('../img-trp/stars-gray.png') 50% 50% no-repeat;
+	        background-size: contain;
 
 	        .bar {
 	            background: url('../img-trp/stars-black.png') 0% 50% no-repeat;
+	            background-size: cover;
 	        }
 	    }
 
@@ -1130,9 +1132,11 @@ body.blur {
         height: 14px;
         display: inline-block;
         background: url('../img-trp/stars-gray.png') 50% 50% no-repeat;
+        background-size: contain;
 
         .bar {
             background: url('../img-trp/stars-blue.png') 0% 50% no-repeat;
+            background-size: cover;
             height: 14px;
         }
     }
@@ -1147,9 +1151,11 @@ body.blur {
 	        width: 186px;
 	        height: 35px;
 	        background: url('../img-trp/stars-gray-big.png') 50% 50% no-repeat;
+	        background-size: contain;
 
 	        .bar {
 	            background: url('../img-trp/stars-blue-big.png') 0% 50% no-repeat;
+	            background-size: cover;
 	            height: 35px;
 	        }
 	    }
@@ -1160,9 +1166,11 @@ body.blur {
 	        width: 130px;
 	        height: 25px;
 	        background: url('../img-trp/stars-gray-average.png') 50% 50% no-repeat;
+	        background-size: contain;
 
 	        .bar {
 	            background: url('../img-trp/stars-blue-average.png') 0% 50% no-repeat;
+	            background-size: cover;
 	            height: 25px;
 	        }
 	    }
@@ -2148,11 +2156,13 @@ textarea.input {
 			    height: 14px;
 			    vertical-align: middle;
 			    background: url(../img-trp/stars-gray.png) 50% 50% no-repeat;
+			    background-size: contain;
 			}
 
 		    .bar {
 		    	@media #{$phone} {
 			    	background: url(../img-trp/stars-blue.png) 0% 50% no-repeat;
+			    	background-size: cover;
 	    			height: 14px;
 	    		}
 		    }
@@ -2560,9 +2570,11 @@ textarea.input {
 
 			    .stars {
 			        background: url('../img-trp/stars-gray.png') 50% 50% no-repeat;
+			        background-size: contain;
 
 			        .bar {
 			            background: url('../img-trp/stars-black.png') 0% 50% no-repeat;
+			            background-size: cover;
 			        }
 			    }
 
@@ -3833,6 +3845,7 @@ textarea.input {
     	span {
     		color: #9f9f9f;
     		font-size: 14px;
+    		margin-right: 3px;
     	}
 
 		.img {
@@ -4114,6 +4127,7 @@ textarea.input {
     	span {
     		font-size: 16px;
     		color: #777777;
+    		margin-right: 3px;
     	}
 
 		.img {
@@ -4311,6 +4325,7 @@ textarea.input {
 
 		span {
 			color: #9f9f9f;
+			margin-right: 3px;
 		}
 
 		.img {
