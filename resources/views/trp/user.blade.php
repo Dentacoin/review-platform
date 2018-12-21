@@ -698,10 +698,15 @@
 							</div>
 						@endif
 			        	@foreach($item->teamApproved as $team)
-							<a class="slider-wrapper" href="{{ $team->clinicTeam->getLink() }}">
+							<a class="slider-wrapper" href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
 								<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 									@if( $team->clinicTeam->is_partner )
 										<img src="img-trp/mini-logo.png"/>
+									@endif
+									@if( (!empty($user) && $item->id==$user->id) )
+										<div class="deleter" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getName() ]) !!}">
+											<i class="fas fa-times"></i>
+										</div>
 									@endif
 								</div>
 							    <div class="slider-container">

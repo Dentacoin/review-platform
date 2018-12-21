@@ -5,6 +5,9 @@ var handleReviewEvents;
 var showFullReview;
 var handleDCNreward;
 var galleryFlickty;
+var teamFlickity;
+var suggestDentist;
+var suggestedDentistClick;
 
 $(document).ready(function(){
 
@@ -118,7 +121,7 @@ $(document).ready(function(){
 
             galleryFlickty.resize();
 
-            flickity = $('.flickity').flickity({
+            teamFlickity = $('.flickity').flickity({
                 autoPlay: false,
                 wrapAround: true,
                 cellAlign: 'left',
@@ -127,7 +130,7 @@ $(document).ready(function(){
                 groupCells: 1,
             });
 
-            flickity.resize();
+            teamFlickity.resize();
         }
     });
 
@@ -497,7 +500,155 @@ $(document).ready(function(){
                 }
             }
         );
-    } )
+    } );
+
+    //Invite teammembers
+
+
+    //
+    //Dentist Registration
+    //
+
+    $('.team-container .deleter').click( function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var r = confirm( $(this).attr('sure') );
+        if(!r) {
+            return;
+        }
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var id = $(this).closest('.slider-wrapper').attr('dentist-id');
+        $.ajax( {
+            url: lang + '/profile/dentists/delete/'+id,
+            type: 'GET',
+            dataType: 'json',
+            success: (function( data ) {
+                ajax_is_running = false;
+                teamFlickity.flickity( 'remove', $(this).closest('.slider-wrapper') );
+            }).bind(this)
+        });
+
+    } );
+
+    suggestedDentistClick = function(elm) {
+        $(elm).closest('.dentist-suggester-wrapper').find('.suggest-results').hide();
+        $(elm).closest('.dentist-suggester-wrapper').find('.suggester-input').val('');
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $.ajax( {
+            url: lang + '/profile/dentists/invite',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                invitedentistid: $(elm).attr('data-id')
+            },
+            success: (function( data ) {
+                $('#dentist-add-result').html(data.message).attr('class', 'alert '+(data.success ? 'alert-success' : 'alert-warning')).show();
+                refreshOnClosePopup = true;
+
+                ajax_is_running = false;
+
+            }).bind(this)
+        });
+
+
+    }
+
+    suggestDentist = function() {
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $.ajax( {
+            url: 'suggest-dentist'+(user_id ? '/'+user_id : ''),
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                invitedentist: $(this).val()
+            },
+            success: (function( data ) {
+                console.log(data);
+                var container = $(this).closest('.dentist-suggester-wrapper').find('.suggest-results');
+                
+                if (data.length) {
+                    container.html('').show();
+                    for(var i in data) {
+                        container.append('<a href="javascript:;" data-id="'+data[i].id+'">'+data[i].name+'</a>');
+                    }
+
+                    container.find('a').click( function() {
+                        suggestedDentistClick(this);
+                    } );
+                } else {
+                    container.hide();                    
+                }
+
+                ajax_is_running = false;
+
+            }).bind(this)
+        });
+    }
+
+    $('.dentist-suggester').closest('form').on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) { 
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    $('.dentist-suggester').on( 'keyup', function(e) {
+        
+        var container = $(this).closest('.dentist-suggester-wrapper').find('.suggest-results');
+
+        var keyCode = e.keyCode || e.which;
+        var activeLink = container.find('a.active');
+        if (keyCode === 40 || keyCode === 38) { //Down / Up
+            if(activeLink.length) {
+                activeLink.removeClass('active');
+                if( keyCode === 40 ) { // Down
+                    if( activeLink.next().length ) {
+                        activeLink.next().addClass('active');
+                    } else {
+                        container.find('a').first().addClass('active');
+                    }
+                } else { // UP
+                    if( activeLink.prev().length ) {
+                        activeLink.prev().addClass('active');
+                    } else {
+                        container.find('a').last().addClass('active');
+                    }
+                }
+            } else {
+                container.find('a').first().addClass('active');
+            }
+        } else if (keyCode === 13) {
+            if( activeLink.length ) {
+                suggestedDentistClick(activeLink);
+            }
+        } else {
+            if( $(this).val().length > 3 ) {
+                //Show Loding
+                if(suggestTO) {
+                    clearTimeout(suggestTO);
+                }
+                suggestTO = setTimeout(suggestDentist.bind(this), 300);
+            } else {
+                container.hide();
+            }
+        }
+    });
 
 
     //

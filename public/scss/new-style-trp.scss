@@ -850,6 +850,24 @@ body.blur {
 			    top: 6px;
 			    left: 6px;
 			}
+
+			.deleter {
+			    position: absolute;
+			    top: 5px;
+			    right: 5px;
+			    width: 23px;
+			    height: 23px;
+			    background: #898989;
+			    border-radius: 50%;
+			    display: flex;
+			    align-items: center;
+			    justify-content: center;
+
+			    i {
+			    	background: none;
+			    	color: white;
+			    }
+			}
 		}
 	}
 
@@ -5387,6 +5405,7 @@ textarea.input {
 	    border-bottom-right-radius: 5px;
 	    box-shadow: -3px 3px 7px 1px #d8d8d8;
 	    margin-top: -3px;
+	    z-index: 1;
 
 	    a {
 		    display: block;

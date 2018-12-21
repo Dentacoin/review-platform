@@ -178,7 +178,7 @@ class CitiesController extends BaseController
 
 		$invitedentist = trim(Request::input('invitedentist'));
 
-		$dentists = User::where(function($query) use ($invitedentist) {
+		$dentists = User::where('is_dentist', 1)->where(function($query) use ($invitedentist) {
 			$query->where('is_clinic', '=', 0 )
 			->orWhereNull('is_clinic');
 		});

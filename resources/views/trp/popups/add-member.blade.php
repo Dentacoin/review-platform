@@ -22,9 +22,15 @@
 			
 		</p>
 
-		<div class="search-dentist">
+		<div class="search-dentist dentist-suggester-wrapper suggester-wrapper">
 			<i class="fas fa-search"></i>
-			<input type="text" class="input" name="search-dentist" placeholder="{!! nl2br(trans('trp.popup.add-team-popup.search')) !!}">
+			<input type="text" class="input dentist-suggester suggester-input" name="search-dentist" placeholder="{!! nl2br(trans('trp.popup.add-team-popup.search')) !!}">
+			<div class="suggest-results">
+			</div>
+			<input type="hidden" class="suggester-hidden" name="clinic_id" value="">
+		</div>
+
+		<div class="alert" id="dentist-add-result" style="display: none; margin-bottom: 20px;">
 		</div>
 
 		<div id="invite-option-email" class="invite-content">

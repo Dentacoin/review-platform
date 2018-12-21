@@ -1,5 +1,4 @@
 var lastCivicForm = null;
-var suggestTO;
 var suggestClinic;
 
 $(document).ready(function(){

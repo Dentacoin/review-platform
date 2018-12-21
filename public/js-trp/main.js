@@ -11,6 +11,8 @@ var mapsWaiting = [];
 var initMap;
 var mapMarkers = {};
 var fixFlickty;
+var suggestTO;
+var refreshOnClosePopup = false;
 
 
 jQuery(document).ready(function($){
@@ -225,6 +227,10 @@ jQuery(document).ready(function($){
 	closePopup = function() {
 		$('.popup').removeClass('active');
 		$('body').removeClass('popup-visible');		
+
+		if( refreshOnClosePopup ) {
+			window.location.reload();
+		}
 	}
 
 	handlePopups = function(id) {

@@ -957,6 +957,20 @@ body.blur .site-content {
         position: absolute;
         top: 6px;
         left: 6px; }
+      .flickity .slider-wrapper .slider-image .deleter {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 23px;
+        height: 23px;
+        background: #898989;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center; }
+        .flickity .slider-wrapper .slider-image .deleter i {
+          background: none;
+          color: white; }
   .flickity .flickity-prev-next-button {
     width: 28px !important;
     height: 66px !important;
@@ -4001,7 +4015,8 @@ textarea.input {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     box-shadow: -3px 3px 7px 1px #d8d8d8;
-    margin-top: -3px; }
+    margin-top: -3px;
+    z-index: 1; }
     .suggester-wrapper .suggest-results a {
       display: block;
       padding: 5px 10px;

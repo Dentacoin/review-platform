@@ -20,6 +20,7 @@ use App\Models\Civic;
 use App\Models\UserAsk;
 use App\Models\UserPhoto;
 use App\Models\UserCategory;
+use App\Models\UserTeam;
 use Carbon\Carbon;
 
 
@@ -816,6 +817,145 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         $this->user->save();
         Request::session()->flash('success-message', trans('trp.page.profile.gdpr-done'));
         return redirect( getLangUrl('profile'));
+    }
+
+
+
+    //
+    //Dentist <-> Clinic relationship
+    //
+
+    public function dentists_delete( $locale=null, $id ) {
+        $res = UserTeam::where('user_id', $this->user->id)->where('dentist_id', $id)->delete();
+
+        if( $res ) {
+            $dentist = User::find( $id );
+
+            $dentist->sendTemplate(37, [
+                'clinic-name' => $this->user->getName()
+            ]);
+        }
+        return Response::json( [
+            'success' => true,
+        ] );
+    }
+
+    public function dentists_reject( $locale=null, $id ) {
+
+        $res = UserTeam::where('user_id', $this->user->id)->where('dentist_id', $id)->delete();
+
+        if( $res ) {
+            $dentist = User::find( $id );
+
+            $dentist->sendTemplate(36, [
+                'clinic-name' => $this->user->getName()
+            ]);
+        }
+        
+        //Success message
+        Request::session()->flash('success-message', trans('front.page.profile.dentist-workpalce-rejected'));
+
+        return redirect( getLangUrl('profile/dentists'));
+    }
+
+    public function dentists_accept( $locale=null, $id ) {
+
+        $item = UserTeam::where('dentist_id', $id)->where('user_id', $this->user->id)->first();
+
+        if ($item) {
+            
+            $item->approved = 1;
+            $item->save();
+
+            $dentist = User::find( $id );
+
+            $dentist->sendTemplate(35, [
+                'clinic-name' => $this->user->getName()
+            ]);
+        }
+
+        //Success message
+        Request::session()->flash('success-message', trans('front.page.profile.dentist-workplace-accepted'));
+
+        return redirect( getLangUrl('profile/dentists'));
+    }
+
+
+    
+    public function clinics_delete( $locale=null, $id ) {
+        $res = UserTeam::where('dentist_id', $this->user->id)->where('user_id', $id)->delete();
+
+        if( $res ) {
+            $clinic = User::find( $id );
+
+            $clinic->sendTemplate(38, [
+                'dentist-name' => $this->user->getName()
+            ]);
+        }
+
+        //Success message
+        Request::session()->flash('success-message', trans('front.page.profile.dentist-workplace-left'));
+
+        return redirect( getLangUrl('profile/clinics'));
+    }
+
+    public function inviteClinic() {
+
+        if(!empty(Request::input('joinclinicid'))) {
+
+            $clinic = User::find( Request::input('joinclinicid') );
+
+            if(!empty($clinic)) {
+
+                $newclinic = new UserTeam;
+                $newclinic->dentist_id = $this->user->id;
+                $newclinic->user_id = Request::input('joinclinicid');
+                $newclinic->approved = 0;
+                $newclinic->save();
+
+                $clinic->sendTemplate(34, [
+                    'dentist-name' =>$this->user->getName()
+                ]);
+
+                Request::session()->flash('success-message', trans('front.page.profile.clinic-invited'));
+                return redirect( getLangUrl('profile/clinics'));
+            }
+        } else {
+            return redirect( getLangUrl('profile/clinics'));
+        }
+
+    }
+
+    public function inviteDentist() {
+
+        if(!empty(Request::input('invitedentistid'))) {
+
+            $dentist = User::find( Request::input('invitedentistid') );
+
+            if(!empty($dentist)) {
+
+                $newdentist = new UserTeam;
+                $newdentist->dentist_id = Request::input('invitedentistid');
+                $newdentist->user_id = $this->user->id;
+                $newdentist->approved = 1;
+                $newdentist->save();
+
+                $dentist->sendTemplate(33, [
+                    'clinic-name' => $this->user->getName()
+                ]);
+
+                return Response::json( [
+                    'success' => true,
+                    'message' => trans('trp.page.user.dentist-invited', ['name' => $dentist->getName() ])
+                ] );
+            }
+        } else {
+            return Response::json( [
+                'success' => false,
+                'message' => trans('trp.page.user.dentist-invited-error')
+            ] );
+        }
+
     }
 
 

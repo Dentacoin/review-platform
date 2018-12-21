@@ -6,6 +6,7 @@ var addressRunning = null;
 var address_selector = 'select[name="country_id"], select[name="city_id"], input[name="address"], input[name="zip"]';
 var map;
 var currencyUpdaterTO = null;
+var suggestTO;
 
 $(document).ready(function(){
 
