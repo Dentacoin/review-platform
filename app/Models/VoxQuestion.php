@@ -41,6 +41,13 @@ class VoxQuestion extends Model {
         return $this->hasOne('App\Models\VoxQuestion', 'id', 'stats_relation_id');
     }
 
+    public function respondents() {
+        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->where('is_completed', 1)->has('user');
+    }
+    public function respondent_count() {
+        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->where('is_completed', 1)->has('user')->count();
+    }
+
 
 
     public function getStatsFieldsAttribute($value)

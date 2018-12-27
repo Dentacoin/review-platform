@@ -203,6 +203,7 @@
                                     <th>{{ trans('admin.page.'.$current_page.'.question-stats') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-type') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-trigger') }}</th>
+                                    <th>Respondents</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-edit') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-delete') }}</th>
                                 </tr>
@@ -228,6 +229,11 @@
                                         </td>
                                         <td>{{ trans('admin.enums.question-type.'.$question->type) }}</td>
                                         <td>{!! $triggers[$question->id] !!}</td>
+                                        <td>
+                                            <a href="{{ url('cms/vox/explorer/'.$question->id) }}" target="_blank">
+                                                {!! $question->respondent_count() !!}
+                                            </a>
+                                        </td>
                                         <td>
                                             <a class="btn btn-sm btn-success" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.$question->id) }}">
                                                 <i class="fa fa-pencil"></i>

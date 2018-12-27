@@ -143,6 +143,9 @@
 				<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-warning">
 					{!! trans('vox.page.questionnaire.answer-error') !!}
 				</div>
+				<div style="display: none; margin-top: 10px;text-align: center;" class="answer-scale-error alert alert-warning">
+					{!! trans('vox.page.questionnaire.answer-scale-error') !!}
+				</div>
 			</div>
 
 

@@ -121,7 +121,7 @@ $(document).ready(function(){
                     answer.push($(this).find('.answer:checked').val());
                 });
             } else {
-                $('.answer-error').show().insertAfter($(this));
+                $('.answer-scale-error').show().insertAfter($(this));
                 ajax_is_running = false;
                 return;
             }

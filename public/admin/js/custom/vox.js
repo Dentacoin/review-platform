@@ -1,5 +1,8 @@
 $(document).ready(function(){
 
+	$('#explorer-question').change( function() {
+		window.location.href = $(this).closest('form').attr('action') + '/' + $(this).val();
+	} )
 
 	$('.toggler').change( function() {
 		var id = $(this).attr('id');

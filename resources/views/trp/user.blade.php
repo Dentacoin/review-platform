@@ -91,6 +91,7 @@
 					</div>
 			    	<input type="text" name="website" class="input" placeholder="{!! nl2br(trans('trp.page.user.website')) !!}" value="{{ $user->website }}">
 			    	<input type="hidden" name="email" value="{{ $user->email }}">
+			    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText()) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
 				</div>
 				<div class="edit-buttons">
 					<button class="button" type="submit">
@@ -262,6 +263,7 @@
 						</div>
 				    	<input type="text" name="website" class="input" placeholder="{!! nl2br(trans('trp.page.user.website')) !!}" value="{{ $user->website }}">
 				    	<input type="hidden" name="email" value="{{ $user->email }}">
+				    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText()) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
 					</div>
 					<div class="clearfix">
 						<div class="edit-buttons">

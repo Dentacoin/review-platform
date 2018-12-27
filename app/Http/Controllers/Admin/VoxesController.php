@@ -804,6 +804,20 @@ class VoxesController extends AdminController
 
     }
 
+    public function explorer($question_id=null) {
+        if(!$question_id) {
+            $question_id = VoxQuestion::first()->id;
+        }
+        $question = VoxQuestion::find($question_id);
+
+        //dd( $question->respondents->take(50)->pluck('user') );
+
+        return $this->showView('voxes-explorer', array(
+            'question' => $question,
+            'voxes' => Vox::get()
+        ));
+    }
+
 
 
 }

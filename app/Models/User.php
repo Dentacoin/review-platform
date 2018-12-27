@@ -836,6 +836,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         return $opens;
     }
+
+    public function getWorkplaceText() {
+        $ret = [];
+        if($this->my_workplace->isNotEmpty()) {
+            foreach($user->my_workplace as $workplace) {
+                $ret[] = $workplace->clinic->getName();
+            }
+        }
+
+        return implode(',', $ret);
+    }
+
+
     public function getSocialCoverPath() {
         $folder = storage_path().'/app/public/avatars/'.($this->id%100);
         return $folder.'/'.$this->id.'-cover.jpg';

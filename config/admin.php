@@ -55,6 +55,7 @@ return [
                 'scales' => 'scales',
                 'faq' => 'faq',
                 'badges' => 'badges',
+                'explorer' => 'explorer',
             ),
             'js' => array(
                 'vox.js',

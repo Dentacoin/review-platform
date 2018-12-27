@@ -1311,7 +1311,8 @@ body.blur .site-content {
   border: none;
   font-size: 16px;
   box-shadow: -3px 3px 7px 1px #d8d8d8;
-  padding: 0px 15px; }
+  padding: 0px 15px;
+  background: white; }
   @media screen and (max-width: 998px) {
     .input {
       width: 100%; } }
