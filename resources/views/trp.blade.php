@@ -172,7 +172,7 @@
 							<a href="{{ getLangUrl('faq') }}">FAQ</a>
 							<a href="https://dentacoin.com/privacy-policy/" target="_blank">Privacy Policy</a>
 							<a href="https://dentavox.dentacoin.com/" target="_blank">Dentavox</a>
-							<a href="https://play.google.com/store/apps/details?id=com.dentacoin.dentacare" target="_blank">Privacy Policy</a>
+							<a href="https://dentacare.dentacoin.com/" target="_blank">Dentacare App</a>
 						</div>
 						<small>
 							Copyright © 2018. Dentacoin Foundation. All rights reserved

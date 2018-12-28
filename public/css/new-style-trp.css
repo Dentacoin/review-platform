@@ -531,7 +531,7 @@ header {
   top: 0px;
   padding-top: 15px;
   padding-bottom: 15px;
-  z-index: 101; }
+  z-index: 111; }
   header .logo {
     width: 134px;
     height: 40px;
@@ -606,7 +606,8 @@ header {
       position: absolute;
       right: -4px;
       top: 30px;
-      padding-top: 20px; }
+      padding-top: 20px;
+      z-index: 1000; }
       @media screen and (max-width: 768px) {
         header .header-info .expander-wrapper {
           right: 1px;
@@ -622,7 +623,6 @@ header {
         display: none;
         padding: 14px;
         background: white;
-        z-index: 20;
         border: 1px solid #e8e8e8;
         box-shadow: 0px 0px 7px 3px rgba(234, 234, 234, 0.5); }
         @media screen and (max-width: 998px) {

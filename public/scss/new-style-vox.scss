@@ -1339,7 +1339,7 @@ header {
 
 	img {
 		margin-right: 23px;
-		width: 78px;
+		min-width: 78px;
 		height: 64px;
 
 		@media #{$phone} {

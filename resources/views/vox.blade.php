@@ -341,7 +341,7 @@
 							<a href="{{ getLangUrl('faq') }}">{{ trans('vox.footer.faq') }}</a>
 							<a href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
 							<a href="https://reviews.dentacoin.com/" target="_blank">{{ trans('vox.footer.trp') }}</a>
-							<a href="https://play.google.com/store/apps/details?id=com.dentacoin.dentacare" target="_blank">{{ trans('vox.footer.dentacare') }}</a>
+							<a href="https://dentacare.dentacoin.com/" target="_blank">{{ trans('vox.footer.dentacare') }}</a>
 						</div>
 						<small>
 							{{ trans('vox.footer.copyrights') }}
@@ -356,15 +356,6 @@
 				</div>
 			</footer>
 		</div>
-
-		<!-- @if(empty($_COOKIE['show-update']))
-			<div class="alert alert-warning alert-update" style="text-align: center;">
-				UPDATE IN PROGRESS: We’re improving DentaVox and working on new surveys. There might be some temporary technical issues. Sorry for any inconvenience and thank you for your understanding!
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-		@endif -->
 
         <script  src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
