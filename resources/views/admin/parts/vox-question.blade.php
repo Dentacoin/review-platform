@@ -134,10 +134,10 @@
             <label class="col-md-3">
             </label>
             <div class="col-md-9">
-                <a href="javascript:;" class="btn btn-white btn-block btn-add-new-trigger" style="margin-top: 10px;">
+                <a href="javascript:;" class="btn btn-white btn-block btn-add-new-trigger" style="margin-top: 10px;{!! !empty($question) && $question->question_trigger=='-1' ? 'display: none;' : '' !!}" >
                     Аdd new trigger
                 </a>
-                <a href="javascript:;" class="btn btn-success btn-block btn-add-trigger" style="margin-top: 10px;">
+                <a href="javascript:;" class="btn btn-success btn-block btn-add-trigger" style="margin-top: 10px;{!! !empty($question) && $question->question_trigger=='-1' ? 'display: none;' : '' !!}" >
                     <!-- {{ trans('admin.page.'.$current_page.'.trigger-add') }} -->
                     Same as previous
                 </a>
