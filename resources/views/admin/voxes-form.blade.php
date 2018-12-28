@@ -210,7 +210,7 @@
                             </thead>
                             <tbody class="questions-draggable">
                                 @foreach($item->questions as $question)
-                                    <tr question-id="{{ $question->id }}">
+                                    <tr question-id="{{ $question->id }}" {!! in_array($question->id, $linked_triggers) ? 'class="linked"' : '' !!}>
                                         <td>
                                             <input type="text" class="form-control question-number" style="width: 60px;" data-qid="{{ $question->id }}" value="{{ $question->order }}" />
                                         </td>

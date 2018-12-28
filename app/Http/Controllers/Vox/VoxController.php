@@ -53,6 +53,26 @@ class VoxController extends FrontController
 		// }
 		// dd('done'); //$users
 
+		// $voxes = Vox::get();
+		// foreach ($voxes as $vox) {
+		// 	echo '<b>'.$vox->title.'</b><br/>';
+		// 	$lastone = false;
+		// 	foreach ($vox->questions as $question) {
+		// 		if( $lastone && $lastone->question_trigger && $question->question_trigger!='-1' && $lastone->question_trigger==$question->question_trigger ) {
+		// 			echo $question->question.'<br/>';
+		// 			$question->question_trigger = '-1';
+		// 			$question->save();
+		// 			$found = true;
+		// 		} else {
+		// 			$lastone = $question;					
+		// 		}
+
+		// 	}
+		// 	echo '<br/>';
+		// }
+
+		// exit;
+
 		if(!$this->user) {
 			return $this->ShowVoxView('vox-public', array(
 				'vox' => $vox,
@@ -432,6 +452,24 @@ class VoxController extends FrontController
 							        $answer->country_id = $this->user->country_id;
 							        $answer->save();
 							        $answered[$q] = 0;
+
+							        $skips = request('skips');
+							        if(is_array($skips)) {
+							        	foreach ($skips as $skip_id) {
+							        		$skipped = $vox->questions->find($skip_id);
+							        		if($skipped->question_trigger=='-1') {
+							        			$answer = new VoxAnswer;
+										        $answer->user_id = $this->user->id;
+										        $answer->vox_id = $vox->id;
+										        $answer->question_id = $skip_id;
+										        $answer->answer = 0;
+										        $answer->is_skipped = true;
+										        $answer->country_id = $this->user->country_id;
+										        $answer->save();
+										        $answered[$skip_id] = 0;
+							        		}
+							        	}
+							        }
 			        			} else if($type == 'multiple') {
 			        				foreach ($a as $value) {
 			        					$answer = new VoxAnswer;

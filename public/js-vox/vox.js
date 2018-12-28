@@ -42,6 +42,8 @@ $(document).ready(function(){
         var group = $(this).closest('.question-group');
         var qid = parseInt(group.attr('data-id'));
         var type = null;
+        var multi_skips = [];
+        var next_trigger;
 
         if(vox.current>=1) {
             $('.questionnaire-description').hide();
@@ -54,6 +56,14 @@ $(document).ready(function(){
         if( group.attr('skipped') ) {
             var answer = 0;
             type = 'skip';
+
+            var next_trigger = group.next();
+            while(next_trigger.length && next_trigger.attr('data-trigger')=='-1') {
+                multi_skips.push( next_trigger.attr('data-id') );
+                next_trigger.attr('skipped', 'skipped');
+                next_trigger = next_trigger.next();
+                vox.current++;                
+            }
 
         } else if (group.hasClass('question-group-details')) {
             if( group.find('select').length ) {
@@ -136,6 +146,7 @@ $(document).ready(function(){
                 question: qid,
                 answer: answer,
                 type: type,
+                skips: multi_skips
             }, 
             function( data ) {
                 if(data.success) {
@@ -219,7 +230,7 @@ $(document).ready(function(){
 
                             var trigger = group.next().attr('data-trigger');
                             var trigger_type = group.next().attr('trigger-type');
-                            if(trigger) {
+                            if(trigger && trigger!='-1') {
                                 var trigger_statuses = [];
                                 var trigger_list = trigger.split(';');
                                 for(var i in trigger_list) {
@@ -228,7 +239,6 @@ $(document).ready(function(){
                                     var trigger_question = parts[0].trim(); // 15 въпрос
                                     var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
                                     var parsed_given_answer = given_answer && given_answer.length && given_answer!="0" ? given_answer.split(',') : null;
-                                    console.log(trigger_question, parts[1], given_answer, parsed_given_answer);
                                     if( parsed_given_answer ) {
                                         if( parts[1] ) {
                                             var trigger_answers = parts[1].split(','); // 2,6 // [2,6]
@@ -299,7 +309,24 @@ $(document).ready(function(){
                 }
                 ajax_is_running = false;
                 if (should_skip) {
-                    sendAnswer.bind(group.next().children().first())();
+
+                    if( multi_skips.length ) {
+                        //console.log('MULTI SKIP');
+                        $('.question-group').find('.loader').remove();
+                        $('.question-group').hide();
+                        var next_real = group.nextAll(':not([skipped="skipped"])').first();
+                        next_real.show();
+                        if( next_real.find('.question').offset().top < $(window).scrollTop() ) {
+                            $('html, body').stop().animate({
+                                scrollTop: parseInt(next_real.find('.question').offset().top)
+                            }, 500);
+                        }
+                        VoxTest.handleNextQuestion();
+                    } else {
+                        //console.log('SKIP');
+                        sendAnswer.bind(group.next().children().first())();
+                    }
+                    
                 }
             }, "json"
         );

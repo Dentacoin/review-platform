@@ -92,17 +92,31 @@
             <div class="col-md-9 triggers-list">
                 @if(!empty($question) && !empty($question->question_trigger) )
                     @foreach(explode(';',$question->question_trigger) as $trigger)
-                        <div class="input-group">
-                            <div class="template-box clearfix"> 
-                                {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), explode(':', $trigger)[0], array('class' => 'form-control select2', 'style' => 'width: 50%; float: left;')) }} 
-                                {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer number')) }}
+                        @if( $trigger==-1 )
+                            <div class="input-group same-as-before" id="trigger-group-template" >
+                                <div class="template-box clearfix" style="line-height: 34px; font-size: 18px;"> 
+                                    This question will have the same trigger as the one before it
+                                    <input type="hidden" name="triggers[]" value="-1">
+                                </div>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default btn-remove-trigger" type="button">
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="input-group-btn">
-                                <button class="btn btn-default btn-remove-trigger" type="button">
-                                    <i class="glyphicon glyphicon-remove"></i>
-                                </button>
+                        @else
+                            <div class="input-group">
+                                <div class="template-box clearfix"> 
+                                    {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), explode(':', $trigger)[0], array('class' => 'form-control select2', 'style' => 'width: 50%; float: left;')) }} 
+                                    {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer number')) }}
+                                </div>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default btn-remove-trigger" type="button">
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     @endforeach
                 @endif
             </div>
@@ -125,7 +139,7 @@
                 </a>
                 <a href="javascript:;" class="btn btn-success btn-block btn-add-trigger" style="margin-top: 10px;">
                     <!-- {{ trans('admin.page.'.$current_page.'.trigger-add') }} -->
-                    Add previous trigger
+                    Same as previous
                 </a>
             </div>
         </div>
@@ -249,10 +263,10 @@
 </div>
 
 <div style="display: none;">
-    <div class="input-group" id="trigger-group-template" >
-        <div class="template-box clearfix"> 
-            {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), !empty($trigger_question_id) ? $trigger_question_id : null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
-            {{ Form::text('answers-number[]', !empty($trigger_valid_answers) ? $trigger_valid_answers : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer number')) }}
+    <div class="input-group same-as-before" id="trigger-group-template" >
+        <div class="template-box clearfix" style="line-height: 34px; font-size: 18px;"> 
+            This question will have the same trigger as the one before it
+            <input type="hidden" name="triggers[]" value="-1">
         </div>
         <div class="input-group-btn">
             <button class="btn btn-default btn-remove-trigger" type="button">

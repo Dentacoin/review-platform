@@ -141,3 +141,33 @@ table.table .table-search {
     line-height: 20px;
     cursor: pointer;
 }
+
+.table-striped>tbody>tr.linked,
+.table-striped>tbody>tr.linked td {
+    background: #c4d0e2;
+    position: relative;
+}
+
+.linked td:nth-child(6) {
+    position: relative;
+}
+.linked td:nth-child(6)::before {
+    content: "\f0c1";
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    background: white;
+    border: 1px solid #e2e7eb;
+    border-radius: 3px;
+    transform: translateX(-50%);
+    line-height: 24px;
+    text-align: center;
+    font-size: 18px;
+}

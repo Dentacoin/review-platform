@@ -106,6 +106,7 @@ $(document).ready(function(){
 		}
 		
 	}
+	
 	if(typeof(vox)!='undefined') {
 		VoxTest.handleNextQuestion();		
 	}

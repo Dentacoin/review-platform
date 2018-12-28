@@ -111,6 +111,7 @@ class VoxesController extends AdminController
         if(!empty($item)) {
 
             $triggers = [];
+            $linked_triggers = [];
 
             foreach($item->questions as $question) {
                 $triggers[$question->id] = '';
@@ -119,14 +120,20 @@ class VoxesController extends AdminController
                     foreach (explode(';', $question->question_trigger) as $v) {
                         $question_id = explode(':',$v)[0];
 
-                        $q = VoxQuestion::find($question_id);
-
-                        if (!empty(explode(':',$v)[1])) {
-                            $answ = explode(':',$v)[1];
-                            $triggers[$question->id] .= $q->question.': '.$answ.'<br/>';
+                        if($question_id==-1) {
+                            $triggers[$question->id] .= 'Same as previous<br/>';
+                            $linked_triggers[] = $question->id;
                         } else {
-                            $triggers[$question->id] .= $q->question.'<br/>';
+                            $q = VoxQuestion::find($question_id);
+
+                            if (!empty(explode(':',$v)[1])) {
+                                $answ = explode(':',$v)[1];
+                                $triggers[$question->id] .= $q->question.': '.$answ.'<br/>';
+                            } else {
+                                $triggers[$question->id] .= $q->question.'<br/>';
+                            }                            
                         }
+
                         
                     }
                 }
@@ -162,6 +169,7 @@ class VoxesController extends AdminController
                 'item' => $item,
                 'category_list' => VoxCategory::get(),
                 'triggers' => $triggers,
+                'linked_triggers' => $linked_triggers,
                 'trigger_question_id' => $trigger_question_id,
                 'trigger_valid_answers' => $trigger_valid_answers
             ));

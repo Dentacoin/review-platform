@@ -42,10 +42,10 @@ class VoxQuestion extends Model {
     }
 
     public function respondents() {
-        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->where('is_completed', 1)->has('user');
+        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->where('is_completed', 1)->where('is_skipped', 0)->has('user');
     }
     public function respondent_count() {
-        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->where('is_completed', 1)->has('user')->count();
+        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->where('is_completed', 1)->where('is_skipped', 0)->has('user')->count();
     }
 
 
