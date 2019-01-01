@@ -736,7 +736,7 @@ body.blur {
 			width: 66%;
 		}
 
-		&:hover {
+		&:hover:not(.pending) {
 
 			.flickity-buttons {
 				display: block;
@@ -790,6 +790,30 @@ body.blur {
     			span {
     				font-size: 14px;
     				color: gray;
+    			}
+    		}
+
+    		.approve-buttons {
+    			display: flex;
+    			margin-top: 20px;
+
+    			div {
+    				flex: 1;
+    				height: 30px;
+    				line-height: 30px;
+    				text-align: center;
+    				font-size: 14px;
+    				color: white;
+    				display: block;
+    				border-radius: 5px;
+
+    				&.yes {
+    					margin-right: 15px;
+    					background: #14cab8;
+    				}
+    				&.no {
+    					background: #ea6e6a;
+    				}
     			}
     		}
 		}
@@ -867,6 +891,16 @@ body.blur {
 			    	background: none;
 			    	color: white;
 			    }
+			}
+		}
+
+		&.pending {
+			.slider-image {
+				opacity: 0.7;
+			}
+
+			.deleter {
+				display: none;
 			}
 		}
 	}

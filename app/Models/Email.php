@@ -288,7 +288,7 @@ class Email extends Model
 				'[reward]',
 				'[/reward]',
 			), array(
-				'<a '.$this->button_style.' href="'.getLangurl('profile/wallet').'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('profile/wallet').'">',
 				'</a>',
 			), $content);
 		}
@@ -315,7 +315,7 @@ class Email extends Model
 				'[/profile-link]',
 			), array(
 				$this->meta['clinic-name'],
-				'<a '.$this->button_style.' href="'.getLangurl('profile/clinics').'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('profile/clinics').'">',
 				'</a>',
 			), $content);
 		}
@@ -328,7 +328,7 @@ class Email extends Model
 				'[/profile-link]',
 			), array(
 				$this->meta['dentist-name'],
-				'<a '.$this->button_style.' href="'.getLangurl('profile/dentists').'">',
+				'<a '.$this->button_style.' href="'.$this->user->getLink().'?tab=about">',
 				'</a>',
 			), $content);
 		}
@@ -378,7 +378,7 @@ class Email extends Model
 				'[/login]',
 			), array(
 				date('d F Y', time()+86400*7),
-				'<a '.$this->text_style.' href="'.getLangurl( $this->template->id==11 ? 'login' : '/' ).'">',
+				'<a '.$this->text_style.' href="'.getLangUrl( $this->template->id==11 ? 'login' : '/' ).'">',
 				'</a>',
 			), $content);
 		}

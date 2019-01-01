@@ -7,7 +7,9 @@ var handleDCNreward;
 var galleryFlickty;
 var teamFlickity;
 var suggestDentist;
+var suggestClinic;
 var suggestedDentistClick;
+var suggestClinicClick;
 
 $(document).ready(function(){
 
@@ -134,7 +136,12 @@ $(document).ready(function(){
         }
     });
 
-    $('.profile-tabs a').first().click();
+
+    if( getUrlParameter('tab') ) {
+        $('.profile-tabs a[data-tab="'+getUrlParameter('tab')+'"]').trigger('click');
+    } else {
+        $('.profile-tabs a').first().click();
+    }
 
     if(getUrlParameter('review_id')) {
         showFullReview( getUrlParameter('review_id') );
@@ -506,7 +513,7 @@ $(document).ready(function(){
 
 
     //
-    //Dentist Registration
+    //Add dentist to clinic
     //
 
     $('.team-container .deleter').click( function(e) {
@@ -649,6 +656,178 @@ $(document).ready(function(){
             }
         }
     });
+
+    //
+    //Ask clinic to join
+    //
+
+    suggestClinicClick = function(elm) {
+        var id = $(elm).attr('data-id');
+        console.log(elm, id);
+
+        $(elm).closest('.suggest-results').hide();
+        $(elm).closest('.suggester-wrapper').find('.suggester-input').val('');
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $.ajax( {
+            url: lang + '/profile/clinics/invite',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                joinclinicid: $(elm).attr('data-id')
+            },
+            success: (function( data ) {
+                $('#clinic-add-result').html(data.message).attr('class', 'alert '+(data.success ? 'alert-success' : 'alert-warning')).show();
+                refreshOnClosePopup = true;
+
+                ajax_is_running = false;
+
+            }).bind(this)
+        });
+
+    }
+
+    suggestClinic = function() {
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $.ajax( {
+            url: 'suggest-clinic'+(user_id ? '/'+user_id : ''),
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                joinclinic: $(this).val()
+            },
+            success: (function( data ) {
+                console.log(data);
+                var container = $(this).closest('.clinic-suggester-wrapper').find('.suggest-results');
+                
+                if (data.length) {
+                    container.html('').show();
+                    for(var i in data) {
+                        container.append('<a href="javascript:;" data-id="'+data[i].id+'">'+data[i].name+'</a>');
+                    }
+
+                    container.find('a').click( function() {
+                        suggestClinicClick(this);
+                    } );
+                } else {
+                    container.hide();                    
+                }
+
+                ajax_is_running = false;
+
+            }).bind(this)
+        });
+    }
+
+    $('.clinic-suggester').closest('form').on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) { 
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    $('.clinic-suggester').on( 'keyup', function(e) {
+        
+        var container = $(this).closest('.clinic-suggester-wrapper').find('.suggest-results');
+
+        var keyCode = e.keyCode || e.which;
+        var activeLink = container.find('a.active');
+        if (keyCode === 40 || keyCode === 38) { //Down / Up
+            if(activeLink.length) {
+                activeLink.removeClass('active');
+                if( keyCode === 40 ) { // Down
+                    if( activeLink.next().length ) {
+                        activeLink.next().addClass('active');
+                    } else {
+                        container.find('a').first().addClass('active');
+                    }
+                } else { // UP
+                    if( activeLink.prev().length ) {
+                        activeLink.prev().addClass('active');
+                    } else {
+                        container.find('a').last().addClass('active');
+                    }
+                }
+            } else {
+                container.find('a').first().addClass('active');
+            }
+        } else if (keyCode === 13) {
+            if( activeLink.length ) {
+                suggestClinicClick(activeLink);
+            }
+        } else {
+            if( $(this).val().length > 3 ) {
+                //Show Loding
+                if(suggestTO) {
+                    clearTimeout(suggestTO);
+                }
+                suggestTO = setTimeout(suggestClinic.bind(this), 300);
+            } else {
+                container.hide();
+            }
+        }
+    });
+
+    $('#workplaces-list .remove-dentist').click( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $.get( 
+            $(this).attr('href'),
+            (function( data ) {
+                console.log($(this));
+                $(this).closest('.flex').remove();
+                refreshOnClosePopup = true;
+                ajax_is_running = false;
+            }).bind(this), "json"
+        );          
+
+    } );
+
+    $('.team-container .approve-buttons div').click( function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if( $(this).hasClass('no') ) {
+            var r = confirm( $(this).attr('sure') );
+            if(!r) {
+                return;
+            }
+        }
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $.get( 
+            $(this).attr('action'),
+            (function( data ) {
+                if( $(this).hasClass('yes') ) {
+                    $(this).closest('.slider-wrapper').removeClass('pending');
+                    $(this).closest('.slider-wrapper').find('.approve-buttons').remove();
+                } else {
+                    teamFlickity.flickity( 'remove', $(this).closest('.slider-wrapper') );
+                }
+                ajax_is_running = false;
+            }).bind(this), "json"
+        );
+
+    } );
 
 
     //

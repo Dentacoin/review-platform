@@ -837,15 +837,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $opens;
     }
 
-    public function getWorkplaceText() {
+    public function getWorkplaceText($isme=false) {
         $ret = [];
         if($this->my_workplace->isNotEmpty()) {
-            foreach($user->my_workplace as $workplace) {
-                $ret[] = $workplace->clinic->getName();
+            foreach($this->my_workplace as $workplace) {
+                if( $workplace->approved ) {
+                    $ret[] = $workplace->clinic->getName();
+                } else {
+                    if( $isme ) {
+                        $ret[] = $workplace->clinic->getName().' (pending)';
+                    }
+                }
             }
         }
 
-        return implode(',', $ret);
+        return implode(', ', $ret);
     }
 
 

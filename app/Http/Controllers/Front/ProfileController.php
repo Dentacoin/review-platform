@@ -831,9 +831,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         if( $res ) {
             $dentist = User::find( $id );
 
-            $dentist->sendTemplate(37, [
-                'clinic-name' => $this->user->getName()
-            ]);
+            // $dentist->sendTemplate(37, [
+            //     'clinic-name' => $this->user->getName()
+            // ]);
         }
         return Response::json( [
             'success' => true,
@@ -852,10 +852,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             ]);
         }
         
-        //Success message
-        Request::session()->flash('success-message', trans('front.page.profile.dentist-workpalce-rejected'));
-
-        return redirect( getLangUrl('profile/dentists'));
+        return Response::json( [
+            'success' => true,
+        ] );
     }
 
     public function dentists_accept( $locale=null, $id ) {
@@ -874,10 +873,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             ]);
         }
 
-        //Success message
-        Request::session()->flash('success-message', trans('front.page.profile.dentist-workplace-accepted'));
-
-        return redirect( getLangUrl('profile/dentists'));
+        return Response::json( [
+            'success' => true,
+        ] );
     }
 
 
@@ -893,10 +891,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             ]);
         }
 
-        //Success message
-        Request::session()->flash('success-message', trans('front.page.profile.dentist-workplace-left'));
-
-        return redirect( getLangUrl('profile/clinics'));
+        return Response::json( [
+            'success' => true,
+        ] );
     }
 
     public function inviteClinic() {
@@ -917,12 +914,17 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     'dentist-name' =>$this->user->getName()
                 ]);
 
-                Request::session()->flash('success-message', trans('front.page.profile.clinic-invited'));
-                return redirect( getLangUrl('profile/clinics'));
+                return Response::json( [
+                    'success' => true,
+                    'message' => trans('trp.page.user.clinic-invited', ['name' => $clinic->getName() ])
+                ] );
             }
-        } else {
-            return redirect( getLangUrl('profile/clinics'));
-        }
+        } 
+            
+        return Response::json( [
+            'success' => false,
+            'message' => trans('trp.page.user.clinic-invited-error')
+        ] );
 
     }
 
@@ -949,12 +951,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     'message' => trans('trp.page.user.dentist-invited', ['name' => $dentist->getName() ])
                 ] );
             }
-        } else {
-            return Response::json( [
-                'success' => false,
-                'message' => trans('trp.page.user.dentist-invited-error')
-            ] );
         }
+
+        return Response::json( [
+            'success' => false,
+            'message' => trans('trp.page.user.dentist-invited-error')
+        ] );
 
     }
 

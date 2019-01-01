@@ -91,7 +91,9 @@
 					</div>
 			    	<input type="text" name="website" class="input" placeholder="{!! nl2br(trans('trp.page.user.website')) !!}" value="{{ $user->website }}">
 			    	<input type="hidden" name="email" value="{{ $user->email }}">
-			    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText()) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
+			    	@if(!$user->is_clinic)
+			    		<input type="text" name="open" class="input wokrplace-input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText(true)) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
+			    	@endif
 				</div>
 				<div class="edit-buttons">
 					<button class="button" type="submit">
@@ -172,6 +174,17 @@
 		    		</div>
 			    	{{ $item->website }}
 		    	</a>
+		    	@endif
+
+		    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
+		    		<div class="p">
+		    			<!--
+				    		<div class="img">
+				    			<img class="black-filter" src="{{ url('img-trp/open.png') }}">
+				    		</div>
+				    	-->
+		    			{!! $workplace !!}
+		    		</div>
 		    	@endif
 			</div>
 			<div class="profile-rating col tac">
@@ -263,7 +276,9 @@
 						</div>
 				    	<input type="text" name="website" class="input" placeholder="{!! nl2br(trans('trp.page.user.website')) !!}" value="{{ $user->website }}">
 				    	<input type="hidden" name="email" value="{{ $user->email }}">
-				    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText()) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
+				    	@if(!$user->is_clinic)
+					    	<input type="text" name="open" class="input wokrplace-input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText(true)) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
+				    	@endif
 					</div>
 					<div class="clearfix">
 						<div class="edit-buttons">
@@ -327,6 +342,16 @@
 			    			</div>
 			    			{{ $item->website }}
 			    		</a>
+			    	@endif
+			    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
+			    		<div class="p">
+			    			<!--
+					    		<div class="img">
+					    			<img class="black-filter" src="{{ url('img-trp/open.png') }}">
+					    		</div>
+					    	-->
+			    			{!! $workplace !!}
+			    		</div>
 			    	@endif
 				</div>
 			</div>
@@ -699,8 +724,8 @@
 								</a>
 							</div>
 						@endif
-			        	@foreach($item->teamApproved as $team)
-							<a class="slider-wrapper" href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
+			        	@foreach( !empty($user) && $item->id==$user->id ? $item->team : $item->teamApproved as $team)
+							<a class="slider-wrapper{!! $team->approved ? '' : ' pending' !!}" href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
 								<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 									@if( $team->clinicTeam->is_partner )
 										<img src="img-trp/mini-logo.png"/>
@@ -722,6 +747,16 @@
 											({{ intval($team->clinicTeam->ratings) }} reviews)
 										</span>
 									</div>
+							    	@if( !$team->approved )
+							    		<div class="approve-buttons clearfix">
+								    		<div class="yes" action="{{ getLangUrl('profile/dentists/accept/'.$team->clinicTeam->id) }}">
+								    			{!! nl2br(trans('trp.page.user.accept-dentist')) !!}
+								    		</div>
+								    		<div class="no" action="{{ getLangUrl('profile/dentists/reject/'.$team->clinicTeam->id) }}" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getName() ]) !!}">
+								    			{!! nl2br(trans('trp.page.user.reject-dentist')) !!}
+								    		</div>
+								    	</div>
+							    	@endif
 							    </div>
 						    	<div class="flickity-buttons clearfix">
 						    		<div>
@@ -769,6 +804,8 @@
 		@include('trp.popups.working-time')
 		@if( $user->is_clinic )
 			@include('trp.popups.add-member')
+		@else
+			@include('trp.popups.workplace')
 		@endif
 	@else
 		@include('trp.popups.submit-review')

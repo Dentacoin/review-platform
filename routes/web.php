@@ -225,12 +225,10 @@ $reviewRoutes = function () {
 				Route::any('profile/privacy', 					'ProfileController@privacy');
 				Route::any('profile/privacy-download', 			'ProfileController@privacy_download');
 
-				Route::any('profile/dentists', 					'ProfileController@dentists');
 				Route::any('profile/dentists/reject/{id}', 		'ProfileController@dentists_reject');
 				Route::any('profile/dentists/delete/{id}', 		'ProfileController@dentists_delete');
 				Route::any('profile/dentists/accept/{id}', 		'ProfileController@dentists_accept');
 				Route::any('profile/dentists/invite', 			'ProfileController@inviteDentist');
-				Route::any('profile/clinics', 					'ProfileController@clinics');
 				Route::any('profile/clinics/delete/{id}', 		'ProfileController@clinics_delete');
 				Route::any('profile/clinics/invite', 			'ProfileController@inviteClinic');
 

@@ -404,6 +404,11 @@ jQuery(document).ready(function($){
 		}
 	} );
 
+	$('.slider-wrapper [href]').click( function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		window.location.href = $(this).attr('href');
+	} );
 
 });
 
