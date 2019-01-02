@@ -166,7 +166,7 @@ class Kernel extends ConsoleKernel
         })->cron("*/10 * * * *"); //05:00h
         
         $schedule->call(function () {
-            $transactions = DcnTransaction::where('status', '!=', 'completed')->get(); //->take(100)
+            $transactions = DcnTransaction::where('status', '!=', 'completed')->take(100)->get(); //
             foreach ($transactions as $trans) {
                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
 
