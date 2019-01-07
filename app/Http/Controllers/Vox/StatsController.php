@@ -71,13 +71,13 @@ class StatsController extends FrontController
         	$scale = Request::input('scale');
         	$type = $question->used_for_stats;
 
-        	$results = $this->prepareQuery($question_id, $dates);
+            $results = $this->prepareQuery($question_id, $dates);
+        	$total = $this->prepareQuery($question_id, $dates)->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
     		$main_chart = [];
     		$second_chart = [];
     		$third_chart = [];
     		$relation_info = [];
-    		$total = 0;
     		$totalf = 0;
     		$totalm = 0;
     		$answers = json_decode($question->answers);
@@ -115,7 +115,6 @@ class StatsController extends FrontController
         		$results = $results->get();
         		foreach ($results as $res) {
         			$main_chart[ $answers_related[ $res->answer-1 ] ] = $res->cnt;
-        			$total += $res->cnt;
         		}
         		
 
@@ -134,7 +133,6 @@ class StatsController extends FrontController
         				$third_chart[ $answers[ $res->answer-1 ] ] = 0; //f
         			}
         			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
-        			$total += $res->cnt;
         			if($res->gender=='f') {
         				$totalf += $res->cnt;
         				$second_chart[ $answers[ $res->answer-1 ] ] += $res->cnt; //m
@@ -159,7 +157,6 @@ class StatsController extends FrontController
         				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
         			}
         			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
-        			$total += $res->cnt;
 
         			if( $res->country_id ) {
         				if(!isset($second_chart[ $countries[$res->country_id]])) {
@@ -191,7 +188,6 @@ class StatsController extends FrontController
         				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
         			}
         			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
-        			$total += $res->cnt;
 
 
         			if( $res->age ) {
@@ -217,7 +213,6 @@ class StatsController extends FrontController
         				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
         			}
         			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
-        			$total += $res->cnt;
 
 
         			if( $res->$scale ) {
@@ -317,7 +312,8 @@ class StatsController extends FrontController
 
     	$results = VoxAnswer::where('question_id', $question_id)
     	->where('is_completed', 1)
-    	->where('is_skipped', 0);
+    	->where('is_skipped', 0)
+        ->has('user');
 
     	if(is_array($dates)) {
     		$from = Carbon::parse($dates[0]);

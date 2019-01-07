@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use DB;
+
 use Illuminate\Database\Eloquent\Model;
 
 class VoxQuestion extends Model {
@@ -45,7 +47,7 @@ class VoxQuestion extends Model {
         return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->where('is_completed', 1)->where('is_skipped', 0)->has('user');
     }
     public function respondent_count() {
-        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->where('is_completed', 1)->where('is_skipped', 0)->has('user')->count();
+        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->where('is_completed', 1)->where('is_skipped', 0)->has('user')->select(DB::raw('count( distinct `user_id`) as num'))->first()->num;
     }
 
 
