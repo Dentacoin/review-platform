@@ -31,6 +31,7 @@
 		<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
+		<link rel="stylesheet" type="text/css" href="{{ url('/css/ids.css').'?ver='.$cache_version }}" />
 		
         @if(!empty($css) && is_array($css))
             @foreach($css as $file)
@@ -188,6 +189,11 @@
 		</div>
 
 
+		<a id="ids" href="https://ids.dentacoin.com/" target="_blank">
+			<i class="fas fa-times-circle"></i>
+		</a>
+
+
 		@include('trp/popups/share')
 		@if(empty($user))
 			@include('trp/popups/register')
@@ -197,6 +203,7 @@
 
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
         <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 		<script src="{{ url('/js-trp/main.js').'?ver='.$cache_version }}"></script>
 		

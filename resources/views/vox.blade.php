@@ -35,6 +35,7 @@
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/app.css').'?ver='.$cache_version }}" />
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/flickity.min.css').'?ver='.$cache_version }}" />
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-vox.css').'?ver='.$cache_version }}" />
+		<link rel="stylesheet" type="text/css" href="{{ url('/css/ids.css').'?ver='.$cache_version }}" />
 		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/style-vox.css').'?ver='.$cache_version }}" /> -->
 
         @if(!empty($css) && is_array($css))
@@ -356,6 +357,10 @@
 				</div>
 			</footer>
 		</div>
+
+		<a id="ids" href="https://ids.dentacoin.com/" target="_blank">
+			<i class="fas fa-times-circle"></i>
+		</a>
 
         <script  src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

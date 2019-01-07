@@ -1,0 +1,40 @@
+$phone: "screen and (max-width: 768px)";
+
+#ids {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding-top: 14.7%;
+	background: url('https://dentacoin.com/assets/uploads/ids-banner.png') 50% 100% no-repeat;
+	background-size: contain;
+	z-index: 10000;
+	display: none;
+
+	@media #{$phone} {
+		padding-top: 49.3%;
+		background-image: url('https://dentacoin.com/assets/uploads/ids-banner-mobile.png');
+    }
+
+    i {
+    	position: absolute;
+	    top: 51.5%;
+	    right: 15px;
+	    font-size: 26px;
+	    color: gray;
+	    box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.5);
+	    background: white;
+	    border-radius: 50%;
+
+	    &:before {
+	    	font-size: 26px;
+	    }
+
+		@media #{$phone} {
+		    top: 49%;
+		    right: 5px;
+	    }
+
+    }
+
+}

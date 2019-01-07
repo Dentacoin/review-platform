@@ -410,6 +410,19 @@ jQuery(document).ready(function($){
 		window.location.href = $(this).attr('href');
 	} );
 
+
+
+	
+	$('#ids i').click( function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		Cookies.set('no-ids', true, { expires: 365 });
+		$('#ids').hide();
+	});
+	if(!Cookies.get('no-ids')) {
+		$('#ids').show();
+	}
+
 });
 
 //
