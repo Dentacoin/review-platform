@@ -85,6 +85,18 @@ $(document).ready(function(){
 
 		$('.questions-form .btn-add-trigger').hide();
 		$('.questions-form .btn-add-new-trigger').hide();
+		$('.questions-form .btn-add-old-trigger').hide();
+	} );
+
+	$('.questions-form .btn-add-old-trigger').click( function() {
+		var newinput = $('#old-trigger-group-template').clone(true).removeAttr('id');
+		$('.questions-form').find('.triggers-list').append(newinput);
+		$('.triggers-list .input-group').each( function() {
+			if (!($(this).find('select').hasClass('select2'))) {
+				$(this).find('select').addClass('select2');
+				$(".select2").select2();
+			}
+		});
 	} );
 
 	$('.questions-form .btn-add-new-trigger').click( function() {
@@ -102,6 +114,7 @@ $(document).ready(function(){
 	$('.btn-remove-trigger').click( function() {
 		if( $(this).closest('.same-as-before').length ) {
 			$('.questions-form .btn-add-trigger').show();
+			$('.questions-form .btn-add-old-trigger').show();
 			$('.questions-form .btn-add-new-trigger').show();
 		}
 

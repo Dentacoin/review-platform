@@ -60,6 +60,7 @@ $(document).ready(function(){
             var next_trigger = group.next();
             while(next_trigger.length && next_trigger.attr('data-trigger')=='-1') {
                 multi_skips.push( next_trigger.attr('data-id') );
+                console.log('ADDING SKIPS');
                 next_trigger.attr('skipped', 'skipped');
                 next_trigger = next_trigger.next();
                 vox.current++;                
@@ -308,25 +309,21 @@ $(document).ready(function(){
                     console.log(data);
                 }
                 ajax_is_running = false;
-                if (should_skip) {
-
-                    if( multi_skips.length ) {
-                        //console.log('MULTI SKIP');
-                        $('.question-group').find('.loader').remove();
-                        $('.question-group').hide();
-                        var next_real = group.nextAll(':not([skipped="skipped"])').first();
-                        next_real.show();
-                        if( next_real.find('.question').offset().top < $(window).scrollTop() ) {
-                            $('html, body').stop().animate({
-                                scrollTop: parseInt(next_real.find('.question').offset().top)
-                            }, 500);
-                        }
-                        VoxTest.handleNextQuestion();
-                    } else {
-                        //console.log('SKIP');
-                        sendAnswer.bind(group.next().children().first())();
+                if( multi_skips.length ) {
+                    console.log('MULTI SKIP');
+                    $('.question-group').find('.loader').remove();
+                    $('.question-group').hide();
+                    var next_real = group.nextAll(':not([skipped="skipped"])').first();
+                    next_real.show();
+                    if( next_real.find('.question').offset().top < $(window).scrollTop() ) {
+                        $('html, body').stop().animate({
+                            scrollTop: parseInt(next_real.find('.question').offset().top)
+                        }, 500);
                     }
-                    
+                    VoxTest.handleNextQuestion();
+                } if (should_skip) {
+                    //console.log('SKIP');
+                    sendAnswer.bind(group.next().children().first())();
                 }
             }, "json"
         );

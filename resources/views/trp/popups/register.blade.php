@@ -179,7 +179,7 @@
 						</h2>
 						@include('front.errors')
 						<div id="register-error" class="alert alert-warning" style="display: none;">
-							{{ trans('front.page.'.$current_page.'.register-error')  }}<br/>
+							{{ trans('trp.popup.popup-register.error')  }}<br/>
 							<span>
 
 							</span>
