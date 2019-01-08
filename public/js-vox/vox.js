@@ -153,6 +153,18 @@ $(document).ready(function(){
                 if(data.success) {
                     var should_skip = false;
 
+                    console.log('Request sent');
+
+                    if( multi_skips.length ) {
+                        console.log('MULTI SKIP');
+                        var next_real = group.nextAll(':not([skipped="skipped"])').first().prev();
+                        VoxTest.handleNextQuestion();
+
+                        console.log(group);
+                        group = next_real;
+                        console.log(group);
+                    } 
+
                     if(data.ban) {
                         var wpopup = $('.popup.ban');
                         wpopup.addClass('active');
@@ -309,19 +321,8 @@ $(document).ready(function(){
                     console.log(data);
                 }
                 ajax_is_running = false;
-                if( multi_skips.length ) {
-                    console.log('MULTI SKIP');
-                    $('.question-group').find('.loader').remove();
-                    $('.question-group').hide();
-                    var next_real = group.nextAll(':not([skipped="skipped"])').first();
-                    next_real.show();
-                    if( next_real.find('.question').offset().top < $(window).scrollTop() ) {
-                        $('html, body').stop().animate({
-                            scrollTop: parseInt(next_real.find('.question').offset().top)
-                        }, 500);
-                    }
-                    VoxTest.handleNextQuestion();
-                } if (should_skip) {
+                
+                if (should_skip) {
                     //console.log('SKIP');
                     sendAnswer.bind(group.next().children().first())();
                 }
