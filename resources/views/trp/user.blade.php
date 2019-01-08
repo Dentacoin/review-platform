@@ -178,11 +178,9 @@
 
 		    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
 		    		<div class="p">
-		    			<!--
-				    		<div class="img">
-				    			<img class="black-filter" src="{{ url('img-trp/open.png') }}">
-				    		</div>
-				    	-->
+			    		<div class="img">
+			    			<img class="black-filter" src="{{ url('img-trp/clinic.png') }}">
+			    		</div>
 		    			{!! $workplace !!}
 		    		</div>
 		    	@endif
@@ -345,11 +343,9 @@
 			    	@endif
 			    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
 			    		<div class="p">
-			    			<!--
-					    		<div class="img">
-					    			<img class="black-filter" src="{{ url('img-trp/open.png') }}">
-					    		</div>
-					    	-->
+				    		<div class="img">
+				    			<img class="black-filter" src="{{ url('img-trp/clinic.png') }}">
+				    		</div>
 			    			{!! $workplace !!}
 			    		</div>
 			    	@endif
