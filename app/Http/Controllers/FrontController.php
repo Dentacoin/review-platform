@@ -297,7 +297,7 @@ class FrontController extends BaseController
         $params['social_description'] = !empty($params['social_description']) ? $params['social_description'] : trans($text_domain.'.social.'.$this->current_page.'.description');
 
         $params['canonical'] = !empty($params['canonical']) ? $params['canonical'] : getLangUrl($this->current_page);
-        $params['social_image'] = !empty($params['social_image']) ? $params['social_image'] : url( $text_domain=='front' ? '/img/logo.png' : '/img-vox/logo-text.png'  );
+        $params['social_image'] = !empty($params['social_image']) ? $params['social_image'] : url( $text_domain=='trp' ? '/img/logo.png' : '/img-vox/logo-text.png'  );
         //dd($params['pages_header']);
 
         if( $text_domain=='vox' && !empty($this->user) && !$this->user->vox_active) {
