@@ -73,10 +73,10 @@
 	    	</a>    		
     	@endif
 
-    	@if($user && $items->where('id', $user->id)->count())
+    	@if(!empty($user) && $user->is_dentist && !$user->address)
     		<div class="alert alert-info">
     			{!! nl2br(trans('trp.page.search.no-address-dentist',[
-    				'link' => '<a href="{{ $user->getLink() }}?open-edit=1">',
+    				'link' => '<a href="'.$user->getLink().'?open-edit=1">',
     				'endlink' => '</a>',
     			])) !!}
     		</div>
@@ -321,48 +321,41 @@
 					@if($items->isNotEmpty())
 				    	@foreach($items as $dentist)
 
-				    		@if($dentist->address)
-
-								<a href="{{ $dentist->getLink() }}" class="result-container dentist clearfix" lat="{{ $dentist->lat }}" lon="{{ $dentist->lon }}" dentist-id="{{ $dentist->id }}">
-									<div class="avatar{!! $dentist->hasimage ? '' : ' default-avatar' !!}" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
-										@if($dentist->is_partner)
-											<img src="{{ url('img-trp/mini-logo.png') }}">
-										@endif
-									</div>
-									<div class="media-right">
-										<h4>
-											{{ $dentist->getName() }}
-										</h4>
-										<span class="type">
-											{{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}
-										</span>
-								    	@if( $time = $dentist->getWorkHoursText() )
-								    		<p>
-								    			<img src="{{ url('img-trp/open.png') }}">
-								    			{!! $time !!}
-								    		</p>
-								    	@endif
-									    <div class="ratings">
-											<div class="stars">
-												<div class="bar" style="width: {{ $dentist->avg_rating/5*100 }}%;">
-												</div>
+							<a href="{{ $dentist->getLink() }}" class="result-container dentist clearfix" {!! $dentist->address ? 'lat="'.$dentist->lat.'" lon="'.$dentist->lon.'"' : '' !!} dentist-id="{{ $dentist->id }}">
+								<div class="avatar{!! $dentist->hasimage ? '' : ' default-avatar' !!}" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
+									@if($dentist->is_partner)
+										<img src="{{ url('img-trp/mini-logo.png') }}">
+									@endif
+								</div>
+								<div class="media-right">
+									<h4>
+										{{ $dentist->getName() }}
+									</h4>
+									<span class="type">
+										{{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}
+									</span>
+							    	@if( $time = $dentist->getWorkHoursText() )
+							    		
+										<div class="p">
+											<div class="img">
+							    				<img src="{{ url('img-trp/open.png') }}">
+							    			</div>
+							    			{!! strip_tags($time) !!}
+							    		</div>
+							    	@endif
+								    <div class="ratings">
+										<div class="stars">
+											<div class="bar" style="width: {{ $dentist->avg_rating/5*100 }}%;">
 											</div>
-											<span class="rating">
-												({{ intval($dentist->ratings) }} reviews)
-											</span>
 										</div>
+										<span class="rating">
+											({{ intval($dentist->ratings) }} reviews)
+										</span>
 									</div>
-								</a>
-
-							@endif
+								</div>
+							</a>
 
 						@endforeach
-
-						@if($items->where('address', '')->count())
-							<div class="alert alert-info mobile">
-								{!! nl2br(trans('trp.page.search.no-address')) !!}
-							</div>
-						@endif
 					@else
 						<div class="alert alert-info">
 							{!! nl2br(trans('trp.page.search.no-results')) !!}
@@ -370,6 +363,11 @@
 					@endif
 				</div>
 				<div class="flex-7">
+					@if($items->where('address', '')->count())
+						<div class="alert alert-info mobile">
+							{!! nl2br(trans('trp.page.search.no-address')) !!}
+						</div>
+					@endif
 					<div id="search-map" lat="{{ $lat }}" lon="{{ $lon }}">
 					</div>
 				</div>

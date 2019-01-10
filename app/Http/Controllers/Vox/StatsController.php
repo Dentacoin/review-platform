@@ -85,6 +85,7 @@ class StatsController extends FrontController
                 if(mb_strpos($value, '!')===0) {
                     $answers[$key] = mb_substr($value, 1);
                 }
+                $main_chart[$answers[$key]] = 0;
             }
 
         	if($type=='dependency') {
@@ -92,6 +93,10 @@ class StatsController extends FrontController
 
         		$results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
         		$results = $results->get();
+
+                foreach ($answers as $key => $value) {
+                    $second_chart[($key+1)] = 0;
+                }
 
         		foreach ($results as $res) {
                     if(!isset( $answers[ $res->answer-1 ] )) {
@@ -122,6 +127,11 @@ class StatsController extends FrontController
                 $answer_id = null;
         		$results = $results->groupBy('answer', 'gender')->selectRaw('answer, gender, COUNT(*) as cnt');
                 $results = $results->get();
+                foreach ($answers as $key => $value) {
+                    $second_chart[($key+1)] = 0;
+                    $third_chart[($key+1)] = 0;
+                }
+                
         		foreach ($results as $res) {
                     if(!isset( $answers[ $res->answer-1 ] )) {
                         continue;
@@ -220,6 +230,10 @@ class StatsController extends FrontController
         			}
         		}
         	}
+
+            $main_chart = $this->processArray($main_chart);
+            $second_chart = $this->processArray($second_chart);
+            $third_chart = $this->processArray($third_chart);
 
         	return Response::json( [
         		'main_chart' => $main_chart,
@@ -326,4 +340,18 @@ class StatsController extends FrontController
 
     	return $results;
 	}
+
+    public function processArray($arr) {
+        $newarr = [];
+        foreach ($arr as $key => $value) {
+            if(is_array($value)) {
+                $a = $this->processArray($value);
+                array_unshift($a, $key);
+                $newarr[] = $a;
+            } else {
+                $newarr[] = [$key, $value];
+            }
+        }
+        return $newarr;
+    }
 }

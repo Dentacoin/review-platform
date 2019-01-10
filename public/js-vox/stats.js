@@ -355,8 +355,8 @@ $(document).ready(function(){
 
                 var rows = [];
                 for(var i in data.main_chart) {
-                    rows.push([i, data.main_chart[i]]);
-                    legend.push(i);
+                    rows.push(data.main_chart[i]);
+                    legend.push(data.main_chart[i][0]);
                 }
 
                 var options = {};
@@ -400,14 +400,17 @@ $(document).ready(function(){
                     var rows = [];
 
                     rows.push([ 'Answer', 'Respondents', { role: 'style' } ]);
-                    var line = Object.values(data.second_chart);
+                    var line = [];
+                    for(var i in data.second_chart) {
+                        line.push(data.second_chart[i][1]);
+                    }
                     var sum = line.reduce(function(a, b) { return a + b; }, 0);
                         
                     var j=0;
                     for(var i in data.second_chart) {
-                        var arr = i.split(' ');
+                        var arr = data.second_chart[i][0].split(' ');
                         var newi = arr.join('\n\r');
-                        rows.push([ newi, data.second_chart[i] ? data.second_chart[i]/sum : 0, chart_colors[j] ]);
+                        rows.push([ newi, data.second_chart[i][1] ? data.second_chart[i][1]/sum : 0, chart_colors[j] ]);
                         j++;
                     }
                     console.log(rows);
@@ -423,7 +426,7 @@ $(document).ready(function(){
                 } else if(scale=='gender') {
                     var rows = [];
                     for(var i in data.second_chart) {
-                        rows.push([i, data.second_chart[i]]);
+                        rows.push(data.second_chart[i]);
                     }
                     drawChart(rows, $(this).find('.second-chart')[0], {
                         pieHole: 0.6,
@@ -432,7 +435,7 @@ $(document).ready(function(){
 
                     var rows = [];
                     for(var i in data.third_chart) {
-                        rows.push([i, data.third_chart[i]]);
+                        rows.push(data.third_chart[i]);
                     }
                     drawChart(rows, $(this).find('.third-chart')[0], {
                         pieHole: 0.6,
@@ -447,7 +450,7 @@ $(document).ready(function(){
                     var rows = [];
                     rows.push(['Country', 'Respondents']);
                     for(var i in data.second_chart) {
-                        rows.push([i, data.second_chart[i]]);
+                        rows.push(data.second_chart[i]);
                     }
                     //rows = rows.slice(0,25);
                     console.log(rows);
@@ -461,28 +464,31 @@ $(document).ready(function(){
                     var rows = [];
                     var headers = [];
                     headers.push( scale_name );
-                    j=0;
-                    for(var i in data.second_chart[Object.keys(data.second_chart)[0]]) {
-                        if(!data.answer_id || j==data.answer_id-1 ) {
-                            headers.push(i);
+                    for(var i in data.second_chart[0]) {
+                        if(i!=0 && (!data.answer_id || i==data.answer_id )) {
+                            headers.push(data.second_chart[0][i][0]);
                         }
-                        j++;
                     }
                     rows.push(headers);
 
                     for(var i in data.second_chart) {
-                        var line = Object.values(data.second_chart[i]);
+                        var key = data.second_chart[i][0];
+                        var line = [];
+                        for(var j in data.second_chart[i]) {
+                            if(j==0) {
+                                continue;
+                            }
+                            line.push(data.second_chart[i][j][1]);
+                        }
                         var newline = [];
                         var sum = line.reduce(function(a, b) { return a + b; }, 0);
-                        console.log('LINE: ', line);
-                        console.log('SUM: ', sum);
                         for(var j in line) {
                             if(!data.answer_id || j==data.answer_id-1 ) {
                                 newline.push( line[j] ? line[j]/sum : 0 );
                             }
                         }
 
-                        var arr = i.split(' ');
+                        var arr = key.split(' ');
                         var newi = arr.join('\n\r');
                         newline.unshift(newi.trim());
                         rows.push( newline );
@@ -582,7 +588,6 @@ $(document).ready(function(){
         if( is_main ) {
             google.visualization.events.addListener(chart, 'select', (function() {
                 var selection = this.getSelection();
-                console.log(selection);
                 if( typeof selection[0].row!='undefined' ) {
                     var container = $(this.container).closest('.stat');
                     if(  container.attr('answer-id')==(selection[0].row + 1) ) {
@@ -661,7 +666,6 @@ $(document).ready(function(){
                     }
 
                     for(var j=1; j<rows[i].length; j++) {
-                        console.log('MAX', rows[i][j], max);
                         var pl = 80*rows[i][j]/max;
                         var color = fixedColor ? chart_colors[fixedColor-1] : chart_colors[j-1];
                         if( typeof(rows[0][j])!='object' ) {

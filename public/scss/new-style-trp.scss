@@ -249,12 +249,12 @@ header {
 		display: block;
 		background: url('../img-trp/logo.png') no-repeat 50% 50%;
 		float: left;
+		background-size: contain;
 
 		@media #{$phone} {
 			background-image: url('../img-trp/logo-mobile.png');
 			width: 25px;
 			height: 24px;
-    		background-size: contain;
 		}
 	}
 
@@ -2374,8 +2374,8 @@ textarea.input {
 		    font-size: 14px;
 		    border-radius: 5px;
 		    z-index: 1;
-		    top: 10px;
-		    right: 10px;
+		    top: 5px;
+		    right: 6px;
 
 		    i {
 				font-size: 15px;

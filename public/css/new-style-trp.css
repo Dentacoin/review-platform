@@ -546,13 +546,13 @@ header {
     height: 40px;
     display: block;
     background: url("../img-trp/logo.png") no-repeat 50% 50%;
-    float: left; }
+    float: left;
+    background-size: contain; }
     @media screen and (max-width: 768px) {
       header .logo {
         background-image: url("../img-trp/logo-mobile.png");
         width: 25px;
-        height: 24px;
-        background-size: contain; } }
+        height: 24px; } }
   header .header-info {
     float: right;
     display: flex;
@@ -2016,8 +2016,8 @@ textarea.input {
     font-size: 14px;
     border-radius: 5px;
     z-index: 1;
-    top: 10px;
-    right: 10px; }
+    top: 5px;
+    right: 6px; }
     #map-results-popup .popup-inner .close-map i {
       font-size: 15px;
       color: white;
