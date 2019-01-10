@@ -546,13 +546,13 @@ header {
     height: 40px;
     display: block;
     background: url("../img-trp/logo.png") no-repeat 50% 50%;
-    float: left; }
+    float: left;
+    background-size: contain; }
     @media screen and (max-width: 768px) {
       header .logo {
         background-image: url("../img-trp/logo-mobile.png");
         width: 25px;
-        height: 24px;
-        background-size: contain; } }
+        height: 24px; } }
   header .header-info {
     float: right;
     display: flex;

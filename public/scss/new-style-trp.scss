@@ -249,12 +249,12 @@ header {
 		display: block;
 		background: url('../img-trp/logo.png') no-repeat 50% 50%;
 		float: left;
+		background-size: contain;
 
 		@media #{$phone} {
 			background-image: url('../img-trp/logo-mobile.png');
 			width: 25px;
 			height: 24px;
-    		background-size: contain;
 		}
 	}
 
