@@ -1762,10 +1762,23 @@ header {
 				}
 
 				.answer-radios-group {
+					display: flex;
+					align-items: center;
+
+					@media screen and (max-width: 768px) {
+						display: block;
+					}
 
 					.answer-question {
-						width: 20%;
-						float: left;
+						// width: 20%;
+						// float: left;
+					    max-width: 20%;
+						flex: 1;
+
+						@media screen and (max-width: 768px) {
+							max-width: none;
+							flex: none
+						}
 
 						h3 {
 							margin-bottom: 30px;
@@ -1789,9 +1802,24 @@ header {
 							}
 
 							&.active-label {
-								padding: 15px;
-    							margin-top: 24px;
+								// padding: 15px;
+    				// 			margin-top: 24px;
+    				    		transform: scale(1.5);
+
+    				    		@media screen and (max-width: 768px) {
+    				    			transform: none;
+    				    		}
 							}
+						}
+					}
+
+					.buttons-list {
+						width: 80%;
+						flex: 1;
+
+						@media screen and (max-width: 768px) {
+							width: auto;
+							flex: none;
 						}
 					}
 				}

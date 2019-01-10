@@ -244,6 +244,7 @@ $reviewRoutes = function () {
 };
 Route::domain('reviews.dentacoin.com')->group($reviewRoutes);
 Route::domain('dev-reviews.dentacoin.com')->group($reviewRoutes);
+Route::domain('urgent-reviews.dentacoin.com')->group($reviewRoutes);
 
 
 $voxRoutes = function () {
@@ -320,3 +321,4 @@ $voxRoutes = function () {
 };
 Route::domain('dentavox.dentacoin.com')->group($voxRoutes);
 Route::domain('dev-dentavox.dentacoin.com')->group($voxRoutes);
+Route::domain('urgent-dentavox.dentacoin.com')->group($voxRoutes);

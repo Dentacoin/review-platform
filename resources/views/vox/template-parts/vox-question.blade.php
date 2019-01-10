@@ -61,13 +61,27 @@
 
 				<div class="flickity">
 					@foreach(json_decode($question->answers, true) as $k => $answer)
+						@if( $loop->index % 4 == 0 && !($loop->first))
+							<div class="mobile-js-remove"> 
+								<div class="clearfix mobile-hide">
+									<div class="answer-title" style="width: 20%;">
+										&nbsp;
+									</div>
+									@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $ans)											
+										<div class="answer-title" style="width: {{ (100 - 20) / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
+											<span>{{ $ans }}</span>
+										</div>
+									@endforeach
+								</div>
+							</div>
+						@endif
 						<div class="answer-radios-group clearfix">
 							<div class="answer-question">
 								<h3>{{ $answer }}</h3>
 							</div>
-							<div class="buttons-list"> 
+							<div class="buttons-list clearfix"> 
 								@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $ans)
-									<div class="tac answer-inner" style="width: {{ (100 - 20) / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
+									<div class="tac answer-inner" style="width: {{ 100 / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
 										<label class="answer-radio" for="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}">
 											<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}" type="radio" name="answer-{{ $k }}" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
 											{{ $ans }}											

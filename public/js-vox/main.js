@@ -8,6 +8,7 @@ var fb_city_id;
 var checkFilledDots;
 var simpleCountDown, hoursCountdown;
 var simpleCountDownTO, hoursCountdownTO;
+var flickityScales;
 
 $(document).ready(function(){
 
@@ -87,11 +88,14 @@ $(document).ready(function(){
 
 		if (window.innerWidth < 768 && $('.question-group:visible').hasClass('scale')) {
 
-			$('.question-group:visible .flickity').flickity({
+			flickityScales = $('.question-group:visible .flickity').flickity({
 				wrapAround: true,
 				adaptiveHeight: true,
 				draggable: false
 			});
+
+			var item_to_remove = flickityScales.find('.mobile-js-remove');
+			flickityScales.flickity( 'remove', item_to_remove );
 
 			$('.question-group:visible .flickity').on( 'select.flickity', checkFilledDots);
 			$('.question-group:visible .next-answer').hide();
