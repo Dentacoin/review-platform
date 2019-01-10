@@ -15,7 +15,6 @@ $(document).ready(function(){
 	$.cookie.json = true;
 
 	checkFilledDots = function( event, index) {
-		console.log('alee');
 		var goods = new Array;
 		var flickity = $('.flickity:visible');
 		var missing = false;
@@ -28,7 +27,6 @@ $(document).ready(function(){
 	                missing = true;
 	            }
 	        } );
-	        console.log(goods);
 	        var i=0;
 	        flickity.find('.flickity-page-dots .dot').each( function() {
 	            if(goods[i]) {

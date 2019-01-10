@@ -474,8 +474,6 @@ $(document).ready(function(){
                         }
                         var newline = [];
                         var sum = line.reduce(function(a, b) { return a + b; }, 0);
-                        console.log('LINE: ', line);
-                        console.log('SUM: ', sum);
                         for(var j in line) {
                             if(!data.answer_id || j==data.answer_id-1 ) {
                                 newline.push( line[j] ? line[j]/sum : 0 );
@@ -582,7 +580,6 @@ $(document).ready(function(){
         if( is_main ) {
             google.visualization.events.addListener(chart, 'select', (function() {
                 var selection = this.getSelection();
-                console.log(selection);
                 if( typeof selection[0].row!='undefined' ) {
                     var container = $(this.container).closest('.stat');
                     if(  container.attr('answer-id')==(selection[0].row + 1) ) {
@@ -661,7 +658,6 @@ $(document).ready(function(){
                     }
 
                     for(var j=1; j<rows[i].length; j++) {
-                        console.log('MAX', rows[i][j], max);
                         var pl = 80*rows[i][j]/max;
                         var color = fixedColor ? chart_colors[fixedColor-1] : chart_colors[j-1];
                         if( typeof(rows[0][j])!='object' ) {
