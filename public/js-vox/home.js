@@ -1,28 +1,8 @@
+var handleFilters;
+
 $(document).ready(function(){
 
-	$('.sort-menu a').click( function() {
-		if (!$(this).hasClass('active')) {
-			$('.sort-menu a').removeClass('active');
-			$(this).addClass('active');
-		}
-
-		handleFilters();
-	} );
-
-
-	$('#survey-search').on('change keyup', function() {
-		handleSearch();
-	});
-
-	$('#surveys-categories').on('change', function() {
-		handleSearch();
-	});
-
-	$('.survey-cats span').click( function() {
-		$('#surveys-categories').val( $(this).attr('cat-id') ).trigger('change');
-	} );
-
-	var handleFilters = function() {
+	handleFilters = function() {
 		if(!$('.sort-menu a.active').length) {
 			return;
 		}
@@ -31,6 +11,7 @@ $(document).ready(function(){
 		$('#survey-search').val('');
 
 		var sort = $('.sort-menu a.active').attr('sort');
+		var sort_element = $('.sort-menu a.active');
 		var wrapper = $('.questions-inner');
 		var list = wrapper.children('.another-question');
 
@@ -68,7 +49,6 @@ $(document).ready(function(){
 			});
 
 		} else {
-
 
 			list.show().attr("found", 1);
 
@@ -112,9 +92,16 @@ $(document).ready(function(){
 				}
 			});
 
-			list.each(function() {
-			    wrapper.append(this);
-			});
+			if (sort_element.hasClass('order-asc')) {
+				list.each(function() {
+				    wrapper.prepend(this);
+				});
+
+			} else {
+				list.each(function() {
+				    wrapper.append(this);
+				});
+			}
 		}
 		
 		$('#survey-not-found').hide();
@@ -166,6 +153,42 @@ $(document).ready(function(){
 			$('#survey-more').show();
 		}
 	}
+
+	$('.sort-menu a').click( function() {
+		if (!$(this).hasClass('active')) {
+			$('.sort-menu a').removeClass('active');
+			$(this).addClass('active');
+		} else {
+			$(this).toggleClass('order-asc');
+		}
+
+		window.location.hash = $(this).attr('sort')+( $(this).attr('sort')!='featured' ? '-'+($(this).hasClass('order-asc') ? 'asc' : 'desc') : '' )
+
+		handleFilters();
+	} );
+
+
+	if (window.location.hash.length) {
+		var parts = window.location.hash.substring(1).split('-');
+		if($('a[sort="'+parts[0]+'"]').length) {
+			$('a[sort="'+parts[0]+'"]').trigger( "click" );			
+			if(parts[1] && parts[1]=='asc') {
+				$('a[sort="'+parts[0]+'"]').trigger( "click" );			
+			}
+		}
+	}
+
+	$('#survey-search').on('change keyup', function() {
+		handleSearch();
+	});
+
+	$('#surveys-categories').on('change', function() {
+		handleSearch();
+	});
+
+	$('.survey-cats span').click( function() {
+		$('#surveys-categories').val( $(this).attr('cat-id') ).trigger('change');
+	} );
 
 	$('#survey-more').click( function() {
 		var i=0;

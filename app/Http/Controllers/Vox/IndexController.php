@@ -42,7 +42,6 @@ class IndexController extends FrontController
 					'newest' => trans('vox.page.home.sort-newest'),
 					'popular' => trans('vox.page.home.sort-popular'),
 					'reward' => trans('vox.page.home.sort-reward'),
-					'duration' => trans('vox.page.home.sort-duration'),
 					'taken' => trans('vox.page.home.sort-taken'),
 				],
 				'taken' => $this->user->filledVoxes(),

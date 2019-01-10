@@ -1998,6 +1998,7 @@ header {
 		color: #373737;
 		border-right: 1px solid #373737;
 		transition: all 0.3s ease;
+		position: relative;
 
 		@media #{$phone} {
 			line-height: 14px;
@@ -2024,7 +2025,6 @@ header {
 
 		&:first-child {
 			padding-left: 17px;
-			position: relative;
 		}
 
 		&:last-child {
@@ -2038,6 +2038,30 @@ header {
 
 			i {
 				color: #38a2e5;
+			}
+		}
+
+		&.active.sortable {
+			padding-right: 17px;
+
+			&:after {
+				content: '';				
+				position: absolute;
+				width: 0;
+				height: 0;
+				border-style: solid;
+				top: 8px;
+				right: 8px;
+				border-width: 4px 3px 0 3px;
+				border-color: #38a2e5 transparent transparent transparent;
+			}
+
+			&.order-asc {
+				&:after {
+					border-width: 0 3px 4px 3px;
+					border-color: transparent transparent #38a2e5 transparent;
+					top: 7px;
+				}
 			}
 		}
 	}

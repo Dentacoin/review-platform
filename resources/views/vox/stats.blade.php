@@ -23,6 +23,7 @@
 		<div class="questions-menu">
 			<div class="sort-menu">
 				@foreach($sorts as $key => $val)
+
 					<a href="javascript:;" sort="{{ $key }}"  {!! $key == 'featured' ? 'class="active"' : '' !!}>
 
 						@if($key == 'featured')
