@@ -221,6 +221,10 @@ class StatsController extends FrontController
         		}
         	}
 
+            $main_chart = $this->processArray($main_chart);
+            $second_chart = $this->processArray($second_chart);
+            $third_chart = $this->processArray($third_chart);
+
         	return Response::json( [
         		'main_chart' => $main_chart,
         		'second_chart' => $second_chart,
@@ -326,4 +330,18 @@ class StatsController extends FrontController
 
     	return $results;
 	}
+
+    public function processArray($arr) {
+        $newarr = [];
+        foreach ($arr as $key => $value) {
+            if(is_array($value)) {
+                $a = $this->processArray($value);
+                array_unshift($a, $key);
+                $newarr[] = $a;
+            } else {
+                $newarr[] = [$key, $value];
+            }
+        }
+        return $newarr;
+    }
 }
