@@ -148,11 +148,15 @@ jQuery(document).ready(function($){
 
 				$('#map-results-popup .result-container').off('mouseover').mouseover( function() {
 					var did = $(this).attr('dentist-id');					
-					mapMarkers[did].setIcon(images_path+'/map-pin-active.png');	    		
+					if( mapMarkers[did] ) {
+						mapMarkers[did].setIcon(images_path+'/map-pin-active.png');	    								
+					}
 				} )
 				$('#map-results-popup .result-container').off('mouseout').mouseout( function() {
 					var did = $(this).attr('dentist-id');					
-					mapMarkers[did].setIcon(images_path+'/map-pin-inactive.png');	    		
+					if( mapMarkers[did] ) {
+						mapMarkers[did].setIcon(images_path+'/map-pin-inactive.png');	    		
+					}
 				} )
 
 
