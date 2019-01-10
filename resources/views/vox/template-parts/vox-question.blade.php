@@ -61,7 +61,7 @@
 
 				<div class="flickity">
 					@foreach(json_decode($question->answers, true) as $k => $answer)
-						@if( $loop->index % 4 == 0 && !($loop->first))
+						@if( $loop->index % 8 == 0 && !($loop->first))
 							<div class="mobile-js-remove"> 
 								<div class="clearfix mobile-hide">
 									<div class="answer-title" style="width: 20%;">
