@@ -9,7 +9,7 @@ $(document).ready(function(){
 
      // Step 3: Start scope request.
     $('.register-civic-button').click(function () {
-    	if( !$('#register-agree:checked').length || $(this).hasClass('loading') ) {
+    	if( $(this).closest('#signin-form-popup-left').length && ( !$('#register-agree:checked').length || $(this).hasClass('loading') ) ) {
     		return;
     	}
     	$(this).addClass('loading');

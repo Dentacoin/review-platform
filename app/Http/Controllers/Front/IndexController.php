@@ -16,7 +16,6 @@ class IndexController extends FrontController
 			return redirect( $this->user->getLink() );
 		}
 
-
 		$featured = User::where('is_dentist', 1)->where('status', 'approved')->orderBy('avg_rating', 'DESC');
 		$refined = clone $featured;
 		if( !empty($this->user) ) {
