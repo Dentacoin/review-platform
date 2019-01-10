@@ -4140,10 +4140,10 @@ header {
         left: 10px;
         font-size: 20px; } }
   .alert.alert-warning {
-    border-color: #7b1a23;
-    color: #7b1a23; }
+    border-color: #f33651;
+    color: #f33651; }
     .alert.alert-warning strong {
-      color: #7b1a23; }
+      color: #f33651; }
     .alert.alert-warning:before {
       font-family: "Font Awesome 5 Free";
       font-weight: 900;
