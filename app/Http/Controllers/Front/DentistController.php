@@ -188,7 +188,7 @@ class DentistController extends FrontController
 
                 $real_text = strip_tags(Request::input( 'answer' ));
                 $real_text_words = explode(' ', $real_text);
-                if( empty(Request::input( 'youtube_id' )) && (mb_strlen($real_text)<100 || count($real_text_words)<20) ) {
+                if( empty(Request::input( 'youtube_id' )) && (mb_strlen($real_text)<50 || count($real_text_words)<10) ) {
                     $ret['short_text'] = true;
                     return Response::json( $ret );
 
