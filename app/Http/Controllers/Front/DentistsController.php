@@ -21,7 +21,7 @@ class DentistsController extends FrontController
 
     public function search($locale=null, $query=null, $latlon=null, $page=null, $ajax=null) {
 
-        // $noAddress = User::where('is_dentist', 1)->where('status', 'approved')->whereNotNull('address')->whereNull('lat')->take(100)->get();
+        // $noAddress = User::where('is_dentist', 1)->where('status', 'approved')->whereNotNull('city_id')->whereNull('lat')->take(300)->get();
         // foreach ($noAddress as $user) {
         //     $query = $user->country->name.', '.$user->city->name.', '.($user->zip ? $user->zip.', ' : null).$user->address;
         //     echo $query.'<br/>';
@@ -132,8 +132,15 @@ class DentistsController extends FrontController
         $items = $items->take(100)->get(); //->take($ppp)->skip( ($page-1)*$ppp )
 
         $staticmap = 'https://maps.googleapis.com/maps/api/staticmap?center='.$lat.','.$lon.'&zoom=13&size=670x188&maptype=roadmap&key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk';
-        foreach ($items->slice(0, 10) as $k => $item) {
-            $staticmap .= '&markers=color:blue%7Clabel:'.($k+1).'%7C'.$item->lat.','.$item->lon;
+        $i=1;
+        $foundOnMap = false;
+        foreach ($items->where('address', '!=', '')->slice(0, 10) as $item) {
+            $foundOnMap = true;
+            $staticmap .= '&markers=color:blue%7Clabel:'.($i).'%7C'.$item->lat.','.$item->lon;
+            $i++;
+        }
+        if(!$foundOnMap) {
+            $staticmap = null;
         }
        
 

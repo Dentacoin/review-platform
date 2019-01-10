@@ -67,10 +67,20 @@
 
     <div class="search-results-wrapper container">
 
-    	@if($items->isNotEmpty() && $mode=='map')
+    	@if($items->isNotEmpty() && $staticImageUrl && $mode=='map')
     		<a href="javascript:;" class="results-static-map" data-popup="map-results-popup">
 	    		<img src="{{ $staticImageUrl }}" />
 	    	</a>    		
+    	@endif
+
+    	@if($user && $items->where('id', $user->id)->count())
+    		<div class="alert alert-info">
+    			{!! nl2br(trans('trp.page.search.no-address-dentist',[
+    				'link' => '<a href="{{ $user->getLink() }}?open-edit=1">',
+    				'endlink' => '</a>',
+    			])) !!}
+    		</div>
+    		<br/>
     	@endif
 
     	@foreach($items as $dentist)
@@ -311,38 +321,48 @@
 					@if($items->isNotEmpty())
 				    	@foreach($items as $dentist)
 
-							<a href="{{ $dentist->getLink() }}" class="result-container dentist clearfix" lat="{{ $dentist->lat }}" lon="{{ $dentist->lon }}" dentist-id="{{ $dentist->id }}">
-								<div class="avatar{!! $dentist->hasimage ? '' : ' default-avatar' !!}" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
-									@if($dentist->is_partner)
-										<img src="img/mini-logo.png"/>
-									@endif
-								</div>
-								<div class="media-right">
-									<h4>
-										{{ $dentist->getName() }}
-									</h4>
-									<span class="type">
-										{{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}
-									</span>
-							    	@if( $time = $dentist->getWorkHoursText() )
-							    		<p>
-							    			<img src="{{ url('img-trp/open.png') }}">
-							    			{!! $time !!}
-							    		</p>
-							    	@endif
-								    <div class="ratings">
-										<div class="stars">
-											<div class="bar" style="width: {{ $dentist->avg_rating/5*100 }}%;">
-											</div>
-										</div>
-										<span class="rating">
-											({{ intval($dentist->ratings) }} reviews)
-										</span>
+				    		@if($dentist->address)
+
+								<a href="{{ $dentist->getLink() }}" class="result-container dentist clearfix" lat="{{ $dentist->lat }}" lon="{{ $dentist->lon }}" dentist-id="{{ $dentist->id }}">
+									<div class="avatar{!! $dentist->hasimage ? '' : ' default-avatar' !!}" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
+										@if($dentist->is_partner)
+											<img src="{{ url('img-trp/mini-logo.png') }}">
+										@endif
 									</div>
-								</div>
-							</a>
+									<div class="media-right">
+										<h4>
+											{{ $dentist->getName() }}
+										</h4>
+										<span class="type">
+											{{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}
+										</span>
+								    	@if( $time = $dentist->getWorkHoursText() )
+								    		<p>
+								    			<img src="{{ url('img-trp/open.png') }}">
+								    			{!! $time !!}
+								    		</p>
+								    	@endif
+									    <div class="ratings">
+											<div class="stars">
+												<div class="bar" style="width: {{ $dentist->avg_rating/5*100 }}%;">
+												</div>
+											</div>
+											<span class="rating">
+												({{ intval($dentist->ratings) }} reviews)
+											</span>
+										</div>
+									</div>
+								</a>
+
+							@endif
 
 						@endforeach
+
+						@if($items->where('address', '')->count())
+							<div class="alert alert-info mobile">
+								{!! nl2br(trans('trp.page.search.no-address')) !!}
+							</div>
+						@endif
 					@else
 						<div class="alert alert-info">
 							{!! nl2br(trans('trp.page.search.no-results')) !!}

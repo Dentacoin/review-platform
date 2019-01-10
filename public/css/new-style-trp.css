@@ -352,6 +352,12 @@ h4 {
       .alert:before {
         left: 10px;
         font-size: 20px; } }
+  .alert.mobile {
+    padding: 10px 10px 10px 40px;
+    font-size: 14px; }
+    .alert.mobile:before {
+      left: 10px;
+      font-size: 20px; }
   .alert.alert-warning {
     border-color: #7b1a23;
     color: #7b1a23; }
@@ -2092,7 +2098,9 @@ textarea.input {
       #map-results-popup .popup-inner .result-container .avatar img {
         position: absolute;
         top: 5px;
-        left: 5px; }
+        left: 5px;
+        width: 18px;
+        height: 18px; }
     #map-results-popup .popup-inner .result-container .media-right {
       width: 170px;
       padding: 6px 7px; }
@@ -3094,6 +3102,11 @@ textarea.input {
 .search-results-wrapper {
   position: relative;
   z-index: 100; }
+  .search-results-wrapper .alert {
+    max-width: 670px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px; }
 
 .page-dentist .home-search-form,
 .page-dentists .home-search-form {

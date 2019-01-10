@@ -33,6 +33,10 @@ $(document).ready(function(){
         $('.edit-button').toggle();
     } );
 
+    if(getUrlParameter('open-edit')) {
+        $('.open-edit').first().trigger('click');
+    }
+
     $('.header-info i').click( function() {
         $('.home-search-form').show();
         $(this).hide();

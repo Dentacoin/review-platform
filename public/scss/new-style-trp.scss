@@ -2489,6 +2489,8 @@ textarea.input {
 					position: absolute;
 					top: 5px;
 					left: 5px;
+					width: 18px;
+					height: 18px;
 				}
 			}
 
@@ -4003,6 +4005,13 @@ textarea.input {
 .search-results-wrapper {
 	position: relative;
     z-index: 100;
+
+    .alert {
+	    max-width: 670px;
+	    margin-left: auto;
+	    margin-right: auto;
+	    margin-bottom: 20px;
+    }
 }
 
 .page-dentist,

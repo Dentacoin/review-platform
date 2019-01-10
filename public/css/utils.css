@@ -352,6 +352,12 @@ h4 {
       .alert:before {
         left: 10px;
         font-size: 20px; } }
+  .alert.mobile {
+    padding: 10px 10px 10px 40px;
+    font-size: 14px; }
+    .alert.mobile:before {
+      left: 10px;
+      font-size: 20px; }
   .alert.alert-warning {
     border-color: #7b1a23;
     color: #7b1a23; }
