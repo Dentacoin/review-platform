@@ -42,6 +42,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'name',
         'description',
         'zip',
+        'city_name',
         'address',
         'phone',
         'website',
@@ -375,25 +376,50 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->attributes['slug'] = $this->makeSlug();
         //
     }
-    public function setAddressAttribute($value) {
-        $this->attributes['address'] = $value;
-        if( $this->country && $this->city) {
-            $query = $this->country->name.', '.$this->city->name.', '.($this->zip ? $this->zip.', ' : null).$this->address;
-            //dd($query);
-
-            $geores = \GoogleMaps::load('geocoding')
-            ->setParam ([
-                'address'    => $query,
-            ])
-            ->get();
-
-            $geores = json_decode($geores);
-            //dd($geores);
-            if(!empty($geores->results[0]->geometry->location)) {
-                $this->attributes['lat'] = $geores->results[0]->geometry->location->lat;
-                $this->attributes['lon'] = $geores->results[0]->geometry->location->lng;
-            }    
+    public function setAddressAttribute($newvalue) {
+        $this->attributes['address'] = $newvalue;
+        $this->attributes['lat'] = null;
+        $this->attributes['lon'] = null;
+        $this->attributes['city_name'] = null;
+        if( $this->country) {
+            $info = self::validateAddress($this->country->name, $newvalue);
+            if(is_array($info)) {
+                foreach ($info as $key => $value) {
+                    $this->attributes[$key] = $value;
+                }
+            }
         }
+    }
+
+    public static function validateAddress($country, $address) {
+
+        $query = $country.', '.$address;
+        //dd($query);
+
+        $geores = \GoogleMaps::load('geocoding')
+        ->setParam ([
+            'address'    => $query,
+        ])
+        ->get();
+
+        $geores = json_decode($geores);
+        //dd($geores);
+        if(!empty($geores->results[0]->geometry->location)) {
+            if( in_array('street_address', $geores->results[0]->types) || in_array('street_number', $geores->results[0]->types) ) {
+                $ret = [];
+                $ret['lat'] = $geores->results[0]->geometry->location->lat;
+                $ret['lon'] = $geores->results[0]->geometry->location->lng;
+                foreach ($geores->results[0]->address_components as $ac) {
+                    if(in_array('locality', $ac->types)) {
+                        $ret['city_name'] = $ac->long_name;
+                        break;
+                    }
+                }
+                return $ret;
+            }
+        }    
+
+        return null;
     }
 
     private function makeSlug() {

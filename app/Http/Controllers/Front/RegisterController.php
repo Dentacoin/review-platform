@@ -8,7 +8,6 @@ use App\Models\UserCategory;
 use App\Models\UserInvite;
 use App\Models\UserTeam;
 use App\Models\Country;
-use App\Models\City;
 use App\Models\Civic;
 use Carbon\Carbon;
 
@@ -96,7 +95,7 @@ class RegisterController extends FrontController
         $validator = Validator::make(Request::all(), [
             'mode' => array('required', 'in:dentist,clinic,in-clinic'),
             'country_id' => array('required', 'exists:countries,id'),
-            'city_id' => array('required', 'exists:cities,id'),
+            //'city_id' => array('required', 'exists:cities,id'),
             //'zip' => array('required', 'string'),
             'address' =>  array('required', 'string'),
             'website' =>  array('required', 'url'),
@@ -119,11 +118,24 @@ class RegisterController extends FrontController
                 $ret['messages'][$field] = implode(', ', $errors);
             }
 
-            return Response::json( $ret );
         } else {
-            return Response::json( ['success' => true] );
+            $info = User::validateAddress( Country::find(request('country_id')), request('address') );
+            if(empty($info)) {
+                $ret = array(
+                    'success' => false,
+                    'messages' => array(
+                        'address' => trans('trp.common.invalid-address')
+                    )
+                );
+            } else {
+                $ret = array(
+                    'success' => true
+                );
+            }
+
         }
 
+        return Response::json( $ret );
     }
 
 
@@ -224,7 +236,7 @@ class RegisterController extends FrontController
             'password' => array('required', 'min:6'),
             'password-repeat' => 'required|same:password',
             'country_id' => array('required', 'exists:countries,id'),
-            'city_id' => array('required', 'exists:cities,id'),
+            //'city_id' => array('required', 'exists:cities,id'),
             //'zip' => array('required', 'string'),
             'address' =>  array('required', 'string'),
             'website' =>  array('required', 'url'),
@@ -307,7 +319,7 @@ class RegisterController extends FrontController
             $newuser->name = Request::input('name');
             $newuser->email = Request::input('email');
             $newuser->country_id = Request::input('country_id');
-            $newuser->city_id = Request::input('city_id');
+            //$newuser->city_id = Request::input('city_id');
             $newuser->password = bcrypt(Request::input('password'));
             $newuser->phone = $phone;
             $newuser->platform = 'trp';

@@ -77,18 +77,12 @@ class UsersController extends AdminController
     		'country_id' => [
     			'type' => 'country',
     		],
-            'city_id' => [
-                'type' => 'city',
-            ],
             'gender' => [
                 'type' => 'select',
                 'values' => $this->genders
             ],
     		'birthyear' => [
     			'type' => 'text'
-    		],
-    		'zip' => [
-    			'type' => 'text',
     		],
     		'address' => [
     			'type' => 'text',

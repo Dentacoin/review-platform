@@ -196,7 +196,7 @@
 								</a>
 							</div>
 						</div>
-						<div class="sign-in-step" id="step-2">
+						<div class="sign-in-step address-suggester-wrapper" id="step-2">
 
 							<div class="mobile-radios">
 								<div class="radio-label">
@@ -230,12 +230,19 @@
 					  				<option>-</option>
 					  			@endif
 					  			@foreach( $countries as $country )
-					  				<option value="{{ $country->id }}" data-code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+					  				<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
 					  			@endforeach
 					  		</select>
-                            {{ Form::select( 'city_id' , $country_id ? ['' => '-'] + \App\Models\City::where('country_id', $country_id)->get()->pluck('name', 'id')->toArray() : ['' => trans('front.common.select-country')] , $city_id , array('id' => 'dentist-city', 'class' => 'input city-select') ) }}
 
-							<input type="text" name="address" id="dentist-address" placeholder="Address" class="input">
+		                	<div>
+						    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="Cty, Street">
+		                        <div class="suggester-map-div" style="height: 200px; display: none; margin: 10px 0px; background: transparent;">
+		                        </div>
+		                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
+		                        	{!! nl2br(trans('trp.common.invalid-address')) !!}
+		                        </div>
+		                    </div>
+
 							<div class="flex input-flex">
 								<div>
 				    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>

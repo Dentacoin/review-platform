@@ -31,7 +31,9 @@
 			</span>
 
 			<div class="clearfix list">
-				<a href="{{ getLangUrl('dentists/worldwide') }}" class="special">Show Dentacoin Partners Worldwide</a>
+				<a href="{{ getLangUrl('dentists/worldwide') }}" class="special">
+					{!! nl2br(trans('trp.common.search-partners')) !!}
+				</a>
 			</div>
 		</div>
 	</div>

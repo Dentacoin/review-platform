@@ -53,12 +53,21 @@
 						<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
 					</div>		
 				</div>
-				<div class="profile-details">
-					<div class="flex">
-						{{ Form::select( 'country_id' , \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'input country-select') ) }}
-						{{ Form::select( 'city_id' , $user->country_id ? \App\Models\City::where('country_id', $user->country_id)->get()->pluck('name', 'id')->toArray() : ['' => trans('vox.common.select-country')] , $user->city_id , array('class' => 'input city-select') ) }}
-					</div>
-				    <input type="text" name="address" class="input" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
+				<div class="profile-details address-suggester-wrapper">
+                	<select class="input country-select" name="country_id">
+                		<option value="">-</option>
+                		@foreach(\App\Models\Country::get() as $country)
+                			<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $user->country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+                		@endforeach
+                	</select>
+				    <div>
+				    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
+                        <div class="suggester-map-div" {!! $user->lat ? 'lat="'.$user->lat.'" lon="'.$user->lon.'"' : '' !!} style="height: 100px; display: none; margin: 10px 0px;">
+                        </div>
+                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
+                        	{!! nl2br(trans('trp.common.invalid-address')) !!}
+                        </div>
+                    </div>
 			    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time">
 			    	<div class="flex phone-widget">
 				    	<span class="phone-code-holder">{{ $user->country_id ? '+'.$user->country->phone_code : '' }}</span>
@@ -224,7 +233,7 @@
 						<input type="file" name="image" id="add-avatar" upload-url="{{ getLangUrl('profile/info/upload') }}">
 					</label>
 
-					<div class="media-right">
+					<div class="media-right address-suggester-wrapper">
 						@if(!$user->is_clinic)
 							<div class="flex">
 								{{ Form::select( 'title' , [
@@ -237,11 +246,20 @@
 						@else
 							<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
 						@endif
-						<div class="flex">
-							{{ Form::select( 'country_id' , \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'input country-select') ) }}
-				    		{{ Form::select( 'city_id' , $user->country_id ? \App\Models\City::where('country_id', $user->country_id)->get()->pluck('name', 'id')->toArray() : ['' => trans('vox.common.select-country')] , $user->city_id , array('class' => 'input city-select') ) }}
-						</div>
-				    	<input type="text" name="address" class="input" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
+						<select class="input country-select" name="country_id">
+	                		<option value="">-</option>
+	                		@foreach(\App\Models\Country::get() as $country)
+	                			<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $user->country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+	                		@endforeach
+	                	</select>
+	                	<div>
+					    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
+	                        <div class="suggester-map-div" {!! $user->lat ? 'lat="'.$user->lat.'" lon="'.$user->lon.'"' : '' !!} style="height: 100px; display: none; margin: 10px 0px;">
+	                        </div>
+	                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
+	                        	{!! nl2br(trans('trp.common.invalid-address')) !!}
+	                        </div>
+	                    </div>
 				    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time">
 				    	<div class="flex phone-widget">
 					    	<span class="phone-code-holder">{{ $user->country_id ? '+'.$user->country->phone_code : '' }}</span>

@@ -469,8 +469,9 @@ class DentistController extends FrontController
             ];
         }
 
+        $addGM = false;
         if($item->lat && $item->lon) {
-            $view_params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
+            $addGM = true;
         }
 
 
@@ -480,6 +481,13 @@ class DentistController extends FrontController
             $view_params['csscdn'] = [
                 'https://hosted-sip.civic.com/css/civic-modal.min.css',
             ];
+
+            $view_params['js'][] = 'address.js';
+            $addGM = true;
+        }
+
+        if( $addGM ) {
+            $view_params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
         }
 
         return $this->ShowView('user', $view_params);

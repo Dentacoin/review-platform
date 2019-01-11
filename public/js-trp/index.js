@@ -2,7 +2,6 @@ var slider = null;
 var sliderTO = null;
 var displaySuggestions;
 var sendSuggestions;
-var autocomplete;
 
 jQuery(document).ready(function($){
 

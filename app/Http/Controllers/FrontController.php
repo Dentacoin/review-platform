@@ -240,16 +240,26 @@ class FrontController extends BaseController
                 if( array_search('upload.js', $params['js'])===false ) {
                     $params['js'][] = 'upload.js';                    
                 }
+                if( array_search('address.js', $params['js'])===false ) {
+                    $params['js'][] = 'address.js';                    
+                }
             } else {
-                $params['js'] = ['login.js', 'upload.js'];
+                $params['js'] = ['login.js', 'upload.js', 'address.js'];
             }
             $params['countries'] = Country::get();
             
             if(is_array($params['jscdn'])) {
-                $params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
+
+                if( array_search('https://hosted-sip.civic.com/js/civic.sip.min.js', $params['jscdn'])===false ) {
+                    $params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
+                }
+                if( array_search('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', $params['jscdn'])===false ) {
+                    $params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
+                }
             } else {
                 $params['jscdn'] = [
                     'https://hosted-sip.civic.com/js/civic.sip.min.js',
+                    'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en',
                 ];
             }
             

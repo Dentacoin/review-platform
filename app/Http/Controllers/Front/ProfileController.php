@@ -69,16 +69,12 @@ class ProfileController extends FrontController
                 'type' => 'text',
                 'required' => true,
             ],
-            'address' => [
-                'type' => 'text',
-                'required' => true,
-            ],
             'country_id' => [
                 'type' => 'country',
                 'required' => true,
             ],
-            'city_id' => [
-                'type' => 'city',
+            'address' => [
+                'type' => 'text',
                 'required' => true,
             ],
             'work_hours' => [
@@ -569,6 +565,25 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 }
                 $this->user->save();
 
+                if($this->user->is_dentist && !$this->user->lat) {
+
+                    if( Request::input('json') ) {
+                        $ret = [
+                            'success' => false,
+                            'messages' => [
+                                'address' => trans('trp.common.invalid-address')
+                            ]
+                        ];
+                        return Response::json($ret);
+                    }
+
+                    return redirect( getLangUrl('profile/info') )
+                    ->withInput()
+                    ->withErrors([
+                        'address' => trans('trp.common.invalid-address')
+                    ]);
+                }
+
                 if( Request::input('json') ) {
                     $ret = [
                         'success' => true,
@@ -603,6 +618,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 'profile.js',
                 'upload.js',
             ],
+
         ]);
     }
 

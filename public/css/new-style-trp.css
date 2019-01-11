@@ -4087,3 +4087,6 @@ textarea.input {
       border-bottom: 1px solid #dadada; }
       .suggester-wrapper .suggest-results a:hover, .suggester-wrapper .suggest-results a.active {
         background: aliceblue; }
+
+.pac-container {
+  z-index: 2000 !important; }
