@@ -50,7 +50,11 @@ class DentistsController extends FrontController
         $items = User::where('is_dentist', 1)->where('status', 'approved');
         $mode = 'map';
 
-        if(request('byname')) {
+        if($query=='worldwide') {
+            request()->merge(['partner' => 1]);
+            $lat = 30;
+            $lon = 0;
+        } else if(request('byname')) {
             $items = $items->where('name', 'like', $query.'%');
             $mode = 'name';
         } else {
@@ -131,7 +135,10 @@ class DentistsController extends FrontController
 
         $items = $items->take(100)->get(); //->take($ppp)->skip( ($page-1)*$ppp )
 
-        $staticmap = 'https://maps.googleapis.com/maps/api/staticmap?center='.$lat.','.$lon.'&zoom=13&size=670x188&maptype=roadmap&key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk';
+        $zoom = $query=='worldwide' ? 1 : 13;
+        $size = $query=='worldwide' ? '670x288' : '670x188';
+
+        $staticmap = 'https://maps.googleapis.com/maps/api/staticmap?center='.$lat.','.$lon.'&zoom='.$zoom.'&size='.$size.'&maptype=roadmap&key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk';
         $i=1;
         $foundOnMap = false;
         foreach ($items->where('address', '!=', '')->slice(0, 10) as $item) {
@@ -145,6 +152,8 @@ class DentistsController extends FrontController
        
 
 		return $this->ShowView('search', [
+            'worldwide' => $query=='worldwide',
+            'zoom' => $query=='worldwide' ? 2 : 13,
             'mode' => $mode,
             'staticImageUrl' => $staticmap,
             'query' => $query,

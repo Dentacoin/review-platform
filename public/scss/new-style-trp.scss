@@ -668,6 +668,10 @@ body.blur {
     		padding-left: 0px;
     	}
 
+    	&.special {
+    		color: #126585;
+    	}
+
     	&.active,
     	&:hover {
     		background-color: #d8eaf5;
@@ -2383,7 +2387,7 @@ textarea.input {
 		    padding: 8px 10px;
 		    font-size: 14px;
 		    border-radius: 5px;
-		    z-index: 1;
+		    z-index: 5;
 		    top: 5px;
 		    right: 6px;
 
@@ -2433,6 +2437,7 @@ textarea.input {
 			overflow-y: scroll;
 			padding-top: 10px;
 		    box-shadow: inset 15px -1px 22px -3px rgba(0,0,0,0.2);;
+		    max-height: 90vh;
 
 		    @media #{$phone} {
 		    	display: none;
@@ -2440,8 +2445,23 @@ textarea.input {
 		}
 
 		.flex-7 {
+			position: relative;
+
+	    	.alert {
+	    		position: absolute;
+	    		left: 0;
+	    		top: 0;
+	    		right: 0px;
+	    		z-index: 1;
+	    	}
 		    @media #{$phone} {
 		    	height: 100%;
+
+		    	.alert {
+		    		left: 5px;
+		    		top: 5px;
+		    		right: 114px;
+		    	}
 		    }
 		}
 
@@ -2501,6 +2521,7 @@ textarea.input {
 					left: 5px;
 					width: 18px;
 					height: 18px;
+					background: transparent;
 				}
 			}
 

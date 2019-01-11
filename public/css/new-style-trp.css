@@ -839,6 +839,8 @@ body.blur .site-content {
     @media screen and (max-width: 768px) {
       .results a {
         padding-left: 0px; } }
+    .results a.special {
+      color: #126585; }
     .results a.active, .results a:hover {
       background-color: #d8eaf5; }
   .results .locations-results {
@@ -2022,7 +2024,7 @@ textarea.input {
     padding: 8px 10px;
     font-size: 14px;
     border-radius: 5px;
-    z-index: 1;
+    z-index: 5;
     top: 5px;
     right: 6px; }
     #map-results-popup .popup-inner .close-map i {
@@ -2056,13 +2058,26 @@ textarea.input {
     max-width: 320px;
     overflow-y: scroll;
     padding-top: 10px;
-    box-shadow: inset 15px -1px 22px -3px rgba(0, 0, 0, 0.2); }
+    box-shadow: inset 15px -1px 22px -3px rgba(0, 0, 0, 0.2);
+    max-height: 90vh; }
     @media screen and (max-width: 768px) {
       #map-results-popup .popup-inner .flex-3 {
         display: none; } }
-  @media screen and (max-width: 768px) {
-    #map-results-popup .popup-inner .flex-7 {
-      height: 100%; } }
+  #map-results-popup .popup-inner .flex-7 {
+    position: relative; }
+    #map-results-popup .popup-inner .flex-7 .alert {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0px;
+      z-index: 1; }
+    @media screen and (max-width: 768px) {
+      #map-results-popup .popup-inner .flex-7 {
+        height: 100%; }
+        #map-results-popup .popup-inner .flex-7 .alert {
+          left: 5px;
+          top: 5px;
+          right: 114px; } }
   #map-results-popup .popup-inner #map-mobile-tooltip {
     display: none;
     position: fixed;
@@ -2107,7 +2122,8 @@ textarea.input {
         top: 5px;
         left: 5px;
         width: 18px;
-        height: 18px; }
+        height: 18px;
+        background: transparent; }
     #map-results-popup .popup-inner .result-container .media-right {
       width: 170px;
       padding: 6px 7px; }

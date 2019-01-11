@@ -85,9 +85,11 @@ jQuery(document).ready(function($){
 						lat: parseFloat($('#search-map').attr('lat')), 
 						lng: parseFloat($('#search-map').attr('lon'))
 					},
-					zoom: 13,
+					zoom: parseInt($('#search-map').attr('zoom')),
 					backgroundColor: 'none'
 				});
+
+				console.log( parseInt($('#search-map').attr('zoom')) );
 
 				mapMarkers = {};
 				var bounds = new google.maps.LatLngBounds();
@@ -133,17 +135,29 @@ jQuery(document).ready(function($){
 							var container = $('#map-results-popup .result-container[dentist-id="'+this.id+'"]');
 							for(i=0;i<3;i++) {
 								container.fadeTo('slow', 0).fadeTo('slow', 1);
-							}							
+							}
+
+							var st = 0;
+							var prev = container.prev();
+							while(prev.length) {
+								st += prev.height() + 10;
+								prev = prev.prev();
+							}
+				            $('#map-results-popup .flex-3').animate({
+				                scrollTop: st
+				            }, 500);
 						}
 					}).bind(mapMarkers[did]) );
 
 				} );
 
 
-				if( $('#map-results-popup .result-container[lat]').length ) {
-					search_map.fitBounds(bounds);
-				} else {
-					search_map.setZoom(12);
+				if(!$('#search-map').attr('worldwide')) {
+					if( $('#map-results-popup .result-container[lat]').length ) {
+						search_map.fitBounds(bounds);
+					} else {
+						search_map.setZoom(12);
+					}
 				}
 
 				$('#map-results-popup .result-container').off('mouseover').mouseover( function() {
