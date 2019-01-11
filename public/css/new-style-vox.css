@@ -4306,3 +4306,64 @@ header {
           line-height: 10px; } }
   .new-auth.pre-login form {
     padding: 0px 15px; }
+
+.suspended-popup {
+  background: rgba(228, 243, 247, 0.84); }
+  .suspended-popup .popup-inner {
+    width: 1135px;
+    padding-left: 335px;
+    background-image: url("../new-vox-img/suspended-popup-background.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    height: 450px;
+    padding-right: 50px;
+    display: flex;
+    position: absolute;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.2); }
+    @media screen and (max-width: 1200px) {
+      .suspended-popup .popup-inner {
+        width: 970px; } }
+    @media screen and (max-width: 1024px) {
+      .suspended-popup .popup-inner {
+        width: 100%;
+        background-image: url("../new-vox-img/suspended-popup-background-mobile.png");
+        background-position: 50% 100%;
+        height: 100%;
+        top: 0;
+        transform: none;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        padding: 10px;
+        border-radius: 0px; } }
+    @media screen and (max-width: 1024px) {
+      .suspended-popup .popup-inner .flex {
+        width: 100%; } }
+    .suspended-popup .popup-inner h4 {
+      text-align: center;
+      margin-top: 30px; }
+      @media screen and (max-width: 768px) {
+        .suspended-popup .popup-inner h4 {
+          font-size: 16px; } }
+    .suspended-popup .popup-inner .content {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%); }
+      @media screen and (max-width: 1024px) {
+        .suspended-popup .popup-inner .content {
+          transform: none;
+          top: 20%; } }
+      .suspended-popup .popup-inner .content .h1 {
+        text-align: center;
+        margin-top: 0px;
+        font-family: 'Nunito';
+        font-weight: 800;
+        font-size: 45px; }
+        @media screen and (max-width: 768px) {
+          .suspended-popup .popup-inner .content .h1 {
+            font-size: 35px; } }

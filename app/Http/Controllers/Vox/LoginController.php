@@ -61,6 +61,10 @@ class LoginController extends FrontController
             }
 
             if ($user) {
+                if($user->loggedFromBadIp()) {
+                    return redirect( getLangUrl('login').'?suspended-popup' );
+                }
+
                 Auth::login($user, true);
                 $intended = session()->pull('our-intended');
                 return redirect( $intended ? $intended : getLangUrl('/') );
@@ -239,6 +243,10 @@ class LoginController extends FrontController
                 $newuser->sendTemplate( 12 );
             }
 
+            if($newuser->loggedFromBadIp()) {
+                return redirect( getLangUrl('registration').'?suspended-popup' );
+            }
+
             Auth::login($newuser, true);
             Request::session()->flash('success-message', trans('vox.page.registration.success'));
             return redirect(getLangUrl('welcome-to-dentavox'));
@@ -302,14 +310,23 @@ class LoginController extends FrontController
 
 
                         if ($user) {
-                            Auth::login($user, true);
-                            if(empty($user->civic_id)) {
-                                $user->civic_id = $data['userId'];
-                                $user->save();      
+                            if($user->loggedFromBadIp()) {
+                                
+                                $ret['success'] = false;
+                                $ret['popup'] = 'suspended-popup';
+
+                            } else {
+
+                                Auth::login($user, true);
+                                if(empty($user->civic_id)) {
+                                    $user->civic_id = $data['userId'];
+                                    $user->save();      
+                                }
+
+                                $ret['success'] = true;
+                                $ret['redirect'] = $user->isBanned('vox') ? getLangUrl('profile') : getLangUrl('/');
                             }
 
-                            $ret['success'] = true;
-                            $ret['redirect'] = $user->isBanned('vox') ? getLangUrl('profile') : getLangUrl('/');
                         } else {
                             $ret['message'] = trans('front.common.civic.not-found');
                         }

@@ -103,6 +103,11 @@ class AuthenticateUser extends FrontController
             if(Auth::guard('web')->user()->isBanned('vox')) {
                 return redirect( getLangUrl('banned'));
             }
+
+            if(Auth::guard('web')->user()->loggedFromBadIp()) {
+                Auth::guard('web')->logout();
+                return redirect( getLangUrl('login').'?suspended-popup' );
+            }
             
             $intended = session()->pull('our-intended');
 

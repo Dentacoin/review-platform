@@ -765,7 +765,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public static function checkBlocks($name, $email) {
-
         foreach (Blacklist::get() as $b) {
             if ($b['field'] == 'name') {
                 if (fnmatch(mb_strtolower($b['pattern']), mb_strtolower($name)) == true) {

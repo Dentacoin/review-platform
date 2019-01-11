@@ -66,6 +66,8 @@ $(document).ready(function(){
                                     if(data.weak) {
                                         $('#civic-weak').show();
                                         civicError();
+                                    } else if(data.popup) {
+                                        $('#'+data.popup).addClass('active');
                                     } else if(data.success) {
                                     	if( data.redirect ) {
                                     		window.location.href = data.redirect;	

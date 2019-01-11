@@ -244,6 +244,8 @@ $(document).ready(function(){
             (function( data ) {
                 if(data.success) {
                		window.location.href = data.url;
+                } else if (data.popup) {
+                	$('#'+data.popup).addClass('active');
                 } else {
 					for(var i in data.messages) {
 						$('#'+i+'-error').html(data.messages[i]).show();
@@ -591,6 +593,11 @@ $(document).ready(function(){
 	}
 
 
+    if(getUrlParameter('suspended-popup')) {
+		$('#suspended-popup').addClass('active');
+	}
+
+
 
 });
 
@@ -782,6 +789,20 @@ Upload.prototype.progressHandling = function (event) {
     console.log(percent);
 };
 
+var getUrlParameter = function(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+};
 
 /*!
   * Stickyfill – `position: sticky` polyfill
