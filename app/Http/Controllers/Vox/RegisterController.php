@@ -136,7 +136,6 @@ class RegisterController extends FrontController
                 
                 $newuser->save();
 
-
                 if($newuser->invited_by && $newuser->invitor->canInvite('vox')) {
                     $inv_id = session('invitation_id');
                     if($inv_id) {
@@ -174,6 +173,14 @@ class RegisterController extends FrontController
                 // if( $newuser->email ) {
                 //     $newuser->sendTemplate( 12 );
                 // }
+
+
+                if ($newuser->loggedFromBadIp()) {
+                    return Response::json( [
+                        'success' => false,
+                        'popup' => 'suspended-popup',
+                    ] );
+                }
 
                 Auth::login($newuser, Request::input('remember'));
 
@@ -536,12 +543,18 @@ class RegisterController extends FrontController
                             $newuser->sendTemplate( 12 );
                         }
 
-                        Auth::login($newuser, true);
+                        if ($newuser->loggedFromBadIp()) {
+                            $ret['success'] = false;
+                            $ret['popup'] = 'suspended-popup';
+                        } else {
 
+                            Auth::login($newuser, true);
 
-                        Request::session()->flash('success-message', trans('vox.page.registration.success'));
-                        $ret['success'] = true;
-                        $ret['redirect'] = getLangUrl('welcome-to-dentavox');
+                            Request::session()->flash('success-message', trans('vox.page.registration.success'));
+                            $ret['success'] = true;
+                            $ret['redirect'] = getLangUrl('welcome-to-dentavox');
+                        }
+
                     }
                     
                 }
