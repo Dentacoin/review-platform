@@ -54,10 +54,12 @@
 		    <div class="flickity">
 		    	@foreach( $featured as $dentist )
 					<a class="slider-wrapper" href="{{ $dentist->getLink() }}">
-						<div class="slider-image" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
-							@if($dentist->is_partner)
-								<img src="{{ url('img-trp/mini-logo.png') }}"/>
-							@endif
+						<div class="slider-image-wrapper"> 
+							<div class="slider-image" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
+								@if($dentist->is_partner)
+									<img src="{{ url('img-trp/mini-logo.png') }}"/>
+								@endif
+							</div>
 						</div>
 					    <div class="slider-container">
 					    	<h4>{{ $dentist->getName() }}</h4>

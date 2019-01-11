@@ -16,6 +16,7 @@ use Validator;
 use Auth;
 use Request;
 use Response;
+use Redirect;
 use Mail;
 use Image;
 use Illuminate\Support\Facades\Input;
@@ -24,6 +25,9 @@ use Illuminate\Support\Facades\Input;
 class RegisterController extends FrontController
 {
     public function register($locale=null) {
+
+
+        return Redirect::to( getLangUrl('welcome-dentist'), 301); 
 
         if(!empty($this->user)) {
             return redirect(getLangUrl('profile'));

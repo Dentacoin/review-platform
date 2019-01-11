@@ -179,6 +179,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return explode(' ', $this->name)[0];
     }
 
+    public function getFormattedPhone($forlink=false) {
+        $ret = '+'.$this->country->phone_code.' '.$this->phone;
+        if($forlink) {
+            $ret = str_replace(' ', '', $ret);
+        }
+        return $ret;
+    }
     public function getMaskedPhone() {
         return '0'.substr($this->phone, 0, 3).' **** '.substr($this->phone, mb_strlen($this->phone)-2, 2);
     }

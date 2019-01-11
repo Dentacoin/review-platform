@@ -592,8 +592,6 @@ header {
       vertical-align: middle;
       margin-left: 12px;
       width: 45px; }
-      header .header-info img.default-avatar {
-        filter: brightness(100); }
       @media screen and (max-width: 768px) {
         header .header-info img {
           margin-left: 8px;
@@ -982,7 +980,9 @@ body.blur .site-content {
       .flickity .slider-wrapper .slider-image img {
         position: absolute;
         top: 6px;
-        left: 6px; }
+        left: 6px;
+        width: 18px;
+        height: 18px; }
       .flickity .slider-wrapper .slider-image .deleter {
         position: absolute;
         top: 5px;
@@ -997,6 +997,13 @@ body.blur .site-content {
         .flickity .slider-wrapper .slider-image .deleter i {
           background: none;
           color: white; }
+    .flickity .slider-wrapper .slider-image-wrapper {
+      background: white;
+      padding: 20px;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px; }
+      .flickity .slider-wrapper .slider-image-wrapper .slider-image {
+        border-radius: 5px; }
     .flickity .slider-wrapper.pending .slider-image {
       opacity: 0.7; }
     .flickity .slider-wrapper.pending .deleter {

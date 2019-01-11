@@ -160,11 +160,11 @@
 		    		</div>
 		    	@endif
 		    	@if( $item->phone )
-		    	<a href="tel:{{ $item->phone }}" class="p">
+		    	<a href="tel:{{ $item->getFormattedPhone(true) }}" class="p">
 		    		<div class="img">
 		    			<img class="black-filter" src="{{ url('img-trp/phone.png') }}">
 		    		</div>
-		    		{{ $item->phone }}
+		    		{{ $item->getFormattedPhone() }}
 		    	</a>
 		    	@endif
 		    	@if( $item->website )
@@ -326,11 +326,11 @@
 			    		</div>
 			    	@endif
 			    	@if( $item->phone )
-			    		<a class="p" href="tel:{{ $item->phone }}">
+			    		<a class="p" href="tel:{{ $item->getFormattedPhone(true) }}">
 			    			<div class="img">
 			    				<img class="black-filter" src="{{ url('img-trp/phone.png') }}">
 			    			</div>
-			    			{{ $item->phone }}
+			    			{{ $item->getFormattedPhone() }}
 			    		</a>
 			    	@endif
 			    	@if( $item->website )

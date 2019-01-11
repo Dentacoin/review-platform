@@ -310,10 +310,6 @@ header {
 			margin-left: 12px;
 			width: 45px;
 
-			&.default-avatar {
-			    filter: brightness(100);
-			}
-
 			@media #{$phone} {
 			    margin-left: 8px;
     			width: 25px;
@@ -855,6 +851,7 @@ body.blur {
 			}
 		}
 
+
 		.slider-image {
 			padding-top: 100%;
 			background-size: cover;
@@ -877,6 +874,8 @@ body.blur {
 				position: absolute;
 			    top: 6px;
 			    left: 6px;
+			    width: 18px;
+			    height: 18px;
 			}
 
 			.deleter {
@@ -895,6 +894,17 @@ body.blur {
 			    	background: none;
 			    	color: white;
 			    }
+			}
+		}
+
+
+		.slider-image-wrapper {
+			background: white;
+			padding: 20px;
+			border-top-left-radius: 5px;
+			border-top-right-radius: 5px;
+			.slider-image {
+				border-radius: 5px;
 			}
 		}
 
