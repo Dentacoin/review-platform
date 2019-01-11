@@ -119,7 +119,7 @@ class RegisterController extends FrontController
             }
 
         } else {
-            $info = User::validateAddress( Country::find(request('country_id')), request('address') );
+            $info = User::validateAddress( Country::find(request('country_id'))->name, request('address') );
             if(empty($info)) {
                 $ret = array(
                     'success' => false,

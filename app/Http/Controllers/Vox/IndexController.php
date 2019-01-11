@@ -56,9 +56,6 @@ class IndexController extends FrontController
 			
 			return $this->ShowVoxView('index', array(
 				'users_count' => User::getCount('vox'),
-				'js' => [
-					'index.js'
-				]
 	        ));			
 		}
 	}

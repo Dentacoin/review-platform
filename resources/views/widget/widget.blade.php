@@ -208,7 +208,7 @@
 									<p>
 										<i class="fa fa-map-marker fa-fw"></i> 
 										@if($review->user->city)
-											{{ $review->user->city->name }}, {{ $review->user->country->name }}
+											{{ $review->user->city_name ? $review->user->city_name : $review->user->city->name }}, {{ $review->user->country->name }}
 										@else
 											{{ $review->user->country->name }}
 										@endif

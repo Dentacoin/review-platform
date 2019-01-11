@@ -15,7 +15,7 @@
 			</h2>
                
 
-      			{!! Form::open(array('url' => getLangUrl('profile/info'), 'method' => 'post', 'class' => 'form-horizontal')) !!}
+      			{!! Form::open(array('url' => getLangUrl('profile/info'), 'method' => 'post', 'class' => 'form-horizontal address-suggester-wrapper')) !!}
                     {!! csrf_field() !!}
             		
             		@include('front.errors')
@@ -26,7 +26,23 @@
                             	{{ trans('vox.page.profile.info.form-'.$key) }}
                             </label>
                             <div class="col-md-10">
-                                @if( $info['type'] == 'text')
+	                            @if( $key == 'address')  
+	                            	<div>
+	                                    {{ Form::text( $key, $user->$key, array( 'autocomplete' => 'off', 'class' => 'form-control address-suggester '.($user->is_dentist ? 'full-address' : ' city-only') )) }}
+	                                    <div class="suggester-map-div" {!! $user->lat ? 'lat="'.$user->lat.'" lon="'.$user->lon.'"' : '' !!} style="height: 200px; display: none; margin-top: 10px;">
+	                                    </div>
+	                                    <div class="alert alert-warning geoip-hint" style="display: none;">
+	                                    	{!! nl2br(trans('trp.common.invalid-address')) !!}
+	                                    </div>
+	                                </div>
+	                            @elseif( $info['type'] == 'country')  
+	                            	<select class="form-control country-select" name="country_id">
+	                            		<option value="">-</option>
+	                            		@foreach(\App\Models\Country::get() as $country)
+	                            			<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $user->$key==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+	                            		@endforeach
+	                            	</select>
+                                @elseif( $info['type'] == 'text')
                                     {{ Form::text( $key, $user->$key, array('class' => 'form-control' )) }}
                                 @elseif( $info['type'] == 'number')
                                     {{ Form::number( $key, $user->$key, array('class' => 'form-control' )) }}
@@ -38,10 +54,6 @@
                                     {{ Form::text( $key, !empty($user->$key) ? $user->$key->format('d.m.Y') : '' , array('class' => 'form-control datepicker' , (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled')) }}
                                 @elseif( $info['type'] == 'datetimepicker')
                                     {{ Form::text( $key, !empty($user->$key) ? $user->$key->format('d.m.Y H:i:s') : '' , array('class' => 'form-control datetimepicker' , (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled')) }}
-                                @elseif( $info['type'] == 'country')  
-                                    {{ Form::select( $key , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , $user->$key , array('class' => 'form-control country-select') ) }}
-                                @elseif( $info['type'] == 'city')  
-                                    {{ Form::select( $key , $user->country_id ? \App\Models\City::where('country_id', $user->country_id)->get()->pluck('name', 'id')->toArray() : ['' => trans('vox.common.select-country')] , $user->$key , array('class' => 'form-control city-select') ) }}
                                 @elseif( $info['type'] == 'select')
                                     {{ Form::select( $key , $info['values'] , $user->$key , array('class' => 'form-control'.(!empty($info['multiple']) ? ' multiple' : '')  , (!empty($info['multiple']) ? 'multiple' : 'nothing') => 'multiple')) }}
                                 @endif

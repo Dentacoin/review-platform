@@ -17,6 +17,7 @@ use App\Models\UserInvite;
 use App\Models\VoxCashout;
 use App\Models\Dcn;
 use App\Models\Civic;
+use App\Models\Country;
 use App\Models\UserAsk;
 use App\Models\UserPhoto;
 use App\Models\UserCategory;
@@ -535,6 +536,26 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 ->withErrors($validator);
             } else {
 
+
+
+                if( !User::validateAddress( Country::find( request('country_id')->name ), request('address') ) ) {
+                    if( Request::input('json') ) {
+                        $ret = [
+                            'success' => false,
+                            'messages' => [
+                                'address' => trans('trp.common.invalid-address')
+                            ]
+                        ];
+                        return Response::json($ret);
+                    }
+
+                    return redirect( getLangUrl('profile/info') )
+                    ->withInput()
+                    ->withErrors([
+                        'address' => trans('trp.common.invalid-address')
+                    ]);
+                }
+
                 foreach ($this->profile_fields as $key => $value) {
                     if( Request::exists($key) ) {
                         if($key=='work_hours') {
@@ -564,26 +585,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     }
                 }
                 $this->user->save();
-
-                if($this->user->is_dentist && !$this->user->lat) {
-
-                    if( Request::input('json') ) {
-                        $ret = [
-                            'success' => false,
-                            'messages' => [
-                                'address' => trans('trp.common.invalid-address')
-                            ]
-                        ];
-                        return Response::json($ret);
-                    }
-
-                    return redirect( getLangUrl('profile/info') )
-                    ->withInput()
-                    ->withErrors([
-                        'address' => trans('trp.common.invalid-address')
-                    ]);
-                }
-
+                
                 if( Request::input('json') ) {
                     $ret = [
                         'success' => true,

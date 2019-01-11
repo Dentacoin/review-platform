@@ -150,7 +150,7 @@
 
 					<div class="clearfix reg-step-2-wrapper">
 
-						<div class="col-md-6 register-dentist-left">
+						<div class="col-md-6 register-dentist-left address-suggester-wrapper">
 
 							<div id="register-error-two" class="alert alert-warning" style="display: none;">						
 								{{ trans('front.page.'.$current_page.'.register-error')  }}<br/>
@@ -163,25 +163,22 @@
 						  				<option>-</option>
 						  			@endif
 						  			@foreach( $countries as $country )
-						  				<option value="{{ $country->id }}" data-code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+						  				<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
 						  			@endforeach
 						  		</select>
 						  		<span class="error-message" id="country-error"></span>
 							</div>
-						  	<div class="form-group {{ $errors->has('city_id') ? 'has-error' : '' }}">
-				                {{ Form::select( 'city_id' , $country_id ? ['' => '-'] + \App\Models\City::where('country_id', $country_id)->get()->pluck('name', 'id')->toArray() : ['' => trans('front.common.select-country')] , $city_id , array('id' => 'dentist-city', 'class' => 'form-control city-select') ) }}
-								<span class="error-message" id="city-error"></span>
-							</div>
-
-						  	<div class="form-group {{ $errors->has('zip') ? 'has-error' : '' }}">
-							    <input type="text" name="zip" id="dentist-zip" class="form-control" placeholder="{!! trans('vox.page.register.zip') !!} ">
-							    <span class="error-message" id="zip-error"></span>
-							</div>
+						  	
 
 						  	<div class="form-group {{ $errors->has('address') ? 'has-error' : '' }}">
-							    <input type="text" name="address" id="dentist-address" class="form-control" placeholder="{!! trans('vox.page.register.address') !!} ">
+						    	<input type="text" name="address" id="dentist-address" class="form-control address-suggester" autocomplete="off" placeholder="{!! trans('vox.page.register.address') !!}">
 							    <span class="error-message" id="address-error"></span>
-							</div>                                    
+		                        <div class="suggester-map-div" style="height: 200px; display: none; margin: 10px 0px; background: transparent;">
+		                        </div>
+		                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
+		                        	{!! nl2br(trans('vox.common.invalid-address')) !!}
+		                        </div>
+		                    </div>                          
 
 						  	<div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
 						  		<div class="flex flex-center">

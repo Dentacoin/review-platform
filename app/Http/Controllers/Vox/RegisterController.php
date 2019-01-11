@@ -30,12 +30,9 @@ class RegisterController extends FrontController
                 'name' => array('required', 'min:3'),
                 'email' => array('required', 'email', 'unique:users,email'),
                 'country_id' => array('required', 'numeric'),
-                'city_id' => array('required', 'numeric'),
                 'password' => array('required', 'min:6'),
                 'password-repeat' => 'required|same:password',
                 'country_id' => array('required', 'exists:countries,id'),
-                'city_id' => array('required', 'exists:cities,id'),
-                'zip' => array('required', 'string'),
                 'address' =>  array('required', 'string'),
                 'privacy' =>  array('required', 'accepted'),
                 'photo' =>  array('required'),
@@ -111,16 +108,25 @@ class RegisterController extends FrontController
                     }
                 }
 
+
+                $info = User::validateAddress( $c->name, request('address') );
+                if(empty($info)) {
+                    return Response::json( [
+                        'success' => false, 
+                        'messages' => [
+                            'address' => trans('vox.common.invalid-address')
+                        ]
+                    ] );
+                }
+
                 
                 $newuser = new User;
                 $newuser->name = Request::input('name');
                 $newuser->email = Request::input('email');
                 $newuser->country_id = Request::input('country_id');
-                $newuser->city_id = Request::input('city_id');
                 $newuser->password = bcrypt(Request::input('password'));
                 $newuser->phone = $phone;
                 $newuser->platform = 'vox';
-                $newuser->zip = Request::input('zip');
                 $newuser->address = Request::input('address');
                 $newuser->website = Request::input('website');
                 
@@ -195,10 +201,12 @@ class RegisterController extends FrontController
             return $this->ShowVoxView('register', array(
                 'countries' => Country::get(),
                 'js' => [
-                    'register.js'
+                    'register.js',
+                    'address.js',
                 ],
                 'jscdn' => [
                     'https://hosted-sip.civic.com/js/civic.sip.min.js',
+                    'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en',
                 ],
                 'csscdn' => [
                     'https://hosted-sip.civic.com/css/civic-modal.min.css',

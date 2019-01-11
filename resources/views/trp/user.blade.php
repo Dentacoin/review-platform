@@ -132,7 +132,7 @@
 		    		<div class="img">
 						<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
 					</div>
-					{{ $item->city->name }}, {{ $item->country->name }} 
+					{{ $item->city_name ? $item->city_name : $item->city->name }}, {{ $item->country->name }} 
 					<!-- <span class="gray-text">(2 km away)</span> -->
 				</div>
 		    	@if( $time = $item->getWorkHoursText() )
@@ -307,7 +307,7 @@
 						<div class="img">
 							<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
 						</div>
-						{{ $item->city->name }}, {{ $item->country->name }} 
+						{{ $item->city_name ? $item->city_name : $item->city->name }}, {{ $item->country->name }} 
 						<!-- <span class="gray-text">(2 km away)</span> -->
 					</div>
 			    	@if( $time = $item->getWorkHoursText() )

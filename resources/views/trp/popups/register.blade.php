@@ -235,7 +235,7 @@
 					  		</select>
 
 		                	<div>
-						    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="Cty, Street">
+						    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="City, Street">
 		                        <div class="suggester-map-div" style="height: 200px; display: none; margin: 10px 0px; background: transparent;">
 		                        </div>
 		                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">

@@ -145,7 +145,7 @@
 									</a>
 								</div>
 								<a class="header-a" href="{{ getLangUrl('profile/info') }}" >
-									<img class="header-avatar{!! $user->hasimage ? '' : ' default' !!}" src="{{ $user->getImageUrl(true) }}">
+									<img class="header-avatar" src="{{ $user->getImageUrl(true) }}">
 								</a>
 
 								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
@@ -176,7 +176,7 @@
 											</a>
 										</div>
 										<a class="header-a" href="{{ getLangUrl('login') }}">
-											<img class="header-avatar{!! $prev_user->hasimage ? '' : ' default' !!}" src="{{ $prev_user->getImageUrl(true) }}">
+											<img class="header-avatar" src="{{ $prev_user->getImageUrl(true) }}">
 										</a>
 									</div>
 

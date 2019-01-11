@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\UserInvite;
 use App\Models\VoxCashout;
 use App\Models\Dcn;
+use App\Models\Country;
 use App\Models\Civic;
 use Carbon\Carbon;
 
@@ -45,14 +46,14 @@ class ProfileController extends FrontController
     			'required' => true,
     			'is_email' => true,
     		],
-    		'country_id' => [
-    			'type' => 'country',
+            'country_id' => [
+                'type' => 'country',
                 'required' => true,
-    		],
-    		'city_id' => [
-    			'type' => 'city',
+            ],
+            'address' => [
+                'type' => 'text',
                 'required' => true,
-    		],
+            ],
             'birthyear' => [
                 'type' => 'select',
                 'required' => true,
@@ -78,6 +79,8 @@ class ProfileController extends FrontController
     public function handleMenu() {
         if($this->user->is_dentist) {
             $this->menu['invite'] = trans('vox.page.profile.menu.invite-dentist');
+        } else {
+            unset($this->profile_fields['address']);            
         }
     }
 
@@ -557,12 +560,18 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 	            ->withErrors($validator);
 	        } else {
 
-                $send_validate_email = $this->user->email != Request::input('email');
+                if( !User::validateAddress( Country::find( request('country_id')->name ), request('address') ) ) {
+                    return redirect( getLangUrl('profile/info') )
+                    ->withInput()
+                    ->withErrors([
+                        'address' => trans('trp.common.invalid-address')
+                    ]);
+                }
 
                 foreach ($this->profile_fields as $key => $value) {
-        			$this->user->$key = Request::input($key);
-        		}
-        		$this->user->save();
+                    $this->user->$key = Request::input($key);
+                }
+                $this->user->save();
 
                 Request::session()->flash('success-message', trans('vox.page.profile.info.updated'));
                 return redirect( getLangUrl('profile/info') );
@@ -574,6 +583,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 			'fields' => $this->profile_fields,
             'js' => [
                 'profile.js',
+                'address.js',
+            ],
+            'jscdn' => [
+                'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
             ],
 		]);
     }
