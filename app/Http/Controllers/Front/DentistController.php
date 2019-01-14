@@ -137,7 +137,8 @@ class DentistController extends FrontController
 
 
 
-    public function list($locale=null, $slug, $review_id=null) {
+    public function list($locale=null, $slug) {
+        $review_id = request('review_id');
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
 
         if(empty($item) || !$item->is_dentist) {
@@ -372,7 +373,7 @@ class DentistController extends FrontController
 
         $social_image = $item->getSocialCover();
         $is_review = false;
-        if( request('review_id') && $current_review = $reviews->find(request('review_id')) ) {
+        if( request('review_id') && $current_review = $reviews->where('id', request('review_id'))->first() ) {
             $current_review->generateSocialCover();
             $social_image = $current_review->getSocialCover();
             $is_review = true;
