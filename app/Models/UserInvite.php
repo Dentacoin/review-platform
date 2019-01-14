@@ -12,6 +12,7 @@ class UserInvite extends Model {
         'invited_name',
         'invited_id',
         'rewarded',
+        'join_clinic',
     ];
 
     protected $dates = [

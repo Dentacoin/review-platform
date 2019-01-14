@@ -285,7 +285,6 @@ $(document).ready(function(){
     });
 
     $('input[name="mode"]').change( function() {
-        console.log('ai de');
         var val = $('#mode-in-clinic:checked').length;
         if(val) {
             $('#clinic-widget').show();

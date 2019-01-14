@@ -44,11 +44,6 @@ class EmailTemplate extends Model
             '[metamask] Instructions [/metamask]',
         ];
 
-        if($this->id==1 || $this->id==2) {
-            $codes[] = '[register_reward]';
-            $codes[] = '[verifylink]Click here[/verifylink]';
-        }
-
         if($this->id==3 || $this->id==4) {
             $codes[] = '[register_reward]';
             $codes[] = '[rewardlink]Click here[/rewardlink]';            
@@ -65,6 +60,11 @@ class EmailTemplate extends Model
             $codes[] = '[rating]';
         } 
 
+        if($this->id==1) {
+            $codes[] = '[clinic_name]';
+            $codes[] = '[invitelink]Click here[/invitelink]';
+
+        }
         if($this->id==7 || $this->id==17 || $this->id==25 || $this->id==27) {
             $codes[] = '[friend_name]';
             $codes[] = '[invitelink]Click here[/invitelink]';
@@ -117,7 +117,7 @@ class EmailTemplate extends Model
             $codes[] = '[profile-link]Click here[/profile-link]';
         }
 
-        if($this->id==34) {
+        if($this->id==34 || $this->id==2) {
             $codes[] = '[dentist-name]';
             $codes[] = '[profile-link]Click here[/profile-link]';
         }

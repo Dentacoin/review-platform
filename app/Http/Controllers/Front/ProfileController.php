@@ -439,17 +439,63 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             }
 
         }
+    }
 
-        return $this->ShowView('profile-invite', [
-            'menu' => $this->menu,
-            'css' => [
-                'common-profile.css',
-            ],
-            'js' => [
-                'profile.js',
-                'hello.all.js',
-            ],
-        ]);
+
+    public function invite_new($locale=null) {
+
+        if($this->user->is_dentist && $this->user->status!='approved') {
+            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
+        }
+
+        if( $this->user->canInvite('vox') ) {
+
+            $validator = Validator::make(Request::all(), [
+                'email' => ['required', 'email'],
+                'name' => ['required', 'string'],
+            ]);
+
+            if ($validator->fails()) {
+                return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
+            } else {
+                $already = UserInvite::where([
+                    ['user_id', $this->user->id],
+                    ['invited_email', 'LIKE', Request::Input('email')],
+                ])->first();
+
+                if($already) {
+                    return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited') ] );                    
+                }
+
+                $invitation = new UserInvite;
+                $invitation->user_id = $this->user->id;
+                $invitation->invited_email = Request::Input('email');
+                $invitation->invited_name = Request::Input('name');
+                $invitation->join_clinic = true;
+                $invitation->save();
+
+                //Mega hack
+                $dentist_name = $this->user->name;
+                $dentist_email = $this->user->email;
+                $this->user->name = Request::Input('name');
+                $this->user->email = Request::Input('email');
+                $this->user->save();
+
+                $this->user->sendTemplate( 1 , [
+                    'clinic_name' => $dentist_name,
+                    'invitation_id' => $invitation->id
+                ]);
+
+                //Back to original
+                $this->user->name = $dentist_name;
+                $this->user->email = $dentist_email;
+                $this->user->save();
+
+                return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
+            }
+        }
+        
+        return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
     }
 
 
@@ -961,7 +1007,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $newdentist->save();
 
                 $dentist->sendTemplate(33, [
-                    'clinic-name' => $this->user->getName()
+                    'clinic-name' => $this->user->getName(),
+                    'clinic-link' => $this->user->getLink()
                 ]);
 
                 return Response::json( [

@@ -141,18 +141,6 @@ class Email extends Model
 
 	private function addPlaceholders($content) {
 
-		if($this->template->id==1 || $this->template->id==2) { //Verify
-			$content = str_replace(array(
-				'[register_reward]',
-				'[verifylink]',
-				'[/verifylink]',
-			), array(
-				Reward::getReward('reward_register'),
-				'<a '.$this->button_style.' href="'.getLangUrl('verify/'.$this->user->id.'/'.$this->user->get_token()).'">',
-				'</a>',
-			), $content);
-		}
-
 		if($this->template->id==3 || $this->template->id==4) { //Reward
 			$content = str_replace(array(
 				'[register_reward]',
@@ -201,6 +189,18 @@ class Email extends Model
 				$dentist_or_clinic->name,
 				$review->rating,
 				'<a '.$this->button_style.' href="'.$dentist_or_clinic->getLink().'/'.$review->id.'">',
+				'</a>',
+			), $content);
+		}
+
+		if($this->template->id==1 ) { //Invite
+			$content = str_replace(array(
+				'[clinic_name]',
+				'[invitelink]',
+				'[/invitelink]',
+			), array(
+				$this->meta['clinic_name'],
+				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$this->meta['invitation_id']).'">',
 				'</a>',
 			), $content);
 		}
@@ -315,7 +315,7 @@ class Email extends Model
 				'[/profile-link]',
 			), array(
 				$this->meta['clinic-name'],
-				'<a '.$this->button_style.' href="'.getLangUrl('profile/clinics').'">',
+				'<a '.$this->button_style.' href="'.$this->meta['clinic-link'].'">',
 				'</a>',
 			), $content);
 		}
@@ -329,6 +329,18 @@ class Email extends Model
 			), array(
 				$this->meta['dentist-name'],
 				'<a '.$this->button_style.' href="'.$this->user->getLink().'?tab=about">',
+				'</a>',
+			), $content);
+		}
+
+		if($this->template->id==34 || $this->template->id==2) { //Dentist Wants to Join Clinic
+			$content = str_replace(array(
+				'[dentist-name]',
+				'[profile-link]',
+				'[/profile-link]',
+			), array(
+				$this->meta['dentist-name'],
+				'<a '.$this->button_style.' href="'.$this->meta['profile-link'].'?tab=about">',
 				'</a>',
 			), $content);
 		}
