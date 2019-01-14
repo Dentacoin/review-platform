@@ -75,6 +75,11 @@ jQuery(document).ready(function($){
 		if(id=='popup-login') {
 			id = 'popup-register';
 			switchLogins('login');
+		} else if(id=='popup-register-dentist') {
+			id = 'popup-register';
+			switchLogins('register');
+			$('.form-wrapper').removeClass('chosen');
+			$('.form-button.white-form-button').closest('.form-wrapper').addClass('chosen');
 		} else if(id=='popup-register') {
 			switchLogins('register');
 		} else if(id=='map-results-popup') {

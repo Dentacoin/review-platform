@@ -216,6 +216,7 @@ $reviewRoutes = function () {
 				Route::get('profile/trp', 						'ProfileController@trp');
 				Route::get('profile/wallet', 					'ProfileController@wallet');
 				Route::any('profile/invite', 					'ProfileController@invite');
+				Route::any('profile/invite-new', 				'ProfileController@invite_new');
 				Route::get('profile/asks', 						'ProfileController@asks');
 				Route::get('profile/asks/accept/{id}', 			'ProfileController@asks_accept');
 				Route::get('profile/asks/deny/{id}', 			'ProfileController@asks_deny');

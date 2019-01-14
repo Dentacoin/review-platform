@@ -213,12 +213,25 @@ class RegisterController extends FrontController
                         $sess['invitation_name'] = $inv->invited_name;
                         $sess['invitation_email'] = $inv->invited_email;
                         $sess['invitation_id'] = $inv->id;
+
+                        if($inv->join_clinic) {
+                            $sess['join_clinic'] = true;
+                        }
                     }
                     session($sess);
 
-                    return redirect()->to(getLangurl('/').'?'. http_build_query(['popup'=>'popup-register']))
-                    ->withInput()
-                    ->with('success-message', trans('trp.popup.registration.invitation', [ 'name' => $user->name ]) );
+                    $text = !empty( $sess['join_clinic'] ) ? trans('trp.popup.registration.invitation-clinic', [ 'name' => $user->name ]) : trans('trp.popup.registration.invitation', [ 'name' => $user->name ]);
+
+                    if($user->is_dentist) {
+                        return redirect()->to( $user->getLink().'?'. http_build_query(['popup'=> !empty( $sess['join_clinic'] ) ? 'popup-register-dentist' : 'popup-register' ]))
+                        ->withInput()
+                        ->with('success-message', $text );
+                    } else {
+                        return redirect()->to(getLangurl('/').'?'. http_build_query(['popup'=>'popup-register']))
+                        ->withInput()
+                        ->with('success-message', $text );
+                    }
+
                 }
 
             }
@@ -338,6 +351,19 @@ class RegisterController extends FrontController
             $newuser->save();
 
 
+            $approve_join = 0;
+            $inv_id = session('invitation_id');
+            if($inv_id) {
+                $inv = UserInvite::find($inv_id);
+                if($inv && $inv->user_id == session('invited_by')) {
+                    $inv->invited_id = $newuser->id;
+                    $inv->save();
+                    if($inv->join_clinic) {
+                        $approve_join = 1;
+                    }
+                }
+            }
+
             if( Request::input('clinic_id') ) {
                 $clinic = User::find( Request::input('clinic_id') );
 
@@ -345,11 +371,12 @@ class RegisterController extends FrontController
                     $newclinic = new UserTeam;
                     $newclinic->dentist_id = $newuser->id;
                     $newclinic->user_id = Request::input('clinic_id');
-                    $newclinic->approved = 0;
+                    $newclinic->approved = $approve_join;
                     $newclinic->save();
 
-                    $clinic->sendTemplate(34, [
-                        'dentist-name' =>$newuser->getName()
+                    $clinic->sendTemplate($approve_join ? 2 : 34, [
+                        'dentist-name' => $newuser->getName(),
+                        'profile-link' => $newuser->getLink()
                     ]);
                 }
             }
@@ -360,16 +387,6 @@ class RegisterController extends FrontController
                 $newuser->addImage($img);
             }
             
-
-            $inv_id = session('invitation_id');
-            if($inv_id) {
-                $inv = UserInvite::find($inv_id);
-                if($inv && $inv->user_id == session('invited_by')) {
-                    $inv->invited_id = $newuser->id;
-                    $inv->save();
-                }
-            }
-
             UserCategory::where('user_id', $newuser->id)->delete();
             if(!empty(Request::input('specialization'))) {
                 foreach (Request::input('specialization') as $cat) {

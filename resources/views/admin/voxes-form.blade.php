@@ -155,8 +155,8 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-md-4 "><b>Title</b></label>
-                                <label class="col-md-4 "><b>Survey Descripiton</b></label>
-                                <label class="col-md-4 "><b>Stats Descripiton</b></label>
+                                <label class="col-md-4 "><b>Survey Description</b></label>
+                                <label class="col-md-4 "><b>Stats Description</b></label>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-4">

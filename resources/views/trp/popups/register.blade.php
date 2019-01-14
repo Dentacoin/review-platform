@@ -177,7 +177,6 @@
 						<h2>
 							{!! nl2br(trans('trp.popup.popup-register.signup')) !!}
 						</h2>
-						@include('front.errors')
 						<div id="register-error" class="alert alert-warning" style="display: none;">
 							{{ trans('trp.popup.popup-register.error')  }}<br/>
 							<span>
@@ -185,6 +184,7 @@
 							</span>
 						</div>
 						<div class="sign-in-step active" id="step-1">
+							@include('front.errors')
 							<input type="text" name="name" id="dentist-name" placeholder="{!! nl2br(trans('trp.popup.popup-register.name')) !!}" class="input" value="{{ old('name') }}">
 							<input type="email" name="email" id="dentist-email" placeholder="{!! nl2br(trans('trp.popup.popup-register.email')) !!}" class="input" value="{{ old('email') }}">
 							<input type="password" name="password" id="dentist-password" placeholder="{!! nl2br(trans('trp.popup.popup-register.password')) !!}" class="input" value="{{ old('password') }}">
@@ -198,7 +198,7 @@
 						</div>
 						<div class="sign-in-step address-suggester-wrapper" id="step-2">
 
-							<div class="mobile-radios">
+							<div class="mobile-radios" {!! session('join_clinic') && session('invited_by') ? 'style="display: none;"' : '' !!}>
 								<div class="radio-label">
 								  	<label for="mode-dentist">
 										<i class="far fa-circle"></i>
@@ -218,7 +218,7 @@
 								<div class="radio-label">
 								  	<label for="mode-in-clinic">
 										<i class="far fa-circle"></i>
-								    	<input class="type-radio" type="radio" name="mode" id="mode-in-clinic" value="in-clinic">
+								    	<input class="type-radio" type="radio" name="mode" id="mode-in-clinic" value="in-clinic" {!! session('join_clinic') && session('invited_by') ? 'checked="checked"' : '' !!}>
 								    	{!! nl2br(trans('trp.popup.popup-register.type.associate')) !!}
 								    	
 								  	</label>
@@ -292,7 +292,7 @@
 								</div>
 							</div>
 
-							<div class="search-input" id="clinic-widget">
+							<div class="search-input" id="clinic-widget" {!! session('join_clinic') && session('invited_by') ? 'style="display: none;"' : '' !!}>
 								<label>
 									{!! nl2br(trans('trp.popup.popup-register.join-clinic')) !!}
 									
@@ -301,7 +301,7 @@
 										<input type="text" class="input cilnic-suggester suggester-input" placeholder="{!! nl2br(trans('trp.popup.popup-register.search-clinic')) !!}">
 										<div class="suggest-results">
 										</div>
-										<input type="hidden" class="suggester-hidden" name="clinic_id" value="">
+										<input type="hidden" class="suggester-hidden" name="clinic_id" value="{{ session('join_clinic') && session('invited_by') ? session('invited_by') : '' }}">
 									</div>
 								</label>
 							</div>

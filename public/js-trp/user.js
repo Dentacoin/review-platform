@@ -330,9 +330,10 @@ $(document).ready(function(){
 
     //Invites
 
-    if( $('#invite-patient-form').length ) {
-
-        $('#invite-patient-form').submit( function(e) {
+    if( $('.invite-patient-form').length ) {
+        console.log(1123);
+        $('.invite-patient-form').submit( function(e) {
+            console.log(456);
             e.preventDefault();
 
             if(ajax_is_running) {
@@ -341,21 +342,21 @@ $(document).ready(function(){
 
             ajax_is_running = true;
 
-            $('#invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
+            $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
 
             $.post( 
                 $(this).attr('action'), 
                 $(this).serialize() , 
-                function( data ) {
+                (function( data ) {
                     if(data.success) {
-                        $('#invite-email').val('');
-                        $('#invite-name').val('').focus();
-                        $('#invite-alert').show().addClass('alert-success').html(data.message);
+                        $(this).find('.invite-email').val('');
+                        $(this).find('.invite-name').val('').focus();
+                        $(this).find('.invite-alert').show().addClass('alert-success').html(data.message);
                     } else {
-                        $('#invite-alert').show().addClass('alert-warning').html(data.message);                    
+                        $(this).find('.invite-alert').show().addClass('alert-warning').html(data.message);                    
                     }
                     ajax_is_running = false;
-                }, "json"
+                }).bind(this), "json"
             );
 
             return false;

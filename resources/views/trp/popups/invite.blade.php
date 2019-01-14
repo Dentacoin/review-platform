@@ -43,18 +43,18 @@
 					
 				</p>
 
-				{!! Form::open(array('method' => 'post', 'id' => 'invite-patient-form', 'url' => getLangUrl('profile/invite') )) !!}
+				{!! Form::open(array('method' => 'post', 'class' => 'invite-patient-form', 'url' => getLangUrl('profile/invite') )) !!}
 					{!! csrf_field() !!}
 					<div class="flex">
 						<div class="col">
-							<input type="text" name="name" placeholder="{!! nl2br(trans('trp.popup.popup-invite.name')) !!}" class="input" id="invite-name">
+							<input type="text" name="name" placeholder="{!! nl2br(trans('trp.popup.popup-invite.name')) !!}" class="input invite-name">
 						</div>
 						<div class="col">
-							<input type="email" name="email" placeholder="{!! nl2br(trans('trp.popup.popup-invite.email')) !!}" id="invite-email" class="input">
+							<input type="email" name="email" placeholder="{!! nl2br(trans('trp.popup.popup-invite.email')) !!}" class="input invite-email">
 						</div>
 					</div>
 
-					<div class="alert" id="invite-alert" style="display: none; margin-top: 20px;">
+					<div class="alert invite-alert" style="display: none; margin-top: 20px;">
 					</div>
 					<!--
 						<a href="javascript:;" class="add-patient">+ Add another patient</a>
