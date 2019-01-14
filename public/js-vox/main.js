@@ -160,9 +160,6 @@ $(document).ready(function(){
 				draggable: false
 			});
 
-			var item_to_remove = flickityScales.find('.mobile-js-remove');
-			flickityScales.flickity( 'remove', item_to_remove );
-
 			$('.question-group:visible .flickity').on( 'select.flickity', checkFilledDots);
 			$('.question-group:visible .next-answer').hide();
 		}
