@@ -126,7 +126,7 @@ class VoxController extends FrontController
 			) {
 		    	//I'm doing ASL questions!
 				$doing_asl = true;
-			} else {
+			} else if(!Request::input('goback')) {
 				return redirect( getLangUrl('/') );	
 			}
 		}
@@ -767,6 +767,10 @@ class VoxController extends FrontController
 					VoxAnswer::where('vox_id', $vox->id)
 					->where('user_id', $this->user->id)
 					->where('question_id', $question->id)
+					->delete();
+
+					VoxReward::where('vox_id', $vox->id)
+					->where('user_id', $this->user->id)
 					->delete();
 				}
 			}
