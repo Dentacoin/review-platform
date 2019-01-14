@@ -5505,3 +5505,29 @@ textarea.input {
 .pac-container {
 	z-index: 2000 !important;
 }
+
+.partner-tooltip {
+	display: none;
+    position: absolute;
+    width: 120px;
+    height: 40px;
+    color: white;
+    line-height: 40px;
+    text-align: center;
+    z-index: 1000000;
+    background-color: #07a9df;
+    border-radius: 5px;
+    transform: translateY(-150%) translateX(-20%);
+
+    &:after {
+    	content: '';
+	    position: absolute;
+	    bottom: -5px;
+	    width: 0;
+	    height: 0;
+	    left: 20px;
+	    border-style: solid;
+	    border-width: 5px 5px 0 5px;
+	    border-color: #07a9df transparent transparent transparent;
+    }
+}

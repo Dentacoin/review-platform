@@ -299,7 +299,7 @@
 							<a href="{{ $dentist->getLink() }}" class="result-container dentist clearfix" {!! $dentist->address ? 'lat="'.$dentist->lat.'" lon="'.$dentist->lon.'"' : '' !!} dentist-id="{{ $dentist->id }}">
 								<div class="avatar{!! $dentist->hasimage ? '' : ' default-avatar' !!}" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
 									@if($dentist->is_partner)
-										<img src="{{ url('img-trp/mini-logo.png') }}">
+										<img src="{{ url('img-trp/mini-logo.png') }}" data-tooltip="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}">
 									@endif
 								</div>
 								<div class="media-right">

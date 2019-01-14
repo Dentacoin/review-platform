@@ -194,6 +194,8 @@
 			<i class="fas fa-times-circle"></i>
 		</a>
 
+		<div class="partner-tooltip"></div>
+
 
 		@include('trp/popups/share')
 		@if(empty($user))
