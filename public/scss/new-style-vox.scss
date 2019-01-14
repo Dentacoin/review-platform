@@ -5809,3 +5809,88 @@ header {
         }
     }
 }
+
+@keyframes MoveRightPerson {
+    0% {
+    	opacity: 1;
+        left: -110%;
+    	transform: scale(1);
+		z-index: 2;
+    }
+    20% {
+    	opacity: 1;
+        left: 0px;
+    	transform: scale(1);
+		z-index: 2;
+    }
+    80% {
+    	opacity: 1;
+        left: 0px;
+    	transform: scale(1);
+		z-index: 2;
+    }
+    100% {
+    	opacity: 0;
+    	transform: scale(0);
+		display: none;
+		z-index: 2;
+    }
+}
+
+@keyframes BubbleEffect {
+    0% {
+    	opacity: 1;
+        transform: scale(0);
+		z-index: 2;
+    }
+    20% {
+    	opacity: 1;
+        transform: scale(1);
+		z-index: 2;
+    }
+    80% {
+    	opacity: 1;
+    	transform: scale(1);
+		z-index: 2;
+    }
+    100% {
+    	opacity: 0;
+    	transform: scale(0);
+		display: none;
+		z-index: 2;
+    }
+}
+
+
+
+.mobile-welcome-images {
+	display: none;
+	position: relative;
+
+	@media #{$phone} {
+		display: block;
+	}
+
+	img {
+		position: absolute;
+		right: 0;
+		left: 0;
+		z-index: -1;
+		opacity: 0;
+		width: 100%;
+
+		&.mobile-person-effect {
+
+			&.effect-loaded {
+				animation: MoveRightPerson 2s ease-in-out;
+			}
+		}
+
+		&.mobile-bubble-effect {
+			
+			&.effect-loaded {
+				animation: BubbleEffect 2s ease-in-out;
+			}
+		}
+	}
+}
