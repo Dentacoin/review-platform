@@ -87,4 +87,35 @@ $(document).ready(function(){
         });
     } );
 
+    if ($('.mobile-bubble-effect').length && $('.mobile-person-effect').length && window.innerWidth < 768) {
+
+        function preloadImages(urls, allImagesLoadedCallback){
+            var loadedCounter = 0;
+            var toBeLoadedNumber = urls.length;
+            urls.forEach(function(url){
+                preloadImage(url, function(){
+                    loadedCounter++;
+                        console.log('Number of loaded images: ' + loadedCounter);
+                  if(loadedCounter == toBeLoadedNumber){
+                    allImagesLoadedCallback();
+                  }
+                });
+            });
+            function preloadImage(url, anImageLoadedCallback){
+                var img = new Image();
+                img.onload = anImageLoadedCallback;
+                img.src = url;
+            }
+        }
+
+        // Let's call it:
+        preloadImages([
+            $('.mobile-bubble-effect').attr('src'),
+            $('.mobile-person-effect').attr('src'),
+        ], function(){
+            $('.mobile-welcome-images img').each (function() {
+                $(this).addClass('effect-loaded');
+            });
+        });
+    }
 });
