@@ -441,6 +441,21 @@ jQuery(document).ready(function($){
 		$('#ids').show();
 	}
 
+	if($('img[data-tooltip]').length) {
+
+		$('img[data-tooltip]').on('mouseover mousemove', function(e) {
+			$('.partner-tooltip').text($(this).attr('data-tooltip'));
+			$('.partner-tooltip').css('left', e.pageX  );
+			$('.partner-tooltip').css('top', e.pageY + ($(this).outerWidth() / 2) );
+			$('.partner-tooltip').show();
+		});
+
+		$('img[data-tooltip]').on('mouseout', function(e) {
+
+			$('.partner-tooltip').hide();
+		});
+	}
+
 });
 
 //

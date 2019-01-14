@@ -717,7 +717,7 @@
 							<a class="slider-wrapper{!! $team->approved ? '' : ' pending' !!}" href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
 								<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 									@if( $team->clinicTeam->is_partner )
-										<img src="img-trp/mini-logo.png"/>
+										<img src="img-trp/mini-logo.png" data-tooltip="{!! nl2br(trans('trp.common.partner')) !!} Clinic }}"/>
 									@endif
 									@if( (!empty($user) && $item->id==$user->id) )
 										<div class="deleter" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getName() ]) !!}">
