@@ -126,7 +126,7 @@ class VoxesController extends AdminController
                         } else {
                             $q = VoxQuestion::find($question_id);
 
-                            if($q) {
+                            if(!empty($q)) {
                                 if (!empty(explode(':',$v)[1])) {
                                     $answ = explode(':',$v)[1];
                                     $triggers[$question->id] .= $q->question.': '.$answ.'<br/>';
