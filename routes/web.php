@@ -66,6 +66,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('users/restore/{id}', 				'UsersController@restore');
 	Route::any('users/reviews/delete/{id}', 		'UsersController@delete_review');
 
+	Route::get('users_stats', 						'UsersStatsController@list');
+
 	Route::get('reviews', 							'ReviewsController@list');
 	Route::post('reviews/mass-delete', 							'ReviewsController@massdelete');
 	Route::any('reviews/add', 						'ReviewsController@add');
