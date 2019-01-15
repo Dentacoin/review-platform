@@ -116,15 +116,12 @@
 					                @foreach($users_country as $key => $c)
 
 				                		<tr>
-				                    		@if(!empty($c->country_id))
-						                    	<td>
-						                    		{{ $c->country->name }}
-						                    	</td>
-						                    	<td>
-						                    		{{ $c->total }}
-						                    	</td>
-						                    @endif
-						                    
+					                    	<td>
+					                    		{{ !empty($c->country_id) ? $c->country->name : '-' }}
+					                    	</td>
+					                    	<td>
+					                    		{{ $c->total }}
+					                    	</td>						                    
 				                    	</tr>
 
 					                @endforeach
