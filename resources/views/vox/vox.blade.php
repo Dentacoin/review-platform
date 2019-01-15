@@ -158,6 +158,9 @@
 					</div>
 
 					<div class="col-md-9 tac">
+						@if($admin)
+							<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
+						@endif
 						<h3 class="done-title">
 							{!! trans('vox.page.questionnaire.well-done', [
 								'who' => '<span class="blue-text">'.$user->getName().'</span>'

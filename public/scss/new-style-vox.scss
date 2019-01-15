@@ -1651,6 +1651,27 @@ header {
 					}
 				}
 
+				.fixed-titles {
+					display: none;
+					position: fixed;
+				    top: 0;
+				    width: 777px;
+				    background: white;
+				    z-index: 10;
+
+				    @media screen and (max-width: 1200px) {
+				        width: 637px;
+				    }
+
+				    @media screen and (max-width: 992px) {
+				        width: 690px;
+				    }
+
+				    &.active {
+				    	display: block;
+				    }
+				}
+
 				.answer-title {
 					float: left;
 		    		padding: 0px 10px;
@@ -1831,7 +1852,7 @@ header {
 		.answers {
 			width: 70%;
 
-	    	@media screen and (max-width: 768px) {
+	    	@media screen and (max-width: 992px) {
 				width: 100%;
 			}
 		}		
