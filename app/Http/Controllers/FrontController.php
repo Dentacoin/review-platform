@@ -154,7 +154,7 @@ class FrontController extends BaseController
                 'city_id' => $this->city_id,
             ]);
 
-            if(false && mb_strpos(Request::url(), '//dev-') && !$this->admin) {
+            if(mb_strpos(Request::url(), '//dev-') && !$this->admin) {
                 echo '<a href="'.str_replace('//dev-', '//', Request::url()).'">Click here</a> or <a href="'.url('cms').'"> log in as admin </a>';
                 exit;
             }
