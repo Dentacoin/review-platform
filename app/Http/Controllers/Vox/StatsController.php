@@ -128,8 +128,8 @@ class StatsController extends FrontController
         		$results = $results->groupBy('answer', 'gender')->selectRaw('answer, gender, COUNT(*) as cnt');
                 $results = $results->get();
                 foreach ($answers as $key => $value) {
-                    $second_chart[($key+1)] = 0;
-                    $third_chart[($key+1)] = 0;
+                    $second_chart[$value] = 0;
+                    $third_chart[$value] = 0;
                 }
                 
         		foreach ($results as $res) {
