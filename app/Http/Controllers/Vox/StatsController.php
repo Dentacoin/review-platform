@@ -95,7 +95,7 @@ class StatsController extends FrontController
         		$results = $results->get();
 
                 foreach ($answers as $key => $value) {
-                    $second_chart[($key+1)] = 0;
+                    $second_chart[$value] = 0;
                 }
 
         		foreach ($results as $res) {
