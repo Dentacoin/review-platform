@@ -253,6 +253,7 @@ Route::domain('urgent-reviews.dentacoin.com')->group($reviewRoutes);
 $voxRoutes = function () {
 	
 	Route::any('test', 									'Front\YouTubeController@test');
+	Route::get('sitemap.xml', 							'Vox\SitemapController@links');
 
 	Route::group(['prefix' => '{locale?}'], function(){
 
