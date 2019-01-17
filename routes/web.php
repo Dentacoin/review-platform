@@ -142,6 +142,7 @@ $reviewRoutes = function () {
 	Route::any('test', 									'Front\YouTubeController@test');
 	Route::any('civic', 								'CivicController@add');
 	Route::any('mobident', 								'MobidentController@reward');
+	Route::get('sitemap.xml', 							'Front\SitemapController@links');
 
 	Route::group(['prefix' => '{locale?}'], function(){
 
