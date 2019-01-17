@@ -1862,10 +1862,9 @@ header {
           color: #00aaff; }
 
 .back-home {
-  position: absolute;
-  top: -30px;
-  left: 0px;
+  display: block;
   font-weight: 600;
+  margin-bottom: 20px;
   font-size: 15px;
   color: #777d81;
   text-transform: uppercase;
@@ -1874,10 +1873,6 @@ header {
   .back-home:hover {
     color: #38ace5;
     background-image: url(../new-vox-img/stats-back-hover.png); }
-  @media screen and (max-width: 768px) {
-    .back-home {
-      top: -26px;
-      display: block; } }
 
 .page-statistics h1 {
   font-size: 25px;
@@ -4439,3 +4434,9 @@ header {
       animation: MoveRightPerson 2s ease-in-out; }
     .mobile-welcome-images img.mobile-bubble-effect.effect-loaded {
       animation: BubbleEffect 2s ease-in-out; }
+
+.stat-survey-info {
+  margin-bottom: 20px; }
+  @media screen and (max-width: 768px) {
+    .stat-survey-info {
+      margin-top: 10px; } }

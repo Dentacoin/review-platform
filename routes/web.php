@@ -143,6 +143,7 @@ $reviewRoutes = function () {
 	Route::any('civic', 								'CivicController@add');
 	Route::any('mobident', 								'MobidentController@reward');
 	Route::get('sitemap.xml', 							'Front\SitemapController@links');
+	Route::get('robots.txt', 							'Front\RobotsController@content');
 
 	Route::group(['prefix' => '{locale?}'], function(){
 
@@ -255,6 +256,7 @@ $voxRoutes = function () {
 	
 	Route::any('test', 									'Front\YouTubeController@test');
 	Route::get('sitemap.xml', 							'Vox\SitemapController@links');
+	Route::get('robots.txt', 							'Vox\RobotsController@content');
 
 	Route::group(['prefix' => '{locale?}'], function(){
 

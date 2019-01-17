@@ -2534,10 +2534,9 @@ header {
 
 
 .back-home {
-	position: absolute;
-	top: -30px;
-	left: 0px;
+	display: block;
 	font-weight: 600;
+	margin-bottom: 20px;
 	font-size: 15px;
 	color: #777d81;
 	text-transform: uppercase;
@@ -2547,11 +2546,6 @@ header {
 	&:hover {
 		color: $main-color;
 		background-image: url(../new-vox-img/stats-back-hover.png);
-	}
-
-	@media #{$phone} {
-		top: -26px;
-		display: block;
 	}
 }
 
@@ -5913,5 +5907,13 @@ header {
 				animation: BubbleEffect 2s ease-in-out;
 			}
 		}
+	}
+}
+
+.stat-survey-info {
+	margin-bottom: 20px;
+
+	@media #{$phone} {
+		margin-top: 10px;
 	}
 }

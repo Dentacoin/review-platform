@@ -3,16 +3,19 @@
 @section('content')
 
 	<div class="container page-statistics">
+		<a class="back-home" href="{{ getLangUrl('dental-survey-stats') }}">
+			{!! trans('vox.page.stats.go-back-stats') !!}
+		</a> 
 
 		<h1>
-			<a class="back-home" href="{{ getLangUrl('dental-survey-stats') }}">
-				{!! trans('vox.page.stats.go-back-stats') !!}
-				
-			</a> 
 			{{ trans('vox.page.stats.title-single', [
 				'name' => $vox->title
 			]) }}
 		</h1>
+
+		<p class="stat-survey-info">
+			{{ $vox->translateorNew(App::getLocale())->stats_description }}
+		</p>
 
 		<div class="filters-wrapper">
 			<div class="filters">

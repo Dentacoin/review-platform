@@ -4,11 +4,11 @@
 
 	<div class="container">
 
-		@include('front.errors')	
+		@include('front.errors')
+		<a class="back-home" href="{{ getLangUrl('/') }}">
+			{!! trans('vox.page.stats.go-back-surveys') !!}
+		</a> 
 		<h1 class="bold">
-			<a class="back-home" href="{{ getLangUrl('/') }}">
-				{!! trans('vox.page.stats.go-back-surveys') !!}
-			</a> 
 			{!! trans('vox.page.stats.title') !!}
 		</h1>
 		<h2>
