@@ -314,7 +314,7 @@
 							</div>
 						</div>
 						<div class="sign-in-step tac" id="step-4">
-					    	<div class="g-recaptcha" id="g-recaptcha" data-callback="sendReCaptcha" style="display: inline-block;" data-size="compact" data-sitekey="6LfmCmEUAAAAAH20CTYH0Dg6LGOH7Ko7Wv1DZlO0"></div>
+					    	<div id="captcha-div"></div>
 							<label class="checkbox-label agree-label" for="agree-privacyy">
 								<input type="checkbox" class="special-checkbox" id="agree-privacyy" name="agree" value="1">
 								<i class="far fa-square"></i>

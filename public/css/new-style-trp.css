@@ -2704,6 +2704,7 @@ textarea.input {
     .forms .form-button {
       display: none; } }
 .forms .form-wrapper {
+  position: relative;
   background-color: transparent;
   flex: 1;
   display: flex;
@@ -2965,9 +2966,7 @@ textarea.input {
 .switch-forms {
   position: absolute;
   top: 50%;
-  left: 50%;
   z-index: 10;
-  transform: translateX(-50%);
   background-color: #00aee6;
   width: 36px;
   height: 36px;
@@ -2982,6 +2981,14 @@ textarea.input {
     background-color: white;
     padding-right: 0px;
     padding-left: 3px; }
+
+#dentist-form .switch-forms {
+  left: 0;
+  margin-left: -18px; }
+
+#user-form .switch-forms {
+  right: 0;
+  margin-right: -18px; }
 
 .results-static-map {
   position: relative;
@@ -4113,3 +4120,8 @@ textarea.input {
     border-style: solid;
     border-width: 5px 5px 0 5px;
     border-color: #07a9df transparent transparent transparent; }
+
+#captcha-div {
+  text-align: center; }
+  #captcha-div > div {
+    display: inline-block; }

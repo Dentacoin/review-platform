@@ -45,10 +45,6 @@
             @endforeach
         @endif
 
-		@if(empty($user))
-			<script src='https://www.google.com/recaptcha/api.js'></script>
-		@endif
-
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108398439-1"></script>
 		<script>
@@ -203,7 +199,7 @@
 			@include('trp/popups/dentist-verification')
 			@include('trp/popups/banned')
 		@endif
-
+		
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>

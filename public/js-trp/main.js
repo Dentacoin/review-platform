@@ -13,7 +13,7 @@ var mapMarkers = {};
 var fixFlickty;
 var suggestTO;
 var refreshOnClosePopup = false;
-
+var onloadCallback;
 
 jQuery(document).ready(function($){
 
@@ -71,16 +71,40 @@ jQuery(document).ready(function($){
         }
     }
 
+    onloadCallback = function() {
+        grecaptcha.render('captcha-div', {
+          'sitekey' : '6LfmCmEUAAAAAH20CTYH0Dg6LGOH7Ko7Wv1DZlO0',
+          'size' : 'compact'
+        });
+      };
+
+    var loadCaptchaScript = function() {
+    	if (!$('#captcha-script').length) {
+
+		    $('body').append( $('<link rel="stylesheet" type="text/css" href="https://hosted-sip.civic.com/css/civic-modal.min.css" />') );
+    		$.getScript('https://hosted-sip.civic.com/js/civic.sip.min.js', function() {
+    			$('body').append( $('<script src="'+window.location.origin+'/js-trp/login.js"></script>') );
+		    	$('body').append( $('<script src="'+window.location.origin+'/js-trp/upload.js"></script>') );
+		    	$('body').append( $('<script src="'+window.location.origin+'/js-trp/address.js"></script>') );
+
+	    		$('body').append( $('<script id="captcha-script" src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer"></script>') );
+    		} );
+    	}
+    }
+
 	showPopup = function(id, e) {
 		if(id=='popup-login') {
+			loadCaptchaScript();
 			id = 'popup-register';
 			switchLogins('login');
 		} else if(id=='popup-register-dentist') {
+			loadCaptchaScript();
 			id = 'popup-register';
 			switchLogins('register');
 			$('.form-wrapper').removeClass('chosen');
 			$('.form-button.white-form-button').closest('.form-wrapper').addClass('chosen');
 		} else if(id=='popup-register') {
+			loadCaptchaScript();
 			switchLogins('register');
 		} else if(id=='map-results-popup') {
 			prepareMapFucntion( function() {

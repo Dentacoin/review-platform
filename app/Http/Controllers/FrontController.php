@@ -232,42 +232,15 @@ class FrontController extends BaseController
         // "2018-05-05 00:00:00.000000"
 
         if( empty( $this->user ) ) {
-
-            if(is_array($params['js'])) {
-                if( array_search('login.js', $params['js'])===false ) {
-                    $params['js'][] = 'login.js';                    
-                }
-                if( array_search('upload.js', $params['js'])===false ) {
-                    $params['js'][] = 'upload.js';                    
-                }
-                if( array_search('address.js', $params['js'])===false ) {
-                    $params['js'][] = 'address.js';                    
-                }
-            } else {
-                $params['js'] = ['login.js', 'upload.js', 'address.js'];
-            }
             $params['countries'] = Country::get();
             
             if(is_array($params['jscdn'])) {
-
-                if( array_search('https://hosted-sip.civic.com/js/civic.sip.min.js', $params['jscdn'])===false ) {
-                    $params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
-                }
                 if( array_search('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', $params['jscdn'])===false ) {
                     $params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
                 }
             } else {
                 $params['jscdn'] = [
-                    'https://hosted-sip.civic.com/js/civic.sip.min.js',
                     'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en',
-                ];
-            }
-            
-            if(is_array($params['csscdn'])) {
-                $params['csscdn'][] = 'https://hosted-sip.civic.com/css/civic-modal.min.css';
-            } else {
-                $params['csscdn'] = [
-                    'https://hosted-sip.civic.com/css/civic-modal.min.css',
                 ];
             }
         }
