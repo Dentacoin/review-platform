@@ -3,7 +3,7 @@
 	function getLangUrl($path=false, $locale=null){
     $locale = $locale ? $locale : \App::getLocale();
 
- 		if(!$path || $path == '/' ){
+ 		if(!$path || $path == '/' || $path == 'index' ){
   			return url($locale == 'en' ? '/' : $locale)."/";
  		} else {
   			return url($locale."/".$path)."/";
