@@ -44,6 +44,7 @@ class Vox extends Model {
 
     protected $dates = [
         'created_at',
+        'launched_at',
         'updated_at',
         'deleted_at'
     ];
@@ -190,6 +191,13 @@ class Vox extends Model {
         }
 
         $this->updated_at = Carbon::now();
+    }
+
+    public function setTypeAttribute($newvalue) {
+        if ($this->attributes['type'] != 'normal' && $newvalue == 'normal' && empty($this->attributes['launched_at'])) {
+            $this->attributes['launched_at'] = Carbon::now();
+        }
+        $this->attributes['type'] = $newvalue;
     }
     
 }

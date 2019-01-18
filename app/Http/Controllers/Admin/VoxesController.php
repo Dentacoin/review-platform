@@ -101,6 +101,9 @@ class VoxesController extends AdminController
             if($field=='type') {
                 $item->$field = $value=='0' ? 'hidden' : 'normal';
             }
+            if($field=='has_stats') {
+                $item->$field = $value=='0' ? 0 : 1;
+            }
             $item->save();
         }
     }
