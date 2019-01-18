@@ -55,9 +55,13 @@ class StatsController extends FrontController
 
 		$vox = Vox::whereTranslationLike('slug', $slug)->first();
 
-		if(empty($vox) || $vox->stats_questions->isEmpty()) {
+		if(empty($vox)) {
 			return redirect( getLangUrl('/') );
 		}
+
+        if(!$vox->has_stats) {
+            return redirect( $vox->getLink() );
+        }
 
         if(!empty($this->user) && $this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile/vox'));
