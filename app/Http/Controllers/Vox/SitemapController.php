@@ -35,7 +35,7 @@ class SitemapController extends FrontController
 			getLangUrl('faq'),
 		];
 
-		$voxes = Vox::where('type', 'normal')->get();
+		$voxes = Vox::where('type', 'normal')->where( 'has_stats', 1 )->get();
 
 		foreach ($voxes as $vox) {
 			$links[] = $vox->getLink();
