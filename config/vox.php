@@ -10,6 +10,9 @@ return array(
 		'education' => 'Education',
 		'employment' => 'Employment',
 		'household_children' => 'Household Children',
+		'job' => 'Area of employment',
+		'job_title' => 'Job title',
+		'income' => 'Monthly net income',
 	],
 	'age_groups' => [
 		'24' => '18-24',

@@ -60,7 +60,7 @@ class StatsController extends FrontController
 		}
 
         if(!$vox->has_stats) {
-            return redirect( $vox->getLink() );
+            return redirect( getLangUrl('dental-survey-stats') );
         }
 
         if(!empty($this->user) && $this->user->isBanned('vox')) {
