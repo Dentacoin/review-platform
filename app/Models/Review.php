@@ -126,7 +126,7 @@ class Review extends Model {
 
         $img = Image::canvas(1200, 628, '#fff');
 
-        if( $this->title && false ) {
+        if( $this->title ) {
             $img->insert( public_path().'/img-trp/cover-review.png');
             $title = $this->title;
             //$title = 'ale ale ale';

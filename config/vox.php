@@ -11,8 +11,8 @@ return array(
 		'employment' => 'Employment',
 		'household_children' => 'Household Children',
 		// 'job' => 'Area of employment',
-		// 'job_title' => 'Job title',
-		// 'income' => 'Monthly net income',
+		'job_title' => 'Job title',
+		'income' => 'Monthly net income',
 	],
 	'age_groups' => [
 		'24' => '18-24',
