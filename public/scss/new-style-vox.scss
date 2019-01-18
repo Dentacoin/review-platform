@@ -5911,9 +5911,14 @@ header {
 }
 
 .stat-survey-info {
-	margin-bottom: 20px;
+	font-size: 18px;
+    color: #020202;
+    text-align: center;
+    font-weight: normal;
+    margin-bottom: 35px;
 
 	@media #{$phone} {
 		margin-top: 10px;
+		margin-bottom: 20px;
 	}
 }
