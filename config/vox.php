@@ -128,7 +128,7 @@ return array(
 				'director' => 'Director',
 				'vice_president' => 'Vice President',
 				'senior_vice_president' => 'Senior Vice President',
-				'c_level' => 'C level executive',
+				'c_level' => 'C-level executive',
 				'ceo' => 'President or CEO',
 				'owner' => 'Owner'
 			],
