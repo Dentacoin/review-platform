@@ -34,6 +34,7 @@ class StatsController extends FrontController
 		];
 
 		return $this->ShowVoxView('stats', array(
+            'canonical' => getLangUrl('dental-survey-stats'),
 			'voxes' => Vox::with('stats_main_question')->get(),
 			'cats' => VoxCategory::with('voxes.vox')->get(),
 			'sorts' => $sorts,
