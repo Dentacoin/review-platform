@@ -488,7 +488,7 @@ $(document).ready(function(){
                             }
                         }
 
-                        var arr = key.split(' ');
+                        var arr = key.toString().split(' ');
                         var newi = arr.join('\n\r');
                         newline.unshift(newi.trim());
                         rows.push( newline );
