@@ -70,7 +70,9 @@
 				@if($question->used_for_stats)
 					<div class="stat" question-id="{{ $question->id }}" stat-type="{{ $question->used_for_stats }}">
 						<a class="title" href="javascript:;">
-							{{ $question->translateorNew(App::getLocale())->stats_title }}
+							<h2>
+								{{ $question->translateorNew(App::getLocale())->stats_title }}
+							</h2>
 						</a>
 						<div class="contents">
 							@if($question->used_for_stats=='standard')

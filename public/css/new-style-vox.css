@@ -2018,6 +2018,16 @@ header {
     padding: 11px 0px;
     padding-left: 35px;
     background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat; }
+    .page-statistics .stats .stat a.title h2 {
+      font-size: 20px;
+      color: #999;
+      text-align: left;
+      margin-bottom: 0px;
+      line-height: 28px; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats .stat a.title h2 {
+          font-size: 14px;
+          line-height: 1; } }
     @media screen and (max-width: 768px) {
       .page-statistics .stats .stat a.title {
         font-size: 14px;
@@ -2253,6 +2263,9 @@ header {
     color: black;
     font-weight: bold;
     background-image: url(../new-vox-img/stats-up.png); }
+    .page-statistics .stats .stat.active a.title h2 {
+      color: black;
+      font-weight: bold; }
   .page-statistics .stats .stat.active .contents {
     display: block; }
 

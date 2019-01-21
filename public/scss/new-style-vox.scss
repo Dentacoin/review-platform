@@ -2763,12 +2763,23 @@ header {
 				padding-left: 35px;
 				background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
 
+				h2 {
+					font-size: 20px;
+					color: #999;
+					text-align: left;
+					margin-bottom: 0px;
+					line-height: 28px;
+
+					@media #{$phone} {
+						font-size: 14px;
+						line-height: 1;
+					}
+				}
+
 				@media #{$phone} {
 					font-size: 14px;
 				    line-height: 1;
 				    padding-left: 25px;
-
-
 				}
 			}
 
@@ -3100,6 +3111,11 @@ header {
 					color: black;
 					font-weight: bold;
 					background-image: url(../new-vox-img/stats-up.png);
+
+					h2 {
+						color: black;
+    					font-weight: bold;
+					}
 				}
 
 				.contents {
