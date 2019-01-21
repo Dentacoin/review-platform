@@ -199,6 +199,7 @@ class RegisterController extends FrontController
             }
         } else {
             return $this->ShowVoxView('register', array(
+                'noindex' => ' ',
                 'countries' => Country::get(),
                 'js' => [
                     'register.js',
@@ -361,6 +362,7 @@ class RegisterController extends FrontController
         $this->current_page = 'forgot-password';
         return $this->ShowVoxView('forgot-password', array(
             'canonical' => getLangUrl('recover-password'),
+            'noindex' => ' ',
         ));
     }
 

@@ -53,6 +53,7 @@ class AuthenticateUser extends FrontController
         }
         
         return $this->ShowVoxView('login',[
+            'noindex' => ' ',
             'js' => [
                 'login.js'
             ],
