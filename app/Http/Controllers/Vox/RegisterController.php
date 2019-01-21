@@ -359,7 +359,9 @@ class RegisterController extends FrontController
 
     public function forgot($locale=null) {
         $this->current_page = 'forgot-password';
-        return $this->ShowVoxView('forgot-password');
+        return $this->ShowVoxView('forgot-password', array(
+            'canonical' => getLangUrl('recover-password'),
+        ));
     }
 
     public function forgot_form($locale=null) {
