@@ -200,7 +200,7 @@ class FrontController extends BaseController
         $params['users_count'] = User::getCount('vox');
         //dd($params['header_questions']);
 
-        $params['cache_version'] = '20190121';
+        $params['cache_version'] = '20190121-1';
 
         $params['show_tutorial'] = false;
         // if($this->user) {

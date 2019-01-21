@@ -1823,7 +1823,7 @@ header {
           .page-stats .stats-list .stats-holder .vox-stat .stats-cta a.secondary {
             color: #38ace5;
             background-color: transparent;
-            margin-top: 10px; }
+            margin-top: 25px; }
             @media screen and (max-width: 768px) {
               .page-stats .stats-list .stats-holder .vox-stat .stats-cta a.secondary {
                 margin-top: 0px;
