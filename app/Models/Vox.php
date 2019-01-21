@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Image;
 
+use DB;
 use App;
 use Carbon\Carbon;
 use App\Models\VoxToCategory;
@@ -40,9 +41,11 @@ class Vox extends Model {
         'has_stats',
         'hasimage',
         'hasimage_social',
+        'country_count',
     ];
 
     protected $dates = [
+        'last_count_at',
         'created_at',
         'launched_at',
         'updated_at',
@@ -63,7 +66,36 @@ class Vox extends Model {
     }
     
     public function respondentsCount() {
-        return VoxReward::where('vox_id', $this->id)->count();
+        return VoxReward::where('vox_id', $this->id)->count();   
+    }
+
+    public function respondentsCountryCount() {
+
+        $date = $this->last_count_at;
+        $now = Carbon::now();
+
+        $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
+
+        if ($diff >= 1) {
+
+            $counted_countries = DB::table('users')
+            ->join('vox_rewards', 'users.id', '=', 'vox_rewards.user_id')
+            ->where('vox_rewards.vox_id', $this->id)
+            ->select(DB::raw('COUNT(*) AS `cnt`'))
+            ->groupBy(DB::raw('users.country_id'))
+            ->get()
+            ->count();
+
+            $this->last_count_at = Carbon::now();
+            $this->country_count = $counted_countries;
+            $this->save();
+
+            return $counted_countries;
+
+        } else {
+            return $this->country_count;
+        }
+        
     }
 
     public function questionsReal() {

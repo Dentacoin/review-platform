@@ -28,6 +28,10 @@ class VoxReward extends Model {
         return $this->hasOne('App\Models\Vox', 'id', 'vox_id');        
     }
 
+    public function user() {
+        return $this->hasOne('App\Models\User', 'id', 'user_id');        
+    }
+
     public function formatDuration() {
         return ($this->seconds>=60 ? floor($this->seconds/60).' min ' : '').( $this->seconds%60 ? ($this->seconds%60).' sec' : '' );
     }

@@ -254,8 +254,6 @@ class StatsController extends FrontController
         	] );
         }
 
-
-
 		$filters = [
 			'all' => 'All times',
 			'last7' => 'Last 7 days',
@@ -267,7 +265,14 @@ class StatsController extends FrontController
 			$active_filter = key($filters);
 		}
 
+        $vox->respondentsCountryCount();
+
+        $respondents_count = $vox->respondentsCount();
+        $respondents_country_count = $vox->respondentsCountryCount();
+
 		return $this->ShowVoxView('stats-survey', array(
+            'respondents' => $respondents_count,
+            'respondents_country' => $respondents_country_count,
 			'filters' => $filters,
 			'active_filter' => $active_filter,
 			'vox' => $vox,
@@ -309,22 +314,30 @@ class StatsController extends FrontController
             'seo_title' => trans('vox.seo.stats.title', [
                 'title' => $vox->title,
                 'description' => $vox->description,
-                'stats_description' => $vox->stats_description
+                'stats_description' => $vox->stats_description,
+                'respondents' => $respondents_count,
+                'respondents_country' => $respondents_country_count,
             ]),
             'seo_description' => trans('vox.seo.stats.description', [
                 'title' => $vox->title,
                 'description' => $vox->description,
-                'stats_description' => $vox->stats_description
+                'stats_description' => $vox->stats_description,
+                'respondents' => $respondents_count,
+                'respondents_country' => $respondents_country_count,
             ]),
             'social_title' => trans('vox.social.stats.title', [
                 'title' => $vox->title,
                 'description' => $vox->description,
-                'stats_description' => $vox->stats_description
+                'stats_description' => $vox->stats_description,
+                'respondents' => $respondents_count,
+                'respondents_country' => $respondents_country_count,
             ]),
             'social_description' => trans('vox.social.stats.description', [
                 'title' => $vox->title,
                 'description' => $vox->description,
-                'stats_description' => $vox->stats_description
+                'stats_description' => $vox->stats_description,
+                'respondents' => $respondents_count,
+                'respondents_country' => $respondents_country_count,
             ]),
         ));
 	}

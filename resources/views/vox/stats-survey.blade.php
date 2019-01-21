@@ -9,7 +9,9 @@
 
 		<h1>
 			{{ trans('vox.page.stats.title-single', [
-				'name' => $vox->title
+				'name' => $vox->title,
+				'respondents' => $respondents,
+				'respondents_country' => $respondents_country,
 			]) }}
 		</h1>
 
