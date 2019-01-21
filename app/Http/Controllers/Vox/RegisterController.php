@@ -373,13 +373,13 @@ class RegisterController extends FrontController
         ])->first();
 
         if(empty($user->id)) {
-            Request::session()->flash('error-message', trans('vox.page.registration.email-error'));
+            Request::session()->flash('error-message', trans('vox.page.recover-password.email-error'));
             return redirect( getLangUrl('recover-password') );
         }
 
         $user->sendTemplate(13);
 
-        Request::session()->flash('success-message', trans('vox.page.registration.email-success'));
+        Request::session()->flash('success-message', trans('vox.page.recover-password.email-success'));
         return redirect( getLangUrl('recover-password') );
     }
 
