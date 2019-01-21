@@ -1714,6 +1714,7 @@ header {
       border-radius: 10px;
       border: 3px solid #f3f3f3;
       padding: 17px 12px;
+      padding-bottom: 50px;
       position: relative;
       max-width: 870px;
       margin-left: auto;
@@ -1797,8 +1798,9 @@ header {
           .page-stats .stats-list .stats-holder .vox-stat .stats-cta {
             position: absolute;
             bottom: 17px;
-            right: 12px;
-            width: 90px; } }
+            right: 0px;
+            width: 100%;
+            display: block; } }
         .page-stats .stats-list .stats-holder .vox-stat .stats-cta a {
           background: #00aaff;
           height: 40px;
@@ -1814,7 +1816,18 @@ header {
               font-size: 10px;
               height: 30px;
               line-height: 30px;
-              padding: 0px 10px; } }
+              padding: 0px 10px;
+              display: inline-block;
+              width: 48%;
+              vertical-align: middle; } }
+          .page-stats .stats-list .stats-holder .vox-stat .stats-cta a.secondary {
+            color: #38ace5;
+            background-color: transparent;
+            margin-top: 10px; }
+            @media screen and (max-width: 768px) {
+              .page-stats .stats-list .stats-holder .vox-stat .stats-cta a.secondary {
+                margin-top: 0px;
+                line-height: 29px; } }
   .page-stats .stats-list .stats-cats {
     display: none;
     width: 220px; }

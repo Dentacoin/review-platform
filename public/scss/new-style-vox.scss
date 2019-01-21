@@ -2334,6 +2334,7 @@ header {
 				border-radius: 10px;
 				border: 3px solid #f3f3f3;
 				padding: 17px 12px;
+				padding-bottom: 50px;
 				position: relative;
 
 				max-width: 870px;
@@ -2440,8 +2441,9 @@ header {
 					@media #{$phone} {
 						position: absolute;
 						bottom: 17px;
-						right: 12px;
-						width: 90px;
+					    right: 0px;
+					    width: 100%;
+					    display: block;
 					}
 
 				    a {
@@ -2461,6 +2463,20 @@ header {
 							height: 30px;
 							line-height: 30px;
     						padding: 0px 10px;
+						    display: inline-block;
+						    width: 48%;
+						    vertical-align: middle;
+						}
+
+						&.secondary {
+							color: #38ace5;
+    						background-color: transparent;
+    						margin-top: 10px;
+
+    						@media #{$phone} {
+    							margin-top: 0px;
+    							line-height: 29px;
+    						}
 						}
 				    }
 				}

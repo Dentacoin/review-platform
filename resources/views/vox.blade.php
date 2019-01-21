@@ -364,6 +364,64 @@
 
 		@include('vox.popups.suspended')
 
+		
+
+		<script type='application/ld+json'> 
+		{
+		  "@context": "http://www.schema.org",
+		  "@type": "Corporation",
+		  "name": "DentaVox",
+		  "description": "DentaVox aims to improve global dental care by supplying the industry with valuable patient insights on various dental health topics. Respondents are rewarded with the first dedicated currency Dentacoin that can be used to cover preventive services and other treatments. DentaVox is a focal point for dental professionals, manufacturers and patients from all corners of the world.",
+		  "logo": "https://dentavox.dentacoin.com/new-vox-img/logo-vox.png",
+		  "image": "https://dentavox.dentacoin.com/new-vox-img/logo-vox.png",
+		  "url": "https://dentavox.dentacoin.com",
+		  "sameAs": ["https://www.facebook.com/dentavox.dentacoin/"],
+		  "address": {
+		    "@type": "PostalAddress",
+		    "streetAddress": "Wim Duisenbergplantsoen 31, ",
+		    "addressLocality": "Maastricht",
+		    "postalCode": "6221 SE ",
+		    "addressCountry": "Netherlands"
+		    },
+		    "foundingDate": "03/22/2017",
+			"founders": [
+		    {
+				"@type": "Person",
+		        "jobTitle": "Founder",
+				"familyName": "Dimitrakiev",
+				"givenName": "Dimitar ",
+				"honorificPrefix": "Prof. Dr. ",
+		        "sameAs": "https://www.linkedin.com/in/dimitar-dimitrakiev/"
+		        },
+		    {
+				"@type": "Person",
+				"familyName": "Grenzebach",
+				"givenName": "Philipp",
+				"jobTitle": "Co-Founder & Business Developer",
+		        "sameAs": "https://www.linkedin.com/in/philipp-g-986861146/"
+		    },
+		    {
+				"@type": "Person",
+				"familyName": "Grenzebach",
+				"givenName": "Jeremias",
+				"jobTitle": "Co-Founder & Core Developer",
+		        "sameAs": "https://twitter.com/neptox"
+			}
+		    ],
+		  "owns": {
+		   "@type": "Product",
+		  "name": "DentaVox",
+		  "image": "https://dentavox.dentacoin.com/new-vox-img/logo-vox.png",
+		  "description": "Take genuine paid surveys online and get rewarded! DentaVox is a market research platfom designed to provide valuable patient insights to the dental industry. Our large database with reliable dental statistics is available for free for anyone who's interested. Feel free to become a respondent yourself and help improve global dental care while also earning your first Dentacoin tokens with DentaVox.",
+		  "aggregateRating": {
+		    "@type": "AggregateRating",
+		    "ratingValue": "5",
+		    "ratingCount": "31"
+		  }
+		}
+		}
+		</script>
+
         <script  src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
