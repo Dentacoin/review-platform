@@ -13,120 +13,6 @@
     <div class="col-md-12 ui-sortable">
         {{ Form::open(array('id' => 'page-add', 'class' => 'form-horizontal', 'method' => 'post', 'files' => true)) }}
 
-            <!-- begin panel -->
-            <div class="panel panel-inverse">
-                <div class="panel-heading">
-                    <div class="panel-heading-btn">
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-                    </div>
-                    <h4 class="panel-title">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.title') : trans('admin.page.'.$current_page.'.edit.title') }}</h4>
-                </div>
-                <div class="panel-body">
-                    {!! csrf_field() !!}
-                    @if(!empty($item))
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.reward_usd') }}</label>
-                            <label class="col-md-9  control-label" style="text-align: left;">
-                                {{ $item->questions->count() }} x {{ $item->getRewardPerQuestion()->dcn }} = {{ $item->getRewardTotal() }} DCN (${{ $item->getRewardTotal(true) }})
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.duration') }}</label>
-                            <label class="col-md-9  control-label" style="text-align: left;">
-                                {{ $item->questions->count() }} x 10sec = ~{{ ceil( $item->questions->count()/6 ) }} min
-                            </label>
-                        </div>
-                    @endif
-
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.type') }}</label>
-                        <div class="col-md-9">
-                            {{ Form::select('type', $types, !empty($item) ? $item->type : null, array('class' => 'form-control')) }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" style="padding-top: 0px;">{{ trans('admin.page.'.$current_page.'.categories') }}</label>
-                        <div class="col-md-9">
-                            @foreach($category_list as $cat)
-                                <label class="col-md-3" for="cat-{{ $cat->id }}">
-
-                                    <input type="checkbox" name="categories[]" value="{{ $cat->id }}" id="cat-{{ $cat->id }}" {!! !empty($item) && $item->categories->where('vox_category_id', $cat->id)->isNotEmpty() ? 'checked="checked"' : '' !!} >
-                                    
-                                    {{ $cat->name }}
-                                </label>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Featured</label>
-                        <div class="col-md-9">
-                            <input type="checkbox" name="featured" value="1" id="featured" {!! !empty($item) && $item->featured ? 'checked="checked"' : '' !!} >
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="has_stats" class="col-md-3 control-label" style="padding-top: 0px;">Stats Enabled</label>
-                        <div class="col-md-9">
-                            <input type="checkbox" name="has_stats" value="1" id="has_stats" {!! !empty($item) && $item->has_stats ? 'checked="checked"' : '' !!} >
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Featured in Stats</label>
-                        <div class="col-md-9">
-                            <input type="checkbox" name="stats_featured" value="1" id="stats_featured" {!! !empty($item) && $item->stats_featured ? 'checked="checked"' : '' !!} >
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Thumb</label>
-                        <div class="col-md-9">
-                            {{ Form::file('photo', ['id' => 'photo', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
-                            * Size: 520х352px, up to 2 MB<br/>
-                            @if(!empty($item) && $item->hasimage)
-                                <a target="_blank" href="{{ $item->getImageUrl() }}">
-                                    <img src="{{ $item->getImageUrl(true) }}" style="background: #2f7de1; width: 200px;" />
-                                </a>
-                                <br/>
-                                <a href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/delpic') }}">Delete photo</a>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">Social Image</label>
-                        <div class="col-md-9">
-                            {{ Form::file('photo-social', ['id' => 'photo-social', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
-                            * Size: 1200x628, up to 2 MB<br/>
-                        </div>
-                    </div>
-                    @if(!empty($item) && $item->hasimage_social)
-                        <div class="form-group">
-                            <label for="featured" class="col-md-3 control-label" style="padding-top: 0px;">&nbsp;</label>
-                            <div class="col-md-3">
-                                Original image<br/>
-                                <a target="_blank" href="{{ $item->getSocialImageUrl() }}">
-                                    <img src="{{ $item->getSocialImageUrl() }}" style="background: #2f7de1; width: 100%;" />
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                Survey Social<br/>
-                                <a target="_blank" href="{{ $item->getSocialImageUrl('survey') }}">
-                                    <img src="{{ $item->getSocialImageUrl('survey') }}" style="background: #2f7de1; width: 100%;" />
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                Stats Social<br/>
-                                <a target="_blank" href="{{ $item->getSocialImageUrl('stats') }}">
-                                    <img src="{{ $item->getSocialImageUrl('stats') }}" style="background: #2f7de1; width: 100%;" />
-                                </a>
-                            </div>
-                        </div>
-                    @endif
-
-                </div>
-            </div>
-            <!-- end panel -->
-
             <div class="panel panel-inverse panel-with-tabs" data-sortable-id="ui-unlimited-tabs-1">
                 <div class="panel-heading p-0">
                     <div class="panel-heading-btn m-r-10 m-t-10">
@@ -148,7 +34,7 @@
                     @foreach($langs as $code => $lang_info)
                         <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }}" id="nav-tab-{{ $code }}">
                             <div class="form-group">
-                                <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.lang-slug') }}</label>
+                                <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.lang-slug') }}</label>
                                 <div class="col-md-10">
                                     {{ Form::text('slug-'.$code, !empty($item) ? $item->translateOrNew($code)->slug : null, array('maxlength' => 256, 'class' => 'form-control')) }}
                                 </div>
@@ -173,12 +59,134 @@
                     @endforeach
                 </div>
             </div>
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.title') : trans('admin.page.'.$current_page.'.edit.title') }}</h4>
+                </div>
+                <div class="panel-body">
+                    {!! csrf_field() !!}
+                    @if(!empty($item))
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.reward_usd') }}</label>
+                            <label class="col-md-10  control-label" style="text-align: left;">
+                                {{ $item->questions->count() }} x {{ $item->getRewardPerQuestion()->dcn }} = {{ $item->getRewardTotal() }} DCN (${{ $item->getRewardTotal(true) }})
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.duration') }}</label>
+                            <label class="col-md-10  control-label" style="text-align: left;">
+                                {{ $item->questions->count() }} x 10sec = ~{{ ceil( $item->questions->count()/6 ) }} min
+                            </label>
+                        </div>
+                    @endif
 
-            <div class="form-group">
-                <div class="col-md-12">
-                    <button type="submit" class="btn btn-sm btn-success btn-block">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}</button>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.type') }}</label>
+                        <div class="col-md-10">
+                            {{ Form::select('type', $types, !empty($item) ? $item->type : null, array('class' => 'form-control')) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px;">{{ trans('admin.page.'.$current_page.'.categories') }}</label>
+                        <div class="col-md-10">
+                            @foreach($category_list as $cat)
+                                <label class="col-md-3" for="cat-{{ $cat->id }}">
+
+                                    <input type="checkbox" name="categories[]" value="{{ $cat->id }}" id="cat-{{ $cat->id }}" {!! !empty($item) && $item->categories->where('vox_category_id', $cat->id)->isNotEmpty() ? 'checked="checked"' : '' !!} >
+                                    
+                                    {{ $cat->name }}
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="featured" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px;">Featured</label>
+                        <div class="col-md-10">
+                            <input type="checkbox" name="featured" value="1" id="featured" {!! !empty($item) && $item->featured ? 'checked="checked"' : '' !!} >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="has_stats" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px;">Stats Enabled</label>
+                        <div class="col-md-10">
+                            <input type="checkbox" name="has_stats" value="1" id="has_stats" {!! !empty($item) && $item->has_stats ? 'checked="checked"' : '' !!} >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="featured" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px;">Featured in Stats</label>
+                        <div class="col-md-10">
+                            <input type="checkbox" name="stats_featured" value="1" id="stats_featured" {!! !empty($item) && $item->stats_featured ? 'checked="checked"' : '' !!} >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="featured" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px;">Thumb</label>
+                        <div class="col-md-10">
+                            {{ Form::file('photo', ['id' => 'photo', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
+                            * Size: 520х352px, up to 2 MB<br/>
+                            
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="featured" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px">Social Image</label>
+                        <div class="col-md-10">
+                            {{ Form::file('photo-social', ['id' => 'photo-social', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
+                            * Size: 1200x628, up to 2 MB<br/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="featured" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px;">&nbsp;</label>
+                        @if(!empty($item) && $item->hasimage)
+                            <div class="col-md-2">
+                                Thumb<br/>
+                                <a target="_blank" href="{{ $item->getImageUrl() }}">
+                                    <img src="{{ $item->getImageUrl(true) }}" style="background: #2f7de1; width: 100%;" />
+                                </a>
+                                <br/>
+                                <a href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/delpic') }}">Delete photo</a>
+                            </div>
+                        @endif
+                        @if(!empty($item) && $item->hasimage_social)
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    Original image<br/>
+                                    <a target="_blank" href="{{ $item->getSocialImageUrl() }}">
+                                        <img src="{{ $item->getSocialImageUrl() }}" style="background: #2f7de1; width: 100%;" />
+                                    </a>
+                                </div>
+                                <div class="col-md-2">
+                                    Survey Social<br/>
+                                    <a target="_blank" href="{{ $item->getSocialImageUrl('survey') }}">
+                                        <img src="{{ $item->getSocialImageUrl('survey') }}" style="background: #2f7de1; width: 100%;" />
+                                    </a>
+                                </div>
+                                <div class="col-md-2">
+                                    Stats Social<br/>
+                                    <a target="_blank" href="{{ $item->getSocialImageUrl('stats') }}">
+                                        <img src="{{ $item->getSocialImageUrl('stats') }}" style="background: #2f7de1; width: 100%;" />
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-sm btn-success btn-block">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}</button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+            <!-- end panel -->
+
+            
 
 
         {{ Form::close() }}
