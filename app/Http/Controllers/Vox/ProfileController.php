@@ -560,7 +560,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 	            ->withErrors($validator);
 	        } else {
 
-                if( !User::validateAddress( Country::find( request('country_id')->name ), request('address') ) ) {
+                if( $this->user->is_dentist && !User::validateAddress( Country::find( request('country_id')->name ), request('address') ) ) {
                     return redirect( getLangUrl('profile/info') )
                     ->withInput()
                     ->withErrors([
