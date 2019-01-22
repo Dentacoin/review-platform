@@ -186,9 +186,24 @@
 		</div>
 
 
-		<a id="ids" href="https://ids.dentacoin.com/" target="_blank">
-			<i class="fas fa-times-circle"></i>
-		</a>
+		<div class="bottom-drawer">
+			<a id="ids" href="https://ids.dentacoin.com/" target="_blank">
+				<i class="fas fa-times-circle"></i>
+			</a>
+			<div id="cookiebar" >
+				<p>
+					{!! nl2br( trans('trp.common.cookiebar-hint',[
+						'link' => '<a href="//dentacoin.com/privacy-policy" target="_blank">',
+						'endlink' => '</a>',
+					]) ) !!}
+				</p>
+				<a class="accept" href="javascript:;">
+					{!! nl2br( trans('trp.common.cookiebar-button') ) !!}
+				</a>
+			</div>
+
+		</div>
+
 
 		<div class="partner-tooltip"></div>
 

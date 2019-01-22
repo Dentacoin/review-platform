@@ -5552,3 +5552,46 @@ textarea.input {
 	    display: inline-block;
 	}
 }
+
+.bottom-drawer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+    z-index: 1000;
+
+	#cookiebar {
+		padding: 20px;
+		background: rgba(10,10,10,.7);
+		display: flex;
+    	align-items: center;
+    	display: none;
+
+		@media #{$phone} {
+			padding: 10px;
+		}
+
+		p {
+			color: white;
+			background: transparent;
+    		margin-right: 20px;
+
+    		@media #{$phone} {
+    			margin-right: 10px;
+    		}
+
+			a {
+				color: #46afda;
+				text-decoration: underline;
+			}
+		}	
+		
+		a.accept {
+			background-color: #46afda;
+			padding: 5px 20px;
+			color: white;
+			margin-left: auto;
+			border-radius: 5px;
+		}	
+	}
+}

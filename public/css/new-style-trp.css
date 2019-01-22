@@ -4125,3 +4125,35 @@ textarea.input {
   text-align: center; }
   #captcha-div > div {
     display: inline-block; }
+
+.bottom-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; }
+  .bottom-drawer #cookiebar {
+    padding: 20px;
+    background: rgba(10, 10, 10, 0.7);
+    display: flex;
+    align-items: center;
+    display: none; }
+    @media screen and (max-width: 768px) {
+      .bottom-drawer #cookiebar {
+        padding: 10px; } }
+    .bottom-drawer #cookiebar p {
+      color: white;
+      background: transparent;
+      margin-right: 20px; }
+      @media screen and (max-width: 768px) {
+        .bottom-drawer #cookiebar p {
+          margin-right: 10px; } }
+      .bottom-drawer #cookiebar p a {
+        color: #46afda;
+        text-decoration: underline; }
+    .bottom-drawer #cookiebar a.accept {
+      background-color: #46afda;
+      padding: 5px 20px;
+      color: white;
+      margin-left: auto;
+      border-radius: 5px; }

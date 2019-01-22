@@ -647,16 +647,26 @@ $(document).ready(function(){
 		}
 	} );
 
-	$('#ids i').click( function(e) {
-		e.preventDefault();
-		e.stopPropagation();
-		Cookies.set('no-ids', true, { expires: 365 });
-		$('#ids').hide();
-	});
+
+
 	if(!Cookies.get('no-ids')) {
-		$('#ids').show();
+		$('#ids').css('display', 'block');
+
+		$('#ids i').click( function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			Cookies.set('no-ids', true, { expires: 365 });
+			$('#ids').hide();
+		});
 	}
 
+	if(!Cookies.get('cookiebar')) {
+		$('#cookiebar').css('display', 'flex');
+		$('#cookiebar a.accept').click( function() {
+			Cookies.set('cookiebar', true, { expires: 365 });
+			$('#cookiebar').hide();
+		} );
+	}
 
     if(getUrlParameter('suspended-popup')) {
 		$('#suspended-popup').addClass('active');
