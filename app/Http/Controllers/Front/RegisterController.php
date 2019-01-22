@@ -543,6 +543,8 @@ class RegisterController extends FrontController
 
                     if( $user ) {
                         if($user->deleted_at || $user->isBanned('vox')) {
+                            $ret['popup'] = 'banned-popup';
+                        } else if( $user->loggedFromBadIp() ) {
                             $ret['popup'] = 'suspended-popup';
                         } else {
                             Auth::login($user, true);

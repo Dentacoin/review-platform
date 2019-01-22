@@ -206,6 +206,11 @@
 		</div>
 
 
+		@if(empty($user))
+			@include('vox.popups.suspended')
+		@endif
+
+
 		@if(!empty($unbanned))
 			<div class="popup unbanned active">
 				<div class="wrapper">
@@ -365,7 +370,6 @@
 			<i class="fas fa-times-circle"></i>
 		</a>
 
-		@include('vox.popups.suspended')
 
 		
 

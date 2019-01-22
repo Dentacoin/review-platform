@@ -61,9 +61,15 @@ class LoginController extends FrontController
             $duplicate = User::where('fb_id', $s_user->getId() )->first();
 
             if( $duplicate ) {
-                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
+                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'banned-popup']))
                     ->withInput();
             } else {
+
+                if( $user->loggedFromBadIp() ) {
+                    return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
+                    ->withInput();
+                }
+
                 $user->fb_id = $s_user->getId();
                 $user->save();
                 session(['new_auth' => null]);
@@ -82,6 +88,11 @@ class LoginController extends FrontController
 
             if ($user) {
                 if( $user->isBanned('vox') ) {
+                    return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'banned-popup']))
+                    ->withInput();
+                }
+
+                if( $user->loggedFromBadIp() ) {
                     return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
                     ->withInput();
                 }
@@ -197,6 +208,12 @@ class LoginController extends FrontController
         if ($user) {
 
             if($user->deleted_at || $user->isBanned('vox')) {
+                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'banned-popup']))
+                ->withInput();
+            }
+
+
+            if( $user->loggedFromBadIp() ) {
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
                 ->withInput();
             }
@@ -362,8 +379,11 @@ class LoginController extends FrontController
 
                         if ($user) {
                             if( $user->isBanned('vox') ) {
+                                $ret['popup'] = 'banned-popup';
+                            } else if( $user->loggedFromBadIp() ) {
                                 $ret['popup'] = 'suspended-popup';
                             } else {
+                                
                                 Auth::login($user, true);
                                 if(empty($user->civic_id)) {
                                     $user->civic_id = $data['userId'];

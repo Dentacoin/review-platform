@@ -3,11 +3,11 @@
 		<div class="flex flex-mobile flex-center break-tablet">
 			<div class="content">
 				<p class="h1">
-					Your profile has been suspended 
+					{!! nl2br(trans('vox.popup.suspended-popup.title')) !!}
+					
 				</p>
 				<h4>
-					We have detected multiple accounts created with the same IP. <br/>
-					You can no longer use any Dentacoin tool.
+					{!! nl2br(trans('vox.popup.suspended-popup.hint')) !!}
 				</h4>
 			</div>
 		</div>

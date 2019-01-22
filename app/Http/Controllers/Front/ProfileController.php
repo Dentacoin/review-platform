@@ -439,6 +439,17 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             }
 
         }
+
+        return $this->ShowView('profile-invite', [
+            'menu' => $this->menu,
+            'css' => [
+                'common-profile.css',
+            ],
+            'js' => [
+                'profile.js',
+                'hello.all.js',
+            ],
+        ]);
     }
 
 

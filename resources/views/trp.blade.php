@@ -198,6 +198,7 @@
 			@include('trp/popups/register')
 			@include('trp/popups/dentist-verification')
 			@include('trp/popups/banned')
+			@include('trp/popups/suspended')
 		@endif
 		
 

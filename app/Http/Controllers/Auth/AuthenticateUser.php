@@ -74,6 +74,14 @@ class AuthenticateUser extends FrontController
                 Auth::guard('web')->logout();
                 return Response::json( [
                     'success' => false, 
+                    'popup' => 'banned-popup'
+                ] );
+            }
+
+            if(Auth::guard('web')->user()->loggedFromBadIp()) {
+                Auth::guard('web')->logout();
+                return Response::json( [
+                    'success' => false, 
                     'popup' => 'suspended-popup'
                 ] );
             }
