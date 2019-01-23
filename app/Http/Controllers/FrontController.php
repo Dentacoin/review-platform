@@ -44,7 +44,7 @@ class FrontController extends BaseController
             if(!empty( config('langs.'.$roter_params['locale']) )) {
                 $locale = $roter_params['locale'];
             } else {
-                $locale = 'en';                
+                abort(404);
             }
         }
         App::setLocale( $locale );
