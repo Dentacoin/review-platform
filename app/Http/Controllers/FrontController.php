@@ -228,7 +228,7 @@ class FrontController extends BaseController
     public function ShowView($page, $params=array()) {
         $this->PrepareViewData($page, $params, 'trp');
 
-        $params['cache_version'] = '20190122';
+        $params['cache_version'] = '20190123';
         // "2018-05-05 00:00:00.000000"
 
         if( empty( $this->user ) ) {

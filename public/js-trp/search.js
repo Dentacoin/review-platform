@@ -88,6 +88,13 @@ jQuery(document).ready(function($){
 
 		$('#search-input').closest('form').submit( function(e) {
 			e.preventDefault();
+
+			var event = jQuery.Event("keyup");
+			event.which = 13; // # Some key code value
+			$('#search-input').trigger(event);
+
+
+			console.log(event);
 			return false;
 		} );
 
