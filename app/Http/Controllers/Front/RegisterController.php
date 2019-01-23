@@ -437,7 +437,8 @@ class RegisterController extends FrontController
     public function forgot_form($locale=null) {
 
 		$user = User::where([
-            ['email','LIKE', Request::input('email') ]
+            ['email','LIKE', Request::input('email') ],
+            ['is_dentist', 1 ],
         ])->first();
 
     	if(empty($user->id)) {

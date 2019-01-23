@@ -1,17 +1,24 @@
 <?php
 
-	function getLangUrl($path=false, $locale=null){
-    $locale = $locale ? $locale : \App::getLocale();
+	function getLangUrl($path=false, $locale=null, $domain=null){
+    	$locale = $locale ? $locale : \App::getLocale();
 
  		if(!$path || $path == '/' || $path == 'index' ){
-  			return url($locale == 'en' ? '/' : $locale)."/";
+  			$link =  $locale == 'en' ? '/' : $locale;
  		} else {
-  			return url($locale."/".$path)."/";
+  			$link = $locale."/".$path;
  		}
+
+ 		if($domain) {
+ 			return $domain.$link.'/';
+ 		} else {
+ 			return url($link)."/"; 			
+ 		}
+
 	}
 
 	function getStarWidth($rate) {
 		$stars = $rate * 30;
-    $emptyspace = floor($rate) * 18;
-    return $stars + $emptyspace;
+	    $emptyspace = floor($rate) * 18;
+	    return $stars + $emptyspace;
 	}

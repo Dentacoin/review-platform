@@ -88,6 +88,13 @@ class Email extends Model
 			'trp' => 'Trusted Reviews',
 			'dentacare' => 'DentaCare',
 		];
+		$platform_urls = [
+			'vox' => 'https://dentavox.dentacoin.com/',
+			'trp' => 'https://reviews.dentacoin.com/',
+			'dentacare' => 'https://dentacoin.com/',
+		];
+
+		$domain = $platform_urls[$this->platform];
 
 		$deafult_searches = array(
 			'[name]',
@@ -120,7 +127,7 @@ class Email extends Model
 			'</div>',
 			'<div style="font-size: 15px; font-weight: bold;">',
 			'</div>',
-			'<a '.$this->button_style.' href="'.getLangUrl('/').'">',
+			'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'">',
 			'</a>',
 			'<a href="'.url($this->platform=='vox' ? 'DentavoxMetamask.pdf' : 'MetaMaskInstructions.pdf').'">',
 			'</a>'
@@ -131,15 +138,15 @@ class Email extends Model
 		$subject = str_replace($deafult_searches, $deafult_replaces, $subject);
 		$content = str_replace($deafult_searches, $deafult_replaces, $content);
 		
-		$content = $this->addPlaceholders($content);
-		$title = $this->addPlaceholders($title);
-		$subtitle = $this->addPlaceholders($subtitle);
-		$subject = $this->addPlaceholders($subject);
+		$content = $this->addPlaceholders($content, $domain);
+		$title = $this->addPlaceholders($title, $domain);
+		$subtitle = $this->addPlaceholders($subtitle, $domain);
+		$subject = $this->addPlaceholders($subject, $domain);
 
 		return [$content, $title, $subtitle, $subject];
 	}
 
-	private function addPlaceholders($content) {
+	private function addPlaceholders($content, $domain) {
 
 		if($this->template->id==3 || $this->template->id==4) { //Reward
 			$content = str_replace(array(
@@ -148,7 +155,7 @@ class Email extends Model
 				'[/rewardlink]',
 			), array(
 				Reward::getReward('reward_register'),
-				'<a '.$this->button_style.' href="'.getLangUrl('profile/reward').'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('profile/reward', null, $domain).'">',
 				'</a>',
 			), $content);
 		}
@@ -168,7 +175,7 @@ class Email extends Model
 				'[recoverlink]',
 				'[/recoverlink]',
 			), array(
-				'<a '.$this->button_style.' href="'.getLangUrl('recover/'.$this->user->id.'/'.$this->user->get_token()).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('recover/'.$this->user->id.'/'.$this->user->get_token(), null, $domain).'">',
 				'</a>',
 			), $content);
 		}
@@ -200,7 +207,7 @@ class Email extends Model
 				'[/invitelink]',
 			), array(
 				$this->meta['clinic_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$this->meta['invitation_id']).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$this->meta['invitation_id'], null, $domain).'">',
 				'</a>',
 			), $content);
 		}
@@ -212,7 +219,7 @@ class Email extends Model
 				'[/invitelink]',
 			), array(
 				$this->meta['friend_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$this->meta['invitation_id']).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$this->meta['invitation_id'], null, $domain).'">',
 				'</a>',
 			), $content);
 		}
@@ -252,7 +259,7 @@ class Email extends Model
 				'[become_dcn_dentist]',
 				'[/become_dcn_dentist]',
 			), array(
-				'<a '.$this->text_style.' href="'.getLangUrl('welcome-to-dentavox').'">',
+				'<a '.$this->text_style.' href="'.getLangUrl('welcome-to-dentavox', null, $domain).'">',
 				'</a>',		
 				'<a '.$this->button_style.' target="_blank" href="https://dentists.dentacoin.com/#contacts">',
 				'</a>',				
@@ -266,7 +273,7 @@ class Email extends Model
 				'[/invitation_link]',
 			), array(
 				$this->meta['patient_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl('profile/asks').'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('profile/asks', null, $domain).'">',
 				'</a>',				
 			), $content);
 		}
@@ -288,7 +295,7 @@ class Email extends Model
 				'[reward]',
 				'[/reward]',
 			), array(
-				'<a '.$this->button_style.' href="'.getLangUrl('profile/wallet').'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('profile/wallet', null, $domain).'">',
 				'</a>',
 			), $content);
 		}
@@ -390,7 +397,7 @@ class Email extends Model
 				'[/login]',
 			), array(
 				date('d F Y', time()+86400*7),
-				'<a '.$this->text_style.' href="'.getLangUrl( $this->template->id==11 ? 'login' : '/' ).'">',
+				'<a '.$this->text_style.' href="'.getLangUrl( ( $this->template->id==11 ? 'login' : '/' ) , null, $domain).'">',
 				'</a>',
 			), $content);
 		}
