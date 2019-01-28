@@ -14,7 +14,7 @@
 			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
 		</div>
 		<div class="forms flex">
-			<div class="form-wrapper" id="user-form">						
+			<div class="form-wrapper {{ $current_page == 'welcome-dentist' ? '' : 'chosen' }}" id="user-form">						
 				<a class="switch-forms user-choice" href="javascript:;">
 					<img src="img-trp/play-black.png"/>
 				</a>
@@ -157,7 +157,8 @@
 					</p>
 	    		</form>
 	    	</div>
-			<div class="form-wrapper chosen" id="dentist-form">								
+
+			<div class="form-wrapper {{ $current_page == 'welcome-dentist' ? 'chosen' : '' }}" id="dentist-form">								
 				<a class="switch-forms dentist-choice" href="javascript:;">
 					<img src="img-trp/play.png"/>
 				</a>
