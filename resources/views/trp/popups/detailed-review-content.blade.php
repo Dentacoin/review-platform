@@ -1,7 +1,7 @@
 <div class="details-wrapper">
 	<div class="review review-wrapper" review-id="{{ $review->id }}">
 		<div class="review-header">
-			<div class="review-avatar" style="background-image: url('{{ url('img-trp/review-img.png') }}');"></div>
+			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
 			<span class="review-name">{{ $review->user->name }}: </span>
 			@if($review->verified)
 				<div class="trusted-sticker mobile-sticker">
