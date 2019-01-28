@@ -5221,6 +5221,21 @@ textarea.input {
 }
 
 .page-profile {
+	.site-content {
+	    min-height: 700px;
+
+	    @media #{$phone} {
+	    	min-height: auto;
+	    }
+
+	    > .container {
+	    	@media screen and (max-width: 992px) {
+				position: relative;
+				z-index: 100;
+			}
+	    }
+	}
+
 	.blue-background {
 		height: 75px;
 		margin-bottom: 25px;
@@ -5447,7 +5462,7 @@ textarea.input {
 		@media #{$pc} {
 			width: auto;
 		}
-		
+
 		@media #{$tablet} {
 			width: 100%;
 		}

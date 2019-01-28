@@ -3893,6 +3893,15 @@ textarea.input {
   background-position: 50%;
   background-size: cover; }
 
+.page-profile .site-content {
+  min-height: 700px; }
+  @media screen and (max-width: 768px) {
+    .page-profile .site-content {
+      min-height: auto; } }
+  @media screen and (max-width: 992px) {
+    .page-profile .site-content > .container {
+      position: relative;
+      z-index: 100; } }
 .page-profile .blue-background {
   height: 75px;
   margin-bottom: 25px; }
