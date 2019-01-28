@@ -150,8 +150,8 @@ class DentistsController extends FrontController
             $staticmap = null;
         }
        
-
 		return $this->ShowView('search', [
+            'canonical' => $query=='worldwide' ? getLangUrl('dentists/worldwide') : null,
             'worldwide' => $query=='worldwide',
             'zoom' => $query=='worldwide' ? 2 : 13,
             'mode' => $mode,

@@ -93,7 +93,7 @@
 					<img src="img/info.png"/>
 					<span>
 						{!! nl2br(trans('trp.popup.popup-invite.no-address.title', [
-							'link' => '<a href="'.url('DentavoxMetamask.pdf').'" target="_blank">',
+							'link' => '<a href="'.getLangUrl('faq').'" target="_blank">',
 							'endlink' => '</a>',
 						])) !!}
 						
