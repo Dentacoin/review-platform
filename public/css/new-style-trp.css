@@ -4049,6 +4049,9 @@ textarea.input {
 
 #popup-register .popup-inner {
   width: 70%; }
+  @media screen and (max-width: 1200px) {
+    #popup-register .popup-inner {
+      width: auto; } }
   @media screen and (max-width: 998px) {
     #popup-register .popup-inner {
       width: 100%; } }

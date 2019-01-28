@@ -5444,6 +5444,10 @@ textarea.input {
 	.popup-inner {
 		width: 70%;
 
+		@media #{$pc} {
+			width: auto;
+		}
+		
 		@media #{$tablet} {
 			width: 100%;
 		}
