@@ -172,7 +172,7 @@ jQuery(document).ready(function($){
             	} else if( $('.search-form .results .locations-results a').length ) {
             		window.location.href = $('.search-form .results .locations-results a').first().attr('href');
             	} else if( $('.search-form .results .dentists-results a').length ) {
-            		window.location.href = lang + '/dentists/' + encodeURIComponent( $(this).val() ) + '?byname=1';
+            		window.location.href = lang + '/dentists/' + encodeURIComponent( $(this).val() ) + '/all-results';
             	}
             } else {
 				if( $(this).val().length > 2 ) {
@@ -251,8 +251,13 @@ jQuery(document).ready(function($){
 
 		$('.search-form .results .locations-results .list').html('').show();
 		predictions.forEach(function(prediction) {
-			console.log( prediction );
-			$('.search-form .results .locations-results .list').append('<a class="address-link" href="/'+lang+'/dentists/'+encodeURIComponent(prediction.description)+'">'+prediction.description+'</a>');
+			// console.log( prediction );
+			var href = prediction.description;
+			href = href.replace(/\s+/g, '-').toLowerCase();
+			href = href.replace(/\,/g, '');
+			console.log(href);
+
+			$('.search-form .results .locations-results .list').append('<a class="address-link" href="/'+lang+'/dentists/'+encodeURIComponent(href)+'">'+prediction.description+'</a>');
 		});
 
 		$('.search-form .results .locations-results').show();

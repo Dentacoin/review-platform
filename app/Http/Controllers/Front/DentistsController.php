@@ -49,12 +49,13 @@ class DentistsController extends FrontController
 
         $items = User::where('is_dentist', 1)->where('status', 'approved');
         $mode = 'map';
+        $formattedAddress = $query;
 
         if($query=='worldwide') {
             request()->merge(['partner' => 1]);
             $lat = 30;
             $lon = 0;
-        } else if(request('byname')) {
+        } else if($latlon == 'all-results') {
             $items = $items->where('name', 'like', $query.'%');
             $mode = 'name';
         } else {
@@ -77,6 +78,7 @@ class DentistsController extends FrontController
 
                 $geores = json_decode($geores);
                 if(!empty($geores->results[0]->geometry->location)) {
+                    $formattedAddress = $geores->results[0]->formatted_address;
                     $lat = $geores->results[0]->geometry->location->lat;
                     $lon = $geores->results[0]->geometry->location->lng;
                 }
@@ -151,7 +153,8 @@ class DentistsController extends FrontController
         }
        
 		return $this->ShowView('search', [
-            'canonical' => $query=='worldwide' ? getLangUrl('dentists/worldwide') : null,
+            'formattedAddress' => $formattedAddress,
+            'canonical' => getLangUrl('dentists/'.$query),
             'worldwide' => $query=='worldwide',
             'zoom' => $query=='worldwide' ? 2 : 13,
             'mode' => $mode,

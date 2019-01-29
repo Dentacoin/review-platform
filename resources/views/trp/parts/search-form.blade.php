@@ -1,6 +1,6 @@
 <form class="front-form search-form">
 	<i class="fas fa-search"></i>
-	<input id="search-input" type="text" name="location" value="{{ !empty($query) ? $query : '' }}" placeholder="{!! nl2br(trans('trp.common.search-placeholder')) !!}" autocomplete="off" />
+	<input id="search-input" type="text" name="location" value="{{ !empty($query) ? $formattedAddress : '' }}" placeholder="{!! nl2br(trans('trp.common.search-placeholder')) !!}" autocomplete="off" />
 	<input type="submit" value="">			    		
 	<div class="loader">
 		<i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i>
