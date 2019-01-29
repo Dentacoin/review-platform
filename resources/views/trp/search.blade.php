@@ -228,7 +228,7 @@
 						
 					</h2>
     				
-    				<form method="get">
+    				<form method="get" base-href="{{ getLangUrl('dentists/'.$query) }}">
 
 						<div class="sort-stars">
 							<h4 class="popup-title">{!! nl2br(trans('trp.page.search.stars')) !!}</h4>
@@ -246,8 +246,8 @@
 							<h4 class="popup-title">{!! nl2br(trans('trp.page.search.category')) !!}</h4>
 
 							@foreach( config('categories') as $cat_id => $cat )
-								<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat_id, $searchCategories) ? ' active' : '' !!}" for="checkbox-filter-{{ $cat }}">
-									<input type="checkbox" class="special-checkbox" id="checkbox-filter-{{ $cat }}" name="searchCategories[]" value="{{ $cat_id }}" {!! in_array($cat_id, $searchCategories) ? 'checked="checked"' : '' !!}>
+								<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat, $searchCategories) ? ' active' : '' !!}" for="checkbox-filter-{{ $cat }}">
+									<input type="checkbox" class="special-checkbox" id="checkbox-filter-{{ $cat }}" value="{{ $cat }}" {!! in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
 									<i class="far fa-square"></i>
 									{{ trans('front.categories.'.$cat) }}
 								</label>
