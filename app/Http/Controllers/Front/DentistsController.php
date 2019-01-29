@@ -155,7 +155,7 @@ class DentistsController extends FrontController
        
 		return $this->ShowView('search', [
             'formattedAddress' => $formattedAddress,
-            'canonical' => getLangUrl('dentists/'.$query),
+            'canonical' => getLangUrl('dentists/'.$query.(!empty($filter) ? '/'.$filter : '')),
             'worldwide' => $query=='worldwide',
             'zoom' => $query=='worldwide' ? 2 : 13,
             'mode' => $mode,
