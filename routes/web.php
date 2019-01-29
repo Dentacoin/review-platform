@@ -243,7 +243,7 @@ $reviewRoutes = function () {
 				
 			});
 
-			Route::get('{slug}', 								'PagesController@home');
+			Route::get('{query?}/{filter?}', 					'DentistsController@search');
 		});
 	});
 };

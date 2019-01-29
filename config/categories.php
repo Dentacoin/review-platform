@@ -1,11 +1,11 @@
 <?php
 
 return [
-    0 => 'general',
-    'cosmetic',
-    'implantology',
-    'orthodontics',
-    'periodontics',
-    'pediatric',
-    'endodontics',
+    0 => 'general-dentists',
+    'cosmetic-dentists',
+    'dental-implants',
+    'orthodontists',
+    'periodontists',
+    'pediatric-dentists',
+    'endodontists',
 ];

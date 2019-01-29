@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\City;
 use App\Models\Country;
 use GoogleMaps;
+use App;
 
 
 class DentistsController extends FrontController
@@ -20,14 +21,14 @@ class DentistsController extends FrontController
     }
 
     public function search($locale=null, $query=null, $filter=null, $page=null, $ajax=null) {
+        $this->current_page = 'dentists';
 
-        if($query) {
-            $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query ));
+        $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).(!empty($filter) ? '/'.$filter : '');
+        if (Request::path() != App::getLocale().'/'.$corrected_query) {
 
-            if ($query != $corrected_query) {
-                return redirect( getLangUrl('dentists/'.$corrected_query.(!empty($filter) ? '/'.$filter : '')) );
-            }
+            return redirect( getLangUrl($corrected_query) );
         }
+
 
         // $noAddress = User::where('is_dentist', 1)->where('status', 'approved')->whereNotNull('city_id')->whereNull('lat')->take(300)->get();
         // foreach ($noAddress as $user) {
@@ -115,7 +116,7 @@ class DentistsController extends FrontController
         ];
         $order_to_field = [
             'rating' => 'avg_rating',
-            'reviews' => 'reviews',
+            'reviews' => 'ratings',
         ];
         if( Request::input('sort') && in_array( Request::input('sort'), $orders ) ) {
             $sort = Request::input('sort');
@@ -131,6 +132,14 @@ class DentistsController extends FrontController
         }
         if( !empty($filter) && $filter != 'all-results') {
             $searchCategories = explode('-', $filter);
+
+            foreach($searchCategories as $k => $v) {
+                if($v=='implants' || $v=='dentists') {
+                    $searchCategories[($k-1)] = $searchCategories[($k-1)].'-'.$v;
+                    unset($searchCategories[$k]);
+                }
+            }
+
             foreach ($searchCategories as $cat) {
                 $cat_id = array_search($cat, config('categories'));
                 $items = $items->whereHas('categories', function ($q) use ($cat_id) {
@@ -138,6 +147,8 @@ class DentistsController extends FrontController
                 });
             }
         }
+
+        // dd($searchCategories);
         //dd($categories);
         if( Request::input('partner') ) {
             $partner = true;
@@ -164,7 +175,7 @@ class DentistsController extends FrontController
        
 		return $this->ShowView('search', [
             'formattedAddress' => $formattedAddress,
-            'canonical' => getLangUrl('dentists/'.$query.(!empty($filter) ? '/'.$filter : '')),
+            'canonical' => getLangUrl($query.(!empty($filter) ? '/'.$filter : '')),
             'worldwide' => $query=='worldwide',
             'zoom' => $query=='worldwide' ? 2 : 13,
             'mode' => $mode,

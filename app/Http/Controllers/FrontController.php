@@ -165,7 +165,7 @@ class FrontController extends BaseController
         $this->categories = [];
         $clist = config('categories');
         foreach ($clist as $cat) {
-            $this->categories[$cat] = trans('front.categories.'.$cat);
+            $this->categories[$cat] = trans('trp.categories.'.$cat);
         }
 
     }

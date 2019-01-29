@@ -278,6 +278,22 @@ jQuery(document).ready(function($){
 
 		$('.search-form .results .locations-results').show();
 	};
+
+
+	$('.search-get-form').submit( function(e) {
+		e.preventDefault();
+
+		if (!$(this).attr('action')) {
+			$(this).attr('action', window.location.href.split('?')[0]);
+		}
+		if ($(this).find('input[name="sort"]').val() == 'rating') {
+			$(this).find('input[name="sort"]').val('');
+		}
+
+		var form_inputs = $(this).find(":input[value!='']").serialize();
+		window.location.href = $(this).attr('action')+ (form_inputs ? '?' : '')+form_inputs;
+		
+	});
 	
 
 

@@ -141,7 +141,7 @@
 				{!! nl2br(trans('trp.page.search.sort-filter')) !!}
 			</h2>
 
-			<form method="get" base-href="{{ getLangUrl('dentists/'.$query) }}">
+			<form class="search-get-form" method="get" base-href="{{ getLangUrl($query) }}">
 
 				<div class="sort-stars">
 					<h4 class="popup-title">
@@ -165,7 +165,7 @@
 						<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat, $searchCategories) ? ' active' : '' !!}" for="checkbox-popup-{{ $cat }}">
 							<input type="checkbox" class="special-checkbox" id="checkbox-popup-{{ $cat }}" value="{{ $cat }}" {!! in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
 							<i class="far fa-square"></i>
-							{{ trans('front.categories.'.$cat) }}
+							{{ trans('trp.categories.'.$cat) }}
 						</label>
 					@endforeach
 				</div>
@@ -228,7 +228,7 @@
 						
 					</h2>
     				
-    				<form method="get" base-href="{{ getLangUrl('dentists/'.$query) }}">
+    				<form class="search-get-form" method="get" base-href="{{ getLangUrl($query) }}">
 
 						<div class="sort-stars">
 							<h4 class="popup-title">{!! nl2br(trans('trp.page.search.stars')) !!}</h4>
@@ -249,7 +249,7 @@
 								<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat, $searchCategories) ? ' active' : '' !!}" for="checkbox-filter-{{ $cat }}">
 									<input type="checkbox" class="special-checkbox" id="checkbox-filter-{{ $cat }}" value="{{ $cat }}" {!! in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
 									<i class="far fa-square"></i>
-									{{ trans('front.categories.'.$cat) }}
+									{{ trans('trp.categories.'.$cat) }}
 								</label>
 							@endforeach
 						</div>
