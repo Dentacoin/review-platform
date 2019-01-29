@@ -21,6 +21,14 @@ class DentistsController extends FrontController
 
     public function search($locale=null, $query=null, $filter=null, $page=null, $ajax=null) {
 
+        if($query) {
+            $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query ));
+
+            if ($query != $corrected_query) {
+                return redirect( getLangUrl('dentists/'.$corrected_query.(!empty($filter) ? '/'.$filter : '')) );
+            }
+        }
+
         // $noAddress = User::where('is_dentist', 1)->where('status', 'approved')->whereNotNull('city_id')->whereNull('lat')->take(300)->get();
         // foreach ($noAddress as $user) {
         //     $query = $user->country->name.', '.$user->city->name.', '.($user->zip ? $user->zip.', ' : null).$user->address;
@@ -152,6 +160,7 @@ class DentistsController extends FrontController
         if(!$foundOnMap) {
             $staticmap = null;
         }
+
        
 		return $this->ShowView('search', [
             'formattedAddress' => $formattedAddress,
