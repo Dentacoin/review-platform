@@ -15,11 +15,11 @@ use GoogleMaps;
 class DentistsController extends FrontController
 {
 
-    public function paginate($locale=null, $query=null, $latlon=null, $page) {
-        return $this->list($locale, $query, $latlon, $page, true);
+    public function paginate($locale=null, $query=null, $filter=null, $page) {
+        return $this->list($locale, $query, $filter, $page, true);
     }
 
-    public function search($locale=null, $query=null, $latlon=null, $page=null, $ajax=null) {
+    public function search($locale=null, $query=null, $filter=null, $page=null, $ajax=null) {
 
         // $noAddress = User::where('is_dentist', 1)->where('status', 'approved')->whereNotNull('city_id')->whereNull('lat')->take(300)->get();
         // foreach ($noAddress as $user) {
@@ -55,18 +55,18 @@ class DentistsController extends FrontController
             request()->merge(['partner' => 1]);
             $lat = 30;
             $lon = 0;
-        } else if($latlon == 'all-results') {
+        } else if($filter == 'all-results') {
             $items = $items->where('name', 'like', $query.'%');
             $mode = 'name';
         } else {
 
-            if($latlon) {
-                $arr = explode(',', $latlon);
-                if(count($arr)==2 && parseFloat($arr[0]) && parseFloat($arr[1])) {
-                    $lat = parseFloat($arr[0]);
-                    $lon = parseFloat($arr[1]);
-                }
-            }
+            // if($filter) {
+            //     $arr = explode(',', $filter);
+            //     if(count($arr)==2 && parseFloat($arr[0]) && parseFloat($arr[1])) {
+            //         $lat = parseFloat($arr[0]);
+            //         $lon = parseFloat($arr[1]);
+            //     }
+            // }
 
             if(!$lat || !$lon) {
 
@@ -121,11 +121,12 @@ class DentistsController extends FrontController
             $stars = Request::input('stars');
             $items = $items->where('avg_rating', '>=', Request::input('stars'));
         }
-        if( Request::input('searchCategories') && is_array(Request::input('searchCategories')) ) {
-            $searchCategories = Request::input('searchCategories');
-            foreach (Request::input('searchCategories') as $cat) {
-                $items = $items->whereHas('categories', function ($q) use ($cat) {
-                    $q->where('category_id', $cat);
+        if( !empty($filter) && $filter != 'all-results') {
+            $searchCategories = explode('-', $filter);
+            foreach ($searchCategories as $cat) {
+                $cat_id = array_search($cat, config('categories'));
+                $items = $items->whereHas('categories', function ($q) use ($cat_id) {
+                    $q->where('category_id', $cat_id);
                 });
             }
         }

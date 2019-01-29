@@ -186,7 +186,7 @@
 						{!! nl2br(trans('trp.page.user.invite')) !!}
 						
 					</a>
-					<a href="javascript:;" class="button button-inner-white" data-popup-logged="popup-widget">
+					<a href="javascript:;" class="button button-inner-white" data-popup-logged="popup-widget" style="text-transform: initial;">
 						{!! nl2br(trans('trp.page.user.widget')) !!}
 						
 					</a>
@@ -368,8 +368,8 @@
 				<a href="javascript:;" class="button" data-popup-logged="popup-invite">
 					{!! nl2br(trans('trp.page.user.invite')) !!}
 				</a>
-				<a href="javascript:;" class="button button-inner-white" data-popup-logged="popup-widget">
-					{!! nl2br(trans('trp.page.user.submit-review')) !!}
+				<a href="javascript:;" class="button button-inner-white" data-popup-logged="popup-widget" style="text-transform: initial;">
+					{!! nl2br(trans('trp.page.user.widget')) !!}
 				</a>
 			@elseif( empty($user) || !$user->is_dentist )
 				<a href="javascript:;" class="button" data-popup-logged="submit-review-popup">

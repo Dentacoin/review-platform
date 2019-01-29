@@ -4,6 +4,7 @@ var searchTO = null;
 var displaySuggestions;
 var sendSuggestions;
 var autocomplete;
+var form_href;
 
 jQuery(document).ready(function($){
 
@@ -61,6 +62,21 @@ jQuery(document).ready(function($){
         $('input[name="sort"]').val('rating');
 
     } );
+
+
+    form_href = $('.sort-category').closest('form').attr('base-href');
+    $('.sort-category .special-checkbox').change( function() {
+    	
+    	var cats = [];
+		var labels = $(this).closest('.sort-category').find('label.active');
+
+		labels.each( function() {
+			cats.push($(this).find('input').val());
+		});
+
+		$(this).closest('form').attr('action', form_href+cats.join('-') )
+
+	});
 
 	//
 	//Search Results

@@ -196,7 +196,7 @@ $reviewRoutes = function () {
 
 			Route::post('register/civic', 						'RegisterController@civic');
 
-			Route::get('dentists/{query?}/{latlon?}', 			'DentistsController@search');
+			Route::get('dentists/{query?}/{filter?}', 			'DentistsController@search');
 
 			Route::get('dentist/{slug}/confirm-review/{secret}', 	'DentistController@confirmReview');
 			Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');
