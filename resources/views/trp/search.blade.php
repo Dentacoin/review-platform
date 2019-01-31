@@ -5,18 +5,7 @@
 	<div class="black-overflow" style="display: none;">
 	</div>
 	<div class="home-search-form">
-		<div class="tac" style="display: none;">
-	    	<h1>
-	    		{!! nl2br(trans('trp.page.search.title')) !!}
-	    		
-	    	</h1>
-	    	<h2>
-	    		{!! nl2br(trans('trp.page.search.subtitle')) !!}
-	    		
-	    	</h2>
-	    </div>
 	    @include('trp.parts.search-form')
-		
 	</div>
 
 	<div class="main-top">
@@ -39,6 +28,14 @@
     		</div>
     	</div>
     </div>
+
+    @if(!empty($search_title))
+
+	    <div class="container overflow-container">
+	    	<h1>{{ $search_title }}</h1>
+	    </div>
+
+	@endif
 
     <div class="search-results-wrapper container">
 

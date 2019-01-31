@@ -3190,7 +3190,7 @@ textarea.input {
     .page-dentists .sort-wrapper {
       width: 100%;
       padding: 0px 10px;
-      margin-top: -50px; } }
+      margin-top: -100px; } }
   @media screen and (max-width: 768px) {
     .page-dentists .sort-wrapper .flex {
       display: flex; } }
@@ -3210,6 +3210,12 @@ textarea.input {
         font-weight: 300; } }
     .page-dentists .sort-wrapper .sort-button img {
       vertical-align: bottom; }
+@media screen and (max-width: 768px) {
+  .page-dentists .home-search-form form {
+    margin-bottom: 0px; } }
+@media screen and (max-width: 768px) {
+  .page-dentists .main-top {
+    padding-bottom: 220px; } }
 
 .blue-background {
   background-color: #12b3e7;
@@ -4229,3 +4235,18 @@ textarea.input {
           height: 25px; } }
       .page-c .countries-wrapper .countries a:hover {
         color: #0fb0e5; }
+
+.overflow-container {
+  position: relative;
+  z-index: 100;
+  text-align: center; }
+  .overflow-container h1 {
+    color: white;
+    font-weight: bold;
+    margin-top: -30px;
+    margin-bottom: 30px;
+    font-size: 33px; }
+    @media screen and (max-width: 768px) {
+      .overflow-container h1 {
+        margin-top: -60px;
+        font-size: 23px; } }

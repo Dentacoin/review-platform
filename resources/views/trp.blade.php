@@ -215,6 +215,71 @@
 			@include('trp/popups/banned')
 			@include('trp/popups/suspended')
 		@endif
+
+
+		@if($current_page == 'index')
+			<script type='application/ld+json'> 
+			{
+			  "@context": "http://www.schema.org",
+			  "@type": "Corporation",
+			  "name": "Dentacoin Trusted Reviews",
+			  "description": "Through creating and implementing the first Blockchain-based platform for trusted dental treatment reviews, Dentacoin Trusted Reviews allows patients voices to be heard and provides dentists with access to up-to-date, extremely valuable market research data and qualified patient feedback - the most powerful tool to improve service quality and to establish a loyal patient base.",
+			  "logo": "https://dentacoin.com/assets/uploads/trusted-reviews.svg",
+			  "image": "https://dentacoin.com/assets/uploads/trusted-reviews.svg",
+			  "url": "https://reviews.dentacoin.com/",
+			  "sameAs": ["https://www.facebook.com/dentacoin.trusted.reviews/"],
+			  "contactPoint": {
+			    "@type": "ContactPoint",
+			    "email": "reviews@dentacoin.com",
+			    "url": "https://reviews.dentacoin.com",
+			    "contactType": "customer service"
+			    },
+			  "address": {
+			    "@type": "PostalAddress",
+			    "streetAddress": "Wim Duisenbergplantsoen 31, ",
+			    "addressLocality": "Maastricht",
+			    "postalCode": "6221 SE ",
+			    "addressCountry": "Netherlands"
+			    },
+			    "foundingDate": "08/08/2017",
+			    "founders": [
+			    {
+			        "@type": "Person",
+			        "jobTitle": "Founder",
+			        "familyName": "Dimitrakiev",
+			        "givenName": "Dimitar ",
+			        "honorificPrefix": "Prof. Dr. ",
+			        "sameAs": "https://www.linkedin.com/in/dimitar-dimitrakiev/"
+			        },
+			    {
+			        "@type": "Person",
+			        "familyName": "Grenzebach",
+			        "givenName": "Philipp",
+			        "jobTitle": "Co-Founder & Business Developer",
+			        "sameAs": "https://www.linkedin.com/in/philipp-g-986861146/"
+			    },
+			    {
+			        "@type": "Person",
+			        "familyName": "Grenzebach",
+			        "givenName": "Jeremias",
+			        "jobTitle": "Co-Founder & Core Developer",
+			        "sameAs": "https://twitter.com/neptox"
+			    }
+			    ],
+			  "owns": {
+			   "@type": "Product",
+			  "name": "Dentacoin Trusted Reviews",
+			  "image": "https://dentacoin.com/assets/uploads/trusted-reviews.svg",
+			  "description": "Dentacoin Trusted Reviews is the first platform for detailed, verified and incentivized dental treatment reviews. Patients are invited by their dentists, verified through Blockchain-based identity system and rewarded for providing valuable feedback. Dentists have the chance to improve upon the feedback received and are incentivized for willing to do so.",
+			  "aggregateRating": {
+			    "@type": "AggregateRating",
+			    "ratingValue": "5",
+			    "ratingCount": "26"
+			  }
+			}
+			}
+			</script>
+		@endif
 		
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>

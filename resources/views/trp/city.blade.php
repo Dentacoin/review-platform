@@ -24,7 +24,11 @@
 	    </div>
 
 	    <div class="sort-wrapper">
-	    	<h1 class="white-title">{!! nl2br(trans('trp.page.search.city-title')) !!}</h1>
+	    	<h1 class="white-title">
+	    		{!! nl2br(trans('trp.page.search.city-title', [
+		            'country' => $country->name,
+		        ])) !!}
+	    </h1>
 	    </div>
 
 	    <div class="countries-wrapper container">

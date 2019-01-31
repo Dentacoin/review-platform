@@ -150,6 +150,7 @@ class DentistsController extends FrontController
             }
         }
 
+
         // dd($searchCategories);
         //dd($categories);
         if( Request::input('partner') ) {
@@ -174,8 +175,99 @@ class DentistsController extends FrontController
             $staticmap = null;
         }
 
+
+
+        if (!empty($query)) {
+            $seo_title = trans('trp.seo.location.title', [
+                'location' => $formattedAddress,
+                'dentists_number' => $items->count(),
+            ]);
+            $seo_description = trans('trp.seo.location.description', [
+                'location' => $formattedAddress,
+                'dentists_number' => $items->count(),
+            ]);
+            $social_title = trans('trp.social.location.title', [
+                'location' => $formattedAddress,
+                'dentists_number' => $items->count(),
+            ]);
+            $social_description = trans('trp.social.location.description', [
+                'location' => $formattedAddress,
+                'dentists_number' => $items->count(),
+            ]);
+
+            $search_title = trans('trp.page.search.location.title', [
+                'location' => $formattedAddress,
+            ]);
+        }
+
+        if (!empty($filter)) {
+            if($filter == 'all-results') {
+                $seo_title = trans('trp.seo.all-results.title', [
+                    'name' => $formattedAddress,
+                ]);
+                $seo_description = trans('trp.seo.all-results.description', [
+                    'name' => $formattedAddress,
+                    'results_number' => $items->count(),
+                ]);
+                $social_title = trans('trp.social.all-results.title', [
+                    'name' => $formattedAddress,
+                ]);
+                $social_description = trans('trp.social.all-results.description', [
+                    'name' => $formattedAddress,
+                    'results_number' => $items->count(),
+                ]);
+
+                $search_title = trans('trp.page.search.all-results.title', [
+                    'name' => $formattedAddress,
+                ]);
+            } else {
+                $searchCategories = explode('-', $filter);
+                foreach($searchCategories as $k => $v) {
+                    if($v=='implants' || $v=='dentists') {
+                        $searchCategories[($k-1)] = $searchCategories[($k-1)].'-'.$v;
+                        unset($searchCategories[$k]);
+                    }
+                }
+                $categoryNames = [];
+                foreach ($searchCategories as $slug) {
+                    $categoryNames[] = $this->categories[$slug];
+                }
+
+                // dd(implode(', ', $categoryNames));
+                // implode(', ', $categoryNames)
+
+                $seo_title = trans('trp.seo.location.category.title', [
+                    'location' => $formattedAddress,
+                    'category' => implode(', ', $categoryNames),
+                ]);
+                $seo_description = trans('trp.seo.location.category.description', [
+                    'location' => $formattedAddress,
+                    'category' => implode(', ', $categoryNames),
+                    'results_number' => $items->count(),
+                ]);
+                $social_title = trans('trp.social.location.category.title', [
+                    'location' => $formattedAddress,
+                    'category' => implode(', ', $categoryNames),
+                ]);
+                $social_description = trans('trp.social.location.category.description', [
+                    'location' => $formattedAddress,
+                    'category' => implode(', ', $categoryNames),
+                    'results_number' => $items->count(),
+                ]);
+
+                $search_title = trans('trp.page.search.location.category.title', [
+                    'location' => $formattedAddress,
+                    'category' => implode(', ', $categoryNames),
+                ]);
+            }
+        }
        
 		return $this->ShowView('search', [
+            'search_title' => !empty($search_title) ? $search_title : null,
+            'seo_title' => !empty($seo_title) ? $seo_title : null,
+            'seo_description' => !empty($seo_description) ? $seo_description : null,
+            'social_title' => !empty($social_title) ? $social_title : null,
+            'social_description' => !empty($social_description) ? $social_description : null,
             'formattedAddress' => $formattedAddress,
             'canonical' => getLangUrl($query.(!empty($filter) ? '/'.$filter : '')),
             'worldwide' => $query=='worldwide',
@@ -330,8 +422,27 @@ class DentistsController extends FrontController
 
         // var_dump($breakpoints);
 
+        $seo_title = trans('trp.seo.country-cities.title', [
+            'country' => $country->name,
+        ]);
+        $seo_description = trans('trp.seo.country-cities.description', [
+            'country' => $country->name,
+            'results_number' => count($cities_name),
+        ]);
+        $social_title = trans('trp.social.country-cities.title', [
+            'country' => $country->name,
+        ]);
+        $social_description = trans('trp.social.country-cities.description', [
+            'country' => $country->name,
+            'results_number' => count($cities_name),
+        ]);
+
 
         return $this->ShowView('city', array(
+            'seo_title' => !empty($seo_title) ? $seo_title : null,
+            'seo_description' => !empty($seo_description) ? $seo_description : null,
+            'social_title' => !empty($social_title) ? $social_title : null,
+            'social_description' => !empty($social_description) ? $social_description : null,
             'cities_name' => $cities_groups,
             'breakpoints' => $breakpoints,
             'country' => $country,
