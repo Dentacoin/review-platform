@@ -4169,3 +4169,63 @@ textarea.input {
       color: white;
       margin-left: auto;
       border-radius: 5px; }
+
+.page-c h1 {
+  color: white;
+  font-weight: bold;
+  text-align: center; }
+  @media screen and (max-width: 768px) {
+    .page-c h1 {
+      text-align: left; } }
+.page-c .main-top {
+  padding-bottom: 160px; }
+  @media screen and (max-width: 768px) {
+    .page-c .main-top {
+      padding-bottom: 200px; } }
+.page-c .sort-wrapper {
+  margin-top: -90px; }
+.page-c .countries-wrapper {
+  position: relative;
+  z-index: 100; }
+  .page-c .countries-wrapper .countries {
+    background-color: white;
+    padding: 70px 115px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.16); }
+    @media screen and (max-width: 998px) {
+      .page-c .countries-wrapper .countries {
+        padding: 30px; } }
+    .page-c .countries-wrapper .countries .col {
+      padding-left: 20px; }
+      @media screen and (max-width: 768px) {
+        .page-c .countries-wrapper .countries .col {
+          padding-left: 0px; } }
+      .page-c .countries-wrapper .countries .col:first-child {
+        padding-left: 0px; }
+    .page-c .countries-wrapper .countries span {
+      display: block;
+      font-weight: bold;
+      font-size: 45px;
+      height: 80px; }
+      @media screen and (max-width: 1200px) {
+        .page-c .countries-wrapper .countries span {
+          font-size: 35px; } }
+      @media screen and (max-width: 998px) {
+        .page-c .countries-wrapper .countries span {
+          height: 50px; } }
+    .page-c .countries-wrapper .countries a {
+      font-size: 20px;
+      height: 40px;
+      display: block;
+      line-height: 0.8; }
+      @media screen and (max-width: 1200px) {
+        .page-c .countries-wrapper .countries a {
+          font-size: 16px; } }
+      @media screen and (max-width: 998px) {
+        .page-c .countries-wrapper .countries a {
+          height: 30px; } }
+      @media screen and (max-width: 768px) {
+        .page-c .countries-wrapper .countries a {
+          height: 25px; } }
+      .page-c .countries-wrapper .countries a:hover {
+        color: #0fb0e5; }

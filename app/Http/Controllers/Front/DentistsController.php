@@ -24,6 +24,8 @@ class DentistsController extends FrontController
         $this->current_page = 'dentists';
 
         $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).(!empty($filter) ? '/'.$filter : '');
+
+        // dd(Request::path());
         if (Request::path() != App::getLocale().'/'.$corrected_query) {
 
             return redirect( getLangUrl($corrected_query) );
@@ -230,6 +232,105 @@ class DentistsController extends FrontController
         //print("Full URL: " . $originalUrl . "&signature=" . $encodedSignature);
          
         return $originalUrl.'&signature='.$encodedSignature;
+    }
+
+
+    public function country($locale=null) {
+
+        $dentists = User::where('is_dentist', 1)->whereNotNull('country_id')->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
+
+        $dentist_countries = Country::whereIn('id', $dentists )->get();
+
+        $countries_groups = [];
+        $letter = null;
+        $letters = [];
+        $total_rows = 0;
+
+        foreach ($dentist_countries as $country) {
+            $letter = $country->name[0];
+            if(empty( $letters[$letter] )) {
+                $total_rows++;
+                $total_rows++;
+                $letters[$letter] = true;
+                $countries_groups[$total_rows] = $letter;
+            }
+
+            $total_rows++;
+            $countries_groups[$total_rows] = $country;
+        }
+
+        $row_length = ceil($total_rows / 4);
+        $breakpoints = [];
+        $p=1;
+        foreach ($countries_groups as $key => $dc) {
+            //echo  $key.' - '.$row_length*$p.'<br/>'; 
+            if($key > $row_length*$p ) {
+                $breakpoints[] = $key;
+                $p++;   
+            }
+        }
+
+        return $this->ShowView('country', array(
+            'countries_groups' => $countries_groups,
+            'breakpoints' => $breakpoints,
+        ));
+
+    }
+
+    public function city($locale=null, $country_slug) {
+
+        $country = Country::where('slug', 'like', $country_slug )->first();
+
+        if(empty($country)) {
+            return redirect('/');
+        }
+
+        $cities_name = User::where('is_dentist', 1)->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('city_name')->get()->pluck('city_name');
+        // dd($cities_name);
+
+        $cities_groups = [];
+        $letter = null;
+        $letters = [];
+        $total_rows = 0;
+
+        foreach ($cities_name as $city) {
+            $letter = $city[0];
+            if(empty( $letters[$letter] )) {
+                $total_rows++;
+                $total_rows++;
+                $letters[$letter] = true;
+                $cities_groups[$total_rows] = $letter;
+
+            }
+
+            $total_rows++;
+            $cities_groups[$total_rows] = $city;
+        }
+
+        $row_length = ceil($total_rows / 4); //19
+        $breakpoints = [];
+        $p=1;
+
+        // echo 'Total: '.$total_rows.'<br/>';
+        // var_dump($cities_groups);
+        foreach ($cities_groups as $key => $dc) {
+//             echo  $key.' - '.$row_length*$p.'
+// '; 
+            if($key >= $row_length*$p ) {
+                $breakpoints[] = $key;
+                $p++;   
+            }
+        }
+
+        // var_dump($breakpoints);
+
+
+        return $this->ShowView('city', array(
+            'cities_name' => $cities_groups,
+            'breakpoints' => $breakpoints,
+            'country' => $country,
+            'total_rows' => $total_rows,
+        ));
     }
 
 

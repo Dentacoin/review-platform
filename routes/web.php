@@ -197,6 +197,8 @@ $reviewRoutes = function () {
 			Route::post('register/civic', 						'RegisterController@civic');
 
 			Route::get('dentists/{query?}/{filter?}', 			'DentistsController@search');
+			Route::get('dentist-listings-by-country', 			'DentistsController@country');
+			Route::get('dentists-in-{country_slug}', 			'DentistsController@city');
 
 			Route::get('dentist/{slug}/confirm-review/{secret}', 	'DentistController@confirmReview');
 			Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');

@@ -35,6 +35,11 @@
 					{!! nl2br(trans('trp.common.search-partners')) !!}
 				</a>
 			</div>
+			<div class="clearfix list">
+				<a href="{{ getLangUrl('dentist-listings-by-country') }}" class="special">
+					{!! nl2br(trans('trp.common.search-dentists-countries')) !!}
+				</a>
+			</div>
 		</div>
 	</div>
 </form>	

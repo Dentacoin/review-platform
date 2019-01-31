@@ -5614,3 +5614,94 @@ textarea.input {
 		}	
 	}
 }
+
+.page-c {
+
+	h1 {
+		color: white;
+		font-weight: bold;
+		text-align: center;
+
+		@media #{$phone} {
+			text-align: left;
+		}
+	}
+
+	.main-top {
+		padding-bottom: 160px;
+
+		@media #{$phone} {
+			padding-bottom: 200px;
+		}
+	}
+
+	.sort-wrapper {
+	    margin-top: -90px;
+	}
+
+	.countries-wrapper {
+		position: relative;
+	    z-index: 100;
+
+	    .countries {
+	    	background-color: white;
+	    	padding: 70px 115px;
+	        border-radius: 5px;
+	        box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.16);
+
+	        @media #{$tablet} {
+	        	padding: 30px;
+	        }
+
+	        .col {
+	        	padding-left: 20px;
+
+	        	@media #{$phone} {
+	        		padding-left: 0px;
+	        	}
+
+	        	&:first-child {
+	        		padding-left: 0px;
+	        	}
+	        }
+
+	        span {
+	        	display: block;
+			    font-weight: bold;
+			    font-size: 45px;
+			    height: 80px;
+
+	        	@media #{$pc} {
+	        		font-size: 35px;
+    			}
+
+	        	@media #{$tablet} {
+	        		height: 50px;
+	        	}
+	        }
+
+	        a {
+				font-size: 20px;
+				height: 40px;
+				display: block;
+				line-height: 0.8;
+
+	        	@media #{$pc} {
+	        		font-size: 16px;
+	        	}
+
+	        	@media #{$tablet} {
+	        		height: 30px;
+	        	}
+
+	        	@media #{$phone} {
+	        		height: 25px;
+	        	}
+
+	        	&:hover {
+	        		color: #0fb0e5;
+	        	}
+	        }
+	    }
+	}
+}

@@ -383,15 +383,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->attributes['city_name'] = null;
         if( $this->country) {
             $info = self::validateAddress($this->country->name, $newvalue);
-            if(is_array($info)) {
+            if(!empty($info)) {
                 foreach ($info as $key => $value) {
                     $this->attributes[$key] = $value;
                 }
+            } else {
+                $this->attributes['address'] = null;
             }
         }
     }
 
     public static function validateAddress($country, $address) {
+
+        $kingdoms = [
+            'United Arab Emirates',
+        ];
 
         $query = $country.', '.$address;
         //dd($query);
@@ -403,23 +409,67 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         ->get();
 
         $geores = json_decode($geores);
+        $ret = [];
         //dd($geores);
         if(!empty($geores->results[0]->geometry->location)) {
-            if( in_array('street_address', $geores->results[0]->types) || in_array('street_number', $geores->results[0]->types) ) {
-                $ret = [];
-                $ret['lat'] = $geores->results[0]->geometry->location->lat;
-                $ret['lon'] = $geores->results[0]->geometry->location->lng;
+            dd($geores->results[0]);
+
+            if(in_array($country, $kingdoms)) {
+                $ret['city_name'] = $country;
+            } else {
                 foreach ($geores->results[0]->address_components as $ac) {
-                    if(in_array('locality', $ac->types)) {
-                        $ret['city_name'] = $ac->long_name;
+                    if(in_array('locality', $ac->types) || in_array('postal_town', $ac->types)) {
+                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                        $cname = iconv('ASCII', 'UTF-8', $cname);
+                        $ret['city_name'] = $cname;
                         break;
                     }
                 }
+
+                if( empty($ret['city_name']) ) {
+                    foreach ($geores->results[0]->address_components as $ac) {
+                        if( in_array('administrative_area_level_1', $ac->types) ) {
+                            $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                            $cname = iconv('ASCII', 'UTF-8', $cname);
+                            $ret['city_name'] = $cname;
+                            break;
+                        }
+                    }
+                }
+
+                if( empty($ret['city_name']) ) {
+                    foreach ($geores->results[0]->address_components as $ac) {
+                        if( in_array('administrative_area_level_2', $ac->types) ) {
+                            $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                            $cname = iconv('ASCII', 'UTF-8', $cname);
+                            $ret['city_name'] = $cname;
+                            break;
+                        }
+                    }
+                }
+
+                if( empty($ret['city_name']) ) {
+                    foreach ($geores->results[0]->address_components as $ac) {
+                        if( in_array('administrative_area_level_3', $ac->types) ) {
+                            $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                            $cname = iconv('ASCII', 'UTF-8', $cname);
+                            $ret['city_name'] = $cname;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if( $geores->results[0]->geometry->location_type == 'ROOFTOP' || in_array('street_address', $geores->results[0]->types) || in_array('establishment', $geores->results[0]->types) || in_array('street_number', $geores->results[0]->types) ) {
+                
+                $ret['lat'] = $geores->results[0]->geometry->location->lat;
+                $ret['lon'] = $geores->results[0]->geometry->location->lng;
+                
                 return $ret;
             }
         }    
 
-        return null;
+        return $ret;
     }
 
     private function makeSlug() {
