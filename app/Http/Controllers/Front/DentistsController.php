@@ -273,6 +273,12 @@ class DentistsController extends FrontController
         return $this->ShowView('country', array(
             'countries_groups' => $countries_groups,
             'breakpoints' => $breakpoints,
+            'js' => [
+                'search.js'
+            ],
+            'jscdn' => [
+                'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
+            ]
         ));
 
     }
@@ -330,6 +336,12 @@ class DentistsController extends FrontController
             'breakpoints' => $breakpoints,
             'country' => $country,
             'total_rows' => $total_rows,
+            'js' => [
+                'search.js'
+            ],
+            'jscdn' => [
+                'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
+            ]
         ));
     }
 
