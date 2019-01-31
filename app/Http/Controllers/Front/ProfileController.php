@@ -59,7 +59,7 @@ class ProfileController extends FrontController
             ],
             'specialization' => [
                 'type' => 'specialization',
-                'required' => true,
+                'required' => false,
             ],
             'email' => [
                 'type' => 'text',
@@ -593,28 +593,26 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 ->withErrors($validator);
             } else {
 
-                if( empty(Request::input('field'))) {
-                    if( $this->user->is_dentist && !User::validateAddress( Country::find( request('country_id')->name ), request('address') ) ) {
-                        if( Request::input('json') ) {
-                            $ret = [
-                                'success' => false,
-                                'messages' => [
-                                    'address' => trans('trp.common.invalid-address')
-                                ]
-                            ];
-                            return Response::json($ret);
-                        }
-
-                        return redirect( getLangUrl('profile/info') )
-                        ->withInput()
-                        ->withErrors([
-                            'address' => trans('trp.common.invalid-address')
-                        ]);
+                if(empty(Request::input('field')) && $this->user->is_dentist && !User::validateAddress( Country::find( request('country_id')->name ), request('address') ) ) {
+                    if( Request::input('json') ) {
+                        $ret = [
+                            'success' => false,
+                            'messages' => [
+                                'address' => trans('trp.common.invalid-address')
+                            ]
+                        ];
+                        return Response::json($ret);
                     }
+
+                    return redirect( getLangUrl('profile/info') )
+                    ->withInput()
+                    ->withErrors([
+                        'address' => trans('trp.common.invalid-address')
+                    ]);
                 }
 
                 foreach ($this->profile_fields as $key => $value) {
-                    if( Request::exists($key) ) {
+                    if( Request::exists($key) || $key=='specialization' ) {
                         if($key=='work_hours') {
                             $wh = Request::input('work_hours');
                             foreach ($wh as $k => $v) {

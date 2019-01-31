@@ -68,8 +68,14 @@ $(document).ready(function(){
                     $('.'+cls+'[role="editor"]').hide();
                     $('.'+cls+'[role="presenter"]').show();
                     console.log( data.value );
+                    var value_here = $('.'+cls+'[role="presenter"] .value-here');
+
                     if(data.value.length) {
-                        $('.'+cls+'[role="presenter"] .value-here').html(data.value);                        
+                        value_here.html(data.value);
+                        console.log('has value');
+                    } else {
+                        value_here.html(value_here.attr('empty-value'));
+                        console.log('empty value');
                     }
                 } else {
                     $(this).find('.alert').show();

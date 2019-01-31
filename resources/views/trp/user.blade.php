@@ -607,7 +607,7 @@
 				@if($item->categories->isNotEmpty() || (!empty($user) && $item->id==$user->id))
 	    			<div class="specialization" role="presenter">
 						<img src="{{ url('img-trp/graduate-hat.png') }}">
-		    			<span class="value-here">
+		    			<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.specialty-empty')) }}">
 		    				{{ $item->categories->isNotEmpty() ? implode(', ', $item->parseCategories($categories)) : nl2br(trans('trp.page.user.specialty-empty')) }}
 	    				</span>
 	    				@if(!empty($user) && $item->id==$user->id)
@@ -641,7 +641,7 @@
 				@endif
     			@if($item->description || (!empty($user) && $item->id==$user->id) )
 	    			<div class="about-content" role="presenter">
-	    				<span class="value-here">
+	    				<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.description-empty')) }}">
 		    				{!! $item->description ? nl2br($item->description) : nl2br(trans('trp.page.user.description-empty')) !!}
 		    			</span>
 	    				@if(!empty($user) && $item->id==$user->id)
