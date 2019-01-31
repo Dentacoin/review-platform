@@ -58,6 +58,7 @@ $(document).ready(function(){
         }
         ajax_is_running = true;
 
+        
         $.post( 
             $(this).attr('action'), 
             $(this).serialize() , 
@@ -72,9 +73,13 @@ $(document).ready(function(){
                     }
                 } else {
                     $(this).find('.alert').show();
+                    $(this).find('.alert').html('');
+                    for(var i in data.messages) {
+                        $(this).find('.alert').append(data.messages[i]);
+                    }
 
                     $('html, body').animate({
-                        scrollTop: that.offset().top - $('header').height()
+                        scrollTop: $(this).offset().top - $('header').height()
                     }, 500);
                 }
                 ajax_is_running = false;
