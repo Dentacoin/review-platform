@@ -268,7 +268,7 @@ $(document).ready(function(){
         } else if (keyCode === 13) {
             if( activeLink.length ) {
                 $(this).val( activeLink.text() ).blur();
-                container.find('.suggester-hidden').val( activeLink.attr('data-id') );
+                $(this).closest('.cilnic-suggester-wrapper').find('.suggester-hidden').val( activeLink.attr('data-id') );
                 container.hide();
             }
         } else {

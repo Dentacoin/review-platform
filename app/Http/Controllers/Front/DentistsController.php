@@ -329,7 +329,7 @@ class DentistsController extends FrontController
 
     public function country($locale=null) {
 
-        $dentists = User::where('is_dentist', 1)->whereNotNull('country_id')->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
+        $dentists = User::where('is_dentist', 1)->where('status', 'approved')->whereNotNull('country_id')->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
 
         $dentist_countries = Country::whereIn('id', $dentists )->get();
 
@@ -396,7 +396,7 @@ class DentistsController extends FrontController
             return redirect('/');
         }
 
-        $cities_name = User::where('is_dentist', 1)->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('city_name')->get()->pluck('city_name');
+        $cities_name = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('city_name')->get()->pluck('city_name');
         // dd($cities_name);
 
         $cities_groups = [];

@@ -25,7 +25,7 @@ class SitemapController extends FrontController
 			$links[] = $dentist->getLink();
 		}
 
-		$dentists = User::where('is_dentist', 1)->whereNotNull('country_id')->groupBy('country_id')->get()->pluck('country_id');
+		$dentists = User::where('is_dentist', 1)->whereNotNull('country_id')->where('status', 'approved')->groupBy('country_id')->get()->pluck('country_id');
         $dentist_countries = Country::whereIn('id', $dentists )->get();
 
         foreach ($dentist_countries as $country) {
