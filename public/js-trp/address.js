@@ -34,7 +34,7 @@ jQuery(document).ready(function($){
                     var marker = new google.maps.Marker({
                         map: profile_address_map,
 						icon: images_path+'/map-pin-inactive.png',
-                        center: coords,
+                        position: coords,
                     });
 	            }
 
@@ -69,7 +69,6 @@ jQuery(document).ready(function($){
 	}
 
 	checkAddress = function(place, conatiner) {
-
         conatiner.find('.address-suggester').blur();
         conatiner.find('.geoip-hint').hide();
         conatiner.find('.suggester-map-div').hide();
@@ -104,7 +103,7 @@ jQuery(document).ready(function($){
                     var marker = new google.maps.Marker({
                         map: profile_address_map,
 						icon: images_path+'/map-pin-inactive.png',
-                        center: coords,
+                        position: coords,
                     });
 
                 }).bind(conatiner) );

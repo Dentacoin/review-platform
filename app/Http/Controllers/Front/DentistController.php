@@ -450,6 +450,12 @@ class DentistController extends FrontController
             ]);   
         }
         
+        
+
+        $addGM = false;
+        if($item->lat && $item->lon) {
+            $addGM = true;
+        }
 
         if(!empty($this->user) && $this->user->id==$item->id) {
             $view_params['js'][] = 'upload.js';
@@ -468,10 +474,7 @@ class DentistController extends FrontController
                 '40' => '40',
                 '50' => '50',
             ];
-        }
-
-        $addGM = false;
-        if($item->lat && $item->lon) {
+            $view_params['js'][] = 'address.js';
             $addGM = true;
         }
 
@@ -483,8 +486,6 @@ class DentistController extends FrontController
                 'https://hosted-sip.civic.com/css/civic-modal.min.css',
             ];
 
-            $view_params['js'][] = 'address.js';
-            $addGM = true;
         }
 
         if( $addGM ) {
