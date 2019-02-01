@@ -11,6 +11,7 @@ class VpnController extends FrontController
 
 	public function list($locale=null) {
 		return $this->ShowView('vpn', array(
+			'extra_body_class' => 'white-header',
         ));
 	}
 

@@ -196,6 +196,8 @@ $reviewRoutes = function () {
 
 			Route::post('register/civic', 						'RegisterController@civic');
 
+			Route::any('vpn', 									'VpnController@list');
+
 			Route::get('dentists/{query?}/{filter?}', 			'DentistsController@search');
 			Route::get('dentist-listings-by-country', 			'DentistsController@country');
 			Route::get('dentists-in-{country_slug}', 			'DentistsController@city');
@@ -294,8 +296,10 @@ $voxRoutes = function () {
 			Route::any('dental-survey-stats', 					'StatsController@home');
 			Route::any('dental-survey-stats/{id}', 				'StatsController@stats');
 
-			Route::any('questionnaire/{id}', 				'VoxController@home');
+			Route::any('questionnaire/{id}', 					'VoxController@home');
 			Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');
+
+			Route::any('vpn', 									'VpnController@list');
 
 			Route::group(['middleware' => 'auth:web'], function () {
 				Route::any('welcome-to-dentavox', 					'RegisterController@register_success');

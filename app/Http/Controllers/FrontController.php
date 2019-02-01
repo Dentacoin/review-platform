@@ -71,7 +71,7 @@ class FrontController extends BaseController
             $myips[Request::ip()] = User::checkForBlockedIP();
             session(['my-ips' => $myips]);
         }
-        if( $myips[Request::ip()] && $this->current_page!='vpn' ) {
+        if($myips[Request::ip()] && $this->current_page!='vpn' ) {
             Redirect::to( getLangUrl('vpn') )->send();
         }
         if( !$myips[Request::ip()] && $this->current_page=='vpn' ) {
@@ -200,7 +200,7 @@ class FrontController extends BaseController
         $params['users_count'] = User::getCount('vox');
         //dd($params['header_questions']);
 
-        $params['cache_version'] = '20190131-1';
+        $params['cache_version'] = '20190201';
 
         $params['show_tutorial'] = false;
         // if($this->user) {
@@ -228,7 +228,7 @@ class FrontController extends BaseController
     public function ShowView($page, $params=array()) {
         $this->PrepareViewData($page, $params, 'trp');
 
-        $params['cache_version'] = '20190131-1';
+        $params['cache_version'] = '20190201';
         // "2018-05-05 00:00:00.000000"
 
         if( empty( $this->user ) ) {
