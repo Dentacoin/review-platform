@@ -774,7 +774,7 @@
 				@else
 					<div class="alert alert-info">
 						{!! nl2br(trans('trp.page.user.map-missing', [
-							'link' => '<a href="javascript:;" class="open-edit">',
+							'link' => '<a href="javascript:;" class="open-edit alert-edit">',
 							'endlink' => '</a>',
 						])) !!}
 						

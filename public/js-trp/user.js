@@ -27,6 +27,12 @@ $(document).ready(function(){
         });
     }
 
+    $('.alert-edit').click( function() {
+        $('html, body').animate({
+            scrollTop: $('.edit-profile').offset().top - $('header').height()
+        }, 500);
+    });
+
     $('.open-edit').click( function() {
         $('.view-profile').toggle();
         $('.edit-profile').toggle();
