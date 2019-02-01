@@ -168,6 +168,12 @@ class FrontController extends BaseController
             $this->categories[$cat] = trans('trp.categories.'.$cat);
         }
 
+        $this->categories_dentists = [];
+        $clist = config('categories');
+        foreach ($clist as $cat) {
+            $this->categories_dentists[$cat] = trans('trp.categories-dentists.'.$cat);
+        }
+
     }
 
     public function ShowVoxView($page, $params=array()) {

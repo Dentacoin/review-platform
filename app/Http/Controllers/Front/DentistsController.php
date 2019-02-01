@@ -230,7 +230,7 @@ class DentistsController extends FrontController
                 }
                 $categoryNames = [];
                 foreach ($searchCategories as $slug) {
-                    $categoryNames[] = $this->categories[$slug];
+                    $categoryNames[] = $this->categories_dentists[$slug];
                 }
 
                 // dd(implode(', ', $categoryNames));
@@ -376,6 +376,19 @@ class DentistsController extends FrontController
     }
 
     public function city($locale=null, $country_slug) {
+
+        // $user = User::find(497);
+
+        // $info = User::validateAddress('Bulgaria', 'Slaveevi gori 23 Plovdiv');
+        // if(is_array($info)) {
+        //     echo 'country: '.$user->country->name.' | address: '.$user->address.' | city: '.$user->city_name.'<br/>';
+        //     foreach ($info as $key => $value) {
+        //         echo 'key-> '.$key.' | value-> '.$value.'<br/>';
+        //         $user->$key = $value;
+        //     }
+            
+        // }
+
 
         $country = Country::where('slug', 'like', $country_slug )->first();
 

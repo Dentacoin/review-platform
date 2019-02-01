@@ -412,7 +412,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $ret = [];
         //dd($geores);
         if(!empty($geores->results[0]->geometry->location)) {
-            
+            // dd($geores->results[0]);
 
             if(in_array($country, $kingdoms)) {
                 $ret['city_name'] = $country;
