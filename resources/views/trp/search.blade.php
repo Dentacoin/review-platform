@@ -39,6 +39,13 @@
 
     <div class="search-results-wrapper container">
 
+    	@if($items->count() == 0)
+    		<div class="alert alert-info">
+    			{!! nl2br(trans('trp.page.search.no-results-dentist')) !!}
+    		</div>
+    		<br/>
+    	@endif
+
     	@if($items->isNotEmpty() && $staticImageUrl && $mode=='map')
     		<a href="javascript:;" class="results-static-map" data-popup="map-results-popup">
 	    		<img src="{{ $staticImageUrl }}" />

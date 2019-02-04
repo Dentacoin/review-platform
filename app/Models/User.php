@@ -957,6 +957,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $avatar = $this->hasimage ? $this->getImagePath(true) : public_path().'/new-vox-img/no-avatar-1.png';
         $img->insert($avatar , 'top-left', 80, 170 );
 
+
         $names = $this->getName();
         $names_size = 66;
         if(mb_strlen($names)>20) {
