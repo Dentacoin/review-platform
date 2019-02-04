@@ -41,7 +41,10 @@
 
     	@if($items->count() == 0)
     		<div class="alert alert-info">
-    			{!! nl2br(trans('trp.page.search.no-results-dentist')) !!}
+    			{!! nl2br(trans('trp.page.search.no-results-dentist',[
+    				'link' => '<a href="'.getLangUrl('dentist-listings-by-country').'">',
+    				'endlink' => '</a>',
+    			])) !!}
     		</div>
     		<br/>
     	@endif
