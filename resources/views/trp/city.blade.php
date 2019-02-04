@@ -39,7 +39,7 @@
 				    		@if(mb_strlen($city) == 1)
 				    			<span class="letter">{{ $city }}</span>
 				    		@else
-				    			<a href="{{ getLangUrl(str_replace(' ', '-', strtolower($city)).'-'.$country->slug) }}">{{ $city }}</a>
+				    			<a href="{{ getLangUrl('dentists/'.str_replace(' ', '-', strtolower($city)).'-'.$country->slug) }}">{{ $city }}</a>
 				    		@endif
 				    		@if( $total_rows > 8 && in_array($key, $breakpoints) && !$loop->last)
 				    			</div>

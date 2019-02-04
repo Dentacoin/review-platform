@@ -23,7 +23,13 @@ class DentistsController extends FrontController
     public function search($locale=null, $query=null, $filter=null, $page=null, $ajax=null) {
         $this->current_page = 'dentists';
 
-        $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).(!empty($filter) ? '/'.$filter : '');
+        // $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).(!empty($filter) ? '/'.$filter : '');
+
+        if(!empty($filter)) {
+            $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).'/'.$filter;
+        } else {
+            $corrected_query = 'dentists/'.mb_strtolower(str_replace([',', ' '], ['', '-'], $query ));
+        }
 
         // dd(Request::path());
         if (Request::path() != App::getLocale().'/'.$corrected_query) {
@@ -269,7 +275,7 @@ class DentistsController extends FrontController
             'social_title' => !empty($social_title) ? $social_title : null,
             'social_description' => !empty($social_description) ? $social_description : null,
             'formattedAddress' => $formattedAddress,
-            'canonical' => getLangUrl($query.(!empty($filter) ? '/'.$filter : '')),
+            'canonical' => getLangUrl((empty($filter) ? 'dentists/' : '').$query.(!empty($filter) ? '/'.$filter : '')),
             'worldwide' => $query=='worldwide',
             'zoom' => $query=='worldwide' ? 2 : 13,
             'mode' => $mode,
