@@ -55,9 +55,9 @@ $(document).ready(function(){
                 $('.section-welcome-done').show();
             } else {
                 
-                $('.finish-test').show();
                 if ($('.finish-test .mobile-bubble-effect').length && $('.finish-test .mobile-person-effect').length && window.innerWidth < 768) {
 
+                    $('.finish-test').show();
                     preloadImages([
                         $('.finish-test .mobile-bubble-effect').attr('src'),
                         $('.finish-test .mobile-person-effect').attr('src'),
