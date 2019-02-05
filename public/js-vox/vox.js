@@ -1,8 +1,22 @@
 var sendReCaptcha;
 var recaptchaCode = null;
 var sendValidation;
+var preloadImages;
 
 $(document).ready(function(){
+
+    if ($('.mobile-bubble-effect').length && $('.mobile-person-effect').length && window.innerWidth < 768) {
+
+        // Let's call it:
+        preloadImages([
+            $('.mobile-bubble-effect').attr('src'),
+            $('.mobile-person-effect').attr('src'),
+        ], function(){
+            $('.mobile-welcome-images img').each (function() {
+                $(this).addClass('effect-loaded');
+            });
+        });
+    }
     
     sendValidation = function() {
         if(recaptchaCode) { // && $('#iagree').is(':checked')

@@ -1,4 +1,5 @@
 var first_test = {};
+var preloadImages;
 
 $(document).ready(function(){
 
@@ -53,7 +54,25 @@ $(document).ready(function(){
                 $('.section-welcome').hide();
                 $('.section-welcome-done').show();
             } else {
-                window.location.href = register_url;
+                
+                $('.finish-test').show();
+                if ($('.finish-test .mobile-bubble-effect').length && $('.finish-test .mobile-person-effect').length && window.innerWidth < 768) {
+
+                    preloadImages([
+                        $('.finish-test .mobile-bubble-effect').attr('src'),
+                        $('.finish-test .mobile-person-effect').attr('src'),
+                    ], function(){
+                        $('.finish-test .mobile-welcome-images img').each (function() {
+                            $(this).addClass('effect-loaded');
+                        });
+                        
+                        setTimeout( function() {
+                            window.location.href = register_url;
+                        }, 2000 );
+                    });
+                }
+
+                
             }
             // $("#first-test-done").modal({backdrop: 'static', keyboard: false});
 
@@ -88,25 +107,6 @@ $(document).ready(function(){
     } );
 
     if ($('.mobile-bubble-effect').length && $('.mobile-person-effect').length && window.innerWidth < 768) {
-
-        function preloadImages(urls, allImagesLoadedCallback){
-            var loadedCounter = 0;
-            var toBeLoadedNumber = urls.length;
-            urls.forEach(function(url){
-                preloadImage(url, function(){
-                    loadedCounter++;
-                        console.log('Number of loaded images: ' + loadedCounter);
-                  if(loadedCounter == toBeLoadedNumber){
-                    allImagesLoadedCallback();
-                  }
-                });
-            });
-            function preloadImage(url, anImageLoadedCallback){
-                var img = new Image();
-                img.onload = anImageLoadedCallback;
-                img.src = url;
-            }
-        }
 
         // Let's call it:
         preloadImages([

@@ -13,6 +13,24 @@ var flickityScales;
 var mapsLoaded = false;
 var mapsWaiting = [];
 
+var preloadImages = function(urls, allImagesLoadedCallback){
+    var loadedCounter = 0;
+    var toBeLoadedNumber = urls.length;
+    var preloadImage = function(url, anImageLoadedCallback){
+        var img = new Image();
+        img.onload = anImageLoadedCallback;
+        img.src = url;
+    }
+    urls.forEach(function(url){
+        preloadImage(url, function(){
+            loadedCounter++;
+                console.log('Number of loaded images: ' + loadedCounter);
+          if(loadedCounter == toBeLoadedNumber){
+            allImagesLoadedCallback();
+          }
+        });
+    });
+}
 
 
 //
@@ -671,8 +689,6 @@ $(document).ready(function(){
     if(getUrlParameter('suspended-popup')) {
 		$('#suspended-popup').addClass('active');
 	}
-
-
 
 
 });

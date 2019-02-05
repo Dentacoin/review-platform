@@ -4503,3 +4503,6 @@ header {
       color: white;
       margin-left: auto;
       border-radius: 5px; }
+
+.finish-test {
+  display: none; }

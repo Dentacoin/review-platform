@@ -11,6 +11,13 @@
 				<img class="mobile-person-effect" src="{{ url('new-vox-img/welcome-test-person.png') }}">
 			</div>
 
+			<div class="finish-test">
+				<div class="mobile-welcome-images">
+					<img class="mobile-bubble-effect" src="{{ url('new-vox-img/blue-circle.png') }}">
+					<img class="mobile-person-effect" src="{{ url('new-vox-img/welcome-test-finish.png') }}">
+				</div>
+			</div>
+
 			<div class="col-md-3">
 				<img class="image-left" src="{{ url('new-vox-img/welcome.png') }}">
 			</div>

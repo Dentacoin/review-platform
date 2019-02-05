@@ -12,6 +12,13 @@
 			</div>
 		@else
 
+			@if(!$welcomerules && $first_question_num == 1)
+				<div class="mobile-welcome-images">
+					<img class="mobile-bubble-effect" src="{{ url('new-vox-img/blue-circle.png') }}">
+					<img class="mobile-person-effect" src="{{ url('new-vox-img/welcome-test-person.png') }}">
+				</div>
+			@endif
+
 			<div class="container" id="question-meta">
 				<div class="questions">
 
