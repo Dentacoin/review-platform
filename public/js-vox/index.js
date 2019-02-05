@@ -54,23 +54,28 @@ $(document).ready(function(){
                 $('.section-welcome').hide();
                 $('.section-welcome-done').show();
             } else {
-                
-                if ($('.finish-test .mobile-bubble-effect').length && $('.finish-test .mobile-person-effect').length && window.innerWidth < 768) {
+                if (window.innerWidth < 768) {
+                    if ($('.finish-test .mobile-bubble-effect').length && $('.finish-test .mobile-person-effect').length) {
 
-                    $('.finish-test').show();
-                    preloadImages([
-                        $('.finish-test .mobile-bubble-effect').attr('src'),
-                        $('.finish-test .mobile-person-effect').attr('src'),
-                    ], function(){
-                        $('.finish-test .mobile-welcome-images img').each (function() {
-                            $(this).addClass('effect-loaded');
+                        $('.finish-test').show();
+                        preloadImages([
+                            $('.finish-test .mobile-bubble-effect').attr('src'),
+                            $('.finish-test .mobile-person-effect').attr('src'),
+                        ], function(){
+                            $('.finish-test .mobile-welcome-images img').each (function() {
+                                $(this).addClass('effect-loaded');
+                            });
+                            
+                            setTimeout( function() {
+                                window.location.href = register_url;
+                            }, 2000 );
                         });
-                        
-                        setTimeout( function() {
-                            window.location.href = register_url;
-                        }, 2000 );
-                    });
+                    }
+
+                } else {
+                    window.location.href = register_url;
                 }
+                
 
                 
             }
