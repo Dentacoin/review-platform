@@ -391,7 +391,7 @@ $(document).ready(function(){
 
         navigator.share({
             title: document.title,
-            url: shareUrl
+            url: window.location.href,
         }).then(() => console.log('Successful share'))
         .catch((error) => console.log('Error sharing:', error));
     } else {
@@ -409,8 +409,8 @@ $(document).ready(function(){
 
 
     $('#invite-button').click( function() {
-        $(this).hide();
         $(this).next().show();
+        $(this).hide();
     });
 
     if (window.innerWidth > 768) {
