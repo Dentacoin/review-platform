@@ -124,7 +124,7 @@ $(document).ready(function(){
 	        } );
 
 	        if(!missing) {
-				$('.question-group:visible .next-answer').show();
+				$('.question-group:visible .next-answer').show().trigger('click');
 	        }
 		}
 	}
