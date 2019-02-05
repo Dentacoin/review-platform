@@ -13,7 +13,7 @@
 	    		
 	    	</p>
 
-			<a href="javascript:;" class="button" data-popup="popup-register">
+			<a href="javascript:;" class="button button-sign-up-dentist" data-popup="popup-register">
 				{{ trans('trp.page.index-dentist.signup') }}
 			</a>
 
@@ -30,7 +30,7 @@
 					<input type="email" name="email" placeholder="{{ trans('trp.page.index-dentist.email') }}" class="input">
 					<input type="password" name="password" placeholder="{{ trans('trp.page.index-dentist.password') }}" class="input">
 					<div class="tac">
-						<input type="submit" value="{{ trans('trp.page.index-dentist.signup') }}" class="button">
+						<input type="submit" value="{{ trans('trp.page.index-dentist.signup') }}" class="button button-sign-up-dentist">
 					</div>
 				</div>
 
@@ -117,7 +117,7 @@
     			{!! nl2br(trans('trp.page.index-dentist.cta')) !!}
     			
     		</h2>
-    		<a href="javascript:;" class="button button-white" data-popup="popup-register">
+    		<a href="javascript:;" class="button button-white button-sign-up-dentist" data-popup="popup-register">
     			{!! nl2br(trans('trp.page.index-dentist.signup')) !!}
     		</a>
     	</div>

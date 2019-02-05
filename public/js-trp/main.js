@@ -494,6 +494,25 @@ jQuery(document).ready(function($){
 		});
 	}
 
+	$('.button-sign-up-dentist').click( function() {
+		fbq('track', 'InitiateRegistration');
+		ga('send', 'event', 'DentistRegistration', 'ClickSignup', 'InitiateDentistRegistration');
+	});
+
+	$('.button-next-step').click( function() {
+		ga('send', 'event', 'DentistRegistration', 'ClickNext', 'DentistRegistrationStep'+ $(this).attr('step-number'));
+	});
+
+	$('.button-sign-up-patient').click( function() {
+		fbq('track', 'InitiateRegistration');
+		ga('send', 'event', 'PatientRegistration', 'ClickSignup', 'PatientInitiateRegistration');
+	});
+
+	$('.button-login-patient').click( function() {
+		fbq('track', 'PatientLogin');
+		ga('send', 'event', 'PatientLogin', 'ClickLogin', 'TRPPatientLogin');
+	});
+
 });
 
 //

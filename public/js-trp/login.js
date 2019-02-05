@@ -345,6 +345,11 @@ $(document).ready(function(){
             $(this).attr('action'), 
             $(this).serialize() , 
             (function( data ) {
+                if(data.track_registration) {
+                    fbq('track', 'CompleteRegistration');
+                    ga('send', 'event', 'DentistRegistration', 'ClickNext', 'DentistRegistrationComplete');
+                }
+
                 if(data.popup) {
                     closePopup();
                     showPopup(data.popup);

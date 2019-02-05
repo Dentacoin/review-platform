@@ -422,6 +422,7 @@ class RegisterController extends FrontController
             return Response::json( [
                 'success' => true,
                 'popup' => 'verification-popup',
+                'track_registration' => true,
             ] );
 
         }
@@ -620,6 +621,7 @@ class RegisterController extends FrontController
                             'invitation_email' => null,
                             'invitation_id' => null,
                             'just_registered' => true,
+                            'civic_registered' => true,
                         ];
                         session($sess);
 

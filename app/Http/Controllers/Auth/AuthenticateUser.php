@@ -94,6 +94,11 @@ class AuthenticateUser extends FrontController
                 ] );
             }
 
+            $sess = [
+                'just_login' => true,
+            ];
+            session($sess);
+
             return Response::json( [
                 'success' => true
             ] );

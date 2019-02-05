@@ -102,7 +102,7 @@
 								{!! nl2br(trans('trp.page.index.usp-1-content')) !!}
 								
 							</p>
-							<a href="javascript:;" class="button" data-popup="popup-register">
+							<a href="javascript:;" class="button button-sign-up-patient" data-popup="popup-register">
 								{!! nl2br(trans('trp.page.index.join-now')) !!}
 								
 							</a>
@@ -143,7 +143,7 @@
 							
 						</p>
 						<div class="tac">
-							<a href="javascript:;" class="button" data-popup="popup-register">
+							<a href="javascript:;" class="button button-sign-up-patient" data-popup="popup-register">
 								{!! nl2br(trans('trp.page.index.join-now')) !!}
 							</a>
 						</div>

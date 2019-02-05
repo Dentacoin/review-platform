@@ -67,11 +67,9 @@
 			'https://connect.facebook.net/en_US/fbevents.js');
 			fbq('init', '2010503399201502'); 
 			fbq('track', 'PageView');
-
-			@if($just_registered)
-            	fbq('track', 'CompleteRegistration');
-            @endif
 		</script>
+
+
 		<!-- End Facebook Pixel Code -->
 		<link rel="apple-touch-icon" sizes="57x57" href="{{ url('trp-fav/apple-icon-57x57.png') }}">
 		<link rel="apple-touch-icon" sizes="60x60" href="{{ url('trp-fav/apple-icon-60x60.png') }}">
@@ -141,7 +139,7 @@
 										For dentists
 									</a>
 								@endif
-								<a href="javascript:;" class="button-sign-in" data-popup="popup-login">
+								<a href="javascript:;" class="button-sign-in {{ $current_page!='welcome-dentist' ? 'button-login-patient' : '' }}" data-popup="popup-login">
 									Log in
 								</a>
 	                        @endif
@@ -283,6 +281,27 @@
 		
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
+        <script type="text/javascript">
+        	jQuery(document).ready(function($){
+	            @if(!empty($user) && !$user->is_dentist)
+
+		            @if( $just_registered && $civic_registered)
+		            	fbq('track', 'CompleteRegistrationCivic');
+						ga('send', 'event', 'PatientRegistration', 'ClickCivic', 'TRPCivicPatientRegistration');
+		            @endif
+
+		            @if( $just_registered && !$civic_registered)
+		            	fbq('track', 'CompleteRegistrationFB');
+						ga('send', 'event', 'PatientRegistration', 'ClickFB', 'FBPatientRegistration');
+		            @endif
+		        @endif
+
+		        @if(!empty($user) && $user->is_dentist && $just_login)
+		        	fbq('track', 'DentistLogin');
+					ga('send', 'event', 'DentistLogin', 'ClickLogin', 'DentistLogin');
+		        @endif
+		    });
+		</script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
         <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 		<script src="{{ url('/js-trp/main.js').'?ver='.$cache_version }}"></script>

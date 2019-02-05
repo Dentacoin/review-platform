@@ -303,6 +303,22 @@ class FrontController extends BaseController
             ]);
         }
 
+        $params['civic_registered'] = false;
+        if( session('civic_registered') ) {
+            $params['civic_registered'] = true;
+            session([
+                'civic_registered' => false
+            ]);
+        }
+
+        $params['just_login'] = false;
+        if( session('just_login') ) {
+            $params['just_login'] = true;
+            session([
+                'just_login' => false
+            ]);
+        }
+
         $params['new_auth'] = false;
         if( session('new_auth') && !empty($this->user) && empty($this->user->fb_id) && empty($this->user->civic_id) ) {
             $params['new_auth'] = true;

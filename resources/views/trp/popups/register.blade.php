@@ -89,7 +89,7 @@
 					<p class="have-account">
 						{!! nl2br(trans('trp.popup.popup-register.have-account')) !!}
 						
-						<a class="log-in-button" href="javascript:;">
+						<a class="log-in-button button-login-patient" href="javascript:;">
 							{!! nl2br(trans('trp.popup.popup-register.login')) !!}
 							
 						</a>
@@ -150,7 +150,7 @@
 					<p class="have-account">
 						{!! nl2br(trans('trp.popup.popup-register.no-account')) !!}
 						
-						<a class="sign-in-button" href="javascript:;">
+						<a class="sign-in-button button-sign-up-patient" href="javascript:;">
 							{!! nl2br(trans('trp.popup.popup-register.signup')) !!}
 							
 						</a>
@@ -191,7 +191,7 @@
 							<input type="password" name="password" id="dentist-password" placeholder="{!! nl2br(trans('trp.popup.popup-register.password')) !!}" class="input" value="{{ old('password') }}">
 							<input type="password" name="password-repeat" id="dentist-password-repeat" placeholder="{!! nl2br(trans('trp.popup.popup-register.repeat-password')) !!}" class="input" value="{{ old('password-repeat') }}">
 							<div class="form-info clearfix">
-								<a href="javascript:;" class="button next go-to-next" data-validator="{{ getLangUrl('register/step1') }}">
+								<a href="javascript:;" class="button next go-to-next button-next-step" step-number="1" data-validator="{{ getLangUrl('register/step1') }}">
 									{!! nl2br(trans('trp.common.next')) !!}
 									
 								</a>
@@ -255,7 +255,7 @@
 							<input type="text" name="website" placeholder="Website" id="dentist-website" class="input">
 							<div class="form-info clearfix">
 								<a class="back" href="javascript:;">< {!! nl2br(trans('trp.common.back')) !!}</a>
-								<a href="javascript:;" class="button next go-to-next" data-validator="{{ getLangUrl('register/step2') }}">{!! nl2br(trans('trp.common.next')) !!}</a>
+								<a href="javascript:;" class="button next go-to-next button-next-step" step-number="2" data-validator="{{ getLangUrl('register/step2') }}">{!! nl2br(trans('trp.common.next')) !!}</a>
 							</div>
 						</div>
 						<div class="sign-in-step" id="step-3">
@@ -309,7 +309,7 @@
 
 							<div class="form-info clearfix">
 								<a class="back" href="javascript:;">< {!! nl2br(trans('trp.common.back')) !!}</a>
-								<a href="javascript:;" class="button next go-to-next" data-validator="{{ getLangUrl('register/step3') }}">
+								<a href="javascript:;" class="button next go-to-next button-next-step" step-number="3" data-validator="{{ getLangUrl('register/step3') }}">
 									{!! nl2br(trans('trp.common.next')) !!}
 								</a>
 							</div>
@@ -367,7 +367,7 @@
 						</a>
 						 | 
 						{!! nl2br(trans('trp.popup.popup-register.no-account')) !!}
-						<a class="sign-in-button" href="javascript:;">
+						<a class="sign-in-button button-sign-up-dentist" href="javascript:;">
 							{!! nl2br(trans('trp.popup.popup-register.signup')) !!}
 						</a>
 					</p>
