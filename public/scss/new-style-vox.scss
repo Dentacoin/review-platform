@@ -407,8 +407,6 @@ select:focus > option:checked {
     	border-right: 7px solid white;
     	border-radius: 8px;
     
-
-
     	&:after {
 		    background-image: url(../new-vox-img/right-arrow.png);
 		    width: 11px;
@@ -416,6 +414,13 @@ select:focus > option:checked {
 		    right: 7px;
 		    top: 5px;
     	}
+
+    	&:hover {
+
+	    	&:after {
+	    		right: 7px;
+	    	}
+	    }
     }
 }
 

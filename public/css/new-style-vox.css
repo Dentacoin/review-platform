@@ -336,7 +336,9 @@ select:focus > option:checked {
         width: 11px;
         height: 18px;
         right: 7px;
-        top: 5px; } }
+        top: 5px; }
+      .black-button:hover:after {
+        right: 7px; } }
 
 .blue-button {
   border: 2px solid #38ace5;
