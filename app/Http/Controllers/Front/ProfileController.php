@@ -126,8 +126,8 @@ class ProfileController extends FrontController
     //
 
     public function home($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved') {
-            return redirect(getLangUrl('pending-dentist'));
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
+            return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
 
@@ -256,8 +256,8 @@ class ProfileController extends FrontController
 
 
     public function privacy($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved') {
-            return redirect(getLangUrl('pending-dentist'));
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
+            return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
         
@@ -339,8 +339,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     //
 
     public function invite($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved') {
-            return redirect(getLangUrl('pending-dentist'));
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
+            return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
 
@@ -455,7 +455,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
     public function invite_new($locale=null) {
 
-        if($this->user->is_dentist && $this->user->status!='approved') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
             return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
         }
 
@@ -516,7 +516,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     //
 
     public function upload($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
             return Response::json(['success' => false ]);
         }
         $this->handleMenu();
@@ -532,8 +532,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     
 
     public function info($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved') {
-            return redirect(getLangUrl('pending-dentist'));
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
+            return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
 
@@ -681,8 +681,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function change_password($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved') {
-            return redirect(getLangUrl('pending-dentist'));
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
+            return redirect(getLangUrl('/'));
         }
 
         $validator = Validator::make(Request::all(), [
@@ -714,8 +714,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     //
 
     public function asks($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved') {
-            return redirect(getLangUrl('pending-dentist'));
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
+            return redirect(getLangUrl('/'));
         }
         if (!$this->user->is_dentist) {
             return redirect( getLangUrl('profile') );
@@ -733,8 +733,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         ]);
     }
     public function asks_accept($locale=null, $ask_id) {
-        if($this->user->is_dentist && $this->user->status!='approved') {
-            return redirect(getLangUrl('pending-dentist'));
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
+            return redirect(getLangUrl('/'));
         }
         if (!$this->user->is_dentist) {
             return redirect( getLangUrl('profile') );
@@ -764,8 +764,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         return redirect( getLangUrl('profile/asks'));
     }
     public function asks_deny($locale=null, $ask_id) {
-        if($this->user->is_dentist && $this->user->status!='approved') {
-            return redirect(getLangUrl('pending-dentist'));
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
+            return redirect(getLangUrl('/'));
         }
         if (!$this->user->is_dentist) {
             return redirect( getLangUrl('profile') );
@@ -842,7 +842,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             return Response::json( $ret );
         }
         
-        if($this->user->is_dentist && $this->user->status!='approved') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
             $ret['message'] = 'not-verified';
             return Response::json( $ret );
         }

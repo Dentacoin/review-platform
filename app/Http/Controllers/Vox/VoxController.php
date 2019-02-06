@@ -111,8 +111,8 @@ class VoxController extends FrontController
 		$doing_asl = false;
 		$first = Vox::where('type', 'home')->first();
 
-		if(empty($vox) || $this->user->status!='approved' || !$this->user->madeTest($first->id) ) {
-			if($this->user->status!='approved') {
+		if(empty($vox) || ($this->user->status!='approved' && $this->user->status!='test') || !$this->user->madeTest($first->id) ) {
+			if($this->user->status!='approved' && $this->user->status!='test') {
             	Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
 			}
 			return redirect( getLangUrl('/') );

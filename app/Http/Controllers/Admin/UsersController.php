@@ -40,7 +40,8 @@ class UsersController extends AdminController
             'new' => 'New',
             'approved' => 'Approved', 
             'pending' => 'Suspicious', 
-            'rejected' => 'Rejected'
+            'rejected' => 'Rejected',
+            'test' => 'Test'
         ];
 
     	$this->fields = [

@@ -699,11 +699,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function canInvite($platform) {
-        return $this->status=='approved' && !$this->loggedFromBadIp();
+        return ($this->status=='approved' || $this->status=='test') && !$this->loggedFromBadIp();
     }
 
     public function canWithdraw($platform) {
-        return $this->status=='approved' && $this->civic_kyc && !$this->loggedFromBadIp();
+        return ($this->status=='approved' || $this->status=='test') && $this->civic_kyc && !$this->loggedFromBadIp();
     }
 
     public function getSameIPUsers() {
