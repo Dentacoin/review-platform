@@ -39,6 +39,15 @@
                                     {{ Form::text( 'id', $item->id, array('class' => 'form-control', 'disabled' ) ) }}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Name</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'name',
+                                        'info' => $fields['name']
+                                    ])
+                                </div>
+                            </div>
                             @if($item->is_dentist && !$item->is_clinic)
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">Title</label>
@@ -50,15 +59,6 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Name</label>
-                                <div class="col-md-9">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'name',
-                                        'info' => $fields['name']
-                                    ])
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Gender</label>
                                 <div class="col-md-9">
