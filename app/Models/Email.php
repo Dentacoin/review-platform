@@ -93,7 +93,7 @@ class Email extends Model
 			'trp' => 'https://reviews.dentacoin.com/',
 			'dentacare' => 'https://dentacoin.com/',
 		];
-
+		
 		$domain = $platform_urls[$this->platform];
 
 		$deafult_searches = array(
