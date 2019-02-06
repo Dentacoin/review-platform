@@ -35,15 +35,30 @@ class IndexController extends FrontController
 	            return redirect(getLangUrl('profile'));
 	        }
 
+	        $sorts = [
+				'featured' => trans('vox.page.home.sort-featured'),
+				'untaken' => trans('vox.page.home.sort-untaken'),
+				// 'category' => trans('vox.page.home.sort-category'),
+				'newest' => trans('vox.page.home.sort-newest'),
+				'popular' => trans('vox.page.home.sort-popular'),
+				'reward' => trans('vox.page.home.sort-reward'),
+				'taken' => trans('vox.page.home.sort-taken'),
+			];
+
+	        $featured_voxes_ids = Vox::where('type', 'normal')->where('featured', '1')->orderBy('created_at', 'DESC')->get()->pluck('id')->toArray();
+
+	        $not_taken_featured = array_diff($featured_voxes_ids, $this->user->filledFeaturedVoxes());
+
+	        // dd($not_taken_featured );
+
+	        if (empty($not_taken_featured)) {
+	        	unset($sorts['featured']);
+	        } else {
+	        	unset($sorts['untaken']);
+	        }
+
 			return $this->ShowVoxView('home', array(
-				'sorts' => [
-					'featured' => trans('vox.page.home.sort-featured'),
-					// 'category' => trans('vox.page.home.sort-category'),
-					'newest' => trans('vox.page.home.sort-newest'),
-					'popular' => trans('vox.page.home.sort-popular'),
-					'reward' => trans('vox.page.home.sort-reward'),
-					'taken' => trans('vox.page.home.sort-taken'),
-				],
+				'sorts' => $sorts,
 				'taken' => $this->user->filledVoxes(),
 	        	'voxes' => Vox::where('type', 'normal')->orderBy('created_at', 'DESC')->get(),
 	        	'vox_categories' => VoxCategory::whereHas('voxes')->get()->pluck('name', 'id')->toArray(),

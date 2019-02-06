@@ -21,7 +21,7 @@
 						@if($key == 'taken' && empty($taken))
 
 						@else
-							<a href="javascript:;" sort="{{ $key }}"  class="{!! $key == 'featured' ? 'active' : 'sortable' !!}">
+							<a href="javascript:;" sort="{{ $key }}"  class="{!! $key == 'featured' || $key == 'untaken' ? 'active' : 'sortable' !!}">
 
 								@if($key == 'featured')
 									<i class="fas fa-star"></i>
@@ -42,7 +42,7 @@
 			<div class="questions-wrapper" id="questions-wrapper">
 				<div class="questions-inner" id="questions-inner">
 					@foreach( $voxes as $vox)
-						<div class="another-question" featured="{{ intval($vox->featured) }}" published="{{ $vox->created_at->timestamp }}" popular="{{ intval($vox->rewards()->count()) }}" dcn="{{ intval($vox->getRewardTotal()) }}" duration="{{ ceil( $vox->questions()->count()/6 ) }}" taken="{{ intval(!in_array($vox->id, $taken) ? 0 : 1) }}" {!! $vox->featured && !in_array($vox->id, $taken) ? '' : 'style="display: none;"' !!}>
+						<div class="another-question" featured="{{ intval($vox->featured) }}" published="{{ $vox->created_at->timestamp }}" popular="{{ intval($vox->rewards()->count()) }}" dcn="{{ intval($vox->getRewardTotal()) }}" duration="{{ ceil( $vox->questions()->count()/6 ) }}" taken="{{ intval(!in_array($vox->id, $taken) ? 0 : 1) }}">
 							@if($vox->featured)
 								<img src="{{ url('new-vox-img/star.png') }}">
 							@endif

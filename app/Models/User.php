@@ -659,6 +659,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         })->get()->pluck('vox_id')->toArray();
     }
 
+    public function filledFeaturedVoxes() {
+        return VoxReward::where('user_id', $this->id)->with('vox')->whereHas('vox', function ($query) {
+            $query->where('type', 'normal')->where('featured', 1);
+        })->get()->pluck('vox_id')->toArray();
+    }
+
     public function vox_cashouts() {
         return $this->hasMany('App\Models\VoxCashout', 'user_id', 'id')->orderBy('id', 'DESC');
     }

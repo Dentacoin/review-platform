@@ -47,6 +47,15 @@ $(document).ready(function(){
 			list.each(function() {
 			    wrapper.append(this);
 			});
+			
+		} else if (sort == 'untaken') {
+			list.hide().attr("found", 0);
+
+			list.each( function() {
+				if ($(this).attr('taken')=='0') {
+					$(this).show().attr("found", 1);
+				}
+			});
 
 		} else {
 
@@ -106,6 +115,8 @@ $(document).ready(function(){
 		
 		$('#survey-not-found').hide();
 		setupPagination();
+
+		console.log('bb');
 	}
 
 
@@ -162,7 +173,7 @@ $(document).ready(function(){
 			$(this).toggleClass('order-asc');
 		}
 
-		window.location.hash = $(this).attr('sort')+( $(this).attr('sort')!='featured' ? '-'+($(this).hasClass('order-asc') ? 'asc' : 'desc') : '' )
+		window.location.hash = $(this).attr('sort')+( $(this).attr('sort')!='featured' && $(this).attr('sort')!='untaken' ? '-'+($(this).hasClass('order-asc') ? 'asc' : 'desc') : '' )
 
 		handleFilters();
 	} );
@@ -176,6 +187,8 @@ $(document).ready(function(){
 				$('a[sort="'+parts[0]+'"]').trigger( "click" );			
 			}
 		}
+	} else {
+		$('.sort-menu a').first().trigger('click');
 	}
 
 	$('#survey-search').on('change keyup', function() {
