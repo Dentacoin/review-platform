@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
+use App\Models\Email;
 use App\Models\User;
 use App\Models\Vox;
 use App\Models\UserBan;
@@ -474,6 +475,8 @@ class UsersController extends AdminController
 
     public function edit( $id ) {
         $item = User::withTrashed()->find($id);
+        $emails = Email::where('user_id', $id )->orderBy('created_at', 'DESC')->get();
+
         if($item->is_dentist) {
             $this->fields['password'] = [
                 'type' => 'password',
@@ -571,11 +574,14 @@ class UsersController extends AdminController
                 $unfinished[$k]->user_id = $item->id;
             }
 
+
+
             return $this->showView('users-form', array(
                 'item' => $item,
                 'categories' => $this->categories,
                 'fields' => $this->fields,
-                'unfinished' => $unfinished
+                'unfinished' => $unfinished,
+                'emails' => $emails,
             ));
         } else {
             return redirect('cms/'.$this->current_page);
