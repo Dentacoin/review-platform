@@ -131,15 +131,17 @@
                                     ])
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Status</label>
-                                <div class="col-md-9">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'status',
-                                        'info' => $fields['status']
-                                    ])
+                            @if($item->is_dentist)
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Status</label>
+                                    <div class="col-md-9">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'status',
+                                            'info' => $fields['status']
+                                        ])
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Facebook ID</label>
                                 <div class="col-md-9">
