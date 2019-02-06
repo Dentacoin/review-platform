@@ -6007,3 +6007,15 @@ header {
 .finish-test {
 	display: none;
 }
+
+.question-done {
+	#invite-button {
+		&:hover,
+		&:focus {
+			@media #{$phone} {
+			    color: #333333 !important;
+			    background-color: white !important;
+			}
+		}
+	}
+}

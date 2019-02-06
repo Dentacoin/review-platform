@@ -385,20 +385,6 @@ $(document).ready(function(){
 
     } );
 
-
-    if (navigator.share !== undefined) {
-        $('.has-mobile-share').show();
-
-        navigator.share({
-            title: document.title,
-            url: window.location.href,
-        }).then(() => console.log('Successful share'))
-        .catch((error) => console.log('Error sharing:', error));
-    } else {
-        $('.no-mobile-share').show();
-    }
-
-
     $('.copy-link').click( function() {
         var $temp = $("<input>");
         $("body").append($temp);
@@ -409,8 +395,20 @@ $(document).ready(function(){
 
 
     $('#invite-button').click( function() {
-        $(this).next().show();
-        $(this).hide();
+       
+        if (navigator.share !== undefined) {
+
+            $(this).blur()
+
+            navigator.share({
+                title: document.title,
+                url: window.location.href,
+            }).then(() => console.log('Successful share'))
+            .catch((error) => console.log('Error sharing:', error));
+        } else {
+            $(this).next().show();
+            $(this).hide();
+        }
     });
 
     if (window.innerWidth > 768) {

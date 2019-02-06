@@ -4508,3 +4508,8 @@ header {
 
 .finish-test {
   display: none; }
+
+@media screen and (max-width: 768px) {
+  .question-done #invite-button:hover, .question-done #invite-button:focus {
+    color: #333333 !important;
+    background-color: white !important; } }
