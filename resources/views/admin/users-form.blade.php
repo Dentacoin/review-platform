@@ -24,106 +24,258 @@
                 {!! Form::open(array('url' => url('cms/'.$current_page.'/edit/'.$item->id), 'method' => 'post', 'class' => 'form-horizontal')) !!}
                     {!! csrf_field() !!}
 
-                        <div class="form-group">
-                        @foreach( $fields as $key => $info)
-                            <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.form-'.$key) }}</label>
-                            <div class="col-md-4">
-                                @if( $key == 'type')
-                                    {{ Form::select( $key , $info['values'] , ($item->is_dentist ? ( $item->is_clinic ? 'clinic' : 'dentist' ) : 'patient') , array(
-                                        'class' => 'form-control',
-                                        'style' => ''.(!empty($info['multiple']) ? 'height: 200px;' : '')
-                                    )) }}
-                                @elseif( $info['type'] == 'password')
-                                    {{ Form::text( $key, '', array('class' => 'form-control', 'placeholder' => 'Enter a new password to change the existing' )) }}
-                                @elseif( $info['type'] == 'text')
-                                    {{ Form::text( $key, $item->$key, array('class' => 'form-control', (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled' )) }}
-                                    @if($key=='fb_id' && $item->$key)
-                                        <a href="https://facebook.com/{{ $item->$key }}" target="_blank">Open FB profile</a>
-                                    @endif
-                                @elseif( $info['type'] == 'textarea')
-                                    {{ Form::textarea( $key, $item->$key, array('class' => 'form-control', (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled' )) }}
-                                @elseif( $info['type'] == 'bool')
-                                    {{ Form::checkbox( $key, 1, $item->$key, array('class' => 'form-control', (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled' )) }}
-                                @elseif( $info['type'] == 'datepicker')
-                                    {{ Form::text( $key, !empty($item->$key) ? $item->$key->format('d.m.Y') : '' , array('class' => 'form-control datepicker', 'data-date-format' => 'dd.mm.yyyy' , (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled')) }}
-                                @elseif( $info['type'] == 'datetimepicker')
-                                    {{ Form::text( $key, !empty($item->$key) ? $item->$key->format('Y.m.d H:i:s') : '' , array('class' => 'form-control datetimepicker' , (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled')) }}
-                                @elseif( $info['type'] == 'country')  
-                                    {{ Form::select( $key , \App\Models\Country::get()->pluck('name', 'id')->toArray() , $item->$key , array('class' => 'form-control country-select') ) }}
-                                @elseif( $info['type'] == 'city')  
-                                    {{ Form::select( $key , $item->country_id ? \App\Models\City::where('country_id', $item->country_id)->get()->pluck('name', 'id')->toArray() : [] , $item->$key , array('class' => 'form-control city-select') ) }}
-                                @elseif( $info['type'] == 'avatar')
-                                    @if($item->hasimage)
-                                        <a class="thumbnail" href="{{ $item->getImageUrl() }}" target="_blank">
-                                            <img src="{{ $item->getImageUrl(true) }}">
-                                        </a>
-                                        <a class="btn btn-primary" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/deleteavatar') }}" onclick="return confirm('{{ trans('admin.common.sure') }}')">
-                                            <i class="fa fa-remove"></i> {{ trans('admin.page.'.$current_page.'.delete-avatar') }}
-                                        </a>
-                                    @else
-                                        <div class="alert alert-info">
-                                            {{ trans('admin.page.'.$current_page.'.no-avatar') }}
-                                        </div>
-                                    @endif
-                                @elseif( $info['type'] == 'select')  
-                                    {{ Form::select( $key , $info['values'] , $item->$key , array(
-                                        'class' => 'form-control'.(!empty($info['multiple']) ? ' multiple' : '') , 
-                                        (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled' , 
-                                        (!empty($info['multiple']) ? 'multiple' : 'nothing') => 'multiple',
-                                        'style' => ''.(!empty($info['multiple']) ? 'height: 200px;' : '')
-                                    )) }}
-                                @endif
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">User Type</label>
+                                <div class="col-md-4">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'type',
+                                        'info' => $fields['type']
+                                    ])
+                                </div>
+                                <label class="col-md-2 control-label">User Id</label>
+                                <div class="col-md-3">
+                                    {{ Form::text( 'id', $item->id, array('class' => 'form-control', 'disabled' ) ) }}
+                                </div>
                             </div>
-                            @if($loop->index%2)
-                        </div>
-                        <div class="form-group">
+                            @if($item->is_dentist && !$item->is_clinic)
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Title</label>
+                                    <div class="col-md-9">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'title',
+                                            'info' => $fields['title']
+                                        ])
+                                    </div>
+                                </div>
                             @endif
-                        @endforeach
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.form-created-at') }}</label>
-                            <div class="col-md-4">
-                                {{ $item->created_at->toDateTimeString() }}
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Name</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'name',
+                                        'info' => $fields['name']
+                                    ])
+                                </div>
                             </div>
-                            <label class="col-md-2 control-label"></label>
-                            <div class="col-md-4">
-                                
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Gender</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'gender',
+                                        'info' => $fields['gender']
+                                    ])
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.form-self-deleted') }}</label>
-                            <div class="col-md-4">
-                                @if($item->self_deleted)
-                                    <span style="color: red; font-weight: bold; font-size: 16px;">
-                                        Yes
-                                    </span>
-                                @else
-                                    No
-                                @endif
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Birth Year</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'birthyear',
+                                        'info' => $fields['birthyear']
+                                    ])
+                                </div>
                             </div>
-                            <label class="col-md-2 control-label"></label>
-                            <div class="col-md-4">
-                                
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Email</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'email',
+                                        'info' => $fields['email']
+                                    ])
+                                </div>
                             </div>
-                        </div>
-
-                    <div class="form-group">
-                        <div class="col-md-2">
-                            <a href="{{ url('cms/users/user-data/'.$item->id) }}" target="_blank" class="btn btn-sm btn-warning form-control">Export Personal Data</a>
-                        </div>
-                        <div class="col-md-2">
-                            <a href="{{ url('cms/users/loginas/'.$item->id) }}" target="_blank" class="btn btn-sm btn-primary form-control"> {{ trans('admin.page.profile.loginas') }} </a>
-                        </div>
-                        <div class="col-md-2">
-                            @if($item->deleted_at)
-                                <a href="{{ url('cms/users/restore/'.$item->id) }}" class="btn btn-sm btn-info form-control"> Restore </a>
-                            @else
-                                <a href="{{ url('cms/users/delete/'.$item->id) }}" class="btn btn-sm btn-danger form-control"> Delete </a>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Country</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'country_id',
+                                        'info' => $fields['country_id']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">City</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'city_name',
+                                        'info' => $fields['city_name']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">ZIP code</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'zip',
+                                        'info' => $fields['zip']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Dental Practice</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'address',
+                                        'info' => $fields['address']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Website / Facebook URL</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'website',
+                                        'info' => $fields['website']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Status</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'status',
+                                        'info' => $fields['status']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Facebook ID</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'fb_id',
+                                        'info' => $fields['fb_id']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Civic ID</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'civic_id',
+                                        'info' => $fields['civic_id']
+                                    ])
+                                </div>
+                            </div>
+                            @if($item->is_dentist)
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">New Password</label>
+                                    <div class="col-md-9">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'password',
+                                            'info' => $fields['password']
+                                        ])
+                                    </div>
+                                </div>
                             @endif
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">DCN Address</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'dcn_address',
+                                        'info' => $fields['dcn_address']
+                                    ])
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
-                            <button type="submit" name="update" class="btn btn-block btn-sm btn-success form-control"> {{ trans('admin.common.save') }} </button>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Profile photo</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'avatar',
+                                        'info' => $fields['avatar']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12" style="text-align: right;">
+                                    <span style="color: black; padding-right: 5px;">Self deleted:</span>
+                                    @if($item->self_deleted)
+                                        <span style="color: red; font-weight: bold; font-size: 16px;">
+                                            Yes
+                                        </span>
+                                    @else
+                                        <span style="color: black;">No</span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Dentacoin partner?</label>
+                                <div class="col-md-3">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'is_partner',
+                                        'info' => $fields['is_partner']
+                                    ])
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{{ url('cms/users/loginas/'.$item->id) }}" target="_blank" class="btn btn-sm btn-primary form-control"> {{ trans('admin.page.profile.loginas') }} </a>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Civic photo ID?</label>
+                                <div class="col-md-3">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'civic_kyc',
+                                        'info' => $fields['civic_kyc']
+                                    ])
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{{ url('cms/users/user-data/'.$item->id) }}" target="_blank" class="btn btn-sm btn-warning form-control">Export Personal Data</a>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Allow withdraw</label>
+                                <div class="col-md-3">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'allow_withdraw',
+                                        'info' => $fields['allow_withdraw']
+                                    ])
+                                </div>
+                                <div class="col-md-6">
+                                    @if($item->deleted_at)
+                                        <a href="{{ url('cms/users/restore/'.$item->id) }}" class="btn btn-sm btn-info form-control"> Restore </a>
+                                    @else
+                                        <a href="{{ url('cms/users/delete/'.$item->id) }}" class="btn btn-sm btn-danger form-control"> Delete </a>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6"></div>
+                                <div class="col-md-6">
+                                    <button type="submit" name="update" class="btn btn-block btn-sm btn-success form-control"> {{ trans('admin.common.save') }} </button>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 style="margin-bottom: 20px;">TRUSTED REVIEWS</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Average rating</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'avg_rating',
+                                        'info' => $fields['avg_rating']
+                                    ])
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Ratings</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'ratings',
+                                        'info' => $fields['ratings']
+                                    ])
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -184,7 +336,6 @@
                         'table_fields' => [
                             'created_at'        => array('format' => 'datetime'),
                             'user'              => array('template' => 'admin.parts.table-reviews-user'),
-                            'dentist'           => array('template' => 'admin.parts.table-reviews-dentist'),
                             'rating'            => array(),
                             'upvotes'            => array(),
                             'verified'              => array('format' => 'bool'),
@@ -238,6 +389,9 @@
 
 @if($item->vox_rewards->isNotEmpty())
     <div class="row">
+        <div class="col-md-12">
+            <h4 style="margin-bottom: 20px;">DENTAVOX</h4>
+        </div>
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
