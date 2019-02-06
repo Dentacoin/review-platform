@@ -347,7 +347,11 @@ $(document).ready(function(){
             (function( data ) {
                 if(data.track_registration) {
                     fbq('track', 'CompleteRegistration');
-                    ga('send', 'event', 'DentistRegistration', 'ClickNext', 'DentistRegistrationComplete');
+                    gtag('event', 'ClickNext', {
+                        'event_category': 'DentistRegistration',
+                        'event_label': 'DentistRegistrationComplete',
+                    });
+
                 }
 
                 if(data.popup) {

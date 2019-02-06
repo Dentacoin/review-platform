@@ -287,20 +287,31 @@
 
 		            @if( $just_registered && $civic_registered)
 		            	fbq('track', 'CompleteRegistrationCivic');
-						ga('send', 'event', 'PatientRegistration', 'ClickCivic', 'TRPCivicPatientRegistration');
+						gtag('event', 'ClickCivic', {
+							'event_category': 'PatientRegistration',
+							'event_label': 'TRPCivicPatientRegistration',
+						});
 		            @endif
 
 		            @if( $just_registered && !$civic_registered)
 		            	fbq('track', 'CompleteRegistrationFB');
-						ga('send', 'event', 'PatientRegistration', 'ClickFB', 'FBPatientRegistration');
+						gtag('event', 'ClickFB', {
+							'event_category': 'PatientRegistration',
+							'event_label': 'FBPatientRegistration',
+						});
 		            @endif
 		        @endif
 
 		        @if(!empty($user) && $user->is_dentist && $just_login)
 		        	fbq('track', 'DentistLogin');
-					ga('send', 'event', 'DentistLogin', 'ClickLogin', 'DentistLogin');
+					gtag('event', 'ClickLogin', {
+						'event_category': 'DentistLogin',
+						'event_label': 'DentistLogin',
+					});
 		        @endif
 		    });
+
+
 		</script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
         <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>

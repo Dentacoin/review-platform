@@ -496,21 +496,33 @@ jQuery(document).ready(function($){
 
 	$('.button-sign-up-dentist').click( function() {
 		fbq('track', 'InitiateRegistration');
-		ga('send', 'event', 'DentistRegistration', 'ClickSignup', 'InitiateDentistRegistration');
+		gtag('event', 'ClickSignup', {
+			'event_category': 'DentistRegistration',
+			'event_label': 'InitiateDentistRegistration',
+		});
 	});
 
 	$('.button-next-step').click( function() {
-		ga('send', 'event', 'DentistRegistration', 'ClickNext', 'DentistRegistrationStep'+ $(this).attr('step-number'));
+		gtag('event', 'ClickNext', {
+			'event_category': 'DentistRegistration',
+			'event_label': 'DentistRegistrationStep'+ $(this).attr('step-number'),
+		});
 	});
 
 	$('.button-sign-up-patient').click( function() {
 		fbq('track', 'InitiateRegistration');
-		ga('send', 'event', 'PatientRegistration', 'ClickSignup', 'PatientInitiateRegistration');
+		gtag('event', 'ClickSignup', {
+			'event_category': 'PatientRegistration',
+			'event_label': 'PatientInitiateRegistration',
+		});
 	});
 
 	$('.button-login-patient').click( function() {
 		fbq('track', 'PatientLogin');
-		ga('send', 'event', 'PatientLogin', 'ClickLogin', 'TRPPatientLogin');
+		gtag('event', 'ClickLogin', {
+			'event_category': 'PatientLogin',
+			'event_label': 'TRPPatientLogin',
+		});
 	});
 
 });
