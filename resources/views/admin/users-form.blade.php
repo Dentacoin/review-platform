@@ -28,14 +28,25 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="col-md-3 control-label">User Type</label>
-                                <div class="col-md-4">
+                                <div class="col-md-{{ $item->is_dentist ? '3' : '4' }}">
                                     @include('admin.parts.user-field',[
                                         'key' => 'type',
                                         'info' => $fields['type']
                                     ])
                                 </div>
-                                <label class="col-md-2 control-label">User Id</label>
-                                <div class="col-md-3">
+                                @if($item->is_dentist)
+                                    <label class="col-md-1 control-label">Status</label>
+                                    <div class="col-md-3">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'status',
+                                            'info' => $fields['status']
+                                        ])
+                                    </div>
+                                @endif
+                                @if(!$item->is_dentist)
+                                    <label class="col-md-3 control-label">User ID</label>
+                                @endif
+                                <div class="col-md-2">
                                     {{ Form::text( 'id', $item->id, array('class' => 'form-control', 'disabled' ) ) }}
                                 </div>
                             </div>
@@ -131,17 +142,6 @@
                                     ])
                                 </div>
                             </div>
-                            @if($item->is_dentist)
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">Status</label>
-                                    <div class="col-md-9">
-                                        @include('admin.parts.user-field',[
-                                            'key' => 'status',
-                                            'info' => $fields['status']
-                                        ])
-                                    </div>
-                                </div>
-                            @endif
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Facebook ID</label>
                                 <div class="col-md-9">
