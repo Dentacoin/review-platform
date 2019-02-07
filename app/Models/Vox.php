@@ -226,7 +226,7 @@ class Vox extends Model {
     }
 
     public function setTypeAttribute($newvalue) {
-        if ($this->attributes['type'] != 'normal' && $newvalue == 'normal' && empty($this->attributes['launched_at'])) {
+        if (!empty($this->attributes['type']) && $this->attributes['type'] != 'normal' && $newvalue == 'normal' && empty($this->attributes['launched_at'])) {
             $this->attributes['launched_at'] = Carbon::now();
         }
         $this->attributes['type'] = $newvalue;
