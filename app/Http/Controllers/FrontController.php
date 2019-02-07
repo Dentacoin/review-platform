@@ -319,6 +319,14 @@ class FrontController extends BaseController
             ]);
         }
 
+        $params['login_patient'] = false;
+        if( session('login_patient') ) {
+            $params['login_patient'] = true;
+            session([
+                'login_patient' => false
+            ]);
+        }
+
         $params['new_auth'] = false;
         if( session('new_auth') && !empty($this->user) && empty($this->user->fb_id) && empty($this->user->civic_id) ) {
             $params['new_auth'] = true;

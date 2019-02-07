@@ -54,6 +54,7 @@ class LoginController extends FrontController
 
 
     private function try_social_login($s_user) {
+        
 
         if( session('new_auth') && !empty($this->user) && empty($this->user->fb_id) && empty($this->user->civic_id) ) {
             $user = $this->user;
@@ -96,6 +97,11 @@ class LoginController extends FrontController
                     return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
                     ->withInput();
                 }
+
+                $sess = [
+                    'login_patient' => true,
+                ];
+                session($sess);
 
                 Auth::login($user, true);
 

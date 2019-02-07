@@ -300,6 +300,14 @@
 							'event_label': 'FBPatientRegistration',
 						});
 		            @endif
+
+		            @if( $login_patient)
+		            	fbq('track', 'PatientLoginSuccess');
+						gtag('event', 'ClickLogin', {
+							'event_category': 'PatientLogin',
+							'event_label': 'LoginSuccess',
+						});
+		            @endif
 		        @endif
 
 		        @if(!empty($user) && $user->is_dentist && $just_login)

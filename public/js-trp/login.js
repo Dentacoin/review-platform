@@ -346,7 +346,7 @@ $(document).ready(function(){
             $(this).serialize() , 
             (function( data ) {
                 if(data.track_registration) {
-                    fbq('track', 'CompleteRegistration');
+                    fbq('track', 'DentistCompleteRegistration');
                     gtag('event', 'ClickNext', {
                         'event_category': 'DentistRegistration',
                         'event_label': 'DentistRegistrationComplete',

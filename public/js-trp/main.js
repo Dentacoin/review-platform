@@ -281,10 +281,11 @@ jQuery(document).ready(function($){
 	}
 
 	handlePopups = function(id) {
-		$('[data-popup]').off('click').click( function(e) {
+		var dataPopupClick = function(e) {
 			showPopup( $(this).attr('data-popup'), e );
-		} );
-		$('[data-popup-logged]').off('click').click( function(e) {
+		}
+
+		var dataPopupClickLogged = function(e) {
 			if( user_id ) {
 				showPopup( $(this).attr('data-popup-logged'), e );				
 			} else {
@@ -296,7 +297,10 @@ jQuery(document).ready(function($){
 				}
 
 			}
-		} );
+		}
+
+		$('[data-popup]').off('click', dataPopupClick).click( dataPopupClick );
+		$('[data-popup-logged]').off('click', dataPopupClickLogged).click( dataPopupClickLogged );
 
 		// $('.fixed-popup').css( 'height', $('.fixed-popup .popup-inner').outerHeight() + 100 );
 		// $('.fixed-popup').css( 'min-height', $(document).height() );
@@ -495,7 +499,7 @@ jQuery(document).ready(function($){
 	}
 
 	$('.button-sign-up-dentist').click( function() {
-		fbq('track', 'InitiateRegistration');
+		fbq('track', 'DentistInitiateRegistration');
 		gtag('event', 'ClickSignup', {
 			'event_category': 'DentistRegistration',
 			'event_label': 'InitiateDentistRegistration',
@@ -510,7 +514,8 @@ jQuery(document).ready(function($){
 	});
 
 	$('.button-sign-up-patient').click( function() {
-		fbq('track', 'InitiateRegistration');
+		console.log('bb');
+		fbq('track', 'PatientInitiateRegistration');
 		gtag('event', 'ClickSignup', {
 			'event_category': 'PatientRegistration',
 			'event_label': 'PatientInitiateRegistration',
@@ -521,7 +526,7 @@ jQuery(document).ready(function($){
 		fbq('track', 'PatientLogin');
 		gtag('event', 'ClickLogin', {
 			'event_category': 'PatientLogin',
-			'event_label': 'TRPPatientLogin',
+			'event_label': 'LoginPopup',
 		});
 	});
 
