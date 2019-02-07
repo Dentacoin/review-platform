@@ -365,6 +365,10 @@ $(document).ready(function(){
                     options.slices[data.relation_info.answer] = {
                         offset: 0.2
                     };
+
+                    if( data.relation_info.question.length > 100 ) {
+                        options.with_long_hint = true;                        
+                    }
                 } else {
                     if(data.answer_id) {
                         options.slices = {};
@@ -553,16 +557,16 @@ $(document).ready(function(){
             backgroundColor: 'transparent',
             chartArea: {
                 left:more_options.slices ? '15%' : '10%',
-                top:more_options.slices ? '15%' : '10%',
+                top:more_options.slices ? (more_options.with_long_hint ? '20%' : '70%' ) : '10%',
                 width:more_options.slices ? '70%' : '80%',
-                height: more_options.slices ? '70%' : '80%'
+                height: more_options.slices ? (more_options.with_long_hint ? '60%' : '70%' ) : '80%'
             },
             colors: chart_colors,
             legend: {
                 position: 'none'
             },
             width: 350,
-            height: 300
+            height: (more_options.with_long_hint ? 400 : 300)
         };
 
         if(more_options) {
