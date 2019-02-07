@@ -85,6 +85,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('transactions/bump/{id}', 			'TransactionsController@bump');
 
 	Route::get('spending', 							'SpendingController@list');
+	
 
 	Route::get('questions', 						'QuestionsController@list');
 	Route::any('questions/add', 					'QuestionsController@add');
