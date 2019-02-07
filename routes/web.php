@@ -81,7 +81,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('pages/edit/{id}/removepic', 		'PagesController@removepic');
 	Route::any('pages/delete/{id}', 				'PagesController@delete');
 
-	Route::get('transactions', 						'TransactionsController@list');
+	Route::any('transactions', 						'TransactionsController@list');
+	Route::any('transactions/bump/{id}', 			'TransactionsController@bump');
 
 	Route::get('spending', 							'SpendingController@list');
 

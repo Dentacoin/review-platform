@@ -38,5 +38,18 @@ class TransactionsController extends AdminController
         ));
     }
 
+    public function bump( $id ) {
+        $item = DcnTransaction::find($id);
+
+        $item->status = 'new';
+        $item->retries = 0;
+
+        $item->save();
+
+        $this->request->session()->flash('success-message', 'Transaction bumped' );
+        return redirect('cms/transactions');
+
+    }
+
 
 }

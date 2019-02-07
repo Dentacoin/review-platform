@@ -63,6 +63,7 @@
                             'message'              => array(),
                             'retries'              => array(),
                             'updated_at'        => array('format' => 'datetime'),
+                            'bump'                  =>array('template' => 'admin.parts.table-transactions-bump'),
 						],
                         'table_data' => $transactions,
 						'table_pagination' => false,
