@@ -8,6 +8,9 @@ jQuery(document).ready(function($){
 		$('#dentist-email').val( $(this).find('input[name="email"]').val() );
 		$('#dentist-password').val( $(this).find('input[name="password"]').val() );
 		$('#dentist-password-repeat').val( $(this).find('input[name="password"]').val() );
-		$('.go-to-next:visible').click();
+		prepareLoginFucntion( function() {
+			$('.go-to-next:visible').click();
+		});
+		
     } );
 });

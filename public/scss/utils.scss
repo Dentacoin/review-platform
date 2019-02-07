@@ -145,6 +145,16 @@ h2 {
     }
 }
 
+.h2 {
+	font-size: 35px;
+	font-weight: 300;
+	color: #126585;
+
+	@media #{$phone} {
+		font-size: 25px;
+	}
+}
+
 h3 {
 	font-size: 30px;
 
