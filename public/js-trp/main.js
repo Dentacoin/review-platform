@@ -15,6 +15,12 @@ var suggestTO;
 var refreshOnClosePopup = false;
 var onloadCallback;
 
+var initLoginScripts;
+var prepareLoginFucntion;
+var loginLoaded = false;
+var loginsWaiting = [];
+
+
 jQuery(document).ready(function($){
 
 	//To be deleted
@@ -83,7 +89,9 @@ jQuery(document).ready(function($){
 
 		    $('body').append( $('<link rel="stylesheet" type="text/css" href="https://hosted-sip.civic.com/css/civic-modal.min.css" />') );
     		$.getScript('https://hosted-sip.civic.com/js/civic.sip.min.js', function() {
-    			$('body').append( $('<script src="'+window.location.origin+'/js-trp/login.js"></script>') );
+    			$.getScript(window.location.origin+'/js-trp/login.js', function() {
+    				initLoginScripts();
+    			});
 		    	$('body').append( $('<script src="'+window.location.origin+'/js-trp/upload.js"></script>') );
 		    	$('body').append( $('<script src="'+window.location.origin+'/js-trp/address.js"></script>') );
 
@@ -531,6 +539,29 @@ jQuery(document).ready(function($){
 	});
 
 });
+
+//
+//Logins function
+//
+
+
+prepareLoginFucntion = function( callback ) {
+
+    if(loginLoaded) {
+        callback();
+    } else {
+        loginsWaiting.push(callback);
+    }
+}
+
+initLoginScripts = function () {
+    loginLoaded = true;
+    for(var i in loginsWaiting) {
+        setTimeout(loginsWaiting[i]);
+    }
+}
+
+
 
 //
 //Maps stuff

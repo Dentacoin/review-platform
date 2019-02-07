@@ -46,14 +46,77 @@
     	</div>
     </div>
 
-    <div class="container section-how">
+    <div class="container section-dentist-info">
     	<h2 class="tac">
-    		{!! nl2br(trans('trp.page.index-dentist.how-works')) !!}
-    		
-    		<span class="h1">6</span>
-    		{!! nl2br(trans('trp.page.index-dentist.steps')) !!}
-    		
+    		{!! nl2br(trans('trp.page.index-dentist.usp-title')) !!}
     	</h2>
+
+    	<div class="clearfix">
+			<div class="flex flex-bottom">
+				<div class="col col-icon">
+	    			<img src="{{ url('img-trp/grow-icon.png') }}">
+	    		</div>
+	    		<div class="col">
+	    			<h3>
+	    				{!! nl2br(trans('trp.page.index-dentist.usp.step-1-title')) !!}
+	    			</h3>
+	    			<p>
+	    				{!! nl2br(trans('trp.page.index-dentist.usp.step-1-description')) !!}
+		    		</p>
+	    		</div>
+    		</div>
+			<div class="flex flex-bottom">
+				<div class="col col-icon">
+	    			<img src="{{ url('img-trp/expertise.png') }}">
+	    		</div>
+	    		<div class="col">
+	    			<h3>
+	    				{!! nl2br(trans('trp.page.index-dentist.usp.step-2-title')) !!}
+	    			</h3>
+	    			<p>
+	    				{!! nl2br(trans('trp.page.index-dentist.usp.step-2-description')) !!}
+		    		</p>
+	    		</div>
+    		</div>
+			<div class="flex flex-bottom">
+				<div class="col col-icon">
+	    			<img src="{{ url('img-trp/ranking.png') }}">
+	    		</div>
+	    		<div class="col">
+	    			<h3>
+	    				{!! nl2br(trans('trp.page.index-dentist.usp.step-3-title')) !!}
+	    			</h3>
+	    			<p>
+	    				{!! nl2br(trans('trp.page.index-dentist.usp.step-3-description')) !!}
+		    		</p>
+	    		</div>
+    		</div>
+			<div class="flex flex-bottom">
+				<div class="col col-icon">
+	    			<img src="{{ url('img-trp/present.png') }}">
+	    		</div>
+	    		<div class="col">
+	    			<h3>
+	    				{!! nl2br(trans('trp.page.index-dentist.usp.step-4-title')) !!}
+	    			</h3>
+	    			<p>
+	    				{!! nl2br(trans('trp.page.index-dentist.usp.step-4-description')) !!}
+	    			</p>
+	    		</div>
+    		</div>
+    	</div>
+    </div>
+
+    <div class="container section-how">
+
+    	<h2 class="tac">
+    		{!! nl2br(trans('trp.page.index-dentist.how-works-title', [
+				'firstblue' => '<span class="h2">',
+				'secondblue' => '<span class="h1">',
+				'endblue' => '</span>',
+			])) !!}
+    	</h2>
+
 
     	<div class="clearfix">
     		<div class="left">
