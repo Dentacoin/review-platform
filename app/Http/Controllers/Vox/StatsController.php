@@ -95,32 +95,41 @@ class StatsController extends FrontController
                 $main_chart[$answers[$key]] = 0;
             }
 
+
+
         	if($type=='dependency') {
                 $answer_id = null;
 
-        		$results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
-        		$results = $results->get();
+                $results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
+                $results = $results->get();
 
                 foreach ($answers as $key => $value) {
                     $second_chart[$value] = 0;
                 }
 
-        		foreach ($results as $res) {
+                foreach ($results as $res) {
                     if(!isset( $answers[ $res->answer-1 ] )) {
                         continue;
                     }
-        			$second_chart[ $answers[ $res->answer-1 ] ] = $res->cnt;
-        		}
+                    $second_chart[ $answers[ $res->answer-1 ] ] = $res->cnt;
+                }
 
                 $relation_info['answer'] = $question->stats_answer_id-1;
-        		$relation_info['question'] = $question->related->question;
+                $relation_info['question'] = $question->related->question;
 
 
-        		$answers_related = json_decode($question->related->answers);
+                $answers_related = json_decode($question->related->answers);
                 foreach ($answers_related as $key => $value) {
                     if(mb_strpos($value, '!')===0) {
                         $answers_related[$key] = mb_substr($value, 1);
                     }
+                }
+                $main_chart = [];
+                foreach ($answers_related as $key => $value) {
+                    if(mb_strpos($value, '!')===0) {
+                        $answers_related[$key] = mb_substr($value, 1);
+                    }
+                    $main_chart[$answers_related[$key]] = 0;
                 }
         		$results = $this->prepareQuery($question->stats_relation_id, $dates);
         		$results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
