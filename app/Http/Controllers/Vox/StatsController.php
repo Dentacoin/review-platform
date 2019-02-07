@@ -95,6 +95,8 @@ class StatsController extends FrontController
                 $main_chart[$answers[$key]] = 0;
             }
 
+
+
         	if($type=='dependency') {
                 $answer_id = null;
 

@@ -545,6 +545,8 @@ $(document).ready(function(){
     }
 
 
+
+
     var drawChart = function(rows, container, more_options, is_main) {
         
         var data = new google.visualization.DataTable();
