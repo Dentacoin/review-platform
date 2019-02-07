@@ -171,3 +171,16 @@ table.table .table-search {
     text-align: center;
     font-size: 18px;
 }
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.col {
+    flex: 1;
+}
+
+.col-60 {
+    max-width: 60px;
+}

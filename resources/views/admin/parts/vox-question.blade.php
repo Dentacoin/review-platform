@@ -189,13 +189,18 @@
                         <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.question-answers') }}</label>
                         <div class="col-md-9 answers-list answers-draggable">
                             @if(!empty($question) && !empty($question->{'answers:'.$code}) )
-                                @foreach(json_decode($question->{'answers:'.$code}, true) as $ans)
-                                    <div class="input-group">
-                                        {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong')) }}
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-default btn-remove-answer" type="button">
-                                                <i class="glyphicon glyphicon-remove"></i>
-                                            </button>
+                                @foreach(json_decode($question->{'answers:'.$code}, true) as $key => $ans)
+                                    <div class="flex input-group">
+                                        <div class="col col-60">
+                                            {{ $question_answers_count[$key] ?? '' }}
+                                        </div>
+                                        <div class="col">
+                                            {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: 95%;')) }}
+                                            <div class="input-group-btn" style="display: inline-block;">
+                                                <button class="btn btn-default btn-remove-answer" type="button">
+                                                    <i class="glyphicon glyphicon-remove"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
@@ -255,12 +260,17 @@
 {{ Form::close() }}
 
 <div style="display: none;">
-    <div class="input-group ui-sortable-handle" id="input-group-template" >
-        {{ Form::text('something', '', array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong')) }}
-        <div class="input-group-btn">
-            <button class="btn btn-default btn-remove-answer" type="button">
-                <i class="glyphicon glyphicon-remove"></i>
-            </button>
+    <div class="flex input-group ui-sortable-handle" id="input-group-template">
+        <div class="col col-60">
+
+        </div>
+        <div class="col">
+            {{ Form::text('something', '', array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: 95%;')) }}
+            <div class="input-group-btn" style="display: inline-block;">
+                <button class="btn btn-default btn-remove-answer" type="button">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </button>
+            </div>
         </div>
     </div>
 </div>

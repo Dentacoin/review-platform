@@ -10,12 +10,14 @@ use App\Models\VoxQuestion;
 use App\Models\VoxToCategory;
 use App\Models\VoxScale;
 use App\Models\VoxBadge;
+use App\Models\VoxAnswer;
 use Illuminate\Support\Facades\Input;
 use Image;
 use Request;
 use Response;
 use Route;
 use Excel;
+use DB;
 
 
 class VoxesController extends AdminController
@@ -449,8 +451,24 @@ class VoxesController extends AdminController
                 }
             }
 
+            $question_answers_count = DB::table('vox_answers')
+                ->join('users', 'users.id', '=', 'vox_answers.user_id')
+                ->whereNull('users.deleted_at')
+                ->whereNull('vox_answers.deleted_at')
+                ->where('vox_id', $id )
+                ->where('question_id', $question_id)
+                ->where('is_completed', 1)
+                ->where('is_skipped', 0)
+                ->select('answer', DB::raw('count(*) as total'))
+                ->groupBy('answer')
+                ->get()
+                ->pluck('total')
+                ->toArray();
+
+
             return $this->showView('voxes-form-question', array(
                 'question' => $question,
+                'question_answers_count' => $question_answers_count,
                 'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
                 'item' => $question->vox,
                 'question_types' => $this->question_types,

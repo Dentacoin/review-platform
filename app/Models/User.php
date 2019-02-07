@@ -40,6 +40,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'is_partner',
         'title',
         'name',
+        'name_alterantive',
         'description',
         'zip',
         'city_name',
