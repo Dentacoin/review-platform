@@ -5810,3 +5810,11 @@ textarea.input {
 		}
 	}
 }
+
+.tablet-fixes {
+	input {
+		@media #{$tablet} {
+			min-width: unset !important;
+		}
+	}
+}

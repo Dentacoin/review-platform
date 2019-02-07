@@ -4309,3 +4309,7 @@ textarea.input {
     @media screen and (max-width: 768px) {
       .section-dentist-info p {
         text-align: center; } }
+
+@media screen and (max-width: 998px) {
+  .tablet-fixes input {
+    min-width: unset !important; } }

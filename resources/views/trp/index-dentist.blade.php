@@ -23,7 +23,7 @@
     <div class="signin-form-wrapper">
     	<img src="{{ url('img-trp/signin-laptop.png') }}">
     	<div class="container clearfix">
-    		<form class="signin-form">
+    		<form class="signin-form tablet-fixes">
 
 				<div class="form-inner">
 					<input type="text" name="name" placeholder="{{ trans('trp.page.index-dentist.name') }}" class="input">
