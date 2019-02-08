@@ -192,6 +192,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Spatie\Sitemap\SitemapServiceProvider::class,
         GoogleMaps\ServiceProvider\GoogleMapsServiceProvider::class,
+        Collective\Remote\RemoteServiceProvider::class,
 
     ],
 
@@ -248,6 +249,7 @@ return [
         'GeoIP' => \Torann\GeoIP\Facades\GeoIP::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'GoogleMaps' => GoogleMaps\Facade\GoogleMapsFacade::class,
+        'SSH' => Collective\Remote\RemoteFacade::class,
 
     ],
 

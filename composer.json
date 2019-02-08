@@ -19,6 +19,8 @@
         "mockery/mockery": "0.9.*",
         "propaganistas/laravel-phone": "^3.0",
         "spatie/laravel-sitemap": "^2.1",
+        "laravelcollective/remote": "5.4.*",
+        "alexpechkarev/google-maps":"1.0.9",
         "torann/geoip": "^1.0"
     },
     "require-dev": {

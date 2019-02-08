@@ -231,9 +231,17 @@ class FrontController extends BaseController
     }
 
     public function ShowView($page, $params=array()) {
-        $this->PrepareViewData($page, $params, 'trp');
 
-        // "2018-05-05 00:00:00.000000"
+        SSH::run([
+            'cd /var/www/html',
+            'ls -al',
+        ], function($line){
+            echo $line.PHP_EOL;
+        });
+        dd('ok');
+
+
+        $this->PrepareViewData($page, $params, 'trp');
 
         if( empty( $this->user ) ) {
             $params['countries'] = Country::get();
