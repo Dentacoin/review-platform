@@ -218,7 +218,7 @@ jQuery(document).ready(function($){
 
 		autocomplete.getPlacePredictions({ 
 			input: query,
-			types: ['(cities)'],
+			//types: ['(cities)', 'country'],
 		}, displaySuggestions);
 
 		$.ajax( {

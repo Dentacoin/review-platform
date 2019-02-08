@@ -28,7 +28,7 @@ class CitiesController extends BaseController
 				'is_clinic' => $user->is_clinic,
 				'rating' => $user->avg_rating,
 				'reviews' => $user->ratings,
-				'location' => $user->city->name.', '.$user->country->name,
+				'location' => $user->city_name.', '.$user->country->name,
 				'lat' => $user->lat,
 				'lon' => $user->lon,
 			];
