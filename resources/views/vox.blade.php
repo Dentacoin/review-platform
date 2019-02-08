@@ -385,7 +385,7 @@
 
 		</div>
 
-	
+		<div class="tooltip-window" style="display: none;"></div>	
 
 		<script type='application/ld+json'> 
 		{

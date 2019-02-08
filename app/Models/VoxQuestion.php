@@ -13,6 +13,7 @@ class VoxQuestion extends Model {
     public $translatedAttributes = [
         'question',
         'answers',
+        'answers_tooltips',
     ];
 
     protected $fillable = [
@@ -22,6 +23,7 @@ class VoxQuestion extends Model {
         'trigger_type',
         'question',
         'answers',
+        'answers_tooltips',
         'vox_scale_id',
         'is_control',
         'order',
@@ -50,7 +52,11 @@ class VoxQuestion extends Model {
         return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->where('is_completed', 1)->where('is_skipped', 0)->has('user')->select(DB::raw('count( distinct `user_id`) as num'))->first()->num;
     }
 
-
+    public function questionWithTooltips() {
+        $new_title = str_replace("[/]","</span>",$this->question);
+        
+        return preg_replace('/\[([^\]]*)\]/', '<span class="tooltip-text" text="${1}">', $new_title);
+    }
 
     public function getStatsFieldsAttribute($value)
     {
@@ -71,6 +77,7 @@ class VoxQuestionTranslation extends Model {
     protected $fillable = [
         'question',
         'answers',
+        'answers_tooltips',
         'stats_title',
     ];
 

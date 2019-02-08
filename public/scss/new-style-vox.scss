@@ -1494,10 +1494,19 @@ header {
 		    font-size: 21px;
 		    color: #060606;
 			margin-bottom: 30px;
+			position: relative;
 
 			@media #{$phone} {
 				font-size: 14px;
 				margin-bottom: 18px;
+			}
+
+			.tooltip-text {
+				font-size: 21px;
+
+				@media #{$phone} {
+					font-size: 14px;
+				}
 			}
 		}
 
@@ -1743,11 +1752,13 @@ header {
 								background: #ddf1ff;
 								padding: 5px 0px 15px 0px;
 								width: 100%;
+								text-align: center;
 
 								h3 {
 								    text-align: center;
 									padding: 0px 20px;
 									margin: 0px 0px 5px 0px;
+									display: inline-block;
 								}
 							}
 
@@ -1800,6 +1811,7 @@ header {
 						// float: left;
 					    max-width: 20%;
 						flex: 1;
+						text-align: right;
 
 						@media screen and (max-width: 768px) {
 							max-width: none;
@@ -1813,6 +1825,7 @@ header {
 							font-size: 18px;
 							font-weight: bold;
 							text-align: right;
+							display: inline-block;
 						}
 					}
 
@@ -6020,4 +6033,40 @@ header {
 			}
 		}
 	}
+}
+
+.tooltip-window {
+	display: none;
+	text-align: left;
+    position: absolute;
+    background-color: white;
+    padding: 15px;
+    max-width: 300px;
+    border: 1px solid #41afff;
+    z-index: 100;
+    border-radius: 10px;
+
+    @media #{$phone} {
+    	font-size: 14px;
+    	padding: 10px;
+    	max-width: 200px;
+    }
+
+    &::after {
+    	content: '';
+    	position: absolute;
+    	top: -7.5px;
+    	left: 50%;
+    	transform: translateX(-50%);
+    	width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 0 7.5px 7.5px 7.5px;
+		border-color: transparent transparent #41b0ff transparent;
+
+		// @media #{$phone} {
+		// 	display: none;
+		// }
+
+    }
 }

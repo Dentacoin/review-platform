@@ -690,6 +690,47 @@ $(document).ready(function(){
 		$('#suspended-popup').addClass('active');
 	}
 
+    var handleTooltip = function(e) {
+
+        $('.tooltip-window').text($(this).attr('text'));
+        $('.tooltip-window').css('left', e.pageX - ($('.tooltip-window').outerWidth() / 2) );
+
+        if (window.innerWidth > 768) {
+	        if (window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
+	            $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
+	        }
+	    }
+
+        if (window.innerWidth < 768) {
+        	$('.tooltip-window').css('top', e.pageY + 15 );
+        } else {
+        	$('.tooltip-window').css('top', e.pageY + 30 );
+        }
+        
+
+        $('.tooltip-window').css('display', 'block');
+    }
+
+    if($('.tooltip-text').length) {
+
+        $('.tooltip-text').on('mouseover mousemove', function(e) {
+            if (window.innerWidth > 768) {
+                handleTooltip.bind(this)(e);
+            }
+        });
+
+        $('.tooltip-text').on('click', function(e) {
+            if (window.innerWidth < 768 && !$(this).hasClass('no-mobile-tooltips')) {
+                handleTooltip.bind(this)(e);
+            }
+        });
+
+        $('.tooltip-text').on('mouseout', function(e) {
+
+            $('.tooltip-window').hide();
+        });
+    }
+
 
 });
 

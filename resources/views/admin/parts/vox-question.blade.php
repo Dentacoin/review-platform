@@ -184,6 +184,11 @@
                         <div class="col-md-9">
                             {{ Form::text('question-'.$code, !empty($question) ? $question->{'question:'.$code} : '', array('maxlength' => 256, 'class' => 'form-control input-title')) }}
                         </div>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-9">
+                            Tooltip example: <br/>
+                            Do you [includes cigars, e-cigarettes and any other tobacco products]smoke cigarettes[/]?
+                        </div>
                     </div>
                     <div class="form-group answers-group">
                         <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.question-answers') }}</label>
@@ -195,7 +200,9 @@
                                             {{ $question_answers_count[$key] ?? '' }}
                                         </div>
                                         <div class="col">
-                                            {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: 95%;')) }}
+                                            {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: 45%;')) }}
+
+                                            {{ Form::text('answers_tooltips-'.$code.'[]', json_decode($question->{'answers_tooltips:'.$code}, true)[$key] ?? '', array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Tooltip', 'style' => 'display: inline-block; width: 45%;')) }}
                                             <div class="input-group-btn" style="display: inline-block;">
                                                 <button class="btn btn-default btn-remove-answer" type="button">
                                                     <i class="glyphicon glyphicon-remove"></i>
@@ -265,7 +272,9 @@
 
         </div>
         <div class="col">
-            {{ Form::text('something', '', array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: 95%;')) }}
+            {{ Form::text('something', '', array('maxlength' => 256, 'class' => 'form-control answer-name', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: 45%;')) }}
+
+            {{ Form::text('bla', '', array('maxlength' => 256, 'class' => 'form-control answer-tooltip', 'placeholder' => 'Tooltip', 'style' => 'display: inline-block; width: 45%;')) }}
             <div class="input-group-btn" style="display: inline-block;">
                 <button class="btn btn-default btn-remove-answer" type="button">
                     <i class="glyphicon glyphicon-remove"></i>

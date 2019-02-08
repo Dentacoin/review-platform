@@ -634,6 +634,12 @@ class VoxesController extends AdminController
                     $translation->answers = '';                            
                 }
 
+                if(!empty( $data['answers_tooltips-'.$key] )) {
+                    $translation->answers_tooltips = json_encode( $data['answers_tooltips-'.$key] );
+                } else {
+                    $translation->answers_tooltips = '';
+                }
+
                 $translation->save();
             }
         }

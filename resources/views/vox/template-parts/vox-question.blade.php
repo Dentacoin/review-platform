@@ -23,12 +23,12 @@
 @elseif($question->type == 'multiple_choice')
 	<div class="question-group question-group-{{ $question->id }} multiple-choice" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  trigger-type="{{ $question->trigger_type }}" >
 		<div class="question">
-			{!! nl2br($question->question) !!}
+			{!! nl2br($question->questionWithTooltips()) !!}
 		</div>
 		<div class="answers">
-			@foreach( $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $answer)
+			@foreach( $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $k => $answer)
 				<div class="checkbox">
-					<label class="answer-checkbox" for="answer-{{ $question->id }}-{{ $loop->index+1 }}">
+					<label class="answer-checkbox no-mobile-tooltips {{ !empty(json_decode($question->answers_tooltips, true)[$k]) ? 'tooltip-text' : '' }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}" {!! !empty(json_decode($question->answers_tooltips, true)[$k]) ? 'text="'.json_decode($question->answers_tooltips, true)[$k].'"' : '' !!}>
 						<i class="far fa-square"></i>
 						<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="checkbox" name="answer" class="answer{!! mb_substr($answer, 0, 1)=='!' ? ' disabler' : '' !!} input-checkbox" value="{{ $loop->index+1 }}">
 						{{ mb_substr($answer, 0, 1)=='!' ? mb_substr($answer, 1) : $answer }}											
@@ -42,7 +42,7 @@
 @elseif($question->type == 'scale')
 	<div class="question-group question-group-{{ $question->id }} scale" data-id="{{ $question->id }}" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? 'data-trigger="'.$question->question_trigger.'"' : "" !!} trigger-type="{{ $question->trigger_type }}" >
 		<div class="question">
-			{!! nl2br($question->question) !!}
+			{!! nl2br($question->questionWithTooltips()) !!}
 		</div>
 		<div class="answers">
 
@@ -52,7 +52,7 @@
 					<div class="answer-title" style="width: 20%;">
 						&nbsp;
 					</div>
-					@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $ans)											
+					@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $key => $ans)											
 						<div class="answer-title" style="width: {{ (100 - 20) / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
 							<span>{{ $ans }}</span>
 						</div>
@@ -63,7 +63,7 @@
 					<div class="answer-title" style="width: 20%;">
 						&nbsp;
 					</div>
-					@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $ans)											
+					@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $key => $ans)											
 						<div class="answer-title" style="width: {{ (100 - 20) / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
 							<span>{{ $ans }}</span>
 						</div>
@@ -74,7 +74,7 @@
 					@foreach(json_decode($question->answers, true) as $k => $answer)
 						<div class="answer-radios-group clearfix">
 							<div class="answer-question">
-								<h3>{{ $answer }}</h3>
+								<h3 class="{{ !empty(json_decode($question->answers_tooltips, true)[$k]) ? 'tooltip-text' : '' }}" {!! !empty(json_decode($question->answers_tooltips, true)[$k]) ? 'text="'.json_decode($question->answers_tooltips, true)[$k].'"' : '' !!}>{{ $answer }}</h3>
 							</div>
 							<div class="buttons-list clearfix"> 
 								@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $ans)
@@ -97,13 +97,13 @@
 @else
 	<div class="question-group question-group-{{ $question->id }} single-choice {{ $question->is_control == -1 ? 'shuffle' : '' }}" {!! isset($answered[$question->id]) ? 'data-answer="'.$answered[$question->id].'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  trigger-type="{{ $question->trigger_type }}" >
 		<div class="question">
-			{!! nl2br($question->question) !!}
+			{!! nl2br($question->questionWithTooltips()) !!}
 		</div>
 		<div class="answers">
-			@foreach($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $answer)
-				<a class="answer answer" data-num="{{ $loop->index+1 }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}">
+			@foreach($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $key => $answer)
+				<a class="answer answer no-mobile-tooltips {{ !empty(json_decode($question->answers_tooltips, true)[$key]) ? 'tooltip-text' : '' }}" {!! !empty(json_decode($question->answers_tooltips, true)[$key]) ? 'text="'.json_decode($question->answers_tooltips, true)[$key].'"' : '' !!} data-num="{{ $loop->index+1 }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}">
 					<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="radio" name="answer" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
-					{{ $answer }}											
+					{{ $answer }}
 				</a>
 			@endforeach
 		</div>

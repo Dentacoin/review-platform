@@ -81,6 +81,7 @@ class UsersController extends AdminController
             ],
             'city_name' => [
                 'type' => 'text',
+                'disabled' => true,
             ],
             'zip' => [
                 'type' => 'text',

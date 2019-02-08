@@ -50,7 +50,8 @@ $(document).ready(function(){
 		$('.questions-form .tab-pane').each( function() {
 			var code = $(this).attr('data-code');
 			var newinput = $('#input-group-template').clone(true).removeAttr('id')
-			newinput.find('input').attr('name', 'answers-'+code+'[]');
+			newinput.find('input.answer-name').attr('name', 'answers-'+code+'[]');
+			newinput.find('input.answer-tooltip').attr('name', 'answers_tooltips-'+code+'[]');
 			$(this).find('.answers-list').append(newinput);
 		} );
 	} );
