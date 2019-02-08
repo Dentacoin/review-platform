@@ -182,7 +182,7 @@ class DentistsController extends FrontController
         }
 
 
-
+        $search_title = '';
         if (!empty($query)) {
             $seo_title = trans('trp.seo.location.title', [
                 'location' => $formattedAddress,
@@ -201,9 +201,15 @@ class DentistsController extends FrontController
                 'dentists_number' => $items->count(),
             ]);
 
-            $search_title = trans('trp.page.search.location.title', [
-                'location' => $formattedAddress,
-            ]);
+            if($query=='worldwide') {
+                $search_title = trans('trp.page.search.location.title-worldwide', [
+                    'location' => $formattedAddress,
+                ]);
+            } else {
+                $search_title = trans('trp.page.search.location.title', [
+                    'location' => $formattedAddress,
+                ]);
+            }
         }
 
         if (!empty($filter)) {
