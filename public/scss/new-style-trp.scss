@@ -5818,3 +5818,15 @@ textarea.input {
 		}
 	}
 }
+
+.dentists-subtitle {
+	margin-top: -25px;
+    margin-bottom: 20px;
+    color: #126585;
+    font-weight: bold;
+    font-size: 25px;
+
+    @media #{$phone} {
+    	font-size: 20px;
+    }
+}

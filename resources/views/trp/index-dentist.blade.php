@@ -8,6 +8,9 @@
 	    		{{ trans('trp.page.index-dentist.title') }}
 	    		
 	    	</h2>
+	    	<h3 class="dentists-subtitle">
+	    		Join Trusted Reviews' Dental Directory
+	    	</h3>
 	    	<p>
 	    		{!! nl2br(trans('trp.page.index-dentist.subtitle')) !!}
 	    		
