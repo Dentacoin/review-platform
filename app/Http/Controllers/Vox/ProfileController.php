@@ -177,11 +177,13 @@ class ProfileController extends FrontController
                 ])
             ];
         } else {
+
             $cashout = new VoxCashout;
             $cashout->user_id = $this->user->id;
             $cashout->reward = $amount;
             $cashout->address = $this->user->dcn_address;
             $cashout->save();
+
 
             $ret = Dcn::send($this->user, $this->user->dcn_address, $amount, 'vox-cashout', $cashout->id);
             $ret['balance'] = $this->user->getVoxBalance();

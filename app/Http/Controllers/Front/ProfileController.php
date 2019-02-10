@@ -14,7 +14,7 @@ use Image;
 use Illuminate\Support\Facades\Input;
 use App\Models\User;
 use App\Models\UserInvite;
-use App\Models\VoxCashout;
+use App\Models\TrpCashout;
 use App\Models\Dcn;
 use App\Models\Civic;
 use App\Models\Country;
@@ -226,14 +226,14 @@ class ProfileController extends FrontController
                 ])
             ];
         } else {
-            $cashout = new VoxCashout;
+            $cashout = new TrpCashout;
             $cashout->user_id = $this->user->id;
             $cashout->reward = $amount;
             $cashout->address = $this->user->dcn_address;
             $cashout->save();
 
             $ret = Dcn::send($this->user, $this->user->dcn_address, $amount, 'vox-cashout', $cashout->id);
-            $ret['balance'] = $this->user->getVoxBalance();
+            $ret['balance'] = $this->user->getTrpBalance();
             
             if($ret['success']) {
                 $cashout->tx_hash = $ret['message'];

@@ -232,15 +232,6 @@ class FrontController extends BaseController
 
     public function ShowView($page, $params=array()) {
 
-        SSH::run([
-            'cd /var/www/html',
-            'ls -al',
-        ], function($line){
-            echo $line.PHP_EOL;
-        });
-        dd('ok');
-
-
         $this->PrepareViewData($page, $params, 'trp');
 
         if( empty( $this->user ) ) {
