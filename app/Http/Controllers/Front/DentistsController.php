@@ -31,8 +31,10 @@ class DentistsController extends FrontController
             $corrected_query = 'dentists/'.mb_strtolower(str_replace([',', ' '], ['', '-'], $query ));
         }
 
+        // dd(urldecode(Request::path()), App::getLocale().'/'.$corrected_query );
+
         // dd(Request::path());
-        if (Request::path() != App::getLocale().'/'.$corrected_query) {
+        if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
 
             return redirect( getLangUrl($corrected_query) );
         }

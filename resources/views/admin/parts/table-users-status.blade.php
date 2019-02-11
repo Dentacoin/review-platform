@@ -5,6 +5,8 @@
 		<span class="label label-warning">Suspicious</span>
 	@elseif($item->status=='approved')
 		<span class="label label-success">Approved</span>
+	@elseif($item->status=='test')
+		<span class="label label-default">Test</span>
 	@else
 		<span class="label label-danger">Rejected</span>
 	@endif
