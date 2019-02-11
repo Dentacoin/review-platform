@@ -4315,7 +4315,7 @@ textarea.input {
     min-width: unset !important; } }
 
 .dentists-subtitle {
-  margin-top: -25px;
+  margin-top: 0px;
   margin-bottom: 20px;
   color: #126585;
   font-weight: bold;
@@ -4325,7 +4325,7 @@ textarea.input {
       font-size: 20px; } }
 
 .h2.with-margin {
-  margin-bottom: 30px;
+  margin-bottom: 5px;
   display: block;
   color: black; }
   @media screen and (max-width: 768px) {
