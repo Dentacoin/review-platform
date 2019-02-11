@@ -4323,3 +4323,11 @@ textarea.input {
   @media screen and (max-width: 768px) {
     .dentists-subtitle {
       font-size: 20px; } }
+
+.h2.with-margin {
+  margin-bottom: 30px;
+  display: block;
+  color: black; }
+  @media screen and (max-width: 768px) {
+    .h2.with-margin {
+      font-size: 30px; } }

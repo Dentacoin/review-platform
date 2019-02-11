@@ -5830,3 +5830,13 @@ textarea.input {
     	font-size: 20px;
     }
 }
+
+.h2.with-margin {
+	margin-bottom: 30px;
+	display: block;
+	color: black;
+
+	@media #{$phone} {
+    	font-size: 30px;
+    }
+}

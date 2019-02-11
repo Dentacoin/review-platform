@@ -4,13 +4,14 @@
 
 	<div class="container">
 		<div class="signin-top">
-	    	<h2>
+	    	<span class="h2 with-margin">
 	    		{{ trans('trp.page.index-dentist.title') }}
 	    		
-	    	</h2>
-	    	<h3 class="dentists-subtitle">
+	    	</span>
+	    	<h1 class="dentists-subtitle">
 	    		Join Trusted Reviews' Dental Directory
-	    	</h3>
+	    	</h1>
+
 	    	<p>
 	    		{!! nl2br(trans('trp.page.index-dentist.subtitle')) !!}
 	    		
