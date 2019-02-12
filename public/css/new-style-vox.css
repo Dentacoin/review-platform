@@ -1415,7 +1415,7 @@ header {
   position: relative;
   margin-top: 35px;
   margin-bottom: 15px;
-  width: 244px; }
+  width: 304px; }
   @media screen and (max-width: 1080px) {
     .search-survey {
       margin-left: auto;
@@ -1702,6 +1702,11 @@ header {
     .page-stats h2 {
       font-size: 12px;
       margin-bottom: 15px; } }
+.page-stats .stats-description {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+  margin-bottom: 40px; }
 .page-stats .search-survey {
   margin: 0 auto; }
 .page-stats .questions-menu {
@@ -4550,3 +4555,30 @@ header {
     border-style: solid;
     border-width: 0 7.5px 7.5px 7.5px;
     border-color: transparent transparent #41b0ff transparent; }
+
+.alert-order {
+  max-width: 870px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-right: 200px; }
+  @media screen and (max-width: 768px) {
+    .alert-order {
+      padding-right: 10px; } }
+  .alert-order .order-survey {
+    position: absolute;
+    right: 20px;
+    color: white;
+    text-decoration: none;
+    top: 50%;
+    transform: translateY(-50%); }
+    .alert-order .order-survey:hover {
+      text-decoration: none;
+      color: white; }
+    @media screen and (max-width: 768px) {
+      .alert-order .order-survey {
+        position: unset;
+        transform: none;
+        display: inline-block;
+        font-size: 10px;
+        padding: 6px 20px;
+        margin-top: 10px; } }

@@ -1923,7 +1923,7 @@ header {
 	position: relative;
 	margin-top: 35px;
 	margin-bottom: 15px;
-	width: 244px;
+	width: 304px;
 
 	@media #{$tablet} {
 		margin-left: auto;
@@ -2314,6 +2314,13 @@ header {
 			font-size: 12px;
 			margin-bottom: 15px;
 		}
+	}
+
+	.stats-description {
+		text-align: center;
+		max-width: 700px;
+		margin: 0 auto;
+		margin-bottom: 40px;
 	}
 
 	.search-survey {
@@ -6068,5 +6075,39 @@ header {
 		// 	display: none;
 		// }
 
+    }
+}
+
+.alert-order {
+	max-width: 870px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: 200px;
+
+    @media #{$phone} {
+    	padding-right: 10px;
+    }
+
+    .order-survey {
+    	position: absolute;
+	    right: 20px;
+	    color: white;
+	    text-decoration: none;
+	    top: 50%;
+	    transform: translateY(-50%);
+
+	    &:hover {
+	    	text-decoration: none;
+	    	color: white;
+	    }
+
+	    @media #{$phone} {
+	    	position: unset;
+	    	transform: none;
+    		display: inline-block;
+	    	font-size: 10px;
+	    	padding: 6px 20px;
+	    	margin-top: 10px;
+	    }
     }
 }

@@ -15,6 +15,10 @@
 			{!! nl2br(trans('vox.page.stats.subtitle')) !!}
 		</h2>
 
+		<p class="stats-description">
+			{!! trans('vox.page.stats.description') !!}
+		</p>
+
 		<div class="search-survey">
 			<i class="fas fa-search"></i>
 			<input type="text" id="survey-search" name="survey-search" class="tal">
@@ -42,7 +46,9 @@
 					{!! trans('vox.page.stats.featured') !!}
 				</b>
 				@foreach($voxes as $vox)
+
 					@if($vox->has_stats)
+
 						<div class="vox-stat flex" featured="{{ intval($vox->stats_featured) }}" published="{{ $vox->created_at->timestamp }}" popular="{{ intval($vox->rewards()->count()) }}" {!! $vox->stats_featured ? '' : 'style="display: none;"' !!}>
 							@if($vox->stats_featured)
 								<img class="featured" src="{{ url('new-vox-img/star.png') }}">
@@ -97,8 +103,10 @@
 				@endforeach
 			</div>
 		</div>
-
-
+		<div class="alert alert-info alert-order">
+			{!! trans('vox.page.stats.order-survey') !!} <br/>
+			<a href="mailto:{!! trans('vox.page.stats.order-survey-email') !!}" class="order-survey blue-button">{!! trans('vox.page.stats.request-survey') !!}</a>
+		</div>
 	</div>
 
 

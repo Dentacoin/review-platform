@@ -28,7 +28,8 @@ class StatsController extends FrontController
         $this->current_page = 'stats';
 
 		$sorts = [
-			'featured' => trans('vox.page.home.sort-featured'),
+            'featured' => trans('vox.page.home.sort-featured'),
+            'all' => trans('vox.page.home.sort-all'),
 			'newest' => trans('vox.page.home.sort-newest'),
 			'popular' => trans('vox.page.home.sort-popular'),
 		];
