@@ -74,6 +74,16 @@ class RegisterController extends FrontController
         } else {
 
 
+            if(User::validateLatin(Request::input('name')) == false) {
+                return Response::json( [
+                    'success' => false, 
+                    'messages' => [
+                        'name' => trans('trp.common.invalid-name')
+                    ]
+                ] );
+            }
+
+
             $is_blocked = User::checkBlocks( Request::input('name') , Request::input('email') );
             if( $is_blocked ) {
                 return Response::json( [
@@ -327,9 +337,18 @@ class RegisterController extends FrontController
                 }
             }
 
+            if(User::validateLatin(Request::input('name')) == false) {
+                return Response::json( [
+                    'success' => false, 
+                    'messages' => [
+                        'name' => trans('trp.common.invalid-name')
+                    ]
+                ] );
+            }
             
             $newuser = new User;
             $newuser->name = Request::input('name');
+            $newuser->name_alternative = Request::input('name_alternative');
             $newuser->email = Request::input('email');
             $newuser->country_id = Request::input('country_id');
             //$newuser->city_id = Request::input('city_id');

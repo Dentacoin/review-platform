@@ -51,7 +51,7 @@
 			                ] , $user->title , array('class' => 'input') ) }}
 						@endif
 						<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
-						<input type="text" name="name_alterantive" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alterantive }}">
+						<input type="text" name="name_alternative" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alternative }}">
 					</div>		
 				</div>
 				<div class="profile-details address-suggester-wrapper">
@@ -170,8 +170,8 @@
 					<h3>
 						{{ $item->getName() }}
 					</h3>
-					@if( $item->name_alterantive )
-						<p class="alternative-name">({{ $item->name_alterantive }})</p>
+					@if( $item->name_alternative )
+						<p class="alternative-name">({{ $item->name_alternative }})</p>
 					@endif
 					<span class="type">
 						@if($item->is_partner)
@@ -327,7 +327,7 @@
 						@else
 							<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
 						@endif
-						<input type="text" name="name_alterantive" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alterantive }}">
+						<input type="text" name="name_alternative" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alternative }}">
 						<select class="input country-select" name="country_id">
 	                		<option value="">-</option>
 	                		@foreach(\App\Models\Country::get() as $country)
@@ -440,8 +440,8 @@
 					<h3>
 						{{ $item->getName() }}
 					</h3>
-					@if( $item->name_alterantive )
-						<p class="alternative-name">({{ $item->name_alterantive }})</p>
+					@if( $item->name_alternative )
+						<p class="alternative-name">({{ $item->name_alternative }})</p>
 					@endif
 					<div class="p">
 						<div class="img">

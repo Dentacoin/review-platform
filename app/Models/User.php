@@ -41,7 +41,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'is_partner',
         'title',
         'name',
-        'name_alterantive',
+        'name_alternative',
         'description',
         'short_description',
         'zip',
@@ -1062,7 +1062,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
 
-    public function validateLatin($string) {
+    public static function validateLatin($string) {
         $result = false;
      
         if (preg_match("/^[\w\d\s.,-]*$/", $string)) {

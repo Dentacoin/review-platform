@@ -187,6 +187,7 @@
 						<div class="sign-in-step active" id="step-1">
 							@include('front.errors')
 							<input type="text" name="name" id="dentist-name" placeholder="{!! nl2br(trans('trp.popup.popup-register.name')) !!}" class="input" value="{{ old('name') }}">
+							<input type="text" name="name_alternative" id="dentist-name_alternative" placeholder="{!! nl2br(trans('trp.popup.popup-register.name_alterantive')) !!}" class="input" value="{{ old('name_alternative') }}">
 							<input type="email" name="email" id="dentist-email" placeholder="{!! nl2br(trans('trp.popup.popup-register.email')) !!}" class="input" value="{{ old('email') }}">
 							<input type="password" name="password" id="dentist-password" placeholder="{!! nl2br(trans('trp.popup.popup-register.password')) !!}" class="input" value="{{ old('password') }}">
 							<input type="password" name="password-repeat" id="dentist-password-repeat" placeholder="{!! nl2br(trans('trp.popup.popup-register.repeat-password')) !!}" class="input" value="{{ old('password-repeat') }}">

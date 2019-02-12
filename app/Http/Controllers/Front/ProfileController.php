@@ -53,10 +53,9 @@ class ProfileController extends FrontController
                 'required' => true,
                 'min' => 3,
             ],
-            'name_alterantive' => [
+            'name_alternative' => [
                 'type' => 'text',
                 'required' => false,
-                'min' => 3,
             ],
             'description' => [
                 'type' => 'text',
@@ -134,7 +133,7 @@ class ProfileController extends FrontController
             unset($this->profile_fields['short_description']);
             unset($this->profile_fields['website']);
             unset($this->profile_fields['socials']);
-            unset($this->profile_fields['name_alterantive']);
+            unset($this->profile_fields['name_alternative']);
             unset($this->profile_fields['email_public']);            
         }
     }
@@ -638,7 +637,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     ]);
                 }
 
-                if(!empty(Request::input('name')) && ($this->user->validateLatin(Request::input('name')) == false)) {
+                if(!empty(Request::input('name')) && (User::validateLatin(Request::input('name')) == false)) {
                     if( Request::input('json') ) {
                         $ret = [
                             'success' => false,
