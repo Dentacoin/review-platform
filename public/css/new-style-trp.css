@@ -1368,6 +1368,10 @@ body.blur .site-content {
     outline: none; }
   .input.has-error {
     background: rgba(255, 0, 0, 0.2); }
+  .input[disabled] {
+    background: #e5e9ed;
+    opacity: .6;
+    cursor: not-allowed; }
 
 textarea.input {
   width: 100%;
@@ -3338,8 +3342,6 @@ textarea.input {
   .profile-info-mobile .claim {
     font-size: 12px;
     color: #bababa; }
-  .profile-info-mobile .edit-buttons {
-    margin-top: 40px !important; }
   .profile-info-mobile .edit-button {
     font-size: 14px;
     color: #126585; }
@@ -4451,78 +4453,90 @@ body.edit-user .profile-info-mobile .profile-details {
 .suggester-map-div {
   background: transparent; }
 
-@media screen and (max-width: 768px) {
-  .social-wrap {
-    display: flex;
-    margin-top: 10px; } }
-.social-wrap .social-networks {
-  max-width: 44px;
-  border-radius: 5px;
-  border: none;
-  font-size: 16px;
-  box-shadow: -3px 3px 7px 1px #d8d8d8;
-  background: white;
-  height: 32px;
-  margin-top: -4px;
-  position: relative;
-  border-right: 1px solid #ededed;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-  position: relative; }
+.flexed-wrap {
+  align-items: baseline !important; }
   @media screen and (max-width: 768px) {
-    .social-wrap .social-networks {
-      margin-top: 0px; } }
-  .social-wrap .social-networks .current-social:after {
-    content: '';
-    position: absolute;
-    top: 13px;
-    right: 5px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 7px 4px 0 4px;
-    border-color: #9d9d9d transparent transparent transparent; }
-  .social-wrap .social-networks .current-social,
-  .social-wrap .social-networks a {
-    display: block;
-    height: 32px;
-    margin-left: 5px;
-    background-color: transparent; }
-    .social-wrap .social-networks .current-social i,
-    .social-wrap .social-networks a i {
-      width: 20px;
-      height: 20px;
-      display: block;
-      background-color: #929292;
-      color: white;
-      text-align: center;
-      padding: 2px;
-      border-radius: 3px;
-      margin-top: 6px; }
-  .social-wrap .social-networks .social-dropdown {
-    display: none;
-    position: absolute;
+    .flexed-wrap {
+      display: flex;
+      margin-top: 10px; } }
+  .flexed-wrap .social-networks {
+    max-width: 44px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    box-shadow: -3px 3px 7px 1px #d8d8d8;
     background: white;
-    top: 100%;
-    left: -1px;
-    border: 1px solid #d8d8d8;
-    z-index: 1000; }
-    .social-wrap .social-networks .social-dropdown.active {
-      display: block; }
-    .social-wrap .social-networks .social-dropdown a {
-      padding: 0px 18px 0px 5px;
-      margin: 0 auto;
-      height: auto;
-      margin-bottom: 8px; }
-      .social-wrap .social-networks .social-dropdown a.inactive {
-        display: none; }
-.social-wrap .col input {
-  width: 100% !important;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px; }
-  @media screen and (max-width: 768px) {
-    .social-wrap .col input {
-      margin-bottom: 0px; } }
+    height: 32px;
+    margin-top: -4px;
+    position: relative;
+    border-right: 1px solid #ededed;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    position: relative; }
+    @media screen and (max-width: 768px) {
+      .flexed-wrap .social-networks {
+        margin-top: 0px; } }
+    .flexed-wrap .social-networks .current-social:after {
+      content: '';
+      position: absolute;
+      top: 13px;
+      right: 5px;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 7px 4px 0 4px;
+      border-color: #9d9d9d transparent transparent transparent; }
+    .flexed-wrap .social-networks .current-social,
+    .flexed-wrap .social-networks a {
+      display: block;
+      height: 32px;
+      margin-left: 5px;
+      background-color: transparent; }
+      .flexed-wrap .social-networks .current-social i,
+      .flexed-wrap .social-networks a i {
+        width: 20px;
+        height: 20px;
+        display: block;
+        background-color: #929292;
+        color: white;
+        text-align: center;
+        padding: 2px;
+        border-radius: 3px;
+        margin-top: 6px; }
+    .flexed-wrap .social-networks .social-dropdown {
+      display: none;
+      position: absolute;
+      background: white;
+      top: 100%;
+      left: -1px;
+      border: 1px solid #d8d8d8;
+      z-index: 1000; }
+      .flexed-wrap .social-networks .social-dropdown.active {
+        display: block; }
+      .flexed-wrap .social-networks .social-dropdown a {
+        padding: 0px 18px 0px 5px;
+        margin: 0 auto;
+        height: auto;
+        margin-bottom: 8px; }
+        .flexed-wrap .social-networks .social-dropdown a.inactive {
+          display: none; }
+  .flexed-wrap .col input {
+    width: 100% !important;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px; }
+    @media screen and (max-width: 768px) {
+      .flexed-wrap .col input {
+        margin-bottom: 0px; } }
+
+.email-wrapper .checkbox-label {
+  margin-bottom: 15px;
+  margin-left: 44px;
+  margin-top: 5px; }
+  .email-wrapper .checkbox-label i {
+    margin-top: 0px;
+    margin-right: 2px; }
+.email-wrapper .email-wrap .social-networks .current-social:after {
+  display: none; }
 
 .add-social-profile {
   position: absolute;
@@ -4534,11 +4548,9 @@ body.edit-user .profile-info-mobile .profile-details {
   color: #1d6786; }
   @media screen and (max-width: 768px) {
     .add-social-profile {
-      position: absolute;
-      left: 10px;
-      bottom: 50px;
-      font-size: 14px !important;
-      bottom: 60px; } }
+      position: unset;
+      margin-top: 10px;
+      font-size: 14px !important; } }
 
 .profile-socials {
   margin-top: 20px; }

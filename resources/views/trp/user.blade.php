@@ -80,10 +80,27 @@
 			    		<input type="text" name="open" class="input wokrplace-input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText(true)) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
 			    	@endif	
 			    	<textarea class="input" name="short_description" placeholder="{!! nl2br(trans('trp.page.user.short-description')) !!}" maxlength="150">{{ $user->short_description }}</textarea>
+			    	<div class="email-wrapper">
+				    	<div class="flex flexed-wrap email-wrap">
+				    		<div class="col social-networks">
+				    			<a href="javascript:;" class="current-social">
+			    					<i class="fas fa-envelope"></i>
+			    				</a>
+				    		</div>
+				    		<div class="col">
+				    			<input type="text" name="email_public" class="input social-link-input" placeholder="{!! nl2br(trans('trp.page.user.user-public-email')) !!}" value="{{ !empty($user->email_public) ? $user->email_public : $user->email }}" maxlength="100" {!! !empty($user->email_public) ? '' : 'disabled' !!}>
+				    		</div>
+				    	</div>
+				    	<label class="checkbox-label label-public-email {!! !empty($user->email_public) ? '' : 'active' !!}" for="current-email-mobile"">
+							<input type="checkbox" class="special-checkbox" id="current-email-mobile" cur-email="{{ $user->email }}" name="current-email" value="{!! !empty($user->email_public) ? '0' : '1' !!}" {!! !empty($user->email_public) ? '' : 'checked' !!} >
+							<i class="far fa-square"></i>
+							{!! nl2br(trans('trp.page.user.user-registration-email')) !!}
+						</label>			    	
+				    </div>
 			    			    	
 			    	@if(!empty($user->socials))
 			    		@foreach($user->socials as $k => $v)
-					    	<div class="flex social-wrap">
+					    	<div class="flex social-wrap flexed-wrap">
 					    		<div class="col social-networks">
 					    			<a href="javascript:;" class="current-social">
 				    					<i class="{{ config('trp.social_network')[$k] }}"></i>
@@ -102,7 +119,7 @@
 					    	</div>
 					    @endforeach
 				    @else
-				    	<div class="flex social-wrap">
+				    	<div class="flex social-wrap flexed-wrap">
 				    		<div class="col social-networks">
 				    			<a href="javascript:;" class="current-social">
 			    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
@@ -217,15 +234,18 @@
 		    			{!! $workplace !!}
 		    		</div>
 		    	@endif
-		    	@if( $item->socials )
-			    	<div class="p profile-socials">
+			    <div class="p profile-socials">
+		    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
+		    			<i class="fas fa-envelope"></i>
+		    		</a>
+		    		@if( $item->socials )
 			    		@foreach($item->socials as $k => $v)
 				    		<a class="social" href="{{ $v }}" target="_blank">
 				    			<i class="{{ config('trp.social_network')[$k] }}"></i>
 				    		</a>
 				    	@endforeach
-			    	</div>
-		    	@endif
+				    @endif
+			    </div>		    	
 			</div>
 			<div class="profile-rating col tac">
 				<div class="ratings average">
@@ -332,9 +352,26 @@
 				    	@if(!$user->is_clinic)
 					    	<input type="text" name="open" class="input wokrplace-input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText(true)) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
 				    	@endif
+				    	<div class="email-wrapper">
+					    	<div class="flex flexed-wrap email-wrap">
+					    		<div class="col social-networks">
+					    			<a href="javascript:;" class="current-social">
+				    					<i class="fas fa-envelope"></i>
+				    				</a>
+					    		</div>
+					    		<div class="col">
+					    			<input type="text" name="email_public" class="input social-link-input" value="{{ !empty($user->email_public) ? $user->email_public : $user->email }}" placeholder="{!! nl2br(trans('trp.page.user.user-public-email')) !!}" maxlength="100" {!! !empty($user->email_public) ? '' : 'disabled' !!}>
+					    		</div>
+					    	</div>
+					    	<label class="checkbox-label label-public-email {!! !empty($user->email_public) ? '' : 'active' !!}" for="current-email"">
+								<input type="checkbox" class="special-checkbox" id="current-email" cur-email="{{ $user->email }}" name="current-email" value="{!! !empty($user->email_public) ? '0' : '1' !!}" {!! !empty($user->email_public) ? '' : 'checked' !!} >
+								<i class="far fa-square"></i>
+								{!! nl2br(trans('trp.page.user.user-registration-email')) !!}
+							</label>			    	
+					    </div>
 				    	@if(!empty($user->socials))
 				    		@foreach($user->socials as $k => $v)
-						    	<div class="flex social-wrap">
+						    	<div class="flex social-wrap flexed-wrap">
 						    		<div class="col social-networks">
 						    			<a href="javascript:;" class="current-social">
 					    					<i class="{{ config('trp.social_network')[$k] }}"></i>
@@ -353,7 +390,7 @@
 						    	</div>
 						    @endforeach
 					    @else
-					    	<div class="flex social-wrap">
+					    	<div class="flex social-wrap flexed-wrap">
 					    		<div class="col social-networks">
 					    			<a href="javascript:;" class="current-social">
 				    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
@@ -445,15 +482,18 @@
 			    			{!! $workplace !!}
 			    		</div>
 			    	@endif
-			    	@if( $item->socials )
-				    	<div class="p profile-socials">
+				    <div class="p profile-socials">
+				    	<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
+			    			<i class="fas fa-envelope"></i>
+			    		</a>
+				    	@if( $item->socials )
 				    		@foreach($item->socials as $k => $v)
 					    		<a class="social" href="{{ $v }}" target="_blank">
 					    			<i class="{{ config('trp.social_network')[$k] }}"></i>
 					    		</a>
 					    	@endforeach
-				    	</div>
-			    	@endif
+				    	@endif
+				    </div>
 				</div>
 				<span class="type">
 					@if($item->is_partner)

@@ -99,6 +99,11 @@ class ProfileController extends FrontController
                 'type' => 'textarea',
                 'required' => true,
             ],
+            'email_public' => [
+                'type' => 'text',
+                'required' => false,
+                'is_email' => true,
+            ],
         ];
 
         $this->genders = [
@@ -129,7 +134,8 @@ class ProfileController extends FrontController
             unset($this->profile_fields['short_description']);
             unset($this->profile_fields['website']);
             unset($this->profile_fields['socials']);
-            unset($this->profile_fields['name_alterantive']);            
+            unset($this->profile_fields['name_alterantive']);
+            unset($this->profile_fields['email_public']);            
         }
     }
 
@@ -650,8 +656,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     ]);
                 }
 
+
+
                 foreach ($this->profile_fields as $key => $value) {
-                    if( Request::exists($key) || $key=='specialization' ) {
+                    if( Request::exists($key) || $key=='specialization' || $key=='email_public' ) {
                         if($key=='work_hours') {
                             $wh = Request::input('work_hours');
                             foreach ($wh as $k => $v) {

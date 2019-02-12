@@ -1142,8 +1142,7 @@ $(document).ready(function(){
     $('.add-social-profile').click( function() {
 
         var social_wrapper = $(this).closest('.address-suggester-wrapper').find('.social-wrap');
-
-        var cloned = social_wrapper.first().clone(true).appendTo( $(this).closest('.address-suggester-wrapper') );
+        var cloned = social_wrapper.first().clone(true).insertAfter( $(this).closest('.address-suggester-wrapper').find('.social-wrap').last() );
 
         cloned.find('.social-link-input').val('');
         cloned.find('.social-dropdown .social-link:not(.inactive)').first().trigger('click');
@@ -1153,6 +1152,16 @@ $(document).ready(function(){
         }
         
     });
+
+    $('input[name="current-email"]').change( function() {
+        if ($(this).is(':checked')) {
+            $(this).closest('.email-wrapper').find('input[name="email_public"]').val($(this).attr('cur-email'));
+            $(this).closest('.email-wrapper').find('input[name="email_public"]').attr('disabled','disabled');
+        } else {
+            $(this).closest('.email-wrapper').find('input[name="email_public"]').val('');
+            $(this).closest('.email-wrapper').find('input[name="email_public"]').removeAttr('disabled');
+        }
+    }); 
 
 
 

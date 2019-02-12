@@ -1405,6 +1405,12 @@ body.blur {
     &.has-error {
     	background: rgba(255, 0, 0, 0.2);
     }
+
+	&[disabled] {
+		background: #e5e9ed;
+		opacity: .6;
+		cursor: not-allowed;
+	}
 }
 
 textarea.input {
@@ -4342,10 +4348,6 @@ textarea.input {
 		color: #bababa;
     }
 
-    .edit-buttons {
-    	margin-top: 40px !important;
-    }
-
     .edit-button {
     	font-size: 14px;
     	color: #126585;
@@ -6018,7 +6020,8 @@ body.edit-user {
 	background: transparent;
 }
 
-.social-wrap {
+.flexed-wrap {
+	align-items: baseline !important;
 
 	@media #{$phone} {
     	display: flex;
@@ -6117,6 +6120,29 @@ body.edit-user {
 	}
 }
 
+.email-wrapper {
+	.checkbox-label {
+		margin-bottom: 15px;
+		margin-left: 44px;
+		margin-top: 5px;
+
+		i {
+			margin-top: 0px;
+			margin-right: 2px;
+		}
+	}
+	.email-wrap {
+		.social-networks {
+		    .current-social {
+			    &:after {
+			    	display: none;
+			    }
+			}
+		}
+	}
+}
+
+
 .add-social-profile {
 	position: absolute;
 	display: block;
@@ -6127,11 +6153,9 @@ body.edit-user {
     color: #1d6786;
 
     @media #{$phone} {
-		position: absolute;
-		left: 10px;
-		bottom: 50px;
+    	position: unset;
+    	margin-top: 10px;
     	font-size: 14px !important;
-    	bottom: 60px;
     }
 }
 
