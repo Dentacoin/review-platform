@@ -78,9 +78,21 @@ class ProfileController extends FrontController
                 'type' => 'text',
                 'required' => true,
             ],
+            'website' => [
+                'type' => 'text',
+                'required' => true,
+            ],
+            'socials' => [
+                'type' => 'text',
+                'required' => false,
+            ],
             'work_hours' => [
                 'required' => false,
                 'hide' => true
+            ],
+            'short_description' => [
+                'type' => 'textarea',
+                'required' => true,
             ],
         ];
 
@@ -109,6 +121,9 @@ class ProfileController extends FrontController
             unset($this->profile_fields['address']);
             unset($this->profile_fields['specialization']);
             unset($this->profile_fields['description']);
+            unset($this->profile_fields['short_description']);
+            unset($this->profile_fields['website']);
+            unset($this->profile_fields['socials']);
         }
     }
 

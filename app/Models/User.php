@@ -42,11 +42,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'name',
         'name_alterantive',
         'description',
+        'short_description',
         'zip',
         'city_name',
         'address',
         'phone',
         'website',
+        'socials',
         'city_id',
         'country_id',
         'gender',
@@ -372,6 +374,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function setWorkHoursAttribute($value) {
         $this->attributes['work_hours'] = $value ? json_encode($value) : '';
     }
+
+    public function getSocialsAttribute() {
+        return json_decode($this->attributes['socials'], true);
+    }
+    public function setSocialsAttribute($value) {
+        if (is_array($value)) {
+            foreach ($value as $key => $v) {
+                if (empty($v)) {
+                    unset($value[$key]);
+                }
+            }
+        }
+        $this->attributes['socials'] = $value ? json_encode($value) : '';
+    }
+
     public function setNameAttribute($value) {
         $this->attributes['name'] = $value;
         $this->attributes['slug'] = $this->makeSlug();

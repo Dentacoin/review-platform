@@ -37,7 +37,13 @@ $(document).ready(function(){
         $('.view-profile').toggle();
         $('.edit-profile').toggle();
         $('.edit-button').toggle();
+        $('body').addClass('edit-user');
     } );
+
+    $('.cancel-edit').click( function() {
+
+        $('body').removeClass('edit-user');
+    });
 
     if(getUrlParameter('open-edit')) {
         $('.open-edit').first().trigger('click');
@@ -303,6 +309,8 @@ $(document).ready(function(){
             $(this).find('.bar').css('width', 0 );
         }
     } );
+
+
 
 
 
@@ -1091,6 +1099,61 @@ $(document).ready(function(){
             } );
         });
     }
+
+    $('.short-desc-arrow').click( function() {
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active');
+            $(this).closest('.edit-profile-wrapper').find('.dentist-short-desc').removeClass('active');
+        } else {
+            $(this).addClass('active');
+            $(this).closest('.edit-profile-wrapper').find('.dentist-short-desc').addClass('active');
+        }
+    });
+
+    $('.current-social').click( function(e) {
+        var elem = $(this).closest('.social-networks').find('.social-dropdown');
+        $('.social-dropdown').each( function() {
+            if(!$(this).is(elem)) {
+                $(this).removeClass('active');
+            }
+        })
+        elem.toggleClass('active');
+    });
+
+    $('body').click( function(e) {
+        if (!$(e.target).closest('.social-networks').length) {
+            $('.social-dropdown').removeClass('active');
+        }
+    });
+
+    $('.social-link').click( function() {
+        var el = $(this).closest('.social-wrap');
+        el.find('.current-social i').removeAttr('class');
+        el.find('.current-social i').attr('class', $(this).attr('social-class'));
+        el.find('.social-link-input').attr('name', 'socials['+$(this).attr('social-type')+']');
+        el.find('.social-dropdown').removeClass('active');
+        console.log(el.closest('.address-suggester-wrapper').find('.social-dropdown .social-link'));
+        el.closest('.address-suggester-wrapper').find('.social-dropdown .social-link[social-type="'+ $(this).attr('social-type') +'"]').each( function() {
+            $(this).addClass('inactive');
+        });
+
+    });
+
+    $('.add-social-profile').click( function() {
+
+        var social_wrapper = $(this).closest('.address-suggester-wrapper').find('.social-wrap');
+
+        var cloned = social_wrapper.first().clone(true).appendTo( $(this).closest('.address-suggester-wrapper') );
+
+        cloned.find('.social-link-input').val('');
+        cloned.find('.social-dropdown .social-link:not(.inactive)').first().trigger('click');
+
+        if((social_wrapper.length +1) == social_wrapper.first().find('.social-dropdown a').length ) {
+            $(this).hide();
+        }
+        
+    });
+
 
 
 });

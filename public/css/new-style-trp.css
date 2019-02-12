@@ -3246,9 +3246,49 @@ textarea.input {
 @media screen and (max-width: 768px) {
   .information {
     display: none; } }
+.information .avatar {
+  position: relative; }
+  .information .avatar::after {
+    content: '';
+    position: absolute;
+    height: 107px;
+    width: 1px;
+    background-color: #b7b7b7;
+    right: -15px;
+    top: 50%;
+    transform: translateY(-50%); }
+    @media screen and (max-width: 998px) {
+      .information .avatar::after {
+        display: none; } }
+.information h3 {
+  margin-bottom: 10px; }
+.information .type {
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+  color: white !important; }
+  @media screen and (max-width: 998px) {
+    .information .type {
+      color: #9f9f9f !important; } }
+  .information .type .img {
+    width: 18px !important; }
+    .information .type .img .black-logo {
+      display: none; }
+      @media screen and (max-width: 998px) {
+        .information .type .img .black-logo {
+          display: inline; } }
+    @media screen and (max-width: 998px) {
+      .information .type .img .white-logo {
+        display: none; } }
+  .information .type span {
+    color: white !important; }
+    @media screen and (max-width: 998px) {
+      .information .type span {
+        color: #9f9f9f !important; } }
 
 .profile-info-mobile {
   display: none;
+  position: relative;
   background-color: white;
   margin-top: -50px;
   width: 300px;
@@ -3295,6 +3335,8 @@ textarea.input {
   .profile-info-mobile .claim {
     font-size: 12px;
     color: #bababa; }
+  .profile-info-mobile .edit-buttons {
+    margin-top: 40px !important; }
   .profile-info-mobile .edit-button {
     font-size: 14px;
     color: #126585; }
@@ -3335,6 +3377,9 @@ textarea.input {
       margin-bottom: 0px;
       max-width: none;
       font-size: 14px; }
+  .profile-info-mobile .short-desc-arrow {
+    left: 50%;
+    transform: translateX(-50%); }
 
 .profile-info {
   width: 570px;
@@ -3375,16 +3420,18 @@ textarea.input {
   .profile-info .media-right {
     float: left;
     position: relative;
-    max-width: 360px; }
+    width: 360px; }
     @media screen and (max-width: 1200px) {
       .profile-info .media-right {
         max-width: 320px; } }
     @media screen and (max-width: 998px) {
       .profile-info .media-right {
+        max-width: 370px;
         float: none;
         width: 100%;
         clear: both; } }
     .profile-info .media-right::after {
+      display: none;
       content: '';
       position: absolute;
       height: 107px;
@@ -3826,7 +3873,8 @@ textarea.input {
       margin-left: 10px; }
       .details-wrapper .about-container .about-content a img {
         width: 20px;
-        height: 20px; }
+        height: 20px;
+        max-width: none; }
     .details-wrapper .about-container .about-content textarea {
       box-shadow: 0px 0px 14px 2px #d8d8d8; }
   .details-wrapper .about-container .gallery-slider {
@@ -4331,3 +4379,180 @@ textarea.input {
   @media screen and (max-width: 768px) {
     .h2.with-margin {
       font-size: 30px; } }
+
+.short-desc-arrow {
+  width: 33px;
+  height: 22px;
+  display: block;
+  position: absolute;
+  bottom: -22px;
+  left: 10px;
+  background: url("../img-trp/desc-arrow-down.png") no-repeat 50% 100%;
+  background-size: cover;
+  z-index: -1; }
+  .short-desc-arrow.active {
+    background-image: url("../img-trp/desc-arrow-up.png"); }
+
+.dentist-short-desc {
+  display: none;
+  margin-top: 30px;
+  margin-left: 13px;
+  max-width: 600px;
+  word-break: break-all; }
+  .dentist-short-desc.active {
+    display: block; }
+  @media screen and (max-width: 1200px) {
+    .dentist-short-desc {
+      max-width: 500px; } }
+  @media screen and (max-width: 998px) {
+    .dentist-short-desc {
+      max-width: 100%; } }
+
+.edit-short-description {
+  float: left;
+  width: 340px;
+  margin-right: 33px;
+  margin-top: 20px; }
+  @media screen and (max-width: 1200px) {
+    .edit-short-description {
+      width: 260px;
+      margin-right: 13px; } }
+  @media screen and (max-width: 998px) {
+    .edit-short-description {
+      width: 100%;
+      margin-right: 0px;
+      margin-top: 40px; } }
+
+textarea[name="short_description"] {
+  height: 87px;
+  margin-bottom: 0px; }
+
+.clear {
+  clear: both; }
+  @media screen and (max-width: 998px) {
+    .clear.flex {
+      display: block; } }
+
+body.edit-user .profile-info {
+  background-image: none; }
+body.edit-user .dentist-short-desc,
+body.edit-user .short-desc-arrow {
+  display: none; }
+
+.suggester-map-div {
+  background: transparent; }
+
+@media screen and (max-width: 768px) {
+  .social-wrap {
+    display: flex;
+    margin-top: 10px; } }
+.social-wrap .social-networks {
+  max-width: 44px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  box-shadow: -3px 3px 7px 1px #d8d8d8;
+  background: white;
+  height: 32px;
+  margin-top: -4px;
+  position: relative;
+  border-right: 1px solid #ededed;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  position: relative; }
+  @media screen and (max-width: 768px) {
+    .social-wrap .social-networks {
+      margin-top: 0px; } }
+  .social-wrap .social-networks .current-social:after {
+    content: '';
+    position: absolute;
+    top: 13px;
+    right: 5px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 4px 0 4px;
+    border-color: #9d9d9d transparent transparent transparent; }
+  .social-wrap .social-networks .current-social,
+  .social-wrap .social-networks a {
+    display: block;
+    height: 32px;
+    margin-left: 5px;
+    background-color: transparent; }
+    .social-wrap .social-networks .current-social i,
+    .social-wrap .social-networks a i {
+      width: 20px;
+      height: 20px;
+      display: block;
+      background-color: #929292;
+      color: white;
+      text-align: center;
+      padding: 2px;
+      border-radius: 3px;
+      margin-top: 6px; }
+  .social-wrap .social-networks .social-dropdown {
+    display: none;
+    position: absolute;
+    background: white;
+    top: 100%;
+    left: -1px;
+    border: 1px solid #d8d8d8;
+    z-index: 1000; }
+    .social-wrap .social-networks .social-dropdown.active {
+      display: block; }
+    .social-wrap .social-networks .social-dropdown a {
+      padding: 0px 18px 0px 5px;
+      margin: 0 auto;
+      height: auto;
+      margin-bottom: 8px; }
+      .social-wrap .social-networks .social-dropdown a.inactive {
+        display: none; }
+.social-wrap .col input {
+  width: 100% !important;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px; }
+  @media screen and (max-width: 768px) {
+    .social-wrap .col input {
+      margin-bottom: 0px; } }
+
+.add-social-profile {
+  position: absolute;
+  display: block;
+  bottom: -25px;
+  right: 0;
+  font-size: 14px;
+  font-weight: 300;
+  color: #1d6786; }
+  @media screen and (max-width: 768px) {
+    .add-social-profile {
+      position: absolute;
+      left: 10px;
+      bottom: 50px;
+      font-size: 14px !important;
+      bottom: 60px; } }
+
+.profile-socials {
+  margin-top: 20px; }
+  @media screen and (max-width: 768px) {
+    .profile-socials {
+      margin-top: 10px; } }
+  .profile-socials .social {
+    width: 20px;
+    height: 20px;
+    background-color: #929292;
+    color: white;
+    text-align: center;
+    padding: 2px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-right: 6px;
+    transition: all 0.3s ease; }
+    @media screen and (max-width: 768px) {
+      .profile-socials .social {
+        padding: 3px; } }
+    .profile-socials .social:hover {
+      background-color: #126585;
+      transition: all 0.3s ease; }
+    .profile-socials .social i {
+      color: white;
+      font-size: 13px; }

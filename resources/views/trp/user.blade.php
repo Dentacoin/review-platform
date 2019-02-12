@@ -77,6 +77,51 @@
 			    	<input type="hidden" name="email" value="{{ $user->email }}">
 			    	@if(!$user->is_clinic)
 			    		<input type="text" name="open" class="input wokrplace-input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText(true)) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
+			    	@endif	
+			    	<textarea class="input" name="short_description" placeholder="{!! nl2br(trans('trp.page.user.short-description')) !!}" maxlength="150">{{ $user->short_description }}</textarea>
+			    			    	
+			    	@if(!empty($user->socials))
+			    		@foreach($user->socials as $k => $v)
+					    	<div class="flex social-wrap">
+					    		<div class="col social-networks">
+					    			<a href="javascript:;" class="current-social">
+				    					<i class="{{ config('trp.social_network')[$k] }}"></i>
+				    				</a>
+					    			<div class="social-dropdown"> 
+						    			@foreach(config('trp.social_network') as $key => $sn)
+						    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! isset($user->socials[$key]) ? 'inactive' : ''; !!}">
+						    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
+						    				</a>
+						    			@endforeach
+						    		</div>
+					    		</div>
+					    		<div class="col">
+					    			<input type="text" name="socials[{{ $k }}]" class="input social-link-input" value="{{ $v }}" maxlength="300">
+					    		</div>
+					    	</div>
+					    @endforeach
+				    @else
+				    	<div class="flex social-wrap">
+				    		<div class="col social-networks">
+				    			<a href="javascript:;" class="current-social">
+			    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
+			    				</a>
+				    			<div class="social-dropdown"> 
+					    			@foreach(config('trp.social_network') as $key => $sn)
+					    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! $loop->first ? 'inactive' : '' !!}">
+					    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
+					    				</a>
+					    			@endforeach
+					    		</div>
+				    		</div>
+				    		<div class="col">
+				    			<input type="text" name="socials[{{ key(config('trp.social_network')) }}]" class="input social-link-input" maxlength="300">
+				    		</div>
+				    	</div>
+				    @endif
+				    
+				    @if(empty($user->socials) || (!empty($user->socials) && (count($user->socials) != count(config('trp.social_network')))))
+			    		<a href="javascript:;" class="add-social-profile">+ Add Social Profile</a>
 			    	@endif
 				</div>
 				<div class="edit-buttons">
@@ -168,6 +213,15 @@
 		    			{!! $workplace !!}
 		    		</div>
 		    	@endif
+		    	@if( $item->socials )
+			    	<div class="p profile-socials">
+			    		@foreach($item->socials as $k => $v)
+				    		<a class="social" href="{{ $v }}" target="_blank">
+				    			<i class="{{ config('trp.social_network')[$k] }}"></i>
+				    		</a>
+				    	@endforeach
+			    	</div>
+		    	@endif
 			</div>
 			<div class="profile-rating col tac">
 				<div class="ratings average">
@@ -204,6 +258,9 @@
 				@endif
 			</div>
 		</div>
+		@if(!empty($item->short_description))
+			<a href="javascript:;" class="short-desc-arrow"></a>
+		@endif
 	</div>
 
 	<div class="information flex">
@@ -270,15 +327,63 @@
 				    	@if(!$user->is_clinic)
 					    	<input type="text" name="open" class="input wokrplace-input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText(true)) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
 				    	@endif
+				    	@if(!empty($user->socials))
+				    		@foreach($user->socials as $k => $v)
+						    	<div class="flex social-wrap">
+						    		<div class="col social-networks">
+						    			<a href="javascript:;" class="current-social">
+					    					<i class="{{ config('trp.social_network')[$k] }}"></i>
+					    				</a>
+						    			<div class="social-dropdown"> 
+							    			@foreach(config('trp.social_network') as $key => $sn)
+							    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! isset($user->socials[$key]) ? 'inactive' : ''; !!}">
+							    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
+							    				</a>
+							    			@endforeach
+							    		</div>
+						    		</div>
+						    		<div class="col">
+						    			<input type="text" name="socials[{{ $k }}]" class="input social-link-input" value="{{ $v }}" maxlength="300">
+						    		</div>
+						    	</div>
+						    @endforeach
+					    @else
+					    	<div class="flex social-wrap">
+					    		<div class="col social-networks">
+					    			<a href="javascript:;" class="current-social">
+				    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
+				    				</a>
+					    			<div class="social-dropdown"> 
+						    			@foreach(config('trp.social_network') as $key => $sn)
+						    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! $loop->first ? 'inactive' : '' !!}">
+						    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
+						    				</a>
+						    			@endforeach
+						    		</div>
+					    		</div>
+					    		<div class="col">
+					    			<input type="text" name="socials[{{ key(config('trp.social_network')) }}]" class="input social-link-input" maxlength="300">
+					    		</div>
+					    	</div>
+					    @endif
+					    
+					    @if(empty($user->socials) || (!empty($user->socials) && (count($user->socials) != count(config('trp.social_network')))))
+				    		<a href="javascript:;" class="add-social-profile">+ Add Social Profile</a>
+				    	@endif
 					</div>
 					<div class="clearfix">
-						<div class="edit-buttons">
-							<button class="button" type="submit">
-								{!! nl2br(trans('trp.page.user.save')) !!}
-							</button>
-							<a href="javascript:;" class="cancel-edit open-edit">
-								{!! nl2br(trans('trp.page.user.cancel')) !!}
-							</a>
+						<div class="clear flex flex-bottom">
+							<div class="edit-short-description">
+								<textarea class="input" name="short_description" placeholder="{!! nl2br(trans('trp.page.user.short-description')) !!}" maxlength="150">{{ $user->short_description }}</textarea>
+							</div>
+							<div class="edit-buttons">
+								<button class="button" type="submit">
+									{!! nl2br(trans('trp.page.user.save')) !!}
+								</button>
+								<a href="javascript:;" class="cancel-edit open-edit">
+									{!! nl2br(trans('trp.page.user.cancel')) !!}
+								</a>
+							</div>
 						</div>
 					</div>
 					<div class="edit-error alert alert-warning" style="display: none;">
@@ -292,16 +397,7 @@
 				<div class="media-right">
 					<h3>
 						{{ $item->getName() }}
-					</h3>
-					<span class="type">
-						@if($item->is_partner)
-			    			<div class="img">
-								<img class="black-filter" src="{{ url('img-trp/mini-logo.png') }}">
-							</div>
-							<span> {!! nl2br(trans('trp.page.user.partner')) !!}</span> 
-						@endif
-						{{ $item->is_clinic ? 'Clinic' : 'Dentist' }}
-					</span>
+					</h3>					
 
 					<div class="p">
 						<div class="img">
@@ -342,7 +438,26 @@
 			    			{!! $workplace !!}
 			    		</div>
 			    	@endif
+			    	@if( $item->socials )
+				    	<div class="p profile-socials">
+				    		@foreach($item->socials as $k => $v)
+					    		<a class="social" href="{{ $v }}" target="_blank">
+					    			<i class="{{ config('trp.social_network')[$k] }}"></i>
+					    		</a>
+					    	@endforeach
+				    	</div>
+			    	@endif
 				</div>
+				<span class="type">
+					@if($item->is_partner)
+		    			<div class="img">
+							<img class="black-filter white-logo" src="{{ url('img-trp/mini-logo-white.png') }}">
+							<img class="black-filter black-logo" src="{{ url('img-trp/mini-logo.png') }}">
+						</div>
+						<span> {!! nl2br(trans('trp.page.user.partner')) !!}</span> 
+					@endif
+					{{ $item->is_clinic ? 'Clinic' : 'Dentist' }}
+				</span>
 			</div>
 			@if(!empty($user) && $user->id==$item->id)
 				<a class="edit-button open-edit" href="javascript:;">
@@ -350,6 +465,10 @@
 					{!! nl2br(trans('trp.page.user.edit-profile')) !!}
 				</a>
 			@endif
+			@if(!empty($item->short_description))
+				<a href="javascript:;" class="short-desc-arrow"></a>
+			@endif
+
 		</div>
 
 		<div class="profile-rating col tac">
@@ -385,6 +504,11 @@
 		</div>
     </div>
 
+	@if(!empty($item->short_description))
+		<div class="dentist-short-desc">
+			{{ $item->short_description }}
+		</div>
+	@endif
 
     <div class="profile-tabs">
     	@if( $item->reviews_in_standard()->count() )
