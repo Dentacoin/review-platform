@@ -121,7 +121,7 @@
 				    @endif
 				    
 				    @if(empty($user->socials) || (!empty($user->socials) && (count($user->socials) != count(config('trp.social_network')))))
-			    		<a href="javascript:;" class="add-social-profile">+ Add Social Profile</a>
+			    		<a href="javascript:;" class="add-social-profile">{!! nl2br(trans('trp.page.user.add-social-profile')) !!}</a>
 			    	@endif
 				</div>
 				<div class="edit-buttons">
@@ -368,7 +368,7 @@
 					    @endif
 					    
 					    @if(empty($user->socials) || (!empty($user->socials) && (count($user->socials) != count(config('trp.social_network')))))
-				    		<a href="javascript:;" class="add-social-profile">+ Add Social Profile</a>
+				    		<a href="javascript:;" class="add-social-profile">{!! nl2br(trans('trp.page.user.add-social-profile')) !!}</a>
 				    	@endif
 					</div>
 					<div class="clearfix">
