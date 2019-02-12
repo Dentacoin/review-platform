@@ -56,8 +56,23 @@ $(document).ready(function(){
                 wrapper.append(this);
             });
 
-        } else {
+        } else if (sort == 'all') {
 
+            list.show().attr("found", 1);
+
+            list.sort(function(a, b) {
+                if( parseInt($(a).attr('updated')) > parseInt($(b).attr('updated')) ) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            });
+
+            list.each(function() {
+                wrapper.append(this);
+            });
+
+        } else {
 
             list.show().attr("found", 1);
 
@@ -82,6 +97,9 @@ $(document).ready(function(){
             list.each(function() {
                 wrapper.append(this);
             });
+
+            list.hide();
+            list.slice( 0, 5 ).show();
         }
     }
 

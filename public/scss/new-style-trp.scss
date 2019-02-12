@@ -4206,6 +4206,7 @@ textarea.input {
 
     .avatar {
     	position: relative;
+    	margin-top: 30px;
 
     	&::after {
 			content: '';
@@ -4221,6 +4222,10 @@ textarea.input {
 				display: none;
 			}
     	}
+    }
+
+    .share-button {
+    	position: absolute;
     }
 
     h3 {
@@ -5987,11 +5992,25 @@ textarea[name="short_description"] {
 body.edit-user {
 	.profile-info {
 		background-image: none;
+
+		.share-button {
+			display: none;
+		}
 	}
 
 	.dentist-short-desc,
 	.short-desc-arrow {
 		display: none;
+	}
+
+	.profile-info-mobile {
+		.share-mobile {
+			display: none;
+		}
+
+		.profile-details {
+		    margin-top: 10px;
+		}
 	}
 }
 
@@ -6149,4 +6168,17 @@ body.edit-user {
 			font-size: 13px;
 		}
 	}
+}
+
+.alternative-name {
+	font-size: 14px;
+    font-weight: 300;
+    color: #777777;
+    margin-top: -5px;
+    margin-bottom: 20px;
+
+    @media #{$phone} {
+        margin-top: 5px;
+    	margin-bottom: 10px;
+    }
 }

@@ -3247,7 +3247,8 @@ textarea.input {
   .information {
     display: none; } }
 .information .avatar {
-  position: relative; }
+  position: relative;
+  margin-top: 30px; }
   .information .avatar::after {
     content: '';
     position: absolute;
@@ -3260,6 +3261,8 @@ textarea.input {
     @media screen and (max-width: 998px) {
       .information .avatar::after {
         display: none; } }
+.information .share-button {
+  position: absolute; }
 .information h3 {
   margin-bottom: 10px; }
 .information .type {
@@ -4435,9 +4438,15 @@ textarea[name="short_description"] {
 
 body.edit-user .profile-info {
   background-image: none; }
+  body.edit-user .profile-info .share-button {
+    display: none; }
 body.edit-user .dentist-short-desc,
 body.edit-user .short-desc-arrow {
   display: none; }
+body.edit-user .profile-info-mobile .share-mobile {
+  display: none; }
+body.edit-user .profile-info-mobile .profile-details {
+  margin-top: 10px; }
 
 .suggester-map-div {
   background: transparent; }
@@ -4556,3 +4565,14 @@ body.edit-user .short-desc-arrow {
     .profile-socials .social i {
       color: white;
       font-size: 13px; }
+
+.alternative-name {
+  font-size: 14px;
+  font-weight: 300;
+  color: #777777;
+  margin-top: -5px;
+  margin-bottom: 20px; }
+  @media screen and (max-width: 768px) {
+    .alternative-name {
+      margin-top: 5px;
+      margin-bottom: 10px; } }

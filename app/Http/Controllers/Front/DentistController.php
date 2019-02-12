@@ -138,6 +138,7 @@ class DentistController extends FrontController
 
 
     public function list($locale=null, $slug) {
+
         $review_id = request('review_id');
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
 

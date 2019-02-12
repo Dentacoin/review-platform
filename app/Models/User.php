@@ -34,7 +34,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     use SoftDeletes, Authenticatable, CanResetPassword;
 
     protected $fillable = [
-    	'email', 
+    	'email',
+        'email_public',
     	'password', 
         'is_dentist',
         'is_partner',
@@ -1059,5 +1060,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $r->hasimage_social = false;
             $r->save();
         }
+    }
+
+    public function validateLatin($string) {
+        $result = false;
+     
+        if (preg_match("/^[\w\d\s.,-]*$/", $string)) {
+            $result = true;
+        }
+     
+        return $result;
     }
 }

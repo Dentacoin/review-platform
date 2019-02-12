@@ -51,6 +51,7 @@
 			                ] , $user->title , array('class' => 'input') ) }}
 						@endif
 						<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
+						<input type="text" name="name_alterantive" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alterantive }}">
 					</div>		
 				</div>
 				<div class="profile-details address-suggester-wrapper">
@@ -152,6 +153,9 @@
 					<h3>
 						{{ $item->getName() }}
 					</h3>
+					@if( $item->name_alterantive )
+						<p class="alternative-name">({{ $item->name_alterantive }})</p>
+					@endif
 					<span class="type">
 						@if($item->is_partner)
 		    				<div class="img">
@@ -303,6 +307,7 @@
 						@else
 							<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
 						@endif
+						<input type="text" name="name_alterantive" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alterantive }}">
 						<select class="input country-select" name="country_id">
 	                		<option value="">-</option>
 	                		@foreach(\App\Models\Country::get() as $country)
@@ -397,8 +402,10 @@
 				<div class="media-right">
 					<h3>
 						{{ $item->getName() }}
-					</h3>					
-
+					</h3>
+					@if( $item->name_alterantive )
+						<p class="alternative-name">({{ $item->name_alterantive }})</p>
+					@endif
 					<div class="p">
 						<div class="img">
 							<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">

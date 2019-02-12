@@ -53,6 +53,11 @@ class ProfileController extends FrontController
                 'required' => true,
                 'min' => 3,
             ],
+            'name_alterantive' => [
+                'type' => 'text',
+                'required' => false,
+                'min' => 3,
+            ],
             'description' => [
                 'type' => 'text',
                 'required' => false,
@@ -124,6 +129,7 @@ class ProfileController extends FrontController
             unset($this->profile_fields['short_description']);
             unset($this->profile_fields['website']);
             unset($this->profile_fields['socials']);
+            unset($this->profile_fields['name_alterantive']);            
         }
     }
 
@@ -623,6 +629,24 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     ->withInput()
                     ->withErrors([
                         'address' => trans('trp.common.invalid-address')
+                    ]);
+                }
+
+                if(!empty(Request::input('name')) && ($this->user->validateLatin(Request::input('name')) == false)) {
+                    if( Request::input('json') ) {
+                        $ret = [
+                            'success' => false,
+                            'messages' => [
+                                'name' => trans('trp.common.invalid-name')
+                            ]
+                        ];
+                        return Response::json($ret);
+                    }
+
+                    return redirect( getLangUrl('profile/info') )
+                    ->withInput()
+                    ->withErrors([
+                        'name' => trans('trp.common.invalid-name')
                     ]);
                 }
 

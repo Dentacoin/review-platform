@@ -49,7 +49,7 @@
 
 					@if($vox->has_stats)
 
-						<div class="vox-stat flex" featured="{{ intval($vox->stats_featured) }}" published="{{ $vox->created_at->timestamp }}" popular="{{ intval($vox->rewards()->count()) }}" {!! $vox->stats_featured ? '' : 'style="display: none;"' !!}>
+						<div class="vox-stat flex" featured="{{ intval($vox->stats_featured) }}" published="{{ $vox->created_at->timestamp }}" updated="{{ $vox->updated_at->timestamp }}" popular="{{ intval($vox->rewards()->count()) }}" {!! $vox->stats_featured ? '' : 'style="display: none;"' !!}>
 							@if($vox->stats_featured)
 								<img class="featured" src="{{ url('new-vox-img/star.png') }}">
 							@endif
@@ -103,9 +103,17 @@
 				@endforeach
 			</div>
 		</div>
-		<div class="alert alert-info alert-order">
-			{!! trans('vox.page.stats.order-survey') !!} <br/>
-			<a href="mailto:{!! trans('vox.page.stats.order-survey-email') !!}" class="order-survey blue-button">{!! trans('vox.page.stats.request-survey') !!}</a>
+	</div>
+
+	<div class="section-stats">
+		<div class="container">
+			<img src="{{ url('new-vox-img/stats-front.png') }}">
+			<h3>
+				{!! trans('vox.page.stats.order-survey') !!}
+			</h3>
+			<a href="mailto:{!! trans('vox.page.stats.order-survey-email') !!}" class="check-stats">
+				{!! trans('vox.page.stats.request-survey') !!}
+			</a>
 		</div>
 	</div>
 
