@@ -65,6 +65,10 @@ class ProfileController extends FrontController
                 'type' => 'specialization',
                 'required' => false,
             ],
+            'accepted_payment' => [
+                'type' => 'array',
+                'required' => false,
+            ],
             'email' => [
                 'type' => 'text',
                 'required' => true,
@@ -134,7 +138,8 @@ class ProfileController extends FrontController
             unset($this->profile_fields['website']);
             unset($this->profile_fields['socials']);
             unset($this->profile_fields['name_alternative']);
-            unset($this->profile_fields['email_public']);            
+            unset($this->profile_fields['email_public']);     
+            unset($this->profile_fields['accepted_payment']);            
         }
     }
 
@@ -588,6 +593,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 if (!empty($value['number'])) {
                     $arr[] = 'numeric';
                 }
+                if (!empty($value['array'])) {
+                    $arr[] = 'array';
+                }
                 if (!empty($value['values'])) {
                     $arr[] = 'in:'.implode(',', array_keys($value['values']) );
                 }
@@ -658,7 +666,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
                 foreach ($this->profile_fields as $key => $value) {
-                    if( Request::exists($key) || $key=='specialization' || $key=='email_public' ) {
+                    if( Request::exists($key) || $key=='specialization' || $key=='email_public' || $key=='accepted_payment' ) {
                         if($key=='work_hours') {
                             $wh = Request::input('work_hours');
                             foreach ($wh as $k => $v) {
@@ -698,6 +706,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                             $ret['value'] = implode(', ', $this->user->parseCategories( $this->categories ));
                         } else if( Request::input('field')=='work_hours' ) {
                             $ret['value'] = strip_tags( $this->user->getWorkHoursText() );
+                        } else if( Request::input('field')=='accepted_payment' ) {
+                            $ret['value'] = $this->user->parseAcceptedPayment( $this->user->accepted_payment );
                         } else {
                             $ret['value'] = nl2br($this->user[ Request::input('field') ]) ;                            
                         }

@@ -3848,20 +3848,30 @@ textarea.input {
   .details-wrapper .map-container {
     width: 100%;
     height: 300px; }
+  .details-wrapper .about-container .dentist-payments,
   .details-wrapper .about-container .specialization {
     position: relative;
     margin-bottom: 20px;
     padding-right: 30px;
     display: flex;
     align-items: center; }
+    .details-wrapper .about-container .dentist-payments .img,
+    .details-wrapper .about-container .specialization .img {
+      text-align: center; }
+    .details-wrapper .about-container .dentist-payments .img,
+    .details-wrapper .about-container .dentist-payments img,
+    .details-wrapper .about-container .specialization .img,
     .details-wrapper .about-container .specialization img {
       width: 17px;
       height: 13px;
       margin-right: 5px; }
+    .details-wrapper .about-container .dentist-payments span,
     .details-wrapper .about-container .specialization span {
       font-weight: 300; }
+    .details-wrapper .about-container .dentist-payments a,
     .details-wrapper .about-container .specialization a {
       margin-left: 10px; }
+      .details-wrapper .about-container .dentist-payments a img,
       .details-wrapper .about-container .specialization a img {
         width: 20px;
         height: 20px; }

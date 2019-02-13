@@ -5131,6 +5131,7 @@ textarea.input {
 	}
 
     .about-container {
+    	.dentist-payments,
     	.specialization {
     		position: relative;
     		margin-bottom: 20px;
@@ -5138,6 +5139,11 @@ textarea.input {
 		    display: flex;
 		    align-items: center;
 
+		    .img {
+		    	text-align: center;
+		    }
+
+		    .img,
 		    img {
 		    	width: 17px;
 		    	height: 13px;

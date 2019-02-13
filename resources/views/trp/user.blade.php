@@ -810,6 +810,41 @@
 		    			</div>
 	    			@endif
 				@endif
+				@if(!empty($item->accepted_payment) || (!empty($user) && $item->id==$user->id))
+	    			<div class="dentist-payments" role="presenter">
+						<i class="fas fa-dollar-sign img"></i>
+		    			<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.accepted-payment-empty')) }}">
+		    				{{ $item->accepted_payment ? $item->parseAcceptedPayment( $item->accepted_payment ) : nl2br(trans('trp.page.user.accepted-payment-empty')) }}
+	    				</span>
+	    				@if(!empty($user) && $item->id==$user->id)
+	    					<a>
+	    						<img src="{{ url('img-trp/pencil.png') }}">
+	    					</a>
+	    				@endif
+	    			</div>
+	    			@if(!empty($user) && $item->id==$user->id)
+		    			<div class="dentist-payments" role="editor" style="display: none;">
+							{{ Form::open(array('class' => 'edit-description', 'method' => 'post', 'url' => getLangUrl('profile/info') )) }}
+								{!! csrf_field() !!}
+								@foreach(config('trp.accepted_payment') as $ap)
+									<label class="checkbox-label {!! in_array($ap, $user->accepted_payment) ? 'active' : '' !!}" for="checkbox-{{ $ap }}" >
+										<input type="checkbox" class="special-checkbox" id="checkbox-{{ $ap }}" name="accepted_payment[]" value="{{ $ap }}" {!! in_array($ap, $user->accepted_payment) ? 'checked="checked"' : '' !!}>
+										<i class="far fa-square"></i>
+										{!! trans('trp.accepted-payments.'.$ap) !!}
+									</label>
+                                @endforeach
+                                <br/>
+                                <input type="hidden" name="field" value="accepted_payment" />
+                                <input type="hidden" name="json" value="1" />
+								<button type="submit" class="button">
+									{!! nl2br(trans('trp.page.user.save')) !!}
+								</button>
+								<div class="alert alert-warning" style="display: none;">
+								</div>
+							{!! Form::close() !!}
+		    			</div>
+	    			@endif
+				@endif
     			@if($item->description || (!empty($user) && $item->id==$user->id) )
 	    			<div class="about-content" role="presenter">
 	    				<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.description-empty')) }}">

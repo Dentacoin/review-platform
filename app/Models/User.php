@@ -49,6 +49,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'address',
         'phone',
         'website',
+        'accepted_payment',
         'socials',
         'city_id',
         'country_id',
@@ -1070,5 +1071,29 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
      
         return $result;
+    }
+
+    public function getAcceptedPaymentAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+    
+    public function setAcceptedPaymentAttribute($value) {
+        $this->attributes['accepted_payment'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['accepted_payment'] = implode(',', $value);            
+        }
+    }
+
+    public function parseAcceptedPayment($ap) {
+        
+        $arr = [];
+        foreach ($ap as $v) {
+            $arr[$v] = trans('trp.accepted-payments.'.$v);
+        }
+
+        return implode(', ', $arr);
     }
 }
