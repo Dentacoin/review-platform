@@ -55,16 +55,6 @@ class RegisterController extends FrontController
                 return Response::json( $ret );
             } else {
 
-                if(User::validateLatin(Request::input('name')) == false) {
-                    $ret = array(
-                        'success' => false,
-                        'messages' =>[
-                            'name' => trans('vox.common.invalid-name')
-                        ]
-                    );
-                    return Response::json( $ret );
-                }
-
                 $captcha = false;
                 $cpost = [
                     'secret' => env('CAPTCHA_SECRET'),
@@ -127,6 +117,16 @@ class RegisterController extends FrontController
                             'address' => trans('vox.common.invalid-address')
                         ]
                     ] );
+                }
+
+                if(User::validateLatin(Request::input('name')) == false) {
+                    $ret = array(
+                        'success' => false,
+                        'messages' =>[
+                            'name' => trans('vox.common.invalid-name')
+                        ]
+                    );
+                    return Response::json( $ret );
                 }
 
                 
