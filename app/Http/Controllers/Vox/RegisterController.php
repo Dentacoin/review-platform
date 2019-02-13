@@ -55,6 +55,16 @@ class RegisterController extends FrontController
                 return Response::json( $ret );
             } else {
 
+                if(User::validateLatin(Request::input('name')) == false) {
+                    $ret = array(
+                        'success' => false,
+                        'messages' =>[
+                            'name' => trans('vox.common.invalid-name')
+                        ]
+                    );
+                    return Response::json( $ret );
+                }
+
                 $captcha = false;
                 $cpost = [
                     'secret' => env('CAPTCHA_SECRET'),
@@ -122,6 +132,7 @@ class RegisterController extends FrontController
                 
                 $newuser = new User;
                 $newuser->name = Request::input('name');
+                $newuser->name_alternative = Request::input('name_alternative');
                 $newuser->email = Request::input('email');
                 $newuser->country_id = Request::input('country_id');
                 $newuser->password = bcrypt(Request::input('password'));
@@ -251,6 +262,15 @@ class RegisterController extends FrontController
 
             return Response::json( $ret );
         } else {
+
+            if(User::validateLatin(Request::input('name')) == false) {
+                return Response::json( [
+                    'success' => false, 
+                    'messages' => [
+                        'name' => trans('vox.common.invalid-name')
+                    ]
+                ] );
+            }
             
             $is_blocked = User::checkBlocks( Request::input('name') , Request::input('email') );
             if( $is_blocked ) {

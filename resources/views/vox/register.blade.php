@@ -108,6 +108,10 @@
 								<input type="text" class="form-control" name="name" id="name" placeholder="{!! trans('vox.page.register.name') !!}">
 								<span class="error-message" id="name-error"></span>
 							</div>
+							<div class="form-group {{ $errors->has('name_alternative') ? 'has-error' : '' }}">
+								<input type="text" class="form-control" name="name_alternative" id="name_alternative" placeholder="{!! trans('vox.page.register.name_alternative') !!}">
+								<span class="error-message" id="name_alternative-error"></span>
+							</div>
 							<div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
 								<input type="text" class="form-control" name="email" id="email" placeholder="{!! trans('vox.page.register.email') !!}">
 								<span class="error-message" id="email-error"></span>
