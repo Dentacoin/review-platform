@@ -3159,11 +3159,11 @@ textarea.input {
   @media screen and (max-width: 1200px) {
     .page-dentist .home-search-form,
     .page-dentists .home-search-form {
-      width: 680px; } }
+      width: 620px; } }
   @media screen and (max-width: 998px) {
     .page-dentist .home-search-form,
     .page-dentists .home-search-form {
-      width: 480px; } }
+      width: 450px; } }
   @media screen and (max-width: 768px) {
     .page-dentist .home-search-form,
     .page-dentists .home-search-form {

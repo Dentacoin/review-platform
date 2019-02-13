@@ -15,6 +15,16 @@ use App;
 
 class DentistsController extends FrontController
 {
+    public function getCorrectedQuery($query, $filter) {
+        $query = urldecode($query);
+        if(!empty($filter)) {
+            $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).'/'.$filter;
+        } else {
+            $corrected_query = 'dentists/'.mb_strtolower(str_replace([',', ' '], ['', '-'], $query ));
+        }
+
+        return $corrected_query;
+    }
 
     public function paginate($locale=null, $query=null, $filter=null, $page) {
         return $this->list($locale, $query, $filter, $page, true);
@@ -25,15 +35,7 @@ class DentistsController extends FrontController
 
         // $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).(!empty($filter) ? '/'.$filter : '');
 
-        if(!empty($filter)) {
-            $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).'/'.$filter;
-        } else {
-            $corrected_query = 'dentists/'.mb_strtolower(str_replace([',', ' '], ['', '-'], $query ));
-        }
-
-        // dd(urldecode(Request::path()), App::getLocale().'/'.$corrected_query );
-
-        // dd(Request::path());
+        $corrected_query = $this->getCorrectedQuery($query, $filter);
         if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
 
             return redirect( getLangUrl($corrected_query) );
@@ -106,6 +108,15 @@ class DentistsController extends FrontController
             if(!$lat || !$lon) {
                 return redirect( getLangUrl('/') );
             }
+
+            $corrected_query = $this->getCorrectedQuery($formattedAddress, $filter);
+            $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
+            $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
+            if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
+
+                return redirect( getLangUrl($corrected_query) );
+            }
+            
 
             list($range_lat, $range_lon) = $this->getRadiusInLatLon(50, $lat);
             $items->whereBetween('lat', [$lat-$range_lat, $lat+$range_lat]);
