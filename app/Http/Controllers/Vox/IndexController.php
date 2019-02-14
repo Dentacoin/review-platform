@@ -71,6 +71,8 @@ class IndexController extends FrontController
 			
 			return $this->ShowVoxView('index', array(
 				'users_count' => User::getCount('vox'),
+	        	'stats_voxes' => Vox::with('stats_main_question')->where('has_stats', 1)->where('stats_featured', 1)->orderBy('launched_at', 'DESC')->get(),
+	        	'taken' => $this->user ? $this->user->filledVoxes() : [],
 	        ));			
 		}
 	}
