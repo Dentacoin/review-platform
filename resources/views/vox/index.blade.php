@@ -180,42 +180,46 @@
 
 		<div class="swiper-container">
 		    <div class="swiper-wrapper">
-		    	@foreach($stats_voxes as $stats_vox)
+		    	@foreach($voxes as $vox)
 			      	<div class="swiper-slide">
-			    		<div class="slide-padding">
-			      			<div class="cover" style="background-image: url('{{ $stats_vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $stats_vox->title, "respondents" => $stats_vox->respondentsCount(), "respondents_country" => $stats_vox->respondentsCountryCount() ]) }}'>
-			      				<img class="featured-img" src="{{ url('new-vox-img/star.png') }}">
-			      			</div>							
-							<div class="vox-header clearfix">
-								<div class="flex">
-									<div class="col left">
-										<h4 class="survey-title bold">{{ $stats_vox->title }}</h4>
-										<div class="survey-cats"> 
-											@foreach( $stats_vox->categories as $c)
-												<span class="survey-cat" cat-id="{{ $c->category->id }}">{{ $c->category->name }}</span>
-											@endforeach
+			      		<div class="slider-inner">
+				    		<div class="slide-padding">
+				      			<div class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}'>
+				      				@if($vox->stats_featured)
+				      					<img class="featured-img" src="{{ url('new-vox-img/star.png') }}">
+				      				@endif
+				      			</div>							
+								<div class="vox-header clearfix">
+									<div class="flex first-flex">
+										<div class="col left">
+											<h4 class="survey-title bold">{{ $vox->title }}</h4>
+										</div>
+										<div class="col right">
+											<span class="bold">{{ !empty($vox->complex) ? 'max ' : '' }} {{ $vox->getRewardTotal() }} DCN</span>
+											<p>{{ $vox->formatDuration() }}</p>
+										</div>					
+									</div>
+									<div class="survey-cats"> 
+										@foreach( $vox->categories as $c)
+											<span class="survey-cat" cat-id="{{ $c->category->id }}">{{ $c->category->name }}</span>
+										@endforeach
+									</div>
+									<div class="flex second-flex">
+										<div class="col left">
+											<p class="vox-description">{{ $vox->description }}</p>
+										</div>
+										<div class="col right">
+											<div class="btns">
+												@if(empty($user) || (!empty($user) && !in_array($vox->id, $taken)) )
+													<a class="opinion blue-button" href="{{ $vox->getLink() }}">
+														{{ trans('vox.common.take-the-test') }}
+													</a>
+												@endif
+											</div>
 										</div>
 									</div>
-									<div class="col right">
-										<span class="bold">{{ !empty($stats_vox->complex) ? 'max ' : '' }} {{ $stats_vox->getRewardTotal() }} DCN</span>
-										<p>{{ $stats_vox->formatDuration() }}</p>
-									</div>					
 								</div>
-								<div class="flex">
-									<div class="col left">
-										<p class="vox-description">{{ $stats_vox->description }}</p>
-									</div>
-									<div class="col right">
-										<div class="btns">
-											@if(empty($user) || (!empty($user) && !in_array($stats_vox->id, $taken)) )
-												<a class="opinion blue-button" href="{{ $stats_vox->getLink() }}">
-													{{ trans('vox.common.take-the-test') }}
-												</a>
-											@endif
-										</div>
-									</div>
-								</div>
-							</div>
+					      	</div>
 				      	</div>
 				    </div>
 		      	@endforeach

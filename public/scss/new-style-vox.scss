@@ -1230,15 +1230,26 @@ p.h2-bold {
 	.slide-padding {
 		display: flex;
 		flex-direction: column;
-		padding: 5px;
-	}
-
-    .swiper-slide {
+		padding: 5px;		  	
     	position: relative;
 		background-color: #d3ebfb;
 		border-radius: 10px;
-		height: auto;
-	    display: flex;
+	}
+
+    .swiper-slide {
+    	height: auto;
+    	display: flex;
+    	flex-direction: column;
+
+	    .slider-inner {
+	    	padding: 0px 25px;
+	    	flex: 1;
+    		display: flex;
+
+    		@media #{$phone} {
+    			padding: 0px;
+    		}
+	    }
 
 		.cover {
 			position: relative;
@@ -1262,6 +1273,29 @@ p.h2-bold {
 				bottom: -12px;
 			}
 		}
+
+		.survey-cats {
+			margin-bottom: 25px;
+			flex: 1;
+
+			@media #{$phone} {
+				margin-bottom: 10px;
+			}
+
+			span {
+				color: #50ade8;
+			    font-size: 11px;
+			    border: 1px solid #50ade8;
+			    padding: 2px 10px;
+			    border-radius: 10px;
+			    font-weight: 600;
+			    margin-top: 10px;
+			    display: inline-block;
+			    cursor: pointer;
+			}
+			
+		}
+
 		.vox-header {
 			position: relative;
 			padding: 15px;
@@ -1269,15 +1303,15 @@ p.h2-bold {
 			flex-direction: column;
 		    flex: 1;
 
-			.flex {
-				&:first-child {
-				    flex: 1;
-				}
+			.first-flex {
+			    flex: 1;
+			}
 
-				&:nth-child(2) {
-					@media screen and (max-width: 1130px) {
-						display: block;
-					}
+			.second-flex {
+				align-items: flex-end;
+
+				@media screen and (max-width: 1130px) {
+					display: block;
 				}
 			}
 
@@ -1287,27 +1321,6 @@ p.h2-bold {
 
 			.left {
 				min-width: 60%;
-
-				.survey-cats {
-					margin-bottom: 25px;
-
-					@media #{$phone} {
-						margin-bottom: 10px;
-					}
-
-					span {
-						color: #50ade8;
-					    font-size: 11px;
-					    border: 1px solid #50ade8;
-					    padding: 2px 10px;
-					    border-radius: 10px;
-					    font-weight: 600;
-					    margin-top: 10px;
-					    display: inline-block;
-					    cursor: pointer;
-					}
-					
-				}
 
 				h4 {
 					color: #060606;

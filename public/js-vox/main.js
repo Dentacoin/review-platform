@@ -737,7 +737,7 @@ $(document).ready(function(){
 
     		var swiper = new Swiper('.swiper-container', {
 				slidesPerView: 3,
-				spaceBetween: 80,
+				spaceBetween: 55,
 				pagination: {
 					el: '.swiper-pagination',
 					clickable: true,
@@ -751,6 +751,9 @@ $(document).ready(function(){
 			          spaceBetween: 30,
 			        },
 			    },
+			    autoplay: {
+				    delay: 5000,
+				},
 		    });
 		} else {
 			var swiper = new Swiper('.swiper-container', {
@@ -769,7 +772,7 @@ $(document).ready(function(){
 			        depth: 100,
 			        modifier: 1,
 			        slideShadows : false,
-			    },			    
+			    },
 		    });
 		}
     }

@@ -907,13 +907,21 @@ p.h2-bold {
 .section-recent-surveys .slide-padding {
   display: flex;
   flex-direction: column;
-  padding: 5px; }
-.section-recent-surveys .swiper-slide {
+  padding: 5px;
   position: relative;
   background-color: #d3ebfb;
-  border-radius: 10px;
+  border-radius: 10px; }
+.section-recent-surveys .swiper-slide {
   height: auto;
-  display: flex; }
+  display: flex;
+  flex-direction: column; }
+  .section-recent-surveys .swiper-slide .slider-inner {
+    padding: 0px 25px;
+    flex: 1;
+    display: flex; }
+    @media screen and (max-width: 768px) {
+      .section-recent-surveys .swiper-slide .slider-inner {
+        padding: 0px; } }
   .section-recent-surveys .swiper-slide .cover {
     position: relative;
     max-width: 100%;
@@ -932,36 +940,39 @@ p.h2-bold {
         height: 20px;
         right: 0px;
         bottom: -12px; } }
+  .section-recent-surveys .swiper-slide .survey-cats {
+    margin-bottom: 25px;
+    flex: 1; }
+    @media screen and (max-width: 768px) {
+      .section-recent-surveys .swiper-slide .survey-cats {
+        margin-bottom: 10px; } }
+    .section-recent-surveys .swiper-slide .survey-cats span {
+      color: #50ade8;
+      font-size: 11px;
+      border: 1px solid #50ade8;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-weight: 600;
+      margin-top: 10px;
+      display: inline-block;
+      cursor: pointer; }
   .section-recent-surveys .swiper-slide .vox-header {
     position: relative;
     padding: 15px;
     display: flex;
     flex-direction: column;
     flex: 1; }
-    .section-recent-surveys .swiper-slide .vox-header .flex:first-child {
+    .section-recent-surveys .swiper-slide .vox-header .first-flex {
       flex: 1; }
-    @media screen and (max-width: 1130px) {
-      .section-recent-surveys .swiper-slide .vox-header .flex:nth-child(2) {
-        display: block; } }
+    .section-recent-surveys .swiper-slide .vox-header .second-flex {
+      align-items: flex-end; }
+      @media screen and (max-width: 1130px) {
+        .section-recent-surveys .swiper-slide .vox-header .second-flex {
+          display: block; } }
     .section-recent-surveys .swiper-slide .vox-header .col {
       padding: 0px; }
     .section-recent-surveys .swiper-slide .vox-header .left {
       min-width: 60%; }
-      .section-recent-surveys .swiper-slide .vox-header .left .survey-cats {
-        margin-bottom: 25px; }
-        @media screen and (max-width: 768px) {
-          .section-recent-surveys .swiper-slide .vox-header .left .survey-cats {
-            margin-bottom: 10px; } }
-        .section-recent-surveys .swiper-slide .vox-header .left .survey-cats span {
-          color: #50ade8;
-          font-size: 11px;
-          border: 1px solid #50ade8;
-          padding: 2px 10px;
-          border-radius: 10px;
-          font-weight: 600;
-          margin-top: 10px;
-          display: inline-block;
-          cursor: pointer; }
       .section-recent-surveys .swiper-slide .vox-header .left h4 {
         color: #060606;
         text-transform: uppercase;
