@@ -820,7 +820,17 @@ header {
     	height: 0px;
     	padding-top: 100%;
 		background-image: url(../new-vox-img/index-mobile.jpg);
-		margin-bottom: 40px;
+		margin-bottom: 130px;
+
+		&::after {
+	    	position: absolute;
+	    	content: '';
+	    	width: 100%;
+	    	height: calc( 100% + 130px );
+	    	top: 0;
+	    	left: 0;
+	    	box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
+	    }
     }
 
     .first-absolute {
@@ -844,7 +854,7 @@ header {
 			margin-bottom: 10px;
 
 			@media #{$phone} {
-		    	font-size: 20px;
+		    	font-size: 22px;
 		    	text-align: center;
 		    	color: #0b0b0b;
 		    	max-width: 100%;
@@ -855,7 +865,7 @@ header {
     		font-size: 30px;
 
     		@media #{$phone} {
-		    	font-size: 18px;
+		    	font-size: 20px;
 		    	text-align: center;
 		    }
     	}
@@ -939,6 +949,20 @@ p.h2-bold {
 
 .section-work {
 	padding-top: 90px;
+
+	@media #{$phone} {
+		padding-top: 0px;
+		background: #e8f7ff;
+		padding-bottom: 40px;
+		box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.35);
+	}
+
+	p.h2-bold {
+		@media #{$phone} {
+			margin-top: 30px;
+		}
+	}
+
 
 	h2 {
 		text-align: center;

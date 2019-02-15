@@ -71,8 +71,11 @@ class IndexController extends FrontController
 			
 			return $this->ShowVoxView('index', array(
 				'users_count' => User::getCount('vox'),
-	        	'voxes' => Vox::where('type', 'normal')->orderBy('launched_at', 'DESC')->take(12)->get(),
+	        	'voxes' => Vox::where('type', 'normal')->orderBy('launched_at', 'DESC')->take(9)->get(),
 	        	'taken' => $this->user ? $this->user->filledVoxes() : [],
+	        	'js' => [
+	        		'index.js'
+	        	]
 	        ));			
 		}
 	}

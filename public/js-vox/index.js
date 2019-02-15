@@ -3,7 +3,59 @@ var preloadImages;
 
 $(document).ready(function(){
 
-    VoxTest.handleNextQuestion();
+
+    if ($('.swiper-container').length) {
+
+        if (window.innerWidth > 768) {
+
+            var swiper = new Swiper('.swiper-container', {
+                slidesPerView: 3,
+                slidesPerGroup: 3,
+                spaceBetween: 55,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    1200: {
+                      spaceBetween: 30,
+                    },
+                    900: {
+                      slidesPerView: 2,
+                      spaceBetween: 30,
+                    },
+                },
+                autoplay: {
+                    delay: 5000,
+                },
+            });
+        } else {
+            var swiper = new Swiper('.swiper-container', {
+                slidesPerView: 1,
+                spaceBetween: 0,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                coverflowEffect: {
+                    rotate: 50,
+                    stretch: 0,
+                    depth: 100,
+                    modifier: 1,
+                    slideShadows : false,
+                },
+            });
+        }
+    }
+
+
+    if(typeof(vox)!='undefined') {
+        VoxTest.handleNextQuestion();        
+    }
+
 	
     $('.question-group a.answer, .question-group a.next-answer').click( function() {
         var group = $(this).closest('.question-group');
@@ -123,5 +175,8 @@ $(document).ready(function(){
             });
         });
     }
+
+
+
 
 });
