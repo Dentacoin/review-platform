@@ -4,6 +4,8 @@
 
 <h1 class="page-header">
     {{ trans('admin.page.'.$current_page.'.title') }}
+    
+    <a class="btn btn-primary pull-right" id="table-sort" href="javascript:;" alternate="Done">Engage Sort mode</a>
 </h1>
 <!-- end page-header -->
 
@@ -21,6 +23,7 @@
 					@include('admin.parts.table', [
 						'table_id' => 'voxs',
 						'table_fields' => [
+                            'sort_order'        => array('label' => 'Sort'),
                             'id'                => array(),
                             'title'             => array(),
                             'category'          => array('template' => 'admin.parts.table-voxes-category'),
@@ -46,14 +49,5 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    
-    window.onload = function(e){ 
-        $('.table').DataTable({
-            "pageLength": 25
-        });
-    }
-</script>
 
 @endsection

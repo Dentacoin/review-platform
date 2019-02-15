@@ -48,9 +48,26 @@ class VoxesController extends AdminController
     public function list( ) {
 
     	return $this->showView('voxes', array(
-            'voxes' => Vox::orderBy('type', 'DESC')->orderBy('id', 'DESC')->get(),
+            'voxes' => Vox::orderBy('sort_order', 'ASC')->get(),
         ));
     }
+
+    public function reorderVoxes() {
+
+        $list = Request::input('list');
+        $i=1;
+        foreach ($list as $qid) {
+            $vox = Vox::find($qid);
+            if( $vox ) {
+                $vox->sort_order = $i;
+                $vox->save();
+                $i++;
+            }
+        }
+
+        return Response::json( ['success' => true] );
+    }
+
 
     public function add( ) {
 
@@ -545,6 +562,7 @@ class VoxesController extends AdminController
         $item->featured = $this->request->input('featured');
         $item->stats_featured = $this->request->input('stats_featured');
         $item->has_stats = $this->request->input('has_stats');
+        $item->sort_order = $this->request->input('sort_order');
         $item->save();
 
         VoxToCategory::where('vox_id', $item->id)->delete();

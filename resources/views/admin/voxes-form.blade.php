@@ -85,6 +85,12 @@
                     @endif
 
                     <div class="form-group">
+                        <label class="col-md-2 control-label" style="max-width: 200px;">Sort order</label>
+                        <div class="col-md-10">
+                            {{ Form::number('sort_order', !empty($item) ? $item->sort_order : null, array('class' => 'form-control')) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.type') }}</label>
                         <div class="col-md-10">
                             {{ Form::select('type', $types, !empty($item) ? $item->type : null, array('class' => 'form-control')) }}

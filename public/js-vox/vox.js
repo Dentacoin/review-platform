@@ -201,16 +201,22 @@ $(document).ready(function(){
                         
                         var go_back_group = $('.question-group').first();
                         var i = 1;
+                        var found = false;
                         do {
-                            if( go_back_group.hasClass('question-group-'+data.go_back) ) {
+                            if( !found && go_back_group.hasClass('question-group-'+data.go_back) ) {
                                 vox.current = i;
-                                break;                                
+                                found = true;                         
+                            }
+                            if( found ) {
+                                go_back_group.attr('data-answer', '');                                
                             }
                             go_back_group = go_back_group.next();
                             i++;
                         } while(go_back_group.length);
 
                         $('.question-group .answer-checkbox.active').removeClass('active');
+
+                        $('.answer-error').hide();
 
                         $('.popcircle .wrapper').css('background-image', 'url('+data.img+')');
                         $('.popcircle h2').html(data.title);
@@ -223,6 +229,7 @@ $(document).ready(function(){
                             $('.popcircle').removeClass('active');
                             $('.question-group').hide();
                             $('.question-group-'+this.go_back).show();
+                            $('#current-question-reward').html( 0 );
                             VoxTest.handleNextQuestion();
                         }).bind(data) );
                         $('.popcircle').addClass('active');
@@ -347,15 +354,18 @@ $(document).ready(function(){
     $('.question-group a.answer').click( sendAnswer );
     $('.question-group a.next-answer').click( sendAnswer );
 
-    $('.question-group .answer-checkbox').click( function() {
-        if( $(this).find('input').prop('disabled') ) {
-            $(this).closest('.question-group').find('input.answer').prop('disabled', false).prop('checked', false);
-            $(this).prop('checked', 'checked');
-            $(this).closest('.question-group').find('input.disabler').closest('.answer-checkbox').removeClass('active');
-        }
-    } )
+    // $('.question-group .answer-checkbox').click( function() {
+    //     if( $(this).find('input').prop('disabled') ) {
+    //         $(this).closest('.question-group').find('input.answer').prop('disabled', false).prop('checked', false);
+    //         $(this).prop('checked', 'checked');
+    //         $(this).closest('.question-group').find('input.disabler').closest('.answer-checkbox').removeClass('active');
+    //     }
+    // } )
 
     $('.question-group input.disabler').change( function() {
+        $(this).closest('.question-group').find('.next-answer').trigger('click');
+        return;
+
         if( $(this).is(':checked') ) {
             $(this).closest('.question-group').find('input.answer').prop('checked', false).prop('disabled', 'disabled');
             $(this).closest('.question-group').find('.answer-checkbox').removeClass('active');

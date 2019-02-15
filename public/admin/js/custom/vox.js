@@ -1,4 +1,69 @@
+var dTable;
+var sortMode = false;
 $(document).ready(function(){
+
+	//
+	//Voxes list
+	//
+
+	if( $('#table-sort').length ) {
+
+	    dTable = $('.table').DataTable({
+	        "pageLength": 25
+	    });
+
+	    $('#table-sort').click( function() {
+	        if(sortMode) {
+	            window.location.reload();
+	            return;
+	        }
+
+            dTable.destroy();                
+            sortMode = true;
+	        $(this).text( $(this).attr('alternate') );
+
+            $('.table tbody').sortable({
+                update: function( event, ui ) { 
+                    console.log('update');
+                    setTimeout( function(){
+                        var ids = [];
+                        $('.table tbody tr').each( function() {
+                            ids.push( $(this).attr('item-id') );
+                        } )
+
+                        $.ajax({
+                            url     : window.location.href + 'reorder',
+                            type    : 'POST',
+                            data    : {
+                                list: ids
+                            },
+                            dataType: 'json',
+                            success : (function( res ) {
+                                var i=1;
+                                $('.table tbody tr').each( function() {
+                                    $(this).find('td').first().next().text(i);
+                                    i++;
+                                } )
+                            }).bind( this ),
+                            error : function( data ) {
+                            }
+                        });
+                    }, 0);
+                },
+            }).disableSelection();
+        });
+	}
+
+
+
+
+
+
+
+	//
+	//Others
+	//
+
 
 	$('#explorer-question').change( function() {
 		window.location.href = $(this).closest('form').attr('action') + '/' + $(this).val();

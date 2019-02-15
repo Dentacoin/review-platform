@@ -37,7 +37,7 @@ class IndexController extends FrontController
 
 	        $sorts = [
 				'featured' => trans('vox.page.home.sort-featured'),
-				'untaken' => trans('vox.page.home.sort-untaken'),
+				//'untaken' => trans('vox.page.home.sort-untaken'),
 				// 'category' => trans('vox.page.home.sort-category'),
 				'newest' => trans('vox.page.home.sort-newest'),
 				'popular' => trans('vox.page.home.sort-popular'),
@@ -45,17 +45,16 @@ class IndexController extends FrontController
 				'taken' => trans('vox.page.home.sort-taken'),
 			];
 
-	        $featured_voxes_ids = Vox::where('type', 'normal')->where('featured', '1')->orderBy('created_at', 'DESC')->get()->pluck('id')->toArray();
+	        // $featured_voxes_ids = Vox::where('type', 'normal')->where('featured', '1')->orderBy('created_at', 'DESC')->get()->pluck('id')->toArray();
+	        // $not_taken_featured = array_diff($featured_voxes_ids, $this->user->filledFeaturedVoxes());
 
-	        $not_taken_featured = array_diff($featured_voxes_ids, $this->user->filledFeaturedVoxes());
+	        // // dd($not_taken_featured );
 
-	        // dd($not_taken_featured );
-
-	        if (empty($not_taken_featured)) {
-	        	unset($sorts['featured']);
-	        } else {
-	        	unset($sorts['untaken']);
-	        }
+	        // if (empty($not_taken_featured)) {
+	        // 	unset($sorts['featured']);
+	        // } else {
+	        // 	unset($sorts['untaken']);
+	        // }
 
 			return $this->ShowVoxView('home', array(
 				'sorts' => $sorts,
@@ -71,7 +70,7 @@ class IndexController extends FrontController
 			
 			return $this->ShowVoxView('index', array(
 				'users_count' => User::getCount('vox'),
-	        	'voxes' => Vox::where('type', 'normal')->orderBy('launched_at', 'DESC')->take(9)->get(),
+	        	'voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
 	        	'taken' => $this->user ? $this->user->filledVoxes() : [],
 	        	'js' => [
 	        		'index.js'

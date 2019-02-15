@@ -1836,8 +1836,6 @@ p.h2-bold {
             height: 20px;
             right: -10px;
             top: -8px; } }
-      .another-questions .questions-wrapper .another-question[taken="1"] {
-        opacity: 0.6; }
       .another-questions .questions-wrapper .another-question .another-question-header {
         position: relative; }
         .another-questions .questions-wrapper .another-question .another-question-header .left {

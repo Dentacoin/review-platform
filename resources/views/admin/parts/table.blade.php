@@ -19,7 +19,7 @@
                 </thead>
                 <tbody>
                 	@foreach($table_data as $row)
-                    	<tr>
+                    	<tr {!! !empty($row->id) ? 'item-id="'.$row->id.'"' : '' !!} >
                     		@foreach($table_fields as $k => $v)
                                 @if(!empty($v['template']))
                                     <td>@include($v['template'], array('item' => $row) )</td>

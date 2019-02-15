@@ -100,6 +100,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::get('vox', 								'VoxesController@list');
 	Route::get('vox/list', 							'VoxesController@list');
+	Route::post('vox/list/reorder', 					'VoxesController@reorderVoxes');
 	Route::any('vox/add', 							'VoxesController@add');
 	Route::any('vox/edit-field/{id}/{field}/{value}', 					'VoxesController@edit_field');
 	Route::any('vox/edit/{id}', 					'VoxesController@edit');
