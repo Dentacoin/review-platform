@@ -2843,6 +2843,12 @@ p.h2-bold {
   .section-login .reg-wrapper .reg-dentists,
   .section-register .reg-wrapper .reg-dentists {
     position: relative; }
+    .section-recover .reg-wrapper .reg-dentists i,
+    .section-login .reg-wrapper .reg-dentists i,
+    .section-register .reg-wrapper .reg-dentists i {
+      display: block;
+      margin: 0 auto;
+      width: 300px; }
     .section-recover .reg-wrapper .reg-dentists::after,
     .section-login .reg-wrapper .reg-dentists::after,
     .section-register .reg-wrapper .reg-dentists::after {
@@ -3851,6 +3857,9 @@ p.h2-bold {
     padding: 0px; }
     .page-profile .site-content .container .alert {
       margin-top: 22px; } }
+.page-profile .site-content .form-group i {
+  display: block;
+  margin-top: 10px; }
 .page-profile .site-content table a {
   color: #38ace5; }
   .page-profile .site-content table a:hover {

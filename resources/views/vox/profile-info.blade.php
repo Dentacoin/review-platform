@@ -57,6 +57,12 @@
                                 @elseif( $info['type'] == 'select')
                                     {{ Form::select( $key , $info['values'] , $user->$key , array('class' => 'form-control'.(!empty($info['multiple']) ? ' multiple' : '')  , (!empty($info['multiple']) ? 'multiple' : 'nothing') => 'multiple')) }}
                                 @endif
+
+	                            @if( !empty($info['hint']) )
+	                            	<i>
+	                            		{{ trans('vox.page.profile.info.form-'.$key.'-hint') }}
+	                            	</i>
+	                            @endif
                             </div>
                         </div>
                     @endforeach

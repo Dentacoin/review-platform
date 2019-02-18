@@ -36,16 +36,22 @@ class ProfileController extends FrontController
 		];
 
 		$this->profile_fields = [
-    		'name' => [
-    			'type' => 'text',
-    			'required' => true,
-    			'min' => 3,
-    		],
-    		'email' => [
-    			'type' => 'text',
-    			'required' => true,
-    			'is_email' => true,
-    		],
+            'name' => [
+                'type' => 'text',
+                'required' => true,
+                'min' => 3,
+                'hint' => true,
+            ],
+            'name_alternative' => [
+                'type' => 'text',
+                'required' => false,
+                'hint' => true,
+            ],
+            'email' => [
+                'type' => 'text',
+                'required' => true,
+                'is_email' => true,
+            ],
             'country_id' => [
                 'type' => 'country',
                 'required' => true,
@@ -53,6 +59,11 @@ class ProfileController extends FrontController
             'address' => [
                 'type' => 'text',
                 'required' => true,
+            ],
+            'website' => [
+                'type' => 'text',
+                'required' => true,
+                'hint' => true,
             ],
             'birthyear' => [
                 'type' => 'select',
@@ -81,6 +92,8 @@ class ProfileController extends FrontController
             $this->menu['invite'] = trans('vox.page.profile.menu.invite-dentist');
         } else {
             unset($this->profile_fields['address']);            
+            unset($this->profile_fields['website']);            
+            unset($this->profile_fields['name_alternative']);            
         }
     }
 
@@ -567,6 +580,25 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     ->withInput()
                     ->withErrors([
                         'address' => trans('trp.common.invalid-address')
+                    ]);
+                }
+
+
+                if(!empty(Request::input('name')) && (User::validateLatin(Request::input('name')) == false)) {
+                    if( Request::input('json') ) {
+                        $ret = [
+                            'success' => false,
+                            'messages' => [
+                                'name' => trans('trp.common.invalid-name')
+                            ]
+                        ];
+                        return Response::json($ret);
+                    }
+
+                    return redirect( getLangUrl('profile/info') )
+                    ->withInput()
+                    ->withErrors([
+                        'name' => trans('trp.common.invalid-name')
                     ]);
                 }
 

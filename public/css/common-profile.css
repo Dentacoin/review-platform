@@ -194,6 +194,9 @@ table th[class*="col-"] {
     margin-top: 22px; } }
 .page-profile .site-content .form-group {
   margin-bottom: 15px; }
+  .page-profile .site-content .form-group i {
+    display: block;
+    margin-top: 10px; }
 .page-profile .site-content table {
   margin-bottom: 50px; }
   .page-profile .site-content table a {

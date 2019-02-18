@@ -3850,6 +3850,12 @@ p.h2-bold {
 		.reg-dentists {
 			position: relative;
 
+			i {
+				display: block;
+				margin: 0 auto;
+				width: 300px;
+			}
+
 			&::after {
 				content: '';
 				height: 172px;
@@ -3897,6 +3903,8 @@ p.h2-bold {
     		padding-right: 20px;
 		}
 	}
+
+
 
 	select,
 	input[type="text"],
@@ -5123,6 +5131,15 @@ p.h2-bold {
 			.alert {
 				margin-top: 22px;
 			}
+		}
+	}
+
+
+	.form-group {
+
+		i {
+			display: block;
+			margin-top: 10px;
 		}
 	}
 
