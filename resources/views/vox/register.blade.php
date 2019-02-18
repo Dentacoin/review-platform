@@ -112,7 +112,8 @@
 								<span class="error-message" id="name-error"></span>
 							</div>
 							<div class="form-group {{ $errors->has('name_alternative') ? 'has-error' : '' }}">
-								<input type="text" class="form-control" name="name_alternative" id="name_alternative" placeholder="{!! trans('vox.page.register.name_alternative') !!}"><i>
+								<input type="text" class="form-control" name="name_alternative" id="name_alternative" placeholder="{!! trans('vox.page.register.name_alternative') !!}">
+								<i>
 									{!! trans('vox.page.register.name_alternative-hint') !!}
 								</i>
 								<span class="error-message" id="name_alternative-error"></span>
@@ -203,7 +204,7 @@
 							</div>
 
 						  	<div class="form-group {{ $errors->has('website') ? 'has-error' : '' }}">
-							    <input type="text" name="website" id="dentist-website" class="form-control" placeholder="{!! trans('vox.page.register.website') !!} ">><i>
+							    <input type="text" name="website" id="dentist-website" class="form-control" placeholder="{!! trans('vox.page.register.website') !!} ">
 								<i>
 									{!! trans('vox.page.register.website-hint') !!}
 								</i>
