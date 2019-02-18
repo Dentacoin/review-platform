@@ -154,6 +154,10 @@ Flexes
 .flex {
 	display: flex;
 
+	&.flex-column {
+		flex-direction: column;		
+	}
+
 	&.wrap {
 		flex-flow: row wrap;		
 	}
@@ -169,6 +173,10 @@ Flexes
     	padding-left: 10px;
     	padding-right: 10px;
     	position: relative;
+    }
+
+    .flex-1 {
+    	flex: 1;
     }
 
     .flex-2 {
@@ -4461,7 +4469,7 @@ p.h2-bold {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: rgba(229, 243, 247, 0.2);
+	background: rgba(229, 243, 247, 0.75);
 	z-index: 1000;
 	display: none;
 
@@ -4643,6 +4651,26 @@ p.h2-bold {
 
 			}
 		}
+	}
+
+	&.login-register {
+		.wrapper {
+
+			@media #{$phone} {
+				overflow-y: auto;
+			}
+
+			.inner {
+				max-width: calc(100%);
+				padding: 20px;
+
+				&.vox-not-logged {
+					box-shadow: none;
+				}
+				
+			}
+		}
+
 	}
 
 

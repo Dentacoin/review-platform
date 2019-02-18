@@ -124,6 +124,9 @@ Flexes
 .flex-mobile,
 .flex {
   display: flex; }
+  .flex-mobile.flex-column,
+  .flex.flex-column {
+    flex-direction: column; }
   .flex-mobile.wrap,
   .flex.wrap {
     flex-flow: row wrap; }
@@ -137,6 +140,9 @@ Flexes
     padding-left: 10px;
     padding-right: 10px;
     position: relative; }
+  .flex-mobile .flex-1,
+  .flex .flex-1 {
+    flex: 1; }
   .flex-mobile .flex-2,
   .flex .flex-2 {
     flex: 2; }
@@ -3371,7 +3377,7 @@ p.h2-bold {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(229, 243, 247, 0.2);
+  background: rgba(229, 243, 247, 0.75);
   z-index: 1000;
   display: none; }
   .popup.active {
@@ -3512,6 +3518,14 @@ p.h2-bold {
             width: 30px;
             height: 30px;
             margin: 0px 5px; }
+  @media screen and (max-width: 768px) {
+    .popup.login-register .wrapper {
+      overflow-y: auto; } }
+  .popup.login-register .wrapper .inner {
+    max-width: calc(100%);
+    padding: 20px; }
+    .popup.login-register .wrapper .inner.vox-not-logged {
+      box-shadow: none; }
   .popup.unbanned .wrapper .inner, .popup.ban .wrapper .inner, .popup.warning .wrapper .inner {
     margin: 60px 0 30px auto; }
     @media screen and (max-width: 768px) {

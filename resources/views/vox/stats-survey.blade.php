@@ -22,7 +22,7 @@
 
 		<div class="tac take-test">
 			@if(!in_array($vox->id, $taken))
-				<a class="blue-button" href="{{ !empty($user) ? $vox->getLink() : getLangUrl('welcome-survey') }}">
+				<a class="blue-button" href="{!! !empty($user) ? $vox->getLink() : "javascript:$('#login-register-popup').addClass('active')" !!}">
 					{{ trans('vox.common.take-the-test') }}
 				</a>
 			@endif
@@ -165,5 +165,8 @@
 		</div>
 	</div>
 
-    	
+	@if(empty($user))
+		@include('vox.popups.login-register')
+	@endif
+
 @endsection
