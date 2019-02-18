@@ -2843,9 +2843,9 @@ p.h2-bold {
   .section-login .reg-wrapper .reg-dentists,
   .section-register .reg-wrapper .reg-dentists {
     position: relative; }
-    .section-recover .reg-wrapper .reg-dentists i,
-    .section-login .reg-wrapper .reg-dentists i,
-    .section-register .reg-wrapper .reg-dentists i {
+    .section-recover .reg-wrapper .reg-dentists i.hint,
+    .section-login .reg-wrapper .reg-dentists i.hint,
+    .section-register .reg-wrapper .reg-dentists i.hint {
       display: block;
       margin: 0 auto;
       width: 300px; }

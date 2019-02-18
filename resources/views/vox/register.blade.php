@@ -106,14 +106,14 @@
 
 							<div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
 								<input type="text" class="form-control" name="name" id="name" placeholder="{!! trans('vox.page.register.name') !!}">
-					    		<i>
+					    		<i class="hint">
 									{!! trans('vox.page.register.name-hint') !!}
 								</i>
 								<span class="error-message" id="name-error"></span>
 							</div>
 							<div class="form-group {{ $errors->has('name_alternative') ? 'has-error' : '' }}">
 								<input type="text" class="form-control" name="name_alternative" id="name_alternative" placeholder="{!! trans('vox.page.register.name_alternative') !!}">
-								<i>
+								<i class="hint">
 									{!! trans('vox.page.register.name_alternative-hint') !!}
 								</i>
 								<span class="error-message" id="name_alternative-error"></span>
@@ -205,7 +205,7 @@
 
 						  	<div class="form-group {{ $errors->has('website') ? 'has-error' : '' }}">
 							    <input type="text" name="website" id="dentist-website" class="form-control" placeholder="{!! trans('vox.page.register.website') !!} ">
-								<i>
+								<i class="hint">
 									{!! trans('vox.page.register.website-hint') !!}
 								</i>
 							    <span class="error-message" id="website-error"></span>
@@ -222,7 +222,7 @@
 						    		</div>
 						    		<input id="add-avatar" name="image" type="file">
 						    	</label>
-					    		<i>
+					    		<i class="hint">
 					    			{!! trans('vox.page.register.photo-hint') !!}
 					    			
 					    		</i>
