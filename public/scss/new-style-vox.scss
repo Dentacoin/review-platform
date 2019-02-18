@@ -2957,6 +2957,16 @@ p.h2-bold {
 
 	}
 
+	.take-test {
+		margin-top: -10px;
+		margin-bottom: 35px;
+
+		@media #{$phone} {
+			margin-bottom: 20px;
+		}
+
+	}
+
 	.filters-wrapper {
 		margin-bottom: 25px;
 

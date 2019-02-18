@@ -2162,6 +2162,12 @@ p.h2-bold {
       font-weight: 600;
       margin-bottom: 5px;
       padding: 0px 20px; } }
+.page-statistics .take-test {
+  margin-top: -10px;
+  margin-bottom: 35px; }
+  @media screen and (max-width: 768px) {
+    .page-statistics .take-test {
+      margin-bottom: 20px; } }
 .page-statistics .filters-wrapper {
   margin-bottom: 25px; }
   .page-statistics .filters-wrapper .filters {

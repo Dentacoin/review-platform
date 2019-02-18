@@ -15,9 +15,18 @@
 			]) }}
 		</h1>
 
+
 		<p class="stat-survey-info">
 			{{ $vox->translateorNew(App::getLocale())->stats_description }}
 		</p>
+
+		<div class="tac take-test">
+			@if(!in_array($vox->id, $taken))
+				<a class="blue-button" href="{{ !empty($user) ? $vox->getLink() : getLangUrl('welcome-survey') }}">
+					{{ trans('vox.common.take-the-test') }}
+				</a>
+			@endif
+		</div>
 
 		<div class="filters-wrapper">
 			<div class="filters">

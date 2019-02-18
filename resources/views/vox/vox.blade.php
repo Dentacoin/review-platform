@@ -198,12 +198,20 @@
 								</a>
 							@endif
 							<a class="white-button" id="invite-button" href="javascript:;">
-								{!! trans('vox.page.questionnaire.what-next-invite') !!}
+								@if($user->is_dentist)
+									{!! trans('vox.page.questionnaire.what-next-invite-dentist') !!}
+								@else
+									{!! trans('vox.page.questionnaire.what-next-invite') !!}
+								@endif
 								
 							</a>
 							<div class="invite-link" style="display: none;">
 								<p>
+								@if($user->is_dentist)
+									{!! trans('vox.page.questionnaire.what-next-invite-dentist-hint') !!}
+								@else
 									{!! trans('vox.page.questionnaire.what-next-invite-hint') !!}
+								@endif
 									
 								</p>
 								{{ Form::text( 'link', getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()), array('class' => 'form-control select-me', 'id' => 'invite-url' ) ) }}

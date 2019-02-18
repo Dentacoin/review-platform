@@ -281,6 +281,7 @@ class StatsController extends FrontController
         $respondents_country_count = $vox->respondentsCountryCount();
 
 		return $this->ShowVoxView('stats-survey', array(
+            'taken' => $this->user ? $this->user->filledVoxes() : [],
             'respondents' => $respondents_count,
             'respondents_country' => $respondents_country_count,
 			'filters' => $filters,
