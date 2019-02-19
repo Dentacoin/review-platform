@@ -324,6 +324,22 @@ class FrontController extends BaseController
             ]);
         }
 
+        $params['just_registered_patient_vox'] = false;
+        if( session('just_registered_patient_vox') ) {
+            $params['just_registered_patient_vox'] = true;
+            session([
+                'just_registered_patient_vox' => false
+            ]);
+        }
+
+        $params['just_registered_dentist_vox'] = false;
+        if( session('just_registered_dentist_vox') ) {
+            $params['just_registered_dentist_vox'] = true;
+            session([
+                'just_registered_dentist_vox' => false
+            ]);
+        }
+
         $params['new_auth'] = false;
         if( session('new_auth') && !empty($this->user) && empty($this->user->fb_id) && empty($this->user->civic_id) ) {
             $params['new_auth'] = true;

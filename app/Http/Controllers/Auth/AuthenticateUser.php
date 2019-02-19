@@ -122,6 +122,11 @@ class AuthenticateUser extends FrontController
                 Auth::guard('web')->logout();
                 return redirect( getLangUrl('login').'?suspended-popup' );
             }
+
+            $sess = [
+                'just_login' => true,
+            ];
+            session($sess);
             
             $intended = session()->pull('our-intended');
 

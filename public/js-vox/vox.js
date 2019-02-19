@@ -5,6 +5,12 @@ var preloadImages;
 
 $(document).ready(function(){
 
+    fbq('track', 'SurveyLaunch');
+    gtag('event', 'Take', {
+        'event_category': 'Survey',
+        'event_label': 'SurveyLaunch',
+    });
+
     if ($('.mobile-bubble-effect').length && $('.mobile-person-effect').length && window.innerWidth < 768) {
 
         // Let's call it:
@@ -260,6 +266,12 @@ $(document).ready(function(){
                             VoxTest.handleNextQuestion();
                             $("#question-meta").hide();
                             $("#question-done").show();
+
+                            fbq('track', 'SurveyComplete');
+                            gtag('event', 'Take', {
+                                'event_category': 'Survey',
+                                'event_label': 'SurveyComplete',
+                            });
                         } else {
 
                             var trigger = group.next().attr('data-trigger');

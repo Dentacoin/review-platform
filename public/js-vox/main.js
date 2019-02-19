@@ -280,6 +280,12 @@ $(document).ready(function(){
 						query: $('#dentist-name').val()
 					};
 
+					fbq('track', 'DVDentistRegistrationInitiate');
+					gtag('event', 'ClickSubmit', {
+						'event_category': 'DentistRegistration',
+						'event_label': 'DentistRegistrationInitiate',
+					});
+
                 } else {
 					for(var i in data.messages) {
 						$('#'+i+'-error').html(data.messages[i]).show();

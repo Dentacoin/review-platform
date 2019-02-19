@@ -389,6 +389,11 @@ class LoginController extends FrontController
                             } else if( $user->loggedFromBadIp() ) {
                                 $ret['popup'] = 'suspended-popup';
                             } else {
+
+                                $sess = [
+                                    'login_patient' => true,
+                                ];
+                                session($sess);
                                 
                                 Auth::login($user, true);
                                 if(empty($user->civic_id)) {

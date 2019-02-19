@@ -179,6 +179,7 @@ class RegisterController extends FrontController
                     'invitation_email' => null,
                     'invitation_id' => null,
                     'just_registered' => true,
+                    'just_registered_dentist_vox' => true,
                 ];
                 session($sess);
 
@@ -569,6 +570,7 @@ class RegisterController extends FrontController
                             'invitation_email' => null,
                             'invitation_id' => null,
                             'just_registered' => true,
+                            'just_registered_patient_vox' => true,
                         ];
                         session($sess);
 

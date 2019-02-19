@@ -6,6 +6,7 @@ use App\Http\Controllers\FrontController;
 use Validator;
 use Response;
 use Request;
+use Session;
 use Route;
 use Hash;
 use Auth;
@@ -42,6 +43,7 @@ class VoxController extends FrontController
 	}
 	public function home_slug($locale=null, $slug) {
 		$vox = Vox::whereTranslationLike('slug', $slug)->first();
+
 		return $this->dovox($locale, $vox);
 	}
 	public function dovox($locale=null, $vox) {

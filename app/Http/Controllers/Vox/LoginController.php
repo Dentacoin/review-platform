@@ -65,6 +65,11 @@ class LoginController extends FrontController
                     return redirect( getLangUrl('login').'?suspended-popup' );
                 }
 
+                $sess = [
+                    'login_patient' => true,
+                ];
+                session($sess);
+
                 Auth::login($user, true);
                 $intended = session()->pull('our-intended');
                 return redirect( $intended ? $intended : getLangUrl('/') );
@@ -236,6 +241,7 @@ class LoginController extends FrontController
                 'invitation_email' => null,
                 'invitation_id' => null,
                 'just_registered' => true,
+                'just_registered_patient_vox' => true,
             ];
             session($sess);
 
@@ -316,6 +322,10 @@ class LoginController extends FrontController
                                 $ret['popup'] = 'suspended-popup';
 
                             } else {
+                                $sess = [
+                                    'login_patient' => true,
+                                ];
+                                session($sess);
 
                                 Auth::login($user, true);
                                 if(empty($user->civic_id)) {
