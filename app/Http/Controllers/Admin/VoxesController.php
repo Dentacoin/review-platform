@@ -873,6 +873,13 @@ class VoxesController extends AdminController
         ));
     }
 
+    public function export_survey_data() {
+
+        return $this->showView('voxes-export-survey-data', array(
+            'voxes' => Vox::get()
+        ));
+    }
+
 
 
 }

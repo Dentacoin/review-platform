@@ -59,6 +59,7 @@ return [
                 'faq' => 'faq',
                 'badges' => 'badges',
                 'explorer' => 'explorer',
+                'export-survey-data' => 'export-survey-data',
             ),
             'js' => array(
                 'vox.js',
