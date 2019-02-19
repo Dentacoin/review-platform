@@ -387,7 +387,30 @@ class DentistsController extends FrontController
             }
         }
 
-        return $this->ShowView('country', array(
+        $all_dentists = User::where('is_dentist', 1)->where('status', 'approved')->whereNotNull('country_id')->whereNotNull('city_name')->get();
+
+        $seo_title = trans('trp.seo.dentist-listings-by-country.title', [
+            'countries_number' => count($dentist_countries),
+            'listings_number' => count($all_dentists),
+        ]);
+        $seo_description = trans('trp.seo.dentist-listings-by-country.description', [
+            'countries_number' => count($dentist_countries),
+            'listings_number' => count($all_dentists),
+        ]);
+        $social_title = trans('trp.social.dentist-listings-by-country.title', [
+            'countries_number' => count($dentist_countries),
+            'listings_number' => count($all_dentists),
+        ]);
+        $social_description = trans('trp.social.dentist-listings-by-country.description', [
+            'countries_number' => count($dentist_countries),
+            'listings_number' => count($all_dentists),
+        ]);
+
+        return $this->ShowView('country', array(            
+            'seo_title' => !empty($seo_title) ? $seo_title : null,
+            'seo_description' => !empty($seo_description) ? $seo_description : null,
+            'social_title' => !empty($social_title) ? $social_title : null,
+            'social_description' => !empty($social_description) ? $social_description : null,
             'countries_groups' => $countries_groups,
             'breakpoints' => $breakpoints,
             'js' => [
@@ -422,7 +445,8 @@ class DentistsController extends FrontController
         }
 
         $cities_name = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('city_name')->get()->pluck('city_name');
-        // dd($cities_name);
+
+        $all_dentists = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->whereNotNull('city_name')->count();
 
         $cities_groups = [];
         $letter = null;
@@ -462,17 +486,23 @@ class DentistsController extends FrontController
 
         $seo_title = trans('trp.seo.country-cities.title', [
             'country' => $country->name,
+            'results_number' => $all_dentists,
+            'cities_number' => count($cities_name),
         ]);
         $seo_description = trans('trp.seo.country-cities.description', [
             'country' => $country->name,
-            'results_number' => count($cities_name),
+            'results_number' => $all_dentists,
+            'cities_number' => count($cities_name),
         ]);
         $social_title = trans('trp.social.country-cities.title', [
             'country' => $country->name,
+            'results_number' => $all_dentists,
+            'cities_number' => count($cities_name),
         ]);
         $social_description = trans('trp.social.country-cities.description', [
             'country' => $country->name,
-            'results_number' => count($cities_name),
+            'results_number' => $all_dentists,
+            'cities_number' => count($cities_name),
         ]);
 
 
