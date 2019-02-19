@@ -314,8 +314,13 @@ class RegisterController extends FrontController
                     $message->subject('New Dentavox Dentist/Clinic registration');
                 });
 
+                $sess = [
+                    'success_registered_dentist_vox' => true,
+                ];
+                session($sess);
+
                 session([
-                    'approval-request-sent' => true
+                    'approval-request-sent' => true,                    
                 ]);
             }
 

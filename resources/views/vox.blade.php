@@ -456,6 +456,14 @@
 		            @endif
 
 		            @if( $just_registered_dentist_vox)
+		            	fbq('track', 'DVDentistRegistrationStep1');
+						gtag('event', 'ClickSubmit', {
+							'event_category': 'DentistRegistration',
+							'event_label': 'DentistRegistrationStep1',
+						});
+		            @endif
+
+		            @if( $success_registered_dentist_vox)
 		            	fbq('track', 'DVDentistRegistrationComplete');
 						gtag('event', 'ClickSubmit', {
 							'event_category': 'DentistRegistration',

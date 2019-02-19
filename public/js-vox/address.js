@@ -33,6 +33,7 @@ jQuery(document).ready(function($){
                     var marker = new google.maps.Marker({
                         map: profile_address_map,
                         center: coords,
+                        position: coords,
                     });
 	            }
 
@@ -87,6 +88,7 @@ jQuery(document).ready(function($){
 		                        var marker = new google.maps.Marker({
 		                            map: profile_address_map,
 		                            center: coords,
+		                            position: coords,
 		                        });
 
 		                    }).bind(this) );

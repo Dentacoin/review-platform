@@ -322,10 +322,6 @@ class LoginController extends FrontController
                                 $ret['popup'] = 'suspended-popup';
 
                             } else {
-                                $sess = [
-                                    'login_patient' => true,
-                                ];
-                                session($sess);
 
                                 Auth::login($user, true);
                                 if(empty($user->civic_id)) {
@@ -335,6 +331,12 @@ class LoginController extends FrontController
 
                                 $ret['success'] = true;
                                 $ret['redirect'] = $user->isBanned('vox') ? getLangUrl('profile') : getLangUrl('/');
+
+                                
+                                $sess = [
+                                    'login_patient' => true,
+                                ];
+                                session($sess);
                             }
 
                         } else {

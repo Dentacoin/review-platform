@@ -340,6 +340,14 @@ class FrontController extends BaseController
             ]);
         }
 
+        $params['success_registered_dentist_vox'] = false;
+        if( session('success_registered_dentist_vox') ) {
+            $params['success_registered_dentist_vox'] = true;
+            session([
+                'success_registered_dentist_vox' => false
+            ]);
+        }
+
         $params['new_auth'] = false;
         if( session('new_auth') && !empty($this->user) && empty($this->user->fb_id) && empty($this->user->civic_id) ) {
             $params['new_auth'] = true;
