@@ -18,7 +18,8 @@
                 <h4 class="panel-title"> Pick a survey </h4>
             </div>
             <div class="panel-body">
-                <form method="get" action="{{ url('cms/vox/export-survey-data') }}" >
+                <form method="post" action="{{ url('cms/vox/export-survey-data') }}" >
+                    {!! csrf_field() !!}
                     <div class="row">
                         <div class="col-md-3">
                             <input type="text" class="form-control datepicker" name="date-from" value="" placeholder="Date from">
@@ -29,7 +30,7 @@
                         <div class="col-md-4">
                             <select class="form-control" name="survey">
                                 @foreach($voxes as $vox)
-                                    <option label="{{ $vox->title }}"></option>
+                                    <option value="{{ $vox->id }}">{{ $vox->title }}</option>
                                 @endforeach
                             </select>
                         </div>

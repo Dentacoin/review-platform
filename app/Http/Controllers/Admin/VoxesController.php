@@ -11,6 +11,7 @@ use App\Models\VoxToCategory;
 use App\Models\VoxScale;
 use App\Models\VoxBadge;
 use App\Models\VoxAnswer;
+use App\Models\VoxReward;
 use Illuminate\Support\Facades\Input;
 use Image;
 use Request;
@@ -18,6 +19,7 @@ use Response;
 use Route;
 use Excel;
 use DB;
+use Carbon\Carbon;
 
 
 class VoxesController extends AdminController
@@ -206,6 +208,10 @@ class VoxesController extends AdminController
         $item = Vox::find($id);
 
         if(!empty($item)) {
+
+            ini_set('max_execution_time', 0);
+            set_time_limit(0);
+            ini_set('memory_limit','1024M');
 
             $flist = [];
 
@@ -875,8 +881,140 @@ class VoxesController extends AdminController
 
     public function export_survey_data() {
 
+
+
+        if(Request::isMethod('post')) {
+
+            $cols = [
+                'Respondent ID',
+                'Survey Date',
+                'Country',
+                'Age',
+                'Sex',
+            ];
+            $cols2 = [
+                '',
+                '',
+                '',
+                '',
+                '',
+            ];
+
+            $vox = Vox::find( request('survey') );
+            $slist = VoxScale::get();
+            $scales = [];
+            foreach ($slist as $sitem) {
+                $scales[$sitem->id] = $sitem;
+            }
+
+
+            foreach( $vox->questions as $question ) {
+                if( $question->type == 'single_choice' ) {
+                    $cols[] = $question->question;
+                    $cols2[] = '';
+                } else if( $question->type == 'scale' ) {
+                    $list = json_decode($question->answers, true);
+                    foreach ($list as $l) {
+                        $cols[] = $question->question;
+                        $cols2[] = $l;
+                    }
+                } else if( $question->type == 'multiple_choice' ) {
+                    $list = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true);
+                    foreach ($list as $l) {
+                        $cols[] = $question->question;
+                        $cols2[] = mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l;
+                    }
+                }
+            }
+
+            $rows = [
+                $cols,
+                $cols2
+            ];
+
+            $users = VoxReward::where('vox_id',$vox->id )->with('user');
+            if( request('date-from') ) {
+                $users->where('created_at', '>=', new Carbon(request('date-from')));
+            }
+            if( request('date-to') ) {
+                $users->where('created_at', '>=', new Carbon(request('date-to')));
+            }
+            $users = $users->get();
+
+            foreach ($users as $user) {
+                if(!$user->user) {
+                    continue;
+                }
+                $row = [
+                    $user->user->id,
+                    $user->created_at->format('d.m.Y'),
+                    $user->user->country ? $user->user->country->name : '',
+                    ( date('Y') - $user->birthyear ),
+                    $user->gender=='m' ? 'Male' : 'Female',
+                ];
+
+                $answers = VoxAnswer::where('user_id', $user->user->id)
+                ->where('vox_id', $vox->id)
+                ->get();
+
+                foreach ($vox->questions as $question) {
+                    $qid = $question->id;
+                    $qanswers = $answers->filter( function($item) use ($qid) {
+                        return $qid == $item->question_id;
+                    } );
+
+                    if( $question->type == 'single_choice' ) {
+                        $answerwords = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true);
+                        $row[] = $qanswers->last() && $qanswers->last()->answer && isset( $answerwords[ ($qanswers->last()->answer)-1 ] ) ? $answerwords[ ($qanswers->last()->answer)-1 ] : '';
+                    } else if( $question->type == 'scale' ) {
+                        $list = json_decode($question->answers, true);
+                        $i=1;
+                        foreach ($list as $l) {
+                            $thisanswer = $qanswers->filter( function($item) use ($i) {
+                                return $i == $item->answer;
+                            } );
+
+                            $row[] = $thisanswer->count() ? $thisanswer->first()->scale : '0';
+                            $i++;
+                        }
+
+                    } else if( $question->type == 'multiple_choice' ) {
+                        $list = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true);
+                        $i=1;
+                        foreach ($list as $l) {
+                            $thisanswer = $qanswers->filter( function($item) use ($i) {
+                                return $i == $item->answer;
+                            } );
+                            $row[] = $thisanswer->count() ? '1' : '';
+                            $i++;
+                        }
+                    }
+                }
+
+
+                $rows[] = $row;
+            }
+
+            
+            $fname = $vox->title;
+
+            Excel::create($fname, function($excel) use ($rows) {
+
+                $excel->sheet('Sheet1', function($sheet) use ($rows) {
+
+                    $sheet->with($rows, null, 'A1', false, false);
+                    //$sheet->setWrapText(true);
+                    //$sheet->getStyle('D1:E999')->getAlignment()->setWrapText(true); 
+
+                });
+
+
+
+            })->export('xlsx');
+        }
+
         return $this->showView('voxes-export-survey-data', array(
-            'voxes' => Vox::get()
+            'voxes' => Vox::orderBy('sort_order', 'ASC')->get()
         ));
     }
 
