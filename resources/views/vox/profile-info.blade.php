@@ -31,6 +31,9 @@
 	                                    {{ Form::text( $key, $user->$key, array( 'autocomplete' => 'off', 'class' => 'form-control address-suggester '.($user->is_dentist ? 'full-address' : ' city-only') )) }}
 	                                    <div class="suggester-map-div" {!! $user->lat ? 'lat="'.$user->lat.'" lon="'.$user->lon.'"' : '' !!} style="height: 200px; display: none; margin-top: 10px;">
 	                                    </div>
+	                                    <div class="alert alert-info geoip-confirmation" style="display: none;">
+	                                    	{!! nl2br(trans('trp.common.check-address')) !!}
+	                                    </div>
 	                                    <div class="alert alert-warning geoip-hint" style="display: none;">
 	                                    	{!! nl2br(trans('trp.common.invalid-address')) !!}
 	                                    </div>

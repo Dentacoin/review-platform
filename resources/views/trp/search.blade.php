@@ -86,7 +86,9 @@
 						<div class="img">
 							<img src="{{ url('img-trp/map-pin.png') }}">
 						</div>
-						{{ $dentist->city_name ? $dentist->city_name : $dentist->city->name }}, {{ $dentist->country->name }} 
+						{{ $dentist->city_name ? $dentist->city_name.', ' : '' }}
+						{{ $dentist->state_name ? $dentist->state_name.', ' : '' }} 
+						{{ $dentist->country->name }} 
 						<!-- <span>(2 km away)</span> -->
 					</div>
 

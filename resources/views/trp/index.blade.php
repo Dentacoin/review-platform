@@ -40,7 +40,9 @@
 					    		<div class="img">
 					    			<img src="img-trp/map-pin.png">
 					    		</div>
-					    		{{ $dentist->city_name ? $dentist->city_name : $dentist->city->name }}, {{ $dentist->country->name }} 
+								{{ $dentist->city_name ? $dentist->city_name.', ' : '' }}
+								{{ $dentist->state_name ? $dentist->state_name.', ' : '' }} 
+								{{ $dentist->country->name }} 
 					    		<!-- <span>(2 km away)</span> -->
 					    	</div>
 					    	@if( $time = $dentist->getWorkHoursText() )

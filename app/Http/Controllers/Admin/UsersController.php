@@ -79,6 +79,10 @@ class UsersController extends AdminController
             'country_id' => [
                 'type' => 'country',
             ],
+            'state_name' => [
+                'type' => 'text',
+                'disabled' => true,
+            ],
             'city_name' => [
                 'type' => 'text',
                 'disabled' => true,

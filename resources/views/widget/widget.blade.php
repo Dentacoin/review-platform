@@ -207,11 +207,9 @@
 								@if($review->user->country)
 									<p>
 										<i class="fa fa-map-marker fa-fw"></i> 
-										@if($review->user->city)
-											{{ $review->user->city_name ? $review->user->city_name : $review->user->city->name }}, {{ $review->user->country->name }}
-										@else
-											{{ $review->user->country->name }}
-										@endif
+										{{ $review->user->city_name ? $review->user->city_name.', ' : '' }}, 
+										{{ $review->user->state_name ? $review->user->state_name.', ' : '' }}, 
+										{{ $review->user->country->name }}
 									</p>
 								@endif
 								<p>

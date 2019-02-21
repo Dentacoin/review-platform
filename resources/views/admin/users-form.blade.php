@@ -107,6 +107,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-md-3 control-label">State</label>
+                                <div class="col-md-9">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'state_name',
+                                        'info' => $fields['state_name']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-md-3 control-label">City</label>
                                 <div class="col-md-9">
                                     @include('admin.parts.user-field',[

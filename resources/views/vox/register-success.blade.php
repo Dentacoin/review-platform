@@ -17,7 +17,6 @@
 						{!! nl2br( trans('vox.page.welcome-to-dentavox.subtitle-dentist') ) !!}
 					@else
 						{!! nl2br( trans('vox.page.welcome-to-dentavox.subtitle-patient') ) !!}
-						Now you can start taking our paid surveys and get rewarded with DCN every <br/> time! Share your insights on various dental topics and help improve the global <br/> dental industry!
 					@endif
 				</h4>
 

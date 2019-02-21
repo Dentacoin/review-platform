@@ -65,6 +65,9 @@
 				    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
                         <div class="suggester-map-div" {!! $user->lat ? 'lat="'.$user->lat.'" lon="'.$user->lon.'"' : '' !!} style="height: 100px; display: none; margin: 10px 0px;">
                         </div>
+                        <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px;">
+                        	{!! nl2br(trans('trp.common.check-address')) !!}
+                        </div>
                         <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
                         	{!! nl2br(trans('trp.common.invalid-address')) !!}
                         </div>
@@ -198,7 +201,9 @@
 		    		<div class="img">
 						<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
 					</div>
-					{{ $item->city_name ? $item->city_name : $item->city->name }}, {{ $item->country->name }} 
+					{{ $item->city_name ? $item->city_name.', ' : '' }}
+					{{ $item->state_name ? $item->state_name.', ' : '' }} 
+					{{ $item->country->name }} 
 					<!-- <span class="gray-text">(2 km away)</span> -->
 				</div>
 		    	@if( $time = $item->getWorkHoursText() )
@@ -338,6 +343,9 @@
 					    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
 	                        <div class="suggester-map-div" {!! $user->lat ? 'lat="'.$user->lat.'" lon="'.$user->lon.'"' : '' !!} style="height: 100px; display: none; margin: 10px 0px;">
 	                        </div>
+	                        <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px;">
+	                        	{!! nl2br(trans('trp.common.check-address')) !!}
+	                        </div>
 	                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
 	                        	{!! nl2br(trans('trp.common.invalid-address')) !!}
 	                        </div>
@@ -447,7 +455,9 @@
 						<div class="img">
 							<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
 						</div>
-						{{ $item->city_name ? $item->city_name : $item->city->name }}, {{ $item->country->name }} 
+						{{ $item->city_name ? $item->city_name.', ' : '' }}
+						{{ $item->state_name ? $item->state_name.', ' : '' }} 
+						{{ $item->country->name }} 
 						<!-- <span class="gray-text">(2 km away)</span> -->
 					</div>
 			    	@if( $time = $item->getWorkHoursText() )

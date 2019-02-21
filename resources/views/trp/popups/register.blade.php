@@ -240,6 +240,9 @@
 						    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}">
 		                        <div class="suggester-map-div" style="height: 200px; display: none; margin: 10px 0px; background: transparent;">
 		                        </div>
+		                        <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px;">
+		                        	{!! nl2br(trans('trp.common.check-address')) !!}
+		                        </div>
 		                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
 		                        	{!! nl2br(trans('trp.common.invalid-address')) !!}
 		                        </div>

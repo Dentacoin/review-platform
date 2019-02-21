@@ -46,6 +46,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'short_description',
         'zip',
         'city_name',
+        'state_name',
         'address',
         'phone',
         'website',
@@ -401,6 +402,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->attributes['lat'] = null;
         $this->attributes['lon'] = null;
         $this->attributes['city_name'] = null;
+        $this->attributes['state_name'] = null;
         if( $this->country) {
             $info = self::validateAddress($this->country->name, $newvalue);
             if(!empty($info)) {
@@ -411,6 +413,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $this->attributes['address'] = null;
             }
         }
+        $this->save();
     }
 
     public static function validateAddress($country, $address) {
@@ -432,61 +435,69 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $ret = [];
         //dd($geores);
         if(!empty($geores->results[0]->geometry->location)) {
-            // dd($geores->results[0]);
 
             if(in_array($country, $kingdoms)) {
+                $ret['state_name'] = $country;
                 $ret['city_name'] = $country;
             } else {
-                foreach ($geores->results[0]->address_components as $ac) {
-                    if(in_array('locality', $ac->types) || in_array('postal_town', $ac->types)) {
-                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-                        $cname = iconv('ASCII', 'UTF-8', $cname);
-                        $ret['city_name'] = $cname;
+
+                $state_fields = [
+                    'administrative_area_level_1',
+                    'administrative_area_level_2',
+                    'administrative_area_level_3',
+                ];
+
+                foreach ($state_fields as $sf) {
+                    if( empty($ret['state_name']) ) {
+                        foreach ($geores->results[0]->address_components as $ac) {
+                            if( in_array($sf, $ac->types) ) {
+                                $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                                $cname = iconv('ASCII', 'UTF-8', $cname);
+                                $ret['state_name'] = $cname;
+                                break;
+                            }
+                        }
+                    } else {
                         break;
                     }
                 }
 
-                if( empty($ret['city_name']) ) {
-                    foreach ($geores->results[0]->address_components as $ac) {
-                        if( in_array('administrative_area_level_1', $ac->types) ) {
-                            $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-                            $cname = iconv('ASCII', 'UTF-8', $cname);
-                            $ret['city_name'] = $cname;
-                            break;
-                        }
-                    }
-                }
 
-                if( empty($ret['city_name']) ) {
-                    foreach ($geores->results[0]->address_components as $ac) {
-                        if( in_array('administrative_area_level_2', $ac->types) ) {
-                            $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-                            $cname = iconv('ASCII', 'UTF-8', $cname);
-                            $ret['city_name'] = $cname;
-                            break;
-                        }
-                    }
-                }
+                $city_fields = [
+                    'postal_town',
+                    'locality',
+                    'administrative_area_level_5',
+                    'administrative_area_level_4',
+                    'administrative_area_level_3',
+                    'administrative_area_level_2',
+                    'sublocality_level_1',
+                    'neighborhood',
+                ];
 
-                if( empty($ret['city_name']) ) {
-                    foreach ($geores->results[0]->address_components as $ac) {
-                        if( in_array('administrative_area_level_3', $ac->types) ) {
-                            $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-                            $cname = iconv('ASCII', 'UTF-8', $cname);
-                            $ret['city_name'] = $cname;
-                            break;
+                foreach ($city_fields as $sf) {
+                    if( empty($ret['city_name']) ) {
+                        foreach ($geores->results[0]->address_components as $ac) {
+                            if( in_array($sf, $ac->types) ) {
+                                $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                                $cname = iconv('ASCII', 'UTF-8', $cname);
+                                $ret['city_name'] = $cname;
+                                break;
+                            }
                         }
+                    } else {
+                        break;
                     }
                 }
             }
-            
-            if( $geores->results[0]->geometry->location_type == 'ROOFTOP' || in_array('street_address', $geores->results[0]->types) || in_array('establishment', $geores->results[0]->types) || in_array('street_number', $geores->results[0]->types) ) {
                 
-                $ret['lat'] = $geores->results[0]->geometry->location->lat;
-                $ret['lon'] = $geores->results[0]->geometry->location->lng;
-                
-                return $ret;
-            }
+            $ret['lat'] = $geores->results[0]->geometry->location->lat;
+            $ret['lon'] = $geores->results[0]->geometry->location->lng;
+
+            // $ret['info'] = [];
+            // foreach ($geores->results[0]->address_components as $ac) {
+            //     $ret['info'][] = implode(', ', $ac->types).': '.$ac->long_name;
+            // }
+
         }    
 
         return $ret;

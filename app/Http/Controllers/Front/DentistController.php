@@ -139,6 +139,15 @@ class DentistController extends FrontController
 
     public function list($locale=null, $slug) {
 
+        // $cmt = $list = User::where('is_dentist', 1)->whereNotNull('address')->whereNull('state_name')->count();
+        // echo 'TOTAL: '.$cmt.'<br/>';
+        // $list = User::where('is_dentist', 1)->whereNotNull('address')->whereNull('state_name')->take(100)->get();
+        // foreach ($list as $user) {
+        //     echo $user->country->name.', '.$user->address.'<br/>';
+        //     $user->address = $user->address.'';
+        // }
+        // exit;
+
         $review_id = request('review_id');
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
 
