@@ -949,7 +949,7 @@ class VoxesController extends AdminController
                     $user->user->id,
                     $user->created_at->format('d.m.Y'),
                     $user->user->country ? $user->user->country->name : '',
-                    ( date('Y') - $user->birthyear ),
+                    ( date('Y') - $user->user->birthyear ),
                     $user->gender=='m' ? 'Male' : 'Female',
                 ];
 
