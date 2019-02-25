@@ -5796,17 +5796,24 @@ textarea.input {
 				height: 40px;
 				display: block;
 				line-height: 0.8;
+				width: 220px;
+			    white-space: nowrap;
+			    overflow: hidden;
+			    text-overflow: ellipsis;
 
 	        	@media #{$pc} {
 	        		font-size: 16px;
+					width: 172.5px;
 	        	}
 
 	        	@media #{$tablet} {
 	        		height: 30px;
+					width: 160px;
 	        	}
 
 	        	@media #{$phone} {
 	        		height: 25px;
+					width: 100%;
 	        	}
 
 	        	&:hover {
