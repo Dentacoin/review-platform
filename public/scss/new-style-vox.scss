@@ -1337,6 +1337,10 @@ p.h2-bold {
 
 			.first-flex {
 			    flex: 1;
+
+			    .right {
+			    	text-align: right;
+			    }
 			}
 
 			.second-flex {
@@ -1476,6 +1480,15 @@ p.h2-bold {
 			position: static;
 			transform: none;
 			font-size: 14px;
+		}
+
+		a {
+			color: white;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
 		}
 	}
 
@@ -2669,6 +2682,38 @@ p.h2-bold {
 
 	.section-stats {
 		margin-top: 0px;
+
+		@media #{$phone} {
+			padding-bottom: 11px;
+		}
+
+		.ribbon-box {
+			position: absolute;
+		    top: 50%;
+		    left: 50%;
+		    transform: translateY(-50%) translateX(-50%);
+
+		    @media #{$phone} {
+				margin-left: auto;
+				margin-right: auto;
+				position: static;
+				transform: none;
+			}
+
+		    h3 {
+		    	position: unset;
+			    transform: none;
+
+			    &.second-h3 {
+					font-size: 26px;
+					margin-top: 10px;
+
+					@media #{$phone} {
+						font-size: 14px;
+					}
+			    }
+		    }
+		}
 	}
 
 	.stats-description {

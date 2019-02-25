@@ -11,18 +11,14 @@ $(document).ready(function(){
             var swiper = new Swiper('.swiper-container', {
                 slidesPerView: 3,
                 slidesPerGroup: 3,
-                spaceBetween: 55,
+                spaceBetween: 0,
                 pagination: {
                     el: '.swiper-pagination',
                     clickable: true,
                 },
                 breakpoints: {
-                    1200: {
-                      spaceBetween: 30,
-                    },
                     900: {
                       slidesPerView: 2,
-                      spaceBetween: 30,
                     },
                 },
                 autoplay: {

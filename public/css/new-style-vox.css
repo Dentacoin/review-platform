@@ -987,6 +987,8 @@ p.h2-bold {
     flex: 1; }
     .section-recent-surveys .swiper-slide .vox-header .first-flex {
       flex: 1; }
+      .section-recent-surveys .swiper-slide .vox-header .first-flex .right {
+        text-align: right; }
     .section-recent-surveys .swiper-slide .vox-header .second-flex {
       align-items: flex-end; }
       @media screen and (max-width: 1130px) {
@@ -1085,6 +1087,11 @@ p.h2-bold {
         position: static;
         transform: none;
         font-size: 14px; } }
+    .section-stats h3 a {
+      color: white;
+      text-decoration: none; }
+      .section-stats h3 a:hover {
+        text-decoration: underline; }
   .section-stats .check-stats {
     font-size: 16px;
     text-transform: uppercase;
@@ -1952,6 +1959,29 @@ p.h2-bold {
       margin-bottom: 15px; } }
 .page-stats .section-stats {
   margin-top: 0px; }
+  @media screen and (max-width: 768px) {
+    .page-stats .section-stats {
+      padding-bottom: 11px; } }
+  .page-stats .section-stats .ribbon-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%); }
+    @media screen and (max-width: 768px) {
+      .page-stats .section-stats .ribbon-box {
+        margin-left: auto;
+        margin-right: auto;
+        position: static;
+        transform: none; } }
+    .page-stats .section-stats .ribbon-box h3 {
+      position: unset;
+      transform: none; }
+      .page-stats .section-stats .ribbon-box h3.second-h3 {
+        font-size: 26px;
+        margin-top: 10px; }
+        @media screen and (max-width: 768px) {
+          .page-stats .section-stats .ribbon-box h3.second-h3 {
+            font-size: 14px; } }
 .page-stats .stats-description {
   text-align: center;
   max-width: 700px;

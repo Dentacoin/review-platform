@@ -108,12 +108,14 @@
 	<div class="section-stats">
 		<div class="container">
 			<img src="{{ url('new-vox-img/stats-front.png') }}">
-			<h3>
-				{!! trans('vox.page.stats.order-survey') !!}
-			</h3>
-			<a href="mailto:{!! trans('vox.page.stats.order-survey-email') !!}" class="check-stats">
-				{!! trans('vox.page.stats.request-survey') !!}
-			</a>
+			<div class="ribbon-box">
+				<h3>
+					{!! nl2br(trans('vox.page.stats.order-survey')) !!}
+				</h3>
+				<h3 class="second-h3">
+					{!! nl2br(trans('vox.page.stats.order-survey-2')) !!}
+				</h3>
+			</div>
 		</div>
 	</div>
 
