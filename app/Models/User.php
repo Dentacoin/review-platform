@@ -488,7 +488,28 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         break;
                     }
                 }
+
+                 $zip_fields = [
+                    'postal_code',
+                    'zip',
+                ];
+
+                foreach ($zip_fields as $sf) {
+                    if( empty($ret['zip']) ) {
+                        foreach ($geores->results[0]->address_components as $ac) {
+                            if( in_array($sf, $ac->types) ) {
+                                $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                                $cname = iconv('ASCII', 'UTF-8', $cname);
+                                $ret['zip'] = $cname;
+                                break;
+                            }
+                        }
+                    } else {
+                        break;
+                    }
+                }
             }
+
                 
             $ret['lat'] = $geores->results[0]->geometry->location->lat;
             $ret['lon'] = $geores->results[0]->geometry->location->lng;

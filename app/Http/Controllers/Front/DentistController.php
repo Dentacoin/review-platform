@@ -139,9 +139,9 @@ class DentistController extends FrontController
 
     public function list($locale=null, $slug) {
 
-        // $cmt = $list = User::where('is_dentist', 1)->whereNotNull('address')->whereNull('state_name')->count();
+        // $cmt = $list = User::where('is_dentist', 1)->whereNotNull('zip')->whereNull('state_name')->count();
         // echo 'TOTAL: '.$cmt.'<br/>';
-        // $list = User::where('is_dentist', 1)->whereNotNull('address')->whereNull('state_name')->take(100)->get();
+        // $list = User::where('is_dentist', 1)->whereNotNull('zip')->whereNull('state_name')->take(100)->get();
         // foreach ($list as $user) {
         //     echo $user->country->name.', '.$user->address.'<br/>';
         //     $user->address = $user->address.'';
@@ -506,6 +506,135 @@ class DentistController extends FrontController
             $view_params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
         }
 
+
+        $view_params['schema'] = [
+            "@context" => "http://schema.org",
+            "@type" => $item->is_clinic ? 'Clinic' : 'Dentist',
+            "name" => $item->getName(),
+            "image" => $item->getImageUrl(true),
+        ];
+
+        if (!empty($item->categories->isNotEmpty())) {
+            $view_params['schema']["MedicalSpecialty"] = array_values($item->parseCategories( $this->categories ));
+        }
+
+        if (!empty($item->phone)) {
+            $view_params['schema']["telephone"] = $item->getFormattedPhone(true);
+        }
+
+        if (!empty($item->address)) {
+            $view_params['schema']["address"] = [
+                "@type" => "PostalAddress",
+                "streetAddress" => $item->address,
+                "addressLocality" => $item->city_name,
+                'addressCountry' => $item->country->code,
+            ];
+        }
+
+        if (!empty($item->state_name)) {
+            $view_params['schema']["address"]["addressRegion"] = $item->state_name;
+        }
+
+        if (!empty($item->zip)) {
+            $view_params['schema']["address"]["postalCode"] = $item->zip;
+        }
+
+        if(!empty($item->lat) && !empty($item->lon) ){
+            $view_params['schema']["hasMap"] = "https://www.google.com/maps/@".$item->lat.",".$item->lon;
+        }
+
+        if(!empty($item->short_description)){
+            $view_params['schema']["description"] = $item->short_description;
+        }
+
+        if (!empty($item->website)) {
+            $view_params['schema']["url"] = $item->website;
+        }
+
+        if (!empty($item->socials)) {
+            $view_params['schema']["sameAs"] = array_values($item->socials);
+        }
+
+        $view_params['schema']["aggregateRating"] = [
+            "@type" => "AggregateRating",
+            "ratingCount" => intval($item->ratings),
+            "ratingValue" => $item->avg_rating,
+        ];
+
+        if($item->reviews_in_standard()->isNotEmpty() ) {
+            $item_reviews = [];
+            foreach($item->reviews_in_standard() as $review) {
+                $item_reviews[] = [
+                    "@type" => "Review",
+                    "author" => [
+                        "@type" => "Person",
+                        "name" => $review->user->name,
+                    ],
+                    "datePublished" => $review->created_at->format('Y-m-d'),
+                    "reviewBody" => $review->answer,
+                    "reviewRating" => [
+                        "@type" => "Rating",
+                        "bestRating" => 5,
+                        "ratingValue" => $review->rating,
+                        "worstRating" => 1,
+                    ]
+                ];
+            }
+            $view_params['schema']["review"] = $item_reviews;
+        }
+
+        if (!empty($item->accepted_payment)) {
+            $view_params['schema']["paymentAccepted"] = $item->parseAcceptedPayment( $item->accepted_payment );
+        }
+
+        $openingHours = [
+            1 => 'Mo',
+            2 => 'Tu',
+            3 => 'We',
+            4 => 'Th',
+            5 => 'Fr',
+            6 => 'Sa',
+            7 => 'Su',
+        ];
+
+        $openingHoursSpecification = [
+            1 => 'Monday',
+            2 => 'Tuesday',
+            3 => 'Wednesday',
+            4 => 'Thursday',
+            5 => 'Friday',
+            6 => 'Saturday',
+            7 => 'Sunday',
+        ];
+
+        if (!empty($item->work_hours)) {
+            $hours_arr = [];
+            $hours_specif = [];
+
+            foreach ($item->work_hours as $k => $wh) {
+                $hours_arr[] = $openingHours[$k].' '.$wh[0].'-'.$wh[1];
+
+                $hours_specif[] = [
+                    "@type" => "OpeningHoursSpecification",
+                    "dayOfWeek" => "http://schema.org/".$openingHoursSpecification[$k],
+                    "opens" => $wh[0],
+                    "closes" => $wh[1],
+                ];
+            }
+
+            $view_params['schema']["openingHours"] = $hours_arr;
+            $view_params['schema']["openingHoursSpecification"] = $hours_specif;
+        }
+
+        if(!empty($item->lat) && !empty($item->lon) ){
+            $view_params['schema']["geo"] = [
+                "@type" => "GeoCoordinates",
+                "latitude" => $item->lat,
+                "longitude" => $item->lon,
+            ];
+        }
+
+        
         return $this->ShowView('user', $view_params);
 
     }

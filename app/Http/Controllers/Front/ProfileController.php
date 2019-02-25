@@ -666,10 +666,16 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
                 foreach ($this->profile_fields as $key => $value) {
-                    if( Request::exists($key) || $key=='specialization' || $key=='email_public' || $key=='accepted_payment' ) {
+                    if( Request::exists($key) || (Request::input('field')=='specialization' && $key=='specialization') || $key=='email_public' || (Request::input('field')=='accepted_payment' && $key=='accepted_payment') ) {
                         if($key=='work_hours') {
                             $wh = Request::input('work_hours');
                             foreach ($wh as $k => $v) {
+                                if( empty($wh[$k][0][0]) || empty($wh[$k][0][1]) || empty($wh[$k][1][0]) || empty($wh[$k][1][1]) ) { 
+                                    unset($wh[$k]);
+                                    continue;
+                                }
+
+
                                 if( !empty($wh[$k][0]) ) {
                                     $wh[$k][0] = implode(':', $wh[$k][0]);
                                 }

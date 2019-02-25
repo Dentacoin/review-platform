@@ -788,6 +788,7 @@
 				@if($item->categories->isNotEmpty() || (!empty($user) && $item->id==$user->id))
 	    			<div class="specialization" role="presenter">
 						<img src="{{ url('img-trp/graduate-hat.png') }}">
+
 		    			<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.specialty-empty')) }}">
 		    				{{ $item->categories->isNotEmpty() ? implode(', ', $item->parseCategories($categories)) : nl2br(trans('trp.page.user.specialty-empty')) }}
 	    				</span>
@@ -1020,5 +1021,11 @@
 	@endif
 @endif
 @include('trp.popups.detailed-review')
+
+
+
+<script type="application/ld+json">
+	{!! json_encode($schema, JSON_UNESCAPED_SLASHES) !!}
+</script>
 
 @endsection
