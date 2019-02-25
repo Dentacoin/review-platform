@@ -35,11 +35,11 @@
 		    <div class="countries">
 		    	<div class="flex">
 		    		<div class="col">
-				    	@foreach($cities_name as $key => $city)
-				    		@if(mb_strlen($city) == 1)
-				    			<span class="letter">{{ $city }}</span>
+				    	@foreach($cities_name as $key => $user)
+				    		@if(!is_object($user))
+				    			<span class="letter">{{ $user }}</span>
 				    		@else
-				    			<a href="{{ getLangUrl('dentists/'.str_replace(' ', '-', strtolower($city)).'-'.$country->slug) }}">{{ $city }}</a>
+				    			<a href="{{ getLangUrl('dentists/'.str_replace(' ', '-', strtolower($user->city_name)).(!empty($user->state_name) ? '-'.strtolower($user->state_name) : '').'-'.$country->slug) }}">{{ $user->city_name }}{{ !empty($user->state_name) ? ', '.$user->state_name : '' }}</a>
 				    		@endif
 				    		@if( $total_rows > 8 && in_array($key, $breakpoints) && !$loop->last)
 				    			</div>

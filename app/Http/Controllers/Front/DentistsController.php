@@ -425,9 +425,9 @@ class DentistsController extends FrontController
 
     public function city($locale=null, $country_slug) {
 
-        // $user = User::find(497);
+        // $user = User::find(1592);
 
-        // $info = User::validateAddress('Bulgaria', 'Slaveevi gori 23 Plovdiv');
+        // $info = User::validateAddress($user->country->name, $user->address);
         // if(is_array($info)) {
         //     echo 'country: '.$user->country->name.' | address: '.$user->address.' | city: '.$user->city_name.'<br/>';
         //     foreach ($info as $key => $value) {
@@ -438,13 +438,15 @@ class DentistsController extends FrontController
         // }
 
 
+
         $country = Country::where('slug', 'like', $country_slug )->first();
 
         if(empty($country)) {
             return redirect('/');
         }
 
-        $cities_name = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('city_name')->get()->pluck('city_name');
+        $cities_name = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('state_name')->groupBy('city_name')->orderBy('city_name', 'asc')->get();
+
 
         $all_dentists = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->whereNotNull('city_name')->count();
 
@@ -453,8 +455,8 @@ class DentistsController extends FrontController
         $letters = [];
         $total_rows = 0;
 
-        foreach ($cities_name as $city) {
-            $letter = $city[0];
+        foreach ($cities_name as $user) {
+            $letter = $user->city_name[0];
             if(empty( $letters[$letter] )) {
                 $total_rows++;
                 $total_rows++;
@@ -464,7 +466,7 @@ class DentistsController extends FrontController
             }
 
             $total_rows++;
-            $cities_groups[$total_rows] = $city;
+            $cities_groups[$total_rows] = $user;
         }
 
         $row_length = ceil($total_rows / 4); //19
