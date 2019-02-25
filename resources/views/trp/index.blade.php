@@ -30,7 +30,7 @@
 						<div class="slider-image-wrapper"> 
 							<div class="slider-image" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
 								@if($dentist->is_partner)
-									<img src="{{ url('img-trp/mini-logo.png') }}" data-tooltip="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}" />
+									<img class="tooltip-text" src="{{ url('img-trp/mini-logo.png') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}" />
 								@endif
 							</div>
 						</div>

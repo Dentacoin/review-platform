@@ -22,6 +22,7 @@ $(document).ready(function(){
                 $('#the-detailed-review').html(data);
                 showPopup('view-review-popup');
                 handleReviewEvents();
+                attachTooltips();
                 $('#view-review-popup .share-popup').attr('share-href', window.location.href.split('?')[0] + '?review_id=' + this);
             }).bind(id)
         });

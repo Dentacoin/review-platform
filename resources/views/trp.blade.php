@@ -202,9 +202,7 @@
 
 		</div>
 
-
-		<div class="partner-tooltip"></div>
-
+		<div class="tooltip-window" style="display: none;"></div>
 
 		@include('trp/popups/share')
 		@if(empty($user))

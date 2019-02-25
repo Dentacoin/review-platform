@@ -601,8 +601,9 @@
 			    			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
 			    			<span class="review-name">{{ $review->user->name }}: </span>
 							@if($review->verified)
-				    			<div class="trusted-sticker mobile-sticker">
+				    			<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
 				    				{!! nl2br(trans('trp.common.trusted')) !!}
+				    				<i class="fas fa-info-circle"></i>
 				    			</div>
 			    			@endif
 			    			@if($review->title)
@@ -611,8 +612,10 @@
 			    			</span>
 			    			@endif
 							@if($review->verified)
-				    			<div class="trusted-sticker">
+
+				    			<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
 				    				{!! nl2br(trans('trp.common.trusted')) !!}
+				    				<i class="fas fa-info-circle"></i>
 				    			</div>
 			    			@endif
 		    			</div>
@@ -761,8 +764,9 @@
 									</span>
 								</div>
 								@if($review->verified)
-									<div class="trusted-sticker">
+									<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
 					    				{!! nl2br(trans('trp.common.trusted')) !!}
+				    					<i class="fas fa-info-circle"></i>
 					    			</div>
 				    			@endif
 				    		</div>
@@ -934,7 +938,7 @@
 							<a class="slider-wrapper{!! $team->approved ? '' : ' pending' !!}" href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
 								<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 									@if( $team->clinicTeam->is_partner )
-										<img src="img-trp/mini-logo.png" data-tooltip="{!! nl2br(trans('trp.common.partner')) !!} Clinic }}"/>
+										<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic }}"/>
 									@endif
 									@if( (!empty($user) && $item->id==$user->id) )
 										<div class="deleter" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getName() ]) !!}">

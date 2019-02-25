@@ -19,6 +19,8 @@ var initLoginScripts;
 var prepareLoginFucntion;
 var loginLoaded = false;
 var loginsWaiting = [];
+var handleTooltip;
+var attachTooltips;
 
 
 jQuery(document).ready(function($){
@@ -490,22 +492,6 @@ jQuery(document).ready(function($){
 		} );
 	}
 
-
-	if($('img[data-tooltip]').length) {
-
-		$('img[data-tooltip]').on('mouseover mousemove', function(e) {
-			$('.partner-tooltip').text($(this).attr('data-tooltip'));
-			$('.partner-tooltip').css('left', e.pageX  );
-			$('.partner-tooltip').css('top', e.pageY + ($(this).outerWidth() / 2) );
-			$('.partner-tooltip').show();
-		});
-
-		$('img[data-tooltip]').on('mouseout', function(e) {
-
-			$('.partner-tooltip').hide();
-		});
-	}
-
 	$('.button-sign-up-dentist').click( function() {
 		fbq('track', 'DentistInitiateRegistration');
 		gtag('event', 'ClickSignup', {
@@ -537,6 +523,54 @@ jQuery(document).ready(function($){
 			'event_label': 'LoginPopup',
 		});
 	});
+
+	handleTooltip = function(e) {
+
+        $('.tooltip-window').text($(this).attr('text'));
+        $('.tooltip-window').css('left', e.pageX - ($('.tooltip-window').outerWidth() / 2) );
+
+        if (window.innerWidth > 768) {
+	        if (window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
+	            $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
+	        }
+	    }
+
+        if (window.innerWidth < 768) {
+        	$('.tooltip-window').css('top', e.pageY + 15 );
+        } else {
+        	$('.tooltip-window').css('top', e.pageY + 30 );
+        }
+        
+
+        $('.tooltip-window').css('display', 'block');
+    }
+
+    attachTooltips = function() {
+
+
+	    if($('.tooltip-text:not(.tooltip-initted)').length) {
+
+	        $('.tooltip-text:not(.tooltip-initted)').on('mouseover mousemove', function(e) {
+	            if (window.innerWidth > 768) {
+	                handleTooltip.bind(this)(e);
+	            }
+	        });
+
+	        $('.tooltip-text:not(.tooltip-initted)').on('click', function(e) {
+	            if (window.innerWidth < 768 && !$(this).hasClass('no-mobile-tooltips')) {
+	                handleTooltip.bind(this)(e);
+	            }
+	        });
+
+	        $('.tooltip-text:not(.tooltip-initted)').on('mouseout', function(e) {
+
+	            $('.tooltip-window').hide();
+	        });
+
+	        $('.tooltip-text:not(.tooltip-initted)').addClass('tooltip-initted');
+	    }
+    }
+    attachTooltips();
 
 });
 

@@ -5318,6 +5318,12 @@ textarea.input {
 	background-color: #14cab8;
 	padding: 3px 7px;
 	border-radius: 5px;
+
+	i {
+		color: white;
+		vertical-align: text-top;
+		padding-left: 5px;
+	}
 }
 
 .cover {
@@ -5643,31 +5649,31 @@ textarea.input {
 	z-index: 2000 !important;
 }
 
-.partner-tooltip {
-	display: none;
-    position: absolute;
-    width: 120px;
-    height: 40px;
-    color: white;
-    line-height: 40px;
-    text-align: center;
-    z-index: 1000000;
-    background-color: #07a9df;
-    border-radius: 5px;
-    transform: translateY(-150%) translateX(-20%);
+// .partner-tooltip {
+// 	display: none;
+//     position: absolute;
+//     width: 120px;
+//     height: 40px;
+//     color: white;
+//     line-height: 40px;
+//     text-align: center;
+//     z-index: 1000000;
+//     background-color: #07a9df;
+//     border-radius: 5px;
+//     transform: translateY(-150%) translateX(-20%);
 
-    &:after {
-    	content: '';
-	    position: absolute;
-	    bottom: -5px;
-	    width: 0;
-	    height: 0;
-	    left: 20px;
-	    border-style: solid;
-	    border-width: 5px 5px 0 5px;
-	    border-color: #07a9df transparent transparent transparent;
-    }
-}
+//     &:after {
+//     	content: '';
+// 	    position: absolute;
+// 	    bottom: -5px;
+// 	    width: 0;
+// 	    height: 0;
+// 	    left: 20px;
+// 	    border-style: solid;
+// 	    border-width: 5px 5px 0 5px;
+// 	    border-color: #07a9df transparent transparent transparent;
+//     }
+// }
 
 #captcha-div {
 	text-align: center;
@@ -6210,5 +6216,43 @@ body.edit-user {
     @media #{$phone} {
         margin-top: 5px;
     	margin-bottom: 10px;
+    }
+}
+
+
+
+.tooltip-window {
+	display: none;
+	text-align: left;
+    position: absolute;
+    background-color: white;
+    padding: 15px;
+    max-width: 300px;
+    border: 1px solid #41afff;
+    z-index: 1001;
+    border-radius: 10px;
+
+    @media #{$phone} {
+    	font-size: 14px;
+    	padding: 10px;
+    	max-width: 200px;
+    }
+
+    &::after {
+    	content: '';
+    	position: absolute;
+    	top: -7.5px;
+    	left: 50%;
+    	transform: translateX(-50%);
+    	width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 0 7.5px 7.5px 7.5px;
+		border-color: transparent transparent #41b0ff transparent;
+
+		// @media #{$phone} {
+		// 	display: none;
+		// }
+
     }
 }

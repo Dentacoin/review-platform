@@ -4,9 +4,9 @@
 			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
 			<span class="review-name">{{ $review->user->name }}: </span>
 			@if($review->verified)
-				<div class="trusted-sticker mobile-sticker">
+				<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
 					{!! nl2br(trans('trp.common.trusted-review')) !!}
-					
+				    <i class="fas fa-info-circle"></i>
 				</div>
 			@endif
 			@if($review->title)
@@ -15,8 +15,9 @@
 				</span>
 			@endif
 			@if($review->verified)
-				<div class="trusted-sticker">
+				<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
 					{!! nl2br(trans('trp.common.trusted-review')) !!}
+				    <i class="fas fa-info-circle"></i>
 				</div>
 			@endif
 		</div>
