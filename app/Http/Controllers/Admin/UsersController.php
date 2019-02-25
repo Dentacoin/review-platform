@@ -161,6 +161,11 @@ class UsersController extends AdminController
             'clinic.pending' => 'Clinics (Suspicious)',
             'clinic.approved' => 'Clinics (Approved)',
             'clinic.rejected' => 'Clinics (Rejected)',
+            'dentist_clinic.all' => 'Dentists & Clinics (All)',
+            'dentist_clinic.new' => 'Dentists & Clinics (New)',
+            'dentist_clinic.pending' => 'Dentists & Clinics (Suspicious)',
+            'dentist_clinic.approved' => 'Dentists & Clinics (Approved)',
+            'dentist_clinic.rejected' => 'Dentists & Clinics (Rejected)',
         ];
 
         $user_statuses = [
@@ -217,6 +222,8 @@ class UsersController extends AdminController
             } else if( $type=='clinic' ) {
                 $users = $users->where('is_dentist', 1)
                 ->where('is_clinic', 1);
+            } else if( $type=='dentist_clinic' ) {
+                $users = $users->where('is_dentist', 1);
             } else if( $type=='dentist' ) {
                 $users = $users->where('is_dentist', 1)->where(function ($query) {
                     $query->where('is_clinic', 0)
