@@ -2170,6 +2170,16 @@ p.h2-bold {
 						display: block;
 					}
 
+					&.scale-error {
+						.buttons-list {
+							.answer-inner {
+								label {
+									border-color: red;
+								}
+							}
+						}
+					}
+
 					.answer-question {
 						// width: 20%;
 						// float: left;

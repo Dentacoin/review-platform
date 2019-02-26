@@ -152,6 +152,15 @@ $(document).ready(function(){
                     answer.push($(this).find('.answer:checked').val());
                 });
             } else {
+                
+                group.find('.answer-radios-group').addClass('scale-error');
+                group.find('.answer-radios-group').each( function() {
+                    if ($(this).find('.answer').is(':checked')) {
+                        $(this).removeClass('scale-error');
+                    }
+                });
+
+                
                 $('.answer-scale-error').show().insertAfter($(this));
                 ajax_is_running = false;
                 return;
@@ -390,6 +399,7 @@ $(document).ready(function(){
     } );
 
     $('.question-group.scale .answer').change( function() {
+        $(this).closest('.answer-radios-group').removeClass('scale-error');
         $(this).closest('.answer-radios-group').find('.answer-radio').each( function() {
             if( $(this).find('input').is(':checked') ) {
                 $(this).addClass('active-label');

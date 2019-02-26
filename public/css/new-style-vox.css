@@ -1597,6 +1597,8 @@ p.h2-bold {
         @media screen and (max-width: 768px) {
           .questions .question-group .answers .answers-inner .answer-radios-group {
             display: block; } }
+        .questions .question-group .answers .answers-inner .answer-radios-group.scale-error .buttons-list .answer-inner label {
+          border-color: red; }
         .questions .question-group .answers .answers-inner .answer-radios-group .answer-question {
           max-width: 20%;
           flex: 1;
