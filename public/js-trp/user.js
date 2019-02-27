@@ -139,6 +139,12 @@ $(document).ready(function(){
                 } );
             }
 
+            if (window.innerWidth > 768) {
+                var draggable = false;
+            } else {
+                 var draggable = true;
+            }
+
 
             galleryFlickty = $('.gallery-flickity').flickity({
                 autoPlay: false,
@@ -147,6 +153,7 @@ $(document).ready(function(){
                 pageDots: true,
                 freeScroll: true,
                 groupCells: 1,
+                draggable: draggable,
             });
 
             galleryFlickty.resize();
@@ -158,6 +165,7 @@ $(document).ready(function(){
                 pageDots: false,
                 freeScroll: true,
                 groupCells: 1,
+                draggable: draggable,
             });
 
             teamFlickity.resize();
@@ -452,6 +460,7 @@ $(document).ready(function(){
 
     //Gallery upload
     $('#add-gallery-photo').change( function() {
+        console.log('bbb');
         if(ajax_is_running) {
             return;
         }

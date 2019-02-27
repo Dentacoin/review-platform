@@ -3894,6 +3894,11 @@ textarea.input {
       box-shadow: 0px 0px 14px 2px #d8d8d8; }
   .details-wrapper .about-container .gallery-slider {
     margin-bottom: 55px; }
+    .details-wrapper .about-container .gallery-slider.with-arrows .gallery-flickity .flickity-button {
+      display: block; }
+      @media screen and (max-width: 768px) {
+        .details-wrapper .about-container .gallery-slider.with-arrows .gallery-flickity .flickity-button {
+          display: none !important; } }
     .details-wrapper .about-container .gallery-slider .gallery-flickity .flickity-page-dots {
       display: none; }
       @media screen and (max-width: 768px) {
@@ -3914,8 +3919,8 @@ textarea.input {
       @media screen and (max-width: 768px) {
         .details-wrapper .about-container .gallery-slider .gallery-flickity .slider-wrapper {
           width: 100%;
-          padding-right: 0px;
-          padding-left: 0px; } }
+          padding-right: 5px;
+          padding-left: 5px; } }
       .details-wrapper .about-container .gallery-slider .gallery-flickity .slider-wrapper .slider-image {
         height: 200px;
         width: 100%; }
@@ -3927,9 +3932,11 @@ textarea.input {
       width: 28px !important;
       height: 66px !important;
       border-radius: 0px !important; }
-    @media screen and (max-width: 768px) {
-      .details-wrapper .about-container .gallery-slider .gallery-flickity .flickity-button {
-        display: none !important; } }
+    .details-wrapper .about-container .gallery-slider .gallery-flickity .flickity-button {
+      display: none; }
+      @media screen and (max-width: 768px) {
+        .details-wrapper .about-container .gallery-slider .gallery-flickity .flickity-button {
+          display: none !important; } }
     .details-wrapper .about-container .gallery-slider .gallery-flickity .flickity-prev-next-button.previous {
       background: url("../img-trp/slider-arrow-left-white.png") 50% 50% no-repeat; }
       .details-wrapper .about-container .gallery-slider .gallery-flickity .flickity-prev-next-button.previous svg {
@@ -3938,28 +3945,34 @@ textarea.input {
       background: url("../img-trp/slider-arrow-right-white.png") 50% 50% no-repeat; }
       .details-wrapper .about-container .gallery-slider .gallery-flickity .flickity-prev-next-button.next svg {
         display: none; }
-  .details-wrapper .team-container .flickity .slider-wrapper .slider-image.add-team-member {
-    display: block;
-    background-color: #e3e3e3;
-    border: 2px dashed #777777;
-    position: relative;
-    border-radius: 5px; }
-    .details-wrapper .team-container .flickity .slider-wrapper .slider-image.add-team-member .plus-team {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-      text-align: center; }
-      .details-wrapper .team-container .flickity .slider-wrapper .slider-image.add-team-member .plus-team img {
-        position: unset; }
-      .details-wrapper .team-container .flickity .slider-wrapper .slider-image.add-team-member .plus-team span {
-        font-size: 20px;
-        display: block;
-        color: #777777;
-        font-weight: bold;
-        min-width: 130px; }
-  .details-wrapper .team-container .flickity .slider-wrapper h4 {
-    margin-bottom: -5px; }
+  .details-wrapper .team-container.with-arrows .flickity .flickity-button {
+    display: block; }
+  .details-wrapper .team-container .flickity {
+    width: 100%; }
+    .details-wrapper .team-container .flickity .slider-wrapper .slider-image.add-team-member {
+      display: block;
+      background-color: #e3e3e3;
+      border: 2px dashed #777777;
+      position: relative;
+      border-radius: 5px; }
+      .details-wrapper .team-container .flickity .slider-wrapper .slider-image.add-team-member .plus-team {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        text-align: center; }
+        .details-wrapper .team-container .flickity .slider-wrapper .slider-image.add-team-member .plus-team img {
+          position: unset; }
+        .details-wrapper .team-container .flickity .slider-wrapper .slider-image.add-team-member .plus-team span {
+          font-size: 20px;
+          display: block;
+          color: #777777;
+          font-weight: bold;
+          min-width: 130px; }
+    .details-wrapper .team-container .flickity .slider-wrapper h4 {
+      margin-bottom: -5px; }
+    .details-wrapper .team-container .flickity .flickity-button {
+      display: none; }
 
 .trusted-sticker {
   display: inline-block;

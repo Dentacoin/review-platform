@@ -886,7 +886,7 @@
 	    			@endif
     			@endif
     			@if($item->photos->isNotEmpty() || (!empty($user) && $item->id==$user->id) )
-	       			<div class="gallery-slider">
+	       			<div class="gallery-slider {!! count($item->photos) > 2 ? 'with-arrows' : '' !!}">
 	    				<div class="gallery-flickity">
 			    			@if( (!empty($user) && $item->id==$user->id) )
 								<div class="slider-wrapper">
@@ -920,7 +920,7 @@
 	    			{!! nl2br(trans('trp.page.user.team')) !!}
 	    		</h2>
 
-	    		<div class="team-container">
+	    		<div class="team-container {!! count($item->teamApproved) > 3 ? 'with-arrows' : '' !!}">
 		    		<div class="flickity">
 		    			@if( (!empty($user) && $item->id==$user->id) )
 							<div class="slider-wrapper">

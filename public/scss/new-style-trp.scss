@@ -5192,6 +5192,18 @@ textarea.input {
     	.gallery-slider {
     		margin-bottom: 55px;
 
+    		&.with-arrows {
+    			.gallery-flickity {
+    				.flickity-button {
+						display: block;
+
+						@media #{$phone} {
+							display: none !important;
+						}
+					}
+    			}
+    		}
+
     		.gallery-flickity {
 
 			    .flickity-page-dots {
@@ -5222,8 +5234,8 @@ textarea.input {
 
 					@media #{$phone} {
 						width: 100%;
-						padding-right: 0px;
-						padding-left: 0px;
+						padding-right: 5px;
+						padding-left: 5px;
 					}
 
 					.slider-image {
@@ -5244,6 +5256,8 @@ textarea.input {
 				}
 
 				.flickity-button {
+					display: none;
+
 					@media #{$phone} {
 						display: none !important;
 					}
@@ -5269,7 +5283,17 @@ textarea.input {
     }
 
     .team-container {
+
+		&.with-arrows {
+			.flickity {
+				.flickity-button {
+					display: block;
+				}
+			}
+		}
+
     	.flickity {
+    		width: 100%;
 
 			.slider-wrapper {
 
@@ -5306,6 +5330,10 @@ textarea.input {
 				h4 {
 					margin-bottom: -5px;
 				}
+			}
+
+			.flickity-button {
+				display: none;
 			}
 		}
     }
