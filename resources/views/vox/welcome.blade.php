@@ -86,7 +86,12 @@
 								What's your year of birth?
 							</div>
 							<div class="answers">
-								<input type="number" class="answer" name="birthyear-answer" id="birthyear-answer" min="{{ date('Y')-100 }}" max="{{ date('Y')-18 }}">
+								<select class="answer" name="birthyear-answer" id="birthyear-answer">
+                            		<option value="">-</option>
+									@for($i=(date('Y')-18);$i>=(date('Y')-90);$i--)
+                            			<option value="{{ $i }}">{{ $i }}</option>
+                            		@endfor
+                            	</select>
 							</div>
 
 							<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>

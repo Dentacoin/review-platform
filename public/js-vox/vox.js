@@ -453,4 +453,17 @@ $(document).ready(function(){
         });
     }
 
+    if (window.innerWidth < 768) {
+        $(window).on('scroll', function() {
+
+            if ($(window).scrollTop() >= $('.vox-survey-title').offset().top && !$('.vox-survey-title').hasClass('fixed-t')) {
+                $('.vox-survey-title').addClass('fixed-t');
+            }
+
+            if (($(window).scrollTop() <= $('header').outerHeight()) && $('.vox-survey-title').hasClass('fixed-t')) {
+                $('.vox-survey-title').removeClass('fixed-t');
+            }
+        });
+    }
+
 });

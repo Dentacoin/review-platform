@@ -1336,7 +1336,8 @@ p.h2-bold {
 		    flex: 1;
 
 			.first-flex {
-			    flex: 1;
+			    // flex: 1;
+			    margin-bottom: 3px;
 
 			    .right {
 			    	text-align: right;
@@ -1863,6 +1864,7 @@ p.h2-bold {
 			@media #{$phone} {
 				font-size: 14px;
 				margin-bottom: 18px;
+				margin-top: 20px;
 			}
 
 			.tooltip-text {
@@ -1921,9 +1923,9 @@ p.h2-bold {
 
 				@media #{$phone} {
 					font-size: 15px;
-					margin-bottom: 10px;
-				    padding-top: 4px;
-				    padding-bottom: 4px;
+					margin-bottom: 15px;
+					padding-top: 8px;
+					padding-bottom: 8px;
 				}
 
 				&.wrong {
@@ -1950,6 +1952,7 @@ p.h2-bold {
 				}
 
 				&#birthyear-answer {
+					min-width: 200px;
 					padding-right: 1px;
 				    padding-left: 10px;
 				    text-align: left;
@@ -1981,7 +1984,7 @@ p.h2-bold {
 					color: #bdbdbd;
 
 					@media #{$phone} {
-						top: 4px;
+						top: 8px;
 					}
 				}
 
@@ -2272,11 +2275,10 @@ p.h2-bold {
 			transition: all 0.3s ease;
 		}
 
-
 		@media #{$phone} {
-			font-size: 15px;
-		    padding-top: 4px;
-		    padding-bottom: 4px;
+			font-size: 18px;
+			padding-top: 8px;
+			padding-bottom: 8px;
 		}
 	}
 
@@ -2595,6 +2597,7 @@ p.h2-bold {
 
     					@media #{$phone} {
     						font-size: 10px;
+    						max-height: 54px;
     					}
 					}
 				}
@@ -6568,4 +6571,22 @@ p.h2-bold {
 	    	margin-top: 10px;
 	    }
     }
+}
+
+.page-questionnaire {
+	footer {
+		@media #{$phone} {
+			display: none;
+		}
+	}
+}
+
+.vox-survey-title.fixed-t {
+	position: fixed;
+    background-color: white;
+    z-index: 100;
+    top: 0;
+    right: 0;
+    left: 0;
+    padding: 20px 30px;
 }

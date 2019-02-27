@@ -986,7 +986,7 @@ p.h2-bold {
     flex-direction: column;
     flex: 1; }
     .section-recent-surveys .swiper-slide .vox-header .first-flex {
-      flex: 1; }
+      margin-bottom: 3px; }
       .section-recent-surveys .swiper-slide .vox-header .first-flex .right {
         text-align: right; }
     .section-recent-surveys .swiper-slide .vox-header .second-flex {
@@ -1365,7 +1365,8 @@ p.h2-bold {
     @media screen and (max-width: 768px) {
       .questions .question-group .question {
         font-size: 14px;
-        margin-bottom: 18px; } }
+        margin-bottom: 18px;
+        margin-top: 20px; } }
     .questions .question-group .question .tooltip-text {
       font-size: 21px;
       color: #41afff; }
@@ -1414,9 +1415,9 @@ p.h2-bold {
         .questions .question-group .answers .answer-checkbox,
         .questions .question-group .answers .answer {
           font-size: 15px;
-          margin-bottom: 10px;
-          padding-top: 4px;
-          padding-bottom: 4px; } }
+          margin-bottom: 15px;
+          padding-top: 8px;
+          padding-bottom: 8px; } }
       .questions .question-group .answers select.wrong,
       .questions .question-group .answers .answer-radio.wrong,
       .questions .question-group .answers .answer-checkbox.wrong,
@@ -1441,6 +1442,7 @@ p.h2-bold {
     .questions .question-group .answers .answer-radio#birthyear-answer,
     .questions .question-group .answers .answer-checkbox#birthyear-answer,
     .questions .question-group .answers .answer#birthyear-answer {
+      min-width: 200px;
       padding-right: 1px;
       padding-left: 10px;
       text-align: left;
@@ -1467,7 +1469,7 @@ p.h2-bold {
         @media screen and (max-width: 768px) {
           .questions .question-group .answers .answer-radio i,
           .questions .question-group .answers .answer-checkbox i {
-            top: 4px; } }
+            top: 8px; } }
       .questions .question-group .answers .answer-radio input.answer,
       .questions .question-group .answers .answer-checkbox input.answer {
         display: inline-block;
@@ -1658,9 +1660,9 @@ p.h2-bold {
     transition: all 0.3s ease; }
   @media screen and (max-width: 768px) {
     .questions .next-answer {
-      font-size: 15px;
-      padding-top: 4px;
-      padding-bottom: 4px; } }
+      font-size: 18px;
+      padding-top: 8px;
+      padding-bottom: 8px; } }
 .questions .hint {
   width: 331px;
   margin: 40px auto 0px auto;
@@ -1892,7 +1894,8 @@ p.h2-bold {
             font-weight: lighter; }
             @media screen and (max-width: 768px) {
               .another-questions .questions-wrapper .another-question .another-question-header .left .question-description {
-                font-size: 10px; } }
+                font-size: 10px;
+                max-height: 54px; } }
         .another-questions .questions-wrapper .another-question .another-question-header .right {
           float: right;
           width: 40%;
@@ -4888,3 +4891,16 @@ p.h2-bold {
         font-size: 10px;
         padding: 6px 20px;
         margin-top: 10px; } }
+
+@media screen and (max-width: 768px) {
+  .page-questionnaire footer {
+    display: none; } }
+
+.vox-survey-title.fixed-t {
+  position: fixed;
+  background-color: white;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding: 20px 30px; }

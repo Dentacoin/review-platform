@@ -23,7 +23,7 @@
 				<div class="questions">
 
 					<div class="col-md-8 col-md-offset-2 clearfix">
-						<h1 class="questionnaire-title tac">
+						<h1 class="questionnaire-title tac vox-survey-title">
 							- {{ $vox->title }} -
 							@if($admin)
 								<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
@@ -99,7 +99,12 @@
 									What's your year of birth?
 								</div>
 								<div class="answers">
-									<input type="number" name="birthyear-answer" class="answer" id="birthyear-answer" min="{{ date('Y')-100 }}" max="{{ date('Y')-18 }}">
+									<select class="answer" name="birthyear-answer" id="birthyear-answer">
+	                            		<option value="">-</option>
+										@for($i=(date('Y')-18);$i>=(date('Y')-90);$i--)
+	                            			<option value="{{ $i }}">{{ $i }}</option>
+	                            		@endfor
+	                            	</select>
 								</div>
 
 								<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
