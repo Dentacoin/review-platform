@@ -938,14 +938,15 @@ class VoxesController extends AdminController
                 $users->where('created_at', '>=', new Carbon(request('date-from')));
             }
             if( request('date-to') ) {
-                $users->where('created_at', '>=', new Carbon(request('date-to')));
+                $users->where('created_at', '<=', new Carbon(request('date-to')));
             }
             if( request('country_id') ) {
                 $country_id = request('country_id');
                 $users->whereHas('user', function ($query) use ($country_id) {
-                    $query->where('country_id', $country_id);
+                    $query->whereIn('country_id', $country_id);
                 });
             }
+
             $users = $users->get();
 
             foreach ($users as $user) {

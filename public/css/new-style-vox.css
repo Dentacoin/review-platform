@@ -1367,7 +1367,8 @@ p.h2-bold {
         font-size: 14px;
         margin-bottom: 18px; } }
     .questions .question-group .question .tooltip-text {
-      font-size: 21px; }
+      font-size: 21px;
+      color: #41afff; }
       @media screen and (max-width: 768px) {
         .questions .question-group .question .tooltip-text {
           font-size: 14px; } }
