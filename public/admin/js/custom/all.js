@@ -111,6 +111,14 @@ $(document).ready(function(){
 	} );
 	*/
 
+
+	$('.custom-tabs .nav li a').click( function() {
+		$('.custom-tabs .nav li').removeClass('active');
+		$(this).parent().addClass('active');
+
+		$(this).closest('.custom-tabs').find('.tab-pane').removeClass('active in');
+		$(this).closest('.custom-tabs').find('.tab-pane.lang-'+$(this).attr('lang')).addClass('active in');
+	});
 	
 
 });

@@ -184,3 +184,11 @@ table.table .table-search {
 .col-60 {
     max-width: 60px;
 }
+
+.custom-tabs .tab-content .tab-pane {
+    display: none;
+}
+
+.custom-tabs .tab-content .tab-pane.active {
+    display: block;
+}

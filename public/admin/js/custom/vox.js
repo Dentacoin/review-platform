@@ -95,16 +95,16 @@ $(document).ready(function(){
 		var stats = $('.question-stats-input').val();
 		if(stats=='dependency') {
 			$('#stat_relations').show();
-			$('#stat_title').show();
+			$('.stat_title').show();
 			$('#stat_standard').hide();
 		} else if(stats=='standard') {
 			$('#stat_relations').hide();
-			$('#stat_title').show();
+			$('.stat_title').show();
 			$('#stat_standard').show();
 		} else {
 			$('#stat_standard').hide();
 			$('#stat_relations').hide();
-			$('#stat_title').hide();
+			$('.stat_title').hide();
 		}
 	}
 
