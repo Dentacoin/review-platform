@@ -482,10 +482,11 @@ class VoxesController extends AdminController
                 ->where('question_id', $question_id)
                 ->where('is_completed', 1)
                 ->where('is_skipped', 0)
+                ->where('answer', '!=', 0)
                 ->select('answer', DB::raw('count(*) as total'))
                 ->groupBy('answer')
                 ->get()
-                ->pluck('total')
+                ->pluck('total', 'answer')
                 ->toArray();
 
 
