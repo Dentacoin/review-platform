@@ -71,7 +71,7 @@
                                         @foreach(json_decode($question->{'answers:'.$code}, true) as $key => $ans)
                                             <div class="flex input-group">
                                                 <div class="col col-60">
-                                                    {{ $question_answers_count[$key] ?? '' }}
+                                                    {{ $question_answers_count[$key-1] ?? '' }}
                                                 </div>
                                                 <div class="col">
                                                     {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: 45%;')) }}
