@@ -455,20 +455,25 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 if ($validator->fails()) {
                     return Response::json(['success' => false, 'message' => trans('vox.page.profile.'.$this->current_subpage.'.failure') ] );
                 } else {
-                    $already = UserInvite::where([
+                    $invitation = UserInvite::where([
                         ['user_id', $this->user->id],
                         ['invited_email', 'LIKE', Request::Input('email')],
                     ])->first();
 
-                    if($already) {
-                        return Response::json(['success' => false, 'message' => trans('vox.page.profile.'.$this->current_subpage.'.already-invited') ] );                    
+                    if($invitation) {
+                        if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
+                            return Response::json(['success' => false, 'message' => trans('vox.page.profile.'.$this->current_subpage.'.already-invited') ] );
+                        }
+                        $invitation->invited_name = Request::Input('name');
+                        $invitation->created_at = Carbon::now();
+                        $invitation->save();
+                    } else {
+                        $invitation = new UserInvite;
+                        $invitation->user_id = $this->user->id;
+                        $invitation->invited_email = Request::Input('email');
+                        $invitation->invited_name = Request::Input('name');
+                        $invitation->save();
                     }
-
-                    $invitation = new UserInvite;
-                    $invitation->user_id = $this->user->id;
-                    $invitation->invited_email = Request::Input('email');
-                    $invitation->invited_name = Request::Input('name');
-                    $invitation->save();
 
                     //Mega hack
                     $dentist_name = $this->user->name;
