@@ -336,7 +336,7 @@ jQuery(document).ready(function($){
 
 	function fix_header(e){
 
-		if ( ($('header').outerHeight() - 20 < $(window).scrollTop()) ) {
+		if ( ($('header').outerHeight() - 40 < $(window).scrollTop()) ) {
 			$('header').addClass('fixed-header');
 		} else {
 			$('header').removeClass('fixed-header');

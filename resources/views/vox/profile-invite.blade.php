@@ -133,10 +133,10 @@
 					  	</div>
 						{!! Form::open(array('method' => 'post', 'class' => 'form-horizontal clearfix', 'id' => 'invite-patient-form' )) !!}
 							<div class="col-md-5">
-		                        {{ Form::text( 'name', '', array('class' => 'form-control', 'id' => 'invite-name', 'placeholder' => trans('vox.page.profile.invite.email-name') ) ) }}
+		                        {{ Form::text( 'name', '', array('class' => 'form-control', 'id' => 'invite-name', 'placeholder' => $user->is_dentist ? trans('vox.page.profile.invite.email-name') : trans('vox.page.profile.invite-dentist.email-name') ) ) }}
 							</div>
 							<div class="col-md-5">
-		                        {{ Form::text( 'email', '', array('class' => 'form-control', 'id' => 'invite-email', 'placeholder' => trans('vox.page.profile.invite.email-email') ) ) }}
+		                        {{ Form::text( 'email', '', array('class' => 'form-control', 'id' => 'invite-email', 'placeholder' => $user->is_dentist ? trans('vox.page.profile.invite.email-email') : trans('vox.page.profile.invite-dentist.email-email') ) ) }}
 							</div>
 							<div class="col-md-2">
 								{{ Form::submit( trans('vox.page.profile.invite.email-submit'), array('class' => 'form-control btn btn-primary nom' ) ) }}

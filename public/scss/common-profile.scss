@@ -559,9 +559,19 @@ table th[class*="col-"] {
 	    	margin-top: 0px;
 	    	display: block;
 	    	width: 100%;
+	    	text-align: center;
 
-			@media screen and (max-width: 992px) {
+	    	@media screen and (max-width: 992px) {
 				margin-top: 10px;
+			}
+
+			i {
+				display: inline-block;
+
+				@media screen and (max-width: 992px) {
+					vertical-align: middle;
+					margin-top: 0px;
+				}
 			}
 	    }
 
@@ -699,10 +709,12 @@ table th[class*="col-"] {
 			}
 
 			.step {
+				flex: 1;
 				
 				@media screen and (max-width: 992px) {
 			    	margin-bottom: 40px;
 			    	text-align: left;
+			    	flex: none;
 
 			    	.form-horizontal {
 			    		margin: 0px;
@@ -716,7 +728,7 @@ table th[class*="col-"] {
 				.number {
 					height: 57px;
 					width: 57px;
-					line-height: 57px;
+					line-height: 50px;
 					background: white;
 					border: 3px solid black;
 					text-align: center;
@@ -739,8 +751,19 @@ table th[class*="col-"] {
 					display: inline-block;
 					margin-top: 25px;
 					float: none;
+					min-width: 190px;
+					text-align: center;
+
 					@media screen and (max-width: 992px) {
 						margin-top: 10px;
+				    }
+				}
+
+				p {
+					min-height: 57px;
+
+					@media screen and (max-width: 992px) {
+						min-height: auto;
 				    }
 				}
 			}
@@ -751,6 +774,10 @@ table th[class*="col-"] {
 			@media screen and (max-width: 992px) {
 				margin-top: 0px;
 				clear: both;
+		    }
+
+		    form {
+		    	margin-top: 0px;
 		    }
 		}
 	}

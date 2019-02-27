@@ -5261,6 +5261,7 @@ p.h2-bold {
 		}
 	}
 
+
 	table {
 		a {
 			color: $main-color;
@@ -5491,6 +5492,10 @@ p.h2-bold {
 			@media screen and (max-width: 992px) {
 				margin-top: 10px;
 			}
+
+			i {
+				display: inline-block;
+			}
 	    }
 
 	    i {
@@ -5614,10 +5619,12 @@ p.h2-bold {
 			}
 
 			.step {
+				flex: 1;
 				
 				@media screen and (max-width: 992px) {
 			    	margin-bottom: 40px;
 			    	text-align: left;
+			    	flex: none;
 
 			    	.form-horizontal {
 			    		margin: 0px;
@@ -5625,6 +5632,12 @@ p.h2-bold {
 			    		input {
 			    			margin-top: 10px;
 			    		}
+			    	}
+			    }
+
+			    &:nth-child(2) {
+			    	p {
+			    		padding: 0px 10px;
 			    	}
 			    }
 
@@ -5654,6 +5667,9 @@ p.h2-bold {
 					display: inline-block;
 					margin-top: 25px;
 					float: none;
+					min-width: 220px;
+					text-align: center;
+
 					@media screen and (max-width: 992px) {
 						margin-top: 10px;
 				    }

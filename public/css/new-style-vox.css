@@ -4103,6 +4103,8 @@ p.h2-bold {
     @media screen and (max-width: 992px) {
       .page-profile .site-content .btn.nom {
         margin-top: 10px; } }
+    .page-profile .site-content .btn.nom i {
+      display: inline-block; }
   .page-profile .site-content .btn i {
     color: white;
     font-weight: normal; }
@@ -4183,40 +4185,47 @@ p.h2-bold {
       @media screen and (max-width: 992px) {
         .page-profile .site-content #invite-wrapper .steps:before {
           display: none; } }
-    @media screen and (max-width: 992px) {
-      .page-profile .site-content #invite-wrapper .steps .step {
-        margin-bottom: 40px;
-        text-align: left; }
-        .page-profile .site-content #invite-wrapper .steps .step .form-horizontal {
-          margin: 0px; }
-          .page-profile .site-content #invite-wrapper .steps .step .form-horizontal input {
+    .page-profile .site-content #invite-wrapper .steps .step {
+      flex: 1; }
+      @media screen and (max-width: 992px) {
+        .page-profile .site-content #invite-wrapper .steps .step {
+          margin-bottom: 40px;
+          text-align: left;
+          flex: none; }
+          .page-profile .site-content #invite-wrapper .steps .step .form-horizontal {
+            margin: 0px; }
+            .page-profile .site-content #invite-wrapper .steps .step .form-horizontal input {
+              margin-top: 10px; } }
+      .page-profile .site-content #invite-wrapper .steps .step:nth-child(2) p {
+        padding: 0px 10px; }
+      .page-profile .site-content #invite-wrapper .steps .step .number {
+        height: 57px;
+        width: 57px;
+        line-height: 57px;
+        background: white;
+        border: 3px solid black;
+        text-align: center;
+        font-size: 25px;
+        font-weight: bold;
+        color: black;
+        border-radius: 50%;
+        z-index: 10;
+        position: relative;
+        margin-bottom: 15px;
+        display: inline-block; }
+        @media screen and (max-width: 992px) {
+          .page-profile .site-content #invite-wrapper .steps .step .number {
+            float: left;
+            margin-right: 15px; } }
+      .page-profile .site-content #invite-wrapper .steps .step .btn {
+        display: inline-block;
+        margin-top: 25px;
+        float: none;
+        min-width: 220px;
+        text-align: center; }
+        @media screen and (max-width: 992px) {
+          .page-profile .site-content #invite-wrapper .steps .step .btn {
             margin-top: 10px; } }
-    .page-profile .site-content #invite-wrapper .steps .step .number {
-      height: 57px;
-      width: 57px;
-      line-height: 57px;
-      background: white;
-      border: 3px solid black;
-      text-align: center;
-      font-size: 25px;
-      font-weight: bold;
-      color: black;
-      border-radius: 50%;
-      z-index: 10;
-      position: relative;
-      margin-bottom: 15px;
-      display: inline-block; }
-      @media screen and (max-width: 992px) {
-        .page-profile .site-content #invite-wrapper .steps .step .number {
-          float: left;
-          margin-right: 15px; } }
-    .page-profile .site-content #invite-wrapper .steps .step .btn {
-      display: inline-block;
-      margin-top: 25px;
-      float: none; }
-      @media screen and (max-width: 992px) {
-        .page-profile .site-content #invite-wrapper .steps .step .btn {
-          margin-top: 10px; } }
   .page-profile .site-content #invite-wrapper .option-div {
     margin-top: 50px; }
     @media screen and (max-width: 992px) {

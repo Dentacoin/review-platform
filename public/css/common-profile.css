@@ -441,10 +441,17 @@ table th[class*="col-"] {
   .page-profile .site-content .btn.nom {
     margin-top: 0px;
     display: block;
-    width: 100%; }
+    width: 100%;
+    text-align: center; }
     @media screen and (max-width: 992px) {
       .page-profile .site-content .btn.nom {
         margin-top: 10px; } }
+    .page-profile .site-content .btn.nom i {
+      display: inline-block; }
+      @media screen and (max-width: 992px) {
+        .page-profile .site-content .btn.nom i {
+          vertical-align: middle;
+          margin-top: 0px; } }
   .page-profile .site-content .btn.compact {
     height: 20px;
     line-height: 20px;
@@ -534,46 +541,58 @@ table th[class*="col-"] {
       @media screen and (max-width: 992px) {
         .page-profile .site-content #invite-wrapper .steps:before {
           display: none; } }
-    @media screen and (max-width: 992px) {
-      .page-profile .site-content #invite-wrapper .steps .step {
-        margin-bottom: 40px;
-        text-align: left; }
-        .page-profile .site-content #invite-wrapper .steps .step .form-horizontal {
-          margin: 0px; }
-          .page-profile .site-content #invite-wrapper .steps .step .form-horizontal input {
+    .page-profile .site-content #invite-wrapper .steps .step {
+      flex: 1; }
+      @media screen and (max-width: 992px) {
+        .page-profile .site-content #invite-wrapper .steps .step {
+          margin-bottom: 40px;
+          text-align: left;
+          flex: none; }
+          .page-profile .site-content #invite-wrapper .steps .step .form-horizontal {
+            margin: 0px; }
+            .page-profile .site-content #invite-wrapper .steps .step .form-horizontal input {
+              margin-top: 10px; } }
+      .page-profile .site-content #invite-wrapper .steps .step .number {
+        height: 57px;
+        width: 57px;
+        line-height: 50px;
+        background: white;
+        border: 3px solid black;
+        text-align: center;
+        font-size: 25px;
+        font-weight: bold;
+        color: black;
+        border-radius: 50%;
+        z-index: 10;
+        position: relative;
+        margin-bottom: 15px;
+        display: inline-block; }
+        @media screen and (max-width: 992px) {
+          .page-profile .site-content #invite-wrapper .steps .step .number {
+            float: left;
+            margin-right: 15px; } }
+      .page-profile .site-content #invite-wrapper .steps .step .btn {
+        display: inline-block;
+        margin-top: 25px;
+        float: none;
+        min-width: 190px;
+        text-align: center; }
+        @media screen and (max-width: 992px) {
+          .page-profile .site-content #invite-wrapper .steps .step .btn {
             margin-top: 10px; } }
-    .page-profile .site-content #invite-wrapper .steps .step .number {
-      height: 57px;
-      width: 57px;
-      line-height: 57px;
-      background: white;
-      border: 3px solid black;
-      text-align: center;
-      font-size: 25px;
-      font-weight: bold;
-      color: black;
-      border-radius: 50%;
-      z-index: 10;
-      position: relative;
-      margin-bottom: 15px;
-      display: inline-block; }
-      @media screen and (max-width: 992px) {
-        .page-profile .site-content #invite-wrapper .steps .step .number {
-          float: left;
-          margin-right: 15px; } }
-    .page-profile .site-content #invite-wrapper .steps .step .btn {
-      display: inline-block;
-      margin-top: 25px;
-      float: none; }
-      @media screen and (max-width: 992px) {
-        .page-profile .site-content #invite-wrapper .steps .step .btn {
-          margin-top: 10px; } }
+      .page-profile .site-content #invite-wrapper .steps .step p {
+        min-height: 57px; }
+        @media screen and (max-width: 992px) {
+          .page-profile .site-content #invite-wrapper .steps .step p {
+            min-height: auto; } }
   .page-profile .site-content #invite-wrapper .option-div {
     margin-top: 50px; }
     @media screen and (max-width: 992px) {
       .page-profile .site-content #invite-wrapper .option-div {
         margin-top: 0px;
         clear: both; } }
+    .page-profile .site-content #invite-wrapper .option-div form {
+      margin-top: 0px; }
 .page-profile .site-content .profile-home-content {
   padding-top: 30px; }
   .page-profile .site-content .profile-home-content b {
