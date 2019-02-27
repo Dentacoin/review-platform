@@ -957,8 +957,8 @@ class VoxesController extends AdminController
                     $user->user->id,
                     $user->created_at->format('d.m.Y'),
                     $user->user->country ? $user->user->country->name : '',
-                    ( date('Y') - $user->user->birthyear ),
-                    $user->gender=='m' ? 'Male' : 'Female',
+                    $user->user->birthyear ? ( date('Y') - $user->user->birthyear ) : '',
+                    $user->user->gender ? ($user->user->gender=='m' ? 'Male' : 'Female') : '',
                 ];
 
                 $answers = VoxAnswer::where('user_id', $user->user->id)
