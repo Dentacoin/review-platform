@@ -3271,8 +3271,8 @@ p.h2-bold {
         position: static;
         opacity: 1;
         height: auto;
-        padding-top: 40px;
-        padding-bottom: 40px; } }
+        padding-top: 30px;
+        padding-bottom: 20px; } }
     @media screen and (max-width: 1080px) {
       .footer-expander footer .container {
         display: flex;
@@ -3286,7 +3286,8 @@ p.h2-bold {
         display: block;
         text-align: center;
         width: 100%;
-        margin-top: 25px; } }
+        margin-top: 25px;
+        display: none; } }
     .footer-expander footer .footer-logo img {
       width: 37px;
       height: 37px;
@@ -3307,7 +3308,7 @@ p.h2-bold {
           margin: 7px 0px 10px 0px; } }
       @media screen and (max-width: 768px) {
         .footer-expander footer .footer-menu {
-          margin: 0px 0px 20px 0px; } }
+          margin: 0px 0px 10px 0px; } }
       .footer-expander footer .footer-menu a {
         font-size: 13px;
         font-weight: 600;
@@ -3327,7 +3328,11 @@ p.h2-bold {
             display: inline-block;
             border-right: 1px solid black;
             padding: 0px 18px;
-            margin: 8px 0px; } }
+            margin: 8px 0px;
+            font-size: 15px; } }
+        @media screen and (max-width: 768px) {
+          .footer-expander footer .footer-menu a.privacy-item {
+            display: none; } }
         .footer-expander footer .footer-menu a:last-child {
           border-right: none;
           padding-right: 0px;
@@ -3352,7 +3357,7 @@ p.h2-bold {
         .footer-expander footer .socials {
           order: 1;
           font-size: 0px;
-          margin: 0px auto 25px auto; } }
+          margin: 0px auto 10px auto; } }
       .footer-expander footer .socials .social {
         display: block;
         float: right;
@@ -3385,6 +3390,17 @@ p.h2-bold {
         @media screen and (max-width: 768px) {
           .footer-expander footer .socials .social:first-child {
             margin-left: 15px; } }
+    .footer-expander footer .privacy-item-mobile {
+      display: none;
+      order: 4;
+      width: 100%;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: bold; }
+      @media screen and (max-width: 768px) {
+        .footer-expander footer .privacy-item-mobile {
+          display: block; } }
   .footer-expander:hover footer {
     opacity: 1;
     bottom: 0px; }

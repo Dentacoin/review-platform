@@ -347,9 +347,9 @@
 					<div class="footer-text col-md-6 tac">
 						<div class="footer-menu">
 							<a href="{{ getLangUrl('faq') }}">{{ trans('vox.footer.faq') }}</a>
-							<a href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
-							<a href="https://reviews.dentacoin.com/" target="_blank">{{ trans('vox.footer.trp') }}</a>
+							<a class="privacy-item" href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
 							<a href="https://dentacare.dentacoin.com/" target="_blank">{{ trans('vox.footer.dentacare') }}</a>
+							<a href="https://reviews.dentacoin.com/" target="_blank">{{ trans('vox.footer.trp') }}</a>
 						</div>
 						<small>
 							{{ trans('vox.footer.copyrights') }}
@@ -361,6 +361,7 @@
 						<a class="social" href="https://t.me/dentacoin" target="_blank"><i class="fab fa-telegram-plane"></i></a>
 						<a class="social" href="https://www.facebook.com/DentaVox-1578351428897849/" target="_blank"><i class="fab fa-facebook-f"></i></a>
 					</div>
+					<a class="privacy-item-mobile" href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
 				</div>
 			</footer>
 		</div>

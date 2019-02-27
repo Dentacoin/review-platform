@@ -4323,8 +4323,8 @@ p.h2-bold {
 			position: static;
 			opacity: 1;
 			height: auto;
-			padding-top: 40px;
-			padding-bottom: 40px;
+			padding-top: 30px;
+			padding-bottom: 20px;
 		}
 
 		.container {
@@ -4347,6 +4347,7 @@ p.h2-bold {
 			    text-align: center;
 			    width: 100%;
 			    margin-top: 25px;
+			    display: none;
 			}
 
 			img {
@@ -4379,7 +4380,7 @@ p.h2-bold {
 				margin: 7px 0px 10px 0px;
 			}
 			@media #{$phone} {
-				margin: 0px 0px 20px 0px;
+				margin: 0px 0px 10px 0px;
 			}
 
 			a {
@@ -4390,7 +4391,6 @@ p.h2-bold {
 				border-right: 1px solid black;
 				color: black;
 				transition: all 0.3s ease;
-
 
 				@media #{$tablet} {
 					display: block;
@@ -4404,6 +4404,13 @@ p.h2-bold {
 					border-right: 1px solid black;
     				padding: 0px 18px;
     				margin: 8px 0px;
+    				font-size: 15px;
+				}
+
+				&.privacy-item {
+					@media #{$phone} {
+						display: none;
+					}
 				}
 
 
@@ -4440,7 +4447,7 @@ p.h2-bold {
 			@media #{$phone} {
 				order: 1;
 				font-size: 0px;
-				margin: 0px auto 25px auto;
+				margin: 0px auto 10px auto;
 			}
 
 			.social {
@@ -4487,6 +4494,20 @@ p.h2-bold {
 						margin-left: 15px;
 					}
 				}
+			}
+		}
+
+		.privacy-item-mobile {
+			display: none;			
+			order: 4;
+			width: 100%;
+			text-align: center;
+			margin-top: 10px;
+			font-size: 12px;
+			font-weight: bold;
+
+			@media #{$phone} {
+				display: block;
 			}
 		}
 	}
