@@ -994,6 +994,11 @@ p.h2-bold {
       @media screen and (max-width: 1130px) {
         .section-recent-surveys .swiper-slide .vox-header .second-flex {
           display: block; } }
+      .section-recent-surveys .swiper-slide .vox-header .second-flex .left {
+        min-width: 70%; }
+        @media screen and (max-width: 1600px) {
+          .section-recent-surveys .swiper-slide .vox-header .second-flex .left {
+            min-width: 60%; } }
     .section-recent-surveys .swiper-slide .vox-header .col {
       padding: 0px; }
     .section-recent-surveys .swiper-slide .vox-header .left {
@@ -1007,13 +1012,17 @@ p.h2-bold {
           .section-recent-surveys .swiper-slide .vox-header .left h4 {
             font-size: 13px; } }
       .section-recent-surveys .swiper-slide .vox-header .left .vox-description {
-        font-size: 13px;
+        font-size: 15px;
         color: #060606;
         text-overflow: ellipsis;
-        max-height: 74px;
+        max-height: 104px;
         overflow: hidden;
         font-weight: lighter;
         padding-right: 20px; }
+        @media screen and (max-width: 1600px) {
+          .section-recent-surveys .swiper-slide .vox-header .left .vox-description {
+            font-size: 13px;
+            max-height: 74px; } }
         @media screen and (max-width: 768px) {
           .section-recent-surveys .swiper-slide .vox-header .left .vox-description {
             font-size: 10px;
@@ -1024,6 +1033,10 @@ p.h2-bold {
       font-size: 14px;
       font-weight: 600;
       color: #070707; }
+      @media screen and (max-width: 1600px) {
+        .section-recent-surveys .swiper-slide .vox-header .right span,
+        .section-recent-surveys .swiper-slide .vox-header .right p {
+          font-size: 11px; } }
       @media screen and (max-width: 768px) {
         .section-recent-surveys .swiper-slide .vox-header .right span,
         .section-recent-surveys .swiper-slide .vox-header .right p {

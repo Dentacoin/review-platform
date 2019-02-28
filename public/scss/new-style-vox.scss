@@ -1350,6 +1350,14 @@ p.h2-bold {
 				@media screen and (max-width: 1130px) {
 					display: block;
 				}
+
+				.left {
+					min-width: 70%;
+
+					@media screen and (max-width: 1600px) {
+				    	min-width: 60%;
+				    }
+				}
 			}
 
 			.col {
@@ -1371,13 +1379,18 @@ p.h2-bold {
 				}
 
 				.vox-description {
-					font-size: 13px;
+					font-size: 15px;
 				    color: #060606;
 				    text-overflow: ellipsis;
-				    max-height: 74px;
+				    max-height: 104px;
 				    overflow: hidden;
 				    font-weight: lighter;
 				    padding-right: 20px;
+
+				    @media screen and (max-width: 1600px) {
+				    	font-size: 13px;
+				    	max-height: 74px;
+				    }
 
 					@media #{$phone} {
 						font-size: 10px;
@@ -1393,6 +1406,10 @@ p.h2-bold {
 					font-size: 14px;
 					font-weight: 600;
 					color: #070707;
+
+					@media screen and (max-width: 1600px) {
+				    	font-size: 11px;
+				    }
 				
 					@media #{$phone} {
 						font-size: 10px;

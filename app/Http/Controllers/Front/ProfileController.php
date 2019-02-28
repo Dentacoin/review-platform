@@ -391,35 +391,41 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     } else {
                         $email = $inv_arr[0];
                     }
-                    $already = UserInvite::where([
+                    $invitation = UserInvite::where([
                         ['user_id', $this->user->id],
                         ['invited_email', 'LIKE', $email],
                     ])->first();
 
-                    if(!$already) {
+                    if($invitation) {
+                        if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
+                            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited') ] );
+                        }
+                        $invitation->invited_name = $name;
+                        $invitation->created_at = Carbon::now();
+                        $invitation->save();
+                    } else {
                         $invitation = new UserInvite;
                         $invitation->user_id = $this->user->id;
                         $invitation->invited_email = $email;
                         $invitation->invited_name = $name;
                         $invitation->save();
-
-                        //Mega hack
-                        $dentist_name = $this->user->name;
-                        $dentist_email = $this->user->email;
-                        $this->user->name = '';
-                        $this->user->email = $email;
-                        $this->user->save();
-
-                        $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17, [
-                            'friend_name' => $dentist_name,
-                            'invitation_id' => $invitation->id
-                        ]);
-
-                        //Back to original
-                        $this->user->name = $dentist_name;
-                        $this->user->email = $dentist_email;
-                        $this->user->save();
                     }
+                    //Mega hack
+                    $dentist_name = $this->user->name;
+                    $dentist_email = $this->user->email;
+                    $this->user->name = '';
+                    $this->user->email = $email;
+                    $this->user->save();
+
+                    $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17, [
+                        'friend_name' => $dentist_name,
+                        'invitation_id' => $invitation->id
+                    ]);
+
+                    //Back to original
+                    $this->user->name = $dentist_name;
+                    $this->user->email = $dentist_email;
+                    $this->user->save();
 
                 }
 
