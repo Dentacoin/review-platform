@@ -317,35 +317,39 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
 
         $schedule->call(function () {
             $users = User::where('is_dentist', '1')->where('status', 'pending')->where('created_at', '<', Carbon::now()->subDays(7) )->get();
-            $userNames = [];
 
-            foreach ($users as $user) {
-                $userNames[] = $user->getName();
+            if (count($users)) {
+                $userNames = [];
 
-                $user->status=='rejected';
-                $user->save();
-                $user->deleteActions();
-                User::destroy( $user->id );
+                foreach ($users as $user) {
+                    $userNames[] = $user->getName();
+
+                    $user->status=='rejected';
+                    $user->save();
+                    $user->deleteActions();
+                    User::destroy( $user->id );
+                }
+
+
+                $mtext = 'We just deleted the following dentists, because they were suspicious for over a week:
+
+                '.implode(', ', $userNames ).'
+
+                ';
+
+                Mail::raw($mtext, function ($message) {
+
+                    $receiver = 'ali.hashem@dentacoin.com';
+                    $sender = config('mail.from.address');
+                    $sender_name = config('mail.from.name');
+
+                    $message->from($sender, $sender_name);
+                    $message->to( $receiver );
+                    //$message->to( 'dokinator@gmail.com' );
+                    $message->subject('Suspicios dentists deleted');
+                });
             }
-
-
-            $mtext = 'We just deleted the following dentists, because they were suspicious for over a week:
-
-            '.implode(', ', $userNames ).'
-
-            ';
-
-            Mail::raw($mtext, function ($message) {
-
-                $receiver = 'ali.hashem@dentacoin.com';
-                $sender = config('mail.from.address');
-                $sender_name = config('mail.from.name');
-
-                $message->from($sender, $sender_name);
-                $message->to( $receiver );
-                //$message->to( 'dokinator@gmail.com' );
-                $message->subject('Suspicios dentists deleted');
-            });
+            
         })->cron("30 7 * * *"); //10:30h BG Time
     }
 

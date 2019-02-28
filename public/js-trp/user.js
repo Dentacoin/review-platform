@@ -140,9 +140,15 @@ $(document).ready(function(){
             }
 
             if (window.innerWidth > 768) {
-                var draggable = false;
+                var draggable_gallery = false;
             } else {
-                 var draggable = true;
+                 var draggable_gallery = true;
+            }
+
+            if (window.innerWidth > 992) {
+                var draggable_team = false;
+            } else {
+                 var draggable_team = true;
             }
 
 
@@ -153,7 +159,7 @@ $(document).ready(function(){
                 pageDots: true,
                 freeScroll: true,
                 groupCells: 1,
-                draggable: draggable,
+                draggable: draggable_gallery,
             });
 
             galleryFlickty.resize();
@@ -165,7 +171,7 @@ $(document).ready(function(){
                 pageDots: false,
                 freeScroll: true,
                 groupCells: 1,
-                draggable: draggable,
+                draggable: draggable_team,
             });
 
             teamFlickity.resize();
@@ -378,22 +384,40 @@ $(document).ready(function(){
 
             $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
 
-            $.post( 
-                $(this).attr('action'), 
-                $(this).serialize() , 
-                (function( data ) {
+
+            var formData = new FormData();
+
+            var this_file = $(this).find('input[name="image"]')[0].files[0];
+            // add assoc key values, this will be posts values
+            formData.append("_token", $(this).find('input[name="_token"]').val());
+            formData.append("image", this_file, this_file.name);
+            formData.append("name", $(this).find('.invite-name').val());
+            formData.append("email", $(this).find('.invite-email').val());
+
+
+            $.ajax({
+                type: "POST",
+                url: $(this).attr('action'),
+                success: function (data) {
                     if(data.success) {
-                        $(this).find('.invite-email').val('');
-                        $(this).find('.invite-name').val('').focus();
-                        $(this).find('.invite-alert').show().addClass('alert-success').html(data.message);
+                        $('.invite-patient-form').find('.invite-email').val('');
+                        $('.invite-patient-form').find('.invite-name').val('').focus();
+                        $('.invite-patient-form').find('.invite-alert').show().addClass('alert-success').html(data.message);
                     } else {
-                        $(this).find('.invite-alert').show().addClass('alert-warning').html(data.message);                    
+                        $('.invite-patient-form').find('.invite-alert').show().addClass('alert-warning').html(data.message);                    
                     }
                     ajax_is_running = false;
-                }).bind(this), "json"
-            );
-
-            return false;
+                },
+                error: function (error) {
+                    console.log('error');
+                },
+                async: true,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                timeout: 60000
+            });
         } );
     }
 
@@ -460,7 +484,6 @@ $(document).ready(function(){
 
     //Gallery upload
     $('#add-gallery-photo').change( function() {
-        console.log('bbb');
         if(ajax_is_running) {
             return;
         }

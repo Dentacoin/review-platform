@@ -40,8 +40,15 @@
 				 
 			</p>
 
-			{!! Form::open(array('method' => 'post', 'class' => 'search-dentist-form invite-patient-form', 'url' => getLangUrl('profile/invite-new') )) !!}
+			{!! Form::open(array('method' => 'post', 'files'=> true, 'class' => 'search-dentist-form invite-patient-form', 'url' => getLangUrl('profile/invite-new') )) !!}
+				{!! csrf_field() !!}
 				<div class="flex">
+					<div class="col">
+						<label for="add-invite-image">
+							Add image
+							<input type="file" name="image" id="add-invite-image">
+						</label>
+					</div>
 					<div class="col">
 						<input type="text" name="name" placeholder="{!! nl2br(trans('trp.popup.add-team-popup.name')) !!}" class="input invite-name">
 					</div>

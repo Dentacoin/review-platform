@@ -978,6 +978,30 @@
 						    	</div>
 							</a>
 						@endforeach
+
+						@if($item->invites->isNotEmpty())
+				        	@foreach( $item->invites as $invite)
+				        		@if(!$invite->invited_id)
+									<a class="slider-wrapper" href="javascript:;" dentist-id="{{ $invite->invited_id }}">
+										<div class="slider-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')"></div>
+									    <div class="slider-container">
+									    	<h4>{{ $invite->invited_name }}</h4>
+										    <div class="ratings">
+												<div class="stars">
+													<div class="bar" style="width: 0%;">
+													</div>
+												</div>
+												<span class="rating">
+													(0 reviews)
+												</span>
+											</div>
+									    </div>
+								    	<div class="flickity-buttons clearfix">
+								    	</div>
+									</a>
+								@endif
+							@endforeach
+						@endif
 					</div>
 				</div>
 

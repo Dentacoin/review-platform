@@ -32,13 +32,13 @@
                         </div>
                         <div class="col-md-6">
                             <select class="form-control" name="country_id[]" multiple style="min-height: 300px;">
-                                <option value="">All countries</option>
                                 @foreach(\App\Models\Country::get() as $country)
-                                    <option value="{{ $country->id }}" code="{{ $country->code }}" >{{ $country->name }}</option>
+                                    <option value="{{ $country->id }}" >{{ $country->name }}</option>
                                 @endforeach
                             </select>
                             <p style="margin-top: 5px;">
-                                * Hold down the control (ctrl) button to select multiple options
+                                * Hold down the control (ctrl) button to select multiple options <br>
+                                * If you want to select all countries, don't select anything
                             </p>
                         </div>
                     </div>
