@@ -63,7 +63,7 @@
                     </div>
 
                     @foreach($langs as $code => $lang_info)
-                        <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} ">
+                        <div class="tab-pane questions-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}" lang="{{ $code }}">
                             <div class="form-group answers-group">
                                 <h3 class="col-md-2" style="margin-top: 0px;">{{ trans('admin.page.'.$current_page.'.question-answers') }}</h3>
                                 <div class="col-md-10 answers-list answers-draggable">
