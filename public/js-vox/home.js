@@ -13,7 +13,7 @@ $(document).ready(function(){
 		var sort = $('.sort-menu a.active').attr('sort');
 		var sort_element = $('.sort-menu a.active');
 		var wrapper = $('.questions-inner');
-		var list = wrapper.children('.another-question');
+		var list = wrapper.children();
 
 		if (sort == 'taken') {
 			list.hide().attr("found", 0);
@@ -123,10 +123,10 @@ $(document).ready(function(){
 	var handleSearch = function() {
 		$('.sort-menu a.active').removeClass('active');
 
-		$('.another-question').show().attr("found", 1);;
+		$('.swiper-slide').show().attr("found", 1);;
 
 		if ($('#survey-search').val().length > 3) {
-			$('.another-question').each( function() {
+			$('.swiper-slide').each( function() {
 				if( $(this).find('.survey-title').text().toLowerCase().indexOf($('#survey-search').val().toLowerCase()) == -1) {
 					$(this).hide().attr("found", 0);
 				}
@@ -134,14 +134,14 @@ $(document).ready(function(){
 		}
 
 		if( $('#surveys-categories').val() != 'all' ) {
-			$('.another-question').each( function() {
+			$('.swiper-slide').each( function() {
 				if(!$(this).find('.survey-cat[cat-id="'+ $('#surveys-categories').val() +'"]').length) {
 					$(this).hide().attr("found", 0);
 				}
 			});
 		}
 
-		if ( !$('.another-question:visible').length ) {
+		if ( !$('.swiper-slide:visible').length ) {
 			$('#survey-not-found').show();
 		} else {
 			$('#survey-not-found').hide();
@@ -152,12 +152,12 @@ $(document).ready(function(){
 
 	var setupPagination = function() {
 		$('#survey-more').hide();
-		var total = $('.another-question:visible').length;
-		if(total>5) {
+		var total = $('.swiper-slide:visible').length;
+		if(total>6) {
 			var i=0;
-			$('.another-question:visible').each( function() {
+			$('.swiper-slide:visible').each( function() {
 				i++;
-				if(i>5) {
+				if(i>6) {
 					$(this).hide();
 				}
 			} );
@@ -205,14 +205,14 @@ $(document).ready(function(){
 
 	$('#survey-more').click( function() {
 		var i=0;
-		$('.another-question[found="1"]:not(:visible)').each( function() {
+		$('.swiper-slide[found="1"]:not(:visible)').each( function() {
 			i++;
-			if(i<=5) {
+			if(i<=6) {
 				$(this).show();
 			}
 		} );
 
-		if( !$('.another-question[found="1"]:not(:visible)').length ) {
+		if( !$('.swiper-slide[found="1"]:not(:visible)').length ) {
 			$(this).hide();
 		}
 

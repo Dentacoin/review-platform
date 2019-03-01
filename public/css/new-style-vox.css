@@ -963,6 +963,16 @@ p.h2-bold {
         height: 20px;
         right: 0px;
         bottom: -12px; } }
+  .section-recent-surveys .swiper-slide .done-img {
+    position: absolute;
+    width: 92px;
+    height: 92px;
+    right: -5px;
+    top: -5px; }
+    @media screen and (max-width: 768px) {
+      .section-recent-surveys .swiper-slide .done-img {
+        width: 61px;
+        height: 61px; } }
   .section-recent-surveys .swiper-slide .survey-cats {
     margin-bottom: 25px;
     flex: 1; }
@@ -1831,127 +1841,51 @@ p.h2-bold {
     @media screen and (max-width: 768px) {
       .another-questions h1 {
         font-size: 15px; } }
-  .another-questions .questions-wrapper {
-    max-width: 500px;
-    margin: 0 auto; }
-    .another-questions .questions-wrapper .questions-inner {
-      position: relative;
-      padding: 20px 0px; }
-    .another-questions .questions-wrapper .give-me-more {
-      font-size: 13px;
-      font-weight: 500;
-      color: #b7dffa;
-      text-align: center;
-      padding-bottom: 15px;
-      background: url(../new-vox-img/down-blue.png) 50% 100% no-repeat;
-      display: block;
-      margin-bottom: 30px; }
-    .another-questions .questions-wrapper .another-question {
-      position: relative;
-      background-color: #d3ebfb;
-      width: 430px;
-      padding: 15px 25px 20px 25px;
-      margin: 0px auto 30px auto;
-      border-radius: 10px; }
-      @media screen and (max-width: 768px) {
-        .another-questions .questions-wrapper .another-question {
-          padding: 17px 15px;
-          width: 100%; } }
-      .another-questions .questions-wrapper .another-question img {
-        position: absolute;
-        right: -27px;
-        top: -22px; }
-        @media screen and (max-width: 768px) {
-          .another-questions .questions-wrapper .another-question img {
-            width: 20px;
-            height: 20px;
-            right: -10px;
-            top: -8px; } }
-      .another-questions .questions-wrapper .another-question .another-question-header {
-        position: relative; }
-        .another-questions .questions-wrapper .another-question .another-question-header .left {
-          float: left;
-          width: 60%;
-          text-align: left; }
-          @media screen and (max-width: 768px) {
-            .another-questions .questions-wrapper .another-question .another-question-header .left {
-              width: calc(100% - 100px); } }
-          .another-questions .questions-wrapper .another-question .another-question-header .left .survey-cats {
-            margin-bottom: 25px; }
-            @media screen and (max-width: 768px) {
-              .another-questions .questions-wrapper .another-question .another-question-header .left .survey-cats {
-                margin-bottom: 10px; } }
-            .another-questions .questions-wrapper .another-question .another-question-header .left .survey-cats span {
-              color: #50ade8;
-              font-size: 11px;
-              border: 1px solid #50ade8;
-              padding: 2px 10px;
-              border-radius: 10px;
-              font-weight: 600;
-              margin-top: 10px;
-              display: inline-block;
-              cursor: pointer; }
-          .another-questions .questions-wrapper .another-question .another-question-header .left h4 {
-            color: #060606;
-            text-transform: uppercase;
-            font-weight: bold; }
-            @media screen and (max-width: 768px) {
-              .another-questions .questions-wrapper .another-question .another-question-header .left h4 {
-                font-size: 13px; } }
-          .another-questions .questions-wrapper .another-question .another-question-header .left .question-description {
-            font-size: 13px;
-            color: #060606;
-            text-overflow: ellipsis;
-            max-height: 74px;
-            overflow: hidden;
-            font-weight: lighter; }
-            @media screen and (max-width: 768px) {
-              .another-questions .questions-wrapper .another-question .another-question-header .left .question-description {
-                font-size: 10px;
-                max-height: 54px; } }
-        .another-questions .questions-wrapper .another-question .another-question-header .right {
-          float: right;
-          width: 40%;
-          margin-top: 3px;
-          text-align: right; }
-          @media screen and (max-width: 768px) {
-            .another-questions .questions-wrapper .another-question .another-question-header .right {
-              margin-top: 0px;
-              width: 100px; } }
-          .another-questions .questions-wrapper .another-question .another-question-header .right span,
-          .another-questions .questions-wrapper .another-question .another-question-header .right p {
-            display: inline-block;
-            font-size: 14px;
-            font-weight: 600;
-            color: #070707; }
-            @media screen and (max-width: 768px) {
-              .another-questions .questions-wrapper .another-question .another-question-header .right span,
-              .another-questions .questions-wrapper .another-question .another-question-header .right p {
-                font-size: 10px; } }
-          .another-questions .questions-wrapper .another-question .another-question-header .right span {
-            border-right: 1px solid #070707;
+  .another-questions .section-recent-surveys .questions-inner {
+    position: relative;
+    padding: 20px 0px;
+    max-width: 1040px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: left; }
+    .another-questions .section-recent-surveys .questions-inner .swiper-slide {
+      width: 460px;
+      margin-left: 30px;
+      margin-right: 30px;
+      margin-bottom: 50px; }
+      @media (max-width: 1200px) {
+        .another-questions .section-recent-surveys .questions-inner .swiper-slide {
+          width: 430px;
+          margin-left: 20px;
+          margin-right: 20px; } }
+      @media (max-width: 992px) {
+        .another-questions .section-recent-surveys .questions-inner .swiper-slide {
+          width: 320px; } }
+      @media (max-width: 768px) {
+        .another-questions .section-recent-surveys .questions-inner .swiper-slide {
+          width: 100%;
+          margin-left: 0;
+          margin-right: 0; } }
+      .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner {
+        padding: 0px; }
+        .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header {
+          padding: 10px; }
+          .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header .right .btns a {
+            padding-left: 5px;
             padding-right: 5px; }
-          .another-questions .questions-wrapper .another-question .another-question-header .right .btns {
-            position: absolute;
-            right: 0px;
-            bottom: 0px; }
-            .another-questions .questions-wrapper .another-question .another-question-header .right .btns a {
-              font-size: 13px;
-              display: block;
-              margin-top: 10px; }
-              @media screen and (max-width: 768px) {
-                .another-questions .questions-wrapper .another-question .another-question-header .right .btns a {
-                  padding: 7px 10px;
-                  font-size: 10px; } }
-    .another-questions .questions-wrapper .another-question.active {
-      width: 390px;
-      opacity: 1; }
-      @media screen and (max-width: 992px) {
-        .another-questions .questions-wrapper .another-question.active {
-          width: 365px; } }
-      @media screen and (max-width: 768px) {
-        .another-questions .questions-wrapper .another-question.active {
-          width: 90%; } }
+          .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header .left h4 {
+            font-size: 18px; }
+  .another-questions .section-recent-surveys .give-me-more {
+    font-size: 13px;
+    font-weight: 500;
+    color: #b7dffa;
+    text-align: center;
+    padding-bottom: 15px;
+    background: url(../new-vox-img/down-blue.png) 50% 100% no-repeat;
+    display: block;
+    margin-bottom: 30px; }
 
 .page-stats h1 {
   font-size: 25px;

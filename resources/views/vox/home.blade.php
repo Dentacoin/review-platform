@@ -39,41 +39,66 @@
 					{{ Form::select('category', ['all' => 'All'] + $vox_categories, null , ['id' => 'surveys-categories']) }} 
 				</div>
 			</div>
-			<div class="questions-wrapper" id="questions-wrapper">
+			<div class="section-recent-surveys" id="questions-wrapper">
 				<div class="questions-inner" id="questions-inner">
 					@foreach( $voxes as $vox)
-						<div class="another-question" featured="{{ intval($vox->featured) }}" published="{{ $vox->created_at->timestamp }}" sort-order="{{ $vox->sort_order }}" popular="{{ intval($vox->rewards()->count()) }}" dcn="{{ intval($vox->getRewardTotal()) }}" duration="{{ ceil( $vox->questions()->count()/6 ) }}" taken="{{ intval(!in_array($vox->id, $taken) ? 0 : 1) }}">
-							@if($vox->featured)
-								<img src="{{ url('new-vox-img/star.png') }}">
-							@endif
-							<div class="another-question-header clearfix">
-								<div class="left">
-									<h4 class="survey-title bold">{{ $vox->title }}</h4>
-									<div class="survey-cats"> 
-										@foreach( $vox->categories as $c)
-											<span class="survey-cat" cat-id="{{ $c->category->id }}">{{ $c->category->name }}</span>
-										@endforeach
+				      	<div class="swiper-slide"
+			      			featured="{{ intval($vox->featured) }}" 
+			      			published="{{ $vox->created_at->timestamp }}" 
+			      			sort-order="{{ $vox->sort_order }}" 
+			      			popular="{{ intval($vox->rewards()->count()) }}" 
+			      			dcn="{{ intval($vox->getRewardTotal()) }}" 
+			      			duration="{{ ceil( $vox->questions()->count()/6 ) }}" 
+			      			taken="{{ intval(!in_array($vox->id, $taken) ? 0 : 1) }}"
+			      			>
+				      		<div class="slider-inner">
+					    		<div class="slide-padding">
+					      			<div class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}'>
+					      				@if($vox->featured)
+					      					<img class="featured-img" src="{{ url('new-vox-img/star.png') }}">
+					      				@endif
+					      				@if(in_array($vox->id, $taken))
+					      					<img class="done-img" src="{{ url('new-vox-img/vox-done.png') }}">
+					      				@endif
+					      			</div>							
+									<div class="vox-header clearfix">
+										<div class="flex first-flex">
+											<div class="col left">
+												<h4 class="survey-title bold">{{ $vox->title }}</h4>
+											</div>
+											<div class="col right">
+												<span class="bold">{{ !empty($vox->complex) ? 'max ' : '' }} {{ $vox->getRewardTotal() }} DCN</span>
+												<p>{{ $vox->formatDuration() }}</p>
+											</div>					
+										</div>
+										<div class="survey-cats"> 
+											@foreach( $vox->categories as $c)
+												<span class="survey-cat" cat-id="{{ $c->category->id }}">{{ $c->category->name }}</span>
+											@endforeach
+										</div>
+										<div class="flex second-flex">
+											<div class="col left">
+												<p class="vox-description">{{ $vox->description }}</p>
+											</div>
+											<div class="col right">
+												<div class="btns">
+													@if($vox->has_stats)
+													<a class="statistics blue-button secondary" href="{{ $vox->getStatsList() }}">
+														{{ trans('vox.common.check-statictics') }}
+													</a>
+													@endif
+													@if(!in_array($vox->id, $taken))
+														<a class="opinion blue-button" href="{{ $vox->getLink() }}">
+															{{ trans('vox.common.take-the-test') }}
+														</a>
+													@endif
+												</div>
+											</div>
+										</div>
 									</div>
-									<p class="question-description">{{ $vox->description }}</p>										
-								</div>
-								<div class="right">
-									<span class="bold">{{ !empty($vox->complex) ? 'max ' : '' }} {{ $vox->getRewardTotal() }} DCN</span>
-									<p>{{ $vox->formatDuration() }}</p>
-									<div class="btns">
-										@if($vox->has_stats)
-										<a class="statistics blue-button secondary" href="{{ $vox->getStatsList() }}">
-											{{ trans('vox.common.check-statictics') }}
-										</a>
-										@endif
-										@if(!in_array($vox->id, $taken))
-											<a class="opinion blue-button" href="{{ $vox->getLink() }}">
-												{{ trans('vox.common.take-the-test') }}
-											</a>
-										@endif
-									</div>
-								</div>
-							</div>
-						</div>
+						      	</div>
+					      	</div>
+					    </div>
 					@endforeach
 				</div>
 
