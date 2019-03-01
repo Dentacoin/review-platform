@@ -3949,6 +3949,19 @@ p.h2-bold {
   color: #38ace5; }
   .page-profile .site-content table a:hover {
     text-decoration: underline; }
+@media screen and (max-width: 768px) {
+  .page-profile .site-content .back-to-site {
+    display: none; } }
+.page-profile .site-content .back-to-site a {
+  color: #9d9d9d;
+  border-color: #9d9d9d;
+  background: transparent;
+  display: block;
+  text-align: center;
+  margin-top: 20px; }
+  .page-profile .site-content .back-to-site a:hover {
+    color: #2196F3;
+    border-color: #2196F3; }
 .page-profile .site-content .profile-menu {
   border: 1px solid #f3f3f3;
   box-shadow: 0px 0px 10px 2px #f3f3f3;

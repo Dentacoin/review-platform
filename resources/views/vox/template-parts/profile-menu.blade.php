@@ -24,3 +24,12 @@
 		</a>
 	</div>
 </div>
+
+<div class="back-to-site">
+	<a class="blue-button" href="{{ getLangUrl('/') }}">
+		{{ trans('vox.page.profile.menu.extra.take-surveys') }}
+	</a>
+	<a  class="blue-button" href="{{ getLangUrl('dental-survey-stats') }}">
+		{{ trans('vox.page.profile.menu.extra.check-stats') }}
+	</a>
+</div>
