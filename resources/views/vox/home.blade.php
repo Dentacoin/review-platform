@@ -42,7 +42,7 @@
 			<div class="questions-wrapper" id="questions-wrapper">
 				<div class="questions-inner" id="questions-inner">
 					@foreach( $voxes as $vox)
-						<div class="another-question" featured="{{ intval($vox->featured) }}" published="{{ $vox->created_at->timestamp }}" popular="{{ intval($vox->rewards()->count()) }}" dcn="{{ intval($vox->getRewardTotal()) }}" duration="{{ ceil( $vox->questions()->count()/6 ) }}" taken="{{ intval(!in_array($vox->id, $taken) ? 0 : 1) }}">
+						<div class="another-question" featured="{{ intval($vox->featured) }}" published="{{ $vox->created_at->timestamp }}" sort-order="{{ $vox->sort_order }}" popular="{{ intval($vox->rewards()->count()) }}" dcn="{{ intval($vox->getRewardTotal()) }}" duration="{{ ceil( $vox->questions()->count()/6 ) }}" taken="{{ intval(!in_array($vox->id, $taken) ? 0 : 1) }}">
 							@if($vox->featured)
 								<img src="{{ url('new-vox-img/star.png') }}">
 							@endif

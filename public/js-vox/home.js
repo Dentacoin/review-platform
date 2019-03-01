@@ -63,7 +63,7 @@ $(document).ready(function(){
 
 			if(sort=='newest') {
 				list.sort(function(a, b) {
-					if( parseInt($(a).attr('published')) > parseInt($(b).attr('published')) ) {
+					if( parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ) {
 						return -1;
 					} else {
 						return 1;
