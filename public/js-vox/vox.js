@@ -445,7 +445,7 @@ $(document).ready(function(){
 
     if (window.innerWidth > 768) {
         $(window).on('scroll', function() {
-            if ($(window).scrollTop() >= $('.question-group:visible').find('.static-titles').offset().top ) {
+            if ( $('.question-group:visible').find('.static-titles').length && $(window).scrollTop() >= $('.question-group:visible').find('.static-titles').offset().top ) {
                 $('.question-group:visible').find('.fixed-titles').addClass('active');
             } else {
                 $('.question-group:visible').find('.fixed-titles').removeClass('active');

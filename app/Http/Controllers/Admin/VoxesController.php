@@ -445,13 +445,14 @@ class VoxesController extends AdminController
                 }
                 
                 if ($q->question_trigger) {
-                    $trigger_list = explode(';', $q->question_trigger);
-                    $first_triger = explode(':', $trigger_list[0]);
-                    $trigger_question_id = $first_triger[0];
-                    $trigger_valid_answers = !empty($first_triger[1]) ? $first_triger[1] : null;
+                    if($q->question_trigger!='-1') {
+                        $trigger_list = explode(';', $q->question_trigger);
+                        $first_triger = explode(':', $trigger_list[0]);
+                        $trigger_question_id = $first_triger[0];
+                        $trigger_valid_answers = !empty($first_triger[1]) ? $first_triger[1] : null;
+                    }
                 }
             }
-
 
             if(empty( $trigger_question_id )) {
                 $prev_question = VoxQuestion::where('vox_id', $id)->where('order', '<', intVal($question->order) )->orderBy('order', 'DESC')->first();
