@@ -14,6 +14,8 @@ var chart_colors = [
     '#48f0af',
 ];
 
+var main_chart_options;
+
 $(document).ready(function(){
 
     //All surveys
@@ -150,8 +152,7 @@ $(document).ready(function(){
     //Individual Survey
 
     google.charts.load('current', {
-        packages: ['corechart', 'bar', 'geochart'],
-        mapsApiKey: 'AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk'
+        packages: ['corechart', 'bar'],
     });
     google.charts.setOnLoadCallback(function() {
         console.log('GC loaded');
@@ -390,20 +391,20 @@ $(document).ready(function(){
                     legend.push(data.main_chart[i][0]);
                 }
 
-                var options = {};
+                main_chart_options = {};
                 if(type=='dependency') {
-                    options.slices = {};
-                    options.slices[data.relation_info.answer] = {
+                    main_chart_options.slices = {};
+                    main_chart_options.slices[data.relation_info.answer] = {
                         offset: 0.2
                     };
 
                     if( data.relation_info.question.length > 100 ) {
-                        options.with_long_hint = true;                        
+                        main_chart_options.with_long_hint = true;                        
                     }
                 } else {
                     if(data.answer_id) {
-                        options.slices = {};
-                        options.slices[data.answer_id-1] = {
+                        main_chart_options.slices = {};
+                        main_chart_options.slices[data.answer_id-1] = {
                             offset: 0.2
                         };
                     }
@@ -411,7 +412,7 @@ $(document).ready(function(){
 
                 if( scale!='gender' ) {
 
-                    options.chartArea = {
+                    main_chart_options.chartArea = {
                         left:'10%',
                         top:'20%',
                         width:'80%',
@@ -419,7 +420,8 @@ $(document).ready(function(){
                     };
                 }
 
-                drawChart(rows, $(this).find('.main-chart')[0], options, true);
+                console.log('main chart data: ', rows);
+                drawChart(rows, $(this).find('.main-chart')[0], main_chart_options, true);
 
                 $(this).find('.total-m').hide();
                 $(this).find('.total-f').hide();
@@ -483,7 +485,6 @@ $(document).ready(function(){
                     $(this).find('.total-f').show().find('b').html(data.totalf);
                 } else if(scale=='country_id') {
                     var rows = [];
-                    rows.push(['Country', 'Respondents']);
                     for(var i in data.second_chart) {
                         rows.push(data.second_chart[i]);
                     }
@@ -798,30 +799,111 @@ $(document).ready(function(){
 
     var drawMap = function(rows, container) {
 
-        var data = google.visualization.arrayToDataTable(rows);
+        //var data = google.visualization.arrayToDataTable(rows);
 
-        var options = {
-            backgroundColor: 'transparent',
-            chartArea: {
-                left:'10%',
-                top:'10%',
-                width:'80%',
-                height:'80%'
-            },
-            width: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth() : 490),
-            height: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : 260),
-            colorAxis: {
-                colors: ['#f5f5f5', '#333']
-            },
-            magnifyingGlass: {
-                enable: true, 
-                zoomFactor: 5.0
+        // var options = {
+        //     backgroundColor: 'transparent',
+        //     chartArea: {
+        //         left:'10%',
+        //         top:'10%',
+        //         width:'80%',
+        //         height:'80%'
+        //     },
+        //     width: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth() : 490),
+        //     height: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : 260),
+        //     colorAxis: {
+        //         colors: ['#f5f5f5', '#333']
+        //     },
+        //     magnifyingGlass: {
+        //         enable: true, 
+        //         zoomFactor: 5.0
+        //     }
+        // };
+
+        // var chart = new google.visualization.GeoChart(container);
+
+        // chart.draw(data, options);
+
+        var map = am4core.create(container, am4maps.MapChart);
+        map.geodata = am4geodata_worldLow;
+        map.projection = new am4maps.projections.Projection(); //Equirectangular
+        
+        // Create map polygon series
+        var polygonSeries = map.series.push(new am4maps.MapPolygonSeries());
+        // Make map load polygon (like country names) data from GeoJSON
+        polygonSeries.useGeodata = true;
+
+        // Configure series
+        var polygonTemplate = polygonSeries.mapPolygons.template;
+        polygonTemplate.stroke = am4core.color("#333333");
+        polygonTemplate.strokeWidth = 1;
+        polygonTemplate.tooltipText = "{name}: {value}% of total";
+        polygonTemplate.fill = am4core.color("#f3f3f3");
+
+        // polygonSeries.mapPolygons.template.events.on("hit", function(ev) {
+        //     console.log('SSShit');
+        //     console.log(ev.target.dataItem);
+        //     console.log(ev.target.dataItem.dataContext);
+        // });
+        
+        polygonSeries.mapPolygons.template.events.on("over", (function(ev) {
+            console.log('over');
+            if( ev.target.dataItem.dataContext.pieData ) {
+                drawChart(ev.target.dataItem.dataContext.pieData, $(this).closest('.graphs').find('.main-chart')[0], main_chart_options, true);                
             }
-        };
+        }).bind(container));
 
-        var chart = new google.visualization.GeoChart(container);
+        // Create hover state and set alternative fill color
+        var hs = polygonTemplate.states.create("hover");
+        hs.properties.fill = am4core.color("#367B25");
 
-        chart.draw(data, options);
+        // Remove Antarctica
+        polygonSeries.exclude = ["AQ"];
+
+        // Add some data
+        var max = 0;
+        var total = rows.reduce(function (a, b) {
+            var rowTotal = b.reduce(function (c, d) {
+                return parseInt(d[1]) ? c + d[1] : c;
+            }, 0);
+            if(rowTotal>max) {
+                max = rowTotal;
+            }
+            return a + rowTotal;
+        }, 0);
+        var chartData = [];
+        for(var i in rows) {
+            var rowTotal = rows[i].reduce(function (c, d) {
+                return parseInt(d[1]) ? c + d[1] : c;
+            }, 0);
+
+
+            //20 - 96
+            //var lummax
+
+            var rgb = hslToRgb(0, 0, 0.96 - (rowTotal/max)*0.76 ); // 20 == 100% // 96 == 0%
+            console.log( rgb + ' -> ' + (rowTotal/max*100).toFixed(2));
+
+            var pieData = [];
+            for(var j = 2; j < rows[i].length; j++) {
+                pieData.push(rows[i][j])
+            }
+            console.log( pieData );
+
+            chartData.push({
+                "id": rows[i][0], //rows[i][0],
+                "name": rows[i][1][1],
+                "value": (rowTotal/total*100).toFixed(2),
+                "fill": am4core.color(rgb),
+                "pieData": pieData,
+            });
+        }
+        console.log( chartData );
+        polygonSeries.data = chartData;
+
+        // Bind "fill" property to "fill" key in data
+        polygonTemplate.propertyFields.fill = "fill";
+
     }
 
 
@@ -858,3 +940,36 @@ $(document).ready(function(){
         } );
     } )
 });
+
+
+function hslToRgb(h, s, l) {
+  var r, g, b;
+
+  if (s == 0) {
+    r = g = b = l; // achromatic
+  } else {
+    function hue2rgb(p, q, t) {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    }
+
+    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    var p = 2 * l - q;
+
+    r = hue2rgb(p, q, h + 1/3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1/3);
+  }
+
+  return "#" + componentToHex(r* 255) + componentToHex(g* 255) + componentToHex(b* 255);
+}
+
+function componentToHex(c) {
+    c = Math.ceil(c);
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}

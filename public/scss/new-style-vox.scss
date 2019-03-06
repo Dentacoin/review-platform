@@ -1234,14 +1234,15 @@ p.h2-bold {
 
 	h2 {
 		text-align: center;
-		margin-bottom: 70px;
+		margin-bottom: 50px;
 
 		@media #{$phone} {
-			margin-bottom: 30px;
+			margin-bottom: 10px;
 		}
 	}
 
 	.swiper-container {
+		padding-top: 20px;
 		width: 100%;
 		padding-bottom: 80px;
 
@@ -1295,14 +1296,14 @@ p.h2-bold {
 
 		.featured-img {
 			position: absolute;
-			right: -33px;
-			bottom: -30px;
+		    left: -29px;
+		    top: -24px;
 			
 			@media #{$phone} {
-			    width: 20px;
-			    height: 20px;
-			    right: 0px;
-				bottom: -12px;
+			    width: 30px;
+			    height: 30px;
+			    left: 2px;
+			    top: 2px;
 			}
 		}
 
@@ -3555,7 +3556,10 @@ p.h2-bold {
 						flex-direction: column;
 						justify-content: space-around;
 
-						svg > g > g:last-child { pointer-events: none }
+						.second-chart.country_id {
+							width: 640px;
+							height: 300px;
+						}
 
 						.mobile-chart {
 							padding: 20px;

@@ -170,7 +170,7 @@ class StatsController extends FrontController
         			}
         		}
         	} else if($scale=='country_id') {
-        		$countries = Country::get()->pluck('name', 'id')->toArray();
+        		$countries = Country::get()->keyBy('id');
 
         		$results = $results->groupBy('answer', 'country_id')->selectRaw('answer, country_id, COUNT(*) as cnt');
         		$results = $results->get();
@@ -186,11 +186,18 @@ class StatsController extends FrontController
         			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
 
         			if( $res->country_id ) {
-        				if(!isset($second_chart[ $countries[$res->country_id]])) {
-        					$second_chart[$countries[$res->country_id]] = 0;
+                        $country = $countries->get($res->country_id);
+                        $country->code = mb_strtoupper($country->code);
+        				if(!isset($second_chart[ $country->code ] )) {
+        					$second_chart[ $country->code ] = [
+                                'name' => $country->name
+                            ];
+                            foreach ($answers as $a) {
+                                $second_chart[ $country->code ][$a] = 0;
+                            }
         				}
                         if(empty($answer_id) || $res->answer==$answer_id) {
-        				    $second_chart[$countries[$res->country_id]] += $res->cnt;
+                            $second_chart[ $country->code ][ $answers[ $res->answer-1 ] ] = $res->cnt; //m
                         }
         			}
         		}
@@ -307,6 +314,9 @@ class StatsController extends FrontController
 			// 'plotly' => true,
 			'jscdn' => [
 				'https://www.gstatic.com/charts/loader.js',
+                '//www.amcharts.com/lib/4/core.js',
+                '//www.amcharts.com/lib/4/maps.js',
+                '//www.amcharts.com/lib/4/geodata/worldLow.js',
 			],
 			'js' => [
 				'stats.js',

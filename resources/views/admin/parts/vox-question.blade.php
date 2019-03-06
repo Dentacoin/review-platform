@@ -33,18 +33,16 @@
                     <div class="form-group clearfix">
                         <h3 class="col-md-1" style="margin-top: 0px;">{{ trans('admin.page.'.$current_page.'.question-question') }}</h3>
                         <label class="col-md-1 control-label">{{ trans('admin.page.'.$current_page.'.question-order') }}</label>
-                        <div class="col-md-1">
-                            {{ Form::text('order', !empty($question) ? $question->order : (!empty($next) ? $next : ''), array('maxlength' => 256, 'class' => 'form-control input-title')) }}
-                        </div>
-                        <div class="col-md-4"> 
+                        <div class="col-md-5" style="display: flex;"> 
+                            {{ Form::text('order', !empty($question) ? $question->order : (!empty($next) ? $next : ''), array('maxlength' => 256, 'class' => 'form-control input-title', 'style' => 'width: 50px;' )) }}
                             @foreach($langs as $code => $lang_info)
-                                <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} ">
+                                <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
                                     {{ Form::text('question-'.$code, !empty($question) ? $question->{'question:'.$code} : '', array('maxlength' => 256, 'class' => 'form-control input-title')) }}
                                 </div>
                             @endforeach
                         </div>
                         <div class="col-md-5">
-                            Tooltip example: <br/>
+                            How QUESTION tooltips work: <br/>
                             Do you [includes cigars, e-cigarettes and any other tobacco products]smoke cigarettes[/]?
                         </div>
                     </div>
