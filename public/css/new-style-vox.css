@@ -2463,6 +2463,17 @@ p.h2-bold {
         .page-statistics .stats .stat .contents .graphs .chart .second-chart.country_id {
           width: 640px;
           height: 300px; }
+          @media (max-width: 1200px) {
+            .page-statistics .stats .stat .contents .graphs .chart .second-chart.country_id {
+              width: 940px;
+              height: 450px; } }
+          @media (max-width: 992px) {
+            .page-statistics .stats .stat .contents .graphs .chart .second-chart.country_id {
+              width: 720px; } }
+          @media (max-width: 768px) {
+            .page-statistics .stats .stat .contents .graphs .chart .second-chart.country_id {
+              height: 250px;
+              width: 100%; } }
         .page-statistics .stats .stat .contents .graphs .chart .mobile-chart {
           padding: 20px; }
           .page-statistics .stats .stat .contents .graphs .chart .mobile-chart .custombar {

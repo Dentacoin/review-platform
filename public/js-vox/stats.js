@@ -15,6 +15,9 @@ var chart_colors = [
 ];
 
 var main_chart_options;
+var main_chart_data;
+var map_country;
+var map_country_data;
 
 $(document).ready(function(){
 
@@ -155,7 +158,6 @@ $(document).ready(function(){
         packages: ['corechart', 'bar'],
     });
     google.charts.setOnLoadCallback(function() {
-        console.log('GC loaded');
         gc_loaded = true;
         $('.stat.active').each( function() {
             reloadGraph(this);
@@ -341,8 +343,6 @@ $(document).ready(function(){
         if( !$(elm).is(':visible') || !gc_loaded ) {
             return;
         }
-        console.log('Reload: ' + $(elm).find('a.title').text());
-
 
         var options = { 
         //    weekday: 'long', 
@@ -385,9 +385,9 @@ $(document).ready(function(){
                 var scale_name = $(this).find('.scales a.active').text();
                 var legend = [];
 
-                var rows = [];
+                main_chart_data = [];
                 for(var i in data.main_chart) {
-                    rows.push(data.main_chart[i]);
+                    main_chart_data.push(data.main_chart[i]);
                     legend.push(data.main_chart[i][0]);
                 }
 
@@ -420,15 +420,16 @@ $(document).ready(function(){
                     };
                 }
 
-                console.log('main chart data: ', rows);
-                drawChart(rows, $(this).find('.main-chart')[0], main_chart_options, true);
+                console.log('main chart data: ', main_chart_data);
+                $(this).find('.main-chart').show();
+                drawChart(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, true);
 
                 $(this).find('.total-m').hide();
                 $(this).find('.total-f').hide();
                 $(this).find('.hint').hide();
                 $(this).find('.map-hint').hide();
 
-                $(this).find('.total-all b').html(data.total);
+                $(this).find('.total-all b').html(data.total).show();
 
 
 
@@ -484,17 +485,28 @@ $(document).ready(function(){
                     $(this).find('.total-m').show().find('b').html(data.totalm);
                     $(this).find('.total-f').show().find('b').html(data.totalf);
                 } else if(scale=='country_id') {
+                    map_country = null;
+                    map_country_data = null;
+                    $(this).find('.main-chart').hide();
+                    
                     var rows = [];
                     for(var i in data.second_chart) {
                         rows.push(data.second_chart[i]);
                     }
-                    //rows = rows.slice(0,25);
-                    console.log(rows);
                     drawMap(rows, $(this).find('.second-chart')[0]);
-                    $(this).find('.third-chart').html('');
-                    setupLegend($(this).find('.legend'), legend, data.answer_id);
-                    $(this).find('.hint').html('Click on a pie slice to see the geo spread of the respective answer.').show();
-                    $(this).find('.map-hint').show();
+                    
+                    var total = main_chart_data.reduce(function(a, b) { return a + b[1]; }, 0);
+                    console.log(total);
+                    for(var i in main_chart_data) {
+                        main_chart_data[i][1] = main_chart_data[i][1] / total;
+                    }
+
+                    main_chart_data.unshift(['', '']);
+                    drawColumns( main_chart_data, $(this).find('.third-chart')[0], null, null, true);
+                    
+                    setupLegend($(this).find('.legend'), []);
+
+                    $(this).find('.total-all').hide();
                 } else {
 
                     var rows = [];
@@ -544,8 +556,6 @@ $(document).ready(function(){
                             }
                         }
                     }
-
-                    console.log( rows );
 
                     drawColumns(rows, $(this).find('.second-chart')[0], null, data.answer_id);
 
@@ -711,7 +721,6 @@ $(document).ready(function(){
                         }
                     }
                 }
-                console.log(rows);
                 
             }
 
@@ -727,8 +736,6 @@ $(document).ready(function(){
             }
 
             var data = google.visualization.arrayToDataTable(rows);
-
-            console.log(data);
 
             var options = {
                 backgroundColor: 'transparent',
@@ -840,22 +847,45 @@ $(document).ready(function(){
         polygonTemplate.tooltipText = "{name}: {value}% of total";
         polygonTemplate.fill = am4core.color("#f3f3f3");
 
-        // polygonSeries.mapPolygons.template.events.on("hit", function(ev) {
-        //     console.log('SSShit');
-        //     console.log(ev.target.dataItem);
-        //     console.log(ev.target.dataItem.dataContext);
-        // });
+        polygonSeries.mapPolygons.template.events.on("hit", (function(ev) {
+            $(this).closest('.graphs').find('.third-chart').html();
+            if(!map_country || ev.target.tooltipDataItem.dataContext.name!=map_country) {
+                map_country = ev.target.tooltipDataItem.dataContext.name;
+                map_country_data = ev.target.dataItem.dataContext;           
+                drawColumns( map_country_data.pieData, $(this).closest('.graphs').find('.third-chart')[0], null, null, true);     
+            } else {
+                map_country = null;
+                map_country_data = null;
+                drawColumns( main_chart_data, $(this).closest('.graphs').find('.third-chart')[0], null, null, true);
+            }
+        }).bind(container));
         
         polygonSeries.mapPolygons.template.events.on("over", (function(ev) {
-            console.log('over');
+            //console.log('over');
             if( ev.target.dataItem.dataContext.pieData ) {
-                drawChart(ev.target.dataItem.dataContext.pieData, $(this).closest('.graphs').find('.main-chart')[0], main_chart_options, true);                
+                $(this).closest('.graphs').find('.third-chart').html();
+                drawColumns( ev.target.dataItem.dataContext.pieData, $(this).closest('.graphs').find('.third-chart')[0], null, null, true);
             }
         }).bind(container));
 
+        polygonSeries.mapPolygons.template.events.on("out", (function(ev) {
+            //console.log('out');
+            $(this).closest('.graphs').find('.third-chart').html();
+            drawColumns( map_country_data ? map_country_data.pieData : main_chart_data, $(this).closest('.graphs').find('.third-chart')[0], null, null, true);
+        }).bind(container));
+
+        polygonSeries.mapPolygons.template.adapter.add("tooltipText", function(text, target, key) {
+            if( target.tooltipDataItem.dataContext.value ) {
+                return text;                
+            } else {
+                return 'No responses from {name}';                
+            }
+        });
+
         // Create hover state and set alternative fill color
-        var hs = polygonTemplate.states.create("hover");
-        hs.properties.fill = am4core.color("#367B25");
+        var hoverState = polygonTemplate.states.create("hover");
+        //hoverState.properties.fill = am4core.color("#111111");
+        hoverState.propertyFields.fill = "hoverColor";
 
         // Remove Antarctica
         polygonSeries.exclude = ["AQ"];
@@ -882,23 +912,24 @@ $(document).ready(function(){
             //var lummax
 
             var rgb = hslToRgb(0, 0, 0.96 - (rowTotal/max)*0.76 ); // 20 == 100% // 96 == 0%
-            console.log( rgb + ' -> ' + (rowTotal/max*100).toFixed(2));
 
-            var pieData = [];
+            var pieData = [
+                ['', '']
+            ];
             for(var j = 2; j < rows[i].length; j++) {
-                pieData.push(rows[i][j])
+                pieData.push([ rows[i][j][0] , rows[i][j][1] / rowTotal ]);
             }
-            console.log( pieData );
+            //console.log( pieData );
 
             chartData.push({
                 "id": rows[i][0], //rows[i][0],
                 "name": rows[i][1][1],
                 "value": (rowTotal/total*100).toFixed(2),
                 "fill": am4core.color(rgb),
+                "hoverColor": am4core.color("#367B25"),
                 "pieData": pieData,
             });
         }
-        console.log( chartData );
         polygonSeries.data = chartData;
 
         // Bind "fill" property to "fill" key in data
