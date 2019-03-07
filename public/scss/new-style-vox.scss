@@ -1812,10 +1812,19 @@ p.h2-bold {
 	}
 
 	h1 {
-		margin-bottom: 20px;
+		font-size: 25px;
+		font-weight: bold;
+		text-transform: uppercase;
+		color: #020202;
+		text-align: center;
+		margin-bottom: 45px;
+		position: relative;
+
 		@media #{$phone} {
-			margin-bottom: 10px;
-			font-size: 18px;
+			font-size: 15px;
+			font-weight: 600;
+			margin-bottom: 5px;
+			padding: 0px 20px;
 		}
 	}
 
@@ -2372,7 +2381,7 @@ p.h2-bold {
 
 .questions-menu {
 	margin-top: 10px;
-	margin-bottom: 60px;
+	margin-bottom: 20px;
 	position: relative;
 
 	@media #{$phone} {
@@ -2519,9 +2528,38 @@ p.h2-bold {
 	text-align: center;
 
 	h1 {
-		font-weight: 600;
+
+		font-size: 25px;
+		font-weight: bold;
+		text-transform: uppercase;
+		color: #020202;
+		text-align: center;
+		margin-bottom: 45px;
+		position: relative;
+
 		@media #{$phone} {
 			font-size: 15px;
+			font-weight: 600;
+			margin-bottom: 5px;
+			padding: 0px 20px;
+		}
+	}
+
+	.filters-section {
+
+		max-width: 980px;
+		margin: 0 auto;
+
+		@media (max-width: 1200px) {
+			max-width: 900px;
+		}
+
+		@media (max-width: 992px) {
+			max-width: 700px;
+		}
+
+		@media (max-width: 768px) {
+			width: 100%;
 		}
 	}
 
@@ -2531,12 +2569,12 @@ p.h2-bold {
 		.questions-inner {
 			position: relative;
 			padding: 20px 0px;
-			max-width: 1040px;
 		    margin-left: auto;
 		    margin-right: auto;
 		    display: flex;
 		    flex-wrap: wrap;
 		    text-align: left;
+		    justify-content: center;
 
 
 		    .swiper-slide {
@@ -2756,17 +2794,18 @@ p.h2-bold {
 
 	h1 {
 		font-size: 25px;
+		font-weight: bold;
+		text-transform: uppercase;
 		color: #020202;
 		text-align: center;
-		font-weight: bold;
-		margin-bottom: 25px;
+		margin-bottom: 45px;
 		position: relative;
 
 		@media #{$phone} {
 			font-size: 15px;
 			font-weight: 600;
+			margin-bottom: 5px;
 			padding: 0px 20px;
-			margin-bottom: 4px;
 		}
 	}
 	h2 {
@@ -2831,6 +2870,7 @@ p.h2-bold {
 
 	.questions-menu {
 		margin-top: 15px;
+		margin-bottom: 60px;
 
 		.sort-menu {
 			width: 100%;
@@ -3509,11 +3549,13 @@ p.h2-bold {
 					    z-index: 100;
 					    text-align: left;
 					    font-size: 14px;
-					    bottom: 5px;
+					    top: 3px;
+					    width: 100%;
+					    text-align: center;
+					    bottom: auto;
 
-						@media screen and (max-width: 1200px) {
-					    	left: 6px;
-					    	bottom: 30px;
+					    b {
+					    	color: #119c88;
 					    }
 					}
 
@@ -4333,7 +4375,7 @@ p.h2-bold {
 	h4 {
 		display: inline-block;
 		padding-right: 7px;
-		margin-bottom: 25px;
+		margin-bottom: 15px;
 		position: relative;
 
 		&::after {
@@ -4624,11 +4666,11 @@ p.h2-bold {
 }
 
 .go-back-admin {
-    padding: 7px 10px;
+    padding: 2px 10px;
     background: #41afff;
     color: white;
     border-radius: 10px;
-    font-size: 20px;
+    font-size: 16px;
     position: absolute;
     right: 0px;
     top: 4px;
@@ -5474,15 +5516,18 @@ p.h2-bold {
 
 	h2.page-title {
 		font-size: 25px;
-
-		img {
-			margin-right: 10px;
-     		vertical-align: sub;
-		}
+    	margin-bottom: 39px;
+		margin-top: 35px;
 
 		@media screen and (max-width: 992px) {
 			font-size: 22px;
 			margin-top: 20px;
+			margin-bottom: 30px;
+		}
+
+		img {
+			margin-right: 10px;
+     		vertical-align: sub;
 		}
 	}
 
@@ -5495,11 +5540,11 @@ p.h2-bold {
 	}
 
 	.form-horizontal {
-		margin-top: 60px;
+		margin-top: 35px;
 
 		@media screen and (max-width: 992px) {
 			margin-top: 20px;
-			margin-bottom: 40px;
+			margin-bottom: 30px;
 		}
 	}
 
@@ -5811,7 +5856,7 @@ p.h2-bold {
 
 	.profile-home-content {
 
-		padding-top: 30px;
+		padding-top: 10px;
 
 		b {
 			font-size: 42px;

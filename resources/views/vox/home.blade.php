@@ -10,33 +10,34 @@
 			<h1 class="bold">
 				{{ trans('vox.page.home.title') }}
 			</h1>
-
-			<div class="search-survey tal">
-				<i class="fas fa-search"></i>
-				<input type="text" id="survey-search" name="survey-search">
-			</div>
-			<div class="questions-menu">
-				<div class="sort-menu tal"> 
-					@foreach($sorts as $key => $val)
-						@if($key == 'taken' && empty($taken))
-
-						@else
-							<a href="javascript:;" sort="{{ $key }}"  class="{!! $key == 'featured' || $key == 'untaken' ? 'active' : 'sortable' !!}">
-
-								@if($key == 'featured')
-									<i class="fas fa-star"></i>
-								@endif
-
-								{{ $val }}
-							</a>
-						@endif
-					@endforeach
+			<div class="filters-section">
+				<div class="search-survey tal">
+					<i class="fas fa-search"></i>
+					<input type="text" id="survey-search" name="survey-search">
 				</div>
-				<div class="sort-category tar"> 
-					<span>
-						{{ trans('vox.page.home.filter') }}:
-					</span>
-					{{ Form::select('category', ['all' => 'All'] + $vox_categories, null , ['id' => 'surveys-categories']) }} 
+				<div class="questions-menu clearfix">
+					<div class="sort-menu tal"> 
+						@foreach($sorts as $key => $val)
+							@if($key == 'taken' && empty($taken))
+
+							@else
+								<a href="javascript:;" sort="{{ $key }}"  class="{!! $key == 'featured' || $key == 'untaken' ? 'active' : 'sortable' !!}">
+
+									@if($key == 'featured')
+										<i class="fas fa-star"></i>
+									@endif
+
+									{{ $val }}
+								</a>
+							@endif
+						@endforeach
+					</div>
+					<div class="sort-category tar"> 
+						<span>
+							{{ trans('vox.page.home.filter') }}:
+						</span>
+						{{ Form::select('category', ['all' => 'All'] + $vox_categories, null , ['id' => 'surveys-categories']) }} 
+					</div>
 				</div>
 			</div>
 			<div class="section-recent-surveys" id="questions-wrapper">

@@ -24,7 +24,7 @@
 			<input type="text" id="survey-search" name="survey-search" class="tal">
 		</div>
 
-		<div class="questions-menu">
+		<div class="questions-menu clearfix">
 			<div class="sort-menu">
 				@foreach($sorts as $key => $val)
 

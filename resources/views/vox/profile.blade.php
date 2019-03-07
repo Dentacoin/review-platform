@@ -110,8 +110,9 @@
 				    		<p class="personal-description">
 				    			{!! trans('vox.page.profile.home.withdraw.hint') !!}
 				    		</p>
+				    		<br/>
 
-				    		<form id="withdraw-form" method="post" class="form-horizontal" action="{!! getLangurl('profile/withdraw') !!}">
+				    		<form id="withdraw-form" method="post" action="{!! getLangurl('profile/withdraw') !!}">
 	                			{!! csrf_field() !!}
 
 					            <div class="form-group">

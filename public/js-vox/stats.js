@@ -420,7 +420,7 @@ $(document).ready(function(){
                     };
                 }
 
-                console.log('main chart data: ', main_chart_data);
+                //console.log('main chart data: ', main_chart_data);
                 $(this).find('.main-chart').show();
                 drawChart(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, true);
 
@@ -429,7 +429,8 @@ $(document).ready(function(){
                 $(this).find('.hint').hide();
                 $(this).find('.map-hint').hide();
 
-                $(this).find('.total-all b').html(data.total).show();
+                $(this).find('.total-all b').html(data.total);
+                $(this).find('.total-all').show();
 
 
 
@@ -493,7 +494,16 @@ $(document).ready(function(){
                     for(var i in data.second_chart) {
                         rows.push(data.second_chart[i]);
                     }
-                    drawMap(rows, $(this).find('.second-chart')[0]);
+                    $(this).find('.second-chart').html('');
+                    
+                    $(this).find('.map-hint').html('Answers distribution by country').show();
+
+                    setTimeout( (function() {
+                        drawMap(this.rows, $(this.container).find('.second-chart')[0]);
+                    }).bind({
+                        rows: rows,
+                        container: this
+                    }), 100 );
                     
                     var total = main_chart_data.reduce(function(a, b) { return a + b[1]; }, 0);
                     console.log(total);
@@ -693,7 +703,7 @@ $(document).ready(function(){
                     $(container).append('<div class="group-heading">'+rows[i][0]+'</div>');
                     var pl = 80*rows[i][1]/max;
                     var color = fixedColor ? chart_colors[fixedColor-1] : rows[i][2];
-                    $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][1]*100).toFixed(2)+'%</div>');
+                    $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][1]*100).toFixed(1)+'%</div>');
                 }
                 console.log(rows);
 
@@ -717,7 +727,7 @@ $(document).ready(function(){
                         var pl = 80*rows[i][j]/max;
                         var color = fixedColor ? chart_colors[fixedColor-1] : chart_colors[j-1];
                         if( typeof(rows[0][j])!='object' ) {
-                            $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(2)+'%</div>');
+                            $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(1)+'%</div>');
                         }
                     }
                 }
@@ -791,11 +801,11 @@ $(document).ready(function(){
                 }
             }
 
-            options.width = $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth() : options.width),
-            options.height = $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : options.height),
+            options.width = $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth() : options.width);
+            options.height = $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : options.height);
                 
 
-            console.log( options );
+            //console.log( options );
             var chart = new google.charts.Bar( container );
             //chart.draw(data, options);
             chart.draw(data, google.charts.Bar.convertOptions(options));
@@ -806,30 +816,6 @@ $(document).ready(function(){
 
     var drawMap = function(rows, container) {
 
-        //var data = google.visualization.arrayToDataTable(rows);
-
-        // var options = {
-        //     backgroundColor: 'transparent',
-        //     chartArea: {
-        //         left:'10%',
-        //         top:'10%',
-        //         width:'80%',
-        //         height:'80%'
-        //     },
-        //     width: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth() : 490),
-        //     height: $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : 260),
-        //     colorAxis: {
-        //         colors: ['#f5f5f5', '#333']
-        //     },
-        //     magnifyingGlass: {
-        //         enable: true, 
-        //         zoomFactor: 5.0
-        //     }
-        // };
-
-        // var chart = new google.visualization.GeoChart(container);
-
-        // chart.draw(data, options);
 
         var map = am4core.create(container, am4maps.MapChart);
         map.geodata = am4geodata_worldLow;
@@ -839,21 +825,32 @@ $(document).ready(function(){
         var polygonSeries = map.series.push(new am4maps.MapPolygonSeries());
         // Make map load polygon (like country names) data from GeoJSON
         polygonSeries.useGeodata = true;
+        polygonSeries.tooltip.getFillFromObject = false;
+        polygonSeries.tooltip.background.fill = am4core.color("#119c88");
 
         // Configure series
         var polygonTemplate = polygonSeries.mapPolygons.template;
         polygonTemplate.stroke = am4core.color("#333333");
         polygonTemplate.strokeWidth = 1;
-        polygonTemplate.tooltipText = "{name}: {value}% of total";
+        polygonTemplate.tooltipText = "{name}: {value}% ({count} resp.)";
         polygonTemplate.fill = am4core.color("#f3f3f3");
 
+        polygonSeries.events.on("hit", (function(ev) {
+            ev.target.mapPolygons.each(function(polygon) {
+                polygon.setState("default");
+            });
+        }).bind(container));
+
         polygonSeries.mapPolygons.template.events.on("hit", (function(ev) {
-            $(this).closest('.graphs').find('.third-chart').html();
+            $(this).closest('.graphs').find('.map-hint').html('Answers distribution by country' ).show();
             if(!map_country || ev.target.tooltipDataItem.dataContext.name!=map_country) {
+                ev.target.setState("highlight");
                 map_country = ev.target.tooltipDataItem.dataContext.name;
                 map_country_data = ev.target.dataItem.dataContext;           
-                drawColumns( map_country_data.pieData, $(this).closest('.graphs').find('.third-chart')[0], null, null, true);     
+                drawColumns( map_country_data.pieData, $(this).closest('.graphs').find('.third-chart')[0], null, 2, true);
+                $(this).closest('.graphs').find('.map-hint').html('Answers distribution in <b>' + ev.target.tooltipDataItem.dataContext.name + '</b>' ).show();
             } else {
+                ev.target.setState("default");
                 map_country = null;
                 map_country_data = null;
                 drawColumns( main_chart_data, $(this).closest('.graphs').find('.third-chart')[0], null, null, true);
@@ -861,17 +858,32 @@ $(document).ready(function(){
         }).bind(container));
         
         polygonSeries.mapPolygons.template.events.on("over", (function(ev) {
-            //console.log('over');
+            $(this).closest('.graphs').find('.map-hint').html('Answers distribution by country' ).show();
+            if(map_country) {
+                $(this).closest('.graphs').find('.map-hint').html('Answers distribution in <b>' + map_country + '</b>' ).show();
+            }
+
             if( ev.target.dataItem.dataContext.pieData ) {
-                $(this).closest('.graphs').find('.third-chart').html();
-                drawColumns( ev.target.dataItem.dataContext.pieData, $(this).closest('.graphs').find('.third-chart')[0], null, null, true);
+                if( ev.target.dataItem.dataContext.name!=map_country ) {
+                    ev.target.setState("hovered");                    
+                    $(this).closest('.graphs').find('.map-hint').html('Answers distribution in <b>' + ev.target.tooltipDataItem.dataContext.name + '</b>' ).show();
+                }
+                drawColumns( ev.target.dataItem.dataContext.pieData, $(this).closest('.graphs').find('.third-chart')[0], null, 2, true);
             }
         }).bind(container));
 
         polygonSeries.mapPolygons.template.events.on("out", (function(ev) {
-            //console.log('out');
-            $(this).closest('.graphs').find('.third-chart').html();
-            drawColumns( map_country_data ? map_country_data.pieData : main_chart_data, $(this).closest('.graphs').find('.third-chart')[0], null, null, true);
+            $(this).closest('.graphs').find('.map-hint').html('Answers distribution by country' ).show();
+            if(map_country) {
+                $(this).closest('.graphs').find('.map-hint').html('Answers distribution in <b>' + map_country + '</b>' ).show();
+            }
+
+            if( ev.target.dataItem.dataContext.name!=map_country ) {
+                ev.target.setState("default");
+            }
+
+            
+            drawColumns( map_country_data ? map_country_data.pieData : main_chart_data, $(this).closest('.graphs').find('.third-chart')[0], null, map_country ? 2 : null, true);
         }).bind(container));
 
         polygonSeries.mapPolygons.template.adapter.add("tooltipText", function(text, target, key) {
@@ -883,9 +895,14 @@ $(document).ready(function(){
         });
 
         // Create hover state and set alternative fill color
-        var hoverState = polygonTemplate.states.create("hover");
+        //var hoverState = polygonTemplate.states.create("hover");
         //hoverState.properties.fill = am4core.color("#111111");
+
+        var hoverState = polygonTemplate.states.create("hovered");
         hoverState.propertyFields.fill = "hoverColor";
+
+        var selectedState = polygonTemplate.states.create("highlight");
+        selectedState.properties.fill = am4core.color("#119c88");
 
         // Remove Antarctica
         polygonSeries.exclude = ["AQ"];
@@ -924,9 +941,10 @@ $(document).ready(function(){
             chartData.push({
                 "id": rows[i][0], //rows[i][0],
                 "name": rows[i][1][1],
-                "value": (rowTotal/total*100).toFixed(2),
+                "value": (rowTotal/total*100).toFixed(1),
+                "count": rowTotal,
                 "fill": am4core.color(rgb),
-                "hoverColor": am4core.color("#367B25"),
+                "hoverColor": am4core.color("#119c88"),
                 "pieData": pieData,
             });
         }

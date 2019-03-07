@@ -1326,11 +1326,19 @@ p.h2-bold {
   color: #060606;
   margin-bottom: 10px; }
 .questions h1 {
-  margin-bottom: 20px; }
+  font-size: 25px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #020202;
+  text-align: center;
+  margin-bottom: 45px;
+  position: relative; }
   @media screen and (max-width: 768px) {
     .questions h1 {
-      margin-bottom: 10px;
-      font-size: 18px; } }
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      padding: 0px 20px; } }
 .questions .demographic-questionnaire-description,
 .questions .questionnaire-description {
   text-align: center;
@@ -1735,7 +1743,7 @@ p.h2-bold {
 
 .questions-menu {
   margin-top: 10px;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
   position: relative; }
   @media screen and (max-width: 768px) {
     .questions-menu {
@@ -1838,19 +1846,40 @@ p.h2-bold {
 .another-questions {
   text-align: center; }
   .another-questions h1 {
-    font-weight: 600; }
+    font-size: 25px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #020202;
+    text-align: center;
+    margin-bottom: 45px;
+    position: relative; }
     @media screen and (max-width: 768px) {
       .another-questions h1 {
-        font-size: 15px; } }
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        padding: 0px 20px; } }
+  .another-questions .filters-section {
+    max-width: 980px;
+    margin: 0 auto; }
+    @media (max-width: 1200px) {
+      .another-questions .filters-section {
+        max-width: 900px; } }
+    @media (max-width: 992px) {
+      .another-questions .filters-section {
+        max-width: 700px; } }
+    @media (max-width: 768px) {
+      .another-questions .filters-section {
+        width: 100%; } }
   .another-questions .section-recent-surveys .questions-inner {
     position: relative;
     padding: 20px 0px;
-    max-width: 1040px;
     margin-left: auto;
     margin-right: auto;
     display: flex;
     flex-wrap: wrap;
-    text-align: left; }
+    text-align: left;
+    justify-content: center; }
     .another-questions .section-recent-surveys .questions-inner .swiper-slide {
       width: 460px;
       margin-left: 30px;
@@ -1890,17 +1919,18 @@ p.h2-bold {
 
 .page-stats h1 {
   font-size: 25px;
+  font-weight: bold;
+  text-transform: uppercase;
   color: #020202;
   text-align: center;
-  font-weight: bold;
-  margin-bottom: 25px;
+  margin-bottom: 45px;
   position: relative; }
   @media screen and (max-width: 768px) {
     .page-stats h1 {
       font-size: 15px;
       font-weight: 600;
-      padding: 0px 20px;
-      margin-bottom: 4px; } }
+      margin-bottom: 5px;
+      padding: 0px 20px; } }
 .page-stats h2 {
   font-size: 18px;
   color: #020202;
@@ -1944,7 +1974,8 @@ p.h2-bold {
 .page-stats .search-survey {
   margin: 0 auto; }
 .page-stats .questions-menu {
-  margin-top: 15px; }
+  margin-top: 15px;
+  margin-bottom: 60px; }
   .page-stats .questions-menu .sort-menu {
     width: 100%;
     text-align: center; }
@@ -2428,11 +2459,12 @@ p.h2-bold {
         z-index: 100;
         text-align: left;
         font-size: 14px;
-        bottom: 5px; }
-        @media screen and (max-width: 1200px) {
-          .page-statistics .stats .stat .contents .graphs .map-hint {
-            left: 6px;
-            bottom: 30px; } }
+        top: 3px;
+        width: 100%;
+        text-align: center;
+        bottom: auto; }
+        .page-statistics .stats .stat .contents .graphs .map-hint b {
+          color: #119c88; }
       .page-statistics .stats .stat .contents .graphs .icon {
         width: 47px;
         height: 77px;
@@ -3168,7 +3200,7 @@ p.h2-bold {
   .black-line-title h4 {
     display: inline-block;
     padding-right: 7px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     position: relative; }
     .black-line-title h4::after {
       content: '';
@@ -3366,11 +3398,11 @@ p.h2-bold {
     bottom: 0px; }
 
 .go-back-admin {
-  padding: 7px 10px;
+  padding: 2px 10px;
   background: #41afff;
   color: white;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 16px;
   position: absolute;
   right: 0px;
   top: 4px; }
@@ -3959,14 +3991,17 @@ p.h2-bold {
       height: 14px;
       margin-right: 20px; }
 .page-profile .site-content h2.page-title {
-  font-size: 25px; }
-  .page-profile .site-content h2.page-title img {
-    margin-right: 10px;
-    vertical-align: sub; }
+  font-size: 25px;
+  margin-bottom: 39px;
+  margin-top: 35px; }
   @media screen and (max-width: 992px) {
     .page-profile .site-content h2.page-title {
       font-size: 22px;
-      margin-top: 20px; } }
+      margin-top: 20px;
+      margin-bottom: 30px; } }
+  .page-profile .site-content h2.page-title img {
+    margin-right: 10px;
+    vertical-align: sub; }
 .page-profile .site-content .container > .col-md-9 {
   background-image: url(../new-vox-img/profile-background.png);
   background-size: cover;
@@ -3974,11 +4009,11 @@ p.h2-bold {
   background-repeat: no-repeat;
   min-height: calc(100vh - 147px - 40px - 100px); }
 .page-profile .site-content .form-horizontal {
-  margin-top: 60px; }
+  margin-top: 35px; }
   @media screen and (max-width: 992px) {
     .page-profile .site-content .form-horizontal {
       margin-top: 20px;
-      margin-bottom: 40px; } }
+      margin-bottom: 30px; } }
 .page-profile .site-content .separated {
   margin-top: 30px; }
 .page-profile .site-content .control-label {
@@ -4206,7 +4241,7 @@ p.h2-bold {
         margin-top: 0px;
         clear: both; } }
 .page-profile .site-content .profile-home-content {
-  padding-top: 30px; }
+  padding-top: 10px; }
   .page-profile .site-content .profile-home-content b {
     font-size: 42px;
     color: black;
