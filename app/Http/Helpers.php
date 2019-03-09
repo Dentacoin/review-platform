@@ -17,6 +17,12 @@
 
 	}
 
+	function getVoxUrl($path=false, $locale=null, $domain=null){
+    	return getLangUrl($path, $locale, 'https://dentavox.dentacoin.com/');
+	}
+
+
+
 	function getStarWidth($rate) {
 		$stars = $rate * 30;
 	    $emptyspace = floor($rate) * 18;

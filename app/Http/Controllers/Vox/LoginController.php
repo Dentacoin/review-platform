@@ -26,7 +26,7 @@ class LoginController extends FrontController
 
     public function facebook_callback() {
         if (!Request::has('code') || Request::has('denied')) {
-            return redirect( getLangUrl('/'));
+            return redirect( getVoxUrl('/'));
         }
     	config(['services.facebook.redirect' =>  'https://dev-dentavox.dentacoin.com/en/login/callback/facebook' ]);
         return $this->try_social_login(Socialite::driver('facebook')->user());
@@ -41,7 +41,7 @@ class LoginController extends FrontController
 
             if( $duplicate ) {
                 Request::session()->flash('error-message', 'There\'s another profile registered with this Facebook Account');
-                return redirect( getLangUrl('/'));
+                return redirect( getVoxUrl('/'));
 
             } else {
                 $user->fb_id = $s_user->getId();
@@ -62,7 +62,7 @@ class LoginController extends FrontController
 
             if ($user) {
                 if($user->loggedFromBadIp()) {
-                    return redirect( getLangUrl('login').'?suspended-popup' );
+                    return redirect( getVoxUrl('login').'?suspended-popup' );
                 }
 
                 $sess = [
@@ -72,13 +72,13 @@ class LoginController extends FrontController
 
                 Auth::login($user, true);
                 $intended = session()->pull('our-intended');
-                return redirect( $intended ? $intended : getLangUrl('/') );
+                return redirect( $intended ? $intended : getVoxUrl('/') );
             } else {
                 Request::session()->flash('error-message', trans('vox.page.login.error-fb', [
-                    'link' => '<a href="'.getLangUrl('/').'">',
+                    'link' => '<a href="'.getVoxUrl('/').'">',
                     'endlink' => '</a>',
                 ]));
-                return redirect( getLangUrl('login'));
+                return redirect( getVoxUrl('login'));
             }
         }
     }
@@ -97,7 +97,7 @@ class LoginController extends FrontController
         config(['services.facebook.redirect' => 'https://dev-dentavox.dentacoin.com/en/register/callback/facebook' ]);
 
         if (!Request::has('code') || Request::has('denied')) {
-            return redirect( getLangUrl('/') );
+            return redirect( getVoxUrl('/') );
         }
         return $this->try_social_register(Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email', 'verified', 'friends', 'gender', 'birthday', 'location'])->user(), 'fb');
     }
@@ -118,14 +118,14 @@ class LoginController extends FrontController
             curl_close($ch);
             
             Request::session()->flash('error-message', trans('vox.popup.register.incomplete-facebook') );
-            return redirect(getLangUrl('registration'));
+            return redirect(getVoxUrl('registration'));
         }
 
         //!empty($s_user->user['verified']) &&
         $verified = !empty($s_user->user['friends']['summary']['total_count']) && $s_user->user['friends']['summary']['total_count']>50;
         if(!$verified) {
             Request::session()->flash('error-message', trans('vox.popup.register.fake-facebook') );
-            return redirect(getLangUrl('registration'));
+            return redirect(getVoxUrl('registration'));
         }
 
 
@@ -141,16 +141,16 @@ class LoginController extends FrontController
         if ($user) {
             if($user->deleted_at) {
                 Request::session()->flash('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
-                return redirect(getLangUrl('registration'));
+                return redirect(getVoxUrl('registration'));
             } else {
 
                 if($user->isBanned('vox')) {
-                    return redirect( getLangUrl('profile'));
+                    return redirect( getVoxUrl('profile'));
                 }
                 Auth::login($user, true);
 
                 Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
-                return redirect(getLangUrl('/'));
+                return redirect(getVoxUrl('/'));
                 
             }
         } else {
@@ -159,7 +159,7 @@ class LoginController extends FrontController
             $is_blocked = User::checkBlocks($name, $s_user->getEmail());
             if( $is_blocked ) {
                 Request::session()->flash('error-message', $is_blocked );
-                return redirect(getLangUrl('registration'));                
+                return redirect(getVoxUrl('registration'));                
             }
 
             $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
@@ -167,7 +167,7 @@ class LoginController extends FrontController
 
             if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
                 Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')) );
-                return redirect(getLangUrl('registration'));
+                return redirect(getVoxUrl('registration'));
             }
 
             if(!empty($s_user->user['location']['name'])) {
@@ -250,12 +250,12 @@ class LoginController extends FrontController
             }
 
             if($newuser->loggedFromBadIp()) {
-                return redirect( getLangUrl('registration').'?suspended-popup' );
+                return redirect( getVoxUrl('registration').'?suspended-popup' );
             }
 
             Auth::login($newuser, true);
             Request::session()->flash('success-message', trans('vox.page.registration.success'));
-            return redirect(getLangUrl('welcome-to-dentavox'));
+            return redirect(getVoxUrl('welcome-to-dentavox'));
         }
     }
 
@@ -305,7 +305,7 @@ class LoginController extends FrontController
                             session(['new_auth' => null]);
 
                             $ret['success'] = true;
-                            $ret['redirect'] = getLangUrl('/');
+                            $ret['redirect'] = getVoxUrl('/');
                         }
 
                     } else {
@@ -330,7 +330,7 @@ class LoginController extends FrontController
                                 }
 
                                 $ret['success'] = true;
-                                $ret['redirect'] = $user->isBanned('vox') ? getLangUrl('profile') : getLangUrl('/');
+                                $ret['redirect'] = $user->isBanned('vox') ? getVoxUrl('profile') : getVoxUrl('/');
 
                                 
                                 $sess = [
