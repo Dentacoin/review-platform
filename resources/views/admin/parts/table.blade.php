@@ -29,7 +29,11 @@
                                             <input type="checkbox" name="ids[]" value="{{ $row->id }}" />
                                         </td>
                                     @elseif($v['format']=='update')
-                                        <td><a class="btn btn-sm btn-primary" href="{{ url('cms/'.$current_page.( !empty($table_subpage) ? '/'.$table_subpage : '' ).'/edit/'.$row->id) }}">{{ trans('admin.table.edit') }}</a></td>
+                                        <td>
+                                            <a class="btn btn-sm btn-primary" href="{{ url('cms/'.$current_page.( !empty($table_subpage) ? '/'.$table_subpage : '' ).'/edit/'.$row->id) }}">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                        </td>
                                     @elseif($v['format']=='delete')
                                         @if(!empty($row->deleted_at))
                                             <td><a class="btn btn-sm btn-deafult" href="{{ url('cms/'.$current_page.( !empty($table_subpage) ? '/'.$table_subpage : '' ).'/restore/'.$row->id) }}">{{ trans('admin.table.restore') }}</a></td>

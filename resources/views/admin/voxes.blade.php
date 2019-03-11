@@ -5,7 +5,8 @@
 <h1 class="page-header">
     {{ trans('admin.page.'.$current_page.'.title') }}
     
-    <a class="btn btn-primary pull-right" id="table-sort" href="javascript:;" alternate="Done">Engage Sort mode</a>
+    <a class="btn btn-primary pull-right" id="table-sort" href="javascript:;" alternate="Done">Sort Surveys</a>
+    <a class="btn btn-primary pull-right" id="table-sort-stats" href="javascript:;" style="margin-right: 20px;" alternate="Done">Sort Stats</a>
 </h1>
 <!-- end page-header -->
 
@@ -24,6 +25,7 @@
 						'table_id' => 'voxs',
 						'table_fields' => [
                             'sort_order'        => array('label' => 'Sort'),
+                            'sort_order_stats'        => array('label' => '(Stats)'),
                             'id'                => array(),
                             'title'             => array(),
                             'category'          => array('template' => 'admin.parts.table-voxes-category'),

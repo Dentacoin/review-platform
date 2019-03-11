@@ -49,7 +49,15 @@
 
 					@if($vox->has_stats)
 
-						<div class="vox-stat flex" featured="{{ intval($vox->stats_featured) }}" published="{{ $vox->created_at->timestamp }}" updated="{{ $vox->updated_at->timestamp }}" popular="{{ intval($vox->rewards()->count()) }}" {!! $vox->stats_featured ? '' : 'style="display: none;"' !!}>
+						<div 
+							class="vox-stat flex" 
+							featured="{{ intval($vox->stats_featured) }}" 
+							published="{{ $vox->created_at->timestamp }}" 
+							updated="{{ $vox->updated_at->timestamp }}" 
+							popular="{{ intval($vox->rewards()->count()) }}" 
+			      			sort-order="{{ $vox->sort_order_stats }}" 
+							{!! $vox->stats_featured ? '' : 'style="display: none;"' !!}
+						>
 							@if($vox->stats_featured)
 								<img class="featured" src="{{ url('new-vox-img/star.png') }}">
 							@endif
