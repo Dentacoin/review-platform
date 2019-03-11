@@ -5,6 +5,7 @@ jQuery(document).ready(function($){
 		showPopup('popup-register');
 		$('.switch-forms').first().click();
 		$('#dentist-name').val( $(this).find('input[name="name"]').val() );
+		$('#dentist-name_alternative').val( $(this).find('input[name="name_alternative"]').val() );
 		$('#dentist-email').val( $(this).find('input[name="email"]').val() );
 		$('#dentist-password').val( $(this).find('input[name="password"]').val() );
 		$('#dentist-password-repeat').val( $(this).find('input[name="password"]').val() );

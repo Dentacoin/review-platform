@@ -513,6 +513,7 @@
             @endforeach
         @endif
         <script type="text/javascript">
+        	var images_path = '{{ url('img-trp') }}'; //Map pins
         	var lang = '{{ App::getLocale() }}';
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         </script>

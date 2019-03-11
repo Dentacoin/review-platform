@@ -2798,7 +2798,8 @@ p.h2-bold {
 		text-transform: uppercase;
 		color: #020202;
 		text-align: center;
-		margin-bottom: 45px;
+		//margin-bottom: 45px;
+		margin-bottom: 15px;
 		position: relative;
 
 		@media #{$phone} {
@@ -2813,7 +2814,8 @@ p.h2-bold {
 		color: #020202;
 		text-align: center;
 		font-weight: normal;
-		margin-bottom: 35px;
+		//margin-bottom: 35px;
+		margin-bottom: 10px;
 
 		@media #{$phone} {
 			font-size: 12px;
@@ -2861,7 +2863,8 @@ p.h2-bold {
 		text-align: center;
 		max-width: 700px;
 		margin: 0 auto;
-		margin-bottom: 40px;
+		//margin-bottom: 40px;
+		margin-bottom: 10px;
 	}
 
 	.search-survey {
@@ -2870,7 +2873,8 @@ p.h2-bold {
 
 	.questions-menu {
 		margin-top: 15px;
-		margin-bottom: 60px;
+		//margin-bottom: 60px;
+		margin-bottom: 20px;
 
 		.sort-menu {
 			width: 100%;
@@ -2897,19 +2901,21 @@ p.h2-bold {
 			}
 
 			.vox-stat {
-				margin-bottom: 60px;
+				//margin-bottom: 60px;
+				margin-bottom: 25px;
 				border-radius: 10px;
 				border: 3px solid #f3f3f3;
 				padding: 17px 12px;
-				padding-bottom: 50px;
 				position: relative;
 
 				max-width: 870px;
 				margin-left: auto;
 				margin-right: auto;
+    			align-items: center;
 
 				@media #{$phone} {
 					margin-bottom: 20px;
+					padding-bottom: 50px;
 				}
 
 				@media #{$tablet} {

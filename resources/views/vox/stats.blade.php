@@ -66,11 +66,6 @@
 								<h3>
 									{{ $vox->title }}
 								</h3>
-								@if($vox->stats_main_question)
-									<h4>
-										{{ $vox->stats_main_question->translateorNew(App::getLocale())->stats_title }}
-									</h4>
-								@endif
 								<p>
 									{{ $vox->translateorNew(App::getLocale())->stats_description }}
 								</p>

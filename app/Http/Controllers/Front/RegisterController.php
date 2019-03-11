@@ -152,7 +152,7 @@ class RegisterController extends FrontController
     public function check_step_three() {
 
         $validator = Validator::make(Request::all(), [
-            'photo' =>  array('required'),
+            //'photo' =>  array('required'),
             'specialization' =>  array('required', 'array'),
         ]);
 
@@ -264,7 +264,7 @@ class RegisterController extends FrontController
             'address' =>  array('required', 'string'),
             'website' =>  array('required', 'url'),
             'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
-            'photo' =>  array('required'),
+            //'photo' =>  array('required'),
             'specialization' =>  array('required', 'array'),
             'agree' =>  array('required', 'accepted'),
         ]);

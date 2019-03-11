@@ -31,6 +31,7 @@
 
 				<div class="form-inner">
 					<input type="text" name="name" placeholder="{{ trans('trp.page.index-dentist.name') }}" class="input">
+					<input type="text" name="name_alternative" placeholder="{{ trans('trp.page.index-dentist.name_alternative') }}" class="input">
 					<input type="email" name="email" placeholder="{{ trans('trp.page.index-dentist.email') }}" class="input">
 					<input type="password" name="password" placeholder="{{ trans('trp.page.index-dentist.password') }}" class="input">
 					<div class="tac">

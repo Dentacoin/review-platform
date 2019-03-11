@@ -35,7 +35,7 @@ class RegisterController extends FrontController
                 'country_id' => array('required', 'exists:countries,id'),
                 'address' =>  array('required', 'string'),
                 'privacy' =>  array('required', 'accepted'),
-                'photo' =>  array('required'),
+                //'photo' =>  array('required'),
                 'website' =>  array('required', 'url'),
                 'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
             ]);

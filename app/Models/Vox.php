@@ -63,7 +63,7 @@ class Vox extends Model {
     }
     
     public function stats_main_question() {
-        return $this->hasOne('App\Models\VoxQuestion', 'vox_id', 'id')->where('stats_featured', '1');
+        return $this->hasOne('App\Models\VoxQuestion', 'vox_id', 'id')->where('stats_featured', '1'); // we used to show the first question in the Stats list
     }
     
     public function respondentsCount() {

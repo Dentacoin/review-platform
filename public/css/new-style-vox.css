@@ -1923,7 +1923,7 @@ p.h2-bold {
   text-transform: uppercase;
   color: #020202;
   text-align: center;
-  margin-bottom: 45px;
+  margin-bottom: 15px;
   position: relative; }
   @media screen and (max-width: 768px) {
     .page-stats h1 {
@@ -1936,7 +1936,7 @@ p.h2-bold {
   color: #020202;
   text-align: center;
   font-weight: normal;
-  margin-bottom: 35px; }
+  margin-bottom: 10px; }
   @media screen and (max-width: 768px) {
     .page-stats h2 {
       font-size: 12px;
@@ -1970,12 +1970,12 @@ p.h2-bold {
   text-align: center;
   max-width: 700px;
   margin: 0 auto;
-  margin-bottom: 40px; }
+  margin-bottom: 10px; }
 .page-stats .search-survey {
   margin: 0 auto; }
 .page-stats .questions-menu {
   margin-top: 15px;
-  margin-bottom: 60px; }
+  margin-bottom: 20px; }
   .page-stats .questions-menu .sort-menu {
     width: 100%;
     text-align: center; }
@@ -1992,18 +1992,19 @@ p.h2-bold {
       color: #020202;
       display: none; }
     .page-stats .stats-list .stats-holder .vox-stat {
-      margin-bottom: 60px;
+      margin-bottom: 25px;
       border-radius: 10px;
       border: 3px solid #f3f3f3;
       padding: 17px 12px;
-      padding-bottom: 50px;
       position: relative;
       max-width: 870px;
       margin-left: auto;
-      margin-right: auto; }
+      margin-right: auto;
+      align-items: center; }
       @media screen and (max-width: 768px) {
         .page-stats .stats-list .stats-holder .vox-stat {
-          margin-bottom: 20px; } }
+          margin-bottom: 20px;
+          padding-bottom: 50px; } }
       @media screen and (max-width: 1080px) {
         .page-stats .stats-list .stats-holder .vox-stat {
           max-width: 740px; } }
