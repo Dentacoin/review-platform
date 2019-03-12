@@ -509,7 +509,7 @@ class DentistController extends FrontController
 
         $view_params['schema'] = [
             "@context" => "http://schema.org",
-            "@type" => $item->is_clinic ? 'Clinic' : 'Dentist',
+            "@type" => 'Dentist',
             "name" => $item->getName(),
             "image" => $item->getImageUrl(true),
         ];
