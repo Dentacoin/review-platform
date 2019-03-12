@@ -1033,6 +1033,21 @@ body.blur .site-content {
     .flickity .flickity-prev-next-button.next svg {
       display: none; }
 
+.delete-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 23px;
+  height: 23px;
+  background: #898989;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  .delete-button i {
+    background: none;
+    color: white; }
+
 .flickity-oval {
   position: relative;
   background-color: #f7f7f7; }
@@ -4641,3 +4656,6 @@ body.edit-user .profile-info-mobile .profile-details {
     border-style: solid;
     border-width: 0 7.5px 7.5px 7.5px;
     border-color: transparent transparent #41b0ff transparent; }
+
+.lb-outerContainer {
+  background-color: transparent !important; }

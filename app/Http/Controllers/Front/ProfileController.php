@@ -905,13 +905,25 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $dapic->save();
             $img = Image::make( Input::file('image') )->orientate();
             $dapic->addImage($img);
-            return Response::json(['success' => true, 'url' => $dapic->getImageUrl(true)]);
+            return Response::json([
+                'success' => true,
+                'url' => $dapic->getImageUrl(true),
+                'original' => $dapic->getImageUrl(),
+            ]);
         }
         $this->user->updateStrength();
         $ret = [
             'success' => true
         ];
         return Response::json( $ret );
+    }    
+
+    public function gallery_delete($locale=null, $id) {
+        UserPhoto::destroy($id);
+
+        return Response::json( [
+            'success' => true,
+        ] );
     }
 
 
@@ -1119,6 +1131,15 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             'message' => trans('trp.page.user.dentist-invited-error')
         ] );
 
+    }
+
+    public function invites_delete( $locale=null, $id ) {
+
+        UserInvite::destroy($id);
+
+        return Response::json( [
+            'success' => true,
+        ] );
     }
 
 

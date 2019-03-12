@@ -13,6 +13,36 @@ var suggestClinicClick;
 
 $(document).ready(function(){
 
+   var handleGalleryRemoved = function() {
+    
+        $('.delete-gallery').off('click').on('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var r = confirm( $(this).attr('sure') );
+            if(!r) {
+                return;
+            }
+
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
+
+            var id = $(this).closest('.slider-wrapper').attr('photo-id');
+            $.ajax( {
+                url: lang + '/profile/gallery/delete/'+id,
+                type: 'GET',
+                dataType: 'json',
+                success: (function( data ) {
+                    ajax_is_running = false;
+                    galleryFlickty.flickity( 'remove', $(this).closest('.slider-wrapper') );
+                }).bind(this)
+            });
+
+        } );
+   }
+   handleGalleryRemoved();
+
     showFullReview = function(id) {
         showPopup('view-review-popup');
         $.ajax( {
@@ -390,7 +420,10 @@ $(document).ready(function(){
             var this_file = $(this).find('input[name="image"]')[0].files[0];
             // add assoc key values, this will be posts values
             formData.append("_token", $(this).find('input[name="_token"]').val());
-            formData.append("image", this_file, this_file.name);
+            if (this_file) {
+                formData.append("image", this_file, this_file.name);
+            }
+            
             formData.append("name", $(this).find('.invite-name').val());
             formData.append("email", $(this).find('.invite-email').val());
 
@@ -491,16 +524,22 @@ $(document).ready(function(){
 
         $('.add-gallery-image .image-label').addClass('loading');
 
+        var sure_text = $('#add-gallery-photo').attr('sure-trans');
         var file = $(this)[0].files[0];
         var upload = new Upload(file, $(this).attr('upload-url'), function(data) {
             $('.add-gallery-image .image-label').removeClass('loading');
 
-            var html = '<div class="slider-wrapper">\
-                <div class="slider-image cover" style="background-image: url(\''+data.url+'\')"></div>\
-            </div>\
+            var html = '<a href="'+data.original+'" data-lightbox="user-gallery" class="slider-wrapper">\
+                <div class="slider-image cover" style="background-image: url(\''+data.url+'\')">\
+                    <div class="delete-gallery delete-button" sure="'+sure_text+'">\
+                        <i class="fas fa-times"></i>\
+                    </div>\
+                </div>\
+            </a>\
             ';
 
             galleryFlickty.flickity( 'insert', $(html), 1 );
+            handleGalleryRemoved();
 
             ajax_is_running = false;
         });
@@ -571,6 +610,34 @@ $(document).ready(function(){
             }
         );
     } );
+
+    $('.team-container .delete-invite').click( function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var r = confirm( $(this).attr('sure') );
+        if(!r) {
+            return;
+        }
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var id = $(this).closest('.slider-wrapper').attr('invite-id');
+        $.ajax( {
+            url: lang + '/profile/invites/delete/'+id,
+            type: 'GET',
+            dataType: 'json',
+            success: (function( data ) {
+                ajax_is_running = false;
+                teamFlickity.flickity( 'remove', $(this).closest('.slider-wrapper') );
+            }).bind(this)
+        });
+
+    } );
+
+
 
     //Invite teammembers
 

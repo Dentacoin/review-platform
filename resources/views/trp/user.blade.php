@@ -899,15 +899,21 @@
 								    		<div class="loader">
 								    			<i class="fas fa-circle-notch fa-spin"></i>
 								    		</div>
-											<input type="file" name="image" id="add-gallery-photo" upload-url="{{ getLangUrl('profile/gallery') }}">
+											<input type="file" name="image" id="add-gallery-photo" upload-url="{{ getLangUrl('profile/gallery') }}" sure-trans="{!! trans('trp.page.user.gallery-sure') !!}">
 										</label>
 									{!! Form::close() !!}
 								</div>			    				
 			    			@endif
 				            @foreach($item->photos as $photo)
-								<div class="slider-wrapper">
-									<div class="slider-image cover" style="background-image: url('{{ $photo->getImageUrl(true) }}')"></div>
-								</div>
+								<a href="{{ $photo->getImageUrl() }}" data-lightbox="user-gallery" class="slider-wrapper" photo-id="{{ $photo->id }}">
+									<div class="slider-image cover" style="background-image: url('{{ $photo->getImageUrl(true) }}')">
+										@if( (!empty($user) && $item->id==$user->id) )
+											<div class="delete-gallery delete-button" sure="{!! trans('trp.page.user.gallery-sure') !!}">
+												<i class="fas fa-times"></i>
+											</div>
+										@endif
+									</div>
+								</a>
 							@endforeach
 						</div>
 	    			</div>
@@ -981,9 +987,15 @@
 
 						@if($item->invites->isNotEmpty())
 				        	@foreach( $item->invites as $invite)
-				        		@if(!$invite->invited_id)
-									<a class="slider-wrapper" href="javascript:;" dentist-id="{{ $invite->invited_id }}">
-										<div class="slider-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')"></div>
+				        		@if(!$invite->invited_id && $invite->for_team)
+									<a class="slider-wrapper" href="javascript:;" invite-id="{{ $invite->id }}">
+										<div class="slider-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')">
+											@if( (!empty($user) && $item->id==$user->id) )
+												<div class="delete-invite delete-button" sure="{!! trans('trp.page.user.delete-sure', ['name' => $invite->invited_name ]) !!}">
+													<i class="fas fa-times"></i>
+												</div>
+											@endif
+										</div>
 									    <div class="slider-container">
 									    	<h4>{{ $invite->invited_name }}</h4>
 										    <div class="ratings">

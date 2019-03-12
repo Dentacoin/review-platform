@@ -221,7 +221,8 @@ $reviewRoutes = function () {
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');
 				Route::any('profile/home', 						'ProfileController@home');
 				Route::post('profile/info/upload', 				'ProfileController@upload');
-				Route::post('profile/gallery', 					'ProfileController@gallery');
+				Route::post('profile/gallery', 					'ProfileController@gallery');				
+				Route::any('profile/gallery/delete/{id}', 		'ProfileController@gallery_delete');
 				Route::any('profile/info', 						'ProfileController@info');
 				Route::get('profile/password', 					'ProfileController@password');
 				Route::post('profile/password', 				'ProfileController@change_password');
@@ -244,6 +245,8 @@ $reviewRoutes = function () {
 				Route::any('profile/dentists/invite', 			'ProfileController@inviteDentist');
 				Route::any('profile/clinics/delete/{id}', 		'ProfileController@clinics_delete');
 				Route::any('profile/clinics/invite', 			'ProfileController@inviteClinic');
+
+				Route::any('profile/invites/delete/{id}', 		'ProfileController@invites_delete');
 
 				Route::get('gdpr', 								'ProfileController@gdpr');
 

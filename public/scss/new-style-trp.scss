@@ -881,7 +881,6 @@ body.blur {
 			    width: 18px;
 			    height: 18px;
 			}
-
 			.deleter {
 			    position: absolute;
 			    top: 5px;
@@ -946,6 +945,24 @@ body.blur {
 			display: none;
 		}
 	}
+}
+
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 23px;
+    height: 23px;
+    background: #898989;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+    	background: none;
+    	color: white;
+    }
 }
 
 .flickity-oval {
@@ -6310,4 +6327,8 @@ body.edit-user {
 		// }
 
     }
+}
+
+.lb-outerContainer {
+	background-color: transparent !important;
 }

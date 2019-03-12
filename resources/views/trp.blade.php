@@ -32,6 +32,9 @@
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/ids.css').'?ver='.$cache_version }}" />
+		@if( $current_page=='dentist' )
+			<link rel="stylesheet" type="text/css" href="{{ url('/css/lightbox.css').'?ver='.$cache_version }}" />
+		@endif
 		
         @if(!empty($css) && is_array($css))
             @foreach($css as $file)
@@ -327,6 +330,7 @@
 			<script src="//vjs.zencdn.net/6.4.0/video.min.js"></script>
 			<script src="//cdn.WebRTC-Experiment.com/RecordRTC.js"></script>
 			<script src="//webrtc.github.io/adapter/adapter-latest.js"></script>
+			<script src="{{ url('/js/lightbox.js').'?ver='.$cache_version }}"></script>
         @endif
         @if(!empty($js) && is_array($js))
             @foreach($js as $file)
