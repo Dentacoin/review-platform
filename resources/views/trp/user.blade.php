@@ -997,6 +997,7 @@
 											@endif
 										</div>
 									    <div class="slider-container">
+									    	<div class="not-verified">Not verified</div>
 									    	<h4>{{ $invite->invited_name }}</h4>
 										    <div class="ratings">
 												<div class="stars">

@@ -773,6 +773,18 @@ body.blur {
 				padding: 6px;
 			}
 
+			.not-verified {
+				position: absolute;
+				top: -22px;
+				background-color: #126585;
+				color: white;
+				left: 0;
+				right: 0;
+				text-align: center;
+				height: 22px;
+				line-height: 22px;
+			}
+
     		h4 {
     			font-weight: bold;
     			margin-bottom: 15px;

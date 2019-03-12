@@ -918,6 +918,16 @@ body.blur .site-content {
       @media screen and (max-width: 1200px) {
         .flickity .slider-wrapper .slider-container {
           padding: 6px; } }
+      .flickity .slider-wrapper .slider-container .not-verified {
+        position: absolute;
+        top: -22px;
+        background-color: #126585;
+        color: white;
+        left: 0;
+        right: 0;
+        text-align: center;
+        height: 22px;
+        line-height: 22px; }
       .flickity .slider-wrapper .slider-container h4 {
         font-weight: bold;
         margin-bottom: 15px; }
