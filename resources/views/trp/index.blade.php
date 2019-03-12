@@ -4,16 +4,14 @@
 
 	<div class="black-overflow" style="display: none;">
 	</div>
-	<div class="home-search-form">
+	<div class="home-search-form main-box">
 		<div class="tac">
-	    	<h1>
+	    	<p class="index-big-title">
 	    		{!! nl2br(trans('trp.page.index.title')) !!}
-	    		
-	    	</h1>
-	    	<h2>
+	    	</p>
+	    	<h1 class="index-main-title">
 	    		{!! nl2br(trans('trp.page.index.subtitle')) !!}
-	    		
-	    	</h2>
+	    	</h1>
 	    </div>
 	    @include('trp.parts.search-form')
 		
@@ -65,12 +63,10 @@
 					    </div>
 				    	<div class="flickity-buttons clearfix">
 				    		<div>
-				    			{!! nl2br(trans('trp.common.see-profile')) !!}
-				    			
+				    			{!! nl2br(trans('trp.common.see-profile')) !!}				    			
 				    		</div>
 				    		<div href="{{ $dentist->getLink() }}?popup-loged=submit-review-popup">
-				    			{!! nl2br(trans('trp.common.submit-review')) !!}
-				    			
+				    			{!! nl2br(trans('trp.common.submit-review')) !!}				    			
 				    		</div>
 				    	</div>
 					</a>
@@ -86,9 +82,8 @@
 			<div class="container">
 				<div class="front-info">
 					<div class="container-middle">
-						<h2 class="tac">
+						<h2 class="gbb tac index-h2">
 							{!! nl2br(trans('trp.page.index.hint')) !!}
-							
 						</h2>
 					</div>
 					<div class="flex first">
@@ -98,15 +93,12 @@
 						<div class="col fixed-width">
 							<h3>
 								{!! nl2br(trans('trp.page.index.usp-1-title')) !!}
-								
 							</h3>
 							<p>
 								{!! nl2br(trans('trp.page.index.usp-1-content')) !!}
-								
 							</p>
 							<a href="javascript:;" class="button button-sign-up-patient" data-popup="popup-register">
 								{!! nl2br(trans('trp.page.index.join-now')) !!}
-								
 							</a>
 						</div>
 					</div>
@@ -114,15 +106,12 @@
 						<div class="col fixed-width">
 							<h3>
 								{!! nl2br(trans('trp.page.index.usp-2-title')) !!}
-								
 							</h3>
 							<p>
 								{!! nl2br(trans('trp.page.index.usp-2-content')) !!}
-								
 							</p>
 							<a href="{{ getLangUrl('welcome-dentist') }}" class="button">
 								{!! nl2br(trans('trp.page.index.join-dentist')) !!}
-								
 							</a>
 						</div>
 						<div class="col">
@@ -135,14 +124,70 @@
 		<div class="front-info">
 			<div class="third">
 				<div class="container">
+					<div class="how-works">
+						<h2 class="gbb tac">{!! nl2br(trans('trp.page.index.how-works.title')) !!}</h2>
+
+						<div class="how-box flex">
+							<div class="first-how">
+								<div class="how-wrap flex flex-center">
+									<div class="how-number">
+										01
+									</div>
+									<div class="how-text">
+										{!! nl2br(trans('trp.page.index.how-works.1')) !!}
+									</div>
+								</div>
+								<div class="how-wrap flex flex-center">
+									<div class="how-number">
+										02
+									</div>
+									<div class="how-text">
+										{!! nl2br(trans('trp.page.index.how-works.2')) !!}
+									</div>
+								</div>
+								<div class="how-wrap flex flex-center">
+									<div class="how-number">
+										03
+									</div>
+									<div class="how-text">
+										{!! nl2br(trans('trp.page.index.how-works.3')) !!}
+									</div>
+								</div>
+							</div>
+							<div class="second-how">
+								<div class="how-wrap flex flex-center">
+									<div class="how-number">
+										04
+									</div>
+									<div class="how-text">
+										{!! nl2br(trans('trp.page.index.how-works.4')) !!}
+									</div>
+								</div>
+								<div class="how-wrap flex flex-center">
+									<div class="how-number">
+										05
+									</div>
+									<div class="how-text">
+										{!! nl2br(trans('trp.page.index.how-works.5')) !!}
+									</div>
+								</div>
+								<div class="how-wrap flex flex-center">
+									<div class="how-number">
+										06
+									</div>
+									<div class="how-text">
+										{!! nl2br(trans('trp.page.index.how-works.6')) !!}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="fixed-width">
-						<h3>
+						<h3 class="gbb">
 							{!! nl2br(trans('trp.page.index.usp-3-title')) !!}
-							
 						</h3>
 						<p>
 							{!! nl2br(trans('trp.page.index.usp-3-content')) !!}
-							
 						</p>
 						<div class="tac">
 							<a href="javascript:;" class="button button-sign-up-patient" data-popup="popup-register">

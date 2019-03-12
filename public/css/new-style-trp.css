@@ -418,6 +418,31 @@ body.logged-in .main-top {
     body.logged-in .main-top {
       padding-bottom: 210px; } }
 
+@media screen and (max-width: 620px) {
+  .main-box {
+    top: 70px !important; } }
+.main-box .index-big-title {
+  font-size: 45px;
+  color: white;
+  padding-top: 0px;
+  font-weight: bold;
+  text-transform: uppercase; }
+  @media screen and (max-width: 998px) {
+    .main-box .index-big-title {
+      font-size: 39px; } }
+  @media screen and (max-width: 768px) {
+    .main-box .index-big-title {
+      font-size: 30px; } }
+.main-box .index-main-title {
+  font-size: 35px;
+  color: white;
+  font-weight: 300;
+  margin-bottom: 30px;
+  text-transform: unset; }
+  @media screen and (max-width: 768px) {
+    .main-box .index-main-title {
+      font-size: 24px; } }
+
 a.text {
   color: #126585;
   text-decoration: underline;
@@ -1110,29 +1135,35 @@ body.blur .site-content {
     color: #268db5;
     transition: all 0.3s ease; }
 
+.gbb {
+  position: relative;
+  padding-bottom: 25px; }
+  .gbb::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 2px;
+    width: 223px;
+    background-color: #c1c1c1; }
+
 .front-info {
   padding-bottom: 80px; }
   @media screen and (max-width: 768px) {
     .front-info {
       text-align: center;
       padding-bottom: 20px; } }
-  .front-info h2 {
+  .front-info .index-h2 {
     padding-bottom: 25px;
     margin-bottom: 100px;
     position: relative; }
     @media screen and (max-width: 768px) {
-      .front-info h2 {
+      .front-info .index-h2 {
         padding-bottom: 15px;
         margin-bottom: 40px; } }
-    .front-info h2::after {
-      content: '';
-      width: 223px;
-      height: 2px;
-      background-color: #c1c1c1;
-      position: absolute;
-      bottom: 0px;
-      left: 50%;
-      transform: translateX(-50%); }
+  .front-info h2 {
+    font-size: 30px; }
   .front-info p {
     font-size: 18px; }
   .front-info .first .fixed-width {
@@ -1217,27 +1248,41 @@ body.blur .site-content {
         text-align: center;
         width: 440px;
         margin-right: auto;
-        margin-left: auto; }
+        margin-left: auto;
+        color: #333333; }
         @media screen and (max-width: 768px) {
           .front-info .third .fixed-width h3 {
             width: 100%;
             padding-bottom: 30px;
             margin-bottom: 30px;
-            font-size: 20px; }
-            .front-info .third .fixed-width h3::after {
-              content: '';
-              width: 223px;
-              height: 2px;
-              background-color: #c1c1c1;
-              position: absolute;
-              bottom: 0px;
-              left: 50%;
-              transform: translateX(-50%); } }
+            font-size: 20px; } }
       .front-info .third .fixed-width p {
         margin-bottom: 20px;
         font-weight: 300; }
       .front-info .third .fixed-width .link-text {
         margin-top: 24px; }
+
+.how-box {
+  margin-bottom: 100px; }
+  .how-box .how-number {
+    font-size: 50px;
+    color: #126585;
+    margin-right: 20px; }
+  .how-box .how-text {
+    color: #333333; }
+  .how-box .first-how {
+    max-width: 390px; }
+    @media screen and (max-width: 768px) {
+      .how-box .first-how {
+        max-width: none; } }
+  .how-box .second-how {
+    margin-left: auto;
+    max-width: 430px; }
+    @media screen and (max-width: 768px) {
+      .how-box .second-how {
+        max-width: none; } }
+  .how-box .how-wrap {
+    margin-bottom: 20px; }
 
 .ratings {
   margin-top: 20px; }

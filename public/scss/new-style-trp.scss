@@ -69,6 +69,42 @@ body.logged-in {
 	}
 }
 
+.main-box {
+
+	@media screen and (max-width: 620px) {
+		top: 70px !important;
+	}
+
+	.index-big-title {
+		font-size: 45px;
+		color: white;
+	    padding-top: 0px;
+	    font-weight: bold;
+	    text-transform: uppercase;
+
+	    @media #{$tablet} {
+	    	font-size: 39px;
+	    }
+
+	    @media #{$phone} {
+	    	font-size: 30px;
+	    }
+	}
+
+	.index-main-title {
+		font-size: 35px;
+		color: white;
+		font-weight: 300;
+	    margin-bottom: 30px;
+	    text-transform: unset;
+
+	    @media #{$phone} {
+	    	font-size: 24px;
+	    }
+	}
+}
+
+
 a.text {
 	color: #126585;
 	text-decoration: underline;
@@ -1045,6 +1081,22 @@ body.blur {
     }
 }
 
+.gbb {
+	position: relative;
+	padding-bottom: 25px;
+
+	&::after {
+	    content: '';
+	    position: absolute;
+	    bottom: 0px;
+	    left: 50%;
+	    transform: translateX(-50%);
+	    height: 2px;
+	    width: 223px;
+	    background-color: #c1c1c1;
+	}
+}
+
 .front-info {
     padding-bottom: 80px;
 
@@ -1053,7 +1105,7 @@ body.blur {
 		padding-bottom: 20px;
 	}
 
-	h2 {
+	.index-h2 {
 		padding-bottom: 25px;
 		margin-bottom: 100px;
 		position: relative;
@@ -1062,17 +1114,10 @@ body.blur {
 			padding-bottom: 15px;
 			margin-bottom: 40px;
 		}
+	}
 
-		&::after {
-			content: '';
-			width: 223px;
-			height: 2px;
-			background-color: #c1c1c1;
-			position: absolute;
-			bottom: 0px;
-			left: 50%;
-			transform: translateX(-50%);
-		}
+	h2 {
+		font-size: 30px;
 	}
 
 	p {
@@ -1190,23 +1235,13 @@ body.blur {
 				width: 440px;
 				margin-right: auto;
 				margin-left: auto;
+				color: #333333;
 
 				@media #{$phone} {
 					width: 100%;
 					padding-bottom: 30px;
     				margin-bottom: 30px;
     				font-size: 20px;
-
-					&::after {
-						content: '';
-						width: 223px;
-						height: 2px;
-						background-color: #c1c1c1;
-						position: absolute;
-						bottom: 0px;
-						left: 50%;
-						transform: translateX(-50%);
-					}
 				}
 	    	}
 
@@ -1222,6 +1257,40 @@ body.blur {
 	}
 }
 
+.how-box {
+    margin-bottom: 100px;
+
+	.how-number {
+		font-size: 50px;
+		color: #126585;
+		margin-right: 20px;
+	}
+
+	.how-text {
+		color: #333333;
+	}
+
+	.first-how {
+		max-width: 390px;
+
+		@media #{$phone} {
+			max-width: none;
+		}
+	}
+
+	.second-how {
+		margin-left: auto;
+	    max-width: 430px;
+
+		@media #{$phone} {
+			max-width: none;
+		}
+	}
+
+	.how-wrap {
+		margin-bottom: 20px;
+	}
+}
 
 .ratings {
     margin-top: 20px;
