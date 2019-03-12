@@ -34,13 +34,33 @@
             .title {
                 font-size: 72px;
                 margin-bottom: 40px;
+                padding: 0px 100px;
+            }
+
+            .button {
+                font-size: 37px;
+                border: 1px solid #B0BEC5;
+                display: inline-block;
+                padding: 10px 40px;
+                color: #b0bec5;
+                text-decoration: none;
+                border-radius: 10px;
+                background-color: transparent;
+                transition: all 0.3s ease;
+            }
+
+            .button:hover {
+                background-color: #b0bec5;
+                color: white;
+                transition: all 0.3s ease;
             }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Sorry, the page you are looking can't be found</div>
+                <div class="title">Sorry, the page you are looking for can't be found. Click the button to go to the home page.</div>
+                <a class="button" href="{{ getLangUrl('/') }}">Home</a>
             </div>
         </div>
     </body>

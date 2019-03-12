@@ -33,6 +33,10 @@ class DentistsController extends FrontController
     public function search($locale=null, $query=null, $filter=null, $page=null, $ajax=null) {
         $this->current_page = 'dentists';
 
+        if (empty($query)) {
+            return redirect( getLangUrl('/') );
+        }
+
         // $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).(!empty($filter) ? '/'.$filter : '');
 
         $corrected_query = $this->getCorrectedQuery($query, $filter);
