@@ -407,7 +407,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $info = self::validateAddress($this->country->name, $newvalue);
             if(!empty($info)) {
                 foreach ($info as $key => $value) {
-                    $this->attributes[$key] = $value;
+                    if( in_array($key, $this->fillable) ) {
+                        $this->attributes[$key] = $value;                        
+                    }
                 }
             } else {
                 $this->attributes['address'] = null;
