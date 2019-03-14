@@ -39,7 +39,7 @@
 				    		@if(!is_object($user))
 				    			<span class="letter">{{ $user }}</span>
 				    		@else
-				    			<a href="{{ getLangUrl('dentists/'.str_replace(' ', '-', strtolower($user->city_name)).(!empty($user->state_name) ? '-'.strtolower($user->state_name) : '').'-'.$country->slug) }}">{{ $user->city_name }}{{ !empty($user->state_name) ? ', '.$user->state_name : '' }}</a>
+				    			<a href="{{ getLangUrl( str_replace(' ', '-', 'dentists/'.strtolower($user->city_name).(!empty($user->state_name) ? '-'.strtolower($user->state_name) : '').'-'.$user->country->slug)) }}">{{ $user->city_name }}{{ !empty($user->state_name) ? ', '.$user->state_name : '' }}</a>
 				    		@endif
 				    		@if( $total_rows > 8 && in_array($key, $breakpoints) && !$loop->last)
 				    			</div>

@@ -1805,9 +1805,13 @@ textarea.input {
 	}
 
 	footer {
+		// opacity: 0;
+		// bottom: -147px;
+
+		opacity: 1;
+		bottom: 0px;
+		
 		transition: all 0.3s ease;
-		opacity: 0;
-		bottom: -147px;
 		height: 147px;
 		padding-top: 0px;
 		flex-direction: column;

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Input;
 use App\Models\User;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\UserPhoto;
 use GoogleMaps;
 use App;
 
@@ -16,7 +17,7 @@ use App;
 class DentistsController extends FrontController
 {
     public function getCorrectedQuery($query, $filter) {
-        $query = urldecode($query);
+        $query = trim(urldecode($query));
         if(!empty($filter)) {
             $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).'/'.$filter;
         } else {
@@ -41,7 +42,6 @@ class DentistsController extends FrontController
 
         $corrected_query = $this->getCorrectedQuery($query, $filter);
         if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
-
             return redirect( getLangUrl($corrected_query) );
         }
 
@@ -103,7 +103,11 @@ class DentistsController extends FrontController
 
                 $geores = json_decode($geores);
                 if(!empty($geores->results[0]->geometry->location)) {
-                    $formattedAddress = $geores->results[0]->formatted_address;
+
+                    $parsedAddress = User::parseAddress( $geores->results[0]->address_components );
+                    $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
+                    $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
+                    $formattedAddress .= !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'].' ' : '';
                     $lat = $geores->results[0]->geometry->location->lat;
                     $lon = $geores->results[0]->geometry->location->lng;
                 }
@@ -113,13 +117,13 @@ class DentistsController extends FrontController
                 return redirect( getLangUrl('/') );
             }
 
-            $corrected_query = $this->getCorrectedQuery($formattedAddress, $filter);
-            $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
-            $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
-            if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
-
-                return redirect( getLangUrl($corrected_query) );
-            }
+            // $corrected_query = $this->getCorrectedQuery($formattedAddress, $filter);
+            // $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
+            // $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
+            // if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
+            //     //dd($formattedAddress, $corrected_query);
+            //     return redirect( getLangUrl($corrected_query) );
+            // }
             
 
             list($range_lat, $range_lon) = $this->getRadiusInLatLon(50, $lat);

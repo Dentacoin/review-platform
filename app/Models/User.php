@@ -440,74 +440,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ret['state_name'] = $country;
                 $ret['city_name'] = $country;
             } else {
-
-                $state_fields = [
-                    'administrative_area_level_1',
-                    'administrative_area_level_2',
-                    'administrative_area_level_3',
-                ];
-
-                foreach ($state_fields as $sf) {
-                    if( empty($ret['state_name']) ) {
-                        foreach ($geores->results[0]->address_components as $ac) {
-                            if( in_array($sf, $ac->types) ) {
-                                $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-                                $cname = iconv('ASCII', 'UTF-8', $cname);
-                                $ret['state_name'] = $cname;
-                                break;
-                            }
-                        }
-                    } else {
-                        break;
-                    }
-                }
-
-
-                $city_fields = [
-                    'postal_town',
-                    'locality',
-                    'administrative_area_level_5',
-                    'administrative_area_level_4',
-                    'administrative_area_level_3',
-                    'administrative_area_level_2',
-                    'sublocality_level_1',
-                    'neighborhood',
-                ];
-
-                foreach ($city_fields as $sf) {
-                    if( empty($ret['city_name']) ) {
-                        foreach ($geores->results[0]->address_components as $ac) {
-                            if( in_array($sf, $ac->types) ) {
-                                $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-                                $cname = iconv('ASCII', 'UTF-8', $cname);
-                                $ret['city_name'] = $cname;
-                                break;
-                            }
-                        }
-                    } else {
-                        break;
-                    }
-                }
-
-                 $zip_fields = [
-                    'postal_code',
-                    'zip',
-                ];
-
-                foreach ($zip_fields as $sf) {
-                    if( empty($ret['zip']) ) {
-                        foreach ($geores->results[0]->address_components as $ac) {
-                            if( in_array($sf, $ac->types) ) {
-                                $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-                                $cname = iconv('ASCII', 'UTF-8', $cname);
-                                $ret['zip'] = $cname;
-                                break;
-                            }
-                        }
-                    } else {
-                        break;
-                    }
-                }
+                $ret = self::parseAddress( $geores->results[0]->address_components );
             }
 
                 
@@ -520,6 +453,100 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             // }
 
         }    
+
+        return $ret;
+    }
+
+    public static function parseAddress( $components ) {
+        $ret = [];
+
+        $country_fields = [
+            'country',
+        ];
+
+        foreach ($country_fields as $sf) {
+            if( empty($ret['country_name']) ) {
+                foreach ($components as $ac) {
+                    if( in_array($sf, $ac->types) ) {
+                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                        $cname = iconv('ASCII', 'UTF-8', $cname);
+                        $ret['country_name'] = $cname;
+                        break;
+                    }
+                }
+            } else {
+                break;
+            }
+        }
+
+
+        $state_fields = [
+            'administrative_area_level_1',
+            'administrative_area_level_2',
+            'administrative_area_level_3',
+        ];
+
+        foreach ($state_fields as $sf) {
+            if( empty($ret['state_name']) ) {
+                foreach ($components as $ac) {
+                    if( in_array($sf, $ac->types) ) {
+                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                        $cname = iconv('ASCII', 'UTF-8', $cname);
+                        $ret['state_name'] = $cname;
+                        break;
+                    }
+                }
+            } else {
+                break;
+            }
+        }
+
+
+        $city_fields = [
+            'postal_town',
+            'locality',
+            'administrative_area_level_5',
+            'administrative_area_level_4',
+            'administrative_area_level_3',
+            'administrative_area_level_2',
+            'sublocality_level_1',
+            'neighborhood',
+        ];
+
+        foreach ($city_fields as $sf) {
+            if( empty($ret['city_name']) ) {
+                foreach ( $components as $ac) {
+                    if( in_array($sf, $ac->types) ) {
+                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                        $cname = iconv('ASCII', 'UTF-8', $cname);
+                        $ret['city_name'] = $cname;
+                        break;
+                    }
+                }
+            } else {
+                break;
+            }
+        }
+
+         $zip_fields = [
+            'postal_code',
+            'zip',
+        ];
+
+        foreach ($zip_fields as $sf) {
+            if( empty($ret['zip']) ) {
+                foreach ( $components as $ac) {
+                    if( in_array($sf, $ac->types) ) {
+                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                        $cname = iconv('ASCII', 'UTF-8', $cname);
+                        $ret['zip'] = $cname;
+                        break;
+                    }
+                }
+            } else {
+                break;
+            }
+        }
 
         return $ret;
     }
