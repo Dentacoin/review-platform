@@ -108,6 +108,7 @@ class DentistsController extends FrontController
                     $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
                     $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
                     $formattedAddress .= !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'].' ' : '';
+
                     $lat = $geores->results[0]->geometry->location->lat;
                     $lon = $geores->results[0]->geometry->location->lng;
                 }
