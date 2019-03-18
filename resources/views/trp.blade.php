@@ -284,46 +284,22 @@
 		
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
-        <script type="text/javascript">
-        	jQuery(document).ready(function($){
-	            @if(!empty($user) && !$user->is_dentist)
 
-		            @if( $just_registered && $civic_registered)
-		            	fbq('track', 'CompleteRegistrationCivic');
-						gtag('event', 'ClickCivic', {
-							'event_category': 'PatientRegistration',
-							'event_label': 'TRPCivicPatientRegistration',
+		@if(!empty($trackEvents))
+	        <script type="text/javascript">
+	        	jQuery(document).ready(function($){
+		        	@foreach ($trackEvents as $event)
+		        		fbq('track', '{{ $event['fb'] }}');
+						gtag('event', '{{ $event['ga_action'] }}', {
+							'event_category': '{{ $event['ga_category'] }}',
+							'event_label': '{{ $event['ga_label'] }}',
 						});
-		            @endif
-
-		            @if( $just_registered && !$civic_registered)
-		            	fbq('track', 'CompleteRegistrationFB');
-						gtag('event', 'ClickFB', {
-							'event_category': 'PatientRegistration',
-							'event_label': 'FBPatientRegistration',
-						});
-		            @endif
-
-		            @if( $login_patient)
-		            	fbq('track', 'PatientLoginSuccess');
-						gtag('event', 'ClickLogin', {
-							'event_category': 'PatientLogin',
-							'event_label': 'LoginSuccess',
-						});
-		            @endif
-		        @endif
-
-		        @if(!empty($user) && $user->is_dentist && $just_login)
-		        	fbq('track', 'DentistLogin');
-					gtag('event', 'ClickLogin', {
-						'event_category': 'DentistLogin',
-						'event_label': 'DentistLogin',
-					});
-		        @endif
-		    });
+		        	@endforeach
+			    });
+			</script>
+		@endif
 
 
-		</script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
         <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 		<script src="{{ url('/js-trp/main.js').'?ver='.$cache_version }}"></script>

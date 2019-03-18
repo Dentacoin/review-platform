@@ -140,6 +140,7 @@ class AuthenticateUser extends FrontController
 
     public function getLogout() {
         session([
+            'mark-login' => null,
             'login-logged' => null,
             'vox-welcome' => null
         ]);

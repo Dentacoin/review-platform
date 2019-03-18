@@ -78,6 +78,8 @@ class FrontController extends BaseController
             Redirect::to( getLangUrl('/') )->send();
         }
 
+        $this->trackEvents = [];
+
 
         //$this->user = Auth::guard('web')->user();
         $this->middleware(function ($request, $next) {
@@ -91,6 +93,7 @@ class FrontController extends BaseController
                 $ul->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
                 $ul->save();
                 session(['login-logged' => time()]);
+                session(['mark-login' => mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'DV' : 'TRP']);
 
                 if( !$this->user->isBanned('vox') && $this->user->bans->isNotEmpty() ) {
                     $last = $this->user->bans->last();
@@ -291,62 +294,172 @@ class FrontController extends BaseController
             $this->user->save();
         }
 
+        //
+        //Global
+        //
+        $platfrom = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
 
-        $params['just_registered'] = false;
-        if( session('just_registered') ) {
-            $params['just_registered'] = true;
+        $params['trackEvents'] = [];
+        if( session('mark-login') ) {
+            $ep = session('mark-login');
             session([
-                'just_registered' => false
+                'mark-login' => false
             ]);
+
+            if( $this->user->is_dentist ) {
+                $params['trackEvents'][] = [
+                    'fb' => $ep.'DentistLoginSaved',
+                    'ga_category' => 'DentistLogin',
+                    'ga_action' => 'NoButton',
+                    'ga_label' => 'DentistLoginSaved',
+                ];
+
+            } else {
+                $params['trackEvents'][] = [
+                    'fb' => $ep.'PatientLoginSaved',
+                    'ga_category' => 'PatientLogin',
+                    'ga_action' => 'NoButton',
+                    'ga_label' => 'PatientLoginSaved',
+                ];
+
+            }
         }
 
-        $params['civic_registered'] = false;
-        if( session('civic_registered') ) {
-            $params['civic_registered'] = true;
-            session([
-                'civic_registered' => false
-            ]);
-        }
 
-        $params['just_login'] = false;
-        if( session('just_login') ) {
-            $params['just_login'] = true;
-            session([
-                'just_login' => false
-            ]);
-        }
-
-        $params['login_patient'] = false;
         if( session('login_patient') ) {
-            $params['login_patient'] = true;
             session([
                 'login_patient' => false
             ]);
+
+            if( $platfrom=='trp' ) {
+                $params['trackEvents'][] = [
+                    'fb' => 'PatientLoginSuccess',
+                    'ga_action' => 'ClickLogin',
+                    'ga_category' => 'PatientLogin',
+                    'ga_label' => 'LoginSuccess',
+                ];
+            } else {
+                $params['trackEvents'][] = [
+                    'fb' => 'DVPatientLogin',
+                    'ga_action' => 'ClickLogin',
+                    'ga_category' => 'PatientLogin',
+                    'ga_label' => 'PatientLoginSuccess',
+                ];
+
+            }
         }
 
-        $params['just_registered_patient_vox'] = false;
+
+        if( session('just_login') ) {
+            session([
+                'just_login' => false
+            ]);
+
+            if( $this->user->is_dentist ) {
+                if( $platfrom=='trp' ) {
+                    $params['trackEvents'][] = [
+                        'fb' => 'DentistLogin',
+                        'ga_action' => 'ClickLogin',
+                        'ga_category' => 'DentistLogin',
+                        'ga_label' => 'DentistLogin',
+                    ];
+                } else {
+                    $params['trackEvents'][] = [
+                        'fb' => 'DVDentistLogin',
+                        'ga_action' => 'ClickLogin',
+                        'ga_category' => 'DentistLogin',
+                        'ga_label' => 'DentistLoginSuccess',
+                    ];
+
+                }
+
+            }
+        }
+
+        //
+        //TRP
+        //
+
+        if( session('just_registered') ) {
+            session([
+                'just_registered' => false
+            ]);
+
+            $civic_registered = false;
+            if( session('civic_registered') ) {
+                $civic_registered = true;
+                session([
+                    'civic_registered' => false
+                ]);
+            }
+
+
+            if( !$this->user->is_dentist ) {
+                if( $civic_registered) {
+                    $params['trackEvents'][] = [
+                        'fb' => 'CompleteRegistrationCivic',
+                        'ga_action' => 'ClickCivic',
+                        'ga_category' => 'PatientRegistration',
+                        'ga_label' => 'TRPCivicPatientRegistration',
+                    ];
+                } else {
+                    $params['trackEvents'][] = [
+                        'fb' => 'CompleteRegistrationFB',
+                        'ga_action' => 'ClickFB',
+                        'ga_category' => 'PatientRegistration',
+                        'ga_label' => 'FBPatientRegistration',
+                    ];
+
+                }
+            }
+
+        }
+
+
+        //
+        //Vox
+        //
+
         if( session('just_registered_patient_vox') ) {
-            $params['just_registered_patient_vox'] = true;
             session([
                 'just_registered_patient_vox' => false
             ]);
+            $params['trackEvents'][] = [
+                'fb' => 'DVPatientRegistration',
+                'ga_action' => 'ClickContinue',
+                'ga_category' => 'PatientRegistration',
+                'ga_label' => 'PatientRegistrationComplete',
+            ];
         }
 
-        $params['just_registered_dentist_vox'] = false;
+
         if( session('just_registered_dentist_vox') ) {
-            $params['just_registered_dentist_vox'] = true;
             session([
                 'just_registered_dentist_vox' => false
             ]);
+            $params['trackEvents'][] = [
+                'fb' => 'DVDentistRegistrationStep1',
+                'ga_action' => 'ClickSubmit',
+                'ga_category' => 'DentistRegistration',
+                'ga_label' => 'DentistRegistrationStep1',
+            ];
         }
 
-        $params['success_registered_dentist_vox'] = false;
         if( session('success_registered_dentist_vox') ) {
-            $params['success_registered_dentist_vox'] = true;
             session([
                 'success_registered_dentist_vox' => false
             ]);
+            $params['trackEvents'][] = [
+                'fb' => 'DVDentistRegistrationComplete',
+                'ga_action' => 'ClickSubmit',
+                'ga_category' => 'DentistRegistration',
+                'ga_label' => 'DentistRegistrationComplete',
+            ];
         }
+
+
+
+
 
         $params['new_auth'] = false;
         if( session('new_auth') && !empty($this->user) && empty($this->user->fb_id) && empty($this->user->civic_id) ) {

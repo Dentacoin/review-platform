@@ -446,55 +446,22 @@
 		</script>
 
         <script  src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
-        <script type="text/javascript">
-        	jQuery(document).ready(function($){
-	            @if(!empty($user))
 
-		            @if( $just_registered_patient_vox)
-		            	fbq('track', 'DVPatientRegistration');
-						gtag('event', 'ClickContinue', {
-							'event_category': 'PatientRegistration',
-							'event_label': 'PatientRegistrationComplete',
+
+		@if(!empty($trackEvents))
+	        <script type="text/javascript">
+	        	jQuery(document).ready(function($){
+		        	@foreach ($trackEvents as $event)
+		        		fbq('track', '{{ $event['fb'] }}');
+						gtag('event', '{{ $event['ga_action'] }}', {
+							'event_category': '{{ $event['ga_category'] }}',
+							'event_label': '{{ $event['ga_label'] }}',
 						});
-		            @endif
+		        	@endforeach
+			    });
+			</script>
+		@endif
 
-		            @if( $just_registered_dentist_vox)
-		            	fbq('track', 'DVDentistRegistrationStep1');
-						gtag('event', 'ClickSubmit', {
-							'event_category': 'DentistRegistration',
-							'event_label': 'DentistRegistrationStep1',
-						});
-		            @endif
-
-		            @if( $success_registered_dentist_vox)
-		            	fbq('track', 'DVDentistRegistrationComplete');
-						gtag('event', 'ClickSubmit', {
-							'event_category': 'DentistRegistration',
-							'event_label': 'DentistRegistrationComplete',
-						});
-		            @endif
-
-		            @if( $login_patient)
-		            	fbq('track', 'DVPatientLogin');
-						gtag('event', 'ClickLogin', {
-							'event_category': 'PatientLogin',
-							'event_label': 'PatientLoginSuccess',
-						});
-		            @endif
-
-		            @if( $just_login)
-		            	fbq('track', 'DVDentistLogin');
-						gtag('event', 'ClickLogin', {
-							'event_category': 'DentistLogin',
-							'event_label': 'DentistLoginSuccess',
-						});
-		            @endif
-
-		        @endif
-		    });
-
-
-		</script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>

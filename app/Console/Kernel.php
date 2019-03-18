@@ -220,7 +220,8 @@ RETRYING -> NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_ha
             
 ';
 
-            $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->take(10)->get(); //
+            $executed = 0;
+            $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->take(100)->get(); //
             foreach ($transactions as $trans) {
                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                 echo $log.'
@@ -228,6 +229,7 @@ RETRYING -> NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_ha
 
                 if($trans->status=='failed' || $trans->status=='new') {
                     if($trans->shouldRetry()) {
+                        $executed++;
                         Dcn::retry($trans);
                         echo '
 NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
@@ -237,6 +239,13 @@ NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
 Too early to Retry
 ';
                     }
+                }
+
+                if($executed>5) {
+                        echo '
+5 executed - enough for now
+';
+
                 }
             }
 
