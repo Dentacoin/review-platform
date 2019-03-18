@@ -22,7 +22,9 @@ class SitemapController extends FrontController
 		$dentists = User::where('is_dentist', '1')->where('status', 'approved')->get();
 
 		foreach ($dentists as $dentist) {
-			$links[] = $dentist->getLink();
+			if($dentist->address) {
+				$links[] = $dentist->getLink();
+			}
 		}
 
 		$dentists = User::where('is_dentist', 1)->whereNotNull('country_id')->where('status', 'approved')->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
