@@ -170,6 +170,7 @@ class VoxController extends FrontController
 		}
 
         if(Request::isMethod('post')) {
+
         	$ret = [
         		'success' => true,
         	];
@@ -626,6 +627,12 @@ class VoxController extends FrontController
 		        	}
 	        	}
         	}
+
+
+			if( $ret['success'] ) {
+				request()->session()->regenerateToken();
+				$ret['token'] = request()->session()->token();
+			}
 
         	return Response::json( $ret );
         }

@@ -166,55 +166,82 @@ class Kernel extends ConsoleKernel
         })->cron("*/10 * * * *"); //05:00h
         
         $schedule->call(function () {
-            $transactions = DcnTransaction::where('status', '!=', 'completed')->take(100)->get(); //
+
+            echo '
+            UNCONFIRMED TRANSACTIONS
+
+            ========================
+
+';
+
+            $transactions = DcnTransaction::where('status', 'unconfirmed')->get(); //
             foreach ($transactions as $trans) {
                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
+                echo $log.'
+';
+
+                $found = false;
+                $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
+                if(!empty($curl)) {
+                    $curl = json_decode($curl, true);
+                    if($curl['status']) {
+                        if(!empty($curl['result']['status'])) {
+                            $trans->status = 'completed';
+                            $trans->save();
+                            if( $trans->user ) {
+                                $trans->user->sendTemplate( 20, [
+                                    'transaction_amount' => $trans->amount,
+                                    'transaction_address' => $trans->address,
+                                    'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
+                                ], $trans->type=='vox-cashout' ? 'vox' : 'trp' );
+                            }
+                            $found = true;
+                            echo '
+COMPLETED!
+';
+                            sleep(1);
+                        }
+                    }
+                }
+
+                if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*24) {
+                    Dcn::retry($trans);
+                    echo '
+RETRYING -> NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
+';
+                }
+            }
+
+
+            echo '
+            NEW & FAILED TRANSACTIONS
+
+            =========================
+            
+';
+
+            $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->take(10)->get(); //
+            foreach ($transactions as $trans) {
+                $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
+                echo $log.'
+';
 
                 if($trans->status=='failed' || $trans->status=='new') {
                     if($trans->shouldRetry()) {
                         Dcn::retry($trans);
-                        echo $log.'
+                        echo '
 NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
 ';
-                        sleep(10);
-                    }
-                } else if($trans->status=='unconfirmed') {
-                    $found = false;
-                    $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
-                    if(!empty($curl)) {
-                        $curl = json_decode($curl, true);
-                        if($curl['status']) {
-                            if(!empty($curl['result']['status'])) {
-                                $trans->status = 'completed';
-                                $trans->save();
-                                if( $trans->user ) {
-                                    $trans->user->sendTemplate( 20, [
-                                        'transaction_amount' => $trans->amount,
-                                        'transaction_address' => $trans->address,
-                                        'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
-                                    ], $trans->type=='vox-cashout' ? 'vox' : 'trp' );
-                                }
-                                $found = true;
-                                echo $log.'
-COMPLETED!
+                    } else {
+                        echo '
+Too early to Retry
 ';
-                                sleep(1);
-                            }
-                        }
-                    }
-
-                    if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*24) {
-                        Dcn::retry($trans);
-                        echo $log.'
-NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
-';
-                        sleep(10);
                     }
                 }
             }
 
             echo 'DONE!';
-        })->cron("*/5 * * * *");
+        })->cron("* * * * *");
 
 
         $schedule->call(function () {

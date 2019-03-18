@@ -397,4 +397,6 @@
 	@endif
     	
 
+	{!! csrf_field() !!}
+	
 @endsection

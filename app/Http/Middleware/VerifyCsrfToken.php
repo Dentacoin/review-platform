@@ -26,8 +26,6 @@ class VerifyCsrfToken extends BaseVerifier
         '*/dental-survey-stats/*',
         '*/register/upload',
         '*/registration/upload',
-        '*/questionnaire/*',
-        '*/paid-dental-surveys/*',
         '*/profile/avatar',
         '*/youtube',
         '*/profile/jwt',

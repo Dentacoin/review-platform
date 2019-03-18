@@ -5,12 +5,6 @@ var preloadImages;
 
 $(document).ready(function(){
 
-    fbq('track', 'SurveyLaunch');
-    gtag('event', 'Take', {
-        'event_category': 'Survey',
-        'event_label': 'SurveyLaunch',
-    });
-
     if ($('.mobile-bubble-effect').length && $('.mobile-person-effect').length && window.innerWidth < 768) {
 
         // Let's call it:
@@ -29,12 +23,21 @@ $(document).ready(function(){
             $.post( 
                 VoxTest.url, 
                 {
-                    captcha: recaptchaCode
+                    captcha: recaptchaCode,
+                    _token: $('input[name="_token"]').val()
                 },
                 function( data ) {
                     if(data.success) {
                         $('#bot-group').next().show();
                         $('#bot-group').remove();
+
+                        fbq('track', 'SurveyLaunch');
+                        gtag('event', 'Take', {
+                            'event_category': 'Survey',
+                            'event_label': 'SurveyLaunch',
+                        });
+
+
                     } else {
                         $('#captcha-error').show();
                     }
@@ -176,10 +179,13 @@ $(document).ready(function(){
                 question: qid,
                 answer: answer,
                 type: type,
-                skips: multi_skips
+                skips: multi_skips,
+                _token: $('input[name="_token"]').val()
             }, 
             function( data ) {
                 if(data.success) {
+                    $('input[name="_token"]').val(data.token);
+
                     var should_skip = false;
 
                     console.log('Request sent');
