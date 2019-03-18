@@ -31,7 +31,7 @@
 		<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
-		<link rel="stylesheet" type="text/css" href="{{ url('/css/ids.css').'?ver='.$cache_version }}" />
+		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/ids.css').'?ver='.$cache_version }}" /> -->
 		@if( $current_page=='dentist' )
 			<link rel="stylesheet" type="text/css" href="{{ url('/css/lightbox.css').'?ver='.$cache_version }}" />
 		@endif
@@ -188,9 +188,11 @@
 
 
 		<div class="bottom-drawer">
-			<a id="ids" href="https://ids.dentacoin.com/" target="_blank">
-				<i class="fas fa-times-circle"></i>
-			</a>
+			<!--
+				<a id="ids" href="https://ids.dentacoin.com/" target="_blank">
+					<i class="fas fa-times-circle"></i>
+				</a>
+			-->
 			<div id="cookiebar" >
 				<p>
 					{!! nl2br( trans('trp.common.cookiebar-hint',[

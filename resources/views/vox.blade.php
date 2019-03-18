@@ -40,7 +40,7 @@
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/app.css').'?ver='.$cache_version }}" />
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/flickity.min.css').'?ver='.$cache_version }}" />
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-vox.css').'?ver='.$cache_version }}" />
-		<link rel="stylesheet" type="text/css" href="{{ url('/css/ids.css').'?ver='.$cache_version }}" />
+		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/ids.css').'?ver='.$cache_version }}" /> -->
 		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/style-vox.css').'?ver='.$cache_version }}" /> -->
 
         @if(!empty($css) && is_array($css))
@@ -368,9 +368,11 @@
 
 
 		<div class="bottom-drawer">
+			<!--
 			<a id="ids" href="https://ids.dentacoin.com/" target="_blank">
 				<i class="fas fa-times-circle"></i>
 			</a>
+		-->
 			<div id="cookiebar" >
 				<p>
 					{!! nl2br( trans('vox.common.cookiebar-hint',[
