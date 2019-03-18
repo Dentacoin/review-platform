@@ -174,7 +174,7 @@ class Kernel extends ConsoleKernel
 
 ';
 
-            $transactions = DcnTransaction::where('status', 'unconfirmed')->get(); //
+            $transactions = DcnTransaction::where('status', 'unconfirmed')->orderBy('id', 'asc')->take(30)->get(); //
             foreach ($transactions as $trans) {
                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                 echo $log.'
@@ -219,7 +219,7 @@ class Kernel extends ConsoleKernel
 ';
 
             $executed = 0;
-            $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->take(100)->get(); //
+            $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->orderBy('id', 'asc')->take(100)->get(); //
             foreach ($transactions as $trans) {
                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                 echo $log.'
