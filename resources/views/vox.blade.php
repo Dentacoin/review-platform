@@ -185,7 +185,7 @@
 								@endif
 							@elseif( $current_page!='register' )
 								<span class="dcn-rate">
-									1 DCN = $<span id="header-rate">{{ sprintf('%.4F', $dcn_price) }}</span> 
+									1 DCN = $<span id="header-rate">{{ sprintf('%.5F', $dcn_price) }}</span> 
 									<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
 								</span>
 								<a href="{{ getLangUrl('login') }}" class="start-button">
