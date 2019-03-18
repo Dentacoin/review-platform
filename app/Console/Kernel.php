@@ -238,9 +238,9 @@ class Kernel extends ConsoleKernel
                 }
 
                 if($executed>5) {
-                        echo '5 executed - enough for now
+                    echo '5 executed - enough for now
 ';
-
+                    break;
                 }
             }
 
