@@ -196,8 +196,7 @@ class Kernel extends ConsoleKernel
                                 ], $trans->type=='vox-cashout' ? 'vox' : 'trp' );
                             }
                             $found = true;
-                            echo '
-COMPLETED!
+                            echo 'COMPLETED!
 ';
                             sleep(1);
                         }
@@ -206,8 +205,7 @@ COMPLETED!
 
                 if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*24) {
                     Dcn::retry($trans);
-                    echo '
-RETRYING -> NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
+                    echo 'RETRYING -> NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
 ';
                 }
             }
@@ -231,19 +229,16 @@ RETRYING -> NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_ha
                     if($trans->shouldRetry()) {
                         $executed++;
                         Dcn::retry($trans);
-                        echo '
-NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
+                        echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
 ';
                     } else {
-                        echo '
-Too early to Retry
+                        echo 'Too early to Retry
 ';
                     }
                 }
 
                 if($executed>5) {
-                        echo '
-5 executed - enough for now
+                        echo '5 executed - enough for now
 ';
 
                 }

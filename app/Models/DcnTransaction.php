@@ -50,8 +50,8 @@ class DcnTransaction extends Model {
 
     public function shouldRetry() {
         $times = intval($this->retries)+1;
-        $period = 300*pow(2, $times);
-        $period = min(86400, $period);
+        $period = 5*pow(2, $times); //5 minutes
+        $period = min(60*24, $period);
         return !User::isGasExpensive() && Carbon::now()->diffInMinutes($this->updated_at) > $period;
     }
 }

@@ -97,6 +97,12 @@ $(document).ready(function(){
                 type: 'GET'
             } );
 
+            gtag('event', 'Take', {
+                'event_category': 'Survey',
+                'event_label': 'WelcomeSurveyComplete',
+            });
+            fbq('track', 'WelcomeSurveyComplete');
+
             if (user_id) {
                 $('.question-hints').hide();
                 $('.section-welcome').hide();
@@ -121,7 +127,9 @@ $(document).ready(function(){
                     }
 
                 } else {
-                    window.location.href = register_url;
+                    setTimeout( function() {
+                        window.location.href = register_url;
+                    }, 1000 );
                 }
                 
 

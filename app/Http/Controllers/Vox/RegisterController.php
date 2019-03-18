@@ -290,7 +290,7 @@ class RegisterController extends FrontController
     public function register_success($locale=null) {
         $this->user->checkForWelcomeCompletion();
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
-            if(Request::isMethod('post')) {
+            if(Request::isMethod('post') && !session( 'approval-request-sent' )) {
 
                 $newuser = $this->user;
 
@@ -314,13 +314,9 @@ class RegisterController extends FrontController
                     $message->subject('New Dentavox Dentist/Clinic registration');
                 });
 
-                $sess = [
-                    'success_registered_dentist_vox' => true,
-                ];
-                session($sess);
-
                 session([
                     'approval-request-sent' => true,                    
+                    'success_registered_dentist_vox' => true,
                 ]);
             }
 
