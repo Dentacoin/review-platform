@@ -432,7 +432,7 @@ class DentistsController extends FrontController
 
     }
 
-    public function city($locale=null, $country_slug) {
+    public function city($locale=null, $country_slug, $state_slug) {
 
         // $user = User::find(1592);
 
@@ -454,10 +454,10 @@ class DentistsController extends FrontController
             return redirect('/');
         }
 
-        $cities_name = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('state_name')->groupBy('city_name')->orderBy('city_name', 'asc')->get();
+        $cities_name = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->groupBy('city_name')->orderBy('city_name', 'asc')->get();
 
 
-        $all_dentists = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->whereNotNull('city_name')->count();
+        $all_dentists = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->count();
 
         $cities_groups = [];
         $letter = null;
@@ -522,7 +522,96 @@ class DentistsController extends FrontController
             'seo_description' => !empty($seo_description) ? $seo_description : null,
             'social_title' => !empty($social_title) ? $social_title : null,
             'social_description' => !empty($social_description) ? $social_description : null,
+            'all_cities' => $cities_name,
             'cities_name' => $cities_groups,
+            'breakpoints' => $breakpoints,
+            'country' => $country,
+            'total_rows' => $total_rows,
+            'js' => [
+                'search.js'
+            ],
+            'jscdn' => [
+                'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
+            ]
+        ));
+    }
+
+    public function state($locale=null, $country_slug) {
+
+        // $user = User::find(68738);
+
+        // $user->address = $user->address.'';
+        // exit;
+
+        $country = Country::where('slug', 'like', $country_slug )->first();
+
+        if(empty($country)) {
+            return redirect('/');
+        }
+
+        $states = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('state_name')->orderBy('state_name', 'asc')->get();
+
+        $all_dentists = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->whereNotNull('city_name')->count();
+
+
+        $states_groups = [];
+        $letter = null;
+        $letters = [];
+        $total_rows = 0;
+
+        foreach ($states as $user) {
+            $letter = $user->state_name[0];
+            if(empty( $letters[$letter] )) {
+                $total_rows++;
+                $total_rows++;
+                $letters[$letter] = true;
+                $states_groups[$total_rows] = $letter;
+
+            }
+
+            $total_rows++;
+            $states_groups[$total_rows] = $user;
+        }
+
+        $row_length = ceil($total_rows / 4); //19
+        $breakpoints = [];
+        $p=1;
+
+        foreach ($states_groups as $key => $dc) {
+
+            if($key >= $row_length*$p ) {
+                $breakpoints[] = $key;
+                $p++;   
+            }
+        }
+
+        $seo_title = trans('trp.seo.country-states.title', [
+            'country' => $country->name,
+            'results_number' => $all_dentists,
+            'states_number' => count($states),
+        ]);
+        $seo_description = trans('trp.seo.country-states.description', [
+            'country' => $country->name,
+            'results_number' => $all_dentists,
+            'states_number' => count($states),
+        ]);
+        $social_title = trans('trp.social.country-states.title', [
+            'country' => $country->name,
+            'results_number' => $all_dentists,
+            'states_number' => count($states),
+        ]);
+        $social_description = trans('trp.social.country-states.description', [
+            'country' => $country->name,
+            'results_number' => $all_dentists,
+            'states_number' => count($states),
+        ]);
+
+        return $this->ShowView('state', array(            
+            'seo_title' => !empty($seo_title) ? $seo_title : null,
+            'seo_description' => !empty($seo_description) ? $seo_description : null,
+            'social_title' => !empty($social_title) ? $social_title : null,
+            'social_description' => !empty($social_description) ? $social_description : null,
+            'states_name' => $states_groups,
             'breakpoints' => $breakpoints,
             'country' => $country,
             'total_rows' => $total_rows,

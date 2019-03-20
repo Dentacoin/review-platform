@@ -4342,7 +4342,9 @@ textarea.input {
     .page-c .main-top {
       padding-bottom: 200px; } }
 .page-c .sort-wrapper {
-  margin-top: -90px; }
+  margin-top: -90px;
+  width: 100%;
+  padding: 0px 20px; }
 .page-c .countries-wrapper {
   position: relative;
   z-index: 100; }

@@ -47,6 +47,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'zip',
         'city_name',
         'state_name',
+        'state_slug',
         'address',
         'phone',
         'website',
@@ -403,6 +404,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->attributes['lon'] = null;
         $this->attributes['city_name'] = null;
         $this->attributes['state_name'] = null;
+        $this->attributes['state_slug'] = null;
         if( $this->country) {
             $info = self::validateAddress($this->country->name, $newvalue);
             if(!empty($info)) {
@@ -411,6 +413,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         $this->attributes[$key] = $value;                        
                     }
                 }
+                if(empty($this->attributes['state_name'])) {
+                    $this->attributes['state_name'] = $this->attributes['city_name'];
+                }
+
+                $state_slug = str_replace(' ', '-', strtolower($this->attributes['state_name']));
+                $this->attributes['state_slug'] = $state_slug;
+
             } else {
                 $this->attributes['address'] = null;
             }
@@ -419,7 +428,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public static function validateAddress($country, $address) {
-
         $kingdoms = [
             'United Arab Emirates',
         ];
@@ -435,7 +443,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         $geores = json_decode($geores);
         $ret = [];
-        //dd($geores);
+        // dd($geores);
         if(!empty($geores->results[0]->geometry->location)) {
 
             if(in_array($country, $kingdoms)) {
@@ -495,6 +503,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
                         $cname = iconv('ASCII', 'UTF-8', $cname);
                         $ret['state_name'] = $cname;
+                        $ret['state_slug'] = str_replace(' ', '-', strtolower($cname));
                         break;
                     }
                 }
