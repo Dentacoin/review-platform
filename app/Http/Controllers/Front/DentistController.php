@@ -392,8 +392,8 @@ class DentistController extends FrontController
 //
 //https://dev-reviews.dentacoin.com/en/dentist/teeth-care-centre-dental-hospital?review_id=6505
 
-
         $view_params = [
+            'noIndex' => $item->address ? false : true,
             'item' => $item,
             'is_trusted' => $isTrusted,
             'my_review' => !empty($this->user) ? $this->user->hasReviewTo($item->id) : null,

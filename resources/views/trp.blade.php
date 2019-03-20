@@ -48,6 +48,10 @@
             @endforeach
         @endif
 
+        @if(!empty($noIndex))
+        	<meta name="robots" content="noindex">
+        @endif
+
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108398439-1"></script>
 		<script>

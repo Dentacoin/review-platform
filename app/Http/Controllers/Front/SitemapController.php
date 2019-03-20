@@ -17,6 +17,8 @@ class SitemapController extends FrontController
 			getLangUrl('welcome-dentist'),
 			getLangUrl('faq'),
 			getLangUrl('dentist-listings-by-country'),
+			getLangUrl('dentists/worldwide'),
+			getLangUrl('dentists/bucuresti-municipiul-bucuresti-romania/'),
 		];
 
 		$dentists = User::where('is_dentist', '1')->where('status', 'approved')->get();
