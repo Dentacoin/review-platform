@@ -220,11 +220,11 @@ $(document).ready(function(){
     }
 
     $('#clinic_dentists').change( function() {
-        if ($(this).val()) {
-            $('.hidden-review-question').show();
-        } else {
-            $('.hidden-review-question').hide();
-        }
+        $('.hidden-review-question').show();
+    });
+
+    $('#dentist_clinics').change( function() {
+        $(this).closest('.question').next().show();
     });
 
     handleDCNreward = function() {

@@ -138,7 +138,8 @@
 							</h4>
 							<div class="review-answers">
 								<div class="clearfix subquestion">
-								   <select name="dentist_clinics" class="input">
+								   <select name="dentist_clinics" class="input" id="dentist_clinics">
+										<option value="" disabled selected>Please select</option>
 										<option value="">{{ trans('trp.popup.submit-review-popup.dentist-cabinet') }}</option>
 										@foreach($item->my_workplace_approved as $workplace)
 											<option value="{{ $workplace->clinic->id }}">{{ $workplace->clinic->getName() }}</option>

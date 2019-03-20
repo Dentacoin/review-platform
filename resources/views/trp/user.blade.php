@@ -689,7 +689,7 @@
 						    			<span class="review-name">{{ $item->getName() }}</span>
 					    			</div>
 									<div class="review-content">
-										<form method="post" action="{{ $item->getLink() }}/reply/{{ $review->id }}" class="reply-form-element">
+										<form method="post" action="{{ $item->getLink() }}reply/{{ $review->id }}" class="reply-form-element">
 											{!! csrf_field() !!}
 											<textarea class="input" name="reply" placeholder="{!! nl2br(trans('trp.page.user.reply-enter')) !!}"></textarea>
 											<button class="button" type="submit" name="">{!! nl2br(trans('trp.page.user.reply-submit')) !!}</button>
