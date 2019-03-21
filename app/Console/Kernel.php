@@ -161,7 +161,7 @@ class Kernel extends ConsoleKernel
             $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->orderBy('id', 'asc')->take(100)->get(); //
             foreach ($transactions as $trans) {
                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
-                echo $log.PHP_EOL
+                echo $log.PHP_EOL;
 
                 if($trans->shouldRetry()) {
                     $executed++;
