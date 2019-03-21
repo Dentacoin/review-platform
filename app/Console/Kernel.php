@@ -178,7 +178,7 @@ class Kernel extends ConsoleKernel
             }
 
             echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-        })->cron("*/10 * * * *");
+        })->cron("* * * * *");
 
 
         $schedule->call(function () {
