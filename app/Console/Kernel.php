@@ -46,7 +46,7 @@ class Kernel extends ConsoleKernel
                 return $url;                
             })->writeToFile(public_path().'/sitemaps/sitemap-vox.xml');
 
-            echo 'Sitemap cron - DONE!'.PHP_EOL;
+            echo 'Sitemap cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
         })->cron("0 5 * * *"); //05:00h
         
         $schedule->call(function () {
@@ -81,7 +81,7 @@ class Kernel extends ConsoleKernel
                 ]);
             }
 
-            echo 'DCN Prices cron - DONE!'.PHP_EOL;
+            echo 'DCN Prices cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("* * * * *"); //05:00h
 
@@ -99,7 +99,7 @@ class Kernel extends ConsoleKernel
 
             file_put_contents('/tmp/dcn_currncies', json_encode($json));
 
-            echo 'Currencies cron - DONE!'.PHP_EOL;
+            echo 'Currencies cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("*/10 * * * *"); //05:00h
         
@@ -177,7 +177,7 @@ class Kernel extends ConsoleKernel
                 }
             }
 
-            echo 'Transactions cron - DONE!'.PHP_EOL;
+            echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
         })->cron("*/10 * * * *");
 
 
@@ -263,7 +263,7 @@ class Kernel extends ConsoleKernel
 
             //Cron log
             unlink('/tmp/cron');
-            echo 'DCN Low Balance Cron - DONE!'.PHP_EOL;
+            echo 'DCN Low Balance Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("30 7 * * *"); //10:30h BG Time
 
@@ -317,6 +317,8 @@ class Kernel extends ConsoleKernel
                     $message->subject('Suspicios dentists deleted');
                 });
             }
+
+            echo 'Suspicious Dentist Delete Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->cron("30 7 * * *"); //10:30h BG Time
     }
