@@ -261,6 +261,10 @@ class Kernel extends ConsoleKernel
                 }
             }
 
+            //Cron log
+            unlink('/tmp/cron');
+            echo 'DCN Low Balance Cron - DONE!'.PHP_EOL;
+
         })->cron("30 7 * * *"); //10:30h BG Time
 
 
