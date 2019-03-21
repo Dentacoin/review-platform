@@ -34,69 +34,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        
-        $schedule->call(function () {
-            try { 
-                DB::statement("
-                UPDATE 
-                    `cities` `c`, 
-                    ( 
-                        SELECT 
-                            `u`.`city_id`, 
-                            AVG(`r`.`rating`) as `avg`, 
-                            COUNT(`r`.`id`) AS `cnt` 
-                        FROM 
-                            `reviews` `r`, 
-                            `users` `u` 
-                        WHERE 
-                            `u`.`id`=`r`.`dentist_id` 
-                        GROUP BY 
-                        `u`.`city_id` 
-                    ) `info`
-                SET 
-                    `c`.`avg_rating` = `info`.`avg`, 
-                    `c`.`ratings` = `info`.`cnt` 
-                WHERE 
-                    `c`.`id` = `info`.`city_id`
-                ");
-            } catch(\Illuminate\Database\QueryException $ex){ 
-              dd($ex->getMessage()); 
-            }
-            
-            
-            try { 
-                DB::statement("
-                UPDATE 
-                    `countries` `c`, 
-                    ( 
-                        SELECT 
-                            `u`.`country_id`, 
-                            AVG(`r`.`rating`) as `avg`, 
-                            COUNT(`r`.`id`) AS `cnt` 
-                        FROM 
-                            `reviews` `r`, 
-                            `users` `u` 
-                        WHERE 
-                            `u`.`id`=`r`.`dentist_id` 
-                        GROUP BY 
-                        `u`.`country_id` 
-                    ) `info`
-                SET 
-                    `c`.`avg_rating` = `info`.`avg`, 
-                    `c`.`ratings` = `info`.`cnt` 
-                WHERE 
-                    `c`.`id` = `info`.`country_id`
-                ");
-            } catch(\Illuminate\Database\QueryException $ex){ 
-              dd($ex->getMessage()); 
-            }
-
-            echo 'DONE!';
-        //})->everyMinute();
-        //})->everyFiveMinutes();
-        })->hourly();
-
-        
         $schedule->call(function () {
             return;
             SitemapGenerator::create('https://reviews.dentacoin.com')
@@ -109,27 +46,28 @@ class Kernel extends ConsoleKernel
                 return $url;                
             })->writeToFile(public_path().'/sitemaps/sitemap-vox.xml');
 
-            echo 'DONE!';
+            echo 'Sitemap cron - DONE!'.PHP_EOL;
         })->cron("0 5 * * *"); //05:00h
         
         $schedule->call(function () {
             $price = null;
-            for($i=0;$i<5;$i++) {
-                $info = @file_get_contents('https://api.coinmarketcap.com/v1/ticker/dentacoin/');
-                $p = json_decode($info, true);
-                if(!empty($p) && !empty($p[0]['price_usd'])) {
-                    $price = floatval($p[0]['price_usd']);
-                    file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
-                }
-                if(!empty($p) && !empty($p[0]['percent_change_24h'])) {
-                    $pc = floatval($p[0]['percent_change_24h']);
-                    file_put_contents('/tmp/dcn_change', $pc);
-                }
-                
-                if($i!=4) {
-                    sleep(10);
-                }                
+            //for($i=0;$i<5;$i++) {
+            
+            $info = @file_get_contents('https://api.coinmarketcap.com/v1/ticker/dentacoin/');
+            $p = json_decode($info, true);
+            if(!empty($p) && !empty($p[0]['price_usd'])) {
+                $price = floatval($p[0]['price_usd']);
+                file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
             }
+            if(!empty($p) && !empty($p[0]['percent_change_24h'])) {
+                $pc = floatval($p[0]['percent_change_24h']);
+                file_put_contents('/tmp/dcn_change', $pc);
+            }
+            
+            //     if($i!=4) {
+            //         sleep(10);
+            //     }                
+            // }
 
             if(!empty($price)) {
                 DB::table('voxes')
@@ -143,7 +81,7 @@ class Kernel extends ConsoleKernel
                 ]);
             }
 
-            echo 'DONE!';
+            echo 'DCN Prices cron - DONE!'.PHP_EOL;
 
         })->cron("* * * * *"); //05:00h
 
@@ -161,7 +99,7 @@ class Kernel extends ConsoleKernel
 
             file_put_contents('/tmp/dcn_currncies', json_encode($json));
 
-            echo 'DONE!';
+            echo 'Currencies cron - DONE!'.PHP_EOL;
 
         })->cron("*/10 * * * *"); //05:00h
         
@@ -177,8 +115,7 @@ class Kernel extends ConsoleKernel
             $transactions = DcnTransaction::where('status', 'unconfirmed')->inRandomOrder()->take(5)->get(); //
             foreach ($transactions as $trans) {
                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
-                echo $log.'
-';
+                echo $log.PHP_EOL;
 
                 $found = false;
                 if( $trans->tx_hash ) {
@@ -198,8 +135,7 @@ class Kernel extends ConsoleKernel
                                     ], $trans->type=='vox-cashout' ? 'vox' : 'trp' );
                                 }
                                 $found = true;
-                                echo 'COMPLETED!
-';
+                                echo 'COMPLETED!'.PHP_EOL;
                                 sleep(1);
                             }
                         }
@@ -209,8 +145,7 @@ class Kernel extends ConsoleKernel
 
                 if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*24) {
                     Dcn::retry($trans);
-                    echo 'RETRYING -> '.$trans->message.' '.$trans->tx_hash.'
-';
+                    echo 'RETRYING -> '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
                 }
             }
 
@@ -226,30 +161,24 @@ class Kernel extends ConsoleKernel
             $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->orderBy('id', 'asc')->take(100)->get(); //
             foreach ($transactions as $trans) {
                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
-                echo $log.'
-';
+                echo $log.PHP_EOL
 
-                if($trans->status=='failed' || $trans->status=='new') {
-                    if($trans->shouldRetry()) {
-                        $executed++;
-                        Dcn::retry($trans);
-                        echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.'
-';
-                    } else {
-                        echo 'Too early to Retry
-';
-                    }
+                if($trans->shouldRetry()) {
+                    $executed++;
+                    Dcn::retry($trans);
+                    echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
+                } else {
+                    echo 'TOO EARLY TO RETRY'.PHP_EOL;
                 }
 
                 if($executed>5) {
-                    echo '5 executed - enough for now
-';
+                    echo '5 executed - enough for now'.PHP_EOL;
                     break;
                 }
             }
 
-            echo 'DONE!';
-        })->cron("* * * * *");
+            echo 'Transactions cron - DONE!'.PHP_EOL;
+        })->cron("*/10 * * * *");
 
 
         $schedule->call(function () {
