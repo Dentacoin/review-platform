@@ -122,15 +122,7 @@ class EmailTemplate extends Model
             $codes[] = '[profile-link]Click here[/profile-link]';
         }
 
-        if($this->id==35) {
-            $codes[] = '[clinic-name]';
-        }
-
-        if($this->id==36) {
-            $codes[] = '[clinic-name]';
-        }
-
-        if($this->id==37) {
+        if($this->id==35 || $this->id==36 || $this->id==37) {
             $codes[] = '[clinic-name]';
         }
 

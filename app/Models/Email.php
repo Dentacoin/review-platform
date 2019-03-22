@@ -31,11 +31,11 @@ class Email extends Model
 	];
 
 	public function template() {
-        return $this->hasOne('App\Models\EmailTemplate', 'id', 'template_id');		
+        return $this->hasOne('App\Models\EmailTemplate', 'id', 'template_id')->withTrashed();		
 	}
 
 	public function user() {
-        return $this->hasOne('App\Models\User', 'id', 'user_id');		
+        return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();		
 	}
 
 	private $button_style = 'style="text-decoration:none;background:#126585;color:#FFFFFF;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;font-weight:normal;line-height:120%;text-transform:none;margin:0px;border:none;border-radius:5px;color:#FFFFFF;cursor:auto;padding:10px 30px;"';
@@ -183,21 +183,23 @@ class Email extends Model
 		if($this->template->id==6 || $this->template->id==8 || $this->template->id==21) { //New review & review reply
 			$review = Review::find($this->meta['review_id']);
 
-			$dentist_or_clinic = $review->dentist_id ? $review->dentist : $review->clinic;
+			if($review) {
+				$dentist_or_clinic = $review->dentist_id ? $review->dentist : $review->clinic;
 
-			$content = str_replace(array(
-				'[author_name]',
-				'[dentist_name]',
-				'[rating]',
-				'[reviewlink]',
-				'[/reviewlink]',
-			), array(
-				$review->user->name,
-				$dentist_or_clinic->name,
-				$review->rating,
-				'<a '.$this->button_style.' href="'.$dentist_or_clinic->getLink().'/'.$review->id.'">',
-				'</a>',
-			), $content);
+				$content = str_replace(array(
+					'[author_name]',
+					'[dentist_name]',
+					'[rating]',
+					'[reviewlink]',
+					'[/reviewlink]',
+				), array(
+					$review->user->name,
+					$dentist_or_clinic->name,
+					$review->rating,
+					'<a '.$this->button_style.' href="'.$dentist_or_clinic->getLink().'/'.$review->id.'">',
+					'</a>',
+				), $content);
+			}
 		}
 
 		if($this->template->id==1 ) { //Invite
@@ -206,7 +208,7 @@ class Email extends Model
 				'[invitelink]',
 				'[/invitelink]',
 			), array(
-				$this->meta['clinic_name'],
+				$this->meta['clinic_name'] ?? '',
 				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$this->meta['invitation_id'], null, $domain).'">',
 				'</a>',
 			), $content);
@@ -321,7 +323,7 @@ class Email extends Model
 				'[profile-link]',
 				'[/profile-link]',
 			), array(
-				$this->meta['clinic-name'],
+				$this->meta['clinic-name'] ?? '',
 				'<a '.$this->button_style.' href="'.$this->meta['clinic-link'].'">',
 				'</a>',
 			), $content);
@@ -341,44 +343,27 @@ class Email extends Model
 		}
 
 		if($this->template->id==34 || $this->template->id==2) { //Dentist Wants to Join Clinic
-			$content = str_replace(array(
-				'[dentist-name]',
-				'[profile-link]',
-				'[/profile-link]',
-			), array(
-				$this->meta['dentist-name'],
-				'<a '.$this->button_style.' href="'.$this->meta['profile-link'].'?tab=about">',
-				'</a>',
-			), $content);
+			if(!empty( $this->meta['profile-link'] )) {
+				$content = str_replace(array(
+					'[dentist-name]',
+					'[profile-link]',
+					'[/profile-link]',
+				), array(
+					$this->meta['dentist-name'],
+					'<a '.$this->button_style.' href="'.$this->meta['profile-link'].'?tab=about">',
+					'</a>',
+				), $content);
+			}
 		}
 
 
-		if($this->template->id==35) { //Clinic Accepts Dentist Request
-			$content = str_replace(array(
-				'[clinic-name]',
-			), array(
-				$this->meta['clinic-name'],
-			), $content);
-		}
-
-
-		if($this->template->id==36) { //Clinic Rejects Dentist Request
+		if($this->template->id==35 || $this->template->id==36 || $this->template->id==37) { //Clinic Accepts Dentist Request
 			$content = str_replace(array(
 				'[clinic-name]',
 			), array(
-				$this->meta['clinic-name'],
+				$this->meta['clinic-name'] ?? '-',
 			), $content);
 		}
-
-
-		if($this->template->id==37) { //Clinic Deletes Dentist Request
-			$content = str_replace(array(
-				'[clinic-name]',
-			), array(
-				$this->meta['clinic-name'],
-			), $content);
-		}
-
 
 		if($this->template->id==38) { //Dentist Leaves Clinic
 			$content = str_replace(array(
