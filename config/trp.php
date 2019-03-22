@@ -5,6 +5,7 @@ return [
 		'facebook' => 'fab fa-facebook-f',
 		'linkedin' => 'fab fa-linkedin-in',
 		'twitter' => 'fab fa-twitter',
+		'instagram' => 'fab fa-instagram',
 	],
 	'accepted_payment' => [
 		'cash',
