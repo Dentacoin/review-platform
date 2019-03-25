@@ -698,23 +698,26 @@ $(document).ready(function(){
 
     var handleTooltip = function(e) {
 
-        $('.tooltip-window').text($(this).attr('text'));
-        $('.tooltip-window').css('left', e.pageX - ($('.tooltip-window').outerWidth() / 2) );
+    	if( $(this).parents('.tooltip-text').length ) {
+    		var that = $(this).parents('.tooltip-text').first()
+    	} else {
+    		var that = $(this).closest('.tooltip-text');
+    	}
 
-        if (window.innerWidth > 768) {
-	        if (window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
-	            $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
-	        }
-	    }
 
-        if (window.innerWidth < 768) {
-        	$('.tooltip-window').css('top', e.pageY + 15 );
-        } else {
-        	$('.tooltip-window').css('top', e.pageY + 30 );
-        }
-        
-
+        $('.tooltip-window').text(that.attr('text'));
         $('.tooltip-window').css('display', 'block');
+
+    	var y = that.offset().top + that.outerHeight() + 10;
+    	var x = that.offset().left + that.outerWidth() / 2 - $('.tooltip-window').outerWidth() / 2 ;
+
+        $('.tooltip-window').css('left', x );
+        $('.tooltip-window').css('top', y );
+
+        if ( window.innerWidth > 768 && window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
+            $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
+        }
+
     }
 
     if($('.tooltip-text').length) {
@@ -736,6 +739,15 @@ $(document).ready(function(){
             $('.tooltip-window').hide();
         });
     }
+
+    $('.answer-mobile-tooltip').click( function(e) {
+    	e.stopPropagation();
+    	e.preventDefault();
+
+    	if (window.innerWidth < 768 && !$(this).hasClass('no-mobile-tooltips')) {
+            handleTooltip.bind(this)(e);
+        }
+    })
 });
 
 

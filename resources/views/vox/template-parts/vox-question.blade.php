@@ -31,7 +31,10 @@
 					<label class="answer-checkbox no-mobile-tooltips {{ !empty(json_decode($question->answers_tooltips, true)[$k]) ? 'tooltip-text' : '' }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}" {!! !empty(json_decode($question->answers_tooltips, true)[$k]) ? 'text="'.json_decode($question->answers_tooltips, true)[$k].'"' : '' !!}>
 						<i class="far fa-square"></i>
 						<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="checkbox" name="answer" class="answer{!! mb_substr($answer, 0, 1)=='!' ? ' disabler' : '' !!} input-checkbox" value="{{ $loop->index+1 }}">
-						{{ mb_substr($answer, 0, 1)=='!' ? mb_substr($answer, 1) : $answer }}											
+						{{ mb_substr($answer, 0, 1)=='!' ? mb_substr($answer, 1) : $answer }}
+						@if(!empty(json_decode($question->answers_tooltips, true)[$k]))
+							<div class="answer-mobile-tooltip tooltip-text" text="{!! json_decode($question->answers_tooltips, true)[$k] !!}"><i class="fas fa-question-circle"></i></div>
+						@endif										
 					</label>
 				</div>
 			@endforeach
@@ -104,6 +107,9 @@
 				<a class="answer answer no-mobile-tooltips {{ !empty(json_decode($question->answers_tooltips, true)[$key]) ? 'tooltip-text' : '' }}" {!! !empty(json_decode($question->answers_tooltips, true)[$key]) ? 'text="'.json_decode($question->answers_tooltips, true)[$key].'"' : '' !!} data-num="{{ $loop->index+1 }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}">
 					<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="radio" name="answer" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
 					{{ $answer }}
+					@if(!empty(json_decode($question->answers_tooltips, true)[$key]))
+						<div class="answer-mobile-tooltip tooltip-text" text="{!! json_decode($question->answers_tooltips, true)[$key] !!}"><i class="fas fa-question-circle"></i></div>
+					@endif
 				</a>
 			@endforeach
 		</div>
