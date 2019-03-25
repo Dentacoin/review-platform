@@ -1000,16 +1000,14 @@ p.h2-bold {
       margin-bottom: 3px; }
       .section-recent-surveys .swiper-slide .vox-header .first-flex .right {
         text-align: right; }
-    .section-recent-surveys .swiper-slide .vox-header .second-flex {
-      align-items: flex-end; }
-      @media screen and (max-width: 1130px) {
-        .section-recent-surveys .swiper-slide .vox-header .second-flex {
-          display: block; } }
-      .section-recent-surveys .swiper-slide .vox-header .second-flex .left {
-        min-width: 70%; }
-        @media screen and (max-width: 1600px) {
-          .section-recent-surveys .swiper-slide .vox-header .second-flex .left {
-            min-width: 60%; } }
+    @media screen and (max-width: 1130px) {
+      .section-recent-surveys .swiper-slide .vox-header .second-flex {
+        display: block; } }
+    .section-recent-surveys .swiper-slide .vox-header .second-flex .left {
+      min-width: 70%; }
+      @media screen and (max-width: 1600px) {
+        .section-recent-surveys .swiper-slide .vox-header .second-flex .left {
+          min-width: 60%; } }
     .section-recent-surveys .swiper-slide .vox-header .col {
       padding: 0px; }
     .section-recent-surveys .swiper-slide .vox-header .left {
@@ -1029,13 +1027,15 @@ p.h2-bold {
         max-height: 104px;
         overflow: hidden;
         font-weight: lighter;
-        padding-right: 20px; }
+        padding-right: 20px;
+        padding-top: 7px; }
         @media screen and (max-width: 1600px) {
           .section-recent-surveys .swiper-slide .vox-header .left .vox-description {
             font-size: 13px;
-            max-height: 74px; } }
+            max-height: 79px; } }
         @media screen and (max-width: 768px) {
           .section-recent-surveys .swiper-slide .vox-header .left .vox-description {
+            padding-top: 0px;
             font-size: 10px;
             padding-right: 0px; } }
     .section-recent-surveys .swiper-slide .vox-header .right span,

@@ -1360,7 +1360,7 @@ p.h2-bold {
 			}
 
 			.second-flex {
-				align-items: flex-end;
+				// align-items: flex-end;
 
 				@media screen and (max-width: 1130px) {
 					display: block;
@@ -1401,13 +1401,15 @@ p.h2-bold {
 				    overflow: hidden;
 				    font-weight: lighter;
 				    padding-right: 20px;
+					padding-top: 7px;
 
 				    @media screen and (max-width: 1600px) {
 				    	font-size: 13px;
-				    	max-height: 74px;
+				    	max-height: 79px;
 				    }
 
 					@media #{$phone} {
+						padding-top: 0px;
 						font-size: 10px;
 						padding-right: 0px;
 					}
