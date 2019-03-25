@@ -165,6 +165,18 @@ $(document).ready(function(){
 		}
 	}
 
+	var surveyTitleHeight = function() {
+		if(window.innerWidth >= 1200) {
+			$('.another-questions .swiper-slide').each( function() {
+				if( $(this).find('h4').outerHeight() > 30) {
+					$(this).find('.vox-description').css('max-height', (window.innerWidth >= 1600 ? '64px' : '54px'));
+				}
+			});
+		}
+	}
+	$(window).resize(surveyTitleHeight);
+	surveyTitleHeight();
+
 	$('.sort-menu a').click( function() {
 		if (!$(this).hasClass('active')) {
 			$('.sort-menu a').removeClass('active');
@@ -176,6 +188,7 @@ $(document).ready(function(){
 		window.location.hash = $(this).attr('sort')+( $(this).attr('sort')!='featured' && $(this).attr('sort')!='untaken' ? '-'+($(this).hasClass('order-asc') ? 'asc' : 'desc') : '' )
 
 		handleFilters();
+		surveyTitleHeight();
 	} );
 
 
@@ -216,7 +229,8 @@ $(document).ready(function(){
 			$(this).hide();
 		}
 
-	} );
+		surveyTitleHeight();
 
+	} );
 
 });
