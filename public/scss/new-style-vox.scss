@@ -1,5 +1,6 @@
 $tablet: "screen and (max-width: 1080px)";
 $phone: "screen and (max-width: 768px)";
+$phone_up: "screen and (min-width: 769px)";
 
 $main-color: #38ace5;
 
@@ -503,7 +504,7 @@ select:focus > option:checked {
 		    color: #40a0f4;
 		}
 
-		&.active i:before {
+		&.active > i:before {
 		    content: "\f14a";
 		}
 
@@ -1360,7 +1361,7 @@ p.h2-bold {
 			}
 
 			.second-flex {
-				align-items: flex-end;
+				// align-items: flex-end;
 
 				@media screen and (max-width: 1130px) {
 					display: block;
@@ -1408,6 +1409,7 @@ p.h2-bold {
 				    }
 
 					@media #{$phone} {
+						padding-top: 0px;
 						font-size: 10px;
 						padding-right: 0px;
 					}
@@ -1961,6 +1963,7 @@ p.h2-bold {
 			    cursor: pointer;
 			    font-weight: 600;
 			    margin-bottom: 15px;
+			    position: relative;
 
 				@media #{$phone} {
 					font-size: 15px;
@@ -1974,6 +1977,23 @@ p.h2-bold {
 					border-color: #f33651;
 					color: white;
 				}
+
+				.answer-mobile-tooltip {
+					position: absolute;
+					right: -25px;
+					padding: 10px;
+					padding-right: 0px;
+					top: 50%;
+					transform: translateY(-50%);
+
+					i {
+						color: #41afff;
+
+						&:before {
+							font-size: 17px;
+						}
+					}
+				}
 			}
 
 
@@ -1983,13 +2003,15 @@ p.h2-bold {
 
 				&.active-label,
 				&:hover {
-					border-color: #3daee6;
-					color: white;
-				    background: #3daee6;
+					@media #{$phone_up} {
+						border-color: #3daee6;
+						color: white;
+					    background: #3daee6;
 
-				    i {
-				    	color: white;
-				    }
+					    i {
+					    	color: white;
+					    }
+					}
 				}
 
 				&#birthyear-answer {
@@ -2017,7 +2039,7 @@ p.h2-bold {
 				padding-left: 56px;
 				position: relative;
 
-				i {
+				> i {
 					position: absolute;
 					top: 12px;
 					left: 30px;
@@ -2039,7 +2061,7 @@ p.h2-bold {
 			    &.active:not(:hover) {
 			    	color: $main-color;
 
-			    	i {
+			    	> i {
 			    		color: $main-color;
 			    	}
 			    }
@@ -2059,7 +2081,7 @@ p.h2-bold {
 				&:hover {
 					width: auto;
 
-					@media screen and (max-width: 768px) {
+					@media #{$phone} {
 						width: 100%;
 					}
 				}
@@ -2069,7 +2091,7 @@ p.h2-bold {
 				width: 100%;
 
 				.mobile-hide {
-					@media screen and (max-width: 768px) {
+					@media #{$phone} {
 						display: none;
 					}
 				}
@@ -2100,7 +2122,7 @@ p.h2-bold {
 		    		padding: 0px 10px;
 		    		vertical-align: middle;
 
-		    		@media screen and (max-width: 768px) {
+		    		@media #{$phone} {
 						width: 100% !important;
 					}
 
@@ -2211,7 +2233,7 @@ p.h2-bold {
 					display: flex;
 					align-items: center;
 
-					@media screen and (max-width: 768px) {
+					@media #{$phone} {
 						display: block;
 					}
 
@@ -2232,7 +2254,7 @@ p.h2-bold {
 						flex: 1;
 						text-align: right;
 
-						@media screen and (max-width: 768px) {
+						@media #{$phone} {
 							max-width: none;
 							flex: none
 						}
@@ -2264,7 +2286,7 @@ p.h2-bold {
     				// 			margin-top: 24px;
     				    		transform: scale(1.5);
 
-    				    		@media screen and (max-width: 768px) {
+    				    		@media #{$phone} {
     				    			transform: none;
     				    		}
 							}
@@ -2275,7 +2297,7 @@ p.h2-bold {
 						width: 80%;
 						flex: 1;
 
-						@media screen and (max-width: 768px) {
+						@media #{$phone} {
 							width: auto;
 							flex: none;
 						}
@@ -2330,7 +2352,7 @@ p.h2-bold {
 		color: #343434;
 		text-align: center;
 
-		@media screen and (max-width: 768px) {
+		@media #{$phone} {
 			width: 100%;
 		}
 	}
@@ -2564,7 +2586,7 @@ p.h2-bold {
 	}
 
 
-	.section-recent-surveys {
+	.section-recent-surveys {		
 
 		.questions-inner {
 			position: relative;
@@ -2574,8 +2596,7 @@ p.h2-bold {
 		    display: flex;
 		    flex-wrap: wrap;
 		    text-align: left;
-		    justify-content: center;
-
+			max-width: 1040px;
 
 		    .swiper-slide {
 		    	width: 460px;
@@ -2605,13 +2626,43 @@ p.h2-bold {
 			    	.vox-header {
 			    		padding: 10px;
 
-			    		.right .btns a {
-						    padding-left: 5px;
-						    padding-right: 5px;		    		
+			    		.right {
+			    			.btns {
+			    				text-align: left;
+
+			    				a {
+									padding-left: 20px;
+									padding-right: 20px;
+									display: inline-block;
+									text-align: center;
+
+									@media (max-width: 768px) {
+										display: block;
+									}
+
+									&:first-child {
+										margin-right: 10px;
+
+										@media (max-width: 768px) {
+											margin-right: 0px;
+										}
+									}
+								}
+							}
+				    	}
+
+				    	.second-flex {
+				    		flex-direction: column;
 				    	}
 
 			    		.left h4 {
 			    			font-size: 18px;
+
+							.vox-description {
+								@media screen and (max-width: 1600px) {
+							    	max-height: 79px;
+							    }
+							}
 			    		}
 			    	}
 		    	}
@@ -2783,7 +2834,7 @@ p.h2-bold {
 	// 			width: 365px;
 	// 		}
 
-	// 		@media screen and (max-width: 768px) {
+	// 		@media #{$phone} {
 	// 			width: 90%;
 	// 		}
 	// 	}
@@ -5650,7 +5701,7 @@ p.h2-bold {
 			margin-top: 10px;
 	    }
 
-	    @media screen and (max-width: 768px) {
+	    @media #{$phone} {
 	    	font-size: 11px;
 	    }
 
@@ -6800,4 +6851,12 @@ p.h2-bold {
     right: 0;
     left: 0;
     padding: 20px 30px;
+}
+
+.answer-mobile-tooltip {
+	display: none;
+
+	@media #{$phone} {
+		display: block;
+	}
 }

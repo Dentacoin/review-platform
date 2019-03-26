@@ -399,7 +399,7 @@ select:focus > option:checked {
     padding-right: 2px;
     font-size: 18px;
     color: #40a0f4; }
-  .checkbox label.active i:before {
+  .checkbox label.active > i:before {
     content: "\f14a"; }
   @media screen and (max-width: 768px) {
     .checkbox label {
@@ -1000,16 +1000,14 @@ p.h2-bold {
       margin-bottom: 3px; }
       .section-recent-surveys .swiper-slide .vox-header .first-flex .right {
         text-align: right; }
-    .section-recent-surveys .swiper-slide .vox-header .second-flex {
-      align-items: flex-end; }
-      @media screen and (max-width: 1130px) {
-        .section-recent-surveys .swiper-slide .vox-header .second-flex {
-          display: block; } }
-      .section-recent-surveys .swiper-slide .vox-header .second-flex .left {
-        min-width: 70%; }
-        @media screen and (max-width: 1600px) {
-          .section-recent-surveys .swiper-slide .vox-header .second-flex .left {
-            min-width: 60%; } }
+    @media screen and (max-width: 1130px) {
+      .section-recent-surveys .swiper-slide .vox-header .second-flex {
+        display: block; } }
+    .section-recent-surveys .swiper-slide .vox-header .second-flex .left {
+      min-width: 70%; }
+      @media screen and (max-width: 1600px) {
+        .section-recent-surveys .swiper-slide .vox-header .second-flex .left {
+          min-width: 60%; } }
     .section-recent-surveys .swiper-slide .vox-header .col {
       padding: 0px; }
     .section-recent-surveys .swiper-slide .vox-header .left {
@@ -1036,6 +1034,7 @@ p.h2-bold {
             max-height: 74px; } }
         @media screen and (max-width: 768px) {
           .section-recent-surveys .swiper-slide .vox-header .left .vox-description {
+            padding-top: 0px;
             font-size: 10px;
             padding-right: 0px; } }
     .section-recent-surveys .swiper-slide .vox-header .right span,
@@ -1440,7 +1439,8 @@ p.h2-bold {
       color: #333;
       cursor: pointer;
       font-weight: 600;
-      margin-bottom: 15px; }
+      margin-bottom: 15px;
+      position: relative; }
       @media screen and (max-width: 768px) {
         .questions .question-group .answers select,
         .questions .question-group .answers .answer-radio,
@@ -1457,20 +1457,41 @@ p.h2-bold {
         background: #f33651;
         border-color: #f33651;
         color: white; }
-    .questions .question-group .answers .answer-radio.active-label, .questions .question-group .answers .answer-radio:hover,
-    .questions .question-group .answers .answer-checkbox.active-label,
-    .questions .question-group .answers .answer-checkbox:hover,
-    .questions .question-group .answers .answer.active-label,
-    .questions .question-group .answers .answer:hover {
-      border-color: #3daee6;
-      color: white;
-      background: #3daee6; }
-      .questions .question-group .answers .answer-radio.active-label i, .questions .question-group .answers .answer-radio:hover i,
-      .questions .question-group .answers .answer-checkbox.active-label i,
-      .questions .question-group .answers .answer-checkbox:hover i,
-      .questions .question-group .answers .answer.active-label i,
-      .questions .question-group .answers .answer:hover i {
-        color: white; }
+      .questions .question-group .answers select .answer-mobile-tooltip,
+      .questions .question-group .answers .answer-radio .answer-mobile-tooltip,
+      .questions .question-group .answers .answer-checkbox .answer-mobile-tooltip,
+      .questions .question-group .answers .answer .answer-mobile-tooltip {
+        position: absolute;
+        right: -25px;
+        padding: 10px;
+        padding-right: 0px;
+        top: 50%;
+        transform: translateY(-50%); }
+        .questions .question-group .answers select .answer-mobile-tooltip i,
+        .questions .question-group .answers .answer-radio .answer-mobile-tooltip i,
+        .questions .question-group .answers .answer-checkbox .answer-mobile-tooltip i,
+        .questions .question-group .answers .answer .answer-mobile-tooltip i {
+          color: #41afff; }
+          .questions .question-group .answers select .answer-mobile-tooltip i:before,
+          .questions .question-group .answers .answer-radio .answer-mobile-tooltip i:before,
+          .questions .question-group .answers .answer-checkbox .answer-mobile-tooltip i:before,
+          .questions .question-group .answers .answer .answer-mobile-tooltip i:before {
+            font-size: 17px; }
+    @media screen and (min-width: 769px) {
+      .questions .question-group .answers .answer-radio.active-label, .questions .question-group .answers .answer-radio:hover,
+      .questions .question-group .answers .answer-checkbox.active-label,
+      .questions .question-group .answers .answer-checkbox:hover,
+      .questions .question-group .answers .answer.active-label,
+      .questions .question-group .answers .answer:hover {
+        border-color: #3daee6;
+        color: white;
+        background: #3daee6; }
+        .questions .question-group .answers .answer-radio.active-label i, .questions .question-group .answers .answer-radio:hover i,
+        .questions .question-group .answers .answer-checkbox.active-label i,
+        .questions .question-group .answers .answer-checkbox:hover i,
+        .questions .question-group .answers .answer.active-label i,
+        .questions .question-group .answers .answer:hover i {
+          color: white; } }
     .questions .question-group .answers .answer-radio#birthyear-answer,
     .questions .question-group .answers .answer-checkbox#birthyear-answer,
     .questions .question-group .answers .answer#birthyear-answer {
@@ -1491,16 +1512,16 @@ p.h2-bold {
       font-size: 16px;
       padding-left: 56px;
       position: relative; }
-      .questions .question-group .answers .answer-radio i,
-      .questions .question-group .answers .answer-checkbox i {
+      .questions .question-group .answers .answer-radio > i,
+      .questions .question-group .answers .answer-checkbox > i {
         position: absolute;
         top: 12px;
         left: 30px;
         padding-right: 8px;
         color: #bdbdbd; }
         @media screen and (max-width: 768px) {
-          .questions .question-group .answers .answer-radio i,
-          .questions .question-group .answers .answer-checkbox i {
+          .questions .question-group .answers .answer-radio > i,
+          .questions .question-group .answers .answer-checkbox > i {
             top: 8px; } }
       .questions .question-group .answers .answer-radio input.answer,
       .questions .question-group .answers .answer-checkbox input.answer {
@@ -1511,8 +1532,8 @@ p.h2-bold {
       .questions .question-group .answers .answer-radio.active:not(:hover),
       .questions .question-group .answers .answer-checkbox.active:not(:hover) {
         color: #38ace5; }
-        .questions .question-group .answers .answer-radio.active:not(:hover) i,
-        .questions .question-group .answers .answer-checkbox.active:not(:hover) i {
+        .questions .question-group .answers .answer-radio.active:not(:hover) > i,
+        .questions .question-group .answers .answer-checkbox.active:not(:hover) > i {
           color: #38ace5; }
     .questions .question-group .answers .answer-radio {
       width: auto;
@@ -1879,7 +1900,7 @@ p.h2-bold {
     display: flex;
     flex-wrap: wrap;
     text-align: left;
-    justify-content: center; }
+    max-width: 1040px; }
     .another-questions .section-recent-surveys .questions-inner .swiper-slide {
       width: 460px;
       margin-left: 30px;
@@ -1902,11 +1923,28 @@ p.h2-bold {
         padding: 0px; }
         .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header {
           padding: 10px; }
-          .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header .right .btns a {
-            padding-left: 5px;
-            padding-right: 5px; }
+          .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header .right .btns {
+            text-align: left; }
+            .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header .right .btns a {
+              padding-left: 20px;
+              padding-right: 20px;
+              display: inline-block;
+              text-align: center; }
+              @media (max-width: 768px) {
+                .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header .right .btns a {
+                  display: block; } }
+              .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header .right .btns a:first-child {
+                margin-right: 10px; }
+                @media (max-width: 768px) {
+                  .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header .right .btns a:first-child {
+                    margin-right: 0px; } }
+          .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header .second-flex {
+            flex-direction: column; }
           .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header .left h4 {
             font-size: 18px; }
+            @media screen and (max-width: 1600px) {
+              .another-questions .section-recent-surveys .questions-inner .swiper-slide .slider-inner .vox-header .left h4 .vox-description {
+                max-height: 79px; } }
   .another-questions .section-recent-surveys .give-me-more {
     font-size: 13px;
     font-weight: 500;
@@ -4938,3 +4976,9 @@ p.h2-bold {
   right: 0;
   left: 0;
   padding: 20px 30px; }
+
+.answer-mobile-tooltip {
+  display: none; }
+  @media screen and (max-width: 768px) {
+    .answer-mobile-tooltip {
+      display: block; } }

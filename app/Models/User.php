@@ -370,6 +370,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
         $item->save();
         $item->send();
+
+        return $item;
     }
 
     public function getWorkHoursAttribute() {

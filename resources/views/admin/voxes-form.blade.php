@@ -48,8 +48,9 @@
                                 <div class="col-md-4">
                                     {{ Form::text('title-'.$code, !empty($item) ? $item->{'title:'.$code} : null, array('maxlength' => 256, 'class' => 'form-control input-title', 'placeholder' => 'Title for Survey page - Website')) }}
                                 </div>
-                                <div class="col-md-4">
-                                    {{ Form::textarea('description-'.$code, !empty($item) ? $item->{'description:'.$code} : null, array('maxlength' => 2048, 'class' => 'form-control input-description', 'placeholder' => 'Description for Survey page - Website')) }}
+                                <div class="col-md-4" max-symb="244">
+                                    {{ Form::textarea('description-'.$code, !empty($item) ? $item->{'description:'.$code} : null, array('maxlength' => 2048, 'class' => 'form-control input-description', 'placeholder' => 'Description for Survey page - Website', 'id' => 'surv-desc')) }}
+                                    <p class="textarea-symbols"><span class="symbol-count">0</span>/244 (Maximum symbols count)</p>
                                 </div>
                                 <div class="col-md-4">
                                     {{ Form::textarea('stats_description-'.$code, !empty($item) ? $item->translateOrNew($code)->stats_description : null, array('maxlength' => 2048, 'class' => 'form-control input-stats_description', 'placeholder' => 'Description for Stats page - Website')) }}
