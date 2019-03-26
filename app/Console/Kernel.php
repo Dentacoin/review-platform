@@ -106,9 +106,9 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
 
             echo '
-            UNCONFIRMED TRANSACTIONS
+UNCONFIRMED TRANSACTIONS
 
-            ========================
+========================
 
 ';
 
@@ -151,10 +151,10 @@ class Kernel extends ConsoleKernel
 
 
             echo '
-            NEW & FAILED TRANSACTIONS
+NEW & FAILED TRANSACTIONS
 
-            =========================
-            
+=========================
+
 ';
 
             $executed = 0;

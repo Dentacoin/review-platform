@@ -390,6 +390,9 @@ $(document).ready(function(){
     // } )
 
     $('.question-group input.disabler').change( function() {
+        $(this).closest('.question-group').find('input:not(.disabler)').prop('checked', false).prop('disabled', 'disabled');
+        $(this).closest('.question-group').find('.answer-checkbox').removeClass('active');
+        $(this).closest('.answer-checkbox').addClass('active');
         $(this).closest('.question-group').find('.next-answer').trigger('click');
         return;
 
