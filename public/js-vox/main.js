@@ -719,6 +719,13 @@ $(document).ready(function(){
 
     }
 
+    if (window.innerWidth < 768) {
+    	$('.no-mobile-tooltips').click( function() {
+    		$('.tooltip-window').hide();
+    	});
+    }
+    
+
     if($('.tooltip-text').length) {
 
         $('.tooltip-text').on('mouseover mousemove', function(e) {

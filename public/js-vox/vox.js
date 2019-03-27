@@ -219,7 +219,8 @@ $(document).ready(function(){
                     if(data.wrong) {
                         $('.question-group').find('.loader').remove();
                         $('.question-group:visible a:nth-child('+parseInt(answer)+')').addClass('wrong');
-                        
+
+
                         var go_back_group = $('.question-group').first();
                         var i = 1;
                         var found = false;
@@ -235,7 +236,9 @@ $(document).ready(function(){
                             i++;
                         } while(go_back_group.length);
 
+                        $('.question-group .answer-checkbox.active input').prop('checked', false);
                         $('.question-group .answer-checkbox.active').removeClass('active');
+                        $('.question-group input.answer').prop('disabled', false);
 
                         $('.answer-error').hide();
 
