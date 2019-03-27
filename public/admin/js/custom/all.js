@@ -120,21 +120,6 @@ $(document).ready(function(){
 		$(this).closest('.custom-tabs').find('.tab-pane.lang-'+$(this).attr('lang')).addClass('active in');
 	});
 	
-	var symbolsCount = function() {
-		var parent = $(this).closest('.col-md-4');
-		var length = $(this).val().length;
-		parent.find('.textarea-symbols .symbol-count').html(length);
-
-		if (length > parseInt(parent.attr('max-symb'))) {
-			parent.find('.textarea-symbols .symbol-count').css('color', 'red');
-		} else {
-			parent.find('.textarea-symbols .symbol-count').css('color', '#707478');
-		}
-	}
-
-	symbolsCount.bind($('#surv-desc'))();
-	
-	$('#surv-desc').keyup(symbolsCount);
 
 });
 
