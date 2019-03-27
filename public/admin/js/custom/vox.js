@@ -318,4 +318,23 @@ $(document).ready(function(){
 		},
 	}).disableSelection();
 
+
+
+	var symbolsCount = function() {
+		var parent = $(this).closest('.col-md-4');
+		var length = $(this).val().length;
+		parent.find('.textarea-symbols .symbol-count').html(length);
+
+		if (length > parseInt(parent.attr('max-symb'))) {
+			parent.find('.textarea-symbols .symbol-count').css('color', 'red');
+		} else {
+			parent.find('.textarea-symbols .symbol-count').css('color', '#707478');
+		}
+	}
+
+	$('#surv-desc').keyup(symbolsCount);
+	if( $('#surv-desc').length ) {
+		symbolsCount.bind($('#surv-desc'))();
+	}
+
 });
