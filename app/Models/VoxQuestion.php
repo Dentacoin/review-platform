@@ -58,6 +58,25 @@ class VoxQuestion extends Model {
         return preg_replace('/\[([^\]]*)\]/', '<span class="tooltip-text" text="${1}">', $new_title);
     }
 
+    public static function handleAnswerTooltip($answer) {
+        $new_answer = str_replace("[/]","</span>",$answer);
+        
+        return preg_replace('/\[([^\]]*)\]/', '<span class="tooltip-text" text="${1}">', $new_answer);
+    }
+
+    public static function hasAnswerTooltip($answer, $question) {
+        if (strpos($answer, '[/]') !== false) {
+
+            $string = $question->handleAnswerTooltip($answer);
+            $arr = explode('text="',$string);
+            $arr = explode('">',$arr[1]);
+
+            return $arr[0];
+        } else {
+            return false;
+        }
+    }
+
     public function getStatsFieldsAttribute($value)
     {
         return $value ? explode(',', $value) : [];

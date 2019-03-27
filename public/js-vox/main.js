@@ -698,14 +698,13 @@ $(document).ready(function(){
 
     var handleTooltip = function(e) {
 
-    	if( $(this).parents('.tooltip-text').length ) {
-    		var that = $(this).parents('.tooltip-text').first()
+    	if( $(this).closest('.no-mobile-tooltips').length ) {
+    		var that = $(this).closest('.no-mobile-tooltips');
     	} else {
     		var that = $(this).closest('.tooltip-text');
     	}
 
-
-        $('.tooltip-window').text(that.attr('text'));
+        $('.tooltip-window').text( $(this).closest('.tooltip-text').attr('text'));
         $('.tooltip-window').css('display', 'block');
 
     	var y = that.offset().top + that.outerHeight() + 10;

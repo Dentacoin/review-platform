@@ -98,7 +98,9 @@
                             <div class="form-group answers-group-add">
                                 <label class="col-md-2 control-label"></label>
                                 <div class="col-md-10">
-                                    {{ trans('admin.page.'.$current_page.'.answers-add-hint') }}<br/>
+                                    {{ trans('admin.page.'.$current_page.'.answers-add-hint') }}<br/><br/>
+                                    How ANSWER tooltips work: <br/>
+                                    Do you [includes cigars, e-cigarettes and any other tobacco products]smoke cigarettes[/]?<br/>
                                     <br/>
                                     <a href="javascript:;" class="btn btn-success btn-block btn-add-answer">{{ trans('admin.page.'.$current_page.'.answers-add') }}</a>
                                 </div>

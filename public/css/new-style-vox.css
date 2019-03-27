@@ -1477,6 +1477,12 @@ p.h2-bold {
           .questions .question-group .answers .answer-checkbox .answer-mobile-tooltip i:before,
           .questions .question-group .answers .answer .answer-mobile-tooltip i:before {
             font-size: 17px; }
+      .questions .question-group .answers select .tooltip-text,
+      .questions .question-group .answers .answer-radio .tooltip-text,
+      .questions .question-group .answers .answer-checkbox .tooltip-text,
+      .questions .question-group .answers .answer .tooltip-text {
+        font-size: 16px;
+        color: #41afff; }
     @media screen and (min-width: 769px) {
       .questions .question-group .answers .answer-radio.active-label, .questions .question-group .answers .answer-radio:hover,
       .questions .question-group .answers .answer-checkbox.active-label,
@@ -1491,6 +1497,12 @@ p.h2-bold {
         .questions .question-group .answers .answer-checkbox:hover i,
         .questions .question-group .answers .answer.active-label i,
         .questions .question-group .answers .answer:hover i {
+          color: white; }
+        .questions .question-group .answers .answer-radio.active-label .tooltip-text, .questions .question-group .answers .answer-radio:hover .tooltip-text,
+        .questions .question-group .answers .answer-checkbox.active-label .tooltip-text,
+        .questions .question-group .answers .answer-checkbox:hover .tooltip-text,
+        .questions .question-group .answers .answer.active-label .tooltip-text,
+        .questions .question-group .answers .answer:hover .tooltip-text {
           color: white; } }
     .questions .question-group .answers .answer-radio#birthyear-answer,
     .questions .question-group .answers .answer-checkbox#birthyear-answer,

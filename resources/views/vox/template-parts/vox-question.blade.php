@@ -28,13 +28,16 @@
 		<div class="answers">
 			@foreach( $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $k => $answer)
 				<div class="checkbox">
-					<label class="answer-checkbox no-mobile-tooltips {{ !empty(json_decode($question->answers_tooltips, true)[$k]) ? 'tooltip-text' : '' }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}" {!! !empty(json_decode($question->answers_tooltips, true)[$k]) ? 'text="'.json_decode($question->answers_tooltips, true)[$k].'"' : '' !!}>
+					<label class="answer-checkbox no-mobile-tooltips {{ !empty($question->hasAnswerTooltip($answer, $question)) ? 'tooltip-text' : '' }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}" {!! !empty($question->hasAnswerTooltip($answer, $question)) ? 'text="'.$question->hasAnswerTooltip($answer, $question).'"' : '' !!}>
 						<i class="far fa-square"></i>
 						<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="checkbox" name="answer" class="answer{!! mb_substr($answer, 0, 1)=='!' ? ' disabler' : '' !!} input-checkbox" value="{{ $loop->index+1 }}">
-						{{ mb_substr($answer, 0, 1)=='!' ? mb_substr($answer, 1) : $answer }}
-						@if(!empty(json_decode($question->answers_tooltips, true)[$k]))
-							<div class="answer-mobile-tooltip tooltip-text" text="{!! json_decode($question->answers_tooltips, true)[$k] !!}"><i class="fas fa-question-circle"></i></div>
-						@endif										
+
+						{!! nl2br(App\Models\VoxQuestion::handleAnswerTooltip( mb_substr($answer, 0, 1)=='!' ? mb_substr($answer, 1) : $answer))  !!}
+
+						@if(!empty($question->hasAnswerTooltip($answer, $question)))
+							<div class="answer-mobile-tooltip tooltip-text" text="{!! $question->hasAnswerTooltip($answer, $question) !!}"><i class="fas fa-question-circle"></i>
+							</div>
+						@endif
 					</label>
 				</div>
 			@endforeach
@@ -104,11 +107,13 @@
 		</div>
 		<div class="answers">
 			@foreach($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $key => $answer)
-				<a class="answer answer no-mobile-tooltips {{ !empty(json_decode($question->answers_tooltips, true)[$key]) ? 'tooltip-text' : '' }}" {!! !empty(json_decode($question->answers_tooltips, true)[$key]) ? 'text="'.json_decode($question->answers_tooltips, true)[$key].'"' : '' !!} data-num="{{ $loop->index+1 }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}">
+				<a class="answer answer no-mobile-tooltips" data-num="{{ $loop->index+1 }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}">
 					<input id="answer-{{ $question->id }}-{{ $loop->index+1 }}" type="radio" name="answer" class="answer" value="{{ $loop->index+1 }}" style="display: none;">
-					{{ $answer }}
-					@if(!empty(json_decode($question->answers_tooltips, true)[$key]))
-						<div class="answer-mobile-tooltip tooltip-text" text="{!! json_decode($question->answers_tooltips, true)[$key] !!}"><i class="fas fa-question-circle"></i></div>
+					{!! nl2br( App\Models\VoxQuestion::handleAnswerTooltip($answer)) !!}
+
+					@if(!empty($question->hasAnswerTooltip($answer, $question)))
+						<div class="answer-mobile-tooltip tooltip-text" text="{!! $question->hasAnswerTooltip($answer, $question) !!}"><i class="fas fa-question-circle"></i>
+						</div>
 					@endif
 				</a>
 			@endforeach
