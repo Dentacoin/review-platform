@@ -12,6 +12,14 @@ class SitemapController extends FrontController
 {
 	public function links($locale=null) {
 
+		// $u = User::where('is_dentist', 1)->where('id','>=',70000)->where('id','<',80000)->get();
+		// $i=0;
+		// foreach ($u as $user) {
+		// 	echo ++$i.'<br/>';
+		// 	$user->address = $user->address.'';
+		// }
+		// exit;
+
 		$links = [
 			getLangUrl('/'),
 			getLangUrl('welcome-dentist'),
@@ -29,10 +37,10 @@ class SitemapController extends FrontController
 			}
 		}
 
-		$dentists = User::where('is_dentist', 1)->whereNotNull('country_id')->where('status', 'approved')->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
+		$dentists = User::where('is_dentist', 1)->whereNotNull('address')->whereNotNull('country_id')->where('status', 'approved')->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
         $dentist_countries = Country::whereIn('id', $dentists )->get();
-        $dentist_cities = User::where('is_dentist', 1)->where('status', 'approved')->whereNotNull('country_id')->whereNotNull('city_name')->groupBy('state_name')->groupBy('city_name')->get();
-        $dentist_states = User::where('is_dentist', 1)->where('status', 'approved')->whereNotNull('country_id')->whereNotNull('city_name')->groupBy('state_name')->get();
+        $dentist_cities = User::where('is_dentist', 1)->whereNotNull('address')->where('status', 'approved')->whereNotNull('country_id')->whereNotNull('state_name')->whereNotNull('city_name')->groupBy('state_name')->groupBy('city_name')->get();
+        $dentist_states = User::where('is_dentist', 1)->whereNotNull('address')->where('status', 'approved')->whereNotNull('country_id')->whereNotNull('city_name')->groupBy('state_name')->get();
 
         foreach ($dentist_countries as $country) {
         	$links[] = getLangUrl('dentists-in-'.$country->slug);

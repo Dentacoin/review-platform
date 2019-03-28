@@ -122,7 +122,6 @@ class DentistsController extends FrontController
             $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
             $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
             if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
-                //dd($formattedAddress, $corrected_query);
 
 
                 $geores = \GoogleMaps::load('geocoding')
@@ -144,7 +143,33 @@ class DentistsController extends FrontController
                 $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
                 $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
                 if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
-                    return redirect( getLangUrl($corrected_query) );
+
+                    if( $geores->results[0]->place_id ) {
+
+                        $geores = \GoogleMaps::load('geocoding')
+                        ->setParam ([
+                            'address'    => $geores->results[0]->formatted_address,
+                        ])
+                        ->get();
+
+                        $geores = json_decode($geores);
+                        if(!empty($geores->results[0]->geometry->location)) {
+
+                            $parsedAddress = User::parseAddress( $geores->results[0]->address_components );
+                            $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
+                            $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
+                            $formattedAddress .= !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'].' ' : '';
+                        }
+
+                        $corrected_query = $this->getCorrectedQuery($formattedAddress, $filter);
+                        $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
+                        $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
+                        if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
+                            return redirect( getLangUrl($corrected_query) );
+                        }
+                    } else {
+                        return redirect( getLangUrl($corrected_query) );
+                    }
                 }
             }
             
