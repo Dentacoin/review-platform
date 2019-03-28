@@ -44,7 +44,7 @@ class EmailTemplate extends Model
             '[metamask] Instructions [/metamask]',
         ];
 
-        if($this->id==3 || $this->id==4) {
+        if($this->id==4) {
             $codes[] = '[register_reward]';
             $codes[] = '[rewardlink]Click here[/rewardlink]';            
         }
@@ -133,6 +133,10 @@ class EmailTemplate extends Model
         if($this->id==11 || $this->id==39) {
             $codes[] = '[grace_expiration_date]';
             $codes[] = '[login]Click here[/login]';
+        }
+
+        if( $this->id==3 || $this->id==5 || $this->id==41 ) { //Unfinished registrations
+            $codes[] = '[button]Click here to finish the registration[/button]';
         }
 
         return $codes;

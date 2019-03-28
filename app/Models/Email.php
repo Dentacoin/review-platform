@@ -148,7 +148,7 @@ class Email extends Model
 
 	private function addPlaceholders($content, $domain) {
 
-		if($this->template->id==3 || $this->template->id==4) { //Reward
+		if($this->template->id==4) { //Reward
 			$content = str_replace(array(
 				'[register_reward]',
 				'[rewardlink]',
@@ -386,6 +386,17 @@ class Email extends Model
 				'</a>',
 			), $content);
 		}
+
+		if( $this->template->id==3 || $this->template->id==5 || $this->template->id==41 ) { //Unfinished registrations
+			$content = str_replace(array(
+				'[button]',
+				'[/button]',
+			), array(
+				'<a '.$this->button_style.' href="'.getLangUrl( 'welcome-dentist', null, $domain).'">',
+				'</a>',
+			), $content);
+        }
+
 
 		return $content;
 	}
