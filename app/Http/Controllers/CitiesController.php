@@ -115,7 +115,7 @@ class CitiesController extends BaseController
 
 		$ret = [
 			'question_count' => number_format( VoxAnswer::getCount() , 0, '', ' '),
-			'dcn_price' => sprintf('%.4F', $dcn_price),
+			'dcn_price' => sprintf('%.5F', $dcn_price),
 			'dcn_price_full' => sprintf('%.10F', $dcn_price),
 			'dcn_change' => $dcn_change,
 		];

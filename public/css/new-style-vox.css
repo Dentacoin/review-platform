@@ -4928,15 +4928,14 @@ p.h2-bold {
   position: absolute;
   background-color: white;
   padding: 15px;
-  max-width: 300px;
+  max-width: 100%;
   border: 1px solid #41afff;
   z-index: 100;
   border-radius: 10px; }
   @media screen and (max-width: 768px) {
     .tooltip-window {
       font-size: 14px;
-      padding: 10px;
-      max-width: 200px; } }
+      padding: 10px; } }
   .tooltip-window::after {
     content: '';
     position: absolute;
