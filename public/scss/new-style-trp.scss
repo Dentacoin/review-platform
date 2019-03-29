@@ -1644,8 +1644,17 @@ textarea.input {
 		}
 	}
 
+	a {
+		color: #38a2e5;
+		font-size: 14px;
+		font-weight: 300;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
 	&.agree-label {
-		margin-top: 35px;
 		color: #999999;
 
 		a {
@@ -1654,6 +1663,7 @@ textarea.input {
 			font-weight: 300;
 		}
 	}
+
 }
 
 .checkbox-question {

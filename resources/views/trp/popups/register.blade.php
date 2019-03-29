@@ -184,13 +184,21 @@
 
 							</span>
 						</div>
-						<div class="sign-in-step active" id="step-1">
+						<div class="sign-in-step {!! empty($regData) ? 'active' : '' !!}" id="step-1">
 							@include('front.errors')
-							<input type="text" name="name" id="dentist-name" placeholder="{!! nl2br(trans('trp.popup.popup-register.name')) !!}" class="input" value="{{ old('name') }}">
-							<input type="text" name="name_alternative" id="dentist-name_alternative" placeholder="{!! nl2br(trans('trp.popup.popup-register.name_alterantive')) !!}" class="input" value="{{ old('name_alternative') }}">
-							<input type="email" name="email" id="dentist-email" placeholder="{!! nl2br(trans('trp.popup.popup-register.email')) !!}" class="input" value="{{ old('email') }}">
-							<input type="password" name="password" id="dentist-password" placeholder="{!! nl2br(trans('trp.popup.popup-register.password')) !!}" class="input" value="{{ old('password') }}">
-							<input type="password" name="password-repeat" id="dentist-password-repeat" placeholder="{!! nl2br(trans('trp.popup.popup-register.repeat-password')) !!}" class="input" value="{{ old('password-repeat') }}">
+							<input type="text" name="name" id="dentist-name" placeholder="{!! nl2br(trans('trp.popup.popup-register.name')) !!}" class="input" value="{{ $regData['name'] ?? old('name') }}">
+							<input type="text" name="name_alternative" id="dentist-name_alternative" placeholder="{!! nl2br(trans('trp.popup.popup-register.name_alterantive')) !!}" class="input" value="{{ $regData['name_alternative'] ?? old('name_alternative') }}">
+							<input type="email" name="email" id="dentist-email" placeholder="{!! nl2br(trans('trp.popup.popup-register.email')) !!}" class="input" value="{{ $regData['email'] ?? old('email') }}">
+							<input type="password" name="password" id="dentist-password" placeholder="{!! nl2br(trans('trp.popup.popup-register.password')) !!}" class="input" value="{{ $regData['password'] ?? old('password') }}">
+							<input type="password" name="password-repeat" id="dentist-password-repeat" placeholder="{!! nl2br(trans('trp.popup.popup-register.repeat-password')) !!}" class="input" value="{{ $regData['password'] ?? old('password-repeat') }}">
+							<label class="checkbox-label agree-label{!! $regData ? ' active' : '' !!}" for="agree-privacyy">
+								<input type="checkbox" class="special-checkbox" id="agree-privacyy" name="agree" value="1" {!! !empty($regData) ? 'checked="checked"' : '' !!} />
+								<i class="far fa-square"></i>
+								{!! nl2br(trans('trp.popup.popup-register.terms', [
+									'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
+									'endlink' => '</a>',
+								])) !!}
+							</label>
 							<div class="form-info clearfix">
 								<a href="javascript:;" class="button next go-to-next button-next-step" step-number="1" data-validator="{{ getLangUrl('register/step1') }}">
 									{!! nl2br(trans('trp.common.next')) !!}
@@ -198,21 +206,21 @@
 								</a>
 							</div>
 						</div>
-						<div class="sign-in-step address-suggester-wrapper" id="step-2">
+						<div class="sign-in-step address-suggester-wrapper {!! !empty($regData) && empty($regData['country_id']) ? 'active' : '' !!}" id="step-2">
 
 							<div class="mobile-radios" {!! session('join_clinic') && session('invited_by') ? 'style="display: none;"' : '' !!}>
 								<div class="radio-label">
-								  	<label for="mode-dentist">
+								  	<label for="mode-dentist" {!! !empty($regData) && $regData['mode']=='dentist' ? 'class="active"' : '' !!}>
 										<i class="far fa-circle"></i>
-								    	<input class="type-radio" type="radio" name="mode" id="mode-dentist" value="dentist">
+								    	<input class="type-radio" type="radio" name="mode" id="mode-dentist" value="dentist" {!! !empty($regData) && $regData['mode']=='dentist' ? 'checked="checked"' : '' !!}>
 								    	{!! nl2br(trans('trp.popup.popup-register.type.dentist')) !!}
 								    	
 								  	</label>
 								</div>
 								<div class="radio-label">
-								  	<label for="mode-clinic">
+								  	<label for="mode-clinic" {!! !empty($regData) && $regData['mode']=='clinic' ? 'class="active"' : '' !!}>
 										<i class="far fa-circle"></i>
-								    	<input class="type-radio" type="radio" name="mode" id="mode-clinic" value="clinic">
+								    	<input class="type-radio" type="radio" name="mode" id="mode-clinic" value="clinic" {!! !empty($regData) && $regData['mode']=='clinic' ? 'checked="checked"' : '' !!}>
 								    	{!! nl2br(trans('trp.popup.popup-register.type.clinic')) !!}
 								    	
 								  	</label>
@@ -232,12 +240,12 @@
 					  				<option>-</option>
 					  			@endif
 					  			@foreach( $countries as $country )
-					  				<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+					  				<option value="{{ $country->id }}" code="{{ $country->code }}" {!! (!empty($regData['country_id']) && $regData['country_id']==$country->id) || (empty($regData['country_id']) && $country_id==$country->id) ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
 					  			@endforeach
 					  		</select>
 
 		                	<div>
-						    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}">
+						    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}"  value="{{ $regData['address'] ?? old('address') }}">
 		                        <div class="suggester-map-div" style="height: 200px; display: none; margin: 10px 0px; background: transparent;">
 		                        </div>
 		                        <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px;">
@@ -253,32 +261,35 @@
 				    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>
 								</div>
 								<div style="flex: 1;">
-									<input type="phone" name="phone" id="dentist-tel" placeholder="Phone number" class="input">
+									<input type="phone" name="phone" id="dentist-tel" placeholder="Phone number" class="input"  value="{{ $regData['phone'] ?? old('phone') }}">
 								</div>
 							</div>
-							<input type="text" name="website" placeholder="Website" id="dentist-website" class="input">
+							<input type="text" name="website" placeholder="Website" id="dentist-website" class="input"  value="{{ $regData['website'] ?? old('website') }}">
 							<div class="form-info clearfix">
 								<a class="back" href="javascript:;">< {!! nl2br(trans('trp.common.back')) !!}</a>
 								<a href="javascript:;" class="button next go-to-next button-next-step" step-number="2" data-validator="{{ getLangUrl('register/step2') }}">{!! nl2br(trans('trp.common.next')) !!}</a>
 							</div>
 						</div>
-						<div class="sign-in-step" id="step-3">
+						<div class="sign-in-step {!! !empty($regData['country_id']) && empty($regData['specialization']) ? 'active' : '' !!}" id="step-3">
 							<div class="flex flex-mobile">
 								<div class="col">
-									<label for="add-avatar" class="image-label">
-										<div class="centered-hack">
-											<i class="fas fa-plus"></i>
-											<p>
-												{!! nl2br(trans('trp.popup.popup-register.add-photo')) !!}
-												
-											</p>
-										</div>
+									<label for="add-avatar" class="image-label" {!! !empty($regData['photoThumb']) ? 'style="background-image:url('.$regData['photoThumb'].');"' : '' !!} >
+										@if(empty( $regData['photo'] ))
+											<div class="centered-hack">
+												<i class="fas fa-plus"></i>
+												<p>
+													{!! nl2br(trans('trp.popup.popup-register.add-photo')) !!}
+													
+												</p>
+											</div>
+										@endif
 							    		<div class="loader">
 							    			<i class="fas fa-circle-notch fa-spin"></i>
 							    		</div>
 										<input type="file" name="image" id="add-avatar" upload-url="{{ getLangUrl('register/upload') }}">
 									</label>
-									<input type="hidden" id="photo-name" name="photo" >
+									<input type="hidden" id="photo-name" name="photo" value="{{ $regData['photo'] ?? '' }}" >
+									<input type="hidden" id="photo-thumb" name="photo-thumb" value="{{ $regData['photoThumb'] ?? '' }}" >
 								</div>
 								<div class="col">
 									<div class="specilializations">
@@ -287,8 +298,15 @@
 											
 										</p>
 								    	@foreach($categories as $k => $v)
-											<label class="checkbox-label" for="checkbox-{{ $k }}">
-												<input type="checkbox" class="special-checkbox" id="checkbox-{{ $k }}" name="specialization[]" value="{{ $loop->index }}">
+											<label class="checkbox-label{!! !empty($regData['specialization']) && in_array($loop->index, $regData['specialization']) ? ' active' : '' !!}" for="checkbox-{{ $k }}">
+												<input 
+													type="checkbox" 
+													class="special-checkbox" 
+													id="checkbox-{{ $k }}" 
+													name="specialization[]" 
+													value="{{ $loop->index }}"
+													{!! !empty($regData['specialization']) && in_array($loop->index, $regData['specialization']) ? 'checked="checked"' : '' !!}
+												>
 												<i class="far fa-square"></i>
 												{{ $v }}
 											</label>
@@ -303,10 +321,10 @@
 									
 									<div class="input-wrapper cilnic-suggester-wrapper suggester-wrapper">
 										<i class="fas fa-search"></i>
-										<input type="text" class="input cilnic-suggester suggester-input" placeholder="{!! nl2br(trans('trp.popup.popup-register.search-clinic')) !!}">
+										<input type="text" class="input cilnic-suggester suggester-input" placeholder="{!! nl2br(trans('trp.popup.popup-register.search-clinic')) !!}"  name="clinic_name"  value="{{ $regData['clinic_name'] ?? '' }}">
 										<div class="suggest-results">
 										</div>
-										<input type="hidden" class="suggester-hidden" name="clinic_id" value="{{ session('join_clinic') && session('invited_by') ? session('invited_by') : '' }}">
+										<input type="hidden" class="suggester-hidden" name="clinic_id" value="{{ session('join_clinic') && session('invited_by') ? session('invited_by') : '' }}"  value="{{ $regData['clinic_id'] ?? '' }}">
 									</div>
 								</label>
 							</div>
@@ -318,13 +336,8 @@
 								</a>
 							</div>
 						</div>
-						<div class="sign-in-step tac" id="step-4">
+						<div class="sign-in-step {!! !empty($regData['specialization']) ? 'active' : '' !!} tac" id="step-4">
 					    	<div id="captcha-div"></div>
-							<label class="checkbox-label agree-label" for="agree-privacyy">
-								<input type="checkbox" class="special-checkbox" id="agree-privacyy" name="agree" value="1">
-								<i class="far fa-square"></i>
-								I’ve read and agree to the <a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">Privacy Policy</a>
-							</label>
 
 							<div class="form-info clearfix">
 								<a class="back" href="javascript:;">< {!! nl2br(trans('trp.common.back')) !!}</a>

@@ -9,6 +9,7 @@ use App\Models\UserInvite;
 use App\Models\UserTeam;
 use App\Models\Country;
 use App\Models\Civic;
+use App\Models\IncompleteRegistration;
 use Carbon\Carbon;
 
 use Validator;
@@ -56,6 +57,7 @@ class RegisterController extends FrontController
             'email' => array('required', 'email', 'unique:users,email'),
             'password' => array('required', 'min:6'),
             'password-repeat' => 'required|same:password',
+            'agree' =>  array('required', 'accepted'),
         ]);
 
         if ($validator->fails()) {
@@ -93,6 +95,13 @@ class RegisterController extends FrontController
                     ]
                 ] );
             }
+
+            $this->saveIncompleteRegistration(request('email'), [
+                'name' => request('name'),
+                'email' => request('email'),
+                'password' => request('password'),
+                'name_alternative' => request('name_alternative'),
+            ]);
 
 
             return Response::json( ['success' => true] );
@@ -138,6 +147,15 @@ class RegisterController extends FrontController
                     )
                 );
             } else {
+
+                $this->saveIncompleteRegistration(request('email'), [
+                    'mode' => request('mode'),
+                    'country_id' => request('country_id'),
+                    'address' => request('address'),
+                    'website' => request('website'),
+                    'phone' => request('phone'),
+                ]);
+
                 $ret = array(
                     'success' => true
                 );
@@ -170,6 +188,15 @@ class RegisterController extends FrontController
 
             return Response::json( $ret );
         } else {
+
+            $this->saveIncompleteRegistration(request('email'), [
+                'specialization' => request('specialization'),
+                'photo' => request('photo'),
+                'photoThumb' => request('photo-thumb'),
+                'clinic_id' => request('clinic_id'),
+                'clinic_name' => request('clinic_name'),
+            ]);
+
             return Response::json( ['success' => true] );
         }
 
@@ -438,6 +465,8 @@ class RegisterController extends FrontController
 
             //Auth::login($newuser, Request::input('remember'));
 
+            $this->completeRegistration( Request::input('email') );
+
             return Response::json( [
                 'success' => true,
                 'popup' => 'verification-popup',
@@ -663,5 +692,31 @@ class RegisterController extends FrontController
 
         
         return Response::json( $ret );
+    }
+
+    public function saveIncompleteRegistration($email, $data) {
+        $item = IncompleteRegistration::where('email', 'like', $email)->first();
+        if(!$item) {
+            $item = new IncompleteRegistration;
+            $item->email = $email;
+        }
+
+        foreach ($data as $key => $value) {
+            $item->$key = $value;
+        }
+        $item->save();
+
+        session([
+            'incomplete-registration' => $item->id
+        ]);
+    }
+
+    public function completeRegistration($email) {
+        IncompleteRegistration::where('email', 'like', $email)->update([
+            'completed' => 1,
+        ]);
+        session([
+            'incomplete-registration' => null
+        ]);
     }
 }

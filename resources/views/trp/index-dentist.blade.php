@@ -30,10 +30,20 @@
     		<form class="signin-form tablet-fixes">
 
 				<div class="form-inner">
-					<input type="text" name="name" placeholder="{{ trans('trp.page.index-dentist.name') }}" class="input">
-					<input type="text" name="name_alternative" placeholder="{{ trans('trp.page.index-dentist.name_alternative') }}" class="input">
-					<input type="email" name="email" placeholder="{{ trans('trp.page.index-dentist.email') }}" class="input">
-					<input type="password" name="password" placeholder="{{ trans('trp.page.index-dentist.password') }}" class="input">
+					<input type="text" name="name" placeholder="{{ trans('trp.page.index-dentist.name') }}" class="input" value="{!! $regData['name'] ?? '' !!}">
+					<input type="text" name="name_alternative" placeholder="{{ trans('trp.page.index-dentist.name_alternative') }}" class="input" value="{!! $regData['name_alternative'] ?? '' !!}">
+					<input type="email" name="email" placeholder="{{ trans('trp.page.index-dentist.email') }}" class="input" value="{!! $regData['password'] ?? '' !!}">
+					<input type="password" name="password" placeholder="{{ trans('trp.page.index-dentist.password') }}" class="input" value="{!! $regData['password'] ?? '' !!}">
+
+					<label class="checkbox-label{!! $regData ? ' active' : '' !!}" for="agree-privacyy-dentist">
+						<input type="checkbox" class="special-checkbox" id="agree-privacyy-dentist" name="agree" value="1" {!! $regData ? 'checked="checked"' : '' !!} />
+						<i class="far fa-square"></i>
+						{!! nl2br(trans('trp.popup.popup-register.terms', [
+							'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
+							'endlink' => '</a>',
+						])) !!}
+					</label>
+
 					<div class="tac">
 						<input type="submit" value="{{ trans('trp.page.index-dentist.signup') }}" class="button button-sign-up-dentist">
 					</div>

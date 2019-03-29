@@ -1532,8 +1532,13 @@ textarea.input {
     color: #777777; }
   .checkbox-label.active i:before {
     content: '\f14a'; }
+  .checkbox-label a {
+    color: #38a2e5;
+    font-size: 14px;
+    font-weight: 300; }
+    .checkbox-label a:hover {
+      text-decoration: underline; }
   .checkbox-label.agree-label {
-    margin-top: 35px;
     color: #999999; }
     .checkbox-label.agree-label a {
       color: black;

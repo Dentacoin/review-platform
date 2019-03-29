@@ -18,6 +18,9 @@ $(document).ready(function(){
                 $('.image-label').find('.centered-hack').remove();
             }
             $('#photo-name').val( data.name );
+            if( $('#photo-thumb').length ) {
+                $('#photo-thumb').val( data.thumb );
+            }
 
             if( $('header .header-info img').length  ) {
                 $('header .header-info img').attr('src', data.thumb);

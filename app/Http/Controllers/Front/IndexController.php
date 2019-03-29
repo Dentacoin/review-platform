@@ -5,6 +5,7 @@ use App\Http\Controllers\FrontController;
 use App\Models\Country;
 use App\Models\City;
 use App\Models\User;
+use App\Models\IncompleteRegistration;
 
 use App;
 
@@ -73,11 +74,16 @@ class IndexController extends FrontController
 			return redirect( getLangUrl('/') );
 		}
 
+        if(session('incomplete-registration')) {
+        	$regData = IncompleteRegistration::find(session('incomplete-registration'));
+        }
+
 		return $this->ShowView('index-dentist', array(
 			'extra_body_class' => 'white-header',
 			'js' => [
 				'index-dentist.js'
-			]
+			],
+			'regData' => $regData
         ));	
 	}
 
