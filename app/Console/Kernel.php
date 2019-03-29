@@ -111,7 +111,7 @@ Why include a photo? Profile photo makes your practice more recognizable and eas
             }
 
             echo 'Incomplete Dentist Registrations cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-        })->cron("15 * * * *"); //every 5 min
+        })->cron("*/5 * * * *"); //every 5 min
         
         $schedule->call(function () {
             $price = null;
