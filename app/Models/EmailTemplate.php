@@ -137,6 +137,7 @@ class EmailTemplate extends Model
 
         if( $this->id==3 || $this->id==5 || $this->id==41 ) { //Unfinished registrations
             $codes[] = '[button]Click here to finish the registration[/button]';
+            $codes[] = '[missing-info]';
         }
 
         return $codes;

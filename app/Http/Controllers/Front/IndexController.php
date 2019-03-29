@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\City;
 use App\Models\User;
 use App\Models\IncompleteRegistration;
+use CArbon\Carbon;
 
 use App;
 
@@ -69,12 +70,21 @@ class IndexController extends FrontController
         ));	
 	}
 
-	public function dentist($locale=null) {
+	public function dentist($locale=null, $session_id=null, $hash=null) {
+
 		if(!empty($this->user)) {
 			return redirect( getLangUrl('/') );
 		}
 
-        if(session('incomplete-registration')) {
+		$regData = null;
+        if($session_id && $hash) {
+        	$regData = IncompleteRegistration::find($session_id);
+        	if(!empty($regData) && $hash!=md5($session_id.env('SALT_INVITE'))) {
+        		$regData = null;
+        	}
+        }
+
+        if(empty($regData) && session('incomplete-registration')) {
         	$regData = IncompleteRegistration::find(session('incomplete-registration'));
         }
 

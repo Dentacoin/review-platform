@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+use App\Models\IncompleteRegistration;
 use App\Models\Article;
 use App\Models\User;
 use App\Models\Dcn;
@@ -35,19 +36,82 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            return;
-            SitemapGenerator::create('https://reviews.dentacoin.com')
-            ->hasCrawled(function (Url $url) {
-                return $url;                
-            })->writeToFile(public_path().'/sitemaps/sitemap-reviews.xml');
+            
 
-            SitemapGenerator::create('https://dentavox.dentacoin.com')
-            ->hasCrawled(function (Url $url) {
-                return $url;                
-            })->writeToFile(public_path().'/sitemaps/sitemap-vox.xml');
+            $notificaitons[] = [
+                'time' => Carbon::now()->addHours(-1),
+                'tempalte_id' => 3,
+            ];
+            $notificaitons[] = [
+                'time' => Carbon::now()->addDays(-1),
+                'tempalte_id' => 5,
+            ];
+            $notificaitons[] = [
+                'time' => Carbon::now()->addDays(-3),
+                'tempalte_id' => 41,
+            ];
+            foreach ($notificaitons as $key => $time) {
+                $field = 'notified'.(intval($key)+1);
+                $list = IncompleteRegistration::whereNull('completed')->whereNull( $field )->where('created_at', '<', $time['time'])->get();
+                foreach ($list as $notify) {
+                    $u = User::find(3);
+                    $tmpEmail = $u->email;
+                    $tmpName = $u->name;
 
-            echo 'Sitemap cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-        })->cron("0 5 * * *"); //05:00h
+                    echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
+
+                    $missingInfo = '';
+                    if($time['tempalte_id']==3) {
+                        if(empty($notify->address)) {
+                            $missingInfo .= '<b>Enter your clinic address and webpage or social media page. </b>
+Your practice will be easily found by patients looking for a dentist in your area.
+
+';
+                        }
+
+                        if(empty($notify->photo)) {
+                            $missingInfo .= '<b>Select your specialties</b>
+Based on your selection, your profile will show to patients who are searching for a particular type of dental specialist.
+
+<b>Upload your profile photo</b> - e.g. picture of you, the team, the clinic or your logo.
+Why include a photo? Profile photo makes your practice more recognizable and easier for patients to remember.';
+
+                        }
+                    }
+                    if($time['tempalte_id']==5) {
+                        $parts = [];
+                        if(empty($notify->address)) {
+                            $parts[] = 'dental clinic contact details';
+                        }
+
+                        if(empty($notify->photo)) {
+                            $parts[] = 'profile photo';
+                        }
+
+                        if(!empty( $parts )) {
+                            $missingInfo .= 'It looks like last time you didn’t have at hand your '.implode(' and ', $parts);
+                        }
+                    }
+
+                    $u->email = $notify->email;
+                    $u->name = $notify->name;
+                    $u->save();
+                    $u->sendTemplate($time['tempalte_id'], [
+                        'link' => $notify->id.'/'.md5($notify->id.env('SALT_INVITE')),
+                        'missing-info' => $missingInfo,
+                    ]);
+
+                    $u->email = $tmpEmail;
+                    $u->name = $tmpName;
+                    $u->save();
+
+                    $notify->$field = true;
+                    $notify->save();
+                }
+            }
+
+            echo 'Incomplete Dentist Registrations cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+        })->cron("15 * * * *"); //every 5 min
         
         $schedule->call(function () {
             $price = null;

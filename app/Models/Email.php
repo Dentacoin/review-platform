@@ -391,9 +391,11 @@ class Email extends Model
 			$content = str_replace(array(
 				'[button]',
 				'[/button]',
+				'[missing-info]',
 			), array(
-				'<a '.$this->button_style.' href="'.getLangUrl( 'welcome-dentist', null, $domain).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl( 'welcome-dentist/'.$this->meta['link'], null, $domain).'">',
 				'</a>',
+				$this->meta['missing-info']
 			), $content);
         }
 

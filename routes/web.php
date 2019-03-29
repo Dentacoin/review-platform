@@ -160,7 +160,7 @@ $reviewRoutes = function () {
 		Route::group(['namespace' => 'Front'], function () {
 			Route::get('/', 									'IndexController@home');
 			Route::get('pending-dentist', 						'IndexController@pending');
-			Route::get('welcome-dentist', 						'IndexController@dentist');
+			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
 
 			Route::any('invite/{id}/{hash}/{inv_id?}', 			'RegisterController@invite_accept');
