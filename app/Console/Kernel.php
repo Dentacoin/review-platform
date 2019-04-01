@@ -77,6 +77,13 @@ Based on your selection, your profile will show to patients who are searching fo
 Why include a photo? Profile photo makes your practice more recognizable and easier for patients to remember.';
 
                         }
+
+                        if(!empty($notify->address) && !empty($notify->photo)) {
+                            $missingInfo .= '<b>Create your profile.</b>
+Click the check box and confirm the CAPTCHA.
+
+';
+                        }
                     }
                     if($time['tempalte_id']==5) {
                         $parts = [];
@@ -89,7 +96,9 @@ Why include a photo? Profile photo makes your practice more recognizable and eas
                         }
 
                         if(!empty( $parts )) {
-                            $missingInfo .= 'It looks like last time you didn’t have at hand your '.implode(' and ', $parts);
+                            $missingInfo .= 'It looks like last time you didn\'t have at hand your '.implode(' and ', $parts);
+                        } else {
+                            $missingInfo .= 'It looks like last time you reached the last step.';
                         }
                     }
 

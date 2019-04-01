@@ -96,5 +96,8 @@ return [
         'admins' => array(
             'icon' => 'user-plus',
         ),
+        'incomplete' => array(
+            'icon' => 'heartbeat',
+        ),
     )
 ];

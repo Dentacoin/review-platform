@@ -137,6 +137,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('rewards', 							'RewardsController@list');
 
 	Route::any('registrations', 					'StatsController@registrations');
+
+	Route::any('incomplete', 						'UsersController@incomplete');
 });
 
 

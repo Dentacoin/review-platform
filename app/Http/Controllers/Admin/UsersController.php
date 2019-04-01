@@ -15,6 +15,7 @@ use App\Models\Country;
 use App\Models\UserCategory;
 use App\Models\Review;
 use App\Models\ReviewAnswer;
+use App\Models\IncompleteRegistration;
 
 use Carbon\Carbon;
 
@@ -608,6 +609,81 @@ class UsersController extends AdminController
         } else {
             return redirect('cms/'.$this->current_page);
         }
+    }
+
+    public function incomplete() {
+
+        if(request('export')) {
+            $incomplete = IncompleteRegistration::whereNull('completed')->orderBy('id', 'desc')->get();
+            $export = [];
+            foreach ($incomplete as $u) {
+                $nameArr = explode(' ', $u->name);
+                if(count($nameArr)>1) {
+                    $ln = $nameArr[ count($nameArr)-1 ];
+                    unset( $nameArr[ count($nameArr)-1 ] );
+                    $fn = implode(' ', $nameArr);
+                } else {
+                    $fn = $u->name;
+                    $ln = '';
+                }
+                $info = [
+                    'email' => $u->email,
+                    'fn' => $fn,
+                    'ln' => $ln,
+                    'country' => '',
+                    'phone' => '',
+                ];
+
+                if( $u->country_id ) {
+                    $country = Country::find($u->country_id);
+                    $info['country'] = mb_strtoupper($country->code);
+                }
+
+
+                if( !empty($country) && $u->phone ) {
+                    $phone = trim(str_replace(' ', '', $u->phone));
+                    $info['phone'] = '+'.$country->phone_code.$phone;
+                }
+
+                //phone
+                //country
+                $export[] = $info;
+            }
+
+            $csv = [
+                ['email','fn','ln','country','phone']
+            ];
+
+
+            foreach ($export as $row) {
+                $tmp = array_values($row);
+                foreach ($tmp as $key => $value) {
+                    $value = preg_replace('/[ ]{2,}|[\t]/', ' ', trim($value));
+                    $tmp[$key] = str_replace(',', ' ', trim($value));
+                }
+
+
+                $csv[] = $tmp;
+            }
+
+            header("Content-type: text/csv");
+            header("Content-Disposition: attachment; filename=export-incompletes.csv");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+
+            foreach ($csv as $item) {
+                echo implode(',', $item);
+                echo '
+    ';
+            }
+            exit;
+
+        }
+
+        $incomplete = IncompleteRegistration::orderBy('id', 'desc')->take(50)->get();
+        return $this->showView('users-incomplete', array(
+            'items' => $incomplete,
+        ));
     }
 
 }
