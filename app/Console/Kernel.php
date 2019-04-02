@@ -52,7 +52,7 @@ class Kernel extends ConsoleKernel
             ];
             foreach ($notificaitons as $key => $time) {
                 $field = 'notified'.(intval($key)+1);
-                $list = IncompleteRegistration::whereNull('completed')->whereNull( $field )->where('created_at', '<', $time['time'])->get();
+                $list = IncompleteRegistration::whereNull('completed')->whereNull('unsubscribed')->whereNull( $field )->where('created_at', '<', $time['time'])->get();
                 foreach ($list as $notify) {
                     $u = User::find(3);
                     $tmpEmail = $u->email;
@@ -96,9 +96,9 @@ Click the check box and confirm the CAPTCHA.
                         }
 
                         if(!empty( $parts )) {
-                            $missingInfo .= 'It looks like last time you didn\'t have at hand your '.implode(' and ', $parts);
+                            $missingInfo .= 'It looks like last time you didn\'t have at hand your '.implode(' and ', $parts).'.';
                         } else {
-                            $missingInfo .= 'It looks like last time you reached the last step.';
+                            $missingInfo .= 'It looks like you did not complete only the last step of your registration.';
                         }
                     }
 

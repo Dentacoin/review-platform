@@ -70,17 +70,30 @@ class IndexController extends FrontController
         ));	
 	}
 
-	public function dentist($locale=null, $session_id=null, $hash=null) {
+
+	public function unsubscribe ($locale=null, $session_id=null, $hash=null) {
+		return $this->dentist($locale, $session_id, $hash, true);
+	}
+
+	public function dentist($locale=null, $session_id=null, $hash=null, $unsubscribe = false) {
 
 		if(!empty($this->user)) {
 			return redirect( getLangUrl('/') );
 		}
 
+		$unsubscribed = false;
 		$regData = null;
         if($session_id && $hash) {
         	$regData = IncompleteRegistration::find($session_id);
         	if(!empty($regData) && $hash!=md5($session_id.env('SALT_INVITE'))) {
         		$regData = null;
+        	}
+
+        	if($regData && $unsubscribe) {
+        		$regData->unsubscribed = true;
+        		$regData->save();
+        		$regData = null;
+        		$unsubscribed = true;
         	}
         }
 
@@ -88,12 +101,14 @@ class IndexController extends FrontController
         	$regData = IncompleteRegistration::find(session('incomplete-registration'));
         }
 
+
 		return $this->ShowView('index-dentist', array(
 			'extra_body_class' => 'white-header',
 			'js' => [
 				'index-dentist.js'
 			],
-			'regData' => $regData
+			'regData' => $regData,
+			'unsubscribed' => $unsubscribed,
         ));	
 	}
 

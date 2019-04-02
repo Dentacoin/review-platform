@@ -162,6 +162,7 @@ $reviewRoutes = function () {
 		Route::group(['namespace' => 'Front'], function () {
 			Route::get('/', 									'IndexController@home');
 			Route::get('pending-dentist', 						'IndexController@pending');
+			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
 

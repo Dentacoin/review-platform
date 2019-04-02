@@ -21,6 +21,12 @@
 				{{ trans('trp.page.index-dentist.signup') }}
 			</a>
 
+			@if($unsubscribed)
+				<div class="alert alert-info">
+					{{ trans('trp.page.index-dentist.unsubscribed') }}
+				</div>
+			@endif
+
 	    </div>
     </div>
 
