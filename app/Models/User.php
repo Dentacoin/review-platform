@@ -877,7 +877,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function loggedFromBadIp() {
-        $users_with_same_ip = UserLogin::where('ip', 'like', Request::ip())->where('user_id', '!=', $this->ip)->groupBy('user_id')->get()->count();
+        $users_with_same_ip = UserLogin::where('ip', 'like', self::getRealIp())->where('user_id', '!=', $this->ip)->groupBy('user_id')->get()->count();
 
         if ($users_with_same_ip >=3 && !$this->allow_withdraw && !$this->is_dentist ) {
             return true;
@@ -887,7 +887,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public static function lastLoginUserId() {
-        return UserLogin::where('ip', 'like', Request::ip())->orderBy('id', 'DESC')->first();
+        return UserLogin::where('ip', 'like', self::getRealIp())->orderBy('id', 'DESC')->first();
     }
 
 

@@ -36,7 +36,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "POST",
-            url: 'https://dentacoin.net/civic',
+            url: 'https://civic.dentacoin.net/civic',
             data: {
                 jwtToken: jwtToken
             },
