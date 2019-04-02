@@ -1168,4 +1168,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         return implode(', ', $arr);
     }
+
+    //Handles CloudFlare
+    public static function getRealIp() {
+        return !empty($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : Request::ip();
+    }
 }

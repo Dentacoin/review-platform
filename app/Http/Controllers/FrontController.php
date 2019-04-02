@@ -64,17 +64,17 @@ class FrontController extends BaseController
         //VPNs
         $myips = session('my-ips');
        
-        if( !isset( $myips[Request::ip()] ) ) {
+        if( !isset( $myips[User::getRealIp()] ) ) {
             if(!is_array($myips)) {
                 $myips = [];
             }
-            $myips[Request::ip()] = User::checkForBlockedIP();
+            $myips[User::getRealIp()] = User::checkForBlockedIP();
             session(['my-ips' => $myips]);
         }
-        if($myips[Request::ip()] && $this->current_page!='vpn' ) {
+        if($myips[User::getRealIp()] && $this->current_page!='vpn' ) {
             Redirect::to( getLangUrl('vpn') )->send();
         }
-        if( !$myips[Request::ip()] && $this->current_page=='vpn' ) {
+        if( !$myips[User::getRealIp()] && $this->current_page=='vpn' ) {
             Redirect::to( getLangUrl('/') )->send();
         }
 
@@ -89,7 +89,7 @@ class FrontController extends BaseController
             if($this->user && !session('login-logged')){
                 $ul = new UserLogin;
                 $ul->user_id = $this->user->id;
-                $ul->ip = Request::ip();
+                $ul->ip = User::getRealIp();
                 $ul->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
                 $ul->save();
                 session(['login-logged' => time()]);
