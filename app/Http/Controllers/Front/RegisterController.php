@@ -134,7 +134,11 @@ class RegisterController extends FrontController
             );
 
             foreach ($msg as $field => $errors) {
-                $ret['messages'][$field] = implode(', ', $errors);
+                if($field=='website') {
+                    $ret['messages'][$field] = trans('trp.common.invalid-website');
+                } else {
+                    $ret['messages'][$field] = implode(', ', $errors);
+                }
             }
 
         } else {
