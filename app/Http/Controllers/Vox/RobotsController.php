@@ -9,7 +9,7 @@ class RobotsController extends FrontController
 	public function content($locale=null) {
 
 		$content = 'User-agent: *
-Disallow:';
+Disallow:'.( Request::getHost() == 'vox.dentacoin.com' ? '/' : '' );
 
 		return response($content, 200)
             ->header('Content-Type', 'text/plain');

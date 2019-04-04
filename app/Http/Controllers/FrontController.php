@@ -60,6 +60,11 @@ class FrontController extends BaseController
         if(empty($this->current_subpage)) {
             $this->current_subpage='home';
         }
+
+        // Fck FB
+        if( Request::getHost() == 'vox.dentacoin.com' && Request::server('HTTP_REFERER') && Request::isMethod('get') ) {
+            Redirect::to( str_replace('vox.', 'dentavox.', Request::url() ) )->send();
+        }
         
         //VPNs
         $myips = session('my-ips');
@@ -230,6 +235,12 @@ class FrontController extends BaseController
                 $params['unbanned_text'] = nl2br(trans('vox.page.bans.unbanned-text-3'));
             }
         }
+
+        // Fck FB
+        if( Request::getHost() == 'vox.dentacoin.com' ) {
+            $params['noindex'] = true;
+        }
+
         return view('vox.'.$page, $params);
     }
 
