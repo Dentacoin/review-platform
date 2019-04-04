@@ -309,6 +309,7 @@ $voxRoutes = function () {
 
 			Route::any('questionnaire/{id}', 					'VoxController@home');
 			Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');
+			Route::any('get-started/{id}', 						'VoxController@home_slug');
 
 			Route::any('vpn', 									'VpnController@list');
 
