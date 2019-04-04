@@ -104,6 +104,14 @@
 								<span></span>
 							</div>
 
+							<div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
+								<select class="form-control" name="title" id="title">
+									<option value="">{!! trans('vox.page.register.title-placeholder') !!}</option>
+									<option value="dr">Dr.</option>
+									<option value="prof">Prof. Dr.</option>
+								</select>
+								<span class="error-message" id="title-error"></span>
+							</div>
 							<div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
 								<input type="text" class="form-control" name="name" id="name" placeholder="{!! trans('vox.page.register.name') !!}">
 					    		<i class="hint">

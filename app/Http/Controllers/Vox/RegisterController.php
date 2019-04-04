@@ -131,6 +131,7 @@ class RegisterController extends FrontController
 
                 
                 $newuser = new User;
+                $newuser->title = Request::input('title');
                 $newuser->name = Request::input('name');
                 $newuser->name_alternative = Request::input('name_alternative');
                 $newuser->email = Request::input('email');
