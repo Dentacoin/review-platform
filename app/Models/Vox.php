@@ -43,6 +43,9 @@ class Vox extends Model {
         'hasimage_social',
         'country_count',
         'sort_order',
+        'related_vox_id',
+        'related_question_id',
+        'related_answer',
     ];
 
     protected $dates = [

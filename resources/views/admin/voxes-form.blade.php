@@ -183,6 +183,33 @@
                         @endif
                     </div>
 
+                    <h3>Related</h3>
+
+                    <div class="form-group">
+                        <label class="col-md-1 control-label">Related survey</label>
+                        <div class="col-md-3">
+                            <select class="form-control" name="related_vox_id">
+                                @foreach($all_voxes as $vox)
+                                    <option value="{{ $vox->id }}" {!! !empty($item->related_vox_id) && ($vox->id == $item->related_vox_id) ? 'selected' : '' !!}>{{ $vox->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <label class="col-md-1 control-label">Related question</label>
+                        <div class="col-md-3">
+                            <select class="form-control" name="related_question_id">
+                                @foreach($item->questions as $q)
+                                    <option value="{{ $q->id }}" {!! !empty($item->related_question_id) && ($q->id == $item->related_question_id) ? 'selected' : '' !!}>{{ $q->question }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <label class="col-md-1 control-label">Related answer</label>
+                        <div class="col-md-3">
+                            {{ Form::number('related_answer', !empty($item->related_answer) ? $item->related_answer : null, array('class' => 'form-control')) }}
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div class="col-md-12">
                             <button type="submit" class="btn btn-sm btn-success btn-block">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}</button>

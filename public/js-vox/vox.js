@@ -283,7 +283,14 @@ $(document).ready(function(){
                             }
                             VoxTest.handleNextQuestion();
                             $("#question-meta").hide();
-                            $("#question-done").show();
+
+                            if (related_question_id && related_answer && $('.question-group[data-id='+related_question_id+'][data-answer='+related_answer+']').length && $("#question-related-done").length) {
+                                $("#question-related-done").show();
+                                swiper.update();
+                            } else {
+                                $("#question-done").show();
+                            }
+                            
 
                             fbq('track', 'SurveyComplete');
                             gtag('event', 'Take', {
@@ -479,6 +486,51 @@ $(document).ready(function(){
                 }
             }
         });
+    }
+
+    if ($('#other-surveys .swiper-container').length) {
+
+        if (window.innerWidth > 768) {
+
+            var swiper = new Swiper('#other-surveys .swiper-container', {
+                slidesPerView: 3,
+                slidesPerGroup: 3,
+                spaceBetween: 0,
+                pagination: {
+                    el: '#other-surveys .swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    900: {
+                      slidesPerView: 2,
+                    },
+                },
+                autoplay: {
+                    delay: 5000,
+                },
+                resizeReInit: true,
+            });
+        } else {
+            var swiper = new Swiper('#other-surveys .swiper-container', {
+                slidesPerView: 1,
+                spaceBetween: 0,
+                pagination: {
+                    el: '#other-surveys .swiper-pagination',
+                    clickable: true,
+                },
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                coverflowEffect: {
+                    rotate: 50,
+                    stretch: 0,
+                    depth: 100,
+                    modifier: 1,
+                    slideShadows : false,
+                },
+                resizeReInit: true,
+            });
+        }
     }
 
 });

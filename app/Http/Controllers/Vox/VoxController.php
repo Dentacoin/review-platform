@@ -689,6 +689,11 @@ class VoxController extends FrontController
         	]);
 		}
 
+		$related_vox = '';
+		if (!empty($vox->related_vox_id) && !in_array($vox->related_vox_id, $this->user->filledVoxes())) {
+			$related_vox = Vox::find($vox->related_vox_id);
+		}
+
 		return $this->ShowVoxView('vox', array(
 			'welcomerules' => $welcomerules,
 			'not_bot' => $not_bot,
@@ -730,8 +735,9 @@ class VoxController extends FrontController
             'email_data' => [
             	'title' => $email_subject,
             	'content' => $email_content,
-            ]
-
+            ],
+            'related_vox' => $related_vox,
+            'suggested_voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $this->user->filledVoxes())->take(9)->get(),
 
         ));
 	}

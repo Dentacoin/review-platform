@@ -90,6 +90,7 @@ class VoxesController extends AdminController
             'category_list' => VoxCategory::get(),
             'question_types' => $this->question_types,
             'stat_types' => $this->stat_types,
+            'all_voxes' => Vox::orderBy('sort_order', 'ASC')->get(),
         ));
     }
 
@@ -198,7 +199,8 @@ class VoxesController extends AdminController
                 'triggers' => $triggers,
                 'linked_triggers' => $linked_triggers,
                 'trigger_question_id' => $trigger_question_id,
-                'trigger_valid_answers' => $trigger_valid_answers
+                'trigger_valid_answers' => $trigger_valid_answers,
+                'all_voxes' => Vox::orderBy('sort_order', 'ASC')->get(),
             ));
         } else {
             return redirect('cms/'.$this->current_page);
@@ -572,6 +574,9 @@ class VoxesController extends AdminController
         $item->stats_featured = $this->request->input('stats_featured');
         $item->has_stats = $this->request->input('has_stats');
         $item->sort_order = $this->request->input('sort_order');
+        $item->related_vox_id = $this->request->input('related_vox_id');
+        $item->related_question_id = $this->request->input('related_question_id');
+        $item->related_answer = $this->request->input('related_answer');
         $item->save();
 
         VoxToCategory::where('vox_id', $item->id)->delete();
