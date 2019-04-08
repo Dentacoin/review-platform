@@ -7,6 +7,9 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
+
 use App;
 use Auth;
 use Session;
@@ -96,6 +99,23 @@ class FrontController extends BaseController
                 $ul->user_id = $this->user->id;
                 $ul->ip = User::getRealIp();
                 $ul->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
+
+                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+
+                $dd = new DeviceDetector($userAgent);
+
+                $dd->parse();
+
+                if ($dd->isBot()) {
+                    // handle bots,spiders,crawlers,...
+                    $ul->device = $dd->getBot();
+                } else {
+                    $ul->device = $dd->getDeviceName();
+                    $ul->brand = $dd->getBrandName();
+                    $ul->model = $dd->getModel();
+                    $ul->os = $dd->getOs()['name'];
+                }
+
                 $ul->save();
                 session(['login-logged' => time()]);
                 session(['mark-login' => mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'DV' : 'TRP']);

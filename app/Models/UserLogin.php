@@ -10,7 +10,11 @@ class UserLogin extends Model {
     protected $fillable = [
         'user_id',
         'platform',
-        'ip'
+        'ip',
+        'device',
+        'brand',
+        'model',
+        'os',
     ];
 
     protected $dates = [
