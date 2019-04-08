@@ -523,6 +523,11 @@ select:focus > option:checked {
 	@media #{$tablet} {
 		display: none;
 	}
+
+	&.done-all-image {
+	    max-width: 500px;
+	    margin-left: -130px;
+	}
 }
 
 header {
@@ -3833,6 +3838,20 @@ p.h2-bold {
 		}
 	}
 
+	.done-desc {
+		max-width: 560px;
+	    margin-right: auto;
+	    margin-left: auto;
+	}
+
+	.what-do-next {
+		font-size: 18px;
+
+		@media #{$phone} {
+			font-size: 14px;
+		}
+	}
+
 	h4 {
 		color: #3b3c3b;
 
@@ -6992,4 +7011,33 @@ p.h2-bold {
     		}
     	}
     }
+}
+
+.alert-done-all-surveys {
+	text-align: center;
+	padding: 25px 70px 25px 70px;
+	max-width: 980px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 22px;
+    border-width: 1px;
+    margin-bottom: 50px;
+
+    @media screen and (max-width: 1200px) {
+		padding: 15px 20px 15px 20px;
+		max-width: 900px;
+		font-size: 17px;
+		margin-bottom: 30px;
+    }
+
+    @media #{$phone} {
+		margin-top: 20px;
+		margin-bottom: 10px;
+		font-size: 14px;
+		padding: 10px;
+	}
+
+	&:before {
+		display: none;
+	}
 }

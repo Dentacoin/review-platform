@@ -694,6 +694,15 @@ class VoxController extends FrontController
 			$related_vox = Vox::find($vox->related_vox_id);
 		}
 
+        $all_surveys = Vox::where('type', 'normal')->get();
+        $taken = $this->user->filledVoxes();
+        $done_all = false;
+
+        if (($all_surveys->count() - 1) == count($taken)) {
+        	$done_all = true;
+        }
+
+
 		return $this->ShowVoxView('vox', array(
 			'welcomerules' => $welcomerules,
 			'not_bot' => $not_bot,
@@ -738,7 +747,7 @@ class VoxController extends FrontController
             ],
             'related_vox' => $related_vox,
             'suggested_voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $this->user->filledVoxes())->take(9)->get(),
-
+            'done_all' => $done_all,
         ));
 	}
 

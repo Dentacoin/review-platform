@@ -397,7 +397,7 @@ class Email extends Model
 			), array(
 				'<a '.$this->button_style.' href="'.getLangUrl( 'welcome-dentist/'.$this->meta['link'], null, $domain).'">',
 				'</a>',
-				$this->meta['missing-info'],
+				!empty($this->meta['missing-info']) ? $this->meta['missing-info'] : '',
 				'<a '.$this->text_style.' href="'.getLangUrl( 'welcome-dentist/unsubscribe/'.$this->meta['link'], null, $domain).'">',
 				'</a>',
 			), $content);

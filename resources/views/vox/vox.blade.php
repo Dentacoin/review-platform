@@ -166,7 +166,11 @@
 				<div class="container done-section">
 
 					<div class="col-md-3">
-						<img class="image-left" src="{{ url('new-vox-img/well-done.png') }}">
+						@if($done_all)
+							<img class="image-left done-all-image" src="{!! url('new-vox-img/all-surveys.png') !!}">
+						@else
+							<img class="image-left" src="{!! url('new-vox-img/well-done.png') !!}">
+						@endif
 					</div>
 
 					<div class="col-md-9 tac">
@@ -175,32 +179,65 @@
 						@endif
 
 						<h3 class="done-title">
-							{!! trans('vox.page.questionnaire.well-done', [
-								'who' => '<span class="blue-text">'.$user->getName().'</span>'
-							]) !!}
+							@if($done_all)
+								{!! trans('vox.page.questionnaire.well-done.all-surveys', [
+									'who' => '<span class="blue-text">'.$user->getName().'</span>'
+								]) !!}
+							@else
+								{!! trans('vox.page.questionnaire.well-done', [
+									'who' => '<span class="blue-text">'.$user->getName().'</span>'
+								]) !!}
+							@endif
 						</h3>
-						<h4>
-							{!! trans('vox.page.questionnaire.well-done-content', [
-								'amount' => '<span id="coins-test">'.$vox->getRewardTotal().'</span>',
-								'link' => '<a href="'.getLangUrl('profile').'">',
-								'endlink' => '</a>',
-							]) !!}
+
+						<h4 class="done-desc">
+							@if($done_all)
+								{!! trans('vox.page.questionnaire.well-done-content.all-surveys', [
+									'amount' => '<span id="coins-test">'.$vox->getRewardTotal().'</span>',
+								]) !!}
+							@else
+								{!! trans('vox.page.questionnaire.well-done-content', [
+									'amount' => '<span id="coins-test">'.$vox->getRewardTotal().'</span>',
+									'link' => '<a href="'.getLangUrl('profile').'">',
+									'endlink' => '</a>',
+								]) !!}
+							@endif
 						</h4>
 
 						<p class="next-title">
-							{!! trans('vox.page.questionnaire.what-next') !!}
-							
+							@if($done_all)
+								{!! trans('vox.page.questionnaire.what-next.all-surveys') !!}
+							@else
+								{!! trans('vox.page.questionnaire.what-next') !!}
+							@endif
 						</p>
 
 						<div class="wrapper-buttons">
-							<a class="white-button" href="{{ getLangUrl('/') }}">
-								{!! trans('vox.page.questionnaire.what-next-another') !!}
-							</a>
-							@if($vox->has_stats)
-								<a class="white-button" href="{{ $vox->getStatsList() }}">
-									{!! trans('vox.page.questionnaire.what-next-stats') !!}
+							@if($done_all)
+
+								@if($vox->has_stats)
+									<a class="white-button" href="{{ $vox->getStatsList() }}">
+										{!! trans('vox.page.questionnaire.what-next-stats.all-surveys') !!}
+									</a>
+								@endif
+								<a class="white-button" href="{{ getLangUrl('/') }}">
+									{!! trans('vox.page.questionnaire.go-surveys.all-surveys') !!}
 								</a>
+								<a class="white-button" href="{{ getLangUrl('profile') }}">
+									{!! trans('vox.page.questionnaire.open-wallet.all-surveys') !!}
+								</a>
+
+							@else
+								<a class="white-button" href="{{ getLangUrl('/') }}">
+									{!! trans('vox.page.questionnaire.what-next-another') !!}
+								</a>
+								@if($vox->has_stats)
+									<a class="white-button" href="{{ $vox->getStatsList() }}">
+										{!! trans('vox.page.questionnaire.what-next-stats') !!}
+									</a>
+								@endif
 							@endif
+
 							<a class="white-button" id="invite-button" href="javascript:;">
 								@if($user->is_dentist)
 									{!! trans('vox.page.questionnaire.what-next-invite-dentist') !!}
@@ -241,6 +278,12 @@
 								</div>
 							</div>
 						</div>
+
+						@if($done_all)
+							<p class="what-do-next">
+								{!! trans('vox.page.questionnaire.check-apointment.all-surveys') !!}
+							</p>
+						@endif
 					</div>
 				</div>
 
@@ -422,8 +465,8 @@
 			url: '{{ $vox->getLink() }}'
 		};
 
-		var related_question_id = {{ $vox->related_question_id }};
-		var related_answer = {{ $vox->related_answer }};
+		var related_question_id = {!! !empty($vox->related_question_id) ? $vox->related_question_id : 'null' !!};
+		var related_answer = {!! !empty($vox->related_answer) ? $vox->related_answer : 'null' !!};
 	</script>
 
 

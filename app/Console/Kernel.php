@@ -105,7 +105,7 @@ Click the check box and confirm the CAPTCHA.
                     $u->email = $notify->email;
                     $u->name = $notify->name;
                     $u->save();
-                    $u->sendTemplate($time['tempalte_id'], [
+                    $mail = $u->sendTemplate($time['tempalte_id'], [
                         'link' => $notify->id.'/'.md5($notify->id.env('SALT_INVITE')),
                         'missing-info' => $missingInfo,
                     ]);
@@ -116,6 +116,8 @@ Click the check box and confirm the CAPTCHA.
 
                     $notify->$field = true;
                     $notify->save();
+
+                    $mail->delete();
                 }
             }
 

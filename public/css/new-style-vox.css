@@ -411,6 +411,9 @@ select:focus > option:checked {
   @media screen and (max-width: 1080px) {
     .image-left {
       display: none; } }
+  .image-left.done-all-image {
+    max-width: 500px;
+    margin-left: -130px; }
 
 header {
   height: 100px;
@@ -2650,6 +2653,18 @@ p.h2-bold {
       .section-welcome-done .done-title span,
       .page-questions-done .done-title span {
         font-size: 18px; } }
+.section-welcome-done .done-desc,
+.page-questions-done .done-desc {
+  max-width: 560px;
+  margin-right: auto;
+  margin-left: auto; }
+.section-welcome-done .what-do-next,
+.page-questions-done .what-do-next {
+  font-size: 18px; }
+  @media screen and (max-width: 768px) {
+    .section-welcome-done .what-do-next,
+    .page-questions-done .what-do-next {
+      font-size: 14px; } }
 .section-welcome-done h4,
 .page-questions-done h4 {
   color: #3b3c3b; }
@@ -5070,3 +5085,27 @@ p.h2-bold {
     @media screen and (max-width: 768px) {
       .sticky-invite .sticky-box img {
         max-width: 25px; } }
+
+.alert-done-all-surveys {
+  text-align: center;
+  padding: 25px 70px 25px 70px;
+  max-width: 980px;
+  margin-right: auto;
+  margin-left: auto;
+  font-size: 22px;
+  border-width: 1px;
+  margin-bottom: 50px; }
+  @media screen and (max-width: 1200px) {
+    .alert-done-all-surveys {
+      padding: 15px 20px 15px 20px;
+      max-width: 900px;
+      font-size: 17px;
+      margin-bottom: 30px; } }
+  @media screen and (max-width: 768px) {
+    .alert-done-all-surveys {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      padding: 10px; } }
+  .alert-done-all-surveys:before {
+    display: none; }

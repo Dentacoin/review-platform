@@ -10,36 +10,53 @@
 			<h1 class="bold">
 				{{ trans('vox.page.home.title') }}
 			</h1>
-			<div class="filters-section">
-				<div class="search-survey tal">
-					<i class="fas fa-search"></i>
-					<input type="text" id="survey-search" name="survey-search">
+
+			@if($voxes->count() == count($taken))
+				<div class="alert alert-info alert-done-all-surveys">
+					@if($user->is_dentist)
+						{!! nl2br(trans('vox.page.home.dentist.alert-done-all-surveys', [
+							'link' => '<a href="'.getLangUrl('profile/invite').'">',
+							'endlink' => '</a>',
+						])) !!}
+					@else
+						{!! nl2br(trans('vox.page.home.patients.alert-done-all-surveys', [
+							'link' => '<a href="'.getLangUrl('profile/invite').'">',
+							'endlink' => '</a>',
+						])) !!}
+					@endif
 				</div>
-				<div class="questions-menu clearfix">
-					<div class="sort-menu tal"> 
-						@foreach($sorts as $key => $val)
-							@if($key == 'taken' && empty($taken))
-
-							@else
-								<a href="javascript:;" sort="{{ $key }}"  class="{!! $key == 'featured' || $key == 'untaken' ? 'active' : 'sortable' !!}">
-
-									@if($key == 'featured')
-										<i class="fas fa-star"></i>
-									@endif
-
-									{{ $val }}
-								</a>
-							@endif
-						@endforeach
+			@else
+				<div class="filters-section">
+					<div class="search-survey tal">
+						<i class="fas fa-search"></i>
+						<input type="text" id="survey-search" name="survey-search">
 					</div>
-					<div class="sort-category tar"> 
-						<span>
-							{{ trans('vox.page.home.filter') }}:
-						</span>
-						{{ Form::select('category', ['all' => 'All'] + $vox_categories, null , ['id' => 'surveys-categories']) }} 
+					<div class="questions-menu clearfix">
+						<div class="sort-menu tal"> 
+							@foreach($sorts as $key => $val)
+								@if($key == 'taken' && empty($taken))
+
+								@else
+									<a href="javascript:;" sort="{{ $key }}"  class="{!! $key == 'featured' || $key == 'untaken' ? 'active' : 'sortable' !!}">
+
+										@if($key == 'featured')
+											<i class="fas fa-star"></i>
+										@endif
+
+										{{ $val }}
+									</a>
+								@endif
+							@endforeach
+						</div>
+						<div class="sort-category tar"> 
+							<span>
+								{{ trans('vox.page.home.filter') }}:
+							</span>
+							{{ Form::select('category', ['all' => 'All'] + $vox_categories, null , ['id' => 'surveys-categories']) }} 
+						</div>
 					</div>
 				</div>
-			</div>
+			@endif
 			<div class="section-recent-surveys" id="questions-wrapper">
 				<div class="questions-inner" id="questions-inner">
 					@foreach( $voxes as $vox)
