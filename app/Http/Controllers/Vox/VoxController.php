@@ -39,10 +39,19 @@ class VoxController extends FrontController
 
 	public function home($locale=null, $id) {
 		$vox = Vox::find($id);
+
+		if (empty($vox)) {
+			return redirect( getLangUrl('/'));
+		}		
+
 		return $this->dovox($locale, $vox);
 	}
 	public function home_slug($locale=null, $slug) {
 		$vox = Vox::whereTranslationLike('slug', $slug)->first();
+
+		if (empty($vox)) {
+			return redirect( getLangUrl('/'));
+		}
 
 		return $this->dovox($locale, $vox);
 	}
