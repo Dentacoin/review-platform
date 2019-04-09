@@ -417,8 +417,8 @@
                         'table_fields' => [
                             'created_at'        => array('format' => 'datetime'),
                             'vox_id'              => array('template' => 'admin.parts.table-vox-rewards-user'),
-                            'reward'           => array(),
                             'device'          => array('template' => 'admin.parts.table-logins-device'),
+                            'reward'           => array(),
                             'delete'              => array('template' => 'admin.parts.table-vox-rewards-delete'),
                         ],
                         'table_data' => $item->vox_rewards,
