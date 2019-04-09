@@ -16,11 +16,13 @@
 					@if($user->is_dentist)
 						{!! nl2br(trans('vox.page.home.dentist.alert-done-all-surveys', [
 							'link' => '<a href="'.getLangUrl('profile/invite').'">',
+							'link_stats' => '<a href="'.getLangUrl('dental-survey-stats').'">',
 							'endlink' => '</a>',
 						])) !!}
 					@else
 						{!! nl2br(trans('vox.page.home.patients.alert-done-all-surveys', [
 							'link' => '<a href="'.getLangUrl('profile/invite').'">',
+							'link_stats' => '<a href="'.getLangUrl('dental-survey-stats').'">',
 							'endlink' => '</a>',
 						])) !!}
 					@endif
