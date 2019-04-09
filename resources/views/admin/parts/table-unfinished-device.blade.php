@@ -1,1 +1,1 @@
-{{ !empty($item->login->device) ? $item->login->device.', ' : '' }} {{ !empty($item->login->brand) ? $item->login->brand.', ' : '' }} {{ !empty($item->login->model) ? $item->login->model.', ' : '' }} {{ !empty($item->login->os) ? $item->login->os.', ' : '' }}
+{{ !empty($item->login->device) ? ucfirst($item->login->device) : '' }}{{ !empty($item->login->brand) ? ', '.ucfirst($item->login->brand) : '' }}{{ !empty($item->login->model) ? ', '.ucfirst($item->login->model) : '' }}{{ !empty($item->login->os) ? ', '.ucfirst($item->login->os) : '' }}

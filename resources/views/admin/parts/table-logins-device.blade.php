@@ -1,1 +1,1 @@
-{{ !empty($item->device) ? $item->device.', ' : '' }} {{ !empty($item->brand) ? $item->brand.', ' : '' }} {{ !empty($item->model) ? $item->model.', ' : '' }} {{ !empty($item->os) ? $item->os.', ' : '' }}
+{{ !empty($item->device) ? ucfirst($item->device) : '' }}{{ !empty($item->brand) ? ', '.ucfirst($item->brand) : '' }}{{ !empty($item->model) ? ', '.ucfirst($item->model) : '' }}{{ !empty($item->os) ? ', '.ucfirst($item->os) : '' }}
