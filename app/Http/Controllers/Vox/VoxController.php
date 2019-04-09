@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
 
+
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
+
 use Validator;
 use Response;
 use Request;
@@ -602,6 +606,20 @@ class VoxController extends FrontController
 						        	$reward->is_scam = true;
 						        }
 						        $reward->seconds = $diff;
+
+						        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+				                $dd = new DeviceDetector($userAgent);
+				                $dd->parse();
+
+				                if ($dd->isBot()) {
+				                    // handle bots,spiders,crawlers,...
+				                    $reward->device = $dd->getBot();
+				                } else {
+				                    $reward->device = $dd->getDeviceName();
+				                    $reward->brand = $dd->getBrandName();
+				                    $reward->model = $dd->getModel();
+				                    $reward->os = $dd->getOs()['name'];
+				                }						        
 
 						        $reward->save();
 		        				$ret['balance'] = $this->user->getVoxBalance();

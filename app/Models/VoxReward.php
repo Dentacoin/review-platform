@@ -16,6 +16,10 @@ class VoxReward extends Model {
         'is_scam',
         'mistakes',
         'seconds',
+        'device',
+        'brand',
+        'model',
+        'os',
     ];
 
     protected $dates = [

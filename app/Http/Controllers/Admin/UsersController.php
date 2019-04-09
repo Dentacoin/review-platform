@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 
 use App\Models\Email;
 use App\Models\User;
+use App\Models\UserLogin;
 use App\Models\Vox;
 use App\Models\UserBan;
 use App\Models\VoxAnswer;
@@ -593,10 +594,14 @@ class UsersController extends AdminController
             $rewarder_questions = VoxReward::where('user_id', $id)->get();
             $unanswerd_questions = array_diff($all_questions_answerd->pluck('vox_id')->toArray(), $rewarder_questions->pluck('vox_id')->toArray() );
             $unfinished = Vox::whereIn('id', $unanswerd_questions)->get();
-            foreach ($unfinished as $k => $v) {
-                $unfinished[$k]->user_id = $item->id;
-            }
 
+            foreach ($unfinished as $k => $v) {
+                $ans = VoxAnswer::where('user_id', $id)->where('vox_id', $v->id)->orderBy('id', 'asc')->first();
+                $user_log = UserLogin::where('user_id', $id)->where('created_at', '<', $ans->created_at )->orderBy('id', 'desc')->first();
+
+                $unfinished[$k]->user_id = $item->id;
+                $unfinished[$k]->login = $user_log;
+            }
 
 
             return $this->showView('users-form', array(

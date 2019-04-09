@@ -101,9 +101,7 @@ class FrontController extends BaseController
                 $ul->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
 
                 $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-
                 $dd = new DeviceDetector($userAgent);
-
                 $dd->parse();
 
                 if ($dd->isBot()) {
@@ -519,7 +517,7 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2019-04-08-1';
+        $params['cache_version'] = '2019-04-09';
     }
 
 }

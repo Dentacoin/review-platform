@@ -1,0 +1,1 @@
+{{ !empty($item->login->device) ? $item->login->device.', ' : '' }} {{ !empty($item->login->brand) ? $item->login->brand.', ' : '' }} {{ !empty($item->login->model) ? $item->login->model.', ' : '' }} {{ !empty($item->login->os) ? $item->login->os.', ' : '' }}

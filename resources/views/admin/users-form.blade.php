@@ -418,6 +418,7 @@
                             'created_at'        => array('format' => 'datetime'),
                             'vox_id'              => array('template' => 'admin.parts.table-vox-rewards-user'),
                             'reward'           => array(),
+                            'device'          => array('template' => 'admin.parts.table-logins-device'),
                             'delete'              => array('template' => 'admin.parts.table-vox-rewards-delete'),
                         ],
                         'table_data' => $item->vox_rewards,
@@ -448,6 +449,7 @@
                         'table_fields' => [
                             'created_at'        => array('format' => 'datetime'),
                             'title'              => array(),
+                            'device'                => array('template' => 'admin.parts.table-unfinished-device'),
                             'delete'              => array('template' => 'admin.parts.table-vox-unfinished-delete'),
                         ],
                         'table_data' => $unfinished,
@@ -577,6 +579,7 @@
                         'table_fields' => [
                             'created_at'        => array('format' => 'datetime'),
                             'ip'                => array('template' => 'admin.parts.table-logins-user'),
+                            'device'          => array('template' => 'admin.parts.table-logins-device'),
                             'platform'          => array(),
                         ],
                         'table_data' => $item->logins,
