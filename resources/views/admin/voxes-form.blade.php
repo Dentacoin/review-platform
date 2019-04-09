@@ -188,7 +188,7 @@
                     <div class="form-group">
                         <label class="col-md-1 control-label">Related survey</label>
                         <div class="col-md-3">
-                            <select class="form-control" name="related_vox_id">
+                            <select class="form-control select2" name="related_vox_id">
                                 @foreach($all_voxes as $vox)
                                     <option value="{{ $vox->id }}" {!! !empty($item->related_vox_id) && ($vox->id == $item->related_vox_id) ? 'selected' : '' !!}>{{ $vox->title }}</option>
                                 @endforeach
@@ -197,7 +197,7 @@
 
                         <label class="col-md-1 control-label">Related question</label>
                         <div class="col-md-3">
-                            <select class="form-control" name="related_question_id">
+                            <select class="form-control select2" name="related_question_id">
                                 @foreach($item->questions as $q)
                                     <option value="{{ $q->id }}" {!! !empty($item->related_question_id) && ($q->id == $item->related_question_id) ? 'selected' : '' !!}>{{ $q->question }}</option>
                                 @endforeach
