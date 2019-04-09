@@ -75,7 +75,6 @@ class LoginController extends FrontController
                 $intended = session()->pull('our-intended');
                 return redirect( $intended ? $intended : getVoxUrl('/') );
             } else {
-                dd( $s_user );
                 Request::session()->flash('error-message', trans('vox.page.login.error-fb', [
                     'link' => '<a href="'.getVoxUrl('/').'">',
                     'endlink' => '</a>',
