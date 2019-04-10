@@ -83,7 +83,7 @@
 					@if(!$user || ($user && !$user->birthyear))
 						<div class="question-group birthyear-question" data-id="birthyear" style="display: none;">
 							<div class="question">
-								What's your year of birth?
+								{!! trans('vox.page.questionnaire.question-birth') !!}
 							</div>
 							<div class="answers">
 								<select class="answer" name="birthyear-answer" id="birthyear-answer">
@@ -101,16 +101,17 @@
 					@if(!$user || ($user && !$user->gender))
 						<div class="question-group gender-question" data-id="gender" style="display: none;">
 							<div class="question">
-								What's your biological sex?
+								{!! trans('vox.page.questionnaire.question-sex') !!}
 							</div>
 							<div class="answers">
 								<a class="answer answer" for="answer-gende-m" data-num="m">
 									<input id="answer-gender-m" type="radio" name="gender-answer" class="answer" value="m" style="display: none;">
-									Male										
+									{!! trans('vox.page.questionnaire.question-sex-m') !!}
+									
 								</a>
 								<a class="answer answer" for="answer-gender-f" data-num="f">
 									<input id="answer-gender-f" type="radio" name="gender-answer" class="answer" value="f" style="display: none;">
-									Female										
+									{!! trans('vox.page.questionnaire.question-sex-f') !!}
 								</a>
 							</div>
 						</div>
@@ -119,7 +120,7 @@
 					@if(!$user || ($user && !$user->country_id))
 						<div class="question-group location-question" data-id="location" style="display: none;">
 							<div class="question">
-								Where do you live?
+								{!! trans('vox.page.questionnaire.question-country') !!}
 							</div>
 							<div class="answers">
 								{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , null , array('class' => 'country-select form-control') ) }}
