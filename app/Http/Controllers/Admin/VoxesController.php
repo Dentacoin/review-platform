@@ -873,17 +873,77 @@ class VoxesController extends AdminController
 
     }
 
-    public function explorer($question_id=null) {
-        if(!$question_id) {
-            $question_id = VoxQuestion::first()->id;
-        }
-        $question = VoxQuestion::find($question_id);
+    public function explorer($vox_id=null,$question_id=null) {
 
-        //dd( $question->respondents->take(50)->pluck('user') );
+        if(!$vox_id) {
+            $vox_id = Vox::first()->id;
+        }
+
+        $question = '';
+        if ($question_id) {
+           $question = VoxQuestion::find($question_id);
+        }
+
+        $vox = Vox::find($vox_id);
+
+        $page = request('page');
+        $page = max(1,intval($page)); 
+        $ppp = 10;
+        $adjacents = 2;
+
+        $respondents = VoxReward::where('vox_id',$vox_id )->has('user')->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+        $question_respondents = '';
+        if (!empty($question_id)) {
+            $question_respondents = VoxAnswer::where('question_id',$question_id )->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->skip( ($page-1)*$ppp )->take($ppp)->get();
+        }
+
+        if (!empty($question_id)) {
+            $items_count = VoxAnswer::where('question_id',$question_id )->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->count();
+        } else {
+            $items_count = VoxReward::where('vox_id',$vox_id )->has('user')->count();
+        }
+
+        $total_count = $items_count;
+        $total_pages = ceil($total_count/$ppp);
+
+        //Here we generates the range of the page numbers which will display.
+        if($total_pages <= (1+($adjacents * 2))) {
+          $start = 1;
+          $end   = $total_pages;
+        } else {
+          if(($page - $adjacents) > 1) { 
+            if(($page + $adjacents) < $total_pages) { 
+              $start = ($page - $adjacents);            
+              $end   = ($page + $adjacents);         
+            } else {             
+              $start = ($total_pages - (1+($adjacents*2)));  
+              $end   = $total_pages;               
+            }
+          } else {               
+            $start = 1;                                
+            $end   = (1+($adjacents * 2));             
+          }
+        }
+
+        //If you want to display all page links in the pagination then
+        //uncomment the following two lines
+        //and comment out the whole if condition just above it.
+        /*$start = 1;
+        $end = $total_pages;*/
 
         return $this->showView('voxes-explorer', array(
+            'question_respondents' => $question_respondents,
             'question' => $question,
-            'voxes' => Vox::get()
+            'vox_id' => $vox_id,
+            'respondents' => $respondents,
+            'vox' => $vox,
+            'voxes' => Vox::get(),
+            'count' =>($page - 1)*$ppp ,
+            'start' => $start,
+            'end' => $end,
+            'total_pages' => $total_pages,
+            'page' => $page,
         ));
     }
 

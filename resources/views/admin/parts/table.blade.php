@@ -43,7 +43,15 @@
                                     @elseif($v['format']=='date')
                                         <td {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>{{ !empty($row[$k]->timestamp) && $row[$k]->timestamp>0 ? date('d.m.Y', $row[$k]->timestamp) : trans('admin.table.na') }}</td>
                                     @elseif($v['format']=='datetime')
-                                        <td {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>{{ !empty($row[$k]->timestamp) && $row[$k]->timestamp>0 ? date('d.m.Y, H:i:s', $row[$k]->timestamp) : trans('admin.table.na') }}</td>
+
+                                        <td {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>
+                                            
+                                            @if(count(explode('.', $k))==2)
+                                                {{ !empty($row[explode('.', $k)[0]][explode('.', $k)[1]]) ? date('d.m.Y, H:i:s', $row[explode('.', $k)[0]][explode('.', $k)[1]]->timestamp) : '' }}
+                                            @else
+                                                {{ !empty($row[$k]->timestamp) && $row[$k]->timestamp>0 ? date('d.m.Y, H:i:s', $row[$k]->timestamp) : trans('admin.table.na') }}
+                                            @endif
+                                        </td>
                                     @elseif($v['format']=='bool')
                                         <td>{!! $row[$k] ? '<span class="label label-success">'.trans('admin.common.yes').'</span>' : '<span class="label label-warning">'.trans('admin.common.no').'</span>' !!}</td>
                                     @elseif($v['format']=='set')
@@ -60,7 +68,11 @@
                                         </td>
                                     @elseif($v['format']=='country')
                                         <td>
-                                            {{ !empty($row[$k]) ? App\Models\Country::find($row[$k])->name : '' }}
+                                            @if(count(explode('.', $k))==2)
+                                                {{ !empty($row[explode('.', $k)[0]][explode('.', $k)[1]]) ? App\Models\Country::find($row[explode('.', $k)[0]][explode('.', $k)[1]])->name : '' }}
+                                            @else
+                                                {{ !empty($row[$k]) ? App\Models\Country::find($row[$k])->name : '' }}
+                                            @endif
                                         </td>
                                     @elseif($v['format']=='enum')
                                         <td>
