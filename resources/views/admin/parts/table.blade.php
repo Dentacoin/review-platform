@@ -22,7 +22,7 @@
                     	<tr {!! !empty($row->id) ? 'item-id="'.$row->id.'"' : '' !!} >
                     		@foreach($table_fields as $k => $v)
                                 @if(!empty($v['template']))
-                                    <td>@include($v['template'], array('item' => $row) )</td>
+                                    <td {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>@include($v['template'], array('item' => $row) )</td>
                                 @elseif(!empty($v['format']))
                                     @if($v['format']=='selector')
                                         <td>
@@ -41,9 +41,9 @@
                                             <td><a class="btn btn-sm btn-deafult" href="{{ url('cms/'.$current_page.( !empty($table_subpage) ? '/'.$table_subpage : '' ).'/delete/'.$row->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a></td>
                                         @endif
                                     @elseif($v['format']=='date')
-                                        <td>{{ !empty($row[$k]->timestamp) && $row[$k]->timestamp>0 ? date('d.m.Y', $row[$k]->timestamp) : trans('admin.table.na') }}</td>
+                                        <td {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>{{ !empty($row[$k]->timestamp) && $row[$k]->timestamp>0 ? date('d.m.Y', $row[$k]->timestamp) : trans('admin.table.na') }}</td>
                                     @elseif($v['format']=='datetime')
-                                        <td>{{ !empty($row[$k]->timestamp) && $row[$k]->timestamp>0 ? date('d.m.Y, H:i:s', $row[$k]->timestamp) : trans('admin.table.na') }}</td>
+                                        <td {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>{{ !empty($row[$k]->timestamp) && $row[$k]->timestamp>0 ? date('d.m.Y, H:i:s', $row[$k]->timestamp) : trans('admin.table.na') }}</td>
                                     @elseif($v['format']=='bool')
                                         <td>{!! $row[$k] ? '<span class="label label-success">'.trans('admin.common.yes').'</span>' : '<span class="label label-warning">'.trans('admin.common.no').'</span>' !!}</td>
                                     @elseif($v['format']=='set')
@@ -82,7 +82,7 @@
                                 @elseif(count(explode('.', $k))==2)
                                     <td>{{ $row[explode('.', $k)[0]][explode('.', $k)[1]] }}</td>
                                 @else
-                                    <td>{{ $row[$k] }}</td>
+                                    <td {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>{{ $row[$k] }}</td>
                                 @endif
 	                        @endforeach
                     	</tr>

@@ -345,8 +345,8 @@
                     @include('admin.parts.table', [
                         'table_id' => 'users',
                         'table_fields' => [
-                            'created_at'        => array('format' => 'datetime'),
-                            'user'              => array('template' => 'admin.parts.table-reviews-user'),
+                            'created_at'        => array('format' => 'datetime','width' => '20%'),
+                            'user'              => array('template' => 'admin.parts.table-reviews-user', 'width' => '30%'),
                             'rating'            => array(),
                             'upvotes'            => array(),
                             'verified'              => array('format' => 'bool'),
@@ -377,8 +377,8 @@
                     @include('admin.parts.table', [
                         'table_id' => 'users',
                         'table_fields' => [
-                            'created_at'        => array('format' => 'datetime'),
-                            'user'              => array('template' => 'admin.parts.table-reviews-user'),
+                            'created_at'        => array('format' => 'datetime','width' => '20%'),
+                            'user'              => array('template' => 'admin.parts.table-reviews-user','width' => '30%'),
                             'dentist'           => array('template' => 'admin.parts.table-reviews-dentist'),
                             'rating'            => array(),
                             'upvotes'            => array(),
@@ -415,10 +415,10 @@
                     @include('admin.parts.table', [
                         'table_id' => 'vox-rewards',
                         'table_fields' => [
-                            'created_at'        => array('format' => 'datetime'),
-                            'vox_id'              => array('template' => 'admin.parts.table-vox-rewards-user'),
-                            'device'          => array('template' => 'admin.parts.table-logins-device'),
-                            'reward'           => array(),
+                            'created_at'        => array('format' => 'datetime', 'width' => '20%'),
+                            'vox_id'              => array('template' => 'admin.parts.table-vox-rewards-user', 'width' => '30%'),
+                            'device'          => array('template' => 'admin.parts.table-logins-device', 'width' => '20%'),
+                            'reward'           => array('width' => '100%'),
                             'delete'              => array('template' => 'admin.parts.table-vox-rewards-delete'),
                         ],
                         'table_data' => $item->vox_rewards,
@@ -447,9 +447,9 @@
                     @include('admin.parts.table', [
                         'table_id' => 'vox-unfinished',
                         'table_fields' => [
-                            'created_at'        => array('format' => 'datetime'),
-                            'title'              => array(),
-                            'device'                => array('template' => 'admin.parts.table-unfinished-device'),
+                            'created_at'        => array('format' => 'datetime', 'width' => '20%'),
+                            'title'              => array('width' => '30%'),
+                            'device'                => array('template' => 'admin.parts.table-unfinished-device', 'width' => '100%'),
                             'delete'              => array('template' => 'admin.parts.table-vox-unfinished-delete'),
                         ],
                         'table_data' => $unfinished,
@@ -577,9 +577,9 @@
                     @include('admin.parts.table', [
                         'table_id' => 'vox-cashouts',
                         'table_fields' => [
-                            'created_at'        => array('format' => 'datetime'),
-                            'ip'                => array('template' => 'admin.parts.table-logins-user'),
-                            'device'          => array('template' => 'admin.parts.table-logins-device'),
+                            'created_at'        => array('format' => 'datetime', 'width' => '20%'),
+                            'ip'                => array('template' => 'admin.parts.table-logins-user', 'width' => '30%'),
+                            'device'          => array('template' => 'admin.parts.table-logins-device', 'width' => '100%'),
                             'platform'          => array(),
                         ],
                         'table_data' => $item->logins,
@@ -606,8 +606,8 @@
                     @include('admin.parts.table', [
                         'table_id' => 'user-emails',
                         'table_fields' => [
-                            'created_at'        => array('format' => 'datetime'),
-                            'template_id'       => array('template' => 'admin.parts.table-email-template'),
+                            'created_at'        => array('format' => 'datetime','width' => '20%'),
+                            'template_id'       => array('template' => 'admin.parts.table-email-template','width' => '100%'),
                         ],
                         'table_data' => $emails,
                         'table_pagination' => false,
