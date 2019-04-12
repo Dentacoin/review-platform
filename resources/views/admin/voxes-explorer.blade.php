@@ -21,7 +21,7 @@
                 <form method="get" action="{{ url('cms/vox/explorer') }}" >
                     <div class="row">
                         <div class="col-md-12">
-                            <select class="form-control" name="question" id="explorer-survey">
+                            <select class="form-control select2" name="question" id="explorer-survey">
                                 @foreach($voxes as $survey)
                                     <option value="{{ $survey->id }}" {!! $survey->id==$vox_id ? 'selected="selected"' : '' !!}>{{ $survey->title }}</option>
                                 @endforeach
@@ -50,7 +50,7 @@
                 <form method="get" action="{{ url('cms/vox/explorer') }}" vox-id="{{ $vox_id }}">
                     <div class="row">
                         <div class="col-md-12">
-                            <select class="form-control" name="question" id="explorer-question">
+                            <select class="form-control select2" name="question" id="explorer-question">
                                 <option value="">(All survey respondents)</option>
                                 @foreach($vox->questions as $q)
                                     <option value="{{ $q->id }}" {!! !empty($question) && $q->id==$question->id ? 'selected="selected"' : '' !!}>{{ $q->question }}</option>
