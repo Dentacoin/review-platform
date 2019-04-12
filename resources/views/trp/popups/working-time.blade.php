@@ -1,4 +1,4 @@
-<div class="popup fixed-popup" id="popup-wokring-time">
+<div class="popup fixed-popup" id="popup-wokring-time" {!! empty(strip_tags($user->getWorkHoursText())) ? 'empty-hours' : '' !!}>
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>

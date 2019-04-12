@@ -4597,7 +4597,7 @@ body.edit-user .profile-info-mobile .profile-details {
       background-color: transparent; }
       .flexed-wrap .social-networks .current-social i,
       .flexed-wrap .social-networks a i {
-        width: 20px;
+        width: 23px;
         height: 20px;
         display: block;
         background-color: #929292;
@@ -4617,7 +4617,7 @@ body.edit-user .profile-info-mobile .profile-details {
       .flexed-wrap .social-networks .social-dropdown.active {
         display: block; }
       .flexed-wrap .social-networks .social-dropdown a {
-        padding: 0px 18px 0px 5px;
+        padding: 0px 15px 0px 5px;
         margin: 0 auto;
         height: auto;
         margin-bottom: 8px; }
@@ -4661,7 +4661,7 @@ body.edit-user .profile-info-mobile .profile-details {
     .profile-socials {
       margin-top: 10px; } }
   .profile-socials .social {
-    width: 20px;
+    width: 23px;
     height: 20px;
     background-color: #929292;
     color: white;

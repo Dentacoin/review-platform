@@ -100,46 +100,48 @@
 							{!! nl2br(trans('trp.page.user.user-registration-email')) !!}
 						</label>			    	
 				    </div>
-			    			    	
-			    	@if(!empty($user->socials))
-			    		@foreach($user->socials as $k => $v)
+			    	
+			    	<div class="s-wrap"> 
+				    	@if(!empty($user->socials))
+				    		@foreach($user->socials as $k => $v)
+						    	<div class="flex social-wrap flexed-wrap">
+						    		<div class="col social-networks">
+						    			<a href="javascript:;" class="current-social" cur-type="{{ $k }}">
+					    					<i class="{{ config('trp.social_network')[$k] }}"></i>
+					    				</a>
+						    			<div class="social-dropdown"> 
+							    			@foreach(config('trp.social_network') as $key => $sn)
+							    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! isset($user->socials[$key]) ? 'inactive' : ''; !!}">
+							    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
+							    				</a>
+							    			@endforeach
+							    		</div>
+						    		</div>
+						    		<div class="col">
+						    			<input type="text" name="socials[{{ $k }}]" class="input social-link-input" value="{{ $v }}" maxlength="300">
+						    		</div>
+						    	</div>
+						    @endforeach
+					    @else
 					    	<div class="flex social-wrap flexed-wrap">
 					    		<div class="col social-networks">
-					    			<a href="javascript:;" class="current-social">
-				    					<i class="{{ config('trp.social_network')[$k] }}"></i>
+					    			<a href="javascript:;" class="current-social" cur-type="{{ array_values(config('trp.social_network'))[0] }}">
+				    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
 				    				</a>
 					    			<div class="social-dropdown"> 
 						    			@foreach(config('trp.social_network') as $key => $sn)
-						    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! isset($user->socials[$key]) ? 'inactive' : ''; !!}">
+						    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! $loop->first ? 'inactive' : '' !!}">
 						    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
 						    				</a>
 						    			@endforeach
 						    		</div>
 					    		</div>
 					    		<div class="col">
-					    			<input type="text" name="socials[{{ $k }}]" class="input social-link-input" value="{{ $v }}" maxlength="300">
+					    			<input type="text" name="socials[{{ key(config('trp.social_network')) }}]" class="input social-link-input" maxlength="300">
 					    		</div>
 					    	</div>
-					    @endforeach
-				    @else
-				    	<div class="flex social-wrap flexed-wrap">
-				    		<div class="col social-networks">
-				    			<a href="javascript:;" class="current-social">
-			    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
-			    				</a>
-				    			<div class="social-dropdown"> 
-					    			@foreach(config('trp.social_network') as $key => $sn)
-					    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! $loop->first ? 'inactive' : '' !!}">
-					    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
-					    				</a>
-					    			@endforeach
-					    		</div>
-				    		</div>
-				    		<div class="col">
-				    			<input type="text" name="socials[{{ key(config('trp.social_network')) }}]" class="input social-link-input" maxlength="300">
-				    		</div>
-				    	</div>
-				    @endif
+					    @endif
+					</div>
 				    
 				    @if(empty($user->socials) || (!empty($user->socials) && (count($user->socials) != count(config('trp.social_network')))))
 			    		<a href="javascript:;" class="add-social-profile">{!! nl2br(trans('trp.page.user.add-social-profile')) !!}</a>
@@ -377,45 +379,47 @@
 								{!! nl2br(trans('trp.page.user.user-registration-email')) !!}
 							</label>			    	
 					    </div>
-				    	@if(!empty($user->socials))
-				    		@foreach($user->socials as $k => $v)
+					    <div class="s-wrap">
+					    	@if(!empty($user->socials))
+					    		@foreach($user->socials as $k => $v)
+							    	<div class="flex social-wrap flexed-wrap">
+							    		<div class="col social-networks">
+							    			<a href="javascript:;" class="current-social" cur-type="{{ $k }}">
+						    					<i class="{{ config('trp.social_network')[$k] }}"></i>
+						    				</a>
+							    			<div class="social-dropdown"> 
+								    			@foreach(config('trp.social_network') as $key => $sn)
+								    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! isset($user->socials[$key]) ? 'inactive' : ''; !!}">
+								    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
+								    				</a>
+								    			@endforeach
+								    		</div>
+							    		</div>
+							    		<div class="col">
+							    			<input type="text" name="socials[{{ $k }}]" class="input social-link-input" value="{{ $v }}" maxlength="300">
+							    		</div>
+							    	</div>
+							    @endforeach
+						    @else
 						    	<div class="flex social-wrap flexed-wrap">
 						    		<div class="col social-networks">
-						    			<a href="javascript:;" class="current-social">
-					    					<i class="{{ config('trp.social_network')[$k] }}"></i>
+						    			<a href="javascript:;" class="current-social" cur-type="{{ array_values(config('trp.social_network'))[0] }}">
+					    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
 					    				</a>
 						    			<div class="social-dropdown"> 
 							    			@foreach(config('trp.social_network') as $key => $sn)
-							    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! isset($user->socials[$key]) ? 'inactive' : ''; !!}">
+							    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! $loop->first ? 'inactive' : '' !!}">
 							    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
 							    				</a>
 							    			@endforeach
 							    		</div>
 						    		</div>
 						    		<div class="col">
-						    			<input type="text" name="socials[{{ $k }}]" class="input social-link-input" value="{{ $v }}" maxlength="300">
+						    			<input type="text" name="socials[{{ key(config('trp.social_network')) }}]" class="input social-link-input" maxlength="300">
 						    		</div>
 						    	</div>
-						    @endforeach
-					    @else
-					    	<div class="flex social-wrap flexed-wrap">
-					    		<div class="col social-networks">
-					    			<a href="javascript:;" class="current-social">
-				    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
-				    				</a>
-					    			<div class="social-dropdown"> 
-						    			@foreach(config('trp.social_network') as $key => $sn)
-						    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! $loop->first ? 'inactive' : '' !!}">
-						    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
-						    				</a>
-						    			@endforeach
-						    		</div>
-					    		</div>
-					    		<div class="col">
-					    			<input type="text" name="socials[{{ key(config('trp.social_network')) }}]" class="input social-link-input" maxlength="300">
-					    		</div>
-					    	</div>
-					    @endif
+						    @endif
+						</div>
 					    
 					    @if(empty($user->socials) || (!empty($user->socials) && (count($user->socials) != count(config('trp.social_network')))))
 				    		<a href="javascript:;" class="add-social-profile">{!! nl2br(trans('trp.page.user.add-social-profile')) !!}</a>

@@ -515,6 +515,7 @@ $(document).ready(function(){
                     for(var i in data.messages) {
                         $('.edit-error').append(data.messages[i] + '<br/>');
                         $('input[name="'+i+'"]').addClass('has-error');
+                        $('textarea[name="'+i+'"]').addClass('has-error');
                     }
                 }
                 ajax_is_running = false;
@@ -1237,13 +1238,33 @@ $(document).ready(function(){
 
     $('.social-link').click( function() {
         var el = $(this).closest('.social-wrap');
+        el.find('.current-social').attr('cur-type', $(this).attr('social-type') );
         el.find('.current-social i').removeAttr('class');
         el.find('.current-social i').attr('class', $(this).attr('social-class'));
         el.find('.social-link-input').attr('name', 'socials['+$(this).attr('social-type')+']');
         el.find('.social-dropdown').removeClass('active');
-        console.log(el.closest('.address-suggester-wrapper').find('.social-dropdown .social-link'));
-        el.closest('.address-suggester-wrapper').find('.social-dropdown .social-link[social-type="'+ $(this).attr('social-type') +'"]').each( function() {
-            $(this).addClass('inactive');
+
+        // el.closest('.address-suggester-wrapper').find('.social-dropdown .social-link[social-type="'+ $(this).attr('social-type') +'"]').each( function() {
+        //     $(this).addClass('inactive');
+        // });
+
+        //get a List of elements that should be hidden
+        var hideClasses = [];
+        $('.s-wrap .current-social').each( function() {
+            if( hideClasses.indexOf( $(this).attr('cur-type') ) == -1 ) {
+                hideClasses.push( $(this).attr('cur-type') );
+            }
+        } )
+
+        $('.s-wrap .social-dropdown').each( function() {
+            //console.log($(this).attr('cur-type'));
+            $(this).find('a').each( function() {
+                if( hideClasses.indexOf( $(this).attr('social-type') ) == -1 ) {
+                    $(this).removeClass('inactive');
+                } else {
+                    $(this).addClass('inactive');
+                }
+            } )
         });
 
     });

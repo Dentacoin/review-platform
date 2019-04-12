@@ -540,7 +540,7 @@ class DentistController extends FrontController
         }
 
         if(!empty($item->lat) && !empty($item->lon) ){
-            $view_params['schema']["hasMap"] = "https://www.google.com/maps/@".$item->lat.",".$item->lon;
+            $view_params['schema']["hasMap"] = "https://www.google.com/maps/@".$item->lat.",".$item->lon.",15z";
         }
 
         if(!empty($item->short_description)){

@@ -273,6 +273,18 @@ jQuery(document).ready(function($){
 				window.open( url , 'ShareWindow', 'height=450, width=550, top=' + (jQuery(window).height() / 2 - 275) + ', left=' + (jQuery(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
 			});
 
+		} else if(id=='popup-wokring-time') {
+
+			if($('#'+id).is('[empty-hours]')) {
+				$('.work-hour-cb').trigger('click');
+
+				$('.popup-desc').each( function() {
+					$(this).find('select').first().find('option[value="09"]').attr('selected','selected');
+					$(this).children('select').eq(1).find('option[value="00"]').attr('selected','selected');
+					$(this).children('select').eq(2).find('option[value="18"]').attr('selected','selected');
+					$(this).children('select').eq(3).find('option[value="00"]').attr('selected','selected');
+				});
+			}
 		}
 
 		$('.popup').removeClass('active');
