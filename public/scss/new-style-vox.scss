@@ -5074,18 +5074,32 @@ p.h2-bold {
 	&.first-test {
 		.wrapper {
 			.inner {
+				max-width: calc(100% - 420px);
+
+				@media screen and (max-width: 1100px) {
+					max-width: calc(100% - 330px);
+				}
+
+				@media screen and (max-width: 860px) {
+					max-width: calc(100% - 270px);
+				}
+
+				@media #{$phone} {
+					max-width: 100%;
+				}
+
 				.rules {
 					margin-top: 50px;
 					margin-bottom: 50px;
 					font-size: 18px;
 					color: #333;
 					text-transform: uppercase;
+					text-align: center;
 
 					@media #{$phone} {
 						display: block;
 						margin-top: 30px;
 						margin-bottom: 30px;
-
 					}
 					.col {
 						@media #{$phone} {

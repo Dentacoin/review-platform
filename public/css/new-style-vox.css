@@ -3689,51 +3689,63 @@ p.h2-bold {
       .popup.ban .wrapper .inner h3 span {
         display: block;
         font-size: 24px; } }
-  .popup.first-test .wrapper .inner .rules {
-    margin-top: 50px;
-    margin-bottom: 50px;
-    font-size: 18px;
-    color: #333;
-    text-transform: uppercase; }
+  .popup.first-test .wrapper .inner {
+    max-width: calc(100% - 420px); }
+    @media screen and (max-width: 1100px) {
+      .popup.first-test .wrapper .inner {
+        max-width: calc(100% - 330px); } }
+    @media screen and (max-width: 860px) {
+      .popup.first-test .wrapper .inner {
+        max-width: calc(100% - 270px); } }
     @media screen and (max-width: 768px) {
-      .popup.first-test .wrapper .inner .rules {
-        display: block;
-        margin-top: 30px;
-        margin-bottom: 30px; } }
-    @media screen and (max-width: 768px) {
-      .popup.first-test .wrapper .inner .rules .col {
-        margin: 20px 0px; } }
-    @media screen and (max-width: 768px) {
-      .popup.first-test .wrapper .inner .rules .col:first-child img {
-        order: -1; } }
-    .popup.first-test .wrapper .inner .rules img {
-      margin: 0px 20px; }
-      @media screen and (max-width: 768px) {
-        .popup.first-test .wrapper .inner .rules img {
-          height: 50px;
-          margin: 0px 20px 0px 0px; } }
-  .popup.first-test .wrapper .inner .icons {
-    margin: 30px auto;
-    max-width: 460px; }
-    .popup.first-test .wrapper .inner .icons .col {
+      .popup.first-test .wrapper .inner {
+        max-width: 100%; } }
+    .popup.first-test .wrapper .inner .rules {
+      margin-top: 50px;
+      margin-bottom: 50px;
+      font-size: 18px;
+      color: #333;
+      text-transform: uppercase;
       text-align: center; }
-      @media screen and (max-width: 310px) {
-        .popup.first-test .wrapper .inner .icons .col {
-          font-size: 12px; }
-          .popup.first-test .wrapper .inner .icons .col b {
-            font-size: 12px; } }
-      .popup.first-test .wrapper .inner .icons .col img {
-        width: 60px;
-        height: auto;
-        margin-bottom: 18px;
-        display: block;
-        margin: 0 auto 15px auto; }
+      @media screen and (max-width: 768px) {
+        .popup.first-test .wrapper .inner .rules {
+          display: block;
+          margin-top: 30px;
+          margin-bottom: 30px; } }
+      @media screen and (max-width: 768px) {
+        .popup.first-test .wrapper .inner .rules .col {
+          margin: 20px 0px; } }
+      @media screen and (max-width: 768px) {
+        .popup.first-test .wrapper .inner .rules .col:first-child img {
+          order: -1; } }
+      .popup.first-test .wrapper .inner .rules img {
+        margin: 0px 20px; }
         @media screen and (max-width: 768px) {
-          .popup.first-test .wrapper .inner .icons .col img {
-            width: 30px; } }
+          .popup.first-test .wrapper .inner .rules img {
+            height: 50px;
+            margin: 0px 20px 0px 0px; } }
+    .popup.first-test .wrapper .inner .icons {
+      margin: 30px auto;
+      max-width: 460px; }
+      .popup.first-test .wrapper .inner .icons .col {
+        text-align: center; }
         @media screen and (max-width: 310px) {
-          .popup.first-test .wrapper .inner .icons .col img {
-            width: 20px; } }
+          .popup.first-test .wrapper .inner .icons .col {
+            font-size: 12px; }
+            .popup.first-test .wrapper .inner .icons .col b {
+              font-size: 12px; } }
+        .popup.first-test .wrapper .inner .icons .col img {
+          width: 60px;
+          height: auto;
+          margin-bottom: 18px;
+          display: block;
+          margin: 0 auto 15px auto; }
+          @media screen and (max-width: 768px) {
+            .popup.first-test .wrapper .inner .icons .col img {
+              width: 30px; } }
+          @media screen and (max-width: 310px) {
+            .popup.first-test .wrapper .inner .icons .col img {
+              width: 20px; } }
   .popup.banned .wrapper {
     max-width: 95%;
     width: 1130px;
