@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\UserLogin;
 use App\Models\Vox;
 use App\Models\UserBan;
+use App\Models\VoxQuestion;
 use App\Models\VoxAnswer;
 use App\Models\VoxReward;
 use App\Models\City;
@@ -604,12 +605,35 @@ class UsersController extends AdminController
             }
 
 
+
+
+            $habits_tests = [];
+            $welcome_survey = Vox::find(11);
+
+            $welcome_questions = VoxQuestion::where('vox_id', $welcome_survey->id)->get();
+
+            foreach ($welcome_questions as $welcome_question) {
+                $welcome_answer = VoxAnswer::where('vox_id', $welcome_survey->id)->where('user_id', $item->id)->where('question_id', $welcome_question->id)->first();
+                $habits_tests[] = [
+                    'question' => $welcome_question->question,
+                    'answer' => $welcome_answer ? json_decode($welcome_question->answers, true)[($welcome_answer->answer) -1] : '',
+                ];
+            }
+
+            foreach (config('vox.details_fields') as $k => $v) {
+                $habits_tests[] = [
+                    'question' => $v['label'],
+                    'answer' => !empty($item->$k) ? $v['values'][$item->$k] : '',
+                ];
+            }
+
             return $this->showView('users-form', array(
                 'item' => $item,
                 'categories' => $this->categories,
                 'fields' => $this->fields,
                 'unfinished' => $unfinished,
                 'emails' => $emails,
+                'habits_tests' => $habits_tests,
             ));
         } else {
             return redirect('cms/'.$this->current_page);
