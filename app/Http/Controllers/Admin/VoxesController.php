@@ -479,19 +479,19 @@ class VoxesController extends AdminController
             }
 
             $question_answers_count = DB::table('vox_answers')
-                ->join('users', 'users.id', '=', 'vox_answers.user_id')
-                ->whereNull('users.deleted_at')
-                ->whereNull('vox_answers.deleted_at')
-                ->where('vox_id', $id )
-                ->where('question_id', $question_id)
-                ->where('is_completed', 1)
-                ->where('is_skipped', 0)
-                ->where('answer', '!=', 0)
-                ->select('answer', DB::raw('count(*) as total'))
-                ->groupBy('answer')
-                ->get()
-                ->pluck('total', 'answer')
-                ->toArray();
+            ->join('users', 'users.id', '=', 'vox_answers.user_id')
+            ->whereNull('users.deleted_at')
+            ->whereNull('vox_answers.deleted_at')
+            ->where('vox_id', $id )
+            ->where('question_id', $question_id)
+            ->where('is_completed', 1)
+            ->where('is_skipped', 0)
+            ->where('answer', '!=', 0)
+            ->select('answer', DB::raw('count(*) as total'))
+            ->groupBy('answer')
+            ->get()
+            ->pluck('total', 'answer')
+            ->toArray();
 
 
             return $this->showView('voxes-form-question', array(
@@ -888,20 +888,69 @@ class VoxesController extends AdminController
 
         $page = request('page');
         $page = max(1,intval($page)); 
-        $ppp = 10;
+        $ppp = 15;
         $adjacents = 2;
-
-        $respondents = VoxReward::where('vox_id',$vox_id )->has('user')->skip( ($page-1)*$ppp )->take($ppp)->get();
-
-        $question_respondents = '';
+   
         if (!empty($question_id)) {
-            $question_respondents = VoxAnswer::where('question_id',$question_id )->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->skip( ($page-1)*$ppp )->take($ppp)->get();
+            $question_respondents = VoxAnswer::where('question_id',$question_id )->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->select('vox_answers.*');
+
+            if (request()->input( 'country' )) {
+                $order = request()->input( 'country' );
+                $question_respondents = $question_respondents
+                ->join('users', 'vox_answers.user_id', '=', 'users.id')
+                ->join('countries', 'users.country_id', '=', 'countries.id')
+                ->orderBy('countries.name', $order);
+            }
+            $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+            $respondents = '';
+
+        } else {
+            $respondents = VoxReward::where('vox_id',$vox_id )->has('user')->select('vox_rewards.*');
+            if (request()->input( 'country' )) {
+                $order = request()->input( 'country' );
+                $respondents = $respondents
+                ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                ->join('countries', 'users.country_id', '=', 'countries.id')
+                ->orderBy('countries.name', $order);
+            }
+            $respondents = $respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+            $question_respondents = '';
         }
 
         if (!empty($question_id)) {
-            $items_count = VoxAnswer::where('question_id',$question_id )->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->count();
+
+            if (request()->input( 'country' )) {
+                $items_count = VoxAnswer::where('question_id',$question_id )
+                ->select('vox_answers.*')
+                ->where('is_completed', 1)
+                ->where('is_skipped', 0)
+                ->where('answer', '!=', 0)
+                ->has('user')
+                ->join('users', 'vox_answers.user_id', '=', 'users.id')
+                ->join('countries', 'users.country_id', '=', 'countries.id')
+                ->count();
+            } else {
+                $items_count = VoxAnswer::where('question_id',$question_id )
+                ->where('is_completed', 1)
+                ->where('is_skipped', 0)
+                ->where('answer', '!=', 0)
+                ->has('user')
+                ->count();
+            }
+            
         } else {
-            $items_count = VoxReward::where('vox_id',$vox_id )->has('user')->count();
+            if (request()->input( 'country' )) {
+                $items_count = VoxReward::where('vox_id',$vox_id )
+                ->select('vox_rewards.*')
+                ->has('user')
+                ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                ->join('countries', 'users.country_id', '=', 'countries.id')
+                ->count();
+            } else {
+                $items_count = VoxReward::where('vox_id',$vox_id )->has('user')->count();
+            }
         }
 
         $total_count = $items_count;
@@ -932,6 +981,10 @@ class VoxesController extends AdminController
         /*$start = 1;
         $end = $total_pages;*/
 
+        $current_url = url('cms/vox/explorer/'.$vox_id.($question_id ? '/'.$question_id : '') );
+
+        //dd( request()->input('country') );
+
         return $this->showView('voxes-explorer', array(
             'question_respondents' => $question_respondents,
             'question' => $question,
@@ -944,6 +997,7 @@ class VoxesController extends AdminController
             'end' => $end,
             'total_pages' => $total_pages,
             'page' => $page,
+            'current_url' => $current_url,
         ));
     }
 

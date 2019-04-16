@@ -1,4 +1,5 @@
 var dTable;
+var handleFilters;
 var sortMode = false;
 $(document).ready(function(){
 
@@ -84,10 +85,6 @@ $(document).ready(function(){
 
 
 
-
-
-
-
 	//
 	//Others
 	//
@@ -111,6 +108,22 @@ $(document).ready(function(){
         });
 
 	} );
+
+	// $('.order').click( function() {
+	// 	// e.preventDefault();
+	// 	var href = $(this).attr('href');
+
+	// 	if ($(this).hasClass('asc')) {
+	// 		$(this).removeClass('asc')
+	// 		$(this).addClass('desc');
+	// 		// window.location.href = href+'?country=desc';
+	// 	} else {
+	// 		$(this).addClass('asc');
+	// 		$(this).removeClass('desc')
+	// 		// window.location.href = href+'?country=asc';
+	// 	}
+
+	// });
 
 
 	var handleScaleChanges = function() {

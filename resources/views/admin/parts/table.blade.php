@@ -9,9 +9,24 @@
                                 @if($k=='selector')
                                     <a href="javascript:;" class="table-select-all">All / None</a>
                                 @elseif(!empty($v['label']))
-                                    {{ $v['label'] }}
+                                    @if(!empty($v['order']))
+                                        @if( !request()->input( $v['orderKey'] ) )
+                                            <a href="{{ !empty($current_url) ? $current_url.'?'.$v['orderKey'].'=asc' : 'javascript:;' }}" class="order">{{ $v['label'] }}</a>
+                                        @elseif( request()->input( $v['orderKey'] )=='desc' )
+                                            <a href="{{ !empty($current_url) ? $current_url.'?'.$v['orderKey'].'=asc' : 'javascript:;' }}" class="order asc">{{ $v['label'] }}</a>
+                                        @else
+                                            <a href="{{ !empty($current_url) ? $current_url.'?'.$v['orderKey'].'=desc' : 'javascript:;' }}" class="order desc">{{ $v['label'] }}</a>
+                                        @endif
+
+                                    @else
+                                        {{ $v['label'] }}
+                                    @endif
                                 @else
-                                    {{ trans('admin.page.'.$current_page.'.table.'.$k) }}
+                                    @if(!empty($v['order']))
+                                        <a href="javascript:;" class="order">{{ trans('admin.page.'.$current_page.'.table.'.$k) }}</a>
+                                    @else
+                                        {{ trans('admin.page.'.$current_page.'.table.'.$k) }}
+                                    @endif
                                 @endif
                             </th>
                         @endforeach
