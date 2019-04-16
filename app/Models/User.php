@@ -418,10 +418,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 if(empty($this->attributes['state_name'])) {
                     $this->attributes['state_name'] = $this->attributes['city_name'];
                 }
-
-                $state_slug = str_replace(' ', '-', strtolower($this->attributes['state_name']));
-                $this->attributes['state_slug'] = $state_slug;
-
             } else {
                 $this->attributes['address'] = null;
             }
@@ -450,6 +446,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
             if(in_array($country, $kingdoms)) {
                 $ret['state_name'] = $country;
+                $ret['state_slug'] = str_replace([' ', "'"], ['-', ''], $country);
                 $ret['city_name'] = $country;
             } else {
                 $ret = self::parseAddress( $geores->results[0]->address_components );
@@ -505,7 +502,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
                         $cname = iconv('ASCII', 'UTF-8', $cname);
                         $ret['state_name'] = $cname;
-                        $ret['state_slug'] = str_replace(' ', '-', strtolower($cname));
+                        $ret['state_slug'] = str_replace([' ', "'"], ['-', ''], strtolower($cname));
                         break;
                     }
                 }
