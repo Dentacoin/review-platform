@@ -4948,6 +4948,10 @@ p.h2-bold {
   .question-done #invite-button:hover, .question-done #invite-button:focus {
     color: #333333 !important;
     background-color: white !important; } }
+.question-done#question-related-done .section-stats {
+  margin-top: 0px; }
+.question-done#question-related-done .related-container .done-title {
+  margin-top: 10px; }
 .question-done#question-related-done .related-container .section-recent-surveys {
   margin-top: 40px; }
   .question-done#question-related-done .related-container .section-recent-surveys h4 {

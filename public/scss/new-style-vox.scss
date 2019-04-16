@@ -6807,7 +6807,14 @@ p.h2-bold {
 	}
 
 	&#question-related-done {
+		.section-stats {
+			margin-top: 0px;
+		}
 		.related-container {
+
+			.done-title {
+				margin-top: 10px;
+			}
 			.section-recent-surveys {
 				margin-top: 40px;
 

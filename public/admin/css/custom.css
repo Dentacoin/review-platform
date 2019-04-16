@@ -192,3 +192,29 @@ table.table .table-search {
 .custom-tabs .tab-content .tab-pane.active {
     display: block;
 }
+
+table .order {
+    position: relative;
+    padding-right: 30px;
+    color: #242a30;
+}
+
+table .order::after {
+    content: "\e150";
+    position: absolute;
+    bottom: -1px;
+    right: 8px;
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    color: rgba(36, 42, 48, 0.2);
+}
+
+table .order.asc::after {
+    content: "\e155";
+    color: rgba(36, 42, 48, 0.5);
+}
+
+table .order.desc::after {
+    content: "\e156";
+    color: rgba(36, 42, 48, 0.5);
+}

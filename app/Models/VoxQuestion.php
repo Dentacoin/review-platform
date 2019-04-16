@@ -33,6 +33,7 @@ class VoxQuestion extends Model {
         'stats_answer_id',
         'stats_featured',
         'stats_fields',
+        'cross_check',
     ];
 
     public $timestamps = false;

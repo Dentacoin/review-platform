@@ -235,6 +235,21 @@ class Vox extends Model {
         }
         $this->attributes['type'] = $newvalue;
     }
+
+    public static function getDemographicQuestions() {
+        $welcome_survey = Vox::find(11);
+        $welcome_questions = VoxQuestion::where('vox_id', $welcome_survey->id)->get();
+        foreach ($welcome_questions as $welcome_question) {
+            $welcome_vox[$welcome_question->id] = $welcome_question->question;
+        }
+
+        $welcome_vox['gender'] = 'What is your biological sex?';
+        foreach (config('vox.details_fields') as $k => $v) {
+            $welcome_vox[$k] = $v['label'];
+        }
+
+        return $welcome_vox;
+    }
     
 }
 

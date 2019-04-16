@@ -216,7 +216,7 @@
                     </div>
 
 
-                     <div class="form-group clearfix">
+                    <div class="form-group clearfix">
                         <h3 class="col-md-1" style="margin-top: 0px;">Stats</h3>
                         <label class="col-md-1 control-label">Show in Stats</label>
                         <div class="col-md-2">
@@ -261,6 +261,17 @@
                         </div>
                         <div class="col-md-5">
                             <input type="text" name="stats_answer_id" class="form-control" value="{!! !empty($question) && $question->used_for_stats=='dependency' ? $question->stats_answer_id : old('stats_answer_id') !!}" placeholder="Select answer number">
+                        </div>
+                    </div>
+
+                    <div class="form-group clearfix" style="margin-top: 40px;">
+                        <h3 class="col-md-12" style="margin-top: 0px;">Cross-checks</h3>
+                    </div>
+
+                    <div class="form-group clearfix">
+                        <label class="col-md-2 control-label">Welcome questions</label>
+                        <div class="col-md-4">
+                            {{ Form::select('welcome_questions', ['' => '-'] + App\Models\Vox::getDemographicQuestions(), '', array('class' => 'form-control question-scale-input select2')) }}
                         </div>
                     </div>
 
