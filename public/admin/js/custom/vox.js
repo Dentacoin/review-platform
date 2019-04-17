@@ -95,8 +95,9 @@ $(document).ready(function(){
 	} );
 
 	$('#explorer-survey').change( function() {
-		console.log('bbb');
-		window.location.href = $(this).closest('form').attr('action') + '/' + $(this).val();
+		if ($(this).val()) {
+			window.location.href = $(this).closest('form').attr('action') + '/' + $(this).val();
+		}
 	} );
 
 	$('.toggler').change( function() {

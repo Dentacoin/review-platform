@@ -876,130 +876,160 @@ class VoxesController extends AdminController
 
     public function explorer($vox_id=null,$question_id=null) {
 
-        if(!$vox_id) {
-            $vox_id = Vox::first()->id;
-        }
+        if($vox_id) {
 
-        $question = '';
-        if ($question_id) {
-           $question = VoxQuestion::find($question_id);
-        }
-
-        $vox = Vox::find($vox_id);
-
-        $page = request('page');
-        $page = max(1,intval($page)); 
-        $ppp = 15;
-        $adjacents = 2;
-   
-        if (!empty($question_id)) {
-            $question_respondents = VoxAnswer::where('question_id',$question_id )->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->select('vox_answers.*');
-
-            if (request()->input( 'country' )) {
-                $order = request()->input( 'country' );
-                $question_respondents = $question_respondents
-                ->join('users', 'vox_answers.user_id', '=', 'users.id')
-                ->join('countries', 'users.country_id', '=', 'countries.id')
-                ->orderBy('countries.name', $order);
+            $question = '';
+            if ($question_id) {
+               $question = VoxQuestion::find($question_id);
             }
-            $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
 
-            $respondents = '';
+            $vox = Vox::find($vox_id);
 
-        } else {
-            $respondents = VoxReward::where('vox_id',$vox_id )->has('user')->select('vox_rewards.*');
-            if (request()->input( 'country' )) {
-                $order = request()->input( 'country' );
-                $respondents = $respondents
-                ->join('users', 'vox_rewards.user_id', '=', 'users.id')
-                ->join('countries', 'users.country_id', '=', 'countries.id')
-                ->orderBy('countries.name', $order);
-            }
-            $respondents = $respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
+            $page = request('page');
+            $page = max(1,intval($page)); 
+            $ppp = 15;
+            $adjacents = 2;
+       
+            if (!empty($question_id)) {
+                $question_respondents = VoxAnswer::where('question_id',$question_id )->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->select('vox_answers.*');
 
-            $question_respondents = '';
-        }
+                if (request()->input( 'country' )) {
+                    $order = request()->input( 'country' );
+                    $question_respondents = $question_respondents
+                    ->join('users', 'vox_answers.user_id', '=', 'users.id')
+                    ->join('countries', 'users.country_id', '=', 'countries.id')
+                    ->orderBy('countries.name', $order);
+                }
+                if (request()->input( 'name' )) {
+                    $order = request()->input( 'name' );
+                    $question_respondents = $question_respondents
+                    ->join('users', 'vox_answers.user_id', '=', 'users.id')
+                    ->orderBy('users.name', $order);
+                }
+                if (request()->input( 'taken' )) {
+                    $order = request()->input( 'taken' );
+                    $question_respondents = $question_respondents
+                    ->orderBy('created_at', $order);
+                }
 
-        if (!empty($question_id)) {
+                $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
 
-            if (request()->input( 'country' )) {
-                $items_count = VoxAnswer::where('question_id',$question_id )
-                ->select('vox_answers.*')
-                ->where('is_completed', 1)
-                ->where('is_skipped', 0)
-                ->where('answer', '!=', 0)
-                ->has('user')
-                ->join('users', 'vox_answers.user_id', '=', 'users.id')
-                ->join('countries', 'users.country_id', '=', 'countries.id')
-                ->count();
+                $respondents = '';
+
             } else {
-                $items_count = VoxAnswer::where('question_id',$question_id )
-                ->where('is_completed', 1)
-                ->where('is_skipped', 0)
-                ->where('answer', '!=', 0)
-                ->has('user')
-                ->count();
+                $respondents = VoxReward::where('vox_id',$vox_id )->has('user')->select('vox_rewards.*');
+                if (request()->input( 'country' )) {
+                    $order = request()->input( 'country' );
+                    $respondents = $respondents
+                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                    ->join('countries', 'users.country_id', '=', 'countries.id')
+                    ->orderBy('countries.name', $order);
+                }
+
+                if (request()->input( 'name' )) {
+                    $order = request()->input( 'name' );
+                    $respondents = $respondents
+                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                    ->orderBy('users.name', $order);
+                }
+
+                if (request()->input( 'taken' )) {
+                    $order = request()->input( 'taken' );
+                    $respondents = $respondents
+                    ->orderBy('created_at', $order);
+                }
+                $respondents = $respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+                $question_respondents = '';
             }
-            
-        } else {
-            if (request()->input( 'country' )) {
-                $items_count = VoxReward::where('vox_id',$vox_id )
-                ->select('vox_rewards.*')
-                ->has('user')
-                ->join('users', 'vox_rewards.user_id', '=', 'users.id')
-                ->join('countries', 'users.country_id', '=', 'countries.id')
-                ->count();
+
+            if (!empty($question_id)) {
+
+                if (request()->input( 'country' )) {
+                    $items_count = VoxAnswer::where('question_id',$question_id )
+                    ->select('vox_answers.*')
+                    ->where('is_completed', 1)
+                    ->where('is_skipped', 0)
+                    ->where('answer', '!=', 0)
+                    ->has('user')
+                    ->join('users', 'vox_answers.user_id', '=', 'users.id')
+                    ->join('countries', 'users.country_id', '=', 'countries.id')
+                    ->count();
+                } else {
+                    $items_count = VoxAnswer::where('question_id',$question_id )
+                    ->where('is_completed', 1)
+                    ->where('is_skipped', 0)
+                    ->where('answer', '!=', 0)
+                    ->has('user')
+                    ->count();
+                }
+                
             } else {
-                $items_count = VoxReward::where('vox_id',$vox_id )->has('user')->count();
+                if (request()->input( 'country' )) {
+                    $items_count = VoxReward::where('vox_id',$vox_id )
+                    ->select('vox_rewards.*')
+                    ->has('user')
+                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                    ->join('countries', 'users.country_id', '=', 'countries.id')
+                    ->count();
+                } else {
+                    $items_count = VoxReward::where('vox_id',$vox_id )->has('user')->count();
+                }
             }
-        }
 
-        $total_count = $items_count;
-        $total_pages = ceil($total_count/$ppp);
+            $total_count = $items_count;
+            $total_pages = ceil($total_count/$ppp);
 
-        //Here we generates the range of the page numbers which will display.
-        if($total_pages <= (1+($adjacents * 2))) {
-          $start = 1;
-          $end   = $total_pages;
+            //Here we generates the range of the page numbers which will display.
+            if($total_pages <= (1+($adjacents * 2))) {
+              $start = 1;
+              $end   = $total_pages;
+            } else {
+              if(($page - $adjacents) > 1) { 
+                if(($page + $adjacents) < $total_pages) { 
+                  $start = ($page - $adjacents);            
+                  $end   = ($page + $adjacents);         
+                } else {             
+                  $start = ($total_pages - (1+($adjacents*2)));  
+                  $end   = $total_pages;               
+                }
+              } else {               
+                $start = 1;                                
+                $end   = (1+($adjacents * 2));             
+              }
+            }
+
+            //If you want to display all page links in the pagination then
+            //uncomment the following two lines
+            //and comment out the whole if condition just above it.
+            /*$start = 1;
+            $end = $total_pages;*/
+
+            $current_url = url('cms/vox/explorer/'.$vox_id.($question_id ? '/'.$question_id : '') );
+
+            //dd( request()->input('country') );
+
+            $viewParams = [
+                'question_respondents' => $question_respondents,
+                'question' => $question,
+                'vox_id' => $vox_id,
+                'respondents' => $respondents,
+                'vox' => $vox,
+                'voxes' => Vox::get(),
+                'count' =>($page - 1)*$ppp ,
+                'start' => $start,
+                'end' => $end,
+                'total_pages' => $total_pages,
+                'page' => $page,
+                'current_url' => $current_url,
+            ];
         } else {
-          if(($page - $adjacents) > 1) { 
-            if(($page + $adjacents) < $total_pages) { 
-              $start = ($page - $adjacents);            
-              $end   = ($page + $adjacents);         
-            } else {             
-              $start = ($total_pages - (1+($adjacents*2)));  
-              $end   = $total_pages;               
-            }
-          } else {               
-            $start = 1;                                
-            $end   = (1+($adjacents * 2));             
-          }
+            $viewParams = [
+                'voxes' => Vox::get(),
+            ];
         }
 
-        //If you want to display all page links in the pagination then
-        //uncomment the following two lines
-        //and comment out the whole if condition just above it.
-        /*$start = 1;
-        $end = $total_pages;*/
-
-        $current_url = url('cms/vox/explorer/'.$vox_id.($question_id ? '/'.$question_id : '') );
-
-        //dd( request()->input('country') );
-
-        return $this->showView('voxes-explorer', array(
-            'question_respondents' => $question_respondents,
-            'question' => $question,
-            'vox_id' => $vox_id,
-            'respondents' => $respondents,
-            'vox' => $vox,
-            'voxes' => Vox::get(),
-            'count' =>($page - 1)*$ppp ,
-            'start' => $start,
-            'end' => $end,
-            'total_pages' => $total_pages,
-            'page' => $page,
-            'current_url' => $current_url,
-        ));
+        return $this->showView('voxes-explorer', $viewParams);
     }
 
     public function export_survey_data() {
