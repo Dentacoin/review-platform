@@ -5367,6 +5367,117 @@ p.h2-bold {
 			}
 		}
 	}
+
+	&.cross-checks {
+		.wrapper {
+			padding: 60px 30px;
+
+			.inner {
+				max-width: calc(100% - 300px);
+
+				@media screen and (max-width: 860px) {
+					max-width: 100%;
+				}
+
+				h2 {
+					margin-bottom: 30px;
+
+					@media #{$phone} {
+						margin-bottom: 20px;
+					}
+				}
+
+				h4 {
+					font-size: 22px;
+					margin-bottom: 20px;
+
+					@media screen and (max-width: 1200px) {
+						font-size: 18px;
+						margin-bottom: 10px;
+					}
+
+					@media #{$phone} {
+						font-size: 14px;
+						margin-bottom: 5px;
+					}
+				}
+
+				.cross-checks-answers {
+					margin-top: 30px;
+					margin-bottom: 40px;
+					display: inline-block;
+				    position: relative;
+				    width: auto;
+
+					label {
+						position: relative;
+					    display: block;
+					    margin-bottom: 20px;
+						font-size: 24px;
+						font-weight: bold;
+						text-align: left;
+					    padding-right: 56px;
+					    position: relative;
+					    cursor: pointer;
+
+					    @media screen and (max-width: 1200px) {
+							font-size: 20px;
+							margin-bottom: 15px;
+						}
+
+						@media #{$phone} {
+							font-size: 16px;
+						}
+
+						i {
+							position: absolute;
+							right: 0px;
+							top: 50%;
+    						transform: translateY(-50%);
+							border-radius: 50%;
+							width: 30px;
+							height: 30px;
+							border: 1px solid #00a6eb;
+
+							@media screen and (max-width: 1200px) {
+								width: 25px;
+								height: 25px;
+							}
+
+							@media #{$phone} {
+								width: 20px;
+								height: 20px;
+							}
+						}
+
+						&:hover,
+						&.active {
+							i {
+								background-color: #00a6eb;
+							}
+						}
+					}
+				}
+
+				.white-button {
+					color: #38a2e5;
+					padding: 7px 40px;
+					border-color: #38a2e5;
+
+					@media #{$phone} {
+						display: inline-block;
+						width: auto;
+					}
+
+					&:focus,
+					&:hover {
+						color: white;
+						background-color: #38a2e5;
+					}
+				}
+			}
+		}
+	}
 }
 
 .popcircle {

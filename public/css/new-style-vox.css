@@ -3903,6 +3903,82 @@ p.h2-bold {
       /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
       filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffc1a7', endColorstr='#f37039',GradientType=0 );
       /* IE6-9 */ }
+  .popup.cross-checks .wrapper {
+    padding: 60px 30px; }
+    .popup.cross-checks .wrapper .inner {
+      max-width: calc(100% - 300px); }
+      @media screen and (max-width: 860px) {
+        .popup.cross-checks .wrapper .inner {
+          max-width: 100%; } }
+      .popup.cross-checks .wrapper .inner h2 {
+        margin-bottom: 30px; }
+        @media screen and (max-width: 768px) {
+          .popup.cross-checks .wrapper .inner h2 {
+            margin-bottom: 20px; } }
+      .popup.cross-checks .wrapper .inner h4 {
+        font-size: 22px;
+        margin-bottom: 20px; }
+        @media screen and (max-width: 1200px) {
+          .popup.cross-checks .wrapper .inner h4 {
+            font-size: 18px;
+            margin-bottom: 10px; } }
+        @media screen and (max-width: 768px) {
+          .popup.cross-checks .wrapper .inner h4 {
+            font-size: 14px;
+            margin-bottom: 5px; } }
+      .popup.cross-checks .wrapper .inner .cross-checks-answers {
+        margin-top: 30px;
+        margin-bottom: 40px;
+        display: inline-block;
+        position: relative;
+        width: auto; }
+        .popup.cross-checks .wrapper .inner .cross-checks-answers label {
+          position: relative;
+          display: block;
+          margin-bottom: 20px;
+          font-size: 24px;
+          font-weight: bold;
+          text-align: left;
+          padding-right: 56px;
+          position: relative;
+          cursor: pointer; }
+          @media screen and (max-width: 1200px) {
+            .popup.cross-checks .wrapper .inner .cross-checks-answers label {
+              font-size: 20px;
+              margin-bottom: 15px; } }
+          @media screen and (max-width: 768px) {
+            .popup.cross-checks .wrapper .inner .cross-checks-answers label {
+              font-size: 16px; } }
+          .popup.cross-checks .wrapper .inner .cross-checks-answers label i {
+            position: absolute;
+            right: 0px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #00a6eb; }
+            @media screen and (max-width: 1200px) {
+              .popup.cross-checks .wrapper .inner .cross-checks-answers label i {
+                width: 25px;
+                height: 25px; } }
+            @media screen and (max-width: 768px) {
+              .popup.cross-checks .wrapper .inner .cross-checks-answers label i {
+                width: 20px;
+                height: 20px; } }
+          .popup.cross-checks .wrapper .inner .cross-checks-answers label:hover i, .popup.cross-checks .wrapper .inner .cross-checks-answers label.active i {
+            background-color: #00a6eb; }
+      .popup.cross-checks .wrapper .inner .white-button {
+        color: #38a2e5;
+        padding: 7px 40px;
+        border-color: #38a2e5; }
+        @media screen and (max-width: 768px) {
+          .popup.cross-checks .wrapper .inner .white-button {
+            display: inline-block;
+            width: auto; } }
+        .popup.cross-checks .wrapper .inner .white-button:focus, .popup.cross-checks .wrapper .inner .white-button:hover {
+          color: white;
+          background-color: #38a2e5; }
 
 .popcircle {
   position: fixed;

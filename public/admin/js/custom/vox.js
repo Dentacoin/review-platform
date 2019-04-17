@@ -125,6 +125,26 @@ $(document).ready(function(){
 
 	// });
 
+	$('#select-cross').change( function() {
+		var select_id = $(this).val();
+		if (select_id) {
+			$('#habits-table').show();
+			$('.q-id').hide();
+			$('.id-'+select_id).show();
+
+			var i=0;
+			$('[name="answers-en[]"]').each( function(){
+				$($('.id-'+select_id)[i]).find('td:last-child').html( $(this).val() );
+				i++;
+			});
+		}
+		
+	});
+
+	if ($('#select-cross').length) {
+		$('#select-cross').trigger('change');
+	}
+
 
 	var handleScaleChanges = function() {
 		var qtype = $('.question-type-input').val();

@@ -237,18 +237,45 @@ class Vox extends Model {
     }
 
     public static function getDemographicQuestions() {
+        $demographic_questions = [];
         $welcome_survey = Vox::find(11);
         $welcome_questions = VoxQuestion::where('vox_id', $welcome_survey->id)->get();
+        
         foreach ($welcome_questions as $welcome_question) {
-            $welcome_vox[$welcome_question->id] = $welcome_question->question;
+            $demographic_questions[$welcome_question->id] = $welcome_question->question;
         }
 
-        $welcome_vox['gender'] = 'What is your biological sex?';
+        $demographic_questions['gender'] = 'What is your biological sex?';
         foreach (config('vox.details_fields') as $k => $v) {
-            $welcome_vox[$k] = $v['label'];
+            $demographic_questions[$k] = $v['label'];
         }
 
-        return $welcome_vox;
+        return $demographic_questions;
+    }
+
+    public static function getDemographicAnswers() {
+
+        $welcome_answers = [];
+
+        foreach (self::getDemographicQuestions() as $key => $value) {
+            if (is_numeric($key)) {
+                $welcome_question = VoxQuestion::where('id', $key)->first();
+                $welcome_answers[$welcome_question->id] = json_decode($welcome_question->answers, true);
+            } else {
+                if ($key == 'gender') {
+                    $welcome_answers['gender'] = [
+                        'Male',
+                        'Female'
+                    ];
+                } else {
+                    $welcome_answers[$key] = config('vox.details_fields')[$key]['values'];
+                }
+                
+            }
+            
+        }
+
+        return $welcome_answers;
     }
     
 }

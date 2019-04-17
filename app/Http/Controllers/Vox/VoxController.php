@@ -118,7 +118,6 @@ class VoxController extends FrontController
 	                'stats_description' => $vox->stats_description
 	            ]),
 	        ));
-
 		}
 				
 		$this->current_page = 'questionnaire';
@@ -149,6 +148,29 @@ class VoxController extends FrontController
         if($this->user->isBanned('vox')) {
             return redirect(getLangUrl('profile'));
         }
+
+    	$cross_checks = [];
+    	foreach ($vox->questions as $vq) {
+	    	if (!empty($vq->cross_check)) {
+
+	    		if (is_numeric($vq->cross_check)) {
+	    			$va = VoxAnswer::where('user_id',$this->user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
+	    			$cross_checks[$vq->id] = $va->answer;
+	    		} else {
+	    			$cc = $vq->cross_check;
+	    			$i=1;
+	    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
+	    				if($key==$this->user->$cc) {
+	    					$cross_checks[$vq->id] = $i;
+	    					break;
+	    				}
+	    				$i++;
+	    			}
+	    		}
+	    	}
+    	}
+
+    	// dd($cross_checks);
 
 
 		$list = VoxAnswer::where('vox_id', $vox->id)
@@ -219,6 +241,7 @@ class VoxController extends FrontController
 	            }
 
         	} else {
+
 
 	        	$q = Request::input('question');
 	        	$admin_ids = Admin::getAdminProfileIds();
@@ -454,6 +477,25 @@ class VoxController extends FrontController
 
 						        	$answer->save();
 							        $answered[$q] = $a;
+
+							        if( $found->cross_check ) {
+							    		if (is_numeric($found->cross_check)) {
+							    			VoxAnswer::where('user_id',$this->user->id )->where('vox_id', 11)->where('question_id', $found->cross_check )->update([
+							    				'answer' => $a,
+							    			]);
+							    		} else {
+							    			$cc = $found->cross_check;
+							    			$i=1;
+							    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
+							    				if($i==$a) {
+							    					$this->user->$cc = $key;
+							    					$this->user->save();
+							    					break;
+							    				}
+							    				$i++;
+							    			}
+							    		}
+							        }
 
 			        			} else if(isset( $this->details_fields[$type] ) || $type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
 			        				$answered[$q] = 1;
@@ -731,6 +773,7 @@ class VoxController extends FrontController
 
 
 		return $this->ShowVoxView('vox', array(
+			'cross_checks' => $cross_checks,
 			'welcomerules' => $welcomerules,
 			'not_bot' => $not_bot,
 			'details_fields' => $this->details_fields,

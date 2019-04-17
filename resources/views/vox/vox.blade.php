@@ -469,6 +469,24 @@
 		var related_answer = {!! !empty($vox->related_answer) ? $vox->related_answer : 'null' !!};
 	</script>
 
+	@if(!empty($cross_checks))
+		<div class="popup cross-checks">
+			<div class="wrapper">
+				<div class="inner tac">
+					<h2>{!! nl2br(trans('vox.popup.cross-checks-popup.title')) !!}</h2>
+					<h4>{!! nl2br(trans('vox.popup.cross-checks-popup.subtitle-1')) !!}</h4>
+					<h4>{!! nl2br(trans('vox.popup.cross-checks-popup.subtitle-2')) !!}</h4>
+					<div class="cross-checks-answers">
+					</div>
+					<br/>
+					<a href="javascript:;" class="white-button update-answer">{!! nl2br(trans('vox.popup.cross-checks-popup.update')) !!}</a>
+					<div style="margin-top: 20px; text-align: center; display: none;" class="answer-error alert alert-warning">
+						{!! nl2br(trans('vox.page.questionnaire.answer-error')) !!}
+					</div>
+				</div>
+			</div>
+		</div>
+	@endif
 
 	<div class="popup ban">
 		<div class="wrapper">

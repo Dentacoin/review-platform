@@ -271,7 +271,36 @@
                     <div class="form-group clearfix">
                         <label class="col-md-2 control-label">Welcome questions</label>
                         <div class="col-md-4">
-                            {{ Form::select('welcome_questions', ['' => '-'] + App\Models\Vox::getDemographicQuestions(), '', array('class' => 'form-control question-scale-input select2')) }}
+                            {{ Form::select('cross_check', ['' => '-'] + App\Models\Vox::getDemographicQuestions(), !empty($question) ? $question->cross_check : '', array('class' => 'form-control question-scale-input select2', 'style' => 'width: 100%', 'id' => 'select-cross')) }}
+                        </div>
+                    </div>
+
+                    <div class="clearfix">
+                        <div class="col-md-6">
+                            <div id="habits-table" {!! !empty($question->cross_check) ? '' : 'style="display:none;"' !!}>
+                                <p style="padding-left: 20px;">
+                                    Please make sure your answers match the selected Cross-check question's answers
+                                </p>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Cross-checks answers</th>
+                                            <th>Current answers</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach(App\Models\Vox::getDemographicAnswers() as $ke => $va)
+                                            @foreach($va as $ans)
+                                                <tr class="q-id id-{{ $ke }}" {!! !empty($question->cross_check) && $question->cross_check == $ke ? '' : 'style="display:none;"' !!}>
+                                                    <td>{{ $ans }}</td>
+                                                    <td></td>
+                                                </tr>
+                                            @endforeach
+                                        @endforeach
+                                    </tbody>
+
+                                </table>
+                            </div>
                         </div>
                     </div>
 

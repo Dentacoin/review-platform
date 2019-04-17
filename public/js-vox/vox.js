@@ -173,6 +173,43 @@ $(document).ready(function(){
         $('#wrong-control').hide();
         group.find('.answers').append('<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>');
 
+
+        if (group.attr('cross-check-correct')) {
+            if (parseInt($(this).find('input').val()) != parseInt(group.attr('cross-check-correct'))) {
+                $('.popup.cross-checks .cross-checks-answers').html('');
+
+                group.find('.answers a.answer').each( function() {
+                    $('.popup.cross-checks .cross-checks-answers').append('<label for="cc-answer-'+group.attr('data-id')+'-'+$(this).find('input').val()+'">'+$(this).text()+'<i class="popup-check"></i><input id="cc-answer-'+group.attr('data-id')+'-'+$(this).find('input').val()+'" type="radio" name="answer" class="answer" value="'+$(this).find('input').val()+'" style="display:none;"></label>');
+                });
+
+                $('.popup.cross-checks').addClass('active');
+
+                $('.cross-checks-answers label').click( function() {
+                    $('.cross-checks-answers label').removeClass('active');
+                    $(this).addClass('active');
+                    $('.popup.cross-checks').find('.answer-error').hide();
+                });
+
+                $('.update-answer').click( function() {
+                    if ($('.cross-checks-answers label.active').length) {
+                        ajax_is_running = false;
+                        group.removeAttr('cross-check-correct');
+                        var new_answer = $('.cross-checks-answers label.active input').val();
+                        //console.log(group.find('input[value="'+new_answer+'"]').parent());
+                        group.find('.loader').remove();
+                        group.find('input[value="'+new_answer+'"]').parent().trigger('click');
+                        $('.popup.cross-checks').removeClass('active');
+                    } else {
+                        $('.popup.cross-checks').find('.answer-error').show();
+                    }
+
+                });
+
+                return;
+            }
+        }
+
+
         $.post( 
             VoxTest.url, 
             {
