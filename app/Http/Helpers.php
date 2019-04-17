@@ -17,7 +17,8 @@
 
 	}
 
-	function getVoxUrl($path=false, $locale=null, $domain=null){
+	function getVoxUrl($path=false){
+    	//return getLangUrl($path);
     	return getLangUrl($path, $locale, 'https://dentavox.dentacoin.com/');
 	}
 

@@ -21,7 +21,8 @@ class LoginController extends FrontController
     public function facebook_login($locale=null) {
         Session::flush();
 
-    	config(['services.facebook.redirect' => 'https://dev-dentavox.dentacoin.com/en/login/callback/facebook' ]);
+    	//config(['services.facebook.redirect' => getLangUrl('login/callback/facebook') ]);
+        config(['services.facebook.redirect' => 'https://dev-dentavox.dentacoin.com/en/login/callback/facebook' ]);
         return Socialite::driver('facebook')->redirect();
     }
 
@@ -29,7 +30,8 @@ class LoginController extends FrontController
         if (!Request::has('code') || Request::has('denied')) {
             return redirect( getVoxUrl('/'));
         }
-    	config(['services.facebook.redirect' =>  'https://dev-dentavox.dentacoin.com/en/login/callback/facebook' ]);
+    	//config(['services.facebook.redirect' =>  getLangUrl('login/callback/facebook') ]);
+        config(['services.facebook.redirect' =>  'https://dev-dentavox.dentacoin.com/en/login/callback/facebook' ]);
         return $this->try_social_login(Socialite::driver('facebook')->user());
     }
 
@@ -88,6 +90,7 @@ class LoginController extends FrontController
     public function facebook_register($locale=null) {
         Session::flush();
         
+        //config(['services.facebook.redirect' => getLangUrl('register/callback/facebook') ]);
         config(['services.facebook.redirect' => 'https://dev-dentavox.dentacoin.com/en/register/callback/facebook' ]);
         return Socialite::driver('facebook')
         ->setScopes(['user_friends', 'public_profile', 'email', 'user_location', 'user_birthday'])
@@ -97,6 +100,7 @@ class LoginController extends FrontController
 
     public function facebook_callback_register() {
         
+        //config(['services.facebook.redirect' => getLangUrl('register/callback/facebook') ]);
         config(['services.facebook.redirect' => 'https://dev-dentavox.dentacoin.com/en/register/callback/facebook' ]);
 
         if (!Request::has('code') || Request::has('denied')) {

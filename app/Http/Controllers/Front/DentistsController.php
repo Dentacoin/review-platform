@@ -19,9 +19,9 @@ class DentistsController extends FrontController
     public function getCorrectedQuery($query, $filter) {
         $query = trim(urldecode($query));
         if(!empty($filter)) {
-            $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).'/'.$filter;
+            $corrected_query = mb_strtolower(str_replace([',', "'", ' '], ['', '', '-'], $query )).'/'.$filter;
         } else {
-            $corrected_query = 'dentists/'.mb_strtolower(str_replace([',', ' '], ['', '-'], $query ));
+            $corrected_query = 'dentists/'.mb_strtolower(str_replace([',',  "'", ' '], ['', '', '-'], $query ));
         }
 
         return $corrected_query;
@@ -172,7 +172,6 @@ class DentistsController extends FrontController
                     }
                 }
             }
-            
 
             list($range_lat, $range_lon) = $this->getRadiusInLatLon(50, $lat);
             $items->whereBetween('lat', [$lat-$range_lat, $lat+$range_lat]);
@@ -180,6 +179,18 @@ class DentistsController extends FrontController
 
         }
 
+        $nonCannonicalUrl = true;
+        if( !empty($parsedAddress['city_name']) && !empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name']) ) {
+
+            $isValid = User::where('city_name', 'like', $parsedAddress['city_name'])
+            ->where('state_slug', 'like', $parsedAddress['state_slug'])
+            ->count();
+
+            if($isValid) {
+                $nonCannonicalUrl = false;
+            }
+
+        }
 
         $page = max(1, $page);
         $ppp = 12;
@@ -367,6 +378,7 @@ class DentistsController extends FrontController
             'page_num' => $page,
             'orders' => $orders,
             'is_ajax' => $ajax,
+            'noIndex' => $nonCannonicalUrl || !$items->count(),
             'js' => [
                 'search.js'
             ],
@@ -462,7 +474,7 @@ class DentistsController extends FrontController
             'listings_number' => count($all_dentists),
         ]);
 
-        return $this->ShowView('country', array(            
+        return $this->ShowView('search-country', array(            
             'seo_title' => !empty($seo_title) ? $seo_title : null,
             'seo_description' => !empty($seo_description) ? $seo_description : null,
             'social_title' => !empty($social_title) ? $social_title : null,
@@ -564,7 +576,7 @@ class DentistsController extends FrontController
         ]);
 
 
-        return $this->ShowView('city', array(
+        return $this->ShowView('search-city', array(
             'seo_title' => !empty($seo_title) ? $seo_title : null,
             'seo_description' => !empty($seo_description) ? $seo_description : null,
             'social_title' => !empty($social_title) ? $social_title : null,
@@ -574,6 +586,7 @@ class DentistsController extends FrontController
             'breakpoints' => $breakpoints,
             'country' => $country,
             'total_rows' => $total_rows,
+            'noIndex' => !count($cities_groups),
             'js' => [
                 'search.js'
             ],
@@ -653,7 +666,7 @@ class DentistsController extends FrontController
             'states_number' => count($states),
         ]);
 
-        return $this->ShowView('state', array(            
+        return $this->ShowView('search-state', array(            
             'seo_title' => !empty($seo_title) ? $seo_title : null,
             'seo_description' => !empty($seo_description) ? $seo_description : null,
             'social_title' => !empty($social_title) ? $social_title : null,
@@ -662,6 +675,7 @@ class DentistsController extends FrontController
             'breakpoints' => $breakpoints,
             'country' => $country,
             'total_rows' => $total_rows,
+            'noIndex' => !count($states_groups),
             'js' => [
                 'search.js'
             ],
