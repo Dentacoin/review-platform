@@ -19,8 +19,14 @@ use App\Models\Email;
 class YouTubeController extends FrontController
 {
     public function test() {
+    	session([
+    		'hi' => 'hi Miro',
+    		'time' => time()
+    	]);
 
-        
+    	echo 'Hi, the session should contain:<br/>
+    	hi: '.session('hi').'<br/>
+    	time: '.session('time');        
 
     }
 }
