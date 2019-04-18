@@ -14,34 +14,35 @@
 				
 			</h2>
 
-			@if($histories->isNotEmpty())
-		        <div class="history-section form-horizontal">
-					<div class="black-line-title">
-		                <h4 class="bold">
-		                	{{ trans('vox.page.profile.vox.list-title') }}
-		                </h4>
-		            </div>
-	            	<table class="table">
-	            		<thead>
-	            			<tr>
-		            			<th>
-		            				
-		            				{{ trans('vox.page.profile.vox.list-date') }}
-		            			</th>
-		            			<th>
-		            				
-		            				{{ trans('vox.page.profile.vox.list-questionnaire') }}
-		            			</th>
-		            			<th>
-		            				
-		            				{{ trans('vox.page.profile.vox.list-stats') }}
-		            			</th>
-		            			<th>
-		            				DCN
-		            			</th>
-	            			</tr>
-	            		</thead>
-	            		<tbody>
+	        <div class="history-section form-horizontal">
+				<div class="black-line-title">
+	                <h4 class="bold">
+	                	{{ trans('vox.page.profile.vox.list-title') }}
+	                </h4>
+	            </div>
+            	<table class="table">
+            		<thead>
+            			<tr>
+	            			<th>
+	            				
+	            				{{ trans('vox.page.profile.vox.list-date') }}
+	            			</th>
+	            			<th>
+	            				
+	            				{{ trans('vox.page.profile.vox.list-questionnaire') }}
+	            			</th>
+	            			<th>
+	            				
+	            				{{ trans('vox.page.profile.vox.list-stats') }}
+	            			</th>
+	            			<th>
+	            				DCN
+	            			</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+
+						@if($histories->isNotEmpty())
 							@foreach($histories as $completed)
 								@if( $completed->vox )
 		            				<tr>
@@ -64,10 +65,10 @@
 		            				</tr>
 	            				@endif
 	            			@endforeach
-	            		</tbody>
-	            	</table>
-			  	</div>
-		  	@endif
+		  				@endif
+            		</tbody>
+            	</table>
+		  	</div>
 
 		  	@if($more_surveys)
 			  	<div class="alert alert-info">				
@@ -184,34 +185,34 @@
 	            </div>
         	@endif
 
-		  	@if($user->bans->isNotEmpty())
+        	<div class="bans-section">
 
-	        	<div class="bans-section">
+				<div class="black-line-title">
+	                <h4 class="bold">
+	                	{{ trans('vox.page.profile.vox.bans-title') }}
+	                </h4>
+	            </div>
+            	<table class="table">
+            		<thead>
+            			<tr>
+	            			<th>
+	            				{{ trans('vox.page.profile.vox.ban-date') }}
+	            			</th>
+            				<th>
+	            				{{ trans('vox.page.profile.vox.ban-duration') }}
+            					
+            				</th>
+	            			<th>
+	            				{{ trans('vox.page.profile.vox.ban-reason') }}
+	            			</th>
+	            			<th>
+	            				{{ trans('vox.page.profile.vox.ban-expires') }}
+	            			</th>
+            			</tr>
+            		</thead>
+            		<tbody>
 
-					<div class="black-line-title">
-		                <h4 class="bold">
-		                	{{ trans('vox.page.profile.vox.bans-title') }}
-		                </h4>
-		            </div>
-	            	<table class="table">
-	            		<thead>
-	            			<tr>
-		            			<th>
-		            				{{ trans('vox.page.profile.vox.ban-date') }}
-		            			</th>
-	            				<th>
-		            				{{ trans('vox.page.profile.vox.ban-duration') }}
-	            					
-	            				</th>
-		            			<th>
-		            				{{ trans('vox.page.profile.vox.ban-reason') }}
-		            			</th>
-		            			<th>
-		            				{{ trans('vox.page.profile.vox.ban-expires') }}
-		            			</th>
-	            			</tr>
-	            		</thead>
-	            		<tbody>
+		  				@if($user->bans->isNotEmpty())
 	            			@foreach( $user->bans as $ban )
 	            				<tr>
 	            					<td>
@@ -234,10 +235,10 @@
 	            					</td>
 	            				</tr>
 	            			@endforeach
-	            		</tbody>
-	            	</table>
-		        </div>
-		    @endif
+			    		@endif
+        			</tbody>
+            	</table>
+	        </div>
 		</div>
 	</div>
 
