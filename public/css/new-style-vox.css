@@ -2714,6 +2714,9 @@ p.h2-bold {
     .section-welcome-done .wrapper-buttons,
     .page-questions-done .wrapper-buttons {
       display: block; } }
+  .section-welcome-done .wrapper-buttons.mt,
+  .page-questions-done .wrapper-buttons.mt {
+    margin-top: 40px; }
   .section-welcome-done .wrapper-buttons .white-button,
   .page-questions-done .wrapper-buttons .white-button {
     display: block;
@@ -2794,6 +2797,9 @@ p.h2-bold {
 
 .done-section {
   min-height: 616px; }
+  @media screen and (max-width: 768px) {
+    .done-section {
+      min-height: auto; } }
 
 .section-recover h3,
 .section-login h3,
@@ -5024,51 +5030,53 @@ p.h2-bold {
   .question-done #invite-button:hover, .question-done #invite-button:focus {
     color: #333333 !important;
     background-color: white !important; } }
-.question-done#question-related-done .section-stats {
-  margin-top: 0px; }
 .question-done#question-related-done .related-container .done-title {
   margin-top: 10px; }
-.question-done#question-related-done .related-container .section-recent-surveys {
-  margin-top: 40px; }
-  .question-done#question-related-done .related-container .section-recent-surveys h4 {
-    text-transform: uppercase;
-    color: #5c5c5c; }
-  .question-done#question-related-done .related-container .section-recent-surveys .swiper-slide .slider-inner {
-    display: block; }
-    .question-done#question-related-done .related-container .section-recent-surveys .swiper-slide .slider-inner .slide-padding {
-      max-width: 320px;
-      margin: 0 auto;
-      margin-top: 15px; }
-  .question-done#question-related-done .related-container .section-recent-surveys .swiper-slide .vox-header {
-    padding: 7px 15px; }
-    .question-done#question-related-done .related-container .section-recent-surveys .swiper-slide .vox-header .first-flex .right {
-      text-align: center; }
-    .question-done#question-related-done .related-container .section-recent-surveys .swiper-slide .vox-header .first-flex .survey-title {
-      color: #060606; }
-    .question-done#question-related-done .related-container .section-recent-surveys .swiper-slide .vox-header .btns a {
-      font-size: 16px;
-      padding: 9px 20px; }
-      @media screen and (max-width: 768px) {
-        .question-done#question-related-done .related-container .section-recent-surveys .swiper-slide .vox-header .btns a {
-          font-size: 12px; } }
 @media screen and (max-width: 768px) {
   .question-done#question-related-done .done-section {
     min-height: auto; } }
-.question-done#question-related-done #other-surveys {
+.question-done .more-surveys {
+  margin-top: 20px; }
+  @media screen and (max-width: 768px) {
+    .question-done .more-surveys {
+      margin-bottom: 40px;
+      font-size: 13px; } }
+.question-done .section-stats {
+  margin-top: 20px; }
+.question-done .section-recent-surveys {
+  margin-top: 40px; }
+  .question-done .section-recent-surveys h4 {
+    text-transform: uppercase;
+    color: #5c5c5c; }
+  .question-done .section-recent-surveys .swiper-slide .slider-inner {
+    display: block; }
+    .question-done .section-recent-surveys .swiper-slide .slider-inner .slide-padding {
+      max-width: 320px;
+      margin: 0 auto;
+      margin-top: 15px; }
+  .question-done .section-recent-surveys .swiper-slide .vox-header {
+    padding: 7px 15px; }
+    .question-done .section-recent-surveys .swiper-slide .vox-header .first-flex .right {
+      text-align: center; }
+    .question-done .section-recent-surveys .swiper-slide .vox-header .first-flex .survey-title {
+      color: #060606; }
+    .question-done .section-recent-surveys .swiper-slide .vox-header .btns a {
+      font-size: 16px;
+      padding: 9px 20px; }
+      @media screen and (max-width: 768px) {
+        .question-done .section-recent-surveys .swiper-slide .vox-header .btns a {
+          font-size: 12px; } }
+
+#other-surveys {
   padding-top: 60px; }
   @media screen and (max-width: 768px) {
-    .question-done#question-related-done #other-surveys {
-      padding-top: 30px; } }
-  .question-done#question-related-done #other-surveys h2 {
+    #other-surveys {
+      padding-top: 30px;
+      padding-bottom: 40px; } }
+  #other-surveys h2 {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 15px; }
-.question-done#question-related-done .more-surveys {
-  margin-top: 20px; }
-  @media screen and (max-width: 768px) {
-    .question-done#question-related-done .more-surveys {
-      margin-bottom: 40px;
-      font-size: 13px; } }
 
 .tooltip-window {
   display: none;
@@ -5209,3 +5217,43 @@ p.h2-bold {
         width: 40px;
         height: 40px;
         left: 5px; } }
+
+.page-profile.sp-vox .section-recent-surveys {
+  margin-top: 20px; }
+  .page-profile.sp-vox .section-recent-surveys .swiper-container {
+    padding-top: 0px;
+    padding-bottom: 50px; }
+  .page-profile.sp-vox .section-recent-surveys .swiper-slide .featured-img {
+    left: -18px;
+    top: -16px;
+    width: 30px; }
+  .page-profile.sp-vox .section-recent-surveys .swiper-slide .slider-inner {
+    padding: 0px 10px; }
+    .page-profile.sp-vox .section-recent-surveys .swiper-slide .slider-inner .slide-padding {
+      max-width: 320px;
+      margin: 0 auto;
+      margin-top: 15px;
+      min-width: 245px; }
+      @media screen and (max-width: 992px) {
+        .page-profile.sp-vox .section-recent-surveys .swiper-slide .slider-inner .slide-padding {
+          min-width: auto; } }
+      @media screen and (max-width: 768px) {
+        .page-profile.sp-vox .section-recent-surveys .swiper-slide .slider-inner .slide-padding {
+          max-width: none;
+          width: 100%; } }
+  .page-profile.sp-vox .section-recent-surveys .swiper-slide .vox-header {
+    padding: 7px 15px;
+    text-align: center; }
+    .page-profile.sp-vox .section-recent-surveys .swiper-slide .vox-header .first-flex:first-child {
+      flex: 1; }
+    .page-profile.sp-vox .section-recent-surveys .swiper-slide .vox-header .first-flex .right {
+      text-align: center; }
+    .page-profile.sp-vox .section-recent-surveys .swiper-slide .vox-header .first-flex .survey-title {
+      color: #060606;
+      font-size: 17px; }
+    .page-profile.sp-vox .section-recent-surveys .swiper-slide .vox-header .btns a {
+      font-size: 16px;
+      padding: 9px 20px; }
+      @media screen and (max-width: 768px) {
+        .page-profile.sp-vox .section-recent-surveys .swiper-slide .vox-header .btns a {
+          font-size: 12px; } }

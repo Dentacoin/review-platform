@@ -14,6 +14,8 @@ use Image;
 use Illuminate\Support\Facades\Input;
 use App\Models\User;
 use App\Models\UserInvite;
+use App\Models\Vox;
+use App\Models\VoxReward;
 use App\Models\VoxCashout;
 use App\Models\Dcn;
 use App\Models\Country;
@@ -282,7 +284,15 @@ class ProfileController extends FrontController
             }
         }
 
+        $more_surveys = false;
+        $rewards = VoxReward::where('user_id', $this->user->id)->where('vox_id', '!=', 34)->get();
+        if ($rewards->count() == 1 && $rewards->first()->vox_id == 11) {
+            $more_surveys = true;
+        }
+
         return $this->ShowVoxView('profile-vox', [
+            'latest_voxes' => Vox::where('type', 'normal')->orderBy('created_at', 'desc')->take(3)->get(),
+            'more_surveys' => $more_surveys,
             'menu' => $this->menu,
             'prev_bans' => $prev_bans,
             'current_ban' => $current_ban,

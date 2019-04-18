@@ -11,6 +11,32 @@ $(document).ready(function(){
     }
     $('.menu-list a').click(mobileMenuClick);
     */
+    if ($('.swiper-container').length) {
+
+        if (window.innerWidth > 768) {
+
+            var swiper = new Swiper('.swiper-container', {
+                slidesPerView: 3,
+                slidesPerGroup: 3,
+                spaceBetween: 0,
+            });
+        } else {
+            var swiper = new Swiper('.swiper-container', {
+                slidesPerView: 1,
+                spaceBetween: 0,
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                coverflowEffect: {
+                    rotate: 50,
+                    stretch: 0,
+                    depth: 100,
+                    modifier: 1,
+                    slideShadows : false,
+                },
+            });
+        }
+    }
 
     if( $('.list-item.active').length && $(window).width()<992 ) {
         history.scrollRestoration = "manual";

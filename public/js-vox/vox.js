@@ -323,11 +323,11 @@ $(document).ready(function(){
 
                             if (related_question_id && related_answer && $('.question-group[data-id='+related_question_id+'][data-answer='+related_answer+']').length && $("#question-related-done").length) {
                                 $("#question-related-done").show();
-                                swiper.update();
                             } else {
                                 $("#question-done").show();
                             }
-                            
+                            $("#other-surveys").show();
+                            swiper.update();
 
                             fbq('track', 'SurveyComplete');
                             gtag('event', 'Take', {
@@ -569,5 +569,14 @@ $(document).ready(function(){
             });
         }
     }
+
+
+    $('#scroll-to-surveys').click( function(e) {
+        e.preventDefault();
+
+        $('html, body').animate({
+            scrollTop: $('#other-surveys').offset().top
+        }, 500);
+    });
 
 });

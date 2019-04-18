@@ -3910,6 +3910,10 @@ p.h2-bold {
 			display: block;
 		}
 
+		&.mt {
+			margin-top: 40px;
+		}
+
 	    .white-button {
 	    	display: block;
 	    	margin-bottom: 15px;
@@ -4000,6 +4004,10 @@ p.h2-bold {
 
 .done-section {
 	min-height: 616px;
+
+	@media #{$phone} {
+		min-height: auto;
+	}
 }
 
 .section-recover,
@@ -6918,58 +6926,10 @@ p.h2-bold {
 	}
 
 	&#question-related-done {
-		.section-stats {
-			margin-top: 0px;
-		}
 		.related-container {
 
 			.done-title {
 				margin-top: 10px;
-			}
-			.section-recent-surveys {
-				margin-top: 40px;
-
-				h4 {
-					text-transform: uppercase;
-					color: #5c5c5c;
-				}
-
-				.swiper-slide {
-					.slider-inner {
-						display: block;
-
-						.slide-padding {
-							max-width: 320px;
-		    				margin: 0 auto;
-		    				margin-top: 15px;
-						}
-					}
-
-					.vox-header {
-						padding: 7px 15px;
-
-						.first-flex {
-							.right {
-							    text-align: center;
-							}
-
-							.survey-title {
-								color: #060606;
-							}
-						}
-
-						.btns {
-					    	a {
-					    		font-size: 16px;
-					    		padding: 9px 20px;
-
-					    		@media #{$phone} {
-					    			font-size: 12px;
-					    		}
-					    	}
-					    }
-					}
-				}
 			}
 		}
 		.done-section {
@@ -6978,28 +6938,80 @@ p.h2-bold {
 				min-height: auto;
 			}
 		}
-		#other-surveys {
-			padding-top: 60px;
+	}
 
-			@media #{$phone} {
-				padding-top: 30px;
-			}
+	.more-surveys {
+		margin-top: 20px;
 
-			h2 {
-				font-size: 24px;
-				font-weight: bold;
-	    		margin-bottom: 15px;
-			}
+		@media #{$phone} {
+			margin-bottom: 40px;
+			font-size: 13px;
+		}
+	}
+
+	.section-stats {
+		margin-top: 20px;
+	}
+
+	.section-recent-surveys {
+		margin-top: 40px;
+
+		h4 {
+			text-transform: uppercase;
+			color: #5c5c5c;
 		}
 
-		.more-surveys {
-			margin-top: 20px;
+		.swiper-slide {
+			.slider-inner {
+				display: block;
 
-			@media #{$phone} {
-				margin-bottom: 40px;
-				font-size: 13px;
+				.slide-padding {
+					max-width: 320px;
+    				margin: 0 auto;
+    				margin-top: 15px;
+				}
+			}
+
+			.vox-header {
+				padding: 7px 15px;
+
+				.first-flex {
+					.right {
+					    text-align: center;
+					}
+
+					.survey-title {
+						color: #060606;
+					}
+				}
+
+				.btns {
+			    	a {
+			    		font-size: 16px;
+			    		padding: 9px 20px;
+
+			    		@media #{$phone} {
+			    			font-size: 12px;
+			    		}
+			    	}
+			    }
 			}
 		}
+	}
+}
+
+#other-surveys {
+	padding-top: 60px;
+
+	@media #{$phone} {
+		padding-top: 30px;
+		padding-bottom: 40px;
+	}
+
+	h2 {
+		font-size: 24px;
+		font-weight: bold;
+		margin-bottom: 15px;
 	}
 }
 
@@ -7180,5 +7192,77 @@ p.h2-bold {
 	    	height: 40px;
 	    	left: 5px;
 	    }
+	}
+}
+
+.page-profile.sp-vox {
+	.section-recent-surveys {
+		margin-top: 20px;
+
+		.swiper-container {
+			padding-top: 0px;
+			padding-bottom: 50px;
+		}
+
+		.swiper-slide {
+			.featured-img {
+				left: -18px;
+			    top: -16px;
+			    width: 30px;
+			}
+
+			.slider-inner {
+				padding: 0px 10px;
+
+				.slide-padding {
+					max-width: 320px;
+    				margin: 0 auto;
+    				margin-top: 15px;
+    				min-width: 245px;
+
+    				@media screen and (max-width: 992px) {
+    					min-width: auto;
+    				}
+
+    				@media #{$phone} {
+    					max-width: none;
+    					width: 100%;
+    				}
+				}
+			}
+
+			.vox-header {
+				padding: 7px 15px;
+				text-align: center;
+
+				.first-flex {
+
+					&:first-child {
+						flex: 1;
+					}
+					
+
+					.right {
+					    text-align: center;
+					}
+
+					.survey-title {
+						color: #060606;
+						font-size: 17px;
+					}
+				}
+
+				.btns {
+			    	a {
+			    		font-size: 16px;
+			    		padding: 9px 20px;
+
+			    		@media #{$phone} {
+			    			font-size: 12px;
+			    		}
+			    	}
+			    }
+			}
+		}
 	}
 }

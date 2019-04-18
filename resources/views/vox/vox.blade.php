@@ -207,8 +207,6 @@
 						<p class="next-title">
 							@if($done_all)
 								{!! trans('vox.page.questionnaire.what-next.all-surveys') !!}
-							@else
-								{!! trans('vox.page.questionnaire.what-next') !!}
 							@endif
 						</p>
 
@@ -223,12 +221,9 @@
 								<a class="white-button" href="{{ getLangUrl('/') }}">
 									{!! trans('vox.page.questionnaire.go-surveys.all-surveys') !!}
 								</a>
-								<a class="white-button" href="{{ getLangUrl('profile') }}">
-									{!! trans('vox.page.questionnaire.open-wallet.all-surveys') !!}
-								</a>
 
 							@else
-								<a class="white-button" href="{{ getLangUrl('/') }}">
+								<a class="white-button" id="scroll-to-surveys" href="javascript:;">
 									{!! trans('vox.page.questionnaire.what-next-another') !!}
 								</a>
 								@if($vox->has_stats)
@@ -237,46 +232,9 @@
 									</a>
 								@endif
 							@endif
-
-							<a class="white-button" id="invite-button" href="javascript:;">
-								@if($user->is_dentist)
-									{!! trans('vox.page.questionnaire.what-next-invite-dentist') !!}
-								@else
-									{!! trans('vox.page.questionnaire.what-next-invite') !!}
-								@endif
+							<a class="white-button" href="{{ getLangUrl('profile') }}">
+								{!! trans('vox.page.questionnaire.open-wallet.all-surveys') !!}
 							</a>
-							<div class="invite-link" style="display: none;">
-								<p>
-									@if($user->is_dentist)
-										{!! trans('vox.page.questionnaire.what-next-invite-dentist-hint') !!}
-									@else
-										{!! trans('vox.page.questionnaire.what-next-invite-hint') !!}
-									@endif									
-								</p>
-								{{ Form::text( 'link', getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()), array('class' => 'form-control select-me', 'id' => 'invite-url' ) ) }}
-								<div class="share-wrap tal">
-									<a class="copy-link" href="javascript:;">
-										<img src="{{ url('new-vox-img/copy-icon.png') }}">
-										{!! trans('vox.page.questionnaire.what-next-copy') !!}										
-									</a>
-									<a class="share fb" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
-										<img src="{{ url('new-vox-img/fb-icon.png') }}">
-										{!! trans('vox.page.questionnaire.what-next-fb') !!}										
-									</a>
-									<a class="share twt" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
-										<img src="{{ url('new-vox-img/twitter-icon.png') }}">
-										{!! trans('vox.page.questionnaire.what-next-tw') !!}										
-									</a>
-									<a class="share messenger" data-url="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}" data-title="{{ trans('vox.social.share.title') }}">
-										<img src="{{ url('new-vox-img/messenger-icon.png') }}">
-										{!! trans('vox.page.questionnaire.what-next-me') !!}										
-									</a>										
-									<a href="https://mail.google.com/mail/?view=cm&fs=1&su={!! urlencode( $email_data['title'] ) !!}&body={!! urlencode( $email_data['content'] ) !!}" target="_blank">
-										<img src="{{ url('new-vox-img/gmail-icon.png') }}">
-										{!! trans('vox.page.questionnaire.what-next-gm') !!}										
-									</a>
-								</div>
-							</div>
 						</div>
 
 						@if($done_all)
@@ -287,17 +245,7 @@
 					</div>
 				</div>
 
-				<div class="section-stats">
-					<div class="container">
-						<img src="{{ url('new-vox-img/stats-front.png') }}">
-						<h3>
-							{!! trans('vox.page.questionnaire.curious') !!}							
-						</h3>
-						<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">
-							{{ trans('vox.common.check-statictics') }}
-						</a>
-					</div>
-				</div>
+				@include('vox.template-parts.vox-done-parts')
 			</div>
 
 			@if(!empty($related_vox))
@@ -370,85 +318,66 @@
 						</div>
 					</div>
 
-					<div class="section-stats">
-						<div class="container">
-							<img src="{{ url('new-vox-img/stats-front.png') }}">
-							<h3>
-								{!! $vox->has_stats ? trans('vox.page.questionnaire.curious-related-survey', ['title' => $vox->title]) : trans('vox.page.questionnaire.curious-related-surveys') !!}
-							</h3>
-							<a href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}" class="check-stats">
-								{{ trans('vox.common.check-statictics') }}
-							</a>
-						</div>
-					</div>
+					@include('vox.template-parts.vox-done-parts')
+				</div>
 
-					<a href="{{ getLangUrl('profile/invite') }}" class="sticky-invite">
-						<div class="sticky-box">
-							<img src="{{ url('new-vox-img/invite-icon.png') }}">
-							<p>
-								{{ $user->is_dentist ? trans('vox.page.questionnaire.invite-patients') : trans('vox.page.questionnaire.invite-friends') }}
-							</p>
-						</div>
-					</a>
+				@if($suggested_voxes->count())
+					<div class="section-recent-surveys" id="other-surveys" style="display: none;">
+						<h2>{{ trans('vox.page.questionnaire.next-survey') }}</h2>
 
-					@if($suggested_voxes->count())
-						<div class="section-recent-surveys" id="other-surveys">
-							<h2>{{ trans('vox.page.questionnaire.next-survey') }}</h2>
-
-							<div class="swiper-container">
-							    <div class="swiper-wrapper">
-							    	@foreach($suggested_voxes as $survey)
-								      	<div class="swiper-slide">
-								      		<div class="slider-inner">
-									    		<div class="slide-padding">
-									      			<div class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title, "respondents" => $survey->respondentsCount(), "respondents_country" => $survey->respondentsCountryCount() ]) }}'>
-									      				@if($survey->stats_featured)
-									      					<img class="featured-img" src="{{ url('new-vox-img/star.png') }}">
-									      				@endif
-									      			</div>							
-													<div class="vox-header clearfix">
-														<div class="flex first-flex">
-															<div class="col left">
-																<h4 class="survey-title bold">{{ $survey->title }}</h4>
-															</div>
-															<div class="col right">
-																<span class="bold">{{ !empty($survey->complex) ? 'max ' : '' }} {{ $survey->getRewardTotal() }} DCN</span>
-																<p>{{ $survey->formatDuration() }}</p>
-															</div>					
+						<div class="swiper-container">
+						    <div class="swiper-wrapper">
+						    	@foreach($suggested_voxes as $survey)
+							      	<div class="swiper-slide">
+							      		<div class="slider-inner">
+								    		<div class="slide-padding">
+								      			<div class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title, "respondents" => $survey->respondentsCount(), "respondents_country" => $survey->respondentsCountryCount() ]) }}'>
+								      				@if($survey->stats_featured)
+								      					<img class="featured-img" src="{{ url('new-vox-img/star.png') }}">
+								      				@endif
+								      			</div>							
+												<div class="vox-header clearfix">
+													<div class="flex first-flex">
+														<div class="col left">
+															<h4 class="survey-title bold">{{ $survey->title }}</h4>
 														</div>
-														<div class="survey-cats"> 
-															@foreach( $survey->categories as $c)
-																<span class="survey-cat" cat-id="{{ $c->category->id }}">{{ $c->category->name }}</span>
-															@endforeach
+														<div class="col right">
+															<span class="bold">{{ !empty($survey->complex) ? 'max ' : '' }} {{ $survey->getRewardTotal() }} DCN</span>
+															<p>{{ $survey->formatDuration() }}</p>
+														</div>					
+													</div>
+													<div class="survey-cats"> 
+														@foreach( $survey->categories as $c)
+															<span class="survey-cat" cat-id="{{ $c->category->id }}">{{ $c->category->name }}</span>
+														@endforeach
+													</div>
+													<div class="flex second-flex">
+														<div class="col left">
+															<p class="vox-description">{{ $survey->description }}</p>
 														</div>
-														<div class="flex second-flex">
-															<div class="col left">
-																<p class="vox-description">{{ $survey->description }}</p>
-															</div>
-															<div class="col right">
-																<div class="btns">
-																	<a class="opinion blue-button" href="{{ $survey->getLink() }}">
-																		{{ trans('vox.common.take-the-test') }}
-																	</a>
-																</div>
+														<div class="col right">
+															<div class="btns">
+																<a class="opinion blue-button" href="{{ $survey->getLink() }}">
+																	{{ trans('vox.common.take-the-test') }}
+																</a>
 															</div>
 														</div>
 													</div>
-										      	</div>
+												</div>
 									      	</div>
-									    </div>
-							      	@endforeach
-							    </div>
+								      	</div>
+								    </div>
+						      	@endforeach
+						    </div>
 
-							    <div class="swiper-pagination"></div>
-							</div>
-
-							<div class="tac">
-								<a href="{{ getLangUrl('/') }}" class="blue-button more-surveys">{{ trans('vox.page.questionnaire.next-survey-button') }}</a>
-							</div>
+						    <div class="swiper-pagination"></div>
 						</div>
-					@endif
-				</div>
+
+						<div class="tac">
+							<a href="{{ getLangUrl('/') }}" class="blue-button more-surveys">{{ trans('vox.page.questionnaire.next-survey-button') }}</a>
+						</div>
+					</div>
+				@endif
 			@endif
 		@endif
 

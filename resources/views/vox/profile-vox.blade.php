@@ -69,8 +69,59 @@
 			  	</div>
 		  	@endif
 
+		  	@if($more_surveys)
+			  	<div class="alert alert-info">				
+					You haven't taken any surveys yet. Just pick a topic and start earning more DCN!
+				</div>
 
+				@if($latest_voxes->count())
 
+					<div class="section-recent-surveys">
+						<h4>Latest Surveys:</h4>
+
+						<div class="swiper-container">
+						    <div class="swiper-wrapper">
+						    	@foreach($latest_voxes as $survey)
+							      	<div class="swiper-slide">
+							      		<div class="slider-inner">
+								    		<div class="slide-padding">
+								      			<div class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title, "respondents" => $survey->respondentsCount(), "respondents_country" => $survey->respondentsCountryCount() ]) }}'>
+								      				@if($survey->featured)
+								      					<img class="featured-img" src="{{ url('new-vox-img/star.png') }}">
+								      				@endif
+								      			</div>
+								      			<div class="vox-header clearfix">
+													<div class="flex first-flex">
+														<div class="col left">
+															<h4 class="survey-title bold">{{ $survey->title }}</h4>
+														</div>
+													</div>
+													<div class="flex first-flex">
+														<div class="col right">
+															<span class="bold">{{ !empty($survey->complex) ? 'max ' : '' }} {{ $survey->getRewardTotal() }} DCN</span>
+															<p>{{ $survey->formatDuration() }}</p>
+														</div>					
+													</div>
+													<div class="flex second-flex">
+														<div class="col right">
+															<div class="btns">
+																<a class="opinion blue-button" href="{{ $survey->getLink() }}">
+																	{{ trans('vox.common.take-the-test') }}
+																</a>
+															</div>
+														</div>
+													</div>
+												</div>
+									      	</div>
+								      	</div>
+								    </div>
+						      	@endforeach
+						    </div>
+						</div>
+					</div>
+				@endif
+
+			@endif
 
         	@if($payouts->isNotEmpty())
 		        <div class="payputs-section">
