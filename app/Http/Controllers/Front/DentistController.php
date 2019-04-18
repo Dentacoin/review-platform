@@ -440,28 +440,28 @@ class DentistController extends FrontController
             $view_params['seo_title'] = trans('trp.seo.dentist.title', [
                 'name' => $item->getName(),
                 'country' => $item->country ? $item->country->name : '',
-                'city' => $item->city ? $item->city->name : '',
+                'city' => $item->city_name ? $item->city_name : '',
                 'reviews_number' => intval($item->ratings),
             ]);
             $view_params['social_title'] = trans('trp.social.dentist.title', [
                 'name' => $item->getName(),
                 'country' => $item->country ? $item->country->name : '',
-                'city' => $item->city ? $item->city->name : '',
+                'city' => $item->city_name ? $item->city_name : '',
                 'reviews_number' => intval($item->ratings),
             ]);
 
             $view_params['seo_description'] = trans('trp.seo.dentist.description', [
                 'name' => $item->getName(),
                 'country' => $item->country ? $item->country->name : '',
-                'city' => $item->city ? $item->city->name : '',
+                'city' => $item->city_name ? $item->city_name : '',
                 'reviews_number' => intval($item->ratings),
             ]);
             $view_params['social_description'] = trans('trp.social.dentist.description', [
                 'name' => $item->getName(),
                 'country' => $item->country ? $item->country->name : '',
-                'city' => $item->city ? $item->city->name : '',
+                'city' => $item->city_name ? $item->city_name : '',
                 'reviews_number' => intval($item->ratings),
-            ]);   
+            ]);
         }
         
         
