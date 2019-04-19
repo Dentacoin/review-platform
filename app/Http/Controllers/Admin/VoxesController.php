@@ -12,6 +12,7 @@ use App\Models\VoxScale;
 use App\Models\VoxBadge;
 use App\Models\VoxAnswer;
 use App\Models\VoxReward;
+use App\Models\VoxRelated;
 use Illuminate\Support\Facades\Input;
 use Image;
 use Request;
@@ -574,9 +575,6 @@ class VoxesController extends AdminController
         $item->stats_featured = $this->request->input('stats_featured');
         $item->has_stats = $this->request->input('has_stats');
         $item->sort_order = $this->request->input('sort_order');
-        $item->related_vox_id = $this->request->input('related_vox_id');
-        $item->related_question_id = $this->request->input('related_question_id');
-        $item->related_answer = $this->request->input('related_answer');
         $item->save();
 
         VoxToCategory::where('vox_id', $item->id)->delete();
@@ -587,6 +585,18 @@ class VoxesController extends AdminController
                 $vc->vox_category_id = $cat_id;
                 $vc->save();
             }   
+        }
+
+        if (!empty(Request::input('related_vox_id'))) {
+            $cur_related = VoxRelated::where('vox_id', $item->id)->delete();
+            foreach (Request::input('related_vox_id') as $i => $ri) {
+                $vr = new VoxRelated;
+                $vr->vox_id = $item->id;
+                $vr->related_vox_id = $this->request->input('related_vox_id')[$i];
+                $vr->related_question_id = $this->request->input('related_question_id')[$i];
+                $vr->related_answer = $this->request->input('related_answer')[$i];
+                $vr->save();
+            }
         }
 
         foreach ($this->langs as $key => $value) {

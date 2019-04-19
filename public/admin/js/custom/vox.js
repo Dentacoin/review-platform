@@ -204,6 +204,29 @@ $(document).ready(function(){
 		$('.answers-list .input-group:nth-child('+num+')').remove();
 	} );
 
+	$('.add-related').click( function() {
+		var p = $(this).closest('.related-group').find('.related-list .input-group');
+		$('#related-template .form-group').clone(true, true).appendTo( p );
+
+		console.log('ffffff');
+		$('.related-group .input-group .form-group').each( function() {
+			if (!($(this).find('select').hasClass('select2'))) {
+				$(this).find('select').addClass('select2');
+				$(".select2").select2();
+			}
+		});
+		/*
+		$('.answers-div').each( function() {
+			$('#answer-template .form-group').clone(true).appendTo( $(this) );
+			$(this).find('.add-answer').appendTo( $(this) );
+		} )
+		*/
+	} );
+
+	$('.remove-related').click( function() {
+		$(this).closest('.form-group').remove();
+	} );
+
 
 	$('.questions-form .btn-add-trigger').click( function() {
 		var newinput = $('#trigger-group-template').clone(true).removeAttr('id');
@@ -375,5 +398,8 @@ $(document).ready(function(){
 	if( $('#surv-desc').length ) {
 		symbolsCount.bind($('#surv-desc'))();
 	}
+
+
+	
 
 });

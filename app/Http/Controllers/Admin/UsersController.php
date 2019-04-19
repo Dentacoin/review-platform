@@ -12,6 +12,7 @@ use App\Models\UserBan;
 use App\Models\VoxQuestion;
 use App\Models\VoxAnswer;
 use App\Models\VoxReward;
+use App\Models\VoxCrossCheck;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\UserCategory;
@@ -606,7 +607,7 @@ class UsersController extends AdminController
 
 
 
-
+            $habits_test_ans = false;
             $habits_tests = [];
             $welcome_survey = Vox::find(11);
 
@@ -614,20 +615,54 @@ class UsersController extends AdminController
 
             foreach ($welcome_questions as $welcome_question) {
                 $welcome_answer = VoxAnswer::where('vox_id', $welcome_survey->id)->where('user_id', $item->id)->where('question_id', $welcome_question->id)->first();
+                if ($welcome_answer) {
+                     $habits_test_ans = true;
+                }
+
+                $welcome_old = VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->first();
+                if(!empty($welcome_old)) {
+                    $oldans= $welcome_old->old_answer;
+                    $oq = json_decode($welcome_question->answers, true)[($oldans) -1];
+                } else {
+                    $oq = '';
+                }
                 $habits_tests[] = [
                     'question' => $welcome_question->question,
+                    'old_answer' => $oq,
                     'answer' => $welcome_answer ? json_decode($welcome_question->answers, true)[($welcome_answer->answer) -1] : '',
+                    'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->orderBy('id', 'desc')->first()->created_at : '',
+                    'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->count() : '',
                 ];
             }
 
             foreach (config('vox.details_fields') as $k => $v) {
+                if (!empty($item->$k)) {
+                    $habits_test_ans = true;
+                }
+
+                $old_an = !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->first()->old_answer : '';
+                if ($old_an) {
+                    $i=1;
+                    foreach ($v['values'] as $key => $value) {
+                        if($i==$old_an) {
+                            $old_an = $value;
+                            break;
+                        }
+                        $i++;
+                    }
+                }
+
                 $habits_tests[] = [
                     'question' => $v['label'],
+                    'old_answer' => $old_an,
                     'answer' => !empty($item->$k) ? $v['values'][$item->$k] : '',
+                    'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->orderBy('id', 'desc')->first()->created_at : '',
+                    'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->count() : '',
                 ];
             }
 
             return $this->showView('users-form', array(
+                'habits_test_ans' => $habits_test_ans,
                 'item' => $item,
                 'categories' => $this->categories,
                 'fields' => $this->fields,

@@ -119,6 +119,11 @@ $(document).ready(function(){
 		$(this).closest('.custom-tabs').find('.tab-pane').removeClass('active in');
 		$(this).closest('.custom-tabs').find('.tab-pane.lang-'+$(this).attr('lang')).addClass('active in');
 	});
+
+	$('.limit-buttons a').click( function() {
+		$(this).closest('.with-limits').find('table tbody tr').hide();
+		$(this).closest('.with-limits').find('table tbody tr').slice( 0, $(this).attr('limit') ).show();
+	});
 	
 
 });

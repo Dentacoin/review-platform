@@ -36,16 +36,14 @@
                                 </div>
                                 @if($item->is_dentist)
                                     <label class="col-md-1 control-label">Status</label>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         @include('admin.parts.user-field',[
                                             'key' => 'status',
                                             'info' => $fields['status']
                                         ])
                                     </div>
                                 @endif
-                                @if(!$item->is_dentist)
-                                    <label class="col-md-3 control-label">User ID</label>
-                                @endif
+                                <label class="col-md-{{ $item->is_dentist ? '1' : '3' }} control-label">{{ !$item->is_dentist ? 'User' : '' }} ID</label>
                                 <div class="col-md-2">
                                     {{ Form::text( 'id', $item->id, array('class' => 'form-control', 'disabled' ) ) }}
                                 </div>
@@ -191,15 +189,32 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Profile photo</label>
-                                <div class="col-md-9">
+                            <div class="form-group avatar-group">
+                                <label class="col-md-6 control-label">Profile photo</label>
+                                <div class="col-md-6">
                                     @include('admin.parts.user-field',[
                                         'key' => 'avatar',
                                         'info' => $fields['avatar']
                                     ])
                                 </div>
                             </div>
+                            @if($item->is_dentist)
+                                <div class="form-group">
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6">
+                                        <div class="ratings">
+                                            <div class="stars">
+                                                <div class="bar" style="width: {{ $item->avg_rating/5*100 }}%;"></div>
+                                            </div>
+                                            <span class="rating">
+                                                ({{ intval($item->ratings) }} reviews)
+                                            </span>
+                                            <div style="margin-top: 10px;">Average rating: {{ $item->avg_rating }}</div>
+                                            <a class="open-trp-link" target="_blank" href="{{ 'https://reviews.dentacoin.com'.explode('.com', $item->getLink())[1]}}">Open TRP Profile</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="form-group">
                                 <div class="col-md-12" style="text-align: right;">
                                     <span style="color: black; padding-right: 5px;">Self deleted:</span>
@@ -213,81 +228,58 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Dentacoin partner?</label>
-                                <div class="col-md-3">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'is_partner',
-                                        'info' => $fields['is_partner']
-                                    ])
-                                </div>
-                                <div class="col-md-6">
-                                    <a href="{{ url('cms/users/loginas/'.$item->id) }}" target="_blank" class="btn btn-sm btn-primary form-control"> {{ trans('admin.page.profile.loginas') }} </a>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Civic photo ID?</label>
-                                <div class="col-md-3">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'civic_kyc',
-                                        'info' => $fields['civic_kyc']
-                                    ])
-                                </div>
-                                <div class="col-md-6">
-                                    <a href="{{ url('cms/users/user-data/'.$item->id) }}" target="_blank" class="btn btn-sm btn-warning form-control">Export Personal Data</a>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Allow withdraw</label>
-                                <div class="col-md-3">
+                                <label class="col-md-5 control-label user-l">Allow withdraw</label>
+                                <div class="col-md-1" style="padding-left: 0px;">
                                     @include('admin.parts.user-field',[
                                         'key' => 'allow_withdraw',
                                         'info' => $fields['allow_withdraw']
                                     ])
                                 </div>
                                 <div class="col-md-6">
+                                    <a href="{{ url('cms/users/loginas/'.$item->id) }}" target="_blank" class="btn btn-sm btn-primary form-control user-b"> {{ trans('admin.page.profile.loginas') }} </a>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-5 control-label user-l">Civic photo ID?</label>
+                                <div class="col-md-1" style="padding-left: 0px;">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'civic_kyc',
+                                        'info' => $fields['civic_kyc']
+                                    ])
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{{ url('cms/users/user-data/'.$item->id) }}" target="_blank" class="btn btn-sm btn-warning form-control user-b">Export Personal Data</a>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                 @if($item->is_dentist)
+                                    <label class="col-md-5 control-label user-l">Dentacoin partner?</label>
+                                    <div class="col-md-1" style="padding-left: 0px;">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'is_partner',
+                                            'info' => $fields['is_partner']
+                                        ])
+                                    </div>
+                                @else 
+                                    <div class="col-md-6"></div>
+                                @endif
+                                <div class="col-md-6">
                                     @if($item->deleted_at)
-                                        <a href="{{ url('cms/users/restore/'.$item->id) }}" class="btn btn-sm btn-info form-control"> Restore </a>
+                                        <a href="{{ url('cms/users/restore/'.$item->id) }}" class="btn btn-sm btn-info form-control user-b"> Restore </a>
                                     @else
-                                        <a href="{{ url('cms/users/delete/'.$item->id) }}" class="btn btn-sm btn-danger form-control"> Delete </a>
+                                        <a href="{{ url('cms/users/delete/'.$item->id) }}" class="btn btn-sm btn-danger form-control user-b"> Delete </a>
                                     @endif
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-6"></div>
                                 <div class="col-md-6">
-                                    <button type="submit" name="update" class="btn btn-block btn-sm btn-success form-control"> {{ trans('admin.common.save') }} </button>
+                                    <button type="submit" name="update" class="btn btn-block btn-sm btn-success form-control user-b"> {{ trans('admin.common.save') }} </button>
                                 </div>
                             </div>
                             
                         </div>
                         
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h4 style="margin-bottom: 20px;">TRUSTED REVIEWS</h4>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Average rating</label>
-                                <div class="col-md-9">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'avg_rating',
-                                        'info' => $fields['avg_rating']
-                                    ])
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Ratings</label>
-                                <div class="col-md-9">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'ratings',
-                                        'info' => $fields['ratings']
-                                    ])
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                 {!! Form::close() !!}
@@ -331,6 +323,7 @@
 
 @endif
 
+<h4 style="margin-bottom: 20px;">TRUSTED REVIEWS</h4>
 @if($item->is_dentist)
     <div class="row">
         <div class="col-md-12">
@@ -378,8 +371,8 @@
                         'table_id' => 'users',
                         'table_fields' => [
                             'created_at'        => array('format' => 'datetime','width' => '20%'),
-                            'user'              => array('template' => 'admin.parts.table-reviews-user','width' => '30%'),
-                            'dentist'           => array('template' => 'admin.parts.table-reviews-dentist'),
+                            'link'              => array('template' => 'admin.parts.table-reviews-link','width' => '30%'),
+                            'dentist'           => array('template' => 'admin.parts.table-reviews-dentist', 'label' => 'Dentist reviewed'),
                             'rating'            => array(),
                             'upvotes'            => array(),
                             'verified'              => array('format' => 'bool'),
@@ -397,12 +390,10 @@
 
 @endif
 
+<h4 style="margin-bottom: 20px;">DENTAVOX</h4>
 
 @if($item->vox_rewards->isNotEmpty())
     <div class="row">
-        <div class="col-md-12">
-            <h4 style="margin-bottom: 20px;">DENTAVOX</h4>
-        </div>
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
@@ -500,7 +491,6 @@
 
 @if($item->bans->isNotEmpty())
     
-
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
@@ -563,33 +553,40 @@
     </div>
 @endif
 
-<div class="row" id="habits-list">
-    <div class="col-md-12">
-        <div class="panel panel-inverse">
-            <div class="panel-heading">
-                <div class="panel-heading-btn">
-                    <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+@if($habits_test_ans)
+    <div class="row" id="habits-list">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">Demographics & Habits</h4>
                 </div>
-                <h4 class="panel-title">Demographics & Habits</h4>
-            </div>
-            <div class="panel-body">
-                @include('admin.parts.table', [
-                    'table_id' => 'vox-cashouts',
-                    'table_fields' => [
-                        'question'          => array('label' => 'Question'),
-                        'answer'          => array('label' => 'Answer'),
-                    ],
-                    'table_data' => $habits_tests,
-                    'table_pagination' => false,
-                    'pagination_link' => array()
-                ])
+                <div class="panel-body">
+                    @include('admin.parts.table', [
+                        'table_id' => 'vox-cashouts',
+                        'table_fields' => [
+                            'question'          => array('label' => 'Question'),
+                            'old_answer'          => array('label' => 'Old Answer'),
+                            'answer'          => array('label' => 'Updated Answer'),
+                            'last_updated'      => array('label' => 'Last Updated'),
+                            'updates_count'      => array('label' => 'Updates'),
+                        ],
+                        'table_data' => $habits_tests,
+                        'table_pagination' => false,
+                        'pagination_link' => array()
+                    ])
+                </div>
             </div>
         </div>
     </div>
-</div>
+@endif
+
+<h4 style="margin-bottom: 20px;">Activity History</h4>
 
 @if($item->logins->isNotEmpty())
-    <div class="row" id="logins-list">
+    <div class="row with-limits" id="logins-list">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
@@ -599,6 +596,12 @@
                     <h4 class="panel-title">User Logins</h4>
                 </div>
                 <div class="panel-body">
+                    <div class="limit-buttons">
+                        <span>Show last: </span>
+                        <a href="javascript:;" limit="10">10</a>
+                        <a href="javascript:;" limit="50">50</a>
+                        <a href="javascript:;" limit="100">100</a>
+                    </div>
                     @include('admin.parts.table', [
                         'table_id' => 'vox-cashouts',
                         'table_fields' => [
@@ -625,7 +628,7 @@
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title">Activity History</h4>
+                    <h4 class="panel-title">Notifications Sent</h4>
                 </div>
                 <div class="panel-body">
                     @include('admin.parts.table', [

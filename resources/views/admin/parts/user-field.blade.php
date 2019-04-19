@@ -27,7 +27,7 @@
         <a class="thumbnail" href="{{ $item->getImageUrl() }}" target="_blank">
             <img src="{{ $item->getImageUrl(true) }}">
         </a>
-        <a class="btn btn-primary" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/deleteavatar') }}" onclick="return confirm('{{ trans('admin.common.sure') }}')">
+        <a class="btn btn-primary delete-avatar" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/deleteavatar') }}" onclick="return confirm('{{ trans('admin.common.sure') }}')">
             <i class="fa fa-remove"></i> {{ trans('admin.page.'.$current_page.'.delete-avatar') }}
         </a>
     @else

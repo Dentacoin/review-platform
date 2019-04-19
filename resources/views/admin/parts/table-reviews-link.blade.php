@@ -1,0 +1,1 @@
+<a target="_blank" href="{{ url('https://reviews.dentacoin.com/en/dentist/'.($item->clinic_id ? $item->clinic->slug : $item->dentist->slug).'/?review_id='.$item->id) }}">Review</a>

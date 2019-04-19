@@ -218,3 +218,56 @@ table .order.desc::after {
     content: "\e156";
     color: rgba(36, 42, 48, 0.5);
 }
+
+.related-group .select2 {
+    width: 100% !important;
+}
+
+.related-group .input-group {
+    width: 100% !important;
+}
+
+.ratings {
+    margin-top: -20px;
+    text-align: right;
+    color: black;
+}
+
+.ratings .stars {
+    width: 74px;
+    height: 14px;
+    display: inline-block;
+    background: url('../../img-trp/stars-gray.png') 50% 50% no-repeat;
+    background-size: contain;
+    vertical-align: middle;
+}
+.ratings .stars .bar {
+    background: url('../../img-trp/stars-blue.png') 0% 50% no-repeat;
+    background-size: cover;
+    height: 14px;
+}
+
+.ratings .rating {
+    vertical-align: middle;
+}
+
+.avatar-group .delete-avatar {
+    position: absolute;
+    left: -80px;
+    bottom: 20px;
+}
+
+.open-trp-link {
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: underline;
+    margin-bottom: 30px;
+}
+
+.user-b {
+    line-height: 21px;
+}
+
+.user-l {
+    padding-top: 12px !important;
+}

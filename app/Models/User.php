@@ -15,6 +15,7 @@ use App\Models\Email;
 use App\Models\Reward;
 use App\Models\VoxReward;
 use App\Models\VoxCashout;
+use App\Models\VoxCrossCheck;
 use App\Models\UserBan;
 use App\Models\UserAsk;
 use App\Models\UserTeam;
@@ -87,16 +88,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     ];
 
     public function city() {
-        return $this->hasOne('App\Models\City', 'id', 'city_id');        
+        return $this->hasOne('App\Models\City', 'id', 'city_id');
     }
     public function country() {
-        return $this->hasOne('App\Models\Country', 'id', 'country_id');        
+        return $this->hasOne('App\Models\Country', 'id', 'country_id');
     }
     public function categories() {
-        return $this->hasMany('App\Models\UserCategory', 'user_id', 'id');        
+        return $this->hasMany('App\Models\UserCategory', 'user_id', 'id');
+    }
+    public function cross_check() {
+        return $this->hasMany('App\Models\VoxCrossCheck', 'user_id', 'id');
     }
     public function invitor() {
-        return $this->hasOne('App\Models\User', 'id', 'invited_by');        
+        return $this->hasOne('App\Models\User', 'id', 'invited_by');
     }
     public function reviews_out() {
         return $this->hasMany('App\Models\Review', 'user_id', 'id')->where('status', 'accepted')->orderBy('id', "DESC");

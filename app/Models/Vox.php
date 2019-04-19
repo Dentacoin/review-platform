@@ -14,6 +14,7 @@ use App\Models\VoxToCategory;
 use App\Models\Reward;
 use App\Models\VoxReward;
 use App\Models\VoxBadge;
+use App\Models\VoxRelated;
 
 class Vox extends Model {
     
@@ -108,6 +109,10 @@ class Vox extends Model {
 
     public function rewards() {
         return $this->hasMany('App\Models\VoxReward', 'vox_id', 'id')->orderBy('id', 'DESC');
+    }
+
+    public function related() {
+        return $this->hasMany('App\Models\VoxRelated', 'vox_id', 'id');
     }
 
     public function formatDuration() {

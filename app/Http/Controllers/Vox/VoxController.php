@@ -23,6 +23,7 @@ use App\Models\Vox;
 use App\Models\VoxAnswer;
 use App\Models\VoxReward;
 use App\Models\VoxQuestion;
+use App\Models\VoxCrossCheck;
 use App\Models\VoxScale;
 use App\Models\UserInvite;
 use App\Models\Dcn;
@@ -480,14 +481,35 @@ class VoxController extends FrontController
 
 							        if( $found->cross_check ) {
 							    		if (is_numeric($found->cross_check)) {
+
+							    			$v_quest = VoxQuestion::where('id', $q )->first();
+
+							    			if ($cross_checks[$q] != $a) {
+								    			$vcc = new VoxCrossCheck;
+								    			$vcc->user_id = $this->user->id;
+								    			$vcc->question_id = $found->cross_check;
+								    			$vcc->old_answer = $cross_checks[$q];
+								    			$vcc->save();
+								    		}
+
 							    			VoxAnswer::where('user_id',$this->user->id )->where('vox_id', 11)->where('question_id', $found->cross_check )->update([
 							    				'answer' => $a,
 							    			]);
+
 							    		} else {
 							    			$cc = $found->cross_check;
+
 							    			$i=1;
 							    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
 							    				if($i==$a) {
+
+									    			if ($cross_checks[$q] != $a) {
+										    			$vcc = new VoxCrossCheck;
+										    			$vcc->user_id = $this->user->id;
+										    			$vcc->question_id = $found->cross_check;
+										    			$vcc->old_answer = $cross_checks[$q];
+										    			$vcc->save();
+										    		}
 							    					$this->user->$cc = $key;
 							    					$this->user->save();
 							    					break;
