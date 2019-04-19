@@ -587,9 +587,9 @@ class VoxesController extends AdminController
             }   
         }
 
-        if (!empty(Request::input('related_vox_id'))) {
-            $cur_related = VoxRelated::where('vox_id', $item->id)->delete();
-            foreach (Request::input('related_vox_id') as $i => $ri) {
+        $cur_related = VoxRelated::where('vox_id', $item->id)->delete();
+        foreach (Request::input('related_vox_id') as $i => $ri) {
+            if (!empty($this->request->input('related_vox_id')[$i])) {
                 $vr = new VoxRelated;
                 $vr->vox_id = $item->id;
                 $vr->related_vox_id = $this->request->input('related_vox_id')[$i];
@@ -909,17 +909,18 @@ class VoxesController extends AdminController
                     ->join('users', 'vox_answers.user_id', '=', 'users.id')
                     ->join('countries', 'users.country_id', '=', 'countries.id')
                     ->orderBy('countries.name', $order);
-                }
-                if (request()->input( 'name' )) {
+                } else if (request()->input( 'name' )) {
                     $order = request()->input( 'name' );
                     $question_respondents = $question_respondents
                     ->join('users', 'vox_answers.user_id', '=', 'users.id')
                     ->orderBy('users.name', $order);
-                }
-                if (request()->input( 'taken' )) {
+                } else if (request()->input( 'taken' )) {
                     $order = request()->input( 'taken' );
                     $question_respondents = $question_respondents
                     ->orderBy('created_at', $order);
+                } else {
+                    $question_respondents = $question_respondents
+                    ->orderBy('created_at', 'desc');
                 }
 
                 $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
@@ -934,19 +935,18 @@ class VoxesController extends AdminController
                     ->join('users', 'vox_rewards.user_id', '=', 'users.id')
                     ->join('countries', 'users.country_id', '=', 'countries.id')
                     ->orderBy('countries.name', $order);
-                }
-
-                if (request()->input( 'name' )) {
+                } else if (request()->input( 'name' )) {
                     $order = request()->input( 'name' );
                     $respondents = $respondents
                     ->join('users', 'vox_rewards.user_id', '=', 'users.id')
                     ->orderBy('users.name', $order);
-                }
-
-                if (request()->input( 'taken' )) {
+                } else if (request()->input( 'taken' )) {
                     $order = request()->input( 'taken' );
                     $respondents = $respondents
                     ->orderBy('created_at', $order);
+                } else {
+                    $respondents = $respondents
+                    ->orderBy('created_at', 'desc');
                 }
                 $respondents = $respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
 

@@ -112,7 +112,7 @@ class Vox extends Model {
     }
 
     public function related() {
-        return $this->hasMany('App\Models\VoxRelated', 'vox_id', 'id');
+        return $this->hasMany('App\Models\VoxRelated', 'vox_id', 'id')->orderBy('id', 'DESC');
     }
 
     public function formatDuration() {

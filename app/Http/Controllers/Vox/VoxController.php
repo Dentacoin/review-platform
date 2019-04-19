@@ -20,6 +20,7 @@ use DB;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Vox;
+use App\Models\VoxRelated;
 use App\Models\VoxAnswer;
 use App\Models\VoxReward;
 use App\Models\VoxQuestion;
@@ -780,11 +781,6 @@ class VoxController extends FrontController
         	]);
 		}
 
-		$related_vox = '';
-		if (!empty($vox->related_vox_id) && !in_array($vox->related_vox_id, $this->user->filledVoxes())) {
-			$related_vox = Vox::find($vox->related_vox_id);
-		}
-
         $all_surveys = Vox::where('type', 'normal')->get();
         $taken = $this->user->filledVoxes();
         $done_all = false;
@@ -793,8 +789,24 @@ class VoxController extends FrontController
         	$done_all = true;
         }
 
+        $related_mode = false;
+		$suggested_voxes = [];
+		if ($vox->related->isNotEmpty()) {
+			foreach ($vox->related as $r) {
+				if (!in_array($r->id, $this->user->filledVoxes())) {
+					$suggested_voxes[] = Vox::find($r->related_vox_id);
+				}
+			}
+		}
+
+		if (empty($suggested_voxes)) {
+			$suggested_voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $this->user->filledVoxes())->take(9)->get();
+		} else {
+			$related_mode = true;
+		}
 
 		return $this->ShowVoxView('vox', array(
+			'related_mode' => $related_mode,
 			'cross_checks' => $cross_checks,
 			'welcomerules' => $welcomerules,
 			'not_bot' => $not_bot,
@@ -837,8 +849,7 @@ class VoxController extends FrontController
             	'title' => $email_subject,
             	'content' => $email_content,
             ],
-            'related_vox' => $related_vox,
-            'suggested_voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $this->user->filledVoxes())->take(9)->get(),
+            'suggested_voxes' => $suggested_voxes,
             'done_all' => $done_all,
         ));
 	}

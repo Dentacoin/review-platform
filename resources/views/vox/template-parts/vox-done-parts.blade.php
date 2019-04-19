@@ -2,9 +2,9 @@
 	<div class="container">
 		<img src="{{ url('new-vox-img/stats-front.png') }}">
 		<h3>
-			{!! $vox->has_stats ? trans('vox.page.questionnaire.curious-related-survey', ['title' => $vox->title]) : trans('vox.page.questionnaire.curious-related-surveys') !!}
+			{!! $vox->has_stats && !empty($related_vox) ? trans('vox.page.questionnaire.curious-related-survey', ['title' => $vox->title]) : trans('vox.page.questionnaire.curious-related-surveys') !!}
 		</h3>
-		<a href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}" class="check-stats">
+		<a href="{{ $vox->has_stats && !empty($related_vox) ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}" class="check-stats">
 			{{ trans('vox.common.check-statictics') }}
 		</a>
 	</div>

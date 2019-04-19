@@ -321,13 +321,31 @@ $(document).ready(function(){
                             VoxTest.handleNextQuestion();
                             $("#question-meta").hide();
 
-                            if (related_question_id && related_answer && $('.question-group[data-id='+related_question_id+'][data-answer='+related_answer+']').length && $("#question-related-done").length) {
+                            if (vox_relateds) {
+                                for (var i in vox_relateds) {
+                                    if(vox_relateds[i].related_question_id && vox_relateds[i].related_answer && !$('.question-group[data-id='+vox_relateds[i].related_question_id+'][data-answer='+vox_relateds[i].related_answer+']').length && $("#question-related-done").length) {
+                                        $('.swiper-slide[survey-id="'+vox_relateds[i].related_vox_id+'"]').remove();
+                                    }
+                                }
+                            }
+                            if ($('.swiper-wrapper').children().length && $('.swiper-wrapper').children().length > 1 && $('.related-mode').length) {
+                                $rel_vox = $('.swiper-wrapper').children().first();
+                                $rel_vox.find('.cover').clone(true).prependTo($('.relateds .slide-padding'));
+                                $('.relateds .survey-title').html($rel_vox.find('.survey-title').html());
+                                $rel_vox.find('.first-flex .right').clone(true).prependTo($('.relateds .first-flex .right'));
+                                $rel_vox.find('.btns').clone(true).prependTo($('.relateds .btns'));
+                                $rel_vox.remove();
+
                                 $("#question-related-done").show();
                             } else {
                                 $("#question-done").show();
                             }
-                            $("#other-surveys").show();
-                            swiper.update();
+
+                            if ($('.swiper-wrapper').children().length) {
+                                $("#other-surveys").show();
+                                swiper.update();
+                            }
+                            
 
                             fbq('track', 'SurveyComplete');
                             gtag('event', 'Take', {
