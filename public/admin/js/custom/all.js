@@ -125,6 +125,9 @@ $(document).ready(function(){
 		$(this).closest('.with-limits').find('table tbody tr').slice( 0, $(this).attr('limit') ).show();
 	});
 	
+	$('.with-dropdown .toggle-button').click( function() {
+		$(this).closest('.with-dropdown').toggleClass('active');
+	});
 
 });
 

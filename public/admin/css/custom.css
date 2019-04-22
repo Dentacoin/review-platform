@@ -271,3 +271,30 @@ table .order.desc::after {
 .user-l {
     padding-top: 12px !important;
 }
+
+.with-dropdown .toggled-area {
+    display: none;
+}
+
+.with-dropdown.active .toggled-area {
+    display: block;
+}
+
+.with-dropdown .toggle-button {
+    position: relative;
+}
+
+.with-dropdown .toggle-button:after {
+    content: "\e114";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 30px;
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    color: white;
+}
+
+.with-dropdown.active .toggle-button:after {
+    content: "\e113";
+}

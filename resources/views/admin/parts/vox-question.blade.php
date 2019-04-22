@@ -276,9 +276,10 @@
                     </div>
 
                     <div class="clearfix">
-                        <div class="col-md-6">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-6" style="margin-left: -170px;">
                             <div id="habits-table" {!! !empty($question->cross_check) ? '' : 'style="display:none;"' !!}>
-                                <p style="padding-left: 20px;">
+                                <p style="padding-left: 17px;">
                                     Please make sure your answers match the selected Cross-check question's answers
                                 </p>
                                 <table class="table">

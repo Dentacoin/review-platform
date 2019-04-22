@@ -583,43 +583,6 @@
     </div>
 @endif
 
-<h4 style="margin-bottom: 20px;">Activity History</h4>
-
-@if($item->logins->isNotEmpty())
-    <div class="row with-limits" id="logins-list">
-        <div class="col-md-12">
-            <div class="panel panel-inverse">
-                <div class="panel-heading">
-                    <div class="panel-heading-btn">
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-                    </div>
-                    <h4 class="panel-title">User Logins</h4>
-                </div>
-                <div class="panel-body">
-                    <div class="limit-buttons">
-                        <span>Show last: </span>
-                        <a href="javascript:;" limit="10">10</a>
-                        <a href="javascript:;" limit="50">50</a>
-                        <a href="javascript:;" limit="100">100</a>
-                    </div>
-                    @include('admin.parts.table', [
-                        'table_id' => 'vox-cashouts',
-                        'table_fields' => [
-                            'created_at'        => array('format' => 'datetime', 'width' => '20%'),
-                            'ip'                => array('template' => 'admin.parts.table-logins-user', 'width' => '30%'),
-                            'device'          => array('template' => 'admin.parts.table-logins-device', 'width' => '100%'),
-                            'platform'          => array(),
-                        ],
-                        'table_data' => $item->logins,
-                        'table_pagination' => false,
-                        'pagination_link' => array()
-                    ])
-                </div>
-            </div>
-        </div>
-    </div>
-@endif
-
 @if($emails)
     <div class="row" id="logins-list">
         <div class="col-md-12">
@@ -647,5 +610,42 @@
     </div>
 @endif
 
+
+<h4 style="margin-bottom: 20px;">Activity History</h4>
+
+@if($item->logins->isNotEmpty())
+    <div class="row with-limits with-dropdown" id="logins-list">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading toggle-button">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">User Logins</h4>
+                </div>
+                <div class="panel-body toggled-area">
+                    <div class="limit-buttons">
+                        <span>Show last: </span>
+                        <a href="javascript:;" limit="10">10</a>
+                        <a href="javascript:;" limit="50">50</a>
+                        <a href="javascript:;" limit="100">100</a>
+                    </div>
+                    @include('admin.parts.table', [
+                        'table_id' => 'vox-cashouts',
+                        'table_fields' => [
+                            'created_at'        => array('format' => 'datetime', 'width' => '20%'),
+                            'ip'                => array('template' => 'admin.parts.table-logins-user', 'width' => '30%'),
+                            'device'          => array('template' => 'admin.parts.table-logins-device', 'width' => '100%'),
+                            'platform'          => array(),
+                        ],
+                        'table_data' => $item->logins,
+                        'table_pagination' => false,
+                        'pagination_link' => array()
+                    ])
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 
 @endsection
