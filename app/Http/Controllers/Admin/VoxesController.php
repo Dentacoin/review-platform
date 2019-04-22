@@ -588,14 +588,16 @@ class VoxesController extends AdminController
         }
 
         $cur_related = VoxRelated::where('vox_id', $item->id)->delete();
-        foreach (Request::input('related_vox_id') as $i => $ri) {
-            if (!empty($this->request->input('related_vox_id')[$i])) {
-                $vr = new VoxRelated;
-                $vr->vox_id = $item->id;
-                $vr->related_vox_id = $this->request->input('related_vox_id')[$i];
-                $vr->related_question_id = $this->request->input('related_question_id')[$i];
-                $vr->related_answer = $this->request->input('related_answer')[$i];
-                $vr->save();
+        if( Request::input('related_vox_id') ) {
+            foreach (Request::input('related_vox_id') as $i => $ri) {
+                if (!empty($this->request->input('related_vox_id')[$i])) {
+                    $vr = new VoxRelated;
+                    $vr->vox_id = $item->id;
+                    $vr->related_vox_id = $this->request->input('related_vox_id')[$i];
+                    $vr->related_question_id = $this->request->input('related_question_id')[$i];
+                    $vr->related_answer = $this->request->input('related_answer')[$i];
+                    $vr->save();
+                }
             }
         }
 
