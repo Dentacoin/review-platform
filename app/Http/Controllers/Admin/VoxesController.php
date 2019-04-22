@@ -920,6 +920,12 @@ class VoxesController extends AdminController
                     $order = request()->input( 'taken' );
                     $question_respondents = $question_respondents
                     ->orderBy('created_at', $order);
+                } else if (request()->input( 'type' )) {
+                    $order = request()->input( 'type' );
+                    $question_respondents = $question_respondents
+                    ->join('users', 'vox_answers.user_id', '=', 'users.id')
+                    ->orderBy('users.is_dentist', $order)
+                    ->orderBy('users.is_clinic', $order);
                 } else {
                     $question_respondents = $question_respondents
                     ->orderBy('created_at', 'desc');
@@ -946,6 +952,12 @@ class VoxesController extends AdminController
                     $order = request()->input( 'taken' );
                     $respondents = $respondents
                     ->orderBy('created_at', $order);
+                } else if (request()->input( 'type' )) {
+                    $order = request()->input( 'type' );
+                    $respondents = $respondents
+                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                    ->orderBy('users.is_dentist', $order)
+                    ->orderBy('users.is_clinic', $order);
                 } else {
                     $respondents = $respondents
                     ->orderBy('created_at', 'desc');
