@@ -960,7 +960,8 @@ p.h2-bold {
   .section-recent-surveys .swiper-slide .featured-img {
     position: absolute;
     left: -29px;
-    top: -24px; }
+    top: -24px;
+    width: 50px; }
     @media screen and (max-width: 768px) {
       .section-recent-surveys .swiper-slide .featured-img {
         width: 30px;
@@ -2070,7 +2071,8 @@ p.h2-bold {
       .page-stats .stats-list .stats-holder .vox-stat img.featured {
         position: absolute;
         top: -23px;
-        right: -28px; }
+        right: -28px;
+        width: 50px; }
         @media screen and (max-width: 768px) {
           .page-stats .stats-list .stats-holder .vox-stat img.featured {
             width: 20px;
@@ -3981,6 +3983,31 @@ p.h2-bold {
                 height: 20px; } }
           .popup.cross-checks .wrapper .inner .cross-checks-answers label:hover i, .popup.cross-checks .wrapper .inner .cross-checks-answers label.active i {
             background-color: #00a6eb; }
+        .popup.cross-checks .wrapper .inner .cross-checks-answers select {
+          display: block;
+          padding: 10px 30px;
+          margin: 1px auto;
+          border: 1px solid #bdbdbd;
+          border-radius: 10px;
+          font-size: 18px;
+          cursor: pointer;
+          font-weight: 600;
+          margin-bottom: 15px;
+          position: relative;
+          min-width: 200px;
+          padding-right: 1px;
+          padding-left: 10px;
+          text-align: left;
+          color: black; }
+          @media screen and (max-width: 768px) {
+            .popup.cross-checks .wrapper .inner .cross-checks-answers select {
+              font-size: 15px;
+              margin-bottom: 15px;
+              padding-top: 8px;
+              padding-bottom: 8px; } }
+          .popup.cross-checks .wrapper .inner .cross-checks-answers select:hover {
+            background: white;
+            border-color: #3daee6; }
       .popup.cross-checks .wrapper .inner .white-button {
         color: #38a2e5;
         padding: 7px 40px;

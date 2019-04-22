@@ -374,7 +374,7 @@
 					</div>
 					<br/>
 					<a href="javascript:;" class="white-button update-answer">{!! nl2br(trans('vox.popup.cross-checks-popup.update')) !!}</a>
-					<div style="margin-top: 20px; text-align: center; display: none;" class="answer-error alert alert-warning">
+					<div style="margin-top: 20px; text-align: center; display: none;" class="pick-answer alert alert-warning">
 						{!! nl2br(trans('vox.page.questionnaire.answer-error')) !!}
 					</div>
 				</div>

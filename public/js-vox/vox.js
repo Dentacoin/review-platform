@@ -175,19 +175,29 @@ $(document).ready(function(){
 
 
         if (group.attr('cross-check-correct')) {
-            if (parseInt($(this).find('input').val()) != parseInt(group.attr('cross-check-correct'))) {
+
+            var given_answer = group.find('select').length ? group.find('select').val() : $(this).find('input').val();
+
+            if (parseInt(given_answer) != parseInt(group.attr('cross-check-correct'))) {
                 $('.popup.cross-checks .cross-checks-answers').html('');
 
-                group.find('.answers a.answer').each( function() {
-                    $('.popup.cross-checks .cross-checks-answers').append('<label for="cc-answer-'+group.attr('data-id')+'-'+$(this).find('input').val()+'">'+$(this).text()+'<i class="popup-check"></i><input id="cc-answer-'+group.attr('data-id')+'-'+$(this).find('input').val()+'" type="radio" name="answer" class="answer" value="'+$(this).find('input').val()+'" style="display:none;"></label>');
-                });
+                if(group.find('select').length) {
+                    $('.popup.cross-checks .cross-checks-answers').append('<select class="answer" name="cc-birthyear-answer" id="cc-birthyear-answer"></select>');
+                    group.find('select option').each( function() {
+                        $('.popup.cross-checks .cross-checks-answers select').append('<option value="'+$(this).val()+'">'+$(this).text()+'</option>');
+                    });
+                } else {
+                    group.find('.answers a.answer').each( function() {
+                        $('.popup.cross-checks .cross-checks-answers').append('<label for="cc-answer-'+group.attr('data-id')+'-'+$(this).find('input').val()+'">'+$(this).text()+'<i class="popup-check"></i><input id="cc-answer-'+group.attr('data-id')+'-'+$(this).find('input').val()+'" type="radio" name="answer" class="answer" value="'+$(this).find('input').val()+'" style="display:none;"></label>');
+                    });
+                }
 
                 $('.popup.cross-checks').addClass('active');
 
                 $('.cross-checks-answers label').click( function() {
                     $('.cross-checks-answers label').removeClass('active');
                     $(this).addClass('active');
-                    $('.popup.cross-checks').find('.answer-error').hide();
+                    $('.popup.cross-checks').find('.pick-answer').hide();
                 });
 
                 $('.update-answer').click( function() {
@@ -195,12 +205,21 @@ $(document).ready(function(){
                         ajax_is_running = false;
                         group.removeAttr('cross-check-correct');
                         var new_answer = $('.cross-checks-answers label.active input').val();
-                        //console.log(group.find('input[value="'+new_answer+'"]').parent());
                         group.find('.loader').remove();
                         group.find('input[value="'+new_answer+'"]').parent().trigger('click');
                         $('.popup.cross-checks').removeClass('active');
+
+                    } else if($('.cross-checks-answers select').length && $('.cross-checks-answers select').val()) {
+                        ajax_is_running = false;
+                        group.removeAttr('cross-check-correct');
+                        var new_answer = $('.cross-checks-answers select').val();
+                        group.find('select').val(new_answer);
+                        group.find('.loader').remove();
+                        group.find('.next-answer').trigger('click');
+                        $('.popup.cross-checks').removeClass('active');
+                        
                     } else {
-                        $('.popup.cross-checks').find('.answer-error').show();
+                        $('.popup.cross-checks').find('.pick-answer').show();
                     }
 
                 });

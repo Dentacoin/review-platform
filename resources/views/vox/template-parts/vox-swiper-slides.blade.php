@@ -3,7 +3,7 @@
 		<div class="slide-padding">
   			<div class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title, "respondents" => $survey->respondentsCount(), "respondents_country" => $survey->respondentsCountryCount() ]) }}'>
   				@if($survey->stats_featured)
-  					<img class="featured-img" src="{{ url('new-vox-img/star.png') }}">
+  					<img class="featured-img" src="{{ url('new-vox-img/star.svg') }}">
   				@endif
   			</div>							
 			<div class="vox-header clearfix">

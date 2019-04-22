@@ -251,6 +251,7 @@ class Vox extends Model {
         }
 
         $demographic_questions['gender'] = 'What is your biological sex?';
+        $demographic_questions['birthyear'] = "What's your year of birth?";
         foreach (config('vox.details_fields') as $k => $v) {
             $demographic_questions[$k] = $v['label'];
         }
@@ -271,6 +272,10 @@ class Vox extends Model {
                     $welcome_answers['gender'] = [
                         'Male',
                         'Female'
+                    ];
+                } else if ($key == 'birthyear') {
+                    $welcome_answers['birthyear'] = [
+                        '',
                     ];
                 } else {
                     $welcome_answers[$key] = config('vox.details_fields')[$key]['values'];

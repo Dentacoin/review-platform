@@ -635,6 +635,14 @@ class UsersController extends AdminController
                 ];
             }
 
+            $habits_tests[] = [
+                'question' => 'What is your biological sex?',
+                'old_answer' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->first()) ? (VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->first()->old_answer == 1 ? 'Male' : 'Female') : '',
+                'answer' => !empty($item->gender) ? ($item->gender == 'm' ? 'Male' : 'Female') : '',
+                'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id','gender')->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->orderBy('id', 'desc')->first()->created_at : '',
+                'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->count() : '',
+            ];
+
             foreach (config('vox.details_fields') as $k => $v) {
                 if (!empty($item->$k)) {
                     $habits_test_ans = true;

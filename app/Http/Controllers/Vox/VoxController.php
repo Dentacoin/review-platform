@@ -158,6 +158,12 @@ class VoxController extends FrontController
 	    		if (is_numeric($vq->cross_check)) {
 	    			$va = VoxAnswer::where('user_id',$this->user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
 	    			$cross_checks[$vq->id] = $va->answer;
+	    		} else if($vq->cross_check == 'gender') {
+	    			$cc = $vq->cross_check;
+	    			$cross_checks[$vq->id] = $this->user->$cc == 'm' ? 1 : 2;
+	    		} else if($vq->cross_check == 'birthyear') {
+	    			$cc = $vq->cross_check;
+	    			$cross_checks[$vq->id] = $this->user->$cc;
 	    		} else {
 	    			$cc = $vq->cross_check;
 	    			$i=1;
@@ -497,6 +503,17 @@ class VoxController extends FrontController
 							    				'answer' => $a,
 							    			]);
 
+							    		} else if($found->cross_check == 'gender') {
+						    				if ($cross_checks[$q] != $a) {
+						    					$vcc = new VoxCrossCheck;
+								    			$vcc->user_id = $this->user->id;
+								    			$vcc->question_id = $found->cross_check;
+								    			$vcc->old_answer = $cross_checks[$q];
+								    			$vcc->save();
+								    		}
+								    		$this->user->gender = $a == 1 ? 'm' : 'f';
+							    			$this->user->save();
+
 							    		} else {
 							    			$cc = $found->cross_check;
 
@@ -523,6 +540,23 @@ class VoxController extends FrontController
 			        			} else if(isset( $this->details_fields[$type] ) || $type == 'location-question' || $type == 'birthyear-question' || $type == 'gender-question' ) {
 			        				$answered[$q] = 1;
 			        				$answer = null;
+
+			        				if( $found->cross_check ) {
+			        					if($found->cross_check == 'birthyear') {
+
+							    			if ($cross_checks[$q] != $a) {
+						    					$vcc = new VoxCrossCheck;
+								    			$vcc->user_id = $this->user->id;
+								    			$vcc->question_id = $found->cross_check;
+								    			$vcc->old_answer = $cross_checks[$q];
+								    			$vcc->save();
+								    		}
+								    		$this->user->birthyear = $a;
+							    			$this->user->save();
+							    		}
+			        				}
+
+
 			        			} else if($type == 'skip') {
 			        				$answer = new VoxAnswer;
 							        $answer->user_id = $this->user->id;
