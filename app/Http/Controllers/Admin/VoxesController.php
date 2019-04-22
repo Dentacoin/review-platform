@@ -638,7 +638,7 @@ class VoxesController extends AdminController
             $question->is_control = $data['is_control'];
         }
         
-        $question->cross_check = $data['cross_check'];
+        $question->cross_check = !empty($data['cross_check']) ? $data['cross_check'] : null;
         $question->type = $data['type'];
         $question->order = $data['order'];
         $question->stats_featured = !empty($data['stats_featured']);
