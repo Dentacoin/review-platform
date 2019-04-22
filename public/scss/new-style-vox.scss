@@ -2895,6 +2895,14 @@ p.h2-bold {
 			padding-bottom: 11px;
 		}
 
+		&.cloned-ribbon {
+			margin-bottom: 25px;
+
+			@media #{$phone} {
+				margin-bottom: 20px;
+			}
+		}
+
 		.ribbon-box {
 			position: absolute;
 		    top: 50%;
@@ -2978,13 +2986,14 @@ p.h2-bold {
 				margin-right: auto;
     			align-items: center;
 
+				@media #{$tablet} {
+					max-width: 700px;
+				}
+
 				@media #{$phone} {
 					margin-bottom: 20px;
 					padding-bottom: 50px;
-				}
-
-				@media #{$tablet} {
-					max-width: 740px;
+					max-width: 95%;
 				}
 
 				img.featured {
@@ -3023,6 +3032,7 @@ p.h2-bold {
 
 					@media #{$tablet} {
 						margin-left: 20px;
+						margin-right: 20px;
 					}
 					@media #{$phone} {
 						order: 1;
@@ -5650,6 +5660,31 @@ p.h2-bold {
 			&:hover {
 				color: #2196F3;
 				border-color: #2196F3;
+			}
+		}
+	}
+
+	.custom-survey {
+		margin-top: 25px;
+
+		@media #{$phone} {
+			margin-top: 20px;
+		}
+
+		a,b,p {
+			color: #9d9d9d;
+			font-size: 15px;
+
+			@media #{$phone} {
+				font-size: 13px;
+			}
+		}
+
+		p {
+			margin-bottom: 15px;
+
+			@media #{$phone} {
+				margin-bottom: 10px;
 			}
 		}
 	}

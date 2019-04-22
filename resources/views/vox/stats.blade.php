@@ -39,78 +39,78 @@
 				@endforeach
 			</div>
 		</div>
+	</div>
 
-		<div class="flex stats-list">
-			<div class="stats-holder">
-				<b template=":what Stats">
-					{!! trans('vox.page.stats.featured') !!}
-				</b>
-				@foreach($voxes as $vox)
+	<div class="flex stats-list">
+		<div class="stats-holder">
+			<b template=":what Stats">
+				{!! trans('vox.page.stats.featured') !!}
+			</b>
+			@foreach($voxes as $vox)
 
-					@if($vox->has_stats)
+				@if($vox->has_stats)
 
-						<div 
-							class="vox-stat flex" 
-							featured="{{ intval($vox->stats_featured) }}" 
-							published="{{ $vox->created_at->timestamp }}" 
-							updated="{{ $vox->updated_at->timestamp }}" 
-							popular="{{ intval($vox->rewards()->count()) }}" 
-			      			sort-order="{{ $vox->sort_order_stats }}" 
-							{!! $vox->stats_featured ? '' : 'style="display: none;"' !!}
-						>
-							@if($vox->stats_featured)
-								<img class="featured" src="{{ url('new-vox-img/star.png') }}">
-							@endif
-							<img class="cover" src="{{ $vox->getImageUrl() }}" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}' />
-							<div class="stats-info flex">
-								<h3>
-									{{ $vox->title }}
-								</h3>
-								<p>
-									{{ $vox->translateorNew(App::getLocale())->stats_description }}
-								</p>
-							</div>
-							<div class="stats-cta flex">
-								<a href="{{ $vox->getStatsList() }}">
-									{!! trans('vox.common.check-statictics') !!}
+					<div 
+						class="vox-stat flex" 
+						featured="{{ intval($vox->stats_featured) }}" 
+						published="{{ $vox->created_at->timestamp }}" 
+						updated="{{ $vox->updated_at->timestamp }}" 
+						popular="{{ intval($vox->rewards()->count()) }}" 
+		      			sort-order="{{ $vox->sort_order_stats }}" 
+						{!! $vox->stats_featured ? '' : 'style="display: none;"' !!}
+					>
+						@if($vox->stats_featured)
+							<img class="featured" src="{{ url('new-vox-img/star.png') }}">
+						@endif
+						<img class="cover" src="{{ $vox->getImageUrl() }}" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}' />
+						<div class="stats-info flex">
+							<h3>
+								{{ $vox->title }}
+							</h3>
+							<p>
+								{{ $vox->translateorNew(App::getLocale())->stats_description }}
+							</p>
+						</div>
+						<div class="stats-cta flex">
+							<a href="{{ $vox->getStatsList() }}">
+								{!! trans('vox.common.check-statictics') !!}
+							</a>
+							@if(!in_array($vox->id, $taken))
+								<a class="blue-button secondary" href="{{ $vox->getLink() }}">
+									{{ trans('vox.common.take-the-test') }}
 								</a>
-								@if(!in_array($vox->id, $taken))
-									<a class="blue-button secondary" href="{{ $vox->getLink() }}">
-										{{ trans('vox.common.take-the-test') }}
-									</a>
-								@endif
-							</div>
+							@endif
 						</div>
-					@endif
-				@endforeach
+					</div>
+				@endif
+			@endforeach
 
-				<div class="alert alert-info" id="survey-not-found" style="display: none;">
-					{!! trans('vox.page.stats.no-results') !!}
-				</div>
+			<div class="alert alert-info" id="survey-not-found" style="display: none;">
+				{!! trans('vox.page.stats.no-results') !!}
 			</div>
-			<div class="stats-cats">
-				<b>
-					{!! trans('vox.page.stats.browse-category') !!}
-				</b>
-				@foreach($cats as $cat)
-					@if($cat->stats_voxes->isNotEmpty())
-						<a class="cat">
-							{{ $cat->name }}
-						</a>
-						<div class="subcats"> 
-							@foreach($cat->stats_voxes as $v)
-								<a href="{{ $v->vox->getStatsList() }}">{{ $v->vox->title }}</a>
-							@endforeach
-						</div>
-					@endif
-				@endforeach
-			</div>
+		</div>
+		<div class="stats-cats">
+			<b>
+				{!! trans('vox.page.stats.browse-category') !!}
+			</b>
+			@foreach($cats as $cat)
+				@if($cat->stats_voxes->isNotEmpty())
+					<a class="cat">
+						{{ $cat->name }}
+					</a>
+					<div class="subcats"> 
+						@foreach($cat->stats_voxes as $v)
+							<a href="{{ $v->vox->getStatsList() }}">{{ $v->vox->title }}</a>
+						@endforeach
+					</div>
+				@endif
+			@endforeach
 		</div>
 	</div>
 
-	<div class="section-stats">
+	<div class="section-stats" id="stat-ribbon">
 		<div class="container">
-			<img src="{{ url('new-vox-img/stats-front.png') }}">
+			<img src="{{ url('new-vox-img/custom-survey-vox.png') }}">
 			<div class="ribbon-box">
 				<h3>
 					{!! nl2br(trans('vox.page.stats.order-survey')) !!}

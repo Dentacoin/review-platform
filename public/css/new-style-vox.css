@@ -1999,6 +1999,11 @@ p.h2-bold {
   @media screen and (max-width: 768px) {
     .page-stats .section-stats {
       padding-bottom: 11px; } }
+  .page-stats .section-stats.cloned-ribbon {
+    margin-bottom: 25px; }
+    @media screen and (max-width: 768px) {
+      .page-stats .section-stats.cloned-ribbon {
+        margin-bottom: 20px; } }
   .page-stats .section-stats .ribbon-box {
     position: absolute;
     top: 50%;
@@ -2054,13 +2059,14 @@ p.h2-bold {
       margin-left: auto;
       margin-right: auto;
       align-items: center; }
+      @media screen and (max-width: 1080px) {
+        .page-stats .stats-list .stats-holder .vox-stat {
+          max-width: 700px; } }
       @media screen and (max-width: 768px) {
         .page-stats .stats-list .stats-holder .vox-stat {
           margin-bottom: 20px;
-          padding-bottom: 50px; } }
-      @media screen and (max-width: 1080px) {
-        .page-stats .stats-list .stats-holder .vox-stat {
-          max-width: 740px; } }
+          padding-bottom: 50px;
+          max-width: 95%; } }
       .page-stats .stats-list .stats-holder .vox-stat img.featured {
         position: absolute;
         top: -23px;
@@ -2090,7 +2096,8 @@ p.h2-bold {
         justify-content: center; }
         @media screen and (max-width: 1080px) {
           .page-stats .stats-list .stats-holder .vox-stat .stats-info {
-            margin-left: 20px; } }
+            margin-left: 20px;
+            margin-right: 20px; } }
         @media screen and (max-width: 768px) {
           .page-stats .stats-list .stats-holder .vox-stat .stats-info {
             order: 1;
@@ -4101,6 +4108,22 @@ p.h2-bold {
   .page-profile .site-content .back-to-site a:hover {
     color: #2196F3;
     border-color: #2196F3; }
+.page-profile .site-content .custom-survey {
+  margin-top: 25px; }
+  @media screen and (max-width: 768px) {
+    .page-profile .site-content .custom-survey {
+      margin-top: 20px; } }
+  .page-profile .site-content .custom-survey a, .page-profile .site-content .custom-survey b, .page-profile .site-content .custom-survey p {
+    color: #9d9d9d;
+    font-size: 15px; }
+    @media screen and (max-width: 768px) {
+      .page-profile .site-content .custom-survey a, .page-profile .site-content .custom-survey b, .page-profile .site-content .custom-survey p {
+        font-size: 13px; } }
+  .page-profile .site-content .custom-survey p {
+    margin-bottom: 15px; }
+    @media screen and (max-width: 768px) {
+      .page-profile .site-content .custom-survey p {
+        margin-bottom: 10px; } }
 .page-profile .site-content .profile-menu {
   border: 1px solid #f3f3f3;
   box-shadow: 0px 0px 10px 2px #f3f3f3;

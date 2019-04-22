@@ -39,6 +39,12 @@ $(document).ready(function(){
         var wrapper = $('.stats-holder');
         var list = wrapper.children('.vox-stat');
 
+        if ($('.cloned-ribbon').length) {
+            $('.cloned-ribbon').remove();
+        }
+
+        $('#stat-ribbon').show();
+
         if (sort == 'featured') {
 
             list.hide().attr("found", 0);
@@ -73,9 +79,18 @@ $(document).ready(function(){
                 }
             });
 
+            var i = 0;
             list.each(function() {
+                i++;
                 wrapper.append(this);
+
+                if (i%3 == 0) {
+                    $('#stat-ribbon').clone(true).removeAttr('id').addClass('cloned-ribbon').insertAfter( this );
+                }
             });
+
+
+            $('#stat-ribbon').hide();
 
         } else {
 

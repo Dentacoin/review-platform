@@ -33,3 +33,13 @@
 		{{ trans('vox.page.profile.menu.extra.check-stats') }}
 	</a>
 </div>
+
+<div class="custom-survey">
+	<p>
+		{!! nl2br(trans('vox.page.profile.menu.extra.custom-survey.title')) !!}
+	</p>
+
+	<p>
+		{!! nl2br(trans('vox.page.profile.menu.extra.custom-survey.description')) !!}
+	</p>
+</div>
