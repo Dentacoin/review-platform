@@ -568,7 +568,7 @@
                         'table_id' => 'vox-cashouts',
                         'table_fields' => [
                             'question'          => array('label' => 'Question'),
-                            'old_answer'          => array('label' => 'Old Answer'),
+                            'old_answer'          => array('label' => 'Initial Answer'),
                             'answer'          => array('label' => 'Updated Answer'),
                             'last_updated'      => array('label' => 'Last Updated'),
                             'updates_count'      => array('label' => 'Updates'),

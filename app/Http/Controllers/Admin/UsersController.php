@@ -628,8 +628,8 @@ class UsersController extends AdminController
                 }
                 $habits_tests[] = [
                     'question' => $welcome_question->question,
-                    'old_answer' => $oq,
-                    'answer' => $welcome_answer ? json_decode($welcome_question->answers, true)[($welcome_answer->answer) -1] : '',
+                    'old_answer' => $oq ? $oq : ($welcome_answer ? json_decode($welcome_question->answers, true)[($welcome_answer->answer) -1] : ''),
+                    'answer' => $oq && $welcome_answer ? json_decode($welcome_question->answers, true)[($welcome_answer->answer) -1] : '',
                     'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->orderBy('id', 'desc')->first()->created_at : '',
                     'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->count() : '',
                 ];
@@ -637,16 +637,16 @@ class UsersController extends AdminController
 
             $habits_tests[] = [
                 'question' => 'What is your biological sex?',
-                'old_answer' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->first()) ? (VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->first()->old_answer == 1 ? 'Male' : 'Female') : '',
-                'answer' => !empty($item->gender) ? ($item->gender == 'm' ? 'Male' : 'Female') : '',
+                'old_answer' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->first()) ? (VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->first()->old_answer == 1 ? 'Male' : 'Female') : (!empty($item->gender) ? ($item->gender == 'm' ? 'Male' : 'Female') : ''),
+                'answer' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->first()) && !empty($item->gender) ? ($item->gender == 'm' ? 'Male' : 'Female') : '',
                 'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id','gender')->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->orderBy('id', 'desc')->first()->created_at : '',
                 'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->count() : '',
             ];
 
             $habits_tests[] = [
                 'question' => "What's your year of birth?",
-                'old_answer' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->first()->old_answer : '',
-                'answer' => !empty($item->birthyear) ? $item->birthyear : '',
+                'old_answer' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->first()->old_answer : (!empty($item->birthyear) ? $item->birthyear : ''),
+                'answer' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->first()) && !empty($item->birthyear) ? $item->birthyear : '',
                 'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id','birthyear')->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->orderBy('id', 'desc')->first()->created_at : '',
                 'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->count() : '',
             ];
@@ -670,8 +670,8 @@ class UsersController extends AdminController
 
                 $habits_tests[] = [
                     'question' => $v['label'],
-                    'old_answer' => $old_an,
-                    'answer' => !empty($item->$k) ? $v['values'][$item->$k] : '',
+                    'old_answer' => $old_an ? $old_an : (!empty($item->$k) ? $v['values'][$item->$k] : ''),
+                    'answer' => $old_an && !empty($item->$k) ? $v['values'][$item->$k] : '',
                     'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->orderBy('id', 'desc')->first()->created_at : '',
                     'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $k)->count() : '',
                 ];
