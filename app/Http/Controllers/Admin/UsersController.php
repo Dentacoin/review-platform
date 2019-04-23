@@ -643,6 +643,14 @@ class UsersController extends AdminController
                 'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'gender')->count() : '',
             ];
 
+            $habits_tests[] = [
+                'question' => "What's your year of birth?",
+                'old_answer' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->first()->old_answer : '',
+                'answer' => !empty($item->birthyear) ? $item->birthyear : '',
+                'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id','birthyear')->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->orderBy('id', 'desc')->first()->created_at : '',
+                'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', 'birthyear')->count() : '',
+            ];
+
             foreach (config('vox.details_fields') as $k => $v) {
                 if (!empty($item->$k)) {
                     $habits_test_ans = true;

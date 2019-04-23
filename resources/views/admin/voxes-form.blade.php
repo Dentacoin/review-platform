@@ -186,6 +186,7 @@
                     @if( !empty($item) )
                         <div class="form-group related-group col-md-12">
                             <h3>Related</h3>
+                            <p>You can add up to 6 related surveys</p>
                             <div class="related-list">
                                 <div class="input-group">
                                     @if($item->related->isNotEmpty())
@@ -258,18 +259,16 @@
                                 @endif
                             </div>
                             <div class="form-group answers-group-add">
-                                <label class="col-md-4 control-label"></label>
-                                <div class="col-md-4">
-                                    <a href="javascript:;" class="btn btn-success btn-block add-related">Add related</a>
-                                </div>                        
-                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-12">
+                                    <a href="javascript:;" class="btn btn-primary btn-block add-related">Add related</a>
+                                </div>
                             </div>
                         </div>
                     @endif
 
                     <div class="form-group">
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-sm btn-success btn-block">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}</button>
+                            <button type="submit" class="btn btn-primary btn-block">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}</button>
                         </div>
                     </div>
                 </div>

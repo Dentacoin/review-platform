@@ -204,27 +204,34 @@ $(document).ready(function(){
 		$('.answers-list .input-group:nth-child('+num+')').remove();
 	} );
 
+
+	if ($('.related-group').length && $('.related-group').find('.related-list .input-group').children().length >=6) {
+		$('.add-related').hide();
+	}
+
 	$('.add-related').click( function() {
 		var p = $(this).closest('.related-group').find('.related-list .input-group');
 		$('#related-template .form-group').clone(true, true).appendTo( p );
-
-		console.log('ffffff');
 		$('.related-group .input-group .form-group').each( function() {
 			if (!($(this).find('select').hasClass('select2'))) {
 				$(this).find('select').addClass('select2');
 				$(".select2").select2();
 			}
 		});
-		/*
-		$('.answers-div').each( function() {
-			$('#answer-template .form-group').clone(true).appendTo( $(this) );
-			$(this).find('.add-answer').appendTo( $(this) );
-		} )
-		*/
+		if( p.children().length >=6) {
+			$(this).hide();
+			
+		}
 	} );
 
 	$('.remove-related').click( function() {
 		$(this).closest('.form-group').remove();
+
+		var p = $(this).closest('.related-group').find('.related-list .input-group');
+		if( p.children().length < 6) {
+			$('.add-related').show();
+			
+		}
 	} );
 
 
