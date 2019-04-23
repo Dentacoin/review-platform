@@ -1,0 +1,1 @@
+{{ !empty($item->platform) ? $platforms[$item->platform] : '' }}

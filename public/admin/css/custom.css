@@ -228,9 +228,11 @@ table .order.desc::after {
 }
 
 .ratings {
-    margin-top: -20px;
-    text-align: right;
     color: black;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    margin-left: -148px;
 }
 
 .ratings .stars {
@@ -251,10 +253,9 @@ table .order.desc::after {
     vertical-align: middle;
 }
 
-.avatar-group .delete-avatar {
-    position: absolute;
-    left: -80px;
-    bottom: 20px;
+.avatar-group {
+    text-align: right;
+    position: relative;
 }
 
 .open-trp-link {
@@ -297,4 +298,62 @@ table .order.desc::after {
 
 .with-dropdown.active .toggle-button:after {
     content: "\e113";
+}
+
+.with-arrow .show-hide-button {
+    position: relative;
+}
+
+.with-arrow .show-hide-button h4 span {
+    display: inline-block !important;
+}
+
+.with-arrow .show-hide-button:after {
+    content: "\e114";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 30px;
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    color: white;
+}
+
+.with-arrow.active .show-hide-button:after {
+    content: "\e113";
+}
+
+.limit-buttons {
+    display: none;
+}
+
+.limit-buttons a {
+    display: none;
+}
+
+.custom-checkbox {
+    display: block;
+    text-align: left;
+    vertical-align: middle;
+    padding-right: 10px;
+    padding-top: 3px !important;
+    color: #aeb8ae;
+}
+
+.custom-checkbox input {
+    display: none;
+}
+
+.custom-checkbox i {
+    font-size: 29px;
+    vertical-align: middle;
+    padding-left: 10px;
+}
+
+.custom-checkbox.active {
+    color: green;
+}
+
+.custom-checkbox.active i:before {
+    content: "\f046";
 }

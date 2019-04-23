@@ -40,6 +40,16 @@ class UsersController extends AdminController
             'f' => trans('admin.common.gender.f'),
         ];
 
+        $this->platforms = [
+            'trp' => 'TRP',
+            'vox' => 'DentaVox',
+            'dentacare' => 'DentaCare',
+            'assurance' => 'Assurance',
+            'dentacoin' => 'Dentacoin',
+            'dentists' => 'Dentists',
+            'wallet' => 'Wallet',
+        ];
+
         $this->statuses = [
             'new' => 'New',
             'approved' => 'Approved', 
@@ -75,7 +85,11 @@ class UsersController extends AdminController
                 ]
     		],
             'is_partner' => [
-                'type' => 'bool',
+                'type' => 'select',
+                'values' => [
+                    0 => 'No',
+                    1 => 'Yes',
+                ]
             ],
             'website' => [
                 'type' => 'text',
@@ -682,6 +696,7 @@ class UsersController extends AdminController
                 'item' => $item,
                 'categories' => $this->categories,
                 'fields' => $this->fields,
+                'platforms' => $this->platforms,
                 'unfinished' => $unfinished,
                 'emails' => $emails,
                 'habits_tests' => $habits_tests,

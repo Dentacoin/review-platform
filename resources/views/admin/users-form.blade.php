@@ -27,30 +27,47 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="col-md-3 control-label">User Type</label>
-                                <div class="col-md-{{ $item->is_dentist ? '3' : '4' }}">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'type',
-                                        'info' => $fields['type']
-                                    ])
-                                </div>
-                                @if($item->is_dentist)
-                                    <label class="col-md-1 control-label">Status</label>
-                                    <div class="col-md-2">
-                                        @include('admin.parts.user-field',[
-                                            'key' => 'status',
-                                            'info' => $fields['status']
-                                        ])
+                                <label class="col-md-2 control-label">User Type</label>
+                                <div class="col-md-10">
+                                    <div class="flex" style="align-items: baseline;justify-content: space-between;">
+                                        <div>
+                                            @include('admin.parts.user-field',[
+                                                'key' => 'type',
+                                                'info' => $fields['type']
+                                            ])
+                                        </div>
+                                        @if($item->is_dentist)
+                                            <div>
+                                                <label class="control-label" style="padding-right: 10px;">Status</label>
+                                                <div style="display: inline-block;">
+                                                    @include('admin.parts.user-field',[
+                                                        'key' => 'status',
+                                                        'info' => $fields['status']
+                                                    ])
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label class="control-label" style="padding-right: 10px;">DCN partner?</label>
+                                                <div style="display: inline-block;">
+                                                    @include('admin.parts.user-field',[
+                                                        'key' => 'is_partner',
+                                                        'info' => $fields['is_partner']
+                                                    ])
+                                                </div>
+                                            </div>
+                                        @endif
+                                        <div>
+                                            <label class="control-label" style="padding-right: 10px;">{{ !$item->is_dentist ? 'User' : '' }} ID</label>
+                                            <div style="display: inline-block;">
+                                                {{ Form::text( 'id', $item->id, array('class' => 'form-control', 'disabled', 'style' => 'max-width: 70px;' ) ) }}
+                                            </div>
+                                        </div>
                                     </div>
-                                @endif
-                                <label class="col-md-{{ $item->is_dentist ? '1' : '3' }} control-label">{{ !$item->is_dentist ? 'User' : '' }} ID</label>
-                                <div class="col-md-2">
-                                    {{ Form::text( 'id', $item->id, array('class' => 'form-control', 'disabled' ) ) }}
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Name</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">Name</label>
+                                <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'name',
                                         'info' => $fields['name']
@@ -59,8 +76,8 @@
                             </div>
                             @if($item->is_dentist && !$item->is_clinic)
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">Title</label>
-                                    <div class="col-md-9">
+                                    <label class="col-md-2 control-label">Title</label>
+                                    <div class="col-md-10">
                                         @include('admin.parts.user-field',[
                                             'key' => 'title',
                                             'info' => $fields['title']
@@ -69,8 +86,8 @@
                                 </div>
                             @endif
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Gender</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">Gender</label>
+                                <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'gender',
                                         'info' => $fields['gender']
@@ -78,8 +95,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Birth Year</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">Birth Year</label>
+                                <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'birthyear',
                                         'info' => $fields['birthyear']
@@ -87,8 +104,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Email</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">Email</label>
+                                <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'email',
                                         'info' => $fields['email']
@@ -96,8 +113,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Country</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">Country</label>
+                                <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'country_id',
                                         'info' => $fields['country_id']
@@ -105,8 +122,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">State</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">State</label>
+                                <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'state_name',
                                         'info' => $fields['state_name']
@@ -114,8 +131,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">City</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">City</label>
+                                <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'city_name',
                                         'info' => $fields['city_name']
@@ -123,8 +140,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">ZIP code</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">ZIP code</label>
+                                <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'zip',
                                         'info' => $fields['zip']
@@ -132,8 +149,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Dental Practice</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">Dental Practice</label>
+                                <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'address',
                                         'info' => $fields['address']
@@ -141,8 +158,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Website / Facebook URL</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">Website / FB URL</label>
+                                <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'website',
                                         'info' => $fields['website']
@@ -150,8 +167,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Facebook ID</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">Facebook ID</label>
+                                <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'fb_id',
                                         'info' => $fields['fb_id']
@@ -159,18 +176,25 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Civic ID</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">Civic ID</label>
+                                <div class="col-md-6">
                                     @include('admin.parts.user-field',[
                                         'key' => 'civic_id',
                                         'info' => $fields['civic_id']
                                     ])
                                 </div>
+                                <label class="col-md-3 control-label user-l">Civic photo ID?</label>
+                                <div class="col-md-1" style="padding-left: 0px;">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'civic_kyc',
+                                        'info' => $fields['civic_kyc']
+                                    ])
+                                </div>
                             </div>
                             @if($item->is_dentist)
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">New Password</label>
-                                    <div class="col-md-9">
+                                    <label class="col-md-2 control-label">New Password</label>
+                                    <div class="col-md-10">
                                         @include('admin.parts.user-field',[
                                             'key' => 'password',
                                             'info' => $fields['password']
@@ -179,8 +203,8 @@
                                 </div>
                             @endif
                             <div class="form-group">
-                                <label class="col-md-3 control-label">DCN Address</label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 control-label">DCN Address</label>
+                                <div class="col-md-10">
                                     @include('admin.parts.user-field',[
                                         'key' => 'dcn_address',
                                         'info' => $fields['dcn_address']
@@ -190,31 +214,34 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group avatar-group">
-                                <label class="col-md-6 control-label">Profile photo</label>
+                                <div class="col-md-4">
+                                    <label class="custom-checkbox {!! $item->allow_withdraw == 1 ? 'active' : '' !!}" for="allow-withdraw">
+                                        Allow withdraw
+                                        <i class="fa fa-square-o"></i>
+                                        <input id="allow-withdraw" class="form-control custom-input" name="allow_withdraw" type="checkbox" value="1" {!! $item->allow_withdraw == 1 ? 'checked="checked"' : '' !!} >
+                                    </label>
+                                </div>
+                                <label class="col-md-2 control-label">Profile photo</label>
                                 <div class="col-md-6">
                                     @include('admin.parts.user-field',[
                                         'key' => 'avatar',
                                         'info' => $fields['avatar']
                                     ])
                                 </div>
-                            </div>
-                            @if($item->is_dentist)
-                                <div class="form-group">
-                                    <div class="col-md-6"></div>
-                                    <div class="col-md-6">
-                                        <div class="ratings">
-                                            <div class="stars">
-                                                <div class="bar" style="width: {{ $item->avg_rating/5*100 }}%;"></div>
-                                            </div>
-                                            <span class="rating">
-                                                ({{ intval($item->ratings) }} reviews)
-                                            </span>
-                                            <div style="margin-top: 10px;">Average rating: {{ $item->avg_rating }}</div>
-                                            <a class="open-trp-link" target="_blank" href="{{ 'https://reviews.dentacoin.com'.explode('.com', $item->getLink())[1]}}">Open TRP Profile</a>
+
+                                @if($item->is_dentist)
+                                    <div class="ratings">
+                                        <div class="stars">
+                                            <div class="bar" style="width: {{ $item->avg_rating/5*100 }}%;"></div>
                                         </div>
+                                        <span class="rating">
+                                            ({{ intval($item->ratings) }} reviews)
+                                        </span>
+                                        <div style="margin-top: 10px;">Average rating: {{ !empty($item->avg_rating) ? $item->avg_rating : 'N/A' }}</div>
+                                        <a class="open-trp-link" target="_blank" href="{{ 'https://reviews.dentacoin.com'.explode('.com', $item->getLink())[1]}}">Open TRP Profile</a>
                                     </div>
-                                </div>
-                            @endif
+                                @endif
+                            </div>
                             <div class="form-group">
                                 <div class="col-md-12" style="text-align: right;">
                                     <span style="color: black; padding-right: 5px;">Self deleted:</span>
@@ -228,41 +255,19 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-5 control-label user-l">Allow withdraw</label>
-                                <div class="col-md-1" style="padding-left: 0px;">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'allow_withdraw',
-                                        'info' => $fields['allow_withdraw']
-                                    ])
-                                </div>
+                                <div class="col-md-6"></div>
                                 <div class="col-md-6">
                                     <a href="{{ url('cms/users/loginas/'.$item->id) }}" target="_blank" class="btn btn-sm btn-primary form-control user-b"> {{ trans('admin.page.profile.loginas') }} </a>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-5 control-label user-l">Civic photo ID?</label>
-                                <div class="col-md-1" style="padding-left: 0px;">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'civic_kyc',
-                                        'info' => $fields['civic_kyc']
-                                    ])
-                                </div>
+                                <div class="col-md-6"></div>
                                 <div class="col-md-6">
                                     <a href="{{ url('cms/users/user-data/'.$item->id) }}" target="_blank" class="btn btn-sm btn-warning form-control user-b">Export Personal Data</a>
                                 </div>
                             </div>
                             <div class="form-group">
-                                 @if($item->is_dentist)
-                                    <label class="col-md-5 control-label user-l">Dentacoin partner?</label>
-                                    <div class="col-md-1" style="padding-left: 0px;">
-                                        @include('admin.parts.user-field',[
-                                            'key' => 'is_partner',
-                                            'info' => $fields['is_partner']
-                                        ])
-                                    </div>
-                                @else 
-                                    <div class="col-md-6"></div>
-                                @endif
+                                <div class="col-md-6"></div>
                                 <div class="col-md-6">
                                     @if($item->deleted_at)
                                         <a href="{{ url('cms/users/restore/'.$item->id) }}" class="btn btn-sm btn-info form-control user-b"> Restore </a>
@@ -290,16 +295,16 @@
 </div>
 
 @if($item->photos->isNotEmpty())
-    <div class="row">
+    <div class="row with-dropdown">
         <div class="col-md-12">
             <div class="panel panel-inverse">
-                <div class="panel-heading">
+                <div class="panel-heading toggle-button">
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-photos') }} </h4>
+                    <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-photos') }}  <span style="float: right;padding-right: 30px;">Click arrow to see all user images</span></h4>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body toggled-area">
                     <div class="row">
                         @foreach($item->photos as $photo)
                             <div class="col-md-3">
@@ -390,9 +395,9 @@
 
 @endif
 
-<h4 style="margin-bottom: 20px;">DENTAVOX</h4>
 
 @if($item->vox_rewards->isNotEmpty())
+    <h4 style="margin-bottom: 20px;">DENTAVOX</h4>
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
@@ -422,7 +427,6 @@
         </div>
     </div>
 @endif
-
 
 @if($unfinished->isNotEmpty())
     <div class="row">
@@ -454,35 +458,30 @@
     </div>
 @endif
 
-@if($item->history->isNotEmpty())
-    
-
-    <div class="row">
+@if($habits_test_ans)
+    <div class="row" id="habits-list">
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title-transactions') }}</h4>
+                    <h4 class="panel-title">Demographics & Habits</h4>
                 </div>
                 <div class="panel-body">
-                    <div class="panel-body">
-                        @include('admin.parts.table', [
-                            'table_id' => 'transactions',
-                            'table_fields' => [
-                                'created_at'        => array('format' => 'datetime'),
-                                'amount'              => array(),
-                                'address'              => array(),
-                                'tx_hash'              => array('template' => 'admin.parts.table-transactions-hash'),
-                                'status'              => array(),
-                                'type'              => array(),
-                            ],
-                            'table_data' => $item->history,
-                            'table_pagination' => false,
-                            'pagination_link' => array()
-                        ])
-                    </div>
+                    @include('admin.parts.table', [
+                        'table_id' => 'vox-habits',
+                        'table_fields' => [
+                            'question'          => array('label' => 'Question'),
+                            'old_answer'          => array('label' => 'Initial Answer'),
+                            'answer'          => array('label' => 'Updated Answer'),
+                            'last_updated'      => array('label' => 'Last Updated'),
+                            'updates_count'      => array('label' => 'Updates'),
+                        ],
+                        'table_data' => $habits_tests,
+                        'table_pagination' => false,
+                        'pagination_link' => array()
+                    ])
                 </div>
             </div>
         </div>
@@ -523,6 +522,40 @@
     </div>
 @endif
 
+<h4 style="margin-bottom: 20px;">Activity History</h4>
+
+@if($item->history->isNotEmpty())
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title-transactions') }}</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="panel-body">
+                        @include('admin.parts.table', [
+                            'table_id' => 'transactions',
+                            'table_fields' => [
+                                'created_at'        => array('format' => 'datetime'),
+                                'amount'              => array(),
+                                'address'              => array(),
+                                'tx_hash'              => array('template' => 'admin.parts.table-transactions-hash'),
+                                'status'              => array(),
+                                'type'              => array(),
+                            ],
+                            'table_data' => $item->history,
+                            'table_pagination' => false,
+                            'pagination_link' => array()
+                        ])
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 
 @if($item->vox_cashouts->isNotEmpty())
     <div class="row">
@@ -553,52 +586,23 @@
     </div>
 @endif
 
-@if($habits_test_ans)
-    <div class="row" id="habits-list">
-        <div class="col-md-12">
-            <div class="panel panel-inverse">
-                <div class="panel-heading">
-                    <div class="panel-heading-btn">
-                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
-                    </div>
-                    <h4 class="panel-title">Demographics & Habits</h4>
-                </div>
-                <div class="panel-body">
-                    @include('admin.parts.table', [
-                        'table_id' => 'vox-cashouts',
-                        'table_fields' => [
-                            'question'          => array('label' => 'Question'),
-                            'old_answer'          => array('label' => 'Initial Answer'),
-                            'answer'          => array('label' => 'Updated Answer'),
-                            'last_updated'      => array('label' => 'Last Updated'),
-                            'updates_count'      => array('label' => 'Updates'),
-                        ],
-                        'table_data' => $habits_tests,
-                        'table_pagination' => false,
-                        'pagination_link' => array()
-                    ])
-                </div>
-            </div>
-        </div>
-    </div>
-@endif
-
 @if($emails)
-    <div class="row" id="logins-list">
+    <div class="row show-hide-section" id="logins-list">
         <div class="col-md-12">
             <div class="panel panel-inverse">
-                <div class="panel-heading">
+                <div class="panel-heading show-hide-button">
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title">Notifications Sent</h4>
+                    <h4 class="panel-title">Notifications Sent <span style="float: right;padding-right: 30px;display: none;">Click arrow to see all user notifications</span></h4>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body show-hide-area">
                     @include('admin.parts.table', [
                         'table_id' => 'user-emails',
                         'table_fields' => [
                             'created_at'        => array('format' => 'datetime','width' => '20%'),
                             'template_id'       => array('template' => 'admin.parts.table-email-template','width' => '100%'),
+                            'platform'       => array('label' => 'Platform', 'template' => 'admin.parts.table-platforms'),
                         ],
                         'table_data' => $emails,
                         'table_pagination' => false,
@@ -610,33 +614,30 @@
     </div>
 @endif
 
-
-<h4 style="margin-bottom: 20px;">Activity History</h4>
-
 @if($item->logins->isNotEmpty())
-    <div class="row with-limits with-dropdown" id="logins-list">
+    <div class="row with-limits show-hide-section" id="logins-list">
         <div class="col-md-12">
             <div class="panel panel-inverse">
-                <div class="panel-heading toggle-button">
+                <div class="panel-heading show-hide-button">
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title">User Logins</h4>
+                    <h4 class="panel-title">User Logins <span style="float: right;padding-right: 30px;display: none;">Click arrow to see all user logins</span></h4>
                 </div>
-                <div class="panel-body toggled-area">
+                <div class="panel-body show-hide-area">
                     <div class="limit-buttons">
                         <span>Show last: </span>
                         <a href="javascript:;" limit="10">10</a>
-                        <a href="javascript:;" limit="50">50</a>
-                        <a href="javascript:;" limit="100">100</a>
+                        <a href="javascript:;" limit="50">/ 50</a>
+                        <a href="javascript:;" limit="100">/ 100</a>
                     </div>
                     @include('admin.parts.table', [
-                        'table_id' => 'vox-cashouts',
+                        'table_id' => 'vox-user-logins',
                         'table_fields' => [
-                            'created_at'        => array('format' => 'datetime', 'width' => '20%'),
-                            'ip'                => array('template' => 'admin.parts.table-logins-user', 'width' => '30%'),
-                            'device'          => array('template' => 'admin.parts.table-logins-device', 'width' => '100%'),
-                            'platform'          => array(),
+                            'created_at'        => array('format' => 'datetime','width' => '20%'),
+                            'ip'                => array('template' => 'admin.parts.table-logins-user','width' => '30%'),
+                            'device'          => array('template' => 'admin.parts.table-logins-device','width' => '100%'),
+                            'platform'          => array('template' => 'admin.parts.table-platforms'),
                         ],
                         'table_data' => $item->logins,
                         'table_pagination' => false,
