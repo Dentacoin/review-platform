@@ -12,8 +12,6 @@ class VoxRelated extends Model {
     protected $fillable = [
         'vox_id',
         'related_vox_id',
-        'related_question_id',
-        'related_answer',
     ];
 
     protected $dates = [

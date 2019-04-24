@@ -183,88 +183,29 @@
                         @endif
                     </div>
 
-                    @if( !empty($item) )
-                        <div class="form-group related-group col-md-12">
-                            <h3>Related</h3>
-                            <p>You can add up to 6 related surveys</p>
-                            <div class="related-list">
-                                <div class="input-group">
-                                    @if($item->related->isNotEmpty())
-                                        @foreach($item->related as $related)
-                                            <div class="form-group">
-                                                <label class="col-md-1 control-label">Related survey</label>
-                                                <div class="col-md-3">
-                                                    <select class="form-control select2" name="related_vox_id[]">
-                                                        <option value="">Select survey</option>
-                                                        @foreach($all_voxes as $vox)
-                                                            <option value="{{ $vox->id }}" {!! !empty($related->related_vox_id) && ($vox->id == $related->related_vox_id) ? 'selected' : '' !!}>{{ $vox->title }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <label class="col-md-1 control-label">Related question</label>
-                                                <div class="col-md-3">
-                                                    <select class="form-control select2" name="related_question_id[]">
-                                                        <option value="">Select question</option>
-                                                        @foreach($item->questions as $q)
-                                                            <option value="{{ $q->id }}" {!! !empty($related->related_question_id) && ($q->id == $related->related_question_id) ? 'selected' : '' !!}>{{ $q->question }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <label class="col-md-1 control-label">Related answer</label>
-                                                <div class="col-md-2">
-                                                    {{ Form::number('related_answer[]', !empty($related->related_answer) ? $related->related_answer : null, array('class' => 'form-control', 'placeholder' => 'Add answer number: 1,2')) }}
-                                                </div>
-                                                <div class="input-group-btn col-md-1" style="display: inline-block;">
-                                                    <button class="btn btn-default remove-related" type="button">
-                                                        <i class="glyphicon glyphicon-remove"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
+                    <div class="form-group col-md-12">
+                        <h3>Related</h3>
+                        <p>You can add up to 6 related surveys</p>
+                        <div class="form-group">
+                            @for ($i=0; $i < 6 ; $i++) 
+                                <label class="col-md-1 control-label">Related survey</label>
+                                <div class="col-md-3">
+                                    <select class="form-control select2" name="related_vox_id[]">
+                                        <option value="">Select survey</option>
+                                        @foreach($all_voxes as $vox)
+                                            <option value="{{ $vox->id }}" {!! !empty($item) && $item->related->isNotEmpty() && !empty($item->related[$i]->related_vox_id) && ($vox->id == $item->related[$i]->related_vox_id) ? 'selected' : '' !!}>{{ $vox->title }}</option>
                                         @endforeach
-                                    @else
-                                        <div class="form-group">
-                                            <label class="col-md-1 control-label">Related survey</label>
-                                            <div class="col-md-3">
-                                                <select class="form-control select2" name="related_vox_id[]">
-                                                    <option value="">Select survey</option>
-                                                    @foreach($all_voxes as $vox)
-                                                        <option value="{{ $vox->id }}">{{ $vox->title }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <label class="col-md-1 control-label">Related question</label>
-                                            <div class="col-md-3">
-                                                <select class="form-control select2" name="related_question_id[]">
-                                                    <option value="">Select question</option>
-                                                    @foreach($item->questions as $q)
-                                                        <option value="{{ $q->id }}">{{ $q->question }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <label class="col-md-1 control-label">Related answer</label>
-                                            <div class="col-md-2">
-                                                {{ Form::number('related_answer[]', null, array('class' => 'form-control', 'placeholder' => 'Add answer number: 1,2')) }}
-                                            </div>
-                                            <div class="input-group-btn col-md-1" style="display: inline-block;">
-                                                <button class="btn btn-default remove-related" type="button">
-                                                    <i class="glyphicon glyphicon-remove"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                            <div class="form-group answers-group-add">
-                                <div class="col-md-12">
-                                    <a href="javascript:;" class="btn btn-primary btn-block add-related">Add related</a>
+                                    </select>
                                 </div>
-                            </div>
+
+                                @if($i == 2)
+                                    </div>
+                                    <div class="form-group">
+                                @endif
+
+                            @endfor
                         </div>
-                    @endif
+                    </div>
 
                     <div class="form-group">
                         <div class="col-md-12">
@@ -274,10 +215,6 @@
                 </div>
 
             </div>
-            <!-- end panel -->
-
-            
-
 
         {{ Form::close() }}
 
@@ -430,43 +367,5 @@
 
     </div>
 </div>
-
-@if( !empty($item) )
-    <div style="display: none;">
-        <div id="related-template">
-            <div class="form-group">
-                <label class="col-md-1 control-label">Related survey</label>
-                <div class="col-md-3">
-                    <select class="form-control" name="related_vox_id[]">
-                        <option value="">Select survey</option>
-                        @foreach($all_voxes as $vox)
-                            <option value="{{ $vox->id }}">{{ $vox->title }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <label class="col-md-1 control-label">Related question</label>
-                <div class="col-md-3">
-                    <select class="form-control" name="related_question_id[]">
-                        <option value="">Select question</option>
-                        @foreach($item->questions as $q)
-                            <option value="{{ $q->id }}">{{ $q->question }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <label class="col-md-1 control-label">Related answer</label>
-                <div class="col-md-2">
-                    {{ Form::number('related_answer[]', null, array('class' => 'form-control', 'placeholder' => 'Add answer number: 1,2')) }}
-                </div>
-                <div class="input-group-btn col-md-1" style="display: inline-block;">
-                    <button class="btn btn-default remove-related" type="button">
-                        <i class="glyphicon glyphicon-remove"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-@endif
 
 @endsection

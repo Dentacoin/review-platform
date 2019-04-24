@@ -274,58 +274,51 @@
 							]) !!}
 						</h4>
 
-						<div class="section-recent-surveys relateds">
-							<h4>{{ trans('vox.page.questionnaire.related-survey') }}</h4>
-							<div class="questions-inner">
+						@if(!empty($related_vox))
+							<div class="section-recent-surveys relateds">
+								<h4>{{ trans('vox.page.questionnaire.related-survey') }}</h4>
+								<div class="questions-inner">
 
-						      	<div class="swiper-slide">
-						      		<div class="slider-inner">
-							    		<div class="slide-padding">
-											<div class="vox-header clearfix">
-												<div class="flex first-flex">
-													<div class="col left">
-														<h4 class="survey-title bold"></h4>
+							      	<div class="swiper-slide">
+							      		<div class="slider-inner">
+								    		<div class="slide-padding">
+								    			<div class="cover" style="background-image: url('{{ $related_vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $related_vox->title, "respondents" => $related_vox->respondentsCount(), "respondents_country" => $related_vox->respondentsCountryCount() ]) }}'>
+									  				@if($related_vox->featured)
+									  					<img class="featured-img" src="{{ url('new-vox-img/star.svg') }}">
+									  				@endif
+									  			</div>	
+												<div class="vox-header clearfix">
+													<div class="flex first-flex">
+														<div class="col left">
+															<h4 class="survey-title bold">{{ $related_vox->title }}</h4>
+														</div>
 													</div>
-												</div>
-												<div class="flex first-flex">
-													<div class="col right">
-													</div>					
-												</div>
-												<div class="flex second-flex">
-													<div class="col right">
-														<div class="btns">
-															
+													<div class="flex first-flex">
+														<div class="col right">
+															<span class="bold">{{ !empty($related_vox->complex) ? 'max ' : '' }} {{ $related_vox->getRewardTotal() }} DCN</span>
+															<p>{{ $related_vox->formatDuration() }}</p>
+														</div>					
+													</div>
+													<div class="flex second-flex">
+														<div class="col right">
+															<div class="btns">
+																<a class="opinion blue-button" href="{{ $related_vox->getLink() }}">
+																	{{ trans('vox.common.take-the-test') }}
+																</a>
+															</div>
 														</div>
 													</div>
 												</div>
-											</div>
+									      	</div>
 								      	</div>
-							      	</div>
-							    </div>
+								    </div>
+								</div>
 							</div>
-						</div>
+						@endif
 					</div>
 				</div>
 
 				@include('vox.template-parts.vox-done-parts')
-			</div>
-
-			<div class="section-recent-surveys other-surveys" id="related-surveys" style="display: none;">
-				<h2>{{ trans('vox.page.questionnaire.next-survey') }}</h2>
-
-				<div class="swiper-container">
-				    <div class="swiper-wrapper">
-				    	@foreach($related_voxes as $survey)
-					      	@include('vox.template-parts.vox-swiper-slides')
-				      	@endforeach
-				    </div>
-
-				    <div class="swiper-pagination"></div>
-				</div>
-
-				<div class="tac">
-					<a href="{{ getLangUrl('/') }}" class="blue-button more-surveys">{{ trans('vox.page.questionnaire.next-survey-button') }}</a>
-				</div>
 			</div>
 
 			<div class="section-recent-surveys other-surveys" id="other-surveys" style="display: none;">
@@ -360,7 +353,7 @@
 			url: '{{ $vox->getLink() }}'
 		};
 
-		var vox_relateds = {!! $vox->related->isNotEmpty() ? json_encode( $vox->related) : 'null' !!};
+		var related = {{ !empty($related_vox) ? 'true' : 'false' }};
 	</script>
 
 	@if(!empty($cross_checks))

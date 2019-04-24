@@ -594,8 +594,6 @@ class VoxesController extends AdminController
                     $vr = new VoxRelated;
                     $vr->vox_id = $item->id;
                     $vr->related_vox_id = $this->request->input('related_vox_id')[$i];
-                    $vr->related_question_id = $this->request->input('related_question_id')[$i];
-                    $vr->related_answer = $this->request->input('related_answer')[$i];
                     $vr->save();
                 }
             }

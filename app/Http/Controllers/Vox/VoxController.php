@@ -823,24 +823,33 @@ class VoxController extends FrontController
         	$done_all = true;
         }
 
+
+
+        $related_vox = null;
         $related_mode = false;
-		$related_voxes = [];
+		$suggested_voxes = [];
 		if ($vox->related->isNotEmpty()) {
 			foreach ($vox->related as $r) {
-				if (!in_array($r->id, $this->user->filledVoxes())) {
-					$related_voxes[] = Vox::find($r->related_vox_id);
+				if (!in_array($r->related_vox_id, $this->user->filledVoxes())) {
+					if(!$related_vox) {
+						$related_vox = Vox::find($r->related_vox_id);
+					} else {
+						$suggested_voxes[] = Vox::find($r->related_vox_id);
+
+					}
 				}
 			}
 		}
 
-		if (!empty($related_voxes)) {
+		if (!empty($suggested_voxes)) {
 			$related_mode = true;
+		} else {
+			$sug_voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $this->user->filledVoxes());
+			$suggested_voxes = !empty($related_vox) ? $sug_voxes->where('id', '!=', $related_vox->id )->take(9)->get() : $sug_voxes->take(9)->get();
 		}
-		
-		$suggested_voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $this->user->filledVoxes())->take(9)->get();
 
 		return $this->ShowVoxView('vox', array(
-            'related_voxes' => $related_voxes,
+			'related_vox' => $related_vox,
             'suggested_voxes' => $suggested_voxes,
 			'related_mode' => $related_mode,
 			'cross_checks' => $cross_checks,
