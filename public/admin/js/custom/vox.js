@@ -13,38 +13,16 @@ $(document).ready(function(){
 	        "pageLength": 25
 	    });
 
-	    $('#table-sort, #table-sort-stats').click( function() {
+	    $('#table-sort').click( function() {
 	        if(sortMode) {
 	            window.location.reload();
 	            return;
 	        }
 
-            dTable.destroy();                
-            sortMode = $(this).attr('id') == 'table-sort-stats' ? 'stats' : 'surveys';
+            dTable.destroy(); 
+            sortMode = true;
 
             $('#table-sort').text( $(this).attr('alternate') );
-	        $('#table-sort-stats').hide();
-
-
-	        if( sortMode=='stats' ) {
-
-		        var wrapper = $('.table tbody');
-		        var list = wrapper.children('tr');
-	            list.sort(function(a, b) {
-	                if( parseInt($(a).children().first().next().text()) && parseInt($(a).children().first().next().text()) < parseInt($(b).children().first().next().text()) ) {
-	                    return -1;
-	                } else {
-	                    return 1;
-	                }
-	            });
-
-	            console.log(list);
-
-	            list.each(function() {
-	                wrapper.append(this);
-	            });
-
-	        }
 
             $('.table tbody').sortable({
                 update: function( event, ui ) { 
@@ -60,17 +38,12 @@ $(document).ready(function(){
                             type    : 'POST',
                             data    : {
                                 list: ids,
-                                stats: sortMode=='stats'
                             },
                             dataType: 'json',
                             success : (function( res ) {
                                 var i=1;
                                 $('.table tbody tr').each( function() {
-                                	if( sortMode=='stats' ) {
-                                    	$(this).find('td').first().next().text(i);
-                                	} else {
-                                    	$(this).find('td').first().text(i);
-                                	}
+                                    $(this).find('td').first().text(i);
                                     i++;
                                 } )
                             }).bind( this ),

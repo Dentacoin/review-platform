@@ -58,12 +58,11 @@ class VoxesController extends AdminController
     public function reorderVoxes() {
 
         $list = Request::input('list');
-        $field = Request::input('stats') ? 'sort_order_stats' : 'sort_order';
         $i=1;
         foreach ($list as $qid) {
             $vox = Vox::find($qid);
             if( $vox ) {
-                $vox->$field = $i;
+                $vox->sort_order = $i;
                 $vox->save();
                 $i++;
             }
