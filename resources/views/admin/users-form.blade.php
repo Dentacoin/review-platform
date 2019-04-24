@@ -47,7 +47,7 @@
                                                 </div>
                                             </div>
                                             <div>
-                                                <label class="control-label" style="padding-right: 10px;">DCN partner?</label>
+                                                <label class="control-label" style="padding-right: 10px;">Partner</label>
                                                 <div style="display: inline-block;">
                                                     @include('admin.parts.user-field',[
                                                         'key' => 'is_partner',
@@ -177,18 +177,34 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Civic ID</label>
-                                <div class="col-md-6">
+                                <div class="col-md-7">
                                     @include('admin.parts.user-field',[
                                         'key' => 'civic_id',
                                         'info' => $fields['civic_id']
                                     ])
                                 </div>
-                                <label class="col-md-3 control-label user-l">Civic photo ID?</label>
+                                <label class="col-md-2 control-label user-l">Civic photo ID?</label>
                                 <div class="col-md-1" style="padding-left: 0px;">
                                     @include('admin.parts.user-field',[
                                         'key' => 'civic_kyc',
                                         'info' => $fields['civic_kyc']
                                     ])
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">DCN Address</label>
+                                <div class="col-md-7">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'dcn_address',
+                                        'info' => $fields['dcn_address']
+                                    ])
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="custom-checkbox {!! $item->allow_withdraw == 1 ? 'active' : '' !!}" for="allow-withdraw">
+                                        Allow withdraw
+                                        <i class="fa fa-square-o"></i>
+                                        <input id="allow-withdraw" class="form-control custom-input" name="allow_withdraw" type="checkbox" value="1" {!! $item->allow_withdraw == 1 ? 'checked="checked"' : '' !!} >
+                                    </label>
                                 </div>
                             </div>
                             @if($item->is_dentist)
@@ -202,26 +218,10 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">DCN Address</label>
-                                <div class="col-md-10">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'dcn_address',
-                                        'info' => $fields['dcn_address']
-                                    ])
-                                </div>
-                            </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group avatar-group">
-                                <div class="col-md-4">
-                                    <label class="custom-checkbox {!! $item->allow_withdraw == 1 ? 'active' : '' !!}" for="allow-withdraw">
-                                        Allow withdraw
-                                        <i class="fa fa-square-o"></i>
-                                        <input id="allow-withdraw" class="form-control custom-input" name="allow_withdraw" type="checkbox" value="1" {!! $item->allow_withdraw == 1 ? 'checked="checked"' : '' !!} >
-                                    </label>
-                                </div>
-                                <label class="col-md-2 control-label">Profile photo</label>
+                            <div class="form-group avatar-group">                                
+                                <label class="col-md-6 control-label">Profile photo</label>
                                 <div class="col-md-6">
                                     @include('admin.parts.user-field',[
                                         'key' => 'avatar',
@@ -302,7 +302,7 @@
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-photos') }}  <span style="float: right;padding-right: 30px;">Click arrow to see all user images</span></h4>
+                    <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-photos') }}</h4>
                 </div>
                 <div class="panel-body toggled-area">
                     <div class="row">
@@ -398,16 +398,17 @@
 
 @if($item->vox_rewards->isNotEmpty())
     <h4 style="margin-bottom: 20px;">DENTAVOX</h4>
-    <div class="row">
+    <div class="row show-hide-section">
         <div class="col-md-12">
             <div class="panel panel-inverse">
-                <div class="panel-heading">
+                <div class="panel-heading show-hide-button">
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
                     <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-vox-rewards') }} </h4>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body show-hide-area">
+                    <span class="total-num">Total number: {{ count($item->vox_rewards) }}</span>
                     @include('admin.parts.table', [
                         'table_id' => 'vox-rewards',
                         'table_fields' => [
@@ -422,6 +423,9 @@
                         'table_pagination' => false,
                         'pagination_link' => array()
                     ])
+                </div>
+                <div class="button-wrapper">
+                    <a class="show-all-button btn btn-primary" href="javascript:;">Show all surveys taken</a>
                 </div>
             </div>
         </div>
@@ -525,32 +529,34 @@
 <h4 style="margin-bottom: 20px;">Activity History</h4>
 
 @if($item->history->isNotEmpty())
-    <div class="row">
+    <div class="row show-hide-section">
         <div class="col-md-12">
             <div class="panel panel-inverse">
-                <div class="panel-heading">
+                <div class="panel-heading show-hide-button">
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
                     <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title-transactions') }}</h4>
                 </div>
-                <div class="panel-body">
-                    <div class="panel-body">
-                        @include('admin.parts.table', [
-                            'table_id' => 'transactions',
-                            'table_fields' => [
-                                'created_at'        => array('format' => 'datetime'),
-                                'amount'              => array(),
-                                'address'              => array(),
-                                'tx_hash'              => array('template' => 'admin.parts.table-transactions-hash'),
-                                'status'              => array(),
-                                'type'              => array(),
-                            ],
-                            'table_data' => $item->history,
-                            'table_pagination' => false,
-                            'pagination_link' => array()
-                        ])
-                    </div>
+                <div class="panel-body show-hide-area">
+                    <span class="total-num">Total number: {{ count($item->history) }}</span>
+                    @include('admin.parts.table', [
+                        'table_id' => 'transactions',
+                        'table_fields' => [
+                            'created_at'        => array('format' => 'datetime'),
+                            'amount'              => array(),
+                            'address'              => array(),
+                            'tx_hash'              => array('template' => 'admin.parts.table-transactions-hash'),
+                            'status'              => array(),
+                            'type'              => array(),
+                        ],
+                        'table_data' => $item->history,
+                        'table_pagination' => false,
+                        'pagination_link' => array()
+                    ])
+                </div>
+                <div class="button-wrapper">
+                    <a class="show-all-button btn btn-primary" href="javascript:;">Show all transactions</a>
                 </div>
             </div>
         </div>
@@ -594,7 +600,7 @@
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title">Notifications Sent <span style="float: right;padding-right: 30px;display: none;">Click arrow to see all user notifications</span></h4>
+                    <h4 class="panel-title">Notifications Sent</h4>
                 </div>
                 <div class="panel-body show-hide-area">
                     @include('admin.parts.table', [
@@ -609,6 +615,9 @@
                         'pagination_link' => array()
                     ])
                 </div>
+                <div class="button-wrapper">
+                    <a class="show-all-button btn btn-primary" href="javascript:;">Show all notifications</a>
+                </div>
             </div>
         </div>
     </div>
@@ -622,15 +631,14 @@
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title">User Logins <span style="float: right;padding-right: 30px;display: none;">Click arrow to see all user logins</span></h4>
+                    <h4 class="panel-title">User Logins</h4>
                 </div>
                 <div class="panel-body show-hide-area">
-                    <div class="limit-buttons">
+                    <!-- <div class="limit-buttons">
                         <span>Show last: </span>
-                        <a href="javascript:;" limit="10">10</a>
-                        <a href="javascript:;" limit="50">/ 50</a>
+                        <a href="javascript:;" limit="50">50</a>
                         <a href="javascript:;" limit="100">/ 100</a>
-                    </div>
+                    </div> -->
                     @include('admin.parts.table', [
                         'table_id' => 'vox-user-logins',
                         'table_fields' => [
@@ -643,6 +651,9 @@
                         'table_pagination' => false,
                         'pagination_link' => array()
                     ])
+                </div>
+                <div class="button-wrapper">
+                    <a class="show-all-button btn btn-primary" href="javascript:;">Show all user logins</a>
                 </div>
             </div>
         </div>

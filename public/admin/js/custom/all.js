@@ -124,23 +124,34 @@ $(document).ready(function(){
 		$(this).closest('.with-dropdown').toggleClass('active');
 	});
 
+	$('.with-dropdown').each( function() {
+		if ($(this).find('.ui-sortable').length) {
+			$(this).find('.ui-sortable').sortable("destroy");
+		}
+	});
+
 	$('.custom-input').change( function(e) {
 		$(this).closest('label').toggleClass('active');
 	});
 
 	$('.show-hide-section').each( function() {
-		if($(this).find('table tbody tr').length > 5) {
-			$(this).addClass('with-arrow');
-			$(this).find('table tbody tr').hide();
-			$(this).find('table tbody tr').slice( 0, 5 ).show();
+		if ($(this).find('.ui-sortable').length) {
+			$(this).find('.ui-sortable').sortable("destroy");
 		}
 
-		if ($(this).find('table tbody tr').length > 10 ) {
-			$('.limit-buttons').show();
-			$('.limit-buttons a[limit="10"]').show();
+		if($(this).find('table tbody tr').length > 10) {
+			$(this).addClass('with-arrow');
+			$(this).find('table tbody tr').hide();
+			$(this).find('table tbody tr').slice( 0, 10 ).show();
+			$(this).find('.show-all-button').show();
+			$(this).find('.total-num').show();
+		} else {
+
+			$(this).find('.show-all-button').hide();
 		}
 
 		if ($(this).find('table tbody tr').length > 50 ) {
+			$('.limit-buttons').show();
 			$('.limit-buttons a[limit="50"]').show();
 		}
 
@@ -149,15 +160,18 @@ $(document).ready(function(){
 		}
 	});
 
-	$('.show-hide-button').click( function() {
-		var section = $(this).closest('.show-hide-section');
-		if(section.find('table tbody tr').length > 5) {
+	$('.show-hide-button, .show-all-button').click( function() {
+		var section = $(this).closest('.with-arrow');
+		if(section.length) {
 			section.toggleClass('active');
 
 			if (section.hasClass('active')) {
 				section.find('table tbody tr').show();
+				section.find('.show-all-button').hide();
 			} else {
-				section.find('table tbody tr').slice( 5, -1 ).hide()
+				section.find('table tbody tr').hide();
+				section.find('table tbody tr').slice( 0, 10 ).show();
+				section.find('.show-all-button').show();
 			}
 		}
 	});

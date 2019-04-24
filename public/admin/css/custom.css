@@ -34,7 +34,6 @@ table.table .table-search {
     float: left;
 }
 
-
 .my-gallery .image img {
 	width: 100%;
 }
@@ -283,6 +282,11 @@ table .order.desc::after {
 
 .with-dropdown .toggle-button {
     position: relative;
+    padding: 5px;
+}
+
+.with-dropdown .toggle-button h4 {
+   padding-left: 36px;
 }
 
 .with-dropdown .toggle-button:after {
@@ -290,10 +294,17 @@ table .order.desc::after {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: 30px;
+    left: 10px;
     display: block;
     font-family: 'Glyphicons Halflings';
-    color: white;
+    color: black;
+    width: 21px;
+    height: 21px;
+    text-align: center;
+    border-radius: 50%;
+    padding: 1px;
+    line-height: 20px;
+    background-color: white;
 }
 
 .with-dropdown.active .toggle-button:after {
@@ -304,8 +315,12 @@ table .order.desc::after {
     position: relative;
 }
 
-.with-arrow .show-hide-button h4 span {
-    display: inline-block !important;
+.show-hide-section .show-hide-button {
+    padding: 5px;
+}
+
+.with-arrow .show-hide-button h4 {
+    padding-left: 36px;
 }
 
 .with-arrow .show-hide-button:after {
@@ -313,10 +328,17 @@ table .order.desc::after {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: 30px;
+    left: 10px;
     display: block;
     font-family: 'Glyphicons Halflings';
-    color: white;
+    color: black;
+    width: 21px;
+    height: 21px;
+    text-align: center;
+    border-radius: 50%;
+    padding: 1px;
+    line-height: 20px;
+    background-color: white;
 }
 
 .with-arrow.active .show-hide-button:after {
@@ -333,7 +355,7 @@ table .order.desc::after {
 
 .custom-checkbox {
     display: block;
-    text-align: left;
+    text-align: right;
     vertical-align: middle;
     padding-right: 10px;
     padding-top: 3px !important;
@@ -356,4 +378,14 @@ table .order.desc::after {
 
 .custom-checkbox.active i:before {
     content: "\f046";
+}
+
+.button-wrapper {
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.total-num,
+.show-all-button {
+    display: none;
 }
