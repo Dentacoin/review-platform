@@ -20,25 +20,6 @@
 			@endif
 		</h2>
 
-		@if(!$user->dcn_address)
-			<div class="form-horizontal">
-                <div class="alert alert-info" id="wallet-needed">
-					@if($user->is_dentist)
-						{!! nl2br(trans('trp.page.profile.invite.no-address-dentist', [
-							'link' => '<a href="'.getLangUrl('profile').'">',
-							'endlink' => '</a>',
-						])) !!}                		
-					@else
-						{!! nl2br(trans('trp.page.profile.invite.no-address-patient', [
-							'link' => '<a href="'.getLangUrl('profile').'">',
-							'endlink' => '</a>',
-						])) !!}
-					@endif
-				</div>
-			</div>
-		@endif
-
-
 		<div class="form-horizontal">
 
 			<div id="invite-wrapper">
