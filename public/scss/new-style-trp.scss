@@ -515,27 +515,31 @@ body.white-header {
 
 			.button-dentists {
 				color: #03556f;
-			    border: 1px solid #03556f;
+			    border: none;
 			    padding: 6px 15px;
+				padding-right: 0px;
+				padding-left: 0px;
 			    border-radius: 5px;
 			    text-align: center;
 			    display: inline-block;
 			    padding-bottom: 7px;
+    			text-transform: uppercase;
+    			background-color: inherit;
 			    transition: all 0.3s ease;
+			}
 
-			    @media #{$phone} {
-			    	font-size: 13px;
-			    }
+			.button-sign-in {
+				color: #03556f;
+				border: 1px solid #03556f;
+			    padding: 6px 15px;
+			    border-radius: 5px;
+			    text-align: center;
 
 			    &:hover {
 			    	background-color: #03556f;
 			    	color: white;
 			    	transition: all 0.3s ease;
 			    }
-			}
-
-			.button-sign-in {
-				color: #03556f;
 			}
 		}
 	}
