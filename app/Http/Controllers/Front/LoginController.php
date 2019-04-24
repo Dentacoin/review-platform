@@ -13,6 +13,7 @@ use Auth;
 use Response;
 use Request;
 use Image;
+use Mail;
 
 class LoginController extends FrontController
 {
@@ -321,6 +322,30 @@ class LoginController extends FrontController
             if( $newuser->email ) {
                 $newuser->sendTemplate( 4 );
             }
+
+            //
+            //To be deleted
+            //
+
+            $notifyMe = [
+                'official@youpluswe.com',
+                'petya.ivanova@dentacoin.com',
+                'donika.kraeva@dentacoin.com',
+                'petar.stoykov@dentacoin.com'
+            ];
+            $mtext = 'New patient registered in TRP: '.$newuser->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id.')';
+
+            foreach ($notifyMe as $n) {
+                Mail::raw($mtext, function ($message) use ($n) {
+                    $message->from(config('mail.from.address'), config('mail.from.name'));
+                    $message->to( $n );
+                    $message->subject('New TRP registration');
+                });
+            }
+
+            //
+            //To be deleted
+            //
 
             Auth::login($newuser, true);
 

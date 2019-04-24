@@ -19,14 +19,23 @@ class CivicController extends BaseController
 			}
 			$c->jwtToken = Request::input('jwtToken');
 			$data = Request::input('data');
+			$hash = '';
+			$cardInfo = [];
 			if(!empty( $data['data'] )) {
 				foreach ($data['data'] as $key => $value) {
 					if( mb_strpos( $value['label'], 'documents.' ) !==false ) {
 						$data['data'][$key]['value'] = 'Masked';
 					}
+					if( $value['label'] == 'documents.genericId.type' || $value['label'] == 'documents.genericId.number' ) {
+						$cardInfo[] = $value['value'];
+					}
+
+					
 				}
 			}
 			$c->response = json_encode($data);
+			$c->cardInfo = implode('|', $cardInfo);
+			$c->hash = $c->cardInfo ? bcrypt($c->cardInfo) : '';
 			$c->save();
 		}
 
