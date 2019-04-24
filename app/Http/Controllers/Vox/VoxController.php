@@ -151,6 +151,11 @@ class VoxController extends FrontController
             return redirect(getLangUrl('profile'));
         }
 
+        $admin_ids = Admin::getAdminProfileIds();
+		if (!Auth::guard('admin')->user() && !in_array($this->user->id, $admin_ids) && $vox->type=='hidden') {
+			return redirect( getLangUrl('/') );
+		}
+
     	$cross_checks = [];
     	foreach ($vox->questions as $vq) {
 	    	if (!empty($vq->cross_check)) {
@@ -252,8 +257,6 @@ class VoxController extends FrontController
 
 
 	        	$q = Request::input('question');
-	        	$admin_ids = Admin::getAdminProfileIds();
-
 
 	        	if( !isset( $answered[$q] ) && $not_bot ) {
 
