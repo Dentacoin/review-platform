@@ -199,12 +199,12 @@
                                         'info' => $fields['dcn_address']
                                     ])
                                 </div>
-                                <div class="col-md-3">
-                                    <label class="custom-checkbox {!! $item->allow_withdraw == 1 ? 'active' : '' !!}" for="allow-withdraw">
-                                        Allow withdraw
-                                        <i class="fa fa-square-o"></i>
-                                        <input id="allow-withdraw" class="form-control custom-input" name="allow_withdraw" type="checkbox" value="1" {!! $item->allow_withdraw == 1 ? 'checked="checked"' : '' !!} >
-                                    </label>
+                                <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Allow withdraw</label>
+                                <div class="col-md-1" style="padding-left: 0px;">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'allow_withdraw',
+                                        'info' => $fields['allow_withdraw']
+                                    ])
                                 </div>
                             </div>
                             @if($item->is_dentist)
