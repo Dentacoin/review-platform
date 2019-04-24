@@ -26,7 +26,7 @@ class CivicController extends BaseController
 					if( mb_strpos( $value['label'], 'documents.' ) !==false ) {
 						$data['data'][$key]['value'] = 'Masked';
 					}
-					if( $value['label'] == 'documents.genericId.type' || $value['label'] == 'documents.genericId.number' ) {
+					if( $value['label'] == 'documents.genericId.type' || $value['label'] == 'documents.genericId.number' || $value['label'] == 'documents.genericId.dateOfBirth' || $value['label'] == 'documents.genericId.dateOfExpiry' ) {
 						$cardInfo[] = $value['value'];
 					}
 
