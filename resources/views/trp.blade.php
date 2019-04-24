@@ -147,7 +147,7 @@
 									</a>
 								@endif
 								<a href="javascript:;" class="button-sign-in {{ $current_page!='welcome-dentist' ? 'button-login-patient' : '' }}" data-popup="popup-login">
-									Log in
+									{{ $current_page=='welcome-dentist' ? 'Log in' : 'Sign in' }}
 								</a>
 	                        @endif
 

@@ -56,7 +56,7 @@
 						published="{{ $vox->created_at->timestamp }}" 
 						updated="{{ $vox->updated_at->timestamp }}" 
 						popular="{{ intval($vox->rewards()->count()) }}" 
-		      			sort-order="{{ $vox->sort_order_stats }}" 
+		      			sort-order="{{ $vox->sort_order }}" 
 						{!! $vox->stats_featured ? '' : 'style="display: none;"' !!}
 					>
 						@if($vox->stats_featured)
