@@ -383,24 +383,25 @@ $(document).ready(function(){
                                                 console.log('AGE: '+age);
                                                 trigger_status = true;
                                                 for(var i in trigger_answers) {
-                                                    if( trigger_answers[i].indexOf('-')!=-1 ) {
-                                                        var range = trigger_answers[i].split('-');
+                                                    var ti = trigger_answers[i].trim();
+                                                    if( ti.indexOf('-')!=-1 ) {
+                                                        var range = ti.split('-');
                                                         console.log('Check: '+range[0]+' < ' + age + ' < ' + range[1]);
                                                         if( parseInt(range[0]) > age || age > parseInt(range[1]) ) {
                                                             console.log('NO!');
                                                             trigger_status = false;
                                                             break;
                                                         }
-                                                    } else if( trigger_answers[i].charAt(0)=='<' ) {
-                                                        console.log('Check: '+age+' < ' + trigger_answers[i].substring(1));
-                                                        if( age > parseInt(trigger_answers[i].substring(1)) ) {
+                                                    } else if( ti.charAt(0)=='<' ) {
+                                                        console.log('Check: '+age+' < ' + ti.substring(1));
+                                                        if( age > parseInt(ti.substring(1)) ) {
                                                             console.log('NO!');
                                                             trigger_status = false;
                                                             break;
                                                         }
-                                                    } else if( trigger_answers[i].charAt(0)=='>' ) {
-                                                        console.log('Check: '+age+' > ' + trigger_answers[i].substring(1));
-                                                        if( age < parseInt(trigger_answers[i].substring(1)) ) {
+                                                    } else if( ti.charAt(0)=='>' ) {
+                                                        console.log('Check: '+age+' > ' + ti.substring(1));
+                                                        if( age < parseInt(ti.substring(1)) ) {
                                                             console.log('NO!');
                                                             trigger_status = false;
                                                             break;
