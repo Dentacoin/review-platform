@@ -72,9 +72,8 @@
                                                     {{ $question_answers_count[$key+1] ?? '' }}
                                                 </div>
                                                 <div class="col">
-                                                    {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: 45%;')) }}
-
-                                                    {{ Form::text('answers_tooltips-'.$code.'[]', json_decode($question->{'answers_tooltips:'.$code}, true)[$key] ?? '', array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Tooltip', 'style' => 'display: inline-block; width: 45%;')) }}
+                                                    {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);')) }}
+                                                    
                                                     <div class="input-group-btn" style="display: inline-block;">
                                                         <button class="btn btn-default btn-remove-answer" type="button">
                                                             <i class="glyphicon glyphicon-remove"></i>
@@ -324,9 +323,7 @@
 
         </div>
         <div class="col">
-            {{ Form::text('something', '', array('maxlength' => 256, 'class' => 'form-control answer-name', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: 45%;')) }}
-
-            {{ Form::text('bla', '', array('maxlength' => 256, 'class' => 'form-control answer-tooltip', 'placeholder' => 'Tooltip', 'style' => 'display: inline-block; width: 45%;')) }}
+            {{ Form::text('something', '', array('maxlength' => 256, 'class' => 'form-control answer-name', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);')) }}
             <div class="input-group-btn" style="display: inline-block;">
                 <button class="btn btn-default btn-remove-answer" type="button">
                     <i class="glyphicon glyphicon-remove"></i>

@@ -13,7 +13,6 @@ class VoxQuestion extends Model {
     public $translatedAttributes = [
         'question',
         'answers',
-        'answers_tooltips',
     ];
 
     protected $fillable = [
@@ -23,7 +22,6 @@ class VoxQuestion extends Model {
         'trigger_type',
         'question',
         'answers',
-        'answers_tooltips',
         'vox_scale_id',
         'is_control',
         'order',
@@ -97,7 +95,6 @@ class VoxQuestionTranslation extends Model {
     protected $fillable = [
         'question',
         'answers',
-        'answers_tooltips',
         'stats_title',
     ];
 
