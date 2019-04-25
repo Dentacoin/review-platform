@@ -887,6 +887,8 @@ class VoxesController extends AdminController
 
         if($vox_id) {
 
+            $show_pagination = true;
+
             $question = '';
             if ($question_id) {
                $question = VoxQuestion::find($question_id);
@@ -895,7 +897,11 @@ class VoxesController extends AdminController
             $vox = Vox::find($vox_id);
 
             $page = request('page');
-            $page = max(1,intval($page)); 
+
+            if ($page != '-1') {
+                $page = max(1,intval($page)); 
+            }
+            
             $ppp = 15;
             $adjacents = 2;
        
@@ -928,7 +934,12 @@ class VoxesController extends AdminController
                     ->orderBy('created_at', 'desc');
                 }
 
-                $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
+                if ($page == '-1') {
+                    $question_respondents = $question_respondents->take(1000)->get();
+                    $show_pagination = false;
+                } else {
+                    $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
+                }
 
                 $respondents = '';
 
@@ -959,7 +970,13 @@ class VoxesController extends AdminController
                     $respondents = $respondents
                     ->orderBy('created_at', 'desc');
                 }
-                $respondents = $respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+                if ($page == '-1') {
+                    $respondents = $respondents->take(1000)->get();
+                    $show_pagination = false;
+                } else {
+                    $respondents = $respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
+                }
 
                 $question_respondents = '';
             }
@@ -1031,6 +1048,7 @@ class VoxesController extends AdminController
             //dd( request()->input('country') );
 
             $viewParams = [
+                'show_pagination' => $show_pagination,
                 'question_respondents' => $question_respondents,
                 'question' => $question,
                 'vox_id' => $vox_id,
@@ -1043,6 +1061,7 @@ class VoxesController extends AdminController
                 'total_pages' => $total_pages,
                 'page' => $page,
                 'current_url' => $current_url,
+                'total_count' => $total_count,
             ];
         } else {
             $viewParams = [
