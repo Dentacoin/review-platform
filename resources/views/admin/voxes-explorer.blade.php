@@ -29,7 +29,6 @@
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -47,12 +46,14 @@
                         </div>
                         <h4 class="panel-title">"{{ $vox->title }}" Respondents</h4>
                     </div>
-                    <div class="panel-body">
-                        <div>
+                    <div class="panel-body">    
+                        <span>Total number: {{ $total_count }}</span>                    
+                        <form method="post" action="{{ url('cms/users/mass-delete') }}" >
                             {!! csrf_field() !!}
                             @include('admin.parts.table', [
                                 'table_id' => 'respondents',
                                 'table_fields' => [
+                                    'selector' => array('format' => 'selector'),
                                     'created_at'                => array('format' => 'datetime', 'label' => 'Date Taken','order' => true, 'orderKey' => 'taken'),
                                     'user.id'                => array('label' => 'ID'),
                                     'user.name'              => array('template' => 'admin.parts.table-respondents-user-name', 'label' => 'Name','order' => true, 'orderKey' => 'name'),
@@ -65,14 +66,21 @@
                                 'table_pagination' => false,
                                 'pagination_link' => array()
                             ])
-                        </div>                
+                            @if($show_pagination)
+                                <div class="button-wrapper">
+                                    <a class="btn btn-primary" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page=-1'.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}">Show all respondents (1000)</a>
+                                </div>
+                            @endif
+                            <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" onclick="return confirm('Are you sure?');">Delete selected users</button>
+                        </form>               
                     </div>
+                    
                 </div>
             </div>
         </div>
     @endif
 
-    @if(!$question)
+    @if(!$question && $show_pagination)
         @if($total_pages > 1)
             <nav aria-label="Page navigation" style="text-align: center;">
                 <ul class="pagination">
@@ -142,11 +150,13 @@
                         <h4 class="panel-title">"{{ $question->question }}" Respondents</h4>
                     </div>
                     <div class="panel-body">
-                        <div class="panel-body">
+                        <span>Total number: {{ $total_count }}</span>    
+                        <form method="post" action="{{ url('cms/users/mass-delete') }}" >
                             {!! csrf_field() !!}
                             @include('admin.parts.table', [
                                 'table_id' => 'respondents',
                                 'table_fields' => [
+                                    'selector' => array('format' => 'selector'),
                                     'created_at'                => array('format' => 'datetime', 'label' => 'Date Taken','order' => true, 'orderKey' => 'taken'),
                                     'user.id'                => array('label' => 'ID'),
                                     'user.name'              => array('template' => 'admin.parts.table-respondents-user-name', 'label' => 'Name','order' => true, 'orderKey' => 'name'),
@@ -159,14 +169,21 @@
                                 'table_pagination' => false,
                                 'pagination_link' => array()
                             ])
-                        </div>
+                            @if($show_pagination)
+                                <div class="button-wrapper">
+                                    <a class="btn btn-primary" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page=-1'.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}">Show all respondents (1000)</a>
+                                </div>
+                            @endif
+                            <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" onclick="return confirm('Are you sure?');">Delete selected users</button>
+                        </form>
                     </div>
+                    
                 </div>
             </div>
         </div>
     @endif
 
-    @if($question)
+    @if($question && $show_pagination)
         @if($total_pages > 1)
             <nav aria-label="Page navigation" style="text-align: center;">
                 <ul class="pagination">

@@ -41,9 +41,12 @@
                                 @elseif(!empty($v['format']))
                                     @if($v['format']=='selector')
                                         <td>
-                                            @if(!empty($row->deleted_at))
-                                            @else
-                                                <input type="checkbox" name="ids[]" value="{{ $row->id }}" />
+                                            @if(empty($row->deleted_at))
+                                                @if($row->user)
+                                                    <input type="checkbox" name="ids[]" value="{{ $row->user->id }}" />
+                                                @else
+                                                    <input type="checkbox" name="ids[]" value="{{ $row->id }}" />
+                                                @endif
                                             @endif
                                         </td>
                                     @elseif($v['format']=='update')
