@@ -13,7 +13,6 @@ class Civic extends Model {
         'jwtToken',
         'response',
         'hash',
-        'cardInfo',
     ];
 
     protected $dates = [

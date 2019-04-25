@@ -21,21 +21,26 @@ class CivicController extends BaseController
 			$data = Request::input('data');
 			$hash = '';
 			$cardInfo = [];
+			$fields = [];
 			if(!empty( $data['data'] )) {
 				foreach ($data['data'] as $key => $value) {
+					$fields[$value['label']] = $value['value'];					
 					if( mb_strpos( $value['label'], 'documents.' ) !==false ) {
 						$data['data'][$key]['value'] = 'Masked';
 					}
-					if( $value['label'] == 'documents.genericId.type' || $value['label'] == 'documents.genericId.number' || $value['label'] == 'documents.genericId.dateOfBirth' || $value['label'] == 'documents.genericId.dateOfExpiry' ) {
-						$cardInfo[] = $value['value'];
-					}
-
-					
 				}
 			}
+			$hashFields = [
+				'documents.genericId.type',
+				'documents.genericId.number',
+				'documents.genericId.dateOfBirth',
+				'documents.genericId.dateOfExpiry',
+			];
+			foreach ($hashFields as $f) {
+				$cardInfo[] = !empty($fields[$f]) ? $fields[$f] : '';
+			}
 			$c->response = json_encode($data);
-			$c->cardInfo = implode('|', $cardInfo);
-			$c->hash = $c->cardInfo ? bcrypt($c->cardInfo) : '';
+			$c->hash = md5(implode('|', $cardInfo));
 			$c->save();
 		}
 
