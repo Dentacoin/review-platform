@@ -967,11 +967,37 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 if(!empty($u) && $u->id != $this->user->id) {
                     $ret['duplicate'] = true;
                 } else {
-                    $this->user->civic_kyc = 1;
-                    $this->user->civic_id = $data['userId'];
-                    $this->user->save();
-                    $ret['success'] = true;
-                    Request::session()->flash('success-message', trans('trp.page.profile.wallet.civic-validated'));                    
+
+                    $u = User::where('civic_kyc_hash', 'LIKE', $civic->hash)->first();
+                    if(!empty($u) && $u->id != $this->user->id) {
+                        $ret['duplicate'] = true;
+                        $notifyMe = [
+                            'official@youpluswe.com',
+                            'petya.ivanova@dentacoin.com',
+                            'donika.kraeva@dentacoin.com',
+                            'daria.kerancheva@dentacoin.com',
+                            'petar.stoykov@dentacoin.com'
+                        ];
+                        $mtext = 'A user just tried to withdraw with duplicated ID card:
+Original holder: '.$u->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$u->id.')
+Scammer: '.$this->user->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$this->user->id.')';
+
+                        foreach ($notifyMe as $n) {
+                            Mail::raw($mtext, function ($message) use ($n) {
+                                $message->from(config('mail.from.address'), config('mail.from.name'));
+                                $message->to( $n );
+                                $message->subject('New Scam attempt');
+                            });
+                        }
+
+                    } else {
+                        $this->user->civic_kyc_hash = $civic->hash;
+                        $this->user->civic_kyc = 1;
+                        $this->user->civic_id = $data['userId'];
+                        $this->user->save();
+                        $ret['success'] = true;
+                        Request::session()->flash('success-message', trans('trp.page.profile.wallet.civic-validated'));                    
+                    }
                 }
             }
         }

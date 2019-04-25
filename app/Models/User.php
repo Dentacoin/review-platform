@@ -70,6 +70,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'fb_id',
         'civic_id',
         'civic_kyc',
+        'civic_kyc_hash',
         'platform',
         'gdpr_privacy',
         'self_deleted',
