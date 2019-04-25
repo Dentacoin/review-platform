@@ -1,1 +1,1 @@
-{{ !empty($item->platform) ? $platforms[$item->platform] : '' }}
+{{ !empty($item->platform) ? config('platforms')[$item->platform] : '' }}

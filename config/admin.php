@@ -4,6 +4,9 @@ return [
     'pages' => array(
         'users' => array(
             'icon' => 'users',
+            'js' => array(
+                'users.js',
+            ),
         ),
         'users_stats' => array(
             'icon' => 'users',
