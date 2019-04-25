@@ -40,16 +40,6 @@ class UsersController extends AdminController
             'f' => trans('admin.common.gender.f'),
         ];
 
-        $this->platforms = [
-            'trp' => 'TRP',
-            'vox' => 'DentaVox',
-            'dentacare' => 'DentaCare',
-            'assurance' => 'Assurance',
-            'dentacoin' => 'Dentacoin',
-            'dentists' => 'Dentists',
-            'wallet' => 'Wallet',
-        ];
-
         $this->statuses = [
             'new' => 'New',
             'approved' => 'Approved', 
@@ -174,22 +164,31 @@ class UsersController extends AdminController
             'dentist.pending' => 'Dentists (Suspicious)',
             'dentist.approved' => 'Dentists (Approved)',
             'dentist.rejected' => 'Dentists (Rejected)',
+            'dentist.partners' => 'Dentists (Partners)',
             'clinic.all' => 'Clinics (All)',
             'clinic.new' => 'Clinics (New)',
             'clinic.pending' => 'Clinics (Suspicious)',
             'clinic.approved' => 'Clinics (Approved)',
             'clinic.rejected' => 'Clinics (Rejected)',
+            'clinic.partners' => 'Clinics (Partners)',
             'dentist_clinic.all' => 'Dentists & Clinics (All)',
             'dentist_clinic.new' => 'Dentists & Clinics (New)',
             'dentist_clinic.pending' => 'Dentists & Clinics (Suspicious)',
             'dentist_clinic.approved' => 'Dentists & Clinics (Approved)',
             'dentist_clinic.rejected' => 'Dentists & Clinics (Rejected)',
+            'dentist_clinic.partners' => 'Dentists & Clinics (Partners)',
         ];
 
         $user_statuses = [
-            '' => 'Normal & Deleted',
-            'deleted' => 'Only deleted',
-            'normal' => 'Only normal',
+            '' => 'Normal Users',
+            'deleted' => 'Deleted Users',
+            'all' => 'Normal & Deleted',
+        ];
+
+        $user_platforms = [
+            '' => 'All Tools',
+            'vox' => 'Dentavox',
+            'trp' => 'Trusted Reviews',
         ];
 
         $users = User::orderBy('id', 'DESC');
@@ -209,9 +208,6 @@ class UsersController extends AdminController
         if(!empty($this->request->input('search-id'))) {
             $users = $users->where('id', $this->request->input('search-id') );
         }
-        if(!empty($this->request->input('search-platform'))) {
-            $users = $users->where('platform', $this->request->input('search-platform') );
-        }
         if(!empty($this->request->input('search-ip-address'))) {
             $ip = $this->request->input('search-ip-address');
             $users = $users->whereHas('logins', function ($query) use ($ip) {
@@ -219,6 +215,22 @@ class UsersController extends AdminController
             });
         }
 
+        // if(!empty($this->request->input('search-platform'))) {
+        //     $users = $users->where('platform', $this->request->input('search-platform') );
+        // }
+        if(!empty($this->request->input('search-country'))) {
+            $users = $users->where('country_id', $this->request->input('search-country') );
+        }
+        if(!empty($this->request->input('search-review'))) {
+            $users = $users->has('reviews_in_dentist', '=', $this->request->input('search-review'));
+        }
+        if(!empty($this->request->input('search-surveys-taken'))) {
+            $users = $users->has('vox_rewards', '>=', $this->request->input('search-surveys-taken'));
+
+            $users = $users->whereHas('vox_rewards', function ($query) {
+                $query->where('vox_id', '!=', 11);
+            }, '>=', $this->request->input('search-surveys-taken'));
+        }
         if(!empty($this->request->input('search-register-from'))) {
             $firstday = new Carbon($this->request->input('search-register-from'));
             $users = $users->where('created_at', '>=', $firstday);
@@ -226,6 +238,14 @@ class UsersController extends AdminController
         if(!empty($this->request->input('search-register-to'))) {
             $firstday = new Carbon($this->request->input('search-register-to'));
             $users = $users->where('created_at', '<=', $firstday);
+        }
+        if(!empty($this->request->input('search-login-after'))) {
+            $date = new Carbon($this->request->input('search-login-after'));
+
+            $minLogins = max(1, intval($this->request->input('search-login-number')));
+            $users = $users->whereHas('logins', function ($query) use ($date) {
+                $query->where('created_at', '>=', $date);
+            }, '>=', $minLogins);
         }
 
         if(!empty($this->request->input('search-type'))) {
@@ -251,6 +271,8 @@ class UsersController extends AdminController
 
             if( $status ) {
                 $users = $users->where('status', $status);
+            } else if($tmp[1] == 'partners') {
+                $users = $users->where('is_partner', 1);
             }
 
         }
@@ -258,11 +280,12 @@ class UsersController extends AdminController
 
         if(!empty($this->request->input('search-status'))) {
             $status = $this->request->input('search-status');
-            if( $status=='deleted' ) {
+            if( $status=='all' ) {
                 $users = $users->withTrashed();
             }
-        } else {
-            $users = $users->withTrashed();
+            if( $status=='deleted' ) {
+                $users = $users->onlyTrashed();
+            }
         }
 
 
@@ -278,11 +301,18 @@ class UsersController extends AdminController
         if( request()->input('export') ) {
             ini_set("memory_limit",-1);
             $users = $users->select(['title', 'name', 'email', 'platform'])->get();
-        } else if($results == 0) {
-            $users = $users->take(3000)->get();
+        } else if(request()->input('export-fb')) {
+            ini_set("memory_limit",-1);
+            $users = $users->select(['id', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender'])->get();
         } else {
-            $users = $users->take($results)->get();
-        }        
+            $users = $users->take(200)->get();
+        }
+
+        // if($results == 0) {
+        //     $users = $users->take(3000)->get();
+        // } else {
+        //     $users = $users->take($results)->get();
+        // }        
         //$total_count = isset( $total_count[0]->cnt ) ? $total_count[0]->cnt : 0;
 
         if( request()->input('export') ) {
@@ -325,6 +355,129 @@ class UsersController extends AdminController
 
         }
 
+        if(request()->input('export-fb')) {
+            $export_fb = [];
+            foreach ($users as $u) {
+                $nameArr = explode(' ', $u->name);
+                if(count($nameArr)>1) {
+                    $ln = $nameArr[ count($nameArr)-1 ];
+                    unset( $nameArr[ count($nameArr)-1 ] );
+                    $fn = implode(' ', $nameArr);
+                } else {
+                    $fn = $u->name;
+                    $ln = '';
+                }
+                $info = [
+                    'uid' => $u->id,
+                    'email' => $u->email,
+                    'fn' => $fn,
+                    'ln' => $ln,
+                    'country' => '',
+                    'phone' => '',
+                    'zip' => $u->zip,
+                    'ct' => $u->city_name,
+                    'st' => $u->state_name,
+                    'doby' => $u->birthyear,
+                    'age' => '',
+                    'gen' => '',
+                    'value' => '',
+                ];
+
+                if( $u->country_id ) {
+                    $info['country'] = mb_strtoupper($u->country->code);
+
+                    if ($u->phone) {
+                        $phone = trim(str_replace(' ', '', $u->phone));
+                        $info['phone'] = '+'.$u->country->phone_code.$phone;
+                    }
+                }
+
+                if( $u->birthyear ) {
+                    $info['age'] = date('Y') - $u->birthyear;
+                }
+
+                if( $u->gender ) {
+                    $info['gen'] = mb_strtoupper($u->gender);
+                }
+
+                if( $u->logins->isNotEmpty() ) {
+                    $info['value'] = $u->logins->count();
+                } else {
+                    $info['value'] = 0;
+                }
+
+                //phone
+                //country
+                $export_fb[] = $info;
+            }
+
+            $csv = [
+                array_keys($export_fb[0])
+            ];
+
+
+            foreach ($export_fb as $row) {
+                $tmp = array_values($row);
+                foreach ($tmp as $key => $value) {
+                    $value = preg_replace('/[ ]{2,}|[\t]/', ' ', trim($value));
+                    $tmp[$key] = str_replace(',', ' ', trim($value));
+                }
+
+
+                $csv[] = $tmp;
+            }
+
+            header("Content-type: text/csv");
+            header("Content-Disposition: attachment; filename=export.csv");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+
+            foreach ($csv as $item) {
+                echo implode(',', $item);
+                echo '
+    ';
+            }
+            exit;
+
+        }
+
+        $table_fields = [
+            'selector' => array('format' => 'selector'),
+            'id' => array(),
+            'name' => array('template' => 'admin.parts.table-users-name'),
+            'email' => array(),
+            'type' => array('template' => 'admin.parts.table-users-type'),
+            'country_id' => array('format' => 'country'),
+            'status' => array('template' => 'admin.parts.table-users-status', 'label' => 'Status'),
+            'is_partner' => array('template' => 'admin.parts.table-users-partner', 'label' => 'Partner'),
+        ];
+
+
+        if($this->request->input('search-platform') == 'trp') {
+            $table_fields['ratings'] = array('template' => 'admin.parts.table-users-ratings');
+            $table_fields['reviews'] = array('template' => 'admin.parts.table-users-reviews', 'label' => 'Reviews');
+        }
+
+        if($this->request->input('search-platform') == 'vox') {
+            $table_fields['surveys'] = array('template' => 'admin.parts.table-users-surveys', 'label' => 'Surveys');
+        }
+
+        $table_fields['created_at'] = array('format' => 'datetime', 'label' => 'Registered');
+        $table_fields['last_login'] = array('template' => 'admin.parts.table-users-last-login', 'label' => 'Last login');
+        $table_fields['update'] = array('format' => 'update');
+        $table_fields['delete'] = array('format' => 'delete');
+
+        $vox_hidden = false;
+        $trp_hidden = false;
+
+        if (empty($this->request->input('search-platform')) || $this->request->input('search-platform') == 'trp') {
+            $vox_hidden = true;
+        }
+
+        if (empty($this->request->input('search-platform')) || $this->request->input('search-platform') == 'vox') {
+            $trp_hidden = true;
+        }
+
         return $this->showView('users', array(
             'users' => $users,
             'total_count' => $total_count,
@@ -343,6 +496,16 @@ class UsersController extends AdminController
             'search_type' => $this->request->input('search-type'),
             'search_status' => $this->request->input('search-status'),
             'search_platform' => $this->request->input('search-platform'),
+            'search_country' => $this->request->input('search-country'),
+            'search_review' => $this->request->input('search-review'),
+            'search_surveys_taken' => $this->request->input('search-surveys-taken'),
+            'search_login_after' => $this->request->input('search-login-after'),
+            'search_login_number' => $this->request->input('search-login-number'),
+            'user_platforms' => $user_platforms,
+            'countries' => Country::get(),
+            'trp_hidden' =>  $trp_hidden,
+            'vox_hidden' =>  $vox_hidden,
+            'table_fields' =>  $table_fields,
         ));
     }
 
@@ -484,14 +647,24 @@ class UsersController extends AdminController
     }
 
 
-    public function loginas( $id ) {
+    public function loginas( $id, $platform=null ) {
+
         $item = User::find($id);
 
         if(!empty($item)) {
             Auth::login($item, true);
         }
 
-        return redirect('/');
+        if(!empty($platform)) {
+            $platform_urls = [
+                'vox' => 'https://dentavox.dentacoin.com/',
+                'trp' => 'https://reviews.dentacoin.com/',
+            ];
+            return redirect($platform_urls[$platform]);
+
+        } else {
+            return redirect('/');
+        }
     }
 
     public function personal_data( $id ) {
@@ -696,7 +869,6 @@ class UsersController extends AdminController
                 'item' => $item,
                 'categories' => $this->categories,
                 'fields' => $this->fields,
-                'platforms' => $this->platforms,
                 'unfinished' => $unfinished,
                 'emails' => $emails,
                 'habits_tests' => $habits_tests,

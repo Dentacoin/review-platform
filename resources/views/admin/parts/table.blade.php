@@ -34,14 +34,17 @@
                 </thead>
                 <tbody>
                 	@foreach($table_data as $row)
-                    	<tr {!! !empty($row->id) ? 'item-id="'.$row->id.'"' : '' !!} >
+                    	<tr {!! !empty($row->id) ? 'item-id="'.$row->id.'"' : '' !!} {!! !empty($row->deleted_at) ? 'style="opacity: 0.7;"' : '' !!}>
                     		@foreach($table_fields as $k => $v)
                                 @if(!empty($v['template']))
                                     <td {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>@include($v['template'], array('item' => $row) )</td>
                                 @elseif(!empty($v['format']))
                                     @if($v['format']=='selector')
                                         <td>
-                                            <input type="checkbox" name="ids[]" value="{{ $row->id }}" />
+                                            @if(!empty($row->deleted_at))
+                                            @else
+                                                <input type="checkbox" name="ids[]" value="{{ $row->id }}" />
+                                            @endif
                                         </td>
                                     @elseif($v['format']=='update')
                                         <td>

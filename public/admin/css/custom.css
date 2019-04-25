@@ -389,3 +389,11 @@ table .order.desc::after {
 .show-all-button {
     display: none;
 }
+
+.custom-row .datepicker {
+    min-width: auto !important;
+}
+
+.filter-hidden {
+    display: none;
+}

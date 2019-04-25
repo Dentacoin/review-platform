@@ -1,0 +1,1 @@
+{{ $item->logins->isNotEmpty() ? date('d.m.Y, H:i:s', $item->logins->first()->created_at->timestamp) : '' }}

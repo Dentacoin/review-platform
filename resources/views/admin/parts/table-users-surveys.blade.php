@@ -1,0 +1,1 @@
+{{ $item->vox_rewards->isNotEmpty() ? ($item->vox_rewards->count() -1 != 0 ? ($item->vox_rewards->count() -1) : '-') : '-' }}
