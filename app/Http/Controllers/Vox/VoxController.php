@@ -467,7 +467,35 @@ class VoxController extends FrontController
 		        				}
 				        	} else {
 
-			        			if($type == 'single') {
+			        			if($type == 'skip') {
+			        				$answer = new VoxAnswer;
+							        $answer->user_id = $this->user->id;
+							        $answer->vox_id = $vox->id;
+							        $answer->question_id = $q;
+							        $answer->answer = 0;
+							        $answer->is_skipped = true;
+							        $answer->country_id = $this->user->country_id;
+							        $answer->save();
+							        $answered[$q] = 0;
+
+							        $skips = request('skips');
+							        if(is_array($skips)) {
+							        	foreach ($skips as $skip_id) {
+							        		$skipped = $vox->questions->find($skip_id);
+							        		if($skipped->question_trigger=='-1') {
+							        			$answer = new VoxAnswer;
+										        $answer->user_id = $this->user->id;
+										        $answer->vox_id = $vox->id;
+										        $answer->question_id = $skip_id;
+										        $answer->answer = 0;
+										        $answer->is_skipped = true;
+										        $answer->country_id = $this->user->country_id;
+										        $answer->save();
+										        $answered[$skip_id] = 0;
+							        		}
+							        	}
+							        }
+			        			} else if($type == 'single') {
 
 									$answer = new VoxAnswer;
 							        $answer->user_id = $this->user->id;
@@ -556,38 +584,20 @@ class VoxController extends FrontController
 								    		}
 								    		$this->user->birthyear = $a;
 							    			$this->user->save();
+
+					        				$answer = new VoxAnswer;
+									        $answer->user_id = $this->user->id;
+									        $answer->vox_id = $vox->id;
+									        $answer->question_id = $q;
+									        $answer->answer = 0;
+									        $answer->country_id = $this->user->country_id;
+									        $answer->save();
+									        $answered[$q] = 0;
+
 							    		}
 			        				}
 
 
-			        			} else if($type == 'skip') {
-			        				$answer = new VoxAnswer;
-							        $answer->user_id = $this->user->id;
-							        $answer->vox_id = $vox->id;
-							        $answer->question_id = $q;
-							        $answer->answer = 0;
-							        $answer->is_skipped = true;
-							        $answer->country_id = $this->user->country_id;
-							        $answer->save();
-							        $answered[$q] = 0;
-
-							        $skips = request('skips');
-							        if(is_array($skips)) {
-							        	foreach ($skips as $skip_id) {
-							        		$skipped = $vox->questions->find($skip_id);
-							        		if($skipped->question_trigger=='-1') {
-							        			$answer = new VoxAnswer;
-										        $answer->user_id = $this->user->id;
-										        $answer->vox_id = $vox->id;
-										        $answer->question_id = $skip_id;
-										        $answer->answer = 0;
-										        $answer->is_skipped = true;
-										        $answer->country_id = $this->user->country_id;
-										        $answer->save();
-										        $answered[$skip_id] = 0;
-							        		}
-							        	}
-							        }
 			        			} else if($type == 'multiple') {
 			        				foreach ($a as $value) {
 			        					$answer = new VoxAnswer;
@@ -932,6 +942,7 @@ class VoxController extends FrontController
 					$lastkey = $aq->question_id;
 				}
 			}
+
 			$found = false;
 			foreach ($vox->questions as $question) {
 				if($question->id==$lastkey) {

@@ -116,7 +116,9 @@ $(document).ready(function(){
 
         } else if (group.hasClass('birthyear-question')) {
 
-            if ( $('#birthyear-answer').val().length && parseInt( $('#birthyear-answer').val() ) > 1900 && parseInt( $('#birthyear-answer').val() ) < 2000 ) {
+            var maxYear = new Date().getFullYear() - 18;
+
+            if ( $('#birthyear-answer').val().length && parseInt( $('#birthyear-answer').val() ) <= maxYear ) {
                 var answer = $('#birthyear-answer').val();
                 type = 'birthyear-question';
             } else {
@@ -174,7 +176,8 @@ $(document).ready(function(){
         group.find('.answers').append('<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>');
 
 
-        if (group.attr('cross-check-correct')) {
+        //Skip skipped :)
+        if (group.attr('cross-check-correct') && !group.attr('skipped') ) {
 
             var given_answer = group.find('select').length ? group.find('select').val() : $(this).find('input').val();
 
@@ -186,6 +189,9 @@ $(document).ready(function(){
                     group.find('select option').each( function() {
                         $('.popup.cross-checks .cross-checks-answers select').append('<option value="'+$(this).val()+'">'+$(this).text()+'</option>');
                     });
+
+                    //Copy value
+                    $('.popup.cross-checks .cross-checks-answers select').val( group.find('select').val() );
                 } else {
                     group.find('.answers a.answer').each( function() {
                         $('.popup.cross-checks .cross-checks-answers').append('<label for="cc-answer-'+group.attr('data-id')+'-'+$(this).find('input').val()+'">'+$(this).text()+'<i class="popup-check"></i><input id="cc-answer-'+group.attr('data-id')+'-'+$(this).find('input').val()+'" type="radio" name="answer" class="answer" value="'+$(this).find('input').val()+'" style="display:none;"></label>');
@@ -367,23 +373,57 @@ $(document).ready(function(){
                                     var parts = trigger_list[i].trim().split(':');
                                     var trigger_question = parts[0].trim(); // 15 въпрос
                                     var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
+                                    var trigger_type = $('.question-group-' + trigger_question).hasClass('birthyear-question') ? 'birthyear' : 'standard';
                                     var parsed_given_answer = given_answer && given_answer.length && given_answer!="0" ? given_answer.split(',') : null;
                                     if( parsed_given_answer ) {
                                         if( parts[1] ) {
                                             var trigger_answers = parts[1].split(','); // 2,6 // [2,6]
-                                            for(var i in trigger_answers) {
-                                                if( trigger_answers[i].indexOf('-')!=-1 ) {
-                                                    var range = trigger_answers[i].split('-');
-                                                    for(var qnum=range[0]; qnum<=range[1]; qnum++) {
-                                                        if( parsed_given_answer.indexOf(qnum.toString())!=-1 ) {
+                                            if( trigger_type=='birthyear' ) {
+                                                var age = new Date().getFullYear() - parseInt(parsed_given_answer);
+                                                console.log('AGE: '+age);
+                                                trigger_status = true;
+                                                for(var i in trigger_answers) {
+                                                    if( trigger_answers[i].indexOf('-')!=-1 ) {
+                                                        var range = trigger_answers[i].split('-');
+                                                        console.log('Check: '+range[0]+' < ' + age + ' < ' + range[1]);
+                                                        if( parseInt(range[0]) > age || age > parseInt(range[1]) ) {
+                                                            console.log('NO!');
+                                                            trigger_status = false;
+                                                            break;
+                                                        }
+                                                    } else if( trigger_answers[i].charAt(0)=='<' ) {
+                                                        console.log('Check: '+age+' < ' + trigger_answers[i].substring(1));
+                                                        if( age > parseInt(trigger_answers[i].substring(1)) ) {
+                                                            console.log('NO!');
+                                                            trigger_status = false;
+                                                            break;
+                                                        }
+                                                    } else if( trigger_answers[i].charAt(0)=='>' ) {
+                                                        console.log('Check: '+age+' > ' + trigger_answers[i].substring(1));
+                                                        if( age < parseInt(trigger_answers[i].substring(1)) ) {
+                                                            console.log('NO!');
+                                                            trigger_status = false;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+
+                                            } else {
+                                                for(var i in trigger_answers) {
+                                                    //Just answers
+                                                    if( trigger_answers[i].indexOf('-')!=-1 ) {
+                                                        var range = trigger_answers[i].split('-');
+                                                        for(var qnum=range[0]; qnum<=range[1]; qnum++) {
+                                                            if( parsed_given_answer.indexOf(qnum.toString())!=-1 ) {
+                                                                trigger_status = true;
+                                                                break;
+                                                            }    
+                                                        }
+                                                    } else {
+                                                        if( parsed_given_answer.indexOf(trigger_answers[i].trim().toString())!=-1 ) {
                                                             trigger_status = true;
                                                             break;
-                                                        }    
-                                                    }
-                                                } else {
-                                                    if( parsed_given_answer.indexOf(trigger_answers[i].trim().toString())!=-1 ) {
-                                                        trigger_status = true;
-                                                        break;
+                                                        }
                                                     }
                                                 }
                                             }
@@ -393,6 +433,8 @@ $(document).ready(function(){
                                     }
                                     trigger_statuses.push(trigger_status);
                                 }
+
+                                console.log( trigger_statuses );
 
                                 if( trigger_type=='or' ) {
                                     should_skip = !(trigger_statuses.indexOf(true)!=-1);

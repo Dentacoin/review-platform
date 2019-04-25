@@ -64,7 +64,9 @@ $(document).ready(function(){
         }
 
         if( group.hasClass('birthyear-question') ) {
-            if (!( $('#birthyear-answer').val().length && parseInt( $('#birthyear-answer').val() ) > 1900) ) {
+
+            var maxYear = new Date().getFullYear() - 18;
+            if (!( $('#birthyear-answer').val().length && parseInt( $('#birthyear-answer').val() ) <= maxYear) ) {
                 $('.answer-error').show().insertAfter($(this));
                 return;
             }
