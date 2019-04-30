@@ -11,11 +11,11 @@
                                 @elseif(!empty($v['label']))
                                     @if(!empty($v['order']))
                                         @if( !request()->input( $v['orderKey'] ) )
-                                            <a href="{{ !empty($current_url) ? $current_url.'?'.$v['orderKey'].'=asc' : 'javascript:;' }}" class="order">{{ $v['label'] }}</a>
+                                            <a href="{{ !empty($current_url) ? $current_url.'?'.$v['orderKey'].'=asc'.($show_all ? '&show_all=1' : '') : 'javascript:;' }}" class="order">{{ $v['label'] }}</a>
                                         @elseif( request()->input( $v['orderKey'] )=='desc' )
-                                            <a href="{{ !empty($current_url) ? $current_url.'?'.$v['orderKey'].'=asc' : 'javascript:;' }}" class="order asc">{{ $v['label'] }}</a>
+                                            <a href="{{ !empty($current_url) ? $current_url.'?'.$v['orderKey'].'=asc'.($show_all ? '&show_all=1' : '') : 'javascript:;' }}" class="order asc">{{ $v['label'] }}</a>
                                         @else
-                                            <a href="{{ !empty($current_url) ? $current_url.'?'.$v['orderKey'].'=desc' : 'javascript:;' }}" class="order desc">{{ $v['label'] }}</a>
+                                            <a href="{{ !empty($current_url) ? $current_url.'?'.$v['orderKey'].'=desc'.($show_all ? '&show_all=1' : '') : 'javascript:;' }}" class="order desc">{{ $v['label'] }}</a>
                                         @endif
 
                                     @else

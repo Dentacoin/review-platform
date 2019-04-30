@@ -1044,6 +1044,8 @@ class VoxesController extends AdminController
                 $show_button = false;
             }
 
+            $pagination_link = (!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('country').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '');
+
             //dd( request()->input('country') );
 
             $viewParams = [
@@ -1062,6 +1064,7 @@ class VoxesController extends AdminController
                 'current_url' => $current_url,
                 'total_count' => $total_count,
                 'show_button' => $show_button,
+                'pagination_link' => $pagination_link,
             ];
         } else {
             $viewParams = [
