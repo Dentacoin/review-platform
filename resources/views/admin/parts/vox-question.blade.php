@@ -37,7 +37,7 @@
                             {{ Form::text('order', !empty($question) ? $question->order : (!empty($next) ? $next : ''), array('maxlength' => 256, 'class' => 'form-control input-title', 'style' => 'width: 50px;' )) }}
                             @foreach($langs as $code => $lang_info)
                                 <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-                                    {{ Form::text('question-'.$code, !empty($question) ? $question->{'question:'.$code} : '', array('maxlength' => 256, 'class' => 'form-control input-title')) }}
+                                    {{ Form::text('question-'.$code, !empty($question) ? $question->{'question:'.$code} : '', array('maxlength' => 2048, 'class' => 'form-control input-title')) }}
                                 </div>
                             @endforeach
                         </div>
@@ -72,7 +72,7 @@
                                                     {{ $question_answers_count[$key+1] ?? '' }}
                                                 </div>
                                                 <div class="col">
-                                                    {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);')) }}
+                                                    {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 2048, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);')) }}
                                                     
                                                     <div class="input-group-btn" style="display: inline-block;">
                                                         <button class="btn btn-default btn-remove-answer" type="button">
@@ -84,7 +84,7 @@
                                         @endforeach
                                     @else
                                         <div class="input-group">
-                                            {{ Form::text('answers-'.$code.'[]', '', array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong')) }}
+                                            {{ Form::text('answers-'.$code.'[]', '', array('maxlength' => 2048, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong')) }}
                                             <div class="input-group-btn">
                                                 <button class="btn btn-default btn-remove-answer" type="button">
                                                     <i class="glyphicon glyphicon-remove"></i>
@@ -324,7 +324,7 @@
 
         </div>
         <div class="col">
-            {{ Form::text('something', '', array('maxlength' => 256, 'class' => 'form-control answer-name', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);')) }}
+            {{ Form::text('something', '', array('maxlength' => 2048, 'class' => 'form-control answer-name', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);')) }}
             <div class="input-group-btn" style="display: inline-block;">
                 <button class="btn btn-default btn-remove-answer" type="button">
                     <i class="glyphicon glyphicon-remove"></i>
