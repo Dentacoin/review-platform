@@ -66,16 +66,32 @@ $(document).ready(function(){
             list.show().attr("found", 1);
 
             list.sort(function(a, b) {
-                if( parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ) {
+                if( parseInt($(a).attr('featured')) > parseInt($(b).attr('featured')) ) {
                     return -1;
-                } else {
+                } else if( parseInt($(a).attr('featured')) < parseInt($(b).attr('featured')) ) {
                     return 1;
+                } else {
+                    return parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ? -1 : 1;
                 }
             });
 
             list.each(function() {
                 wrapper.append(this);
             });
+
+            // list.show().attr("found", 1);
+
+            // list.sort(function(a, b) {
+            //     if( parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ) {
+            //         return -1;
+            //     } else {
+            //         return 1;
+            //     }
+            // });
+
+            // list.each(function() {
+            //     wrapper.append(this);
+            // });
 
         } else {
 

@@ -1854,8 +1854,6 @@ p.h2-bold {
           top: 1px; }
           .questions-menu a i:before {
             font-size: 11px; } }
-    .questions-menu a:first-child {
-      padding-left: 17px; }
     .questions-menu a:last-child {
       border-right: none; }
     .questions-menu a.active, .questions-menu a:hover {

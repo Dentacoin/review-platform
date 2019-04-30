@@ -24,7 +24,25 @@ $(document).ready(function(){
 				}
 			});
 
-		} else if (sort == 'featured') {
+		} else if (sort == 'all') {
+
+            list.show().attr("found", 1);
+
+            list.sort(function(a, b) {
+                if( parseInt($(a).attr('featured')) > parseInt($(b).attr('featured')) ) {
+                    return -1;
+                } else if( parseInt($(a).attr('featured')) < parseInt($(b).attr('featured')) ) {
+                    return 1;
+                } else {
+                	return parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ? -1 : 1;
+                }
+            });
+
+            list.each(function() {
+                wrapper.append(this);
+            });
+
+        } else if (sort == 'featured') {
 			list.hide().attr("found", 0);
 
 			list.sort(function(a, b) {
@@ -185,7 +203,7 @@ $(document).ready(function(){
 			$(this).toggleClass('order-asc');
 		}
 
-		window.location.hash = $(this).attr('sort')+( $(this).attr('sort')!='featured' && $(this).attr('sort')!='untaken' ? '-'+($(this).hasClass('order-asc') ? 'asc' : 'desc') : '' )
+		window.location.hash = $(this).attr('sort')+( $(this).attr('sort')!='featured' && $(this).attr('sort')!='untaken' && $(this).attr('sort')!='all' && $(this).attr('sort')!='taken' ? '-'+($(this).hasClass('order-asc') ? 'asc' : 'desc') : '' )
 
 		handleFilters();
 		surveyTitleHeight();
@@ -201,7 +219,7 @@ $(document).ready(function(){
 			}
 		}
 	} else {
-		$('.sort-menu a').first().trigger('click');
+		// $('.sort-menu a').first().trigger('click');
 	}
 
 	$('#survey-search').on('change keyup', function() {

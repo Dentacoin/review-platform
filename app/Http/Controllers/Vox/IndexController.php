@@ -37,10 +37,11 @@ class IndexController extends FrontController
 	        }
 
 	        $sorts = [
-				'featured' => trans('vox.page.home.sort-featured'),
+				// 'featured' => trans('vox.page.home.sort-featured'),
 				//'untaken' => trans('vox.page.home.sort-untaken'),
 				// 'category' => trans('vox.page.home.sort-category'),
 				'newest' => trans('vox.page.home.sort-newest'),
+				'all' => trans('vox.page.home.sort-all'),
 				'popular' => trans('vox.page.home.sort-popular'),
 				'reward' => trans('vox.page.home.sort-reward'),
 				'taken' => trans('vox.page.home.sort-taken'),

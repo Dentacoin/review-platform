@@ -39,7 +39,7 @@
 								@if($key == 'taken' && empty($taken))
 
 								@else
-									<a href="javascript:;" sort="{{ $key }}"  class="{!! $key == 'featured' || $key == 'untaken' ? 'active' : 'sortable' !!}">
+									<a href="javascript:;" sort="{{ $key }}"  class="{!! $key == 'newest' ? 'active sortable' : ( $key == 'featured' || $key == 'untaken' ? 'active' : ($key == 'all' || $key == 'taken' ? '' : 'sortable')) !!}">
 
 										@if($key == 'featured')
 											<i class="fas fa-star"></i>
