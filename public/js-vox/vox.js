@@ -72,7 +72,7 @@ $(document).ready(function(){
             $('.questionnaire-description').hide();
         }
 
-        if( group.next().hasClass('question-group-details') || group.next().hasClass('location-question') || group.next().hasClass('birthyear-question') ) {
+        if( group.next().hasClass('question-group-details') || group.next().hasClass('location-question') || (group.next().hasClass('birthyear-question') && !group.next().attr('cross-check-correct')) ) {
             $('.demographic-questionnaire-description').show();
         }
 
