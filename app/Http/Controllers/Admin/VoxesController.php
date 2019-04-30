@@ -904,12 +904,9 @@ class VoxesController extends AdminController
             $vox = Vox::find($vox_id);
 
             $page = request('page');
-
-            if ($page != '-1') {
-                $page = max(1,intval($page)); 
-            }
+            $page = max(1,intval($page));
             
-            $ppp = 15;
+            $ppp = request()->input( 'show_all' ) ? 1000 : 15;
             $adjacents = 2;
        
             if (!empty($question_id)) {
@@ -941,12 +938,7 @@ class VoxesController extends AdminController
                     ->orderBy('created_at', 'desc');
                 }
 
-                if ($page == '-1') {
-                    $question_respondents = $question_respondents->take(1000)->get();
-                    $show_pagination = false;
-                } else {
-                    $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
-                }
+                $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
 
                 $respondents = '';
 
@@ -978,12 +970,7 @@ class VoxesController extends AdminController
                     ->orderBy('created_at', 'desc');
                 }
 
-                if ($page == '-1') {
-                    $respondents = $respondents->take(1000)->get();
-                    $show_pagination = false;
-                } else {
-                    $respondents = $respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
-                }
+                $respondents = $respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
 
                 $question_respondents = '';
             }
@@ -1052,6 +1039,11 @@ class VoxesController extends AdminController
 
             $current_url = url('cms/vox/explorer/'.$vox_id.($question_id ? '/'.$question_id : '') );
 
+            $show_button = true;
+            if (request()->input( 'show_all' )) {
+                $show_button = false;
+            }
+
             //dd( request()->input('country') );
 
             $viewParams = [
@@ -1061,7 +1053,7 @@ class VoxesController extends AdminController
                 'vox_id' => $vox_id,
                 'respondents' => $respondents,
                 'vox' => $vox,
-                'voxes' => Vox::get(),
+                'voxes' => Vox::orderBy('sort_order', 'asc')->get(),
                 'count' =>($page - 1)*$ppp ,
                 'start' => $start,
                 'end' => $end,
@@ -1069,10 +1061,11 @@ class VoxesController extends AdminController
                 'page' => $page,
                 'current_url' => $current_url,
                 'total_count' => $total_count,
+                'show_button' => $show_button,
             ];
         } else {
             $viewParams = [
-                'voxes' => Vox::get(),
+                'voxes' => Vox::orderBy('sort_order', 'asc')->get(),
             ];
         }
 

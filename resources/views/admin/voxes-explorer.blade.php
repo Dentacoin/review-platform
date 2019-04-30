@@ -66,9 +66,9 @@
                                 'table_pagination' => false,
                                 'pagination_link' => array()
                             ])
-                            @if($show_pagination)
+                            @if($show_button)
                                 <div class="button-wrapper">
-                                    <a class="btn btn-primary" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page=-1'.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}">Show all respondents (1000)</a>
+                                    <a class="btn btn-primary" href="{{ url('cms/vox/explorer/'.$vox_id.'?show_all=1000'.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}">Show all respondents (1000)</a>
                                 </div>
                             @endif
                             <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" onclick="return confirm('Are you sure?');">Delete selected users</button>
@@ -85,25 +85,25 @@
             <nav aria-label="Page navigation" style="text-align: center;">
                 <ul class="pagination">
                     <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                        <a class="page-link" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page=1'.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}" aria-label="Previous">
+                        <a class="page-link" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page=1'.(!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}" aria-label="Previous">
                             <span aria-hidden="true"> << </span>
                         </a>
                     </li>
                     <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                        <a class="page-link prev" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.($page>1 ? $page-1 : '1').(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}"  aria-label="Previous">
+                        <a class="page-link prev" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.($page>1 ? $page-1 : '1').(!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}"  aria-label="Previous">
                             <span aria-hidden="true"> < </span>
                         </a>
                     </li>
                     @for($i=$start; $i<=$end; $i++)
                         <li class="{{ ($i == $page ?  'active' : '') }}">
-                            <a class="page-link" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.$i.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}">{{ $i }}</a>
+                            <a class="page-link" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.$i.(!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}">{{ $i }}</a>
                         </li>
                     @endfor
                     <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                        <a class="page-link next" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.($page < $total_pages ? $page+1 :  $total_pages).(!empty(request()->input('country').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
+                        <a class="page-link next" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.($page < $total_pages ? $page+1 :  $total_pages).(!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('country').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
                     </li>
                     <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                        <a class="page-link" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.$total_pages.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
+                        <a class="page-link" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.$total_pages.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
                     </li>
                 </ul>
             </nav>
@@ -169,9 +169,9 @@
                                 'table_pagination' => false,
                                 'pagination_link' => array()
                             ])
-                            @if($show_pagination)
+                            @if($show_button)
                                 <div class="button-wrapper">
-                                    <a class="btn btn-primary" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page=-1'.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}">Show all respondents (1000)</a>
+                                    <a class="btn btn-primary" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?show_all=1000'.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}">Show all respondents (1000)</a>
                                 </div>
                             @endif
                             <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" onclick="return confirm('Are you sure?');">Delete selected users</button>
@@ -188,25 +188,25 @@
             <nav aria-label="Page navigation" style="text-align: center;">
                 <ul class="pagination">
                     <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                        <a class="page-link" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page=1'.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}" aria-label="Previous">
+                        <a class="page-link" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page=1'.(!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}" aria-label="Previous">
                             <span aria-hidden="true"> << </span>
                         </a>
                     </li>
                     <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
-                        <a class="page-link prev" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.($page>1 ? $page-1 : '1').(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}"  aria-label="Previous">
+                        <a class="page-link prev" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.($page>1 ? $page-1 : '1').(!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}"  aria-label="Previous">
                             <span aria-hidden="true"> < </span>
                         </a>
                     </li>
                     @for($i=$start; $i<=$end; $i++)
                         <li class="{{ ($i == $page ?  'active' : '') }}">
-                            <a class="page-link" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.$i.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}">{{ $i }}</a>
+                            <a class="page-link" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.$i.(!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}">{{ $i }}</a>
                         </li>
                     @endfor
                     <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                        <a class="page-link next" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.($page < $total_pages ? $page+1 :  $total_pages).(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
+                        <a class="page-link next" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.($page < $total_pages ? $page+1 :  $total_pages).(!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
                     </li>
                     <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                        <a class="page-link" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.$total_pages.(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
+                        <a class="page-link" href="{{ url('cms/vox/explorer/'.$vox_id.(!empty($question) ? '/'.$question->id : '').'?page='.$total_pages.(!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '')) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
                     </li>
                 </ul>
             </nav>
