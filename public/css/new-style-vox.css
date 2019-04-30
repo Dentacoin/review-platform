@@ -2005,6 +2005,12 @@ p.h2-bold {
     @media screen and (max-width: 768px) {
       .page-stats .section-stats.cloned-ribbon {
         margin-bottom: 20px; } }
+  .page-stats .section-stats.scrolled-ribbon {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%; }
   .page-stats .section-stats .ribbon-box {
     position: absolute;
     top: 50%;
@@ -2218,6 +2224,14 @@ p.h2-bold {
         cursor: pointer; }
         .page-stats .stats-list .stats-cats .subcats a:hover {
           color: #00aaff; }
+
+.scrolled-ribbon .section-stats {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100; }
 
 .back-home {
   display: block;

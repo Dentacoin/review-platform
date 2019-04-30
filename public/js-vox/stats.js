@@ -39,12 +39,6 @@ $(document).ready(function(){
         var wrapper = $('.stats-holder');
         var list = wrapper.children('.vox-stat');
 
-        if ($('.cloned-ribbon').length) {
-            $('.cloned-ribbon').remove();
-        }
-
-        $('#stat-ribbon').show();
-
         if (sort == 'featured') {
 
             list.hide().attr("found", 0);
@@ -79,18 +73,9 @@ $(document).ready(function(){
                 }
             });
 
-            var i = 0;
             list.each(function() {
-                i++;
                 wrapper.append(this);
-
-                if (i%3 == 0) {
-                    $('#stat-ribbon').clone(true).removeAttr('id').addClass('cloned-ribbon').insertAfter( this );
-                }
             });
-
-
-            $('#stat-ribbon').hide();
 
         } else {
 
@@ -133,6 +118,7 @@ $(document).ready(function(){
         window.location.hash = $(this).attr('sort');
 
         handleFilters();
+        scroll_ribbon();
     } );
 
     if (window.location.hash.length && $('a[sort="'+window.location.hash.substring(1)+'"]').length) {
@@ -140,11 +126,24 @@ $(document).ready(function(){
     }
 
 
+    function scroll_ribbon() {
+        if (window.location.hash == '#all') {
+            if($(window).scrollTop() > $('.stats-holder .vox-stat:nth-of-type(3)').offset().top / 2) {
+                $('body').addClass('scrolled-ribbon');
+                $('body').css('padding-bottom', $('#stat-ribbon').outerHeight());
+            } else {
+                $('body').removeClass('scrolled-ribbon');
+                $('body').css('padding-bottom', '0px');
+            }
+        }        
+    }
+
+    $(window).scroll(scroll_ribbon);
+
+
     $('#survey-search').on('change keyup', function() {
         handleSearch();
-    });
-
-    
+    });    
 
 
     var handleSearch = function() {
