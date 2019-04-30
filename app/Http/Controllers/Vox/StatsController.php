@@ -31,7 +31,7 @@ class StatsController extends FrontController
             // 'featured' => trans('vox.page.stats.sort-featured'),
             'all' => trans('vox.page.stats.sort-all'),
 			'newest' => trans('vox.page.stats.sort-newest'),
-			'popular' => trans('vox.page.stats.sort-popular'),
+			// 'popular' => trans('vox.page.stats.sort-popular'),
 		];
 
 

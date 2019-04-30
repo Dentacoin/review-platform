@@ -113,7 +113,7 @@
                             <div class="form-group clearfix col-md-11">
                                 <label class="col-md-1 control-label">Triggers</label>
                                 <div class="col-md-11">
-                                    <a class="btn btn-primary" href="javascript: $('#trigger-widgets').show(); $('#trigger-widgets').prev().remove(); ;" style="margin-left: 15px;">
+                                    <a class="btn btn-primary" href="javascript: $('#trigger-widgets').show(); $('#trigger-widgets').prev().remove(); $('.btn-add-old-trigger').trigger('click'); ;" style="margin-left: 15px;">
                                         Show Trigger Controls
                                     </a>
                                 </div>
@@ -141,8 +141,8 @@
                                             @else
                                                 <div class="input-group">
                                                     <div class="template-box clearfix"> 
-                                                        {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), explode(':', $trigger)[0], array('class' => 'form-control select2', 'style' => 'width: 50%; float: left;')) }} 
-                                                        {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer number')) }}
+                                                        {{ Form::select('triggers[]', ['' => 'Select question'] + $item->questions->pluck('question', 'id')->toArray(), explode(':', $trigger)[0], array('class' => 'form-control select2', 'style' => 'width: 50%; float: left;')) }} 
+                                                        {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
                                                     </div>
                                                     <div class="input-group-btn">
                                                         <button class="btn btn-default btn-remove-trigger" type="button">
@@ -161,7 +161,8 @@
                                 <div class="col-md-11">
                                     To enable a trigger, first select the question from the dropdown and then type the number of the answer(s) that will trigger the present question.<br/>
                                     Example: "Question text?" / One trigger answer: 1 (for the first answer), 2 (for the second answer, etc.); 2+ answers: 1, 2, 3, 4<br/>
-                                    To enable a previously selected trigger, click Add previous trigger.
+                                    <!-- To enable a previously selected trigger, click Add previous trigger. -->
+                                    To enable another trigger, click button bellow.
                                 </div>
                             </div>
                             <div class="form-group clearfix">
@@ -169,7 +170,7 @@
                                 </label>
                                 <div class="col-md-11">
                                     <a href="javascript:;" class="btn btn-white btn-block btn-add-new-trigger" style="margin-top: 10px;{!! !empty($question) && $question->question_trigger=='-1' ? 'display: none;' : '' !!}" >
-                                        Аdd new trigger
+                                        Аdd another trigger
                                     </a>
                                     <a href="javascript:;" class="btn btn-white btn-block btn-add-old-trigger" style="margin-top: 10px;{!! !empty($question) && $question->question_trigger=='-1' ? 'display: none;' : '' !!}" >
                                         Copy from previous question
@@ -346,23 +347,41 @@
         </div>
     </div>
 
-     <div class="input-group" id="old-trigger-group-template" >
-        <div class="template-box clearfix"> 
-            {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), !empty($trigger_question_id) ? $trigger_question_id : null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
-            {{ Form::text('answers-number[]', !empty($trigger_valid_answers) ? $trigger_valid_answers : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer number')) }}
-        </div>
-        <div class="input-group-btn">
-            <button class="btn btn-default btn-remove-trigger" type="button">
-                <i class="glyphicon glyphicon-remove"></i>
-            </button>
-        </div>
+     <div id="old-trigger-group-template" >
+        @if(!empty($question) && !empty($triggers_ids) )
+            @foreach($triggers_ids as $q => $a)
+                <div class="input-group">
+                    <div class="template-box clearfix"> 
+                        {{ Form::select('triggers[]', ['' => 'Select question'] + $item->questions->pluck('question', 'id')->toArray(), $q, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
+                        {{ Form::text('answers-number[]', !empty($a) ? $a : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
+                    </div>
+                    <div class="input-group-btn">
+                        <button class="btn btn-default btn-remove-trigger" type="button">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </button>
+                    </div>
+                </div>
+            @endforeach
+        @else 
+            <div class="input-group">
+                <div class="template-box clearfix"> 
+                    {{ Form::select('triggers[]', ['' => 'Select question'] + $item->questions->pluck('question', 'id')->toArray(), !empty($trigger_question_id) ? $trigger_question_id : null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
+                    {{ Form::text('answers-number[]', !empty($trigger_valid_answers) ? $trigger_valid_answers : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
+                </div>
+                <div class="input-group-btn">
+                    <button class="btn btn-default btn-remove-trigger" type="button">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </button>
+                </div>
+            </div>
+        @endif
     </div>
 
 
     <div class="input-group" id="new-trigger-group-template" >
         <div class="template-box clearfix"> 
-            {{ Form::select('triggers[]', $item->questions->pluck('question', 'id')->toArray(), null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
-            {{ Form::text('answers-number[]', null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer number')) }}
+            {{ Form::select('triggers[]',  ['' => 'Select question'] + $item->questions->pluck('question', 'id')->toArray(), null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
+            {{ Form::text('answers-number[]', null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
         </div>
         <div class="input-group-btn">
             <button class="btn btn-default btn-remove-trigger" type="button">

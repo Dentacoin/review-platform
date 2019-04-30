@@ -441,6 +441,8 @@ class VoxesController extends AdminController
             $trigger_question_id = null;
             $trigger_valid_answers = null;
 
+            $triggers_ids = [];
+
             foreach ($question->vox->questions as $q) {
 
                 if($q->order>=$question->order) {
@@ -448,18 +450,26 @@ class VoxesController extends AdminController
                 }
                 
                 if ($q->question_trigger) {
+                    $triggers_ids = [];
                     if($q->question_trigger!='-1') {
                         $trigger_list = explode(';', $q->question_trigger);
                         $first_triger = explode(':', $trigger_list[0]);
                         $trigger_question_id = $first_triger[0];
                         $trigger_valid_answers = !empty($first_triger[1]) ? $first_triger[1] : null;
+
+                        foreach (explode(';', $q->question_trigger) as $va) {
+                            if(!empty(explode(':', $va)[0])) {
+                                $triggers_ids[explode(':', $va)[0]] = !empty(explode(':', $va)[1]) ? explode(':', $va)[1] : '';
+                            }
+                            
+                        }
                     }
                 }
             }
 
             if(empty( $trigger_question_id )) {
                 $prev_question = VoxQuestion::where('vox_id', $id)->where('order', '<', intVal($question->order) )->orderBy('order', 'DESC')->first();
-                $trigger_question_id = $prev_question ? $prev_question->id : $question->id;
+                $trigger_question_id = $prev_question ? $prev_question->id : '';
                 $trigger_valid_answers = null;
             }
 
@@ -502,7 +512,8 @@ class VoxesController extends AdminController
                 'question_types' => $this->question_types,
                 'stat_types' => $this->stat_types,
                 'trigger_question_id' => $trigger_question_id,
-                'trigger_valid_answers' => $trigger_valid_answers
+                'trigger_valid_answers' => $trigger_valid_answers,
+                'triggers_ids' => $triggers_ids,
             ));
 
         } else {
@@ -652,7 +663,9 @@ class VoxesController extends AdminController
         if(!empty( $data['triggers'] )) {
             $help_array = [];
             foreach($data['triggers'] as $i => $trg) {
-                $help_array[] = $trg.( !empty( $data['answers-number'][$i] ) ? ':'.$data['answers-number'][$i] : '' );
+                if(!empty($trg)) {
+                    $help_array[] = $trg.( !empty( $data['answers-number'][$i] ) ? ':'.$data['answers-number'][$i] : '' );
+                }
             }
             $question->question_trigger = implode(';', $help_array);
         } else {
