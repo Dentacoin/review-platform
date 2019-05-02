@@ -61,7 +61,7 @@ class StatsController extends FrontController
 
         if(empty($this->user) {
             session([
-                'vox-redirect-workaround' => str_replace( getLangUrl('/'), '', $vox->getLink())
+                'vox-redirect-workaround' => str_replace( getLangUrl('/').'en/paid-dental-surveys', '', $vox->getLink())
             ]);
         }
 
