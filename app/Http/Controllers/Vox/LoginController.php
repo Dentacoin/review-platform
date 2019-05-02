@@ -75,11 +75,11 @@ class LoginController extends FrontController
 
                 Auth::login($user, true);
 
+                $intended = session()->pull('our-intended');
+
                 if (request()->ip() == '78.130.213.163') {
                     dd($intended);
                 }
-
-                $intended = session()->pull('our-intended');
                 return redirect( $intended ? $intended : getVoxUrl('/') );
             } else {
                 Request::session()->flash('error-message', trans('vox.page.login.error-fb', [
