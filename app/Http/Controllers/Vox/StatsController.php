@@ -9,7 +9,6 @@ use Request;
 use Route;
 use Hash;
 use Mail;
-use App;
 use DB;
 use Carbon\Carbon;
 use App\Models\Dcn;
@@ -62,7 +61,7 @@ class StatsController extends FrontController
 
         if(empty($this->user) {
             session([
-                'vox-redirect-workaround' => str_replace( getLangUrl('/').App::getLocale(), '', $vox->getLink())
+                'vox-redirect-workaround' => str_replace( getLangUrl('/').'en/paid-dental-surveys', '', $vox->getLink())
             ]);
         }
 
