@@ -196,7 +196,7 @@
 							var upload_url = '{{ getLangUrl('profile/info/upload') }}';
 						</script>
 
-	                    <div class="form-group">
+	                    <div class="form-group clearfix">
 	                        <button type="submit" name="update" class="btn btn-block btn-primary form-control">
 	                            {{ trans('trp.page.'.$current_page.'.info.form-save') }} 
 	                        </button>

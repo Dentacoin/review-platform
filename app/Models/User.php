@@ -38,6 +38,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $fillable = [
     	'email',
         'email_public',
+        'email_clean',
     	'password', 
         'is_dentist',
         'is_partner',
@@ -379,6 +380,40 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         return $item;
     }
+
+
+    public function setEmailAttribute($value) {
+        $this->attributes['email_clean'] = str_replace('.', '', $value);
+        $this->attributes['email'] = $value;
+        $this->save();
+    }
+
+    public static function validateEmail($email) {
+        $result = false;
+
+        $clean_email = str_replace('.', '', $email);
+        $found_email = self::where('email_clean', 'LIKE', $clean_email)->first();
+     
+        if ($found_email) {
+            $result = true;
+        }
+     
+        return $result;
+    }
+
+    public function validateMyEmail() {
+        $result = false;
+
+        $clean_email = str_replace('.', '', $this->email);
+        $found_email = self::where('email_clean', 'LIKE', $clean_email)->where('id', '!=', $this->id)->first();
+     
+        if ($found_email) {
+            $result = true;
+        }
+     
+        return $result;
+    }
+
 
     public function getWorkHoursAttribute() {
         return json_decode($this->attributes['work_hours'], true);
@@ -1197,12 +1232,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         if(empty($ret['weak']) && !empty($data['userId'])) {
             $u = self::where('civic_id', 'LIKE', $data['userId'])->first();
-            if(!empty($u) && $u->id != $this->user->id) {
+            if(!empty($u) && $u->id != $this->id) {
                 $ret['duplicate'] = true;
             } else {
 
                 $u = self::where('civic_kyc_hash', 'LIKE', $civic->hash)->first();
-                if(!empty($u) && $u->id != $this->user->id) {
+                if(!empty($u) && $u->id != $this->id) {
                     $ret['duplicate'] = true;
                     $notifyMe = [
                         'official@youpluswe.com',
@@ -1213,7 +1248,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     ];
                     $mtext = 'A user just tried to withdraw with duplicated ID card:
 Original holder: '.$u->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$u->id.')
-Scammer: '.$this->user->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$this->id.')';
+Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$this->id.')';
 
                     foreach ($notifyMe as $n) {
                         Mail::raw($mtext, function ($message) use ($n) {
@@ -1222,6 +1257,11 @@ Scammer: '.$this->user->getName().' (https://reviews.dentacoin.com/cms/users/edi
                             $message->subject('New Scam attempt');
                         });
                     }
+
+                    $this->deleteActions();
+                    self::destroy( $this->id );
+                    $u->deleteActions();
+                    self::destroy( $u->id );
 
                 } else {
                     $this->civic_kyc_hash = $civic->hash;

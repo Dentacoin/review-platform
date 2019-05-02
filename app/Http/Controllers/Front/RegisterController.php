@@ -85,6 +85,16 @@ class RegisterController extends FrontController
                 ] );
             }
 
+            if(User::validateEmail(Request::input('email')) == true) {
+                $ret = array(
+                    'success' => false,
+                    'messages' =>[
+                        'email' => trans('trp.common.invalid-email')
+                    ]
+                );
+                return Response::json( $ret );
+            }
+
 
             $is_blocked = User::checkBlocks( Request::input('name') , Request::input('email') );
             if( $is_blocked ) {
@@ -375,6 +385,16 @@ class RegisterController extends FrontController
                         'name' => trans('trp.common.invalid-name')
                     ]
                 ] );
+            }
+
+            if(User::validateEmail(Request::input('email')) == true) {
+                $ret = array(
+                    'success' => false,
+                    'messages' =>[
+                        'email' => trans('trp.common.invalid-email')
+                    ]
+                );
+                return Response::json( $ret );
             }
             
             $newuser = new User;

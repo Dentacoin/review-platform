@@ -129,6 +129,16 @@ class RegisterController extends FrontController
                     return Response::json( $ret );
                 }
 
+                if(User::validateEmail(Request::input('email')) == true) {
+                    $ret = array(
+                        'success' => false,
+                        'messages' =>[
+                            'email' => trans('vox.common.invalid-email')
+                        ]
+                    );
+                    return Response::json( $ret );
+                }
+
                 
                 $newuser = new User;
                 $newuser->title = Request::input('title');
@@ -272,6 +282,17 @@ class RegisterController extends FrontController
                         'name' => trans('vox.common.invalid-name')
                     ]
                 ] );
+            }
+
+
+            if(User::validateEmail(Request::input('email')) == true) {
+                $ret = array(
+                    'success' => false,
+                    'messages' =>[
+                        'email' => trans('vox.common.invalid-email')
+                    ]
+                );
+                return Response::json( $ret );
             }
             
             $is_blocked = User::checkBlocks( Request::input('name') , Request::input('email') );

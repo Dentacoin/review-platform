@@ -605,6 +605,13 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     ]);
                 }
 
+                if($this->user->validateMyEmail() == true) {
+                    return redirect( getLangUrl('profile/info') )
+                    ->withInput()
+                    ->withErrors([
+                        'email' => trans('vox.common.invalid-email')
+                    ]);
+                }
 
                 if(!empty(Request::input('name')) && (User::validateLatin(Request::input('name')) == false)) {
                     if( Request::input('json') ) {

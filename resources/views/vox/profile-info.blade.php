@@ -106,7 +106,7 @@
 						var upload_url = '{{ getLangUrl('profile/info/upload') }}';
 					</script>
 
-                    <div class="form-group">
+                    <div class="form-group clearfix">
                         <div class="col-md-12">
                             <button type="submit" name="update" class="btn btn-block btn-primary form-control">
                                 {{ trans('vox.page.'.$current_page.'.info.form-save') }} 

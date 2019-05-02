@@ -688,7 +688,13 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     ]);
                 }
 
-
+                if($this->user->validateMyEmail() == true) {
+                    return redirect( getLangUrl('profile/info') )
+                    ->withInput()
+                    ->withErrors([
+                        'email' => trans('trp.common.invalid-email')
+                    ]);
+                }
 
                 foreach ($this->profile_fields as $key => $value) {
                     if( Request::exists($key) || (Request::input('field')=='specialization' && $key=='specialization') || $key=='email_public' || (Request::input('field')=='accepted_payment' && $key=='accepted_payment') ) {
