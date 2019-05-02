@@ -7108,7 +7108,7 @@ p.h2-bold {
     position: absolute;
     background-color: white;
     padding: 15px;
-    max-width: 100%;
+    max-width: 500px;
     border: 1px solid #41afff;
     z-index: 100;
     border-radius: 10px;
@@ -7116,6 +7116,9 @@ p.h2-bold {
     @media #{$phone} {
     	font-size: 14px;
     	padding: 10px;
+    	max-width: calc(100% - 30px);
+    	margin-right: auto;
+    	margin-left: auto;
     }
 
     &::after {

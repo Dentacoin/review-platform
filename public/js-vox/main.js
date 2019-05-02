@@ -713,9 +713,9 @@ $(document).ready(function(){
         $('.tooltip-window').css('left', x );
         $('.tooltip-window').css('top', y );
 
-        if ( window.innerWidth > 768 && window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
-            $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
-        }
+        // if ( window.innerWidth < 768 && window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
+        //     $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
+        // }
 
     }
 
