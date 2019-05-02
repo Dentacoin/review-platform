@@ -906,74 +906,10 @@ class VoxesController extends AdminController
             $page = request('page');
             $page = max(1,intval($page));
             
-            $ppp = request()->input( 'show_all' ) ? 1000 : 15;
+            $ppp = request()->input( 'show_all' ) ? 1000 : 25;
+            $respondents_shown = request()->input( 'show_all' ) ? '1000' : '25';
             $adjacents = 2;
-       
-            if (!empty($question_id)) {
-                $question_respondents = VoxAnswer::where('question_id',$question_id )->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->select('vox_answers.*');
 
-                if (request()->input( 'country' )) {
-                    $order = request()->input( 'country' );
-                    $question_respondents = $question_respondents
-                    ->join('users', 'vox_answers.user_id', '=', 'users.id')
-                    ->join('countries', 'users.country_id', '=', 'countries.id')
-                    ->orderBy('countries.name', $order);
-                } else if (request()->input( 'name' )) {
-                    $order = request()->input( 'name' );
-                    $question_respondents = $question_respondents
-                    ->join('users', 'vox_answers.user_id', '=', 'users.id')
-                    ->orderBy('users.name', $order);
-                } else if (request()->input( 'taken' )) {
-                    $order = request()->input( 'taken' );
-                    $question_respondents = $question_respondents
-                    ->orderBy('created_at', $order);
-                } else if (request()->input( 'type' )) {
-                    $order = request()->input( 'type' );
-                    $question_respondents = $question_respondents
-                    ->join('users', 'vox_answers.user_id', '=', 'users.id')
-                    ->orderBy('users.is_dentist', $order)
-                    ->orderBy('users.is_clinic', $order);
-                } else {
-                    $question_respondents = $question_respondents
-                    ->orderBy('created_at', 'desc');
-                }
-
-                $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
-
-                $respondents = '';
-
-            } else {
-                $respondents = VoxReward::where('vox_id',$vox_id )->has('user')->select('vox_rewards.*');
-                if (request()->input( 'country' )) {
-                    $order = request()->input( 'country' );
-                    $respondents = $respondents
-                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
-                    ->join('countries', 'users.country_id', '=', 'countries.id')
-                    ->orderBy('countries.name', $order);
-                } else if (request()->input( 'name' )) {
-                    $order = request()->input( 'name' );
-                    $respondents = $respondents
-                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
-                    ->orderBy('users.name', $order);
-                } else if (request()->input( 'taken' )) {
-                    $order = request()->input( 'taken' );
-                    $respondents = $respondents
-                    ->orderBy('created_at', $order);
-                } else if (request()->input( 'type' )) {
-                    $order = request()->input( 'type' );
-                    $respondents = $respondents
-                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
-                    ->orderBy('users.is_dentist', $order)
-                    ->orderBy('users.is_clinic', $order);
-                } else {
-                    $respondents = $respondents
-                    ->orderBy('created_at', 'desc');
-                }
-
-                $respondents = $respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
-
-                $question_respondents = '';
-            }
 
             if (!empty($question_id)) {
 
@@ -1009,6 +945,99 @@ class VoxesController extends AdminController
                 }
             }
 
+
+            $show_button = true;
+            if (request()->input( 'show_all' ) || $items_count <= 1000) {
+                $show_button = false;
+            }
+
+            $show_all_button = false;
+            if ($items_count <= 1000) {
+                $show_all_button = true;
+            }
+       
+            if (!empty($question_id)) {
+                $question_respondents = VoxAnswer::where('question_id',$question_id )->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->select('vox_answers.*');
+
+                if (request()->input( 'country' )) {
+                    $order = request()->input( 'country' );
+                    $question_respondents = $question_respondents
+                    ->join('users', 'vox_answers.user_id', '=', 'users.id')
+                    ->join('countries', 'users.country_id', '=', 'countries.id')
+                    ->orderBy('countries.name', $order);
+                } else if (request()->input( 'name' )) {
+                    $order = request()->input( 'name' );
+                    $question_respondents = $question_respondents
+                    ->join('users', 'vox_answers.user_id', '=', 'users.id')
+                    ->orderBy('users.name', $order);
+                } else if (request()->input( 'taken' )) {
+                    $order = request()->input( 'taken' );
+                    $question_respondents = $question_respondents
+                    ->orderBy('created_at', $order);
+                } else if (request()->input( 'type' )) {
+                    $order = request()->input( 'type' );
+                    $question_respondents = $question_respondents
+                    ->join('users', 'vox_answers.user_id', '=', 'users.id')
+                    ->orderBy('users.is_dentist', $order)
+                    ->orderBy('users.is_clinic', $order);
+                } else {
+                    $question_respondents = $question_respondents
+                    ->orderBy('created_at', 'desc');
+                }
+
+                if (request()->input( 'show-more' )) {
+                    $question_respondents = $question_respondents->get();
+                    $show_button = false;
+                    $show_all_button = false;
+                    $show_pagination = false;
+                    $respondents_shown = $items_count;
+                } else {
+                    $question_respondents = $question_respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
+                }                
+
+                $respondents = '';
+
+            } else {
+                $respondents = VoxReward::where('vox_id',$vox_id )->has('user')->select('vox_rewards.*');
+                if (request()->input( 'country' )) {
+                    $order = request()->input( 'country' );
+                    $respondents = $respondents
+                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                    ->join('countries', 'users.country_id', '=', 'countries.id')
+                    ->orderBy('countries.name', $order);
+                } else if (request()->input( 'name' )) {
+                    $order = request()->input( 'name' );
+                    $respondents = $respondents
+                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                    ->orderBy('users.name', $order);
+                } else if (request()->input( 'taken' )) {
+                    $order = request()->input( 'taken' );
+                    $respondents = $respondents
+                    ->orderBy('created_at', $order);
+                } else if (request()->input( 'type' )) {
+                    $order = request()->input( 'type' );
+                    $respondents = $respondents
+                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                    ->orderBy('users.is_dentist', $order)
+                    ->orderBy('users.is_clinic', $order);
+                } else {
+                    $respondents = $respondents
+                    ->orderBy('created_at', 'desc');
+                }
+
+                if (request()->input( 'show-more' )) {
+                    $respondents = $respondents->get();
+                    $show_button = false;
+                    $show_all_button = false;
+                    $show_pagination = false;
+                    $respondents_shown = $items_count;
+                } else {
+                    $respondents = $respondents->skip( ($page-1)*$ppp )->take($ppp)->get();
+                }                
+
+                $question_respondents = '';
+            }
+
             $total_count = $items_count;
             $total_pages = ceil($total_count/$ppp);
 
@@ -1039,11 +1068,6 @@ class VoxesController extends AdminController
 
             $current_url = url('cms/vox/explorer/'.$vox_id.($question_id ? '/'.$question_id : '') );
 
-            $show_button = true;
-            if (request()->input( 'show_all' )) {
-                $show_button = false;
-            }
-
             $pagination_link = (!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '');
 
             //dd( request()->input('country') );
@@ -1065,6 +1089,8 @@ class VoxesController extends AdminController
                 'total_count' => $total_count,
                 'show_button' => $show_button,
                 'pagination_link' => $pagination_link,
+                'show_all_button' => $show_all_button,
+                'respondents_shown' => $respondents_shown,
             ];
         } else {
             $viewParams = [

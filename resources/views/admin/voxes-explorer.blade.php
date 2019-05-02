@@ -46,8 +46,13 @@
                         </div>
                         <h4 class="panel-title">"{{ $vox->title }}" Respondents</h4>
                     </div>
-                    <div class="panel-body">    
-                        <span>Total number: {{ $total_count }}</span>                    
+                    <div class="panel-body">
+                        <div>
+                            <span>Total respondents: {{ $total_count }}</span>
+                        </div>
+                        <div>
+                            <span>Respondents shown: {{ $respondents_shown }}</span>
+                        </div>
                         <form method="post" action="{{ url('cms/users/mass-delete') }}" >
                             {!! csrf_field() !!}
                             @include('admin.parts.table', [
@@ -67,10 +72,16 @@
                                 'show_all' => request()->input('show_all'),
                                 'pagination_link' => array()
                             ])
-                            @if($show_button)
+                            @if($show_all_button)
                                 <div class="button-wrapper">
-                                    <a class="btn btn-primary" href="{{ url('cms/vox/explorer/'.$vox_id.'?show_all=1000'.$pagination_link) }}">Show 1000 respondents</a>
+                                    <a class="btn btn-primary" href="{{ url('cms/vox/explorer/'.$vox_id.'?show-more=1'.$pagination_link) }}">Show all respondents</a>
                                 </div>
+                            @else
+                                @if($show_button)
+                                    <div class="button-wrapper">
+                                        <a class="btn btn-primary" href="{{ url('cms/vox/explorer/'.$vox_id.'?show_all=1000'.$pagination_link) }}">Show more respondents</a>
+                                    </div>
+                                @endif
                             @endif
                             <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" onclick="return confirm('Are you sure?');">Delete selected users</button>
                         </form>               
@@ -151,7 +162,12 @@
                         <h4 class="panel-title">"{{ $question->question }}" Respondents</h4>
                     </div>
                     <div class="panel-body">
-                        <span>Total number: {{ $total_count }}</span>    
+                        <div>
+                            <span>Total respondents: {{ $total_count }}</span>
+                        </div>
+                        <div>
+                            <span>Respondents shown: {{ $respondents_shown }}</span>
+                        </div>
                         <form method="post" action="{{ url('cms/users/mass-delete') }}" >
                             {!! csrf_field() !!}
                             @include('admin.parts.table', [
@@ -171,10 +187,17 @@
                                 'show_all' => request()->input('show_all'),
                                 'pagination_link' => array()
                             ])
-                            @if($show_button)
+                            
+                            @if($show_all_button)
                                 <div class="button-wrapper">
-                                    <a class="btn btn-primary" href="{{ url('cms/vox/explorer/'.$vox_id.$pagination_link) }}">Show 1000 respondents</a>
+                                    <a class="btn btn-primary" href="{{ url('cms/vox/explorer/'.$vox_id.'?show-more=1'.$pagination_link) }}">Show all respondents</a>
                                 </div>
+                            @else
+                                @if($show_button)
+                                    <div class="button-wrapper">
+                                        <a class="btn btn-primary" href="{{ url('cms/vox/explorer/'.$vox_id.'?show_all=1000'.$pagination_link) }}">Show more respondents</a>
+                                    </div>
+                                @endif
                             @endif
                             <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" onclick="return confirm('Are you sure?');">Delete selected users</button>
                         </form>
