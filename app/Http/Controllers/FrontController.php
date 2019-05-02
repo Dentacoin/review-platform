@@ -206,6 +206,7 @@ class FrontController extends BaseController
 
         if($this->user) {
             $intended = session()->pull('our-intended');
+            dd($intended);
             if ($intended) {
                 return redirect( $intended );
             }
