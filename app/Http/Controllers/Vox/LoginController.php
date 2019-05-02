@@ -26,12 +26,12 @@ class LoginController extends FrontController
         return Socialite::driver('facebook')->redirect();
     }
 
-    public function facebook_callback() {
+    public function facebook_callback($locale=null, $path = null) {
         if (!Request::has('code') || Request::has('denied')) {
             return redirect( getVoxUrl('/'));
         }
     	//config(['services.facebook.redirect' =>  getLangUrl('login/callback/facebook') ]);
-        config(['services.facebook.redirect' =>  'https://dev-dentavox.dentacoin.com/en/login/callback/facebook' ]);
+        config(['services.facebook.redirect' =>  'https://dev-dentavox.dentacoin.com/en/login/callback/facebook'.($path ? '/'.$path : '') ]);
         return $this->try_social_login(Socialite::driver('facebook')->user());
     }
 
