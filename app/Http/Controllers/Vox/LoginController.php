@@ -74,6 +74,11 @@ class LoginController extends FrontController
                 session($sess);
 
                 Auth::login($user, true);
+
+                if (request()->ip() == '78.130.213.163') {
+                    dd($intended);
+                }
+
                 $intended = session()->pull('our-intended');
                 return redirect( $intended ? $intended : getVoxUrl('/') );
             } else {
