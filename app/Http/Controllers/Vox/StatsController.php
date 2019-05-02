@@ -59,11 +59,9 @@ class StatsController extends FrontController
 
 		$vox = Vox::whereTranslationLike('slug', $slug)->first();
 
-        if(empty($this->user) {
-            session([
-                'our-intended' => $vox->getLink()
-            ]);
-        }
+        session([
+            'our-intended' => $vox->getLink()
+        ]);        
 
 		if(empty($vox)) {
 			return redirect( getLangUrl('/') );
