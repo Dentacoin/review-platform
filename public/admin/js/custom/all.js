@@ -201,5 +201,14 @@ $(document).ready(function(){
 		}
 	});
 
+
+	$('input[name="results-number2"]').on('keyup keypress', function(e) {
+		$('#users-filter-form').find('input[name="results-number"]').val($(this).val());
+		var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) { 
+            $('#users-filter-form').submit();
+        }
+	});
+
 });
 

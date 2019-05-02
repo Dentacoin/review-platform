@@ -20,7 +20,7 @@
                 <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-filter') }} </h4>
             </div>
             <div class="panel-body">
-                <form method="get" action="{{ url('cms/'.$current_page) }}" >
+                <form method="get" action="{{ url('cms/'.$current_page) }}" id="users-filter-form">
                     <div class="row" style="margin-bottom: 10px;">                        
                         <div class="col-md-2">
                             <select class="form-control" name="search-platform">
@@ -45,9 +45,9 @@
                         </div>
                     </div>
                     <div class="row custom-row" style="margin-bottom: 10px;">
-                        <!-- <div class="col-md-2">
+                        <div class="col-md-2" style="display: none;">
                             <input type="text" class="form-control" name="results-number" value="{{ $results_number }}" placeholder="Results ( enter 0 to show all )">
-                        </div> -->
+                        </div>
                         <div class="col-md-1">
                             <input type="text" class="form-control datepicker" name="search-register-from" value="{{ $search_register_from }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-register-from') }}" autocomplete="off">
                         </div>
@@ -67,11 +67,11 @@
                             <input type="text" class="form-control" name="search-surveys-taken" value="{{ $search_surveys_taken }}" placeholder="Surveys taken (0 -no surveys; number)">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="margin-bottom: 10px;">
                         <div class="col-md-1">
                             <input type="text" class="form-control" name="search-id" value="{{ $search_id }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-id') }}">
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             <input type="text" class="form-control" name="search-name" value="{{ $search_name }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-name') }}">
                         </div>
                         <div class="col-md-2">
@@ -91,10 +91,12 @@
                         <!-- <div class="col-md-2">
                             <input type="text" class="form-control" name="search-phone" value="{{ $search_phone }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-phone') }}">
                         </div> -->
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <input type="text" class="form-control" name="search-address" value="{{ $search_address }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-address') }}">
                         </div>
-                        <div class="col-md-2">
+                    </div>
+                    <div class="row">                        
+                        <div class="col-md-12">
                             <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="{{ trans('admin.page.'.$current_page.'.title-filter-submit') }}">
                         </div>
                     </div>
@@ -116,12 +118,8 @@
                 <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title') }}</h4>
             </div>
             <div class="panel-body">
-                <div class="limit-buttons" style="display: block;">
-                    <span>Show </span>
-                    <a href="javascript:;" limit="all">All</a>
-                    <a href="javascript:;" limit="15">/ 15 results</a>
-                    <a href="javascript:;" limit="50">/ 50 results</a>
-                    <a href="javascript:;" limit="100">/ 100 results</a>
+                <div>
+                    <span>Results shown <input type="text" class="form-control" name="results-number2" value="{{ $results_number ? $results_number : 50 }}" style="display: inline-block;width: 60px;"> </span>
                     out of total {{ $total_count }} profiles that match this search
                 </div>
                 <!-- <b>

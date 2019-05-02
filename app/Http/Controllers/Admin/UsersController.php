@@ -155,9 +155,15 @@ class UsersController extends AdminController
             return redirect('cms/users/edit/'.Auth::guard('admin')->user()->user_id);            
         }
 
+        $getArr = $_GET;
+        if(!is_array($getArr)) {
+            $getArr = [];
+        }
+        $getArrNoSort = $getArr;
 
         $user_types = [
             '' => 'All user types',
+            'patient_dentist_clinic.approved' => 'All Approved',
             'patient' => 'Patients',
             'dentist.all' => 'Dentists (All)',
             'dentist.new' => 'Dentists (New)',
@@ -288,6 +294,23 @@ class UsersController extends AdminController
             }
         }
 
+        if(!empty($this->request->input('survey-count'))) {
+            $order = request()->input( 'survey-count' );
+            $users->getQuery()->orders = null;
+            $users = $users
+            ->select(DB::raw('count(vox_rewards.id) as vox_count, users.*'))
+            ->join('vox_rewards', 'users.id', '=', 'vox_rewards.user_id', 'left outer')
+            ->where('vox_rewards.vox_id', '!=', 11)
+            ->groupBy('vox_rewards.user_id')
+            ->orderByRaw('count(vox_rewards.id) '.$order);
+
+            // dd($users->take(20)->get());
+
+            unset($getArrNoSort['survey-count']);
+        }
+
+        // dd($users->first());
+
 
         if( null !== $this->request->input('results-number')) {
             $results = trim($this->request->input('results-number'));
@@ -304,15 +327,11 @@ class UsersController extends AdminController
         } else if(request()->input('export-fb')) {
             ini_set("memory_limit",-1);
             $users = $users->select(['id', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender'])->get();
+        } else if($results == 0) {
+            $users = $users->take(3000)->get();
         } else {
-            $users = $users->take(200)->get();
-        }
-
-        // if($results == 0) {
-        //     $users = $users->take(3000)->get();
-        // } else {
-        //     $users = $users->take($results)->get();
-        // }        
+            $users = $users->take($results)->get();
+        }        
         //$total_count = isset( $total_count[0]->cnt ) ? $total_count[0]->cnt : 0;
 
         if( request()->input('export') ) {
@@ -441,11 +460,13 @@ class UsersController extends AdminController
 
         }
 
+
         $table_fields = [
             'selector' => array('format' => 'selector'),
             'id' => array(),
             'name' => array('template' => 'admin.parts.table-users-name'),
             'email' => array(),
+            'login' => array('template' => 'admin.parts.table-users-login', 'label' => 'Frontend' ),
             'type' => array('template' => 'admin.parts.table-users-type'),
             'country_id' => array('format' => 'country'),
             'status' => array('template' => 'admin.parts.table-users-status', 'label' => 'Status'),
@@ -459,12 +480,11 @@ class UsersController extends AdminController
         }
 
         if($this->request->input('search-platform') == 'vox') {
-            $table_fields['surveys'] = array('template' => 'admin.parts.table-users-surveys', 'label' => 'Surveys');
+            $table_fields['surveys'] = array('template' => 'admin.parts.table-users-surveys', 'label' => 'Surveys','order' => true, 'orderKey' => 'survey-count');
         }
 
         $table_fields['created_at'] = array('format' => 'datetime', 'label' => 'Registered');
         $table_fields['last_login'] = array('template' => 'admin.parts.table-users-last-login', 'label' => 'Last login');
-        $table_fields['update'] = array('format' => 'update');
         $table_fields['delete'] = array('format' => 'delete');
 
         $vox_hidden = false;
@@ -477,6 +497,9 @@ class UsersController extends AdminController
         if (empty($this->request->input('search-platform')) || $this->request->input('search-platform') == 'vox') {
             $trp_hidden = true;
         }
+
+        // dd($getArrNoSort);
+        $current_url = url('cms/users/').'?'.http_build_query($getArrNoSort);
 
         return $this->showView('users', array(
             'users' => $users,
@@ -506,6 +529,7 @@ class UsersController extends AdminController
             'trp_hidden' =>  $trp_hidden,
             'vox_hidden' =>  $vox_hidden,
             'table_fields' =>  $table_fields,
+            'current_url' => $current_url,
         ));
     }
 

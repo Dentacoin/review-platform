@@ -1,7 +1,3 @@
-<a target="_blank" href="{{ $item->getLink() }}">
+<a href="{{ url('cms/'.$current_page.( !empty($table_subpage) ? '/'.$table_subpage : '' ).'/edit/'.$item->id) }}">
 	{{ $item->name }}
-</a>
-<br/>
-<a target="_blank" href="{{ url('cms/users/loginas/'.$item->id.(!empty(request()->input('search-platform')) ? '/'.request()->input( 'search-platform' ) : '')) }}">
-	{{ trans('admin.common.login-as') }}
 </a>
