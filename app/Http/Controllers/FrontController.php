@@ -206,7 +206,10 @@ class FrontController extends BaseController
 
         if($this->user) {
             $intended = session()->pull('our-intended');
-            return redirect( $intended );
+            if ($intended) {
+                return redirect( $intended );
+            }
+            
         }
 
         if( session('login-logged') && $this->user && !Cookie::get('prev-login') ) {
