@@ -185,6 +185,11 @@ class FrontController extends BaseController
             //     exit;
             // }
 
+            if($this->user) {
+                $intended = session()->pull('our-intended');
+                return redirect( $intended );
+            }
+
             return $next($request);
         });
 
