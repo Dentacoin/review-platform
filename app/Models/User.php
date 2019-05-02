@@ -28,6 +28,7 @@ use Carbon\Carbon;
 use Request;
 use Image;
 use Auth;
+use Mail;
 
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
@@ -1174,5 +1175,63 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     //Handles CloudFlare
     public static function getRealIp() {
         return !empty($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : Request::ip();
+    }
+
+    //Handles Civic Scam
+    public function validateCivicKyc($civic) {
+        $data = json_decode($civic->response, true);
+        $ret = [
+            'success' => false,
+            'weak' => true
+        ];
+
+        if(!empty($data['data'])) {
+            foreach ($data['data'] as $key => $value) {
+                if( mb_strpos( $value['label'], 'documents.' ) !==false ) {
+                    unset($ret['weak']);
+                    break;
+                }
+            }
+        } 
+
+
+        if(empty($ret['weak']) && !empty($data['userId'])) {
+            $u = self::where('civic_id', 'LIKE', $data['userId'])->first();
+            if(!empty($u) && $u->id != $this->user->id) {
+                $ret['duplicate'] = true;
+            } else {
+
+                $u = self::where('civic_kyc_hash', 'LIKE', $civic->hash)->first();
+                if(!empty($u) && $u->id != $this->user->id) {
+                    $ret['duplicate'] = true;
+                    $notifyMe = [
+                        'official@youpluswe.com',
+                        'petya.ivanova@dentacoin.com',
+                        'donika.kraeva@dentacoin.com',
+                        'daria.kerancheva@dentacoin.com',
+                        'petar.stoykov@dentacoin.com'
+                    ];
+                    $mtext = 'A user just tried to withdraw with duplicated ID card:
+Original holder: '.$u->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$u->id.')
+Scammer: '.$this->user->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$this->id.')';
+
+                    foreach ($notifyMe as $n) {
+                        Mail::raw($mtext, function ($message) use ($n) {
+                            $message->from(config('mail.from.address'), config('mail.from.name'));
+                            $message->to( $n );
+                            $message->subject('New Scam attempt');
+                        });
+                    }
+
+                } else {
+                    $this->civic_kyc_hash = $civic->hash;
+                    $this->civic_kyc = 1;
+                    $this->civic_id = $data['userId'];
+                    $this->save();
+                    $ret['success'] = true;            
+                }
+            }
+        }
+        return $ret;
     }
 }
