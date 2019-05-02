@@ -103,7 +103,7 @@
 							</h4>
 
 							<div class="fb-button-inside">
-								<a href="https://dev-dentavox.dentacoin.com/en/login/facebook{{ $workaround ? '/'.$workaround : '' }}" class="">
+								<a href="https://dev-dentavox.dentacoin.com/en/login/facebook{{ $workaround ? $workaround : '' }}" class="">
 								</a>
 								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
 							</div>
