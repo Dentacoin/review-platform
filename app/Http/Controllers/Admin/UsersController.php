@@ -557,7 +557,7 @@ class UsersController extends AdminController
         }
 
         $this->request->session()->flash('success-message', 'All selected users and now deleted' );
-        return redirect('cms/'.$this->current_page);
+        return redirect(url()->previous());
     }
 
     public function delete_avatar( $id ) {
