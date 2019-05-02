@@ -204,14 +204,6 @@ class FrontController extends BaseController
 
     public function ShowVoxView($page, $params=array()) {
 
-        if($this->user) {
-            $intended = session()->pull('our-intended');
-            if ($intended) {
-                return redirect( $intended );
-            }
-            
-        }
-
         if( session('login-logged') && $this->user && !Cookie::get('prev-login') ) {
             Cookie::queue('prev-login', $this->user->id, 60*24*31);
         }

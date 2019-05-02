@@ -51,8 +51,10 @@ class AuthenticateUser extends FrontController
         if(!empty($this->user)) {
             return redirect(getLangUrl('profile'));
         }
+
         
         return $this->ShowVoxView('login',[
+            'workaround' => session('vox-redirect-workaround'),
             'noindex' => ' ',
             'js' => [
                 'login.js'

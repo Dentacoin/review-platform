@@ -221,6 +221,7 @@ class RegisterController extends FrontController
 
             }
         } else {
+
             return $this->ShowVoxView('register', array(
                 'noindex' => ' ',
                 'countries' => Country::get(),

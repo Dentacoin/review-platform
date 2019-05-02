@@ -18,11 +18,11 @@ use Image;
 
 class LoginController extends FrontController
 {
-    public function facebook_login($locale=null) {
+    public function facebook_login($locale=null, $path = null) {
         Session::flush();
 
     	//config(['services.facebook.redirect' => getLangUrl('login/callback/facebook') ]);
-        config(['services.facebook.redirect' => 'https://dev-dentavox.dentacoin.com/en/login/callback/facebook' ]);
+        config(['services.facebook.redirect' => 'https://dev-dentavox.dentacoin.com/en/login/callback/facebook'.($path ? '/'.$path : '') ]);
         return Socialite::driver('facebook')->redirect();
     }
 
@@ -35,7 +35,7 @@ class LoginController extends FrontController
         return $this->try_social_login(Socialite::driver('facebook')->user());
     }
 
-    private function try_social_login($s_user) {
+    private function try_social_login($s_user, $path = null) {
 
         if( session('new_auth') && !empty($this->user) && empty($this->user->fb_id) && empty($this->user->civic_id) ) {
             $user = $this->user;
@@ -75,6 +75,9 @@ class LoginController extends FrontController
 
                 Auth::login($user, true);
                 $intended = session()->pull('our-intended');
+                if( $path  ){
+                    return redirect( getVoxUrl($path) );
+                }
                 return redirect( $intended ? $intended : getVoxUrl('/') );
             } else {
                 Request::session()->flash('error-message', trans('vox.page.login.error-fb', [
