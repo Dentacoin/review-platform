@@ -296,8 +296,8 @@ $voxRoutes = function () {
 			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
 			Route::post('recover/{id}/{hash}', 					'RegisterController@recover_form');
 
-			Route::get('login/facebook/{query}', 						'LoginController@facebook_login')->where('query','.+');
-			Route::get('login/callback/facebook/{query}', 				'LoginController@facebook_callback')->where('query','.+');
+			Route::get('login/facebook/{query?}', 						'LoginController@facebook_login')->where('query','.+');
+			Route::get('login/callback/facebook/{query?}', 				'LoginController@facebook_callback')->where('query','.+');
 			Route::post('login/civic', 							'LoginController@civic');
 
 			Route::post('register/civic', 						'RegisterController@civic');

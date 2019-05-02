@@ -9,7 +9,6 @@ use Request;
 use Route;
 use Hash;
 use Mail;
-use App;
 use DB;
 use Carbon\Carbon;
 use App\Models\Dcn;

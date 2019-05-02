@@ -21,6 +21,7 @@ class LoginController extends FrontController
     public function facebook_login($locale=null, $path = null) {
         Session::flush();
 
+        //dd('https://dev-dentavox.dentacoin.com/en/login/callback/facebook'.($path ? '/'.$path : ''));
     	//config(['services.facebook.redirect' => getLangUrl('login/callback/facebook') ]);
         config(['services.facebook.redirect' => 'https://dev-dentavox.dentacoin.com/en/login/callback/facebook'.($path ? '/'.$path : '') ]);
         return Socialite::driver('facebook')->redirect();
@@ -32,7 +33,7 @@ class LoginController extends FrontController
         }
     	//config(['services.facebook.redirect' =>  getLangUrl('login/callback/facebook') ]);
         config(['services.facebook.redirect' =>  'https://dev-dentavox.dentacoin.com/en/login/callback/facebook'.($path ? '/'.$path : '') ]);
-        return $this->try_social_login(Socialite::driver('facebook')->user());
+        return $this->try_social_login(Socialite::driver('facebook')->user(), $path);
     }
 
     private function try_social_login($s_user, $path = null) {
@@ -75,6 +76,7 @@ class LoginController extends FrontController
 
                 Auth::login($user, true);
                 $intended = session()->pull('our-intended');
+
                 if( $path  ){
                     return redirect( getVoxUrl($path) );
                 }
