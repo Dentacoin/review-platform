@@ -91,6 +91,10 @@ class VoxController extends FrontController
 		// exit;
 
 		if(!$this->user) {
+			session([
+	            'our-intended' => request()->url()
+	        ]);
+
 			return $this->ShowVoxView('vox-public', array(
 				'vox' => $vox,
 				'js' => [

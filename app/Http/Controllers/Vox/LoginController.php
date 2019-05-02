@@ -336,8 +336,10 @@ class LoginController extends FrontController
                                     $user->save();      
                                 }
 
+                                $intended = session()->pull('our-intended');
+
                                 $ret['success'] = true;
-                                $ret['redirect'] = $user->isBanned('vox') ? getVoxUrl('profile') : getVoxUrl('/');
+                                $ret['redirect'] = $user->isBanned('vox') ? getVoxUrl('profile') : ($intended ? $intended : getVoxUrl('/'));
 
                                 
                                 $sess = [
