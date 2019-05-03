@@ -32,6 +32,7 @@ class DentistsController extends FrontController
     }
 
     public function search($locale=null, $query=null, $filter=null, $page=null, $ajax=null) {
+
         $this->current_page = 'dentists';
 
         if (empty($query)) {
@@ -39,7 +40,6 @@ class DentistsController extends FrontController
         }
 
         // $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).(!empty($filter) ? '/'.$filter : '');
-
         $corrected_query = $this->getCorrectedQuery($query, $filter);
         if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
             return redirect( getLangUrl($corrected_query) );
@@ -96,6 +96,8 @@ class DentistsController extends FrontController
 
             if(!$lat || !$lon) {
 
+                $query = str_replace('-', ' ', $query);
+
                 $geores = \GoogleMaps::load('geocoding')
                 ->setParam ([
                     'address'    => $query,
@@ -103,6 +105,7 @@ class DentistsController extends FrontController
                 ->get();
 
                 $geores = json_decode($geores);
+                
                 if(!empty($geores->results[0]->geometry->location)) {
 
                     $parsedAddress = User::parseAddress( $geores->results[0]->address_components );
