@@ -113,7 +113,7 @@
                             <div class="form-group clearfix col-md-11">
                                 <label class="col-md-1 control-label">Triggers</label>
                                 <div class="col-md-11">
-                                    <a class="btn btn-primary" href="javascript: $('#trigger-widgets').show(); $('#trigger-widgets').prev().remove(); $('.btn-add-old-trigger').trigger('click'); ;" style="margin-left: 15px;">
+                                    <a class="btn btn-primary" href="javascript: $('#trigger-widgets').show(); $('#trigger-widgets').prev().remove(); $('.btn-add-trigger').trigger('click'); ;" style="margin-left: 15px;">
                                         Show Trigger Controls
                                     </a>
                                 </div>
