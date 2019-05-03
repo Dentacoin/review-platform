@@ -75,6 +75,7 @@ class DentistsController extends FrontController
         $items = User::where('is_dentist', 1)->where('status', 'approved');
         $mode = 'map';
         $formattedAddress = $query;
+        $country_search = false;
 
         if($query=='worldwide') {
             request()->merge(['partner' => 1]);
@@ -172,15 +173,27 @@ class DentistsController extends FrontController
                     }
                 }
             }
+            if (empty($parsedAddress['city_name']) && empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) {
+                $country_n = $parsedAddress['country_name'];
+                $country = Country::whereHas('translations', function ($query) use ($country_n) {
+                    $query->where('name', 'LIKE', $country_n);
+                })->first();
 
-            list($range_lat, $range_lon) = $this->getRadiusInLatLon(50, $lat);
-            $items->whereBetween('lat', [$lat-$range_lat, $lat+$range_lat]);
-            $items->whereBetween('lon', [$lon-$range_lon, $lon+$range_lon]);
-
+                $items->where('country_id', $country->id);
+                $country_search = true;
+            } else {
+                list($range_lat, $range_lon) = $this->getRadiusInLatLon(50, $lat);
+                $items->whereBetween('lat', [$lat-$range_lat, $lat+$range_lat]);
+                $items->whereBetween('lon', [$lon-$range_lon, $lon+$range_lon]);
+            }
         }
 
+        // dd($parsedAddress);
+
         $nonCannonicalUrl = true;
-        if( !empty($parsedAddress['city_name']) && !empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name']) ) {
+
+
+        if( !empty($parsedAddress['city_name']) && !empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name']) && !$country_search) {
 
             $isValid = User::where('city_name', 'like', $parsedAddress['city_name'])
             ->where('state_slug', 'like', $parsedAddress['state_slug'])
@@ -246,8 +259,10 @@ class DentistsController extends FrontController
 
         $items = $items->take(100)->get(); //->take($ppp)->skip( ($page-1)*$ppp )
 
-        $zoom = $query=='worldwide' ? 1 : 13;
+        $zoom = $country_search ? 5 : ($query=='worldwide' ? 1 : 13);
         $size = $query=='worldwide' ? '670x288' : '670x188';
+
+        // dd($lat, $lon);
 
         $staticmap = 'https://maps.googleapis.com/maps/api/staticmap?center='.$lat.','.$lon.'&zoom='.$zoom.'&size='.$size.'&maptype=roadmap&key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk';
         $i=1;

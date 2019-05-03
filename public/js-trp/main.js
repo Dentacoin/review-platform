@@ -132,6 +132,12 @@ jQuery(document).ready(function($){
 
 				mapMarkers = {};
 				var bounds = new google.maps.LatLngBounds();
+				
+				bounds.extend({
+					lat: parseFloat($('#search-map').attr('lat')), 
+					lng: parseFloat($('#search-map').attr('lon'))
+				});
+
 
 				$('#map-results-popup .result-container[lat]').each( function() {
 					if( !$(this).attr('lat') || !$(this).attr('lon') ) {
@@ -212,6 +218,9 @@ jQuery(document).ready(function($){
 					}
 				} )
 
+				if(search_map.getZoom() > 16) {
+					search_map.setZoom(16);
+				}
 
 			} );
 		} else if(id=='submit-review-popup') {
