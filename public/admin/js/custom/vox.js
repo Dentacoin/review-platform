@@ -224,6 +224,9 @@ $(document).ready(function(){
 	} );
 
 	$('.questions-form .btn-add-old-trigger').click( function() {
+		$('.triggers-list .input-group').each( function() {
+			$(this).find('.btn-remove-trigger').trigger('click');
+		});
 		var newinput = $('#old-trigger-group-template').clone(true).removeAttr('id');
 		$('.questions-form').find('.triggers-list').append(newinput);
 		$('.triggers-list .input-group').each( function() {
@@ -379,6 +382,20 @@ $(document).ready(function(){
 	}
 
 
-	
+	var triggerClick =  function() {
+		$('#close-and-add-trigger').click( function() {
+			$(this).closest('#trigger-widgets').find('.button-close-trigger').trigger('click');
+			$('.btn-add-old-trigger').trigger('click');
+			$('.show-me').hide();
+		});
+	}
+
+	$('.show-trigger-controls').click( function() {
+		$('#trigger-widgets').show();
+		$('#trigger-widgets').prev().remove();
+		$('.btn-add-trigger').trigger('click'); 
+		$('.show-me').show();
+		triggerClick();
+	});
 
 });

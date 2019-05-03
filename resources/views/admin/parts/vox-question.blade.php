@@ -113,7 +113,7 @@
                             <div class="form-group clearfix col-md-11">
                                 <label class="col-md-1 control-label">Triggers</label>
                                 <div class="col-md-11">
-                                    <a class="btn btn-primary" href="javascript: $('#trigger-widgets').show(); $('#trigger-widgets').prev().remove(); $('.btn-add-trigger').trigger('click'); ;" style="margin-left: 15px;">
+                                    <a class="btn btn-primary show-trigger-controls" href="javascript:;" style="margin-left: 15px;">
                                         Show Trigger Controls
                                     </a>
                                 </div>
@@ -162,7 +162,7 @@
                                     To enable a trigger, first select the question from the dropdown and then type the number of the answer(s) that will trigger the present question.<br/>
                                     Example: "Question text?" / One trigger answer: 1 (for the first answer), 2 (for the second answer, etc.); 2+ answers: 1, 2, 3, 4<br/>
                                     <!-- To enable a previously selected trigger, click Add previous trigger. -->
-                                    To enable another trigger, click button bellow.
+                                    <span style="display: none;" class="show-me">To enable another trigger, click <a href="javascript:;" id="close-and-add-trigger">here</a>.</span>
                                 </div>
                             </div>
                             <div class="form-group clearfix">
@@ -341,7 +341,7 @@
             <input type="hidden" name="triggers[]" value="-1">
         </div>
         <div class="input-group-btn">
-            <button class="btn btn-default btn-remove-trigger" type="button">
+            <button class="btn btn-default btn-remove-trigger button-close-trigger" type="button">
                 <i class="glyphicon glyphicon-remove"></i>
             </button>
         </div>
