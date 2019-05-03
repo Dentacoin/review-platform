@@ -10,6 +10,7 @@ use Route;
 use Hash;
 use Mail;
 use DB;
+use App;
 use Carbon\Carbon;
 use App\Models\Dcn;
 use App\Models\Country;
