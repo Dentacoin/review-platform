@@ -93,6 +93,7 @@ class VoxController extends FrontController
 		if(!$this->user) {
 			session([
 	            'vox-redirect-workaround' => str_replace( getLangUrl('/').App::getLocale().'/', '', $vox->getLink())
+	            
 	        ]);
 
 			return $this->ShowVoxView('vox-public', array(
