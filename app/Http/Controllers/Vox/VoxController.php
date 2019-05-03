@@ -126,6 +126,23 @@ class VoxController extends FrontController
 	            ]),
 	        ));
 		}
+
+		if (request()->has('testmode')) {
+			if(request('testmode')) {
+				$ses = [
+		            'testmode' => true
+		        ];
+			} else {
+				$ses = [
+		            'testmode' => false
+		        ];
+			}
+			session($ses);
+		}
+
+        $admin_ids = Admin::getAdminProfileIds();
+		$isAdmin = Auth::guard('admin')->user() || in_array($this->user->id, $admin_ids);
+		$testmode = session('testmode') && $isAdmin;
 				
 		$this->current_page = 'questionnaire';
 		$doing_details = false;
@@ -156,8 +173,7 @@ class VoxController extends FrontController
             return redirect(getLangUrl('profile'));
         }
 
-        $admin_ids = Admin::getAdminProfileIds();
-		if (!Auth::guard('admin')->user() && !in_array($this->user->id, $admin_ids) && $vox->type=='hidden') {
+		if (!$isAdmin && $vox->type=='hidden') {
 			return redirect( getLangUrl('/') );
 		}
 
@@ -207,10 +223,10 @@ class VoxController extends FrontController
 			}
 		}
 
-		$not_bot = !empty($this->admin) || session('not_not-'.$vox->id);
+		$not_bot = $testmode || session('not_not-'.$vox->id);
 
 
-		if(Request::input('goback') && !empty($this->admin)) {
+		if(Request::input('goback') && $testmode) {
 			$this->goBack($answered, $list, $vox);
 
             return redirect( $vox->getLink() );
@@ -393,7 +409,7 @@ class VoxController extends FrontController
 					        	}
 					        }
 
-				        	if($is_scam && !in_array($this->user->id, $admin_ids) && !$this->user->is_partner) {
+				        	if($is_scam && !$testmode && !$this->user->is_partner) {
 				        		
 				        		$wrongs = intval(session('wrongs'));
 				        		$wrongs++;
@@ -637,7 +653,7 @@ class VoxController extends FrontController
 							});
 
 	        				$ppp = 10;
-		        			if( $reallist->count() && $reallist->count()%$ppp==0 && !in_array($this->user->id, $admin_ids) && !$this->user->is_partner ) {
+		        			if( $reallist->count() && $reallist->count()%$ppp==0 && !$testmode && !$this->user->is_partner ) {
 
 		        				$pagenum = $reallist->count()/$ppp;
 		        				$start = $reallist->forPage($pagenum, $ppp)->first();
@@ -719,7 +735,7 @@ class VoxController extends FrontController
 						        $start = $list->first()->created_at;
 						        $diff = Carbon::now()->diffInSeconds( $start );
 						        $normal = count($vox->questions)*2;
-						        if($normal > $diff && !in_array($this->user->id, $admin_ids) && !$this->user->is_partner) {
+						        if($normal > $diff && !$testmode && !$this->user->is_partner) {
 						        	$reward->is_scam = true;
 						        }
 						        $reward->seconds = $diff;
@@ -913,6 +929,8 @@ class VoxController extends FrontController
             	'content' => $email_content,
             ],
             'done_all' => $done_all,
+            'testmode' => $testmode,
+            'isAdmin' => $isAdmin
         ));
 	}
 

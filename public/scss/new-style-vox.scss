@@ -7356,3 +7356,22 @@ p.h2-bold {
 		}
 	}
 }
+
+.vox-mode-wrapper {
+	font-size: 16px;
+    position: absolute;
+    right: 0px;
+    top: 44px;
+
+    .vox-mode {
+    	&.active {
+    		color: #2196F3;
+    	}
+
+    	&:first-child {
+    		padding-right: 5px;
+		    border-right: 1px solid black;
+		    margin-right: 7px;
+    	}
+    }
+}

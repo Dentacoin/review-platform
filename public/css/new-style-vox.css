@@ -5322,3 +5322,15 @@ p.h2-bold {
       @media screen and (max-width: 768px) {
         .page-profile.sp-vox .section-recent-surveys .swiper-slide .vox-header .btns a {
           font-size: 12px; } }
+
+.vox-mode-wrapper {
+  font-size: 16px;
+  position: absolute;
+  right: 0px;
+  top: 44px; }
+  .vox-mode-wrapper .vox-mode.active {
+    color: #2196F3; }
+  .vox-mode-wrapper .vox-mode:first-child {
+    padding-right: 5px;
+    border-right: 1px solid black;
+    margin-right: 7px; }

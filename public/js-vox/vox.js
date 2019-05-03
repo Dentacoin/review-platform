@@ -181,7 +181,7 @@ $(document).ready(function(){
 
             var given_answer = group.find('select').length ? group.find('select').val() : $(this).find('input').val();
 
-            if (parseInt(given_answer) != parseInt(group.attr('cross-check-correct'))) {
+            if ((parseInt(given_answer) != parseInt(group.attr('cross-check-correct'))) && !testmode) {
                 $('.popup.cross-checks .cross-checks-answers').html('');
 
                 if(group.find('select').length) {

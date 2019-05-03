@@ -25,8 +25,16 @@
 					<div class="col-md-8 col-md-offset-2 clearfix">
 						<h1 class="questionnaire-title tac vox-survey-title">
 							- {{ $vox->title }} -
-							@if($admin)
+							@if($testmode)
 								<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
+								<div class="vox-mode-wrapper">
+									<a href="{{ $vox->getLink() }}?testmode=0" class="vox-mode {{ $testmode ? '' : 'active' }}">
+										Live
+									</a>
+									<a href="{{ $vox->getLink() }}?testmode=1" class="vox-mode {{ $testmode ? 'active' : '' }}">
+										Test
+									</a>
+								</div>
 							@endif
 						</h1>
 						<p class="questionnaire-description tac" {!! !empty($answered) && count($answered)>1 ? 'style="display: none;"' : '' !!} >
@@ -174,7 +182,7 @@
 					</div>
 
 					<div class="col-md-9 tac">
-						@if($admin)
+						@if($testmode)
 							<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
 						@endif
 
@@ -257,7 +265,7 @@
 					</div>
 
 					<div class="col-md-9 related-container tac">
-						@if($admin)
+						@if($testmode)
 							<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
 						@endif
 
@@ -354,6 +362,7 @@
 		};
 
 		var related = {{ !empty($related_vox) ? 'true' : 'false' }};
+		var testmode = {{ $testmode ? $testmode : 'false' }};
 	</script>
 
 	@if(!empty($cross_checks))

@@ -35,10 +35,25 @@
                         <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }}" id="nav-tab-{{ $code }}">
                             <div class="form-group">
                                 <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.lang-slug') }}</label>
-                                <div class="col-md-10">
+                                <div class="col-md-{{ !empty($item) ? '6' : '10' }}">
                                     {{ Form::text('slug-'.$code, !empty($item) ? $item->translateOrNew($code)->slug : null, array('maxlength' => 256, 'class' => 'form-control')) }}
                                 </div>
+                                @if(!empty($item))
+                                    <div class="col-md-2">
+                                        <a href="{{ $item->getLink().'?testmode=0' }}" target="_blank" class="btn btn-primary btn-block">Preview Survey</a>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a href="{{ $item->getLink().'?testmode=1' }}" target="_blank" class="btn btn-primary btn-block">Test</a>
+                                    </div>
+                                @endif
                             </div>
+                            @if(!empty($item))
+                                <div class="form-group">
+                                    <div style="float: right; padding-right: 20px;">
+                                        * Test mode disables bans, captcha, cross-checks
+                                    </div>
+                                </div>
+                            @endif
                             <div class="form-group">
                                 <label class="col-md-4 "><b>Title</b></label>
                                 <label class="col-md-4 "><b>Survey Description</b></label>
