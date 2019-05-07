@@ -25,8 +25,10 @@
 					<div class="col-md-8 col-md-offset-2 clearfix">
 						<h1 class="questionnaire-title tac vox-survey-title">
 							- {{ $vox->title }} -
-							@if($isAdmin)
+							@if($testmode)
 								<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
+							@endif
+							@if($isAdmin)
 								<div class="vox-mode-wrapper">
 									<a href="{{ $vox->getLink() }}?testmode=0" class="vox-mode {{ $testmode ? '' : 'active' }}">
 										Live
