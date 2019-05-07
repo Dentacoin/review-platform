@@ -364,8 +364,10 @@ $(document).ready(function(){
                         } else {
 
                             var trigger = group.next().attr('data-trigger');
-                            var trigger_type = group.next().attr('trigger-type');
+                            var trigger_logical_operator = group.next().attr('trigger-type');
                             if(trigger && trigger!='-1') {
+                                console.log(group.find('.question').text());
+                                console.log(trigger, trigger_logical_operator);
                                 var trigger_statuses = [];
                                 var trigger_list = trigger.split(';');
                                 for(var i in trigger_list) {
@@ -435,13 +437,14 @@ $(document).ready(function(){
                                     trigger_statuses.push(trigger_status);
                                 }
 
-                                console.log( trigger_statuses );
+                                console.log( 'Trigger statuses: ', trigger_statuses );
 
-                                if( trigger_type=='or' ) {
+                                if( trigger_logical_operator=='or' ) {
                                     should_skip = !(trigger_statuses.indexOf(true)!=-1);
                                 } else { //and
                                     should_skip = trigger_statuses.indexOf(false)!=-1;                                    
                                 }
+                                console.log( 'should skip: ', should_skip );
                             }
 
 
