@@ -324,8 +324,8 @@ class Email extends Model
 				'[/profile-link]',
 			), array(
 				$this->meta['clinic-name'] ?? '',
-				'<a '.$this->button_style.' href="'.$this->meta['clinic-link'].'">',
-				'</a>',
+				!empty($this->meta['clinic-link']) ? '<a '.$this->button_style.' href="'.$this->meta['clinic-link'].'">' : '',
+				!empty($this->meta['clinic-link']) ? '</a>' : '',
 			), $content);
 		}
 

@@ -711,15 +711,15 @@ class UsersController extends AdminController
         $item = User::withTrashed()->find($id);
         $emails = Email::where('user_id', $id )->orderBy('created_at', 'DESC')->get();
 
-        if($item->is_dentist) {
-            $this->fields['password'] = [
-                'type' => 'password',
-            ];
-        } else {
-            unset( $this->fields['status'] );
-        }
-
         if(!empty($item)) {
+
+            if($item->is_dentist) {
+                $this->fields['password'] = [
+                    'type' => 'password',
+                ];
+            } else {
+                unset( $this->fields['status'] );
+            }
 
             if(Request::isMethod('post')) {
             	foreach ($this->fields as $key => $value) {
