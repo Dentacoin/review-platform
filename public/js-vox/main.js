@@ -716,7 +716,9 @@ $(document).ready(function(){
     		var that = $(this).closest('.tooltip-text');
     	}
 
-        $('.tooltip-window').text( $(this).closest('.tooltip-text').attr('text'));
+    	console.log( $(this).closest('.tooltip-text').attr('text') );
+
+        $('.tooltip-window').text( $(this).closest('.tooltip-text').attr('text') );
         $('.tooltip-window').css('display', 'block');
 
     	var y = that.offset().top + that.outerHeight() + 10;
@@ -728,6 +730,8 @@ $(document).ready(function(){
         // if ( window.innerWidth < 768 && window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
         //     $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
         // }
+
+        e.stopPropagation();
 
     }
 

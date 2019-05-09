@@ -767,12 +767,14 @@ $(document).ready(function(){
         } else {
 
 
-            var biggerLabels = false;
+            var fontSize = 10;
             if( rows.length<=5 && $(window).width()>768 ) {
-                biggerLabels = true;
+                fontSize = 15;
                 for(var i in rows) {
                     rows[i][0] = rows[i][0].replace(new RegExp('\n', 'g'), ' ').replace(new RegExp('\r', 'g'), ' ')
                 }
+            } else if(rows.length>=9) {
+                fontSize = 8;                
             }
 
             var data = google.visualization.arrayToDataTable(rows);
@@ -807,7 +809,7 @@ $(document).ready(function(){
                     slantedTextAngle: 90,
                     textStyle: { 
                         //color: 'red',
-                        fontSize: biggerLabels ? 15 : 10,
+                        fontSize: fontSize,
                         // bold: <boolean>,
                         // italic: <boolean> 
                     }
