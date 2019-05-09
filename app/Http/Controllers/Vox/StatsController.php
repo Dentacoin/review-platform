@@ -16,6 +16,7 @@ use App\Models\Dcn;
 use App\Models\Country;
 use App\Models\User;
 use App\Models\Vox;
+use App\Models\VoxScale;
 use App\Models\VoxReward;
 use App\Models\VoxAnswer;
 use App\Models\VoxQuestion;
@@ -96,7 +97,15 @@ class StatsController extends FrontController
     		$relation_info = [];
     		$totalf = 0;
     		$totalm = 0;
-    		$answers = json_decode($question->answers);
+    		if( $question->vox_scale_id ) {
+                $answers = explode(',', VoxScale::find($question->vox_scale_id)->answers );
+                foreach ($answers as $key => $value) {
+                    $answers[$key] = trim($value);
+                }
+            } else {
+                $answers = json_decode($question->answers);
+            }
+
             foreach ($answers as $key => $value) {
                 if(mb_strpos($value, '!')===0) {
                     $answers[$key] = mb_substr($value, 1);
