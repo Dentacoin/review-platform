@@ -524,17 +524,7 @@ class VoxController extends FrontController
 							        $answer->question_id = $q;
 							        $answer->answer = $a;
 							        $answer->country_id = $this->user->country_id;
-							        foreach (config('vox.stats_scales') as $df => $dv) {
-							        	if($df=='age') {
-		        							$agegroup = $this->getAgeGroup($this->user->birthyear);
-		        							$answer->$df = $agegroup;
-							        	} else {
-							        		if($this->user->$df!==null) {
-								        		$answer->$df = $this->user->$df;
-								        	}
-							        	}
-							        }
-
+							        $this->setupAnswerStats($answer);
 						        	$answer->save();
 							        $answered[$q] = $a;
 
@@ -612,6 +602,7 @@ class VoxController extends FrontController
 									        $answer->question_id = $q;
 									        $answer->answer = 0;
 									        $answer->country_id = $this->user->country_id;
+							        		$this->setupAnswerStats($answer);
 									        $answer->save();
 									        $answered[$q] = 0;
 
@@ -627,6 +618,8 @@ class VoxController extends FrontController
 								        $answer->question_id = $q;
 								        $answer->answer = $value;
 								        $answer->country_id = $this->user->country_id;
+							        	$this->setupAnswerStats($answer);
+
 								        $answer->save();
 			        				}
 								    $answered[$q] = $a;
@@ -639,6 +632,7 @@ class VoxController extends FrontController
 								        $answer->answer = $k+1;
 								        $answer->scale = $value;
 								        $answer->country_id = $this->user->country_id;
+							        	$this->setupAnswerStats($answer);
 								        $answer->save();
 			        				}
 								    $answered[$q] = $a;
@@ -757,14 +751,14 @@ class VoxController extends FrontController
 						        $reward->save();
 		        				$ret['balance'] = $this->user->getVoxBalance();
 
+		        				VoxAnswer::where('user_id', $this->user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
+
 		        				if( $reward->is_scam ) {
 		        					if($this->user->vox_should_ban()) {
 	            						$ret['ban_type'] = $this->user->banUser('vox', 'too-fast');
 	            						$ret['ban'] = getLangUrl('profile');
 			        				}
 		        				} else {
-
-		        					VoxAnswer::where('user_id', $this->user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
 
 		                            if($this->user->invited_by) {
 		                                $inv = UserInvite::where('user_id', $this->user->invited_by)->where('invited_id', $this->user->id)->first();
@@ -985,5 +979,19 @@ class VoxController extends FrontController
 		}
 
 		return $lastkey;
+	}
+
+	private function setupAnswerStats(&$answer) {
+
+        foreach (config('vox.stats_scales') as $df => $dv) {
+        	if($df=='age') {
+				$agegroup = $this->getAgeGroup($this->user->birthyear);
+				$answer->$df = $agegroup;
+        	} else {
+        		if($this->user->$df!==null) {
+	        		$answer->$df = $this->user->$df;
+	        	}
+        	}
+        }
 	}
 }
