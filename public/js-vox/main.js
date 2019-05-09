@@ -220,6 +220,18 @@ $(document).ready(function(){
 		});
     } );
 
+    
+
+    $('.modern-input').focus( function() {
+    	$(this).closest('.modern-field').find('label').addClass('active');
+    });
+
+    if ($('.modern-input').length) {
+    	if ($('.modern-input').val()) {
+    		$('.modern-input').closest('.modern-field').find('label').addClass('active');
+    	}
+    }
+
 	$('.alert-update button').click( function() {
 		Cookies.set('show-update', 'ok', { expires: 365 });
 	} );
@@ -753,7 +765,7 @@ $(document).ready(function(){
     	if (window.innerWidth < 768 && !$(this).hasClass('no-mobile-tooltips')) {
             handleTooltip.bind(this)(e);
         }
-    })
+    });
 });
 
 

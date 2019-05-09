@@ -178,6 +178,9 @@ $reviewRoutes = function () {
 			Route::post('forgot-password', 						'RegisterController@forgot_form');
 			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
 			Route::post('recover/{id}/{hash}', 					'RegisterController@recover_form');
+			Route::any('register-invite', 						'RegisterController@register_invite')->name('register-invite');
+			Route::any('invite-clinic', 						'RegisterController@invite_clinic')->name('invite-clinic');
+			Route::any('verification-dentist', 					'RegisterController@verification_dentist')->name('verification-dentist');
 
 			Route::get('login/facebook', 						'LoginController@facebook_login');
 			Route::get('login/twitter', 						'LoginController@twitter_login');

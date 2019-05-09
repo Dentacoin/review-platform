@@ -51,11 +51,7 @@ class UsersController extends AdminController
     	$this->fields = [
             'title' => [
                 'type' => 'select',
-                'values' => [
-                    '' => '-',
-                    'dr' => 'Dr.',
-                    'prof' => 'Prof. Dr.'
-                ]
+                'values' => config('titles')
             ],
     		'name' => [
     			'type' => 'text',

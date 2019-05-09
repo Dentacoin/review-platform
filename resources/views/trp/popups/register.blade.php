@@ -11,13 +11,15 @@
 				{!! nl2br(trans('trp.popup.popup-register.dentist')) !!}
 				
 			</a>
+		</div>
+		<div class="tablet-buttons">
 			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
 		</div>
 		<div class="forms flex">
 			<div class="form-wrapper {{ $current_page == 'welcome-dentist' ? '' : 'chosen' }}" id="user-form">						
-				<a class="switch-forms user-choice" href="javascript:;">
+				<!-- <a class="switch-forms user-choice" href="javascript:;">
 					<img src="img-trp/play-black.png"/>
-				</a>
+				</a> -->
 				<a href="javascript:;" class="form-button">
 					{!! nl2br(trans('trp.popup.popup-register.user')) !!}
 					
@@ -33,8 +35,7 @@
 						</div>
 
 						<h2>
-							{!! nl2br(trans('trp.popup.popup-register.signup')) !!}
-							
+							{!! nl2br(trans('trp.popup.popup-register.signup-title')) !!}
 						</h2>
 
 						<a href="{{ getLangUrl('register/facebook') }}" class="fb-login log-button">
@@ -159,9 +160,9 @@
 	    	</div>
 
 			<div class="form-wrapper {{ $current_page == 'welcome-dentist' ? 'chosen' : '' }}" id="dentist-form">								
-				<a class="switch-forms dentist-choice" href="javascript:;">
+				<!-- <a class="switch-forms dentist-choice" href="javascript:;">
 					<img src="img-trp/play.png"/>
-				</a>
+				</a> -->
 				<a href="javascript:;" class="form-button white-form-button">
 					{!! nl2br(trans('trp.popup.popup-register.dentist')) !!}
 				</a>
@@ -176,7 +177,7 @@
 						</div>
 
 						<h2>
-							{!! nl2br(trans('trp.popup.popup-register.signup')) !!}
+							{!! nl2br(trans('trp.popup.popup-register.signup-title')) !!}
 						</h2>
 						<div id="register-error" class="alert alert-warning" style="display: none;">
 							{{ trans('trp.popup.popup-register.error')  }}<br/>
@@ -186,19 +187,26 @@
 						</div>
 						<div class="sign-in-step {!! empty($regData) ? 'active' : '' !!}" id="step-1">
 							@include('front.errors')
-							<input type="text" name="name" id="dentist-name" placeholder="{!! nl2br(trans('trp.popup.popup-register.name')) !!}" class="input" value="{{ $regData['name'] ?? old('name') }}">
-							<input type="text" name="name_alternative" id="dentist-name_alternative" placeholder="{!! nl2br(trans('trp.popup.popup-register.name_alterantive')) !!}" class="input" value="{{ $regData['name_alternative'] ?? old('name_alternative') }}">
-							<input type="email" name="email" id="dentist-email" placeholder="{!! nl2br(trans('trp.popup.popup-register.email')) !!}" class="input" value="{{ $regData['email'] ?? old('email') }}">
-							<input type="password" name="password" id="dentist-password" placeholder="{!! nl2br(trans('trp.popup.popup-register.password')) !!}" class="input" value="{{ $regData['password'] ?? old('password') }}">
-							<input type="password" name="password-repeat" id="dentist-password-repeat" placeholder="{!! nl2br(trans('trp.popup.popup-register.repeat-password')) !!}" class="input" value="{{ $regData['password'] ?? old('password-repeat') }}">
-							<label class="checkbox-label agree-label{!! $regData ? ' active' : '' !!}" for="agree-privacyy">
-								<input type="checkbox" class="special-checkbox" id="agree-privacyy" name="agree" value="1" {!! !empty($regData) ? 'checked="checked"' : '' !!} />
-								<i class="far fa-square"></i>
-								{!! nl2br(trans('trp.popup.popup-register.terms', [
-									'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
-									'endlink' => '</a>',
-								])) !!}
-							</label>
+							<div class="modern-field">
+								<input type="email" name="email" id="dentist-email" class="modern-input" value="{{ $regData['email'] ?? old('email') }}" autocomplete="off">
+								<label for="dentist-email">
+									<span>{!! nl2br(trans('trp.popup.popup-register.email')) !!}</span>
+								</label>
+							</div>
+							
+							<div class="modern-field">
+								<input type="password" name="password" id="dentist-password" class="modern-input" value="{{ $regData['password'] ?? old('password') }}" autocomplete="off">
+								<label for="dentist-password">
+									<span>{!! nl2br(trans('trp.popup.popup-register.password')) !!}</span>
+								</label>
+							</div>
+							
+							<div class="modern-field">
+								<input type="password" name="password-repeat" id="dentist-password-repeat" class="modern-input" value="{{ $regData['password'] ?? old('password-repeat') }}" autocomplete="off">
+								<label for="dentist-password-repeat">
+									<span>{!! nl2br(trans('trp.popup.popup-register.repeat-password')) !!}</span>
+								</label>
+							</div>
 							<div class="form-info clearfix">
 								<a href="javascript:;" class="button next go-to-next button-next-step" step-number="1" data-validator="{{ getLangUrl('register/step1') }}">
 									{!! nl2br(trans('trp.common.next')) !!}
@@ -206,80 +214,138 @@
 								</a>
 							</div>
 						</div>
-						<div class="sign-in-step address-suggester-wrapper {!! !empty($regData) && empty($regData['country_id']) ? 'active' : '' !!}" id="step-2">
+						<div class="sign-in-step {!! !empty($regData) && empty($regData['name']) ? 'active' : '' !!}" id="step-2">
 
-							<div class="mobile-radios" {!! session('join_clinic') && session('invited_by') ? 'style="display: none;"' : '' !!}>
-								<div class="radio-label">
+							<div class="mobile-radios modern-radios" {!! session('join_clinic') && session('invited_by') ? 'style="display: none;"' : '' !!}>
+								<div class="radio-label col">
 								  	<label for="mode-dentist" {!! !empty($regData) && $regData['mode']=='dentist' ? 'class="active"' : '' !!}>
-										<i class="far fa-circle"></i>
+										<span class="modern-radio">
+											<span></span>
+										</span>
 								    	<input class="type-radio" type="radio" name="mode" id="mode-dentist" value="dentist" {!! !empty($regData) && $regData['mode']=='dentist' ? 'checked="checked"' : '' !!}>
-								    	{!! nl2br(trans('trp.popup.popup-register.type.dentist')) !!}
-								    	
+								    	{!! nl2br(trans('trp.popup.popup-register.mode.dentist')) !!}
 								  	</label>
+								  	<span>{!! nl2br(trans('trp.popup.popup-register.mode.dentist.description')) !!}</span>
 								</div>
-								<div class="radio-label">
+								<div class="radio-label col">
 								  	<label for="mode-clinic" {!! !empty($regData) && $regData['mode']=='clinic' ? 'class="active"' : '' !!}>
-										<i class="far fa-circle"></i>
+										<span class="modern-radio">
+											<span></span>
+										</span>
 								    	<input class="type-radio" type="radio" name="mode" id="mode-clinic" value="clinic" {!! !empty($regData) && $regData['mode']=='clinic' ? 'checked="checked"' : '' !!}>
-								    	{!! nl2br(trans('trp.popup.popup-register.type.clinic')) !!}
-								    	
+								    	{!! nl2br(trans('trp.popup.popup-register.mode.clinic')) !!}								    	
 								  	</label>
-								</div>
-								<div class="radio-label">
-								  	<label for="mode-in-clinic">
-										<i class="far fa-circle"></i>
-								    	<input class="type-radio" type="radio" name="mode" id="mode-in-clinic" value="in-clinic" {!! session('join_clinic') && session('invited_by') ? 'checked="checked"' : '' !!}>
-								    	{!! nl2br(trans('trp.popup.popup-register.type.associate')) !!}
-								    	
-								  	</label>
+								  	<span>{!! nl2br(trans('trp.popup.popup-register.mode.clinic.description')) !!}</span>
 								</div>
 							</div>
 
-					  		<select name="country_id" id="dentist-country" class="input country-select">
-					  			@if(!$country_id)
-					  				<option>-</option>
-					  			@endif
-					  			@foreach( $countries as $country )
-					  				<option value="{{ $country->id }}" code="{{ $country->code }}" {!! (!empty($regData['country_id']) && $regData['country_id']==$country->id) || (empty($regData['country_id']) && $country_id==$country->id) ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
-					  			@endforeach
-					  		</select>
-
-		                	<div>
-						    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}"  value="{{ $regData['address'] ?? old('address') }}">
-		                        <div class="suggester-map-div" style="height: 200px; display: none; margin: 10px 0px; background: transparent;">
-		                        </div>
-		                        <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px;">
-		                        	{!! nl2br(trans('trp.common.check-address')) !!}
-		                        </div>
-		                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
-		                        	{!! nl2br(trans('trp.common.invalid-address')) !!}
-		                        </div>
-		                    </div>
-
-							<div class="flex input-flex">
-								<div>
-				    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>
-								</div>
-								<div style="flex: 1;">
-									<input type="phone" name="phone" id="dentist-tel" placeholder="Phone number" class="input"  value="{{ $regData['phone'] ?? old('phone') }}">
-								</div>
+					  		<div class="modern-field title-wrap" {!! !empty($regData) && $regData['mode']=='dentist' ? '' : 'style="display: none;"' !!}>
+					  			<select name="title" id="dentist-title" class="modern-input" value="{{ $regData['title'] ?? old('title') }}">
+					  				@foreach(config('titles') as $k => $v)
+					  					<option value="{{ $k }}" {!! !empty($regData['title'] && ($regData['title'] == $k)) ? 'selected="selected"' : '' !!}>{{ $v }}</option>
+					  				@endforeach
+					  			</select>
+								<label for="dentist-title">
+									<span>{!! nl2br(trans('trp.popup.popup-register.title')) !!}</span>
+								</label>
 							</div>
-							<input type="text" name="website" placeholder="Website" id="dentist-website" class="input"  value="{{ $regData['website'] ?? old('website') }}">
+
+					  		<div class="modern-field">
+								<input type="text" name="name" id="dentist-name" class="modern-input" value="{{ $regData['name'] ?? old('name') }}" autocomplete="off">
+								<label for="dentist-name">
+									<span>{!! nl2br(trans('trp.popup.popup-register.name')) !!}</span>
+								</label>
+								<p>{!! nl2br(trans('trp.popup.popup-register.name.description')) !!}</p>
+							</div>
+
+					  		<div class="modern-field">
+								<input type="text" name="name_alternative" id="dentist-name_alternative" class="modern-input" value="{{ $regData['name_alternative'] ?? old('name_alternative') }}" autocomplete="off">
+								<label for="dentist-name_alternative">
+									<span>{!! nl2br(trans('trp.popup.popup-register.name_alterantive')) !!}</span>
+								</label>
+								<p>{!! nl2br(trans('trp.popup.popup-register.name_alterantive.description')) !!}</p>
+							</div>
+
+							<label class="checkbox-label agree-label{!! (!empty($regData) && empty($regData['country_id']) && !empty($regData['name'])) || (empty($regData['specialization']) && !empty($regData['country_id'])) ? ' active' : '' !!}" for="agree-privacyy" >
+								<input type="checkbox" class="special-checkbox" id="agree-privacyy" name="agree" value="1" {!! (!empty($regData) && empty($regData['country_id']) && !empty($regData['name'])) || (empty($regData['specialization']) && !empty($regData['country_id'])) ? 'checked="checked"' : '' !!} />
+								<i class="far fa-square"></i>
+								{!! nl2br(trans('trp.popup.popup-register.terms', [
+									'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
+									'endlink' => '</a>',
+								])) !!}
+							</label>
 							<div class="form-info clearfix">
 								<a class="back" href="javascript:;">< {!! nl2br(trans('trp.common.back')) !!}</a>
 								<a href="javascript:;" class="button next go-to-next button-next-step" step-number="2" data-validator="{{ getLangUrl('register/step2') }}">{!! nl2br(trans('trp.common.next')) !!}</a>
 							</div>
 						</div>
-						<div class="sign-in-step {!! !empty($regData['country_id']) && empty($regData['specialization']) ? 'active' : '' !!}" id="step-3">
+						<div class="sign-in-step address-suggester-wrapper {!! !empty($regData) && empty($regData['country_id']) && !empty($regData['name']) ? 'active' : '' !!}" id="step-3">
+							<div class="modern-field">
+					  			<select name="country_id" id="dentist-country" class="modern-input country-select">
+					  				@if(!$country_id)
+						  				<option>-</option>
+						  			@endif
+					  				@foreach( $countries as $country )
+					  					<option value="{{ $country->id }}" code="{{ $country->code }}" {!! (!empty($regData['country_id']) && $regData['country_id']==$country->id) || (empty($regData['country_id']) && $country_id==$country->id) ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+					  				@endforeach
+					  			</select>
+							</div>
+
+							<div class="modern-field">
+								<input type="text" name="address"  id="dentist-address" class="modern-input address-suggester" autocomplete="off" value="{{ $regData['address'] ?? old('address') }}">
+								<label for="dentist-address">
+									<span>{!! nl2br(trans('trp.popup.popup-register.address')) !!}</span>
+								</label>
+								<p>{!! nl2br(trans('trp.popup.popup-register.address.description')) !!}</p>
+							</div>
+
+		                	<div>
+						    	<div class="suggester-map-div" style="height: 200px; display: none; margin: 10px 0px; background: transparent;">
+		                        </div>
+		                        <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px 20px;">
+		                        	{!! nl2br(trans('trp.common.check-address')) !!}
+		                        </div>
+		                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
+		                        	{!! nl2br(trans('trp.common.invalid-address')) !!}
+		                        </div>		                        
+		                    </div>
+
+							<div class="modern-field">
+								<input type="text" name="website" id="dentist-website" class="modern-input" autocomplete="off" value="{{ $regData['website'] ?? old('website') }}">
+								<label for="dentist-website">
+									<span>{!! nl2br(trans('trp.popup.popup-register.website')) !!}</span>
+								</label>
+								<p>{!! nl2br(trans('trp.popup.popup-register.website.description')) !!}</p>
+							</div>
+
+							<div class="flex input-flex">
+								<div>
+				    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>
+								</div>
+								<div style="flex: 1;" class="modern-field">
+									<input type="text" name="phone" id="dentist-tel" class="modern-input" autocomplete="off" value="{{ $regData['phone'] ?? old('phone') }}">
+									<label for="dentist-tel">
+										<span>{!! nl2br(trans('trp.popup.popup-register.phone')) !!}</span>
+									</label>
+								</div>
+							</div>
+
+							<div class="form-info clearfix">
+								<a class="back" href="javascript:;">< {!! nl2br(trans('trp.common.back')) !!}</a>
+								<a href="javascript:;" class="button next go-to-next button-next-step" step-number="3" data-validator="{{ getLangUrl('register/step3') }}">
+									{!! nl2br(trans('trp.common.next')) !!}
+								</a>
+							</div>
+						</div>
+						<div class="sign-in-step {!! !empty($regData['country_id']) ? 'active' : '' !!} tac" id="step-4">
 							<div class="flex flex-mobile">
-								<div class="col">
+								<div class="col" style="max-width: 154px;">
 									<label for="add-avatar" class="image-label" {!! !empty($regData['photoThumb']) ? 'style="background-image:url('.$regData['photoThumb'].');"' : '' !!} >
 										@if(empty( $regData['photo'] ))
 											<div class="centered-hack">
 												<i class="fas fa-plus"></i>
 												<p>
-													{!! nl2br(trans('trp.popup.popup-register.add-photo')) !!}
-													
+													{!! nl2br(trans('trp.popup.popup-register.add-photo')) !!}													
 												</p>
 											</div>
 										@endif
@@ -312,36 +378,14 @@
 											</label>
 	                                    @endforeach
 	                                </div>
+
 								</div>
 							</div>
-
-							<div class="search-input" id="clinic-widget" {!! session('join_clinic') && session('invited_by') ? 'style="display: none;"' : '' !!}>
-								<label>
-									{!! nl2br(trans('trp.popup.popup-register.join-clinic')) !!}
-									
-									<div class="input-wrapper cilnic-suggester-wrapper suggester-wrapper">
-										<i class="fas fa-search"></i>
-										<input type="text" class="input cilnic-suggester suggester-input" placeholder="{!! nl2br(trans('trp.popup.popup-register.search-clinic')) !!}"  name="clinic_name"  value="{{ $regData['clinic_name'] ?? '' }}">
-										<div class="suggest-results">
-										</div>
-										<input type="hidden" class="suggester-hidden" name="clinic_id" value="{{ session('join_clinic') && session('invited_by') ? session('invited_by') : '' }}"  value="{{ $regData['clinic_id'] ?? '' }}">
-									</div>
-								</label>
-							</div>
-
-							<div class="form-info clearfix">
-								<a class="back" href="javascript:;">< {!! nl2br(trans('trp.common.back')) !!}</a>
-								<a href="javascript:;" class="button next go-to-next button-next-step" step-number="3" data-validator="{{ getLangUrl('register/step3') }}">
-									{!! nl2br(trans('trp.common.next')) !!}
-								</a>
-							</div>
-						</div>
-						<div class="sign-in-step {!! !empty($regData['specialization']) ? 'active' : '' !!} tac" id="step-4">
 					    	<div id="captcha-div"></div>
 
 							<div class="form-info clearfix">
 								<a class="back" href="javascript:;">< {!! nl2br(trans('trp.common.back')) !!}</a>
-								<input type="submit" value="Create profile" class="button next"/>
+								<input type="submit" value="{!! nl2br(trans('trp.popup.popup-register.create-profile')) !!}" class="button next"/>
 							</div>
 						</div>
 					</div>
@@ -366,8 +410,20 @@
 						
 						<h2>{!! nl2br(trans('trp.popup.popup-register.login')) !!}</h2>
 						@include('front.errors')
-						<input type="email" name="email" placeholder="{!! nl2br(trans('trp.popup.popup-register.email')) !!}" class="input">
-						<input type="password" name="password" placeholder="{!! nl2br(trans('trp.popup.popup-register.password')) !!}" class="input">
+
+						<div class="modern-field">
+							<input type="email" name="email" id="dentist-login-email" class="modern-input" autocomplete="off">
+							<label for="dentist-login-email">
+								<span>{!! nl2br(trans('trp.popup.popup-register.email')) !!}</span>
+							</label>
+						</div>
+
+						<div class="modern-field">
+							<input type="password" name="password" id="dentist-login-password" class="modern-input" autocomplete="off">
+							<label for="dentist-login-password">
+								<span>{!! nl2br(trans('trp.popup.popup-register.password')) !!}</span>
+							</label>
+						</div>
 
 						<div class="form-info tac">
 							<input class="button login-button" type="submit" value="{!! nl2br(trans('trp.popup.popup-register.login')) !!}"/>
@@ -375,17 +431,17 @@
 								
 							</div>
 						</div>
+						<div class="login-without-account">
+							{!! nl2br(trans('trp.popup.popup-register.no-account')) !!}
+							<a class="sign-in-button button-sign-up-dentist" href="javascript:;">
+								{!! nl2br(trans('trp.popup.popup-register.signup')) !!}
+							</a>
+						</div>
 					</div>
 
-					<p class="have-account">
+					<p class="have-account forgot-password-wrap">
 						<a href="{{ getLangUrl('forgot-password') }}">
-							{!! nl2br(trans('trp.popup.popup-register.forgot')) !!}
-							
-						</a>
-						 | 
-						{!! nl2br(trans('trp.popup.popup-register.no-account')) !!}
-						<a class="sign-in-button button-sign-up-dentist" href="javascript:;">
-							{!! nl2br(trans('trp.popup.popup-register.signup')) !!}
+							{!! nl2br(trans('trp.popup.popup-register.forgot')) !!}							
 						</a>
 					</p>
 

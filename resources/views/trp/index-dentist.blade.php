@@ -36,10 +36,19 @@
     		<form class="signin-form tablet-fixes">
 
 				<div class="form-inner">
-					<input type="text" name="name" placeholder="{{ trans('trp.page.index-dentist.name') }}" class="input" value="{!! $regData['name'] ?? '' !!}">
-					<input type="text" name="name_alternative" placeholder="{{ trans('trp.page.index-dentist.name_alternative') }}" class="input" value="{!! $regData['name_alternative'] ?? '' !!}">
-					<input type="email" name="email" placeholder="{{ trans('trp.page.index-dentist.email') }}" class="input" value="{!! $regData['password'] ?? '' !!}">
-					<input type="password" name="password" placeholder="{{ trans('trp.page.index-dentist.password') }}" class="input" value="{!! $regData['password'] ?? '' !!}">
+					<div class="modern-field">
+						<input type="email" name="email" id="dentist-mail" class="modern-input" autocomplete="off">
+						<label for="dentist-mail">
+							<span>{{ trans('trp.page.index-dentist.email') }}</span>
+						</label>
+					</div>
+					
+					<div class="modern-field">
+						<input type="password" name="password" id="dentist-pass" class="modern-input" autocomplete="off">
+						<label for="dentist-pass">
+							<span>{{ trans('trp.page.index-dentist.password') }}</span>
+						</label>
+					</div>
 
 					<label class="checkbox-label{!! $regData ? ' active' : '' !!}" for="agree-privacyy-dentist">
 						<input type="checkbox" class="special-checkbox" id="agree-privacyy-dentist" name="agree" value="1" {!! $regData ? 'checked="checked"' : '' !!} />
@@ -51,7 +60,7 @@
 					</label>
 
 					<div class="tac">
-						<input type="submit" value="{{ trans('trp.page.index-dentist.signup') }}" class="button button-sign-up-dentist">
+						<input type="submit" value="{{ trans('trp.page.index-dentist.signup') }}" class="button button-sign-up-dentist sign-dentist-form">
 					</div>
 				</div>
 
@@ -59,8 +68,7 @@
 					{!! nl2br(trans('trp.page.index-dentist.have-account', [
 						'link' => '<a href="javascript:;" data-popup="popup-login">',
 						'endlink' => '</a>',
-					])) !!}
-					
+					])) !!}					
 				</p>
 
     		</form>

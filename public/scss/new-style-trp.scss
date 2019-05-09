@@ -1435,7 +1435,8 @@ body.blur {
     	padding: 20px;
     	border-top-right-radius: 10px;
     	border-top-left-radius: 10px;
-    	background-color: #f7f7f7;
+    	// background-color: #f7f7f7;
+    	background-color: white;
     	box-shadow: -8px -8px 17px 0px rgba(109, 109, 109, 0.58);
     	margin-top: -20px;
 
@@ -1621,13 +1622,37 @@ textarea.input {
 	}
 }
 
+@keyframes twerk {
+    0% { transform: rotate(0deg); }
+	3% { transform: rotate(-3deg); }
+	6% { transform: rotate(3deg); }
+	9% { transform: rotate(-3deg); }
+	12% { transform: rotate(3deg); }
+	15% { transform: rotate(-3deg); }
+	18% { transform: rotate(3deg); }
+	21% { transform: rotate(-3deg); }
+	24% { transform: rotate(3deg); }
+	27% { transform: rotate(-3deg); }
+	30% { transform: rotate(0deg); }
+}
+
 .checkbox-label {
 	display: block;
 	min-width: 150px;
-	font-weight: 300;
-	font-size: 14px;
+	text-align: center;
+    font-size: 16px;
+    font-weight: normal;
 	color: #333333;
 	cursor: pointer;
+
+	&.has-error {
+		animation: twerk 3s; 
+	    animation-iteration-count: infinite;
+
+	    i {
+			color: rgba(255, 0, 0, 0.6);
+	    }
+	}
 
 	input {
 		display: none;
@@ -1637,11 +1662,21 @@ textarea.input {
 		vertical-align: bottom;
     	margin-top: 10px;
     	margin-right: 5px;
-    	color: #777777;
+    	color: #126585;
+    	vertical-align: text-bottom;
+    	font-size: 20px;
+
+    	@media #{$tablet} {
+    		vertical-align: inherit;
+    		font-size: 16px;
+    	}
 	}
 
 	&.active {
 		i {
+			font-weight: 900;
+			color: #126585;
+
 			&:before {
 				content: '\f14a';
 			}
@@ -1651,7 +1686,6 @@ textarea.input {
 	a {
 		color: #38a2e5;
 		font-size: 14px;
-		font-weight: 300;
 
 		&:hover {
 			text-decoration: underline;
@@ -1659,12 +1693,10 @@ textarea.input {
 	}
 
 	&.agree-label {
-		color: #999999;
-
 		a {
 			color: black;
-			font-size: 14px;
-			font-weight: 300;
+			font-size: 16px;
+			color: #126585;
 		}
 	}
 
@@ -1672,6 +1704,9 @@ textarea.input {
 
 .checkbox-question {
 	margin-top: -4px;
+	text-align: left;
+	color: #888888;
+    margin-bottom: 5px;
 }
 
 .centered-hack {
@@ -2293,39 +2328,163 @@ textarea.input {
     }
 }
  
-.verification-popup {
+.verification-popup.fixed-popup {
     .popup-inner {
-        padding: 80px 45px 65px 45px;
+        padding: 40px 60px;
+        box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
  
         @media #{$phone} {
-            padding: 30px 20px 0px 20px;
+            padding: 20px 30px;
         }
- 
-        h4 {
-            max-width: 520px;
- 
-            @media #{$phone} {
-                font-size: 16px;
-                text-align: left;
-            }
+
+        .close-popup {
+        	position: absolute;
+		    right: 15px;
+		    top: 15px;
+
+		    i {
+		    	font-size: 25px;
+    			color: #424242;
+		    }
         }
- 
-        .icon {
-            img {
-                @media #{$phone} {
-                    width: 105px;
-                    bottom: 40px;
-                }
-            }
+
+        .alert {
+            margin-bottom: 20px;
         }
- 
-        .content {
- 
-            .h1 {
-                @media #{$phone} {
-                    margin-bottom: 25px;
-                }
-            }
+
+        .verification-content {
+        	text-align: center;
+			padding: 20px 80px 0px;
+
+			@media #{$tablet} {
+		    	padding: 20px 20px 0px;
+		    }
+
+		    @media #{$phone} {
+		    	padding: 0px;
+		    }
+
+			img {
+				max-height: 80px;
+    			margin-bottom: 20px;
+
+    			@media #{$phone} {
+			    	max-height: 50px;
+			    }
+			}
+
+        	h2 {
+        		font-weight: bold;
+        		text-transform: uppercase;
+        		color: black;
+        		margin-bottom: 25px;
+
+        		@media #{$phone} {
+			    	margin-top: 0px;
+			    }
+        	}
+
+        	h4 {
+        		color: #333333;
+
+        		@media #{$phone} {
+			    	font-size: 16px;
+			    	margin-bottom: 25px;
+			    }
+        	}
+        }
+
+        .verification-info {
+			border-top: 1px solid black;
+        	padding: 30px 65px 0px;
+
+			@media #{$tablet} {
+		    	padding: 30px 20px 0px;
+		    }
+
+		    @media #{$phone} {
+		    	padding: 20px 0px 0px;
+		    }
+
+        	h2 {
+        		color: black;
+        		font-weight: bold;
+        		margin-bottom: 40px;
+
+        		@media #{$phone} {
+        			margin-top: 0px;
+        			margin-bottom: 20px;
+        		}
+        	}
+        }
+
+        form {
+
+        	.invite-clinic-wrap {
+        		.invite-title {
+	        		position: relative;
+					margin-bottom: 25px;
+					margin-top: -5px;
+
+        			span {
+	        			color: black;
+					    background-color: white;
+					    position: relative;
+					    z-index: 10;
+					    padding: 0px 9px;
+        			}
+
+        			&:after {
+        				content: '';
+        				position: absolute;
+        				height: 1px;
+        				width: 100%;
+        			    top: 50%;
+        				left: 0;
+        				background-color: black;
+        			}
+        		}
+        	}
+
+        	.big-button {
+			    padding: 15px 90px;
+
+			    @media #{$tablet} {
+			    	padding: 9px 70px;
+			    }
+        	}
+
+        	.button-white {
+    			text-align: center;
+        	}
+
+        	.invite-clinic-buttons {
+        		max-width: 430px;
+        		margin: 0 auto;
+        		padding-bottom: 25px;
+        		border-bottom: 1px solid black;
+        		margin-bottom: 30px;
+        		display: flex;
+
+        		.col {
+        			flex: 1;
+
+        			&:first-child {
+        				margin-right: 5px;
+        			}
+        		}
+
+        		.button {
+        			padding: 15px;
+        			width: 100%;
+        			display: block;
+        			border: 2px solid #126585;
+
+        			@media #{$tablet} {
+        				padding: 7px;
+        			}
+        		}
+        	}
         }
     }
 }
@@ -3528,6 +3687,14 @@ textarea.input {
 	}
 }
 
+.tablet-buttons {
+	display: none;
+
+	@media #{$tablet} {
+		display: block;
+	}
+}
+
 .switch-forms-mobile {
 	text-align: center;
 	text-transform: unset;
@@ -3535,7 +3702,6 @@ textarea.input {
 }
 
 .switch-forms-mobile[data-form="user-form"] {
-	background-color: #00aee6;
     border: 3px solid white;
     border-right-width: 1px;
 }
@@ -3557,11 +3723,9 @@ textarea.input {
 		display: block;
 	    width: 100%;
 	    border: 3px solid white;
-	    border-radius: 3px;
 	    color: white;
-	    background-color: #00aee6;
+	    background-color: #126585;
 	    font-size: 35px;
-	    font-weight: 300;
 	    text-align: center;
 		padding: 10px 0px;
 
@@ -3638,7 +3802,8 @@ textarea.input {
 			color: black;
 			background-color: white;
 			padding: 10px 0px;
-			border-bottom: 1px solid #dcdcdc;
+			border-bottom: 1px solid #000000;
+    		padding-bottom: 12px;
 		}
 
 		#login-form-popup {
@@ -3651,6 +3816,27 @@ textarea.input {
 		    @media #{$tablet} {
 				height: 100%;
 				min-width: unset;
+			}
+
+			.login-without-account {
+				text-align: center;
+				margin-top: 25px;
+
+				a {
+					font-size: 20px;
+					font-weight: bold;
+
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+			}
+
+			.forgot-password-wrap {
+				a {
+					color: #999999;
+					font-size: 16px;
+				}
 			}
 		}
 
@@ -3686,7 +3872,7 @@ textarea.input {
     		flex: 1;
 
 		    &.blue-form {
-				background-color: #00aee6;
+				background-color: #126585;
 				border: 3px solid white;
 				margin-top: -3px;
 				border-top-width: 1px;
@@ -3708,8 +3894,6 @@ textarea.input {
 					text-align: center;
 					margin-top: 0px;
 				    color: white;
-				    font-size: 16px;
-				    font-weight: 300;
     				padding-bottom: 10px;
 
 				    &.blink {
@@ -3792,20 +3976,12 @@ textarea.input {
 				}
 
 				@media #{$tablet} {
-					padding: 0px 20px;
+					padding: 0px 20px 20px;
 				}
 
 				h2 {
 					text-transform: uppercase;
-					padding-top: 60px;
-
-					@media #{$tablet} {
-					    padding-top: 60px;
-					}
-
-					@media #{$phone} {
-					    padding-top: 30px;
-					}
+					padding-top: 30px;
 				}
 
 				.mobile-radios {
@@ -3846,12 +4022,20 @@ textarea.input {
 			}
 
 			.have-account {
-				margin-top: 90px;
+				margin-top: 30px;
 				text-align: center;
-			    border-top: 1px solid #dcdcdc;
-			    padding-top: 30px;
-			    color: #999999;
-			    padding-bottom: 35px;
+				border-top: 1px solid #000000;
+				padding-top: 20px;
+				padding-bottom: 23px;
+				color: black;
+				width: 90%;
+				margin-right: auto;
+				margin-left: auto;
+
+				@media #{$tablet} {
+					width: 100%;
+					margin-top: 0px;
+				}
 
 			    @media #{$phone} {
 					padding-top: 15px;
@@ -3870,6 +4054,14 @@ textarea.input {
 
 			.specilializations {
 				margin-left: 20px;
+
+				.checkbox-label {
+					text-align: left;
+
+					i {
+						margin-top: 3px;
+					}
+				}
 			}
 
 			.image-label {
@@ -3902,10 +4094,16 @@ textarea.input {
 					}
 
 					.phone-code-holder {
-						margin-bottom: 10px;
-					    display: block;
-					    text-align: right;
-					    padding-right: 20px;
+						margin-bottom: 27px;
+						display: block;
+						text-align: right;
+						padding-right: 10px;
+						font-size: 18px;
+
+						@media #{$phone} {
+							margin-bottom: 18px;
+							font-size: 14px;
+						}
 					}
 				}
 			}
@@ -4200,6 +4398,16 @@ textarea.input {
 	    margin-right: auto;
 	    margin-bottom: 20px;
     }
+}
+
+#signin-form-popup-left,
+#signin-form-popup {
+	.form-inner {
+		>h2 {
+			font-size: 30px;
+			text-transform: unset;
+		}
+	}
 }
 
 .page-dentist,
@@ -5733,6 +5941,7 @@ textarea.input {
 #popup-register {
 	.popup-inner {
 		width: 70%;
+		max-width: 1000px;
 
 		@media #{$pc} {
 			width: auto;
@@ -5746,10 +5955,249 @@ textarea.input {
 	.close-popup {
 	    right: 6px;
 	    top: 3px;
+	    z-index: 10;
 
 	    i {
 	    	font-size: 20px;
 	    }		
+	}
+}
+
+.modern-field {
+	margin-bottom: 25px;
+	position: relative;
+
+	@media #{$phone} {
+		margin-bottom: 15px;
+	}
+
+	p {
+		font-size: 14px;
+		font-weight: 300;
+		color: #888888;
+		padding-left: 10px;
+
+		@media #{$tablet} {
+			font-size: 12px;
+		}
+	}
+
+	.modern-input,
+	span,
+	label {
+		display: block;
+		margin: 10px;
+		padding: 5px;
+		border: none;
+		font-size: 22px;
+	}
+
+	.modern-input:focus {
+		outline: 0;
+	}
+
+	.modern-input {
+		padding-left: 20px;
+		font-size: 17px;
+		height: 58px;
+		font-weight: 300;
+		border-radius: 4px;
+		margin: 0;
+		border: 2px solid #cccccc;
+		width: 100%;
+		transition: padding-top 0.2s ease, margin-top 0.2s ease;
+		overflow-x: hidden;
+		/* Hack to make "rows" attribute apply in Firefox. */
+
+		@media #{$tablet} {
+			font-size: 14px;
+    		height: 45px;
+		}
+
+		&.has-error {
+			border-color: rgba(255, 0, 0, 0.2);
+		}
+
+		&:-webkit-autofill {
+		    background-color: transparent !important;
+		}
+	}
+
+	textarea.modern-input {
+		height: 96px;
+		resize: none;
+	}
+
+	.modern-input+label {
+		display: block;
+		position: relative;
+		white-space: nowrap;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		-webkit-transition: width 0.4s ease;
+		transition: width 0.4s ease;
+		height: 3px;
+	}
+
+	.modern-input+label>span {
+		font-weight: 300;
+		margin: 0;
+		position: absolute;
+		color: #888888;
+		font-size: 16px;
+		top: -46px;
+		left: 0px;
+		margin-left: 9px;
+		background-color: white;
+		-webkit-transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+		transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+
+		@media #{$tablet} {
+			font-size: 14px;
+    		top: -37px;
+		}
+	}
+
+	textarea.modern-input+label>span {
+		top: -86px;
+	}
+
+	@keyframes appear {
+		100% {
+			opacity: 1;
+		}
+	}
+
+	&.active {
+		label {
+			width: 100%;
+		}
+
+		.modern-input {
+			padding-top: 5px;
+			border-color: #126585;
+
+			&.has-error {
+				border-color: rgba(255, 0, 0, 0.2);
+			}
+		}
+
+		textarea.modern-input {
+			padding-top: 15px;
+		}
+
+		.modern-input+label>span {
+			top: -73px;
+			color: #126585;
+
+			@media #{$tablet} {				
+	    		top: -60px;
+			}
+		}
+
+		textarea.modern-input+label>span {
+			top: -111px;
+		}
+
+		.search-icon {
+			background-color: #126585;
+		}
+	}
+
+	.suggest-results {
+		top: calc(100% - 16px) !important;
+	}
+
+	.search-icon {
+		position: absolute;
+		right: 1px;
+		top: 1px;
+		height: 56px;
+		width: 45px;
+		background-color: #888888;
+		color: white;
+		text-align: center;
+		line-height: 56px;
+		border-radius: 3px;
+
+		@media #{$tablet} {
+		    height: 43px;
+		    line-height: 43px;
+		}
+	}
+}
+
+.modern-radios {
+	display: flex;
+
+	.radio-label {
+		label {
+			display: block;
+			border: 2px solid #ccc;
+			padding: 7px 9px;
+			border-radius: 4px;
+			font-size: 18px;
+			color: #888888;
+
+			@media #{$tablet} {
+				font-size: 14px;
+				padding: 11px 9px;
+			}
+
+			.modern-radio {
+				width: 20px;
+				height: 20px;
+				border-radius: 50%;
+				border: 1px solid #ccc;
+				display: inline-block;
+				background-color: white;
+				position: relative;
+				vertical-align: sub;
+
+				@media #{$tablet} {
+					width: 16px;
+					height: 16px;
+					margin-right: 5px;
+				}
+
+				span {
+					position: absolute;
+					border-radius: 50%;
+					top: 50%;
+					left: 50%;
+					transform: translateX(-50%) translateY(-50%);
+					width: 10px;
+					height: 10px;
+				}
+			}
+			&.active {
+				color: black;
+				border-color: #126585;		
+				span {
+					span {
+						background-color: #666666;
+					}
+				}
+			}
+		}
+
+		&:first-child {
+			margin-right: 38px;
+		}
+
+		>span {
+			font-size: 12px;
+			color: #888888;
+		}
+	}
+
+	&.has-error {
+		.radio-label {
+			label {
+				border-color: #ffd7d7;
+			}
+		}
 	}
 }
 
@@ -5841,6 +6289,7 @@ textarea.input {
 
 #captcha-div {
 	text-align: center;
+	margin-top: 40px;
 
 	> div {
 	    display: inline-block;
