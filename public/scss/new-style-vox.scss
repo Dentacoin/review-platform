@@ -852,6 +852,7 @@ header {
 	    top: 35%;
 	    left: 50%;
     	transform: translateY(-50%);
+	    z-index: 1;
 
     	@media #{$phone} {
     		top: 100%;

@@ -631,7 +631,8 @@ header {
     position: absolute;
     top: 35%;
     left: 50%;
-    transform: translateY(-50%); }
+    transform: translateY(-50%);
+    z-index: 1; }
     @media screen and (max-width: 768px) {
       .full .first-absolute {
         top: 100%;
