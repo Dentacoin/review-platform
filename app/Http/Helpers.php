@@ -1,5 +1,18 @@
 <?php
 
+	function getVoxUrl($path=false){
+    	//return getLangUrl($path);
+    	return getLangUrl($path, $locale, 'https://dentavox.dentacoin.com/');
+	}
+
+
+
+	function getStarWidth($rate) {
+		$stars = $rate * 30;
+	    $emptyspace = floor($rate) * 18;
+	    return $stars + $emptyspace;
+	}
+
 	function getLangUrl($path=false, $locale=null, $domain=null){
     	$locale = $locale ? $locale : \App::getLocale();
 
@@ -17,15 +30,8 @@
 
 	}
 
-	function getVoxUrl($path=false){
-    	//return getLangUrl($path);
-    	return getLangUrl($path, $locale, 'https://dentavox.dentacoin.com/');
-	}
+	function getLangRoute($path=false, $params = [], $locale=null){
+		$params['locale'] = $locale ?? App::getLocale();
+		return route($path, $params);
 
-
-
-	function getStarWidth($rate) {
-		$stars = $rate * 30;
-	    $emptyspace = floor($rate) * 18;
-	    return $stars + $emptyspace;
 	}

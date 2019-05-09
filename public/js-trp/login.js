@@ -131,6 +131,9 @@ $(document).ready(function(){
         var prev_step = $(this).closest('.sign-in-step');
         prev_step.removeClass('active');
         prev_step.prev().addClass('active');
+        if ($('#dentist-address').length && $('#dentist-address').val()) {
+            $('#dentist-address').blur();
+        }
     });
 
     $('.switch-forms').click( function() {
@@ -161,6 +164,24 @@ $(document).ready(function(){
             $(this).attr('action'), 
             $(this).serialize() , 
             (function( data ) {
+                if (data.hash) {
+                    $('input[name="last_user_hash"]').val(data.hash);
+                }
+                if (data.id) {
+                    $('input[name="last_user_id"]').val(data.id);
+                }
+                
+                if (data.short_description && (data.short_description!='') && $('.verification-form').length && data.is_clinic && $('.invite-clinic-form').length) {
+                    $('.verification-info').hide();
+                } else {                    
+                    if (data.short_description && $('.verification-form').length) {
+                        $('.verification-form').hide();
+                    }
+                    if (data.is_clinic && $('.invite-clinic-form').length) {
+                        $('.invite-clinic-form').hide();
+                    }
+                }
+
                 if(data.popup) {
                     closePopup();
                     showPopup(data.popup);
@@ -208,7 +229,7 @@ $(document).ready(function(){
                 joinclinic: $(this).val()
             },
             success: (function( data ) {
-                console.log(data);
+                // console.log(data);
                 var container = $(this).closest('.cilnic-suggester-wrapper').find('.suggest-results');
                 
                 if (data.length) {
@@ -220,10 +241,10 @@ $(document).ready(function(){
                     container.find('a').click( function() {
                         $(this).closest('.suggest-results').hide();
                         $(this).closest('.cilnic-suggester-wrapper').find('.cilnic-suggester').val( $(this).text() ).blur();
-                        $(this).closest('.cilnic-suggester-wrapper').find('.suggester-hidden').val( $(this).attr('data-id') );
+                        $(this).closest('.cilnic-suggester-wrapper').find('.suggester-hidden').val( $(this).attr('data-id') ).trigger('change');
                     } );
                 } else {
-                    container.hide();                    
+                    container.hide();
                 }
 
                 ajax_is_running = false;
@@ -271,6 +292,8 @@ $(document).ready(function(){
                 $(this).closest('.cilnic-suggester-wrapper').find('.suggester-hidden').val( activeLink.attr('data-id') );
                 container.hide();
             }
+            // $(this).closest('.cilnic-suggester-wrapper').find('.suggester-hidden').trigger('change');
+            
         } else {
             if( $(this).val().length > 3 ) {
                 //Show Loding
@@ -284,12 +307,143 @@ $(document).ready(function(){
         }
     });
 
+    $('.invite-clinic-wrap .cancel-invitation').click( function() {
+        $(this).closest('.invite-clinic-wrap').hide();
+    });
+
+    if ($('.invite-clinic-wrap').length) {
+        $('.cilnic-suggester').on( 'keyup', function(e) {
+
+            var container = $(this).closest('.cilnic-suggester-wrapper').find('.suggest-results');
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                if (!$('.verification-popup').find('input[name="clinic_id"]').val()) {
+                    $('.invite-clinic-wrap').show();
+                } else {
+                    $('.invite-clinic-wrap').hide();
+                }
+            }
+        });
+
+        $('.suggester-hidden').on( 'change', function(e) {
+            var form = $(this).closest('form');
+
+            $('.popup .alert').hide();
+
+            $.ajax({
+                type: "POST",
+                url: $(this).attr('url'),
+                data: {
+                    clinic_name: $('input[name="clinic_name"]').val(),
+                    clinic_id: $(this).val(),
+                    user_id: $('input[name="last_user_id"]').val(),
+                    user_hash: $('input[name="last_user_hash"]').val(),
+                    _token: form.find('input[name="_token"]').val(),
+                },
+                dataType: 'json',
+                success: function(ret) {
+                    if (ret.success) {
+                        form.hide();
+                        $('.popup .alert-success').html(ret.message).show();
+                    } else {
+                        $('.popup .alert-warning').html(ret.message).show();
+                    }
+                }
+            });
+
+        });
+    }
+
+    $('.invite-clinic-form').submit( function(e) {
+        e.preventDefault();
+
+        $('.popup .alert').hide();
+        $(this).find('.has-error').removeClass('has-error');
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: {
+                clinic_name: $('input[name="clinic-name"]').val(),
+                clinic_email: $('input[name="clinic-email"]').val(),
+                user_id: $('input[name="last_user_id"]').val(),
+                user_hash: $('input[name="last_user_hash"]').val(),
+                _token: $(this).find('input[name="_token"]').val(),
+            },
+            dataType: 'json',
+            success: (function(ret) {
+                if (ret.success) {
+                    $(this).hide();
+                    $('.popup .alert-success').html(ret.message).show();
+                } else {
+                    $('.popup .alert-warning').show();
+                    $('.popup .alert-warning').html('');
+                    for(var i in ret.messages) {
+                        $('.popup .alert-warning').append(ret.messages[i] + '<br/>');
+                        $('input[name="'+i+'"]').addClass('has-error');
+                    }
+                }
+                ajax_is_running = false;
+            }).bind(this)
+        });
+
+    } );
+
+    $('.verification-form').submit( function(e) {
+        e.preventDefault();
+
+        $('.popup .alert').hide();
+        $(this).find('.has-error').removeClass('has-error');
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: {
+                short_description: $('[name="short_description"]').val(),
+                user_id: $('input[name="last_user_id"]').val(),
+                user_hash: $('input[name="last_user_hash"]').val(),
+                _token: $(this).find('input[name="_token"]').val(),
+            },
+            dataType: 'json',
+            success: (function(ret) {
+                if (ret.success) {
+                    $(this).hide();
+                    $('.popup .alert-success').html(ret.message).show();
+                } else {
+                    $('.popup .alert-warning').show();
+                    $('.popup .alert-warning').html('');
+                    for(var i in ret.messages) {
+                        $('.popup .alert-warning').append(ret.messages[i] + '<br/>');
+                        $('[name="'+i+'"]').addClass('has-error');
+                    }
+                }
+                ajax_is_running = false;
+            }).bind(this)
+        });
+
+    } );
+
+
     $('input[name="mode"]').change( function() {
-        var val = $('#mode-in-clinic:checked').length;
+        $(this).closest('.modern-radios').removeClass('has-error');
+
+        var val = $('#mode-clinic:checked').length;
         if(val) {
-            $('#clinic-widget').show();
+            $('.title-wrap').hide();
         } else {
-            $('#clinic-widget').hide();
+            $('.title-wrap').show();
         }
     } );
 
@@ -318,6 +472,10 @@ $(document).ready(function(){
                     for(var i in data.messages) {
                         $('#register-error span').append(data.messages[i] + '<br/>');
                         $('input[name="'+i+'"]').addClass('has-error');
+
+                        if ($('input[name="'+i+'"]').closest('.modern-radios').length) {
+                            $('input[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+                        }
                     }
                     grecaptcha.reset();
                 }
@@ -352,6 +510,23 @@ $(document).ready(function(){
                         'event_label': 'DentistRegistrationComplete',
                     });
 
+                }
+                if (data.hash) {
+                    $('input[name="last_user_hash"]').val(data.hash);
+                }
+                if (data.id) {
+                    $('input[name="last_user_id"]').val(data.id);
+                }
+
+                if (data.short_description && (data.short_description!='') && $('.verification-form').length && data.is_clinic && $('.invite-clinic-form').length) {
+                    $('.verification-info').hide();
+                } else {                    
+                    if (data.short_description && $('.verification-form').length) {
+                        $('.verification-form').hide();
+                    }
+                    if (data.is_clinic && $('.invite-clinic-form').length) {
+                        $('.invite-clinic-form').hide();
+                    }
                 }
 
                 if(data.popup) {

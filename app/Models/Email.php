@@ -403,6 +403,18 @@ class Email extends Model
 			), $content);
         }
 
+		if($this->template->id==42 ) { // Invite Clinic After Dentist Registration
+			$content = str_replace(array(
+				'[dentist-name]',
+				'[button]',
+				'[/button]',
+			), array(
+				$this->meta['dentist_name'],
+				'<a '.$this->button_style.' href="'.getLangUrl( 'welcome-dentist' , null, $domain).'">',
+				'</a>',
+			), $content);
+		}
+
 
 		return $content;
 	}

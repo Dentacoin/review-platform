@@ -43,11 +43,7 @@ class ProfileController extends FrontController
             'title' => [
                 'type' => 'select',
                 'required' => true,
-                'values' => [
-                    '' => '-',
-                    'dr' => 'Dr.',
-                    'prof' => 'Prof. Dr.'
-                ]
+                'values' => config('titles')
             ],
             'name' => [
                 'type' => 'text',

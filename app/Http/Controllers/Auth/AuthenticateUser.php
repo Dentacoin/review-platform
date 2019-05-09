@@ -88,12 +88,17 @@ class AuthenticateUser extends FrontController
                 ] );
             }
 
-            if( Auth::guard('web')->user()->is_dentist && Auth::guard('web')->user()->status!='approved' ) {
-                Auth::guard('web')->logout();
-                return Response::json( [
+            if( Auth::guard('web')->user()->is_dentist && Auth::guard('web')->user()->status!='approved' && Auth::guard('web')->user()->status!='test' ) {
+                $array = [
                     'success' => false, 
-                    'popup' => 'verification-popup'
-                ] );
+                    'popup' => 'verification-popup',
+                    'hash' => Auth::guard('web')->user()->get_token(),
+                    'id' => Auth::guard('web')->user()->id,
+                    'short_description' => Auth::guard('web')->user()->short_description,
+                    'is_clinic' => Auth::guard('web')->user()->is_clinic,
+                ];
+                Auth::guard('web')->logout();
+                return Response::json( $array );
             }
 
             $sess = [

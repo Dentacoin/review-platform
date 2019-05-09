@@ -61,6 +61,36 @@ jQuery(document).ready(function($){
 
     });
 
+    $('.modern-input').focus( function() {
+    	$(this).closest('.modern-field').addClass('active');
+    });
+
+    $('.modern-input').focusout( function() {
+    	if (!$(this).val()) {
+    		$(this).closest('.modern-field').removeClass('active');
+    	}
+    });
+
+    if ($('.modern-input').length) {
+    	setTimeout( function() {
+
+	    	$('.modern-input').each( function() {
+	    		if ($(this).val() || $(this).is(":-webkit-autofill")) {
+	    			$(this).closest('.modern-field').addClass('active');
+	    		}
+	    	});
+    	} , 0)
+    }
+
+    $('.sign-dentist-form').click( function(e) {
+    	if ($('#agree-privacyy-dentist').not(':checked').length) {
+    		e.preventDefault();
+    		$('#agree-privacyy-dentist').closest('label').addClass('has-error');
+    	} else {
+    		$('#agree-privacyy-dentist').closest('label').removeClass('has-error');
+    	}
+    });
+
 	$('input').focus( function() {
 		$(this).removeClass('has-error');
 	});
@@ -369,6 +399,7 @@ jQuery(document).ready(function($){
 
 	$('.special-checkbox').change( function() {
 		$(this).closest('label').toggleClass('active');
+		$(this).closest('label').removeClass('has-error');
 	});
 
 	$('.tab').click( function() {

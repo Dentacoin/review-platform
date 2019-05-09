@@ -44,11 +44,7 @@
 							<i class="fas fa-share-alt"></i>
 						</a>
 						@if(!$user->is_clinic)
-							{{ Form::select( 'title' , [
-			                    '' => '-',
-			                    'dr' => 'Dr.',
-			                    'prof' => 'Prof. Dr.'
-			                ] , $user->title , array('class' => 'input') ) }}
+							{{ Form::select( 'title' , config('titles') , $user->title , array('class' => 'input') ) }}
 						@endif
 						<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
 						<input type="text" name="name_alternative" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alternative }}">
@@ -324,11 +320,7 @@
 					<div class="media-right address-suggester-wrapper">
 						@if(!$user->is_clinic)
 							<div class="flex">
-								{{ Form::select( 'title' , [
-				                    '' => '-',
-				                    'dr' => 'Dr.',
-				                    'prof' => 'Prof. Dr.'
-				                ] , $user->title , array('class' => 'input') ) }}
+								{{ Form::select( 'title' , config('titles') , $user->title , array('class' => 'input') ) }}
 								<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
 							</div>
 						@else

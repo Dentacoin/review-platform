@@ -183,11 +183,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getName() {
-        $titles = [
-            'dr' => 'Dr.',
-            'prof' => 'Prof. Dr.'
-        ];
-        return ($this->title && $this->is_dentist && !$this->is_clinic ? $titles[$this->title].' ' : '').$this->name;
+        return ($this->title && $this->is_dentist && !$this->is_clinic ? config('titles')[$this->title].' ' : '').$this->name;
     }
 
     public function getNameShort() {

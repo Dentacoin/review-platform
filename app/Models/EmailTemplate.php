@@ -141,6 +141,11 @@ class EmailTemplate extends Model
             $codes[] = '[unsubscribe]click here to unsubscribe[/unsubscribe]';
         }
 
+        if( $this->id==42 ) { // Invite Clinic After Dentist Registration
+            $codes[] = '[button]Click here to register[/button]';
+            $codes[] = '[dentist-name]';
+        }
+
         return $codes;
     }
 }

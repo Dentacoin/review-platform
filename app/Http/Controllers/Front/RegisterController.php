@@ -53,6 +53,51 @@ class RegisterController extends FrontController
     public function check_step_one() {
 
         $validator = Validator::make(Request::all(), [
+            'email' => array('required', 'email', 'unique:users,email'),
+            'password' => array('required', 'min:6'),
+            'password-repeat' => 'required|same:password',
+        ]);
+
+        if ($validator->fails()) {
+
+            $msg = $validator->getMessageBag()->toArray();
+            $ret = array(
+                'success' => false,
+                'messages' => array()
+            );
+
+            foreach ($msg as $field => $errors) {
+                $ret['messages'][$field] = implode(', ', $errors);
+            }
+
+            return Response::json( $ret );
+        } else {
+
+            if(User::validateEmail(Request::input('email')) == true) {
+                $ret = array(
+                    'success' => false,
+                    'messages' =>[
+                        'email' => trans('trp.common.invalid-email')
+                    ]
+                );
+                return Response::json( $ret );
+            }
+
+            $this->saveIncompleteRegistration(request('email'), [
+                'email' => request('email'),
+                'password' => request('password'),
+            ]);
+
+
+            return Response::json( ['success' => true] );
+        }
+
+    }
+
+    public function check_step_two() {
+
+        $validator = Validator::make(Request::all(), [
+            'mode' => array('required', 'in:dentist,clinic'),
             'name' => array('required', 'min:3'),
             'email' => array('required', 'email', 'unique:users,email'),
             'password' => array('required', 'min:6'),
@@ -72,29 +117,7 @@ class RegisterController extends FrontController
                 $ret['messages'][$field] = implode(', ', $errors);
             }
 
-            return Response::json( $ret );
         } else {
-
-
-            if(User::validateLatin(Request::input('name')) == false) {
-                return Response::json( [
-                    'success' => false, 
-                    'messages' => [
-                        'name' => trans('trp.common.invalid-name')
-                    ]
-                ] );
-            }
-
-            if(User::validateEmail(Request::input('email')) == true) {
-                $ret = array(
-                    'success' => false,
-                    'messages' =>[
-                        'email' => trans('trp.common.invalid-email')
-                    ]
-                );
-                return Response::json( $ret );
-            }
-
 
             $is_blocked = User::checkBlocks( Request::input('name') , Request::input('email') );
             if( $is_blocked ) {
@@ -106,33 +129,41 @@ class RegisterController extends FrontController
                 ] );
             }
 
+            if(User::validateLatin(Request::input('name')) == false) {
+                return Response::json( [
+                    'success' => false, 
+                    'messages' => [
+                        'name' => trans('trp.common.invalid-name')
+                    ]
+                ] );
+            }
+
             $this->saveIncompleteRegistration(request('email'), [
+                'mode' => request('mode'),
                 'name' => request('name'),
-                'email' => request('email'),
-                'password' => request('password'),
+                'title' => request('title'),
                 'name_alternative' => request('name_alternative'),
             ]);
 
+            $ret = array(
+                'success' => true
+            );
 
-            return Response::json( ['success' => true] );
         }
 
+        return Response::json( $ret );
     }
 
-    public function check_step_two() {
+
+    public function check_step_three() {
 
         $validator = Validator::make(Request::all(), [
-            'mode' => array('required', 'in:dentist,clinic,in-clinic'),
             'country_id' => array('required', 'exists:countries,id'),
             //'city_id' => array('required', 'exists:cities,id'),
             //'zip' => array('required', 'string'),
             'address' =>  array('required', 'string'),
             'website' =>  array('required', 'url'),
             'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
-            'name' => array('required', 'min:3'),
-            'email' => array('required', 'email', 'unique:users,email'),
-            'password' => array('required', 'min:6'),
-            'password-repeat' => 'required|same:password',
         ]);
 
         if ($validator->fails()) {
@@ -151,7 +182,10 @@ class RegisterController extends FrontController
                 }
             }
 
+            return Response::json( $ret );
         } else {
+
+
             $info = User::validateAddress( Country::find(request('country_id'))->name, request('address') );
             if(empty($info)) {
                 $ret = array(
@@ -163,55 +197,14 @@ class RegisterController extends FrontController
             } else {
 
                 $this->saveIncompleteRegistration(request('email'), [
-                    'mode' => request('mode'),
                     'country_id' => request('country_id'),
                     'address' => request('address'),
                     'website' => request('website'),
                     'phone' => request('phone'),
                 ]);
 
-                $ret = array(
-                    'success' => true
-                );
+                return Response::json( ['success' => true] );
             }
-
-        }
-
-        return Response::json( $ret );
-    }
-
-
-    public function check_step_three() {
-
-        $validator = Validator::make(Request::all(), [
-            'photo' =>  array('required'),
-            'specialization' =>  array('required', 'array'),
-        ]);
-
-        if ($validator->fails()) {
-
-            $msg = $validator->getMessageBag()->toArray();
-            $ret = array(
-                'success' => false,
-                'messages' => array()
-            );
-
-            foreach ($msg as $field => $errors) {
-                $ret['messages'][$field] = implode(', ', $errors);
-            }
-
-            return Response::json( $ret );
-        } else {
-
-            $this->saveIncompleteRegistration(request('email'), [
-                'specialization' => request('specialization'),
-                'photo' => request('photo'),
-                'photoThumb' => request('photo-thumb'),
-                'clinic_id' => request('clinic_id'),
-                'clinic_name' => request('clinic_name'),
-            ]);
-
-            return Response::json( ['success' => true] );
         }
 
     }
@@ -294,7 +287,7 @@ class RegisterController extends FrontController
     public function register_form($locale=null) {
 
         $validator = Validator::make(Request::all(), [
-            'mode' => array('required', 'in:dentist,clinic,in-clinic'),
+            'mode' => array('required', 'in:dentist,clinic'),
             'name' => array('required', 'min:3'),
             'email' => array('required', 'email', 'unique:users,email'),
             'password' => array('required', 'min:6'),
@@ -306,6 +299,7 @@ class RegisterController extends FrontController
             'website' =>  array('required', 'url'),
             'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
             'photo' =>  array('required'),
+            'photoThumb' => request('photo-thumb'),
             'specialization' =>  array('required', 'array'),
             'agree' =>  array('required', 'accepted'),
         ]);
@@ -420,38 +414,6 @@ class RegisterController extends FrontController
 
             $newuser->save();
 
-
-            $approve_join = 0;
-            $inv_id = session('invitation_id');
-            if($inv_id) {
-                $inv = UserInvite::find($inv_id);
-                if($inv && $inv->user_id == session('invited_by')) {
-                    $inv->invited_id = $newuser->id;
-                    $inv->save();
-                    if($inv->join_clinic) {
-                        $approve_join = 1;
-                    }
-                }
-            }
-
-            if( Request::input('clinic_id') ) {
-                $clinic = User::find( Request::input('clinic_id') );
-
-                if(!empty($clinic)) {
-                    $newclinic = new UserTeam;
-                    $newclinic->dentist_id = $newuser->id;
-                    $newclinic->user_id = Request::input('clinic_id');
-                    $newclinic->approved = $approve_join;
-                    $newclinic->save();
-
-                    $clinic->sendTemplate($approve_join ? 2 : 34, [
-                        'dentist-name' => $newuser->getName(),
-                        'profile-link' => $newuser->getLink()
-                    ]);
-                }
-            }
-
-
             if( Request::input('photo') ) {
                 $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
                 $newuser->addImage($img);
@@ -466,6 +428,34 @@ class RegisterController extends FrontController
                     $newc->save();
                 }
             }
+
+            if(session('join_clinic') && session('invitation_id')) {
+                $approve_join = 0;
+                $inv_id = session('invitation_id');
+                if($inv_id) {
+                    $inv = UserInvite::find($inv_id);
+                    if($inv && $inv->user_id == session('join_clinic')) {
+                        $inv->invited_id = $user->id;
+                        $inv->save();
+                        if($inv->join_clinic) {
+                            $approve_join = 1;
+                        }
+                    }
+                }
+
+                $newclinic = new UserTeam;
+                $newclinic->dentist_id = $user->id;
+                $newclinic->user_id = request('clinic_id');
+                $newclinic->approved = 0;
+                $newclinic->save();
+
+                $clinic->sendTemplate(2, [
+                    'dentist-name' => $user->getName(),
+                    'profile-link' => $user->getLink()
+                ]);
+
+            }
+
 
             $mtext = 'New dentist/clinic registration:
 
@@ -495,9 +485,156 @@ class RegisterController extends FrontController
                 'success' => true,
                 'popup' => 'verification-popup',
                 'track_registration' => true,
+                'hash' => $newuser->get_token(),
+                'id' => $newuser->id,
+                'short_description' => $newuser->short_description,
+                'is_clinic' => $newuser->is_clinic,
             ] );
 
         }
+    }
+
+    public function register_invite($locale=null) {
+
+        if (request('user_id')) {
+            $user = User::find(request('user_id'));
+
+            if( (request('user_hash') == $user->get_token()) && request('clinic_id') && !$user->is_clinic ) {
+                $clinic = User::find( request('clinic_id') );
+
+                if(!empty($clinic)) {
+                    $team = UserTeam::where('dentist_id', $user->id)->where('user_id', $clinic->id)->first();
+
+                    if (!$team) {
+                        $newclinic = new UserTeam;
+                        $newclinic->dentist_id = $user->id;
+                        $newclinic->user_id = $clinic->id;
+                        $newclinic->approved = 0;
+                        $newclinic->save();
+
+                        $clinic->sendTemplate(34, [
+                            'dentist-name' => $user->getName(),
+                            'profile-link' => $user->getLink()
+                        ]);
+                    }
+
+                    return Response::json( [
+                        'success' => true,
+                        'message' => trans('trp.popup.verification-popup.join-workplace.success', ['clinic-name' => request('clinic_name')]),
+                    ] );
+                }
+            }
+        }
+        return Response::json( [
+            'success' => false,
+            'message' => trans('trp.popup.verification-popup.join-workplace.error'),
+        ] );
+
+    }
+
+    public function invite_clinic($locale=null) {
+
+        if (request('user_id')) {
+            $user = User::find(request('user_id'));
+
+            $validator = Validator::make(Request::all(), [
+                'clinic_name' => array('required', 'min:3'),
+                'clinic_email' => array('required', 'email', 'unique:users,email'),
+            ]);
+
+            if ($validator->fails()) {
+
+                $msg = $validator->getMessageBag()->toArray();
+                $ret = array(
+                    'success' => false,
+                    'messages' => array()
+                );
+
+                foreach ($msg as $field => $errors) {
+                    $ret['messages'][$field] = implode(', ', $errors);
+                }
+
+                return Response::json( $ret );
+            } else {
+
+                $invitation = new UserInvite;
+                $invitation->user_id = $user->id;
+                $invitation->invited_email = Request::Input('clinic_email');
+                $invitation->invited_name = Request::Input('clinic_name');
+                $invitation->save();
+
+                //Mega hack
+                $dentist_name = $user->name;
+                $dentist_email = $user->email;
+                $user->name = Request::Input('clinic_name');
+                $user->email = Request::Input('clinic_email');
+                $user->save();
+
+                $user->sendTemplate( 42  , [
+                    'dentist_name' => $dentist_name,
+                ]);
+
+                //Back to original
+                $user->name = $dentist_name;
+                $user->email = $dentist_email;
+                $user->save();
+
+                return Response::json( [
+                    'success' => true,
+                    'message' => trans('trp.popup.verification-popup.workplace.success', ['clinic-name' => request('clinic_name')]),
+                ] );
+            }
+        }
+
+        return Response::json( [
+            'success' => false,
+            'message' => trans('trp.popup.verification-popup.workplace.error'),
+        ] );
+
+    }
+
+
+
+    public function verification_dentist($locale=null) {
+
+        if (request('user_id')) {
+
+            $user = User::find(request('user_id'));
+
+            $validator = Validator::make(Request::all(), [
+                'short_description' => array('required', 'max:150'),
+            ]);
+
+            if ($validator->fails()) {
+
+                $msg = $validator->getMessageBag()->toArray();
+                $ret = array(
+                    'success' => false,
+                    'messages' => array()
+                );
+
+                foreach ($msg as $field => $errors) {
+                    $ret['messages'][$field] = implode(', ', $errors);
+                }
+
+                return Response::json( $ret );
+            } else {
+
+                $user->short_description = Request::Input('short_description');
+                $user->save();
+
+                return Response::json( [
+                    'success' => true,
+                    'message' => trans('trp.popup.verification-popup.user-info.success'),
+                ] );
+            }
+        }
+
+        return Response::json( [
+            'success' => false,
+            'message' => trans('trp.popup.verification-popup.user-info.error'),
+        ] );
+
     }
 
     public function forgot($locale=null) {
