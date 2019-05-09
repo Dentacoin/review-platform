@@ -50,6 +50,12 @@
 					</div>
 				</div>
 
+			@elseif($user->created_at->timestamp >= (time() - 259200))
+				<div class="form-horizontal">
+					<div class="alert alert-warning">
+						{!! trans('vox.page.profile.home.wallet-waiting') !!}
+					</div>
+				</div>
 			@else
             	
             	@include('front.errors')

@@ -829,7 +829,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function canWithdraw($platform) {
-        return ($this->status=='approved' || $this->status=='test') && $this->civic_kyc && !$this->loggedFromBadIp();
+        return ($this->status=='approved' || $this->status=='test') && $this->civic_kyc && !$this->loggedFromBadIp() && ($this->created_at->timestamp <= (time() - 259200)) ;
     }
 
     public function getSameIPUsers() {
