@@ -89,7 +89,7 @@
 									{!! trans('vox.page.stats.scale-by') !!}:									
 									@foreach( $question->stats_fields as $sk)
 										<a {!! $loop->first ? 'class="active"' : '' !!} scale="{{ $sk }}">
-											{{ $scales[$sk] }}
+											{{ trans('vox.page.stats.group-by-'.$sk) }}
 										</a>
 									@endforeach
 								</div>
