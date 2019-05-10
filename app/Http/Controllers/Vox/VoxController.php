@@ -248,7 +248,7 @@ class VoxController extends FrontController
 	            $cpost = [
 	                'secret' => env('CAPTCHA_SECRET'),
 	                'response' => Request::input('captcha'),
-	                'remoteip' => Request::ip()
+	                'remoteip' => User::getRealIp()
 	            ];
 	            $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
 	            curl_setopt($ch, CURLOPT_HEADER, 0);

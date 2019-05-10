@@ -259,7 +259,12 @@ class StatsController extends FrontController
 					}
 				}
 
+                //dd( $results->toArray() );
         		foreach ($results as $res) {
+                    if($res->$scale===null || !isset( $answers[ $res->answer-1 ] )) {
+                        continue;
+                    }
+
         			if(!isset($main_chart[ $answers[ $res->answer-1 ] ])) {
         				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
         			}

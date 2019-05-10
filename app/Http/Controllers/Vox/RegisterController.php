@@ -59,7 +59,7 @@ class RegisterController extends FrontController
                 $cpost = [
                     'secret' => env('CAPTCHA_SECRET'),
                     'response' => Request::input('g-recaptcha-response'),
-                    'remoteip' => Request::ip()
+                    'remoteip' => User::getRealIp()
                 ];
                 $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
                 curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -318,9 +318,10 @@ class RegisterController extends FrontController
                 $newuser = $this->user;
 
                 $mtext = 'New Dentavox dentist/clinic registration:
-
+                '.$newuser->getName().'
+                IP: '.User::getRealIp().'
+                '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
                 '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
-
                 ';
 
                 Mail::raw($mtext, function ($message) use ($newuser) {
