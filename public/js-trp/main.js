@@ -21,6 +21,7 @@ var loginLoaded = false;
 var loginsWaiting = [];
 var handleTooltip;
 var attachTooltips;
+var modernFieldsUpdate;
 
 
 jQuery(document).ready(function($){
@@ -61,35 +62,30 @@ jQuery(document).ready(function($){
 
     });
 
-    $('.modern-input').focus( function() {
-    	$(this).closest('.modern-field').addClass('active');
-    });
+    modernFieldsUpdate = function() {
+	    $('.modern-input').focus( function() {
+	    	$(this).closest('.modern-field').addClass('active');
+	    });
 
-    $('.modern-input').focusout( function() {
-    	if (!$(this).val()) {
-    		$(this).closest('.modern-field').removeClass('active');
-    	}
-    });
+	    $('.modern-input').focusout( function() {
+	    	if (!$(this).val()) {
+	    		$(this).closest('.modern-field').removeClass('active');
+	    	}
+	    });
 
-    if ($('.modern-input').length) {
-    	setTimeout( function() {
+	    if ($('.modern-input').length) {
+	    	setTimeout( function() {
 
-	    	$('.modern-input').each( function() {
-	    		if ($(this).val() || $(this).is(":-webkit-autofill")) {
-	    			$(this).closest('.modern-field').addClass('active');
-	    		}
-	    	});
-    	} , 0)
+		    	$('.modern-input').each( function() {
+		    		if ($(this).val() || $(this).is(":-webkit-autofill")) {
+		    			$(this).closest('.modern-field').addClass('active');
+		    		}
+		    	});
+	    	} , 0)
+	    }
     }
+    modernFieldsUpdate();
 
-    $('.sign-dentist-form').click( function(e) {
-    	if ($('#agree-privacyy-dentist').not(':checked').length) {
-    		e.preventDefault();
-    		$('#agree-privacyy-dentist').closest('label').addClass('has-error');
-    	} else {
-    		$('#agree-privacyy-dentist').closest('label').removeClass('has-error');
-    	}
-    });
 
 	$('input').focus( function() {
 		$(this).removeClass('has-error');

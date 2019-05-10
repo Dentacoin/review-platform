@@ -49,18 +49,16 @@
 							<span>{{ trans('trp.page.index-dentist.password') }}</span>
 						</label>
 					</div>
-
-					<label class="checkbox-label{!! $regData ? ' active' : '' !!}" for="agree-privacyy-dentist">
-						<input type="checkbox" class="special-checkbox" id="agree-privacyy-dentist" name="agree" value="1" {!! $regData ? 'checked="checked"' : '' !!} />
-						<i class="far fa-square"></i>
-						{!! nl2br(trans('trp.popup.popup-register.terms', [
-							'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
-							'endlink' => '</a>',
-						])) !!}
-					</label>
+					
+					<div class="modern-field">
+						<input type="password" name="password-repeat" id="dentist-pass-repeat" class="modern-input" autocomplete="off">
+						<label for="dentist-pass-repeat">
+							<span>{{ trans('trp.page.index-dentist.repeat-password') }}</span>
+						</label>
+					</div>
 
 					<div class="tac">
-						<input type="submit" value="{{ trans('trp.page.index-dentist.signup') }}" class="button button-sign-up-dentist sign-dentist-form">
+						<input type="submit" value="{{ trans('trp.page.index-dentist.signup') }}" class="button button-sign-up-dentist">
 					</div>
 				</div>
 

@@ -266,8 +266,8 @@
 								<p>{!! nl2br(trans('trp.popup.popup-register.name_alterantive.description')) !!}</p>
 							</div>
 
-							<label class="checkbox-label agree-label{!! (!empty($regData) && empty($regData['country_id']) && !empty($regData['name'])) || (empty($regData['specialization']) && !empty($regData['country_id'])) ? ' active' : '' !!}" for="agree-privacyy" >
-								<input type="checkbox" class="special-checkbox" id="agree-privacyy" name="agree" value="1" {!! (!empty($regData) && empty($regData['country_id']) && !empty($regData['name'])) || (empty($regData['specialization']) && !empty($regData['country_id'])) ? 'checked="checked"' : '' !!} />
+							<label class="checkbox-label agree-label {!! (!empty($regData) && empty($regData['country_id']) && !empty($regData['name'])) || (empty($regData['specialization']) && !empty($regData['country_id'])) ? 'active' : '' !!}" for="agree-privacyyy" >
+								<input type="checkbox" class="special-checkbox" id="agree-privacyyy" name="agree" value="1" {!! (!empty($regData) && empty($regData['country_id']) && !empty($regData['name'])) || (empty($regData['specialization']) && !empty($regData['country_id'])) ? 'checked="checked"' : '' !!} />
 								<i class="far fa-square"></i>
 								{!! nl2br(trans('trp.popup.popup-register.terms', [
 									'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',

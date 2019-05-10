@@ -1403,6 +1403,8 @@ body.blur .site-content {
     @media screen and (max-width: 768px) {
       .signin-form-wrapper form {
         display: none; } }
+    .signin-form-wrapper form .modern-field {
+      margin-bottom: 15px; }
     .signin-form-wrapper form input:not([type="submit"]) {
       min-width: 320px;
       background: white; }
@@ -1410,7 +1412,6 @@ body.blur .site-content {
         .signin-form-wrapper form input:not([type="submit"]) {
           min-width: 240px; } }
     .signin-form-wrapper form input[type="submit"] {
-      margin-top: 20px;
       margin-bottom: 25px; }
   .signin-form-wrapper .have-account {
     text-align: center;
