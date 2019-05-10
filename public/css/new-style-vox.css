@@ -2634,6 +2634,9 @@ p.h2-bold {
               height: 10px;
               border-radius: 50%;
               margin-right: 6px; }
+    .page-statistics .stats .stat .contents .multiple-hint {
+      text-align: center;
+      margin-top: 10px; }
   .page-statistics .stats .stat:hover a.title {
     color: black; }
   .page-statistics .stats .stat.active a.title {

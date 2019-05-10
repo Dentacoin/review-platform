@@ -68,7 +68,7 @@ class Vox extends Model {
     }
     
     public function respondentsCount() {
-        return VoxReward::where('vox_id', $this->id)->count();   
+        return VoxReward::where('vox_id', $this->id)->has('user')->count();   
     }
 
     public function respondentsCountryCount() {

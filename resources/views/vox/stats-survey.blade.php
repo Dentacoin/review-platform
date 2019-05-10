@@ -158,6 +158,11 @@
 									</a>
 								@endif
 							</div>
+							@if( $question->type=='multiple_choice' )
+								<div class="multiple-hint">
+									{!! trans('vox.page.stats.multiple-hint') !!}
+								</div>
+							@endif
 						</div>
 					</div>
 				@endif

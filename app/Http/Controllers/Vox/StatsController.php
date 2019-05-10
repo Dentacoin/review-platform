@@ -178,13 +178,20 @@ class StatsController extends FrontController
         			}
         			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
         			if($res->gender=='f') {
-        				$totalf += $res->cnt;
         				$second_chart[ $answers[ $res->answer-1 ] ] += $res->cnt; //m
         			}
         			if($res->gender=='m') {
-        				$totalm += $res->cnt;
         				$third_chart[ $answers[ $res->answer-1 ] ] += $res->cnt; //f
         			}
+                    $totalm = $totalf = 0;
+                    $totalQuery = $this->prepareQuery($question_id, $dates)->groupBy('gender')->select(DB::raw('gender, count(distinct `user_id`) as num'))->get();
+                    foreach ($totalQuery->toArray() as $garr) {
+                        if($garr['gender']=='m') {
+                            $totalm = $garr['num'];
+                        } else if($garr['gender']=='f') {
+                            $totalf = $garr['num'];
+                        }
+                    }
         		}
         	} else if($scale=='country_id') {
         		$countries = Country::get()->keyBy('id');

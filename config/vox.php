@@ -122,14 +122,10 @@ return array(
 			'values' => [
 				'intern' => 'Intern',
 				'entry' => 'Entry Level',
-				'associate' => 'Analyst / Associate',
-				'manager' => 'Manager',
-				'senior_manager' => 'Senior Manager',
-				'director' => 'Director',
-				'vice_president' => 'Vice President',
-				'senior_vice_president' => 'Senior Vice President',
-				'c_level' => 'C-level executive',
-				'ceo' => 'President or CEO',
+				'associate' => 'Associate',
+				'manager' => 'Manager', //senior_manager, 
+				'director' => 'Director', //vice_president, senior_vice_president, 
+				'ceo' => 'CEO', //c_level
 				'owner' => 'Owner'
 			],
 			'trigger' => [
