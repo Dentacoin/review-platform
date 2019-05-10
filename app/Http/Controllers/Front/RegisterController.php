@@ -83,12 +83,6 @@ class RegisterController extends FrontController
                 return Response::json( $ret );
             }
 
-            $this->saveIncompleteRegistration(request('email'), [
-                'email' => request('email'),
-                'password' => request('password'),
-            ]);
-
-
             return Response::json( ['success' => true] );
         }
 
@@ -139,6 +133,8 @@ class RegisterController extends FrontController
             }
 
             $this->saveIncompleteRegistration(request('email'), [
+                'email' => request('email'),
+                'password' => request('password'),
                 'mode' => request('mode'),
                 'name' => request('name'),
                 'title' => request('title'),
