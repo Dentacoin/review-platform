@@ -1452,16 +1452,20 @@ body.blur {
     		display: none;
     	}
 
+    	.modern-field {
+    		margin-bottom: 15px;
+    	}
+
     	input:not([type="submit"]) {
     		min-width: 320px;
     		background: white;
+
     		@media #{$phone} {
     			min-width: 240px;
     		}
     	}
 
     	input[type="submit"] {
-    		margin-top: 20px;
     		margin-bottom: 25px;
     	}
     }
