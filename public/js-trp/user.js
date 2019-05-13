@@ -426,10 +426,10 @@ $(document).ready(function(){
 
             var formData = new FormData();
 
-            var this_file = $(this).find('input[name="image"]')[0].files[0];
             // add assoc key values, this will be posts values
             formData.append("_token", $(this).find('input[name="_token"]').val());
-            if (this_file) {
+            if ($(this).find('input[name="image"]').length) {
+                var this_file = $(this).find('input[name="image"]')[0].files[0];
                 formData.append("image", this_file, this_file.name);
             }
             
