@@ -94,7 +94,7 @@ class FrontController extends BaseController
             $this->admin = Auth::guard('admin')->user();
             $this->user = Auth::guard('web')->user();
 
-            if($this->user && !session('login-logged')){
+            if($this->user && session('login-logged')!=$this->user->id){
                 $ul = new UserLogin;
                 $ul->user_id = $this->user->id;
                 $ul->ip = User::getRealIp();
@@ -115,7 +115,7 @@ class FrontController extends BaseController
                 }
 
                 $ul->save();
-                session(['login-logged' => time()]);
+                session(['login-logged' => $this->user->id]);
                 session(['mark-login' => mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'DV' : 'TRP']);
 
                 if( !$this->user->isBanned('vox') && $this->user->bans->isNotEmpty() ) {
@@ -350,8 +350,15 @@ class FrontController extends BaseController
                     'ga_action' => 'NoButton',
                     'ga_label' => 'PatientLoginSaved',
                 ];
-
             }
+
+            $params['markLogin'] = true;
+        }
+        if( session('login-logged-out') ) {
+            $params['markLogout'] = session('login-logged-out');
+            session([
+                'login-logged-out' => false
+            ]);
         }
 
 

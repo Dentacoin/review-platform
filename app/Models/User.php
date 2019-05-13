@@ -822,6 +822,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if(!$this->is_dentist) {
             $this->sendTemplate(9);
         }
+
+        $this->logoutActions();
     }
 
     public function canInvite($platform) {
@@ -1269,5 +1271,15 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
             }
         }
         return $ret;
+    }
+
+
+    public function logoutActions() {
+        session([
+            'mark-login' => null,
+            'login-logged' => null,
+            'vox-welcome' => null,
+            'login-logged-out' => session('logged_user')['token'] ?? null,
+        ]);
     }
 }

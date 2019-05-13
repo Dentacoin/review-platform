@@ -302,7 +302,12 @@
 			    });
 			</script>
 		@endif
-
+		@if(!empty( $markLogin )) 
+			@include('sso')
+		@endif
+		@if(!empty( $markLogout )) 
+			@include('sso-logout')
+		@endif
 
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
         <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
