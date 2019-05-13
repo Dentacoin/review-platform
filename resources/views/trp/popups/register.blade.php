@@ -180,28 +180,28 @@
 							{!! nl2br(trans('trp.popup.popup-register.signup-title')) !!}
 						</h2>
 						<div id="register-error" class="alert alert-warning" style="display: none;">
-							{{ trans('trp.popup.popup-register.error')  }}<br/>
+							<!-- {{ trans('trp.popup.popup-register.error')  }}<br/> -->
 							<span>
 
 							</span>
 						</div>
 						<div class="sign-in-step {!! empty($regData) ? 'active' : '' !!}" id="step-1">
 							@include('front.errors')
-							<div class="modern-field">
+							<div class="modern-field alert-after">
 								<input type="email" name="email" id="dentist-email" class="modern-input" value="{{ $regData['email'] ?? old('email') }}" autocomplete="off">
 								<label for="dentist-email">
 									<span>{!! nl2br(trans('trp.popup.popup-register.email')) !!}</span>
 								</label>
 							</div>
 							
-							<div class="modern-field">
+							<div class="modern-field alert-after">
 								<input type="password" name="password" id="dentist-password" class="modern-input" value="{{ $regData['password'] ?? old('password') }}" autocomplete="off">
 								<label for="dentist-password">
 									<span>{!! nl2br(trans('trp.popup.popup-register.password')) !!}</span>
 								</label>
 							</div>
 							
-							<div class="modern-field">
+							<div class="modern-field alert-after">
 								<input type="password" name="password-repeat" id="dentist-password-repeat" class="modern-input" value="{{ $regData['password'] ?? old('password-repeat') }}" autocomplete="off">
 								<label for="dentist-password-repeat">
 									<span>{!! nl2br(trans('trp.popup.popup-register.repeat-password')) !!}</span>
@@ -216,7 +216,7 @@
 						</div>
 						<div class="sign-in-step {!! !empty($regData) && empty($regData['name']) ? 'active' : '' !!}" id="step-2">
 
-							<div class="mobile-radios modern-radios" {!! session('join_clinic') && session('invited_by') ? 'style="display: none;"' : '' !!}>
+							<div class="mobile-radios modern-radios alert-after" {!! session('join_clinic') && session('invited_by') ? 'style="display: none;"' : '' !!}>
 								<div class="radio-label col">
 								  	<label for="mode-dentist" {!! !empty($regData) && $regData['mode']=='dentist' ? 'class="active"' : '' !!}>
 										<span class="modern-radio">
@@ -239,7 +239,7 @@
 								</div>
 							</div>
 
-					  		<div class="modern-field title-wrap" {!! !empty($regData) && $regData['mode']=='dentist' ? '' : 'style="display: none;"' !!}>
+					  		<div class="modern-field title-wrap alert-after" {!! !empty($regData) && $regData['mode']=='dentist' ? '' : 'style="display: none;"' !!}>
 					  			<select name="title" id="dentist-title" class="modern-input" value="{{ $regData['title'] ?? old('title') }}">
 					  				@foreach(config('titles') as $k => $v)
 					  					<option value="{{ $k }}" {!! !empty($regData['title'] && ($regData['title'] == $k)) ? 'selected="selected"' : '' !!}>{{ $v }}</option>
@@ -250,7 +250,7 @@
 								</label>
 							</div>
 
-					  		<div class="modern-field">
+					  		<div class="modern-field alert-after">
 								<input type="text" name="name" id="dentist-name" class="modern-input" value="{{ $regData['name'] ?? old('name') }}" autocomplete="off">
 								<label for="dentist-name">
 									<span>{!! nl2br(trans('trp.popup.popup-register.name')) !!}</span>
@@ -266,7 +266,7 @@
 								<p>{!! nl2br(trans('trp.popup.popup-register.name_alterantive.description')) !!}</p>
 							</div>
 
-							<label class="checkbox-label agree-label {!! (!empty($regData) && empty($regData['country_id']) && !empty($regData['name'])) || (empty($regData['specialization']) && !empty($regData['country_id'])) ? 'active' : '' !!}" for="agree-privacyyy" >
+							<label class="checkbox-label agree-label alert-after {!! (!empty($regData) && empty($regData['country_id']) && !empty($regData['name'])) || (empty($regData['specialization']) && !empty($regData['country_id'])) ? 'active' : '' !!}" for="agree-privacyyy" >
 								<input type="checkbox" class="special-checkbox" id="agree-privacyyy" name="agree" value="1" {!! (!empty($regData) && empty($regData['country_id']) && !empty($regData['name'])) || (empty($regData['specialization']) && !empty($regData['country_id'])) ? 'checked="checked"' : '' !!} />
 								<i class="far fa-square"></i>
 								{!! nl2br(trans('trp.popup.popup-register.terms', [
@@ -291,7 +291,7 @@
 					  			</select>
 							</div>
 
-							<div class="modern-field">
+							<div class="modern-field alert-after">
 								<input type="text" name="address"  id="dentist-address" class="modern-input address-suggester" autocomplete="off" value="{{ $regData['address'] ?? old('address') }}">
 								<label for="dentist-address">
 									<span>{!! nl2br(trans('trp.popup.popup-register.address')) !!}</span>
@@ -310,7 +310,7 @@
 		                        </div>		                        
 		                    </div>
 
-							<div class="modern-field">
+							<div class="modern-field alert-after">
 								<input type="text" name="website" id="dentist-website" class="modern-input" autocomplete="off" value="{{ $regData['website'] ?? old('website') }}">
 								<label for="dentist-website">
 									<span>{!! nl2br(trans('trp.popup.popup-register.website')) !!}</span>
@@ -318,7 +318,7 @@
 								<p>{!! nl2br(trans('trp.popup.popup-register.website.description')) !!}</p>
 							</div>
 
-							<div class="flex input-flex">
+							<div class="flex input-flex alert-after">
 								<div>
 				    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>
 								</div>
@@ -338,7 +338,7 @@
 							</div>
 						</div>
 						<div class="sign-in-step {!! !empty($regData['country_id']) ? 'active' : '' !!} tac" id="step-4">
-							<div class="flex flex-mobile">
+							<div class="flex flex-mobile alert-after">
 								<div class="col" style="max-width: 154px;">
 									<label for="add-avatar" class="image-label" {!! !empty($regData['photoThumb']) ? 'style="background-image:url('.$regData['photoThumb'].');"' : '' !!} >
 										@if(empty( $regData['photo'] ))

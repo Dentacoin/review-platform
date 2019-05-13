@@ -520,4 +520,15 @@ h4 {
 	span {
 		display: block;
 	}
+
+
+	&.ajax-alert {
+	    margin-bottom: 20px;
+	    font-size: 14px;
+	    padding: 10px 20px 10px 50px;
+
+	    &:before {
+	    	font-size: 20px;
+	    }
+	}
 }

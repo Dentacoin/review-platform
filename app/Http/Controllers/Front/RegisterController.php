@@ -153,12 +153,18 @@ class RegisterController extends FrontController
 
     public function check_step_three() {
 
+        if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
+            request()->merge([
+                'website' => 'http://'.request('website')
+            ]);
+        }
+
         $validator = Validator::make(Request::all(), [
             'country_id' => array('required', 'exists:countries,id'),
             //'city_id' => array('required', 'exists:cities,id'),
             //'zip' => array('required', 'string'),
             'address' =>  array('required', 'string'),
-            'website' =>  array('required', 'url'),
+            'website' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
             'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
         ]);
 
@@ -282,6 +288,12 @@ class RegisterController extends FrontController
 
     public function register_form($locale=null) {
 
+        if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
+            request()->merge([
+                'website' => 'http://'.request('website')
+            ]);
+        }
+
         $validator = Validator::make(Request::all(), [
             'mode' => array('required', 'in:dentist,clinic'),
             'name' => array('required', 'min:3'),
@@ -292,10 +304,9 @@ class RegisterController extends FrontController
             //'city_id' => array('required', 'exists:cities,id'),
             //'zip' => array('required', 'string'),
             'address' =>  array('required', 'string'),
-            'website' =>  array('required', 'url'),
+            'website' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
             'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
             'photo' =>  array('required'),
-            'photoThumb' => request('photo-thumb'),
             'specialization' =>  array('required', 'array'),
             'agree' =>  array('required', 'accepted'),
         ]);
@@ -526,6 +537,44 @@ class RegisterController extends FrontController
         return Response::json( [
             'success' => false,
             'message' => trans('trp.popup.verification-popup.join-workplace.error'),
+        ] );
+
+    }
+
+    public function invite_dentist($locale=null) {
+
+        if (request('user_id')) {
+            $user = User::find(request('user_id'));
+
+            if( (request('user_hash') == $user->get_token()) && request('dentist_id') && $user->is_clinic ) {
+                $dentist = User::find( request('dentist_id') );
+
+                if(!empty($dentist)) {
+                    $team = UserTeam::where('dentist_id', $dentist->id)->where('user_id', $user->id)->first();
+
+                    if (!$team) {
+                        $newdentist = new UserTeam;
+                        $newdentist->dentist_id = $dentist->id;
+                        $newdentist->user_id = $user->id;
+                        $newdentist->approved = 1;
+                        $newdentist->save();
+
+                        $dentist->sendTemplate(33, [
+                            'clinic-name' => $user->getName(),
+                            'clinic-link' => $user->getLink()
+                        ]);
+                    }
+
+                    return Response::json( [
+                        'success' => true,
+                        'message' => trans('trp.popup.verification-popup.dentist-invite.success', ['dentist-name' => $dentist->getName()]),
+                    ] );
+                }
+            }
+        }
+        return Response::json( [
+            'success' => false,
+            'message' => trans('trp.popup.verification-popup.dentist-invite.error'),
         ] );
 
     }

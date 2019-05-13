@@ -26,6 +26,12 @@ class RegisterController extends FrontController
 
         if(Request::isMethod('post')) {
 
+            if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
+                request()->merge([
+                    'website' => 'http://'.request('website')
+                ]);
+            }
+
             $validator = Validator::make(Request::all(), [
                 'name' => array('required', 'min:3'),
                 'email' => array('required', 'email', 'unique:users,email'),
@@ -36,7 +42,7 @@ class RegisterController extends FrontController
                 'address' =>  array('required', 'string'),
                 'privacy' =>  array('required', 'accepted'),
                 'photo' =>  array('required'),
-                'website' =>  array('required', 'url'),
+                'website' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
                 'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
             ]);
 

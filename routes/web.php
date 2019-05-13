@@ -180,6 +180,7 @@ $reviewRoutes = function () {
 			Route::post('recover/{id}/{hash}', 					'RegisterController@recover_form');
 			Route::any('register-invite', 						'RegisterController@register_invite')->name('register-invite');
 			Route::any('invite-clinic', 						'RegisterController@invite_clinic')->name('invite-clinic');
+			Route::any('invite-dentist', 						'RegisterController@invite_dentist')->name('invite-dentist');
 			Route::any('verification-dentist', 					'RegisterController@verification_dentist')->name('verification-dentist');
 
 			Route::get('login/facebook', 						'LoginController@facebook_login');

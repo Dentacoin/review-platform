@@ -67,6 +67,7 @@ class ProfileController extends FrontController
                 'type' => 'text',
                 'required' => true,
                 'hint' => true,
+                'regex' => 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
             ],
             'birthyear' => [
                 'type' => 'select',
@@ -583,11 +584,20 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         		if (!empty($value['values'])) {
         			$arr[] = 'in:'.implode(',', array_keys($value['values']) );
         		}
+                if (!empty($value['regex'])) {
+                    $arr[] = $value['regex'];
+                }
 
         		if (!empty($arr)) {
         			$validator_arr[$key] = $arr;
         		}
         	}
+
+            if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
+                request()->merge([
+                    'website' => 'http://'.request('website')
+                ]);
+            }
 
         	$validator = Validator::make(Request::all(), $validator_arr);
 
