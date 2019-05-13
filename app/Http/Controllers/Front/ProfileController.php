@@ -299,6 +299,7 @@ class ProfileController extends FrontController
                     $this->user->save();
                     $this->user->deleteActions();
                     User::destroy( $this->user->id );
+                    session(['login-logged' => true]);
                     Auth::guard('web')->logout();
                     return redirect( getLangUrl('/') );
                 }

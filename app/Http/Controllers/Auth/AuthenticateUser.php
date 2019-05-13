@@ -146,11 +146,9 @@ class AuthenticateUser extends FrontController
     }
 
     public function getLogout() {
-        session([
-            'mark-login' => null,
-            'login-logged' => null,
-            'vox-welcome' => null
-        ]);
+        if( Auth::guard('web')->user() ) {
+            Auth::guard('web')->user()->logoutActions();
+        }
         Auth::guard('web')->logout();
         return redirect( getLangUrl('/') );
     }

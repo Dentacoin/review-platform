@@ -21,6 +21,7 @@ Route::post('user-name', 							'CitiesController@getUsername');
 Route::get('question-count', 						'CitiesController@getQuestions');
 Route::any('suggest-clinic/{id?}', 					'CitiesController@getClinic');
 Route::any('suggest-dentist/{id?}', 				'CitiesController@getDentist');
+Route::get('custom-cookie', 						'SSOController@manageCustomCookie')->name('custom-cookie');
 
 
 Route::post('wait', 									'CitiesController@wait');
