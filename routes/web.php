@@ -268,7 +268,7 @@ $reviewRoutes = function () {
 	});
 };
 Route::domain('reviews.dentacoin.com')->group($reviewRoutes);
-Route::domain('dev-reviews.dentacoin.com')->group($reviewRoutes);
+Route::domain('dev.reviews.dentacoin.com')->group($reviewRoutes);
 Route::domain('urgent-reviews.dentacoin.com')->group($reviewRoutes);
 
 
@@ -351,5 +351,5 @@ $voxRoutes = function () {
 };
 Route::domain('vox.dentacoin.com')->group($voxRoutes);
 Route::domain('dentavox.dentacoin.com')->group($voxRoutes);
-Route::domain('dev-dentavox.dentacoin.com')->group($voxRoutes);
+Route::domain('dev.dentavox.dentacoin.com')->group($voxRoutes);
 Route::domain('urgent-dentavox.dentacoin.com')->group($voxRoutes);

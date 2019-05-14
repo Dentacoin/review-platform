@@ -1,5 +1,8 @@
 <?php
 
+$website = $_SERVER['SERVER_NAME'] ?? $_SERVER['HTTP_HOST'] ?? 'reviews.dentacoin.com';
+$website = str_replace(['dev.', 'urgent.'], '', $website);
+
 return [
 
     /*
@@ -148,7 +151,7 @@ return [
     |
     */
 
-    'domain' => null, //'dentacoin.com',
+    'domain' => $website, //'dentacoin.com',
 
     /*
     |--------------------------------------------------------------------------
