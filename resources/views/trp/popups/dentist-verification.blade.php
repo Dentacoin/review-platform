@@ -18,6 +18,26 @@
 
 			<h2>{!! nl2br(trans('trp.popup.verification-popup.subtitle')) !!}</h2>
 
+			{!! Form::open(array('method' => 'post', 'class' => 'invite-dentist-form', 'url' => getLangRoute('invite-dentist') )) !!}
+				{!! csrf_field() !!}
+
+				<div class="dentist-suggester-wrapper suggester-wrapper">
+					<div class="modern-field">
+						<input type="text" name="invitedentist" class="modern-input dentist-suggester suggester-input" value="" autocomplete="off">
+						<label for="invitedentist">
+							<span>{!! nl2br(trans('trp.popup.verification-popup.add-dentist')) !!}</span>
+						</label>
+						<p>{!! nl2br(trans('trp.popup.verification-popup.add-dentist.hint')) !!}</p>
+
+						<div class="suggest-results">
+						</div>
+						<input type="hidden" class="suggester-hidden" name="dentist_id" value="" url="{{ getLangRoute('invite-dentist') }}">
+						<i class="search-icon fas fa-search"></i>
+					</div>
+				</div>
+
+			{!! Form::close() !!}
+
 			@if(!session('join_clinic') && !session('invited_by'))
 				{!! Form::open(array('method' => 'post', 'class' => 'invite-clinic-form', 'url' => getLangRoute('invite-clinic') )) !!}
 					{!! csrf_field() !!}

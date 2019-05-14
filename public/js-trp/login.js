@@ -170,16 +170,15 @@ $(document).ready(function(){
                 if (data.id) {
                     $('input[name="last_user_id"]').val(data.id);
                 }
+                               
+                if (data.short_description && $('.verification-form').length) {
+                    $('.verification-form').hide();
+                }
                 
-                if (data.short_description && (data.short_description!='') && $('.verification-form').length && data.is_clinic && $('.invite-clinic-form').length) {
-                    $('.verification-info').hide();
-                } else {                    
-                    if (data.short_description && $('.verification-form').length) {
-                        $('.verification-form').hide();
-                    }
-                    if (data.is_clinic && $('.invite-clinic-form').length) {
-                        $('.invite-clinic-form').hide();
-                    }
+                if (data.is_clinic && $('.invite-clinic-form').length) {
+                    $('.invite-clinic-form').hide();
+                } else if($('.invite-dentist-form').length) {
+                    $('.invite-dentist-form').hide();
                 }
 
                 if(data.popup) {
@@ -212,6 +211,97 @@ $(document).ready(function(){
     //
     //Dentist Registration
     //
+
+    suggestDentist = function() {
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $.ajax( {
+            url: 'suggest-dentist'+(user_id ? '/'+user_id : ''),
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                invitedentist: $(this).val()
+            },
+            success: (function( data ) {
+                console.log(data);
+                var container = $(this).closest('.dentist-suggester-wrapper').find('.suggest-results');
+                
+                if (data.length) {
+                    container.html('').show();
+                    for(var i in data) {
+                        container.append('<a href="javascript:;" data-id="'+data[i].id+'">'+data[i].name+'</a>');
+                    }
+
+                    container.find('a').click( function() {
+                        $(this).closest('.suggest-results').hide();
+                        $(this).closest('.dentist-suggester-wrapper').find('.dentist-suggester').val( $(this).text() ).blur();
+                        $(this).closest('.dentist-suggester-wrapper').find('.suggester-hidden').val( $(this).attr('data-id') ).trigger('change');
+                    } );
+                } else {
+                    container.hide();                    
+                }
+
+                ajax_is_running = false;
+
+            }).bind(this)
+        });
+    }
+
+    $('.dentist-suggester').closest('form').on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) { 
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    $('.dentist-suggester').on( 'keyup', function(e) {
+        
+        var container = $(this).closest('.dentist-suggester-wrapper').find('.suggest-results');
+
+        var keyCode = e.keyCode || e.which;
+        var activeLink = container.find('a.active');
+        if (keyCode === 40 || keyCode === 38) { //Down / Up
+            if(activeLink.length) {
+                activeLink.removeClass('active');
+                if( keyCode === 40 ) { // Down
+                    if( activeLink.next().length ) {
+                        activeLink.next().addClass('active');
+                    } else {
+                        container.find('a').first().addClass('active');
+                    }
+                } else { // UP
+                    if( activeLink.prev().length ) {
+                        activeLink.prev().addClass('active');
+                    } else {
+                        container.find('a').last().addClass('active');
+                    }
+                }
+            } else {
+                container.find('a').first().addClass('active');
+            }
+        } else if (keyCode === 13) {
+            if( activeLink.length ) {
+                $(this).val( activeLink.text() ).blur();
+                $(this).closest('.dentist-suggester-wrapper').find('.suggester-hidden').val( activeLink.attr('data-id') );
+                container.hide();
+            }
+        } else {
+            if( $(this).val().length > 3 ) {
+                //Show Loding
+                if(suggestTO) {
+                    clearTimeout(suggestTO);
+                }
+                suggestTO = setTimeout(suggestDentist.bind(this), 300);
+            } else {
+                container.hide();
+            }
+        }
+    });
 
 
     suggestClinic = function() {
@@ -325,7 +415,7 @@ $(document).ready(function(){
             }
         });
 
-        $('.suggester-hidden').on( 'change', function(e) {
+        $('.cilnic-suggester-wrapper .suggester-hidden').on( 'change', function(e) {
             var form = $(this).closest('form');
 
             $('.popup .alert').hide();
@@ -343,7 +433,6 @@ $(document).ready(function(){
                 dataType: 'json',
                 success: function(ret) {
                     if (ret.success) {
-                        form.hide();
                         $('.popup .alert-success').html(ret.message).show();
                     } else {
                         $('.popup .alert-warning').html(ret.message).show();
@@ -353,6 +442,33 @@ $(document).ready(function(){
 
         });
     }
+
+    $('.dentist-suggester-wrapper .suggester-hidden').on( 'change', function(e) {
+        var form = $(this).closest('form');
+
+        $('.popup .alert').hide();
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('url'),
+            data: {
+                dentist_name: $('input[name="invitedentist"]').val(),
+                dentist_id: $(this).val(),
+                user_id: $('input[name="last_user_id"]').val(),
+                user_hash: $('input[name="last_user_hash"]').val(),
+                _token: form.find('input[name="_token"]').val(),
+            },
+            dataType: 'json',
+            success: function(ret) {
+                if (ret.success) {
+                    $('.popup .alert-success').html(ret.message).show();
+                } else {
+                    $('.popup .alert-warning').html(ret.message).show();
+                }
+            }
+        });
+
+    });
 
     $('.invite-clinic-form').submit( function(e) {
         e.preventDefault();
@@ -460,6 +576,7 @@ $(document).ready(function(){
             $('#signin-form-popup').serialize(), 
             function( data ) {
                 if(data.success) {
+                    $('.ajax-alert').remove();
                     $('#register-error').hide();
 
                     var a = $('.sign-in-step.active');
@@ -467,15 +584,21 @@ $(document).ready(function(){
                     a.next().addClass('active');
 
                 } else {
-                    $('#register-error').show();
-                    $('#register-error span').html('');
+                    // $('#register-error').show();
+                    // $('#register-error span').html('');
+                    $('.ajax-alert').remove();
                     for(var i in data.messages) {
-                        $('#register-error span').append(data.messages[i] + '<br/>');
-                        $('input[name="'+i+'"]').addClass('has-error');
+                        // $('#register-error span').append(data.messages[i] + '<br/>');
+                        $('[name="'+i+'"]').addClass('has-error');
+                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
 
-                        if ($('input[name="'+i+'"]').closest('.modern-radios').length) {
-                            $('input[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
+                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
                         }
+
+                        if ($('[name="'+i+'"]').closest('.agree-label').length) {
+                            $('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
+                        }                        
                     }
                     grecaptcha.reset();
                 }
@@ -517,16 +640,14 @@ $(document).ready(function(){
                 if (data.id) {
                     $('input[name="last_user_id"]').val(data.id);
                 }
-
-                if (data.short_description && (data.short_description!='') && $('.verification-form').length && data.is_clinic && $('.invite-clinic-form').length) {
-                    $('.verification-info').hide();
-                } else {                    
-                    if (data.short_description && $('.verification-form').length) {
-                        $('.verification-form').hide();
-                    }
-                    if (data.is_clinic && $('.invite-clinic-form').length) {
-                        $('.invite-clinic-form').hide();
-                    }
+                 
+                if (data.short_description && $('.verification-form').length) {
+                    $('.verification-form').hide();
+                }
+                if (data.is_clinic && $('.invite-clinic-form').length) {
+                    $('.invite-clinic-form').hide();
+                } else if($('.invite-dentist-form').length) {
+                    $('.invite-dentist-form').hide();
                 }
 
                 if(data.popup) {
@@ -535,11 +656,15 @@ $(document).ready(function(){
                 } else if(data.success) {
                     window.location.href = data.url;
                 } else {
-                    $('#register-error').show();
-                    $('#register-error span').html('');
+                    // $('#register-error span').html('');
+                    // $('#register-error').show();
+                    $('.ajax-alert').remove();
+                    $('#step-4 .alert-after').after('<div class="alert alert-warning ajax-alert"></div>');
                     for(var i in data.messages) {
-                        $('#register-error span').append(data.messages[i] + '<br/>');
-                        $('input[name="'+i+'"]').closest('.form-group').addClass('has-error');
+                        // $('#register-error span').append(data.messages[i] + '<br/>');
+                        $('#step-4 .ajax-alert').append(data.messages[i] + '<br/>');
+
+                        $('[name="'+i+'"]').addClass('has-error');
                     }
                     grecaptcha.reset();
                 }
@@ -554,6 +679,14 @@ $(document).ready(function(){
 
     $('#signin-form-popup input').on('focus', function(e){
         $(this).closest('.form-group').removeClass('has-error');
+    });
+
+    $('#signin-form-popup input').on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) { 
+            e.preventDefault();
+            return false;
+        }
     });
 
 

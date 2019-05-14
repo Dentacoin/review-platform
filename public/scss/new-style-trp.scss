@@ -1402,6 +1402,10 @@ body.blur {
 		}
     }
 
+	.modern-field + .ajax-alert {
+		margin-top: -10px;
+	}
+
     img {
 		position: absolute;
 		top: -250px;
@@ -1626,20 +1630,6 @@ textarea.input {
 	}
 }
 
-@keyframes twerk {
-    0% { transform: rotate(0deg); }
-	3% { transform: rotate(-3deg); }
-	6% { transform: rotate(3deg); }
-	9% { transform: rotate(-3deg); }
-	12% { transform: rotate(3deg); }
-	15% { transform: rotate(-3deg); }
-	18% { transform: rotate(3deg); }
-	21% { transform: rotate(-3deg); }
-	24% { transform: rotate(3deg); }
-	27% { transform: rotate(-3deg); }
-	30% { transform: rotate(0deg); }
-}
-
 .checkbox-label {
 	display: block;
 	min-width: 150px;
@@ -1650,9 +1640,6 @@ textarea.input {
 	cursor: pointer;
 
 	&.has-error {
-		animation: twerk 3s; 
-	    animation-iteration-count: infinite;
-
 	    i {
 			color: rgba(255, 0, 0, 0.6);
 	    }
@@ -4109,6 +4096,14 @@ textarea.input {
 							font-size: 14px;
 						}
 					}
+
+					& + .ajax-alert {
+						margin-top: -20px;
+
+						@media #{$phone} {
+							margin-top: -10px;
+						}
+					}
 				}
 			}
 
@@ -5973,6 +5968,14 @@ textarea.input {
 
 	@media #{$phone} {
 		margin-bottom: 15px;
+	}
+
+	& + .ajax-alert {
+		margin-top: -20px;
+
+		@media #{$phone} {
+			margin-top: -10px;
+		}
 	}
 
 	p {
