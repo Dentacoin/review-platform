@@ -12,6 +12,7 @@ var flickityScales;
 
 var mapsLoaded = false;
 var mapsWaiting = [];
+var modernFieldsUpdate;
 
 var preloadImages = function(urls, allImagesLoadedCallback){
     var loadedCounter = 0;
@@ -198,6 +199,10 @@ $(document).ready(function(){
 
 
     $('.country-select').change( function() {
+    	$(this).closest('form').find('input[name="address"]').val('');
+    	$(this).closest('form').find('.suggester-map-div').hide();
+    	$(this).closest('form').find('.geoip-confirmation').hide();
+
     	var city_select = $(this).closest('form').find('.city-select').first();
     	city_select.attr('disabled', 'disabled');
 		$.ajax( {
@@ -220,17 +225,6 @@ $(document).ready(function(){
 		});
     } );
 
-    
-
-    $('.modern-input').focus( function() {
-    	$(this).closest('.modern-field').find('label').addClass('active');
-    });
-
-    if ($('.modern-input').length) {
-    	if ($('.modern-input').val()) {
-    		$('.modern-input').closest('.modern-field').find('label').addClass('active');
-    	}
-    }
 
 	$('.alert-update button').click( function() {
 		Cookies.set('show-update', 'ok', { expires: 365 });
@@ -269,62 +263,172 @@ $(document).ready(function(){
 		$('.user-type-mobile a[type="reg-patients"]').trigger('click');
 	}
 
-	$('#go-to-2').click( function(e) {
 
-		$(this).blur();
+	$('input').focus( function() {
+		$(this).removeClass('has-error');
+	});
 
-		e.preventDefault();
+	$('.type-radio').change( function(e) {
+		$(this).closest('.modern-radios').find('label').removeClass('active');
+		$(this).closest('label').addClass('active');
+	});
 
-		$('#register-form').find('.error-message').hide();
-		$('#register-form').find('.has-error').removeClass('has-error');
+	$('input[name="mode"]').change( function() {
+        $(this).closest('.modern-radios').removeClass('has-error');
+
+        var val = $('#mode-clinic:checked').length;
+        if(val) {
+            $('.title-wrap').hide();
+        } else {
+            $('.title-wrap').show();
+        }
+    } );
+
+    $('#register-form input').on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) { 
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    modernFieldsUpdate = function() {
+	    $('.modern-input').focus( function() {
+	    	$(this).closest('.modern-field').addClass('active');
+	    	$(this).removeClass('has-error');
+	    });
+
+	    $('.modern-input').focusout( function() {
+	    	if (!$(this).val()) {
+	    		$(this).closest('.modern-field').removeClass('active');
+	    	}
+	    });
+
+	    if ($('.modern-input').length) {
+	    	setTimeout( function() {
+
+		    	$('.modern-input').each( function() {
+		    		if ($(this).val() || $(this).is(":-webkit-autofill")) {
+		    			$(this).closest('.modern-field').addClass('active');
+		    		}
+		    	});
+	    	} , 0)
+	    }
+    }
+    modernFieldsUpdate();
+
+	$('.go-to-next').click( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $('.form-group').removeClass('has-error');
 
         $.post( 
             $(this).attr('data-validator'), 
-            $('#register-form').serialize() , 
+            $('#register-form').serialize(), 
             function( data ) {
                 if(data.success) {
-                	$('#step-1').hide();
-                	$('#step-2').show();
-                	$(window).scrollTop(0);
+                    $('.ajax-alert').remove();
 
-					var request = {
-						type: ['dentist'],
-						query: $('#dentist-name').val()
-					};
+                    var a = $('.sign-in-step.active');
+                    a.removeClass('active');
+                    a.next().addClass('active');
 
-					fbq('track', 'DVDentistRegistrationInitiate');
-					gtag('event', 'ClickSubmit', {
-						'event_category': 'DentistRegistration',
-						'event_label': 'DentistRegistrationInitiate',
-					});
+					// var request = {
+					// 	type: ['dentist'],
+					// 	query: $('#dentist-name').val()
+					// };
+
+					// fbq('track', 'DVDentistRegistrationInitiate');
+					// gtag('event', 'ClickSubmit', {
+					// 	'event_category': 'DentistRegistration',
+					// 	'event_label': 'DentistRegistrationInitiate',
+					// });
 
                 } else {
-					for(var i in data.messages) {
-						$('#'+i+'-error').html(data.messages[i]).show();
-						$('input[name="'+i+'"]').closest('.form-group').addClass('has-error');
-					}
 
-	                $('html, body').animate({
-	                	scrollTop: $('#register-form').offset().top - 60
-	                }, 500);
-	                grecaptcha.reset();
+                    $('.ajax-alert').remove();
+                    for(var i in data.messages) {
+                        $('[name="'+i+'"]').addClass('has-error');
+                        $('[name="'+i+'"]').closest('.form-group').addClass('has-error');
+                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
+
+                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
+                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+                        }
+
+                        if ($('[name="'+i+'"]').closest('.agree-label').length) {
+                            $('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
+                        }                        
+                    }
+                    grecaptcha.reset();
                 }
                 ajax_is_running = false;
             }, 
             "json"
         );
 
-	} );
+    } );
 
-	$('#register-form').keydown(function(event){
-		if(event.keyCode == 13) {
-			if( $('#step-1').is(':visible') ) {
-				event.preventDefault();
-				$('#go-to-2').click();
-				return false;				
-			}
-		}
-	});
+	// $('#go-to-2').click( function(e) {
+
+	// 	$(this).blur();
+
+	// 	e.preventDefault();
+
+	// 	$('#register-form').find('.error-message').hide();
+	// 	$('#register-form').find('.has-error').removeClass('has-error');
+
+ //        $.post( 
+ //            $(this).attr('data-validator'), 
+ //            $('#register-form').serialize() , 
+ //            function( data ) {
+ //                if(data.success) {
+ //                	$('#step-1').hide();
+ //                	$('#step-2').show();
+ //                	$(window).scrollTop(0);
+
+	// 				var request = {
+	// 					type: ['dentist'],
+	// 					query: $('#dentist-name').val()
+	// 				};
+
+	// 				fbq('track', 'DVDentistRegistrationInitiate');
+	// 				gtag('event', 'ClickSubmit', {
+	// 					'event_category': 'DentistRegistration',
+	// 					'event_label': 'DentistRegistrationInitiate',
+	// 				});
+
+ //                } else {
+	// 				for(var i in data.messages) {
+	// 					$('#'+i+'-error').html(data.messages[i]).show();
+	// 					$('input[name="'+i+'"]').closest('.form-group').addClass('has-error');
+	// 				}
+
+	//                 $('html, body').animate({
+	//                 	scrollTop: $('#register-form').offset().top - 60
+	//                 }, 500);
+	//                 grecaptcha.reset();
+ //                }
+ //                ajax_is_running = false;
+ //            }, 
+ //            "json"
+ //        );
+
+	// } );
+
+	$('#register-form .back').click( function() {
+        var prev_step = $(this).closest('.sign-in-step');
+        prev_step.removeClass('active');
+        prev_step.prev().addClass('active');
+        if ($('#dentist-address').length && $('#dentist-address').val()) {
+            $('#dentist-address').blur();
+        }
+    });
 
 	$('#register-form').submit( function(e) {
 		e.preventDefault();
@@ -348,14 +452,17 @@ $(document).ready(function(){
                 } else if (data.popup) {
                 	$('#'+data.popup).addClass('active');
                 } else {
-					for(var i in data.messages) {
-						$('#'+i+'-error').html(data.messages[i]).show();
-						$('input[name="'+i+'"]').closest('.form-group').addClass('has-error');
-					}
 
-	                $('html, body').animate({
-	                	scrollTop: $('#register-form').offset().top - 60
-	                }, 500);
+                	$('.ajax-alert').remove();
+                    $('#step-4 .alert-after').after('<div class="alert alert-warning ajax-alert"></div>');
+                    for(var i in data.messages) {
+                        $('#'+i+'-error').html(data.messages[i]).show();
+						$('input[name="'+i+'"]').closest('.form-group').addClass('has-error');
+
+                        $('#step-4 .ajax-alert').append(data.messages[i] + '<br/>');
+                        $('[name="'+i+'"]').addClass('has-error');
+                    }
+
 	                grecaptcha.reset();
                 }
                 ajax_is_running = false;
@@ -370,6 +477,43 @@ $(document).ready(function(){
     	console.log($(this).closest('.form-group'));
 	    $(this).closest('.form-group').removeClass('has-error');
 	});
+
+	$('.verification-form').submit( function(e) {
+        e.preventDefault();
+
+        $('.alert').hide();
+        $(this).find('.has-error').removeClass('has-error');
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: {
+                short_description: $('[name="short_description"]').val(),
+                _token: $(this).find('input[name="_token"]').val(),
+            },
+            dataType: 'json',
+            success: (function(ret) {
+                if (ret.success) {
+                    $(this).hide();
+                    $('.alert-success').html(ret.message).show();
+                } else {
+                    $('.alert-warning').html('').show();
+                    for(var i in ret.messages) {
+                        $('.alert-warning').append(ret.messages[i] + '<br/>');
+                        $('[name="'+i+'"]').addClass('has-error');
+                    }
+                }
+                ajax_is_running = false;
+            }).bind(this)
+        });
+
+    } );
 
 	//Gallery
     $('#add-avatar').change( function() {
@@ -408,9 +552,6 @@ $(document).ready(function(){
         upload.doUpload();
 
     } );
-
-
-
 
 	$('#language-selector').change( function() {
 		var arr = window.location.pathname.split('/');

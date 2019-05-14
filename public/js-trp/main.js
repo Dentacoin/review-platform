@@ -28,6 +28,11 @@ jQuery(document).ready(function($){
 
 	//To be deleted
 	$('.country-select').change( function() {
+
+    	$(this).closest('form').find('input[name="address"]').val('');
+    	$(this).closest('form').find('.suggester-map-div').hide();
+    	$(this).closest('form').find('.geoip-confirmation').hide();
+
 		if(ajax_is_running) {
 			return;
 		}

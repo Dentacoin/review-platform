@@ -27,13 +27,20 @@
 						</p>
 						<form action="{{ getLangUrl('login') }}" method="post" class="form-horizontal">
 							{!! csrf_field() !!}
-							<div class="form-group">
-								<input type="text" name="email" value="{{ old('email') }}" class="form-control" placeholder="{{ trans('vox.page.login.email') }}">
+
+							<div class="modern-field alert-after">
+								<input type="email" name="email" id="email" class="modern-input" autocomplete="off" value="{{ old('email') }}">
+								<label for="email">
+									<span>{{ trans('vox.page.login.email') }}</span>
+								</label>
 							</div>
-							<div class="form-group">
-								<input type="password" name="password" class="form-control" placeholder="{{ trans('vox.page.login.password') }}">
+
+							<div class="modern-field alert-after">
+								<input type="password" name="password" id="password" class="modern-input" autocomplete="off">
+								<label for="password">
+									<span>{{ trans('vox.page.login.password') }}</span>
+								</label>
 							</div>
-							
 
 							<div class="form-group">
 								<button class="btn btn-primary btn-block" type="submit">
@@ -146,13 +153,19 @@
 								<span></span>
 							</div>
 
-							<div class="form-group">
-								<input type="text" name="email" value="{{ old('email') }}" class="form-control" placeholder="{{ trans('vox.page.login.email') }}">
+							<div class="modern-field alert-after">
+								<input type="email" name="email" id="email" class="modern-input" autocomplete="off" value="{{ old('email') }}">
+								<label for="email">
+									<span>{{ trans('vox.page.login.email') }}</span>
+								</label>
 							</div>
-							<div class="form-group">
-								<input type="password" name="password" class="form-control" placeholder="{{ trans('vox.page.login.password') }}">
-							</div>
-							
+
+							<div class="modern-field alert-after">
+								<input type="password" name="password" id="password" class="modern-input" autocomplete="off">
+								<label for="password">
+									<span>{{ trans('vox.page.login.password') }}</span>
+								</label>
+							</div>							
 
 							<div class="form-group">
 								<button class="btn btn-primary btn-block" type="submit">

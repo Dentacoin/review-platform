@@ -294,6 +294,8 @@ $voxRoutes = function () {
 			
 			Route::any('registration', 								'RegisterController@register');
 			Route::post('registration/step1', 						'RegisterController@check_step_one');
+			Route::post('registration/step2', 						'RegisterController@check_step_two');
+			Route::post('registration/step3', 						'RegisterController@check_step_three');
 			Route::post('registration/upload', 						'RegisterController@upload');
 
 			Route::get('recover-password', 						'RegisterController@forgot');
@@ -319,7 +321,7 @@ $voxRoutes = function () {
 			Route::any('vpn', 									'VpnController@list');
 
 			Route::group(['middleware' => 'auth:web'], function () {
-				Route::any('welcome-to-dentavox', 					'RegisterController@register_success');
+				Route::any('welcome-to-dentavox', 					'RegisterController@register_success')->name('verification-dentist');
 
 				Route::any('profile', 							'ProfileController@home');
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');

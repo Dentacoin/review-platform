@@ -938,11 +938,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             if(!$this->madeTest($first->id)) {
                 foreach ($has_test as $q_id => $a_id) {
 
-                    if($q_id == 'location') {
-                        $country_id = $a_id;
-                        $this->country_id = $country_id;
-                        $this->save();
-                    } else if($q_id == 'birthyear') {
+                    // if($q_id == 'location') {
+                    //     $country_id = $a_id;
+                    //     $this->country_id = $country_id;
+                    //     $this->save();
+                    // } else 
+                    if($q_id == 'birthyear') {
                         $this->birthyear = $a_id;
                         $this->save();
                     } else if($q_id == 'gender') {
