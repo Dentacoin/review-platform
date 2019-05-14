@@ -305,7 +305,7 @@
 		                        <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px 20px;">
 		                        	{!! nl2br(trans('trp.common.check-address')) !!}
 		                        </div>
-		                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
+		                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: -10px 0px 10px;">
 		                        	{!! nl2br(trans('trp.common.invalid-address')) !!}
 		                        </div>		                        
 		                    </div>

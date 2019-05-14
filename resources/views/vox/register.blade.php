@@ -99,177 +99,210 @@
 								{{ trans('vox.common.type-dentist')  }}
 							</h4>
 
-							<div id="register-error" class="alert alert-warning" style="display: none;">						
-								{{ trans('front.page.'.$current_page.'.register-error')  }}<br/>
-								<span></span>
-							</div>
+							<div class="sign-in-step active" id="step-1">
 
-							<div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
-								<select class="form-control" name="title" id="title">
-									<option value="">{!! trans('vox.page.register.title-placeholder') !!}</option>
-									<option value="dr">Dr.</option>
-									<option value="prof">Prof. Dr.</option>
-								</select>
-								<span class="error-message" id="title-error"></span>
-							</div>
-							<div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-								<input type="text" class="form-control" name="name" id="name" placeholder="{!! trans('vox.page.register.name') !!}">
-					    		<i class="hint">
-									{!! trans('vox.page.register.name-hint') !!}
-								</i>
-								<span class="error-message" id="name-error"></span>
-							</div>
-							<div class="form-group {{ $errors->has('name_alternative') ? 'has-error' : '' }}">
-								<input type="text" class="form-control" name="name_alternative" id="name_alternative" placeholder="{!! trans('vox.page.register.name_alternative') !!}">
-								<i class="hint">
-									{!! trans('vox.page.register.name_alternative-hint') !!}
-								</i>
-								<span class="error-message" id="name_alternative-error"></span>
-							</div>
-							<div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-								<input type="text" class="form-control" name="email" id="email" placeholder="{!! trans('vox.page.register.email') !!}">
-								<span class="error-message" id="email-error"></span>
-							</div>
-							<div class="form-group {{ $errors->has('password') ? 'has-error' : '' }}">
-								<input type="password" class="form-control" name="password" id="password" placeholder="{!! trans('vox.page.register.password') !!}
-								">
-								<span class="error-message" id="password-error"></span>
-							</div>
-							<div class="form-group {{ $errors->has('password-repeat') ? 'has-error' : '' }}">
-								<input type="password" class="form-control" name="password-repeat" id="password-repeat" placeholder="{!! trans('vox.page.register.password-repeat') !!}">
-								<span class="error-message" id="password-repeat-error"></span>
-							</div>
+								<div class="modern-field alert-after {{ $errors->has('email') ? 'has-error' : '' }}">
+									<input type="email" name="email" id="email" class="modern-input" autocomplete="off">
+									<label for="email">
+										<span>{!! trans('vox.page.register.email') !!}</span>
+									</label>
+								</div>
 
-							<div class="form-group tac">
-								<button class="btn" id="go-to-2" data-validator="{{ getLangUrl('registration/step1') }}">
-									{!! trans('vox.page.register.sign-up') !!}
-								</button>
+								<div class="modern-field alert-after {{ $errors->has('password') ? 'has-error' : '' }}">
+									<input type="password" name="password" id="password" class="modern-input" autocomplete="off">
+									<label for="password">
+										<span>{!! trans('vox.page.register.password') !!}</span>
+									</label>
+								</div>
+
+								<div class="modern-field alert-after {{ $errors->has('password-repeat') ? 'has-error' : '' }}">
+									<input type="password" name="password-repeat" id="password-repeat" class="modern-input" autocomplete="off">
+									<label for="password-repeat">
+										<span>{!! trans('vox.page.register.password-repeat') !!}</span>
+									</label>
+								</div>								
+
+								<div class="form-info clearfix">
+									<button class="btn go-to-next" id="go-to-2" data-validator="{{ getLangUrl('registration/step1') }}">
+										{!! trans('vox.page.register.next') !!}
+									</button>
+								</div>
+							</div>
+							<div class="sign-in-step address-suggester-wrapper" id="step-2">
+
+								<div class="modern-radios alert-after">
+									<div class="radio-label">
+									  	<label for="mode-dentist">
+											<span class="modern-radio">
+												<span></span>
+											</span>
+									    	<input class="type-radio" type="radio" name="mode" id="mode-dentist" value="dentist">
+									    	{!! nl2br(trans('vox.page.register.mode.dentist')) !!}
+									  	</label>
+									  	<span>{!! nl2br(trans('vox.page.register.mode.dentist.description')) !!}</span>
+									</div>
+									<div class="radio-label">
+									  	<label for="mode-clinic">
+											<span class="modern-radio">
+												<span></span>
+											</span>
+									    	<input class="type-radio" type="radio" name="mode" id="mode-clinic" value="clinic">
+									    	{!! nl2br(trans('vox.page.register.mode.clinic')) !!}								    	
+									  	</label>
+									  	<span>{!! nl2br(trans('vox.page.register.mode.clinic.description')) !!}</span>
+									</div>
+								</div>
+
+								<div class="modern-field alert-after title-wrap">
+									{{ Form::select( 'title' , config('titles') , null , array('class' => 'modern-input', 'id'=>'title') ) }}
+									<label for="title">
+										<span>{!! trans('vox.page.register.title-placeholder') !!}</span>
+									</label>
+								</div>
+
+								<div class="modern-field alert-after {{ $errors->has('name') ? 'has-error' : '' }}">
+									<input type="text" name="name" id="name" class="modern-input" autocomplete="off">
+									<label for="name">
+										<span>{!! trans('vox.page.register.name') !!}</span>
+									</label>
+									<p>{!! trans('vox.page.register.name-hint') !!}</p>
+								</div>
+
+								<div class="modern-field alert-after {{ $errors->has('name_alternative') ? 'has-error' : '' }}">
+									<input type="text" name="name_alternative" id="name_alternative" class="modern-input" autocomplete="off">
+									<label for="name_alternative">
+										<span>{!! trans('vox.page.register.name_alternative') !!}</span>
+									</label>
+									<p>{!! trans('vox.page.register.name_alternative-hint') !!}</p>
+								</div>
+
+								<div class="form-info clearfix">
+									<a class="back" href="javascript:;">&lt; {!! trans('vox.page.register.back') !!}</a>
+									<button class="btn go-to-next" id="go-to-3" type="submit" data-validator="{{ getLangUrl('registration/step2') }}">
+										{!! trans('vox.page.register.next') !!}
+									</button>
+								</div>								
+							</div>
+							<div class="sign-in-step address-suggester-wrapper" id="step-3">
+
+								<div class="modern-field  {{ $errors->has('country_id') ? 'has-error' : '' }}">
+						  			<select name="country_id" id="dentist-country" class="modern-input country-select">
+						  				@if(!$country_id)
+							  				<option>-</option>
+							  			@endif
+						  				@foreach( $countries as $country )
+						  					<option value="{{ $country->id }}" code="{{ $country->code }}" {!! ( $test_country_id ?? $country_id )==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+						  				@endforeach
+						  			</select>
+								</div>
+
+								<div class="modern-field alert-after {{ $errors->has('address') ? 'has-error' : '' }}">
+									<input type="text" name="address"  id="dentist-address" class="modern-input address-suggester" autocomplete="off">
+									<label for="dentist-address">
+										<span>{!! trans('vox.page.register.address') !!}</span>
+									</label>
+									<p>{!! nl2br(trans('vox.page.register.address.description')) !!}</p>
+								</div>
+
+			                	<div>
+							    	<div class="suggester-map-div" style="height: 200px; display: none; margin: 10px 0px; background: transparent;">
+			                        </div>
+			                        <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px 20px;">
+			                        	{!! nl2br(trans('vox.common.check-address')) !!}
+			                        </div>
+			                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: -10px 0px 10px;">
+			                        	{!! nl2br(trans('vox.common.invalid-address')) !!}
+			                        </div>		                        
+			                    </div>
+
+			                    <div class="modern-field alert-after {{ $errors->has('website') ? 'has-error' : '' }}">
+									<input type="text" name="website" id="dentist-website" class="modern-input" autocomplete="off" value="{{ $regData['website'] ?? old('website') }}">
+									<label for="dentist-website">
+										<span>{!! trans('vox.page.register.website') !!} </span>
+									</label>
+									<p>{!! trans('vox.page.register.website-hint') !!}</p>
+								</div>
+
+								<div class="flex input-flex alert-after {{ $errors->has('phone') ? 'has-error' : '' }}">
+									<div>
+					    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>
+									</div>
+									<div style="flex: 1;" class="modern-field">
+										<input type="text" name="phone" id="dentist-phone" class="modern-input" autocomplete="off">
+										<label for="dentist-phone">
+											<span>{!! trans('vox.page.register.phone') !!}</span>
+										</label>
+									</div>
+								</div>
+
+								<div class="form-info clearfix">
+									<a class="back" href="javascript:;">&lt; {!! trans('vox.page.register.back') !!}</a>
+									<button class="btn go-to-next" id="go-to-4" type="submit" data-validator="{{ getLangUrl('registration/step3') }}">
+										{!! trans('vox.page.register.next') !!}
+									</button>
+								</div>
+							</div>
+							<div class="sign-in-step" id="step-4">
+
+								<div class="flex alert-after">
+									<div class="col image-w">
+										<label class="add-photo" for="add-avatar">
+								    		<div class="photo-cta">
+								    			<i class="fa fa-plus"></i>
+								    			{!! trans('vox.page.register.photo-add') !!}
+								    		</div> 
+								    		<div class="loader">
+								    			<i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i>
+								    		</div>
+								    		<input id="add-avatar" name="image" type="file">
+								    	</label>
+							    		<!-- <i class="hint">
+							    			{!! trans('vox.page.register.photo-hint') !!}
+							    			
+							    		</i> -->
+										<input type="hidden" id="photo-name" name="photo" >
+										<div id="photo-upload-error" style="display: none;" class="alert alert-warning">
+											{!! trans('vox.page.register.photo-error') !!}
+											
+										</div>
+									</div>
+									<div class="col">
+										<div class="specializations">
+											<p class="checkbox-question">
+												{!! trans('vox.page.register.specialization') !!}
+											</p>
+									    	@foreach($categories as $k => $v)
+												<label class="checkbox-label" for="checkbox-{{ $k }}">
+													<input 
+														type="checkbox" 
+														class="input-checkbox" 
+														id="checkbox-{{ $k }}" 
+														name="specialization[]" 
+														value="{{ $loop->index }}"
+													>
+													<i class="far fa-square"></i>
+													{{ $v }}
+												</label>
+		                                    @endforeach
+		                                </div>
+
+									</div>
+								</div>								
+
+							  	<div class="form-group {{ $errors->has('captcha') ? 'has-error' : '' }}" style="text-align: center;">
+								    <div class="g-recaptcha" id="g-recaptcha" data-callback="sendReCaptcha" style="display: inline-block;" data-size="compact" data-sitekey="6LfmCmEUAAAAAH20CTYH0Dg6LGOH7Ko7Wv1DZlO0"></div>
+								</div>
+
+								<div class="form-info clearfix">
+									<a class="back" href="javascript:;">&lt; {!! trans('vox.page.register.back') !!}</a>
+									<button class="btn submit-register" type="submit">
+										{!! trans('vox.page.register.sign-up') !!}
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
 
-				</div>
-			</div>
-
-			<div class="container" id="step-2" style="display: none;">
-
-				<div class="col-md-3">
-					<img class="image-left" src="{{ url('new-vox-img/register-dentist.png') }}">
-				</div>
-
-				<div class="col-md-9 clearfix">
-
-					<h3 class="tac">
-						{!! trans('vox.page.register.title-dentist') !!}
-					</h3>
-					<p class="reg-desc">
-						{!! nl2br(trans('vox.page.register.subtitle-dentist')) !!}
-					</p>
-
-					<div class="clearfix reg-step-2-wrapper">
-
-						<div class="col-md-6 register-dentist-left address-suggester-wrapper">
-
-							<div id="register-error-two" class="alert alert-warning" style="display: none;">						
-								{{ trans('front.page.'.$current_page.'.register-error')  }}<br/>
-								<span></span>
-							</div>
-
-						  	<div class="form-group {{ $errors->has('country_id') ? 'has-error' : '' }}">
-						  		<select name="country_id" id="dentist-country" class="form-control country-select" placeholder="{!! trans('vox.page.register.country') !!}">
-						  			@if(!$country_id)
-						  				<option>-</option>
-						  			@endif
-						  			@foreach( $countries as $country )
-						  				<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
-						  			@endforeach
-						  		</select>
-						  		<span class="error-message" id="country-error"></span>
-							</div>
-						  	
-
-						  	<div class="form-group {{ $errors->has('address') ? 'has-error' : '' }}">
-						    	<input type="text" name="address" id="dentist-address" class="form-control address-suggester" autocomplete="off" placeholder="{!! trans('vox.page.register.address') !!}">
-							    <span class="error-message" id="address-error"></span>
-		                        <div class="suggester-map-div" style="height: 200px; display: none; margin: 10px 0px; background: transparent;">
-		                        </div>
-		                        <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px;">
-		                        	{!! nl2br(trans('trp.common.check-address')) !!}
-		                        </div>
-		                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
-		                        	{!! nl2br(trans('vox.common.invalid-address')) !!}
-		                        </div>
-		                    </div>                          
-
-						  	<div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
-						  		<div class="flex flex-center">
-						  			<div class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</div>
-								    <input type="text" name="phone" id="dentist-phone" class="form-control" placeholder="{!! trans('vox.page.register.phone') !!}">
-								</div>
-								<!--
-						    		<i>
-						    			{!! trans('vox.page.register.phone-hint') !!}
-						    		</i>
-						    	-->
-							    <span class="error-message" id="phone-error"></span>
-							</div>
-
-						  	<div class="form-group {{ $errors->has('website') ? 'has-error' : '' }}">
-							    <input type="text" name="website" id="dentist-website" class="form-control" placeholder="{!! trans('vox.page.register.website') !!} ">
-								<i class="hint">
-									{!! trans('vox.page.register.website-hint') !!}
-								</i>
-							    <span class="error-message" id="website-error"></span>
-							</div>
-
-							<div class="form-group {{ $errors->has('photo') ? 'has-error' : '' }}">
-						    	<label class="add-photo" for="add-avatar">
-						    		<div class="photo-cta">
-						    			<i class="fa fa-plus"></i>
-						    			{!! trans('vox.page.register.photo-add') !!}
-						    		</div> 
-						    		<div class="loader">
-						    			<i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i>
-						    		</div>
-						    		<input id="add-avatar" name="image" type="file">
-						    	</label>
-					    		<i class="hint">
-					    			{!! trans('vox.page.register.photo-hint') !!}
-					    			
-					    		</i>
-								<input type="hidden" id="photo-name" name="photo" >
-								<span class="error-message" id="photo-error"></span>
-								<div id="photo-upload-error" style="display: none;" class="alert alert-warning">
-									{!! trans('vox.page.register.photo-error') !!}
-									
-								</div>
-							</div>
-
-						  	<div class="form-group {{ $errors->has('captcha') ? 'has-error' : '' }}">
-							    <div class="g-recaptcha" id="g-recaptcha" data-callback="sendReCaptcha" style="display: inline-block;" data-size="compact" data-sitekey="6LfmCmEUAAAAAH20CTYH0Dg6LGOH7Ko7Wv1DZlO0"></div>
-							    <span class="error-message" id="captcha-error"></span>
-							</div>
-
-							<button class="btn btn-block" id="go-to-3" type="submit">
-								{!! trans('vox.page.register.sign-up') !!}
-							</button>
-						</div>
-
-						<div class="col-md-6 register-dentist-right">
-							<p>
-								{!! trans('vox.page.register.dentist-perk-1') !!}
-							</p>
-							<p>
-								{!! trans('vox.page.register.dentist-perk-2') !!}
-							</p>
-							<p>
-								{!! trans('vox.page.register.dentist-perk-3') !!}
-							</p>
-							<p>
-								{!! trans('vox.page.register.dentist-perk-4') !!}
-							</p>
-						</div>
-					</div>
 				</div>
 			</div>
 

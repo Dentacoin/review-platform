@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
 
 use App\Models\User;
+use App\Models\UserCategory;
 use App\Models\UserInvite;
 use App\Models\Country;
 use App\Models\City;
@@ -24,6 +25,12 @@ class RegisterController extends FrontController
     public function register($locale=null) {
         $this->current_page = 'register';
 
+        $test_country_id = null;
+        $has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
+        if ($has_test && !empty($has_test['location'])) {
+            $test_country_id = $has_test['location'];
+        }
+
         if(Request::isMethod('post')) {
 
             if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
@@ -33,9 +40,9 @@ class RegisterController extends FrontController
             }
 
             $validator = Validator::make(Request::all(), [
+                'mode' => array('required', 'in:dentist,clinic'),
                 'name' => array('required', 'min:3'),
                 'email' => array('required', 'email', 'unique:users,email'),
-                'country_id' => array('required', 'numeric'),
                 'password' => array('required', 'min:6'),
                 'password-repeat' => 'required|same:password',
                 'country_id' => array('required', 'exists:countries,id'),
@@ -44,6 +51,7 @@ class RegisterController extends FrontController
                 'photo' =>  array('required'),
                 'website' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
                 'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
+                'specialization' =>  array('required', 'array'),
             ]);
 
             if ($validator->fails()) {
@@ -91,38 +99,16 @@ class RegisterController extends FrontController
                     );
 
                     return Response::json( $ret );
-                }  
-
-                $phone = null;
-                $c = Country::find( Request::Input('country_id') );
-                if( Request::input('type')=='clinic' ) {
-                    $phone = ltrim( str_replace(' ', '', Request::Input('phone')), '0');
-                    $pn = $c->phone_code.' '.$phone;
-
-                    $validator = Validator::make(['phone' => $pn], [
-                        'phone' => ['required','phone:'.$c->code],
-                    ]);
-
-
-                    if ($validator->fails()) {
-                        return Response::json( [
-                            'success' => false, 
-                            'messages' => [
-                                'phone' => trans('front.page.registration.phone')
-                            ]
-                        ] );
-                    }
                 }
 
-
-                $info = User::validateAddress( $c->name, request('address') );
+                $info = User::validateAddress( Country::find(request('country_id'))->name, request('address') );
                 if(empty($info)) {
-                    return Response::json( [
-                        'success' => false, 
-                        'messages' => [
+                    $ret = array(
+                        'success' => false,
+                        'messages' => array(
                             'address' => trans('vox.common.invalid-address')
-                        ]
-                    ] );
+                        )
+                    );
                 }
 
                 if(User::validateLatin(Request::input('name')) == false) {
@@ -153,13 +139,14 @@ class RegisterController extends FrontController
                 $newuser->email = Request::input('email');
                 $newuser->country_id = Request::input('country_id');
                 $newuser->password = bcrypt(Request::input('password'));
-                $newuser->phone = $phone;
+                $newuser->phone = Request::input('phone');
                 $newuser->platform = 'vox';
                 $newuser->address = Request::input('address');
                 $newuser->website = Request::input('website');
                 
                 $newuser->gdpr_privacy = true;
                 $newuser->is_dentist = 1;
+                $newuser->is_clinic = Request::input('mode')=='clinic' ? 1 : 0;
 
                 if(!empty(session('invited_by'))) {
                     $newuser->invited_by = session('invited_by');
@@ -169,6 +156,16 @@ class RegisterController extends FrontController
                 }
                 
                 $newuser->save();
+
+                UserCategory::where('user_id', $newuser->id)->delete();
+                if(!empty(Request::input('specialization'))) {
+                    foreach (Request::input('specialization') as $cat) {
+                        $newc = new UserCategory;
+                        $newc->user_id = $newuser->id;
+                        $newc->category_id = $cat;
+                        $newc->save();
+                    }
+                }
 
                 if($newuser->invited_by && $newuser->invitor->canInvite('vox')) {
                     $inv_id = session('invitation_id');
@@ -217,6 +214,31 @@ class RegisterController extends FrontController
                     ] );
                 }
 
+                $mtext = 'New Dentavox dentist/clinic registration:
+                '.$newuser->getName().'
+                IP: '.User::getRealIp().'
+                '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
+                '.url('https://dentavox.dentacoin.com/cms/users/edit/'.$newuser->id).'
+                ';
+
+                Mail::raw($mtext, function ($message) use ($newuser) {
+
+                    //$receiver = 'official@youpluswe.com';
+                    $receiver = 'ali.hashem@dentacoin.com';
+                    $sender = config('mail.from.address-vox');
+                    $sender_name = config('mail.from.name-vox');
+
+                    $message->from($sender, $sender_name);
+                    $message->to( $receiver );
+                    //$message->to( 'dokinator@gmail.com' );
+                    $message->replyTo($receiver, $newuser->getName());
+                    $message->subject('New Dentavox Dentist/Clinic registration');
+                });
+
+                session([
+                    'success_registered_dentist_vox' => true,
+                ]);
+
                 Auth::login($newuser, Request::input('remember'));
 
                 Request::session()->flash('success-message', trans('front.page.registration.success-dentist'));
@@ -229,6 +251,7 @@ class RegisterController extends FrontController
         } else {
 
             return $this->ShowVoxView('register', array(
+                'test_country_id' => $test_country_id,
                 'noindex' => ' ',
                 'countries' => Country::get(),
                 'js' => [
@@ -260,6 +283,46 @@ class RegisterController extends FrontController
         $this->current_page = 'register';
 
         $validator = Validator::make(Request::all(), [
+            'email' => array('required', 'email', 'unique:users,email'),
+            'password' => array('required', 'min:6'),
+            'password-repeat' => 'required|same:password',
+            'privacy' =>  array('required', 'accepted'),
+        ]);
+
+        if ($validator->fails()) {
+
+            $msg = $validator->getMessageBag()->toArray();
+            $ret = array(
+                'success' => false,
+                'messages' => array()
+            );
+
+            foreach ($msg as $field => $errors) {
+                $ret['messages'][$field] = implode(', ', $errors);
+            }
+
+            return Response::json( $ret );
+        } else {
+
+            if(User::validateEmail(Request::input('email')) == true) {
+                $ret = array(
+                    'success' => false,
+                    'messages' =>[
+                        'email' => trans('vox.common.invalid-email')
+                    ]
+                );
+                return Response::json( $ret );
+            }
+
+            return Response::json( ['success' => true] );
+        }
+    }
+
+    public function check_step_two() {
+        $this->current_page = 'register';
+
+        $validator = Validator::make(Request::all(), [
+            'mode' => array('required', 'in:dentist,clinic'),
             'name' => array('required', 'min:3'),
             'email' => array('required', 'email', 'unique:users,email'),
             'password' => array('required', 'min:6'),
@@ -290,17 +353,6 @@ class RegisterController extends FrontController
                     ]
                 ] );
             }
-
-
-            if(User::validateEmail(Request::input('email')) == true) {
-                $ret = array(
-                    'success' => false,
-                    'messages' =>[
-                        'email' => trans('vox.common.invalid-email')
-                    ]
-                );
-                return Response::json( $ret );
-            }
             
             $is_blocked = User::checkBlocks( Request::input('name') , Request::input('email') );
             if( $is_blocked ) {
@@ -316,44 +368,88 @@ class RegisterController extends FrontController
         }
     }
 
+    public function check_step_three() {
+        $this->current_page = 'register';
+
+        if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
+            request()->merge([
+                'website' => 'http://'.request('website')
+            ]);
+        }
+
+        $validator = Validator::make(Request::all(), [
+            'country_id' => array('required', 'exists:countries,id'),
+            'address' =>  array('required', 'string'),
+            'privacy' =>  array('required', 'accepted'),
+            'website' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
+            'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
+        ]);
+
+        if ($validator->fails()) {
+
+            $msg = $validator->getMessageBag()->toArray();
+            $ret = array(
+                'success' => false,
+                'messages' => array()
+            );
+
+            foreach ($msg as $field => $errors) {
+                $ret['messages'][$field] = implode(', ', $errors);
+            }
+
+            return Response::json( $ret );
+        } else {
+
+            $info = User::validateAddress( Country::find(request('country_id'))->name, request('address') );
+            if(empty($info)) {
+                return Response::json( [
+                    'success' => false, 
+                    'messages' => [
+                        'address' => trans('vox.common.invalid-address')
+                    ]
+                ] );
+            }
+
+            return Response::json( ['success' => true] );
+        }
+    }
+
     public function register_success($locale=null) {
         $this->user->checkForWelcomeCompletion();
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='test') {
-            if(Request::isMethod('post') && !session( 'approval-request-sent' )) {
+            if(Request::isMethod('post')) {
 
-                $newuser = $this->user;
-
-                $mtext = 'New Dentavox dentist/clinic registration:
-                '.$newuser->getName().'
-                IP: '.User::getRealIp().'
-                '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
-                '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
-                ';
-
-                Mail::raw($mtext, function ($message) use ($newuser) {
-
-                    //$receiver = 'official@youpluswe.com';
-                    $receiver = 'ali.hashem@dentacoin.com';
-                    $sender = config('mail.from.address-vox');
-                    $sender_name = config('mail.from.name-vox');
-
-                    $message->from($sender, $sender_name);
-                    $message->to( $receiver );
-                    //$message->to( 'dokinator@gmail.com' );
-                    $message->replyTo($receiver, $newuser->getName());
-                    $message->subject('New Dentavox Dentist/Clinic registration');
-                });
-
-                session([
-                    'approval-request-sent' => true,                    
-                    'success_registered_dentist_vox' => true,
+                $validator = Validator::make(Request::all(), [
+                    'short_description' => array('required', 'max:150'),
                 ]);
+
+                if ($validator->fails()) {
+
+                    $msg = $validator->getMessageBag()->toArray();
+                    $ret = array(
+                        'success' => false,
+                        'messages' => array()
+                    );
+
+                    foreach ($msg as $field => $errors) {
+                        $ret['messages'][$field] = implode(', ', $errors);
+                    }
+
+                    return Response::json( $ret );
+                } else {
+
+                    $this->user->short_description = Request::Input('short_description');
+                    $this->user->save();
+
+                    return Response::json( [
+                        'success' => true,
+                        'message' => trans('trp.popup.verification-popup.user-info.success'),
+                    ] );
+                }
             }
 
 
-            return $this->ShowVoxView('register-success-dentist',[
-                'request_sent' => session('approval-request-sent')
-            ]);
+            return $this->ShowVoxView('register-success-dentist');
         } else {
             return $this->ShowVoxView('register-success');            
         }

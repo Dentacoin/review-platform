@@ -356,27 +356,16 @@ class RegisterController extends FrontController
                 );
 
                 return Response::json( $ret );
-            }  
+            }
 
-            $phone = null;
-            $c = Country::find( Request::Input('country_id') );
-            if( Request::input('type')=='clinic' ) {
-                $phone = ltrim( str_replace(' ', '', Request::Input('phone')), '0');
-                $pn = $c->phone_code.' '.$phone;
-
-                $validator = Validator::make(['phone' => $pn], [
-                    'phone' => ['required','phone:'.$c->code],
-                ]);
-
-
-                if ($validator->fails()) {
-                    return Response::json( [
-                        'success' => false, 
-                        'messages' => [
-                            'phone' => trans('trp.popup.registration.phone')
-                        ]
-                    ] );
-                }
+            $info = User::validateAddress( Country::find(request('country_id'))->name, request('address') );
+            if(empty($info)) {
+                $ret = array(
+                    'success' => false,
+                    'messages' => array(
+                        'address' => trans('trp.common.invalid-address')
+                    )
+                );
             }
 
             if(User::validateLatin(Request::input('name')) == false) {
@@ -399,13 +388,14 @@ class RegisterController extends FrontController
             }
             
             $newuser = new User;
+            $newuser->title = Request::input('title');
             $newuser->name = Request::input('name');
             $newuser->name_alternative = Request::input('name_alternative');
             $newuser->email = Request::input('email');
             $newuser->country_id = Request::input('country_id');
             //$newuser->city_id = Request::input('city_id');
             $newuser->password = bcrypt(Request::input('password'));
-            $newuser->phone = $phone;
+            $newuser->phone = Request::input('phone');
             $newuser->platform = 'trp';
             //$newuser->zip = Request::input('zip');
             $newuser->address = Request::input('address');
