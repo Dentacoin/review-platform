@@ -1,11 +1,11 @@
 <div class="swiper-slide" survey-id="{{ $survey->id }}">
 	<div class="slider-inner">
 		<div class="slide-padding">
-  			<div class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title, "respondents" => $survey->respondentsCount(), "respondents_country" => $survey->respondentsCountryCount() ]) }}'>
+  			<a href="{{ $survey->getLink() }}" class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title, "respondents" => $survey->respondentsCount(), "respondents_country" => $survey->respondentsCountryCount() ]) }}'>
   				@if($survey->featured)
   					<img class="featured-img" src="{{ url('new-vox-img/star.svg') }}">
   				@endif
-  			</div>							
+  			</a>							
 			<div class="vox-header clearfix">
 				<div class="flex first-flex">
 					<div class="col left">

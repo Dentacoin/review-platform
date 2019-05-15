@@ -292,11 +292,11 @@
 							      	<div class="swiper-slide">
 							      		<div class="slider-inner">
 								    		<div class="slide-padding">
-								    			<div class="cover" style="background-image: url('{{ $related_vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $related_vox->title, "respondents" => $related_vox->respondentsCount(), "respondents_country" => $related_vox->respondentsCountryCount() ]) }}'>
+								    			<a href="{{ $related_vox->getLink() }}" class="cover" style="background-image: url('{{ $related_vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $related_vox->title, "respondents" => $related_vox->respondentsCount(), "respondents_country" => $related_vox->respondentsCountryCount() ]) }}'>
 									  				@if($related_vox->featured)
 									  					<img class="featured-img" src="{{ url('new-vox-img/star.svg') }}">
 									  				@endif
-									  			</div>	
+									  			</a>	
 												<div class="vox-header clearfix">
 													<div class="flex first-flex">
 														<div class="col left">

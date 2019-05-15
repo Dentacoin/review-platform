@@ -186,11 +186,11 @@
 			      	<div class="swiper-slide">
 			      		<div class="slider-inner">
 				    		<div class="slide-padding">
-				      			<div class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}'>
+				      			<a href="{{ $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}'>
 				      				@if($vox->stats_featured)
 				      					<img class="featured-img" src="{{ url('new-vox-img/star.svg') }}">
 				      				@endif
-				      			</div>							
+				      			</a>							
 								<div class="vox-header clearfix">
 									<div class="flex first-flex">
 										<div class="col left">

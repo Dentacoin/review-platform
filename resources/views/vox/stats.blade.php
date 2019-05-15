@@ -62,7 +62,9 @@
 						@if($vox->stats_featured)
 							<img class="featured" src="{{ url('new-vox-img/star.svg') }}">
 						@endif
-						<img class="cover" src="{{ $vox->getImageUrl() }}" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}' />
+						<a href="{{ $vox->getStatsList() }}">
+							<img class="cover" src="{{ $vox->getImageUrl() }}" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}' />
+						</a>
 						<div class="stats-info flex">
 							<h3>
 								{{ $vox->title }}
