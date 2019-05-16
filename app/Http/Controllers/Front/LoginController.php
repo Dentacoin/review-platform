@@ -125,7 +125,6 @@ class LoginController extends FrontController
     public function facebook_register($locale=null, $type='patient') {
         config(['services.facebook.redirect' => getLangUrl('register/callback/facebook') ]);
         return Socialite::driver('facebook')
-        ->scopes(['user_friends'])
         ->redirect();
     }
 /*
@@ -149,7 +148,7 @@ class LoginController extends FrontController
         if (!Request::has('code') || Request::has('denied')) {
             return redirect( getLangUrl('register') );
         }
-        return $this->try_social_register(Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email', 'verified', 'friends'])->user(), 'fb');
+        return $this->try_social_register(Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email'])->user(), 'fb');
     }
 /*
     public function twitter_callback_register() {
@@ -177,31 +176,6 @@ class LoginController extends FrontController
         // return redirect( getLangUrl('register') )
         // ->withInput()
         // ->with('error-message', 'Due to the overwhelming surge in popularity, new registrations on Trusted Review Platform are currently disabled to allow for infrastructure & security upgrades. Thank you for your understanding!');
-
-
-        //isset($s_user->user['verified']) && 
-        $allset = isset($s_user->user['friends']);
-        if(!$allset) {
-            $url = 'https://graph.facebook.com/v2.5/me/permissions?access_token='. $s_user->token;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
-            curl_close($ch);
-
-            return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
-            ->withInput()
-            ->with('error-message', trans('trp.popup.registration.incomplete-facebook'));
-        }
-
-        //!empty($s_user->user['verified']) && 
-        $verified = !empty($s_user->user['friends']['summary']['total_count']) && $s_user->user['friends']['summary']['total_count']>50;
-        if(!$verified) {
-            return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
-            ->withInput()
-            ->with('error-message', trans('trp.popup.registration.fake-facebook'));
-        }
 
         $is_dentist = session('is_dentist');
         $is_clinic = session('is_clinic');
