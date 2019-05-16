@@ -416,6 +416,8 @@ $(document).ready(function(){
                                                     //Just answers
                                                     if( trigger_answers[i].indexOf('-')!=-1 ) {
                                                         var range = trigger_answers[i].split('-');
+                                                        range[0] = parseInt(range[0]);
+                                                        range[1] = parseInt(range[1]);
                                                         for(var qnum=range[0]; qnum<=range[1]; qnum++) {
                                                             if( parsed_given_answer.indexOf(qnum.toString())!=-1 ) {
                                                                 trigger_status = true;
