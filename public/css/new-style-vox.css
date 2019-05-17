@@ -2136,7 +2136,8 @@ p.h2-bold {
         .page-stats .stats-list .stats-holder .vox-stat {
           margin-bottom: 20px;
           padding-bottom: 50px;
-          max-width: 95%; } }
+          max-width: 95%;
+          display: block; } }
       .page-stats .stats-list .stats-holder .vox-stat img.featured {
         position: absolute;
         top: -23px;
@@ -2158,8 +2159,8 @@ p.h2-bold {
         @media screen and (max-width: 768px) {
           .page-stats .stats-list .stats-holder .vox-stat img.cover {
             order: 2;
-            width: 90px;
-            height: 75px; } }
+            width: 100%;
+            height: auto; } }
       .page-stats .stats-list .stats-holder .vox-stat .stats-info {
         margin-left: 30px;
         width: 300px;
@@ -2173,8 +2174,8 @@ p.h2-bold {
           .page-stats .stats-list .stats-holder .vox-stat .stats-info {
             order: 1;
             margin-left: 0px;
-            margin-right: 12px;
-            width: calc(100% - 100px);
+            margin-right: 0px;
+            width: 100%;
             min-height: 115px;
             justify-content: flex-start; } }
         .page-stats .stats-list .stats-holder .vox-stat .stats-info h3 {
@@ -2185,7 +2186,10 @@ p.h2-bold {
           margin-bottom: 15px; }
           @media screen and (max-width: 768px) {
             .page-stats .stats-list .stats-holder .vox-stat .stats-info h3 {
-              font-size: 13px; } }
+              font-size: 13px;
+              text-align: center;
+              margin-bottom: 5px;
+              margin-top: 10px; } }
         .page-stats .stats-list .stats-holder .vox-stat .stats-info h4 {
           font-weight: bold;
           font-size: 16px;
@@ -2196,7 +2200,7 @@ p.h2-bold {
           color: #040404; }
           @media screen and (max-width: 768px) {
             .page-stats .stats-list .stats-holder .vox-stat .stats-info p {
-              font-size: 10px;
+              font-size: 12px;
               font-weight: 600; } }
       .page-stats .stats-list .stats-holder .vox-stat .stats-cta {
         flex-direction: column;
@@ -2227,7 +2231,7 @@ p.h2-bold {
           text-align: center; }
           @media screen and (max-width: 768px) {
             .page-stats .stats-list .stats-holder .vox-stat .stats-cta a {
-              font-size: 10px;
+              font-size: 12px;
               height: 30px;
               line-height: 30px;
               padding: 0px 10px;

@@ -3103,6 +3103,7 @@ p.h2-bold {
 					margin-bottom: 20px;
 					padding-bottom: 50px;
 					max-width: 95%;
+					display: block;
 				}
 
 				img.featured {
@@ -3129,8 +3130,8 @@ p.h2-bold {
 					}
 					@media #{$phone} {
 						order: 2;
-						width: 90px;
-						height: 75px;
+					    width: 100%;
+					    height: auto;
 					}
 				}
 
@@ -3147,9 +3148,9 @@ p.h2-bold {
 					@media #{$phone} {
 						order: 1;
 						margin-left: 0px;
-						margin-right: 12px;
+						margin-right: 0px;
 
-					    width: calc(100% - 100px);
+					    width: 100%;
 					    min-height: 115px;
     					justify-content: flex-start;
 					}
@@ -3163,6 +3164,9 @@ p.h2-bold {
 
 						@media #{$phone} {
 							font-size: 13px;
+							text-align: center;
+							margin-bottom: 5px;
+							margin-top: 10px;
 						}
 					}
 
@@ -3178,7 +3182,7 @@ p.h2-bold {
 						color: #040404;	
 
 						@media #{$phone} {
-							font-size: 10px;
+							font-size: 12px;
 							font-weight: 600;
 						}					
 					}
@@ -3217,7 +3221,7 @@ p.h2-bold {
 
 
 						@media #{$phone} {
-							font-size: 10px;
+							font-size: 12px;
 							height: 30px;
 							line-height: 30px;
     						padding: 0px 10px;
