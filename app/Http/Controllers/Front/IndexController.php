@@ -18,7 +18,7 @@ class IndexController extends FrontController
 			return redirect( $this->user->getLink() );
 		}
 
-		$featured = User::where('is_dentist', 1)->where('status', 'approved')->orderBy('avg_rating', 'DESC');
+		$featured = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved'])->orderBy('avg_rating', 'DESC');
 		$refined = clone $featured;
 		if( !empty($this->user) ) {
 			if( $this->user->country_id ) {
@@ -59,10 +59,12 @@ class IndexController extends FrontController
 		}
 
 		return $this->ShowView('index', array(
+            'countries' => Country::get(),
 			'featured' => $refined,
 			'js' => [
 				'index.js',
-                'search.js'
+                'search.js',
+                'address.js'
 			],
 			'jscdn' => [
 				'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'

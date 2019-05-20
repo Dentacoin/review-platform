@@ -415,6 +415,20 @@ class Email extends Model
 			), $content);
 		}
 
+		if($this->template->id==43 ) { // Patient Invites Dentist To Register
+			$content = str_replace(array(
+				'[patient-name]',
+				'[dentist-name]',
+				'[button]',
+				'[/button]',
+			), array(
+				$this->meta['patient_name'],
+				$this->meta['dentist_name'],
+				'<a '.$this->button_style.' href="'.getLangUrl( 'claim/'.$this->user_id , null, $domain).'">',
+				'</a>',
+			), $content);
+		}
+
 
 		return $content;
 	}

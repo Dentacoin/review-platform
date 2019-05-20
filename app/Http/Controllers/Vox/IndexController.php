@@ -28,7 +28,7 @@ class IndexController extends FrontController
 
 		if(!empty($this->user) && $this->user->madeTest($first->id)) {
 			
-	        if($this->user->is_dentist && $this->user->status != 'approved' && $this->user->status != 'test') {
+	        if($this->user->is_dentist && $this->user->status != 'approved' && $this->user->status!='added_approved' && $this->user->status != 'test') {
 	            return redirect(getLangUrl('welcome-to-dentavox'));
 	        }
 

@@ -9,7 +9,7 @@
 	<div class="col-md-9">
 	@include('front.errors')
 
-		@if( $user->status!='approved' )
+		@if( $user->status!='approved' && $user->status!='added_approved' )
 			<div class="alert alert-info">
 				{{ trans('front.page.profile.reward.wait-for-approval') }}
 			</div>

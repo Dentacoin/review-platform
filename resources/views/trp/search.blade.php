@@ -136,6 +136,21 @@
 
 	</div>
 
+	@if($items->count() == 0)
+
+		<div class="invite-new-dentist-wrapper">
+
+			<div class="invite-new-dentist-titles">
+				<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
+				<h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
+			</div>
+
+			<div class="colorfull-wrapper">
+				@include('trp.parts.invite-new-dentist-form')
+			</div>
+		</div>
+	@endif
+
 
 	<div class="popup fixed-popup results-popup" id="sort-popup">
 		<div class="popup-inner inner-white">

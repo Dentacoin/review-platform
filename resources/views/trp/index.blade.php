@@ -30,6 +30,9 @@
 								@if($dentist->is_partner)
 									<img class="tooltip-text" src="{{ url('img-trp/mini-logo.png') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}" />
 								@endif
+								@if($dentist->status == 'added_approved')
+									<div class="invited-dentist">Invited</div>
+								@endif
 							</div>
 						</div>
 					    <div class="slider-container">
@@ -75,7 +78,15 @@
 		</div>
 	</div>
 
+
 	@if(empty($user))
+		<div class="invite-new-dentist-wrapper-index">
+			<div class="container tac">
+				<h2 class="gbb">{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
+				<h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
+				<a href="javascript:;" data-popup="popup-register" class="button button-sign-up-patient">Sign up</a>
+			</div>
+		</div>
 
 		<div class="gray-background">
 
@@ -196,6 +207,18 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+	@elseif(!empty($user) && !$user->is_dentist)
+		<div class="invite-new-dentist-wrapper white-invite">
+
+			<div class="invite-new-dentist-titles">
+				<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
+				<h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
+			</div>
+
+			<div class="colorfull-wrapper">
+				@include('trp.parts.invite-new-dentist-form')
 			</div>
 		</div>
 	@endif

@@ -40,14 +40,6 @@ class UsersController extends AdminController
             'f' => trans('admin.common.gender.f'),
         ];
 
-        $this->statuses = [
-            'new' => 'New',
-            'approved' => 'Approved', 
-            'pending' => 'Suspicious', 
-            'rejected' => 'Rejected',
-            'test' => 'Test'
-        ];
-
     	$this->fields = [
             'title' => [
                 'type' => 'select',
@@ -140,7 +132,7 @@ class UsersController extends AdminController
             ],
             'status' => [
                 'type' => 'select',
-                'values' => $this->statuses
+                'values' => config('user-statuses')
             ],
     	];
     }
@@ -167,12 +159,18 @@ class UsersController extends AdminController
             'dentist.approved' => 'Dentists (Approved)',
             'dentist.rejected' => 'Dentists (Rejected)',
             'dentist.partners' => 'Dentists (Partners)',
+            'dentist.added_new' => 'Dentists (Added New)',
+            'dentist.added_approved' => 'Dentists (Added Approved)',
+            'dentist.added_rejected' => 'Dentists (Added Rejected)',
             'clinic.all' => 'Clinics (All)',
             'clinic.new' => 'Clinics (New)',
             'clinic.pending' => 'Clinics (Suspicious)',
             'clinic.approved' => 'Clinics (Approved)',
             'clinic.rejected' => 'Clinics (Rejected)',
             'clinic.partners' => 'Clinics (Partners)',
+            'clinic.added_new' => 'Clinics (Added New)',
+            'clinic.added_approved' => 'Clinics (Added Approved)',
+            'clinic.added_rejected' => 'Clinics (Added Rejected)',
             'dentist_clinic.all' => 'Dentists & Clinics (All)',
             'dentist_clinic.new' => 'Dentists & Clinics (New)',
             'dentist_clinic.pending' => 'Dentists & Clinics (Suspicious)',
@@ -253,7 +251,7 @@ class UsersController extends AdminController
         if(!empty($this->request->input('search-type'))) {
             $tmp = explode('.', $this->request->input('search-type'));
             $type = $tmp[0];
-            $status = isset($tmp[1]) && isset( $this->statuses[ $tmp[1] ] ) ? $tmp[1] : null;
+            $status = isset($tmp[1]) && isset( config('user-statuses')[ $tmp[1] ] ) ? $tmp[1] : null;
             if( $type=='patient' ) {
                 $users = $users->where(function ($query) {
                     $query->where('is_dentist', 0)
@@ -733,6 +731,7 @@ class UsersController extends AdminController
                             }
                         } else if($key=='status') {
                             if( $this->request->input($key) && $item->$key!=$this->request->input($key) ) {
+
                                 if( $this->request->input($key)=='approved' ) {
                                     if( $item->deleted_at ) {
                                         $item->restore();
@@ -757,8 +756,20 @@ class UsersController extends AdminController
                                     $item->email = $olde;
                                     $item->save();
                                     $to_ali->delete();
-                                } if( $this->request->input($key)=='rejected' ) {
+                                } else if( $this->request->input($key)=='rejected' ) {
                                     $item->sendTemplate(14);
+                                } else if($this->request->input($key)=='added_approved') {
+                                    $patient = User::find($item->invited_by);
+
+                                    if (!empty($patient)) {
+                                        $item->sendTemplate( 43  , [
+                                            'dentist_name' => $item->name,
+                                            'patient_name' => $patient->name,
+                                        ]);
+
+                                        //patient earn 1000DCN
+                                    }
+
                                 }
                             }
                             $item->$key = $this->request->input($key);

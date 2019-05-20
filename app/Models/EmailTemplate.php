@@ -146,6 +146,12 @@ class EmailTemplate extends Model
             $codes[] = '[dentist-name]';
         }
 
+        if( $this->id==43 ) { // Patient Invites Dentist To Register
+            $codes[] = '[button]Click here to register[/button]';
+            $codes[] = '[dentist-name]';
+            $codes[] = '[patient-name]';
+        }
+
         return $codes;
     }
 }

@@ -553,8 +553,6 @@ $(document).ready(function(){
 
 
     $('input[name="mode"]').change( function() {
-        $(this).closest('.modern-radios').removeClass('has-error');
-
         var val = $('#mode-clinic:checked').length;
         if(val) {
             $('.title-wrap').hide();

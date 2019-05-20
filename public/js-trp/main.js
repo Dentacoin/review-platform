@@ -445,7 +445,52 @@ jQuery(document).ready(function($){
 
         return false;
 
-	} )
+	} );
+
+	$('input[name="mode"]').change( function() {
+        $(this).closest('.modern-radios').removeClass('has-error');
+    } );
+
+
+	$('.invite-new-dentist-form').submit( function(e) {
+        e.preventDefault();
+
+        $(this).find('.ajax-alert').remove();
+        $(this).find('.alert').hide();
+        $(this).find('.has-error').removeClass('has-error');
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize() , 
+            (function( data ) {
+                if(data.success) {
+                    $(this).find('.alert-success').html(data.message).show();
+                } else {
+                    for(var i in data.messages) {
+                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
+
+                        $('[name="'+i+'"]').addClass('has-error');
+
+                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
+                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+                        }
+                    }
+                }
+                ajax_is_running = false;
+            }).bind(that), "json"
+        );          
+
+
+        return false;
+
+	} );
 
 
 	$('.invite-tabs a').click( function() {

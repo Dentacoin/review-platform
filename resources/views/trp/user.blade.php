@@ -162,7 +162,11 @@
 		<div class="view-profile">
 			<div class="flex-mobile">
 				<div class="flex-5">
-					<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');"> </div>
+					<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');">
+						@if($item->status == 'added_approved')
+							<div class="invited-dentist">Invited</div>
+						@endif
+					</div>
 				</div>
 				<div class="flex-7">
 					<a href="javascript:;" class="share-mobile" data-popup="popup-share">
@@ -439,7 +443,11 @@
 			@endif
 
     		<div class="view-profile clearfix">
-				<div class="avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"> </div>
+				<div class="avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');">
+					@if($item->status == 'added_approved')
+						<div class="invited-dentist">Invited</div>
+					@endif
+				</div>
 				<div class="media-right">
 					<h3>
 						{{ $item->getName() }}

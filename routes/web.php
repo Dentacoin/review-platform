@@ -184,6 +184,9 @@ $reviewRoutes = function () {
 			Route::any('invite-dentist', 						'RegisterController@invite_dentist')->name('invite-dentist');
 			Route::any('verification-dentist', 					'RegisterController@verification_dentist')->name('verification-dentist');
 
+			Route::any('invite-new-dentist', 					'AddDentistController@invite_new_dentist')->name('invite-new-dentist');
+			Route::any('claim/{id}', 							'AddDentistController@invited_dentist_registration')->name('invited-dentist-registration');
+
 			Route::get('login/facebook', 						'LoginController@facebook_login');
 			Route::get('login/twitter', 						'LoginController@twitter_login');
 			Route::get('login/gplus', 							'LoginController@gplus_login');

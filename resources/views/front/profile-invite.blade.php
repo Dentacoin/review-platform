@@ -9,7 +9,7 @@
 	<div class="col-md-9">
 
 
-		@if( $user->status!='approved' )
+		@if( $user->status!='approved' && $user->status!='added_approved' )
 			<div class="alert alert-info">
 				{{ trans('front.page.profile.'.$current_subpage.'.wait-for-approval') }}
 			</div>

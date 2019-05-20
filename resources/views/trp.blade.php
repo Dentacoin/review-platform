@@ -161,7 +161,7 @@
 			@yield('content')
 		</div>
 
-		<div class="footer-expander">
+		<div class="footer-expander {{ !empty($gray_footer) ? 'gray-footer' : '' }}">
 			<footer>
 				<div class="container clearfix">
 					<a href="https://dentacoin.com/" target="_blank" class="footer-logo col-md-3 flex break-mobile flex-center">
@@ -219,6 +219,8 @@
 			@include('trp/popups/dentist-verification')
 			@include('trp/popups/banned')
 			@include('trp/popups/suspended')
+		@else
+			@include('trp/popups/invite-new-dentist')
 		@endif
 
 
