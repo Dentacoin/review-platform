@@ -4128,7 +4128,8 @@ p.h2-bold {
       filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffc1a7', endColorstr='#f37039',GradientType=0 );
       /* IE6-9 */ }
   .popup.cross-checks .wrapper {
-    padding: 60px 30px; }
+    padding: 60px 30px;
+    overflow-y: auto; }
     .popup.cross-checks .wrapper .inner {
       max-width: calc(100% - 300px); }
       @media screen and (max-width: 860px) {

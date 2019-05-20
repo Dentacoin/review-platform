@@ -5829,6 +5829,7 @@ p.h2-bold {
 	&.cross-checks {
 		.wrapper {
 			padding: 60px 30px;
+			overflow-y: auto;
 
 			.inner {
 				max-width: calc(100% - 300px);
