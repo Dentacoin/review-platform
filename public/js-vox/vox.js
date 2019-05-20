@@ -206,7 +206,7 @@ $(document).ready(function(){
                     $('.popup.cross-checks').find('.pick-answer').hide();
                 });
 
-                $('.update-answer').click( function() {
+                $('.update-answer').off('click').click( function() {
                     if ($('.cross-checks-answers label.active').length) {
                         ajax_is_running = false;
                         group.removeAttr('cross-check-correct');
@@ -249,8 +249,6 @@ $(document).ready(function(){
                     $('input[name="_token"]').val(data.token);
 
                     var should_skip = false;
-
-                    console.log('Request sent');
 
                     if( multi_skips.length ) {
                         console.log('MULTI SKIP');
@@ -482,6 +480,7 @@ $(document).ready(function(){
 
 
                 } else {
+                    console.log('ERROR');
                     console.log(data);
                 }
                 ajax_is_running = false;
@@ -491,7 +490,11 @@ $(document).ready(function(){
                     sendAnswer.bind(group.next().children().first())();
                 }
             }, "json"
-        );
+        )
+        .fail(function(response) {
+            console.log('ERROR');
+            console.log(response);
+        });;
     }
 
     $('.question-group a.answer').click( sendAnswer );
