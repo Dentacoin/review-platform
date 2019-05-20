@@ -98,7 +98,7 @@ class LoginController extends FrontController
         //config(['services.facebook.redirect' => getLangUrl('register/callback/facebook') ]);
         config(['services.facebook.redirect' => 'https://dev.dentavox.dentacoin.com/en/register/callback/facebook' ]);
         return Socialite::driver('facebook')
-        ->setScopes(['user_friends', 'public_profile', 'email', 'user_location', 'user_birthday'])
+        ->setScopes(['public_profile', 'email', 'user_location', 'user_birthday'])
         ->redirect();
     }
 
@@ -111,35 +111,12 @@ class LoginController extends FrontController
         if (!Request::has('code') || Request::has('denied')) {
             return redirect( getVoxUrl('/') );
         }
-        return $this->try_social_register(Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email', 'verified', 'friends', 'gender', 'birthday', 'location'])->user(), 'fb');
+        return $this->try_social_register(Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email', 'gender', 'birthday', 'location'])->user(), 'fb');
     }
 
     private function try_social_register($s_user, $network) {
 
         //dd($s_user);
-        //isset($s_user->user['verified']) && 
-
-        $allset = isset($s_user->user['friends']);
-        if(!$allset) {
-            $url = 'https://graph.facebook.com/v2.5/me/permissions?access_token='. $s_user->token;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
-            curl_close($ch);
-            
-            Request::session()->flash('error-message', trans('vox.popup.register.incomplete-facebook') );
-            return redirect(getVoxUrl('registration'));
-        }
-
-        //!empty($s_user->user['verified']) &&
-        $verified = !empty($s_user->user['friends']['summary']['total_count']) && $s_user->user['friends']['summary']['total_count']>50;
-        if(!$verified) {
-            Request::session()->flash('error-message', trans('vox.popup.register.fake-facebook') );
-            return redirect(getVoxUrl('registration'));
-        }
-
 
         if($s_user->getId()) {
             $user = User::where( 'fb_id','LIKE', $s_user->getId() )->withTrashed()->first();

@@ -143,7 +143,8 @@ class VoxController extends FrontController
         $admin_ids = Admin::getAdminProfileIds();
 		$isAdmin = Auth::guard('admin')->user() || in_array($this->user->id, $admin_ids);
 		$testmode = session('testmode') && $isAdmin;
-				
+		$qtype = Request::input('type');
+
 		$this->current_page = 'questionnaire';
 		$doing_details = false;
 		$doing_asl = false;
@@ -154,19 +155,16 @@ class VoxController extends FrontController
             	Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
 			}
 			return redirect( getLangUrl('/') );
+		} else if( 
+	    	isset( $this->details_fields[$qtype] ) ||
+	    	$qtype=='gender-question' ||
+	    	$qtype=='birthyear-question' ||
+	    	$qtype=='location-question'
+		) {
+	    	//I'm doing ASL questions!
+			$doing_asl = true;
 		} else if( $this->user->madeTest($vox->id) ) {
-		    $qtype = Request::input('type');
-		    if( 
-		    	isset( $this->details_fields[$qtype] ) ||
-		    	$qtype=='gender-question' ||
-		    	$qtype=='birthyear-question' ||
-		    	$qtype=='location-question'
-			) {
-		    	//I'm doing ASL questions!
-				$doing_asl = true;
-			} else if(!Request::input('goback')) {
-				return redirect( getLangUrl('/') );	
-			}
+		    return redirect( getLangUrl('/') );	
 		}
 
         if($this->user->isBanned('vox')) {
@@ -192,7 +190,7 @@ class VoxController extends FrontController
 	    			$cross_checks[$vq->id] = $this->user->$cc;
 	    		} else {
 	    			$cc = $vq->cross_check;
-	    			$i=1;
+	    			$i=0;
 	    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
 	    				if($key==$this->user->$cc) {
 	    					$cross_checks[$vq->id] = $i;
@@ -559,7 +557,7 @@ class VoxController extends FrontController
 							    		} else {
 							    			$cc = $found->cross_check;
 
-							    			$i=1;
+							    			$i=0;
 							    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
 							    				if($i==$a) {
 

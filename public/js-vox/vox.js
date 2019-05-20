@@ -206,7 +206,7 @@ $(document).ready(function(){
                     $('.popup.cross-checks').find('.pick-answer').hide();
                 });
 
-                $('.update-answer').click( function() {
+                $('.update-answer').off('click').click( function() {
                     if ($('.cross-checks-answers label.active').length) {
                         ajax_is_running = false;
                         group.removeAttr('cross-check-correct');
@@ -249,8 +249,6 @@ $(document).ready(function(){
                     $('input[name="_token"]').val(data.token);
 
                     var should_skip = false;
-
-                    console.log('Request sent');
 
                     if( multi_skips.length ) {
                         console.log('MULTI SKIP');
@@ -416,6 +414,8 @@ $(document).ready(function(){
                                                     //Just answers
                                                     if( trigger_answers[i].indexOf('-')!=-1 ) {
                                                         var range = trigger_answers[i].split('-');
+                                                        range[0] = parseInt(range[0]);
+                                                        range[1] = parseInt(range[1]);
                                                         for(var qnum=range[0]; qnum<=range[1]; qnum++) {
                                                             if( parsed_given_answer.indexOf(qnum.toString())!=-1 ) {
                                                                 trigger_status = true;
@@ -480,6 +480,7 @@ $(document).ready(function(){
 
 
                 } else {
+                    console.log('ERROR');
                     console.log(data);
                 }
                 ajax_is_running = false;
@@ -489,7 +490,11 @@ $(document).ready(function(){
                     sendAnswer.bind(group.next().children().first())();
                 }
             }, "json"
-        );
+        )
+        .fail(function(response) {
+            console.log('ERROR');
+            console.log(response);
+        });;
     }
 
     $('.question-group a.answer').click( sendAnswer );

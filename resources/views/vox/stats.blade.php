@@ -24,21 +24,25 @@
 			<input type="text" id="survey-search" name="survey-search" class="tal">
 		</div>
 
-		<div class="questions-menu clearfix">
-			<div class="sort-menu">
-				@foreach($sorts as $key => $val)
+		<!--
+			<div class="questions-menu clearfix">
+				<div class="sort-menu">
+					@foreach($sorts as $key => $val)
 
-					<a href="javascript:;" sort="{{ $key }}"  {!! $key == 'featured' ? 'class="active"' : '' !!}>
+						<a href="javascript:;" sort="{{ $key }}"  {!! $key == 'featured' ? 'class="active"' : '' !!}>
 
-						@if($key == 'featured')
-							<i class="fas fa-star"></i>
-						@endif
+							@if($key == 'featured')
+								<i class="fas fa-star"></i>
+							@endif
 
-						{{ $val }}
-					</a>
-				@endforeach
+							{{ $val }}
+						</a>
+					@endforeach
+				</div>
 			</div>
-		</div>
+		-->
+		<br/>
+		<br/>
 	</div>
 
 	<div class="flex stats-list">
