@@ -377,6 +377,10 @@
         @endif
     </div>
 
+    @if($trigger_type)
+        <input type="hidden" id="old-trigger-type" value="{{ $trigger_type }}" />
+    @endif
+
 
     <div class="input-group" id="new-trigger-group-template" >
         <div class="template-box clearfix"> 

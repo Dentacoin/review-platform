@@ -235,6 +235,9 @@ $(document).ready(function(){
 				$(".select2").select2();
 			}
 		});
+
+		$('[name="trigger_type"]').prop('checked', false);
+		$('[name="trigger_type"][value="'+$('#old-trigger-type').val()+'"]').prop('checked', 'checked');		
 	} );
 
 	$('.questions-form .btn-add-new-trigger').click( function() {
