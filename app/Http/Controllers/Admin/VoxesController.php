@@ -450,8 +450,8 @@ class VoxesController extends AdminController
                 }
                 
                 if ($q->question_trigger) {
-                    $triggers_ids = [];
                     if($q->question_trigger!='-1') {
+                        $triggers_ids = [];
                         $trigger_list = explode(';', $q->question_trigger);
                         $first_triger = explode(':', $trigger_list[0]);
                         $trigger_question_id = $first_triger[0];
@@ -460,8 +460,7 @@ class VoxesController extends AdminController
                         foreach (explode(';', $q->question_trigger) as $va) {
                             if(!empty(explode(':', $va)[0])) {
                                 $triggers_ids[explode(':', $va)[0]] = !empty(explode(':', $va)[1]) ? explode(':', $va)[1] : '';
-                            }
-                            
+                            }                            
                         }
                     }
                 }
