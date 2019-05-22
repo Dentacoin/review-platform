@@ -14,7 +14,7 @@ use Image;
 use Illuminate\Support\Facades\Input;
 use App\Models\User;
 use App\Models\UserInvite;
-use App\Models\TrpCashout;
+use App\Models\DcnCashout;
 use App\Models\Dcn;
 use App\Models\Civic;
 use App\Models\Country;
@@ -245,7 +245,7 @@ class ProfileController extends FrontController
         
 
         $amount = intval(Request::input('wallet-amount'));
-        if($amount > $this->user->getVoxBalance()) {
+        if($amount > $this->user->getTotalBalance('vox')) {
             $ret = [
                 'success' => false,
                 'message' => trans('trp.page.profile.home.amount-too-high')
@@ -258,14 +258,15 @@ class ProfileController extends FrontController
                 ])
             ];
         } else {
-            $cashout = new TrpCashout;
+            $cashout = new DcnCashout;
             $cashout->user_id = $this->user->id;
+            $cashout->platform = 'trp';
             $cashout->reward = $amount;
             $cashout->address = $this->user->dcn_address;
             $cashout->save();
 
             $ret = Dcn::send($this->user, $this->user->dcn_address, $amount, 'vox-cashout', $cashout->id);
-            $ret['balance'] = $this->user->getTrpBalance();
+            $ret['balance'] = $this->user->getTotalBalance('trp');
             
             if($ret['success']) {
                 $cashout->tx_hash = $ret['message'];

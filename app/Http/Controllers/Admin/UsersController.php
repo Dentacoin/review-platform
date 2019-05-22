@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
+
 use App\Http\Controllers\AdminController;
 
 use App\Models\Email;
 use App\Models\User;
 use App\Models\UserLogin;
+use App\Models\Reward;
 use App\Models\Vox;
 use App\Models\UserBan;
 use App\Models\VoxQuestion;
 use App\Models\VoxAnswer;
-use App\Models\VoxReward;
+use App\Models\DcnReward;
 use App\Models\VoxCrossCheck;
 use App\Models\City;
 use App\Models\Country;
@@ -593,7 +597,7 @@ class UsersController extends AdminController
 
     public function delete_vox( $id, $reward_id ) {
         $item = User::withTrashed()->find($id);
-        $reward = VoxReward::find($reward_id);
+        $reward = DcnReward::find($reward_id);
 
         if(!empty($reward) && !empty($item) && $reward->user_id == $item->id) {
             VoxAnswer::where([
@@ -601,7 +605,7 @@ class UsersController extends AdminController
                 ['vox_id', $reward->vox_id],
             ])
             ->delete();
-            VoxReward::destroy( $reward_id );
+            DcnReward::destroy( $reward_id );
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.reward-deleted') );
@@ -766,8 +770,28 @@ class UsersController extends AdminController
                                             'dentist_name' => $item->name,
                                             'patient_name' => $patient->name,
                                         ]);
+                                        $amount = Reward::getReward('patient_add_dentist');
+                                        $reward = new DcnReward();
+                                        $reward->user_id = $patient->id;
+                                        $reward->reward = $amount;
+                                        $reward->platform = 'trp';
+                                        $reward->type = 'added_dentist';
+                                        $reward->reference_id = $item->id;
 
-                                        //patient earn 1000DCN
+                                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                                        $dd = new DeviceDetector($userAgent);
+                                        $dd->parse();
+
+                                        if ($dd->isBot()) {
+                                            // handle bots,spiders,crawlers,...
+                                            $reward->device = $dd->getBot();
+                                        } else {
+                                            $reward->device = $dd->getDeviceName();
+                                            $reward->brand = $dd->getBrandName();
+                                            $reward->model = $dd->getModel();
+                                            $reward->os = $dd->getOs()['name'];
+                                        }
+                                        $reward->save();
                                     }
 
                                 }
@@ -811,7 +835,7 @@ class UsersController extends AdminController
             $all_questions_answerd = VoxAnswer::where('user_id', $id)
             ->groupBy('vox_id')
             ->get();
-            $rewarder_questions = VoxReward::where('user_id', $id)->get();
+            $rewarder_questions = DcnReward::where('user_id', $id)->where('platform' , 'vox')->get();
             $unanswerd_questions = array_diff($all_questions_answerd->pluck('vox_id')->toArray(), $rewarder_questions->pluck('vox_id')->toArray() );
             $unfinished = Vox::whereIn('id', $unanswerd_questions)->get();
 

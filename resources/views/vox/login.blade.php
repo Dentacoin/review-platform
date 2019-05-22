@@ -29,7 +29,7 @@
 							{!! csrf_field() !!}
 
 							<div class="modern-field alert-after">
-								<input type="email" name="email" id="email" class="modern-input" autocomplete="off" value="{{ old('email') }}">
+								<input type="email" name="email" id="email" class="modern-input" autocomplete="off" value="{{ old('email') }}" readonly onfocus="this.removeAttribute('readonly');">
 								<label for="email">
 									<span>{{ trans('vox.page.login.email') }}</span>
 								</label>
@@ -154,7 +154,7 @@
 							</div>
 
 							<div class="modern-field alert-after">
-								<input type="email" name="email" id="email" class="modern-input" autocomplete="off" value="{{ old('email') }}">
+								<input type="email" name="email" id="email" class="modern-input" autocomplete="off" value="{{ old('email') }}" readonly onfocus="this.removeAttribute('readonly');">
 								<label for="email">
 									<span>{{ trans('vox.page.login.email') }}</span>
 								</label>

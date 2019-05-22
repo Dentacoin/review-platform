@@ -424,7 +424,7 @@ class Email extends Model
 			), array(
 				$this->meta['patient_name'],
 				$this->meta['dentist_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl( 'claim/'.$this->user_id , null, $domain).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl( 'welcome-dentist/claim/'.$this->user_id.'/'.$this->user->get_invite_token() , null, $domain).'?'. http_build_query(['popup'=>'claim-popup']).'">',
 				'</a>',
 			), $content);
 		}

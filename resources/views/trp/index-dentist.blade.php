@@ -37,7 +37,7 @@
 
 				<div class="form-inner">
 					<div class="modern-field">
-						<input type="email" name="email" id="dentist-mail" class="modern-input" autocomplete="off">
+						<input type="email" name="email" id="dentist-mail" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 						<label for="dentist-mail">
 							<span>{{ trans('trp.page.index-dentist.email') }}</span>
 						</label>

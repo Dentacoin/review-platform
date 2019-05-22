@@ -143,7 +143,7 @@
 										Hello, {{ $user->getName() }}
 									</a>
 									<a href="{{ getLangUrl('profile') }}">
-										<span id="header-balance">{{ $user->getVoxBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getVoxBalance() * $dcn_price) }}</span>
+										<span id="header-balance">{{ $user->getTotalBalance('vox') }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance('vox') * $dcn_price) }}</span>
 									</a>
 								</div>
 								<a class="header-a" href="{{ getLangUrl('profile/info') }}" >

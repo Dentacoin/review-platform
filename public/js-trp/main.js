@@ -606,7 +606,6 @@ jQuery(document).ready(function($){
 	});
 
 	$('.button-sign-up-patient').click( function() {
-		console.log('bb');
 		fbq('track', 'PatientInitiateRegistration');
 		gtag('event', 'ClickSignup', {
 			'event_category': 'PatientRegistration',

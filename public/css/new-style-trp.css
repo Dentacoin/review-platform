@@ -2137,6 +2137,71 @@ textarea.input {
         padding: 12px 10px 15px;
         font-weight: normal; } }
 
+.claim-popup.fixed-popup .popup-inner {
+  padding: 22px 130px 50px;
+  box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
+  background-image: url("../img-trp/popup-top-blue.png");
+  background-repeat: no-repeat;
+  background-size: contain; }
+  @media screen and (max-width: 768px) {
+    .claim-popup.fixed-popup .popup-inner {
+      padding: 22px 20px 50px; } }
+  .claim-popup.fixed-popup .popup-inner .close-popup {
+    background-color: transparent;
+    position: absolute;
+    right: 15px;
+    top: 15px; }
+    .claim-popup.fixed-popup .popup-inner .close-popup i {
+      font-size: 25px;
+      color: #424242; }
+  .claim-popup.fixed-popup .popup-inner .claim-success,
+  .claim-popup.fixed-popup .popup-inner .claim-details {
+    background-color: transparent; }
+  .claim-popup.fixed-popup .popup-inner .claim-success {
+    display: none; }
+    .claim-popup.fixed-popup .popup-inner .claim-success .button {
+      padding: 13px 90px; }
+      @media screen and (max-width: 768px) {
+        .claim-popup.fixed-popup .popup-inner .claim-success .button {
+          padding: 9px 70px; } }
+  .claim-popup.fixed-popup .popup-inner .header-claim {
+    background-color: transparent; }
+    .claim-popup.fixed-popup .popup-inner .header-claim img {
+      max-width: 120px;
+      margin-bottom: 10px; }
+      @media screen and (max-width: 768px) {
+        .claim-popup.fixed-popup .popup-inner .header-claim img {
+          max-width: 60px; } }
+    .claim-popup.fixed-popup .popup-inner .header-claim h2 {
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 38px;
+      color: black;
+      margin-bottom: 13px; }
+      @media screen and (max-width: 768px) {
+        .claim-popup.fixed-popup .popup-inner .header-claim h2 {
+          font-size: 24px;
+          margin-top: 0px; } }
+    .claim-popup.fixed-popup .popup-inner .header-claim h3 {
+      font-size: 28px;
+      font-weight: bold;
+      color: black;
+      margin-bottom: 20px; }
+      @media screen and (max-width: 768px) {
+        .claim-popup.fixed-popup .popup-inner .header-claim h3 {
+          font-size: 18px;
+          margin-bottom: 10px; } }
+    .claim-popup.fixed-popup .popup-inner .header-claim h4 {
+      color: #333; }
+      @media screen and (max-width: 768px) {
+        .claim-popup.fixed-popup .popup-inner .header-claim h4 {
+          font-size: 16px;
+          margin-bottom: 25px; } }
+.claim-popup.fixed-popup.claimed .popup-inner .claim-success {
+  display: block; }
+.claim-popup.fixed-popup.claimed .popup-inner .claim-details {
+  display: none; }
+
 @media screen and (max-width: 768px) {
   #sort-popup .popup-title {
     text-align: left;
@@ -4137,6 +4202,9 @@ textarea.input {
       .details-wrapper .about-container .specialization a img {
         width: 20px;
         height: 20px; }
+    .details-wrapper .about-container .dentist-payments label,
+    .details-wrapper .about-container .specialization label {
+      text-align: left; }
   .details-wrapper .about-container .about-content {
     position: relative;
     font-weight: 300;
@@ -4471,6 +4539,7 @@ textarea.input {
     width: 100%;
     transition: padding-top 0.2s ease, margin-top 0.2s ease;
     overflow-x: hidden;
+    background-color: white;
     /* Hack to make "rows" attribute apply in Firefox. */ }
     @media screen and (max-width: 998px) {
       .modern-field .modern-input {
@@ -4550,6 +4619,53 @@ textarea.input {
       .modern-field .search-icon {
         height: 43px;
         line-height: 43px; } }
+  .modern-field.modern-file label {
+    padding-left: 20px;
+    font-size: 17px;
+    height: 58px;
+    font-weight: 300;
+    border-radius: 4px;
+    margin: 0;
+    border: 2px solid #cccccc;
+    width: 100%;
+    transition: padding-top 0.2s ease, margin-top 0.2s ease;
+    overflow-x: hidden;
+    position: relative; }
+    @media screen and (max-width: 998px) {
+      .modern-field.modern-file label {
+        height: 45px; } }
+    .modern-field.modern-file label .file-name {
+      line-height: 42px; }
+      @media screen and (max-width: 998px) {
+        .modern-field.modern-file label .file-name {
+          line-height: 31px; } }
+    .modern-field.modern-file label .file-submit {
+      position: absolute;
+      width: 130px;
+      background-color: #ccc;
+      color: black;
+      font-size: 18px;
+      right: 0px;
+      top: 0;
+      bottom: 0;
+      line-height: 54px;
+      text-align: center;
+      font-weight: 500; }
+      @media screen and (max-width: 998px) {
+        .modern-field.modern-file label .file-submit {
+          line-height: 40px;
+          font-size: 16px; } }
+  .modern-field.modern-file input {
+    display: none; }
+  .modern-field.modern-file.has-error label {
+    border-color: rgba(255, 0, 0, 0.2); }
+    .modern-field.modern-file.has-error label .file-submit {
+      background-color: rgba(255, 0, 0, 0.2); }
+  .modern-field.modern-file.active label {
+    border-color: #126585; }
+    .modern-field.modern-file.active label .file-submit {
+      background-color: #126585;
+      color: white; }
 
 .modern-radios {
   display: flex; }
@@ -5224,3 +5340,35 @@ body.edit-user .profile-info-mobile .profile-details {
   background-color: #126585;
   color: white;
   padding: 5px; }
+
+@media screen and (max-width: 768px) {
+  .balance-wrap .profile-home-content {
+    padding-top: 20px !important; } }
+
+@media screen and (max-width: 768px) {
+  .balance-buttons-wrap {
+    display: flex;
+    flex-flow: row wrap; } }
+.balance-buttons-wrap .balance-button {
+  font-size: 16px;
+  color: #333;
+  margin-right: 2px;
+  padding: 5px 15px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  display: inline-block; }
+  @media screen and (max-width: 1200px) {
+    .balance-buttons-wrap .balance-button {
+      font-size: 14px;
+      margin-right: 0px;
+      padding: 5px 12px; } }
+  @media screen and (max-width: 768px) {
+    .balance-buttons-wrap .balance-button {
+      margin-right: 4px;
+      margin-bottom: 4px; } }
+  .balance-buttons-wrap .balance-button.active {
+    font-weight: bold;
+    background-color: #80b8dc;
+    color: white; }
+  .balance-buttons-wrap .balance-button:hover:not(.active) {
+    border-color: #80b8dc; }

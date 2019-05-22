@@ -219,6 +219,7 @@
 			@include('trp/popups/dentist-verification')
 			@include('trp/popups/banned')
 			@include('trp/popups/suspended')
+			@include('trp/popups/claim-profile')
 		@else
 			@include('trp/popups/invite-new-dentist')
 		@endif

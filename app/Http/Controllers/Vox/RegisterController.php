@@ -231,7 +231,7 @@ class RegisterController extends FrontController
                     $message->from($sender, $sender_name);
                     $message->to( $receiver );
                     //$message->to( 'dokinator@gmail.com' );
-                    $message->replyTo($receiver, $newuser->getName());
+                    $message->replyTo($newuser->email, $newuser->getName());
                     $message->subject('New Dentavox Dentist/Clinic registration');
                 });
 

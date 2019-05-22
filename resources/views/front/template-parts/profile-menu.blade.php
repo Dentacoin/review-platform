@@ -51,7 +51,7 @@
 		<p>
 			<i class="fa fa-bitcoin"></i>
 			{{ trans('front.common.balance') }}: 
-			<span class="profile-balance">{{ $user->getTrpBalance() }}</span> DCN
+			<span class="profile-balance">{{ $user->getTotalBalance('trp') }}</span> DCN
 		</p>
 	</div>
 </div>

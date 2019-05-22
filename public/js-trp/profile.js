@@ -217,6 +217,13 @@ $(document).ready(function(){
         convertDcn();
     }
 
+    $('.balance-button').click( function() {
+        $('.balance-button').removeClass('active');
+        $(this).addClass('active');
+        $(this).closest('.balance-wrap').find('.dcn-amount').html($(this).attr('amount'));
+        convertDcn();
+    });
+
     //
     //Withdraw
     //

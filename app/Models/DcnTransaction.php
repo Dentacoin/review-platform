@@ -42,7 +42,7 @@ class DcnTransaction extends Model {
         return $this->hasOne('App\Models\UserInvite', 'id', 'reference_id');        
     }
     public function voxCashout() {
-        return $this->hasOne('App\Models\VoxCashout', 'id', 'reference_id');        
+        return $this->hasOne('App\Models\DcnCashout', 'id', 'reference_id')->where('platform', 'vox');        
     }
     public function mobident() {
         return $this->hasOne('App\Models\Mobident', 'id', 'reference_id');        

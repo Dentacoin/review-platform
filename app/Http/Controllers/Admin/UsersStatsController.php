@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Models\Vox;
 use App\Models\UserBan;
 use App\Models\VoxAnswer;
-use App\Models\VoxReward;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\UserCategory;

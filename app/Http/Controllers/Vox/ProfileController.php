@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Input;
 use App\Models\User;
 use App\Models\UserInvite;
 use App\Models\Vox;
-use App\Models\VoxReward;
-use App\Models\VoxCashout;
+use App\Models\DcnReward;
+use App\Models\DcnCashout;
 use App\Models\Dcn;
 use App\Models\Country;
 use App\Models\Civic;
@@ -181,7 +181,7 @@ class ProfileController extends FrontController
         
 
         $amount = intval(Request::input('wallet-amount'));
-        if($amount > $this->user->getVoxBalance()) {
+        if($amount > $this->user->getTotalBalance('vox')) {
             $ret = [
                 'success' => false,
                 'message' => trans('vox.page.profile.home.amount-too-high')
@@ -195,15 +195,16 @@ class ProfileController extends FrontController
             ];
         } else {
 
-            $cashout = new VoxCashout;
+            $cashout = new DcnCashout;
             $cashout->user_id = $this->user->id;
             $cashout->reward = $amount;
+            $cashout->platform = 'vox';
             $cashout->address = $this->user->dcn_address;
             $cashout->save();
 
 
             $ret = Dcn::send($this->user, $this->user->dcn_address, $amount, 'vox-cashout', $cashout->id);
-            $ret['balance'] = $this->user->getVoxBalance();
+            $ret['balance'] = $this->user->getTotalBalance('vox');
             
             if($ret['success']) {
                 $cashout->tx_hash = $ret['message'];
@@ -286,7 +287,7 @@ class ProfileController extends FrontController
         }
 
         $more_surveys = false;
-        $rewards = VoxReward::where('user_id', $this->user->id)->where('vox_id', '!=', 34)->get();
+        $rewards = DcnReward::where('user_id', $this->user->id)->where('platform', 'vox')->where('reference_id', '!=', 34)->get();
         if ($rewards->count() == 1 && $rewards->first()->vox_id == 11) {
             $more_surveys = true;
         }

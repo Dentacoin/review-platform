@@ -512,6 +512,7 @@ $(document).ready(function(){
     } );
 
     $('.verification-form').submit( function(e) {
+
         e.preventDefault();
 
         $('.popup .alert').hide();
@@ -537,6 +538,12 @@ $(document).ready(function(){
                 if (ret.success) {
                     $(this).hide();
                     $('.popup .alert-success').html(ret.message).show();
+
+                    fbq('track', 'DentistProfile');
+                    gtag('event', 'ClickSave', {
+                        'event_category': 'DentistRegistration',
+                        'event_label': 'DentistProfile',
+                    });
                 } else {
                     $('.popup .alert-warning').show();
                     $('.popup .alert-warning').html('');

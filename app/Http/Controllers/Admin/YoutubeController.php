@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
+
 use App\Http\Controllers\AdminController;
 
 use App\Models\Review;
-use App\Models\TrpReward;
+use App\Models\DcnReward;
 use App\Models\Reward;
 
 use Carbon\Carbon;
@@ -37,11 +40,26 @@ class YoutubeController extends AdminController
 
                 if( $review->verified ) {
                     $amount = Reward::getReward('review_video_trusted');
-                    $reward = new TrpReward();
+                    $reward = new DcnReward();
                     $reward->user_id = $review->user_id;
                     $reward->reward = $amount;
+                    $reward->platform = 'trp';
                     $reward->type = 'review';
                     $reward->reference_id = $review->id;
+
+                    $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                    $dd = new DeviceDetector($userAgent);
+                    $dd->parse();
+
+                    if ($dd->isBot()) {
+                        // handle bots,spiders,crawlers,...
+                        $reward->device = $dd->getBot();
+                    } else {
+                        $reward->device = $dd->getDeviceName();
+                        $reward->brand = $dd->getBrandName();
+                        $reward->model = $dd->getModel();
+                        $reward->os = $dd->getOs()['name'];
+                    }
                     $reward->save();
                 }
                 

@@ -9,6 +9,10 @@ use App\Models\IncompleteRegistration;
 use CArbon\Carbon;
 
 use App;
+use Mail;
+use Response;
+use Request;
+use Validator;
 
 class IndexController extends FrontController
 {
@@ -120,6 +124,87 @@ class IndexController extends FrontController
 		$this->user->save();
 
 		return redirect( getLangUrl('/') );
+	}
+
+	public function claim ($locale=null, $id, $hash) {
+		$user = User::find($id);
+
+        if (!$user || $user->status != 'added_approved' || $hash != $user->get_invite_token()) {
+            return redirect( getLangUrl('/') );
+        }
+
+		if(Request::isMethod('post')) {
+            $validator = Validator::make(Request::all(), [
+	            'name' => array('required', 'min:3'),
+	            'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
+	            'job' =>  array('required', 'string'),
+	            'explain-related' =>  array('required'),
+                'proof-file' => array('required','file'),
+                'password' => array('required', 'min:6'),
+            	'password-repeat' => 'required|same:password',
+	        ]);
+
+	        if ($validator->fails()) {
+
+	            $msg = $validator->getMessageBag()->toArray();
+	            $ret = array(
+	                'success' => false,
+	                'messages' => array()
+	            );
+
+	            foreach ($msg as $field => $errors) {
+	                $ret['messages'][$field] = implode(', ', $errors);
+	            }
+
+	            return Response::json( $ret );
+	        } else {
+
+	            if(User::validateLatin(Request::input('name')) == false) {
+	                return Response::json( [
+	                    'success' => false, 
+	                    'messages' => [
+	                        'name' => trans('trp.common.invalid-name')
+	                    ]
+	                ] );
+	            }
+	            
+	            $user->name = Request::input('name');
+	            $user->phone = Request::input('phone');
+	            $user->password = bcrypt(Request::input('password'));
+
+	            $user->save();
+
+	            $file = request()->file('proof-file');
+				$file->move('/tmp', $file->getClientOriginalName());
+
+	            $mtext = 'Dentist claimed his profile<br/>
+Job position: '.Request::input('job').' <br/>
+Explain how dentist is related to this office: '.Request::input('explain-related').' <br/>
+Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+
+				Mail::send([], [], function ($message) use ($mtext, $user, $file) {
+					$receiver = 'ali.hashem@dentacoin.com';
+					//$receiver = 'gergana@youpluswe.com';
+		            $sender = config('mail.from.address');
+		            $sender_name = config('mail.from.name');
+
+		            $message->from($sender, $sender_name);
+		            $message->to( $receiver ); //$sender
+		            //$message->to( 'dokinator@gmail.com' );
+		            $message->replyTo($user->email, $user->getName());
+		            $message->subject('Invited Dentist Claimed His Profile');
+		            $message->attach('/tmp/'.$file->getClientOriginalName());
+		            $message->setBody($mtext, 'text/html'); // for HTML rich messages
+		        });
+
+	            return Response::json( [
+	                'success' => true,
+	            ] );
+	        }
+        }
+
+        return $this->dentist($locale);
+
 	}
 
 }

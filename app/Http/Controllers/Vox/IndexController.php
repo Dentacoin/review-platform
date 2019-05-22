@@ -6,7 +6,6 @@ use App\Models\Vox;
 use App\Models\User;
 use App\Models\UserLogin;
 use App\Models\VoxAnswer;
-use App\Models\VoxReward;
 use App\Models\VoxCategory;
 use Carbon\Carbon;
 

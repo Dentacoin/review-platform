@@ -3,8 +3,8 @@
 @section('content')
 
 <h1 class="page-header"> 
-    {{ trans('admin.page.'.$current_page.'.title-edit') }} 
-    @if( $item->getSameIPUsers() )
+    {{ trans('admin.page.'.$current_page.'.title-edit') }}
+    @if( $item->getSameIPUsers() && !$item->is_dentist )
         <a class="label label-danger" href="{{ url('cms/users/edit/'.$item->id) }}#logins-list">Click for Suspicious Logins</a>
     @endif
 </h1>
@@ -394,7 +394,6 @@
     </div>
 
 @endif
-
 
 @if($item->vox_rewards->isNotEmpty())
     <h4 style="margin-bottom: 20px;">DENTAVOX</h4>

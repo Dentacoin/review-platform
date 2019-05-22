@@ -10,22 +10,11 @@ use Illuminate\Support\Facades\Input;
 use App\Models\User;
 use App\Models\Country;
 use Auth;
+use Mail;
 
 
 class AddDentistController extends FrontController
 {
-
-
-    public function invited_dentist_registration($locale=null, $id) {
-
-        $user = User::find($id);
-
-        if (!$user || $user->status != 'added_approved') {
-            return redirect( getLangUrl('/') );
-        }
-
-        return $this->ShowView('invited-dentist-registration');
-    }
     
 	public function invite_new_dentist($locale=null) {
 
@@ -104,21 +93,24 @@ class AddDentistController extends FrontController
             $newdentist->save();
 
 
-//             $mtext = $this->user->name.' invited his dentist to register<br/>
-// Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$this->user->id.'
-// Link to invited dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$newdentist->id;
+            $mtext = 'Patient - '.$this->user->name.' invited his dentist to register 
+Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$this->user->id.'
+Link to invited dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$newdentist->id;
 
-//             Mail::raw($mtext, function ($message) use ($newdentist) {
-//                 $receiver = 'ali.hashem@dentacoin.com';
-//                 $sender = config('mail.from.address');
-//                 $sender_name = config('mail.from.name');
+            $patient = $this->user;
 
-//                 $message->from($sender, $sender_name);
-//                 $message->to( $receiver );
-//                 //$message->to( 'dokinator@gmail.com' );
-//                 $message->replyTo($receiver, $newdentist->getName());
-//                 $message->subject('Patient invites dentist to register');
-//             });
+            Mail::raw($mtext, function ($message) use ($newdentist, $patient) {
+                $receiver = 'ali.hashem@dentacoin.com';
+                //$receiver = 'gergana@youpluswe.com';
+                $sender = config('mail.from.address');
+                $sender_name = config('mail.from.name');
+
+                $message->from($sender, $sender_name);
+                $message->to( $receiver );
+                //$message->to( 'dokinator@gmail.com' );
+                $message->replyTo($patient->email, $patient->name);
+                $message->subject('Patient invites dentist to register');
+            });
 
 
             return Response::json( [

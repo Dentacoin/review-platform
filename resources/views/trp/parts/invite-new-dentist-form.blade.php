@@ -81,7 +81,7 @@
 		</label>
 	</div>
 
-	<p class="invite-reward">{!! nl2br(trans('trp.page.invite.reward')) !!}</p>
+	<p class="invite-reward">{!! nl2br(trans('trp.page.invite.reward', ['amount' => App\Models\Reward::getReward('patient_add_dentist')])) !!}</p>
 
 	<div class="tac">
 		<input type="submit" value="{!! nl2br(trans('trp.page.invite.submit')) !!}" class="button next"/>

@@ -2515,6 +2515,109 @@ textarea.input {
 		}
 	}
 }
+ 
+.claim-popup.fixed-popup {
+    .popup-inner {
+        padding: 22px 130px 50px;
+        box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
+        background-image: url('../img-trp/popup-top-blue.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+
+        @media #{$phone} {
+        	padding: 22px 20px 50px;
+        }
+
+        .close-popup {
+        	background-color: transparent;
+        	position: absolute;
+		    right: 15px;
+		    top: 15px;
+
+		    i {
+		    	font-size: 25px;
+    			color: #424242;
+		    }
+        }
+
+        .claim-success,
+        .claim-details {
+        	background-color: transparent;
+        }
+
+        .claim-success {
+        	display: none;
+
+        	.button {
+        		padding: 13px 90px;
+
+        		@media #{$phone} {
+        			padding: 9px 70px;
+        		}
+        	}
+        }
+
+        .header-claim {
+        	background-color: transparent;
+
+        	img {
+        		max-width: 120px;
+        		margin-bottom: 10px;
+
+        		@media #{$phone} {
+        			max-width: 60px;
+        		}
+        	}        	
+
+        	h2 {
+        		text-transform: uppercase;
+        		font-weight: bold;
+        		font-size: 38px;
+        		color: black;
+        		margin-bottom: 13px;
+
+        		@media #{$phone} {
+        			font-size: 24px;
+        			margin-top: 0px;
+        		}
+        	}
+
+        	h3 {
+				font-size: 28px;
+				font-weight: bold;
+        		color: black;
+        		margin-bottom: 20px;
+
+        		@media #{$phone} {
+        			font-size: 18px;
+        			margin-bottom: 10px;
+        		}
+        	}
+
+        	h4 {
+        		color: #333;
+
+        		@media #{$phone} {
+        			font-size: 16px;
+        			margin-bottom: 25px;
+        		}
+        	}
+        }
+    }
+
+    &.claimed {
+    	.popup-inner {
+
+	        .claim-success {
+	        	display: block;
+	        }
+
+	        .claim-details {
+	        	display: none;
+	        }
+	    }
+    }
+}
 
 #sort-popup {
 	.popup-title {
@@ -5541,6 +5644,10 @@ textarea.input {
     				height: 20px;
     			}
     		}
+
+    		label {
+    			text-align: left;
+    		}
     	}
 
     	.about-content {
@@ -6052,6 +6159,7 @@ textarea.input {
 		width: 100%;
 		transition: padding-top 0.2s ease, margin-top 0.2s ease;
 		overflow-x: hidden;
+		background-color: white;
 		/* Hack to make "rows" attribute apply in Firefox. */
 
 		@media #{$tablet} {
@@ -6169,6 +6277,80 @@ textarea.input {
 		@media #{$tablet} {
 		    height: 43px;
 		    line-height: 43px;
+		}
+	}
+
+	&.modern-file {
+
+		label {
+			padding-left: 20px;
+		    font-size: 17px;
+		    height: 58px;
+		    font-weight: 300;
+		    border-radius: 4px;
+		    margin: 0;
+		    border: 2px solid #cccccc;
+		    width: 100%;
+		    transition: padding-top 0.2s ease, margin-top 0.2s ease;
+		    overflow-x: hidden;
+		    position: relative;
+
+		    @media #{$tablet} {
+				height: 45px;
+			}
+
+		    .file-name {
+		    	line-height: 42px;
+
+		    	@media #{$tablet} {
+		    		line-height: 31px;
+		    	}
+		    }
+
+		    .file-submit {
+		    	position: absolute;
+		    	width: 130px;
+		    	background-color: #ccc;
+		    	color: black;
+		    	font-size: 18px;
+		    	right: 0px;
+				top: 0;
+				bottom: 0;
+				line-height: 54px;
+				text-align: center;
+				font-weight: 500;
+
+				@media #{$tablet} {
+					line-height: 40px;
+					font-size: 16px;
+				}
+		    }
+		}
+
+		input {
+			display: none;
+		}
+
+		&.has-error {
+			label {
+				border-color: rgba(255, 0, 0, 0.2);
+
+				.file-submit {
+					background-color: rgba(255, 0, 0, 0.2);
+				}
+			}
+			
+		}
+
+		&.active {
+			label {
+				border-color: #126585;
+
+				.file-submit {
+					background-color: #126585;
+					color: white;
+				}
+			}
 		}
 	}
 }
@@ -7157,4 +7339,51 @@ body.edit-user {
     background-color: #126585;
     color: white;
     padding: 5px;
+}
+
+.balance-wrap {
+	.profile-home-content {
+		@media #{$phone} {
+			padding-top: 20px !important;
+		}
+	}
+}
+
+.balance-buttons-wrap {
+
+    @media #{$phone} {
+	    display: flex;
+    	flex-flow: row wrap;
+    }
+
+	.balance-button {
+	    font-size: 16px;
+	    color: #333;
+	    margin-right: 2px;
+	    padding: 5px 15px;
+	    border-radius: 4px;
+	    border: 1px solid transparent;
+	    display: inline-block;
+
+	    @media #{$pc} {
+	    	font-size: 14px;
+		    margin-right: 0px;
+		    padding: 5px 12px;
+	    }
+
+	    @media #{$phone} {
+	    	margin-right: 4px;
+	    	margin-bottom: 4px;
+	    }
+
+	    &.active {
+	    	font-weight: bold;
+	    	background-color: #80b8dc;
+	    	color: white;
+	    }
+
+	    &:hover:not(.active) {
+	    	border-color: #80b8dc;
+	    }
+	}
 }

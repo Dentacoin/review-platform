@@ -5845,3 +5845,35 @@ p.h2-bold {
       margin-top: 3px; }
   .modern-radios.has-error .radio-label label {
     border-color: #ffd7d7; }
+
+@media screen and (max-width: 768px) {
+  .balance-wrap .profile-home-content {
+    padding-top: 20px !important; } }
+
+@media screen and (max-width: 768px) {
+  .balance-buttons-wrap {
+    display: flex;
+    flex-flow: row wrap; } }
+.balance-buttons-wrap .balance-button {
+  font-size: 16px;
+  color: #333;
+  margin-right: 2px;
+  padding: 5px 15px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  display: inline-block; }
+  @media screen and (max-width: 1200px) {
+    .balance-buttons-wrap .balance-button {
+      font-size: 14px;
+      margin-right: 0px;
+      padding: 5px 12px; } }
+  @media screen and (max-width: 768px) {
+    .balance-buttons-wrap .balance-button {
+      margin-right: 4px;
+      margin-bottom: 4px; } }
+  .balance-buttons-wrap .balance-button.active {
+    font-weight: bold;
+    background-color: #80b8dc;
+    color: white; }
+  .balance-buttons-wrap .balance-button:hover:not(.active) {
+    border-color: #80b8dc; }

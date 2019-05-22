@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -13,8 +16,8 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 use App\Models\Email;
 use App\Models\Reward;
-use App\Models\VoxReward;
-use App\Models\VoxCashout;
+use App\Models\DcnReward;
+use App\Models\DcnCashout;
 use App\Models\VoxCrossCheck;
 use App\Models\UserBan;
 use App\Models\UserAsk;
@@ -754,8 +757,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getTrpBalance() {
-        $income = TrpReward::where('user_id', $this->id)->sum('reward');
-        $cashouts = TrpCashout::where('user_id', $this->id)->sum('reward');
+        $income = DcnReward::where('user_id', $this->id)->where('platform', 'trp')->sum('reward');
+        $cashouts = DcnCashout::where('user_id', $this->id)->where('platform', 'trp')->sum('reward');
 
         return $income - $cashouts;
     }
@@ -767,51 +770,52 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     //
 
     public function getVoxBalance() {
-        $income = VoxReward::where('user_id', $this->id)->sum('reward');
-        $cashouts = VoxCashout::where('user_id', $this->id)->sum('reward');
+        $income = DcnReward::where('user_id', $this->id)->where('platform', 'vox')->sum('reward');
+        $cashouts = DcnCashout::where('user_id', $this->id)->where('platform', 'vox')->sum('reward');
+
+        return $income - $cashouts;
+    }
+
+    public function getTotalBalance($platform) {
+        $income = DcnReward::where('user_id', $this->id);
+        if (!empty($platform)) {
+            $income = $income->where('platform', $platform);
+        }
+        $income = $income->sum('reward');
+        
+        $cashouts = DcnCashout::where('user_id', $this->id);
+        if (!empty($platform)) {
+            $cashouts = $cashouts->where('platform', $platform);
+        }
+        $cashouts = $cashouts->sum('reward');
 
         return $income - $cashouts;
     }
 
     public function madeTest($id) {
-        return VoxReward::where('user_id', $this->id)
-        ->where('vox_id', $id)
+        return DcnReward::where('user_id', $this->id)
+        ->where('platform', 'vox')
+        ->where('reference_id', $id)
         ->first();
     }
 
     public function filledVoxes() {
-        return VoxReward::where('user_id', $this->id)->with('vox')->whereHas('vox', function ($query) {
+        return DcnReward::where('user_id', $this->id)->where('platform', 'vox')->with('vox')->whereHas('vox', function ($query) {
             $query->where('type', 'normal');
-        })->get()->pluck('vox_id')->toArray();
+        })->get()->pluck('reference_id')->toArray();
     }
 
     public function filledFeaturedVoxes() {
-        return VoxReward::where('user_id', $this->id)->with('vox')->whereHas('vox', function ($query) {
+        return DcnReward::where('user_id', $this->id)->where('platform', 'vox')->with('vox')->whereHas('vox', function ($query) {
             $query->where('type', 'normal')->where('featured', 1);
-        })->get()->pluck('vox_id')->toArray();
+        })->get()->pluck('reference_id')->toArray();
     }
 
     public function vox_cashouts() {
-        return $this->hasMany('App\Models\VoxCashout', 'user_id', 'id')->orderBy('id', 'DESC');
+        return $this->hasMany('App\Models\DcnCashout', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
     }
     public function vox_rewards() {
-        return $this->hasMany('App\Models\VoxReward', 'user_id', 'id')->orderBy('id', 'DESC');
-    }
-
-    public function vox_should_ban() {
-        $tests = VoxReward::where('user_id', $this->id)
-        ->where('is_scam', '1')
-        ->where('created_at', '>', Carbon::now()->subDays(7))
-        ->count();
-
-
-        $answers = VoxAnswer::where('user_id', $this->id)
-        ->where('is_scam', '1')
-        ->where('created_at', '>', Carbon::now()->subDays(7))
-        ->count();
-
-        return $tests>=3 || $answers>=3;
-
+        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
     }
 
     public function deleteActions() {
@@ -959,10 +963,26 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         $answer->save();
                     }
                 }
-                $reward = new VoxReward;
+                $reward = new DcnReward;
                 $reward->user_id = $this->id;
-                $reward->vox_id = $first->id;
+                $reward->reference_id = $first->id;
                 $reward->reward = $first->getRewardTotal();
+                $reward->platform = 'vox';
+
+                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                $dd = new DeviceDetector($userAgent);
+                $dd->parse();
+
+                if ($dd->isBot()) {
+                    // handle bots,spiders,crawlers,...
+                    $reward->device = $dd->getBot();
+                } else {
+                    $reward->device = $dd->getDeviceName();
+                    $reward->brand = $dd->getBrandName();
+                    $reward->model = $dd->getModel();
+                    $reward->os = $dd->getOs()['name'];
+                }
+
                 $reward->save();
             }
             setcookie('first_test', null, time()-600, '/');
