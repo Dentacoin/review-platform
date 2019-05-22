@@ -58,7 +58,7 @@ class VoxQuestion extends Model {
     }
 
     public static function handleAnswerTooltip($answer) {
-        $new_answer = str_replace("[/]","</span>",$answer);
+        $new_answer = str_replace("[/]","</span>", str_replace('"', '&quot;', $answer));
         
         return preg_replace('/\[([^\]]*)\]/', '<span class="tooltip-text" text="${1}">', $new_answer);
     }
