@@ -377,7 +377,7 @@
         @endif
     </div>
 
-    @if($trigger_type)
+    @if(!empty($trigger_type))
         <input type="hidden" id="old-trigger-type" value="{{ $trigger_type }}" />
     @endif
 
