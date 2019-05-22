@@ -7343,8 +7343,10 @@ body.edit-user {
 
 .balance-wrap {
 	.profile-home-content {
+	    padding-top: 50px !important;
+
 		@media #{$phone} {
-			padding-top: 20px !important;
+			padding-top: 40px !important;
 		}
 	}
 }

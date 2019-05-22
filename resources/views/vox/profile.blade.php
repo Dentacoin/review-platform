@@ -142,7 +142,7 @@
 
 					            <div class="form-group separated">
 					  				<label class="control-label top-label col-md-12">
-					  					{!! trans('vox.page.profile.home.withdraw.amount') !!}
+					  					{!! trans('vox.page.profile.home.withdraw.amount') !!} / Currently available: {!! number_format( $user->getTotalBalance(), 0, '.', ' ') !!} DCN
 					  				</label>
 					                <div class="col-md-9">
 					                    <input class="form-control style-2" id="wallet-amount" name="wallet-amount" type="number" value="" placeholder="{!! trans('vox.page.profile.wallet-withdraw-amount') !!}">

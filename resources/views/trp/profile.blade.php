@@ -140,7 +140,7 @@
 
 					            <div class="form-group separated">
 					  				<label class="control-label top-label">
-					  					{!! trans('trp.page.profile.home.withdraw.amount') !!}
+					  					{!! trans('trp.page.profile.home.withdraw.amount') !!} / Currently available: {!! number_format( $user->getTotalBalance(), 0, '.', ' ') !!} DCN
 					  				</label>
 					  				<div class="flex break-tablet">
 						                <div class="flex-3">
@@ -153,6 +153,7 @@
 										</div>
 									</div>
 					            </div>
+
 					            @if($user->isGasExpensive())
 						            <div class="alert alert-warning">
 						            	{!! trans('trp.page.profile.wallet-withdraw-gas') !!}

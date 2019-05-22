@@ -5846,9 +5846,11 @@ p.h2-bold {
   .modern-radios.has-error .radio-label label {
     border-color: #ffd7d7; }
 
-@media screen and (max-width: 768px) {
-  .balance-wrap .profile-home-content {
-    padding-top: 20px !important; } }
+.balance-wrap .profile-home-content {
+  padding-top: 38px !important; }
+  @media screen and (max-width: 768px) {
+    .balance-wrap .profile-home-content {
+      padding-top: 30px !important; } }
 
 @media screen and (max-width: 768px) {
   .balance-buttons-wrap {
