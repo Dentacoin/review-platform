@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
+
 use Response;
 use Request;
 use Validator;
@@ -20,7 +23,7 @@ use App\Models\UserInvite;
 use App\Models\UserAsk;
 use App\Models\Dcn;
 use App\Models\Reward;
-use App\Models\TrpReward;
+use App\Models\DcnReward;
 use Carbon\Carbon;
 use Auth;
 use Cloutier\PhpIpfsApi\IPFS;
@@ -300,11 +303,26 @@ class DentistController extends FrontController
                         $amount = $review->verified ? Reward::getReward('review'.$is_video.'_trusted') : Reward::getReward('review'.$is_video);
                         
                         if(!$is_video && $review->verified) {
-                            $reward = new TrpReward();
+                            $reward = new DcnReward();
                             $reward->user_id = $this->user->id;
+                            $reward->platform = 'trp';
                             $reward->reward = $amount;
                             $reward->type = 'review';
                             $reward->reference_id = $review->id;
+
+                            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                            $dd = new DeviceDetector($userAgent);
+                            $dd->parse();
+
+                            if ($dd->isBot()) {
+                                // handle bots,spiders,crawlers,...
+                                $reward->device = $dd->getBot();
+                            } else {
+                                $reward->device = $dd->getDeviceName();
+                                $reward->brand = $dd->getBrandName();
+                                $reward->model = $dd->getModel();
+                                $reward->os = $dd->getOs()['name'];
+                            }
                             $reward->save();                            
                         }
 

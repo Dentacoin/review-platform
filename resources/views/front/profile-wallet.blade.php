@@ -9,7 +9,7 @@
 	<div class="col-md-9">
 	@include('front.errors')
 
-		@if( $user->status!='approved' )
+		@if( $user->status!='approved' && $user->status!='added_approved' )
 			<div class="alert alert-info">
 				{{ trans('front.page.profile.reward.wait-for-approval') }}
 			</div>
@@ -122,13 +122,13 @@
 						            <div class="form-group">
 						                <label class="col-md-3 control-label">{{ trans('front.page.profile.wallet.withdraw-balance') }}</label>
 						                <div class="col-md-9">
-						                    {{ Form::text( 'withdraw-balance', $user->getTrpBalance(), array('class' => 'form-control', 'disabled' => 'disabled' )) }}
+						                    {{ Form::text( 'withdraw-balance', $user->getTotalBalance('trp'), array('class' => 'form-control', 'disabled' => 'disabled' )) }}
 						                </div>
 						            </div>
 						            <div class="form-group">
 						                <label class="col-md-3 control-label">{{ trans('front.page.profile.wallet.withdraw-amount') }}</label>
 						                <div class="col-md-9">
-						                    {{ Form::text( 'withdraw-amount', $user->getTrpBalance(), array('class' => 'form-control', 'id' => 'transfer-withdraw-amount' )) }}
+						                    {{ Form::text( 'withdraw-amount', $user->getTotalBalance('trp'), array('class' => 'form-control', 'id' => 'transfer-withdraw-amount' )) }}
 						                </div>
 						            </div>
 						            @if($user->isGasExpensive())

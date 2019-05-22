@@ -6,7 +6,6 @@ use App\Models\Vox;
 use App\Models\User;
 use App\Models\UserLogin;
 use App\Models\VoxAnswer;
-use App\Models\VoxReward;
 use App\Models\VoxCategory;
 use Carbon\Carbon;
 
@@ -28,7 +27,7 @@ class IndexController extends FrontController
 
 		if(!empty($this->user) && $this->user->madeTest($first->id)) {
 			
-	        if($this->user->is_dentist && $this->user->status != 'approved' && $this->user->status != 'test') {
+	        if($this->user->is_dentist && $this->user->status != 'approved' && $this->user->status!='added_approved' && $this->user->status != 'test') {
 	            return redirect(getLangUrl('welcome-to-dentavox'));
 	        }
 

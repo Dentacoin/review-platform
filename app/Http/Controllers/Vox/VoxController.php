@@ -22,7 +22,7 @@ use App\Models\User;
 use App\Models\Vox;
 use App\Models\VoxRelated;
 use App\Models\VoxAnswer;
-use App\Models\VoxReward;
+use App\Models\DcnReward;
 use App\Models\VoxQuestion;
 use App\Models\VoxCrossCheck;
 use App\Models\VoxScale;
@@ -150,9 +150,8 @@ class VoxController extends FrontController
 		$doing_asl = false;
 		$first = Vox::where('type', 'home')->first();
 
-
-		if(empty($vox) || ($this->user->status!='approved' && $this->user->status!='test') || !$this->user->madeTest($first->id) ) {
-			if($this->user->status!='approved' && $this->user->status!='test') {
+		if(empty($vox) || ($this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='test') || !$this->user->madeTest($first->id) ) {
+			if($this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='test') {
             	Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
 			}
 			return redirect( getLangUrl('/') );
@@ -317,7 +316,7 @@ class VoxController extends FrontController
 
 		        			if( $should_reward ) {
 		        				$reward = Reward::where('reward_type', 'vox_question')->first()->dcn;
-			        			VoxReward::where('user_id', $this->user->id )->where('vox_id',$vox->id )->update(
+			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->update(
 			        				array(
 			        					'reward' => DB::raw('`reward` + '.$reward
 			        				))
@@ -720,11 +719,11 @@ class VoxController extends FrontController
 	        				// dd($answered, count($vox->questions));
 
 					        if(count($answered) == count($vox->questions)) {
-								$reward = new VoxReward;
+								$reward = new DcnReward;
 						        $reward->user_id = $this->user->id;
-						        $reward->vox_id = $vox->id;
+						        $reward->reference_id = $vox->id;
+						        $reward->platform = 'vox';
 						        $reward->reward = $vox->getRewardForUser($this->user->id);
-						        $reward->mistakes = intval(session('wrongs-'.$vox->id));
 						        $start = $list->first()->created_at;
 						        $diff = Carbon::now()->diffInSeconds( $start );
 						        $normal = count($vox->questions)*2;
@@ -745,34 +744,26 @@ class VoxController extends FrontController
 				                    $reward->brand = $dd->getBrandName();
 				                    $reward->model = $dd->getModel();
 				                    $reward->os = $dd->getOs()['name'];
-				                }						        
+				                }
 
 						        $reward->save();
-		        				$ret['balance'] = $this->user->getVoxBalance();
+		        				$ret['balance'] = $this->user->getTotalBalance('vox');
 
 		        				VoxAnswer::where('user_id', $this->user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
 
-		        				if( $reward->is_scam ) {
-		        					if($this->user->vox_should_ban()) {
-	            						$ret['ban_type'] = $this->user->banUser('vox', 'too-fast');
-	            						$ret['ban'] = getLangUrl('profile');
-			        				}
-		        				} else {
 
-		                            if($this->user->invited_by) {
-		                                $inv = UserInvite::where('user_id', $this->user->invited_by)->where('invited_id', $this->user->id)->first();
-		                                if(!empty($inv) && !$inv->rewarded) {
-		                                    $tmp = Dcn::send($this->user->invitor, $this->user->invitor->dcn_address, Reward::getReward('reward_invite'), 'invite-reward', $inv->id, true);
-		                                    $inv->rewarded = true;
-		                                    $inv->save();
+	                            if($this->user->invited_by) {
+	                                $inv = UserInvite::where('user_id', $this->user->invited_by)->where('invited_id', $this->user->id)->first();
+	                                if(!empty($inv) && !$inv->rewarded) {
+	                                    $tmp = Dcn::send($this->user->invitor, $this->user->invitor->dcn_address, Reward::getReward('reward_invite'), 'invite-reward', $inv->id, true);
+	                                    $inv->rewarded = true;
+	                                    $inv->save();
 
-		                                    $this->user->invitor->sendTemplate( 22, [
-		                                        'who_joined_name' => $this->user->getName()
-		                                    ] );
-		                                }
-		                            }
-
-		        				}
+	                                    $this->user->invitor->sendTemplate( 22, [
+	                                        'who_joined_name' => $this->user->getName()
+	                                    ] );
+	                                }
+	                            }
 					        }
 		        		} else {
 		        			$ret['success'] = false;
@@ -970,7 +961,8 @@ class VoxController extends FrontController
 					->where('question_id', $question->id)
 					->delete();
 
-					VoxReward::where('vox_id', $vox->id)
+					DcnReward::where('reference_id', $vox->id)
+					->where('platform', 'vox')
 					->where('user_id', $this->user->id)
 					->delete();
 				}

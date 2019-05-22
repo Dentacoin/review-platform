@@ -116,7 +116,7 @@
 
 			<div class="alert alert-warning" style="display: none;"></div>
 
-			{!! Form::open(array('method' => 'post', 'class' => 'verification-form', 'url' => getLangRoute('verification-dentist') )) !!}
+			{!! Form::open(array('method' => 'post', 'class' => 'verification-form', 'url' => getLangUrl('verification-dentist') )) !!}
 				{!! csrf_field() !!}
 				<div class="modern-field">
 					<textarea class="modern-input" id="dentist-short-description" name="short_description" maxlength="150"></textarea>

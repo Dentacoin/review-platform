@@ -46,7 +46,7 @@ class DentistsController extends FrontController
         }
 
 
-        // $noAddress = User::where('is_dentist', 1)->where('status', 'approved')->whereNotNull('city_id')->whereNull('lat')->take(300)->get();
+        // $noAddress = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved'])->whereNotNull('city_id')->whereNull('lat')->take(300)->get();
         // foreach ($noAddress as $user) {
         //     $query = $user->country->name.', '.$user->city->name.', '.($user->zip ? $user->zip.', ' : null).$user->address;
         //     echo $query.'<br/>';
@@ -72,7 +72,7 @@ class DentistsController extends FrontController
         // }
         // dd('ok');
 
-        $items = User::where('is_dentist', 1)->where('status', 'approved');
+        $items = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved']);
         $mode = 'map';
         $formattedAddress = $query;
         $country_search = false;
@@ -279,6 +279,10 @@ class DentistsController extends FrontController
             $staticmap = null;
         }
 
+        $gray_footer = false;
+        if ($items->count() == 0) {
+            $gray_footer = true;
+        }
 
         $search_title = '';
         if (!empty($query)) {
@@ -373,6 +377,7 @@ class DentistsController extends FrontController
         }
        
 		return $this->ShowView('search', [
+            'countries' => Country::get(),
             'search_title' => !empty($search_title) ? $search_title : null,
             'seo_title' => !empty($seo_title) ? $seo_title : null,
             'seo_description' => !empty($seo_description) ? $seo_description : null,
@@ -397,8 +402,10 @@ class DentistsController extends FrontController
             'orders' => $orders,
             'is_ajax' => $ajax,
             'noIndex' => $nonCannonicalUrl || !$items->count(),
+            'gray_footer' => $gray_footer,
             'js' => [
-                'search.js'
+                'search.js',
+                'address.js'
             ],
             'jscdn' => [
                 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
@@ -440,7 +447,7 @@ class DentistsController extends FrontController
 
     public function country($locale=null) {
 
-        $dentists = User::where('is_dentist', 1)->where('status', 'approved')->whereNotNull('country_id')->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
+        $dentists = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved'])->whereNotNull('country_id')->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
 
         $dentist_countries = Country::whereIn('id', $dentists )->get();
 
@@ -473,7 +480,7 @@ class DentistsController extends FrontController
             }
         }
 
-        $all_dentists = User::where('is_dentist', 1)->where('status', 'approved')->whereNotNull('country_id')->whereNotNull('city_name')->get();
+        $all_dentists = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved'])->whereNotNull('country_id')->whereNotNull('city_name')->get();
 
         $seo_title = trans('trp.seo.dentist-listings-by-country.title', [
             'countries_number' => count($dentist_countries),
@@ -531,10 +538,10 @@ class DentistsController extends FrontController
             return redirect('/');
         }
 
-        $cities_name = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->groupBy('city_name')->orderBy('city_name', 'asc')->get();
+        $cities_name = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved'])->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->groupBy('city_name')->orderBy('city_name', 'asc')->get();
 
 
-        $all_dentists = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->count();
+        $all_dentists = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved'])->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->count();
 
         $cities_groups = [];
         $letter = null;
@@ -627,9 +634,9 @@ class DentistsController extends FrontController
             return redirect('/');
         }
 
-        $states = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('state_name')->orderBy('state_name', 'asc')->get();
+        $states = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved'])->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('state_name')->orderBy('state_name', 'asc')->get();
 
-        $all_dentists = User::where('is_dentist', 1)->where('status', 'approved')->where('country_id', $country->id)->whereNotNull('city_name')->count();
+        $all_dentists = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved'])->where('country_id', $country->id)->whereNotNull('city_name')->count();
 
 
         $states_groups = [];

@@ -22,25 +22,35 @@
 	                </h4>
 	            </div>
 
-				<div class="profile-home-content">
-					<div class="balance">
-						<b><span class="dcn-amount">{!! number_format( $user->getVoxBalance(), 0, '.', ' ') !!}</span> DCN</b>
-						<div class="convertor">
-							= <span class="convertor-value"></span>
-							<span class="convertor-currnecy">
-								<span class="active-currency">
-									USD
-								</span>
+	            <div class="balance-wrap">
+		            <div class="balance-buttons-wrap">
+		            	<a href="javascript:;" class="balance-button active !!}" amount="{!! number_format( $user->getTotalBalance(), 0, '.', ' ') !!}">Total amount</a>
+		            	@foreach(config('platforms') as $p => $platform)
+		            		@if($platform['balance'])
+		            			<a href="javascript:;" class="balance-button" amount="{!! number_format( $user->getTotalBalance($p), 0, '.', ' ') !!}">{{ $platform['name'] }}</a>
+		            		@endif
+		            	@endforeach
+		            </div>
+		            <div class="profile-home-content">
+	            		<div class="balance">
+							<b><span class="dcn-amount">{!! number_format( $user->getTotalBalance(), 0, '.', ' ') !!}</span> DCN</b>
+							<div class="convertor">
+								= <span class="convertor-value"></span>
+								<span class="convertor-currnecy">
+									<span class="active-currency">
+										USD
+									</span>
 
-								<div class="expander">
-									@foreach( config('currencies') as $currency )
-										<a currency="{!! $currency !!}" {!! $currency=='USD' ? 'class="active"' : '' !!}>{!! $currency !!}</a>
-									@endforeach
-								</div>
-							</span>
+									<div class="expander">
+										@foreach( config('currencies') as $currency )
+											<a currency="{!! $currency !!}" {!! $currency=='USD' ? 'class="active"' : '' !!}>{!! $currency !!}</a>
+										@endforeach
+									</div>
+								</span>
+							</div>
 						</div>
-					</div>
-				</div>
+		            </div>
+		        </div>
 			</div>
 
 			@if($user->loggedFromBadIp())

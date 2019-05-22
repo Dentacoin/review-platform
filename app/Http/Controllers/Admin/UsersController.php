@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
+
 use App\Http\Controllers\AdminController;
 
 use App\Models\Email;
 use App\Models\User;
 use App\Models\UserLogin;
+use App\Models\Reward;
 use App\Models\Vox;
 use App\Models\UserBan;
 use App\Models\VoxQuestion;
 use App\Models\VoxAnswer;
-use App\Models\VoxReward;
+use App\Models\DcnReward;
 use App\Models\VoxCrossCheck;
 use App\Models\City;
 use App\Models\Country;
@@ -38,14 +42,6 @@ class UsersController extends AdminController
             '' => null,
             'm' => trans('admin.common.gender.m'),
             'f' => trans('admin.common.gender.f'),
-        ];
-
-        $this->statuses = [
-            'new' => 'New',
-            'approved' => 'Approved', 
-            'pending' => 'Suspicious', 
-            'rejected' => 'Rejected',
-            'test' => 'Test'
         ];
 
     	$this->fields = [
@@ -140,7 +136,7 @@ class UsersController extends AdminController
             ],
             'status' => [
                 'type' => 'select',
-                'values' => $this->statuses
+                'values' => config('user-statuses')
             ],
     	];
     }
@@ -167,12 +163,18 @@ class UsersController extends AdminController
             'dentist.approved' => 'Dentists (Approved)',
             'dentist.rejected' => 'Dentists (Rejected)',
             'dentist.partners' => 'Dentists (Partners)',
+            'dentist.added_new' => 'Dentists (Added New)',
+            'dentist.added_approved' => 'Dentists (Added Approved)',
+            'dentist.added_rejected' => 'Dentists (Added Rejected)',
             'clinic.all' => 'Clinics (All)',
             'clinic.new' => 'Clinics (New)',
             'clinic.pending' => 'Clinics (Suspicious)',
             'clinic.approved' => 'Clinics (Approved)',
             'clinic.rejected' => 'Clinics (Rejected)',
             'clinic.partners' => 'Clinics (Partners)',
+            'clinic.added_new' => 'Clinics (Added New)',
+            'clinic.added_approved' => 'Clinics (Added Approved)',
+            'clinic.added_rejected' => 'Clinics (Added Rejected)',
             'dentist_clinic.all' => 'Dentists & Clinics (All)',
             'dentist_clinic.new' => 'Dentists & Clinics (New)',
             'dentist_clinic.pending' => 'Dentists & Clinics (Suspicious)',
@@ -253,7 +255,7 @@ class UsersController extends AdminController
         if(!empty($this->request->input('search-type'))) {
             $tmp = explode('.', $this->request->input('search-type'));
             $type = $tmp[0];
-            $status = isset($tmp[1]) && isset( $this->statuses[ $tmp[1] ] ) ? $tmp[1] : null;
+            $status = isset($tmp[1]) && isset( config('user-statuses')[ $tmp[1] ] ) ? $tmp[1] : null;
             if( $type=='patient' ) {
                 $users = $users->where(function ($query) {
                     $query->where('is_dentist', 0)
@@ -595,7 +597,7 @@ class UsersController extends AdminController
 
     public function delete_vox( $id, $reward_id ) {
         $item = User::withTrashed()->find($id);
-        $reward = VoxReward::find($reward_id);
+        $reward = DcnReward::find($reward_id);
 
         if(!empty($reward) && !empty($item) && $reward->user_id == $item->id) {
             VoxAnswer::where([
@@ -603,7 +605,7 @@ class UsersController extends AdminController
                 ['vox_id', $reward->vox_id],
             ])
             ->delete();
-            VoxReward::destroy( $reward_id );
+            DcnReward::destroy( $reward_id );
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.reward-deleted') );
@@ -733,6 +735,7 @@ class UsersController extends AdminController
                             }
                         } else if($key=='status') {
                             if( $this->request->input($key) && $item->$key!=$this->request->input($key) ) {
+
                                 if( $this->request->input($key)=='approved' ) {
                                     if( $item->deleted_at ) {
                                         $item->restore();
@@ -757,8 +760,40 @@ class UsersController extends AdminController
                                     $item->email = $olde;
                                     $item->save();
                                     $to_ali->delete();
-                                } if( $this->request->input($key)=='rejected' ) {
+                                } else if( $this->request->input($key)=='rejected' ) {
                                     $item->sendTemplate(14);
+                                } else if($this->request->input($key)=='added_approved') {
+                                    $patient = User::find($item->invited_by);
+
+                                    if (!empty($patient)) {
+                                        $item->sendTemplate( 43  , [
+                                            'dentist_name' => $item->name,
+                                            'patient_name' => $patient->name,
+                                        ]);
+                                        $amount = Reward::getReward('patient_add_dentist');
+                                        $reward = new DcnReward();
+                                        $reward->user_id = $patient->id;
+                                        $reward->reward = $amount;
+                                        $reward->platform = 'trp';
+                                        $reward->type = 'added_dentist';
+                                        $reward->reference_id = $item->id;
+
+                                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                                        $dd = new DeviceDetector($userAgent);
+                                        $dd->parse();
+
+                                        if ($dd->isBot()) {
+                                            // handle bots,spiders,crawlers,...
+                                            $reward->device = $dd->getBot();
+                                        } else {
+                                            $reward->device = $dd->getDeviceName();
+                                            $reward->brand = $dd->getBrandName();
+                                            $reward->model = $dd->getModel();
+                                            $reward->os = $dd->getOs()['name'];
+                                        }
+                                        $reward->save();
+                                    }
+
                                 }
                             }
                             $item->$key = $this->request->input($key);
@@ -800,7 +835,7 @@ class UsersController extends AdminController
             $all_questions_answerd = VoxAnswer::where('user_id', $id)
             ->groupBy('vox_id')
             ->get();
-            $rewarder_questions = VoxReward::where('user_id', $id)->get();
+            $rewarder_questions = DcnReward::where('user_id', $id)->where('platform' , 'vox')->get();
             $unanswerd_questions = array_diff($all_questions_answerd->pluck('vox_id')->toArray(), $rewarder_questions->pluck('vox_id')->toArray() );
             $unfinished = Vox::whereIn('id', $unanswerd_questions)->get();
 

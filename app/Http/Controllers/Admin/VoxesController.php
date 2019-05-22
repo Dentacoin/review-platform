@@ -11,7 +11,7 @@ use App\Models\VoxToCategory;
 use App\Models\VoxScale;
 use App\Models\VoxBadge;
 use App\Models\VoxAnswer;
-use App\Models\VoxReward;
+use App\Models\DcnReward;
 use App\Models\VoxRelated;
 use Illuminate\Support\Facades\Input;
 use Image;
@@ -933,14 +933,15 @@ class VoxesController extends AdminController
                 
             } else {
                 if (request()->input( 'country' )) {
-                    $items_count = VoxReward::where('vox_id',$vox_id )
+                    $items_count = DcnReward::where('reference_id',$vox_id )
+                    ->where('platform', 'vox')
                     ->select('vox_rewards.*')
                     ->has('user')
                     ->join('users', 'vox_rewards.user_id', '=', 'users.id')
                     ->join('countries', 'users.country_id', '=', 'countries.id')
                     ->count();
                 } else {
-                    $items_count = VoxReward::where('vox_id',$vox_id )->has('user')->count();
+                    $items_count = DcnReward::where('reference_id',$vox_id )->where('platform', 'vox')->has('user')->count();
                 }
             }
 
@@ -997,7 +998,7 @@ class VoxesController extends AdminController
                 $respondents = '';
 
             } else {
-                $respondents = VoxReward::where('vox_id',$vox_id )->has('user')->select('vox_rewards.*');
+                $respondents = DcnReward::where('reference_id',$vox_id )->where('platform', 'vox')->has('user')->select('vox_rewards.*');
                 if (request()->input( 'country' )) {
                     $order = request()->input( 'country' );
                     $respondents = $respondents
@@ -1153,7 +1154,7 @@ class VoxesController extends AdminController
                 $cols2
             ];
 
-            $users = VoxReward::where('vox_id',$vox->id )->with('user');
+            $users = DcnReward::where('reference_id',$vox->id )->where('platform', 'vox')->with('user');
             if( request('date-from') ) {
                 $users->where('created_at', '>=', new Carbon(request('date-from')));
             }

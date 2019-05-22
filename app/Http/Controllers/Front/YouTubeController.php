@@ -12,8 +12,6 @@ use App\Models\DcnTransaction;
 use App\Models\User;
 use App\Models\Vox;
 use App\Models\VoxQuestion;
-use App\Models\VoxCashout;
-use App\Models\TrpReward;
 use App\Models\Email;
 
 class YouTubeController extends FrontController

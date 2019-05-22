@@ -958,6 +958,7 @@ body.blur {
 			padding: 20px;
 			border-top-left-radius: 5px;
 			border-top-right-radius: 5px;
+			
 			.slider-image {
 				border-radius: 5px;
 			}
@@ -1844,6 +1845,10 @@ textarea.input {
 		height: auto;
 	}
 
+	&.gray-footer {
+		background-color: #f7f7f7;
+	}
+
 	footer {
 		// opacity: 0;
 		// bottom: -147px;
@@ -1892,8 +1897,6 @@ textarea.input {
 				}
 			}
 		}
-
-
 
 		.footer-logo {
 			@media #{$phone} {
@@ -2477,6 +2480,142 @@ textarea.input {
         		}
         	}
         }
+    }
+}
+
+.invite-new-dentist-popup.fixed-popup {
+	.popup-inner {
+        box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
+
+		h2 {
+			font-size: 40px;
+			margin-bottom: 20px;
+
+
+			@media #{$phone} {
+				font-size: 26px;
+			}
+		}
+
+		.popup-title {
+			padding: 12px 60px 15px;
+			font-size: 23px;
+			font-weight: 300;
+			text-align: center;
+
+			@media #{$tablet} {
+				font-size: 18px;
+			}
+
+			@media #{$phone} {
+				font-size: 16px;
+				padding: 12px 10px 15px;
+				font-weight: normal;
+			}
+		}
+	}
+}
+ 
+.claim-popup.fixed-popup {
+    .popup-inner {
+        padding: 22px 130px 50px;
+        box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8);
+        background-image: url('../img-trp/popup-top-blue.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+
+        @media #{$phone} {
+        	padding: 22px 20px 50px;
+        }
+
+        .close-popup {
+        	background-color: transparent;
+        	position: absolute;
+		    right: 15px;
+		    top: 15px;
+
+		    i {
+		    	font-size: 25px;
+    			color: #424242;
+		    }
+        }
+
+        .claim-success,
+        .claim-details {
+        	background-color: transparent;
+        }
+
+        .claim-success {
+        	display: none;
+
+        	.button {
+        		padding: 13px 90px;
+
+        		@media #{$phone} {
+        			padding: 9px 70px;
+        		}
+        	}
+        }
+
+        .header-claim {
+        	background-color: transparent;
+
+        	img {
+        		max-width: 120px;
+        		margin-bottom: 10px;
+
+        		@media #{$phone} {
+        			max-width: 60px;
+        		}
+        	}        	
+
+        	h2 {
+        		text-transform: uppercase;
+        		font-weight: bold;
+        		font-size: 38px;
+        		color: black;
+        		margin-bottom: 13px;
+
+        		@media #{$phone} {
+        			font-size: 24px;
+        			margin-top: 0px;
+        		}
+        	}
+
+        	h3 {
+				font-size: 28px;
+				font-weight: bold;
+        		color: black;
+        		margin-bottom: 20px;
+
+        		@media #{$phone} {
+        			font-size: 18px;
+        			margin-bottom: 10px;
+        		}
+        	}
+
+        	h4 {
+        		color: #333;
+
+        		@media #{$phone} {
+        			font-size: 16px;
+        			margin-bottom: 25px;
+        		}
+        	}
+        }
+    }
+
+    &.claimed {
+    	.popup-inner {
+
+	        .claim-success {
+	        	display: block;
+	        }
+
+	        .claim-details {
+	        	display: none;
+	        }
+	    }
     }
 }
 
@@ -4414,6 +4553,7 @@ textarea.input {
 
 	.home-search-form {
 	    top: 15px;
+	    width: 810px;
 
 	    @media #{$pc} {
 	    	width: 620px;
@@ -4646,6 +4786,7 @@ textarea.input {
     	width: 120px;
     	height: 120px;
         margin-right: 10px;
+        position: relative;
     }
 
     .share-mobile {
@@ -5503,6 +5644,10 @@ textarea.input {
     				height: 20px;
     			}
     		}
+
+    		label {
+    			text-align: left;
+    		}
     	}
 
     	.about-content {
@@ -6014,6 +6159,7 @@ textarea.input {
 		width: 100%;
 		transition: padding-top 0.2s ease, margin-top 0.2s ease;
 		overflow-x: hidden;
+		background-color: white;
 		/* Hack to make "rows" attribute apply in Firefox. */
 
 		@media #{$tablet} {
@@ -6131,6 +6277,80 @@ textarea.input {
 		@media #{$tablet} {
 		    height: 43px;
 		    line-height: 43px;
+		}
+	}
+
+	&.modern-file {
+
+		label {
+			padding-left: 20px;
+		    font-size: 17px;
+		    height: 58px;
+		    font-weight: 300;
+		    border-radius: 4px;
+		    margin: 0;
+		    border: 2px solid #cccccc;
+		    width: 100%;
+		    transition: padding-top 0.2s ease, margin-top 0.2s ease;
+		    overflow-x: hidden;
+		    position: relative;
+
+		    @media #{$tablet} {
+				height: 45px;
+			}
+
+		    .file-name {
+		    	line-height: 42px;
+
+		    	@media #{$tablet} {
+		    		line-height: 31px;
+		    	}
+		    }
+
+		    .file-submit {
+		    	position: absolute;
+		    	width: 130px;
+		    	background-color: #ccc;
+		    	color: black;
+		    	font-size: 18px;
+		    	right: 0px;
+				top: 0;
+				bottom: 0;
+				line-height: 54px;
+				text-align: center;
+				font-weight: 500;
+
+				@media #{$tablet} {
+					line-height: 40px;
+					font-size: 16px;
+				}
+		    }
+		}
+
+		input {
+			display: none;
+		}
+
+		&.has-error {
+			label {
+				border-color: rgba(255, 0, 0, 0.2);
+
+				.file-submit {
+					background-color: rgba(255, 0, 0, 0.2);
+				}
+			}
+			
+		}
+
+		&.active {
+			label {
+				border-color: #126585;
+
+				.file-submit {
+					background-color: #126585;
+					color: white;
+				}
+			}
 		}
 	}
 }
@@ -6888,4 +7108,282 @@ body.edit-user {
 
 .lb-outerContainer {
 	background-color: transparent !important;
+}
+
+.invite-new-dentist-form {
+	max-width: 670px;
+	margin-left: auto;
+	margin-right: auto;
+
+	.button {
+	    padding: 13px 84px;
+
+	    @media #{$phone} {
+	        padding: 13px 54px;
+	    }
+	}
+
+	.modern-radios {
+		margin-bottom: 20px;
+
+		.radio-label {
+			label {
+				background-color: white;
+			}
+
+			&:first-child {
+				@media #{$phone} {
+					margin-right: 18px;
+				}
+			}
+		}
+	}
+
+	.modern-field {
+		.modern-input {
+			background-color: white;
+		}
+	}
+
+	.invite-reward {
+		text-align: center;
+		font-size: 18px;
+	    font-weight: 300;
+	    margin-bottom: 30px;
+
+	    @media #{$phone} {
+	    	font-size: 14px;
+	    }
+
+	    span {
+	    	font-weight: bold;
+	    	font-size: 18px;
+	    	color: #126585;
+
+		    @media #{$phone} {
+		    	font-size: 14px;
+		    }
+	    }
+	}
+}
+
+.invite-new-dentist-wrapper-index {
+	position: relative;
+
+	@media #{$phone} {
+		padding: 20px 0px;
+	}
+
+	&:after {
+		content: '';
+	    position: absolute;
+	    left: 0;
+	    bottom: 99.9%;
+	    background: url(../img-trp/oval-white.png) no-repeat 50% 50%;
+	    background-size: 100% 100%;
+	    width: 100%;
+	    padding-top: 3%;
+	}
+
+	&:before {
+	    content: '';
+	    position: absolute;
+	    top: 100%;
+	    background: url(../img-trp/oval-white-down.png) no-repeat 50% 50%;
+	    background-size: 100% 100%;
+	    width: 100%;
+	    padding-top: 3%;
+	}
+
+	& + .gray-background {
+		padding-top: 100px;
+
+		@media #{$pc} {
+			padding-top: 80px;
+		}
+
+		@media #{$phone} {
+			padding-top: 60px;
+		}
+	}
+
+	h2 {
+		padding-bottom: 20px;
+		margin-bottom: 15px;
+	}
+
+	h3 {
+		font-weight: 300;
+		font-size: 24px;
+		margin-bottom: 25px;
+
+		@media #{$phone} {
+			font-size: 18px;
+		}
+	}
+
+	.button {
+	    padding: 13px 84px;
+
+	    @media #{$phone} {
+	        padding: 10px 50px;
+	    }
+	}
+}
+
+.invite-new-dentist-wrapper {
+
+	@media screen and (max-width: 500px) {
+		margin-top: -50px;
+	}
+
+	@media screen and (max-width: 450px) {
+		margin-top: -90px;
+	}
+
+	&.white-invite {
+		background-color: #f7f7f7;
+
+		@media screen and (max-width: 1600px) {
+			margin-top: -70px;
+		}
+
+		@media #{$tablet} {
+			margin-top: -100px;
+		}
+
+		.colorfull-wrapper {
+			background-color: #ffffff;
+
+			&:after {
+			    background-image: url(../img-trp/oval-white-big.png);
+
+			    @media #{$phone} {
+			    	padding-top: 3%;
+			    }
+
+			    @media screen and (max-width: 480px) {
+			    	padding-top: 9%;
+			    }
+			}
+		}
+	}
+
+	.invite-new-dentist-titles {
+		background-color: transparent;
+		position: relative;
+		z-index: 1;
+		transform: translateY(120px);
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	h2 {
+		text-align: center;
+		font-weight: bold;
+		font-size: 48px;
+		margin-bottom: 10px;
+
+		@media #{$pc} {
+			font-size: 38px;
+		}
+
+		@media #{$phone} {
+			font-size: 22px;
+		}
+	}
+
+	h3 {
+		text-align: center;
+		font-weight: 300;
+		font-size: 38px;
+		margin-bottom: 50px;
+
+		@media #{$pc} {
+			font-size: 28px;
+		}
+
+		@media #{$phone} {
+			font-size: 17px;
+			margin-bottom: 30px;
+		}
+	}
+
+	.colorfull-wrapper {
+		background-color: #f7f7f7;
+		position: relative;
+		padding: 120px 10px 70px;
+
+		@media #{$phone} {
+			padding-bottom: 30px;
+		}
+
+		&:after {
+			content: '';
+		    position: absolute;
+		    left: 0;
+		    bottom: 99.9%;
+		    background: url(../img-trp/oval-gray.png) no-repeat 50% 50%;
+		    background-size: 100% 100%;
+		    width: 100%;
+		    padding-top: 12%;
+		}
+	}
+}
+
+.invited-dentist {
+	position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #126585;
+    color: white;
+    padding: 5px;
+}
+
+.balance-wrap {
+	.profile-home-content {
+		@media #{$phone} {
+			padding-top: 20px !important;
+		}
+	}
+}
+
+.balance-buttons-wrap {
+
+    @media #{$phone} {
+	    display: flex;
+    	flex-flow: row wrap;
+    }
+
+	.balance-button {
+	    font-size: 16px;
+	    color: #333;
+	    margin-right: 2px;
+	    padding: 5px 15px;
+	    border-radius: 4px;
+	    border: 1px solid transparent;
+	    display: inline-block;
+
+	    @media #{$pc} {
+	    	font-size: 14px;
+		    margin-right: 0px;
+		    padding: 5px 12px;
+	    }
+
+	    @media #{$phone} {
+	    	margin-right: 4px;
+	    	margin-bottom: 4px;
+	    }
+
+	    &.active {
+	    	font-weight: bold;
+	    	background-color: #80b8dc;
+	    	color: white;
+	    }
+
+	    &:hover:not(.active) {
+	    	border-color: #80b8dc;
+	    }
+	}
 }

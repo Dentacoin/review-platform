@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -9,7 +12,7 @@ use App\Models\Dcn;
 use App\Models\User;
 use App\Models\Secret;
 use App\Models\Reward;
-use App\Models\TrpReward;
+use App\Models\DcnReward;
 use App\Models\ReviewAnswer;
 
 use Image;
@@ -86,11 +89,27 @@ class Review extends Model {
         }
 
         if($this->verified) {
-            $reward = new TrpReward();
+            $reward = new DcnReward();
             $reward->user_id = $this->dentist_id ? $this->dentist_id : $this->clinic_id;
+            $reward->platform = 'trp';
             $reward->reward = Reward::getReward('reward_dentist');
             $reward->type = 'dentist-review';
             $reward->reference_id = $this->id;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+            $dd = new DeviceDetector($userAgent);
+            $dd->parse();
+
+            if ($dd->isBot()) {
+                // handle bots,spiders,crawlers,...
+                $reward->device = $dd->getBot();
+            } else {
+                $reward->device = $dd->getDeviceName();
+                $reward->brand = $dd->getBrandName();
+                $reward->model = $dd->getModel();
+                $reward->os = $dd->getOs()['name'];
+            }
+
             $reward->save();
         }
 
@@ -99,11 +118,27 @@ class Review extends Model {
             $inv = UserInvite::where('user_id', $this->user->invited_by)->where('invited_id', $this->user->id)->first();
             if(!empty($inv) && !$inv->rewarded) {
 
-                $reward = new TrpReward();
+                $reward = new DcnReward();
                 $reward->user_id = $this->user->invitor;
+                $reward->platform = 'trp';
                 $reward->reward = Reward::getReward('reward_invite');
                 $reward->type = 'invitation';
                 $reward->reference_id = $inv->id;
+
+                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                $dd = new DeviceDetector($userAgent);
+                $dd->parse();
+
+                if ($dd->isBot()) {
+                    // handle bots,spiders,crawlers,...
+                    $reward->device = $dd->getBot();
+                } else {
+                    $reward->device = $dd->getDeviceName();
+                    $reward->brand = $dd->getBrandName();
+                    $reward->model = $dd->getModel();
+                    $reward->os = $dd->getOs()['name'];
+                }
+
                 $reward->save();
                 
                 $this->user->invitor->sendTemplate( 22, [

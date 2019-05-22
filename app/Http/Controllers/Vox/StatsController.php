@@ -17,7 +17,6 @@ use App\Models\Country;
 use App\Models\User;
 use App\Models\Vox;
 use App\Models\VoxScale;
-use App\Models\VoxReward;
 use App\Models\VoxAnswer;
 use App\Models\VoxQuestion;
 use App\Models\VoxCategory;

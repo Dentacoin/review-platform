@@ -136,14 +136,14 @@
 							@endif
 						</div>
 						<div class="header-right col-md-4 tar flex">
-							@if( $user && $user->status!='approved' && $user->status!='test' )
+							@if( $user && $user->status!='approved' && $user->status!='added_approved' && $user->status!='test' )
 							@elseif($user)
 								<div class="user-and-price header-a">
 									<a class="my-name" href="{{ getLangUrl('profile') }}">
 										Hello, {{ $user->getName() }}
 									</a>
 									<a href="{{ getLangUrl('profile') }}">
-										<span id="header-balance">{{ $user->getVoxBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getVoxBalance() * $dcn_price) }}</span>
+										<span id="header-balance">{{ $user->getTotalBalance('vox') }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance('vox') * $dcn_price) }}</span>
 									</a>
 								</div>
 								<a class="header-a" href="{{ getLangUrl('profile/info') }}" >
@@ -159,7 +159,7 @@
 									<a class="btn" href="{{ getLangUrl('profile') }}">
 										My Account
 									</a>
-									@if($user->status!='approved' && $user->status!='test')
+									@if($user->status!='approved' && $user->status!='added_approved' && $user->status!='test')
 										<span>
 											* You cannot access your Profile until it's approved.
 										</span>

@@ -152,7 +152,7 @@
 							<li class="dcn-info">
 								@if($user)
 									<a href="{{ getLangUrl('profile/wallet') }}">
-										<span id="header-balance">{{ $user->getTrpBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTrpBalance() * $dcn_price) }}</span>
+										<span id="header-balance">{{ $user->getTotalBalance('trp') }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance('trp') * $dcn_price) }}</span>
 									</a>
 								@endif
 								<p class="{{ $user ? '' : 'mt' }}">

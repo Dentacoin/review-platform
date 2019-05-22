@@ -12,7 +12,7 @@ use App;
 use Carbon\Carbon;
 use App\Models\VoxToCategory;
 use App\Models\Reward;
-use App\Models\VoxReward;
+use App\Models\DcnReward;
 use App\Models\VoxBadge;
 use App\Models\VoxRelated;
 
@@ -68,7 +68,7 @@ class Vox extends Model {
     }
     
     public function respondentsCount() {
-        return VoxReward::where('vox_id', $this->id)->has('user')->count();   
+        return DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->has('user')->count();   
     }
 
     public function respondentsCountryCount() {
@@ -105,7 +105,7 @@ class Vox extends Model {
     }
 
     public function rewards() {
-        return $this->hasMany('App\Models\VoxReward', 'vox_id', 'id')->orderBy('id', 'DESC');
+        return $this->hasMany('App\Models\DcnReward', 'reference_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
     }
 
     public function related() {

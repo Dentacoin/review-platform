@@ -188,7 +188,7 @@
 						<div class="sign-in-step {!! empty($regData) ? 'active' : '' !!}" id="step-1">
 							@include('front.errors')
 							<div class="modern-field alert-after">
-								<input type="email" name="email" id="dentist-email" class="modern-input" value="{{ $regData['email'] ?? old('email') }}" autocomplete="off">
+								<input type="email" name="email" id="dentist-email" class="modern-input" value="{{ $regData['email'] ?? old('email') }}" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 								<label for="dentist-email">
 									<span>{!! nl2br(trans('trp.popup.popup-register.email')) !!}</span>
 								</label>
@@ -412,7 +412,7 @@
 						@include('front.errors')
 
 						<div class="modern-field">
-							<input type="email" name="email" id="dentist-login-email" class="modern-input" autocomplete="off">
+							<input type="email" name="email" id="dentist-login-email" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 							<label for="dentist-login-email">
 								<span>{!! nl2br(trans('trp.popup.popup-register.email')) !!}</span>
 							</label>

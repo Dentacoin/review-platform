@@ -102,7 +102,7 @@
 							<div class="sign-in-step active" id="step-1">
 
 								<div class="modern-field alert-after {{ $errors->has('email') ? 'has-error' : '' }}">
-									<input type="email" name="email" id="email" class="modern-input" autocomplete="off">
+									<input type="email" name="email" id="email" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 									<label for="email">
 										<span>{!! trans('vox.page.register.email') !!}</span>
 									</label>
