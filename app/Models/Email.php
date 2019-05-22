@@ -83,18 +83,7 @@ class Email extends Model
 			$subject = $title;
 		}
 		$content = $this->template['content'];
-		$platform_names = [
-			'vox' => 'DentaVox',
-			'trp' => 'Trusted Reviews',
-			'dentacare' => 'DentaCare',
-		];
-		$platform_urls = [
-			'vox' => 'https://dentavox.dentacoin.com/',
-			'trp' => 'https://reviews.dentacoin.com/',
-			'dentacare' => 'https://dentacoin.com/',
-		];
-		
-		$domain = $platform_urls[$this->platform];
+		$domain = 'https://'.config('platforms.'.$this->platform.'.url').'/';
 
 		$deafult_searches = array(
 			'[name]',
@@ -116,7 +105,7 @@ class Email extends Model
 		);
 		$deafult_replaces = array(
 			$this->user->getName(),
-			$platform_names[$this->platform],
+			config('platforms.'.$this->platform.'.name'),
 			'<i>',
 			'</i>',
 			'<span style="text-decoration: underline;">',
