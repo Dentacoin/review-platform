@@ -834,18 +834,24 @@ class UsersController extends AdminController
 
             $all_questions_answerd = VoxAnswer::where('user_id', $id)
             ->groupBy('vox_id')
+            ->orderBy('created_at')
             ->get();
             $rewarder_questions = DcnReward::where('user_id', $id)->where('platform' , 'vox')->get();
             $unanswerd_questions = array_diff($all_questions_answerd->pluck('vox_id')->toArray(), $rewarder_questions->pluck('vox_id')->toArray() );
-            $unfinished = Vox::whereIn('id', $unanswerd_questions)->get();
-
-            foreach ($unfinished as $k => $v) {
+            foreach ($unanswerd_questions as $value) {
+                $unfinished[$value] = [];
+            }
+            $unfinishedVoxes = Vox::whereIn('id', $unanswerd_questions)->get();
+            $unfinished = [];
+            
+            foreach ($unfinishedVoxes as $v) {
+                $unfinished[$v->id] = $v;
                 $ans = VoxAnswer::where('user_id', $id)->where('vox_id', $v->id)->orderBy('id', 'asc')->first();
                 $user_log = UserLogin::where('user_id', $id)->where('created_at', '<', $ans->created_at )->orderBy('id', 'desc')->first();
 
-                $unfinished[$k]->user_id = $item->id;
-                $unfinished[$k]->login = $user_log;
-                $unfinished[$k]->taken_date = $ans->created_at;
+                $unfinished[$v->id]->user_id = $item->id;
+                $unfinished[$v->id]->login = $user_log;
+                $unfinished[$v->id]->taken_date = $ans->created_at;
             }
 
 

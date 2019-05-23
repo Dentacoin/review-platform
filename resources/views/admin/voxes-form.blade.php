@@ -268,7 +268,7 @@
                                             <textarea style="min-width: 360px;" class="form-control question-question" data-qid="{{ $question->id }}">{{ $question->question }}</textarea>
                                         </td>
                                         <td>
-                                            {{ trans( 'admin.common.'.( $question->is_control ? 'yes' : 'no' ) ) }}
+                                            {!! $question->is_control ? '<b>'.trans( 'admin.common.yes' ).'</b>' : trans( 'admin.common.no' ) !!}
                                         </td>
                                         <td>
                                             @if($question->used_for_stats=='standard')
