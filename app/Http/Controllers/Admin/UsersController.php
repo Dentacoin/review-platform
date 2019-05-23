@@ -845,6 +845,7 @@ class UsersController extends AdminController
 
                 $unfinished[$k]->user_id = $item->id;
                 $unfinished[$k]->login = $user_log;
+                $unfinished[$k]->taken_date = $ans->created_at;
             }
 
 

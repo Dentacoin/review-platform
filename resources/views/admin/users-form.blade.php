@@ -445,7 +445,7 @@
                     @include('admin.parts.table', [
                         'table_id' => 'vox-unfinished',
                         'table_fields' => [
-                            'created_at'        => array('format' => 'datetime', 'width' => '20%'),
+                            'taken_date'        => array('format' => 'datetime', 'width' => '20%'),
                             'title'              => array('width' => '30%'),
                             'device'                => array('template' => 'admin.parts.table-unfinished-device', 'width' => '100%'),
                             'delete'              => array('template' => 'admin.parts.table-vox-unfinished-delete'),
