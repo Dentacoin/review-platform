@@ -391,7 +391,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $result = false;
 
         $clean_email = str_replace('.', '', $email);
-        $found_email = self::where('email_clean', 'LIKE', $clean_email)->first();
+        $found_email = self::where('email_clean', 'LIKE', $clean_email)->withTrashed()->first();
      
         if ($found_email) {
             $result = true;
