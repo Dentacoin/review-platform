@@ -207,4 +207,13 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
 	}
 
+	public function want_to_invite_dentist($locale=null) {
+
+		$sess = [
+            'want_to_invite_dentist' => true,
+        ];
+        session($sess);
+
+	}	
+
 }

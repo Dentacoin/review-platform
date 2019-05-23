@@ -329,7 +329,16 @@ class LoginController extends FrontController
 
             Auth::login($newuser, true);
 
-            return redirect( $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('profile').'?'. http_build_query(['popup'=>'invite-new-dentist-popup']) );
+            $want_to_invite = false;
+            if(session('want_to_invite_dentist')) {
+                $want_to_invite = true;
+                session([
+                    'want_to_invite_dentist' => null,
+                ]);
+            }
+            
+
+            return redirect( $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('profile').($want_to_invite ? '?'.http_build_query(['popup'=>'invite-new-dentist-popup']) : '' ) );
         }
     }
 

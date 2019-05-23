@@ -167,6 +167,7 @@ $reviewRoutes = function () {
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
 			Route::any('welcome-dentist/claim/{id}/{hash}',		'IndexController@claim')->name('claim-profile');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
+			Route::get('want-to-invite-dentist', 				'IndexController@want_to_invite_dentist');
 
 			Route::any('invite/{id}/{hash}/{inv_id?}', 			'RegisterController@invite_accept');
 
