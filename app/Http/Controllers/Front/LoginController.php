@@ -219,6 +219,11 @@ class LoginController extends FrontController
                 ->with('error-message', $is_blocked );
             }
 
+            if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
+                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
+                ->withInput()
+                ->with('error-message', nl2br(trans('trp.popup.login.existing_email')) );
+            }
 
 
             $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;

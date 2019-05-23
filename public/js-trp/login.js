@@ -545,10 +545,9 @@ $(document).ready(function(){
                         'event_label': 'DentistProfile',
                     });
                 } else {
-                    $('.popup .alert-warning').show();
-                    $('.popup .alert-warning').html('');
+                    $('.popup .alert-warning:not(.short-descr-error)').html('').show();
                     for(var i in ret.messages) {
-                        $('.popup .alert-warning').append(ret.messages[i] + '<br/>');
+                        $('.popup .alert-warning:not(.short-descr-error)').append(ret.messages[i] + '<br/>');
                         $('[name="'+i+'"]').addClass('has-error');
                     }
                 }

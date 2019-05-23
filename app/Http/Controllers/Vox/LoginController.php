@@ -149,6 +149,11 @@ class LoginController extends FrontController
             if( $is_blocked ) {
                 Request::session()->flash('error-message', $is_blocked );
                 return redirect(getVoxUrl('registration'));                
+            }            
+
+            if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
+                Request::session()->flash('error-message', nl2br(trans('front.page.login.existing_email')) );
+                return redirect(getVoxUrl('registration'));
             }
 
             $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
