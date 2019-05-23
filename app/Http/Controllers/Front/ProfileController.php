@@ -100,6 +100,7 @@ class ProfileController extends FrontController
             'short_description' => [
                 'type' => 'textarea',
                 'required' => true,
+                'max' => 150
             ],
             'email_public' => [
                 'type' => 'text',

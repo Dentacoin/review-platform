@@ -78,7 +78,8 @@
 			    	@if(!$user->is_clinic)
 			    		<input type="text" name="open" class="input wokrplace-input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText(true)) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
 			    	@endif	
-			    	<textarea class="input" name="short_description" placeholder="{!! nl2br(trans('trp.page.user.short-description')) !!}" maxlength="150">{{ $user->short_description }}</textarea>
+			    	<textarea class="input" name="short_description" placeholder="{!! nl2br(trans('trp.page.user.short-description')) !!}" maxsymb="150">{{ $user->short_description }}</textarea>
+					<div class="alert short-descr-error alert-warning" style="display: none;">{!! nl2br(trans('trp.page.user.short_description.error')) !!}</div>
 			    	<div class="email-wrapper">
 				    	<div class="flex flexed-wrap email-wrap">
 				    		<div class="col social-networks">
@@ -90,7 +91,7 @@
 				    			<input type="text" name="email_public" class="input social-link-input" placeholder="{!! nl2br(trans('trp.page.user.user-public-email')) !!}" value="{{ !empty($user->email_public) ? $user->email_public : $user->email }}" maxlength="100" {!! !empty($user->email_public) ? '' : 'disabled' !!}>
 				    		</div>
 				    	</div>
-				    	<label class="checkbox-label label-public-email {!! !empty($user->email_public) ? '' : 'active' !!}" for="current-email-mobile"">
+				    	<label class="checkbox-label label-public-email {!! !empty($user->email_public) ? '' : 'active' !!}" for="current-email-mobile">
 							<input type="checkbox" class="special-checkbox" id="current-email-mobile" cur-email="{{ $user->email }}" name="current-email" value="{!! !empty($user->email_public) ? '0' : '1' !!}" {!! !empty($user->email_public) ? '' : 'checked' !!} >
 							<i class="far fa-square"></i>
 							{!! nl2br(trans('trp.page.user.user-registration-email')) !!}
@@ -424,7 +425,7 @@
 					<div class="clearfix">
 						<div class="clear flex flex-bottom">
 							<div class="edit-short-description">
-								<textarea class="input" name="short_description" placeholder="{!! nl2br(trans('trp.page.user.short-description')) !!}" maxlength="150">{{ $user->short_description }}</textarea>
+								<textarea class="input" name="short_description" placeholder="{!! nl2br(trans('trp.page.user.short-description')) !!}" maxsymb="150">{{ $user->short_description }}</textarea>
 							</div>
 							<div class="edit-buttons">
 								<button class="button" type="submit">
@@ -436,6 +437,7 @@
 							</div>
 						</div>
 					</div>
+					<div class="alert short-descr-error alert-warning" style="display: none;">{!! nl2br(trans('trp.page.user.short_description.error')) !!}</div>
 					<div class="edit-error alert alert-warning" style="display: none;">
 					</div>
 					<input type="hidden" name="json" value="1">

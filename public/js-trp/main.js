@@ -570,7 +570,6 @@ jQuery(document).ready(function($){
 	} );
 
 
-
 	if(!Cookies.get('no-ids')) {
 		$('#ids').css('display', 'block');
 
@@ -668,6 +667,26 @@ jQuery(document).ready(function($){
 	    }
     }
     attachTooltips();
+
+    
+
+    var symbolsCount = function() {
+        var length = $(this).val().length;
+
+        if (length > parseInt($(this).attr('maxsymb'))) {
+            $('.short-descr-error').show();
+            $(this).addClass('has-error');
+        } else {
+            $('.short-descr-error').hide();
+            $(this).removeClass('has-error');
+        }
+    }
+
+    $('textarea[name="short_description"]').keyup(symbolsCount);
+    if( $('textarea[name="short_description"]').length ) {
+        symbolsCount.bind($('textarea[name="short_description"]'))();
+    }
+
 
 });
 

@@ -115,11 +115,12 @@
 			<div class="alert alert-success" style="display: none;"></div>
 
 			<div class="alert alert-warning" style="display: none;"></div>
+			<div class="alert short-descr-error alert-warning" style="display: none;">{!! nl2br(trans('trp.popup.verification-popup.short_description.error')) !!}</div>
 
 			{!! Form::open(array('method' => 'post', 'class' => 'verification-form', 'url' => getLangUrl('verification-dentist') )) !!}
 				{!! csrf_field() !!}
 				<div class="modern-field">
-					<textarea class="modern-input" id="dentist-short-description" name="short_description" maxlength="150"></textarea>
+					<textarea class="modern-input" id="dentist-short-description" name="short_description" maxsymb="150"></textarea>
 					<label for="dentist-short-description">
 						<span>{!! nl2br(trans('trp.popup.verification-popup.short_description')) !!}</span>
 					</label>

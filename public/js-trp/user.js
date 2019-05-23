@@ -503,6 +503,7 @@ $(document).ready(function(){
         }
         ajax_is_running = true;
         $('.edit-error').hide();
+        $('.short-descr-error').hide();        
 
         $.post( 
             $(this).attr('action'), 
@@ -1292,7 +1293,4 @@ $(document).ready(function(){
             $(this).closest('.email-wrapper').find('input[name="email_public"]').removeAttr('disabled');
         }
     }); 
-
-
-
 });
