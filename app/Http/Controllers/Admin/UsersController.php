@@ -602,7 +602,7 @@ class UsersController extends AdminController
         if(!empty($reward) && !empty($item) && $reward->user_id == $item->id) {
             VoxAnswer::where([
                 ['user_id', $item->id],
-                ['vox_id', $reward->vox_id],
+                ['vox_id', $reward->reference_id],
             ])
             ->delete();
             DcnReward::destroy( $reward_id );

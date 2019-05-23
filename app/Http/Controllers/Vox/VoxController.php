@@ -163,7 +163,7 @@ class VoxController extends FrontController
 		) {
 	    	//I'm doing ASL questions!
 			$doing_asl = true;
-		} else if( $this->user->madeTest($vox->id) ) {
+		} else if( $this->user->madeTest($vox->id) && !(Request::input('goback') && $testmode) ) { //because of GoBack
 		    return redirect( getLangUrl('/') );	
 		}
 
@@ -226,6 +226,7 @@ class VoxController extends FrontController
 
 		if(Request::input('goback') && $testmode) {
 			$this->goBack($answered, $list, $vox);
+
 
             return redirect( $vox->getLink() );
 		}
