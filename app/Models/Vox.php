@@ -81,8 +81,9 @@ class Vox extends Model {
         if ($diff >= 1) {
 
             $counted_countries = DB::table('users')
-            ->join('vox_rewards', 'users.id', '=', 'vox_rewards.user_id')
-            ->where('vox_rewards.vox_id', $this->id)
+            ->join('dcn_rewards', 'users.id', '=', 'dcn_rewards.user_id')
+            ->where('dcn_rewards.platform', 'vox')
+            ->where('dcn_rewards.reference_id', $this->id)
             ->select(DB::raw('COUNT(*) AS `cnt`'))
             ->groupBy(DB::raw('users.country_id'))
             ->get()

@@ -938,9 +938,9 @@ class VoxesController extends AdminController
                 if (request()->input( 'country' )) {
                     $items_count = DcnReward::where('reference_id',$vox_id )
                     ->where('platform', 'vox')
-                    ->select('vox_rewards.*')
+                    ->select('dcn_rewards.*')
                     ->has('user')
-                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                    ->join('users', 'dcn_rewards.user_id', '=', 'users.id')
                     ->join('countries', 'users.country_id', '=', 'countries.id')
                     ->count();
                 } else {
@@ -1001,17 +1001,17 @@ class VoxesController extends AdminController
                 $respondents = '';
 
             } else {
-                $respondents = DcnReward::where('reference_id',$vox_id )->where('platform', 'vox')->has('user')->select('vox_rewards.*');
+                $respondents = DcnReward::where('reference_id',$vox_id )->where('platform', 'vox')->has('user')->select('dcn_rewards.*');
                 if (request()->input( 'country' )) {
                     $order = request()->input( 'country' );
                     $respondents = $respondents
-                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                    ->join('users', 'dcn_rewards.user_id', '=', 'users.id')
                     ->join('countries', 'users.country_id', '=', 'countries.id')
                     ->orderBy('countries.name', $order);
                 } else if (request()->input( 'name' )) {
                     $order = request()->input( 'name' );
                     $respondents = $respondents
-                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                    ->join('users', 'dcn_rewards.user_id', '=', 'users.id')
                     ->orderBy('users.name', $order);
                 } else if (request()->input( 'taken' )) {
                     $order = request()->input( 'taken' );
@@ -1020,7 +1020,7 @@ class VoxesController extends AdminController
                 } else if (request()->input( 'type' )) {
                     $order = request()->input( 'type' );
                     $respondents = $respondents
-                    ->join('users', 'vox_rewards.user_id', '=', 'users.id')
+                    ->join('users', 'dcn_rewards.user_id', '=', 'users.id')
                     ->orderBy('users.is_dentist', $order)
                     ->orderBy('users.is_clinic', $order);
                 } else {

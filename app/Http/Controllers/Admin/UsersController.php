@@ -229,9 +229,7 @@ class UsersController extends AdminController
             $users = $users->has('reviews_in_dentist', '=', $this->request->input('search-review'));
         }
         if(!empty($this->request->input('search-surveys-taken'))) {
-            $users = $users->has('vox_rewards', '>=', $this->request->input('search-surveys-taken'));
-
-            $users = $users->whereHas('vox_rewards', function ($query) {
+            $users = $users->whereHas('dcn_rewards', function ($query) {
                 $query->where('vox_id', '!=', 11);
             }, '>=', $this->request->input('search-surveys-taken'));
         }
@@ -296,11 +294,12 @@ class UsersController extends AdminController
             $order = request()->input( 'survey-count' );
             $users->getQuery()->orders = null;
             $users = $users
-            ->select(DB::raw('count(vox_rewards.id) as vox_count, users.*'))
-            ->join('vox_rewards', 'users.id', '=', 'vox_rewards.user_id', 'left outer')
-            ->where('vox_rewards.vox_id', '!=', 11)
-            ->groupBy('vox_rewards.user_id')
-            ->orderByRaw('count(vox_rewards.id) '.$order);
+            ->select(DB::raw('count(dcn_rewards.id) as vox_count, users.*'))
+            ->join('dcn_rewards', 'users.id', '=', 'dcn_rewards.user_id', 'left outer')
+            ->where('dcn_rewards.reference_id', '!=', 11)
+            ->where('dcn_rewards.platform', 'vox')
+            ->groupBy('dcn_rewards.user_id')
+            ->orderByRaw('count(dcn_rewards.id) '.$order);
 
             // dd($users->take(20)->get());
 
