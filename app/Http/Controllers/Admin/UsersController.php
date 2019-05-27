@@ -218,10 +218,9 @@ class UsersController extends AdminController
                 $query->where('ip', 'like', $ip);
             });
         }
-
-        // if(!empty($this->request->input('search-platform'))) {
-        //     $users = $users->where('platform', $this->request->input('search-platform') );
-        // }
+        if(!empty($this->request->input('registered-platform'))) {
+            $users = $users->where('platform', $this->request->input('registered-platform') );
+        }
         if(!empty($this->request->input('search-country'))) {
             $users = $users->where('country_id', $this->request->input('search-country') );
         }
@@ -516,6 +515,7 @@ class UsersController extends AdminController
             'search_type' => $this->request->input('search-type'),
             'search_status' => $this->request->input('search-status'),
             'search_platform' => $this->request->input('search-platform'),
+            'registered_platform' => $this->request->input('registered-platform'),
             'search_country' => $this->request->input('search-country'),
             'search_review' => $this->request->input('search-review'),
             'search_surveys_taken' => $this->request->input('search-surveys-taken'),

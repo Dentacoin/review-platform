@@ -42,7 +42,14 @@
                                     <option value="{{ $k }}" {!! $k==$search_status ? 'selected="selected"' : '' !!}>{{ $type }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div>                   
+                        <div class="col-md-2">
+                            <select class="form-control" name="registered-platform">
+                                <option value="">Registered platform</option>
+                                <option value="trp" {!! 'trp'==$registered_platform ? 'selected="selected"' : '' !!}>Truested Reviews</option>
+                                <option value="vox" {!! 'vox'==$registered_platform ? 'selected="selected"' : '' !!}>DentaVox</option>
+                            </select>
+                        </div>                        
                     </div>
                     <div class="row custom-row" style="margin-bottom: 10px;">
                         <div class="col-md-2" style="display: none;">
