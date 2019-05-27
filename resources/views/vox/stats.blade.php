@@ -61,7 +61,6 @@
 						updated="{{ $vox->updated_at->timestamp }}" 
 						popular="{{ intval($vox->rewards()->count()) }}" 
 		      			sort-order="{{ $vox->sort_order }}" 
-						{!! $vox->stats_featured ? '' : 'style="display: none;"' !!}
 					>
 						@if($vox->stats_featured)
 							<img class="featured" src="{{ url('new-vox-img/star.svg') }}">
