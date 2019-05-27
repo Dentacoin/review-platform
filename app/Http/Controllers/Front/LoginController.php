@@ -306,30 +306,18 @@ class LoginController extends FrontController
             //To be deleted
             //
 
-            $notifyMe = [
-                'official@youpluswe.com',
-                'petya.ivanova@dentacoin.com',
-                'donika.kraeva@dentacoin.com',
-                'daria.kerancheva@dentacoin.com',
-                'petar.stoykov@dentacoin.com'
-            ];
-            $mtext = 'New patient registered in TRP: '.$newuser->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id.')';
-
-            foreach ($notifyMe as $n) {
-                Mail::raw($mtext, function ($message) use ($n) {
-                    $message->from(config('mail.from.address'), config('mail.from.name'));
-                    $message->to( $n );
-                    $message->subject('New TRP registration');
-                });
-            }
-
-            //
-            //To be deleted
-            //
-
             Auth::login($newuser, true);
 
-            return redirect( $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('profile').'?'. http_build_query(['popup'=>'invite-new-dentist-popup']) );
+            $want_to_invite = false;
+            if(session('want_to_invite_dentist')) {
+                $want_to_invite = true;
+                session([
+                    'want_to_invite_dentist' => null,
+                ]);
+            }
+            
+
+            return redirect( $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('profile').($want_to_invite ? '?'.http_build_query(['popup'=>'invite-new-dentist-popup']) : '' ) );
         }
     }
 

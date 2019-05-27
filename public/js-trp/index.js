@@ -20,4 +20,12 @@ jQuery(document).ready(function($){
 		}
 	});
 
+
+	$('.button-want-to-add-dentist').click( function() {
+		$.ajax({
+            type: "GET",
+            url: lang + '/want-to-invite-dentist',
+        });
+	});
+
 });

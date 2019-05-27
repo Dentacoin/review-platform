@@ -200,18 +200,22 @@ class ProfileController extends FrontController
             'history' => $this->user->history->where('type', '=', 'vox-cashout'),
             'js' => [
                 'profile.js',
-                'address.js'
+                'address.js',
             ],
             'css' => [
                 'common-profile.css',
             ],
+            'jscdn' => [
+                'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
+            ]
         ];
 
         if(!$this->user->civic_kyc) {
             $params['js'][] = 'civic.js';
-            $params['jscdn'] = [
-                'https://hosted-sip.civic.com/js/civic.sip.min.js',
-            ];
+            if(empty($params['jscdn'])) {
+                $params['jscdn'] = [];
+            }
+            $params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
             $params['csscdn'] = [
                 'https://hosted-sip.civic.com/css/civic-modal.min.css',
             ];

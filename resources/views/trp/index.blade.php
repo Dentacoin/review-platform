@@ -84,7 +84,7 @@
 			<div class="container tac">
 				<h2 class="gbb">{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
 				<h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
-				<a href="javascript:;" data-popup="popup-register" class="button button-sign-up-patient">Sign up</a>
+				<a href="javascript:;" data-popup="popup-register" class="button button-sign-up-patient button-want-to-add-dentist">Sign up</a>
 			</div>
 		</div>
 
