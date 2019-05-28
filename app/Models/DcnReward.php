@@ -40,6 +40,25 @@ class DcnReward extends Model {
     public function formatDuration() {
         return ($this->seconds>=60 ? floor($this->seconds/60).' min ' : '').( $this->seconds%60 ? ($this->seconds%60).' sec' : '' );
     }
+
+    public function getDeviceName() {
+        $arr = [];
+
+        if (!empty($this->device) && $this->device != 'smartphone') {
+            $arr[] = ucfirst($this->device);
+        }
+        if (!empty($this->brand)) {
+            $arr[] = ucfirst($this->brand);
+        }
+        if (!empty($this->model)) {
+            $arr[] = ucfirst($this->model);
+        }
+        if (!empty($this->os)) {
+            $arr[] = ucfirst($this->os);
+        }
+
+        return implode(',', $arr);
+    }
 }
 
 ?>

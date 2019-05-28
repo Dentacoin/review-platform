@@ -32,6 +32,25 @@ class UserLogin extends Model {
 
         return !empty($ips) ? current($ips)->count : 1;
     }
+
+    public function getDeviceName() {
+        $arr = [];
+
+        if (!empty($this->device) && $this->device != 'smartphone') {
+            $arr[] = ucfirst($this->device);
+        }
+        if (!empty($this->brand)) {
+            $arr[] = ucfirst($this->brand);
+        }
+        if (!empty($this->model)) {
+            $arr[] = ucfirst($this->model);
+        }
+        if (!empty($this->os)) {
+            $arr[] = ucfirst($this->os);
+        }
+
+        return implode(',', $arr);
+    }
 }
 
 ?>

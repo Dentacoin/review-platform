@@ -412,7 +412,8 @@
                         'table_id' => 'vox-rewards',
                         'table_fields' => [
                             'created_at'        => array('format' => 'datetime', 'width' => '20%'),
-                            'vox_id'              => array('template' => 'admin.parts.table-vox-rewards-user', 'width' => '30%'),
+                            'seconds'              => array('template' => 'admin.parts.table-vox-rewards-duration', 'width' => '30%'),
+                            'vox_id'              => array('template' => 'admin.parts.table-vox-rewards-user', 'width' => '20%'),
                             'device'          => array('template' => 'admin.parts.table-logins-device', 'width' => '20%'),
                             'reward'           => array('width' => '100%'),
                             'delete'              => array('template' => 'admin.parts.table-vox-rewards-delete'),

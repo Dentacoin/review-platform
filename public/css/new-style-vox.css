@@ -5879,3 +5879,7 @@ p.h2-bold {
     color: white; }
   .balance-buttons-wrap .balance-button:hover:not(.active) {
     border-color: #80b8dc; }
+
+.reg-patients .alert {
+  max-width: 310px;
+  margin: 20px auto 0; }
