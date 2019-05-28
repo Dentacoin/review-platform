@@ -24,6 +24,11 @@ $(document).ready(function(){
 		window.open(window.location.href+extra);
 	});
 
+	$('.btn-export-sendgrid').click( function(e) {
+		var extra = window.location.href.indexOf('?')==-1 ? '?export-sendgrid=1' : '&export-sendgrid=1';
+		window.open(window.location.href+extra);
+	});
+
 	$('.table-filters').each( function (e) {
 		if($(this).find('.form-group:visible').length) {
 			$(this).find('legend').show();
