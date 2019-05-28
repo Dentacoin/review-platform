@@ -113,6 +113,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-md-2 control-label">Phone</label>
+                                <div class="col-md-10">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'phone',
+                                        'info' => $fields['phone']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-md-2 control-label">Country</label>
                                 <div class="col-md-10">
                                     @include('admin.parts.user-field',[

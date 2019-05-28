@@ -108,11 +108,11 @@ class UsersController extends AdminController
                 'type' => 'text',
                 'disabled' => true,
             ],
-            'category_id' => [
-                'type' => 'select',
-                'multiple' => true,
-                'values' => $this->categories
-            ],
+            // 'category_id' => [
+            //     'type' => 'select',
+            //     'multiple' => true,
+            //     'values' => $this->categories
+            // ],
     		'avatar' => [
     			'type' => 'avatar'
     		],
@@ -121,9 +121,6 @@ class UsersController extends AdminController
             ],
             'fb_id' => [
                 'type' => 'text',
-            ],
-            'gdpr_privacy' => [
-                'type' => 'bool',
             ],
             'allow_withdraw' => [
                 'type' => 'bool',
@@ -720,7 +717,7 @@ class UsersController extends AdminController
 
             if(Request::isMethod('post')) {
             	foreach ($this->fields as $key => $value) {
-            		if(empty($value['disabled']) && $value['type']!='avatar' && $key!='category_id') {
+            		if(empty($value['disabled']) && $value['type']!='avatar') {
                         if($key=='type') {
                             if( $this->request->input($key)=='dentist' ) {
                                 $item->is_dentist = true;
@@ -811,16 +808,16 @@ class UsersController extends AdminController
 
 
                 //Categories
-                UserCategory::where('user_id', $item->id)->delete();
-                $cats = $this->request->input('categories');
-                if(!empty($cats)) {
-                    foreach ($cats as $cat) {
-                        $newc = new ArticleCategory;
-                        $newc->user_id = $item->id;
-                        $newc->category_id = $cat;
-                        $newc->save();
-                    }
-                }
+                // UserCategory::where('user_id', $item->id)->delete();
+                // $cats = $this->request->input('categories');
+                // if(!empty($cats)) {
+                //     foreach ($cats as $cat) {
+                //         $newc = new ArticleCategory;
+                //         $newc->user_id = $item->id;
+                //         $newc->category_id = $cat;
+                //         $newc->save();
+                //     }
+                // }
 
                 if($item->status=='rejected' && empty($item->deleted_at)) {
                     $item->deleteActions();
