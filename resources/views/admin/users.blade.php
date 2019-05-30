@@ -6,6 +6,7 @@
     {{ trans('admin.page.'.$current_page.'.title') }}
     <a href="javascript:;" class="btn btn-primary pull-right btn-export">Export</a>
     <a href="javascript:;" class="btn btn-primary pull-right btn-export-fb" style="margin-right: 10px;">FB Export</a>
+    <a href="javascript:;" class="btn btn-primary pull-right btn-export-sendgrid" style="margin-right: 10px;">SendGrid Export</a>
 </h1>
 <!-- end page-header -->
 

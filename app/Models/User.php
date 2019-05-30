@@ -46,6 +46,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'is_dentist',
         'is_partner',
         'title',
+        'slug',
         'name',
         'name_alternative',
         'description',
@@ -613,7 +614,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getLink() {
-        return getLangUrl('dentist/'.$this->slug);
+        return getLangUrl('dentist/'.$this->slug, null, 'https://reviews.dentacoin.com/');
     }
 
     public function parseCategories($categories) {
@@ -1200,6 +1201,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
      
         return $result;
+    }
+
+    public function getSlugAttribute($value) {
+
+
+        if(empty($this->attributes['slug'])) {
+            $this->attributes['slug'] = $this->makeSlug();
+            $this->save();
+        }
+        return $this->attributes['slug'];
     }
 
     public function getAcceptedPaymentAttribute($value) {
