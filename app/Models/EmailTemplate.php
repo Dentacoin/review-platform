@@ -42,6 +42,7 @@ class EmailTemplate extends Model
             '[h2]Heading 2 (15px)[/h2]',
             '[homepage]Click here[/homepage]',
             '[metamask] Instructions [/metamask]',
+            '[invite-patients-button]Invite patients[/invite-patients-button]'
         ];
 
         if($this->id==4) {
@@ -150,6 +151,21 @@ class EmailTemplate extends Model
             $codes[] = '[button]Click here to register[/button]';
             $codes[] = '[dentist-name]';
             $codes[] = '[patient-name]';
+        }
+
+        if( $this->id==45 ) { //Dentist First 3 weeks engagement Email 3
+            $codes[] = '[missing-info]';
+        }
+
+        if( $this->id==48 ) { //Dentist First 3 weeks engagement Email 5
+            $codes[] = '[rating]';
+            $codes[] = '[reviews]';
+        }
+
+        if( $this->id==55 ) { //Dentist Monthly reminders
+            $codes[] = '[cur-month-rating]';
+            $codes[] = '[cur-month-rating-percent]';
+            $codes[] = '[top3-dentists]';
         }
 
         return $codes;

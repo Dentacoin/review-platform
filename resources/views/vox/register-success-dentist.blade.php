@@ -10,7 +10,11 @@
 				<div class="right-content">
 					<div class="verification-content {!! !$user || ($user && $user->short_description) ? 'verticle-align' : '' !!}">
 						<h1>
-							{!! nl2br( trans('vox.page.welcome-to-dentavox.approval-request-title') ) !!}
+							@if($user->is_clinic)
+								{!! nl2br( trans('vox.page.welcome-to-dentavox.approval-request-title.clinic') ) !!}
+							@else
+								{!! nl2br( trans('vox.page.welcome-to-dentavox.approval-request-title.dentist') ) !!}
+							@endif
 						</h1>
 
 						<h4>
@@ -18,12 +22,14 @@
 						</h4>
 					</div>
 
-					@if($user && !$user->short_description)
+					<div class="verification-info">
 
-						<div class="verification-info">
-							<h2>{!! nl2br( trans('vox.page.welcome-to-dentavox.approval-request.user-info-title') ) !!}</h2>
+						@if(!$user->short_description)
+							<h2>
+								{!! nl2br( trans('vox.page.welcome-to-dentavox.approval-request.user-info-title') ) !!}
+							</h2>
 
-							{!! Form::open(array('method' => 'post', 'class' => 'verification-form', 'url' => getLangRoute('verification-dentist') )) !!}
+							{!! Form::open(array('method' => 'post', 'class' => 'verification-form', 'url' => getLangUrl('welcome-to-dentavox') )) !!}
 								{!! csrf_field() !!}
 								<h4>
 									{!! nl2br( trans('vox.page.welcome-to-dentavox.approval-request.user-info-hint') ) !!}
@@ -37,15 +43,28 @@
 								</div>
 
 								<div class="tac">
-									<input class="blue-button" type="submit" value="{!! nl2br( trans('vox.page.welcome-to-dentavox.approval-request.user-info.save') ) !!}">
+									<input class="blue-button big-blue-button" type="submit" value="{!! nl2br( trans('vox.page.welcome-to-dentavox.approval-request.user-info.save') ) !!}">
 								</div>
 
 							{!! Form::close() !!}
 
 							<div class="alert alert-success" style="display: none;"></div>
 							<div class="alert alert-warning" style="display: none;"></div>
-						</div>
-					@endif
+						@else
+
+							<div class="enhancing-info">
+								<h2>Thank you for enhancing your profile information!</h2>
+
+								<p>
+									You will be able to review your accounts on DentaVox and Trusted Reviews as soon as your profile has been verified.<br><br>
+									Curious to see our dental survey stats? Dive into a pool of topics and keep track of the latest patient experience trends!
+								</p>
+
+								<a href="{{ getLangUrl('dental-survey-stats') }}" class="blue-button">CHECK DENTAL SURVEY STATS</a>
+							</div>
+						@endif
+
+					</div>
 				</div>
 			</div>
 		</div>

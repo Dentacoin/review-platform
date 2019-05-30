@@ -102,6 +102,8 @@ class Email extends Model
 			'[/homepage]',
 			'[metamask]',
 			'[/metamask]',
+			'[invite-patients-button]',
+			'[/invite-patients-button]',
 		);
 		$deafult_replaces = array(
 			$this->user->getName(),
@@ -119,7 +121,9 @@ class Email extends Model
 			'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'">',
 			'</a>',
 			'<a href="'.url($this->platform=='vox' ? 'DentavoxMetamask.pdf' : 'MetaMaskInstructions.pdf').'">',
-			'</a>'
+			'</a>',
+			'<a '.$this->button_style.' href="'.getLangUrl( 'dentist/'.$this->user->slug, null, $domain).'?'. http_build_query(['popup'=>'popup-invite']).'">',
+			'</a>',
 		);
 
 		$title = str_replace($deafult_searches, $deafult_replaces, $title);
@@ -417,6 +421,36 @@ class Email extends Model
 				'</a>',
 			), $content);
 		}
+
+		if( $this->template->id==45 ) { //Dentist First 3 weeks engagement Email 3
+			$content = str_replace(array(
+				'[missing-info]',
+			), array(
+				!empty($this->meta['missing-info']) ? $this->meta['missing-info'] : '',
+			), $content);
+        }
+
+		if( $this->template->id==48 ) { //Dentist First 3 weeks engagement Email 5
+			$content = str_replace(array(
+				'[rating]',
+				'[reviews]',
+			), array(
+				$this->meta['rating'],
+				$this->meta['reviews'],
+			), $content);
+        }
+
+		if( $this->template->id==55 ) { //Dentist Monthly reminders
+			$content = str_replace(array(
+				'[cur-month-rating]',
+				'[cur-month-rating-percent]',
+				'[top3-dentists]',
+			), array(
+				$this->meta['cur-month-rating'],
+				$this->meta['cur-month-rating-percent'],
+				$this->meta['top3-dentists'],
+			), $content);
+        }
 
 
 		return $content;

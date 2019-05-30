@@ -1303,4 +1303,21 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
             'login-logged-out' => session('logged_user')['token'] ?? null,
         ]);
     }
+
+    public function getMontlyRating($month=0) {
+
+        $id = $this->id;
+
+        $to_month = Carbon::now()->modify('-'.$month.' months');
+        $from_month = Carbon::now()->modify('-'.($month+1).' months');
+
+        $prev_reviews = Review::where(function($query) use ($id) {
+            $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+        })
+        ->where('created_at', '>=', $from_month)
+        ->where('created_at', '<=', $to_month)
+        ->get();
+
+        return $prev_reviews;        
+    }
 }

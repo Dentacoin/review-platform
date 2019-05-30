@@ -70,6 +70,8 @@ jQuery(document).ready(function($){
     modernFieldsUpdate = function() {
 	    $('.modern-input').focus( function() {
 	    	$(this).closest('.modern-field').addClass('active');
+	    	$(this).removeClass('has-error');
+	    	$('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
 	    });
 
 	    $('.modern-input').focusout( function() {
@@ -400,7 +402,8 @@ jQuery(document).ready(function($){
 
 	$('.special-checkbox').change( function() {
 		$(this).closest('label').toggleClass('active');
-		$(this).closest('label').removeClass('has-error');
+		$(this).closest('label').removeClass('has-error');		
+        $('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
 	});
 
 	$('.tab').click( function() {
@@ -474,7 +477,7 @@ jQuery(document).ready(function($){
                     $(this).find('.alert-success').html(data.message).show();
                 } else {
                     for(var i in data.messages) {
-                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
+                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
 
                         $('[name="'+i+'"]').addClass('has-error');
 
@@ -534,6 +537,7 @@ jQuery(document).ready(function($){
     $('.type-radio').change( function(e) {
 		$(this).closest('.mobile-radios').find('label').removeClass('active');
 		$(this).closest('label').addClass('active');
+	    $('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
 	});
 
 	//

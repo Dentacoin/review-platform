@@ -275,7 +275,8 @@ $(document).ready(function(){
 
 	$('input[name="mode"]').change( function() {
         $(this).closest('.modern-radios').removeClass('has-error');
-
+		$('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
+		
         var val = $('#mode-clinic:checked').length;
         if(val) {
             $('.title-wrap').hide();
@@ -296,6 +297,7 @@ $(document).ready(function(){
 	    $('.modern-input').focus( function() {
 	    	$(this).closest('.modern-field').addClass('active');
 	    	$(this).removeClass('has-error');
+	    	$('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
 	    });
 
 	    $('.modern-input').focusout( function() {
@@ -327,6 +329,8 @@ $(document).ready(function(){
 
         $('.form-group').removeClass('has-error');
 
+        var that = $(this);
+
         $.post( 
             $(this).attr('data-validator'), 
             $('#register-form').serialize(), 
@@ -338,16 +342,10 @@ $(document).ready(function(){
                     a.removeClass('active');
                     a.next().addClass('active');
 
-					// var request = {
-					// 	type: ['dentist'],
-					// 	query: $('#dentist-name').val()
-					// };
-
-					// fbq('track', 'DVDentistRegistrationInitiate');
-					// gtag('event', 'ClickSubmit', {
-					// 	'event_category': 'DentistRegistration',
-					// 	'event_label': 'DentistRegistrationInitiate',
-					// });
+                    gtag('event', 'ClickNext', {
+						'event_category': 'DentistRegistration',
+						'event_label': 'DentistRegistrationStep'+ that.attr('step-number'),
+					});
 
                 } else {
 
@@ -355,7 +353,7 @@ $(document).ready(function(){
                     for(var i in data.messages) {
                         $('[name="'+i+'"]').addClass('has-error');
                         $('[name="'+i+'"]').closest('.form-group').addClass('has-error');
-                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
+                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
 
                         if ($('[name="'+i+'"]').closest('.modern-radios').length) {
                             $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');

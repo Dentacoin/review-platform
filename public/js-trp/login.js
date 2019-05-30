@@ -559,6 +559,7 @@ $(document).ready(function(){
 
 
     $('input[name="mode"]').change( function() {
+        $('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
         var val = $('#mode-clinic:checked').length;
         if(val) {
             $('.title-wrap').hide();
@@ -594,7 +595,7 @@ $(document).ready(function(){
                     for(var i in data.messages) {
                         // $('#register-error span').append(data.messages[i] + '<br/>');
                         $('[name="'+i+'"]').addClass('has-error');
-                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
+                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
 
                         if ($('[name="'+i+'"]').closest('.modern-radios').length) {
                             $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');

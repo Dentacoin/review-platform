@@ -1706,7 +1706,7 @@ p.h2-bold {
 				}
 
 				&.verticle-align {
-					margin-top: 200px;
+					margin-top: 60px;
 
 					@media screen and (max-width: 992px) {
 						margin-top: 0px;
@@ -1720,6 +1720,26 @@ p.h2-bold {
 
 				@media screen and (max-width: 992px) {
 					padding-top: 20px;
+				}
+
+				.enhancing-info {
+					h2 {
+						margin-bottom: 20px;
+					}
+					
+					p {
+						font-size: 18px;
+						max-width: 590px;
+						margin: 0 auto 30px;
+
+						@media screen and (max-width: 992px) {
+							font-size: 15px;
+						}
+
+						@media #{$phone} {
+							font-size: 14px;
+						}
+					}
 				}
 			}
 
@@ -1747,7 +1767,7 @@ p.h2-bold {
 			}
 		}
 
-		.blue-button {
+		.big-blue-button {
 			padding-left: 75px;
 			padding-right: 75px;
 			text-transform: uppercase;

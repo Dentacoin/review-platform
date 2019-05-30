@@ -130,6 +130,10 @@ class AuthenticateUser extends FrontController
                 return redirect( getLangUrl('login').'?suspended-popup' );
             }
 
+            if( Auth::guard('web')->user()->is_dentist && Auth::guard('web')->user()->status!='approved' && Auth::guard('web')->user()->status!='test') {
+                return redirect( getLangUrl('welcome-to-dentavox') );
+            }
+
             $sess = [
                 'just_login' => true,
             ];
