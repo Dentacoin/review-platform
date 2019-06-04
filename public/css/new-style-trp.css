@@ -576,10 +576,7 @@ header {
   top: 0px;
   padding-top: 15px;
   padding-bottom: 15px;
-  z-index: 101; }
-  @media screen and (max-width: 768px) {
-    header {
-      z-index: 111; } }
+  z-index: 111; }
   header .logo {
     width: 134px;
     height: 40px;
