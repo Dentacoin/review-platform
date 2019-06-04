@@ -23,8 +23,8 @@ $(document).ready(function(){
                     $('#photo-thumb').val( data.thumb );
                 }
 
-                if( $('header .header-info img').length  ) {
-                    $('header .header-info img').attr('src', data.thumb);
+                if( $('header .header-info .profile-btn img').length  ) {
+                    $('header .header-info .profile-btn img').attr('src', data.thumb);
                 }
 
                 ajax_is_running = false;

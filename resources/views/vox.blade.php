@@ -136,7 +136,7 @@
 							@endif
 						</div>
 						<div class="header-right col-md-4 tar flex">
-							@if( $user && $user->status!='approved' && $user->status!='added_approved' && $user->status!='test' )
+							@if( $user && $user->status!='approved' && $user->status!='test' )
 							@elseif($user)
 								<div class="user-and-price header-a">
 									<a class="my-name" href="{{ getLangUrl('profile') }}">
@@ -151,19 +151,34 @@
 								</a>
 
 								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
-								<div class="expander{!! $user->hasimage ? ' has-image' : '' !!}">
-									<a href="{{ getLangUrl('logout') }}">
-										<i class="fas fa-power-off"></i>
-										Log out
-									</a>
-									<a class="btn" href="{{ getLangUrl('profile') }}">
-										My Account
-									</a>
-									@if($user->status!='approved' && $user->status!='added_approved' && $user->status!='test')
-										<span>
-											* You cannot access your Profile until it's approved.
-										</span>
-									@endif
+
+								<div class="expander-wrapper{!! $user->hasimage ? ' has-image' : '' !!}">
+									<div class="expander">
+										<a href="javascript:;" class="close-explander">Close<span>X</span></a>
+										<div class="expander-content">
+											@foreach(getDentacoinHubApplications() as $dcn_platform)
+										        <a href="{{ $dcn_platform->link ? $dcn_platform->link : 'javascript:;' }}" target="_blank" class="platform-icon">
+										            <figure class="text-center" itemtype="http://schema.org/ImageObject">
+										               	<img src="{{ $dcn_platform->media_name }}" itemprop="contentUrl" alt="{{ $dcn_platform->media_alt }}"> 
+										               	<figcaption>{{ $dcn_platform->title }}</figcaption>
+										            </figure>
+										        </a>
+										    @endforeach
+										</div>
+										<div class="expander-footer">
+											<div class="col">
+												<a href="{{ getLangUrl('logout') }}">
+													<i class="fas fa-power-off"></i>
+													Log out
+												</a>
+											</div>
+											<div class="col">
+												<a class="btn" href="{{ getLangUrl('profile') }}">
+													My Account
+												</a>
+											</div>
+										</div>
+									</div>
 								</div>
 							@elseif($current_page=='welcome-survey')
 								@if($prev_user)

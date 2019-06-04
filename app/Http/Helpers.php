@@ -33,5 +33,8 @@
 	function getLangRoute($path=false, $params = [], $locale=null){
 		$params['locale'] = $locale ?? App::getLocale();
 		return route($path, $params);
+	}
 
+	function getDentacoinHubApplications() {
+        return json_decode(file_get_contents('https://dentacoin.com/info/applications'));
 	}

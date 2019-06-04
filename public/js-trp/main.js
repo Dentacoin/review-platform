@@ -564,6 +564,7 @@ jQuery(document).ready(function($){
 	$('header .profile-btn').click( function(e) {
 		if($(window).width()<768) {
 			e.preventDefault();
+			$(this).closest('.header-info').find('.expander-wrapper').addClass('active');
 		}
 	} );
 
@@ -691,6 +692,19 @@ jQuery(document).ready(function($){
         symbolsCount.bind($('textarea[name="short_description"]'))();
     }
 
+    $('.close-explander').click( function() {
+    	$(this).closest('.expander-wrapper').removeClass('active');
+    });
+
+    function preload(arrayOfImages) {
+        $(arrayOfImages).each(function () {
+            $('<img />').attr('src',this).appendTo('body').css('display','none');
+        });
+    }
+
+    preload([
+        '/img-trp/expander-background.jpg',
+    ]);
 
 });
 

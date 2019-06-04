@@ -822,6 +822,7 @@ $(document).ready(function(){
 			// }
 
 			e.preventDefault();
+			$(this).closest('.header-right').find('.expander-wrapper').addClass('active');
 			return false;
 		}
 	} );
@@ -913,6 +914,22 @@ $(document).ready(function(){
             handleTooltip.bind(this)(e);
         }
     });
+
+
+    $('.close-explander').click( function() {
+    	$(this).closest('.expander-wrapper').removeClass('active');
+    });
+
+
+    function preload(arrayOfImages) {
+        $(arrayOfImages).each(function () {
+            $('<img />').attr('src',this).appendTo('body').css('display','none');
+        });
+    }
+
+    preload([
+        '/new-vox-img/expander-background.jpg',
+    ]);
 });
 
 

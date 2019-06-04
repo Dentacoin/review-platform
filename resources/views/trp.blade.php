@@ -127,13 +127,30 @@
 								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
 								<div class="expander-wrapper{!! $user->hasimage ? ' has-image' : '' !!}">
 									<div class="expander">
-										<a href="{{ getLangUrl('logout') }}">
-											<i class="fas fa-power-off"></i>
-											Log out
-										</a>
-										<a class="btn" href="{{ getLangUrl('profile') }}">
-											My Account
-										</a>
+										<a href="javascript:;" class="close-explander">Close<span>X</span></a>
+										<div class="expander-content">
+											@foreach(getDentacoinHubApplications() as $dcn_platform)
+										        <a href="{{ $dcn_platform->link ? $dcn_platform->link : 'javascript:;' }}" target="_blank" class="platform-icon">
+										            <figure class="text-center" itemtype="http://schema.org/ImageObject">
+										               	<img src="{{ $dcn_platform->media_name }}" itemprop="contentUrl" alt="{{ $dcn_platform->media_alt }}"> 
+										               	<figcaption>{{ $dcn_platform->title }}</figcaption>
+										            </figure>
+										        </a>
+										    @endforeach
+										</div>
+										<div class="expander-footer">
+											<div class="col">
+												<a href="{{ getLangUrl('logout') }}">
+													<i class="fas fa-power-off"></i>
+													Log out
+												</a>
+											</div>
+											<div class="col">
+												<a class="btn" href="{{ getLangUrl('profile') }}">
+													My Account
+												</a>
+											</div>
+										</div>
 									</div>
 								</div>
 	                        @else

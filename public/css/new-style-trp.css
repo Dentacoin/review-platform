@@ -650,78 +650,148 @@ header {
           display: block; } }
     header .header-info .expander-wrapper {
       position: absolute;
-      right: -4px;
-      top: 30px;
+      top: 40px;
+      right: 0px;
       padding-top: 20px;
       z-index: 1000; }
       @media screen and (max-width: 768px) {
         header .header-info .expander-wrapper {
-          right: 1px;
-          top: 15px; } }
-      header .header-info .expander-wrapper.has-image {
-        top: 35px;
-        right: 0px; }
-        @media screen and (max-width: 768px) {
-          header .header-info .expander-wrapper.has-image {
-            right: 2px;
-            top: 15px; } }
+          display: none;
+          top: 0;
+          position: fixed;
+          padding: 0px;
+          height: 100vh;
+          background-color: rgba(0, 0, 0, 0.6);
+          overflow-y: scroll; } }
+      header .header-info .expander-wrapper.active {
+        display: block; }
       header .header-info .expander-wrapper .expander {
         display: none;
-        padding: 14px;
-        background: white;
-        border: 1px solid #e8e8e8;
-        box-shadow: 0px 0px 7px 3px rgba(234, 234, 234, 0.5); }
-        @media screen and (max-width: 998px) {
+        background-color: white;
+        position: relative;
+        text-align: center;
+        min-width: 270px;
+        max-width: 450px;
+        box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.5);
+        border-radius: 15px; }
+        @media screen and (max-width: 768px) {
           header .header-info .expander-wrapper .expander {
-            text-align: center;
-            flex-direction: column-reverse;
-            padding: 9px 14px; } }
+            display: block;
+            min-width: auto;
+            max-width: none;
+            width: 100%; } }
+        header .header-info .expander-wrapper .expander.active {
+          display: block; }
         header .header-info .expander-wrapper .expander:before {
           content: '';
           position: absolute;
           right: 20px;
-          top: 17px;
+          top: -10px;
           width: 0;
           height: 0;
           border-style: solid;
-          border-width: 0 5px 4px 5px;
-          border-color: transparent transparent #ffffff transparent; }
+          border-width: 0 5px 10px 5px;
+          border-color: transparent transparent #6197c9 transparent; }
           @media screen and (max-width: 768px) {
             header .header-info .expander-wrapper .expander:before {
-              right: 15px; } }
-        header .header-info .expander-wrapper .expander a {
-          padding: 0px 12px;
-          line-height: 30px;
-          height: 30px;
-          color: #555555;
-          display: inline-block;
-          border-radius: 7px; }
-          @media screen and (max-width: 998px) {
-            header .header-info .expander-wrapper .expander a {
-              margin: 5px 0px; }
-              header .header-info .expander-wrapper .expander a:last-child {
-                margin-bottom: 0px; } }
-          header .header-info .expander-wrapper .expander a i {
-            color: #555555; }
-          header .header-info .expander-wrapper .expander a:hover {
-            color: #000; }
-          header .header-info .expander-wrapper .expander a.btn {
-            background: #126585;
-            color: white; }
-            header .header-info .expander-wrapper .expander a.btn:hover {
+              display: none; } }
+        header .header-info .expander-wrapper .expander .close-explander {
+          display: none;
+          position: absolute;
+          top: 13px;
+          right: 15px;
+          background: transparent;
+          font-size: 20px;
+          color: white; }
+          @media screen and (max-width: 768px) {
+            header .header-info .expander-wrapper .expander .close-explander {
+              display: block; } }
+          header .header-info .expander-wrapper .expander .close-explander span {
+            background: white;
+            color: black;
+            width: 25px;
+            height: 25px;
+            display: inline-block;
+            text-align: center;
+            line-height: 25px;
+            border-radius: 50%;
+            margin-left: 4px;
+            font-size: 20px; }
+        header .header-info .expander-wrapper .expander .expander-content {
+          background-image: url("../img-trp/expander-background.jpg");
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          display: flex;
+          flex-flow: row wrap;
+          padding: 30px 34px 15px;
+          border-top-left-radius: 15px;
+          border-top-right-radius: 15px; }
+          @media screen and (max-width: 768px) {
+            header .header-info .expander-wrapper .expander .expander-content {
+              padding: 57px 0px 15px; } }
+          header .header-info .expander-wrapper .expander .expander-content .platform-icon {
+            width: 25%;
+            display: block;
+            text-align: center;
+            background-color: transparent;
+            padding: 0px 15px; }
+            @media screen and (max-width: 998px) {
+              header .header-info .expander-wrapper .expander .expander-content .platform-icon {
+                width: 33.3%; } }
+            header .header-info .expander-wrapper .expander .expander-content .platform-icon img {
+              border-radius: 0px;
+              margin-left: 0px;
+              width: auto;
+              max-width: 100%; }
+            header .header-info .expander-wrapper .expander .expander-content .platform-icon figcaption {
               color: white;
-              background: #268db5; }
-        header .header-info .expander-wrapper .expander span {
-          display: block;
-          max-width: 180px;
-          text-align: center;
-          margin: 10px auto 0px auto;
-          color: #999; }
+              padding-bottom: 15px;
+              font-size: 14px;
+              line-height: 20px; }
+              @media screen and (max-width: 768px) {
+                header .header-info .expander-wrapper .expander .expander-content .platform-icon figcaption {
+                  font-size: 20px;
+                  line-height: 29px; } }
+        header .header-info .expander-wrapper .expander .expander-footer {
+          padding: 10px 4px;
+          display: flex;
+          align-items: center;
+          border-bottom-left-radius: 15px;
+          border-bottom-right-radius: 15px; }
+          header .header-info .expander-wrapper .expander .expander-footer .col {
+            flex: 1; }
+          header .header-info .expander-wrapper .expander .expander-footer a {
+            padding: 0px 12px;
+            line-height: 30px;
+            color: #555555;
+            display: inline-block;
+            border-radius: 7px; }
+            header .header-info .expander-wrapper .expander .expander-footer a i {
+              color: #555555;
+              font-size: 22px;
+              vertical-align: middle;
+              margin-right: 5px; }
+            header .header-info .expander-wrapper .expander .expander-footer a:hover {
+              color: #000; }
+            header .header-info .expander-wrapper .expander .expander-footer a.btn {
+              background: #126585;
+              color: white;
+              font-size: 20px;
+              font-weight: bold;
+              padding: 10px 20px;
+              border-radius: 4px; }
+              header .header-info .expander-wrapper .expander .expander-footer a.btn:hover {
+                color: white;
+                background: #268db5; }
+          header .header-info .expander-wrapper .expander .expander-footer span {
+            display: block;
+            max-width: 180px;
+            text-align: center;
+            margin: 10px auto 0px auto;
+            color: #999; }
     header .header-info:hover .expander {
       display: block; }
-      @media screen and (max-width: 998px) {
-        header .header-info:hover .expander {
-          display: flex; } }
 
 header.fixed-header {
   background-color: #0fb0e5; }
