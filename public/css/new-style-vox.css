@@ -1241,18 +1241,26 @@ p.h2-bold {
     @media screen and (max-width: 768px) {
       .section-register-success.success-dentist .right-content h2 {
         font-size: 18px; } }
+  .section-register-success.success-dentist .right-content .with-short-desc {
+    display: none; }
+  .section-register-success.success-dentist .right-content.active {
+    margin-top: 60px; }
+    @media screen and (max-width: 992px) {
+      .section-register-success.success-dentist .right-content.active {
+        margin-top: 0px; } }
+    .section-register-success.success-dentist .right-content.active .verification-content {
+      display: none; }
+    .section-register-success.success-dentist .right-content.active .without-short-desc {
+      display: none; }
+    .section-register-success.success-dentist .right-content.active .with-short-desc {
+      display: block; }
   .section-register-success.success-dentist .right-content .verification-content {
-    padding-bottom: 40px; }
+    padding-bottom: 40px;
+    border-bottom: 1px solid black; }
     @media screen and (max-width: 992px) {
       .section-register-success.success-dentist .right-content .verification-content {
         padding-bottom: 30px; } }
-    .section-register-success.success-dentist .right-content .verification-content.verticle-align {
-      margin-top: 60px; }
-      @media screen and (max-width: 992px) {
-        .section-register-success.success-dentist .right-content .verification-content.verticle-align {
-          margin-top: 0px; } }
   .section-register-success.success-dentist .right-content .verification-info {
-    border-top: 1px solid black;
     padding-top: 30px; }
     @media screen and (max-width: 992px) {
       .section-register-success.success-dentist .right-content .verification-info {

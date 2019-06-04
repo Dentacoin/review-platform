@@ -34,6 +34,14 @@ use Auth;
 use Mail;
 
 
+use \SendGrid\Mail\From as From;
+use \SendGrid\Mail\To as To;
+use \SendGrid\Mail\Subject as Subject;
+use \SendGrid\Mail\PlainTextContent as PlainTextContent;
+use \SendGrid\Mail\HtmlContent as HtmlContent;
+use \SendGrid\Mail\Mail as SendGridMail;
+
+
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
     use SoftDeletes, Authenticatable, CanResetPassword;
@@ -367,7 +375,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $item->template_id = $template_id;
         $item->meta = $params;
         if($platform) {
-            $item->platform = $platform;            
+            $item->platform = $platform;
         } else {
              if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
                 $item->platform = $this->platform;
@@ -377,6 +385,60 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
         $item->save();
         $item->send();
+
+        return $item;
+    }
+
+    public function sendGridTemplate($template_id, $substitutions=null, $platform=null) {
+        $item = new Email;
+        $item->user_id = $this->id;
+        $item->template_id = $template_id;
+        $item->meta = $substitutions;
+        if($platform) {
+            $item->platform = $platform;            
+        } else {
+             if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
+                $item->platform = $this->platform;
+             } else {
+                $item->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
+             }
+        }
+        $item->save();
+
+
+        $sender = config('mail.from.address');
+        $sender_name = config('mail.from.name');
+
+        $from = new From($sender, $sender_name);
+
+        $tos = [new To( $this->email)];
+
+        $email = new SendGridMail(
+            $from,
+            $tos
+        );
+        $email->setTemplateId($item->template->sendgrid_template_id);
+
+        $domain = 'https://'.config('platforms.'.$this->platform.'.url').'/';
+
+        $defaulth_substitutions  = [
+            "name" => $this->name,
+            "platform" => $item->platform,
+            "invite-patient" => getLangUrl( 'dentist/'.$this->slug, null, $domain).'?'. http_build_query(['popup'=>'popup-invite']),
+            "homepage" => getLangUrl('/', null, $domain),
+        ];
+
+        if ($substitutions) {
+            $defaulth_substitutions = array_merge($defaulth_substitutions, $substitutions);
+        }
+
+        $email->addDynamicTemplateDatas($defaulth_substitutions );
+        
+        $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+
+        $item->sent = 1;
+        $item->save();
 
         return $item;
     }

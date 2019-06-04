@@ -7,8 +7,8 @@
 		<div class="container">
 			<div class="col-md-12 tac">
 				<img src="{{ url('new-vox-img/welcome-dentist.png') }}">
-				<div class="right-content">
-					<div class="verification-content {!! !$user || ($user && $user->short_description) ? 'verticle-align' : '' !!}">
+				<div class="right-content {!! $user->short_description ? 'active' : '' !!}">
+					<div class="verification-content">
 						<h1>
 							@if($user->is_clinic)
 								{!! nl2br( trans('vox.page.welcome-to-dentavox.approval-request-title.clinic') ) !!}
@@ -24,7 +24,7 @@
 
 					<div class="verification-info">
 
-						@if(!$user->short_description)
+						<div class="without-short-desc">
 							<h2>
 								{!! nl2br( trans('vox.page.welcome-to-dentavox.approval-request.user-info-title') ) !!}
 							</h2>
@@ -48,9 +48,9 @@
 
 							{!! Form::close() !!}
 
-							<div class="alert alert-success" style="display: none;"></div>
 							<div class="alert alert-warning" style="display: none;"></div>
-						@else
+						</div>
+						<div class="with-short-desc">
 
 							<div class="enhancing-info">
 								<h2>Thank you for enhancing your profile information!</h2>
@@ -62,7 +62,7 @@
 
 								<a href="{{ getLangUrl('dental-survey-stats') }}" class="blue-button">CHECK DENTAL SURVEY STATS</a>
 							</div>
-						@endif
+						</div>
 
 					</div>
 				</div>

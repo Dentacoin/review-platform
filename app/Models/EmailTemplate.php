@@ -15,6 +15,7 @@ class EmailTemplate extends Model
         "title",
     	"subtitle",
         "subject",
+        "sendgrid_template_id"
     ];
 
     protected $fillable = [
@@ -23,6 +24,8 @@ class EmailTemplate extends Model
         "subtitle",
         "subject",
     	"name",
+        "type",
+        "sendgrid_template_id"
     ];
     
     protected $dates = [
@@ -180,6 +183,7 @@ class EmailTemplateTranslation extends Model {
         "title",
         "subtitle",
         "subject",
+        "sendgrid_template_id"
 	];
 
 }

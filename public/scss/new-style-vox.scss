@@ -1698,24 +1698,40 @@ p.h2-bold {
 				}
 			}
 
+			.with-short-desc {
+				display: none;
+			}
+
+			&.active {
+				margin-top: 60px;
+
+				@media screen and (max-width: 992px) {
+					margin-top: 0px;
+				}
+				
+				.verification-content {
+					display: none;
+				}
+
+				.without-short-desc {
+					display: none;
+				}
+
+				.with-short-desc {
+					display: block;
+				}
+			}
+
 			.verification-content {
 				padding-bottom: 40px;
+				border-bottom: 1px solid black;
 
 				@media screen and (max-width: 992px) {
 					padding-bottom: 30px;
 				}
-
-				&.verticle-align {
-					margin-top: 60px;
-
-					@media screen and (max-width: 992px) {
-						margin-top: 0px;
-					}
-				}
 			}
 
 			.verification-info {
-				border-top: 1px solid black;
 				padding-top: 30px;
 
 				@media screen and (max-width: 992px) {

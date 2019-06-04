@@ -829,12 +829,41 @@ class UsersController extends AdminController
                                     if( $item->deleted_at ) {
                                         $item->restore();
                                     }
+
                                     $item->sendTemplate(26);
+
+                                    
+                                    // if ($item->platform == 'trp') {
+                                    //     $substitutions = [
+                                    //         'title' => $item->title,
+                                    //         'add_name' => $item->name,
+                                    //         'trp_profile' => $item->getLink(),
+                                    //     ];
+
+                                    //     $item->sendGridTemplate(26, $substitutions);
+                                    // } else {
+                                    //     $item->sendTemplate(26);
+                                    // // }
 
                                     $olde = $item->email;
                                     $item->email = 'ali.hashem@dentacoin.com';
                                     $item->save();
+
+
                                     $to_ali = $item->sendTemplate(26);
+
+
+                                    // if ($item->platform == 'trp') {
+                                    //     $substitutions = [
+                                    //         'title' => $item->title,
+                                    //         'add_name' => $item->name,
+                                    //         'trp_profile' => $item->getLink(),
+                                    //     ];
+
+                                    //     $to_ali = $item->sendGridTemplate(26, $substitutions);
+                                    // } else {
+                                        // $to_ali = $item->sendTemplate(26);
+                                    // }
                                     $item->email = $olde;
                                     $item->save();
                                     $to_ali->delete();

@@ -499,7 +499,7 @@ $(document).ready(function(){
             success: (function(ret) {
                 if (ret.success) {
                     $(this).hide();
-                    $('.alert-success').html(ret.message).show();
+                    $(this).closest('.right-content').addClass('active');
                 } else {
                     $('.alert-warning').html('').show();
                     for(var i in ret.messages) {
@@ -515,39 +515,43 @@ $(document).ready(function(){
 
 	//Gallery
     $('#add-avatar').change( function() {
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
 
-        $('.add-photo').addClass('loading');
+		if (typeof($(this)[0].files[0]) != 'undefined' ) {
 
-        var file = $(this)[0].files[0];
-        var upload = new Upload(file, upload_url, function(data) {
-            $('.add-photo').removeClass('loading');
-	        $('.add-photo').css('background-image', "url('"+data.thumb+"')");
+	        if(ajax_is_running) {
+	            return;
+	        }
+	        ajax_is_running = true;
 
-            if( $('body').hasClass('page-profile') ) {
-            	console.log('waaat');
-            	$('img.header-avatar').attr('src', data.thumb);
-            	$('.add-photo').find('.photo-cta').hide();
+	        $('.add-photo').addClass('loading');
 
-            	setTimeout( (function() {
-            		$('.add-photo').find('.photo-cta').show();
-            		$('.add-photo').css('background-image', "radial-gradient( rgba(255,255,255,1), rgba(255,255,255,1), rgba(255,255,255,0) ), url('"+this+"')");
-            	}).bind(data.thumb), 3000 );
-            } else {
-            	
-	            if($('.add-photo').find('.photo-cta').length) {
-	            	$('.add-photo').find('.photo-cta').remove();
+	        var file = $(this)[0].files[0];
+	        var upload = new Upload(file, upload_url, function(data) {
+	            $('.add-photo').removeClass('loading');
+		        $('.add-photo').css('background-image', "url('"+data.thumb+"')");
+
+	            if( $('body').hasClass('page-profile') ) {
+	            	console.log('waaat');
+	            	$('img.header-avatar').attr('src', data.thumb);
+	            	$('.add-photo').find('.photo-cta').hide();
+
+	            	setTimeout( (function() {
+	            		$('.add-photo').find('.photo-cta').show();
+	            		$('.add-photo').css('background-image', "radial-gradient( rgba(255,255,255,1), rgba(255,255,255,1), rgba(255,255,255,0) ), url('"+this+"')");
+	            	}).bind(data.thumb), 3000 );
+	            } else {
+	            	
+		            if($('.add-photo').find('.photo-cta').length) {
+		            	$('.add-photo').find('.photo-cta').remove();
+		            }
+		            $('#photo-name').val( data.name );
 	            }
-	            $('#photo-name').val( data.name );
-            }
 
-            ajax_is_running = false;
-        });
+	            ajax_is_running = false;
+	        });
 
-        upload.doUpload();
+	        upload.doUpload();
+	    }
 
     } );
 
@@ -1043,7 +1047,7 @@ Upload.prototype.getSize = function() {
     return this.file.size;
 };
 Upload.prototype.getName = function() {
-    return this.file.name;
+	return this.file.name;
 };
 Upload.prototype.doUpload = function () {
     $('#photo-upload-error').hide();
@@ -1051,6 +1055,7 @@ Upload.prototype.doUpload = function () {
     var formData = new FormData();
 
     // add assoc key values, this will be posts values
+
     formData.append("image", this.file, this.getName());
     formData.append("upload_file", true);
 

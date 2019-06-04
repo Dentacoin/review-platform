@@ -15,7 +15,7 @@ return [
 		'balance' => true,
 	],
 	'assurance' => [
-		'name' => 'Assurance',
+		'name' => 'Dentacoin Assurance',
 		'url' => 'assurance.dentacoin.com',
 		'balance' => true,
 	],
@@ -25,12 +25,12 @@ return [
 		'balance' => false,
 	],
 	'dentists' => [
-		'name' => 'Dentists',
+		'name' => 'Dentacoin Hub',
 		'url' => 'dentists.dentacoin.com',
 		'balance' => false,
 	],
 	'wallet' => [
-		'name' => 'Wallet',
+		'name' => 'Dentacoin Wallet',
 		'url' => 'wallet.dentacoin.com',
 		'balance' => false,
 	],
