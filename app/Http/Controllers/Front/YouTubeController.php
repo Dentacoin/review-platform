@@ -38,6 +38,9 @@ class YouTubeController extends FrontController
 				AND `user_id` NOT IN ( 
 					SELECT `user_id` FROM emails WHERE template_id = 44
 				)
+				AND `user_id` NOT IN ( 
+					SELECT `id` FROM users WHERE unsubscribe is not null
+				)
 				AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00' 
 				AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
 			GROUP BY 
@@ -69,6 +72,9 @@ class YouTubeController extends FrontController
 				template_id = 44
 				AND `user_id` NOT IN ( 
 					SELECT `user_id` FROM emails WHERE template_id = 45
+				)
+				AND `user_id` NOT IN ( 
+					SELECT `id` FROM users WHERE unsubscribe is not null
 				)
 				AND `created_at` < '".date('Y-m-d', time() - 86400*3)." 00:00:00' 
 		";
@@ -128,6 +134,9 @@ class YouTubeController extends FrontController
 				AND `user_id` NOT IN ( 
 					SELECT `user_id` FROM emails WHERE template_id IN ( 46, 47)
 				)
+				AND `user_id` NOT IN ( 
+					SELECT `id` FROM users WHERE unsubscribe is not null
+				)
 				AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
 		";
 
@@ -144,7 +153,7 @@ class YouTubeController extends FrontController
 		// 	}		
 		// }
     	
-  //       dd($emails);
+        // dd($emails);
 
 
     	//Email5
@@ -157,6 +166,9 @@ class YouTubeController extends FrontController
 				template_id IN ( 46, 47)
 				AND `user_id` NOT IN ( 
 					SELECT `user_id` FROM emails WHERE template_id = 48
+				)
+				AND `user_id` NOT IN ( 
+					SELECT `id` FROM users WHERE unsubscribe is not null
 				)
 				AND `created_at` < '".date('Y-m-d', time() - 86400*10)." 00:00:00'
 		";
@@ -205,6 +217,7 @@ class YouTubeController extends FrontController
 				AND `id` NOT IN ( SELECT `clinic_id` FROM `reviews` WHERE `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00' )
 				AND `id` NOT IN ( SELECT `user_id` FROM `emails` WHERE  `template_id` = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00' )
 				AND `created_at` < '".date('Y-m-d', time() - 86400*30)." 00:00:00'
+				AND `unsubscribe` is null
 				AND `status` = 'approved'
 				AND `deleted_at` is null
 		";
@@ -235,6 +248,9 @@ class YouTubeController extends FrontController
 				AND `user_id` NOT IN ( 
 					SELECT `user_id` FROM emails WHERE template_id = 50
 				)
+				AND `user_id` NOT IN ( 
+					SELECT `id` FROM users WHERE unsubscribe is not null
+				)
 				AND `created_at` > '".date('Y-m-d', time() - 86400*4)." 00:00:00'
 		";
 
@@ -263,6 +279,9 @@ class YouTubeController extends FrontController
 				template_id = 50
 				AND `user_id` NOT IN ( 
 					SELECT `user_id` FROM emails WHERE template_id IN ( 51, 52)
+				)
+				AND `user_id` NOT IN ( 
+					SELECT `id` FROM users WHERE unsubscribe is not null
 				)
 				AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
 		";
@@ -294,6 +313,9 @@ class YouTubeController extends FrontController
 				template_id = 52
 				AND `user_id` NOT IN ( 
 					SELECT `user_id` FROM emails WHERE template_id IN ( 53, 54)
+				)
+				AND `user_id` NOT IN ( 
+					SELECT `id` FROM users WHERE unsubscribe is not null
 				)
 				AND `created_at` > '".date('Y-m-d', time() - 86400*14)." 00:00:00'
 		";
@@ -328,6 +350,7 @@ class YouTubeController extends FrontController
 				AND `id` NOT IN ( SELECT `user_id` FROM `emails` WHERE  `template_id` IN ( 55, 56) AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00' )
 				AND `created_at` < '".date('Y-m-d', time() - 86400*30)." 00:00:00'
 				AND `deleted_at` is null
+				AND `unsubscribe` is null
 				AND `status` = 'approved'
 		";
 
@@ -438,6 +461,7 @@ class YouTubeController extends FrontController
 					`u`.`id` = `rewards`.`user_id`
 				WHERE
 					`is_dentist` = 1
+					AND `unsubscribe` is null
 					AND `status` = 'approved'
 					AND `dcn_address` is not null
 					AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) > 3000

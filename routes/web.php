@@ -169,6 +169,8 @@ $reviewRoutes = function () {
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
 			Route::get('want-to-invite-dentist', 				'IndexController@want_to_invite_dentist');
 
+			Route::any('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
+
 			Route::any('invite/{id}/{hash}/{inv_id?}', 			'RegisterController@invite_accept');
 
 			Route::get('review/{id}', 							'DentistController@fullReview');

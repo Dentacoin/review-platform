@@ -86,6 +86,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'civic_kyc',
         'civic_kyc_hash',
         'platform',
+        'unsubscribe',
         'gdpr_privacy',
         'self_deleted',
         'allow_withdraw',
@@ -447,6 +448,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             "trp_profile" => $this->getLink(),
             "town" => $this->city_name,
             "country" => Country::find($this->country_id),
+            "unsubscribe" => getLangUrl( 'unsubscribe/'.$this->id.'/'.$this->get_token(), null, $domain),
         ];
 
         if ($substitutions) {

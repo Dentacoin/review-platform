@@ -5441,3 +5441,7 @@ body.edit-user .profile-info-mobile .profile-details {
     color: white; }
   .balance-buttons-wrap .balance-button:hover:not(.active) {
     border-color: #80b8dc; }
+
+.unsubscribe-wrapper {
+  padding-top: 100px;
+  padding-bottom: 100px; }
