@@ -51,13 +51,12 @@ class YouTubeController extends FrontController
 		// foreach ($emails as $e) {
 		// 	$user = User::find($e->user_id);
 		// 	if (!empty($user)) {
-		// 		// $user->sendTemplate(44);
-		// 		$user->sendGridTemplate(44, $user->email, 'trp' );
+		// 		$user->sendGridTemplate(44);
 		// 	}
 			
 		// }
     	
-        dd($emails);
+        // dd($emails);
     
 
     	//Email3
@@ -71,7 +70,7 @@ class YouTubeController extends FrontController
 				AND `user_id` NOT IN ( 
 					SELECT `user_id` FROM emails WHERE template_id = 45
 				)
-				AND `created_at` > '".date('Y-m-d', time() - 86400*3)." 00:00:00' 
+				AND `created_at` < '".date('Y-m-d', time() - 86400*3)." 00:00:00' 
 		";
 
 		$emails = DB::select(
@@ -106,13 +105,16 @@ class YouTubeController extends FrontController
 
   //               $missingInfo = implode(', ', $missingInfo);
 
-  //               $user->sendTemplate(45, [
-  //                   'missing-info' => $missingInfo,
-  //               ]);
+
+  //               $substitutions = [
+  //                   'profile_missing_info' => $missingInfo,
+  //               ];
+
+  //               $user->sendGridTemplate(45, $substitutions);
 		// 	}			
 		// }
     	
-  //       dd($emails);
+        // dd($emails);
 
 
     	//Email4
@@ -126,7 +128,7 @@ class YouTubeController extends FrontController
 				AND `user_id` NOT IN ( 
 					SELECT `user_id` FROM emails WHERE template_id IN ( 46, 47)
 				)
-				AND `created_at` > '".date('Y-m-d', time() - 86400*4)." 00:00:00'
+				AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
 		";
 
 		$emails = DB::select(
@@ -136,9 +138,9 @@ class YouTubeController extends FrontController
 		// foreach ($emails as $e) {
 		// 	$user = User::find($e->user_id);
 		// 	if (!empty($user) && $user->invites->isNotEmpty()) {
-		// 		$user->sendTemplate(46);
+		// 		$user->sendGridTemplate(46);
 		// 	} else {
-		// 		$user->sendTemplate(47);
+		// 		$user->sendGridTemplate(47);
 		// 	}		
 		// }
     	
@@ -156,7 +158,7 @@ class YouTubeController extends FrontController
 				AND `user_id` NOT IN ( 
 					SELECT `user_id` FROM emails WHERE template_id = 48
 				)
-				AND `created_at` > '".date('Y-m-d', time() - 86400*10)." 00:00:00'
+				AND `created_at` < '".date('Y-m-d', time() - 86400*10)." 00:00:00'
 		";
 
 		$emails = DB::select(
@@ -167,14 +169,16 @@ class YouTubeController extends FrontController
 		// $user = User::find($e->user_id);
 		// 	if (!empty($user) && $user->reviews_in()->isNotEmpty()) {
 
-		// 		$user->sendTemplate(48, [
-  //                   'rating' => $user->avg_rating,
-		// 			'reviews' => $user->reviews_in()->count()
-  //               ]);
+		// 		$substitutions = [
+  //                   'score_last_month_aver' => number_format($user->avg_rating,2),
+		// 			'reviews_last_month_num' => $user->reviews_in()->count()
+  //               ];
+
+  //               $user->sendGridTemplate(48, $substitutions);
 		// 	}
 		// }
     	
-        // dd($emails);
+  //       dd($emails);
 
 
 

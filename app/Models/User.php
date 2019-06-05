@@ -198,6 +198,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return ($this->title && $this->is_dentist && !$this->is_clinic ? config('titles')[$this->title].' ' : '').$this->name;
     }
 
+    public function getNameSendGrid() {
+        if ($this->title && $this->is_dentist && !$this->is_clinic) {
+            $names = explode(' ', $this->name);
+            
+            if (count($names) > 1) {
+                unset($names[0]);
+            }
+            $last_name = implode(' ', $names);
+            
+            return config('titles')[$this->title].' '.$last_name;
+        } else {
+            return $this->name;
+        }
+    }
+
     public function getNameShort() {
         return explode(' ', $this->name)[0];
     }
@@ -416,25 +431,36 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $email = new SendGridMail(
             $from,
             $tos
+
         );
         $email->setTemplateId($item->template->sendgrid_template_id);
+
+        $email->addBcc("4097841@bcc.hubspot.com");
 
         $domain = 'https://'.config('platforms.'.$this->platform.'.url').'/';
 
         $defaulth_substitutions  = [
-            "name" => $this->name,
+            "name" => $this->getNameSendGrid(),
             "platform" => $item->platform,
             "invite-patient" => getLangUrl( 'dentist/'.$this->slug, null, $domain).'?'. http_build_query(['popup'=>'popup-invite']),
             "homepage" => getLangUrl('/', null, $domain),
+            "trp_profile" => $this->getLink(),
+            "town" => $this->city_name,
+            "country" => Country::find($this->country_id),
         ];
 
         if ($substitutions) {
             $defaulth_substitutions = array_merge($defaulth_substitutions, $substitutions);
         }
 
+        foreach ($defaulth_substitutions as $key => $value) {
+            $defaulth_substitutions[$key] = $value.'';
+        }
+
         $email->addDynamicTemplateDatas($defaulth_substitutions );
         
         $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
+        $sendgrid->send($email);
 
 
         $item->sent = 1;
@@ -1258,7 +1284,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public static function validateLatin($string) {
         $result = false;
      
-        if (preg_match("/^[\w\d\s.,-]*$/", $string)) {
+        if (preg_match("/^[\w\d\s\+\'\&.,-][^0-9]*$/", $string)) {
             $result = true;
         }
      

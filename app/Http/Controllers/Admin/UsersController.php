@@ -834,16 +834,11 @@ class UsersController extends AdminController
 
                                     
                                     // if ($item->platform == 'trp') {
-                                    //     $substitutions = [
-                                    //         'title' => $item->title,
-                                    //         'add_name' => $item->name,
-                                    //         'trp_profile' => $item->getLink(),
-                                    //     ];
 
-                                    //     $item->sendGridTemplate(26, $substitutions);
+                                    //     $item->sendGridTemplate(26);
                                     // } else {
                                     //     $item->sendTemplate(26);
-                                    // // }
+                                    // }
 
                                     $olde = $item->email;
                                     $item->email = 'ali.hashem@dentacoin.com';
