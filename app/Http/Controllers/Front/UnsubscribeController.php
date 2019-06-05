@@ -40,7 +40,9 @@ class UnsubscribeController extends FrontController
 	            });
 			}
 
-	        return $this->ShowView('unsubscribe-dentist');
+	        return $this->ShowView('unsubscribe-dentist', [
+	        	'noIndex' => true,
+	        ]);
 		}
 
 		return redirect( getLangUrl('/') );
