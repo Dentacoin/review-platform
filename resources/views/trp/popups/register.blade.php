@@ -28,12 +28,6 @@
 					{!! csrf_field() !!}
 					<div class="form-inner">
 
-						<div class="cta">
-							<i class="fas fa-sign-in-alt"></i>
-							{!! nl2br(trans('trp.popup.popup-register.cta')) !!}
-							
-						</div>
-
 						<h2>
 							{!! nl2br(trans('trp.popup.popup-register.signup-title')) !!}
 						</h2>
@@ -85,6 +79,12 @@
 							])) !!}
 							
 						</label>
+
+						<div class="cta">
+							<i class="fas fa-sign-in-alt"></i>
+							{!! nl2br(trans('trp.popup.popup-register.cta')) !!}
+							
+						</div>
 					</div>
 
 					<p class="have-account">
