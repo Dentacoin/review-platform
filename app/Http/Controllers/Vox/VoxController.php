@@ -728,9 +728,6 @@ class VoxController extends FrontController
 						        $start = $list->first()->created_at;
 						        $diff = Carbon::now()->diffInSeconds( $start );
 						        $normal = count($vox->questions)*2;
-						        if($normal > $diff && !$testmode && !$this->user->is_partner) {
-						        	$reward->is_scam = true;
-						        }
 						        $reward->seconds = $diff;
 
 						        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
