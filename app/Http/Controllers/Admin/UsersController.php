@@ -950,7 +950,7 @@ class UsersController extends AdminController
             ->orderBy('created_at')
             ->get();
             $rewarder_questions = DcnReward::where('user_id', $id)->where('platform' , 'vox')->get();
-            $unanswerd_questions = array_diff($all_questions_answerd->pluck('vox_id')->toArray(), $rewarder_questions->pluck('vox_id')->toArray() );
+            $unanswerd_questions = array_diff($all_questions_answerd->pluck('vox_id')->toArray(), $rewarder_questions->pluck('reference_id')->toArray() );
             foreach ($unanswerd_questions as $value) {
                 $unfinished[$value] = [];
             }
@@ -966,8 +966,6 @@ class UsersController extends AdminController
                 $unfinished[$v->id]->login = $user_log;
                 $unfinished[$v->id]->taken_date = $ans->created_at;
             }
-
-
 
             $habits_test_ans = false;
             $habits_tests = [];

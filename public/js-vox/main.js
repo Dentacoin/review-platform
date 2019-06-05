@@ -153,8 +153,8 @@ $(document).ready(function(){
 				var old = parseInt( $('#bonus-question-reward').text().trim() );
 				$('#bonus-question-reward').html( old + vox.reward_single );
 
-				old = parseInt( $('#coins-test').text().trim() );
-				$('#coins-test').html( old + vox.reward_single );
+				old = parseInt( $('.coins-test').text().trim() );
+				$('.coins-test').html( old + vox.reward_single );
 			} else {
 				var reward = 0;
 				if( $('body').hasClass('page-welcome-survey') ) {
@@ -167,7 +167,7 @@ $(document).ready(function(){
 				$('#current-question-reward').html( Math.round(reward) );
 				$('#dcn-test-reward-before').hide();
 				$('#dcn-test-reward-after').show();
-				$('#coins-test').html( Math.round(reward) );
+				$('.coins-test').html( Math.round(reward) );
 			}
 		}
 

@@ -203,11 +203,11 @@
 						<h4 class="done-desc">
 							@if($done_all)
 								{!! trans('vox.page.questionnaire.well-done-content.all-surveys', [
-									'amount' => '<span id="coins-test">'.$vox->getRewardTotal().'</span>',
+									'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
 								]) !!}
 							@else
 								{!! trans('vox.page.questionnaire.well-done-content', [
-									'amount' => '<span id="coins-test">'.$vox->getRewardTotal().'</span>',
+									'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
 									'link' => '<a href="'.getLangUrl('profile').'">',
 									'endlink' => '</a>',
 								]) !!}
@@ -278,7 +278,7 @@
 						</h3>
 						<h4>
 							{!! trans('vox.page.questionnaire.well-done-content', [
-								'amount' => '<span id="coins-test">'.$vox->getRewardTotal().'</span>',
+								'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
 								'link' => '<a href="'.getLangUrl('profile').'">',
 								'endlink' => '</a>',
 							]) !!}
