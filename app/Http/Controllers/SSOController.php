@@ -56,6 +56,23 @@ class SSOController extends BaseController
         }
     }
 
+    public function getLoginToken() {
+        $user = Auth::guard('web')->user();
+        if($user) {
+
+            if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
+                $platform = $user->platform;
+            } else {
+                $platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
+            }
+
+            $tokenobj = $user->createToken('LoginToken');
+            $tokenobj->token->platform = $platform;
+            $tokenobj->token->save();
+            return $this->encrypt($tokenobj->accessToken);
+        }
+    }
+
 
     public function encrypt($raw_text) {
         $length = openssl_cipher_iv_length(env('CRYPTO_METHOD'));

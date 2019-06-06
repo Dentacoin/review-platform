@@ -193,6 +193,7 @@ return [
         Spatie\Sitemap\SitemapServiceProvider::class,
         GoogleMaps\ServiceProvider\GoogleMapsServiceProvider::class,
         Collective\Remote\RemoteServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
 
     ],
 

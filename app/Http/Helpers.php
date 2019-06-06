@@ -36,5 +36,10 @@
 	}
 
 	function getDentacoinHubApplications() {
-        return json_decode(file_get_contents('https://dentacoin.com/info/applications'));
+		$fn = storage_path('dentacoin-platforms');
+        $t = file_exists($fn) ? filemtime($fn) : null;
+        if(!$t || $t < time()-300) {
+            file_put_contents($fn, file_get_contents('https://dentacoin.com/info/applications'));
+        }
+        return json_decode(file_get_contents($fn));
 	}

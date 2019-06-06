@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Support\Str;
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -44,7 +46,7 @@ use \SendGrid\Mail\Mail as SendGridMail;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use SoftDeletes, Authenticatable, CanResetPassword;
+    use Notifiable, HasApiTokens, SoftDeletes, Authenticatable, CanResetPassword;
 
     protected $fillable = [
     	'email',
