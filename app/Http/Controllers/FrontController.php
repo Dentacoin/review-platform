@@ -115,8 +115,20 @@ class FrontController extends BaseController
                 }
 
                 $ul->save();
-                session(['login-logged' => $this->user->id]);
-                session(['mark-login' => mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'DV' : 'TRP']);
+
+                $tokenobj = $this->user->createToken('LoginToken');
+                $tokenobj->token->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
+                $tokenobj->token->save();
+
+                session([
+                    'login-logged' => $this->user->id,
+                    'mark-login' => mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'DV' : 'TRP',
+                    'logged_user' => [
+                        'token' => $tokenobj->accessToken,
+                        'id' => $this->user->id,
+                        'type' => $this->user->is_dentist ? 'dentist' : 'patient',
+                    ]
+                ]);
 
                 if( !$this->user->isBanned('vox') && $this->user->bans->isNotEmpty() ) {
                     $last = $this->user->bans->last();
