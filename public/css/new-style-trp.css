@@ -761,23 +761,24 @@ header {
           header .header-info .expander-wrapper .expander .expander-footer a {
             padding: 0px 12px;
             line-height: 30px;
-            color: #555555;
+            color: black;
             display: inline-block;
             border-radius: 7px; }
             header .header-info .expander-wrapper .expander .expander-footer a i {
-              color: #555555;
+              color: black;
               font-size: 22px;
               vertical-align: middle;
               margin-right: 5px; }
             header .header-info .expander-wrapper .expander .expander-footer a:hover {
               color: #000; }
             header .header-info .expander-wrapper .expander .expander-footer a.btn {
-              background: #126585;
+              background-color: #041e42;
+              padding: 5px 10px;
+              border: 2px solid #fff;
+              border-radius: 12px;
+              font-size: 18px;
               color: white;
-              font-size: 20px;
-              font-weight: bold;
-              padding: 10px 20px;
-              border-radius: 4px; }
+              font-weight: bold; }
               header .header-info .expander-wrapper .expander .expander-footer a.btn:hover {
                 color: white;
                 background: #268db5; }
