@@ -33,7 +33,7 @@ class VoxCategory extends Model {
     }
 
     public function voxesWithoutAnswer($user) {
-        $answer_ids = $user->dcn_rewards->where('platform', 'vox')->pluck('reference_id')->toArray();
+        $answer_ids = $user->vox_rewards->pluck('reference_id')->toArray();
 
         return $this->voxes->filter(function($vox) use ($answer_ids) {
             return !in_array($vox->vox_id, $answer_ids);
