@@ -396,6 +396,209 @@ NEW & FAILED TRANSACTIONS
             echo 'Suspicious Dentist Delete Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->cron("30 7 * * *"); //10:30h BG Time
+
+
+
+
+
+
+        $schedule->call(function () {
+
+            //First 3 weeks engagement      
+
+            //Email 2
+            $query = "
+                SELECT 
+                    * 
+                FROM 
+                    emails 
+                WHERE 
+                    template_id = 26
+                    AND `user_id` NOT IN ( 
+                        SELECT `user_id` FROM emails WHERE template_id = 44
+                    )
+                    AND `user_id` NOT IN ( 
+                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    )
+                    AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00' 
+                    AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
+                GROUP BY 
+                    `user_id`
+            ";
+
+            $emails = DB::select(
+                DB::raw($query), []
+            );
+
+            $email2 = 0;
+            foreach ($emails as $e) {                
+                $user = User::find($e->user_id);
+                if (!empty($user)) {
+                    $email2++;
+                    $user->sendGridTemplate(44);
+                }                
+            }
+        
+
+            //Email 3
+            $query = "
+                SELECT 
+                    * 
+                FROM 
+                    emails 
+                WHERE 
+                    template_id = 44
+                    AND `user_id` NOT IN ( 
+                        SELECT `user_id` FROM emails WHERE template_id = 45
+                    )
+                    AND `user_id` NOT IN ( 
+                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    )
+                    AND `created_at` < '".date('Y-m-d', time() - 86400*3)." 00:00:00' 
+            ";
+
+            $emails = DB::select(
+                DB::raw($query), []
+            );
+
+            $email3 = 0;
+            foreach ($emails as $e) {
+                $user = User::find($e->user_id);
+
+                if (!empty($user)) {
+                    $missingInfo = [];
+
+                    if(empty($user->short_description)) {
+                        $missingInfo[] = 'a short intro';
+                    }
+
+                    if(empty($user->work_hours)) {
+                        $missingInfo[] = 'opening hours';
+                    }
+
+                    if(empty($user->socials)) {
+                        $missingInfo[] = 'social media pages';
+                    }
+
+                    if(empty($user->description)) {
+                        $missingInfo[] = 'a description';
+                    }
+
+                    if($user->photos->isEmpty()) {
+                        $missingInfo[] = 'more photos';
+                    }
+
+                    if (!empty($missingInfo)) {
+                        $email3++;
+
+                        $substitutions = [
+                            'profile_missing_info' => $missingInfo[0],
+                        ];
+
+                        $user->sendGridTemplate(45, $substitutions);
+                    } else {
+                        $user->sendGridTemplate(45, null, null, 1);
+                    }
+                }           
+            }
+
+
+            //Email 4
+            $query = "
+                SELECT 
+                    * 
+                FROM 
+                    emails 
+                WHERE 
+                    template_id = 45
+                    AND `user_id` NOT IN ( 
+                        SELECT `user_id` FROM emails WHERE template_id IN ( 46, 47)
+                    )
+                    AND `user_id` NOT IN ( 
+                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    )
+                    AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
+            ";
+
+            $emails = DB::select(
+                DB::raw($query), []
+            );
+
+            $email4_success = 0;
+            $email4_false = 0;
+            foreach ($emails as $e) {
+                $user = User::find($e->user_id);
+                if (!empty($user) && $user->invites->isNotEmpty()) {
+                    $email4_success++;
+                    $user->sendGridTemplate(46);
+                } else {
+                    $email4_false++;
+                    $user->sendGridTemplate(47);
+                }       
+            }
+            
+
+            //Email 5
+            $query = "
+                SELECT 
+                    * 
+                FROM 
+                    emails 
+                WHERE 
+                    template_id IN ( 46, 47)
+                    AND `user_id` NOT IN ( 
+                        SELECT `user_id` FROM emails WHERE template_id = 48
+                    )
+                    AND `user_id` NOT IN ( 
+                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    )
+                    AND `created_at` < '".date('Y-m-d', time() - 86400*10)." 00:00:00'
+            ";
+
+            $emails = DB::select(
+                DB::raw($query), []
+            );
+
+            $email5 = 0;
+            foreach ($emails as $e) {
+                $user = User::find($e->user_id);
+                if (!empty($user) && $user->reviews_in()->isNotEmpty()) {
+                    $email5++;
+
+                    $substitutions = [
+                        'score_last_month_aver' => number_format($user->avg_rating,2),
+                        'reviews_last_month_num' => $user->reviews_in()->count().($user->reviews_in()->count() > 1 ? ' reviews' : ' review'),
+                    ];
+
+                    $user->sendGridTemplate(48, $substitutions);
+                }
+            }
+
+
+            $mtext = 'We just sent:
+
+            Email 2: '.$email2.'
+            Email 3: '.$email3.'
+            Email 4 success: '.$email4_success.'
+            Email 4 false: '.$email4_false.'
+            Email 5: '.$email5.'
+
+            ';
+
+            Mail::raw($mtext, function ($message) {
+
+                $sender = config('mail.from.address');
+                $sender_name = config('mail.from.name');
+
+                $message->from($sender, $sender_name);
+                $message->to( 'petya.ivanova@dentacoin.com' );
+                $message->to( 'gergana@youpluswe.com' );
+                $message->subject('Dentist First 3 weeks engagement / Welcome journey');
+            });
+
+
+        })->cron("15 */6 * * *"); //05:00h
+
     }
 
     /**

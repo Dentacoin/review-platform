@@ -13,6 +13,14 @@ use App\Models\Reward;
 use Mail;
 use Session;
 
+
+use \SendGrid\Mail\From as From;
+use \SendGrid\Mail\To as To;
+use \SendGrid\Mail\Subject as Subject;
+use \SendGrid\Mail\PlainTextContent as PlainTextContent;
+use \SendGrid\Mail\HtmlContent as HtmlContent;
+use \SendGrid\Mail\Mail as SendGridMail;
+
 class Email extends Model
 {
     use SoftDeletes;
@@ -56,19 +64,36 @@ class Email extends Model
 			$sender = 'ali.hashem@dentacoin.com';
 		}
 		$sender_name = $platform=='vox' ? config('mail.from.name-vox') : config('mail.from.name');
-		Mail::send('emails.template', [
-				'user' => $this->user,
-				'content' => $content,
-				'title' => $title,
-				'subtitle' => $subtitle,
-				'platform' => $platform,
-			], function ($message) use ($subject, $platform, $sender, $sender_name) {
-			    $message->from($sender, $sender_name);
-			    $message->to( $this->user->email );
-			    //$message->to( 'dokinator@gmail.com' );
-				$message->replyTo($sender, $sender_name);
-				$message->subject($subject);
-        });
+		
+		$contents = view('emails.template', [
+			'user' => $this->user,
+			'content' => $content,
+			'title' => $title,
+			'subtitle' => $subtitle,
+			'platform' => $platform,
+		])->render();
+
+        $from = new From($sender, $sender_name);
+        $tos = [new To( $this->user->email)];
+
+        $email = new SendGridMail(
+            $from,
+            $tos
+        );
+        
+        if ($this->template->category) {
+        	$email->addCategory($this->template->category);
+        } else {
+        	$email->addCategory(strtoupper($platform).' Service '.($this->user->is_dentist ? 'Dentist' : 'Patient'));
+        }
+        $email->setSubject($subject);
+        $email->setReplyTo($sender, $sender_name);
+		$email->addContent(
+		    "text/html", $contents
+		);
+        
+        $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
+        $sendgrid->send($email);
 
 		$this->sent = 1;
 		$this->save();

@@ -407,7 +407,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $item;
     }
 
-    public function sendGridTemplate($template_id, $substitutions=null, $platform=null) {
+    public function sendGridTemplate($template_id, $substitutions=null, $platform=null, $is_skipped=null) {
         $item = new Email;
         $item->user_id = $this->id;
         $item->template_id = $template_id;
@@ -423,52 +423,62 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
         $item->save();
 
+        if (empty($is_skipped)) {
 
-        $sender = config('mail.from.address');
-        $sender_name = config('mail.from.name');
+            $sender = config('mail.from.address');
+            $sender_name = config('mail.from.name');
 
-        $from = new From($sender, $sender_name);
+            $from = new From($sender, $sender_name);
 
-        $tos = [new To( $this->email)];
+            $tos = [new To( $this->email)];
 
-        $email = new SendGridMail(
-            $from,
-            $tos
+            $email = new SendGridMail(
+                $from,
+                $tos
+            );
+            $email->setTemplateId($item->template->sendgrid_template_id);
+            $email->addBcc("4097841@bcc.hubspot.com");
 
-        );
-        $email->setTemplateId($item->template->sendgrid_template_id);
+            if ($item->template->category) {
+                $email->addCategory($item->template->category);
+            } else {
+                $email->addCategory(strtoupper($item->platform).' Service '.($this->is_dentist ? 'Dentist' : 'Patient'));
+            }
 
-        $email->addBcc("4097841@bcc.hubspot.com");
+            $domain = 'https://'.config('platforms.'.$this->platform.'.url').'/';
 
-        $domain = 'https://'.config('platforms.'.$this->platform.'.url').'/';
+            $defaulth_substitutions  = [
+                "name" => $this->getNameSendGrid(),
+                "platform" => $item->platform,
+                "invite-patient" => getLangUrl( 'dentist/'.$this->slug, null, $domain).'?'. http_build_query(['popup'=>'popup-invite']),
+                "homepage" => getLangUrl('/', null, $domain),
+                "trp_profile" => $this->getLink(),
+                "town" => $this->city_name,
+                "country" => Country::find($this->country_id),
+                "unsubscribe" => getLangUrl( 'unsubscribe/'.$this->id.'/'.$this->get_token(), null, $domain),
+            ];
 
-        $defaulth_substitutions  = [
-            "name" => $this->getNameSendGrid(),
-            "platform" => $item->platform,
-            "invite-patient" => getLangUrl( 'dentist/'.$this->slug, null, $domain).'?'. http_build_query(['popup'=>'popup-invite']),
-            "homepage" => getLangUrl('/', null, $domain),
-            "trp_profile" => $this->getLink(),
-            "town" => $this->city_name,
-            "country" => Country::find($this->country_id),
-            "unsubscribe" => getLangUrl( 'unsubscribe/'.$this->id.'/'.$this->get_token(), null, $domain),
-        ];
+            if ($substitutions) {
+                $defaulth_substitutions = array_merge($defaulth_substitutions, $substitutions);
+            }
 
-        if ($substitutions) {
-            $defaulth_substitutions = array_merge($defaulth_substitutions, $substitutions);
+            foreach ($defaulth_substitutions as $key => $value) {
+                $defaulth_substitutions[$key] = $value.'';
+            }
+
+            $email->addDynamicTemplateDatas($defaulth_substitutions );
+            
+            $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
+            $sendgrid->send($email);
+
+
+            $item->sent = 1;
+            $item->save();
+
+        } else {
+            $item->sent = 0;
+            $item->save();
         }
-
-        foreach ($defaulth_substitutions as $key => $value) {
-            $defaulth_substitutions[$key] = $value.'';
-        }
-
-        $email->addDynamicTemplateDatas($defaulth_substitutions );
-        
-        $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
-        $sendgrid->send($email);
-
-
-        $item->sent = 1;
-        $item->save();
 
         return $item;
     }
