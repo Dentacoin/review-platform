@@ -454,7 +454,6 @@ jQuery(document).ready(function($){
         $(this).closest('.modern-radios').removeClass('has-error');
     } );
 
-
 	$('.invite-new-dentist-form').submit( function(e) {
         e.preventDefault();
 
