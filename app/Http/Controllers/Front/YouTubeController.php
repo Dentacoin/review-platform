@@ -90,7 +90,7 @@ class YouTubeController extends FrontController
 		// 		$missingInfo = [];
 				
 		// 		if(empty($user->short_description)) {
-  //                   $missingInfo[] = 'short intro';
+  //                   $missingInfo[] = 'a short intro';
   //               }
 				
 		// 		if(empty($user->work_hours)) {
@@ -98,29 +98,33 @@ class YouTubeController extends FrontController
   //               }
 				
 		// 		if(empty($user->socials)) {
-  //                   $missingInfo[] = 'social media';
+  //                   $missingInfo[] = 'social media pages';
   //               }
 				
 		// 		if(empty($user->description)) {
-  //                   $missingInfo[] = 'description';
+  //                   $missingInfo[] = 'a description';
   //               }
 				
 		// 		if($user->photos->isEmpty()) {
-  //                   $missingInfo[] = 'additonal photos';
+  //                   $missingInfo[] = 'more photos';
   //               }
 
-  //               $missingInfo = implode(', ', $missingInfo);
+  //               if (!empty($missingInfo)) {
+	 //                $substitutions = [
+	 //                    'profile_missing_info' => $missingInfo[0],
+	 //                ];
 
+	 //                $user->sendGridTemplate(45, $substitutions);
+	                
+  //               } else {
+	               
+	 //            	$user->sendGridTemplate(45, null, null, 1);
+  //               }
 
-  //               $substitutions = [
-  //                   'profile_missing_info' => $missingInfo,
-  //               ];
-
-  //               $user->sendGridTemplate(45, $substitutions);
 		// 	}			
 		// }
     	
-        // dd($emails);
+  //       dd($emails);
 
 
     	//Email4
@@ -153,7 +157,7 @@ class YouTubeController extends FrontController
 		// 	}		
 		// }
     	
-        // dd($emails);
+  //       dd($emails);
 
 
     	//Email5
@@ -183,7 +187,7 @@ class YouTubeController extends FrontController
 
 		// 		$substitutions = [
   //                   'score_last_month_aver' => number_format($user->avg_rating,2),
-		// 			'reviews_last_month_num' => $user->reviews_in()->count()
+		// 			'reviews_last_month_num' => $user->reviews_in()->count().($user->reviews_in()->count() > 1 ? ' reviews' : ' review'),
   //               ];
 
   //               $user->sendGridTemplate(48, $substitutions);
@@ -469,6 +473,10 @@ class YouTubeController extends FrontController
 					AND `id` NOT IN ( 
 						SELECT `user_id` FROM emails WHERE template_id = 57 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
 					)
+					AND `id` NOT IN ( 
+						SELECT `user_id` FROM emails WHERE template_id = 57 AND `created_at` < '".date('Y-m-d', time() - 86400*31*6)." 00:00:00'
+					)
+			LIMIT 100
 
 		";
 
@@ -477,19 +485,13 @@ class YouTubeController extends FrontController
 		);
 
 		// foreach ($users as $u) {
-		// 	$user = User::find($u->id);
+		// 	$user = User::find($u->user_id);
 
 		// 	if (!empty($user)) {
-		// 		$user->sendTemplate(57);
+		// 		$user->sendGridTemplate(57);
 		// 	}
 		// }
 		// dd($users);
 
-
-
-		
-
-    }
-
-    
+    }    
 }

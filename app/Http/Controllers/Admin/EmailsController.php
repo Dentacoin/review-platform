@@ -48,6 +48,7 @@ class EmailsController extends AdminController
                 $translation->subtitle = $this->request->input('subtitle_'.$langkey);
                 $translation->content = $this->request->input('content_'.$langkey);
                 $translation->sendgrid_template_id = $this->request->input('sendgrid_template_id_'.$langkey);
+                $translation->category = $this->request->input('category_'.$langkey);
                 $translation->save();
             }
             $template->save();

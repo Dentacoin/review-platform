@@ -322,7 +322,7 @@ class UsersController extends AdminController
             $users = $users->select(['id', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender'])->get();
         } else if(request()->input('export-sendgrid')) {
             ini_set("memory_limit",-1);
-            $users = $users->select(['id', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender', 'is_partner', 'is_dentist', 'is_clinic', 'platform'])->get();
+            $users = $users->whereNull('unsubscribe')->select(['id', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender', 'is_partner', 'is_dentist', 'is_clinic', 'platform'])->get();
         } else if($results == 0) {
             $users = $users->take(3000)->get();
         } else {
@@ -796,9 +796,10 @@ class UsersController extends AdminController
 
     public function edit( $id ) {
         $item = User::withTrashed()->find($id);
-        $emails = Email::where('user_id', $id )->orderBy('created_at', 'DESC')->get();
 
         if(!empty($item)) {
+
+            $emails = Email::where('user_id', $id )->where('sent', 1)->orderBy('created_at', 'DESC')->get();
 
             if($item->is_dentist) {
                 $this->fields['password'] = [
@@ -829,36 +830,23 @@ class UsersController extends AdminController
                                     if( $item->deleted_at ) {
                                         $item->restore();
                                     }
-
-                                    $item->sendTemplate(26);
-
                                     
-                                    // if ($item->platform == 'trp') {
-
-                                    //     $item->sendGridTemplate(26);
-                                    // } else {
-                                    //     $item->sendTemplate(26);
-                                    // }
+                                    if ($item->platform == 'trp') {
+                                        $item->sendGridTemplate(26);
+                                    } else {
+                                        $item->sendTemplate(26);
+                                    }
 
                                     $olde = $item->email;
                                     $item->email = 'ali.hashem@dentacoin.com';
                                     $item->save();
 
+                                    if ($item->platform == 'trp') {
+                                        $to_ali = $item->sendGridTemplate(26);
+                                    } else {
+                                        $to_ali = $item->sendTemplate(26);
+                                    }
 
-                                    $to_ali = $item->sendTemplate(26);
-
-
-                                    // if ($item->platform == 'trp') {
-                                    //     $substitutions = [
-                                    //         'title' => $item->title,
-                                    //         'add_name' => $item->name,
-                                    //         'trp_profile' => $item->getLink(),
-                                    //     ];
-
-                                    //     $to_ali = $item->sendGridTemplate(26, $substitutions);
-                                    // } else {
-                                        // $to_ali = $item->sendTemplate(26);
-                                    // }
                                     $item->email = $olde;
                                     $item->save();
                                     $to_ali->delete();

@@ -62,6 +62,13 @@
                             </div>
 
                             <div class="form-group">
+                                <label class="col-md-2 control-label">Category</label>
+                                <div class="col-md-10">
+                                    {{ Form::text('category_'.$langkey, !empty($item) ? stripslashes($item->{'category:'.$langkey}) : null, array('maxlength' => 512, 'class' => 'form-control')) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="col-md-2 control-label">SendGrid Template ID</label>
                                 <div class="col-md-10">
                                     {{ Form::text('sendgrid_template_id_'.$langkey, !empty($item) ? stripslashes($item->{'sendgrid_template_id:'.$langkey}) : null, array('maxlength' => 256, 'class' => 'form-control')) }}
