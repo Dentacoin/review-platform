@@ -302,7 +302,7 @@ class ProfileController extends FrontController
             'ban_alternatives' => $ban_alternatives,
             'ban_alternatives_buttons' => $ban_alternatives_buttons,
             'time_left' => $time_left,
-            'histories' => $this->user->dcn_rewards->where('reference_id', '!=', 34)->where('platform', 'vox'),
+            'histories' => $this->user->vox_rewards->where('reference_id', '!=', 34),
             'payouts' => $this->user->history->where('type', '=', 'vox-cashout'),
             'js' => [
                 'profile.js',
