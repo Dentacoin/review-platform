@@ -473,6 +473,10 @@ class YouTubeController extends FrontController
 					AND `id` NOT IN ( 
 						SELECT `user_id` FROM emails WHERE template_id = 57 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
 					)
+					AND `id` NOT IN ( 
+						SELECT `user_id` FROM emails WHERE template_id = 57 AND `created_at` < '".date('Y-m-d', time() - 86400*31*6)." 00:00:00'
+					)
+			LIMIT 100
 
 		";
 
@@ -481,10 +485,10 @@ class YouTubeController extends FrontController
 		);
 
 		// foreach ($users as $u) {
-		// 	$user = User::find($u->id);
+		// 	$user = User::find($u->user_id);
 
 		// 	if (!empty($user)) {
-		// 		$user->sendTemplate(57);
+		// 		$user->sendGridTemplate(57);
 		// 	}
 		// }
 		// dd($users);

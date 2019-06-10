@@ -574,6 +574,69 @@ NEW & FAILED TRANSACTIONS
                 }
             }
 
+            //Create a Wallet
+            //!!!!!! (repeates for six months) !!!!!!!!!!
+
+            $query = "
+                SELECT 
+                    `rewards`.`user_id`
+                FROM
+                    (
+                        SELECT 
+                            `user_id`, 
+                            sum(reward) as `rewards_total` 
+                        FROM 
+                            dcn_rewards 
+                        GROUP BY 
+                            `user_id`
+                    ) `rewards`
+                    left OUTER JOIN
+                    (
+                        SELECT 
+                            `user_id`, 
+                            sum(reward) as `withdraws_total` 
+                        FROM 
+                            dcn_cashouts 
+                        GROUP BY 
+                            `user_id`
+                    ) `cashouts`
+                    ON
+                        `rewards`.user_id = `cashouts`.user_id  
+                    LEFT JOIN 
+                        `users` `u`
+                    ON
+                        `u`.`id` = `rewards`.`user_id`
+                    WHERE
+                        `is_dentist` = 1
+                        AND `unsubscribe` is null
+                        AND `status` = 'approved'
+                        AND `dcn_address` is not null
+                        AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) > 3000
+                        AND `deleted_at` is null
+                        AND `id` NOT IN ( 
+                            SELECT `user_id` FROM emails WHERE template_id = 57 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
+                        )
+                        AND `id` NOT IN ( 
+                            SELECT `user_id` FROM emails WHERE template_id = 57 AND `created_at` < '".date('Y-m-d', time() - 86400*31*6)." 00:00:00'
+                        )
+                LIMIT 100
+
+            ";
+
+            $users = DB::select(
+                DB::raw($query), []
+            );
+
+            $create_wallet_email = 0;
+            foreach ($users as $u) {
+                $user = User::find($u->user_id);
+
+                if (!empty($user)) {
+                    $create_wallet_email++;
+                    $user->sendGridTemplate(57);
+                }
+            }
+
 
             $mtext = 'We just sent:
 
@@ -582,6 +645,8 @@ NEW & FAILED TRANSACTIONS
             Email 4 success: '.$email4_success.'
             Email 4 false: '.$email4_false.'
             Email 5: '.$email5.'
+
+            "Create Wallet" Email: '.$create_wallet_email.'
 
             ';
 
