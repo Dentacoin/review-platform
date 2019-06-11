@@ -269,7 +269,7 @@ class UsersController extends AdminController
 
             if( $status ) {
                 $users = $users->where('status', $status);
-            } else if($tmp[1] == 'partners') {
+            } else if(!empty($tmp[1]) && $tmp[1] == 'partners') {
                 $users = $users->where('is_partner', 1);
             }
 
