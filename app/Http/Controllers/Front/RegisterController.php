@@ -661,6 +661,7 @@ class RegisterController extends FrontController
 
                 return Response::json( [
                     'success' => true,
+                    'user' => $user->is_clinic ? 'clinic' : 'dentist',
                     'message' => trans('trp.popup.verification-popup.user-info.success'),
                 ] );
             }

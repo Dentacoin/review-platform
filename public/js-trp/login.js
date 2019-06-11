@@ -434,6 +434,11 @@ $(document).ready(function(){
                 success: function(ret) {
                     if (ret.success) {
                         $('.popup .alert-success').html(ret.message).show();
+
+                        gtag('event', 'Invite', {
+                            'event_category': 'DentistRegistration',
+                            'event_label': 'DentistWorkplace',
+                        });
                     } else {
                         $('.popup .alert-warning').html(ret.message).show();
                     }
@@ -462,6 +467,11 @@ $(document).ready(function(){
             success: function(ret) {
                 if (ret.success) {
                     $('.popup .alert-success').html(ret.message).show();
+
+                    gtag('event', 'Invite', {
+                        'event_category': 'DentistRegistration',
+                        'event_label': 'ClinicTeam',
+                    });
                 } else {
                     $('.popup .alert-warning').html(ret.message).show();
                 }
@@ -497,6 +507,11 @@ $(document).ready(function(){
                 if (ret.success) {
                     $(this).hide();
                     $('.popup .alert-success').html(ret.message).show();
+
+                    gtag('event', 'Invite', {
+                        'event_category': 'DentistRegistration',
+                        'event_label': 'DentistWorkplace',
+                    });
                 } else {
                     $('.popup .alert-warning').show();
                     $('.popup .alert-warning').html('');
@@ -539,11 +554,17 @@ $(document).ready(function(){
                     $(this).hide();
                     $('.popup .alert-success').html(ret.message).show();
 
-                    fbq('track', 'DentistProfile');
-                    gtag('event', 'ClickSave', {
-                        'event_category': 'DentistRegistration',
-                        'event_label': 'DentistProfile',
-                    });
+                    if (ret.user == 'dentist') {
+                        gtag('event', 'ClickSave', {
+                            'event_category': 'DentistRegistration',
+                            'event_label': 'DentistDescr',
+                        });
+                    } else {
+                        gtag('event', 'ClickSave', {
+                            'event_category': 'DentistRegistration',
+                            'event_label': 'ClinicDescr',
+                        });
+                    }
                 } else {
                     $('.popup .alert-warning:not(.short-descr-error)').html('').show();
                     for(var i in ret.messages) {
