@@ -70,7 +70,7 @@ class LoginController extends FrontController
 
             if ($user) {
                 if($user->loggedFromBadIp()) {
-                    dd('Bad IP', $s_user, $s_user->user);
+                    //dd('Bad IP', $s_user, $s_user->user);
                     return redirect( getVoxUrl('login').'?suspended-popup' );
                 }
 
@@ -87,7 +87,7 @@ class LoginController extends FrontController
                 }
                 return redirect( $intended ? $intended : getVoxUrl('/') );
             } else {
-                dd('Other error', $s_user, $s_user->user);
+                //dd('Other error', $s_user, $s_user->user);
                 Request::session()->flash('error-message', trans('vox.page.login.error-fb', [
                     'link' => '<a href="'.getVoxUrl('/').'">',
                     'endlink' => '</a>',
