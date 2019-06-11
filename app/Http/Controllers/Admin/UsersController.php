@@ -909,8 +909,24 @@ class UsersController extends AdminController
                         }
             		}
             	}
+
+                $item->hasimage_social = false;
                 $item->save();
 
+                foreach ($item->reviews_out as $review_out) {
+                    $review_out->hasimage_social = false;
+                    $review_out->save();
+                }
+
+                foreach ($item->reviews_in_dentist as $review_in_dentist) {
+                    $review_in_dentist->hasimage_social = false;
+                    $review_in_dentist->save();
+                }
+
+                foreach ($item->reviews_in_clinic as $review_in_clinic) {
+                    $review_in_clinic->hasimage_social = false;
+                    $review_in_clinic->save();
+                }
 
                 //Categories
                 // UserCategory::where('user_id', $item->id)->delete();

@@ -587,6 +587,25 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         if( Request::file('image') && Request::file('image')->isValid() ) {
             $img = Image::make( Input::file('image') )->orientate();
             $this->user->addImage($img);
+
+            $this->user->hasimage_social = false;
+            $this->user->save();
+
+            foreach ($this->user->reviews_out as $review_out) {
+                $review_out->hasimage_social = false;
+                $review_out->save();
+            }
+
+            foreach ($this->user->reviews_in_dentist as $review_in_dentist) {
+                $review_in_dentist->hasimage_social = false;
+                $review_in_dentist->save();
+            }
+
+            foreach ($this->user->reviews_in_clinic as $review_in_clinic) {
+                $review_in_clinic->hasimage_social = false;
+                $review_in_clinic->save();
+            }
+
             return Response::json(['success' => true, 'thumb' => $this->user->getImageUrl(true), 'name' => '' ]);
         }
     
@@ -746,7 +765,24 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         }
                     }
                 }
+
+                $this->user->hasimage_social = false;
                 $this->user->save();
+
+                foreach ($this->user->reviews_out as $review_out) {
+                    $review_out->hasimage_social = false;
+                    $review_out->save();
+                }
+
+                foreach ($this->user->reviews_in_dentist as $review_in_dentist) {
+                    $review_in_dentist->hasimage_social = false;
+                    $review_in_dentist->save();
+                }
+
+                foreach ($this->user->reviews_in_clinic as $review_in_clinic) {
+                    $review_in_clinic->hasimage_social = false;
+                    $review_in_clinic->save();
+                }
                 
                 if( Request::input('json') ) {
                     $ret = [
