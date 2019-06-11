@@ -123,6 +123,7 @@ $(document).ready(function(){
             list.slice( 0, 5 ).show();
         }
     }
+    handleFilters();
 
 
     $('.sort-menu a').click( function(e) {
