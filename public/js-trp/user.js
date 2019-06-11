@@ -615,6 +615,11 @@ $(document).ready(function(){
                     $('.ask-dentist').closest('.alert').hide();
                     $('.ask-success').show();
                     $('.button-ask').remove();
+
+                    gtag('event', 'Request', {
+                        'event_category': 'Reviews',
+                        'event_label': 'InvitesAsk',
+                    });
                 } else {
 
                 }
