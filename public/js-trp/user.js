@@ -410,9 +410,7 @@ $(document).ready(function(){
     //Invites
 
     if( $('.invite-patient-form').length ) {
-        console.log(1123);
         $('.invite-patient-form').submit( function(e) {
-            console.log(456);
             e.preventDefault();
 
             if(ajax_is_running) {
@@ -445,6 +443,11 @@ $(document).ready(function(){
                         $('.invite-patient-form').find('.invite-email').val('');
                         $('.invite-patient-form').find('.invite-name').val('').focus();
                         $('.invite-patient-form').find('.invite-alert').show().addClass('alert-success').html(data.message);
+
+                        gtag('event', 'Send', {
+                            'event_category': 'Reviews',
+                            'event_label': 'InvitesSent',
+                        });
                     } else {
                         $('.invite-patient-form').find('.invite-alert').show().addClass('alert-warning').html(data.message);                    
                     }
@@ -1043,6 +1046,11 @@ $(document).ready(function(){
                     console.log('success');
                     $('#review-confirmed').show();
                     $('#review-submit-button').hide();
+
+                    gtag('event', 'Submit', {
+                        'event_category': 'Reviews',
+                        'event_label': 'Reviews',
+                    });
                 } else {
                     if(data.valid_input) {
                         $('#review-crypto-error').show();

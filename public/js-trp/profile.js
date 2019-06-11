@@ -92,6 +92,11 @@ $(document).ready(function(){
                         $('#invite-email').val('');
                         $('#invite-name').val('').focus();
                         $('#invite-alert').show().addClass('alert-success').html(data.message);
+
+                        gtag('event', 'Send', {
+                            'event_category': 'Reviews',
+                            'event_label': 'InvitesSent',
+                        });
                     } else {
                         $('#invite-alert').show().addClass('alert-warning').html(data.message);                    
                     }
