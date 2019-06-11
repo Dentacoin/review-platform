@@ -140,6 +140,12 @@ jQuery(document).ready(function($){
 			loadCaptchaScript();
 			id = 'popup-register';
 			switchLogins('login');
+		} else if(id=='popup-login-dentist') {
+			loadCaptchaScript();
+			id = 'popup-register';
+			switchLogins('login');
+			$('.form-wrapper').removeClass('chosen');
+			$('.form-button.white-form-button').closest('.form-wrapper').addClass('chosen');
 		} else if(id=='popup-register-dentist') {
 			loadCaptchaScript();
 			id = 'popup-register';
