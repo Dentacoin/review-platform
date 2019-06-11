@@ -18,7 +18,10 @@ class CitiesController extends BaseController
 	public function getUsername() {
 
 		$username = trim(Request::input('username'));
-		$users = User::where('is_dentist', true)->where('name', 'LIKE', '%'.$username.'%')->whereIn('status', ['approved','added_approved'])->take(10)->get();
+		$users = User::where('is_dentist', true)->where(function($query) use ($username) {
+			$query->where('name', 'LIKE', '%'.$username.'%')
+			->orWhere('name_alternative', 'LIKE', '%'.$username.'%');
+		})->whereIn('status', ['approved','added_approved'])->take(10)->get();
 		$user_list = [];
 		foreach ($users as $user) {
 			$user_list[] = [
