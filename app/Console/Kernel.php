@@ -7,6 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use App\Models\IncompleteRegistration;
 use App\Models\Article;
+use App\Models\Email;
 use App\Models\User;
 use App\Models\Dcn;
 use App\Models\DcnTransaction;
