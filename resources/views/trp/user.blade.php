@@ -200,7 +200,7 @@
 				</div>		
 			</div>
 			<div class="profile-details">
-				<div class="p">
+				<a href="javascript:;" class="p scroll-to-map" map-tooltip="{{ $item->address ? $item->address.', ' : '' }} {{ $item->country->name }} ">
 		    		<div class="img">
 						<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
 					</div>
@@ -208,7 +208,7 @@
 					{{ $item->state_name ? $item->state_name.', ' : '' }} 
 					{{ $item->country->name }} 
 					<!-- <span class="gray-text">(2 km away)</span> -->
-				</div>
+				</a>
 		    	@if( $time = $item->getWorkHoursText() )
 		    		<div class="p">
 			    		<div class="img">
@@ -457,7 +457,7 @@
 					@if( $item->name_alternative )
 						<p class="alternative-name">({{ $item->name_alternative }})</p>
 					@endif
-					<div class="p">
+					<a href="javascript:;" class="p scroll-to-map" map-tooltip="{{ $item->address ? $item->address.', ' : '' }} {{ $item->country->name }} ">
 						<div class="img">
 							<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}">
 						</div>
@@ -465,7 +465,7 @@
 						{{ $item->state_name ? $item->state_name.', ' : '' }} 
 						{{ $item->country->name }} 
 						<!-- <span class="gray-text">(2 km away)</span> -->
-					</div>
+					</a>
 			    	@if( $time = $item->getWorkHoursText() )
 			    		<div class="p">
 			    			<div class="img">

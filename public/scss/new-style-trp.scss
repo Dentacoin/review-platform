@@ -5157,6 +5157,15 @@ textarea.input {
 		}
 	}
 
+	.scroll-to-map {
+		transition: all 0.3s ease;
+		
+		&:hover {
+			color: #268db5;
+			transition: all 0.3s ease;
+		}
+	}
+
 	a,
 	span {
 		font-size: 14px;
@@ -5722,6 +5731,10 @@ textarea.input {
 	.map-container {
 		width: 100%;
 		height: 300px;
+
+		.gm-ui-hover-effect {
+			display: none !important;
+		}
 	}
 
     .about-container {

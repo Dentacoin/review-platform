@@ -165,6 +165,11 @@ $(document).ready(function(){
                         icon: images_path+'/map-pin-active.png',
                     });
 
+                    var data = $('.scroll-to-map:visible').attr('map-tooltip');
+                    var infowindow = new google.maps.InfoWindow({
+                      content: data
+                    });
+                    infowindow.open(profile_map,mapMarker);
 
                 } );
             }
@@ -1306,4 +1311,11 @@ $(document).ready(function(){
             $(this).closest('.email-wrapper').find('input[name="email_public"]').removeAttr('disabled');
         }
     }); 
+
+    $('.scroll-to-map').click( function() {
+        $('.profile-tabs .tab[data-tab="about"]').trigger('click');
+        $('html, body').animate({
+            scrollTop: $('.map-container').offset().top - $('header').height() - 40
+        }, 500);        
+    });
 });
