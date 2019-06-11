@@ -3140,7 +3140,7 @@ p.h2-bold {
 		text-align: center;
 		font-weight: normal;
 		//margin-bottom: 35px;
-		margin-bottom: 10px;
+		margin-bottom: 40px;
 
 		@media #{$phone} {
 			font-size: 12px;
@@ -3204,8 +3204,8 @@ p.h2-bold {
 		text-align: center;
 		max-width: 870px;
 		margin: 0 auto;
-		//margin-bottom: 40px;
-		margin-bottom: 10px;
+		margin-bottom: 40px;
+		// margin-bottom: 10px;
 	}
 
 	.search-survey {
@@ -3225,6 +3225,7 @@ p.h2-bold {
 
 	.stats-list {
 		justify-content: space-between;
+		margin-top: 10px;
 
 		.stats-holder {
 			//width: 870px;
