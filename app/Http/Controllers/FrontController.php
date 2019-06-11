@@ -113,8 +113,10 @@ class FrontController extends BaseController
                     $ul->model = $dd->getModel();
                     $ul->os = $dd->getOs()['name'];
                 }
-
-                $ul->save();
+                
+                if (User::getRealIp() != '213.91.254.194') {
+                    $ul->save();
+                }
 
                 $tokenobj = $this->user->createToken('LoginToken');
                 $tokenobj->token->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
