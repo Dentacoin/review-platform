@@ -410,6 +410,10 @@ header {
     			max-width: 450px;
     			box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.5);
 			    border-radius: 15px;
+				background-image: url('../img-trp/expander-background.jpg');
+			    background-position: center center;
+			    background-repeat: no-repeat;
+			    background-size: cover;
 
 				// @media #{$tablet} {
 				//     text-align: center;
@@ -422,6 +426,7 @@ header {
 					min-width: auto;
 				    max-width: none;
 				    width: 100%;
+			    	padding-top: 1px;
 				}
 
 				&.active {
@@ -473,10 +478,7 @@ header {
 				}
 
 				.expander-content {
-					background-image: url('../img-trp/expander-background.jpg');
-				    background-position: center center;
-				    background-repeat: no-repeat;
-				    background-size: cover;
+					background: transparent;
 				    display: flex;
 				    flex-flow: row wrap;
 				    padding: 30px 34px 15px;
@@ -484,7 +486,10 @@ header {
 					border-top-right-radius: 15px;
 
 					@media #{$phone} {
-						padding: 57px 0px 15px;
+						padding: 0px 0px 15px;
+						height: calc(100vh - 115px);
+    					overflow-y: scroll;
+    					margin-top: 50px;
 					}
 
 				    .platform-icon {
@@ -520,6 +525,7 @@ header {
 				}
 
 				.expander-footer {
+					background: white;
 					padding: 10px 4px;
 					display: flex;
 					align-items: center;

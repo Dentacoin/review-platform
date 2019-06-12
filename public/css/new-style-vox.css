@@ -562,13 +562,18 @@ header {
         min-width: 450px;
         max-width: 450px;
         box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.5);
-        border-radius: 15px; }
+        border-radius: 15px;
+        background-image: url("../new-vox-img/expander-background.jpg");
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover; }
         @media screen and (max-width: 768px) {
           header .header-right .expander-wrapper .expander {
             display: block;
             min-width: auto;
             max-width: none;
-            width: 100%; } }
+            width: 100%;
+            padding-top: 1px; } }
         header .header-right .expander-wrapper .expander.active {
           display: block; }
         header .header-right .expander-wrapper .expander:before {
@@ -607,10 +612,6 @@ header {
             margin-left: 4px;
             font-size: 20px; }
         header .header-right .expander-wrapper .expander .expander-content {
-          background-image: url("../new-vox-img/expander-background.jpg");
-          background-position: center center;
-          background-repeat: no-repeat;
-          background-size: cover;
           display: flex;
           flex-flow: row wrap;
           padding: 30px 34px 15px;
@@ -618,7 +619,10 @@ header {
           border-top-right-radius: 15px; }
           @media screen and (max-width: 768px) {
             header .header-right .expander-wrapper .expander .expander-content {
-              padding: 57px 0px 15px; } }
+              padding: 0px 0px 15px;
+              height: calc(100vh - 115px);
+              overflow-y: scroll;
+              margin-top: 50px; } }
           header .header-right .expander-wrapper .expander .expander-content .platform-icon {
             width: 25%;
             display: block;
@@ -647,7 +651,8 @@ header {
           display: flex;
           align-items: center;
           border-bottom-left-radius: 15px;
-          border-bottom-right-radius: 15px; }
+          border-bottom-right-radius: 15px;
+          background: white; }
           header .header-right .expander-wrapper .expander .expander-footer .col {
             flex: 1; }
           header .header-right .expander-wrapper .expander .expander-footer a {
