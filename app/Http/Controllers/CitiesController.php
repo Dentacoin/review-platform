@@ -25,7 +25,7 @@ class CitiesController extends BaseController
 		$user_list = [];
 		foreach ($users as $user) {
 			$user_list[] = [
-				'name' => $user->getName(),
+				'name' => $user->getName().( $user->name_alternative && mb_strtolower($user->name)!=mb_strtolower($user->name_alternative) ? ' / '.$user->name_alternative : '' ) ,
 				'link' => $user->getLink(),
 				'type' => $user->is_clinic ? trans('front.common.clinic') : trans('front.common.dentist'),
 				'is_clinic' => $user->is_clinic,
