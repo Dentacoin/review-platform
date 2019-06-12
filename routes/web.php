@@ -132,6 +132,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::get('emails', 							'EmailsController@list');
 	Route::get('emails/{what?}', 					'EmailsController@list');
+	Route::get('emails/trp/send-engagement-email', 'EmailsController@engagement_email');
 	Route::get('emails/edit/{id}', 					'EmailsController@edit');
 	Route::post('emails/edit/{id}', 				'EmailsController@save');
 

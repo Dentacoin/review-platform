@@ -10,6 +10,7 @@ use App\Models\Article;
 use App\Models\Email;
 use App\Models\User;
 use App\Models\Dcn;
+use App\Models\Review;
 use App\Models\DcnTransaction;
 use Carbon\Carbon;
 use DB;
@@ -661,6 +662,174 @@ NEW & FAILED TRANSACTIONS
                 $message->to( 'gergana@youpluswe.com' );
                 $message->subject('Dentist First 3 weeks engagement / Welcome journey');
             });
+
+
+
+
+
+
+            //No reviews last 30 days
+
+            //Email2
+
+            $query = "
+                SELECT 
+                    * 
+                FROM 
+                    emails 
+                WHERE 
+                    template_id = 49
+                    AND `user_id` NOT IN ( 
+                        SELECT `user_id` FROM emails WHERE template_id = 50 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+                    )
+                    AND `user_id` NOT IN ( 
+                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    )
+                    AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
+            ";
+
+            $emails = DB::select(
+                DB::raw($query), []
+            );
+
+            foreach ($emails as $e) {
+                $user = User::find($e->user_id);
+                if (!empty($user)) {
+                    $user->sendGridTemplate(50);
+                }
+            }
+
+
+            //Email3
+
+            $query = "
+                SELECT 
+                    * 
+                FROM 
+                    emails 
+                WHERE 
+                    template_id = 50
+                    AND `user_id` NOT IN ( 
+                        SELECT `user_id` FROM emails WHERE template_id IN ( 51, 52) AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+                    )
+                    AND `user_id` NOT IN ( 
+                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    )
+                    AND `created_at` < '".date('Y-m-d', time() - 86400*7)." 00:00:00'
+            ";
+
+            $emails = DB::select(
+                DB::raw($query), []
+            );
+
+            foreach ($emails as $e) {
+                $user = User::find($e->user_id);
+                if (!empty($user) && $user->invites->isNotEmpty()) {
+
+                    if ( $user->reviews_in()->isNotEmpty()) {
+                        $id = $user->id;
+                        $from_day = Carbon::now()->subDays(11);
+
+                        $prev_reviews = Review::where(function($query) use ($id) {
+                        $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+                        })
+                        ->where('created_at', '>=', $from_day)
+                        ->get();
+
+
+                        $rating = 0;
+                        foreach($prev_reviews as $reviews) {
+                            $rating += $reviews->rating;
+                        }
+
+                        $rating_avg = !empty($rating) ? $rating / $prev_reviews->count() : 0;
+
+                        $results_sentence = 'Congrats, you are on the right track! In the past weeks you achieved '.number_format($rating_avg, 2).' rating score based on '.$prev_reviews->count().($prev_reviews->count() > 1 ? ' reviews' : ' review').'.';                   
+
+                    } else {
+
+                        $invites_text = $user->invites->count() > 1 ? "invites" : "invite";
+
+                        $results_sentence = 'Congrats, you are on the right track! In the past weeks you sent '.$user->invites->count().' review '.$invites_text.' to your patients.';
+                    }
+
+                    $substitutions = [
+                        'results_sentence' => $results_sentence
+                    ];
+
+                    $user->sendGridTemplate(51, $substitutions);
+
+                } else {
+                    $user->sendGridTemplate(52);
+                }   
+            }           
+
+
+
+
+            //Email4
+
+            $query = "
+                SELECT 
+                    * 
+                FROM 
+                    emails 
+                WHERE 
+                    template_id = 52
+                    AND `user_id` NOT IN ( 
+                        SELECT `user_id` FROM emails WHERE template_id IN ( 53, 54) AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+                    )
+                    AND `user_id` NOT IN ( 
+                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    )
+                    AND `created_at` < '".date('Y-m-d', time() - 86400*14)." 00:00:00'
+            ";
+
+            $emails = DB::select(
+                DB::raw($query), []
+            );
+
+            foreach ($emails as $e) {
+                $user = User::find($e->user_id);
+                if (!empty($user) && $user->invites->isNotEmpty()) {
+
+                    if ( $user->reviews_in()->isNotEmpty()) {
+                        $id = $user->id;
+                        $from_day = Carbon::now()->subDays(25);
+
+                        $prev_reviews = Review::where(function($query) use ($id) {
+                        $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+                        })
+                        ->where('created_at', '>=', $from_day)
+                        ->get();
+
+
+                        $rating = 0;
+                        foreach($prev_reviews as $reviews) {
+                            $rating += $reviews->rating;
+                        }
+
+                        $rating_avg = !empty($rating) ? $rating / $prev_reviews->count() : 0;
+
+                        $results_sentence = 'Congrats, you are on the right track! In the past weeks you achieved '.number_format($rating_avg, 2).' rating score based on '.$prev_reviews->count().($prev_reviews->count() > 1 ? ' reviews' : ' review').'.';                   
+
+                    } else {
+
+                        $invites_text = $user->invites->count() > 1 ? "invites" : "invite";
+
+                        $results_sentence = 'Congrats, you are on the right track! In the past weeks you sent '.$user->invites->count().' review '.$invites_text.' to your patients.';
+                    }
+
+                    $substitutions = [
+                        'results_sentence' => $results_sentence
+                    ];
+
+                    $user->sendGridTemplate(53, $substitutions);
+
+                } else {
+                    $user->sendGridTemplate(54);
+                }   
+            }
 
 
         })->cron("15 */6 * * *"); //05:00h

@@ -2,7 +2,16 @@
 
 @section('content')
 
-<h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
+<h1 class="page-header">
+    {{ trans('admin.page.'.$current_page.'.title') }}
+    
+    @if($platform == 'trp')
+        <a href="{{ url('cms/emails/trp/send-engagement-email') }}" class="btn btn-primary pull-right">Send Re-engagament dentists without reviews last 30 days</a>
+    @endif
+</h1>
+
+@include('admin.errors')
+
 <!-- end page-header -->
 <div class="row">
     <div class="col-md-12">

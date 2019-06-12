@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 
 use App\Models\EmailTemplate;
 use App\Models\Email;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 
@@ -21,6 +22,7 @@ class EmailsController extends AdminController
 
     	return $this->showView('emails', array(
             'templates' => $templates,
+            'platform' => $what
         ));
     }
 
@@ -56,10 +58,46 @@ class EmailsController extends AdminController
             $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.saved'));
             return redirect('cms/'.$this->current_page.'/'.$template->type);
         } else {
-            return redirect('cms/'.$this->current_page);
+            
         }
     }
 
-}
 
-//
+    public function engagement_email() {
+
+        //No reviews last 30 days
+
+        //Email1
+
+        $query = "
+            SELECT 
+                `id`
+            FROM 
+                users
+            WHERE 
+                `is_dentist` = 1
+                AND `id` NOT IN ( SELECT `dentist_id` FROM `reviews` WHERE `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00' )
+                AND `id` NOT IN ( SELECT `clinic_id` FROM `reviews` WHERE `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00' )
+                AND `id` NOT IN ( SELECT `user_id` FROM `emails` WHERE `template_id` = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00' )
+                AND `created_at` < '".date('Y-m-d', time() - 86400*30)." 00:00:00'
+                AND `unsubscribe` is null
+                AND `status` = 'approved'
+                AND `deleted_at` is null
+        ";
+
+        $users = DB::select(
+            DB::raw($query), []
+        );
+
+        foreach ($users as $u) {
+            $user = User::find($u->id);
+
+            if (!empty($user)) {
+                $user->sendGridTemplate(49);
+            }
+        }
+
+        $this->request->session()->flash('success-message', 'Emails send');
+        return redirect('cms/'.$this->current_page);
+    }
+}

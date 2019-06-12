@@ -11,6 +11,7 @@ use App\Models\Dcn;
 use App\Models\DcnTransaction;
 use App\Models\User;
 use App\Models\Vox;
+use App\Models\Review;
 use App\Models\VoxQuestion;
 use App\Models\Email;
 
@@ -20,6 +21,8 @@ use \SendGrid\Mail\Subject as Subject;
 use \SendGrid\Mail\PlainTextContent as PlainTextContent;
 use \SendGrid\Mail\HtmlContent as HtmlContent;
 use \SendGrid\Mail\Mail as Mail;
+
+use Carbon\Carbon;
 
 class YouTubeController extends FrontController
 {
@@ -206,38 +209,7 @@ class YouTubeController extends FrontController
 
 
 
-		//No reviews last 30 days
-
-        //Email1
-
-    	$query = "
-			SELECT 
-				`id`
-			FROM 
-				users
-			WHERE 
-				`is_dentist` = 1
-				AND `id` NOT IN ( SELECT `dentist_id` FROM `reviews` WHERE `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00' )
-				AND `id` NOT IN ( SELECT `clinic_id` FROM `reviews` WHERE `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00' )
-				AND `id` NOT IN ( SELECT `user_id` FROM `emails` WHERE  `template_id` = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00' )
-				AND `created_at` < '".date('Y-m-d', time() - 86400*30)." 00:00:00'
-				AND `unsubscribe` is null
-				AND `status` = 'approved'
-				AND `deleted_at` is null
-		";
-
-		$users = DB::select(
-			DB::raw($query), []
-		);
-
-		// foreach ($users as $u) {
-		// 	$user = User::find($u->id);
-		// 	if (!empty($user)) {
-		// 		$user->sendTemplate(49);
-		// 	}
-		// }
-
-		// dd($users);
+		//No reviews last 30 days        
 
 
 		//Email2
@@ -250,12 +222,12 @@ class YouTubeController extends FrontController
 			WHERE 
 				template_id = 49
 				AND `user_id` NOT IN ( 
-					SELECT `user_id` FROM emails WHERE template_id = 50
+					!!SELECT `user_id` FROM emails WHERE template_id = 50 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
 				)
 				AND `user_id` NOT IN ( 
 					SELECT `id` FROM users WHERE unsubscribe is not null
 				)
-				AND `created_at` > '".date('Y-m-d', time() - 86400*4)." 00:00:00'
+				AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
 		";
 
 		$emails = DB::select(
@@ -265,11 +237,11 @@ class YouTubeController extends FrontController
 		// foreach ($emails as $e) {
 		// 	$user = User::find($e->user_id);
 		// 	if (!empty($user)) {
-		// 		$user->sendTemplate(50);
+		// 		$user->sendGridTemplate(50);
 		// 	}	
 		// }
     	
-		// dd($emails);
+		//dd($emails);
 
 
 		//Email3
@@ -282,12 +254,12 @@ class YouTubeController extends FrontController
 			WHERE 
 				template_id = 50
 				AND `user_id` NOT IN ( 
-					SELECT `user_id` FROM emails WHERE template_id IN ( 51, 52)
+					!!SELECT `user_id` FROM emails WHERE template_id IN ( 51, 52) AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
 				)
 				AND `user_id` NOT IN ( 
 					SELECT `id` FROM users WHERE unsubscribe is not null
 				)
-				AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
+				AND `created_at` < '".date('Y-m-d', time() - 86400*7)." 00:00:00'
 		";
 
 		$emails = DB::select(
@@ -297,13 +269,51 @@ class YouTubeController extends FrontController
 		// foreach ($emails as $e) {
 		// 	$user = User::find($e->user_id);
 		// 	if (!empty($user) && $user->invites->isNotEmpty()) {
-		// 		$user->sendTemplate(51);
+
+		// 		if ( $user->reviews_in()->isNotEmpty()) {
+		// 			$id = $user->id;
+		// 	        $from_day = Carbon::now()->subDays(11);
+
+		// 	        $prev_reviews = Review::where(function($query) use ($id) {
+		// 	            $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+		// 	        })
+		// 	        ->where('created_at', '>=', $from_day)
+		// 	        ->get();
+
+
+		// 	        $rating = 0;
+		// 			foreach($prev_reviews as $reviews) {
+		// 				$rating += $reviews->rating;
+		// 			}
+
+		// 			$rating_avg = !empty($rating) ? $rating / $prev_reviews->count() : 0;
+
+		// 			$results_sentence = 'Congrats, you are on the right track! In the past weeks you achieved '.number_format($rating_avg, 2).' rating score based on '.$prev_reviews->count().($prev_reviews->count() > 1 ? ' reviews' : ' review').'.';					
+
+		// 		} else {
+
+		// 			$invites_text = $user->invites->count() > 1 ? "invites" : "invite";
+
+		// 			$results_sentence = 'Congrats, you are on the right track! In the past weeks you sent '.$user->invites->count().' review '.$invites_text.' to your patients.';
+		// 		}
+
+		// 		$substitutions = [
+		// 			'results_sentence' => $results_sentence
+		// 		];
+
+		// 		$user->sendGridTemplate(51, $substitutions);
+
 		// 	} else {
-		// 		$user->sendTemplate(52);
+		// 		$user->sendGridTemplate(52);
 		// 	}	
 		// }
     	
 		// dd($emails);
+
+
+		
+
+
 
 
 		//Email4
@@ -316,12 +326,12 @@ class YouTubeController extends FrontController
 			WHERE 
 				template_id = 52
 				AND `user_id` NOT IN ( 
-					SELECT `user_id` FROM emails WHERE template_id IN ( 53, 54)
+					!!SELECT `user_id` FROM emails WHERE template_id IN ( 53, 54) AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
 				)
 				AND `user_id` NOT IN ( 
 					SELECT `id` FROM users WHERE unsubscribe is not null
 				)
-				AND `created_at` > '".date('Y-m-d', time() - 86400*14)." 00:00:00'
+				AND `created_at` < '".date('Y-m-d', time() - 86400*14)." 00:00:00'
 		";
 
 		$emails = DB::select(
@@ -331,13 +341,54 @@ class YouTubeController extends FrontController
 		// foreach ($emails as $e) {
 		// 	$user = User::find($e->user_id);
 		// 	if (!empty($user) && $user->invites->isNotEmpty()) {
-		// 		$user->sendTemplate(53);
+
+		// 		if ( $user->reviews_in()->isNotEmpty()) {
+		// 			$id = $user->id;
+		// 	        $from_day = Carbon::now()->subDays(25);
+
+		// 	        $prev_reviews = Review::where(function($query) use ($id) {
+		// 	            $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+		// 	        })
+		// 	        ->where('created_at', '>=', $from_day)
+		// 	        ->get();
+
+
+		// 	        $rating = 0;
+		// 			foreach($prev_reviews as $reviews) {
+		// 				$rating += $reviews->rating;
+		// 			}
+
+		// 			$rating_avg = !empty($rating) ? $rating / $prev_reviews->count() : 0;
+
+		// 			$results_sentence = 'Congrats, you are on the right track! In the past weeks you achieved '.number_format($rating_avg, 2).' rating score based on '.$prev_reviews->count().($prev_reviews->count() > 1 ? ' reviews' : ' review').'.';					
+
+		// 		} else {
+
+		// 			$invites_text = $user->invites->count() > 1 ? "invites" : "invite";
+
+		// 			$results_sentence = 'Congrats, you are on the right track! In the past weeks you sent '.$user->invites->count().' review '.$invites_text.' to your patients.';
+		// 		}
+
+		// 		$substitutions = [
+		// 			'results_sentence' => $results_sentence
+		// 		];
+
+		// 		$user->sendGridTemplate(53, $substitutions);
+
 		// 	} else {
-		// 		$user->sendTemplate(54);
+		// 		$user->sendGridTemplate(54);
 		// 	}	
 		// }
     	
 		// dd($emails);
+
+
+
+
+
+
+
+
 
 
 
