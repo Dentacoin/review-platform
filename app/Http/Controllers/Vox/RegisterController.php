@@ -251,7 +251,7 @@ class RegisterController extends FrontController
         } else {
 
             if (request()->getHost() == 'dentavox.dentacoin.com') {
-                return redirect('https://vox.dentacoin.com/en/registration/');
+                return redirect('https://vox.dentacoin.com/en/registration');
             }
 
             return $this->ShowVoxView('register', array(
