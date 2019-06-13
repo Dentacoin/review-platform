@@ -72,7 +72,7 @@
 			</div>
 		</div>
 
-		<form action="{{ getLangUrl('new-login/facebook', null, 'https://dentavox.dentacoin.com') }}" method="post" id="new-login-form" style="display: none;">
+		<form action="{{ getLangUrl('new-login/facebook', null, 'https://dentavox.dentacoin.com/') }}" method="post" id="new-login-form" style="display: none;">
 			{!! csrf_field() !!}
 			<input type="text" name="access-token" value="">
 			<button type="submit"></button>			
