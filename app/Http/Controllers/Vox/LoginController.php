@@ -247,9 +247,9 @@ class LoginController extends FrontController
                 $newuser->sendTemplate( 12 );
             }
 
-            if($newuser->loggedFromBadIp()) {
-                return redirect( getVoxUrl('registration').'?suspended-popup' );
-            }
+            // if($newuser->loggedFromBadIp()) {
+            //     return redirect( getVoxUrl('registration').'?suspended-popup' );
+            // }
 
             Auth::login($newuser, true);
             Request::session()->flash('success-message', trans('vox.page.registration.success'));
