@@ -362,7 +362,7 @@ select:focus > option:checked {
     background-color: #2196F3; }
   .blue-button.secondary {
     color: #38ace5;
-    background-color: white; }
+    background-color: transparent; }
     .blue-button.secondary:focus, .blue-button.secondary:hover {
       color: #f8faf9;
       border-color: #2196F3;

@@ -453,8 +453,8 @@ select:focus > option:checked {
 
 	&.secondary {
 		color: $main-color;
-		background-color: white;
-		
+		background-color: transparent;
+
 		&:focus,
 		&:hover {
 			color: #f8faf9;
