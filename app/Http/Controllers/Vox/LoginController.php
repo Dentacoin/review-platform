@@ -69,10 +69,10 @@ class LoginController extends FrontController
             }
 
             if ($user) {
-                // if($user->loggedFromBadIp()) {
-                //     //dd('Bad IP', $s_user, $s_user->user);
-                //     return redirect( getVoxUrl('login').'?suspended-popup' );
-                // }
+                if($user->loggedFromBadIp()) {
+                    //dd('Bad IP', $s_user, $s_user->user);
+                    return redirect( getVoxUrl('/').'?suspended-popup' );
+                }
 
                 $sess = [
                     'login_patient' => true,
@@ -247,9 +247,9 @@ class LoginController extends FrontController
                 $newuser->sendTemplate( 12 );
             }
 
-            // if($newuser->loggedFromBadIp()) {
-            //     return redirect( getVoxUrl('registration').'?suspended-popup' );
-            // }
+            if($newuser->loggedFromBadIp()) {
+                return redirect( getVoxUrl('/').'?suspended-popup' );
+            }
 
             Auth::login($newuser, true);
             Request::session()->flash('success-message', trans('vox.page.registration.success'));
