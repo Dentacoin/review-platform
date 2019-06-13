@@ -63,9 +63,9 @@ class FrontController extends BaseController
         if(empty($this->current_subpage)) {
             $this->current_subpage='home';
         }
-        
+
         // Fck FB
-        if( Request::getHost() == 'vox.dentacoin.com' && Request::server('HTTP_REFERER') && Request::isMethod('get') && request()->url() != 'https://vox.dentacoin.com/en/registration') {
+        if( Request::getHost() == 'vox.dentacoin.com' && Request::server('HTTP_REFERER') && Request::isMethod('get') && request()->url() != 'https://vox.dentacoin.com/en/registration' && request()->url() != 'https://vox.dentacoin.com/en/login') {
             Redirect::to( str_replace('vox.', 'dentavox.', Request::url() ) )->send();
         }
         
