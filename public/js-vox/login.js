@@ -123,4 +123,42 @@ $(document).ready(function(){
         $('.new-auth').removeClass('active');
     } );
 
+    const fb_config = {
+        //app_id: '299398824049604',
+        app_id: '1906201509652855',
+        platform: 'fb'
+    };
+
+    var fb_custom_btn = $('.fb-login-button-new');
+
+    //application init
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: fb_config.app_id,
+            cookie: true,
+            xfbml: true,
+            version: 'v2.8'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = '//connect.facebook.net/bg_BG/sdk.js';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    $('.fb-login-button-new').click( function(rerequest){
+
+        FB.login(function (response) {
+
+            console.log(response);
+        });
+    });
+
 });

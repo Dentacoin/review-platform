@@ -109,12 +109,19 @@
 								{{ trans('vox.common.type-patient')  }}
 							</h4>
 
+							@if(!empty($admin))
+								<div class="fb-button-inside">
+									<a href="javascript:;" url="https://dev.dentavox.dentacoin.com/en/login/facebook/{{ $workaround ? $workaround : '' }}" class="fb-login-button-new">
+									</a>
+									<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+								</div>
+							@endif
+							
 							<div class="fb-button-inside">
 								<a href="https://dev.dentavox.dentacoin.com/en/login/facebook/{{ $workaround ? $workaround : '' }}" class="">
 								</a>
 								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
 							</div>
-
 					
 							<div class="civic-button" id="register-civic-button">
 								<i class="fas fa-circle-notch fa-spin"></i>
@@ -154,15 +161,15 @@
 							</div>
 
 							<div class="modern-field alert-after">
-								<input type="email" name="email" id="email" class="modern-input" autocomplete="off" value="{{ old('email') }}" readonly onfocus="this.removeAttribute('readonly');">
-								<label for="email">
+								<input type="email" name="email" id="email-login" class="modern-input" autocomplete="off" value="{{ old('email') }}" readonly onfocus="this.removeAttribute('readonly');">
+								<label for="email-login">
 									<span>{{ trans('vox.page.login.email') }}</span>
 								</label>
 							</div>
 
 							<div class="modern-field alert-after">
-								<input type="password" name="password" id="password" class="modern-input" autocomplete="off">
-								<label for="password">
+								<input type="password" name="password" id="password-login" class="modern-input" autocomplete="off">
+								<label for="password-login">
 									<span>{{ trans('vox.page.login.password') }}</span>
 								</label>
 							</div>							
