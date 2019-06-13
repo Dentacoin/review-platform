@@ -62,7 +62,7 @@ class LoginController extends FrontController
             }
             if(empty($user) && $s_user->getEmail()) {
                 $user = User::where( 'email','LIKE', $s_user->getEmail() )->first(); //->where('id', '<', 5200)
-                if( $user->fb_id != $s_user->getId() ) {
+                if( !empty($user) && $user->fb_id != $s_user->getId() ) {
                     $user->fb_id = $s_user->getId();
                     $user->save();
                 }      
