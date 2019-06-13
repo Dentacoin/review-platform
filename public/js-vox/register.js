@@ -113,6 +113,55 @@ $(document).ready(function(){
         });
     }
 
+    const fb_config = {
+        //app_id: '299398824049604',
+        app_id: '1906201509652855',
+        platform: 'fb'
+    };
 
+    var fb_custom_btn = $('.fb-login-button-new');
+
+    //application init
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: fb_config.app_id,
+            cookie: true,
+            xfbml: true,
+            version: 'v2.8'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = '//connect.facebook.net/bg_BG/sdk.js';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+
+    $('.fb-register-button-new').click( function(rerequest){
+        rerequest.preventDefault();
+
+        if ($('#read-privacy').prop("checked")) {
+            var that = $(this);
+
+            FB.login(function (response) {
+
+                if(response.authResponse && response.status == "connected") {
+                    $('#new-register-form input[name="access-token"]').val(response.authResponse.accessToken);
+                    $('#new-register-form').submit();
+                }
+            });
+        } else {
+            $('#read-privacy').closest('.form-group').addClass('has-error');
+        }
+
+        
+    });
 
 });

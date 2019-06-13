@@ -13,6 +13,12 @@
 
 	<div class="section-register">
 
+		<form action="{{ getLangUrl('new-register/facebook', null, 'https://dentavox.dentacoin.com/') }}" method="post" id="new-register-form" style="display: none;">
+			{!! csrf_field() !!}
+			<input type="text" name="access-token" value="">
+			<button type="submit"></button>			
+		</form>
+
 		<form action="{{ getLangUrl('registration') }}" id="register-form" method="post" role="form" data-toggle="validator" class="form-horizontal">
 			{!! csrf_field() !!}
 
@@ -65,11 +71,16 @@
 								{{ trans('vox.common.type-patient')  }}
 							</h4>
 
-							<div class="fb-button-inside">
+							<div class="fb-button-inside">								
+								<a href="javascript:;" class="fb-register-button-new"></a>
+								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+							</div>
+
+							<!-- <div class="fb-button-inside">
 								<a href="https://dev.dentavox.dentacoin.com/en/register/facebook" class="fb-register">
 								</a>
 								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
-							</div>
+							</div> -->
 
 							<div class="civic-button" id="register-civic-button">
 								<i class="fas fa-circle-notch fa-spin"></i>
