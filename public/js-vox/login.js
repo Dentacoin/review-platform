@@ -155,9 +155,14 @@ $(document).ready(function(){
 
     $('.fb-login-button-new').click( function(rerequest){
 
+        var that = $(this);
+
         FB.login(function (response) {
 
-            console.log(response);
+            if(response.authResponse && response.status == "connected") {
+                $('#new-login-form input[name="access-token"]').val(response.authResponse.accessToken);
+                $('#new-login-form').submit();
+            }
         });
     });
 

@@ -72,6 +72,12 @@
 			</div>
 		</div>
 
+		<form action="{{ getLangUrl('new-login/facebook', null, 'https://dentavox.dentacoin.com') }}" method="post" id="new-login-form" style="display: none;">
+			{!! csrf_field() !!}
+			<input type="text" name="access-token" value="">
+			<button type="submit"></button>			
+		</form>
+
 		<div class="container">
 			<div class="col-md-3">
 				<img class="image-left" src="{{ url('new-vox-img/register-dentist.png') }}">
@@ -109,19 +115,17 @@
 								{{ trans('vox.common.type-patient')  }}
 							</h4>
 
-							@if(!empty($admin))
-								<div class="fb-button-inside">
-									<a href="javascript:;" url="https://dev.dentavox.dentacoin.com/en/login/facebook/{{ $workaround ? $workaround : '' }}" class="fb-login-button-new">
-									</a>
-									<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
-								</div>
-							@endif
-							
 							<div class="fb-button-inside">
-								<a href="https://dev.dentavox.dentacoin.com/en/login/facebook/{{ $workaround ? $workaround : '' }}" class="">
+								<a href="javascript:;" class="fb-login-button-new">
 								</a>
 								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
 							</div>
+
+							<!-- <div class="fb-button-inside">
+								<a href="https://dev.dentavox.dentacoin.com/en/login/facebook/{{ $workaround ? $workaround : '' }}" class="">
+								</a>
+								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+							</div> -->
 					
 							<div class="civic-button" id="register-civic-button">
 								<i class="fas fa-circle-notch fa-spin"></i>

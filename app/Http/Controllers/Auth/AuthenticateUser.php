@@ -52,6 +52,9 @@ class AuthenticateUser extends FrontController
             return redirect(getLangUrl('profile'));
         }
 
+        if (request()->getHost() == 'dentavox.dentacoin.com') {
+            return redirect('https://urgent.dentavox.dentacoin.com/en/login/');
+        }
         
         return $this->ShowVoxView('login',[
             'workaround' => session('vox-redirect-workaround'),

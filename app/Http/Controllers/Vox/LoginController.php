@@ -353,4 +353,11 @@ class LoginController extends FrontController
         
         return Response::json( $ret );
     }
+
+    public function new_facebook_login($locale=null) {
+
+        $user = Socialite::driver('facebook')->userFromToken(Request::input('access-token'));
+
+        return $this->try_social_login($user);
+    }
 }

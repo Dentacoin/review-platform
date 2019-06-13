@@ -299,19 +299,21 @@ $voxRoutes = function () {
 
 			Route::any('invite/{id}/{hash}/{inv_id?}', 			'RegisterController@invite_accept');
 			
-			Route::any('registration', 								'RegisterController@register');
-			Route::post('registration/step1', 						'RegisterController@check_step_one');
-			Route::post('registration/step2', 						'RegisterController@check_step_two');
-			Route::post('registration/step3', 						'RegisterController@check_step_three');
-			Route::post('registration/upload', 						'RegisterController@upload');
+			Route::any('registration', 							'RegisterController@register');
+			Route::post('registration/step1', 					'RegisterController@check_step_one');
+			Route::post('registration/step2', 					'RegisterController@check_step_two');
+			Route::post('registration/step3', 					'RegisterController@check_step_three');
+			Route::post('registration/upload', 					'RegisterController@upload');
 
 			Route::get('recover-password', 						'RegisterController@forgot');
-			Route::post('recover-password', 						'RegisterController@forgot_form');
+			Route::post('recover-password', 					'RegisterController@forgot_form');
 			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
 			Route::post('recover/{id}/{hash}', 					'RegisterController@recover_form');
 
-			Route::get('login/facebook/{query?}', 						'LoginController@facebook_login')->where('query','.+');
-			Route::get('login/callback/facebook/{query?}', 				'LoginController@facebook_callback')->where('query','.+');
+			Route::post('new-login/facebook', 					'LoginController@new_facebook_login');
+			
+			Route::get('login/facebook/{query?}', 				'LoginController@facebook_login')->where('query','.+');
+			Route::get('login/callback/facebook/{query?}', 		'LoginController@facebook_callback')->where('query','.+');
 			Route::post('login/civic', 							'LoginController@civic');
 
 			Route::post('register/civic', 						'RegisterController@civic');
