@@ -71,6 +71,8 @@ class LoginController extends FrontController
             if ($user) {
                 if($user->loggedFromBadIp()) {
                     //dd('Bad IP', $s_user, $s_user->user);
+
+                    dd('bb');
                     return redirect( getVoxUrl('/').'?suspended-popup' );
                 }
 
