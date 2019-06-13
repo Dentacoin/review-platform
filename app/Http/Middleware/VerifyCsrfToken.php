@@ -33,5 +33,6 @@ class VerifyCsrfToken extends BaseVerifier
         '*/profile/gallery',
         '*/profile/clinics/*',
         '*/profile/dentists/*',
+        '*/new-login/facebook',
     ];
 }
