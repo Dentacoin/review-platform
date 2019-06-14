@@ -134,7 +134,7 @@ class LoginController extends FrontController
         if ($user) {
             if($user->deleted_at) {
                 Request::session()->flash('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
-                return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1');
+                return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('You have been permanently banned and cannot return to DentaVox anymore.'));
             } else {
 
                 if($user->isBanned('vox')) {
@@ -143,8 +143,7 @@ class LoginController extends FrontController
                 Auth::login($user, true);
 
                 Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
-                return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1');
-                
+                return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&success-message='.urlencode(trans('vox.popup.register.have-account')));
             }
         } else {
             if (!empty($s_user->getEmail())) {
@@ -154,12 +153,12 @@ class LoginController extends FrontController
                 $is_blocked = User::checkBlocks($name, $s_user->getEmail());
                 if( $is_blocked ) {
                     Request::session()->flash('error-message', $is_blocked );
-                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1');                
+                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode($is_blocked);                
                 }            
 
                 if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
                     Request::session()->flash('error-message', nl2br(trans('front.page.login.existing_email')) );
-                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1');
+                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.page.login.existing_email')));
                 }
 
                 $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
@@ -167,7 +166,7 @@ class LoginController extends FrontController
 
                 if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
                     Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')) );
-                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1');
+                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.page.login.over18')));
                 }
 
                 if(!empty($s_user->user['location']['name'])) {
@@ -255,7 +254,7 @@ class LoginController extends FrontController
 
                 Auth::login($newuser, true);
                 Request::session()->flash('success-message', trans('vox.page.registration.success'));
-                return redirect(getVoxUrl('welcome-to-dentavox'));
+                return redirect(getVoxUrl('welcome-to-dentavox').'?success-message='.urlencode(trans('vox.page.registration.success')));
             } else {
                 return redirect( getVoxUrl('/') );
             }
