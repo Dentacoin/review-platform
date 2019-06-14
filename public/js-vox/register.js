@@ -151,15 +151,39 @@ $(document).ready(function(){
             FB.login(function (response) {
 
                 if(response.authResponse && response.status == "connected") {
-                    $('#new-register-form input[name="access-token"]').val(response.authResponse.accessToken);
-                    $('#new-register-form').submit();
+                    var ac_token = response.authResponse.accessToken;
+
+                    $.ajax({
+                        type: "POST",
+                        url: that.attr('url'),
+                        data: {
+                            access_token: ac_token,
+                            _token: $('input[name="_token"]').val()
+                        },
+                        dataType: 'json',
+                        success: function(ret) {
+                            if(ret.success == true) {
+
+                                window.location.href = ret.link;
+
+                            } else {
+                                if (ret.message) {
+                                    $('.reg-false-alert').html(ret.message);
+                                }
+                                if (ret.link) {
+                                    window.location.href = ret.link;
+                                }
+                            }
+                        },
+                        error: function(ret) {
+                            console.log('error')
+                        }
+                    });
                 }
             }, {scope: 'email'});
         } else {
             $('#read-privacy').closest('.form-group').addClass('has-error');
-        }
-
-        
+        }        
     });
 
 });

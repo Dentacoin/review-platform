@@ -133,18 +133,30 @@ class LoginController extends FrontController
         $country_id = null;
         if ($user) {
             if($user->deleted_at) {
-                Request::session()->flash('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
-                return redirect(getVoxUrl('/'));
+                $ret = [
+                    'success' => false,
+                    'message' => 'You have been permanently banned and cannot return to DentaVox anymore.',
+                ];
+
+                return Response::json( $ret );
             } else {
 
                 if($user->isBanned('vox')) {
-                    return redirect( getVoxUrl('profile'));
+                    $ret = [
+                        'success' => true,
+                        'link' => getVoxUrl('profile'),
+                    ];
+
+                    return Response::json( $ret );
                 }
                 Auth::login($user, true);
 
-                Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
-                return redirect(getVoxUrl('/'));
-                
+                $ret = [
+                    'success' => true,
+                    'link' => getVoxUrl('profile'),
+                ];
+
+                return Response::json( $ret );                
             }
         } else {
             if (!empty($s_user->getEmail())) {
@@ -153,21 +165,36 @@ class LoginController extends FrontController
 
                 $is_blocked = User::checkBlocks($name, $s_user->getEmail());
                 if( $is_blocked ) {
-                    Request::session()->flash('error-message', $is_blocked );
-                    return redirect(getVoxUrl('/'));                
+
+                    $ret = [
+                        'success' => false,
+                        'message' => $is_blocked,
+                    ];
+
+                    return Response::json( $ret );
                 }            
 
                 if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
-                    Request::session()->flash('error-message', nl2br(trans('front.page.login.existing_email')) );
-                    return redirect(getVoxUrl('/'));
+
+                    $ret = [
+                        'success' => false,
+                        'message' => nl2br(trans('front.page.login.existing_email')),
+                    ];
+
+                    return Response::json( $ret );
                 }
 
                 $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
                 $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
 
                 if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
-                    Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')) );
-                    return redirect(getVoxUrl('/'));
+
+                    $ret = [
+                        'success' => false,
+                        'message' => nl2br(trans('front.page.login.over18')),
+                    ];
+
+                    return Response::json( $ret );
                 }
 
                 if(!empty($s_user->user['location']['name'])) {
@@ -254,10 +281,22 @@ class LoginController extends FrontController
                 }
 
                 Auth::login($newuser, true);
-                Request::session()->flash('success-message', trans('vox.page.registration.success'));
-                return redirect(getVoxUrl('welcome-to-dentavox'));
+
+                $ret = [
+                    'success' => true,
+                    'link' => getVoxUrl('welcome-to-dentavox'),
+                ];
+
+                return Response::json( $ret );
             } else {
-                return redirect( getVoxUrl('/') );
+
+
+                $ret = [
+                    'success' => false,
+                    'link' => getLangUrl('/'),
+                ];
+
+                return Response::json( $ret );
             }
         }
     }
@@ -368,7 +407,7 @@ class LoginController extends FrontController
 
     public function new_facebook_register($locale=null) {
 
-        $user = Socialite::driver('facebook')->userFromToken(Request::input('access-token'));
+        $user = Socialite::driver('facebook')->userFromToken(Request::input('access_token'));
 
         return $this->try_social_register($user);
     }
