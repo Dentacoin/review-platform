@@ -122,10 +122,10 @@ class LoginController extends FrontController
 
     private function try_social_register($s_user, $network) {
 
-        
+
         $ret = [
             'success' => false,
-            'message' => 'eho eho',
+            'link' => getVoxUrl('/'),
         ];
         return Response::json( $ret );
 
