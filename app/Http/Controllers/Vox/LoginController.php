@@ -413,6 +413,12 @@ class LoginController extends FrontController
 
         $user = Socialite::driver('facebook')->userFromToken(Request::input('access_token'));
 
+        $ret = [
+            'success' => false,
+            'message' => 'eho eho',
+        ];
+        return Response::json( $ret );
+
         return $this->try_social_register($user);
     }
 
