@@ -167,7 +167,7 @@ $(document).ready(function(){
 
                             } else {
                                 if (ret.message) {
-                                    $('.reg-false-alert').html(ret.message);
+                                    $('.reg-false-alert').html(ret.message).show();
                                 }
                             }
                         },

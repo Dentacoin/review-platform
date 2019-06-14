@@ -57,8 +57,8 @@
 					<div class="errors-wrapper">
 						@include('front.errors')
 
-						<div class="alert alert-warning reg-success-alert" style="display: none;"></div>
-						<div class="alert alert-info reg-false-alert" style="display: none;"></div>
+						<div class="alert alert-info reg-success-alert" style="display: none;"></div>
+						<div class="alert alert-warning reg-false-alert" style="display: none;"></div>
 					</div>
 
 					<div class="reg-wrapper row clearfix">
