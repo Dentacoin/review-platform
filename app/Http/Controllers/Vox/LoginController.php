@@ -45,7 +45,7 @@ class LoginController extends FrontController
 
             if( $duplicate ) {
                 Request::session()->flash('error-message', 'There\'s another profile registered with this Facebook Account');
-                return redirect( getVoxUrl('/'));
+                return redirect( getVoxUrl('/').'?error-message='.urlencode('There\'s another profile registered with this Facebook Account'));
 
             } else {
                 $user->fb_id = $s_user->getId();
@@ -92,7 +92,10 @@ class LoginController extends FrontController
                     'link' => '<a href="'.getVoxUrl('/').'">',
                     'endlink' => '</a>',
                 ]));
-                return redirect( getVoxUrl('login'));
+                return redirect( getVoxUrl('login').'?error-message='.urlencode(trans('vox.page.login.error-fb', [
+                    'link' => '<a href="'.getVoxUrl('/').'">',
+                    'endlink' => '</a>',
+                ])));
             }
         }
     }
@@ -143,7 +146,7 @@ class LoginController extends FrontController
                 Auth::login($user, true);
 
                 Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
-                return redirect(getVoxUrl('profile'));
+                return redirect(getVoxUrl('profile').'?success-message='.urlencode(trans('vox.popup.register.have-account')));
             }
         } else {
             if (!empty($s_user->getEmail())) {
