@@ -102,15 +102,28 @@
 											</div>
 											<div class="col right">
 												<div class="btns">
-													@if($vox->has_stats)
-														<a class="statistics blue-button" href="{{ $vox->getStatsList() }}">
-															{{ trans('vox.common.check-statictics') }}
-														</a>
-													@endif
-													@if(!in_array($vox->id, $taken))
-														<a class="opinion blue-button secondary" href="{{ $vox->getLink() }}">
-															{{ trans('vox.common.take-the-test') }}
-														</a>
+													@if($user->is_dentist)
+														@if($vox->has_stats)
+															<a class="statistics blue-button" href="{{ $vox->getStatsList() }}">
+																{{ trans('vox.common.check-statictics') }}
+															</a>
+														@endif
+														@if(!in_array($vox->id, $taken))
+															<a class="opinion blue-button secondary" href="{{ $vox->getLink() }}">
+																{{ trans('vox.common.take-the-test') }}
+															</a>
+														@endif
+													@else
+														@if(!in_array($vox->id, $taken))
+															<a class="opinion blue-button" href="{{ $vox->getLink() }}">
+																{{ trans('vox.common.take-the-test') }}
+															</a>
+														@endif
+														@if($vox->has_stats)
+															<a class="statistics blue-button secondary" href="{{ $vox->getStatsList() }}">
+																{{ trans('vox.common.check-statictics') }}
+															</a>
+														@endif
 													@endif
 												</div>
 											</div>
