@@ -277,7 +277,10 @@ class LoginController extends FrontController
                 }
 
                 if($newuser->loggedFromBadIp()) {
-                    return redirect( getVoxUrl('/').'?suspended-popup' );
+                    $ret = [
+                        'success' => false,
+                        'link' => getVoxUrl('/').'?suspended-popup',
+                    ];
                 }
 
                 Auth::login($newuser, true);
