@@ -143,7 +143,7 @@ class LoginController extends FrontController
                 Auth::login($user, true);
 
                 Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
-                return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&success-message='.urlencode(trans('vox.popup.register.have-account')));
+                return redirect(getVoxUrl('profile'));
             }
         } else {
             if (!empty($s_user->getEmail())) {
