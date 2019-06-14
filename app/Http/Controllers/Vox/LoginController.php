@@ -122,13 +122,6 @@ class LoginController extends FrontController
 
     private function try_social_register($s_user, $network) {
 
-
-        $ret = [
-            'success' => false,
-            'link' => getVoxUrl('/'),
-        ];
-        return Response::json( $ret );
-
         if($s_user->getId()) {
             $user = User::where( 'fb_id','LIKE', $s_user->getId() )->withTrashed()->first();
         }
@@ -419,6 +412,12 @@ class LoginController extends FrontController
     public function new_facebook_register($locale=null) {
 
         $user = Socialite::driver('facebook')->userFromToken(Request::input('access_token'));
+        
+        $ret = [
+            'success' => false,
+            'link' => getVoxUrl('/'),
+        ];
+        return Response::json( $ret );
 
         return $this->try_social_register($user);
     }
