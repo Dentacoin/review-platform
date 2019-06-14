@@ -121,13 +121,7 @@ class LoginController extends FrontController
     }
 
     private function try_social_register($s_user, $network) {
-        $ret = [
-            'success' => false,
-            'message' => nl2br(trans('front.page.login.existing_email')),
-        ];
-
-        return Response::json( $ret );
-
+       
         if($s_user->getId()) {
             $user = User::where( 'fb_id','LIKE', $s_user->getId() )->withTrashed()->first();
         }
@@ -155,7 +149,23 @@ class LoginController extends FrontController
 
                     return Response::json( $ret );
                 }
+
+                $ret = [
+                    'success' => false,
+                    'message' => nl2br(trans('front.page.login.existing_email')),
+                ];
+
+                return Response::json( $ret );
+
                 Auth::login($user, true);
+
+                $ret = [
+                    'success' => false,
+                    'message' => nl2br(trans('front.page.login.existing_email')),
+                ];
+
+                return Response::json( $ret );
+
 
                 $ret = [
                     'success' => true,
