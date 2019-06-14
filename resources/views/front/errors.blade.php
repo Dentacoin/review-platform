@@ -16,10 +16,10 @@
         <strong>{!! Session::get('error-message') !!}</strong>
     </div>
 @endif
-@if(request()->input('error-message'))
+@if(request('error-message'))
     <!-- Form Error List -->
     <div class="alert alert-warning">
-        <strong>{!! request()->input('error-message') !!}</strong>
+        <strong>{!! request('error-message') !!}</strong>
     </div>
 @endif
 @if(Session::has('success-message'))
@@ -28,9 +28,9 @@
         <strong>{!! Session::get('success-message') !!}</strong>
     </div>
 @endif
-@if(request()->input('success-message'))
+@if(request('success-message'))
     <!-- Form Success List -->
     <div class="alert alert-success">
-        <strong>{!! request()->input('success-message') !!}</strong>
+        <strong>{!! request('success-message') !!}</strong>
     </div>
 @endif
