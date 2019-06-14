@@ -134,7 +134,7 @@ class LoginController extends FrontController
         if ($user) {
             if($user->deleted_at) {
                 Request::session()->flash('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
-                return redirect(getVoxUrl('registration'));
+                return redirect(getVoxUrl('/'));
             } else {
 
                 if($user->isBanned('vox')) {
@@ -152,12 +152,12 @@ class LoginController extends FrontController
             $is_blocked = User::checkBlocks($name, $s_user->getEmail());
             if( $is_blocked ) {
                 Request::session()->flash('error-message', $is_blocked );
-                return redirect(getVoxUrl('registration'));                
+                return redirect(getVoxUrl('/'));                
             }            
 
             if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
                 Request::session()->flash('error-message', nl2br(trans('front.page.login.existing_email')) );
-                return redirect(getVoxUrl('registration'));
+                return redirect(getVoxUrl('/'));
             }
 
             $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
@@ -165,7 +165,7 @@ class LoginController extends FrontController
 
             if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
                 Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')) );
-                return redirect(getVoxUrl('registration'));
+                return redirect(getVoxUrl('/'));
             }
 
             if(!empty($s_user->user['location']['name'])) {
