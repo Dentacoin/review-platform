@@ -18,7 +18,7 @@
 
 			<h2>{!! nl2br(trans('trp.popup.verification-popup.subtitle')) !!}</h2>
 
-			{!! Form::open(array('method' => 'post', 'class' => 'invite-dentist-form', 'url' => getLangRoute('invite-dentist') )) !!}
+			{!! Form::open(array('method' => 'post', 'class' => 'invite-dentist-form', 'url' => getLangUrl('invite-dentist') )) !!}
 				{!! csrf_field() !!}
 
 				<div class="dentist-suggester-wrapper suggester-wrapper">
@@ -31,7 +31,7 @@
 
 						<div class="suggest-results">
 						</div>
-						<input type="hidden" class="suggester-hidden" name="dentist_id" value="" url="{{ getLangRoute('invite-dentist') }}">
+						<input type="hidden" class="suggester-hidden" name="dentist_id" value="" url="{{ getLangUrl('invite-dentist') }}">
 						<i class="search-icon fas fa-search"></i>
 					</div>
 				</div>
@@ -39,7 +39,7 @@
 			{!! Form::close() !!}
 
 			@if(!session('join_clinic') && !session('invited_by'))
-				{!! Form::open(array('method' => 'post', 'class' => 'invite-clinic-form', 'url' => getLangRoute('invite-clinic') )) !!}
+				{!! Form::open(array('method' => 'post', 'class' => 'invite-clinic-form', 'url' => getLangUrl('invite-clinic') )) !!}
 					{!! csrf_field() !!}
 
 					<div class="search-input" id="clinic-widget">
@@ -53,7 +53,7 @@
 
 								<div class="suggest-results">
 								</div>
-								<input type="hidden" class="suggester-hidden" name="clinic_id" value="{{ session('join_clinic') && session('invited_by') ? session('invited_by') : '' }}"  value="" url="{{ getLangRoute('register-invite') }}">
+								<input type="hidden" class="suggester-hidden" name="clinic_id" value="{{ session('join_clinic') && session('invited_by') ? session('invited_by') : '' }}"  value="" url="{{ getLangUrl('register-invite') }}">
 								<i class="search-icon fas fa-search"></i>
 							</div>
 

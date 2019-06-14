@@ -166,7 +166,7 @@ $reviewRoutes = function () {
 			Route::get('pending-dentist', 						'IndexController@pending');
 			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
-			Route::any('welcome-dentist/claim/{id}/{hash}',		'IndexController@claim')->name('claim-profile');
+			Route::any('welcome-dentist/claim/{id}/{hash}',		'IndexController@claim');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
 			Route::get('want-to-invite-dentist', 				'IndexController@want_to_invite_dentist');
 
@@ -185,11 +185,11 @@ $reviewRoutes = function () {
 			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
 			Route::post('recover/{id}/{hash}', 					'RegisterController@recover_form');
 			Route::any('verification-dentist', 					'RegisterController@verification_dentist');
-			Route::any('register-invite', 						'RegisterController@register_invite')->name('register-invite');
-			Route::any('invite-clinic', 						'RegisterController@invite_clinic')->name('invite-clinic');
-			Route::any('invite-dentist', 						'RegisterController@invite_dentist')->name('invite-dentist');
+			Route::any('register-invite', 						'RegisterController@register_invite');
+			Route::any('invite-clinic', 						'RegisterController@invite_clinic');
+			Route::any('invite-dentist', 						'RegisterController@invite_dentist');
 
-			Route::any('invite-new-dentist', 					'AddDentistController@invite_new_dentist')->name('invite-new-dentist');
+			Route::any('invite-new-dentist', 					'AddDentistController@invite_new_dentist');
 
 			Route::get('login/facebook', 						'LoginController@facebook_login');
 			Route::get('login/twitter', 						'LoginController@twitter_login');

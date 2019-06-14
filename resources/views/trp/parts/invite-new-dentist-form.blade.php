@@ -1,4 +1,4 @@
-<form class="invite-new-dentist-form address-suggester-wrapper" action="{{ getLangRoute('invite-new-dentist') }}" method="post">
+<form class="invite-new-dentist-form address-suggester-wrapper" action="{{ getLangUrl('invite-new-dentist') }}" method="post">
 	{!! csrf_field() !!}
 
 	<div class="mobile-radios modern-radios alert-after flex">
