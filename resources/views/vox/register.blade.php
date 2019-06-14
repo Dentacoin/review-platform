@@ -13,6 +13,12 @@
 
 	<div class="section-register">
 
+		<form action="{{ getLangUrl('new-register/facebook', null, 'https://dentavox.dentacoin.com/') }}" method="post" id="new-register-form" style="display: none;">
+			{!! csrf_field() !!}
+			<input type="text" name="access-token" value="">
+			<button type="submit"></button>			
+		</form>
+
 		<form action="{{ getLangUrl('registration') }}" id="register-form" method="post" role="form" data-toggle="validator" class="form-horizontal">
 			{!! csrf_field() !!}
 
@@ -56,9 +62,6 @@
 
 					<div class="errors-wrapper">
 						@include('front.errors')
-
-						<div class="alert alert-info reg-success-alert" style="display: none;"></div>
-						<div class="alert alert-warning reg-false-alert" style="display: none;"></div>
 					</div>
 
 					<div class="reg-wrapper row clearfix">
@@ -69,7 +72,7 @@
 							</h4>
 
 							<div class="fb-button-inside">								
-								<a href="javascript:;" url="{{ getLangUrl('new-register/facebook', null, 'https://dentavox.dentacoin.com/') }}" class="fb-register-button-new"></a>
+								<a href="javascript:;" class="fb-register-button-new"></a>
 								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
 							</div>
 

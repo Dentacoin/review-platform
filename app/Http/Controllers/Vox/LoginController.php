@@ -121,7 +121,7 @@ class LoginController extends FrontController
     }
 
     private function try_social_register($s_user, $network) {
-       
+
         if($s_user->getId()) {
             $user = User::where( 'fb_id','LIKE', $s_user->getId() )->withTrashed()->first();
         }
@@ -133,30 +133,18 @@ class LoginController extends FrontController
         $country_id = null;
         if ($user) {
             if($user->deleted_at) {
-                $ret = [
-                    'success' => false,
-                    'message' => 'You have been permanently banned and cannot return to DentaVox anymore.',
-                ];
-
-                return Response::json( $ret );
+                Request::session()->flash('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
+                return redirect(getVoxUrl('/'));
             } else {
 
                 if($user->isBanned('vox')) {
-                    $ret = [
-                        'success' => false,
-                        'message' => 'You are banned.',
-                    ];
-
-                    return Response::json( $ret );
+                    return redirect( getVoxUrl('profile'));
                 }
-
                 Auth::login($user, true);
 
-                $ret = [
-                    'success' => true,
-                ];
-
-                return Response::json( $ret );
+                Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
+                return redirect(getVoxUrl('/'));
+                
             }
         } else {
             if (!empty($s_user->getEmail())) {
@@ -165,36 +153,21 @@ class LoginController extends FrontController
 
                 $is_blocked = User::checkBlocks($name, $s_user->getEmail());
                 if( $is_blocked ) {
-
-                    $ret = [
-                        'success' => false,
-                        'message' => $is_blocked,
-                    ];
-
-                    return Response::json( $ret );
+                    Request::session()->flash('error-message', $is_blocked );
+                    return redirect(getVoxUrl('/'));                
                 }            
 
                 if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
-
-                    $ret = [
-                        'success' => false,
-                        'message' => nl2br(trans('front.page.login.existing_email')),
-                    ];
-
-                    return Response::json( $ret );
+                    Request::session()->flash('error-message', nl2br(trans('front.page.login.existing_email')) );
+                    return redirect(getVoxUrl('/'));
                 }
 
                 $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
                 $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
 
                 if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
-
-                    $ret = [
-                        'success' => false,
-                        'message' => nl2br(trans('front.page.login.over18')),
-                    ];
-
-                    return Response::json( $ret );
+                    Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')) );
+                    return redirect(getVoxUrl('/'));
                 }
 
                 if(!empty($s_user->user['location']['name'])) {
@@ -277,28 +250,14 @@ class LoginController extends FrontController
                 }
 
                 if($newuser->loggedFromBadIp()) {
-                    $ret = [
-                        'success' => false,
-                        // 'href' => getVoxUrl('/').'?suspended-popup',
-                    ];
-
-                    return Response::json( $ret );
+                    return redirect( getVoxUrl('/').'?suspended-popup' );
                 }
 
                 Auth::login($newuser, true);
-
-                $ret = [
-                    'success' => true,
-                ];
-
-                return Response::json( $ret );
+                Request::session()->flash('success-message', trans('vox.page.registration.success'));
+                return redirect(getVoxUrl('welcome-to-dentavox'));
             } else {
-
-
-                $ret = [
-                    'success' => false,
-                ];
-                return Response::json( $ret );
+                return redirect( getVoxUrl('/') );
             }
         }
     }
@@ -409,7 +368,7 @@ class LoginController extends FrontController
 
     public function new_facebook_register($locale=null) {
 
-        $user = Socialite::driver('facebook')->userFromToken(Request::input('access_token'));
+        $user = Socialite::driver('facebook')->userFromToken(Request::input('access-token'));
 
         return $this->try_social_register($user);
     }

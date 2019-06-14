@@ -142,8 +142,8 @@ $(document).ready(function(){
     }(document, 'script', 'facebook-jssdk'));
 
 
-    $('.fb-register-button-new').click( function(e){
-        e.preventDefault();
+    $('.fb-register-button-new').click( function(rerequest){
+        rerequest.preventDefault();
 
         if ($('#read-privacy').prop("checked")) {
             var that = $(this);
@@ -151,30 +151,8 @@ $(document).ready(function(){
             FB.login(function (response) {
 
                 if(response.authResponse && response.status == "connected") {
-                    var ac_token = response.authResponse.accessToken;
-
-                    $.ajax({
-                        type: "POST",
-                        url: that.attr('url'),
-                        data: {
-                            access_token: ac_token,
-                            _token: $('input[name="_token"]').val()
-                        },
-                        dataType: 'json',
-                        success: function(ret) {
-                            if(ret.success == true) {
-                                window.location.href = '/';
-
-                            } else {
-                                if (ret.message) {
-                                    $('.reg-false-alert').html(ret.message).show();
-                                }
-                            }
-                        },
-                        error: function(ret) {
-                            console.log('error')
-                        }
-                    });
+                    $('#new-register-form input[name="access-token"]').val(response.authResponse.accessToken);
+                    $('#new-register-form').submit();
                 }
             }, {scope: 'email'});
         } else {
