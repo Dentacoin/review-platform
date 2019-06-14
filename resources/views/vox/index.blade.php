@@ -4,8 +4,8 @@
 
 	<div class="full">
 		<div class="first-absolute">
-			<h1>{!! nl2br(trans('vox.page.index.title')) !!}</h1>
-			<h2>{!! nl2br(trans('vox.page.index.subtitle')) !!}</h2>
+			<h1>{!! $title !!}</h1>
+			<h2>{!! $subtitle !!}</h2>
 			<br/>
 			<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">
 				{!! nl2br(trans('vox.page.index.start')) !!}

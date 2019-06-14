@@ -68,8 +68,22 @@ class IndexController extends FrontController
 			));
 
 		} else {
+
+			if (Request::input('h1')) {
+				$title = Request::input('h1');
+			} else {
+				$title = nl2br(trans('vox.page.index.title'));
+			}
+
+			if (Request::input('h2')) {
+				$subtitle = Request::input('h2');
+			} else {
+				$subtitle = nl2br(trans('vox.page.index.subtitle'));
+			}
 			
 			return $this->ShowVoxView('index', array(
+				'subtitle' => $subtitle,
+				'title' => $title,
 				'users_count' => User::getCount('vox'),
 	        	'voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
 	        	'taken' => $this->user ? $this->user->filledVoxes() : [],
