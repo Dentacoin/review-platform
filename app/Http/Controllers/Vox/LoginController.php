@@ -138,8 +138,6 @@ class LoginController extends FrontController
                     'message' => 'You have been permanently banned and cannot return to DentaVox anymore.',
                 ];
 
-                dd('1');
-
                 return Response::json( $ret );
             } else {
 
@@ -148,7 +146,6 @@ class LoginController extends FrontController
                         'success' => true,
                         'link' => getVoxUrl('profile'),
                     ];
-                    dd('2');
 
                     return Response::json( $ret );
                 }
@@ -158,7 +155,6 @@ class LoginController extends FrontController
                     'success' => true,
                     'link' => getVoxUrl('profile'),
                 ];
-                dd('3');
 
                 return Response::json( $ret );                
             }
@@ -174,7 +170,6 @@ class LoginController extends FrontController
                         'success' => false,
                         'message' => $is_blocked,
                     ];
-                dd('4');
 
                     return Response::json( $ret );
                 }            
@@ -186,7 +181,6 @@ class LoginController extends FrontController
                         'message' => nl2br(trans('front.page.login.existing_email')),
                     ];
 
-                dd('5');
                     return Response::json( $ret );
                 }
 
@@ -200,7 +194,6 @@ class LoginController extends FrontController
                         'message' => nl2br(trans('front.page.login.over18')),
                     ];
 
-                dd('6');
                     return Response::json( $ret );
                 }
 
@@ -289,7 +282,6 @@ class LoginController extends FrontController
                         'link' => getVoxUrl('/').'?suspended-popup',
                     ];
 
-                    dd('7');
                     return Response::json( $ret );
                 }
 
@@ -300,7 +292,6 @@ class LoginController extends FrontController
                     'link' => getVoxUrl('welcome-to-dentavox'),
                 ];
 
-                dd('8');
                 return Response::json( $ret );
             } else {
 
@@ -309,7 +300,6 @@ class LoginController extends FrontController
                     'success' => false,
                     'link' => getLangUrl('/'),
                 ];
-                dd('9');
                 return Response::json( $ret );
             }
         }
