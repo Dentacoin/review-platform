@@ -144,7 +144,7 @@ class LoginController extends FrontController
                 if($user->isBanned('vox')) {
                     $ret = [
                         'success' => true,
-                        'link' => getVoxUrl('profile'),
+                        'href' => getVoxUrl('profile'),
                     ];
 
                     return Response::json( $ret );
@@ -153,7 +153,7 @@ class LoginController extends FrontController
 
                 $ret = [
                     'success' => true,
-                    'link' => getVoxUrl('profile'),
+                    'href' => getVoxUrl('profile'),
                 ];
 
                 return Response::json( $ret );                
@@ -279,7 +279,7 @@ class LoginController extends FrontController
                 if($newuser->loggedFromBadIp()) {
                     $ret = [
                         'success' => false,
-                        'link' => getVoxUrl('/').'?suspended-popup',
+                        'href' => getVoxUrl('/').'?suspended-popup',
                     ];
 
                     return Response::json( $ret );
@@ -289,7 +289,7 @@ class LoginController extends FrontController
 
                 $ret = [
                     'success' => true,
-                    'link' => getVoxUrl('welcome-to-dentavox'),
+                    'href' => getVoxUrl('welcome-to-dentavox'),
                 ];
 
                 return Response::json( $ret );
@@ -298,7 +298,7 @@ class LoginController extends FrontController
 
                 $ret = [
                     'success' => false,
-                    'link' => getLangUrl('/'),
+                    'href' => getLangUrl('/'),
                 ];
                 return Response::json( $ret );
             }
@@ -415,7 +415,7 @@ class LoginController extends FrontController
         
         $ret = [
             'success' => false,
-            'link' => getVoxUrl('/'),
+            'href' => getVoxUrl('/'),
         ];
         return Response::json( $ret );
 

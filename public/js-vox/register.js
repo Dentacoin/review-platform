@@ -163,15 +163,14 @@ $(document).ready(function(){
                         dataType: 'json',
                         success: function(ret) {
                             if(ret.success == true) {
-
-                                window.location.href = ret.link;
+                                window.location.href = ret.href;
 
                             } else {
                                 if (ret.message) {
                                     $('.reg-false-alert').html(ret.message);
                                 }
-                                if (ret.link) {
-                                    window.location.href = ret.link;
+                                if (ret.href) {
+                                    window.location.href = ret.href;
                                 }
                             }
                         },
