@@ -153,7 +153,7 @@ class LoginController extends FrontController
                 $is_blocked = User::checkBlocks($name, $s_user->getEmail());
                 if( $is_blocked ) {
                     Request::session()->flash('error-message', $is_blocked );
-                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode($is_blocked);                
+                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode($is_blocked));                
                 }            
 
                 if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
