@@ -147,7 +147,7 @@ class LoginController extends FrontController
                 
             }
         } else {
-            if (!empty($s_user->getEmail()) {
+            if (!empty($s_user->getEmail())) {
                 
                 $name = $s_user->getName() ? $s_user->getName() : (!empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' );
 
