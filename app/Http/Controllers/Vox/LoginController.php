@@ -153,18 +153,10 @@ class LoginController extends FrontController
                 Auth::login($user, true);
 
                 $ret = [
-                    'success' => false,
-                    'message' => 'sled login',
-                ];
-
-                return Response::json( $ret );
-
-
-                $ret = [
                     'success' => true,
                 ];
 
-                return Response::json( $ret );                
+                return Response::json( $ret );
             }
         } else {
             if (!empty($s_user->getEmail())) {
