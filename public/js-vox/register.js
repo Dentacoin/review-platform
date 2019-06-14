@@ -142,8 +142,8 @@ $(document).ready(function(){
     }(document, 'script', 'facebook-jssdk'));
 
 
-    $('.fb-register-button-new').click( function(rerequest){
-        rerequest.preventDefault();
+    $('.fb-register-button-new').click( function(e){
+        e.preventDefault();
 
         if ($('#read-privacy').prop("checked")) {
             var that = $(this);
