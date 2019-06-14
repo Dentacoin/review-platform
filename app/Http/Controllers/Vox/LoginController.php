@@ -143,8 +143,8 @@ class LoginController extends FrontController
 
                 if($user->isBanned('vox')) {
                     $ret = [
-                        'success' => true,
-                        'href' => getVoxUrl('profile'),
+                        'success' => false,
+                        'message' => 'You are banned.',
                     ];
 
                     return Response::json( $ret );
@@ -153,7 +153,6 @@ class LoginController extends FrontController
 
                 $ret = [
                     'success' => true,
-                    'href' => getVoxUrl('profile'),
                 ];
 
                 return Response::json( $ret );                
@@ -279,7 +278,7 @@ class LoginController extends FrontController
                 if($newuser->loggedFromBadIp()) {
                     $ret = [
                         'success' => false,
-                        'href' => getVoxUrl('/').'?suspended-popup',
+                        // 'href' => getVoxUrl('/').'?suspended-popup',
                     ];
 
                     return Response::json( $ret );
@@ -289,7 +288,6 @@ class LoginController extends FrontController
 
                 $ret = [
                     'success' => true,
-                    'href' => getVoxUrl('welcome-to-dentavox'),
                 ];
 
                 return Response::json( $ret );
@@ -298,7 +296,6 @@ class LoginController extends FrontController
 
                 $ret = [
                     'success' => false,
-                    'href' => getLangUrl('/'),
                 ];
                 return Response::json( $ret );
             }
@@ -412,12 +409,6 @@ class LoginController extends FrontController
     public function new_facebook_register($locale=null) {
 
         $user = Socialite::driver('facebook')->userFromToken(Request::input('access_token'));
-        
-        $ret = [
-            'success' => false,
-            'href' => getVoxUrl('/'),
-        ];
-        return Response::json( $ret );
 
         return $this->try_social_register($user);
     }

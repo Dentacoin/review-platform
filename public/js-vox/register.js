@@ -163,14 +163,11 @@ $(document).ready(function(){
                         dataType: 'json',
                         success: function(ret) {
                             if(ret.success == true) {
-                                window.location.href = ret.href;
+                                window.location.href = '/';
 
                             } else {
                                 if (ret.message) {
                                     $('.reg-false-alert').html(ret.message);
-                                }
-                                if (ret.href) {
-                                    window.location.href = ret.href;
                                 }
                             }
                         },
