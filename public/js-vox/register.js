@@ -160,6 +160,6 @@ $(document).ready(function(){
         }
 
         
-    }, {scope: 'email'});
+    });
 
 });
