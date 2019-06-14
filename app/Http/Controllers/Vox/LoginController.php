@@ -147,113 +147,118 @@ class LoginController extends FrontController
                 
             }
         } else {
-            $name = $s_user->getName() ? $s_user->getName() : (!empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' );
+            if (!empty($s_user->getEmail()) {
+                
+                $name = $s_user->getName() ? $s_user->getName() : (!empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' );
 
-            $is_blocked = User::checkBlocks($name, $s_user->getEmail());
-            if( $is_blocked ) {
-                Request::session()->flash('error-message', $is_blocked );
-                return redirect(getVoxUrl('/'));                
-            }            
+                $is_blocked = User::checkBlocks($name, $s_user->getEmail());
+                if( $is_blocked ) {
+                    Request::session()->flash('error-message', $is_blocked );
+                    return redirect(getVoxUrl('/'));                
+                }            
 
-            if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
-                Request::session()->flash('error-message', nl2br(trans('front.page.login.existing_email')) );
-                return redirect(getVoxUrl('/'));
-            }
+                if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
+                    Request::session()->flash('error-message', nl2br(trans('front.page.login.existing_email')) );
+                    return redirect(getVoxUrl('/'));
+                }
 
-            $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
-            $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
+                $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
+                $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
 
-            if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
-                Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')) );
-                return redirect(getVoxUrl('/'));
-            }
+                if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
+                    Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')) );
+                    return redirect(getVoxUrl('/'));
+                }
 
-            if(!empty($s_user->user['location']['name'])) {
-                $loc_info = explode(',', $s_user->user['location']['name']);
-                $fb_country = trim($loc_info[(count($loc_info)-1)]);
-                $fb_city = trim($loc_info[0]);
+                if(!empty($s_user->user['location']['name'])) {
+                    $loc_info = explode(',', $s_user->user['location']['name']);
+                    $fb_country = trim($loc_info[(count($loc_info)-1)]);
+                    $fb_city = trim($loc_info[0]);
 
-                $country = Country::whereHas('translations', function ($query) use ($fb_country) {
-                    $query->where('name', 'LIKE', $fb_country);
-                })->first();
-                if(!empty($country)) {
-                    $country_id = $country->id;
-                    $city = City::where('country_id', $country_id)->whereHas('translations', function ($query) use ($fb_city) {
-                        $query->where('name', 'LIKE', $fb_city);
+                    $country = Country::whereHas('translations', function ($query) use ($fb_country) {
+                        $query->where('name', 'LIKE', $fb_country);
                     })->first();
-                    if(!empty($city)) {
-                        $city_id = $city->id;
+                    if(!empty($country)) {
+                        $country_id = $country->id;
+                        $city = City::where('country_id', $country_id)->whereHas('translations', function ($query) use ($fb_city) {
+                            $query->where('name', 'LIKE', $fb_city);
+                        })->first();
+                        if(!empty($city)) {
+                            $city_id = $city->id;
+                        }
+                            
                     }
-                        
+
                 }
 
-            }
+                $password = $name.date('WY');
+                $newuser = new User;
+                $newuser->name = $name;
+                $newuser->email = $s_user->getEmail() ? $s_user->getEmail() : '';
+                $newuser->password = bcrypt($password);
+                $newuser->country_id = $country_id;
+                $newuser->city_id = $city_id;
+                $newuser->gender = $gender;
+                $newuser->birthyear = $birthyear;
+                $newuser->fb_id = $s_user->getId();
+                $newuser->gdpr_privacy = true;
+                $newuser->platform = 'vox';
+                $newuser->status = 'approved';
 
-            $password = $name.date('WY');
-            $newuser = new User;
-            $newuser->name = $name;
-            $newuser->email = $s_user->getEmail() ? $s_user->getEmail() : '';
-            $newuser->password = bcrypt($password);
-            $newuser->country_id = $country_id;
-            $newuser->city_id = $city_id;
-            $newuser->gender = $gender;
-            $newuser->birthyear = $birthyear;
-            $newuser->fb_id = $s_user->getId();
-            $newuser->gdpr_privacy = true;
-            $newuser->platform = 'vox';
-            $newuser->status = 'approved';
-
-            if(!empty(session('invited_by'))) {
-                $newuser->invited_by = session('invited_by');
-            }
-            if(!empty(session('invite_secret'))) {
-                $newuser->invite_secret = session('invite_secret');
-            }
-            
-            $newuser->save();
+                if(!empty(session('invited_by'))) {
+                    $newuser->invited_by = session('invited_by');
+                }
+                if(!empty(session('invite_secret'))) {
+                    $newuser->invite_secret = session('invite_secret');
+                }
+                
+                $newuser->save();
 
 
-            if($newuser->invited_by && $newuser->invitor->canInvite('vox')) {
-                $inv_id = session('invitation_id');
-                if($inv_id) {
-                    $inv = UserInvite::find($inv_id);
-                } else {
-                    $inv = new UserInvite;
-                    $inv->user_id = $newuser->invited_by;
-                    $inv->invited_email = $newuser->email;
-                    $inv->invited_name = $newuser->name;
+                if($newuser->invited_by && $newuser->invitor->canInvite('vox')) {
+                    $inv_id = session('invitation_id');
+                    if($inv_id) {
+                        $inv = UserInvite::find($inv_id);
+                    } else {
+                        $inv = new UserInvite;
+                        $inv->user_id = $newuser->invited_by;
+                        $inv->invited_email = $newuser->email;
+                        $inv->invited_name = $newuser->name;
+                        $inv->save();
+                    }
+
+                    $inv->invited_id = $newuser->id;
                     $inv->save();
+
+                    // $newuser->invitor->sendTemplate( 26, [
+                    //     'who_joined_name' => $newuser->getName()
+                    // ] );
                 }
 
-                $inv->invited_id = $newuser->id;
-                $inv->save();
+                $sess = [
+                    'invited_by' => null,
+                    'invitation_name' => null,
+                    'invitation_email' => null,
+                    'invitation_id' => null,
+                    'just_registered' => true,
+                    'just_registered_patient_vox' => true,
+                ];
+                session($sess);
 
-                // $newuser->invitor->sendTemplate( 26, [
-                //     'who_joined_name' => $newuser->getName()
-                // ] );
+                if( $newuser->email ) {
+                    $newuser->sendTemplate( 12 );
+                }
+
+                if($newuser->loggedFromBadIp()) {
+                    return redirect( getVoxUrl('/').'?suspended-popup' );
+                }
+
+                Auth::login($newuser, true);
+                Request::session()->flash('success-message', trans('vox.page.registration.success'));
+                return redirect(getVoxUrl('welcome-to-dentavox'));
+            } else {
+                return redirect( getVoxUrl('/') );
             }
-
-            $sess = [
-                'invited_by' => null,
-                'invitation_name' => null,
-                'invitation_email' => null,
-                'invitation_id' => null,
-                'just_registered' => true,
-                'just_registered_patient_vox' => true,
-            ];
-            session($sess);
-
-            if( $newuser->email ) {
-                $newuser->sendTemplate( 12 );
-            }
-
-            if($newuser->loggedFromBadIp()) {
-                return redirect( getVoxUrl('/').'?suspended-popup' );
-            }
-
-            Auth::login($newuser, true);
-            Request::session()->flash('success-message', trans('vox.page.registration.success'));
-            return redirect(getVoxUrl('welcome-to-dentavox'));
         }
     }
 
