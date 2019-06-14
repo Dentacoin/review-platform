@@ -310,13 +310,13 @@ $voxRoutes = function () {
 			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
 			Route::post('recover/{id}/{hash}', 					'RegisterController@recover_form');
 
-			Route::post('new-login/facebook', 					'LoginController@new_facebook_login');
+			Route::any('new-login/facebook', 					'LoginController@new_facebook_login');
 			
 			Route::get('login/facebook/{query?}', 				'LoginController@facebook_login')->where('query','.+');
 			Route::get('login/callback/facebook/{query?}', 		'LoginController@facebook_callback')->where('query','.+');
 			Route::post('login/civic', 							'LoginController@civic');
 
-			Route::post('new-register/facebook', 				'LoginController@new_facebook_register');
+			Route::any('new-register/facebook', 				'LoginController@new_facebook_register');
 
 			Route::post('register/civic', 						'RegisterController@civic');
 			Route::get('register/facebook', 					'LoginController@facebook_register');
