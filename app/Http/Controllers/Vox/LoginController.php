@@ -150,18 +150,11 @@ class LoginController extends FrontController
                     return Response::json( $ret );
                 }
 
-                $ret = [
-                    'success' => false,
-                    'message' => nl2br(trans('front.page.login.existing_email')),
-                ];
-
-                return Response::json( $ret );
-
                 Auth::login($user, true);
 
                 $ret = [
                     'success' => false,
-                    'message' => nl2br(trans('front.page.login.existing_email')),
+                    'message' => 'sled login',
                 ];
 
                 return Response::json( $ret );
