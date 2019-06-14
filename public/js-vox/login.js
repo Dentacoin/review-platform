@@ -129,8 +129,6 @@ $(document).ready(function(){
         platform: 'fb'
     };
 
-    var fb_custom_btn = $('.fb-login-button-new');
-
     //application init
     window.fbAsyncInit = function () {
         FB.init({
