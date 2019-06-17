@@ -243,6 +243,7 @@ $reviewRoutes = function () {
 				Route::get('profile/password', 					'ProfileController@password');
 				Route::post('profile/password', 				'ProfileController@change_password');
 				Route::get('profile/trp', 						'ProfileController@trp');
+				Route::get('profile/trp-iframe', 				'ProfileController@trp');
 				Route::get('profile/wallet', 					'ProfileController@wallet');
 				Route::any('profile/invite', 					'ProfileController@invite');
 				Route::any('profile/invite-new', 				'ProfileController@invite_new');
@@ -338,6 +339,7 @@ $voxRoutes = function () {
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');
 				Route::post('profile/address', 					'ProfileController@address');
 				Route::any('profile/vox', 						'ProfileController@vox');
+				Route::any('profile/vox-iframe', 				'ProfileController@vox');
 				Route::any('profile/home', 						'ProfileController@home');
 				Route::any('profile/info', 						'ProfileController@info');
 				Route::post('profile/info/upload', 				'ProfileController@upload');

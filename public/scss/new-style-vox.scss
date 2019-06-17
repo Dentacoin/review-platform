@@ -8482,3 +8482,18 @@ p.h2-bold {
 		margin: 20px auto 0;
 	}
 }
+
+
+body.sp-vox-iframe {
+
+	header,
+	.footer-expander,
+	.col-md-3 {
+		display: none;
+	}
+
+	.col-md-9 {
+		width: 100% !important;
+	}
+
+}
