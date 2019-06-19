@@ -291,6 +291,22 @@ $(document).ready(function(){
 
     } );
 
+    if ($('body').hasClass('sp-trp-iframe')) {
+        function triggerIframeSizeEventForParent(width, height) {
+            window.parent.postMessage(
+                {
+                    event_id: 'iframe_size_event',
+                    data: {
+                        width: width,
+                        height: height
+                    }
+                },
+                "*"
+            );
+        }
+        triggerIframeSizeEventForParent();
+        $(window).resize(triggerIframeSizeEventForParent);
+    }
 });
 
 
