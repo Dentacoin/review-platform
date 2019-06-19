@@ -935,12 +935,25 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     //
 
      public function trp($locale=null) {
+        
         if ($this->user->is_dentist) {
             return redirect( getLangUrl('profile') );
         }
+        
+        $path = explode('/', request()->path())[2];
+        $markLogin = true;
+        $markLogout = true;
+
+        if ($path == 'trp-iframe') {
+            $markLogin = false;
+            $markLogout = false;
+        }
+
         $this->handleMenu();
 
         return $this->ShowView('profile-trp', [
+            'markLogout' => $markLogout,
+            'markLogin' => $markLogin,
             'menu' => $this->menu,
             'css' => [
                 'common-profile.css',

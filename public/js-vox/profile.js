@@ -248,13 +248,13 @@ $(document).ready(function(){
 
 
     if ($('body').hasClass('sp-vox-iframe')) {
-        function triggerIframeSizeEventForParent(width, height) {
+        function triggerIframeSizeEventForParent() {
             window.parent.postMessage(
                 {
                     event_id: 'iframe_size_event',
                     data: {
-                        width: width,
-                        height: height
+                        width: $('.site-content').width(),
+                        height: $('.site-content').height()
                     }
                 },
                 "*"
@@ -262,6 +262,8 @@ $(document).ready(function(){
         }
         triggerIframeSizeEventForParent();
         $(window).resize(triggerIframeSizeEventForParent);
+
+        $('a').attr('target', '_top');
     }
 
 });
