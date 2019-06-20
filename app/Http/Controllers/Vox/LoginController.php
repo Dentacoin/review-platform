@@ -344,8 +344,6 @@ class LoginController extends FrontController
                                     'login_patient' => true,
                                 ];
                                 session($sess);
-
-                                dd(Auth::guard('web')->user());
                             }
 
                         } else {
