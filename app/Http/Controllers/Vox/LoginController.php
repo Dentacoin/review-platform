@@ -335,6 +335,7 @@ class LoginController extends FrontController
                                 }
 
                                 $intended = session()->pull('our-intended');
+                                dd($intended);
 
                                 $ret['success'] = true;
                                 $ret['redirect'] = $user->isBanned('vox') ? getVoxUrl('profile') : ($intended ? $intended : getVoxUrl('/'));
