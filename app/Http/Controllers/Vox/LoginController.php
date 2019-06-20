@@ -265,9 +265,6 @@ class LoginController extends FrontController
     }
 
     public function civic() {
-        $ret = [
-            'success' => false
-        ];
 
         $jwt = Request::input('jwtToken');
         $civic = Civic::where('jwtToken', 'LIKE', $jwt)->first();
@@ -291,11 +288,8 @@ class LoginController extends FrontController
                 }
 
                 if(empty($email)) {
-                    $ret['weak'] = true;
+                    return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.common.civic.weak')));
                 } else {
-
-
-
 
                     if( session('new_auth') ) {
                         $user = $this->user;
@@ -303,14 +297,13 @@ class LoginController extends FrontController
                         $duplicate = User::where('civic_id', $data['userId'] )->first();
 
                         if( $duplicate ) {
-                            $ret['message'] = 'There\'s another profile registered with this Civic Account';
+                            return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('There\'s another profile registered with this Civic Account'));
                         } else {
                             $user->civic_id = $data['userId'];
                             $user->save();
                             session(['new_auth' => null]);
 
-                            $ret['success'] = true;
-                            $ret['redirect'] = getVoxUrl('/');
+                            return redirect(getVoxUrl('/'));
                         }
 
                     } else {
@@ -323,8 +316,7 @@ class LoginController extends FrontController
                         if ($user) {
                             if($user->loggedFromBadIp()) {
                                 
-                                $ret['success'] = false;
-                                $ret['popup'] = 'suspended-popup';
+                                return redirect( getVoxUrl('/').'?suspended-popup' );
 
                             } else {
 
@@ -335,12 +327,8 @@ class LoginController extends FrontController
                                 }
 
                                 $intended = session()->pull('our-intended');
-                                
 
-                                $ret['success'] = true;
-                                //$ret['redirect'] = $user->isBanned('vox') ? getVoxUrl('profile') : ($intended ? $intended : getVoxUrl('/'));
-
-                                return redirect(getVoxUrl('/'));
+                                return redirect($user->isBanned('vox') ? getVoxUrl('profile') : ($intended ? $intended : getVoxUrl('/')));
                                 
                                 $sess = [
                                     'login_patient' => true,
@@ -349,18 +337,15 @@ class LoginController extends FrontController
                             }
 
                         } else {
-                            $ret['message'] = trans('front.common.civic.not-found');
+                            return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.common.civic.not-found')));
                         }
                     }
                 }
 
             } else {
-                $ret['weak'] = true;
+                return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.common.civic.weak')));
             }
         }
-
-        
-        return Response::json( $ret );
     }
 
     public function new_facebook_login($locale=null) {
