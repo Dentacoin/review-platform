@@ -321,7 +321,7 @@ class LoginController extends FrontController
 
 
                         if ($user) {
-                            if(true || $user->loggedFromBadIp()) {
+                            if($user->loggedFromBadIp()) {
                                 
                                 $ret['success'] = false;
                                 $ret['popup'] = 'suspended-popup';
@@ -344,6 +344,8 @@ class LoginController extends FrontController
                                     'login_patient' => true,
                                 ];
                                 session($sess);
+
+                                dd(Auth::guard('web')->user());
                             }
 
                         } else {
