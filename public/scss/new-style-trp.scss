@@ -5978,6 +5978,7 @@ textarea.input {
 }
 
 .page-profile {
+
 	.site-content {
 	    min-height: 700px;
 
@@ -7525,22 +7526,17 @@ body.edit-user {
     padding-bottom: 100px;
 }
 
-.strength-wrapper {
+.strength-parent {
+	position: relative;
 	width: 100%;
 	max-width: 800px;
-    margin: 0 auto;
-	box-shadow: 0px 0 4px 0px rgba(0, 0, 0, 0.2);
-	position: relative;
-    padding-bottom: 40px;
-    border-radius: 10px;
-    position: fixed;
-   	top: 100%;
-   	//bottom: 0px;
-    z-index: 112;
-    background: white;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: all 0.3s ease;
+	margin-right: auto;
+    margin-left: auto;
+    z-index: 123;
+
+	@media screen and (max-width: 992px) {
+    	width: calc(100% - 16px);
+    }
 
 	.strength-button {
 		box-shadow: 0px 0 4px 0px rgba(0, 0, 0, 0.2);
@@ -7552,7 +7548,7 @@ body.edit-user {
 		left: 50%;
 		transform: translateX(-50%);
 		border-radius: 50%;
-		z-index: -1;
+		cursor: pointer;
 
 		&:after {
 			content: "\f106";
@@ -7567,6 +7563,117 @@ body.edit-user {
 		}
 	}
 
+	&.active {
+		.strength-button {
+
+			&:after {
+				content: "\f107";
+			}
+		}
+
+		.extra-title {
+			display: none;
+		}
+
+		.stretching-box {
+			// transition: all 0.3s ease;
+			height: auto;
+			opacity: 1;
+			z-index: 1;
+		}
+	}
+
+	&.in-profile {
+		width: 100%;
+		max-width: none;
+		margin-bottom: 50px;
+
+		@media screen and (max-width: 992px) {
+			margin-bottom: 30px;
+			margin-top: 10px;
+		}
+
+		.strength-wrapper {
+			border-radius: 0px;
+			box-shadow: 0px 0px 10px 2px #f3f3f3;
+		}
+
+		.strength-button {
+			display: none;
+		}
+
+		.stretching-box {
+			height: auto;
+			opacity: 1;
+			z-index: 0;
+		}
+
+		.extra-title {
+			display: none;
+		}
+
+		.stretching-box,
+	    .strength-flickity,
+	    .flickity-slider,
+	    .flickity-viewport {
+	    	border-radius: 0px;
+	    }
+	}
+
+    &.fixed {
+    	position: fixed;
+	    left: 50%;
+	    transform: translateX(-50%);
+   		bottom: 0px;
+		max-width: 800px;
+
+		@media screen and (max-width: 992px) {
+	    	width: calc(100% - 16px);
+	    	bottom: 3px;
+	    }
+    }
+}
+
+.strength-wrapper {
+	width: 100%;
+    margin: 0 auto;
+	box-shadow: 0px 0 4px 0px rgba(0, 0, 0, 0.2);
+	position: relative;
+    padding-bottom: 40px;
+    border-radius: 10px;
+   	//top: 100%;
+    background: white;
+    transition: all 0.3s ease;
+    position: relative;
+
+    @media screen and (max-width: 992px) {
+    	padding-bottom: 30px;
+    }
+
+	.extra-title {
+		font-size: 18px;
+		text-align: center;
+		font-weight: 300;
+		color: #333;
+		padding-top: 15px;
+		padding-bottom: 3px;
+		background: white;
+
+		@media screen and (max-width: 992px) {
+			font-size: 16px;
+			padding-bottom: 5px;
+		}
+	}
+
+	.stretching-box {
+		position: relative;
+		opacity: 0;
+		height: 0px;
+		//transition: all 0.3s ease;
+	}
+
+	.extra-title,
+	.stretching-box,
     .strength-flickity,
     .flickity-slider,
     .flickity-viewport {
@@ -7577,6 +7684,10 @@ body.edit-user {
 		width: 100%;
 		padding: 0px 50px;
 		border-radius: 10px;
+
+		@media screen and (max-width: 992px) {
+			padding: 0px 25px;
+		}
 	}
 
 	h2 {
@@ -7586,6 +7697,10 @@ body.edit-user {
 		margin-bottom: 15px;
 		margin-top: 20px;
 		text-transform: inherit;
+
+		@media screen and (max-width: 992px) {
+			font-size: 16px;
+		}
 	}
 
 	.strength-box {
@@ -7607,6 +7722,12 @@ body.edit-user {
 		.strength-desc {
 			flex: 1;
 			padding-right: 40px;
+
+			@media screen and (max-width: 992px) {
+				padding: 10px;
+				padding-left: 0px;
+				font-size: 14px;
+			}
 		}
 	}
 
@@ -7617,10 +7738,16 @@ body.edit-user {
 
 	.strength-scale-wrapper {
 		background-color: #e1e9ee;
-		margin: 0px 70px;
+		margin: 0px 50px;
 		position: relative;
 		height: 13px;
 		margin-top: 15px;
+
+		@media screen and (max-width: 992px) {
+			margin-right: 30px;
+			margin-left: 30px;
+			height: 7px;
+		}
 
         .strength-divider {
         	position: absolute;
@@ -7642,8 +7769,19 @@ body.edit-user {
 		    transform: translateY(-50%);
 		    margin-left: -20px;
 		    background-size: contain;
-        	background: url('../img-trp/strenght/tick.png') 50% 50% no-repeat;
+        	background: url('../img-strength/tick.png') 50% 50% no-repeat;
         	z-index: 2;
+
+        	@media screen and (max-width: 992px) {
+        		width: 30px;
+        		height: 34px;
+        		margin-left: -15px;
+        		background-size: contain;
+        	}
+
+        	&.zero {
+        		background-image: url('../img-strength/tick-zero.png');
+        	}
         }
 
         .strength-star {
@@ -7655,8 +7793,19 @@ body.edit-user {
 		    transform: translateY(-50%);
 		    margin-right: -20px;
 		    background-size: contain;
-        	background: url('../img-trp/strenght/star.png') 50% 50% no-repeat;
+        	background: url('../img-strength/star.png') 50% 50% no-repeat;
         	z-index: 1;
+
+        	@media screen and (max-width: 992px) {
+        		width: 30px;
+        		height: 34px;
+        		margin-right: -15px;
+        		background-size: contain;
+        	}
+
+        	&.full {
+        		background-image: url('../img-strength/star-full.png');
+        	}
         }
 
 		.strength-scale {
@@ -7669,11 +7818,19 @@ body.edit-user {
 			position: absolute;
 			top: 0;
 
+			@media screen and (max-width: 992px) {
+				height: 7px;
+			}
+
 	        .strength-scale-inner {
-	            background: url('../img-trp/strenght/gradient.jpg') 0% 50% no-repeat;
+	            background: url('../img-strength/gradient.jpg') 0% 50% no-repeat;
 	            background-size: cover;
 				height: 13px;
 				width: 100%;
+
+				@media screen and (max-width: 992px) {
+					height: 7px;
+				}
 	        }
 	    }
 	}
@@ -7690,7 +7847,7 @@ body.edit-user {
 			&:after {
 				content: '';
 				position: absolute;
-				background-image: url('../img-trp/strenght/button-tick.png');
+				background-image: url('../img-strength/button-tick.png');
 				background-size: contain;
 				width: 17px;
 				height: 17px;
@@ -7706,12 +7863,18 @@ body.edit-user {
 			background-position: 50%;
 			border-radius: 0px;
 
+			@media screen and (max-width: 374px) {
+				width: 72px;
+			    height: 22px;
+			    background-size: contain;
+			}
+
 			&.android {
-				background-image: url('../img-trp/strenght/google-play.png');
+				background-image: url('../img-strength/google-play.png');
 			}
 
 			&.ios {
-				background-image: url('../img-trp/strenght/ios-app-store.png');
+				background-image: url('../img-strength/ios-app-store.png');
 			}
 			
 		}
@@ -7719,12 +7882,26 @@ body.edit-user {
 
 	.strenght-progress {
 		position: absolute;
-		bottom: 90px;
+		bottom: 20px;
 		left: 50px;
+
+		@media screen and (max-width: 992px) {
+			left: 25px;
+		}
+
+		p {
+			@media screen and (max-width: 992px) {
+				font-size: 12px;
+			}
+		}
 
 		span {
 			font-weight: bold;
 			font-size: 18px;
+
+			@media screen and (max-width: 992px) {
+				font-size: 14px;
+			}
 		}
 	}
 
@@ -7738,13 +7915,21 @@ body.edit-user {
 		}
 
 		&.previous {
-			background: url('../img-trp/strenght/arrow-left.png') 50% 100% no-repeat;
+			background: url('../img-strength/arrow-left.png') 50% 100% no-repeat;
 			left: 25px !important;
+
+			@media screen and (max-width: 992px) {
+				left: 7px !important;
+			}
 		}
 
 		&.next {
-			background: url('../img-trp/strenght/arrow-right.png') 50% 0% no-repeat;
+			background: url('../img-strength/arrow-right.png') 50% 0% no-repeat;
 			right: 25px !important;
+
+			@media screen and (max-width: 992px) {
+				right: 7px !important;
+			}
 		}
 
 		&:hover {
@@ -7756,15 +7941,6 @@ body.edit-user {
 			&.next {
 				background-position: 50% 100%;
 				outline: none;
-			}
-		}
-	}
-
-	&.active {
-		.strength-button {
-
-			&:after {
-				content: "\f107";
 			}
 		}
 	}
@@ -7785,5 +7961,23 @@ body.sp-trp-iframe {
 
 	.col {
 		flex: none;
+	}
+
+	.container {
+		width: 100%;
+	}
+
+	.site-content {
+		min-height: auto !important;
+	}
+
+	.profile-reviews-space {
+		margin-bottom: 0px !important;
+
+		.review-wrapper {
+			&:last-child {
+				margin-bottom: 0px !important;
+			}
+		}
 	}
 }

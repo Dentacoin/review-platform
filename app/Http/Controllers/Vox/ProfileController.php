@@ -231,6 +231,16 @@ class ProfileController extends FrontController
             return redirect(getLangUrl('welcome-to-dentavox'));
         }
 
+
+        $path = explode('/', request()->path())[2];
+        $markLogin = true;
+        $markLogout = true;
+
+        if ($path == 'vox-iframe') {
+            $markLogin = false;
+            $markLogout = false;
+        }
+
         $this->handleMenu();
         $current_ban = $this->user->isBanned('vox');
         $prev_bans = null; 
@@ -293,6 +303,8 @@ class ProfileController extends FrontController
         }
 
         return $this->ShowVoxView('profile-vox', [
+            'markLogout' => $markLogout,
+            'markLogin' => $markLogin,
             'latest_voxes' => Vox::where('type', 'normal')->orderBy('created_at', 'desc')->take(3)->get(),
             'more_surveys' => $more_surveys,
             'menu' => $this->menu,

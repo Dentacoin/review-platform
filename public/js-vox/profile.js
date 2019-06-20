@@ -245,4 +245,25 @@ $(document).ready(function(){
         convertDcn();
     });
 
+
+
+    if ($('body').hasClass('sp-vox-iframe')) {
+        function triggerIframeSizeEventForParent() {
+            window.parent.postMessage(
+                {
+                    event_id: 'iframe_size_event',
+                    data: {
+                        width: $('.site-content').width(),
+                        height: $('.site-content').height()
+                    }
+                },
+                "*"
+            );
+        }
+        triggerIframeSizeEventForParent();
+        $(window).resize(triggerIframeSizeEventForParent);
+
+        $('a').attr('target', '_top');
+    }
+
 });
