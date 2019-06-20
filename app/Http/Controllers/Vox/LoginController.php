@@ -275,7 +275,7 @@ class LoginController extends FrontController
             $data = json_decode($civic->response, true);
             if(!empty($data['userId'])) {
 
-                //dd($data);
+                dd($data);
                 $email = null;
                 $phone = null;
 
