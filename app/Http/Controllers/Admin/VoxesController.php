@@ -1206,7 +1206,7 @@ class VoxesController extends AdminController
                                 return $i == $item->answer;
                             } );
 
-                            $row[] = $thisanswer->count() ? $thisanswer->first()->scale : '0';
+                            $row[] = $thisanswer->count() ? explode(',', $scales[$question->vox_scale_id]->answers)[$thisanswer->first()->scale-1] : '';
                             $i++;
                         }
 
