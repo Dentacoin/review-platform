@@ -78,6 +78,12 @@
 			<button type="submit"></button>			
 		</form>
 
+		<form action="{{ getLangUrl('login/civic', null, 'https://dentavox.dentacoin.com/') }}" method="post" id="new-civic-login-form" style="display: none;">
+			{!! csrf_field() !!}
+			<input type="text" name="jwtToken" value="">
+			<button type="submit"></button>			
+		</form>
+
 		<div class="container">
 			<div class="col-md-3">
 				<img class="image-left" src="{{ url('new-vox-img/register-dentist.png') }}">

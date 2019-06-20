@@ -48,35 +48,43 @@ $(document).ready(function(){
         				$('#civic-wait').show();
                         console.log(jwtToken);
                         setTimeout(function() {
-                            $.post( 
-                                $('#jwtAddress').val(), 
-                                {
-                                    jwtToken: jwtToken,
-                                    '_token': $('#register-civic-button').closest('form').find('input[name="_token"]').val()
-                                }, 
-                                function( data ) {
-                                    if(data.weak) {
-                                        $('#civic-weak').show();
-                                        civicError();
-                                    } else if(data.popup) {
-                                        $('#'+data.popup).addClass('active');
-                                    } else if(data.success) {
-                                    	if( data.redirect ) {
-                                    		window.location.href = data.redirect;	
-                                    	} else {
-                                    		window.location.reload();
-                                    	}
-                                    } else {
-                                        $('#civic-error').show();
-                                        $('#civic-error span').html(data.message);
-                                        civicError();
-                                    }
-                                }, "json"
-                            )
-                            .fail(function(xhr, status, error) {
-                                $('#civic-error').show();
-                                civicError();
-                            });
+
+                            $('#new-civic-login-form input[name="jwtToken"]').val(jwtToken);
+                            $('#new-civic-login-form').submit();
+
+                            // $.post( 
+                            //     $('#jwtAddress').val(), 
+                            //     {
+                            //         jwtToken: jwtToken,
+                            //         '_token': $('#register-civic-button').closest('form').find('input[name="_token"]').val()
+                            //     }, 
+                            //     function( data ) {
+                            //         if(data.weak) {
+                            //             $('#civic-weak').show();
+                            //             civicError();
+                            //         } else if(data.popup) {
+                            //             $('#'+data.popup).addClass('active');
+                            //         } else if(data.success) {
+                            //         	if( data.redirect ) {
+                            //         		window.location.href = data.redirect;	
+                            //         	} else {
+                            //         		window.location.reload();
+                            //         	}
+                            //         } else {
+                            //             $('#civic-error').show();
+                            //             $('#civic-error span').html(data.message);
+                            //             civicError();
+                            //         }
+                            //     }, "json"
+                            // )
+                            // .fail(function(xhr, status, error) {
+                            //     $('#civic-error').show();
+                            //     civicError();
+                            // });
+
+
+
+                            
                         }, 3000);
                     }
                 },

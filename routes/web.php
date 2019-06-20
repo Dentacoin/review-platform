@@ -315,7 +315,7 @@ $voxRoutes = function () {
 			
 			Route::get('login/facebook/{query?}', 				'LoginController@facebook_login')->where('query','.+');
 			Route::get('login/callback/facebook/{query?}', 		'LoginController@facebook_callback')->where('query','.+');
-			Route::post('login/civic', 							'LoginController@civic');
+			Route::any('login/civic', 							'LoginController@civic');
 
 			Route::any('new-register/facebook', 				'LoginController@new_facebook_register');
 
