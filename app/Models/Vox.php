@@ -42,6 +42,7 @@ class Vox extends Model {
         'has_stats',
         'hasimage',
         'hasimage_social',
+        'hasimage_stats',
         'country_count',
         'sort_order',
     ];
@@ -202,35 +203,45 @@ class Vox extends Model {
         return $folder.'/'.$this->id.'-'.$type.'.png';
     }
 
-    public function addSocialImage($img) {
+    public function addSocialImage($img, $type='social') {
 
-        $to = $this->getSocialImagePath();
+        $to = $this->getSocialImagePath($type);
 
         $img->fit(1200, 628);
         $img->save($to);
-        $this->hasimage_social = true;
+        if($type=='social') {
+            $this->hasimage_social = true;
+        } else if($type=='for-stats') {
+            $this->hasimage_stats = true;
+        }
         $this->save();
 
         $this->regenerateSocialImages();
     }
-
     public function regenerateSocialImages() {
-        $types = [
-            'survey' => 1, 
-            'stats' => 2
-        ];
 
-        foreach ($types as $type => $tid) {
+        if( $this->hasimage_social ) {
             $original = Image::make( $this->getSocialImagePath() );
-            $badge_file = VoxBadge::find($tid)->getImagePath();
+            $badge_file = VoxBadge::find(1)->getImagePath(); //survey
             if(file_exists($badge_file)) {
                 $original->insert( $badge_file, 'bottom-left', 0, 0);                
             }
-            $original->save( $this->getSocialImagePath($type) );
+            $original->save( $this->getSocialImagePath('survey') );
+        }
+
+        if( $this->hasimage_stats ) {
+            $original = Image::make( $this->getSocialImagePath('for-stats') );
+            $badge_file = VoxBadge::find(2)->getImagePath(); //stats
+            if(file_exists($badge_file)) {
+                $original->insert( $badge_file, 'bottom-left', 0, 0);                
+            }
+            $original->save( $this->getSocialImagePath('stats') );
         }
 
         $this->updated_at = Carbon::now();
     }
+
+
 
     public function setTypeAttribute($newvalue) {
         if (!empty($this->attributes['type']) && $this->attributes['type'] != 'normal' && $newvalue == 'normal' && empty($this->attributes['launched_at'])) {

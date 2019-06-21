@@ -163,6 +163,14 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="featured" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px">Stats Image</label>
+                        <div class="col-md-10">
+                            {{ Form::file('photo-stats', ['id' => 'photo-stats', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
+                            * Size: 1200x628, up to 2 MB<br/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="featured" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px;">&nbsp;</label>
                         @if(!empty($item) && $item->hasimage)
                             <div class="col-md-2">
