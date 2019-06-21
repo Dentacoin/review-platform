@@ -1318,4 +1318,11 @@ $(document).ready(function(){
             scrollTop: $('.map-container').offset().top - $('header').height() - 40
         }, 500);        
     });
+
+    $('.ask-review-button').click( function(e) {
+        gtag('event', 'Request', {
+            'event_category': 'Reviews',
+            'event_label': 'InvitesAskUnver',
+        });
+    });
 });

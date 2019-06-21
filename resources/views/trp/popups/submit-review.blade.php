@@ -380,7 +380,7 @@
 				            	{{ trans('trp.popup.submit-review-popup.done-non-trusted') }}
 				            	<br/>
 				            	<br/>
-				            	<a class="button" data-popup-logged="popup-ask-dentist">
+				            	<a class="button ask-review-button" data-popup-logged="popup-ask-dentist">
 				            		{{ trans('trp.popup.submit-review-popup.done-non-trusted-invite') }}
 				            	</a>
 				            @endif
