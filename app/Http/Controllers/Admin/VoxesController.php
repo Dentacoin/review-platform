@@ -633,6 +633,10 @@ class VoxesController extends AdminController
             $img = Image::make( Input::file('photo-social') )->orientate();
             $item->addSocialImage($img);
         }
+        if( Input::file('photo-stats') ) {
+            $img = Image::make( Input::file('photo-stats') )->orientate();
+            $item->addSocialImage($img, 'for-stats');
+        }
 
 
     }
