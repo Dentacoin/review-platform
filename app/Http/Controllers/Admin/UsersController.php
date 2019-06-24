@@ -23,6 +23,7 @@ use App\Models\UserCategory;
 use App\Models\Review;
 use App\Models\ReviewAnswer;
 use App\Models\IncompleteRegistration;
+use App\Models\UserInvite;
 
 use Carbon\Carbon;
 
@@ -850,6 +851,34 @@ class UsersController extends AdminController
                                     $item->email = $olde;
                                     $item->save();
                                     $to_ali->delete();
+
+                                    if($item->invited_by && $item->is_dentist) {
+                                        $inv = UserInvite::where('user_id', $item->invited_by)->where('invited_email', $item->email)->whereNull('invited_id')->orderBy('id', 'DESC')->first();
+                                        if(empty($inv)) {
+                                            $inv = new UserInvite;
+                                            $inv->user_id = $item->invited_by;
+                                        }
+
+                                        $inv->invited_email = $item->email;
+                                        $inv->invited_name = $item->name;
+                                        $inv->invited_id = $item->id;
+                                        $inv->save();
+
+                                        $item->invitor->sendTemplate( 26, [
+                                            'who_joined_name' => $item->getName()
+                                        ] );
+
+                                        
+
+                                        $reward = new DcnReward;
+                                        $reward->user_id = $item->invited_by;
+                                        $reward->platform = $item->platform;
+                                        $reward->reward = Reward::getReward('reward_invite');
+                                        $reward->type = 'invitation';
+                                        $reward->reference_id = $item->id;
+                                        $reward->save();
+                                    }
+
                                 } else if( $this->request->input($key)=='pending' ) {
                                     $item->sendTemplate(40);
 
