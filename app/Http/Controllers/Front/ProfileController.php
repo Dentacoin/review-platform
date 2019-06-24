@@ -468,7 +468,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     }
 
                     //Mega hack
-                    $user_dentist = $this->user;
                     $dentist_name = $this->user->name;
                     $dentist_email = $this->user->email;
                     $this->user->name = Request::Input('name');
@@ -477,10 +476,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
                     $substitutions = [
-                        'type' => $user_dentist->is_clinic ? 'dental clinic' : ($user_dentist->is_dentist ? 'your dentist' : ''),
+                        'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                         'inviting_user_name' => $user_dentist->name,
-                        'invited_user_name' => $this->user->name,
-                        "invitation_link" => getLangUrl('invite/'.$user_dentist->id.'/'.$user_dentist->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
+                        'invited_user_name' => $dentist_name,
+                        "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
                     ];
 
                     $this->user->sendGridTemplate(59, $substitutions);
