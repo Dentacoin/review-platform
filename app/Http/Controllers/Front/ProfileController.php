@@ -482,7 +482,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
                     ];
 
-                    $user->sendGridTemplate(59, $substitutions);
+                    $this->user->sendGridTemplate(59, $substitutions);
 
                     // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
                     //     'friend_name' => $dentist_name,
