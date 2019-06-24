@@ -36,5 +36,6 @@ class VerifyCsrfToken extends BaseVerifier
         '*/new-login/facebook',
         '*/new-register/facebook',
         '*/login/civic',
+        '*/login',
     ];
 }
