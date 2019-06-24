@@ -576,7 +576,7 @@ header {
   top: 0px;
   padding-top: 15px;
   padding-bottom: 15px;
-  z-index: 111; }
+  z-index: 150; }
   header .logo {
     width: 134px;
     height: 40px;
@@ -5605,6 +5605,12 @@ body.edit-user .profile-info-mobile .profile-details {
           padding: 10px;
           padding-left: 0px;
           font-size: 14px; } }
+      .strength-wrapper .strength-box .strength-desc a {
+        color: #126585;
+        text-decoration: underline;
+        font-size: inherit; }
+        .strength-wrapper .strength-box .strength-desc a:hover {
+          color: #268db5; }
   .strength-wrapper .strength-urls {
     text-align: right;
     margin: 15px 0px; }

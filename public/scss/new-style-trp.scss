@@ -273,7 +273,7 @@ header {
 	top: 0px;
 	padding-top: 15px;
 	padding-bottom: 15px;
-	z-index: 111;
+	z-index: 150;
 
 	.logo {
 		width: 134px;
@@ -7727,6 +7727,16 @@ body.edit-user {
 				padding: 10px;
 				padding-left: 0px;
 				font-size: 14px;
+			}
+
+			a {
+				color: #126585;
+				text-decoration: underline;
+				font-size: inherit;
+
+				&:hover {
+					color: #268db5;
+				}
 			}
 		}
 	}

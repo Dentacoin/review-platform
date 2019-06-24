@@ -432,11 +432,9 @@ NEW & FAILED TRANSACTIONS
                 DB::raw($query), []
             );
 
-            $email2 = 0;
             foreach ($emails as $e) {                
                 $user = User::find($e->user_id);
                 if (!empty($user)) {
-                    $email2++;
                     $user->sendGridTemplate(44);
                 }                
             }
@@ -463,7 +461,6 @@ NEW & FAILED TRANSACTIONS
                 DB::raw($query), []
             );
 
-            $email3 = 0;
             foreach ($emails as $e) {
                 $user = User::find($e->user_id);
 
@@ -491,7 +488,6 @@ NEW & FAILED TRANSACTIONS
                     }
 
                     if (!empty($missingInfo)) {
-                        $email3++;
 
                         $substitutions = [
                             'profile_missing_info' => $missingInfo[0],
@@ -526,15 +522,11 @@ NEW & FAILED TRANSACTIONS
                 DB::raw($query), []
             );
 
-            $email4_success = 0;
-            $email4_false = 0;
             foreach ($emails as $e) {
                 $user = User::find($e->user_id);
                 if (!empty($user) && $user->invites->isNotEmpty()) {
-                    $email4_success++;
                     $user->sendGridTemplate(46);
                 } else {
-                    $email4_false++;
                     $user->sendGridTemplate(47);
                 }       
             }
@@ -561,11 +553,9 @@ NEW & FAILED TRANSACTIONS
                 DB::raw($query), []
             );
 
-            $email5 = 0;
             foreach ($emails as $e) {
                 $user = User::find($e->user_id);
                 if (!empty($user) && $user->reviews_in()->isNotEmpty()) {
-                    $email5++;
 
                     $substitutions = [
                         'score_last_month_aver' => number_format($user->avg_rating,2),
@@ -629,42 +619,13 @@ NEW & FAILED TRANSACTIONS
                 DB::raw($query), []
             );
 
-            $create_wallet_email = 0;
             foreach ($users as $u) {
                 $user = User::find($u->user_id);
 
                 if (!empty($user)) {
-                    $create_wallet_email++;
                     $user->sendGridTemplate(57);
                 }
             }
-
-
-            $mtext = 'We just sent:
-
-            Email 2: '.$email2.'
-            Email 3: '.$email3.'
-            Email 4 success: '.$email4_success.'
-            Email 4 false: '.$email4_false.'
-            Email 5: '.$email5.'
-
-            "Create Wallet" Email: '.$create_wallet_email.'
-
-            ';
-
-            Mail::raw($mtext, function ($message) {
-
-                $sender = config('mail.from.address');
-                $sender_name = config('mail.from.name');
-
-                $message->from($sender, $sender_name);
-                $message->to( 'petya.ivanova@dentacoin.com' );
-                $message->to( 'gergana@youpluswe.com' );
-                $message->subject('Dentist First 3 weeks engagement / Welcome journey');
-            });
-
-
-
 
 
 

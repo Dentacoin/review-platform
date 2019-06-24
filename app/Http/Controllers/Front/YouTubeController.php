@@ -8,6 +8,7 @@ use Request;
 use DB;
 
 use App\Models\Dcn;
+use App\Models\DcnReward;
 use App\Models\DcnTransaction;
 use App\Models\User;
 use App\Models\Vox;
@@ -28,6 +29,7 @@ class YouTubeController extends FrontController
 {
     public function test() {
 
+    	
     	//First 3 weeks engagement		
 
     	//Email2
@@ -127,7 +129,7 @@ class YouTubeController extends FrontController
 		// 	}			
 		// }
     	
-  //       dd($emails);
+ 	// 	dd($emails);
 
 
     	//Email4
@@ -222,7 +224,7 @@ class YouTubeController extends FrontController
 			WHERE 
 				template_id = 49
 				AND `user_id` NOT IN ( 
-					!!SELECT `user_id` FROM emails WHERE template_id = 50 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+					SELECT `user_id` FROM emails WHERE template_id = 50 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
 				)
 				AND `user_id` NOT IN ( 
 					SELECT `id` FROM users WHERE unsubscribe is not null
@@ -254,7 +256,7 @@ class YouTubeController extends FrontController
 			WHERE 
 				template_id = 50
 				AND `user_id` NOT IN ( 
-					!!SELECT `user_id` FROM emails WHERE template_id IN ( 51, 52) AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+					SELECT `user_id` FROM emails WHERE template_id IN ( 51, 52) AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
 				)
 				AND `user_id` NOT IN ( 
 					SELECT `id` FROM users WHERE unsubscribe is not null
@@ -326,7 +328,7 @@ class YouTubeController extends FrontController
 			WHERE 
 				template_id = 52
 				AND `user_id` NOT IN ( 
-					!!SELECT `user_id` FROM emails WHERE template_id IN ( 53, 54) AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+					SELECT `user_id` FROM emails WHERE template_id IN ( 53, 54) AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
 				)
 				AND `user_id` NOT IN ( 
 					SELECT `id` FROM users WHERE unsubscribe is not null

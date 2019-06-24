@@ -569,6 +569,11 @@ jQuery(document).ready(function($){
 	$('header .profile-btn').click( function(e) {
 		if($(window).width()<768) {
 			e.preventDefault();
+			if (window.innerWidth < 768) {
+				$('html, body').animate({
+                    scrollTop: 60
+                }, 500);
+			}
 			$(this).closest('.header-info').find('.expander-wrapper').addClass('active');
 		}
 	} );
