@@ -919,17 +919,25 @@ $(document).ready(function(){
     $('.close-explander').click( function() {
     	$(this).closest('.expander-wrapper').removeClass('active');
     });
+    
 
+    if ($('.strength-flickity').length) {
+	    $('.strength-flickity').flickity({
+	    	wrapAround: true,
+			draggable: true,
+			pageDots: false,
+		});
+	}
 
-    function preload(arrayOfImages) {
-        $(arrayOfImages).each(function () {
-            $('<img />').attr('src',this).appendTo('body').css('display','none');
-        });
-    }
-
-    preload([
-        '/new-vox-img/expander-background.jpg',
-    ]);
+	$('.strength-button').click( function() {
+		if ($(this).hasClass('active')) {
+			$(this).removeClass('active');
+			$('.strength-parent').removeClass('active');
+		} else {
+			$(this).addClass('active');
+			$('.strength-parent').addClass('active');
+		}
+	});
 });
 
 
