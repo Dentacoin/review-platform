@@ -28,4 +28,10 @@ jQuery(document).ready(function($){
         });
 	});
 
+	if( window.location.hash == '#invite-form' ) {
+        $('html, body').animate({
+            scrollTop: $(".invite-new-dentist-wrapper").offset().top - $('.header').height()
+        }, 500);
+	}
+
 });

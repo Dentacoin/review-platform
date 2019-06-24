@@ -840,7 +840,7 @@ $(document).ready(function(){
 		});
 	}
 
-	if(!Cookies.get('cookiebar')) {
+	if(!Cookies.get('cookiebar') && !$('body').hasClass('sp-vox-iframe') ) {
 		$('#cookiebar').css('display', 'flex');
 		$('#cookiebar a.accept').click( function() {
 			Cookies.set('cookiebar', true, { expires: 365 });

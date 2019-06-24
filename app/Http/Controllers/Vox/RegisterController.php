@@ -167,25 +167,25 @@ class RegisterController extends FrontController
                     }
                 }
 
-                if($newuser->invited_by && $newuser->invitor->canInvite('vox')) {
-                    $inv_id = session('invitation_id');
-                    if($inv_id) {
-                        $inv = UserInvite::find($inv_id);
-                    } else {
-                        $inv = new UserInvite;
-                        $inv->user_id = $newuser->invited_by;
-                        $inv->invited_email = $newuser->email;
-                        $inv->invited_name = $newuser->name;
-                        $inv->save();
-                    }
+                // if($newuser->invited_by && $newuser->invitor->canInvite('vox')) {
+                //     $inv_id = session('invitation_id');
+                //     if($inv_id) {
+                //         $inv = UserInvite::find($inv_id);
+                //     } else {
+                //         $inv = new UserInvite;
+                //         $inv->user_id = $newuser->invited_by;
+                //         $inv->invited_email = $newuser->email;
+                //         $inv->invited_name = $newuser->name;
+                //         $inv->save();
+                //     }
 
-                    $inv->invited_id = $newuser->id;
-                    $inv->save();
+                //     $inv->invited_id = $newuser->id;
+                //     $inv->save();
 
-                    // $newuser->invitor->sendTemplate( 26, [
-                    //     'who_joined_name' => $newuser->getName()
-                    // ] );
-                }
+                //     // $newuser->invitor->sendTemplate( 26, [
+                //     //     'who_joined_name' => $newuser->getName()
+                //     // ] );
+                // }
 
                 $sess = [
                     'invited_by' => null,
