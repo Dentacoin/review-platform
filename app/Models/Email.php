@@ -286,7 +286,7 @@ class Email extends Model
 			), $content);
 		}
 
-		if($this->template->id==23) { //user asks Dentist
+		if($this->template->id==23 || $this->template->id==63) { //user asks Dentist
 			$content = str_replace(array(
 				'[patient_name]',
 				'[invitation_link]',

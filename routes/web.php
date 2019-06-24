@@ -224,7 +224,7 @@ $reviewRoutes = function () {
 
 			Route::get('dentist/{slug}/confirm-review/{secret}', 	'DentistController@confirmReview');
 			Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');
-			Route::get('dentist/{slug}/ask', 					'DentistController@ask');
+			Route::get('dentist/{slug}/ask/{verification?}',	'DentistController@ask');
 			Route::any('dentist/{slug}/{review_id}', 			'DentistController@list');
 			Route::any('dentist/{slug}', 						'DentistController@list');
 			Route::any('youtube', 								'DentistController@youtube');

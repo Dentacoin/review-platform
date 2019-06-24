@@ -566,12 +566,12 @@ jQuery(document).ready(function($){
 	$(window).resize( fixFlickty );
 	fixFlickty();
 
-	if($(window).width()<768) {
+	if($(window).width() < 768) {
 		$('header .profile-btn').off('click').click( function(e) {
 			e.preventDefault();
-			$('html, body').animate({
-                scrollTop: 100
-            }, 500);
+			// $('html, body').animate({
+   //              scrollTop: 100
+   //          }, 500);
 			$(this).closest('.header-info').find('.expander-wrapper').addClass('active');
 		} );
 	}

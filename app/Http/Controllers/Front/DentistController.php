@@ -655,7 +655,7 @@ class DentistController extends FrontController
     }
 
 
-    public function ask($locale=null, $slug) {
+    public function ask($locale=null, $slug, $verification=null) {
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
 
         if(!empty($item)) {
@@ -671,7 +671,7 @@ class DentistController extends FrontController
                     $ask->status = 'waiting';
                     $ask->save();
 
-                    $item->sendTemplate( 23 ,[
+                    $item->sendTemplate( !empty($verification) ? 63 : 23 ,[
                         'patient_name' => $this->user->name
                     ] );
 

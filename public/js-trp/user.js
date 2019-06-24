@@ -1320,6 +1320,8 @@ $(document).ready(function(){
     });
 
     $('.ask-review-button').click( function(e) {
+        $('#popup-ask-dentist').find('.ask-dentist').attr('href', $('#popup-ask-dentist').find('.ask-dentist').attr('original-href')+'/1' );
+
         gtag('event', 'Request', {
             'event_category': 'Reviews',
             'event_label': 'InvitesAskUnver',

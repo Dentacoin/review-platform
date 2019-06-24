@@ -102,7 +102,7 @@ class EmailTemplate extends Model
             $codes[] = '[transaction_link]Click here[/transaction_link]';
         } 
 
-        if($this->id==23) {
+        if($this->id==23 || $this->id==63) {
             $codes[] = '[patient_name]';
             $codes[] = '[invitation_link]Click here[/invitation_link]';
         } 

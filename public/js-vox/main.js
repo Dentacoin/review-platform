@@ -814,8 +814,8 @@ $(document).ready(function(){
 		
 	});
 
-	$('.header-a').click( function(e) {
-		if( $(window).width()<768 ) {
+	if( $(window).width()<768 ) {
+		$('.header-a').click( function(e) {
 			
 			// if( $('.menu-list a.active').length ) {
 			// 	$('.menu-list a.active').trigger('click');
@@ -824,10 +824,8 @@ $(document).ready(function(){
 			e.preventDefault();
 			$(this).closest('.header-right').find('.expander-wrapper').addClass('active');
 			return false;
-		}
-	} );
-
-
+		} );
+	}
 
 	if(!Cookies.get('no-ids')) {
 		$('#ids').css('display', 'block');
