@@ -25,7 +25,7 @@
 						<p>
 							{!! nl2br(trans('vox.page.auth.before-login.hint')) !!}
 						</p>
-						<form action="{{ getVoxUrl('login') }}" method="post" class="form-horizontal">
+						<form action="{{ getLangUrl('login', null, 'https://dentavox.dentacoin.com/') }}" method="post" class="form-horizontal">
 							{!! csrf_field() !!}
 
 							<div class="modern-field alert-after">
