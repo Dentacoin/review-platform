@@ -570,11 +570,12 @@ jQuery(document).ready(function($){
 		$('header .profile-btn').off('click').click( function(e) {
 			e.preventDefault();
 			$('html, body').animate({
-                scrollTop: 60
+                scrollTop: 100
             }, 500);
 			$(this).closest('.header-info').find('.expander-wrapper').addClass('active');
 		} );
 	}
+
 
 	$('.slider-wrapper [href]').click( function(e) {
 		e.stopPropagation();
