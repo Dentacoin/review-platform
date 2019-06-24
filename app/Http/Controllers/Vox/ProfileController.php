@@ -513,10 +513,19 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $this->user->email = Request::Input('email');
                     $this->user->save();
 
-                    $this->user->sendTemplate( $this->user->is_dentist ? 27 : 25 , [
-                        'friend_name' => $dentist_name,
-                        'invitation_id' => $invitation->id
-                    ]);
+                    // $this->user->sendTemplate( $this->user->is_dentist ? 27 : 25 , [
+                    //     'friend_name' => $dentist_name,
+                    //     'invitation_id' => $invitation->id
+                    // ]);
+
+                    $substitutions = [
+                        'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                        'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
+                        'invited_user_name' => $this->user->name,
+                        "invitation_link" => getVoxUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id),
+                    ];
+
+                    $this->user->sendGridTemplate(58, $substitutions);
 
                     //Back to original
                     $this->user->name = $dentist_name;

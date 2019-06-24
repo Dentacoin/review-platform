@@ -19,7 +19,7 @@
 			@endif
 		</h2>
 
-		@if(!$user->dcn_address)
+<!-- 		@if(!$user->dcn_address)
 			<div class="form-horizontal">
                 <div class="alert alert-info" id="wallet-needed">
 					@if($user->is_dentist)
@@ -35,7 +35,7 @@
 					@endif
 				</div>
 			</div>
-		@endif
+		@endif -->
 
 
 		<div class="form-horizontal">

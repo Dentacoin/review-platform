@@ -48,18 +48,18 @@ $(document).ready(function(){
     //Invites
 
     $('#invite-wrapper .step .btn').click( function() {
-        if( $('#wallet-needed').length ) {
-            $('.option-div').hide();
-            $(window).scrollTop(0);
-            $("#wallet-needed").animate({opacity:0},200,"linear",function(){
-                $(this).animate({opacity:1},200,"linear",function(){
-                    $(this).animate({opacity:0},200,"linear",function(){
-                        $(this).animate({opacity:1},200);
-                        });
-                    });
-                });
-            return;            
-        }
+        // if( $('#wallet-needed').length ) {
+        //     $('.option-div').hide();
+        //     $(window).scrollTop(0);
+        //     $("#wallet-needed").animate({opacity:0},200,"linear",function(){
+        //         $(this).animate({opacity:1},200,"linear",function(){
+        //             $(this).animate({opacity:0},200,"linear",function(){
+        //                 $(this).animate({opacity:1},200);
+        //                 });
+        //             });
+        //         });
+        //     return;            
+        // }
 
         var id = $(this).attr('for');
         if( $(window).width()<992 ) {
