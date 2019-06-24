@@ -383,7 +383,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         }
         $this->handleMenu();
 
-        if(Request::isMethod('post') && $this->user->canInvite('vox') ) {
+        if(Request::isMethod('post') && $this->user->canInvite('trp') ) {
 
             if(Request::Input('is_contacts')) {
                 if(empty(Request::Input('contacts')) || !is_array( Request::Input('contacts') ) ) {
@@ -474,10 +474,20 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $this->user->email = Request::Input('email');
                     $this->user->save();
 
-                    $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
-                        'friend_name' => $dentist_name,
-                        'invitation_id' => $invitation->id
-                    ]);
+
+                    $substitutions = [
+                        'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                        'inviting_user_name' => $this->user->name,
+                        'invited_user_name' => Request::Input('name'),
+                        "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
+                    ];
+
+                    $user->sendGridTemplate(59, $substitutions);
+
+                    // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
+                    //     'friend_name' => $dentist_name,
+                    //     'invitation_id' => $invitation->id
+                    // ]);
 
                     //Back to original
                     $this->user->name = $dentist_name;
@@ -509,7 +519,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
         }
 
-        if( $this->user->canInvite('vox') ) {
+        if( $this->user->canInvite('trp') ) {
 
             $validator = Validator::make(Request::all(), [
                 'email' => ['required', 'email'],

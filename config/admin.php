@@ -49,6 +49,9 @@ return [
             'subpages' => array(
                 'trp' => 'trp',
                 'vox' => 'vox',
+                'dentacare' => 'dentacare',
+                'assurance' => 'assurance',
+                'dentacoin' => 'dentacoin',
                 'common' => 'common',
             ),
         ),
