@@ -566,17 +566,15 @@ jQuery(document).ready(function($){
 	$(window).resize( fixFlickty );
 	fixFlickty();
 
-	$('header .profile-btn').click( function(e) {
-		if($(window).width()<768) {
+	if($(window).width()<768) {
+		$('header .profile-btn').off('click').click( function(e) {
 			e.preventDefault();
-			if (window.innerWidth < 768) {
-				$('html, body').animate({
-                    scrollTop: 60
-                }, 500);
-			}
+			$('html, body').animate({
+                scrollTop: 60
+            }, 500);
 			$(this).closest('.header-info').find('.expander-wrapper').addClass('active');
-		}
-	} );
+		} );
+	}
 
 	$('.slider-wrapper [href]').click( function(e) {
 		e.stopPropagation();
