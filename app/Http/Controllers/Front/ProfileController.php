@@ -919,29 +919,42 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             ]);
 
 
-            $reward = new DcnReward();
-            $reward->user_id = $ask->user->id;
-            $reward->platform = 'trp';
-            $reward->reward = Reward::getReward('review_trusted');
-            $reward->type = 'review_trusted';
-            $reward->reference_id = null;
+            $d_id = $this->user->id;
+            $reviews = Review::where(function($query) use ($d_id) {
+                $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
+            })->where('user_id', $ask->user->id)
+            ->get();
 
-            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-            $dd = new DeviceDetector($userAgent);
-            $dd->parse();
-
-            if ($dd->isBot()) {
-                // handle bots,spiders,crawlers,...
-                $reward->device = $dd->getBot();
-            } else {
-                $reward->device = $dd->getDeviceName();
-                $reward->brand = $dd->getBrandName();
-                $reward->model = $dd->getModel();
-                $reward->os = $dd->getOs()['name'];
-            }
-
-            $reward->save();
+            if ($reviews->count()) {
                 
+                foreach ($reviews as $review) {
+                    $review->verified = true;
+                    $review->save();
+
+                    $reward = new DcnReward();
+                    $reward->user_id = $ask->user->id;
+                    $reward->platform = 'trp';
+                    $reward->reward = Reward::getReward('review_trusted');
+                    $reward->type = 'review_trusted';
+                    $reward->reference_id = null;
+
+                    $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                    $dd = new DeviceDetector($userAgent);
+                    $dd->parse();
+
+                    if ($dd->isBot()) {
+                        // handle bots,spiders,crawlers,...
+                        $reward->device = $dd->getBot();
+                    } else {
+                        $reward->device = $dd->getDeviceName();
+                        $reward->brand = $dd->getBrandName();
+                        $reward->model = $dd->getModel();
+                        $reward->os = $dd->getOs()['name'];
+                    }
+
+                    $reward->save();
+                }
+            }                
         }
         
         Request::session()->flash('success-message', trans('trp.page.profile.asks.accepted'));
