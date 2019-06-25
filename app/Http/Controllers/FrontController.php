@@ -343,7 +343,7 @@ class FrontController extends BaseController
         $platfrom = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
 
         $params['trackEvents'] = [];
-        if( session('mark-login') ) {
+        if( session('mark-login') && empty($params['skipSSO']) ) {
             $ep = session('mark-login');
             session([
                 'mark-login' => false
@@ -368,7 +368,7 @@ class FrontController extends BaseController
 
             $params['markLogin'] = true;
         }
-        if( session('login-logged-out') ) {
+        if( session('login-logged-out') && empty($params['skipSSO'] ) {
             $params['markLogout'] = session('login-logged-out');
             session([
                 'login-logged-out' => false

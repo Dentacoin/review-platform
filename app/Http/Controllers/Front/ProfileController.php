@@ -990,20 +990,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             return redirect( getLangUrl('profile') );
         }
         
-        $path = explode('/', request()->path())[2];
-        $markLogin = true;
-        $markLogout = true;
-
-        if ($path == 'trp-iframe') {
-            $markLogin = false;
-            $markLogout = false;
-        }
-
-        $this->handleMenu();
-
-        return $this->ShowView('profile-trp', [
-            'markLogout' => $markLogout,
-            'markLogin' => $markLogin,
+        $params = [
             'menu' => $this->menu,
             'css' => [
                 'common-profile.css',
@@ -1011,7 +998,16 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             'js' => [
                 'profile.js',
             ],
-        ]);
+        ];
+
+        $path = explode('/', request()->path())[2];
+        if ($path == 'trp-iframe') {
+            $params['skipSSO'] = true;
+        }
+
+        $this->handleMenu();
+
+        return $this->ShowView('profile-trp', $params);
     }
 
     //
