@@ -34,7 +34,7 @@ use Request;
 use Image;
 use Auth;
 use Mail;
-
+use App;
 
 use \SendGrid\Mail\From as From;
 use \SendGrid\Mail\To as To;
@@ -70,6 +70,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'website',
         'accepted_payment',
         'socials',
+        'work_hours',
         'city_id',
         'country_id',
         'gender',
@@ -253,6 +254,711 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return false;
     }
 
+    public function getStrengthPlatform($platform) {
+
+        $ret = [];
+
+        if ($platform == 'trp') {
+
+            if($this->is_dentist) {
+
+                $missing_info = [];
+
+                if(empty($this->short_description)) {
+                    $missing_info[] = 'a short bio';
+                }
+                if(empty($this->description)) {
+                    $missing_info[] = 'a longer description';
+                }
+                if(empty($this->work_hours)) {
+                    $missing_info[] = 'working hours';
+                }
+                if($this->photos->isEmpty()) {
+                    $missing_info[] = 'photos';
+                }
+                if(empty($this->socials)) {
+                    $missing_info[] = 'social channels';
+                }                
+
+                if( empty($missing_info )) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.complete-profile.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.complete-profile.text-complete')),
+                        'image' => 'wallet',
+                        'completed' => true,
+                        'buttonText' => trans('trp.strength.dentist.complete-profile.button-text'),
+                    ];
+                } else {
+                    $missing_parts = count($missing_info) > 1 ? $missing_info[0].' and '.$missing_info[1] : $missing_info[0];
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.complete-profile.title'),
+                        'image' => 'wallet',
+                        'text' => nl2br(trans('trp.strength.dentist.complete-profile.text', ['missing' => $missing_parts])),
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.dentist.complete-profile.button-text'),
+                        'buttonHref' => getLangUrl('/'),
+                    ];
+                }
+
+                $ret[] = [
+                    'title' => trans('trp.strength.dentist.invite-patients.title'),
+                    'text' => nl2br(trans('trp.strength.dentist.invite-patients.text')),
+                    'image' => 'wallet',
+                    'completed' => false,
+                    'buttonText' => trans('trp.strength.dentist.invite-patients.button-text'),
+                    'buttonHref' => getLangUrl('profile/invite'),
+                ];
+
+                if ($this->is_clinic) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.clinic.show-team.title'),
+                        'text' => nl2br(trans('trp.strength.clinic.show-team.text')),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.clinic.show-team.button-text'),
+                        'buttonHref' => getLangUrl('/'),
+                    ];
+                }
+
+                if( !empty($this->dcn_address )) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.set-wallet.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.set-wallet.text')),
+                        'image' => 'wallet',
+                        'completed' => true,
+                        'buttonText' => trans('trp.strength.dentist.set-wallet.button-text'),
+                    ];
+                } else {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.set-wallet.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.set-wallet.text')),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.dentist.set-wallet.button-text'),
+                        'buttonHref' => 'https://wallet.dentacoin.com/',
+                        'target' => true
+                    ];
+                }
+
+                if( !empty($this->description )) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.add-description.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.add-description.text')),
+                        'image' => 'wallet',
+                        'completed' => true,
+                        'buttonText' => trans('trp.strength.dentist.add-description.button-text'),
+                    ];
+                } else {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.add-description.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.add-description.text')),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.dentist.add-description.button-text'),
+                        'buttonHref' => getLangUrl('/'),
+                    ];
+                }
+
+                if( !empty($this->socials )) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.add-socials.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.add-socials.text')),
+                        'image' => 'wallet',
+                        'completed' => true,
+                        'buttonText' => trans('trp.strength.dentist.add-socials.button-text'),
+                    ];
+                } else {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.add-socials.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.add-socials.text')),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.dentist.add-socials.button-text'),
+                        'buttonHref' => getLangUrl('/'),
+                    ];
+                }
+
+                if($this->photos->isNotEmpty() && $this->photos->count() >= 10) {
+                    $ret[] = [                        
+                        'title' => trans('trp.strength.dentist.add-photos.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.add-photos.text')),
+                        'image' => 'wallet',
+                        'completed' => true,
+                        'buttonText' => trans('trp.strength.dentist.add-photos.button-text'),
+                    ];
+                } else {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.add-photos.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.add-photos.text')),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.dentist.add-photos.button-text'),
+                        'buttonHref' => getLangUrl('/'),
+                    ];
+                }
+
+                if( !empty($this->work_hours )) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.add-work-hours.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.add-work-hours.text')),
+                        'image' => 'wallet',
+                        'completed' => true,
+                        'buttonText' => trans('trp.strength.dentist.add-work-hours.button-text'),
+                    ];
+                } else {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.add-work-hours.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.add-work-hours.text')),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.dentist.add-work-hours.button-text'),
+                        'buttonHref' => getLangUrl('/'),
+                    ];
+                }
+
+                if( $this->widget_activated) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.add-widget.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.add-widget.text')),
+                        'image' => 'wallet',
+                        'completed' => true,
+                        'buttonText' => trans('trp.strength.dentist.add-widget.button-text'),
+                    ];
+                } else {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.add-widget.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.add-widget.text')),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.dentist.add-widget.button-text'),
+                        'buttonHref' => $this->getLink().'?popup-loged=popup-widget',
+                    ];
+                }
+
+                $total_balance = $this->getTotalBalance();
+                if ($total_balance > env('VOX_MIN_WITHDRAW') ) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.withdraw-rewards.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.withdraw-rewards.text', ['link' => '<a href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/" target="_blank">', 'endlink' => '</a>'])),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.dentist.withdraw-rewards.button-text'),
+                        'buttonHref' => getLangUrl('profile'),
+                    ];
+                }
+
+                $stats = Vox::with('stats_main_question')->where('has_stats', 1)->where('featured', 1)->orderBy('id', 'desc')->first();
+                $ret[] = [
+                    'title' => trans('trp.strength.dentist.check-stats.title'),
+                    'text' => nl2br(trans('trp.strength.dentist.check-stats.text', ['name' => $stats->title ])),
+                    'image' => 'dentavox',
+                    'completed' => false,
+                    'buttonText' => trans('trp.strength.dentist.check-stats.button-text'),
+                    'buttonHref' => getVoxUrl('dental-survey-stats/'.$stats->translate(App::getLocale(), true)->slug ),
+                    'target' => true
+                ];
+
+                $ret[] = [
+                    'title' => trans('trp.strength.dentist.browse-surveys.title'),
+                    'text' => nl2br(trans('trp.strength.dentist.browse-surveys.text')),
+                    'image' => 'wallet',
+                    'completed' => false,
+                    'buttonText' => trans('trp.strength.dentist.browse-surveys.button-text'),
+                    'buttonHref' => getVoxUrl('/'),
+                    'target' => true
+                ];
+
+                $ret[] = [
+                    'title' => trans('trp.strength.dentist.join-assurance.title'),
+                    'text' => nl2br(trans('trp.strength.dentist.join-assurance.text')),
+                    'image' => 'wallet',
+                    'completed' => false,
+                    'buttonText' => trans('trp.strength.dentist.join-assurance.button-text'),
+                    'buttonHref' => 'https://assurance.dentacoin.com',
+                    'target' => true
+                ];
+
+                $ret[] = [
+                    'title' => trans('trp.strength.dentist.join-dentacare.title'),
+                    'text' => nl2br(trans('trp.strength.dentist.join-dentacare.text')),
+                    'image' => 'wallet',
+                    'completed' => false,
+                    'buttonText' => trans('trp.strength.dentist.join-dentacare.button-text'),
+                    'buttonHref' => 'https://dentacare.dentacoin.com',
+                    'target' => true
+                ];
+
+
+                // $ret['photo-dentist'] = $this->hasimage ? true : false;
+                // $ret['info'] = ($this->name && $this->phone && $this->description && $this->email && $this->country_id && $this->city_id && $this->zip && $this->address && $this->website) ? true : false;
+                // $ret['gallery'] = $this->photos->isNotEmpty() ? true : false;
+                // $ret['invite-dentist'] = $this->invites->isNotEmpty() ? true : false;
+                // $ret['widget'] = $this->widget_activated ? true : false;
+
+            } else {
+
+                if( $this->reviews_out->isNotEmpty()) {
+                    $last_review = $this->reviews_out->first();
+
+                    if($last_review->created_at->timestamp < Carbon::now()->modify('-6 months')->timestamp) {
+                        $ret[] = [
+                            'title' => trans('trp.strength.patient.visit-dentist.title'),
+                            'text' => nl2br(trans('trp.strength.patient.visit-dentist.text')),
+                            'image' => 'review',
+                            'completed' => false,
+                            'buttonText' => trans('trp.strength.patient.visit-dentist.button-text'),
+                            'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug) : getLangUrl('/'),
+                        ];
+                    } else {
+                        //complete step
+                        $ret[] = [
+                            'title' => trans('trp.strength.patient.visit-dentist.title'),
+                            'text' => nl2br(trans('trp.strength.patient.visit-dentist.text')),
+                            'image' => 'review',
+                            'completed' => true,
+                            'buttonText' => trans('trp.strength.patient.visit-dentist.button-text'),
+                        ];
+                    }
+
+                } else {
+
+                    if($this->created_at->timestamp < Carbon::now()->modify('-1 months')->timestamp) {
+                        $ret[] = [
+                            'title' => trans('trp.strength.patient.routine-check.title'),
+                            'text' => nl2br(trans('trp.strength.patient.routine-check.text')),
+                            'image' => 'review',
+                            'completed' => false,
+                            'buttonText' => trans('trp.strength.patient.routine-check.button-text'),
+                            'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug) : getLangUrl('/'),
+                        ];
+                    } else {
+                        $ret[] = [
+                            'title' => trans('trp.strength.patient.submit-review.title'),
+                            'text' => nl2br(trans('trp.strength.patient.submit-review.text')),
+                            'image' => 'review',
+                            'completed' => false,
+                            'buttonText' => trans('trp.strength.patient.submit-review.button-text'),
+                            'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug) : getLangUrl('/'),
+                        ];
+                    }
+                }
+
+                if( $this->reviews_out->isNotEmpty()) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.patient.invite-dentist.title'),
+                        'text' => nl2br(trans('trp.strength.patient.invite-dentist.text')),
+                        'image' => 'invite-dentist',
+                        'completed' => true,
+                        'buttonText' => trans('trp.strength.patient.invite-dentist.button-text'),
+                    ];
+                } else {
+                    $ret[] = [
+                        'title' => trans('trp.strength.patient.invite-dentist.title'),
+                        'text' => nl2br(trans('trp.strength.patient.invite-dentist.text')),
+                        'image' => 'invite-dentist',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.patient.invite-dentist.button-text'),
+                        'buttonHref' => getLangUrl('/').'?popup=invite-new-dentist-popup',
+                    ];
+                }
+
+
+                if( $this->dcn_address) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.patient.set-wallet.title'),
+                        'text' => nl2br(trans('trp.strength.patient.set-wallet.text')),
+                        'image' => 'wallet',
+                        'completed' => true,
+                        'buttonText' => trans('trp.strength.patient.set-wallet.button-text'),
+                    ];
+                } else {
+                    $ret[] = [
+                        'title' => trans('trp.strength.patient.set-wallet.title'),
+                        'text' => nl2br(trans('trp.strength.patient.set-wallet.text')),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.patient.set-wallet.button-text'),
+                        'buttonHref' => 'https://wallet.dentacoin.com/',
+                        'target' => true
+                    ];
+                }
+
+                $ret[] = [
+                    'title' => trans('trp.strength.patient.invite-friends.title'),
+                    'text' => nl2br(trans('trp.strength.patient.invite-friends.text')),
+                    'image' => 'invite-friends',
+                    'completed' => false,
+                    'buttonText' => trans('trp.strength.patient.invite-friends.button-text'),
+                    'buttonHref' => getLangUrl('profile/invite'),
+                ];
+
+                $total_balance = $this->getTotalBalance();
+                if ($total_balance > env('VOX_MIN_WITHDRAW') ) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.patient.withdraw-rewards.title'),
+                        'text' => nl2br(trans('trp.strength.patient.withdraw-rewards.text', ['link' => '<a href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/" target="_blank">', 'endlink' => '</a>'])),
+                        'image' => 'balance',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.patient.withdraw-rewards.button-text'),
+                        'buttonHref' => getLangUrl('profile'),
+                    ];
+                }
+
+                $all_surveys = Vox::where('type', 'normal')->get();
+                $taken = $this->filledVoxes();
+                $done_all = false;
+
+                if (($all_surveys->count() - 1) == count($taken)) {
+                    $done_all = true;
+                }
+
+                if(!$this->madeTest(11)) {
+                    $welcome_vox = Vox::find(11);
+                    $ret[] = [
+                        'title' => trans('trp.strength.patient.take-first-survey.title'),
+                        'text' => nl2br(trans('trp.strength.patient.take-first-survey.text')),
+                        'image' => 'dentavox',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.patient.take-first-survey.button-text'),
+                        'buttonHref' => getVoxUrl('/'),
+                        'target' => true
+                    ];
+                } else if ($this->madeTest(11) ) {
+
+                    $voxes = Vox::where('type', 'normal')->where('featured', 1)->orderBy('id', 'desc')->get()->pluck('id')->toArray();
+                    if (!$voxes) {
+                        $voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'asc')->get()->pluck('id')->toArray();
+                    }
+                    $filled_voxes = $this->filledVoxes();
+
+                    $latest_voxes = array_diff($voxes, $filled_voxes);
+                    $latest_vox = Vox::find(array_values($latest_voxes)[0]);
+
+                    $ret[] = [
+                        'title' => trans('trp.strength.patient.take-latest-survey.title'),
+                        'text' => nl2br(trans('trp.strength.patient.take-latest-survey.text', ['name' => $latest_vox->title, 'reward' => $latest_vox->getRewardTotal() ])),
+                        'image' => 'dentavox',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.patient.take-latest-survey.button-text'),
+                        'buttonHref' => getVoxUrl('paid-dental-surveys/'.$latest_vox->translate(App::getLocale(), true)->slug ),
+                        'target' => true
+                    ];
+                } else if($done_all) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.patient.take-latest-survey.title'),
+                        'text' => nl2br(trans('trp.strength.patient.take-latest-survey.text-complete')),
+                        'image' => 'dentavox',
+                        'completed' => true,
+                        'buttonText' => trans('trp.strength.patient.take-latest-survey.button-text'),
+                    ];
+                }
+
+                $ret[] = [
+                    'title' => trans('trp.strength.patient.join-dentacare.title'),
+                    'text' => nl2br(trans('trp.strength.patient.join-dentacare.text')),
+                    'image' => 'dentacare',
+                    'completed' => false,
+                    'iosLink' => 'https://apps.apple.com/bg/app/dentacare-health-training/id1274148338',
+                    'androidLink' => 'https://play.google.com/store/apps/details?id=com.dentacoin.dentacare&hl=en',
+                ];
+            }
+
+        } else {
+
+            if($this->is_dentist) {
+
+                $ret[] = [
+                    'title' => trans('vox.strength.dentist.public-profile.title'),
+                    'text' => nl2br(trans('vox.strength.dentist.public-profile.text')),
+                    'image' => 'wallet',
+                    'completed' => false,
+                    'buttonText' => trans('vox.strength.dentist.public-profile.button-text'),
+                    'buttonHref' => getLangUrl('/', null, 'https://reviews.dentacoin.com/'),
+                    'target' => true
+                ];
+
+                $stats = Vox::with('stats_main_question')->where('has_stats', 1)->where('featured', 1)->orderBy('id', 'desc')->first();
+                $ret[] = [
+                    'title' => trans('vox.strength.dentist.check-stats.title'),
+                    'text' => nl2br(trans('vox.strength.dentist.check-stats.text', ['name' => $stats->title])),
+                    'image' => 'dentavox',
+                    'completed' => false,
+                    'buttonText' => trans('vox.strength.dentist.check-stats.button-text'),
+                    'buttonHref' => getLangUrl('dental-survey-stats/'.$stats->translate(App::getLocale(), true)->slug ),
+                ];
+
+                $ret[] = [
+                    'title' => trans('vox.strength.dentist.browse-surveys.title'),
+                    'text' => nl2br(trans('vox.strength.dentist.browse-surveys.text')),
+                    'image' => 'wallet',
+                    'completed' => false,
+                    'buttonText' => trans('vox.strength.dentist.browse-surveys.button-text'),
+                    'buttonHref' => getLangUrl('/'),
+                ];
+
+                $ret[] = [
+                    'title' => trans('vox.strength.dentist.invite-patients.title'),
+                    'text' => nl2br(trans('vox.strength.dentist.invite-patients.text')),
+                    'image' => 'wallet',
+                    'completed' => false,
+                    'buttonText' => trans('vox.strength.dentist.invite-patients.button-text'),
+                    'buttonHref' => getLangUrl('profile/invite'),
+                ];
+
+
+                if( $this->dcn_address) {
+                    $ret[] = [
+                        'title' => trans('vox.strength.dentist.set-wallet.title'),
+                        'text' => nl2br(trans('vox.strength.dentist.set-wallet.text')),
+                        'image' => 'wallet',
+                        'completed' => true,
+                        'buttonText' => trans('vox.strength.dentist.set-wallet.button-text'),
+                    ];
+                } else {
+                    $ret[] = [
+                        'title' => trans('vox.strength.dentist.set-wallet.title'),
+                        'text' => nl2br(trans('vox.strength.dentist.set-wallet.text')),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('vox.strength.dentist.set-wallet.button-text'),
+                        'buttonHref' => 'https://wallet.dentacoin.com/',
+                        'target' => true
+                    ];
+                }
+
+                $missing_info = [];
+
+                if(empty($this->short_description)) {
+                    $missing_info[] = 'a short bio';
+                }
+                if(empty($this->description)) {
+                    $missing_info[] = 'a longer description';
+                }
+                if(empty($this->work_hours)) {
+                    $missing_info[] = 'working hours';
+                }
+                if($this->photos->isEmpty()) {
+                    $missing_info[] = 'photos';
+                }
+                if(empty($this->socials)) {
+                    $missing_info[] = 'social channels';
+                }                
+
+                if( empty($missing_info )) {
+                    $ret[] = [
+                        'title' => trans('vox.strength.dentist.complete-profile.title'),
+                        'text' => nl2br(trans('vox.strength.dentist.complete-profile.text-complete')),
+                        'image' => 'wallet',
+                        'completed' => true,
+                        'buttonText' => trans('vox.strength.dentist.complete-profile.button-text'),
+                    ];
+                } else {
+                    $missing_parts = count($missing_info) > 1 ? $missing_info[0].' and '.$missing_info[1] : $missing_info[0];
+                    $ret[] = [
+                        'title' => trans('vox.strength.dentist.complete-profile.title'),
+                        'image' => 'wallet',
+                        'text' => nl2br(trans('vox.strength.dentist.complete-profile.text', ['missing' => $missing_parts])),
+                        'completed' => false,
+                        'buttonText' => trans('vox.strength.dentist.complete-profile.button-text'),
+                        'buttonHref' => getLangUrl('/', null, 'https://reviews.dentacoin.com/'),
+                        'target' => true
+                    ];
+                }
+
+                $ret[] = [
+                    'title' => trans('vox.strength.dentist.join-assurance.title'),
+                    'text' => nl2br(trans('vox.strength.dentist.join-assurance.text')),
+                    'image' => 'wallet',
+                    'completed' => false,
+                    'buttonText' => trans('vox.strength.dentist.join-assurance.button-text'),
+                    'buttonHref' => 'https://assurance.dentacoin.com',
+                    'target' => true
+                ];
+
+                $total_balance = $this->getTotalBalance();
+                if ($total_balance > env('VOX_MIN_WITHDRAW') ) {
+                    $ret[] = [
+                        'title' => trans('vox.strength.dentist.withdraw-rewards.title'),
+                        'text' => nl2br(trans('vox.strength.dentist.withdraw-rewards.text', ['link' => '<a href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/" target="_blank">', 'endlink' => '</a>' ])),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('vox.strength.dentist.withdraw-rewards.button-text'),
+                        'buttonHref' => getLangUrl('profile'),
+                    ];
+                }
+
+                $ret[] = [
+                    'title' => trans('vox.strength.dentist.join-dentacare.title'),
+                    'text' => nl2br(trans('vox.strength.dentist.join-dentacare.text')),
+                    'image' => 'wallet',
+                    'completed' => false,
+                    'buttonText' => trans('vox.strength.dentist.join-dentacare.button-text'),
+                    'buttonHref' => 'https://dentacare.dentacoin.com',
+                    'target' => true
+                ];
+
+                // $ret['photo-dentist'] = $this->hasimage ? true : false;
+                // $ret['info'] = ($this->name && $this->phone && $this->description && $this->email && $this->country_id && $this->city_id && $this->zip && $this->address && $this->website) ? true : false;
+                // $ret['gallery'] = $this->photos->isNotEmpty() ? true : false;
+                // $ret['wallet'] = $this->dcn_address ? true : false;
+                // $ret['invite-dentist'] = $this->invites->isNotEmpty() ? true : false;
+                // $ret['widget'] = $this->widget_activated ? true : false;
+
+
+            } else {
+
+                $all_surveys = Vox::where('type', 'normal')->get();
+                $taken = $this->filledVoxes();
+                $done_all = false;
+
+                if (($all_surveys->count() - 1) == count($taken)) {
+                    $done_all = true;
+                }
+
+                if(!$this->madeTest(11)) {
+                    $welcome_vox = Vox::find(11);
+                    $ret[] = [
+                        'title' => trans('vox.strength.patient.take-first-survey.title'),
+                        'text' => nl2br(trans('vox.strength.patient.take-first-survey.text')),
+                        'image' => 'dentavox',
+                        'completed' => false,
+                        'buttonText' => trans('vox.strength.patient.take-first-survey.button-text'),
+                        'buttonHref' => getVoxUrl(),
+                    ];
+                } else if ($this->madeTest(11) ) {
+
+                    $voxes = Vox::where('type', 'normal')->where('featured', 1)->orderBy('id', 'desc')->get()->pluck('id')->toArray();
+                    if (!$voxes) {
+                        $voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'asc')->get()->pluck('id')->toArray();
+                    }
+                    
+                    $filled_voxes = $this->filledVoxes();
+
+                    $latest_voxes = array_diff($voxes, $filled_voxes);
+                    $latest_vox = Vox::find(array_values($latest_voxes)[0]);
+
+                    $ret[] = [
+                        'title' => trans('vox.strength.patient.take-latest-survey.title'),
+                        'text' => nl2br(trans('vox.strength.patient.take-latest-survey.text', ['name' => $latest_vox->title, 'reward' => $latest_vox->getRewardTotal() ])),
+                        'image' => 'dentavox',
+                        'completed' => false,
+                        'buttonText' => trans('vox.strength.patient.take-latest-survey.button-text'),
+                        'buttonHref' => getVoxUrl('paid-dental-surveys/'.$latest_vox->translate(App::getLocale(), true)->slug ),
+                    ];
+                } else if($done_all) {
+                    $ret[] = [
+                        'title' => trans('vox.strength.patient.take-latest-survey.title'),
+                        'text' => nl2br(trans('vox.strength.patient.take-latest-survey.text-complete')),
+                        'image' => 'dentavox',
+                        'completed' => true,
+                        'buttonText' => trans('vox.strength.patient.take-latest-survey.button-text'),
+                    ];
+                }
+
+                if( $this->dcn_address) {
+                    $ret[] = [
+                        'title' => trans('vox.strength.patient.set-wallet.title'),
+                        'text' => nl2br(trans('vox.strength.patient.set-wallet.text')),
+                        'image' => 'wallet',
+                        'completed' => true,
+                        'buttonText' => trans('vox.strength.patient.set-wallet.button-text'),
+                    ];
+                } else {
+                    $ret[] = [
+                        'title' => trans('vox.strength.patient.set-wallet.title'),
+                        'text' => nl2br(trans('vox.strength.patient.set-wallet.text')),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('vox.strength.patient.set-wallet.button-text'),
+                        'buttonHref' => 'https://wallet.dentacoin.com/',
+                        'target' => true
+                    ];
+                }
+
+                $total_balance = $this->getTotalBalance();
+                if ($total_balance > env('VOX_MIN_WITHDRAW') ) {
+                    $ret[] = [
+                        'title' => trans('vox.strength.patient.withdraw-rewards.title'),
+                        'text' => nl2br(trans('vox.strength.patient.withdraw-rewards.text', ['link' => '<a href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/" target="_blank">', 'endlink' => '</a>'])),
+                        'image' => 'balance',
+                        'completed' => false,
+                        'buttonText' => trans('vox.strength.patient.withdraw-rewards.button-text'),
+                        'buttonHref' => getLangUrl('profile'),
+                    ];
+                }
+
+                $ret[] = [
+                    'title' => trans('vox.strength.patient.invite-friends.title'),
+                    'text' => nl2br(trans('vox.strength.patient.invite-friends.text')),
+                    'image' => 'invite-friends',
+                    'completed' => false,
+                    'buttonText' => trans('vox.strength.patient.invite-friends.button-text'),
+                    'buttonHref' => getLangUrl('profile/invite'),
+                ];
+
+
+                if( $this->reviews_out->isNotEmpty()) {
+                    $last_review = $this->reviews_out->first();
+
+                    if($last_review->created_at->timestamp < Carbon::now()->modify('-6 months')->timestamp) {
+                        $ret[] = [
+                            'title' => trans('vox.strength.patient.visit-dentist.title'),
+                            'text' => nl2br(trans('vox.strength.patient.visit-dentist.text')),
+                            'image' => 'review',
+                            'completed' => false,
+                            'buttonText' => trans('vox.strength.patient.visit-dentist.button-text'),
+                            'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug, null, 'https://reviews.dentacoin.com') : getLangUrl('/', null, 'https://reviews.dentacoin.com'),
+                            'target' => true
+                        ];
+                    } else {
+                        $ret[] = [
+                            'title' => trans('vox.strength.patient.visit-dentist.title'),
+                            'text' => nl2br(trans('vox.strength.patient.visit-dentist.text')),
+                            'image' => 'review',
+                            'completed' => true,
+                            'buttonText' => trans('vox.strength.patient.visit-dentist.button-text'),
+                        ];
+                    }
+
+                } else {
+
+                    if($this->created_at->timestamp < Carbon::now()->modify('-1 months')->timestamp) {
+                        $ret[] = [
+                            'title' => trans('vox.strength.patient.routine-check.title'),
+                            'text' => nl2br(trans('vox.strength.patient.routine-check.text')),
+                            'image' => 'review',
+                            'completed' => false,
+                            'buttonText' => trans('vox.strength.patient.routine-check.button-text'),
+                            'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug, null, 'https://reviews.dentacoin.com') : getLangUrl('/', null, 'https://reviews.dentacoin.com'),
+                            'target' => true
+                        ];
+                    } else {
+                        $ret[] = [
+                            'title' => trans('vox.strength.patient.submit-review.title'),
+                            'text' => nl2br(trans('vox.strength.patient.submit-review.text')),
+                            'image' => 'review',
+                            'completed' => false,
+                            'buttonText' => trans('vox.strength.patient.submit-review.button-text'),
+                            'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug, null, 'https://reviews.dentacoin.com') : getLangUrl('/', null, 'https://reviews.dentacoin.com'),
+                            'target' => true
+                        ];
+                    }
+                }
+
+                $ret[] = [
+                    'title' => trans('vox.strength.patient.join-dentacare.title'),
+                    'text' => nl2br(trans('vox.strength.patient.join-dentacare.text')),
+                    'image' => 'dentacare',
+                    'completed' => false,
+                    'iosLink' => 'https://apps.apple.com/bg/app/dentacare-health-training/id1274148338',
+                    'androidLink' => 'https://play.google.com/store/apps/details?id=com.dentacoin.dentacare&hl=en',
+                ];
+            }
+        }
+
+        return $ret;
+    }
+
     public function getStrength() {
         $ret = [];
 
@@ -270,6 +976,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $ret['invite-patient'] = $this->invites->isNotEmpty() ? true : false;
         }
         return $ret;
+    }
+
+    public function getStrengthCompleted($platform) {
+            
+        $num = 0;
+        $s = $this->getStrengthPlatform($platform);
+        foreach ($s as $val) {
+            if ($val['completed'] == true) {
+                $num++;
+            }
+        }
+
+        return $num;
     }
 
     public function getStrengthNumber() {
@@ -453,7 +1172,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 "invite-patient" => getLangUrl( 'dentist/'.$this->slug, null, $domain).'?'. http_build_query(['popup'=>'popup-invite']),
                 "homepage" => getLangUrl('/', null, $domain),
                 "trp_profile" => $this->getLink(),
-                "town" => $this->city_name,
+                "town" => $this->city_name ? $this->city_name : 'your town',
                 "country" => Country::find($this->country_id)->name,
                 "unsubscribe" => getLangUrl( 'unsubscribe/'.$this->id.'/'.$this->get_token(), null, $domain),
             ];
@@ -914,9 +1633,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         })->get()->pluck('reference_id')->toArray();
     }
 
+    public function dcn_cashouts() {
+        return $this->hasMany('App\Models\DcnCashout', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
+
     public function vox_cashouts() {
         return $this->hasMany('App\Models\DcnCashout', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
     }
+
     public function vox_rewards() {
         return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
     }
@@ -1298,7 +2022,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public static function validateLatin($string) {
         $result = false;
      
-        if (preg_match("/^[\w\d\s\+\'\&.,-][^0-9]*$/", $string)) {
+        if (preg_match("/^[\w\d\s\+\'\&.,-]*$/", $string)) {
             $result = true;
         }
      
