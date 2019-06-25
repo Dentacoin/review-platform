@@ -11,6 +11,7 @@ class UserAsk extends Model {
         'user_id',
         'dentist_id',
         'status',
+        'on_review',
     ];
 
     protected $dates = [

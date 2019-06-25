@@ -669,6 +669,9 @@ class DentistController extends FrontController
                     $ask->user_id = $this->user->id;
                     $ask->dentist_id = $item->id;
                     $ask->status = 'waiting';
+                    if (!empty($verification)) {
+                        $ask->on_review = true;
+                    }
                     $ask->save();
 
                     $item->sendTemplate( !empty($verification) ? 63 : 23 ,[

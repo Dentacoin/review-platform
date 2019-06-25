@@ -896,9 +896,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         }
         $this->handleMenu();
 
-        if (!$this->user->is_dentist) {
-            return redirect( getLangUrl('profile') );
-        }
         $ask = UserAsk::find($ask_id);
         if(!empty($ask) && $ask->dentist_id==$this->user->id && $ask->status=='waiting') {
             $ask->status = 'yes';
@@ -909,7 +906,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $inv->invited_name = $ask->user->name;
             $inv->invited_id = $ask->user->id;
             $inv->save();
-            $ask->user->sendTemplate( 24 ,[
+            $ask->user->sendTemplate( $ask->on_review ? 64 : 24 ,[
                 'dentist_name' => $this->user->getName(),
                 'dentist_link' => $this->user->getLink(),
             ]);
@@ -927,9 +924,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         }
         $this->handleMenu();
 
-        if (!$this->user->is_dentist) {
-            return redirect( getLangUrl('profile') );
-        }
         $ask = UserAsk::find($ask_id);
         if(!empty($ask) && $ask->dentist_id==$this->user->id && $ask->status=='waiting') {
             $ask->status = 'no';

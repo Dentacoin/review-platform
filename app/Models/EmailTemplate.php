@@ -172,6 +172,10 @@ class EmailTemplate extends Model
             $codes[] = '[cur-month-rating-percent]';
             $codes[] = '[top3-dentists]';
         }
+        if($this->id==64) {
+            $codes[] = '[dentist_name]';
+            $codes[] = '[rewardlink]Check Your Reward[/rewardlink]';
+        } 
 
         return $codes;
     }

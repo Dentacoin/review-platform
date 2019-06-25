@@ -477,6 +477,18 @@ class Email extends Model
 			), $content);
         }
 
+		if($this->template->id==64) { //Dentist Approves Review Verification Request
+			$content = str_replace(array(
+				'[dentist_name]',
+				'[rewardlink]',
+				'[/rewardlink]',
+			), array(
+				$this->meta['dentist_name'],
+				'<a '.$this->button_style.' href="'.getLangUrl( 'profile/home' , null, $domain).'">',
+				'</a>',
+			), $content);
+		}
+
 
 		return $content;
 	}
