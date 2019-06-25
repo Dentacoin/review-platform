@@ -22,8 +22,12 @@ use App\Models\UserAsk;
 use App\Models\UserPhoto;
 use App\Models\UserCategory;
 use App\Models\UserTeam;
+use App\Models\DcnReward;
 use Carbon\Carbon;
 
+
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
 
 
 class ProfileController extends FrontController
@@ -900,16 +904,43 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         if(!empty($ask) && $ask->dentist_id==$this->user->id && $ask->status=='waiting') {
             $ask->status = 'yes';
             $ask->save();
+
             $inv = new UserInvite;
             $inv->user_id = $this->user->id;
             $inv->invited_email = $ask->user->email;
             $inv->invited_name = $ask->user->name;
             $inv->invited_id = $ask->user->id;
             $inv->save();
+
             $ask->user->sendTemplate( $ask->on_review ? 64 : 24 ,[
                 'dentist_name' => $this->user->getName(),
                 'dentist_link' => $this->user->getLink(),
             ]);
+
+
+            $reward = new DcnReward();
+            $reward->user_id = $ask->user->id;
+            $reward->platform = 'trp';
+            $reward->reward = Reward::getReward('review_trusted');
+            $reward->type = 'review_trusted';
+            $reward->reference_id = null;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+            $dd = new DeviceDetector($userAgent);
+            $dd->parse();
+
+            if ($dd->isBot()) {
+                // handle bots,spiders,crawlers,...
+                $reward->device = $dd->getBot();
+            } else {
+                $reward->device = $dd->getDeviceName();
+                $reward->brand = $dd->getBrandName();
+                $reward->model = $dd->getModel();
+                $reward->os = $dd->getOs()['name'];
+            }
+
+            $reward->save();
+                
         }
         
         Request::session()->flash('success-message', trans('trp.page.profile.asks.accepted'));
