@@ -23,6 +23,7 @@ use App\Models\UserPhoto;
 use App\Models\UserCategory;
 use App\Models\UserTeam;
 use App\Models\DcnReward;
+use App\Models\Reward;
 use Carbon\Carbon;
 
 
