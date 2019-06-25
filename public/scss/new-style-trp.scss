@@ -487,7 +487,7 @@ header {
 
 					@media #{$phone} {
 						padding: 0px 0px 15px;
-						height: calc(100vh - 115px);
+						//height: calc(100vh - 115px);
     					overflow-y: scroll;
     					margin-top: 50px;
 					}
@@ -501,6 +501,10 @@ header {
 
 					    @media #{$tablet} {
 					    	width: 33.3%;
+					    }
+
+					    @media #{$phone} {					    	
+					    	padding: 0px 23px;
 					    }
 
 					    img {
@@ -517,8 +521,8 @@ header {
 					    	line-height: 20px;
 
 					    	@media #{$phone} {
-								font-size: 20px;
-								line-height: 29px;
+								font-size: 18px;
+								line-height: 20px;
 					    	}
 					    }
 				    }

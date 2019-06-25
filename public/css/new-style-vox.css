@@ -620,7 +620,6 @@ header {
           @media screen and (max-width: 768px) {
             header .header-right .expander-wrapper .expander .expander-content {
               padding: 0px 0px 15px;
-              height: calc(100vh - 115px);
               overflow-y: scroll;
               margin-top: 50px; } }
           header .header-right .expander-wrapper .expander .expander-content .platform-icon {
@@ -632,6 +631,9 @@ header {
             @media screen and (max-width: 1080px) {
               header .header-right .expander-wrapper .expander .expander-content .platform-icon {
                 width: 33.3%; } }
+            @media screen and (max-width: 768px) {
+              header .header-right .expander-wrapper .expander .expander-content .platform-icon {
+                padding: 0px 23px; } }
             header .header-right .expander-wrapper .expander .expander-content .platform-icon img {
               border-radius: 0px;
               margin-left: 0px;
@@ -644,8 +646,8 @@ header {
               line-height: 20px; }
               @media screen and (max-width: 768px) {
                 header .header-right .expander-wrapper .expander .expander-content .platform-icon figcaption {
-                  font-size: 20px;
-                  line-height: 29px; } }
+                  font-size: 18px;
+                  line-height: 20px; } }
         header .header-right .expander-wrapper .expander .expander-footer {
           padding: 10px 4px;
           display: flex;
