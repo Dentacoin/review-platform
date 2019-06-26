@@ -306,7 +306,13 @@ class ProfileController extends FrontController
             'payouts' => $this->user->history->where('type', '=', 'vox-cashout'),
             'js' => [
                 'profile.js',
-            ]
+            ],
+            'csscdn' => [
+                'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
+            ],
+            'css' => [
+                'vox-profile-fix.css',
+            ],
         ];
 
         $path = explode('/', request()->path())[2];

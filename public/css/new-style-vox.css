@@ -4515,10 +4515,31 @@ p.h2-bold {
       width: 14px;
       height: 14px;
       margin-right: 20px; }
+.page-profile .site-content .alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px; }
+  .page-profile .site-content .alert:before {
+    display: none; }
+  .page-profile .site-content .alert.alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1; }
+  .page-profile .site-content .alert.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6; }
+  .page-profile .site-content .alert.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1; }
 .page-profile .site-content h2.page-title {
-  font-size: 25px;
+  font-size: 24px;
   margin-bottom: 39px;
-  margin-top: 35px; }
+  margin-top: 35px;
+  font-family: 'Lato', sans-serif;
+  font-weight: bold; }
   @media screen and (max-width: 992px) {
     .page-profile .site-content h2.page-title {
       font-size: 22px;

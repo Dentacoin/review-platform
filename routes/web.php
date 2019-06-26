@@ -153,6 +153,8 @@ $reviewRoutes = function () {
 	Route::get('sitemap.xml', 							'Front\SitemapController@links');
 	Route::get('robots.txt', 							'Front\RobotsController@content');
 
+	Route::get('user-logout',									'Auth\AuthenticateUser@getLogout');
+	
 	Route::group(['prefix' => '{locale?}'], function(){
 
 		Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginForm'] );
@@ -285,6 +287,8 @@ $voxRoutes = function () {
 	Route::any('test', 									'Front\YouTubeController@test');
 	Route::get('sitemap.xml', 							'Vox\SitemapController@links');
 	Route::get('robots.txt', 							'Vox\RobotsController@content');
+
+	Route::get('user-logout',									'Auth\AuthenticateUser@getLogout');
 
 	Route::group(['prefix' => '{locale?}'], function(){
 

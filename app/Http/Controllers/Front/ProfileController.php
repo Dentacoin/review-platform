@@ -998,6 +998,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             'js' => [
                 'profile.js',
             ],
+            'csscdn' => [
+                'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
+            ],
         ];
 
         $path = explode('/', request()->path())[2];

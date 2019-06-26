@@ -1,0 +1,49 @@
+
+@font-face {
+    font-family: 'Calibri';
+    src: url('../fonts/Calibri-Bold.eot');
+    src: url('../fonts/Calibri-Bold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Calibri-Bold.woff2') format('woff2'),
+         url('../fonts/Calibri-Bold.woff') format('woff'),
+         url('../fonts/Calibri-Bold.ttf') format('truetype'),
+         url('../fonts/Calibri-Bold.svg') format('svg');
+    font-weight: 700;
+    font-style: bold;
+}
+
+@font-face {
+    font-family: 'Calibri';
+    src: url('../fonts/Calibri.eot');
+    src: url('../fonts/Calibri.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Calibri.woff2') format('woff2'),
+         url('../fonts/Calibri.woff') format('woff'),
+         url('../fonts/Calibri.ttf') format('truetype'),
+         url('../fonts/Calibri.svg') format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Calibri';
+    src: url('../fonts/Calibri-Light.eot');
+    src: url('../fonts/Calibri-Light.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Calibri-Light.woff2') format('woff2'),
+         url('../fonts/Calibri-Light.woff') format('woff'),
+         url('../fonts/Calibri-Light.ttf') format('truetype'),
+         url('../fonts/Calibri-Light.svg') format('svg');
+    font-weight: 300;
+    font-style: bold;
+}
+
+
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    font-family: 'Calibri', sans-serif;
+    color: #1d1d1d;
+}
+
+
+.black-line-title h4 {
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+}

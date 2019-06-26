@@ -206,13 +206,10 @@ table th[class*="col-"] {
 
 .page-profile .site-content {
 
-	@media #{$phone} {
-		.container {
+	color: #1d1d1d;
 
-			.alert {
-				margin-top: 22px;
-			}
-		}
+	* {
+		color: #1d1d1d;		
 	}
 
 	.form-group {
@@ -274,6 +271,7 @@ table th[class*="col-"] {
 			margin-bottom: 25px;
 			position: relative;
     		font-weight: bold;
+		    font-family: 'Lato', sans-serif;
 
 			&::after {
 				content: '';
@@ -430,7 +428,9 @@ table th[class*="col-"] {
 	}
 
 	h2.page-title {
-		font-size: 25px;
+		font-size: 24px;
+		font-family: 'Lato', sans-serif;
+		font-weight: bold;
 
 		img {
 			margin-right: 10px;
@@ -891,5 +891,36 @@ table th[class*="col-"] {
 			}
 		}
 
+	}
+}
+
+
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+
+    &:before {
+    	display: none;
+    }
+
+	&.alert-info {
+	    color: #31708f;
+	    background-color: #d9edf7;
+	    border-color: #bce8f1;
+	}
+
+	&.alert-success {
+	    color: #3c763d;
+	    background-color: #dff0d8;
+	    border-color: #d6e9c6;
+	}
+
+	&.alert-danger {
+	    color: #a94442;
+	    background-color: #f2dede;
+	    border-color: #ebccd1;
 	}
 }
