@@ -210,7 +210,7 @@ class LoginController extends FrontController
             }
 
             Request::session()->flash('success-message', trans('trp.popup.registration.have-account'));
-            return redirect(getLangUrl('profile'));
+            return redirect(getLangUrl('/'));
         } else {
 
             $name = $s_user->getName() ? $s_user->getName() : ( !empty($s_user->user['first_name']) && !empty($s_user->user['last_name']) ? $s_user->user['first_name'].' '.$s_user->user['last_name'] : ( !empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' ) );
@@ -321,7 +321,7 @@ class LoginController extends FrontController
             }
             
 
-            return redirect( $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('profile').($want_to_invite ? '?'.http_build_query(['popup'=>'invite-new-dentist-popup']) : '' ) );
+            return redirect( $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('/').($want_to_invite ? '?'.http_build_query(['popup'=>'invite-new-dentist-popup']) : '' ) );
         }
     }
 
@@ -369,7 +369,7 @@ class LoginController extends FrontController
                             session(['new_auth' => null]);
 
                             $ret['success'] = true;
-                            $ret['redirect'] = getLangUrl('profile');
+                            $ret['redirect'] = getLangUrl('/');
                         }
 
                     } else {
@@ -399,7 +399,7 @@ class LoginController extends FrontController
                                 }
 
                                 $ret['success'] = true;
-                                $ret['redirect'] = getLangUrl('profile');
+                                $ret['redirect'] = getLangUrl('/');
                             }
                         } else {
                             $ret['message'] = trans('trp.common.civic.not-found');

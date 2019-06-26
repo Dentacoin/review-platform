@@ -208,7 +208,7 @@
 							@else
 								{!! trans('vox.page.questionnaire.well-done-content', [
 									'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
-									'link' => '<a href="'.getLangUrl('profile').'">',
+									'link' => '<a href="https://account.dentacoin.com/">',
 									'endlink' => '</a>',
 								]) !!}
 							@endif
@@ -242,7 +242,7 @@
 									</a>
 								@endif
 							@endif
-							<a class="white-button" href="{{ getLangUrl('profile') }}">
+							<a class="white-button" href="https://account.dentacoin.com/">
 								{!! trans('vox.page.questionnaire.open-wallet.all-surveys') !!}
 							</a>
 						</div>
@@ -279,7 +279,7 @@
 						<h4>
 							{!! trans('vox.page.questionnaire.well-done-content', [
 								'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
-								'link' => '<a href="'.getLangUrl('profile').'">',
+								'link' => '<a href="https://account.dentacoin.com/">',
 								'endlink' => '</a>',
 							]) !!}
 						</h4>

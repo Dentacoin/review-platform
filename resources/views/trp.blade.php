@@ -117,7 +117,7 @@
 							@endif
 
 	                        @if(!empty($user))
-								<a href="{{ getLangUrl('profile') }}" class="profile-btn">
+								<a href="https://account.dentacoin.com/" class="profile-btn">
 									<span class="name">
 										{{ $user->getNameShort() }}
 									</span>
@@ -146,7 +146,7 @@
 												</a>
 											</div>
 											<div class="col">
-												<a class="btn" href="{{ getLangUrl('profile') }}">
+												<a class="btn" href="https://account.dentacoin.com/">
 													My Account
 												</a>
 											</div>

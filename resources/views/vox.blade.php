@@ -139,14 +139,14 @@
 							@if( $user && $user->status!='approved' && $user->status!='test' )
 							@elseif($user)
 								<div class="user-and-price header-a">
-									<a class="my-name" href="{{ getLangUrl('profile') }}">
+									<a class="my-name" href="https://account.dentacoin.com/">
 										Hello, {{ $user->getName() }}
 									</a>
-									<a href="{{ getLangUrl('profile') }}">
+									<a href="https://account.dentacoin.com/">
 										<span id="header-balance">{{ $user->getTotalBalance('vox') }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance('vox') * $dcn_price) }}</span>
 									</a>
 								</div>
-								<a class="header-a" href="{{ getLangUrl('profile/info') }}" >
+								<a class="header-a" href="https://account.dentacoin.com/" >
 									<img class="header-avatar" src="{{ $user->getImageUrl(true) }}">
 								</a>
 
@@ -173,7 +173,7 @@
 												</a>
 											</div>
 											<div class="col">
-												<a class="btn" href="{{ getLangUrl('profile') }}">
+												<a class="btn" href="https://account.dentacoin.com/">
 													My Account
 												</a>
 											</div>

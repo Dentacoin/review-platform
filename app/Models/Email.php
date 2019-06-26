@@ -173,7 +173,7 @@ class Email extends Model
 				'[/rewardlink]',
 			), array(
 				Reward::getReward('reward_register'),
-				'<a '.$this->button_style.' href="'.getLangUrl('profile/reward', null, $domain).'">',
+				'<a '.$this->button_style.' href="https://account.dentacoin.com/">',
 				'</a>',
 			), $content);
 		}
@@ -293,7 +293,7 @@ class Email extends Model
 				'[/invitation_link]',
 			), array(
 				$this->meta['patient_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl('profile/asks', null, $domain).'">',
+				'<a '.$this->button_style.' href="https://account.dentacoin.com/invite">',
 				'</a>',				
 			), $content);
 		}
@@ -315,7 +315,7 @@ class Email extends Model
 				'[reward]',
 				'[/reward]',
 			), array(
-				'<a '.$this->button_style.' href="'.getLangUrl('profile/wallet', null, $domain).'">',
+				'<a '.$this->button_style.' href="https://account.dentacoin.com/">',
 				'</a>',
 			), $content);
 		}

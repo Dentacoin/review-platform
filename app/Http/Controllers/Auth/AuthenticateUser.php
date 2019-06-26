@@ -42,14 +42,14 @@ class AuthenticateUser extends FrontController
     public function showLoginForm()
     {
         if(!empty($this->user)) {
-            return redirect(getLangUrl('profile'));
+            return redirect(getLangUrl('/'));
         }
         return redirect( getLangUrl('/').'?popup=popup-login' );
     }
     public function showLoginFormVox()
     {
         if(!empty($this->user)) {
-            return redirect(getLangUrl('profile'));
+            return redirect(getLangUrl('/'));
         }
 
         if (request()->getHost() == 'dentavox.dentacoin.com') {

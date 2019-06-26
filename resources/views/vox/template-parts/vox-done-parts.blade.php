@@ -10,7 +10,7 @@
 	</div>
 </div>
 
-<a href="{{ getLangUrl('profile/invite') }}" class="sticky-invite">
+<a href="https://account.dentacoin.com/invite" class="sticky-invite">
 	<div class="sticky-box">
 		<img src="{{ url('new-vox-img/invite-icon.png') }}">
 		<p>

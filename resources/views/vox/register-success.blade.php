@@ -22,7 +22,7 @@
 
 				<div class="tac clearfix">
 					@if($user->is_dentist)
-						<a class="blue-button" href="{{ getLangUrl('profile/invite') }}">
+						<a class="blue-button" href="https://account.dentacoin.com/invite">
 							{!! nl2br( trans('vox.page.welcome-to-dentavox.invite') ) !!}
 							
 						</a>

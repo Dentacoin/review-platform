@@ -30,7 +30,7 @@ class RegisterController extends FrontController
         return Redirect::to( getLangUrl('welcome-dentist'), 301); 
 
         if(!empty($this->user)) {
-            return redirect(getLangUrl('profile'));
+            return redirect(getLangUrl('/'));
         }
 
 		return $this->ShowView('register', [
@@ -803,7 +803,7 @@ class RegisterController extends FrontController
 
                             Request::session()->flash('success-message', trans('trp.popup.registration.have-account'));
                             $ret['success'] = true;
-                            $ret['redirect'] = getLangUrl('profile');
+                            $ret['redirect'] = getLangUrl('/');
                         }
                     } else {
 
@@ -904,7 +904,7 @@ class RegisterController extends FrontController
                         //
 
                         $ret['success'] = true;
-                        $ret['redirect'] = $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('profile');
+                        $ret['redirect'] = $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('/');
                     }
                     
                 }
