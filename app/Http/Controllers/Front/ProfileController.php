@@ -985,12 +985,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     //
 
      public function trp($locale=null) {
-        
-        if ($this->user->is_dentist) {
-            return redirect( getLangUrl('profile') );
-        }
-        
+                
         $params = [
+            'reviews' => $this->user->is_dentist ? $this->user->reviews_in() : $this->user->reviews_out,
             'menu' => $this->menu,
             'css' => [
                 'common-profile.css',
