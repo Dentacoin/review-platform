@@ -75,7 +75,7 @@ class StatsController extends FrontController
         }
 
         if(!empty($this->user) && $this->user->isBanned('vox')) {
-            return redirect('https://account.dentacoin.com/dentavox');
+            return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
         }
 
         if(Request::isMethod('post')) {

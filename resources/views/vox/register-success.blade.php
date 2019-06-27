@@ -22,7 +22,7 @@
 
 				<div class="tac clearfix">
 					@if($user->is_dentist)
-						<a class="blue-button" href="https://account.dentacoin.com/invite">
+						<a class="blue-button" href="https://account.dentacoin.com/invite?platform=dentavox">
 							{!! nl2br( trans('vox.page.welcome-to-dentavox.invite') ) !!}
 							
 						</a>

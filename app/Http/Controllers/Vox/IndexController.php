@@ -32,7 +32,7 @@ class IndexController extends FrontController
 	        }
 
 	        if($this->user->isBanned('vox')) {
-	            return redirect('https://account.dentacoin.com/dentavox');
+	            return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
 	        }
 
 	        $sorts = [

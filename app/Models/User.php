@@ -306,7 +306,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'image' => 'invite-friends',
                     'completed' => false,
                     'buttonText' => trans('trp.strength.dentist.invite-patients.button-text'),
-                    'buttonHref' => 'https://account.dentacoin.com/invite',
+                    'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
                 ];
 
                 if ($this->is_clinic) {
@@ -443,7 +443,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'image' => 'balance',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.withdraw-rewards.button-text'),
-                        'buttonHref' => 'https://account.dentacoin.com/',
+                        'buttonHref' => 'https://account.dentacoin.com/?platform=trusted-reviews',
                     ];
                 }
 
@@ -589,7 +589,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'image' => 'invite-friends',
                     'completed' => false,
                     'buttonText' => trans('trp.strength.patient.invite-friends.button-text'),
-                    'buttonHref' => 'https://account.dentacoin.com/invite',
+                    'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
                 ];
 
                 $total_balance = $this->getTotalBalance();
@@ -600,7 +600,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'image' => 'balance',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.patient.withdraw-rewards.button-text'),
-                        'buttonHref' => 'https://account.dentacoin.com/',
+                        'buttonHref' => 'https://account.dentacoin.com/?platform=trusted-reviews',
                     ];
                 }
 
@@ -702,7 +702,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'image' => 'invite-friends',
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.invite-patients.button-text'),
-                    'buttonHref' => 'https://account.dentacoin.com/invite',
+                    'buttonHref' => 'https://account.dentacoin.com/invite?platform=dentavox',
                 ];
 
 
@@ -783,7 +783,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'image' => 'balance',
                         'completed' => false,
                         'buttonText' => trans('vox.strength.dentist.withdraw-rewards.button-text'),
-                        'buttonHref' => 'https://account.dentacoin.com/',
+                        'buttonHref' => 'https://account.dentacoin.com/?platform=dentavox',
                     ];
                 }
 
@@ -883,7 +883,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'image' => 'balance',
                         'completed' => false,
                         'buttonText' => trans('vox.strength.patient.withdraw-rewards.button-text'),
-                        'buttonHref' => 'https://account.dentacoin.com/',
+                        'buttonHref' => 'https://account.dentacoin.com/?platform=dentavox',
                     ];
                 }
 
@@ -893,7 +893,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'image' => 'invite-friends',
                     'completed' => false,
                     'buttonText' => trans('vox.strength.patient.invite-friends.button-text'),
-                    'buttonHref' => 'https://account.dentacoin.com/invite',
+                    'buttonHref' => 'https://account.dentacoin.com/invite?platform=dentavox',
                 ];
 
 

@@ -168,7 +168,7 @@ class VoxController extends FrontController
 		}
 
         if($this->user->isBanned('vox')) {
-            return redirect('https://account.dentacoin.com/dentavox');
+            return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
         }
 
 		if (!$isAdmin && $vox->type=='hidden') {
