@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 89.9 89.9"
+	 style="enable-background:new 0 0 89.9 89.9;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#80B8DC;stroke-width:3;stroke-miterlimit:10;}
+	.st1{fill:#80B8DC;}
+	.st2{fill:none;stroke:#80B8DC;stroke-width:2;stroke-miterlimit:10;}
+</style>
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  bottomLeftOrigin="true" height="89.9" width="89.9" x="-14.9" y="4.7"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<circle class="st0" cx="45" cy="45" r="43.5"/>
+<path class="st1" d="M35.6,28.5c1.8,0,3.2,1.4,3.2,3.2v9.7c0,1.8-1.4,3.2-3.2,3.2h-9.7c-1.8,0-3.2-1.4-3.2-3.2v-9.7
+	c0-1.8,1.4-3.2,3.2-3.2H35.6 M35.6,25.3h-9.7c-3.6,0-6.5,2.9-6.5,6.5v9.7c0,3.6,2.9,6.5,6.5,6.5h9.7c3.6,0,6.5-2.9,6.5-6.5v-9.7
+	C42.1,28.2,39.2,25.3,35.6,25.3z M71.1,26.9c0-0.9-0.7-1.6-1.6-1.6c0,0,0,0,0,0H50.1c-0.9,0-1.6,0.7-1.6,1.6s0.7,1.6,1.6,1.6h19.4
+	C70.4,28.5,71.1,27.8,71.1,26.9C71.1,26.9,71.1,26.9,71.1,26.9z M71.1,36.6c0-0.9-0.7-1.6-1.6-1.6c0,0,0,0,0,0H50.1
+	c-0.9,0-1.6,0.7-1.6,1.6c0,0.9,0.7,1.6,1.6,1.6h19.4C70.4,38.2,71.1,37.5,71.1,36.6C71.1,36.6,71.1,36.6,71.1,36.6z M71.1,46.2
+	c0-0.9-0.7-1.6-1.6-1.6c0,0,0,0,0,0H50.1c-0.9,0-1.6,0.7-1.6,1.6s0.7,1.6,1.6,1.6h19.4C70.4,47.9,71.1,47.1,71.1,46.2
+	C71.1,46.2,71.1,46.2,71.1,46.2z M71.1,55.9c0-0.9-0.7-1.6-1.6-1.6c0,0,0,0,0,0H21.1c-0.9,0-1.6,0.7-1.6,1.6s0.7,1.6,1.6,1.6h48.4
+	C70.4,57.5,71.1,56.8,71.1,55.9C71.1,55.9,71.1,55.9,71.1,55.9z M71.1,65.6c0-0.9-0.7-1.6-1.6-1.6c0,0,0,0,0,0H21.1
+	c-0.9,0-1.6,0.7-1.6,1.6s0.7,1.6,1.6,1.6h48.4C70.4,67.2,71.1,66.5,71.1,65.6C71.1,65.6,71.1,65.6,71.1,65.6z"/>
+<circle class="st2" cx="30.7" cy="35.1" r="4.6"/>
+<ellipse class="st2" cx="30.7" cy="43.4" rx="8.1" ry="3.1"/>
+</svg>

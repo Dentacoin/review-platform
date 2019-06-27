@@ -894,7 +894,7 @@
     			@if($item->photos->isNotEmpty() || (!empty($user) && $item->id==$user->id) )
 	       			<div class="gallery-slider {!! count($item->photos) > 2 ? 'with-arrows' : '' !!}">
 	    				<div class="gallery-flickity">
-			    			@if( (!empty($user) && $item->id==$user->id) )
+			    			@if( (!empty($user) && $item->id==$user->id && $item->photos->count() < 10 ) )
 								<div class="slider-wrapper">
 									{{ Form::open(array('class' => 'gallery-add', 'method' => 'post', 'files' => true)) }}
 										<label for="add-gallery-photo" class="add-gallery-image slider-image cover image-label">
@@ -1048,6 +1048,12 @@
     	</div>
     </div>
 </div>
+
+@if(!empty($user) && $item->id==$user->id && !empty($admin))
+	<div class="strength-parent fixed">
+		@include('trp.parts.strength-scale')
+	</div>
+@endif
 
 @if(!empty($user))
 

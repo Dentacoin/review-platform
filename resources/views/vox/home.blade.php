@@ -3,6 +3,12 @@
 @section('content')
 
 	<div class="container">
+		@if($user && !empty($admin))
+			<div class="strength-parent">
+				@include('vox.template-parts.strength-scale')
+			</div>
+		@endif
+		
 		<div class="another-questions">
 
   			@include('front.errors')
@@ -65,7 +71,7 @@
 				      	<div class="swiper-slide"
 			      			featured="{{ intval($vox->featured) }}" 
 			      			published="{{ $vox->created_at->timestamp }}" 
-			      			sort-order="{{ $vox->sort_order }}" 
+			      			sort-order="{{ $vox->sort_order ? $vox->sort_order : 0 }}" 
 			      			popular="{{ intval($vox->rewards()->count()) }}" 
 			      			dcn="{{ intval($vox->getRewardTotal()) }}" 
 			      			duration="{{ ceil( $vox->questions()->count()/6 ) }}" 

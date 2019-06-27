@@ -284,7 +284,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.complete-profile.title'),
                         'text' => nl2br(trans('trp.strength.dentist.complete-profile.text-complete')),
-                        'image' => 'wallet',
+                        'image' => 'complete-profile',
                         'completed' => true,
                         'buttonText' => trans('trp.strength.dentist.complete-profile.button-text'),
                     ];
@@ -292,7 +292,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $missing_parts = count($missing_info) > 1 ? $missing_info[0].' and '.$missing_info[1] : $missing_info[0];
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.complete-profile.title'),
-                        'image' => 'wallet',
+                        'image' => 'complete-profile',
                         'text' => nl2br(trans('trp.strength.dentist.complete-profile.text', ['missing' => $missing_parts])),
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.complete-profile.button-text'),
@@ -303,7 +303,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.invite-patients.title'),
                     'text' => nl2br(trans('trp.strength.dentist.invite-patients.text')),
-                    'image' => 'wallet',
+                    'image' => 'invite-friends',
                     'completed' => false,
                     'buttonText' => trans('trp.strength.dentist.invite-patients.button-text'),
                     'buttonHref' => 'https://account.dentacoin.com/invite',
@@ -313,7 +313,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('trp.strength.clinic.show-team.title'),
                         'text' => nl2br(trans('trp.strength.clinic.show-team.text')),
-                        'image' => 'wallet',
+                        'image' => 'team',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.clinic.show-team.button-text'),
                         'buttonHref' => getLangUrl('/'),
@@ -344,7 +344,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.add-description.title'),
                         'text' => nl2br(trans('trp.strength.dentist.add-description.text')),
-                        'image' => 'wallet',
+                        'image' => 'description',
                         'completed' => true,
                         'buttonText' => trans('trp.strength.dentist.add-description.button-text'),
                     ];
@@ -352,7 +352,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.add-description.title'),
                         'text' => nl2br(trans('trp.strength.dentist.add-description.text')),
-                        'image' => 'wallet',
+                        'image' => 'description',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-description.button-text'),
                         'buttonHref' => getLangUrl('/'),
@@ -363,7 +363,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.add-socials.title'),
                         'text' => nl2br(trans('trp.strength.dentist.add-socials.text')),
-                        'image' => 'wallet',
+                        'image' => 'socials',
                         'completed' => true,
                         'buttonText' => trans('trp.strength.dentist.add-socials.button-text'),
                     ];
@@ -371,7 +371,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.add-socials.title'),
                         'text' => nl2br(trans('trp.strength.dentist.add-socials.text')),
-                        'image' => 'wallet',
+                        'image' => 'socials',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-socials.button-text'),
                         'buttonHref' => getLangUrl('/'),
@@ -382,7 +382,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [                        
                         'title' => trans('trp.strength.dentist.add-photos.title'),
                         'text' => nl2br(trans('trp.strength.dentist.add-photos.text')),
-                        'image' => 'wallet',
+                        'image' => 'photos',
                         'completed' => true,
                         'buttonText' => trans('trp.strength.dentist.add-photos.button-text'),
                     ];
@@ -390,7 +390,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.add-photos.title'),
                         'text' => nl2br(trans('trp.strength.dentist.add-photos.text')),
-                        'image' => 'wallet',
+                        'image' => 'photos',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-photos.button-text'),
                         'buttonHref' => getLangUrl('/'),
@@ -401,7 +401,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.add-work-hours.title'),
                         'text' => nl2br(trans('trp.strength.dentist.add-work-hours.text')),
-                        'image' => 'wallet',
+                        'image' => 'work-hours',
                         'completed' => true,
                         'buttonText' => trans('trp.strength.dentist.add-work-hours.button-text'),
                     ];
@@ -409,7 +409,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.add-work-hours.title'),
                         'text' => nl2br(trans('trp.strength.dentist.add-work-hours.text')),
-                        'image' => 'wallet',
+                        'image' => 'work-hours',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-work-hours.button-text'),
                         'buttonHref' => getLangUrl('/'),
@@ -420,7 +420,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.add-widget.title'),
                         'text' => nl2br(trans('trp.strength.dentist.add-widget.text')),
-                        'image' => 'wallet',
+                        'image' => 'widget',
                         'completed' => true,
                         'buttonText' => trans('trp.strength.dentist.add-widget.button-text'),
                     ];
@@ -428,7 +428,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.add-widget.title'),
                         'text' => nl2br(trans('trp.strength.dentist.add-widget.text')),
-                        'image' => 'wallet',
+                        'image' => 'widget',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-widget.button-text'),
                         'buttonHref' => $this->getLink().'?popup-loged=popup-widget',
@@ -440,7 +440,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.withdraw-rewards.title'),
                         'text' => nl2br(trans('trp.strength.dentist.withdraw-rewards.text', ['link' => '<a href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/" target="_blank">', 'endlink' => '</a>'])),
-                        'image' => 'wallet',
+                        'image' => 'balance',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.withdraw-rewards.button-text'),
                         'buttonHref' => 'https://account.dentacoin.com/',
@@ -451,7 +451,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.check-stats.title'),
                     'text' => nl2br(trans('trp.strength.dentist.check-stats.text', ['name' => $stats->title ])),
-                    'image' => 'dentavox',
+                    'image' => 'stats',
                     'completed' => false,
                     'buttonText' => trans('trp.strength.dentist.check-stats.button-text'),
                     'buttonHref' => getVoxUrl('dental-survey-stats/'.$stats->translate(App::getLocale(), true)->slug ),
@@ -461,7 +461,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.browse-surveys.title'),
                     'text' => nl2br(trans('trp.strength.dentist.browse-surveys.text')),
-                    'image' => 'wallet',
+                    'image' => 'dentavox',
                     'completed' => false,
                     'buttonText' => trans('trp.strength.dentist.browse-surveys.button-text'),
                     'buttonHref' => getVoxUrl('/'),
@@ -471,7 +471,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.join-assurance.title'),
                     'text' => nl2br(trans('trp.strength.dentist.join-assurance.text')),
-                    'image' => 'wallet',
+                    'image' => 'assurance',
                     'completed' => false,
                     'buttonText' => trans('trp.strength.dentist.join-assurance.button-text'),
                     'buttonHref' => 'https://assurance.dentacoin.com',
@@ -481,7 +481,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.join-dentacare.title'),
                     'text' => nl2br(trans('trp.strength.dentist.join-dentacare.text')),
-                    'image' => 'wallet',
+                    'image' => 'dentacare',
                     'completed' => false,
                     'buttonText' => trans('trp.strength.dentist.join-dentacare.button-text'),
                     'buttonHref' => 'https://dentacare.dentacoin.com',
@@ -670,7 +670,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ret[] = [
                     'title' => trans('vox.strength.dentist.public-profile.title'),
                     'text' => nl2br(trans('vox.strength.dentist.public-profile.text')),
-                    'image' => 'wallet',
+                    'image' => 'public-profile',
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.public-profile.button-text'),
                     'buttonHref' => getLangUrl('/', null, 'https://reviews.dentacoin.com/'),
@@ -681,7 +681,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ret[] = [
                     'title' => trans('vox.strength.dentist.check-stats.title'),
                     'text' => nl2br(trans('vox.strength.dentist.check-stats.text', ['name' => $stats->title])),
-                    'image' => 'dentavox',
+                    'image' => 'stats',
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.check-stats.button-text'),
                     'buttonHref' => getLangUrl('dental-survey-stats/'.$stats->translate(App::getLocale(), true)->slug ),
@@ -690,7 +690,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ret[] = [
                     'title' => trans('vox.strength.dentist.browse-surveys.title'),
                     'text' => nl2br(trans('vox.strength.dentist.browse-surveys.text')),
-                    'image' => 'wallet',
+                    'image' => 'dentavox',
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.browse-surveys.button-text'),
                     'buttonHref' => getLangUrl('/'),
@@ -699,7 +699,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ret[] = [
                     'title' => trans('vox.strength.dentist.invite-patients.title'),
                     'text' => nl2br(trans('vox.strength.dentist.invite-patients.text')),
-                    'image' => 'wallet',
+                    'image' => 'invite-friends',
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.invite-patients.button-text'),
                     'buttonHref' => 'https://account.dentacoin.com/invite',
@@ -748,7 +748,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('vox.strength.dentist.complete-profile.title'),
                         'text' => nl2br(trans('vox.strength.dentist.complete-profile.text-complete')),
-                        'image' => 'wallet',
+                        'image' => 'complete-profile',
                         'completed' => true,
                         'buttonText' => trans('vox.strength.dentist.complete-profile.button-text'),
                     ];
@@ -756,7 +756,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $missing_parts = count($missing_info) > 1 ? $missing_info[0].' and '.$missing_info[1] : $missing_info[0];
                     $ret[] = [
                         'title' => trans('vox.strength.dentist.complete-profile.title'),
-                        'image' => 'wallet',
+                        'image' => 'complete-profile',
                         'text' => nl2br(trans('vox.strength.dentist.complete-profile.text', ['missing' => $missing_parts])),
                         'completed' => false,
                         'buttonText' => trans('vox.strength.dentist.complete-profile.button-text'),
@@ -768,7 +768,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ret[] = [
                     'title' => trans('vox.strength.dentist.join-assurance.title'),
                     'text' => nl2br(trans('vox.strength.dentist.join-assurance.text')),
-                    'image' => 'wallet',
+                    'image' => 'assurance',
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.join-assurance.button-text'),
                     'buttonHref' => 'https://assurance.dentacoin.com',
@@ -780,7 +780,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $ret[] = [
                         'title' => trans('vox.strength.dentist.withdraw-rewards.title'),
                         'text' => nl2br(trans('vox.strength.dentist.withdraw-rewards.text', ['link' => '<a href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/" target="_blank">', 'endlink' => '</a>' ])),
-                        'image' => 'wallet',
+                        'image' => 'balance',
                         'completed' => false,
                         'buttonText' => trans('vox.strength.dentist.withdraw-rewards.button-text'),
                         'buttonHref' => 'https://account.dentacoin.com/',
@@ -790,7 +790,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ret[] = [
                     'title' => trans('vox.strength.dentist.join-dentacare.title'),
                     'text' => nl2br(trans('vox.strength.dentist.join-dentacare.text')),
-                    'image' => 'wallet',
+                    'image' => 'dentacare',
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.join-dentacare.button-text'),
                     'buttonHref' => 'https://dentacare.dentacoin.com',

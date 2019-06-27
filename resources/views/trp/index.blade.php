@@ -223,4 +223,10 @@
 		</div>
 	@endif
 
+	@if($user && !empty($admin))
+		<div class="strength-parent fixed">
+			@include('trp.parts.strength-scale')
+		</div>
+	@endif
+
 @endsection
