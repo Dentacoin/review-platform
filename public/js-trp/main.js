@@ -480,6 +480,11 @@ jQuery(document).ready(function($){
             (function( data ) {
                 if(data.success) {
                     $(this).find('.alert-success').html(data.message).show();
+
+                    gtag('event', 'Invite', {
+						'event_category': 'InviteDentist',
+						'event_label': 'InvitedDentists',
+					});
                 } else {
                     for(var i in data.messages) {
                         $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
