@@ -4675,6 +4675,7 @@ textarea.input {
 	.home-search-form {
 	    top: 15px;
 	    width: 810px;
+		z-index: 1022;
 
 	    @media #{$pc} {
 	    	width: 620px;
@@ -4716,8 +4717,7 @@ textarea.input {
 	    @media #{$phone} {
 			top: 50px;
 		}
-	}
-	
+	}	
 }
 
 
