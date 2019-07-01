@@ -1146,6 +1146,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
             $sender = config('mail.from.address');
             $sender_name = config('mail.from.name');
+            //$sender_name = config('platforms.'.$item->platform.'.name') ?? config('mail.from.name');
 
             $from = new From($sender, $sender_name);
 

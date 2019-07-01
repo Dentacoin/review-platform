@@ -6,7 +6,7 @@ return array(
   'port' => 587,
   'from' => array(
   	'address' => 'reviews@dentacoin.com', 
-  	'name' => 'Dentacoin Trusted Review Platform',
+  	'name' => 'Dentacoin Trusted Reviews',
   	'address-vox' => 'dentavox@dentacoin.com', 
   	'name-vox' => 'DentaVox Market Research Platform',
   ),
