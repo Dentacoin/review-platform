@@ -819,13 +819,16 @@ NEW & FAILED TRANSACTIONS
                     users
                 WHERE 
                     `is_dentist` = 1
-                    AND `id` NOT IN ( SELECT `user_id` FROM `emails` WHERE  `template_id` IN ( 55, 56) AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00' )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                     AND `deleted_at` is null
                     AND `unsubscribe` is null
 
                     AND `status` IN ('approved', 'test')
             ";
+
+            // Cron runs 1x per month
+            // AND `id` NOT IN ( SELECT `user_id` FROM `emails` WHERE  `template_id` IN ( 55, 56) AND `created_at` > '".date('Y-m-d', time() - 86400*20)." 00:00:00' )
+
 
             $users = DB::select(
                 DB::raw($query), []
