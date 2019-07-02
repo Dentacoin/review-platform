@@ -1876,11 +1876,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $dow = $date->dayOfWeekIso;
                 if( isset( $this->work_hours[$dow] ) ) {
                     $oa = explode(':', $this->work_hours[$dow][0]);
-                    $open = Carbon::createFromTime( intval($oa[0]), intval($oa[1]), 0, $tz );
                     $ca = explode(':', $this->work_hours[$dow][1]);
-                    $close = Carbon::createFromTime( intval($ca[0]), intval($ca[1]), 0, $tz );
-                    if( $date->lessThan($close) && $date->greaterThan($open) ) {
-                        $opens = '<span class="green-text">Open now</span>&nbsp;<span>('.$this->work_hours[$dow][0].' - '.$this->work_hours[$dow][1].')</span>';
+                    if(!empty($oa[0]) && is_numeric($oa[0]) && !empty($ca[0]) && is_numeric($ca[0]) && !empty($oa[1]) && is_numeric($oa[1]) && !empty($ca[1]) && is_numeric($ca[1])) {
+                        $open = Carbon::createFromTime( intval($oa[0]), intval($oa[1]), 0, $tz );
+                        $close = Carbon::createFromTime( intval($ca[0]), intval($ca[1]), 0, $tz );
+                        if( $date->lessThan($close) && $date->greaterThan($open) ) {
+                            $opens = '<span class="green-text">Open now</span>&nbsp;<span>('.$this->work_hours[$dow][0].' - '.$this->work_hours[$dow][1].')</span>';
+                        }
                     }
                 } 
 
