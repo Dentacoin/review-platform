@@ -604,13 +604,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     ];
                 }
 
-                $all_surveys = Vox::where('type', 'normal')->get();
-                $taken = $this->filledVoxes();
                 $done_all = false;
-
-                if (($all_surveys->count() - 1) == count($taken)) {
-                    $done_all = true;
-                }
 
                 if(!$this->madeTest(11)) {
                     $welcome_vox = Vox::find(11);
@@ -632,18 +626,26 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $filled_voxes = $this->filledVoxes();
 
                     $latest_voxes = array_diff($voxes, $filled_voxes);
-                    $latest_vox = Vox::find(array_values($latest_voxes)[0]);
 
-                    $ret[] = [
-                        'title' => trans('trp.strength.patient.take-latest-survey.title'),
-                        'text' => nl2br(trans('trp.strength.patient.take-latest-survey.text', ['name' => $latest_vox->title, 'reward' => $latest_vox->getRewardTotal() ])),
-                        'image' => 'dentavox',
-                        'completed' => false,
-                        'buttonText' => trans('trp.strength.patient.take-latest-survey.button-text'),
-                        'buttonHref' => getVoxUrl('paid-dental-surveys/'.$latest_vox->translate(App::getLocale(), true)->slug ),
-                        'target' => true
-                    ];
-                } else if($done_all) {
+                    if(empty($latest_voxes)) {
+                        $done_all = true;
+                    } else {
+                        $latest_vox = Vox::find(array_values($latest_voxes)[0]);
+
+                        $ret[] = [
+                            'title' => trans('trp.strength.patient.take-latest-survey.title'),
+                            'text' => nl2br(trans('trp.strength.patient.take-latest-survey.text', ['name' => $latest_vox->title, 'reward' => $latest_vox->getRewardTotal() ])),
+                            'image' => 'dentavox',
+                            'completed' => false,
+                            'buttonText' => trans('trp.strength.patient.take-latest-survey.button-text'),
+                            'buttonHref' => getVoxUrl('paid-dental-surveys/'.$latest_vox->translate(App::getLocale(), true)->slug ),
+                            'target' => true
+                        ];                        
+                    }
+                }
+
+
+                if($done_all) {
                     $ret[] = [
                         'title' => trans('trp.strength.patient.take-latest-survey.title'),
                         'text' => nl2br(trans('trp.strength.patient.take-latest-survey.text-complete')),
@@ -2100,7 +2102,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'official@youpluswe.com',
                         'petya.ivanova@dentacoin.com',
                         'donika.kraeva@dentacoin.com',
-                        'daria.kerancheva@dentacoin.com',
+                        //'daria.kerancheva@dentacoin.com',
                         'petar.stoykov@dentacoin.com'
                     ];
                     $mtext = 'A user just tried to withdraw with duplicated ID card:

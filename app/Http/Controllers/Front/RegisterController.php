@@ -886,7 +886,7 @@ class RegisterController extends FrontController
                             'official@youpluswe.com',
                             'petya.ivanova@dentacoin.com',
                             'donika.kraeva@dentacoin.com',
-                            'daria.kerancheva@dentacoin.com',
+                            //'daria.kerancheva@dentacoin.com',
                             'petar.stoykov@dentacoin.com'
                         ];
                         $mtext = 'New patient registered in TRP: '.$newuser->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id.')';
