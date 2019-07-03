@@ -79,7 +79,7 @@ $(document).ready(function(){
 
         } else if (group.hasClass('location-question')) {
 
-            if ( !$('.country-select option:selected').length ) {
+            if ( !$('.country-select').val() ) {
                 $('.answer-error').show().insertAfter($(this));
                 return;
             }
