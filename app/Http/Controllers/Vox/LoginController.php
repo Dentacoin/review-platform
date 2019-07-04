@@ -161,7 +161,7 @@ class LoginController extends FrontController
 
                 if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
                     Request::session()->flash('error-message', nl2br(trans('front.page.login.existing_email')) );
-                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.page.login.existing_email')));
+                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('vox.page.login.existing_email')));
                 }
 
                 $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
@@ -177,9 +177,13 @@ class LoginController extends FrontController
                     $fb_country = trim($loc_info[(count($loc_info)-1)]);
                     $fb_city = trim($loc_info[0]);
 
+
+                    $has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
+
                     $country = Country::whereHas('translations', function ($query) use ($fb_country) {
                         $query->where('name', 'LIKE', $fb_country);
                     })->first();
+                    
                     if(!empty($country)) {
                         $country_id = $country->id;
                         $city = City::where('country_id', $country_id)->whereHas('translations', function ($query) use ($fb_city) {
@@ -189,6 +193,8 @@ class LoginController extends FrontController
                             $city_id = $city->id;
                         }
                             
+                    } else if($has_test) {
+                        $country_id = $has_test['location'];
                     }
 
                 }
