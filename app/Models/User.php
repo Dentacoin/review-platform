@@ -1176,7 +1176,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 "homepage" => getLangUrl('/', null, $domain),
                 "trp_profile" => $this->getLink(),
                 "town" => $this->city_name ? $this->city_name : 'your town',
-                "country" => Country::find($this->country_id)->name,
+                "country" => $this->country_id ? Country::find($this->country_id)->name : 'your country',
                 "unsubscribe" => getLangUrl( 'unsubscribe/'.$this->id.'/'.$this->get_token(), null, $domain),
             ];
 
