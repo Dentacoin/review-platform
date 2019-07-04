@@ -1977,7 +1977,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $font->align('left');
             $font->valign('top');
         });
-        $location = $this->address.', '.$this->country->name;
+        $location = ($this->city_name ? $this->city_name.', ' : '').($this->state_name ? $this->state_name.', ' : '').$this->country->name;
         $img->text($location, 562, 365, function($font) {
             $font->file(public_path().'/fonts/Calibri.ttf');
             $font->size(30);
