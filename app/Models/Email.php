@@ -286,7 +286,7 @@ class Email extends Model
 			), $content);
 		}
 
-		if($this->template->id==23 || $this->template->id==63) { //user asks Dentist
+		if($this->template->id==23) { //user asks Dentist
 			$content = str_replace(array(
 				'[patient_name]',
 				'[invitation_link]',
@@ -476,6 +476,19 @@ class Email extends Model
 				$this->meta['top3-dentists'],
 			), $content);
         }
+
+
+		if($this->template->id==63) { //user asks Dentist
+			$content = str_replace(array(
+				'[patient_name]',
+				'[invitation_link]',
+				'[/invitation_link]',
+			), array(
+				$this->meta['patient_name'],
+				'<a '.$this->button_style.' href="'.getLangUrl( '/' , null, $domain).'">',
+				'</a>',				
+			), $content);
+		}
 
 		if($this->template->id==64) { //Dentist Approves Review Verification Request
 			$content = str_replace(array(

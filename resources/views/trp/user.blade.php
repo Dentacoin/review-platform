@@ -593,7 +593,7 @@
     	</a>
 
     	@if(!empty($user) && $user->id==$item->id && ($user->invites->isNotEmpty() || $user->asks->isNotEmpty()))
-    		<a class="tab" data-tab="asks" href="javascript:;">
+    		<a class="tab {!! $patient_asks ? 'force-active' : '' !!}" data-tab="asks" href="javascript:;">
     			My patients
 
     			<span class="{!! $patient_asks ? 'active' : ''  !!}"></span>

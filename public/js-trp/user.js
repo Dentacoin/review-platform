@@ -216,6 +216,8 @@ $(document).ready(function(){
 
     if( getUrlParameter('tab') ) {
         $('.profile-tabs a[data-tab="'+getUrlParameter('tab')+'"]').trigger('click');
+    } else if($('.profile-tabs .force-active').length) {
+        $('.profile-tabs .force-active').click();
     } else {
         $('.profile-tabs a').first().click();
     }
