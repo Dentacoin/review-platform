@@ -2713,6 +2713,8 @@ textarea.input {
   @media screen and (max-width: 768px) {
     .fixed-popup .popup-inner .subquestion:last-child .answer:nth-child(3n + 2) {
       border-bottom: none; } }
+  .fixed-popup .popup-inner .subquestion .ratings.average .stars {
+    width: 132px; }
   .fixed-popup .popup-inner .question,
   .fixed-popup .popup-inner .subquestion {
     transition: all 600ms ease;
@@ -4086,7 +4088,7 @@ textarea.input {
     @media screen and (max-width: 768px) {
       .profile-tabs .tab {
         min-width: 80px; } }
-    .profile-tabs .tab:nth-child(3) {
+    .profile-tabs .tab:last-child {
       margin-right: 0px; }
     .profile-tabs .tab:hover, .profile-tabs .tab.active {
       background-color: #126585;
@@ -4099,6 +4101,17 @@ textarea.input {
           transition: all 0.3s ease;
           font-size: 20px;
           min-width: auto; } }
+      .profile-tabs .tab:hover span.active, .profile-tabs .tab.active span.active {
+        background-color: #14cab8; }
+    .profile-tabs .tab span.active {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-left: 4px;
+      margin-right: 4px;
+      background-color: #126585;
+      vertical-align: middle; }
 
 .details-wrapper {
   margin-top: 35px; }
@@ -4387,6 +4400,45 @@ textarea.input {
       margin-bottom: -5px; }
     .details-wrapper .team-container .flickity .flickity-button {
       display: none; }
+  @media screen and (max-width: 768px) {
+    .details-wrapper .asks-container {
+      overflow-x: auto; } }
+  .details-wrapper .asks-container table {
+    margin-bottom: 50px;
+    width: 100%;
+    max-width: 100%; }
+    .details-wrapper .asks-container table thead {
+      font-size: 18px; }
+    .details-wrapper .asks-container table th, .details-wrapper .asks-container table td {
+      vertical-align: bottom;
+      border-bottom: 2px solid #bfbfbf;
+      padding: 8px;
+      line-height: 1.42857143;
+      text-align: left; }
+    .details-wrapper .asks-container table td {
+      vertical-align: top; }
+  .details-wrapper .asks-container .btn.compact {
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    margin-right: 10px;
+    padding: 0px 20px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    display: inline-block;
+    width: auto;
+    border: none; }
+    .details-wrapper .asks-container .btn.compact i {
+      font-size: 12px;
+      color: white;
+      font-weight: normal; }
+  .details-wrapper .asks-container .btn-primary {
+    background-color: #126585;
+    color: white; }
+  .details-wrapper .asks-container .btn-inactive {
+    background-color: #9d9d9d;
+    color: white; }
 
 .trusted-sticker {
   display: inline-block;

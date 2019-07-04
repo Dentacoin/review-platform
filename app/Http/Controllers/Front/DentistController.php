@@ -407,6 +407,16 @@ class DentistController extends FrontController
             $is_review = true;
         }
 
+        $patient_asks = false;
+
+        if (!empty($this->user) && $this->user->asks->isNotEmpty()) {
+            foreach ($this->user->asks as $p_ask) {
+                if ($p_ask->status == 'waiting') {
+                    $patient_asks = true;
+                }
+            }
+        }
+
         $view_params = [
             'noIndex' => $item->address ? false : true,
             'item' => $item,
@@ -421,6 +431,7 @@ class DentistController extends FrontController
             'review_limit_reached' => !empty($this->user) ? $this->user->getReviewLimits() : null,
             'dentist_limit_reached' => $dentist_limit_reached,
             'has_asked_dentist' => $has_asked_dentist,
+            'patient_asks' => $patient_asks,
             'aggregated_rates' => $aggregated_rates,
             'aggregated_rates_total' => $aggregated_rates_total ,
             'social_image' => $social_image,

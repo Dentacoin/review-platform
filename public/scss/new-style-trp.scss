@@ -3416,6 +3416,12 @@ textarea.input {
 					}
 				}
 			}
+
+			.ratings.average {
+				.stars {
+					width: 132px;
+				}
+			}
 		}
 
 		.question,
@@ -5469,7 +5475,7 @@ textarea.input {
 			min-width: 80px;
 		}
 
-		&:nth-child(3) {
+		&:last-child {
 			margin-right: 0px;
 		}
 
@@ -5485,6 +5491,23 @@ textarea.input {
 			    transition: all 0.3s ease;
 			    font-size: 20px;
 			    min-width: auto;
+			}
+
+			span.active {
+				background-color: #14cab8;
+			}
+		}
+
+		span {
+			&.active {
+				display: inline-block;
+			    width: 8px;
+			    height: 8px;
+			    border-radius: 50%;
+			    margin-left: 4px;
+			    margin-right: 4px;
+			    background-color: #126585;
+			    vertical-align: middle;
 			}
 		}
 	}
@@ -5957,6 +5980,64 @@ textarea.input {
 			.flickity-button {
 				display: none;
 			}
+		}
+    }
+
+    .asks-container {
+    	@media #{$phone} {
+    		overflow-x: auto;
+    	}
+
+    	table {
+    	    margin-bottom: 50px;
+    	    width: 100%;
+    		max-width: 100%;
+
+    		thead {
+			    font-size: 18px;
+			}
+
+	    	th,td {
+	    		vertical-align: bottom;
+				border-bottom: 2px solid #bfbfbf;
+				padding: 8px;
+				line-height: 1.42857143;
+				text-align: left;
+	    	}
+
+			td {
+				vertical-align: top;
+			}
+    	}
+
+    	.btn.compact {
+		    height: 20px;
+		    line-height: 20px;
+		    font-size: 14px;
+		    margin-right: 10px;
+			padding: 0px 20px;
+			border-radius: 5px;
+			text-transform: uppercase;
+		    font-weight: 600;
+		    display: inline-block;
+		    width: auto;
+		    border: none;
+
+		     i {
+			    font-size: 12px;
+			    color: white;
+    			font-weight: normal;
+			}
+		}
+
+		.btn-primary {
+		    background-color: #126585;
+		    color: white;
+		}
+
+		.btn-inactive {
+		    background-color: #9d9d9d;
+		    color: white;
 		}
     }
 }

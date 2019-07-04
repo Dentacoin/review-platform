@@ -590,8 +590,15 @@
     	@endif
     	<a class="tab" data-tab="about" href="javascript:;">
     		{!! nl2br(trans('trp.page.user.about')) !!}
-    		
     	</a>
+
+    	@if(!empty($user) && $user->id==$item->id && ($user->invites->isNotEmpty() || $user->asks->isNotEmpty()))
+    		<a class="tab" data-tab="asks" href="javascript:;">
+    			My patients
+
+    			<span class="{!! $patient_asks ? 'active' : ''  !!}"></span>
+    		</a>
+    	@endif
     </div>
 
     <div class="details-wrapper profile-reviews-space">
@@ -1046,6 +1053,118 @@
 				@endif
 			@endif
     	</div>
+
+    	@if(!empty($user) && $user->id==$item->id && ($user->invites->isNotEmpty() || $user->asks->isNotEmpty()))
+    		<div class="tab-container" id="asks">
+
+				@if($user->asks->isNotEmpty())
+		    		<h2 class="black-left-line section-title">
+		    			Patient Requests
+		    		</h2>
+
+		    		<div class="asks-container">
+
+			        	<table class="table">
+		            		<thead>
+		            			<tr>
+			            			<th>
+			            				{{ trans('trp.page.profile.asks.list-date') }}
+			            			</th>
+			            			<th>
+			            				{{ trans('trp.page.profile.asks.list-name') }}
+			            			</th>
+			            			<th>
+			            				{{ trans('trp.page.profile.asks.list-status') }}
+			            			</th>
+		            			</tr>
+		            		</thead>
+		            		<tbody>
+		            			@foreach( $user->asks as $ask )
+		            				<tr>
+		            					<td>
+		            						{{ $ask->created_at->toDateString() }}
+		            					</td>
+		            					<td>
+		            						{{ $ask->user->name }}
+		            					</td>
+		            					<td>
+		            						@if($ask->status=='waiting')
+		            							<a class="btn btn-primary compact" href="{{ getLangUrl('profile/asks/accept/'.$ask->id) }}">
+		            								<i class="fas fa-thumbs-up"></i>
+			            							{{ trans('trp.page.profile.asks.accept') }}
+		            							</a>
+		            							<a class="btn btn-inactive compact" href="{{ getLangUrl('profile/asks/deny/'.$ask->id) }}">
+		            								<i class="fas fa-thumbs-down"></i>
+			            							{{ trans('trp.page.profile.asks.deny') }}
+		            							</a>
+		            						@else
+		            							<span class="label label-{{ $ask->status=='yes' ? 'success' : 'warning' }}">
+			            							{{ trans('trp.page.profile.asks.status-'.$ask->status) }}
+		            							</span>
+		            						@endif
+		            					</td>
+		            				</tr>
+		            			@endforeach
+		            		</tbody>
+		            	</table>
+					</div>
+				@endif
+
+    			@if($user->invites->isNotEmpty())
+		    		<h2 class="black-left-line section-title">
+		    			My patients
+		    		</h2>
+
+		    		<div class="asks-container">
+
+			        	<table class="table">
+			        		<thead>
+			        			<tr>
+			            			<th>
+			            				{{ trans('trp.page.profile.invite.list-date') }}
+			            			</th>
+			            			<th>
+			            				{{ trans('trp.page.profile.invite.list-name') }}
+			            			</th>
+			            			<th>
+			            				{{ trans('trp.page.profile.invite.list-email') }}
+			            			</th>
+			            			<th>
+			            				{{ trans('trp.page.profile.invite.list-status') }}
+			            			</th>
+			        			</tr>
+			        		</thead>
+			        		<tbody>
+			        			@foreach( $user->invites as $inv )
+			        				<tr>
+			        					<td>
+			        						{{ $inv->created_at->toDateString() }}
+			        					</td>
+			        					<td>
+			        						{{ $inv->invited_name }}
+			        					</td>
+			        					<td>
+			        						{{ $inv->invited_email }}
+			        					</td>
+			        					<td>
+			        						@if($inv->invited_id)
+			        							<span class="label label-success">
+			            							{{ trans('trp.common.yes') }}	            								
+			        							</span>
+			        						@else
+			        							<span class="label label-warning">
+			            							{{ trans('trp.common.no') }}	            								
+			        							</span>
+			        						@endif
+			        					</td>
+			        				</tr>
+			        			@endforeach
+			        		</tbody>
+			        	</table>
+	    			</div>
+				@endif
+			</div>
+    	@endif
     </div>
 </div>
 
