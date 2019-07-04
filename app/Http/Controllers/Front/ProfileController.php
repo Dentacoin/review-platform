@@ -959,7 +959,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         }
         
         Request::session()->flash('success-message', trans('trp.page.profile.asks.accepted'));
-        return redirect( getLangUrl('/'));
+        return redirect( getLangUrl('/').'?tab=asks');
     }
     public function asks_deny($locale=null, $ask_id) {
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='test') {
@@ -977,7 +977,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         }
         
         Request::session()->flash('success-message', trans('trp.page.profile.asks.denied'));
-        return redirect( getLangUrl('/'));
+        return redirect( getLangUrl('/').'?tab=asks');
     }
 
     //
