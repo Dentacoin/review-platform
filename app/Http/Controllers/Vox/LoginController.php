@@ -183,7 +183,7 @@ class LoginController extends FrontController
                     $country = Country::whereHas('translations', function ($query) use ($fb_country) {
                         $query->where('name', 'LIKE', $fb_country);
                     })->first();
-                    
+
                     if(!empty($country)) {
                         $country_id = $country->id;
                         $city = City::where('country_id', $country_id)->whereHas('translations', function ($query) use ($fb_city) {
@@ -194,6 +194,8 @@ class LoginController extends FrontController
                         }
                             
                     } else if($has_test) {
+
+                        dd($has_test);
                         $country_id = $has_test['location'];
                     }
 
