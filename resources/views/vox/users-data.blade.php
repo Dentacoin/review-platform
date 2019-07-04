@@ -140,10 +140,10 @@
 						<td> {{ $user->country->name }} </td>
 					</tr>
 				@endif
-				@if($user->city_id)
+				@if($user->city_name)
 					<tr class="row">
 						<td> <b> City </b> </td>
-						<td> {{ $user->city->name }} </td>
+						<td> {{ $user->city_name }} </td>
 					</tr>
 				@endif
 				@if($user->address)
