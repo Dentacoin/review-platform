@@ -485,7 +485,7 @@ class Email extends Model
 				'[/invitation_link]',
 			), array(
 				$this->meta['patient_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl( '/' , null, $domain).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl( '/' , null, $domain).'?'. http_build_query(['popup'=>'popup-register']).'">',
 				'</a>',				
 			), $content);
 		}
