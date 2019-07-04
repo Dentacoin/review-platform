@@ -1212,6 +1212,30 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->save();
     }
 
+    public static function validateName($name) {
+        $result = false;
+
+        $found_name = self::where('name', 'LIKE', $name)->withTrashed()->first();
+     
+        if ($found_name) {
+            $result = true;
+        }
+     
+        return $result;
+    }
+
+    public static function validateWebsite($website) {
+        $result = false;
+
+        $found_website = self::where('website', 'LIKE', $website)->withTrashed()->first();
+     
+        if ($found_website) {
+            $result = true;
+        }
+     
+        return $result;
+    }
+
     public static function validateEmail($email) {
         $result = false;
 
