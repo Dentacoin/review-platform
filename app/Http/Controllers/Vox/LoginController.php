@@ -171,14 +171,13 @@ class LoginController extends FrontController
                     Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')) );
                     return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.page.login.over18')));
                 }
+                
+                $has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
 
                 if(!empty($s_user->user['location']['name'])) {
                     $loc_info = explode(',', $s_user->user['location']['name']);
                     $fb_country = trim($loc_info[(count($loc_info)-1)]);
                     $fb_city = trim($loc_info[0]);
-
-
-                    $has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
 
                     $country = Country::whereHas('translations', function ($query) use ($fb_country) {
                         $query->where('name', 'LIKE', $fb_country);
@@ -193,12 +192,10 @@ class LoginController extends FrontController
                             $city_id = $city->id;
                         }
                             
-                    } else if($has_test) {
-
-                        dd($has_test);
-                        $country_id = $has_test['location'];
                     }
 
+                } else if($has_test) {
+                    $country_id = $has_test['location'];
                 }
 
                 $password = $name.date('WY');
