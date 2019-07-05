@@ -134,7 +134,7 @@
 								</div>								
 
 								<div class="form-info clearfix">
-									<button class="btn go-to-next" id="go-to-2" step-number="2" data-validator="{{ getLangUrl('registration/step1') }}">
+									<button class="btn go-to-next" id="go-to-2" step-number="1" data-validator="{{ getLangUrl('registration/step1') }}">
 										{!! trans('vox.page.register.next') !!}
 									</button>
 								</div>
@@ -189,7 +189,7 @@
 
 								<div class="form-info clearfix">
 									<a class="back" href="javascript:;">&lt; {!! trans('vox.page.register.back') !!}</a>
-									<button class="btn go-to-next" id="go-to-3" step-number="3" type="submit" data-validator="{{ getLangUrl('registration/step2') }}">
+									<button class="btn go-to-next" id="go-to-3" step-number="2" type="submit" data-validator="{{ getLangUrl('registration/step2') }}">
 										{!! trans('vox.page.register.next') !!}
 									</button>
 								</div>								
@@ -248,7 +248,7 @@
 
 								<div class="form-info clearfix">
 									<a class="back" href="javascript:;">&lt; {!! trans('vox.page.register.back') !!}</a>
-									<button class="btn go-to-next" id="go-to-4" step-number="4" type="submit" data-validator="{{ getLangUrl('registration/step3') }}">
+									<button class="btn go-to-next" id="go-to-4" step-number="3" type="submit" data-validator="{{ getLangUrl('registration/step3') }}">
 										{!! trans('vox.page.register.next') !!}
 									</button>
 								</div>
