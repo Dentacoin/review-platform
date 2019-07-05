@@ -594,7 +594,7 @@
 
     	@if(!empty($user) && $user->id==$item->id && ($user->invites->isNotEmpty() || $user->asks->isNotEmpty()))
     		<a class="tab {!! $patient_asks ? 'force-active' : '' !!}" data-tab="asks" href="javascript:;">
-    			My patients
+    			{!! nl2br(trans('trp.page.user.my-patients')) !!}
 
     			<span class="{!! $patient_asks ? 'active' : ''  !!}"></span>
     		</a>
@@ -1059,33 +1059,39 @@
 
 				@if($user->asks->isNotEmpty())
 		    		<h2 class="black-left-line section-title">
-		    			Patient Requests
+		    			{!! nl2br(trans('trp.page.user.patient-requests')) !!}
 		    		</h2>
 
 		    		<div class="asks-container">
 
-			        	<table class="table">
+			        	<table class="table paging" num-paging="5">
 		            		<thead>
 		            			<tr>
-			            			<th>
+			            			<th style="width: 20%;">
 			            				{{ trans('trp.page.profile.asks.list-date') }}
 			            			</th>
-			            			<th>
+			            			<th style="width: 30%;">
 			            				{{ trans('trp.page.profile.asks.list-name') }}
 			            			</th>
-			            			<th>
+			            			<th style="width: 40%;">
+			            				{{ trans('trp.page.profile.asks.list-email') }}
+			            			</th>
+			            			<th style="width: 10%;">
 			            				{{ trans('trp.page.profile.asks.list-status') }}
 			            			</th>
 		            			</tr>
 		            		</thead>
 		            		<tbody>
-		            			@foreach( $user->asks as $ask )
+		            			@foreach( $user->asks->sortBy('status', 'waiting') as $ask )
 		            				<tr>
 		            					<td>
 		            						{{ $ask->created_at->toDateString() }}
 		            					</td>
 		            					<td>
 		            						{{ $ask->user->name }}
+		            					</td>
+		            					<td>
+		            						{{ $ask->user->email }}
 		            					</td>
 		            					<td>
 		            						@if($ask->status=='waiting')
@@ -1098,9 +1104,15 @@
 			            							{{ trans('trp.page.profile.asks.deny') }}
 		            							</a>
 		            						@else
-		            							<span class="label label-{{ $ask->status=='yes' ? 'success' : 'warning' }}">
-			            							{{ trans('trp.page.profile.asks.status-'.$ask->status) }}
-		            							</span>
+	            								@if($ask->on_review)
+	            									<a review-id="{{ \App\Models\Review::where('user_id', $ask->user->id)->where('dentist_id', $user->id)->orderby('id', 'desc')->first()->id }}" href="javascript:;" class="ask-review">
+				            							{{ trans('trp.page.profile.asks.status-review') }}
+			            							</a>
+	            								@else
+			            							<span class="label label-warning">
+				            							{{ trans('trp.page.profile.asks.status-no-review') }}
+			            							</span>
+			            						@endif
 		            						@endif
 		            					</td>
 		            				</tr>
@@ -1112,24 +1124,24 @@
 
     			@if($user->invites->isNotEmpty())
 		    		<h2 class="black-left-line section-title">
-		    			My patients
+		    			{!! nl2br(trans('trp.page.user.review-invitation')) !!}
 		    		</h2>
 
 		    		<div class="asks-container">
 
-			        	<table class="table">
+			        	<table class="table paging" num-paging="10">
 			        		<thead>
 			        			<tr>
-			            			<th>
+			            			<th style="width: 20%;">
 			            				{{ trans('trp.page.profile.invite.list-date') }}
 			            			</th>
-			            			<th>
+			            			<th style="width: 30%;">
 			            				{{ trans('trp.page.profile.invite.list-name') }}
 			            			</th>
-			            			<th>
+			            			<th style="width: 40%;">
 			            				{{ trans('trp.page.profile.invite.list-email') }}
 			            			</th>
-			            			<th>
+			            			<th style="width: 10%;">
 			            				{{ trans('trp.page.profile.invite.list-status') }}
 			            			</th>
 			        			</tr>
@@ -1153,7 +1165,7 @@
 			        							</span>
 			        						@else
 			        							<span class="label label-warning">
-			            							{{ trans('trp.common.no') }}	            								
+			            							{{ trans('trp.common.no') }}
 			        							</span>
 			        						@endif
 			        					</td>

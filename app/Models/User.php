@@ -170,7 +170,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->orderBy('id', 'DESC');
     }
     public function invites() {
-        return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->orderBy('id', 'DESC');
+        return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->orderBy('created_at', 'DESC');
     }
     public function asks() {
         return $this->hasMany('App\Models\UserAsk', 'dentist_id', 'id')->orderBy('id', 'DESC');

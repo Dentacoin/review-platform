@@ -766,7 +766,6 @@ jQuery(document).ready(function($){
 			$('.stretching-box').css('height', 0);
 		}		
 	});
-		
 
 });
 

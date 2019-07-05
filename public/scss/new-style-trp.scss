@@ -8086,3 +8086,31 @@ body.sp-trp-iframe {
 		}
 	}
 }
+
+.pager {
+    text-align: center;
+    margin: 1em 0;
+
+    @media #{$phone} {
+    	margin-bottom: 40px;
+    }
+
+    span {
+    	border: 1px solid #126585;
+    	background-color: white;
+	    display: inline-block;
+	    width: 30px;
+	    height: 30px;
+	    line-height: 1.8;
+	    text-align: center;
+	    cursor: pointer;
+	    color: #126585;
+	    margin-right: 10px;
+	    font-weight: bold;
+
+	    &.active {
+	    	background-color: #126585;
+	    	color: white;
+	    }
+	}
+}
