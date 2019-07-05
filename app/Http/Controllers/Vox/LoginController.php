@@ -222,6 +222,20 @@ class LoginController extends FrontController
                 $newuser->save();
 
 
+                $avatarurl = $s_user->getAvatar();
+                if($network=='fb') {
+                    $avatarurl .= '&width=600&height=600';                
+                } else if($network=='gp') {
+                    $avatarurl = str_replace('sz=50', 'sz=600', $avatarurl);
+                } else if($network=='tw') {
+                    $avatarurl = str_replace('_normal', '', $avatarurl);
+                }
+                if(!empty($avatarurl)) {
+                    $img = Image::make($avatarurl);
+                    $newuser->addImage($img);
+                }
+
+
                 if($newuser->invited_by && $newuser->invitor->canInvite('vox')) {
                     $inv_id = session('invitation_id');
                     if($inv_id) {

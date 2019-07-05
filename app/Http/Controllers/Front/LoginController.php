@@ -55,7 +55,6 @@ class LoginController extends FrontController
 
 
     private function try_social_login($s_user) {
-        
 
         if( session('new_auth') && !empty($this->user) && empty($this->user->fb_id) && empty($this->user->civic_id) ) {
             $user = $this->user;
