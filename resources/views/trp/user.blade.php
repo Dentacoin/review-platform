@@ -1104,15 +1104,9 @@
 			            							{{ trans('trp.page.profile.asks.deny') }}
 		            							</a>
 		            						@else
-	            								@if($ask->on_review)
-	            									<a review-id="{{ \App\Models\Review::where('user_id', $ask->user->id)->where('dentist_id', $user->id)->orderby('id', 'desc')->first()->id }}" href="javascript:;" class="ask-review">
-				            							{{ trans('trp.page.profile.asks.status-review') }}
-			            							</a>
-	            								@else
-			            							<span class="label label-warning">
-				            							{{ trans('trp.page.profile.asks.status-no-review') }}
-			            							</span>
-			            						@endif
+	            								<span class="label label-{{ $ask->status=='yes' ? 'success' : 'warning' }}">
+			            							{{ trans('trp.page.profile.asks.status-'.$ask->status) }}
+		            							</span>
 		            						@endif
 		            					</td>
 		            				</tr>
@@ -1160,12 +1154,19 @@
 			        					</td>
 			        					<td>
 			        						@if($inv->invited_id)
-			        							<span class="label label-success">
-			            							{{ trans('trp.common.yes') }}	            								
-			        							</span>
+
+												@if(!empty(\App\Models\Review::where('user_id', $inv->invited_id)->where('dentist_id', $user->id)->orderby('id', 'desc')->first()))
+													<a review-id="{{ \App\Models\Review::where('user_id', $inv->invited_id)->where('dentist_id', $user->id)->orderby('id', 'desc')->first()->id }}" href="javascript:;" class="ask-review">
+														{{ trans('trp.page.profile.invite.status-review') }}
+													</a>
+												@else
+													<span class="label label-warning">
+														{{ trans('trp.page.profile.invite.status-no-review') }}
+													</span>
+												@endif
 			        						@else
 			        							<span class="label label-warning">
-			            							{{ trans('trp.common.no') }}
+			            							{{ trans('trp.page.profile.invite.status-no-review') }}
 			        							</span>
 			        						@endif
 			        					</td>
