@@ -7,8 +7,10 @@ return array(
   'from' => array(
   	'address' => 'reviews@dentacoin.com', 
   	'name' => 'Dentacoin Trusted Reviews',
-  	'address-vox' => 'dentavox@dentacoin.com', 
-  	'name-vox' => 'DentaVox Market Research Platform',
+    'address-vox' => 'dentavox@dentacoin.com', 
+    'name-vox' => 'DentaVox Market Research Platform',
+    'address-dentacoin' => 'admin@dentacoin.com', 
+    'name-dentacoin' => 'Dentacoin Onboarding Team',
   ),
   'encryption' => 'tls',
   'username' => env('SENDGRID_USERNAME'),

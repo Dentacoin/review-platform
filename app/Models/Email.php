@@ -59,11 +59,11 @@ class Email extends Model
 		list($content, $title, $subtitle, $subject) = $this->prepareContent();
 
 		$platform = $this->platform;
-		$sender = $platform=='vox' ? config('mail.from.address-vox') : config('mail.from.address');
+		$sender = $platform=='vox' ? config('mail.from.address-vox') : config('mail.from.address-dentacoin');
 		if($this->template_id==40) {
 			$sender = 'ali.hashem@dentacoin.com';
 		}
-		$sender_name = $platform=='vox' ? config('mail.from.name-vox') : config('mail.from.name');
+		$sender_name = $platform=='vox' ? config('mail.from.name-vox') : config('mail.from.name-dentacoin');
 		
 		$contents = view('emails.template', [
 			'user' => $this->user,
