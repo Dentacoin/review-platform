@@ -819,12 +819,15 @@ class RegisterController extends FrontController
                                 ]
                             ] );
                         }
+                        
+                        $has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
 
                         $password = $name.date('WY');
                         $newuser = new User;
                         $newuser->name = $name;
                         $newuser->email = $email ? $email : '';
                         $newuser->password = bcrypt($password);
+                        $newuser->country_id = $has_test ? $has_test['location'] : '';
                         $newuser->is_dentist = 0;
                         $newuser->is_clinic = 0;
                         $newuser->civic_id = $data['userId'];
