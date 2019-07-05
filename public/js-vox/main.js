@@ -446,6 +446,13 @@ $(document).ready(function(){
             $(this).serialize() , 
             (function( data ) {
                 if(data.success) {
+
+               		fbq('track', 'DentistCompleteRegistration');
+                    gtag('event', 'ClickNext', {
+                        'event_category': 'DentistRegistration',
+                        'event_label': 'DentistRegistrationComplete',
+                    });
+                    
                		window.location.href = data.url;
                 } else if (data.popup) {
                 	$('#'+data.popup).addClass('active');
