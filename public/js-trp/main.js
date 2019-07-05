@@ -763,6 +763,7 @@ jQuery(document).ready(function($){
 			$('.strength-button').removeClass('active');
 			$('.strength-parent').removeClass('active');
 			// $('.strength-wrapper').css('top', '100%');
+			$('.stretching-box').css('height', 0);
 		}		
 	});
 		
