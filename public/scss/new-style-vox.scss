@@ -8684,6 +8684,17 @@ p.h2-bold {
 		@media screen and (max-width: 992px) {
 			font-size: 16px;
 		}
+
+		a {
+			font-size: 20px;
+			font-weight: bold;
+			text-align: center;
+			text-transform: inherit;
+
+			@media screen and (max-width: 992px) {
+				font-size: 16px;
+			}
+		}
 	}
 
 	.strength-box {
@@ -8751,15 +8762,14 @@ p.h2-bold {
 		    left: 0px;
 		    transform: translateY(-50%);
 		    margin-left: -20px;
-		    background-size: contain;
         	background: url('../img-strength/tick.png') 50% 50% no-repeat;
+		    background-size: contain;
         	z-index: 2;
 
         	@media screen and (max-width: 992px) {
         		width: 30px;
         		height: 34px;
         		margin-left: -15px;
-        		background-size: contain;
         	}
 
         	&.zero {
@@ -8775,15 +8785,14 @@ p.h2-bold {
 		    right: 0px;
 		    transform: translateY(-50%);
 		    margin-right: -20px;
-		    background-size: contain;
         	background: url('../img-strength/star.png') 50% 50% no-repeat;
+        	background-size: contain;
         	z-index: 1;
 
         	@media screen and (max-width: 992px) {
         		width: 30px;
         		height: 34px;
         		margin-right: -15px;
-        		background-size: contain;
         	}
 
         	&.full {
@@ -8849,13 +8858,13 @@ p.h2-bold {
 			padding: 0px;
 			display: inline-block;
 			background-position: 50%;
-			border-radius: 0px;
+			border-radius: 3px;
+			background-size: contain;
 			border: none;
 
 			@media screen and (max-width: 450px) {
 				width: 72px;
 			    height: 22px;
-			    background-size: contain;
 			}
 
 			&.android {
@@ -8894,9 +8903,10 @@ p.h2-bold {
 	}
 
 	.flickity-prev-next-button {
-		width: 12px !important;
-		height: 28px !important;
+		width: 19px !important;
+		height: 24px !important;
 		top: 48% !important;
+		background-size: 13px !important;
 
 		svg,
 		.flickity-button-icon {

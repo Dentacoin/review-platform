@@ -605,6 +605,7 @@ jQuery(document).ready(function($){
 		$('#cookiebar a.accept').click( function() {
 			Cookies.set('cookiebar', true, { expires: 365 });
 			$('#cookiebar').hide();
+			showStrength();
 		} );
 	}
 
@@ -711,8 +712,27 @@ jQuery(document).ready(function($){
     });
     
 
+	$('.strength-button').click( function() {
+		if ($(this).hasClass('active')) {
+			$(this).removeClass('active');
+			$('body').removeClass('dark');
+			$('.strength-parent').removeClass('active');
+			// $('.strength-wrapper').css('top', '100%');
+			$('.stretching-box').css('height', 0);
+		} else {
+			$(this).addClass('active');
+			$('body').addClass('dark');
+			$('.strength-parent').addClass('active');
+			// $('.strength-wrapper').css('top', 'calc(100% - '+$('.strength-wrapper').outerHeight()+'px)');
+
+			$('.stretching-box').css('height', $('.strength-flickity').outerHeight());
+		}
+	});
+
     if ($('.strength-flickity').length) {
-	    $('.strength-flickity').flickity({
+    	var $carousel = $('.strength-flickity');
+
+		$carousel.flickity({
 	    	wrapAround: true,
 			//adaptiveHeight: true,
 			draggable: true,
@@ -720,19 +740,23 @@ jQuery(document).ready(function($){
 		});
 	}
 
-	$('.strength-button').click( function() {
-		if ($(this).hasClass('active')) {
-			$(this).removeClass('active');
-			$('body').removeClass('dark');
-			$('.strength-parent').removeClass('active');
-			// $('.strength-wrapper').css('top', '100%');
-		} else {
-			$(this).addClass('active');
-			$('body').addClass('dark');
-			$('.strength-parent').addClass('active');
-			// $('.strength-wrapper').css('top', 'calc(100% - '+$('.strength-wrapper').outerHeight()+'px)');
+	var showStrength = function() {
+
+		if(($('body').hasClass('page-dentist') || $('body').hasClass('page-index')) && $('.strength-parent').length) {
+
+			if(!Cookies.get('cookiebar')) {
+				$('.strength-parent').hide();
+			} else {
+				$('.strength-parent').css('display', 'block');
+				$carousel.flickity('resize');
+			}
+
+			setTimeout( function() {
+				$('.strength-button').trigger('click');
+			}, 1000);
 		}
-	});
+	}
+	showStrength();
 
 	$('.black-overflow').click( function() {
 		if ($('.strength-button').length) {

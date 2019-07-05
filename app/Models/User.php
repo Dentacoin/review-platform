@@ -550,6 +550,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'image' => 'invite-dentist',
                         'completed' => true,
                         'buttonText' => trans('trp.strength.patient.invite-dentist.button-text'),
+                        'buttonHref' => getLangUrl('/').'?popup=invite-new-dentist-popup',
                     ];
                 } else {
                     $ret[] = [

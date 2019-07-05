@@ -6126,6 +6126,14 @@ p.h2-bold {
     @media screen and (max-width: 992px) {
       .strength-wrapper h2 {
         font-size: 16px; } }
+    .strength-wrapper h2 a {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      text-transform: inherit; }
+      @media screen and (max-width: 992px) {
+        .strength-wrapper h2 a {
+          font-size: 16px; } }
   .strength-wrapper .strength-box {
     display: flex;
     border: 1px solid #d3d3d3;
@@ -6176,15 +6184,14 @@ p.h2-bold {
       left: 0px;
       transform: translateY(-50%);
       margin-left: -20px;
-      background-size: contain;
       background: url("../img-strength/tick.png") 50% 50% no-repeat;
+      background-size: contain;
       z-index: 2; }
       @media screen and (max-width: 992px) {
         .strength-wrapper .strength-scale-wrapper .strength-tick {
           width: 30px;
           height: 34px;
-          margin-left: -15px;
-          background-size: contain; } }
+          margin-left: -15px; } }
       .strength-wrapper .strength-scale-wrapper .strength-tick.zero {
         background-image: url("../img-strength/tick-zero.png"); }
     .strength-wrapper .strength-scale-wrapper .strength-star {
@@ -6195,15 +6202,14 @@ p.h2-bold {
       right: 0px;
       transform: translateY(-50%);
       margin-right: -20px;
-      background-size: contain;
       background: url("../img-strength/star.png") 50% 50% no-repeat;
+      background-size: contain;
       z-index: 1; }
       @media screen and (max-width: 992px) {
         .strength-wrapper .strength-scale-wrapper .strength-star {
           width: 30px;
           height: 34px;
-          margin-right: -15px;
-          background-size: contain; } }
+          margin-right: -15px; } }
       .strength-wrapper .strength-scale-wrapper .strength-star.full {
         background-image: url("../img-strength/star-full.png"); }
     .strength-wrapper .strength-scale-wrapper .strength-scale {
@@ -6251,13 +6257,13 @@ p.h2-bold {
       padding: 0px;
       display: inline-block;
       background-position: 50%;
-      border-radius: 0px;
+      border-radius: 3px;
+      background-size: contain;
       border: none; }
       @media screen and (max-width: 450px) {
         .strength-wrapper .blue-button.app-store {
           width: 72px;
-          height: 22px;
-          background-size: contain; } }
+          height: 22px; } }
       .strength-wrapper .blue-button.app-store.android {
         background-image: url("../img-strength/google-play.png"); }
       .strength-wrapper .blue-button.app-store.ios {
@@ -6279,9 +6285,10 @@ p.h2-bold {
         .strength-wrapper .strenght-progress span {
           font-size: 14px; } }
   .strength-wrapper .flickity-prev-next-button {
-    width: 12px !important;
-    height: 28px !important;
-    top: 48% !important; }
+    width: 19px !important;
+    height: 24px !important;
+    top: 48% !important;
+    background-size: 13px !important; }
     .strength-wrapper .flickity-prev-next-button svg,
     .strength-wrapper .flickity-prev-next-button .flickity-button-icon {
       display: none; }
