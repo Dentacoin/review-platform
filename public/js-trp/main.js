@@ -617,13 +617,6 @@ jQuery(document).ready(function($){
 		});
 	});
 
-	$('.button-next-step').click( function() {
-		gtag('event', 'ClickNext', {
-			'event_category': 'DentistRegistration',
-			'event_label': 'DentistRegistrationStep'+ $(this).attr('step-number'),
-		});
-	});
-
 	$('.button-sign-up-patient').click( function() {
 		fbq('track', 'PatientInitiateRegistration');
 		gtag('event', 'ClickSignup', {

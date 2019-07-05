@@ -597,11 +597,19 @@ $(document).ready(function(){
         }
         ajax_is_running = true;
 
+        var that = $(this);
+
         $.post( 
             $(this).attr('data-validator'), 
             $('#signin-form-popup').serialize(), 
             function( data ) {
                 if(data.success) {
+
+                    gtag('event', 'ClickNext', {
+                        'event_category': 'DentistRegistration',
+                        'event_label': 'DentistRegistrationStep'+ that.attr('step-number'),
+                    });
+
                     $('.ajax-alert').remove();
                     $('#register-error').hide();
 
@@ -652,35 +660,31 @@ $(document).ready(function(){
             $(this).attr('action'), 
             $(this).serialize() , 
             (function( data ) {
-                if(data.track_registration) {
+
+                if(data.success) {
                     fbq('track', 'DentistCompleteRegistration');
                     gtag('event', 'ClickNext', {
                         'event_category': 'DentistRegistration',
                         'event_label': 'DentistRegistrationComplete',
                     });
-
-                }
-                if (data.hash) {
-                    $('input[name="last_user_hash"]').val(data.hash);
-                }
-                if (data.id) {
-                    $('input[name="last_user_id"]').val(data.id);
-                }
-                 
-                if (data.short_description && $('.verification-form').length) {
-                    $('.verification-form').hide();
-                }
-                if (data.is_clinic && $('.invite-clinic-form').length) {
-                    $('.invite-clinic-form').hide();
-                } else if($('.invite-dentist-form').length) {
-                    $('.invite-dentist-form').hide();
-                }
-
-                if(data.popup) {
                     closePopup();
                     showPopup(data.popup);
-                } else if(data.success) {
-                    window.location.href = data.url;
+
+                    if (data.hash) {
+                        $('input[name="last_user_hash"]').val(data.hash);
+                    }
+                    if (data.id) {
+                        $('input[name="last_user_id"]').val(data.id);
+                    }                     
+                    if (data.short_description && $('.verification-form').length) {
+                        $('.verification-form').hide();
+                    }
+                    if (data.is_clinic && $('.invite-clinic-form').length) {
+                        $('.invite-clinic-form').hide();
+                    } else if($('.invite-dentist-form').length) {
+                        $('.invite-dentist-form').hide();
+                    }
+
                 } else {
                     // $('#register-error span').html('');
                     // $('#register-error').show();

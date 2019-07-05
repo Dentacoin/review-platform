@@ -483,7 +483,6 @@ class RegisterController extends FrontController
             return Response::json( [
                 'success' => true,
                 'popup' => 'verification-popup',
-                'track_registration' => true,
                 'hash' => $newuser->get_token(),
                 'id' => $newuser->id,
                 'short_description' => $newuser->short_description,
