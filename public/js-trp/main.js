@@ -749,11 +749,11 @@ jQuery(document).ready(function($){
 			} else {
 				$('.strength-parent').css('display', 'block');
 				$carousel.flickity('resize');
+				setTimeout( function() {
+					$('.strength-button').trigger('click');
+				}, 1000);
 			}
 
-			setTimeout( function() {
-				$('.strength-button').trigger('click');
-			}, 1000);
 		}
 	}
 	showStrength();
