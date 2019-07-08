@@ -6849,6 +6849,15 @@ textarea.input {
 	        	}
 	        }
 
+	        .show-all-dentists {
+	        	font-size: 25px;
+	        	margin-bottom: 20px;
+
+	        	@media #{$pc} {
+	        		font-size: 21px;
+	        	}
+	        }
+
 	        a {
 				font-size: 20px;
 				height: 40px;

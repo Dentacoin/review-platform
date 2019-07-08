@@ -4974,6 +4974,12 @@ textarea.input {
       @media screen and (max-width: 998px) {
         .page-c .countries-wrapper .countries span {
           height: 50px; } }
+    .page-c .countries-wrapper .countries .show-all-dentists {
+      font-size: 25px;
+      margin-bottom: 20px; }
+      @media screen and (max-width: 1200px) {
+        .page-c .countries-wrapper .countries .show-all-dentists {
+          font-size: 21px; } }
     .page-c .countries-wrapper .countries a {
       font-size: 20px;
       height: 40px;

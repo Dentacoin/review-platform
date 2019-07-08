@@ -23,6 +23,10 @@
 	    <div class="countries-wrapper container">
 		    <div class="countries">
 		    	@if(count($states_name))
+
+			    	<div class="show-all-dentists">
+			    		<a href="{{ getLangUrl('dentists/'.$country->slug) }}" class="show-all-dentists">{!! trans('trp.page.search.show-all') !!}</a>
+			    	</div>
 			    	<div class="flex">
 			    		<div class="col">
 					    	@foreach($states_name as $key => $cuser)
