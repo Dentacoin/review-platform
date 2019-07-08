@@ -116,7 +116,7 @@ class FrontController extends BaseController
                 }
 
                 
-                if (User::getRealIp() != '213.91.254.194' || empty($this->admin)) {
+                if (!(User::getRealIp() == '213.91.254.194' || empty($this->admin))) {
                     $ul->save();
                 }
 
@@ -132,7 +132,6 @@ class FrontController extends BaseController
                         'id' => $this->user->id,
                         'type' => $this->user->is_dentist ? 'dentist' : 'patient',
                     ],
-                    'loginas' => false
                 ]);
 
                 if( !$this->user->isBanned('vox') && $this->user->bans->isNotEmpty() ) {
