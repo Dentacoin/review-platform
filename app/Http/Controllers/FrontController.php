@@ -51,6 +51,8 @@ class FrontController extends BaseController
             }
         }
         App::setLocale( $locale );
+        date_default_timezone_set("Europe/Sofia");
+        // echo date_default_timezone_get();
 
         $this->request = $request;
         $path = explode('/', Request::path());
