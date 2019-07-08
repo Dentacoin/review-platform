@@ -765,11 +765,6 @@ class UsersController extends AdminController
 
         if(!empty($item)) {
             Auth::login($item, true);
-
-            $sess = [
-                'loginas' => true,
-            ];
-            session($sess);
         }
 
         if(!empty($platform)) {
@@ -777,10 +772,10 @@ class UsersController extends AdminController
                 'vox' => 'https://dentavox.dentacoin.com/',
                 'trp' => 'https://reviews.dentacoin.com/',
             ];
-            return redirect($platform_urls[$platform].'/?loginas');
+            return redirect($platform_urls[$platform]);
 
         } else {
-            return redirect('/?loginas');
+            return redirect('/');
         }
     }
 
