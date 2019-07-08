@@ -366,6 +366,9 @@ class VoxesController extends AdminController
                 });
 
                 if(!empty($results)) {
+                    if(is_array($results[0]) && count($results[0])>10) {
+                        $results = $results[0];
+                    }
                     $q = null;
                     $a = [];
                     foreach ($results as $row) {
