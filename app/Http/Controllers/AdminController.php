@@ -31,6 +31,8 @@ class AdminController extends BaseController
         setlocale(LC_ALL, 'en');
         \App::setLocale('en');
 
+        date_default_timezone_set("Europe/Sofia");
+
     	$this->request = $request;
     	$path = explode('/', $request->path());
     	$this->current_page = isset($path[1]) ? $path[1] : null;
