@@ -777,7 +777,7 @@ class UsersController extends AdminController
                 'vox' => 'https://dentavox.dentacoin.com/',
                 'trp' => 'https://reviews.dentacoin.com/',
             ];
-            return redirect($platform_urls[$platform].'?loginas');
+            return redirect($platform_urls[$platform].'/?loginas');
 
         } else {
             return redirect('/?loginas');
