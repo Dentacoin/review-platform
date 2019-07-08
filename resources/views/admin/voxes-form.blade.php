@@ -288,7 +288,7 @@
                                         <td>{{ trans('admin.enums.question-type.'.$question->type) }}</td>
                                         <td>{!! $triggers[$question->id] !!}</td>
                                         <td>
-                                            <a href="{{ url('cms/vox/explorer/'.$question->id) }}" target="_blank">
+                                            <a href="{{ url('cms/vox/explorer/'.$item->id.'/'.$question->id) }}" target="_blank">
                                                 {!! $question->respondent_count() !!}
                                             </a>
                                         </td>
