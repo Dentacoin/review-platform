@@ -115,7 +115,7 @@ class FrontController extends BaseController
                     $ul->os = $dd->getOs()['name'];
                 }
                 
-                if (User::getRealIp() != '213.91.254.194' || !empty(session('loginas'))) {
+                if (User::getRealIp() != '213.91.254.194' || empty(session('loginas'))) {
                     $ul->save();
                 }
 
