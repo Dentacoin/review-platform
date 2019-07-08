@@ -90,7 +90,6 @@ class FrontController extends BaseController
 
         $this->trackEvents = [];
 
-
         //$this->user = Auth::guard('web')->user();
         $this->middleware(function ($request, $next) {
             $this->admin = Auth::guard('admin')->user();
@@ -116,7 +115,7 @@ class FrontController extends BaseController
                     $ul->os = $dd->getOs()['name'];
                 }
                 
-                if (User::getRealIp() != '213.91.254.194') {
+                if (User::getRealIp() != '213.91.254.194' || !empty(session('loginas'))) {
                     $ul->save();
                 }
 
@@ -131,7 +130,8 @@ class FrontController extends BaseController
                         'token' => $tokenobj->accessToken,
                         'id' => $this->user->id,
                         'type' => $this->user->is_dentist ? 'dentist' : 'patient',
-                    ]
+                    ],
+                    'loginas' => false
                 ]);
 
                 if( !$this->user->isBanned('vox') && $this->user->bans->isNotEmpty() ) {

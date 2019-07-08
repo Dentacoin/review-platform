@@ -765,6 +765,11 @@ class UsersController extends AdminController
 
         if(!empty($item)) {
             Auth::login($item, true);
+
+            $sess = [
+                'loginas' => true,
+            ];
+            session($sess);
         }
 
         if(!empty($platform)) {
