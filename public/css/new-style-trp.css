@@ -2476,7 +2476,8 @@ textarea.input {
         padding: 0px;
         margin: 0px; } }
   #map-results-popup .popup-inner .checkbox-label {
-    font-size: 14px; }
+    font-size: 14px;
+    text-align: left; }
   #map-results-popup .popup-inner .result-container {
     width: 280px;
     margin-bottom: 10px; }

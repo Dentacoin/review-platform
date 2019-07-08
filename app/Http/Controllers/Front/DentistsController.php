@@ -268,9 +268,50 @@ class DentistsController extends FrontController
         $zoom = $country_search ? 5 : ($query=='worldwide' ? 1 : 13);
         $size = $query=='worldwide' ? '670x288' : '670x188';
 
+        if (!$country_search && $query!='worldwide' ) {
+            $max_lon = -300;
+            $min_lon = 999;
+            $max_lat = -300;
+            $min_lat = 999;
+
+            foreach ($items as $val) {
+                if ($max_lon < $val->lon ) {
+                    $max_lon = $val->lon;
+                }
+                if ($min_lon > $val->lon ) {
+                    $min_lon = $val->lon;
+                }
+                if ($max_lat < $val->lat ) {
+                    $max_lat = $val->lat;
+                }
+                if ($min_lat > $val->lat ) {
+                    $min_lat = $val->lat;
+                }
+            }
+
+            if ($max_lon < $lon ) {
+                $max_lon = $lon;
+            }
+            if ($min_lon > $lon ) {
+                $min_lon = $lon;
+            }
+            if ($max_lat < $lat ) {
+                $max_lat = $lat;
+            }
+            if ($min_lat > $lat ) {
+                $min_lat = $lat;
+            }
+
+            $bounds_lon = ($max_lon + $min_lon) / 2;
+            $bounds_lat = ($max_lat + $min_lat) / 2;
+
+            $bounds_zoom = 8;
+            //dd($lonRange, $latRange);
+        }
+
         // dd($lat, $lon);
 
-        $staticmap = 'https://maps.googleapis.com/maps/api/staticmap?center='.$lat.','.$lon.'&zoom='.$zoom.'&size='.$size.'&maptype=roadmap&key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk';
+        $staticmap = 'https://maps.googleapis.com/maps/api/staticmap?center='.($bounds_lat ? $bounds_lat : $lat).','.($bounds_lon ? $bounds_lon : $lon).'&zoom='.($bounds_zoom ? $bounds_zoom : $zoom).'&size='.$size.'&maptype=roadmap&key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk';
         $i=1;
         $foundOnMap = false;
         foreach ($items->where('address', '!=', '')->slice(0, 10) as $item) {
