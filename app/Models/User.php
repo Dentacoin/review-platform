@@ -1678,6 +1678,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $r->delete();
         }
 
+        $id = $this->id;
+        $teams = UserTeam::where(function($query) use ($id) {
+            $query->where( 'dentist_id', $id)->orWhere('user_id', $id);
+        })->get();
+
+        if (!empty($teams)) {
+           foreach ($teams as $team) {
+               $team->delete();
+           }
+        }
+
         if(!$this->is_dentist) {
             $this->sendTemplate(9);
         }
