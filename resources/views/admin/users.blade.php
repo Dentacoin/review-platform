@@ -47,7 +47,7 @@
                         <div class="col-md-2">
                             <select class="form-control" name="registered-platform">
                                 <option value="">Registered platform</option>
-                                <option value="trp" {!! 'trp'==$registered_platform ? 'selected="selected"' : '' !!}>Truested Reviews</option>
+                                <option value="trp" {!! 'trp'==$registered_platform ? 'selected="selected"' : '' !!}>Trusted Reviews</option>
                                 <option value="vox" {!! 'vox'==$registered_platform ? 'selected="selected"' : '' !!}>DentaVox</option>
                             </select>
                         </div>                        

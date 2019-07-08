@@ -661,7 +661,7 @@ class RegisterController extends FrontController
                         $newuser->name = $name;
                         $newuser->email = $email ? $email : '';
                         $newuser->password = bcrypt($password);
-                        $newuser->country_id = $has_test ? $has_test['location'] : '';
+                        $newuser->country_id = $has_test ? $has_test['location'] : $this->country_id;
                         $newuser->is_dentist = 0;
                         $newuser->is_clinic = 0;
                         $newuser->civic_id = $data['userId'];
