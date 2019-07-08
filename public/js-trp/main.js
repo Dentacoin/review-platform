@@ -760,6 +760,13 @@ jQuery(document).ready(function($){
 		}		
 	});
 
+	$('[event_category]').click( function() {
+		gtag('event', $(this).attr('event_action'), {
+            'event_category': $(this).attr('event_category'),
+            'event_label': $(this).attr('event_label'),
+        });
+	});
+
 });
 
 //

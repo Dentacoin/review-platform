@@ -263,21 +263,27 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             if($this->is_dentist) {
 
                 $missing_info = [];
+                $event_missing = [];
 
                 if(empty($this->short_description)) {
                     $missing_info[] = 'a short bio';
+                    $event_missing[] = 'ShortDescription';
                 }
                 if(empty($this->description)) {
                     $missing_info[] = 'a longer description';
+                    $event_missing[] = 'Description';
                 }
                 if(empty($this->work_hours)) {
                     $missing_info[] = 'working hours';
+                    $event_missing[] = 'WorkHours';
                 }
                 if($this->photos->isEmpty()) {
                     $missing_info[] = 'photos';
+                    $event_missing[] = 'Photos';
                 }
                 if(empty($this->socials)) {
                     $missing_info[] = 'social channels';
+                    $event_missing[] = 'SocialChannels';
                 }                
 
                 if( empty($missing_info )) {
@@ -290,6 +296,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     ];
                 } else {
                     $missing_parts = count($missing_info) > 1 ? $missing_info[0].' and '.$missing_info[1] : $missing_info[0];
+                    $missing_parts_event = count($event_missing) > 1 ? $event_missing[0].'And'.$event_missing[1] : $event_missing[0];
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.complete-profile.title'),
                         'image' => 'complete-profile',
@@ -297,6 +304,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.complete-profile.button-text'),
                         'buttonHref' => getLangUrl('/'),
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Add',
+                        'event_label' => $missing_parts_event,
                     ];
                 }
 
@@ -307,6 +317,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('trp.strength.dentist.invite-patients.button-text'),
                     'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
+                    'event_category' => 'ProfileStrengthDentist',
+                    'event_action' => 'Invite',
+                    'event_label' => 'InvitePatients',
                 ];
 
                 if ($this->is_clinic) {
@@ -317,6 +330,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.clinic.show-team.button-text'),
                         'buttonHref' => getLangUrl('/'),
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Add',
+                        'event_label' => 'Team',
                     ];
                 }
 
@@ -336,7 +352,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.set-wallet.button-text'),
                         'buttonHref' => 'https://wallet.dentacoin.com/',
-                        'target' => true
+                        'target' => true,
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Create',
+                        'event_label' => 'NewWallet',
                     ];
                 }
 
@@ -356,6 +375,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-description.button-text'),
                         'buttonHref' => getLangUrl('/'),
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Add',
+                        'event_label' => 'Description',
                     ];
                 }
 
@@ -375,6 +397,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-socials.button-text'),
                         'buttonHref' => getLangUrl('/'),
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Add',
+                        'event_label' => 'Social',
                     ];
                 }
 
@@ -394,6 +419,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-photos.button-text'),
                         'buttonHref' => getLangUrl('/'),
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Add',
+                        'event_label' => 'Photos',
                     ];
                 }
 
@@ -413,6 +441,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-work-hours.button-text'),
                         'buttonHref' => getLangUrl('/'),
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Add',
+                        'event_label' => 'Hours',
                     ];
                 }
 
@@ -432,6 +463,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-widget.button-text'),
                         'buttonHref' => $this->getLink().'?popup-loged=popup-widget',
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Add',
+                        'event_label' => 'Widget',
                     ];
                 }
 
@@ -444,6 +478,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.withdraw-rewards.button-text'),
                         'buttonHref' => 'https://account.dentacoin.com/?platform=trusted-reviews',
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Withdraw',
+                        'event_label' => 'WithdrawRewards',
                     ];
                 }
 
@@ -455,7 +492,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('trp.strength.dentist.check-stats.button-text'),
                     'buttonHref' => getVoxUrl('dental-survey-stats/'.$stats->translate(App::getLocale(), true)->slug ),
-                    'target' => true
+                    'target' => true,
+                    'event_category' => 'ProfileStrengthDentist',
+                    'event_action' => 'Check',
+                    'event_label' => 'Stats',
                 ];
 
                 $ret[] = [
@@ -465,7 +505,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('trp.strength.dentist.browse-surveys.button-text'),
                     'buttonHref' => getVoxUrl('/'),
-                    'target' => true
+                    'target' => true,
+                    'event_category' => 'ProfileStrengthDentist',
+                    'event_action' => 'Browse',
+                    'event_label' => 'SurveysList',
                 ];
 
                 $ret[] = [
@@ -475,7 +518,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('trp.strength.dentist.join-assurance.button-text'),
                     'buttonHref' => 'https://assurance.dentacoin.com',
-                    'target' => true
+                    'target' => true,
+                    'event_category' => 'ProfileStrengthDentist',
+                    'event_action' => 'Join',
+                    'event_label' => 'Assurance',
                 ];
 
                 $ret[] = [
@@ -485,7 +531,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('trp.strength.dentist.join-dentacare.button-text'),
                     'buttonHref' => 'https://dentacare.dentacoin.com',
-                    'target' => true
+                    'target' => true,
+                    'event_category' => 'ProfileStrengthDentist',
+                    'event_action' => 'Recommend',
+                    'event_label' => 'Dentacare',
                 ];
 
 
@@ -508,6 +557,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                             'completed' => false,
                             'buttonText' => trans('trp.strength.patient.visit-dentist.button-text'),
                             'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug) : getLangUrl('/'),
+                            'event_category' => 'ProfileStrengthPatient',
+                            'event_action' => 'Write',
+                            'event_label' => 'VisitedLatelyRequestInvite',
                         ];
                     } else {
                         //complete step
@@ -530,6 +582,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                             'completed' => false,
                             'buttonText' => trans('trp.strength.patient.routine-check.button-text'),
                             'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug) : getLangUrl('/'),
+                            'event_category' => 'ProfileStrengthPatient',
+                            'event_action' => 'Write',
+                            'event_label' => 'RoutineCheckReview',
                         ];
                     } else {
                         $ret[] = [
@@ -539,6 +594,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                             'completed' => false,
                             'buttonText' => trans('trp.strength.patient.submit-review.button-text'),
                             'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug) : getLangUrl('/'),
+                            'event_category' => 'ProfileStrengthPatient',
+                            'event_action' => 'Write',
+                            'event_label' => 'FirstReview',
                         ];
                     }
                 }
@@ -551,6 +609,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => true,
                         'buttonText' => trans('trp.strength.patient.invite-dentist.button-text'),
                         'buttonHref' => getLangUrl('/').'?popup=invite-new-dentist-popup',
+                        'event_category' => 'ProfileStrengthPatient',
+                        'event_action' => 'Invite',
+                        'event_label' => 'AddNewDentist',
                     ];
                 } else {
                     $ret[] = [
@@ -560,6 +621,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.patient.invite-dentist.button-text'),
                         'buttonHref' => getLangUrl('/').'?popup=invite-new-dentist-popup',
+                        'event_category' => 'ProfileStrengthPatient',
+                        'event_action' => 'Invite',
+                        'event_label' => 'AddNewDentist',
                     ];
                 }
 
@@ -580,7 +644,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.patient.set-wallet.button-text'),
                         'buttonHref' => 'https://wallet.dentacoin.com/',
-                        'target' => true
+                        'target' => true,
+                        'event_category' => 'ProfileStrengthPatient',
+                        'event_action' => 'Create',
+                        'event_label' => 'NewWallet',
                     ];
                 }
 
@@ -591,6 +658,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('trp.strength.patient.invite-friends.button-text'),
                     'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
+                    'event_category' => 'ProfileStrengthPatient',
+                    'event_action' => 'Invite',
+                    'event_label' => 'InviteFriends',
                 ];
 
                 $total_balance = $this->getTotalBalance();
@@ -602,6 +672,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.patient.withdraw-rewards.button-text'),
                         'buttonHref' => 'https://account.dentacoin.com/?platform=trusted-reviews',
+                        'event_category' => 'ProfileStrengthPatient',
+                        'event_action' => 'Withdraw',
+                        'event_label' => 'WithdrawRewards',
                     ];
                 }
 
@@ -616,7 +689,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('trp.strength.patient.take-first-survey.button-text'),
                         'buttonHref' => getVoxUrl('/'),
-                        'target' => true
+                        'target' => true,
+                        'event_category' => 'ProfileStrengthPatient',
+                        'event_action' => 'Take',
+                        'event_label' => 'FirstSurvey',
                     ];
                 } else if ($this->madeTest(11) ) {
 
@@ -640,11 +716,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                             'completed' => false,
                             'buttonText' => trans('trp.strength.patient.take-latest-survey.button-text'),
                             'buttonHref' => getVoxUrl('paid-dental-surveys/'.$latest_vox->translate(App::getLocale(), true)->slug ),
-                            'target' => true
+                            'target' => true,
+                            'event_category' => 'ProfileStrengthPatient',
+                            'event_action' => 'Take',
+                            'event_label' => 'LatestSurvey',
                         ];                        
                     }
                 }
-
 
                 if($done_all) {
                     $ret[] = [
@@ -663,6 +741,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'iosLink' => 'https://apps.apple.com/bg/app/dentacare-health-training/id1274148338',
                     'androidLink' => 'https://play.google.com/store/apps/details?id=com.dentacoin.dentacare&hl=en',
+                    'event_category' => 'ProfileStrengthPatient',
+                    'event_action' => 'Download',
+                    'event_label' => 'Dentacare',
                 ];
             }
 
@@ -677,7 +758,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.public-profile.button-text'),
                     'buttonHref' => getLangUrl('/', null, 'https://reviews.dentacoin.com/'),
-                    'target' => true
+                    'target' => true,
+                    'event_category' => 'ProfileStrengthDentist',
+                    'event_action' => 'Check',
+                    'event_label' => 'TRP',
                 ];
 
                 $stats = Vox::with('stats_main_question')->where('has_stats', 1)->where('featured', 1)->orderBy('id', 'desc')->first();
@@ -688,6 +772,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.check-stats.button-text'),
                     'buttonHref' => getLangUrl('dental-survey-stats/'.$stats->translate(App::getLocale(), true)->slug ),
+                    'event_category' => 'ProfileStrengthDentist',
+                    'event_action' => 'Check',
+                    'event_label' => 'Stats',
                 ];
 
                 $ret[] = [
@@ -697,6 +784,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.browse-surveys.button-text'),
                     'buttonHref' => getLangUrl('/'),
+                    'event_category' => 'ProfileStrengthDentist',
+                    'event_action' => 'Browse',
+                    'event_label' => 'SurveysList',
                 ];
 
                 $ret[] = [
@@ -706,6 +796,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.invite-patients.button-text'),
                     'buttonHref' => 'https://account.dentacoin.com/invite?platform=dentavox',
+                    'event_category' => 'MonthlyDentist',
+                    'event_action' => 'Send',
+                    'event_label' => 'PatientInvites',
                 ];
 
 
@@ -725,27 +818,36 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('vox.strength.dentist.set-wallet.button-text'),
                         'buttonHref' => 'https://wallet.dentacoin.com/',
-                        'target' => true
+                        'target' => true,
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Create',
+                        'event_label' => 'NewWallet',
                     ];
                 }
 
                 $missing_info = [];
+                $event_missing = [];
 
                 if(empty($this->short_description)) {
                     $missing_info[] = 'a short bio';
+                    $event_missing[] = 'ShortDescription';
                 }
                 if(empty($this->description)) {
                     $missing_info[] = 'a longer description';
+                    $event_missing[] = 'Description';
                 }
                 if(empty($this->work_hours)) {
                     $missing_info[] = 'working hours';
+                    $event_missing[] = 'WorkHours';
                 }
                 if($this->photos->isEmpty()) {
                     $missing_info[] = 'photos';
+                    $event_missing[] = 'Photos';
                 }
                 if(empty($this->socials)) {
                     $missing_info[] = 'social channels';
-                }                
+                    $event_missing[] = 'SocialChannels';
+                }
 
                 if( empty($missing_info )) {
                     $ret[] = [
@@ -757,6 +859,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     ];
                 } else {
                     $missing_parts = count($missing_info) > 1 ? $missing_info[0].' and '.$missing_info[1] : $missing_info[0];
+                    $missing_parts_event = count($event_missing) > 1 ? $event_missing[0].'And'.$event_missing[1] : $event_missing[0];
                     $ret[] = [
                         'title' => trans('vox.strength.dentist.complete-profile.title'),
                         'image' => 'complete-profile',
@@ -764,7 +867,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('vox.strength.dentist.complete-profile.button-text'),
                         'buttonHref' => getLangUrl('/', null, 'https://reviews.dentacoin.com/'),
-                        'target' => true
+                        'target' => true,
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Add',
+                        'event_label' => $missing_parts_event,
                     ];
                 }
 
@@ -775,7 +881,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.join-assurance.button-text'),
                     'buttonHref' => 'https://assurance.dentacoin.com',
-                    'target' => true
+                    'target' => true,
+                    'event_category' => 'ProfileStrengthDentist',
+                    'event_action' => 'Join',
+                    'event_label' => 'Assurance',
                 ];
 
                 $total_balance = $this->getTotalBalance();
@@ -787,6 +896,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('vox.strength.dentist.withdraw-rewards.button-text'),
                         'buttonHref' => 'https://account.dentacoin.com/?platform=dentavox',
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Withdraw',
+                        'event_label' => 'WithdrawRewards',
                     ];
                 }
 
@@ -797,7 +909,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('vox.strength.dentist.join-dentacare.button-text'),
                     'buttonHref' => 'https://dentacare.dentacoin.com',
-                    'target' => true
+                    'target' => true,
+                    'event_category' => 'ProfileStrengthDentist',
+                    'event_action' => 'Recommend',
+                    'event_label' => 'Dentacare',
                 ];
 
                 // $ret['photo-dentist'] = $this->hasimage ? true : false;
@@ -827,6 +942,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('vox.strength.patient.take-first-survey.button-text'),
                         'buttonHref' => getVoxUrl(),
+                        'event_category' => 'ProfileStrengthPatient',
+                        'event_action' => 'Browse',
+                        'event_label' => 'SurveysList',
                     ];
                 } else if ($this->madeTest(11) ) {
 
@@ -847,6 +965,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('vox.strength.patient.take-latest-survey.button-text'),
                         'buttonHref' => getVoxUrl('paid-dental-surveys/'.$latest_vox->translate(App::getLocale(), true)->slug ),
+                        'event_category' => 'ProfileStrengthPatient',
+                        'event_action' => 'Browse',
+                        'event_label' => 'SurveysList',
                     ];
                 } else if($done_all) {
                     $ret[] = [
@@ -855,6 +976,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'image' => 'dentavox',
                         'completed' => true,
                         'buttonText' => trans('vox.strength.patient.take-latest-survey.button-text'),
+                        'event_category' => 'ProfileStrengthPatient',
+                        'event_action' => 'Take',
+                        'event_label' => 'LatestSurvey',
                     ];
                 }
 
@@ -874,7 +998,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('vox.strength.patient.set-wallet.button-text'),
                         'buttonHref' => 'https://wallet.dentacoin.com/',
-                        'target' => true
+                        'target' => true,
+                        'event_category' => 'ProfileStrengthPatient',
+                        'event_action' => 'Create',
+                        'event_label' => 'NewWallet',
                     ];
                 }
 
@@ -887,6 +1014,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'completed' => false,
                         'buttonText' => trans('vox.strength.patient.withdraw-rewards.button-text'),
                         'buttonHref' => 'https://account.dentacoin.com/?platform=dentavox',
+                        'event_category' => 'ProfileStrengthPatient',
+                        'event_action' => 'Withdraw',
+                        'event_label' => 'WithdrawRewards',
                     ];
                 }
 
@@ -897,6 +1027,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'buttonText' => trans('vox.strength.patient.invite-friends.button-text'),
                     'buttonHref' => 'https://account.dentacoin.com/invite?platform=dentavox',
+                    'event_category' => 'ProfileStrengthPatient',
+                    'event_action' => 'Invite',
+                    'event_label' => 'InviteFriends',
                 ];
 
 
@@ -911,7 +1044,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                             'completed' => false,
                             'buttonText' => trans('vox.strength.patient.visit-dentist.button-text'),
                             'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug, null, 'https://reviews.dentacoin.com') : getLangUrl('/', null, 'https://reviews.dentacoin.com'),
-                            'target' => true
+                            'target' => true,
+                            'event_category' => 'ProfileStrengthPatient',
+                            'event_action' => 'Write',
+                            'event_label' => 'VisitedLatelyRequestInvite',
                         ];
                     } else {
                         $ret[] = [
@@ -933,7 +1069,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                             'completed' => false,
                             'buttonText' => trans('vox.strength.patient.routine-check.button-text'),
                             'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug, null, 'https://reviews.dentacoin.com') : getLangUrl('/', null, 'https://reviews.dentacoin.com'),
-                            'target' => true
+                            'target' => true,
+                            'event_category' => 'ProfileStrengthPatient',
+                            'event_action' => 'Write',
+                            'event_label' => 'RoutineCheckReview',
                         ];
                     } else {
                         $ret[] = [
@@ -943,7 +1082,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                             'completed' => false,
                             'buttonText' => trans('vox.strength.patient.submit-review.button-text'),
                             'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug, null, 'https://reviews.dentacoin.com') : getLangUrl('/', null, 'https://reviews.dentacoin.com'),
-                            'target' => true
+                            'target' => true,
+                            'event_category' => 'ProfileStrengthPatient',
+                            'event_action' => 'Write',
+                            'event_label' => 'FirstReview',
                         ];
                     }
                 }
@@ -955,6 +1097,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'completed' => false,
                     'iosLink' => 'https://apps.apple.com/bg/app/dentacare-health-training/id1274148338',
                     'androidLink' => 'https://play.google.com/store/apps/details?id=com.dentacoin.dentacare&hl=en',
+                    'event_category' => 'ProfileStrengthPatient',
+                    'event_action' => 'Download',
+                    'event_label' => 'Dentacare',
                 ];
             }
         }

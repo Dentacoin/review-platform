@@ -14,10 +14,10 @@
 					</a>
 					<div class="strength-urls">
 						@if($strength['iosLink'])
-							<a target="_blank" href="{{ $strength['androidLink'] }}" class="button app-store android"></a>
-							<a target="_blank" href="{{ $strength['iosLink'] }}" class="button app-store ios"></a>
+							<a target="_blank" href="{{ $strength['androidLink'] }}" class="button app-store android" {{ $strength['event_category'] ? 'event_category='.$strength['event_category'] : '' }} {{ $strength['event_action'] ? 'event_action='.$strength['event_action'] : '' }} {{ $strength['event_label'] ? 'event_label='.$strength['event_label'] : '' }}></a>
+							<a target="_blank" href="{{ $strength['iosLink'] }}" class="button app-store ios" {{ $strength['event_category'] ? 'event_category='.$strength['event_category'] : '' }} {{ $strength['event_action'] ? 'event_action='.$strength['event_action'] : '' }} {{ $strength['event_label'] ? 'event_label='.$strength['event_label'] : '' }}></a>
 						@else
-							<a href="{{ $strength['buttonHref'] ? $strength['buttonHref'] : 'javascript:;' }}" class="button {{ $strength['completed'] ? 'completed' : '' }}" {{ $strength['target'] == true ? 'target="_blank"' : '' }} >{{ $strength['buttonText'] }}</a>
+							<a href="{{ $strength['buttonHref'] ? $strength['buttonHref'] : 'javascript:;' }}" class="button {{ $strength['completed'] ? 'completed' : '' }}" {{ $strength['target'] == true ? 'target="_blank"' : '' }} {{ $strength['event_category'] ? 'event_category='.$strength['event_category'] : '' }} {{ $strength['event_action'] ? 'event_action='.$strength['event_action'] : '' }} {{ $strength['event_label'] ? 'event_label='.$strength['event_label'] : '' }} >{{ $strength['buttonText'] }}</a>
 						@endif								
 					</div>
 					
