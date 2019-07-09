@@ -1374,7 +1374,7 @@ p.h2-bold {
 
 	h2 {
 		text-align: center;
-		margin-bottom: 50px;
+		margin-bottom: 20px;
 
 		@media #{$phone} {
 			margin-bottom: 10px;
@@ -1382,7 +1382,7 @@ p.h2-bold {
 	}
 
 	.swiper-container {
-		padding-top: 20px;
+		padding-top: 80px;
 		width: 100%;
 		padding-bottom: 80px;
 
@@ -1436,14 +1436,16 @@ p.h2-bold {
 
 		.featured-img {
 			position: absolute;
-		    left: -29px;
+		    right: -29px;
 		    top: -24px;
 		    width: 50px;
+		    transform: rotate(-8deg);
+    		transform-origin: center;
 			
 			@media #{$phone} {
 			    width: 30px;
 			    height: 30px;
-			    left: 2px;
+			    right: 2px;
 			    top: 2px;
 			}
 		}
@@ -1605,13 +1607,21 @@ p.h2-bold {
     }
 }
 
+body.vox-public {
+	.site-content {
+		@media screen and (max-height: 800px) and (min-width: 769px ) {
+			padding-top: 0px;
+		}
+	}
+}
+
 .section-vox-not-login {
 	position: relative;
     padding-bottom: 60px;
     margin-bottom: -60px;
 
     @media #{$phone} {
-    	margin-bottom: 0px;
+    	margin-bottom: 40px;
     	padding-bottom: 40px;
     }
 
@@ -1639,6 +1649,21 @@ p.h2-bold {
 	h2 {
 		font-weight: 600;
 		margin-bottom: 30px;
+
+		@media #{$tablet} {
+			margin-bottom: 30px;
+			line-height: normal;
+		}
+
+		@media screen and (max-height: 800px) and (min-width: 769px ) {
+			margin-bottom: 10px;
+			font-size: 28px;
+			line-height: 32px;
+		}
+
+		@media #{$phone} {
+			font-size: 18px;
+		}
 	}
 
 	.vox-title {
@@ -1646,6 +1671,14 @@ p.h2-bold {
 	    color: #3daee6;
 	    text-transform: uppercase;
 	    margin-bottom: 0px;
+
+	    @media #{$tablet} {
+	    	margin-top: 0px;
+	    }
+
+	    @media screen and (max-height: 800px) and (min-width: 769px ) {
+	    	margin-top: -30px;
+	    }
 
 	    @media #{$phone} {
 	    	margin-bottom: 10px;
@@ -1656,8 +1689,8 @@ p.h2-bold {
 		padding-top: 50px;
 		text-align: center;
 
-		@media screen and (max-width: 1200px) {
-			padding-top: 30px;
+		@media screen and (max-height: 800px) and (min-width: 769px ) {
+			padding-top: 20px;
 		}
 
 		p {
@@ -1666,9 +1699,12 @@ p.h2-bold {
 			font-size: 18px;
 			margin-bottom: 20px;
 
+			@media screen and (max-height: 800px) and (min-width: 769px ) {
+				margin-bottom: 10px;
+			}
+
 			@media #{$phone} {
 				font-size: 14px;
-				margin-bottom: 10px;
 				text-align: left;
 			}
 		}
@@ -1776,7 +1812,7 @@ p.h2-bold {
     		top: 55px;
     		text-align: center;
 
-    		@media screen and (max-width: 1200px) {
+    		@media screen and (max-height: 800px) and (min-width: 769px ) {
     			width: 125px;
     		}
 
@@ -1794,13 +1830,13 @@ p.h2-bold {
     			border-top-right-radius: 0px;
     			border-bottom-right-radius: 0px;
 
-    			@media screen and (max-width: 1200px) {
+    			@media screen and (max-height: 800px) and (min-width: 769px ) {
     				left: -125px;
-    		    	border-radius: 7px;
     			}
 
     			@media #{$phone} {
     				margin-right: 10px;
+    		    	border-radius: 7px;
     			}
     		}
 
@@ -1809,8 +1845,11 @@ p.h2-bold {
     			border-top-left-radius: 0px;
     			border-bottom-left-radius: 0px;
 
-    			@media screen and (max-width: 1200px) {
+    			@media screen and (max-height: 800px) and (min-width: 769px ) {
     				right: -125px;
+    			}
+
+    			@media #{$phone} {
     		    	border-radius: 7px;
     			}
     		}
@@ -1833,8 +1872,8 @@ p.h2-bold {
     			font-size: 30px;
     			font-weight: bold;
 
-    			@media screen and (max-width: 1200px) {
-		    		font-size: 20px;
+    			@media screen and (max-height: 800px) and (min-width: 769px ) {
+		    		font-size: 23px;
 		    	}
 
 		    	@media #{$phone} {
@@ -1849,12 +1888,24 @@ p.h2-bold {
 
     	.cover {
 		    border-radius: 7px;
+
+		    @media #{$tablet} {
+		    	padding-top: 45%;
+		    }
+
+		    @media screen and (max-height: 800px) and (min-width: 769px ) {
+		    	padding-top: 34%;
+		    }
 		}
 
 		.survey-cats {
 			span {
 			    font-size: 16px;
 			    margin-top: 5px;
+
+			    @media screen and (max-height: 800px) and (min-width: 769px ) {
+			    	font-size: 14px;
+			    }
 
 			    @media #{$phone} {
 			    	font-size: 11px;
@@ -1863,6 +1914,11 @@ p.h2-bold {
 		}
 
 		.vox-header {
+
+			@media screen and (max-height: 800px) and (min-width: 769px ) {
+				padding: 10px;
+			}
+
 			@media #{$phone} {
 		    	padding: 10px 0px 0px;
 		    }
@@ -1872,7 +1928,7 @@ p.h2-bold {
 				    font-size: 18px;
 				    max-height: none;
 
-				    @media screen and (max-width: 1200px) {
+				    @media screen and (max-height: 800px) and (min-width: 769px ) {
 				    	font-size: 16px;
 				    }
 
@@ -1887,7 +1943,7 @@ p.h2-bold {
 	.slide-padding {
 	    padding: 15px;
 
-	    @media #{$phone} {
+	    @media screen and (max-height: 800px) and (min-width: 769px ) {
 	    	padding: 10px;
 	    }
 	}
@@ -8218,7 +8274,7 @@ p.h2-bold {
 
 		.swiper-slide {
 			.featured-img {
-				left: -18px;
+				right: -18px;
 			    top: -16px;
 			    width: 30px;
 			}
@@ -9262,4 +9318,31 @@ body.sp-vox-iframe {
 	.above-fold {
 		min-height: auto !important;
 	}
+}
+
+.doublecoin-tooltip {
+	position: absolute;
+    background-color: #9c9c9c;
+    width: 310px;
+    color: white;
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    line-height: 14px;
+
+    b {
+    	color: white;
+    	font-size: 13px;
+    }
+
+    span {
+    	position: absolute;
+    	bottom: -7.5px;
+    	left: 20px;
+    	width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 7.5px 5px 0 5px;
+		border-color: #9c9c9c transparent transparent transparent;
+    }
 }

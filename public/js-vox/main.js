@@ -920,6 +920,50 @@ $(document).ready(function(){
         }
     });
 
+    var handleCoinTooltip = function(e) {
+    	var that = $(this);
+
+        $('.doublecoin-tooltip').css('display', 'block');
+
+    	var y = that.offset().top + that.outerHeight() - 100;
+    	var x = that.offset().left;
+
+        $('.doublecoin-tooltip').css('left', x );
+        $('.doublecoin-tooltip').css('top', y );
+
+        if ( window.innerWidth - $('.doublecoin-tooltip').innerWidth() - 20 < e.pageX ) {
+
+    		$('.doublecoin-tooltip span').css('left', $('.doublecoin-tooltip').offset().left - $(window).innerWidth() + $('.doublecoin-tooltip').innerWidth() + 30 );
+        	$('.doublecoin-tooltip').css('left', $(window).innerWidth() - $('.doublecoin-tooltip').innerWidth() - 20 );
+    	
+        } else {        	
+        	$('.doublecoin-tooltip span').css('left', '20px' );
+        }
+
+        e.stopPropagation();
+
+    }
+
+    if($('.doublecoin').length) {
+
+        $('.doublecoin').on('mouseover mousemove', function(e) {
+            if (window.innerWidth > 768) {
+                handleCoinTooltip.bind(this)(e);
+            }
+        });
+
+        $('.doublecoin').on('click', function(e) {
+        	e.preventDefault();
+            if (window.innerWidth < 768) {
+                handleCoinTooltip.bind(this)(e);
+            }
+        });
+
+        $('.doublecoin').on('mouseout', function(e) {
+            $('.doublecoin-tooltip').hide();
+        });
+    }
+
 
     $('.close-explander').click( function() {
     	$(this).closest('.expander-wrapper').removeClass('active');

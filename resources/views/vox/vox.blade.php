@@ -203,11 +203,11 @@
 						<h4 class="done-desc">
 							@if($done_all)
 								{!! trans('vox.page.questionnaire.well-done-content.all-surveys', [
-									'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
+									'amount' => '<span class="coins-test">'.$vox->featured ? ($vox->getRewardTotal() * 2) : $vox->getRewardTotal().'</span>',
 								]) !!}
 							@else
 								{!! trans('vox.page.questionnaire.well-done-content', [
-									'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
+									'amount' => '<span class="coins-test">'.$vox->featured ? ($vox->getRewardTotal() * 2) : $vox->getRewardTotal().'</span>',
 									'link' => '<a href="https://account.dentacoin.com/?platform=dentavox">',
 									'endlink' => '</a>',
 								]) !!}
@@ -278,7 +278,7 @@
 						</h3>
 						<h4>
 							{!! trans('vox.page.questionnaire.well-done-content', [
-								'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
+								'amount' => '<span class="coins-test">'.$vox->featured ? ($vox->getRewardTotal() * 2) : $vox->getRewardTotal().'</span>',
 								'link' => '<a href="https://account.dentacoin.com/?platform=dentavox">',
 								'endlink' => '</a>',
 							]) !!}
@@ -294,7 +294,7 @@
 								    		<div class="slide-padding">
 								    			<a href="{{ $related_vox->getLink() }}" class="cover" style="background-image: url('{{ $related_vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $related_vox->title, "respondents" => $related_vox->respondentsCount(), "respondents_country" => $related_vox->respondentsCountryCount() ]) }}'>
 									  				@if($related_vox->featured)
-									  					<img class="featured-img" src="{{ url('new-vox-img/star.svg') }}">
+									  					<img class="featured-img doublecoin" src="{{ url('new-vox-img/flipping-coin.gif') }}">
 									  				@endif
 									  			</a>	
 												<div class="vox-header clearfix">

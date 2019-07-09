@@ -1000,12 +1000,12 @@ p.h2-bold {
     padding-right: 15px; } }
 .section-recent-surveys h2 {
   text-align: center;
-  margin-bottom: 50px; }
+  margin-bottom: 20px; }
   @media screen and (max-width: 768px) {
     .section-recent-surveys h2 {
       margin-bottom: 10px; } }
 .section-recent-surveys .swiper-container {
-  padding-top: 20px;
+  padding-top: 80px;
   width: 100%;
   padding-bottom: 80px; }
   @media screen and (max-width: 768px) {
@@ -1044,14 +1044,16 @@ p.h2-bold {
     border-top-left-radius: 7px; }
   .section-recent-surveys .swiper-slide .featured-img {
     position: absolute;
-    left: -29px;
+    right: -29px;
     top: -24px;
-    width: 50px; }
+    width: 50px;
+    transform: rotate(-8deg);
+    transform-origin: center; }
     @media screen and (max-width: 768px) {
       .section-recent-surveys .swiper-slide .featured-img {
         width: 30px;
         height: 30px;
-        left: 2px;
+        right: 2px;
         top: 2px; } }
   .section-recent-surveys .swiper-slide .done-img {
     position: absolute;
@@ -1160,13 +1162,17 @@ p.h2-bold {
             padding: 7px 10px;
             font-size: 10px; } }
 
+@media screen and (max-height: 800px) and (min-width: 769px) {
+  body.vox-public .site-content {
+    padding-top: 0px; } }
+
 .section-vox-not-login {
   position: relative;
   padding-bottom: 60px;
   margin-bottom: -60px; }
   @media screen and (max-width: 768px) {
     .section-vox-not-login {
-      margin-bottom: 0px;
+      margin-bottom: 40px;
       padding-bottom: 40px; } }
   .section-vox-not-login:after {
     content: '';
@@ -1186,29 +1192,49 @@ p.h2-bold {
   .section-vox-not-login h2 {
     font-weight: 600;
     margin-bottom: 30px; }
+    @media screen and (max-width: 1080px) {
+      .section-vox-not-login h2 {
+        margin-bottom: 30px;
+        line-height: normal; } }
+    @media screen and (max-height: 800px) and (min-width: 769px) {
+      .section-vox-not-login h2 {
+        margin-bottom: 10px;
+        font-size: 28px;
+        line-height: 32px; } }
+    @media screen and (max-width: 768px) {
+      .section-vox-not-login h2 {
+        font-size: 18px; } }
   .section-vox-not-login .vox-title {
     font-weight: 900;
     color: #3daee6;
     text-transform: uppercase;
     margin-bottom: 0px; }
+    @media screen and (max-width: 1080px) {
+      .section-vox-not-login .vox-title {
+        margin-top: 0px; } }
+    @media screen and (max-height: 800px) and (min-width: 769px) {
+      .section-vox-not-login .vox-title {
+        margin-top: -30px; } }
     @media screen and (max-width: 768px) {
       .section-vox-not-login .vox-title {
         margin-bottom: 10px; } }
   .section-vox-not-login .login-buttons {
     padding-top: 50px;
     text-align: center; }
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-height: 800px) and (min-width: 769px) {
       .section-vox-not-login .login-buttons {
-        padding-top: 30px; } }
+        padding-top: 20px; } }
     .section-vox-not-login .login-buttons p {
       color: #060606;
       font-weight: bold;
       font-size: 18px;
       margin-bottom: 20px; }
+      @media screen and (max-height: 800px) and (min-width: 769px) {
+        .section-vox-not-login .login-buttons p {
+          margin-bottom: 10px; } }
       @media screen and (max-width: 768px) {
         .section-vox-not-login .login-buttons p {
           font-size: 14px;
-          margin-bottom: 10px;
           text-align: left; } }
     .section-vox-not-login .login-buttons a {
       display: block;
@@ -1281,7 +1307,7 @@ p.h2-bold {
       position: absolute;
       top: 55px;
       text-align: center; }
-      @media screen and (max-width: 1200px) {
+      @media screen and (max-height: 800px) and (min-width: 769px) {
         .section-vox-not-login .swiper-slide .wing {
           width: 125px; } }
       @media screen and (max-width: 768px) {
@@ -1296,20 +1322,22 @@ p.h2-bold {
         left: -205px;
         border-top-right-radius: 0px;
         border-bottom-right-radius: 0px; }
-        @media screen and (max-width: 1200px) {
+        @media screen and (max-height: 800px) and (min-width: 769px) {
           .section-vox-not-login .swiper-slide .wing.left-wing {
-            left: -125px;
-            border-radius: 7px; } }
+            left: -125px; } }
         @media screen and (max-width: 768px) {
           .section-vox-not-login .swiper-slide .wing.left-wing {
-            margin-right: 10px; } }
+            margin-right: 10px;
+            border-radius: 7px; } }
       .section-vox-not-login .swiper-slide .wing.right-wing {
         right: -205px;
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px; }
-        @media screen and (max-width: 1200px) {
+        @media screen and (max-height: 800px) and (min-width: 769px) {
           .section-vox-not-login .swiper-slide .wing.right-wing {
-            right: -125px;
+            right: -125px; } }
+        @media screen and (max-width: 768px) {
+          .section-vox-not-login .swiper-slide .wing.right-wing {
             border-radius: 7px; } }
       .section-vox-not-login .swiper-slide .wing .wing-box {
         position: relative;
@@ -1323,9 +1351,9 @@ p.h2-bold {
       .section-vox-not-login .swiper-slide .wing p {
         font-size: 30px;
         font-weight: bold; }
-        @media screen and (max-width: 1200px) {
+        @media screen and (max-height: 800px) and (min-width: 769px) {
           .section-vox-not-login .swiper-slide .wing p {
-            font-size: 20px; } }
+            font-size: 23px; } }
         @media screen and (max-width: 768px) {
           .section-vox-not-login .swiper-slide .wing p {
             font-size: 14px; } }
@@ -1333,19 +1361,31 @@ p.h2-bold {
           font-weight: 900; }
     .section-vox-not-login .swiper-slide .cover {
       border-radius: 7px; }
+      @media screen and (max-width: 1080px) {
+        .section-vox-not-login .swiper-slide .cover {
+          padding-top: 45%; } }
+      @media screen and (max-height: 800px) and (min-width: 769px) {
+        .section-vox-not-login .swiper-slide .cover {
+          padding-top: 34%; } }
     .section-vox-not-login .swiper-slide .survey-cats span {
       font-size: 16px;
       margin-top: 5px; }
+      @media screen and (max-height: 800px) and (min-width: 769px) {
+        .section-vox-not-login .swiper-slide .survey-cats span {
+          font-size: 14px; } }
       @media screen and (max-width: 768px) {
         .section-vox-not-login .swiper-slide .survey-cats span {
           font-size: 11px; } }
+    @media screen and (max-height: 800px) and (min-width: 769px) {
+      .section-vox-not-login .swiper-slide .vox-header {
+        padding: 10px; } }
     @media screen and (max-width: 768px) {
       .section-vox-not-login .swiper-slide .vox-header {
         padding: 10px 0px 0px; } }
     .section-vox-not-login .swiper-slide .vox-header .left .vox-description {
       font-size: 18px;
       max-height: none; }
-      @media screen and (max-width: 1200px) {
+      @media screen and (max-height: 800px) and (min-width: 769px) {
         .section-vox-not-login .swiper-slide .vox-header .left .vox-description {
           font-size: 16px; } }
       @media screen and (max-width: 768px) {
@@ -1353,7 +1393,7 @@ p.h2-bold {
           font-size: 14px; } }
   .section-vox-not-login .slide-padding {
     padding: 15px; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-height: 800px) and (min-width: 769px) {
       .section-vox-not-login .slide-padding {
         padding: 10px; } }
 
@@ -5816,7 +5856,7 @@ p.h2-bold {
     padding-top: 0px;
     padding-bottom: 50px; }
   .page-profile.sp-vox .section-recent-surveys .swiper-slide .featured-img {
-    left: -18px;
+    right: -18px;
     top: -16px;
     width: 30px; }
   .page-profile.sp-vox .section-recent-surveys .swiper-slide .slider-inner {
@@ -6525,3 +6565,25 @@ body.sp-vox-iframe .site-content {
     margin-top: 0px; }
 body.sp-vox-iframe .above-fold {
   min-height: auto !important; }
+
+.doublecoin-tooltip {
+  position: absolute;
+  background-color: #9c9c9c;
+  width: 310px;
+  color: white;
+  font-size: 13px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  line-height: 14px; }
+  .doublecoin-tooltip b {
+    color: white;
+    font-size: 13px; }
+  .doublecoin-tooltip span {
+    position: absolute;
+    bottom: -7.5px;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7.5px 5px 0 5px;
+    border-color: #9c9c9c transparent transparent transparent; }

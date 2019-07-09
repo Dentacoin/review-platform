@@ -108,7 +108,7 @@
 
     </head>
 
-    <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($satic_page) ? 'page-page' : '' }} {{ (config('langs')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }} {{ !empty($user) ? 'logged-in' : 'logged-out' }}">
+    <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($satic_page) ? 'page-page' : '' }} {{ (config('langs')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }} {{ !empty($user) ? 'logged-in' : 'logged-out' }} {{ !empty($custom_body_class) ? $custom_body_class : '' }}">
 		<noscript>
 			<img height="1" width="1" src="https://www.facebook.com/tr?id=2010503399201502&ev=PageView&noscript=1"/>
 		</noscript>
@@ -402,7 +402,12 @@
 
 		</div>
 
-		<div class="tooltip-window" style="display: none;"></div>	
+		<div class="tooltip-window" style="display: none;"></div>
+
+		<div class="doublecoin-tooltip" style="display: none;">
+			Only now for a limited time you have the chance to earn <b>double rewards</b> if you fill this survey
+			<span></span>
+		</div>
 
 		<script type='application/ld+json'> 
 		{
