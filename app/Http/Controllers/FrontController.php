@@ -99,7 +99,7 @@ class FrontController extends BaseController
                 $ul = new UserLogin;
                 $ul->user_id = $this->user->id;
                 $ul->ip = User::getRealIp();
-                $ul->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
+                $ul->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
 
                 $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
                 $dd = new DeviceDetector($userAgent);
@@ -121,12 +121,12 @@ class FrontController extends BaseController
                 }
 
                 $tokenobj = $this->user->createToken('LoginToken');
-                $tokenobj->token->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
+                $tokenobj->token->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
                 $tokenobj->token->save();
 
                 session([
                     'login-logged' => $this->user->id,
-                    'mark-login' => mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'DV' : 'TRP',
+                    'mark-login' => mb_strpos( Request::getHost(), 'vox' )!==false ? 'DV' : 'TRP',
                     'logged_user' => [
                         'token' => $tokenobj->accessToken,
                         'id' => $this->user->id,
@@ -342,7 +342,7 @@ class FrontController extends BaseController
         //
         //Global
         //
-        $platfrom = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
+        $platfrom = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
 
         $params['trackEvents'] = [];
         if( session('mark-login') && empty($params['skipSSO']) ) {
@@ -540,6 +540,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2019-07-08-03';
+        $params['cache_version'] = '2019-07-09';
     }
 }

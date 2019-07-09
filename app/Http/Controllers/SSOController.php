@@ -63,7 +63,7 @@ class SSOController extends BaseController
             if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
                 $platform = $user->platform;
             } else {
-                $platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
+                $platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
             }
 
             $tokenobj = $user->createToken('LoginToken');

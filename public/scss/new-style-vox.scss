@@ -1605,6 +1605,294 @@ p.h2-bold {
     }
 }
 
+.section-vox-not-login {
+	position: relative;
+    padding-bottom: 60px;
+    margin-bottom: -60px;
+
+    @media #{$phone} {
+    	margin-bottom: 0px;
+    	padding-bottom: 40px;
+    }
+
+    &:after {
+    	content: '';
+    	position: absolute;
+    	bottom: 0px;
+    	left: 50%;
+    	transform: translateX(-50%);
+    	width: 410px;
+    	height: 1px;
+    	background-color: #d3ebfb;
+
+    	@media #{$phone} {
+    		width: 230px;
+    	}
+    }
+
+    .container {
+    	@media #{$phone} {
+    		padding: 0px;
+    	}
+    }
+
+	h2 {
+		font-weight: 600;
+		margin-bottom: 30px;
+	}
+
+	.vox-title {
+		font-weight: 900;
+	    color: #3daee6;
+	    text-transform: uppercase;
+	    margin-bottom: 0px;
+
+	    @media #{$phone} {
+	    	margin-bottom: 10px;
+	    }
+	}
+
+	.login-buttons {
+		padding-top: 50px;
+		text-align: center;
+
+		@media screen and (max-width: 1200px) {
+			padding-top: 30px;
+		}
+
+		p {
+			color: #060606;
+			font-weight: bold;
+			font-size: 18px;
+			margin-bottom: 20px;
+
+			@media #{$phone} {
+				font-size: 14px;
+				margin-bottom: 10px;
+				text-align: left;
+			}
+		}
+
+		a {
+			display: block;
+			padding: 12px 20px;
+			font-size: 20px;
+			font-weight: 900;
+
+			@media screen and (max-width: 1200px) {
+				font-size: 15px;
+			}
+
+			@media #{$phone} {
+				font-size: 14px;
+				padding: 8px 0px;
+			}
+		}
+
+		.white-button {
+			border-color: white;
+			font-weight: bold;
+			color: #3daee6;
+
+			&:hover {
+				color: #3daee6;
+				background-color: #f1fdff;
+				border-color: #f1fdff;
+			}
+
+			img {
+				max-width: 25px;
+				vertical-align: sub;
+			    margin-right: 10px;
+
+			    @media screen and (max-width: 1200px) {
+			    	max-width: 17px;
+			    }
+			}
+		}
+
+		.col {
+
+			&:first-child {
+				border-right: 2px solid white;
+				padding-right: 60px;
+
+				@media screen and (max-width: 1200px) {
+					padding-right: 20px;
+				}
+
+				@media #{$phone} {
+					padding-right: 10px;
+				}
+			}
+
+			&:last-child {
+				padding-left: 60px;
+
+				@media screen and (max-width: 1200px) {
+					padding-left: 20px;
+				}
+
+				@media #{$phone} {
+					padding-left: 10px;
+				}
+			}
+		}
+	}
+
+    .swiper-slide {
+        max-width: 730px;
+    	margin: 0 auto;
+    	position: relative;
+
+    	@media screen and (max-width: 1200px) {
+    		max-width: 640px;
+    	}
+
+    	@media #{$tablet} {
+			max-width: 460px;
+		}
+
+		@media #{$phone} {
+			max-width: 100%;
+			display: flex;
+			flex-flow: row wrap;
+		}
+
+    	.slider-inner {
+    		padding: 0px;
+    	}
+
+    	.survey-cats {
+    		margin-bottom: 15px;
+    	}
+
+    	.wing {
+    		width: 205px;
+    		height: 170px;
+    		background-color: #d3ebfb;
+    		border-radius: 7px;
+    		position: absolute;
+    		top: 55px;
+    		text-align: center;
+
+    		@media screen and (max-width: 1200px) {
+    			width: 125px;
+    		}
+
+    		@media #{$phone} {
+    			position: static;
+    			flex: 1;
+    			margin-bottom: 10px;
+    			height: auto;
+    		    padding: 10px 0px;
+    		    min-width: 40%;
+    		}
+
+    		&.left-wing {
+    			left: -205px;
+    			border-top-right-radius: 0px;
+    			border-bottom-right-radius: 0px;
+
+    			@media screen and (max-width: 1200px) {
+    				left: -125px;
+    		    	border-radius: 7px;
+    			}
+
+    			@media #{$phone} {
+    				margin-right: 10px;
+    			}
+    		}
+
+    		&.right-wing {
+    			right: -205px;
+    			border-top-left-radius: 0px;
+    			border-bottom-left-radius: 0px;
+
+    			@media screen and (max-width: 1200px) {
+    				right: -125px;
+    		    	border-radius: 7px;
+    			}
+    		}
+
+    		.wing-box {
+    			position: relative;
+			    top: 50%;
+			    transform: translateY(-50%);
+    		}
+
+    		img {
+    			max-width: 42px;
+
+    			@media #{$phone} {
+    				max-width: 30px;
+    			}
+    		}
+
+    		p {
+    			font-size: 30px;
+    			font-weight: bold;
+
+    			@media screen and (max-width: 1200px) {
+		    		font-size: 20px;
+		    	}
+
+		    	@media #{$phone} {
+		    		font-size: 14px;
+		    	}
+
+    			&:last-child {
+    				font-weight: 900;
+    			}
+    		}
+    	}
+
+    	.cover {
+		    border-radius: 7px;
+		}
+
+		.survey-cats {
+			span {
+			    font-size: 16px;
+			    margin-top: 5px;
+
+			    @media #{$phone} {
+			    	font-size: 11px;
+			    }
+			}
+		}
+
+		.vox-header {
+			@media #{$phone} {
+		    	padding: 10px 0px 0px;
+		    }
+
+			.left {
+				.vox-description {
+				    font-size: 18px;
+				    max-height: none;
+
+				    @media screen and (max-width: 1200px) {
+				    	font-size: 16px;
+				    }
+
+				    @media #{$phone} {
+				    	font-size: 14px;
+				    }
+				}
+			}
+		}
+	}
+
+	.slide-padding {
+	    padding: 15px;
+
+	    @media #{$phone} {
+	    	padding: 10px;
+	    }
+	}
+}
+
 .section-stats {
 	margin-top: 85px;
 	background-color: $main-color;

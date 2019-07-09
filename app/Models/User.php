@@ -1265,7 +1265,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
              if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
                 $item->platform = $this->platform;
              } else {
-                $item->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
+                $item->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
              }
         }
         $item->save();
@@ -1285,7 +1285,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
              if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
                 $item->platform = $this->platform;
              } else {
-                $item->platform = mb_strpos( Request::getHost(), 'dentavox' )!==false ? 'vox' : 'trp';
+                $item->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
              }
         }
         $item->save();

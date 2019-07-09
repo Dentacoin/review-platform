@@ -2,59 +2,200 @@
 
 @section('content')
 
-	<div class="page-questions">
-		<div class="container" id="question-meta">
-			<div class="questions">
+	<div class="section-recent-surveys section-vox-not-login">
+		<div class="container">
+			<h2 class="vox-title">"{{ $vox->title }}"</h2>
+			<h2>Take survey and get rewarded!</h2>
 
-				<div class="col-md-8 col-md-offset-2 clearfix">
-					<h1 class="questionnaire-title tac">
-						- {{ $vox->title }} -
-					</h1>
-					<p class="questionnaire-description tac" >
-						{{ $vox->description }}
+			<div class="swiper-wrapper">
+
+		      	<div class="swiper-slide">
+					<div class="wing left-wing">
+						<div class="wing-box">
+							<img src="{{ url('new-vox-img/clock-icon.svg') }}">
+							<p>Time:</p>
+							<p>{{ $vox->formatDuration() }}</p>
+						</div>
+					</div>
+					<div class="wing right-wing">
+						<div class="wing-box">
+							<img src="{{ url('new-vox-img/coin-icon.png') }}">
+							<p>Reward:</p>
+							<p>{{ $vox->getRewardTotal() }} DCN</p>
+						</div>
+					</div>
+		      		<div class="slider-inner">
+			    		<div class="slide-padding">
+			      			<a href="{{ $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}'></a>							
+							<div class="vox-header clearfix">
+								<div class="survey-cats"> 
+									@foreach( $vox->categories as $c)
+										<span class="survey-cat" cat-id="{{ $c->category->id }}">{{ $c->category->name }}</span>
+									@endforeach
+								</div>
+								<div class="flex second-flex">
+									<div class="col left">
+										<p class="vox-description">{{ $vox->description }}</p>
+									</div>
+								</div>
+								<div class="flex login-buttons">
+									<div class="col">
+										<p>{{ trans('vox.page.questionnaire.not-logged-register-title') }}</p>
+										<a href="{{ getLangUrl('welcome-survey') }}" class="blue-button">{{ trans('vox.page.questionnaire.not-logged-register-button') }}</a>
+									</div>
+									<div class="col">
+										<p>{{ trans('vox.page.questionnaire.not-logged-login-title') }}</p>
+										<a href="{{ getLangUrl('login') }}" class="white-button"><img src="{{ url('new-vox-img/log-in-icon.svg') }}">{{ trans('vox.page.questionnaire.not-logged-login-button') }}</a>
+									</div>
+								</div>
+							</div>
+				      	</div>
+			      	</div>
+			    </div>
+		    </div>
+		</div>
+	</div>
+
+	<div class="section-reasons">
+		<div class="container">
+			<p class="h2-bold">{!! nl2br(trans('vox.page.index.reasons.title')) !!}</p>
+			<h2>{!! nl2br(trans('vox.page.index.reasons.subtitle')) !!}</h2>
+
+			<div class="reasons-wrap flex flex-center">
+				<div class="col reason-number">
+					<div>01</div>
+				</div>
+				<div class="col reason-title">
+					<h4>{!! nl2br(trans('vox.page.index.reasons.1.title')) !!}</h4>
+				</div>
+				<div class="col reason-desc">
+					<p>
+						{!! nl2br(trans('vox.page.index.reasons.1.content')) !!}
 					</p>
-
 				</div>
 			</div>
-
-			<div class="vox-not-logged">
-				<h2>
-					{{ trans('vox.page.questionnaire.not-logged-title') }}
-					
-				</h2>
-
-				<div class="flex break-mobile">
-					<div class="col">
-						<img src="{{ url('new-vox-img/vox-not-logged-register.png') }}" />
-						<div>
-							<h3>
-								{{ trans('vox.page.questionnaire.not-logged-register-title') }}
-							</h3>
-							<p>
-								{{ trans('vox.page.questionnaire.not-logged-register-content') }}
-							</p>
-							<a class="btn" href="{{ getLangUrl('welcome-survey') }}">
-								{{ trans('vox.page.questionnaire.not-logged-register-button') }}
-							</a>
-						</div>
-					</div>
-					<div class="col">
-						<img src="{{ url('new-vox-img/vox-not-logged-login.png') }}" />
-						<div>
-							<h3>
-								{{ trans('vox.page.questionnaire.not-logged-login-title') }}
-							</h3>
-							<p>
-								{{ trans('vox.page.questionnaire.not-logged-login-content') }}
-							</p>
-							<a class="btn" href="{{ getLangUrl('login') }}">
-								{{ trans('vox.page.questionnaire.not-logged-login-button') }}
-							</a>
-						</div>
-					</div>
+			<div class="reasons-wrap flex flex-center">
+				<div class="col reason-number">
+					<div>02</div>
 				</div>
-
+				<div class="col reason-title">
+					<h4>{!! nl2br(trans('vox.page.index.reasons.2.title')) !!}</h4>
+				</div>
+				<div class="col reason-desc">
+					<p>
+						{!! nl2br(trans('vox.page.index.reasons.2.content',[
+							"link" => '<a href="https://dentacoin.com/partner-network" target="_blank">',
+							"endlink" => '</a>'
+						])) !!}						
+					</p>
+				</div>
 			</div>
+			<div class="reasons-wrap flex flex-center">
+				<div class="col reason-number">
+					<div>03</div>
+				</div>
+				<div class="col reason-title">
+					<h4>{!! nl2br(trans('vox.page.index.reasons.3.title')) !!}</h4>
+				</div>
+				<div class="col reason-desc">
+					<p>
+						{!! nl2br(trans('vox.page.index.reasons.3.content')) !!}
+					</p>
+				</div>
+			</div>
+			<div class="reasons-wrap flex flex-center">
+				<div class="col reason-number">
+					<div>04</div>
+				</div>
+				<div class="col reason-title">
+					<h4>{!! nl2br(trans('vox.page.index.reasons.4.title')) !!}</h4>
+				</div>
+				<div class="col reason-desc">
+					<p>
+						{!! nl2br(trans('vox.page.index.reasons.4.content')) !!}
+					</p>
+				</div>
+			</div>
+			<div class="reasons-wrap flex flex-center">
+				<div class="col reason-number">
+					<div>05</div>
+				</div>
+				<div class="col reason-title">
+					<h4>{!! nl2br(trans('vox.page.index.reasons.5.title')) !!}</h4>
+				</div>
+				<div class="col reason-desc">
+					<p>
+						{!! nl2br(trans('vox.page.index.reasons.5.content')) !!}
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section-recent-surveys">
+		<p class="h2-bold">{!! nl2br(trans('vox.page.index.recent-surveys.title')) !!}</p>
+		<h2>{!! nl2br(trans('vox.page.index.recent-surveys.subtitle')) !!}</h2>
+
+		<div class="swiper-container">
+		    <div class="swiper-wrapper">
+		    	@foreach($voxes as $vox)
+			      	<div class="swiper-slide">
+			      		<div class="slider-inner">
+				    		<div class="slide-padding">
+				      			<a href="{{ $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}'>
+				      				@if($vox->stats_featured)
+				      					<img class="featured-img" src="{{ url('new-vox-img/star.svg') }}">
+				      				@endif
+				      			</a>							
+								<div class="vox-header clearfix">
+									<div class="flex first-flex">
+										<div class="col left">
+											<h4 class="survey-title bold">{{ $vox->title }}</h4>
+										</div>
+										<div class="col right">
+											<span class="bold">{{ !empty($vox->complex) ? 'max ' : '' }} {{ $vox->getRewardTotal() }} DCN</span>
+											<p>{{ $vox->formatDuration() }}</p>
+										</div>					
+									</div>
+									<div class="survey-cats"> 
+										@foreach( $vox->categories as $c)
+											<span class="survey-cat" cat-id="{{ $c->category->id }}">{{ $c->category->name }}</span>
+										@endforeach
+									</div>
+									<div class="flex second-flex">
+										<div class="col left">
+											<p class="vox-description">{{ $vox->description }}</p>
+										</div>
+										<div class="col right">
+											<div class="btns">
+												@if(empty($user) || (!empty($user) && !in_array($vox->id, $taken)) )
+													<a class="opinion blue-button" href="{{ $vox->getLink() }}">
+														{{ trans('vox.common.take-the-test') }}
+													</a>
+												@endif
+											</div>
+										</div>
+									</div>
+								</div>
+					      	</div>
+				      	</div>
+				    </div>
+		      	@endforeach
+		    </div>
+
+		    <div class="swiper-pagination"></div>
+		</div>
+	</div>
+
+	<div class="section-stats">
+		<div class="container">
+			<img src="{{ url('new-vox-img/stats-front.png') }}">
+			<h3>
+				{!! nl2br(trans('vox.page.index.curious')) !!}
+			</h3>
+			<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">
+				{{ trans('vox.common.check-statictics') }}
+			</a>
 		</div>
 	</div>
 
