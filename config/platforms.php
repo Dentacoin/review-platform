@@ -34,4 +34,9 @@ return [
 		'url' => 'wallet.dentacoin.com',
 		'balance' => false,
 	],
+	'account' => [
+		'name' => 'Dentacoin Account',
+		'url' => 'account.dentacoin.com',
+		'balance' => false,
+	],
 ];
