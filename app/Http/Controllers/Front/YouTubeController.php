@@ -30,6 +30,7 @@ class YouTubeController extends FrontController
 {
     public function test() {
 
+    	dd(session('intended'));
     	
     	//First 3 weeks engagement		
 
