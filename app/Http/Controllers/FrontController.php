@@ -98,11 +98,7 @@ class FrontController extends BaseController
             if ($this->user && session('intended')) {
                 $intended = session()->pull('intended');
 
-                if (User::getRealIp() == '78.130.213.163') {
-                    dd($intended);
-                }
-
-                return redirect($intended);
+                Redirect::to($intended)->send();
             }
 
             if($this->user && session('login-logged')!=$this->user->id){
