@@ -125,8 +125,6 @@ class LoginController extends FrontController
 
     private function try_social_register($s_user, $network) {
 
-        return redirect('https://dentavox.dentacoin.com/test');
-
         if($s_user->getId()) {
             $user = User::where( 'fb_id','LIKE', $s_user->getId() )->withTrashed()->first();
         }
@@ -275,11 +273,10 @@ class LoginController extends FrontController
                 if($newuser->loggedFromBadIp()) {
                     return redirect( getVoxUrl('/').'?suspended-popup' );
                 }
-                $intended = session()->pull('intended');
 
                 Auth::login($newuser, true);
                 Request::session()->flash('success-message', trans('vox.page.registration.success'));
-                return redirect($intended ? $intended : getVoxUrl('/').'?success-message='.urlencode(trans('vox.page.registration.success')));
+                return redirect(getVoxUrl('/').'?success-message='.urlencode(trans('vox.page.registration.success')));
             } else {
                 return redirect( getVoxUrl('/') );
             }

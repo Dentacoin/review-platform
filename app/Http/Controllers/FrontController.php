@@ -95,6 +95,12 @@ class FrontController extends BaseController
             $this->admin = Auth::guard('admin')->user();
             $this->user = Auth::guard('web')->user();
 
+            if ($this->user && session('intended')) {
+                $intended = session()->pull('intended');
+
+                return redirect($intended);
+            }
+
             if($this->user && session('login-logged')!=$this->user->id){
                 $ul = new UserLogin;
                 $ul->user_id = $this->user->id;
