@@ -1930,7 +1930,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function loggedFromBadIp() {
         $users_with_same_ip = UserLogin::where('ip', 'like', self::getRealIp())->where('user_id', '!=', $this->ip)->groupBy('user_id')->get()->count();
 
-        if ($users_with_same_ip >=3 && !$this->allow_withdraw && !$this->is_dentist ) {
+        if ($users_with_same_ip >=3 && !$this->allow_withdraw && !$this->is_dentist && $this::getRealIp() != '78.130.213.163' ) {
             return true;
         } else {
             return false;
