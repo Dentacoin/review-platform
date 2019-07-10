@@ -67,37 +67,37 @@ class RegisterController extends FrontController
                 ->withErrors($validator);
             } else {
 
-                $captcha = false;
-                $cpost = [
-                    'secret' => env('CAPTCHA_SECRET'),
-                    'response' => Request::input('g-recaptcha-response'),
-                    'remoteip' => User::getRealIp()
-                ];
-                $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
-                curl_setopt($ch, CURLOPT_HEADER, 0);
-                curl_setopt ($ch, CURLOPT_POST, 1);
-                curl_setopt ($ch, CURLOPT_POSTFIELDS, http_build_query($cpost));
-                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);    
-                curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-                $response = curl_exec($ch);
-                curl_close($ch);
-                if($response) {
-                    $api_response = json_decode($response, true);
-                    if(!empty($api_response['success'])) {
-                        $captcha = true;
-                    }
-                }
+                // $captcha = false;
+                // $cpost = [
+                //     'secret' => env('CAPTCHA_SECRET'),
+                //     'response' => Request::input('g-recaptcha-response'),
+                //     'remoteip' => User::getRealIp()
+                // ];
+                // $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
+                // curl_setopt($ch, CURLOPT_HEADER, 0);
+                // curl_setopt ($ch, CURLOPT_POST, 1);
+                // curl_setopt ($ch, CURLOPT_POSTFIELDS, http_build_query($cpost));
+                // curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);    
+                // curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+                // $response = curl_exec($ch);
+                // curl_close($ch);
+                // if($response) {
+                //     $api_response = json_decode($response, true);
+                //     if(!empty($api_response['success'])) {
+                //         $captcha = true;
+                //     }
+                // }
 
-                if( !$captcha ) {
-                    $ret = array(
-                        'success' => false,
-                        'messages' => array(
-                            'captcha' => trans('front.page.registration.captcha')
-                        )
-                    );
+                // if( !$captcha ) {
+                //     $ret = array(
+                //         'success' => false,
+                //         'messages' => array(
+                //             'captcha' => trans('front.page.registration.captcha')
+                //         )
+                //     );
 
-                    return Response::json( $ret );
-                }
+                //     return Response::json( $ret );
+                // }
 
                 $info = User::validateAddress( Country::find(request('country_id'))->name, request('address') );
                 if(empty($info)) {
