@@ -99,7 +99,7 @@ class FrontController extends BaseController
                 $intended = session()->pull('intended');
 
                 if (User::getRealIp() == '78.130.213.163') {
-                    dd('https://'.Request::getHost().'/'.App::getLocale().'/'.request()->path(), trim($intended, '/') );
+                    dd('https://'.Request::getHost().'/'.request()->path(), trim($intended, '/') );
                 }
 
                 if( 'https://'.Request::getHost().'/'.App::getLocale().'/'.request()->path() != trim($intended, '/') ) {
