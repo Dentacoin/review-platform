@@ -102,7 +102,7 @@ class FrontController extends BaseController
                     dd('https://'.Request::getHost().'/'.request()->path(), trim($intended, '/') );
                 }
 
-                if( 'https://'.Request::getHost().'/'.App::getLocale().'/'.request()->path() != trim($intended, '/') ) {
+                if( 'https://'.Request::getHost().'/'.request()->path() != trim($intended, '/') ) {
                     Redirect::to($intended)->send();
                 } else {
                     session([
