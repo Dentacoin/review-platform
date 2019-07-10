@@ -417,6 +417,66 @@ class RegisterController extends FrontController
         }
     }
 
+    public function check_step_four() {
+        $this->current_page = 'register';
+
+        $validator = Validator::make(Request::all(), [
+            'photo' =>  array('required'),
+            'specialization' =>  array('required', 'array'),
+        ]);
+
+        if ($validator->fails()) {
+
+            $msg = $validator->getMessageBag()->toArray();
+            $ret = array(
+                'success' => false,
+                'messages' => array()
+            );
+
+            foreach ($msg as $field => $errors) {
+                $ret['messages'][$field] = implode(', ', $errors);
+            }
+
+            return Response::json( $ret );
+        } else {
+
+            
+            $captcha = false;
+            $cpost = [
+                'secret' => env('CAPTCHA_SECRET'),
+                'response' => Request::input('g-recaptcha-response'),
+                'remoteip' => User::getRealIp()
+            ];
+            $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt ($ch, CURLOPT_POST, 1);
+            curl_setopt ($ch, CURLOPT_POSTFIELDS, http_build_query($cpost));
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);    
+            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+            $response = curl_exec($ch);
+            curl_close($ch);
+            if($response) {
+                $api_response = json_decode($response, true);
+                if(!empty($api_response['success'])) {
+                    $captcha = true;
+                }
+            }
+
+            if( !$captcha ) {
+                $ret = array(
+                    'success' => false,
+                    'messages' => array(
+                        'captcha' => trans('front.page.registration.captcha')
+                    )
+                );
+
+                return Response::json( $ret );
+            }
+
+            return Response::json( ['success' => true] );
+        }
+    }
+
     public function register_success($locale=null) {
         $this->user->checkForWelcomeCompletion();
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='test') {

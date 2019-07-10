@@ -338,14 +338,19 @@ $(document).ready(function(){
                 if(data.success) {
                     $('.ajax-alert').remove();
 
-                    var a = $('.sign-in-step.active');
-                    a.removeClass('active');
-                    a.next().addClass('active');
+                    if (that.attr('step-number') == 4) {
+                    	$('#register-form').submit();
+                    } else {
 
-                    gtag('event', 'ClickNext', {
-						'event_category': 'DentistRegistration',
-						'event_label': 'DentistRegistrationStep'+ that.attr('step-number'),
-					});
+	                    var a = $('.sign-in-step.active');
+	                    a.removeClass('active');
+	                    a.next().addClass('active');
+
+	                    gtag('event', 'ClickNext', {
+							'event_category': 'DentistRegistration',
+							'event_label': 'DentistRegistrationStep'+ that.attr('step-number'),
+						});
+                    }
 
                 } else {
 
@@ -428,55 +433,55 @@ $(document).ready(function(){
         }
     });
 
-	$('#register-form').submit( function(e) {
-		e.preventDefault();
+	// $('#register-form').submit( function(e) {
+	// 	e.preventDefault();
 
-		$('#register-form').find('.error-message').hide();
-		$('#register-form').find('.has-error').removeClass('has-error');
+	// 	$('#register-form').find('.error-message').hide();
+	// 	$('#register-form').find('.has-error').removeClass('has-error');
 
-		if(ajax_is_running) {
-			return;
-		}
-		ajax_is_running = true;
+	// 	if(ajax_is_running) {
+	// 		return;
+	// 	}
+	// 	ajax_is_running = true;
 
-		var that = $(this);
+	// 	var that = $(this);
 
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            (function( data ) {
-                if(data.success) {
+ //        $.post( 
+ //            $(this).attr('action'), 
+ //            $(this).serialize() , 
+ //            (function( data ) {
+ //                if(data.success) {
 
-               		fbq('track', 'DentistCompleteRegistration');
-                    gtag('event', 'ClickNext', {
-                        'event_category': 'DentistRegistration',
-                        'event_label': 'DentistRegistrationComplete',
-                    });
+ //               		fbq('track', 'DentistCompleteRegistration');
+ //                    gtag('event', 'ClickNext', {
+ //                        'event_category': 'DentistRegistration',
+ //                        'event_label': 'DentistRegistrationComplete',
+ //                    });
                     
-               		window.location.href = data.url;
-                } else if (data.popup) {
-                	$('#'+data.popup).addClass('active');
-                } else {
+ //               		window.location.href = data.url;
+ //                } else if (data.popup) {
+ //                	$('#'+data.popup).addClass('active');
+ //                } else {
 
-                	$('.ajax-alert').remove();
-                    $('#step-4 .alert-after').after('<div class="alert alert-warning ajax-alert"></div>');
-                    for(var i in data.messages) {
-                        $('#'+i+'-error').html(data.messages[i]).show();
-						$('input[name="'+i+'"]').closest('.form-group').addClass('has-error');
+ //                	$('.ajax-alert').remove();
+ //                    $('#step-4 .alert-after').after('<div class="alert alert-warning ajax-alert"></div>');
+ //                    for(var i in data.messages) {
+ //                        $('#'+i+'-error').html(data.messages[i]).show();
+	// 					$('input[name="'+i+'"]').closest('.form-group').addClass('has-error');
 
-                        $('#step-4 .ajax-alert').append(data.messages[i] + '<br/>');
-                        $('[name="'+i+'"]').addClass('has-error');
-                    }
+ //                        $('#step-4 .ajax-alert').append(data.messages[i] + '<br/>');
+ //                        $('[name="'+i+'"]').addClass('has-error');
+ //                    }
 
-	                grecaptcha.reset();
-                }
-                ajax_is_running = false;
-            }).bind(that), "json"
-        );			
+	//                 grecaptcha.reset();
+ //                }
+ //                ajax_is_running = false;
+ //            }).bind(that), "json"
+ //        );			
 
-        return false;
+ //        return false;
 
-    } );
+ //    } );
 
     $('#register-form input').on('focus', function(e){
     	console.log($(this).closest('.form-group'));

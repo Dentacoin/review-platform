@@ -308,6 +308,7 @@ $voxRoutes = function () {
 			Route::post('registration/step1', 					'RegisterController@check_step_one');
 			Route::post('registration/step2', 					'RegisterController@check_step_two');
 			Route::post('registration/step3', 					'RegisterController@check_step_three');
+			Route::post('registration/step4', 					'RegisterController@check_step_four');
 			Route::post('registration/upload', 					'RegisterController@upload');
 
 			Route::get('recover-password', 						'RegisterController@forgot');
