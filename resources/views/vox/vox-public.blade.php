@@ -26,7 +26,7 @@
 					</div>
 		      		<div class="slider-inner">
 			    		<div class="slide-padding">
-			      			<a href="{{ $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}'></a>							
+			      			<a href="{{ $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getSocialImageUrl('stats') }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}'></a>							
 							<div class="vox-header clearfix">
 								<div class="survey-cats"> 
 									@foreach( $vox->categories as $c)
@@ -56,7 +56,7 @@
 		</div>
 	</div>
 
-	
+
 	<div class="section-work">
 		<div class="container">
 

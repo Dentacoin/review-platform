@@ -1196,7 +1196,7 @@ p.h2-bold {
       .section-vox-not-login h2 {
         margin-bottom: 30px;
         line-height: normal; } }
-    @media screen and (max-height: 800px) and (min-width: 769px) {
+    @media screen and (max-height: 700px) and (min-width: 769px) {
       .section-vox-not-login h2 {
         margin-bottom: 10px;
         font-size: 28px;
@@ -1212,7 +1212,7 @@ p.h2-bold {
     @media screen and (max-width: 1080px) {
       .section-vox-not-login .vox-title {
         margin-top: 0px; } }
-    @media screen and (max-height: 800px) and (min-width: 769px) {
+    @media screen and (max-height: 700px) and (min-width: 769px) {
       .section-vox-not-login .vox-title {
         margin-top: -30px; } }
     @media screen and (max-width: 768px) {
