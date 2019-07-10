@@ -84,6 +84,8 @@
 			<button type="submit"></button>			
 		</form>
 
+		<input type="hidden" name="intended" value="{{ $_SERVER['HTTP_REFERER'] }}">
+
 		<div class="container">
 			<div class="col-md-3">
 				<img class="image-left" src="{{ url('new-vox-img/register-dentist.png') }}">

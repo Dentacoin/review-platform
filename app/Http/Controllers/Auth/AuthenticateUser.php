@@ -144,7 +144,7 @@ class AuthenticateUser extends FrontController
             
             $intended = session()->pull('our-intended');
 
-            return redirect( $intended ? $intended : getLangUrl('/') );
+            return redirect( $intended ? $intended : ( $request->input('intended') ? $request->input('intended') : getLangUrl('/')) );
         } else {
             return redirect( getLangUrl('login') )
             ->withInput()
