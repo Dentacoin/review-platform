@@ -125,6 +125,8 @@ class LoginController extends FrontController
 
     private function try_social_register($s_user, $network) {
 
+        return redirect( 'https://dentavox.dentacoin.com/test' );
+
         if($s_user->getId()) {
             $user = User::where( 'fb_id','LIKE', $s_user->getId() )->withTrashed()->first();
         }
