@@ -347,7 +347,7 @@ class LoginController extends FrontController
 
                                 $intended = session()->pull('our-intended');
 
-                                return redirect($user->isBanned('vox') ? getVoxUrl('profile') : ($intended ? $intended : getVoxUrl('/')));
+                                return redirect($user->isBanned('vox') ? getVoxUrl('profile') : ($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/'))));
                                 
                                 $sess = [
                                     'login_patient' => true,
