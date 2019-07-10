@@ -339,6 +339,13 @@ $(document).ready(function(){
                     $('.ajax-alert').remove();
 
                     if (that.attr('step-number') == 4) {
+
+                    	fbq('track', 'DVDentistRegistrationInitiate');
+                    	gtag('event', 'ClickNext', {
+		                    'event_category': 'DentistRegistration',
+		                    'event_label': 'DentistRegistrationComplete',
+		                });
+
                     	$('#register-form').submit();
                     } else {
 

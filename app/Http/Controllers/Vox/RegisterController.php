@@ -101,32 +101,18 @@ class RegisterController extends FrontController
 
                 $info = User::validateAddress( Country::find(request('country_id'))->name, request('address') );
                 if(empty($info)) {
-                    $ret = array(
-                        'success' => false,
-                        'messages' => array(
-                            'address' => trans('vox.common.invalid-address')
-                        )
-                    );
+                    Request::session()->flash('error-message', trans('vox.common.invalid-address'));
+                    return redirect( getLangUrl('registration'));
                 }
 
                 if(User::validateLatin(Request::input('name')) == false) {
-                    $ret = array(
-                        'success' => false,
-                        'messages' =>[
-                            'name' => trans('vox.common.invalid-name')
-                        ]
-                    );
-                    return Response::json( $ret );
+                    Request::session()->flash('error-message', trans('vox.common.invalid-name'));
+                    return redirect( getLangUrl('registration'));
                 }
 
                 if(User::validateEmail(Request::input('email')) == true) {
-                    $ret = array(
-                        'success' => false,
-                        'messages' =>[
-                            'email' => trans('vox.common.invalid-email')
-                        ]
-                    );
-                    return Response::json( $ret );
+                    Request::session()->flash('error-message', trans('vox.common.invalid-email'));
+                    return redirect( getLangUrl('registration'));
                 }
 
                 
@@ -206,10 +192,8 @@ class RegisterController extends FrontController
 
 
                 if ($newuser->loggedFromBadIp()) {
-                    return Response::json( [
-                        'success' => false,
-                        'popup' => 'suspended-popup',
-                    ] );
+                    Request::session()->flash('error-message', trans('vox.common.invalid-email'));
+                    return redirect( getVoxUrl('/').'?suspended-popup' );
                 }
 
                 $mtext = 'New Dentavox dentist/clinic registration:
@@ -240,11 +224,7 @@ class RegisterController extends FrontController
                 Auth::login($newuser, Request::input('remember'));
 
                 Request::session()->flash('success-message', trans('front.page.registration.success-dentist'));
-                return redirect('/');
-                return Response::json( [
-                    'success' => true,
-                    'url' => getLangUrl('welcome-to-dentavox'),
-                ] );
+                return redirect(getVoxUrl('welcome-to-dentavox'));
 
             }
         } else {
