@@ -273,10 +273,11 @@ class LoginController extends FrontController
                 // if($newuser->loggedFromBadIp()) {
                 //     return redirect( getVoxUrl('/').'?suspended-popup' );
                 // }
+                $intended = session()->pull('intended');
 
                 Auth::login($newuser, true);
                 Request::session()->flash('success-message', trans('vox.page.registration.success'));
-                return redirect(getVoxUrl('welcome-to-dentavox').'?success-message='.urlencode(trans('vox.page.registration.success')));
+                return redirect($intended ? $intended : getVoxUrl('/').'?success-message='.urlencode(trans('vox.page.registration.success')));
             } else {
                 return redirect( getVoxUrl('/') );
             }
