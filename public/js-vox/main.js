@@ -354,20 +354,34 @@ $(document).ready(function(){
 
                 } else {
 
-                    $('.ajax-alert').remove();
-                    for(var i in data.messages) {
-                        $('[name="'+i+'"]').addClass('has-error');
-                        $('[name="'+i+'"]').closest('.form-group').addClass('has-error');
-                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
+                	$('.ajax-alert').remove();
 
-                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
-                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
-                        }
+                	if (that.attr('step-number') == 4) {
+	                    $('#step-4 .alert-after').after('<div class="alert alert-warning ajax-alert"></div>');
+	                    for(var i in data.messages) {
+	                        $('#'+i+'-error').html(data.messages[i]).show();
+							$('input[name="'+i+'"]').closest('.form-group').addClass('has-error');
 
-                        if ($('[name="'+i+'"]').closest('.agree-label').length) {
-                            $('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
-                        }                        
-                    }
+	                        $('#step-4 .ajax-alert').append(data.messages[i] + '<br/>');
+	                        $('[name="'+i+'"]').addClass('has-error');
+	                    }
+
+                	} else {
+
+	                    for(var i in data.messages) {
+	                        $('[name="'+i+'"]').addClass('has-error');
+	                        $('[name="'+i+'"]').closest('.form-group').addClass('has-error');
+	                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
+
+	                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
+	                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+	                        }
+
+	                        if ($('[name="'+i+'"]').closest('.agree-label').length) {
+	                            $('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
+	                        }                        
+	                    }
+                	}
                     grecaptcha.reset();
                 }
                 ajax_is_running = false;
