@@ -725,7 +725,7 @@ class VoxController extends FrontController
 						        $reward->user_id = $this->user->id;
 						        $reward->reference_id = $vox->id;
 						        $reward->platform = 'vox';
-						        $reward->reward = $vox->featured ? ($vox->getRewardForUser($this->user->id) * 2) : $vox->getRewardForUser($this->user->id);
+						        $reward->reward = $vox->getRewardForUser($this->user->id);
 						        $start = $list->first()->created_at;
 						        $diff = Carbon::now()->diffInSeconds( $start );
 						        $normal = count($vox->questions)*2;

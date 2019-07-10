@@ -119,7 +119,12 @@ class Vox extends Model {
     }
 
     public function getRewardPerQuestion() {
-        return Reward::where('reward_type', 'vox_question')->first();
+        $reward = Reward::where('reward_type', 'vox_question')->first();
+        if ($this->featured) {
+            $reward->dcn *= 2;
+            $reward->amount *= 2;
+        }
+        return $reward;
     }
 
     public function getRewardTotal($inusd = false) {
@@ -139,7 +144,7 @@ class Vox extends Model {
             $how_many_questions = VoxAnswer::where('vox_id', $this->id)->where('user_id', $user_id)->where('answer', '!=' , 0)->groupBy('question_id')->get()->count();
             $reward_per_question = Reward::where('reward_type', 'vox_question')->first()->dcn;
 
-            return $how_many_questions * $reward_per_question;
+            return $this->featured ? ($how_many_questions * $reward_per_question) * 2 : $how_many_questions * $reward_per_question;
         }        
     }
 
