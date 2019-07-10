@@ -98,10 +98,6 @@ class FrontController extends BaseController
             if ($this->user && session('intended') ) {
                 $intended = session()->pull('intended');
 
-                if (User::getRealIp() == '78.130.213.163') {
-                    dd('https://'.Request::getHost().'/'.App::getLocale().'/'.request()->path(), trim($intended, '/') );
-                }
-
                 if( 'https://'.Request::getHost().'/'.App::getLocale().'/'.request()->path() != trim($intended, '/') ) {
                     Redirect::to($intended)->send();
                 } else {
