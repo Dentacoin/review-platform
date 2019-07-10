@@ -95,10 +95,15 @@ class FrontController extends BaseController
             $this->admin = Auth::guard('admin')->user();
             $this->user = Auth::guard('web')->user();
 
-            if ($this->user && session('intended')) {
+            if ($this->user && session('intended') ) {
                 $intended = session()->pull('intended');
-
-                Redirect::to($intended)->send();
+                if( 'https://'.Request::getHost().App::getLocale().'/'.request()->path() != $intended ) {
+                    Redirect::to($intended)->send();
+                } else {
+                    session([
+                        'intended' => null
+                    ]);
+                }
             }
 
             if($this->user && session('login-logged')!=$this->user->id){
@@ -122,7 +127,7 @@ class FrontController extends BaseController
                 }
 
                 
-                if (!(User::getRealIp() == '213.91.254.194' || !empty($this->admin))) {
+                if (!(User::getRealIp() == '213.91.254.194' || User::getRealIp() == '78.130.213.163' || !empty($this->admin))) {
                     $ul->save();
                 }
 
