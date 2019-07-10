@@ -84,8 +84,6 @@
 			<button type="submit"></button>			
 		</form>
 
-		<input type="hidden" name="intended" value="{{ $_SERVER['HTTP_REFERER'] }}">
-
 		<div class="container">
 			<div class="col-md-3">
 				<img class="image-left" src="{{ url('new-vox-img/register-dentist.png') }}">
@@ -101,6 +99,8 @@
 
 				<form action="{{ getVoxUrl('login') }}" method="post" class="form-horizontal">
 					{!! csrf_field() !!}
+					
+					<input type="hidden" name="intended" value="{{ $_SERVER['HTTP_REFERER'] }}">
 
 					<div class="user-type-mobile">
 						<a href="javascript:;" type="reg-patients">
