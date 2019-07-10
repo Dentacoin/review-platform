@@ -96,7 +96,7 @@ class VoxController extends FrontController
 	        ]);
 
 	        session([
-	            'intended' => 'paid-dental-surveys/'.$vox->slug,
+	            'intended' => $vox->getLink(),
 	        ]);
 
 			return $this->ShowVoxView('vox-public', array(
