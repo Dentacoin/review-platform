@@ -19,7 +19,7 @@
 			<button type="submit"></button>			
 		</form>
 
-		<form action="{{ getLangUrl('registration') }}" id="register-form" method="post" role="form" data-toggle="validator" class="form-horizontal">
+		<form action="{{ getVoxUrl('registration') }}" id="register-form" method="post" role="form" data-toggle="validator" class="form-horizontal">
 			{!! csrf_field() !!}
 
 
