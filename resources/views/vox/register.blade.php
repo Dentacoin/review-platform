@@ -113,21 +113,21 @@
 							<div class="sign-in-step active" id="step-1">
 
 								<div class="modern-field alert-after {{ $errors->has('email') ? 'has-error' : '' }}">
-									<input type="email" name="email" id="email" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+									<input type="email" name="email" id="email" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');" value="{{ old('email') }}">
 									<label for="email">
 										<span>{!! trans('vox.page.register.email') !!}</span>
 									</label>
 								</div>
 
 								<div class="modern-field alert-after {{ $errors->has('password') ? 'has-error' : '' }}">
-									<input type="password" name="password" id="password" class="modern-input" autocomplete="off">
+									<input type="password" name="password" id="password" class="modern-input" autocomplete="off" value="{{ old('password') }}">
 									<label for="password">
 										<span>{!! trans('vox.page.register.password') !!}</span>
 									</label>
 								</div>
 
 								<div class="modern-field alert-after {{ $errors->has('password-repeat') ? 'has-error' : '' }}">
-									<input type="password" name="password-repeat" id="password-repeat" class="modern-input" autocomplete="off">
+									<input type="password" name="password-repeat" id="password-repeat" class="modern-input" autocomplete="off" value="{{ old('password-repeat') }}">
 									<label for="password-repeat">
 										<span>{!! trans('vox.page.register.password-repeat') !!}</span>
 									</label>

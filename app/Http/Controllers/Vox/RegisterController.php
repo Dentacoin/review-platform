@@ -62,11 +62,9 @@ class RegisterController extends FrontController
                     'messages' => array()
                 );
 
-                foreach ($msg as $field => $errors) {
-                    $ret['messages'][$field] = implode(', ', $errors);
-                }
-
-                return Response::json( $ret );
+                return redirect(getLangUrl('registration'))
+                ->withInput()
+                ->withErrors($validator);
             } else {
 
                 $captcha = false;
@@ -242,6 +240,7 @@ class RegisterController extends FrontController
                 Auth::login($newuser, Request::input('remember'));
 
                 Request::session()->flash('success-message', trans('front.page.registration.success-dentist'));
+                return redirect('/');
                 return Response::json( [
                     'success' => true,
                     'url' => getLangUrl('welcome-to-dentavox'),
