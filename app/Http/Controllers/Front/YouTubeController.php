@@ -29,7 +29,6 @@ use Carbon\Carbon;
 class YouTubeController extends FrontController
 {
     public function test() {
-		dd(session('vox-intended'));
 
     	
     	//First 3 weeks engagement		
