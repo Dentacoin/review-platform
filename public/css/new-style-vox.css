@@ -1048,7 +1048,8 @@ p.h2-bold {
     top: -24px;
     width: 50px;
     transform: rotate(-8deg);
-    transform-origin: center; }
+    transform-origin: center;
+    z-index: 100; }
     @media screen and (max-width: 768px) {
       .section-recent-surveys .swiper-slide .featured-img {
         width: 30px;
@@ -5858,7 +5859,8 @@ p.h2-bold {
   .page-profile.sp-vox .section-recent-surveys .swiper-slide .featured-img {
     right: -18px;
     top: -16px;
-    width: 30px; }
+    width: 30px;
+    z-index: 100; }
   .page-profile.sp-vox .section-recent-surveys .swiper-slide .slider-inner {
     padding: 0px 10px; }
     .page-profile.sp-vox .section-recent-surveys .swiper-slide .slider-inner .slide-padding {

@@ -1441,6 +1441,7 @@ p.h2-bold {
 		    width: 50px;
 		    transform: rotate(-8deg);
     		transform-origin: center;
+    		z-index: 100;
 			
 			@media #{$phone} {
 			    width: 30px;
@@ -8277,6 +8278,7 @@ body.vox-public {
 				right: -18px;
 			    top: -16px;
 			    width: 30px;
+			    z-index: 100;
 			}
 
 			.slider-inner {
