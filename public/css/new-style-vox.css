@@ -6635,6 +6635,7 @@ body.sp-vox-iframe .above-fold {
   padding: 12px 20px;
   border-radius: 10px;
   display: inline-block;
+  cursor: auto;
   transition: all 0.3s ease; }
   .gray-button.secondary {
     background-color: transparent;
