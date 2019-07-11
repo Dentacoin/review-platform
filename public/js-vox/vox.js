@@ -494,6 +494,7 @@ $(document).ready(function(){
         .fail(function(response) {
             console.log('ERROR');
             console.log(response);
+            window.location.reload();
         });;
     }
 
