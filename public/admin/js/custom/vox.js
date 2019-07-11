@@ -279,7 +279,7 @@ $(document).ready(function(){
 		controlQuestion();
 	});
 
-	$('.question-number, .question-question').on('keypress', function(e) {
+	$('.question-number').on('keypress', function(e) {
 	    var code = e.keyCode || e.which;
 	    if (code == 13) {
 	        $(this).blur();
