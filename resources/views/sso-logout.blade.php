@@ -4,3 +4,4 @@
 		<img src="//{{ $platform['url'] }}/custom-cookie?logout-token={{ urlencode($token) }}" class="hide"/>
 	@endif
 @endforeach
+<img src="//{{ vox.dentacoin.com }}/custom-cookie?logout-token={{ urlencode($token) }}" class="hide"/>
