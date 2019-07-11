@@ -2616,8 +2616,12 @@ body.vox-public {
 				}
 
 				.tooltip-text {
-				    font-size: 16px;
+				    font-size: 18px;
 					color: #41afff;
+
+					@media #{$phone} {
+						font-size: 16px;
+					}
 				}
 			}
 
@@ -2896,6 +2900,11 @@ body.vox-public {
 							font-weight: bold;
 							text-align: right;
 							display: inline-block;
+
+							.tooltip-text {
+								font-size: 18px;
+								color: #41afff;
+							}
 						}
 					}
 
@@ -2938,11 +2947,7 @@ body.vox-public {
 
 	.question-group.scale {
 		.answers {
-			width: 70%;
-
-	    	@media screen and (max-width: 992px) {
-				width: 100%;
-			}
+			width: 100%;
 		}		
 	}
 

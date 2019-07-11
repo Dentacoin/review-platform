@@ -1892,8 +1892,14 @@ p.h2-bold {
       .questions .question-group .answers .answer-radio .tooltip-text,
       .questions .question-group .answers .answer-checkbox .tooltip-text,
       .questions .question-group .answers .answer .tooltip-text {
-        font-size: 16px;
+        font-size: 18px;
         color: #41afff; }
+        @media screen and (max-width: 768px) {
+          .questions .question-group .answers select .tooltip-text,
+          .questions .question-group .answers .answer-radio .tooltip-text,
+          .questions .question-group .answers .answer-checkbox .tooltip-text,
+          .questions .question-group .answers .answer .tooltip-text {
+            font-size: 16px; } }
     @media screen and (min-width: 769px) {
       .questions .question-group .answers .answer-radio.active-label, .questions .question-group .answers .answer-radio:hover,
       .questions .question-group .answers .answer-checkbox.active-label,
@@ -2094,6 +2100,9 @@ p.h2-bold {
             font-weight: bold;
             text-align: right;
             display: inline-block; }
+            .questions .question-group .answers .answers-inner .answer-radios-group .answer-question h3 .tooltip-text {
+              font-size: 18px;
+              color: #41afff; }
         .questions .question-group .answers .answers-inner .answer-radios-group .answer-inner {
           float: left; }
           .questions .question-group .answers .answers-inner .answer-radios-group .answer-inner .answer-radio:hover, .questions .question-group .answers .answers-inner .answer-radios-group .answer-inner .answer-radio.active-label {
@@ -2112,10 +2121,7 @@ p.h2-bold {
               width: auto;
               flex: none; } }
 .questions .question-group.scale .answers {
-  width: 70%; }
-  @media screen and (max-width: 992px) {
-    .questions .question-group.scale .answers {
-      width: 100%; } }
+  width: 100%; }
 .questions .next-answer {
   display: block;
   width: 200px;

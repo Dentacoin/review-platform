@@ -80,7 +80,8 @@
 					@foreach(json_decode($question->answers, true) as $k => $answer)
 						<div class="answer-radios-group clearfix">
 							<div class="answer-question">
-								<h3 class="{{ !empty(json_decode($question->answers_tooltips, true)[$k]) ? 'tooltip-text' : '' }}" {!! !empty(json_decode($question->answers_tooltips, true)[$k]) ? 'text="'.json_decode($question->answers_tooltips, true)[$k].'"' : '' !!}>{{ $answer }}</h3>
+								<h3 class="{{ !empty(json_decode($question->answers_tooltips, true)[$k]) ? 'tooltip-text' : '' }}" {!! !empty(json_decode($question->answers_tooltips, true)[$k]) ? 'text="'.json_decode($question->answers_tooltips, true)[$k].'"' : '' !!}>{!!  nl2br( App\Models\VoxQuestion::handleAnswerTooltip($answer)) !!}
+								</h3>
 							</div>
 							<div class="buttons-list clearfix"> 
 								@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $ans)
