@@ -2,6 +2,21 @@ var handleSorts;
 
 $(document).ready(function(){
 
+	var setupPagination = function() {
+		$('#survey-more').hide();
+		var total = $('.swiper-slide:visible').length;
+		if(total>6) {
+			var i=0;
+			$('.swiper-slide:visible').each( function() {
+				i++;
+				if(i>6) {
+					$(this).hide();
+				}
+			} );
+			$('#survey-more').show();
+		}
+	}
+
 	handleSorts = function() {
 		// if(!$('.sort-menu a.active').length) {
 		// 	return;
@@ -38,45 +53,47 @@ $(document).ready(function(){
 		var wrapper = $('.questions-inner');
 		var list = wrapper.children();
 
+		var order_multiplier = sort=='newest' ? (sort_element.hasClass('order-asc') ? -1 : 1) : (sort_element.hasClass('order-asc') ? 1 : -1);
+
 		if(sort=='newest') {
 			list.sort(function(a, b) {
-				if( parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ) {
-					return -1;
-				} else {
-					return 1;
-				}
+				if( parseInt($(a).attr('featured')) > parseInt($(b).attr('featured')) ) {
+                    return -1;
+                } else if( parseInt($(a).attr('featured')) < parseInt($(b).attr('featured')) ) {
+                    return 1;
+                } else {
+                    return (parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ? -1 : 1) * order_multiplier;
+                }
 			});
 		} else if(sort=='popular') {
 			list.sort(function(a, b) {
-				if( parseInt($(a).attr('popular')) > parseInt($(b).attr('popular')) ) {
-					return -1;
-				} else {
-					return 1;
-				}
+				if( parseInt($(a).attr('featured')) > parseInt($(b).attr('featured')) ) {
+                    return -1;
+                } else if( parseInt($(a).attr('featured')) < parseInt($(b).attr('featured')) ) {
+                    return 1;
+                } else {
+                    return (parseInt($(a).attr('popular')) < parseInt($(b).attr('popular')) ? -1 : 1) * order_multiplier;
+                }
 			});
 		} else if(sort=='reward') {
 			list.sort(function(a, b) {
-				if( parseInt($(a).attr('dcn')) > parseInt($(b).attr('dcn')) ) {
-					return -1;
-				} else {
-					return 1;
-				}
-			});
-		} else if(sort=='time') {
-			list.sort(function(a, b) {
-				if( parseInt($(a).attr('time')) > parseInt($(b).attr('time')) ) {
-					return -1;
-				} else {
-					return 1;
-				}
+				if( parseInt($(a).attr('featured')) > parseInt($(b).attr('featured')) ) {
+                    return -1;
+                } else if( parseInt($(a).attr('featured')) < parseInt($(b).attr('featured')) ) {
+                    return 1;
+                } else {
+                    return (parseInt($(a).attr('dcn')) < parseInt($(b).attr('dcn')) ? -1 : 1) * order_multiplier;
+                }
 			});
 		} else if(sort=='duration') {
 			list.sort(function(a, b) {
-				if( parseInt($(a).attr('duration')) > parseInt($(b).attr('duration')) ) {
-					return -1;
-				} else {
-					return 1;
-				}
+				if( parseInt($(a).attr('featured')) > parseInt($(b).attr('featured')) ) {
+                    return -1;
+                } else if( parseInt($(a).attr('featured')) < parseInt($(b).attr('featured')) ) {
+                    return 1;
+                } else {
+                    return (parseInt($(a).attr('duration')) < parseInt($(b).attr('duration')) ? -1 : 1) * order_multiplier;
+                }
 			});
 		}
 
@@ -86,16 +103,9 @@ $(document).ready(function(){
 		// 	}
 		// });
 
-		if (sort_element.hasClass('order-asc')) {
-			list.each(function() {
-			    wrapper.prepend(this);
-			});
-
-		} else {
-			list.each(function() {
-			    wrapper.append(this);
-			});
-		}
+		list.each(function() {
+		    wrapper.append(this);
+		});
 
 		if ( !$('.swiper-slide:visible').length ) {
 			$('#survey-not-found').show();
@@ -105,21 +115,7 @@ $(document).ready(function(){
 		}
 		
 	}
-
-	var setupPagination = function() {
-		$('#survey-more').hide();
-		var total = $('.swiper-slide:visible').length;
-		if(total>6) {
-			var i=0;
-			$('.swiper-slide:visible').each( function() {
-				i++;
-				if(i>6) {
-					$(this).hide();
-				}
-			} );
-			$('#survey-more').show();
-		}
-	}
+	handleSorts();
 
 	var surveyTitleHeight = function() {
 		if(window.innerWidth >= 1200) {
@@ -152,6 +148,7 @@ $(document).ready(function(){
 		$(this).addClass('active');
 
 		handleSorts();
+		surveyTitleHeight();
 	});
 
 	if (window.location.hash.length) {

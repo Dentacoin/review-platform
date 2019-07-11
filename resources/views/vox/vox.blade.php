@@ -83,7 +83,7 @@
 							{!! trans('vox.page.questionnaire.wrong-answer') !!}
 						</div>
 					</div>
-					<div class="col-md-12 clearfix">
+					<div class="col-md-8 col-md-offset-2 clearfix">
 
 						@if(!$not_bot)
 							<div class="question-group" data-id="bot" id="bot-group">

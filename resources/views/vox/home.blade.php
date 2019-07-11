@@ -89,7 +89,6 @@
 			      			dcn="{{ intval($vox->getRewardTotal()) }}" 
 			      			duration="{{ ceil( $vox->questions()->count()/6 ) }}" 
 			      			taken="{{ intval(!in_array($vox->id, $taken) ? 0 : 1) }}"
-			      			time="{{ $vox->formatDurationNumber() }}"
 			      			>
 				      		<div class="slider-inner">
 					    		<div class="slide-padding">

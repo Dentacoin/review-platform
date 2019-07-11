@@ -43,7 +43,7 @@ class IndexController extends FrontController
 				//'all' => trans('vox.page.home.sort-all'),
 				'popular' => trans('vox.page.home.sort-popular'),
 				'reward' => trans('vox.page.home.sort-reward'),
-				'time' => trans('vox.page.home.sort-time'),
+				'duration' => trans('vox.page.home.sort-time'),
 				//'taken' => trans('vox.page.home.sort-taken'),
 			];
 
