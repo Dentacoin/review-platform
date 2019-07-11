@@ -79,13 +79,13 @@
 			      			>
 				      		<div class="slider-inner">
 					    		<div class="slide-padding">
-					      			<a href="{{ $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}'>
+					      			<a href="{{ in_array($vox->id, $taken) ? 'javascript:;' : $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}'>
 					      				@if($vox->featured)
 					      					<img class="featured-img doublecoin" src="{{ url('new-vox-img/flipping-coin.gif') }}">
 					      				@endif
-					      				@if(in_array($vox->id, $taken))
+					      				<!-- @if(in_array($vox->id, $taken))
 					      					<img class="done-img" src="{{ url('new-vox-img/vox-done.png') }}">
-					      				@endif
+					      				@endif -->
 					      			</a>							
 									<div class="vox-header clearfix">
 										<div class="flex first-flex">
@@ -115,14 +115,22 @@
 															</a>
 														@endif
 														@if(!in_array($vox->id, $taken))
-															<a class="opinion blue-button secondary" href="{{ $vox->getLink() }}">
+															<a class="opinion blue-button {!! $vox->has_stats ? 'secondary' : '' !!}" href="{{ $vox->getLink() }}">
 																{{ trans('vox.common.take-the-test') }}
+															</a>
+														@else
+															<a class="gray-button secondary" href="javascript:;">
+																<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
 															</a>
 														@endif
 													@else
 														@if(!in_array($vox->id, $taken))
 															<a class="opinion blue-button" href="{{ $vox->getLink() }}">
 																{{ trans('vox.common.take-the-test') }}
+															</a>
+														@else
+															<a class="gray-button" href="javascript:;">
+																<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
 															</a>
 														@endif
 														@if($vox->has_stats)

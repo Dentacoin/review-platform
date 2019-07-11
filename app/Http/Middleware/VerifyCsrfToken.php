@@ -38,6 +38,6 @@ class VerifyCsrfToken extends BaseVerifier
         '*/login/civic',
         '*/login',
         '*/registration',
-        '*/paid-dental-surveys/*',
+        //'*/paid-dental-surveys/*',
     ];
 }

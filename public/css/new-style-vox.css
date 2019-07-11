@@ -6589,3 +6589,31 @@ body.sp-vox-iframe .above-fold {
     border-style: solid;
     border-width: 7.5px 5px 0 5px;
     border-color: #9c9c9c transparent transparent transparent; }
+
+.gray-button {
+  min-width: 120px;
+  border: 2px solid #888888;
+  background-color: #888888;
+  color: #d4ebfb;
+  font-size: 16px;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  border-radius: 10px;
+  display: inline-block;
+  transition: all 0.3s ease; }
+  .gray-button.secondary {
+    background-color: transparent;
+    color: #888888; }
+    .gray-button.secondary:focus, .gray-button.secondary:hover {
+      color: #888888; }
+    .gray-button.secondary i {
+      color: #888888; }
+  .gray-button:focus, .gray-button:hover {
+    color: #d4ebfb; }
+  .gray-button i {
+    color: #d4ebfb;
+    margin-right: 5px;
+    margin-left: -5px; }
+    @media screen and (max-width: 768px) {
+      .gray-button i:before {
+        font-size: 9px; } }

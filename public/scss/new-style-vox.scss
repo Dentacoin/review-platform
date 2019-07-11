@@ -9348,3 +9348,47 @@ body.sp-vox-iframe {
 		border-color: #9c9c9c transparent transparent transparent;
     }
 }
+
+.gray-button {
+	min-width: 120px;
+	border: 2px solid #888888;
+    background-color: #888888;
+    color: #d4ebfb;;
+    font-size: 16px;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    border-radius: 10px;
+    display: inline-block;
+    transition: all 0.3s ease;
+
+    &.secondary {
+    	background-color: transparent;
+    	color: #888888;
+
+    	&:focus,
+    	&:hover {
+    		color: #888888;
+    	}
+
+    	i {
+    		color: #888888;
+    	}
+    }
+
+    &:focus,
+    &:hover {
+    	color: #d4ebfb;
+    }
+
+    i {
+		color: #d4ebfb;
+		margin-right: 5px;
+		margin-left: -5px;
+
+		&:before {
+			@media #{$phone} {
+				font-size: 9px;
+			}
+		}
+    }
+}
