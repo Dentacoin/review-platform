@@ -17,7 +17,33 @@ use Response;
 
 class IndexController extends FrontController
 {
+	public function survey_list($locale=null) {
+		$sorts = [
+			// 'featured' => trans('vox.page.home.sort-featured'),
+			'newest' => trans('vox.page.home.sort-newest'),
+			'popular' => trans('vox.page.home.sort-popular'),
+			'reward' => trans('vox.page.home.sort-reward'),
+			'duration' => trans('vox.page.home.sort-time'),
+		];
 
+        $filters = [
+			'untaken' => trans('vox.page.home.sort-untaken'),
+			'taken' => trans('vox.page.home.sort-taken'),
+			'all' => trans('vox.page.home.sort-all'),
+		];
+
+		return $this->ShowVoxView('home', array(
+			'sorts' => $sorts,
+			'filters' => $filters,
+			'taken' => !empty($this->user) ? $this->user->filledVoxes() : null,
+        	'voxes' => Vox::where('type', 'normal')->orderBy('created_at', 'DESC')->get(),
+        	'vox_categories' => VoxCategory::whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
+        	'js' => [
+        		'home.js'
+        	]
+		));
+	}
+	
 	public function home($locale=null) {
 
 		$first = Vox::where('type', 'home')->first();
@@ -35,46 +61,7 @@ class IndexController extends FrontController
 	            return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
 	        }
 
-	        $sorts = [
-				// 'featured' => trans('vox.page.home.sort-featured'),
-				//'untaken' => trans('vox.page.home.sort-untaken'),
-				// 'category' => trans('vox.page.home.sort-category'),
-				'newest' => trans('vox.page.home.sort-newest'),
-				//'all' => trans('vox.page.home.sort-all'),
-				'popular' => trans('vox.page.home.sort-popular'),
-				'reward' => trans('vox.page.home.sort-reward'),
-				'duration' => trans('vox.page.home.sort-time'),
-				//'taken' => trans('vox.page.home.sort-taken'),
-			];
-
-	        $filters = [
-				'untaken' => trans('vox.page.home.sort-untaken'),
-				'taken' => trans('vox.page.home.sort-taken'),
-				'all' => trans('vox.page.home.sort-all'),
-			];
-
-	        // $featured_voxes_ids = Vox::where('type', 'normal')->where('featured', '1')->orderBy('created_at', 'DESC')->get()->pluck('id')->toArray();
-	        // $not_taken_featured = array_diff($featured_voxes_ids, $this->user->filledFeaturedVoxes());
-
-	        // // dd($not_taken_featured );
-
-	        // if (empty($not_taken_featured)) {
-	        // 	unset($sorts['featured']);
-	        // } else {
-	        // 	unset($sorts['untaken']);
-	        // }
-
-			return $this->ShowVoxView('home', array(
-				'sorts' => $sorts,
-				'filters' => $filters,
-				'taken' => $this->user->filledVoxes(),
-	        	'voxes' => Vox::where('type', 'normal')->orderBy('created_at', 'DESC')->get(),
-	        	'vox_categories' => VoxCategory::whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
-	        	'js' => [
-	        		'home.js'
-	        	]
-			));
-
+	        return $this->survey_list($locale);
 		} else {
 
 			if (Request::input('h1')) {
@@ -99,6 +86,18 @@ class IndexController extends FrontController
 	        		'index.js'
 	        	]
 	        ));			
+		}
+	}
+	
+	public function surveys_public($locale=null) {
+
+		if(!empty($this->user)) {	
+
+	       	return redirect(getLangUrl('/'));
+	        
+		} else {
+
+			return $this->survey_list($locale);
 		}
 	}
 

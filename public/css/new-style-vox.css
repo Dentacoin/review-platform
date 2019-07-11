@@ -1005,7 +1005,7 @@ p.h2-bold {
     .section-recent-surveys h2 {
       margin-bottom: 10px; } }
 .section-recent-surveys .swiper-container {
-  padding-top: 80px;
+  padding-top: 20px;
   width: 100%;
   padding-bottom: 80px; }
   @media screen and (max-width: 768px) {
@@ -6653,3 +6653,13 @@ body.sp-vox-iframe .above-fold {
     @media screen and (max-width: 768px) {
       .gray-button i:before {
         font-size: 9px; } }
+
+.all-surveys-container {
+  margin-top: 40px; }
+  @media screen and (max-width: 768px) {
+    .all-surveys-container {
+      margin-top: 0px; } }
+  @media screen and (max-width: 768px) {
+    .all-surveys-container .blue-button {
+      padding: 7px 25px;
+      font-size: 13px; } }

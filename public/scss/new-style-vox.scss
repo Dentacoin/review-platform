@@ -1382,7 +1382,7 @@ p.h2-bold {
 	}
 
 	.swiper-container {
-		padding-top: 80px;
+		padding-top: 20px;
 		width: 100%;
 		padding-bottom: 80px;
 
@@ -9439,4 +9439,19 @@ body.sp-vox-iframe {
 			}
 		}
     }
+}
+
+.all-surveys-container {
+	margin-top: 40px;
+
+	@media #{$phone} {
+		margin-top: 0px;
+	}
+
+	.blue-button {
+		@media #{$phone} {
+		    padding: 7px 25px;
+		    font-size: 13px;
+		}
+	}
 }

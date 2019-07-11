@@ -332,6 +332,7 @@ $voxRoutes = function () {
 			Route::any('dental-survey-stats/{id}', 				'StatsController@stats');
 
 			Route::any('questionnaire/{id}', 					'VoxController@home');
+			Route::any('paid-dental-surveys', 					'IndexController@surveys_public');
 			Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');
 			Route::any('get-started/{id}', 						'VoxController@home_slug');
 

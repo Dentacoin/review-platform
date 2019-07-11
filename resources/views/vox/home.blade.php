@@ -17,7 +17,7 @@
 				{{ trans('vox.page.home.title') }}
 			</h1>
 
-			@if($voxes->count() == count($taken))
+			@if(!empty($user) && $voxes->count() == count($taken))
 				<div class="alert alert-info alert-done-all-surveys">
 					@if($user->is_dentist)
 						{!! nl2br(trans('vox.page.home.dentist.alert-done-all-surveys', [
@@ -63,19 +63,22 @@
 							{{ Form::select('category', ['all' => 'All'] + $vox_categories, null , ['id' => 'surveys-categories']) }} 
 						</div>
 					</div>
-					<div class="questions-menu clearfix">
-						<div class="filter-menu tal"> 
-							@foreach($filters as $k => $v)
-								@if($k == 'taken' && empty($taken))
 
-								@else
-									<a href="javascript:;" filter="{{ $k }}"  class="{!! $k == 'untaken' ? 'active' : '' !!}">
-										{{ $v }}
-									</a>
-								@endif
-							@endforeach
+					@if(!empty($user))
+						<div class="questions-menu clearfix">
+							<div class="filter-menu tal"> 
+								@foreach($filters as $k => $v)
+									@if($k == 'taken' && empty($taken))
+
+									@else
+										<a href="javascript:;" filter="{{ $k }}"  class="{!! $k == 'untaken' ? 'active' : '' !!}">
+											{{ $v }}
+										</a>
+									@endif
+								@endforeach
+							</div>
 						</div>
-					</div>
+					@endif
 				</div>
 			@endif
 			<div class="section-recent-surveys" id="questions-wrapper">
@@ -121,29 +124,29 @@
 											</div>
 											<div class="col right">
 												<div class="btns">
-													@if($user->is_dentist)
+													@if($user && $user->is_dentist)
 														@if($vox->has_stats)
 															<a class="statistics blue-button" href="{{ $vox->getStatsList() }}">
 																{{ trans('vox.common.check-statictics') }}
 															</a>
 														@endif
-														@if(!in_array($vox->id, $taken))
-															<a class="opinion blue-button {!! $vox->has_stats ? 'secondary' : '' !!}" href="{{ $vox->getLink() }}">
-																{{ trans('vox.common.take-the-test') }}
-															</a>
-														@else
+														@if(in_array($vox->id, $taken))
 															<a class="gray-button secondary" href="javascript:;">
 																<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
 															</a>
-														@endif
-													@else
-														@if(!in_array($vox->id, $taken))
-															<a class="opinion blue-button" href="{{ $vox->getLink() }}">
+														@else
+															<a class="opinion blue-button {!! $vox->has_stats ? 'secondary' : '' !!}" href="{{ $vox->getLink() }}">
 																{{ trans('vox.common.take-the-test') }}
 															</a>
-														@else
+														@endif
+													@else
+														@if(in_array($vox->id, $taken))
 															<a class="gray-button" href="javascript:;">
 																<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
+															</a>
+														@else
+															<a class="opinion blue-button" href="{{ $vox->getLink() }}">
+																{{ trans('vox.common.take-the-test') }}
 															</a>
 														@endif
 														@if($vox->has_stats)

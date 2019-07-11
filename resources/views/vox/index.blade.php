@@ -231,6 +231,12 @@
 		</div>
 	</div>
 
+	<div class="all-surveys-container container tac">
+		<a class="opinion blue-button" href="{{ getLangUrl('paid-dental-surveys') }}">
+			{{ trans('vox.page.index.see-all-surveys') }}
+		</a>
+	</div>
+
 	<div class="section-stats">
 		<div class="container">
 			<img src="{{ url('new-vox-img/stats-front.png') }}">

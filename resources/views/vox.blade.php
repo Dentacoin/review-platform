@@ -405,7 +405,7 @@
 		<div class="tooltip-window" style="display: none;"></div>
 
 		<div class="doublecoin-tooltip" style="display: none;">
-			Only now for a limited time you have the chance to earn <b>double rewards</b> if you fill this survey
+			{!! nl2br( trans('vox.common.featured-tooltip') ) !!}
 			<span></span>
 		</div>
 
