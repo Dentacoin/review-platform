@@ -40,10 +40,17 @@ class IndexController extends FrontController
 				//'untaken' => trans('vox.page.home.sort-untaken'),
 				// 'category' => trans('vox.page.home.sort-category'),
 				'newest' => trans('vox.page.home.sort-newest'),
-				'all' => trans('vox.page.home.sort-all'),
+				//'all' => trans('vox.page.home.sort-all'),
 				'popular' => trans('vox.page.home.sort-popular'),
 				'reward' => trans('vox.page.home.sort-reward'),
+				'time' => trans('vox.page.home.sort-time'),
+				//'taken' => trans('vox.page.home.sort-taken'),
+			];
+
+	        $filters = [
+				'untaken' => trans('vox.page.home.sort-untaken'),
 				'taken' => trans('vox.page.home.sort-taken'),
+				'all' => trans('vox.page.home.sort-all'),
 			];
 
 	        // $featured_voxes_ids = Vox::where('type', 'normal')->where('featured', '1')->orderBy('created_at', 'DESC')->get()->pluck('id')->toArray();
@@ -59,6 +66,7 @@ class IndexController extends FrontController
 
 			return $this->ShowVoxView('home', array(
 				'sorts' => $sorts,
+				'filters' => $filters,
 				'taken' => $this->user->filledVoxes(),
 	        	'voxes' => Vox::where('type', 'normal')->orderBy('created_at', 'DESC')->get(),
 	        	'vox_categories' => VoxCategory::whereHas('voxes')->get()->pluck('name', 'id')->toArray(),

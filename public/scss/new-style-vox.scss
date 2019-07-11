@@ -3059,6 +3059,45 @@ body.vox-public {
 		}
 	}
 
+	.filter-menu {
+		margin-left: 5px;
+
+		@media #{$tablet} {
+			margin-left: auto;
+			margin-right: auto;
+		    display: inline-block;
+		}
+
+		@media #{$phone} {
+			text-align: center;
+		}
+
+		a {
+			border: 1px solid #61b1f6 !important;
+			border-radius: 10px;
+			min-width: 100px;
+			display: inline-block;
+			text-align: center;
+			padding: 2px;
+			font-weight: 600;
+			color: #50ade8;
+			margin-right: 5px;
+			transition: all 0.3s ease;
+
+			@media #{$phone} {
+				padding: 3px;
+				font-size: 12px;
+				min-width: 80px;
+			}
+
+			&:hover,
+			&.active {
+				background-color: #d3ebfb;
+				transition: all 0.3s ease;
+			}
+		}
+	}
+
 	.sort-category {
 		@media #{$tablet} {
 			display: none;
@@ -3162,6 +3201,10 @@ body.vox-public {
 				right: 8px;
 				border-width: 4px 3px 0 3px;
 				border-color: #38a2e5 transparent transparent transparent;
+
+				@media #{$phone} {
+					top: 5px;
+				}
 			}
 
 			&.order-asc {
@@ -3169,6 +3212,10 @@ body.vox-public {
 					border-width: 0 3px 4px 3px;
 					border-color: transparent transparent #38a2e5 transparent;
 					top: 7px;
+
+					@media #{$phone} {
+						top: 4px;
+					}
 				}
 			}
 		}

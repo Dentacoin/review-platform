@@ -63,6 +63,19 @@
 							{{ Form::select('category', ['all' => 'All'] + $vox_categories, null , ['id' => 'surveys-categories']) }} 
 						</div>
 					</div>
+					<div class="questions-menu clearfix">
+						<div class="filter-menu tal"> 
+							@foreach($filters as $k => $v)
+								@if($k == 'taken' && empty($taken))
+
+								@else
+									<a href="javascript:;" filter="{{ $k }}"  class="{!! $k == 'untaken' ? 'active' : '' !!}">
+										{{ $v }}
+									</a>
+								@endif
+							@endforeach
+						</div>
+					</div>
 				</div>
 			@endif
 			<div class="section-recent-surveys" id="questions-wrapper">
@@ -70,12 +83,13 @@
 					@foreach( $voxes as $vox)
 				      	<div class="swiper-slide"
 			      			featured="{{ intval($vox->featured) }}" 
-			      			published="{{ $vox->created_at->timestamp }}" 
+			      			published="{{ $vox->launched_at->timestamp }}" 
 			      			sort-order="{{ $vox->sort_order ? $vox->sort_order : 0 }}" 
 			      			popular="{{ intval($vox->rewards()->count()) }}" 
 			      			dcn="{{ intval($vox->getRewardTotal()) }}" 
 			      			duration="{{ ceil( $vox->questions()->count()/6 ) }}" 
 			      			taken="{{ intval(!in_array($vox->id, $taken) ? 0 : 1) }}"
+			      			time="{{ $vox->formatDurationNumber() }}"
 			      			>
 				      		<div class="slider-inner">
 					    		<div class="slide-padding">

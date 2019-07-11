@@ -1,147 +1,15 @@
-var handleFilters;
+var handleSorts;
 
 $(document).ready(function(){
 
-	handleFilters = function() {
-		if(!$('.sort-menu a.active').length) {
-			return;
-		}
+	handleSorts = function() {
+		// if(!$('.sort-menu a.active').length) {
+		// 	return;
+		// }
 
-		$('#surveys-categories').val('all');
-		$('#survey-search').val('');
-
-		var sort = $('.sort-menu a.active').attr('sort');
-		var sort_element = $('.sort-menu a.active');
-		var wrapper = $('.questions-inner');
-		var list = wrapper.children();
-
-		if (sort == 'taken') {
-			list.hide().attr("found", 0);
-
-			list.each( function() {
-				if ($(this).attr('taken')=='1') {
-					$(this).show().attr("found", 1);
-				}
-			});
-
-		} else if (sort == 'all') {
-
-            list.show().attr("found", 1);
-
-            list.sort(function(a, b) {
-                if( parseInt($(a).attr('featured')) > parseInt($(b).attr('featured')) ) {
-                    return -1;
-                } else if( parseInt($(a).attr('featured')) < parseInt($(b).attr('featured')) ) {
-                    return 1;
-                } else {
-                	return parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ? -1 : 1;
-                }
-            });
-
-            list.each(function() {
-                wrapper.append(this);
-            });
-
-        } else if (sort == 'featured') {
-			list.hide().attr("found", 0);
-
-			list.sort(function(a, b) {
-				if( parseInt($(a).attr('published')) > parseInt($(b).attr('published')) ) {
-					return -1;
-				} else {
-					return 1;
-				}
-			});
-			
-			list.each( function() {
-				if ($(this).attr('featured')=='1') {
-					$(this).show().attr("found", 1)
-				}
-				// if ($(this).attr('taken')=='1') {
-				// 	$(this).hide().attr("found", 0);
-				// }
-			});
-
-			list.each(function() {
-			    wrapper.append(this);
-			});
-			
-		} else if (sort == 'untaken') {
-			list.hide().attr("found", 0);
-
-			list.each( function() {
-				if ($(this).attr('taken')=='0') {
-					$(this).show().attr("found", 1);
-				}
-			});
-
-		} else {
-
-			list.show().attr("found", 1);
-
-			if(sort=='newest') {
-				list.sort(function(a, b) {
-					if( parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ) {
-						return -1;
-					} else {
-						return 1;
-					}
-				});
-			} else if(sort=='popular') {
-				list.sort(function(a, b) {
-					if( parseInt($(a).attr('popular')) > parseInt($(b).attr('popular')) ) {
-						return -1;
-					} else {
-						return 1;
-					}
-				});
-			} else if(sort=='reward') {
-				list.sort(function(a, b) {
-					if( parseInt($(a).attr('dcn')) > parseInt($(b).attr('dcn')) ) {
-						return -1;
-					} else {
-						return 1;
-					}
-				});
-			} else if(sort=='duration') {
-				list.sort(function(a, b) {
-					if( parseInt($(a).attr('duration')) > parseInt($(b).attr('duration')) ) {
-						return -1;
-					} else {
-						return 1;
-					}
-				});
-			}
-
-			// list.each( function() {
-			// 	if ($(this).attr('taken')=='1') {
-			// 		$(this).hide().attr("found", 0);
-			// 	}
-			// });
-
-			if (sort_element.hasClass('order-asc')) {
-				list.each(function() {
-				    wrapper.prepend(this);
-				});
-
-			} else {
-				list.each(function() {
-				    wrapper.append(this);
-				});
-			}
-		}
-		
-		$('#survey-not-found').hide();
-		setupPagination();
-
-		console.log('bb');
-	}
-
-
-	var handleSearch = function() {
-		$('.sort-menu a.active').removeClass('active');
-
-		$('.swiper-slide').show().attr("found", 1);;
+		//$('#surveys-categories').val('all');
+		//$('#survey-search').val('');
+		$('.swiper-slide').show().attr("found", 1);
 
 		if ($('#survey-search').val().length > 3) {
 			$('.swiper-slide').each( function() {
@@ -159,13 +27,83 @@ $(document).ready(function(){
 			});
 		}
 
+		if($('.filter-menu a.active').attr('filter') == 'taken') {
+			$('.questions-inner .swiper-slide[taken="0"]').hide().attr("found", 0);
+		} else if($('.filter-menu a.active').attr('filter') == 'untaken') {
+			$('.questions-inner .swiper-slide[taken="1"]').hide().attr("found", 0);
+		}
+
+		var sort = $('.sort-menu a.active').attr('sort');
+		var sort_element = $('.sort-menu a.active');
+		var wrapper = $('.questions-inner');
+		var list = wrapper.children();
+
+		if(sort=='newest') {
+			list.sort(function(a, b) {
+				if( parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ) {
+					return -1;
+				} else {
+					return 1;
+				}
+			});
+		} else if(sort=='popular') {
+			list.sort(function(a, b) {
+				if( parseInt($(a).attr('popular')) > parseInt($(b).attr('popular')) ) {
+					return -1;
+				} else {
+					return 1;
+				}
+			});
+		} else if(sort=='reward') {
+			list.sort(function(a, b) {
+				if( parseInt($(a).attr('dcn')) > parseInt($(b).attr('dcn')) ) {
+					return -1;
+				} else {
+					return 1;
+				}
+			});
+		} else if(sort=='time') {
+			list.sort(function(a, b) {
+				if( parseInt($(a).attr('time')) > parseInt($(b).attr('time')) ) {
+					return -1;
+				} else {
+					return 1;
+				}
+			});
+		} else if(sort=='duration') {
+			list.sort(function(a, b) {
+				if( parseInt($(a).attr('duration')) > parseInt($(b).attr('duration')) ) {
+					return -1;
+				} else {
+					return 1;
+				}
+			});
+		}
+
+		// list.each( function() {
+		// 	if ($(this).attr('taken')=='1') {
+		// 		$(this).hide().attr("found", 0);
+		// 	}
+		// });
+
+		if (sort_element.hasClass('order-asc')) {
+			list.each(function() {
+			    wrapper.prepend(this);
+			});
+
+		} else {
+			list.each(function() {
+			    wrapper.append(this);
+			});
+		}
+
 		if ( !$('.swiper-slide:visible').length ) {
 			$('#survey-not-found').show();
 		} else {
 			$('#survey-not-found').hide();
+			setupPagination();
 		}
-	
-		setupPagination();	
+		
 	}
 
 	var setupPagination = function() {
@@ -205,10 +143,16 @@ $(document).ready(function(){
 
 		window.location.hash = $(this).attr('sort')+( $(this).attr('sort')!='featured' && $(this).attr('sort')!='untaken' && $(this).attr('sort')!='all' && $(this).attr('sort')!='taken' ? '-'+($(this).hasClass('order-asc') ? 'asc' : 'desc') : '' )
 
-		handleFilters();
+		handleSorts();
 		surveyTitleHeight();
 	} );
 
+	$('.filter-menu a').click( function() {
+		$('.filter-menu a').removeClass('active');
+		$(this).addClass('active');
+
+		handleSorts();
+	});
 
 	if (window.location.hash.length) {
 		var parts = window.location.hash.substring(1).split('-');
@@ -223,11 +167,11 @@ $(document).ready(function(){
 	}
 
 	$('#survey-search').on('change keyup', function() {
-		handleSearch();
+		handleSorts();
 	});
 
 	$('#surveys-categories').on('change', function() {
-		handleSearch();
+		handleSorts();
 	});
 
 	$('.survey-cats span').click( function() {

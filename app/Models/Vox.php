@@ -118,9 +118,13 @@ class Vox extends Model {
         return ceil( $this->questions()->count()/6 ).' min';
     }
 
+    public function formatDurationNumber() {
+        return ceil( $this->questions()->count()/6 );
+    }
+
     public function getRewardPerQuestion() {
         $reward = Reward::where('reward_type', 'vox_question')->first();
-        if ($this->featured) {
+        if ($this->featured) { //if you remove *2 , remove also in getRewardForUser()
             $reward->dcn *= 2;
             $reward->amount *= 2;
         }
