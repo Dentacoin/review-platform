@@ -41,7 +41,7 @@
 								<div class="flex login-buttons">
 									<div class="col">
 										<p>{{ trans('vox.page.questionnaire.not-logged-register-title') }}</p>
-										<a href="{{ getLangUrl('welcome-survey') }}" class="blue-button">{{ trans('vox.page.questionnaire.not-logged-register-button') }}</a>
+										<a href="{{ getLangUrl('registration') }}" class="blue-button">{{ trans('vox.page.questionnaire.not-logged-register-button') }}</a>
 									</div>
 									<div class="col">
 										<p>{{ trans('vox.page.questionnaire.not-logged-login-title') }}</p>

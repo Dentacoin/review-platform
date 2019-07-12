@@ -31,9 +31,9 @@ class RegisterController extends FrontController
             $test_country_id = $has_test['location'];
         }
 
-        if (empty($_COOKIE['first_test'])) {
-            return redirect(getLangUrl('/'));
-        }
+        // if (empty($_COOKIE['first_test'])) {
+        //     return redirect(getLangUrl('/'));
+        // }
 
         if(Request::isMethod('post')) {
 
