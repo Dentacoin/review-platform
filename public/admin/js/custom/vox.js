@@ -401,4 +401,9 @@ $(document).ready(function(){
 		triggerClick();
 	});
 
+	$('.diplicate-q-button').click( function() {
+		console.log($(this).attr('q-id'));
+		$('#d-question').val($(this).attr('q-id'));
+	});
+
 });

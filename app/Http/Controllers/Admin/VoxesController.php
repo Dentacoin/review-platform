@@ -644,7 +644,7 @@ class VoxesController extends AdminController
 
     }
 
-    private function saveOrUpdateQuestion($question, $data = null) {
+    private function saveOrUpdateQuestion($question, $data = null, $justCopy = false ) {
         if(empty($data)) {
             $data = $this->request->input();
         }
@@ -660,7 +660,7 @@ class VoxesController extends AdminController
         $question->order = $data['order'];
         $question->stats_featured = !empty($data['stats_featured']);
         $question->stats_fields = !empty($data['stats_fields']) ? $data['stats_fields'] : [];
-        $question->vox_scale_id = !empty($data['question_scale']) ? $data['question_scale'] : null;;
+        $question->vox_scale_id = !empty($data['question_scale']) ? $data['question_scale'] : null;
         if( !empty($data['trigger_type']) ) {
             $question->trigger_type = $data['trigger_type'];
         }
@@ -669,16 +669,21 @@ class VoxesController extends AdminController
         $question->stats_relation_id = $question->used_for_stats=='dependency' ? $data['stats_relation_id'] : null;
         $question->stats_answer_id = $question->used_for_stats=='dependency' ? $data['stats_answer_id'] : null;
 
-        if(!empty( $data['triggers'] )) {
-            $help_array = [];
-            foreach($data['triggers'] as $i => $trg) {
-                if(!empty($trg)) {
-                    $help_array[] = $trg.( !empty( $data['answers-number'][$i] ) ? ':'.$data['answers-number'][$i] : '' );
-                }
-            }
-            $question->question_trigger = implode(';', $help_array);
+
+        if( $justCopy ) {
+            $question->question_trigger = $data['question_trigger'];
         } else {
-            $question->question_trigger = '';
+            if(!empty( $data['triggers'] )) {
+                $help_array = [];
+                foreach($data['triggers'] as $i => $trg) {
+                    if(!empty($trg)) {
+                        $help_array[] = $trg.( !empty( $data['answers-number'][$i] ) ? ':'.$data['answers-number'][$i] : '' );
+                    }
+                }
+                $question->question_trigger = implode(';', $help_array);
+            } else {
+                $question->question_trigger = '';
+            }
         }
         
         $question->save();
@@ -1259,5 +1264,34 @@ class VoxesController extends AdminController
     }
 
 
+
+    public function duplicate_question() {
+        $qObj = VoxQuestion::find($this->request->input('d-question'));
+        $q = $qObj->toArray();
+
+        foreach ($this->langs as $key => $value) {
+            $translation = $qObj->translateOrNew($key);
+            $q['question-'.$key] = $translation->question;
+            $q['answers-'.$key] = json_decode(stripcslashes($translation->answers));
+        }
+        $q['question_scale'] = $qObj->vox_scale_id;
+
+
+        $item = Vox::find($this->request->input('duplicate-question-vox'));
+
+        if(!empty($item)) {
+
+            $question = new VoxQuestion;
+            $question->vox_id = $item->id;
+            $this->saveOrUpdateQuestion($question, $q, true);
+            $item->checkComplex();
+        
+            Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-added'));
+            return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
+
+        } else {
+            return redirect('cms/'.$this->current_page);
+        }
+    }
 
 }

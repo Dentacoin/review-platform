@@ -262,6 +262,7 @@
                                     <th>{{ trans('admin.page.'.$current_page.'.question-type') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-trigger') }}</th>
                                     <th>Respondents</th>
+                                    <th>Duplicate</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-edit') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-delete') }}</th>
                                 </tr>
@@ -290,6 +291,11 @@
                                         <td>
                                             <a href="{{ url('cms/vox/explorer/'.$item->id.'/'.$question->id) }}" target="_blank">
                                                 {!! $question->respondent_count() !!}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-sm btn-success diplicate-q-button" href="javascript:;" q-id="{{ $question->id }}" data-toggle="modal" data-target="#duplicateModal">
+                                                <i class="fa fa-paste"></i>
                                             </a>
                                         </td>
                                         <td>
@@ -387,6 +393,36 @@
 
         @endif
 
+
+    </div>
+</div>
+
+<div id="duplicateModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Dupicate question</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url('cms/'.$current_page.'/duplicate-question') }}" method="post">
+                    Pick survey:
+                    <select class="form-control select2" name="duplicate-question-vox" style="width: 100%;">
+                        <option value="">Select survey</option>
+                        @foreach($all_voxes as $survey)
+                            <option value="{{ $survey->id }}" {!! !empty($item) && $survey->id==$item->id ? 'selected="selected"' : '' !!}>{{ $survey->title }}</option>
+                        @endforeach
+                    </select>
+                    <input type="hidden" name="d-question" id="d-question" value="">
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Save</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
 
     </div>
 </div>

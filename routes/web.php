@@ -129,6 +129,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/badges/delete/{id}', 			'VoxesController@delbadge');
 	Route::any('vox/explorer/{vox_id?}/{question_id?}', 	'VoxesController@explorer');
 	Route::any('vox/export-survey-data', 			'VoxesController@export_survey_data');
+	Route::any('vox/duplicate-question', 			'VoxesController@duplicate_question');
 
 	Route::get('emails', 							'EmailsController@list');
 	Route::get('emails/{what?}', 					'EmailsController@list');
