@@ -28,6 +28,7 @@ $(document).ready(function(){
                 },
                 function( data ) {
                     if(data.success) {
+                        $('input[name="_token"]').val(data.token);
                         $('#bot-group').next().show();
                         $('#bot-group').remove();
 
