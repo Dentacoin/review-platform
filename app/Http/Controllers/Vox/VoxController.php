@@ -771,9 +771,6 @@ class VoxController extends FrontController
 						        $reward->reference_id = 11;
 						        $reward->platform = 'vox';
 						        $reward->reward = 100;
-						        $start = $list->first()->created_at;
-						        $diff = Carbon::now()->diffInSeconds( $start );
-						        $reward->seconds = $diff;
 
 						        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
 				                $dd = new DeviceDetector($userAgent);
