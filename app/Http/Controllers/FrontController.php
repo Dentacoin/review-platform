@@ -95,7 +95,7 @@ class FrontController extends BaseController
             $this->admin = Auth::guard('admin')->user();
             $this->user = Auth::guard('web')->user();
 
-            if ($this->user && !$this->user->is_dentist && session('intended') ) {
+            if (!empty($this->user) && !$this->user->is_dentist && session('intended') ) {
                 $intended = session()->pull('intended');
                 
                 if( 'https://'.Request::getHost().'/'.request()->path() != trim($intended, '/') ) {
@@ -107,7 +107,7 @@ class FrontController extends BaseController
                 }
             }
 
-            if($this->user && session('login-logged')!=$this->user->id){
+            if(!empty($this->user) && session('login-logged')!=$this->user->id){
                 $ul = new UserLogin;
                 $ul->user_id = $this->user->id;
                 $ul->ip = User::getRealIp();
@@ -458,7 +458,7 @@ class FrontController extends BaseController
             }
 
 
-            if( !$this->user->is_dentist ) {
+            if( !empty($this->user) && !$this->user->is_dentist ) {
                 if( $civic_registered) {
                     $params['trackEvents'][] = [
                         'fb' => 'CompleteRegistrationCivic',
