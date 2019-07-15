@@ -91,15 +91,15 @@
 			      			popular="{{ intval($vox->rewards()->count()) }}" 
 			      			dcn="{{ intval($vox->getRewardTotal()) }}" 
 			      			duration="{{ ceil( $vox->questions()->count()/6 ) }}" 
-			      			taken="{{ intval(!in_array($vox->id, $taken) ? 0 : 1) }}"
+			      			taken="{{ !empty($taken) && intval(!in_array($vox->id, $taken) ? 0 : 1) }}"
 			      			>
 				      		<div class="slider-inner">
 					    		<div class="slide-padding">
-					      			<a href="{{ in_array($vox->id, $taken) ? 'javascript:;' : $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}'>
+					      			<a href="{{ !empty($taken) && in_array($vox->id, $taken) ? 'javascript:;' : $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title, "respondents" => $vox->respondentsCount(), "respondents_country" => $vox->respondentsCountryCount() ]) }}'>
 					      				@if($vox->featured)
 					      					<img class="featured-img doublecoin" src="{{ url('new-vox-img/flipping-coin.gif') }}">
 					      				@endif
-					      				<!-- @if(in_array($vox->id, $taken))
+					      				<!-- @if(!empty($taken) && in_array($vox->id, $taken))
 					      					<img class="done-img" src="{{ url('new-vox-img/vox-done.png') }}">
 					      				@endif -->
 					      			</a>							
@@ -130,7 +130,7 @@
 																{{ trans('vox.common.check-statictics') }}
 															</a>
 														@endif
-														@if(in_array($vox->id, $taken))
+														@if(!empty($taken) && in_array($vox->id, $taken))
 															<a class="gray-button secondary" href="javascript:;">
 																<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
 															</a>
@@ -140,7 +140,7 @@
 															</a>
 														@endif
 													@else
-														@if(in_array($vox->id, $taken))
+														@if(!empty($taken) && in_array($vox->id, $taken))
 															<a class="gray-button" href="javascript:;">
 																<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
 															</a>
