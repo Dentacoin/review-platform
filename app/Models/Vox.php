@@ -120,7 +120,7 @@ class Vox extends Model {
 
     public function getRewardPerQuestion() {
         $reward = Reward::where('reward_type', 'vox_question')->first();
-        if ($this->featured) { //if you remove *2 , remove also in getRewardForUser()
+        if ($this->featured) {
             $reward->dcn *= 2;
             $reward->amount *= 2;
         }
@@ -142,9 +142,9 @@ class Vox extends Model {
             return 0;
         } else {
             $how_many_questions = VoxAnswer::where('vox_id', $this->id)->where('user_id', $user_id)->where('answer', '!=' , 0)->groupBy('question_id')->get()->count();
-            $reward_per_question = Reward::where('reward_type', 'vox_question')->first()->dcn;
+            $reward_per_question = $this->getRewardPerQuestion()->dcn;
 
-            return $this->featured ? ($how_many_questions * $reward_per_question) * 2 : $how_many_questions * $reward_per_question;
+            return $how_many_questions * $reward_per_question;
         }        
     }
 

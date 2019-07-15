@@ -84,6 +84,9 @@
 							</h2>
 						</a>
 						<div class="contents">
+							@if(!empty($question->translateorNew(App::getLocale())->stats_subtitle))
+								<p class="stats-subtitle">{{ nl2br($question->translateorNew(App::getLocale())->stats_subtitle) }}</p>
+							@endif
 							@if($question->used_for_stats=='standard')
 								<div class="scales flex flex-center">
 									{!! trans('vox.page.stats.scale-by') !!}:									

@@ -144,7 +144,6 @@ class VoxController extends FrontController
 			}
 			session($ses);
 		}
-
         $admin_ids = Admin::getAdminProfileIds();
 		$isAdmin = Auth::guard('admin')->user() || in_array($this->user->id, $admin_ids);
 		$testmode = session('testmode') && $isAdmin;
@@ -153,9 +152,8 @@ class VoxController extends FrontController
 		$this->current_page = 'questionnaire';
 		$doing_details = false;
 		$doing_asl = false;
-		$first = Vox::where('type', 'home')->first();
 
-		if(empty($vox) || ($this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='test') || !$this->user->madeTest($first->id) ) {
+		if(empty($vox) || ($this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='test') ) {
 			if($this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='test') {
             	Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
 			}
@@ -178,6 +176,14 @@ class VoxController extends FrontController
 
 		if (!$isAdmin && $vox->type=='hidden') {
 			return redirect( getLangUrl('/') );
+		}
+
+		$first = Vox::where('type', 'home')->first();
+		$welcome_vox = '';
+		$welcome_vox_question_ids = [];
+		if (!$this->user->madeTest($first->id)) {
+			$welcome_vox = $first;
+			$welcome_vox_question_ids = $welcome_vox->questions->pluck('id')->toArray();
 		}
 
     	$cross_checks = [];
@@ -293,6 +299,15 @@ class VoxController extends FrontController
 		        		}
 		        	}
 
+		        	if (!empty($welcome_vox)) {
+			        	foreach ($welcome_vox->questions as $question) {
+			        		if($question->id == $q) {
+			        			$found = $question;
+			        			break;
+			        		}
+			        	}
+		        	}
+
 		        	if($found) {
 		        		$valid = false;
 		        		$type = Request::input('type');
@@ -304,6 +319,7 @@ class VoxController extends FrontController
 		        			$a = 0;
 
 		        		} else if ( isset( $this->details_fields[$type] ) ) {
+
 
 		        			$should_reward = false;
 		        			if($this->user->$type===null) {
@@ -321,15 +337,23 @@ class VoxController extends FrontController
 		        			$a = Request::input('answer');
 
 		        			if( $should_reward ) {
-		        				$reward = Reward::where('reward_type', 'vox_question')->first()->dcn;
+
 			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->update(
 			        				array(
-			        					'reward' => DB::raw('`reward` + '.$reward
+			        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
 			        				))
 			        			);
 		        			}
 
 		        		} else if ($type == 'location-question') {
+
+		        			if($this->user->country_id===null) {
+			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->update(
+			        				array(
+			        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
+			        				))
+			        			);
+		        			}
 		        			//answer = 71,2312
 		        			$country_id = Request::input('answer');
 		        			$this->user->country_id = $country_id;
@@ -337,10 +361,19 @@ class VoxController extends FrontController
 		        				'country_id' => $country_id
 		        			]);
 		        			$this->user->save();
+
 		        			$a = $country_id;
 		        			$valid = true;
 		        		
 		        		} else if ($type == 'birthyear-question') {
+
+		        			if($this->user->birthyear===null) {
+			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->update(
+			        				array(
+			        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
+			        				))
+			        			);
+		        			}
 
 		        			$this->user->birthyear = Request::input('answer');
 		        			$this->user->save();
@@ -355,6 +388,14 @@ class VoxController extends FrontController
 		        			$a = Request::input('answer');
 
 		        		} else if ($type == 'gender-question') {
+
+		        			if($this->user->gender===null) {
+			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->update(
+			        				array(
+			        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
+			        				))
+			        			);
+		        			}
 		        			$this->user->gender = Request::input('answer');
 		        			$this->user->save();
 		        			VoxAnswer::where('user_id', $this->user->id)->update([
@@ -495,7 +536,7 @@ class VoxController extends FrontController
 			        			if($type == 'skip') {
 			        				$answer = new VoxAnswer;
 							        $answer->user_id = $this->user->id;
-							        $answer->vox_id = $vox->id;
+							        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
 							        $answer->question_id = $q;
 							        $answer->answer = 0;
 							        $answer->is_skipped = true;
@@ -510,7 +551,7 @@ class VoxController extends FrontController
 							        		if($skipped->question_trigger=='-1') {
 							        			$answer = new VoxAnswer;
 										        $answer->user_id = $this->user->id;
-										        $answer->vox_id = $vox->id;
+										        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
 										        $answer->question_id = $skip_id;
 										        $answer->answer = 0;
 										        $answer->is_skipped = true;
@@ -524,7 +565,7 @@ class VoxController extends FrontController
 
 									$answer = new VoxAnswer;
 							        $answer->user_id = $this->user->id;
-							        $answer->vox_id = $vox->id;
+							        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
 							        $answer->question_id = $q;
 							        $answer->answer = $a;
 							        $answer->country_id = $this->user->country_id;
@@ -602,7 +643,7 @@ class VoxController extends FrontController
 
 					        				$answer = new VoxAnswer;
 									        $answer->user_id = $this->user->id;
-									        $answer->vox_id = $vox->id;
+									        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
 									        $answer->question_id = $q;
 									        $answer->answer = 0;
 									        $answer->country_id = $this->user->country_id;
@@ -618,7 +659,7 @@ class VoxController extends FrontController
 			        				foreach ($a as $value) {
 			        					$answer = new VoxAnswer;
 								        $answer->user_id = $this->user->id;
-								        $answer->vox_id = $vox->id;
+								        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
 								        $answer->question_id = $q;
 								        $answer->answer = $value;
 								        $answer->country_id = $this->user->country_id;
@@ -631,7 +672,7 @@ class VoxController extends FrontController
 			        				foreach ($a as $k => $value) {
 			        					$answer = new VoxAnswer;
 								        $answer->user_id = $this->user->id;
-								        $answer->vox_id = $vox->id;
+								        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
 								        $answer->question_id = $q;
 								        $answer->answer = $k+1;
 								        $answer->scale = $value;
@@ -724,6 +765,34 @@ class VoxController extends FrontController
 
 	        				// dd($answered, count($vox->questions));
 
+	        				if (!empty($welcome_vox_question_ids) && $q==end($welcome_vox_question_ids)) {
+								$reward = new DcnReward;
+						        $reward->user_id = $this->user->id;
+						        $reward->reference_id = 11;
+						        $reward->platform = 'vox';
+						        $reward->reward = 100;
+						        $start = $list->first()->created_at;
+						        $diff = Carbon::now()->diffInSeconds( $start );
+						        $reward->seconds = $diff;
+
+						        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+				                $dd = new DeviceDetector($userAgent);
+				                $dd->parse();
+
+				                if ($dd->isBot()) {
+				                    // handle bots,spiders,crawlers,...
+				                    $reward->device = $dd->getBot();
+				                } else {
+				                    $reward->device = $dd->getDeviceName();
+				                    $reward->brand = $dd->getBrandName();
+				                    $reward->model = $dd->getModel();
+				                    $reward->os = $dd->getOs()['name'];
+				                }
+
+						        $reward->save();
+	        					# code...
+	        				}
+
 					        if(count($answered) == count($vox->questions)) {
 								$reward = new DcnReward;
 						        $reward->user_id = $this->user->id;
@@ -787,13 +856,23 @@ class VoxController extends FrontController
         $first_question = null;
         $first_question_num = 0;
         if($not_bot) {
-        	foreach ($vox->questions as $question) {
-	    		$first_question_num++;
-	    		if(!isset($answered[$question->id])) {
-	    			$first_question = $question->id;
-	    			break;
-	    		}
-	    	}
+        	if (!empty($welcome_vox)) {
+	        	foreach ($welcome_vox->questions as $question) {
+		    		$first_question_num++;
+		    		if(!isset($answered[$question->id])) {
+		    			$first_question = $question->id;
+		    			break;
+		    		}
+		    	}
+        	} else {
+        		foreach ($vox->questions as $question) {
+		    		$first_question_num++;
+		    		if(!isset($answered[$question->id])) {
+		    			$first_question = $question->id;
+		    			break;
+		    		}
+		    	}
+        	}
         } else {
 	    	$first_question_num++;
         }
@@ -815,6 +894,12 @@ class VoxController extends FrontController
         	if($this->user->$key==null) {
         		$total_questions++;		
         	}
+        }
+
+        if (!empty($welcome_vox)) {
+	        foreach ($welcome_vox->questions as $key => $value) {
+	        	$total_questions++;		
+	        }
         }
 
         
@@ -870,6 +955,7 @@ class VoxController extends FrontController
 		}
 
 		return $this->ShowVoxView('vox', array(
+			'welcome_vox' => $welcome_vox,
 			'related_vox' => $related_vox,
             'suggested_voxes' => $suggested_voxes,
 			'related_mode' => $related_mode,

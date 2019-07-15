@@ -690,6 +690,12 @@ header {
     header .header-right:hover .expander {
       display: block; }
 
+.logged-in .full {
+  margin-top: -40px; }
+  @media screen and (max-width: 768px) {
+    .logged-in .full {
+      margin-top: 0px; } }
+
 .full {
   background-image: url(../new-vox-img/index.jpg);
   height: calc(100vh - 100px);
@@ -1102,6 +1108,8 @@ p.h2-bold {
           min-width: 60%; } }
     .section-recent-surveys .swiper-slide .vox-header .col {
       padding: 0px; }
+    .section-recent-surveys .swiper-slide .vox-header .gray-button {
+      min-width: auto; }
     .section-recent-surveys .swiper-slide .vox-header .left {
       min-width: 60%; }
       .section-recent-surveys .swiper-slide .vox-header .left h4 {
@@ -1798,6 +1806,8 @@ p.h2-bold {
   @media screen and (max-width: 768px) {
     .questions .question-group {
       margin-bottom: 20px; } }
+  .questions .question-group.multiple-choice .answers .answer-checkbox .tooltip-text {
+    font-size: 16px; }
   .questions .question-group .question {
     font-weight: 600;
     font-size: 21px;
@@ -2849,6 +2859,13 @@ p.h2-bold {
         font-size: 14px;
         line-height: 1;
         padding-left: 25px; } }
+  .page-statistics .stats .stat .stats-subtitle {
+    margin-bottom: 30px;
+    margin-top: -20px;
+    font-size: 14px; }
+    @media screen and (max-width: 768px) {
+      .page-statistics .stats .stat .stats-subtitle {
+        margin-top: -10px; } }
   .page-statistics .stats .stat .contents {
     display: none;
     margin: 25px 0px; }

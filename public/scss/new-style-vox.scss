@@ -955,6 +955,16 @@ header {
 	}
 }
 
+.logged-in {
+	.full {
+		margin-top: -40px;
+
+		@media #{$phone} {
+		 	margin-top: 0px;
+		}
+	}
+}
+
 .full {
 	background-image: url(../new-vox-img/index.jpg);
     height: calc(100vh - 100px);
@@ -1521,6 +1531,10 @@ p.h2-bold {
 
 			.col {
 				padding: 0px;
+			}
+
+			.gray-button {
+				min-width: auto;
 			}
 
 			.left {
@@ -2515,6 +2529,16 @@ body.vox-public {
 
 		@media #{$phone} {
 			margin-bottom: 20px;
+		}
+
+		&.multiple-choice {
+			.answers {
+				.answer-checkbox {
+					.tooltip-text {
+						font-size: 16px;
+					}
+				}
+			}
 		}
 
 		.question {
@@ -4131,6 +4155,16 @@ body.vox-public {
 					font-size: 14px;
 				    line-height: 1;
 				    padding-left: 25px;
+				}
+			}
+
+			.stats-subtitle {
+				margin-bottom: 30px;
+				margin-top: -20px;
+				font-size: 14px;
+
+				@media #{$phone} {
+					margin-top: -10px;
 				}
 			}
 

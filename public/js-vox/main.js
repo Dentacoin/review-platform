@@ -135,27 +135,53 @@ $(document).ready(function(){
 		var mins = Math.ceil( (vox.count - vox.current)/6 );
 		$('#current-question-num').html( mins<2 ? '<1' : '~'+mins );
 
-		if( vox.current > vox.count_real ) {
-			$('#dcn-test-reward-bonus').show();
+		if (welcome_vox) {
+			if( vox.current > (vox.count_real + welcome_vox_q_count) ) {
+				$('#dcn-test-reward-bonus').show();
 
+			}
+		} else {
+			if( vox.current > vox.count_real ) {
+				$('#dcn-test-reward-bonus').show();
+
+			}
 		}
 
 		if(vox.current>1) {
 
 			var answerd_q = 0;
 			$('.question-group').each( function() {
-				if( $(this).attr('data-answer') && $(this).attr('data-answer')!='0' ) {
+				if( $(this).attr('data-answer') && $(this).attr('data-answer')!='0' && !$(this).attr('welcome') ) {
 					answerd_q++;
 				}
 			});
 
-			if( vox.current > (vox.count_real+1) ) {
+			var welcomeBonus = 0;
+			if( welcome_vox ) {
+				var doingAsl = vox.current > ( (vox.count_real+1) + welcome_vox_q_count );
+				var doingWelcome = vox.current <= welcome_vox_q_count;
+				if(!doingWelcome && !doingAsl) {
+					welcomeBonus = 100;
+				}
+
+			} else {
+				var doingAsl = vox.current > (vox.count_real+1);
+				var doingWelcome = false;
+			}
+
+			if( doingAsl ) {
+				console.log('doingAsl');
 				var old = parseInt( $('#bonus-question-reward').text().trim() );
 				$('#bonus-question-reward').html( old + vox.reward_single );
 
-				old = parseInt( $('.coins-test').text().trim() );
-				$('.coins-test').html( old + vox.reward_single );
-			} else {
+				old = parseInt( $('.coins-test').first().text().trim() );
+				$('.coins-test').html( old + parseInt(vox.reward_single) );
+
+			} else if( doingWelcome ) {
+				console.log('doingWelcome');
+				$('#current-question-reward').html( (vox.current / welcome_vox_q_count) * 100 );
+			} else { //Нормални
+				console.log('normal');
 				var reward = 0;
 				if( $('body').hasClass('page-welcome-survey') ) {
 					var reward_per_question = ( vox.reward / vox.count_real );
@@ -163,6 +189,7 @@ $(document).ready(function(){
 				} else {
 					reward = vox.reward_single * answerd_q;					
 				}
+				reward += welcomeBonus;
 
 				$('#current-question-reward').html( Math.round(reward) );
 				$('#dcn-test-reward-before').hide();

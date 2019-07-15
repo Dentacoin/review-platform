@@ -340,7 +340,7 @@ $voxRoutes = function () {
 			Route::any('vpn', 									'VpnController@list');
 
 			Route::group(['middleware' => 'auth:web'], function () {
-				Route::any('welcome-to-dentavox', 					'RegisterController@register_success');
+				Route::any('welcome-to-dentavox', 				'RegisterController@register_success');
 
 				Route::any('profile', 							'ProfileController@home');
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');

@@ -99,6 +99,12 @@
 							</div>
 						@endif
 
+						@if(!empty($welcome_vox))
+							@foreach( $welcome_vox->questions as $question )
+								@include('vox.template-parts.vox-question')
+							@endforeach
+						@endif
+
 						@foreach( $vox->questions as $question )
 							@include('vox.template-parts.vox-question')
 						@endforeach
@@ -360,9 +366,11 @@
 			reward: {{ intval($vox->getRewardTotal()) }},
 			reward_single: {{ $vox->getRewardPerQuestion()->dcn }},
 			current: {{ $first_question_num }},
-			url: '{{ $vox->getLink() }}'
+			url: '{{ $vox->getLink() }}',
 		};
 
+		var welcome_vox = {{ !empty($welcome_vox) ? 'true' : 'false' }};
+		var welcome_vox_q_count = {{ !empty($welcome_vox) ? $welcome_vox->questions->count() : 'false' }};
 		var related = {{ !empty($related_vox) ? 'true' : 'false' }};
 		var testmode = {{ $testmode ? $testmode : 'false' }};
 	</script>

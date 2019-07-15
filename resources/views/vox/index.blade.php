@@ -216,6 +216,10 @@
 													<a class="opinion blue-button" href="{{ $vox->getLink() }}">
 														{{ trans('vox.common.take-the-test') }}
 													</a>
+												@else
+													<a class="gray-button" href="javascript:;">
+														<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
+													</a>
 												@endif
 											</div>
 										</div>
