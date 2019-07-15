@@ -278,7 +278,7 @@ class LoginController extends FrontController
                 //Request::session()->flash('success-message', trans('vox.page.registration.success'));
                 return redirect(getVoxUrl('/').'?success-message='.urlencode(trans('vox.page.registration.success')));
             } else {
-                return redirect( getVoxUrl('/') );
+                return redirect( getVoxUrl('/').'?error-message='.urlencode(trans('vox.page.registration.no-fb-email')));
             }
         }
     }
