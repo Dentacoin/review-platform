@@ -350,7 +350,9 @@ $(document).ready(function(){
                             } else {
                                 $("#question-done").show();
                             }
-
+                            $('html, body').animate({
+                                scrollTop: $('body').offset().top
+                            }, 500);
 
                             $("#other-surveys").show();
                             swiper.update();
