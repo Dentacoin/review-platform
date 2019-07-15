@@ -91,7 +91,7 @@
 			      			popular="{{ intval($vox->rewards()->count()) }}" 
 			      			dcn="{{ intval($vox->getRewardTotal()) }}" 
 			      			duration="{{ ceil( $vox->questions()->count()/6 ) }}" 
-			      			taken="{{ !empty($taken) && intval(!in_array($vox->id, $taken) ? 0 : 1) }}"
+			      			{!! !empty($taken) ? 'taken="'.intval(!in_array($vox->id, $taken) ? 0 : 1).'"' : '' !!}
 			      			>
 				      		<div class="slider-inner">
 					    		<div class="slide-padding">
