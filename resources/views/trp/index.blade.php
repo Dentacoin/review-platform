@@ -2,6 +2,7 @@
 
 @section('content')
 
+	@include('front.errors')
 	<div class="black-overflow" style="display: none;">
 	</div>
 	<div class="home-search-form main-box">

@@ -212,115 +212,119 @@ class LoginController extends FrontController
             return redirect(getLangUrl('/'));
         } else {
 
-            $name = $s_user->getName() ? $s_user->getName() : ( !empty($s_user->user['first_name']) && !empty($s_user->user['last_name']) ? $s_user->user['first_name'].' '.$s_user->user['last_name'] : ( !empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' ) );
+            if (!empty($s_user->getEmail())) {
+
+                $name = $s_user->getName() ? $s_user->getName() : ( !empty($s_user->user['first_name']) && !empty($s_user->user['last_name']) ? $s_user->user['first_name'].' '.$s_user->user['last_name'] : ( !empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' ) );
 
 
-            $is_blocked = User::checkBlocks( $name , $s_user->getEmail() );
-            if( $is_blocked ) {
-                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
-                ->withInput()
-                ->with('error-message', $is_blocked );
-            }
-
-            if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
-                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
-                ->withInput()
-                ->with('error-message', nl2br(trans('trp.popup.login.existing_email')) );
-            }
-
-
-            $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
-            $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
-
-            if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
-                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
-                ->withInput()
-                ->with('error-message', nl2br(trans('trp.popup.login.over18')) );
-            }
-
-            $password = $name.date('WY');
-            $newuser = new User;
-            $newuser->name = $name;
-            $newuser->email = $s_user->getEmail() ? $s_user->getEmail() : '';
-            $newuser->password = bcrypt($password);
-            $newuser->country_id = $this->country_id;
-            $newuser->fb_id = $s_user->getId();
-            $newuser->gdpr_privacy = true;
-            $newuser->platform = 'trp';
-            $newuser->status = 'approved';
-            
-            if(!empty(session('invited_by'))) {
-                $newuser->invited_by = session('invited_by');
-            }
-            if(!empty(session('invite_secret'))) {
-                $newuser->invite_secret = session('invite_secret');
-            }
-            
-            $newuser->save();
-
-            $avatarurl = $s_user->getAvatar();
-            if($network=='fb') {
-                $avatarurl .= '&width=600&height=600';                
-            } else if($network=='gp') {
-                $avatarurl = str_replace('sz=50', 'sz=600', $avatarurl);
-            } else if($network=='tw') {
-                $avatarurl = str_replace('_normal', '', $avatarurl);
-            }
-            if(!empty($avatarurl)) {
-                $img = Image::make($avatarurl);
-                $newuser->addImage($img);
-            }
-
-
-            if($newuser->invited_by && $newuser->invitor->canInvite('trp')) {
-                $inv_id = session('invitation_id');
-                if($inv_id) {
-                    $inv = UserInvite::find($inv_id);
-                } else {
-                    $inv = new UserInvite;
-                    $inv->user_id = $newuser->invited_by;
-                    $inv->invited_email = $newuser->email;
-                    $inv->invited_name = $newuser->name;
-                    $inv->save();
+                $is_blocked = User::checkBlocks( $name , $s_user->getEmail() );
+                if( $is_blocked ) {
+                    return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
+                    ->withInput()
+                    ->with('error-message', $is_blocked );
                 }
 
-                $inv->invited_id = $newuser->id;
-                $inv->save();
+                if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
+                    return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
+                    ->withInput()
+                    ->with('error-message', nl2br(trans('trp.popup.login.existing_email')) );
+                }
 
-                $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
-                    'who_joined_name' => $newuser->getName()
-                ] );
+
+                $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
+                $birthyear = !empty($s_user->user['birthday']) ? explode('/', $s_user->user['birthday'])[2] : 0;
+
+                if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
+                    return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']))
+                    ->withInput()
+                    ->with('error-message', nl2br(trans('trp.popup.login.over18')) );
+                }
+
+                $password = $name.date('WY');
+                $newuser = new User;
+                $newuser->name = $name;
+                $newuser->email = $s_user->getEmail() ? $s_user->getEmail() : '';
+                $newuser->password = bcrypt($password);
+                $newuser->country_id = $this->country_id;
+                $newuser->fb_id = $s_user->getId();
+                $newuser->gdpr_privacy = true;
+                $newuser->platform = 'trp';
+                $newuser->status = 'approved';
+                
+                if(!empty(session('invited_by'))) {
+                    $newuser->invited_by = session('invited_by');
+                }
+                if(!empty(session('invite_secret'))) {
+                    $newuser->invite_secret = session('invite_secret');
+                }
+                
+                $newuser->save();
+
+                $avatarurl = $s_user->getAvatar();
+                if($network=='fb') {
+                    $avatarurl .= '&width=600&height=600';                
+                } else if($network=='gp') {
+                    $avatarurl = str_replace('sz=50', 'sz=600', $avatarurl);
+                } else if($network=='tw') {
+                    $avatarurl = str_replace('_normal', '', $avatarurl);
+                }
+                if(!empty($avatarurl)) {
+                    $img = Image::make($avatarurl);
+                    $newuser->addImage($img);
+                }
+
+
+                if($newuser->invited_by && $newuser->invitor->canInvite('trp')) {
+                    $inv_id = session('invitation_id');
+                    if($inv_id) {
+                        $inv = UserInvite::find($inv_id);
+                    } else {
+                        $inv = new UserInvite;
+                        $inv->user_id = $newuser->invited_by;
+                        $inv->invited_email = $newuser->email;
+                        $inv->invited_name = $newuser->name;
+                        $inv->save();
+                    }
+
+                    $inv->invited_id = $newuser->id;
+                    $inv->save();
+
+                    $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
+                        'who_joined_name' => $newuser->getName()
+                    ] );
+                }
+
+                $sess = [
+                    'invited_by' => null,
+                    'invitation_name' => null,
+                    'invitation_email' => null,
+                    'invitation_id' => null,
+                    'just_registered' => true,
+                ];
+                session($sess);
+
+                if( $newuser->email ) {
+                    $newuser->sendTemplate( 4 );
+                }
+
+                //
+                //To be deleted
+                //
+
+                Auth::login($newuser, true);
+
+                $want_to_invite = false;
+                if(session('want_to_invite_dentist')) {
+                    $want_to_invite = true;
+                    session([
+                        'want_to_invite_dentist' => null,
+                    ]);
+                }
+
+                return redirect( $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('/').($want_to_invite ? '?'.http_build_query(['popup'=>'invite-new-dentist-popup']) : '' ) );
+            } else {
+                return redirect( getLanUrl('/').'?error-message='.urlencode(trans('trp.popup.login.no-fb-email')));
             }
-
-            $sess = [
-                'invited_by' => null,
-                'invitation_name' => null,
-                'invitation_email' => null,
-                'invitation_id' => null,
-                'just_registered' => true,
-            ];
-            session($sess);
-
-            if( $newuser->email ) {
-                $newuser->sendTemplate( 4 );
-            }
-
-            //
-            //To be deleted
-            //
-
-            Auth::login($newuser, true);
-
-            $want_to_invite = false;
-            if(session('want_to_invite_dentist')) {
-                $want_to_invite = true;
-                session([
-                    'want_to_invite_dentist' => null,
-                ]);
-            }
-            
-
-            return redirect( $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('/').($want_to_invite ? '?'.http_build_query(['popup'=>'invite-new-dentist-popup']) : '' ) );
         }
     }
 

@@ -2,6 +2,7 @@
 
 @section('content')
 
+	@include('front.errors')
 	<div class="full">
 		<div class="first-absolute">
 			<h1>{!! $title !!}</h1>
