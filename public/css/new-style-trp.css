@@ -2362,6 +2362,8 @@ textarea.input {
       color: white; }
     .results-popup .popup-inner .sort-by a:hover i, .results-popup .popup-inner .sort-by a.active i {
       color: black; }
+  .results-popup .popup-inner .checkbox-label {
+    text-align: left; }
   .results-popup .popup-inner .button {
     padding: 10px 110px;
     margin-top: 30px; }

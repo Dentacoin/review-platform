@@ -5,19 +5,19 @@
 		<div class="strength-flickity">
 			@foreach($user->getStrengthPlatform('vox') as $strength)
 				<div class="strength-flickity-slide">
-					<h2><a href="{{ $strength['buttonHref'] ? $strength['buttonHref'] : 'javascript:;' }}" {{ $strength['target'] == true ? 'target="_blank"' : '' }} >{{ $strength['title'] }}</a></h2>
-					<a href="{{ $strength['buttonHref'] ? $strength['buttonHref'] : 'javascript:;' }}" {{ $strength['target'] == true ? 'target="_blank"' : '' }} class="strength-box">
+					<h2><a href="{{!empty( $strength['buttonHref']) ? $strength['buttonHref'] : 'javascript:;' }}" {{ !empty($strength['target']) ? 'target="_blank"' : '' }} >{{ $strength['title'] }}</a></h2>
+					<a href="{{ !empty($strength['buttonHref']) ? $strength['buttonHref'] : 'javascript:;' }}" {{ !empty($strength['target']) ? 'target="_blank"' : '' }} class="strength-box">
 						<div class="strength-image">
 							<img src="{{ url('img-strength/'.$strength['image'].'.svg') }}">
 						</div>
 						<span class="strength-desc">{!! $strength['text'] !!}</span>
 					</a>
 					<div class="strength-urls">
-						@if($strength['iosLink'])
-							<a target="_blank" href="{{ $strength['androidLink'] }}" class="blue-button app-store android" {{ $strength['event_category'] ? 'event_category='.$strength['event_category'] : '' }} {{ $strength['event_action'] ? 'event_action='.$strength['event_action'] : '' }} {{ $strength['event_label'] ? 'event_label='.$strength['event_label'] : '' }}></a>
-							<a target="_blank" href="{{ $strength['iosLink'] }}" class="blue-button app-store ios" {{ $strength['event_category'] ? 'event_category='.$strength['event_category'] : '' }} {{ $strength['event_action'] ? 'event_action='.$strength['event_action'] : '' }} {{ $strength['event_label'] ? 'event_label='.$strength['event_label'] : '' }}></a>
+						@if(!empty($strength['iosLink']))
+							<a target="_blank" href="{{ $strength['androidLink'] }}" class="blue-button app-store android" {{ !empty($strength['event_category']) ? 'event_category='.$strength['event_category'] : '' }} {{ !empty($strength['event_action']) ? 'event_action='.$strength['event_action'] : '' }} {{ !empty($strength['event_label']) ? 'event_label='.$strength['event_label'] : '' }}></a>
+							<a target="_blank" href="{{ $strength['iosLink'] }}" class="blue-button app-store ios" {{ !empty($strength['event_category']) ? 'event_category='.$strength['event_category'] : '' }} {{ !empty($strength['event_action']) ? 'event_action='.$strength['event_action'] : '' }} {{ !empty($strength['event_label']) ? 'event_label='.$strength['event_label'] : '' }}></a>
 						@else
-							<a href="{{ $strength['buttonHref'] ? $strength['buttonHref'] : 'javascript:;' }}" class="blue-button {{ $strength['completed'] ? 'completed' : '' }}" {{ $strength['target'] == true ? 'target="_blank"' : '' }} {{ $strength['event_category'] ? 'event_category='.$strength['event_category'] : '' }} {{ $strength['event_action'] ? 'event_action='.$strength['event_action'] : '' }} {{ $strength['event_label'] ? 'event_label='.$strength['event_label'] : '' }} >{{ $strength['buttonText'] }}</a>
+							<a href="{{ !empty($strength['buttonHref']) ? $strength['buttonHref'] : 'javascript:;' }}" class="blue-button {{ $strength['completed'] ? 'completed' : '' }}" {{ !empty($strength['target']) ? 'target="_blank"' : '' }} {{ !empty($strength['event_category']) ? 'event_category='.$strength['event_category'] : '' }} {{ !empty($strength['event_action']) ? 'event_action='.$strength['event_action'] : '' }} {{ !empty($strength['event_label']) ? 'event_label='.$strength['event_label'] : '' }} >{{ $strength['buttonText'] }}</a>
 						@endif								
 					</div>
 					

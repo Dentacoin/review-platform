@@ -1771,7 +1771,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $income - $cashouts;
     }
 
-    public function getTotalBalance($platform) {
+    public function getTotalBalance($platform=null) {
         $income = DcnReward::where('user_id', $this->id);
         if (!empty($platform)) {
             $income = $income->where('platform', $platform);
@@ -2076,9 +2076,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         }
                     }
                     if(empty($opens)) {
-                        reset($this->work_hours);
-                        $dow = key( $this->work_hours );
-                        $opens = '<span>Opens on '.$dows[$dow].' at '.$this->work_hours[$dow][0].'</span>';
+                        $wh = $this->work_hours;
+                        reset($wh);
+                        $dow = key( $wh );
+                        $opens = '<span>Opens on '.$dows[$dow].' at '.$wh[$dow][0].'</span>';
                     }
                 }
             }

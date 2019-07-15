@@ -187,7 +187,7 @@
 					</h4>
 					@foreach( config('categories') as $cat_id => $cat )
 						<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat, $searchCategories) ? ' active' : '' !!}" for="checkbox-popup-{{ $cat }}">
-							<input type="checkbox" class="special-checkbox" id="checkbox-popup-{{ $cat }}" value="{{ $cat }}" {!! in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
+							<input type="checkbox" class="special-checkbox" id="checkbox-popup-{{ $cat }}" value="{{ $cat }}" {!! !empty($searchCategories) && in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
 							<i class="far fa-square"></i>
 							{{ trans('trp.categories.'.$cat) }}
 						</label>
@@ -271,7 +271,7 @@
 
 							@foreach( config('categories') as $cat_id => $cat )
 								<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat, $searchCategories) ? ' active' : '' !!}" for="checkbox-filter-{{ $cat }}">
-									<input type="checkbox" class="special-checkbox" id="checkbox-filter-{{ $cat }}" value="{{ $cat }}" {!! in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
+									<input type="checkbox" class="special-checkbox" id="checkbox-filter-{{ $cat }}" value="{{ $cat }}" {!! !empty($searchCategories) && in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
 									<i class="far fa-square"></i>
 									{{ trans('trp.categories.'.$cat) }}
 								</label>

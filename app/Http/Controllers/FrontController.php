@@ -72,21 +72,21 @@ class FrontController extends BaseController
         }
         
         //VPNs
-        $myips = session('my-ips');
+        // $myips = session('my-ips');
        
-        if( !isset( $myips[User::getRealIp()] ) ) {
-            if(!is_array($myips)) {
-                $myips = [];
-            }
-            $myips[User::getRealIp()] = User::checkForBlockedIP();
-            session(['my-ips' => $myips]);
-        }
-        if($myips[User::getRealIp()] && $this->current_page!='vpn' ) {
-            Redirect::to( getLangUrl('vpn') )->send();
-        }
-        if( !$myips[User::getRealIp()] && $this->current_page=='vpn' ) {
-            Redirect::to( getLangUrl('/') )->send();
-        }
+        // if( !isset( $myips[User::getRealIp()] ) ) {
+        //     if(!is_array($myips)) {
+        //         $myips = [];
+        //     }
+        //     $myips[User::getRealIp()] = User::checkForBlockedIP();
+        //     session(['my-ips' => $myips]);
+        // }
+        // if($myips[User::getRealIp()] && $this->current_page!='vpn' ) {
+        //     Redirect::to( getLangUrl('vpn') )->send();
+        // }
+        // if( !$myips[User::getRealIp()] && $this->current_page=='vpn' ) {
+        //     Redirect::to( getLangUrl('/') )->send();
+        // }
 
         $this->trackEvents = [];
 
@@ -552,6 +552,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2019-07-15-01';
+        $params['cache_version'] = '2019-07-15-02';
     }
 }

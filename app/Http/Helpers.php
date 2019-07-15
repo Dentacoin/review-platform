@@ -1,6 +1,6 @@
 <?php
 
-	function getVoxUrl($path=false){
+	function getVoxUrl($path=false, $locale=null){
     	//return getLangUrl($path);
     	return getLangUrl($path, $locale, 'https://dentavox.dentacoin.com/');
 	}

@@ -1082,7 +1082,9 @@
 		            			</tr>
 		            		</thead>
 		            		<tbody>
-		            			@foreach( $user->asks->sortBy('status', 'waiting') as $ask )
+		            			@foreach( $user->asks->sortBy(function ($elm, $key) {
+								    return $elm['status']=='waiting' ? -1 : 1;
+								}) as $ask )
 		            				<tr>
 		            					<td>
 		            						{{ $ask->created_at->toDateString() }}

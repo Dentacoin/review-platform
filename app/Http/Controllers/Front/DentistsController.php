@@ -97,7 +97,7 @@ class DentistsController extends FrontController
             //     }
             // }
 
-            if(!$lat || !$lon) {
+            if(empty($lat) || empty($lon)) {
 
                 $query = str_replace('-', ' ', $query);
 
@@ -267,6 +267,10 @@ class DentistsController extends FrontController
 
         $zoom = $country_search ? 5 : ($query=='worldwide' ? 1 : 13);
         $size = $query=='worldwide' ? '670x288' : '670x188';
+
+        $bounds_lon = null;
+        $bounds_lat = null;
+        $bounds_zoom = null;
 
         if (!$country_search && $query!='worldwide' ) {
             $max_lon = -300;

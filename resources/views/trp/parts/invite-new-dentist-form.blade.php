@@ -43,9 +43,11 @@
 			@if(!$country_id)
 				<option>-</option>
 			@endif
-			@foreach( $countries as $country )
-				<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
-			@endforeach
+			@if(!empty($countries))
+				@foreach( $countries as $country )
+					<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+				@endforeach
+			@endif
 		</select>
 	</div>
 

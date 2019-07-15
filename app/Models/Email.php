@@ -239,7 +239,7 @@ class Email extends Model
 				'[/invitelink]',
 			), array(
 				$this->meta['friend_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$this->meta['invitation_id'], null, $domain).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.($this->meta['invitation_id'] ?? ''), null, $domain).'">',
 				'</a>',
 			), $content);
 		}
@@ -254,7 +254,7 @@ class Email extends Model
 			$content = str_replace(array(
 				'[who_joined_name]',
 			), array(
-				$this->meta['who_joined_name']
+				$this->meta['who_joined_name'] ?? '',
 			), $content);
 		}
 

@@ -350,10 +350,10 @@ $(document).ready(function(){
                                 $("#question-done").show();
                             }
 
+
                             $("#other-surveys").show();
                             swiper.update();
                             
-
                             fbq('track', 'SurveyComplete');
                             gtag('event', 'Take', {
                                 'event_category': 'Survey',

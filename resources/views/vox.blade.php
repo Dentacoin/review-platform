@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="google-site-verification" content="b0VE72mRJqqUuxWJZklHQnvRZV4zdJkDymC0RD9hPhE" />
 
-        @if($noindex)
+        @if(!empty($noindex))
         	<meta name="robots" content="noindex">
         @endif
 
@@ -84,6 +84,7 @@
 			s.parentNode.insertBefore(t,s)}(window,document,'script',
 			'https://connect.facebook.net/en_US/fbevents.js');
 			fbq('init', '2010503399201502'); 
+			 fbq('init', '2366034370318681'); 
 			fbq('track', 'PageView');
 		</script>
 		<!-- End Facebook Pixel Code -->
@@ -111,6 +112,7 @@
     <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($satic_page) ? 'page-page' : '' }} {{ (config('langs')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }} {{ !empty($user) ? 'logged-in' : 'logged-out' }} {{ !empty($custom_body_class) ? $custom_body_class : '' }}">
 		<noscript>
 			<img height="1" width="1" src="https://www.facebook.com/tr?id=2010503399201502&ev=PageView&noscript=1"/>
+		 	<img height="1" width="1" src="https://www.facebook.com/tr?id=2366034370318681&ev=PageView&noscript=1"/>
 		</noscript>
 		
 		<div class="above-fold">

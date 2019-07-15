@@ -188,21 +188,21 @@
 						<div class="sign-in-step {!! empty($regData) ? 'active' : '' !!}" id="step-1">
 							@include('front.errors')
 							<div class="modern-field alert-after">
-								<input type="email" name="email" id="dentist-email" class="modern-input" value="{{ $regData['email'] ?? old('email') }}" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+								<input type="email" name="email" id="dentist-email" class="modern-input" value="{{ !empty($regData) && $regData['email'] ?? old('email') }}" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 								<label for="dentist-email">
 									<span>{!! nl2br(trans('trp.popup.popup-register.email')) !!}</span>
 								</label>
 							</div>
 							
 							<div class="modern-field alert-after">
-								<input type="password" name="password" id="dentist-password" class="modern-input" value="{{ $regData['password'] ?? old('password') }}" autocomplete="off">
+								<input type="password" name="password" id="dentist-password" class="modern-input" value="{{ !empty($regData) && $regData['password'] ?? old('password') }}" autocomplete="off">
 								<label for="dentist-password">
 									<span>{!! nl2br(trans('trp.popup.popup-register.password')) !!}</span>
 								</label>
 							</div>
 							
 							<div class="modern-field alert-after">
-								<input type="password" name="password-repeat" id="dentist-password-repeat" class="modern-input" value="{{ $regData['password'] ?? old('password-repeat') }}" autocomplete="off">
+								<input type="password" name="password-repeat" id="dentist-password-repeat" class="modern-input" value="{{ !empty($regData) && $regData['password'] ?? old('password-repeat') }}" autocomplete="off">
 								<label for="dentist-password-repeat">
 									<span>{!! nl2br(trans('trp.popup.popup-register.repeat-password')) !!}</span>
 								</label>
@@ -242,7 +242,7 @@
 					  		<div class="modern-field title-wrap alert-after" {!! !empty($regData) && $regData['mode']=='dentist' ? '' : 'style="display: none;"' !!}>
 					  			<select name="title" id="dentist-title" class="modern-input" value="{{ $regData['title'] ?? old('title') }}">
 					  				@foreach(config('titles') as $k => $v)
-					  					<option value="{{ $k }}" {!! !empty($regData['title'] && ($regData['title'] == $k)) ? 'selected="selected"' : '' !!}>{{ $v }}</option>
+					  					<option value="{{ $k }}" {!! !empty($regData) && !empty($regData['title'] && ($regData['title'] == $k)) ? 'selected="selected"' : '' !!}>{{ $v }}</option>
 					  				@endforeach
 					  			</select>
 								<label for="dentist-title">
@@ -251,7 +251,7 @@
 							</div>
 
 					  		<div class="modern-field alert-after">
-								<input type="text" name="name" id="dentist-name" class="modern-input" value="{{ $regData['name'] ?? old('name') }}" autocomplete="off">
+								<input type="text" name="name" id="dentist-name" class="modern-input" value="{{ !empty($regData) && $regData['name'] ?? old('name') }}" autocomplete="off">
 								<label for="dentist-name">
 									<span>{!! nl2br(trans('trp.popup.popup-register.name')) !!}</span>
 								</label>
@@ -286,7 +286,7 @@
 						  				<option>-</option>
 						  			@endif
 					  				@foreach( $countries as $country )
-					  					<option value="{{ $country->id }}" code="{{ $country->code }}" {!! (!empty($regData['country_id']) && $regData['country_id']==$country->id) || (empty($regData['country_id']) && $country_id==$country->id) ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+					  					<option value="{{ $country->id }}" code="{{ $country->code }}" {!! (!empty($regData) && !empty($regData['country_id']) && $regData['country_id']==$country->id) || (empty($regData['country_id']) && $country_id==$country->id) ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
 					  				@endforeach
 					  			</select>
 							</div>
@@ -311,7 +311,7 @@
 		                    </div>
 
 							<div class="modern-field alert-after">
-								<input type="text" name="website" id="dentist-website" class="modern-input" autocomplete="off" value="{{ $regData['website'] ?? old('website') }}">
+								<input type="text" name="website" id="dentist-website" class="modern-input" autocomplete="off" value="{{ !empty($regData) && $regData['website'] ?? old('website') }}">
 								<label for="dentist-website">
 									<span>{!! nl2br(trans('trp.popup.popup-register.website')) !!}</span>
 								</label>
@@ -323,7 +323,7 @@
 				    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>
 								</div>
 								<div style="flex: 1;" class="modern-field">
-									<input type="text" name="phone" id="dentist-tel" class="modern-input" autocomplete="off" value="{{ $regData['phone'] ?? old('phone') }}">
+									<input type="text" name="phone" id="dentist-tel" class="modern-input" autocomplete="off" value="{{ !empty($regData) && $regData['phone'] ?? old('phone') }}">
 									<label for="dentist-tel">
 										<span>{!! nl2br(trans('trp.popup.popup-register.phone')) !!}</span>
 									</label>
@@ -337,10 +337,10 @@
 								</a>
 							</div>
 						</div>
-						<div class="sign-in-step {!! !empty($regData['country_id']) ? 'active' : '' !!} tac" id="step-4">
+						<div class="sign-in-step {!! !empty($regData) && !empty($regData['country_id']) ? 'active' : '' !!} tac" id="step-4">
 							<div class="flex flex-mobile alert-after">
 								<div class="col" style="max-width: 154px;">
-									<label for="add-avatar" class="image-label" {!! !empty($regData['photoThumb']) ? 'style="background-image:url('.$regData['photoThumb'].');"' : '' !!} >
+									<label for="add-avatar" class="image-label" {!! !empty($regData) && !empty($regData['photoThumb']) ? 'style="background-image:url('.$regData['photoThumb'].');"' : '' !!} >
 										@if(empty( $regData['photo'] ))
 											<div class="centered-hack">
 												<i class="fas fa-plus"></i>
@@ -354,7 +354,7 @@
 							    		</div>
 										<input type="file" name="image" id="add-avatar" upload-url="{{ getLangUrl('register/upload') }}">
 									</label>
-									<input type="hidden" id="photo-name" name="photo" value="{{ $regData['photo'] ?? '' }}" >
+									<input type="hidden" id="photo-name" name="photo" value="{{ !empty($regData) && $regData['photo'] ?? '' }}" >
 									<input type="hidden" id="photo-thumb" name="photo-thumb" value="{{ $regData['photoThumb'] ?? '' }}" >
 								</div>
 								<div class="col">
@@ -364,7 +364,7 @@
 											
 										</p>
 								    	@foreach($categories as $k => $v)
-											<label class="checkbox-label{!! !empty($regData['specialization']) && in_array($loop->index, $regData['specialization']) ? ' active' : '' !!}" for="checkbox-{{ $k }}">
+											<label class="checkbox-label{!! !empty($regData) && !empty($regData['specialization']) && in_array($loop->index, $regData['specialization']) ? ' active' : '' !!}" for="checkbox-{{ $k }}">
 												<input 
 													type="checkbox" 
 													class="special-checkbox" 
