@@ -628,7 +628,7 @@ class VoxController extends FrontController
 			        				$answered[$q] = 1;
 			        				$answer = null;
 
-			        				if( $found->cross_check ) {
+			        				if( !empty($found->cross_check) ) {
 			        					if($found->cross_check == 'birthyear') {
 
 							    			if ($cross_checks[$q] != $a) {
