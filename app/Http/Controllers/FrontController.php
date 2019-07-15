@@ -95,7 +95,7 @@ class FrontController extends BaseController
             $this->admin = Auth::guard('admin')->user();
             $this->user = Auth::guard('web')->user();
 
-            if ($this->user && session('intended') ) {
+            if ($this->user && !$this->user->is_dentist && session('intended') ) {
                 $intended = session()->pull('intended');
                 
                 if( 'https://'.Request::getHost().'/'.request()->path() != trim($intended, '/') ) {
