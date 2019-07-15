@@ -13,6 +13,8 @@ var flickityScales;
 var mapsLoaded = false;
 var mapsWaiting = [];
 var modernFieldsUpdate;
+var welcome_vox;
+var welcome_vox_q_count;
 
 var preloadImages = function(urls, allImagesLoadedCallback){
     var loadedCounter = 0;
