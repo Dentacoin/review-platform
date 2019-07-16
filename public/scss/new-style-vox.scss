@@ -4116,6 +4116,7 @@ body.vox-public {
 	}
 
 	.stats {
+
 		.stat {
 			border-bottom: 1px solid #f3f3f3;
 
@@ -4124,9 +4125,79 @@ body.vox-public {
 			}
 
 			&:first-child {
-				.contents .graphs .share-buttons {
+				.share-buttons {
 					visibility: visible;					
 				}
+			}
+
+			.box {
+				align-items: baseline;
+    			justify-content: space-between;
+
+    			@media #{$tablet} {
+    				flex-flow: row wrap;
+    			}
+			}
+
+			.share-buttons {
+			    align-items: center;
+			    z-index: 100;
+			    visibility: hidden;
+
+			    @media #{$tablet} {
+					margin-bottom: 10px;
+					order: -1;
+					width: 100%;
+				}
+
+				@media #{$phone} {
+					display: inline-block;
+					text-align: center;
+					margin-bottom: 20px;
+				}
+
+			    span {
+			    	margin-right: 5px;
+
+				    @media #{$phone} {
+			    		margin-right: 0px;
+					}
+			    }
+
+			    .share-button {
+			    	padding-left: 5px;
+			    	padding-right: 5px;
+
+			    	@media #{$phone} {
+					    display: inline-block;
+					}
+
+		    		&.fb {
+		    			a {
+		    				background-color: #3a559f;
+		    			}
+		    		}
+		    		&.twt {
+		    			a {
+		    				background-color: #50abf1;
+		    			}
+		    		}
+			    }
+
+			    a {
+			    	border-radius: 3px;
+			    	display: block;
+				    background-color: #3a559f;
+				    color: white;
+				    width: 24px;
+				    height: 24px;
+				    text-align: center;
+				    line-height: 24px;
+
+				    i {
+				    	color: white;
+				    }
+			    }
 			}
 
 			a.title {
@@ -4224,66 +4295,6 @@ body.vox-public {
 
 					@media #{$phone} {
 					    flex-direction: column;
-					}
-
-					.share-buttons {
-					    position: absolute;
-					    right: 10px;
-					    top: 10px;
-					    align-items: center;
-					    z-index: 100;
-					    visibility: hidden;
-
-					    @media #{$phone} {
-						    display: block;
-							right: 5px;
-							top: 3px;
-						}
-
-					    span {
-					    	margin-right: 5px;
-						    @media #{$phone} {
-					    		margin-right: 0px;
-							    display: block;
-							    text-align: center;
-							}
-					    }
-
-					    .col {
-					    	padding-left: 5px;
-					    	padding-right: 5px;
-
-					    	@media #{$phone} {
-							    display: inline-block;
-							    padding: 0px;
-							}
-
-				    		&.fb {
-				    			a {
-				    				background-color: #3a559f;
-				    			}
-				    		}
-				    		&.twt {
-				    			a {
-				    				background-color: #50abf1;
-				    			}
-				    		}
-					    }
-
-					    a {
-					    	border-radius: 3px;
-					    	display: block;
-						    background-color: #3a559f;
-						    color: white;
-						    width: 24px;
-						    height: 24px;
-						    text-align: center;
-						    line-height: 24px;
-
-						    i {
-						    	color: white;
-						    }
-					    }
 					}
 
 					.nav {

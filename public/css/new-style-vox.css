@@ -2834,8 +2834,54 @@ p.h2-bold {
   border-bottom: 1px solid #f3f3f3; }
   .page-statistics .stats .stat:last-child {
     border-bottom: none; }
-  .page-statistics .stats .stat:first-child .contents .graphs .share-buttons {
+  .page-statistics .stats .stat:first-child .share-buttons {
     visibility: visible; }
+  .page-statistics .stats .stat .box {
+    align-items: baseline;
+    justify-content: space-between; }
+    @media screen and (max-width: 1080px) {
+      .page-statistics .stats .stat .box {
+        flex-flow: row wrap; } }
+  .page-statistics .stats .stat .share-buttons {
+    align-items: center;
+    z-index: 100;
+    visibility: hidden; }
+    @media screen and (max-width: 1080px) {
+      .page-statistics .stats .stat .share-buttons {
+        margin-bottom: 10px;
+        order: -1;
+        width: 100%; } }
+    @media screen and (max-width: 768px) {
+      .page-statistics .stats .stat .share-buttons {
+        display: inline-block;
+        text-align: center;
+        margin-bottom: 20px; } }
+    .page-statistics .stats .stat .share-buttons span {
+      margin-right: 5px; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats .stat .share-buttons span {
+          margin-right: 0px; } }
+    .page-statistics .stats .stat .share-buttons .share-button {
+      padding-left: 5px;
+      padding-right: 5px; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats .stat .share-buttons .share-button {
+          display: inline-block; } }
+      .page-statistics .stats .stat .share-buttons .share-button.fb a {
+        background-color: #3a559f; }
+      .page-statistics .stats .stat .share-buttons .share-button.twt a {
+        background-color: #50abf1; }
+    .page-statistics .stats .stat .share-buttons a {
+      border-radius: 3px;
+      display: block;
+      background-color: #3a559f;
+      color: white;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      line-height: 24px; }
+      .page-statistics .stats .stat .share-buttons a i {
+        color: white; }
   .page-statistics .stats .stat a.title {
     font-size: 20px;
     color: #999;
@@ -2909,47 +2955,6 @@ p.h2-bold {
       @media screen and (max-width: 768px) {
         .page-statistics .stats .stat .contents .graphs {
           flex-direction: column; } }
-      .page-statistics .stats .stat .contents .graphs .share-buttons {
-        position: absolute;
-        right: 10px;
-        top: 10px;
-        align-items: center;
-        z-index: 100;
-        visibility: hidden; }
-        @media screen and (max-width: 768px) {
-          .page-statistics .stats .stat .contents .graphs .share-buttons {
-            display: block;
-            right: 5px;
-            top: 3px; } }
-        .page-statistics .stats .stat .contents .graphs .share-buttons span {
-          margin-right: 5px; }
-          @media screen and (max-width: 768px) {
-            .page-statistics .stats .stat .contents .graphs .share-buttons span {
-              margin-right: 0px;
-              display: block;
-              text-align: center; } }
-        .page-statistics .stats .stat .contents .graphs .share-buttons .col {
-          padding-left: 5px;
-          padding-right: 5px; }
-          @media screen and (max-width: 768px) {
-            .page-statistics .stats .stat .contents .graphs .share-buttons .col {
-              display: inline-block;
-              padding: 0px; } }
-          .page-statistics .stats .stat .contents .graphs .share-buttons .col.fb a {
-            background-color: #3a559f; }
-          .page-statistics .stats .stat .contents .graphs .share-buttons .col.twt a {
-            background-color: #50abf1; }
-        .page-statistics .stats .stat .contents .graphs .share-buttons a {
-          border-radius: 3px;
-          display: block;
-          background-color: #3a559f;
-          color: white;
-          width: 24px;
-          height: 24px;
-          text-align: center;
-          line-height: 24px; }
-          .page-statistics .stats .stat .contents .graphs .share-buttons a i {
-            color: white; }
       .page-statistics .stats .stat .contents .graphs .nav {
         position: absolute;
         top: 50%;

@@ -87,16 +87,33 @@
 							@if(!empty($question->translateorNew(App::getLocale())->stats_subtitle))
 								<p class="stats-subtitle">{{ nl2br($question->translateorNew(App::getLocale())->stats_subtitle) }}</p>
 							@endif
-							@if($question->used_for_stats=='standard')
-								<div class="scales flex flex-center">
-									{!! trans('vox.page.stats.scale-by') !!}:									
-									@foreach( $question->stats_fields as $sk)
-										<a {!! $loop->first ? 'class="active"' : '' !!} scale="{{ $sk }}">
-											{{ trans('vox.page.stats.group-by-'.$sk) }}
+							<div class="flex box">
+								@if($question->used_for_stats=='standard')
+									<div class="scales flex flex-center">
+										{!! trans('vox.page.stats.scale-by') !!}:									
+										@foreach( $question->stats_fields as $sk)
+											<a {!! $loop->first ? 'class="active"' : '' !!} scale="{{ $sk }}">
+												{{ trans('vox.page.stats.group-by-'.$sk) }}
+											</a>
+										@endforeach
+									</div>
+								@endif
+								<div class="share-buttons flex" data-href="{{ $vox->getStatsList() }}">
+									<span>
+										{!! trans('vox.page.stats.share') !!}
+									</span>
+									<div class="share-button fb tac">
+										<a class="share" href="javascript:;">
+											<i class="fab fa-facebook-f"></i>
 										</a>
-									@endforeach
+									</div>
+									<div class="share-button twt tac">
+										<a class="share" href="javascript:;">
+											<i class="fab fa-twitter"></i>
+										</a>
+									</div>
 								</div>
-							@endif
+							</div>
 							<div class="graphs flex">						
 								<div class="chart">
 									<div class="main-chart"></div>
@@ -138,22 +155,6 @@
 										{{ $question->related->question }}
 									</div>
 								@endif	
-
-								<div class="share-buttons flex" data-href="{{ $vox->getStatsList() }}">
-									<span>
-										{!! trans('vox.page.stats.share') !!}
-									</span>
-									<div class="col fb tac">
-										<a class="share" href="javascript:;">
-											<i class="fab fa-facebook-f"></i>
-										</a>
-									</div>
-									<div class="col twt tac">
-										<a class="share" href="javascript:;">
-											<i class="fab fa-twitter"></i>
-										</a>
-									</div>
-								</div>
 								@if($question->used_for_stats=='standard')
 									<a class="nav nav-left">
 									</a>
