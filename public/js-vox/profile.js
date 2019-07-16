@@ -248,7 +248,8 @@ $(document).ready(function(){
 
 
     if ($('body').hasClass('sp-vox-iframe')) {
-        var content_heigth = $('.popup').length ? $('.popup').heigth() + $('.site-content').height() : $('.site-content').height();
+        var content_heigth = $('.popup').length ? ($('.popup').heigth() + $('.site-content').height()) : $('.site-content').height();
+        console.log($('.popup').heigth(), $('.site-content').height(),  content_heigth);
 
         function triggerIframeSizeEventForParent() {
             window.parent.postMessage(
