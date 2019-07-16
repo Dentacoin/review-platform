@@ -106,6 +106,13 @@ class VoxController extends FrontController
 				'js' => [
 					'vox.js'
 				],
+	            'csscdn' => [
+	                'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
+	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
+	            ],
+	            'jscdn' => [
+	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
+	            ],
 	            'canonical' => $vox->getLink(),
 	            'social_image' => $vox->getSocialImageUrl('survey'),
 

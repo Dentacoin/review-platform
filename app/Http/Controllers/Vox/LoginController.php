@@ -141,12 +141,12 @@ class LoginController extends FrontController
             } else {
 
                 if($user->isBanned('vox')) {
-                    return redirect( getVoxUrl('profile'));
+                    return redirect( 'https://account.dentacoin.com/dentavox?platform=dentavox');
                 }
                 Auth::login($user, true);
 
                 //Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
-                return redirect(getVoxUrl('profile').'?success-message='.urlencode(trans('vox.popup.register.have-account')));
+                return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
             }
         } else {
             if (!empty($s_user->getEmail())) {
@@ -347,7 +347,7 @@ class LoginController extends FrontController
 
                                 $intended = session()->pull('our-intended');
                                 
-                                return redirect($user->isBanned('vox') ? getVoxUrl('profile') : ($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/')  )));
+                                return redirect($user->isBanned('vox') ? 'https://account.dentacoin.com/dentavox?platform=dentavox' : ($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/')  )));
                                 
                                 $sess = [
                                     'login_patient' => true,
