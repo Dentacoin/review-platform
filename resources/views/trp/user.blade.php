@@ -281,7 +281,7 @@
 						{!! nl2br(trans('trp.page.user.submit-review')) !!}
 						
 					</a>
-					@if(!$isTrusted && !$has_asked_dentist)
+					@if(empty($isTrusted) && !$has_asked_dentist)
 						<a href="javascript:;" class="button button-inner-white button-ask" data-popup-logged="popup-ask-dentist">
 							{!! nl2br(trans('trp.page.user.request-invite')) !!}
 							
@@ -557,7 +557,7 @@
 				<a href="javascript:;" class="button" data-popup-logged="submit-review-popup">
 					{!! nl2br(trans('trp.page.user.submit-review')) !!}
 				</a>
-				@if(!$isTrusted && !$has_asked_dentist)
+				@if(empty($isTrusted) && !$has_asked_dentist)
 					<a href="javascript:;" class="button button-inner-white button-ask" data-popup-logged="popup-ask-dentist">
 						{!! nl2br(trans('trp.page.user.request-invite')) !!}
 					</a>
@@ -1202,7 +1202,7 @@
 		@endif
 	@else
 		@include('trp.popups.submit-review')
-		@if(!$isTrusted && !$has_asked_dentist)
+		@if(empty($isTrusted) && !$has_asked_dentist)
 			@include('trp.popups.ask-dentist')
 		@endif
 	@endif
