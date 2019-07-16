@@ -19,5 +19,10 @@ class BannedController extends FrontController
         ));
 
 	}
+	public function profile_redirect($locale=null) {
+			
+		return $this->ShowVoxView('profile-redirect');
+
+	}
 
 }

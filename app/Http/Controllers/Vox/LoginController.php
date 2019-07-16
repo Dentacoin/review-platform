@@ -141,7 +141,7 @@ class LoginController extends FrontController
             } else {
 
                 if($user->isBanned('vox')) {
-                    return redirect( getVoxUrl('profile'));
+                    return redirect( getVoxUrl('profile-redirect'));
                 }
                 Auth::login($user, true);
 
@@ -347,7 +347,7 @@ class LoginController extends FrontController
 
                                 $intended = session()->pull('our-intended');
                                 
-                                return redirect($user->isBanned('vox') ? getVoxUrl('profile') : ($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/')  )));
+                                return redirect($user->isBanned('vox') ? getVoxUrl('profile-redirect') : ($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/')  )));
                                 
                                 $sess = [
                                     'login_patient' => true,

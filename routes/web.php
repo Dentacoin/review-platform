@@ -342,6 +342,8 @@ $voxRoutes = function () {
 			Route::group(['middleware' => 'auth:web'], function () {
 				Route::any('welcome-to-dentavox', 				'RegisterController@register_success');
 
+				Route::get('profile-redirect', 					'BannedController@profile_redirect');
+				
 				Route::any('profile', 							'ProfileController@home');
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');
 				Route::post('profile/address', 					'ProfileController@address');

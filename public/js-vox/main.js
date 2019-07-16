@@ -1054,6 +1054,19 @@ $(document).ready(function(){
             'event_label': $(this).attr('event_label'),
         });
 	});
+
+	if ($('body').hasClass('page-profile-redirect')) {
+
+		var cnt = $('img.hide').length;
+		var loaded = 0;
+		$('img.hide').on('load error', function() {
+	        loaded++;
+			if(loaded==cnt) {
+				window.location.href = 'https://account.dentacoin.com/dentavox?platform=dentavox';
+				console.log('bbb');
+			}
+	    });
+	}
 });
 
 
