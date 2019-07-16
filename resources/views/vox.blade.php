@@ -13,6 +13,9 @@
 
         <title>{{ $seo_title }}</title>
         <meta name="description" content="{{ $seo_description }}">
+        @if(!empty($keywords))
+        	<meta name="keywords" content="{{ $keywords }}">
+        @endif
         <link rel="canonical" href="{{ $canonical }}" />
 
         <meta property="og:locale" content="{{ App::getLocale() }}" />

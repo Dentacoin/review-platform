@@ -32,7 +32,11 @@ class IndexController extends FrontController
 			'all' => trans('vox.page.home.sort-all'),
 		];
 
+		$social_image = url('new-vox-img/dentavox-all-paid-surveys.jpg');
+
 		return $this->ShowVoxView('home', array(
+			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',
+			'social_image' => $social_image,
 			'sorts' => $sorts,
 			'filters' => $filters,
 			'taken' => !empty($this->user) ? $this->user->filledVoxes() : null,
