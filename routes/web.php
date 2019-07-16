@@ -302,7 +302,7 @@ $voxRoutes = function () {
 			Route::get('faq', 									'FaqController@home');
 
 			Route::get('banned', 								'BannedController@home');
-			Route::get('profile-redirect', 					'BannedController@profile_redirect');
+			Route::get('profile-redirect', 						'BannedController@profile_redirect');
 
 			Route::any('invite/{id}/{hash}/{inv_id?}', 			'RegisterController@invite_accept');
 			
