@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
+use Request;
 
 
 class RobotsController extends FrontController

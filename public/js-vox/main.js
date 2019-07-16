@@ -655,8 +655,12 @@ $(document).ready(function(){
         navigator.share({
             title: $(this).attr('data-title'),
             url: $(this).attr('data-url')
-        }).then(() => console.log('Successful share'))
-        .catch((error) => console.log('Error sharing:', error));
+        }).then( function() {
+        	console.log('Successful share')
+        })
+        .catch(function(error) {
+        	console.log('Error sharing:', error)
+        });
 
     });
 
