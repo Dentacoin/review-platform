@@ -84,7 +84,13 @@ class IndexController extends FrontController
 	        	'taken' => $this->user ? $this->user->filledVoxes() : [],
 	        	'js' => [
 	        		'index.js'
-	        	]
+	        	],
+	            'jscdn' => [
+	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
+	            ],
+	            'csscdn' => [
+	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
+	            ],
 	        ));			
 		}
 	}

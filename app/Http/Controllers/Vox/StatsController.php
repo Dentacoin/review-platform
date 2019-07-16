@@ -157,7 +157,8 @@ class StatsController extends FrontController
 
         	} else if($scale=='gender') {
                 $answer_id = null;
-        		$results = $results->groupBy('answer', 'gender')->selectRaw('answer, gender, COUNT(*) as cnt');
+                $total = $this->prepareQuery($question_id, $dates)->whereNotNull('gender')->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+        		$results = $results->whereNotNull('gender')->groupBy('answer', 'gender')->selectRaw('answer, gender, COUNT(*) as cnt');
                 $results = $results->get();
                 foreach ($answers as $key => $value) {
                     $second_chart[$value] = 0;
@@ -182,7 +183,7 @@ class StatsController extends FrontController
         				$third_chart[ $answers[ $res->answer-1 ] ] += $res->cnt; //f
         			}
                     $totalm = $totalf = 0;
-                    $totalQuery = $this->prepareQuery($question_id, $dates)->groupBy('gender')->select(DB::raw('gender, count(distinct `user_id`) as num'))->get();
+                    $totalQuery = $this->prepareQuery($question_id, $dates)->whereNotNull('gender')->groupBy('gender')->select(DB::raw('gender, count(distinct `user_id`) as num'))->get();
                     foreach ($totalQuery->toArray() as $garr) {
                         if($garr['gender']=='m') {
                             $totalm = $garr['num'];
