@@ -80,6 +80,11 @@ class LoginController extends FrontController
                 session($sess);
 
                 Auth::login($user, true);
+                
+                if($user->isBanned('vox')) {
+                    return redirect( getVoxUrl('profile-redirect'));
+                }
+
                 $intended = session()->pull('our-intended');
 
                 if( $path  ){
@@ -141,7 +146,7 @@ class LoginController extends FrontController
             } else {
 
                 Auth::login($user, true);
-                
+
                 if($user->isBanned('vox')) {
                     return redirect( getVoxUrl('profile-redirect'));
                 }
