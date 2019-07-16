@@ -64,6 +64,12 @@ class VoxQuestion extends Model {
         return preg_replace('/\[([^\]]*)\]/', '<span class="tooltip-text" text="${1}">', $new_answer);
     }
 
+    public static function removeAnswerTooltip($answer) {
+        $new_answer = str_replace("[/]","", str_replace('"', '&quot;', $answer));
+        
+        return preg_replace('/\[([^\]]*)\]/', '', $new_answer);
+    }
+
     public static function hasAnswerTooltip($answer, $question) {
         if (strpos($answer, '[/]') !== false) {
 

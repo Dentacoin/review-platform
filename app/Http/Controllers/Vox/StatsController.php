@@ -98,10 +98,13 @@ class StatsController extends FrontController
     		if( $question->vox_scale_id ) {
                 $answers = explode(',', VoxScale::find($question->vox_scale_id)->answers );
                 foreach ($answers as $key => $value) {
-                    $answers[$key] = trim($value);
+                    $answers[$key] = trim($question->removeAnswerTooltip($value));
                 }
             } else {
-                $answers = json_decode($question->answers);
+                $ans_array = json_decode($question->answers);
+                foreach ($ans_array as $ans) {
+                    $answers[] = $question->removeAnswerTooltip($ans);
+                }
             }
 
             foreach ($answers as $key => $value) {
