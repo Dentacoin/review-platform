@@ -566,6 +566,9 @@ class VoxController extends FrontController
 									$answer = new VoxAnswer;
 							        $answer->user_id = $this->user->id;
 							        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+							        if (in_array($q, $welcome_vox_question_ids)===true) {
+							        	$answer->is_completed = 1;
+							        }
 							        $answer->question_id = $q;
 							        $answer->answer = $a;
 							        $answer->country_id = $this->user->country_id;
@@ -644,6 +647,9 @@ class VoxController extends FrontController
 					        				$answer = new VoxAnswer;
 									        $answer->user_id = $this->user->id;
 									        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+									        if (in_array($q, $welcome_vox_question_ids)===true) {
+									        	$answer->is_completed = 1;
+									        }
 									        $answer->question_id = $q;
 									        $answer->answer = 0;
 									        $answer->country_id = $this->user->country_id;
@@ -660,6 +666,9 @@ class VoxController extends FrontController
 			        					$answer = new VoxAnswer;
 								        $answer->user_id = $this->user->id;
 								        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+								        if (in_array($q, $welcome_vox_question_ids)===true) {
+								        	$answer->is_completed = 1;
+								        }
 								        $answer->question_id = $q;
 								        $answer->answer = $value;
 								        $answer->country_id = $this->user->country_id;
@@ -673,6 +682,9 @@ class VoxController extends FrontController
 			        					$answer = new VoxAnswer;
 								        $answer->user_id = $this->user->id;
 								        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+								        if (in_array($q, $welcome_vox_question_ids)===true) {
+								        	$answer->is_completed = 1;
+								        }
 								        $answer->question_id = $q;
 								        $answer->answer = $k+1;
 								        $answer->scale = $value;
