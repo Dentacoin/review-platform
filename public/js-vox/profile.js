@@ -248,13 +248,15 @@ $(document).ready(function(){
 
 
     if ($('body').hasClass('sp-vox-iframe')) {
+        var content_heigth = $('.popup').length ? $('.popup').heigth() + $('.site-content').height() : $('.site-content').height();
+
         function triggerIframeSizeEventForParent() {
             window.parent.postMessage(
                 {
                     event_id: 'iframe_size_event',
                     data: {
                         width: $('.site-content').width(),
-                        height: $('.site-content').height()
+                        height: content_heigth
                     }
                 },
                 "*"
