@@ -75,14 +75,14 @@
 		<form action="{{ getLangUrl('new-login/facebook', null, 'https://dentavox.dentacoin.com/') }}" method="post" id="new-login-form" style="display: none;">
 			{!! csrf_field() !!}
 			<input type="text" name="access-token" value="">
-			<input type="hidden" name="intended" value="{{ $_SERVER['HTTP_REFERER'] }}">
+			<input type="hidden" name="intended" value="{{ !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '' }}">
 			<button type="submit"></button>			
 		</form>
 
 		<form action="{{ getLangUrl('login/civic', null, 'https://dentavox.dentacoin.com/') }}" method="post" id="new-civic-login-form" style="display: none;">
 			{!! csrf_field() !!}
 			<input type="text" name="jwtToken" value="">
-			<input type="hidden" name="intended" value="{{ $_SERVER['HTTP_REFERER'] }}">
+			<input type="hidden" name="intended" value="{{ !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '' }}">
 			<button type="submit"></button>			
 		</form>
 
@@ -102,7 +102,7 @@
 				<form action="{{ getVoxUrl('login') }}" method="post" class="form-horizontal">
 					{!! csrf_field() !!}
 
-					<input type="hidden" name="intended" value="{{ $_SERVER['HTTP_REFERER'] }}">
+					<input type="hidden" name="intended" value="{{ !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '' }}">
 
 					<div class="user-type-mobile">
 						<a href="javascript:;" type="reg-patients">
