@@ -98,7 +98,7 @@
 										@endforeach
 									</div>
 								@endif
-								<div class="share-buttons flex" data-href="{{ $vox->getStatsList() }}">
+								<div class="share-buttons flex" data-href="{{ str_replace('dentavox', 'vox', $vox->getStatsList()) }}">
 									<span>
 										{!! trans('vox.page.stats.share') !!}
 									</span>

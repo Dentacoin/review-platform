@@ -1025,7 +1025,7 @@ $(document).ready(function(){
     });
 
     $('.share-buttons .share').click( function() {
-        console.log(document.title);
+        
         var href = $(this).closest('.share-buttons').attr('data-href');
         if ($(this).parent().hasClass('fb')) {
             var url = 'https://www.facebook.com/dialog/share?app_id=1906201509652855&display=popup&href=' + escape(href);
