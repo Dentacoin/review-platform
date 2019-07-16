@@ -35,6 +35,8 @@ class StatsController extends FrontController
 			// 'popular' => trans('vox.page.stats.sort-popular'),
 		];
 
+        $social_image = url('new-vox-img/dentavox-dental-stats.jpg');
+
 
 		return $this->ShowVoxView('stats', array(
             'taken' => $this->user ? $this->user->filledVoxes() : [],
@@ -42,7 +44,7 @@ class StatsController extends FrontController
 			'voxes' => Vox::where('type', '!=', 'hidden')->with('stats_main_question')->get(),
 			'cats' => VoxCategory::with('voxes.vox')->get(),
 			'sorts' => $sorts,
-
+            'social_image' => $social_image,
             'seo_title' => trans('vox.seo.stats-all.title'),
             'seo_description' => trans('vox.seo.stats-all.description'),
             'social_title' => trans('vox.social.stats-all.title'),

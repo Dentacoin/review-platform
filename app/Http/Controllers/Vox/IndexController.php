@@ -80,12 +80,15 @@ class IndexController extends FrontController
 				$subtitle = nl2br(trans('vox.page.index.subtitle'));
 			}
 			
+			$social_image = url('new-vox-img/dentavox-home.jpg');
+			
 			return $this->ShowVoxView('index', array(
 				'subtitle' => $subtitle,
 				'title' => $title,
 				'users_count' => User::getCount('vox'),
 	        	'voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
 	        	'taken' => $this->user ? $this->user->filledVoxes() : [],
+				'social_image' => $social_image,
 	        	'js' => [
 	        		'index.js'
 	        	],
