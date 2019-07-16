@@ -140,10 +140,11 @@ class LoginController extends FrontController
                 return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('You have been permanently banned and cannot return to DentaVox anymore.'));
             } else {
 
+                Auth::login($user, true);
+                
                 if($user->isBanned('vox')) {
                     return redirect( getVoxUrl('profile-redirect'));
                 }
-                Auth::login($user, true);
 
                 //Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
                 return redirect(getVoxUrl('/').'?success-message='.urlencode(trans('vox.popup.register.have-account')));
