@@ -1062,8 +1062,10 @@ $(document).ready(function(){
 		$('img.hide').on('load error', function() {
 	        loaded++;
 			if(loaded==cnt) {
+				$('.loader').fadeOut();
+	        	$('.loader-mask').delay(350).fadeOut('slow');
+
 				window.location.href = 'https://account.dentacoin.com/dentavox?platform=dentavox';
-				console.log('bbb');
 			}
 	    });
 	}
