@@ -568,6 +568,7 @@ class VoxController extends FrontController
 							        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
 							        if (in_array($q, $welcome_vox_question_ids)===true) {
 							        	$answer->is_completed = 1;
+							        	$answer->is_skipped = 0;
 							        }
 							        $answer->question_id = $q;
 							        $answer->answer = $a;
@@ -649,6 +650,7 @@ class VoxController extends FrontController
 									        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
 									        if (in_array($q, $welcome_vox_question_ids)===true) {
 									        	$answer->is_completed = 1;
+							        			$answer->is_skipped = 0;
 									        }
 									        $answer->question_id = $q;
 									        $answer->answer = 0;
@@ -668,6 +670,7 @@ class VoxController extends FrontController
 								        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
 								        if (in_array($q, $welcome_vox_question_ids)===true) {
 								        	$answer->is_completed = 1;
+							        		$answer->is_skipped = 0;
 								        }
 								        $answer->question_id = $q;
 								        $answer->answer = $value;
@@ -684,6 +687,7 @@ class VoxController extends FrontController
 								        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
 								        if (in_array($q, $welcome_vox_question_ids)===true) {
 								        	$answer->is_completed = 1;
+							        		$answer->is_skipped = 0;
 								        }
 								        $answer->question_id = $q;
 								        $answer->answer = $k+1;

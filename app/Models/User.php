@@ -1971,6 +1971,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         $answer->question_id = $q_id;
                         $answer->answer = $a_id;
                         $answer->country_id = $this->country_id;
+                        $answer->is_completed = 1;
+                        $answer->is_skipped = 0;
                         $answer->save();
                     }
                 }
