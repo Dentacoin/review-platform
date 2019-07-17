@@ -201,7 +201,7 @@ class LoginController extends FrontController
                     }
 
                 } else if($has_test) {
-                    $country_id = $has_test['location'] ? $has_test['location'] : '' ;
+                    $country_id = !empty($has_test['location']) ? $has_test['location'] : '' ;
                 }
 
                 $password = $name.date('WY');
