@@ -201,7 +201,7 @@ class LoginController extends FrontController
                     }
 
                 } else if($has_test) {
-                    $country_id = $has_test['location'];
+                    $country_id = $has_test['location'] ? $has_test['location'] : '' ;
                 }
 
                 $password = $name.date('WY');
@@ -209,7 +209,7 @@ class LoginController extends FrontController
                 $newuser->name = $name;
                 $newuser->email = $s_user->getEmail() ? $s_user->getEmail() : '';
                 $newuser->password = bcrypt($password);
-                $newuser->country_id = $country_id ? $country_id : null;
+                $newuser->country_id = $country_id;
                 $newuser->city_id = $city_id;
                 $newuser->gender = $gender;
                 $newuser->birthyear = $birthyear;
