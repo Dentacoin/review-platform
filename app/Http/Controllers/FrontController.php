@@ -531,30 +531,36 @@ class FrontController extends BaseController
         $params['new_auth'] = false;
         if( session('new_auth') && !empty($this->user) && empty($this->user->fb_id) && empty($this->user->civic_id) ) {
             $params['new_auth'] = true;
-            if(is_array($params['js'])) {
-                $params['js'][] = 'login.js';
-            } else {
-                $params['js'] = ['login.js'];
+
+            if (!empty($params['js'])) {
+                if(is_array($params['js'])) {
+                    $params['js'][] = 'login.js';
+                } else {
+                    $params['js'] = ['login.js'];
+                }
             }
 
-
-            if(is_array($params['jscdn'])) {
-                $params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
-            } else {
-                $params['jscdn'] = [
-                    'https://hosted-sip.civic.com/js/civic.sip.min.js',
-                ];
+            if (!empty($params['jscdn'])) {
+                if(is_array($params['jscdn'])) {
+                    $params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
+                } else {
+                    $params['jscdn'] = [
+                        'https://hosted-sip.civic.com/js/civic.sip.min.js',
+                    ];
+                }
             }
 
-            if(is_array($params['csscdn'])) {
-                $params['csscdn'][] = 'https://hosted-sip.civic.com/css/civic-modal.min.css';
-            } else {
-                $params['csscdn'] = [
-                    'https://hosted-sip.civic.com/css/civic-modal.min.css',
-                ];
+            if (!empty($params['csscdn'])) {
+                if(is_array($params['csscdn'])) {
+                    $params['csscdn'][] = 'https://hosted-sip.civic.com/css/civic-modal.min.css';
+                } else {
+                    $params['csscdn'] = [
+                        'https://hosted-sip.civic.com/css/civic-modal.min.css',
+                    ];
+                }
             }
         }
 
-        $params['cache_version'] = '2019-07-16-07';
+        $params['cache_version'] = '2019-07-17';
     }
 }
