@@ -934,14 +934,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 }
 
                 if(empty($taken)) {
-                    $welcome_vox = Vox::find(11);
                     $ret[] = [
                         'title' => trans('vox.strength.patient.take-first-survey.title'),
                         'text' => nl2br(trans('vox.strength.patient.take-first-survey.text')),
                         'image' => 'dentavox',
                         'completed' => false,
                         'buttonText' => trans('vox.strength.patient.take-first-survey.button-text'),
-                        'buttonHref' => getVoxUrl(),
+                        'buttonHref' => getVoxUrl('/'),
                         'event_category' => 'ProfileStrengthPatient',
                         'event_action' => 'Browse',
                         'event_label' => 'SurveysList',
@@ -1040,7 +1039,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                             'image' => 'review',
                             'completed' => false,
                             'buttonText' => trans('vox.strength.patient.visit-dentist.button-text'),
-                            'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug, null, 'https://reviews.dentacoin.com') : getLangUrl('/', null, 'https://reviews.dentacoin.com'),
+                            'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug, null, 'https://reviews.dentacoin.com/') : getLangUrl('/', null, 'https://reviews.dentacoin.com/'),
                             'target' => true,
                             'event_category' => 'ProfileStrengthPatient',
                             'event_action' => 'Write',
@@ -1065,7 +1064,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                             'image' => 'review',
                             'completed' => false,
                             'buttonText' => trans('vox.strength.patient.routine-check.button-text'),
-                            'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug, null, 'https://reviews.dentacoin.com') : getLangUrl('/', null, 'https://reviews.dentacoin.com'),
+                            'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug, null, 'https://reviews.dentacoin.com/') : getLangUrl('/', null, 'https://reviews.dentacoin.com/'),
                             'target' => true,
                             'event_category' => 'ProfileStrengthPatient',
                             'event_action' => 'Write',
@@ -1078,7 +1077,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                             'image' => 'review',
                             'completed' => false,
                             'buttonText' => trans('vox.strength.patient.submit-review.button-text'),
-                            'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug, null, 'https://reviews.dentacoin.com') : getLangUrl('/', null, 'https://reviews.dentacoin.com'),
+                            'buttonHref' => $this->country_id ? getLangUrl('dentists/'.Country::find($this->country_id)->slug, null, 'https://reviews.dentacoin.com/') : getLangUrl('/', null, 'https://reviews.dentacoin.com/'),
                             'target' => true,
                             'event_category' => 'ProfileStrengthPatient',
                             'event_action' => 'Write',
