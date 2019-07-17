@@ -209,7 +209,7 @@ class Review extends Model {
 
 
         $names = 'by: '.$this->user->getName();
-        $img->text($names, 506, 472, function($font) use ($names_size) {
+        $img->text($names, 506, 472, function($font) {
             $font->file(public_path().'/fonts/Calibri.ttf');
             $font->size(38);
             $font->color('#000000');
