@@ -678,10 +678,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     ];
                 }
 
+                $all_surveys = Vox::where('type', 'normal')->get();
+                $taken = $this->filledVoxes();
                 $done_all = false;
 
-                if(!$this->madeTest(11)) {
-                    $welcome_vox = Vox::find(11);
+                if (($all_surveys->count() - 1) == count($taken)) {
+                    $done_all = true;
+                }
+
+                if(empty($taken)) {
                     $ret[] = [
                         'title' => trans('trp.strength.patient.take-first-survey.title'),
                         'text' => nl2br(trans('trp.strength.patient.take-first-survey.text')),
@@ -694,37 +699,32 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'event_action' => 'Take',
                         'event_label' => 'FirstSurvey',
                     ];
-                } else if ($this->madeTest(11) ) {
+                } else if (empty($done_all) ) {
 
                     $voxes = Vox::where('type', 'normal')->where('featured', 1)->orderBy('id', 'desc')->get()->pluck('id')->toArray();
                     if (!$voxes) {
                         $voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'asc')->get()->pluck('id')->toArray();
                     }
+                    
                     $filled_voxes = $this->filledVoxes();
 
                     $latest_voxes = array_diff($voxes, $filled_voxes);
+                    $latest_vox = Vox::find(array_values($latest_voxes)[0]);
 
-                    if(empty($latest_voxes)) {
-                        $done_all = true;
-                    } else {
-                        $latest_vox = Vox::find(array_values($latest_voxes)[0]);
+                    $ret[] = [
+                        'title' => trans('trp.strength.patient.take-latest-survey.title'),
+                        'text' => nl2br(trans('trp.strength.patient.take-latest-survey.text', ['name' => $latest_vox->title, 'reward' => $latest_vox->getRewardTotal() ])),
+                        'image' => 'dentavox',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.patient.take-latest-survey.button-text'),
+                        'buttonHref' => getVoxUrl('paid-dental-surveys/'.$latest_vox->translate(App::getLocale(), true)->slug ),
+                        'target' => true,
+                        'event_category' => 'ProfileStrengthPatient',
+                        'event_action' => 'Take',
+                        'event_label' => 'LatestSurvey',
+                    ];
 
-                        $ret[] = [
-                            'title' => trans('trp.strength.patient.take-latest-survey.title'),
-                            'text' => nl2br(trans('trp.strength.patient.take-latest-survey.text', ['name' => $latest_vox->title, 'reward' => $latest_vox->getRewardTotal() ])),
-                            'image' => 'dentavox',
-                            'completed' => false,
-                            'buttonText' => trans('trp.strength.patient.take-latest-survey.button-text'),
-                            'buttonHref' => getVoxUrl('paid-dental-surveys/'.$latest_vox->translate(App::getLocale(), true)->slug ),
-                            'target' => true,
-                            'event_category' => 'ProfileStrengthPatient',
-                            'event_action' => 'Take',
-                            'event_label' => 'LatestSurvey',
-                        ];                        
-                    }
-                }
-
-                if($done_all) {
+                } else if($done_all) {
                     $ret[] = [
                         'title' => trans('trp.strength.patient.take-latest-survey.title'),
                         'text' => nl2br(trans('trp.strength.patient.take-latest-survey.text-complete')),
@@ -933,7 +933,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     $done_all = true;
                 }
 
-                if(!$this->madeTest(11)) {
+                if(empty($taken)) {
                     $welcome_vox = Vox::find(11);
                     $ret[] = [
                         'title' => trans('vox.strength.patient.take-first-survey.title'),
@@ -946,7 +946,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'event_action' => 'Browse',
                         'event_label' => 'SurveysList',
                     ];
-                } else if ($this->madeTest(11) ) {
+                } else if (empty($done_all) ) {
 
                     $voxes = Vox::where('type', 'normal')->where('featured', 1)->orderBy('id', 'desc')->get()->pluck('id')->toArray();
                     if (!$voxes) {
@@ -966,8 +966,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'buttonText' => trans('vox.strength.patient.take-latest-survey.button-text'),
                         'buttonHref' => getVoxUrl('paid-dental-surveys/'.$latest_vox->translate(App::getLocale(), true)->slug ),
                         'event_category' => 'ProfileStrengthPatient',
-                        'event_action' => 'Browse',
-                        'event_label' => 'SurveysList',
+                        'event_action' => 'Take',
+                        'event_label' => 'LatestSurvey',
                     ];
                 } else if($done_all) {
                     $ret[] = [
@@ -976,9 +976,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'image' => 'dentavox',
                         'completed' => true,
                         'buttonText' => trans('vox.strength.patient.take-latest-survey.button-text'),
-                        'event_category' => 'ProfileStrengthPatient',
-                        'event_action' => 'Take',
-                        'event_label' => 'LatestSurvey',
                     ];
                 }
 
