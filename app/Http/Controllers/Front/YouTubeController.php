@@ -30,6 +30,9 @@ class YouTubeController extends FrontController
 {
     public function test() {
 
+    	// $us = User::find(37530);
+    	// $us->sendGridTemplate(26);
+
     	//dd(session('intended'));
     	
     	//First 3 weeks engagement		

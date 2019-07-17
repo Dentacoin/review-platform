@@ -1328,7 +1328,25 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
 
             foreach ($defaulth_substitutions as $key => $value) {
-                $defaulth_substitutions[$key] = $value.'';
+                $value = $value.'';
+                $matches = '';
+                preg_match_all("_(^|[\s.:;?\-\]<\(])(https?://[-\w;/?:@&=+$\|\_.!~*\|'()\[\]%#,☺]+[\w/#](\(\))?)(?=$|[\s',\|\(\).:;?\-\[\]>\)])_i", $value , $matches);
+
+                if(!empty($matches)) {
+                    foreach ($matches[0] as $match) {
+
+                        $pos = mb_strpos($match, '?');
+                        if ($pos === false) {
+                            $separator = '?';
+                        } else {
+                            $separator = '&';
+                        }
+                        $new_match = $match.$separator.'utm_content='.urlencode($item->template->name);
+
+                        $value = str_replace($match, $new_match, $value);                        
+                    }                    
+                }
+                $defaulth_substitutions[$key] = $value;
             }
 
             $email->addDynamicTemplateDatas($defaulth_substitutions );
