@@ -261,6 +261,21 @@
                             @endforeach
                         </div>
                     </div>
+
+                    @if(!empty($question) && !empty($question->vox_scale_id) && !empty($question->{'answers:en'}) )
+                        <div class="form-group clearfix" id="stats_scale_answers">
+                            <label class="col-md-2 control-label">Show in stats scale answers</label>
+                            <div class="col-md-10">
+                                @foreach(json_decode($question->{'answers:en'}, true) as $key => $ans)
+                                    <label for="stats-scale-answers-{{ $key + 1 }}">
+                                        <input type="checkbox" name="stats_scale_answers[]" value="{{ $key + 1 }}" id="stats-scale-answers-{{ $key + 1 }}" style="vertical-align: sub;" {!! !empty($question->stats_scale_answers) && !empty(json_decode($question->stats_scale_answers, true)[$key]) ? 'checked="checked"' : '' !!} />
+                                        {{ $ans }} &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="form-group clearfix" id="stat_relations">
                         <label class="col-md-2 control-label">Related question</label>
                         <div class="col-md-5">

@@ -32,6 +32,7 @@ class VoxQuestion extends Model {
         'stats_answer_id',
         'stats_featured',
         'stats_fields',
+        'stats_scale_answers',
         'cross_check',
     ];
 

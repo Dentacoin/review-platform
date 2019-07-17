@@ -486,6 +486,9 @@ class VoxesController extends AdminController
                 if(request('used_for_stats')=='standard' && !request('stats_fields')) {
                     Request::session()->flash('success-message', 'Please, select the demographic details which should be used for the statistics.');
                     return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
+                } else if ($question->type == 'scale' && request('used_for_stats')=='standard' && !request('stats_fields') && !request('stats_scale_answers')) {
+                    Request::session()->flash('success-message', 'Please, select the demographic details and scale answers which should be used for the statistics.');
+                    return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
                 } else {
                     Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-updated'));
                     return redirect('cms/'.$this->current_page.'/edit/'.$id);
@@ -660,6 +663,7 @@ class VoxesController extends AdminController
         $question->order = $data['order'];
         $question->stats_featured = !empty($data['stats_featured']);
         $question->stats_fields = !empty($data['stats_fields']) ? $data['stats_fields'] : [];
+        $question->stats_scale_answers = !empty($data['stats_scale_answers']) ? json_encode($data['stats_scale_answers']) : '';
         $question->vox_scale_id = !empty($data['question_scale']) ? $data['question_scale'] : null;
         if( !empty($data['trigger_type']) ) {
             $question->trigger_type = $data['trigger_type'];

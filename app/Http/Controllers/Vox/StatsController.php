@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
 
+use Auth;
 use Validator;
 use Response;
 use Request;
@@ -37,11 +38,16 @@ class StatsController extends FrontController
 
         $social_image = url('new-vox-img/dentavox-dental-stats.jpg');
 
+        if (Auth::guard('admin')->user()) {
+            $voxes = Vox::with('stats_main_question')->get();
+        } else {
+            $voxes = Vox::where('type', '!=', 'hidden')->with('stats_main_question')->get();
+        }
 
 		return $this->ShowVoxView('stats', array(
             'taken' => $this->user ? $this->user->filledVoxes() : [],
             'canonical' => getLangUrl('dental-survey-stats'),
-			'voxes' => Vox::where('type', '!=', 'hidden')->with('stats_main_question')->get(),
+			'voxes' => $voxes,
 			'cats' => VoxCategory::with('voxes.vox')->get(),
 			'sorts' => $sorts,
             'social_image' => $social_image,
