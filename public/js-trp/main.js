@@ -324,7 +324,10 @@ jQuery(document).ready(function($){
 		} else if(id=='popup-wokring-time') {
 
 			if($('#'+id).is('[empty-hours]')) {
-				$('.work-hour-cb').trigger('click');
+				setTimeout( function() {
+		        	$('.work-hour-cb').trigger('click');
+		        }, 200 );
+				
 
 				$('.popup-desc').each( function() {
 					$(this).find('select').first().find('option[value="09"]').attr('selected','selected');
