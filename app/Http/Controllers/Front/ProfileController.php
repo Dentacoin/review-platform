@@ -703,7 +703,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 ->withErrors($validator);
             } else {
 
-                if(empty(Request::input('field')) && $this->user->is_dentist && !User::validateAddress( Country::find( request('country_id')->name ), request('address') ) ) {
+                if(empty(Request::input('field')) && $this->user->is_dentist && !User::validateAddress( Country::find( request('country_id') )->name, request('address') ) ) {
                     if( Request::input('json') ) {
                         $ret = [
                             'success' => false,
