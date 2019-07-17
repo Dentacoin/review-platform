@@ -25,13 +25,17 @@ use App\Models\ReviewAnswer;
 use App\Models\IncompleteRegistration;
 use App\Models\UserInvite;
 
+use Illuminate\Support\Facades\Input;
+
 use Carbon\Carbon;
 
+use Response;
 use Request;
 use Route;
 use Auth;
 use DB;
 use Excel;
+use Image;
 
 class UsersController extends AdminController
 {
@@ -658,6 +662,35 @@ class UsersController extends AdminController
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.avatar-deleted') );
         return redirect('cms/'.$this->current_page.'/edit/'.$id);
+    }
+
+    public function add_avatar( $id ) {
+        $user = User::find($id);
+
+        if( Request::file('image') && Request::file('image')->isValid() ) {
+            $img = Image::make( Input::file('image') )->orientate();
+            $user->addImage($img);
+
+            $user->hasimage_social = false;
+            $user->save();
+
+            foreach ($user->reviews_out as $review_out) {
+                $review_out->hasimage_social = false;
+                $review_out->save();
+            }
+
+            foreach ($user->reviews_in_dentist as $review_in_dentist) {
+                $review_in_dentist->hasimage_social = false;
+                $review_in_dentist->save();
+            }
+
+            foreach ($user->reviews_in_clinic as $review_in_clinic) {
+                $review_in_clinic->hasimage_social = false;
+                $review_in_clinic->save();
+            }
+
+            return Response::json(['success' => true, 'thumb' => $user->getImageUrl(true), 'name' => '' ]);
+        }
     }
 
     public function delete_photo( $id, $position ) {

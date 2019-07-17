@@ -58,6 +58,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('users/loginas/{id}/{platform?}', 	'UsersController@loginas');
 	Route::any('users/user-data/{id}', 				'UsersController@personal_data');
 	Route::any('users/edit/{id}', 					'UsersController@edit');
+	Route::any('users/edit/{id}/addavatar', 		'UsersController@add_avatar');
 	Route::any('users/edit/{id}/deleteavatar', 		'UsersController@delete_avatar');
 	Route::any('users/edit/{id}/deletephoto/{position}', 'UsersController@delete_photo');
 	Route::any('users/edit/{id}/deleteban/{banid}', 'UsersController@delete_ban');

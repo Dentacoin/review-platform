@@ -229,14 +229,27 @@
                             @endif
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group avatar-group">                                
+                            <div class="form-group avatar-group">
                                 <label class="col-md-6 control-label">Profile photo</label>
+                                <div class="col-md-6">
+                                    <label for="add-avatar" class="image-label" style="background-image: url('{{ $item->getImageUrl(true)}}');">
+                                        <div class="loader">
+                                            <i class="fas fa-circle-notch fa-spin"></i>
+                                        </div>
+                                        <input type="file" name="image" id="add-avatar" upload-url="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/addavatar') }}">
+                                    </label>
+                                    <a class="btn btn-primary delete-avatar" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/deleteavatar') }}" onclick="return confirm('{{ trans('admin.common.sure') }}')">
+                                        <i class="fa fa-remove"></i> {{ trans('admin.page.'.$current_page.'.delete-avatar') }}
+                                    </a>
+                                </div>
+
+                                <!-- <label class="col-md-6 control-label">Profile photo</label>
                                 <div class="col-md-6">
                                     @include('admin.parts.user-field',[
                                         'key' => 'avatar',
                                         'info' => $fields['avatar']
                                     ])
-                                </div>
+                                </div> -->
 
                                 @if($item->is_dentist)
                                     <div class="ratings">

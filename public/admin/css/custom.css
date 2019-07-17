@@ -397,3 +397,74 @@ table .order.desc::after {
 .filter-hidden {
     display: none;
 }
+
+.image-label {
+    cursor: pointer;
+    width: 100%;
+    padding-top: 100%;
+    display: block;
+    background-color: #e3e3e3;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    position: relative;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+.centered-hack {
+    position: absolute;
+    width: 100%;
+    top: auto;
+    bottom: 0px;
+    left: 0;
+    background: #8c8c8c;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.image-label p {
+    font-size: 18px;
+    color: #777777;
+    font-weight: 300;
+}
+
+.image-label i {
+    font-size: 30px;
+    color: #777777;
+}
+
+.image-label input {
+    display: none;
+}
+
+.image-label .loader {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    text-align: center;
+    padding: 20px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.3);
+    color: white;
+    width: 100px;
+    height: 100px;
+    line-height: 80px;
+}
+
+.image-label .loader i {
+    color: white;
+    background: none;
+    font-size: 40px;
+}
+
+.image-label.loading .loader {
+    display: block;
+}
+
+.image-label.loading .centered-hack {
+    display: none;
+}
