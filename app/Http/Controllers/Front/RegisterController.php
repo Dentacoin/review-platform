@@ -228,6 +228,8 @@ class RegisterController extends FrontController
         if (!empty($user) && $user->canInvite('trp')) {
 
             if ($hash == $user->get_invite_token()) {
+                // check for GET variables and build query string
+                $get = count($_GET) ? ('?' . http_build_query($_GET)) : '';
 
                 if($this->user) {
                     if($this->user->id==$user->id) {
@@ -249,7 +251,7 @@ class RegisterController extends FrontController
                         }
                         Request::session()->flash('success-message', trans('trp.popup.registration.invitation-registered', [ 'name' => $user->name ]));
                     }
-                    return redirect( $user->getLink() );
+                    return redirect( $user->getLink().$get );
                 } else {
                     $sess = [
                         'invited_by' => $user->id,
@@ -268,8 +270,6 @@ class RegisterController extends FrontController
 
                     $text = !empty( $sess['join_clinic'] ) ? trans('trp.popup.registration.invitation-clinic', [ 'name' => $user->name ]) : trans('trp.popup.registration.invitation', [ 'name' => $user->name ]);
 
-                    // check for GET variables and build query string
-                    $get = count($_GET) ? ('?' . http_build_query($_GET)) : '';
 
                     if($user->is_dentist) {
                         return redirect()->to( $user->getLink().'?'. http_build_query(['popup'=> !empty( $sess['join_clinic'] ) ? 'popup-register-dentist' : 'popup-register' ]).$get)

@@ -509,6 +509,8 @@ class RegisterController extends FrontController
         if (!empty($user) && $user->canInvite('vox')) {
 
             if ($hash == $user->get_invite_token()) {
+                // check for GET variables and build query string
+                $get = count($_GET) ? ('?' . http_build_query($_GET)) : '';
 
                 if($this->user) {
                     if($this->user->id==$user->id) {
@@ -530,7 +532,7 @@ class RegisterController extends FrontController
                         }
                         Request::session()->flash('success-message', trans('vox.page.registration.invitation-registered', [ 'name' => $user->name ]));
                     }
-                    return redirect( getLangUrl('/') );
+                    return redirect( getLangUrl('/').$get );
                 } else {
                     $sess = [
                         'invited_by' => $user->id,
@@ -544,7 +546,7 @@ class RegisterController extends FrontController
                     session($sess);
 
                     Request::session()->flash('success-message', trans('vox.page.registration.invitation', [ 'name' => $user->name ]));
-                    return redirect( getLangUrl('/').'#register' ); 
+                    return redirect( getLangUrl('/').'#register'.$get ); 
                 }
 
             }
