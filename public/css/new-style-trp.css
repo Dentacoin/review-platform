@@ -3639,6 +3639,12 @@ textarea.input {
 @media screen and (max-width: 768px) {
   .page-dentists .main-top {
     padding-bottom: 220px; } }
+.page-dentists .invite-new-dentist-wrapper-index {
+  margin-top: 30px;
+  background-color: #f7f7f7;
+  padding-bottom: 40px; }
+  .page-dentists .invite-new-dentist-wrapper-index:after {
+    background-image: url(../img-trp/oval-gray-invite.png); }
 
 .blue-background {
   background-color: #12b3e7;

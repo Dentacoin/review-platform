@@ -4797,6 +4797,16 @@ textarea.input {
 	    	padding-bottom: 220px;
 	    }
 	}
+
+	.invite-new-dentist-wrapper-index {
+		margin-top: 30px;
+		background-color: #f7f7f7;
+		padding-bottom: 40px;
+
+		&:after {
+		    background-image: url(../img-trp/oval-gray-invite.png);
+		}
+	}
 }
 
 .blue-background {

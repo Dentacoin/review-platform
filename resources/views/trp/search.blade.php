@@ -137,18 +137,28 @@
 	</div>
 
 	@if($items->count() == 0)
+		@if(!empty($user) && !$user->is_dentist )
 
-		<div class="invite-new-dentist-wrapper">
+			<div class="invite-new-dentist-wrapper">
 
-			<div class="invite-new-dentist-titles">
-				<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
-				<h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
+				<div class="invite-new-dentist-titles">
+					<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
+					<h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
+				</div>
+
+				<div class="colorfull-wrapper">
+					@include('trp.parts.invite-new-dentist-form')
+				</div>
 			</div>
-
-			<div class="colorfull-wrapper">
-				@include('trp.parts.invite-new-dentist-form')
+		@elseif(empty($user))
+			<div class="invite-new-dentist-wrapper-index">
+				<div class="container tac">
+					<h2 class="gbb">{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
+					<h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
+					<a href="javascript:;" data-popup="popup-register" class="button button-sign-up-patient button-want-to-add-dentist">Sign up</a>
+				</div>
 			</div>
-		</div>
+		@endif
 	@endif
 
 
