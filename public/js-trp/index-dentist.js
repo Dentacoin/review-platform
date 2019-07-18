@@ -56,6 +56,9 @@ jQuery(document).ready(function($){
                         $(this).find('[name="'+i+'"]').closest('.modern-file').addClass('has-error');
                     }
                 }
+                $('.popup').animate({
+	                scrollTop: $('.ajax-alert:visible').first().offset().top
+	            }, 500);
 			}
             ajax_is_running = false;
 
