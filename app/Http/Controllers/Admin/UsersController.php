@@ -860,7 +860,7 @@ class UsersController extends AdminController
                         } else if($key=='status') {
                             if( $this->request->input($key) && $item->$key!=$this->request->input($key) ) {
 
-                                if ($item->$key == 'added_approved' && $this->request->input($key)=='approved') {
+                                if ($this->request->input($key)=='added_approved') {
                                     $patient = User::find($item->invited_by);
 
                                     if (!empty($patient)) {
