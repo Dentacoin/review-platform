@@ -165,7 +165,7 @@
 				<div class="flex-5">
 					<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');">
 						@if($item->status == 'added_approved')
-							<div class="invited-dentist">Invited</div>
+							<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 						@endif
 					</div>
 				</div>
@@ -447,7 +447,7 @@
     		<div class="view-profile clearfix">
 				<div class="avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');">
 					@if($item->status == 'added_approved')
-						<div class="invited-dentist">Invited</div>
+						<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 					@endif
 				</div>
 				<div class="media-right">

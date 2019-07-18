@@ -5484,6 +5484,9 @@ body.edit-user .profile-info-mobile .profile-details {
   background-color: #126585;
   color: white;
   padding: 5px; }
+  @media screen and (max-width: 768px) {
+    .invited-dentist {
+      font-size: 11px; } }
 
 .balance-wrap .profile-home-content {
   padding-top: 50px !important; }

@@ -7568,6 +7568,10 @@ body.edit-user {
     background-color: #126585;
     color: white;
     padding: 5px;
+
+    @media #{$phone} {
+    	font-size: 11px;
+    }
 }
 
 .balance-wrap {
