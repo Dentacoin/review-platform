@@ -18,6 +18,10 @@ class AddDentistController extends FrontController
     
 	public function invite_new_dentist($locale=null) {
 
+        if (empty($this->user)) {
+            return redirect( getLangUrl('/'));
+        }
+
         if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
             request()->merge([
                 'website' => 'http://'.request('website')

@@ -860,7 +860,44 @@ class UsersController extends AdminController
                         } else if($key=='status') {
                             if( $this->request->input($key) && $item->$key!=$this->request->input($key) ) {
 
-                                if( $this->request->input($key)=='approved' ) {
+                                if ($item->$key == 'added_approved' && $this->request->input($key)=='approved') {
+                                    $patient = User::find($item->invited_by);
+
+                                    if (!empty($patient)) {
+                                        $substitutions = [
+                                            "invitation_link" => getLangUrl( 'welcome-dentist/claim/'.$item->id.'/'.$item->get_invite_token() , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
+                                        ];
+
+                                        $item->sendGridTemplate(43, $substitutions);
+
+                                        // $item->sendTemplate( 43  , [
+                                        //     'dentist_name' => $item->name,
+                                        //     'patient_name' => $patient->name,
+                                        // ]);
+                                        $amount = Reward::getReward('patient_add_dentist');
+                                        $reward = new DcnReward();
+                                        $reward->user_id = $patient->id;
+                                        $reward->reward = $amount;
+                                        $reward->platform = 'trp';
+                                        $reward->type = 'added_dentist';
+                                        $reward->reference_id = $item->id;
+
+                                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                                        $dd = new DeviceDetector($userAgent);
+                                        $dd->parse();
+
+                                        if ($dd->isBot()) {
+                                            // handle bots,spiders,crawlers,...
+                                            $reward->device = $dd->getBot();
+                                        } else {
+                                            $reward->device = $dd->getDeviceName();
+                                            $reward->brand = $dd->getBrandName();
+                                            $reward->model = $dd->getModel();
+                                            $reward->os = $dd->getOs()['name'];
+                                        }
+                                        $reward->save();
+                                    }
+                                } else if( $this->request->input($key)=='approved' ) {
                                     if( $item->deleted_at ) {
                                         $item->restore();
                                     }
@@ -899,9 +936,7 @@ class UsersController extends AdminController
 
                                         $item->invitor->sendTemplate( 26, [
                                             'who_joined_name' => $item->getName()
-                                        ] );
-
-                                        
+                                        ] );                                        
 
                                         $reward = new DcnReward;
                                         $reward->user_id = $item->invited_by;
@@ -925,38 +960,6 @@ class UsersController extends AdminController
                                     $to_ali->delete();
                                 } else if( $this->request->input($key)=='rejected' ) {
                                     $item->sendTemplate(14);
-                                } else if($this->request->input($key)=='added_approved') {
-                                    $patient = User::find($item->invited_by);
-
-                                    if (!empty($patient)) {
-                                        $item->sendTemplate( 43  , [
-                                            'dentist_name' => $item->name,
-                                            'patient_name' => $patient->name,
-                                        ]);
-                                        $amount = Reward::getReward('patient_add_dentist');
-                                        $reward = new DcnReward();
-                                        $reward->user_id = $patient->id;
-                                        $reward->reward = $amount;
-                                        $reward->platform = 'trp';
-                                        $reward->type = 'added_dentist';
-                                        $reward->reference_id = $item->id;
-
-                                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                                        $dd = new DeviceDetector($userAgent);
-                                        $dd->parse();
-
-                                        if ($dd->isBot()) {
-                                            // handle bots,spiders,crawlers,...
-                                            $reward->device = $dd->getBot();
-                                        } else {
-                                            $reward->device = $dd->getDeviceName();
-                                            $reward->brand = $dd->getBrandName();
-                                            $reward->model = $dd->getModel();
-                                            $reward->os = $dd->getOs()['name'];
-                                        }
-                                        $reward->save();
-                                    }
-
                                 }
                             }
                             $item->$key = $this->request->input($key);
