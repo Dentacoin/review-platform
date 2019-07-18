@@ -272,11 +272,11 @@ class RegisterController extends FrontController
 
 
                     if($user->is_dentist) {
-                        return redirect()->to( $user->getLink().'?'. http_build_query(['popup'=> !empty( $sess['join_clinic'] ) ? 'popup-register-dentist' : 'popup-register' ]).$get)
+                        return redirect()->to( $user->getLink().'?'. http_build_query(['popup'=> !empty( $sess['join_clinic'] ) ? 'popup-register-dentist' : 'popup-register' ]).'&'.http_build_query($_GET))
                         ->withInput()
                         ->with('success-message', $text );
                     } else {
-                        return redirect()->to(getLangurl('/').'?'. http_build_query(['popup'=>'popup-register']).$get)
+                        return redirect()->to(getLangurl('/').'?'. http_build_query(['popup'=>'popup-register']).'&'.http_build_query($_GET))
                         ->withInput()
                         ->with('success-message', $text );
                     }
