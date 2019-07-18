@@ -1288,8 +1288,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         if (empty($is_skipped)) {
 
-            $sender = config('mail.from.address');
-            $sender_name = config('mail.from.name');
+            $sender = $item->platform=='vox' ? config('mail.from.address-vox') : config('mail.from.address');
+            $sender_name = $item->platform=='vox' ? config('mail.from.name-vox') : config('mail.from.name');
             //$sender_name = config('platforms.'.$item->platform.'.name') ?? config('mail.from.name');
 
             $from = new From($sender, $sender_name);
