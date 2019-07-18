@@ -1278,11 +1278,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if($platform) {
             $item->platform = $platform;            
         } else {
-             if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
+            if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
                 $item->platform = $this->platform;
-             } else {
+            } else {
                 $item->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
-             }
+            }
         }
         $item->save();
 
@@ -1320,6 +1320,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 "town" => $this->city_name ? $this->city_name : 'your town',
                 "country" => $this->country_id ? Country::find($this->country_id)->name : 'your country',
                 "unsubscribe" => getLangUrl( 'unsubscribe/'.$this->id.'/'.$this->get_token(), null, $domain),
+                "trp" => url('https://reviews.dentacoin.com/'),
+                "trp-dentist" => url('https://reviews.dentacoin.com/en/welcome-dentist/'),
+                "vox" => url('https://dentavox.dentacoin.com/'),
+                "partners" => url('https://dentacoin.com/partner-network'),
+                "assurance" => url('https://assurance.dentacoin.com/'),
+                "wallet" => url('https://wallet.dentacoin.com/'),
+                "dcn" => url('https://dentacoin.com/'),
+                "dentist" => url('https://dentists.dentacoin.com/'),
+                "dentacare" => url('https://dentacare.dentacoin.com/'),
+                "giftcards" => url('https://dentacoin.com/?payment=bidali-gift-cards'),
             ];
 
             if ($substitutions) {
