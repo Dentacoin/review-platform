@@ -268,12 +268,15 @@ class RegisterController extends FrontController
 
                     $text = !empty( $sess['join_clinic'] ) ? trans('trp.popup.registration.invitation-clinic', [ 'name' => $user->name ]) : trans('trp.popup.registration.invitation', [ 'name' => $user->name ]);
 
+                    // check for GET variables and build query string
+                    $get = count($_GET) ? ('?' . http_build_query($_GET)) : '';
+
                     if($user->is_dentist) {
-                        return redirect()->to( $user->getLink().'?'. http_build_query(['popup'=> !empty( $sess['join_clinic'] ) ? 'popup-register-dentist' : 'popup-register' ]))
+                        return redirect()->to( $user->getLink().'?'. http_build_query(['popup'=> !empty( $sess['join_clinic'] ) ? 'popup-register-dentist' : 'popup-register' ]).$get)
                         ->withInput()
                         ->with('success-message', $text );
                     } else {
-                        return redirect()->to(getLangurl('/').'?'. http_build_query(['popup'=>'popup-register']))
+                        return redirect()->to(getLangurl('/').'?'. http_build_query(['popup'=>'popup-register']).$get)
                         ->withInput()
                         ->with('success-message', $text );
                     }
