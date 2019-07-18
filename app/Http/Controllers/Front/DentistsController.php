@@ -263,7 +263,7 @@ class DentistsController extends FrontController
             $items = $items->where('is_partner', true);
         }
 
-        $items = $items->take(100)->get(); //->take($ppp)->skip( ($page-1)*$ppp )
+        $items = $items->get(); //->take($ppp)->skip( ($page-1)*$ppp )
 
         $zoom = $country_search ? 5 : ($query=='worldwide' ? 1 : 13);
         $size = $query=='worldwide' ? '670x288' : '670x188';

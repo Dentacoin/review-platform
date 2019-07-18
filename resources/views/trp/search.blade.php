@@ -134,6 +134,10 @@
 
 		@endforeach
 
+		<div class="pagination" style="display: none;">
+			
+		</div>
+
 	</div>
 
 	@if($items->count() == 0)
@@ -365,6 +369,11 @@
 							</a>
 
 						@endforeach
+			
+
+						<div class="pagination" style="display: none;">
+							
+						</div>
 					@else
 						<div class="alert alert-info">
 							{!! nl2br(trans('trp.page.search.no-results')) !!}
