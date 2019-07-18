@@ -514,7 +514,7 @@ class RegisterController extends FrontController
 
                 if($this->user) {
                     if($this->user->id==$user->id) {
-                        Request::session()->flash('success-message', trans('vox.page.registration.invite-yourself'));
+                        Request::session()->flash('error-message', trans('vox.page.registration.invite-yourself'));
                     } else {
                         if(!$this->user->wasInvitedBy($user->id)) {
                             $inv = UserInvite::find($inv_id);
