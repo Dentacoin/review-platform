@@ -498,6 +498,10 @@ jQuery(document).ready(function($){
                             $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
                         }
                     }
+
+                    $('html, body').animate({
+		                scrollTop: $('.ajax-alert:visible').first().offset().top - $('header').height() - 150
+		            }, 500);
                 }
                 ajax_is_running = false;
             }).bind(that), "json"
