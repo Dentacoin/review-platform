@@ -682,7 +682,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $taken = $this->filledVoxes();
                 $done_all = false;
 
-                if (($all_surveys->count() - 1) == count($taken)) {
+                if ($all_surveys->count() == count($taken)) {
                     $done_all = true;
                 }
 
@@ -929,7 +929,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $taken = $this->filledVoxes();
                 $done_all = false;
 
-                if (($all_surveys->count() - 1) == count($taken)) {
+                if ($all_surveys->count() == count($taken)) {
                     $done_all = true;
                 }
 
