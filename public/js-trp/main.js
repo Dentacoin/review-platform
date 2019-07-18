@@ -482,7 +482,11 @@ jQuery(document).ready(function($){
             $(this).serialize() , 
             (function( data ) {
                 if(data.success) {
-                    $(this).find('.alert-success').html(data.message).show();
+                	closePopup();
+                	$('#inv_dent_name').html(data.dentist_name);
+                	showPopup( 'invite-new-dentist-success-popup' );
+                	that[0].reset();
+                   //$(this).find('.alert-success').html(data.message).show();
 
                     gtag('event', 'Invite', {
 						'event_category': 'InviteDentist',

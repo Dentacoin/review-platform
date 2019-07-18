@@ -142,6 +142,7 @@ class AddDentistController extends FrontController
                 return Response::json( [
                     'success' => true,
                 	'message' => trans('trp.page.invite.success', ['name' => $newdentist->name]),
+                    'dentist_name' => $newdentist->name,
                 ] );
 
             }

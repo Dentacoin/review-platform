@@ -240,6 +240,7 @@
 			@include('trp/popups/claim-profile')
 		@else
 			@include('trp/popups/invite-new-dentist')
+			@include('trp/popups/invite-new-dentist-success')
 		@endif
 
 

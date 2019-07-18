@@ -1955,11 +1955,11 @@ textarea.input {
         color: #126585; }
         .popup .popup-inner .popup-mobile-buttons .share-popup i {
           color: #126585; }
-    .popup .popup-inner .close-popup {
+    .popup .popup-inner .close-popup:not(.button) {
       position: absolute;
       right: 20px;
       top: 20px; }
-      .popup .popup-inner .close-popup i {
+      .popup .popup-inner .close-popup:not(.button) i {
         font-size: 30px; }
     .popup .popup-inner .share-popup {
       position: absolute;
@@ -2212,6 +2212,32 @@ textarea.input {
         font-size: 16px;
         padding: 12px 10px 15px;
         font-weight: normal; } }
+
+.invite-new-dentist-success-popup.fixed-popup .popup-inner {
+  max-width: 740px;
+  text-align: center;
+  box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8); }
+  @media screen and (max-width: 998px) {
+    .invite-new-dentist-success-popup.fixed-popup .popup-inner {
+      max-width: 100%; } }
+  .invite-new-dentist-success-popup.fixed-popup .popup-inner img {
+    max-width: 80px; }
+  .invite-new-dentist-success-popup.fixed-popup .popup-inner h2 {
+    font-weight: bold;
+    color: black;
+    text-transform: uppercase;
+    max-width: 400px;
+    margin: 5px auto 15px; }
+  .invite-new-dentist-success-popup.fixed-popup .popup-inner p {
+    font-size: 20px; }
+    .invite-new-dentist-success-popup.fixed-popup .popup-inner p span {
+      color: #0fb0e5;
+      font-weight: bold;
+      font-size: 20px; }
+  .invite-new-dentist-success-popup.fixed-popup .popup-inner .button {
+    padding: 10px 100px;
+    margin-top: 40px;
+    margin-bottom: 10px; }
 
 .claim-popup.fixed-popup .popup-inner {
   padding: 22px 130px 50px;
