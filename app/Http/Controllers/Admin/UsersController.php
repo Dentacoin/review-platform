@@ -636,7 +636,7 @@ class UsersController extends AdminController
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
-        return redirect('cms/'.$this->current_page);
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/'.$this->current_page.$get);
     }
 
     public function massdelete(  ) {
@@ -781,6 +781,7 @@ class UsersController extends AdminController
 
 
     public function restore( $id ) {
+
         $item = User::onlyTrashed()->find($id);
 
         if(!empty($item)) {
@@ -788,7 +789,7 @@ class UsersController extends AdminController
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.restored') );
-        return redirect('cms/'.$this->current_page);
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/'.$this->current_page);
     }
 
 
