@@ -814,43 +814,38 @@ class VoxController extends FrontController
 	        				}
 
 					        if(count($answered) == count($vox->questions)) {
-					        	$has_reward = DcnReward::where('user_id', $this->user->id)->where('reference_id', $vox->id)->where('platform', 'vox')->first();
+					        	$reward = DcnReward::where('user_id', $this->user->id)->where('reference_id', $vox->id)->where('platform', 'vox')->first();
 
-					        	if (empty($has_reward)) {
+					        	if (empty($reward)) {
 									$reward = new DcnReward;
 							        $reward->user_id = $this->user->id;
 							        $reward->reference_id = $vox->id;
 							        $reward->platform = 'vox';
-							        $reward->reward = $vox->getRewardForUser($this->user->id);
-							        $start = $list->first()->created_at;
-							        $diff = Carbon::now()->diffInSeconds( $start );
-							        $normal = count($vox->questions)*2;
-							        $reward->seconds = $diff;
+							    }
+						        $reward->reward = $vox->getRewardForUser($this->user->id);
+						        $start = $list->first()->created_at;
+						        $diff = Carbon::now()->diffInSeconds( $start );
+						        $normal = count($vox->questions)*2;
+						        $reward->seconds = $diff;
 
-							        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-					                $dd = new DeviceDetector($userAgent);
-					                $dd->parse();
+						        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+				                $dd = new DeviceDetector($userAgent);
+				                $dd->parse();
 
-					                if ($dd->isBot()) {
-					                    // handle bots,spiders,crawlers,...
-					                    $reward->device = $dd->getBot();
-					                } else {
-					                    $reward->device = $dd->getDeviceName();
-					                    $reward->brand = $dd->getBrandName();
-					                    $reward->model = $dd->getModel();
-					                    $reward->os = $dd->getOs()['name'];
-					                }
+				                if ($dd->isBot()) {
+				                    // handle bots,spiders,crawlers,...
+				                    $reward->device = $dd->getBot();
+				                } else {
+				                    $reward->device = $dd->getDeviceName();
+				                    $reward->brand = $dd->getBrandName();
+				                    $reward->model = $dd->getModel();
+				                    $reward->os = $dd->getOs()['name'];
+				                }
 
-							        $reward->save();
-			        				$ret['balance'] = $this->user->getTotalBalance('vox');
+						        $reward->save();
+		        				$ret['balance'] = $this->user->getTotalBalance('vox');
 
-			        				VoxAnswer::where('user_id', $this->user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
-					        	} else {
-
-					        		DcnReward::where('user_id', $this->user->id)->where('reference_id', $vox->id)->where('platform', 'vox')->update(['reward' => $vox->getRewardForUser($this->user->id)]);
-					        	}
-
-
+		        				VoxAnswer::where('user_id', $this->user->id)->where('vox_id', $vox->id)->update(['is_completed' => 1]);
 
 
 	                            if($this->user->invited_by) {
