@@ -89,13 +89,17 @@ class StatsController extends FrontController
         if(Request::isMethod('post')) {
         	$dates = Request::input('timeframe');
             $answer_id = Request::input('answer_id');
-        	$question_id = Request::input('question_id');
+            $question_id = Request::input('question_id');
+            $scale_answer_id = !empty(Request::input('scale_answer_id')) ? Request::input('scale_answer_id') : null;
         	$question = VoxQuestion::find($question_id);
         	$scale = Request::input('scale');
         	$type = $question->used_for_stats;
 
-            $results = $this->prepareQuery($question_id, $dates);
-        	$total = $this->prepareQuery($question_id, $dates)->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+            $answerField = $scale_answer_id ? 'scale' : 'answer';
+
+            $results = $this->prepareQuery($question_id, $dates, $scale_answer_id);
+        	$total = $this->prepareQuery($question_id, $dates, $scale_answer_id);
+            $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
     		$main_chart = [];
     		$second_chart = [];
@@ -127,7 +131,7 @@ class StatsController extends FrontController
         	if($type=='dependency') {
                 $answer_id = null;
 
-                $results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
+                $results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt');
                 $results = $results->get();
 
                 foreach ($answers as $key => $value) {
@@ -135,10 +139,10 @@ class StatsController extends FrontController
                 }
 
                 foreach ($results as $res) {
-                    if(!isset( $answers[ $res->answer-1 ] )) {
+                    if(!isset( $answers[ $res->$answerField-1 ] )) {
                         continue;
                     }
-                    $second_chart[ $answers[ $res->answer-1 ] ] = $res->cnt;
+                    $second_chart[ $answers[ $res->$answerField-1 ] ] = $res->cnt;
                 }
 
                 $relation_info['answer'] = $question->stats_answer_id-1;
@@ -158,18 +162,18 @@ class StatsController extends FrontController
                     }
                     $main_chart[$answers_related[$key]] = 0;
                 }
-        		$results = $this->prepareQuery($question->stats_relation_id, $dates);
-        		$results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
+        		$results = $this->prepareQuery($question->stats_relation_id, $dates, $scale_answer_id);
+        		$results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt');
         		$results = $results->get();
         		foreach ($results as $res) {
-        			$main_chart[ $answers_related[ $res->answer-1 ] ] = $res->cnt;
+        			$main_chart[ $answers_related[ $res->$answerField-1 ] ] = $res->cnt;
         		}
         		
 
         	} else if($scale=='gender') {
                 $answer_id = null;
-                $total = $this->prepareQuery($question_id, $dates)->whereNotNull('gender')->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
-        		$results = $results->whereNotNull('gender')->groupBy('answer', 'gender')->selectRaw('answer, gender, COUNT(*) as cnt');
+                $total = $this->prepareQuery($question_id, $dates, $scale_answer_id)->whereNotNull('gender')->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+        		$results = $results->whereNotNull('gender')->groupBy($answerField, 'gender')->selectRaw($answerField.', gender, COUNT(*) as cnt');
                 $results = $results->get();
                 foreach ($answers as $key => $value) {
                     $second_chart[$value] = 0;
@@ -177,24 +181,24 @@ class StatsController extends FrontController
                 }
                 
         		foreach ($results as $res) {
-                    if(!isset( $answers[ $res->answer-1 ] )) {
+                    if(!isset( $answers[ $res->$answerField-1 ] )) {
                         continue;
                     }
 
-        			if(!isset($main_chart[ $answers[ $res->answer-1 ] ])) {
-        				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
-        				$second_chart[ $answers[ $res->answer-1 ] ] = 0; //m
-        				$third_chart[ $answers[ $res->answer-1 ] ] = 0; //f
+        			if(!isset($main_chart[ $answers[ $res->$answerField-1 ] ])) {
+        				$main_chart[ $answers[ $res->$answerField-1 ] ] = 0;
+        				$second_chart[ $answers[ $res->$answerField-1 ] ] = 0; //m
+        				$third_chart[ $answers[ $res->$answerField-1 ] ] = 0; //f
         			}
-        			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
+        			$main_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt;
         			if($res->gender=='f') {
-        				$second_chart[ $answers[ $res->answer-1 ] ] += $res->cnt; //m
+        				$second_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt; //m
         			}
         			if($res->gender=='m') {
-        				$third_chart[ $answers[ $res->answer-1 ] ] += $res->cnt; //f
+        				$third_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt; //f
         			}
                     $totalm = $totalf = 0;
-                    $totalQuery = $this->prepareQuery($question_id, $dates)->whereNotNull('gender')->groupBy('gender')->select(DB::raw('gender, count(distinct `user_id`) as num'))->get();
+                    $totalQuery = $this->prepareQuery($question_id, $dates, $scale_answer_id)->whereNotNull('gender')->groupBy('gender')->select(DB::raw('gender, count(distinct `user_id`) as num'))->get();
                     foreach ($totalQuery->toArray() as $garr) {
                         if($garr['gender']=='m') {
                             $totalm = $garr['num'];
@@ -206,18 +210,18 @@ class StatsController extends FrontController
         	} else if($scale=='country_id') {
         		$countries = Country::get()->keyBy('id');
 
-        		$results = $results->groupBy('answer', 'country_id')->selectRaw('answer, country_id, COUNT(*) as cnt');
+        		$results = $results->groupBy($answerField, 'country_id')->selectRaw($answerField.', country_id, COUNT(*) as cnt');
         		$results = $results->get();
 
         		foreach ($results as $res) {
-                    if(!isset( $answers[ $res->answer-1 ] )) {
+                    if(!isset( $answers[ $res->$answerField-1 ] )) {
                         continue;
                     }
 
-        			if(!isset($main_chart[ $answers[ $res->answer-1 ] ])) {
-        				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
+        			if(!isset($main_chart[ $answers[ $res->$answerField-1 ] ])) {
+        				$main_chart[ $answers[ $res->$answerField-1 ] ] = 0;
         			}
-        			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
+        			$main_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt;
 
         			if( $res->country_id ) {
                         $country = $countries->get($res->country_id);
@@ -230,13 +234,13 @@ class StatsController extends FrontController
                                 $second_chart[ $country->code ][$a] = 0;
                             }
         				}
-                        if(empty($answer_id) || $res->answer==$answer_id) {
-                            $second_chart[ $country->code ][ $answers[ $res->answer-1 ] ] = $res->cnt; //m
+                        if(empty($answer_id) || $res->$answerField==$answer_id) {
+                            $second_chart[ $country->code ][ $answers[ $res->$answerField-1 ] ] = $res->cnt; //m
                         }
         			}
         		}
         	} else if($scale=='age') {
-        		$results = $results->groupBy('answer', 'age')->selectRaw('answer, age, COUNT(*) as cnt');
+        		$results = $results->groupBy($answerField, 'age')->selectRaw($answerField.', age, COUNT(*) as cnt');
         		$results = $results->get();
 
         		$age_to_group = config('vox.age_groups');
@@ -248,22 +252,22 @@ class StatsController extends FrontController
 				}
 
         		foreach ($results as $res) {
-                    if(!isset( $answers[ $res->answer-1 ] )) {
+                    if(!isset( $answers[ $res->$answerField-1 ] )) {
                         continue;
                     }
                     
-        			if(!isset($main_chart[ $answers[ $res->answer-1 ] ])) {
-        				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
+        			if(!isset($main_chart[ $answers[ $res->$answerField-1 ] ])) {
+        				$main_chart[ $answers[ $res->$answerField-1 ] ] = 0;
         			}
-        			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
+        			$main_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt;
 
 
         			if( $res->age ) {
-	        			$second_chart[ $age_to_group[$res->age] ][ $answers[ $res->answer-1 ] ] = $res->cnt; //m
+	        			$second_chart[ $age_to_group[$res->age] ][ $answers[ $res->$answerField-1 ] ] = $res->cnt; //m
         			}
         		}
         	} else {
-        		$results = $results->groupBy('answer', $scale)->selectRaw('answer, '.$scale.', COUNT(*) as cnt');
+        		$results = $results->groupBy($answerField, $scale)->selectRaw($answerField.', '.$scale.', COUNT(*) as cnt');
         		$results = $results->get();
 
         		$age_to_group = config('vox.details_fields.'.$scale.'.values');
@@ -278,18 +282,18 @@ class StatsController extends FrontController
 
                 //dd( $results->toArray() );
         		foreach ($results as $res) {
-                    if($res->$scale===null || !isset( $answers[ $res->answer-1 ] )) {
+                    if($res->$scale===null || !isset( $answers[ $res->$answerField-1 ] )) {
                         continue;
                     }
 
-        			if(!isset($main_chart[ $answers[ $res->answer-1 ] ])) {
-        				$main_chart[ $answers[ $res->answer-1 ] ] = 0;
+        			if(!isset($main_chart[ $answers[ $res->$answerField-1 ] ])) {
+        				$main_chart[ $answers[ $res->$answerField-1 ] ] = 0;
         			}
-        			$main_chart[ $answers[ $res->answer-1 ] ] += $res->cnt;
+        			$main_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt;
 
 
         			if( $res->$scale ) {
-    	        		$second_chart[ $age_to_group[$res->$scale] ][ $answers[ $res->answer-1 ] ] = $res->cnt; //m
+    	        		$second_chart[ $age_to_group[$res->$scale] ][ $answers[ $res->$answerField-1 ] ] = $res->cnt; //m
         			}
         		}
         	}
@@ -402,12 +406,16 @@ class StatsController extends FrontController
         ));
 	}
 
-	private function prepareQuery($question_id, $dates) {
+	private function prepareQuery($question_id, $dates, $scale_answer_id = null) {
 
     	$results = VoxAnswer::where('question_id', $question_id)
     	->where('is_completed', 1)
     	->where('is_skipped', 0)
         ->has('user');
+
+        if( $scale_answer_id ) {
+            $results = $results->where('answer', $scale_answer_id);
+        }
 
     	if(is_array($dates)) {
     		$from = Carbon::parse($dates[0]);

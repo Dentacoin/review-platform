@@ -413,6 +413,7 @@ $(document).ready(function(){
         var params = {
             timeframe: phptimeframe,
             question_id: $(elm).attr('question-id'),
+            scale_answer_id: $(elm).attr('scale-answer-id') ? $(elm).attr('scale-answer-id') : '',
             answer_id: $(elm).attr('answer-id'),
             scale: $(elm).find('.scales a.active').attr('scale')
         }

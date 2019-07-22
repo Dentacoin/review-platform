@@ -121,7 +121,7 @@ class DentistsController extends FrontController
                 }
             }
 
-            if(!$lat || !$lon) {
+            if(empty($lat) || empty($lon)) {
                 return redirect( getLangUrl('/') );
             }
 

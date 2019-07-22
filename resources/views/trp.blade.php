@@ -195,7 +195,7 @@
 							<a href="https://dentacare.dentacoin.com/" target="_blank">Dentacare App</a>
 						</div>
 						<small>
-							Copyright © 2018. Dentacoin Foundation. All rights reserved
+							Copyright © 2019. Dentacoin Foundation. All rights reserved
 						</small>
 					</div>
 					<div class="socials col-md-3">
