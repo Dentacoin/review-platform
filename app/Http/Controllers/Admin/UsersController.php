@@ -24,6 +24,7 @@ use App\Models\Review;
 use App\Models\ReviewAnswer;
 use App\Models\IncompleteRegistration;
 use App\Models\UserInvite;
+use App\Models\UserAsk;
 
 use Illuminate\Support\Facades\Input;
 
@@ -324,7 +325,7 @@ class UsersController extends AdminController
             $users = $users->select(['title', 'name', 'email', 'platform'])->get();
         } else if(request()->input('export-fb')) {
             ini_set("memory_limit",-1);
-            $users = $users->select(['id', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender'])->get();
+            $users = $users->select(['id', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender', 'is_dentist'])->get();
         } else if(request()->input('export-sendgrid')) {
             ini_set("memory_limit",-1);
             $users = $users->whereNull('unsubscribe')->select(['id', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender', 'is_partner', 'is_dentist', 'is_clinic', 'platform'])->get();
@@ -479,6 +480,9 @@ class UsersController extends AdminController
                     'age' => '',
                     'gen' => '',
                     'value' => '',
+                    'surveys' => '',
+                    'reviews_patient' => '',
+                    'reviews_invites' => '',
                 ];
 
                 if( $u->country_id ) {
@@ -504,6 +508,24 @@ class UsersController extends AdminController
                     $info['value'] = $u->logins->count();
                 } else {
                     $info['value'] = 0;
+                }
+
+                if ($u->vox_rewards->isNotEmpty()) {
+                    $info['surveys'] = $u->vox_rewards->count() - 1;
+                } else {
+                    $info['surveys'] = 0;
+                }
+
+                if ($u->reviews_out->isNotEmpty()) {
+                    $info['reviews_patient'] = $u->reviews_out->count();
+                } else {
+                    $info['reviews_patient'] = 0;
+                }
+
+                if ($u->is_dentist && $u->invites->isNotEmpty()) {
+                    $info['reviews_invites'] = $u->invites->count();
+                } else {
+                    $info['reviews_invites'] = 0;
                 }
 
                 if( request()->input('export-sendgrid') ) {
