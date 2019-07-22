@@ -58,7 +58,7 @@ class Email extends Model
 
 		list($content, $title, $subtitle, $subject) = $this->prepareContent();
 
-		$platform = $this->platform;
+		$platform = $this->template_id==20 ? 'dentacoin' : $this->platform;
 		$sender = $platform=='vox' ? config('mail.from.address-vox') : config('mail.from.address-dentacoin');
 		if($this->template_id==40 || $this->template_id==14) {
 			$sender = 'ali.hashem@dentacoin.com';

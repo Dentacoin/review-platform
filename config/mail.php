@@ -10,7 +10,7 @@ return array(
     'address-vox' => 'dentavox@dentacoin.com', 
     'name-vox' => 'DentaVox Market Research Platform',
     'address-dentacoin' => 'admin@dentacoin.com', 
-    'name-dentacoin' => 'Dentacoin Onboarding Team',
+    'name-dentacoin' => 'Dentacoin Team',
   ),
   'encryption' => 'tls',
   'username' => env('SENDGRID_USERNAME'),
