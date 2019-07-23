@@ -146,7 +146,7 @@
 										Hello, {{ $user->getName() }}
 									</a>
 									<a href="https://account.dentacoin.com/?platform=dentavox">
-										<span id="header-balance">{{ $user->getTotalBalance('vox') }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance('vox') * $dcn_price) }}</span>
+										<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
 									</a>
 								</div>
 								<a class="header-a" href="https://account.dentacoin.com/?platform=dentavox" >
