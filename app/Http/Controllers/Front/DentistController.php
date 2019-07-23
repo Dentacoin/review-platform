@@ -348,14 +348,14 @@ class DentistController extends FrontController
 
         if (!empty($this->user) && ($this->user->id != $item->id)) {
 
-            if (!session('pageview')) {
+            if (!session('pageview-'.$item->id)) {
                 $pageview = new DentistPageview;
                 $pageview->dentist_id = $item->id;
                 $pageview->user_id = $this->user->id;
                 $pageview->ip = User::getRealIp();
                 $pageview->save();
             }
-            session(['pageview' => true]);
+            session(['pageview-'.$item->id => true]);
         }
 
         $reviews = $item->reviews_in();
