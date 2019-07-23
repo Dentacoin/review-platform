@@ -971,15 +971,13 @@ class UsersController extends AdminController
                                     }
 
                                 } else if( $this->request->input($key)=='pending' ) {
-                                    $item->sendTemplate(40);
-
                                     $olde = $item->email;
                                     $item->email = 'ali.hashem@dentacoin.com';
                                     $item->save();
                                     $to_ali = $item->sendTemplate(40);
-                                    $item->sendTemplate(40);
                                     $item->email = $olde;
                                     $item->save();
+                                    $item->sendTemplate(40);
                                     $to_ali->delete();
                                 } else if( $this->request->input($key)=='rejected' ) {
                                     $item->sendTemplate(14);
