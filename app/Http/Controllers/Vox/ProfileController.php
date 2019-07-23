@@ -203,7 +203,7 @@ class ProfileController extends FrontController
             $cashout->save();
 
 
-            $ret = Dcn::send($this->user, $this->user->dcn_address, $amount, 'vox-cashout', $cashout->id);
+            $ret = Dcn::send($this->user, $this->user->dcn_address, $amount, 'vox-cashout', [$cashout->id]);
             $ret['balance'] = $this->user->getTotalBalance('vox');
             
             if($ret['success']) {

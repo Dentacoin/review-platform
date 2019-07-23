@@ -35,24 +35,26 @@ class DcnTransaction extends Model {
     public function user() {
         return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();
     }
-    public function review() {
-        return $this->hasOne('App\Models\Review', 'id', 'reference_id');        
-    }
-    public function invitation() {
-        return $this->hasOne('App\Models\UserInvite', 'id', 'reference_id');        
-    }
-    public function voxCashout() {
-        return $this->hasOne('App\Models\DcnCashout', 'id', 'reference_id')->where('platform', 'vox');        
-    }
-    public function mobident() {
-        return $this->hasOne('App\Models\Mobident', 'id', 'reference_id');        
-    }
 
     public function shouldRetry() {
         $times = intval($this->retries)+1;
-        $period = 5*pow(2, $times); //5 minutes
-        $period = min(60*24, $period);
+        $period = 300*pow(2, $times);
+        $period = min(86400, $period);
         return !User::isGasExpensive() && Carbon::now()->diffInMinutes($this->updated_at) > $period;
+    }
+
+    public function getReferenceIdAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+    
+    public function setReferenceIdAttribute($value) {
+        $this->attributes['reference_id'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['reference_id'] = implode(',', $value);            
+        }
     }
 }
 

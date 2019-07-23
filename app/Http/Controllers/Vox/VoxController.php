@@ -851,7 +851,7 @@ class VoxController extends FrontController
 	                            if($this->user->invited_by) {
 	                                $inv = UserInvite::where('user_id', $this->user->invited_by)->where('invited_id', $this->user->id)->first();
 	                                if(!empty($inv) && !$inv->rewarded) {
-	                                    $tmp = Dcn::send($this->user->invitor, $this->user->invitor->dcn_address, Reward::getReward('reward_invite'), 'invite-reward', $inv->id, true);
+	                                    $tmp = Dcn::send($this->user->invitor, $this->user->invitor->dcn_address, Reward::getReward('reward_invite'), 'invite-reward', [$inv->id], true);
 	                                    $inv->rewarded = true;
 	                                    $inv->save();
 
