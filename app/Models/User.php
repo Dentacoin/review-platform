@@ -28,6 +28,7 @@ use App\Models\DcnTransaction;
 use App\Models\UserLogin;
 use App\Models\Blacklist;
 use App\Models\BlacklistBlock;
+use App\Models\DentistPageview;
 use Carbon\Carbon;
 
 use Request;
@@ -1311,6 +1312,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
             $domain = 'https://'.config('platforms.'.$this->platform.'.url').'/';
 
+            $pageviews = DentistPageview::where('dentist_id', $this->id)->count();
+
             $defaulth_substitutions  = [
                 "name" => $this->getNameSendGrid(),
                 "platform" => $item->platform,
@@ -1320,6 +1323,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 "town" => $this->city_name ? $this->city_name : 'your town',
                 "country" => $this->country_id ? Country::find($this->country_id)->name : 'your country',
                 "unsubscribe" => getLangUrl( 'unsubscribe/'.$this->id.'/'.$this->get_token(), null, $domain),
+                "pageviews" => $pageviews,
                 "trp" => url('https://reviews.dentacoin.com/'),
                 "trp-dentist" => url('https://reviews.dentacoin.com/en/welcome-dentist/'),
                 "vox" => url('https://dentavox.dentacoin.com/'),
