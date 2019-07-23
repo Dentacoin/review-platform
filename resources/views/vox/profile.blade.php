@@ -7,11 +7,9 @@
 			@include('vox.template-parts.profile-menu')
 		</div>
 		<div class="col-md-9">
-			@if(!empty($admin))
-				<div class="strength-parent in-profile">
-					@include('vox.template-parts.strength-scale')
-				</div>
-			@endif
+			<div class="strength-parent in-profile">
+				@include('vox.template-parts.strength-scale')
+			</div>
 			<h2 class="page-title">
 				<img src="{!! url('new-vox-img/profile-home.png') !!}" />
 				{!! trans('vox.page.profile.home.title') !!}

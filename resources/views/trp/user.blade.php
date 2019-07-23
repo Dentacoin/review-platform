@@ -1183,7 +1183,7 @@
     </div>
 </div>
 
-@if(!empty($user) && $item->id==$user->id && !empty($admin))
+@if(!empty($user) && $item->id==$user->id)
 	<div class="strength-parent fixed">
 		@include('trp.parts.strength-scale')
 	</div>

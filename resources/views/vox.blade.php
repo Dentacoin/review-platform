@@ -139,7 +139,7 @@
 							@endif
 						</div>
 						<div class="header-right col-md-4 tar flex">
-							@if( $user && $user->status!='approved' && $user->status!='test' )
+							@if( !empty($user) && $user->status!='approved' && $user->status!='test' )
 							@elseif($user)
 								<div class="user-and-price header-a">
 									<a class="my-name" href="https://account.dentacoin.com/?platform=dentavox">

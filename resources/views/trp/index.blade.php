@@ -223,7 +223,7 @@
 		</div>
 	@endif
 
-	@if($user && !empty($admin))
+	@if(!empty($user))
 		<div class="strength-parent fixed">
 			@include('trp.parts.strength-scale')
 		</div>

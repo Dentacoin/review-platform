@@ -3,7 +3,7 @@
 @section('content')
 
 	<div class="container">
-		@if($user && !empty($admin))
+		@if(!empty($user))
 			<div class="strength-parent">
 				@include('vox.template-parts.strength-scale')
 			</div>
