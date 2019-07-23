@@ -373,7 +373,8 @@ class VoxesController extends AdminController
                     $a = [];
                     foreach ($results as $row) {
                         $text = current($row);
-                        if(empty($text)) {
+
+                        if(empty($text) && $text != '0') {
                             if($q && !empty($a)) {
                                 $qdata = [
                                     'order' => $i,
@@ -402,7 +403,7 @@ class VoxesController extends AdminController
                                 $a[] = $text;
                             }
                         }
-                    }                    
+                    }
                 }
 
                 //exit;
