@@ -24,6 +24,7 @@ use App\Models\UserAsk;
 use App\Models\Dcn;
 use App\Models\Reward;
 use App\Models\DcnReward;
+use App\Models\DentistPageview;
 use Carbon\Carbon;
 use Auth;
 use Cloutier\PhpIpfsApi\IPFS;
@@ -345,6 +346,17 @@ class DentistController extends FrontController
         }
 
 
+        if (!empty($this->user) && ($this->user->id != $item->id)) {
+
+            if (!session('pageview')) {
+                $pageview = new DentistPageview;
+                $pageview->dentist_id = $item->id;
+                $pageview->user_id = $this->user->id;
+                $pageview->ip = User::getRealIp();
+                $pageview->save();
+            }
+            session(['pageview' => true]);
+        }
 
         $reviews = $item->reviews_in();
         if($review_id) {
