@@ -798,10 +798,82 @@ NEW & FAILED TRANSACTIONS
 
 
 
+        $schedule->call(function () {
+            //users with balance over 200,000 DCN
 
+            $query = "
+                SELECT 
+                    `rewards`.`user_id`
+                FROM
+                    (
+                        SELECT 
+                            `user_id`, 
+                            sum(reward) as `rewards_total` 
+                        FROM 
+                            dcn_rewards 
+                        GROUP BY 
+                            `user_id`
+                    ) `rewards`
+                    left OUTER JOIN
+                    (
+                        SELECT 
+                            `user_id`, 
+                            sum(reward) as `withdraws_total` 
+                        FROM 
+                            dcn_cashouts 
+                        GROUP BY 
+                            `user_id`
+                    ) `cashouts`
+                    ON
+                        `rewards`.user_id = `cashouts`.user_id  
+                    LEFT JOIN 
+                        `users` `u`
+                    ON
+                        `u`.`id` = `rewards`.`user_id`
+                    WHERE
+                        AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) >= 200000
+                        AND `deleted_at` is null
 
+            ";
 
+            $users = DB::select(
+                DB::raw($query), []
+            );
 
+            $user_links = [];
+            foreach ($users as $u) {
+                $user = User::find($u->user_id);
+
+                if (!empty($user)) {
+                    $user_links[] = 'https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+                }
+            }
+
+            if (!empty($user_links)) {
+                $mtext = 'Users with balance of 200,000 DCN or more.'
+                
+                'Link to profiles in CMS:
+
+                '.implode('
+', $user_links ).'
+
+                ';
+
+                Mail::raw($mtext, function ($message) {
+
+                    $sender = config('mail.from.address');
+                    $sender_name = config('mail.from.name');
+
+                    $message->from($sender, $sender_name);
+                    $message->to( 'petar.stoykov@dentacoin.com' );
+                    $message->to( 'donika.kraeva@dentacoin.com' );
+                    $message->to( 'gergana@youpluswe.com' );
+                    //$message->to( 'dokinator@gmail.com' );
+                    $message->subject('Users with high balance');
+                });
+            }
+
+        })->cron("0 10 * * *"); //05:00h
 
 
 
