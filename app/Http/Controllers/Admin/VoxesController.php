@@ -703,6 +703,8 @@ class VoxesController extends AdminController
                 }
                 if(!empty( $data['stats_subtitle-'.$key] )) {
                     $translation->stats_subtitle = $data['stats_subtitle-'.$key];
+                } else {
+                    $translation->stats_subtitle = '';
                 }
 
                 if(!empty( $data['answers-'.$key] )) {
