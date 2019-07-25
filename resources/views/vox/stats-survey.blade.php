@@ -89,11 +89,11 @@
 									<p class="stats-subtitle">{{ nl2br($question->translateorNew(App::getLocale())->stats_subtitle) }}</p>
 								@endif
 								@foreach(json_decode($question->{'answers:en'}, true) as $key => $ans)
-									@if( !empty(json_decode($question->stats_scale_answers, true)[$key]))
+									@if( in_array($key, json_decode($question->stats_scale_answers, true)))
 										<div class="stat" question-id="{{ $question->id }}" scale-answer-id="{{ $key + 1 }}" stat-type="{{ $question->used_for_stats }}">
 											<a class="title" href="javascript:;">
 												<h2>
-													{{ $ans }}
+													{{ $question->removeAnswerTooltip($ans) }}
 												</h2>
 											</a>
 											<div class="contents scale-contents">
