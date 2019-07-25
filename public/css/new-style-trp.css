@@ -5928,3 +5928,6 @@ body.sp-trp-iframe .profile-reviews-space {
     margin: 0px 2px; }
     .pagination li.active {
       background-color: #0fb0e5; }
+
+body.strength-pb {
+  padding-bottom: 130px; }

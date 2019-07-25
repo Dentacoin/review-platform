@@ -62,7 +62,7 @@ class IndexController extends FrontController
 			$refined = $refined->take(12)->get();
 		}
 
-		return $this->ShowView('index', array(
+		$params = array(
             'countries' => Country::get(),
 			'featured' => $refined,
 			'js' => [
@@ -73,7 +73,13 @@ class IndexController extends FrontController
 			'jscdn' => [
 				'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
 			]
-        ));	
+        );
+
+		if (!empty($this->user)) {
+			$params['extra_body_class'] = 'strength-pb';
+		}
+
+		return $this->ShowView('index', $params);	
 	}
 
 

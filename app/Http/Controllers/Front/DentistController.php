@@ -672,6 +672,10 @@ class DentistController extends FrontController
             ];
         }
 
+        if (!empty($this->user) && ($this->user->id == $item->id)) {
+            $view_params['extra_body_class'] = 'strength-pb';
+        }
+
         
         return $this->ShowView('user', $view_params);
 
