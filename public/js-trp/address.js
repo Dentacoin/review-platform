@@ -128,8 +128,8 @@ jQuery(document).ready(function($){
         conatiner.find('.geoip-hint').hide();
         conatiner.find('.geoip-confirmation').hide();
         conatiner.find('.suggester-map-div').hide();
-
-    	if( place && place.geometry ) {
+        
+    	if( place && place.geometry && place.types && (place.types.indexOf('street_address') != -1)) {
     		//address_components
     		console.log('Geocoding result: ', place);
     		
