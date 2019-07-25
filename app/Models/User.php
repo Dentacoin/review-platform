@@ -702,10 +702,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     ];
                 } else if (empty($done_all) ) {
 
-                    $voxes = Vox::where('type', 'normal')->where('featured', 1)->orderBy('id', 'desc')->get()->pluck('id')->toArray();
-                    if (!$voxes) {
-                        $voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'asc')->get()->pluck('id')->toArray();
-                    }
+                    $voxes = Vox::where('type', 'normal')->orderBy('featured', 'desc')->orderBy('id', 'desc')->get()->pluck('id')->toArray();
                     
                     $filled_voxes = $this->filledVoxes();
 
@@ -948,10 +945,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     ];
                 } else if (empty($done_all) ) {
 
-                    $voxes = Vox::where('type', 'normal')->where('featured', 1)->orderBy('id', 'desc')->get()->pluck('id')->toArray();
-                    if (!$voxes) {
-                        $voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'asc')->get()->pluck('id')->toArray();
-                    }
+                    $voxes = Vox::where('type', 'normal')->orderBy('featured', 'desc')->orderBy('id', 'desc')->get()->pluck('id')->toArray();
                     
                     $filled_voxes = $this->filledVoxes();
 
