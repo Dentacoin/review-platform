@@ -186,7 +186,7 @@ class LoginController extends FrontController
             $user = User::where( 'fb_id','LIKE', $s_user->getId() )->withTrashed()->first();
         }
         if(empty($user) && $s_user->getEmail()) {
-            $user = User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->where('id', '<', 5200)->first();            
+            $user = User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->first();            
         }
 
         if ($user) {
