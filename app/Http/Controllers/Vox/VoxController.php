@@ -450,7 +450,14 @@ class VoxController extends FrontController
 			        				if($type == 'single') {
 						        		$is_scam = end($answered) != $a;
 						        	} else if($type == 'multiple') {
-						        		$is_scam = !empty(array_diff( end($answered), $a ));
+						        		$end_answered = [];
+
+						        		if (!is_array(end($answered))) {
+						        			$end_answered[] = end($answered);
+						        		} else {
+						        			$end_answered = end($answered);
+						        		}
+						        		$is_scam = !empty(array_diff( $end_answered, $a ));
 						        	}
 					        	} else {
 			        				if($type == 'single') {
