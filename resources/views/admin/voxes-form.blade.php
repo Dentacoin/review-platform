@@ -416,6 +416,7 @@
                         @endforeach
                     </select>
                     <input type="hidden" name="d-question" id="d-question" value="">
+                    <input type="hidden" name="current-vox" id="current-vox" value="{{ $item->id }} ">
                     <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Save</button>
                 </form>
             </div>

@@ -1290,10 +1290,21 @@ class VoxesController extends AdminController
         $item = Vox::find($this->request->input('duplicate-question-vox'));
 
         if(!empty($item)) {
+            if ($this->request->input('current-vox') == $this->request->input('duplicate-question-vox')) {
+                VoxQuestion::where('vox_id', $item->id)->where('order', '>', $q['order'])->update([
+                    'order' => DB::raw('`order`+1')
+                ]);
+            }
 
             $question = new VoxQuestion;
             $question->vox_id = $item->id;
             $this->saveOrUpdateQuestion($question, $q, true);
+            if ($this->request->input('current-vox') == $this->request->input('duplicate-question-vox')) {
+                $question->order++;
+            } else {
+                $question->order = 1000;
+            }
+            $question->save();
             $item->checkComplex();
         
             Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-added'));
