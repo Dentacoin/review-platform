@@ -360,7 +360,12 @@ $(document).ready(function(){
         }
         var stat = $(this).closest('.stat');
         if( !stat.hasClass('active') ) {
-            reloadGraph( stat );
+            if (stat.find('.stat').length) {
+                stat.addClass('active');
+                reloadGraph(stat.find('.stat').first());
+            } else {
+                reloadGraph( stat );
+            }
         } else {
             stat.removeClass('active');
         }
