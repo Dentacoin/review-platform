@@ -1016,7 +1016,7 @@ NEW & FAILED TRANSACTIONS
                             'score_last_month_aver' => $cur_month_rating,
                             'score_percent_month' => $cur_month_rating_percent,
                             'change_month' => $change_month,
-                            'reviews_last_month_num' => $cur_month_reviews_num,
+                            'reviews_last_month_num' => $cur_month_reviews_num.($cur_month_reviews_num > 1 ? ' reviews' : ' review'),
                             'score_percent_country' => $cur_country_month_rating_percent,
                             'change_country' => $change_country,
                             'reviews_num_percent_month' => $reviews_num_percent_month,
