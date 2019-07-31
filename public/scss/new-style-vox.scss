@@ -4379,6 +4379,7 @@ body.vox-public {
 					}
 
 					.icon {
+						z-index: -1;
 						width: 47px;
 						height: 77px;
 						background-position: 50% 50%;
@@ -9611,4 +9612,10 @@ body.sp-vox-iframe {
 	    -webkit-transform: rotate(360deg);
 	    transform: rotate(360deg);
 	}
+}
+
+
+//charts tooltip to not crop
+svg:not(:root) {
+	overflow: visible !important;
 }

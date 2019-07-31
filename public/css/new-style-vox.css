@@ -3016,6 +3016,7 @@ p.h2-bold {
         .page-statistics .stats .stat .contents .graphs .map-hint b {
           color: #119c88; }
       .page-statistics .stats .stat .contents .graphs .icon {
+        z-index: -1;
         width: 47px;
         height: 77px;
         background-position: 50% 50%;
@@ -6768,3 +6769,5 @@ body.sp-vox-iframe .above-fold {
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
+svg:not(:root) {
+  overflow: visible !important; }
