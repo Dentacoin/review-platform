@@ -299,6 +299,7 @@ $(document).ready(function(){
 
                         $('.question-group .answer-checkbox.active input').prop('checked', false);
                         $('.question-group .answer-checkbox.active').removeClass('active');
+                        $('.question-group .answer-radio.active-label').removeClass('active-label');
                         $('.question-group input.answer').prop('disabled', false);
 
                         $('.answer-error').hide();

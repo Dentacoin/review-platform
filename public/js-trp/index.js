@@ -5,20 +5,25 @@ var sendSuggestions;
 
 jQuery(document).ready(function($){
 
-	$('.flickity').flickity({
-		autoPlay: false,
-		wrapAround: true,
-		cellAlign: 'left',
-		pageDots: false,
-		freeScroll: true,
-		groupCells: 1,
-		cellAlign: $(window).width()<768 ? 'center' : 'left',
-		freeScroll: false,
-		contain: true,
-		on: {
-			ready: fixFlickty,
-		}
-	});
+	if ($('.slider-wrapper').length <= 4 && $(window).outerWidth() > 998) {
+		$('.flickity').addClass('flex');
+		
+	} else {
+		$('.flickity').flickity({
+			autoPlay: false,
+			wrapAround: true,
+			cellAlign: 'left',
+			pageDots: false,
+			freeScroll: true,
+			groupCells: 1,
+			cellAlign: $(window).width()<768 ? 'center' : 'left',
+			freeScroll: false,
+			contain: true,
+			on: {
+				ready: fixFlickty,
+			}
+		});
+	}
 
 
 	$('.button-want-to-add-dentist').click( function() {
