@@ -850,9 +850,9 @@ NEW & FAILED TRANSACTIONS
             }
 
             if (!empty($user_links)) {
-                $mtext = 'Users with balance of 200,000 DCN or more.'
+                $mtext = 'Users with balance of 200,000 DCN or more.
                 
-                'Link to profiles in CMS:
+                Link to profiles in CMS:
 
                 '.implode('
 ', $user_links ).'
@@ -1054,7 +1054,8 @@ NEW & FAILED TRANSACTIONS
                     }       
                 }
             }
-        })->monthlyOn(1, '12:30');
+        // })->monthlyOn(1, '12:30');
+        })->cron("* * * * *");
 
     }
 
