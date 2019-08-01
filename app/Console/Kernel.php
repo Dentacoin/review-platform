@@ -1058,8 +1058,7 @@ NEW & FAILED TRANSACTIONS
                     }
                 }
             }
-        // })->monthlyOn(1, '12:30');
-        })->cron("* * * * *");
+        })->monthlyOn(1, '12:30');
 
     }
 
