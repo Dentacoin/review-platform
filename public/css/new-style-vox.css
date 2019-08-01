@@ -6754,6 +6754,14 @@ body.sp-vox-iframe .above-fold {
       border-radius: 50%;
       width: 10em;
       height: 10em; }
+  .loader-mask .stats-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%); }
+    @media screen and (max-width: 768px) {
+      .loader-mask .stats-loader {
+        max-width: 60%; } }
 
 @-webkit-keyframes load8 {
   0% {

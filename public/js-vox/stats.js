@@ -358,6 +358,9 @@ $(document).ready(function(){
         if( $( '.stat.restore-me' ).length ) {
             return;
         }
+        $('.loader').fadeIn();
+        $('.loader-mask').fadeIn();
+
         var stat = $(this).closest('.stat');
         if( !stat.hasClass('active') ) {
             if (stat.find('.stat').length) {
@@ -634,6 +637,9 @@ $(document).ready(function(){
 
                 $(this).find('.second-chart').attr('class', 'second-chart '+(type=='dependency' ? 'dependency' : scale) );
                 $(this).find('.third-chart').attr('class', 'third-chart '+(type=='dependency' ? 'dependency' : scale) );
+
+                $('.loader').fadeOut();
+                $('.loader-mask').delay(350).fadeOut('slow');   
 
             }).bind(elm)
         );

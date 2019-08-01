@@ -9590,6 +9590,17 @@ body.sp-vox-iframe {
 			height: 10em;
 		}
 	}
+
+	.stats-loader {
+		position: absolute;
+	    top: 50%;
+	    left: 50%;
+	    transform: translateX(-50%) translateY(-50%);
+
+	    @media #{$phone} {
+	    	max-width: 60%;
+	    }
+	}
 }
 
 @-webkit-keyframes load8 {
