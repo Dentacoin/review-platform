@@ -957,9 +957,9 @@ class UsersController extends AdminController
                                         $inv->invited_id = $item->id;
                                         $inv->save();
 
-                                        $item->invitor->sendTemplate( 26, [
+                                        $item->invitor->sendTemplate( 19, [
                                             'who_joined_name' => $item->getName()
-                                        ] );                                        
+                                        ] );
 
                                         $reward = new DcnReward;
                                         $reward->user_id = $item->invited_by;
