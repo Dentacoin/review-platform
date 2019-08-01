@@ -1828,6 +1828,10 @@ body.vox-public {
     		text-align: center;
 
     		@media screen and (max-height: 800px) and (min-width: 769px ) {
+    			width: 155px;
+    		}
+
+    		@media screen and (max-width: 920px ) {
     			width: 125px;
     		}
 
@@ -1846,8 +1850,12 @@ body.vox-public {
     			border-bottom-right-radius: 0px;
 
     			@media screen and (max-height: 800px) and (min-width: 769px ) {
-    				left: -125px;
+    				left: -155px;
     			}
+
+	    		@media screen and (max-width: 920px ) {
+	    			left: -125px;
+	    		}
 
     			@media #{$phone} {
     				margin-right: 10px;
@@ -1861,8 +1869,12 @@ body.vox-public {
     			border-bottom-left-radius: 0px;
 
     			@media screen and (max-height: 800px) and (min-width: 769px ) {
-    				right: -125px;
+    				right: -155px;
     			}
+
+	    		@media screen and (max-width: 920px ) {
+	    			right: -125px;
+	    		}
 
     			@media #{$phone} {
     		    	border-radius: 7px;
@@ -1889,6 +1901,10 @@ body.vox-public {
 
     			@media screen and (max-height: 800px) and (min-width: 769px ) {
 		    		font-size: 23px;
+		    	}
+
+		    	@media screen and (max-width: 920px ) {
+		    		font-size: 20px;
 		    	}
 
 		    	@media #{$phone} {

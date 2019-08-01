@@ -1318,6 +1318,9 @@ p.h2-bold {
       text-align: center; }
       @media screen and (max-height: 800px) and (min-width: 769px) {
         .section-vox-not-login .swiper-slide .wing {
+          width: 155px; } }
+      @media screen and (max-width: 920px) {
+        .section-vox-not-login .swiper-slide .wing {
           width: 125px; } }
       @media screen and (max-width: 768px) {
         .section-vox-not-login .swiper-slide .wing {
@@ -1333,6 +1336,9 @@ p.h2-bold {
         border-bottom-right-radius: 0px; }
         @media screen and (max-height: 800px) and (min-width: 769px) {
           .section-vox-not-login .swiper-slide .wing.left-wing {
+            left: -155px; } }
+        @media screen and (max-width: 920px) {
+          .section-vox-not-login .swiper-slide .wing.left-wing {
             left: -125px; } }
         @media screen and (max-width: 768px) {
           .section-vox-not-login .swiper-slide .wing.left-wing {
@@ -1343,6 +1349,9 @@ p.h2-bold {
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px; }
         @media screen and (max-height: 800px) and (min-width: 769px) {
+          .section-vox-not-login .swiper-slide .wing.right-wing {
+            right: -155px; } }
+        @media screen and (max-width: 920px) {
           .section-vox-not-login .swiper-slide .wing.right-wing {
             right: -125px; } }
         @media screen and (max-width: 768px) {
@@ -1363,6 +1372,9 @@ p.h2-bold {
         @media screen and (max-height: 800px) and (min-width: 769px) {
           .section-vox-not-login .swiper-slide .wing p {
             font-size: 23px; } }
+        @media screen and (max-width: 920px) {
+          .section-vox-not-login .swiper-slide .wing p {
+            font-size: 20px; } }
         @media screen and (max-width: 768px) {
           .section-vox-not-login .swiper-slide .wing p {
             font-size: 14px; } }

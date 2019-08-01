@@ -5,7 +5,7 @@
 	<div class="section-recent-surveys section-vox-not-login">
 		<div class="container">
 			<h2 class="vox-title">"{{ $vox->title }}"</h2>
-			<h2>Take survey and get rewarded!</h2>
+			<h2>{{ trans('vox.page.public-questionnaire.title') }}</h2>
 
 			<div class="swiper-wrapper">
 
@@ -13,14 +13,14 @@
 					<div class="wing left-wing">
 						<div class="wing-box">
 							<img src="{{ url('new-vox-img/clock-icon.svg') }}">
-							<p>Time:</p>
+							<p>{{ trans('vox.page.public-questionnaire.time') }}</p>
 							<p>{{ $vox->formatDuration() }}</p>
 						</div>
 					</div>
 					<div class="wing right-wing">
 						<div class="wing-box">
 							<img src="{{ url('new-vox-img/coin-icon.png') }}">
-							<p>Reward:</p>
+							<p>{{ trans('vox.page.public-questionnaire.reward') }}</p>
 							<p>{{ $vox->getRewardTotal() }} DCN</p>
 						</div>
 					</div>
