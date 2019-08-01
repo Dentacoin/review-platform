@@ -909,7 +909,7 @@ NEW & FAILED TRANSACTIONS
             foreach ($users as $u) {
                 $user = User::find($u->id);
 
-                if($user->id > 14984) {
+                if($user->id > 25671) {
 
                     if (!empty($user)) {
 
@@ -923,7 +923,7 @@ NEW & FAILED TRANSACTIONS
                             }
                         }
 
-                        if ($found) {
+                        if ($found && $user->getMontlyRating()->count()) {
 
                             $avg_rating = 0;
                             foreach($user->getMontlyRating() as $cur_month_reviews) {
