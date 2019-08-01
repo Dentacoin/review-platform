@@ -14,67 +14,6 @@
 			<div class="alert alert-info">
 				{{ trans('trp.popup.submit-review-popup.self') }}
 			</div>
-		@elseif(!$user->civic_id)
-			<h2>
-				{!! nl2br(trans('trp.popup.submit-review-popup.title')) !!}
-				
-			</h2>
-			<div class="question">
-				<h4 class="popup-title">
-					{!! nl2br(trans('trp.popup.submit-review-popup.civic-title')) !!}
-					
-				</h4>
-				<div class="review-answers">
-					<p>
-						{!! nl2br(trans('trp.popup.submit-review-popup.civic-hint')) !!}
-						
-						<br/>
-						<br/>
-					</p>
-					<p>
-						{!! nl2br(trans('trp.popup.submit-review-popup.civic-1')) !!}
-						
-						<br/>
-						<br/>
-					</p>
-                	<p>
-                		<a href="https://play.google.com/store/apps/details?id=com.civic.sip" target="_blank" class="civic-download civic-android"></a>
-                		<a href="https://itunes.apple.com/us/app/civic-secure-identity/id1141956958?mt=8" target="_blank" class="civic-download civic-ios"></a>
-						<br/>
-						<br/>
-                	</p>
-					<p>
-						{!! nl2br(trans('trp.popup.submit-review-popup.civic-2')) !!}
-						
-						<br/>
-						<br/>
-					</p>
-
-					<button id="signupButton" class="civic-button-a medium" type="button" scope="BASIC_SIGNUP">
-						<span style="color: white;">
-							{!! nl2br(trans('vox.page.profile.home.civic-button')) !!}
-						</span>
-					</button>
-
-					<div id="civic-cancelled" class="alert alert-info" style="display: none;">
-						{!! nl2br(trans('vox.page.profile.home.civic-cancelled')) !!}
-					</div>
-					<div id="civic-error" class="alert alert-warning" style="display: none;">
-						{!! nl2br(trans('vox.page.profile.home.civic-error')) !!}
-					</div>
-					<div id="civic-weak" class="alert alert-warning" style="display: none;">
-						{!! nl2br(trans('vox.page.profile.home.civic-weak')) !!}
-					</div>
-					<div id="civic-wait" class="alert alert-info" style="display: none;">
-						{!! nl2br(trans('vox.page.profile.home.civic-wait')) !!}
-					</div>
-					<div id="civic-duplicate" class="alert alert-warning" style="display: none;">
-						{!! nl2br(trans('vox.page.profile.home.civic-duplicate')) !!}
-					</div>
-					<input type="hidden" id="jwtAddress" value="{!! getLangUrl('profile/jwt') !!}" />
-
-				</div>
-			</div>
 
 		@elseif($dentist_limit_reached)
 			<div class="alert alert-info">
