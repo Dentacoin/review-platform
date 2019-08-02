@@ -159,6 +159,10 @@ class DentistController extends FrontController
             return redirect( getLangUrl('dentists') );
         }
 
+        session([
+            'intended' => $item->getLink(),
+        ]);
+
         //$item->recalculateRating();
         $isTrusted = !empty($this->user) ? $this->user->wasInvitedBy($item->id) : false;
 

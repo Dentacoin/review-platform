@@ -109,7 +109,7 @@ class LoginController extends FrontController
 
                 Auth::login($user, true);
 
-                $intended = session()->pull('our-intended');
+                $intended = session()->pull('intended');
 
                 return redirect( $intended ? $intended : getLangUrl('/'));
             } else {
