@@ -109,7 +109,9 @@ class LoginController extends FrontController
 
                 Auth::login($user, true);
 
-                return redirect('/');
+                $intended = session()->pull('our-intended');
+
+                return redirect( $intended ? $intended : getLangUrl('/'));
             } else {
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-login']))
                     ->withInput()
