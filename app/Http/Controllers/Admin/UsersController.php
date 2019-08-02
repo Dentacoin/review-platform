@@ -957,9 +957,12 @@ class UsersController extends AdminController
                                         $inv->invited_id = $item->id;
                                         $inv->save();
 
-                                        $item->invitor->sendTemplate( 19, [
-                                            'who_joined_name' => $item->getName()
-                                        ] );
+                                        $substitutions = [
+                                            'added_dentist_name' => $item->getName(),
+                                            'trp_added_dentist_prf' => $item->getLink().'?popup=popup-login',
+                                        ];
+
+                                        $item->invitor->sendGridTemplate(65, $substitutions, 'trp');
 
                                         $reward = new DcnReward;
                                         $reward->user_id = $item->invited_by;
