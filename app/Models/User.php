@@ -1856,6 +1856,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
            }
         }
 
+        $user_invites = UserInvite::where(function($query) use ($id) {
+            $query->where( 'user_id', $id)->orWhere('invited_id', $id);
+        })->get();
+
+        if (!empty($user_invites)) {
+           foreach ($user_invites as $user_invite) {
+               $user_invite->delete();
+           }
+        }
+
         if(!$this->is_dentist) {
             $this->sendTemplate(9);
         }
