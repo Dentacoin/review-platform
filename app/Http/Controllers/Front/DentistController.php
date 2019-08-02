@@ -160,7 +160,7 @@ class DentistController extends FrontController
         }
 
         session([
-            'intended' => $item->getLink(),
+            'intended-sess' => $item->getLink(),
         ]);
 
         //$item->recalculateRating();
