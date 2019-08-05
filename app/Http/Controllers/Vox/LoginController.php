@@ -387,4 +387,8 @@ class LoginController extends FrontController
         return $this->try_social_register($user, 'fb');
     }
 
+    public function status() {
+        return !empty($this->user) ? $this->user->convertForResponse() : null;
+    }
+
 }

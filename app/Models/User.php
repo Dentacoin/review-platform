@@ -2378,4 +2378,13 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
 
         return $prev_reviews;        
     }
+
+    public function convertForResponse() {
+        $arr = $this->toArray();
+        $arr['avatar_url'] = $this->getImageUrl();
+        $arr['thumbnail_url'] = $this->getImageUrl(true);
+        $arr['trp_public_profile_link'] = $this->is_dentist && ($this->status=='approved' || $this->status=='test' || $this->status=='added_approved') ? $this->getLink() : null;
+
+        return $arr;
+    }
 }

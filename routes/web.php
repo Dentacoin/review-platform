@@ -212,6 +212,8 @@ $reviewRoutes = function () {
 			Route::get('register/callback/twitter', 			'LoginController@twitter_callback_register');
 			Route::get('register/callback/gplus', 				'LoginController@gplus_callback_register');
 
+			Route::any('status', 								'LoginController@status');
+
 			Route::post('register/step1', 						'RegisterController@check_step_one');
 			Route::post('register/step2', 						'RegisterController@check_step_two');
 			Route::post('register/step3', 						'RegisterController@check_step_three');
@@ -326,6 +328,8 @@ $voxRoutes = function () {
 			Route::any('login/civic', 							'LoginController@civic');
 
 			Route::any('new-register/facebook', 				'LoginController@new_facebook_register');
+			
+			Route::any('status', 								'LoginController@status');
 
 			Route::post('register/civic', 						'RegisterController@civic');
 			Route::get('register/facebook', 					'LoginController@facebook_register');
