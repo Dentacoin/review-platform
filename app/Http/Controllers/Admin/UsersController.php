@@ -998,7 +998,9 @@ class UsersController extends AdminController
                         }
             		}
             	}
-
+                $item->state_name = $this->request->input('state_name');
+                $item->state_slug = $this->request->input('state_slug');
+                $item->city_name = $this->request->input('city_name');
                 $item->hasimage_social = false;
                 $item->save();
 

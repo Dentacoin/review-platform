@@ -185,6 +185,8 @@ class LoginController extends FrontController
                 $city_name = null;
                 $lat = null;
                 $lon = null;
+                $f_name = null;
+                $l_name = null;
                 if(!empty($s_user->user['location']['name'])) {
 
                     // $loc_info = explode(',', $s_user->user['location']['name']);
@@ -232,6 +234,9 @@ class LoginController extends FrontController
                     if (!empty($info['lon'])) {
                         $lon = $info['lon'];
                     }
+                    $f_name = !empty($info['first_name']) ? $info['first_name'] : '';
+                    $l_name = !empty($info['last_name']) ? $info['last_name'] : '';
+                    $name = $f_name.' '.$l_name;
 
                 } else if($has_test) {
                     $country_id = !empty($has_test['location']) ? $has_test['location'] : '' ;
@@ -420,7 +425,7 @@ class LoginController extends FrontController
 
     public function new_facebook_register($locale=null) {
 
-        $user = Socialite::driver('facebook')->fields(['email', 'gender', 'birthday', 'location'])->userFromToken(Request::input('access-token'));
+        $user = Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email', 'gender', 'birthday', 'location'])->userFromToken(Request::input('access-token'));
 
         return $this->try_social_register($user, 'fb');
     }
