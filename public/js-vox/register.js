@@ -154,7 +154,7 @@ $(document).ready(function(){
                     $('#new-register-form input[name="access-token"]').val(response.authResponse.accessToken);
                     $('#new-register-form').submit();
                 }
-            }, {scope: 'email, gender, birthday, location'});
+            }, {scope: 'email, user_location, user_birthday'});
         } else {
             $('#read-privacy').closest('.form-group').addClass('has-error');
         }        
