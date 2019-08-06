@@ -157,7 +157,7 @@ class LoginController extends FrontController
         } else {
             if (!empty($s_user->getEmail())) {
                 
-                $name = $s_user->getName() ? $s_user->getName() : (!empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' );
+                $name = (!empty($s_user->user['first_name'] && !empty($s_user->user['last_name'])) ? ($s_user->user['first_name'].' '.$s_user->user['last_name']) : (!empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' );
 
                 $is_blocked = User::checkBlocks($name, $s_user->getEmail());
                 if( $is_blocked ) {
@@ -234,7 +234,6 @@ class LoginController extends FrontController
                     if (!empty($info['lon'])) {
                         $lon = $info['lon'];
                     }
-
                 } else if($has_test) {
                     $country_id = !empty($has_test['location']) ? $has_test['location'] : '' ;
                 }

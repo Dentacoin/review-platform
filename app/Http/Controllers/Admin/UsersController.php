@@ -105,6 +105,7 @@ class UsersController extends AdminController
     		],
     		'address' => [
     			'type' => 'text',
+                'disabled' => true,
     		],
     		'avg_rating' => [
     			'type' => 'text',
@@ -867,8 +868,12 @@ class UsersController extends AdminController
             }
 
             if(Request::isMethod('post')) {
+
             	foreach ($this->fields as $key => $value) {
             		if(empty($value['disabled']) && $value['type']!='avatar') {
+                        if($key=='city_name') {
+                            
+                        }
                         if($key=='type') {
                             if( $this->request->input($key)=='dentist' ) {
                                 $item->is_dentist = true;
@@ -998,10 +1003,8 @@ class UsersController extends AdminController
                         }
             		}
             	}
-                $item->state_name = $this->request->input('state_name');
-                $item->state_slug = $this->request->input('state_slug');
-                $item->city_name = $this->request->input('city_name');
                 $item->hasimage_social = false;
+
                 $item->save();
 
                 foreach ($item->reviews_out as $review_out) {
