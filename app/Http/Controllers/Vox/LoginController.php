@@ -234,9 +234,6 @@ class LoginController extends FrontController
                     if (!empty($info['lon'])) {
                         $lon = $info['lon'];
                     }
-                    $f_name = !empty($info['first_name']) ? $info['first_name'] : '';
-                    $l_name = !empty($info['last_name']) ? $info['last_name'] : '';
-                    $name = $f_name.' '.$l_name;
 
                 } else if($has_test) {
                     $country_id = !empty($has_test['location']) ? $has_test['location'] : '' ;
