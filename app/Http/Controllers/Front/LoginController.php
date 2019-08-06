@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 use App\Models\User;
 use App\Models\Dcn;
+use App\Models\Country;
 use App\Models\Civic;
 use App\Models\UserInvite;
 use Carbon\Carbon;
@@ -129,7 +130,7 @@ class LoginController extends FrontController
 
     public function facebook_register($locale=null, $type='patient') {
         config(['services.facebook.redirect' => getLangUrl('register/callback/facebook') ]);
-        return Socialite::driver('facebook')
+        return Socialite::driver('facebook')->scopes(['user_location', 'user_birthday'])
         ->redirect();
     }
 /*
@@ -153,7 +154,7 @@ class LoginController extends FrontController
         if (!Request::has('code') || Request::has('denied')) {
             return redirect( getLangUrl('register') );
         }
-        return $this->try_social_register(Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email'])->user(), 'fb');
+        return $this->try_social_register(Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email', 'gender', 'birthday', 'location'])->user(), 'fb');
     }
 /*
     public function twitter_callback_register() {
@@ -177,6 +178,7 @@ class LoginController extends FrontController
 */
 
     private function try_social_register($s_user, $network) {
+
         //dd($s_user);
         // return redirect( getLangUrl('register') )
         // ->withInput()
@@ -242,12 +244,54 @@ class LoginController extends FrontController
                     ->with('error-message', nl2br(trans('trp.popup.login.over18')) );
                 }
 
+                $country_id = null;
+                $state_name = null;
+                $state_slug = null;
+                $city_name = null;
+                $lat = null;
+                $lon = null;
+                if (!empty($s_user->user['location']['name'])) {
+                    $info = User::validateAddress( '', $s_user->user['location']['name'] );
+                    if (!empty($info['country_name'])) {
+                        $fb_country = $info['country_name'];
+                        $country = Country::whereHas('translations', function ($query) use ($fb_country) {
+                            $query->where('name', 'LIKE', $fb_country);
+                        })->first();
+
+                        if (!empty($country)) {
+                            $country_id = $country->id;
+                        }
+                    }
+                    if (!empty($info['state_name'])) {
+                        $state_name = $info['state_name'];
+                    }
+                    if (!empty($info['state_slug'])) {
+                        $state_slug = $info['state_slug'];
+                    }
+                    if (!empty($info['city_name'])) {
+                        $city_name = $info['city_name'];
+                    }
+                    if (!empty($info['lat'])) {
+                        $lat = $info['lat'];
+                    }
+                    if (!empty($info['lon'])) {
+                        $lon = $info['lon'];
+                    }
+                }
+
                 $password = $name.date('WY');
                 $newuser = new User;
                 $newuser->name = $name;
                 $newuser->email = $s_user->getEmail() ? $s_user->getEmail() : '';
                 $newuser->password = bcrypt($password);
-                $newuser->country_id = $this->country_id;
+                $newuser->country_id = !empty($country_id) ? $country_id : $this->country_id;
+                $newuser->state_name = $state_name;
+                $newuser->state_slug = $state_slug;
+                $newuser->city_name = $city_name;
+                $newuser->lat = $lat;
+                $newuser->lon = $lon;
+                $newuser->gender = $gender;
+                $newuser->birthyear = !empty($birthyear) ? $birthyear : '';
                 $newuser->fb_id = $s_user->getId();
                 $newuser->gdpr_privacy = true;
                 $newuser->platform = 'trp';

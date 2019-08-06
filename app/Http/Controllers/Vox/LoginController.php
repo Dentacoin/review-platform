@@ -180,24 +180,57 @@ class LoginController extends FrontController
                 
                 $has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
 
+                $state_name = null;
+                $state_slug = null;
+                $city_name = null;
+                $lat = null;
+                $lon = null;
                 if(!empty($s_user->user['location']['name'])) {
-                    $loc_info = explode(',', $s_user->user['location']['name']);
-                    $fb_country = trim($loc_info[(count($loc_info)-1)]);
-                    $fb_city = trim($loc_info[0]);
 
-                    $country = Country::whereHas('translations', function ($query) use ($fb_country) {
-                        $query->where('name', 'LIKE', $fb_country);
-                    })->first();
+                    // $loc_info = explode(',', $s_user->user['location']['name']);
+                    // $fb_country = trim($loc_info[(count($loc_info)-1)]);
+                    // $fb_city = trim($loc_info[0]);
 
-                    if(!empty($country)) {
-                        $country_id = $country->id;
-                        $city = City::where('country_id', $country_id)->whereHas('translations', function ($query) use ($fb_city) {
-                            $query->where('name', 'LIKE', $fb_city);
-                        })->first();
-                        if(!empty($city)) {
-                            $city_id = $city->id;
-                        }
+                    // $country = Country::whereHas('translations', function ($query) use ($fb_country) {
+                    //     $query->where('name', 'LIKE', $fb_country);
+                    // })->first();
+
+                    // if(!empty($country)) {
+                    //     $country_id = $country->id;
+                    //     $city = City::where('country_id', $country_id)->whereHas('translations', function ($query) use ($fb_city) {
+                    //         $query->where('name', 'LIKE', $fb_city);
+                    //     })->first();
+                    //     if(!empty($city)) {
+                    //         $city_id = $city->id;
+                    //     }
                             
+                    // }
+
+                    $info = User::validateAddress( '', $s_user->user['location']['name'] );
+                    if (!empty($info['country_name'])) {
+                        $fb_country = $info['country_name'];
+                        $country = Country::whereHas('translations', function ($query) use ($fb_country) {
+                            $query->where('name', 'LIKE', $fb_country);
+                        })->first();
+
+                        if (!empty($country)) {
+                            $country_id = $country->id;
+                        }
+                    }
+                    if (!empty($info['state_name'])) {
+                        $state_name = $info['state_name'];
+                    }
+                    if (!empty($info['state_slug'])) {
+                        $state_slug = $info['state_slug'];
+                    }
+                    if (!empty($info['city_name'])) {
+                        $city_name = $info['city_name'];
+                    }
+                    if (!empty($info['lat'])) {
+                        $lat = $info['lat'];
+                    }
+                    if (!empty($info['lon'])) {
+                        $lon = $info['lon'];
                     }
 
                 } else if($has_test) {
@@ -209,8 +242,13 @@ class LoginController extends FrontController
                 $newuser->name = $name;
                 $newuser->email = $s_user->getEmail() ? $s_user->getEmail() : '';
                 $newuser->password = bcrypt($password);
-                $newuser->country_id = $country_id;
-                $newuser->city_id = $city_id;
+                $newuser->country_id = !empty($country_id) ? $country_id : $this->country_id;
+                $newuser->state_name = $state_name;
+                $newuser->state_slug = $state_slug;
+                $newuser->city_name = $city_name;
+                $newuser->lat = $lat;
+                $newuser->lon = $lon;
+                // $newuser->city_id = $city_id;
                 $newuser->gender = $gender;
                 $newuser->birthyear = $birthyear;
                 $newuser->fb_id = $s_user->getId();
