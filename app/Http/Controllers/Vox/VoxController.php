@@ -194,24 +194,30 @@ class VoxController extends FrontController
 		}
 
     	$cross_checks = [];
+    	$cross_checks_references = [];
+
     	foreach ($vox->questions as $vq) {
 	    	if (!empty($vq->cross_check)) {
 
 	    		if (is_numeric($vq->cross_check)) {
 	    			$va = VoxAnswer::where('user_id',$this->user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
-	    			$cross_checks[$vq->id] = $va->answer;
+	    			$cross_checks[$vq->id] = $va ? $va->answer : null;
+	    			$cross_checks_references[$vq->id] = $vq->cross_check;
 	    		} else if($vq->cross_check == 'gender') {
 	    			$cc = $vq->cross_check;
 	    			$cross_checks[$vq->id] = $this->user->$cc == 'm' ? 1 : 2;
+	    			$cross_checks_references[$vq->id] = 'gender';
 	    		} else if($vq->cross_check == 'birthyear') {
 	    			$cc = $vq->cross_check;
 	    			$cross_checks[$vq->id] = $this->user->$cc;
+	    			$cross_checks_references[$vq->id] = 'birthyear';
 	    		} else {
 	    			$cc = $vq->cross_check;
 	    			$i=0;
 	    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
 	    				if($key==$this->user->$cc) {
 	    					$cross_checks[$vq->id] = $i;
+	    					$cross_checks_references[$vq->id] = $cc;
 	    					break;
 	    				}
 	    				$i++;
@@ -596,7 +602,7 @@ class VoxController extends FrontController
 
 							    			$v_quest = VoxQuestion::where('id', $q )->first();
 
-							    			if ($cross_checks[$q] != $a) {
+							    			if (!empty($cross_checks) && $cross_checks[$q] != $a) {
 								    			$vcc = new VoxCrossCheck;
 								    			$vcc->user_id = $this->user->id;
 								    			$vcc->question_id = $found->cross_check;
@@ -609,7 +615,7 @@ class VoxController extends FrontController
 							    			]);
 
 							    		} else if($found->cross_check == 'gender') {
-						    				if ($cross_checks[$q] != $a) {
+						    				if (!empty($cross_checks) && $cross_checks[$q] != $a) {
 						    					$vcc = new VoxCrossCheck;
 								    			$vcc->user_id = $this->user->id;
 								    			$vcc->question_id = $found->cross_check;
@@ -625,8 +631,7 @@ class VoxController extends FrontController
 							    			$i=0;
 							    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
 							    				if($i==$a) {
-
-									    			if ($cross_checks[$q] != $a) {
+									    			if (!empty($cross_checks) && $cross_checks[$q] != $a) {
 										    			$vcc = new VoxCrossCheck;
 										    			$vcc->user_id = $this->user->id;
 										    			$vcc->question_id = $found->cross_check;
@@ -649,7 +654,7 @@ class VoxController extends FrontController
 			        				if( !empty($found->cross_check) ) {
 			        					if($found->cross_check == 'birthyear') {
 
-							    			if ($cross_checks[$q] != $a) {
+							    			if (!empty($cross_checks) && $cross_checks[$q] != $a) {
 						    					$vcc = new VoxCrossCheck;
 								    			$vcc->user_id = $this->user->id;
 								    			$vcc->question_id = $found->cross_check;
@@ -991,6 +996,7 @@ class VoxController extends FrontController
             'suggested_voxes' => $suggested_voxes,
 			'related_mode' => $related_mode,
 			'cross_checks' => $cross_checks,
+			'cross_checks_references' => $cross_checks_references,
 			'welcomerules' => $welcomerules,
 			'not_bot' => $not_bot,
 			'details_fields' => $this->details_fields,

@@ -19,7 +19,7 @@
 @elseif( $info['type'] == 'datetimepicker')
     {{ Form::text( $key, !empty($item->$key) ? $item->$key->format('Y.m.d H:i:s') : '' , array('class' => 'form-control datetimepicker' , (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled')) }}
 @elseif( $info['type'] == 'country')  
-    {{ Form::select( $key , \App\Models\Country::get()->pluck('name', 'id')->toArray() , $item->$key , array('class' => 'form-control country-select') ) }}
+    {{ Form::select( $key , ['' => null] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , $item->$key , array('class' => 'form-control country-select') ) }}
 @elseif( $info['type'] == 'city')  
     {{ Form::select( $key , $item->country_id ? \App\Models\City::where('country_id', $item->country_id)->get()->pluck('name', 'id')->toArray() : [] , $item->$key , array('class' => 'form-control city-select') ) }}
 @elseif( $info['type'] == 'avatar')

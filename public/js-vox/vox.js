@@ -176,7 +176,6 @@ $(document).ready(function(){
         $('#wrong-control').hide();
         group.find('.answers').append('<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>');
 
-
         //Skip skipped :)
         if (group.attr('cross-check-correct') && !group.attr('skipped') ) {
 
@@ -234,6 +233,12 @@ $(document).ready(function(){
                 return;
             }
         }
+
+        $('.question-group').each( function() {
+            if (qid == $(this).attr('cross-check-id')) {
+                $(this).attr('cross-check-correct', answer);
+            }
+        });
 
 
         $.post( 
@@ -498,7 +503,7 @@ $(document).ready(function(){
         .fail(function(response) {
             console.log('ERROR');
             console.log(response);
-            window.location.reload();
+            //window.location.reload();
         });;
     }
 
