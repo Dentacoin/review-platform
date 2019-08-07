@@ -147,11 +147,13 @@ jQuery(document).ready(function($){
             setupMap(conatiner, coords);
 
             conatiner.find('.geoip-confirmation').show();
-
+            
+            $('.go-to-next[step-number="3"]').removeClass('disabled');
             return;
        
         } else {
             conatiner.find('.geoip-hint').show();
+            $('.go-to-next[step-number="3"]').addClass('disabled');
             
         }
         

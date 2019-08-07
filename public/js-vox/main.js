@@ -349,82 +349,89 @@ $(document).ready(function(){
     }
     modernFieldsUpdate();
 
+    $('#register-form .address-suggester').focus(function(e) {
+        $('.go-to-next[step-number="3"]').addClass('disabled');
+    });
+
 	$('.go-to-next').click( function(e) {
         e.preventDefault();
 
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
+        if (!$(this).hasClass('disabled')) {
 
-        $('.form-group').removeClass('has-error');
+	        if(ajax_is_running) {
+	            return;
+	        }
+	        ajax_is_running = true;
 
-        var that = $(this);
+	        $('.form-group').removeClass('has-error');
 
-        $.post( 
-            $(this).attr('data-validator'), 
-            $('#register-form').serialize(), 
-            function( data ) {
-                if(data.success) {
-                    $('.ajax-alert').remove();
+	        var that = $(this);
 
-                    if (that.attr('step-number') == 4) {
+	        $.post( 
+	            $(this).attr('data-validator'), 
+	            $('#register-form').serialize(), 
+	            function( data ) {
+	                if(data.success) {
+	                    $('.ajax-alert').remove();
 
-                    	fbq('track', 'DVDentistRegistrationInitiate');
-                    	gtag('event', 'ClickNext', {
-		                    'event_category': 'DentistRegistration',
-		                    'event_label': 'DentistRegistrationComplete',
-		                });
+	                    if (that.attr('step-number') == 4) {
 
-                    	$('#register-form').submit();
-                    } else {
+	                    	fbq('track', 'DVDentistRegistrationInitiate');
+	                    	gtag('event', 'ClickNext', {
+			                    'event_category': 'DentistRegistration',
+			                    'event_label': 'DentistRegistrationComplete',
+			                });
 
-	                    var a = $('.sign-in-step.active');
-	                    a.removeClass('active');
-	                    a.next().addClass('active');
+	                    	$('#register-form').submit();
+	                    } else {
 
-	                    gtag('event', 'ClickNext', {
-							'event_category': 'DentistRegistration',
-							'event_label': 'DentistRegistrationStep'+ that.attr('step-number'),
-						});
-                    }
+		                    var a = $('.sign-in-step.active');
+		                    a.removeClass('active');
+		                    a.next().addClass('active');
 
-                } else {
-
-                	$('.ajax-alert').remove();
-
-                	if (that.attr('step-number') == 4) {
-	                    $('#step-4 .alert-after').after('<div class="alert alert-warning ajax-alert"></div>');
-	                    for(var i in data.messages) {
-	                        $('#'+i+'-error').html(data.messages[i]).show();
-							$('input[name="'+i+'"]').closest('.form-group').addClass('has-error');
-
-	                        $('#step-4 .ajax-alert').append(data.messages[i] + '<br/>');
-	                        $('[name="'+i+'"]').addClass('has-error');
+		                    gtag('event', 'ClickNext', {
+								'event_category': 'DentistRegistration',
+								'event_label': 'DentistRegistrationStep'+ that.attr('step-number'),
+							});
 	                    }
 
-                	} else {
+	                } else {
 
-	                    for(var i in data.messages) {
-	                        $('[name="'+i+'"]').addClass('has-error');
-	                        $('[name="'+i+'"]').closest('.form-group').addClass('has-error');
-	                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
+	                	$('.ajax-alert').remove();
 
-	                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
-	                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
-	                        }
+	                	if (that.attr('step-number') == 4) {
+		                    $('#step-4 .alert-after').after('<div class="alert alert-warning ajax-alert"></div>');
+		                    for(var i in data.messages) {
+		                        $('#'+i+'-error').html(data.messages[i]).show();
+								$('input[name="'+i+'"]').closest('.form-group').addClass('has-error');
 
-	                        if ($('[name="'+i+'"]').closest('.agree-label').length) {
-	                            $('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
-	                        }                        
-	                    }
-                	}
-                    grecaptcha.reset();
-                }
-                ajax_is_running = false;
-            }, 
-            "json"
-        );
+		                        $('#step-4 .ajax-alert').append(data.messages[i] + '<br/>');
+		                        $('[name="'+i+'"]').addClass('has-error');
+		                    }
+
+	                	} else {
+
+		                    for(var i in data.messages) {
+		                        $('[name="'+i+'"]').addClass('has-error');
+		                        $('[name="'+i+'"]').closest('.form-group').addClass('has-error');
+		                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
+
+		                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
+		                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+		                        }
+
+		                        if ($('[name="'+i+'"]').closest('.agree-label').length) {
+		                            $('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
+		                        }                        
+		                    }
+	                	}
+	                    grecaptcha.reset();
+	                }
+	                ajax_is_running = false;
+	            }, 
+	            "json"
+	        );
+	    }
 
     } );
 
