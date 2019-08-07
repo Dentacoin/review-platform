@@ -589,57 +589,63 @@ $(document).ready(function(){
         }
     } );
 
+    $('.address-suggester').focus(function(e) {
+        $('.go-to-next[step-number="3"]').addClass('disabled');
+    });
+
     $('.go-to-next').click( function(e) {
         e.preventDefault();
+        if (!$(this).hasClass('disabled')) {
 
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
+            if(ajax_is_running) {
+                return;
+            }
+            ajax_is_running = true;
 
-        var that = $(this);
+            var that = $(this);
 
-        $.post( 
-            $(this).attr('data-validator'), 
-            $('#signin-form-popup').serialize(), 
-            function( data ) {
-                if(data.success) {
+            $.post( 
+                $(this).attr('data-validator'), 
+                $('#signin-form-popup').serialize(), 
+                function( data ) {
+                    if(data.success) {
 
-                    gtag('event', 'ClickNext', {
-                        'event_category': 'DentistRegistration',
-                        'event_label': 'DentistRegistrationStep'+ that.attr('step-number'),
-                    });
+                        gtag('event', 'ClickNext', {
+                            'event_category': 'DentistRegistration',
+                            'event_label': 'DentistRegistrationStep'+ that.attr('step-number'),
+                        });
 
-                    $('.ajax-alert').remove();
-                    $('#register-error').hide();
+                        $('.ajax-alert').remove();
+                        $('#register-error').hide();
 
-                    var a = $('.sign-in-step.active');
-                    a.removeClass('active');
-                    a.next().addClass('active');
+                        var a = $('.sign-in-step.active');
+                        a.removeClass('active');
+                        a.next().addClass('active');
 
-                } else {
-                    // $('#register-error').show();
-                    // $('#register-error span').html('');
-                    $('.ajax-alert').remove();
-                    for(var i in data.messages) {
-                        // $('#register-error span').append(data.messages[i] + '<br/>');
-                        $('[name="'+i+'"]').addClass('has-error');
-                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
+                    } else {
+                        // $('#register-error').show();
+                        // $('#register-error span').html('');
+                        $('.ajax-alert').remove();
+                        for(var i in data.messages) {
+                            // $('#register-error span').append(data.messages[i] + '<br/>');
+                            $('[name="'+i+'"]').addClass('has-error');
+                            $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
 
-                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
-                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+                            if ($('[name="'+i+'"]').closest('.modern-radios').length) {
+                                $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+                            }
+
+                            if ($('[name="'+i+'"]').closest('.agree-label').length) {
+                                $('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
+                            }                        
                         }
-
-                        if ($('[name="'+i+'"]').closest('.agree-label').length) {
-                            $('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
-                        }                        
+                        grecaptcha.reset();
                     }
-                    grecaptcha.reset();
-                }
-                ajax_is_running = false;
-            }, 
-            "json"
-        );
+                    ajax_is_running = false;
+                }, 
+                "json"
+            );
+        }
 
     } );
 

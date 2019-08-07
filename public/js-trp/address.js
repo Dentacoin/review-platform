@@ -128,10 +128,10 @@ jQuery(document).ready(function($){
         conatiner.find('.geoip-hint').hide();
         conatiner.find('.geoip-confirmation').hide();
         conatiner.find('.suggester-map-div').hide();
+            console.log('Geocoding result: ', place);
         
     	if( place && place.geometry && place.types && (place.types.indexOf('street_address') != -1)) {
     		//address_components
-    		console.log('Geocoding result: ', place);
     		
             var gstring = conatiner.find('.address-suggester').val();
             var country_name = conatiner.find('.country-select option:selected').text();
@@ -146,10 +146,12 @@ jQuery(document).ready(function($){
 
             conatiner.find('.geoip-confirmation').show();
 
+            $('.go-to-next[step-number="3"]').removeClass('disabled');
             return;
        
         } else {
             conatiner.find('.geoip-hint').show();
+            $('.go-to-next[step-number="3"]').addClass('disabled');
             
         }
         
