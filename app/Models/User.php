@@ -70,6 +70,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'phone',
         'website',
         'accepted_payment',
+        'status',
+        'ownership',
         'socials',
         'work_hours',
         'city_id',

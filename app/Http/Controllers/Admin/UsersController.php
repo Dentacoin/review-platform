@@ -50,6 +50,13 @@ class UsersController extends AdminController
             'f' => trans('admin.common.gender.f'),
         ];
 
+        $this->ownership = [
+            'unverified' => 'Unverified',
+            'approved' => 'Approved',
+            'rejected' => 'Rejected',
+            'suspicious' => 'Suspicious',
+        ];
+
     	$this->fields = [
             'title' => [
                 'type' => 'select',
@@ -141,6 +148,10 @@ class UsersController extends AdminController
             'status' => [
                 'type' => 'select',
                 'values' => config('user-statuses')
+            ],
+            'ownership' => [
+                'type' => 'select',
+                'values' => $this->ownership
             ],
     	];
     }
@@ -872,7 +883,7 @@ class UsersController extends AdminController
             	foreach ($this->fields as $key => $value) {
             		if(empty($value['disabled']) && $value['type']!='avatar') {
                         if($key=='city_name') {
-                            
+
                         }
                         if($key=='type') {
                             if( $this->request->input($key)=='dentist' ) {
@@ -924,6 +935,13 @@ class UsersController extends AdminController
                                             $reward->os = $dd->getOs()['name'];
                                         }
                                         $reward->save();
+
+                                        $substitutions = [
+                                            'added_dentist_name' => $item->getName(),
+                                            'trp_added_dentist_prf' => $item->getLink().'?popup=popup-login',
+                                        ];
+
+                                        $patient->sendGridTemplate(65, $substitutions, 'trp');
                                     }
                                 } else if( $this->request->input($key)=='approved' ) {
                                     if( $item->deleted_at ) {
@@ -949,34 +967,6 @@ class UsersController extends AdminController
                                     $item->email = $olde;
                                     $item->save();
                                     $to_ali->delete();
-
-                                    if($item->invited_by && $item->is_dentist) {
-                                        $inv = UserInvite::where('user_id', $item->invited_by)->where('invited_email', $item->email)->whereNull('invited_id')->orderBy('id', 'DESC')->first();
-                                        if(empty($inv)) {
-                                            $inv = new UserInvite;
-                                            $inv->user_id = $item->invited_by;
-                                        }
-
-                                        $inv->invited_email = $item->email;
-                                        $inv->invited_name = $item->name;
-                                        $inv->invited_id = $item->id;
-                                        $inv->save();
-
-                                        $substitutions = [
-                                            'added_dentist_name' => $item->getName(),
-                                            'trp_added_dentist_prf' => $item->getLink().'?popup=popup-login',
-                                        ];
-
-                                        $item->invitor->sendGridTemplate(65, $substitutions, 'trp');
-
-                                        $reward = new DcnReward;
-                                        $reward->user_id = $item->invited_by;
-                                        $reward->platform = $item->platform;
-                                        $reward->reward = Reward::getReward('reward_invite');
-                                        $reward->type = 'invitation';
-                                        $reward->reference_id = $item->id;
-                                        $reward->save();
-                                    }
 
                                 } else if( $this->request->input($key)=='pending' ) {
                                     $olde = $item->email;
