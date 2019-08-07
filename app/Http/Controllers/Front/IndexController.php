@@ -27,8 +27,13 @@ class IndexController extends FrontController
 		if( !empty($this->user) ) {
 			if( $this->user->country_id ) {
 				$refined->where('country_id', $this->user->country_id);
-				if( $this->user->city_id ) {
-					$refined->where('city_id', $this->user->city_id);
+				
+				if( $this->user->state_name ) {
+					$refined->where('state_name', 'LIKE', $this->user->state_name);
+
+					if( $this->user->city_name ) {
+						$refined->where('city_name', 'LIKE', $this->user->city_name);
+					}
 				}
 			}
 		} else {
