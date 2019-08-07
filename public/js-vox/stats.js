@@ -358,8 +358,11 @@ $(document).ready(function(){
         if( $( '.stat.restore-me' ).length ) {
             return;
         }
-        $('.loader').fadeIn();
-        $('.loader-mask').fadeIn();
+        if (!$(this).closest('.stat').hasClass('active')) {
+
+            $('.loader').fadeIn();
+            $('.loader-mask').fadeIn();
+        }
 
         var stat = $(this).closest('.stat');
         if( !stat.hasClass('active') ) {
