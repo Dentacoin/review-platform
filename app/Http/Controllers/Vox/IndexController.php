@@ -32,7 +32,7 @@ class IndexController extends FrontController
 			'all' => trans('vox.page.home.sort-all'),
 		];
 
-		$social_image = url('new-vox-img/dentavox-all-paid-surveys.jpg');
+		$social_image = url('new-vox-img/dentavox-summer-rewards.jpg');
 
 		return $this->ShowVoxView('home', array(
 			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',
