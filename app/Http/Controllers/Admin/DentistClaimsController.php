@@ -63,6 +63,21 @@ class DentistClaimsController extends AdminController
                             foreach ($dentist_claims as $dk) {
                                 $dk->status = 'rejected';
                                 $dk->save();
+
+                                $u = User::find(3);
+                                $tmpEmail = $u->email;
+                                $tmpName = $u->name;
+
+                                $u->email = $dk->email;
+                                $u->name = $dk->name;
+                                $u->save();
+                                $mail = $u->sendGridTemplate(66, null, 'trp');
+
+                                $u->email = $tmpEmail;
+                                $u->name = $tmpName;
+                                $u->save();
+
+                                $mail->delete();
                             }
                         }
 
@@ -83,7 +98,20 @@ class DentistClaimsController extends AdminController
                         $user->ownership = 'rejected';
                         $user->save();
 
-                        $user->sendGridTemplate(66, null, 'trp');
+                        $u = User::find(3);
+                        $tmpEmail = $u->email;
+                        $tmpName = $u->name;
+
+                        $u->email = $item->email;
+                        $u->name = $item->name;
+                        $u->save();
+                        $mail = $u->sendGridTemplate(66, null, 'trp');
+
+                        $u->email = $tmpEmail;
+                        $u->name = $tmpName;
+                        $u->save();
+
+                        $mail->delete();
                     }
 
                     $this->request->session()->flash('success-message', 'Claim Profile Updated' );
