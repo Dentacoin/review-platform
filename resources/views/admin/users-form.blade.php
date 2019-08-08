@@ -25,7 +25,7 @@
                     {!! csrf_field() !!}
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="form-group">
                                 <label class="col-md-2 control-label">User Type</label>
                                 <div class="col-md-10">
@@ -46,6 +46,17 @@
                                                     ])
                                                 </div>
                                             </div>
+                                            @if($item->invited_by)
+                                                <div>
+                                                    <label class="control-label" style="padding-right: 10px;">Ownership</label>
+                                                    <div style="display: inline-block;">
+                                                        @include('admin.parts.user-field',[
+                                                            'key' => 'ownership',
+                                                            'info' => $fields['ownership']
+                                                        ])
+                                                    </div>
+                                                </div>
+                                            @endif
                                             <div>
                                                 <label class="control-label" style="padding-right: 10px;">Partner</label>
                                                 <div style="display: inline-block;">
@@ -228,7 +239,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group avatar-group">
                                 <label class="col-md-6 control-label">Profile photo</label>
                                 <div class="col-md-6">
@@ -677,6 +688,39 @@
                 <div class="button-wrapper">
                     <a class="show-all-button btn btn-primary" href="javascript:;">Show all user logins</a>
                 </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if($item->claims->isNotEmpty())
+    <div class="row with-limits" id="claims-list">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">Profile Claims</h4>
+                </div>
+                <div class="panel-body">
+                <div class="panel-body">
+                    @include('admin.parts.table', [
+                        'table_id' => 'dentist-claims',
+                        'table_fields' => [
+                            'created_at'        => array('format' => 'datetime'),
+                            'name'              => array('label' => 'Name'),
+                            'email'              => array('label' => 'Email'),
+                            'phone'             => array('label' => 'Phone'),
+                            'job'               => array('label' => 'Job'),
+                            'status'            => array(),
+                            'update'            => array('label' => 'Edit', 'template' => 'admin.parts.table-dentist-claim-edit'),
+                        ],
+                        'table_data' => $item->claims,
+                        'table_pagination' => false,
+                    ])
+                </div>
+            </div>
             </div>
         </div>
     </div>

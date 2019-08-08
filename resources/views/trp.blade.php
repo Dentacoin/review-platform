@@ -237,7 +237,9 @@
 			@include('trp/popups/dentist-verification')
 			@include('trp/popups/banned')
 			@include('trp/popups/suspended')
-			@include('trp/popups/claim-profile')
+			@if($current_page == 'welcome-dentist' || $current_page == 'dentist')
+				@include('trp/popups/claim-profile')
+			@endif
 		@else
 			@include('trp/popups/invite-new-dentist')
 			@include('trp/popups/invite-new-dentist-success')

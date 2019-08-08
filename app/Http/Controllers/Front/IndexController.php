@@ -5,6 +5,7 @@ use App\Http\Controllers\FrontController;
 use App\Models\Country;
 use App\Models\City;
 use App\Models\User;
+use App\Models\DentistClaim;
 use App\Models\IncompleteRegistration;
 use CArbon\Carbon;
 
@@ -137,20 +138,20 @@ class IndexController extends FrontController
 		return redirect( getLangUrl('/') );
 	}
 
-	public function claim ($locale=null, $id, $hash) {
+	public function claim ($locale=null, $id) {
 		$user = User::find($id);
 
-        if (!$user || $user->status != 'added_approved' || $hash != $user->get_invite_token()) {
+        if (!$user || $user->status != 'added_approved') {
             return redirect( getLangUrl('/') );
         }
 
 		if(Request::isMethod('post')) {
             $validator = Validator::make(Request::all(), [
 	            'name' => array('required', 'min:3'),
+	            'email' => 'sometimes|required|email',
 	            'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
 	            'job' =>  array('required', 'string'),
 	            'explain-related' =>  array('required'),
-                'proof-file' => array('required','file'),
                 'password' => array('required', 'min:6'),
             	'password-repeat' => 'required|same:password',
 	        ]);
@@ -178,22 +179,28 @@ class IndexController extends FrontController
 	                    ]
 	                ] );
 	            }
-	            
-	            $user->name = Request::input('name');
-	            $user->phone = Request::input('phone');
-	            $user->password = bcrypt(Request::input('password'));
 
-	            $user->save();
+	            $claim = new DentistClaim;
+	            $claim->dentist_id = $user->id;
+	            $claim->name = Request::input('name');
+	            $claim->email = Request::input('email') ? Request::input('email') : $user->email;
+	            $claim->phone = Request::input('phone');
+	            $claim->password = bcrypt(Request::input('password'));
+	            $claim->job = Request::input('job');
+	            $claim->explain_related = Request::input('explain-related');
+	            $claim->status = 'waiting';
+	            $claim->save();
 
-	            $file = request()->file('proof-file');
-				$file->move('/tmp', $file->getClientOriginalName());
 
 	            $mtext = 'Dentist claimed his profile<br/>
+Name: '.Request::input('name').' <br/>
+Phone: '.Request::input('phone').' <br/>
+Email: '.Request::input('email') ? Request::input('email') : $user->email.' <br/>
 Job position: '.Request::input('job').' <br/>
 Explain how dentist is related to this office: '.Request::input('explain-related').' <br/>
 Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 
-				Mail::send([], [], function ($message) use ($mtext, $user, $file) {
+				Mail::send([], [], function ($message) use ($mtext, $user) {
 					$receiver = 'ali.hashem@dentacoin.com';
 					//$receiver = 'gergana@youpluswe.com';
 		            $sender = config('mail.from.address');
@@ -204,7 +211,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 		            //$message->to( 'dokinator@gmail.com' );
 		            $message->replyTo($user->email, $user->getName());
 		            $message->subject('Invited Dentist Claimed His Profile');
-		            $message->attach('/tmp/'.$file->getClientOriginalName());
 		            $message->setBody($mtext, 'text/html'); // for HTML rich messages
 		        });
 

@@ -143,6 +143,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('registrations', 					'StatsController@registrations');
 
 	Route::any('incomplete', 						'UsersController@incomplete');
+
+	Route::any('claims/edit/{id}', 					'DentistClaimsController@edit');
 });
 
 
@@ -170,7 +172,7 @@ $reviewRoutes = function () {
 			Route::get('pending-dentist', 						'IndexController@pending');
 			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
-			Route::any('welcome-dentist/claim/{id}/{hash}',		'IndexController@claim');
+			Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
 			Route::get('want-to-invite-dentist', 				'IndexController@want_to_invite_dentist');
 

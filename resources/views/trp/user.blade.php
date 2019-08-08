@@ -197,6 +197,11 @@
 							
 						</a>
 					@endif
+					@if(empty($user) && $item->status == 'added_approved')
+						<a class="claim-button" href="javascript:;"  data-popup="claim-popup">
+							Claim profile
+						</a>
+					@endif
 				</div>		
 			</div>
 			<div class="profile-details">
@@ -526,6 +531,11 @@
 				<a class="edit-button open-edit" href="javascript:;">
 					<i class="fas fa-edit"></i>
 					{!! nl2br(trans('trp.page.user.edit-profile')) !!}
+				</a>
+			@endif
+			@if(empty($user) && $item->status == 'added_approved')
+				<a class="claim-button" href="javascript:;" data-popup="claim-popup">
+					Claim profile
 				</a>
 			@endif
 			@if(!empty($item->short_description))

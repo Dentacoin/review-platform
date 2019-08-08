@@ -11,7 +11,7 @@
 				<h4>{!! nl2br(trans('trp.popup.popup-claim-profile.trustest-dentists')) !!}</h4>
 			</div>
 
-			<form class="claim-profile-form" id="claim-profile-form" enctype="multipart/form-data" method="post">
+			<form class="claim-profile-form" id="claim-profile-form" enctype="multipart/form-data" method="post" {!! $current_page == 'dentist' ? 'action="'.getLangUrl('welcome-dentist/claim/'.$item->id).'"' : '' !!}>
 				{!! csrf_field() !!}
 
 				<div class="modern-field alert-after">
@@ -20,6 +20,15 @@
 						<span>{!! nl2br(trans('trp.popup.popup-claim-profile.name')) !!}</span>
 					</label>
 				</div>
+
+				@if(empty(request()->input('utm_content')))
+					<div class="modern-field alert-after">
+						<input type="email" name="email" id="claim-email" class="modern-input" autocomplete="off">
+						<label for="claim-email">
+							<span>{!! nl2br(trans('trp.popup.popup-claim-profile.email')) !!}</span>
+						</label>
+					</div>
+				@endif
 
 				<div class="modern-field alert-after">
 					<input type="text" name="phone" id="claim-tel" class="modern-input" autocomplete="off">
@@ -40,15 +49,6 @@
 					<label for="claim-explain-related">
 						<span>{!! nl2br(trans('trp.popup.popup-claim-profile.explain-related')) !!}</span>
 					</label>
-				</div>
-
-				<div class="modern-field modern-file alert-after">
-					<label for="claim-proof-file">
-						<div class="file-name"></div>
-						<div class="file-submit">Attach file</div>
-						<input type="file" name="proof-file" id="claim-proof-file" class="modern-input" autocomplete="off">
-					</label>				
-					<p>{!! nl2br(trans('trp.popup.popup-claim-profile.proof-file.hint')) !!}</p>
 				</div>
 
 				<div class="modern-field alert-after">

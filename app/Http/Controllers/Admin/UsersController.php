@@ -145,13 +145,13 @@ class UsersController extends AdminController
             'dcn_address' => [
                 'type' => 'text',
             ],
-            'status' => [
-                'type' => 'select',
-                'values' => config('user-statuses')
-            ],
             'ownership' => [
                 'type' => 'select',
                 'values' => $this->ownership
+            ],
+            'status' => [
+                'type' => 'select',
+                'values' => config('user-statuses')
             ],
     	];
     }
@@ -670,7 +670,7 @@ class UsersController extends AdminController
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/'.$this->current_page.$get);
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/'.$this->current_page);
     }
 
     public function massdelete(  ) {
@@ -904,7 +904,7 @@ class UsersController extends AdminController
 
                                     if (!empty($patient)) {
                                         $substitutions = [
-                                            "invitation_link" => getLangUrl( 'welcome-dentist/claim/'.$item->id.'/'.$item->get_invite_token() , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
+                                            "invitation_link" => getLangUrl( 'welcome-dentist/claim/'.$item->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
                                         ];
 
                                         $item->sendGridTemplate(43, $substitutions);
@@ -965,6 +965,7 @@ class UsersController extends AdminController
                                     }
 
                                     $item->email = $olde;
+                                    $item->ownership = 'approved';
                                     $item->save();
                                     $to_ali->delete();
 
@@ -982,6 +983,20 @@ class UsersController extends AdminController
                                 }
                             }
                             $item->$key = $this->request->input($key);
+                        } else if($key=='ownership') {
+                            if( $this->request->input($key) && $item->$key!=$this->request->input($key) ) {
+
+                                if ($this->request->input($key)=='rejected') {
+
+                                    $item->sendGridTemplate(66, null, 'trp');
+                                    
+                                } else if ($this->request->input($key)=='suspicious') {
+                                    
+                                    $item->sendGridTemplate(67, null, 'trp');
+                                }
+                            }
+                            $item->$key = $this->request->input($key);
+
                         } else if($value['type']=='password') {
                             if( $this->request->input($key) ) {
                                 $item->$key = bcrypt( $this->request->input($key) );                                
