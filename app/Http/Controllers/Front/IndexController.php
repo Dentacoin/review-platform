@@ -123,10 +123,14 @@ class IndexController extends FrontController
 		return $this->ShowView('index-dentist', array(
 			'extra_body_class' => 'white-header',
 			'js' => [
+				'address.js',
 				'index-dentist.js'
 			],
 			'regData' => $regData,
 			'unsubscribed' => $unsubscribed,
+			'jscdn' => [
+				'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
+			]
         ));	
 	}
 
