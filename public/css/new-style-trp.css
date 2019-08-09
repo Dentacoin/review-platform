@@ -4462,21 +4462,30 @@ textarea.input {
     .details-wrapper .asks-container table td {
       vertical-align: top; }
   .details-wrapper .asks-container .btn.compact {
-    height: 20px;
-    line-height: 20px;
+    height: 22px;
+    line-height: 23px;
+    margin-bottom: 5px;
     font-size: 14px;
     margin-right: 10px;
-    padding: 0px 20px;
+    padding: 0px 8px;
     border-radius: 5px;
     text-transform: uppercase;
     font-weight: 600;
     display: inline-block;
     width: auto;
-    border: none; }
+    border: none;
+    width: 100%;
+    text-align: center; }
+    @media screen and (max-width: 998px) {
+      .details-wrapper .asks-container .btn.compact {
+        font-size: 9px;
+        vertical-align: middle; } }
     .details-wrapper .asks-container .btn.compact i {
       font-size: 12px;
       color: white;
       font-weight: normal; }
+    .details-wrapper .asks-container .btn.compact:last-child {
+      margin-bottom: 0px; }
   .details-wrapper .asks-container .btn-primary {
     background-color: #126585;
     color: white; }
