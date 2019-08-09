@@ -47,37 +47,32 @@ class DentistClaimsController extends AdminController
                     ->withInput()
                     ->withErrors($validator);
                 } else {
-                    
-                    $item->name = $this->request->input('name');
-                    $item->email = $this->request->input('email');
-                    $item->phone = $this->request->input('phone');
-                    $item->job = $this->request->input('job');
-                    $item->explain_related = $this->request->input('explain_related');
-                    $item->status = $this->request->input('status');
-                    $item->save();
 
                     if ($this->request->input('status') == 'approved') {
-                        $dentist_claims = DentistClaim::where('dentist_id', $item->dentist_id)->where('id', '!=', $item->id)->get();
 
-                        if (!empty($dentist_claims)) {
-                            foreach ($dentist_claims as $dk) {
-                                $dk->status = 'rejected';
-                                $dk->save();
+                        if ($item->status!=$this->request->input('status')) {
+                            $dentist_claims = DentistClaim::where('dentist_id', $item->dentist_id)->where('id', '!=', $item->id)->get();
 
-                                $u = User::find(3);
-                                $tmpEmail = $u->email;
-                                $tmpName = $u->name;
+                            if (!empty($dentist_claims)) {
+                                foreach ($dentist_claims as $dk) {
+                                    $dk->status = 'rejected';
+                                    $dk->save();
 
-                                $u->email = $dk->email;
-                                $u->name = $dk->name;
-                                $u->save();
-                                $mail = $u->sendGridTemplate(66, null, 'trp');
+                                    $u = User::find(3);
+                                    $tmpEmail = $u->email;
+                                    $tmpName = $u->name;
 
-                                $u->email = $tmpEmail;
-                                $u->name = $tmpName;
-                                $u->save();
+                                    $u->email = $dk->email;
+                                    $u->name = $dk->name;
+                                    $u->save();
+                                    $mail = $u->sendGridTemplate(66, null, 'trp');
 
-                                $mail->delete();
+                                    $u->email = $tmpEmail;
+                                    $u->name = $tmpName;
+                                    $u->save();
+
+                                    $mail->delete();
+                                }
                             }
                         }
 
@@ -90,10 +85,12 @@ class DentistClaimsController extends AdminController
                         $user->ownership = 'approved';
                         $user->save();
 
-                        $user->sendGridTemplate(26);
+                        if ($this->request->input('status') && $item->status!=$this->request->input('status')) {
+                            $user->sendGridTemplate(26);
+                        }
                     }
 
-                    if ($this->request->input('status') == 'rejected') {
+                    if ($this->request->input('status') == 'rejected' && $item->status!=$this->request->input('status')) {
                         $user = User::find($item->dentist_id);
                         $user->ownership = 'rejected';
                         $user->save();
@@ -113,6 +110,14 @@ class DentistClaimsController extends AdminController
 
                         $mail->delete();
                     }
+                    
+                    $item->name = $this->request->input('name');
+                    $item->email = $this->request->input('email');
+                    $item->phone = $this->request->input('phone');
+                    $item->job = $this->request->input('job');
+                    $item->explain_related = $this->request->input('explain_related');
+                    $item->status = $this->request->input('status');
+                    $item->save();
 
                     $this->request->session()->flash('success-message', 'Claim Profile Updated' );
                     return redirect('cms/users/edit/'.$item->dentist_id);
