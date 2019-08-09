@@ -147,12 +147,19 @@ jQuery(document).ready(function($){
             conatiner.find('.geoip-confirmation').show();
 
             $('.go-to-next[step-number="3"]').removeClass('disabled');
+            if ($('.invite-new-dentist-form').length) {
+                $('.invite-new-dentist-form').find('.button').removeClass('disabled');
+            }
+
             return;
        
         } else {
             conatiner.find('.geoip-hint').show();
             $('.go-to-next[step-number="3"]').addClass('disabled');
             
+            if ($('.invite-new-dentist-form').length) {
+                $('.invite-new-dentist-form').find('.button').addClass('disabled');
+            }
         }
         
 

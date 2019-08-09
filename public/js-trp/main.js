@@ -463,57 +463,63 @@ jQuery(document).ready(function($){
         $(this).closest('.modern-radios').removeClass('has-error');
     } );
 
+    $('.invite-new-dentist-form .address-suggester').focus(function(e) {
+        $('.invite-new-dentist-form .button').addClass('disabled');
+    });
+
 	$('.invite-new-dentist-form').submit( function(e) {
         e.preventDefault();
 
-        $(this).find('.ajax-alert').remove();
-        $(this).find('.alert').hide();
-        $(this).find('.has-error').removeClass('has-error');
+        if (!$(this).find('.button').hasClass('disabled')) {
 
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
+	        $(this).find('.ajax-alert').remove();
+	        $(this).find('.alert').hide();
+	        $(this).find('.has-error').removeClass('has-error');
 
-        var that = $(this);
+	        if(ajax_is_running) {
+	            return;
+	        }
+	        ajax_is_running = true;
 
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            (function( data ) {
-                if(data.success) {
-                	closePopup();
-                	$('#inv_dent_name').html(data.dentist_name);
-                	showPopup( 'invite-new-dentist-success-popup' );
-                	that[0].reset();
-                   //$(this).find('.alert-success').html(data.message).show();
+	        var that = $(this);
 
-                    gtag('event', 'Invite', {
-						'event_category': 'InviteDentist',
-						'event_label': 'InvitedDentists',
-					});
-                } else {
-                    for(var i in data.messages) {
-                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
+	        $.post( 
+	            $(this).attr('action'), 
+	            $(this).serialize() , 
+	            (function( data ) {
+	                if(data.success) {
+	                	closePopup();
+	                	$('#inv_dent_name').html(data.dentist_name);
+	                	showPopup( 'invite-new-dentist-success-popup' );
+	                	that[0].reset();
+	                   //$(this).find('.alert-success').html(data.message).show();
 
-                        $('[name="'+i+'"]').addClass('has-error');
+	                    gtag('event', 'Invite', {
+							'event_category': 'InviteDentist',
+							'event_label': 'InvitedDentists',
+						});
+	                } else {
+	                    for(var i in data.messages) {
+	                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
 
-                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
-                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
-                        }
-                    }
+	                        $('[name="'+i+'"]').addClass('has-error');
 
-                    $('html, body').animate({
-		                scrollTop: $('.ajax-alert:visible').first().offset().top - $('header').height() - 150
-		            }, 500);
-                }
-                ajax_is_running = false;
-            }).bind(that), "json"
-        );          
+	                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
+	                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+	                        }
+	                    }
+
+	                    $('html, body').animate({
+			                scrollTop: $('.ajax-alert:visible').first().offset().top - $('header').height() - 150
+			            }, 500);
+	                }
+	                ajax_is_running = false;
+	            }).bind(that), "json"
+	        );          
 
 
-        return false;
-
+	        return false;
+	    }
 	} );
 
 
