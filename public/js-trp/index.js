@@ -25,6 +25,22 @@ jQuery(document).ready(function($){
 		});
 	}
 
+	var fixFlicktyInner = function() {
+		$('.flickity-slider').each( function() {
+			var mh = 0;
+			$(this).find('.slider-container').css('height', 'auto');
+			$(this).find('.slider-container').each( function() {
+				if( $(this).height() > mh ) {
+					mh = $(this).height();
+				}
+			} );
+			$(this).find('.slider-container').css('height', mh+'px');
+		} );
+
+
+	}
+	fixFlicktyInner();
+
 
 	$('.button-want-to-add-dentist').click( function() {
 		$.ajax({

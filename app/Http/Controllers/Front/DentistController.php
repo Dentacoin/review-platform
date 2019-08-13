@@ -374,6 +374,25 @@ class DentistController extends FrontController
             }
         }
 
+        $aggregated = [];
+        if (count($reviews)) {
+
+            foreach ($reviews as $rev) {
+                foreach($rev->answers as $answer) {
+                    //echo $answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
+                    if(!isset($aggregated[$answer->question['label']])) {
+                        $aggregated[$answer->question['label']] = 0;
+                    }
+
+                    $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                }
+            }
+
+            foreach ($aggregated as $key => $value) {
+                $aggregated[$key] /= $reviews->count();
+            }
+        }
+
         $aggregated_rates = [];
         $aggregated_rates_total = [];
         $count = $reviews->count();
@@ -449,7 +468,8 @@ class DentistController extends FrontController
             'has_asked_dentist' => $has_asked_dentist,
             'patient_asks' => $patient_asks,
             'aggregated_rates' => $aggregated_rates,
-            'aggregated_rates_total' => $aggregated_rates_total ,
+            'aggregated_rates_total' => $aggregated_rates_total,
+            'aggregated' => $aggregated,
             'social_image' => $social_image,
             'canonical' => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
             'js' => [
@@ -457,7 +477,11 @@ class DentistController extends FrontController
                 'user.js',
                 'search.js',
             ],
-            'jscdn' => [],
+            'jscdn' => [
+                'https://www.amcharts.com/lib/4/core.js',
+                'https://www.amcharts.com/lib/4/themes/animated.js',
+                'https://www.amcharts.com/lib/4/charts.js',
+            ],
         ];
 
         if( $is_review ) {

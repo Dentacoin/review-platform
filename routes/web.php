@@ -144,7 +144,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::any('incomplete', 						'UsersController@incomplete');
 
-	Route::any('claims/edit/{id}', 					'DentistClaimsController@edit');
+	Route::any('claims/approve/{id}', 				'DentistClaimsController@approve');
+	Route::any('claims/reject/{id}', 				'DentistClaimsController@reject');
+	Route::any('claims/suspicious/{id}', 			'DentistClaimsController@suspicious');
 });
 
 

@@ -25,7 +25,7 @@
                     {!! csrf_field() !!}
 
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="col-md-2 control-label">User Type</label>
                                 <div class="col-md-10">
@@ -46,7 +46,7 @@
                                                     ])
                                                 </div>
                                             </div>
-                                            @if($item->invited_by)
+                                            <!-- @if($item->invited_by)
                                                 <div>
                                                     <label class="control-label" style="padding-right: 10px;">Ownership</label>
                                                     <div style="display: inline-block;">
@@ -56,7 +56,7 @@
                                                         ])
                                                     </div>
                                                 </div>
-                                            @endif
+                                            @endif -->
                                             <div>
                                                 <label class="control-label" style="padding-right: 10px;">Partner</label>
                                                 <div style="display: inline-block;">
@@ -120,6 +120,15 @@
                                     @include('admin.parts.user-field',[
                                         'key' => 'email',
                                         'info' => $fields['email']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Public Email</label>
+                                <div class="col-md-10">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'email_public',
+                                        'info' => $fields['email_public']
                                     ])
                                 </div>
                             </div>
@@ -239,7 +248,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group avatar-group">
                                 <label class="col-md-6 control-label">Profile photo</label>
                                 <div class="col-md-6">
@@ -715,7 +724,7 @@
                             'job'               => array('label' => 'Job','width' => '10%'),
                             'explain_related'   => array('label' => 'Explain','width' => '30%'),
                             'status'            => array('width' => '10%'),
-                            'update'            => array('label' => 'Edit', 'template' => 'admin.parts.table-dentist-claim-edit','width' => '10%'),
+                            'update'            => array('label' => 'Actions', 'template' => 'admin.parts.table-dentist-claim-edit','width' => '10%'),
                         ],
                         'table_data' => $item->claims,
                         'table_pagination' => false,

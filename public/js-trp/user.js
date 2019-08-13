@@ -10,6 +10,7 @@ var suggestDentist;
 var suggestClinic;
 var suggestedDentistClick;
 var suggestClinicClick;
+var aggregated_reviews;
 
 $(document).ready(function(){
 
@@ -1362,4 +1363,127 @@ $(document).ready(function(){
         var id = $(this).attr('review-id');
         showFullReview(id);
     } );
+
+
+    if ($('#reviews-chart').length) {
+
+        am4core.ready(function() {
+
+        // Themes begin
+            am4core.useTheme(am4themes_animated);
+            // Themes end
+
+            // Create chart instance
+            var chart = am4core.create("reviews-chart", am4charts.XYChart);
+            //chart.scrollbarX = new am4core.Scrollbar();
+            //console.log(chart.scrollbarX);
+
+            chart.seriesContainer.draggable = false;
+
+            // Add data
+            for (var i in aggregated_reviews) {
+                var q = i.replace(' ', '\n\r');
+
+                chart.data.push({
+                    "question": i,
+                    "rating": aggregated_reviews[i].toFixed(2)
+                    
+                });
+            }
+
+            // Create axes
+            var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+            categoryAxis.dataFields.category = "question";
+            categoryAxis.renderer.grid.template.location = 0;
+            categoryAxis.renderer.grid.template.disabled = true;
+            categoryAxis.renderer.minGridDistance = 60;
+            if ($(window).outerWidth < 769) {
+                categoryAxis.renderer.labels.template.fontSize = 12;
+            }
+            //categoryAxis.fontSize = 0;
+            categoryAxis.tooltip.disabled = true;
+
+            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            valueAxis.renderer.minWidth = 50;
+            valueAxis.maxPrecision = 0;
+            valueAxis.min = 0;
+            valueAxis.max = 5;
+            valueAxis.cursorTooltipEnabled = false;
+
+            // Create series
+            var series = chart.series.push(new am4charts.ColumnSeries());
+            series.sequencedInterpolation = true;
+            series.dataFields.valueY = "rating";
+            series.dataFields.categoryX = "question";
+            series.tooltipText = "[{categoryX}: bold]{valueY}[/]";
+            series.tooltip.autoTextColor = false;
+            series.tooltip.label.fill = am4core.color("#FFFFFF");
+            series.columns.template.strokeWidth = 0;
+
+            series.tooltip.pointerOrientation = "vertical";
+
+            series.columns.template.column.cornerRadiusTopLeft = 15;
+            series.columns.template.column.cornerRadiusTopRight = 15;
+            // series.columns.template.column.fillOpacity = 0.8;
+            series.columns.template.width = am4core.percent(35);
+
+            // on hover, make corner radiuses bigger
+            var hoverState = series.columns.template.column.states.create("hover");
+            hoverState.properties.cornerRadiusTopLeft = 0;
+            hoverState.properties.cornerRadiusTopRight = 0;
+            hoverState.properties.fillOpacity = 1;
+
+            chart.colors.list = [
+                am4core.color("#02a5d9"),
+                am4core.color("#04a8d8"),
+                am4core.color("#09acd6"),
+                am4core.color("#0cafd4"),
+                am4core.color("#12b4d1"),
+                am4core.color("#18bace"),
+                am4core.color("#20c2c9"),
+                am4core.color("#27c8c6"),
+                am4core.color("#2dcec3"),
+                am4core.color("#38dbd0")                
+            ];
+            series.columns.template.events.once("inited", function(event){
+                event.target.fill = chart.colors.getIndex(event.target.dataItem.index);
+            });
+
+            series.columns.template.events.disableType("toggled");
+
+            // Cursor
+            chart.cursor = new am4charts.XYCursor();
+            chart.cursor.behavior = "panX";
+            chart.cursor.lineY.disabled = true;
+            chart.cursor.lineX.disabled = true;
+
+            chart.events.on("ready", function (e) {
+
+                $('#reviews-chart').find('tspan').each( function() {
+                    if ($(this).text() == '0' || $(this).text() == '1' || $(this).text() == '2' || $(this).text() == '3' || $(this).text() == '4' || $(this).text() == '5') {
+                        $(this).css('font-size', 0);
+                    } else {
+                        $(this).css('font-weight', 700);
+                    }
+                });
+
+                $('#reviews-chart').find('g[aria-labelledby="id-66-title"]').hide();
+
+                $('#reviews-chart').append('<div class="chart-overlap"></div>');
+            });
+            
+        }); // end am4core.ready()
+
+        
+        if ($(window).outerWidth() < 980) {
+            $(window).scroll( function() {
+                if ($(window).scrollTop() >= ($('.review-chart').offset().top - 300)) {
+                    $('.slide-animation').addClass('active');
+                }
+            });
+        }
+    }
+
+
+
 });
