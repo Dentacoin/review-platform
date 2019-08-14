@@ -61,7 +61,12 @@ class DentistClaimsController extends AdminController
         $u->email = $item->email;
         $u->name = $item->name;
         $u->save();
-        $mail = $u->sendGridTemplate(26, null, 'trp');
+
+        $substitutions = [
+            'trp_profile' => getLangUrl('dentist/'.$user->slug, null, 'https://reviews.dentacoin.com/'),
+        ];
+
+        $mail = $u->sendGridTemplate(26, $substitutions, 'trp');
 
         $u->email = $tmpEmail;
         $u->name = $tmpName;
