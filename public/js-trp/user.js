@@ -994,6 +994,7 @@ $(document).ready(function(){
 	$('#write-review-form').submit( function(e) {
 		e.preventDefault();
 
+        $('#treatment-error').hide();
         $('#review-crypto-error').hide();
         $('#review-answer-error').hide();
 		$('#review-short-text').hide();
@@ -1004,7 +1005,7 @@ $(document).ready(function(){
 		var allgood = true;
 
 		$(this).find('input[type="hidden"]').each( function() {
-            if ($(this).closest('.review').hasClass('hidden-review-question') && !$('#clinic_dentists').val()) {
+            if ($(this).closest('.question').hasClass('hidden-review-question') && !$('#clinic_dentists').val()) {
                 console.log('Skip 4th question'); //don't check because it's 4th question and I didn't pick a dentist
             } else {
     			if( !parseInt($(this).val()) && $(this).attr('name')!='_token' && $(this).attr('name')!='youtube_id' ) {
@@ -1025,6 +1026,16 @@ $(document).ready(function(){
             $('html, body').animate({
                 scrollTop: $('.review-tabs').offset().top - 20
             }, 500);
+        }
+
+        console.log($('.treatment').val());
+        if( !$('.treatment').is(':checked') ) {
+            allgood = false;
+            $('#treatment-error').show();
+            $('html, body').animate({
+                scrollTop: $('.question-treatments').offset().top - 20
+            }, 500);
+
         }
 
 		if( !$('#review-title').val().trim().length || (!$('#review-answer').val().trim().length && !$('#youtube_id').val().trim().length) ) {
@@ -1116,6 +1127,7 @@ $(document).ready(function(){
         });
         
         $('#init-video').click( function() {
+            $('.myVideo-dimensions').show();
             var hm = player.record().getDevice();
         } );
         $('#start-video').click( function() {
@@ -1485,5 +1497,31 @@ $(document).ready(function(){
     }
 
 
+    $('.treatment').change( function() {
+        $(this).closest('label').toggleClass('active');
+
+        var duplicate_treatment = $(this).closest('.treatment-wrapper').find('.treatment[treatment="'+$(this).attr('treatment')+'"][category!="'+$(this).attr('category')+'"]');
+        if (duplicate_treatment.length) {
+            if (duplicate_treatment.closest('label').hasClass('active')) {
+                duplicate_treatment.closest('label').removeClass('active');
+                duplicate_treatment.removeAttr('checked');
+            } else {
+                duplicate_treatment.closest('label').addClass('active');
+                duplicate_treatment.attr('checked', 'checked');
+            }
+            
+        }
+
+        if ($(this).closest('.question').next().hasClass('hidden')) {
+            $(this).closest('.question').next().removeClass('hidden');
+        }
+
+        $('#treatment-error').hide();
+    });
+
+    $('.more-treatments').click( function() {
+        $(this).toggleClass('active');
+        $(this).closest('.treatment-wrapper').find('.treatments-hidden').toggleClass('active');
+    });
 
 });

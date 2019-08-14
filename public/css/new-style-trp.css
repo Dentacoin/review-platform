@@ -2947,6 +2947,7 @@ textarea.input {
       .fixed-popup .popup-inner .reviews-wrapper .review-box p {
         margin-bottom: 15px; }
       .fixed-popup .popup-inner .reviews-wrapper .review-box .myVideo-dimensions {
+        display: none;
         position: relative;
         width: 100% !important;
         height: auto; }
@@ -4450,10 +4451,10 @@ textarea.input {
     border-radius: 50%; }
   .details-wrapper .review-name {
     color: #545454;
-    font-size: 18px; }
+    font-size: 20px; }
     @media screen and (max-width: 768px) {
       .details-wrapper .review-name {
-        font-size: 14px; } }
+        font-size: 16px; } }
   .details-wrapper .review-title {
     font-size: 20px;
     font-style: italic;
@@ -4479,19 +4480,46 @@ textarea.input {
       .details-wrapper .ratings {
         margin-top: 15px; } }
     .details-wrapper .ratings .rating {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: normal;
       vertical-align: text-top; }
+      @media screen and (max-width: 768px) {
+        .details-wrapper .ratings .rating {
+          font-size: 14px; } }
   .details-wrapper .review-date {
     color: #bababa;
-    font-size: 14px;
+    font-size: 16px;
     margin-left: 12px; }
+    @media screen and (max-width: 768px) {
+      .details-wrapper .review-date {
+        font-size: 14px; } }
+  .details-wrapper .treatment {
+    color: #bababa;
+    font-size: 16px;
+    margin-left: 12px; }
+    @media screen and (max-width: 768px) {
+      .details-wrapper .treatment {
+        font-size: 14px; } }
+    .details-wrapper .treatment span {
+      color: #bababa;
+      font-size: 16px; }
+      @media screen and (max-width: 768px) {
+        .details-wrapper .treatment span {
+          font-size: 14px; } }
   .details-wrapper .review-content {
     margin-top: 10px;
-    font-weight: 300; }
+    font-weight: 300;
+    font-size: 18px; }
+    @media screen and (max-width: 768px) {
+      .details-wrapper .review-content {
+        font-size: 16px; } }
     .details-wrapper .review-content .more {
       font-weight: bold;
-      color: #126585; }
+      color: #126585;
+      font-size: 18px; }
+      @media screen and (max-width: 768px) {
+        .details-wrapper .review-content .more {
+          font-size: 16px; } }
       .details-wrapper .review-content .more:hover {
         text-decoration: underline; }
     .details-wrapper .review-content textarea.input {
@@ -4508,8 +4536,11 @@ textarea.input {
       line-height: 30px;
       display: inline-flex; }
       .details-wrapper .review-footer a span {
-        font-size: 14px;
+        font-size: 16px;
         line-height: 30px; }
+        @media screen and (max-width: 768px) {
+          .details-wrapper .review-footer a span {
+            font-size: 14px; } }
       .details-wrapper .review-footer a img {
         transition: all 0.3s ease;
         vertical-align: middle;

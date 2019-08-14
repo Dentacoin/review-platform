@@ -143,6 +143,55 @@
 						</div>
 					@endforeach
 
+					<div class="question question-treatments">
+						<h4 class="popup-title">
+							{{ trans('trp.treatments.question') }}
+						</h4>
+						<div class="review-answers">
+							<div class="treatment-wrapper">
+								@foreach(config('trp.treatments') as $t => $treatment)
+									@if($t == 'most_popular')
+										<p class="treatment-category">
+											• {{ trans('trp.treatments.category.'.$t) }}
+										</p>
+
+										@foreach($treatment as $mp)
+											<label for="{{ $t.'-'.$mp }}">
+												<input type="checkbox" value="{{ $mp }}" id="{{ $t.'-'.$mp }}" class="treatment" treatment="{{ $mp }}" category="{{ $t }}">
+												{!! App\Models\Review::handleTreatmentTooltips(trans('trp.treatments.'.$mp)) !!}
+												<span class="close-treatment">х</span>
+											</label>
+										@endforeach
+									@endif
+								@endforeach
+
+								<p class="treatment-category more-treatments-title">• If you can’t find your treatment, you can search from the list with all types of dental treatment: </p>
+								<a href="javascript:;" class="more-treatments"><i class="fas fa-plus"></i> All treatments</a>
+
+								<div class="treatments-hidden">
+									@foreach(config('trp.treatments') as $t => $treatment)
+										@if($t != 'most_popular')
+											<p class="treatment-category">
+												• {{ trans('trp.treatments.category.'.$t) }}
+											</p>
+
+											@foreach($treatment as $mp)
+												<label for="{{ $t.'-'.$mp }}">
+													<input type="checkbox" name="treatments[]" value="{{ $mp }}" id="{{ $t.'-'.$mp }}" class="treatment" treatment="{{ $mp }}" category="{{ $t }}">
+													{!! App\Models\Review::handleTreatmentTooltips(trans('trp.treatments.'.$mp)) !!}
+													<span class="close-treatment">х</span>
+												</label>
+											@endforeach
+										@endif
+									@endforeach
+								</div>
+							</div>
+							<div class="alert alert-warning" style="display: none;" id="treatment-error">
+								{{ trans('trp.treatments.error') }}
+							</div>
+					    </div>
+					</div>
+
 					<div class="question">
 
 						<h4 class="popup-title">

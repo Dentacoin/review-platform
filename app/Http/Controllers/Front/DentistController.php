@@ -176,7 +176,8 @@ class DentistController extends FrontController
             );
             $validator_arr = [
                 'answer' => ['required_without:youtube_id'],
-                'youtube_id' => ['required_without:answer']
+                'youtube_id' => ['required_without:answer'],
+                'treatments' => ['required']
             ];
             foreach ($questions as $question) {
                 if($question->id == 4 && $item->is_clinic && empty( Request::input( 'clinic_dentists' ) )  ) {
@@ -256,6 +257,7 @@ class DentistController extends FrontController
                         $review->verified = !empty($isTrusted);
                         $review->status = 'pending';
                         $review->secret_id = $secret->id;
+                        $review->treatments = Request::input( 'treatments' );
                         $review->save();
 
                         $total = 0;

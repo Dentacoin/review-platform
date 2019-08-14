@@ -3763,6 +3763,7 @@ textarea.input {
 			    }
 
 			    .myVideo-dimensions {
+			    	display: none;
 			    	position: relative;
 			    	width: 100% !important;
 			    	height: auto;
@@ -6024,10 +6025,10 @@ textarea.input {
 
 	.review-name {
 		color: #545454;
-		font-size: 18px;
+		font-size: 20px;
 
 		@media #{$phone} {
-			font-size: 14px;
+			font-size: 16px;
 		}
 	}
 
@@ -6067,25 +6068,62 @@ textarea.input {
 		}
 
 		.rating {
-			font-size: 14px;
+			font-size: 16px;
 			font-weight: normal;
 		    vertical-align: text-top;
+
+			@media #{$phone} {
+				font-size: 14px;
+			}
 		}
 	}
 
     .review-date {
     	color: #bababa;
-    	font-size: 14px;
+    	font-size: 16px;
     	margin-left: 12px;
+
+		@media #{$phone} {
+			font-size: 14px;
+		}
     }
+
+	.treatment {
+		color: #bababa;
+	    font-size: 16px;
+	    margin-left: 12px;
+
+		@media #{$phone} {
+			font-size: 14px;
+		}
+
+	    span {
+	    	color: #bababa;
+	    	font-size: 16px;
+
+			@media #{$phone} {
+				font-size: 14px;
+			}
+	    }
+	}
 
     .review-content {
     	margin-top: 10px;
     	font-weight: 300;
+    	font-size: 18px;
+
+		@media #{$phone} {
+			font-size: 16px;
+		}
 
     	.more {
     		font-weight: bold;
     		color: #126585;
+    		font-size: 18px;
+
+			@media #{$phone} {
+				font-size: 16px;
+			}
 
     		&:hover {
     			text-decoration: underline;
@@ -6114,8 +6152,12 @@ textarea.input {
 		    display: inline-flex;
 
 		    span {
-	    		font-size: 14px;
+	    		font-size: 16px;
 		    	line-height: 30px;
+
+				@media #{$phone} {
+					font-size: 14px;
+				}
 		    }
 
     		img {

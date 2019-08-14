@@ -641,9 +641,9 @@
 				    			</div>
 			    			@endif
 			    			@if($review->title)
-			    			<span class="review-title">
-			    				“{{ $review->title }}”
-			    			</span>
+				    			<span class="review-title">
+				    				“{{ $review->title }}”
+				    			</span>
 			    			@endif
 							@if($review->verified)
 
@@ -666,12 +666,16 @@
 							<span class="review-date">
 								{{ $review->created_at ? $review->created_at->toFormattedDateString() : '-' }}
 							</span>
+							@if(!empty($review->treatments))
+								@foreach($review->treatments as $t)
+									<span class="treatment">• {!! App\Models\Review::handleTreatmentTooltips(trans('trp.treatments.'.$t)) !!}</span>
+								@endforeach
+							@endif
 						</div>
 						<div class="review-content">
 							{!! nl2br($review->answer) !!}
 							<a href="javascript:;" class="more">
 								{!! nl2br(trans('trp.page.user.show-entire')) !!}
-								
 							</a>
 						</div>
 
@@ -680,7 +684,6 @@
 							@if($review->reply)
 								<a class="reply-button show-hide" href="javascript:;" alternative="▾ Show replies" >
 									▴ {!! nl2br(trans('trp.page.user.hire-replies')) !!}
-									
 								</a>
 							@endif
 							<div class="col">
@@ -688,7 +691,6 @@
 									<a class="reply-review" href="javascript:;">
 										<span>
 											{!! nl2br(trans('trp.page.user.reply')) !!}
-											
 										</span>
 									</a>
 								@endif

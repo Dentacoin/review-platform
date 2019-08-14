@@ -36,6 +36,7 @@ class Review extends Model {
         'upvotes',
         'secret_id',
         'status',
+        'treatments',
         'reward_address',
         'reward_tx',
         'ipfs',
@@ -247,6 +248,19 @@ class Review extends Model {
             $this->generateSocialCover();
         }
         return url('/storage/reviews/'.($this->id%100).'/'.$this->id.'-cover.jpg').'?rev='.$this->updated_at->timestamp;
+    }
+
+    public static function handleTreatmentTooltips($t) {
+        $new_title = str_replace("[/]","</span>",$t);
+        
+        return preg_replace('/\[([^\]]*)\]/', '<span class="tooltip-text" text="${1}">', $new_title);
+    }
+
+    public function getTreatmentsAttribute() {
+        return json_decode($this->attributes['treatments'], true);
+    }
+    public function setTreatmentsAttribute($value) {
+        $this->attributes['treatments'] = $value ? json_encode($value) : '';
     }
 }
 
