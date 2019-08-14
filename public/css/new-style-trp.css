@@ -2737,6 +2737,97 @@ textarea.input {
       .fixed-popup .popup-inner .question .review-answers .answer .ratings {
         margin-top: -2px;
         cursor: pointer; }
+    .fixed-popup .popup-inner .question .treatment-wrapper .treatment-category {
+      font-size: 16px;
+      color: #888888;
+      margin-bottom: 25px; }
+      .fixed-popup .popup-inner .question .treatment-wrapper .treatment-category.more-treatments-title {
+        margin-top: 25px; }
+    .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments {
+      font-weight: bold;
+      display: inline-block;
+      font-size: 20px;
+      color: #126585;
+      border: 1px solid #126585;
+      border-radius: 5px;
+      padding: 6px 15px;
+      margin-bottom: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments {
+          font-size: 16px;
+          margin-bottom: 10px; } }
+      .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments.active {
+        padding-right: 15px;
+        background-color: #126585;
+        color: white; }
+        .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments.active i {
+          color: white; }
+          .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments.active i:before {
+            content: '\f068'; }
+      .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments i {
+        color: #126585; }
+        @media screen and (max-width: 768px) {
+          .fixed-popup .popup-inner .question .treatment-wrapper .more-treatments i {
+            font-size: 13px; } }
+    .fixed-popup .popup-inner .question .treatment-wrapper label {
+      position: relative;
+      display: inline-block;
+      font-size: 20px;
+      color: #126585;
+      border: 1px solid #126585;
+      border-radius: 5px;
+      padding: 6px 15px;
+      margin-bottom: 25px;
+      margin-right: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .question .treatment-wrapper label {
+          font-size: 16px;
+          margin-bottom: 10px;
+          margin-right: 4px; } }
+      .fixed-popup .popup-inner .question .treatment-wrapper label:hover {
+        background-color: #e6f1ff;
+        transition: all 0.3s ease; }
+      .fixed-popup .popup-inner .question .treatment-wrapper label .tooltip-text {
+        color: #126585;
+        font-size: 20px; }
+        @media screen and (max-width: 768px) {
+          .fixed-popup .popup-inner .question .treatment-wrapper label .tooltip-text {
+            font-size: 16px; } }
+      .fixed-popup .popup-inner .question .treatment-wrapper label input {
+        display: none; }
+      .fixed-popup .popup-inner .question .treatment-wrapper label .close-treatment {
+        display: none;
+        position: absolute;
+        right: 13px;
+        top: 46%;
+        transform: translateY(-50%);
+        font-size: 21px;
+        color: #12b4e8; }
+      .fixed-popup .popup-inner .question .treatment-wrapper label.active {
+        font-weight: bold;
+        background-color: #e6f1ff;
+        color: #4b607d;
+        border-color: #e6f1ff;
+        transition: all 0.3s ease;
+        padding-right: 30px; }
+        .fixed-popup .popup-inner .question .treatment-wrapper label.active .tooltip-text {
+          color: #4b607d; }
+        .fixed-popup .popup-inner .question .treatment-wrapper label.active .close-treatment {
+          display: inline-block; }
+    .fixed-popup .popup-inner .question .treatment-wrapper .treatments-hidden {
+      padding-left: 33px;
+      display: none; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .question .treatment-wrapper .treatments-hidden {
+          padding-left: 15px; } }
+      .fixed-popup .popup-inner .question .treatment-wrapper .treatments-hidden.active {
+        display: block; }
+      .fixed-popup .popup-inner .question .treatment-wrapper .treatments-hidden .treatment-category {
+        margin-top: 10px; }
   @media screen and (max-width: 998px) {
     .fixed-popup .popup-inner .subquestion {
       display: flex; } }
@@ -6264,6 +6355,14 @@ body.strength-pb {
   .review-chart ::-webkit-scrollbar-thumb {
     background: #02a5d9;
     /* Old browsers */
+    background: -moz-linear-gradient(left, #02a5d9 14%, #02a5d9 14%, #38dbd0 93%, #38dbd0 93%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, #02a5d9 14%, #02a5d9 14%, #38dbd0 93%, #38dbd0 93%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, #02a5d9 14%, #02a5d9 14%, #38dbd0 93%, #38dbd0 93%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#02a5d9', endColorstr='#38dbd0',GradientType=1 );
+    /* IE6-9 */
     border-right: 15px; }
   .review-chart ::-moz-scrollbar {
     width: 5px;
@@ -6275,6 +6374,14 @@ body.strength-pb {
   .review-chart ::-moz-scrollbar-thumb {
     background: #02a5d9;
     /* Old browsers */
+    background: -moz-linear-gradient(left, #02a5d9 14%, #02a5d9 14%, #38dbd0 93%, #38dbd0 93%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, #02a5d9 14%, #02a5d9 14%, #38dbd0 93%, #38dbd0 93%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, #02a5d9 14%, #02a5d9 14%, #38dbd0 93%, #38dbd0 93%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#02a5d9', endColorstr='#38dbd0',GradientType=1 );
+    /* IE6-9 */
     border-right: 15px; }
   .review-chart ::scrollbar {
     width: 5px;
@@ -6286,6 +6393,14 @@ body.strength-pb {
   .review-chart ::scrollbar-thumb {
     background: #02a5d9;
     /* Old browsers */
+    background: -moz-linear-gradient(left, #02a5d9 14%, #02a5d9 14%, #38dbd0 93%, #38dbd0 93%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, #02a5d9 14%, #02a5d9 14%, #38dbd0 93%, #38dbd0 93%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, #02a5d9 14%, #02a5d9 14%, #38dbd0 93%, #38dbd0 93%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#02a5d9', endColorstr='#38dbd0',GradientType=1 );
+    /* IE6-9 */
     border-right: 15px; }
   .review-chart .review-charts-wrapper {
     width: 100%;
