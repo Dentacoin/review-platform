@@ -3711,7 +3711,7 @@ textarea.input {
   padding: 15px;
   background-color: white;
   box-shadow: 0px 0 32px 3px rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
+  border-radius: 10px;
   align-items: center; }
   @media screen and (max-width: 768px) {
     .information {
@@ -3845,10 +3845,13 @@ textarea.input {
     position: absolute;
     right: 21px;
     top: 16px;
-    color: #bababa;
-    font-size: 18px; }
+    color: #46afda;
+    font-size: 18px;
+    width: 63px; }
     .information .share-button img {
-      vertical-align: bottom; }
+      display: inline-block;
+      max-width: 16px;
+      vertical-align: middle; }
   .information h3 {
     line-height: 27px;
     margin-bottom: 10px; }
@@ -3863,7 +3866,7 @@ textarea.input {
   margin-left: auto;
   padding: 10px;
   padding-bottom: 15px;
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: 0px 0px 2px 1px #d8d2d2; }
   @media screen and (max-width: 768px) {
     .profile-info-mobile {
@@ -3900,9 +3903,14 @@ textarea.input {
   .profile-info-mobile .share-mobile {
     position: absolute;
     right: 12px;
-    top: 10px; }
-    .profile-info-mobile .share-mobile i {
-      color: #46afda; }
+    top: 10px;
+    color: #46afda;
+    font-size: 14px;
+    width: 48px; }
+    .profile-info-mobile .share-mobile img {
+      display: inline-block;
+      max-width: 12px;
+      vertical-align: middle; }
   .profile-info-mobile h3 {
     font-size: 20px;
     font-weight: bold; }
@@ -3924,7 +3932,7 @@ textarea.input {
     font-size: 12px;
     color: #bababa; }
   .profile-info-mobile .edit-button {
-    font-size: 14px;
+    font-size: 16px;
     color: #46afda;
     font-weight: bold; }
     .profile-info-mobile .edit-button i {
@@ -3932,7 +3940,7 @@ textarea.input {
       color: #126585;
       margin-right: 5px; }
   .profile-info-mobile .claim-button {
-    font-size: 14px;
+    font-size: 16px;
     color: #46afda;
     font-weight: bold;
     margin-top: 10px;
@@ -5388,7 +5396,9 @@ body.edit-user .short-desc-arrow {
 body.edit-user .profile-info-mobile .share-mobile {
   display: none; }
 body.edit-user .profile-info-mobile .profile-details {
-  margin-top: 10px; }
+  margin-top: 10px;
+  margin-left: 0px;
+  width: 100%; }
 body.edit-user .information {
   background-color: transparent;
   box-shadow: none;
@@ -5737,12 +5747,13 @@ body.edit-user .information {
       margin-bottom: 5px; } }
   @media screen and (max-width: 998px) {
     .invited-dentist {
-      margin-top: -20px; } }
+      margin-top: -20px;
+      text-align: center;
+      margin-left: 10px; } }
   @media screen and (max-width: 768px) {
     .invited-dentist {
-      font-size: 13px;
-      margin-top: -8px;
-      text-align: center; } }
+      font-size: 16px;
+      margin-top: -8px; } }
 
 .balance-wrap .profile-home-content {
   padding-top: 50px !important; }
@@ -6164,8 +6175,7 @@ body.strength-pb {
   80% {
     opacity: 0; }
   100% {
-    opacity: 0;
-    display: none; } }
+    opacity: 0; } }
 .review-chart {
   position: relative;
   max-width: 1620px;
@@ -6179,7 +6189,6 @@ body.strength-pb {
     .review-chart {
       height: 250px; } }
   .review-chart .slide-animation {
-    opacity: 0;
     display: none;
     position: absolute;
     z-index: 100;
@@ -6190,8 +6199,7 @@ body.strength-pb {
     transition: all 0.3s ease; }
     .review-chart .slide-animation.active {
       display: block;
-      animation-name: HandAnimation;
-      animation-duration: 5s; }
+      animation: HandAnimation 5s infinite; }
   .review-chart .chart-stars {
     position: absolute;
     left: 0px;

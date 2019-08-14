@@ -156,7 +156,8 @@
 
 		<div class="view-profile">
 			<a href="javascript:;" class="share-mobile" data-popup="popup-share">
-				<i class="fas fa-share-alt"></i>
+				<img src="{{ url('img-trp/share.svg') }}">
+				{!! nl2br(trans('trp.common.share')) !!}
 			</a>
 			@if($item->status == 'added_approved')
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
@@ -287,7 +288,8 @@
 
 	<div class="information flex">
 		<a href="javascript:;" class="share-button" data-popup="popup-share">
-			<img src="img-trp/share.png"> {!! nl2br(trans('trp.common.share')) !!}
+			<img src="{{ url('img-trp/share.svg') }}">
+			{!! nl2br(trans('trp.common.share')) !!}
 		</a>
 		
     	<div class="profile-info col">

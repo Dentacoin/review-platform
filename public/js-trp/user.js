@@ -1476,10 +1476,10 @@ $(document).ready(function(){
 
         
         if ($(window).outerWidth() < 980) {
-            $(window).scroll( function() {
-                if ($(window).scrollTop() >= ($('.review-chart').offset().top - 300)) {
-                    $('.slide-animation').addClass('active');
-                }
+
+            $('.slide-animation').addClass('active');
+            $('.review-chart').on('click taphold swipe touchmove', function() {
+                $('.slide-animation').removeClass('active');
             });
         }
     }

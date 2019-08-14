@@ -4907,7 +4907,7 @@ textarea.input {
 	padding: 15px; 
 	background-color: white;
     box-shadow: 0px 0 32px 3px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
+    border-radius: 10px;
     align-items: center;
 
 	@media #{$phone} {
@@ -5090,11 +5090,14 @@ textarea.input {
 		position: absolute;
 	    right: 21px;
 	    top: 16px;
-	    color: #bababa;
+	    color: #46afda;
 	    font-size: 18px;
+	    width: 63px;
 
 		img {
-			vertical-align: bottom;
+			display: inline-block;
+			max-width: 16px;
+			vertical-align: middle;
 		}
     }
 
@@ -5114,7 +5117,7 @@ textarea.input {
     margin-left: auto;
     padding: 10px;
     padding-bottom: 15px;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0px 0px 2px 1px #d8d2d2;
 
     @media #{$phone} {
@@ -5170,9 +5173,14 @@ textarea.input {
 		position: absolute;
 		right: 12px;
 		top: 10px;
+		color: #46afda;
+		font-size: 14px;
+		width: 48px;
 
-		i {
-			color: #46afda;
+		img {
+			display: inline-block;
+			max-width: 12px;
+			vertical-align: middle;
 		}
     }
 
@@ -5209,7 +5217,7 @@ textarea.input {
     }
 
     .edit-button {
-    	font-size: 14px;
+    	font-size: 16px;
     	color: #46afda;
     	font-weight: bold;
 
@@ -5221,7 +5229,7 @@ textarea.input {
     }
 
     .claim-button {
-    	font-size: 14px;
+    	font-size: 16px;
 		color: #46afda;
 		font-weight: bold;
 		margin-top: 10px;
@@ -7460,6 +7468,8 @@ body.edit-user {
 
 		.profile-details {
 		    margin-top: 10px;
+		    margin-left: 0px;
+		    width: 100%;
 		}
 	}
 
@@ -7954,12 +7964,13 @@ body.edit-user {
 
     @media #{$tablet} {
     	margin-top: -20px;
+    	text-align: center;
+    	margin-left: 10px;
     }
 
     @media #{$phone} {
-    	font-size: 13px;
+    	font-size: 16px;
     	margin-top: -8px;
-    	text-align: center;
     }
 }
 
@@ -8560,7 +8571,6 @@ body.strength-pb {
     }
     100% {
         opacity: 0;
-        display: none;
     }
 }
 
@@ -8579,7 +8589,6 @@ body.strength-pb {
 	}
 
 	.slide-animation {
-		opacity: 0;
 		display: none;
 		position: absolute;
 		z-index: 100;
@@ -8591,8 +8600,7 @@ body.strength-pb {
 
 	    &.active {
 	    	display: block;
-	    	animation-name: HandAnimation;
-  			animation-duration: 5s;
+	    	animation: HandAnimation 5s infinite;
 	    }
 	}
 
