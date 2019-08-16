@@ -2047,12 +2047,12 @@ p.h2-bold {
         display: none;
         position: fixed;
         top: 0;
-        width: 777px;
+        width: 730px;
         background: white;
         z-index: 10; }
         @media screen and (max-width: 1200px) {
           .questions .question-group .answers .answers-inner .fixed-titles {
-            width: 637px; } }
+            width: 596.66px; } }
         @media screen and (max-width: 992px) {
           .questions .question-group .answers .answers-inner .fixed-titles {
             width: 690px; } }
