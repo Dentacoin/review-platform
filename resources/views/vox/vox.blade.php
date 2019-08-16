@@ -39,6 +39,17 @@
 								</div>
 							@endif
 						</h1>
+						@if(!empty($answered))
+							<div class="answered-box">
+								<p>
+									It seems you've started but didn't finished this survey. Pick up where you left off or start over.
+								</p>
+								<a href="javascript:;" class="start-over" u-id="{{ $user->id }}" vox-id="{{ $vox->id }}" url="{{ getLangUrl('start-over') }}">
+									<img src="{{ url('new-vox-img/start-over.svg') }}">
+									Start over
+								</a>
+							</div>
+						@endif
 						<p class="questionnaire-description tac" {!! !empty($answered) && count($answered)>1 ? 'style="display: none;"' : '' !!} >
 							{{ $vox->description }}
 						</p>

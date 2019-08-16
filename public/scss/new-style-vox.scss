@@ -2480,6 +2480,55 @@ body.vox-public {
 		}
 	}
 
+	.answered-box {
+		text-align: center;
+		margin-top: -20px;
+		margin-bottom: 20px;
+
+		@media #{$phone} {
+			margin-top: 0px;
+		}
+
+		p {
+			color: #38a2e5;
+			margin-bottom: 20px;
+		}
+
+		.start-over {
+			color: white;
+			font-size: 18px;
+			text-transform: uppercase;
+			background-color: #38ace5;
+			border-radius: 10px;
+			padding: 5px 11px;
+			padding-bottom: 8px;
+			display: inline-block;
+			min-width: 190px;
+			transition: all 0.3s ease;
+
+			@media #{$phone} {
+				font-size: 16px;
+				min-width: 160px;
+				padding-bottom: 5px;
+			}
+
+			&:hover {
+				background-color: #37b8f7;
+				transition: all 0.3s ease;
+			}
+
+			img {
+				margin-right: 3px;
+				max-width: 25px;
+				vertical-align: text-bottom;
+
+				@media #{$phone} {
+					max-width: 20px;
+					vertical-align: sub;
+				}
+			}
+		}
+	}
 
 	.demographic-questionnaire-description,
 	.questionnaire-description {
@@ -8495,7 +8544,7 @@ body.vox-public {
 	font-size: 16px;
     position: absolute;
     right: 0px;
-    top: 44px;
+    top: 34px;
 
     .vox-mode {
     	&.active {

@@ -63,6 +63,10 @@ $(document).ready(function(){
 
         ajax_is_running = true;
 
+        if($('.answered-box').length && $('.answered-box:visible')) {
+            $('.answered-box').hide();
+        }
+
         var group = $(this).closest('.question-group');
         var qid = parseInt(group.attr('data-id'));
         var type = null;
@@ -703,6 +707,44 @@ $(document).ready(function(){
             });
         }
     }
+
+
+
+    $('.start-over').click( function() {
+        if(ajax_is_running) {
+            return;
+        }
+
+        ajax_is_running = true;
+
+        var link = $(this).attr('url');
+        var user_id = $(this).attr('u-id');
+        var vox_id = $(this).attr('vox-id');
+
+        $.ajax({
+            type: "POST",
+            url: link,
+            data: {
+                user_id: user_id,
+                vox_id: vox_id,
+                _token: $('input[name="_token"]').val(),
+            },
+            dataType: 'json',
+
+            success: function(ret) {
+                if (ret.success) {
+                    window.location.reload();
+
+                } else {
+                    console.log('error');
+                }
+                
+            },
+            error: function(ret) {
+                console.log('error');
+            }
+        });
+    });
 
 
 });

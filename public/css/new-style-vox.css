@@ -1769,6 +1769,43 @@ p.h2-bold {
       font-weight: 600;
       margin-bottom: 5px;
       padding: 0px 20px; } }
+.questions .answered-box {
+  text-align: center;
+  margin-top: -20px;
+  margin-bottom: 20px; }
+  @media screen and (max-width: 768px) {
+    .questions .answered-box {
+      margin-top: 0px; } }
+  .questions .answered-box p {
+    color: #38a2e5;
+    margin-bottom: 20px; }
+  .questions .answered-box .start-over {
+    color: white;
+    font-size: 18px;
+    text-transform: uppercase;
+    background-color: #38ace5;
+    border-radius: 10px;
+    padding: 5px 11px;
+    padding-bottom: 8px;
+    display: inline-block;
+    min-width: 190px;
+    transition: all 0.3s ease; }
+    @media screen and (max-width: 768px) {
+      .questions .answered-box .start-over {
+        font-size: 16px;
+        min-width: 160px;
+        padding-bottom: 5px; } }
+    .questions .answered-box .start-over:hover {
+      background-color: #37b8f7;
+      transition: all 0.3s ease; }
+    .questions .answered-box .start-over img {
+      margin-right: 3px;
+      max-width: 25px;
+      vertical-align: text-bottom; }
+      @media screen and (max-width: 768px) {
+        .questions .answered-box .start-over img {
+          max-width: 20px;
+          vertical-align: sub; } }
 .questions .demographic-questionnaire-description,
 .questions .questionnaire-description {
   text-align: center;
@@ -5995,7 +6032,7 @@ p.h2-bold {
   font-size: 16px;
   position: absolute;
   right: 0px;
-  top: 44px; }
+  top: 34px; }
   .vox-mode-wrapper .vox-mode.active {
     color: #2196F3; }
   .vox-mode-wrapper .vox-mode:first-child {

@@ -1117,4 +1117,28 @@ class VoxController extends FrontController
         	}
         }
 	}
+
+	public function start_over() {
+
+		$vox = Vox::find(Request::input('vox_id'));
+
+		if (!empty($vox) && !empty(Request::input('user_id'))) {
+	        VoxAnswer::where('vox_id', Request::input('vox_id'))
+			->where('user_id', Request::input('user_id'))
+			->delete();
+
+			$ret = [
+				'success' => true,
+				'first_q' => $vox->questions->first()->id
+			];
+		} else {
+			$ret = [
+				'success' => false,
+			];
+		}
+
+
+		return Response::json( $ret );
+	}
+	
 }

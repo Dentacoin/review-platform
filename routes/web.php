@@ -71,7 +71,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('users_stats', 						'UsersStatsController@list');
 
 	Route::get('reviews', 							'ReviewsController@list');
-	Route::post('reviews/mass-delete', 							'ReviewsController@massdelete');
+	Route::post('reviews/mass-delete', 				'ReviewsController@massdelete');
 	Route::any('reviews/add', 						'ReviewsController@add');
 	Route::any('reviews/delete/{id}', 				'ReviewsController@delete');
 	Route::any('reviews/restore/{id}', 				'ReviewsController@restore');
@@ -147,6 +147,11 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('claims/approve/{id}', 				'DentistClaimsController@approve');
 	Route::any('claims/reject/{id}', 				'DentistClaimsController@reject');
 	Route::any('claims/suspicious/{id}', 			'DentistClaimsController@suspicious');
+
+	Route::get('polls', 							'PollsController@list');
+	Route::any('polls/add', 						'PollsController@add');
+	Route::any('polls/edit/{id}', 					'PollsController@edit');
+	Route::get('polls/delete/{id}', 				'PollsController@delete');
 });
 
 
@@ -346,6 +351,7 @@ $voxRoutes = function () {
 			Route::any('paid-dental-surveys', 					'IndexController@surveys_public');
 			Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');
 			Route::any('get-started/{id}', 						'VoxController@home_slug');
+			Route::any('start-over', 							'VoxController@start_over');
 
 			Route::any('vpn', 									'VpnController@list');
 
