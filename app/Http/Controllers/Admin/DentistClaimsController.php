@@ -49,6 +49,8 @@ class DentistClaimsController extends AdminController
         }
 
         $user = User::find($item->dentist_id);
+        $user->email_public = $user->email;
+        $user->email = $item->email;
         $user->password = $item->password;
         $user->status = 'approved';
         $user->ownership = 'approved';
