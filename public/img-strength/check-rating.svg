@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 89.9 89.9"
+	 style="enable-background:new 0 0 89.9 89.9;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#80B8DC;stroke-width:3;stroke-miterlimit:10;}
+	.st1{fill:#80B8DC;}
+	.st2{fill:none;stroke:#80B8DC;stroke-width:2;stroke-miterlimit:10;}
+</style>
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  bottomLeftOrigin="true" height="90" width="90" x="0" y="-0.1"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<circle class="st0" cx="45" cy="45" r="43.5"/>
+<g>
+	<path class="st1" d="M67.8,69.1L52.3,53.6c-0.5-0.5-1.2-0.5-1.7,0c-0.5,0.5-0.5,1.2,0,1.7l14.6,14.6l-5.5,5.5l-13-13
+		c-0.2-0.2-0.4-0.5-0.4-0.8c0-0.3,0.1-0.6,0.4-0.8l0.2-0.2c0.7-0.7,1.1-1.5,1.1-2.5c0-1-0.4-1.8-1.1-2.5l-4.8-4.8
+		c2.8-3.3,4.5-7.3,4.5-11.8c0-9.8-8-17.8-17.8-17.8S11,29.2,11,39s8,17.8,17.8,17.8c4.5,0,8.6-1.7,11.7-4.4l4.8,4.8
+		c0.2,0.2,0.4,0.5,0.4,0.8s-0.1,0.6-0.4,0.8L45.1,59c-0.7,0.7-1.1,1.5-1.1,2.5c0,1,0.4,1.8,1.1,2.5l13.8,13.8
+		c0.2,0.3,0.5,0.4,0.8,0.4s0.6-0.1,0.8-0.4l7.1-7.1C68.2,70.3,68.2,69.6,67.8,69.1z M13.4,39c0-8.5,7-15.5,15.5-15.5
+		s15.5,7,15.5,15.5s-7,15.5-15.5,15.5S13.4,47.5,13.4,39z"/>
+</g>
+<polygon class="st1" points="28.9,28.2 32.4,35.2 40.1,36.4 34.5,41.8 35.8,49.5 28.9,45.9 22,49.5 23.3,41.8 17.7,36.4 25.4,35.2 
+	"/>
+<polygon class="st2" points="55.5,32.9 57.4,36.8 61.8,37.5 58.6,40.5 59.4,44.9 55.5,42.8 51.6,44.9 52.3,40.5 49.2,37.5 
+	53.5,36.8 "/>
+<polygon class="st2" points="72.8,32.9 74.7,36.8 79.1,37.5 75.9,40.5 76.7,44.9 72.8,42.8 68.9,44.9 69.6,40.5 66.5,37.5 
+	70.8,36.8 "/>
+</svg>

@@ -1524,4 +1524,9 @@ $(document).ready(function(){
         $(this).closest('.treatment-wrapper').find('.treatments-hidden').toggleClass('active');
     });
 
+    console.log(window.location.hash);
+    if (window.location.hash.length && $('.tab[data-tab="'+window.location.hash.substring(1)+'"]').length) {
+        $('.tab[data-tab="'+window.location.hash.substring(1)+'"]').trigger( "click" );
+    }
+
 });

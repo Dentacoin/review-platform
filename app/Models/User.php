@@ -268,6 +268,300 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
             if($this->is_dentist) {
 
+                $array_number_shuffle = [
+                    'important' => 0,
+                    'not_important' => 0,
+                ];
+
+
+                //Monthly progress
+
+                $carbon_month = \Carbon\Carbon::now();
+                $prev_month = $carbon_month->subMonth()->format('F');
+
+
+
+                $first_day_of_month = Carbon::now()->startOfMonth();
+                $five_day = $first_day_of_month->addDays(4);
+
+                $today = Carbon::now();
+
+                if ($today < $five_day) {
+
+                    $id = $this->id;
+
+                    $first_day_of_last_month = new Carbon('first day of last month');
+                    $last_day_of_last_month = new Carbon('last day of last month');
+
+                    $last_month_reviews = Review::where(function($query) use ($id) {
+                        $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+                    })
+                    ->where('created_at', '>=', $first_day_of_last_month)
+                    ->where('created_at', '<=', $last_day_of_last_month)
+                    ->get();   
+
+                    //1.
+
+                    if ($last_month_reviews->count()) {
+
+                        foreach ($last_month_reviews as $rev) {
+                            foreach($rev->answers as $answer) {
+                                //echo $answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
+                                if(!isset($aggregated[$answer->question['label']])) {
+                                    $aggregated[$answer->question['label']] = 0;
+                                }
+
+                                $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                            }
+                        }
+
+                        foreach ($aggregated as $key => $value) {
+                            $aggregated[$key] /= $last_month_reviews->count();
+                        }
+
+                        $now = Carbon::now();
+
+                        if ($now->month == '8') {
+                            $prev_month_rating = array_values($aggregated)[0];
+                            $prev_month_label = array_keys($aggregated)[0];
+                            
+                        } else {
+                            $prev_month_rating = array_values($aggregated)[1];
+                            $prev_month_label = array_keys($aggregated)[1];
+                        }
+
+                        $ret[] = [
+                            'title' => trans('trp.strength.dentist.invites.check-rating.title', ['month' => $prev_month]),
+                            'text' =>  trans('trp.strength.dentist.invites.check-rating.text', ['prev_month_rating' => $prev_month_rating, 'prev_month_category' => $prev_month_label]),
+                            'image' => 'check-rating',
+                            'completed' => false,
+                            'buttonText' => trans('trp.strength.dentist.invites.check-rating.button-text'),
+                            'buttonHref' => $this->getLink().'/#reviews',
+                            'target' => false,
+                            'event_category' => 'ProfileStrengthDentist',
+                            'event_action' => 'Check',
+                            'event_label' => 'ReviewsLastMonth',
+                        ];
+                    } else {
+                        $ret[] = [
+                            'title' => trans('trp.strength.dentist.invites.check-no-rating.title', ['month' => $prev_month]),
+                            'text' => trans('trp.strength.dentist.invites.check-no-rating.text'),
+                            'image' => 'check-rating',
+                            'completed' => false,
+                            'buttonText' => trans('trp.strength.dentist.invites.check-no-rating.button-text'),
+                            'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
+                            'target' => true,
+                            'event_category' => 'ProfileStrengthDentist',
+                            'event_action' => 'Invite',
+                            'event_label' => 'RatingInvite',
+                        ];
+                    }
+                    $array_number_shuffle['important']++;
+
+                    //2.
+
+                    $last_month_invitations = UserInvite::where( 'user_id', $this->id)
+                    ->where('created_at', '>=', $first_day_of_last_month)
+                    ->where('created_at', '<=', $last_day_of_last_month)
+                    ->get();
+
+                    if($last_month_invitations->count() && $last_month_reviews->count()) {
+                        $ret[] = [
+                            'title' => trans('trp.strength.dentist.invites.send-last-month.title', ['last_month_invitations' => $last_month_invitations->count()]),
+                            'text' => trans('trp.strength.dentist.invites.send-last-month.text'),
+                            'image' => 'invite-patients',
+                            'completed' => false,
+                            'buttonText' => trans('trp.strength.dentist.invites.send-last-month.button-text'),
+                            'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
+                            'target' => true,
+                            'event_category' => 'ProfileStrengthDentist',
+                            'event_action' => 'Invite',
+                            'event_label' => 'InvitesLastMonth',
+                        ];
+                    } else {
+                        $ret[] = [
+                            'title' => trans('trp.strength.dentist.invites.not-send-last-month.title'),
+                            'text' => trans('trp.strength.dentist.invites.not-send-last-month.text'),
+                            'image' => 'invite-patients',
+                            'completed' => false,
+                            'buttonText' => trans('trp.strength.dentist.invites.not-send-last-month.button-text'),
+                            'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
+                            'target' => true,
+                            'event_category' => 'ProfileStrengthDentist',
+                            'event_action' => 'Invite',
+                            'event_label' => 'NoInvitesLastMonth',
+                        ];
+                    }
+                    $array_number_shuffle['important']++;
+
+                    //3.
+
+                    if($this->country_id) {
+                        $country_id = $this->country_id;
+
+                        $country_reviews = Review::whereHas('user', function ($query) use ($country_id) {
+                            $query->where('country_id', $country_id);
+                        })
+                        ->where('created_at', '>=', $first_day_of_last_month)
+                        ->where('created_at', '<=', $last_day_of_last_month)
+                        ->get();
+
+                        $has_country_reviews = false;
+                        if ($country_reviews->count()) {
+                            $has_country_reviews = true;
+                            $country_rating = 0;
+                            foreach ($country_reviews as $c_review) {
+                                $country_rating += $c_review->rating;
+                            }
+
+                            $avg_country_rating = number_format($country_rating / $country_reviews->count(), 2);
+
+                            $dentist_country = Country::find($this->country_id)->name;
+
+                            $ret[] = [
+                                'title' => trans('trp.strength.dentist.invites.country-rating-last-month.title', ['dentist_country' => $dentist_country ]),
+                                'text' => trans('trp.strength.dentist.invites.country-rating-last-month.text', ['dentist_country' => $dentist_country, 'country_rating' => $avg_country_rating ]),
+                                'image' => 'outrank-dentists',
+                                'completed' => false,
+                                'buttonText' => trans('trp.strength.dentist.invites.country-rating-last-month.button-text'),
+                                'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
+                                'target' => true,
+                                'event_category' => 'ProfileStrengthDentist',
+                                'event_action' => 'Invite',
+                                'event_label' => 'Country',
+                            ];
+
+
+                            $array_number_shuffle['important']++;
+                        }
+                    }
+                } else {
+                    $current_month_invitations = UserInvite::where( 'user_id', $this->id)
+                    ->where('created_at', '>=', $first_day_of_month)
+                    ->get();
+
+                    //2.
+
+                    if ($current_month_invitations->count()) {
+
+                        $id = $this->id;
+
+                        $current_month_reviews = Review::where(function($query) use ($id) {
+                            $query->where( 'dentist_id', $id)->orWhere('clinic_id', $id);
+                        })
+                        ->where('created_at', '>=', $first_day_of_month)
+                        ->get();
+
+                        if ($current_month_reviews->count()) {
+                            foreach ($current_month_reviews as $rev) {
+                                foreach($rev->answers as $answer) {
+                                    //echo $answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
+                                    if(!isset($aggregated[$answer->question['label']])) {
+                                        $aggregated[$answer->question['label']] = 0;
+                                    }
+
+                                    $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                                }
+                            }
+
+                            foreach ($aggregated as $key => $value) {
+                                $aggregated[$key] /= $current_month_reviews->count();
+                            }
+
+                            $now = Carbon::now();
+
+                            if ($now->month == '8') {
+                                $cur_month_rating = array_values($aggregated)[0];
+                                $cur_month_label = array_keys($aggregated)[0];
+                                
+                            } else {
+                                $cur_month_rating = array_values($aggregated)[1];
+                                $cur_month_label = array_keys($aggregated)[1];
+                            }
+
+                            $ret[] = [
+                                'title' => trans('trp.strength.dentist.invites.rating-this-month.title'),
+                                'text' => trans('trp.strength.dentist.invites.rating-this-month.text', ['this_month_rating' => $cur_month_rating, 'this_month_category' => $cur_month_label ]),
+                                'image' => 'invite-patients',
+                                'completed' => false,
+                                'buttonText' => trans('trp.strength.dentist.invites.rating-this-month.button-text'),
+                                'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
+                                'target' => true,
+                                'event_category' => 'ProfileStrengthDentist',
+                                'event_action' => 'Check',
+                                'event_label' => 'ScoreRatingThisMonth',
+                            ];
+                        } else {
+
+                            $ret[] = [
+                                'title' => trans('trp.strength.dentist.invites.sent-this-month.title', ['invites_number' => $current_month_invitations->count() ]),
+                                'text' => trans('trp.strength.dentist.invites.sent-this-month.text'),
+                                'image' => 'invite-patients',
+                                'completed' => false,
+                                'buttonText' => trans('trp.strength.dentist.invites.sent-this-month.button-text'),
+                                'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
+                                'target' => true,
+                                'event_category' => 'ProfileStrengthDentist',
+                                'event_action' => 'Invite',
+                                'event_label' => 'InvitesThisMonth',
+                            ];
+                        }
+
+                    } else {
+                        $ret[] = [
+                            'title' => trans('trp.strength.dentist.invite-patients.title'),
+                            'text' => nl2br(trans('trp.strength.dentist.invite-patients.text')),
+                            'image' => 'invite-patients',
+                            'completed' => false,
+                            'buttonText' => trans('trp.strength.dentist.invite-patients.button-text'),
+                            'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
+                            'event_category' => 'ProfileStrengthDentist',
+                            'event_action' => 'Invite',
+                            'event_label' => 'PatientInvites',
+                        ];
+                    }
+                    $array_number_shuffle['important']++;
+
+                    //3.
+
+                    if($this->country_id) {
+                        $country_id = $this->country_id;
+                        
+                        $country_reviews = Review::whereHas('user', function ($query) use ($country_id) {
+                            $query->where('country_id', $country_id);
+                        })->where('created_at', '>=', $first_day_of_month)->get();
+
+                        $has_country_reviews = false;
+                        if ($country_reviews->count()) {
+                            $has_country_reviews = true;
+
+                            $country_rating = 0;
+                            foreach ($country_reviews as $c_review) {
+                                $country_rating += $c_review->rating;
+                            }
+
+                            $avg_country_rating = number_format($country_rating / $country_reviews->count(), 2);
+                            $dentist_country = Country::find($this->country_id)->name;
+
+                            $ret[] = [
+                                'title' => trans('trp.strength.dentist.invites.country-rating-this-month.title', ['dentist_country' => $dentist_country ]),
+                                'text' => trans('trp.strength.dentist.invites.country-rating-this-month.text', ['dentist_country' => $dentist_country, 'country_rating' => $avg_country_rating ]),
+                                'image' => 'outrank-dentists',
+                                'completed' => false,
+                                'buttonText' => trans('trp.strength.dentist.invites.country-rating-this-month.button-text'),
+                                'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
+                                'target' => true,
+                                'event_category' => 'ProfileStrengthDentist',
+                                'event_action' => 'Invite',
+                                'event_label' => 'Country',
+                            ];
+                            $array_number_shuffle['important']++;
+                        }
+                    }
+                }
+
+                //End Monthly progress
+
                 $missing_info = [];
                 $event_missing = [];
 
@@ -315,32 +609,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'event_label' => $missing_parts_event,
                     ];
                 }
-
-                $ret[] = [
-                    'title' => trans('trp.strength.dentist.invite-patients.title'),
-                    'text' => nl2br(trans('trp.strength.dentist.invite-patients.text')),
-                    'image' => 'invite-friends',
-                    'completed' => false,
-                    'buttonText' => trans('trp.strength.dentist.invite-patients.button-text'),
-                    'buttonHref' => 'https://account.dentacoin.com/invite?platform=trusted-reviews',
-                    'event_category' => 'ProfileStrengthDentist',
-                    'event_action' => 'Invite',
-                    'event_label' => 'InvitePatients',
-                ];
-
-                if ($this->is_clinic) {
-                    $ret[] = [
-                        'title' => trans('trp.strength.clinic.show-team.title'),
-                        'text' => nl2br(trans('trp.strength.clinic.show-team.text')),
-                        'image' => 'team',
-                        'completed' => false,
-                        'buttonText' => trans('trp.strength.clinic.show-team.button-text'),
-                        'buttonHref' => $this->getLink().'?popup-loged=add-team-popup',
-                        'event_category' => 'ProfileStrengthDentist',
-                        'event_action' => 'Add',
-                        'event_label' => 'Team',
-                    ];
-                }
+                $array_number_shuffle['important']++;
 
                 if( !empty($this->dcn_address )) {
                     $ret[] = [
@@ -364,6 +633,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'event_label' => 'NewWallet',
                     ];
                 }
+                $array_number_shuffle['important']++;
 
                 if( !empty($this->description )) {
                     $ret[] = [
@@ -386,6 +656,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'event_label' => 'Description',
                     ];
                 }
+                $array_number_shuffle['important']++;
 
                 if( !empty($this->socials )) {
                     $ret[] = [
@@ -407,6 +678,23 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'event_action' => 'Add',
                         'event_label' => 'Social',
                     ];
+                }
+                $array_number_shuffle['important']++;
+
+                if ($this->is_clinic) {
+                    $ret[] = [
+                        'title' => trans('trp.strength.clinic.show-team.title'),
+                        'text' => nl2br(trans('trp.strength.clinic.show-team.text')),
+                        'image' => 'team',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.clinic.show-team.button-text'),
+                        'buttonHref' => $this->getLink().'?popup-loged=add-team-popup',
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Add',
+                        'event_label' => 'Team',
+                    ];
+
+                    $array_number_shuffle['not_important']++;
                 }
 
                 if($this->photos->isNotEmpty() && $this->photos->count() >= 10) {
@@ -430,6 +718,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'event_label' => 'Photos',
                     ];
                 }
+                $array_number_shuffle['not_important']++;
 
                 if( !empty($this->work_hours )) {
                     $ret[] = [
@@ -452,6 +741,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'event_label' => 'Hours',
                     ];
                 }
+                $array_number_shuffle['not_important']++;
 
                 if( $this->widget_activated) {
                     $ret[] = [
@@ -474,6 +764,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'event_label' => 'Widget',
                     ];
                 }
+                $array_number_shuffle['not_important']++;
 
                 $total_balance = $this->getTotalBalance();
                 if ($total_balance > env('VOX_MIN_WITHDRAW') ) {
@@ -488,6 +779,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                         'event_action' => 'Withdraw',
                         'event_label' => 'WithdrawRewards',
                     ];
+                    $array_number_shuffle['not_important']++;
                 }
 
                 $stats = Vox::with('stats_main_question')->where('has_stats', 1)->where('featured', 1)->orderBy('id', 'desc')->first();
@@ -503,6 +795,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'event_action' => 'Check',
                     'event_label' => 'Stats',
                 ];
+                $array_number_shuffle['not_important']++;
 
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.browse-surveys.title'),
@@ -516,6 +809,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'event_action' => 'Browse',
                     'event_label' => 'SurveysList',
                 ];
+                $array_number_shuffle['not_important']++;
 
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.join-assurance.title'),
@@ -529,6 +823,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'event_action' => 'Join',
                     'event_label' => 'Assurance',
                 ];
+                $array_number_shuffle['not_important']++;
 
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.join-dentacare.title'),
@@ -542,6 +837,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     'event_action' => 'Recommend',
                     'event_label' => 'Dentacare',
                 ];
+                $array_number_shuffle['not_important']++;
+
+                // $first_part = array_slice($ret, 0, $array_number_shuffle['important'], true);
+                // shuffle($first_part);
+
+                // $last_part = array_slice($ret, $array_number_shuffle['important'], $array_number_shuffle['not_important'], true);
+                // shuffle($last_part);
+
+                // $ret = array_merge($first_part, $last_part);
 
 
                 // $ret['photo-dentist'] = $this->hasimage ? true : false;
@@ -1902,7 +2206,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             file_put_contents($fn, $cnt);
         }
         return file_get_contents($fn);
-
     }
 
     public static function getDentistCount() {
@@ -1913,11 +2216,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             file_put_contents($fn, $cnt);
         }
         return file_get_contents($fn);
-
     }
-
-
- 
 
     public static function getTempImageName() {
         return md5( microtime(false) ).'.jpg';
@@ -1977,7 +2276,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public static function lastLoginUserId() {
         return UserLogin::where('ip', 'like', self::getRealIp())->orderBy('id', 'DESC')->first();
     }
-
 
     public function checkForWelcomeCompletion() {
 
@@ -2144,7 +2442,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return implode(', ', $ret);
     }
 
-
     public function getSocialCoverPath() {
         $folder = storage_path().'/app/public/avatars/'.($this->id%100);
         return $folder.'/'.$this->id.'-cover.jpg';
@@ -2310,8 +2607,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 }
             }
         } 
-
-
         if(empty($ret['weak']) && !empty($data['userId'])) {
             $u = self::where('civic_id', 'LIKE', $data['userId'])->first();
             if(!empty($u) && $u->id != $this->id) {
@@ -2382,6 +2677,19 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
         ->get();
 
         return $prev_reviews;        
+    }
+
+    public function getMonthlyInvites($month=0) {
+
+        $to_month = Carbon::now()->modify('-'.$month.' months');
+        $from_month = Carbon::now()->modify('-'.($month+1).' months');
+
+        $prev_invites = UserInvite::where( 'user_id', $this->id)
+        ->where('created_at', '>=', $from_month)
+        ->where('created_at', '<=', $to_month)
+        ->get();
+
+        return $prev_invites;        
     }
 
     public function convertForResponse() {
