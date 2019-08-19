@@ -839,13 +839,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 ];
                 $array_number_shuffle['not_important']++;
 
-                // $first_part = array_slice($ret, 0, $array_number_shuffle['important'], true);
-                // shuffle($first_part);
+                $first_part = array_slice($ret, 0, $array_number_shuffle['important'], true);
+                shuffle($first_part);
 
-                // $last_part = array_slice($ret, $array_number_shuffle['important'], $array_number_shuffle['not_important'], true);
-                // shuffle($last_part);
+                $last_part = array_slice($ret, $array_number_shuffle['important'], $array_number_shuffle['not_important'], true);
+                shuffle($last_part);
 
-                // $ret = array_merge($first_part, $last_part);
+                $ret = array_merge($first_part, $last_part);
 
 
                 // $ret['photo-dentist'] = $this->hasimage ? true : false;
