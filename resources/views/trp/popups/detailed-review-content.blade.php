@@ -34,6 +34,11 @@
 			<span class="review-date">
 				{{ $review->created_at ? $review->created_at->toFormattedDateString() : '-' }}
 			</span>
+			@if(!empty($review->treatments))
+				@foreach($review->treatments as $t)
+					<span class="treatment">• {!! App\Models\Review::handleTreatmentTooltips(trans('trp.treatments.'.$t)) !!}</span>
+				@endforeach
+			@endif
 		</div>
 		<div class="review-content">
 			{!! nl2br($review->answer) !!}

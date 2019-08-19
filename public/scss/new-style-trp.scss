@@ -2832,6 +2832,14 @@ textarea.input {
 		}
 	}
 
+	.treatment {
+	    vertical-align: super;
+
+	    @media #{$phone} {
+	    	vertical-align: inherit;
+	    }
+	}
+
 	.review-replied-wrapper {
 		margin-left: 30px;
 		margin-bottom: 0px;

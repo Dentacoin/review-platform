@@ -2334,6 +2334,11 @@ textarea.input {
 @media screen and (max-width: 768px) {
   #view-review-popup .review-date {
     vertical-align: middle; } }
+#view-review-popup .treatment {
+  vertical-align: super; }
+  @media screen and (max-width: 768px) {
+    #view-review-popup .treatment {
+      vertical-align: inherit; } }
 #view-review-popup .review-replied-wrapper {
   margin-left: 30px;
   margin-bottom: 0px; }
