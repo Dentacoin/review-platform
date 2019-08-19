@@ -25,7 +25,12 @@
 		</div>
 	</div>
 </div>
-<div class="graphs flex">						
+<div class="graphs flex">
+
+	<div class="loader-mask stats-mask">
+	    <img class="stats-loader" src="{{ url('new-vox-img/stats-loader.gif') }}">
+  	</div>
+
 	<div class="chart">
 		<div class="main-chart"></div>
 		<div class="total total-all">

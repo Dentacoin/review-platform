@@ -9621,6 +9621,10 @@ body.sp-vox-iframe {
 	background-color: #fff;
 	z-index: 99999;
 
+	&.stats-mask {
+		position: absolute;
+	}
+
 	.loader {
 		-webkit-border-radius: 50%;
 		border-radius: 50%;
@@ -9661,9 +9665,15 @@ body.sp-vox-iframe {
 	    top: 50%;
 	    left: 50%;
 	    transform: translateX(-50%) translateY(-50%);
+	    max-width: 500px;
+
+	    @media #{$tablet} {
+	    	max-width: 60%;
+			top: 150px;
+	    }
 
 	    @media #{$phone} {
-	    	max-width: 60%;
+	    	max-width: 100%;
 	    }
 	}
 }

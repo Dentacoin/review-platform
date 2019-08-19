@@ -358,18 +358,16 @@ $(document).ready(function(){
         if( $( '.stat.restore-me' ).length ) {
             return;
         }
-        if (!$(this).closest('.stat').hasClass('active')) {
-
-            $('.loader').fadeIn();
-            $('.loader-mask').fadeIn();
-        }
-
         var stat = $(this).closest('.stat');
+
         if( !stat.hasClass('active') ) {
             if (stat.find('.stat').length) {
                 stat.addClass('active');
                 reloadGraph(stat.find('.stat').first());
             } else {
+                stat.addClass('active');
+                stat.find('.loader').fadeIn();
+                stat.find('.loader-mask').fadeIn();
                 reloadGraph( stat );
             }
         } else {
@@ -380,6 +378,8 @@ $(document).ready(function(){
     $('.stat .scales a').click( function() {
         $(this).closest('.scales').find('a').removeClass('active');
         $(this).addClass('active');
+        $(this).closest('.stat').find('.loader').fadeIn();
+        $(this).closest('.stat').find('.loader-mask').fadeIn();
         reloadGraph( $(this).closest('.stat') );
     } );
 
@@ -641,8 +641,8 @@ $(document).ready(function(){
                 $(this).find('.second-chart').attr('class', 'second-chart '+(type=='dependency' ? 'dependency' : scale) );
                 $(this).find('.third-chart').attr('class', 'third-chart '+(type=='dependency' ? 'dependency' : scale) );
 
-                $('.loader').fadeOut();
-                $('.loader-mask').delay(350).fadeOut('slow');   
+                $(this).find('.loader').fadeOut();
+                $(this).find('.loader-mask').delay(350).fadeOut('slow');   
 
             }).bind(elm)
         );

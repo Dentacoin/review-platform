@@ -6773,6 +6773,8 @@ body.sp-vox-iframe .above-fold {
   bottom: 0;
   background-color: #fff;
   z-index: 99999; }
+  .loader-mask.stats-mask {
+    position: absolute; }
   .loader-mask .loader {
     -webkit-border-radius: 50%;
     border-radius: 50%;
@@ -6807,10 +6809,15 @@ body.sp-vox-iframe .above-fold {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translateX(-50%) translateY(-50%); }
+    transform: translateX(-50%) translateY(-50%);
+    max-width: 500px; }
+    @media screen and (max-width: 1080px) {
+      .loader-mask .stats-loader {
+        max-width: 60%;
+        top: 150px; } }
     @media screen and (max-width: 768px) {
       .loader-mask .stats-loader {
-        max-width: 60%; } }
+        max-width: 100%; } }
 
 @-webkit-keyframes load8 {
   0% {

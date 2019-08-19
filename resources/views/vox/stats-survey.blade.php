@@ -2,10 +2,6 @@
 
 @section('content')
 
-	<div class="loader-mask">
-	    <img class="stats-loader" src="{{ url('new-vox-img/stats-loader.gif') }}">
-  	</div>
-
 	<div class="container page-statistics">
 		<a class="back-home" href="{{ getLangUrl('dental-survey-stats') }}">
 			{!! trans('vox.page.stats.go-back-stats') !!}
