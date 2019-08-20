@@ -437,7 +437,7 @@ class StatsController extends FrontController
                 array_unshift($a, $key);
                 $newarr[] = $a;
             } else {
-                $newarr[] = [$key, $value];
+                $newarr[] = [$key.'', $value];
             }
         }
         return $newarr;
