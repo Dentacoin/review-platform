@@ -184,7 +184,7 @@
 									</div>
 								</div>
 							@elseif($current_page=='welcome-survey')
-								@if($prev_user)
+								@if(!empty($prev_user))
 									<div class="twerk-it">
 										<div class="user-and-price header-a">
 											<span class="tar">
