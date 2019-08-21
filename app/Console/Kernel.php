@@ -130,17 +130,34 @@ Click the check box and confirm the CAPTCHA.
         $schedule->call(function () {
             $price = null;
             //for($i=0;$i<5;$i++) {
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_URL => "https://api.coingecko.com/api/v3/coins/dentacoin",
+                CURLOPT_SSL_VERIFYPEER => 0
+            ));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            $resp = json_decode(curl_exec($curl));
+            curl_close($curl);
+            if(!empty($resp))   {
+                if(!empty($resp->market_data->current_price->usd))  {
+                   $price = floatval($resp->market_data->current_price->usd);
+                   file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
+                }
+            }
             
-            $info = @file_get_contents('https://api.coinmarketcap.com/v1/ticker/dentacoin/');
-            $p = json_decode($info, true);
-            if(!empty($p) && !empty($p[0]['price_usd'])) {
-                $price = floatval($p[0]['price_usd']);
-                file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
-            }
-            if(!empty($p) && !empty($p[0]['percent_change_24h'])) {
-                $pc = floatval($p[0]['percent_change_24h']);
-                file_put_contents('/tmp/dcn_change', $pc);
-            }
+            // $info = @file_get_contents('https://api.coinmarketcap.com/v1/ticker/dentacoin/');
+            // $p = json_decode($info, true);
+            // if(!empty($p) && !empty($p[0]['price_usd'])) {
+            //     $price = floatval($p[0]['price_usd']);
+            //     file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
+            // }
+            
+            // if(!empty($p) && !empty($p[0]['percent_change_24h'])) {
+            //     $pc = floatval($p[0]['percent_change_24h']);
+            //     file_put_contents('/tmp/dcn_change', $pc);
+            // }
             
             //     if($i!=4) {
             //         sleep(10);
@@ -163,23 +180,25 @@ Click the check box and confirm the CAPTCHA.
 
         })->cron("* * * * *"); //05:00h
 
-        $schedule->call(function () {
 
-            $json = [];
 
-            foreach (config('currencies') as $currency) {
-                $url = 'https://api.coinmarketcap.com/v1/ticker/dentacoin/?convert='.$currency;
-                $info = @file_get_contents($url);
-                $p = json_decode($info, true);
-                $price = floatval($p[0]['price_'.mb_strtolower($currency)]);
-                $json[$currency] = $price;
-            }
+        // $schedule->call(function () {
 
-            file_put_contents('/tmp/dcn_currncies', json_encode($json));
+        //     $json = [];
 
-            echo 'Currencies cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+        //     foreach (config('currencies') as $currency) {
+        //         $url = 'https://api.coinmarketcap.com/v1/ticker/dentacoin/?convert='.$currency;
+        //         $info = @file_get_contents($url);
+        //         $p = json_decode($info, true);
+        //         $price = floatval($p[0]['price_'.mb_strtolower($currency)]);
+        //         $json[$currency] = $price;
+        //     }
 
-        })->cron("*/10 * * * *"); //05:00h
+        //     file_put_contents('/tmp/dcn_currncies', json_encode($json));
+
+        //     echo 'Currencies cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+        // })->cron("* * * * *"); //05:00h
         
         $schedule->call(function () {
 
