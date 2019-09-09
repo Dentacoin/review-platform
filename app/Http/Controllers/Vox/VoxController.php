@@ -91,52 +91,63 @@ class VoxController extends FrontController
 		// exit;
 
 		if(!$this->user) {
-			session([
-	            'vox-redirect-workaround' => str_replace( getLangUrl('/').App::getLocale().'/', '', $vox->getLink())
-	        ]);
 
-	        session([
-	            'intended' => $vox->getLink(),
-	        ]);
+			if(!empty($this->admin) && ($this->admin->id) == 11 && !empty($this->admin->user_id)) {
+				$adm = User::find($this->admin->user_id);
 
-			return $this->ShowVoxView('vox-public', array(
-				'voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
-				'vox' => $vox,
-				'custom_body_class' => 'vox-public',
-				'js' => [
-					'vox.js'
-				],
-	            'csscdn' => [
-	                'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
-	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
-	            ],
-	            'jscdn' => [
-	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
-	            ],
-	            'canonical' => $vox->getLink(),
-	            'social_image' => $vox->getSocialImageUrl('survey'),
+		        if(!empty($adm)) {
+		            Auth::login($adm, true);
+		        }
+		        return redirect(url()->current());
+		    } else {
 
-	            'seo_title' => trans('vox.seo.questionnaire.title', [
-	                'title' => $vox->title,
-	                'description' => $vox->description,
-	                'stats_description' => $vox->stats_description
-	            ]),
-	            'seo_description' => trans('vox.seo.questionnaire.description', [
-	                'title' => $vox->title,
-	                'description' => $vox->description,
-	                'stats_description' => $vox->stats_description
-	            ]),
-	            'social_title' => trans('vox.social.questionnaire.title', [
-	                'title' => $vox->title,
-	                'description' => $vox->description,
-	                'stats_description' => $vox->stats_description
-	            ]),
-	            'social_description' => trans('vox.social.questionnaire.description', [
-	                'title' => $vox->title,
-	                'description' => $vox->description,
-	                'stats_description' => $vox->stats_description
-	            ]),
-	        ));
+				session([
+		            'vox-redirect-workaround' => str_replace( getLangUrl('/').App::getLocale().'/', '', $vox->getLink())
+		        ]);
+
+		        session([
+		            'intended' => $vox->getLink(),
+		        ]);
+
+				return $this->ShowVoxView('vox-public', array(
+					'voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
+					'vox' => $vox,
+					'custom_body_class' => 'vox-public',
+					'js' => [
+						'vox.js'
+					],
+		            'csscdn' => [
+		                'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
+		                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
+		            ],
+		            'jscdn' => [
+		                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
+		            ],
+		            'canonical' => $vox->getLink(),
+		            'social_image' => $vox->getSocialImageUrl('survey'),
+
+		            'seo_title' => trans('vox.seo.questionnaire.title', [
+		                'title' => $vox->title,
+		                'description' => $vox->description,
+		                'stats_description' => $vox->stats_description
+		            ]),
+		            'seo_description' => trans('vox.seo.questionnaire.description', [
+		                'title' => $vox->title,
+		                'description' => $vox->description,
+		                'stats_description' => $vox->stats_description
+		            ]),
+		            'social_title' => trans('vox.social.questionnaire.title', [
+		                'title' => $vox->title,
+		                'description' => $vox->description,
+		                'stats_description' => $vox->stats_description
+		            ]),
+		            'social_description' => trans('vox.social.questionnaire.description', [
+		                'title' => $vox->title,
+		                'description' => $vox->description,
+		                'stats_description' => $vox->stats_description
+		            ]),
+		        ));
+		    }
 		}
 
 		if (request()->has('testmode')) {
@@ -296,7 +307,6 @@ class VoxController extends FrontController
 	            		'reward-for-'.$vox->id => $vox->getRewardTotal()
 	            	]);
 	            }
-
 
         	} else {
 
