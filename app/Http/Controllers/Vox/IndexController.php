@@ -104,13 +104,10 @@ class IndexController extends FrontController
 	
 	public function surveys_public($locale=null) {
 
-		if(!empty($this->user)) {	
-
-	       	return redirect(getLangUrl('/'));
-	        
-		} else {
-
+		if(empty($this->user) || (!empty($this->user) && !$this->user->madeTest(11) ) ) {
 			return $this->survey_list($locale);
+		} else {
+			return redirect(getLangUrl('/'));
 		}
 	}
 
