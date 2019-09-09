@@ -21,11 +21,15 @@ use Redirect;
 
 use Carbon\Carbon;
 
+use App\Models\Reward;
 use App\Models\User;
 use App\Models\Page;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\City;
+use App\Models\Poll;
+use App\Models\PollAnswer;
+use App\Models\DcnReward;
 use App\Models\VoxAnswer;
 use App\Models\Vox;
 use App\Models\UserLogin;
@@ -106,6 +110,39 @@ class FrontController extends BaseController
                     ]);
                 }
             }
+
+            // if(!empty($this->user) && Cookie::get('daily_poll')){
+            //     $poll = json_decode(Cookie::get('daily_poll'), true);
+
+            //     $reward = new DcnReward;
+            //     $reward->user_id = $this->user->id;
+            //     $reward->reference_id = $poll['id'];
+            //     $reward->platform = 'vox';
+            //     $reward->type = 'daily_poll';
+            //     $reward->reward = Reward::getReward('daily_polls');
+
+            //     $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+            //     $dd = new DeviceDetector($userAgent);
+            //     $dd->parse();
+
+            //     if ($dd->isBot()) {
+            //         // handle bots,spiders,crawlers,...
+            //         $reward->device = $dd->getBot();
+            //     } else {
+            //         $reward->device = $dd->getDeviceName();
+            //         $reward->brand = $dd->getBrandName();
+            //         $reward->model = $dd->getModel();
+            //         $reward->os = $dd->getOs()['name'];
+            //     }
+
+            //     $reward->save();
+
+            //     PollAnswer::where('id', $poll['answer_id'])->update([
+            //         'user_id' => $this->user->id
+            //     ]);
+
+            //     Cookie::queue(Cookie::forget('daily_poll'));
+            // }
 
             if(!empty($this->user) && session('login-logged')!=$this->user->id){
                 $ul = new UserLogin;
@@ -286,6 +323,25 @@ class FrontController extends BaseController
         if( Request::getHost() == 'vox.dentacoin.com' ) {
             $params['noindex'] = true;
         }
+
+        // $daily_poll = Poll::where('launched_at', date('Y-m-d') )->where('status', 'open')->first();
+
+        // if (!empty($daily_poll)) {
+        //     $params['daily_poll'] = $daily_poll;
+
+        //     if(!empty($this->user)) {
+        //         $taken_daily_poll = PollAnswer::where('poll_id', $daily_poll->id)->where('user_id', $this->user->id)->first();
+
+        //         if ($taken_daily_poll) {
+        //             $params['taken_daily_poll'] = true;
+        //         }
+        //     }
+        // }
+
+        // if (Cookie::get('daily_poll')) {
+        //     $params['session_polls'] = true;
+        // }
+
 
         return view('vox.'.$page, $params);
     }
@@ -561,6 +617,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2019-08-19-02';
+        $params['cache_version'] = '2019-09-09';
     }
 }
