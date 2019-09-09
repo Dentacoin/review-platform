@@ -98,8 +98,6 @@ class StatsController extends FrontController
             $answerField = $scale_answer_id ? 'scale' : 'answer';
 
             $results = $this->prepareQuery($question_id, $dates, $scale_answer_id);
-        	$total = $this->prepareQuery($question_id, $dates, $scale_answer_id);
-            $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
     		$main_chart = [];
     		$second_chart = [];
@@ -130,6 +128,8 @@ class StatsController extends FrontController
 
         	if($type=='dependency') {
                 $answer_id = null;
+                $total = $this->prepareQuery($question_id, $dates, $scale_answer_id);
+                $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
                 $results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt');
                 $results = $results->get();
@@ -209,6 +209,8 @@ class StatsController extends FrontController
         		}
         	} else if($scale=='country_id') {
         		$countries = Country::get()->keyBy('id');
+                $total = $this->prepareQuery($question_id, $dates, $scale_answer_id);
+                $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
         		$results = $results->groupBy($answerField, 'country_id')->selectRaw($answerField.', country_id, COUNT(*) as cnt');
         		$results = $results->get();
@@ -240,6 +242,8 @@ class StatsController extends FrontController
         			}
         		}
         	} else if($scale=='age') {
+                $total = $this->prepareQuery($question_id, $dates, $scale_answer_id);
+                $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->whereNotNull('age')->first()->num;
         		$results = $results->groupBy($answerField, 'age')->selectRaw($answerField.', age, COUNT(*) as cnt');
         		$results = $results->get();
 
@@ -267,6 +271,8 @@ class StatsController extends FrontController
         			}
         		}
         	} else {
+                $total = $this->prepareQuery($question_id, $dates, $scale_answer_id);
+                $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->whereNotNull($scale)->first()->num;
         		$results = $results->groupBy($answerField, $scale)->selectRaw($answerField.', '.$scale.', COUNT(*) as cnt');
         		$results = $results->get();
 

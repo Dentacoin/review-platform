@@ -486,6 +486,7 @@ $(document).ready(function(){
 
                 //console.log('main chart data: ', main_chart_data);
                 $(this).find('.main-chart').show();
+                console.log($(this).find('.main-chart'));
                 drawChart(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, true);
 
                 $(this).find('.total-m').hide();
@@ -767,10 +768,15 @@ $(document).ready(function(){
                 }
 
                 for(var i=1; i<rows.length; i++) {
-                    $(container).append('<div class="group-heading">'+rows[i][0]+'</div>');
-                    var pl = 80*rows[i][1]/max;
-                    var color = fixedColor ? chart_colors[fixedColor-1] : rows[i][2];
-                    $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][1]*100).toFixed(1)+'%</div>');
+                    if (rows[i][1]*100 == 0 && $(window).outerWidth() < 768) {
+
+                    } else {
+                        $(container).append('<div class="group-heading">'+rows[i][0]+'</div>');
+                        var pl = 84*rows[i][1]/max;
+                        var color = fixedColor ? chart_colors[fixedColor-1] : rows[i][2];
+                    
+                        $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][1]*100).toFixed(1)+'%</div>');
+                    }
                 }
                 console.log(rows);
 
