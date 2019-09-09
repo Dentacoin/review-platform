@@ -297,6 +297,7 @@ class VoxController extends FrontController
 	            	]);
 	            }
 
+
         	} else {
 
 
@@ -804,6 +805,7 @@ class VoxController extends FrontController
 								$reward = new DcnReward;
 						        $reward->user_id = $this->user->id;
 						        $reward->reference_id = 11;
+						        $reward->type = 'survey';
 						        $reward->platform = 'vox';
 						        $reward->reward = 100;
 
@@ -833,6 +835,7 @@ class VoxController extends FrontController
 							        $reward->user_id = $this->user->id;
 							        $reward->reference_id = $vox->id;
 							        $reward->platform = 'vox';
+							        $reward->type = 'survey';
 							    }
 						        $reward->reward = $vox->getRewardForUser($this->user->id);
 						        $start = $list->first()->created_at;
