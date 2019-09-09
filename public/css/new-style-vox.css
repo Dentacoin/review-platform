@@ -7022,23 +7022,25 @@ p.h2-bold {
       background-position: 50% 100%;
       outline: none; }
 
-body.sp-vox-iframe header,
-body.sp-vox-iframe .footer-expander,
-body.sp-vox-iframe .col-md-3 {
-  display: none; }
-body.sp-vox-iframe .col-md-9 {
-  padding: 0px !important;
-  width: 100% !important;
-  min-height: auto !important; }
-body.sp-vox-iframe .container {
-  width: 100% !important;
-  padding: 0px !important; }
-body.sp-vox-iframe .site-content {
-  padding-top: 0px; }
-  body.sp-vox-iframe .site-content h2.page-title {
-    margin-top: 0px; }
-body.sp-vox-iframe .above-fold {
-  min-height: auto !important; }
+body.sp-vox-iframe {
+  min-height: 200px; }
+  body.sp-vox-iframe header,
+  body.sp-vox-iframe .footer-expander,
+  body.sp-vox-iframe .col-md-3 {
+    display: none; }
+  body.sp-vox-iframe .col-md-9 {
+    padding: 0px !important;
+    width: 100% !important;
+    min-height: auto !important; }
+  body.sp-vox-iframe .container {
+    width: 100% !important;
+    padding: 0px !important; }
+  body.sp-vox-iframe .site-content {
+    padding-top: 0px; }
+    body.sp-vox-iframe .site-content h2.page-title {
+      margin-top: 0px; }
+  body.sp-vox-iframe .above-fold {
+    min-height: auto !important; }
 
 .doublecoin-tooltip {
   position: absolute;

@@ -15,7 +15,10 @@ class BannedController extends FrontController
 	public function home($locale=null) {
 			
 		return $this->ShowVoxView('banned', array(
-			'ban_expires' => session('ban-expires')
+			'ban_expires' => session('ban-expires'),
+			'js' => [
+				'banned.js'
+			]
         ));
 
 	}
