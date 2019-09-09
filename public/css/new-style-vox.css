@@ -1228,9 +1228,12 @@ p.h2-bold {
       .section-vox-not-login .vox-title {
         margin-bottom: 10px; } }
   .section-vox-not-login .login-buttons {
-    padding-top: 50px;
+    padding-top: 30px;
     text-align: center; }
     @media screen and (max-height: 800px) and (min-width: 769px) {
+      .section-vox-not-login .login-buttons {
+        padding-top: 20px; } }
+    @media screen and (max-width: 768px) {
       .section-vox-not-login .login-buttons {
         padding-top: 20px; } }
     .section-vox-not-login .login-buttons p {
@@ -1308,6 +1311,9 @@ p.h2-bold {
       padding: 0px; }
     .section-vox-not-login .swiper-slide .survey-cats {
       margin-bottom: 15px; }
+      @media screen and (max-height: 800px) and (min-width: 769px) {
+        .section-vox-not-login .swiper-slide .survey-cats {
+          display: none; } }
     .section-vox-not-login .swiper-slide .wing {
       width: 205px;
       height: 170px;
@@ -1385,9 +1391,6 @@ p.h2-bold {
       @media screen and (max-width: 1080px) {
         .section-vox-not-login .swiper-slide .cover {
           padding-top: 45%; } }
-      @media screen and (max-height: 800px) and (min-width: 769px) {
-        .section-vox-not-login .swiper-slide .cover {
-          padding-top: 34%; } }
     .section-vox-not-login .swiper-slide .survey-cats span {
       font-size: 16px;
       margin-top: 5px; }

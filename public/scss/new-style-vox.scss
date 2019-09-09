@@ -1701,12 +1701,16 @@ body.vox-public {
 	}
 
 	.login-buttons {
-		padding-top: 50px;
+		padding-top: 30px;
 		text-align: center;
 
 		@media screen and (max-height: 800px) and (min-width: 769px ) {
 			padding-top: 20px;
 		}
+
+		@media #{$phone} {
+	    	padding-top: 20px;
+	    }
 
 		p {
 			color: #060606;
@@ -1816,6 +1820,10 @@ body.vox-public {
 
     	.survey-cats {
     		margin-bottom: 15px;
+
+    		@media screen and (max-height: 800px) and (min-width: 769px ) {
+	    		display: none;
+	    	}
     	}
 
     	.wing {
@@ -1924,9 +1932,9 @@ body.vox-public {
 		    	padding-top: 45%;
 		    }
 
-		    @media screen and (max-height: 800px) and (min-width: 769px ) {
-		    	padding-top: 34%;
-		    }
+		    // @media screen and (max-height: 800px) and (min-width: 769px ) {
+		    // 	padding-top: 34%;
+		    // }
 		}
 
 		.survey-cats {
