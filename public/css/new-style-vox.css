@@ -3050,6 +3050,11 @@ p.h2-bold {
         .page-statistics .stats .stat .contents .graphs .total b {
           color: #1c96d5;
           font-weight: bold; }
+      @media screen and (min-width: 1220px) {
+        .page-statistics .stats .stat .contents .graphs .total {
+          bottom: auto;
+          top: calc(50% + 135px);
+          transform: translateX(-50%) translateY(-50%); } }
       .page-statistics .stats .stat .contents .graphs .hint {
         bottom: auto;
         top: 5px;

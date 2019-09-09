@@ -4425,6 +4425,14 @@ body.vox-public {
 						}
 					}
 
+					.total {
+						@media screen and (min-width: 1220px) {
+							bottom: auto;
+						    top: calc(50% + 135px);
+						    transform: translateX(-50%) translateY(-50%);
+						}
+					}
+
 					.hint {
 						bottom: auto;
 						top: 5px;
