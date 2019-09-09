@@ -4453,7 +4453,9 @@ p.h2-bold {
     max-width: 95%;
     width: 1130px;
     overflow: hidden;
-    min-height: 487px; }
+    min-height: 487px;
+    top: 10px;
+    transform: translateX(-50%); }
     .popup.banned .wrapper .x {
       top: 5px;
       right: 5px; }

@@ -6347,6 +6347,8 @@ body.vox-public {
 			width: 1130px;
 			overflow: hidden;
 			min-height: 487px;
+			top: 10px;
+			transform: translateX(-50%);
 
 			.x {	
 				top: 5px;
