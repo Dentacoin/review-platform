@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Country;
 use App\Models\Dcn;
 use App\Models\Review;
+use App\Models\Poll;
 use App\Models\DcnTransaction;
 use Carbon\Carbon;
 use DB;
@@ -57,70 +58,73 @@ class Kernel extends ConsoleKernel
                 $field = 'notified'.(intval($key)+1);
                 $list = IncompleteRegistration::whereNull('completed')->whereNull('unsubscribed')->whereNull( $field )->where('created_at', '<', $time['time'])->get();
                 foreach ($list as $notify) {
-                    $u = User::find(3);
-                    $tmpEmail = $u->email;
-                    $tmpName = $u->name;
+                    if (!empty($notify->email)) {
+                        
+                        $u = User::find(3);
+                        $tmpEmail = $u->email;
+                        $tmpName = $u->name;
 
-                    echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
+                        echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
 
-                    $missingInfo = '';
-                    if($time['tempalte_id']==3) {
-                        if(empty($notify->address)) {
-                            $missingInfo .= '<b>Enter your clinic address and webpage or social media page. </b>
+                        $missingInfo = '';
+                        if($time['tempalte_id']==3) {
+                            if(empty($notify->address)) {
+                                $missingInfo .= '<b>Enter your clinic address and webpage or social media page. </b>
 Your practice will be easily found by patients looking for a dentist in your area.
 
 ';
-                        }
+                            }
 
-                        if(empty($notify->photo)) {
-                            $missingInfo .= '<b>Select your specialties</b>
+                            if(empty($notify->photo)) {
+                                $missingInfo .= '<b>Select your specialties</b>
 Based on your selection, your profile will show to patients who are searching for a particular type of dental specialist.
 
 <b>Upload your profile photo</b> - e.g. picture of you, the team, the clinic or your logo.
 Why include a photo? Profile photo makes your practice more recognizable and easier for patients to remember.';
 
-                        }
+                            }
 
-                        if(!empty($notify->address) && !empty($notify->photo)) {
-                            $missingInfo .= '<b>Create your profile.</b>
+                            if(!empty($notify->address) && !empty($notify->photo)) {
+                                $missingInfo .= '<b>Create your profile.</b>
 Click the check box and confirm the CAPTCHA.
 
 ';
+                            }
                         }
+                        if($time['tempalte_id']==5) {
+                            $parts = [];
+                            if(empty($notify->address)) {
+                                $parts[] = 'dental clinic contact details';
+                            }
+
+                            if(empty($notify->photo)) {
+                                $parts[] = 'profile photo';
+                            }
+
+                            if(!empty( $parts )) {
+                                $missingInfo .= 'It looks like last time you didn\'t have at hand your '.implode(' and ', $parts).'.';
+                            } else {
+                                $missingInfo .= 'It looks like you did not complete only the last step of your registration.';
+                            }
+                        }
+
+                        $u->email = $notify->email;
+                        $u->name = $notify->name;
+                        $u->save();
+                        $mail = $u->sendTemplate($time['tempalte_id'], [
+                            'link' => $notify->id.'/'.md5($notify->id.env('SALT_INVITE')),
+                            'missing-info' => $missingInfo,
+                        ]);
+
+                        $u->email = $tmpEmail;
+                        $u->name = $tmpName;
+                        $u->save();
+
+                        $notify->$field = true;
+                        $notify->save();
+
+                        $mail->delete();
                     }
-                    if($time['tempalte_id']==5) {
-                        $parts = [];
-                        if(empty($notify->address)) {
-                            $parts[] = 'dental clinic contact details';
-                        }
-
-                        if(empty($notify->photo)) {
-                            $parts[] = 'profile photo';
-                        }
-
-                        if(!empty( $parts )) {
-                            $missingInfo .= 'It looks like last time you didn\'t have at hand your '.implode(' and ', $parts).'.';
-                        } else {
-                            $missingInfo .= 'It looks like you did not complete only the last step of your registration.';
-                        }
-                    }
-
-                    $u->email = $notify->email;
-                    $u->name = $notify->name;
-                    $u->save();
-                    $mail = $u->sendTemplate($time['tempalte_id'], [
-                        'link' => $notify->id.'/'.md5($notify->id.env('SALT_INVITE')),
-                        'missing-info' => $missingInfo,
-                    ]);
-
-                    $u->email = $tmpEmail;
-                    $u->name = $tmpName;
-                    $u->save();
-
-                    $notify->$field = true;
-                    $notify->save();
-
-                    $mail->delete();
                 }
             }
 
@@ -260,7 +264,7 @@ NEW & FAILED TRANSACTIONS
                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                 echo $log.PHP_EOL;
 
-                if($trans->shouldRetry()) {
+                if($trans->status=='new' ||  $trans->shouldRetry()) {
                     $executed++;
                     Dcn::retry($trans);
                     echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
@@ -1076,6 +1080,21 @@ NEW & FAILED TRANSACTIONS
                 }
             }
         })->monthlyOn(1, '12:30');
+
+
+
+        //Daily Polls
+
+        $schedule->call(function () {
+
+            $daily_poll = Poll::where('launched_at', date('Y-m-d') )->first();
+
+            if (!empty($daily_poll)) {
+                $daily_poll->status = 'open';
+                $daily_poll->save();
+            }
+
+        })->dailyAt('06:00');
 
     }
 
