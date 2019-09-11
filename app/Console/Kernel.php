@@ -40,6 +40,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
+
+            echo 'Incomplete Dentist Registrations cron - START';
             
 
             $notificaitons[] = [
@@ -133,6 +135,8 @@ Click the check box and confirm the CAPTCHA.
         })->cron("*/5 * * * *"); //every 5 min
         
         $schedule->call(function () {
+            echo 'DCN Prices cron - Start';
+
             $price = null;
             //for($i=0;$i<5;$i++) {
 
@@ -394,6 +398,8 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'Suspicious Dentist Delete Cron - START';
+
             $users = User::where('is_dentist', '1')->where('status', 'pending')->where('created_at', '<', Carbon::now()->subDays(7) )->get();
 
             if (count($users)) {
@@ -438,6 +444,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'First 3 weeks engagement email 2 START';
 
             //First 3 weeks engagement      
 
@@ -840,6 +847,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'Balance over 200 000 Email 2 START';
             //users with balance over 200,000 DCN
 
             $query = "
@@ -925,6 +933,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'Monthly score Email START';
 
             $query = "
                 SELECT 
@@ -1106,6 +1115,7 @@ NEW & FAILED TRANSACTIONS
         //Daily Polls
 
         $schedule->call(function () {
+            echo 'Daily Poll START';
 
             $daily_poll = Poll::where('launched_at', date('Y-m-d') )->first();
 
