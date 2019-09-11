@@ -285,6 +285,8 @@ NEW & FAILED TRANSACTIONS
 
         $schedule->call(function () {
 
+            echo 'DCN Low Balance Cron - START!';
+
             $alerts = [
                 [
                     'currency' => 'DCN',
@@ -374,6 +376,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'DCN grace Cron - START!';
 
             $notify = User::where( 'grace_end', '>', Carbon::now()->addDays(23) )->whereNull('grace_notified')->get();
             if($notify->isNotEmpty()) {
