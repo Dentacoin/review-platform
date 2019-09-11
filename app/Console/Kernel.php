@@ -325,8 +325,10 @@ NEW & FAILED TRANSACTIONS
 
 
             foreach ($alerts as $data) {
+                echo ' DATA URL '.$data['url'];
                 $curl = file_get_contents($data['url']);
                 if(!empty($curl)) {
+                    echo ' CURL '.$curl;
                     $curl = json_decode($curl, true);
                     if(!empty(intval($curl['result']))) {
                         if( intval($curl['result']) < $data['limit'] ) { //0.25
