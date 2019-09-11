@@ -59,6 +59,7 @@ class Kernel extends ConsoleKernel
                 $list = IncompleteRegistration::whereNull('completed')->whereNull('unsubscribed')->whereNull( $field )->where('created_at', '<', $time['time'])->get();
                 foreach ($list as $notify) {
                     if (!empty($notify->email)) {
+                        echo 'USER: '.$notify;
                         echo 'USER EMAIL: '.$notify->email;
                         $u = User::find(3);
                         $tmpEmail = $u->email;
