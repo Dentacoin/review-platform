@@ -228,7 +228,7 @@ UNCONFIRMED TRANSACTIONS
                             if(!empty($curl['result']['status'])) {
                                 $trans->status = 'completed';
                                 $trans->save();
-                                if( $trans->user ) {
+                                if( $trans->user && !empty($trans->user->email) ) {
                                     $trans->user->sendTemplate( 20, [
                                         'transaction_amount' => $trans->amount,
                                         'transaction_address' => $trans->address,
@@ -375,9 +375,12 @@ NEW & FAILED TRANSACTIONS
             $notify = User::where( 'grace_end', '>', Carbon::now()->addDays(23) )->whereNull('grace_notified')->get();
             if($notify->isNotEmpty()) {
                 foreach ($notify as $nuser) {
-                    $nuser->sendTemplate( $nuser->platform=='vox' ? 11 : 39, null, ($nuser->platform=='vox' ? 'vox' : 'trp') ); 
-                    $nuser->grace_notified = true;
-                    $nuser->save();
+                    if (!empty($nuser->email)) {
+                        echo 'Grace user email: '.$nuser->email;
+                        $nuser->sendTemplate( $nuser->platform=='vox' ? 11 : 39, null, ($nuser->platform=='vox' ? 'vox' : 'trp') ); 
+                        $nuser->grace_notified = true;
+                        $nuser->save();
+                    }
                 }
             }
 
@@ -462,6 +465,8 @@ NEW & FAILED TRANSACTIONS
                     $user->sendGridTemplate(44);
                 }                
             }
+
+            echo 'First 3 weeks engagement email 2 DONE';
         
 
             //Email 3
@@ -523,6 +528,7 @@ NEW & FAILED TRANSACTIONS
                     }
                 }           
             }
+            echo 'First 3 weeks engagement email 3 DONE';
 
 
             //Email 4
@@ -554,6 +560,7 @@ NEW & FAILED TRANSACTIONS
                     $user->sendGridTemplate(47);
                 }       
             }
+            echo 'First 3 weeks engagement email 4 DONE';
             
 
             //Email 5
@@ -589,6 +596,7 @@ NEW & FAILED TRANSACTIONS
                     $user->sendGridTemplate(48, $substitutions);
                 }
             }
+            echo 'First 3 weeks engagement email 5 DONE';
 
             //Create a Wallet
             //!!!!!! (repeates for six months) !!!!!!!!!!
@@ -651,6 +659,7 @@ NEW & FAILED TRANSACTIONS
                 }
             }
 
+            echo 'Create Wallet Email DONE';
 
 
             //No reviews last 30 days
@@ -683,6 +692,7 @@ NEW & FAILED TRANSACTIONS
                     $user->sendGridTemplate(50);
                 }
             }
+            echo 'No reviews last 30 days Email 2 DONE';
 
 
             //Email3
@@ -747,7 +757,8 @@ NEW & FAILED TRANSACTIONS
                 } else {
                     $user->sendGridTemplate(52);
                 }   
-            }           
+            }
+            echo 'No reviews last 30 days Email 3 DONE';
 
 
 
@@ -815,6 +826,7 @@ NEW & FAILED TRANSACTIONS
                     $user->sendGridTemplate(54);
                 }   
             }
+            echo 'No reviews last 30 days Email 4 DONE';
 
 
         })->cron("15 */6 * * *"); //05:00h
@@ -895,6 +907,7 @@ NEW & FAILED TRANSACTIONS
                     $message->subject('Users with high balance');
                 });
             }
+            echo 'Balance over 200 000 Email 2 DONE';
 
         })->cron("0 10 * * *"); //05:00h
 
@@ -1079,6 +1092,7 @@ NEW & FAILED TRANSACTIONS
                     }       
                 }
             }
+            echo 'Monthly score Email  DONE';
         })->monthlyOn(1, '12:30');
 
 
@@ -1093,6 +1107,7 @@ NEW & FAILED TRANSACTIONS
                 $daily_poll->status = 'open';
                 $daily_poll->save();
             }
+            echo 'Daily Poll DONE';
 
         })->dailyAt('06:00');
 
