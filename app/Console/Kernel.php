@@ -1127,6 +1127,12 @@ NEW & FAILED TRANSACTIONS
 
         })->dailyAt('06:00');
 
+
+        $schedule->call(function () {
+            echo 'TEST CRON END';
+
+        })->cron("* * * * *"); //05:00h
+
     }
 
     /**
