@@ -234,6 +234,15 @@ class RegisterController extends FrontController
                 if($this->user) {
                     if($this->user->id==$user->id) {
                         Request::session()->flash('success-message', trans('trp.popup.registration.invite-yourself'));
+                    } else {
+                        if(!$this->user->wasInvitedBy($user->id)) {
+                            $inv = UserInvite::find($inv_id);
+                            if(!empty($inv)) {
+                                $inv->invited_id = $this->user->id;
+                                $inv->save();
+                            }
+                        }
+                        Request::session()->flash('success-message', trans('trp.popup.registration.invitation-registered', [ 'name' => $user->name ]));
                     }
                     return redirect( $user->getLink().$get );
                 } else {
