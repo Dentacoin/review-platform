@@ -213,7 +213,7 @@ class Vox extends Model {
 
         $to = $this->getSocialImagePath($type);
 
-        $img->fit(1200, 628);
+        $img->fit(1920, 1005);
         $img->save($to);
         if($type=='social') {
             $this->hasimage_social = true;
