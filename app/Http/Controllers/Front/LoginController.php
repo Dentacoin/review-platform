@@ -220,6 +220,17 @@ class LoginController extends FrontController
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
                 ->withInput();
             }
+
+            if(!empty(session('invitation_id'))) {
+
+                $inv_id = session('invitation_id');
+                $inv = UserInvite::find($inv_id);
+
+                if ( !empty($inv) && empty($inv->invited_id)) {
+                    $inv->invited_id = $user->id;
+                    $inv->save();
+                }
+            }
             
             Auth::login($user, true);
             if(empty($user->fb_id)) {
@@ -227,8 +238,27 @@ class LoginController extends FrontController
                 $user->save();      
             }
 
-            Request::session()->flash('success-message', trans('trp.popup.registration.have-account'));
-            return redirect(getLangUrl('/'));
+            if(!empty(session('invitation_id'))) {
+                $inv_id = session('invitation_id');
+                $inv = UserInvite::find($inv_id);
+
+                if(!empty($inv)) {
+                    $dentist_invitor = User::find($inv->user_id);
+
+                    if (!empty($dentist_invitor)) {
+                        Request::session()->flash('success-message', trans('trp.popup.registration.have-account'));
+                        return redirect($dentist_invitor->getLink());
+                    }
+                }
+
+                Request::session()->flash('success-message', trans('trp.popup.registration.have-account'));
+                return redirect(getLangUrl('/'));
+
+            } else {
+                Request::session()->flash('success-message', trans('trp.popup.registration.have-account'));
+                return redirect(getLangUrl('/'));
+            }
+
         } else {
 
             if (!empty($s_user->getEmail())) {
@@ -335,19 +365,17 @@ class LoginController extends FrontController
                 }
 
 
-                if($newuser->invited_by && $newuser->invitor->canInvite('trp')) {
+                if($newuser->invited_by && $newuser->invitor->canInvite('trp') && !empty(session('invitation_id'))) {
                     $inv_id = session('invitation_id');
-                    if($inv_id) {
-                        $inv = UserInvite::find($inv_id);
+                    $inv = UserInvite::find($inv_id);
 
-                        if (empty($inv->invited_id)) {
-                            $inv->invited_id = $newuser->id;
-                            $inv->save();
-                            
-                            $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
-                                'who_joined_name' => $newuser->getName()
-                            ] );
-                        }
+                    if (empty($inv->invited_id)) {
+                        $inv->invited_id = $newuser->id;
+                        $inv->save();
+                        
+                        $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
+                            'who_joined_name' => $newuser->getName()
+                        ] );
                     }
                 }
 
