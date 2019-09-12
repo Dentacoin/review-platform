@@ -13,7 +13,7 @@
 
 	<div class="section-register">
 
-		<form action="{{ getLangUrl('new-register/facebook') }}" method="post" id="new-register-form" style="display: none;">
+		<form action="{{ getVoxUrl('new-register/facebook') }}" method="post" id="new-register-form" style="display: none;">
 			{!! csrf_field() !!}
 			<input type="text" name="access-token" value="">
 			<button type="submit"></button>			

@@ -90,7 +90,7 @@ class LoginController extends FrontController
                 if( $path  ){
                     return redirect( getVoxUrl($path) );
                 }
-                return redirect( $intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getLangUrl('/')) );
+                return redirect( $intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/')) );
             } else {
                 //dd('Other error', $s_user, $s_user->user);
                 // Request::session()->flash('error-message', trans('vox.page.login.error-fb', [
@@ -321,7 +321,7 @@ class LoginController extends FrontController
 
                 Auth::login($newuser, true);
                 //Request::session()->flash('success-message', trans('vox.page.registration.success'));
-                return redirect(getLangUrl('/').'?success-message='.urlencode(trans('vox.page.registration.success')));
+                return redirect(getVoxUrl('/').'?success-message='.urlencode(trans('vox.page.registration.success')));
             } else {
                 return redirect( getVoxUrl('/').'?error-message='.urlencode(trans('vox.page.registration.no-fb-email')));
             }
