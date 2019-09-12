@@ -473,32 +473,56 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         $invitation->save();
                     }
 
-                    //Mega hack
-                    $dentist_name = $this->user->name;
-                    $dentist_email = $this->user->email;
-                    $this->user->name = Request::Input('name');
-                    $this->user->email = Request::Input('email');
-                    $this->user->save();
+                    $existing_patient = User::where('email', Request::Input('email') )->where('is_dentist', 0)->first();
+
+                    if(!empty($existing_patient)) {
+
+                        $substitutions = [
+                            'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                            'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
+                            'invited_user_name' => Request::Input('name'),
+                            "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
+                        ];
+
+                        $existing_patient->sendGridTemplate(68, $substitutions);
+
+                    } else {
+
+                        if(Request::Input('email') != $this->user->email) {
+
+                            //Mega hack
+                            $dentist_name = $this->user->name;
+                            $dentist_email = $this->user->email;
+                            $this->user->name = Request::Input('name');
+                            $this->user->email = Request::Input('email');
+                            $this->user->save();
 
 
-                    $substitutions = [
-                        'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-                        'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
-                        'invited_user_name' => $this->user->name,
-                        "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
-                    ];
+                            $substitutions = [
+                                'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                                'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
+                                'invited_user_name' => $this->user->name,
+                                "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
+                            ];
 
-                    $this->user->sendGridTemplate(59, $substitutions);
+                            $this->user->sendGridTemplate(59, $substitutions);
 
-                    // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
-                    //     'friend_name' => $dentist_name,
-                    //     'invitation_id' => $invitation->id
-                    // ]);
+                            // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
+                            //     'friend_name' => $dentist_name,
+                            //     'invitation_id' => $invitation->id
+                            // ]);
 
-                    //Back to original
-                    $this->user->name = $dentist_name;
-                    $this->user->email = $dentist_email;
-                    $this->user->save();
+                            //Back to original
+                            $this->user->name = $dentist_name;
+                            $this->user->email = $dentist_email;
+                            $this->user->save();
+
+                        } else {
+                            return Response::json(['success' => false, 'message' => 'You can\'t invite yourself' ] );
+                        }
+
+                    }
+
 
                     return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
                 }
