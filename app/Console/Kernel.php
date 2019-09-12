@@ -60,9 +60,8 @@ class Kernel extends ConsoleKernel
                 $field = 'notified'.(intval($key)+1);
                 $list = IncompleteRegistration::whereNull('completed')->whereNull('unsubscribed')->whereNull( $field )->where('created_at', '<', $time['time'])->get();
                 foreach ($list as $notify) {
-                    if (!empty($notify->email)) {
+                    if (!empty($notify->email) && filter_var($notify->email, FILTER_VALIDATE_EMAIL)) {
                         echo 'USER: '.$notify;
-                        echo 'USER EMAIL: '.$notify->email;
                         $u = User::find(3);
                         $tmpEmail = $u->email;
                         $tmpName = $u->name;
@@ -1129,7 +1128,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'TEST CRON END';
+            echo 'TEST CRON END  '.date('Y-m-d');
 
         })->cron("* * * * *"); //05:00h
 
