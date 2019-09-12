@@ -237,7 +237,7 @@ class RegisterController extends FrontController
                     } else {
                         if(!$this->user->wasInvitedBy($user->id)) {
                             $inv = UserInvite::find($inv_id);
-                            if(!empty($inv)) {
+                            if(!empty($inv) && empty($inv->invited_id)) {
                                 $inv->invited_id = $this->user->id;
                                 $inv->save();
                             }
@@ -249,6 +249,7 @@ class RegisterController extends FrontController
                     $sess = [
                         'invited_by' => $user->id,
                     ];
+
                     $inv = UserInvite::find($inv_id);
                     if(!empty($inv)) {
                         $sess['invitation_name'] = $inv->invited_name;

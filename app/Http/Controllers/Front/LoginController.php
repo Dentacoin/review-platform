@@ -103,6 +103,21 @@ class LoginController extends FrontController
                     ->withInput();
                 }
 
+
+                if(!empty(session('invitation_id'))) {
+
+                    $inv_id = session('invitation_id');
+                    if($inv_id) {
+                        $inv = UserInvite::find($inv_id);
+
+                        if (empty($inv->invited_id)) {
+                            $inv->invited_id = $user->id;
+                            $inv->save();
+                        }
+                    }
+                }
+
+
                 $sess = [
                     'login_patient' => true,
                 ];
@@ -324,17 +339,16 @@ class LoginController extends FrontController
                     $inv_id = session('invitation_id');
                     if($inv_id) {
                         $inv = UserInvite::find($inv_id);
-                    }
 
-                    if (empty($inv->invited_id)) {
-                        $inv->invited_id = $newuser->id;
-                        $inv->save();
-                        
-                        $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
-                            'who_joined_name' => $newuser->getName()
-                        ] );
+                        if (empty($inv->invited_id)) {
+                            $inv->invited_id = $newuser->id;
+                            $inv->save();
+                            
+                            $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
+                                'who_joined_name' => $newuser->getName()
+                            ] );
+                        }
                     }
-
                 }
 
                 $sess = [
