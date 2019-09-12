@@ -1182,8 +1182,8 @@
 			        					<td>
 			        						@if($inv->invited_id)
 
-												@if(!empty(\App\Models\Review::where('user_id', $inv->invited_id)->where('dentist_id', $user->id)->orderby('id', 'desc')->first()))
-													<a review-id="{{ \App\Models\Review::where('user_id', $inv->invited_id)->where('dentist_id', $user->id)->orderby('id', 'desc')->first()->id }}" href="javascript:;" class="ask-review">
+												@if(!empty($inv->hasReview($user->id)))
+													<a review-id="{{ $inv->hasReview($user->id) }}" href="javascript:;" class="ask-review">
 														{{ trans('trp.page.profile.invite.status-review') }}
 													</a>
 												@else
