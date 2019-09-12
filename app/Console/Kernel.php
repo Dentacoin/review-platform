@@ -1128,7 +1128,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'TEST CRON END  '.date('Y-m-d');
+            echo 'TEST CRON END  '.date('Y-m-d H:i:s');
 
         })->cron("* * * * *"); //05:00h
 
