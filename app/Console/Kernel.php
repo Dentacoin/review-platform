@@ -1124,7 +1124,7 @@ NEW & FAILED TRANSACTIONS
             }
             echo 'Daily Poll DONE';
 
-        })->dailyAt('07:33');
+        })->dailyAt('01:00');
 
 
         $schedule->call(function () {
