@@ -324,20 +324,17 @@ class LoginController extends FrontController
                     $inv_id = session('invitation_id');
                     if($inv_id) {
                         $inv = UserInvite::find($inv_id);
-                    } else {
-                        $inv = new UserInvite;
-                        $inv->user_id = $newuser->invited_by;
-                        $inv->invited_email = $newuser->email;
-                        $inv->invited_name = $newuser->name;
-                        $inv->save();
                     }
 
-                    $inv->invited_id = $newuser->id;
-                    $inv->save();
+                    if (empty($inv->invited_id)) {
+                        $inv->invited_id = $newuser->id;
+                        $inv->save();
+                        
+                        $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
+                            'who_joined_name' => $newuser->getName()
+                        ] );
+                    }
 
-                    $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
-                        'who_joined_name' => $newuser->getName()
-                    ] );
                 }
 
                 $sess = [
