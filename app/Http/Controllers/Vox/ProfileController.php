@@ -287,7 +287,7 @@ class ProfileController extends FrontController
         }
 
         $more_surveys = false;
-        $rewards = DcnReward::where('user_id', $this->user->id)->where('platform', 'vox')->where('reference_id', '!=', 34)->get();
+        $rewards = DcnReward::where('user_id', $this->user->id)->where('platform', 'vox')->where('type', 'survey')->where('reference_id', '!=', 34)->get();
         if ($rewards->count() == 1 && $rewards->first()->vox_id == 11) {
             $more_surveys = true;
         }

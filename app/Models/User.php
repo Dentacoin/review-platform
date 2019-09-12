@@ -470,14 +470,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
                             $now = Carbon::now();
 
-                            if ($now->month == '8') {
-                                $cur_month_rating = array_values($aggregated)[0];
-                                $cur_month_label = array_keys($aggregated)[0];
-                                
-                            } else {
-                                $cur_month_rating = array_values($aggregated)[1];
-                                $cur_month_label = array_keys($aggregated)[1];
-                            }
+                            $arrayIndex = (intval(date('Y')) - 2019)*12 + intval(date('n')); // + ....
+                            $arrayIndex = $arrayIndex % 9;
+
+                            $cur_month_rating = array_values($aggregated)[$arrayIndex];
+                            $cur_month_label = array_keys($aggregated)[$arrayIndex];
 
                             $ret[] = [
                                 'title' => trans('trp.strength.dentist.invites.rating-this-month.title'),
@@ -839,13 +836,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 ];
                 $array_number_shuffle['not_important']++;
 
-                $first_part = array_slice($ret, 0, $array_number_shuffle['important'], true);
-                shuffle($first_part);
+                // $first_part = array_slice($ret, 0, $array_number_shuffle['important'], true);
+                // shuffle($first_part);
 
-                $last_part = array_slice($ret, $array_number_shuffle['important'], $array_number_shuffle['not_important'], true);
-                shuffle($last_part);
+                // $last_part = array_slice($ret, $array_number_shuffle['important'], $array_number_shuffle['not_important'], true);
+                // shuffle($last_part);
 
-                $ret = array_merge($first_part, $last_part);
+                // $ret = array_merge($first_part, $last_part);
 
 
                 // $ret['photo-dentist'] = $this->hasimage ? true : false;
@@ -2120,19 +2117,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function madeTest($id) {
         return DcnReward::where('user_id', $this->id)
+        ->where('type', 'survey')
         ->where('platform', 'vox')
         ->where('reference_id', $id)
         ->first();
     }
 
     public function filledVoxes() {
-        return DcnReward::where('user_id', $this->id)->where('platform', 'vox')->with('vox')->whereHas('vox', function ($query) {
+        return DcnReward::where('user_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->with('vox')->whereHas('vox', function ($query) {
             $query->where('type', 'normal');
         })->get()->pluck('reference_id')->toArray();
     }
 
     public function filledFeaturedVoxes() {
-        return DcnReward::where('user_id', $this->id)->where('platform', 'vox')->with('vox')->whereHas('vox', function ($query) {
+        return DcnReward::where('user_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->with('vox')->whereHas('vox', function ($query) {
             $query->where('type', 'normal')->where('featured', 1);
         })->get()->pluck('reference_id')->toArray();
     }
@@ -2256,11 +2254,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         $gas = json_decode($url, true);
 
-        if(intVal($gas['gasPrice']) > intVal($gas['treshold']) ) {
-            return true;
-        } else {
-            return false;
-        }
+        // if(intVal($gas['gasPrice']) > intVal($gas['treshold']) ) {
+        //     return true;
+        // } else {
+        //     return false;
+        // }
+
+        return false;
     }
 
     public function loggedFromBadIp() {
@@ -2314,6 +2314,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $reward = new DcnReward;
                 $reward->user_id = $this->id;
                 $reward->reference_id = $first->id;
+                $reward->type = 'survey';
                 $reward->reward = $first->getRewardTotal();
                 $reward->platform = 'vox';
 

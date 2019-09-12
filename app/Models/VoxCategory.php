@@ -15,6 +15,8 @@ class VoxCategory extends Model {
 
     protected $fillable = [
         'name',
+        'color',
+        'hasimage',
     ];
 
     public $timestamps = false;
@@ -38,6 +40,29 @@ class VoxCategory extends Model {
         return $this->voxes->filter(function($vox) use ($answer_ids) {
             return !in_array($vox->vox_id, $answer_ids);
         });
+    }
+
+    public function getImageUrl($thumb = false) {
+        return $this->hasimage ? url('/storage/voxcategories/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.png') : url('new-vox-img/no-avatar-0.png');
+    }
+    public function getImagePath($thumb = false) {
+        $folder = storage_path().'/app/public/voxcategories/'.($this->id%100);
+        if(!is_dir($folder)) {
+            mkdir($folder);
+        }
+        return $folder.'/'.$this->id.($thumb ? '-thumb' : '').'.png';
+    }
+
+    public function addImage($img) {
+
+        $to = $this->getImagePath();
+        $to_thumb = $this->getImagePath(true);
+
+        $img->save($to);
+        $img->fit( 50, 50 );
+        $img->save($to_thumb);
+        $this->hasimage = true;
+        $this->save();
     }
 
 }

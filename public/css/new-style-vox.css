@@ -3122,11 +3122,13 @@ p.h2-bold {
             font-size: 12px;
             line-height: 20px; }
             .page-statistics .stats .stat .contents .graphs .chart .mobile-chart .custombar span {
+              width: 0%;
               display: block;
               height: 10px;
               margin-right: 10px;
               transform: translateY(50%);
-              float: left; }
+              float: left;
+              transition: all 0.5s ease; }
           .page-statistics .stats .stat .contents .graphs .chart .mobile-chart .group-heading {
             display: block;
             margin-top: 5px;
@@ -4866,7 +4868,8 @@ p.h2-bold {
       .popup.daily-poll .popup-inner .content .poll-question {
         font-size: 21px;
         font-weight: 600;
-        margin-bottom: 35px; }
+        margin-bottom: 35px;
+        max-width: 500px; }
         @media screen and (max-width: 1000px) {
           .popup.daily-poll .popup-inner .content .poll-question {
             font-size: 18px;
@@ -4958,7 +4961,13 @@ p.h2-bold {
           padding-left: 45px; }
           @media screen and (max-width: 1000px) {
             .popup.daily-poll .popup-inner .content .blue-button.sign {
-              min-width: auto; } }
+              min-width: auto;
+              position: relative;
+              bottom: auto;
+              right: auto;
+              margin-top: 30px;
+              padding-left: 60px;
+              font-size: 16px; } }
           .popup.daily-poll .popup-inner .content .blue-button.sign img {
             max-width: 24px;
             position: absolute;
@@ -5041,11 +5050,13 @@ p.h2-bold {
           font-size: 12px;
           line-height: 20px; }
           .popup.daily-poll .popup-inner .content #chart-poll .custombar span {
+            width: 0%;
             display: block;
             height: 10px;
             margin-right: 10px;
             transform: translateY(50%);
-            background-color: #1ebfd8; }
+            background-color: #1ebfd8;
+            transition: all 0.5s ease; }
         .popup.daily-poll .popup-inner .content #chart-poll .group-heading {
           display: block;
           margin-top: 5px;
@@ -7316,15 +7327,28 @@ svg:not(:root) {
       position: absolute;
       right: 0px;
       top: 0px; }
+    #calendar .poll-day i {
+      position: absolute;
+      top: 6px;
+      right: 27px; }
     #calendar .poll-day .poll-q {
       font-size: 16px;
       font-weight: 300;
       color: #060606;
       padding-left: 4px;
-      padding-top: 3px; }
+      padding-top: 3px;
+      max-height: 64px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical; }
       @media screen and (max-width: 1200px) {
         #calendar .poll-day .poll-q {
           font-size: 13px; } }
+      @media screen and (max-width: 992px) {
+        #calendar .poll-day .poll-q {
+          -webkit-line-clamp: 2;
+          padding-top: 0px; } }
     #calendar .poll-day .poll-image {
       max-width: 28px; }
       @media screen and (max-width: 1200px) {
@@ -7507,3 +7531,73 @@ svg:not(:root) {
         @media screen and (max-width: 1080px) {
           #calendar .fc-list-empty-wrap1 .list-event .poll-stat-image {
             max-width: 16px; } }
+
+.daily-poll-welcome {
+  text-align: center; }
+  @media screen and (max-width: 768px) {
+    .daily-poll-welcome .flex-mobile {
+      align-items: center; } }
+  @media screen and (max-width: 768px) {
+    .daily-poll-welcome .flex-mobile .col:first-child {
+      order: 2;
+      text-align: left; } }
+  .daily-poll-welcome h3 {
+    margin-bottom: 5px; }
+    @media screen and (max-width: 768px) {
+      .daily-poll-welcome h3 {
+        font-size: 20px; } }
+  .daily-poll-welcome h4 {
+    margin-bottom: 25px; }
+    @media screen and (max-width: 768px) {
+      .daily-poll-welcome h4 {
+        font-size: 17px; } }
+    .daily-poll-welcome h4 b {
+      color: #3bade5;
+      font-weight: normal; }
+    .daily-poll-welcome h4.title-next {
+      margin-top: 35px;
+      font-weight: bold;
+      margin-bottom: 30px; }
+      @media screen and (max-width: 768px) {
+        .daily-poll-welcome h4.title-next {
+          font-size: 21px;
+          margin-top: 20px; } }
+  .daily-poll-welcome img {
+    max-width: 100%; }
+  .daily-poll-welcome .doing-next {
+    margin-bottom: 65px; }
+    @media screen and (max-width: 768px) {
+      .daily-poll-welcome .doing-next {
+        display: block; } }
+    .daily-poll-welcome .doing-next .col > img {
+      max-width: 126px;
+      display: block;
+      margin: 0 auto 20px; }
+      @media screen and (max-width: 768px) {
+        .daily-poll-welcome .doing-next .col > img {
+          display: none; } }
+    @media screen and (max-width: 768px) {
+      .daily-poll-welcome .doing-next .col .blue-button {
+        position: relative;
+        display: block;
+        max-width: 260px;
+        margin-right: auto;
+        margin-left: auto;
+        margin-bottom: 20px;
+        text-align: left;
+        padding-left: 53px;
+        padding-top: 15px;
+        padding-bottom: 15px; } }
+    .daily-poll-welcome .doing-next .col .blue-button img {
+      display: none; }
+      @media screen and (max-width: 768px) {
+        .daily-poll-welcome .doing-next .col .blue-button img {
+          display: block;
+          position: absolute;
+          max-width: 60px;
+          left: -20px;
+          top: 50%;
+          transform: translateY(-50%);
+          border: 5px solid #38ace5;
+          border-radius: 50%;
+          background-color: #38ace5; } }

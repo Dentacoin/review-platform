@@ -268,7 +268,7 @@
                             <div class="col-md-10">
                                 @foreach(json_decode($question->{'answers:en'}, true) as $key => $ans)
                                     <label for="stats-scale-answers-{{ $key + 1 }}">
-                                        <input type="checkbox" name="stats_scale_answers[]" value="{{ $key + 1 }}" id="stats-scale-answers-{{ $key + 1 }}" style="vertical-align: sub;" {!! !empty($question->stats_scale_answers) && !empty(json_decode($question->stats_scale_answers, true)[$key]) ? 'checked="checked"' : '' !!} />
+                                        <input type="checkbox" name="stats_scale_answers[]" value="{{ $key + 1 }}" id="stats-scale-answers-{{ $key + 1 }}" style="vertical-align: sub;" {!! !empty($question->stats_scale_answers) && in_array(($key+1), json_decode($question->stats_scale_answers, true)) ? 'checked="checked"' : '' !!} />
                                         {{ $question->removeAnswerTooltip($ans) }} &nbsp;&nbsp;&nbsp;&nbsp;
                                     </label>
                                 @endforeach

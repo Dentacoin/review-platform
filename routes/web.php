@@ -121,6 +121,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('vox/categories', 					'VoxesController@categories');
 	Route::any('vox/categories/add', 				'VoxesController@add_category');
 	Route::any('vox/categories/edit/{id}', 			'VoxesController@edit_category');
+	Route::any('vox/categories/edit/{id}/delpic',   'VoxesController@delete_cat_image');
 	Route::any('vox/categories/delete/{id}', 		'VoxesController@delete_category');
 	Route::get('vox/scales', 						'VoxesController@scales');
 	Route::any('vox/scales/add', 					'VoxesController@add_scale');
@@ -131,6 +132,15 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/explorer/{vox_id?}/{question_id?}', 	'VoxesController@explorer');
 	Route::any('vox/export-survey-data', 			'VoxesController@export_survey_data');
 	Route::any('vox/duplicate-question', 			'VoxesController@duplicate_question');
+
+	Route::get('vox/polls', 						'PollsController@list');
+	Route::any('vox/polls/add', 					'PollsController@add');
+	Route::any('vox/polls/edit/{id}', 				'PollsController@edit');
+	Route::get('vox/polls/delete/{id}', 			'PollsController@delete');	
+	Route::any('vox/polls/change-date/{id}', 		'PollsController@change_poll_date');
+	Route::any('vox/polls/change-question/{id}', 	'PollsController@change_poll_question');
+	Route::any('vox/polls/duplicate/{id}', 			'PollsController@duplicate_poll');
+	Route::any('vox/polls-explorer/{id?}', 			'PollsController@polls_explorer');
 
 	Route::get('emails', 							'EmailsController@list');
 	Route::get('emails/{what?}', 					'EmailsController@list');
@@ -147,11 +157,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('claims/approve/{id}', 				'DentistClaimsController@approve');
 	Route::any('claims/reject/{id}', 				'DentistClaimsController@reject');
 	Route::any('claims/suspicious/{id}', 			'DentistClaimsController@suspicious');
-
-	Route::get('polls', 							'PollsController@list');
-	Route::any('polls/add', 						'PollsController@add');
-	Route::any('polls/edit/{id}', 					'PollsController@edit');
-	Route::get('polls/delete/{id}', 				'PollsController@delete');
 });
 
 
@@ -352,6 +357,15 @@ $voxRoutes = function () {
 			Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');
 			Route::any('get-started/{id}', 						'VoxController@home_slug');
 			Route::any('start-over', 							'VoxController@start_over');
+
+			Route::any('daily-polls', 							'PollsController@list');
+			Route::any('daily-polls/{date}', 					'PollsController@show_popup_poll');
+			Route::any('daily-polls/{date}/stats', 				'PollsController@show_popup_stats_poll');
+			Route::post('get-polls', 							'PollsController@get_polls');
+			Route::post('poll/{id}', 							'PollsController@dopoll');
+			Route::post('get-poll-content/{id}', 				'PollsController@get_poll_content');
+			Route::post('get-poll-stats/{id}', 					'PollsController@get_poll_stats');
+
 
 			Route::any('vpn', 									'VpnController@list');
 

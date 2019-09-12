@@ -69,7 +69,7 @@ class Vox extends Model {
     }
     
     public function respondentsCount() {
-        return DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->has('user')->count();   
+        return DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->count();   
     }
 
     public function respondentsCountryCount() {
@@ -84,6 +84,7 @@ class Vox extends Model {
             $counted_countries = DB::table('users')
             ->join('dcn_rewards', 'users.id', '=', 'dcn_rewards.user_id')
             ->where('dcn_rewards.platform', 'vox')
+            ->where('dcn_rewards.type', 'survey')
             ->where('dcn_rewards.reference_id', $this->id)
             ->select(DB::raw('COUNT(*) AS `cnt`'))
             ->groupBy(DB::raw('users.country_id'))
@@ -107,7 +108,7 @@ class Vox extends Model {
     }
 
     public function rewards() {
-        return $this->hasMany('App\Models\DcnReward', 'reference_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
+        return $this->hasMany('App\Models\DcnReward', 'reference_id', 'id')->where('platform', 'vox')->where('type', 'survey')->orderBy('id', 'DESC');
     }
 
     public function related() {

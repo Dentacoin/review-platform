@@ -192,4 +192,11 @@ $(document).ready(function(){
 
 	} );
 
+
+	$('.scroll-to-surveys').click( function() {
+		$('html, body').animate({
+        	scrollTop: $('#strength-parent').offset().top
+        }, 500);
+	});
+
 });

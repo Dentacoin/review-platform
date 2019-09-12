@@ -313,6 +313,7 @@ class UsersController extends AdminController
             $users = $users
             ->select(DB::raw('count(dcn_rewards.id) as vox_count, users.*'))
             ->join('dcn_rewards', 'users.id', '=', 'dcn_rewards.user_id', 'left outer')
+            ->where('dcn_rewards.type', 'survey')
             ->where('dcn_rewards.reference_id', '!=', 11)
             ->where('dcn_rewards.platform', 'vox')
             ->groupBy('dcn_rewards.user_id')

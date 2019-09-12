@@ -66,10 +66,13 @@ return [
                 'badges' => 'badges',
                 'explorer' => 'explorer',
                 'export-survey-data' => 'export-survey-data',
+                'polls' => 'polls',
+                'polls-explorer' => 'polls-explorer',
             ),
             'js' => array(
                 'vox.js',
                 'faq.js',
+                'polls.js',
             ),
         ),
         'rewards' => array(

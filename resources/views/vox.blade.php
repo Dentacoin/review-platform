@@ -50,6 +50,13 @@
             @endforeach
         @endif
 
+        @if($current_page == 'daily-polls')
+        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/core/main.min.css').'?ver='.$cache_version }}" />
+        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/daygrid/main.min.css').'?ver='.$cache_version }}" />
+        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/timegrid/main.min.css').'?ver='.$cache_version }}" />
+        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/list/main.min.css').'?ver='.$cache_version }}" />
+        @endif
+
         @if(!empty($csscdn) && is_array($csscdn))
             @foreach($csscdn as $file)
 				<link rel="stylesheet" type="text/css" href="{{ $file }}" />
@@ -227,6 +234,9 @@
 			@include('vox.popups.suspended')
 		@endif
 
+		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && request()->getHost() != 'vox.dentacoin.com' && empty($session_polls)) || ($current_page == 'daily-polls') )
+			@include('vox.popups.daily-poll')
+		@endif
 
 		@if(!empty($unbanned))
 			<div class="popup unbanned active">
@@ -484,7 +494,7 @@
 			    });
 			</script>
 		@endif
-		@if(!empty( $markLogin )) 
+		@if(!empty( $markLogin ) || $current_page=='banned' ) 
 			@include('sso')
 		@endif
 		@if(!empty( $markLogout )) 
@@ -503,6 +513,13 @@
             @foreach($js as $file)
                 <script src="{{ url('/js-vox/'.$file).'?ver='.$cache_version }}"></script>
             @endforeach
+        @endif
+        @if($current_page == 'daily-polls')
+        	<script src="{{ url('/calendar/core/main.min.js').'?ver='.$cache_version }}"></script>
+        	<script src="{{ url('/calendar/interaction/main.min.js').'?ver='.$cache_version }}"></script>
+        	<script src="{{ url('/calendar/daygrid/main.min.js').'?ver='.$cache_version }}"></script>
+        	<script src="{{ url('/calendar/timegrid/main.min.js').'?ver='.$cache_version }}"></script>
+        	<script src="{{ url('/calendar/list/main.min.js').'?ver='.$cache_version }}"></script>
         @endif
         @if(!empty($jscdn) && is_array($jscdn))
             @foreach($jscdn as $file)

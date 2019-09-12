@@ -3,8 +3,47 @@
 @section('content')
 
 	<div class="container">
+		@if(request()->exists('daily-answer'))
+			<div class="daily-poll-welcome">
+				<div class="flex-mobile">
+					<div class="col">
+				    	<h3>{{ trans('vox.page.home.daily-poll.title') }}</h3>
+				    	<h4>{!! nl2br(trans('vox.page.home.daily-poll.subtitle', ['reward' => '<b>'. App\Models\Reward::getReward('daily_polls').' DCN</b>'])) !!}</h4>
+				    </div>
+				    <div class="col">
+		    			<img src="{{ url('new-vox-img/welcome-daily-poll.png') }}">
+		    		</div>
+		    	</div>
+		    	<h4 class="title-next">{{ trans('vox.page.home.daily-poll.next-title') }}</h4>
+
+		    	<div class="flex doing-next">
+		    		<div class="col">
+		    			<img src="{{ url('new-vox-img/browse-polls-icon-white.png') }}">
+		    			<a href="{{ getLangUrl('daily-polls') }}" class="blue-button">
+			    			<img src="{{ url('new-vox-img/browse-polls-icon-white.svg') }}">
+				    		{{ trans('vox.page.home.daily-poll.browse-polls') }}
+				    	</a>
+		    		</div>
+		    		<div class="col">
+		    			<img src="{{ url('new-vox-img/take-paid-surveys-white.png') }}">
+		    			<a href="javascript:;" class="blue-button scroll-to-surveys">
+		    				<img src="{{ url('new-vox-img/take-paid-surveys-white.svg') }}">
+		    				{{ trans('vox.page.home.daily-poll.take-surveys') }}
+		    			</a>
+		    		</div>
+		    		<div class="col">
+		    			<img src="{{ url('new-vox-img/check-stats-white.png') }}">
+		    			<a href="{{ getLangUrl('dental-survey-stats') }}" class="blue-button">
+		    				<img src="{{ url('new-vox-img/check-stats-white.svg') }}">
+		    				{{ trans('vox.page.home.daily-poll.check-stats') }}
+		    			</a>
+		    		</div>
+		    	</div>
+		    </div>
+		@endif
+
 		@if(!empty($user))
-			<div class="strength-parent">
+			<div class="strength-parent" id="strength-parent">
 				@include('vox.template-parts.strength-scale')
 			</div>
 		@endif
@@ -175,7 +214,6 @@
 			</div>
 	            
 		</div>
-	</div>
-    	
+	</div>    	
     	
 @endsection

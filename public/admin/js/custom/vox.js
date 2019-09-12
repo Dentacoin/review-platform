@@ -365,8 +365,6 @@ $(document).ready(function(){
 		},
 	}).disableSelection();
 
-
-
 	var symbolsCount = function() {
 		var parent = $(this).closest('.col-md-4');
 		var length = $(this).val().length;

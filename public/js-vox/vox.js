@@ -306,7 +306,7 @@ $(document).ready(function(){
                             i++;
                         } while(go_back_group.length);
 
-                        $('.question-group .answer-checkbox.active input').prop('checked', false);
+                        $('.question-group .answer-radio.active-label input').prop('checked', false);
                         $('.question-group .answer-checkbox.active').removeClass('active');
                         $('.question-group .answer-radio.active-label').removeClass('active-label');
                         $('.question-group input.answer').prop('disabled', false);

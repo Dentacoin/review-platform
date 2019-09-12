@@ -50,6 +50,34 @@
                             </div>
                         </div>
                     @endforeach
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Color</label>
+                        <div class="col-md-9">
+                            {{ Form::text('color', !empty($item) ? $item->color : null, array('class' => 'form-control')) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px; max-width: 200px;">Icon</label>
+                        <div class="col-md-9">
+                            {{ Form::file('icon', ['id' => 'icon', 'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}<br/>
+                            * Square PNG Image, Min Width 50px, up to 2 MB<br/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="featured" class="col-md-3 control-label" style="padding-top: 0px; max-width: 200px;">&nbsp;</label>
+                        @if(!empty($item) && $item->hasimage)
+                            <div class="col-md-9">
+                                <a target="_blank" href="{{ $item->getImageUrl() }}">
+                                    <img src="{{ $item->getImageUrl(true) }}" style="background: #2f7de1; width: 50px;" />
+                                </a>
+                                <br/>
+                                <a href="{{ url('cms/vox/categories/edit/'.$item->id.'/delpic') }}">Delete photo</a>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
 

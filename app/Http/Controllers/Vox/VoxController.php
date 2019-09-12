@@ -362,7 +362,7 @@ class VoxController extends FrontController
 
 		        			if( $should_reward ) {
 
-			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->update(
+			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
 			        				array(
 			        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
 			        				))
@@ -372,7 +372,7 @@ class VoxController extends FrontController
 		        		} else if ($type == 'location-question') {
 
 		        			if($this->user->country_id===null) {
-			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->update(
+			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
 			        				array(
 			        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
 			        				))
@@ -392,7 +392,7 @@ class VoxController extends FrontController
 		        		} else if ($type == 'birthyear-question') {
 
 		        			if($this->user->birthyear===null) {
-			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->update(
+			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
 			        				array(
 			        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
 			        				))
@@ -414,7 +414,7 @@ class VoxController extends FrontController
 		        		} else if ($type == 'gender-question') {
 
 		        			if($this->user->gender===null) {
-			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->update(
+			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
 			        				array(
 			        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
 			        				))
@@ -838,7 +838,7 @@ class VoxController extends FrontController
 	        				}
 
 					        if(count($answered) == count($vox->questions)) {
-					        	$reward = DcnReward::where('user_id', $this->user->id)->where('reference_id', $vox->id)->where('platform', 'vox')->first();
+					        	$reward = DcnReward::where('user_id', $this->user->id)->where('reference_id', $vox->id)->where('platform', 'vox')->where('type', 'survey')->first();
 
 					        	if (empty($reward)) {
 									$reward = new DcnReward;
@@ -1108,6 +1108,7 @@ class VoxController extends FrontController
 
 					DcnReward::where('reference_id', $vox->id)
 					->where('platform', 'vox')
+					->where('type', 'survey')
 					->where('user_id', $this->user->id)
 					->delete();
 				}

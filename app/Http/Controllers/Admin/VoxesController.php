@@ -731,6 +731,7 @@ class VoxesController extends AdminController
 
         if(Request::isMethod('post')) {
             $item = new VoxCategory;
+            $item->color = $this->request->input('color');
             $item->save();
 
             foreach ($this->langs as $key => $value) {
@@ -740,6 +741,12 @@ class VoxesController extends AdminController
                     $translation->name = $this->request->input('category-name-'.$key);
                     $translation->save();
                 }
+            }
+
+
+            if( Input::file('icon') ) {
+                $img = Image::make( Input::file('icon') )->orientate();
+                $item->addImage($img);
             }
         
             Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.category.added'));
@@ -754,6 +761,18 @@ class VoxesController extends AdminController
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.category.deleted') );
         return redirect('cms/vox/categories');
+    }
+
+    public function delete_cat_image( $id ) {
+        $item = VoxCategory::find($id);
+
+        if(!empty($item)) {
+            $item->hasimage = false;
+            $item->save();
+        }
+
+        $this->request->session()->flash('success-message', trans('Image Deleted') );
+        return redirect('cms/vox/categories/edit/'.$id);
     }
 
     public function edit_category( $id ) {
@@ -771,7 +790,13 @@ class VoxesController extends AdminController
                         $translation->save();
                     }
                 }
+                $item->color = $this->request->input('color');
                 $item->save();
+
+                if( Input::file('icon') ) {
+                    $img = Image::make( Input::file('icon') )->orientate();
+                    $item->addImage($img);
+                }
             
                 Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.category.updated'));
                 return redirect('cms/vox/categories');
@@ -959,6 +984,7 @@ class VoxesController extends AdminController
             } else {
                 if (request()->input( 'country' )) {
                     $items_count = DcnReward::where('reference_id',$vox_id )
+                    ->where('type', 'survey')
                     ->where('platform', 'vox')
                     ->select('dcn_rewards.*')
                     ->has('user')
@@ -966,7 +992,10 @@ class VoxesController extends AdminController
                     ->join('countries', 'users.country_id', '=', 'countries.id')
                     ->count();
                 } else {
-                    $items_count = DcnReward::where('reference_id',$vox_id )->where('platform', 'vox')->has('user')->count();
+                    $items_count = DcnReward::where('reference_id',$vox_id )
+                    ->where('platform', 'vox')
+                    ->where('type', 'survey')
+                    ->has('user')->count();
                 }
             }
 
@@ -1023,7 +1052,7 @@ class VoxesController extends AdminController
                 $respondents = '';
 
             } else {
-                $respondents = DcnReward::where('reference_id',$vox_id )->where('platform', 'vox')->has('user')->select('dcn_rewards.*');
+                $respondents = DcnReward::where('reference_id',$vox_id )->where('platform', 'vox')->where('type', 'survey')->has('user')->select('dcn_rewards.*');
                 if (request()->input( 'country' )) {
                     $order = request()->input( 'country' );
                     $respondents = $respondents
@@ -1179,7 +1208,7 @@ class VoxesController extends AdminController
                 $cols2
             ];
 
-            $users = DcnReward::where('reference_id',$vox->id )->where('platform', 'vox')->with('user');
+            $users = DcnReward::where('reference_id',$vox->id )->where('platform', 'vox')->where('type', 'survey')->with('user');
             if( request('date-from') ) {
                 $users->where('created_at', '>=', new Carbon(request('date-from')));
             }
