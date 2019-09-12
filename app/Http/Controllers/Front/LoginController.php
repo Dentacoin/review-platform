@@ -130,7 +130,7 @@ class LoginController extends FrontController
 
     public function facebook_register($locale=null, $type='patient') {
         config(['services.facebook.redirect' => getLangUrl('register/callback/facebook') ]);
-        return Socialite::driver('facebook')->scopes(['user_location', 'user_age_range'])
+        return Socialite::driver('facebook')->scopes(['user_location'])
         ->redirect();
     }
 /*
@@ -154,7 +154,7 @@ class LoginController extends FrontController
         if (!Request::has('code') || Request::has('denied')) {
             return redirect( getLangUrl('register') );
         }
-        return $this->try_social_register(Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email', 'user_age_range', 'location'])->user(), 'fb');
+        return $this->try_social_register(Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email', 'location'])->user(), 'fb');
     }
 /*
     public function twitter_callback_register() {
