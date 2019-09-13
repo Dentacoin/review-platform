@@ -152,7 +152,7 @@ class LoginController extends FrontController
                 }
 
                 //Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
-                return redirect(getVoxUrl('/').'?success-message='.urlencode(trans('vox.popup.register.have-account')));
+                return redirect($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/').'?success-message='.urlencode(trans('vox.popup.register.have-account'))) );
             }
         } else {
             if (!empty($s_user->getEmail())) {
