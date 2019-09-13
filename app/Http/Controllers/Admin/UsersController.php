@@ -1089,7 +1089,8 @@ class UsersController extends AdminController
                 $welcome_old = VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->first();
                 if(!empty($welcome_old)) {
                     $oldans= $welcome_old->old_answer;
-                    $oq = json_decode($welcome_question->answers, true)[($oldans) -1];
+                    $n = $oldans != 0 ? (($oldans) -1) : 1;
+                    $oq = json_decode($welcome_question->answers, true)[$n ];
                 } else {
                     $oq = '';
                 }
