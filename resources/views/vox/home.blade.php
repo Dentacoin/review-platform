@@ -11,7 +11,7 @@
 				    	<h4>{!! nl2br(trans('vox.page.home.daily-poll.subtitle', ['reward' => '<b>'. App\Models\Reward::getReward('daily_polls').' DCN</b>'])) !!}</h4>
 				    </div>
 				    <div class="col">
-		    			<img src="{{ url('new-vox-img/welcome-daily-poll.png') }}">
+		    			<img class="poll-man" src="{{ url('new-vox-img/welcome-daily-poll.png') }}">
 		    		</div>
 		    	</div>
 		    	<h4 class="title-next">{{ trans('vox.page.home.daily-poll.next-title') }}</h4>

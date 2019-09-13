@@ -10652,6 +10652,10 @@ svg:not(:root) {
 .daily-poll-welcome {
 	text-align: center;
 
+	@media screen and (max-height: 800px) and (min-width: 769px ) {
+		margin-top: -30px;
+	}
+
 	.flex-mobile {
 		@media #{$phone} {
 			align-items: center;
@@ -10698,9 +10702,14 @@ svg:not(:root) {
 		}
 	}
 
+	.poll-man {
+		@media screen and (max-height: 800px) and (min-width: 769px ) {
+			height: 220px;
+		}
+	}
+
 	img {
 		max-width: 100%;
-
 	}
 
 	.doing-next {
@@ -10716,6 +10725,10 @@ svg:not(:root) {
 				max-width: 126px;
 				display: block;
 	   			margin: 0 auto 20px;
+
+	   			@media screen and (max-height: 800px) and (min-width: 769px ) {
+					max-width: 106px;
+				}
 
 	   			@media #{$phone} {
 	   				display: none;

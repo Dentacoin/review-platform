@@ -7534,6 +7534,9 @@ svg:not(:root) {
 
 .daily-poll-welcome {
   text-align: center; }
+  @media screen and (max-height: 800px) and (min-width: 769px) {
+    .daily-poll-welcome {
+      margin-top: -30px; } }
   @media screen and (max-width: 768px) {
     .daily-poll-welcome .flex-mobile {
       align-items: center; } }
@@ -7562,6 +7565,9 @@ svg:not(:root) {
         .daily-poll-welcome h4.title-next {
           font-size: 21px;
           margin-top: 20px; } }
+  @media screen and (max-height: 800px) and (min-width: 769px) {
+    .daily-poll-welcome .poll-man {
+      height: 220px; } }
   .daily-poll-welcome img {
     max-width: 100%; }
   .daily-poll-welcome .doing-next {
@@ -7573,6 +7579,9 @@ svg:not(:root) {
       max-width: 126px;
       display: block;
       margin: 0 auto 20px; }
+      @media screen and (max-height: 800px) and (min-width: 769px) {
+        .daily-poll-welcome .doing-next .col > img {
+          max-width: 106px; } }
       @media screen and (max-width: 768px) {
         .daily-poll-welcome .doing-next .col > img {
           display: none; } }
