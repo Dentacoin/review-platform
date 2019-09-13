@@ -766,7 +766,7 @@ class RegisterController extends FrontController
 
                             Request::session()->flash('success-message', trans('vox.page.registration.success'));
                             $ret['success'] = true;
-                            $ret['redirect'] = getLangUrl('welcome-to-dentavox');
+                            $ret['redirect'] = getLangUrl('/');
                         }
 
                     }
