@@ -241,21 +241,23 @@ class PollsController extends FrontController
 			if(!$this->user) {
 
 				if ($valid) {
-					$answer = new PollAnswer;
-			        $answer->user_id = 0;
-			        $answer->poll_id = $poll->id;
-			        $answer->answer = $a;
-		        	$answer->save();
+					if(!Auth::guard('admin')->user()) {
+						$answer = new PollAnswer;
+				        $answer->user_id = 0;
+				        $answer->poll_id = $poll->id;
+				        $answer->answer = $a;
+			        	$answer->save();
 
-		        	$cv = Cookie::get('daily_poll');
-		        	if(empty($cv)) {
-		        		$cv = [];
-		        	} else {
-		        		$cv = json_decode($cv, true);
-		        	}
-					
-					$cv[$poll->id] = $answer->id;
-		        	Cookie::queue('daily_poll', json_encode($cv), 1440, null, '.dentacoin.com');
+			        	$cv = Cookie::get('daily_poll');
+			        	if(empty($cv)) {
+			        		$cv = [];
+			        	} else {
+			        		$cv = json_decode($cv, true);
+			        	}
+						
+						$cv[$poll->id] = $answer->id;
+			        	Cookie::queue('daily_poll', json_encode($cv), 1440, null, '.dentacoin.com');
+			        }
 
 		        	$this->checkStatus($poll);
 
