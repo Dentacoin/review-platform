@@ -34,15 +34,19 @@ class PollsController extends FrontController
 {
 
 	public function list($locale=null) {
+
+		$social_image = url('new-vox-img/daily-polls-home.jpg');
 		
 		return $this->ShowVoxView('daily-polls', array(
 			'js' => [
         		'polls.js'
         	],
+			'social_image' => $social_image,
         ));
 	}
 
 	public function show_popup_poll($locale=null, $date) {
+		$social_image = url('new-vox-img/daily-polls-home.jpg');
 
 		$time = strtotime($date);
 		$newformat = date('Y-m-d',$time);
@@ -52,11 +56,13 @@ class PollsController extends FrontController
 			'js' => [
         		'polls.js'
         	],
+			'social_image' => $social_image,
         ));
 		
 	}
 
 	public function show_popup_stats_poll($locale=null, $date) {
+		$social_image = url('new-vox-img/daily-polls-home.jpg');
 
 		$time = strtotime($date);
 		$newformat = date('Y-m-d',$time);
@@ -67,6 +73,7 @@ class PollsController extends FrontController
 			'js' => [
         		'polls.js'
         	],
+			'social_image' => $social_image,
         ));
 		
 	}
