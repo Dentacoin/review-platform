@@ -305,6 +305,11 @@ $(document).ready(function(){
 		                			}
 	                			}
 	                		}
+
+                            if (ret.daily_polls[i].scheduled) {
+                                $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').append('<i class="fas fa-clock"></i>');
+                                $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').addClass('admin');
+                            }
                 		}
 						//heights();
 

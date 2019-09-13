@@ -7474,6 +7474,10 @@ svg:not(:root) {
         #calendar .fc-list-empty-wrap1 .list-event .mobile-poll-date .poll-day-mobile {
           color: #060606;
           font-weight: 300; }
+      #calendar .fc-list-empty-wrap1 .list-event i {
+        position: absolute;
+        left: 57px;
+        top: 2px; }
       #calendar .fc-list-empty-wrap1 .list-event .mobile-poll-content {
         flex: 1;
         padding-left: 52px;
