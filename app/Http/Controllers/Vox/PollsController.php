@@ -20,6 +20,7 @@ use DB;
 use Cookie;
 
 use Carbon\Carbon;
+use App\Models\Admin;
 use App\Models\User;
 use App\Models\Poll;
 use App\Models\PollAnswer;
@@ -277,34 +278,36 @@ class PollsController extends FrontController
 
 			if( $valid && empty($taken_daily_poll) ) {
 
-				$answer = new PollAnswer;
-		        $answer->user_id = $this->user->id;
-		        $answer->poll_id = $poll->id;
-		        $answer->answer = $a;
-	        	$answer->save();
+				if(!Auth::guard('admin')->user()) {
+					$answer = new PollAnswer;
+			        $answer->user_id = $this->user->id;
+			        $answer->poll_id = $poll->id;
+			        $answer->answer = $a;
+		        	$answer->save();
 
-				$reward = new DcnReward;
-		        $reward->user_id = $this->user->id;
-		        $reward->reference_id = $poll->id;
-		        $reward->platform = 'vox';
-		        $reward->type = 'daily_poll';
-		        $reward->reward = Reward::getReward('daily_polls');
+					$reward = new DcnReward;
+			        $reward->user_id = $this->user->id;
+			        $reward->reference_id = $poll->id;
+			        $reward->platform = 'vox';
+			        $reward->type = 'daily_poll';
+			        $reward->reward = Reward::getReward('daily_polls');
 
-		        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                $dd = new DeviceDetector($userAgent);
-                $dd->parse();
+			        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+	                $dd = new DeviceDetector($userAgent);
+	                $dd->parse();
 
-                if ($dd->isBot()) {
-                    // handle bots,spiders,crawlers,...
-                    $reward->device = $dd->getBot();
-                } else {
-                    $reward->device = $dd->getDeviceName();
-                    $reward->brand = $dd->getBrandName();
-                    $reward->model = $dd->getModel();
-                    $reward->os = $dd->getOs()['name'];
-                }
+	                if ($dd->isBot()) {
+	                    // handle bots,spiders,crawlers,...
+	                    $reward->device = $dd->getBot();
+	                } else {
+	                    $reward->device = $dd->getDeviceName();
+	                    $reward->brand = $dd->getBrandName();
+	                    $reward->model = $dd->getModel();
+	                    $reward->os = $dd->getOs()['name'];
+	                }
 
-		        $reward->save();
+			        $reward->save();
+			    }
 
 		        $this->checkStatus($poll);
 
