@@ -254,7 +254,7 @@ class PollsController extends FrontController
 		        	}
 					
 					$cv[$poll->id] = $answer->id;
-		        	Cookie::queue('daily_poll', json_encode($cv), 1440);
+		        	Cookie::queue('daily_poll', json_encode($cv), 1440, null, '.dentacoin.com');
 
 		        	$this->checkStatus($poll);
 
