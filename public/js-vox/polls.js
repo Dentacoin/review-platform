@@ -311,6 +311,7 @@ $(document).ready(function(){
 						setTimeout( function() {
 
 							$('.fc-scroller').css('height', $('.fc-list-empty-wrap1').outerHeight());
+                            console.log($('.fc-scroller').height());
 						}, 100);
 
 
@@ -335,6 +336,7 @@ $(document).ready(function(){
         ajax_is_running = false;
     }
 
+
 	$('.fc-listMonth-button').click( function() {
 		calendarListEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
 	});
@@ -351,6 +353,10 @@ $(document).ready(function(){
 
 	if ($(window).innerWidth() <= 768) {
 		$('.fc-listMonth-button').trigger('click');
+
+        $(window).on('scroll', function() {
+            $('.fc-scroller').css('height', $('.fc-list-empty-wrap1').outerHeight());
+        });
 	}
     
 
