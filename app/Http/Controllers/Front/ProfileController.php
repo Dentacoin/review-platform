@@ -511,14 +511,22 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                             $this->user->save();
 
 
-                            $substitutions = [
-                                'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-                                'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
-                                'invited_user_name' => $this->user->name,
-                                "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
-                            ];
+                            if ( $this->user->is_dentist) {
+                                $substitutions = [
+                                    'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                                    'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
+                                    'invited_user_name' => $this->user->name,
+                                    "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
+                                ];
 
-                            $this->user->sendGridTemplate(59, $substitutions);
+
+                                $this->user->sendGridTemplate(59, $substitutions);
+                            } else {
+                                $this->user->sendTemplate( 17 , [
+                                    'friend_name' => $dentist_name,
+                                    'invitation_id' => $invitation->id
+                                ]);
+                            }
 
                             // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
                             //     'friend_name' => $dentist_name,
