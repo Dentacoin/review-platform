@@ -102,7 +102,7 @@
 							<div id="civic-wait" class="alert alert-info" style="display: none;">
 								{!! nl2br(trans('front.common.civic.wait')) !!}
 							</div>
-							<input type="hidden" id="jwtAddress" value="{{ getLangUrl('register/civic') }}" />
+							<input type="hidden" id="jwtAddress" value="{{ getLangUrl('register/civic', null, 'https://dentavox.dentacoin.com') }}" />
 						</div>
 
 						<div class="reg-dentists col-md-6">
