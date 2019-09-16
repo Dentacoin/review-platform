@@ -25,7 +25,7 @@ class VerifyCsrfToken extends BaseVerifier
         'cms/*',
         '*/dental-survey-stats/*',
         '*/register/upload',
-        '*/register/civic',
+        '*/new-register/civic',
         '*/registration/upload',
         '*/profile/avatar',
         '*/youtube',
