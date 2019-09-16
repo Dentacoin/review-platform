@@ -374,10 +374,11 @@
 					</a>
 					<div class="footer-text col-md-6 tac">
 						<div class="footer-menu">
+							<a href="{{ getLangUrl('daily-polls') }}">{{ trans('vox.footer.daily-polls') }}</a>
+							<a href="{{ getLangUrl('dental-survey-stats') }}">{{ trans('vox.footer.stats') }}</a>
+							<a href="https://dentavox.dentacoin.com/blog/" target="_blank">{{ trans('vox.footer.blog') }}</a>
 							<a href="{{ getLangUrl('faq') }}">{{ trans('vox.footer.faq') }}</a>
 							<a class="privacy-item" href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
-							<a href="https://dentacare.dentacoin.com/" target="_blank">{{ trans('vox.footer.dentacare') }}</a>
-							<a href="https://reviews.dentacoin.com/" target="_blank">{{ trans('vox.footer.trp') }}</a>
 						</div>
 						<small>
 							{{ trans('vox.footer.copyrights') }}

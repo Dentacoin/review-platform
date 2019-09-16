@@ -4024,6 +4024,9 @@ p.h2-bold {
 .footer-expander {
   height: 147px;
   overflow: hidden; }
+  @media screen and (max-width: 1080px) {
+    .footer-expander {
+      height: 187px; } }
   @media screen and (max-width: 768px) {
     .footer-expander {
       height: auto; } }
@@ -4037,6 +4040,10 @@ p.h2-bold {
     justify-content: center;
     display: flex;
     position: relative; }
+    @media screen and (max-width: 1080px) {
+      .footer-expander footer {
+        height: 157px;
+        bottom: -187px; } }
     @media screen and (max-width: 768px) {
       .footer-expander footer {
         position: static;
@@ -4098,7 +4105,7 @@ p.h2-bold {
           .footer-expander footer .footer-menu a {
             display: inline-block;
             border-right: 1px solid black;
-            padding: 0px 18px;
+            padding: 0px 15px;
             margin: 8px 0px;
             font-size: 15px; } }
         @media screen and (max-width: 768px) {
@@ -4108,6 +4115,11 @@ p.h2-bold {
           border-right: none;
           padding-right: 0px;
           margin-right: 0px; }
+        @media screen and (max-width: 768px) {
+          .footer-expander footer .footer-menu a:nth-last-child(2) {
+            border-right: none;
+            padding-right: 0px;
+            margin-right: 0px; } }
         .footer-expander footer .footer-menu a:hover {
           color: #38a2e5;
           transition: all 0.3s ease; }

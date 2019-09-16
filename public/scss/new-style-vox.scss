@@ -5727,6 +5727,10 @@ body.vox-public {
 	height: 147px;
 	overflow: hidden;
 
+	@media #{$tablet} {
+		height: 187px;
+	}
+
 	@media #{$phone} {
 		height: auto;
 	}
@@ -5742,6 +5746,10 @@ body.vox-public {
 		display: flex;
 		position: relative;
 
+		@media #{$tablet} {
+			height: 157px;
+			bottom: -187px;
+		}
 
 		@media #{$phone} {
 			position: static;
@@ -5826,7 +5834,7 @@ body.vox-public {
 				@media #{$phone} {
 					display: inline-block;
 					border-right: 1px solid black;
-    				padding: 0px 18px;
+    				padding: 0px 15px;
     				margin: 8px 0px;
     				font-size: 15px;
 				}
@@ -5837,11 +5845,18 @@ body.vox-public {
 					}
 				}
 
-
 				&:last-child {
 					border-right: none;
 					padding-right: 0px;
 					margin-right: 0px;
+				}
+
+				&:nth-last-child(2) {
+					@media #{$phone} {
+						border-right: none;
+						padding-right: 0px;
+						margin-right: 0px;
+					}
 				}
 				
 				&:hover {

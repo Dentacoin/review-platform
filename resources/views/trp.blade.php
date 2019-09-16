@@ -189,6 +189,7 @@
 					</a>
 					<div class="footer-text col-md-6 tac">
 						<div class="footer-menu">
+							<a href="https://reviews.dentacoin.com/blog/" target="_blank">Blog</a>
 							<a href="{{ getLangUrl('faq') }}">FAQ</a>
 							<a href="https://dentacoin.com/privacy-policy/" target="_blank">Privacy Policy</a>
 							<a href="https://dentavox.dentacoin.com/" target="_blank">Dentavox</a>
