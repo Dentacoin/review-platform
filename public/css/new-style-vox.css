@@ -4811,6 +4811,13 @@ p.h2-bold {
           align-items: normal;
           padding: 20px;
           display: block; } }
+      .popup.daily-poll .popup-inner .content.poll-stats-wrapper p {
+        font-size: 18px;
+        color: #888;
+        margin-bottom: 20px; }
+        @media screen and (max-width: 1000px) {
+          .popup.daily-poll .popup-inner .content.poll-stats-wrapper p {
+            font-size: 16px; } }
       .popup.daily-poll .popup-inner .content.poll-closed-wrapper {
         flex-direction: column; }
         .popup.daily-poll .popup-inner .content.poll-closed-wrapper h2 {

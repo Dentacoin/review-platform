@@ -6821,6 +6821,18 @@ body.vox-public {
 					display: block;
 				}
 
+				&.poll-stats-wrapper {
+					p {
+						font-size: 18px;
+						color: #888;
+						margin-bottom: 20px;
+
+						@media screen and (max-width: 1000px) {
+							font-size: 16px;
+						}
+					}
+				}
+
 				&.poll-closed-wrapper {
 					flex-direction: column;
 

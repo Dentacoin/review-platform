@@ -50,7 +50,13 @@
 				<h3 alternative-title="{!! nl2br(trans('vox.daily-polls.popup.we-asked')) !!}" title="{!! nl2br(trans('vox.daily-polls.popup.get-exited', ['reward' => '<b>'. App\Models\Reward::getReward('daily_polls').' DCN</b>'])) !!}">
 					{!! nl2br(trans('vox.daily-polls.popup.get-exited', ['reward' => '<b>'. App\Models\Reward::getReward('daily_polls').' DCN</b>'])) !!}
 				</h3>
+				@if(!empty($daily_poll))
+					<p>
+						Respondents: {{ $daily_poll->respondentsCount() }}/100 people
+					</p>
+				@endif
 				{!! csrf_field() !!}
+
 				<div class="poll-question">
 					{{ !empty($daily_poll) ? $daily_poll->question : '' }}
 				</div>

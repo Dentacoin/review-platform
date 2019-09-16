@@ -65,6 +65,7 @@ $(document).ready(function(){
                 	pollStats(ret.chart);
                 	$('#poll-popup').find('.poll-stats-wrapper h3').html($('#poll-popup').find('.poll-stats-wrapper h3').attr('alternative-title'));
                     $('#poll-popup').find('.poll-question').html(ret.title);
+                    $('#poll-popup').find('.poll-stats-wrapper p').remove();
                 	$('#poll-popup').find('.poll-form-wrapper').hide();
                 	$('#poll-popup').find('.poll-closed-wrapper').hide();
                 	$('#poll-popup').find('.poll-stats-wrapper').show();
