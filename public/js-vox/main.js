@@ -1189,6 +1189,8 @@ $(document).ready(function(){
 	                	} else {
 	                		$('.next-poll').attr('poll-id', data.next_poll);
 	                	}
+
+						$('#poll-popup').find('.poll-stats-wrapper p').remove();
 	                	$('<p>'+data.respondents+'</p>').insertAfter('.poll-stats-wrapper h3');
 	                } else {
 	                	if (data.closed_poll) {
