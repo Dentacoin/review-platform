@@ -250,6 +250,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserAsk', 'user_id', 'id')->where('dentist_id', $dentist_id)->first();
     }
 
+    public function canAskDentist($dentist_id) {
+        $user_ask = UserAsk::where('user_id', $this->id)->where('dentist_id', $dentist_id )->orderBy('id', 'desc')->first();
+
+        if (!empty($user_ask)) {
+            $days = $user_ask->created_at->diffInDays( Carbon::now() );
+            if($days>30) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
     public function isBanned($domain) {
         foreach ($this->bans as $ban) {
             if($ban->domain==$domain && ($ban->expires===null || Carbon::now()->lt( $ban->expires ) ) ) {
@@ -1515,6 +1530,30 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $dr ? $dr : ( $cr ? $cr : null );
     }
 
+    public function cantSubmitReviewToSameDentist($dentist_id) {
+
+        if ($this->hasReviewTo($dentist_id)) {
+
+            $review = $this->hasReviewTo($dentist_id);
+
+            $days = $review->created_at->diffInDays( Carbon::now() );
+            if($days>93) {
+                return false;
+            } else {
+                $heAllowed = UserAsk::where('user_id', $this->id)
+                ->where('dentist_id', $dentist_id)
+                ->where('status', 'yes')
+                ->where('created_at', '>=', Carbon::now()->modify('-3 months'))
+                ->first();
+
+                return $heAllowed ? false : true;
+            }
+
+        } else {
+            return false;
+        }
+    }
+
     public function usefulVotesForDenist($dentist_id) {
         $myid = $this->id;
         return Review::where([
@@ -2250,9 +2289,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public static function isGasExpensive() {
 
-        $url = file_get_contents('https://dentacoin.net/gas-price');
+        // $url = file_get_contents('https://dentacoin.net/gas-price');
 
-        $gas = json_decode($url, true);
+        // $gas = json_decode($url, true);
 
         // if(intVal($gas['gasPrice']) > intVal($gas['treshold']) ) {
         //     return true;
