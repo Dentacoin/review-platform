@@ -1,15 +1,13 @@
-@if($current_page != 'daily-polls')
-	<div class="poll-bubble">
-		<img class="main-bubble-image" src="{{ url('new-vox-img/daily-poll-first.png') }}">
-		<div class="white-bubble">
-			<a href="javascript:;" class="close-bubble"><img src="{{ url('new-vox-img/close-popup.png') }}"></a>
-			<h4>{!! nl2br(trans('vox.daily-polls.popup.title')) !!}</h4>
-			<p><span class="daily-respondents">{{ !empty($daily_poll) ? $daily_poll->respondentsCount() : '' }}</span>/100 people</p>
-			<div class="poll-reward twerk-it"><img src="{{ url('new-vox-img/coin-icon.png') }}">{{ App\Models\Reward::getReward('daily_polls') }} DCN</div>
-			<a href="javascript:;" class="answer-poll" data-popup="poll-popup">{!! nl2br(trans('vox.daily-polls.popup.answer')) !!}</a>
-		</div>
+<div class="poll-bubble">
+	<img class="main-bubble-image" src="{{ url('new-vox-img/daily-poll-first.png') }}">
+	<div class="white-bubble">
+		<a href="javascript:;" class="close-bubble"><img src="{{ url('new-vox-img/close-popup.png') }}"></a>
+		<h4>{!! nl2br(trans('vox.daily-polls.popup.title')) !!}</h4>
+		<p><span class="daily-respondents">{{ !empty($daily_poll) ? $daily_poll->respondentsCount() : '' }}</span>/100 people</p>
+		<div class="poll-reward twerk-it"><img src="{{ url('new-vox-img/coin-icon.png') }}">{{ App\Models\Reward::getReward('daily_polls') }} DCN</div>
+		<a href="javascript:;" class="answer-poll" data-popup="poll-popup">{!! nl2br(trans('vox.daily-polls.popup.answer')) !!}</a>
 	</div>
-@endif
+</div>
 
 <div class="popup fixed-popup popup-with-background daily-poll close-on-shield" id="poll-popup">
 	<div class="popup-inner">

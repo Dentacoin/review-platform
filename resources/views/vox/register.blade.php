@@ -37,7 +37,6 @@
 				<div class="col-md-9">
 					<h3 class="tac">
 						{!! trans('vox.page.register.title') !!}
-						
 					</h3>
 					<p class="reg-desc">
 						{!! nl2br(trans('vox.page.register.subtitle')) !!}

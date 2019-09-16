@@ -234,7 +234,7 @@
 			@include('vox.popups.suspended')
 		@endif
 
-		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && request()->getHost() != 'vox.dentacoin.com' && empty($session_polls)) || ($current_page == 'daily-polls') )
+		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && request()->getHost() != 'vox.dentacoin.com' && empty($session_polls)) )
 			@include('vox.popups.daily-poll')
 		@endif
 
