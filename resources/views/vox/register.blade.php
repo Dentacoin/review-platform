@@ -19,7 +19,7 @@
 			<button type="submit"></button>			
 		</form>
 
-		<form action="{{ getLangUrl('new-register/civic') }}" method="post" id="new-register-form-civic" style="display: none;">
+		<form action="{{ getVoxUrl('new-register/civic') }}" method="post" id="new-register-form-civic" style="display: none;">
 			{!! csrf_field() !!}
 			<input type="text" name="jwttoken" value="">
 			<button type="submit"></button>			
