@@ -19,6 +19,12 @@
 			<button type="submit"></button>			
 		</form>
 
+		<form action="{{ getLangUrl('new-register/civic') }}" method="post" id="new-register-form-civic" style="display: none;">
+			{!! csrf_field() !!}
+			<input type="text" name="jwttoken" value="">
+			<button type="submit"></button>			
+		</form>
+
 		<form action="{{ getVoxUrl('registration') }}" id="register-form" method="post" role="form" data-toggle="validator" class="form-horizontal">
 			{!! csrf_field() !!}
 
@@ -102,7 +108,7 @@
 							<div id="civic-wait" class="alert alert-info" style="display: none;">
 								{!! nl2br(trans('front.common.civic.wait')) !!}
 							</div>
-							<input type="hidden" id="jwtAddress" value="{{ getVoxUrl('register/civic') }}" />
+							<input type="hidden" id="jwtAddress" value="{{ getLangUrl('register/civic') }}" />
 						</div>
 
 						<div class="reg-dentists col-md-6">

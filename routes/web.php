@@ -342,6 +342,7 @@ $voxRoutes = function () {
 			Route::any('login/civic', 							'LoginController@civic');
 
 			Route::any('new-register/facebook', 				'LoginController@new_facebook_register');
+			Route::post('new-register/civic', 					'RegisterController@new_civic_register');
 			
 			Route::any('status', 								'LoginController@status');
 

@@ -16,10 +16,10 @@ $(document).ready(function(){
 				return;
 			}
 			
-        	if( $(this).hasClass('loading') ) {
-        		return;
-        	}
-        	$(this).addClass('loading');
+        	// if( $(this).hasClass('loading') ) {
+        	// 	return;
+        	// }
+        	// $(this).addClass('loading');
             $('#civic-error').hide();
             $('#withdraw-widget .alert').hide();
             civicSip.signup({ style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP });
@@ -55,36 +55,43 @@ $(document).ready(function(){
 
         				$('#civic-wait').show();
                         console.log(jwtToken);
-                        setTimeout(function() {
-                            $.post( 
-                                $('#jwtAddress').val(), 
-                                {
-                                    jwtToken: jwtToken,
-                                    '_token': $('#register-civic-button').closest('form').find('input[name="_token"]').val()
-                                }, 
-                                function( data ) {
-                                    if(data.weak) {
-                                        $('#civic-weak').show();
-                                        civicError();
-                                    } else if(data.popup) {
-                                        $('#'+data.popup).addClass('active');
-                                    } else if(data.success) {
-                                    	if( data.redirect ) {
-                                    		window.location.href = data.redirect;	
-                                    	} else {
-                                    		window.location.reload();
-                                    	}
-                                    } else {
-                                        $('#civic-error').show();
-                                        civicError();
-                                    }
-                                }, "json"
-                            )
-                            .fail(function(xhr, status, error) {
-                                $('#civic-error').show();
-                                civicError();
-                            });
-                        }, 3000);
+
+
+                        $('#new-register-form-civic input[name="jwttoken"]').val(jwtToken);
+                        $('#new-register-form-civic').submit();
+
+
+
+                        // setTimeout(function() {
+                        //     $.post( 
+                        //         $('#jwtAddress').val(), 
+                        //         {
+                        //             jwtToken: jwtToken,
+                        //             '_token': $('#register-civic-button').closest('form').find('input[name="_token"]').val()
+                        //         }, 
+                        //         function( data ) {
+                        //             if(data.weak) {
+                        //                 $('#civic-weak').show();
+                        //                 civicError();
+                        //             } else if(data.popup) {
+                        //                 $('#'+data.popup).addClass('active');
+                        //             } else if(data.success) {
+                        //             	if( data.redirect ) {
+                        //             		window.location.href = data.redirect;	
+                        //             	} else {
+                        //             		window.location.reload();
+                        //             	}
+                        //             } else {
+                        //                 $('#civic-error').show();
+                        //                 civicError();
+                        //             }
+                        //         }, "json"
+                        //     )
+                        //     .fail(function(xhr, status, error) {
+                        //         $('#civic-error').show();
+                        //         civicError();
+                        //     });
+                        // }, 3000);
                     }
                 },
                 error: function(ret) {

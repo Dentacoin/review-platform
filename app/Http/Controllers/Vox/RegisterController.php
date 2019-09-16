@@ -781,4 +781,142 @@ class RegisterController extends FrontController
         
         return Response::json( $ret );
     }
+
+    public function new_civic_register($locale=null) {
+
+        $jwt = Request::input('jwttoken');
+        $civic = Civic::where('jwttoken', 'LIKE', $jwt)->first();
+        if(!empty($civic)) {
+            $data = json_decode($civic->response, true);
+            if(!empty($data['userId'])) {
+
+                //dd($data);
+                $email = null;
+                $phone = null;
+
+                if(!empty($data['data'])) {
+                    foreach ($data['data'] as $dd) {
+                        if($dd['label'] == 'contact.personal.email' && $dd['isOwner'] && $dd['isValid']) {
+                            $email = $dd['value'];
+                        }
+                        if($dd['label'] == 'contact.personal.phoneNumber' && $dd['isOwner'] && $dd['isValid']) {
+                            $phone = $dd['value'];
+                        }
+                    }
+                }
+
+                if(empty($email)) {
+                    Request::session()->flash('error-message', trans('front.common.civic.weak'));
+                    return redirect(getLangUrl('registration') );
+                } else {
+
+                    $user = User::where( 'civic_id','LIKE', $data['userId'] )->withTrashed()->first();
+                    if(empty($user) && $email) {
+                        $user = User::where( 'email','LIKE', $email )->withTrashed()->first();            
+                    }
+
+
+                    if( $user ) {
+                        if($user->deleted_at) {
+                            Request::session()->flash('error-message', 'You have been permanently banned and cannot return to Dentavox anymore.');
+                            return redirect(getLangUrl('registration') );
+                        } else if( $user->isBanned('vox') ) {
+                            Request::session()->flash('error-message', trans('front.page.login.vox-ban'));
+                            return redirect(getLangUrl('registration') );
+                        } else {
+                            Auth::login($user, true);
+                            if(empty($user->civic_id)) {
+                                $user->civic_id = $data['userId'];
+                                $user->save();      
+                            }
+
+                            Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
+                            return redirect(getLangUrl('registration') );
+                        }
+                    } else {
+
+                        $name = explode('@', $email)[0];
+
+
+                        $is_blocked = User::checkBlocks( $name , $email );
+                        if( $is_blocked ) {
+                            Request::session()->flash('error-message', trans('front.common.civic.error'));
+                            return redirect(getLangUrl('registration') );
+                        }
+
+                        $has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
+
+                        $password = $name.date('WY');
+                        $newuser = new User;
+                        $newuser->name = $name;
+                        $newuser->email = $email ? $email : '';
+                        $newuser->password = bcrypt($password);
+                        $newuser->country_id = $has_test ? $has_test['location'] : $this->country_id;
+                        $newuser->is_dentist = 0;
+                        $newuser->is_clinic = 0;
+                        $newuser->civic_id = $data['userId'];
+                        $newuser->gdpr_privacy = true;
+                        $newuser->platform = 'vox';
+                        $newuser->status = 'approved';
+                        
+                        if(!empty(session('invited_by'))) {
+                            $newuser->invited_by = session('invited_by');
+                        }
+                        if(!empty(session('invite_secret'))) {
+                            $newuser->invite_secret = session('invite_secret');
+                        }
+                        
+                        $newuser->save();
+
+                        if($newuser->invited_by && $newuser->invitor->canInvite('vox')) {
+                            $inv_id = session('invitation_id');
+                            if($inv_id) {
+                                $inv = UserInvite::find($inv_id);
+                            } else {
+                                $inv = new UserInvite;
+                                $inv->user_id = $newuser->invited_by;
+                                $inv->invited_email = $newuser->email;
+                                $inv->invited_name = $newuser->name;
+                                $inv->save();
+                            }
+
+                            $inv->invited_id = $newuser->id;
+                            $inv->save();
+
+                            $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
+                                'who_joined_name' => $newuser->getName()
+                            ] );
+                        }
+
+                        $sess = [
+                            'invited_by' => null,
+                            'invitation_name' => null,
+                            'invitation_email' => null,
+                            'invitation_id' => null,
+                            'just_registered' => true,
+                            'just_registered_patient_vox' => true,
+                        ];
+                        session($sess);
+
+                        if( $newuser->email ) {
+                            $newuser->sendTemplate( 12 );
+                        }
+
+                        if ($newuser->loggedFromBadIp()) {
+                            return redirect( getVoxUrl('/').'?suspended-popup' );
+                        } else {
+
+                            Auth::login($newuser, true);
+                            return redirect(getVoxUrl('/').'?success-message='.urlencode(trans('vox.page.registration.success')) );
+                        }
+
+                    }
+                    
+                }
+
+            } else {
+                $ret['weak'] = true;
+            }
+        }
+    }
 }
