@@ -216,6 +216,7 @@ class PollsController extends FrontController
 	        	'title' => $poll->question,
 	        	'chart' => $this->chartData($poll),
 		        'next_poll' => $more_polls_to_take ? $more_polls_to_take->id : false,
+		        'closed' => $poll->status == 'closed' ? true : false,
 	        ];
 
 		} else {
