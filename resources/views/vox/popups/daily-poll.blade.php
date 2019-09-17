@@ -5,7 +5,7 @@
 		<h4>{!! nl2br(trans('vox.daily-polls.popup.title')) !!}</h4>
 		<p><span class="daily-respondents">{{ !empty($daily_poll) ? $daily_poll->respondentsCount() : '' }}</span>/100 people</p>
 		<div class="poll-reward twerk-it"><img src="{{ url('new-vox-img/coin-icon.png') }}">{{ App\Models\Reward::getReward('daily_polls') }} DCN</div>
-		<a href="javascript:;" class="answer-poll" data-popup="poll-popup">{!! nl2br(trans('vox.daily-polls.popup.answer')) !!}</a>
+		<a href="javascript:;" class="answer-poll" q="{{ !empty($daily_poll) ? $daily_poll->question : '' }}" data-popup="poll-popup">{!! nl2br(trans('vox.daily-polls.popup.answer')) !!}</a>
 	</div>
 </div>
 
