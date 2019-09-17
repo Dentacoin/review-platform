@@ -1209,6 +1209,13 @@ $(document).ready(function(){
 	                                    
 	                }
 	                ajax_is_running = false;
+
+	                fbq('track', 'DV_DailyPoll');
+	                gtag('event', 'Answer', {
+		                'event_category': 'DailyPollAnswer',
+		                'event_label': 'Dynamic-DailyPollQuestion',
+		            });
+
 	            }, "json"
 	        );
 		});
@@ -1246,6 +1253,13 @@ $(document).ready(function(){
 	                console.log('error');
 	            }
 	        });
+		});
+
+		$('.answer-poll').click( function() {
+        	gtag('event', 'Click', {
+                'event_category': 'DailyPollPopup',
+                'event_label': 'Dynamic-DailyPollQuestion',
+            });
 		});
 
 

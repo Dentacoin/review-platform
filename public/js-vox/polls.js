@@ -39,6 +39,11 @@ $(document).ready(function(){
                 	tooltipsFunction();
                 	pollStats();
                 	pollsFunction();
+
+                    gtag('event', 'Click', {
+                        'event_category': 'DailyPollCallendar',
+                        'event_label': 'Dynamic-DailyPollQuestion',
+                    });
                 } else {
     				console.log('error');
                 }
