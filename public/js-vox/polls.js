@@ -40,9 +40,11 @@ $(document).ready(function(){
                 	pollStats();
                 	pollsFunction();
 
+                    var q = $('#poll-popup .poll-form-wrapper .poll-question').html();
+
                     gtag('event', 'Click', {
                         'event_category': 'DailyPollCallendar',
-                        'event_label': 'Dynamic-DailyPollQuestion',
+                        'event_label': q+'-DailyPollQuestion',
                     });
                 } else {
     				console.log('error');

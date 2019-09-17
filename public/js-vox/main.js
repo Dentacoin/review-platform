@@ -1210,10 +1210,12 @@ $(document).ready(function(){
 	                }
 	                ajax_is_running = false;
 
+	                var q = $('#poll-popup .poll-form-wrapper .poll-question').html();
+
 	                fbq('track', 'DV_DailyPoll');
 	                gtag('event', 'Answer', {
 		                'event_category': 'DailyPollAnswer',
-		                'event_label': 'Dynamic-DailyPollQuestion',
+		                'event_label': q+'-DailyPollQuestion',
 		            });
 
 	            }, "json"
@@ -1256,9 +1258,11 @@ $(document).ready(function(){
 		});
 
 		$('.answer-poll').click( function() {
+			var q = $(this).attr('q');
+
         	gtag('event', 'Click', {
                 'event_category': 'DailyPollPopup',
-                'event_label': 'Dynamic-DailyPollQuestion',
+                'event_label': q+'-DailyPollQuestion',
             });
 		});
 
