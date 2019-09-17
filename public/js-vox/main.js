@@ -1202,6 +1202,7 @@ $(document).ready(function(){
 		                	that.closest('.poll-form-wrapper').hide();
 		                	that.closest('#poll-popup').find('.poll-stats-wrapper').show();
 		                	pollStatsAnimate();
+		                	$('#poll-popup').find('.poll-stats-wrapper p').remove();
 		                	$('<p>'+data.respondents+'</p>').insertAfter('.poll-stats-wrapper h3');
 	                	} else {
 	                		console.log('false'); 

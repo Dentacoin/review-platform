@@ -82,6 +82,10 @@ $(document).ready(function(){
                 	} else {
                 		$('.next-poll').attr('poll-id', ret.next_poll);
                 	}
+                    $('#poll-popup').find('.poll-stats-wrapper p').remove();
+                    if (ret.closed) {
+                        $('<p>This poll is closed.</p>').insertAfter('.poll-stats-wrapper h3');
+                    }
                 	$('#poll-popup').addClass('active');
                 } else {
     				console.log('error');
