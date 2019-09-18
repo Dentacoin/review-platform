@@ -13,6 +13,7 @@ use App\Models\Country;
 use App\Models\Dcn;
 use App\Models\Review;
 use App\Models\Poll;
+use App\Models\UserInvite;
 use App\Models\DcnTransaction;
 use Carbon\Carbon;
 use DB;
@@ -131,6 +132,54 @@ Click the check box and confirm the CAPTCHA.
             }
 
             echo 'Incomplete Dentist Registrations cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+        })->cron("*/5 * * * *"); //every 5 min
+
+        $schedule->call(function () {
+
+            echo 'Dentist Invite Patient For Review';
+
+            $notificaitons[] = [
+                'time' => Carbon::now()->addDays(-2),
+                'tempalte_id' => 72,
+            ];
+            $notificaitons[] = [
+                'time' => Carbon::now()->addDays(-4),
+                'tempalte_id' => 73,
+            ];
+            $notificaitons[] = [
+                'time' => Carbon::now()->addDays(-7),
+                'tempalte_id' => 74,
+            ];
+            foreach ($notificaitons as $key => $time) {
+                $field = 'notified'.(intval($key)+1);
+                $list = UserInvite::whereNull('completed')->whereNull('unsubscribed')->whereNotNull('review')->whereNull( $field )->where('created_at', '<', $time['time'])->get();
+                foreach ($list as $notify) {
+                    if (!empty($notify->email) && filter_var($notify->email, FILTER_VALIDATE_EMAIL)) {
+                        echo 'USER: '.$notify;
+                        $u = User::find(3);
+                        $tmpEmail = $u->email;
+                        $tmpName = $u->name;
+
+                        echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
+
+                        $u->email = $notify->email;
+                        $u->name = $notify->name;
+                        $u->save();
+                        $mail = $u->sendTemplate($time['tempalte_id']);
+
+                        $u->email = $tmpEmail;
+                        $u->name = $tmpName;
+                        $u->save();
+
+                        $notify->$field = true;
+                        $notify->save();
+
+                        $mail->delete();
+                    }
+                }
+            }
+
+            echo 'Dentist Invite Patient For Review cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
         })->cron("*/5 * * * *"); //every 5 min
         
         $schedule->call(function () {
