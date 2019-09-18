@@ -333,10 +333,11 @@ $(document).ready(function(){
 
 
                         if (go_to_date !== undefined && go_to_date) {
+
                             if (poll_stats !== undefined && poll_stats) {
                                 showStats($('.list-event[data-date="'+go_to_date+'"]').attr('poll-id'));
                             } else {
-                                showPoll($('.list-event[data-date="'+go_to_date+'"]').attr('poll-id'));
+                                $('.list-event[data-date="'+go_to_date+'"]').trigger('click');
                             }
                             
                             go_to_date=null;
