@@ -19,58 +19,61 @@ class IndexController extends FrontController
 {
 
 	public function home($locale=null) {
+		if(!empty($this->user) && $this->user->isBanned('trp')) {
+			return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+		}
+
 		if(!empty($this->user) && $this->user->is_dentist) {
 			return redirect( $this->user->getLink() );
 		}
 
 		$featured = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved'])->orderBy('avg_rating', 'DESC');
-		$refined = clone $featured;
+		$homeDentists = collect();
+
+
 		if( !empty($this->user) ) {
-			if( $this->user->country_id ) {
-				$refined->where('country_id', $this->user->country_id);
-				
-				if( $this->user->state_name ) {
-					$refined->where('state_name', 'LIKE', $this->user->state_name);
-
-					if( $this->user->city_name ) {
-						$refined->where('city_name', 'LIKE', $this->user->city_name);
-					}
-				}
+			if( $homeDentists->count() < 12 && $this->user->city_name ) {
+				$addMore = clone $featured;
+				$addMore = $addMore->where('city_name', 'LIKE', $this->user->city_name)->take( 12 - $homeDentists->count() )->get();
+				$homeDentists = $homeDentists->concat($addMore);
 			}
+
+			if( $homeDentists->count() < 12 && $this->user->state_name ) {
+				$addMore = clone $featured;
+				$addMore = $addMore->where('state_name', 'LIKE', $this->user->state_name)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
+				$homeDentists = $homeDentists->concat($addMore);
+			}
+
+			if( $homeDentists->count() < 12 && $this->user->country_id ) {
+				$addMore = clone $featured;
+				$addMore = $addMore->where('country_id', 'LIKE', $this->user->country_id)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
+				$homeDentists = $homeDentists->concat($addMore);
+			}
+
 		} else {
-			if( $this->country_id ) {
-				$refined->where('country_id', $this->country_id);
-				if( $this->city_id ) {
-					$refined->where('city_id', $this->city_id);
-				}
+			if( $homeDentists->count() < 12 && $this->city_id ) {
+				$addMore = clone $featured;
+				$addMore = $addMore->where('city_id', 'LIKE', $this->city_id)->take( 12 - $homeDentists->count() )->get();
+				$homeDentists = $homeDentists->concat($addMore);
+			}
+
+			if( $homeDentists->count() < 12 && $this->country_id ) {
+				$addMore = clone $featured;
+				$addMore = $addMore->where('country_id', 'LIKE', $this->country_id)->take( 12 - $homeDentists->count() )->get();
+				$homeDentists = $homeDentists->concat($addMore);				
 			}
 		}
 
-		$refined = $refined->take(12)->get();
 
-		if($refined->isEmpty()) {
-			$refined = clone $featured;
-			if( !empty($this->user) ) {
-				if( $this->user->country_id ) {
-					$refined->where('country_id', $this->user->country_id);
-				}
-			} else {
-				if( $this->country_id ) {
-					$refined->where('country_id', $this->country_id);
-				}
-			}
-			$refined = $refined->take(12)->get();
-		}
-
-
-		if($refined->isEmpty()) {
-			$refined = clone $featured;
-			$refined = $refined->take(12)->get();
+		if( $homeDentists->count() < 2 ) {
+			$addMore = clone $featured;
+			$addMore = $addMore->take( 12 - $homeDentists->count() )->get();
+			$homeDentists = $homeDentists->concat($addMore);	
 		}
 
 		$params = array(
             'countries' => Country::get(),
-			'featured' => $refined,
+			'featured' => $homeDentists,
 			'js' => [
 				'index.js',
                 'search.js',
@@ -94,6 +97,10 @@ class IndexController extends FrontController
 	}
 
 	public function dentist($locale=null, $session_id=null, $hash=null, $unsubscribe = false) {
+		
+		if(!empty($this->user) && $this->user->isBanned('trp')) {
+			return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+		}
 
 		if(!empty($this->user)) {
 			return redirect( getLangUrl('/') );
