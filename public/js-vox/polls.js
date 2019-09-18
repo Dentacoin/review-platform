@@ -32,7 +32,7 @@ $(document).ready(function(){
                 		$('#poll-popup .poll-answers').append('<label class="poll-answer" for="ans-'+(parseInt(i) + 1)+'"><input type="radio" name="answer" class="answer" value="'+(parseInt(i) + 1)+'" id="ans-'+(parseInt(i) + 1)+'">'+ret.answers[i]+'</label>');
                 	}
                 	$('#poll-popup').find('.poll-stats-wrapper h3').html($('#poll-popup').find('.poll-stats-wrapper h3').attr('title'));
-                	$('#poll-popup').find('.poll-stats-wrapper').hide();
+                	$('#poll-popup').find('.content').hide();
                 	$('#poll-popup').find('.poll-form-wrapper').show();
                 	$('#poll-popup').addClass('active');
 
@@ -73,19 +73,24 @@ $(document).ready(function(){
                 	$('#poll-popup').find('.poll-stats-wrapper h3').html($('#poll-popup').find('.poll-stats-wrapper h3').attr('alternative-title'));
                     $('#poll-popup').find('.poll-question').html(ret.title);
                     $('#poll-popup').find('.poll-stats-wrapper p').remove();
-                	$('#poll-popup').find('.poll-form-wrapper').hide();
-                	$('#poll-popup').find('.poll-closed-wrapper').hide();
+                	$('#poll-popup').find('.content').hide();
                 	$('#poll-popup').find('.poll-stats-wrapper').show();
                     pollStatsAnimate();
-                	if (!ret.next_poll) {
-                		$('.next-poll').hide();
-                	} else {
-                		$('.next-poll').attr('poll-id', ret.next_poll);
-                	}
                     $('#poll-popup').find('.poll-stats-wrapper p').remove();
                     if (ret.closed) {
                         $('<p>This poll is closed.</p>').insertAfter('.poll-stats-wrapper h3');
+
+                        if (!ret.has_user) {
+                            $('.get-reward-buttons').show();
+                            $('.sign').hide();
+                        }
                     }
+                    $('.next-poll').removeClass('taken-all');
+                	if (!ret.next_poll) {
+                		$('.next-poll').addClass('taken-all');
+                	} else {
+                		$('.next-poll').attr('poll-id', ret.next_poll);
+                	}
                 	$('#poll-popup').addClass('active');
                 } else {
     				console.log('error');
@@ -281,42 +286,35 @@ $(document).ready(function(){
                 	if (ret.daily_polls) {
                 		$('.fc-list-empty-wrap1').html('');
                 		for (var i in ret.daily_polls) {
-                			if ($(window).innerWidth() >= 992) {
+
+                			if ($(window).innerWidth() >= 1080) {
+
 	                			$('.fc-list-empty-wrap1').append('<div class="info-list"><span class="day-word">'+ret.daily_polls[i].day_word+'</span><span class="poll-full-date">'+ret.daily_polls[i].custom_date+'</span></div>');
 	                			$('.fc-list-empty-wrap1').append('<a href="javascript:;" class="list-event" poll-id="'+ret.daily_polls[i].id+'" data-date="'+ret.daily_polls[i].date+'" style="background-color: '+ret.daily_polls[i].color+';"><img class="poll-image" src="'+ret.daily_polls[i].category_image+'"/>'+ret.daily_polls[i].title+'</a>');
 
-	                			if (ret.daily_polls[i].closed) {
-	                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').append('<img class="poll-stat-image" src="'+ret.daily_polls[i].closed_image+'"/>');
-	                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').addClass('stats');
-	                			} else {
-		                			if (ret.daily_polls[i].to_take) {
-		                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').append('<img class="poll-take-image" src="'+ret.daily_polls[i].to_take_image+'"/>');
-		                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').addClass('to-take');
-		                			} else if (ret.daily_polls[i].taken) {
-                                        $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').removeClass('to-take');
-		                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').append('<img class="poll-stat-image" src="'+ret.daily_polls[i].closed_image+'"/>');
-		                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').append('<img class="poll-taken-image" src="'+ret.daily_polls[i].taken_image+'"/>');
-		                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').addClass('stats');
-		                			}
-	                			}
+                                var elem = $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]');
+	                			
 	                		} else {
+
 	                			$('.fc-list-empty-wrap1').append('<a href="javascript:;" class="list-event" poll-id="'+ret.daily_polls[i].id+'" data-date="'+ret.daily_polls[i].date+'"><div class="mobile-poll-date"><span class="poll-day-word">'+ret.daily_polls[i].day_word_mobile+'</span><span class="poll-day-mobile">'+ret.daily_polls[i].day_mobile+'</span></div><div class="mobile-poll-content"  style="background-color: '+ret.daily_polls[i].color+';"><img class="poll-image" src="'+ret.daily_polls[i].category_image+'"/>'+ret.daily_polls[i].title+'</div></a>');
 
-	                			if (ret.daily_polls[i].closed) {
-	                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"] .mobile-poll-content').append('<img class="poll-stat-image" src="'+ret.daily_polls[i].closed_image+'"/>');
-	                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').addClass('stats');
-	                			} else {
-		                			if (ret.daily_polls[i].to_take) {
-		                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"] .mobile-poll-content').append('<img class="poll-take-image" src="'+ret.daily_polls[i].to_take_image+'"/>');
-		                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').addClass('to-take');
-		                			} else if (ret.daily_polls[i].taken) {
-                                        $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').removeClass('to-take');
-		                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"] .mobile-poll-content').append('<img class="poll-stat-image" src="'+ret.daily_polls[i].closed_image+'"/>');
-		                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"] .mobile-poll-content').append('<img class="poll-taken-image" src="'+ret.daily_polls[i].taken_image+'"/>');
-		                				$('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').addClass('stats');
-		                			}
-	                			}
+                                var elem = $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"] .mobile-poll-content');
 	                		}
+
+                            if (ret.daily_polls[i].closed) {
+                                elem.append('<img class="poll-stat-image" src="'+ret.daily_polls[i].closed_image+'"/>');
+                                $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').addClass('stats');
+                            } else {
+                                if (ret.daily_polls[i].to_take) {
+                                    elem.append('<img class="poll-take-image" src="'+ret.daily_polls[i].to_take_image+'"/>');
+                                    $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').addClass('to-take');
+                                } else if (ret.daily_polls[i].taken) {
+                                    $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').removeClass('to-take');
+                                    elem.append('<img class="poll-stat-image" src="'+ret.daily_polls[i].closed_image+'"/>');
+                                    elem.append('<img class="poll-taken-image" src="'+ret.daily_polls[i].taken_image+'"/>');
+                                    $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').addClass('stats');
+                                }
+                            }
 
                             if (ret.daily_polls[i].scheduled) {
                                 $('.fc-list-empty-wrap1 .list-event[data-date="'+ret.daily_polls[i].date+'"]').append('<i class="fas fa-clock"></i>');

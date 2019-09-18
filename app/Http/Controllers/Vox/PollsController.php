@@ -155,22 +155,17 @@ class PollsController extends FrontController
 		if (!empty($this->user)) {
 			$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first();
 		} else {
-			if (!empty($this->user)) {
-				$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first();
-			} else {
-				if (Cookie::get('daily_poll')) {
-					$cv = json_decode(Cookie::get('daily_poll'), true);
-					foreach ($cv as $pid => $aid) {
-						if ($pid == $poll->id) {
-							$taken_daily_poll = PollAnswer::find($aid);
-						} else {
-							$taken_daily_poll = null;
-						}
+			if (Cookie::get('daily_poll')) {
+				$cv = json_decode(Cookie::get('daily_poll'), true);
+				foreach ($cv as $pid => $aid) {
+					if ($pid == $poll->id) {
+						$taken_daily_poll = PollAnswer::find($aid);
+					} else {
+						$taken_daily_poll = null;
 					}
-					
-				} else {
-					$taken_daily_poll = null;
-				}
+				}				
+			} else {
+				$taken_daily_poll = null;
 			}
 		}
 
@@ -217,6 +212,7 @@ class PollsController extends FrontController
 	        	'chart' => $this->chartData($poll),
 		        'next_poll' => $more_polls_to_take ? $more_polls_to_take->id : false,
 		        'closed' => $poll->status == 'closed' ? true : false,
+		        'has_user' => !empty($this->user) ? true : false,
 	        ];
 
 		} else {
@@ -274,6 +270,7 @@ class PollsController extends FrontController
 			        	'logged' => false,
 			        	'chart' => $this->chartData($poll),
 	        			'respondents' => 'Respondents: '.$poll->respondentsCount().'/100 people',
+	        			'has_user' => false,
 			        ];
 				} else {
 					$ret = [
@@ -330,6 +327,7 @@ class PollsController extends FrontController
 		        	'chart' => $this->chartData($poll),
 		        	'next_poll' => $more_polls_to_take ? $more_polls_to_take->id : false,
 	        		'respondents' => 'Respondents: '.$poll->respondentsCount().'/100 people',
+	        		'has_user' => true,
 		        ];
 
 	    	} else {

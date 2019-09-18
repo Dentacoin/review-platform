@@ -4830,24 +4830,24 @@ p.h2-bold {
         @media screen and (max-width: 1000px) {
           .popup.daily-poll .popup-inner .content.poll-stats-wrapper p {
             font-size: 16px; } }
-      .popup.daily-poll .popup-inner .content.poll-closed-wrapper {
+      .popup.daily-poll .popup-inner .content.poll-taken-all-wrapper, .popup.daily-poll .popup-inner .content.poll-closed-wrapper {
         flex-direction: column; }
-        .popup.daily-poll .popup-inner .content.poll-closed-wrapper h2 {
+        .popup.daily-poll .popup-inner .content.poll-taken-all-wrapper h2, .popup.daily-poll .popup-inner .content.poll-closed-wrapper h2 {
           font-size: 28px;
           font-weight: 600;
           max-width: 500px;
           margin: 0 auto;
           margin-top: 50px; }
           @media screen and (max-width: 1000px) {
-            .popup.daily-poll .popup-inner .content.poll-closed-wrapper h2 {
+            .popup.daily-poll .popup-inner .content.poll-taken-all-wrapper h2, .popup.daily-poll .popup-inner .content.poll-closed-wrapper h2 {
               font-size: 22px;
               margin-top: 30px;
               margin-bottom: 30px; } }
-          .popup.daily-poll .popup-inner .content.poll-closed-wrapper h2 b {
+          .popup.daily-poll .popup-inner .content.poll-taken-all-wrapper h2 b, .popup.daily-poll .popup-inner .content.poll-closed-wrapper h2 b {
             color: #3daee6;
             font-weight: bold; }
             @media screen and (max-width: 1000px) {
-              .popup.daily-poll .popup-inner .content.poll-closed-wrapper h2 b {
+              .popup.daily-poll .popup-inner .content.poll-taken-all-wrapper h2 b, .popup.daily-poll .popup-inner .content.poll-closed-wrapper h2 b {
                 font-size: 22px; } }
       .popup.daily-poll .popup-inner .content h3 {
         text-transform: uppercase;
@@ -7495,8 +7495,14 @@ svg:not(:root) {
           font-weight: 300; }
       #calendar .fc-list-empty-wrap1 .list-event i {
         position: absolute;
-        left: 57px;
-        top: 2px; }
+        left: 17px;
+        top: 50%;
+        transform: translateY(-50%); }
+        @media screen and (max-width: 1080px) {
+          #calendar .fc-list-empty-wrap1 .list-event i {
+            left: 57px;
+            top: 2px;
+            transform: none; } }
       #calendar .fc-list-empty-wrap1 .list-event .mobile-poll-content {
         flex: 1;
         padding-left: 52px;

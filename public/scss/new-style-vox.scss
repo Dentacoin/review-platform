@@ -6848,6 +6848,7 @@ body.vox-public {
 					}
 				}
 
+				&.poll-taken-all-wrapper,
 				&.poll-closed-wrapper {
 					flex-direction: column;
 
@@ -10596,8 +10597,15 @@ svg:not(:root) {
 
 			i {
 				position: absolute;
-			    left: 57px;
-			    top: 2px;
+			    left: 17px;
+			    top: 50%;
+			    transform: translateY(-50%);
+
+			    @media #{$tablet} {
+			    	left: 57px;
+			    	top: 2px;
+			    	transform: none;
+			    }
 			}
 
 			.mobile-poll-content {
