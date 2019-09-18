@@ -64,7 +64,7 @@ class LoginController extends FrontController
 
             if( $duplicate ) {
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'banned-popup']))
-                    ->withInput();
+                ->withInput();
             } else {
 
                 if( $user->loggedFromBadIp() ) {
@@ -93,9 +93,9 @@ class LoginController extends FrontController
             }
 
             if ($user) {
-                if( $user->isBanned('vox') ) {
-                    return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'banned-popup']))
-                    ->withInput();
+                if( $user->isBanned('trp') ) {
+                    
+                    return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
                 }
 
                 if( $user->loggedFromBadIp() ) {
@@ -210,9 +210,9 @@ class LoginController extends FrontController
 
         if ($user) {
 
-            if($user->deleted_at || $user->isBanned('vox')) {
-                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'banned-popup']))
-                ->withInput();
+            if($user->deleted_at || $user->isBanned('trp')) {
+                
+                return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
             }
 
 
@@ -373,9 +373,9 @@ class LoginController extends FrontController
                         $inv->invited_id = $newuser->id;
                         $inv->save();
                         
-                        $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
-                            'who_joined_name' => $newuser->getName()
-                        ] );
+                        // $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
+                        //     'who_joined_name' => $newuser->getName()
+                        // ] );
                     }
                 }
 
@@ -389,7 +389,7 @@ class LoginController extends FrontController
                 session($sess);
 
                 if( $newuser->email ) {
-                    $newuser->sendTemplate( 4 );
+                    $newuser->sendGridTemplate( 4 );
                 }
 
                 //
@@ -469,7 +469,7 @@ class LoginController extends FrontController
 
 
                         if ($user) {
-                            if( $user->isBanned('vox') ) {
+                            if( $user->isBanned('trp')) {
                                 $ret['popup'] = 'banned-popup';
                             } else if( $user->loggedFromBadIp() ) {
                                 $ret['popup'] = 'suspended-popup';

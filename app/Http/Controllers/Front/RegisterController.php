@@ -786,7 +786,7 @@ class RegisterController extends FrontController
 
 
                     if( $user ) {
-                        if($user->deleted_at || $user->isBanned('vox')) {
+                        if($user->deleted_at || $user->isBanned('trp')) {
                             $ret['popup'] = 'banned-popup';
                         } else if( $user->loggedFromBadIp() ) {
                             $ret['popup'] = 'suspended-popup';
@@ -838,24 +838,18 @@ class RegisterController extends FrontController
                         
                         $newuser->save();
 
-                        if($newuser->invited_by && $newuser->invitor->canInvite('trp')) {
+                        if($newuser->invited_by && $newuser->invitor->canInvite('trp') && !empty(session('invitation_id'))) {
                             $inv_id = session('invitation_id');
-                            if($inv_id) {
-                                $inv = UserInvite::find($inv_id);
-                            } else {
-                                $inv = new UserInvite;
-                                $inv->user_id = $newuser->invited_by;
-                                $inv->invited_email = $newuser->email;
-                                $inv->invited_name = $newuser->name;
+                            $inv = UserInvite::find($inv_id);
+
+                            if (empty($inv->invited_id)) {
+                                $inv->invited_id = $newuser->id;
                                 $inv->save();
+                                
+                                // $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
+                                //     'who_joined_name' => $newuser->getName()
+                                // ] );
                             }
-
-                            $inv->invited_id = $newuser->id;
-                            $inv->save();
-
-                            $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
-                                'who_joined_name' => $newuser->getName()
-                            ] );
                         }
 
                         $sess = [
@@ -869,7 +863,7 @@ class RegisterController extends FrontController
                         session($sess);
 
                         if( $newuser->email ) {
-                            $newuser->sendTemplate( $newuser->is_dentist ? 3 : 4 );
+                            $newuser->sendGridTemplate( 4 );
                         }
 
                         Auth::login($newuser, true);

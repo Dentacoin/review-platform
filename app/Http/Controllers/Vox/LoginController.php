@@ -295,6 +295,7 @@ class LoginController extends FrontController
                     }
 
                     $inv->invited_id = $newuser->id;
+                    $inv->created_at = Carbon::now();
                     $inv->save();
 
                     // $newuser->invitor->sendTemplate( 26, [
@@ -313,7 +314,7 @@ class LoginController extends FrontController
                 session($sess);
 
                 if( $newuser->email ) {
-                    $newuser->sendTemplate( 12 );
+                    $newuser->sendGridTemplate( 12 );
                 }
 
                 if($newuser->loggedFromBadIp()) {

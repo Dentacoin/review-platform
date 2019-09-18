@@ -754,7 +754,7 @@ class RegisterController extends FrontController
                         session($sess);
 
                         if( $newuser->email ) {
-                            $newuser->sendTemplate( 12 );
+                            $newuser->sendGridTemplate( 12 );
                         }
 
                         if ($newuser->loggedFromBadIp()) {
@@ -899,7 +899,7 @@ class RegisterController extends FrontController
                         session($sess);
 
                         if( $newuser->email ) {
-                            $newuser->sendTemplate( 12 );
+                            $newuser->sendGridTemplate( 12 );
                         }
 
                         if ($newuser->loggedFromBadIp()) {
