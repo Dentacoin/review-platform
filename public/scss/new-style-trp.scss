@@ -8690,6 +8690,12 @@ body.sp-trp-iframe {
 	}
 
 	#banned-popup {
+
+		&:after {
+			@media #{$tablet} {
+				display: none;
+			}
+		}
 		.popup-inner {
 
 			@media #{$tablet} {

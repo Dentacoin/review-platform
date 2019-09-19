@@ -18,12 +18,14 @@
 			</div>
 		@elseif(!empty($my_review))
 			<div class="alert alert-info ask-dentist-alert">
-				{!! nl2br(trans('trp.popup.submit-review-popup.already-left-review')) !!}
 				@if($user->approvedPatientcanAskDentist($item->id))
+					{!! nl2br(trans('trp.popup.submit-review-popup.already-left-review')) !!}
 					<br><br>
 					<a href="{{ getLangUrl('dentist/'.$item->slug).'ask' }}" class="button ask-dentist">
 						{!! nl2br(trans('trp.popup.submit-review-popup.limit-send')) !!}
 					</a>
+				@else
+					You already reached your review limit to this dentist for the period. Ask for an invitation next month.
 				@endif
 			</div>
 		@elseif($user->is_dentist)
