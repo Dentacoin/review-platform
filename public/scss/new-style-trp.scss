@@ -8688,6 +8688,42 @@ body.sp-trp-iframe {
 			}
 		}
 	}
+
+	#banned-popup {
+		.popup-inner {
+
+			@media #{$tablet} {
+				height: 660px;
+				background-position: 50% 100%;
+			}
+
+			@media #{$phone} {
+				height: 460px;
+			}
+
+			>div {
+				@media #{$tablet} {
+					height: 660px;
+					justify-content: center;
+				}
+				@media #{$phone} {
+					height: 460px;
+				}
+			}
+
+			.icon {
+				@media #{$tablet} {
+					order: 2;
+				    max-width: 150px;
+				    margin-top: 160px;
+				}
+				@media #{$phone} {
+					max-width: 90px;
+    				margin-top: 30px;
+				}
+			}
+		}
+	}
 }
 
 .pager {
