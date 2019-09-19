@@ -775,7 +775,7 @@ class DentistController extends FrontController
                     } else {
                         $item->sendTemplate( !empty($verification) ? 63 : 23 ,[
                             'patient_name' => $this->user->name,
-                            'invitation_link' => $item->getLink().'?'. http_build_query(['popup'=>'popup-login-dentist'])
+                            'invitation_link' => $item->getLink()
                         ] );
                     }
 
