@@ -293,7 +293,7 @@ class Email extends Model
 				'[/invitation_link]',
 			), array(
 				$this->meta['patient_name'],
-				'<a '.$this->button_style.' href="'.$this->meta['invitation_link'].'">',
+				'<a '.$this->button_style.' href="https://account.dentacoin.com/invite">',
 				'</a>',				
 			), $content);
 		}
