@@ -1296,6 +1296,18 @@ $(document).ready(function(){
 		$('.poll-bubble').hide();
 	});
 
+	if ($('.poll-bubble').length) {
+		$(window).on("scroll", function() {
+			var scrollHeight = $(document).height();
+			var scrollPosition = $(window).height() + $(window).scrollTop();
+			if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+			    $('.poll-bubble').fadeOut();
+			} else {
+				$('.poll-bubble').fadeIn();
+			}
+		});
+	}
+
 });
 
 
