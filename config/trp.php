@@ -34,7 +34,7 @@ return [
 		'general_dentistry' => [
 			'check_up',
 			'tooth_cleaning',
-			'filling',
+			'fillings',
 			'caries_infiltration',
 			'dental_sealants_for_children',
 			'root_canal_treatment',
