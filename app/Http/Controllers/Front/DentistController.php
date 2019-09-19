@@ -1040,21 +1040,12 @@ class DentistController extends FrontController
         $patient = User::find($p_id);
 
         if (!empty($patient)) {
-            
-            if($patient->reviews_out->isNotEmpty()) {
-                $nonverified = [];
-                foreach ($patient->reviews_out as $review) {
-                    if(!$review->verified) {
-                        if($review->dentist_id) {
-                            $nonverified[$review->dentist_id] = $review->dentist_id;
-                        }
-                        if($review->clinic_id) {
-                            $nonverified[$review->clinic_id] = $review->clinic_id;
-                        }
-                    }
-                }
 
-                if (count($nonverified) == 3) {
+            $current_month_reviews = Review::where('user_id', $patient->id )->where('created_at', '>', Carbon::now()->subDays(30))->get();
+            
+            if(!empty($current_month_reviews)) {
+
+                if (count($current_month_reviews) == 3) {
                     $mtext = 'Patient - '.$patient->name.' writes his third review to different dentist. 
 Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$patient->id;
 
@@ -1073,7 +1064,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     });
                 }
 
-                if (count($nonverified) >= 6) {
+                if (count($current_month_reviews) >= 6) {
                     $ban = new UserBan;
                     $ban->user_id = $patient->id;
                     $ban->domain = 'trp';
