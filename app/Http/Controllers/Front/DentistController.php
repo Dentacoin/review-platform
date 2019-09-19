@@ -351,7 +351,7 @@ class DentistController extends FrontController
                             $review->afterSubmitActions();
                         }
 
-                        $invites = UserInvite::where('dentist_id', $item->id )->where('invited_id', $this->user->id)->where('review', 1)->whereNull('completed')->get();
+                        $invites = UserInvite::where('user_id', $item->id )->where('invited_id', $this->user->id)->where('review', 1)->whereNull('completed')->get();
                         if (!empty($invites)) {
                             foreach ($invites as $invite) {
                                 $invite->completed = true;
