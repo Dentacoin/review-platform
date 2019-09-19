@@ -1373,38 +1373,76 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $path = $this->getSocialCoverPath();
 
         $img = Image::canvas(1200, 628, '#fff');
-        $img->insert( public_path().'/img-trp/cover-dentist.png');
+        
 
-        $avatar = $this->hasimage ? $this->getImagePath(true) : public_path().'/new-vox-img/no-avatar-1.png';
-        $img->insert($avatar , 'top-left', 80, 170 );
+        if ($this->hasimage) {
+            $img->insert( public_path().'/img-trp/cover-dentist-new.png');
+
+            $avatar = Image::make( $this->getImagePath(true) );
+            $avatar->resize(393, 393);
+            $img->insert($avatar , 'top-left', 66, 150 );
+        } else {
+            $img->insert( public_path().'/img-trp/cover-dentist-new-no-avatar.png');
+        }
+
+        if($this->avg_rating) {
+            $reviews = '('.intval($this->ratings).' reviews)';
+            $img->text($reviews, 860, 470, function($font) {
+                $font->file(public_path().'/fonts/Calibri-Light.ttf');
+                $font->size(30);
+                $font->color('#555555');
+                $font->align('left');
+                $font->valign('top');
+            });
+
+            $step = 67;
+            $startX = 518;
+            for($i=1;$i<=5;$i++) {
+                $img->insert( public_path().'/img-trp/cover-star-review-new-gray.png' , 'top-left', $startX, 452 );
+                $startX += $step;
+            }
+
+            $step = 67;
+            $startX = 518;
+            for($i=1;$i<=$this->avg_rating;$i++) {
+                $img->insert( public_path().'/img-trp/cover-star-review-new.png' , 'top-left', $startX, 452 );
+                $startX += $step;
+            }
+
+            $rest = ( $this->avg_rating - floor( $this->avg_rating ) );
+            if($rest) {
+                $halfstar = Image::canvas(60*$rest, 61, '#fff');
+                $halfstar->insert( public_path().'/img-trp/cover-star-review-new.png', 'top-left', 0, 0 );
+                $img->insert($halfstar , 'top-left', $startX, 452 );
+            }
+
+            $above_pushing = 0;
+        } else {
+            $above_pushing = 25;
+        }
 
 
         $names = $this->getName();
-        $names_size = 66;
-        if(mb_strlen($names)>20) {
-            $names_size = 56;
-        }
-        if(mb_strlen($names)>25) {
-            $names_size = 50;
-        }
-        if(mb_strlen($names)>30) {
-            $names_size = 45;
-        }
-        $img->text($names, 515, 205, function($font) use ($names_size) {
+        $names_size = 51;
+        $img->text($names, 515, 205 + $above_pushing, function($font) use ($names_size) {
             $font->file(public_path().'/fonts/Calibri-Bold.ttf');
             $font->size($names_size);
             $font->color('#000000');
             $font->align('left');
             $font->valign('top');
         });
+
+        $img->insert( public_path().'/img-trp/cover-pin.png' , 'top-left', 515, 365 + $above_pushing );
+
+
         $type = ($this->is_partner ? 'Partner ' : '').($this->is_clinic ? 'Clinic' : 'Dentist');
         $type_left = $this->is_partner ? 575 : 515;
         if($this->is_partner) {
             $avatar = public_path().'/img-trp/cover-partner.png';
-            $img->insert($avatar , 'top-left', 515, 283 );            
+            $img->insert($avatar , 'top-left', 515, 283 + $above_pushing );            
         }
 
-        $img->text($type, $type_left, 283, function($font) {
+        $img->text($type, $type_left, 283 + $above_pushing, function($font) {
             $font->file(public_path().'/fonts/Calibri.ttf');
             $font->size(46);
             $font->color('#555555');
@@ -1412,35 +1450,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $font->valign('top');
         });
         $location = ($this->city_name ? $this->city_name.', ' : '').($this->state_name ? $this->state_name.', ' : '').$this->country->name;
-        $img->text($location, 562, 365, function($font) {
+        $img->text($location, 555, 365 + $above_pushing, function($font) {
             $font->file(public_path().'/fonts/Calibri.ttf');
             $font->size(30);
             $font->color('#000000');
             $font->align('left');
             $font->valign('top');
         });
-        $reviews = '('.intval($this->ratings).' reviews)';
-        $img->text($reviews, 860, 470, function($font) {
-            $font->file(public_path().'/fonts/Calibri-Light.ttf');
-            $font->size(30);
-            $font->color('#555555');
-            $font->align('left');
-            $font->valign('top');
-        });
 
-        $step = 67;
-        $start = 518;
-        for($i=1;$i<=$this->avg_rating;$i++) {
-            $img->insert( public_path().'/img-trp/cover-star.png' , 'top-left', $start, 452 );
-            $start += $step;
-        }
-
-        $rest = ( $this->avg_rating - floor( $this->avg_rating ) );
-        if($rest) {
-            $halfstar = Image::canvas(59*$rest, 62, '#fff');
-            $halfstar->insert( public_path().'/img-trp/cover-star.png', 'top-left', 0, 0 );
-            $img->insert($halfstar , 'top-left', $start, 452 );
-        }
 
         $img->save($path);
         $this->hasimage_social = true;

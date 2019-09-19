@@ -162,75 +162,123 @@ class Review extends Model {
 
         $img = Image::canvas(1200, 628, '#fff');
 
+        $dentist = $this->dentist ? $this->dentist : $this->clinic;
+
+        if ($dentist->hasimage) {
+            $img->insert( public_path().'/img-trp/new-cover-review.png');
+
+            $avatar_image_dentist = Image::make( $dentist->getImagePath(true) );
+            $avatar_image_dentist->resize(320, 320);
+            $img->insert( $avatar_image_dentist , 'top-left', 70, 190 );
+
+        } else {
+            $img->insert( public_path().'/img-trp/new-cover-review-no-avatar.png');
+        }
+
+        $dentist_name = $dentist->name;
+
+        $img->text($dentist_name, 225, 547, function($font) {
+            $font->file(public_path().'/fonts/Calibri-Bold.ttf');
+            $font->size(33);
+            $font->color('#ffffff');
+            $font->align('center');
+            $font->valign('top');
+        });
+
+
         if( $this->title ) {
-            $img->insert( public_path().'/img-trp/cover-review.png');
+            //$img->insert( public_path().'/img-trp/cover-review.png');
             $title = $this->title;
             //$title = 'ale ale ale';
-            $title = wordwrap('“'.$title.'”', 40); 
+            $title = wordwrap('“'.$title.'”', 26); 
             $lines = count(explode("\n", $title));
-            $top = 91;
-            $top -= $lines*38;
-            $img->text($title, 123, $top, function($font) {
-                $font->file(public_path().'/fonts/Calibri-Italic.ttf');
-                $font->size(60);
+            $top = 160;
+            if ($lines == 1) {
+                $top = 180;
+            } else if($lines == 2) {
+                $top -= $lines*15;
+            } else if($lines == 3) {
+                $top -= $lines*35;
+            } else {
+                $top -= $lines*35;
+            }
+            
+            $img->text($title, 573, $top, function($font) {
+                $font->file(public_path().'/fonts/Calibri-Bold.ttf');
+                $font->size(45);
                 $font->color('#000000');
                 $font->align('left');
                 $font->valign('top');
             });
 
-            $voffset = (3 - $lines)*40;
+            $voffset = (3 - $lines)*10;
         } else {
-            $img->insert( public_path().'/img-trp/cover-review-notitle.png');
             $voffset = 0;
         }
 
 
         $answer = $this->answer;
-        $answer = mb_strlen($answer)>170 ? mb_substr($answer, 0, 167).'...' : $answer;
-        $answer = wordwrap('"'.$answer.'"', 60);
+        $answer = mb_strlen($answer)>100 ? mb_substr($answer, 0, 97).'...' : $answer;
+        $answer = wordwrap('"'.$answer.'"', 38);
         $lines = count(explode("\n", $answer));
-        $top = 335;
+        $top = 355;
         $top -= $lines*38;
 
-        $img->text($answer, 218, $top - $voffset, function($font) {
+        $img->text($answer, 573, $top - $voffset, function($font) {
             $font->file(public_path().'/fonts/Calibri.ttf');
-            $font->size(38);
+            $font->size(35);
             $font->color('#000000');
             $font->align('left');
             $font->valign('top');
         });
 
-        $avatar_image = Image::make( $this->user->hasimage ? $this->user->getImagePath(true) : public_path().'/new-vox-img/no-avatar-0.png' );
-        $avatar_image->resize(70, 70);
-        $avatar = Image::canvas(70, 70, '#fff');
-        $avatar->insert( $avatar_image, 'top-left', 0, 0 );
-        $avatar->insert( public_path().'/img-trp/cover-avatar-mask.png' , 'top-left', 0, 0 );
-        $img->insert( $avatar , 'top-left', 123, 280 - $voffset );
+        if ($this->user->hasimage) {
+            $avatar_image = Image::make( $this->user->getImagePath(true) );
+            $avatar_image->resize(60, 60);
+            $avatar = Image::canvas(60, 60, '#fff');
+            $avatar->insert( $avatar_image, 'top-left', 0, 0 );
+            $avatar->insert( public_path().'/img-trp/cover-avatar-mask-new.png' , 'top-left', 0, 0 );
+            $img->insert( $avatar , 'top-left', 706, 500 );
+
+            $left_patient_name = 774;
+        } else {
+            $left_patient_name = 710;
+        }
+
+        if ($this->verified) {
+            $img->insert( public_path().'/img-trp/cover-trusted.png' , 'top-left', 921, 424 );
+        }
 
 
-
-        $names = 'by: '.$this->user->getName();
-        $img->text($names, 506, 472, function($font) {
+        $names = $this->user->getName();
+        $img->text($names, $left_patient_name, 516, function($font) {
             $font->file(public_path().'/fonts/Calibri.ttf');
-            $font->size(38);
+            $font->size(30);
             $font->color('#000000');
             $font->align('left');
             $font->valign('top');
         });
 
 
-        $step = 73;
-        $start = 122;
+        $step = 67;
+        $startX = 573;
+        for($i=1;$i<=5;$i++) {
+            $img->insert( public_path().'/img-trp/cover-star-review-new-gray.png' , 'top-left', $startX, 409 );
+            $startX += $step;
+        }
+
+        $step = 67;
+        $startX = 573;
         for($i=1;$i<=$this->rating;$i++) {
-            $img->insert( public_path().'/img-trp/cover-star-review.png' , 'top-left', $start, 450 );
-            $start += $step;
+            $img->insert( public_path().'/img-trp/cover-star-review-new.png' , 'top-left', $startX, 409 );
+            $startX += $step;
         }
 
         $rest = ( $this->rating - floor( $this->rating ) );
         if($rest) {
-            $halfstar = Image::canvas(65*$rest, 67, '#fff');
-            $halfstar->insert( public_path().'/img-trp/cover-star-review.png', 'top-left', 0, 0 );
-            $img->insert($halfstar , 'top-left', $start, 450 );
+            $halfstar = Image::canvas(60*$rest, 61, '#fff');
+            $halfstar->insert( public_path().'/img-trp/cover-star-review-new.png', 'top-left', 0, 0 );
+            $img->insert($halfstar , 'top-left', $startX, 409 );
         }
 
         $img->save($path);
