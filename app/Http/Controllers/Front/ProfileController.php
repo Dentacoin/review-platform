@@ -468,7 +468,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                             $patient_review = Review::where('user_id', $existing_patient->id )->where(function($query) use ($d_id) {
                                 $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
                             })->orderBy('id', 'desc')->first();
-                            return Response::json(['success' => false, 'message' => 'This patient already submitted a review for your dental practice recently. Try again next month.' ] );
+                            
+                            if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
+                                return Response::json(['success' => false, 'message' => 'This patient already submitted a review for your dental practice recently. Try again next month.' ] );
+                            }
                         }
 
                         if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
