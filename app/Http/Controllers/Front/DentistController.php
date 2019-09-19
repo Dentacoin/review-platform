@@ -774,7 +774,8 @@ class DentistController extends FrontController
                         $item->sendGridTemplate(71, $substitutions);
                     } else {
                         $item->sendTemplate( !empty($verification) ? 63 : 23 ,[
-                            'patient_name' => $this->user->name
+                            'patient_name' => $this->user->name,
+                            'invitation_link' => $item->getLink().'?'. http_build_query(['popup'=>'popup-login-dentist'])
                         ] );
                     }
 
