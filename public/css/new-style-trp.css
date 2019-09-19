@@ -6268,6 +6268,7 @@ body.sp-trp-iframe .profile-reviews-space {
     height: 460px; } }
 @media screen and (max-width: 998px) {
   body.sp-trp-iframe #banned-popup .popup-inner .icon {
+    position: static;
     order: 2;
     max-width: 150px;
     margin-top: 160px; } }
