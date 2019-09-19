@@ -1027,21 +1027,20 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $ask->status = 'yes';
             $ask->save();
 
+            $last_invite = UserInvite::where('user_id', $this->user->id)->where('invited_id', $ask->user->id)->first();
+            if (!empty($last_invite)) {
+                $last_invite->created_at = Carbon::now();
+                $last_invite->save();   
+            } else {
+                $inv = new UserInvite;
+                $inv->user_id = $this->user->id;
+                $inv->invited_email = $ask->user->email;
+                $inv->invited_name = $ask->user->name;
+                $inv->invited_id = $ask->user->id;
+                $inv->save();                    
+            }
+
             if ($ask->on_review) {
-
-                $last_invite = UserInvite::where('user_id', $this->user->id)->where('invited_id', $ask->user->id)->first();
-                if (!empty($last_invite)) {
-                    $last_invite->created_at = Carbon::now();
-                    $last_invite->save();   
-                } else {
-                    $inv = new UserInvite;
-                    $inv->user_id = $this->user->id;
-                    $inv->invited_email = $ask->user->email;
-                    $inv->invited_name = $ask->user->name;
-                    $inv->invited_id = $ask->user->id;
-                    $inv->save();                    
-                }
-
                 $ask->user->sendTemplate( $ask->on_review ? 64 : 24 ,[
                     'dentist_name' => $this->user->getName(),
                     'dentist_link' => $this->user->getLink(),

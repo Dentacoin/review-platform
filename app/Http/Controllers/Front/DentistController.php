@@ -1060,7 +1060,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     Mail::raw($mtext, function ($message) use ($patient) {
                         $receiver = 'petya.ivanova@dentacoin.com';
                         $receiver = 'donika.kraeva@dentacoin.com';
-                        //$receiver = 'gergana@youpluswe.com';
+                        $receiver = 'gergana@youpluswe.com';
                         $sender = config('mail.from.address');
                         $sender_name = config('mail.from.name');
 
