@@ -78,7 +78,7 @@
 		</div>
 	</div>
 
-	@if($current_ban)
+	@if(!empty($current_ban))
 	
 		<div class="popup fixed-popup popup-with-background active" id="banned-popup">
 			<div class="popup-inner inner-white">
