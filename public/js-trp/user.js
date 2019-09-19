@@ -619,13 +619,21 @@ $(document).ready(function(){
             return;
         }
         ajax_is_running = true;
+        var that = $(this);
+
         $.get( 
             $(this).attr('href'), 
             function( data ) {
                 if(data.success) {
-                    $('.ask-dentist').closest('.alert').hide();
-                    $('.ask-success').show();
-                    $('.button-ask').remove();
+                    if (that.parent().hasClass('ask-dentist-alert')) {
+                        $('.ask-dentist-alert').find('.ask-dentist').remove();
+                        $('.ask-dentist-alert').find('br').remove();
+                        that.closest('.popup').removeClass('active');
+                    } else {
+                        $('.ask-dentist').closest('.alert').hide();
+                        $('.ask-success').show();
+                        $('.button-ask').remove();
+                    }
 
                     gtag('event', 'Request', {
                         'event_category': 'Reviews',
@@ -1084,6 +1092,8 @@ $(document).ready(function(){
                         $('html, body').animate({
                             scrollTop: $('.review-tabs').offset().top - 20
                         }, 500);                        
+                    } else if(data.ban) {
+                        window.location.reload(); 
                     } else {
                     	$('#review-error').show();
 
@@ -1524,9 +1534,37 @@ $(document).ready(function(){
         $(this).closest('.treatment-wrapper').find('.treatments-hidden').toggleClass('active');
     });
 
-    console.log(window.location.hash);
     if (window.location.hash.length && $('.tab[data-tab="'+window.location.hash.substring(1)+'"]').length) {
         $('.tab[data-tab="'+window.location.hash.substring(1)+'"]').trigger( "click" );
     }
+
+    $('#invite-again').click( function(e) {
+        e.preventDefault();
+
+        var invite_url = $(this).attr('data-href');
+        var invitation_id = $(this).attr('inv-id');
+
+        console.log(invite_url);
+
+        $.ajax({
+            type: "POST",
+            url: invite_url,
+            data: {
+                _token: $('input[name="_token"]').val(),
+                id: invitation_id,
+            },
+            dataType: 'json',
+            success: function(ret) {
+                if(ret.success) {
+                    window.location.href = ret.url;
+                } else {
+                    console.log('error');
+                }
+            },
+            error: function(ret) {
+                console.log('error');
+            }
+        });
+    })
 
 });

@@ -216,7 +216,7 @@
 						{!! nl2br(trans('trp.page.user.submit-review')) !!}
 						
 					</a>
-					@if(empty($isTrusted) && !$has_asked_dentist)
+					@if(empty($is_trusted) && !$has_asked_dentist)
 						<a href="javascript:;" class="button button-inner-white button-ask" data-popup-logged="popup-ask-dentist">
 							{!! nl2br(trans('trp.page.user.request-invite')) !!}
 							
@@ -553,7 +553,7 @@
 				<a href="javascript:;" class="button" data-popup-logged="submit-review-popup">
 					{!! nl2br(trans('trp.page.user.submit-review')) !!}
 				</a>
-				@if(empty($isTrusted) && !$has_asked_dentist)
+				@if(empty($is_trusted) && !$has_asked_dentist)
 					<a href="javascript:;" class="button button-inner-white button-ask" data-popup-logged="popup-ask-dentist">
 						{!! nl2br(trans('trp.page.user.request-invite')) !!}
 					</a>
@@ -1084,7 +1084,7 @@
 
 				@if($user->asks->isNotEmpty())
 		    		<h2 class="black-left-line section-title">
-		    			{!! nl2br(trans('trp.page.user.patient-requests')) !!}
+		    			{!! nl2br(trans('trp.page.user.patient-requests')) !!} ({{ $user->asks->count() }})
 		    		</h2>
 
 		    		<div class="asks-container">
@@ -1145,7 +1145,7 @@
 
 				@if($user->invites->isNotEmpty())
 		    		<h2 class="black-left-line section-title">
-		    			{!! nl2br(trans('trp.page.user.review-invitation')) !!}
+		    			{!! nl2br(trans('trp.page.user.review-invitation')) !!} ({{ $user->invites->count() }})
 		    		</h2>
 
 		    		<div class="asks-container">
@@ -1183,7 +1183,10 @@
 			        						@if($inv->invited_id)
 
 												@if(!empty($inv->hasReview($user->id)))
-													<a review-id="{{ $inv->hasReview($user->id) }}" href="javascript:;" class="ask-review">
+													@if(!empty($inv->dentistInviteAgain($user->id)))
+														<a href="javascript:;" class="button" id="invite-again" data-href="{{ getLangUrl('invite-patient-again') }}" inv-id="{{ $inv->id }}" style="font-size: 16px;padding: 5px;">Invite again</a><br>
+													@endif
+													<a review-id="{{ $inv->hasReview($user->id)->id }}" href="javascript:;" class="ask-review">
 														{{ trans('trp.page.profile.invite.status-review') }}
 													</a>
 												@else
@@ -1227,7 +1230,7 @@
 		@endif
 	@else
 		@include('trp.popups.submit-review')
-		@if(empty($isTrusted) && !$has_asked_dentist)
+		@if(empty($is_trusted) && !$has_asked_dentist)
 			@include('trp.popups.ask-dentist')
 		@endif
 	@endif

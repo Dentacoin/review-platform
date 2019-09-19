@@ -8,45 +8,23 @@
 			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
 
-
-
 		@if($item->id == $user->id)
 			<div class="alert alert-info">
 				{{ trans('trp.popup.submit-review-popup.self') }}
-			</div>
-
-		@elseif($dentist_limit_reached)
-			<div class="alert alert-info">
-				@if($has_asked_dentist)
-					@if($has_asked_dentist->status=='no')
-						{!! nl2br(trans('trp.popup.submit-review-popup.limit-denied', [ 'name' => $item->getName() ])) !!}
-					@else
-						{!! nl2br(trans('trp.popup.submit-review-popup.limit-waiting', [ 'name' => $item->getName() ])) !!}
-					@endif
-				@else
-					{!! nl2br(trans('trp.popup.submit-review-popup.limit-hint', [ 'name' => $item->getName() ])) !!}
-					<br/>
-					<br/>
-					<a href="{{ $item->getLink().'/ask' }}" class="button ask-dentist">
-						{!! nl2br(trans('trp.popup.submit-review-popup.limit-send')) !!}
-					</a>
-				@endif
-			</div>
-			<div class="alert alert-success ask-success" style="display: none;">
-				{!! nl2br(trans('trp.popup.submit-review-popup.limit-success', [ 'name' => $item->getName() ])) !!}
 			</div>
 		@elseif($user->loggedFromBadIp())
 			<div class="alert alert-info">
 				{!! nl2br(trans('trp.popup.submit-review-popup.bad-ip')) !!}
 			</div>
-		@elseif($review_limit_reached)
-			<div class="alert alert-info">
-				{!! nl2br(trans('trp.popup.submit-review-popup.limit-reached-'.$review_limit_reached, [ 'name' => $item->getName() ])) !!}
-			</div>
 		@elseif(!empty($my_review))
-			<div class="alert alert-info">
-				{!! nl2br(trans('trp.popup.submit-review-popup.already-left')) !!}
-				
+			<div class="alert alert-info ask-dentist-alert">
+				{!! nl2br(trans('trp.popup.submit-review-popup.already-left-review')) !!}
+				@if($user->approvedPatientcanAskDentist($item->id))
+					<br><br>
+					<a href="{{ getLangUrl('dentist/'.$item->slug).'ask' }}" class="button ask-dentist">
+						{!! nl2br(trans('trp.popup.submit-review-popup.limit-send')) !!}
+					</a>
+				@endif
 			</div>
 		@elseif($user->is_dentist)
 			<div class="alert alert-info">
@@ -67,7 +45,7 @@
 				{!! nl2br(trans('trp.popup.submit-review-popup.title')) !!}
 			</h2>
 
-			{!! Form::open(array('url' => $item->getLink(), 'id' => 'write-review-form', 'method' => 'post')) !!}
+			{!! Form::open(array('url' => getLangUrl('dentist/'.$item->slug), 'id' => 'write-review-form', 'method' => 'post')) !!}
 				<div class="questions-wrapper">
 
 					@if($item->is_dentist && !$item->is_clinic && $item->my_workplace_approved->isNotEmpty())	
@@ -361,7 +339,7 @@
 				            	]) !!}
 				            	<br/>
 				            	<br/>
-				            	<a class="button" href="{{ $item->getLink() }}">
+				            	<a class="button" href="{{ getLangUrl('dentist/'.$item->slug) }}">
 				            		{{ trans('trp.popup.submit-review-popup.my-review') }}
 				            	</a>
 				            @else

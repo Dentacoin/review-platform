@@ -81,6 +81,12 @@
 					<img src="{{ url('new-vox-img/coins.svg') }}">
 					{!! nl2br(trans('vox.daily-polls.popup.signin')) !!}
 				</a>
+				<div class="get-reward-buttons" style="display: none;">
+					<a href="javascript:;" class="blue-button next-poll">
+						{!! nl2br(trans('vox.daily-polls.popup.next-poll')) !!}
+						<img src="{{ url('new-vox-img/next-arrow.svg') }}">
+					</a>
+				</div>
 			@endif
 		</div>
 		<div class="content poll-closed-wrapper" style="display: none;">
@@ -95,6 +101,17 @@
 				<a href="javascript:;" class="blue-button next-poll">
 					{!! nl2br(trans('vox.daily-polls.popup.next-poll')) !!}
 					<img src="{{ url('new-vox-img/next-arrow.svg') }}">
+				</a>
+			</div>
+		</div>
+		<div class="content poll-taken-all-wrapper" style="display: none;">
+			<h3>
+				{!! nl2br(trans('vox.daily-polls.popup.title')) !!}
+			</h3>
+			<h2>Oops! No more open polls for you. <br><br> Check again tomorrow for the new daily poll! Meanwhile, why don't you dive into our pool of paid surveys?</h2>
+			<div class="get-reward-buttons">
+				<a href="{{ getLangUrl('paid-dental-surveys') }}" class="blue-button">
+					TAKE PAID SURVEYS
 				</a>
 			</div>
 		</div>

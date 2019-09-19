@@ -10,6 +10,10 @@ class PagesController extends FrontController
 
 	public function home($locale=null, $slug=null) {
 
+        if(!empty($this->user) && $this->user->isBanned('trp')) {
+            return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+        }
+
         $page = Page::translatedIn(App::getLocale())->whereTranslationLike('slug', $slug)->first();
         
         if (!empty($page)) {

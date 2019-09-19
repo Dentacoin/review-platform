@@ -477,14 +477,38 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
                             return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited') ] );
                         }
+
                         $invitation->invited_name = Request::Input('name');
                         $invitation->created_at = Carbon::now();
+
+                        if (empty($invitation->unsubscribed)) {
+                            $invitation->review = true;
+                            $invitation->completed = null;
+                            $invitation->notified1 = null;
+                            $invitation->notified2 = null;
+                            $invitation->notified3 = null;
+                        }
                         $invitation->save();
+
+                        $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
+                        if(!empty($last_ask)) {
+                            $last_ask->created_at = Carbon::now();
+                            $last_ask->on_review = true;
+                            $last_ask->save();
+                        } else {
+                            $ask = new UserAsk;
+                            $ask->user_id = $existing_patient->id;
+                            $ask->dentist_id = $this->user->id;
+                            $ask->status = 'yes';
+                            $ask->on_review = true;
+                            $ask->save();
+                        }
                     } else {
                         $invitation = new UserInvite;
                         $invitation->user_id = $this->user->id;
                         $invitation->invited_email = Request::Input('email');
                         $invitation->invited_name = Request::Input('name');
+                        $invitation->review = true;
                         $invitation->save();
                     }
 
@@ -561,6 +585,57 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 'hello.all.js',
             ],
         ]);
+    }
+
+
+    public function invite_patient_again($locale=null) {
+        $id = Request::input('id');
+
+        if (!empty($id)) {
+            if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='test') {
+                return redirect(getLangUrl('/'));
+            }
+
+            if(Request::isMethod('post') && $this->user->canInvite('trp') ) {
+
+                $last_invite = UserInvite::find($id);
+                $existing_patient = User::find($last_invite->invited_id);
+
+                if (!empty($last_invite) && !empty($existing_patient)) {
+                    
+                    $last_invite->created_at = Carbon::now();
+                    $last_invite->save();
+                    
+                    $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
+                    if(!empty($last_ask)) {
+                        $last_ask->created_at = Carbon::now();
+                        $last_ask->on_review = true;
+                        $last_ask->save();
+                    } else {
+                        $ask = new UserAsk;
+                        $ask->user_id = $existing_patient->id;
+                        $ask->dentist_id = $this->user->id;
+                        $ask->status = 'yes';
+                        $ask->on_review = true;
+                        $ask->save();
+                    }
+
+                    $substitutions = [
+                        'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                        'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
+                        'invited_user_name' => $last_invite->invited_name,
+                        "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$last_invite->id, null, 'https://reviews.dentacoin.com/'),
+                    ];
+
+                    $existing_patient->sendGridTemplate(68, $substitutions);
+
+                    return Response::json(['success' => true, 'url' => getLangUrl('/').'?tab=asks' ] );
+                } else {
+                    return Response::json(['success' => false ] );
+                }
+            }
+        }
+
     }
 
 
@@ -952,55 +1027,64 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $ask->status = 'yes';
             $ask->save();
 
-            $inv = new UserInvite;
-            $inv->user_id = $this->user->id;
-            $inv->invited_email = $ask->user->email;
-            $inv->invited_name = $ask->user->name;
-            $inv->invited_id = $ask->user->id;
-            $inv->save();
+            if ($ask->on_review) {
 
-            $ask->user->sendTemplate( $ask->on_review ? 64 : 24 ,[
-                'dentist_name' => $this->user->getName(),
-                'dentist_link' => $this->user->getLink(),
-            ]);
-
-
-            $d_id = $this->user->id;
-            $reviews = Review::where(function($query) use ($d_id) {
-                $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
-            })->where('user_id', $ask->user->id)
-            ->get();
-
-            if ($reviews->count()) {
-                
-                foreach ($reviews as $review) {
-                    $review->verified = true;
-                    $review->save();
-
-                    $reward = new DcnReward();
-                    $reward->user_id = $ask->user->id;
-                    $reward->platform = 'trp';
-                    $reward->reward = Reward::getReward('review_trusted');
-                    $reward->type = 'review_trusted';
-                    $reward->reference_id = null;
-
-                    $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                    $dd = new DeviceDetector($userAgent);
-                    $dd->parse();
-
-                    if ($dd->isBot()) {
-                        // handle bots,spiders,crawlers,...
-                        $reward->device = $dd->getBot();
-                    } else {
-                        $reward->device = $dd->getDeviceName();
-                        $reward->brand = $dd->getBrandName();
-                        $reward->model = $dd->getModel();
-                        $reward->os = $dd->getOs()['name'];
-                    }
-
-                    $reward->save();
+                $last_invite = UserInvite::where('user_id', $this->user->id)->where('invited_id', $ask->user->id)->first();
+                if (!empty($last_invite)) {
+                    $last_invite->created_at = Carbon::now();
+                    $last_invite->save();   
+                } else {
+                    $inv = new UserInvite;
+                    $inv->user_id = $this->user->id;
+                    $inv->invited_email = $ask->user->email;
+                    $inv->invited_name = $ask->user->name;
+                    $inv->invited_id = $ask->user->id;
+                    $inv->save();                    
                 }
-            }                
+
+                $ask->user->sendTemplate( $ask->on_review ? 64 : 24 ,[
+                    'dentist_name' => $this->user->getName(),
+                    'dentist_link' => $this->user->getLink(),
+                ]);
+
+
+                $d_id = $this->user->id;
+                $reviews = Review::where(function($query) use ($d_id) {
+                    $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
+                })->where('user_id', $ask->user->id)
+                ->get();
+
+                if ($reviews->count()) {
+                    
+                    foreach ($reviews as $review) {
+                        $review->verified = true;
+                        $review->save();
+
+                        $reward = new DcnReward();
+                        $reward->user_id = $ask->user->id;
+                        $reward->platform = 'trp';
+                        $reward->reward = Reward::getReward('review_trusted');
+                        $reward->type = 'review_trusted';
+                        $reward->reference_id = null;
+
+                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                        $dd = new DeviceDetector($userAgent);
+                        $dd->parse();
+
+                        if ($dd->isBot()) {
+                            // handle bots,spiders,crawlers,...
+                            $reward->device = $dd->getBot();
+                        } else {
+                            $reward->device = $dd->getDeviceName();
+                            $reward->brand = $dd->getBrandName();
+                            $reward->model = $dd->getModel();
+                            $reward->os = $dd->getOs()['name'];
+                        }
+
+                        $reward->save();
+                    }
+                }
+            }
         }
         
         Request::session()->flash('success-message', trans('trp.page.profile.asks.accepted'));
@@ -1044,6 +1128,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
             ],
         ];
+
+        if ($this->user->isBanned('trp')) {
+            $params['current_ban'] = true;
+        }
 
         $path = explode('/', request()->path())[2];
         if ($path == 'trp-iframe') {
@@ -1098,7 +1186,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         $ret = [
             'success' => false
         ];
-        if($this->user->isBanned('vox')) {
+        if($this->user->isBanned('trp')) {
             $ret['message'] = 'banned';
             return Response::json( $ret );
         }

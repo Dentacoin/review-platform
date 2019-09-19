@@ -3944,7 +3944,8 @@ textarea.input {
     top: 16px;
     color: #46afda;
     font-size: 18px;
-    width: 63px; }
+    width: 63px;
+    z-index: 10; }
     .information .share-button img {
       display: inline-block;
       max-width: 16px;

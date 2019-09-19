@@ -252,6 +252,8 @@ $reviewRoutes = function () {
 
 			Route::get('faq', 									'FaqController@home');
 
+			Route::post('invite-patient-again',					'ProfileController@invite_patient_again');
+
 			Route::group(['middleware' => 'auth:web'], function () {
 				Route::any('profile', 							'ProfileController@home');
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');

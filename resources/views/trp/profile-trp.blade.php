@@ -77,4 +77,25 @@
 			@endif
 		</div>
 	</div>
+
+	@if($current_ban)
+	
+		<div class="popup fixed-popup popup-with-background active" id="banned-popup">
+			<div class="popup-inner inner-white">
+				<div class="flex flex-mobile flex-center break-tablet">
+					<div class="icon">
+						<img src="{{ url('img-trp/big-x.png') }}">
+					</div>
+					<div class="content">
+						<p class="h1">
+							You've been banned for suspicious activity.
+						</p>
+						<h3>
+							You will no longer be able to submit feedback on Dentacoin Trusted Reviews.
+						</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	@endif
 @endsection

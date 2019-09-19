@@ -13,7 +13,7 @@
 			
 			<br/>
 			<br/>
-			<a href="{{ $item->getLink().'/ask' }}" original-href="{{ $item->getLink().'/ask' }}" class="button ask-dentist">
+			<a href="{{ $item->getLink().'ask' }}" original-href="{{ $item->getLink().'ask' }}" class="button ask-dentist">
 				{!! nl2br(trans('trp.popup.popup-ask-dentist.send')) !!}
 				
 			</a>

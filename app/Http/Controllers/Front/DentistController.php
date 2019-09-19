@@ -6,11 +6,13 @@ use App\Http\Controllers\FrontController;
 use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
 
+use Mail;
 use Response;
 use Request;
 use Validator;
 use Illuminate\Support\Facades\Input;
 use App\Models\User;
+use App\Models\UserBan;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Question;
@@ -143,6 +145,10 @@ class DentistController extends FrontController
 
     public function list($locale=null, $slug) {
 
+        if(!empty($this->user) && $this->user->isBanned('trp')) {
+            return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+        }
+
         // $cmt = $list = User::where('is_dentist', 1)->whereNotNull('zip')->whereNull('state_name')->count();
         // echo 'TOTAL: '.$cmt.'<br/>';
         // $list = User::where('is_dentist', 1)->whereNotNull('zip')->whereNull('state_name')->take(100)->get();
@@ -165,6 +171,8 @@ class DentistController extends FrontController
 
         //$item->recalculateRating();
         $isTrusted = !empty($this->user) ? $this->user->wasInvitedBy($item->id) : false;
+
+        $canAskDentist = !empty($this->user) ? $this->user->canAskDentist($item->id) : true;
 
         $questions = Question::get();
 
@@ -219,13 +227,14 @@ class DentistController extends FrontController
                 if( !$this->user->is_dentist) {
 
                     $old_review = $this->user->hasReviewTo($item->id);
-                    if($old_review && $old_review->status=='accepted') {
+                    // if($old_review && $old_review->status=='accepted') {
+                    //     ; //dgd
+                    // }
+                    if( $this->user->loggedFromBadIp() ) {
                         ; //dgd
-                    } else if( $this->user->loggedFromBadIp() ) {
-                        ; //dgd
-                    } else if( $this->user->getReviewLimits() ) {
-                        ; //dgd
-                    } else if( $this->user->cantReviewDentist($item->id) ) {
+                    // } else if( $this->user->getReviewLimits() ) {
+                    //     ; //dgd
+                    } else if( $this->user->cantSubmitReviewToSameDentist($item->id) ) {
                         ; //dgd
                     } else {
 
@@ -282,7 +291,7 @@ class DentistController extends FrontController
 
                             $answer_rates[$question->id] /= count($options);
                             
-                            if($old_review) {
+                            if($old_review && $old_review->status=='pending') {
                                 $answer = ReviewAnswer::where([
                                     ['review_id', $review->id],
                                     ['question_id', $question->id],
@@ -340,6 +349,19 @@ class DentistController extends FrontController
 
                         if(!$review->youtube_id) {
                             $review->afterSubmitActions();
+                        }
+
+                        $invites = UserInvite::where('dentist_id', $item->id )->where('invited_id', $this->user->id)->where('review', 1)->whereNull('completed')->get();
+                        if (!empty($invites)) {
+                            foreach ($invites as $invite) {
+                                $invite->completed = true;
+                                $invite->save();
+                            }
+                        }
+
+                        if($this->patientSuspicious($this->user->id)) {
+                            $ret['success'] = false;
+                            $ret['ban'] = true;
                         }
 
                         $ret['success'] = true;
@@ -458,7 +480,8 @@ class DentistController extends FrontController
             'noIndex' => $item->address ? false : true,
             'item' => $item,
             'is_trusted' => $isTrusted,
-            'my_review' => !empty($this->user) ? $this->user->hasReviewTo($item->id) : null,
+            'canAskDentist' => $canAskDentist,
+            'my_review' => !empty($this->user) ? $this->user->cantSubmitReviewToSameDentist($item->id) : null,
             'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
             'my_downvotes' => !empty($this->user) ? $this->user->unusefulVotesForDenist($item->id) : null,
             'questions' => $questions,
@@ -717,23 +740,44 @@ class DentistController extends FrontController
 
         if(!empty($item)) {
 
-
             if(!empty($this->user) && !$this->user->cantReviewDentist($item->id)) {
 
-                $ask = $this->user->hasAskedDentist($item->id);
-                if(empty($ask)) {
-                    $ask = new UserAsk;
-                    $ask->user_id = $this->user->id;
-                    $ask->dentist_id = $item->id;
-                    $ask->status = 'waiting';
-                    if (!empty($verification)) {
-                        $ask->on_review = true;
-                    }
-                    $ask->save();
+                $ask = $this->user->canAskDentist($item->id);
+                $is_patient_to_dentist = UserInvite::where('user_id', $item->id )->where('invited_id', $this->user->id)->first();
 
-                    $item->sendTemplate( !empty($verification) ? 63 : 23 ,[
-                        'patient_name' => $this->user->name
-                    ] );
+                if(!empty($ask)) {
+                    $last_ask = UserAsk::where('user_id', $this->user->id)->where('dentist_id', $item->id)->first();
+
+                    if(!empty($last_ask)) {
+                        $last_ask->created_at = Carbon::now();
+                        $last_ask->status = 'waiting';
+                        $last_ask->on_review = true;
+                        $last_ask->save();
+                    } else {
+                        $ask = new UserAsk;
+                        $ask->user_id = $this->user->id;
+                        $ask->dentist_id = $item->id;
+                        $ask->status = 'waiting';
+                        if (!empty($verification)) {
+                            $ask->on_review = true;
+                        }
+                        $ask->save();
+                    }
+
+                    if (!empty($is_patient_to_dentist)) {
+
+                        $substitutions = [
+                            'patient_name' => $this->user->name,
+                            "requests_link" => getLangUrl( '/' , null, 'https://reviews.dentacoin.com').'?'. http_build_query(['popup'=>'popup-login-dentist']),
+                        ];
+
+                        $item->sendGridTemplate(71, $substitutions);
+                    } else {
+                        $item->sendTemplate( !empty($verification) ? 63 : 23 ,[
+                            'patient_name' => $this->user->name
+                        ] );
+                    }
+
 
                     return Response::json( ['success' => true] );
                 }
@@ -989,5 +1033,61 @@ class DentistController extends FrontController
         fclose($handle);
         return $status;
     }
+
+
+    public function patientSuspicious($p_id) {
+        $patient = User::find($p_id);
+
+        if (!empty($patient)) {
+            
+            if($patient->reviews_out->isNotEmpty()) {
+                $nonverified = [];
+                foreach ($patient->reviews_out as $review) {
+                    if(!$review->verified) {
+                        if($review->dentist_id) {
+                            $nonverified[$review->dentist_id] = $review->dentist_id;
+                        }
+                        if($review->clinic_id) {
+                            $nonverified[$review->clinic_id] = $review->clinic_id;
+                        }
+                    }
+                }
+
+                if (count($nonverified) == 3) {
+                    $mtext = 'Patient - '.$patient->name.' writes his third review to different dentist. 
+Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$patient->id;
+
+                    Mail::raw($mtext, function ($message) use ($patient) {
+                        $receiver = 'petya.ivanova@dentacoin.com';
+                        $receiver = 'donika.kraeva@dentacoin.com';
+                        //$receiver = 'gergana@youpluswe.com';
+                        $sender = config('mail.from.address');
+                        $sender_name = config('mail.from.name');
+
+                        $message->from($sender, $sender_name);
+                        $message->to( $receiver );
+                        //$message->to( 'dokinator@gmail.com' );
+                        $message->replyTo($patient->email, $patient->name);
+                        $message->subject('Suspicious Patient Activity - 3 Reviews');
+                    });
+                }
+
+                if (count($nonverified) >= 6) {
+                    $ban = new UserBan;
+                    $ban->user_id = $patient->id;
+                    $ban->domain = 'trp';
+                    $ban->type = 'reviews';
+                    $ban->save();
+
+                    $patient->sendGridTemplate(70);
+
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    
 
 }

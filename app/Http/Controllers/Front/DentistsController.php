@@ -33,6 +33,10 @@ class DentistsController extends FrontController
 
     public function search($locale=null, $query=null, $filter=null, $page=null, $ajax=null) {
 
+        if(!empty($this->user) && $this->user->isBanned('trp')) {
+            return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+        }
+
         $this->current_page = 'dentists';
 
         if (empty($query)) {
@@ -495,6 +499,11 @@ class DentistsController extends FrontController
 
     public function country($locale=null) {
 
+        
+        if(!empty($this->user) && $this->user->isBanned('trp')) {
+            return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+        }
+
         $dentists = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved'])->whereNotNull('country_id')->whereNotNull('city_name')->groupBy('country_id')->get()->pluck('country_id');
 
         $dentist_countries = Country::whereIn('id', $dentists )->get();
@@ -565,6 +574,11 @@ class DentistsController extends FrontController
     }
 
     public function city($locale=null, $country_slug, $state_slug) {
+
+
+        if(!empty($this->user) && $this->user->isBanned('trp')) {
+            return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+        }
 
         // $user = User::find(1592);
 
@@ -670,6 +684,11 @@ class DentistsController extends FrontController
     }
 
     public function state($locale=null, $country_slug) {
+
+
+        if(!empty($this->user) && $this->user->isBanned('trp')) {
+            return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+        }
 
         // $user = User::find(68738);
 

@@ -75,7 +75,7 @@ class AuthenticateUser extends FrontController
     {
         if (Auth::guard('web')->attempt( ['email' => $request->input('email'), 'password' => $request->input('password') ], $request->input('remember') )) {
             
-            if( $ban_info = Auth::guard('web')->user()->isBanned('vox') ) {
+            if( $ban_info = Auth::guard('web')->user()->isBanned('trp') ) {
                 Auth::guard('web')->logout();
                 return Response::json( [
                     'success' => false, 

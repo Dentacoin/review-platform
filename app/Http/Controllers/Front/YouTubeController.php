@@ -30,6 +30,16 @@ class YouTubeController extends FrontController
 {
     public function test() {
 
+
+    	$review = Review::find(8493);
+    	$review->generateSocialCover();
+
+    	dd($review->getSocialCover());
+
+
+
+    	exit;
+
     	// $us = User::find(37530);
     	// $us->sendGridTemplate(26);
 

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Carbon\Carbon;
+
 class UserInvite extends Model {
 
     protected $fillable = [
@@ -15,6 +17,12 @@ class UserInvite extends Model {
         'for_team',
         'rewarded',
         'join_clinic',
+        'review',
+        'completed',
+        'notified1',
+        'notified2',
+        'notified3',
+        'unsubscribed',
     ];
 
     protected $dates = [
@@ -62,7 +70,25 @@ class UserInvite extends Model {
         })->orderby('id', 'desc')->first();
 
         if(!empty($review)) {
-            return $review->id;
+            return $review;
+        } else {
+            return false;
+        }
+    }
+
+    public function dentistInviteAgain($id) {
+
+        if(!empty($this->hasReview($id))) {
+
+            $days = $this->hasReview($id)->created_at->diffInDays( Carbon::now() );
+            $to_month = Carbon::now()->modify('-1 months');
+            $dentist_invites = self::where('user_id', $id)->where('invited_id', $this->invited_id)->where('created_at', '<=', $to_month)->first();
+
+            if($days>30 && !empty($dentist_invites)) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

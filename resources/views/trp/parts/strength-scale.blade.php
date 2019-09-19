@@ -3,7 +3,7 @@
 	<p class="extra-title">{!! $user->is_dentist ? nl2br(trans('trp.strength.title-dentist')) : nl2br(trans('trp.strength.title')) !!}</p>
 	<div class="stretching-box">
 		<div class="strength-flickity">
-			@foreach($user->getStrengthPlatform('trp') as $strength)
+			@foreach(App\Models\UserStrength::getStrengthPlatform('trp', $user) as $strength)
 				<div class="strength-flickity-slide">
 					<h2><a href="{{ !empty($strength['buttonHref']) ? $strength['buttonHref'] : 'javascript:;' }}" {{ !empty($strength['target']) ? 'target="_blank"' : '' }} >{{ $strength['title'] }}</a></h2>
 					<a href="{{ !empty($strength['buttonHref']) ? $strength['buttonHref'] : 'javascript:;' }}" {{ !empty($strength['target']) ? 'target="_blank"' : '' }} class="strength-box">
@@ -22,20 +22,20 @@
 					</div>
 					
 					<div class="strenght-progress">
-						<p>{!! nl2br(trans('trp.strength.progress')) !!}: <span><span class="strength-current">{{ $user->getStrengthCompleted('trp') }}</span>/<span class="strength-total">{{ count($user->getStrengthPlatform('trp')) }}</span></span></p>
+						<p>{!! nl2br(trans('trp.strength.progress')) !!}: <span><span class="strength-current">{{ $user->getStrengthCompleted('trp') }}</span>/<span class="strength-total">{{ count(App\Models\UserStrength::getStrengthPlatform('trp', $user)) }}</span></span></p>
 					</div>
 				</div>
 			@endforeach
 		</div>
 	</div>
 	<div class="strength-scale-wrapper">
-		@foreach($user->getStrengthPlatform('trp') as $strength)
-			<div class="strength-divider" style="left: {{ (100 / count($user->getStrengthPlatform('trp'))) * $loop->iteration }}%"></div>
+		@foreach(App\Models\UserStrength::getStrengthPlatform('trp', $user) as $strength)
+			<div class="strength-divider" style="left: {{ (100 / count(App\Models\UserStrength::getStrengthPlatform('trp', $user))) * $loop->iteration }}%"></div>
 		@endforeach
-		<div class="strength-tick {{ $user->getStrengthCompleted('trp') == 0 ? 'zero' : '' }}" style="left: {{ (100 / count($user->getStrengthPlatform('trp'))) * $user->getStrengthCompleted('trp') }}%"></div>
-		<div class="strength-star {{ $user->getStrengthCompleted('trp') == count($user->getStrengthPlatform('trp')) ? 'full' : '' }}"></div>
+		<div class="strength-tick {{ $user->getStrengthCompleted('trp') == 0 ? 'zero' : '' }}" style="left: {{ (100 / count(App\Models\UserStrength::getStrengthPlatform('trp', $user))) * $user->getStrengthCompleted('trp') }}%"></div>
+		<div class="strength-star {{ $user->getStrengthCompleted('trp') == count(App\Models\UserStrength::getStrengthPlatform('trp', $user)) ? 'full' : '' }}"></div>
 		<div class="strength-scale">
-			<div class="strength-scale-inner" style="width: {{ (100 / count($user->getStrengthPlatform('trp'))) * $user->getStrengthCompleted('trp') }}% "></div>
+			<div class="strength-scale-inner" style="width: {{ (100 / count(App\Models\UserStrength::getStrengthPlatform('trp', $user))) * $user->getStrengthCompleted('trp') }}% "></div>
 		</div>
 	</div>
 </div>

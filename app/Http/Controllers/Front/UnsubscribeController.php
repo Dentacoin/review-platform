@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 use App\Models\User;
+use App\Models\UserInvite;
 use CArbon\Carbon;
 
 use App;
@@ -24,8 +25,8 @@ class UnsubscribeController extends FrontController
 				$user->unsubscribe = true;
 				$user->save();
 
-				$mtext = 'New dentist unsubscribe 
-	Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+				$mtext = 'New user unsubscribe 
+Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 
 	            Mail::raw($mtext, function ($message) use ($user) {
 
@@ -38,6 +39,15 @@ class UnsubscribeController extends FrontController
 	                $message->replyTo($user->email, $user->getName());
 	                $message->subject('New dentist unsubscribe');
 	            });
+			}
+
+			$on_invites = UserInvite::where('invite_id', $user->id)->whereNull('unsubscribe')->get();
+
+			if (!empty($on_invites)) {
+				foreach ($on_invites as $inv) {
+					$inv->unsubscribe = true;
+					$inv->save();
+				}
 			}
 
 	        return $this->ShowView('unsubscribe-dentist', [
