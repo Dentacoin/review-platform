@@ -437,7 +437,7 @@
 
 @endif
 
-@if($item->vox_rewards->isNotEmpty())
+@if($item->vox_surveys_and_polls->isNotEmpty())
     <h4 style="margin-bottom: 20px;">DENTAVOX</h4>
     <div class="row show-hide-section">
         <div class="col-md-12">
@@ -449,7 +449,7 @@
                     <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-vox-rewards') }} </h4>
                 </div>
                 <div class="panel-body show-hide-area">
-                    <span class="total-num">Total number: {{ count($item->vox_rewards) }}</span>
+                    <span class="total-num">Total number: {{ count($item->vox_surveys_and_polls) }}</span>
                     @include('admin.parts.table', [
                         'table_id' => 'vox-rewards',
                         'table_fields' => [
@@ -460,7 +460,7 @@
                             'reward'           => array('width' => '100%'),
                             'delete'              => array('template' => 'admin.parts.table-vox-rewards-delete'),
                         ],
-                        'table_data' => $item->vox_rewards,
+                        'table_data' => $item->vox_surveys_and_polls,
                         'table_subpage' => 'vox-rewards',
                         'table_pagination' => false,
                         'pagination_link' => array()

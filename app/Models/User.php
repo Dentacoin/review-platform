@@ -1062,6 +1062,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
     }
 
+    public function vox_surveys_and_polls() {
+        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->whereIn('type', ['daily_poll', 'survey'])->orderBy('id', 'DESC');
+    }
+
     public function deleteActions() {
         foreach ($this->reviews_out as $r) {
             $r->delete();
