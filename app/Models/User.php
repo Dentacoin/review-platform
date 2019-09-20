@@ -1383,8 +1383,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $img->insert( public_path().'/img-trp/cover-dentist-new.png');
 
             $avatar = Image::make( $this->getImagePath(true) );
-            $avatar->resize(393, 393);
-            $img->insert($avatar , 'top-left', 66, 150 );
+            $avatar->resize(366, 365);
+            $avatar_mask = Image::canvas(366, 365, '#fff');
+            $avatar_mask->insert( $avatar, 'top-left', 0, 0 );
+            $avatar_mask->insert( public_path().'/img-trp/cover-dentist-mask-new.png' , 'top-left', 0, 0 );
+            $img->insert($avatar_mask , 'top-left', 80, 162 );
         } else {
             $img->insert( public_path().'/img-trp/cover-dentist-new-no-avatar.png');
         }

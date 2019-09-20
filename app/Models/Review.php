@@ -212,8 +212,10 @@ class Review extends Model {
             });
 
             $voffset = (3 - $lines)*10;
+            $title = true;
         } else {
             $voffset = 0;
+            $title = false;
         }
 
 
@@ -224,9 +226,15 @@ class Review extends Model {
         $top = 355;
         $top -= $lines*38;
 
-        $img->text($answer, 573, $top - $voffset, function($font) {
+        if (empty($title) && $lines < 3) {
+            $font_size = 40;
+        } else {
+            $font_size = 35;
+        }
+
+        $img->text($answer, 573, $title ? $top - $voffset : 260 - ($lines * 30), function($font) use ($font_size) {
             $font->file(public_path().'/fonts/Calibri.ttf');
-            $font->size(35);
+            $font->size($font_size);
             $font->color('#000000');
             $font->align('left');
             $font->valign('top');
@@ -246,7 +254,7 @@ class Review extends Model {
         }
 
         if ($this->verified) {
-            $img->insert( public_path().'/img-trp/cover-trusted.png' , 'top-left', 921, 424 );
+            $img->insert( public_path().'/img-trp/cover-trusted.png' , 'top-left', 921, $title ? 424 : 405 );
         }
 
 
@@ -263,14 +271,14 @@ class Review extends Model {
         $step = 67;
         $startX = 573;
         for($i=1;$i<=5;$i++) {
-            $img->insert( public_path().'/img-trp/cover-star-review-new-gray.png' , 'top-left', $startX, 409 );
+            $img->insert( public_path().'/img-trp/cover-star-review-new-gray.png' , 'top-left', $startX, $title ? 409 : 390 );
             $startX += $step;
         }
 
         $step = 67;
         $startX = 573;
         for($i=1;$i<=$this->rating;$i++) {
-            $img->insert( public_path().'/img-trp/cover-star-review-new.png' , 'top-left', $startX, 409 );
+            $img->insert( public_path().'/img-trp/cover-star-review-new.png' , 'top-left', $startX, $title ? 409 : 390 );
             $startX += $step;
         }
 
@@ -278,7 +286,7 @@ class Review extends Model {
         if($rest) {
             $halfstar = Image::canvas(60*$rest, 61, '#fff');
             $halfstar->insert( public_path().'/img-trp/cover-star-review-new.png', 'top-left', 0, 0 );
-            $img->insert($halfstar , 'top-left', $startX, 409 );
+            $img->insert($halfstar , 'top-left', $startX, $title ? 409 : 390 );
         }
 
         $img->save($path);
