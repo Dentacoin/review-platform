@@ -168,8 +168,13 @@ class Review extends Model {
             $img->insert( public_path().'/img-trp/new-cover-review.png');
 
             $avatar_image_dentist = Image::make( $dentist->getImagePath(true) );
-            $avatar_image_dentist->resize(320, 320);
-            $img->insert( $avatar_image_dentist , 'top-left', 70, 190 );
+            $avatar_image_dentist->resize(302, 302);
+
+            $avatar_mask = Image::canvas(302, 302, '#fff');
+            $avatar_mask->insert( $avatar_image_dentist, 'top-left', 0, 0 );
+            $avatar_mask->insert( public_path().'/img-trp/new-dentist-mask-review.png' , 'top-left', 0, 0 );
+
+            $img->insert( $avatar_mask , 'top-left', 78, 199 );
 
         } else {
             $img->insert( public_path().'/img-trp/new-cover-review-no-avatar.png');
