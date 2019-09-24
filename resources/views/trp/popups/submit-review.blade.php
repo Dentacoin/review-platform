@@ -31,7 +31,6 @@
 		@elseif($user->is_dentist)
 			<div class="alert alert-info">
 				{!! nl2br(trans('trp.popup.submit-review-popup.is-dentist')) !!}
-				
 			</div>
 		@elseif(!empty($user))
 			<div class="dcn-review-reward" {!! $is_trusted ? '' : 'style="display: none;"' !!}>
@@ -70,7 +69,7 @@
 					@endif
 
 					@foreach($questions as $qid => $question)
-						@if($item->is_clinic && $item->teamApproved->isNotEmpty() && $loop->iteration == 4 )
+						@if($item->is_clinic && $item->teamApproved->isNotEmpty() && $item->teamApproved->count() && $loop->iteration == 4 )
 							<div class="question skippable">
 								<h4 class="popup-title">
 									{{ trans('trp.popup.submit-review-popup.dentist-treat') }}
@@ -91,7 +90,7 @@
 						@endif
 
 
-						<div class="question {{ $item->is_clinic && $item->team->isNotEmpty() && $item->team->count() > 1 && $loop->iteration == 4 ? 'hidden-review-question' : '' }}" {{ $item->is_clinic && $item->team->isNotEmpty() && $item->team->count() > 1 && $loop->iteration == 4 ? 'style=display:none;' : '' }}>
+						<div class="question {{ $item->is_clinic && $item->teamApproved->isNotEmpty() && $item->teamApproved->count() > 1 && $loop->iteration == 4 ? 'hidden-review-question' : '' }}" {{ $item->is_clinic && $item->teamApproved->isNotEmpty() && $item->teamApproved->count() > 1 && $loop->iteration == 4 ? 'style=display:none;' : '' }}>
 							<h4 class="popup-title">
 								{{ str_replace('{name}', $item->name, $question->question) }}
 							</h4>
