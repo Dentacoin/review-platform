@@ -403,12 +403,16 @@ class DentistController extends FrontController
 
             foreach ($reviews as $rev) {
                 foreach($rev->answers as $answer) {
-                    //echo $answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
+                    //echo $rev->answers->count().'  '.$answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
                     if(!isset($aggregated[$answer->question['label']])) {
                         $aggregated[$answer->question['label']] = 0;
                     }
 
                     $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                }
+
+                if ($rev->answers->count() == 9 && array_key_exists("Doctor",$aggregated) ) {
+                    $aggregated['Doctor'] += 5;
                 }
             }
 
@@ -416,6 +420,7 @@ class DentistController extends FrontController
                 $aggregated[$key] /= $reviews->count();
             }
         }
+
 
         $aggregated_rates = [];
         $aggregated_rates_total = [];
@@ -497,6 +502,7 @@ class DentistController extends FrontController
             'aggregated' => $aggregated,
             'social_image' => $social_image,
             'canonical' => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
+            'countries' => Country::get(),
             'js' => [
                 'videojs.record.min.js',
                 'user.js',
