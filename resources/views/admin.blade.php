@@ -244,6 +244,12 @@
                 <script src="admin/js/custom/{{ $file }}"></script>
             @endforeach
         @endif
+
+        @if(!empty( config('admin.pages.'.$current_page.'.jscdn')) && is_array(config('admin.pages.'.$current_page.'.jscdn')))
+            @foreach(config('admin.pages.'.$current_page.'.jscdn') as $jscdn)
+                <script src="{{ $jscdn }}"></script>
+            @endforeach
+        @endif
         <!-- ================== END CUSTOM JS ================== -->
     </body>
 </html>

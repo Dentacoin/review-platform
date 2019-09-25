@@ -6,6 +6,10 @@ return [
             'icon' => 'users',
             'js' => array(
                 'users.js',
+                'address.js',
+            ),
+            'jscdn' => array(
+                'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en',
             ),
         ),
         'users_stats' => array(

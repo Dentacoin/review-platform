@@ -115,7 +115,7 @@ class UsersController extends AdminController
     		],
     		'address' => [
     			'type' => 'text',
-                'disabled' => true,
+                //'disabled' => true,
     		],
     		'avg_rating' => [
     			'type' => 'text',
@@ -1153,6 +1153,7 @@ class UsersController extends AdminController
                 'unfinished' => $unfinished,
                 'emails' => $emails,
                 'habits_tests' => $habits_tests,
+                'countries' => Country::get(),
             ));
         } else {
             return redirect('cms/'.$this->current_page);

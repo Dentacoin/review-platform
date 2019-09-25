@@ -141,51 +141,65 @@
                                     ])
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">Country</label>
-                                <div class="col-md-10">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'country_id',
-                                        'info' => $fields['country_id']
-                                    ])
+
+                            <div class="address-suggester-wrapper">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Country</label>
+                                    <div class="col-md-10">
+                                        <select name="country_id" class="form-control country-select">
+                                            <option></option>
+                                            @foreach( $countries as $country )
+                                                <option value="{{ $country->id }}" code="{{ $country->code }}" {!! !empty($item->country_id) && $item->country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">State</label>
+                                    <div class="col-md-10">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'state_name',
+                                            'info' => $fields['state_name']
+                                        ])
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">City</label>
+                                    <div class="col-md-10">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'city_name',
+                                            'info' => $fields['city_name']
+                                        ])
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">ZIP code</label>
+                                    <div class="col-md-10">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'zip',
+                                            'info' => $fields['zip']
+                                        ])
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Dental Practice</label>
+                                    <div class="col-md-10">
+                                        {{ Form::text( 'address', $item->address, array('class' => 'form-control address-suggester', 'autocomplete' => 'off' )) }}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="suggester-map-div" style="height: 200px; display: none; margin: 10px 0px; background: transparent;">
+                                    </div>
+                                    <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px 20px;">
+                                        {!! nl2br(trans('trp.common.check-address')) !!}
+                                    </div>
+                                    <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: -10px 0px 10px;">
+                                        {!! nl2br(trans('trp.common.invalid-address')) !!}
+                                    </div>                              
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">State</label>
-                                <div class="col-md-10">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'state_name',
-                                        'info' => $fields['state_name']
-                                    ])
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">City</label>
-                                <div class="col-md-10">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'city_name',
-                                        'info' => $fields['city_name']
-                                    ])
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">ZIP code</label>
-                                <div class="col-md-10">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'zip',
-                                        'info' => $fields['zip']
-                                    ])
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">Dental Practice</label>
-                                <div class="col-md-10">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'address',
-                                        'info' => $fields['address']
-                                    ])
-                                </div>
-                            </div>
+
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Website / FB URL</label>
                                 <div class="col-md-10">
