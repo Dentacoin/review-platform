@@ -11,6 +11,8 @@ use Hash;
 use Mail;
 use Auth;
 use Image;
+use Excel;
+use File;
 use Illuminate\Support\Facades\Input;
 use App\Models\User;
 use App\Models\UserInvite;
@@ -490,18 +492,20 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         }
                         $invitation->save();
 
-                        $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
-                        if(!empty($last_ask)) {
-                            $last_ask->created_at = Carbon::now();
-                            $last_ask->on_review = true;
-                            $last_ask->save();
-                        } else {
-                            $ask = new UserAsk;
-                            $ask->user_id = $existing_patient->id;
-                            $ask->dentist_id = $this->user->id;
-                            $ask->status = 'yes';
-                            $ask->on_review = true;
-                            $ask->save();
+                        if(!empty($existing_patient)) {
+                            $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
+                            if(!empty($last_ask)) {
+                                $last_ask->created_at = Carbon::now();
+                                $last_ask->on_review = true;
+                                $last_ask->save();
+                            } else {
+                                $ask = new UserAsk;
+                                $ask->user_id = $existing_patient->id;
+                                $ask->dentist_id = $this->user->id;
+                                $ask->status = 'yes';
+                                $ask->on_review = true;
+                                $ask->save();
+                            }
                         }
                     } else {
                         $invitation = new UserInvite;
@@ -585,6 +589,384 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 'hello.all.js',
             ],
         ]);
+    }
+
+    public function invite_whatsapp($locale=null) {
+
+        if($this->user->canInvite('trp') ) {
+
+            $invitation = new UserInvite;
+            $invitation->user_id = $this->user->id;
+            $invitation->invited_email = 'whatsapp';
+            $invitation->save();
+
+            $text = 'Dr. '.$this->user->name.' invited you to leave a review on Trusted Reviews - the only platform, which rewards patients for their verified feedback! '.rawurlencode(getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'));
+
+            return Response::json([
+                'success' => true,
+                'message' => trans('trp.page.profile.invite.success'),
+                'text' => $text,
+            ] );
+        }
+    }
+
+    public function invite_copypaste($locale=null) {
+
+        if($this->user->canInvite('trp') ) {
+
+            $validator = Validator::make(Request::all(), [
+                'copypaste' => array('required'),
+            ]);
+
+            if ($validator->fails()) {
+                $ret = array(
+                    'success' => false,
+                    'message' => 'Please paste information, containing names and emails, separated by commas or tabs',
+                );
+
+                return Response::json( $ret );
+            } else {
+
+                $columns = explode(PHP_EOL, Request::input('copypaste'));
+                $rows = [];
+                foreach ($columns as $column) {
+                    $rows[] = preg_split('/[\t,]/', $column);
+                }
+
+                if (count($rows[0]) <= 1) {
+                    return Response::json([
+                        'success' => false,
+                        'message' => 'Please paste information, containing names and emails, separated by commas or tabs',
+                    ] );
+                }
+
+                $reversedRows = [];
+                $maxcnt = 0;
+                foreach ($rows as $row) {
+                    if(count($row) > $maxcnt) {
+                        $maxcnt = count($row);
+                    }
+                }
+
+                for($i=0;$i<$maxcnt; $i++) {
+                    $reversedRows[$i] = [];
+                }
+
+                foreach ($rows as $row) {
+                    for($i=0;$i<$maxcnt; $i++) {
+                        $reversedRows[$i][] = isset($row[$i]) ? trim($row[$i]) : '';
+                    }
+                }
+
+                if (session('bulk_invites')) {
+                    session()->pull('bulk_invites');
+                }                
+                session(['bulk_invites' => $reversedRows]);
+
+                return Response::json([
+                    'success' => true,
+                    'info' => $reversedRows,
+                ] );
+
+            }
+        }
+    }
+
+    public function invite_copypaste_emails($locale=null) {
+
+        if($this->user->canInvite('trp') ) {
+
+            if(Request::Input('patient-emails')) {
+
+                $bulk_invites = session('bulk_invites');
+                $bulk_emails = $bulk_invites[Request::Input('patient-emails') - 1];
+
+                unset($bulk_invites[Request::Input('patient-emails') - 1]);
+
+                if (session('bulk_emails')) {
+                    session()->pull('bulk_emails');
+                }                
+                session(['bulk_emails' => $bulk_emails]);
+
+                $first_ten_emails = array_slice($bulk_emails, 0, 10);
+                $p_emails = implode(', ', $first_ten_emails);
+
+                return Response::json([
+                    'success' => true,
+                    'info' => $bulk_invites,
+                    'emails' => $p_emails,
+                ] );
+
+            }
+        }
+    }
+
+    public function invite_copypaste_names($locale=null) {
+
+        if($this->user->canInvite('trp') ) {
+
+            if(Request::Input('patient-names')) {
+
+                $bulk_invites = session('bulk_invites');
+                $bulk_names = $bulk_invites[Request::Input('patient-names') - 1];
+
+                if (session('bulk_names')) {
+                    session()->pull('bulk_names');
+                }                
+                session(['bulk_names' => $bulk_names]);
+
+                $first_ten_names = array_slice($bulk_names, 0, 10);
+                $p_names = implode(', ', $first_ten_names);
+
+                return Response::json([
+                    'success' => true,
+                    'names' => $p_names,
+                ] );
+
+            }
+        }
+    }
+
+    public function invite_copypaste_final($locale=null) {
+
+        if($this->user->canInvite('trp') ) {
+
+            if(session('bulk_names') && session('bulk_emails')) {
+                $emails = session('bulk_emails');
+                $names = session('bulk_names');
+
+                foreach ($emails as $key => $email) {
+                    if(!empty($names[$key]) && ($email != $this->user->email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+                        $send_mail = false;
+
+                        $invitation = UserInvite::where([
+                            ['user_id', $this->user->id],
+                            ['invited_email', 'LIKE', $email],
+                        ])->first();
+
+                        $existing_patient = User::where('email', 'LIKE', $email )->where('is_dentist', 0)->first();
+
+                        if($invitation) {
+
+                            if ($invitation->created_at->timestamp < Carbon::now()->subMonths(1)->timestamp) {
+
+                                $invitation->invited_name = $names[$key];
+                                $invitation->created_at = Carbon::now();
+
+                                if (empty($invitation->unsubscribed)) {
+                                    $invitation->review = true;
+                                    $invitation->completed = null;
+                                    $invitation->notified1 = null;
+                                    $invitation->notified2 = null;
+                                    $invitation->notified3 = null;
+                                }
+                                $invitation->save();
+                                $send_mail = true;
+
+                                if(!empty($existing_patient)) {
+                                    $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
+                                    if(!empty($last_ask)) {
+                                        $last_ask->created_at = Carbon::now();
+                                        $last_ask->on_review = true;
+                                        $last_ask->save();
+                                    } else {
+                                        $ask = new UserAsk;
+                                        $ask->user_id = $existing_patient->id;
+                                        $ask->dentist_id = $this->user->id;
+                                        $ask->status = 'yes';
+                                        $ask->on_review = true;
+                                        $ask->save();
+                                    }
+                                }
+                            }
+                        } else {
+                            $invitation = new UserInvite;
+                            $invitation->user_id = $this->user->id;
+                            $invitation->invited_email = $email;
+                            $invitation->invited_name = $names[$key];
+                            $invitation->review = true;
+                            $invitation->save();
+
+                            $send_mail = true;
+                        }
+
+                        if ($send_mail) {
+                            if(!empty($existing_patient)) {
+
+                                $substitutions = [
+                                    'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                                    'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
+                                    'invited_user_name' => $names[$key],
+                                    "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
+                                ];
+
+                                $existing_patient->sendGridTemplate(68, $substitutions);
+
+                            } else {
+
+                                    //Mega hack
+                                $dentist_name = $this->user->name;
+                                $dentist_email = $this->user->email;
+                                $this->user->name = $names[$key];
+                                $this->user->email = $email;
+                                $this->user->save();
+
+
+                                if ( $this->user->is_dentist) {
+                                    $substitutions = [
+                                        'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                                        'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
+                                        'invited_user_name' => $this->user->name,
+                                        "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
+                                    ];
+
+
+                                    $this->user->sendGridTemplate(59, $substitutions);
+                                } else {
+                                    $this->user->sendTemplate( 17 , [
+                                        'friend_name' => $dentist_name,
+                                        'invitation_id' => $invitation->id
+                                    ]);
+                                }
+
+                                // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
+                                //     'friend_name' => $dentist_name,
+                                //     'invitation_id' => $invitation->id
+                                // ]);
+
+                                //Back to original
+                                $this->user->name = $dentist_name;
+                                $this->user->email = $dentist_email;
+                                $this->user->save();
+                            }
+                        }
+
+                    }
+                }
+
+                session()->pull('bulk_names');
+                session()->pull('bulk_emails');
+
+                return Response::json([
+                    'success' => true,
+                    'message' => trans('trp.page.profile.invite.success'),
+                ] );
+            } else {
+                return Response::json([
+                    'success' => false,
+                    'message' => 'Something went wrong, please try again from first step',
+                ] );
+            }
+        }
+    }
+
+    public function invite_file($locale=null) {
+
+        if($this->user->canInvite('trp') ) {
+
+            $validator = Validator::make(request()->all(), [
+                'invite-file' => array('required','file', 'mimes:txt,csv'),
+            ]);
+
+            $ret = [
+                'success' => false
+            ];
+ 
+            if ($validator->fails()) {
+
+                $ret['message'] = 'Please upload a file';
+                return Response::json($ret);
+
+            } else {
+
+                if (Input::file('invite-file')->getMimeType() == 'text/plain') {
+                    $columns = explode(PHP_EOL, File::get(Input::file('invite-file')->path()));
+                    $rows = [];
+                    foreach ($columns as $column) {
+                        $rows[] = preg_split('/[\t,]/', $column);
+                    }
+
+                    if (count($rows[0]) <= 1) {
+                        return Response::json([
+                            'success' => false,
+                            'message' => 'Please upload a file, containing names and emails, separated by commas or tabs',
+                        ] );
+                    }
+
+                    $reversedRows = [];
+                    $maxcnt = 0;
+                    foreach ($rows as $row) {
+                        if(count($row) > $maxcnt) {
+                            $maxcnt = count($row);
+                        }
+                    }
+
+                    for($i=0;$i<$maxcnt; $i++) {
+                        $reversedRows[$i] = [];
+                    }
+
+                    foreach ($rows as $row) {
+                        for($i=0;$i<$maxcnt; $i++) {
+                            $reversedRows[$i][] = isset($row[$i]) ? trim($row[$i]) : '';
+                        }
+                    }
+
+                } else {
+
+                    global $reversedRows;
+
+                    Excel::load( Input::file('invite-file')->path() , function($reader)  {
+
+                        // Getting all results
+                        global $results, $reversedRows;
+                        $results = [];
+                        $reader->each(function($sheet) {
+                            global $results;
+                            $results[] = $sheet->toArray();
+                        });
+
+                        $reversedRows = [];
+                        $maxcnt = 0;
+                        if(!empty($results)) {
+                            foreach ($results as $row) {
+                                if(count($row) > $maxcnt) {
+                                    $maxcnt = count($row);
+                                }
+                            }
+                        }
+
+                        for($i=0;$i<$maxcnt; $i++) {
+                            $reversedRows[$i] = [];
+                        }
+
+                        foreach ($results as $key => $value) {
+                            $results[$key] = array_values($value);
+                        }
+
+                        foreach ($results as $row) {
+                            for($i=0;$i<$maxcnt; $i++) {
+                                $reversedRows[$i][] = isset($row[$i]) ? trim($row[$i]) : '';
+                            }
+                        }
+
+                    });
+                }
+
+
+                if (session('bulk_invites')) {
+                    session()->pull('bulk_invites');
+                }                
+                session(['bulk_invites' => $reversedRows]);
+
+                return Response::json([
+                    'success' => true,
+                    'info' => $reversedRows,
+                ] );
+                
+            }
+
+        }
     }
 
 
