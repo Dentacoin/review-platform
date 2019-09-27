@@ -256,7 +256,7 @@ class LoginController extends FrontController
 
                     if (!empty($dentist_invitor)) {
                         Request::session()->flash('success-message', trans('trp.popup.registration.have-account'));
-                        return redirect($dentist_invitor->getLink().'?'. http_build_query(['popup'=>'submit-review-popup']);
+                        return redirect($dentist_invitor->getLink().'?'. http_build_query(['popup'=>'submit-review-popup']));
                     }
                 }
 
