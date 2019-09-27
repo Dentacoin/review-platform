@@ -499,26 +499,35 @@ class LoginController extends FrontController
                                     $user->save();      
                                 }
 
+                                $ret['success'] = true;
+
                                 if(!empty(session('invitation_id'))) {
 
                                     $inv_id = session('invitation_id');
-                                    if($inv_id) {
-                                        $inv = UserInvite::find($inv_id);
+                                    $inv = UserInvite::find($inv_id);
 
-                                        if ($inv && empty($inv->invited_id)) {
-                                            $inv->invited_id = $user->id;
+                                    if ($inv && empty($inv->invited_id)) {
+                                        $inv->invited_id = $user->id;
 
-                                            if ($inv->invited_email == 'whatsapp') {
-                                                $inv->invited_email = $user->email;
-                                                $inv->invited_name = $user->name;
-                                            }
-                                            $inv->save();
+                                        if ($inv->invited_email == 'whatsapp') {
+                                            $inv->invited_email = $user->email;
+                                            $inv->invited_name = $user->name;
                                         }
+                                        $inv->save();
                                     }
+                                    $ret['redirect'] = getLangUrl('/');
+
+                                    $dentist_invitor = User::find($inv->user_id);
+
+                                    if (!empty($dentist_invitor)) {
+                                        $ret['redirect'] = $dentist_invitor->getLink().'?'. http_build_query(['popup'=>'submit-review-popup']);
+                                    } else {
+                                        $ret['redirect'] = getLangUrl('/');
+                                    }
+                                } else {
+                                    $ret['redirect'] = getLangUrl('/');
                                 }
 
-                                $ret['success'] = true;
-                                $ret['redirect'] = getLangUrl('/');
                             }
                         } else {
                             $ret['message'] = trans('trp.common.civic.not-found');
