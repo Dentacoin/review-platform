@@ -239,6 +239,12 @@ class RegisterController extends FrontController
                             $inv = UserInvite::find($inv_id);
                             if(!empty($inv) && empty($inv->invited_id)) {
                                 $inv->invited_id = $this->user->id;
+
+                                if ($inv->invited_email == 'whatsapp') {
+                                    $inv->invited_name = $this->user->name;
+                                    $inv->invited_email = $this->user->email;
+                                }
+
                                 $inv->save();
                             }
                         }
@@ -252,8 +258,6 @@ class RegisterController extends FrontController
 
                     $inv = UserInvite::find($inv_id);
                     if(!empty($inv)) {
-                        $sess['invitation_name'] = $inv->invited_name;
-                        $sess['invitation_email'] = $inv->invited_email;
                         $sess['invitation_id'] = $inv->id;
 
                         if($inv->join_clinic) {

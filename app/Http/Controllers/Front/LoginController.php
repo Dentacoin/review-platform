@@ -110,8 +110,13 @@ class LoginController extends FrontController
                     if($inv_id) {
                         $inv = UserInvite::find($inv_id);
 
-                        if (empty($inv->invited_id)) {
+                        if ($inv && empty($inv->invited_id)) {
                             $inv->invited_id = $user->id;
+
+                            if ($inv->invited_email == 'whatsapp') {
+                                $inv->invited_email = $user->email;
+                                $inv->invited_name = $user->name;
+                            }
                             $inv->save();
                         }
                     }
@@ -228,6 +233,10 @@ class LoginController extends FrontController
 
                 if ( !empty($inv) && empty($inv->invited_id)) {
                     $inv->invited_id = $user->id;
+                    if ($inv->invited_email == 'whatsapp') {
+                        $inv->invited_email = $user->email;
+                        $inv->invited_name = $user->name;
+                    }
                     $inv->save();
                 }
             }
@@ -369,8 +378,13 @@ class LoginController extends FrontController
                     $inv_id = session('invitation_id');
                     $inv = UserInvite::find($inv_id);
 
-                    if (empty($inv->invited_id)) {
+                    if ($inv && empty($inv->invited_id)) {
                         $inv->invited_id = $newuser->id;
+
+                        if ($inv->invited_email == 'whatsapp') {
+                            $inv->invited_email = $newuser->email;
+                            $inv->invited_name = $newuser->name;
+                        }
                         $inv->save();
                         
                         // $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
@@ -484,6 +498,24 @@ class LoginController extends FrontController
                                 if(empty($user->civic_id)) {
                                     $user->civic_id = $data['userId'];
                                     $user->save();      
+                                }
+
+                                if(!empty(session('invitation_id'))) {
+
+                                    $inv_id = session('invitation_id');
+                                    if($inv_id) {
+                                        $inv = UserInvite::find($inv_id);
+
+                                        if ($inv && empty($inv->invited_id)) {
+                                            $inv->invited_id = $user->id;
+
+                                            if ($inv->invited_email == 'whatsapp') {
+                                                $inv->invited_email = $user->email;
+                                                $inv->invited_name = $user->name;
+                                            }
+                                            $inv->save();
+                                        }
+                                    }
                                 }
 
                                 $ret['success'] = true;
