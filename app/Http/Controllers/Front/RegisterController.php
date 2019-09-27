@@ -846,8 +846,13 @@ class RegisterController extends FrontController
                             $inv_id = session('invitation_id');
                             $inv = UserInvite::find($inv_id);
 
-                            if (empty($inv->invited_id)) {
+                            if (!empty($inv) && empty($inv->invited_id)) {
                                 $inv->invited_id = $newuser->id;
+
+                                if ($inv->invited_email == 'whatsapp') {
+                                    $inv->invited_email = $newuser->email;
+                                    $inv->invited_name = $newuser->name;
+                                }
                                 $inv->save();
                                 
                                 // $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
@@ -899,7 +904,7 @@ class RegisterController extends FrontController
                         //
 
                         $ret['success'] = true;
-                        $ret['redirect'] = $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink() : getLangUrl('/');
+                        $ret['redirect'] = $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink().'?'. http_build_query(['popup'=>'submit-review-popup']) : getLangUrl('/');
                     }
                     
                 }
