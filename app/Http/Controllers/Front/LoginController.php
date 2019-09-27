@@ -103,26 +103,6 @@ class LoginController extends FrontController
                     ->withInput();
                 }
 
-
-                if(!empty(session('invitation_id'))) {
-
-                    $inv_id = session('invitation_id');
-                    if($inv_id) {
-                        $inv = UserInvite::find($inv_id);
-
-                        if ($inv && empty($inv->invited_id)) {
-                            $inv->invited_id = $user->id;
-
-                            if ($inv->invited_email == 'whatsapp') {
-                                $inv->invited_email = $user->email;
-                                $inv->invited_name = $user->name;
-                            }
-                            $inv->save();
-                        }
-                    }
-                }
-
-
                 $sess = [
                     'login_patient' => true,
                 ];
@@ -130,9 +110,35 @@ class LoginController extends FrontController
 
                 Auth::login($user, true);
 
-                $intended = session()->pull('intended-sess');
+                if(!empty(session('invitation_id'))) {
 
-                return redirect( $intended ? $intended : getLangUrl('/'));
+                    $inv_id = session('invitation_id');
+                    $inv = UserInvite::find($inv_id);
+
+                    if (!empty($inv) && empty($inv->invited_id)) {
+                        $inv->invited_id = $user->id;
+
+                        if ($inv->invited_email == 'whatsapp') {
+                            $inv->invited_email = $user->email;
+                            $inv->invited_name = $user->name;
+                        }
+                        $inv->save();
+
+                        $dentist_invitor = User::find($inv->user_id);
+
+                        if (!empty($dentist_invitor)) {
+                            return redirect($dentist_invitor->getLink().'?'. http_build_query(['popup'=>'submit-review-popup']));
+                        }
+                    } else {
+                        $intended = session()->pull('intended-sess');
+                        return redirect( $intended ? $intended : getLangUrl('/'));
+                    }
+                } else {
+
+                    $intended = session()->pull('intended-sess');
+                    return redirect( $intended ? $intended : getLangUrl('/'));
+                }
+
             } else {
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-login']))
                     ->withInput()
@@ -225,21 +231,6 @@ class LoginController extends FrontController
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
                 ->withInput();
             }
-
-            if(!empty(session('invitation_id'))) {
-
-                $inv_id = session('invitation_id');
-                $inv = UserInvite::find($inv_id);
-
-                if ( !empty($inv) && empty($inv->invited_id)) {
-                    $inv->invited_id = $user->id;
-                    if ($inv->invited_email == 'whatsapp') {
-                        $inv->invited_email = $user->email;
-                        $inv->invited_name = $user->name;
-                    }
-                    $inv->save();
-                }
-            }
             
             Auth::login($user, true);
             if(empty($user->fb_id)) {
@@ -251,7 +242,15 @@ class LoginController extends FrontController
                 $inv_id = session('invitation_id');
                 $inv = UserInvite::find($inv_id);
 
-                if(!empty($inv)) {
+                if(!empty($inv) && empty($inv->invited_id)) {
+
+                    $inv->invited_id = $user->id;
+                    if ($inv->invited_email == 'whatsapp') {
+                        $inv->invited_email = $user->email;
+                        $inv->invited_name = $user->name;
+                    }
+                    $inv->save();
+
                     $dentist_invitor = User::find($inv->user_id);
 
                     if (!empty($dentist_invitor)) {
