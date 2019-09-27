@@ -11,6 +11,7 @@ var suggestClinic;
 var suggestedDentistClick;
 var suggestClinicClick;
 var aggregated_reviews;
+var editor;
 
 $(document).ready(function(){
 
@@ -504,6 +505,377 @@ $(document).ready(function(){
         } );
 
     }
+
+
+    $('.whatsapp-button').click( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+
+        ajax_is_running = true;
+
+        that = $(this);
+        that.closest('.invite-content').find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
+
+        $.ajax({
+            type: "POST",
+            url: that.attr('data-url'),
+            data: {
+                _token: $('input[name="_token"]').val(),
+            },
+            dataType: 'json',
+            success: function(data) {
+                if(data.success) {
+
+                    if ($(window).innerWidth() <= 992) {
+                        window.open('whatsapp://send?text='+ data.text +'&href='+ data.text +'', '_blank');
+                    } else {
+                        window.open('https://api.whatsapp.com/send?text=' + data.text, '_blank');
+                    }                        
+
+                    that.closest('.invite-content').find('.invite-alert').show().addClass('alert-success').html(data.message);
+
+                    // gtag('event', 'Send', {
+                    //     'event_category': 'Reviews',
+                    //     'event_label': 'InvitesSent',
+                    // });
+                }
+            },
+            error: function(ret) {
+                console.log('error');
+            }
+        });
+        ajax_is_running = false;
+    });
+
+
+    if( $('.invite-patient-whatsapp-form').length ) {
+        $('.invite-patient-whatsapp-form').submit( function(e) {
+            e.preventDefault();
+
+            if(ajax_is_running) {
+                return;
+            }
+
+            ajax_is_running = true;
+
+            $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
+
+            var that = $(this);
+
+            $.post( 
+                $(this).attr('action'), 
+                $(this).serialize() , 
+                function( data ) {
+                    if(data.success) {
+
+                        if ($(window).innerWidth() <= 992) {
+                            window.open('whatsapp://send?text='+ data.text +'&href='+ data.text +'', '_blank');
+                        } else {
+                            window.open('https://api.whatsapp.com/send?phone=' + data.phone + '&text=' + data.text, '_blank');
+                        }                        
+
+                        that.find('.invite-phone').val('');
+                        that.find('.invite-alert').show().addClass('alert-success').html(data.message);
+
+                        // gtag('event', 'Send', {
+                        //     'event_category': 'Reviews',
+                        //     'event_label': 'InvitesSent',
+                        // });
+                    } else {
+                        console.log(data.message);
+                        that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
+                                        
+                    }
+                    ajax_is_running = false;
+
+                }, "json"
+            );
+        } );
+    }
+
+    if ($('#copypaste').length) {
+
+        editor = CodeMirror.fromTextArea(document.getElementById("copypaste"), {
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: "text/x-csharp"
+        });
+    }
+
+    var inviteRadio = function() {
+        $('.invite-input-radio').change( function() {
+            $(this).closest('.copypaste-wrapper').find('.checkbox-wrapper').removeClass('active');
+            $(this).closest('.checkbox-wrapper').addClass('active');
+            $(this).closest('form').submit();
+        });
+
+        $('.bulk-invite-back').click( function() {
+            $(this).closest('.copypaste-wrapper').hide();
+            $(this).closest('.invite-content').find('.step'+$(this).attr('step')).find('.invite-input-radio').prop('checked', false);
+            $(this).closest('.invite-content').find('.step'+$(this).attr('step')).find('.checkbox-wrapper').removeClass('active');
+            $(this).closest('.invite-content').find('.step'+$(this).attr('step')).show();
+        });
+    }
+
+    inviteRadio();
+
+    if( $('.invite-patient-copy-paste-form').length ) {
+        $('.invite-patient-copy-paste-form').submit( function(e) {
+            e.preventDefault();
+
+            if(ajax_is_running) {
+                return;
+            }
+
+            ajax_is_running = true;
+
+            $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
+
+            var that = $(this);
+            var unique_id = $(this).attr('radio-id');
+
+            $.post( 
+                $(this).attr('action'), 
+                $(this).serialize() , 
+                function( data ) {
+                    if(data.success && data.info) {
+
+                        that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').html('');
+                        for (var i in data.info) {
+
+                            that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').append('<div class="checkbox-wrapper" attr="'+i+'"><label class="invite-radio" for="r'+unique_id+i+'"><i class="far fa-square"></i><input type="radio" name="patient-emails" value="'+(parseInt(i) + 1)+'" class="invite-input-radio" id="r'+unique_id+i+'"></label><div class="copypaste-box"></div></div>');
+
+                            for (var u in data.info[i]) {
+                                that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').find('.checkbox-wrapper[attr="'+i+'"]').find('.copypaste-box').append('<p>'+(data.info[i][u]? data.info[i][u] : '-')+'</p>');
+                            }
+                        }
+
+                        var scroll_parent = that.closest('.copypaste-wrapper').next().find('.checkboxes-inner');
+                        var children = scroll_parent.children();
+                        var total = 0;
+
+                        children.each( function() { 
+                            total += $(this).outerWidth() + parseFloat($(this).css('margin-right')) + parseFloat($(this).css('margin-left'));
+                        });
+
+                        scroll_parent.css('width', total + parseFloat(scroll_parent.css('padding-left')) + parseFloat(scroll_parent.css('padding-right')));
+
+                        that.closest('.copypaste-wrapper').hide().next().show();
+
+                        inviteRadio();
+
+                        that.closest('.invite-content').find('.step4').find('.final-button').show(); 
+                        that.closest('.invite-content').find('.step4').find('.bulk-invite-back').show();
+                    } else {
+                        that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
+                                        
+                    }
+                    ajax_is_running = false;
+
+                }, "json"
+            );
+        } );
+    }
+
+    $('.invite-patient-copy-paste-form-emails').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+
+        ajax_is_running = true;
+
+        $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
+
+        var that = $(this);
+        var unique_id = $(this).attr('radio-id');
+
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize() , 
+            function( data ) {
+                if(data.success && data.info) {
+
+                    that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').html('');
+
+                    for (var i in data.info) {
+
+                        that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').append('<div class="checkbox-wrapper" attr="a'+i+'"><label class="invite-radio" for="ra'+unique_id+i+'"><i class="far fa-square"></i><input type="radio" name="patient-names" value="'+(parseInt(i) + 1)+'" class="invite-input-radio" id="ra'+unique_id+i+'"></label><div class="copypaste-box"></div></div>');
+
+                        for (var u in data.info[i]) {
+                            that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').find('.checkbox-wrapper[attr="a'+i+'"]').find('.copypaste-box').append('<p>'+(data.info[i][u]? data.info[i][u] : '-')+'</p>');
+                        }
+                    }
+
+                    var scroll_parent = that.closest('.copypaste-wrapper').next().find('.checkboxes-inner');
+                    var children = scroll_parent.children();
+                    var total = 0;
+
+                    children.each( function() { 
+                        total += $(this).outerWidth() + parseFloat($(this).css('margin-right')) + parseFloat($(this).css('margin-left'));
+                    });
+
+                    scroll_parent.css('width', total + parseFloat(scroll_parent.css('padding-left')) + parseFloat(scroll_parent.css('padding-right')));
+
+                    that.closest('.invite-content').find('.for-email').html(data.emails);
+
+                    that.closest('.copypaste-wrapper').hide().next().show();
+
+                    inviteRadio();
+
+                } else {
+                    console.log(data.message);
+                    that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
+                                    
+                }
+                ajax_is_running = false;
+
+            }, "json"
+        );
+    } );
+
+    $('.invite-patient-copy-paste-form-names').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+
+        ajax_is_running = true;
+
+        $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
+
+        var that = $(this);
+
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize() , 
+            function( data ) {
+                if(data.success) {
+
+                    that.closest('.copypaste-wrapper').next().find('.for-name').html(data.names);
+                    that.closest('.copypaste-wrapper').hide().next().show();
+
+                } else {
+                    console.log(data.message);
+                    that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
+                                    
+                }
+                ajax_is_running = false;
+
+            }, "json"
+        );
+    } );
+
+    $('.invite-patient-copy-paste-form-final').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        that.find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
+        that.find('button').addClass('waiting');
+
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize() , 
+            function( data ) {
+                
+                that.find('button').removeClass('waiting');
+
+                if(data.success) {
+                    that.find('.invite-alert').show().addClass('alert-success').html(data.message);
+                    that.find('.final-button').hide(); 
+                    that.find('.bulk-invite-back').hide(); 
+                } else {
+                    that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
+                }
+                ajax_is_running = false;
+
+            }, "json"
+        );
+    } );
+
+    $('#invite-file').change(function() {
+        var file = $('#invite-file')[0].files[0].name;
+        console.log(file);
+        $(this).closest('label').find('span').text(file);
+    });
+
+
+    $('.invite-patient-file-form').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+
+        ajax_is_running = true;
+
+        $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
+        var that = $(this);
+        var unique_id = $(this).attr('radio-id');
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        }).done( (function (data) {
+            if(data.success && data.info) {
+
+                that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').html('');
+                for (var i in data.info) {
+
+                    that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').append('<div class="checkbox-wrapper" attr="'+i+'"><label class="invite-radio" for="r'+unique_id+i+'"><i class="far fa-square"></i><input type="radio" name="patient-emails" value="'+(parseInt(i) + 1)+'" class="invite-input-radio" id="r'+unique_id+i+'"></label><div class="copypaste-box"></div></div>');
+
+                    for (var u in data.info[i]) {
+                        that.closest('.copypaste-wrapper').next().find('.checkboxes-inner').find('.checkbox-wrapper[attr="'+i+'"]').find('.copypaste-box').append('<p>'+(data.info[i][u]? data.info[i][u] : '-')+'</p>');
+                    }
+                }
+
+                var scroll_parent = that.closest('.copypaste-wrapper').next().find('.checkboxes-inner');
+                var children = scroll_parent.children();
+                var total = 0;
+
+                children.each( function() { 
+                    total += $(this).outerWidth() + parseFloat($(this).css('margin-right')) + parseFloat($(this).css('margin-left'));
+                });
+
+                scroll_parent.css('width', total + parseFloat(scroll_parent.css('padding-left')) + parseFloat(scroll_parent.css('padding-right')));
+
+                that.closest('.copypaste-wrapper').hide().next().show();
+
+                inviteRadio();
+
+                that.closest('.invite-content').find('.step4').find('.final-button').show(); 
+                that.closest('.invite-content').find('.step4').find('.bulk-invite-back').show();
+            } else {
+                that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
+                                
+            }
+            ajax_is_running = false;
+
+        }).bind(this) ).fail(function (data) {
+                console.log('error');
+            // $(this).find('.alert').addClass('alert-danger').html('Грешка, моля, опитайте отново.').show();
+        });
+
+    } );
+
 
     //Profile edit
     $('.edit-profile').submit( function(e) {
@@ -1565,6 +1937,6 @@ $(document).ready(function(){
                 console.log('error');
             }
         });
-    })
+    });
 
 });

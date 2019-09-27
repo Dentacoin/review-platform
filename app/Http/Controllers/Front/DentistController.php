@@ -512,6 +512,11 @@ class DentistController extends FrontController
                 'https://www.amcharts.com/lib/4/core.js',
                 'https://www.amcharts.com/lib/4/themes/animated.js',
                 'https://www.amcharts.com/lib/4/charts.js',
+                'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js',
+                'https://codemirror.net/addon/display/placeholder.js',
+            ],
+            'css' => [
+                'codemirror.css',
             ],
         ];
 

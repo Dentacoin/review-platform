@@ -180,6 +180,9 @@ $reviewRoutes = function () {
 		Route::get('widget/{id}/{hash}/{mode}', 				'WidgetController@widget');
 
 		Route::group(['namespace' => 'Front'], function () {
+			
+			Route::get('banned', 								'BannedController@home');
+			
 			Route::get('/', 									'IndexController@home');
 			Route::get('pending-dentist', 						'IndexController@pending');
 			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
@@ -268,6 +271,12 @@ $reviewRoutes = function () {
 				Route::get('profile/trp-iframe', 				'ProfileController@trp');
 				Route::get('profile/wallet', 					'ProfileController@wallet');
 				Route::any('profile/invite', 					'ProfileController@invite');
+				Route::post('profile/invite-whatsapp', 			'ProfileController@invite_whatsapp');
+				Route::post('profile/invite-copypaste', 		'ProfileController@invite_copypaste');
+				Route::post('profile/invite-copypaste-emails', 	'ProfileController@invite_copypaste_emails');
+				Route::post('profile/invite-copypaste-names', 	'ProfileController@invite_copypaste_names');
+				Route::post('profile/invite-copypaste-final', 	'ProfileController@invite_copypaste_final');
+				Route::post('profile/invite-file',			 	'ProfileController@invite_file');
 				Route::any('profile/invite-new', 				'ProfileController@invite_new');
 				Route::get('profile/asks', 						'ProfileController@asks');
 				Route::get('profile/asks/accept/{id}', 			'ProfileController@asks_accept');
