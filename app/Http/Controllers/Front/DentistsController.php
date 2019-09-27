@@ -297,16 +297,16 @@ class DentistsController extends FrontController
                 }
             }
 
-            if ($max_lon < $lon ) {
+            if (!empty($lon) && $max_lon < $lon ) {
                 $max_lon = $lon;
             }
-            if ($min_lon > $lon ) {
+            if (!empty($lon) && $min_lon > $lon ) {
                 $min_lon = $lon;
             }
-            if ($max_lat < $lat ) {
+            if (!empty($lat) && $max_lat < $lat ) {
                 $max_lat = $lat;
             }
-            if ($min_lat > $lat ) {
+            if (!empty($lat) && $min_lat > $lat ) {
                 $min_lat = $lat;
             }
 
@@ -442,8 +442,8 @@ class DentistsController extends FrontController
             'mode' => $mode,
             'staticImageUrl' => $staticmap,
             'query' => $query,
-            'lat' => $lat,
-            'lon' => $lon,
+            'lat' => !empty($lat) ? $lat : 0,
+            'lon' => !empty($lon) ? $lon : 0,
 			'items' => $items,
             'searchCategories' => $searchCategories,
             'stars' => $stars,
