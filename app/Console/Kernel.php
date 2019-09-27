@@ -768,6 +768,9 @@ NEW & FAILED TRANSACTIONS
                     AND `user_id` NOT IN ( 
                         SELECT `user_id` FROM emails WHERE template_id IN ( 51, 52) AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
                     )
+                    AND `user_id` IN ( 
+                        SELECT `user_id` FROM emails WHERE template_id = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
+                    )
                     AND `user_id` NOT IN ( 
                         SELECT `id` FROM users WHERE unsubscribe is not null
                     )
@@ -835,6 +838,9 @@ NEW & FAILED TRANSACTIONS
                     template_id = 52
                     AND `user_id` NOT IN ( 
                         SELECT `user_id` FROM emails WHERE template_id IN ( 53, 54) AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
+                    )
+                    AND `user_id` IN ( 
+                        SELECT `user_id` FROM emails WHERE template_id = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                     )
                     AND `user_id` NOT IN ( 
                         SELECT `id` FROM users WHERE unsubscribe is not null
