@@ -486,6 +486,17 @@ h4 {
     		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f071";
 		}
 	}
+
+	&.alert-orange {
+		border-color: #f59c1a;
+		color: #f59c1a;			
+		strong {
+			color: #f59c1a;			
+		}
+		&:before {
+    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f071";
+		}
+	}
 	&.alert-success {
 		border-color: #2b9b60;
 		color: #2b9b60;

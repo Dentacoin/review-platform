@@ -735,6 +735,49 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $emails = session('bulk_emails');
                 $names = session('bulk_names');
 
+                $invalid = 0;
+                $already_invited = 0;
+                foreach ($emails as $key => $email) {
+                    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        $invalid++;
+                    }
+
+                    $invitation = UserInvite::where([
+                        ['user_id', $this->user->id],
+                        ['invited_email', 'LIKE', $email],
+                    ])->first();
+
+                    if ($invitation) {
+                        $already_invited++;
+                    }
+                }
+
+                $final_message = '';
+                $alert_color = '';
+
+                if (!empty($invalid) && $invalid == count($emails)) {
+                    $final_message = 'The review invitations were not sent. Please, provide valid patient emails and match them correctly with the corresponding column.';
+                    $alert_color = 'warning';
+                } else if(!empty($invalid) && $invalid != count($emails)) {
+                    if (empty($already_invited)) {
+                        $final_message = 'Review invitations were sent successfully to patients with valid email addresses. However, there were some unvalid emails in the provided contact info, which were skipped.';
+                        $alert_color = 'orange';
+                    } else {
+                        $final_message = 'Review invitations were sent successfully to patients with valid email addresses. However, note that some patients were excluded from the invites because they already submitted feedback this month or their email addresses were invalid.';
+                        $alert_color = 'orange';
+                    }
+                } else if(!empty($already_invited) && ($already_invited == count($emails))) {
+                    $final_message = 'Review invitations sending failed! These patients already submitted their feedback this month.';
+                    $alert_color = 'warning';
+                } else if(!empty($already_invited) && $already_invited != count($emails)) {
+                    $final_message = 'Review invitations were sent successfully to patients with valid email addresses. However, note that some patients were excluded from the invites because they already submitted feedback this month.';
+                    $alert_color = 'orange';
+                } else {
+                    $final_message = trans('trp.page.profile.invite.success');
+                    $alert_color = 'success';
+                }
+
+
                 foreach ($emails as $key => $email) {
                     if(!empty($names[$key]) && ($email != $this->user->email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
@@ -850,7 +893,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
                 return Response::json([
                     'success' => true,
-                    'message' => trans('trp.page.profile.invite.success'),
+                    'message' => $final_message,
+                    'color' => $alert_color,
                 ] );
             } else {
                 return Response::json([
@@ -875,7 +919,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
  
             if ($validator->fails()) {
 
-                $ret['message'] = 'Please upload a file';
+                $ret['message'] = 'Please upload a file, containing names and emails, separated by commas or tabs';
                 return Response::json($ret);
 
             } else {

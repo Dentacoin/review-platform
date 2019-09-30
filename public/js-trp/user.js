@@ -572,10 +572,10 @@ $(document).ready(function(){
                     if(data.success) {
 
                         if ($(window).innerWidth() <= 992) {
-                            window.open('whatsapp://send?text='+ data.text +'&href='+ data.text +'', '_blank');
+                            window.open('whatsapp://send?text='+ data.text, '_blank');
                         } else {
-                            window.open('https://api.whatsapp.com/send?phone=' + data.phone + '&text=' + data.text, '_blank');
-                        }                        
+                            window.open('https://api.whatsapp.com/send?text=' + data.text, '_blank');
+                        }                   
 
                         that.find('.invite-phone').val('');
                         that.find('.invite-alert').show().addClass('alert-success').html(data.message);
@@ -622,6 +622,12 @@ $(document).ready(function(){
 
     inviteRadio();
 
+    $('.try-invite-again').click( function() {
+        $(this).closest('.copypaste-wrapper').hide();
+        $(this).closest('.invite-content').find('.step1').show();
+        $(this).closest('.copypaste-wrapper').find('.invite-alert').hide();
+    });
+
     if( $('.invite-patient-copy-paste-form').length ) {
         $('.invite-patient-copy-paste-form').submit( function(e) {
             e.preventDefault();
@@ -635,7 +641,7 @@ $(document).ready(function(){
             $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
 
             var that = $(this);
-            var unique_id = $(this).attr('radio-id');
+            var unique_id = $(this).closest('.invite-content').attr('radio-id');
 
             $.post( 
                 $(this).attr('action'), 
@@ -669,6 +675,7 @@ $(document).ready(function(){
 
                         that.closest('.invite-content').find('.step4').find('.final-button').show(); 
                         that.closest('.invite-content').find('.step4').find('.bulk-invite-back').show();
+                        that.closest('.invite-content').find('.step4').find('.try-invite-again').hide();
                     } else {
                         that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
                                         
@@ -692,7 +699,7 @@ $(document).ready(function(){
         $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
 
         var that = $(this);
-        var unique_id = $(this).attr('radio-id');
+        var unique_id = $(this).closest('.invite-content').attr('radio-id');
 
         $.post( 
             $(this).attr('action'), 
@@ -782,7 +789,7 @@ $(document).ready(function(){
 
         var that = $(this);
 
-        that.find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
+        that.find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success').removeClass('alert-orange');
         that.find('button').addClass('waiting');
 
         $.post( 
@@ -793,9 +800,10 @@ $(document).ready(function(){
                 that.find('button').removeClass('waiting');
 
                 if(data.success) {
-                    that.find('.invite-alert').show().addClass('alert-success').html(data.message);
+                    that.find('.invite-alert').show().addClass('alert-'+data.color).html(data.message);
                     that.find('.final-button').hide(); 
                     that.find('.bulk-invite-back').hide(); 
+                    that.find('.try-invite-again').show();
                 } else {
                     that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
                 }
@@ -823,7 +831,7 @@ $(document).ready(function(){
 
         $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
         var that = $(this);
-        var unique_id = $(this).attr('radio-id');
+        var unique_id = $(this).closest('.invite-content').attr('radio-id');
 
         var formData = new FormData(this);
 
@@ -863,6 +871,7 @@ $(document).ready(function(){
 
                 that.closest('.invite-content').find('.step4').find('.final-button').show(); 
                 that.closest('.invite-content').find('.step4').find('.bulk-invite-back').show();
+                that.closest('.invite-content').find('.step4').find('.try-invite-again').hide();
             } else {
                 that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
                                 
