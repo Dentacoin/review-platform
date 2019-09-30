@@ -529,11 +529,11 @@ $(document).ready(function(){
             success: function(data) {
                 if(data.success) {
 
-                    if ($(window).innerWidth() <= 992) {
-                        window.open('whatsapp://send?text='+ data.text +'&href='+ data.text +'', '_blank');
-                    } else {
+                    // if ($(window).innerWidth() <= 992) {
+                    //     window.open('whatsapp://send?text='+ data.text +'&href='+ data.text +'', '_blank');
+                    // } else {
                         window.open('https://api.whatsapp.com/send?text=' + data.text, '_blank');
-                    }                        
+                    // }
 
                     that.closest('.invite-content').find('.invite-alert').show().addClass('alert-success').html(data.message);
 
