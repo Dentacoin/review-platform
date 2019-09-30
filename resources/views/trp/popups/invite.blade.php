@@ -9,21 +9,20 @@
 		</div>
 		<h2>
 			{!! nl2br(trans('trp.popup.popup-invite.title')) !!}
-			
 		</h2>
 
 		<div class="popup-tabs invite-tabs flex flex-mobile">
 			<a class="active col" href="javascript:;" data-invite="copypaste" style="z-index: 3">
-				Copy/Paste from file
+				{!! nl2br(trans('trp.popup.popup-invite.copypaste.title')) !!}
 			</a>
 			<a class="col" href="javascript:;" data-invite="email" style="z-index: 2">
-				Add manually
+				{!! nl2br(trans('trp.popup.popup-invite.manually.title')) !!}
 			</a>
 			<a class="col" href="javascript:;" data-invite="whatsapp" style="z-index: 1">
-				Send via WhatsApp
+				{!! nl2br(trans('trp.popup.popup-invite.whatsapp.title')) !!}
 			</a>
 			<a class="col" href="javascript:;" data-invite="file">
-				Import from file
+				{!! nl2br(trans('trp.popup.popup-invite.file.title')) !!}
 			</a>
 			@if(false)
 				<a class="col" href="javascript:;" data-invite="link">
@@ -35,18 +34,17 @@
 		<div id="invite-option-copypaste" class="invite-content" radio-id="copypasteid" >
 
 			<h4 class="popup-title">
-				<!-- {!! nl2br(trans('trp.popup.popup-invite.subtitle')) !!} -->
-				COPY / PASTE FROM FILE
+				{!! nl2br(trans('trp.popup.popup-invite.copypaste.title')) !!}
 			</h4>
 
 			<div class="copypaste-wrapper step1" style="display: block;">
 				<p class="popup-desc">
-					• Paste patient info.
+					• {!! nl2br(trans('trp.popup.popup-invite.copypaste.instructions')) !!}
 				</p>
 				<br/>
 				<br/>
 
-				<h4 class="step-title"><span>Step 1:</span> Paste patient email and name</h4>
+				<h4 class="step-title">{!! nl2br(trans('trp.popup.popup-invite.copypaste.step1-title')) !!}</h4>
 
 				{!! Form::open(array('method' => 'post', 'class' => 'invite-patient-copy-paste-form', 'url' => getLangUrl('profile/invite-copypaste') )) !!}
 					{!! csrf_field() !!}
@@ -57,7 +55,7 @@
 					</div>
 
 					<div class="tac">
-						<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!} Invite">
+						<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!}">
 					</div>
 				{!! Form::close() !!}
 			</div>
@@ -68,8 +66,7 @@
 		<div id="invite-option-email" class="invite-content" style="display: none;">
 
 			<h4 class="popup-title">
-				<!-- {!! nl2br(trans('trp.popup.popup-invite.subtitle')) !!} -->
-				Add manually
+				{!! nl2br(trans('trp.popup.popup-invite.manually.title')) !!}
 			</h4>
 
 			<p class="popup-desc">
@@ -101,30 +98,30 @@
 
 				<div class="alert invite-alert" style="display: none; margin-top: 20px;">
 				</div>
-				<!--
-					<a href="javascript:;" class="add-patient">+ Add another patient</a>
-				-->
-
+				@if(false)
+					<!--
+						<a href="javascript:;" class="add-patient">+ Add another patient</a>
+					-->
+				@endif
 				<div class="tac">
-					<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!} Invite">
+					<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!}">
 				</div>
 			{!! Form::close() !!}
 		</div>
 
 		<div id="invite-option-whatsapp" class="invite-content" style="display: none;">
 			<h4 class="popup-title">
-				<!-- {!! nl2br(trans('trp.popup.popup-invite.subtitle')) !!} -->
-				Send via WhatsApp
+				{!! nl2br(trans('trp.popup.popup-invite.whatsapp.title')) !!}
 			</h4>
 
 			<p class="popup-desc">
-				• Send invitation link to your patient via WhatsApp.
+				• {!! nl2br(trans('trp.popup.popup-invite.whatsapp.instructions')) !!}
 			</p>
 			<br/>
 			<br/>
 
 			<div class="tac">
-				<a href="javascript:;" data-url="{!! getLangUrl('profile/invite-whatsapp') !!}" class="whatsapp-button">{!! nl2br(trans('trp.popup.popup-invite.send')) !!} Invite<i class="fab fa-whatsapp"></i></a>
+				<a href="javascript:;" data-url="{!! getLangUrl('profile/invite-whatsapp') !!}" class="whatsapp-button">{!! nl2br(trans('trp.popup.popup-invite.send')) !!}<i class="fab fa-whatsapp"></i></a>
 			</div>
 
 			<div class="alert invite-alert" style="display: none; margin-top: 20px;"></div>
@@ -132,33 +129,32 @@
 
 		<div id="invite-option-file" class="invite-content" radio-id="fileid" style="display: none;">
 			<h4 class="popup-title">
-				<!-- {!! nl2br(trans('trp.popup.popup-invite.subtitle')) !!} -->
-				Import from file
+				{!! nl2br(trans('trp.popup.popup-invite.file.title')) !!}
 			</h4>
 
 			<div class="copypaste-wrapper step1" style="display: block;">
 				<p class="popup-desc">
-					• Upload a .csv or .txt file with multiple patient emails and names.
+					• {!! nl2br(trans('trp.popup.popup-invite.file.instructions')) !!}
 				</p>
 				<br/>
 				<br/>
 
-				<h4 class="step-title"><span>Step 1:</span> UPLOAD FILE WITH PATIENT NAMES AND EMAILS</h4>
+				<h4 class="step-title">{!! nl2br(trans('trp.popup.popup-invite.file.step1-title')) !!}</h4>
 
 				{!! Form::open(array('method' => 'post', 'class' => 'invite-patient-file-form', 'url' => getLangUrl('profile/invite-file'), 'files' => 'true' )) !!}
 					{!! csrf_field() !!}
 
 					<label for="invite-file" class="label-file clearfix">
 						<span></span>
-						<div class="browse">Browse</div>
+						<div class="browse">{!! nl2br(trans('trp.popup.popup-invite.file.browse')) !!}</div>
 						<input type="file" name="invite-file" id="invite-file" accept=".csv,.txt">
 					</label>
 					<div class="flex file-info">
 						<div class="col">
-							<a href="{{ url('sample-import-file.csv') }}" class="download-sample"><img src="{{ url('img-trp/download.png') }}"/>Download sample</a>
+							<a href="{{ url('sample-import-file.csv') }}" class="download-sample"><img src="{{ url('img-trp/download.png') }}"/>{!! nl2br(trans('trp.popup.popup-invite.file.download')) !!}</a>
 						</div>
 						<div class="col">
-							<span>Acceptable file types: .csv or .txt files</span>
+							<span>{!! nl2br(trans('trp.popup.popup-invite.file.acceptable')) !!}</span>
 						</div>
 					</div>
 
@@ -166,7 +162,7 @@
 					</div>
 
 					<div class="tac">
-						<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!} Invite">
+						<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!}">
 					</div>
 				{!! Form::close() !!}
 			</div>
