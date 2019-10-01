@@ -14,7 +14,7 @@ return [
     |
     */
     
-    'key'       => 'AIzaSyCJRYVaywMNA78usy_ChohUTCxf1B8qGG0', //env('MAPS_SERVER_KEY'),
+    'key'       => 'AIzaSyDmpDKyQF3M1QjPd9fl5lwuod_EP8pvlUE', //env('MAPS_SERVER_KEY'),
         
     /*
     |--------------------------------------------------------------------------
@@ -281,7 +281,6 @@ return [
                                                     'zagatselected' => null,
                                                     ]           
         ],
-        
         
         
         'placedetails' => [
