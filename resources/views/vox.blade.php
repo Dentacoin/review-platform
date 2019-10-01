@@ -298,6 +298,8 @@
 									{!! nl2br(trans('vox.page.auth.after-login.hint-grace',[
 										'days' => floor(($user->grace_end->timestamp+86400*31 - time()) / 86400)
 									])) !!}
+								@else 
+									If you already have a Facebook or Civic account, just continue with your preferred option and your DentaVox account with be automatically connected.
 								@endif
 
 							</p>
@@ -323,7 +325,7 @@
 									<input type="hidden" id="jwtAddress" value="{{ getLangUrl('login/civic') }}" />
 								</div>
 
-								@if( $user->grace_end && $user->grace_end->timestamp+86400*31 < time() )
+								<!-- @if( $user->grace_end && $user->grace_end->timestamp+86400*31 < time() )
 								@else
 								  	<div class="col-md-12 text-center">
 										<div class="grace-button" id="grace-button">
@@ -331,7 +333,7 @@
 											
 										</div>
 								  	</div>
-								@endif
+								@endif -->
 
 							</div>
 						</div>
