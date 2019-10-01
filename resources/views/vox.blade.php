@@ -294,7 +294,7 @@
 								<br/>
 								@if( $user->grace_end && $user->grace_end->timestamp+86400*31 < time() )
 									{!! nl2br(trans('vox.page.auth.after-login.hint-expired')) !!}
-								@else
+								@elseif($user->grace_end)
 									{!! nl2br(trans('vox.page.auth.after-login.hint-grace',[
 										'days' => floor(($user->grace_end->timestamp+86400*31 - time()) / 86400)
 									])) !!}
