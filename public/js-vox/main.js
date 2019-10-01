@@ -1308,6 +1308,49 @@ $(document).ready(function(){
 		});
 	}
 
+	
+
+    const fb_config = {
+        //app_id: '299398824049604',
+        app_id: '1906201509652855',
+        platform: 'fb'
+    };
+
+    //application init
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: fb_config.app_id,
+            cookie: true,
+            xfbml: true,
+            version: 'v2.8'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = '//connect.facebook.net/bg_BG/sdk.js';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    $('.fb-login-button-new').click( function(rerequest){
+
+        var that = $(this);
+
+        FB.login(function (response) {
+
+            if(response.authResponse && response.status == "connected") {
+                $('#new-login-form input[name="access-token"]').val(response.authResponse.accessToken);
+                $('#new-login-form').submit();
+            }
+        });
+    });
+
 });
 
 

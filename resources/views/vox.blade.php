@@ -303,12 +303,18 @@
 								@endif
 
 							</p>
+
+							<form action="{{ getLangUrl('new-login/facebook', null, 'https://dentavox.dentacoin.com/') }}" method="post" id="new-login-form" style="display: none;">
+								{!! csrf_field() !!}
+								<input type="text" name="access-token" value="">
+								<input type="hidden" name="intended" value="{{ !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '' }}">
+								<button type="submit"></button>			
+							</form>
 								
 							<div class="form-group buttons">
 							  	<div class="col-md-12 text-center">
 									<div class="fb-button-inside">
-										<a href="{{ getLangUrl('login/facebook') }}" class="">
-										</a>
+										<a href="javascript:;" class="fb-login-button-new"></a>
 										<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
 									</div>
 								</div>
