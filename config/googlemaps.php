@@ -14,7 +14,7 @@ return [
     |
     */
     
-    'key'       => 'AIzaSyDmpDKyQF3M1QjPd9fl5lwuod_EP8pvlUE', //env('MAPS_SERVER_KEY'),
+    'key'       => env('MAPS_SERVER_KEY'),
         
     /*
     |--------------------------------------------------------------------------
