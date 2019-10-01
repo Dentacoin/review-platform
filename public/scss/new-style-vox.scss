@@ -6722,9 +6722,10 @@ body.vox-public {
 	}
 
 	&.daily-poll {
+		overflow-y: auto;
+
 		@media screen and (max-width: 1000px) {
 			background-color: white;
-			overflow-y: auto; 
 			padding: 10px;
 		}
 
@@ -6859,20 +6860,31 @@ body.vox-public {
 						margin: 0 auto;
 						margin-top: 50px;
 
-						@media screen and (max-width: 1000px) {
+						@media screen and (max-width: 1300px) {
 							font-size: 22px;
-							margin-top: 30px;
-    						margin-bottom: 30px;
+    						margin-bottom: 50px;
+						}
+
+						@media #{$phone} {
+							font-size: 20px;
 						}
 
 						b {
 							color: #3daee6;
 							font-weight: bold;
 
-							@media screen and (max-width: 1000px) {
+							@media screen and (max-width: 1300px) {
 								font-size: 22px;
 							}
+
+							@media #{$phone} {
+								font-size: 20px;
+							}
 						}
+					}
+
+					.get-reward-buttons {
+						text-align: center;
 					}
 				}
 
@@ -6924,6 +6936,7 @@ body.vox-public {
 					@media screen and (max-width: 1000px) {
 						font-size: 18px;
 						margin-bottom: 15px;
+						max-width: none;
 					}
 				}
 
@@ -7174,6 +7187,10 @@ body.vox-public {
 		    }
 		}
 	}
+}
+
+body.popup-visible {
+	overflow-y: hidden;
 }
 
 .popcircle {
