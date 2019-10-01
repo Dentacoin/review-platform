@@ -266,10 +266,19 @@ class RegisterController extends FrontController
                     }
                     session($sess);
 
-                    $text = !empty( $sess['join_clinic'] ) ? trans('trp.popup.registration.invitation-clinic', [ 'name' => $user->name ]) : trans('trp.popup.registration.invitation', [ 'name' => $user->name ]);
+                    if (!empty($inv) && !empty($inv->invited_id)) {
+                        $text = 'The invitation has expired. Get in touch with your dentist to request a new invite.';
 
+                        session()->pull('invitation_id');
+                    } else {
+                        $text = !empty( $sess['join_clinic'] ) ? trans('trp.popup.registration.invitation-clinic', [ 'name' => $user->name ]) : trans('trp.popup.registration.invitation', [ 'name' => $user->name ]);
+                    }
 
-                    if($user->is_dentist) {
+                    if (!empty($inv) && !empty($inv->invited_id)) {
+                        return redirect()->to( $user->getLink().'?'. http_build_query(['popup'=> !empty( $sess['join_clinic'] ) ? 'popup-register-dentist' : 'popup-register' ]).'&'.http_build_query($_GET))
+                        ->withInput()
+                        ->with('error-message', $text );
+                    } else if($user->is_dentist) {
                         return redirect()->to( $user->getLink().'?'. http_build_query(['popup'=> !empty( $sess['join_clinic'] ) ? 'popup-register-dentist' : 'popup-register' ]).'&'.http_build_query($_GET))
                         ->withInput()
                         ->with('success-message', $text );
