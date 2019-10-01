@@ -9255,6 +9255,19 @@ body.popup-visible {
 	}
 }
 
+.ip-country {
+	margin-bottom: 20px;
+	font-size: 14px;
+	padding: 10px 20px 10px 50px;
+
+	& + .ajax-alert {
+	    margin-top: -20px;
+	}
+
+	&:before {
+		font-size: 20px;
+	}
+}
 
 .modern-field {
 	margin-bottom: 25px;

@@ -602,6 +602,7 @@ $(document).ready(function(){
             }
             ajax_is_running = true;
 
+            $('.ip-country').hide();
             var that = $(this);
 
             $.post( 

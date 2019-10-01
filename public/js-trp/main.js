@@ -839,6 +839,18 @@ jQuery(document).ready(function($){
 		closePopup();
 	});
 
+
+	$('.country-dropdown').change( function() {
+
+		if ($(this).attr('real-country') != '') {
+			if ($(this).val() != $(this).attr('real-country')) {
+				$(this).parent().parent().find('.ip-country').show();
+			} else {
+				$(this).parent().parent().find('.ip-country').hide();
+			}
+		}
+	});
+
 });
 
 //

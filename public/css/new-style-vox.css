@@ -6551,6 +6551,15 @@ body.popup-visible {
   .sign-in-step .submit-register {
     text-transform: unset !important; }
 
+.ip-country {
+  margin-bottom: 20px;
+  font-size: 14px;
+  padding: 10px 20px 10px 50px; }
+  .ip-country + .ajax-alert {
+    margin-top: -20px; }
+  .ip-country:before {
+    font-size: 20px; }
+
 .modern-field {
   margin-bottom: 25px;
   position: relative; }

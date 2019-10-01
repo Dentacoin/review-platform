@@ -280,8 +280,12 @@
 							</div>
 						</div>
 						<div class="sign-in-step address-suggester-wrapper {!! !empty($regData) && empty($regData['country_id']) && !empty($regData['name']) ? 'active' : '' !!}" id="step-3">
+							<div class="alert alert-warning ip-country mobile" style="display: none;">
+	                        	Hmm... Your IP thinks differently. <br/>
+								Sure you've entered the right country?
+	                        </div>	
 							<div class="modern-field">
-					  			<select name="country_id" id="dentist-country" class="modern-input country-select">
+					  			<select name="country_id" id="dentist-country" class="modern-input country-select country-dropdown" real-country="{{ !empty($country_id) ? $country_id : '' }}">
 					  				@if(!$country_id)
 						  				<option>-</option>
 						  			@endif

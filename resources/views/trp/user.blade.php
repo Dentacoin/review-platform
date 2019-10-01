@@ -45,7 +45,12 @@
 				<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
 				<input type="text" name="name_alternative" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alternative }}">
 				<div class="profile-details address-suggester-wrapper">
-                	<select class="input country-select" name="country_id">
+					<div class="alert alert-warning mobile ip-country" style="display: none;">
+                    	Hmm... Your IP thinks differently. <br/>
+						Sure you've entered the right country?
+                    </div>	
+
+                	<select class="input country-select country-dropdown" name="country_id" real-country="{{ !empty($country_id) ? $country_id : '' }}">
                 		<option value="">-</option>
                 		@foreach(\App\Models\Country::get() as $country)
                 			<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $user->country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
@@ -324,7 +329,13 @@
 							<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
 						@endif
 						<input type="text" name="name_alternative" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alternative }}">
-						<select class="input country-select" name="country_id">
+
+						<div class="alert alert-warning mobile ip-country" style="display: none;">
+	                    	Hmm... Your IP thinks differently. <br/>
+							Sure you've entered the right country?
+	                    </div>	
+
+	                	<select class="input country-select country-dropdown" name="country_id" real-country="{{ !empty($country_id) ? $country_id : '' }}">
 	                		<option value="">-</option>
 	                		@foreach(\App\Models\Country::get() as $country)
 	                			<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $user->country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>

@@ -371,6 +371,7 @@ $(document).ready(function(){
 	        ajax_is_running = true;
 
 	        $('.form-group').removeClass('has-error');
+	        $('.ip-country').hide();
 
 	        var that = $(this);
 
@@ -1350,6 +1351,20 @@ $(document).ready(function(){
             }
         });
     });
+
+    
+
+
+	$('.country-dropdown').change( function() {
+
+		if ($(this).attr('real-country') != '') {
+			if ($(this).val() != $(this).attr('real-country')) {
+				$(this).parent().parent().find('.ip-country').show();
+			} else {
+				$(this).parent().parent().find('.ip-country').hide();
+			}
+		}
+	});
 
 });
 
