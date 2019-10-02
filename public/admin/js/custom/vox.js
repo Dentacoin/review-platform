@@ -73,16 +73,6 @@ $(document).ready(function(){
 		}
 	} );
 
-	$('.toggler').change( function() {
-		var id = $(this).attr('id');
-		var field = $(this).attr('field');
-        $.ajax({
-            url     : 'cms/vox/edit-field/'+id+'/'+field+'/'+( $(this).is(':checked') ? 1 : 0 ),
-            type    : 'GET'
-        });
-
-	} );
-
 	// $('.order').click( function() {
 	// 	// e.preventDefault();
 	// 	var href = $(this).attr('href');

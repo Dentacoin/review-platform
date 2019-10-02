@@ -1,0 +1,2 @@
+<span style="font-size: 0px;">{{ intval($item->stats_featured) }}</span>
+<input type="checkbox" class="toggler" field="stats_featured" id="{{ $item->id }}" {!! $item->stats_featured ? 'checked="checked"' : '' !!} />

@@ -127,6 +127,9 @@ class VoxesController extends AdminController
             if($field=='has_stats') {
                 $item->$field = $value=='0' ? 0 : 1;
             }
+            if($field=='stats_featured') {
+                $item->$field = $value=='0' ? 0 : 1;
+            }
             $item->save();
         }
     }

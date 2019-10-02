@@ -35,6 +35,18 @@ $(document).ready(function(){
 		}
 	});
 
+	$('.toggler').change(function(e) {
+		e.preventDefault();
+		
+		var id = $(this).attr('id');
+		var field = $(this).attr('field');
+        $.ajax({
+            url     : 'cms/vox/edit-field/'+id+'/'+field+'/'+( $(this).is(':checked') ? 1 : 0 ),
+            type    : 'GET'
+        });
+
+	} );
+
 	$('.table-select-all').click( function() {
 		
 		var active = $(this).closest('table').find('input[type="checkbox"]').first().is(':checked');
