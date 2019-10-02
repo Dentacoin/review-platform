@@ -8,4 +8,5 @@ return [
     'added_new' => 'info',
     'added_approved' => 'success',
     'added_rejected' => 'danger',
+    'admin_imported' => 'info',
 ];
