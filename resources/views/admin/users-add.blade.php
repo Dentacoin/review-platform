@@ -104,7 +104,7 @@
                             <div class="form-group">
                                 <div class="col-md-6"></div>
                                 <div class="col-md-6">
-                                    <button type="submit" name="update" class="btn btn-block btn-sm btn-success form-control scrape-submit" disabled> {{ trans('admin.common.save') }} </button>
+                                    <button type="submit" name="update" class="btn btn-block btn-sm btn-success form-control"> {{ trans('admin.common.save') }} </button>
                                 </div>
                             </div>
                             
