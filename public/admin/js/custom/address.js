@@ -1,6 +1,7 @@
 var initAddressSuggesters;
 var checkAddress;
 var setupMap;
+var mapsWaiting;
 
 jQuery(document).ready(function($){
 
@@ -14,7 +15,6 @@ jQuery(document).ready(function($){
             });
             var marker = new google.maps.Marker({
                 map: profile_address_map,
-                icon: images_path+'/map-pin-inactive.png',
                 draggable:true,
                 position: coords,
             });
@@ -146,19 +146,16 @@ jQuery(document).ready(function($){
 
             conatiner.find('.geoip-confirmation').show();
 
-            $('.go-to-next[step-number="3"]').removeClass('disabled');
-            if ($('.invite-new-dentist-form').length) {
-                $('.invite-new-dentist-form').find('.button').removeClass('disabled');
+            if ($('.scrape-submit').length) {
+                $('.scrape-submit').removeAttr("disabled");
             }
 
             return;
        
         } else {
             conatiner.find('.geoip-hint').show();
-            $('.go-to-next[step-number="3"]').addClass('disabled');
-            
-            if ($('.invite-new-dentist-form').length) {
-                $('.invite-new-dentist-form').find('.button').addClass('disabled');
+            if ($('.scrape-submit').length) {
+                $('.scrape-submit').prop('disabled', 'disabled');
             }
         }
         

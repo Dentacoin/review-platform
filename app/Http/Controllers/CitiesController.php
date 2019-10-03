@@ -21,7 +21,7 @@ class CitiesController extends BaseController
 		$users = User::where('is_dentist', true)->where(function($query) use ($username) {
 			$query->where('name', 'LIKE', '%'.$username.'%')
 			->orWhere('name_alternative', 'LIKE', '%'.$username.'%');
-		})->whereIn('status', ['approved','added_approved'])->take(10)->get();
+		})->whereIn('status', ['approved','added_approved','admin_imported'])->take(10)->get();
 		$user_list = [];
 		foreach ($users as $user) {
 			$user_list[] = [

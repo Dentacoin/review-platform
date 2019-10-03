@@ -18,7 +18,7 @@ class SSOController extends BaseController
             if($user) {
             	$token = $this->decrypt(request('token'));
 	            $type = $this->decrypt(request('type'));
-                $approved_statuses = array('approved', 'pending', 'test', 'added_approved');
+                $approved_statuses = array('approved', 'pending', 'test', 'added_approved', 'admin_imported');
                 if($user->self_deleted != NULL) {
                     return abort(404);
                 } else if(!in_array($user->status, $approved_statuses)) {

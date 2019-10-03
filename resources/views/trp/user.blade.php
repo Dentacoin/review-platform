@@ -164,7 +164,7 @@
 				<img src="{{ url('img-trp/share.svg') }}">
 				{!! nl2br(trans('trp.common.share')) !!}
 			</a>
-			@if($item->status == 'added_approved')
+			@if($item->status == 'added_approved' || $item->status == 'admin_imported')
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
 			<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
@@ -189,9 +189,9 @@
 						{!! nl2br(trans('trp.page.user.edit-profile')) !!}
 					</a>
 				@endif
-				@if(empty($user) && $item->status == 'added_approved')
+				@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported'))
 					<a class="claim-button" href="javascript:;"  data-popup="claim-popup">
-						Claim profile
+						Is this your practice?
 					</a>
 				@endif
 			</div>
@@ -448,7 +448,7 @@
 			@endif
 
 
-			@if($item->status == 'added_approved')
+			@if($item->status == 'added_approved' || $item->status == 'admin_imported')
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
 
@@ -529,9 +529,9 @@
 					{!! nl2br(trans('trp.page.user.edit-profile')) !!}
 				</a>
 			@endif
-			@if(empty($user) && $item->status == 'added_approved')
+			@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported'))
 				<a class="claim-button" href="javascript:;" data-popup="claim-popup">
-					Claim profile
+					Is this your practice?
 				</a>
 			@endif
 			@if(!empty($item->short_description))

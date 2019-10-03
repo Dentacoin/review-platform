@@ -7,6 +7,8 @@
     <a href="javascript:;" class="btn btn-primary pull-right btn-export">Export</a>
     <a href="javascript:;" class="btn btn-primary pull-right btn-export-fb" style="margin-right: 10px;">FB Export</a>
     <a href="javascript:;" class="btn btn-primary pull-right btn-export-sendgrid" style="margin-right: 10px;">SendGrid Export</a>
+    <a href="{{ url('cms/users/add') }}" class="btn btn-primary pull-right" style="margin-right: 10px;">Add dentist</a>
+    <a href="{{ url('cms/users/import') }}" class="btn btn-primary pull-right" style="margin-right: 10px;">Import dentists</a>
 </h1>
 <!-- end page-header -->
 

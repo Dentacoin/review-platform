@@ -27,7 +27,7 @@ class IndexController extends FrontController
 			return redirect( $this->user->getLink() );
 		}
 
-		$featured = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved'])->orderBy('avg_rating', 'DESC');
+		$featured = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported'])->orderBy('avg_rating', 'DESC');
 		$homeDentists = collect();
 
 
@@ -152,7 +152,7 @@ class IndexController extends FrontController
 	public function claim ($locale=null, $id) {
 		$user = User::find($id);
 
-        if (!$user || $user->status != 'added_approved') {
+        if (!$user || $user->status != 'added_approved' || $user->status != 'admin_imported') {
             return redirect( getLangUrl('/') );
         }
 

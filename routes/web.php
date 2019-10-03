@@ -57,6 +57,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('users/byweek', 						'UsersController@byweek');
 	Route::any('users/loginas/{id}/{platform?}', 	'UsersController@loginas');
 	Route::any('users/user-data/{id}', 				'UsersController@personal_data');
+	Route::any('users/import', 						'UsersController@import');
+	Route::any('users/add', 						'UsersController@add');
 	Route::any('users/edit/{id}', 					'UsersController@edit');
 	Route::any('users/edit/{id}/addavatar', 		'UsersController@add_avatar');
 	Route::any('users/edit/{id}/deleteavatar', 		'UsersController@delete_avatar');
@@ -157,6 +159,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('claims/approve/{id}', 				'DentistClaimsController@approve');
 	Route::any('claims/reject/{id}', 				'DentistClaimsController@reject');
 	Route::any('claims/suspicious/{id}', 			'DentistClaimsController@suspicious');
+
+	Route::any('scrape-google-dentists', 			'ScrapeGoogleDentistsController@list');
+	Route::any('scrape-google-dentists/{id}', 		'ScrapeGoogleDentistsController@download');
 });
 
 

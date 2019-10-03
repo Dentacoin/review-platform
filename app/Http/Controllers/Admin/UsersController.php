@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Input;
 
 use Carbon\Carbon;
 
+use Validator;
 use Response;
 use Request;
 use Route;
@@ -184,6 +185,7 @@ class UsersController extends AdminController
             'dentist.added_new' => 'Dentists (Added New)',
             'dentist.added_approved' => 'Dentists (Added Approved)',
             'dentist.added_rejected' => 'Dentists (Added Rejected)',
+            'dentist.admin_imported' => 'Dentists (Admin Imported)',
             'clinic.all' => 'Clinics (All)',
             'clinic.new' => 'Clinics (New)',
             'clinic.pending' => 'Clinics (Suspicious)',
@@ -193,12 +195,14 @@ class UsersController extends AdminController
             'clinic.added_new' => 'Clinics (Added New)',
             'clinic.added_approved' => 'Clinics (Added Approved)',
             'clinic.added_rejected' => 'Clinics (Added Rejected)',
+            'clinic.admin_imported' => 'Clinics (Admin Imported)',
             'dentist_clinic.all' => 'Dentists & Clinics (All)',
             'dentist_clinic.new' => 'Dentists & Clinics (New)',
             'dentist_clinic.pending' => 'Dentists & Clinics (Suspicious)',
             'dentist_clinic.approved' => 'Dentists & Clinics (Approved)',
             'dentist_clinic.rejected' => 'Dentists & Clinics (Rejected)',
             'dentist_clinic.partners' => 'Dentists & Clinics (Partners)',
+            'dentist_clinic.admin_imported' => 'Dentists & Clinics (Admin Imported)',
         ];
 
         $user_statuses = [
@@ -867,6 +871,63 @@ class UsersController extends AdminController
         }
     }
 
+    public function add() {
+
+        if(Request::isMethod('post')) {
+
+            $validator = Validator::make(Request::all(), [
+                'type' => array('required', 'in:dentist,clinic'),
+                'name' => array('required', 'min:3'),
+                'email' => array('required', 'email', 'unique:users,email'),
+                'country_id' => array('required', 'exists:countries,id'),
+                'address' =>  array('required', 'string'),
+            ]);
+
+            if ($validator->fails()) {;
+
+                return redirect(url('cms/users/add'))
+                ->withInput()
+                ->withErrors($validator);
+            } else {
+                
+                $newuser = new User;
+                $newuser->title = Request::input('title');
+                $newuser->name = Request::input('name');
+                $newuser->email = Request::input('email');
+                $newuser->country_id = Request::input('country_id');
+                $newuser->phone = Request::input('phone');
+                $newuser->is_partner = Request::input('is_partner');
+                $newuser->platform = 'trp';
+                $newuser->status = 'admin_imported';
+                $newuser->address = Request::input('address');
+                $newuser->website = Request::input('website');
+                $newuser->is_dentist = 1;
+                $newuser->is_clinic = Request::input('type')=='clinic' ? 1 : 0;
+
+                $newuser->save();
+
+                if( Request::file('image') && Request::file('image')->isValid() ) {
+                    $img = Image::make( Input::file('image') )->orientate();
+                    $newuser->addImage($img);
+                }
+
+                $substitutions = [
+                    "invitation_link" => getLangUrl( 'welcome-dentist/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
+                ];
+
+                $newuser->sendGridTemplate(81, $substitutions);
+
+                Request::session()->flash('success-message', 'Dentist Added');
+                return redirect('cms/'.$this->current_page.'/edit/'.$newuser->id);
+            }
+        }
+
+        return $this->showView('users-add', array(
+            'fields' => $this->fields,
+            'countries' => Country::get(),
+        ));
+    }
+
     public function edit( $id ) {
         $item = User::withTrashed()->find($id);
 
@@ -884,8 +945,8 @@ class UsersController extends AdminController
 
             if(Request::isMethod('post')) {
 
-            	foreach ($this->fields as $key => $value) {
-            		if(empty($value['disabled']) && $value['type']!='avatar') {
+                foreach ($this->fields as $key => $value) {
+                    if(empty($value['disabled']) && $value['type']!='avatar') {
                         if($key=='city_name') {
 
                         }
@@ -1006,12 +1067,12 @@ class UsersController extends AdminController
                                 $item->$key = bcrypt( $this->request->input($key) );                                
                             }
                         } else if($value['type']=='datepicker') {
-                	       $item->$key = $this->request->input($key) ? new Carbon( $this->request->input($key) ) : null;
+                           $item->$key = $this->request->input($key) ? new Carbon( $this->request->input($key) ) : null;
                         } else {
                            $item->$key = $this->request->input($key);                            
                         }
-            		}
-            	}
+                    }
+                }
                 $item->hasimage_social = false;
 
                 $item->save();
@@ -1233,6 +1294,84 @@ class UsersController extends AdminController
         return $this->showView('users-incomplete', array(
             'items' => $incomplete,
         ));
+    }
+
+    public function import() {
+
+        if(Request::isMethod('post')) {
+
+            if(Input::file('file')) {
+
+                global $results, $not_imported;
+
+                Excel::load( Input::file('file')->path() , function($reader)  { //
+
+                    global $results, $not_imported;
+                    $not_imported = [];
+                    $results = [];
+                    $reader->each(function($sheet) {
+                        global $results;
+                        $results[] = $sheet->toArray();
+                    });
+
+                    unset($results[0]);
+                    //dd($results);
+                    if(!empty($results)) {
+
+                        foreach ($results as $row) {
+                            if (!empty($row[1])) {
+                                $existing_user = User::where('email', 'like', $row[1] )->first();
+                                if (!empty($existing_user)) {
+                                    $not_imported[] = $row[0];
+                                } else {
+
+                                    $newuser = new User;
+                                    $newuser->name = $row[0];
+                                    $newuser->email = $row[1];
+                                    $newuser->phone = $row[2];
+                                    $newuser->website = $row[3];
+                                    $newuser->work_hours = $row[4];
+                                    $newuser->is_dentist = 1;
+                                    $newuser->is_clinic = ($row[5] == 'clinic') ? 1 : 0;
+                                    $country_n = $row[6];
+                                    $country = Country::whereHas('translations', function ($query) use ($country_n) {
+                                        $query->where('name', 'LIKE', $country_n);
+                                    })->first();
+                                    $newuser->country_id = $country->id;
+                                    $newuser->address = $row[7];
+                                    $newuser->status = 'admin_imported';
+                                    $newuser->platform = 'trp';
+                                    $newuser->save();
+
+                                    $substitutions = [
+                                        "invitation_link" => getLangUrl( 'welcome-dentist/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
+                                    ];
+
+                                    $newuser->sendGridTemplate(81, $substitutions);
+                                }
+                            } else {
+                                $not_imported[] = $row[0];
+                            }
+
+                        }
+                    }
+
+                });
+
+                if(!empty($not_imported)) {
+                    $this->request->session()->flash('warning-message', 'Dentists were imported successfully. However, there were some invalid or missing dentist emails which were skipped - '.implode(',', $not_imported));
+                } else {
+                    $this->request->session()->flash('success-message', 'Dentists were imported successfully.');
+                }
+                
+                return redirect('cms/'.$this->current_page.'/import');
+
+            } else {
+                return redirect('cms/'.$this->current_page.'/import');
+            }
+        }
+
+        return $this->showView('users-import');
     }
 
 }

@@ -813,6 +813,7 @@ jQuery(document).ready(function($){
 				$('#claim-popup').addClass('claimed');
 				
 			} else {
+				console.log(data);
 				for(var i in data.messages) {
                     $(this).find('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert">'+data.messages[i]+'</div>');
 

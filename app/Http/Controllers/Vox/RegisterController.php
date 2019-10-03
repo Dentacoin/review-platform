@@ -463,7 +463,7 @@ class RegisterController extends FrontController
 
     public function register_success($locale=null) {
         $this->user->checkForWelcomeCompletion();
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='test') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
             if(Request::isMethod('post')) {
 
                 $validator = Validator::make(Request::all(), [

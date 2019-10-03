@@ -1100,11 +1100,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function canInvite($platform) {
-        return ($this->status=='approved' || $this->status=='added_approved' || $this->status=='test') && !$this->loggedFromBadIp();
+        return ($this->status=='approved' || $this->status=='added_approved' || $this->status=='test' || $this->status=='admin_imported') && !$this->loggedFromBadIp();
     }
 
     public function canWithdraw($platform) {
-        return ($this->status=='approved' || $this->status=='added_approved' || $this->status=='test') && $this->civic_kyc && !$this->loggedFromBadIp() && ($this->created_at->timestamp <= (time() - 259200)) ;
+        return ($this->status=='approved' || $this->status=='added_approved' || $this->status=='test' || $this->status=='admin_imported') && $this->civic_kyc && !$this->loggedFromBadIp() && ($this->created_at->timestamp <= (time() - 259200)) ;
     }
 
     public function getSameIPUsers() {
@@ -1636,7 +1636,7 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
         $arr = $this->toArray();
         $arr['avatar_url'] = $this->getImageUrl();
         $arr['thumbnail_url'] = $this->getImageUrl(true);
-        $arr['trp_public_profile_link'] = $this->is_dentist && ($this->status=='approved' || $this->status=='test' || $this->status=='added_approved') ? $this->getLink() : null;
+        $arr['trp_public_profile_link'] = $this->is_dentist && ($this->status=='approved' || $this->status=='test' || $this->status=='added_approved' || $this->status=='admin_imported') ? $this->getLink() : null;
 
         return $arr;
     }
