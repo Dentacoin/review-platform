@@ -1191,7 +1191,7 @@ NEW & FAILED TRANSACTIONS
         $schedule->call(function () {
             echo 'Scrape dentists scron';
 
-            $scrapes = ScrapeDentist::whereNull('completed')->get();
+            $scrapes = ScrapeDentist::whereNull('completed')->orderBy('id', 'desc')->get();
 
             if ($scrapes->count()) {
 
