@@ -152,7 +152,7 @@ class IndexController extends FrontController
 	public function claim ($locale=null, $id) {
 		$user = User::find($id);
 
-        if (!$user || $user->status != 'added_approved' || $user->status != 'admin_imported') {
+        if (!$user || ($user->status != 'added_approved' && $user->status != 'admin_imported')) {
             return redirect( getLangUrl('/') );
         }
 
