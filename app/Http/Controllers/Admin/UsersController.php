@@ -1324,14 +1324,12 @@ class UsersController extends AdminController
                                 if (!empty($existing_user)) {
                                     $not_imported[] = $row[0];
                                 } else {
-                                    $wh = json_decode($row[4], true);
-
                                     $newuser = new User;
                                     $newuser->name = $row[0];
                                     $newuser->email = $row[1];
                                     $newuser->phone = $row[2];
                                     $newuser->website = $row[3];
-                                    $newuser->work_hours = json_encode($wh, JSON_HEX_QUOT);
+                                    $newuser->work_hours = $row[4];
                                     $newuser->is_dentist = 1;
                                     $newuser->is_clinic = ($row[5] == 'clinic') ? 1 : 0;
                                     $country_n = $row[6];

@@ -713,7 +713,8 @@ class DentistController extends FrontController
             $hours_arr = [];
             $hours_specif = [];
 
-            foreach ($item->work_hours as $k => $wh) {
+            $wh = is_array($item->work_hours) ? $item->work_hours : json_decode(str_replace("\'","",$item->work_hours), true);
+            foreach ($wh as $k => $wh) {
                 $hours_arr[] = $openingHours[$k].' '.$wh[0].'-'.$wh[1];
 
                 $hours_specif[] = [

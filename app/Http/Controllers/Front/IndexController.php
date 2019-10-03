@@ -204,11 +204,11 @@ class IndexController extends FrontController
 
 
 	            $mtext = 'Dentist claimed his profile<br/>
-Name: '.Request::input('name').' <br/>
-Phone: '.Request::input('phone').' <br/>
-Email: '.Request::input('email') ? Request::input('email') : $user->email.' <br/>
-Job position: '.Request::input('job').' <br/>
-Explain how dentist is related to this office: '.Request::input('explain-related').' <br/>
+Name: '.$claim->name.' <br/>
+Phone: '.$claim->phone.' <br/>
+Email: '.$claim->email.' <br/>
+Job position: '.$claim->job.' <br/>
+Explain how dentist is related to this office: '.$claim->explain_related.' <br/>
 Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 
 				Mail::send([], [], function ($message) use ($mtext, $user) {

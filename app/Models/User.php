@@ -1306,20 +1306,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $opens = null;
 
         if( $this->work_hours && $this->country) {
+            $work_h = is_array($this->work_hours) ? $this->work_hours : json_decode($this->work_hours, true);
 
             $identifiers = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, mb_strtoupper($this->country->code));
             if(!empty($identifiers)) {
                 $tz = current($identifiers);
                 $date = Carbon::now($tz);
                 $dow = $date->dayOfWeekIso;
-                if( isset( $this->work_hours[$dow] ) ) {
-                    $oa = explode(':', $this->work_hours[$dow][0]);
-                    $ca = explode(':', $this->work_hours[$dow][1]);
+                if( isset( $work_h[$dow] ) ) {
+                    $oa = explode(':', $work_h[$dow][0]);
+                    $ca = explode(':', $work_h[$dow][1]);
                     if(!empty($oa[0]) && is_numeric($oa[0]) && !empty($ca[0]) && is_numeric($ca[0]) && !empty($oa[1]) && is_numeric($oa[1]) && !empty($ca[1]) && is_numeric($ca[1])) {
                         $open = Carbon::createFromTime( intval($oa[0]), intval($oa[1]), 0, $tz );
                         $close = Carbon::createFromTime( intval($ca[0]), intval($ca[1]), 0, $tz );
                         if( $date->lessThan($close) && $date->greaterThan($open) ) {
-                            $opens = '<span class="green-text">Open now</span>&nbsp;<span>('.$this->work_hours[$dow][0].' - '.$this->work_hours[$dow][1].')</span>';
+                            $opens = '<span class="green-text">Open now</span>&nbsp;<span>('.$work_h[$dow][0].' - '.$work_h[$dow][1].')</span>';
                         }
                     }
                 } 
@@ -1327,13 +1328,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 if( empty($opens) ) {
                     while($dow<=7) {
                         $dow++;
-                        if( isset( $this->work_hours[$dow] ) ) {
-                            $opens = '<span>Opens on '.$dows[$dow].' at '.$this->work_hours[$dow][0].'</span>';
+                        if( isset( $work_h[$dow] ) ) {
+                            $opens = '<span>Opens on '.$dows[$dow].' at '.$work_h[$dow][0].'</span>';
                             break;
                         }
                     }
                     if(empty($opens)) {
-                        $wh = $this->work_hours;
+                        $wh = $work_h;
                         reset($wh);
                         $dow = key( $wh );
                         $opens = '<span>Opens on '.$dows[$dow].' at '.$wh[$dow][0].'</span>';
