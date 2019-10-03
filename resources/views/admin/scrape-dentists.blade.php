@@ -53,6 +53,9 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
+                        <div class="col-md-12" style="margin-bottom: 30px;">
+                            <span style="color: #009688;font-size: 18px;margin-left: 14px;">30 requests/5 min</span>
+                        </div>
                         @foreach($scrapes as $scrape)
                             <div class="col-md-12" style="margin-bottom: 20px;">
                                 <div class="col-md-10">
