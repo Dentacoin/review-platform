@@ -15,11 +15,16 @@ use App\Models\Review;
 use App\Models\Poll;
 use App\Models\UserInvite;
 use App\Models\DcnTransaction;
+use App\Models\ScrapeDentist;
+use App\Models\ScrapeDentistResult;
+
 use Carbon\Carbon;
-use DB;
+
 use Spatie\Sitemap\SitemapGenerator;
 use Spatie\Sitemap\Tags\Url;
+
 use Mail;
+use DB;
 
 class Kernel extends ConsoleKernel
 {
@@ -1180,6 +1185,194 @@ NEW & FAILED TRANSACTIONS
             echo 'Daily Poll DONE';
 
         })->dailyAt('01:00');
+
+
+
+        $schedule->call(function () {
+            echo 'Scrape dentists scron';
+
+            $scrapes = ScrapeDentist::whereNull('completed')->get();
+
+            if ($scrapes->count()) {
+
+                foreach ($scrapes as $scrape) {
+                    echo '<br/>';
+                    echo '<br/>';
+                    echo 'Scraping: '.$scrape->name.'<br/>';
+                    $startingRequests = $scrape->requests;
+                    $i=0;
+                    for($lat = $scrape->lat_start; $lat<$scrape->lat_end; $lat+=$scrape->lat_step) {
+                        for($lon = $scrape->lon_start; $lon<$scrape->lon_end; $lon+=$scrape->lon_step) {
+                            $i++;
+                            if($i<$startingRequests) {
+                                continue;
+                            }
+                            if($i>=$startingRequests+30) {
+                                continue;
+                            }
+
+                            $latlon = $lat.','.$lon;
+
+                            //echo $i.' -> '.$latlon.'<br/>';
+
+                            $query_dentists = [];
+                            $pagetoken = null;
+
+                            do {
+                                if($pagetoken) {
+                                    sleep(3);
+                                }
+
+                                $params = $pagetoken ? [
+                                    'pagetoken' => $pagetoken,
+                                ] : [
+                                    'location'    => $latlon,
+                                    'radius' => 1000,
+                                    "type"      => "dentist",
+                                ];
+
+                                $geores2 = \GoogleMaps::load('nearbysearch')
+                                ->setParam ($params)
+                                ->get();
+
+                                $geores2 = json_decode($geores2);
+                                //dd($geores2);
+
+                                if (!empty($geores2->results)) {
+                                    foreach ($geores2->results as $res) {
+                                        $query_dentists[] = $res;
+                                    }
+                                }
+
+                                if(!empty($geores2->next_page_token)) {
+                                    $pagetoken = $geores2->next_page_token;
+                                } else {
+                                    $pagetoken = null;
+                                }
+
+                            } while (!empty($pagetoken));
+
+                                
+                            $dentists = [];
+                            if (!empty($query_dentists)) {
+
+                                foreach ($query_dentists as $key => $dentist) {
+                                    $place_info = \GoogleMaps::load('placedetails')
+                                    ->setParam ([
+                                        'place_id'    => $dentist->place_id,
+                                    ])
+                                    ->get();
+
+                                    $place_info = json_decode($place_info);
+                                    //dd($place_info);
+                                    if (!empty($place_info)) {
+                                        $dentists[$key] = [
+                                            // 'original' => $dentist,
+                                            // 'place' => $place_info,
+                                            'place_id' => $dentist->place_id,
+                                            'name' => $place_info->result->name,
+                                        ];
+
+                                        if (!empty($place_info->result->formatted_phone_number)) {
+                                            $dentists[$key]['phone'] = $place_info->result->formatted_phone_number;
+                                        }
+
+                                        if (!empty($place_info->result->website)) {
+                                            $dentists[$key]['website'] = $place_info->result->website;
+                                        }
+
+                                        if (!empty($place_info->result->opening_hours)) {
+                                            $wh = [];
+                                            foreach ($place_info->result->opening_hours->periods as $k => $period) {
+                                                if (!empty($period) && !empty($period->open->time) && !empty($period->close->time)) {
+                                                    $wh[$k + 1] = [
+                                                        substr($period->open->time, 0, 2).':'.substr($period->open->time, 2),
+                                                        substr($period->close->time, 0, 2).':'.substr($period->open->time, 2),
+                                                    ];
+                                                }
+                                            }
+                                            if ($wh) {
+                                                $dentists[$key]['work_hours'] = json_encode($wh, true);
+                                            }
+                                        }
+
+                                        $country_fields = [
+                                            'country',
+                                        ];
+
+                                        foreach ($country_fields as $sf) {
+                                            if( empty($dentists[$key]['country_name']) ) {
+                                                foreach ($place_info->result->address_components as $ac) {
+                                                    if( in_array($sf, $ac->types) ) {
+                                                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                                                        $cname = iconv('ASCII', 'UTF-8', $cname);
+                                                        $dentists[$key]['country_name'] = $cname;
+                                                        break;
+                                                    }
+                                                }
+                                            } else {
+                                                break;
+                                            }
+                                        }
+
+                                        $dentists[$key]['address'] = $place_info->result->vicinity;
+
+                                        $place_addr = User::validateAddress( $dentists[$key]['country_name'], $dentists[$key]['address'] );
+                                        //dd($place_addr);
+                                        if (!empty($place_addr)) {
+                                            if (!empty($place_addr['state_name'])) {
+                                                $dentists[$key]['state_name'] = $place_addr['state_name'];
+                                            }
+                                            if (!empty($place_addr['state_slug'])) {
+                                                $dentists[$key]['state_slug'] = $place_addr['state_slug'];
+                                            }
+                                            if (!empty($place_addr['city_name'])) {
+                                                $dentists[$key]['city_name'] = $place_addr['city_name'];
+                                            }
+                                            if (!empty($place_addr['zip'])) {
+                                                $dentists[$key]['zip'] = $place_addr['zip'];
+                                            }
+                                            if (!empty($place_addr['lat'])) {
+                                                $dentists[$key]['lat'] = $place_addr['lat'];
+                                            }
+                                            if (!empty($place_addr['lon'])) {
+                                                $dentists[$key]['lon'] = $place_addr['lon'];
+                                            }
+                                        }
+                                        //dd($dentists);
+                                    }
+                                }
+                            }
+
+                            if(!empty($dentists)) {
+                                foreach ($dentists as $dentist) {
+                                    ScrapeDentistResult::where('scrape_dentists_id', $scrape->id)->where('place_id', $dentist['place_id'])->delete();
+                                    $scrape_results = new ScrapeDentistResult;
+                                    $scrape_results->scrape_dentists_id = $scrape->id;
+                                    $scrape_results->place_id = $dentist['place_id'];
+                                    $scrape_results->num = $i;
+                                    $scrape_results->data = json_encode($dentist);
+                                    $scrape_results->save();
+                                }
+                            }
+
+                            $scrape->requests++;
+
+                            if ($scrape->requests == $scrape->requests_total) {
+                                $scrape->completed = true;
+                            }
+                            $scrape->save();
+
+
+                        }
+                    }
+                }
+            }
+
+
+            echo 'Scrape dentists scron DONE';
+
+        })->everyFiveMinutes();
 
 
         $schedule->call(function () {
