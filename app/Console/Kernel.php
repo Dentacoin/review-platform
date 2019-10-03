@@ -1356,10 +1356,11 @@ NEW & FAILED TRANSACTIONS
                                 }
                             }
 
-                            $scrape->requests++;
 
                             if ($scrape->requests == $scrape->requests_total) {
                                 $scrape->completed = true;
+                            } else {
+                                $scrape->requests++;
                             }
                             $scrape->save();
 
