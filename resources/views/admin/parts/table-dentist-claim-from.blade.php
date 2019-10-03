@@ -1,0 +1,1 @@
+{!! !empty($item->from_mail) ? '<span class="label label-success">Mail</span>' : '<span class="label label-info">Site</span>' !!}

@@ -190,7 +190,8 @@ class IndexController extends FrontController
 	                    ]
 	                ] );
 	            }
-	            $fromm = Request::input('email') ? 'from mail' : 'from site';
+
+	            $fromm = !empty(Request::input('email')) ? 'from site' : 'from mail';
 
 	            $claim = new DentistClaim;
 	            $claim->dentist_id = $user->id;
@@ -201,6 +202,7 @@ class IndexController extends FrontController
 	            $claim->job = Request::input('job');
 	            $claim->explain_related = Request::input('explain-related');
 	            $claim->status = 'waiting';
+	            $claim->from_mail = !empty(Request::input('email')) ? false : true;
 	            $claim->save();
 
 
