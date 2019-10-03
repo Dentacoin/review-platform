@@ -190,6 +190,7 @@ class IndexController extends FrontController
 	                    ]
 	                ] );
 	            }
+	            $fromm = Request::input('email') ? 'from mail' : 'from site';
 
 	            $claim = new DentistClaim;
 	            $claim->dentist_id = $user->id;
@@ -203,7 +204,7 @@ class IndexController extends FrontController
 	            $claim->save();
 
 
-	            $mtext = 'Dentist claimed his profile<br/>
+	            $mtext = 'Dentist claimed his profile '.$fromm.'<br/>
 Name: '.$claim->name.' <br/>
 Phone: '.$claim->phone.' <br/>
 Email: '.$claim->email.' <br/>
