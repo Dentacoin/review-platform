@@ -58,6 +58,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('users/loginas/{id}/{platform?}', 	'UsersController@loginas');
 	Route::any('users/user-data/{id}', 				'UsersController@personal_data');
 	Route::any('users/import', 						'UsersController@import');
+	Route::any('users/upload-temp', 				'UsersController@upload_temp');
 	Route::any('users/add', 						'UsersController@add');
 	Route::any('users/edit/{id}', 					'UsersController@edit');
 	Route::any('users/edit/{id}/addavatar', 		'UsersController@add_avatar');

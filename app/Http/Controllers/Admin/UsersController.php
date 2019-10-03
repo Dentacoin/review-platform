@@ -1373,4 +1373,13 @@ class UsersController extends AdminController
         return $this->showView('users-import');
     }
 
+    public function upload_temp($locale=null) {
+
+        if( Request::file('image') && Request::file('image')->isValid() ) {
+            $img = Image::make( Input::file('image') )->orientate();
+            list($thumb, $full, $name) = User::addTempImage($img);
+            return Response::json(['success' => true, 'thumb' => $thumb, 'name' => $name ]);
+        }
+    }
+
 }

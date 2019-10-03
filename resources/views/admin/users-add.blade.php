@@ -110,7 +110,7 @@
                             
                         </div>
                         <div class="col-md-6">
-                            <div class="col-md-6"></div>
+                            <label class="col-md-6 control-label">Add avatar</label>
                             <div class="col-md-6">
                                 <label for="add-avatar" class="image-label">
                                     <div class="centered-hack">
@@ -118,7 +118,7 @@
                                             {!! nl2br(trans('trp.popup.popup-register.add-photo')) !!}                                                  
                                         </p>
                                     </div>
-                                    <input type="file" name="image" id="add-avatar">
+                                    <input type="file" name="image" id="add-avatar" upload-url="{{ url('cms/users/upload-temp') }}">
                                 </label>
                             </div>
                         </div>

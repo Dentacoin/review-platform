@@ -81,6 +81,10 @@ $(document).ready(function(){
                 $('.image-label').removeClass('loading');
                 $('.image-label').css('background-image', "url('"+data.thumb+"')");
 
+                if ($('.centered-hack').length) {
+                    $('.centered-hack').hide();
+                }
+
                 ajax_is_running = false;
             });
 
