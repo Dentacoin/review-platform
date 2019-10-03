@@ -1316,29 +1316,6 @@ NEW & FAILED TRANSACTIONS
                                         }
 
                                         $dentists[$key]['address'] = $place_info->result->vicinity;
-
-                                        $place_addr = User::validateAddress( $dentists[$key]['country_name'], $dentists[$key]['address'] );
-                                        //dd($place_addr);
-                                        if (!empty($place_addr)) {
-                                            if (!empty($place_addr['state_name'])) {
-                                                $dentists[$key]['state_name'] = $place_addr['state_name'];
-                                            }
-                                            if (!empty($place_addr['state_slug'])) {
-                                                $dentists[$key]['state_slug'] = $place_addr['state_slug'];
-                                            }
-                                            if (!empty($place_addr['city_name'])) {
-                                                $dentists[$key]['city_name'] = $place_addr['city_name'];
-                                            }
-                                            if (!empty($place_addr['zip'])) {
-                                                $dentists[$key]['zip'] = $place_addr['zip'];
-                                            }
-                                            if (!empty($place_addr['lat'])) {
-                                                $dentists[$key]['lat'] = $place_addr['lat'];
-                                            }
-                                            if (!empty($place_addr['lon'])) {
-                                                $dentists[$key]['lon'] = $place_addr['lon'];
-                                            }
-                                        }
                                         //dd($dentists);
                                     }
                                 }
