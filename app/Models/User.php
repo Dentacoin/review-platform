@@ -1558,7 +1558,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 if(!empty($u) && $u->id != $this->id) {
                     $ret['duplicate'] = true;
                     $notifyMe = [
-                        'official@youpluswe.com',
+                        //'official@youpluswe.com',
                         'petya.ivanova@dentacoin.com',
                         'donika.kraeva@dentacoin.com',
                         //'daria.kerancheva@dentacoin.com',
