@@ -14,6 +14,7 @@ use Response;
 use Request;
 use Route;
 use Auth;
+use Mail;
 
 class DentistClaimsController extends AdminController
 {
@@ -105,6 +106,24 @@ class DentistClaimsController extends AdminController
 
         $mail->delete();
 
+
+        $mtext = 'Dentist claim request was rejected<br/>
+Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+
+        Mail::send([], [], function ($message) use ($mtext, $user) {
+            $receiver = 'ali.hashem@dentacoin.com';
+            //$receiver = 'gergana@youpluswe.com';
+            $sender = config('mail.from.address');
+            $sender_name = config('mail.from.name');
+
+            $message->from($sender, $sender_name);
+            $message->to( $receiver ); //$sender
+            //$message->to( 'dokinator@gmail.com' );
+            $message->replyTo($user->email, $user->getName());
+            $message->subject('Dentist claim request was rejected');
+            $message->setBody($mtext, 'text/html'); // for HTML rich messages
+        });
+
         return redirect( 'cms/users/edit/'.$item->dentist_id );
 
     }
@@ -134,6 +153,24 @@ class DentistClaimsController extends AdminController
         $u->save();
 
         $mail->delete();
+
+
+        $mtext = 'Dentist claim request was suspicious<br/>
+Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+
+        Mail::send([], [], function ($message) use ($mtext, $user) {
+            $receiver = 'ali.hashem@dentacoin.com';
+            //$receiver = 'gergana@youpluswe.com';
+            $sender = config('mail.from.address');
+            $sender_name = config('mail.from.name');
+
+            $message->from($sender, $sender_name);
+            $message->to( $receiver ); //$sender
+            //$message->to( 'dokinator@gmail.com' );
+            $message->replyTo($user->email, $user->getName());
+            $message->subject('Dentist claim request was suspicious');
+            $message->setBody($mtext, 'text/html'); // for HTML rich messages
+        });
 
         return redirect( 'cms/users/edit/'.$item->dentist_id );
 
