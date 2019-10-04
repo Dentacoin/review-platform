@@ -99,6 +99,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'grace_end',
         'grace_notified',
         'dcn_address',
+        'place_id',
         'lat',
         'lon',
     ];

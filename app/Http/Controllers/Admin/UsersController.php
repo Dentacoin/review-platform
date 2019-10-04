@@ -1301,6 +1301,10 @@ class UsersController extends AdminController
         if(Request::isMethod('post')) {
 
             if(Input::file('file')) {
+                if (Input::file('file')->getMimeType() != 'application/vnd.ms-office') {
+                    $this->request->session()->flash('error-message', 'File format not accepted. Upload .xls');
+                    return redirect('cms/'.$this->current_page.'/import');
+                }
 
                 global $results, $not_imported;
 
@@ -1318,26 +1322,34 @@ class UsersController extends AdminController
                     //dd($results);
                     if(!empty($results)) {
 
-                        foreach ($results as $row) {
-                            if (!empty($row[1])) {
-                                $existing_user = User::where('email', 'like', $row[1] )->first();
+                        foreach ($results as $k => $row) {
+
+                            //dd($results, $k, $row);
+                            if (!empty($row[2]) && !empty($row[0]) && filter_var($row[2], FILTER_VALIDATE_EMAIL) && !empty($row[9])) {
+                                $existing_user = User::where('email', 'like', $row[2] )->first();
+                                $existing_place = User::where('place_id', $row[9] )->first();
+
                                 if (!empty($existing_user)) {
                                     $not_imported[] = $row[0];
+                                } else if(!empty($existing_place)) {
+                                    $not_imported[] = 'already imported user '.$row[0].'. Existing user ID: '.$existing_place->id;
                                 } else {
                                     $newuser = new User;
                                     $newuser->name = $row[0];
-                                    $newuser->email = $row[1];
-                                    $newuser->phone = $row[2];
-                                    $newuser->website = $row[3];
-                                    $newuser->work_hours = $row[4];
+                                    $newuser->name_alternative = $row[1];
+                                    $newuser->email = $row[2];
+                                    $newuser->phone = $row[3];
+                                    $newuser->website = $row[4];
+                                    $newuser->work_hours = $row[5];
                                     $newuser->is_dentist = 1;
-                                    $newuser->is_clinic = ($row[5] == 'clinic') ? 1 : 0;
-                                    $country_n = $row[6];
+                                    $newuser->is_clinic = ($row[6] == 'clinic') ? 1 : 0;
+                                    $country_n = $row[7];
                                     $country = Country::whereHas('translations', function ($query) use ($country_n) {
                                         $query->where('name', 'LIKE', $country_n);
                                     })->first();
                                     $newuser->country_id = $country->id;
-                                    $newuser->address = $row[7];
+                                    $newuser->address = $row[8];
+                                    $newuser->place_id = $row[9];
                                     $newuser->status = 'admin_imported';
                                     $newuser->platform = 'trp';
                                     $newuser->save();
@@ -1349,7 +1361,7 @@ class UsersController extends AdminController
                                     $newuser->sendGridTemplate(81, $substitutions);
                                 }
                             } else {
-                                $not_imported[] = $row[0];
+                                $not_imported[] = $row[0] ? $row[0] : ($row[2] ? $row[2] : 'without name and mail');
                             }
 
                         }
