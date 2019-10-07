@@ -1323,13 +1323,15 @@ NEW & FAILED TRANSACTIONS
 
                             if(!empty($dentists)) {
                                 foreach ($dentists as $dentist) {
-                                    ScrapeDentistResult::where('scrape_dentists_id', $scrape->id)->where('place_id', $dentist['place_id'])->delete();
-                                    $scrape_results = new ScrapeDentistResult;
-                                    $scrape_results->scrape_dentists_id = $scrape->id;
-                                    $scrape_results->place_id = $dentist['place_id'];
-                                    $scrape_results->num = $i;
-                                    $scrape_results->data = json_encode($dentist);
-                                    $scrape_results->save();
+                                    $existing_result = ScrapeDentistResult::where('scrape_dentists_id', $scrape->id)->where('place_id', $dentist['place_id'])->first();
+                                    if (empty($existing_result)) {
+                                        $scrape_results = new ScrapeDentistResult;
+                                        $scrape_results->scrape_dentists_id = $scrape->id;
+                                        $scrape_results->place_id = $dentist['place_id'];
+                                        $scrape_results->num = $i;
+                                        $scrape_results->data = json_encode($dentist);
+                                        $scrape_results->save();
+                                    }
                                 }
                             }
 
@@ -1354,9 +1356,100 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'Scrape Dentist Emails Cron Start';
+
+            $sr = ScrapeDentistResult::whereNull('scrape_email')->orderBy('id', 'desc')->first();
+
+            if (!empty($sr)) {
+
+                $emails = [];
+                if (array_key_exists('website', json_decode($sr->data, true))) {
+                    $arr = json_decode($sr->data, true);
+
+                    $emails = ScrapeDentistResult::scrapeUrl($arr['website']);
+
+                    $file = file_get_contents($arr['website'], true);
+                    preg_match_all('#href\="([^"]*)"( [a-zA-Z_\:][a-zA-Z0-9_\:\.-]*\="[^"]*")*>(.*?)#', $file , $websites);
+
+                    if ($websites[0]) {
+                        $href = [];
+                        foreach ($websites[0] as $ws) {
+                            $f = explode('href="', $ws);
+                            $l = explode('"', $f[1]);
+                            if(filter_var($l[0], FILTER_VALIDATE_URL)) {
+                                $href[] = $l[0];
+                            }
+                        }
+                    }
+
+                    $formats = [
+                        '@',
+                        '.jpg',
+                        '.jpeg',
+                        '.png',
+                        '.ico',
+                        '.cur',
+                        '.gz',
+                        '.svg',
+                        '.svgz',
+                        '.mp4',
+                        '.ogg',
+                        '.ogv',
+                        '.webm',
+                        '.htc',
+                        '.css',
+                        '.js',
+                        '.ttf',
+                        '.woff',
+                        '.svg',
+                        '.eot',
+                        '.woff2',
+                    ];
+
+                    $domain = explode('/', explode('://', $arr['website'])[1])[0];
+                    $real_hrefs = [];
+                    foreach ($href as $h) {
+                        if (!in_array($h, $real_hrefs)) {
+                            if (mb_strpos($h, $domain) !== false) {
+                                $real_hrefs[] = $h;
+                            }
+                            
+                        }
+                    }
+
+                    foreach ($formats as $format) {
+                        foreach ($real_hrefs as $k => $rh) {
+                            if (mb_strpos($rh, $format) !== false) {
+                                unset($real_hrefs[$k]);
+                            }
+                        }
+                    }
+                    
+                    foreach ($real_hrefs as $real_href) {
+                        $emails_new = ScrapeDentistResult::scrapeUrl($real_href);
+                        array_merge( $emails, $emails_new );
+                    }
+
+                }
+
+                if (!empty($emails)) {
+                    $sr->emails = implode(',', $emails);
+                }
+
+                $sr->scrape_email = true;
+                $sr->save();
+            }
+            
+            echo 'Scrape Dentist Emails Cron END';
+
+        })->everyMinute();
+
+
+        $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s');
 
         })->cron("* * * * *"); //05:00h
+
 
     }
 

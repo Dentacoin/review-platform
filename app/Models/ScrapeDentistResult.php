@@ -11,6 +11,8 @@ class ScrapeDentistResult extends Model {
         'place_id',
         'num',
         'data',
+        'scrape_email',
+        'emails',
     ];
 
     protected $dates = [
@@ -18,6 +20,25 @@ class ScrapeDentistResult extends Model {
         'updated_at',
         'deleted_at'
     ];
+
+    public static function scrapeUrl($url) {
+        $site_mails = [];
+        $site_mails_filtered = [];
+
+        $file = file_get_contents($url, true);
+        preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $file, $matches);
+        $site_mails = $matches[0];
+        foreach ($site_mails as $email) {
+            if(!in_array($email, $site_mails_filtered)) {
+                list($bla, $domain) = explode('@', $email);
+                if( checkdnsrr($domain, 'MX') ) {
+                    $site_mails_filtered[] = $email;
+                }
+            }
+        }
+
+        return $site_mails_filtered;
+    }
     
 }
 
