@@ -11,6 +11,8 @@ use App\Models\Country;
 use App\Models\Dcn;
 use App\Models\DcnReward;
 use App\Models\DcnTransaction;
+use App\Models\ScrapeDentistResult;
+use App\Models\ScrapeDentist;
 use App\Models\User;
 use App\Models\Vox;
 use App\Models\Review;
@@ -29,6 +31,9 @@ use Carbon\Carbon;
 class YouTubeController extends FrontController
 {
     public function test() {
+
+		
+
 
     	exit;
     }

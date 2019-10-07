@@ -104,13 +104,14 @@ class ScrapeGoogleDentistsController extends AdminController
 	        ];
 	        foreach ($dentists as $dentist) {
 	        	$place_id = $dentist['place_id'];
+	        	$emails = $dentist['emails'];
 
 	        	$dentist = json_decode($dentist->data, true);
 
 	            $flist[] = [
 	                $dentist['name'],
 	                '',
-	                '',
+	                !empty($emails) ? $emails : '',
 	                !empty($dentist['phone']) ? $dentist['phone'] : '',
 	                !empty($dentist['website']) ? $dentist['website'] : '',
 	                !empty($dentist['work_hours']) ? $dentist['work_hours'] : '',
