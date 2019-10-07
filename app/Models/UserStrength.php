@@ -736,7 +736,7 @@ class UserStrength extends Model
                 $taken = $user->filledVoxes();
                 $done_all = false;
 
-                if ($all_surveys->count() == count($taken)) {
+                if ($all_surveys->count() <= count($taken)) {
                     $done_all = true;
                 }
 
@@ -980,7 +980,7 @@ class UserStrength extends Model
                 $taken = $user->filledVoxes();
                 $done_all = false;
 
-                if ($all_surveys->count() == count($taken)) {
+                if ($all_surveys->count() <= count($taken)) {
                     $done_all = true;
                 }
 
