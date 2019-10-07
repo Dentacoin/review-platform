@@ -52,7 +52,15 @@
                     <h4 class="panel-title">Dentist scrapes</h4>
                 </div>
                 <div class="panel-body">
+
                     <div class="row">
+                        <div class="col-md-12" style="margin-bottom: 30px;">
+                            @if(!empty($finding_emails))
+                                <span style="color: red;font-size: 18px;margin-left: 14px;">Scraping dentist emails .. {{ $finding_emails }} remain</span>
+                            @else
+                                <span style="color: #009688;font-size: 18px;margin-left: 14px;">Scraping dentist emails .. COMPLETE</span>
+                            @endif
+                        </div>
                         <div class="col-md-12" style="margin-bottom: 30px;">
                             <span style="color: #009688;font-size: 18px;margin-left: 14px;">30 requests/5 min</span>
                         </div>

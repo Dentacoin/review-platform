@@ -75,9 +75,12 @@ class ScrapeGoogleDentistsController extends AdminController
 
     	$scrapes = ScrapeDentist::orderBy('id', 'desc')->get();
 
+    	$finding_emails = ScrapeDentistResult::whereNull('scrape_email')->count();
+
     	return $this->showView('scrape-dentists', [
 			'countries' => Country::get(),
 			'scrapes' => !empty($scrapes) ? $scrapes : null,
+			'finding_emails' => !empty($finding_emails) ? $finding_emails : null,
 		]);
     }
 
