@@ -75,31 +75,44 @@ class PollsController extends AdminController
 
         if(Request::isMethod('post')) {
 
-            $newpoll = new Poll;
-        	$newpoll->launched_at = $this->request->input('launched_at');
-		    $newpoll->category = $this->request->input('category');
-	        $newpoll->status = 'scheduled';
-	        $newpoll->save();
+            $validator = Validator::make($this->request->all(), [
+                'question' => array('required'),
+                'launched_at' => array('required'),
+                'category' => array('required'),
+            ]);
 
-	        foreach ($this->langs as $key => $value) {
-	            if(!empty($this->request->input('question-'.$key))) {
-	                $translation = $newpoll->translateOrNew($key);
-	                $translation->poll_id = $newpoll->id;
-	                $translation->question = $this->request->input('question-'.$key);
-	            }
+            if ($validator->fails()) {
+                return redirect('cms/vox/polls/add')
+                ->withInput()
+                ->withErrors($validator);
+            } else {
 
-	            if(!empty( $this->request->input('answers-'.$key) )) {
-                    $translation->answers = json_encode( $this->request->input('answers-'.$key) );
-                } else {
-                    $translation->answers = '';
-                }
+                $newpoll = new Poll;
+            	$newpoll->launched_at = $this->request->input('launched_at');
+    		    $newpoll->category = $this->request->input('category');
+    	        $newpoll->status = 'scheduled';
+    	        $newpoll->save();
 
-                $translation->save();
-	        }
-	        $newpoll->save();
+    	        foreach ($this->langs as $key => $value) {
+    	            if(!empty($this->request->input('question-'.$key))) {
+    	                $translation = $newpoll->translateOrNew($key);
+    	                $translation->poll_id = $newpoll->id;
+    	                $translation->question = $this->request->input('question-'.$key);
+    	            }
 
-            Request::session()->flash('success-message', 'Daily Poll Added');
-            return redirect('cms/vox/polls');
+    	            if(!empty( $this->request->input('answers-'.$key) )) {
+                        $translation->answers = json_encode( $this->request->input('answers-'.$key) );
+                    } else {
+                        $translation->answers = '';
+                    }
+
+                    $translation->save();
+    	        }
+    	        $newpoll->save();
+
+                Request::session()->flash('success-message', 'Daily Poll Added');
+                return redirect('cms/vox/polls');
+            }            
         }
 
         return $this->showView('polls-form', array(
@@ -114,30 +127,44 @@ class PollsController extends AdminController
         if(!empty($item)) {
 
 	        if(Request::isMethod('post')) {
-		        $item->status = $this->request->input('status');
-        		$item->launched_at = $this->request->input('launched_at');
-		        $item->category = $this->request->input('category');
-		        $item->save();
 
-		        foreach ($this->langs as $key => $value) {
-		            if(!empty($this->request->input('question-'.$key))) {
-		                $translation = $item->translateOrNew($key);
-		                $translation->poll_id = $item->id;
-		                $translation->question = $this->request->input('question-'.$key);
-		            }
+                $validator = Validator::make($this->request->all(), [
+                    'question' => array('required'),
+                    'launched_at' => array('required'),
+                    'category' => array('required'),
+                ]);
 
-		            if(!empty( $this->request->input('answers-'.$key) )) {
-	                    $translation->answers = json_encode( $this->request->input('answers-'.$key) );
-	                } else {
-	                    $translation->answers = '';
-	                }
+                if ($validator->fails()) {
+                    return redirect('cms/vox/polls/edit/'.$item->id)
+                    ->withInput()
+                    ->withErrors($validator);
+                } else {
 
-	                $translation->save();
-		        }
-		        $item->save();
+    		        $item->status = $this->request->input('status');
+            		$item->launched_at = $this->request->input('launched_at');
+    		        $item->category = $this->request->input('category');
+    		        $item->save();
 
-		        Request::session()->flash('success-message', 'Daily Poll Edited');
-            	return redirect('cms/vox/polls/');
+    		        foreach ($this->langs as $key => $value) {
+    		            if(!empty($this->request->input('question-'.$key))) {
+    		                $translation = $item->translateOrNew($key);
+    		                $translation->poll_id = $item->id;
+    		                $translation->question = $this->request->input('question-'.$key);
+    		            }
+
+    		            if(!empty( $this->request->input('answers-'.$key) )) {
+    	                    $translation->answers = json_encode( $this->request->input('answers-'.$key) );
+    	                } else {
+    	                    $translation->answers = '';
+    	                }
+
+    	                $translation->save();
+    		        }
+    		        $item->save();
+
+    		        Request::session()->flash('success-message', 'Daily Poll Edited');
+                	return redirect('cms/vox/polls/');
+                }
 	        }
 
             $time = $item->launched_at->timestamp;
