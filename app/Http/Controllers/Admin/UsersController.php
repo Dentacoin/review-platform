@@ -1325,9 +1325,9 @@ class UsersController extends AdminController
                         foreach ($results as $k => $row) {
 
                             //dd($results, $k, $row);
-                            if (!empty($row[2]) && !empty($row[0]) && filter_var($row[2], FILTER_VALIDATE_EMAIL) && !empty($row[9])) {
+                            if (!empty($row[2]) && !empty($row[0]) && filter_var($row[2], FILTER_VALIDATE_EMAIL) && !empty($row[10])) {
                                 $existing_user = User::where('email', 'like', $row[2] )->first();
-                                $existing_place = User::where('place_id', $row[9] )->first();
+                                $existing_place = User::where('place_id', $row[10] )->first();
 
                                 if (!empty($existing_user)) {
                                     $not_imported[] = $row[0];
@@ -1349,10 +1349,15 @@ class UsersController extends AdminController
                                     })->first();
                                     $newuser->country_id = $country->id;
                                     $newuser->address = $row[8];
-                                    $newuser->place_id = $row[9];
+                                    $newuser->place_id = $row[10];
                                     $newuser->status = 'admin_imported';
                                     $newuser->platform = 'trp';
                                     $newuser->save();
+
+                                    if (!empty($row[9])) {
+                                        $img = Image::make( $row[9] )->orientate();
+                                        $newuser->addImage($img);
+                                    }
 
                                     $substitutions = [
                                         "invitation_link" => getLangUrl( 'welcome-dentist/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),

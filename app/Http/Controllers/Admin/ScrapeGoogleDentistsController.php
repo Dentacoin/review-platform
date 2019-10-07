@@ -99,6 +99,7 @@ class ScrapeGoogleDentistsController extends AdminController
 	            'Type(dentist/clinic)',
 	            'Country',
 	            'Address',
+	            'Avatar link',
 	            'Google Place ID (do not edit)',
 	        ];
 	        foreach ($dentists as $dentist) {
@@ -116,6 +117,7 @@ class ScrapeGoogleDentistsController extends AdminController
 	                '',
 	                $dentist['country_name'],
 	                $dentist['address'],
+	                '',
 	                $place_id
 	            ];
 	        }
