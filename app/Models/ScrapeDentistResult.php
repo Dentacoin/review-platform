@@ -25,14 +25,16 @@ class ScrapeDentistResult extends Model {
         $site_mails = [];
         $site_mails_filtered = [];
 
-        $file = file_get_contents($url, true);
-        preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $file, $matches);
-        $site_mails = $matches[0];
-        foreach ($site_mails as $email) {
-            if(!in_array($email, $site_mails_filtered)) {
-                list($bla, $domain) = explode('@', $email);
-                if( checkdnsrr($domain, 'MX') ) {
-                    $site_mails_filtered[] = $email;
+        $file = @file_get_contents($url, true);
+        if(!empty($file)) {
+            preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $file, $matches);
+            $site_mails = $matches[0];
+            foreach ($site_mails as $email) {
+                if(!in_array($email, $site_mails_filtered)) {
+                    list($bla, $domain) = explode('@', $email);
+                    if( checkdnsrr($domain, 'MX') ) {
+                        $site_mails_filtered[] = $email;
+                    }
                 }
             }
         }

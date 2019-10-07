@@ -1368,66 +1368,69 @@ NEW & FAILED TRANSACTIONS
 
                     $emails = ScrapeDentistResult::scrapeUrl($arr['website']);
 
-                    $file = file_get_contents($arr['website'], true);
-                    preg_match_all('#href\="([^"]*)"( [a-zA-Z_\:][a-zA-Z0-9_\:\.-]*\="[^"]*")*>(.*?)#', $file , $websites);
+                    $file = @file_get_contents($arr['website'], true);
+                    if(!empty($file)) {
+                        
+                        preg_match_all('#href\="([^"]*)"( [a-zA-Z_\:][a-zA-Z0-9_\:\.-]*\="[^"]*")*>(.*?)#', $file , $websites);
 
-                    if ($websites[0]) {
-                        $href = [];
-                        foreach ($websites[0] as $ws) {
-                            $f = explode('href="', $ws);
-                            $l = explode('"', $f[1]);
-                            if(filter_var($l[0], FILTER_VALIDATE_URL)) {
-                                $href[] = $l[0];
+                        if ($websites[0]) {
+                            $href = [];
+                            foreach ($websites[0] as $ws) {
+                                $f = explode('href="', $ws);
+                                $l = explode('"', $f[1]);
+                                if(filter_var($l[0], FILTER_VALIDATE_URL)) {
+                                    $href[] = $l[0];
+                                }
                             }
                         }
-                    }
 
-                    $formats = [
-                        '@',
-                        '.jpg',
-                        '.jpeg',
-                        '.png',
-                        '.ico',
-                        '.cur',
-                        '.gz',
-                        '.svg',
-                        '.svgz',
-                        '.mp4',
-                        '.ogg',
-                        '.ogv',
-                        '.webm',
-                        '.htc',
-                        '.css',
-                        '.js',
-                        '.ttf',
-                        '.woff',
-                        '.svg',
-                        '.eot',
-                        '.woff2',
-                    ];
+                        $formats = [
+                            '@',
+                            '.jpg',
+                            '.jpeg',
+                            '.png',
+                            '.ico',
+                            '.cur',
+                            '.gz',
+                            '.svg',
+                            '.svgz',
+                            '.mp4',
+                            '.ogg',
+                            '.ogv',
+                            '.webm',
+                            '.htc',
+                            '.css',
+                            '.js',
+                            '.ttf',
+                            '.woff',
+                            '.svg',
+                            '.eot',
+                            '.woff2',
+                        ];
 
-                    $domain = explode('/', explode('://', $arr['website'])[1])[0];
-                    $real_hrefs = [];
-                    foreach ($href as $h) {
-                        if (!in_array($h, $real_hrefs)) {
-                            if (mb_strpos($h, $domain) !== false) {
-                                $real_hrefs[] = $h;
-                            }
-                            
-                        }
-                    }
-
-                    foreach ($formats as $format) {
-                        foreach ($real_hrefs as $k => $rh) {
-                            if (mb_strpos($rh, $format) !== false) {
-                                unset($real_hrefs[$k]);
+                        $domain = explode('/', explode('://', $arr['website'])[1])[0];
+                        $real_hrefs = [];
+                        foreach ($href as $h) {
+                            if (!in_array($h, $real_hrefs)) {
+                                if (mb_strpos($h, $domain) !== false) {
+                                    $real_hrefs[] = $h;
+                                }
+                                
                             }
                         }
-                    }
-                    
-                    foreach ($real_hrefs as $real_href) {
-                        $emails_new = ScrapeDentistResult::scrapeUrl($real_href);
-                        array_merge( $emails, $emails_new );
+
+                        foreach ($formats as $format) {
+                            foreach ($real_hrefs as $k => $rh) {
+                                if (mb_strpos($rh, $format) !== false) {
+                                    unset($real_hrefs[$k]);
+                                }
+                            }
+                        }
+                        
+                        foreach ($real_hrefs as $real_href) {
+                            $emails_new = ScrapeDentistResult::scrapeUrl($real_href);
+                            array_merge( $emails, $emails_new );
+                        }
                     }
 
                 }
