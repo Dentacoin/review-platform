@@ -1093,6 +1093,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
            }
         }
 
+        if($this->claims->isNotEmpty()) {
+            foreach ($this->claims as $c) {
+                $c->delete();
+            }
+        }
+
+
         if(!$this->is_dentist) {
             $this->sendTemplate(9);
         }
