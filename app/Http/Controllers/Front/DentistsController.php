@@ -185,10 +185,13 @@ class DentistsController extends FrontController
             }
             if (empty($parsedAddress['city_name']) && empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) {
                 $country_n = $parsedAddress['country_name'];
-                $country = Country::whereHas('translations', function ($query) use ($country_n) {
-                    $query->where('name', 'LIKE', $country_n);
-                })->first();
-
+                if ($country_n == 'Vietnam') {
+                    $country = Country::find(238);
+                } else {
+                    $country = Country::whereHas('translations', function ($query) use ($country_n) {
+                        $query->where('name', 'LIKE', $country_n);
+                    })->first();
+                }
                 $items->where('country_id', $country->id);
                 $country_search = true;
             } else {
@@ -331,11 +334,6 @@ class DentistsController extends FrontController
             $staticmap = null;
         }
 
-        $gray_footer = false;
-        if ($items->count() == 0) {
-            $gray_footer = true;
-        }
-
         $search_title = '';
         if (!empty($query)) {
             $seo_title = trans('trp.seo.location.title', [
@@ -454,7 +452,6 @@ class DentistsController extends FrontController
             'orders' => $orders,
             'is_ajax' => $ajax,
             'noIndex' => $nonCannonicalUrl || !$items->count(),
-            'gray_footer' => $gray_footer,
             'js' => [
                 'search.js',
                 'address.js'
