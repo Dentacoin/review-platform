@@ -30,10 +30,10 @@ return [
         'production' => [
             'host'      => env('SSH_HOST'),
             'username'  => env('SSH_USERNAME'),
-            'password'  => env('SSH_KEY_PASS'),
+            'password'  => '',
             'key'       => env('SSH_KEY'),
             'keytext'   => '',
-            'keyphrase' => '',
+            'keyphrase' => env('SSH_KEY_PASS'),
             'agent'     => '',
             'timeout'   => 15,
         ],
