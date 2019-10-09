@@ -30,7 +30,7 @@ return [
         'production' => [
             'host'      => env('SSH_HOST'),
             'username'  => env('SSH_USERNAME'),
-            'password'  => '',
+            'password'  => env('SSH_KEY_PASS'),
             'key'       => env('SSH_KEY'),
             'keytext'   => '',
             'keyphrase' => '',
