@@ -45,7 +45,6 @@
                                     @if($v['format']=='selector')
                                         <td>
                                             @if(empty($row->deleted_at))
-                                            {{ dd($row) }}
                                                 @if($row->user)
                                                     <input type="checkbox" name="ids[]" value="{{ $row->user->id }}" />
                                                 @else
