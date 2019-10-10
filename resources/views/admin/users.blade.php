@@ -45,7 +45,7 @@
                                     <option value="{{ $k }}" {!! $k==$search_status ? 'selected="selected"' : '' !!}>{{ $type }}</option>
                                 @endforeach
                             </select>
-                        </div>                   
+                        </div>
                         <div class="col-md-2">
                             <select class="form-control" name="registered-platform">
                                 <option value="">Registered platform</option>
@@ -54,7 +54,7 @@
                                 <option value="dentists" {!! 'dentists'==$registered_platform ? 'selected="selected"' : '' !!}>Dentists</option>
                                 <option value="dentacoin" {!! 'dentacoin'==$registered_platform ? 'selected="selected"' : '' !!}>Dentacoin</option>
                             </select>
-                        </div>                        
+                        </div>
                     </div>
                     <div class="row custom-row" style="margin-bottom: 10px;">
                         <div class="col-md-2" style="display: none;">

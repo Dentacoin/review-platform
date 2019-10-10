@@ -8,9 +8,12 @@
                            	<th>
                                 @if($k=='selector')
                                     <a href="javascript:;" class="table-select-all">All / None</a>
+                                @elseif($k=='checkboxes')
+                                    <a href="javascript:;" class="table-select-all">All / None</a>
                                 @elseif(!empty($v['label']))
                                     @if(!empty($v['order']))
                                         @if( !request()->input( $v['orderKey'] ) )
+
                                             <a href="{{ !empty($current_url) ? $current_url.'?&'.$v['orderKey'].'=asc'.(!empty($show_all) ? '&show_all=1' : '') : 'javascript:;' }}" class="order">{{ $v['label'] }}</a>
                                         @elseif( request()->input( $v['orderKey'] )=='desc' )
                                             <a href="{{ !empty($current_url) ? $current_url.'?&'.$v['orderKey'].'=asc'.(!empty($show_all) ? '&show_all=1' : '') : 'javascript:;' }}" class="order asc">{{ $v['label'] }}</a>
@@ -42,12 +45,17 @@
                                     @if($v['format']=='selector')
                                         <td>
                                             @if(empty($row->deleted_at))
+                                            {{ dd($row) }}
                                                 @if($row->user)
                                                     <input type="checkbox" name="ids[]" value="{{ $row->user->id }}" />
                                                 @else
                                                     <input type="checkbox" name="ids[]" value="{{ $row->id }}" />
                                                 @endif
                                             @endif
+                                        </td>
+                                    @elseif($v['format']=='checkboxes')
+                                        <td>
+                                            <input type="checkbox" name="ids[]" value="{{ $row->id }}" />
                                         </td>
                                     @elseif($v['format']=='update')
                                         <td>

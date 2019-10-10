@@ -88,6 +88,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::any('transactions', 						'TransactionsController@list');
 	Route::any('transactions/bump/{id}', 			'TransactionsController@bump');
+	Route::any('transactions/stop/{id}', 			'TransactionsController@stop');
+	Route::post('transactions/mass-bump', 			'TransactionsController@massbump');
+	Route::post('transactions/mass-stop', 			'TransactionsController@massstop');
 
 	Route::get('spending', 							'SpendingController@list');
 	
@@ -189,7 +192,7 @@ $reviewRoutes = function () {
 			
 			Route::get('banned', 								'BannedController@home');
 			
-			Route::get('/', 									'IndexController@home');
+			Route::any('/', 									'IndexController@home');
 			Route::get('pending-dentist', 						'IndexController@pending');
 			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');

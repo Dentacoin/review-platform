@@ -220,12 +220,28 @@ $(document).ready(function(){
 
 
 	$('input[name="results-number2"]').on('keyup keypress', function(e) {
+		
 		$('#users-filter-form').find('input[name="results-number"]').val($(this).val());
 		var keyCode = e.keyCode || e.which;
         if (keyCode === 13) { 
             $('#users-filter-form').submit();
         }
 	});
+
+
+	if($('#mass-bump').length) {
+		$('#mass-bump').click( function(e) {
+			e.preventDefault();
+			$(this).closest('form').attr('action', $(this).closest('form').attr('original-action')+'/'+$(this).attr('id'));
+			$(this).closest('form').submit();
+		});
+		
+		$('#mass-stop').click( function(e) {
+			e.preventDefault();
+			$(this).closest('form').attr('action', $(this).closest('form').attr('original-action')+'/'+$(this).attr('id'));
+			$(this).closest('form').submit();
+		});
+	}
 
 });
 
