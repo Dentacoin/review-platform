@@ -512,8 +512,8 @@ NEW & FAILED TRANSACTIONS
                     AND `user_id` NOT IN ( 
                         SELECT `user_id` FROM emails WHERE template_id = 44
                     )
-                    AND `user_id` NOT IN ( 
-                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    AND `user_id` IN ( 
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00' 
                     AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
@@ -546,8 +546,8 @@ NEW & FAILED TRANSACTIONS
                     AND `user_id` NOT IN ( 
                         SELECT `user_id` FROM emails WHERE template_id = 45
                     )
-                    AND `user_id` NOT IN ( 
-                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    AND `user_id` IN ( 
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*3)." 00:00:00' 
             ";
@@ -608,8 +608,8 @@ NEW & FAILED TRANSACTIONS
                     AND `user_id` NOT IN ( 
                         SELECT `user_id` FROM emails WHERE template_id IN ( 46, 47)
                     )
-                    AND `user_id` NOT IN ( 
-                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    AND `user_id` IN ( 
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
             ";
@@ -639,9 +639,9 @@ NEW & FAILED TRANSACTIONS
                     template_id IN ( 46, 47)
                     AND `user_id` NOT IN ( 
                         SELECT `user_id` FROM emails WHERE template_id = 48
-                    )
-                    AND `user_id` NOT IN ( 
-                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    )                    
+                    AND `user_id` IN ( 
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*10)." 00:00:00'
             ";
@@ -742,8 +742,8 @@ NEW & FAILED TRANSACTIONS
                     AND `user_id` NOT IN ( 
                         SELECT `user_id` FROM emails WHERE template_id = 50 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
                     )
-                    AND `user_id` NOT IN ( 
-                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    AND `user_id` IN ( 
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
             ";
@@ -775,9 +775,9 @@ NEW & FAILED TRANSACTIONS
                     )
                     AND `user_id` IN ( 
                         SELECT `user_id` FROM emails WHERE template_id = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
-                    )
-                    AND `user_id` NOT IN ( 
-                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    )                    
+                    AND `user_id` IN ( 
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*7)." 00:00:00'
             ";
@@ -846,9 +846,9 @@ NEW & FAILED TRANSACTIONS
                     )
                     AND `user_id` IN ( 
                         SELECT `user_id` FROM emails WHERE template_id = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
-                    )
-                    AND `user_id` NOT IN ( 
-                        SELECT `id` FROM users WHERE unsubscribe is not null
+                    )                    
+                    AND `user_id` IN ( 
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*14)." 00:00:00'
             ";
