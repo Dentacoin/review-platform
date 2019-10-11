@@ -1,0 +1,1 @@
+<img style="max-width: 50px;" src="{{ $item->getImageUrl() }}">

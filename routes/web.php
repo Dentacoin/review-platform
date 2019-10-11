@@ -166,6 +166,12 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::any('scrape-google-dentists', 			'ScrapeGoogleDentistsController@list');
 	Route::any('scrape-google-dentists/{id}', 		'ScrapeGoogleDentistsController@download');
+
+	Route::get('testimonial-slider', 				'TestimonialSliderController@list');
+	Route::post('testimonial-slider/add', 			'TestimonialSliderController@add');
+	Route::any('testimonial-slider/edit/{id}', 		'TestimonialSliderController@edit');
+	Route::any('testimonial-slider/edit/{id}/addavatar', 	'TestimonialSliderController@add_avatar');
+	Route::any('testimonial-slider/delete/{id}', 	'TestimonialSliderController@delete');
 });
 
 

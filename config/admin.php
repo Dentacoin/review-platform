@@ -115,5 +115,8 @@ return [
         'scrape-google-dentists' => array(
             'icon' => 'download',
         ),
+        'testimonial-slider' => array(
+            'icon' => 'film',
+        ),
     )
 ];
