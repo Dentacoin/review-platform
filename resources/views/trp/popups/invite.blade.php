@@ -121,7 +121,7 @@
 			<br/>
 
 			<div class="tac">
-				<a href="javascript:;" data-url="{!! getLangUrl('profile/invite-whatsapp') !!}" class="whatsapp-button">{!! nl2br(trans('trp.popup.popup-invite.send')) !!}<i class="fab fa-whatsapp"></i></a>
+				<a href="javascript:;" data-url="{!! getLangUrl('profile/invite-whatsapp') !!}" class="whatsapp-button">{!! nl2br(trans('trp.popup.popup-invite.whatsapp-send')) !!}<i class="fab fa-whatsapp"></i></a>
 			</div>
 
 			<div class="alert invite-alert" style="display: none; margin-top: 20px;"></div>
