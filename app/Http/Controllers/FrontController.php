@@ -43,6 +43,7 @@ class FrontController extends BaseController
     public $user;
 
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
+        $to_redirect_404 = false;
 
         $roter_params = $request->route()->parameters();
         if(empty($roter_params['locale'])) {
@@ -51,12 +52,15 @@ class FrontController extends BaseController
             if(!empty( config('langs.'.$roter_params['locale']) )) {
                 $locale = $roter_params['locale'];
             } else {
-                abort(404);
+                $locale = 'en';
+                $to_redirect_404 = true;
             }
         }
+
         App::setLocale( $locale );
 
         date_default_timezone_set("Europe/Sofia");
+
 
         $this->request = $request;
         $path = explode('/', Request::path());
@@ -70,6 +74,9 @@ class FrontController extends BaseController
             $this->current_subpage='home';
         }
 
+        if (!empty($to_redirect_404)) {
+            Redirect::to(getLangUrl('page-not-found'))->send();
+        }
         // Fck FB
         if( Request::getHost() == 'vox.dentacoin.com' && Request::server('HTTP_REFERER') && Request::isMethod('get') && request()->url() != 'https://vox.dentacoin.com/en/registration' && request()->url() != 'https://vox.dentacoin.com/en/login') {
             Redirect::to( str_replace('vox.', 'dentavox.', Request::url() ) )->send();

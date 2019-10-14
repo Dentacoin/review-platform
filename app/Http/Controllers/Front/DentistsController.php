@@ -40,7 +40,7 @@ class DentistsController extends FrontController
         $this->current_page = 'dentists';
 
         if (empty($query)) {
-            return redirect( getLangUrl('/') );
+            return redirect( getLangUrl('page-not-found') );
         }
 
         // $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).(!empty($filter) ? '/'.$filter : '');
@@ -126,7 +126,7 @@ class DentistsController extends FrontController
             }
 
             if(empty($lat) || empty($lon)) {
-                return redirect( getLangUrl('/') );
+                return redirect( getLangUrl('page-not-found') );
             }
 
             $corrected_query = $this->getCorrectedQuery($formattedAddress, $filter);
@@ -192,6 +192,7 @@ class DentistsController extends FrontController
                         $query->where('name', 'LIKE', $country_n);
                     })->first();
                 }
+                // dd($country_n);
                 $items->where('country_id', $country->id);
                 $country_search = true;
             } else {
@@ -594,7 +595,7 @@ class DentistsController extends FrontController
         $country = Country::where('slug', 'like', $country_slug )->first();
 
         if(empty($country)) {
-            return redirect('/');
+            return redirect('page-not-found');
         }
 
         $cities_name = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported'])->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->groupBy('city_name')->orderBy('city_name', 'asc')->get();
@@ -695,7 +696,7 @@ class DentistsController extends FrontController
         $country = Country::where('slug', 'like', $country_slug )->first();
 
         if(empty($country)) {
-            return redirect('/');
+            return redirect('page-not-found');
         }
 
         $states = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported'])->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('state_name')->orderBy('state_name', 'asc')->get();

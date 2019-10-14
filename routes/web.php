@@ -184,7 +184,7 @@ $reviewRoutes = function () {
 	Route::get('sitemap.xml', 							'Front\SitemapController@links');
 	Route::get('robots.txt', 							'Front\RobotsController@content');
 
-	Route::get('user-logout',									'Auth\AuthenticateUser@getLogout');
+	Route::get('user-logout',							'Auth\AuthenticateUser@getLogout');
 	
 	Route::group(['prefix' => '{locale?}'], function(){
 
@@ -268,6 +268,8 @@ $reviewRoutes = function () {
 			Route::any('youtube', 								'DentistController@youtube');
 			Route::any('full-review/{id}',						'DentistController@fullReview');
 
+			Route::get('page-not-found', 						'NotFoundController@home');
+
 			Route::get('faq', 									'FaqController@home');
 
 			Route::post('invite-patient-again',					'ProfileController@invite_patient_again');
@@ -318,8 +320,11 @@ $reviewRoutes = function () {
 			});
 
 			Route::get('{query?}/{filter?}', 					'DentistsController@search');
+
 		});
 	});
+	//Route::any('/{any}', 								'Front\NotFoundController@home')->where('any', '.*');
+	//Route::any('page-not-found', 								'Front\NotFoundController@home');
 };
 Route::domain('reviews.dentacoin.com')->group($reviewRoutes);
 Route::domain('dev.reviews.dentacoin.com')->group($reviewRoutes);
