@@ -882,7 +882,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $constraint->upsize();
         });
         $img->save($to);
-        $img->fit( 400, 400 );
+
+        if ($img->height() > $img->width()) {
+            $img->heighten(400);
+        } else {
+            $img->widen(400);
+        }
+        $img->resizeCanvas(400, 400);
+
+        //$img->fit( 400, 400 );
         $img->save($to_thumb);
         $this->hasimage = true;
         $this->hasimage_social = false;
@@ -1169,9 +1177,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $constraint->upsize();
         });
         $img->save($to);
-        $img->heighten(400, function ($constraint) {
-            $constraint->upsize();
-        });
+
+        if ($img->height() > $img->width()) {
+            $img->heighten(400);
+        } else {
+            $img->widen(400);
+        }
+        $img->resizeCanvas(400, 400);
+
+        // $img->heighten(400, function ($constraint) {
+        //     $constraint->upsize();
+        // });
         $img->save($to_thumb);
         
         return [ self::getTempImageUrl($name, true), self::getTempImageUrl($name), $name ];
