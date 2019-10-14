@@ -157,6 +157,9 @@ class UsersController extends AdminController
                 'type' => 'select',
                 'values' => config('user-statuses')
             ],
+            'is_hub_app_dentist' => [
+                'type' => 'bool',
+            ],
     	];
     }
 

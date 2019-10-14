@@ -253,10 +253,17 @@
                             @if($item->is_dentist)
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">New Password</label>
-                                    <div class="col-md-10">
+                                    <div class="col-md-7">
                                         @include('admin.parts.user-field',[
                                             'key' => 'password',
                                             'info' => $fields['password']
+                                        ])
+                                    </div>
+                                    <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Use Hub App</label>
+                                    <div class="col-md-1" style="padding-left: 0px;">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'is_hub_app_dentist',
+                                            'info' => $fields['is_hub_app_dentist']
                                         ])
                                     </div>
                                 </div>
