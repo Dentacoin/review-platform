@@ -929,7 +929,7 @@
 							{{ Form::open(array('class' => 'edit-description', 'method' => 'post', 'url' => getLangUrl('profile/info') )) }}
 								{!! csrf_field() !!}
 								<textarea class="input" name="description" id="dentist-description" placeholder="{!! nl2br(trans('trp.page.user.description-placeholder')) !!}">{{ $item->description }}</textarea>
-								<!-- <p class="symbols-wrapper"><span id="symbols-count">0</span> / 512</p> -->
+								<p class="symbols-wrapper"><span id="symbols-count">0</span> / max length 512</p>
 	                            <input type="hidden" name="field" value="description" />
 	                            <input type="hidden" name="json" value="1" />
 								<button type="submit" class="button">{!! nl2br(trans('trp.page.user.save')) !!}</button>

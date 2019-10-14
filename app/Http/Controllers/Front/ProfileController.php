@@ -1267,6 +1267,16 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     ]);
                 }
 
+                if (!empty(Request::input('description')) && mb_strlen(json_encode(Request::input('description'))) > 512) {
+                    $ret = [
+                        'success' => false,
+                        'messages' => [
+                            'description' => 'Your description exceeds the maximum length of 512 characters. Please, edit it and save again.'
+                        ]
+                    ];
+                    return Response::json($ret);
+                }
+
                 if(!empty(Request::input('name')) && (User::validateLatin(Request::input('name')) == false)) {
                     if( Request::input('json') ) {
                         $ret = [

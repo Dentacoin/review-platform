@@ -122,6 +122,7 @@ $(document).ready(function(){
                         value_here.html(value_here.attr('empty-value'));
                         console.log('empty value');
                     }
+                    $(this).find('.alert').hide();
                 } else {
                     $(this).find('.alert').show();
                     $(this).find('.alert').html('');
