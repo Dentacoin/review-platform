@@ -1297,7 +1297,7 @@ $(document).ready(function(){
 		$('.poll-bubble').hide();
 	});
 
-	if ($('.poll-bubble').length) {
+	if ($('.poll-bubble').length && $(window).innerWidth() >= 768) {
 		$(window).on("scroll", function() {
 			var scrollHeight = $(document).height();
 			var scrollPosition = $(window).height() + $(window).scrollTop();
