@@ -43,6 +43,7 @@ jQuery(document).ready(function($){
 
 
 	$('.button-want-to-add-dentist').click( function() {
+		console.log('vvv');
 		$.ajax({
             type: "GET",
             url: lang + '/want-to-invite-dentist',
@@ -54,5 +55,37 @@ jQuery(document).ready(function($){
             scrollTop: $(".invite-new-dentist-wrapper").offset().top - $('.header').height()
         }, 500);
 	}
+
+	setTimeout( function() {
+		$('.city-dentist').removeAttr('placeholder');
+	},1000);
+
+
+	$('#search-dentists-city').submit( function(e) {
+		e.preventDefault();
+
+		if(ajax_is_running) {
+            return;
+        }
+
+        ajax_is_running = true;
+
+        var that = $(this);
+        $(this).find('.alert-warning').hide();
+
+        $.post( 
+            window.location.href, 
+            $(this).serialize() , 
+            function( data ) {
+                if(data.success) {
+                	window.location.reload();
+                } else {
+                	that.find('.alert-warning').show();
+                }
+                ajax_is_running = false;
+
+            }, "json"
+        );
+	});
 
 });

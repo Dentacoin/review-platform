@@ -912,8 +912,16 @@ class RegisterController extends FrontController
                         //To be deleted
                         //
 
+                        $want_to_invite = false;
+                        if(session('want_to_invite_dentist')) {
+                            $want_to_invite = true;
+                            session([
+                                'want_to_invite_dentist' => null,
+                            ]);
+                        }
+
                         $ret['success'] = true;
-                        $ret['redirect'] = $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink().'?'. http_build_query(['popup'=>'submit-review-popup']) : getLangUrl('/');
+                        $ret['redirect'] = $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink().'?'. http_build_query(['popup'=>'submit-review-popup']) : getLangUrl('/').($want_to_invite ? '?'.http_build_query(['popup'=>'invite-new-dentist-popup']) : '' );
                     }
                     
                 }

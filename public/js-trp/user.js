@@ -1948,4 +1948,20 @@ $(document).ready(function(){
         });
     });
 
+
+    if($('#symbols-count').length) {
+        $('#symbols-count').html($('#dentist-description').val().length);
+    }
+
+    $('#dentist-description').keyup(function() {
+        var length = $(this).val().length;
+
+        if (length > 512) {
+            $('#symbols-count').addClass('red');
+        } else {
+            $('#symbols-count').removeClass('red');
+        }
+        $('#symbols-count').html(length);
+    });
+
 });

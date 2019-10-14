@@ -7,12 +7,14 @@ use App\Models\City;
 use App\Models\User;
 use App\Models\DentistClaim;
 use App\Models\IncompleteRegistration;
+use App\Models\DentistTestimonial;
 use CArbon\Carbon;
 
 use App;
 use Mail;
 use Response;
 use Request;
+use Cookie;
 use Validator;
 
 class IndexController extends FrontController
@@ -27,53 +29,175 @@ class IndexController extends FrontController
 			return redirect( $this->user->getLink() );
 		}
 
-		$featured = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported'])->orderBy('avg_rating', 'DESC');
-		$homeDentists = collect();
+		if(Request::isMethod('post')) {
 
+			$validator = Validator::make(Request::all(), [
+	            'dentists-city' => array('required'),
+	        ]);
 
-		if( !empty($this->user) ) {
-			if( $homeDentists->count() < 12 && $this->user->city_name ) {
-				$addMore = clone $featured;
-				$addMore = $addMore->where('city_name', 'LIKE', $this->user->city_name)->take( 12 - $homeDentists->count() )->get();
-				$homeDentists = $homeDentists->concat($addMore);
-			}
+	        if ($validator->fails()) {
 
-			if( $homeDentists->count() < 12 && $this->user->state_name ) {
-				$addMore = clone $featured;
-				$addMore = $addMore->where('state_name', 'LIKE', $this->user->state_name)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
-				$homeDentists = $homeDentists->concat($addMore);
-			}
+	            $msg = $validator->getMessageBag()->toArray();
+	            $ret = array(
+	                'success' => false,
+	                'messages' => array()
+	            );
 
-			if( $homeDentists->count() < 12 && $this->user->country_id ) {
-				$addMore = clone $featured;
-				$addMore = $addMore->where('country_id', 'LIKE', $this->user->country_id)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
-				$homeDentists = $homeDentists->concat($addMore);
-			}
+	            foreach ($msg as $field => $errors) {
+	                $ret['messages'][$field] = implode(', ', $errors);
+	            }
 
-		} else {
-			if( $homeDentists->count() < 12 && $this->city_id ) {
-				$addMore = clone $featured;
-				$addMore = $addMore->where('city_id', 'LIKE', $this->city_id)->take( 12 - $homeDentists->count() )->get();
-				$homeDentists = $homeDentists->concat($addMore);
-			}
+	            return Response::json( $ret );
+	        } else {
 
-			if( $homeDentists->count() < 12 && $this->country_id ) {
-				$addMore = clone $featured;
-				$addMore = $addMore->where('country_id', 'LIKE', $this->country_id)->take( 12 - $homeDentists->count() )->get();
-				$homeDentists = $homeDentists->concat($addMore);				
+				$info = \GoogleMaps::load('geocoding')
+		        ->setParam ([
+		            'address'    => Request::input('dentists-city'),
+		        ])
+		        ->get();
+
+		        if (!empty($info)) {
+	        		$info = json_decode($info);
+	        		$components = $info->results[0]->address_components;
+
+		        	$ret = [];
+
+			        $country_fields = [
+			            'country',
+			        ];
+
+			        foreach ($country_fields as $sf) {
+			            if( empty($ret['country_name']) ) {
+			                foreach ($components as $ac) {
+			                    if( in_array($sf, $ac->types) ) {
+			                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+			                        $cname = iconv('ASCII', 'UTF-8', $cname);
+			                        $ret['country_name'] = $cname;
+			                        break;
+			                    }
+			                }
+			            } else {
+			                break;
+			            }
+			        }
+
+			        $city_fields = [
+			            'locality',
+			        ];
+
+			        foreach ($city_fields as $cf) {
+			            if( empty($ret['city_name']) ) {
+			                foreach ($components as $ac) {
+			                    if( in_array($cf, $ac->types) ) {
+			                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+			                        $cname = iconv('ASCII', 'UTF-8', $cname);
+			                        $ret['city_name'] = $cname;
+			                        break;
+			                    }
+			                }
+			            } else {
+			                break;
+			            }
+			        }
+
+			        if (!empty($ret['country_name']) && !empty($ret['city_name'])) {
+			        	
+			        	$final_info = User::validateAddress($ret['country_name'], $ret['city_name']);
+
+				        if(!empty(Request::input('change-city'))) {
+				        	$this->user->address = $ret['city_name'].','.$ret['country_name'];
+							$this->user->save();
+				        }
+
+			        	Cookie::queue('dentists_city', json_encode($final_info), 60*24*31);
+
+			            return Response::json( ['success' => true] );
+			        } else {
+			        	return Response::json( ['success' => false] );
+			        }
+		        }
 			}
 		}
 
 
-		if( $homeDentists->count() < 2 ) {
+		$city_cookie = json_decode(Cookie::get('dentists_city'), true);
+		//dd($city_cookie);
+
+		$featured = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported'])->orderBy('avg_rating', 'DESC');
+		$homeDentists = collect();
+
+		if (!empty($city_cookie)) {
+			if( $homeDentists->count() < 12 ) {
+				$addMore = clone $featured;
+				$addMore = $addMore->where('city_name', 'LIKE', $city_cookie['city_name'])->take( 12 - $homeDentists->count() )->get();
+				$homeDentists = $homeDentists->concat($addMore);
+			}
+
+			if( $homeDentists->count() < 12 ) {
+				$addMore = clone $featured;
+				$addMore = $addMore->where('state_name', 'LIKE', $city_cookie['state_name'])->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
+				$homeDentists = $homeDentists->concat($addMore);
+			}
+
+			if( $homeDentists->count() < 12 ) {
+				$country_n = $city_cookie['country_name'];
+				$country = Country::whereHas('translations', function ($query) use ($country_n) {
+	                $query->where('name', 'LIKE', $country_n);
+	            })->first();
+
+				$addMore = clone $featured;
+				$addMore = $addMore->where('country_id', $country->id)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
+				$homeDentists = $homeDentists->concat($addMore);
+			}
+
+		} else {
+
+			if( !empty($this->user) ) {
+				if( $homeDentists->count() < 12 && $this->user->city_name ) {
+					$addMore = clone $featured;
+					$addMore = $addMore->where('city_name', 'LIKE', $this->user->city_name)->take( 12 - $homeDentists->count() )->get();
+					$homeDentists = $homeDentists->concat($addMore);
+				}
+
+				if( $homeDentists->count() < 12 && $this->user->state_name ) {
+					$addMore = clone $featured;
+					$addMore = $addMore->where('state_name', 'LIKE', $this->user->state_name)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
+					$homeDentists = $homeDentists->concat($addMore);
+				}
+
+				if( $homeDentists->count() < 12 && $this->user->country_id ) {
+					$addMore = clone $featured;
+					$addMore = $addMore->where('country_id', 'LIKE', $this->user->country_id)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
+					$homeDentists = $homeDentists->concat($addMore);
+				}
+
+			} else {
+
+				if( $homeDentists->count() < 12 && $this->city_id ) {
+					$addMore = clone $featured;
+					$addMore = $addMore->where('city_id', 'LIKE', $this->city_id)->take( 12 - $homeDentists->count() )->get();
+					$homeDentists = $homeDentists->concat($addMore);
+				}
+
+				if( $homeDentists->count() < 12 && $this->country_id ) {
+					$addMore = clone $featured;
+					$addMore = $addMore->where('country_id', 'LIKE', $this->country_id)->take( 12 - $homeDentists->count() )->get();
+					$homeDentists = $homeDentists->concat($addMore);				
+				}
+			}
+		}
+
+		if( $homeDentists->count() <= 2) {
 			$addMore = clone $featured;
 			$addMore = $addMore->take( 12 - $homeDentists->count() )->get();
 			$homeDentists = $homeDentists->concat($addMore);	
 		}
 
+
 		$params = array(
             'countries' => Country::get(),
 			'featured' => $homeDentists,
+			'city_cookie' => $city_cookie,
 			'js' => [
 				'index.js',
                 'search.js',
@@ -126,15 +250,17 @@ class IndexController extends FrontController
         	$regData = IncompleteRegistration::find(session('incomplete-registration'));
         }
 
+    	$testimonials = DentistTestimonial::orderBy('id', 'desc')->get();
 
 		return $this->ShowView('index-dentist', array(
-			'extra_body_class' => 'white-header',
+			//'extra_body_class' => 'white-header',
 			'js' => [
 				'address.js',
 				'index-dentist.js'
 			],
 			'regData' => $regData,
 			'unsubscribed' => $unsubscribed,
+			'testimonials' => $testimonials,
 			'jscdn' => [
 				'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
 			]

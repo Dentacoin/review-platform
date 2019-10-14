@@ -19,5 +19,46 @@ jQuery(document).ready(function($){
     if( $('#dentist-email').val() ) {
 		showPopup('popup-register');
     }
+    var $carousel = $('.flickity-testimonial');
+
+	$('.testimonial img').on('load', function() {
+		$carousel.flickity({
+	    	autoPlay: true,
+			wrapAround: true,
+			cellAlign: 'left',
+			pageDots: false,
+			groupCells: 1,
+			adaptiveHeight: true,
+		});
+	});
+
+	setTimeout( function() {
+
+		$carousel.flickity({
+	    	autoPlay: true,
+			wrapAround: true,
+			cellAlign: 'left',
+			pageDots: false,
+			groupCells: 1,
+			adaptiveHeight: true,
+		});
+	}, 1000);
+
+	if ($(window).innerWidth() < 768) {
+		$('.mobile-flickity .left').children().appendTo('.mobile-flickity');
+		$('.mobile-flickity .left').remove();
+		$('.mobile-flickity .right').children().appendTo('.mobile-flickity');
+		$('.mobile-flickity .right').remove();
+
+		$('.mobile-flickity').flickity({
+	    	//autoPlay: true,
+			wrapAround: true,
+			cellAlign: 'left',
+			pageDots: true,
+			prevNextButtons: false,
+			groupCells: 1,
+			adaptiveHeight: true,
+		});
+	}    
     
 });

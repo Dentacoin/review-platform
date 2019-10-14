@@ -130,13 +130,22 @@ class LoginController extends FrontController
                             return redirect($dentist_invitor->getLink().'?'. http_build_query(['popup'=>'submit-review-popup']));
                         }
                     } else {
+
                         $intended = session()->pull('intended-sess');
                         return redirect( $intended ? $intended : getLangUrl('/'));
                     }
                 } else {
 
+                    $want_to_invite = false;
+                    if(session('want_to_invite_dentist')) {
+                        $want_to_invite = true;
+                        session([
+                            'want_to_invite_dentist' => null,
+                        ]);
+                    }
+
                     $intended = session()->pull('intended-sess');
-                    return redirect( $intended ? $intended : getLangUrl('/'));
+                    return redirect( $intended ? $intended : getLangUrl('/').($want_to_invite ? '?'.http_build_query(['popup'=>'invite-new-dentist-popup']) : '' ));
                 }
 
             } else {
@@ -263,8 +272,16 @@ class LoginController extends FrontController
                 return redirect(getLangUrl('/'));
 
             } else {
+                $want_to_invite = false;
+                if(session('want_to_invite_dentist')) {
+                    $want_to_invite = true;
+                    session([
+                        'want_to_invite_dentist' => null,
+                    ]);
+                }
+
                 Request::session()->flash('success-message', trans('trp.popup.registration.have-account'));
-                return redirect(getLangUrl('/'));
+                return redirect(getLangUrl('/').($want_to_invite ? '?'.http_build_query(['popup'=>'invite-new-dentist-popup']) : '' ));
             }
 
         } else {
@@ -525,7 +542,15 @@ class LoginController extends FrontController
                                         $ret['redirect'] = getLangUrl('/');
                                     }
                                 } else {
-                                    $ret['redirect'] = getLangUrl('/');
+                                    $want_to_invite = false;
+                                    if(session('want_to_invite_dentist')) {
+                                        $want_to_invite = true;
+                                        session([
+                                            'want_to_invite_dentist' => null,
+                                        ]);
+                                    }
+
+                                    $ret['redirect'] = getLangUrl('/').($want_to_invite ? '?'.http_build_query(['popup'=>'invite-new-dentist-popup']) : '' );
                                 }
 
                             }

@@ -258,9 +258,11 @@
 		    	@if( $item->website )
 			    	<a href="{{ $item->getWebsiteUrl() }}" target="_blank" class="p website-p">
 			    		<div class="img">
-			    			<img class="black-filter" src="{{ url('img-trp/site.png') }}">
+			    			<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}">
 			    		</div>
-				    	{{ $item->website }}
+			    		<span>
+				    		{{ $item->website }}
+				    	</span>
 			    	</a>
 		    	@endif
 
@@ -496,9 +498,11 @@
 			    	@if( $item->website )
 			    		<a class="p website-p" href="{{ $item->getWebsiteUrl() }}" target="_blank">
 			    			<div class="img">
-			    				<img class="black-filter" src="{{ url('img-trp/site.png') }}">
+			    				<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}">
 			    			</div>
-			    			{{ $item->website }}
+				    		<span>
+				    			{{ $item->website }}
+				    		</span>
 			    		</a>
 			    	@endif
 			    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
@@ -924,7 +928,8 @@
 		    			<div class="about-content" role="editor" style="display: none;">
 							{{ Form::open(array('class' => 'edit-description', 'method' => 'post', 'url' => getLangUrl('profile/info') )) }}
 								{!! csrf_field() !!}
-								<textarea class="input" name="description" placeholder="{!! nl2br(trans('trp.page.user.description-placeholder')) !!}">{{ $item->description }}</textarea>
+								<textarea class="input" name="description" id="dentist-description" placeholder="{!! nl2br(trans('trp.page.user.description-placeholder')) !!}">{{ $item->description }}</textarea>
+								<!-- <p class="symbols-wrapper"><span id="symbols-count">0</span> / 512</p> -->
 	                            <input type="hidden" name="field" value="description" />
 	                            <input type="hidden" name="json" value="1" />
 								<button type="submit" class="button">{!! nl2br(trans('trp.page.user.save')) !!}</button>

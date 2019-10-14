@@ -45,7 +45,6 @@ jQuery(document).ready(function($){
             conatiner.find('.suggester-map-div').data('map').panTo(coords);
             conatiner.find('.suggester-map-div').data('marker').setPosition(coords);
         }
-        
     }
 
 	initAddressSuggesters = function() {
@@ -78,7 +77,7 @@ jQuery(document).ready(function($){
 	                componentRestrictions: {
 	                    country: cc
 	                },
-	                types: ['address']                
+	                types: $(this).hasClass('city-dentist') ? ['(cities)'] : ['address']              
 	            };
 
 	            var GMautocomplete = new google.maps.places.Autocomplete(input, options);

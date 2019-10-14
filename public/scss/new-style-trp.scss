@@ -88,6 +88,7 @@ body.logged-in {
 
 	    @media #{$phone} {
 	    	font-size: 30px;
+	    	margin-bottom: 10px;
 	    }
 	}
 
@@ -144,7 +145,7 @@ a.text {
 
 .black-overflow {
 	position: fixed;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.6);
     top: 0;
     bottom: 0;
     left: 0;
@@ -667,6 +668,11 @@ body.white-header {
 }
 
 body.page-welcome-dentist {
+
+	.site-content {
+		overflow: visible;
+	}
+
 	.site-content > .container:first-child {
 
 		.button {
@@ -927,7 +933,7 @@ body.blur {
 			transition: all 0.3s ease;
 			flex: 1;
 			display: flex;
-			justify-content: flex-end;
+			justify-content: center;
     		flex-direction: column;
 
 			@media #{$pc} {
@@ -1185,6 +1191,16 @@ body.blur {
     	background-color: white;
     	color: #126585;
     }
+
+    &.button-yellow {
+    	background-color: #fdc734;
+    	color: black;
+		font-size: 24px;
+
+    	&:hover {
+    		background-color: #f7d16a;
+    	}
+    }
 }
 
 .button-inner-white {
@@ -1228,11 +1244,9 @@ body.blur {
 }
 
 .front-info {
-    padding-bottom: 80px;
 
 	@media #{$phone} {
 		text-align: center;
-		padding-bottom: 20px;
 	}
 
 	.index-h2 {
@@ -1333,23 +1347,16 @@ body.blur {
 	.third {
 	    position: relative;
 
-	    @media #{$phone} {
-	    	padding-top: 30px;
+	    @media #{$tablet} {
+	    	margin-bottom: 40px;
 	    }
 
-		&::after {
-			content: '';
-			position: absolute;
-			left: 0;
-			bottom: 99.9%;
-			background: url('../img-trp/oval-white.png') no-repeat 50% 50%;
-			background-size: 100% 100%;
-			width: 100%;
-			padding-top: 5%;
-		}
+	    @media #{$phone} {
+	    	margin-bottom: 0px;
+	    }
 
 		.fixed-width {
-			width: 600px;
+			width: 750px;
 			margin-right: auto;
 			margin-left: auto;
 
@@ -1357,31 +1364,32 @@ body.blur {
 				width: 100%;
 			}
 
-	    	h3 {
+	    	h2 {
 				position: relative;
-	    		margin-bottom: 30px;
-	    		font-weight: 300;
+	    		margin-bottom: 45px;
+	    		font-weight: bold;
 				text-align: center;
 				width: 440px;
 				margin-right: auto;
 				margin-left: auto;
-				color: #333333;
+				color: #2478d1;
 
 				@media #{$phone} {
 					width: 100%;
-					padding-bottom: 30px;
-    				margin-bottom: 30px;
-    				font-size: 20px;
+				    margin-bottom: 20px;
+				    font-size: 30px;
 				}
 	    	}
 
 	    	p {
-	    		margin-bottom: 20px;
+	    		font-size: 20px;
+	    		margin-bottom: 50px;
 	    		font-weight: 300;
-	    	}
+	    		color: #333333;
 
-	    	.link-text {
-	    		margin-top: 24px;
+	    		@media #{$phone} {
+	    			margin-bottom: 30px;
+	    		}
 	    	}
 		}
 	}
@@ -1459,9 +1467,24 @@ body.blur {
 	    }
     }	
 
+    &.biggest {
+	    .stars {
+	        width: 230px;
+	        height: 43px;
+	        background: url('../img-trp/stars-gray-big.png') 50% 50% no-repeat;
+	        background-size: contain;
+
+	        .bar {
+	            background: url('../img-trp/stars-blue-big.png') 0% 50% no-repeat;
+	            background-size: cover;
+	            height: 43px;
+	        }
+	    }
+    }	
+
     &.average {
 	    .stars {
-	        width: 130px;
+	        width: 132px;
 	        height: 25px;
 	        background: url('../img-trp/stars-gray-average.png') 50% 50% no-repeat;
 	        background-size: contain;
@@ -1476,56 +1499,128 @@ body.blur {
 }
 
 .signin-top {
-	padding-top: 100px;
-	margin-left: 455px;
+    background-color: white;
+    padding: 40px 55px 30px 335px;
+    border-radius: 20px;
+    width: 70%;
+    position: absolute;
+    top: 105px;
+    left: 230px;
+
+    @media screen and (max-width: 1400px) {
+    	top: 85px;
+    	left: 120px;
+    	width: 78%;
+    }
 
 	@media #{$pc} {
-		margin-left: 415px;
+		position: relative;
+		margin-top: 85px;
+		top: auto;
+		left: auto;
+	    margin-left: 60px;
+	    width: 90%;
 	}
 
-	@media #{$tablet} {
-		margin-left: 0px;
-		text-align: center;
-	}
-
-	h2 {
-		@media #{$phone} {
-			font-size: 30px;
-		}
-	}
-
-	p {
-		font-size: 18px;
-	}
-}
-
-.signin-form-wrapper {
-	background-color: #0aade2;
-    position: relative;
-    margin-top: 110px;
-
-    @media #{$tablet} {
-        height: 350px;
-    }
-
-    @media #{$phone} {
-	    margin-top: 32px;
-	    background: transparent;
-	    height: auto;
-    }
-
-    &::after {
-    	content: '';
-		position: absolute;
-		bottom: 99.9%;
-		background: url('../img-trp/oval-signin.png') no-repeat 50% 50%;
-		background-size: 100% 100%;
+	@media #{$phone} {
 		width: 100%;
-		padding-top: 8%;
+		margin-top: -124px;
+		z-index: 10;
+		border-radius: 0px;
+	    margin-left: 0px;
+	    padding: 19px 28px 55px;
+	    text-align: center;
+	    display: flex;
+	    flex-direction: column;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 300px;
+		transform: translateY(-50%);
+		width: 1px;
+		height: 180px;
+		background-color: #b7b7b7;
 
 		@media #{$phone} {
 			display: none;
 		}
+	}
+
+	h1 {
+		font-size: 35px;
+		color: #333333;
+		font-weight: 300;
+	    max-width: 600px;
+	    margin-bottom: 20px;
+
+	    @media #{$phone} {
+	    	max-width: 100%;
+	    	line-height: 36px;
+	    	order: -2;
+	    }
+	}
+
+	p {
+		font-size: 20px;
+		font-weight: 300;
+		color: #333333;
+		margin-bottom: 20px;
+
+		@media #{$phone} {
+			margin-bottom: 30px;
+		}
+	}
+
+	.ratings {
+		@media #{$phone} {
+			order: -1;
+			margin-bottom: 20px;
+			margin-top: 0px;
+		}
+	}
+
+	.button-wrap {
+		display: none;
+
+		@media #{$phone} {
+			display: block;
+			margin-bottom: -82px;
+			background: transparent;
+		}
+
+		.button {
+			background-color: #46afda;
+		    font-size: 25px;
+		    font-weight: bold;
+		    padding: 12.5px 65px;
+		}
+	}
+}
+
+.signin-form-wrapper {
+    position: relative;
+
+    @media #{$phone} {
+    	order: -1;
+    }
+
+    .container {
+    	width: 60%;
+
+    	@media screen and (max-width: 1500px) {
+    		width: 67%;
+    	}
+
+    	@media #{$pc} {
+    		width: 78%;
+    	}
+
+    	@media #{$phone} {
+    		display: none;
+    	}
     }
 
 	.modern-field + .ajax-alert {
@@ -1534,48 +1629,63 @@ body.blur {
 
     img {
 		position: absolute;
-		top: -250px;
+		bottom: -170px;
 		background-color: transparent;
 		z-index: 10;
-		left: 50%;
-    	margin-left: -585px;
+		left: -50px;
+		width: 810px;
 
-    	@media #{$pc} {
-			margin-left: -490px;
+		@media screen and (max-width: 1400px) {
+	    	width: 710px;
+	        left: -80px;
+	        bottom: -140px;
+	    }
+
+		@media #{$pc} {
+			left: -150px;
 		}
 
 		@media #{$tablet} {
-			display: none;
+			width: 760px;
+		    left: -220px;
+		}
+
+		@media screen and (max-width: 949px) {
+			width: 810px;
 		}
 
 		@media #{$phone} {
 			position: static;
-		    margin-left: auto;
-		    display: block;
-		    width: 60%;
-		    transform: scaleX(-1);
-		    margin-right: auto;
+		    width: 100%;
+		    left: auto;
+		    bottom: auto;
+		    background: url('../img-trp/behind-dentist.png') 50% 50% no-repeat;
+		    background-size: contain;
 		}
     }
 
     form {
-    	position: relative;
-    	top: 0px;
-    	float: right;
-    	padding: 20px;
-    	border-top-right-radius: 10px;
-    	border-top-left-radius: 10px;
-    	// background-color: #f7f7f7;
-    	background-color: white;
-    	box-shadow: -8px -8px 17px 0px rgba(109, 109, 109, 0.58);
-    	margin-top: -20px;
+		position: relative;
+		top: -40px;
+		float: right;
+		padding: 50px 20px;
+		border-top-right-radius: 10px;
+		border-top-left-radius: 10px;
+		background-color: white;
+		box-shadow: -8px -8px 17px 0px rgba(109, 109, 109, 0.32);
+		margin-top: 0px;
+		margin-bottom: -112px;
+
+		@media screen and (max-width: 1500px) {
+			top: 0px;
+			padding: 30px 20px;
+			margin-bottom: -72px;
+		}
 
     	@media #{$tablet} {
-    		float: none;
+    		// float: none;
     		top: -20px;
 			max-width: 300px;
-			margin-right: auto;
-			margin-left: auto;
     	}
 
     	@media #{$phone} {
@@ -1587,16 +1697,19 @@ body.blur {
     	}
 
     	input:not([type="submit"]) {
-    		min-width: 320px;
+    		min-width: 320px !important;
     		background: white;
 
-    		@media #{$phone} {
-    			min-width: 240px;
+    		@media #{$tablet} {
+    			min-width: 260px !important;
     		}
     	}
 
     	input[type="submit"] {
     		margin-bottom: 25px;
+    		font-size: 25px;
+    		padding: 12px 66px;
+    		background-color: #46afda;
     	}
     }
 
@@ -1614,6 +1727,59 @@ body.blur {
 			&:hover {
 				text-decoration: underline;
 			}
+		}
+    }
+}
+
+.welcome-dentist-section {
+    background: url(../img-trp/dentist-background.png) 50% 0% no-repeat;
+    background-size: cover;
+    position: relative;
+    padding-bottom: 163px;
+    padding-top: 1px;
+    overflow: hidden;
+    padding-top: 380px;
+
+    @media screen and (max-width: 1400px) {
+    	padding-top: 320px;
+    }
+
+    @media screen and (max-width: 1300px) {
+    	padding-top: 380px;
+    }
+
+    @media #{$pc} {
+		padding-top: 0px;
+	}
+
+	@media #{$phone} {
+		display: flex;
+		flex-direction: column;
+		padding-bottom: 0px;
+		padding-top: 70px;
+		background-image: url(../img-trp/index-dentist-mobile.jpg);
+		margin-bottom: 20px;
+		box-shadow: 0 0 25px 0px rgba(0, 0, 0, 0.2);
+		overflow: visible;
+	}
+
+    &::after {
+    	content: '';
+		position: absolute;
+		top: 100%;
+		background: url('../img-trp/dentist-background-after.svg') no-repeat 0% 100%;
+		background-size: cover;
+		width: 100%;
+		height: 163px;
+		margin-top: -163px;
+		z-index: 100;
+
+		@media screen and (max-width: 1450px) {
+			background-position: 50% 100%;
+		}
+
+		@media #{$phone} {
+			display: none;
 		}
     }
 }
@@ -1835,24 +2001,24 @@ textarea.input {
 }
 
 .section-how {
-	padding: 40px 70px 70px;
+	padding: 110px 70px 85px;
 
 	@media #{$phone} {
-		padding: 0px 10px;
+		padding: 80px 10px 70px;
 	}
 
 	h2 {
 		position: relative;
-		padding-bottom: 25px;
+		padding-bottom: 35px;
 		margin-bottom: 70px;
 		max-width: 630px;
 		margin-right: auto;
 		margin-left: auto;
 
 		@media #{$phone} {
-		    padding-bottom: 0px;
+		    padding: 0px 20px;
     		margin-bottom: 40px;
-    		font-size: 25px;
+    		font-size: 35px;
     	}
 
 		&::after {
@@ -1870,8 +2036,10 @@ textarea.input {
 			}
 		}
 
-		.h1 {
-			margin-right: 0px;
+		span {
+			font-size: 35px;
+			color: #2478d1;
+			font-weight: bold;
 		}
 	}
 
@@ -1883,18 +2051,42 @@ textarea.input {
 		}
 	}
 
-	.h1 {
-	    margin-right: 20px;
+	.how-number {
+	    margin-right: 30px;
+	    color: #46afda;
+	    position: relative;
+	    font-size: 40px;
 
 	    @media #{$phone} {
 	    	font-size: 50px;
 	    	margin-right: 0px;
+			padding: 16px;
+	    }
+
+	    &::before {
+	    	content: '';
+	    	background: url('../img-trp/avatar-border.svg') 50% 50% no-repeat;
+	    	position: absolute;
+	    	top: 50%;
+	    	left: 50%;
+	    	transform: translateX(-50%) translateY(-50%);
+	    	width: 168%;
+	    	height: 168%;
+
+			@media #{$phone} {
+				width: 100%;
+				height: 100%;
+			}
 	    }
 	}
 
 	.left {
 		float: left;
-		width: 400px;
+		width: 450px;
+
+		@media #{$pc} {
+			width: 400px;
+		}
 
 		@media #{$tablet} {
 			width: 100%;
@@ -1904,7 +2096,11 @@ textarea.input {
 
 	.right {
 		float: right;
-		width: 400px;
+		width: 450px;
+
+		@media #{$pc} {
+			width: 400px;
+		}
 
 		@media #{$tablet} {
 			width: 100%;
@@ -1913,52 +2109,118 @@ textarea.input {
 	}
 
 	.how-block {
-		margin-bottom: 30px;
+		margin-bottom: 35px;
 
 		@media #{$phone} {
 			text-align: center;
+			width: 100%;
+			margin-top: 10px;
 		}
 
 		a,
 		p {
-			font-size: 18px;
+			font-size: 20px;
+		    font-weight: 300;
 		}
+
+		p {			
+		    color: #333333;
+
+		    @media #{$phone} {
+		    	margin-top: 40px;
+		    	max-width: 300px;
+			    margin-right: auto;
+			    margin-left: auto;
+		    }
+		}
+	}
+
+	.button {
+		color: white;
+		font-size: 25px;
+		font-weight: bold;
+		background-color: #46afda;
+	    padding: 12.5px 32px;
+	    margin-top: 55px;
+
+	    &:hover {
+	    	text-decoration: none;
+	    	opacity: 0.9;
+	    }
+	}
+
+	.dot {
+	    width: 20px;
+	    height: 20px;
+	    margin: 0 5px;
+	    background-color: #eaeaea;
+	    opacity: 1;
+
+	    &.is-selected {
+	    	background-color: #2478d1;
+	    }
 	}
 }
 
 .section-learn {
-	text-align: center;
-    background-color: #0eb0e4;
-    padding-top: 70px;
-    padding-bottom: 50px;
+	background: url('../img-trp/learn-section-background.jpg') 50% 100% no-repeat;
+	background-size: cover;
+    padding-top: 15px;
+    padding-bottom: 25px;
+    position: relative;
+    //overflow: hidden;
 
     @media #{$phone} {
-    	padding-top: 20px;
-    	padding-bottom: 10px;
-    	background: transparent;
     	position: relative;
-    	margin-top: 60px;
+    	text-align: center;
+    	padding-top: 45px;
+    	padding-bottom: 45px;
+    	overflow: hidden;
+    }
 
-    	&:before {
-    		content: '';
-    		position: absolute;
-    		top: 0px;
-    		left: 25%;
-    		width: 50%;
-    		height: 2px;
-    		background: #eeeeee;
-    	}
+    .container {
+    	position: static;
+    }
 
-	    h2 {
-	    	font-size: 25px;
-	    }
+    h2 {
+    	color: white;
+    	max-width: 350px;
+    	margin-bottom: 20px;
 
-    	.button.button-white {
-		    background-color: #126585;
-		    color: white;
+    	@media #{$phone} {
+    		max-width: 100%;
+    		margin-bottom: 180px;
+    		font-size: 35px;
     	}
     }
 
+	.button {
+	    font-weight: bold;
+	}
+
+	img {
+		position: absolute;
+	    top: -40px;
+
+	    @media #{$tablet} {
+	    	top: -23px;
+	    }
+
+	    @media #{$phone} {
+	    	top: 40px;
+	    	max-width: 400px;
+		    left: 50%;
+		    transform: translateX(-50%);
+	    }
+
+	    @media screen and (max-width: 680px) {
+	    	top: 80px;
+	    }
+
+	    @media screen and (max-width: 379px) {
+	    	top: 120px;
+	    }
+	}
 }
 
 
@@ -3611,12 +3873,6 @@ textarea.input {
 							border-bottom: none;
 						}
 					}
-				}
-			}
-
-			.ratings.average {
-				.stars {
-					width: 132px;
 				}
 			}
 		}
@@ -5334,6 +5590,23 @@ textarea.input {
 	}
 }
 
+.page-dentists {
+	min-height: calc(100vh - 147px);
+
+	@media #{$phone} {
+		min-height: calc(100vh - 292px);
+	}
+
+	.main-top {
+		background: transparent;
+
+		&::after {
+			display: none;
+		}
+	}
+}
+
+
 .page-dentist {
 	.blue-background {
 		background-image: url('../img-trp/header-dentist.svg');
@@ -5507,15 +5780,21 @@ textarea.input {
     	}
 
     	.website-p {
-    		height: 20px;
-    		overflow: hidden;
+
+    		span {
+    			height: 20px;
+			    overflow: hidden;
+			    margin-left: 13px;
+    		}
 
     		.img {
+    			width: auto;
 
     		    img {
     		    	display: block;
     		    	width: 14px !important;
     		    	max-width: none;
+    		        margin-top: 2px;
     		    }
     		}
     	}
@@ -5665,7 +5944,7 @@ textarea.input {
     }
 
     h3 {
-		line-height: 27px;
+		line-height: 35px;
 		margin-bottom: 10px;
     }
 }
@@ -5825,15 +6104,21 @@ textarea.input {
     	}
 
     	.website-p {
-    		height: 20px;
-    		overflow: hidden;
+
+    		span {
+    			height: 20px;
+			    overflow: hidden;
+			    margin-left: 13px;
+    		}
 
     		.img {
-
+    			width: auto;
+    			
     		    img {
     		    	display: block;
     		    	width: 14px !important;
     		    	max-width: none;
+    		    	margin-top: 2px;
     		    }
     		}
     	}
@@ -6262,47 +6547,49 @@ textarea.input {
 			}
     	}
 	}
+}
 
-	.gallery-flickity {
-		.slider-wrapper {
-			.slider-image {
-	    		position: relative;
 
-	    		.remove-gallery-image {
-	    			position: absolute;
-	    			right: 5px;
-	    			top: 5px;
-	    		}
+.gallery-flickity {
+	.slider-wrapper {
+		.slider-image {
+    		position: relative;
 
-	    		&.add-gallery-image {
-	    			display: block;
-	    			background-color: #e3e3e3;
-	    			border: 2px dashed #777777;
-	    			position: relative;
+    		.remove-gallery-image {
+    			position: absolute;
+    			right: 5px;
+    			top: 5px;
+    		}
 
-	    			.plus-gallery-image {
-	    				position: absolute;
-					    top: 50%;
-					    left: 50%;
-					    transform: translateX(-50%) translateY(-50%);
-					    text-align: center;
+    		&.add-gallery-image {
+    			display: block;
+    			background-color: #e3e3e3;
+    			border: 2px dashed #777777;
+    			position: relative;
+    		}
+    	}
+    }
+}
 
-					    i {
-					    	font-size: 30px;
-					    	color: #777777;
-					    }
 
-					    span {
-					    	font-size: 20px;
-					    	display: block;
-					    	color: #777777;
-					    	font-weight: bold;
-					    }
-	    			}
-	    		}
-	    	}
-	    }
-	}
+.plus-gallery-image {
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+
+    i {
+    	font-size: 30px;
+    	color: #777777;
+    }
+
+    span {
+    	font-size: 20px;
+    	display: block;
+    	color: #777777;
+    	font-weight: bold;
+    }
 }
 
 .profile-rating {
@@ -7868,16 +8155,35 @@ textarea.input {
 
 .section-dentist-info {
     max-width: 840px;
-    padding-top: 70px;
+    padding-top: 30px;
+
+    @media screen and (max-width: 1450px) {
+    	padding-top: 0px;
+    }
+
+    @media #{$phone} {
+    	padding-top: 50px;
+    }
+
+    .info-padding {
+    	padding: 0px 60px;
+
+    	@media #{$phone} {
+    		padding: 0px 10px;
+    	}
+    }
 
     h2 {
-    	color: #126585;
+    	color: #2478d1;
+    	font-weight: bold;
     	position: relative;
     	padding-bottom: 25px;
     	margin-bottom: 70px;
 
     	@media #{$phone} {
+    		padding-bottom: 40px;
     		margin-bottom: 30px;
+    		font-size: 35px;
     	}
 
     	&::after {
@@ -7888,16 +8194,12 @@ textarea.input {
 		    transform: translateX(-50%);
 		    height: 2px;
 		    width: 223px;
-		    background-color: #dce8ed;
-
-		    @media #{$phone} {
-		    	display: none;
-		    }
+		    background-color: #c1c1c1;
 		}
     }
 
 	.flex {
-		margin-bottom: 50px;
+		margin-bottom: 70px;
 
 		@media #{$phone} {
     		margin-bottom: 30px;
@@ -7914,23 +8216,151 @@ textarea.input {
 	}
 
 	h3 {
+		margin-top: 20px;
 		margin-bottom: 10px;
 		font-weight: 300;
 
 		@media #{$phone} {
-			text-align: center;
+			font-size: 30px;
 		}
 	}
 
 	p {
-		font-size: 16px;
+		font-size: 20px;
 		font-weight: 300;
 		color: #232323;
 
 		@media #{$phone} {
-			text-align: center;
+			margin-bottom: 60px;
 		}
 	}
+
+	img {
+		@media #{$phone} {
+			max-width: 250px;
+		}
+	}
+
+	.button-wrap {
+		display: none;
+
+		@media #{$phone} {
+			display: block;
+		}
+
+		.button {
+			background-color: #46afda;
+		    font-size: 25px;
+		    font-weight: bold;
+		    padding: 12.5px 65px;
+		}
+	}
+}
+
+.testimonials-section {
+	background: url(../img-trp/testimonials-full.png) 50% 100% no-repeat;
+    background-size: 100% 370px;
+    padding-bottom: 40px;
+    position: relative;
+    margin-top: 140px;
+
+    @media #{$phone} {
+    	background-size: 300% 390px;
+    }
+
+    @media screen and (max-width: 450px) {
+    	background-size: 300% 440px;
+    }
+
+    @media #{$phone} {
+    	margin-top: 80px;
+    }
+
+	h2 {
+		font-weight: bold;
+		color: #2478d1;
+
+		@media #{$phone} {
+			font-size: 35px;
+		}
+	}
+
+	span {
+		display: block;
+		font-size: 24px;
+		font-weight: 300;
+	    padding: 0px 162px;
+	    position: relative;
+	    padding-bottom: 35px;
+	    margin-bottom: 80px;
+
+	    @media #{$phone} {
+	    	padding-left: 0px;
+	    	padding-right: 0px;
+	    	margin-bottom: 30px;
+	    }
+
+	    &::after {
+	    	content: '';
+	    	position: absolute;
+	    	width: 222px;
+	    	height: 2px;
+	    	left: 50%;
+	    	transform: translateX(-50%);
+	    	bottom: 0px;
+	    	background-color: #dce8ed;
+	    }
+	}
+
+	.testimonial {
+		width: 100%;
+
+		@media #{$phone} {
+			padding-top: 65px;
+		}
+
+		.testimonial-inner {
+			max-width: 630px;
+			margin: 0 auto;
+			text-align: center;
+
+			@media #{$phone} {
+				max-width: 100%;
+			}
+
+			img {
+				margin-bottom: 15px;
+				max-width: 108px;
+			}
+
+			h4 {
+				font-size: 24px;
+				font-weight: 300;
+				color: white;
+				margin-bottom: 22px;
+			}
+
+			p {
+				font-size: 20px;
+				color: white;
+				font-weight: 300;
+
+				&.name {
+					font-weight: bold;
+				}
+			}
+		}
+	}
+
+	.flickity-prev-next-button {
+		@media #{$phone} {
+    		top: 30%;
+    	}
+    }
+
+    .flickity-button {
+    	color: #6fb6d4 !important;
+    }
 }
 
 .tablet-fixes {
@@ -8337,6 +8767,7 @@ body.edit-user {
 	margin-right: auto;
 
 	.button {
+		background-color: #46afda;
 	    padding: 13px 84px;
 
 	    @media #{$phone} {
@@ -8463,40 +8894,40 @@ body.edit-user {
 	}
 
 	&.white-invite {
-		background-color: #f7f7f7;
-
-		@media screen and (max-width: 1600px) {
-			margin-top: -70px;
-		}
-
-		@media #{$tablet} {
-			margin-top: -100px;
-		}
+		margin-top: -140px;
 
 		.colorfull-wrapper {
 			background-color: #ffffff;
 
 			&:after {
-			    background-image: url(../img-trp/oval-white-big.png);
-
-			    @media #{$phone} {
-			    	padding-top: 3%;
-			    }
-
-			    @media screen and (max-width: 480px) {
-			    	padding-top: 9%;
-			    }
+			    display: none;
 			}
 		}
+
+		h2 {
+			color: #2478d1;
+		}
+
+		h3 {
+			margin-bottom: 50px;
+			padding-bottom: 45px;
+			color: #38393b;
+		}
 	}
+
 
 	.invite-new-dentist-titles {
 		background-color: transparent;
 		position: relative;
 		z-index: 1;
 		transform: translateY(120px);
-		padding-left: 10px;
-		padding-right: 10px;
+		max-width: 670px;
+	    margin-left: auto;
+	    margin-right: auto;
+
+	    @media #{$phone} {
+	    	padding: 0px 45px;
+	    }
 	}
 
 	h2 {
@@ -8510,22 +8941,23 @@ body.edit-user {
 		}
 
 		@media #{$phone} {
-			font-size: 22px;
+			font-size: 35px;
+			margin-bottom: 20px;
 		}
 	}
 
 	h3 {
 		text-align: center;
-		font-weight: 300;
-		font-size: 38px;
 		margin-bottom: 50px;
+		font-weight: 300;
+		font-size: 34px;
 
 		@media #{$pc} {
 			font-size: 28px;
 		}
 
 		@media #{$phone} {
-			font-size: 17px;
+			font-size: 25px;
 			margin-bottom: 30px;
 		}
 	}
@@ -9472,4 +9904,628 @@ body.strength-pb {
 
 .ip-country {
 	margin-bottom: 20px;
+}
+
+.green-gradient {
+	background: #24c7ca; /* Old browsers */
+	background: -moz-linear-gradient(top, #24c7ca 0%, #09aadf 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #24c7ca 0%,#09aadf 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #24c7ca 0%,#09aadf 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24c7ca', endColorstr='#09aadf',GradientType=0 ); /* IE6-9 */
+}
+
+.search-gradient-wave {
+	position: relative;
+
+	&:before {
+		content: '';
+		background: #09aadf;
+	    background: -moz-linear-gradient(top, #09aadf 0%, #1492da 100%);
+	    background: -webkit-linear-gradient(top, #09aadf 0%, #1492da 100%);
+	    background: linear-gradient(to bottom, #09aadf 0%, #1492da 100%);
+	    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#09aadf', endColorstr='#1492da',GradientType=0 );
+		height: 91px;
+		bottom: -91px;
+		width: 100%;
+		left: 0;
+		right: 0;
+		position: absolute;
+	}
+
+	&:after {
+		content: '';
+		background: url(../img-trp/index-bottom-gradient.svg) 50% 0% no-repeat;
+		background-size: cover;
+		height: 130px;
+		bottom: -220px;
+		width: 100%;
+		left: 0;
+		right: 0;
+		position: absolute;
+	}
+}
+
+.index-gradient {
+	padding-bottom: 1px;
+
+	.main-top {
+		background: none;
+		padding-bottom: 310px;
+		margin-bottom: 7px;
+
+		@media screen and (max-width: 345px) {
+			margin-bottom: 27px;
+		}
+	}
+
+	.home-search-form {
+		top: 100px;
+	}
+
+	.flickity-oval {
+		background: none;
+
+		&::after {
+			display: none;
+		}
+
+		.container {
+			@media #{$phone} {
+				padding: 0px;
+			}
+		}
+
+		.flickity {
+			padding-bottom: 0px;
+
+			.flickity-prev-next-button.next {
+			    background: url(../img-trp/slider-new-arrow-right.png) 50% 50% no-repeat;
+			}
+			.flickity-prev-next-button.previous {
+			    background: url(../img-trp/slider-new-arrow-left.png) 50% 50% no-repeat;
+			}
+
+			.flickity-prev-next-button {
+			    width: 41px !important;
+			    height: 112px !important;
+			}
+
+			.slider-wrapper {
+				padding: 30px 20px;
+
+				@media #{$phone} {
+					width: 260px;
+				}
+
+				.slider-inner {
+    				border-radius: 5px;
+    				height: 100%;
+    				display: flex;
+    				flex-direction: column;
+				}
+				.slider-container {
+				    border-bottom-left-radius: 5px;
+				    border-bottom-right-radius: 5px;
+				}
+
+				&:hover {
+					.slider-container {
+						border-bottom-left-radius: 0px;
+					    border-bottom-right-radius: 0px;
+					}
+
+					.slider-inner {
+						box-shadow: 0px 0px 33px -2px rgba(0, 0, 0, 0.4);
+					}
+				}
+
+				.slider-image-wrapper {
+					position: relative;
+
+					&::before {
+						content: '';
+					    position: absolute;
+					    left: 50%;
+					    top: 50%;
+					    transform: translateX(-50%) translateY(-50%);
+					    width: 190.31px;
+					    height: 190.31px;
+					    background: url(../img-trp/avatar-border.svg) no-repeat 50% 50%;
+					    z-index: 1;
+
+					    @media #{$pc} {
+							width: 147.05px;
+							height: 148.05px;
+					    }
+
+					    @media #{$tablet} {
+							width: 267.19px;
+							height: 268.19px;
+					    }
+
+					    @media #{$phone} {
+					    	width: 190.31px;
+					    	height: 190.31px;
+					    }
+					}
+
+					.slider-image {
+						border-radius: 50%;
+
+						@media #{$phone} {
+							padding-top: 100%;
+						}
+
+						img {
+							top: -4px;
+							left: -4px;
+
+							@media #{$pc} {
+								top: -9px;
+								left: -9px;
+							}
+						}
+
+						.invited-dentist {
+							position: absolute;
+						    text-align: center;
+						    left: 0;
+						    right: 0;
+						    bottom: 0;
+						    margin-bottom: 0px;
+						    padding-bottom: 18px;
+						    margin-top: 0px;
+						}
+					}
+				}
+
+				&:hover {
+
+					.slider-container {
+						@media #{$phone} {
+							transform: none;
+							border-bottom-left-radius: 5px;
+							border-bottom-right-radius: 5px;
+						}
+					}
+				}
+
+				.ratings {
+					display: flex;
+					align-items: center;
+
+					.rating {
+						margin-left: 3px;
+					}
+				}
+			}
+		}
+	}
+}
+
+.index-invite-dentist {
+	padding-top: 10px;
+	margin-bottom: 215px;
+	position: relative;
+	padding-bottom: 80px;
+	background: #09aadf; /* Old browsers */
+	background: -moz-linear-gradient(top, #09aadf 0%, #1492da 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #09aadf 0%,#1492da 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #09aadf 0%,#1492da 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#09aadf', endColorstr='#1492da',GradientType=0 ); /* IE6-9 */
+	//background-image: url(../img-trp/index-bottom-gradient.png);
+
+	@media #{$pc} {
+		padding-bottom: 30px;
+		margin-bottom: 165px;
+	}
+
+	@media #{$tablet} {
+		padding-bottom: 360px;
+	}
+
+	@media #{$phone} {
+		padding-bottom: 280px;
+		margin-bottom: 85px;
+	}
+
+	&::after {
+		content: '';
+		height: 163px;
+		background: url(../img-trp/index-bottom-gradient.svg) 50% 0% no-repeat;
+		width: 101%;
+		position: absolute;
+	    bottom: -161px;
+	}
+
+	.flex {
+		@media #{$tablet} {
+			flex-direction: column;
+    		align-items: center;
+		}
+
+		.col {
+			&:nth-child(2) {
+				@media #{$tablet} {
+					order: -1;
+					text-align: center;
+				}
+			}
+		}
+	}
+
+	img {
+		position: absolute;
+	    top: 0;
+	    left: 0;
+
+		@media #{$pc} {
+	    	max-width: 410px;
+		}
+
+		@media #{$tablet} {
+		    top: 50px;
+		    left: 50%;
+		    transform: translateX(-50%);
+		}
+
+		@media #{$phone} {
+			top: 30px;
+			max-width: 300px;
+		}
+	}
+
+	h2 {
+		padding-top: 80px;
+		color: white;
+		margin-bottom: 15px;
+
+		@media #{$tablet} {
+			padding-top: 30px;
+		}
+
+		@media #{$phone} {
+			font-size: 30px;
+		}
+	}
+
+	h3 {
+		font-size: 24px;
+	    font-weight: 300;
+	    color: white;
+	    max-width: 460px;
+	    margin-bottom: 30px;
+
+		@media #{$phone} {
+			font-size: 20px;
+		}
+	}
+
+	&.patient-invite {
+		padding-top: 310px;
+		margin-top: -1px;
+
+		@media #{$tablet} {
+			padding-bottom: 0px;
+			margin-bottom: 195px;
+		}
+
+		@media #{$phone} {
+			margin-bottom: 85px;
+		}
+
+		img {
+			position: absolute;
+			top: -280px;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+	}
+}
+
+.info-section {
+	padding-bottom: 88px;
+
+	@media #{$phone} {
+		padding-bottom: 78px;
+	}
+
+	.container {
+		max-width: 838px;
+	}
+
+	h2 {
+		text-align: center;
+		font-weight: bold;
+		color: #2478d1;
+		padding: 0px 7px;
+		padding-bottom: 40px;
+		margin-bottom: 70px;
+
+		@media #{$phone} {
+			padding: 0px;
+			padding-bottom: 20px;
+			margin-bottom: 40px;
+		}
+	}
+
+	.info-box {
+		margin-bottom: 70px;
+
+		@media #{$pc} {
+			margin-bottom: 40px;
+		}
+
+		@media #{$phone} {
+			flex-direction: column;
+    		align-items: center;
+    		margin-bottom: 45px;
+		}
+
+		.info-icon {
+			margin-right: 35px;
+			min-width: 106px;
+
+			@media #{$phone} {
+				margin-right: 0px;
+				margin-bottom: 16px;
+			}
+		}
+
+		.info-text {
+			@media #{$phone} {
+				text-align: center;
+			}
+		}
+
+		h3 {
+			margin-bottom: 10px;
+
+			@media #{$phone} {
+				font-size: 25px;
+			}
+		}
+
+		p {
+			font-size: 20px;
+			font-weight: 300;
+			color: #232323;
+		}
+	}
+
+	.button {
+		font-size: 25px;
+	    background-color: #46afda;
+	    padding: 13px 65px;
+	    font-weight: bold;
+
+	    &:hover {
+	    	background-color: #238fbb;
+	    }
+	}
+}
+
+.add-practice {
+	margin-bottom: 100px;
+	background: #09a8df; /* Old browsers */
+	background: -moz-linear-gradient(top, #09a8df 0%, #2083d4 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #09a8df 0%,#2083d4 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #09a8df 0%,#2083d4 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#09a8df', endColorstr='#2083d4',GradientType=0 ); /* IE6-9 */
+
+	@media #{$tablet} {
+		margin-bottom: 70px;
+	}
+
+	@media #{$phone} {
+		padding-bottom: 0px;
+	}
+
+	.flex {
+		@media #{$tablet} {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.col {
+			&:nth-child(2) {
+				@media #{$tablet} {
+					order: -1;
+				}
+
+				@media #{$phone} {
+					padding: 0px 20px;
+				}
+			}
+		}
+	}
+
+	.practice-image {
+
+		@media #{$tablet} {
+			text-align: center;
+		}
+
+		img {
+			position: absolute;
+	    	top: -55px;
+
+	    	@media #{$pc} {
+	    		top: -42px;
+	    		max-width: 450px;
+	    	}
+
+	    	@media #{$tablet} {
+	    		position: static;
+	    		top: auto;
+	    	}
+
+	    	@media #{$phone} {
+	    		display: none;
+	    	}
+		}
+	}
+
+	.mobile-practice-img {
+		display: none;
+	    margin-right: -14px;
+	    margin-bottom: 60px;
+	    margin-top: 60px;
+
+		@media #{$phone} {
+			display: block;
+		}
+
+		img {
+			width: 100%;
+		    transform: scale(1.3);
+		}
+	}
+
+
+	h2 {
+		padding-top: 60px;
+		text-transform: uppercase;
+		color: white;
+		margin-bottom: 19px;
+
+		@media #{$pc} {
+			padding-top: 30px;
+		}
+
+		@media #{$phone} {
+			font-size: 30px;
+			text-align: center;
+			padding-top: 50px;
+			line-height: 30px;
+			margin-bottom: 30px;
+		}
+	}
+
+	.button {
+		margin-bottom: 45px;
+		margin-top: 30px;
+
+		@media #{$pc} {
+			margin-bottom: 35px;
+		}
+
+		@media #{$phone} {
+			margin-bottom: 55px;
+			margin-top: 45px;
+		}
+	}
+
+	p {
+		color: white;
+		font-size: 24px;
+		font-weight: 300;
+
+		@media #{$pc} {
+			font-size: 20px;
+		}
+
+		&.practice-subtitle {
+			font-weight: 400;
+			margin-bottom: 15px;
+
+			@media #{$phone} {
+				margin-bottom: 25px;
+			}
+		}
+	}
+
+}
+
+.tac-tablet {
+	@media #{$tablet} {
+		text-align: center;
+	}
+}
+
+.flickity-dentists-form {
+	font-size: 20px;
+	font-weight: 500;
+	margin-left: 85px;
+	margin-top: 10px;
+    margin-bottom: 10px;
+
+	@media #{$tablet} {
+		margin-left: 0px;
+		text-align: center;
+	}
+
+	img {
+		max-width: 13px;
+	}
+
+	.current-city {
+		font-size: 20px;
+		font-weight: 500;
+		color: white;
+		border: 1px solid white;
+		border-radius: 10px;
+		padding: 5px 14px;
+		-webkit-appearance: none;
+
+		@media #{$phone} {
+			padding: 3px 14px;
+		}
+
+		i {
+			color: white;
+			font-size: 10px;
+			position: relative;
+			top: -2px;
+		}
+	}
+}
+
+
+#change-dentist-popup {
+
+	.popup-inner {
+		padding-bottom: 40px;
+	}
+
+	h2 {
+		font-size: 42px;
+		margin-bottom: 25px;
+
+		@media #{$phone} {
+			font-size: 32px;
+		}
+
+		img {
+			width: 25px;
+
+			@media #{$phone} {
+				max-width: 15px;
+			}
+		}
+	}
+
+	.checkbox-label {
+		text-align: left;
+	}
+
+	.modern-field {
+		margin-bottom: 5px;
+	}
+
+	button {
+		margin-top: 45px;
+	    background-color: #46afda;
+	    padding: 13px 65px;
+	}
+}
+
+.symbols-wrapper {
+	margin-bottom: 20px;
+
+	span {
+		&.red {
+			color: red;
+		}
+	}
 }
