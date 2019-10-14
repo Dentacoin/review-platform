@@ -168,8 +168,7 @@
 
 				<div class="invite-new-dentist-titles">
 					<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
-					<!-- <h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3> -->
-					<h3 class="gbb">Fill in their details below and we will invite them to claim their profile on Trusted Reviews!</h3>
+					<h3 class="gbb">{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
 				</div>
 
 				<div class="colorfull-wrapper">
@@ -185,9 +184,8 @@
 						</div>
 						<div class="col">
 							<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
-							<!-- <h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3> -->
-							<h3>Fill in their details below and we will invite them to claim their profile on Trusted Reviews!</h3>
-							<a href="javascript:;" data-popup="popup-register" class="button button-yellow button-sign-up-patient button-want-to-add-dentist">Add your dentist</a>
+							<h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
+							<a href="javascript:;" data-popup="popup-register" class="button button-yellow button-sign-up-patient button-want-to-add-dentist">{!! nl2br(trans('trp.page.invite.add-dentist')) !!}</a>
 						</div>
 					</div>
 				</div>

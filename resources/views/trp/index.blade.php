@@ -107,9 +107,8 @@
 					</div>
 					<div class="col">
 						<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
-						<!-- <h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3> -->
-						<h3>Fill in their details below and we will invite them to claim their profile on Trusted Reviews!</h3>
-						<a href="javascript:;" data-popup="popup-register" class="button button-yellow button-sign-up-patient button-want-to-add-dentist">Add your dentist</a>
+						<h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
+						<a href="javascript:;" data-popup="popup-register" class="button button-yellow button-sign-up-patient button-want-to-add-dentist">{!! nl2br(trans('trp.page.invite.add-dentist')) !!}</a>
 					</div>
 				</div>
 			</div>
@@ -124,8 +123,8 @@
 						<img src="{{ url('img-trp/index-icon-1.png') }}">
 					</div>
 					<div class="info-text">
-						<h3>Find The Best Dentist</h3>
-						<p>Search for a dental practice by name or area location. Filter by specialty, compare ratings and read reviews from real patients to make an informed choice.</p>
+						<h3>{!! nl2br(trans('trp.page.index.intro-title-1')) !!}</h3>
+						<p>{!! nl2br(trans('trp.page.index.intro-description-1')) !!}</p>
 					</div>
 				</div>
 				<div class="info-box flex flex-mobile">
@@ -133,8 +132,8 @@
 						<img src="{{ url('img-trp/index-icon-2.png') }}">
 					</div>
 					<div class="info-text">
-						<h3>Make Your Voice Heard</h3>
-						<p>Trusted Reviews gives your a platform to share detailed feedback for every aspect of your experience as a patient. Help your dentist improve by providing а valuable insight!</p>
+						<h3>{!! nl2br(trans('trp.page.index.intro-title-2')) !!}</h3>
+						<p>{!! nl2br(trans('trp.page.index.intro-description-2')) !!}</p>
 					</div>
 				</div>
 				<div class="info-box flex flex-mobile">
@@ -142,12 +141,12 @@
 						<img src="{{ url('img-trp/index-icon-3.png') }}">
 					</div>
 					<div class="info-text">
-						<h3>Get Rewarded For Your Contribution</h3>
-						<p>Your reward comes in the form of real Dentacoin (DCN) cryptocurrency which you can spend on dental treatment at clinics in 20 countries across the world!</p>
+						<h3>{!! nl2br(trans('trp.page.index.intro-title-3')) !!}</h3>
+						<p>{!! nl2br(trans('trp.page.index.intro-description-3')) !!}</p>
 					</div>
 				</div>
 				<div class="tac">
-					<a href="javascript:;" data-popup="popup-register" class="button button-sign-up-patient">Sign up</a>
+					<a href="javascript:;" data-popup="popup-register" class="button button-sign-up-patient">{!! nl2br(trans('trp.page.index.intro-button')) !!}</a>
 				</div>
 			</div>
 		</div>
@@ -161,17 +160,17 @@
 						</div>
 					</div>
 					<div class="col">
-						<h2>Are you a first-rate dentist?</h2>
+						<h2>{!! nl2br(trans('trp.page.index.first-rated-dentist.title')) !!}</h2>
 						<div class="mobile-practice-img">
 							<img src="{{ url('img-trp/index-rated-dentist.png') }}">
 						</div>
-						<p class="practice-subtitle">Grow your practice with the power of patient reviews.</p>
-						<p>• Attract and build trust with new patients</p>
-						<p>• Get to the top of search results and reach more patients</p>
-						<p>• Learn from patient feedback and achieve excellence </p>
+						<p class="practice-subtitle">{!! nl2br(trans('trp.page.index.first-rated-dentist.subtitle')) !!}</p>
+						<p>
+							{!! nl2br(trans('trp.page.index.first-rated-dentist.description')) !!}
+						</p>
 						<div class="tac-tablet">
 							<a href="{{ getLangUrl('welcome-dentist') }}" class="button button-yellow">
-								Add your practice
+								{!! nl2br(trans('trp.page.index.first-rated-dentist.button')) !!}
 							</a>
 						</div>
 					</div>
@@ -189,15 +188,11 @@
 								{!! nl2br(trans('trp.page.index.usp-3-title')) !!}
 							</h2>
 							<p>
-								<!-- {!! nl2br(trans('trp.page.index.usp-3-content')) !!} -->
-								Dentacoin Trusted Reviews is the first Blockchain-based review platform on dental services, developed by the Dentacoin Foundation. It incentivizes patients (for sharing their valuable  feedback) and dentists (for willing to improve their service and treatment quality) with Dentacoin (DCN) - the first cryptocurrency created for the dental industry. <br/><br/>
-
-	 							The Dentacoin tokens collected can be stored in a wallet, exchanged to other currencies or used to pay for dental services in multiple partner venues across the world. Check them here.
+								{!! nl2br(trans('trp.page.index.usp-3-content')) !!}
 							</p>
 							<div class="tac">
 								<a href="javascript:;" class="button button-white button-sign-up-patient" data-popup="popup-register">
-									<!-- {!! nl2br(trans('trp.page.index.join-now')) !!} -->
-									Join now
+									{!! nl2br(trans('trp.page.index.usp.join-now')) !!}
 								</a>
 							</div>
 						</div>
@@ -216,8 +211,7 @@
 
 			<div class="invite-new-dentist-titles">
 				<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
-				<!-- <h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3> -->
-				<h3 class="gbb">Fill in their details below and we will invite them to claim their profile on Trusted Reviews!</h3>
+				<h3 class="gbb">{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
 			</div>
 
 			<div class="colorfull-wrapper">
@@ -243,13 +237,11 @@
 			</div>
 			<h2>
 				<img src="{{ url('img-trp/pin-gray.png') }}">
-				<!-- {!! nl2br(trans('trp.popup.add-team-popup.title')) !!} -->
-				City of Residence
+				{!! nl2br(trans('trp.popup.change-dentist-popup.title')) !!}
 			</h2>
 
 			<h4 class="popup-title tac">
-				<!-- {!! nl2br(trans('trp.popup.add-team-popup.subtitle')) !!} -->
-				Do you want to see dentists in another city?
+				{!! nl2br(trans('trp.popup.change-dentist-popup.subtitle')) !!}
 			</h4>
 
 			{!! Form::open(array('method' => 'post', 'id' => 'search-dentists-city') ) !!}
@@ -258,7 +250,7 @@
 					<div class="modern-field alert-after">
 						<input type="text" name="dentists-city" id="dentist-city" class="modern-input address-suggester city-dentist" autocomplete="off">
 						<label for="dentist-city">
-							<span>City:</span>
+							<span>{!! nl2br(trans('trp.popup.change-dentist-popup.city')) !!}:</span>
 						</label>
 					</div>
 
@@ -266,16 +258,16 @@
 						<label class="checkbox-label" for="change-city" >
 							<input type="checkbox" class="special-checkbox" id="change-city" name="change-city"/>
 							<i class="far fa-square"></i>
-							Save this as my current location
+							{!! nl2br(trans('trp.popup.change-dentist-popup.save-location')) !!}
 						</label>
 					@endif
 				</div>
 
 				<div class="alert alert-warning" style="display: none; margin-top: 20px;">
-					The city field is required.
+					{!! nl2br(trans('trp.popup.change-dentist-popup.error')) !!}
 				</div>
 				<div class="tac">
-					<button type="submit" class="button">Search</button>
+					<button type="submit" class="button">{!! nl2br(trans('trp.popup.change-dentist-popup.search')) !!}</button>
 				</div>
 			{!! Form::close() !!}
 		</div>
