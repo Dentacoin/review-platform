@@ -44,9 +44,9 @@
 										@if($dentist->is_partner)
 											<img class="tooltip-text" src="{{ url('img-trp/mini-logo.png') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}" />
 										@endif
-										@if($dentist->status == 'added_approved' || $dentist->status == 'admin_imported')
+										<!-- @if($dentist->status == 'added_approved' || $dentist->status == 'admin_imported')
 											<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
-										@endif
+										@endif -->
 									</div>
 								</div>
 							    <div class="slider-container">
