@@ -193,11 +193,13 @@ class IndexController extends FrontController
 			$homeDentists = $homeDentists->concat($addMore);	
 		}
 
+		$social_image = url('img-trp/index-social-image.jpg');
 
 		$params = array(
             'countries' => Country::get(),
 			'featured' => $homeDentists,
 			'city_cookie' => $city_cookie,
+			'social_image' => $social_image,
 			'js' => [
 				'index.js',
                 'search.js',
@@ -252,6 +254,8 @@ class IndexController extends FrontController
 
     	$testimonials = DentistTestimonial::orderBy('id', 'desc')->get();
 
+		$social_image = url('img-trp/welcome-dentist-social-image.jpg');
+
 		return $this->ShowView('index-dentist', array(
 			//'extra_body_class' => 'white-header',
 			'js' => [
@@ -261,6 +265,7 @@ class IndexController extends FrontController
 			'regData' => $regData,
 			'unsubscribed' => $unsubscribed,
 			'testimonials' => $testimonials,
+			'social_image' => $social_image,
 			'jscdn' => [
 				'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
 			]
