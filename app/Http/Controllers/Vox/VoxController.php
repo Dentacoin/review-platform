@@ -876,7 +876,30 @@ class VoxController extends FrontController
 	                            if($this->user->invited_by) {
 	                                $inv = UserInvite::where('user_id', $this->user->invited_by)->where('invited_id', $this->user->id)->first();
 	                                if(!empty($inv) && !$inv->rewarded) {
-	                                    $tmp = Dcn::send($this->user->invitor, $this->user->invitor->dcn_address, Reward::getReward('reward_invite'), 'invite-reward', [$inv->id], true);
+
+	                                	$reward = new DcnReward;
+								        $reward->user_id = $this->user->invited_by;
+								        $reward->reference_id = $this->user->id;
+								        $reward->type = 'invitation';
+								        $reward->platform = 'vox';
+								        $reward->reward = Reward::getReward('reward_invite');
+
+								        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+						                $dd = new DeviceDetector($userAgent);
+						                $dd->parse();
+
+						                if ($dd->isBot()) {
+						                    // handle bots,spiders,crawlers,...
+						                    $reward->device = $dd->getBot();
+						                } else {
+						                    $reward->device = $dd->getDeviceName();
+						                    $reward->brand = $dd->getBrandName();
+						                    $reward->model = $dd->getModel();
+						                    $reward->os = $dd->getOs()['name'];
+						                }
+
+								        $reward->save();
+
 	                                    $inv->rewarded = true;
 	                                    $inv->save();
 

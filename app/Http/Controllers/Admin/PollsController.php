@@ -76,7 +76,6 @@ class PollsController extends AdminController
         if(Request::isMethod('post')) {
 
             $validator = Validator::make($this->request->all(), [
-                'question' => array('required'),
                 'launched_at' => array('required'),
                 'category' => array('required'),
             ]);
@@ -129,7 +128,6 @@ class PollsController extends AdminController
 	        if(Request::isMethod('post')) {
 
                 $validator = Validator::make($this->request->all(), [
-                    'question' => array('required'),
                     'launched_at' => array('required'),
                     'category' => array('required'),
                 ]);
