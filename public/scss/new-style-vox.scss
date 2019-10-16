@@ -4365,9 +4365,55 @@ body.vox-public {
     					flex-flow: wrap;
     				}
 
-
 					@media #{$phone} {
 					    flex-direction: column;
+					}
+
+					&.multiple-stat {
+						padding-top: 70px;
+
+						@media screen and (max-width: 1200px) {
+							padding-top: 0px;
+						}
+
+						.total {
+							top: -35px;
+
+							@media screen and (max-width: 1200px) {
+								top: 15px;
+							}
+						}
+
+						.legend {
+							display: none;
+						}
+
+						.custom-legend {
+							cursor: pointer;
+
+							&.inactive {
+								opacity: 0.2;
+							}
+
+							&:first-child {
+								margin-top: 20px;
+
+								@media screen and (max-width: 1200px) {
+									margin-top: 30px;
+								}
+							}
+						}
+
+						.legend,
+						.chart {
+					    	flex: 1;
+						}
+
+						.second-chart {
+							> div {
+								margin: 0 auto;
+							}
+						}
 					}
 
 					.nav {

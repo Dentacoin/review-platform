@@ -25,7 +25,7 @@
 		</div>
 	</div>
 </div>
-<div class="graphs flex">
+<div class="graphs flex {!! $question->type=='multiple_choice' ? 'multiple-stat' : '' !!}" >
 
 	<div class="loader-mask stats-mask">
 	    <img class="stats-loader" src="{{ url('new-vox-img/stats-loader.gif') }}">
@@ -45,8 +45,10 @@
 			<div class="total total-f">
 				{!! trans('vox.page.stats.total-women') !!}: <b></b>
 			</div>
-			<div class="icon total-f">
-			</div>
+			@if($question->type!='multiple_choice')
+				<div class="icon total-f">
+				</div>
+			@endif
 			<div class="map-hint">
 				{!! trans('vox.page.stats.respondents') !!}
 				
@@ -59,8 +61,10 @@
 			<div class="total total-m">
 				{!! trans('vox.page.stats.total-men') !!}: <b></b>
 			</div>
-			<div class="icon total-m">
-			</div>
+			@if($question->type!='multiple_choice')
+				<div class="icon total-m">
+				</div>
+			@endif
 		@endif
 	</div>
 	<div class="legend flex">
@@ -78,8 +82,8 @@
 		</a>
 	@endif
 </div>
-@if( $question->type=='multiple_choice' )
+<!-- @if( $question->type=='multiple_choice' )
 	<div class="multiple-hint">
 		{!! trans('vox.page.stats.multiple-hint') !!}
 	</div>
-@endif
+@endif -->

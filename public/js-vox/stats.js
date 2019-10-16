@@ -425,7 +425,7 @@ $(document).ready(function(){
             timeframe: phptimeframe,
             question_id: $(elm).attr('question-id'),
             scale_answer_id: $(elm).attr('scale-answer-id') ? $(elm).attr('scale-answer-id') : '',
-            answer_id: $(elm).attr('answer-id'),
+            answer_id: $(elm).attr('answer-id') ? $(elm).attr('answer-id') : ($(elm).find('.multiple-stat').length ? $(elm).find('.multiple-stat').find('.custom-legend').first().attr('answer-id') : $(elm).attr('answer-id')),
             scale: $(elm).find('.scales a.active').attr('scale')
         }
     
@@ -486,8 +486,12 @@ $(document).ready(function(){
 
                 //console.log('main chart data: ', main_chart_data);
                 $(this).find('.main-chart').show();
-                console.log($(this).find('.main-chart'));
-                drawChart(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, true);
+                //console.log($(this).find('.main-chart'));
+                if(data.question_type == 'multiple_choice') {
+                    drawMultipleColumns(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, data.total);
+                } else {
+                    drawChart(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, true);
+                }
 
                 $(this).find('.total-m').hide();
                 $(this).find('.total-f').hide();
@@ -500,7 +504,7 @@ $(document).ready(function(){
 
 
                 if(type=='dependency') {
-                    console.log('dependency');
+                    //console.log('dependency');
                     var rows = [];
 
                     rows.push([ 'Answer', 'Respondents', { role: 'style' } ]);
@@ -517,7 +521,7 @@ $(document).ready(function(){
                         rows.push([ newi, data.second_chart[i][1] ? data.second_chart[i][1]/sum : 0, chart_colors[j] ]);
                         j++;
                     }
-                    console.log(rows);
+                    //console.log(rows);
                     var options = {
                         width: 750
                     }
@@ -532,21 +536,33 @@ $(document).ready(function(){
                     for(var i in data.second_chart) {
                         rows.push(data.second_chart[i]);
                     }
-                    drawChart(rows, $(this).find('.second-chart')[0], {
-                        pieHole: 0.6,
-                        width: 270,
-                    });
+                    
+                    if(data.question_type == 'multiple_choice') {
+                        drawMultipleColumns(rows, $(this).find('.second-chart')[0], options, data.totalf);
+                    } else {
+                        drawChart(rows, $(this).find('.second-chart')[0], {
+                            pieHole: 0.6,
+                            width: 270,
+                        });
+                    }
 
                     var rows = [];
                     for(var i in data.third_chart) {
                         rows.push(data.third_chart[i]);
                     }
-                    drawChart(rows, $(this).find('.third-chart')[0], {
-                        pieHole: 0.6,
-                        width: 270,
-                    });
+                                        
+                    if(data.question_type == 'multiple_choice') {
+                        drawMultipleColumns(rows, $(this).find('.third-chart')[0], options, data.totalm);
+                    } else {
+                        drawChart(rows, $(this).find('.third-chart')[0], {
+                            pieHole: 0.6,
+                            width: 270,
+                        });
+                    }
 
-                    setupLegend($(this).find('.legend'), legend, data.answer_id);
+                    if(data.question_type != 'multiple_choice') {
+                        setupLegend($(this).find('.legend'), legend, data.answer_id);
+                    }
 
                     $(this).find('.total-m').show().find('b').html(data.totalm);
                     $(this).find('.total-f').show().find('b').html(data.totalf);
@@ -571,7 +587,7 @@ $(document).ready(function(){
                     }), 100 );
                     
                     var total = main_chart_data.reduce(function(a, b) { return a + b[1]; }, 0);
-                    console.log(total);
+                    //console.log(total);
                     for(var i in main_chart_data) {
                         main_chart_data[i][1] = main_chart_data[i][1] / total;
                     }
@@ -631,12 +647,16 @@ $(document).ready(function(){
                             }
                         }
                     }
-
                     drawColumns(rows, $(this).find('.second-chart')[0], null, data.answer_id);
 
                     $(this).find('.third-chart').html('');
-                    setupLegend($(this).find('.legend'), legend, data.answer_id);
-                    $(this).find('.hint').html('Click on a pie slice to see data only for the respective answer.').show();
+                    if(data.question_type != 'multiple_choice') {
+                        setupLegend($(this).find('.legend'), legend, data.answer_id);
+                        $(this).find('.hint').html('').html('Click on a pie slice to see data only for the respective answer.').show();
+                    } else {
+                        setupMultipleLegend($(this).find('.main-chart'), legend, data.answer_id);
+                        $(this).find('.hint').html('').html('Click on an answer to see data for it.').show();
+                    }
                 }
 
                 $(this).find('.second-chart').attr('class', 'second-chart '+(type=='dependency' ? 'dependency' : scale) );
@@ -644,6 +664,16 @@ $(document).ready(function(){
 
                 $(this).find('.loader').fadeOut();
                 $(this).find('.loader-mask').delay(350).fadeOut('slow');   
+
+                if (data.question_type=='multiple_choice' && scale != 'gender' && scale != 'country_id' && $(window).outerWidth() > 1200) {
+                    $('.third-chart').parent().hide();
+                    $('.main-chart').parent().css('max-width', '33.3%');
+                } else {
+                    $('.third-chart').parent().show();
+                    $('.main-chart').parent().css('max-width', 'auto');
+                }
+
+                //console.log(scale);
 
             }).bind(elm)
         );
@@ -662,6 +692,23 @@ $(document).ready(function(){
             container.attr('answer-id', $(this).attr('answer-id') );
             reloadGraph( container );            
         } )
+    }
+
+    var setupMultipleLegend = function(container, legend, answer) {
+
+        for(var i in legend) {
+            var cl = container.find('.custom-legend[answer-id="'+(parseInt(i)+1)+'"]');
+            if (answer && i!=(parseInt(answer)-1)) {
+                container.find('.custom-legend').addClass('inactive')
+                container.find('.custom-legend[answer-id="'+(parseInt(answer))+'"]').removeClass('inactive')
+            }
+        }
+
+        container.find('.custom-legend').click( function() {
+            var container = $(this).closest('.stat');
+            container.attr('answer-id', $(this).attr('answer-id') );
+            reloadGraph( container );            
+        } );
     }
 
 
@@ -885,6 +932,65 @@ $(document).ready(function(){
             //chart.draw(data, options);
             chart.draw(data, google.charts.Bar.convertOptions(options));
         }
+    }
+
+    var drawMultipleColumns = function(rows, container, more_options, totalCount) {
+        $(container).html('<div class="mobile-chart"></div>');
+        container = $(container).find('.mobile-chart');
+
+        var width = $(window).width()<1200 ? $(container).closest('.graphs').innerWidth() : 100+'%';
+
+        $(container).css('width', width );
+
+        //Dependency + Answer ID
+        var globalMax = null;
+
+        if( rows[0].length==2 ) {
+            var globalMax = 0 ;
+            for(var i=0;i<rows.length;i++) {
+                if( rows[i][1] > globalMax) {
+                    globalMax = rows[i][1];
+                }
+            }
+        }
+
+        for(var i=0; i<rows.length; i++) {
+            $(container).append('<div answer-id="'+(i + 1)+'" class="custom-legend"><div class="group-heading">'+rows[i][0]+'</div></div>');
+
+
+            if( globalMax ) {
+                var max = globalMax;
+            } else {
+                var max = 0;
+                for(var j=1; j<rows[i].length; j++) {
+                    if(rows[i][j] > max) {
+                        max = rows[i][j];
+                    }
+                }
+            }
+            for(var j=1; j<rows[i].length; j++) {
+                var pl = 80*rows[i][j]/max;
+                var color = chart_colors[i];
+                if( typeof(rows[0][j])!='object' ) {
+                    $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').attr('votes', rows[i][j]);
+                    $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+((rows[i][j]/ totalCount)*100).toFixed(1)+'%</div>');
+                }
+            }
+        }
+
+        var list = container.children();
+
+        list.sort(function(a, b) {
+            if( parseInt($(a).attr('votes')) > parseInt($(b).attr('votes')) ) {
+                return -1;
+            } else if( parseInt($(a).attr('votes')) < parseInt($(b).attr('votes')) ) {
+                return 1;
+            }
+        });
+
+        list.each(function() {
+            container.append(this);
+        });
     }
 
 

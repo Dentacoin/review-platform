@@ -3007,6 +3007,32 @@ p.h2-bold {
       @media screen and (max-width: 768px) {
         .page-statistics .stats .stat .contents .graphs {
           flex-direction: column; } }
+      .page-statistics .stats .stat .contents .graphs.multiple-stat {
+        padding-top: 70px; }
+        @media screen and (max-width: 1200px) {
+          .page-statistics .stats .stat .contents .graphs.multiple-stat {
+            padding-top: 0px; } }
+        .page-statistics .stats .stat .contents .graphs.multiple-stat .total {
+          top: -35px; }
+          @media screen and (max-width: 1200px) {
+            .page-statistics .stats .stat .contents .graphs.multiple-stat .total {
+              top: 15px; } }
+        .page-statistics .stats .stat .contents .graphs.multiple-stat .legend {
+          display: none; }
+        .page-statistics .stats .stat .contents .graphs.multiple-stat .custom-legend {
+          cursor: pointer; }
+          .page-statistics .stats .stat .contents .graphs.multiple-stat .custom-legend.inactive {
+            opacity: 0.2; }
+          .page-statistics .stats .stat .contents .graphs.multiple-stat .custom-legend:first-child {
+            margin-top: 20px; }
+            @media screen and (max-width: 1200px) {
+              .page-statistics .stats .stat .contents .graphs.multiple-stat .custom-legend:first-child {
+                margin-top: 30px; } }
+        .page-statistics .stats .stat .contents .graphs.multiple-stat .legend,
+        .page-statistics .stats .stat .contents .graphs.multiple-stat .chart {
+          flex: 1; }
+        .page-statistics .stats .stat .contents .graphs.multiple-stat .second-chart > div {
+          margin: 0 auto; }
       .page-statistics .stats .stat .contents .graphs .nav {
         position: absolute;
         top: 50%;

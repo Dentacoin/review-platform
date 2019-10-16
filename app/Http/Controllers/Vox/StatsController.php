@@ -55,7 +55,6 @@ class StatsController extends FrontController
             'seo_description' => trans('vox.seo.stats-all.description'),
             'social_title' => trans('vox.social.stats-all.title'),
             'social_description' => trans('vox.social.stats-all.description'),
-
 			'js' => [
 				'stats.js'
 			]
@@ -317,6 +316,7 @@ class StatsController extends FrontController
         		'totalf' => $totalf,
                 'relation_info' => $relation_info,
         		'answer_id' => $answer_id,
+                'question_type' => $question->type,
         	] );
         }
 
