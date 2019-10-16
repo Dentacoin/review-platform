@@ -29,6 +29,7 @@ class Poll extends Model {
         'answers',
         'category',
         'status',
+        'hasimage_social',
     ];
 
     protected $dates = [
@@ -38,10 +39,6 @@ class Poll extends Model {
         'deleted_at'
     ];
     
-    // public function respondentsCount() {
-    //     return DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'daily_poll')->has('user')->count();   
-    // }
-    
     public function respondentsCount() {
         return PollAnswer::where('poll_id', $this->id)->count();   
     }
@@ -50,6 +47,85 @@ class Poll extends Model {
         $new_answer = str_replace("[/]","</span>", str_replace('"', '&quot;', $answer));
         
         return preg_replace('/\[([^\]]*)\]/', '<span class="tooltip-text" text="${1}">', $new_answer);
+    }
+
+     public function getSocialCoverPath() {
+        $folder = storage_path().'/app/public/dailypolls/'.($this->id%100);
+        if(!is_dir($folder)) {
+            mkdir($folder);
+        }
+        return $folder.'/'.$this->id.'-cover.jpg';
+    }
+
+    public function getSocialCover() {
+        if(!$this->hasimage_social) {
+            $this->generateSocialCover();
+        }
+        return url('/storage/dailypolls/'.($this->id%100).'/'.$this->id.'-cover.jpg').'?rev='.$this->updated_at->timestamp;
+    }
+
+    public function generateSocialCover() {
+        $path = $this->getSocialCoverPath();
+
+        $img = Image::canvas(1200, 628, '#fff');
+
+
+        if ($this->status == 'closed') {
+            $img->insert( public_path().'/img-trp/cover-dailypoll-closed.png');
+        } else {
+            $img->insert( public_path().'/img-trp/cover-dailypoll-open.png');
+        }
+
+        $question = $this->question;
+        $question = wordwrap($question, $this->status == 'closed' ? 26 : 20); 
+        $lines = explode("\n", $question);
+        $linesCount = count($lines);
+        $lh = 50;
+
+        $top = (630 - ($linesCount * $lh)) / 2;
+
+        $f_top = $top;
+
+        foreach ($lines as $line) {
+            $img->text($line, $this->status == 'closed' ? 645 : 730, $top, function($font) {
+                $font->file(public_path().'/fonts/Nunito-Regular.ttf');
+                $font->size(41);
+                $font->color('#333333');
+                $font->align('left');
+                $font->valign('top');
+            });
+            $top += $lh;
+        }
+        
+
+        if ($this->status == 'closed') {
+
+            $text = 'WE ASKED 100 PEOPLE... ';
+            $img->text($text, 645, $f_top - 80, function($font) {
+                $font->file(public_path().'/fonts/Nunito-Black.ttf');
+                $font->size(40);
+                $font->color('#333333');
+                $font->align('left');
+                $font->valign('top');
+            });
+
+            $img->insert( public_path().'/img-trp/cover-results-button.png' , 'top-left', 645, $top + 50 );  
+        } else {
+            $text = 'DAILY POLL';
+            $img->text($text, 730, $f_top - 100, function($font) {
+                $font->file(public_path().'/fonts/Nunito-Black.ttf');
+                $font->size(67);
+                $font->color('#333333');
+                $font->align('left');
+                $font->valign('top');
+            });
+
+            $img->insert( public_path().'/img-trp/cover-answer-button.png' , 'top-left', 730, $top + 50 );            
+        }
+
+        $img->save($path);
+        $this->hasimage_social = true;
+        $this->save();
     }
     
 }

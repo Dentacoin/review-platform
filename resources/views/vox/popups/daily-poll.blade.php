@@ -9,6 +9,17 @@
 			<a href="javascript:;" class="answer-poll" q="{{ !empty($daily_poll) ? $daily_poll->question : '' }}" data-popup="poll-popup">{!! nl2br(trans('vox.daily-polls.popup.answer')) !!}</a>
 		</div>
 	</div>
+@elseif(!empty($closed_daily_poll))
+	<div class="poll-bubble">
+		<img class="main-bubble-image" src="{{ url('new-vox-img/daily-poll-first.png') }}">
+		<div class="white-bubble closed-bubble">
+			<a href="javascript:;" class="close-bubble"><img src="{{ url('new-vox-img/close-popup.png') }}"></a>
+			<h4>Daily Poll</h4>
+			<h4 class="closed">Closed</h4>
+			<p class="closed-p">You missed your chance. Try tomorrow. </p>
+			<a href="javascript:;" class="closed-poll-button see-stats" poll-id="{{ $closed_daily_poll->id }}">Results</a>
+		</div>
+	</div>
 @endif
 
 <div class="popup fixed-popup popup-with-background daily-poll close-on-shield" id="poll-popup">

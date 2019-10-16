@@ -359,6 +359,12 @@ class FrontController extends BaseController
             }
         }
 
+        $closed_daily_poll = Poll::where('launched_at', date('Y-m-d') )->where('status', 'closed')->first();
+
+        if (!empty($closed_daily_poll)) {
+            $params['closed_daily_poll'] = $closed_daily_poll;
+        }
+
         if (Cookie::get('daily_poll')) {
             $params['session_polls'] = true;
         }
@@ -638,6 +644,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2019-10-16';
+        $params['cache_version'] = '2019-10-16-01';
     }
 }

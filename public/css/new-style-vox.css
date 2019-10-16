@@ -7298,11 +7298,21 @@ svg:not(:root) {
         padding: 50px 20px 20px;
         height: 222px;
         position: relative; } }
+    .poll-bubble .white-bubble.closed-bubble {
+      padding-left: 125px;
+      padding-top: 60px; }
+      @media screen and (max-width: 768px) {
+        .poll-bubble .white-bubble.closed-bubble {
+          padding-left: 20px;
+          padding-top: 30px; } }
     .poll-bubble .white-bubble h4 {
       text-transform: uppercase;
       font-weight: bold;
       font-size: 25px;
       margin-bottom: 4px; }
+      .poll-bubble .white-bubble h4.closed {
+        color: #ff0046;
+        margin-top: -9px; }
     .poll-bubble .white-bubble p, .poll-bubble .white-bubble span {
       color: #ff0046; }
       @media screen and (max-width: 768px) {
@@ -7310,6 +7320,15 @@ svg:not(:root) {
           font-size: 16px; } }
     .poll-bubble .white-bubble p {
       margin-bottom: 13px; }
+      .poll-bubble .white-bubble p.closed-p {
+        color: #333333;
+        margin-bottom: 27px;
+        margin-top: 7px; }
+        @media screen and (max-width: 768px) {
+          .poll-bubble .white-bubble p.closed-p {
+            max-width: 170px;
+            margin-right: auto;
+            margin-left: auto; } }
     .poll-bubble .white-bubble .close-bubble {
       display: none;
       position: absolute;
@@ -7332,6 +7351,7 @@ svg:not(:root) {
       .poll-bubble .white-bubble .poll-reward img {
         max-width: 22px;
         margin-right: 5px; }
+    .poll-bubble .white-bubble .closed-poll-button,
     .poll-bubble .white-bubble .answer-poll {
       background-color: #ff0046;
       color: white;
@@ -7341,9 +7361,16 @@ svg:not(:root) {
       padding: 5px 25px;
       border-radius: 10px;
       transition: all 0.3s ease; }
+      .poll-bubble .white-bubble .closed-poll-button:hover,
       .poll-bubble .white-bubble .answer-poll:hover {
         background-color: #ff386e;
         transition: all 0.3s ease; }
+    .poll-bubble .white-bubble .closed-poll-button {
+      border: 1px solid #ff0046;
+      background-color: white;
+      color: #ff0046; }
+      .poll-bubble .white-bubble .closed-poll-button:hover {
+        color: white; }
 
 .page-daily-polls h1 {
   font-size: 25px;

@@ -46,10 +46,15 @@ class PollsController extends FrontController
 	}
 
 	public function show_popup_poll($locale=null, $date) {
-		$social_image = url('new-vox-img/daily-polls-home.jpg');
-
 		$time = strtotime($date);
 		$newformat = date('Y-m-d',$time);
+
+		$poll = Poll::where('launched_at', $newformat )->first();
+		if (!empty($poll)) {
+			$social_image = $poll->getSocialCover();
+		} else {
+			$social_image = url('new-vox-img/daily-polls-home.jpg');
+		}
 		
 		return $this->ShowVoxView('daily-polls', array(
 			'date_poll' => $newformat,
@@ -62,10 +67,16 @@ class PollsController extends FrontController
 	}
 
 	public function show_popup_stats_poll($locale=null, $date) {
-		$social_image = url('new-vox-img/daily-polls-home.jpg');
 
 		$time = strtotime($date);
 		$newformat = date('Y-m-d',$time);
+
+		$poll = Poll::where('launched_at', $newformat )->first();
+		if (!empty($poll)) {
+			$social_image = $poll->getSocialCover();
+		} else {
+			$social_image = url('new-vox-img/daily-polls-home.jpg');
+		}
 		
 		return $this->ShowVoxView('daily-polls', array(
 			'date_poll' => $newformat,
@@ -346,6 +357,7 @@ class PollsController extends FrontController
 
 		if ($respondents >= 100) {
 			$poll->status = 'closed';
+			$poll->hasimage_social = false;
 			$poll->save();
 		}
 	}

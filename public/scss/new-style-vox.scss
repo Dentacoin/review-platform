@@ -10322,11 +10322,26 @@ svg:not(:root) {
 		// 	background-position: 50% 100%;
 		// }
 
+    	&.closed-bubble {
+			padding-left: 125px;
+			padding-top: 60px;
+
+			@media #{$phone} {
+				padding-left: 20px;
+				padding-top: 30px;
+			}
+    	}
+
     	h4 {
     		text-transform: uppercase;
     		font-weight: bold;
     		font-size: 25px;
     		margin-bottom: 4px;
+
+    		&.closed {
+    			color: #ff0046;
+    			margin-top: -9px;
+    		}
     	}
 
     	p,span {
@@ -10339,6 +10354,18 @@ svg:not(:root) {
 
     	p {
     		margin-bottom: 13px;
+
+    		&.closed-p {
+    			color: #333333;
+    			margin-bottom: 27px;
+    			margin-top: 7px;
+
+    			@media #{$phone} {
+    				max-width: 170px;
+				    margin-right: auto;
+				    margin-left: auto;
+    			}
+    		}
     	}
 
     	.close-bubble {
@@ -10372,6 +10399,7 @@ svg:not(:root) {
 		    }
     	}
 
+    	.closed-poll-button,
     	.answer-poll {
     		background-color: #ff0046;
     		color: white;
@@ -10385,6 +10413,16 @@ svg:not(:root) {
 		    &:hover {
 		    	background-color: #ff386e;
 		    	transition: all 0.3s ease;
+		    }
+    	}
+
+    	.closed-poll-button {
+    		border: 1px solid #ff0046;
+    		background-color: white;
+    		color: #ff0046;
+
+    		&:hover {
+		    	color: white;
 		    }
     	}
     }

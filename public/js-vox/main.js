@@ -791,7 +791,9 @@ $(document).ready(function(){
 	$('.popup.close-on-shield').click( function(e) {
 		if($(e.target).hasClass('popup')) {
 			$(this).removeClass('active');
-			if ($(this).hasClass('daily-poll')) {
+			$('body').removeClass('popup-visible');
+
+			if ($(this).hasClass('daily-poll') && $('#calendar').length) {
 				calendarEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
 				calendarListEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
 			}
@@ -808,8 +810,9 @@ $(document).ready(function(){
 			window.location.reload();
 		}
 		$(this).closest('.popup').removeClass('active');
+		$('body').removeClass('popup-visible');
 
-		if ($(this).closest('.popup').hasClass('daily-poll')) {
+		if ($(this).closest('.popup').hasClass('daily-poll') && $('#calendar').length) {
 			calendarEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
 			calendarListEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
 		}
@@ -1155,6 +1158,52 @@ $(document).ready(function(){
     		$(this).find('span').css('width', $(this).find('span').attr('stat-width') );
     	});
     }
+
+	showStats = function(poll_id) {
+		var p_id = poll_id;
+
+		$.ajax({
+            type: "POST",
+            url: window.location.origin+'/en/get-poll-stats/'+p_id,
+            data: {
+                _token: $('input[name="_token"]').val(),
+            },
+            dataType: 'json',
+            success: function(ret) {
+                if(ret.success) {
+                	
+                	pollStats(ret.chart);
+                	$('#poll-popup').find('.poll-stats-wrapper h3').html($('#poll-popup').find('.poll-stats-wrapper h3').attr('alternative-title'));
+                    $('#poll-popup').find('.poll-question').html(ret.title);
+                    $('#poll-popup').find('.poll-stats-wrapper p').remove();
+                	$('#poll-popup').find('.content').hide();
+                	$('#poll-popup').find('.poll-stats-wrapper').show();
+                    pollStatsAnimate();
+                    $('#poll-popup').find('.poll-stats-wrapper p').remove();
+                    if (ret.closed) {
+                        $('<p>This poll is closed.</p>').insertAfter('.poll-stats-wrapper h3');
+
+                        if (!ret.has_user) {
+                            $('.get-reward-buttons').show();
+                            $('.sign').hide();
+                        }
+                    }
+                    $('.next-poll').removeClass('taken-all');
+                	if (!ret.next_poll) {
+                		$('.next-poll').addClass('taken-all');
+                	} else {
+                		$('.next-poll').attr('poll-id', ret.next_poll);
+                	}
+                	$('#poll-popup').addClass('active');
+                } else {
+    				console.log('error');
+                }
+            },
+            error: function(ret) {
+                console.log('error');
+            }
+        });
+	}
 
 
 	pollsFunction = function() {
