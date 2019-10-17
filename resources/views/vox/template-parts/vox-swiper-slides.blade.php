@@ -1,7 +1,7 @@
 <div class="swiper-slide" survey-id="{{ $survey->id }}">
 	<div class="slider-inner">
 		<div class="slide-padding">
-  			<a href="{{ $survey->getLink() }}" class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title, "respondents" => $survey->respondentsCount(), "respondents_country" => $survey->respondentsCountryCount() ]) }}'>
+  			<a href="{{ $survey->getLink() }}" class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title ]) }}'>
   				@if($survey->featured)
   					<img class="featured-img doublecoin" src="{{ url('new-vox-img/flipping-coin.gif') }}">
   				@endif

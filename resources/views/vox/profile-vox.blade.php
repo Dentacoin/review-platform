@@ -86,7 +86,7 @@
 							      	<div class="swiper-slide">
 							      		<div class="slider-inner">
 								    		<div class="slide-padding">
-								      			<div class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title, "respondents" => $survey->respondentsCount(), "respondents_country" => $survey->respondentsCountryCount() ]) }}'>
+								      			<div class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title]) }}'>
 								      				@if($survey->featured)
 								      					<img class="featured-img doublecoin" src="{{ url('new-vox-img/flipping-coin.gif') }}">
 								      				@endif

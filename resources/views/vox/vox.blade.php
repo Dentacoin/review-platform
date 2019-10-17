@@ -313,7 +313,7 @@
 							      	<div class="swiper-slide">
 							      		<div class="slider-inner">
 								    		<div class="slide-padding">
-								    			<a href="{{ $related_vox->getLink() }}" class="cover" style="background-image: url('{{ $related_vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $related_vox->title, "respondents" => $related_vox->respondentsCount(), "respondents_country" => $related_vox->respondentsCountryCount() ]) }}'>
+								    			<a href="{{ $related_vox->getLink() }}" class="cover" style="background-image: url('{{ $related_vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $related_vox->title ]) }}'>
 									  				@if($related_vox->featured)
 									  					<img class="featured-img doublecoin" src="{{ url('new-vox-img/flipping-coin.gif') }}">
 									  				@endif
