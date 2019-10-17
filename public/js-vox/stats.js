@@ -603,6 +603,7 @@ $(document).ready(function(){
                     var rows = [];
                     var headers = [];
                     headers.push( scale_name );
+
                     for(var i in data.second_chart[0]) {
                         if(i!=0 && (!data.answer_id || i==data.answer_id )) {
                             headers.push(data.second_chart[0][i][0]);
@@ -673,6 +674,12 @@ $(document).ready(function(){
                     $('.main-chart').parent().css('max-width', 'auto');
                 }
 
+                if (data.question_type=='multiple_choice' && scale == 'gender') {
+                    $('.custom-legend').css('cursor', 'auto');
+                } else {
+                    $('.custom-legend').css('cursor', 'pointer');
+                }
+
                 //console.log(scale);
 
             }).bind(elm)
@@ -682,7 +689,6 @@ $(document).ready(function(){
 
     var setupLegend = function(container, legend, answer) {
         container.html('');
-        console.log( legend.length );
         for(var i in legend) {
             container.append( $('<div answer-id="'+(parseInt(i)+1)+'" class="'+(legend.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'"><span style="background-color: '+chart_colors[i]+';"></span>'+legend[i]+'</div>') );
         }
@@ -825,7 +831,6 @@ $(document).ready(function(){
                         $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][1]*100).toFixed(1)+'%</div>');
                     }
                 }
-                console.log(rows);
 
             } else {
 

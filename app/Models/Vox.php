@@ -44,6 +44,9 @@ class Vox extends Model {
         'hasimage_social',
         'hasimage_stats',
         'country_count',
+        'questions_count',
+        'respondents_count',
+        'rewards_count',
         'sort_order',
     ];
 
@@ -60,6 +63,25 @@ class Vox extends Model {
         return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->orderBy('order', 'ASC');
     }
 
+    public function questionsCount() {
+        $date = $this->last_count_at;
+        $now = Carbon::now();
+
+        $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
+
+        if ($diff >= 1 || empty($this->questions_count)) {
+
+            $this->last_count_at = Carbon::now();
+            $this->questions_count = $this->questions()->count();
+            $this->save();
+
+            return $this->questions()->count();
+
+        } else {
+            return $this->questions_count;
+        }
+    }
+
     public function stats_questions() {
         return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->where('used_for_stats', '!=', '')->orderBy('order', 'ASC');
     }
@@ -69,7 +91,22 @@ class Vox extends Model {
     }
     
     public function respondentsCount() {
-        return DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->count();   
+        $date = $this->last_count_at;
+        $now = Carbon::now();
+
+        $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
+
+        if ($diff >= 1 || empty($this->respondents_count)) {
+
+            $this->last_count_at = Carbon::now();
+            $this->respondents_count = DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->count();
+            $this->save();
+
+            return DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->count();
+
+        } else {
+            return $this->respondents_count;
+        }
     }
 
     public function respondentsCountryCount() {
@@ -79,7 +116,7 @@ class Vox extends Model {
 
         $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
 
-        if ($diff >= 1) {
+        if ($diff >= 1 || empty($this->country_count)) {
 
             $counted_countries = DB::table('users')
             ->join('dcn_rewards', 'users.id', '=', 'dcn_rewards.user_id')
@@ -111,12 +148,31 @@ class Vox extends Model {
         return $this->hasMany('App\Models\DcnReward', 'reference_id', 'id')->where('platform', 'vox')->where('type', 'survey')->orderBy('id', 'DESC');
     }
 
+    public function rewardsCount() {
+        $date = $this->last_count_at;
+        $now = Carbon::now();
+
+        $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
+
+        if ($diff >= 1 || empty($this->rewards_count)) {
+
+            $this->last_count_at = Carbon::now();
+            $this->rewards_count = $this->rewards()->count();
+            $this->save();
+
+            return $this->rewards()->count();
+
+        } else {
+            return $this->rewards_count;
+        }
+    }
+
     public function related() {
         return $this->hasMany('App\Models\VoxRelated', 'vox_id', 'id')->orderBy('id', 'ASC');
     }
 
     public function formatDuration() {
-        return ceil( $this->questions()->count()/6 ).' min';
+        return ceil( $this->questionsCount()/6 ).' min';
     }
 
     public function getRewardPerQuestion() {

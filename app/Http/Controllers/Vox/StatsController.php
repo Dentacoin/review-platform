@@ -279,9 +279,7 @@ class StatsController extends FrontController
 				foreach ($age_to_group as $k => $v) {
 					$second_chart[ $v ] = [];
 					foreach ($answers as $a) {
-                        if(empty($answer_id) || $a==$answer_id) {
-    						$second_chart[ $v ][$a] = 0;
-                        }
+    					$second_chart[ $v ][$a] = 0;
 					}
 				}
 
@@ -303,9 +301,12 @@ class StatsController extends FrontController
         		}
         	}
 
+            //dd($second_chart, $this->processArray($second_chart));
+
             $main_chart = $this->processArray($main_chart);
             $second_chart = $this->processArray($second_chart);
             $third_chart = $this->processArray($third_chart);
+
 
         	return Response::json( [
         		'main_chart' => $main_chart,

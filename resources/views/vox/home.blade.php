@@ -127,9 +127,9 @@
 			      			featured="{{ intval($vox->featured) }}" 
 			      			published="{{ $vox->launched_at->timestamp }}" 
 			      			sort-order="{{ $vox->sort_order ? $vox->sort_order : 0 }}" 
-			      			popular="{{ intval($vox->rewards()->count()) }}" 
+			      			popular="{{ intval($vox->rewardsCount()) }}" 
 			      			dcn="{{ intval($vox->getRewardTotal()) }}" 
-			      			duration="{{ ceil( $vox->questions()->count()/6 ) }}" 
+			      			duration="{{ ceil( $vox->questionsCount()/6 ) }}" 
 			      			{!! !empty($taken) ? 'taken="'.intval(!in_array($vox->id, $taken) ? 0 : 1).'"' : '' !!}
 			      			>
 				      		<div class="slider-inner">
