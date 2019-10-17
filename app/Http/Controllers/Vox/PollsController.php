@@ -62,6 +62,7 @@ class PollsController extends FrontController
         		'polls.js'
         	],
 			'social_image' => $social_image,
+			'canonical' => getLangUrl('daily-polls/'.$date)
         ));
 		
 	}
@@ -85,6 +86,7 @@ class PollsController extends FrontController
         		'polls.js'
         	],
 			'social_image' => $social_image,
+			'canonical' => getLangUrl('daily-polls/'.$date.'/stats')
         ));
 		
 	}
