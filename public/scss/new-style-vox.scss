@@ -4388,22 +4388,6 @@ body.vox-public {
 							display: none;
 						}
 
-						.custom-legend {
-							cursor: pointer;
-
-							&.inactive {
-								opacity: 0.2;
-							}
-
-							&:first-child {
-								margin-top: 20px;
-
-								@media screen and (max-width: 1200px) {
-									margin-top: 30px;
-								}
-							}
-						}
-
 						.legend,
 						.chart {
 					    	flex: 1;
@@ -4412,6 +4396,23 @@ body.vox-public {
 						.second-chart {
 							> div {
 								margin: 0 auto;
+							}
+						}
+					}
+					
+
+					.custom-legend {
+						cursor: pointer;
+
+						&.inactive {
+							opacity: 0.2;
+						}
+
+						&:first-child {
+							margin-top: 20px;
+
+							@media screen and (max-width: 1200px) {
+								margin-top: 30px;
 							}
 						}
 					}

@@ -526,7 +526,7 @@ $(document).ready(function(){
                         width: 750
                     }
 
-                    drawColumns(rows, $(this).find('.second-chart')[0], options, data.relation_info.answer+1, true);
+                    drawColumns(rows, $(this).find('.second-chart')[0], options, data.relation_info.answer+1, true,null);
                     $(this).find('.hint').html( data.relation_info.question ).show();
                     $(this).find('.third-chart').html('');
 
@@ -593,7 +593,7 @@ $(document).ready(function(){
                     }
 
                     main_chart_data.unshift(['', '']);
-                    drawColumns( main_chart_data, $(this).find('.third-chart')[0], null, null, true);
+                    drawColumns( main_chart_data, $(this).find('.third-chart')[0], null, null, true, 'country_id');
                     
                     setupLegend($(this).find('.legend'), []);
 
@@ -648,7 +648,7 @@ $(document).ready(function(){
                             }
                         }
                     }
-                    drawColumns(rows, $(this).find('.second-chart')[0], null, data.answer_id);
+                    drawColumns(rows, $(this).find('.second-chart')[0], null, data.answer_id,null);
 
                     $(this).find('.third-chart').html('');
                     if(data.question_type != 'multiple_choice') {
@@ -785,7 +785,7 @@ $(document).ready(function(){
 
     }
 
-    var drawColumns = function(rows, container, more_options, fixedColor, dependency) {
+    var drawColumns = function(rows, container, more_options, fixedColor, dependency, scale) {
 
         if( $(window).width()<1200 || dependency ) {
             $(container).html('<div class="mobile-chart"></div>');
@@ -834,33 +834,73 @@ $(document).ready(function(){
 
             } else {
 
-                for(var i=1; i<rows.length; i++) {
-                    $(container).append('<div class="group-heading">'+rows[i][0]+'</div>');
+                if (scale && scale == 'country_id') {
+                    for(var i=1; i<rows.length; i++) {
+                        $(container).append('<div class="sort-stat" answer-id="'+i+'"><div class="group-heading">'+rows[i][0]+'</div></div>');
 
-                    if( globalMax ) {
-                        var max = globalMax;
-                    } else {
-                        var max = 0;
+                        if( globalMax ) {
+                            var max = globalMax;
+                        } else {
+                            var max = 0;
+                            for(var j=1; j<rows[i].length; j++) {
+                                if(rows[i][j] > max) {
+                                    max = rows[i][j];
+                                }
+                            }
+                        }
+
                         for(var j=1; j<rows[i].length; j++) {
-                            if(rows[i][j] > max) {
-                                max = rows[i][j];
+                            var pl = 80*rows[i][j]/max;
+                            var color = fixedColor ? chart_colors[fixedColor-1] : chart_colors[j-1];
+                            if( typeof(rows[0][j])!='object' ) {
+                                $(container).find('.sort-stat[answer-id="'+i+'"]').attr('votes', (rows[i][j]*1000).toFixed(1));
+                                $(container).find('.sort-stat[answer-id="'+i+'"]').append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(1)+'%</div>');
                             }
                         }
                     }
 
-                    for(var j=1; j<rows[i].length; j++) {
-                        var pl = 80*rows[i][j]/max;
-                        var color = fixedColor ? chart_colors[fixedColor-1] : chart_colors[j-1];
-                        if( typeof(rows[0][j])!='object' ) {
-                            $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(1)+'%</div>');
+                    console.log(scale, container);
+                    var list = container.children();
+
+                    list.sort(function(a, b) {
+                        if( parseInt($(a).attr('votes')) > parseInt($(b).attr('votes')) ) {
+                            return -1;
+                        } else if( parseInt($(a).attr('votes')) < parseInt($(b).attr('votes')) ) {
+                            return 1;
+                        }
+                    });
+
+                    list.each(function() {
+                        container.append(this);
+                    });
+                    
+                } else {
+                    for(var i=1; i<rows.length; i++) {
+                        $(container).append('<div class="group-heading">'+rows[i][0]+'</div>');
+
+                        if( globalMax ) {
+                            var max = globalMax;
+                        } else {
+                            var max = 0;
+                            for(var j=1; j<rows[i].length; j++) {
+                                if(rows[i][j] > max) {
+                                    max = rows[i][j];
+                                }
+                            }
+                        }
+
+                        for(var j=1; j<rows[i].length; j++) {
+                            var pl = 80*rows[i][j]/max;
+                            var color = fixedColor ? chart_colors[fixedColor-1] : chart_colors[j-1];
+                            if( typeof(rows[0][j])!='object' ) {
+                                $(container).append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(1)+'%</div>');
+                            }
                         }
                     }
                 }
-                
             }
 
         } else {
-
 
             var fontSize = 10;
             if( rows.length<=5 && $(window).width()>768 ) {
@@ -1033,13 +1073,13 @@ $(document).ready(function(){
                 ev.target.setState("highlight");
                 map_country = ev.target.tooltipDataItem.dataContext.name;
                 map_country_data = ev.target.dataItem.dataContext;           
-                drawColumns( map_country_data.pieData, $(this).closest('.graphs').find('.third-chart')[0], null, 2, true);
+                drawColumns( map_country_data.pieData, $(this).closest('.graphs').find('.third-chart')[0], null, 2, true,null);
                 $(this).closest('.graphs').find('.map-hint').html('Answers distribution in <b>' + ev.target.tooltipDataItem.dataContext.name + '</b>' ).show();
             } else {
                 ev.target.setState("default");
                 map_country = null;
                 map_country_data = null;
-                drawColumns( main_chart_data, $(this).closest('.graphs').find('.third-chart')[0], null, null, true);
+                drawColumns( main_chart_data, $(this).closest('.graphs').find('.third-chart')[0], null, null, true,null);
             }
         }).bind(container));
         
@@ -1054,7 +1094,7 @@ $(document).ready(function(){
                     ev.target.setState("hovered");                    
                     $(this).closest('.graphs').find('.map-hint').html('Answers distribution in <b>' + ev.target.tooltipDataItem.dataContext.name + '</b>' ).show();
                 }
-                drawColumns( ev.target.dataItem.dataContext.pieData, $(this).closest('.graphs').find('.third-chart')[0], null, 2, true);
+                drawColumns( ev.target.dataItem.dataContext.pieData, $(this).closest('.graphs').find('.third-chart')[0], null, 2, true,null);
             }
         }).bind(container));
 
@@ -1069,7 +1109,7 @@ $(document).ready(function(){
             }
 
             
-            drawColumns( map_country_data ? map_country_data.pieData : main_chart_data, $(this).closest('.graphs').find('.third-chart')[0], null, map_country ? 2 : null, true);
+            drawColumns( map_country_data ? map_country_data.pieData : main_chart_data, $(this).closest('.graphs').find('.third-chart')[0], null, map_country ? 2 : null, true,null);
         }).bind(container));
 
         polygonSeries.mapPolygons.template.adapter.add("tooltipText", function(text, target, key) {
