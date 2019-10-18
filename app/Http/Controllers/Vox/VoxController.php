@@ -908,7 +908,7 @@ class VoxController extends FrontController
 	                                    $inv->rewarded = true;
 	                                    $inv->save();
 
-	                                    $this->user->invitor->sendTemplate( 22, [
+	                                    $this->user->invitor->sendGridTemplate( 82, [
 	                                        'who_joined_name' => $this->user->getName()
 	                                    ] );
 	                                }
