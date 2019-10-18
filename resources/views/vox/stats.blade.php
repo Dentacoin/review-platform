@@ -66,7 +66,7 @@
 							<img class="featured" src="{{ url('new-vox-img/star.svg') }}">
 						@endif
 						<a href="{{ $vox->getStatsList() }}">
-							<img class="cover" src="{{ $vox->getImageUrl() }}" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title]) }}' />
+							<img class="cover" src="{{ $vox->getImageUrl() }}" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title]) }}' />
 						</a>
 						<div class="stats-info flex">
 							<h3>
