@@ -245,6 +245,7 @@ class RegisterController extends FrontController
                                     $inv->invited_email = $this->user->email;
                                 }
 
+                                $inv->rewarded = true;
                                 $inv->save();
                             }
                         }

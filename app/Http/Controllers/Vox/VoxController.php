@@ -59,36 +59,41 @@ class VoxController extends FrontController
 			return redirect( getLangUrl('/'));
 		}
 
+		if (!empty($this->user) && $this->user->madeTest($vox->id)) {
+
+			$related_voxes = [];
+			$related_voxes_ids = [];
+			if ($vox->related->isNotEmpty()) {
+				foreach ($vox->related as $r) {
+					if (!in_array($r->related_vox_id, $this->user->filledVoxes())) {
+						$related_voxes[] = Vox::find($r->related_vox_id);
+						$related_voxes_ids[] = $r->related_vox_id;
+					}
+				}
+			}
+
+			$suggested_voxes = [];
+			$suggested_voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->take(9)->get();
+
+			return $this->showVoxView('taken-survey', [
+				'vox' => $vox,
+				'related_voxes' => $related_voxes,
+	            'suggested_voxes' => $suggested_voxes,
+				'js' => [
+					'taken-vox.js'
+				],
+	            'csscdn' => [
+	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
+	            ],
+	            'jscdn' => [
+	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
+	            ],
+			]);
+		}
+
 		return $this->dovox($locale, $vox);
 	}
 	public function dovox($locale=null, $vox) {
-
-		// $users = User::whereNotNull('gender')->skip(20000)->take(10000)->get();
-		// foreach ($users as $i => $user) {
-		// 	echo $i.'<br/>';
-		// 	VoxAnswer::where('user_id', $user->id)->update(['age' => $this->getAgeGroup($user->birthyear)]);
-		// }
-		// dd('done'); //$users
-
-		// $voxes = Vox::get();
-		// foreach ($voxes as $vox) {
-		// 	echo '<b>'.$vox->title.'</b><br/>';
-		// 	$lastone = false;
-		// 	foreach ($vox->questions as $question) {
-		// 		if( $lastone && $lastone->question_trigger && $question->question_trigger!='-1' && $lastone->question_trigger==$question->question_trigger ) {
-		// 			echo $question->question.'<br/>';
-		// 			$question->question_trigger = '-1';
-		// 			$question->save();
-		// 			$found = true;
-		// 		} else {
-		// 			$lastone = $question;					
-		// 		}
-
-		// 	}
-		// 	echo '<br/>';
-		// }
-
-		// exit;
 
 		if(!$this->user) {
 

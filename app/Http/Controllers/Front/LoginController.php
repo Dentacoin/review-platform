@@ -122,6 +122,8 @@ class LoginController extends FrontController
                             $inv->invited_email = $user->email;
                             $inv->invited_name = $user->name;
                         }
+
+                        $inv->rewarded = true;
                         $inv->save();
 
                         $dentist_invitor = User::find($inv->user_id);
@@ -258,6 +260,7 @@ class LoginController extends FrontController
                         $inv->invited_email = $user->email;
                         $inv->invited_name = $user->name;
                     }
+                    $inv->rewarded = true;
                     $inv->save();
 
                     $dentist_invitor = User::find($inv->user_id);
@@ -401,6 +404,7 @@ class LoginController extends FrontController
                             $inv->invited_email = $newuser->email;
                             $inv->invited_name = $newuser->name;
                         }
+                        $inv->rewarded = true;
                         $inv->save();
                         
                         // $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
@@ -530,6 +534,7 @@ class LoginController extends FrontController
                                             $inv->invited_email = $user->email;
                                             $inv->invited_name = $user->name;
                                         }
+                                        $inv->rewarded = true;
                                         $inv->save();
                                     }
                                     $ret['redirect'] = getLangUrl('/');

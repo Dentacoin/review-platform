@@ -1466,6 +1466,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $last_invite = UserInvite::where('user_id', $this->user->id)->where('invited_id', $ask->user->id)->first();
             if (!empty($last_invite)) {
                 $last_invite->created_at = Carbon::now();
+                $last_invite->rewarded = true;
                 $last_invite->save();   
             } else {
                 $inv = new UserInvite;
@@ -1473,6 +1474,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $inv->invited_email = $ask->user->email;
                 $inv->invited_name = $ask->user->name;
                 $inv->invited_id = $ask->user->id;
+                $inv->rewarded = true;
                 $inv->save();                    
             }
 
