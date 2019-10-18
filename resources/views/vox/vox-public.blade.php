@@ -228,7 +228,7 @@
 			      	<div class="swiper-slide">
 			      		<div class="slider-inner">
 				    		<div class="slide-padding">
-				      			<a href="{{ $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title]) }}'>
+				      			<a href="{{ $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title]) }}'>
 				      				@if($vox->featured)
 				      					<img class="featured-img doublecoin" src="{{ url('new-vox-img/flipping-coin.gif') }}">
 				      				@endif
