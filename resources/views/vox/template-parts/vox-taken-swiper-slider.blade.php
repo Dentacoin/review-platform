@@ -26,7 +26,7 @@
 				<div class="btns">
 					@if($survey->has_stats)
 						<a class="white-button" href="{{ $survey->getStatsList() }}">
-							Check stats
+							{!! trans('vox.common.check-statictics') !!}
 						</a>
 					@endif
 					<a class="opinion blue-button" href="{{ $survey->getLink() }}">
