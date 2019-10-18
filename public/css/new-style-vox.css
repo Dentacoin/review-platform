@@ -3128,7 +3128,7 @@ p.h2-bold {
             .page-statistics .stats .stat .contents .graphs .chart:first-child {
               order: 2; } }
         .page-statistics .stats .stat .contents .graphs .chart .second-chart.country_id {
-          width: 640px;
+          width: 600px;
           height: 300px; }
           @media (max-width: 1200px) {
             .page-statistics .stats .stat .contents .graphs .chart .second-chart.country_id {
