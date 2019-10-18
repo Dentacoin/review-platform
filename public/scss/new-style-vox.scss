@@ -4204,6 +4204,73 @@ body.vox-public {
 				}
 			}
 
+			&.stat-with-many-qs {
+				.contents {
+
+					.graphs {
+						flex-direction: column;
+
+						.legend {
+							order: -1;
+						}
+					}
+				}
+
+				.more-q-legend {
+					flex-direction: row !important;
+					padding-top: 20px;
+
+					@media #{$phone} {
+						display: block;
+					}
+				}
+
+				.more-q-content {
+					@media screen and (max-width: 1200px) {
+						display: block;
+					}
+					.chart {
+						flex: 1;
+
+						@media screen and (max-width: 1200px) {
+							flex: none;
+						}
+
+						.second-chart,
+						.third-chart {
+							>div {
+								div[dir="ltr"] {
+									margin: 0 auto;
+								}
+							}
+						}
+
+						.second-chart {
+							margin-left: 110px;
+
+							@media screen and (max-width: 1200px) {
+								margin-left: 0px;
+							}
+
+							&.gender,
+							&.country_id {
+								margin-left: 0px;
+							}
+						}
+
+						.main-chart {
+							>div {
+								div[dir="ltr"] {
+									@media screen and (max-width: 1200px) {
+										margin: 0 auto;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
 			.box {
 				align-items: baseline;
     			justify-content: space-between;

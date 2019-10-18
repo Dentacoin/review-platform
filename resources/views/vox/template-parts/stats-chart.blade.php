@@ -25,8 +25,15 @@
 		</div>
 	</div>
 </div>
+
 <div class="graphs flex {!! $question->type=='multiple_choice' ? 'multiple-stat' : '' !!}" >
 
+	@if(count(json_decode($question->answers, true)) > 9)
+		<div class="legend flex more-q-legend">
+			
+		</div>
+		<div class="flex more-q-content">
+	@endif
 	<div class="loader-mask stats-mask">
 	    <img class="stats-loader" src="{{ url('new-vox-img/stats-loader.gif') }}">
   	</div>
@@ -67,8 +74,12 @@
 			@endif
 		@endif
 	</div>
-	<div class="legend flex">
-	</div>
+	@if(count(json_decode($question->answers, true)) <= 9)
+		<div class="legend flex">
+		</div>
+	@else
+		</div>
+	@endif
 	
 	@if($question->used_for_stats=='related')
 		<div class="main-title">

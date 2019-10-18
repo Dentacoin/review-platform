@@ -689,11 +689,40 @@ $(document).ready(function(){
 
     var setupLegend = function(container, legend, answer) {
         container.html('');
-        for(var i in legend) {
-            container.append( $('<div answer-id="'+(parseInt(i)+1)+'" class="'+(legend.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'"><span style="background-color: '+chart_colors[i]+';"></span>'+legend[i]+'</div>') );
+        if(container.hasClass('more-q-legend')) {
+            container.append('<div class="col f-c"></div><div class="col s-c"></div><div class="col t-c"></div>');
         }
 
-        container.find('div').click( function() {
+        var count = legend.length;
+        var middle = Math.ceil(count/3);
+        var last = Math.ceil((count/3)*2);
+
+        for(var i in legend) {
+            if(container.hasClass('more-q-legend')) {
+                var d = legend.length / 3;
+
+
+                if (parseInt(i)+1<=middle) {
+                    container.find('.f-c').append( $('<div answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(legend.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'"><span style="background-color: '+chart_colors[i]+';"></span>'+legend[i]+'</div>') );
+                }
+                if(parseInt(i)+1>middle && parseInt(i)+1<=last) {
+                    container.find('.s-c').append( $('<div answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(legend.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'"><span style="background-color: '+chart_colors[i]+';"></span>'+legend[i]+'</div>') );
+                } else if(parseInt(i)+1>last) {
+                    container.find('.t-c').append( $('<div answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(legend.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'"><span style="background-color: '+chart_colors[i]+';"></span>'+legend[i]+'</div>') );
+                }
+
+                
+                
+                // if(d % 3 == 0 && d != legend.length) {
+
+                // }
+                    
+            } else {
+                container.append( $('<div answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(legend.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'"><span style="background-color: '+chart_colors[i]+';"></span>'+legend[i]+'</div>') );
+            }
+        }
+
+        container.find('.legend-div').click( function() {
             var container = $(this).closest('.stat');
             container.attr('answer-id', $(this).attr('answer-id') );
             reloadGraph( container );            

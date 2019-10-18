@@ -75,7 +75,7 @@
 		<div class="stats">
 			@foreach($vox->questions as $question)
 				@if($question->used_for_stats)
-					<div class="stat" question-id="{{ $question->id }}" stat-type="{{ $question->used_for_stats }}">
+					<div class="stat {!! count(json_decode($question->answers, true)) > 9 ? 'stat-with-many-qs' : '' !!}" question-id="{{ $question->id }}" stat-type="{{ $question->used_for_stats }}">
 						<a class="title" href="javascript:;">
 							<h2>
 								{{ $question->translateorNew(App::getLocale())->stats_title }}
