@@ -488,10 +488,13 @@ class VoxesController extends AdminController
             
 
                 if(request('used_for_stats')=='standard' && !request('stats_fields')) {
-                    Request::session()->flash('success-message', 'Please, select the demographic details which should be used for the statistics.');
+                    Request::session()->flash('error-message', 'Please, select the demographic details which should be used for the statistics.');
                     return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
                 } else if ($question->type == 'scale' && request('used_for_stats')=='standard' && !request('stats_fields') && !request('stats_scale_answers')) {
-                    Request::session()->flash('success-message', 'Please, select the demographic details and scale answers which should be used for the statistics.');
+                    Request::session()->flash('error-message', 'Please, select the demographic details and scale answers which should be used for the statistics.');
+                    return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
+                } else if ($question->type == 'scale' && !request('vox_scale_id')) {
+                    Request::session()->flash('error-message', 'Please, pick a scale.');
                     return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
                 } else {
                     Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-updated'));
