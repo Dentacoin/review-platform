@@ -251,6 +251,7 @@ $(document).ready(function(){
 	            (function( data ) {
 	                if(data.success) {
 	                	that[0].reset();
+	                	$('.select2').val(null).trigger('change').select2();
 	                   $(this).find('.alert-success').show();
 	                } else {
 	                    for(var i in data.messages) {

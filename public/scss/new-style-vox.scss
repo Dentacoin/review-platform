@@ -7394,7 +7394,7 @@ body.vox-public {
 		    	}
 
 		    	.h1 {
-		    		font-size: 39px;
+		    		font-size: 25px;
 		    		font-weight: bold;
 		    		margin-top: 0px;
 		    		margin-bottom: 20px;
@@ -7405,9 +7405,11 @@ body.vox-public {
 		    	}
 
 		    	h4 {
+		    		font-size: 18px;
 		    		margin-bottom: 40px;
 
 		    		@media #{$tablet} {
+		    			font-size: 16px;
 		    			margin-bottom: 20px;
 		    		}
 		    	}
@@ -7511,7 +7513,13 @@ body.vox-public {
 
 				.select2 {
 				    display: block;
+				    width: 100% !important;
 				}
+
+				.select2-container--default .select2-selection--multiple,
+				.select2-container--default.select2-container--focus .select2-selection--multiple {
+    				border: solid #cccccc 2px !important;
+    			}
 
 				.blue-button {
 					padding: 11px 59px;

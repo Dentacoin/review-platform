@@ -56,20 +56,18 @@
 
 		</div>
 
-		@if($vox->has_stats)
-			<div class="taken-vox-stats {!! empty($related_voxes) ? 'without-line' : '' !!}">
-				<div class="container">
-					<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.survey-stats-title') !!}</h3>
-					<a href="{{ $vox->getStatsList() }}">
-						<video id="myVideo" playsinline autoplay muted loop src="{{ url('new-vox-img/stats.m4v') }}" type="video/mp4" controls=""></video>
-					</a>
-				</div>
-
-				<div class="tac">
-					<a href="{{ $vox->getStatsList() }}" class="blue-button more-surveys">{!! trans('vox.common.check-statictics') !!}</a>
-				</div>
+		<div class="taken-vox-stats {!! empty($related_voxes) ? 'without-line' : '' !!}">
+			<div class="container">
+				<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.survey-stats-title') !!}</h3>
+				<a href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}">
+					<video id="myVideo" playsinline autoplay muted loop src="{{ url('new-vox-img/stats.m4v') }}" type="video/mp4" controls=""></video>
+				</a>
 			</div>
-		@endif
+
+			<div class="tac">
+				<a href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}" class="blue-button more-surveys">{!! trans('vox.common.check-statictics') !!}</a>
+			</div>
+		</div>
 
 		@if(!empty($related_voxes))
 			<div class="suggested-wrap">
