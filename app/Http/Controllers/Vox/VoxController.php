@@ -59,38 +59,6 @@ class VoxController extends FrontController
 			return redirect( getLangUrl('/'));
 		}
 
-		if (!empty($this->user) && $this->user->madeTest($vox->id)) {
-
-			$related_voxes = [];
-			$related_voxes_ids = [];
-			if ($vox->related->isNotEmpty()) {
-				foreach ($vox->related as $r) {
-					if (!in_array($r->related_vox_id, $this->user->filledVoxes())) {
-						$related_voxes[] = Vox::find($r->related_vox_id);
-						$related_voxes_ids[] = $r->related_vox_id;
-					}
-				}
-			}
-
-			$suggested_voxes = [];
-			$suggested_voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->take(9)->get();
-
-			return $this->showVoxView('taken-survey', [
-				'vox' => $vox,
-				'related_voxes' => $related_voxes,
-	            'suggested_voxes' => $suggested_voxes,
-				'js' => [
-					'taken-vox.js'
-				],
-	            'csscdn' => [
-	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
-	            ],
-	            'jscdn' => [
-	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
-	            ],
-			]);
-		}
-
 		return $this->dovox($locale, $vox);
 	}
 	public function dovox($locale=null, $vox) {
@@ -190,7 +158,35 @@ class VoxController extends FrontController
 	    	//I'm doing ASL questions!
 			$doing_asl = true;
 		} else if( $this->user->madeTest($vox->id) && !(Request::input('goback') && $testmode) ) { //because of GoBack
-		    return redirect( getLangUrl('/') );	
+
+			$related_voxes = [];
+			$related_voxes_ids = [];
+			if ($vox->related->isNotEmpty()) {
+				foreach ($vox->related as $r) {
+					if (!in_array($r->related_vox_id, $this->user->filledVoxes())) {
+						$related_voxes[] = Vox::find($r->related_vox_id);
+						$related_voxes_ids[] = $r->related_vox_id;
+					}
+				}
+			}
+
+			$suggested_voxes = [];
+			$suggested_voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->take(9)->get();
+
+			return $this->showVoxView('taken-survey', [
+				'vox' => $vox,
+				'related_voxes' => $related_voxes,
+	            'suggested_voxes' => $suggested_voxes,
+				'js' => [
+					'taken-vox.js'
+				],
+	            'csscdn' => [
+	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
+	            ],
+	            'jscdn' => [
+	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
+	            ],
+			]);
 		}
 
         if($this->user->isBanned('vox')) {
