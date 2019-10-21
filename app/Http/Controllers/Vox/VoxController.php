@@ -171,7 +171,7 @@ class VoxController extends FrontController
 			}
 
 			$suggested_voxes = [];
-			$suggested_voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->take(9)->get();
+			$suggested_voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $this->user->filledVoxes())->take(9)->get();
 
 			return $this->showVoxView('taken-survey', [
 				'vox' => $vox,
