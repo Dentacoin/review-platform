@@ -25,10 +25,10 @@ class VoxAnswer extends Model {
         return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
 
-    public static function getCount() {
+    public static function getCount($reload=false) {
         $fn = storage_path('vox_count');
         $t = file_exists($fn) ? filemtime($fn) : null;
-        if(!$t || $t < time()-300) {
+        if($reload || !$t || $t < time()-3600) {
             $cnt = self::count();
             file_put_contents($fn, $cnt);
         }

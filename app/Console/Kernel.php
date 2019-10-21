@@ -1453,6 +1453,15 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
+            
+            VoxAnswer::getCount(true);
+
+            echo 'Vox answers count Cron END';
+
+        })->everyThirtyMinutes();
+
+
+        $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s');
 
         })->cron("* * * * *"); //05:00h
