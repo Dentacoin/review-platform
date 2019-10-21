@@ -177,6 +177,12 @@ class VoxController extends FrontController
 				'vox' => $vox,
 				'related_voxes' => $related_voxes,
 	            'suggested_voxes' => $suggested_voxes,
+	            'seo_title' => trans('vox.seo.taken-questionnaire.title', [
+	                'title' => $vox->title,
+	            ]),
+	            'seo_description' => trans('vox.seo.taken-questionnaire.description', [
+	                'title' => $vox->title,
+	            ]),
 				'js' => [
 					'taken-vox.js'
 				],
