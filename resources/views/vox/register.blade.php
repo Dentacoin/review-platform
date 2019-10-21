@@ -319,7 +319,7 @@
 									<button class="btn go-to-next" id="go-to-5" step-number="4" type="submit" data-validator="{{ getLangUrl('registration/step4') }}">
 										{!! trans('vox.page.register.sign-up') !!}
 									</button>
-									<button class="btn submit-register" type="submit" style="display: none;">
+									<button class="blue-button submit-register" type="submit" style="display: none;">
 										{!! trans('vox.page.register.sign-up') !!}
 									</button>
 								</div>

@@ -422,10 +422,12 @@ $voxRoutes = function () {
 				Route::any('profile/privacy-download', 			'ProfileController@privacy_download');
 				
 				Route::get('gdpr', 								'ProfileController@gdpr');
+
 			});
 
 			Route::get('/', 									'IndexController@home');
-			Route::get('welcome-survey', 								'IndexController@welcome');
+			Route::post('request-survey', 						'IndexController@request_survey');
+			Route::get('welcome-survey', 						'IndexController@welcome');
 			Route::any('appeal', 								'IndexController@appeal');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
 			Route::get('{slug}', 								'PagesController@home');

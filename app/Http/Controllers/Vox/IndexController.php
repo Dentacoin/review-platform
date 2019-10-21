@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\UserLogin;
 use App\Models\VoxAnswer;
 use App\Models\VoxCategory;
+use App\Models\Country;
 use Carbon\Carbon;
 
 use Mail;
@@ -14,6 +15,7 @@ use App;
 use Cookie;
 use Request;
 use Response;
+use Validator;
 
 class IndexController extends FrontController
 {
@@ -35,6 +37,7 @@ class IndexController extends FrontController
 		$social_image = url('new-vox-img/dentavox-summer-rewards.jpg');
 
 		return $this->ShowVoxView('home', array(
+			'countries' => Country::get(),
 			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',
 			'social_image' => $social_image,
 			'sorts' => $sorts,
@@ -44,7 +47,13 @@ class IndexController extends FrontController
         	'vox_categories' => VoxCategory::whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
         	'js' => [
         		'home.js'
-        	]
+        	],
+	        'jscdn' => [
+	            'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js',
+	        ],
+	        'csscdn' => [
+	            'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css',
+	        ],
 		));
 	}
 	
@@ -173,6 +182,74 @@ class IndexController extends FrontController
 				]
 	        ));
 	    }
+	}
+
+	public function request_survey($locale=null) {
+
+		if(!empty($this->user) && $this->user->is_dentist) {
+
+			$validator = Validator::make(Request::all(), [
+                'title' => array('required', 'min:6'),
+                'target' => array('required', 'in:worldwide,specific'),
+                'target-countries' => array('required_if:target,==,specific'),
+                'other-specifics' => array('required'),
+                'topics' => array('required'),
+
+            ]);
+
+            if ($validator->fails()) {
+
+                $msg = $validator->getMessageBag()->toArray();
+                $ret = array(
+                    'success' => false,
+                    'messages' => array()
+                );
+
+                foreach ($msg as $field => $errors) {
+                    $ret['messages'][$field] = implode(', ', $errors);
+                }
+
+                return Response::json( $ret );
+            } else {
+
+            	$target_countries = [];
+				foreach (request('target-countries') as $v) {
+					$target_countries[] = Country::find($v)->name;
+				}
+      
+            	$mtext = 'New survey request from '.$this->user->getName().'
+	                
+		        Link to CMS: '.url("/cms/users/edit/".$this->user->id).'
+		        Survey title: '.request('title').'
+		        Survey target group location/s: '.request('target');
+
+		        if (request('target') == 'specific') {
+		        	$mtext .= '
+		        Survey target group countries: '.implode(',', $target_countries);
+		        }
+		        
+		        $mtext .= '
+		        Other specifics of survey target group: '.request('other-specifics').'
+		        Survey topics and the questions: '.request('topics');
+
+		        Mail::raw($mtext, function ($message) {
+
+		            $sender = 'dentavox@dentacoin.com';
+		            $sender = 'donika.kraeva@dentacoin.com';
+		            $sender_name = config('mail.from.name-vox');
+
+		            $message->from($sender, $sender_name);
+		            $message->to( $sender );
+		            $message->replyTo($this->user->email, $this->user->getName());
+		            $message->subject('Survey Request');
+		        });
+
+                return Response::json( [
+                    'success' => true,
+                ] );
+
+            }
+		}
 	}
 
 }

@@ -122,8 +122,43 @@
 			@endif
 			<div class="section-recent-surveys" id="questions-wrapper">
 				<div class="questions-inner" id="questions-inner">
+					@if(!empty($user) && $user->is_dentist)
+						<div class="swiper-slide request-vox">
+				      		<div class="slider-inner">
+					    		<div class="slide-padding">
+					      			<a href="javascript:;" class="cover" style="background-image: url('{{ url('new-vox-img/request-survey.jpg') }}');"></a>							
+									<div class="vox-header clearfix">
+										<div class="flex first-flex">
+											<div class="col left">
+												<h4 class="survey-title bold">REQUEST CUSTOM SURVEY</h4>
+											</div>			
+										</div>
+										<div class="survey-cats"> 
+											<span>Verified respondents</span>
+											<span>Quick delivery</span>
+											<span>Qualified stats</span>
+										</div>
+										<div class="flex second-flex">
+											<div class="col left">
+												<p class="vox-description">
+													Want to explore a particular topic that will help you improve your own dental practice? Send us your thoughts and we will compose the survey for you!
+												</p>
+											</div>
+											<div class="col right">
+												<div class="btns">
+													<a class="blue-button" href="javascript:;" data-popup="request-survey-popup">
+														REQUEST NOW
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+						      	</div>
+					      	</div>
+					    </div>
+					@endif
 					@foreach( $voxes as $vox)
-				      	<div class="swiper-slide"
+				      	<div class="swiper-slide home-vox"
 			      			featured="{{ intval($vox->featured) }}" 
 			      			published="{{ $vox->launched_at->timestamp }}" 
 			      			sort-order="{{ $vox->sort_order ? $vox->sort_order : 0 }}" 
@@ -214,6 +249,10 @@
 			</div>
 	            
 		</div>
-	</div>    	
+	</div>
+
+	@if(!empty($user) && $user->is_dentist)
+		@include('vox.popups.request-survey')
+	@endif
     	
 @endsection

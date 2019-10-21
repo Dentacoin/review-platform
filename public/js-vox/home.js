@@ -1,4 +1,5 @@
 var handleSorts;
+var ajax_is_running = false;
 
 $(document).ready(function(){
 
@@ -51,7 +52,8 @@ $(document).ready(function(){
 		var sort = $('.sort-menu a.active').attr('sort');
 		var sort_element = $('.sort-menu a.active');
 		var wrapper = $('.questions-inner');
-		var list = wrapper.children();
+		var list = wrapper.find('.home-vox');
+		var request_survey = $('.request-vox');
 
 		var order_multiplier = sort=='newest' ? (sort_element.hasClass('order-asc') ? -1 : 1) : (sort_element.hasClass('order-asc') ? 1 : -1);
 
@@ -103,6 +105,7 @@ $(document).ready(function(){
 		// 	}
 		// });
 
+		wrapper.append(request_survey);
 		list.each(function() {
 		    wrapper.append(this);
 		});
@@ -171,7 +174,7 @@ $(document).ready(function(){
 		handleSorts();
 	});
 
-	$('.survey-cats span').click( function() {
+	$('.survey-cats .survey-cat').click( function() {
 		$('#surveys-categories').val( $(this).attr('cat-id') ).trigger('change');
 	} );
 
@@ -198,5 +201,79 @@ $(document).ready(function(){
         	scrollTop: $('#strength-parent').offset().top
         }, 500);
 	});
+
+	$('input[name="target"]').change( function() {
+		$(this).closest('.modern-radios').removeClass('has-error');
+        $('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
+        var val = $('#target-specific:checked').length;
+        if(val) {
+            $('.target-row').show();
+        } else {
+            $('.target-row').hide();
+        }
+    } );
+
+    if ($('.select2').length) {
+    	$(".select2").select2({
+			multiple: true,
+			placeholder: 'Select Country/ies',
+		});
+    }
+
+    $('#request-survey-form').submit( function(e) {
+        e.preventDefault();
+
+        if (!$(this).find('.button').hasClass('disabled')) {
+
+	        $(this).find('.ajax-alert').remove();
+	        $(this).find('.alert').hide();
+	        $(this).find('.has-error').removeClass('has-error');
+
+	        if(ajax_is_running) {
+	            return;
+	        }
+	        ajax_is_running = true;
+
+	        var that = $(this);
+
+	        // var countries = [];
+	        // for (var i in $('[name="target-countries"]').select2('data')) {
+	        // 	countries.push($('[name="target-countries"]').select2('data')[i]['text']);
+	        // }
+
+	        // $('[name="target-countries"]').val(countries.toString());
+	        // console.log(countries.toString(), $('[name="target-countries"]').val());
+
+	        //console.log($('[name="target-countries"]').val());
+	        $.post( 
+	            $(this).attr('action'), 
+	            $(this).serialize() , 
+	            (function( data ) {
+	                if(data.success) {
+	                	that[0].reset();
+	                   $(this).find('.alert-success').show();
+	                } else {
+	                    for(var i in data.messages) {
+	                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
+
+	                        $('[name="'+i+'"]').addClass('has-error');
+
+	                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
+	                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+	                        }
+	                    }
+
+	                    $('html, body').animate({
+			                scrollTop: $('.ajax-alert:visible').first().offset().top - $('header').height() - 150
+			            }, 500);
+	                }
+	                ajax_is_running = false;
+	            }).bind(that), "json"
+	        );          
+
+
+	        return false;
+	    }
+	} );
 
 });
