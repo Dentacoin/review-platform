@@ -1464,7 +1464,7 @@ NEW & FAILED TRANSACTIONS
 
         $schedule->call(function () {
 
-            $reward = json_encode(Reward::where('reward_type', 'vox_question')->first(), true);
+            $reward = json_encode(Reward::where('reward_type', 'vox_question')->first());
             file_put_contents('/tmp/reward_vox_question', $reward);
 
             echo 'amount reward vox_question CRON END';
