@@ -9,10 +9,10 @@
 		<div class="flex flex-mobile flex-center break-tablet">
 			<div class="content">
 				<p class="h1">
-					REQUEST CUSTOM SURVEY
+					{{ trans('vox.page.home.request-survey.popup.title') }}
 				</p>
 				<h4>
-					Please describe your survey request in detail. <br/> Our team will gladly assess it, get in touch and compile it for you! 
+					{{ trans('vox.page.home.request-survey.popup.description') }} 
 				</h4>
 
 				<form class="form" action="{{ getLangUrl('request-survey') }}" method="post" id="request-survey-form">
@@ -22,14 +22,14 @@
 						<div class="modern-field">
 							<input type="text" name="title" id="title" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 							<label for="title">
-								<span>Survey topic:</span>
+								<span>{{ trans('vox.page.home.request-survey.popup.topic') }}</span>
 							</label>
 						</div>
 					</div>
 
 					<div class="request-row radios-row alert-after">
 						<div class="target-label">
-							Target group location/s: 
+							{{ trans('vox.page.home.request-survey.popup.target') }}
 						</div>
 						<div class="modern-radios">
 							<div class="radio-label">
@@ -38,7 +38,7 @@
 										<span></span>
 									</span>
 							    	<input class="type-radio" type="radio" name="target" id="target-worldwide" value="worldwide">
-							    	Worldwide
+							    	{{ trans('vox.page.home.request-survey.popup.target.worldwide') }}
 							  	</label>
 							</div>
 							<div class="radio-label">
@@ -47,7 +47,7 @@
 										<span></span>
 									</span>
 							    	<input class="type-radio" type="radio" name="target" id="target-specific" value="specific">
-							    	Specific countries							    	
+							    	{{ trans('vox.page.home.request-survey.popup.target.specific-countries') }}							    	
 							  	</label>
 							</div>
 						</div>
@@ -55,7 +55,7 @@
 
 					<div class="request-row target-row alert-after" style="display: none;">
 						<div class="target-countries-label">
-							Please select your target country/ies:
+							{{ trans('vox.page.home.request-survey.popup.target-countries') }}
 						</div>
 						<div class="col">
 				  			<select name="target-countries[]" class="modern-input select2">
@@ -70,7 +70,7 @@
 						<div class="modern-field">
 							<input type="text" name="other-specifics" id="other-specifics" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 							<label for="other-specifics">
-								<span>Any other specifics of your target group?</span>
+								<span>{{ trans('vox.page.home.request-survey.popup.target-group') }}</span>
 							</label>
 						</div>
 					</div>
@@ -79,15 +79,15 @@
 						<div class="modern-field">
 							<textarea name="topics" id="topics" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');"></textarea>
 							<label for="topics">
-								<span>Describe the topics and the questions you'd like us to ask</span>
+								<span>{{ trans('vox.page.home.request-survey.popup.describe') }}</span>
 							</label>
 						</div>
 					</div>
 
 					<div class="tac">
-						<button type="submit" class="blue-button">SEND REQUEST</button>
+						<button type="submit" class="blue-button">{{ trans('vox.page.home.request-survey.popup.send') }}</button>
 					</div>
-					<div class="alert alert-success" style="display: none;">Thank you for helping us improve DentaVox. We'll check your suggestion and get back to you in case we have any questions</div>
+					<div class="alert alert-success" style="display: none;">{{ trans('vox.page.home.request-survey.popup.success') }}</div>
 				</form>
 			</div>
 		</div>

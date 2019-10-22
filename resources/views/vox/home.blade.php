@@ -131,24 +131,24 @@
 									<div class="vox-header clearfix">
 										<div class="flex first-flex">
 											<div class="col left">
-												<h4 class="survey-title bold">REQUEST CUSTOM SURVEY</h4>
+												<h4 class="survey-title bold">{{ trans('vox.page.home.request-survey.title') }}</h4>
 											</div>			
 										</div>
 										<div class="survey-cats"> 
-											<span>Verified respondents</span>
-											<span>Quick delivery</span>
-											<span>Qualified stats</span>
+											<span>{{ trans('vox.page.home.request-survey.cat1') }}</span>
+											<span>{{ trans('vox.page.home.request-survey.cat2') }}</span>
+											<span>{{ trans('vox.page.home.request-survey.cat2') }}</span>
 										</div>
 										<div class="flex second-flex">
 											<div class="col left">
 												<p class="vox-description">
-													Want to explore a particular topic that will help you improve your own dental practice? Send us your thoughts and we will compose the survey for you!
+													{{ trans('vox.page.home.request-survey.description') }}
 												</p>
 											</div>
 											<div class="col right">
 												<div class="btns">
 													<a class="blue-button" href="javascript:;" data-popup="request-survey-popup">
-														REQUEST NOW
+														{{ trans('vox.page.home.request-survey.request') }}
 													</a>
 												</div>
 											</div>
