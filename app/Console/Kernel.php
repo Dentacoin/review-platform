@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Country;
 use App\Models\Dcn;
 use App\Models\Review;
+use App\Models\Reward;
 use App\Models\Poll;
 use App\Models\UserInvite;
 use App\Models\DcnTransaction;
@@ -1459,6 +1460,16 @@ NEW & FAILED TRANSACTIONS
             echo 'Vox answers count Cron END';
 
         })->everyThirtyMinutes();
+
+
+        $schedule->call(function () {
+
+            $reward = json_encode(Reward::where('reward_type', 'vox_question')->first(), true);
+            file_put_contents('/tmp/reward_vox_question', $reward);
+
+            echo 'amount reward vox_question CRON END';
+
+        })->everyMinute(); //05:00h
 
 
         $schedule->call(function () {
