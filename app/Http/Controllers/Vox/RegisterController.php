@@ -512,7 +512,7 @@ class RegisterController extends FrontController
                         }
                         Request::session()->flash('success-message', trans('vox.page.registration.invitation-registered', [ 'name' => $user->name ]));
                     }
-                    return redirect( getLangUrl('/').$get );
+                    return redirect( getLangUrl('paid-dental-surveys').$get );
                 } else {
                     $sess = [
                         'invited_by' => $user->id,
@@ -526,7 +526,7 @@ class RegisterController extends FrontController
                     session($sess);
 
                     Request::session()->flash('success-message', trans('vox.page.registration.invitation', [ 'name' => $user->name ]));
-                    return redirect( getLangUrl('/').'#register'.$get ); 
+                    return redirect( getLangUrl('paid-dental-surveys').'#register'.$get ); 
                 }
 
             }
