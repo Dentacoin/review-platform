@@ -26,6 +26,7 @@ use App\Models\UserAsk;
 use App\Models\Dcn;
 use App\Models\Reward;
 use App\Models\DcnReward;
+use App\Models\UserStrength;
 use App\Models\DentistPageview;
 use Carbon\Carbon;
 use Auth;
@@ -174,7 +175,7 @@ class DentistController extends FrontController
 
         $canAskDentist = !empty($this->user) ? $this->user->canAskDentist($item->id) : true;
 
-        $questions = Question::get();
+        $questions = Question::with('translations')->get();
 
 
         if(Request::isMethod('post')) {
@@ -481,7 +482,17 @@ class DentistController extends FrontController
             }
         }
 
+
+        $strength_arr = null;
+        $completed_strength = null;
+        if ($this->user) {
+            $strength_arr = UserStrength::getStrengthPlatform('trp', $this->user);
+            $completed_strength = $this->user->getStrengthCompleted('trp');
+        }
+
         $view_params = [
+            'strength_arr' => $strength_arr,
+            'completed_strength' => $completed_strength,
             'noIndex' => $item->address ? false : true,
             'item' => $item,
             'is_trusted' => $isTrusted,
@@ -502,7 +513,7 @@ class DentistController extends FrontController
             'aggregated' => $aggregated,
             'social_image' => $social_image,
             'canonical' => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
-            'countries' => Country::get(),
+            'countries' => Country::with('translations')->get(),
             'js' => [
                 'videojs.record.min.js',
                 'user.js',

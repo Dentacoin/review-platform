@@ -53,7 +53,7 @@ class VoxController extends FrontController
 		return $this->dovox($locale, $vox);
 	}
 	public function home_slug($locale=null, $slug) {
-		$vox = Vox::whereTranslationLike('slug', $slug)->first();
+		$vox = Vox::whereTranslationLike('slug', $slug)->with('questions.translations')->with('questions.vox')->first();
 
 		if (empty($vox)) {
 			return redirect( getLangUrl('/'));
@@ -123,6 +123,9 @@ class VoxController extends FrontController
 		    }
 		}
 
+
+		$taken = $this->user->filledVoxes();
+
 		if (request()->has('testmode')) {
 			if(request('testmode')) {
 				$ses = [
@@ -163,7 +166,7 @@ class VoxController extends FrontController
 			$related_voxes_ids = [];
 			if ($vox->related->isNotEmpty()) {
 				foreach ($vox->related as $r) {
-					if (!in_array($r->related_vox_id, $this->user->filledVoxes())) {
+					if (!in_array($r->related_vox_id, $taken)) {
 						$related_voxes[] = Vox::find($r->related_vox_id);
 						$related_voxes_ids[] = $r->related_vox_id;
 					}
@@ -171,7 +174,7 @@ class VoxController extends FrontController
 			}
 
 			$suggested_voxes = [];
-			$suggested_voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $this->user->filledVoxes())->take(9)->get();
+			$suggested_voxes = Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
 
 			return $this->showVoxView('taken-survey', [
 				'vox' => $vox,
@@ -1001,7 +1004,6 @@ class VoxController extends FrontController
 		}
 
         $all_surveys = Vox::where('type', 'normal')->get();
-        $taken = $this->user->filledVoxes();
         $done_all = false;
 
         if (($all_surveys->count() - 1) == count($taken)) {
@@ -1015,7 +1017,7 @@ class VoxController extends FrontController
 		$suggested_voxes = [];
 		if ($vox->related->isNotEmpty()) {
 			foreach ($vox->related as $r) {
-				if (!in_array($r->related_vox_id, $this->user->filledVoxes())) {
+				if (!in_array($r->related_vox_id, $taken)) {
 					if(!$related_vox) {
 						$related_vox = Vox::find($r->related_vox_id);
 					} else {
@@ -1029,7 +1031,7 @@ class VoxController extends FrontController
 		if (!empty($suggested_voxes)) {
 			$related_mode = true;
 		} else {
-			$sug_voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $this->user->filledVoxes());
+			$sug_voxes = Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->whereNotIn('id', $taken);
 			$suggested_voxes = !empty($related_vox) ? $sug_voxes->where('id', '!=', $related_vox->id )->take(9)->get() : $sug_voxes->take(9)->get();
 		}
 

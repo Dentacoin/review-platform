@@ -190,7 +190,7 @@ class DentistsController extends FrontController
                 } else if($country_n == 'South Korea' || $country_n == 'North Korea') {
                     $country = Country::find(116);
                 } else {
-                    $country = Country::whereHas('translations', function ($query) use ($country_n) {
+                    $country = Country::with('translations')->whereHas('translations', function ($query) use ($country_n) {
                         $query->where('name', 'LIKE', $country_n);
                     })->first();
                 }
@@ -272,7 +272,7 @@ class DentistsController extends FrontController
             $items = $items->where('is_partner', true);
         }
 
-        $items = $items->get(); //->take($ppp)->skip( ($page-1)*$ppp )
+        $items = $items->with('country.translations')->get(); //->take($ppp)->skip( ($page-1)*$ppp )
 
         $zoom = $country_search ? 5 : ($query=='worldwide' ? 1 : 13);
         $size = $query=='worldwide' ? '670x288' : '670x188';
@@ -429,7 +429,7 @@ class DentistsController extends FrontController
         }
        
 		return $this->ShowView('search', [
-            'countries' => Country::get(),
+            'countries' => Country::with('translations')->get(),
             'search_title' => !empty($search_title) ? $search_title : null,
             'seo_title' => !empty($seo_title) ? $seo_title : null,
             'seo_description' => !empty($seo_description) ? $seo_description : null,

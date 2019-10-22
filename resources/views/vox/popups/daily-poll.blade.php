@@ -5,7 +5,7 @@
 			<a href="javascript:;" class="close-bubble"><img src="{{ url('new-vox-img/close-popup.png') }}"></a>
 			<h4>{!! nl2br(trans('vox.daily-polls.popup.title')) !!}</h4>
 			<p><span class="daily-respondents">{{ !empty($daily_poll) ? $daily_poll->respondentsCount() : '' }}</span>/100 people</p>
-			<div class="poll-reward twerk-it"><img src="{{ url('new-vox-img/coin-icon.png') }}">{{ App\Models\Reward::getReward('daily_polls') }} DCN</div>
+			<div class="poll-reward twerk-it"><img src="{{ url('new-vox-img/coin-icon.png') }}">{{ $daily_poll_reward }} DCN</div>
 			<a href="javascript:;" class="answer-poll" q="{{ !empty($daily_poll) ? $daily_poll->question : '' }}" data-popup="poll-popup">{!! nl2br(trans('vox.daily-polls.popup.answer')) !!}</a>
 		</div>
 	</div>
@@ -54,12 +54,12 @@
 				</div>
 				<input type="submit" name="submit" style="display: none;">
 			</form>
-			<div class="poll-reward"><img src="{{ url('new-vox-img/coin-icon.png') }}">{{ App\Models\Reward::getReward('daily_polls') }} DCN</div>
+			<div class="poll-reward"><img src="{{ url('new-vox-img/coin-icon.png') }}">{{ $daily_poll_reward }} DCN</div>
 		</div>
 		<div class="content poll-stats-wrapper" style="display: none;">
 			<div class="poll-group">
-				<h3 alternative-title="{!! nl2br(trans('vox.daily-polls.popup.we-asked')) !!}" title="{!! nl2br(trans('vox.daily-polls.popup.get-exited', ['reward' => '<b>'. App\Models\Reward::getReward('daily_polls').' DCN</b>'])) !!}">
-					{!! nl2br(trans('vox.daily-polls.popup.get-exited', ['reward' => '<b>'. App\Models\Reward::getReward('daily_polls').' DCN</b>'])) !!}
+				<h3 alternative-title="{!! nl2br(trans('vox.daily-polls.popup.we-asked')) !!}" title="{!! nl2br(trans('vox.daily-polls.popup.get-exited', ['reward' => '<b>'. $daily_poll_reward.' DCN</b>'])) !!}">
+					{!! nl2br(trans('vox.daily-polls.popup.get-exited', ['reward' => '<b>'. $daily_poll_reward.' DCN</b>'])) !!}
 				</h3>
 				@if(!empty($daily_poll))
 					<p>

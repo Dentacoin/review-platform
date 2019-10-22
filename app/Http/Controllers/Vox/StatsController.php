@@ -39,16 +39,16 @@ class StatsController extends FrontController
         $social_image = url('new-vox-img/dentavox-dental-stats.jpg');
 
         if (Auth::guard('admin')->user()) {
-            $voxes = Vox::with('stats_main_question')->get();
+            $voxes = Vox::with('stats_main_question')->with('translations')->get();
         } else {
-            $voxes = Vox::where('type', '!=', 'hidden')->with('stats_main_question')->get();
+            $voxes = Vox::where('type', '!=', 'hidden')->with('stats_main_question')->with('translations')->get();
         }
 
 		return $this->ShowVoxView('stats', array(
             'taken' => $this->user ? $this->user->filledVoxes() : [],
             'canonical' => getLangUrl('dental-survey-stats'),
 			'voxes' => $voxes,
-			'cats' => VoxCategory::with('voxes.vox')->get(),
+			'cats' => VoxCategory::with('voxes.vox')->with('translations')->get(),
 			'sorts' => $sorts,
             'social_image' => $social_image,
             'seo_title' => trans('vox.seo.stats-all.title'),
@@ -67,15 +67,15 @@ class StatsController extends FrontController
 
 		$vox = Vox::whereTranslationLike('slug', $slug)->first();
 
+		if(empty($vox)) {
+			return redirect( getLangUrl('/') );
+		}
+
         if(empty($this->user)) {
             session([
                 'vox-redirect-workaround' => str_replace( getLangUrl('/').App::getLocale().'/', '', $vox->getLink())
             ]);
         }
-
-		if(empty($vox)) {
-			return redirect( getLangUrl('/') );
-		}
 
         if(!$vox->has_stats) {
             return redirect( getLangUrl('dental-survey-stats') );
@@ -207,7 +207,7 @@ class StatsController extends FrontController
                     }
         		}
         	} else if($scale=='country_id') {
-        		$countries = Country::get()->keyBy('id');
+        		$countries = Country::with('translations')->get()->keyBy('id');
                 $total = $this->prepareQuery($question_id, $dates, $scale_answer_id);
                 $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 

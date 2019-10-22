@@ -220,7 +220,7 @@ class RegisterController extends FrontController
             return $this->ShowVoxView('register', array(
                 'test_country_id' => $test_country_id,
                 'noindex' => ' ',
-                'countries' => Country::get(),
+                'countries' => Country::with('translations')->get(),
                 'js' => [
                     'register.js',
                     'address.js',

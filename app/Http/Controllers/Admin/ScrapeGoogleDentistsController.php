@@ -78,7 +78,7 @@ class ScrapeGoogleDentistsController extends AdminController
     	$finding_emails = ScrapeDentistResult::whereNull('scrape_email')->count();
 
     	return $this->showView('scrape-dentists', [
-			'countries' => Country::get(),
+			'countries' => Country::with('translations')->get(),
 			'scrapes' => !empty($scrapes) ? $scrapes : null,
 			'finding_emails' => !empty($finding_emails) ? $finding_emails : null,
 		]);

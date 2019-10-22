@@ -141,10 +141,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         });
     }
     public function reviews_in_dentist() {
-        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')->where('status', 'accepted')->orderBy('id', 'desc');
+        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')->where('status', 'accepted')->orderBy('id', 'desc')->with('user')->with('answers');
     }
     public function reviews_in_clinic() {
-        return $this->hasMany('App\Models\Review', 'clinic_id', 'id')->where('status', 'accepted')->orderBy('id', 'desc');
+        return $this->hasMany('App\Models\Review', 'clinic_id', 'id')->where('status', 'accepted')->orderBy('id', 'desc')->with('user')->with('answers');
     }
     public function reviews_in() {
         return $this->reviews_in_dentist->merge($this->reviews_in_clinic)->sortBy(function ($review, $key) {
@@ -1019,26 +1019,33 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     //
 
     public function getVoxBalance() {
-        $income = DcnReward::where('user_id', $this->id)->where('platform', 'vox')->sum('reward');
-        $cashouts = DcnCashout::where('user_id', $this->id)->where('platform', 'vox')->sum('reward');
 
-        return $income - $cashouts;
+        if(!isset($this->cachedBalance)) {
+            $income = DcnReward::where('user_id', $this->id)->where('platform', 'vox')->sum('reward');
+            $cashouts = DcnCashout::where('user_id', $this->id)->where('platform', 'vox')->sum('reward');
+            $this->cachedBalance = $income - $cashouts;
+        }
+
+        return $this->cachedBalance;
     }
 
     public function getTotalBalance($platform=null) {
-        $income = DcnReward::where('user_id', $this->id);
-        if (!empty($platform)) {
-            $income = $income->where('platform', $platform);
+        if(!isset($this->cachedTotalBalance)) {
+            $income = DcnReward::where('user_id', $this->id);
+            if (!empty($platform)) {
+                $income = $income->where('platform', $platform);
+            }
+            $income = $income->sum('reward');
+            
+            $cashouts = DcnCashout::where('user_id', $this->id);
+            if (!empty($platform)) {
+                $cashouts = $cashouts->where('platform', $platform);
+            }
+            $cashouts = $cashouts->sum('reward');
+            $this->cachedTotalBalance = $income - $cashouts;
         }
-        $income = $income->sum('reward');
-        
-        $cashouts = DcnCashout::where('user_id', $this->id);
-        if (!empty($platform)) {
-            $cashouts = $cashouts->where('platform', $platform);
-        }
-        $cashouts = $cashouts->sum('reward');
 
-        return $income - $cashouts;
+        return $this->cachedTotalBalance;
     }
 
     public function madeTest($id) {

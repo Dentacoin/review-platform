@@ -46,13 +46,14 @@ class FrontController extends BaseController
         $to_redirect_404 = false;
 
         $roter_params = $request->route()->parameters();
-        if(empty($roter_params['locale'])) {
+        if(empty($roter_params['locale'])) { // || $roter_params['locale']=='_debugbar'
             $locale = 'en';
         } else {
             if(!empty( config('langs.'.$roter_params['locale']) )) {
                 $locale = $roter_params['locale'];
             } else {
                 $locale = 'en';
+
                 $to_redirect_404 = true;
             }
         }
@@ -345,7 +346,7 @@ class FrontController extends BaseController
             $params['noindex'] = true;
         }
 
-        $daily_poll = Poll::where('launched_at', date('Y-m-d') )->where('status', 'open')->first();
+        $daily_poll = Poll::with('translations')->where('launched_at', date('Y-m-d') )->where('status', 'open')->first();
 
         if (!empty($daily_poll)) {
             $params['daily_poll'] = $daily_poll;
@@ -359,11 +360,13 @@ class FrontController extends BaseController
             }
         }
 
-        $closed_daily_poll = Poll::where('launched_at', date('Y-m-d') )->where('status', 'closed')->first();
+        $closed_daily_poll = Poll::with('translations')->where('launched_at', date('Y-m-d') )->where('status', 'closed')->first();
 
         if (!empty($closed_daily_poll)) {
             $params['closed_daily_poll'] = $closed_daily_poll;
         }
+
+        $params['daily_poll_reward'] = Reward::getReward('daily_polls');
 
         if (Cookie::get('daily_poll')) {
             $params['session_polls'] = true;
@@ -378,7 +381,7 @@ class FrontController extends BaseController
         $this->PrepareViewData($page, $params, 'trp');
 
         if( empty( $this->user ) ) {
-            $params['countries'] = Country::get();
+            $params['countries'] = Country::with('translations')->get();
 
             if (!empty($params['jscdn'])) {
             
@@ -412,7 +415,7 @@ class FrontController extends BaseController
         $params['is_ajax'] = !empty($params['is_ajax']) ? $params['is_ajax'] : false;
 
         if($this->user && !$this->user->phone_verified) {
-            $countries = Country::get();
+            $countries = Country::with('translations')->get();
             $params['phone_codes'] = [];
             foreach ($countries as $country) {
                 $params['phone_codes'][$country->id] = mb_strtoupper($country->code).' ('.$country->phone_code.')';

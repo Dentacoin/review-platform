@@ -176,7 +176,7 @@ class Vox extends Model {
     }
 
     public function getRewardPerQuestion() {
-        $reward = Reward::where('reward_type', 'vox_question')->first();
+        $reward = json_decode(file_get_contents('/tmp/reward_vox_question'));
         if ($this->featured) {
             $reward->dcn *= 2;
             $reward->amount *= 2;
@@ -190,7 +190,7 @@ class Vox extends Model {
         } else if ($this->type == 'user_details') {
             return 0;
         } else {
-            return ( $inusd ? $this->getRewardPerQuestion()->amount : $this->getRewardPerQuestion()->dcn) * $this->questions->count();
+            return ( $inusd ? $this->getRewardPerQuestion()->amount : $this->getRewardPerQuestion()->dcn) * $this->questionsCount();
         }        
     }
 

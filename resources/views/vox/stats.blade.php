@@ -94,23 +94,25 @@
 				{!! trans('vox.page.stats.no-results') !!}
 			</div>
 		</div>
-		<div class="stats-cats">
-			<b>
-				{!! trans('vox.page.stats.browse-category') !!}
-			</b>
-			@foreach($cats as $cat)
-				@if($cat->stats_voxes->isNotEmpty())
-					<a class="cat">
-						{{ $cat->name }}
-					</a>
-					<div class="subcats"> 
-						@foreach($cat->stats_voxes as $v)
-							<a href="{{ $v->vox->getStatsList() }}">{{ $v->vox->title }}</a>
-						@endforeach
-					</div>
-				@endif
-			@endforeach
-		</div>
+		@if(false)
+			<div class="stats-cats">
+				<b>
+					{!! trans('vox.page.stats.browse-category') !!}
+				</b>
+				@foreach($cats as $cat)
+					@if($cat->stats_voxes->isNotEmpty())
+						<a class="cat">
+							{{ $cat->name }}
+						</a>
+						<div class="subcats"> 
+							@foreach($cat->stats_voxes as $v)
+								<a href="{{ $v->vox->getStatsList() }}">{{ $v->vox->title }}</a>
+							@endforeach
+						</div>
+					@endif
+				@endforeach
+			</div>
+		@endif
 	</div>
 
 	<div class="section-stats" id="stat-ribbon">

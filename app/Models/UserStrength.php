@@ -526,7 +526,7 @@ class UserStrength extends Model
                     $array_number_shuffle['not_important']++;
                 }
 
-                $stats = Vox::with('stats_main_question')->where('has_stats', 1)->where('featured', 1)->orderBy('id', 'desc')->first();
+                $stats = Vox::where('has_stats', 1)->where('featured', 1)->orderBy('id', 'desc')->first();
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.check-stats.title'),
                     'text' => nl2br(trans('trp.strength.dentist.check-stats.text', ['name' => $stats->title ])),
@@ -815,7 +815,7 @@ class UserStrength extends Model
                     'event_label' => 'TRP',
                 ];
 
-                $stats = Vox::with('stats_main_question')->where('has_stats', 1)->where('featured', 1)->orderBy('id', 'desc')->first();
+                $stats = Vox::where('has_stats', 1)->where('featured', 1)->orderBy('id', 'desc')->first();
                 $ret[] = [
                     'title' => trans('vox.strength.dentist.check-stats.title'),
                     'text' => nl2br(trans('vox.strength.dentist.check-stats.text', ['name' => $stats->title])),

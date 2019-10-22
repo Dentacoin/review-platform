@@ -3,12 +3,13 @@
 @section('content')
 
 	<div class="container">
+
 		@if(request()->exists('daily-answer'))
 			<div class="daily-poll-welcome">
 				<div class="flex-mobile">
 					<div class="col">
 				    	<h3>{{ trans('vox.page.home.daily-poll.title') }}</h3>
-				    	<h4>{!! nl2br(trans('vox.page.home.daily-poll.subtitle', ['reward' => '<b>'. App\Models\Reward::getReward('daily_polls').' DCN</b>'])) !!}</h4>
+				    	<h4>{!! nl2br(trans('vox.page.home.daily-poll.subtitle', ['reward' => '<b>'. $daily_poll_reward.' DCN</b>'])) !!}</h4>
 				    </div>
 				    <div class="col">
 		    			<img class="poll-man" src="{{ url('new-vox-img/welcome-daily-poll.png') }}">

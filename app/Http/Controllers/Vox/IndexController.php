@@ -6,6 +6,7 @@ use App\Models\Vox;
 use App\Models\User;
 use App\Models\UserLogin;
 use App\Models\VoxAnswer;
+use App\Models\UserStrength;
 use App\Models\VoxCategory;
 use App\Models\Country;
 use Carbon\Carbon;
@@ -36,15 +37,24 @@ class IndexController extends FrontController
 
 		$social_image = url('new-vox-img/dentavox-summer-rewards.jpg');
 
+		$strength_arr = null;
+		$completed_strength = null;
+		if ($this->user) {
+			$strength_arr = UserStrength::getStrengthPlatform('vox', $this->user);
+			$completed_strength = $this->user->getStrengthCompleted('vox');
+		}
+
 		return $this->ShowVoxView('home', array(
-			'countries' => Country::get(),
+			'strength_arr' => $strength_arr,
+			'completed_strength' => $completed_strength,
+			'countries' => Country::with('translations')->get(),
 			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',
 			'social_image' => $social_image,
 			'sorts' => $sorts,
 			'filters' => $filters,
 			'taken' => !empty($this->user) ? $this->user->filledVoxes() : null,
-        	'voxes' => Vox::where('type', 'normal')->orderBy('created_at', 'DESC')->get(),
-        	'vox_categories' => VoxCategory::whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
+        	'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->orderBy('created_at', 'DESC')->get(),
+        	'vox_categories' => VoxCategory::with('translations')->whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
         	'js' => [
         		'home.js'
         	],
@@ -95,7 +105,7 @@ class IndexController extends FrontController
 				'subtitle' => $subtitle,
 				'title' => $title,
 				'users_count' => User::getCount('vox'),
-	        	'voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
+	        	'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
 	        	'taken' => $this->user ? $this->user->filledVoxes() : [],
 				'social_image' => $social_image,
 	        	'js' => [
@@ -155,7 +165,7 @@ class IndexController extends FrontController
 
 
 	public function welcome($locale=null) {
-		$first = Vox::where('type', 'home')->first();
+		$first = Vox::with('questions.translations')->where('type', 'home')->first();
 
 		if ($this->user && $this->user->madeTest($first->id)) {
 			return redirect( getLangUrl('/') );

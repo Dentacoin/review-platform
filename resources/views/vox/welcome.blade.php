@@ -127,7 +127,7 @@
 	                        		Hmm... Your IP thinks differently. <br/>
 									Sure you've entered the right country?
 		                        </div>
-								{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::get()->pluck('name', 'id')->toArray() , null , array('class' => 'country-select form-control country-dropdown', 'real-country' => !empty($country_id) ? $country_id : '') ) }}
+								{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::with('translations')->get()->pluck('name', 'id')->toArray() , null , array('class' => 'country-select form-control country-dropdown', 'real-country' => !empty($country_id) ? $country_id : '') ) }}
 							</div>
 
 							<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>

@@ -319,7 +319,7 @@ $reviewRoutes = function () {
 				
 			});
 
-			Route::get('{query?}/{filter?}', 					'DentistsController@search');
+			Route::get('{query?}/{filter?}', 					'DentistsController@search')->where('locale', '(en)');
 
 		});
 	});

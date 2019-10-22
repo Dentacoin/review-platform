@@ -9,6 +9,7 @@ use App\Models\DentistClaim;
 use App\Models\IncompleteRegistration;
 use App\Models\DentistTestimonial;
 use CArbon\Carbon;
+use App\Models\UserStrength;
 
 use App;
 use Mail;
@@ -123,7 +124,7 @@ class IndexController extends FrontController
 		$city_cookie = json_decode(Cookie::get('dentists_city'), true);
 		//dd($city_cookie);
 
-		$featured = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported'])->orderBy('avg_rating', 'DESC');
+		$featured = User::where('is_dentist', 1)->with('country.translations')->whereIn('status', ['approved','added_approved','admin_imported'])->orderBy('avg_rating', 'DESC');
 		$homeDentists = collect();
 
 		if (!empty($city_cookie)) {
@@ -141,7 +142,7 @@ class IndexController extends FrontController
 
 			if( $homeDentists->count() < 12 ) {
 				$country_n = $city_cookie['country_name'];
-				$country = Country::whereHas('translations', function ($query) use ($country_n) {
+				$country = Country::with('translations')->whereHas('translations', function ($query) use ($country_n) {
 	                $query->where('name', 'LIKE', $country_n);
 	            })->first();
 
@@ -195,8 +196,17 @@ class IndexController extends FrontController
 
 		$social_image = url('img-trp/index-social-image.jpg');
 
+		$strength_arr = null;
+		$completed_strength = null;
+		if ($this->user) {
+			$strength_arr = UserStrength::getStrengthPlatform('trp', $this->user);
+			$completed_strength = $this->user->getStrengthCompleted('trp');
+		}
+
 		$params = array(
-            'countries' => Country::get(),
+			'strength_arr' => $strength_arr,
+			'completed_strength' => $completed_strength,
+            'countries' => Country::with('translations')->get(),
 			'featured' => $homeDentists,
 			'city_cookie' => $city_cookie,
 			'social_image' => $social_image,

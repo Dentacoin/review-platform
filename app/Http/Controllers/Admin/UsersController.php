@@ -662,7 +662,7 @@ class UsersController extends AdminController
             'search_login_after' => $this->request->input('search-login-after'),
             'search_login_number' => $this->request->input('search-login-number'),
             'user_platforms' => $user_platforms,
-            'countries' => Country::get(),
+            'countries' => Country::with('translations')->get(),
             'trp_hidden' =>  $trp_hidden,
             'vox_hidden' =>  $vox_hidden,
             'table_fields' =>  $table_fields,
@@ -927,7 +927,7 @@ class UsersController extends AdminController
 
         return $this->showView('users-add', array(
             'fields' => $this->fields,
-            'countries' => Country::get(),
+            'countries' => Country::with('translations')->get(),
         ));
     }
 
@@ -1217,7 +1217,7 @@ class UsersController extends AdminController
                 'unfinished' => $unfinished,
                 'emails' => $emails,
                 'habits_tests' => $habits_tests,
-                'countries' => Country::get(),
+                'countries' => Country::with('translations')->get(),
             ));
         } else {
             return redirect('cms/'.$this->current_page);

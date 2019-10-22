@@ -31,7 +31,7 @@ class VoxCategory extends Model {
     public function stats_voxes() {
         return $this->hasMany('App\Models\VoxToCategory', 'vox_category_id', 'id')->whereHas('vox', function ($query) {
             $query->where('type', 'normal')->where( 'has_stats', 1 );
-        });
+        })->with('vox.translations');
     }
 
     public function voxesWithoutAnswer($user) {

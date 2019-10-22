@@ -43,7 +43,7 @@ class RegisterController extends FrontController
             'csscdn' => [
                 'https://hosted-sip.civic.com/css/civic-modal.min.css',
             ],
-            'countries' => Country::get(),
+            'countries' => Country::with('translations')->get(),
             'categories' => $this->categories,
             'invitation_email' => session('invitation_email'),
             'invitation_name' => session('invitation_name'),

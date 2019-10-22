@@ -52,7 +52,7 @@
 
                 	<select class="input country-select country-dropdown" name="country_id" real-country="{{ !empty($country_id) ? $country_id : '' }}">
                 		<option value="">-</option>
-                		@foreach(\App\Models\Country::get() as $country)
+                		@foreach(\App\Models\Country::with('translations')->get() as $country)
                 			<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $user->country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
                 		@endforeach
                 	</select>
@@ -339,7 +339,7 @@
 
 	                	<select class="input country-select country-dropdown" name="country_id" real-country="{{ !empty($country_id) ? $country_id : '' }}">
 	                		<option value="">-</option>
-	                		@foreach(\App\Models\Country::get() as $country)
+	                		@foreach(\App\Models\Country::with('translations')->get() as $country)
 	                			<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $user->country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
 	                		@endforeach
 	                	</select>
