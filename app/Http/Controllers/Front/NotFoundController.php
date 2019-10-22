@@ -73,6 +73,6 @@ class NotFoundController extends FrontController
 			'gray_footer' => true
         );
 
-		return $this->ShowView('404', $params);	
+		return $this->ShowView('404', $params, 404);	
 	}
 }

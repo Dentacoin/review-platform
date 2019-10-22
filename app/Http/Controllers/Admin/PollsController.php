@@ -60,7 +60,7 @@ class PollsController extends AdminController
         }
 
 
-        $polls = $polls->get();
+        $polls = $polls->get()->take(500);
 
     	return $this->showView('polls', array(
             'search_polls_from' => $this->request->input('search-polls-from'),

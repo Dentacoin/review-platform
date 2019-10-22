@@ -376,7 +376,7 @@ class FrontController extends BaseController
         return view('vox.'.$page, $params);
     }
 
-    public function ShowView($page, $params=array()) {
+    public function ShowView($page, $params=array(), $statusCode=null) {
 
         $this->PrepareViewData($page, $params, 'trp');
 
@@ -396,8 +396,12 @@ class FrontController extends BaseController
                 }
             }
         }
+        if (!empty($statusCode)) {
+            return response()->view('trp.'.$page, $params, $statusCode);
+        } else {
+            return view('trp.'.$page, $params);
+        }
         
-        return view('trp.'.$page, $params);
     }    
     public function PrepareViewData($page, &$params, $text_domain) {
 
