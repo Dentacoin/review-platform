@@ -109,6 +109,10 @@ class Vox extends Model {
         }
     }
 
+    public function realRespondentsCountForAdminPurposes() {
+         return DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->count();
+    }
+
     public function respondentsCountryCount() {
 
         $date = $this->last_count_at;
