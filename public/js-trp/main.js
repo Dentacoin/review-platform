@@ -316,7 +316,7 @@ jQuery(document).ready(function($){
 				if ($(this).attr('network')=='fb') {
 					var url = 'https://www.facebook.com/dialog/share?app_id=1906201509652855&display=popup&href=' + escape(post_url);
 				} else if ($(this).attr('network')=='twt') {
-					var url = 'https://twitter.com/share?url=' + escape(post_url) + '&text=' + post_title;
+					var url = 'https://twitter.com/share?url=' + escape(post_url) + '&text=' + escape(post_title);
 				}
 				window.open( url , 'ShareWindow', 'height=450, width=550, top=' + (jQuery(window).height() / 2 - 275) + ', left=' + (jQuery(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
 			});

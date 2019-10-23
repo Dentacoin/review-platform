@@ -686,7 +686,7 @@ $(document).ready(function(){
 			if ($(this).hasClass('fb')) {
 				var url = 'https://www.facebook.com/dialog/share?app_id=1906201509652855&display=popup&href=' + escape(post_url);
 			} else if ($(this).hasClass('twt')) {
-				var url = 'https://twitter.com/share?url=' + escape(post_url) + '&text=' + post_title;
+				var url = 'https://twitter.com/share?url=' + escape(post_url) + '&text=' + escape(post_title);
 			} else if ($(this).hasClass('google')) {
 				var url = 'https://plus.google.com/share?url=' + escape(post_url);
 			}  else if ($(this).hasClass('messenger')) {
