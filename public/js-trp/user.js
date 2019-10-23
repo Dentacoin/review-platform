@@ -961,7 +961,28 @@ $(document).ready(function(){
         } else {
             texts.attr('disabled', 'disabled');
         }
+
+        if ($(this).attr('name') == 'day-1') {
+            if ($(this).is(':checked')) {
+                $('.all-days-equal').show();
+            } else {
+                $('.all-days-equal').hide();
+            }
+        }
     } );
+
+    $('.all-days-equal').click( function() {
+        for (var i = 2; i<6; i++) {
+            if (!$('#day-'+i).is(':checked')) {
+                $('#day-'+i).click();
+            }
+            $('[name="work_hours['+i+'][0][0]"]').val($('[name="work_hours[1][0][0]"]').val());
+            $('[name="work_hours['+i+'][0][1]"]').val($('[name="work_hours[1][0][1]"]').val());
+            $('[name="work_hours['+i+'][1][0]"]').val($('[name="work_hours[1][1][0]"]').val());
+            $('[name="work_hours['+i+'][1][1]"]').val($('[name="work_hours[1][1][1]"]').val());
+        }
+        
+    });
 
     $('#popup-wokring-time form').off('submit').submit( function(e) {
         e.preventDefault();

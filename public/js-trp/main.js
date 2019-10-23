@@ -336,6 +336,12 @@ jQuery(document).ready(function($){
 					$(this).children('select').eq(3).find('option[value="00"]').attr('selected','selected');
 				});
 			}
+			
+            if ($('#day-1').is(':checked')) {
+                $('.all-days-equal').show();
+            } else {
+                $('.all-days-equal').hide();
+	        }
 		}
 
 		$('.popup').removeClass('active');

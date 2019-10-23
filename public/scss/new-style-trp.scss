@@ -7888,12 +7888,34 @@ textarea.input {
 
 #popup-wokring-time {
 	.popup-inner {
+
+		.day-wrapper {
+		    margin-bottom: 50px;
+		    text-align: center;
+
+		    .all-days-equal {
+		    	color: #126585;
+			    font-weight: bold;
+			    padding: 10px;
+			    display: inline-block;
+			    border: 1px solid #126585;
+			    border-radius: 5px;
+			    transition: all 0.3s ease;
+
+			    &:hover {
+			    	transition: all 0.3s ease;
+			    	background-color: #126585;
+			    	color: white;
+			    }
+		    }
+		}
+
 		.popup-desc {
 		    display: flex;
     		justify-content: center;
 		    align-items: baseline;
 		    margin-top: -15px;
-		    margin-bottom: 50px;
+		    margin-bottom: 20px;
 
 		    label {
 		    	margin-right: 5px;

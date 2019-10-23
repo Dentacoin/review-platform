@@ -18,53 +18,58 @@
 			@for($day=1;$day<=7;$day++)
 				<h4 class="popup-title tac">{{ date('l', strtotime("Sunday +{$day} days")) }}</h4>
 
-                <div class="popup-desc" >
-                    <label for="day-{{ $day }}"> 
-                        {{ Form::checkbox( 'day-'.$day, 1, '', array( 'id' => 'day-'.$day, 'class' => 'work-hour-cb', !empty($user->work_hours[$day]) ? 'checked' : 'something' => 'checked' ) ) }}
-                    </label>
-                    {{ Form::select( 
-                        'work_hours['.$day.'][0][0]', 
-                        $hours,
-                        !empty($user->work_hours[$day][0]) ? explode(':', $user->work_hours[$day][0])[0] : '' , 
-                        array(
-                            'class' => 'input', 
-                            'placeholder' => 'HH',
-                            !empty($user->work_hours[$day]) ? 'something' : 'disabled' => 'disabled'
-                        ) 
-                    ) }}
-                    {{ Form::select( 
-                        'work_hours['.$day.'][0][1]', 
-                        $minutes,
-                        !empty($user->work_hours[$day][0]) ? explode(':', $user->work_hours[$day][0])[1] : '' , 
-                        array(
-                            'class' => 'input', 
-                            'placeholder' => 'MM',
-                            !empty($user->work_hours[$day]) ? 'something' : 'disabled' => 'disabled'
-                        ) 
-                    ) }}
-                    <div class="separator"></div> 
-                    {{ Form::select( 
-                        'work_hours['.$day.'][1][0]', 
-                        $hours,
-                        !empty($user->work_hours[$day][1]) ? explode(':', $user->work_hours[$day][1])[0] : '' , 
-                        array(
-                            'class' => 'input', 
-                            'placeholder' => 'HH',
-                            !empty($user->work_hours[$day]) ? 'something' : 'disabled' => 'disabled'
-                        ) 
-                    ) }}
-                    {{ Form::select( 
-                        'work_hours['.$day.'][1][1]', 
-                        $minutes,
-                        !empty($user->work_hours[$day][1]) ? explode(':', $user->work_hours[$day][1])[1] : '' , 
-                        array(
-                            'class' => 'input', 
-                            'placeholder' => 'MM',
-                            !empty($user->work_hours[$day]) ? 'something' : 'disabled' => 'disabled'
-                        ) 
-                    ) }}
-                </div>
+                <div class="day-wrapper">
+                    <div class="popup-desc" >
+                        <label for="day-{{ $day }}"> 
+                            {{ Form::checkbox( 'day-'.$day, 1, '', array( 'id' => 'day-'.$day, 'class' => 'work-hour-cb', !empty($user->work_hours[$day]) ? 'checked' : 'something' => 'checked' ) ) }}
+                        </label>
+                        {{ Form::select( 
+                            'work_hours['.$day.'][0][0]', 
+                            $hours,
+                            !empty($user->work_hours[$day][0]) ? explode(':', $user->work_hours[$day][0])[0] : '' , 
+                            array(
+                                'class' => 'input', 
+                                'placeholder' => 'HH',
+                                !empty($user->work_hours[$day]) ? 'something' : 'disabled' => 'disabled'
+                            ) 
+                        ) }}
+                        {{ Form::select( 
+                            'work_hours['.$day.'][0][1]', 
+                            $minutes,
+                            !empty($user->work_hours[$day][0]) ? explode(':', $user->work_hours[$day][0])[1] : '' , 
+                            array(
+                                'class' => 'input', 
+                                'placeholder' => 'MM',
+                                !empty($user->work_hours[$day]) ? 'something' : 'disabled' => 'disabled'
+                            ) 
+                        ) }}
+                        <div class="separator"></div> 
+                        {{ Form::select( 
+                            'work_hours['.$day.'][1][0]', 
+                            $hours,
+                            !empty($user->work_hours[$day][1]) ? explode(':', $user->work_hours[$day][1])[0] : '' , 
+                            array(
+                                'class' => 'input', 
+                                'placeholder' => 'HH',
+                                !empty($user->work_hours[$day]) ? 'something' : 'disabled' => 'disabled'
+                            ) 
+                        ) }}
+                        {{ Form::select( 
+                            'work_hours['.$day.'][1][1]', 
+                            $minutes,
+                            !empty($user->work_hours[$day][1]) ? explode(':', $user->work_hours[$day][1])[1] : '' , 
+                            array(
+                                'class' => 'input', 
+                                'placeholder' => 'MM',
+                                !empty($user->work_hours[$day]) ? 'something' : 'disabled' => 'disabled'
+                            ) 
+                        ) }}
+                    </div>
 
+                    @if($day == 1)
+                        <a href="javascript:;" class="all-days-equal">use the same hours for weekdays</a>
+                    @endif
+                </div>
 
 			@endfor
 
