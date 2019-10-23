@@ -216,7 +216,7 @@ class FrontController extends BaseController
                     ],
                 ]);
 
-                if( !$this->user->isBanned('vox') && $this->user->bans->isNotEmpty() ) {
+                if( !$this->user->isBanned('vox') && !$this->user->isBanned('trp') && $this->user->bans->isNotEmpty() ) {
                     $last = $this->user->bans->last();
                     if(!$last->notified) {
                         $last->notified = true;

@@ -800,6 +800,8 @@ class UsersController extends AdminController
         
         if(!empty($item)) {
             $uid = $item->user_id;
+            $patient = User::find($uid);
+
             ReviewAnswer::where([
                 ['review_id', $item->id],
             ])
@@ -810,13 +812,34 @@ class UsersController extends AdminController
             if($item->clinic_id) {
                 $clinic = User::find($item->clinic_id);
             }
+            
+            DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->delete();
+            
             Review::destroy( $review_id );
             if( !empty($dentist) ) {
                 $dentist->recalculateRating();
+                $substitutions = [
+                    'spam_author_name' => $patient->name,
+                ];
+                
+                $dentist->sendGridTemplate(87, $substitutions, 'trp');
             }
             if( !empty($clinic) ) {
                 $clinic->recalculateRating();
+                $substitutions = [
+                    'spam_author_name' => $patient->name,
+                ];
+                
+                $clinic->sendGridTemplate(87, $substitutions, 'trp');
             }
+
+            $ban = new UserBan;
+            $ban->user_id = $patient->id;
+            $ban->domain = 'trp';
+            $ban->type = 'spam-review';
+            $ban->save();
+
+            $patient->sendGridTemplate(86);
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.review-deleted') );

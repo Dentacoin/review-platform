@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
 use App\Models\Review;
+use App\Models\ReviewAnswer;
+use App\Models\User;
+use App\Models\UserBan;
 use Carbon\Carbon;
 
 use Request;
@@ -72,9 +75,47 @@ class ReviewsController extends AdminController
 
     public function delete( $id ) {
         $item = Review::find($id);
-
+        
         if(!empty($item)) {
+            $uid = $item->user_id;
+            $patient = User::find($uid);
+
+            ReviewAnswer::where([
+                ['review_id', $item->id],
+            ])
+            ->delete();
+            if($item->dentist_id) {
+                $dentist = User::find($item->dentist_id);
+            }
+            if($item->clinic_id) {
+                $clinic = User::find($item->clinic_id);
+            }
+            DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->delete();
             Review::destroy( $id );
+            if( !empty($dentist) ) {
+                $dentist->recalculateRating();
+                $substitutions = [
+                    'spam_author_name' => $patient->name,
+                ];
+                
+                $dentist->sendGridTemplate(87, $substitutions, 'trp');
+            }
+            if( !empty($clinic) ) {
+                $clinic->recalculateRating();
+                $substitutions = [
+                    'spam_author_name' => $patient->name,
+                ];
+                
+                $clinic->sendGridTemplate(87, $substitutions, 'trp');
+            }
+
+            $ban = new UserBan;
+            $ban->user_id = $patient->id;
+            $ban->domain = 'trp';
+            $ban->type = 'spam-review';
+            $ban->save();
+
+            $patient->sendGridTemplate(86);
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
@@ -83,7 +124,52 @@ class ReviewsController extends AdminController
 
     public function massdelete(  ) {
         if( Request::input('ids') ) {
-            Review::whereIn('id', Request::input('ids'))->delete();            
+            foreach (Request::input('ids') as $r_id) {
+                $item = Review::find($r_id);
+                
+                if(!empty($item)) {
+                    $uid = $item->user_id;
+                    $patient = User::find($uid);
+
+                    ReviewAnswer::where([
+                        ['review_id', $item->id],
+                    ])
+                    ->delete();
+                    if($item->dentist_id) {
+                        $dentist = User::find($item->dentist_id);
+                    }
+                    if($item->clinic_id) {
+                        $clinic = User::find($item->clinic_id);
+                    }
+                    DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->delete();
+                    Review::destroy( $r_id );
+                    if( !empty($dentist) ) {
+                        $dentist->recalculateRating();
+                        $substitutions = [
+                            'spam_author_name' => $patient->name,
+                        ];
+                        
+                        $dentist->sendGridTemplate(87, $substitutions, 'trp');
+                    }
+                    if( !empty($clinic) ) {
+                        $clinic->recalculateRating();
+                        $substitutions = [
+                            'spam_author_name' => $patient->name,
+                        ];
+                        
+                        $clinic->sendGridTemplate(87, $substitutions, 'trp');
+                    }
+
+                    $ban = new UserBan;
+                    $ban->user_id = $patient->id;
+                    $ban->domain = 'trp';
+                    $ban->type = 'spam-review';
+                    $ban->save();
+
+                    $patient->sendGridTemplate(86);
+                }
+            }
+            //Review::whereIn('id', Request::input('ids'))->delete();            
         }
 
         $this->request->session()->flash('success-message', 'All selected reviews and now deleted' );
@@ -94,8 +180,25 @@ class ReviewsController extends AdminController
     public function restore( $id ) {
         $item = Review::onlyTrashed()->find($id);
 
-        if(!empty($item)) {
+        if(!empty($item)) {            
             $item->restore();
+            ReviewAnswer::onlyTrashed()->where([
+                ['review_id', $item->id],
+            ])
+            ->restore();
+
+            if($item->dentist_id) {
+                $dentist = User::find($item->dentist_id);
+            }
+            if($item->clinic_id) {
+                $clinic = User::find($item->clinic_id);
+            }
+            if( !empty($dentist) ) {
+                $dentist->recalculateRating();
+            }
+            if( !empty($clinic) ) {
+                $clinic->recalculateRating();
+            }
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.restored') );
