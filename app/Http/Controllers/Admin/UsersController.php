@@ -808,9 +808,8 @@ class UsersController extends AdminController
             ->delete();
             if($item->dentist_id) {
                 $dentist = User::find($item->dentist_id);
-            }
-            if($item->clinic_id) {
-                $clinic = User::find($item->clinic_id);
+            } else if($item->clinic_id) {
+                $dentist = User::find($item->clinic_id);
             }
             
             DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->delete();
@@ -823,14 +822,6 @@ class UsersController extends AdminController
                 ];
                 
                 $dentist->sendGridTemplate(87, $substitutions, 'trp');
-            }
-            if( !empty($clinic) ) {
-                $clinic->recalculateRating();
-                $substitutions = [
-                    'spam_author_name' => $patient->name,
-                ];
-                
-                $clinic->sendGridTemplate(87, $substitutions, 'trp');
             }
 
             $ban = new UserBan;
