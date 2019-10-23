@@ -1015,12 +1015,18 @@ class UsersController extends AdminController
                                     if( $item->deleted_at ) {
                                         $item->restore();
                                     }
+
+                                    $platformMails = [
+                                        'vox' => 84,
+                                        'trp' => 26,
+                                        'dentacare' => 83,
+                                        'assurance' => 85,
+                                        'dentacoin' => 83,
+                                        'dentists' => 83,
+                                        'wallet' => 83,
+                                    ];
                                     
-                                    if ($item->platform == 'trp') {
-                                        $item->sendGridTemplate(26);
-                                    } else {
-                                        $item->sendTemplate(26);
-                                    }
+                                    $item->sendGridTemplate($platformMails[$item->platform]);
 
                                     $olde = $item->email;
                                     $item->email = 'ali.hashem@dentacoin.com';
