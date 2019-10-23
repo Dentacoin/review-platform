@@ -107,6 +107,17 @@ class FrontController extends BaseController
             $this->admin = Auth::guard('admin')->user();
             $this->user = Auth::guard('web')->user();
 
+            if(!empty(Request::input('inviter'))) {
+                $u_id = User::decrypt(request('inviter'));
+
+                $user = User::find($u_id);
+                if(!empty($user)) {
+                    return redirect(getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()));
+                }
+
+                
+            }
+
             if (!empty($this->user) && !$this->user->is_dentist && session('intended') && !$this->user->isBanned('vox')) {
                 $intended = session()->pull('intended');
                 
