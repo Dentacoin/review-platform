@@ -6,8 +6,6 @@
     {{ trans('admin.page.'.$current_page.'.title') }}
 </h1>
 
-@include('admin.errors')
-
 <!-- end page-header -->
 <div class="row">
     <div class="col-md-12">
