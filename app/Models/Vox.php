@@ -69,10 +69,10 @@ class Vox extends Model {
 
         $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
 
-        if ($diff >= 1 || empty($this->questions_count)) {
+        if ($diff >= 1) {
 
-            $this->last_count_at = Carbon::now();
             $this->questions_count = $this->questions()->count();
+            $this->last_count_at = Carbon::now();
             $this->save();
 
             return $this->questions()->count();
@@ -96,7 +96,7 @@ class Vox extends Model {
 
         $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
 
-        if ($diff >= 1 || empty($this->respondents_count)) {
+        if ($diff >= 1) {
 
             $this->last_count_at = Carbon::now();
             $this->respondents_count = DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->count();
