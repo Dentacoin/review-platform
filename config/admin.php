@@ -118,5 +118,8 @@ return [
         'testimonial-slider' => array(
             'icon' => 'film',
         ),
+        'logs' => array(
+            'icon' => 'bug',
+        ),
     )
 ];

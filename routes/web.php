@@ -172,6 +172,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('testimonial-slider/edit/{id}', 		'TestimonialSliderController@edit');
 	Route::any('testimonial-slider/edit/{id}/addavatar', 	'TestimonialSliderController@add_avatar');
 	Route::any('testimonial-slider/delete/{id}', 	'TestimonialSliderController@delete');
+
+
+	Route::any('logs', 								'LogsController@list');
 });
 
 
