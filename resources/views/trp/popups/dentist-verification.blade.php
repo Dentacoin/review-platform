@@ -119,7 +119,7 @@
 
 			{!! Form::open(array('method' => 'post', 'class' => 'verification-form', 'url' => getLangUrl('verification-dentist') )) !!}
 				{!! csrf_field() !!}
-				<div class="modern-field">
+				<div class="modern-field tooltip-text fixed-tooltip" text="What's the most important thing patients should know about your practice?">
 					<textarea class="modern-input" id="dentist-short-description" name="short_description" maxsymb="150"></textarea>
 					<label for="dentist-short-description">
 						<span>{!! nl2br(trans('trp.popup.verification-popup.short_description')) !!}</span>

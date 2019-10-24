@@ -658,19 +658,32 @@ jQuery(document).ready(function($){
 
 	handleTooltip = function(e) {
 
-        $('.tooltip-window').text($(this).attr('text'));
-        $('.tooltip-window').css('left', e.pageX - ($('.tooltip-window').outerWidth() / 2) );
-
-        if (window.innerWidth > 768) {
-	        if (window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
-	            $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
-	        }
-	    }
+        $('.tooltip-window').html($(this).attr('text'));
 
         if (window.innerWidth < 768) {
-        	$('.tooltip-window').css('top', e.pageY + 15 );
+      //   if ($(this).hasClass('fixed-tooltip')) {
+
+	        var that = $(this).closest('.tooltip-text');
+	        var y = that.offset().top + that.outerHeight() + 10;
+	    	var x = that.offset().left + that.outerWidth() / 2 - $('.tooltip-window').outerWidth() / 2 ;
+
+	        $('.tooltip-window').css('left', x );
+	        $('.tooltip-window').css('top', y );
         } else {
-        	$('.tooltip-window').css('top', e.pageY + 30 );
+
+        	 $('.tooltip-window').css('left', e.pageX - ($('.tooltip-window').outerWidth() / 2) );
+
+	        if (window.innerWidth > 768) {
+		        if (window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
+		            $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
+		        }
+		    }
+
+	        if (window.innerWidth < 768) {
+	        	$('.tooltip-window').css('top', e.pageY + 15 );
+	        } else {
+	        	$('.tooltip-window').css('top', e.pageY + 30 );
+	        }
         }
         
 
@@ -699,7 +712,7 @@ jQuery(document).ready(function($){
 	            $('.tooltip-window').hide();
 	        });
 
-	        $('.tooltip-text:not(.tooltip-initted)').addClass('tooltip-initted');
+	        //$('.tooltip-text:not(.tooltip-initted)').addClass('tooltip-initted');
 	    }
     }
     attachTooltips();
@@ -860,6 +873,16 @@ jQuery(document).ready(function($){
 			} else {
 				$(this).parent().parent().find('.ip-country').hide();
 			}
+		}
+	});
+
+	$('.dentist-name-register').on('keyup keypress', function() {
+
+		if($(this).val() && !$(this).val().match(/^[\w\d\s\+\'\&.,-]*$/)) {
+			$('#alert-name-dentist').show();
+			$('.tooltip-window').hide();
+		} else {
+			$('#alert-name-dentist').hide();
 		}
 	});
 

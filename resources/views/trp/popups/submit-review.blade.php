@@ -202,7 +202,7 @@
 								<input type="text" class="input" id="review-title" name="title" value="{{ $my_review ? $my_review->title : '' }}" placeholder="{!! nl2br(trans('trp.popup.submit-review-popup.title-placeholder')) !!}">
 
 								<div id="review-option-text" class="review-type-content" style="">
-									{{ Form::textarea( 'answer', $my_review ? $my_review->answer : '', array( 'id' => 'review-answer', 'class' => 'input', 'placeholder' => trans('trp.popup.submit-review-popup.last-question-placeholder') )) }}
+									{{ Form::textarea( 'answer', $my_review ? $my_review->answer : '', array( 'id' => 'review-answer', 'class' => 'input tooltip-text fixed-tooltip', 'placeholder' => trans('trp.popup.submit-review-popup.last-question-placeholder'), 'text' => nl2br(trans('trp.popup.submit-review-popup.last-question-tooltip')) )) }}
 								</div>
 
 								<div id="review-option-video" class="review-type-content" style="display: none;">

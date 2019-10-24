@@ -1063,6 +1063,7 @@ body.blur {
 			    left: 6px;
 			    width: 18px;
 			    height: 18px;
+			    z-index: 100;
 			}
 			.deleter {
 			    position: absolute;
@@ -4005,6 +4006,10 @@ textarea.input {
 			    textarea.input {
 
 			    	height: 260px;
+
+			    	@media #{$phone} {
+			    		height: 130px;
+			    	}
 			    }
 
 			    .checkbox-label {
@@ -8751,7 +8756,7 @@ body.edit-user {
     padding: 15px;
     max-width: 300px;
     border: 1px solid #41afff;
-    z-index: 1001;
+    z-index: 1002;
     border-radius: 10px;
 
     @media #{$phone} {
@@ -10604,5 +10609,15 @@ body.strength-pb {
 	    background-color: #46afda;
 	    padding: 14px 59px;
 	    margin-top: 10px;
+	}
+}
+
+#alert-name-dentist {
+	margin-bottom: 20px;
+    font-size: 14px;
+    padding: 10px 20px 10px 50px;
+
+    &:before {
+	    font-size: 20px;
 	}
 }

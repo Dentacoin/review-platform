@@ -239,7 +239,7 @@
 								</div>
 							</div>
 
-					  		<div class="modern-field title-wrap alert-after" {!! !empty($regData) && $regData['mode']=='dentist' ? '' : 'style="display: none;"' !!}>
+					  		<div class="modern-field title-wrap alert-after tooltip-text fixed-tooltip" text="Please choose the right title." {!! !empty($regData) && $regData['mode']=='dentist' ? '' : 'style="display: none;"' !!}>
 					  			<select name="title" id="dentist-title" class="modern-input" value="{{ $regData['title'] ?? old('title') }}">
 					  				@foreach(config('titles') as $k => $v)
 					  					<option value="{{ $k }}" {!! !empty($regData) && !empty($regData['title'] && ($regData['title'] == $k)) ? 'selected="selected"' : '' !!}>{{ $v }}</option>
@@ -250,15 +250,17 @@
 								</label>
 							</div>
 
-					  		<div class="modern-field alert-after">
-								<input type="text" name="name" id="dentist-name" class="modern-input" value="{{ !empty($regData) && $regData['name'] ?? old('name') }}" autocomplete="off">
+					  		<div class="modern-field alert-after tooltip-text fixed-tooltip" text="Write your names (or your official practice name) in full! This ensures that patients who search for you will find you easily.">
+								<input type="text" name="name" id="dentist-name" class="modern-input dentist-name-register" value="{{ !empty($regData) && $regData['name'] ?? old('name') }}" autocomplete="off">
 								<label for="dentist-name">
 									<span>{!! nl2br(trans('trp.popup.popup-register.name')) !!}</span>
 								</label>
 								<p>{!! nl2br(trans('trp.popup.popup-register.name.description')) !!}</p>
 							</div>
 
-					  		<div class="modern-field">
+							<div class="alert alert-warning" id="alert-name-dentist" style="display: none;">Latin letters only. Please add the alternative spelling below.</div>
+
+					  		<div class="modern-field tooltip-text fixed-tooltip" text="Patients who search for your name in your language will still find your profile.">
 								<input type="text" name="name_alternative" id="dentist-name_alternative" class="modern-input" value="{{ $regData['name_alternative'] ?? old('name_alternative') }}" autocomplete="off">
 								<label for="dentist-name_alternative">
 									<span>{!! nl2br(trans('trp.popup.popup-register.name_alterantive')) !!}</span>
@@ -295,8 +297,8 @@
 					  			</select>
 							</div>
 
-							<div class="modern-field alert-after">
-								<input type="text" name="address"  id="dentist-address" class="modern-input address-suggester" autocomplete="off" value="{{ $regData['address'] ?? old('address') }}">
+							<div class="modern-field alert-after tooltip-text fixed-tooltip" text="Enter your full address, in the same way it is displayed on your website / Facebook page / Google Business profile.">
+								<input type="text" name="address" id="dentist-address" class="modern-input address-suggester" autocomplete="off" value="{{ $regData['address'] ?? old('address') }}">
 								<label for="dentist-address">
 									<span>{!! nl2br(trans('trp.popup.popup-register.address')) !!}</span>
 								</label>
@@ -314,7 +316,7 @@
 		                        </div>		                        
 		                    </div>
 
-							<div class="modern-field alert-after">
+							<div class="modern-field alert-after tooltip-text fixed-tooltip" text="Website URL or Facebook page">
 								<input type="text" name="website" id="dentist-website" class="modern-input" autocomplete="off" value="{{ !empty($regData) && $regData['website'] ?? old('website') }}">
 								<label for="dentist-website">
 									<span>{!! nl2br(trans('trp.popup.popup-register.website')) !!}</span>
@@ -326,7 +328,7 @@
 								<div>
 				    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>
 								</div>
-								<div style="flex: 1;" class="modern-field">
+								<div style="flex: 1;" class="modern-field tooltip-text fixed-tooltip" text="Enter your official practice phone number exactly as it is on your website / Facebook page.">
 									<input type="text" name="phone" id="dentist-tel" class="modern-input" autocomplete="off" value="{{ !empty($regData) && $regData['phone'] ?? old('phone') }}">
 									<label for="dentist-tel">
 										<span>{!! nl2br(trans('trp.popup.popup-register.phone')) !!}</span>
@@ -344,7 +346,7 @@
 						<div class="sign-in-step {!! !empty($regData) && !empty($regData['country_id']) ? 'active' : '' !!} tac" id="step-4">
 							<div class="flex flex-mobile alert-after">
 								<div class="col" style="max-width: 154px;">
-									<label for="add-avatar" class="image-label" {!! !empty($regData) && !empty($regData['photoThumb']) ? 'style="background-image:url('.$regData['photoThumb'].');"' : '' !!} >
+									<label for="add-avatar" class="image-label tooltip-text fixed-tooltip" text="Photos build trust. Add a clear image of you/your team or upload your practice logo." {!! !empty($regData) && !empty($regData['photoThumb']) ? 'style="background-image:url('.$regData['photoThumb'].');"' : '' !!} >
 										@if(empty( $regData['photo'] ))
 											<div class="centered-hack">
 												<i class="fas fa-plus"></i>

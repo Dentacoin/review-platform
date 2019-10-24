@@ -1128,7 +1128,8 @@ body.blur .site-content {
         top: 6px;
         left: 6px;
         width: 18px;
-        height: 18px; }
+        height: 18px;
+        z-index: 100; }
       .flickity .slider-wrapper .slider-image .deleter {
         position: absolute;
         top: 5px;
@@ -3148,6 +3149,9 @@ textarea.input {
           color: #afb0b2; }
       .fixed-popup .popup-inner .reviews-wrapper .review-box textarea.input {
         height: 260px; }
+        @media screen and (max-width: 768px) {
+          .fixed-popup .popup-inner .reviews-wrapper .review-box textarea.input {
+            height: 130px; } }
       .fixed-popup .popup-inner .reviews-wrapper .review-box .checkbox-label {
         font-size: 16px;
         font-weight: normal;
@@ -6324,7 +6328,7 @@ body.edit-user .information {
   padding: 15px;
   max-width: 300px;
   border: 1px solid #41afff;
-  z-index: 1001;
+  z-index: 1002;
   border-radius: 10px; }
   @media screen and (max-width: 768px) {
     .tooltip-window {
@@ -7644,3 +7648,10 @@ body.strength-pb {
     background-color: #46afda;
     padding: 14px 59px;
     margin-top: 10px; }
+
+#alert-name-dentist {
+  margin-bottom: 20px;
+  font-size: 14px;
+  padding: 10px 20px 10px 50px; }
+  #alert-name-dentist:before {
+    font-size: 20px; }
