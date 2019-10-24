@@ -13,6 +13,7 @@ use App\Models\Country;
 use App\Models\Dcn;
 use App\Models\Review;
 use App\Models\Reward;
+use App\Models\VoxAnswer;
 use App\Models\Poll;
 use App\Models\UserInvite;
 use App\Models\DcnTransaction;
