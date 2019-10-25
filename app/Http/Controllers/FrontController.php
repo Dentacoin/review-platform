@@ -108,7 +108,7 @@ class FrontController extends BaseController
             $this->user = Auth::guard('web')->user();
 
             if(!empty(Request::input('inviter'))) {
-                $u_id = User::decrypt(request('inviter'));
+                $u_id = User::decrypt(Request::input('inviter'));
 
                 $user = User::find($u_id);
                 if(!empty($user)) {
