@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use Log;
+use Request;
 use Session;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
