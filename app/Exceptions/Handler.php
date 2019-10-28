@@ -31,8 +31,16 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $exception)
+     public function report(Exception $exception)
     {
+        if( \App::runningInConsole() ) {
+            ;
+        } else {
+            Log::error("URL: " . Request::url().' - Method: '.Request::method());
+            Log::error("GET: " . json_encode($_GET));
+            Log::error("POST: " . json_encode($_POST));
+        }
+
         parent::report($exception);
     }
 
