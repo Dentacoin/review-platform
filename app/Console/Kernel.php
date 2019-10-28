@@ -960,8 +960,8 @@ NEW & FAILED TRANSACTIONS
                         `users` `u`
                     ON
                         `u`.`id` = `rewards`.`user_id`
-                    WHERE
-                        AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) >= 200000
+                    WHERE 
+                        (rewards_total - IF (withdraws_total IS NULL, 0, withdraws_total) ) >= 200000
                         AND `deleted_at` is null
 
             ";
