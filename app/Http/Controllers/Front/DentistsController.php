@@ -194,8 +194,13 @@ class DentistsController extends FrontController
                         $query->where('name', 'LIKE', $country_n);
                     })->first();
                 }
+
+                // if (!empty($country) && !empty($country->id)) {
+                // }
                 $items->where('country_id', $country->id);
                 $country_search = true;
+                
+                
             } else {
                 list($range_lat, $range_lon) = $this->getRadiusInLatLon(50, $lat);
                 $items->whereBetween('lat', [$lat-$range_lat, $lat+$range_lat]);
