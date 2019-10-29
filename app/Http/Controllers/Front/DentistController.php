@@ -160,10 +160,10 @@ class DentistController extends FrontController
         // exit;
 
         $review_id = request('review_id');
-        $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
+        $item = User::where('slug', 'LIKE', $slug)->first();
 
         if(empty($item) || !$item->is_dentist) {
-            return redirect( getLangUrl('dentists') );
+            return redirect( getLangUrl('page-not-found') );
         }
 
         session([

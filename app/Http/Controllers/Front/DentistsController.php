@@ -49,7 +49,6 @@ class DentistsController extends FrontController
             return redirect( getLangUrl($corrected_query) );
         }
 
-
         // $noAddress = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported'])->whereNotNull('city_id')->whereNull('lat')->take(300)->get();
         // foreach ($noAddress as $user) {
         //     $query = $user->country->name.', '.$user->city->name.', '.($user->zip ? $user->zip.', ' : null).$user->address;
