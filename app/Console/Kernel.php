@@ -928,8 +928,8 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'Balance over 200 000 Email 2 START';
-            //users with balance over 200,000 DCN
+            echo 'Balance over 500 000 Email 2 START';
+            //users with balance over 500,000 DCN
 
             $query = "
                 SELECT 
@@ -961,7 +961,7 @@ NEW & FAILED TRANSACTIONS
                     ON
                         `u`.`id` = `rewards`.`user_id`
                     WHERE 
-                        (rewards_total - IF (withdraws_total IS NULL, 0, withdraws_total) ) >= 200000
+                        (rewards_total - IF (withdraws_total IS NULL, 0, withdraws_total) ) >= 500000
                         AND `deleted_at` is null
 
             ";
@@ -983,7 +983,7 @@ NEW & FAILED TRANSACTIONS
             }
 
             if (!empty($user_links)) {
-                $mtext = 'Users with balance of 200,000 DCN or more.
+                $mtext = 'Users with balance of 500,000 DCN or more.
                 
                 Link to profiles in CMS:
 
@@ -1005,7 +1005,7 @@ NEW & FAILED TRANSACTIONS
                     $message->subject('Users with high balance');
                 });
             }
-            echo 'Balance over 200 000 Email 2 DONE';
+            echo 'Balance over 500 000 Email 2 DONE';
 
         })->cron("0 10 * * *"); //05:00h
 
