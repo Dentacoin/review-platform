@@ -463,6 +463,8 @@ $(document).ready(function(){
 
             if ($('[name="widget-layout"]:checked').val() == 'carousel' && parseInt($('[name="slide-results"]').val()) == 3 && $('#trusted-chosen').attr('trusted-reviews-count') < 4) {
                 $('#trusted-chosen').hide();
+            } else if($('#trusted-chosen').attr('trusted-reviews-count') < 1) {
+                $('#trusted-chosen').hide();
             } else {
                 $('#trusted-chosen').show();
             }
