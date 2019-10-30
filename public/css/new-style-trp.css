@@ -7819,7 +7819,14 @@ body.strength-pb {
               /* <-- Apparently some margin are still there even though it's hidden */ }
 .widget-step #selected-image-layout {
   margin-bottom: 25px;
-  max-width: 100%; }
+  max-width: 398px; }
+  @media screen and (max-width: 768px) {
+    .widget-step #selected-image-layout {
+      max-width: 100%; } }
+.widget-step #selected-layout {
+  color: #126585;
+  font-weight: bold;
+  text-transform: capitalize; }
 .widget-step .widget-subtitle {
   font-size: 22px;
   margin-bottom: 30px !important; }

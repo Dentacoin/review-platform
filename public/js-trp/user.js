@@ -435,6 +435,7 @@ $(document).ready(function(){
             
             
             var getParams = '?layout='+$('[name="widget-layout"]:checked').val();
+            $('#selected-layout').html($('[name="widget-layout"]:checked').closest('label').find('p').attr('layout-text'));
             var custom_width = false;
             var custom_heigth = false;
 

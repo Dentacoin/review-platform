@@ -33,7 +33,7 @@
 				    	<input class="type-radio" type="radio" name="widget-layout" id="widget-carousel" value="carousel" checked="checked">
 				    	<img class="layout-img" src="{{ url('img-trp/widget-carousel.png') }}">
 				    	<div class="widget-option">
-				    		<p>• {!! nl2br(trans('trp.popup.popup-widget.layout.carousel')) !!}</p>
+				    		<p layout-text="{!! nl2br(trans('trp.popup.popup-widget.layout.carousel')) !!}">• {!! nl2br(trans('trp.popup.popup-widget.layout.carousel')) !!}</p>
 				    		<div class="select-wrap flex flex-mobile">
 				    			<span>{!! nl2br(trans('trp.popup.popup-widget.layout.carousel.results')) !!}: </span>
 				    			<select name="slide-results" {!! $item->reviews_in_standard()->count() < 4 ? 'cant-select' : '' !!}>
@@ -55,7 +55,7 @@
 				    	<input class="type-radio" type="radio" name="widget-layout" id="widget-list" value="list">
 				    	<img class="layout-img" src="{{ url('img-trp/widget-list.png') }}">
 				    	<div class="widget-option">
-				    		<p>• {!! nl2br(trans('trp.popup.popup-widget.layout.list')) !!}</p>
+				    		<p layout-text="{!! nl2br(trans('trp.popup.popup-widget.layout.list')) !!}">• {!! nl2br(trans('trp.popup.popup-widget.layout.list')) !!}</p>
 				    		<div class="select-wrap flex flex-mobile">
 				    			<span>{!! nl2br(trans('trp.popup.popup-widget.layout.list.width')) !!}: </span>
 				    			<input type="number" name="list-width" value="100" min="0"><span>%</span>
@@ -75,7 +75,7 @@
 				    	<input class="type-radio" type="radio" name="widget-layout" id="widget-badge" value="badge">
 				    	<img class="layout-img" src="{{ url('img-trp/widget-badge.png') }}">
 				    	<div class="widget-option">
-				    		<p>• {!! nl2br(trans('trp.popup.popup-widget.layout.badge')) !!}</p>					    		
+				    		<p layout-text="{!! nl2br(trans('trp.popup.popup-widget.layout.badge')) !!}">• {!! nl2br(trans('trp.popup.popup-widget.layout.badge')) !!}</p>					    		
 				    		<div class="select-wrap flex flex-mobile">
 				    			<span>{!! nl2br(trans('trp.popup.popup-widget.layout.badge.style')) !!}: </span>
 				    			<select name="badge">
@@ -95,7 +95,7 @@
 		<div class="widget-step widget-step-2" style="display: none;">
 
 			<h4 class="widget-step-title">{!! nl2br(trans('trp.popup.popup-widget.step2.title')) !!}</h3>
-			<p class="step-description">{!! nl2br(trans('trp.popup.popup-widget.step2.subtitle')) !!}</p>
+			<p class="step-description"><!-- {!! nl2br(trans('trp.popup.popup-widget.step2.subtitle')) !!} --> Selected layout: <text id="selected-layout">Carousel</text></p>
 
 			<div class="tac">
 				<img id="selected-image-layout" src="{{ url('img-trp/widget-carousel.png') }}">

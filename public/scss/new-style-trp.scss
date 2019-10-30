@@ -10784,7 +10784,7 @@ body.strength-pb {
 
 				.layout-img {
 					max-width: 398px;
-					
+
 					@media #{$tablet} {
 				    	max-width: 260px;
 				    }
@@ -10857,7 +10857,17 @@ body.strength-pb {
 
 	#selected-image-layout {
 		margin-bottom: 25px;
-		max-width: 100%;
+		max-width: 398px;
+
+		@media #{$phone} {
+			max-width: 100%;
+		}
+	}
+
+	#selected-layout {
+		color: #126585;
+		font-weight: bold;
+		text-transform: capitalize;
 	}
 
 	.widget-subtitle {
