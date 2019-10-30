@@ -312,10 +312,11 @@ jQuery(document).ready(function($){
 
 			$('#popup-share .share-buttons .share').off('click').click( function() {
 				var post_url = $(this).closest('.share-buttons').attr('data-href');
-				var post_title = $(document).find("title").text();;
+				var post_title = $(this).closest('.share-buttons').attr('data-title');
 				if ($(this).attr('network')=='fb') {
 					var url = 'https://www.facebook.com/dialog/share?app_id=1906201509652855&display=popup&href=' + escape(post_url);
 				} else if ($(this).attr('network')=='twt') {
+					console.log(post_title);
 					var url = 'https://twitter.com/share?url=' + escape(post_url) + '&text=' + escape(post_title);
 				}
 				window.open( url , 'ShareWindow', 'height=450, width=550, top=' + (jQuery(window).height() / 2 - 275) + ', left=' + (jQuery(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');

@@ -23,7 +23,7 @@
 		</p>
 
 		<div class="flex copy-wrapper">
-			<div class="col share-buttons flex flex-mobile" data-href="">
+			<div class="col share-buttons flex flex-mobile" data-href="" data-title="{!! $seo_title !!}">
 				<div class="col fb tac">
 					<a class="share" network="fb" href="javascript:;">
 						<i class="fab fa-facebook-f"></i>
