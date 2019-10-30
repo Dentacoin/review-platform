@@ -141,18 +141,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         });
     }
     public function reviews_in_dentist() {
-        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')->where('status', 'accepted')->orderBy('id', 'desc')->with('user')->with('answers');
+        return $this->hasMany('App\Models\Review', 'dentist_id', 'id')->where('status', 'accepted')->with('user')->with('answers')->orderBy('id', 'desc');
     }
     public function reviews_in_clinic() {
-        return $this->hasMany('App\Models\Review', 'clinic_id', 'id')->where('status', 'accepted')->orderBy('id', 'desc')->with('user')->with('answers');
+        return $this->hasMany('App\Models\Review', 'clinic_id', 'id')->where('status', 'accepted')->with('user')->with('answers')->orderBy('id', 'desc');
     }
     public function reviews_in() {
-        return $this->reviews_in_dentist->merge($this->reviews_in_clinic)->sortBy(function ($review, $key) {
-
+        return $this->reviews_in_dentist->merge($this->reviews_in_clinic)->sortByDesc(function ($review, $key) {
             if($review->verified) {
-                return -1;
+                return 1000000 + $review->id;
             } else {
-                return 99999;
+                return $review->id;
             }
         });
     }
