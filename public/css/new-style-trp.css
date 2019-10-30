@@ -7649,9 +7649,466 @@ body.strength-pb {
     padding: 14px 59px;
     margin-top: 10px; }
 
+.mobile-alert,
 #alert-name-dentist {
   margin-bottom: 20px;
   font-size: 14px;
   padding: 10px 20px 10px 50px; }
+  .mobile-alert:before,
   #alert-name-dentist:before {
     font-size: 20px; }
+
+@media screen and (max-width: 998px) {
+  #select-reviews-popup,
+  #popup-widget {
+    background-color: white; } }
+#select-reviews-popup .popup-inner,
+#popup-widget .popup-inner {
+  overflow-x: initial;
+  overflow-y: unset;
+  box-shadow: 0 0 19px -2px rgba(0, 0, 0, 0.8); }
+  @media screen and (max-width: 998px) {
+    #select-reviews-popup .popup-inner,
+    #popup-widget .popup-inner {
+      box-shadow: none; } }
+  #select-reviews-popup .popup-inner h2,
+  #popup-widget .popup-inner h2 {
+    margin-bottom: 25px; }
+    @media screen and (max-width: 768px) {
+      #select-reviews-popup .popup-inner h2,
+      #popup-widget .popup-inner h2 {
+        font-size: 30px;
+        margin-top: 40px; } }
+  @media screen and (max-width: 768px) {
+    #select-reviews-popup .popup-inner .popup-title,
+    #popup-widget .popup-inner .popup-title {
+      font-size: 20px; } }
+  @media screen and (max-width: 768px) {
+    #select-reviews-popup .popup-inner .popup-description,
+    #popup-widget .popup-inner .popup-description {
+      font-size: 18px;
+      font-weight: 300; } }
+
+#select-reviews-popup .button {
+  border: 1px solid #46afda;
+  font-size: 25px;
+  background-color: #46afda;
+  padding: 12px 73px;
+  margin-top: 30px;
+  margin-bottom: 20px; }
+
+.widget-step .widget-step-title {
+  color: #126585;
+  font-size: 24px;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 10px !important; }
+  .widget-step .widget-step-title span {
+    color: black;
+    font-size: 24px;
+    text-transform: uppercase; }
+.widget-step .popup-desc {
+  font-weight: 300;
+  margin-bottom: 10px; }
+.widget-step .popup-title {
+  color: #333333;
+  padding: 7px 100px 9px; }
+.widget-step .step-description {
+  font-size: 18px;
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 30px; }
+.widget-step .modern-radios {
+  display: block; }
+  @media screen and (max-width: 768px) {
+    .widget-step .modern-radios {
+      margin-bottom: 47px; } }
+  .widget-step .modern-radios .radio-label {
+    margin-bottom: 35px; }
+    @media screen and (max-width: 768px) {
+      .widget-step .modern-radios .radio-label {
+        margin-bottom: 10px;
+        border-bottom: 2px solid #dadada;
+        padding-bottom: 20px; } }
+    .widget-step .modern-radios .radio-label:first-child {
+      margin-right: 0px; }
+    .widget-step .modern-radios .radio-label label {
+      border-color: transparent;
+      align-items: center;
+      padding: 18px 15px;
+      display: flex; }
+      @media screen and (max-width: 768px) {
+        .widget-step .modern-radios .radio-label label {
+          display: block; } }
+      .widget-step .modern-radios .radio-label label.active {
+        border-color: #126585; }
+        .widget-step .modern-radios .radio-label label.active .modern-radio span {
+          background-color: #126585; }
+        .widget-step .modern-radios .radio-label label.active .widget-option p {
+          color: #126585;
+          font-weight: bold; }
+        .widget-step .modern-radios .radio-label label.active:hover {
+          border-color: #126585; }
+      .widget-step .modern-radios .radio-label label:hover {
+        border-color: #ccc; }
+      .widget-step .modern-radios .radio-label label .modern-radio {
+        min-width: 36px;
+        width: 36px;
+        height: 36px;
+        border-color: #979797;
+        background-color: #ebebeb;
+        margin-right: 13px; }
+        @media screen and (max-width: 768px) {
+          .widget-step .modern-radios .radio-label label .modern-radio {
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
+            margin-bottom: 14px; } }
+        .widget-step .modern-radios .radio-label label .modern-radio span {
+          width: 20px;
+          height: 20px; }
+      @media screen and (max-width: 998px) {
+        .widget-step .modern-radios .radio-label label .layout-img {
+          max-width: 260px; } }
+      @media screen and (max-width: 768px) {
+        .widget-step .modern-radios .radio-label label .layout-img {
+          margin-bottom: 20px; } }
+      .widget-step .modern-radios .radio-label label .widget-option {
+        margin-left: 40px; }
+        @media screen and (max-width: 998px) {
+          .widget-step .modern-radios .radio-label label .widget-option {
+            margin-left: 20px; } }
+        .widget-step .modern-radios .radio-label label .widget-option p {
+          font-size: 20px;
+          font-weight: 300;
+          margin-bottom: 20px; }
+        .widget-step .modern-radios .radio-label label .widget-option .select-wrap {
+          margin-bottom: 14px; }
+          @media screen and (max-width: 768px) {
+            .widget-step .modern-radios .radio-label label .widget-option .select-wrap {
+              justify-content: center; } }
+          .widget-step .modern-radios .radio-label label .widget-option .select-wrap:last-child {
+            margin-bottom: 0px; }
+          .widget-step .modern-radios .radio-label label .widget-option .select-wrap span {
+            font-size: 18px;
+            font-weight: 300; }
+          .widget-step .modern-radios .radio-label label .widget-option .select-wrap select,
+          .widget-step .modern-radios .radio-label label .widget-option .select-wrap input {
+            display: block;
+            border: 1px solid #d7d7d7;
+            margin: 0px 5px;
+            border-radius: 4px;
+            padding: 0px 5px;
+            font-size: 18px;
+            font-weight: 300; }
+            .widget-step .modern-radios .radio-label label .widget-option .select-wrap select:hover, .widget-step .modern-radios .radio-label label .widget-option .select-wrap select:focus,
+            .widget-step .modern-radios .radio-label label .widget-option .select-wrap input:hover,
+            .widget-step .modern-radios .radio-label label .widget-option .select-wrap input:focus {
+              outline: none; }
+          .widget-step .modern-radios .radio-label label .widget-option .select-wrap input {
+            max-width: 59px;
+            -moz-appearance: textfield; }
+            .widget-step .modern-radios .radio-label label .widget-option .select-wrap input::-webkit-outer-spin-button, .widget-step .modern-radios .radio-label label .widget-option .select-wrap input::-webkit-inner-spin-button {
+              /* display: none; <- Crashes Chrome on hover */
+              -webkit-appearance: none;
+              margin: 0;
+              /* <-- Apparently some margin are still there even though it's hidden */ }
+.widget-step #selected-image-layout {
+  margin-bottom: 25px;
+  max-width: 100%; }
+.widget-step .widget-subtitle {
+  font-size: 22px;
+  margin-bottom: 30px !important; }
+.widget-step .popup-tabs {
+  margin-top: 0px !important; }
+  @media screen and (max-width: 768px) {
+    .widget-step .popup-tabs {
+      flex-direction: column; } }
+  @media screen and (max-width: 768px) {
+    .widget-step .popup-tabs a {
+      margin-right: 0px;
+      margin-left: 0px; } }
+  @media screen and (max-width: 768px) {
+    .widget-step .popup-tabs a:first-child {
+      margin-bottom: 10px; } }
+.widget-step .instructions-image {
+  position: relative;
+  display: block; }
+  .widget-step .instructions-image .magnifier {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    background-color: transparent; }
+.widget-step .select-reviews .modern-radios .radio-label {
+  margin-bottom: 27px; }
+  @media screen and (max-width: 768px) {
+    .widget-step .select-reviews .modern-radios .radio-label {
+      border-bottom: 0px;
+      padding-bottom: 0px; } }
+  .widget-step .select-reviews .modern-radios .radio-label label {
+    border-color: #d6d6d7;
+    display: block;
+    border-width: 1px;
+    position: relative; }
+    .widget-step .select-reviews .modern-radios .radio-label label.active {
+      border-color: #126585; }
+      .widget-step .select-reviews .modern-radios .radio-label label.active span {
+        font-weight: bold;
+        color: #126585; }
+    .widget-step .select-reviews .modern-radios .radio-label label span {
+      font-size: 20px;
+      font-weight: 300; }
+    .widget-step .select-reviews .modern-radios .radio-label label .info {
+      vertical-align: middle;
+      margin-left: 5px; }
+    .widget-step .select-reviews .modern-radios .radio-label label .hidden-option {
+      display: none;
+      padding-left: 40px;
+      padding-top: 18px; }
+      @media screen and (max-width: 768px) {
+        .widget-step .select-reviews .modern-radios .radio-label label .hidden-option {
+          padding-left: 30px; } }
+      .widget-step .select-reviews .modern-radios .radio-label label .hidden-option.active {
+        display: block; }
+      .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .option-checkboxes {
+        display: flex; }
+        .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .option-checkboxes label {
+          border: none;
+          padding: 0px;
+          margin-right: 30px;
+          font-size: 18px; }
+          .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .option-checkboxes label.active .modern-radio span {
+            background-color: #126585; }
+          .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .option-checkboxes label:last-child {
+            margin-right: 0px; }
+          .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .option-checkboxes label .modern-radio span {
+            background-color: transparent; }
+      .widget-step .select-reviews .modern-radios .radio-label label .hidden-option p {
+        font-size: 18px;
+        margin-bottom: 15px; }
+      .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .button {
+        background-color: white;
+        border: 1px solid #126585;
+        color: #126585;
+        text-transform: none;
+        font-size: 18px;
+        padding: 7px 20px;
+        margin-bottom: 0px; }
+        .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .button:hover {
+          background-color: #126585;
+          color: white; }
+    .widget-step .select-reviews .modern-radios .radio-label label .modern-radio {
+      min-width: 24px;
+      width: 24px;
+      height: 24px; }
+      @media screen and (max-width: 768px) {
+        .widget-step .select-reviews .modern-radios .radio-label label .modern-radio {
+          display: inline-block;
+          margin-bottom: 0px;
+          margin-right: 5px; } }
+      .widget-step .select-reviews .modern-radios .radio-label label .modern-radio span {
+        width: 13px;
+        height: 13px; }
+    .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option {
+      padding: 20px;
+      padding-bottom: 19px;
+      position: absolute;
+      right: 2px;
+      top: 0px; }
+      @media screen and (max-width: 768px) {
+        .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option {
+          padding: 10px;
+          top: 13px; } }
+      .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option i {
+        font-size: 20px;
+        color: #636363; }
+        .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option i:before {
+          content: "\f0d7"; }
+      .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option.active i:before {
+        content: "\f0d8"; }
+.widget-step .widget-code-wrap {
+  background-color: #126585;
+  margin: 20px -100px 50px;
+  padding: 25px 100px;
+  position: relative; }
+  @media screen and (max-width: 768px) {
+    .widget-step .widget-code-wrap {
+      margin: 20px -20px 50px;
+      padding: 25px 20px; } }
+  .widget-step .widget-code-wrap textarea {
+    height: 170px;
+    box-shadow: none;
+    padding: 10px 15px; }
+    @media screen and (max-width: 998px) {
+      .widget-step .widget-code-wrap textarea {
+        height: 210px; } }
+    @media screen and (max-width: 768px) {
+      .widget-step .widget-code-wrap textarea {
+        height: 300px; } }
+.widget-step .button {
+  border: 1px solid #46afda;
+  font-size: 25px;
+  background-color: #46afda;
+  padding: 12px 73px;
+  margin-bottom: 30px; }
+  @media screen and (max-width: 768px) {
+    .widget-step .button {
+      font-size: 19px;
+      padding: 9px 45px; } }
+  .widget-step .button.back-widget {
+    background-color: white;
+    color: #46afda;
+    margin-right: 10px; }
+.widget-step .copy-widget {
+  position: absolute;
+  right: 104px;
+  background: #f1eff1;
+  color: #4e4c4e;
+  display: block;
+  padding: 6px 10px;
+  top: 29px; }
+  @media screen and (max-width: 768px) {
+    .widget-step .copy-widget {
+      right: 24px; } }
+  .widget-step .copy-widget i {
+    color: #4e4c4e; }
+
+.list-reviews label {
+  display: flex;
+  padding-top: 30px;
+  border-bottom: 1px solid #ccc;
+  align-items: center; }
+  @media screen and (max-width: 768px) {
+    .list-reviews label {
+      flex-direction: column;
+      padding-top: 10px;
+      border-bottom: none; } }
+  .list-reviews label:last-child {
+    border-bottom: 0px; }
+  .list-reviews label * {
+    background-color: transparent; }
+  .list-reviews label.active, .list-reviews label:hover {
+    background-color: rgba(3, 169, 244, 0.03); }
+    @media screen and (max-width: 998px) {
+      .list-reviews label.active, .list-reviews label:hover {
+        background-color: transparent; } }
+  .list-reviews label .widget-checkbox {
+    margin-top: -50px;
+    margin-right: 20px;
+    margin-left: 20px; }
+    @media screen and (max-width: 768px) {
+      .list-reviews label .widget-checkbox {
+        margin-top: 0px;
+        margin-bottom: 20px; } }
+    @media screen and (max-width: 768px) {
+      .list-reviews label .widget-checkbox i {
+        font-size: 21px; } }
+.list-reviews .list-review {
+  display: flex;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 30px; }
+  @media screen and (max-width: 768px) {
+    .list-reviews .list-review {
+      flex-direction: column;
+      border-bottom: none;
+      position: relative; } }
+  @media screen and (max-width: 768px) {
+    .list-reviews .list-review:after {
+      content: '';
+      position: absolute;
+      bottom: 0px;
+      width: 213px;
+      height: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #eeeeee; } }
+  .list-reviews .list-review:last-child {
+    margin-bottom: 0px;
+    border-bottom: none; }
+  .list-reviews .list-review .review-avatar {
+    width: 84px;
+    height: 84px;
+    background-size: cover;
+    border-radius: 50%;
+    margin-bottom: 28px;
+    position: relative; }
+    @media screen and (max-width: 768px) {
+      .list-reviews .list-review .review-avatar {
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 14px; } }
+    .list-reviews .list-review .review-avatar:before {
+      content: '';
+      position: absolute;
+      left: 0px;
+      right: 0;
+      top: 0px;
+      bottom: 0;
+      width: 100%;
+      background: url(../img-trp/avatar-border.svg) no-repeat 50% 50%; }
+  .list-reviews .list-review .list-review-left {
+    margin-right: 30px; }
+    @media screen and (max-width: 768px) {
+      .list-reviews .list-review .list-review-left {
+        margin-right: 0px; } }
+  .list-reviews .list-review .list-review-right {
+    text-align: left; }
+    @media screen and (max-width: 768px) {
+      .list-reviews .list-review .list-review-right {
+        text-align: center; } }
+  .list-reviews .list-review .review-date {
+    color: #888888;
+    text-align: center; }
+    @media screen and (max-width: 768px) {
+      .list-reviews .list-review .review-date {
+        display: none; } }
+  .list-reviews .list-review .review-title {
+    font-size: 20px;
+    font-weight: bold;
+    font-style: italic;
+    text-transform: uppercase; }
+  .list-reviews .list-review .ratings {
+    margin-top: 6px; }
+    @media screen and (max-width: 768px) {
+      .list-reviews .list-review .ratings {
+        margin-top: 14px; } }
+    .list-reviews .list-review .ratings .stars {
+      width: 117px;
+      height: 20px;
+      background: url("../img-trp/new-stars-gray.png") 50% 50% no-repeat; }
+      .list-reviews .list-review .ratings .stars .bar {
+        background: url("../img-trp/new-stars-blue.png") 0% 50% no-repeat;
+        height: 20px; }
+  .list-reviews .list-review .review-content {
+    font-weight: 300;
+    margin-top: 3px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-size: 18px; }
+    @media screen and (max-width: 768px) {
+      .list-reviews .list-review .review-content {
+        -webkit-line-clamp: 4;
+        margin-top: 12px; } }
+  .list-reviews .list-review .review-name {
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 10px;
+    display: block;
+    color: #333; }
+    @media screen and (max-width: 768px) {
+      .list-reviews .list-review .review-name {
+        font-size: 16px;
+        margin-bottom: 15px; } }
+  .list-reviews .list-review .mobile-review-date {
+    display: none;
+    text-align: center;
+    color: #888888; }
+    @media screen and (max-width: 768px) {
+      .list-reviews .list-review .mobile-review-date {
+        display: block; } }

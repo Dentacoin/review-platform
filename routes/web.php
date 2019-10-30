@@ -196,6 +196,7 @@ $reviewRoutes = function () {
 		Route::get('logout',									'Auth\AuthenticateUser@getLogout');
 
 		Route::get('widget/{id}/{hash}/{mode}', 				'WidgetController@widget');
+		Route::any('widget-new/{id}/{hash}', 					'WidgetController@widget_new');
 
 		Route::group(['namespace' => 'Front'], function () {
 			

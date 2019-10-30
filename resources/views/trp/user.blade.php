@@ -212,10 +212,12 @@
 						{!! nl2br(trans('trp.page.user.invite')) !!}
 						
 					</a>
-					<a href="javascript:;" class="button button-inner-white" data-popup-logged="popup-widget" style="text-transform: initial;">
-						{!! nl2br(trans('trp.page.user.widget')) !!}
-						
-					</a>
+					@if( $item->reviews_in_standard()->count() )
+						<a href="javascript:;" class="button button-inner-white" data-popup-logged="popup-widget" style="text-transform: initial;">
+							{!! nl2br(trans('trp.page.user.widget')) !!}
+							
+						</a>
+					@endif
 				@elseif( empty($user) || !$user->is_dentist )
 					<a href="javascript:;" class="button" data-popup-logged="submit-review-popup">
 						{!! nl2br(trans('trp.page.user.submit-review')) !!}
@@ -561,9 +563,11 @@
 				<a href="javascript:;" class="button" data-popup-logged="popup-invite">
 					{!! nl2br(trans('trp.page.user.invite')) !!}
 				</a>
-				<a href="javascript:;" class="button button-inner-white" data-popup-logged="popup-widget" style="text-transform: initial;">
-					{!! nl2br(trans('trp.page.user.widget')) !!}
-				</a>
+				@if( $item->reviews_in_standard()->count() )
+					<a href="javascript:;" class="button button-inner-white" data-popup-logged="popup-widget" style="text-transform: initial;">
+						{!! nl2br(trans('trp.page.user.widget')) !!}
+					</a>
+				@endif
 			@elseif( empty($user) || !$user->is_dentist )
 				<a href="javascript:;" class="button" data-popup-logged="submit-review-popup">
 					{!! nl2br(trans('trp.page.user.submit-review')) !!}

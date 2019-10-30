@@ -397,25 +397,163 @@ $(document).ready(function(){
     //
 
     //Widget
-    if( $('.widget-options input').length ) {
+    if( $('#widget-carousel').length ) {
         $(".select-me").on("click focus", function () {
             $(this).select();
         });
 
-        var refreshWidgetCode = function() {
+        $(".copy-widget").click(function(){
+            $(this).closest('.widget-code-wrap').find('textarea').select();
+            document.execCommand('copy');
+        });
+
+        $('.widget-tabs .col, #select-reviews-popup input, #popup-widget input, #popup-widget select').on('click change keyup keypress', function(e) {
             if(typeof widet_url=='undefined') {
                 return;
             }
-            var wmode = parseInt($('.widget-options input:checked').val());
-            wmode = isNaN(wmode) ? 0 : wmode;
-            var parsedUrl = widet_url.replace('{mode}', wmode);
-            $('#option-iframe textarea').val('<iframe style="width: 100%; height: 50vh; border: none; outline: none;" src="'+parsedUrl+'"></iframe>');
-            $('#option-js textarea').val('<div id="trp-widget"></div><script type="text/javascript" src="https://reviews.dentacoin.com/js/widget.js"></script> <script type="text/javascript"> TRPWidget.init("'+parsedUrl+'"); </script>');
-        }
+            var layout = $('[name="widget-layout"]:checked').val();
+            var image_url = $('[name="widget-layout"]:checked').closest('.radio-label').find('img').attr('src');
+            if ($('[name="widget-layout"]:checked').val() == 'carousel' && parseInt($('[name="slide-results"]').val()) == 3) {
+                $('#selected-image-layout').attr('src', 'https://urgent.reviews.dentacoin.com/img-trp/widget-carousel-3.png');
+            } else if($('[name="widget-layout"]:checked').val() == 'badge' && $('[name="badge"]').val() == 'mini') {
+                $('#selected-image-layout').attr('src', 'https://urgent.reviews.dentacoin.com/img-trp/widget-badge-min.png');
+            } else {
+                $('#selected-image-layout').attr('src', image_url);
+            }
 
-        $('.widget-options input').change(refreshWidgetCode);
-        refreshWidgetCode();
+            if (parseInt($('[name="slide-results"]').val()) == 3) {
+                $('#widget-carousel').closest('label').find('img').attr('src', 'https://urgent.reviews.dentacoin.com/img-trp/widget-carousel-3.png');
+            } else {
+                $('#widget-carousel').closest('label').find('img').attr('src', 'https://urgent.reviews.dentacoin.com/img-trp/widget-carousel.png');
+            }
+
+            if ($('[name="badge"]').val() == 'mini') {
+                $('#widget-badge').closest('label').find('img').attr('src', 'https://urgent.reviews.dentacoin.com/img-trp/widget-badge-min.png');
+            } else {
+                $('#widget-badge').closest('label').find('img').attr('src', 'https://urgent.reviews.dentacoin.com/img-trp/widget-badge.png');
+            }
+            
+            
+            var getParams = '?layout='+$('[name="widget-layout"]:checked').val();
+            var custom_width = false;
+            var custom_heigth = false;
+
+            $('.select-reviews').show();
+            if (layout == 'carousel') {
+                if ($('[name="slide-results"][cant-select]').length && parseInt($('[name="slide-results"]').val()) == 3) {
+                    getParams += '&slide=1';
+                    $('[name="slide-results"]').val('1');
+                    $('.slider-alert').show();
+                } else {
+                    getParams += '&slide='+$('[name="slide-results"]').val();
+                }
+            } else if(layout == 'list') {
+                getParams += '&width='+$('[name="list-width"]').val()+'&height='+$('[name="list-height"]').val();
+                custom_heigth = true;
+
+                if (parseInt($('[name="list-width"]').val()) != 100) {
+                    custom_width = true;
+                }
+                $('.slider-alert').hide();
+            } else if(layout == 'badge') {
+                getParams += '&badge='+$('[name="badge"]').val();
+                $('.select-reviews').hide();
+                $('.slider-alert').hide();
+            }
+
+            if ($('[name="widget-layout"]:checked').val() == 'carousel' && parseInt($('[name="slide-results"]').val()) == 3 && $('#trusted-chosen').attr('trusted-reviews-count') < 4) {
+                $('#trusted-chosen').hide();
+            } else {
+                $('#trusted-chosen').show();
+            }
+
+            if (layout != 'badge') {
+                
+                getParams += '&review-type='+$('[name="review-type"]:checked').val();
+
+                if ($('[name="review-type"]:checked').val() == 'all') {
+                    getParams += '&review-all-count='+$('[name="all-reviews-option"]:checked').val();
+                } else if($('[name="review-type"]:checked').val() == 'trusted') {
+                    getParams += '&review-trusted-count='+$('[name="trusted-reviews-option"]:checked').val();
+                } else if($('[name="review-type"]:checked').val() == 'custom') {
+                    if ($('[name="widget-custom-review"]:checked').length) {
+                        $('[name="widget-custom-review"]:checked').each( function() {
+                            getParams += '&review-custom[]='+$(this).val();
+                        });
+                    }
+                }
+
+            }
+
+            if (!$('#widget-option-flexible:visible').length && custom_width) {
+                $('.widget-tab-alert').show();
+            } else {
+                $('.widget-tab-alert').hide();
+            }
+
+            $('#custom-reviews-length').html($('[name="widget-custom-review"]:checked').length)
+            
+            var parsedUrl = widet_url+getParams;
+
+            if (!$(e.target).closest('.popup-tabs').length) {
+                $('.get-widget-code-wrap').show();
+                $('.widget-last-step').hide();
+            }
+
+            if(layout == 'badge') {
+                $('.get-widget-code-wrap').hide();
+                $('.widget-last-step').show();
+            }
+
+            $('.widget-custom-reviews-alert').hide();
+
+            var iframe_url = parsedUrl.replace('&width=','&customwidth=').replace('&height=','&customheight=');
+            $('#option-iframe textarea').val('<!--Trusted Reviews Widget-->\n\r<iframe style="width: 100%; height: '+(custom_heigth ? $('[name="list-height"]').val()+'px' : '50vh')+'; border: none; outline: none;" src="'+iframe_url+'"></iframe>\n\r<!--End Trusted Reviews Widget-->');
+            $('#option-js textarea').val('<!--Trusted Reviews Widget-->\n\r<div id="trp-widget"></div><script type="text/javascript" src="https://urgent.reviews.dentacoin.com/js-trp/widget.js"></script> <script type="text/javascript"> TRPWidget.init("'+parsedUrl+'"); </script>\n\r<!--End Trusted Reviews Widget-->');
+        });
+        $('#widget-carousel').trigger('change');
+
     }
+
+    $('.get-widget-code').click( function() {
+        if($('[name="review-type"]:checked').val() == 'custom' && !$('[name="widget-custom-review"]:checked').length) {
+            $('.widget-custom-reviews-alert').show();
+        } else if ($('[name="widget-layout"]:checked').val() == 'carousel' && parseInt($('[name="slide-results"]').val()) == 3 && $('[name="review-type"]:checked').val() == 'custom' && $('[name="widget-custom-review"]:checked').length < 4) {
+            $('.widget-custom-reviews-alert').show();
+        } else {
+
+            $(this).closest('.get-widget-code-wrap').hide();
+            $('.widget-last-step').show();
+        }
+    });
+    
+
+    $('.widget-button').click( function() {
+        $(this).closest('.widget-step').hide();
+        $('.widget-step-'+$(this).attr('to-step')).show();
+        $('.popup.active').animate({
+            scrollTop: $('.popup.active').offset().top
+        }, 500);
+    });
+
+    $('.open-hidden-option').click( function() {
+        $(this).closest('label').find('.hidden-option').toggleClass('active');
+        $(this).toggleClass('active');
+    });
+
+    $('.type-radio-widget').change( function(e) {
+        $(this).closest('.option-checkboxes').find('label').removeClass('active');
+        $(this).closest('label').addClass('active');
+    });
+
+    $('.type-radio-widget-first').change( function(e) {
+        if ($(this).val() == 'custom') {
+            $(this).closest('.radio-label').find('.hidden-option').addClass('active');
+        }
+        $(this).closest('.modern-radios').find('.first-label').removeClass('active');
+        $(this).closest('.first-label').addClass('active');
+        $(this).closest('.first-label').toggleClass('open');
+    });
 
     //Invites
 

@@ -351,11 +351,19 @@ jQuery(document).ready(function($){
 	}
 
 	closePopup = function() {
+		var custom_widget_popup = false;
+		if($('#select-reviews-popup').hasClass('active')) {
+			custom_widget_popup = true;
+		}
 		$('.popup').removeClass('active');
 		$('body').removeClass('popup-visible');		
 
 		if( refreshOnClosePopup ) {
 			window.location.reload();
+		}
+
+		if(custom_widget_popup) {
+			showPopup( 'popup-widget' );
 		}
 	}
 

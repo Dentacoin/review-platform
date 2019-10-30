@@ -194,6 +194,7 @@ class DentistsController extends FrontController
                     })->first();
                 }
 
+
                 // if (!empty($country) && !empty($country->id)) {
                 // }
                 $items->where('country_id', $country->id);
