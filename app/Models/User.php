@@ -1082,7 +1082,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function deleteActions() {
         foreach ($this->reviews_out as $r) {
+            if (!empty($r->dentist_id)) {
+                $dentist = self::find($r->dentist_id);
+            } else if(!empty($r->clinic_id)) {
+                $dentist = self::find($r->clinic_id);
+            }
             $r->delete();
+            $dentist->recalculateRating();
         }
 
         $id = $this->id;
