@@ -11246,6 +11246,12 @@ svg:not(:root) {
 	    	margin-top: 0px;
 	    }
 
+		@media screen and (max-height: 700px) and (min-width: 769px ) {
+			max-width: 300px;
+		    margin-right: auto;
+		    margin-left: auto;
+		}
+
 	    @media #{$phone} {
 	        max-width: 190px;
 		    margin: 0 auto;
@@ -11278,6 +11284,7 @@ svg:not(:root) {
 
 	    p {
 	    	font-size: 22px;
+	    	margin-bottom: 20px;
 
 	    	@media #{$phone} {
 	    		font-size: 16px;

@@ -7903,6 +7903,11 @@ svg:not(:root) {
     @media screen and (max-width: 992px) {
       .taken-survey-wrapper .taken-survey-image {
         margin-top: 0px; } }
+    @media screen and (max-height: 700px) and (min-width: 769px) {
+      .taken-survey-wrapper .taken-survey-image {
+        max-width: 300px;
+        margin-right: auto;
+        margin-left: auto; } }
     @media screen and (max-width: 768px) {
       .taken-survey-wrapper .taken-survey-image {
         max-width: 190px;
@@ -7925,7 +7930,8 @@ svg:not(:root) {
           font-size: 26px;
           margin-bottom: 10px; } }
     .taken-survey-wrapper .taken-survey-description p {
-      font-size: 22px; }
+      font-size: 22px;
+      margin-bottom: 20px; }
       @media screen and (max-width: 768px) {
         .taken-survey-wrapper .taken-survey-description p {
           font-size: 16px; } }
