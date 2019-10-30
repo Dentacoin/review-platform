@@ -487,28 +487,31 @@ class UserStrength extends Model
                 }
                 $array_number_shuffle['not_important']++;
 
-                if( $user->widget_activated) {
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.add-widget.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.add-widget.text')),
-                        'image' => 'widget',
-                        'completed' => true,
-                        'buttonText' => trans('trp.strength.dentist.add-widget.button-text'),
-                    ];
-                } else {
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.add-widget.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.add-widget.text')),
-                        'image' => 'widget',
-                        'completed' => false,
-                        'buttonText' => trans('trp.strength.dentist.add-widget.button-text'),
-                        'buttonHref' => $user->getLink().'?popup-loged=popup-widget',
-                        'event_category' => 'ProfileStrengthDentist',
-                        'event_action' => 'Add',
-                        'event_label' => 'Widget',
-                    ];
+                if($user->reviews_in_standard()->count()) {
+                    
+                    if( $user->widget_activated) {
+                        $ret[] = [
+                            'title' => trans('trp.strength.dentist.add-widget.title'),
+                            'text' => nl2br(trans('trp.strength.dentist.add-widget.text')),
+                            'image' => 'widget',
+                            'completed' => true,
+                            'buttonText' => trans('trp.strength.dentist.add-widget.button-text'),
+                        ];
+                    } else {
+                        $ret[] = [
+                            'title' => trans('trp.strength.dentist.add-widget.title'),
+                            'text' => nl2br(trans('trp.strength.dentist.add-widget.text')),
+                            'image' => 'widget',
+                            'completed' => false,
+                            'buttonText' => trans('trp.strength.dentist.add-widget.button-text'),
+                            'buttonHref' => $user->getLink().'?popup-loged=popup-widget',
+                            'event_category' => 'ProfileStrengthDentist',
+                            'event_action' => 'Add',
+                            'event_label' => 'Widget',
+                        ];
+                    }
+                    $array_number_shuffle['not_important']++;
                 }
-                $array_number_shuffle['not_important']++;
 
                 $total_balance = $user->getTotalBalance();
                 if ($total_balance > env('VOX_MIN_WITHDRAW') ) {
@@ -527,6 +530,9 @@ class UserStrength extends Model
                 }
 
                 $stats = Vox::where('has_stats', 1)->where('featured', 1)->orderBy('id', 'desc')->first();
+                if (empty($stats)) {
+                    $stats = Vox::where('has_stats', 1)->orderBy('id', 'desc')->first();
+                }
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.check-stats.title'),
                     'text' => nl2br(trans('trp.strength.dentist.check-stats.text', ['name' => $stats->title ])),
@@ -816,6 +822,9 @@ class UserStrength extends Model
                 ];
 
                 $stats = Vox::where('has_stats', 1)->where('featured', 1)->orderBy('id', 'desc')->first();
+                if (empty($stats)) {
+                    $stats = Vox::where('has_stats', 1)->orderBy('id', 'desc')->first();
+                }
                 $ret[] = [
                     'title' => trans('vox.strength.dentist.check-stats.title'),
                     'text' => nl2br(trans('vox.strength.dentist.check-stats.text', ['name' => $stats->title])),
