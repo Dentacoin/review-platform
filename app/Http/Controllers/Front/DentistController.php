@@ -150,6 +150,10 @@ class DentistController extends FrontController
             return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
         }
 
+        if ($slug == 'dr-vadivelan-jeyachandran') {
+            return redirect( getLangUrl('dentist/vadivelan-jeyachandran'), 301 );
+        }
+
         // $cmt = $list = User::where('is_dentist', 1)->whereNotNull('zip')->whereNull('state_name')->count();
         // echo 'TOTAL: '.$cmt.'<br/>';
         // $list = User::where('is_dentist', 1)->whereNotNull('zip')->whereNull('state_name')->take(100)->get();

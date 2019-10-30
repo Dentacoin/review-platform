@@ -118,14 +118,14 @@ class UsersController extends AdminController
     			'type' => 'text',
                 //'disabled' => true,
     		],
-    		'avg_rating' => [
-    			'type' => 'text',
-    			'disabled' => true,
-    		],
-            'ratings' => [
-                'type' => 'text',
-                'disabled' => true,
-            ],
+    		// 'avg_rating' => [
+    		// 	'type' => 'text',
+    		// 	'disabled' => true,
+    		// ],
+      //       'ratings' => [
+      //           'type' => 'text',
+      //           'disabled' => true,
+      //       ],
             // 'category_id' => [
             //     'type' => 'select',
             //     'multiple' => true,
