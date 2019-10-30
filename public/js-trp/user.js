@@ -414,23 +414,23 @@ $(document).ready(function(){
             var layout = $('[name="widget-layout"]:checked').val();
             var image_url = $('[name="widget-layout"]:checked').closest('.radio-label').find('img').attr('src');
             if ($('[name="widget-layout"]:checked').val() == 'carousel' && parseInt($('[name="slide-results"]').val()) == 3) {
-                $('#selected-image-layout').attr('src', 'https://urgent.reviews.dentacoin.com/img-trp/widget-carousel-3.png');
+                $('#selected-image-layout').attr('src', 'https://reviews.dentacoin.com/img-trp/widget-carousel-3.png');
             } else if($('[name="widget-layout"]:checked').val() == 'badge' && $('[name="badge"]').val() == 'mini') {
-                $('#selected-image-layout').attr('src', 'https://urgent.reviews.dentacoin.com/img-trp/widget-badge-min.png');
+                $('#selected-image-layout').attr('src', 'https://reviews.dentacoin.com/img-trp/widget-badge-min.png');
             } else {
                 $('#selected-image-layout').attr('src', image_url);
             }
 
             if (parseInt($('[name="slide-results"]').val()) == 3) {
-                $('#widget-carousel').closest('label').find('img').attr('src', 'https://urgent.reviews.dentacoin.com/img-trp/widget-carousel-3.png');
+                $('#widget-carousel').closest('label').find('img').attr('src', 'https://reviews.dentacoin.com/img-trp/widget-carousel-3.png');
             } else {
-                $('#widget-carousel').closest('label').find('img').attr('src', 'https://urgent.reviews.dentacoin.com/img-trp/widget-carousel.png');
+                $('#widget-carousel').closest('label').find('img').attr('src', 'https://reviews.dentacoin.com/img-trp/widget-carousel.png');
             }
 
             if ($('[name="badge"]').val() == 'mini') {
-                $('#widget-badge').closest('label').find('img').attr('src', 'https://urgent.reviews.dentacoin.com/img-trp/widget-badge-min.png');
+                $('#widget-badge').closest('label').find('img').attr('src', 'https://reviews.dentacoin.com/img-trp/widget-badge-min.png');
             } else {
-                $('#widget-badge').closest('label').find('img').attr('src', 'https://urgent.reviews.dentacoin.com/img-trp/widget-badge.png');
+                $('#widget-badge').closest('label').find('img').attr('src', 'https://reviews.dentacoin.com/img-trp/widget-badge.png');
             }
             
             
@@ -509,7 +509,7 @@ $(document).ready(function(){
 
             var iframe_url = parsedUrl.replace('&width=','&customwidth=').replace('&height=','&customheight=');
             $('#option-iframe textarea').val('<!--Trusted Reviews Widget-->\n\r<iframe style="width: 100%; height: '+(custom_heigth ? $('[name="list-height"]').val()+'px' : '50vh')+'; border: none; outline: none;" src="'+iframe_url+'"></iframe>\n\r<!--End Trusted Reviews Widget-->');
-            $('#option-js textarea').val('<!--Trusted Reviews Widget-->\n\r<div id="trp-widget"></div><script type="text/javascript" src="https://urgent.reviews.dentacoin.com/js-trp/widget.js"></script> <script type="text/javascript"> TRPWidget.init("'+parsedUrl+'"); </script>\n\r<!--End Trusted Reviews Widget-->');
+            $('#option-js textarea').val('<!--Trusted Reviews Widget-->\n\r<div id="trp-widget"></div><script type="text/javascript" src="https://reviews.dentacoin.com/js-trp/widget.js"></script> <script type="text/javascript"> TRPWidget.init("'+parsedUrl+'"); </script>\n\r<!--End Trusted Reviews Widget-->');
         });
         $('#widget-carousel').trigger('change');
 
