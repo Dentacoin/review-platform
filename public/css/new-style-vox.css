@@ -7903,7 +7903,7 @@ svg:not(:root) {
     @media screen and (max-width: 992px) {
       .taken-survey-wrapper .taken-survey-image {
         margin-top: 0px; } }
-    @media screen and (max-height: 700px) and (min-width: 769px) {
+    @media screen and (max-height: 750px) and (min-width: 769px) {
       .taken-survey-wrapper .taken-survey-image {
         max-width: 300px;
         margin-right: auto;
