@@ -520,7 +520,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $tos
             );
             $email->setTemplateId($item->template->sendgrid_template_id);
-            if($this->is_dentist) {
+            if($this->is_dentist && $template_id != 58 && $template_id != 59 && $template_id != 60 && $template_id != 61 && $template_id != 62) {
                 $email->addBcc("4097841@bcc.hubspot.com");
             }
 
