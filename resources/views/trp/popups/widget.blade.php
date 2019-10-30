@@ -14,17 +14,15 @@
 
 		<h4 class="popup-title">
 			{!! nl2br(trans('trp.popup.popup-widget.subtitle')) !!}
-			
 		</h4>
 
 		<div class="widget-step widget-step-1">
 			<p class="popup-desc">
-				<!-- {!! nl2br(trans('trp.popup.popup-widget.hint')) !!} -->
-				Add your patients' reviews to your website! It’s super easy and requires (almost) no coding skills. 
+				{!! nl2br(trans('trp.popup.popup-widget.hint')) !!}
 			</p>
 
-			<h3 class="widget-step-title"><span>STEP 1:</span> Choose layout</h3>
-			<p class="step-description">Select one of the customizable layouts below and follow the instructions.</p>
+			<h3 class="widget-step-title">{!! nl2br(trans('trp.popup.popup-widget.step1.title')) !!}</h3>
+			<p class="step-description">{!! nl2br(trans('trp.popup.popup-widget.step1.subtitle')) !!}</p>
 
 			<div class="mobile-radios modern-radios active">
 				<div class="radio-label">
@@ -96,8 +94,8 @@
 		</div>
 		<div class="widget-step widget-step-2" style="display: none;">
 
-			<h4 class="widget-step-title"><span>STEP 2:</span> FINAL SET-UP AND GET YOUR CODE</h3>
-			<p class="step-description">Select one of the customizable layouts below and follow the instructions.</p>
+			<h4 class="widget-step-title">{!! nl2br(trans('trp.popup.popup-widget.step2.title')) !!}</h3>
+			<p class="step-description">{!! nl2br(trans('trp.popup.popup-widget.step2.subtitle')) !!}</p>
 
 			<div class="tac">
 				<img id="selected-image-layout" src="{{ url('img-trp/widget-carousel.png') }}">
