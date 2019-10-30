@@ -7769,12 +7769,14 @@ body.strength-pb {
         .widget-step .modern-radios .radio-label label .modern-radio span {
           width: 20px;
           height: 20px; }
-      @media screen and (max-width: 998px) {
-        .widget-step .modern-radios .radio-label label .layout-img {
-          max-width: 260px; } }
-      @media screen and (max-width: 768px) {
-        .widget-step .modern-radios .radio-label label .layout-img {
-          margin-bottom: 20px; } }
+      .widget-step .modern-radios .radio-label label .layout-img {
+        max-width: 398px; }
+        @media screen and (max-width: 998px) {
+          .widget-step .modern-radios .radio-label label .layout-img {
+            max-width: 260px; } }
+        @media screen and (max-width: 768px) {
+          .widget-step .modern-radios .radio-label label .layout-img {
+            margin-bottom: 20px; } }
       .widget-step .modern-radios .radio-label label .widget-option {
         margin-left: 40px; }
         @media screen and (max-width: 998px) {

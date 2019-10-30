@@ -10783,6 +10783,8 @@ body.strength-pb {
 				}
 
 				.layout-img {
+					max-width: 398px;
+					
 					@media #{$tablet} {
 				    	max-width: 260px;
 				    }
