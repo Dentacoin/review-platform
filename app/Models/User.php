@@ -1081,15 +1081,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function deleteActions() {
-        foreach ($this->reviews_out as $r) {
-            if (!empty($r->dentist_id)) {
-                $dentist = self::find($r->dentist_id);
-            } else if(!empty($r->clinic_id)) {
-                $dentist = self::find($r->clinic_id);
-            }
-            $r->delete();
-            $dentist->recalculateRating();
-        }
+
+        // foreach ($this->reviews_out as $r) {
+        //     if (!empty($r->dentist_id)) {
+        //         $dentist = self::find($r->dentist_id);
+        //     } else if(!empty($r->clinic_id)) {
+        //         $dentist = self::find($r->clinic_id);
+        //     }
+        //     $r->delete();
+        //     $dentist->recalculateRating();
+        // }
 
         $id = $this->id;
         $teams = UserTeam::where(function($query) use ($id) {
@@ -1118,9 +1119,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
-
         if(!$this->is_dentist) {
             $this->sendTemplate(9);
+        }
+
+        if($this->reviews_out->isNotEmpty()) {
+            $mtext = 'User with reviews was deleted.
+Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$this->id;
+
+            Mail::raw($mtext, function ($message) {
+                $message->from(config('mail.from.address'), config('mail.from.name'));
+                $message->to( 'petya.ivanova@dentacoin.com' );
+                $message->subject('Patient Who Submitted Reviews Was Deleted');
+            });
         }
 
         $this->logoutActions();
