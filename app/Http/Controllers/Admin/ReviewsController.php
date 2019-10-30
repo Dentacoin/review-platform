@@ -107,7 +107,7 @@ class ReviewsController extends AdminController
             $ban->type = 'spam-review';
             $ban->save();
 
-            $patient->sendGridTemplate(86);
+            $patient->sendGridTemplate(86, null, 'trp');
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
@@ -149,7 +149,7 @@ class ReviewsController extends AdminController
                     $ban->type = 'spam-review';
                     $ban->save();
 
-                    $patient->sendGridTemplate(86);
+                    $patient->sendGridTemplate(86, null,'trp');
                 }
             }
             //Review::whereIn('id', Request::input('ids'))->delete();            
