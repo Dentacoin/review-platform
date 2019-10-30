@@ -33,16 +33,16 @@
 				    	<input class="type-radio" type="radio" name="widget-layout" id="widget-carousel" value="carousel" checked="checked">
 				    	<img class="layout-img" src="{{ url('img-trp/widget-carousel.png') }}">
 				    	<div class="widget-option">
-				    		<p>• Carousel</p>
+				    		<p>• {!! nl2br(trans('trp.popup.popup-widget.layout.carousel')) !!}</p>
 				    		<div class="select-wrap flex flex-mobile">
-				    			<span>Results per slide (desktop): </span>
+				    			<span>{!! nl2br(trans('trp.popup.popup-widget.layout.carousel.results')) !!}: </span>
 				    			<select name="slide-results" {!! $item->reviews_in_standard()->count() < 4 ? 'cant-select' : '' !!}>
 				    				<option value="1" selected="selected">1</option>
 				    				<option value="3">3</option>
 				    			</select>
 				    		</div>
 				    		<div class="alert mobile-alert alert-warning slider-alert" style="display: none;">
-								Get more review from patients to unlock this feature.
+								{!! nl2br(trans('trp.popup.popup-widget.layout.carousel.error')) !!}
 							</div>
 				    	</div>
 				  	</label>
@@ -55,13 +55,13 @@
 				    	<input class="type-radio" type="radio" name="widget-layout" id="widget-list" value="list">
 				    	<img class="layout-img" src="{{ url('img-trp/widget-list.png') }}">
 				    	<div class="widget-option">
-				    		<p>• List Widget</p>
+				    		<p>• {!! nl2br(trans('trp.popup.popup-widget.layout.list')) !!}</p>
 				    		<div class="select-wrap flex flex-mobile">
-				    			<span>Width: </span>
+				    			<span>{!! nl2br(trans('trp.popup.popup-widget.layout.list.width')) !!}: </span>
 				    			<input type="number" name="list-width" value="100" min="0"><span>%</span>
 				    		</div>
 				    		<div class="select-wrap flex flex-mobile">
-				    			<span>Heigth: </span>
+				    			<span>{!! nl2br(trans('trp.popup.popup-widget.layout.list.height')) !!}: </span>
 				    			<input type="number" name="list-height" value="450" min="0"><span>px</span>
 				    		</div>
 				    	</div>
@@ -75,12 +75,12 @@
 				    	<input class="type-radio" type="radio" name="widget-layout" id="widget-badge" value="badge">
 				    	<img class="layout-img" src="{{ url('img-trp/widget-badge.png') }}">
 				    	<div class="widget-option">
-				    		<p>• Score rating badge</p>					    		
+				    		<p>• {!! nl2br(trans('trp.popup.popup-widget.layout.badge')) !!}</p>					    		
 				    		<div class="select-wrap flex flex-mobile">
-				    			<span>Style: </span>
+				    			<span>{!! nl2br(trans('trp.popup.popup-widget.layout.badge.style')) !!}: </span>
 				    			<select name="badge">
-				    				<option value="macro" selected="selected">Macro Badge</option>
-				    				<option value="mini">Mini Badge</option>
+				    				<option value="macro" selected="selected">{!! nl2br(trans('trp.popup.popup-widget.layout.badge.style.macro')) !!}</option>
+				    				<option value="mini">{!! nl2br(trans('trp.popup.popup-widget.layout.badge.style.mini')) !!}</option>
 				    			</select>
 				    		</div>
 				    	</div>
@@ -102,7 +102,7 @@
 			</div>
 
 			<div class="select-reviews">
-				<h4 class="widget-subtitle">• Choose which reviews to show</h3>
+				<h4 class="widget-subtitle">• {!! nl2br(trans('trp.popup.popup-widget.reviews')) !!}</h3>
 
 				<div class="mobile-radios modern-radios">
 					<div class="radio-label">
@@ -111,11 +111,11 @@
 								<span></span>
 							</span>
 					    	<input class="type-radio-widget-first" type="radio" name="review-type" id="аll-reviews" value="all" checked="checked">
-					    	<span>Trusted & Unverified reviews</span>
+					    	<span>{!! nl2br(trans('trp.popup.popup-widget.reviews.all')) !!}</span>
 					    	<a href="javascript:;" class="open-hidden-option"><i class="fas fa-caret-down"></i></a>
 
 					    	<div class="hidden-option">
-					    		<p>How many results to show:</p>
+					    		<p>{!! nl2br(trans('trp.popup.popup-widget.reviews.results')) !!}</p>
 
 					    		<div class="option-checkboxes">
 					    			<label for="аll-reviews-all" class="active">
@@ -123,21 +123,21 @@
 											<span></span>
 										</span>
 								    	<input class="type-radio-widget" type="radio" name="all-reviews-option" id="аll-reviews-all" value="all" checked="checked">
-								    	All
+								    	{!! nl2br(trans('trp.popup.popup-widget.reviews.results.all')) !!}
 								    </label>
 					    			<label for="аll-reviews-last-fifteen">
 										<span class="modern-radio">
 											<span></span>
 										</span>
 								    	<input class="type-radio-widget" type="radio" name="all-reviews-option" id="аll-reviews-last-fifteen" value="15">
-								    	Last 15
+								    	{!! nl2br(trans('trp.popup.popup-widget.reviews.results.fifteen')) !!}
 								    </label>
 					    			<label for="аll-reviews-last-fifth">
 										<span class="modern-radio">
 											<span></span>
 										</span>
 								    	<input class="type-radio-widget" type="radio" name="all-reviews-option" id="аll-reviews-last-fifth" value="5">
-								    	Last 5
+								    	{!! nl2br(trans('trp.popup.popup-widget.reviews.results.five')) !!}
 								    </label>
 					    		</div>
 					    	</div>
@@ -149,12 +149,12 @@
 								<span></span>
 							</span>
 					    	<input class="type-radio-widget-first" type="radio" name="review-type" id="trusted-reviews" value="trusted">
-					    	<span>Only trusted reviews</span>
-					    	<img class="tooltip-text info" text="Reviews only from your verified patients" src="{{ url('img-trp/info-light.png') }}">
+					    	<span>{!! nl2br(trans('trp.popup.popup-widget.reviews.trusted')) !!}</span>
+					    	<img class="tooltip-text info" text="{!! nl2br(trans('trp.popup.popup-widget.reviews.trusted.hint')) !!}" src="{{ url('img-trp/info-light.png') }}">
 					    	<a href="javascript:;" class="open-hidden-option"><i class="fas fa-caret-down"></i></a>
 
 					    	<div class="hidden-option">
-					    		<p>How many results to show:</p>
+					    		<p>{!! nl2br(trans('trp.popup.popup-widget.reviews.results')) !!}</p>
 
 					    		<div class="option-checkboxes">
 					    			<label for="trusted-reviews-all" class="active">
@@ -162,21 +162,21 @@
 											<span></span>
 										</span>
 								    	<input class="type-radio-widget" type="radio" name="trusted-reviews-option" id="trusted-reviews-all" value="all" checked="checked">
-								    	All
+								    	{!! nl2br(trans('trp.popup.popup-widget.reviews.results.all')) !!}
 								    </label>
 					    			<label for="trusted-reviews-last-fifteen">
 										<span class="modern-radio">
 											<span></span>
 										</span>
 								    	<input class="type-radio-widget" type="radio" name="trusted-reviews-option" id="trusted-reviews-last-fifteen" value="15">
-								    	Last 15
+								    	{!! nl2br(trans('trp.popup.popup-widget.reviews.results.fifteen')) !!}
 								    </label>
 					    			<label for="trusted-reviews-last-fifth">
 										<span class="modern-radio">
 											<span></span>
 										</span>
 								    	<input class="type-radio-widget" type="radio" name="trusted-reviews-option" id="trusted-reviews-last-fifth" value="5">
-								    	Last 5
+								    	{!! nl2br(trans('trp.popup.popup-widget.reviews.results.five')) !!}
 								    </label>
 					    		</div>
 					    	</div>
@@ -188,13 +188,13 @@
 								<span></span>
 							</span>
 					    	<input class="type-radio-widget-first" type="radio" name="review-type" id="custom-trusted" value="custom">
-					    	<span>Select custom</span>
+					    	<span>{!! nl2br(trans('trp.popup.popup-widget.reviews.custom')) !!}</span>
 					    	<a href="javascript:;" class="open-hidden-option"><i class="fas fa-caret-down"></i></a>
 
 					    	<div class="hidden-option">
 					    		<p>You have selected <text id="custom-reviews-length">0</text> reviews to be shown</p>
 
-					    		<a href="javascript:;" data-popup="select-reviews-popup" class="button">Select reviews</a>
+					    		<a href="javascript:;" data-popup="select-reviews-popup" class="button">{!! nl2br(trans('trp.popup.popup-widget.reviews.custom.button')) !!}</a>
 					    	</div>
 					  	</label>
 					</div>
@@ -202,19 +202,19 @@
 			</div>
 
 			<div class="alert mobile-alert alert-warning widget-custom-reviews-alert" style="display: none;">
-				Please select at least four of your reviews
+				{!! nl2br(trans('trp.popup.popup-widget.reviews.custom.error')) !!}
 			</div>
 
 			<div class="tac get-widget-code-wrap">
 				<a href="javascript:;" class="button widget-button back-widget" to-step="1">< Back</a>
-				<a href="javascript:;" class="button get-widget-code">Get Code</a>
+				<a href="javascript:;" class="button get-widget-code">{!! nl2br(trans('trp.popup.popup-widget.get-code')) !!}</a>
 			</div>
 
 			<div class="widget-last-step" style="display: none;">
 
-				<h4 class="widget-subtitle">• Implement your reviews widget</h4>
+				<h4 class="widget-subtitle">• {!! nl2br(trans('trp.popup.popup-widget.widget-options.title')) !!}</h4>
 				<div class="alert mobile-alert alert-warning widget-tab-alert" style="display: none;">
-					Simple widget is with fixed width, and will be reseized to 100%. If you wish to customize the width, please select flexible widget.
+					{!! nl2br(trans('trp.popup.popup-widget.widget-options.subtitle')) !!}
 				</div>
 
 				<div class="popup-tabs widget-tabs flex flex-mobile">
