@@ -55,7 +55,7 @@
 					</div>
 
 					<div class="tac">
-						<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!}">
+						<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.next')) !!}">
 					</div>
 				{!! Form::close() !!}
 			</div>
@@ -162,7 +162,7 @@
 					</div>
 
 					<div class="tac">
-						<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!}">
+						<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.next')) !!}">
 					</div>
 				{!! Form::close() !!}
 			</div>

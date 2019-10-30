@@ -3247,14 +3247,15 @@ textarea.input {
       text-transform: uppercase;
       font-weight: bold;
       color: #126585;
-      text-align: center; }
+      text-align: center;
+      font-size: 24px; }
       @media screen and (max-width: 768px) {
         .fixed-popup .popup-inner .invite-content .step-title {
           font-size: 18px;
           margin-bottom: 25px;
           text-align: left; } }
       .fixed-popup .popup-inner .invite-content .step-title span {
-        font-size: 20px;
+        font-size: 24px;
         color: black; }
         @media screen and (max-width: 768px) {
           .fixed-popup .popup-inner .invite-content .step-title span {

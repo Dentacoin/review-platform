@@ -31,9 +31,7 @@ use Carbon\Carbon;
 class YouTubeController extends FrontController
 {
     public function test() {
-
-		
-
+    	
 
     	exit;
     }

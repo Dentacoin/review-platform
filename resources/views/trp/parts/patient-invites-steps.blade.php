@@ -19,7 +19,7 @@
 			<a href="javascript:;" class="button button-inner-white bulk-invite-back" step="1">
 				{!! nl2br(trans('trp.popup.popup-invite.back')) !!}
 			</a>
-			<input type="submit" class="button" disabled="disabled" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!}">
+			<input type="submit" class="button" disabled="disabled" value="{!! nl2br(trans('trp.popup.popup-invite.next')) !!}">
 		</div>
 	{!! Form::close() !!}
 </div>
@@ -52,7 +52,7 @@
 			<a href="javascript:;" class="button button-inner-white bulk-invite-back" step="2">
 				{!! nl2br(trans('trp.popup.popup-invite.back')) !!}
 			</a>
-			<input type="submit" class="button" disabled="disabled" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!}">
+			<input type="submit" class="button" disabled="disabled" value="{!! nl2br(trans('trp.popup.popup-invite.next')) !!}">
 		</div>
 	{!! Form::close() !!}
 </div>

@@ -4151,6 +4151,7 @@ textarea.input {
 				font-weight: bold;
 				color: #126585;
 				text-align: center;
+				font-size: 24px;
 
 				@media #{$phone} {
 					font-size: 18px;
@@ -4159,7 +4160,7 @@ textarea.input {
 				}
 
 				span {
-					font-size: 20px;
+					font-size: 24px;
 					color: black;
 
 					@media #{$phone} {
