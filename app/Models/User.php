@@ -106,7 +106,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'lon',
     ];
     protected $dates = [
-        'self_deleted_at'
+        'self_deleted_at',
         'created_at',
         'updated_at',
         'deleted_at',
