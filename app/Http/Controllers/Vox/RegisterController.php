@@ -786,7 +786,7 @@ class RegisterController extends FrontController
                 }
 
                 if(empty($email)) {
-                    return redirect(getVoxUrl('/').'?error-message='.urlencode(trans('front.common.civic.weak') );
+                    return redirect(getVoxUrl('/').'?error-message='.urlencode(trans('front.common.civic.weak') ));
                 } else {
 
                     $user = User::where( 'civic_id','LIKE', $data['userId'] )->withTrashed()->first();
@@ -809,7 +809,7 @@ class RegisterController extends FrontController
                                 $user->save();      
                             }
 
-                            return redirect(getVoxUrl('/').'?success-message='.urlencode(trans('vox.popup.register.have-account') );
+                            return redirect(getVoxUrl('/').'?success-message='.urlencode(trans('vox.popup.register.have-account') ));
                         }
                     } else {
 
@@ -818,7 +818,7 @@ class RegisterController extends FrontController
 
                         $is_blocked = User::checkBlocks( $name , $email );
                         if( $is_blocked ) {
-                            return redirect(getVoxUrl('/').'?error-message='.urlencode(trans('front.common.civic.error') );
+                            return redirect(getVoxUrl('/').'?error-message='.urlencode(trans('front.common.civic.error') ));
                         }
 
                         $has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
