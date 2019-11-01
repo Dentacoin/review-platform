@@ -50,6 +50,8 @@
         font-size: 30px;
         margin-bottom: 10px; } }
   #trp-widget-new .review-avatar {
+    display: block;
+    text-decoration: none;
     width: 84px;
     height: 84px;
     background-size: cover;
@@ -66,6 +68,7 @@
       width: 100%;
       background: url(../img-trp/avatar-border.svg) no-repeat 50% 50%; }
   #trp-widget-new .review-title {
+    text-decoration: none;
     font-size: 20px;
     font-weight: bold;
     font-style: italic;
@@ -234,7 +237,8 @@
     border-radius: 7px;
     display: inline-block;
     padding: 0px 15px 15px;
-    position: relative; }
+    position: relative;
+    text-decoration: none; }
     #trp-widget-new .badge:before {
       content: '';
       position: absolute;
@@ -281,7 +285,8 @@
   #trp-widget-new .badge-mini {
     background-color: white;
     border-radius: 7px;
-    display: inline-flex; }
+    display: inline-flex;
+    text-decoration: none; }
     #trp-widget-new .badge-mini .mini-wrap {
       padding: 11px 19px 11px 17px; }
       @media screen and (max-width: 768px) {

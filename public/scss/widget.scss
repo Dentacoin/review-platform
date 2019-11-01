@@ -73,6 +73,8 @@ $phone: "screen and (max-width: 768px)";
 	}
 
 	.review-avatar {
+		display: block;
+		text-decoration: none;
 		width: 84px;
 		height: 84px;
 	    background-size: cover;
@@ -93,6 +95,7 @@ $phone: "screen and (max-width: 768px)";
 	}
 
 	.review-title {
+		text-decoration: none;
 		font-size: 20px;
 		font-weight: bold;
 		font-style: italic;
@@ -348,6 +351,7 @@ $phone: "screen and (max-width: 768px)";
 		display: inline-block;
 		padding: 0px 15px 15px;
 		position: relative;
+		text-decoration: none;
 
 		&:before {
 			content: '';
@@ -403,6 +407,7 @@ $phone: "screen and (max-width: 768px)";
 		background-color: white;
 		border-radius: 7px;
 		display: inline-flex;
+		text-decoration: none;
 
 		.mini-wrap {
 			padding: 11px 19px 11px 17px;

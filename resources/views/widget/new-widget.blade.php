@@ -31,11 +31,11 @@
 		<div class="widget-flickity" id="widget-flickity">
 			@foreach($reviews as $review)
 				<div class="widget-slide">
-					<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
+					<a href="{{ $user->getLink().'?review_id='.$review->id }}" target="_blank" class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></a>
 					@if($review->title)
-		    			<span class="review-title">
+		    			<a href="{{ $user->getLink().'?review_id='.$review->id }}" target="_blank" class="review-title">
 		    				“{{ $review->title }}”
-		    			</span>
+		    			</a>
 	    			@endif
 	    			<div class="ratings average">
 						<div class="stars">
@@ -46,7 +46,7 @@
 					<div class="review-content">
 						{!! nl2br($review->answer) !!}
 					</div>
-					<p class="review-name">{{ $review->user->name }}</p>
+					<p class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? 'Verified Patient' : 'Deleted User') : $review->user->name }}</p>
 					<p class="review-date">
 						{{ $review->created_at ? date('d/m/Y', $review->created_at->timestamp) : '-' }}
 					</p>
@@ -110,7 +110,7 @@
 
 		<div class="tac">
 			@if(!empty($badge) && $badge == 'mini')
-				<div class="badge-mini">
+				<a href="{{ $user->getLink() }}" target="_blank" class="badge-mini">
 					<div class="mini-wrap">
 						<div class="rating">
 							{{ $user->avg_rating }}
@@ -125,9 +125,9 @@
 					<div class="logo">
 						<img src="https://reviews.dentacoin.com/img-trp/logo.png">
 					</div>
-				</div>
+				</a>
 			@else
-				<div class="badge">
+				<a href="{{ $user->getLink() }}" target="_blank" class="badge">
 					<img src="https://reviews.dentacoin.com/img-trp/logo-blue.png">
 					<div class="ratings average">
 						<div class="stars">
@@ -138,7 +138,7 @@
 							{{ $user->avg_rating }}
 						</div>
 					</div>
-				</div>
+				</a>
 			@endif
 		</div>
 
@@ -148,16 +148,16 @@
 			@foreach($reviews as $review)
 				<div class="list-review">
 					<div class="list-review-left">
-						<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
+						<a href="{{ $user->getLink().'?review_id='.$review->id }}" target="_blank" class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></a>
 						<span class="review-date">
 							{{ $review->created_at ? date('d/m/Y', $review->created_at->timestamp) : '-' }}
 						</span>
 					</div>
 					<div class="list-review-right">
 						@if($review->title)
-			    			<span class="review-title">
+			    			<a href="{{ $user->getLink().'?review_id='.$review->id }}" target="_blank" class="review-title">
 			    				“{{ $review->title }}”
-			    			</span>
+			    			</a>
 		    			@endif
 		    			<div class="ratings">
 							<div class="stars">
@@ -168,7 +168,7 @@
 						<div class="review-content">
 							{!! nl2br($review->answer) !!}
 						</div>
-						<span class="review-name">{{ $review->user->name }}</span>
+						<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? 'Verified Patient' : 'Deleted User') : $review->user->name }}</span>
 						<span class="mobile-review-date">
 							{{ $review->created_at ? date('d/m/Y', $review->created_at->timestamp) : '-' }}
 						</span>

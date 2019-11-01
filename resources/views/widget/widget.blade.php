@@ -201,7 +201,7 @@
 							</div>
 							<div class="media-body">
 								<div class="media-heading">
-									{{ $review->user->name }}
+									{{ !empty($review->user->self_deleted) ? ($review->verified ? 'Verified Patient' : 'Deleted User') : $review->user->name }}
 								</div>
 
 								@if($review->user->country)
