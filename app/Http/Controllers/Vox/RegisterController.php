@@ -797,7 +797,7 @@ class RegisterController extends FrontController
 
                     if( $user ) {
                         if($user->deleted_at || $user->isBanned('vox')) {
-                            return redirect(getVoxUrl('/').'?error-message='.urlencode('You have been permanently banned and cannot return to Dentavox anymore.' );
+                            return redirect(getVoxUrl('/').'?error-message='.urlencode('You have been permanently banned and cannot return to Dentavox anymore.' ));
                         } else if($user->loggedFromBadIp()) {
                             return redirect(getVoxUrl('/').'?error-message='.urlencode('We have detected a suspicious activity from your IP address.'));
                         } else if($user->self_deleted) {
