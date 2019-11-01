@@ -70,6 +70,10 @@ class LoginController extends FrontController
                 if( $user->loggedFromBadIp() ) {
                     return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
                     ->withInput();
+                } else if($user->self_deleted) {
+                    return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-login']))
+                    ->withInput()
+                    ->with('error-message', 'Unable to sign you up for security reasons.' );
                 }
 
                 $user->fb_id = $s_user->getId();
@@ -94,11 +98,12 @@ class LoginController extends FrontController
 
             if ($user) {
                 if( $user->isBanned('trp') ) {
-                    
                     return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
-                }
-
-                if( $user->loggedFromBadIp() ) {
+                } else if($user->self_deleted) {
+                    return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-login']))
+                    ->withInput()
+                    ->with('error-message', 'Unable to sign you up for security reasons.' );
+                } else if( $user->loggedFromBadIp() ) {
                     return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
                     ->withInput();
                 }
@@ -233,12 +238,12 @@ class LoginController extends FrontController
         if ($user) {
 
             if($user->deleted_at || $user->isBanned('trp')) {
-                
                 return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
-            }
-
-
-            if( $user->loggedFromBadIp() ) {
+            } else if($user->self_deleted) {
+                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-login']))
+                ->withInput()
+                ->with('error-message', 'Unable to sign you up for security reasons.' );
+            } else if( $user->loggedFromBadIp() ) {
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
                 ->withInput();
             }

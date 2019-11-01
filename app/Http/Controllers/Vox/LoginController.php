@@ -48,6 +48,13 @@ class LoginController extends FrontController
                 return redirect( getLangUrl('/').'?error-message='.urlencode('There\'s another profile registered with this Facebook Account'));
 
             } else {
+
+                if( $user->loggedFromBadIp() ) {
+                    return redirect( getLangUrl('/').'?error-message='.urlencode('We have detected suspicious activity from your account.'));
+                } else if($user->self_deleted) {
+                    return redirect( getLangUrl('/').'?error-message='.urlencode('Unable to sign you up for security reasons.'));
+                }
+
                 $user->fb_id = $s_user->getId();
                 $user->save();
                 session(['new_auth' => null]);
@@ -72,6 +79,8 @@ class LoginController extends FrontController
                 if($user->loggedFromBadIp()) {
                     //dd('Bad IP', $s_user, $s_user->user);
                     return redirect( getVoxUrl('/').'?suspended-popup' );
+                } else if($user->self_deleted) {
+                    return redirect( getLangUrl('/').'?error-message='.urlencode('Unable to sign you up for security reasons.'));
                 }
 
                 $sess = [
@@ -143,6 +152,8 @@ class LoginController extends FrontController
             if($user->deleted_at) {
                 //Request::session()->flash('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
                 return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('You have been permanently banned and cannot return to DentaVox anymore.'));
+            } else if($user->self_deleted) {
+                return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Unable to sign you up for security reasons.'));
             } else {
 
                 Auth::login($user, true);
