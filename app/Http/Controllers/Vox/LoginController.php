@@ -384,6 +384,8 @@ class LoginController extends FrontController
                                 
                                 return redirect( getVoxUrl('/').'?suspended-popup' );
 
+                            } else if($user->self_deleted) {
+                                return redirect(getVoxUrl('/').'?error-message='.urlencode('Unable to sign you up for security reasons.'));
                             } else {
 
                                 Auth::login($user, true);

@@ -507,6 +507,11 @@ class LoginController extends FrontController
                                 $ret['popup'] = 'banned-popup';
                             } else if( $user->loggedFromBadIp() ) {
                                 $ret['popup'] = 'suspended-popup';
+                            } else if($user->self_deleted) {
+                                return Response::json( [
+                                    'success' => false, 
+                                    'message' => 'Unable to sign you up for security reasons.',
+                                ] );
                             } else {
 
                                 $sess = [
