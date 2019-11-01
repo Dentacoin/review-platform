@@ -511,7 +511,7 @@ $(document).ready(function(){
             $('.widget-custom-reviews-alert').hide();
 
             var iframe_url = parsedUrl.replace('&width=','&customwidth=').replace('&height=','&customheight=');
-            $('#option-iframe textarea').val('<!--Trusted Reviews Widget-->\n\r<iframe style="width: 100%; height: '+(custom_heigth ? $('[name="list-height"]').val()+'px' : (layout == 'carousel' ? '700px' : '50vh'))+'; border: none; outline: none;" src="'+iframe_url+'"></iframe>\n\r<!--End Trusted Reviews Widget-->');
+            $('#option-iframe textarea').val('<!--Trusted Reviews Widget-->\n\r<iframe style="width: 100%; height: '+(custom_heigth ? $('[name="list-height"]').val()+'px' : (layout == 'carousel' ? '750px' : '50vh'))+'; border: none; outline: none;" src="'+iframe_url+'"></iframe>\n\r<!--End Trusted Reviews Widget-->');
             $('#option-js textarea').val('<!--Trusted Reviews Widget-->\n\r<div id="trp-widget"></div><script type="text/javascript" src="https://reviews.dentacoin.com/js-trp/widget.js"></script> <script type="text/javascript"> TRPWidget.init("'+parsedUrl+'"); </script>\n\r<!--End Trusted Reviews Widget-->');
         });
         $('#widget-carousel').trigger('change');
