@@ -165,6 +165,9 @@ class ProfileController extends FrontController
     //
 
     public function home($locale=null) {
+
+        return redirect(getLangUrl('/'));
+
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
             return redirect(getLangUrl('/'));
         }
@@ -234,6 +237,9 @@ class ProfileController extends FrontController
 
 
     public function withdraw($locale=null) {
+
+        return redirect(getLangUrl('/'));
+
         if(!$this->user->canWithdraw('trp') ) {
             return;
         }
@@ -302,6 +308,8 @@ class ProfileController extends FrontController
 
 
     public function privacy($locale=null) {
+        return redirect(getLangUrl('/'));
+
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
             return redirect(getLangUrl('/'));
         }
@@ -338,6 +346,8 @@ class ProfileController extends FrontController
     }
 
     public function privacy_download($locale=null) {
+
+        return redirect(getLangUrl('/'));
 
         $html = $this->showView('users-data', array(
             'genders' => $this->genders,
@@ -580,6 +590,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             }
 
         }
+
+        return redirect(getLangUrl('/'));
 
         return $this->ShowView('profile-invite', [
             'menu' => $this->menu,
@@ -1383,6 +1395,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
             }
         }
+
+        return redirect(getLangUrl('/'));
 
         return $this->ShowView('profile-info', [
             'menu' => $this->menu,

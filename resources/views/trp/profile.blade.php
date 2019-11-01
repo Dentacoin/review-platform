@@ -9,9 +9,6 @@
 			@include('trp.parts.profile-menu')
 		</div>
 		<div class="flex-3">
-			<div class="strength-parent in-profile">
-				@include('trp.parts.strength-scale')
-			</div>
 
 			<h2 class="page-title">
 				<img src="{!! url('new-vox-img/profile-home.png') !!}" />
