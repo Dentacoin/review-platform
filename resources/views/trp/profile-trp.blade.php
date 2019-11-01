@@ -28,7 +28,7 @@
 						<div class="review-header">
 			    			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
 			    			@if($user->is_dentist)
-			    				<span class="review-name">{{ $review->user->getName() }}: </span>
+			    				<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? 'Verified Patient' : 'Deleted User') : $review->user->name }}: </span>
 			    			@else
 			    				<span class="review-name">to {{ $review->dentist ? $review->dentist->name : $review->clinic->name }}: </span>
 			    			@endif

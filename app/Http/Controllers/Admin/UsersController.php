@@ -211,6 +211,7 @@ class UsersController extends AdminController
         $user_statuses = [
             '' => 'Normal Users',
             'deleted' => 'Deleted Users',
+            'self_deleted' => 'Self Deleted Users',
             'all' => 'Normal & Deleted',
         ];
 
@@ -311,6 +312,9 @@ class UsersController extends AdminController
             }
             if( $status=='deleted' ) {
                 $users = $users->onlyTrashed();
+            }
+            if( $status=='self_deleted' ) {
+                $users = $users->whereNotNull('self_deleted')->withTrashed();
             }
         }
 

@@ -363,7 +363,7 @@
 							<div class="review-content">
 								{!! nl2br($review->answer) !!}
 							</div>
-							<span class="review-name">{{ $review->user->name }}</span>
+							<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? 'Verified Patient' : 'Deleted User') : $review->user->name }}</span>
 							<span class="mobile-review-date">
 								{{ $review->created_at ? date('d/m/Y', $review->created_at->timestamp) : '-' }}
 							</span>

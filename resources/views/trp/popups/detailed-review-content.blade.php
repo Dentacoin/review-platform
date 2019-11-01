@@ -2,7 +2,7 @@
 	<div class="review review-wrapper" review-id="{{ $review->id }}">
 		<div class="review-header">
 			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
-			<span class="review-name">{{ $review->user->name }}: </span>
+			<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? 'Verified Patient' : 'Deleted User') : $review->user->name }}: </span>
 			@if($review->verified)
 				<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
 					{!! nl2br(trans('trp.common.trusted-review')) !!}

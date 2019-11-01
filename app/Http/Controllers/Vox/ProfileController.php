@@ -348,6 +348,8 @@ class ProfileController extends FrontController
                 if( Request::input('action')=='delete' ) {
                     $this->user->sendTemplate( 30 );
                     $this->user->self_deleted = 1;
+                    $this->user->hasimage = false;
+                    $this->user->self_deleted_at = Carbon::now();
                     $this->user->save();
                     $this->user->deleteActions();
                     User::destroy( $this->user->id );
