@@ -1499,6 +1499,23 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'Self deleted users cron start';
+
+            $self_deleted_users = User::whereNotNull('self_deleted')->whereNotNull('self_deleted_at')->where('self_deleted_at', '<', Carbon::now()->subDays(90) )->get();
+            $rand = 'anonymous'.mb_substr(microtime(true), 0, 10);
+
+            foreach ($self_deleted_users as $sdu) {
+                $sdu->name = 'Anonymous';
+                $sdu->email = $rand;
+                $sdu->save();
+            }
+
+            echo 'Self deleted users cron end';
+
+        })->daily(); //05:00h
+
+
+        $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s');
 
         })->cron("* * * * *"); //05:00h
