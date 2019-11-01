@@ -807,9 +807,7 @@ class RegisterController extends FrontController
                         } else if($user->self_deleted) {
                             return Response::json( [
                                 'success' => false, 
-                                'messages' => [
-                                    'name' => 'Unable to sign you up for security reasons.'
-                                ]
+                                'message' => 'Unable to sign you up for security reasons.',
                             ] );
                         } else {
                             Auth::login($user, true);
