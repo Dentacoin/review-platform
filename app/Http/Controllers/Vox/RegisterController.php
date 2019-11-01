@@ -786,8 +786,7 @@ class RegisterController extends FrontController
                 }
 
                 if(empty($email)) {
-                    Request::session()->flash('error-message', trans('front.common.civic.weak'));
-                    return redirect(getLangUrl('registration') );
+                    return redirect(getVoxUrl('/').'?error-message='.urlencode(trans('front.common.civic.weak') );
                 } else {
 
                     $user = User::where( 'civic_id','LIKE', $data['userId'] )->withTrashed()->first();
@@ -798,14 +797,11 @@ class RegisterController extends FrontController
 
                     if( $user ) {
                         if($user->deleted_at) {
-                            Request::session()->flash('error-message', 'You have been permanently banned and cannot return to Dentavox anymore.');
-                            return redirect(getLangUrl('registration') );
+                            return redirect(getVoxUrl('/').'?error-message='.urlencode('You have been permanently banned and cannot return to Dentavox anymore.' );
                         } else if( $user->isBanned('vox') ) {
-                            Request::session()->flash('error-message', trans('front.page.login.vox-ban'));
-                            return redirect(getLangUrl('registration') );
+                            return redirect(getVoxUrl('/').'?error-message='.urlencode(trans('front.page.login.vox-ban')) );
                         } else if($user->self_deleted) {
-                            Request::session()->flash('error-message', trans('Unable to sign you up for security reasons.'));
-                            return redirect(getLangUrl('registration') );
+                            return redirect(getVoxUrl('/').'?error-message='.urlencode('Unable to sign you up for security reasons.'));
                         } else {
                             Auth::login($user, true);
                             if(empty($user->civic_id)) {
@@ -813,8 +809,7 @@ class RegisterController extends FrontController
                                 $user->save();      
                             }
 
-                            Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
-                            return redirect(getLangUrl('registration') );
+                            return redirect(getVoxUrl('/').'?success-message='.urlencode(trans('vox.popup.register.have-account') );
                         }
                     } else {
 
@@ -823,8 +818,7 @@ class RegisterController extends FrontController
 
                         $is_blocked = User::checkBlocks( $name , $email );
                         if( $is_blocked ) {
-                            Request::session()->flash('error-message', trans('front.common.civic.error'));
-                            return redirect(getLangUrl('registration') );
+                            return redirect(getVoxUrl('/').'?error-message='.urlencode(trans('front.common.civic.error') );
                         }
 
                         $has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
