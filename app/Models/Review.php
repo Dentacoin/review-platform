@@ -224,7 +224,7 @@ class Review extends Model {
         }
 
 
-        $answer = $this->answer;
+        $answer = trim(preg_replace('/\s\s+/', ' ', $this->answer));
         $answer = mb_strlen($answer)>100 ? mb_substr($answer, 0, 97).'...' : $answer;
         $answer = wordwrap('"'.$answer.'"', 38);
         $lines = count(explode("\n", $answer));

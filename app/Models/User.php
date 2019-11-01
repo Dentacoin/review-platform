@@ -1477,8 +1477,14 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
         $names = $this->getName();
+        $names = wordwrap('“'.$names.'”', 30); 
+        $lines = count(explode("\n", $names));
+        $top = 205 + $above_pushing;
+        if($lines == 2) {
+            $top -= 60;
+        }
         $names_size = 51;
-        $img->text($names, 515, 205 + $above_pushing, function($font) use ($names_size) {
+        $img->text($names, 515, $top, function($font) use ($names_size) {
             $font->file(public_path().'/fonts/Calibri-Bold.ttf');
             $font->size($names_size);
             $font->color('#000000');
@@ -1503,8 +1509,15 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $font->align('left');
             $font->valign('top');
         });
+
         $location = ($this->city_name ? $this->city_name.', ' : '').($this->state_name ? $this->state_name.', ' : '').$this->country->name;
-        $img->text($location, 555, 365 + $above_pushing, function($font) {
+        $location = wordwrap($location, 50); 
+        $top2 = count(explode("\n", $location));
+        $top2 = 365 + $above_pushing;
+        if($lines == 2) {
+            $top2 -= 20;
+        }
+        $img->text($location, 555, $top2, function($font) {
             $font->file(public_path().'/fonts/Calibri.ttf');
             $font->size(30);
             $font->color('#000000');

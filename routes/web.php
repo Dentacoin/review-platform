@@ -200,8 +200,6 @@ $reviewRoutes = function () {
 
 		Route::group(['namespace' => 'Front'], function () {
 			
-			Route::get('banned', 								'BannedController@home');
-			
 			Route::any('/', 									'IndexController@home');
 			Route::get('pending-dentist', 						'IndexController@pending');
 			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');

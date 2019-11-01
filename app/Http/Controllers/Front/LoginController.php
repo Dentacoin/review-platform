@@ -98,7 +98,7 @@ class LoginController extends FrontController
 
             if ($user) {
                 if( $user->isBanned('trp') ) {
-                    return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+                    return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'banned-popup']));
                 } else if($user->self_deleted) {
                     return redirect()->to( getLangUrl('/', null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'popup-login']))
                     ->withInput()
@@ -238,7 +238,7 @@ class LoginController extends FrontController
         if ($user) {
 
             if($user->deleted_at || $user->isBanned('trp')) {
-                return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+                return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'banned-popup']));
             } else if($user->self_deleted) {
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-login']))
                 ->withInput()
