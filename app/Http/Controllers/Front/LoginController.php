@@ -100,7 +100,7 @@ class LoginController extends FrontController
                 if( $user->isBanned('trp') ) {
                     return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
                 } else if($user->self_deleted) {
-                    return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-login']))
+                    return redirect()->to( getLangUrl('/', null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'popup-login']))
                     ->withInput()
                     ->with('error-message', 'Unable to sign you up for security reasons.' );
                 } else if( $user->loggedFromBadIp() ) {
