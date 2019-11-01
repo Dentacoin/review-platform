@@ -803,6 +803,9 @@ class RegisterController extends FrontController
                         } else if( $user->isBanned('vox') ) {
                             Request::session()->flash('error-message', trans('front.page.login.vox-ban'));
                             return redirect(getLangUrl('registration') );
+                        } else if($user->self_deleted) {
+                            Request::session()->flash('error-message', trans('Unable to sign you up for security reasons.'));
+                            return redirect(getLangUrl('registration') );
                         } else {
                             Auth::login($user, true);
                             if(empty($user->civic_id)) {
