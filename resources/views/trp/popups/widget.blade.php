@@ -114,7 +114,7 @@
 					    	<span>{!! nl2br(trans('trp.popup.popup-widget.reviews.all')) !!}</span>
 					    	<a href="javascript:;" class="open-hidden-option"><i class="fas fa-caret-down"></i></a>
 
-					    	<div class="hidden-option">
+					    	<div class="hidden-option active">
 					    		<p>{!! nl2br(trans('trp.popup.popup-widget.reviews.results')) !!}</p>
 
 					    		<div class="option-checkboxes">
