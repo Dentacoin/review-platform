@@ -16,11 +16,11 @@
 				<div class="survey-time flex">
 					<div class="col">
 						<img src="{{ url('new-vox-img/coin-icon.png') }}">
-						<p>Max {{ $vox->getRewardTotal() }} DCN</p>
+						<p>Max {{ $survey->getRewardTotal() }} DCN</p>
 					</div>
 					<div class="col">
 						<img src="{{ url('new-vox-img/clock-icon.svg') }}">
-						<p><span class="hide-mobile">{{ trans('vox.page.public-questionnaire.time') }}</span> {{ $vox->formatDuration() }}</p>
+						<p><span class="hide-mobile">{{ trans('vox.page.public-questionnaire.time') }}</span> {{ $survey->formatDuration() }}</p>
 					</div>
 				</div>
 				<div class="btns">
