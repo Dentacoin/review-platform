@@ -550,6 +550,7 @@ $(document).ready(function(){
     });
 
     $('.type-radio-widget-first').change( function(e) {
+        $(this).closest('.select-reviews').find('.hidden-option').removeClass('active');
         $(this).closest('.radio-label').find('.hidden-option').addClass('active');
         $(this).closest('.modern-radios').find('.first-label').removeClass('active');
         $(this).closest('.first-label').addClass('active');

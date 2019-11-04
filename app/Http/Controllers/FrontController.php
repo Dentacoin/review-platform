@@ -23,7 +23,6 @@ use Carbon\Carbon;
 
 use App\Models\Reward;
 use App\Models\User;
-use App\Models\Page;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\City;
@@ -437,9 +436,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['pages_header'] = Page::translatedIn(App::getLocale())->where('header','>',0)->orderBy('header', 'asc')->get();
-        $params['pages_footer'] = Page::translatedIn(App::getLocale())->where('footer','>',0)->orderBy('footer', 'asc')->get();
-
         $params['seo_title'] = !empty($params['seo_title']) ? $params['seo_title'] : trans($text_domain.'.seo.'.$this->current_page.'.title');
         $params['seo_description'] = !empty($params['seo_description']) ? $params['seo_description'] : trans($text_domain.'.seo.'.$this->current_page.'.description');
 
@@ -662,6 +658,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2019-11-04';
+        $params['cache_version'] = '2019-11-04-02';
     }
 }
