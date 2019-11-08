@@ -233,7 +233,14 @@
 		@if(empty($user))
 			@include('vox.popups.suspended')
 		@endif
-		
+
+		<style type="text/css">
+			.page-login .poll-bubble, .page-register .poll-bubble {
+				display: none !important;
+			}
+
+		</style>
+
 		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && $current_page != 'register' && $current_page != 'login' && $current_page != 'profile' && request()->getHost() != 'vox.dentacoin.com' && empty($session_polls)) || $current_page == 'daily-polls' || !empty($closed_daily_poll) && $current_page != 'questionnaire')
 			@include('vox.popups.daily-poll')
 		@endif
