@@ -234,7 +234,7 @@
 			@include('vox.popups.suspended')
 		@endif
 
-		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && $current_page != 'profile' && request()->getHost() != 'vox.dentacoin.com' && empty($session_polls)) || $current_page == 'daily-polls' || !empty($closed_daily_poll) && $current_page != 'questionnaire')
+		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && $current_page != 'profile' && request()->getHost() != 'vox.dentacoin.com' && empty($session_polls)) || $current_page == 'daily-polls' || $current_page == 'register' || $current_page == 'login' || !empty($closed_daily_poll) && $current_page != 'questionnaire')
 			@include('vox.popups.daily-poll')
 		@endif
 
