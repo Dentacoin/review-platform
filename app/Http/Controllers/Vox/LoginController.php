@@ -333,6 +333,8 @@ class LoginController extends FrontController
                 }
 
                 Auth::login($newuser, true);
+
+                $intended = session()->pull('our-intended');
                 //Request::session()->flash('success-message', trans('vox.page.registration.success'));
                 return redirect($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/').'?success-message='.urlencode(trans('vox.page.registration.success'))));
             } else {
