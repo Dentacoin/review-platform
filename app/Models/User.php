@@ -1076,6 +1076,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->orderBy('id', 'DESC');
     }
 
+    public function surveys_rewards() {
+        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->where('type', 'survey')->orderBy('id', 'DESC');
+    }
+
     public function vox_surveys_and_polls() {
         return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->whereIn('type', ['daily_poll', 'survey'])->orderBy('id', 'DESC');
     }
@@ -1702,13 +1706,14 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
     }
 
     public static function decrypt($encrypted_text) {
-        if(strpos($encrypted_text, '|')) {
-            list($data, $iv) = explode('|', $encrypted_text);
-            $iv = base64_decode($iv);
-            $raw_text = openssl_decrypt($data, env('CRYPTO_METHOD'), env('CRYPTO_KEY'), 0, $iv);
-            return $raw_text;
-        } else {
-            return false;
+        $arr = explode('|', $encrypted_text);
+        if (count($arr)!=2) {
+            return null;
         }
+        $data = $arr[0];
+        $iv = $arr[1];
+        $iv = base64_decode($iv);
+        $raw_text = openssl_decrypt($data, env('CRYPTO_METHOD'), env('CRYPTO_KEY'), 0, $iv);
+        return $raw_text;
     }
 }
