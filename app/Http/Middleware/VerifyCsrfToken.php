@@ -39,6 +39,10 @@ class VerifyCsrfToken extends BaseVerifier
         '*/login/civic',
         '*/login',
         '*/registration',
+        '*/get-poll-stats/*',
+        '*/get-poll-content/*',
+        '*/daily-polls/*',
+        '*/get-polls/*',
         //'*/paid-dental-surveys/*',
     ];
 }
