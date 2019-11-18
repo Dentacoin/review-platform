@@ -416,8 +416,13 @@ class DentistController extends FrontController
                     $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
                 }
 
-                if ($rev->answers->count() == 9 && array_key_exists("Doctor",$aggregated) ) {
-                    $aggregated['Doctor'] += 5;
+                if ($rev->answers->count() == 9) {
+                    if (array_key_exists("Doctor",$aggregated)) {
+                        $aggregated['Doctor'] += 5;
+                    } else {
+                        $aggregated['Doctor'] = 5;
+                    }
+                    
                 }
             }
 
