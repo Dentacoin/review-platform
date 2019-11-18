@@ -1,3 +1,5 @@
+<!-- if change - go to popup too -->
+
 <form class="invite-new-dentist-form address-suggester-wrapper" action="{{ getLangUrl('invite-new-dentist') }}" method="post">
 	{!! csrf_field() !!}
 
@@ -18,7 +20,7 @@
 					<span></span>
 				</span>
 		    	<input class="type-radio" type="radio" name="mode" id="mode-clinic" value="clinic">
-		    	{!! nl2br(trans('trp.page.invite.mode.clinic')) !!}								    	
+		    	{!! nl2br(trans('trp.page.invite.mode.clinic')) !!}
 		  	</label>
 		  	<span>{!! nl2br(trans('trp.page.invite.mode.clinic.description')) !!}</span>
 		</div>

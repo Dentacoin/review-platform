@@ -1000,7 +1000,7 @@ NEW & FAILED TRANSACTIONS
                     $message->from($sender, $sender_name);
                     $message->to( 'petar.stoykov@dentacoin.com' );
                     $message->to( 'donika.kraeva@dentacoin.com' );
-                    $message->to( 'gergana@youpluswe.com' );
+                    //$message->to( 'gergana@youpluswe.com' );
                     //$message->to( 'dokinator@gmail.com' );
                     $message->subject('Users with high balance');
                 });
