@@ -319,7 +319,7 @@ NEW & FAILED TRANSACTIONS
 ';
 
             $executed = 0;
-            $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->where('created_at','<', Carbon::now()->subMinutes(5)->toDateTimeString())->orderBy('id', 'asc')->take(100)->get(); //
+            $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->where('created_at','<', Carbon::now()->subMinutes(10)->toDateTimeString())->orderBy('id', 'asc')->take(100)->get(); //
             foreach ($transactions as $trans) {
                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                 echo $log.PHP_EOL;
@@ -332,14 +332,14 @@ NEW & FAILED TRANSACTIONS
                     echo 'TOO EARLY TO RETRY'.PHP_EOL;
                 }
 
-                if($executed>5) {
+                if($executed>10) {
                     echo '5 executed - enough for now'.PHP_EOL;
                     break;
                 }
             }
 
             echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-        })->cron("* * * * *");
+        })->cron("*/5 * * * *");
 
 
         $schedule->call(function () {
