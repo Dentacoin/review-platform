@@ -273,7 +273,7 @@ UNCONFIRMED TRANSACTIONS
 
 ';
 
-            $transactions = DcnTransaction::where('status', 'unconfirmed')->inRandomOrder()->take(5)->get(); //
+            $transactions = DcnTransaction::where('status', 'unconfirmed')->inRandomOrder()->take(20)->get(); //
             foreach ($transactions as $trans) {
                 $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                 echo $log.PHP_EOL;
