@@ -289,7 +289,7 @@ class DentistController extends FrontController
                             $option_answers = [];
                             $options = json_decode($question['options'], true);
                             foreach ($options as $i => $nosense) {
-                                $r = Request::input( 'option.'.$question->id.'.'.$i );;
+                                $r = Request::input( 'option.'.$question->id.'.'.$i );
                                 $option_answers[] = $r;
                                 $answer_rates[$question->id] += $r;
                             }
@@ -318,6 +318,8 @@ class DentistController extends FrontController
                         $review->ipfs = $ipfs->add(json_encode($crypto_data));
                         $review->save();
 
+                        $the_dentist = !empty($review->dentist_id) ? User::find($review->dentist_id) : User::find($review->clinic_id);
+                        $the_dentist->recalculateRating();
                         
                         //Send & confirm
                         $is_video = $review->youtube_id ? '_video' : '';
