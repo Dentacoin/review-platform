@@ -52,6 +52,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('blacklist', 						'BlacklistController@list');
 	Route::get('blacklist/delete/{id}', 			'BlacklistController@delete');
 
+	Route::any('whitelist', 						'WhitelistIpsController@list');
+	Route::get('whitelist/delete/{id}', 			'WhitelistIpsController@delete');
+
 	Route::get('users', 							'UsersController@list');
 	Route::post('users/mass-delete', 				'UsersController@massdelete');
 	Route::get('users/byweek', 						'UsersController@byweek');
@@ -142,6 +145,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('vox/polls', 						'PollsController@list');
 	Route::any('vox/polls/add', 					'PollsController@add');
 	Route::any('vox/polls/edit/{id}', 				'PollsController@edit');
+	Route::any('vox/polls/edit/{id}/import', 		'PollsController@import');
 	Route::get('vox/polls/delete/{id}', 			'PollsController@delete');	
 	Route::any('vox/polls/change-date/{id}', 		'PollsController@change_poll_date');
 	Route::any('vox/polls/change-question/{id}', 	'PollsController@change_poll_question');
@@ -173,6 +177,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('testimonial-slider/edit/{id}/addavatar', 	'TestimonialSliderController@add_avatar');
 	Route::any('testimonial-slider/delete/{id}', 	'TestimonialSliderController@delete');
 
+	Route::get('vox/recommendations', 				'RecommendationsController@list');
+
 
 	Route::any('logs', 								'LogsController@list');
 });
@@ -184,7 +190,9 @@ $reviewRoutes = function () {
 	Route::any('test', 									'Front\YouTubeController@test');
 	Route::any('civic', 								'CivicController@add');
 	Route::any('mobident', 								'MobidentController@reward');
-	Route::get('sitemap.xml', 							'Front\SitemapController@links');
+
+	Route::get('sitemap-trusted-reviews.xml', 			'Front\SitemapController@links');
+	Route::get('sitemap.xml', 							'Front\SitemapController@sitemap');
 	Route::get('robots.txt', 							'Front\RobotsController@content');
 
 	Route::get('user-logout',							'Auth\AuthenticateUser@getLogout');
@@ -336,7 +344,8 @@ Route::domain('urgent.reviews.dentacoin.com')->group($reviewRoutes);
 $voxRoutes = function () {
 	
 	Route::any('test', 									'Front\YouTubeController@test');
-	Route::get('sitemap.xml', 							'Vox\SitemapController@links');
+	Route::get('sitemap-dentavox.xml', 					'Vox\SitemapController@links');
+	Route::get('sitemap.xml', 							'Vox\SitemapController@sitemap');
 	Route::get('robots.txt', 							'Vox\RobotsController@content');
 
 	Route::get('user-logout',									'Auth\AuthenticateUser@getLogout');
@@ -400,7 +409,6 @@ $voxRoutes = function () {
 			Route::post('get-poll-content/{id}', 				'PollsController@get_poll_content');
 			Route::post('get-poll-stats/{id}', 					'PollsController@get_poll_stats');
 
-
 			Route::any('vpn', 									'VpnController@list');
 
 			Route::group(['middleware' => 'auth:web'], function () {
@@ -429,6 +437,8 @@ $voxRoutes = function () {
 
 			Route::get('/', 									'IndexController@home');
 			Route::post('request-survey', 						'IndexController@request_survey');
+			Route::post('request-survey-patients', 				'IndexController@request_survey_patients');
+			Route::post('recommend', 							'IndexController@recommend');
 			Route::get('welcome-survey', 						'IndexController@welcome');
 			Route::any('appeal', 								'IndexController@appeal');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');

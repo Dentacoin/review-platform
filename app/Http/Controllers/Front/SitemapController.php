@@ -67,4 +67,23 @@ class SitemapController extends FrontController
         
 	}
 
+
+	public function sitemap($locale=null) {
+
+        $content = '<?xml version="1.0" encoding="UTF-8"?>
+        <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+		   <sitemap>
+		      <loc>https://reviews.dentacoin.com/sitemap-trusted-reviews.xml</loc>
+		      <lastmod>2019-11-10</lastmod>
+		   </sitemap>
+		   <sitemap>
+		      <loc>https://reviews.dentacoin.com/blog/sitemap_index.xml</loc>
+		      <lastmod>2019-11-10</lastmod>
+		   </sitemap>
+		</sitemapindex>';
+        
+		return response($content, 200)
+            ->header('Content-Type', 'application/xml');
+	}
+
 }
