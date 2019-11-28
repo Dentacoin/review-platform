@@ -26,9 +26,12 @@ use App\Models\UserAsk;
 use App\Models\UserTeam;
 use App\Models\DcnTransaction;
 use App\Models\UserLogin;
+use App\Models\WhitelistIp;
 use App\Models\Blacklist;
 use App\Models\BlacklistBlock;
 use App\Models\DentistPageview;
+use App\Models\Recommendation;
+use App\Models\Vox;
 use Carbon\Carbon;
 
 use Request;
@@ -54,39 +57,61 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'email_public',
         'email_clean',
     	'password', 
+        'remember_token',
         'is_dentist',
+        'is_clinic',
         'is_partner',
         'title',
-        'slug',
         'name',
         'name_alternative',
+        'slug',
         'description',
         'short_description',
         'zip',
-        'city_name',
         'state_name',
         'state_slug',
+        'city_name',
         'address',
+        'lat',
+        'lon',
         'phone',
         'website',
+        'socials',
+        'work_hours',
         'accepted_payment',
         'status',
         'ownership',
-        'socials',
-        'work_hours',
+        'is_verified',
+        'is_approved',
+        'verification_code',
+        'phone_verified',
         'city_id',
         'country_id',
         'gender',
         'birthyear',
+        'maritial_status',
+        'children',
+        'household_children',
+        'education',
+        'employment',
+        'job',
+        'job_title',
+        'income',
         'avg_rating',
         'ratings',
         'strength',
         'widget_activated',
         'invited_by',
+        'invite_secret',
         'hasimage',
         'hasimage_social',
-        'is_approved',
+        'register_reward',
+        'register_tx',
+        'dcn_address',
+        'vox_address',
         'vox_active',
+        'tw_id',
+        'gp_id',
         'fb_id',
         'civic_id',
         'civic_kyc',
@@ -94,18 +119,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'platform',
         'patient_of',
         'is_hub_app_dentist',
+        'place_id',
         'unsubscribe',
         'gdpr_privacy',
         'self_deleted',
         'allow_withdraw',
         'grace_end',
         'grace_notified',
-        'dcn_address',
-        'place_id',
-        'lat',
-        'lon',
+        'recover_token',
+        'fb_recommendation',
+        'first_login_recommendation',
     ];
     protected $dates = [
+        'phone_verified_on',
+        'verified_on',
+        'recover_at',
         'self_deleted_at',
         'created_at',
         'updated_at',
@@ -180,6 +208,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     public function claims() {
         return $this->hasMany('App\Models\DentistClaim', 'dentist_id', 'id')->orderBy('created_at', 'DESC');
+    }
+    public function recommendations() {
+        return $this->hasMany('App\Models\Recommendation', 'user_id', 'id')->orderBy('created_at', 'DESC');
     }
     public function asks() {
         return $this->hasMany('App\Models\UserAsk', 'dentist_id', 'id')->orderBy('id', 'DESC');
@@ -507,8 +538,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         if (empty($is_skipped)) {
 
-            $sender = $item->platform=='vox' ? config('mail.from.address-vox') : config('mail.from.address');
-            $sender_name = $item->platform=='vox' ? config('mail.from.name-vox') : config('mail.from.name');
+            $sender = $item->platform=='vox' ? config('mail.from.address-vox') : ($item->platform == 'trp' ? config('mail.from.address') : config('mail.from.address-dentacoin'));
+            $sender_name = $item->platform=='vox' ? config('mail.from.name-vox') : ($item->platform == 'trp' ? config('mail.from.name') : config('mail.from.name-dentacoin'));
             //$sender_name = config('platforms.'.$item->platform.'.name') ?? config('mail.from.name');
 
             $from = new From($sender, $sender_name);
@@ -1233,13 +1264,23 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     }
 
     public function loggedFromBadIp() {
-        $users_with_same_ip = UserLogin::where('ip', 'like', self::getRealIp())->where('user_id', '!=', $this->ip)->groupBy('user_id')->get()->count();
 
-        if ($users_with_same_ip >=3 && !$this->allow_withdraw && !$this->is_dentist && $this::getRealIp() != '78.130.213.163' && $this::getRealIp() != '213.91.254.194' ) {
-            return true;
-        } else {
+        $ip = self::getRealIp();
+
+        $is_whitelist_ip = WhitelistIp::where('ip', 'like', $ip)->first();
+
+        if (!empty($is_whitelist_ip)) {
             return false;
+        } else {
+            $users_with_same_ip = UserLogin::where('ip', 'like', self::getRealIp())->where('user_id', '!=', $this->id)->groupBy('user_id')->get()->count();
+
+            if ($users_with_same_ip >=2 && !$this->allow_withdraw && !$this->is_dentist && $this::getRealIp() != '78.130.213.163' && $this::getRealIp() != '213.91.254.194' ) {
+                return true;
+            } else {
+                return false;
+            }
         }
+
     }
 
     public static function lastLoginUserId() {
@@ -1715,5 +1756,203 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
         $iv = base64_decode($iv);
         $raw_text = openssl_decrypt($data, env('CRYPTO_METHOD'), env('CRYPTO_KEY'), 0, $iv);
         return $raw_text;
+    }
+
+    public static function getAllVoxes() {
+        return Vox::with('translations');
+    }
+
+    public function voxesTargeting() {
+        $voxlist = self::getAllVoxes();
+
+        $marital_status = $this->marital_status;
+        $children = $this->children;
+        $household_children = $this->household_children;
+        $education = $this->education;
+        $employment = $this->employment;
+        $job = $this->job;
+        $job_title = $this->job_title;
+        $income = $this->income;
+        $country_id = $this->country_id;
+        $gender = $this->gender;
+        $dentists_patients = $this->is_dentist ? 'dentists' : 'patients';
+        
+        $age = !empty($this->birthyear) ? date('Y') - $this->birthyear : null;
+
+        if (!empty($age)) {
+            if ($age <= 24) {
+                $age = 24;
+            } else if($age <= 34) {
+                $age = 34;
+            } else if($age <= 44) {
+                $age = 44;
+            } else if($age <= 54) {
+                $age = 54;
+            } else if($age <= 64) {
+                $age = 64;
+            } else if($age <= 74) {
+                $age = 74;
+            } else if($age > 74) {
+                $age = 'more';
+            }            
+        }
+
+        if (!empty($marital_status)) {
+            $voxlist = $voxlist->where(function($query) use ($marital_status) {
+                $query->whereNull('marital_status')
+                ->orWhereRaw('FIND_IN_SET("'.$marital_status.'", `marital_status`)');
+            });
+        }
+
+        if (!empty($children)) {
+            $voxlist = $voxlist->where(function($query) use ($children) {
+                $query->whereNull('children')
+                ->orWhereRaw('FIND_IN_SET("'.$children.'", `children`)');
+            });
+        }
+
+        if (!empty($household_children)) {
+            $voxlist = $voxlist->where(function($query) use ($household_children) {
+                $query->whereNull('household_children')
+                ->orWhereRaw('FIND_IN_SET("'.$household_children.'", `household_children`)');
+            });
+        }
+
+        if (!empty($education)) {
+            $voxlist = $voxlist->where(function($query) use ($education) {
+                $query->whereNull('education')
+                ->orWhereRaw('FIND_IN_SET("'.$education.'", `education`)');
+            });
+        }
+
+        if (!empty($employment)) {
+            $voxlist = $voxlist->where(function($query) use ($employment) {
+                $query->whereNull('employment')
+                ->orWhereRaw('FIND_IN_SET("'.$employment.'", `employment`)');
+            });
+        }
+
+        if (!empty($job)) {
+            $voxlist = $voxlist->where(function($query) use ($job) {
+                $query->whereNull('job')
+                ->orWhereRaw('FIND_IN_SET("'.$job.'", `job`)');
+            });
+        }
+
+        if (!empty($job_title)) {
+            $voxlist = $voxlist->where(function($query) use ($job_title) {
+                $query->whereNull('job_title')
+                ->orWhereRaw('FIND_IN_SET("'.$job_title.'", `job_title`)');
+            });
+        }
+
+        if (!empty($income)) {
+            $voxlist = $voxlist->where(function($query) use ($income) {
+                $query->whereNull('income')
+                ->orWhereRaw('FIND_IN_SET("'.$income.'", `income`)');
+            });
+        }
+
+        if (!empty($country_id)) {
+            $voxlist = $voxlist->where(function($query) use ($country_id) {
+                $query->whereNull('countries_ids')
+                ->orWhereRaw('JSON_CONTAINS( `countries_ids`, \'"'.$country_id.'"\')');
+            });
+        }
+
+        if (!empty($gender)) {
+            $voxlist = $voxlist->where(function($query) use ($gender) {
+                $query->whereNull('gender')
+                ->orWhereRaw('FIND_IN_SET("'.$gender.'", `gender`)');
+            });
+        }
+
+        if (!empty($dentists_patients)) {
+            $voxlist = $voxlist->where(function($query) use ($dentists_patients) {
+                $query->whereNull('dentists_patients')
+                ->orWhereRaw('FIND_IN_SET("'.$dentists_patients.'", `dentists_patients`)');
+            });
+        }
+
+        if (!empty($age)) {
+            $voxlist = $voxlist->where(function($query) use ($age) {
+                $query->whereNull('age')
+                ->orWhereRaw('FIND_IN_SET("'.$age.'", `age`)');
+            });
+        }
+
+        return $voxlist;
+
+    }
+
+    public function isVoxRestricted($vox) {
+
+        $dentists_patients = $this->is_dentist ? 'dentists' : 'patients';
+        $age = !empty($this->birthyear) ? date('Y') - $this->birthyear : null;
+
+        if (!empty($age)) {            
+            if ($age <= 24) {
+                $age = 24;
+            } else if($age <= 34) {
+                $age = 34;
+            } else if($age <= 44) {
+                $age = 44;
+            } else if($age <= 54) {
+                $age = 54;
+            } else if($age <= 64) {
+                $age = 64;
+            } else if($age <= 74) {
+                $age = 74;
+            } else if($age > 74) {
+                $age = 'more';
+            }
+        }
+
+        //set fields
+        $arr = [
+            'marital_status',
+            'children',
+            'household_children',
+            'education',
+            'employment',
+            'job',
+            'job_title',
+            'income',
+            'gender',
+        ];
+
+        $is_restricted = false;
+
+        foreach ($arr as $val) {
+            if (!empty($this->$val)) {                
+                if (!empty($vox->$val) && !in_array($this->$val, $vox->$val)) {
+                    $is_restricted = true;
+                }
+            }
+        }
+
+        if (!empty($this->birthyear)) {
+            
+            if (!empty($vox->age) && !in_array($age, $vox->age)) {
+                $is_restricted = true;
+            }
+        }
+
+        if (!empty($vox->dentists_patients) && !in_array($dentists_patients, $vox->dentists_patients)) {
+            $is_restricted = true;
+        }
+
+        if (!empty($this->country_id)) {
+            if (!empty($vox->countries_ids) && !in_array($this->country_id, $vox->countries_ids)) {
+                $is_restricted = true;
+            }
+
+            // if (!empty($vox->country_percentage) && !empty($vox->users_percentage) && array_key_exists($this->country_id, $vox->users_percentage) && $vox->users_percentage[$this->country_id] > $vox->country_percentage) {
+            //     $is_restricted = true;
+            // }
+        }
+
+        return $is_restricted;
+
     }
 }
