@@ -1531,7 +1531,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
         $names = $this->getName();
-        $names = wordwrap('“'.$names.'”', 30); 
+        $names = wordwrap($names, 30); 
         $lines = count(explode("\n", $names));
         $top = 205 + $above_pushing;
         if($lines == 2) {
