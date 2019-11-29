@@ -480,7 +480,6 @@ class DentistController extends FrontController
         $social_image = $item->getSocialCover();
         $is_review = false;
         if( request('review_id') && $current_review = $reviews->where('id', request('review_id'))->first() ) {
-            $current_review->generateSocialCover();
             $social_image = $current_review->getSocialCover();
             $is_review = true;
         }
