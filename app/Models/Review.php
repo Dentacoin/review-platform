@@ -310,7 +310,7 @@ class Review extends Model {
         if(!$this->hasimage_social) {
             $this->generateSocialCover();
         }
-        return url('/storage/reviews/'.($this->id%100).'/'.$this->id.'-cover.jpg').'?rev='.$this->updated_at->timestamp.'1';
+        return url('/storage/reviews/'.($this->id%100).'/'.$this->id.'-cover.jpg').'?rev='.$this->updated_at->timestamp.'12';
     }
 
     public static function handleTreatmentTooltips($t) {
