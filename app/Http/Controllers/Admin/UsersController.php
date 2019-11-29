@@ -160,6 +160,10 @@ class UsersController extends AdminController
             'is_hub_app_dentist' => [
                 'type' => 'bool',
             ],
+            'fb_recommendation' => [
+                'type' => 'bool',
+            ],
+            
     	];
     }
 
@@ -254,8 +258,8 @@ class UsersController extends AdminController
             $users = $users->has('reviews_in_dentist', '=', $this->request->input('search-review'));
         }
         if(!empty($this->request->input('search-surveys-taken'))) {
-            $users = $users->whereHas('dcn_rewards', function ($query) {
-                $query->where('vox_id', '!=', 11);
+            $users = $users->whereHas('surveys_rewards', function ($query) {
+                $query->where('reference_id', '!=', 11);
             }, '>=', $this->request->input('search-surveys-taken'));
         }
         if(!empty($this->request->input('search-register-from'))) {
@@ -1185,7 +1189,7 @@ class UsersController extends AdminController
                 $habits_tests[] = [
                     'question' => $welcome_question->question,
                     'old_answer' => $oq ? $oq : ($welcome_answer ? json_decode($welcome_question->answers, true)[($welcome_answer->answer) -1] : ''),
-                    'answer' => $oq && $welcome_answer ? json_decode($welcome_question->answers, true)[($welcome_answer->answer) -1] : '',
+                    'answer' => $oq && $welcome_answer ? ((isset(json_decode($welcome_question->answers, true)[($welcome_answer->answer) -1])) ? json_decode($welcome_question->answers, true)[($welcome_answer->answer) -1] : '' ) : '',
                     'last_updated' => !empty(VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->orderBy('id', 'desc')->first()) ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->orderBy('id', 'desc')->first()->created_at : '',
                     'updates_count' => VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->count() ? VoxCrossCheck::where('user_id', $item->id)->where('question_id', $welcome_question->id)->count() : '',
                 ];
