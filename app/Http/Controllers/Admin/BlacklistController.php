@@ -34,6 +34,17 @@ class BlacklistController extends AdminController
                 $bl->comments = $this->request->input('comments');
                 $bl->save();
 
+                if ($this->request->input('field') == 'email') {
+                    $users = User::get();
+
+                    foreach ($users as $u) {
+                        if (fnmatch(mb_strtolower($this->request->input('pattern')), mb_strtolower($u->email)) == true) {
+                            $u->deleteActions();
+                            User::destroy( $u->id );
+                        }
+                    }
+                }
+
                 $this->request->session()->flash('success-message', 'Item added to the blacklist' );
                 return redirect('cms/blacklist');
             }
