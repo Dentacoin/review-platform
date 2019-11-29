@@ -96,7 +96,8 @@ class TransactionsController extends AdminController
 
         $current_url = url('cms/transactions');
 
-        $pagination_link = (!empty(request()->input('search-address')) ? '&search-address='.request()->input( 'search-address' ) : '').(!empty(request()->input('search-tx')) ? '&search-tx='.request()->input( 'search-tx' ) : '').(!empty(request()->input('search-user-id')) ? '&search-user-id='.request()->input( 'search-user-id' ) : '').(!empty(request()->input('search-status')) ? '&search-status='.request()->input( 'search-status' ) : '').(!empty(request()->input('search-from')) ? '&search-from='.request()->input( 'search-from' ) : '').(!empty(request()->input('search-to')) ? '&search-to='.request()->input( 'search-to' ) : '');
+        $pagination_link = (!empty($this->request->input('search-address')) ? '&search-address='.$this->request->input( 'search-address' ) : '').(!empty($this->request->input('search-tx')) ? '&search-tx='.$this->request->input( 'search-tx' ) : '').(!empty($this->request->input('search-user-id')) ? '&search-user-id='.$this->request->input( 'search-user-id' ) : '').(!empty($this->request->input('search-email')) ? '&search-email='.$this->request->input( 'search-email' ) : '').(!empty($this->request->input('search-status')) ? '&search-status='.$this->request->input( 'search-status' ) : '').(!empty($this->request->input('search-from')) ? '&search-from='.$this->request->input( 'search-from' ) : '').(!empty($this->request->input('search-to')) ? '&search-to='.$this->request->input( 'search-to' ) : '');
+
 
         return $this->showView('transactions', array(
             'transactions' => $transactions,
