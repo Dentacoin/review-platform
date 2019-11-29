@@ -320,6 +320,8 @@ class DentistController extends FrontController
 
                         $the_dentist = !empty($review->dentist_id) ? User::find($review->dentist_id) : User::find($review->clinic_id);
                         $the_dentist->recalculateRating();
+                        $the_dentist->hasimage_social = false;
+                        $the_dentist->save();
                         
                         //Send & confirm
                         $is_video = $review->youtube_id ? '_video' : '';
