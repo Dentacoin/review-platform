@@ -211,10 +211,17 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Facebook ID</label>
-                                <div class="col-md-10">
+                                <div class="col-md-7">
                                     @include('admin.parts.user-field',[
                                         'key' => 'fb_id',
                                         'info' => $fields['fb_id']
+                                    ])
+                                </div>                                
+                                <label class="col-md-2 control-label user-l" style="padding-left: 0px;">FB Recommend</label>
+                                <div class="col-md-1" style="padding-left: 0px;">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'fb_recommendation',
+                                        'info' => $fields['fb_recommendation']
                                     ])
                                 </div>
                             </div>
@@ -268,6 +275,7 @@
                                     </div>
                                 </div>
                             @endif
+                            
                         </div>
                         <div class="col-md-6">
                             <div class="form-group avatar-group">
@@ -317,6 +325,20 @@
                                     @endif
                                 </div>
                             </div>
+                            @if($item->self_deleted_at)
+                                <div class="form-group">
+                                    <div class="col-md-12" style="text-align: right;">
+                                        <span style="color: black; padding-right: 5px;">Self deleted at: {{ $item->self_deleted_at->toDateTimeString() }}</span>
+                                    </div>
+                                </div>
+                            @endif
+                            @if($item->deleted_at)
+                                <div class="form-group">
+                                    <div class="col-md-12" style="text-align: right;">
+                                        <span style="color: black; padding-right: 5px;">Deleted at: {{ $item->deleted_at->toDateTimeString() }}</span>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="form-group">
                                 <div class="col-md-6"></div>
                                 <div class="col-md-6">
@@ -749,6 +771,35 @@
                             'update'            => array('label' => 'Actions', 'template' => 'admin.parts.table-dentist-claim-edit','width' => '10%'),
                         ],
                         'table_data' => $item->claims,
+                        'table_pagination' => false,
+                    ])
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if($item->recommendations->isNotEmpty())
+    <div class="row with-limits" id="recommendations-list">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">Recommendations</h4>
+                </div>
+                <div class="panel-body">
+                <div class="panel-body">
+                    @include('admin.parts.table', [
+                        'table_id' => 'recommendations',
+                        'table_fields' => [
+                            'created_at'        => array('format' => 'datetime','width' => '20%'),
+                            'scale'              => array('label' => 'Scale','width' => '20%'),
+                            'description'              => array('label' => 'Comment','width' => '100%'),
+                        ],
+                        'table_data' => $item->recommendations,
                         'table_pagination' => false,
                     ])
                 </div>
