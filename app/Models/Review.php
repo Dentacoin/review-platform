@@ -295,6 +295,8 @@ class Review extends Model {
         }
 
         $img->save($path);
+        $this->hasimage_social = true;
+        $this->save();
     }
 
     public function getSocialCoverPath() {
