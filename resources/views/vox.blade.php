@@ -38,7 +38,7 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
 		{!! config('langs')[App::getLocale()]['font'] !!}
-		<link rel="stylesheet" type="text/css" href="{{ url('/css/app.css').'?ver='.$cache_version }}" />
+		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css').'?ver='.$cache_version }}" /> -->
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/flickity.min.css').'?ver='.$cache_version }}" />
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-vox.css').'?ver='.$cache_version }}" />
 		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/ids.css').'?ver='.$cache_version }}" /> -->
@@ -221,6 +221,38 @@
 					</div>
 				</div>
 			</header>
+			<style type="text/css">
+				
+				.christmas-banner {
+					box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+					display: block;
+				}
+
+				.christmas-banner img {
+					width: 100%;
+					display: block;
+				}
+
+				.christmas-banner.mobile-christmas-banner {
+					display: none;
+				}
+
+				@media screen and (max-width: 768px) {
+					.christmas-banner {
+						display: none;
+					}
+
+					.christmas-banner.mobile-christmas-banner {
+						display: block;
+					}
+				}
+			</style>
+			<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner">
+				<img src="{{ url('new-vox-img/christmas-banner.gif') }}">
+			</a>
+			<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner mobile-christmas-banner">
+				<img src="{{ url('new-vox-img/mobile-christmas-banner-small.gif') }}">
+			</a>
 
 			<div class="site-content">
 		   
@@ -232,16 +264,16 @@
 
 		@if(empty($user))
 			@include('vox.popups.suspended')
+		
 		@endif
 
 		<style type="text/css">
 			.page-login .poll-bubble, .page-register .poll-bubble {
 				display: none !important;
 			}
-
 		</style>
 
-		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && $current_page != 'register' && $current_page != 'login' && $current_page != 'profile' && request()->getHost() != 'vox.dentacoin.com' && empty($session_polls)) || $current_page == 'daily-polls' || !empty($closed_daily_poll) && $current_page != 'questionnaire')
+		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && $current_page != 'register' && $current_page != 'login' && $current_page != 'profile' && request()->getHost() != 'vox.dentacoin.com' && request()->getHost() != 'account.dentacoin.com' && empty($session_polls)) || $current_page == 'daily-polls' || !empty($closed_daily_poll) && $current_page != 'questionnaire')
 			@include('vox.popups.daily-poll')
 		@endif
 
@@ -417,6 +449,7 @@
 				<i class="fas fa-times-circle"></i>
 			</a>
 		-->
+			
 			<div id="cookiebar" >
 				<p>
 					{!! nl2br( trans('vox.common.cookiebar-hint',[

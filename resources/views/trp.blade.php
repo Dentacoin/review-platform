@@ -216,6 +216,40 @@
 					<i class="fas fa-times-circle"></i>
 				</a>
 			-->
+
+			<style type="text/css">
+				
+				.christmas-banner {
+					box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+					display: block;
+				}
+
+				.christmas-banner img {
+					width: 100%;
+					display: block;
+				}
+
+				.christmas-banner.mobile-christmas-banner {
+					display: none;
+				}
+
+				@media screen and (max-width: 768px) {
+					.christmas-banner {
+						display: none;
+					}
+
+					.christmas-banner.mobile-christmas-banner {
+						display: block;
+					}
+				}
+			</style>
+
+			<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner">
+				<img src="{{ url('img-trp/christmas-banner.gif') }}">
+			</a>
+			<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner mobile-christmas-banner">
+				<img src="{{ url('img-trp/mobile-christmas-banner-small.gif') }}">
+			</a>
 			<div id="cookiebar" >
 				<p>
 					{!! nl2br( trans('trp.common.cookiebar-hint',[
