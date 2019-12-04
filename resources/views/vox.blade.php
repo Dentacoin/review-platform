@@ -224,17 +224,31 @@
 			<style type="text/css">
 				
 				.christmas-banner {
+					position: relative;
 					box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
 					display: block;
 				}
 
-				.christmas-banner img {
+				.christmas-banner img:not(.close-banner) {
 					width: 100%;
 					display: block;
 				}
 
+				.christmas-banner .close-banner {
+					position: absolute;
+				    right: 10px;
+				    top: 10px;
+				}
+
 				.christmas-banner.mobile-christmas-banner {
 					display: none;
+				}
+
+				@media screen and (max-height: 800px) and (min-width: 769px ) {
+					.vox-public .christmas-banner {
+						margin-bottom: 50px;
+						margin-top: -20px;
+					}
 				}
 
 				@media screen and (max-width: 768px) {
@@ -247,12 +261,29 @@
 					}
 				}
 			</style>
+
 			<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner">
+				<img class="close-banner" id="banner-pc" src="{{ url('new-vox-img/close-popup.png') }}">
 				<img src="{{ url('new-vox-img/christmas-banner.gif') }}">
 			</a>
 			<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner mobile-christmas-banner">
+				<img class="close-banner" id="banner-mobile" src="{{ url('new-vox-img/close-popup.png') }}">
 				<img src="{{ url('new-vox-img/mobile-christmas-banner-small.gif') }}">
 			</a>
+
+			<script type="text/javascript">
+
+				document.getElementById("banner-pc").addEventListener("click", function(e) {
+					e.preventDefault();
+					this.parentNode.style.display='none';
+				});
+
+				document.getElementById("banner-mobile").addEventListener("click", function(e) {
+					e.preventDefault();
+					this.parentNode.style.display='none';
+				});
+				
+			</script>
 
 			<div class="site-content">
 		   
@@ -264,7 +295,6 @@
 
 		@if(empty($user))
 			@include('vox.popups.suspended')
-		
 		@endif
 
 		<style type="text/css">
