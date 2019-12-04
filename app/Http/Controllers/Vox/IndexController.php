@@ -35,7 +35,7 @@ class IndexController extends FrontController
 			'all' => trans('vox.page.home.sort-all'),
 		];
 
-		$social_image = url('new-vox-img/dentavox-summer-rewards.jpg');
+		$social_image = url('new-vox-img/paid-dental-surveys.png');
 
 		$strength_arr = null;
 		$completed_strength = null;
@@ -257,6 +257,124 @@ class IndexController extends FrontController
                 return Response::json( [
                     'success' => true,
                 ] );
+
+            }
+		}
+	}
+
+	public function request_survey_patients($locale=null) {
+
+		$validator = Validator::make(Request::all(), [
+            'topics' => array('required'),
+        ]);
+
+        if ($validator->fails()) {
+
+            $msg = $validator->getMessageBag()->toArray();
+            $ret = array(
+                'success' => false,
+                'messages' => array()
+            );
+
+            foreach ($msg as $field => $errors) {
+                $ret['messages'][$field] = implode(', ', $errors);
+            }
+
+            return Response::json( $ret );
+        } else {
+        	$mtext = 'New survey request from '.(!empty($this->user) ? 'patient '.$this->user->name.' with User ID '.$this->user->id : 'not logged user').'
+	        Survey topics and the questions: '.request('topics');
+
+	        Mail::raw($mtext, function ($message) {
+
+	            $sender = 'dentavox@dentacoin.com';
+	            $sender = 'donika.kraeva@dentacoin.com';
+	            //$sender = 'gergana@youpluswe.com';
+	            $sender_name = config('mail.from.name-vox');
+
+	            $message->from($sender, $sender_name);
+	            $message->to( $sender );
+	            $message->subject('Survey Request From Patient or Not Logged User');
+	        });
+
+            return Response::json( [
+                'success' => true,
+            ] );
+
+        }
+	}
+
+	public function recommend($locale=null) {
+
+		if(!empty($this->user)) {
+
+			$validator = Validator::make(Request::all(), [
+                'scale' => array('required'),
+            ]);
+
+            if ($validator->fails()) {
+
+                $msg = $validator->getMessageBag()->toArray();
+                $ret = array(
+                    'success' => false,
+                    'messages' => array()
+                );
+
+                foreach ($msg as $field => $errors) {
+                    $ret['messages'][$field] = implode(', ', $errors);
+                }
+
+                return Response::json( $ret );
+            } else {
+
+            	if (session('recommendation')) {
+            		$new_recommendation = Recommendation::find(session('recommendation'));
+
+                } else {
+                	$new_recommendation = new Recommendation;
+                	$new_recommendation->save();
+                    session([
+                        'recommendation' => $new_recommendation->id
+                    ]);
+                }
+        		
+        		$new_recommendation->user_id = $this->user->id;
+        		$new_recommendation->scale = Request::input('scale');
+        		$new_recommendation->save();
+
+            	if (intval(Request::input('scale')) > 3) {
+            		$this->user->fb_recommendation = false;
+            		$this->user->save();
+
+            		return Response::json( [
+	                    'success' => true,
+	                    'recommend' => true,
+	                    'description' => false,
+	                ] );
+            	}
+
+            	if (intval(Request::input('scale')) <= 3) {
+            		$this->user->fb_recommendation = true;
+            		$this->user->save();
+            	}
+
+            	if (!empty(Request::input('description'))) {
+            		$new_recommendation->description = Request::input('description');
+            		$new_recommendation->save();
+
+            		return Response::json( [
+	                    'success' => true,
+		                'recommend' => false,
+		                'description' => true,
+	                ] );
+            	}
+
+                return Response::json( [
+                    'success' => true,
+	                'recommend' => false,
+		            'description' => false,
+                ] );
+
 
             }
 		}
