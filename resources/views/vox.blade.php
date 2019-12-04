@@ -302,8 +302,8 @@
 				display: none !important;
 			}
 
-			.page-statistics .stats .stat.active a.title {
-				background-size: 24px;
+			.page-statistics .stats .stat a.title {
+				background-size: 24px !important;
 			}
 		</style>
 
