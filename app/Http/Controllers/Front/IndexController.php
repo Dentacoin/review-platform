@@ -194,7 +194,7 @@ class IndexController extends FrontController
 			$homeDentists = $homeDentists->concat($addMore);	
 		}
 
-		$social_image = url('img-trp/index-social-image.jpg');
+		$social_image = url('img-trp/reviews-social-image.png');
 
 		$strength_arr = null;
 		$completed_strength = null;
