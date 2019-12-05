@@ -6565,7 +6565,6 @@ body.edit-user .information {
 .strength-parent {
   position: relative;
   width: 100%;
-  max-width: 800px;
   margin-right: auto;
   margin-left: auto;
   z-index: 123; }
@@ -6629,14 +6628,14 @@ body.edit-user .information {
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 0px;
-    max-width: 800px; }
+    bottom: 0px; }
     @media screen and (max-width: 992px) {
       .strength-parent.fixed {
         width: calc(100% - 16px);
         bottom: 3px; } }
 
 .strength-wrapper {
+  max-width: 800px;
   width: 100%;
   margin: 0 auto;
   box-shadow: 0px 0 4px 0px rgba(0, 0, 0, 0.2);
