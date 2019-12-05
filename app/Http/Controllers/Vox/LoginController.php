@@ -15,6 +15,7 @@ use Auth;
 use Response;
 use Request;
 use Image;
+use Cookie;
 
 class LoginController extends FrontController
 {
@@ -107,7 +108,7 @@ class LoginController extends FrontController
                 //     'endlink' => '</a>',
                 // ]));
                 return redirect( getLangUrl('login', null, 'https://vox.dentacoin.com/').'?error-message='.urlencode(trans('vox.page.login.error-fb', [
-                    'link' => '<a href="'.getVoxUrl('/').'">',
+                    'link' => '<a href="https://vox.dentacoin.com/en/registration">',
                     'endlink' => '</a>',
                 ])));
             }
@@ -146,12 +147,20 @@ class LoginController extends FrontController
             $user = User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->first();            
         }
 
+        $stat_redirect = null;
+        if (Cookie::get('stat-url')) {
+            $stat_redirect = Cookie::get('stat-url');
+            Cookie::queue(Cookie::forget('stat-url'));
+        }
+
         $city_id = null;
         $country_id = null;
         if ($user) {
             if($user->deleted_at) {
                 //Request::session()->flash('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
                 return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('You have been permanently banned and cannot return to DentaVox anymore.'));
+            } else if($user->loggedFromBadIp()) {
+                return redirect( getVoxUrl('/').'?suspended-popup' );
             } else if($user->self_deleted) {
                 return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Unable to sign you up for security reasons.'));
             } else {
@@ -164,7 +173,7 @@ class LoginController extends FrontController
                 
                 $intended = session()->pull('our-intended');
                 //Request::session()->flash('success-message', trans('vox.popup.register.have-account'));
-                return redirect($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/').'?success-message='.urlencode(trans('vox.popup.register.have-account'))) );
+                return redirect($stat_redirect ? $stat_redirect : ($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/').'?success-message='.urlencode(trans('vox.popup.register.have-account'))) ));
             }
         } else {
             if (!empty($s_user->getEmail())) {
@@ -336,7 +345,7 @@ class LoginController extends FrontController
 
                 $intended = session()->pull('our-intended');
                 //Request::session()->flash('success-message', trans('vox.page.registration.success'));
-                return redirect($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/').'?success-message='.urlencode(trans('vox.page.registration.success'))));
+                return redirect($stat_redirect ? $stat_redirect : ($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/').'?success-message='.urlencode(trans('vox.page.registration.success')))));
             } else {
                 return redirect( getVoxUrl('/').'?error-message='.urlencode(trans('vox.page.registration.no-fb-email')));
             }
