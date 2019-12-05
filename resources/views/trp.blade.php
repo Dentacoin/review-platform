@@ -216,7 +216,7 @@
 					<i class="fas fa-times-circle"></i>
 				</a>
 			-->
-			@if(!empty($user) && $current_page == 'index')
+			@if(!empty($user) && $current_page == 'index' || $current_page == 'strength-pb')
 
 			@else
 				<style type="text/css">
