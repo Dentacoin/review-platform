@@ -40,15 +40,22 @@
 	</div>
 </div>
 <style type="text/css">
-				
+					
 	.christmas-banner {
+		position: relative;
 		box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
 		display: block;
 	}
 
-	.christmas-banner img {
+	.christmas-banner img:not(.close-banner) {
 		width: 100%;
 		display: block;
+	}
+
+	.christmas-banner .close-banner {
+		position: absolute;
+	    right: 10px;
+	    top: 10px;
 	}
 
 	.christmas-banner.mobile-christmas-banner {
