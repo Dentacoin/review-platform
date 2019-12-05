@@ -545,20 +545,25 @@ class RegisterController extends FrontController
 
     public function forgot_form($locale=null) {
 
-        $user = User::where([
-            ['email','LIKE', Request::input('email') ],
-            ['is_dentist', 1 ],
-        ])->first();
+        if (!empty(Request::input('email'))) {
+            $user = User::where([
+                ['email','LIKE', Request::input('email') ],
+                ['is_dentist', 1 ],
+            ])->first();
 
-        if(empty($user->id)) {
-            Request::session()->flash('error-message', trans('vox.page.recover-password.email-error'));
+            if(empty($user->id)) {
+                Request::session()->flash('error-message', trans('vox.page.recover-password.email-error'));
+                return redirect( getLangUrl('recover-password') );
+            }
+
+            $user->sendTemplate(13);
+
+            Request::session()->flash('success-message', trans('vox.page.recover-password.email-success'));
+            return redirect( getLangUrl('recover-password') );
+        } else {
+            Request::session()->flash('error-message', 'Please enter valid email');
             return redirect( getLangUrl('recover-password') );
         }
-
-        $user->sendTemplate(13);
-
-        Request::session()->flash('success-message', trans('vox.page.recover-password.email-success'));
-        return redirect( getLangUrl('recover-password') );
     }
 
     public function recover($locale=null, $id, $hash) {
@@ -575,9 +580,7 @@ class RegisterController extends FrontController
                 ));
             }
         }
-        else {
-            return redirect('/');
-        }
+        return redirect('/');
     }
 
     public function recover_form($locale=null, $id, $hash) {
@@ -609,6 +612,8 @@ class RegisterController extends FrontController
                 }
             }
         }
+
+        return redirect('/');
     }
 
 
@@ -685,6 +690,7 @@ class RegisterController extends FrontController
                         $newuser = new User;
                         $newuser->name = $name;
                         $newuser->email = $email ? $email : '';
+                        $newuser->phone = $phone ? $phone : '';
                         $newuser->password = bcrypt($password);
                         $newuser->country_id = $has_test ? $has_test['location'] : $this->country_id;
                         $newuser->is_dentist = 0;
@@ -875,14 +881,13 @@ class RegisterController extends FrontController
                         ];
                         session($sess);
 
-                        if( $newuser->email ) {
-                            $newuser->sendGridTemplate( 12 );
-                        }
-
                         if ($newuser->loggedFromBadIp()) {
                             return redirect( getVoxUrl('/').'?suspended-popup' );
                         } else {
-
+                            if( $newuser->email ) {
+                                $newuser->sendGridTemplate( 12 );
+                            }
+                            
                             Auth::login($newuser, true);
                             return redirect(getVoxUrl('/').'?success-message='.urlencode(trans('vox.page.registration.success')) );
                         }
