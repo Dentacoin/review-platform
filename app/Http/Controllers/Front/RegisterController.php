@@ -799,7 +799,7 @@ class RegisterController extends FrontController
                     }
                 }
 
-                if(empty($email)) {
+                if(empty($email) || empty($phone)) {
                     $ret['weak'] = true;
                 } else {
 
@@ -820,6 +820,16 @@ class RegisterController extends FrontController
                                 'message' => 'Unable to sign you up for security reasons.',
                             ] );
                         } else {
+
+                            $existing_phone = User::where('id', '!=', $user->id)->where('phone', 'LIKE', $phone)->first();
+
+                            if ($existing_phone) {
+                                return Response::json( [
+                                    'success' => false, 
+                                    'message' => 'User with this phone number already exists.',
+                                ] );
+                            }
+
                             Auth::login($user, true);
                             if(empty($user->civic_id)) {
                                 $user->civic_id = $data['userId'];
@@ -831,6 +841,15 @@ class RegisterController extends FrontController
                             $ret['redirect'] = getLangUrl('/');
                         }
                     } else {
+
+                        $existing_phone = User::where('phone', 'LIKE', $phone)->first();
+
+                        if ($existing_phone) {
+                            return Response::json( [
+                                'success' => false, 
+                                'message' => 'User with this phone number already exists.',
+                            ] );
+                        }
 
                         $name = explode('@', $email)[0];
 

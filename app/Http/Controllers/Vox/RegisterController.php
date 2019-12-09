@@ -792,7 +792,9 @@ class RegisterController extends FrontController
                 }
 
                 if(empty($email)) {
-                    return redirect(getVoxUrl('/').'?error-message='.urlencode(trans('front.common.civic.weak') ));
+                    return redirect(getVoxUrl('/').'?error-message='.urlencode('Please add an email address to your Civic account and try again.'));
+                } else if(empty($phone)) {
+                    return redirect(getVoxUrl('/').'?error-message='.urlencode('Please add a phone number to your Civic account and try again.'));
                 } else {
 
                     $user = User::where( 'civic_id','LIKE', $data['userId'] )->withTrashed()->first();
@@ -809,6 +811,12 @@ class RegisterController extends FrontController
                         } else if($user->self_deleted) {
                             return redirect(getVoxUrl('/').'?error-message='.urlencode('Unable to sign you up for security reasons.'));
                         } else {
+                            $existing_phone = User::where('id', '!=', $user->id)->where('phone', 'LIKE', $phone)->first();
+
+                            if ($existing_phone) {
+                                return redirect(getVoxUrl('/').'?error-message='.urlencode('User with this phone number already exists'));
+                            }
+
                             Auth::login($user, true);
                             if(empty($user->civic_id)) {
                                 $user->civic_id = $data['userId'];
@@ -818,6 +826,12 @@ class RegisterController extends FrontController
                             return redirect(getVoxUrl('/').'?success-message='.urlencode(trans('vox.popup.register.have-account') ));
                         }
                     } else {
+
+                        $existing_phone = User::where('phone', 'LIKE', $phone)->first();
+
+                        if ($existing_phone) {
+                            return redirect(getVoxUrl('/').'?error-message='.urlencode('User with this phone number already exists'));
+                        }
 
                         $name = explode('@', $email)[0];
 
@@ -833,6 +847,7 @@ class RegisterController extends FrontController
                         $newuser = new User;
                         $newuser->name = $name;
                         $newuser->email = $email ? $email : '';
+                        $newuser->phone = $phone ? $phone : '';
                         $newuser->password = bcrypt($password);
                         $newuser->country_id = $has_test ? $has_test['location'] : $this->country_id;
                         $newuser->is_dentist = 0;

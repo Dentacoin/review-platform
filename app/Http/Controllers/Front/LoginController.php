@@ -427,6 +427,11 @@ class LoginController extends FrontController
                 ];
                 session($sess);
 
+                if( $newuser->loggedFromBadIp() ) {
+                    return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
+                    ->withInput();
+                }
+                
                 if( $newuser->email ) {
                     $newuser->sendGridTemplate( 4 );
                 }
@@ -478,7 +483,7 @@ class LoginController extends FrontController
                     }
                 }
 
-                if(empty($email)) {
+                if(empty($email) || empty($phone)) {
                     $ret['weak'] = true;
                 } else {
 
@@ -518,6 +523,15 @@ class LoginController extends FrontController
                                     'message' => 'Unable to sign you up for security reasons.',
                                 ] );
                             } else {
+
+                                $existing_phone = User::where('id', '!=', $user->id)->where('phone', 'LIKE', $phone)->first();
+
+                                if ($existing_phone) {
+                                    return Response::json( [
+                                        'success' => false, 
+                                        'message' => 'User with this phone number already exists.',
+                                    ] );
+                                }
 
                                 $sess = [
                                     'login_patient' => true,
@@ -570,6 +584,7 @@ class LoginController extends FrontController
 
                             }
                         } else {
+
                             $ret['message'] = trans('trp.common.civic.not-found');
                         }
 

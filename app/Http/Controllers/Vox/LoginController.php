@@ -376,7 +376,9 @@ class LoginController extends FrontController
                 }
 
                 if(empty($email)) {
-                    return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.common.civic.weak')));
+                    return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Please add an email address to your Civic account and try again.'));
+                } else if(empty($phone)) {
+                    return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Please add a phone number to your Civic account and try again.'));
                 } else {
 
                     if( session('new_auth') ) {
@@ -410,6 +412,12 @@ class LoginController extends FrontController
                                 return redirect(getVoxUrl('/').'?error-message='.urlencode('Unable to sign you up for security reasons.'));
                             } else {
 
+                                $existing_phone = User::where('id', '!=', $user->id)->where('phone', 'LIKE', $phone)->first();
+
+                                if ($existing_phone) {
+                                    return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('User with this phone number already exists'));
+                                }
+
                                 Auth::login($user, true);
                                 if(empty($user->civic_id)) {
                                     $user->civic_id = $data['userId'];
@@ -427,13 +435,14 @@ class LoginController extends FrontController
                             }
 
                         } else {
+
                             return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.common.civic.not-found')));
                         }
                     }
                 }
 
             } else {
-                return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.common.civic.weak')));
+                return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Please add an email address and phone number to your Civic account and try again.'));
             }
         }
     }
