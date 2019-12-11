@@ -246,13 +246,6 @@
 				display: none !important;
 			}
 
-
-
-
-			/*da se iztrie pri commit*/
-			.page-statistics .stats .stat a.title {
-				background-size: 24px !important;
-			}
 		</style>
 
 		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && $current_page != 'register' && $current_page != 'login' && $current_page != 'profile' && request()->getHost() != 'vox.dentacoin.com' && request()->getHost() != 'account.dentacoin.com' && empty($session_polls)) || $current_page == 'daily-polls' || !empty($closed_daily_poll) && $current_page != 'questionnaire')

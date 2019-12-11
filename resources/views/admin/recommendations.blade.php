@@ -49,7 +49,7 @@
 					'table_id' => 'users',
 					'table_fields' => [
                         'created_at'        => array('format' => 'datetime'),
-                        'user'              => array('template' => 'admin.parts.table-reviews-user','label' => 'Name'),
+                        'user'              => array('template' => 'admin.parts.table-recommend-user','label' => 'Name'),
                         'scale'            => array('label' => 'Scale'),
                         'description'       => array('format' => 'break-word','label' => 'Comment'),
 					],
