@@ -98,6 +98,7 @@ class LoginController extends FrontController
                 $stat_redirect = null;
                 if (Cookie::get('stat-url') && Cookie::get('stat-url') !== 'undefined') {
                     $stat_redirect = Cookie::get('stat-url');
+                    Cookie::queue(Cookie::forget('stat-url'));
                 }
 
                 $intended = session()->pull('our-intended');
@@ -155,6 +156,7 @@ class LoginController extends FrontController
         $stat_redirect = null;
         if (Cookie::get('stat-url') && Cookie::get('stat-url') !== 'undefined') {
             $stat_redirect = Cookie::get('stat-url');
+            Cookie::queue(Cookie::forget('stat-url'));
         }
 
         $city_id = null;
