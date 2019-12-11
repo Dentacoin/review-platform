@@ -95,10 +95,8 @@ class LoginController extends FrontController
                     return redirect( getVoxUrl('profile-redirect'));
                 }
 
-
-
                 $stat_redirect = null;
-                if (Cookie::get('stat-url')) {
+                if (Cookie::get('stat-url') && Cookie::get('stat-url') !== 'undefined') {
                     $stat_redirect = Cookie::get('stat-url');
                 }
 
@@ -155,7 +153,7 @@ class LoginController extends FrontController
         }
 
         $stat_redirect = null;
-        if (Cookie::get('stat-url')) {
+        if (Cookie::get('stat-url') && Cookie::get('stat-url') !== 'undefined') {
             $stat_redirect = Cookie::get('stat-url');
         }
 
