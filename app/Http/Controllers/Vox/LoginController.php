@@ -150,7 +150,6 @@ class LoginController extends FrontController
         $stat_redirect = null;
         if (Cookie::get('stat-url')) {
             $stat_redirect = Cookie::get('stat-url');
-            Cookie::queue(Cookie::forget('stat-url'));
         }
 
         $city_id = null;
