@@ -102,9 +102,9 @@ class LoginController extends FrontController
 
                 $intended = session()->pull('our-intended');
 
-                if( $path  ){
-                    return redirect( getVoxUrl($path) );
-                }
+                // if( $path  ){
+                //     return redirect( getVoxUrl($path) );
+                // }
                 return redirect( !empty($stat_redirect) ? $stat_redirect : ($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/'))) );
             } else {
                 //dd('Other error', $s_user, $s_user->user);
