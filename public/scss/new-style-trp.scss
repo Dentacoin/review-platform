@@ -4981,18 +4981,27 @@ textarea.input {
 			background-color: white;
 			border-radius: 5px;
 			margin-bottom: 17px;
-			height: 40px;
-			line-height: 40px;
+			padding: 10px 15px;
 			font-size: 20px;
 			padding-left: 15px;
 			box-shadow: 0px 1px 11px 1px rgba(0, 0, 0, 0.3);
 
 			span {
 				display: inline-block;
-				vertical-align: middle;
+				vertical-align: sub;
 				width: 27px;
 				text-align: center;
 				margin-right: 10px; //was 30
+			}
+
+			&.fb-login {
+				background-color: #4267B2;
+    			color: white;
+
+    			i {
+					color: white;
+					font-size: 30px;
+    			}
 			}
 		}
 

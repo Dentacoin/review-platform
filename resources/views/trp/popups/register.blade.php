@@ -34,10 +34,9 @@
 
 						<a href="{{ getLangUrl('register/facebook') }}" class="fb-login log-button">
 							<span>
-								<img src="img-trp/fb.png">
+								<i class="fab fa-facebook"></i>
 							</span>
-							{!! nl2br(trans('trp.popup.popup-register.facebook')) !!}
-							
+							Continue with Facebook							
 						</a>
 						<a href="javascript:;" class="civic-login log-button register-civic-button">
 							<span>
@@ -111,9 +110,9 @@
 
 						<a href="{{ getLangUrl('login/facebook') }}" class="fb-login log-button">
 							<span>
-								<img src="img-trp/fb.png">
+								<i class="fab fa-facebook"></i>
 							</span>
-							{!! nl2br(trans('trp.popup.popup-register.facebook')) !!}
+							Continue with Facebook
 						</a>
 						<a href="javascript:;" class="civic-login log-button register-civic-button">
 							<span>

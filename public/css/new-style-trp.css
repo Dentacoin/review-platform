@@ -3801,17 +3801,22 @@ textarea.input {
     background-color: white;
     border-radius: 5px;
     margin-bottom: 17px;
-    height: 40px;
-    line-height: 40px;
+    padding: 10px 15px;
     font-size: 20px;
     padding-left: 15px;
     box-shadow: 0px 1px 11px 1px rgba(0, 0, 0, 0.3); }
     .forms .form-wrapper .log-button span {
       display: inline-block;
-      vertical-align: middle;
+      vertical-align: sub;
       width: 27px;
       text-align: center;
       margin-right: 10px; }
+    .forms .form-wrapper .log-button.fb-login {
+      background-color: #4267B2;
+      color: white; }
+      .forms .form-wrapper .log-button.fb-login i {
+        color: white;
+        font-size: 30px; }
   .forms .form-wrapper form {
     background-color: white;
     border-bottom-left-radius: 3px;
