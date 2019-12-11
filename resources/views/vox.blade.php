@@ -198,11 +198,11 @@
 												Already been here?
 											</span>
 											<br/>
-											<a class="my-name" style="font-weight: bold;" href="{{ getLangUrl('login') }}">
+											<a class="my-name" style="font-weight: bold;" href="{{ getVoxUrl('login') }}">
 												Log into your Profile!
 											</a>
 										</div>
-										<a class="header-a" href="{{ getLangUrl('login') }}">
+										<a class="header-a" href="{{ getVoxUrl('login') }}">
 											<img class="header-avatar" src="{{ $prev_user->getImageUrl(true) }}">
 										</a>
 									</div>
@@ -213,7 +213,7 @@
 									1 DCN = $<span id="header-rate">{{ sprintf('%.5F', $dcn_price) }}</span> 
 									<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
 								</span>
-								<a href="{{ getLangUrl('login') }}" class="start-button">
+								<a href="{{ getVoxUrl('login') }}" class="start-button">
 									Log in
 								</a>
 							@endif
