@@ -1595,6 +1595,10 @@ $(document).ready(function(){
     		$('#christmasBanner').attr('src', $('#christmasBanner').attr('mobile-src'));
     	}
     }
+    
+    if ($('#myVideo').length) {
+    	$('#myVideo')[0].removeAttribute("controls");
+    }
 
     $(".close-banner").click( function(e) {
 		e.preventDefault();

@@ -45,10 +45,10 @@
 			<p class="h2-bold">DENTAL STATISTICS</p>
 			<h2>Check up-to-date market statistics to stay on top of industry trends!</h2>
 			<a class="video-parent" href="{{ getLangUrl('dental-survey-stats') }}">
-				<video class="video-stats"  onplaying="disableVideoControls();" id="myVideo" playsinline autoplay muted loop src="{{ url('new-vox-img/stats.m4v') }}" type="video/mp4" controls=""></video>
+				<video class="video-stats" id="myVideo" playsinline autoplay muted loop src="{{ url('new-vox-img/stats.m4v') }}" type="video/mp4" controls=""></video>
 			</a>
 			<a class="video-parent-mobile" href="{{ getLangUrl('dental-survey-stats') }}">
-				<video class="video-stats" onplaying="disableVideoControls();" id="myVideoMobile" playsinline autoplay muted loop src="{{ url('new-vox-img/stats-mobile.mp4') }}" type="video/mp4" controls=""></video>
+				<video class="video-stats" id="myVideoMobile" playsinline autoplay muted loop src="{{ url('new-vox-img/stats-mobile.mp4') }}" type="video/mp4" controls=""></video>
 			</a>
 		</div>
 
