@@ -128,7 +128,7 @@
 						<h2>Curious to learn more?</h2>
 						<p>Unlock up-to-date, live dental market statistics!</p>
 						<a href="https://vox.dentacoin.com/en/registration/" stat-url="{{ !empty($_SERVER['HTTP_REFERER']) ? ($_SERVER['HTTP_REFERER'].ltrim($_SERVER['REQUEST_URI'], '/')) : '' }}" class="blue-button blurred-button">SIGN UP FOR FREE</a>
-						<span>Already have an account? <a href="https://vox.dentacoin.com/en/login">Log in</a></span>
+						<span>Already have an account? <a class="blurred-button" href="https://vox.dentacoin.com/en/login">Log in</a></span>
 					</div>
 				</div>
 			</div>

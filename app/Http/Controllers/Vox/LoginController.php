@@ -95,12 +95,19 @@ class LoginController extends FrontController
                     return redirect( getVoxUrl('profile-redirect'));
                 }
 
+
+
+                $stat_redirect = null;
+                if (Cookie::get('stat-url')) {
+                    $stat_redirect = Cookie::get('stat-url');
+                }
+
                 $intended = session()->pull('our-intended');
 
                 if( $path  ){
                     return redirect( getVoxUrl($path) );
                 }
-                return redirect( $intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/')) );
+                return redirect( !empty($stat_redirect) ? $stat_redirect : ($intended ? $intended : ( Request::input('intended') ? Request::input('intended') : getVoxUrl('/'))) );
             } else {
                 //dd('Other error', $s_user, $s_user->user);
                 // Request::session()->flash('error-message', trans('vox.page.login.error-fb', [
