@@ -16,7 +16,7 @@
 						<p class="flex-1">
 							{{ trans('vox.page.questionnaire.not-logged-register-content') }}
 						</p>
-						<a class="btn" href="{{ getLangUrl('welcome-survey') }}">
+						<a class="btn reg-but" href="{{ getLangUrl('welcome-survey') }}">
 							{{ trans('vox.page.questionnaire.not-logged-register-button') }}
 						</a>
 					</div>

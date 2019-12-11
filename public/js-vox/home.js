@@ -120,6 +120,14 @@ $(document).ready(function(){
 	}
 	handleSorts();
 
+	if($(window).outerWidth() <= 768) {
+		$('.another-questions .sort-menu').children().each( function() {
+			if($(this).text().split(" ").length > 1) {
+				$(this).text($(this).text().split(" ")[1]);
+			}
+		});
+	}
+
 	var surveyTitleHeight = function() {
 		if(window.innerWidth >= 1200) {
 			$('.another-questions .swiper-slide').each( function() {
@@ -201,80 +209,5 @@ $(document).ready(function(){
         	scrollTop: $('#strength-parent').offset().top
         }, 500);
 	});
-
-	$('input[name="target"]').change( function() {
-		$(this).closest('.modern-radios').removeClass('has-error');
-        $('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
-        var val = $('#target-specific:checked').length;
-        if(val) {
-            $('.target-row').show();
-        } else {
-            $('.target-row').hide();
-        }
-    } );
-
-    if ($('.select2').length) {
-    	$(".select2").select2({
-			multiple: true,
-			placeholder: 'Select Country/ies',
-		});
-    }
-
-    $('#request-survey-form').submit( function(e) {
-        e.preventDefault();
-
-        if (!$(this).find('.button').hasClass('disabled')) {
-
-	        $(this).find('.ajax-alert').remove();
-	        $(this).find('.alert').hide();
-	        $(this).find('.has-error').removeClass('has-error');
-
-	        if(ajax_is_running) {
-	            return;
-	        }
-	        ajax_is_running = true;
-
-	        var that = $(this);
-
-	        // var countries = [];
-	        // for (var i in $('[name="target-countries"]').select2('data')) {
-	        // 	countries.push($('[name="target-countries"]').select2('data')[i]['text']);
-	        // }
-
-	        // $('[name="target-countries"]').val(countries.toString());
-	        // console.log(countries.toString(), $('[name="target-countries"]').val());
-
-	        //console.log($('[name="target-countries"]').val());
-	        $.post( 
-	            $(this).attr('action'), 
-	            $(this).serialize() , 
-	            (function( data ) {
-	                if(data.success) {
-	                	that[0].reset();
-	                	$('.select2').val(null).trigger('change').select2();
-	                   $(this).find('.alert-success').show();
-	                } else {
-	                    for(var i in data.messages) {
-	                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
-
-	                        $('[name="'+i+'"]').addClass('has-error');
-
-	                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
-	                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
-	                        }
-	                    }
-
-	                    $('html, body').animate({
-			                scrollTop: $('.ajax-alert:visible').first().offset().top - $('header').height() - 150
-			            }, 500);
-	                }
-	                ajax_is_running = false;
-	            }).bind(that), "json"
-	        );          
-
-
-	        return false;
-	    }
-	} );
 
 });

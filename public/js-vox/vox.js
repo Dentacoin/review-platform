@@ -17,6 +17,49 @@ $(document).ready(function(){
             });
         });
     }
+
+    if ($('.swiper-container').length) {
+
+        if (window.innerWidth > 768) {
+
+            var swiper_done = new Swiper('.swiper-container', {
+                slidesPerView: 3,
+                slidesPerGroup: 3,
+                spaceBetween: 0,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    900: {
+                      slidesPerView: 2,
+                    },
+                },
+                autoplay: {
+                    delay: 5000,
+                },
+            });
+        } else {
+            var swiper_done = new Swiper('.swiper-container', {
+                slidesPerView: 1,
+                spaceBetween: 0,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                coverflowEffect: {
+                    rotate: 50,
+                    stretch: 0,
+                    depth: 100,
+                    modifier: 1,
+                    slideShadows : false,
+                },
+            });
+        }
+    }
     
     sendValidation = function() {
         if(recaptchaCode) { // && $('#iagree').is(':checked')
@@ -354,24 +397,83 @@ $(document).ready(function(){
                             }
                             VoxTest.handleNextQuestion();
                             $("#question-meta").hide();
-                            
-                            if (related) {
-                                $("#question-related-done").show();
+
+                            // if (related) {
+                            //     $("#question-related-done").show();
+                            // } else {
+                            //     $("#question-done").show();
+                            // }
+                            // $('html, body').animate({
+                            //     scrollTop: $('body').offset().top
+                            // }, 500);
+
+                            // $("#other-surveys").show();
+                            // swiper.update();
+                            if ($(window).outerWidth() <= 768) {
+                                $('#myVideoMobile')[0].play();
                             } else {
-                                $("#question-done").show();
+                                $('#myVideo')[0].play();
                             }
+                            
+                            
+                            $("#question-done").show();
+                            if ($('.swiper-container').length) {
+
+                                if (window.innerWidth > 768) {
+
+                                    var swiper_done = new Swiper('.swiper-container', {
+                                        slidesPerView: 3,
+                                        slidesPerGroup: 3,
+                                        spaceBetween: 0,
+                                        pagination: {
+                                            el: '.swiper-pagination',
+                                            clickable: true,
+                                        },
+                                        breakpoints: {
+                                            900: {
+                                              slidesPerView: 2,
+                                            },
+                                        },
+                                        autoplay: {
+                                            delay: 5000,
+                                        },
+                                    });
+                                } else {
+                                    var swiper_done = new Swiper('.swiper-container', {
+                                        slidesPerView: 1,
+                                        spaceBetween: 0,
+                                        pagination: {
+                                            el: '.swiper-pagination',
+                                            clickable: true,
+                                        },
+                                        effect: 'coverflow',
+                                        grabCursor: true,
+                                        centeredSlides: true,
+                                        coverflowEffect: {
+                                            rotate: 50,
+                                            stretch: 0,
+                                            depth: 100,
+                                            modifier: 1,
+                                            slideShadows : false,
+                                        },
+                                    });
+                                }
+                            }
+
                             $('html, body').animate({
                                 scrollTop: $('body').offset().top
                             }, 500);
-
-                            $("#other-surveys").show();
-                            swiper.update();
                             
                             fbq('track', 'SurveyComplete');
                             gtag('event', 'Take', {
                                 'event_category': 'Survey',
                                 'event_label': 'SurveyComplete',
                             });
+
+                            console.log(data.recommend);
+                            if(data.recommend) {
+                                $('#recommend-popup').addClass('active');
+                            }
                         } else {
 
                             var trigger = group.next().attr('data-trigger');
@@ -493,6 +595,9 @@ $(document).ready(function(){
 
 
                 } else {
+                    if (data.restricted) {
+                        window.location.reload();
+                    }
                     console.log('ERROR');
                     console.log(data);
                 }
@@ -507,8 +612,13 @@ $(document).ready(function(){
         .fail(function(response) {
             console.log('ERROR');
             console.log(response);
-            window.location.reload();
+            //window.location.reload();
         });;
+    }
+
+    if ($('.loader').length) {
+        $('.loader').fadeOut();
+        $('.loader-mask').delay(350).fadeOut('slow');
     }
 
     $('.question-group a.answer').click( sendAnswer );
@@ -609,103 +719,6 @@ $(document).ready(function(){
                 }
             }
         });
-    }
-
-    if ($('#other-surveys .swiper-container').length) {
-
-        if (window.innerWidth > 768) {
-
-            var swiper = new Swiper('#other-surveys .swiper-container', {
-                slidesPerView: 3,
-                slidesPerGroup: 3,
-                spaceBetween: 0,
-                pagination: {
-                    el: '#other-surveys .swiper-pagination',
-                    clickable: true,
-                },
-                breakpoints: {
-                    900: {
-                      slidesPerView: 2,
-                    },
-                },
-                autoplay: {
-                    delay: 5000,
-                },
-                resizeReInit: true,
-            });
-        } else {
-            var swiper = new Swiper('#other-surveys .swiper-container', {
-                slidesPerView: 1,
-                spaceBetween: 0,
-                pagination: {
-                    el: '#other-surveys .swiper-pagination',
-                    clickable: true,
-                },
-                effect: 'coverflow',
-                grabCursor: true,
-                centeredSlides: true,
-                coverflowEffect: {
-                    rotate: 50,
-                    stretch: 0,
-                    depth: 100,
-                    modifier: 1,
-                    slideShadows : false,
-                },
-                resizeReInit: true,
-            });
-        }
-    }
-
-
-    $('#scroll-to-surveys').click( function(e) {
-        e.preventDefault();
-
-        $('html, body').animate({
-            scrollTop: $('#other-surveys').offset().top
-        }, 500);
-    });
-
-    if ($('.swiper-container').length) {
-
-        if (window.innerWidth > 768) {
-
-            var swiper = new Swiper('.swiper-container', {
-                slidesPerView: 3,
-                slidesPerGroup: 3,
-                spaceBetween: 0,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                breakpoints: {
-                    900: {
-                      slidesPerView: 2,
-                    },
-                },
-                autoplay: {
-                    delay: 5000,
-                },
-            });
-        } else {
-            var swiper = new Swiper('.swiper-container', {
-                slidesPerView: 1,
-                spaceBetween: 0,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                effect: 'coverflow',
-                grabCursor: true,
-                centeredSlides: true,
-                coverflowEffect: {
-                    rotate: 50,
-                    stretch: 0,
-                    depth: 100,
-                    modifier: 1,
-                    slideShadows : false,
-                },
-            });
-        }
     }
 
 

@@ -15,6 +15,7 @@ use App\Models\Reward;
 use App\Models\DcnReward;
 use App\Models\VoxBadge;
 use App\Models\VoxRelated;
+use App\Models\VoxAnswer;
 
 class Vox extends Model {
     
@@ -48,6 +49,18 @@ class Vox extends Model {
         'respondents_count',
         'rewards_count',
         'sort_order',
+        'gender',
+        'marital_status',
+        'children',
+        'household_children',
+        'education',
+        'employment',
+        'job',
+        'job_title',
+        'income',
+        'age',
+        'country_percentage',
+        'dentists_patients',
     ];
 
     protected $dates = [
@@ -56,6 +69,11 @@ class Vox extends Model {
         'launched_at',
         'updated_at',
         'deleted_at'
+    ];
+
+    protected $casts = [
+        'countries_ids' => 'array',
+        'users_percentage' => 'array',
     ];
 
     
@@ -362,7 +380,193 @@ class Vox extends Model {
 
         return $welcome_answers;
     }
+
+    public function getGenderAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
     
+    public function setGenderAttribute($value) {
+        $this->attributes['gender'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['gender'] = implode(',', $value);            
+        }
+    }
+
+    public function getMaritalStatusAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+    
+    public function setMaritalStatusAttribute($value) {
+        $this->attributes['marital_status'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['marital_status'] = implode(',', $value);            
+        }
+    }
+
+    public function getChildrenAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+    
+    public function setChildrenAttribute($value) {
+        $this->attributes['children'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['children'] = implode(',', $value);            
+        }
+    }
+
+    public function getHouseholdChildrenAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+    
+    public function setHouseholdChildrenAttribute($value) {
+        $this->attributes['household_children'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['household_children'] = implode(',', $value);            
+        }
+    }
+
+    public function getEducationAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+    
+    public function setEducationAttribute($value) {
+        $this->attributes['education'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['education'] = implode(',', $value);            
+        }
+    }
+
+    public function getEmploymentAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+    
+    public function setEmploymentAttribute($value) {
+        $this->attributes['employment'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['employment'] = implode(',', $value);            
+        }
+    }
+
+    public function getJobAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+    
+    public function setJobAttribute($value) {
+        $this->attributes['job'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['job'] = implode(',', $value);            
+        }
+    }
+
+    public function getJobTitleAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+    
+    public function setJobTitleAttribute($value) {
+        $this->attributes['job_title'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['job_title'] = implode(',', $value);            
+        }
+    }
+
+    public function getIncomeAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+    
+    public function setIncomeAttribute($value) {
+        $this->attributes['income'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['income'] = implode(',', $value);            
+        }
+    }
+
+    public function getAgeAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+    
+    public function setAgeAttribute($value) {
+        $this->attributes['age'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['age'] = implode(',', $value);            
+        }
+    }
+
+    public function getDentistsPatientsAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+    
+    public function setDentistsPatientsAttribute($value) {
+        $this->attributes['dentists_patients'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['dentists_patients'] = implode(',', $value);
+        }
+    }
+
+    public function recalculateUsersPercentage($user) {
+
+        if(!empty($this->country_percentage) ) {
+            $country = $user->country_id;
+
+            $respondents_count = $this->realRespondentsCountForAdminPurposes();
+
+            if ($respondents_count > 9) {
+                
+                $respondents_users = DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->get();
+
+                $arr = [];
+                foreach ($respondents_users as $ru) {
+                    if (!empty($ru->user->country_id)) {
+
+                        if (!isset($arr[$ru->user->country_id])) {
+                            $arr[$ru->user->country_id] = 0;
+                        }
+                        $arr[$ru->user->country_id] += 1;
+                    }
+                }
+
+                foreach ($arr as $key => $value) {
+                    $arr[$key] = round((($value / $respondents_count) * 100), 2);
+                }
+
+                $this->users_percentage = $arr;
+                $this->save();
+            }
+
+        }
+    }
 }
 
 class VoxTranslation extends Model {

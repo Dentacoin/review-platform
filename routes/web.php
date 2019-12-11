@@ -82,12 +82,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('reviews/delete/{id}', 				'ReviewsController@delete');
 	Route::any('reviews/restore/{id}', 				'ReviewsController@restore');
 	Route::any('reviews/edit/{id}', 				'ReviewsController@edit');
-	
-	Route::get('pages', 							'PagesController@list');
-	Route::any('pages/add', 						'PagesController@add');
-	Route::any('pages/edit/{id}', 					'PagesController@edit');
-	Route::any('pages/edit/{id}/removepic', 		'PagesController@removepic');
-	Route::any('pages/delete/{id}', 				'PagesController@delete');
 
 	Route::any('transactions', 						'TransactionsController@list');
 	Route::any('transactions/bump/{id}', 			'TransactionsController@bump');
@@ -296,7 +290,7 @@ $reviewRoutes = function () {
 				Route::post('profile/password', 				'ProfileController@change_password');
 				//Route::get('profile/trp', 						'ProfileController@trp');
 				Route::get('profile/trp-iframe', 				'ProfileController@trp');
-				Route::get('profile/wallet', 					'ProfileController@wallet');
+				//Route::get('profile/wallet', 					'ProfileController@wallet');
 				Route::any('profile/invite', 					'ProfileController@invite');
 				Route::post('profile/invite-whatsapp', 			'ProfileController@invite_whatsapp');
 				Route::post('profile/invite-copypaste', 		'ProfileController@invite_copypaste');
@@ -442,7 +436,6 @@ $voxRoutes = function () {
 			Route::get('welcome-survey', 						'IndexController@welcome');
 			Route::any('appeal', 								'IndexController@appeal');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
-			Route::get('{slug}', 								'PagesController@home');
 
 		});
 	});

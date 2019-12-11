@@ -122,11 +122,16 @@ $(document).ready(function(){
 			$('.answers-group, .answers-group-add').show();
 		}
 
+		if (qtype == 'single_choice') {
+			$('#randomize-single').show();
+		} else {
+			$('#randomize-single').hide();
+		}
+
 		var stats = $('.question-stats-input').val();
 		if(stats=='dependency') {
 			$('#stat_relations').show();
 			$('.stat_title').show();
-			$('#stat_standard').hide();
 		} else if(stats=='standard') {
 			$('#stat_relations').hide();
 			$('.stat_title').show();
@@ -147,6 +152,10 @@ $(document).ready(function(){
 			var newinput = $('#input-group-template').clone(true).removeAttr('id')
 			newinput.find('input.answer-name').attr('name', 'answers-'+code+'[]');
 			$(this).find('.answers-list').append(newinput);
+
+			if ($(this).find('.answers-list').children().length > 10) {
+				$(this).find('.answers-error').show();
+			}
 		} );
 	} );
 
@@ -392,6 +401,11 @@ $(document).ready(function(){
 	$('.diplicate-q-button').click( function() {
 		console.log($(this).attr('q-id'));
 		$('#d-question').val($(this).attr('q-id'));
+	});
+
+	$('.target-button').click( function() {
+		$(this).parent().find('.target-wrapper').show();
+		$(this).hide();
 	});
 
 });

@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Models\Poll;
 use App\Models\PollAnswer;
 use App\Models\VoxCategory;
+use App\Models\VoxScale;
 use App\Models\DcnReward;
 
 use Illuminate\Support\Facades\Input;
@@ -89,7 +90,8 @@ class PollsController extends AdminController
                 $newpoll = new Poll;
             	$newpoll->launched_at = $this->request->input('launched_at');
     		    $newpoll->category = $this->request->input('category');
-    	        $newpoll->status = 'scheduled';
+                $newpoll->status = 'scheduled';
+                $newpoll->scale_id = $this->request->input('scale-id');
     	        $newpoll->save();
 
     	        foreach ($this->langs as $key => $value) {
@@ -117,6 +119,7 @@ class PollsController extends AdminController
         return $this->showView('polls-form', array(
     		'categories' => $this->poll_categories,
 	        'statuses' => $this->statuses,
+            'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
         ));
     }
 
@@ -141,6 +144,7 @@ class PollsController extends AdminController
     		        $item->status = $this->request->input('status');
             		$item->launched_at = $this->request->input('launched_at');
     		        $item->category = $this->request->input('category');
+                    $item->scale_id = $this->request->input('scale-id');
     		        $item->save();
 
     		        foreach ($this->langs as $key => $value) {
@@ -170,6 +174,7 @@ class PollsController extends AdminController
 
 	        return $this->showView('polls-form', array(
 	            'item' => $item,
+                'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
     			'categories' => $this->poll_categories,
 	            'statuses' => $this->statuses,
                 'poll_date' => $newformat,
@@ -275,6 +280,54 @@ class PollsController extends AdminController
         }
 
         return $this->showView('polls-explorer', $viewParams);
+    }
+
+
+
+    public function import($id) {
+
+        $item = Poll::find($id);
+
+        if(!empty($item)) {
+
+            global $reversedRows;
+
+            Excel::load( Input::file('table')->path() , function($reader) use ($item)  {
+
+                // Getting all results
+                global $results, $reversedRows;
+                $results = [];
+                $reader->each(function($sheet) {
+                    global $results;
+                    $results[] = $sheet->toArray();
+                });
+
+                $answers = [];
+                foreach ($results[0] as $key => $value) {
+                    foreach ($value as $k => $v) {
+                        $answers[] = $v;
+                    }
+                }
+
+                foreach ($this->langs as $key => $value) {
+                    $translation = $item->translateOrNew($key);
+
+                    $cur_answers = !empty($translation->answers) ? (!empty(json_decode($translation->answers, true)[0]) ? json_decode($translation->answers, true) : [] ) : [];
+                    $new_answers = !empty($cur_answers) ? array_merge($cur_answers, $answers) : $answers;
+
+                    $translation->answers = json_encode($new_answers);
+
+                    $translation->save();
+                }
+
+            });
+
+            $this->request->session()->flash('success-message', 'Answers imported');
+            return redirect('cms/vox/polls/edit/'.$item->id);
+
+        } else {
+            return redirect('cms/vox/polls/');
+        }
     }
 
 }

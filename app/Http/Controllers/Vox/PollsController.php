@@ -25,6 +25,7 @@ use App\Models\User;
 use App\Models\Poll;
 use App\Models\PollAnswer;
 use App\Models\VoxCategory;
+use App\Models\VoxScale;
 use App\Models\DcnReward;
 use App\Models\Dcn;
 use App\Models\Reward;
@@ -62,7 +63,8 @@ class PollsController extends FrontController
         		'polls.js'
         	],
 			'social_image' => $social_image,
-			'canonical' => getLangUrl('daily-polls/'.$date)
+			'canonical' => getLangUrl('daily-polls/'.$date),
+			'noindex' => true,
         ));
 		
 	}
@@ -86,7 +88,8 @@ class PollsController extends FrontController
         		'polls.js'
         	],
 			'social_image' => $social_image,
-			'canonical' => getLangUrl('daily-polls/'.$date.'/stats')
+			'canonical' => getLangUrl('daily-polls/'.$date.'/stats'),
+			'noindex' => true,
         ));
 		
 	}
@@ -184,8 +187,20 @@ class PollsController extends FrontController
 
 		if (!empty($poll) && $poll->status == 'open' && empty($taken_daily_poll) || !empty($this->admin)) {
 
+			$slist = VoxScale::get();
+	        $poll_scales = [];
+	        foreach ($slist as $sitem) {
+	            $poll_scales[$sitem->id] = $sitem;
+	        }
+
+			if (!empty($poll->scale_id) && !empty($poll_scales[$poll->scale_id])) {
+				$json_answers = explode(',', $poll_scales[$poll->scale_id]->answers);
+			} else {
+				$json_answers = json_decode($poll->answers, true);
+			}
+
 			$answers = [];
-			foreach (json_decode($poll->answers, true) as $key => $answer) {
+			foreach ($json_answers as $key => $answer) {
 				$answers[] = Poll::handleAnswerTooltip($answer);
 			}
 
@@ -219,6 +234,12 @@ class PollsController extends FrontController
 		    	$more_polls_to_take = null;
 		    }
 
+		    $next_stat = Poll::orderBy('id', 'desc')->where('id', '<', $poll_id)->first();
+
+		    if (empty($next_stat)) {
+		    	$next_stat = Poll::where('status', '!=', 'scheduled')->orderBy('id', 'desc')->first();
+		    }
+
 			$ret = [
 	        	'success' => true,
 	        	'title' => $poll->question,
@@ -226,6 +247,7 @@ class PollsController extends FrontController
 		        'next_poll' => $more_polls_to_take ? $more_polls_to_take->id : false,
 		        'closed' => $poll->status == 'closed' ? true : false,
 		        'has_user' => !empty($this->user) ? true : false,
+		        'next_stat' => $next_stat->id,
 	        ];
 
 		} else {
@@ -252,44 +274,49 @@ class PollsController extends FrontController
 		        return Response::json( $ret );
 			}
 
+			$slist = VoxScale::get();
+	        $poll_scales = [];
+	        foreach ($slist as $sitem) {
+	            $poll_scales[$sitem->id] = $sitem;
+	        }
+
+			if (!empty($poll->scale_id) && !empty($poll_scales[$poll->scale_id])) {
+				$json_answers = explode(',', $poll_scales[$poll->scale_id]->answers);
+			} else {
+				$json_answers = json_decode($poll->answers, true);
+			}
+
 			$a = intval(Request::input('answer'));
-			$valid = $a>=1 && $a<=json_decode($poll->answers, true);
 
 			if(!$this->user) {
 
-				if ($valid) {
-					if(!Auth::guard('admin')->user()) {
-						$answer = new PollAnswer;
-				        $answer->user_id = 0;
-				        $answer->poll_id = $poll->id;
-				        $answer->answer = $a;
-			        	$answer->save();
+				if(!Auth::guard('admin')->user()) {
+					$answer = new PollAnswer;
+			        $answer->user_id = 0;
+			        $answer->poll_id = $poll->id;
+			        $answer->answer = $a;
+		        	$answer->save();
 
-			        	$cv = Cookie::get('daily_poll');
-			        	if(empty($cv)) {
-			        		$cv = [];
-			        	} else {
-			        		$cv = json_decode($cv, true);
-			        	}
-						
-						$cv[$poll->id] = $answer->id;
-			        	Cookie::queue('daily_poll', json_encode($cv), 1440, null, '.dentacoin.com');
-			        }
+		        	$cv = Cookie::get('daily_poll');
+		        	if(empty($cv)) {
+		        		$cv = [];
+		        	} else {
+		        		$cv = json_decode($cv, true);
+		        	}
+					
+					$cv[$poll->id] = $answer->id;
+		        	Cookie::queue('daily_poll', json_encode($cv), 1440, null, '.dentacoin.com');
+		        }
 
-		        	$this->checkStatus($poll);
+	        	$this->checkStatus($poll);
 
-			        $ret = [
-			        	'success' => true,
-			        	'logged' => false,
-			        	'chart' => $this->chartData($poll),
-	        			'respondents' => 'Respondents: '.$poll->respondentsCount().'/100 people',
-	        			'has_user' => false,
-			        ];
-				} else {
-					$ret = [
-			        	'success' => false,
-			        ];
-				}
+		        $ret = [
+		        	'success' => true,
+		        	'logged' => false,
+		        	'chart' => $this->chartData($poll),
+        			'respondents' => 'Respondents: '.$poll->respondentsCount().'/100 people',
+        			'has_user' => false,
+		        ];
 
 				return Response::json( $ret );
 			}
@@ -297,7 +324,7 @@ class PollsController extends FrontController
 
 			$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first();
 
-			if( $valid && empty($taken_daily_poll) ) {
+			if( empty($taken_daily_poll) ) {
 
 				if(!Auth::guard('admin')->user()) {
 					$answer = new PollAnswer;
@@ -373,7 +400,18 @@ class PollsController extends FrontController
 
 		$chart = [];
 
-		$ans_array = json_decode($poll->answers);
+		$slist = VoxScale::get();
+        $poll_scales = [];
+        foreach ($slist as $sitem) {
+            $poll_scales[$sitem->id] = $sitem;
+        }
+
+		if (!empty($poll->scale_id) && !empty($poll_scales[$poll->scale_id])) {
+			$ans_array = explode(',', $poll_scales[$poll->scale_id]->answers);
+		} else {
+			$ans_array = json_decode($poll->answers);
+		}
+
         foreach ($ans_array as $ans) {
             $answers[] = Poll::handleAnswerTooltip($ans);
         }

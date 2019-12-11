@@ -3,6 +3,11 @@
 @section('content')
 
 	<div class="page-questions">
+		<div class="loader-mask">
+		    <div class="loader">
+		      	"Loading..."
+		    </div>
+		</div>
 
 		@if($user->loggedFromBadIp())
 			<div class="container">
@@ -116,12 +121,8 @@
 							@endforeach
 						@endif
 
-						@foreach( $vox->questions as $question )
-							@include('vox.template-parts.vox-question')
-						@endforeach
-
 						@if(!$user->birthyear)
-							<div class="question-group birthyear-question tac" style="display: none;">
+							<div class="question-group birthyear-question tac user-detail-question" style="display: none;">
 								<div class="question">
 									{!! trans('vox.page.questionnaire.question-birth') !!}
 								</div>
@@ -139,7 +140,7 @@
 						@endif
 
 						@if(!$user->gender)
-							<div class="question-group gender-question single-choice" style="display: none;">
+							<div class="question-group gender-question single-choice user-detail-question" style="display: none;">
 								<div class="question">
 									{!! trans('vox.page.questionnaire.question-sex') !!}
 								</div>
@@ -157,7 +158,7 @@
 						@endif
 
 						@if(!$user->country_id )
-							<div class="question-group location-question" style="display: none;">
+							<div class="question-group location-question user-detail-question" style="display: none;">
 								<div class="question">
 									{!! trans('vox.page.questionnaire.question-country') !!}
 								</div>
@@ -181,6 +182,10 @@
 								])
 							@endif
 						@endforeach
+
+						@foreach( $vox->questions as $question )
+							@include('vox.template-parts.vox-question')
+						@endforeach
 	 				</div>
 				</div>
 				<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-warning">
@@ -194,180 +199,117 @@
 
 			<div class="question-done page-questions-done" id="question-done" style="display: none;">
 
-				<div class="container done-section">
-
-					<div class="col-md-3">
-						@if($done_all)
-							<img class="image-left done-all-image" src="{!! url('new-vox-img/all-surveys.png') !!}">
-						@else
-							<img class="image-left" src="{!! url('new-vox-img/well-done.png') !!}">
-						@endif
+				<div class="taken-survey-wrapper">
+					<div class="container">
+						<div class="flex">
+							<div class="col">
+								<img class="taken-survey-image" src="{{ url('new-vox-img/questions-done-man.jpg') }}">
+							</div>
+							<div class="col taken-survey-description">
+								@if($testmode)
+									<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
+								@endif
+								<h3 class="done-title">
+									{!! trans('vox.page.questionnaire.well-done', [
+										'who' => '<span class="blue-text">'.$user->getName().'</span>'
+									]) !!}
+								</h3>
+								<p>
+									{!! nl2br(trans('vox.page.questionnaire.well-done-content', [
+										'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
+										'link' => '<a href="https://account.dentacoin.com/?platform=dentavox">',
+										'endlink' => '</a>',
+									])) !!}
+								</p>
+							</div>
+						</div>
 					</div>
 
-					<div class="col-md-9 tac">
-						@if($testmode)
-							<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
-						@endif
+					@if(count($suggested_voxes) || !empty($related_voxes))
+						<div class="related-wrap">
+							@if(!empty($related_voxes))
+								<div class="section-recent-surveys">
+									<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.related-surveys-title') !!}</h3>
 
-						<h3 class="done-title">
-							@if($done_all)
-								{!! trans('vox.page.questionnaire.well-done.all-surveys', [
-									'who' => '<span class="blue-text">'.$user->getName().'</span>'
-								]) !!}
+									<div class="swiper-container">
+									    <div class="swiper-wrapper">
+									    	@foreach($related_voxes as $survey)
+										    	<div class="swiper-slide" survey-id="{{ $survey->id }}">
+											      	@include('vox.template-parts.vox-taken-swiper-slider')
+											    </div>
+									      	@endforeach
+									    </div>
+
+									    <div class="swiper-pagination"></div>
+									</div>
+								</div>
 							@else
-								{!! trans('vox.page.questionnaire.well-done', [
-									'who' => '<span class="blue-text">'.$user->getName().'</span>'
-								]) !!}
+								<div class="section-recent-surveys">
+									<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.next-surveys-title') !!}</h3>
+
+									<div class="swiper-container">
+									    <div class="swiper-wrapper">
+									    	@foreach($suggested_voxes as $survey)
+										    	<div class="swiper-slide" survey-id="{{ $survey->id }}">
+											      	@include('vox.template-parts.vox-taken-swiper-slider')
+											    </div>
+									      	@endforeach
+									    </div>
+
+									    <div class="swiper-pagination"></div>
+									</div>
+
+									<div class="tac">
+										<a href="{{ getLangUrl('/') }}" class="blue-button more-surveys">{!! trans('vox.page.taken-questionnaire.see-surveys') !!}</a>
+									</div>
+								</div>
 							@endif
-						</h3>
 
-						<h4 class="done-desc">
-							@if($done_all)
-								{!! trans('vox.page.questionnaire.well-done-content.all-surveys', [
-									'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
-								]) !!}
-							@else
-								{!! trans('vox.page.questionnaire.well-done-content', [
-									'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
-									'link' => '<a href="https://account.dentacoin.com/?platform=dentavox">',
-									'endlink' => '</a>',
-								]) !!}
-							@endif
-						</h4>
+						</div>
+					@endif
 
-						<p class="next-title">
-							@if($done_all)
-								{!! trans('vox.page.questionnaire.what-next.all-surveys') !!}
-							@endif
-						</p>
-
-						<div class="wrapper-buttons">
-							@if($done_all)
-
-								@if($vox->has_stats)
-									<a class="white-button" href="{{ $vox->getStatsList() }}">
-										{!! trans('vox.page.questionnaire.what-next-stats.all-surveys') !!}
-									</a>
-								@endif
-								<a class="white-button" href="{{ getLangUrl('/') }}">
-									{!! trans('vox.page.questionnaire.go-surveys.all-surveys') !!}
-								</a>
-
-							@else
-								<a class="white-button" id="scroll-to-surveys" href="javascript:;">
-									{!! trans('vox.page.questionnaire.what-next-another') !!}
-								</a>
-								@if($vox->has_stats)
-									<a class="white-button" href="{{ $vox->getStatsList() }}">
-										{!! trans('vox.page.questionnaire.what-next-stats') !!}
-									</a>
-								@endif
-							@endif
-							<a class="white-button" href="https://account.dentacoin.com/?platform=dentavox">
-								{!! trans('vox.page.questionnaire.open-wallet.all-surveys') !!}
+					<div class="taken-vox-stats {!! empty($related_voxes) ? 'without-line' : '' !!}">
+						<div class="container">
+							<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.survey-stats-title') !!}</h3>
+							<a class="video-parent" href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}">
+								<video id="myVideo" playsinline muted loop src="{{ url('new-vox-img/stats.m4v') }}" type="video/mp4" controls=""></video>
+							</a>
+							<a class="video-parent-mobile" href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}">
+								<video id="myVideoMobile" playsinline muted loop src="{{ url('new-vox-img/stats-mobile.mp4') }}" type="video/mp4" controls=""></video>
 							</a>
 						</div>
 
-						@if($done_all)
-							<p class="what-do-next">
-								{!! trans('vox.page.questionnaire.check-apointment.all-surveys') !!}
-							</p>
-						@endif
-					</div>
-				</div>
-
-				@include('vox.template-parts.vox-done-parts')
-			</div>
-
-			<div class="question-done page-questions-done" id="question-related-done" style="display: none;">
-
-				<div class="container done-section">
-
-					<div class="col-md-3">
-						<img class="image-left" src="{{ url('new-vox-img/well-done.png') }}">
+						<div class="tac">
+							<a href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}" class="blue-button more-surveys">{!! trans('vox.common.check-statictics') !!}</a>
+						</div>
 					</div>
 
-					<div class="col-md-9 related-container tac">
-						@if($testmode)
-							<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
-						@endif
+					@if(!empty($related_voxes) && !empty($suggested_voxes))
+						<div class="suggested-wrap">
+							<div class="section-recent-surveys new-style-swiper">
+								<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.next-surveys-title') !!}</h3>
 
-						<h3 class="done-title">
-							{!! trans('vox.page.questionnaire.well-done', [
-								'who' => '<span class="blue-text">'.$user->getName().'</span>'
-							]) !!}
-						</h3>
-						<h4>
-							{!! trans('vox.page.questionnaire.well-done-content', [
-								'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
-								'link' => '<a href="https://account.dentacoin.com/?platform=dentavox">',
-								'endlink' => '</a>',
-							]) !!}
-						</h4>
-
-						@if(!empty($related_vox))
-							<div class="section-recent-surveys relateds">
-								<h4>{{ trans('vox.page.questionnaire.related-survey') }}</h4>
-								<div class="questions-inner">
-
-							      	<div class="swiper-slide">
-							      		<div class="slider-inner">
-								    		<div class="slide-padding">
-								    			<a href="{{ $related_vox->getLink() }}" class="cover" style="background-image: url('{{ $related_vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $related_vox->title ]) }}'>
-									  				@if($related_vox->featured)
-									  					<img class="featured-img doublecoin" src="{{ url('new-vox-img/flipping-coin.gif') }}">
-									  				@endif
-									  			</a>	
-												<div class="vox-header clearfix">
-													<div class="flex first-flex">
-														<div class="col left">
-															<h4 class="survey-title bold">{{ $related_vox->title }}</h4>
-														</div>
-													</div>
-													<div class="flex first-flex">
-														<div class="col right">
-															<span class="bold">{{ !empty($related_vox->complex) ? 'max ' : '' }} {{ $related_vox->getRewardTotal() }} DCN</span>
-															<p>{{ $related_vox->formatDuration() }}</p>
-														</div>					
-													</div>
-													<div class="flex second-flex">
-														<div class="col right">
-															<div class="btns">
-																<a class="opinion blue-button" href="{{ $related_vox->getLink() }}">
-																	{{ trans('vox.common.take-the-test') }}
-																</a>
-															</div>
-														</div>
-													</div>
-												</div>
-									      	</div>
-								      	</div>
+								<div class="swiper-container">
+								    <div class="swiper-wrapper">
+								    	@foreach($suggested_voxes as $survey)
+									    	<div class="swiper-slide" survey-id="{{ $survey->id }}">
+										      	@include('vox.template-parts.vox-taken-swiper-slider')
+										    </div>
+								      	@endforeach
 								    </div>
+
+								    <div class="swiper-pagination"></div>
+								</div>
+
+								<div class="tac">
+									<a href="{{ getLangUrl('/') }}" class="blue-button more-surveys">{!! trans('vox.page.taken-questionnaire.see-surveys') !!}</a>
 								</div>
 							</div>
-						@endif
-					</div>
+						</div>
+					@endif
+
 				</div>
-
-				@include('vox.template-parts.vox-done-parts')
-			</div>
-
-			<div class="section-recent-surveys other-surveys" id="other-surveys" style="display: none;">
-				<h2>{{ trans('vox.page.questionnaire.next-survey') }}</h2>
-
-				<div class="swiper-container">
-				    <div class="swiper-wrapper">
-				    	@foreach($suggested_voxes as $survey)
-					      	@include('vox.template-parts.vox-swiper-slides')
-				      	@endforeach
-				    </div>
-
-				    <div class="swiper-pagination"></div>
-				</div>
-
-				<div class="tac">
-					<a href="{{ getLangUrl('/') }}" class="blue-button more-surveys">{{ trans('vox.page.questionnaire.next-survey-button') }}</a>
-				</div>
+				
 			</div>
 		@endif
 
@@ -386,7 +328,6 @@
 
 		var welcome_vox = {{ !empty($welcome_vox) ? 'true' : 'false' }};
 		var welcome_vox_q_count = {{ !empty($welcome_vox) ? $welcome_vox->questions->count() : 'false' }};
-		var related = {{ !empty($related_vox) ? 'true' : 'false' }};
 		var testmode = {{ $testmode ? $testmode : 'false' }};
 	</script>
 

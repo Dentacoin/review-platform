@@ -19,6 +19,9 @@
                 <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title') }}</h4>
             </div>
             <div class="panel-body">
+                All voxes: {{ $voxes->count() }} <br/>
+                Active voxes: {{ $active_voxes_count }} <br/>
+                Hidden voxes: {{ $hidden_voxes_count }} <br/>
         		<div class="panel-body">
 					@include('admin.parts.table', [
 						'table_id' => 'voxs',

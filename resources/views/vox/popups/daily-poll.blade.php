@@ -1,23 +1,29 @@
 @if(!empty($daily_poll))
 	<div class="poll-bubble">
-		<img class="main-bubble-image" src="{{ url('new-vox-img/daily-poll-first.png') }}">
-		<div class="white-bubble">
-			<a href="javascript:;" class="close-bubble"><img src="{{ url('new-vox-img/close-popup.png') }}"></a>
-			<h4>{!! nl2br(trans('vox.daily-polls.popup.title')) !!}</h4>
-			<p><span class="daily-respondents">{{ !empty($daily_poll) ? $daily_poll->respondentsCount() : '' }}</span>/100 people</p>
-			<div class="poll-reward twerk-it"><img src="{{ url('new-vox-img/coin-icon.png') }}">{{ $daily_poll_reward }} DCN</div>
-			<a href="javascript:;" class="answer-poll" q="{{ !empty($daily_poll) ? $daily_poll->question : '' }}" data-popup="poll-popup">{!! nl2br(trans('vox.daily-polls.popup.answer')) !!}</a>
+		<img class="small-bubble-image" src="{{ url('new-vox-img/small-poll.png') }}">
+		<div class="bubble-inner">
+			<img class="main-bubble-image" src="{{ url('new-vox-img/daily-poll-first.png') }}">
+			<div class="white-bubble">
+				<a href="javascript:;" class="close-bubble"><img src="{{ url('new-vox-img/close-popup.png') }}"></a>
+				<h4>{!! nl2br(trans('vox.daily-polls.popup.title')) !!}</h4>
+				<p><span class="daily-respondents">{{ !empty($daily_poll) ? $daily_poll->respondentsCount() : '' }}</span>/100 people</p>
+				<div class="poll-reward twerk-it"><img src="{{ url('new-vox-img/coin-icon.png') }}">{{ $daily_poll_reward }} DCN</div>
+				<a href="javascript:;" class="answer-poll" q="{{ !empty($daily_poll) ? $daily_poll->question : '' }}" data-popup="poll-popup">{!! nl2br(trans('vox.daily-polls.popup.answer')) !!}</a>
+			</div>
 		</div>
 	</div>
 @elseif(!empty($closed_daily_poll))
 	<div class="poll-bubble">
-		<img class="main-bubble-image" src="{{ url('new-vox-img/daily-poll-first.png') }}">
-		<div class="white-bubble closed-bubble">
-			<a href="javascript:;" class="close-bubble"><img src="{{ url('new-vox-img/close-popup.png') }}"></a>
-			<h4>Daily Poll</h4>
-			<h4 class="closed">Closed</h4>
-			<p class="closed-p">You missed your chance. Try tomorrow. </p>
-			<a href="javascript:;" class="closed-poll-button see-stats" poll-id="{{ $closed_daily_poll->id }}">Results</a>
+		<img class="small-bubble-image" src="{{ url('new-vox-img/small-poll.png') }}">
+		<div class="bubble-inner">
+			<img class="main-bubble-image" src="{{ url('new-vox-img/daily-poll-first.png') }}">
+			<div class="white-bubble closed-bubble">
+				<a href="javascript:;" class="close-bubble"><img src="{{ url('new-vox-img/close-popup.png') }}"></a>
+				<h4>Daily Poll</h4>
+				<h4 class="closed">Closed</h4>
+				<p class="closed-p">You missed your chance. Try tomorrow. </p>
+				<a href="javascript:;" class="closed-poll-button see-stats" poll-id="{{ $closed_daily_poll->id }}">Results</a>
+			</div>
 		</div>
 	</div>
 @endif
@@ -42,9 +48,9 @@
 				<div class="poll-question">
 					{{ !empty($daily_poll) ? $daily_poll->question  : '' }}
 				</div>
-				<div class="poll-answers">
+				<div class="poll-answers {!! !empty($daily_poll) && $daily_poll->type == 'scale' ? 'poll-scale-answers' : '' !!}">
 					@if(!empty($daily_poll))
-						@foreach(json_decode($daily_poll->answers, true) as $key => $answer)
+						@foreach($daily_poll->scale_id && !empty($poll_scales[$daily_poll->scale_id]) ? explode(',', $poll_scales[$daily_poll->scale_id]->answers) : json_decode($daily_poll->answers, true) as $key => $answer)
 							<label class="poll-answer" for="ans-{{ $key }}">
 								<input type="radio" name="answer" class="answer" value="{{ $loop->index+1 }}" id="ans-{{ $key }}">
 								{!! nl2br( App\Models\Poll::handleAnswerTooltip($answer)) !!}
@@ -82,6 +88,11 @@
 						<a href="{{ getLangUrl('daily-polls') }}" class="white-button browse-polls">
 							<img src="{{ url('new-vox-img/polls-calendar.svg') }}">
 							{!! nl2br(trans('vox.daily-polls.popup.browse-polls')) !!}
+						</a>
+					@else					
+						<a href="javascript:;" class="white-button next-stat">
+							NEXT RESULTS
+							<img src="{{ url('new-vox-img/next-arrow-blue.svg') }}">
 						</a>
 					@endif
 					<a href="javascript:;" class="blue-button next-poll">

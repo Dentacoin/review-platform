@@ -61,13 +61,13 @@
 				<div class="alert alert-info alert-done-all-surveys">
 					@if($user->is_dentist)
 						{!! nl2br(trans('vox.page.home.dentist.alert-done-all-surveys', [
-							'link' => '<a href="'.getLangUrl('profile/invite').'">',
+							'link' => '<a href="https://account.dentacoin.com/invite?platform=dentavox">',
 							'link_stats' => '<a href="'.getLangUrl('dental-survey-stats').'">',
 							'endlink' => '</a>',
 						])) !!}
 					@else
 						{!! nl2br(trans('vox.page.home.patients.alert-done-all-surveys', [
-							'link' => '<a href="'.getLangUrl('profile/invite').'">',
+							'link' => '<a href="https://account.dentacoin.com/invite?platform=dentavox">',
 							'link_stats' => '<a href="'.getLangUrl('dental-survey-stats').'">',
 							'endlink' => '</a>',
 						])) !!}
@@ -121,41 +121,33 @@
 					@endif
 				</div>
 			@endif
-			<div class="section-recent-surveys" id="questions-wrapper">
+			<div class="section-recent-surveys new-style-swiper" id="questions-wrapper">
 				<div class="questions-inner" id="questions-inner">
 					@if(!empty($user) && $user->is_dentist)
 						<div class="swiper-slide request-vox">
-				      		<div class="slider-inner">
-					    		<div class="slide-padding">
-					      			<a href="javascript:;" class="cover" style="background-image: url('{{ url('new-vox-img/request-survey.jpg') }}');"></a>							
+							<div class="slider-inner">
+								<div class="slide-padding">
+									<a href="javascript:;" class="cover" style="background-image: url('{{ url('new-vox-img/request-survey.jpg') }}');"></a>		
 									<div class="vox-header clearfix">
-										<div class="flex first-flex">
-											<div class="col left">
-												<h4 class="survey-title bold">{{ trans('vox.page.home.request-survey.title') }}</h4>
-											</div>			
-										</div>
+										<h4 class="survey-title bold">{{ trans('vox.page.home.request-survey.title') }}</h4>
 										<div class="survey-cats"> 
 											<span>{{ trans('vox.page.home.request-survey.cat1') }}</span>
 											<span>{{ trans('vox.page.home.request-survey.cat2') }}</span>
-											<span>{{ trans('vox.page.home.request-survey.cat2') }}</span>
+											<span>{{ trans('vox.page.home.request-survey.cat3') }}</span>
 										</div>
-										<div class="flex second-flex">
-											<div class="col left">
-												<p class="vox-description">
-													{{ trans('vox.page.home.request-survey.description') }}
-												</p>
-											</div>
-											<div class="col right">
-												<div class="btns">
-													<a class="blue-button" href="javascript:;" data-popup="request-survey-popup">
-														{{ trans('vox.page.home.request-survey.request') }}
-													</a>
-												</div>
-											</div>
+										<div class="survey-time flex">
+											<p class="vox-description tac">
+												{{ trans('vox.page.home.request-survey.description') }}
+											</p>
+										</div>
+										<div class="btns">
+											<a class="blue-button" href="javascript:;" data-popup="request-survey-popup">
+												{{ trans('vox.page.home.request-survey.request') }}
+											</a>
 										</div>
 									</div>
-						      	</div>
-					      	</div>
+							  	</div>
+							</div>
 					    </div>
 					@endif
 					@foreach( $voxes as $vox)
@@ -168,74 +160,67 @@
 			      			duration="{{ ceil( $vox->questionsCount()/6 ) }}" 
 			      			{!! !empty($taken) ? 'taken="'.intval(!in_array($vox->id, $taken) ? 0 : 1).'"' : '' !!}
 			      			>
-				      		<div class="slider-inner">
-					    		<div class="slide-padding">
-					      			<a href="{{ !empty($taken) && in_array($vox->id, $taken) ? 'javascript:;' : $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title ]) }}'>
-					      				@if($vox->featured)
-					      					<img class="featured-img doublecoin" src="{{ url('new-vox-img/flipping-coin.gif') }}">
-					      				@endif
-					      				<!-- @if(!empty($taken) && in_array($vox->id, $taken))
-					      					<img class="done-img" src="{{ url('new-vox-img/vox-done.png') }}">
-					      				@endif -->
-					      			</a>							
+
+			      			<div class="slider-inner">
+								<div class="slide-padding">
+									<a href="{{ !empty($taken) && in_array($vox->id, $taken) ? 'javascript:;' : $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl(true) }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title ]) }}'>
+										@if($vox->featured)
+											<img class="featured-img doublecoin" src="{{ url('new-vox-img/flipping-coin.gif') }}">
+										@endif
+									</a>
 									<div class="vox-header clearfix">
-										<div class="flex first-flex">
-											<div class="col left">
-												<h4 class="survey-title bold">{{ $vox->title }}</h4>
-											</div>
-											<div class="col right">
-												<span class="bold">{{ !empty($vox->complex) ? 'max ' : '' }} {{ $vox->getRewardTotal() }} DCN</span>
-												<p>{{ $vox->formatDuration() }}</p>
-											</div>					
-										</div>
+										<h4 class="survey-title bold">{{ $vox->title }}</h4>
 										<div class="survey-cats"> 
 											@foreach( $vox->categories as $c)
 												<span class="survey-cat" cat-id="{{ $c->category->id }}">{{ $c->category->name }}</span>
 											@endforeach
 										</div>
-										<div class="flex second-flex">
-											<div class="col left">
-												<p class="vox-description">{{ $vox->description }}</p>
+										<div class="survey-time flex">
+											<div class="col">
+												<img src="{{ url('new-vox-img/coin-icon.png') }}">
+												<p>Max {{ $vox->getRewardTotal() }} DCN</p>
 											</div>
-											<div class="col right">
-												<div class="btns">
-													@if($user && $user->is_dentist)
-														@if($vox->has_stats)
-															<a class="statistics blue-button" href="{{ $vox->getStatsList() }}">
-																{{ trans('vox.common.check-statictics') }}
-															</a>
-														@endif
-														@if(!empty($taken) && in_array($vox->id, $taken))
-															<a class="gray-button secondary" href="javascript:;">
-																<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
-															</a>
-														@else
-															<a class="opinion blue-button {!! $vox->has_stats ? 'secondary' : '' !!}" href="{{ $vox->getLink() }}">
-																{{ trans('vox.common.take-the-test') }}
-															</a>
-														@endif
-													@else
-														@if(!empty($taken) && in_array($vox->id, $taken))
-															<a class="gray-button" href="javascript:;">
-																<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
-															</a>
-														@else
-															<a class="opinion blue-button" href="{{ $vox->getLink() }}">
-																{{ trans('vox.common.take-the-test') }}
-															</a>
-														@endif
-														@if($vox->has_stats)
-															<a class="statistics blue-button secondary" href="{{ $vox->getStatsList() }}">
-																{{ trans('vox.common.check-statictics') }}
-															</a>
-														@endif
-													@endif
-												</div>
+											<div class="col">
+												<img src="{{ url('new-vox-img/clock-icon.svg') }}">
+												<p><span class="hide-mobile">{{ trans('vox.page.public-questionnaire.time') }}</span> {{ $vox->formatDuration() }}</p>
 											</div>
 										</div>
+										<div class="btns">
+											@if($user && $user->is_dentist)
+												@if($vox->has_stats)
+													<a class="statistics blue-button" href="{{ $vox->getStatsList() }}">
+														{{ trans('vox.common.check-statictics') }}
+													</a>
+												@endif
+												@if(!empty($taken) && in_array($vox->id, $taken))
+													<a class="gray-button secondary" href="javascript:;">
+														<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
+													</a>
+												@else
+													<a class="opinion blue-button {!! $vox->has_stats ? 'secondary' : '' !!}" href="{{ $vox->getLink() }}">
+														{{ trans('vox.common.take-the-test') }}
+													</a>
+												@endif
+											@else
+												@if(!empty($taken) && in_array($vox->id, $taken))
+													<a class="gray-button" href="javascript:;">
+														<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
+													</a>
+												@else
+													<a class="opinion blue-button" href="{{ $vox->getLink() }}">
+														{{ trans('vox.common.take-the-test') }}
+													</a>
+												@endif
+												@if($vox->has_stats)
+													<a class="statistics blue-button secondary" href="{{ $vox->getStatsList() }}">
+														{{ trans('vox.common.check-statictics') }}
+													</a>
+												@endif
+											@endif
+										</div>
 									</div>
-						      	</div>
-					      	</div>
+							  	</div>
+							</div>
 					    </div>
 					@endforeach
 				</div>

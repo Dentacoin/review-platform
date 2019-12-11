@@ -33,7 +33,9 @@ class VoxQuestion extends Model {
         'stats_featured',
         'stats_fields',
         'stats_scale_answers',
+        'stats_top_answers',
         'cross_check',
+        'dont_randomize_answers'
     ];
 
     public $timestamps = false;

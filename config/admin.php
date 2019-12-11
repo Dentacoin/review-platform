@@ -18,6 +18,9 @@ return [
         'scammers' => array(
             'icon' => 'transgender-alt',
         ),
+        'whitelist' => array(
+            'icon' => 'list-ul',
+        ),
         'blacklist' => array(
             'icon' => 'umbrella',
         ),
@@ -40,12 +43,6 @@ return [
             'icon' => 'comments',
             'js' => array(
                 'faq.js',
-            ),
-        ),
-        'pages' => array(
-            'icon' => 'copy',
-            'js' => array(
-                'pages.js'
             ),
         ),
         'emails' => array(
@@ -72,6 +69,7 @@ return [
                 'export-survey-data' => 'export-survey-data',
                 'polls' => 'polls',
                 'polls-explorer' => 'polls-explorer',
+                'recommendations' => 'recommendations',
             ),
             'js' => array(
                 'vox.js',

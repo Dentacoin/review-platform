@@ -41,6 +41,4 @@ $(document).ready(function(){
             resizeReInit: true,
         });
     }
-
-    $('video')[0].play();
 });

@@ -230,6 +230,101 @@
                         </div>
                     </div>
 
+                    <style type="text/css">
+                        .target-wrapper .select2-container {
+                            width: 100% !important;
+                        }
+
+                        .target-wrapper .select2-container--default .select2-selection--multiple {
+                            height: auto !important;
+                        }
+
+                    </style>
+
+                    <div class="form-group col-md-12">
+                        <h3 style="display: inline-block; margin-right: 20px;">TARGETING</h3> <a href="javascript:;" class="btn btn-primary target-button">Show target groups</a>
+                        <div class="col-md-12">
+
+                            <div class="target-wrapper" style="display: none; margin-top: 30px;"> 
+                                @foreach(config('vox.details_fields') as $key => $value)
+                                    <div class="form-group" style="border-bottom: 1px solid #9E9E9E; padding-bottom: 15px;">
+                                        <label class="col-md-1 control-label" style="padding-top: 0px; max-width: 200px;">{{ trans('admin.common.'.$key) }}</label>
+                                        <div class="col-md-11">
+                                            @foreach($value['values'] as $k => $v)
+                                                <label class="col-md-3" for="{{ $k }}">
+
+                                                    <input type="checkbox" name="{{ $key }}[]" value="{{ $k }}" id="{{ $k }}" {!! !empty($item) && !empty($item->$key) && in_array($k, $item->$key) ? 'checked="checked"' : '' !!}>
+                                                    
+                                                    {{ $v }}
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                <div class="form-group" style="border-bottom: 1px solid #9E9E9E; padding-bottom: 15px;">
+                                    <label class="col-md-1 control-label" style="padding-top: 0px; max-width: 200px;">Age groups</label>
+                                    <div class="col-md-11">
+                                        @foreach(config('vox.age_groups') as $key => $value)
+                                            <label class="col-md-3" for="{{ $key }}">
+
+                                                <input type="checkbox" name="age[]" value="{{ $key }}" id="{{ $key }}" {!! !empty($item) && !empty($item->age) && in_array($key, $item->age) ? 'checked="checked"' : '' !!}>
+                                                
+                                                {{ $value }}
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="border-bottom: 1px solid #9E9E9E; padding-bottom: 15px;">
+                                    <label class="col-md-1 control-label" style="padding-top: 0px; max-width: 200px;">Gender</label>
+                                    <div class="col-md-11">
+                                        <label class="col-md-3" for="m">
+                                            <input type="checkbox" name="gender[]" value="m" id="m" {!! !empty($item) && !empty($item->gender) && in_array('m', $item->gender) ? 'checked="checked"' : '' !!}>                                            
+                                            Men
+                                        </label>
+                                        <label class="col-md-3" for="f">
+                                            <input type="checkbox" name="gender[]" value="f" id="f" {!! !empty($item) && !empty($item->gender) && in_array('f', $item->gender) ? 'checked="checked"' : '' !!}>                                            
+                                            Women
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="border-bottom: 1px solid #9E9E9E; padding-bottom: 15px;">
+                                    <label class="col-md-1 control-label" style="padding-top: 0px; max-width: 200px;">User type</label>
+                                    <div class="col-md-11">
+                                        <label class="col-md-3" for="dentists">
+                                            <input type="checkbox" name="dentists_patients[]" value="dentists" id="dentists" {!! !empty($item) && !empty($item->dentists_patients) && in_array('dentists', $item->dentists_patients) ? 'checked="checked"' : '' !!}>                                            
+                                            Dentists
+                                        </label>
+                                        <label class="col-md-3" for="patients">
+                                            <input type="checkbox" name="dentists_patients[]" value="patients" id="patients" {!! !empty($item) && !empty($item->dentists_patients) && in_array('patients', $item->dentists_patients) ? 'checked="checked"' : '' !!}>                                            
+                                            Patients
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">Countries</label>
+                                    <div class="col-md-3">
+                                        <select class="form-control select2" name="countries_ids[]" multiple>
+                                            @foreach( \App\Models\Country::get() as $country )
+                                                <option value="{{ $country->id }}" {!! !empty($item) && !empty($item->countries_ids) && in_array($country->id, $item->countries_ids) ? 'selected="selected"' : null !!}>{{ $country->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <label class="col-md-4 control-label">
+                                        Max percentage of users from one country
+                                        <!-- <br/> (this will not apply if there is only one selected country) -->
+                                    </label>
+                                    <div class="col-md-3">
+                                        {{ Form::number( 'country_percentage', !empty($item) ? $item->country_percentage : '' , array('class' => 'form-control', 'placeholder' => 'Number from 1 to 100') ) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div class="col-md-12">
                             <button type="submit" class="btn btn-primary btn-block">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}</button>

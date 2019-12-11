@@ -4,12 +4,12 @@
 
 	<div class="section-recover">
 
-		<div class="container">
-			<div class="col-md-3">
+		<div class="container wrapper-flex">
+			<div class="col">
 				<img class="image-left" src="{{ url('new-vox-img/register-dentist.png') }}">
 			</div>
 
-			<div class="col-md-9">
+			<div class="col">
 				<h3 class="tac">
 					Recover Your Password
 				</h3>
@@ -22,17 +22,23 @@
 
 					@include('front.errors')
 
-					<div class="form-group">
-					  	<input type="password" name="password" placeholder="{{ trans('vox.page.'.$current_page.'.password') }}" class="form-control" required>
+					<div class="modern-field alert-after">
+						<input type="password" name="password" id="password-forgot" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+						<label for="password-forgot">
+							<span>{{ trans('vox.page.'.$current_page.'.password') }}</span>
+						</label>
 					</div>
-					<div class="form-group">
-					    <input type="password" name="password-repeat" class="form-control" placeholder="{{ trans('vox.page.'.$current_page.'.password-repeat') }}" required>
+
+					<div class="modern-field alert-after">
+						<input type="password" name="password-repeat" id="password-forgot-repeat" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+						<label for="password-forgot-repeat">
+							<span>{{ trans('vox.page.'.$current_page.'.password-repeat') }}</span>
+						</label>
 					</div>
-        			<div class="form-group">
-	        			<button class="btn btn-primary" type="submit">
-	        				{{ trans('vox.page.'.$current_page.'.submit') }}
-	        			</button>
-        			</div>
+
+					<button class="button" type="submit">
+        				{{ trans('front.page.'.$current_page.'.submit') }}
+        			</button>
 				</form>
 			</div>
 		</div>

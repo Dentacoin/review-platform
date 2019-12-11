@@ -32,6 +32,7 @@
                                     <option value="failed" {!! 'failed'==$search_status ? 'selected="selected"' : '' !!}>Failed</option>
                                     <option value="completed" {!! 'completed'==$search_status ? 'selected="selected"' : '' !!}>Completed</option>
                                     <option value="stopped" {!! 'stopped'==$search_status ? 'selected="selected"' : '' !!}>Stopped</option>
+                                    <option value="first" {!! 'first'==$search_status ? 'selected="selected"' : '' !!}>First</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -128,7 +129,7 @@
                     <a class="page-link next" href="{{ url('cms/transactions/?page='.($page < $total_pages ? $page+1 :  $total_pages).$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
                 </li>
                 <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
-                    <a class="page-link" href="{{ url('cms/vox/transactions/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
+                    <a class="page-link" href="{{ url('cms/transactions/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
                 </li>
             </ul>
         </nav>

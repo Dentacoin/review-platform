@@ -8126,3 +8126,28 @@ body.strength-pb {
     @media screen and (max-width: 768px) {
       .list-reviews .list-review .mobile-review-date {
         display: block; } }
+
+.christmas-banner {
+  position: relative;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+  display: block; }
+  .christmas-banner.white-banner {
+    padding-top: 6%; }
+    @media screen and (max-width: 768px) {
+      .christmas-banner.white-banner {
+        padding-top: 21%; } }
+  .christmas-banner .close-banner {
+    position: absolute;
+    right: 10px;
+    top: 10px; }
+  .christmas-banner video {
+    display: block;
+    width: 100%;
+    pointer-events: none; }
+    .christmas-banner video:focus {
+      outline: none;
+      border: none; }
+  .christmas-banner video::-webkit-media-controls {
+    display: none !important; }
+  .christmas-banner video::-webkit-media-controls-enclosure {
+    display: none !important; }

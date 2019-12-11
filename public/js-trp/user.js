@@ -1043,7 +1043,7 @@ $(document).ready(function(){
             $(this).serialize(), 
             function( data ) {
                 if(data.success) {
-                    window.location.href = data.href;
+                    window.location.reload();
                 } else {
                     $('.edit-error').show().html('');
                     for(var i in data.messages) {

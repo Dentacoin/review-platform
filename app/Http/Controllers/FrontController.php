@@ -30,6 +30,7 @@ use App\Models\Poll;
 use App\Models\PollAnswer;
 use App\Models\DcnReward;
 use App\Models\VoxAnswer;
+use App\Models\VoxScale;
 use App\Models\Vox;
 use App\Models\UserLogin;
 
@@ -261,6 +262,15 @@ class FrontController extends BaseController
                 }                
             }
 
+            if( Cookie::get('first-login-recommendation') ) {
+                Cookie::queue(Cookie::forget('first-login-recommendation'));
+            }
+
+            if(!empty($this->user) && count($this->user->filledVoxes()) >= 5 && empty($this->user->first_login_recommendation) && empty(Cookie::get('first-login-recommendation')) && (Request::getHost() == 'dentavox.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com' )) {
+                Cookie::queue('first-login-recommendation', true, 1440, null, null, false, false);
+                $this->user->first_login_recommendation = true;
+                $this->user->save();
+            }
 
             // if($this->user) {
             //     $details_vox = Vox::where('type', 'user_details')->first();
@@ -382,6 +392,13 @@ class FrontController extends BaseController
             $params['session_polls'] = true;
         }
 
+        $slist = VoxScale::get();
+        $poll_scales = [];
+        foreach ($slist as $sitem) {
+            $poll_scales[$sitem->id] = $sitem;
+        }
+
+        $params['poll_scales'] = $poll_scales;
 
         return view('vox.'.$page, $params);
     }
@@ -658,6 +675,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2019-11-04-02';
+        $params['cache_version'] = '2019-12-12-01';
     }
 }

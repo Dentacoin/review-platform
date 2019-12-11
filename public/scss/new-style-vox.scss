@@ -282,8 +282,22 @@ Content
 */
 
 .container {
+	margin-left: auto;
+	margin-right: auto;
+
+	@media screen and (min-width: 768px) {
+		width: 750px;
+	}
+	@media screen and (min-width: 992px) {
+		width: 970px;
+	}
+	@media screen and (min-width: 1200px) {
+		width: 1170px;
+	}
+
 	@media #{$phone} {
 		flex-direction: column;
+		width: 100%;
 	}
 }
 
@@ -361,6 +375,17 @@ select:focus > option:checked {
     top: 20px;
 }
 
+.index-h1 {
+	@media #{$phone} {
+		font-size: 30px;
+	    font-weight: bold;
+	    text-align: center;
+	    padding: 0px 20px;
+	    margin-bottom: 20px;
+	    margin-top: 10px;
+	}
+}
+
 .black-button {
 	background-color: #090909;
     color: #fbf9f9;
@@ -402,32 +427,28 @@ select:focus > option:checked {
 
 
 	@media #{$phone} {
+		top: -57px;
     	width: auto;
 	    margin: 0px auto;
     	border-radius: 5px;
-    	height: 39px;
-    	line-height: 31px;
-    	font-size: 16px;
-    	padding: 0px 32px 0px 14px;
-
-   		border-top: 5px solid white;
-    	border-bottom: 5px solid white;
-    	border-left: 7px solid white;
-    	border-right: 7px solid white;
+    	font-size: 18px;
+    	padding: 0px 54px 0px 25px;
     	border-radius: 8px;
+    	height: 44px;
+    	line-height: 45px;
     
     	&:after {
 		    background-image: url(../new-vox-img/right-arrow.png);
-		    width: 11px;
-		    height: 18px;
-		    right: 7px;
-		    top: 5px;
+		    width: 12px;
+		    height: 23px;
+		    right: 15px;
+		    top: 10px;
     	}
 
     	&:hover {
 
 	    	&:after {
-	    		right: 7px;
+	    		right: 13px;
 	    	}
 	    }
     }
@@ -729,7 +750,7 @@ header {
 		    top: 70px;
 			right: 0px;
 		    padding-top: 20px;
-		    z-index: 1000;
+		    z-index: 1002;
 
 			@media #{$phone} {
 				display: none;
@@ -978,16 +999,6 @@ header {
     	padding-top: 100%;
 		background-image: url(../new-vox-img/index-mobile.jpg);
 		margin-bottom: 130px;
-
-		&::after {
-	    	position: absolute;
-	    	content: '';
-	    	width: 100%;
-	    	height: calc( 100% + 130px );
-	    	top: 0;
-	    	left: 0;
-	    	box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
-	    }
     }
 
     .first-absolute {
@@ -1006,12 +1017,14 @@ header {
     	}
 
     	h1 {
-			font-size: 45px;
-			font-weight: 700;
-			max-width: 630px;
-			margin-bottom: 10px;
+			font-size: 50px;
+		    font-weight: bold;
+		    max-width: 500px;
+		    margin-bottom: 10px;
+		    line-height: 60px;
 
 			@media #{$phone} {
+				line-height: normal;
 		    	font-size: 22px;
 		    	text-align: center;
 		    	color: #0b0b0b;
@@ -1020,12 +1033,28 @@ header {
     	}
 
     	h2 {
-    		font-size: 30px;
-
     		@media #{$phone} {
-		    	font-size: 20px;
 		    	text-align: center;
+		    	max-width: 270px;
+			    margin-right: auto;
+			    margin-left: auto;
+			    padding-bottom: 35px;
+			    position: relative;
+			    margin-top: 15px;
+
+
+			    &:after {
+			    	content: '';
+			    	position: absolute;
+			    	bottom: 0px;
+			    	left: 50%;
+			    	transform: translateX(-50%);
+			    	width: 157px;
+			    	height: 1px;
+			    	background-color: black;
+			    }
 		    }
+
     	}
 
 	    span {
@@ -1089,30 +1118,236 @@ header {
 			}
 	    }
     }
+}
 
+.index-swiper {
+	padding-top: 100px;
+
+	@media #{$tablet} {
+		padding-top: 50px;
+	}
+
+	@media #{$phone} {
+		padding-top: 60px;
+	}
+
+	.swiper-container {
+		@media #{$phone} {
+			padding-bottom: 60px !important;
+		}
+	}
 }
 
 p.h2-bold {
 	font-weight: 900;
 	text-align: center;
 	text-transform: uppercase;
-	font-size: 35px;
+	font-size: 30px;
 	padding-bottom: 0px;
 
 	@media #{$phone} {
-		font-size: 18px;
+		font-weight: 800;
+		font-size: 26px;
 		padding-bottom: 0px;
 	}
 }
 
+.page-index {
+	h2 {
+		font-size: 30px;
+
+		@media #{$phone} {
+	    	font-size: 26px;
+	    }
+	}
+
+	.blue-button {
+		padding: 10px 40px;
+    	display: inline-block;
+
+    	@media #{$phone} {
+    		font-size: 18px;
+    	}
+	}
+
+	.section-work {
+		@media #{$phone} {
+			padding-top: 40px;
+		}
+	}
+}
+
+.section-take-surveys {
+	padding: 40px 0px;
+    background-color: #09ace1;
+
+	@media #{$tablet} {
+		margin-bottom: 20px;
+	}
+
+	.container {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		@media #{$tablet} {
+			display: block;
+			text-align: center;
+		}
+	}
+
+	h3 {
+		font-weight: bold;
+		color: white;
+
+		@media screen and (max-width: 1200px) {
+			font-size: 26px;
+			font-weight: normal;
+		}
+	}
+
+	img {
+		max-width: 100%;
+
+		@media #{$tablet} {
+			display: none;
+		}
+	}
+
+	.white-button {
+		border: 2px solid white;
+	    background-color: transparent;
+	    color: white;
+	    font-size: 18px;
+	    font-weight: bold;
+	    padding: 12px 15px;
+	    border-radius: 10px;
+	    text-transform: uppercase;
+    	transition: all 0.3s ease;
+
+		@media #{$tablet} {
+			margin-top: 20px;
+			display: inline-block;
+			padding: 8px 25px;
+			max-width: 240px;
+		}
+	}
+}
+
+.check-statictics-wrapper {
+	padding: 150px 0px;
+
+	@media #{$tablet} {
+		padding: 80px 0px;
+	}
+
+	@media #{$phone} {
+		padding-top: 34px;
+		padding-bottom: 65px;
+	}
+
+	h2 {
+		margin-bottom: 30px;
+	}
+}
+
+.index-daily-polls {
+	background: url('../new-vox-img/index-polls-background.jpg') 50% 100% no-repeat;
+	background-size: cover;
+    padding: 120px 0px;
+
+    @media screen and (max-width: 1630px) {
+    	padding: 90px 0px;
+    }
+
+    @media screen and (max-width: 1400px) {
+    	padding: 60px 0px;
+    }
+
+    @media #{$phone} {
+    	background-image: url('../new-vox-img/index-polls-background-mobile.jpg');
+    	padding-top: 50px;
+    	padding-bottom: 0px;
+    }
+
+    & * {
+    	color: white;
+    }
+
+    h2 {
+    	margin-bottom: 15px;
+
+    	@media screen and (max-width: 1630px) {
+			max-width: 600px;
+			margin-right: auto;
+			margin-left: auto;
+    	}
+
+    	@media #{$tablet} {
+			max-width: 440px;
+		    font-size: 21px;
+		}
+
+		@media #{$phone} {
+			max-width: 280px;
+    		font-size: 26px;
+    		margin-bottom: 35px;
+		}
+    }
+
+    p.h2-bold {
+    	@media #{$phone} {
+    		margin-bottom: 10px;
+    	}
+    }
+
+    .go-polls {
+		background-color: #ff0045;
+		font-size: 18px;
+		padding: 7px 38px 10px;
+		display: inline-block;
+		border-radius: 10px;
+		transition: all 0.3s ease;
+
+		@media #{$phone} {
+			margin-bottom: 30px;
+		}
+
+		&:hover {
+			color: white;
+			background-color: #ff4a7b;
+			transition: all 0.3s ease;
+		}
+
+		img {
+			max-width: 28px;
+    		vertical-align: bottom;
+    		margin-right: 10px;
+		}
+    }
+
+    .index-poll-man {
+    	display: none;
+    	max-width: 100%;
+
+    	@media #{$phone} {
+    		margin-left: auto;
+    		margin-right: auto;
+    		display: block;
+    	}
+    }
+}
+
 .section-work {
-	padding-top: 90px;
+	padding-top: 150px;
+
+	@media #{$tablet} {
+		padding-top: 80px;
+	}
 
 	@media #{$phone} {
 		padding-top: 0px;
-		background: #e8f7ff;
-		padding-bottom: 40px;
-		box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.35);
+		padding-bottom: 30px;
 	}
 
 	p.h2-bold {
@@ -1134,23 +1369,20 @@ p.h2-bold {
 	.work-desc {
 		text-align: center;
 		max-width: 900px;
-	    margin: 0 auto 50px;
+	    margin: 0 auto 70px;
 
 	    @media #{$phone} {
 			margin-bottom: 30px;
 		}
 	}
 
-	.row {
-		@media #{$tablet} {
-			display: flex;
-    		justify-content: center;
-		}
+	.flex {
+    	justify-content: center;
 
 		@media #{$phone} {
 			display: block;
 
-			.col-md-3 {
+			.col {
 				display: flex;
     			align-items: center;
 				text-align: left;
@@ -1171,99 +1403,48 @@ p.h2-bold {
 		    	display: block;
 		    }
 		}
-
-		&:after {
-			content: '';
-    		position: absolute;
-		    height: 19px;
-		    top: 50%;
-		    transform: translateY(-50%);
-		    left: 108px;
-		    z-index: -1;
-		    width: 190px;
-		    box-shadow: 0px 12px 27px 0px #cbe6f1;
-
-		    @media #{$phone} {
-			    width: 6px;
-			    left: 22px;
-			    height: 200%;
-			    top: 100%;
-			    transform: none;
-		    }
-		}
-
-
-		&.warm-image {
-
-			&:after {
-			    background: #49c2f6;
-			    background: -moz-linear-gradient(top, #49c2f6 0%, #3cb1e4 100%);
-			    background: -webkit-linear-gradient(top, #49c2f6 0%, #3cb1e4 100%);
-			    background: linear-gradient(to bottom, #49c2f6 0%, #3cb1e4 100%);
-			    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#49c2f6', endColorstr='#3cb1e4',GradientType=0 );
-			}
-		}
-
-		&.sign-image {
-			&:after {
-			    background: #33a3d5; /* Old browsers */
-				background: -moz-linear-gradient(top, #33a3d5 0%, #238ebe 100%); /* FF3.6-15 */
-				background: -webkit-linear-gradient(top, #33a3d5 0%,#238ebe 100%); /* Chrome10-25,Safari5.1-6 */
-				background: linear-gradient(to bottom, #33a3d5 0%,#238ebe 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#33a3d5', endColorstr='#238ebe',GradientType=0 );
-			}
-		}
-
-		&.grab-image {
-			&:after {
-			    background: #1a80af; /* Old browsers */
-				background: -moz-linear-gradient(top, #1a80af 0%, #0d6f9d 100%); /* FF3.6-15 */
-				background: -webkit-linear-gradient(top, #1a80af 0%,#0d6f9d 100%); /* Chrome10-25,Safari5.1-6 */
-				background: linear-gradient(to bottom, #1a80af 0%,#0d6f9d 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1a80af', endColorstr='#0d6f9d',GradientType=0 );
-			}
-		}
-
-		&.no-image {
-			&:after {
-				display: none;
-			}
-		}
 	}
 
 	h4 {
 		margin-top: 30px;
-		font-weight: 600;
+		font-weight: bold;
 		margin-bottom: 30px;
 
 		@media #{$phone} {
 			margin-top: 0px;
 			margin-bottom: 10px;
-			font-size: 16px;
+			font-size: 20px;
 		}
 	}
 
 	.black-button {
 		margin-top: 100px;
 
+		@media #{$tablet} {
+			margin-top: 60px;
+		}
+
 		@media #{$phone} {
-			margin-top: 0px;
+			top: auto;
+			margin-top: 20px;
 		}
 	}
 }
 
 .section-reasons {
-	padding-top: 120px;
-	padding-bottom: 120px;
+	padding: 120px 0px;
+
+	@media #{$tablet} {
+		padding: 80px 0px;
+	}
 
 	@media #{$phone} {
-		padding-top: 40px;
-		padding-bottom: 40px;
+		padding: 40px 0px;
 	}
 
 	h2 {
 		text-align: center;
-		margin-bottom: 100px;
+		margin-bottom: 80px;
 
 		@media #{$phone} {
 			margin-bottom: 30px;
@@ -1478,7 +1659,9 @@ p.h2-bold {
 
 		.survey-cats {
 			margin-bottom: 25px;
-			flex: 1;
+			display: flex;
+			justify-content: center;
+			flex-flow: row wrap;
 
 			@media #{$phone} {
 				margin-bottom: 10px;
@@ -1494,6 +1677,18 @@ p.h2-bold {
 			    margin-top: 10px;
 			    display: inline-block;
 			    cursor: pointer;
+			    margin-right: 5px;
+
+			    &:last-child {
+			    	margin-right: 0px;
+			    }
+
+			    &[cat-id="21"] {
+					order: -1;
+					color: #ff0046;
+					border-color: #ff0046;
+					margin-right: 5px;
+			    }
 			}
 			
 		}
@@ -1627,6 +1822,13 @@ body.vox-public {
 	.site-content {
 		@media screen and (max-height: 800px) and (min-width: 769px ) {
 			padding-top: 0px;
+		}
+	}
+
+	.christmas-banner {
+		@media screen and (max-height: 800px) and (min-width: 769px ) {
+			margin-bottom: 50px;
+			margin-top: -20px;
 		}
 	}
 }
@@ -2474,7 +2676,7 @@ body.vox-public {
 
 	h1 {
 		font-size: 25px;
-		font-weight: bold;
+		//font-weight: bold;
 		text-transform: uppercase;
 		color: #020202;
 		text-align: center;
@@ -2482,7 +2684,7 @@ body.vox-public {
 		position: relative;
 
 		@media #{$phone} {
-			font-size: 15px;
+			font-size: 16px;
 			font-weight: 600;
 			margin-bottom: 5px;
 			padding: 0px 20px;
@@ -2542,7 +2744,7 @@ body.vox-public {
 	.demographic-questionnaire-description,
 	.questionnaire-description {
 		text-align: center;
-		font-size: 21px;
+		font-size: 18px;
 		color: #060606;
 		margin-bottom: 35px;
 	    margin-left: auto;
@@ -2550,7 +2752,7 @@ body.vox-public {
 		width: 90%;
 
 		@media #{$phone} {
-			font-size: 14px;
+			font-size: 15px;
 		}
 	}
 
@@ -2616,24 +2818,25 @@ body.vox-public {
 		}
 
 		.question {
-		    font-weight: 600;
-		    font-size: 21px;
+		    font-weight: bold;
+    		font-size: 25px;
 		    color: #060606;
 			margin-bottom: 30px;
 			position: relative;
 
 			@media #{$phone} {
-				font-size: 14px;
+				font-size: 17px;
 				margin-bottom: 18px;
 				margin-top: 20px;
 			}
 
 			.tooltip-text {
-				font-size: 21px;
+				font-size: 25px;
+		    	font-weight: bold;
 				color: #41afff;
 
 				@media #{$phone} {
-					font-size: 14px;
+					font-size: 17px;
 				}
 			}
 		}
@@ -2921,6 +3124,10 @@ body.vox-public {
 									padding: 0px 20px;
 									margin: 0px 0px 5px 0px;
 									display: inline-block;
+
+									@media #{$phone} {
+										font-size: 17px;
+									}
 								}
 							}
 
@@ -3104,7 +3311,7 @@ body.vox-public {
 
 	@media #{$phone} {
     	margin-left: 5%;
-    	width: 40%;
+    	width: 45%;
 	}
 
 	&::after {
@@ -3135,7 +3342,7 @@ body.vox-public {
 
 .questions-menu {
 	margin-top: 10px;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	position: relative;
 
 	@media #{$phone} {
@@ -3187,12 +3394,6 @@ body.vox-public {
 			margin-right: 5px;
 			transition: all 0.3s ease;
 
-			@media #{$phone} {
-				padding: 3px;
-				font-size: 12px;
-				min-width: 80px;
-			}
-
 			&:hover,
 			&.active {
 				background-color: #d3ebfb;
@@ -3221,7 +3422,7 @@ body.vox-public {
 		height: 27px;
 		padding: 0px 10px;
 		margin-left: 7px;
-		font-size: 13px;
+		font-size: 15px;
     	background: white;
 
 		@media #{$phone} {
@@ -3231,9 +3432,8 @@ body.vox-public {
 	}
 
 	span {
-		font-size: 13px;
-		font-weight: 600;
-		color: #373737;
+		font-size: 15px;
+		color: #333;
 
 		@media #{$phone} {
 			display: none;
@@ -3243,21 +3443,20 @@ body.vox-public {
 	a {
 		padding-right: 8px;
 		padding-left: 8px;
-		font-size: 14px;
-		font-weight: lighter;
-		color: #373737;
+		font-size: 15px;
+		color: #333;
 		border-right: 1px solid #373737;
 		transition: all 0.3s ease;
 		position: relative;
 
 		@media #{$phone} {
-			line-height: 14px;
+			text-transform: capitalize;
 			margin-bottom: 5px;
 			display: inline-block;
 		}
 
 		i {
-			color: #373737;
+			color: #333;
 			vertical-align: text-top;
 			position: absolute;
 			top: 3px;
@@ -3304,10 +3503,6 @@ body.vox-public {
 				right: 8px;
 				border-width: 4px 3px 0 3px;
 				border-color: #38a2e5 transparent transparent transparent;
-
-				@media #{$phone} {
-					top: 5px;
-				}
 			}
 
 			&.order-asc {
@@ -3315,14 +3510,14 @@ body.vox-public {
 					border-width: 0 3px 4px 3px;
 					border-color: transparent transparent #38a2e5 transparent;
 					top: 7px;
-
-					@media #{$phone} {
-						top: 4px;
-					}
 				}
 			}
 		}
 	}
+}
+
+#questions-wrapper {
+	margin-top: 30px;
 }
 
 .another-questions {
@@ -3330,19 +3525,18 @@ body.vox-public {
 
 	h1 {
 
-		font-size: 25px;
-		font-weight: bold;
+		font-size: 30px;
+		font-weight: normal;
 		text-transform: uppercase;
 		color: #020202;
 		text-align: center;
-		margin-bottom: 45px;
+		margin-bottom: 39px;
 		position: relative;
 
 		@media #{$phone} {
-			font-size: 15px;
-			font-weight: 600;
-			margin-bottom: 5px;
-			padding: 0px 20px;
+			font-size: 26px;
+			margin-bottom: 0px;
+			padding: 0px 30px;
 		}
 	}
 
@@ -3649,34 +3843,54 @@ body.vox-public {
 
 .page-stats {
 
+	.section-take-surveys {
+		background-color: white;
+
+		h3 {
+			color: black;
+		}
+
+		.white-button {
+		    border-color: black;
+		    color: black;
+		}
+	}
+
+	.search-survey {
+
+		@media #{$phone} {
+	    	width: 70%;
+		}
+	}
+
 	h1 {
-		font-size: 25px;
+		font-size: 26px;
 		font-weight: bold;
 		text-transform: uppercase;
 		color: #020202;
 		text-align: center;
 		//margin-bottom: 45px;
-		margin-bottom: 15px;
+		margin-bottom: 20px;
 		position: relative;
 
 		@media #{$phone} {
-			font-size: 15px;
-			font-weight: 600;
-			margin-bottom: 5px;
+			font-weight: normal;
 			padding: 0px 20px;
 		}
 	}
 	h2 {
 		font-size: 18px;
-		color: #020202;
+		color: #333;
 		text-align: center;
 		font-weight: normal;
-		//margin-bottom: 35px;
 		margin-bottom: 40px;
 
 		@media #{$phone} {
-			font-size: 12px;
-			margin-bottom: 15px;
+			font-size: 16px;
+			margin-bottom: 20px;
+			max-width: 200px;
+		    margin-left: auto;
+		    margin-right: auto;
 		}
 	}
 
@@ -3736,8 +3950,13 @@ body.vox-public {
 		text-align: center;
 		max-width: 870px;
 		margin: 0 auto;
+		color: #333;
 		margin-bottom: 40px;
 		// margin-bottom: 10px;
+
+		@media #{$phone} {
+			font-size: 15px;
+		}
 	}
 
 	.search-survey {
@@ -3756,12 +3975,15 @@ body.vox-public {
 	}
 
 	.stats-list {
-		justify-content: space-between;
 		margin-top: 10px;
 
 		.stats-holder {
 			//width: 870px;
 			width: 100%;
+
+			@media #{$phone} {
+				padding: 0px 22px;
+			}
 
 			b {
 				font-size: 20px;
@@ -3792,10 +4014,12 @@ body.vox-public {
 				}
 
 				@media #{$phone} {
-					margin-bottom: 20px;
-					padding-bottom: 50px;
-					max-width: 95%;
+					margin-bottom: 37px;
+					padding: 6px 9px 16px;
+					max-width: 100%;
 					display: block;
+					border-width: 1px;
+    				border-color: #ccc;
 				}
 
 				img.featured {
@@ -3805,10 +4029,10 @@ body.vox-public {
 					width: 50px;
 
 					@media #{$phone} {
-					    width: 20px;
-					    height: 20px;
-					    right: -10px;
-					    top: -10px;
+					    width: 40px;
+					    height: 40px;
+					    right: -20px;
+					    top: -16px;
 					}
 				}
 
@@ -3824,6 +4048,8 @@ body.vox-public {
 						order: 2;
 					    width: 100%;
 					    height: auto;
+					    border-top-right-radius: 10px;
+					    border-top-left-radius: 10px;
 					}
 				}
 
@@ -3841,23 +4067,21 @@ body.vox-public {
 						order: 1;
 						margin-left: 0px;
 						margin-right: 0px;
-
 					    width: 100%;
 					    min-height: 115px;
     					justify-content: flex-start;
 					}
 
 					h3 {
-						color: #00aaff;
+						color: #00beff;
 						font-weight: bold;
 						font-size: 18px;
 						text-transform: uppercase;
 						margin-bottom: 15px;
 
 						@media #{$phone} {
-							font-size: 13px;
+							font-size: 22px;
 							text-align: center;
-							margin-bottom: 5px;
 							margin-top: 10px;
 						}
 					}
@@ -3871,11 +4095,19 @@ body.vox-public {
 
 					p {
 						font-size: 16px;
-						color: #040404;	
+						color: #333;	
+
+						@media #{$tablet} {
+							overflow: hidden;
+						    display: -webkit-box;
+						    -webkit-line-clamp: 6;
+						    -webkit-box-orient: vertical;
+						}
 
 						@media #{$phone} {
-							font-size: 12px;
-							font-weight: 600;
+						    -webkit-line-clamp: 4;
+							font-size: 14px;
+							margin-bottom: 20px;
 						}					
 					}
 				}
@@ -3893,15 +4125,12 @@ body.vox-public {
 					}
 
 					@media #{$phone} {
-						position: absolute;
-						bottom: 17px;
-					    right: 0px;
 					    width: 100%;
 					    display: block;
 					}
 
 				    a {
-				    	background: #00aaff;
+				    	background: #00beff;
 				    	height: 40px;
 				    	line-height: 40px;
 				    	padding: 0px 10px;
@@ -3911,28 +4140,80 @@ body.vox-public {
 				    	font-size: 16px;
 				    	text-align: center;
 
-
 						@media #{$phone} {
-							font-size: 12px;
-							height: 30px;
-							line-height: 30px;
-    						padding: 0px 10px;
+							font-size: 16px;
+						    height: auto;
+						    line-height: normal;
+						    padding: 12px 10px;
 						    display: inline-block;
-						    width: 48%;
+						    width: 46%;
 						    vertical-align: middle;
+						    border: 2px solid #00beff;
+						    margin: 0px 4px;
+						}
+
+						@media screen and (max-width: 370px) {
+							font-size: 14px;
 						}
 
 						&.secondary {
-							color: #38ace5;
+							border-color: #00beff;
+							color: #00beff;
     						background-color: transparent;
     						margin-top: 25px;
 
     						@media #{$phone} {
     							margin-top: 0px;
-    							line-height: 29px;
     						}
 						}
 				    }
+				}
+
+				&.request-survey-stat {
+					background-color: #ffd9e4;
+					border-color: #ffd9e4;
+
+					.cover {
+						width: 260px;
+					    height: 176px;
+					    background-size: cover;
+
+					    @media #{$tablet} {
+					    	width: 180px;
+    						height: 121px;
+					    }
+
+					    @media #{$phone} {
+					    	display: block;
+						    width: auto;
+						    height: auto;
+						    padding-top: 67%;						    
+						    border-top-right-radius: 10px;
+						    border-top-left-radius: 10px;
+					    }
+					}
+
+					.stats-info {
+						h3 {
+							font-size: 20px;
+    						color: #060606;
+
+    						@media #{$phone} {
+    							font-size: 22px;
+    						}
+						}
+					}
+
+					.stats-cta {
+						a {
+							background-color: #ff0046;
+    						border-color: #ff0046;
+
+    						@media #{$phone} {
+    							width: auto;
+    						}
+						}
+					}
 				}
 			}
 		}
@@ -3999,7 +4280,85 @@ body.vox-public {
 				}
 			}
 		}
+
+		.pagination {
+			align-items: center;
+		    display: flex;
+		    justify-content: center;
+		    margin-bottom: 60px;
+		    margin-top: 55px;
+		    border-radius: 0px;
+
+		    @media #{$phone} {
+		    	display: block;
+		    	margin-bottom: 30px;
+		    	margin-top: 35px;
+		    }
+
+		    >li {
+
+		    	@media #{$phone} {
+		    		display: inline-block;
+		    		margin-bottom: 8px;
+		    	}
+
+		    	>a,
+		    	>span {
+		    		color: #00bbdc;
+				    width: 30px;
+				    height: 30px;
+				    line-height: 30px;
+				    display: inline-block;
+				    border: 1px solid #00bbdc;
+				    margin: 0 3px;
+				    border-radius: 50%;
+				    font-size: 14px;
+				    cursor: pointer;
+				    transition: all 0.3s ease;
+				    float: none;
+				    padding: 0px;
+		    	}
+
+		    	&:hover,
+		    	&.active {
+		    		>span,
+		    		>a {
+		    			background: #00bbdc;
+					    color: #fff;
+					    transition: all 0.3s ease;
+					    box-shadow: 0 0 20px -2px rgba(158, 158, 158, 0.59);
+					   	border-color: #00bbdc;
+		    		}
+		    	}
+
+		    	&.disabled {
+		    		display: none;
+		    	}
+
+		    	&:first-child,
+		    	&:last-child {
+		    		>a,>span {
+		    			line-height: 26px;
+
+		    			@media #{$phone} {
+		    				line-height: 30px;
+		    			}
+		    		}
+		    	}
+		    }
+		}
 	}
+
+	&.sp-home {
+
+		.footer-expander {
+			footer {
+			    opacity: 1;
+			    bottom: 0;
+			}
+		}
+	}
+
 }
 
 .scrolled-ribbon {
@@ -4043,9 +4402,8 @@ body.vox-public {
 		position: relative;
 
 		@media #{$phone} {
-			font-size: 15px;
-			font-weight: 600;
-			margin-bottom: 5px;
+			font-size: 18px;
+			margin-bottom: 35px;
 			padding: 0px 20px;
 		}
 
@@ -4063,10 +4421,10 @@ body.vox-public {
 
 	.filters-wrapper {
 		margin-bottom: 25px;
+		text-align: center;
 
 		.filters {
 			text-align: center;
-
 
 			@media #{$phone} {
     			display: block;
@@ -4079,7 +4437,9 @@ body.vox-public {
 
 				@media #{$phone} {
 					display: block;
-					margin-bottom: 5px;
+					margin-bottom: 15px;
+					font-size: 15px;
+					font-weight: normal;
 				}
 			}
 
@@ -4094,7 +4454,7 @@ body.vox-public {
 	    			border-width: 1px;
 	    		}
 
-				&:last-child {
+				&:nth-last-child(2) {
 					border-right: none;
 				}
 
@@ -4102,19 +4462,103 @@ body.vox-public {
 				&:hover {
 					color: #38a2e5;
 				}
+
+				@media #{$phone} {
+					display: none;
+				}
+			}
+
+			select {
+				display: none;
+				margin-right: auto;
+			    margin-left: auto;
+			    border: 1px solid #61b1f6;
+			    background-color: white;
+			    border-radius: 10px;
+			    padding: 2px 35px 2px 6px;
+
+				@media #{$phone} {
+					display: block;
+				}
 			}
 		}
 
 		.filters-custom {
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			margin-top: 15px;
+			background-color: #F7F7F7;
+		    border: 1px solid #CCCCCC;
+		    border-radius: 5px 5px 5px 5px;
+		    padding: 10px;
+		    position: relative;
+
+		    @media #{$phone} {
+		    	flex-direction: column;
+		    }
+
+			.close-custom-datepicker {
+				position: absolute;
+				right: 4px;
+				z-index: 10;
+				top: 0px;
+				padding: 5px;
+			}
+
 			#custom-datepicker {
+				position: relative;
 				display: inline-block;
-				margin: 15px auto 0 auto;
+				//margin: 15px auto 0 auto;
+
+
+				.date-picker-wrapper {
+					border: none;
+    				background: transparent;
+    				padding: 0px;
+    				display: block;
+
+					.drp_top-bar {
+						display: none;
+					}
+
+					.month-wrapper {
+						border: none;
+						background: none;
+
+						table {
+							background: white;
+
+							.caption {
+								background-color: #38a2e5;
+								height: auto;
+
+								div,span {
+									color: white;
+								}
+							}
+
+							.day.real-today {
+							    background-color: #00c9b7;
+    							color: white !important;
+							}
+						}
+
+						.time1 {
+							@media #{$phone} {
+						    	width: auto;
+						    }
+						}
+					}
+				}
+
 
 				.datepicker {
 					display: flex;
 
 					@media screen and (max-width: 992px) {
 						display: block;
+						padding-top: 30px;
 					}
 
 					table {
@@ -4142,10 +4586,11 @@ body.vox-public {
 
 			#datepicker-extras {
 				margin-left: 25px;
-    			padding-top: 42px;
+    			padding-top: 32px;
 
 				@media screen and (max-width: 992px) {
 					margin-left: 0px;
+					padding-top: 12px;
 				}
 
     			.flex {
@@ -4160,6 +4605,7 @@ body.vox-public {
 
 					@media screen and (max-width: 992px) {
     					display: block;
+    					margin-top: 15px;
 					}
 
 					.btn {
@@ -4221,13 +4667,126 @@ body.vox-public {
 		.stat {
 			border-bottom: 1px solid #f3f3f3;
 
+			&[stat-type="dependency"] {
+
+				.chart {
+					@media screen and (max-width: 1200px) {
+						min-width: 100%;
+					}
+
+					div[dir="ltr"] {
+						@media screen and (max-width: 1200px) {
+							margin-left: auto;
+    						margin-right: auto;
+						}
+					}
+
+					&.chart-1 {
+						min-width: 33.3%;
+						justify-content: normal;
+
+						@media screen and (max-width: 1200px) {
+							flex: 1;
+						}
+
+						.main-chart {
+						    height: 100%;
+
+						    .mobile-chart {
+						    	@media #{$phone} {	
+						    		margin-top: 30px;
+						    	}
+						    }
+						}
+					}
+
+					.mobile-chart {
+					    padding: 20px !important;
+					}
+				}
+
+				.more-q-content {
+					.chart {
+						.second-chart {
+						    margin-left: 0px !important;
+						}
+					}
+				}
+
+				.contents {
+					.graphs {
+						min-height: 380px;
+						
+						.total {
+						    top: calc(50% + 165px);
+
+						    @media screen and (max-width: 1200px) {
+						    	top: auto;
+						    }
+						}
+						.main-chart {
+							padding-bottom: 70px;
+
+							@media #{$phone} {
+								padding-bottom: 30px;
+							}
+						}
+
+						&.multiple-stat {
+
+							.hint {
+								@media screen and (max-width: 1200px) {
+								    top: 50px;
+								}
+
+								@media #{$phone} {
+									top: 46px;
+								}
+							}
+						}
+					}
+
+				}
+			}
+
+			&[cur-scale="country_id"] {
+				.contents {
+					.scales.mobile-scales {
+						@media #{$phone} {
+							order: 5;
+						}
+					}
+				}
+			}
+
+			&[cur-scale="gender"] {
+
+				.contents {
+					.multiple-stat {
+						.scales.mobile-scales {
+							@media #{$phone} {
+    							margin-bottom: 10px;
+							}
+						}
+
+						&.mobile-bottom-margin {
+							.scales.mobile-scales {
+								@media #{$phone} {
+	    							margin-bottom: 80px;
+								}
+							}
+						}
+					}
+				}
+			}
+
 			&:last-child {
 				border-bottom: none;
 			}
 
 			&:first-child {
 				.share-buttons {
-					visibility: visible;					
+					display: flex;					
 				}
 			}
 
@@ -4245,16 +4804,23 @@ body.vox-public {
 
 				.more-q-legend {
 					flex-direction: row !important;
-					padding-top: 20px;
+					//padding-top: 20px;
 
 					@media #{$phone} {
 						display: block;
+						order:4 !important;
+						margin-left: 10px !important;
 					}
 				}
 
 				.more-q-content {
 					@media screen and (max-width: 1200px) {
 						display: block;
+					}
+
+					@media #{$phone} {
+						display: flex;
+						flex-direction: column;
 					}
 					.chart {
 						flex: 1;
@@ -4298,30 +4864,54 @@ body.vox-public {
 				}
 			}
 
+			.loader-mask {
+				z-index: 99;
+			}
+
+			.top-answers {
+				text-align: center;
+				margin-bottom: 20px;
+				margin-top: 10px;
+				font-weight: bold;
+				text-transform: uppercase;
+
+				@media #{$phone} {
+					margin-top: 20px;
+				}
+			}
+
 			.box {
 				align-items: baseline;
     			justify-content: space-between;
 
-    			@media #{$tablet} {
+    			@media screen and (max-width: 1200px) {
     				flex-flow: row wrap;
+    			}
+
+    			@media #{$phone} {
+    				padding-top: 10px;
     			}
 			}
 
 			.share-buttons {
 			    align-items: center;
 			    z-index: 100;
-			    visibility: hidden;
+			    display: none;
 
-			    @media #{$tablet} {
+			    @media screen and (max-width: 1200px) {
 					margin-bottom: 10px;
 					order: -1;
 					width: 100%;
 				}
 
 				@media #{$phone} {
-					display: inline-block;
 					text-align: center;
-					margin-bottom: 20px;
+    				background-color: #f6f6f6;
+    				justify-content: center;
+				    margin-bottom: 0px;
+				    padding: 10px 0px;
+    				border-top-right-radius: 30px;
+    				border-top-left-radius: 30px;
 				}
 
 			    span {
@@ -4370,58 +4960,123 @@ body.vox-public {
 
 			a.title {
 				font-size: 20px;
-				color: #999;
 				display: block;
 				line-height: 28px;
 				padding: 11px 0px;
 				padding-left: 35px;
-				background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
-
-				h2 {
-					font-size: 20px;
-					color: #999;
-					text-align: left;
-					margin-bottom: 0px;
-					line-height: 28px;
-
-					@media #{$phone} {
-						font-size: 14px;
-						line-height: 1;
-					}
-				}
+				background-color: #d3ebfb;
 
 				@media #{$phone} {
 					font-size: 14px;
 				    line-height: 1;
 				    padding-left: 25px;
 				}
+
+				h2 {
+					font-weight: bold;
+					font-size: 20px;
+					text-align: left;
+					margin-bottom: 0px;
+					line-height: 28px;
+					background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
+					background-size: 29px;
+					padding-left: 40px;
+
+					@media #{$tablet} {
+						width: 100%;
+					}
+
+					@media #{$phone} {
+						font-size: 16px;
+						line-height: normal;
+						max-width: 100%;
+						background-size: 20px;
+						padding-left: 30px;
+					}
+				}
 			}
 
 			.stats-subtitle {
 				margin-bottom: 30px;
-				margin-top: -20px;
-				font-size: 14px;
+				font-size: 16px;
 
 				@media #{$phone} {
-					margin-top: -10px;
+					font-size: 14px;
 				}
 			}
 
 			.contents {
 				display: none;
-				margin: 25px 0px;
+				margin: 25px auto 40px;
 
 				@media #{$phone} {
-					margin: 10px 0px;
+					margin: 10px auto;
+				}
+
+				.mobile-button-legend {
+					display: none;
+					background-color: #38ace5;
+					text-align: center;
+					align-items: center;
+					justify-content: center;
+					color: white;
+					text-transform: uppercase;
+					order: 3;
+					min-height: 38px;
+
+					@media #{$phone} {
+						display: flex;
+					}
+
+					img {
+						max-width: 20px;
+					}
+
+					i {
+						display: none;
+						color: white;
+
+						&:before {
+							font-size: 20px;
+						}
+					}
+
+					&.active {
+						font-size: 0px;
+
+						img {
+							display: none;
+						}
+
+						i {
+							display: block;
+						}
+					}
 				}
 
 				.scales {
-					margin-bottom: 15px;
+					margin-bottom: 25px;
+
+					@media screen and (max-width: 1200px) {
+						display: block;
+						text-align: left;
+					}
 
 					@media #{$phone} {
-						display: block;
-						text-align: center;
 						font-size: 0;
+						text-align: center;
+						margin-bottom: 10px;
+						display: none;
+					}
+
+					&.mobile-scales {
+						display: none;
+
+						@media #{$phone} {
+							display: block;
+							order: 4;
+							margin-top: 20px;
+						}
 					}
 
 					a {
@@ -4436,14 +5091,121 @@ body.vox-public {
 						display: inline-block;
 						cursor: pointer;
 
-						@media #{$phone} {
+						@media screen and (max-width: 1200px) {
 							margin-bottom: 10px;
 						}
 
-						&:hover,
+						&:hover {
+							color: #f7f9fb;	
+							background: #64c1e0;
+
+							@media #{$tablet} {
+								background: #f6f6f6;
+								color: #0e1f2b;
+							}
+
+							&.with-children {
+								&:after {
+									color: white;
+
+									@media #{$tablet} {
+										color: #888888;
+									}
+								}
+							}
+						}
+
 						&.active {
 							color: #f7f9fb;	
 							background: #64c1e0;
+
+							&.with-children {
+								&:after {
+									color: white;
+								}
+							}
+						}
+
+						&.with-children {
+							position: relative;
+							padding-right: 26px;
+							padding-left: 15px;
+
+							&:after {
+								content: '\f0d7';
+								font-family: "Font Awesome 5 Free";
+    							font-weight: 900;
+    							color: #888888;
+    							position: absolute;
+    							right: 10px;
+    							top: 50%;
+    							transform: translateY(-50%);
+							}
+
+							.scales-filter {
+								text-align: left;
+								display: none;
+								position: absolute;
+							    z-index: 100011;
+							    background-color: white;
+							    left: 0px;
+							    padding: 10px 15px;
+							    border-radius: 10px;
+							    box-shadow: 0px 3px 5px 5px rgba(0, 0, 0, 0.11);
+							    min-width: 210px;
+
+							    @media #{$phone} {
+							    	min-width: 180px;
+							    	left: 50%;
+    								transform: translateX(-50%);
+							    }
+
+							    label {
+							    	display: block;
+							    	cursor: pointer;
+							    	font-weight: normal;
+							    	color: #333;
+							    	padding: 5px 0px;
+
+							    	&.select-all-scales-label {
+							    		color: #64c1e0;
+    									font-weight: bold;
+							    		border-bottom: 1px solid #65c1e0;
+							    		margin-bottom: 5px;
+							    		padding-bottom: 10px;
+
+							    		i {
+							    			display: none;
+							    		}
+
+							    		&:hover {
+							    			color: #43b1e7;
+							    		}
+							    	}
+
+							    	&.active {
+							    		i {
+							    			&:before {
+							    				content: "\f14a";
+							    			}
+							    		}
+							    	}
+
+							    	i {
+							    		margin-right: 5px;
+							    	}
+
+							    	input {
+							    		display: none;
+							    	}
+							    }
+							}
+
+							&.open {
+								.scales-filter {
+									display: block;
+								}
+							}
 						}
 					}
 				}
@@ -4451,7 +5213,7 @@ body.vox-public {
 				.graphs {
 					min-height: 300px;
 					border: 1px solid #eaeaea;
-					border-radius: 10px;
+					border-radius: 30px;
 					box-shadow: 0px 0px 5px 5px rgba(234,234,234,0.75);
 					position: relative;
 					overflow: hidden;
@@ -4462,6 +5224,76 @@ body.vox-public {
 
 					@media #{$phone} {
 					    flex-direction: column;
+					    overflow: visible;
+					}
+
+					&:not(.multiple-stat) {
+						.legend {
+							@media #{$phone} {
+								max-height: 0px;
+    							opacity: 0;
+    							transition: all 0.3s ease;
+    							z-index: -1;
+							}
+
+							&.open {
+								@media #{$phone} {
+									max-height: 100%;
+									opacity: 1;
+									transition: all 0.3s ease;
+									z-index: 0;
+								}
+							}
+						}
+
+						.map-hint {
+							@media #{$phone} {
+								top: 30px;
+							}
+						}
+
+						.total-gender {
+							top: 10px;
+
+							@media #{$phone} {
+								top: -55px;
+							}
+						}
+					}
+
+
+					.total-gender {
+						position: absolute;
+					    top: -55px;
+					    left: 50%;
+					    width: 100%;
+					    transform: translateX(-50%);
+					    display: flex;
+					    align-items: center;
+					    justify-content: center;
+
+
+						img {
+							max-width: 36px;
+							vertical-align: middle;
+							margin-right: 7px;
+						}
+
+						.total {
+							position: static;
+						    width: auto;
+						    transform: none;
+						    display: flex;
+						    align-items: center;
+						    justify-content: center;
+						    left: auto;
+							width: 300px;
+							cursor: pointer;
+						}
+
+						b {
+							margin-left: 3px;
+						}
 					}
 
 					&.multiple-stat {
@@ -4476,7 +5308,45 @@ body.vox-public {
 
 							@media screen and (max-width: 1200px) {
 								top: 15px;
+								height: 20px;
 							}
+						}
+
+						.main-chart {
+							padding-bottom: 0px;
+
+						}
+
+						// .hint {
+						// 	@media screen and (max-width: 1200px) {
+						// 		display: none !important;
+						// 	}
+						// }
+
+						.chart.country-legend {
+							margin-top: 0px !important;
+	   	 					padding-top: 0px !important;
+
+	   	 					@media screen and (max-width: 1200px) {
+	   	 						padding-top: 30px !important;
+	   	 					}
+
+				    		.map-hint {
+				    			top: -47px;
+
+				    			@media screen and (max-width: 1200px) {
+				    				top: 23px;
+				    			}
+				    		}
+					    }
+
+
+						.sort-stat {
+						    margin-bottom: 30px;
+
+						    @media screen and (max-width: 1200px) {
+						    	margin-bottom: 0px;
+						    }
 						}
 
 						.legend {
@@ -4491,6 +5361,61 @@ body.vox-public {
 						.second-chart {
 							> div {
 								margin: 0 auto;
+							}
+						}
+
+						.main-multiple-gender {
+							min-height: 300px;
+    						padding-top: 20px;
+
+							@media screen and (max-width: 1200px) {
+								margin-bottom: 90px;
+							}
+
+							@media #{$phone} {
+								min-height: auto;
+								margin-bottom: 0px;
+							}
+
+							.custom-legend {
+								height: 48px;
+								margin-bottom: 30px;
+
+								@media screen and (max-width: 1200px) {
+							    	margin-bottom: 0px;
+							    }
+
+							    @media #{$phone} {
+							    	height: auto;
+							    }
+							}
+
+							&.lower-margin {
+								.custom-legend {
+									height: auto;
+									margin-bottom: 10px;
+								}
+							}
+						}
+
+						.chart {
+							.mobile-chart {
+								padding: 50px 20px;
+							}
+						}
+						.hint {
+							top: 10px;
+
+							@media #{$phone} {
+								top: 46px;
+							}
+						}
+
+						.top-answers {
+							margin-top: -20px;
+
+							@media #{$phone} {
+								margin-top: 20px;
 							}
 						}
 					}
@@ -4509,6 +5434,10 @@ body.vox-public {
 							@media screen and (max-width: 1200px) {
 								margin-top: 30px;
 							}
+
+							@media #{$phone} {
+								margin-top: 10px;
+							}
 						}
 					}
 
@@ -4523,6 +5452,10 @@ body.vox-public {
 						background-position: 50% 50%;
 						background-repeat: no-repeat;
 						z-index: 10;
+
+						@media #{$phone} {
+							display: none;
+						}
 
 						&:hover {
 							opacity: 1;
@@ -4580,18 +5513,32 @@ body.vox-public {
 						top: 5px;
 						font-style: italic;;
 						font-size: 14px;
+						padding: 0px 10px; 
 
-						
+						a {
+							text-decoration: underline;
+						}
+
+						span {
+							font-size: 14px;
+						}
 					}
 
+					.dependency-question {
+					    font-style: italic;
+					    font-size: 14px;
+					    padding: 0px 10px;
+					    text-align: center;
+					    margin-top: 10px;
+					}
 
 					.map-hint {
 						transform: none;
-					    left: 24px;
+					    left: 0px;
 					    z-index: 100;
 					    text-align: left;
 					    font-size: 14px;
-					    top: 3px;
+					    top: 20px;
 					    width: 100%;
 					    text-align: center;
 					    bottom: auto;
@@ -4611,12 +5558,49 @@ body.vox-public {
 						top: 50%;
     					left: 50%;
     					transform: translateX(-50%) translateY(-50%);
-						background-image: url(../new-vox-img/stats-males.png);
+						background-image: url(../new-vox-img/women-icon.svg);
 
 
 						&.total-m {
-							background-image: url(../new-vox-img/stats-females.png);
+							background-image: url(../new-vox-img/man-icon.svg);
 						}
+					}
+
+					.multiple-gender-nav {
+						display: none;
+						order: 4;
+						margin-bottom: 90px;
+						background-color: #f6f6f6;
+						justify-content: space-between;
+    					align-items: center;
+    					padding: 10px 0px;
+
+    					.multiple-gender-nav-content {
+							display: flex;
+							align-items: center;
+							margin: 0px 20px;
+
+    						.nav-color {
+    							display: inline-block;
+							    width: 15px;
+							    min-width: 15px;
+							    height: 15px;
+							    border-radius: 50%;
+							    margin-right: 7px;
+    						}
+    					}
+
+    					a {
+							display: block;
+							padding: 0px 10px;
+
+							i {
+								&:before {
+									font-size: 25px;
+    								color: #555555;
+								}
+							}
+    					}
 					}
 
 
@@ -4624,6 +5608,9 @@ body.vox-public {
 						z-index: 10;
 					    position: relative;
 					    order: 2;
+						display: flex;
+						flex-direction: column;
+						justify-content: space-around;
 
 						@media screen and (max-width: 1200px) {
 				    		order: 3;
@@ -4637,13 +5624,55 @@ body.vox-public {
 						    }
 					    }
 
-						display: flex;
-						flex-direction: column;
-						justify-content: space-around;
+					    &.chart-1 {
+					    	.mobile-chart {
+						    	@media #{$phone} {
+						    		padding-top: 40px
+						    	}
+					    	}
+					    }
 
-						.second-chart.country_id {
+					    &.chart-2 {
+					    	@media #{$phone} {
+					    		order: 4;
+					    	}
+
+					    	&.chart-flex {
+					    		flex: 1;
+					    	}
+					    }
+
+					    &.chart-3 {
+					    	@media #{$phone} {
+					    		order: 5;
+					    		overflow: hidden;
+					    	}
+					    }
+
+					    &.country-legend {
+					    	max-width: 33.3%;
+					    	min-width: 33.3%;
+					    	background: #f6f6f6;
+   	 						padding-top: 40px;
+
+   	 						@media screen and (max-width: 1200px) {
+								max-width: 100%;
+								min-width: auto;
+					    		flex: 1;
+					    		min-width: 100%;
+							}
+
+					    	.mobile-chart {
+					    		width: auto !important;
+
+					    	}
+					    }
+
+						.third-chart.country_id {
 							width: 600px;
 							height: 300px;
+							margin-left: auto;
+							margin-right: auto;
 
 							@media (max-width: 1200px) {
 								width: 940px;
@@ -4683,24 +5712,87 @@ body.vox-public {
 								margin-top: 5px;
 								font-weight: 600;
 							}
+
+							&.multiple-gender-chart {
+								padding: 0px 70px;
+
+								@media screen and (max-width: 1200px) {
+									padding: 0px 20px;
+								}
+
+								img {
+									max-width: 15px;
+									float: left;
+									margin-right: 5px;
+									margin-bottom: 5px;
+								}
+
+								.custom-legend {
+								    margin-bottom: 30px;
+								    cursor: auto !important;
+
+								    @media #{$phone} {
+								    	margin-bottom: 10px;
+								    }
+
+								    &.verticle-gender {
+								    	display: flex;
+								    	align-items: flex-end;
+								    	min-height: 250px;
+
+								    	@media #{$phone} {
+								    		min-height: 150px;
+								    	}
+
+								    	img {
+								    		display: none;
+								    	}
+
+								    	span {
+								    		float: none;
+								    	}
+
+								    	.custombar {
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+
+											span {
+												max-height: 350px;
+											}
+								    	}
+								    }
+								}
+							}
+						}
+
+						div[dir="ltr"] {
+							@media #{$phone} {
+								margin-right: auto;
+	    						margin-left: auto;
+	    					}
 						}
 					}
 
 					.main-chart {
+						padding-bottom: 30px;
 						background: #f6f6f6;
+						padding-top: 40px;
 					}
 
 					.legend {
 					    flex-direction: column;
 					    justify-content: center;
 					    margin-left: 20px;
+					    padding-right: 20px;
 					    order: 3;
 
 						@media screen and (max-width: 1200px) {
 					    	order: 2;
+					    	flex: 1;
 					    }
 						@media #{$phone} {
-					    	order: 1;
+					    	order: 3;
     						padding: 10px 0px;
 					    }
 
@@ -4717,11 +5809,18 @@ body.vox-public {
 								margin: 10px 0px;
 
 								span {
-									display: block;
-									width: 50px;
-									height: 10px;
-									margin-bottom: 5px;
-								}								
+									display: inline-block;
+								    width: 15px;
+								    height: 15px;
+								    border-radius: 50%;
+								    vertical-align: sub;
+								    margin-right: 7px;
+								}
+
+								.mobile-percentage {
+									width: auto;
+									vertical-align: baseline;
+								}
 							}
 
 							&.short {
@@ -4733,7 +5832,12 @@ body.vox-public {
 									height: 10px;
 									border-radius: 50%;
 									margin-right: 6px;
-								}	
+								}
+								
+								.mobile-percentage {
+									width: auto;
+									vertical-align: baseline;
+								}
 							}
 
 						}
@@ -4746,36 +5850,121 @@ body.vox-public {
 				}
 
 				.stat {
-					padding-left: 30px;
+					border: 1px solid #eaeaea;
+				    border-radius: 15px;
+				    box-shadow: 0px 0px 5px 5px rgba(234, 234, 234, 0.75);
+				    margin-bottom: 14px;
+				    position: relative;
 
 					@media #{$phone} {
-						padding-left: 10px;
+						padding-left: 0px;
+						padding-right: 0px;
+					}
+
+					&:last-child {
+						margin-bottom: 15px;
+					}
+
+					&.scale-stat-q {
+						.share-buttons {
+							position: unset;
+
+							@media #{$phone} {
+								position: absolute;
+							}
+						}
 					}
 
 					a.title {
-						font-weight: normal;
-						color: #999;
-						background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
+						padding: 16px 0px;
+						padding-left: 30px;
+						padding-right: 20px;
+						font-weight: bold;
+						background-color: transparent;
+
+						@media #{$phone} {
+							padding-left: 10px;
+							padding-right: 10px;
+						}
 
 						h2 {
-							font-weight: normal;
-							color: #999;
+							font-weight: bold;
+							background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
+							background-size: 29px;
+
+							@media #{$phone} {
+								background-size: 20px;
+							}
+						}
+					}
+
+					.share-buttons {
+						position: absolute;
+					    top: 23px;
+					    right: 30px;
+
+					    @media #{$phone} {
+							top: 0px;
+   							right: 0px;
+						}
+					}
+
+					.box {
+						padding-left: 30px;
+
+						@media #{$phone} {
+							padding-left: 0px;
 						}
 					}
 
 					.contents {
 						display: none;
+						margin: 6px 0px 0px;
+
+						.graphs {
+							border: none;
+						    box-shadow: none;
+						    border-radius: 0px;
+
+						    .hint {
+						    	@media #{$phone} {
+						    		top: 45px;
+						    	}
+						    }
+
+						    .map-hint {
+						    	@media #{$phone} {
+						    		top: 40px;
+						    	}
+						    }
+						}
+
+						.scales {
+							margin-bottom: 30px;
+
+							@media #{$phone} {
+								margin-bottom: 0px;
+							}
+						}
+					}
+
+					.main-chart {
+						border-bottom-left-radius: 30px;
+
+						@media #{$phone} {
+							border-bottom-left-radius: 0px;
+							padding-top: 70px;
+						}
 					}
 
 					&.active {
+						border-radius: 30px;
+						margin-bottom: 35px;
+
 						a.title {
-							color: black;
-							font-weight: bold;
-							background-image: url(../new-vox-img/stats-up.png);
 
 							h2 {
-								color: black;
-		    					font-weight: bold;
+								background-image: url(../new-vox-img/stats-up.png);
 							}
 						}
 
@@ -4793,14 +5982,15 @@ body.vox-public {
 			}
 
 			&.active {
+
+				@media #{$phone} {
+					padding-bottom: 20px;
+				}
+
 				a.title {
-					color: black;
-					font-weight: bold;
-					background-image: url(../new-vox-img/stats-up.png);
 
 					h2 {
-						color: black;
-    					font-weight: bold;
+						background-image: url(../new-vox-img/stats-up.png);
 					}
 				}
 
@@ -5237,34 +6427,20 @@ body.vox-public {
     		padding-right: 20px;
 		}
 	}
-	select,
-	input[type="text"],
-	input[type="password"],
-	input[type="email"] {
-		width: 300px;
-		height: 46px;
-		background-color: #ebf2f6;
-		border: 1px solid #ebf2f6;
-		margin: 0 auto;
-		display: block;
-		padding: 0px 15px;
-		border-radius: 5px;
-		font-size: 16px;
-		box-shadow: none;
 
-		&::placeholder {
-			color: #5b5b5b;
-		}
+	.modern-field {
+		max-width: 300px;
+		margin-left: auto;
+		margin-right: auto;
 
 		@media #{$phone} {
 			width: 100%;
-			height: 43px;
-			font-size: 12px;
 		}
 	}
 
 	button {
-		width: 300px;
+		width: 100%;
+		max-width: 300px;
 		height: 46px;
 		line-height: 46px;
 		background-color: #3daee6;
@@ -5287,7 +6463,6 @@ body.vox-public {
 		}
 
 		@media #{$phone} {
-			width: 100%;
 			height: 43px;
 			margin-top: 20px;
 		}
@@ -5374,6 +6549,10 @@ body.vox-public {
 
 
 .section-login {
+	@media #{$phone} {
+		padding-bottom: 120px;
+	}
+
 	button {
 		width: 400px;
 		height: 46px;
@@ -5416,7 +6595,7 @@ body.vox-public {
 		margin-bottom: 10px;
 
 		@media #{$phone} {
-			font-size: 20px;
+			font-size: 26px;
 		}
 	}
 
@@ -5441,7 +6620,7 @@ body.vox-public {
 	    display: inline-block;
 
 	    @media #{$phone} {
-    		font-size: 12px;
+    		font-size: 14px;
 	    }
 
 	    a {
@@ -5576,6 +6755,10 @@ body.vox-public {
 	.form-group {
 		margin-bottom: 22px;
 
+		@media #{$phone} {
+			margin-bottom: 20px;
+		}
+
 		i:not(.far) {
 			display: block;
 			margin-top: 5px;
@@ -5593,10 +6776,6 @@ body.vox-public {
 				background-color: #ffcfce;
     			border-radius: 5px;
 			}
-		}
-
-		@media #{$phone} {
-			margin-bottom: 10px;
 		}
 
 		.phone-code-holder {
@@ -5942,6 +7121,7 @@ body.vox-public {
 		.footer-text {
 			@media #{$phone} {
 				order: 2;
+				width: 100%;
 			}
 
 		}
@@ -6439,6 +7619,18 @@ body.vox-public {
 					max-width: 100%;
 				}
 
+				h2 {
+					@media #{$phone} {
+						font-size: 26px;
+					}
+				}
+
+				h3 {
+					@media #{$phone} {
+						font-size: 18px;
+					}
+				}
+
 				.rules {
 					margin-top: 50px;
 					margin-bottom: 50px;
@@ -6455,6 +7647,7 @@ body.vox-public {
 					.col {
 						@media #{$phone} {
 							margin: 20px 0px;
+							font-size: 15px;
 						}
 
 						&:first-child {
@@ -6484,7 +7677,11 @@ body.vox-public {
 
 					.col {
 						text-align: center;
+						font-size: 15px;
 
+						b {
+							font-size: 15px;
+						}
 
 						@media screen and (max-width: 310px) {
 							font-size: 12px;
@@ -6509,6 +7706,12 @@ body.vox-public {
 								width: 20px;
 							}
 						}
+					}
+				}
+
+				.btn {
+					@media #{$phone} {
+						font-size: 18px;
 					}
 				}
 			}
@@ -6873,7 +8076,7 @@ body.vox-public {
 
 		.popup-inner {
 			display: flex;
-			width: 1300px;
+			width: 1280px;
 			align-items: center;
 		    position: relative;
 		    top: 100px;
@@ -7241,6 +8444,7 @@ body.vox-public {
 					}
 				}
 
+				.next-stat,
 				.see-stats,
 				.browse-polls {
 					text-transform: uppercase;
@@ -7294,6 +8498,31 @@ body.vox-public {
 				    	text-align: center;
 				    	min-width: 120px;
 				    }
+				}
+
+				.next-stat {
+					padding-left: 20px;
+					padding-right: 45px;
+					min-width: 170px;
+
+					@media screen and (max-width: 1000px) {
+    					min-width: 110px;
+    					max-width: 132px;
+					    padding-right: 26px;
+					    padding-left: 4px;
+    				}
+
+					img {
+						left: auto;
+						right: 18px;
+						max-width: 22px;
+
+						@media screen and (max-width: 1000px) {
+							max-width: 17px;
+							left: auto;
+							right: 6px;
+						}
+					}
 				}
 
 				#chart-poll {
@@ -7355,6 +8584,10 @@ body.vox-public {
 
 			@media #{$tablet} {
 				padding: 50px 20px 40px;
+			}
+
+			@media #{$phone} {
+				padding: 50px 14px 40px;
 			}
 
 		    .closer {
@@ -7445,6 +8678,22 @@ body.vox-public {
 		    			.radio-label {
 		    				&:first-child {
 							    margin-right: 10px;
+
+							    @media #{$phone} {
+							    	margin-right: 4px;
+							    }
+							}
+
+							label {
+								@media #{$phone} {
+									padding: 11px 3px;
+								}
+
+								.modern-radio {
+									@media #{$phone} {
+										margin-right: 0px;
+									}
+								}
 							}
 						}
 		    		}
@@ -7533,6 +8782,189 @@ body.vox-public {
 				.alert {
 					margin-top: 20px;
 				}
+		    }
+		}
+	}
+
+	&.recommend-popup {
+		overflow-y: auto;
+
+		@media #{$phone} {
+			padding: 0px 10px;
+		}
+
+		.popup-inner {
+			width: 730px;
+			position: relative;
+			top: 100px;
+			margin: 0 auto;
+			background: white;
+			border-radius: 10px;
+			padding: 50px 70px 40px;
+			text-align: center;
+			box-shadow: 0 0 23px 0px #a3a2a2;
+
+			@media #{$phone} {
+				width: 100%;
+				padding: 30px 10px 18px;
+				top: 80px;
+			}
+
+		    .closer {
+				position: absolute;
+				right: -14px;
+				top: -14px;
+				z-index: 100;
+				box-shadow: 0 0 7px 0px #a3a2a2;
+			    border-radius: 50%;
+			    display: block;
+
+			    @media #{$phone} {
+			    	right: auto;
+				    left: 50%;
+				    transform: translateX(-50%);
+			    }
+
+				img {
+					display: block;
+				}
+		    }
+
+		    .content {
+		    	@media #{$phone} {
+	    			width: 100%;
+	    		}
+
+		    	.h1 {
+		    		font-size: 35px;
+		    		font-weight: 900;
+		    		margin-top: 0px;
+		    		margin-bottom: 30px;
+
+		    		@media #{$phone} {
+		    			font-size: 22px;
+		    			max-width: 300px;
+					    margin-right: auto;
+					    margin-left: auto;
+					    margin-bottom: 20px;
+		    		}
+		    	}
+
+		    	.recommend-icons {
+		    		padding: 0px 10px;
+
+		    		@media #{$phone} {
+		    			padding: 0px;
+		    		}
+
+		    		label {
+		    			display: block;
+		    			flex: 1;
+		    			margin: 0px 10px;
+		    			border-radius: 50%;
+		    			border: 5px solid transparent;
+		    			cursor: pointer;
+
+		    			@media #{$phone} {
+		    				margin: 0px 7px 0px 0px;
+		    			}
+
+		    			&:last-child {
+		    				@media #{$phone} {
+			    				margin-right: 0px;
+			    			}
+		    			}
+
+		    			&:hover,
+		    			&.active {
+		    				border-color: #38a2e5;
+		    			}
+
+		    			img {
+		    				display: block;
+		    			}
+
+		    			input {
+		    				display: none;
+		    			}
+		    		}
+		    	}
+
+		    	.modern-field {
+		    		margin-top: 40px;
+
+		    		@media screen and (min-width: 769px) {
+				    	textarea {
+				    		height: 190px;
+				    	}
+
+				    	textarea.modern-input + label > span {
+						    top: -186px;
+						}
+
+						&.active {
+							textarea.modern-input + label > span {
+							    top: -206px;
+							}
+						}
+			    	}
+				}
+
+		    	.blue-button {
+					font-size: 23px;
+					padding: 6px 77px;
+					border-radius: 7px;
+		    	}
+
+		    	h4 {
+		    		font-size: 30px;
+				    margin-top: -10px;
+				    margin-bottom: 30px;
+
+				    @media #{$phone} {
+		    			font-size: 20px;
+		    			max-width: 150px;
+					    margin-right: auto;
+					    margin-left: auto;
+					    margin-bottom: 18px;
+		    		}
+		    	}
+
+		    	.recommend-fb {
+
+			    	.blue-button {
+			    		padding: 6px 37px;
+
+			    		@media #{$phone} {
+			    			padding: 6px 10px;
+			    			font-size: 20px;
+			    		}
+			    	}
+
+			    	video {
+						margin-bottom: -45px;
+						margin-top: 30px;
+						width: 100%;
+						pointer-events: none;
+
+						@media #{$phone} {
+							margin-bottom: -23px;
+						}
+
+						&:focus {
+							outline: none;
+							border: none;
+						}
+			    	}
+
+			    	video::-webkit-media-controls {
+					  	display: none !important;
+					}
+
+					video::-webkit-media-controls-enclosure {
+					  	display:none !important;
+					}
+		    	}
 		    }
 		}
 	}
@@ -8551,7 +9983,7 @@ body.popup-visible {
 	text-align: left;
 	position: relative;
     word-break: break-word;
-
+    margin-bottom: 20px;
 
 	@media #{$phone} {
 		padding: 10px 10px 10px 40px;
@@ -8985,8 +10417,9 @@ body.popup-visible {
     margin-bottom: 35px;
 
 	@media #{$phone} {
+		font-size: 16px;
 		margin-top: 10px;
-		margin-bottom: 20px;
+		margin-bottom: 30px;
 	}
 }
 
@@ -9049,78 +10482,35 @@ body.popup-visible {
 		}
 	}
 
-	&#question-related-done {
-		.related-container {
+	.done-title {
+		margin-top: 0px;
 
-			.done-title {
-				margin-top: 10px;
-			}
-		}
-		.done-section {
-
+		span {
 			@media #{$phone} {
-				min-height: auto;
+				font-size: 26px;
 			}
 		}
 	}
 
-	.more-surveys {
-		margin-top: 20px;
+	.taken-survey-wrapper {
+		.taken-survey-description {
+			p {
+				max-width: 340px;
+				color: #333;
 
-		@media #{$phone} {
-			margin-bottom: 40px;
-			font-size: 13px;
-		}
-	}
-
-	.section-stats {
-		margin-top: 20px;
-	}
-
-	.section-recent-surveys {
-		margin-top: 40px;
-
-		h4 {
-			text-transform: uppercase;
-			color: #5c5c5c;
-		}
-
-		.swiper-slide {
-			.slider-inner {
-				display: block;
-
-				.slide-padding {
-					max-width: 320px;
-    				margin: 0 auto;
-    				margin-top: 15px;
+				@media #{$phone} {
+					max-width: 260px;
+				    margin-left: auto;
+				    margin-right: auto;
 				}
 			}
-
-			.vox-header {
-				padding: 7px 15px;
-
-				.first-flex {
-					.right {
-					    text-align: center;
-					}
-
-					.survey-title {
-						color: #060606;
-					}
-				}
-
-				.btns {
-			    	a {
-			    		font-size: 16px;
-			    		padding: 9px 20px;
-
-			    		@media #{$phone} {
-			    			font-size: 12px;
-			    		}
-			    	}
-			    }
-			}
 		}
+	}
+
+	video {
+		width: 100%;
+		margin-bottom: 25px;
+		pointer-events: none;
 	}
 }
 
@@ -9211,13 +10601,13 @@ body.popup-visible {
     }
 }
 
-.page-questionnaire {
-	footer {
-		@media #{$phone} {
-			display: none;
-		}
-	}
-}
+// .page-questionnaire {
+// 	footer {
+// 		@media #{$phone} {
+// 			display: none;
+// 		}
+// 	}
+// }
 
 .vox-survey-title.fixed-t {
 	position: fixed;
@@ -10470,15 +11860,21 @@ body.sp-vox-iframe {
 	margin-top: 40px;
 
 	@media #{$phone} {
-		margin-top: 0px;
-	}
+	    padding-bottom: 35px;
+	    position: relative;
+	    margin-top: 20px;
 
-	.blue-button {
-		@media #{$phone} {
-		    padding: 7px 25px;
-		    font-size: 13px;
-		}
-	}
+	    &:after {
+	    	content: '';
+	    	position: absolute;
+	    	bottom: 0px;
+	    	left: 50%;
+	    	transform: translateX(-50%);
+	    	width: 157px;
+	    	height: 1px;
+	    	background-color: black;
+	    }
+    }
 }
 
 .loader-mask {
@@ -10534,15 +11930,18 @@ body.sp-vox-iframe {
 	    top: 50%;
 	    left: 50%;
 	    transform: translateX(-50%) translateY(-50%);
-	    max-width: 500px;
+	    //max-width: 500px;
+	    max-width: 260px;
 
 	    @media #{$tablet} {
-	    	max-width: 60%;
+	    	//max-width: 60%;
+	    	max-width: 30%;
 			top: 150px;
 	    }
 
 	    @media #{$phone} {
-	    	max-width: 100%;
+	    	//max-width: 100%;
+	    	max-width: 60%;
 	    }
 	}
 }
@@ -10583,6 +11982,28 @@ svg:not(:root) {
 
     @media #{$phone} {
     	left: 0;
+    }
+
+    &.small-bubble {
+    	@media #{$phone} {
+    		left: auto;
+
+	    	.small-bubble-image {
+	    		display: block;
+	    	}
+
+	    	.bubble-inner {
+	    		display: none;
+	    	}
+	    }
+    }
+
+    .small-bubble-image {
+    	display: none;
+		float: right;
+		max-width: 80px;
+		margin-right: 10px;
+		margin-bottom: 10px;
     }
 
     .main-bubble-image {
@@ -11290,7 +12711,7 @@ svg:not(:root) {
 	    		font-size: 16px;
 	    	}
 
-	    	span {
+	    	span, a {
 	    		font-size: 22px;
 	    		color: #46afda;
 	    		font-weight: bold;
@@ -11299,6 +12720,16 @@ svg:not(:root) {
 		    	@media #{$phone} {
 		    		font-size: 16px;
 		    	}
+	    	}
+
+			.coins-test {
+				color: black;
+				font-weight: normal;
+			}
+
+	    	a {
+	    		text-decoration: none;
+	    		text-transform: none;
 	    	}
 	    }
 	}
@@ -11387,8 +12818,12 @@ svg:not(:root) {
 		p {
 			display: inline-block;
 
-			@media screen and (max-width: 1220px) {
+			@media screen and (max-width: 1300px) {
 				font-size: 13px;
+			}
+			
+			@media #{$phone} {
+				font-size: 16px;
 			}
 
 			.hide-mobile {
@@ -11497,25 +12932,6 @@ svg:not(:root) {
 			}
 		}
 
-		video {
-			width: 100%;
-			margin-bottom: 25px;
-			pointer-events: none;
-
-			&:focus {
-				outline: none;
-				border: none;
-			}
-		}
-
-		video::-webkit-media-controls {
-		  	display: none !important;
-		}
-
-		video::-webkit-media-controls-enclosure {
-		  	display:none !important;
-		}
-
 		.blue-button {
 			@media #{$phone} {
 				padding: 10px 50px;
@@ -11539,33 +12955,6 @@ svg:not(:root) {
 			}
 		}
 
-		.swiper-slide {
-			.survey-cats {
-				@media #{$phone} {
-			    	display: block;
-			    }
-
-			    .survey-cat {
-			    	@media #{$phone} {
-			    		display: none;
-			    	}
-
-			    	&:nth-child(2),
-			    	&:first-child {
-			    		@media #{$phone} {
-				    		display: inline-block;
-				    	}
-			    	}
-			    }
-			}
-
-			.vox-header {
-				.survey-title {
-				    margin-bottom: 5px;
-				}
-			}
-		}
-
 		.more-surveys {
 			margin-top: 45px;
 
@@ -11575,4 +12964,510 @@ svg:not(:root) {
 		}
 	}
 
+}
+
+.new-style-swiper {
+
+	.swiper-slide {
+		.vox-header {
+			text-align: center;
+			padding-top: 25px;
+
+			@media #{$phone} {
+				padding-top: 15px;
+			}
+
+			.survey-title {
+				text-transform: uppercase;
+				margin-bottom: 5px;
+
+				@media #{$phone} {
+					font-size: 22px;
+					margin-bottom: 25px;
+				}
+			}
+		}
+
+		.survey-cats {
+		    margin-bottom: 20px;
+
+			@media #{$phone} {
+		    	display: block;
+		    }
+
+		    .survey-cat {
+		    	@media #{$phone} {
+		    		display: none;
+		    	}
+
+		    	&:nth-child(2),
+		    	&:first-child {
+		    		@media #{$phone} {
+			    		display: inline-block;
+			    	}
+		    	}
+		    }
+		}
+
+		.vox-header {
+			.survey-title {
+			    margin-bottom: 5px;
+			}
+		}
+	}
+
+	.survey-time {
+		text-align: left;
+
+		.col {
+			display: flex;
+			align-items: center;
+			justify-content: end;
+
+			@media #{$phone} {
+				flex: auto;
+			}
+
+			&:first-child {
+				text-align: right;
+				justify-content: flex-end;
+				margin-right: 28px;
+				position: relative;
+
+				&::after {
+					content: '';
+				    width: 2px;
+				    height: 15px;
+				    background-color: black;
+				    position: absolute;
+				    top: 50%;
+				    right: -15px;
+				    transform: translateY(-50%);
+				}
+			}
+		}
+
+		p {
+			display: inline-block;
+
+			@media screen and (max-width: 1300px) {
+				font-size: 13px;
+			}
+
+			@media #{$phone} {
+				font-size: 16px;
+			}
+
+			.hide-mobile {
+				@media screen and (max-width: 1220px) {
+					font-size: 13px;
+				}
+
+				@media #{$phone} {
+					display: none;
+				}
+			}
+		}
+
+		img {
+			max-height: 22px;
+			margin-right: 7px;
+		}
+	}
+
+	.btns {
+		margin-top: 24px;
+
+		a {
+
+			&:first-child {
+				margin-right: 15px;
+			}
+
+			&.white-button {
+				background-color: transparent;
+				color: #38ace5;
+				border-color: #38ace5;
+			}
+		}
+	}
+
+	.gray-button,
+	.white-button,
+	.blue-button {
+		padding: 10px 40px;
+	    display: inline-block;
+
+	    @media screen and (max-width: 1490px) {
+			padding: 10px 20px;
+		}
+
+	    @media screen and (max-width: 1240px) {
+			padding: 10px;
+		}
+
+		@media #{$phone} {
+			font-size: 16px;
+			width: auto;
+			//margin-right: 0px;
+		}
+	}
+}
+
+.video-parent {
+	display: block;
+
+	@media #{$phone} {
+		display: none;
+	}
+}
+
+.video-parent-mobile {
+	display: none;
+
+	@media #{$phone} {
+		display: block;
+	}
+}
+
+.video-stats {
+	width: 100%;
+	margin-bottom: 25px;
+	pointer-events: none;
+
+	&:focus {
+		outline: none;
+		border: none;
+	}
+}
+
+.video-stats::-webkit-media-controls {
+  	display: none !important;
+}
+
+.video-stats::-webkit-media-controls-enclosure {
+  	display:none !important;
+}
+
+
+.wrapper-flex {
+	display: flex;
+
+	> .col {
+		flex: 1;
+
+		&:first-child {
+			max-width: 28%;
+
+			@media #{$tablet} {
+				display: none;
+			}
+		}
+	}
+}
+
+.blog-wrapper {
+	background: url('../new-vox-img/stats-blog.jpg') 50% 57% no-repeat;
+	background-size: cover;
+	padding: 70px 0px;
+
+	@media #{$tablet} {
+		background-image: url('../new-vox-img/stats-blog-mobile.jpg');
+	}
+
+	@media #{$phone} {
+		padding-top: 40px;
+		padding-bottom: 25px;
+	}
+
+	.container {
+		@media #{$tablet} {
+			flex-direction: column;
+			text-align: center;
+		}
+	}
+
+	h2 {
+		font-weight: 900;
+	    color: white;
+	    font-size: 30px;
+	    text-align: left;
+	    margin-bottom: 5px;
+
+	    @media #{$tablet} {
+	    	text-align: center;
+	    }
+
+	    @media #{$phone} {
+	    	font-size: 26px;
+	    	max-width: 100%;
+	    	margin-bottom: 15px;
+	    }
+	}
+
+	p {
+		font-size: 30px;
+	    color: white;
+	    line-height: 36px;
+	    margin-bottom: 35px;
+
+	    @media #{$phone} {
+	    	font-size: 26px;
+	    	line-height: normal;
+	    	margin-bottom: 15px;
+	    }
+	}
+
+	img {
+		max-width: 100%;
+		display: none;
+
+		@media #{$tablet} {
+			display: inline-block;
+		}
+	}
+
+	.white-button {
+		display: inline-block;
+		border-color: white;
+		color: #38ace5;
+		padding: 10px 37px;
+		font-size: 18px;
+
+		@media #{$tablet} {
+			max-width: 200px;
+			margin-bottom: 20px;
+		}
+
+		&:focus,
+		&:hover {
+			color: white;
+			background-color: #00dac8;
+		}
+	}
+}
+
+.all-stats-section {
+	margin-top: 70px;
+	margin-bottom: 40px;
+	padding-top: 50px;
+	position: relative;
+
+	@media #{$phone} {
+		margin-top: 50px;
+		padding-top: 30px;
+		margin-bottom: 20px;
+	}
+
+	&:after {
+		content: '';
+		position: absolute;
+		top: 0px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 585px;
+		height: 1px;
+		background-color: black;
+
+		@media #{$phone} {
+			width: 165px;
+		}
+	}
+
+	h2 {
+		font-size: 25px;
+		font-weight: bold;
+		color: black;
+		margin-bottom: 22px;
+
+		@media #{$phone} {
+			font-size: 18px;
+		}
+	}
+
+	p {
+		font-size: 18px;
+		color: #333333;
+		margin-bottom: 45px;
+
+		@media #{$phone} {
+			font-size: 15px;
+		}
+	}
+}
+
+.stats-blurred {
+	border-top: 1px solid #f3f3f3;
+
+	.blurred-title {
+		font-size: 20px;
+	    display: block;
+	    line-height: 28px;
+	    padding: 11px 0px;
+	    padding-left: 35px;
+	    background-color: #d3ebfb;
+		box-shadow: 0 3px 5px rgb(211, 235, 251);
+		margin-bottom: 4px;
+
+		@media #{$phone} {
+			font-size: 14px;
+		    line-height: 1;
+		    padding-left: 25px;
+		    box-shadow: 0 0px 5px rgb(211, 235, 251);
+		}
+
+	    h2 {
+	    	font-weight: bold;
+		    font-size: 20px;
+		    text-align: left;
+		    margin-bottom: 0px;
+		    line-height: 28px;
+		    background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
+		    background-size: 29px;
+		    padding-left: 40px;
+		    color: #333;
+		    filter: blur(4px);
+
+		    @media #{$tablet} {
+				width: 100%;
+			}
+
+			@media #{$phone} {
+				font-size: 16px;
+				line-height: normal;
+				max-width: 100%;
+				background-size: 20px;
+				padding-left: 30px;
+			}
+	    }
+	}
+
+	.blurred-stat {
+		position: relative;
+
+		img {
+			display: block;
+			max-width: 100%;
+
+			&.mobile-blurred {
+				display: none;
+
+				@media #{$phone} {
+					display: block;
+				}
+			}
+
+			&.pc-blurred {
+
+				@media #{$phone} {
+					display: none;
+				}
+			}
+		}
+
+		.blurred-text {
+			position: absolute;
+		    top: 50%;
+		    left: 50%;
+		    transform: translateX(-50%) translateY(-50%);
+		    text-align: center;
+		    width: 100%;
+
+		    @media #{$phone} {
+		    	padding: 0px 20px;
+		    }
+
+		    h2 {
+		    	font-size: 39px;
+			    font-weight: bold;
+			    margin-bottom: 0px;
+			    max-width: 100%;
+
+			    @media #{$tablet} {
+			    	font-size: 30px;
+			    }
+
+			    @media #{$phone} {
+			    	font-size: 25px;
+			    }
+		    }
+
+		    p {
+				font-size: 25px;
+				margin-bottom: 25px;
+
+			    @media #{$tablet} {
+			    	font-size: 20px;
+			    }
+
+			    @media #{$phone} {
+			    	font-size: 16px;
+			    }
+			}
+
+			.blue-button {
+				font-weight: bold;
+			}
+
+			span {
+				display: block;
+				margin-top: 10px;
+
+				a {
+					font-weight: bold;
+				    text-transform: uppercase;
+				    text-decoration: underline;
+				}
+			}
+		}
+	}
+}
+
+.page-login,
+.page-register {
+	.poll-bubble {
+		display: none !important;
+	}
+}
+
+.poll-scale-titles {
+	.answer-title {
+		float: left;
+	    padding: 0px 10px;
+	    vertical-align: middle;
+	}
+}
+
+
+
+.christmas-banner {
+	position: relative;
+	box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+	display: block;
+	z-index: 1000;
+
+	.close-banner {
+		position: absolute;
+	    right: 10px;
+	    top: 10px;
+	}
+
+	video {
+		display: block;
+		width: 100%;
+		pointer-events: none;
+
+		&:focus {
+			outline: none;
+			border: none;
+		}
+	}
+
+	video::-webkit-media-controls {
+	  	display: none !important;
+	}
+
+	video::-webkit-media-controls-enclosure {
+	  	display:none !important;
+	}
 }

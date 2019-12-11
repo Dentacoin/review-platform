@@ -216,71 +216,11 @@
 					<i class="fas fa-times-circle"></i>
 				</a>
 			-->
-			<style type="text/css">
-				
-				.christmas-banner {
-				position: relative;
-				box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
-				display: block;
-			}
-
-			.christmas-banner img:not(.close-banner) {
-				width: 100%;
-				display: block;
-			}
-
-			.christmas-banner .close-banner {
-				position: absolute;
-			    right: 10px;
-			    top: 10px;
-			}
-
-			.christmas-banner.mobile-christmas-banner {
-				display: none;
-			}
-
-			@media screen and (max-width: 768px) {
-				.christmas-banner {
-					display: none;
-				}
-
-				.christmas-banner.mobile-christmas-banner {
-					display: block;
-				}
-			}
-			</style>
 
 			<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner">
-				<img class="close-banner" id="banner-pc" src="{{ url('new-vox-img/close-popup.png') }}">
-				<img src="{{ url('img-trp/christmas-banner.gif') }}">
+				<img class="close-banner" src="{{ url('new-vox-img/close-popup.png') }}">
+				<video class="video-banner" id="christmasBanner" playsinline autoplay muted loop src="{{ url('img-trp/christmas-banner.mp4') }}" type="video/mp4" controls="" mobile-src="{{ url('img-trp/mobile-christmas-banner3.mp4') }}"></video>
 			</a>
-			<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner mobile-christmas-banner">
-				<img class="close-banner" id="banner-mobile" src="{{ url('new-vox-img/close-popup.png') }}">
-				<img src="{{ url('img-trp/mobile-christmas-banner-small.gif') }}">
-			</a>
-
-			<script type="text/javascript">
-
-				document.getElementById("banner-pc").addEventListener("click", function(e) {
-					e.preventDefault();
-					var elements = document.getElementsByClassName('christmas-banner');
-
-				    for (var i = 0; i < elements.length; i++){
-				        elements[i].style.display = 'none';
-				    }
-				});
-
-				document.getElementById("banner-mobile").addEventListener("click", function(e) {
-					e.preventDefault();
-					
-					var elements = document.getElementsByClassName('christmas-banner');
-
-				    for (var i = 0; i < elements.length; i++){
-				        elements[i].style.display = 'none';
-				    }
-				});
-				
-			</script>
 
 			<div id="cookiebar" >
 				<p>

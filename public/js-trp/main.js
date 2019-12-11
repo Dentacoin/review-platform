@@ -93,6 +93,20 @@ jQuery(document).ready(function($){
     }
     modernFieldsUpdate();
 
+    if ($('#christmasBanner').length) {
+    	$('#christmasBanner')[0].removeAttribute("controls");
+
+    	if ($(window).outerWidth() <= 768) {
+    		$('#christmasBanner').attr('src', $('#christmasBanner').attr('mobile-src'));
+    	}
+    }
+
+    $(".close-banner").click( function(e) {
+		e.preventDefault();
+
+		$('.christmas-banner').hide();
+	});
+
 
 	$('input').focus( function() {
 		$(this).removeClass('has-error');

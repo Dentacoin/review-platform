@@ -19,48 +19,57 @@
 			</div>
 		</div>
 
-		<div class="related-wrap">
-			@if(!empty($related_voxes))
-				<div class="section-recent-surveys">
-					<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.related-surveys-title') !!}</h3>
+		@if(count($suggested_voxes) || !empty($related_voxes))
+			<div class="related-wrap">
+				@if(!empty($related_voxes))
+					<div class="section-recent-surveys">
+						<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.related-surveys-title') !!}</h3>
 
-					<div class="swiper-container">
-					    <div class="swiper-wrapper">
-					    	@foreach($related_voxes as $survey)
-						      	@include('vox.template-parts.vox-taken-swiper-slider')
-					      	@endforeach
-					    </div>
+						<div class="swiper-container">
+						    <div class="swiper-wrapper">
+						    	@foreach($related_voxes as $survey)
+							    	<div class="swiper-slide" survey-id="{{ $survey->id }}">
+								      	@include('vox.template-parts.vox-taken-swiper-slider')
+								    </div>
+						      	@endforeach
+						    </div>
 
-					    <div class="swiper-pagination"></div>
+						    <div class="swiper-pagination"></div>
+						</div>
 					</div>
-				</div>
-			@else
-				<div class="section-recent-surveys">
-					<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.next-surveys-title') !!}</h3>
+				@else
+					<div class="section-recent-surveys">
+						<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.next-surveys-title') !!}</h3>
 
-					<div class="swiper-container">
-					    <div class="swiper-wrapper">
-					    	@foreach($suggested_voxes as $survey)
-						      	@include('vox.template-parts.vox-taken-swiper-slider')
-					      	@endforeach
-					    </div>
+						<div class="swiper-container">
+						    <div class="swiper-wrapper">
+						    	@foreach($suggested_voxes as $survey)
+							    	<div class="swiper-slide" survey-id="{{ $survey->id }}">
+								      	@include('vox.template-parts.vox-taken-swiper-slider')
+								    </div>
+						      	@endforeach
+						    </div>
 
-					    <div class="swiper-pagination"></div>
+						    <div class="swiper-pagination"></div>
+						</div>
+
+						<div class="tac">
+							<a href="{{ getLangUrl('/') }}" class="blue-button more-surveys">{!! trans('vox.page.taken-questionnaire.see-surveys') !!}</a>
+						</div>
 					</div>
+				@endif
 
-					<div class="tac">
-						<a href="{{ getLangUrl('/') }}" class="blue-button more-surveys">{!! trans('vox.page.taken-questionnaire.see-surveys') !!}</a>
-					</div>
-				</div>
-			@endif
-
-		</div>
+			</div>
+		@endif
 
 		<div class="taken-vox-stats {!! empty($related_voxes) ? 'without-line' : '' !!}">
 			<div class="container">
 				<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.survey-stats-title') !!}</h3>
-				<a href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}">
-					<video id="myVideo" playsinline autoplay muted loop src="{{ url('new-vox-img/stats.m4v') }}" type="video/mp4" controls=""></video>
+				<a class="video-parent" href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}">
+					<video id="myVideo" class="video-stats" playsinline autoplay muted loop src="{{ url('new-vox-img/stats.m4v') }}" type="video/mp4" controls=""></video>
+				</a>
+				<a class="video-parent-mobile" href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}">
+					<video id="myVideoMobile" class="video-stats" playsinline autoplay muted loop src="{{ url('new-vox-img/stats-mobile.mp4') }}" type="video/mp4" controls=""></video>
 				</a>
 			</div>
 
@@ -69,15 +78,17 @@
 			</div>
 		</div>
 
-		@if(!empty($related_voxes))
+		@if(!empty($related_voxes) && !empty($suggested_voxes))
 			<div class="suggested-wrap">
-				<div class="section-recent-surveys">
+				<div class="section-recent-surveys new-style-swiper">
 					<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.next-surveys-title') !!}</h3>
 
 					<div class="swiper-container">
 					    <div class="swiper-wrapper">
 					    	@foreach($suggested_voxes as $survey)
-						      	@include('vox.template-parts.vox-taken-swiper-slider')
+						    	<div class="swiper-slide" survey-id="{{ $survey->id }}">
+							      	@include('vox.template-parts.vox-taken-swiper-slider')
+							    </div>
 					      	@endforeach
 					    </div>
 

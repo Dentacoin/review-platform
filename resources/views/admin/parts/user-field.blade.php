@@ -7,9 +7,9 @@
     {{ Form::text( $key, '', array('class' => 'form-control', 'placeholder' => 'Enter a new password to change the existing' )) }}
 @elseif( $info['type'] == 'text')
     {{ Form::text( $key, $item->$key, array('class' => 'form-control', (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled' )) }}
-    @if($key=='fb_id' && $item->$key)
+    <!-- @if($key=='fb_id' && $item->$key)
         <a href="https://facebook.com/{{ $item->$key }}" target="_blank">Open FB profile</a>
-    @endif
+    @endif -->
 @elseif( $info['type'] == 'textarea')
     {{ Form::textarea( $key, $item->$key, array('class' => 'form-control', (!empty($info['disabled']) ? 'disabled' : 'nothing') => 'disabled' )) }}
 @elseif( $info['type'] == 'bool')

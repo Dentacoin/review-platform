@@ -19,81 +19,104 @@
 			{!! trans('vox.page.stats.description') !!}
 		</p>
 
-		<div class="search-survey">
-			<i class="fas fa-search"></i>
-			<input type="text" id="survey-search" name="survey-search" class="tal">
-		</div>
-
-		
-			<div class="questions-menu clearfix" style="display: none;">
-				<div class="sort-menu">
-					@foreach($sorts as $key => $val)
-
-						<a href="javascript:;" sort="{{ $key }}"  {!! $key == 'all' ? 'class="active"' : '' !!}>
-
-							@if($key == 'featured')
-								<i class="fas fa-star"></i>
-							@endif
-
-							{{ $val }}
-						</a>
-					@endforeach
-				</div>
+		{!! csrf_field() !!}
+		<form class="search-stats-form" method="post">
+			{!! csrf_field() !!}
+			<div class="search-survey">
+				<i class="fas fa-search"></i>
+				<input type="text" id="survey-search" name="survey-search" class="tal" value="{{ !empty($name) ? $name : '' }}">
 			</div>
-		
+		</form>
+
+		<div class="questions-menu clearfix" style="display: none;">
+			<div class="sort-menu">
+				@foreach($sorts as $key => $val)
+					<a href="javascript:;" sort="{{ $key }}"  {!! $key == 'all' ? 'class="active"' : '' !!}>
+						@if($key == 'featured')
+							<i class="fas fa-star"></i>
+						@endif
+						{{ $val }}
+					</a>
+				@endforeach
+			</div>
+		</div>
 		<br/>
 		<br/>
 	</div>
 
-	<div class="flex stats-list">
+	<div class="stats-list">
 		<div class="stats-holder">
 			<b template=":what Stats">
 				{!! trans('vox.page.stats.featured') !!}
 			</b>
+			@if(!empty($user) && $user->is_dentist)
+				<div class="vox-stat flex request-survey-stat">
+					<a href="javascript:;" class="cover" style="background-image: url('{{ url('new-vox-img/request-survey.jpg') }}');"></a>
+					<div class="stats-info flex">
+						<h3>
+							{{ trans('vox.page.home.request-survey.title') }}
+						</h3>
+						<p>
+							{{ trans('vox.page.home.request-survey.description') }}
+						</p>
+					</div>
+					<div class="stats-cta flex">
+						<a class="blue-button" href="javascript:;" data-popup="request-survey-popup">
+							{{ trans('vox.page.home.request-survey.request') }}
+						</a>
+					</div>
+				</div>
+			@endif
+
 			@foreach($voxes as $vox)
 
-				@if($vox->has_stats)
-
-					<div 
-						class="vox-stat flex" 
-						featured="{{ intval($vox->stats_featured) }}" 
-						published="{{ $vox->created_at->timestamp }}" 
-						updated="{{ $vox->updated_at->timestamp }}" 
-						popular="{{ intval($vox->rewardsCount()) }}" 
-		      			sort-order="{{ $vox->sort_order }}" 
-					>
-						@if($vox->stats_featured)
-							<img class="featured" src="{{ url('new-vox-img/star.svg') }}">
-						@endif
-						<a href="{{ $vox->getStatsList() }}">
-							<img class="cover" src="{{ $vox->getImageUrl() }}" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title]) }}' />
-						</a>
-						<div class="stats-info flex">
-							<h3>
-								{{ $vox->title }}
-							</h3>
-							<p>
-								{{ $vox->translateorNew(App::getLocale())->stats_description }}
-							</p>
-						</div>
-						<div class="stats-cta flex">
-							<a href="{{ $vox->getStatsList() }}">
-								{!! trans('vox.common.check-statictics') !!}
-							</a>
-							@if(!in_array($vox->id, $taken))
-								<a class="blue-button secondary" href="{{ $vox->getLink() }}">
-									{{ trans('vox.common.take-the-test') }}
-								</a>
-							@endif
-						</div>
+				<div 
+					class="vox-stat flex normal-stat" 
+					featured="{{ intval($vox->stats_featured) }}" 
+					published="{{ $vox->created_at->timestamp }}" 
+					updated="{{ $vox->updated_at->timestamp }}" 
+					popular="{{ intval($vox->rewardsCount()) }}" 
+	      			sort-order="{{ $vox->sort_order }}" 
+				>
+					@if($vox->stats_featured)
+						<img class="featured" src="{{ url('new-vox-img/star.svg') }}">
+					@endif
+					<a href="{{ $vox->getStatsList() }}">
+						<img class="cover" src="{{ $vox->getImageUrl(true) }}" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title]) }}' />
+					</a>
+					<div class="stats-info flex">
+						<h3>
+							{{ $vox->title }}
+						</h3>
+						<p>
+							{{ $vox->translateorNew(App::getLocale())->stats_description }}
+						</p>
 					</div>
-				@endif
+					<div class="stats-cta flex">
+						<a href="{{ $vox->getStatsList() }}">
+							{!! trans('vox.common.check-statictics') !!}
+						</a>
+						@if(!in_array($vox->id, $taken))
+							<a class="blue-button secondary" href="{{ $vox->getLink() }}">
+								{{ trans('vox.common.take-the-test') }}
+							</a>
+						@endif
+					</div>
+				</div>
 			@endforeach
 
-			<div class="alert alert-info" id="survey-not-found" style="display: none;">
-				{!! trans('vox.page.stats.no-results') !!}
+			<div class="container">
+				<div class="alert alert-info" id="survey-not-found" style="display: none;">
+					{!! trans('vox.page.stats.no-results') !!}
+				</div>
 			</div>
 		</div>
+		@if(empty($name))
+			<div class="tac"> 
+				{{ $voxes->render() }}
+			</div>
+		@endif
+		
 		@if(false)
 			<div class="stats-cats">
 				<b>
@@ -115,19 +138,45 @@
 		@endif
 	</div>
 
-	<div class="section-stats" id="stat-ribbon">
-		<div class="container">
-			<img src="{{ url('new-vox-img/custom-survey-vox.png') }}">
-			<div class="ribbon-box">
-				<h3>
-					{!! nl2br(trans('vox.page.stats.order-survey')) !!}
-				</h3>
-				<h3 class="second-h3">
-					{!! nl2br(trans('vox.page.stats.order-survey-2')) !!}
-				</h3>
+	<div class="blog-wrapper">
+		<div class="container flex">
+			<div class="col">
+				<h2>DENTAVOX BLOG</h2>
+				<p>Check our blog for more curious statistics & infographics!</p>
+				<a href="https://dentavox.dentacoin.com/blog" target="_blank" class="white-button">VISIT BLOG</a>
+			</div>
+			<div class="col">
+				<img src="{{ url('new-vox-img/blog-laptop.png') }}">
 			</div>
 		</div>
 	</div>
 
+	<div class="section-take-surveys">
+		<div class="container">
+			<img src="{{ url('new-vox-img/custom-survey-vox.png') }}">
+			<h3>
+				@if(!empty($user) && $user->is_dentist)
+					You  want to explore a topic <br> within a targeted audience?
+				@else
+					You have an idea for a new survey?
+				@endif
+			</h3>
+			@if(!empty($user) && $user->is_dentist)
+				<a href="javascript:;" data-popup="request-survey-popup" class="white-button">
+					REQUEST A SURVEY
+				</a>
+			@else
+				<a href="javascript:;" data-popup="request-survey-patient-popup" class="white-button">
+					Share it
+				</a>
+			@endif
+		</div>
+	</div>
+
+	@if(!empty($user) && $user->is_dentist)
+		@include('vox.popups.request-survey')
+	@else
+		@include('vox.popups.request-survey-patients')
+	@endif
 
 @endsection

@@ -134,11 +134,6 @@
 	                            	{{ trans('front.common.search') }}
 	                            </a>
 	                        </li>
-				            @foreach ($pages_header as $key => $page)
-				                <li {!! $current_page==$page->slug ? 'class="active"' : '' !!} >
-				                    <a href="{{ getLangUrl($page['slug']) }}" role="button">{{ $page['title'] }}</a>
-				                </li>
-				            @endforeach
 	                        @if(empty($user))
 					        	<li>
 		                            <a href="{{ url('MetaMaskInstructions.pdf') }}" target="_blank">
@@ -300,14 +295,6 @@
 		            </div>
 		            <div class="col-md-2">
 		            </div>
-		        </div>
-				<div class="form-group col-links">
-		            <div class="col-md-12">
-			            @foreach ($pages_footer as $key => $page)
-			                <a href="{{ getLangUrl($page['slug']) }}" role="button">{{ $page['title'] }}</a>
-			            @endforeach
-						<a href="https://dentacoin.com/privacy/" target="_blank">{{ trans('front.footer.privacy') }}</a>
-	                </div>
 		        </div>
 				<div class="form-group col-copyrights">
 		            <div class="col-md-12">

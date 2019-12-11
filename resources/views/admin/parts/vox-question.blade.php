@@ -59,6 +59,16 @@
                             {!! nl2br(trans('admin.page.'.$current_page.'.question-scale-hint')) !!}
                         </div>
                     </div>
+                    <div class="form-group clearfix" id="randomize-single">
+                        <label class="col-md-2 control-label" for="dont_randomize_answers">Don’t randomize</label>
+                        <div class="col-md-1">
+                            <input type="checkbox" name="dont_randomize_answers" class="form-control" value="1" id="dont_randomize_answers" style="vertical-align: sub;width: 30px;" {!! !empty($question) && !empty($question->dont_randomize_answers) ? 'checked="checked"' : '' !!} />
+                        </div>
+                        <div class="col-md-5">
+                            Single choice questions are randomizing only if they are not a predefined scale.
+                        </div>
+                        
+                    </div>
 
                     @foreach($langs as $code => $lang_info)
                         <div class="tab-pane questions-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}" lang="{{ $code }}">
@@ -97,6 +107,7 @@
                             <div class="form-group answers-group-add">
                                 <label class="col-md-2 control-label"></label>
                                 <div class="col-md-10">
+                                    <p class="answers-error" style="font-size: 20px;color: #ff8d69;display: none;">The recommended number of answers is up to 10</p>
                                     {{ trans('admin.page.'.$current_page.'.answers-add-hint') }}<br/><br/>
                                     How ANSWER tooltips work: <br/>
                                     Do you [includes cigars, e-cigarettes and any other tobacco products]smoke cigarettes[/]?<br/>
@@ -250,6 +261,25 @@
                             </div>
                         </div>
                     </div>
+                    
+                    @if(!empty($question) && $question->type == 'multiple_choice')
+                        <div class="stat_title">
+                            <div class="form-group clearfix">
+                                <label class="col-md-2 control-label">
+                                    Show Only Top Answers 
+                                    <!-- <br/>(multiple choice only) -->
+                                </label>
+                                <div class="col-md-2">
+                                    {{ Form::select('stats_top_answers', $stat_top_answers, !empty($question) ? $question->stats_top_answers : old('stats_top_answers'), array('class' => 'form-control')) }}
+                                </div>
+                                @if(!empty($question->{'answers:en'}))
+                                    <div class="col-md-3" style="margin-top: 8px;margin-left: -18px;color: #348fe2;">
+                                        Current answers count: {{ count(json_decode($question->{'answers:en'}, true)) }}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
                     <div class="form-group clearfix" id="stat_standard">
                         <label class="col-md-2 control-label">Demographics</label>
                         <div class="col-md-10">
@@ -279,7 +309,7 @@
                     <div class="form-group clearfix" id="stat_relations">
                         <label class="col-md-2 control-label">Related question</label>
                         <div class="col-md-5">
-                            {{ Form::select('stats_relation_id', $item->questions->pluck('question', 'id')->toArray(), !empty($question) && $question->used_for_stats=='dependency' ? $question->stats_relation_id : old('stats_relation_id'), array('class' => 'form-control')) }}                    
+                            {{ Form::select('stats_relation_id', $item->questions->pluck('question', 'id')->toArray(), !empty($question) && $question->used_for_stats=='dependency' ? $question->stats_relation_id : old('stats_relation_id'), array('class' => 'form-control')) }}
                         </div>
                         <div class="col-md-5">
                             <input type="text" name="stats_answer_id" class="form-control" value="{!! !empty($question) && $question->used_for_stats=='dependency' ? $question->stats_answer_id : old('stats_answer_id') !!}" placeholder="Select answer number">

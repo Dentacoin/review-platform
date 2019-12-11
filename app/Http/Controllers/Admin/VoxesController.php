@@ -46,12 +46,20 @@ class VoxesController extends AdminController
             'standard' => 'Yes',
             'dependency' => 'Yes + Relationship',
         ];
+        $this->stat_top_answers = [
+            '' => '-',
+            'top_3' => 'TOP 3',
+            'top_5' => 'TOP 5',
+            'top_10' => 'TOP 10',
+        ];
     }
 
     public function list( ) {
 
     	return $this->showView('voxes', array(
             'voxes' => Vox::orderBy('sort_order', 'ASC')->get(),
+            'active_voxes_count' => Vox::where('type', '!=', 'hidden')->count(),
+            'hidden_voxes_count' => Vox::where('type', 'hidden')->count(),
         ));
     }
 
@@ -90,6 +98,7 @@ class VoxesController extends AdminController
             'category_list' => VoxCategory::get(),
             'question_types' => $this->question_types,
             'stat_types' => $this->stat_types,
+            'stat_top_answers' => $this->stat_top_answers,
             'all_voxes' => Vox::orderBy('sort_order', 'ASC')->get(),
         ));
     }
@@ -197,6 +206,7 @@ class VoxesController extends AdminController
                 'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
                 'question_types' => $this->question_types,
                 'stat_types' => $this->stat_types,
+                'stat_top_answers' => $this->stat_top_answers,
                 'item' => $item,
                 'category_list' => VoxCategory::get(),
                 'triggers' => $triggers,
@@ -485,6 +495,7 @@ class VoxesController extends AdminController
 
                 $this->saveOrUpdateQuestion($question);
                 $question->vox->checkComplex();
+
             
                 if(request('used_for_stats')=='standard' && !request('stats_fields')) {
                     Request::session()->flash('error-message', 'Please, select the demographic details which should be used for the statistics.');
@@ -523,6 +534,7 @@ class VoxesController extends AdminController
                 'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
                 'item' => $question->vox,
                 'question_types' => $this->question_types,
+                'stat_top_answers' => $this->stat_top_answers,
                 'stat_types' => $this->stat_types,
                 'trigger_question_id' => $trigger_question_id,
                 'trigger_valid_answers' => $trigger_valid_answers,
@@ -599,6 +611,21 @@ class VoxesController extends AdminController
         $item->stats_featured = $this->request->input('stats_featured');
         $item->has_stats = $this->request->input('has_stats');
         $item->sort_order = $this->request->input('sort_order');
+
+        $item->gender = $this->request->input('gender');
+        $item->marital_status = $this->request->input('marital_status');
+        $item->children = $this->request->input('children');
+        $item->household_children = $this->request->input('household_children');
+        $item->education = $this->request->input('education');
+        $item->employment = $this->request->input('employment');
+        $item->job = $this->request->input('job');
+        $item->job_title = $this->request->input('job_title');
+        $item->income = $this->request->input('income');
+        $item->age = $this->request->input('age');
+        $item->countries_ids = $this->request->input('countries_ids');
+        $item->country_percentage = $this->request->input('country_percentage');
+        $item->dentists_patients = $this->request->input('dentists_patients');
+
         $item->save();
 
         VoxToCategory::where('vox_id', $item->id)->delete();
@@ -668,9 +695,11 @@ class VoxesController extends AdminController
         $question->type = $data['type'];
         $question->order = $data['order'];
         $question->stats_featured = !empty($data['stats_featured']);
+        $question->stats_top_answers = !empty($data['stats_top_answers']) ? $data['stats_top_answers'] : null;
         $question->stats_fields = !empty($data['stats_fields']) ? $data['stats_fields'] : [];
         $question->stats_scale_answers = !empty($data['stats_scale_answers']) ? json_encode($data['stats_scale_answers']) : '';
         $question->vox_scale_id = !empty($data['question_scale']) ? $data['question_scale'] : null;
+        $question->dont_randomize_answers = !empty($data['dont_randomize_answers']) ? $data['dont_randomize_answers'] : null;
         if( !empty($data['trigger_type']) ) {
             $question->trigger_type = $data['trigger_type'];
         }

@@ -207,10 +207,15 @@ class Review extends Model {
             } else {
                 $top -= $lines*35;
             }
+
+            $size = 45;
+            if ($lines > 3) {
+                $size = 40;
+            }
             
-            $img->text($title, 573, $top, function($font) {
+            $img->text($title, 573, $top, function($font) use ($size) {
                 $font->file(public_path().'/fonts/Calibri-Bold.ttf');
-                $font->size(45);
+                $font->size($size);
                 $font->color('#000000');
                 $font->align('left');
                 $font->valign('top');

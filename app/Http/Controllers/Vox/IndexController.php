@@ -9,6 +9,7 @@ use App\Models\VoxAnswer;
 use App\Models\UserStrength;
 use App\Models\VoxCategory;
 use App\Models\Country;
+use App\Models\Recommendation;
 use Carbon\Carbon;
 
 use Mail;
@@ -44,6 +45,32 @@ class IndexController extends FrontController
 			$completed_strength = $this->user->getStrengthCompleted('vox');
 		}
 
+		if( $this->user ) {
+			$voxList = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
+		} else {
+			$voxList = User::getAllVoxes();
+		}
+		$voxList = $voxList->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->orderBy('created_at', 'DESC')->get();
+
+		if ($this->user && !empty($this->user->country_id)) {
+			$arr = [];
+			foreach ($voxList as $vl) {
+				$has_started_the_survey = VoxAnswer::where('vox_id', $vl->id)->where('user_id', $this->user->id)->first();
+
+	            if(!empty($vl->country_percentage) && !empty($vl->users_percentage) && array_key_exists($this->user->country_id, $vl->users_percentage) && $vl->users_percentage[$this->user->country_id] > $vl->country_percentage  && empty($has_started_the_survey)) {
+	                $arr[] = $vl->id;
+	            }
+			}
+
+			if (!empty($arr)) {
+				foreach ($arr as $ar) {
+					$voxList = $voxList->filter(function($item) use ($ar) {
+					    return $item->id != $ar;
+					});
+				}
+			}
+		}
+
 		return $this->ShowVoxView('home', array(
 			'strength_arr' => $strength_arr,
 			'completed_strength' => $completed_strength,
@@ -53,7 +80,7 @@ class IndexController extends FrontController
 			'sorts' => $sorts,
 			'filters' => $filters,
 			'taken' => !empty($this->user) ? $this->user->filledVoxes() : null,
-        	'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->orderBy('created_at', 'DESC')->get(),
+        	'voxes' => $voxList,
         	'vox_categories' => VoxCategory::with('translations')->whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
         	'js' => [
         		'home.js'

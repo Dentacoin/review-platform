@@ -5,7 +5,7 @@
 	@include('front.errors')
 	<div class="full">
 		<div class="first-absolute">
-			<h1>{!! $title !!}</h1>
+			<h1 class="index-h1">{!! $title !!}</h1>
 			<h2>{!! $subtitle !!}</h2>
 			<br/>
 			<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">
@@ -16,6 +16,59 @@
 			{!! nl2br(trans('vox.page.index.more')) !!}
 		</a>
 	</div>
+
+	<div class="section-recent-surveys new-style-swiper index-swiper">
+		<p class="h2-bold">{!! nl2br(trans('vox.page.index.recent-surveys.title')) !!}</p>
+		<h2>{!! nl2br(trans('vox.page.index.recent-surveys.subtitle')) !!}</h2>
+
+		<div class="swiper-container">
+		    <div class="swiper-wrapper">
+		    	@foreach($voxes as $survey)
+			    	<div class="swiper-slide">
+				    	@include('vox.template-parts.vox-taken-swiper-slider')
+				    </div>
+		      	@endforeach
+		    </div>
+
+		    <div class="swiper-pagination"></div>
+		</div>
+	</div>
+
+	<div class="all-surveys-container container tac">
+		<a class="opinion blue-button" href="{{ getLangUrl('paid-dental-surveys') }}">
+			{{ trans('vox.page.index.see-all-surveys') }}
+		</a>
+	</div>
+
+	<div class="check-statictics-wrapper tac">
+		<div class="container">
+			<p class="h2-bold">DENTAL STATISTICS</p>
+			<h2>Check up-to-date market statistics to stay on top of industry trends!</h2>
+			<a class="video-parent" href="{{ getLangUrl('dental-survey-stats') }}">
+				<video class="video-stats"  onplaying="disableVideoControls();" id="myVideo" playsinline autoplay muted loop src="{{ url('new-vox-img/stats.m4v') }}" type="video/mp4" controls=""></video>
+			</a>
+			<a class="video-parent-mobile" href="{{ getLangUrl('dental-survey-stats') }}">
+				<video class="video-stats" onplaying="disableVideoControls();" id="myVideoMobile" playsinline autoplay muted loop src="{{ url('new-vox-img/stats-mobile.mp4') }}" type="video/mp4" controls=""></video>
+			</a>
+		</div>
+
+		<div class="tac">
+			<a href="{{ getLangUrl('dental-survey-stats') }}" class="blue-button more-surveys">{!! trans('vox.common.check-statictics') !!}</a>
+		</div>
+	</div>
+
+	<div class="index-daily-polls tac">
+		<div class="container">
+			<p class="h2-bold">DAILY POLLS</p>
+			<h2>Earn additional rewards by answering polls! Only the first 100 win!</h2>
+			<a href="{{ getLangUrl('daily-polls') }}" class="go-polls">
+				<img src="{{ url('new-vox-img/calendar-white.png') }}">
+				{!! nl2br(trans('vox.daily-polls.popup.browse-polls')) !!}
+			</a>
+			<img class="index-poll-man" src="{{ url('new-vox-img/index-poll-man.png') }}">
+		</div>
+	</div>
+
 	<div class="section-work">
 		<div class="container">
 
@@ -26,8 +79,8 @@
 				{!! nl2br(trans('vox.page.index.how-works.description')) !!}			
 			</p>
 
-			<div class="row">
-				<div class="col-md-3 tac" style="{{ $user ? 'margin-left: 12%' : '' }}">
+			<div class="flex">
+				<div class="col tac" style="{{ $user ? 'margin-left: 12%' : '' }}">
 					<div class="image-wrapper warm-image">
 						<img src="{{ url('new-vox-img/warm-up.png') }}">
 					</div>
@@ -41,7 +94,7 @@
 					</div>
 				</div>
 				@if(!$user)
-					<div class="col-md-3 tac">
+					<div class="col tac">
 						<div class="image-wrapper sign-image">
 							<img src="{{ url('new-vox-img/sign-up.png') }}">
 						</div>
@@ -55,7 +108,7 @@
 						</div>
 					</div>
 				@endif
-				<div class="col-md-3 tac">
+				<div class="col tac">
 					<div class="image-wrapper grab-image">
 						<img src="{{ url('new-vox-img/grab-reward.png') }}">
 					</div>
@@ -75,7 +128,7 @@
 						@endif
 					</div>
 				</div>
-				<div class="col-md-3 tac">
+				<div class="col tac">
 					<div class="image-wrapper no-image">
 						<img src="{{ url('new-vox-img/take-surveys.png') }}">
 					</div>
@@ -92,7 +145,7 @@
 			</div>
 
 			<div class="row tac">
-				<div class="col-md-12">
+				<div class="col">
 					<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">
 						{!! nl2br(trans('vox.page.index.start')) !!}
 					</a>
@@ -177,79 +230,14 @@
 		</div>
 	</div>
 
-	<div class="section-recent-surveys">
-		<p class="h2-bold">{!! nl2br(trans('vox.page.index.recent-surveys.title')) !!}</p>
-		<h2>{!! nl2br(trans('vox.page.index.recent-surveys.subtitle')) !!}</h2>
-
-		<div class="swiper-container">
-		    <div class="swiper-wrapper">
-		    	@foreach($voxes as $vox)
-			      	<div class="swiper-slide">
-			      		<div class="slider-inner">
-				    		<div class="slide-padding">
-				      			<a href="{{ $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title ]) }}'>
-				      				@if($vox->featured)
-				      					<img class="featured-img doublecoin" src="{{ url('new-vox-img/flipping-coin.gif') }}">
-				      				@endif
-				      			</a>							
-								<div class="vox-header clearfix">
-									<div class="flex first-flex">
-										<div class="col left">
-											<h4 class="survey-title bold">{{ $vox->title }}</h4>
-										</div>
-										<div class="col right">
-											<span class="bold">{{ !empty($vox->complex) ? 'max ' : '' }} {{ $vox->getRewardTotal() }} DCN</span>
-											<p>{{ $vox->formatDuration() }}</p>
-										</div>					
-									</div>
-									<div class="survey-cats"> 
-										@foreach( $vox->categories as $c)
-											<span class="survey-cat" cat-id="{{ $c->category->id }}">{{ $c->category->name }}</span>
-										@endforeach
-									</div>
-									<div class="flex second-flex">
-										<div class="col left">
-											<p class="vox-description">{{ $vox->description }}</p>
-										</div>
-										<div class="col right">
-											<div class="btns">
-												@if(empty($user) || (!empty($user) && !in_array($vox->id, $taken)) )
-													<a class="opinion blue-button" href="{{ $vox->getLink() }}">
-														{{ trans('vox.common.take-the-test') }}
-													</a>
-												@else
-													<a class="gray-button" href="javascript:;">
-														<i class="fas fa-check"></i>{{ trans('vox.common.taken') }}
-													</a>
-												@endif
-											</div>
-										</div>
-									</div>
-								</div>
-					      	</div>
-				      	</div>
-				    </div>
-		      	@endforeach
-		    </div>
-
-		    <div class="swiper-pagination"></div>
-		</div>
-	</div>
-
-	<div class="all-surveys-container container tac">
-		<a class="opinion blue-button" href="{{ getLangUrl('paid-dental-surveys') }}">
-			{{ trans('vox.page.index.see-all-surveys') }}
-		</a>
-	</div>
-
-	<div class="section-stats">
+	<div class="section-take-surveys">
 		<div class="container">
-			<img src="{{ url('new-vox-img/stats-front.png') }}">
+			<img src="{{ url('new-vox-img/checklist-light.png') }}">
 			<h3>
-				{!! nl2br(trans('vox.page.index.curious')) !!}
+				Browse all survey topics and start earning DCN!
 			</h3>
-			<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">
-				{{ trans('vox.common.check-statictics') }}
+			<a href="{{ getLangUrl('paid-dental-surveys') }}" class="white-button">
+				Take surveys
 			</a>
 		</div>
 	</div>

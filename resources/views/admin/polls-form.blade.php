@@ -61,16 +61,21 @@
 				        @endif
 
 			            <div class="form-group">
-	                        <label class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px;">Category</label>
+	                        <label class="col-md-2 control-label" style="padding-top: 0px; ">Category</label>
 	                        <div class="col-md-10">
 	                            @foreach($categories as $k => $cat)
 	                                <label class="col-md-3" for="cat-{{ $k }}">
-
 	                                    <input type="radio" name="category" value="{{ $k }}" id="cat-{{ $k }}" {!! !empty($item) && ($item->category == $k) ? 'checked="checked"' : '' !!} >
-	                                    
 	                                    {{ $cat }}
 	                                </label>
 	                            @endforeach
+	                        </div>
+	                    </div>
+
+	                    <div class="form-group clearfix">
+	                        <label class="col-md-2 control-label">Scale</label>
+	                        <div class="col-md-2">
+	                            {{ Form::select('scale-id', ['' => '-'] + $scales, !empty($item) ? $item->scale_id : null, array('class' => 'form-control scale-input')) }}
 	                        </div>
 	                    </div>
 
@@ -130,17 +135,49 @@
 	    </div>
 	</div>
 
-@endsection
+	@if(!empty($item))
+		<a class="btn btn-primary btn-block" href="javascript: $('#import-poll-answers').show();">
+		    Import answers
+		</a>
+		<div id="import-poll-answers" style="display: none;">
+		    <div class="panel panel-inverse">
+		        <div class="tab-content">
+		            <div class="row">
+		                <div class="col-md-12">
+		                    <h4>Import answers</h4>
+		                    <form class="form-horizontal" id="import-poll-answers-form" method="post" action="{{ url('cms/vox/polls/edit/'.$item->id.'/import') }}" enctype="multipart/form-data">
+		                        {!! csrf_field() !!}
+		                        <div class="row">
+		                            <div class="col-md-6">
+		                                <input type="file" class="btn-block form-control" name="table" accept=".xls, .xlsx" />
+		                            </div>
+		                            <div class="col-md-6">
+		                                <button type="submit" class="btn btn-success btn-block">
+		                                    Import
+		                                </button>
+		                            </div>
+		                        </div>
+		                    </form>
+		                    <br/>
+		                    <a href="{{ url('poll-import-template.xlsx') }}">Download sample</a>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	@endif
 
-<div style="display: none;">
-    <div class="flex input-group ui-sortable-handle" id="input-group-template">
-        <div class="col">
-            {{ Form::text('something', '', array('maxlength' => 2048, 'class' => 'form-control answer-name poll-answers', 'placeholder' => 'Answer', 'style' => 'display: inline-block; width: calc(100% - 60px);')) }}
-            <div class="input-group-btn" style="display: inline-block;">
-                <button class="btn btn-default btn-remove-answer" type="button" style="height: 34px;">
-                    <i class="glyphicon glyphicon-remove"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+	<div style="display: none;">
+	    <div class="flex input-group ui-sortable-handle" id="input-group-template">
+	        <div class="col">
+	            {{ Form::text('something', '', array('maxlength' => 2048, 'class' => 'form-control answer-name poll-answers', 'placeholder' => 'Answer', 'style' => 'display: inline-block; width: calc(100% - 60px);')) }}
+	            <div class="input-group-btn" style="display: inline-block;">
+	                <button class="btn btn-default btn-remove-answer" type="button" style="height: 34px;">
+	                    <i class="glyphicon glyphicon-remove"></i>
+	                </button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+@endsection

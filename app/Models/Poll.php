@@ -29,6 +29,7 @@ class Poll extends Model {
         'answers',
         'category',
         'status',
+        'scale_id',
         'hasimage_social',
     ];
 

@@ -144,17 +144,17 @@ $(document).ready(function(){
 		var mins = Math.ceil( (vox.count - vox.current)/6 );
 		$('#current-question-num').html( mins<2 ? '<1' : '~'+mins );
 
-		if (welcome_vox) {
-			if( vox.current > (vox.count_real + welcome_vox_q_count) ) {
-				$('#dcn-test-reward-bonus').show();
+		// if (welcome_vox) {
+		// 	if( vox.current > (vox.count_real + welcome_vox_q_count) ) {
+		// 		$('#dcn-test-reward-bonus').show();
 
-			}
-		} else {
-			if( vox.current > vox.count_real ) {
-				$('#dcn-test-reward-bonus').show();
+		// 	}
+		// } else {
+		// 	if( vox.current > vox.count_real ) {
+		// 		$('#dcn-test-reward-bonus').show();
 
-			}
-		}
+		// 	}
+		// }
 
 		if(vox.current>1) {
 
@@ -179,12 +179,12 @@ $(document).ready(function(){
 			}
 
 			if( doingAsl ) {
-				console.log('doingAsl');
-				var old = parseInt( $('#bonus-question-reward').text().trim() );
-				$('#bonus-question-reward').html( old + vox.reward_single );
+				// console.log('doingAsl');
+				// var old = parseInt( $('#bonus-question-reward').text().trim() );
+				// $('#bonus-question-reward').html( old + vox.reward_single );
 
-				old = parseInt( $('.coins-test').first().text().trim() );
-				$('.coins-test').html( old + parseInt(vox.reward_single) );
+				// old = parseInt( $('.coins-test').first().text().trim() );
+				// $('.coins-test').html( old + parseInt(vox.reward_single) );
 
 			} else if( doingWelcome ) {
 				console.log('doingWelcome');
@@ -222,17 +222,30 @@ $(document).ready(function(){
 
 		if($('.question-group:visible').hasClass('shuffle')) {
 			var parent = $('.question-group:visible .answers');
-		    var divs = parent.children();
+		    var divs = parent.children().not(".disabler-label");
+
 		    while (divs.length) {
-		        parent.append(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+		        parent.prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
 		    }
 		}
-		
 	}
 	
 	if(typeof(vox)!='undefined') {
 		VoxTest.handleNextQuestion();		
 	}
+
+	if ($('#bot-group').length) {
+		$('.question-group').hide();
+        $('#bot-group').show();
+	} else if ($('.question-group[welcome=1]').length) {
+        $('.question-group').hide();
+        console.log('welcome-show');
+        $('.question-group[welcome]').first().show();
+    } else if($('.user-detail-question').length) {
+        $('.question-group').hide();
+        console.log('demographics-show');
+        $('.user-detail-question').first().show();
+    }
 
 
     $('.country-select').change( function() {
@@ -270,7 +283,7 @@ $(document).ready(function(){
 
     $('.second-absolute').click( function(e) {
 		$('html, body').animate({
-        	scrollTop: $('.section-work').offset().top
+        	scrollTop: $('.section-recent-surveys').offset().top
         }, 500);
 	});
 
@@ -288,7 +301,7 @@ $(document).ready(function(){
 	$('.user-type-mobile a').click( function() {
 		$('.user-type-mobile a').removeClass('active');
 		$(this).addClass('active');
-		$('.reg-wrapper .col-md-6').removeClass('active');
+		$('.reg-wrapper .col').removeClass('active');
 		$('.'+$(this).attr('type')).addClass('active');
 
 		Cookies.set('user-type', $(this).attr('type'), { expires: 365 });
@@ -1146,11 +1159,27 @@ $(document).ready(function(){
         var container = $('#chart-poll');
         container.html('');
 
+        var u = 0;
         for(var i in chart) {
-            $(container).append('<div class="group-heading">'+i+'</div>');
+        	u++;
+            $(container).append('<div class="custombar-parent" sta="'+u+'" votes="'+(parseInt(chart[i])/total*100).toFixed(1)+'"><div class="group-heading">'+i+'</div></div>');
             var pl = 90*parseInt(chart[i])/max + 1;
-            $(container).append('<div class="custombar"><span stat-width="'+parseInt(pl)+'%"></span> '+(parseInt(chart[i])/total*100).toFixed(1)+'%</div>');
+            $(container).find('.custombar-parent[sta="'+u+'"]').append('<div class="custombar"><span stat-width="'+parseInt(pl)+'%"></span> '+(parseInt(chart[i])/total*100).toFixed(1)+'%</div>');
         }
+
+        var list = container.children();
+
+        list.sort(function(a, b) {
+            if( parseInt($(a).attr('votes')) > parseInt($(b).attr('votes')) ) {
+                return -1;
+            } else if( parseInt($(a).attr('votes')) < parseInt($(b).attr('votes')) ) {
+                return 1;
+            }
+        });
+
+        list.each(function() {
+            container.append(this);
+        });
     }
 
     pollStatsAnimate = function() {
@@ -1193,6 +1222,9 @@ $(document).ready(function(){
                 		$('.next-poll').addClass('taken-all');
                 	} else {
                 		$('.next-poll').attr('poll-id', ret.next_poll);
+                	}
+                	if ($('.next-stat').length) {
+                		$('.next-stat').attr('stat-id', ret.next_stat);
                 	}
                 	$('#poll-popup').addClass('active');
                 } else {
@@ -1335,6 +1367,9 @@ $(document).ready(function(){
             });
 		});
 
+		$('.next-stat').click( function() {
+			showStats($(this).attr('stat-id'));
+		});
 
 		$('.see-stats').click( function() {
 			showStats($(this).attr('poll-id'));
@@ -1343,10 +1378,24 @@ $(document).ready(function(){
 	pollsFunction();
 
 	$('.close-bubble').click( function() {
+		if (window.innerWidth <= 768) {
+			Cookies.set('small-poll-bubble', true, { expires: 1 });
+		}
 		$('.poll-bubble').hide();
 	});
 
-	if ($('.poll-bubble').length && $(window).innerWidth() >= 768) {
+	if (window.innerWidth <= 768) {
+		if(Cookies.get('small-poll-bubble')) {
+			$('.poll-bubble').addClass('small-bubble');
+		}
+
+		$('.small-bubble').click( function() {
+			$(this).removeClass('small-bubble');
+			Cookies.remove('small-poll-bubble');
+		});
+	}
+
+	if ($('.poll-bubble').length && window.innerWidth >= 768) {
 		$(window).on("scroll", function() {
 			var scrollHeight = $(document).height();
 			var scrollPosition = $(window).height() + $(window).scrollTop();
@@ -1413,6 +1462,144 @@ $(document).ready(function(){
 				$(this).parent().parent().find('.ip-country').hide();
 			}
 		}
+	});
+
+	if ($('.video-stats').length) {
+    	$('.video-stats')[0].play();
+	}
+
+    $('#request-survey-form').submit( function(e) {
+        e.preventDefault();
+
+        if (!$(this).find('.button').hasClass('disabled')) {
+
+	        $(this).find('.ajax-alert').remove();
+	        $(this).find('.alert').hide();
+	        $(this).find('.has-error').removeClass('has-error');
+
+	        if(ajax_is_running) {
+	            return;
+	        }
+	        ajax_is_running = true;
+
+	        var that = $(this);
+
+	        // var countries = [];
+	        // for (var i in $('[name="target-countries"]').select2('data')) {
+	        // 	countries.push($('[name="target-countries"]').select2('data')[i]['text']);
+	        // }
+
+	        // $('[name="target-countries"]').val(countries.toString());
+	        // console.log(countries.toString(), $('[name="target-countries"]').val());
+
+	        //console.log($('[name="target-countries"]').val());
+	        $.post( 
+	            $(this).attr('action'), 
+	            $(this).serialize() , 
+	            (function( data ) {
+	                if(data.success) {
+	                	that[0].reset();
+	                	if ($('.select2').length) {
+	                		$('.select2').val(null).trigger('change').select2();
+	                	}
+	                	
+	                   	$(this).find('.alert-success').show();
+	                } else {
+	                    for(var i in data.messages) {
+	                        $('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
+
+	                        $('[name="'+i+'"]').addClass('has-error');
+
+	                        if ($('[name="'+i+'"]').closest('.modern-radios').length) {
+	                            $('[name="'+i+'"]').closest('.modern-radios').addClass('has-error');
+	                        }
+	                    }
+
+	                    $('html, body').animate({
+			                scrollTop: $('.ajax-alert:visible').first().offset().top - $('header').height() - 150
+			            }, 500);
+	                }
+	                ajax_is_running = false;
+	            }).bind(that), "json"
+	        );          
+
+
+	        return false;
+	    }
+	} );
+
+
+	$('.recommend-radio').change( function(e) {
+		$(this).closest('.recommend-icons').find('label').removeClass('active');
+		$(this).closest('label').addClass('active');
+		$('#recommend-form').submit();
+	});
+
+	$('#recommend-button').click( function(e) {
+		e.preventDefault();
+
+		if ($('#recommend-description').val()) {
+			$('#recommend-form').submit();
+		} else {
+			$('#recommend-description').addClass('has-error');
+			$('#recommend-form').find('.alert-warning').show();
+		}
+	});
+
+    $('#recommend-form').submit( function(e) {
+        e.preventDefault();
+
+        $(this).find('.ajax-alert').remove();
+        $(this).find('.alert').hide();
+        $(this).find('.has-error').removeClass('has-error');
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        var that = $(this);
+        
+        $.post( 
+            $(this).attr('action'), 
+            $(this).serialize() , 
+            (function( data ) {
+                if(data.success) {
+
+                	if (data.recommend) {
+                		$(this).next().show();
+                		$(this).hide();
+                		$('#myVideoRecommend')[0].play();
+                	} else {
+                		if (data.description) {
+                			$(this).find('.hide-on-success').hide();	                	
+	                   		$(this).find('.alert-success').show();
+                		} else {
+                			$(this).find('.hide-happy').show();
+                		}	                	
+                	}
+                }
+                ajax_is_running = false;
+            }).bind(that), "json"
+        );  
+	} );
+
+	if( Cookies.get('first-login-recommendation') ) {
+		showPopup('recommend-popup');
+	}
+
+    if ($('#christmasBanner').length) {
+    	$('#christmasBanner')[0].removeAttribute("controls");
+
+    	if ($(window).outerWidth() <= 768) {
+    		$('#christmasBanner').attr('src', $('#christmasBanner').attr('mobile-src'));
+    	}
+    }
+
+    $(".close-banner").click( function(e) {
+		e.preventDefault();
+
+		$('.christmas-banner').hide();
 	});
 
 });

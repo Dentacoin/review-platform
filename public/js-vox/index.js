@@ -182,7 +182,9 @@ $(document).ready(function(){
         });
     }
 
-
+    if (window.innerWidth <= 768) {
+        $('.site-content').prepend($('.first-absolute h1'));
+    }
 
 
 });

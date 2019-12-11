@@ -24,10 +24,8 @@
 						<p>
 	    					@if( !$user->hasimage )
 	    						{!! nl2br(trans('trp.page.user.add-photo')) !!}
-				    			
 		    				@else
 		    					{!! nl2br(trans('trp.page.user.change-photo')) !!}
-			    				
 							@endif
 			    		</p>
 					</div>
@@ -50,12 +48,20 @@
 						Sure you've entered the right country?
                     </div>	
 
-                	<select class="input country-select country-dropdown" name="country_id" real-country="{{ !empty($country_id) ? $country_id : '' }}">
-                		<option value="">-</option>
-                		@foreach(\App\Models\Country::with('translations')->get() as $country)
-                			<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $user->country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
-                		@endforeach
-                	</select>
+                    @if(!empty($user->country_id))
+                    	<select class="input country-select country-dropdown" name="country_id" disabled="disabled">
+	                		<option value="{{ \App\Models\Country::find($user->country_id)->name }}" code="{{ \App\Models\Country::find($user->country_id)->code }}" selected="selected" >{{ \App\Models\Country::find($user->country_id)->name }}</option>
+	                	</select>
+	                	<div class="alert alert-warning mobile" style="margin: 10px 0px;">
+                        	Your country is uneditable. If you’ve moved to another country, contact us at admin@dentacoin.com.
+                        </div>
+                    @else
+	                	<select class="input country-select country-dropdown" name="country_id" {!! !empty($country_id) ? 'disabled="disabled"' : '' !!} real-country="{{ !empty($country_id) ? $country_id : '' }}">
+	                		@foreach(\App\Models\Country::with('translations')->get() as $country)
+	                			<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $user->country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+	                		@endforeach
+	                	</select>
+	                @endif
 				    <div>
 				    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
                         <div class="suggester-map-div" {!! $user->lat ? 'lat="'.$user->lat.'" lon="'.$user->lon.'"' : '' !!} style="height: 100px; display: none; margin: 10px 0px;">
@@ -339,12 +345,20 @@
 							Sure you've entered the right country?
 	                    </div>	
 
-	                	<select class="input country-select country-dropdown" name="country_id" real-country="{{ !empty($country_id) ? $country_id : '' }}">
-	                		<option value="">-</option>
-	                		@foreach(\App\Models\Country::with('translations')->get() as $country)
-	                			<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $user->country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
-	                		@endforeach
-	                	</select>
+	                    @if(!empty($user->country_id))
+	                    	<select class="input country-select country-dropdown" name="country_id" disabled="disabled">
+		                		<option value="{{ \App\Models\Country::find($user->country_id)->name }}" code="{{ \App\Models\Country::find($user->country_id)->code }}" selected="selected" >{{ \App\Models\Country::find($user->country_id)->name }}</option>
+		                	</select>		                	
+		                	<div class="alert alert-warning mobile" style="margin: 10px 0px;">
+	                        	Your country is uneditable. If you’ve moved to another country, contact us at admin@dentacoin.com.
+	                        </div>
+	                    @else
+		                	<select class="input country-select country-dropdown" name="country_id" {!! !empty($country_id) ? 'disabled="disabled"' : '' !!} real-country="{{ !empty($country_id) ? $country_id : '' }}">
+		                		@foreach(\App\Models\Country::with('translations')->get() as $country)
+		                			<option value="{{ $country->id }}" code="{{ $country->code }}" {!! $user->country_id==$country->id ? 'selected="selected"' : '' !!} >{{ $country->name }}</option>
+		                		@endforeach
+		                	</select>
+		                @endif
 	                	<div>
 					    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
 	                        <div class="suggester-map-div" {!! $user->lat ? 'lat="'.$user->lat.'" lon="'.$user->lon.'"' : '' !!} style="height: 100px; display: none; margin: 10px 0px;">

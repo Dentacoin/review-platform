@@ -11328,26 +11328,42 @@ body.strength-pb {
 	}
 }
 
+.christmas-banner {
+	position: relative;
+	box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+	display: block;
 
+	&.white-banner {
+		padding-top: 6%;
 
-// .christmas-banner {
-// 	box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
-// 	display: block;
+		@media #{$phone} {
+			padding-top: 21%;
+		}
+	}
 
-// 	@media #{$phone} {
-// 		display: none;
-// 	}
+	.close-banner {
+		position: absolute;
+	    right: 10px;
+	    top: 10px;
+	}
 
-// 	&.mobile-christmas-banner {
-// 		display: none;
+	video {
+		display: block;
+		width: 100%;
+		pointer-events: none;
 
-// 		@media #{$phone} {
-// 			display: block;
-// 		}
-// 	}
-	
-// 	img {
-// 		width: 100%;
-// 		display: block;
-// 	}
-// }
+		&:focus {
+			outline: none;
+			border: none;
+		}
+	}
+
+	video::-webkit-media-controls {
+	  	display: none !important;
+	}
+
+	video::-webkit-media-controls-enclosure {
+	  	display:none !important;
+	}
+}
+

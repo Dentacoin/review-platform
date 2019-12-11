@@ -29,12 +29,12 @@
 			{!! csrf_field() !!}
 
 
-			<div class="container" id="step-1">
-				<div class="col-md-3">
+			<div class="container wrapper-flex" id="step-1">
+				<div class="col">
 					<img class="image-left" src="{{ url('new-vox-img/register.png') }}">
 				</div>
 
-				<div class="col-md-9">
+				<div class="col">
 					<h3 class="tac">
 						{!! trans('vox.page.register.title') !!}
 					</h3>
@@ -69,9 +69,9 @@
 						@include('front.errors')
 					</div>
 
-					<div class="reg-wrapper row clearfix">
+					<div class="reg-wrapper flex">
 
-						<div class="reg-patients col-md-6 tac">
+						<div class="reg-patients col tac">
 							<h4>
 								{{ trans('vox.common.type-patient')  }}
 							</h4>
@@ -110,7 +110,7 @@
 							<input type="hidden" id="jwtAddress" value="{{ getLangUrl('register/civic') }}" />
 						</div>
 
-						<div class="reg-dentists col-md-6">
+						<div class="reg-dentists col">
 							<h4 class="tac">
 								{{ trans('vox.common.type-dentist')  }}
 							</h4>
@@ -308,7 +308,7 @@
 		                                </div>
 
 									</div>
-								</div>								
+								</div>
 
 							  	<div class="form-group {{ $errors->has('captcha') ? 'has-error' : '' }}" style="text-align: center;">
 								    <div class="g-recaptcha" id="g-recaptcha" data-callback="sendReCaptcha" style="display: inline-block;" data-size="compact" data-sitekey="6LfmCmEUAAAAAH20CTYH0Dg6LGOH7Ko7Wv1DZlO0"></div>

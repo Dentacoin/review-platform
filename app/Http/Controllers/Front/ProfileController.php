@@ -86,7 +86,7 @@ class ProfileController extends FrontController
             ],
             'country_id' => [
                 'type' => 'country',
-                'required' => true,
+                'required' => false,
             ],
             'address' => [
                 'type' => 'text',
@@ -1258,12 +1258,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     return Response::json($ret);
                 }
 
-                return redirect( getLangUrl('profile/info') )
+                return redirect( getLangUrl('/') )
                 ->withInput()
                 ->withErrors($validator);
             } else {
 
-                if(empty(Request::input('field')) && $this->user->is_dentist && !User::validateAddress( Country::find( request('country_id') )->name, request('address') ) ) {
+                if(is_numeric(request('country_id')) && empty(Request::input('field')) && $this->user->is_dentist && !User::validateAddress( $this->user->country_id, request('address') ) ) {
                     if( Request::input('json') ) {
                         $ret = [
                             'success' => false,
@@ -1274,7 +1274,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         return Response::json($ret);
                     }
 
-                    return redirect( getLangUrl('profile/info') )
+                    return redirect( getLangUrl('/') )
                     ->withInput()
                     ->withErrors([
                         'address' => trans('trp.common.invalid-address')
@@ -1302,7 +1302,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         return Response::json($ret);
                     }
 
-                    return redirect( getLangUrl('profile/info') )
+                    return redirect( getLangUrl('/') )
                     ->withInput()
                     ->withErrors([
                         'name' => trans('trp.common.invalid-name')
@@ -1310,7 +1310,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 }
 
                 if($this->user->validateMyEmail() == true) {
-                    return redirect( getLangUrl('profile/info') )
+                    return redirect( getLangUrl('/') )
                     ->withInput()
                     ->withErrors([
                         'email' => trans('trp.common.invalid-email')
@@ -1373,7 +1373,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 if( Request::input('json') ) {
                     $ret = [
                         'success' => true,
-                        'href' => $this->user->getLink()
+                        'href' => getLangUrl('/')
                     ];
 
                     if( Request::input('field') ) {
@@ -1391,7 +1391,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 }
 
                 Request::session()->flash('success-message', trans('trp.page.profile.info.updated'));
-                return redirect( getLangUrl('profile/info') );
+                return redirect( getLangUrl('/') );
 
             }
         }

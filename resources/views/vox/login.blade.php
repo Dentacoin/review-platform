@@ -86,12 +86,12 @@
 			<button type="submit"></button>			
 		</form>
 
-		<div class="container">
-			<div class="col-md-3">
+		<div class="container wrapper-flex">
+			<div class="col">
 				<img class="image-left" src="{{ url('new-vox-img/register-dentist.png') }}">
 			</div>
 
-			<div class="col-md-9">
+			<div class="col">
 				<h3 class="tac">
 					{{ trans('vox.page.login.title')  }}
 				</h3>
@@ -117,10 +117,10 @@
 						@include('front.errors')
 					</div>
 
-					<div class="reg-wrapper row clearfix">
+					<div class="reg-wrapper flex">
 
 
-						<div class="reg-patients col-md-6 tac">
+						<div class="reg-patients col tac">
 							<h4>
 								{{ trans('vox.common.type-patient')  }}
 							</h4>
@@ -157,13 +157,13 @@
 							<input type="hidden" id="jwtAddress" value="{{ getLangUrl('login/civic') }}" />
 
 
-					
+							<br/>
 							<div class="grace-button" id="register-grace-button">
 								{!! trans('vox.page.login.email-pass') !!}
 							</div>
 						</div>
 
-						<div class="reg-dentists col-md-6">
+						<div class="reg-dentists col">
 							<h4 class="tac">
 								{{ trans('vox.common.type-dentist')  }}
 							</h4>

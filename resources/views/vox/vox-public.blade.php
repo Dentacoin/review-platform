@@ -67,8 +67,8 @@
 				{!! nl2br(trans('vox.page.index.how-works.description')) !!}			
 			</p>
 
-			<div class="row">
-				<div class="col-md-3 tac" style="{{ $user ? 'margin-left: 12%' : '' }}">
+			<div class="flex">
+				<div class="col tac" style="{{ $user ? 'margin-left: 12%' : '' }}">
 					<div class="image-wrapper warm-image">
 						<img src="{{ url('new-vox-img/warm-up.png') }}">
 					</div>
@@ -82,7 +82,7 @@
 					</div>
 				</div>
 				@if(!$user)
-					<div class="col-md-3 tac">
+					<div class="col tac">
 						<div class="image-wrapper sign-image">
 							<img src="{{ url('new-vox-img/sign-up.png') }}">
 						</div>
@@ -96,7 +96,7 @@
 						</div>
 					</div>
 				@endif
-				<div class="col-md-3 tac">
+				<div class="col tac">
 					<div class="image-wrapper grab-image">
 						<img src="{{ url('new-vox-img/grab-reward.png') }}">
 					</div>
@@ -116,7 +116,7 @@
 						@endif
 					</div>
 				</div>
-				<div class="col-md-3 tac">
+				<div class="col tac">
 					<div class="image-wrapper no-image">
 						<img src="{{ url('new-vox-img/take-surveys.png') }}">
 					</div>
@@ -133,7 +133,7 @@
 			</div>
 
 			<div class="row tac">
-				<div class="col-md-12">
+				<div class="col">
 					<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">
 						{!! nl2br(trans('vox.page.index.start')) !!}
 					</a>

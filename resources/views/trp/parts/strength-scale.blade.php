@@ -39,43 +39,5 @@
 		</div>
 	</div>
 </div>
-<style type="text/css">
-					
-	.christmas-banner {
-		position: relative;
-		box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
-		display: block;
-	}
 
-	.christmas-banner img:not(.close-banner) {
-		width: 100%;
-		display: block;
-	}
-
-	.christmas-banner .close-banner {
-		position: absolute;
-	    right: 10px;
-	    top: 10px;
-	}
-
-	.christmas-banner.mobile-christmas-banner {
-		display: none;
-	}
-
-	@media screen and (max-width: 768px) {
-		.christmas-banner {
-			display: none;
-		}
-
-		.christmas-banner.mobile-christmas-banner {
-			display: block;
-		}
-	}
-</style>
-
-<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner">
-	<img src="{{ url('img-trp/christmas-banner.gif') }}">
-</a>
-<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner mobile-christmas-banner">
-	<img src="{{ url('img-trp/mobile-christmas-banner-small.gif') }}">
-</a>
+<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner white-banner"></a>
