@@ -393,7 +393,7 @@ $voxRoutes = function () {
 			Route::any('paid-dental-surveys', 					'IndexController@surveys_public');
 			Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');
 			Route::any('get-started/{id}', 						'VoxController@home_slug');
-			Route::any('start-over', 							'VoxController@start_over');
+			Route::post('start-over', 							'VoxController@start_over');
 
 			Route::any('daily-polls', 							'PollsController@list');
 			Route::any('daily-polls/{date}', 					'PollsController@show_popup_poll');

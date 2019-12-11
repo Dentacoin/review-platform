@@ -313,13 +313,22 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <label class="col-md-4 control-label">
+                                    <label class="col-md-3 control-label">
                                         Max percentage of users from one country
                                         <!-- <br/> (this will not apply if there is only one selected country) -->
                                     </label>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         {{ Form::number( 'country_percentage', !empty($item) ? $item->country_percentage : '' , array('class' => 'form-control', 'placeholder' => 'Number from 1 to 100') ) }}
                                     </div>
+                                    @if(!empty($item) && !empty($item->users_percentage))
+                                        <div class="col-md-3" style="border: 1px solid black;padding-top: 10px;padding-bottom: 10px;">
+                                            <b> Current users percentage :</b> <br/><br/>
+
+                                            @foreach($item->users_percentage as $c => $up)
+                                                <p {!! !empty($item->country_percentage) && intval($item->country_percentage) < intval($up) ? 'style="color:red;"' : '' !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
