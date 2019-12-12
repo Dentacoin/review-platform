@@ -975,8 +975,10 @@ body.blur .site-content {
       color: #126585; }
     .results a.active, .results a:hover {
       background-color: #d8eaf5; }
-  .results .locations-results {
+  .results .results-type {
     margin-bottom: 25px; }
+    .results .results-type:last-child {
+      margin-bottom: 0px; }
   .results .ratings {
     margin-top: 0px;
     float: right; }

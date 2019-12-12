@@ -15,6 +15,7 @@ class VerifyCsrfToken extends BaseVerifier
         'test',
         'location',
         'user-name',
+        'dentist-location',
         'suggest-clinic',
         'suggest-clinic/*',
         'suggest-dentist',

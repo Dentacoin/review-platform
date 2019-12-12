@@ -40,6 +40,26 @@ class CitiesController extends BaseController
 		return Response::json($user_list);
 	}
 
+	public function getDentistLocation() {
+
+		$username = trim(Request::input('username'));
+		$users = User::where('is_dentist', true)->where(function($query) use ($username) {
+			$query->where('name', 'LIKE', '%'.$username.'%')
+			->orWhere('name_alternative', 'LIKE', '%'.$username.'%');
+		})->whereIn('status', ['approved','added_approved','admin_imported'])->take(10)->get();
+		$user_list = [];
+		foreach ($users as $user) {
+			$user_list[] = [
+				'location' => $user->city_name.', '.$user->country->name,
+				'location_link' => strtolower($user->city_name.'-'.$user->country->name),
+				'lat' => $user->lat,
+				'lon' => $user->lon,
+			];
+		}
+
+		return Response::json($user_list);
+	}
+
 	public function getCities($id, $empty=false) {
 
 		$country = Country::find($id);
