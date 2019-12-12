@@ -123,10 +123,6 @@ jQuery(document).ready(function($){
             $('#signin-form-popup-left').show();
             $('#login-form-popup').hide();
             $('#login-form-popup-left').hide();
-
-	        if ($('.alert-warning').length) {
-	        	$('.alert-warning').hide();
-	        }
         }
     }
 
