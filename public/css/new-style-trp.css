@@ -8143,7 +8143,11 @@ body.strength-pb {
   .christmas-banner video {
     display: block;
     width: 100%;
-    pointer-events: none; }
+    pointer-events: none;
+    max-height: 118px; }
+    @media screen and (max-width: 768px) {
+      .christmas-banner video {
+        max-height: 230px; } }
     .christmas-banner video:focus {
       outline: none;
       border: none; }

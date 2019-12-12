@@ -12937,6 +12937,17 @@ svg:not(:root) {
 				padding: 10px 50px;
 			}
 		}
+
+		.vox-stats-subtitle {
+			text-align: center;
+		    font-size: 30px;
+		    margin-top: -20px;
+		    margin-bottom: 40px;
+
+		    @media #{$phone} {
+		    	font-size: 26px;
+		    }
+		}
 	}
 
 	.suggested-wrap {
@@ -13456,6 +13467,11 @@ svg:not(:root) {
 		display: block;
 		width: 100%;
 		pointer-events: none;
+		max-height: 118px;
+
+		@media #{$phone} {
+			max-height: 230px;
+		}
 
 		&:focus {
 			outline: none;
@@ -13469,5 +13485,39 @@ svg:not(:root) {
 
 	video::-webkit-media-controls-enclosure {
 	  	display:none !important;
+	}
+}
+
+.daily-limit-reached {
+	margin-bottom: -80px;
+
+	@media #{$phone} {
+		margin-bottom: 0px;
+	}
+
+	.hours-countdown {
+		font-size: 20px;
+	    font-weight: 800;
+	    display: flex;
+	    align-items: center;
+
+	    @media #{$phone} {
+	    	justify-content: center;
+	    	font-size: 0px;
+	    }
+
+	    img {
+	    	margin-right: 20px;
+
+	    	@media #{$phone} {
+	    		margin-right: 10px;
+	    	}
+	    }
+
+	    span {
+	    	font-weight: 800;
+    		font-size: 30px;
+    		margin-left: 5px;
+	    }
 	}
 }

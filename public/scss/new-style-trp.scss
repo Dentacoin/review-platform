@@ -11351,6 +11351,11 @@ body.strength-pb {
 		display: block;
 		width: 100%;
 		pointer-events: none;
+		max-height: 118px;
+
+		@media #{$phone} {
+			max-height: 230px;
+		}
 
 		&:focus {
 			outline: none;

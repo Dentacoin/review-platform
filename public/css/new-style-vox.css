@@ -8998,6 +8998,14 @@ svg:not(:root) {
     @media screen and (max-width: 768px) {
       .taken-survey-wrapper .taken-vox-stats .blue-button {
         padding: 10px 50px; } }
+    .taken-survey-wrapper .taken-vox-stats .vox-stats-subtitle {
+      text-align: center;
+      font-size: 30px;
+      margin-top: -20px;
+      margin-bottom: 40px; }
+      @media screen and (max-width: 768px) {
+        .taken-survey-wrapper .taken-vox-stats .vox-stats-subtitle {
+          font-size: 26px; } }
   .taken-survey-wrapper .suggested-wrap {
     padding-top: 60px; }
     @media screen and (max-width: 768px) {
@@ -9356,7 +9364,11 @@ svg:not(:root) {
   .christmas-banner video {
     display: block;
     width: 100%;
-    pointer-events: none; }
+    pointer-events: none;
+    max-height: 118px; }
+    @media screen and (max-width: 768px) {
+      .christmas-banner video {
+        max-height: 230px; } }
     .christmas-banner video:focus {
       outline: none;
       border: none; }
@@ -9364,3 +9376,27 @@ svg:not(:root) {
     display: none !important; }
   .christmas-banner video::-webkit-media-controls-enclosure {
     display: none !important; }
+
+.daily-limit-reached {
+  margin-bottom: -80px; }
+  @media screen and (max-width: 768px) {
+    .daily-limit-reached {
+      margin-bottom: 0px; } }
+  .daily-limit-reached .hours-countdown {
+    font-size: 20px;
+    font-weight: 800;
+    display: flex;
+    align-items: center; }
+    @media screen and (max-width: 768px) {
+      .daily-limit-reached .hours-countdown {
+        justify-content: center;
+        font-size: 0px; } }
+    .daily-limit-reached .hours-countdown img {
+      margin-right: 20px; }
+      @media screen and (max-width: 768px) {
+        .daily-limit-reached .hours-countdown img {
+          margin-right: 10px; } }
+    .daily-limit-reached .hours-countdown span {
+      font-weight: 800;
+      font-size: 30px;
+      margin-left: 5px; }

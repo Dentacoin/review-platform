@@ -129,7 +129,7 @@ jQuery(document).ready(function($){
         conatiner.find('.suggester-map-div').hide();
             console.log('Geocoding result: ', place);
         
-    	if( place && place.geometry && place.types && (place.types.indexOf('street_address') != -1)) {
+    	if( place && place.geometry && place.types && (place.types.indexOf('street_address') != -1 || place.types.indexOf('establishment') != -1 || place.types.indexOf('point_of_interest') != -1 || place.types.indexOf('premise') != -1) ) {
     		//address_components
     		
             var gstring = conatiner.find('.address-suggester').val();

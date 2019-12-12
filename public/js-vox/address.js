@@ -131,7 +131,7 @@ jQuery(document).ready(function($){
         conatiner.find('.geoip-confirmation').hide();
         conatiner.find('.suggester-map-div').hide();
 
-    	if( place && place.geometry && place.types && (place.types.indexOf('street_address') != -1) ) {
+    	if( place && place.geometry && place.types && (place.types.indexOf('street_address') != -1 || place.types.indexOf('establishment') != -1 || place.types.indexOf('point_of_interest') != -1 || place.types.indexOf('premise') != -1) ) {
     		//address_components
     		console.log('Geocoding result: ', place);
     		
