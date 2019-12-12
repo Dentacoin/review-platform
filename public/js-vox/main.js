@@ -965,7 +965,9 @@ $(document).ready(function(){
 		$('.popup').removeClass('active');
 		$('#'+id+'.popup').addClass('active');
 		handlePopups();
-		$('body').addClass('popup-visible');
+		if ($('.popup.active').length) {
+			$('body').addClass('popup-visible');
+		}
 	}
 
 	closePopup = function() {
