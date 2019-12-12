@@ -187,7 +187,12 @@ jQuery(document).ready(function($){
             	if( $('.search-form .results a.active').length ) {
             		window.location.href = $('.search-form .results a.active').first().attr('href');
             	} else if( $('.search-form .results .dentists-results a').length ) {
-            		window.location.href = lang + '/dentists/' + encodeURIComponent( $(this).val() ) + '/all-results';
+            		if ($('.search-form .results .dentists-results a').length > 1) {
+            			window.location.href = lang + '/dentists/' + encodeURIComponent( $(this).val() ) + '/all-results';
+            		} else {
+            			window.location.href = $('.search-form .results .dentists-results a').first().attr('href');
+            		}
+            		
             	} else if( $('.search-form .results .locations-results a').length ) {
             		window.location.href = $('.search-form .results .locations-results a').first().attr('href');
             	}
