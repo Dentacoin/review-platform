@@ -16,7 +16,7 @@
                 <h4 class="panel-title"> Filter </h4>
             </div>
             <div class="panel-body">
-                <form class="col-md-12" method="get" action="{{ url('cms/'.$current_page) }}" >
+                <form class="col-md-12" method="get" action="{{ url('cms/vox/recommendations') }}" >
                     <div class="col-md-2">
                         <input type="text" class="form-control" name="search-user-id" value="{{ $search_user_id }}" placeholder="User ID">
                     </div>

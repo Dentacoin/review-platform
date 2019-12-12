@@ -33,7 +33,7 @@ class RecommendationsController extends AdminController
         if( null !== $this->request->input('results-number')) {
             $results = trim($this->request->input('results-number'));
         } else {
-            $results = 50;
+            $results = 500;
         }
 
         if($results == 0) {

@@ -1530,7 +1530,8 @@ $(document).ready(function(){
 
 
 	$('.recommend-radio').change( function(e) {
-		$(this).closest('.recommend-icons').find('label').removeClass('active');
+		$('.recommend-radio').not(this).attr('disabled', 'disabled');
+		//$(this).closest('.recommend-icons').find('label').removeClass('active');
 		$(this).closest('label').addClass('active');
 		$('#recommend-form').submit();
 	});
@@ -1605,6 +1606,10 @@ $(document).ready(function(){
 
 		$('.christmas-banner').hide();
 	});
+
+	if ($('.daily-limit-reached').length) {
+		hoursCountdown();
+	}
 
 });
 

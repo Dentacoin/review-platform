@@ -320,12 +320,12 @@
                                     <div class="col-md-2">
                                         {{ Form::number( 'country_percentage', !empty($item) ? $item->country_percentage : '' , array('class' => 'form-control', 'placeholder' => 'Number from 1 to 100') ) }}
                                     </div>
-                                    @if(!empty($item) && !empty($item->users_percentage))
+                                    @if(!empty($item) && !empty($item->users_percentage) && !empty($item->country_percentage))
                                         <div class="col-md-3" style="border: 1px solid black;padding-top: 10px;padding-bottom: 10px;">
                                             <b> Current users percentage :</b> <br/><br/>
 
                                             @foreach($item->users_percentage as $c => $up)
-                                                <p {!! !empty($item->country_percentage) && intval($item->country_percentage) < intval($up) ? 'style="color:red;"' : '' !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
+                                                <p {!! intval($item->country_percentage) < intval($up) ? 'style="color:red;"' : '' !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
                                             @endforeach
                                         </div>
                                     @endif
