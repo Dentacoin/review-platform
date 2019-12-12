@@ -159,7 +159,7 @@ class LoginController extends FrontController
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-login']))
                     ->withInput()
                     ->with('error-message', trans('trp.popup.login.error-fb', [
-                    'link' => '<a href="'.getLangUrl('register').'">',
+                    'link' => '<a class="sign-in-button" href="javascript:;">',
                     'endlink' => '</a>',
                 ]) );
             }
