@@ -90,7 +90,14 @@ class ReviewsController extends AdminController
             } else if($item->clinic_id) {
                 $dentist = User::find($item->clinic_id);
             }
-            DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->delete();
+
+            
+            $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
+
+            if (!empty($reward_for_review)) {
+                $reward_for_review->delete();
+            }
+
             Review::destroy( $id );
             if( !empty($dentist) ) {
                 $dentist->recalculateRating();
@@ -132,7 +139,13 @@ class ReviewsController extends AdminController
                     } else if($item->clinic_id) {
                         $dentist = User::find($item->clinic_id);
                     }
-                    DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->delete();
+
+            
+                    $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
+
+                    if (!empty($reward_for_review)) {
+                        $reward_for_review->delete();
+                    }
                     Review::destroy( $r_id );
                     if( !empty($dentist) ) {
                         $dentist->recalculateRating();

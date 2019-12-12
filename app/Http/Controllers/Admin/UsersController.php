@@ -823,7 +823,11 @@ class UsersController extends AdminController
                 $dentist = User::find($item->clinic_id);
             }
             
-            DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->delete();
+            $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
+
+            if (!empty($reward_for_review)) {
+                $reward_for_review->delete();
+            }
             
             Review::destroy( $review_id );
             if( !empty($dentist) ) {
