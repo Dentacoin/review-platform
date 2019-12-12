@@ -524,7 +524,7 @@ class DentistController extends FrontController
             'aggregated_rates_total' => $aggregated_rates_total,
             'aggregated' => $aggregated,
             'social_image' => $social_image,
-            'canonical' => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
+            'canonical' => $item->getLink(),
             'countries' => Country::with('translations')->get(),
             'js' => [
                 'videojs.record.min.js',

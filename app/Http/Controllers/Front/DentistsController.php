@@ -441,7 +441,7 @@ class DentistsController extends FrontController
             'social_title' => !empty($social_title) ? $social_title : null,
             'social_description' => !empty($social_description) ? $social_description : null,
             'formattedAddress' => $formattedAddress,
-            'canonical' => getLangUrl((empty($filter) ? 'dentists/' : '').$query.(!empty($filter) ? '/'.$filter : '')),
+            'canonical' => getLangUrl((empty($filter) ? 'dentists/' : '').str_replace([' ', "'"], ['-', ''], $query).(!empty($filter) ? '/'.$filter : '')),
             'worldwide' => $query=='worldwide',
             'zoom' => $query=='worldwide' ? 2 : 13,
             'mode' => $mode,
