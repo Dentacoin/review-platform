@@ -209,6 +209,9 @@ class UsersController extends AdminController
             'dentist_clinic.approved' => 'Dentists & Clinics (Approved)',
             'dentist_clinic.rejected' => 'Dentists & Clinics (Rejected)',
             'dentist_clinic.partners' => 'Dentists & Clinics (Partners)',
+            'dentist_clinic.added_new' => 'Dentists & Clinics (Added New)',
+            'dentist_clinic.added_approved' => 'Dentists & Clinics (Added Approved)',
+            'dentist_clinic.added_rejected' => 'Dentists & Clinics (Added Rejected)',
             'dentist_clinic.admin_imported' => 'Dentists & Clinics (Admin Imported)',
         ];
 

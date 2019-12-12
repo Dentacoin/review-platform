@@ -336,7 +336,14 @@
                                 <div class="form-group">
                                     <div class="col-md-12" style="text-align: right;">
                                         <span style="color: black;">Deleted at: {{ $item->deleted_at->toDateTimeString() }}</span><br/><br/>
-                                        <span style="color: black;">(A user can be deleted if an administrator deletes it OR automatically if falls in blacklist)</span>
+                                        <span style="color: black;">(A user can be deleted if an administrator deletes it OR automatically if falls in blacklist, duplicated Civic ID)</span>
+                                    </div>
+                                </div>
+                            @endif
+                            @if($item->invited_by && $item->is_dentist)
+                                <div class="form-group" style="text-align: right;">
+                                    <div class="col-md-12">
+                                        Added by patient <a href="{{ url('cms/users/edit/'.App\Models\User::find($item->invited_by)->id) }}">{{ App\Models\User::find($item->invited_by)->name }}</a>
                                     </div>
                                 </div>
                             @endif
