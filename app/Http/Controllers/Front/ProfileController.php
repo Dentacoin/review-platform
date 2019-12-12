@@ -614,7 +614,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $invitation->invited_email = 'whatsapp';
             $invitation->save();
 
-            $text = 'Dr. '.$this->user->name.' invited you to leave a review on Trusted Reviews - the only platform, which rewards patients for their verified feedback! '.rawurlencode(getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'));
+            $text = 'Dr. '.$this->user->name.' invited you to leave a review on Trusted Reviews - the only platform, which rewards patients for their verified feedback! '.rawurlencode(getLangUrl('whatsapp-invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'));
 
             return Response::json([
                 'success' => true,

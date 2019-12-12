@@ -1756,6 +1756,15 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
         return $arr;
     }
 
+    public static function encrypt($raw_text) {
+        $length = openssl_cipher_iv_length(env('CRYPTO_METHOD'));
+        $iv = openssl_random_pseudo_bytes($length);
+        $encrypted = openssl_encrypt($raw_text, env('CRYPTO_METHOD'), env('CRYPTO_KEY'), OPENSSL_RAW_DATA, $iv);
+        //here we append the $iv to the encrypted, because we will need it for the decryption
+        $encrypted_with_iv = base64_encode($encrypted) . '|' . base64_encode($iv);
+        return $encrypted_with_iv;
+    }
+
     public static function decrypt($encrypted_text) {
         $arr = explode('|', $encrypted_text);
         if (count($arr)!=2) {
