@@ -811,7 +811,7 @@ class UsersController extends AdminController
         
         if(!empty($item)) {
             $uid = $item->user_id;
-            $patient = User::find($uid);
+            $patient = User::where('id', $uid)->withTrashed()->first();
 
             ReviewAnswer::where([
                 ['review_id', $item->id],
@@ -822,9 +822,8 @@ class UsersController extends AdminController
             } else if($item->clinic_id) {
                 $dentist = User::find($item->clinic_id);
             }
-            
-            $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
 
+            $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
             if (!empty($reward_for_review)) {
                 $reward_for_review->delete();
             }

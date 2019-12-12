@@ -79,7 +79,7 @@ class ReviewsController extends AdminController
         
         if(!empty($item)) {
             $uid = $item->user_id;
-            $patient = User::find($uid);
+            $patient = User::where('id', $uid)->withTrashed()->first();
 
             ReviewAnswer::where([
                 ['review_id', $item->id],
@@ -128,7 +128,7 @@ class ReviewsController extends AdminController
                 
                 if(!empty($item)) {
                     $uid = $item->user_id;
-                    $patient = User::find($uid);
+                    $patient = User::where('id', $uid)->withTrashed()->first();
 
                     ReviewAnswer::where([
                         ['review_id', $item->id],
