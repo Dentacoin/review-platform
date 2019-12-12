@@ -305,8 +305,14 @@ class RegisterController extends FrontController
 
             if (!empty($info)) {
                 $id = json_decode($info, true)['user_id'];
-                $inv_id = json_decode($info, true)['inv_id'];
                 $hash = json_decode($info, true)['hash'];
+
+                if (isset(json_decode($info, true)['inv_id'])) {
+                    $inv_id = json_decode($info, true)['inv_id'];
+                } else {
+                    $inv_id = null;
+                }
+                
 
                 $user = User::find($id);
 
