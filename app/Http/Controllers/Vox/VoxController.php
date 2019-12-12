@@ -203,6 +203,8 @@ class VoxController extends FrontController
 	            'seo_description' => trans('vox.seo.taken-questionnaire.description', [
 	                'title' => $vox->title,
 	            ]),
+            	'canonical' => $vox->getLink(),
+            	'social_image' => $vox->getSocialImageUrl('survey'),
 				'js' => [
 					'taken-vox.js'
 				],
@@ -275,6 +277,8 @@ class VoxController extends FrontController
 		            'seo_description' => trans('vox.seo.taken-questionnaire.description', [
 		                'title' => $vox->title,
 		            ]),
+		            'canonical' => $vox->getLink(),
+		            'social_image' => $vox->getSocialImageUrl('survey'),
 					'js' => [
 						'taken-vox.js'
 					],
@@ -285,6 +289,47 @@ class VoxController extends FrontController
 		                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
 		            ],
 				]);
+			}
+
+			$daily_voxes = DcnReward::where('user_id', $this->user->id)->where('platform', 'vox')->where('type', 'survey')->where('created_at', '>', Carbon::now()->subDays(1))->count();
+
+			if($daily_voxes >= 10) {
+				$last_vox = DcnReward::where('user_id', $this->user->id)->where('platform', 'vox')->where('type', 'survey')->where('created_at', '>', Carbon::now()->subDays(1))->orderBy('id', 'desc')->first();
+
+				$time_left = '';
+
+	            $now = Carbon::now()->subDays(1);
+	            $time_left = $last_vox->created_at->diffInHours($now).':'.
+	            str_pad($last_vox->created_at->diffInMinutes($now)%60, 2, '0', STR_PAD_LEFT).':'.
+	            str_pad($last_vox->created_at->diffInSeconds($now)%60, 2, '0', STR_PAD_LEFT);
+
+				return $this->ShowVoxView('daily-limit-reached', array(
+					'vox' => $vox,
+					'time_left' => $time_left,					
+		            'canonical' => $vox->getLink(),
+		            'social_image' => $vox->getSocialImageUrl('survey'),
+
+		            'seo_title' => trans('vox.seo.questionnaire.title', [
+		                'title' => $vox->title,
+		                'description' => $vox->description,
+		                'stats_description' => $vox->stats_description
+		            ]),
+		            'seo_description' => trans('vox.seo.questionnaire.description', [
+		                'title' => $vox->title,
+		                'description' => $vox->description,
+		                'stats_description' => $vox->stats_description
+		            ]),
+		            'social_title' => trans('vox.social.questionnaire.title', [
+		                'title' => $vox->title,
+		                'description' => $vox->description,
+		                'stats_description' => $vox->stats_description
+		            ]),
+		            'social_description' => trans('vox.social.questionnaire.description', [
+		                'title' => $vox->title,
+		                'description' => $vox->description,
+		                'stats_description' => $vox->stats_description
+		            ]),
+				));
 			}
 		}
 
