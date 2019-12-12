@@ -227,10 +227,11 @@ class Email extends Model
 				'[/invitelink]',
 			), array(
 				$this->meta['clinic_name'] ?? '',
-				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$this->meta['invitation_id'], null, $domain).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $this->meta['invitation_id'])))), null, $domain).'">',
 				'</a>',
 			), $content);
 		}
+		
 
 		if($this->template->id==7 || $this->template->id==17 || $this->template->id==25 || $this->template->id==27) { //Invite
 			$content = str_replace(array(
@@ -239,7 +240,7 @@ class Email extends Model
 				'[/invitelink]',
 			), array(
 				$this->meta['friend_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.($this->meta['invitation_id'] ?? ''), null, $domain).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $this->meta['invitation_id'] ?? '')))), null, $domain).'">',
 				'</a>',
 			), $content);
 		}

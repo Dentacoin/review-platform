@@ -93,7 +93,7 @@
 						</div>
 						<div class="form-group clearfix flex break-tablet">
 						  	<div class="flex-5">
-			                    {{ Form::text( 'link', getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()), array('class' => 'form-control select-me' ) ) }}
+			                    {{ Form::text( 'link', getLangUrl('invite/?info='.base64_encode(App\Models\User::encrypt(json_encode(array('user_id' => $user->id, 'hash' => $user->get_invite_token()))))), array('class' => 'form-control select-me' ) ) }}
 						  	</div>
 						  	<div class="col">
 			                    <a class="btn btn-primary nom copy-invite-link">

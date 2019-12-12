@@ -534,7 +534,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                             'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                             'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
                             'invited_user_name' => Request::Input('name'),
-                            "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
+                            "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
                         ];
 
                         $existing_patient->sendGridTemplate(68, $substitutions);
@@ -556,7 +556,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                                     'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                                     'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
                                     'invited_user_name' => $this->user->name,
-                                    "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
+                                    "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
                                 ];
 
 
@@ -614,7 +614,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $invitation->invited_email = 'whatsapp';
             $invitation->save();
 
-            $text = 'Dr. '.$this->user->name.' invited you to leave a review on Trusted Reviews - the only platform, which rewards patients for their verified feedback! '.rawurlencode(getLangUrl('whatsapp-invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'));
+            $text = 'Dr. '.$this->user->name.' invited you to leave a review on Trusted Reviews - the only platform, which rewards patients for their verified feedback! '.rawurlencode(getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'));
 
             return Response::json([
                 'success' => true,
@@ -855,7 +855,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                                     'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                                     'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
                                     'invited_user_name' => $names[$key],
-                                    "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
+                                    "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
                                 ];
 
                                 $existing_patient->sendGridTemplate(68, $substitutions);
@@ -875,7 +875,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                                         'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                                         'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
                                         'invited_user_name' => $this->user->name,
-                                        "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id, null, 'https://reviews.dentacoin.com/'),
+                                        "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
                                     ];
 
 
@@ -1064,7 +1064,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                         'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
                         'invited_user_name' => $last_invite->invited_name,
-                        "invitation_link" => getLangUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$last_invite->id, null, 'https://reviews.dentacoin.com/'),
+                        "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $last_invite->id)))), null, 'https://reviews.dentacoin.com/'),
                     ];
 
                     $existing_patient->sendGridTemplate(68, $substitutions);

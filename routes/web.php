@@ -212,8 +212,7 @@ $reviewRoutes = function () {
 
 			Route::any('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
 
-			Route::any('invite/{id}/{hash}/{inv_id?}', 			'RegisterController@invite_accept');
-			Route::any('whatsapp-invite', 						'RegisterController@invite_accept_whatsapp');
+			Route::any('invite/', 								'RegisterController@invite_accept');
 
 			Route::get('review/{id}', 							'DentistController@fullReview');
 			Route::get('useful/{id}', 							'DentistController@useful');
@@ -358,7 +357,7 @@ $voxRoutes = function () {
 			Route::get('banned', 								'BannedController@home');
 			Route::get('profile-redirect', 						'BannedController@profile_redirect');
 
-			Route::any('invite/{id}/{hash}/{inv_id?}', 			'RegisterController@invite_accept');
+			Route::any('invite', 								'RegisterController@invite_accept');
 			
 			Route::any('registration', 							'RegisterController@register');
 			Route::post('registration/step1', 					'RegisterController@check_step_one');

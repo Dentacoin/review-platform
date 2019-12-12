@@ -72,7 +72,7 @@
 							  		</p>
 							  	</div>
 							  	<div class="col-md-12">
-				                    {{ Form::text( 'link', getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()), array('class' => 'form-control select-me' ) ) }}
+				                    {{ Form::text( 'link', getLangUrl('invite/?info='.base64_encode(App\Models\User::encrypt(json_encode(array('user_id' => $user->id, 'hash' => $user->get_invite_token()))))), array('class' => 'form-control select-me' ) ) }}
 							  	</div>
 							</div>
 

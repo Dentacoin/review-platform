@@ -112,9 +112,8 @@ class FrontController extends BaseController
 
                 $user = User::find($u_id);
                 if(!empty($user)) {
-                    return redirect(getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()));
+                    return redirect(getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $user->id, 'hash' => $user->get_invite_token()))))));
                 }
-
                 
             }
 

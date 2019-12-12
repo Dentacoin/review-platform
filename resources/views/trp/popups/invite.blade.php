@@ -189,7 +189,7 @@
 
 				<div class="flex">
 					<div class="flex-10">
-						<input type="text" id="invite-url" class="input select-me" name="link" value="{{ getLangUrl('invite/'.$user->id.'/'.$user->get_invite_token()) }}">
+						<input type="text" id="invite-url" class="input select-me" name="link" value="{{ getLangUrl('invite/?info='.base64_encode(App\Models\User::encrypt(json_encode(array('user_id' => $user->id, 'hash' => $user->get_invite_token()))))) }}">
 					</div>
 					<div class="flex-2">
 						<a class="copy-link button" href="javascript:;">

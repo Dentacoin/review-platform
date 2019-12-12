@@ -540,7 +540,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                         'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
                         'invited_user_name' => $this->user->name,
-                        "invitation_link" => getVoxUrl('invite/'.$this->user->id.'/'.$this->user->get_invite_token().'/'.$invitation->id),
+                        "invitation_link" => getVoxUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id))))),
                     ];
 
                     $this->user->sendGridTemplate(58, $substitutions);
