@@ -1225,6 +1225,10 @@ p.h2-bold {
 	    text-transform: uppercase;
     	transition: all 0.3s ease;
 
+		&.disabled {
+			background: #d3d3d3;
+		}
+
 		@media #{$tablet} {
 			margin-top: 20px;
 			display: inline-block;
@@ -4172,6 +4176,11 @@ body.vox-public {
 				&.request-survey-stat {
 					background-color: #ffd9e4;
 					border-color: #ffd9e4;
+
+					&.disabled {
+						background-color: #a29296;
+    					border-color: #796b6f;
+					}
 
 					.cover {
 						width: 260px;

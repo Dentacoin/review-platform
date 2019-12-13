@@ -894,6 +894,8 @@ p.h2-bold {
     border-radius: 10px;
     text-transform: uppercase;
     transition: all 0.3s ease; }
+    .section-take-surveys .white-button.disabled {
+      background: #d3d3d3; }
     @media screen and (max-width: 1080px) {
       .section-take-surveys .white-button {
         margin-top: 20px;
@@ -2875,6 +2877,9 @@ p.h2-bold {
       .page-stats .stats-list .stats-holder .vox-stat.request-survey-stat {
         background-color: #ffd9e4;
         border-color: #ffd9e4; }
+        .page-stats .stats-list .stats-holder .vox-stat.request-survey-stat.disabled {
+          background-color: #a29296;
+          border-color: #796b6f; }
         .page-stats .stats-list .stats-holder .vox-stat.request-survey-stat .cover {
           width: 260px;
           height: 176px;

@@ -61,7 +61,7 @@
 						</p>
 					</div>
 					<div class="stats-cta flex">
-						<a class="blue-button" href="javascript:;" data-popup="request-survey-popup">
+						<a class="blue-button {!! $user->status != 'approved' ? 'disabled' : '' !!}" href="javascript:;" data-popup="request-survey-popup">
 							{{ trans('vox.page.home.request-survey.request') }}
 						</a>
 					</div>
@@ -163,7 +163,7 @@
 					@endif
 				</h3>
 				@if($user->is_dentist)
-					<a href="javascript:;" data-popup="request-survey-popup" class="white-button">
+					<a href="javascript:;" data-popup="request-survey-popup" class="white-button {!! $user->status != 'approved' ? 'disabled' : '' !!}">
 						REQUEST A SURVEY
 					</a>
 				@else
