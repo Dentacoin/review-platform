@@ -344,7 +344,7 @@
                             @if(!empty($item->invited_by) && $item->is_dentist)
                                 <div class="form-group" style="text-align: right;">
                                     <div class="col-md-12">
-                                        Added by patient <a href="{{ url('cms/users/edit/'.App\Models\User::find($item->invited_by)->id) }}">{{ App\Models\User::find($item->invited_by)->name }}</a>
+                                        Added by patient <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
                                     </div>
                                 </div>
                             @endif
@@ -363,7 +363,7 @@
                             <div class="form-group">
                                 <div class="col-md-6"></div>
                                 <div class="col-md-6">
-                                    @if($item->deleted_at)
+                                    @if(!empty($item->deleted_at))
                                         <a href="{{ url('cms/users/restore/'.$item->id) }}" class="btn btn-sm btn-info form-control user-b"> Restore </a>
                                     @else
                                         <a href="{{ url('cms/users/delete/'.$item->id) }}" class="btn btn-sm btn-danger form-control user-b"> Delete </a>
