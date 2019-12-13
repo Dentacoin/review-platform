@@ -293,7 +293,7 @@ UNCONFIRMED TRANSACTIONS
                                         'transaction_amount' => $trans->amount,
                                         'transaction_address' => $trans->address,
                                         'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
-                                    ], $trans->type=='vox-cashout' ? 'vox' : 'trp' );
+                                    ], $trans->type=='vox' ? 'vox' : 'trp' );
                                 }
                                 $found = true;
                                 echo 'COMPLETED!'.PHP_EOL;

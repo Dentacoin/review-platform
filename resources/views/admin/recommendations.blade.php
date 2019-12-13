@@ -23,6 +23,9 @@
                     <div class="col-md-2">
                         <input type="text" class="form-control" name="search-name-user" value="{{ $search_name_user }}" placeholder="User name">
                     </div>
+                    <div class="col-md-1">
+                        <input type="text" class="form-control" name="search-scale" value="{{ $search_scale }}" placeholder="Scale number">
+                    </div>
                     <div class="col-md-2">
                         <input type="text" class="form-control" name="results-number" value="{{ $results_number }}" placeholder="Results ( enter 0 to show all )">
                     </div>

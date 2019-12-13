@@ -29,6 +29,9 @@ class RecommendationsController extends AdminController
                 $query->where('name', 'LIKE', $name.'%');
             });
         }
+        if(!empty($this->request->input('search-scale'))) {
+            $recommendations = $recommendations->where('scale', $this->request->input('search-scale'));
+        }
 
         if( null !== $this->request->input('results-number')) {
             $results = trim($this->request->input('results-number'));
@@ -46,6 +49,7 @@ class RecommendationsController extends AdminController
             'recommendations' => $recommendations,
             'search_name_user' => $this->request->input('search-name-user'),
             'search_user_id' => $this->request->input('search-user-id'),
+            'search_scale' => $this->request->input('search-scale'),
             'results_number' => $this->request->input('results-number'),
         ));
     }
