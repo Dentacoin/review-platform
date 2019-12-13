@@ -88,8 +88,8 @@
 					</div>
 					<div class="col">
 						<div class="modern-field">
-							<input type="email" name="email" id="invite-name" class="modern-input invite-email" autocomplete="off">
-							<label for="invite-name">
+							<input type="email" name="email" id="invite-email" class="modern-input invite-email" autocomplete="off">
+							<label for="invite-email">
 								<span>{!! nl2br(trans('trp.popup.popup-invite.email')) !!}:</span>
 							</label>
 						</div>

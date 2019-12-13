@@ -858,6 +858,7 @@ class UsersController extends AdminController
         $item = User::onlyTrashed()->find($id);
 
         if(!empty($item)) {
+            $item->restoreActions();
             $item->restore();
         }
 
@@ -1041,6 +1042,7 @@ class UsersController extends AdminController
                                     }
                                 } else if( $this->request->input($key)=='approved' ) {
                                     if( $item->deleted_at ) {
+                                        $item->restoreActions();
                                         $item->restore();
                                     }
 

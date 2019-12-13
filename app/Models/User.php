@@ -20,6 +20,7 @@ use App\Models\Email;
 use App\Models\Reward;
 use App\Models\DcnReward;
 use App\Models\DcnCashout;
+use App\Models\DentistClaim;
 use App\Models\VoxCrossCheck;
 use App\Models\UserBan;
 use App\Models\UserAsk;
@@ -1180,6 +1181,47 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         }
 
         $this->logoutActions();
+    }
+
+    public function restoreActions() {
+
+        $id = $this->id;
+        $teams = UserTeam::where(function($query) use ($id) {
+            $query->where( 'dentist_id', $id)->orWhere('user_id', $id);
+        })->withTrashed()->get();
+
+        if (!empty($teams)) {
+           foreach ($teams as $team) {
+               $team->restore();
+           }
+        }
+
+        $user_invites = UserInvite::where(function($query) use ($id) {
+            $query->where( 'user_id', $id)->orWhere('invited_id', $id);
+        })->withTrashed()->get();
+
+        if (!empty($user_invites)) {
+           foreach ($user_invites as $user_invite) {
+               $user_invite->restore();
+           }
+        }
+
+        $claims = DentistClaim::where('dentist_id', $id)->withTrashed()->get();
+
+        if($claims->isNotEmpty()) {
+            foreach ($claims as $c) {
+                $c->restore();
+            }
+        }
+
+        $transactions = DcnTransaction::where('user_id', $this->id)->whereIn('status', ['unconfirmed', 'new', 'failed', 'first'])->withTrashed()->get();
+
+        if ($transactions->isNotEmpty()) {
+            foreach ($transactions as $trans) {
+                $trans->status = 'new';
+                $trans->save();
+            }
+        }
     }
 
     public function canInvite($platform) {
