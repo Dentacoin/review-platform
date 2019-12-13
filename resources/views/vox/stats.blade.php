@@ -176,7 +176,7 @@
 	@endif
 
 	@if(!empty($user))
-		@if($user->is_dentist && ($user->status == 'approved' || $user->status != 'test'))
+		@if($user->is_dentist && ($user->status == 'approved' || $user->status == 'test'))
 			@include('vox.popups.request-survey')
 		@elseif(!$user->is_dentist)
 			@include('vox.popups.request-survey-patients')
