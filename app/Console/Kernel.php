@@ -478,12 +478,12 @@ NEW & FAILED TRANSACTIONS
 
                 Mail::raw($mtext, function ($message) {
 
-                    $receiver = 'ali.hashem@dentacoin.com';
                     $sender = config('mail.from.address');
                     $sender_name = config('mail.from.name');
 
                     $message->from($sender, $sender_name);
-                    $message->to( $receiver );
+                    $message->to( 'ali.hashem@dentacoin.com' );
+                    $message->to( 'betina.bogdanova@dentacoin.com' );
                     //$message->to( 'dokinator@gmail.com' );
                     $message->subject('Suspicios dentists deleted');
                 });

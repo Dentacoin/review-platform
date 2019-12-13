@@ -127,14 +127,12 @@ class AddDentistController extends FrontController
                 $patient = $this->user;
 
                 Mail::raw($mtext, function ($message) use ($newdentist, $patient) {
-                    $receiver = 'ali.hashem@dentacoin.com';
-                    //$receiver = 'gergana@youpluswe.com';
                     $sender = config('mail.from.address');
                     $sender_name = config('mail.from.name');
 
                     $message->from($sender, $sender_name);
-                    $message->to( $receiver );
-                    //$message->to( 'dokinator@gmail.com' );
+                    $message->to( 'ali.hashem@dentacoin.com' );
+                    $message->to( 'betina.bogdanova@dentacoin.com' );
                     $message->replyTo($patient->email, $patient->name);
                     $message->subject('Patient invites dentist to register');
                 });

@@ -271,12 +271,12 @@ class IndexController extends FrontController
 
 		        Mail::raw($mtext, function ($message) {
 
-		            $sender = 'dentavox@dentacoin.com';
-		            $sender = 'donika.kraeva@dentacoin.com';
+		            $sender = config('mail.from.address-vox');
 		            $sender_name = config('mail.from.name-vox');
 
 		            $message->from($sender, $sender_name);
-		            $message->to( $sender );
+		            $message->to( 'dentavox@dentacoin.com' );
+		            $message->to( 'donika.kraeva@dentacoin.com' );
 		            $message->replyTo($this->user->email, $this->user->getName());
 		            $message->subject('Survey Request');
 		        });
@@ -314,13 +314,12 @@ class IndexController extends FrontController
 
 	        Mail::raw($mtext, function ($message) {
 
-	            $sender = 'dentavox@dentacoin.com';
-	            $sender = 'donika.kraeva@dentacoin.com';
-	            //$sender = 'gergana@youpluswe.com';
-	            $sender_name = config('mail.from.name-vox');
+	            $sender = config('mail.from.address-vox');
+                $sender_name = config('mail.from.name-vox');
 
-	            $message->from($sender, $sender_name);
-	            $message->to( $sender );
+                $message->from($sender, $sender_name);
+                $message->to( 'dentavox@dentacoin.com' );
+                $message->to( 'donika.kraeva@dentacoin.com' );
 	            $message->subject('Survey Request From Patient or Not Logged User');
 	        });
 

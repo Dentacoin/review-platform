@@ -502,13 +502,12 @@ class RegisterController extends FrontController
 
             Mail::raw($mtext, function ($message) use ($newuser) {
 
-                $receiver = 'ali.hashem@dentacoin.com';
                 $sender = config('mail.from.address');
                 $sender_name = config('mail.from.name');
 
                 $message->from($sender, $sender_name);
-                $message->to( $receiver );
-                //$message->to( 'dokinator@gmail.com' );
+                $message->to( 'ali.hashem@dentacoin.com' );
+                $message->to( 'betina.bogdanova@dentacoin.com' );
                 $message->replyTo($newuser->email, $newuser->getName());
                 $message->subject('New Dentist/Clinic registration');
             });

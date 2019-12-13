@@ -356,14 +356,12 @@ Explain how dentist is related to this office: '.$claim->explain_related.' <br/>
 Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 
 				Mail::send([], [], function ($message) use ($mtext, $user) {
-					$receiver = 'ali.hashem@dentacoin.com';
-					//$receiver = 'gergana@youpluswe.com';
 		            $sender = config('mail.from.address');
 		            $sender_name = config('mail.from.name');
 
 		            $message->from($sender, $sender_name);
-		            $message->to( $receiver ); //$sender
-		            //$message->to( 'dokinator@gmail.com' );
+                    $message->to( 'ali.hashem@dentacoin.com' );
+                    $message->to( 'betina.bogdanova@dentacoin.com' );
 		            $message->replyTo($user->email, $user->getName());
 		            $message->subject('Invited Dentist Claimed His Profile');
 		            $message->setBody($mtext, 'text/html'); // for HTML rich messages

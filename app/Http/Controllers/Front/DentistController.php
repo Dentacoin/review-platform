@@ -1085,15 +1085,13 @@ class DentistController extends FrontController
 Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$patient->id;
 
                     Mail::raw($mtext, function ($message) use ($patient) {
-                        $receiver = 'petya.ivanova@dentacoin.com';
-                        $receiver = 'donika.kraeva@dentacoin.com';
-                        $receiver = 'gergana@youpluswe.com';
                         $sender = config('mail.from.address');
                         $sender_name = config('mail.from.name');
 
                         $message->from($sender, $sender_name);
-                        $message->to( $receiver );
-                        //$message->to( 'dokinator@gmail.com' );
+                        $message->to( 'petya.ivanova@dentacoin.com' );
+                        $message->to( 'donika.kraeva@dentacoin.com' );
+                        $message->to( 'gergana@youpluswe.com' );
                         $message->replyTo($patient->email, $patient->name);
                         $message->subject('Suspicious Patient Activity - 3 Reviews');
                     });
