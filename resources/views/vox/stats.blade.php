@@ -146,37 +146,41 @@
 				<a href="https://dentavox.dentacoin.com/blog" target="_blank" class="white-button">VISIT BLOG</a>
 			</div>
 			<div class="col">
-				<img src="{{ url('new-vox-img/blog-laptop.png') }}">
+				<img src="{{ url('new-vox-img/blogg-laptop.png') }}">
 			</div>
 		</div>
 	</div>
 
-	<div class="section-take-surveys">
-		<div class="container">
-			<img src="{{ url('new-vox-img/custom-survey-vox.png') }}">
-			<h3>
-				@if(!empty($user) && $user->is_dentist)
-					You  want to explore a topic <br> within a targeted audience?
+	@if(!empty($user))
+		<div class="section-take-surveys">
+			<div class="container">
+				<img src="{{ url('new-vox-img/custom-survey-vox.png') }}">
+				<h3>
+					@if($user->is_dentist)
+						You  want to explore a topic <br> within a targeted audience?
+					@else
+						You have an idea for a new survey?
+					@endif
+				</h3>
+				@if($user->is_dentist)
+					<a href="javascript:;" data-popup="request-survey-popup" class="white-button">
+						REQUEST A SURVEY
+					</a>
 				@else
-					You have an idea for a new survey?
+					<a href="javascript:;" data-popup="request-survey-patient-popup" class="white-button">
+						Share it
+					</a>
 				@endif
-			</h3>
-			@if(!empty($user) && $user->is_dentist)
-				<a href="javascript:;" data-popup="request-survey-popup" class="white-button">
-					REQUEST A SURVEY
-				</a>
-			@else
-				<a href="javascript:;" data-popup="request-survey-patient-popup" class="white-button">
-					Share it
-				</a>
-			@endif
+			</div>
 		</div>
-	</div>
+	@endif
 
-	@if(!empty($user) && $user->is_dentist)
-		@include('vox.popups.request-survey')
-	@else
-		@include('vox.popups.request-survey-patients')
+	@if(!empty($user))
+		@if($user->is_dentist && $user->status == 'approved')
+			@include('vox.popups.request-survey')
+		@elseif(!$user->is_dentist)
+			@include('vox.popups.request-survey-patients')
+		@endif
 	@endif
 
 @endsection

@@ -32,7 +32,7 @@
 					<a href="https://dentavox.dentacoin.com/blog" target="_blank" class="white-button">VISIT BLOG</a>
 				</div>
 				<div class="col">
-					<img src="{{ url('new-vox-img/blog-laptop.png') }}">
+					<img src="{{ url('new-vox-img/blogg-laptop.png') }}">
 				</div>
 			</div>
 		</div>
