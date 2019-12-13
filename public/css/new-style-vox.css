@@ -9161,12 +9161,12 @@ svg:not(:root) {
           display: none; } }
 
 .blog-wrapper {
-  background: url("../new-vox-img/stats-blogg.jpg") 50% 57% no-repeat;
+  background: url("../new-vox-img/b.jpg") 50% 57% no-repeat;
   background-size: cover;
   padding: 70px 0px; }
   @media screen and (max-width: 1080px) {
     .blog-wrapper {
-      background-image: url("../new-vox-img/stats-blogg-mobile.jpg"); } }
+      background-image: url("../new-vox-img/b-mobile.jpg"); } }
   @media screen and (max-width: 768px) {
     .blog-wrapper {
       padding-top: 40px;

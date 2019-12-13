@@ -13187,12 +13187,12 @@ svg:not(:root) {
 }
 
 .blog-wrapper {
-	background: url('../new-vox-img/stats-blogg.jpg') 50% 57% no-repeat;
+	background: url('../new-vox-img/b.jpg') 50% 57% no-repeat;
 	background-size: cover;
 	padding: 70px 0px;
 
 	@media #{$tablet} {
-		background-image: url('../new-vox-img/stats-blogg-mobile.jpg');
+		background-image: url('../new-vox-img/b-mobile.jpg');
 	}
 
 	@media #{$phone} {
