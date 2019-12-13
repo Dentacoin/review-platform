@@ -2877,9 +2877,6 @@ p.h2-bold {
       .page-stats .stats-list .stats-holder .vox-stat.request-survey-stat {
         background-color: #ffd9e4;
         border-color: #ffd9e4; }
-        .page-stats .stats-list .stats-holder .vox-stat.request-survey-stat.disabled {
-          background-color: #a29296;
-          border-color: #796b6f; }
         .page-stats .stats-list .stats-holder .vox-stat.request-survey-stat .cover {
           width: 260px;
           height: 176px;
@@ -2905,6 +2902,9 @@ p.h2-bold {
         .page-stats .stats-list .stats-holder .vox-stat.request-survey-stat .stats-cta a {
           background-color: #ff0046;
           border-color: #ff0046; }
+          .page-stats .stats-list .stats-holder .vox-stat.request-survey-stat .stats-cta a.disabled {
+            background-color: #a29296;
+            border-color: #796b6f; }
           @media screen and (max-width: 768px) {
             .page-stats .stats-list .stats-holder .vox-stat.request-survey-stat .stats-cta a {
               width: auto; } }

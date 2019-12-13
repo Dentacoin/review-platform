@@ -4177,11 +4177,6 @@ body.vox-public {
 					background-color: #ffd9e4;
 					border-color: #ffd9e4;
 
-					&.disabled {
-						background-color: #a29296;
-    					border-color: #796b6f;
-					}
-
 					.cover {
 						width: 260px;
 					    height: 176px;
@@ -4217,6 +4212,11 @@ body.vox-public {
 						a {
 							background-color: #ff0046;
     						border-color: #ff0046;
+
+							&.disabled {
+								background-color: #a29296;
+		    					border-color: #796b6f;
+							}
 
     						@media #{$phone} {
     							width: auto;
