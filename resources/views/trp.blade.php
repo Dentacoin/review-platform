@@ -12,6 +12,10 @@
         <meta name="description" content="{{ $seo_description }}">
         <link rel="canonical" href="{{ $canonical }}" />
 
+        @if(!empty($og_url))
+			<meta property="og:url" content="{{ $og_url }}" />
+		@endif
+
         <meta property="og:locale" content="{{ App::getLocale() }}" />
         <meta property="og:title" content="{{ $social_title }}"/>
         <meta property="og:description" content="{{ $social_description }}"/>
