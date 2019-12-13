@@ -1188,7 +1188,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         $id = $this->id;
         $teams = UserTeam::where(function($query) use ($id) {
             $query->where( 'dentist_id', $id)->orWhere('user_id', $id);
-        })->withTrashed()->get();
+        })->get();
 
         if (!empty($teams)) {
            foreach ($teams as $team) {
@@ -1198,7 +1198,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
         $user_invites = UserInvite::where(function($query) use ($id) {
             $query->where( 'user_id', $id)->orWhere('invited_id', $id);
-        })->withTrashed()->get();
+        })->get();
 
         if (!empty($user_invites)) {
            foreach ($user_invites as $user_invite) {
@@ -1206,7 +1206,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
            }
         }
 
-        $claims = DentistClaim::where('dentist_id', $id)->withTrashed()->get();
+        $claims = DentistClaim::where('dentist_id', $id)->get();
 
         if($claims->isNotEmpty()) {
             foreach ($claims as $c) {
@@ -1214,7 +1214,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             }
         }
 
-        $transactions = DcnTransaction::where('user_id', $this->id)->whereIn('status', ['unconfirmed', 'new', 'failed', 'first'])->withTrashed()->get();
+        $transactions = DcnTransaction::where('user_id', $this->id)->whereIn('status', ['unconfirmed', 'new', 'failed', 'first'])->get();
 
         if ($transactions->isNotEmpty()) {
             foreach ($transactions as $trans) {
