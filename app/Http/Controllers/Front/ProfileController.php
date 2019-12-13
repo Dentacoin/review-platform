@@ -426,7 +426,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
                     if($invitation) {
                         if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited') ] );
+                            return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.' ] );
                         }
                         $invitation->invited_name = $name;
                         $invitation->created_at = Carbon::now();
@@ -489,7 +489,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         }
 
                         if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited') ] );
+                            return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.'] );
                         }
 
                         $invitation->invited_name = Request::Input('name');
@@ -781,7 +781,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         $alert_color = 'orange';
                     }
                 } else if(!empty($already_invited) && ($already_invited == count($emails))) {
-                    $final_message = 'Review invitations sending failed! These patients already submitted their feedback this month.';
+                    $final_message = 'Sending review invitations failed! You already invited these patients to submit feedback this month.';
                     $alert_color = 'warning';
                 } else if(!empty($already_invited) && $already_invited != count($emails)) {
                     $final_message = 'Review invitations were sent successfully to patients with valid email addresses. However, note that some patients were excluded from the invites because they already submitted feedback this month.';
@@ -1102,7 +1102,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
                 if($invitation) {
                     if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                        return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited') ] );
+                        return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.' ] );
                     }
                     $invitation->invited_name = Request::Input('name');
                     $invitation->created_at = Carbon::now();
