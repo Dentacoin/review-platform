@@ -282,7 +282,7 @@ class RegisterController extends FrontController
                             session($sess);
 
                             if (!empty($inv) && !empty($inv->invited_id)) {
-                                $text = 'You already registered from this invite. Login to submit a review.';
+                                $text = 'You already registered from this invite. Log in to submit a review.';
 
                                 session()->pull('invitation_id');
                             } else {
