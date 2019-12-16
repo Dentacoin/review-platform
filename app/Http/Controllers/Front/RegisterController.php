@@ -290,7 +290,7 @@ class RegisterController extends FrontController
                             }
 
                             if (!empty($inv) && !empty($inv->invited_id)) {
-                                return redirect()->to( $user->getLink().'?'. http_build_query(['popup'=> !empty( $sess['join_clinic'] ) ? 'popup-register-dentist' : 'popup-register' ]).'&'.http_build_query($_GET))
+                                return redirect()->to( $user->getLink().'?'. http_build_query(['popup'=> !empty( $sess['join_clinic'] ) ? 'popup-register-dentist' : 'popup-login' ]).'&'.http_build_query($_GET))
                                 ->withInput()
                                 ->with('error-message', $text );
                             } else if($user->is_dentist) {
