@@ -13,6 +13,7 @@ use Validator;
 use Illuminate\Support\Facades\Input;
 use App\Models\User;
 use App\Models\UserBan;
+use App\Models\OldSlug;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Question;
@@ -165,6 +166,15 @@ class DentistController extends FrontController
 
         $review_id = request('review_id');
         $item = User::where('slug', 'LIKE', $slug)->first();
+
+        if(empty($item)) {
+            $old_slug = OldSlug::where('slug', 'LIKE', $slug)->first();
+
+            if (!empty($old_slug)) {
+                $item = User::where('id', $old_slug->user_id)->first();
+                return redirect( getLangUrl('dentist/'.$item->slug) );
+            }
+        }
 
         if(empty($item) || !$item->is_dentist) {
             return redirect( getLangUrl('page-not-found') );
@@ -1114,6 +1124,23 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         return false;
     }
 
-    
+    public function lead_magnet($locale=null, $slug) {
+
+        if(!empty($this->user) && $this->user->isBanned('trp')) {
+            return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+        }
+
+        $item = User::where('slug', 'LIKE', $slug)->first();
+
+        if (empty($item) || !$item->is_dentist || empty($this->user) || (!empty($this->user) && $item->id != $this->user->id )) {
+            return redirect( getLangUrl('page-not-found') );
+        }
+
+        return $this->ShowView('lead-magnet', array(
+            // 'js' => [
+            //  'leadmagnet.js',
+            // ],
+        )); 
+    }
 
 }

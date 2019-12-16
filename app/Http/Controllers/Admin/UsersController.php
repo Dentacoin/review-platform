@@ -25,6 +25,7 @@ use App\Models\ReviewAnswer;
 use App\Models\IncompleteRegistration;
 use App\Models\UserInvite;
 use App\Models\UserAsk;
+use App\Models\OldSlug;
 
 use Illuminate\Support\Facades\Input;
 
@@ -63,9 +64,12 @@ class UsersController extends AdminController
                 'type' => 'select',
                 'values' => config('titles')
             ],
-    		'name' => [
-    			'type' => 'text',
-    		],
+            'name' => [
+                'type' => 'text',
+            ],
+            'slug' => [
+                'type' => 'text',
+            ],
             'email' => [
                 'type' => 'text',
             ],
@@ -993,6 +997,46 @@ class UsersController extends AdminController
                                 $item->is_dentist = false;
                                 $item->is_clinic = false;
                             }
+                        } else if($key=='slug') {
+                            if (!empty($this->request->input($key))) {
+                                $existing_slug = User::where('id', '!=', $item->id)->where('slug', 'like', $this->request->input($key))->first();
+
+                                if (empty($existing_slug)) {
+                                    $existing_slug = OldSlug::where('user_id', '!=', $item->id)->where('slug', 'like', $this->request->input($key))->first();
+                                }
+
+                                if (!empty($existing_slug)) {
+                                    Request::session()->flash('error-message', 'This slug is already used by another user');
+                                    return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
+                                } else {
+                                    $existed_old_slug = OldSlug::where('user_id', $item->id)->where('slug', 'like', $this->request->input($key))->first();
+
+                                    if (!empty($existed_old_slug)) {
+                                        $existed_old_slug->delete();
+                                    }
+
+                                    if ($item->$key != $this->request->input($key)) {
+                                        
+                                        $oldslug = new OldSlug;
+                                        $oldslug->user_id = $item->id;
+                                        $oldslug->slug = $item->slug;
+                                        $oldslug->save();
+
+                                        $item->$key = $this->request->input($key);
+                                    }
+                                }
+                            } else {
+                                $item->$key = $this->request->input($key);
+                            }
+                        } else if($key=='name' || $key=='email') {
+                            $existing = User::withTrashed()->where('id', '!=', $item->id)->where($key, 'like', $this->request->input($key))->first();
+
+                            if (!empty($existing)) {
+                                Request::session()->flash('error-message', 'This '.$key.' is already used by another user - ID '.$existing->id);
+                                return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
+                            } else {
+                                $item->$key = $this->request->input($key);
+                            }
                         } else if($key=='status') {
                             if( $this->request->input($key) && $item->$key!=$this->request->input($key) ) {
 
@@ -1040,6 +1084,11 @@ class UsersController extends AdminController
 
                                         $patient->sendGridTemplate(65, $substitutions, 'trp');
                                     }
+
+                                    if (empty($item->slug)) {
+                                        $item->slug = $item->makeSlug();
+                                        $item->save();
+                                    }
                                 } else if( $this->request->input($key)=='approved' ) {
                                     if( $item->deleted_at ) {
                                         $item->restoreActions();
@@ -1072,6 +1121,11 @@ class UsersController extends AdminController
                                     $item->ownership = 'approved';
                                     $item->save();
                                     $to_ali->delete();
+
+                                    if (empty($item->slug)) {
+                                        $item->slug = $item->makeSlug();
+                                        $item->save();
+                                    }
 
                                 } else if( $this->request->input($key)=='pending' ) {
                                     $olde = $item->email;

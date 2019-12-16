@@ -302,9 +302,7 @@ class RegisterController extends FrontController
                                 ->withInput()
                                 ->with('success-message', $text );
                             }
-
                         }
-
                     }
                 }
             }
@@ -448,6 +446,9 @@ class RegisterController extends FrontController
             }
 
             $newuser->save();
+
+            // $newuser->slug = $newuser->makeSlug();
+            // $newuser->save();
 
             if( Request::input('photo') ) {
                 $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
@@ -901,6 +902,9 @@ class RegisterController extends FrontController
                             $newuser->invite_secret = session('invite_secret');
                         }
                         
+                        $newuser->save();
+
+                        $newuser->slug = $newuser->makeSlug();
                         $newuser->save();
 
                         if($newuser->invited_by && $newuser->invitor->canInvite('trp') && !empty(session('invitation_id'))) {

@@ -711,11 +711,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->attributes['socials'] = $value ? json_encode($value) : '';
     }
 
-    public function setNameAttribute($value) {
-        $this->attributes['name'] = $value;
-        $this->attributes['slug'] = $this->makeSlug();
-        //
-    }
+    // public function setNameAttribute($value) {
+    //     $this->attributes['name'] = $value;
+    //     //$this->attributes['slug'] = $this->makeSlug();
+    //     //
+    // }
     public function setAddressAttribute($newvalue) {
         $this->attributes['address'] = $newvalue;
         $this->attributes['lat'] = null;
@@ -877,7 +877,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $ret;
     }
 
-    private function makeSlug() {
+    public function makeSlug() {
         $name = $this->name;
         $i=0;
         $tryval = $name;
@@ -1649,15 +1649,15 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         return $result;
     }
 
-    public function getSlugAttribute($value) {
+    // public function getSlugAttribute($value) {
 
 
-        if(empty($this->attributes['slug'])) {
-            $this->attributes['slug'] = $this->makeSlug();
-            $this->save();
-        }
-        return $this->attributes['slug'];
-    }
+    //     if(empty($this->attributes['slug'])) {
+    //         $this->attributes['slug'] = $this->makeSlug();
+    //         $this->save();
+    //     }
+    //     return $this->attributes['slug'];
+    // }
 
     public function getAcceptedPaymentAttribute($value) {
         if(!empty($value)) {

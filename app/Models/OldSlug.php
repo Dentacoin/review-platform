@@ -5,19 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 use App\Models\User;
 
-class UserTeam extends Model {
+class OldSlug extends Model {
 
 	use SoftDeletes;
     
     protected $fillable = [
         'user_id', //The clinic
-        'dentist_id', //The dentist
-        'approved',
+        'slug',
     ];
-
 
     protected $dates = [
         'created_at',
@@ -25,10 +22,7 @@ class UserTeam extends Model {
         'deleted_at',
     ];
 
-	public function clinicTeam() {
-	    return $this->hasOne('App\Models\User', 'id', 'dentist_id');
-	}
-	public function clinic() {
+	public function user() {
 	    return $this->hasOne('App\Models\User', 'id', 'user_id');
 	}
 }

@@ -145,6 +145,9 @@ class RegisterController extends FrontController
                 
                 $newuser->save();
 
+                // $newuser->slug = $newuser->makeSlug();
+                // $newuser->save();
+
                 UserCategory::where('user_id', $newuser->id)->delete();
                 if(!empty(Request::input('specialization'))) {
                     foreach (Request::input('specialization') as $cat) {
@@ -721,6 +724,9 @@ class RegisterController extends FrontController
                         
                         $newuser->save();
 
+                        $newuser->slug = $newuser->makeSlug();
+                        $newuser->save();
+
                         if($newuser->invited_by && $newuser->invitor->canInvite('vox')) {
                             $inv_id = session('invitation_id');
                             if($inv_id) {
@@ -876,6 +882,9 @@ class RegisterController extends FrontController
                             $newuser->invite_secret = session('invite_secret');
                         }
                         
+                        $newuser->save();
+
+                        $newuser->slug = $newuser->makeSlug();
                         $newuser->save();
 
                         if($newuser->invited_by && $newuser->invitor->canInvite('vox')) {

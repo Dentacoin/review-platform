@@ -293,6 +293,8 @@ class LoginController extends FrontController
                 
                 $newuser->save();
 
+                $newuser->slug = $newuser->makeSlug();
+                $newuser->save();
 
                 $avatarurl = $s_user->getAvatar();
                 if($network=='fb') {
