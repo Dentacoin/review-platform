@@ -128,7 +128,7 @@ class TransactionsController extends AdminController
         $item->save();
 
         $this->request->session()->flash('success-message', 'Transaction bumped' );
-        return redirect('cms/transactions');
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
     public function stop( $id ) {
@@ -139,7 +139,7 @@ class TransactionsController extends AdminController
         $item->save();
 
         $this->request->session()->flash('success-message', 'Transaction stopped' );
-        return redirect('cms/transactions');
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
     public function massbump(  ) {
@@ -153,7 +153,7 @@ class TransactionsController extends AdminController
         }
 
         $this->request->session()->flash('success-message', 'All selected transactions are bumped' );
-        return redirect('cms/transactions');
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
     public function massstop(  ) {
@@ -166,7 +166,7 @@ class TransactionsController extends AdminController
         }
 
         $this->request->session()->flash('success-message', 'All selected transactions are stopped' );
-        return redirect('cms/transactions');
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
 }
