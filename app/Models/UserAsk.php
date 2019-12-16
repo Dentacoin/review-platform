@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 //ReverseInvite
 class UserAsk extends Model {
+
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -17,6 +20,7 @@ class UserAsk extends Model {
     protected $dates = [
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
 
     public function user() {
