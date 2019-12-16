@@ -282,7 +282,7 @@ class RegisterController extends FrontController
                             session($sess);
 
                             if (!empty($inv) && !empty($inv->invited_id)) {
-                                $text = 'The invitation has expired. Get in touch with your dentist to request a new invite.';
+                                $text = 'You already registered from this invite. Go to <a href="'.$user->getLink().'">'.$user->name.'</a> to submit review.';
 
                                 session()->pull('invitation_id');
                             } else {
