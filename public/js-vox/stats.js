@@ -1994,8 +1994,10 @@ $(document).ready(function(){
     //     $('#login-register-popup').addClass('active');
     // });
 
-    $('.blurred-button').click( function() {
-        Cookies.set('stat-url', $(this).attr('stat-url'), { expires: 1 , domain: '.dentacoin.com'});
+    $('.blurred-button').click( function(e) {
+        e.preventDefault();
+        Cookies.set('stat-url', window.location.href, { expires: 1 , domain: '.dentacoin.com'});
+        window.location.href = $(this).attr('href');
     });
 });
 
