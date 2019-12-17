@@ -366,7 +366,7 @@ class UsersController extends AdminController
             $users = $users->select(['id', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender', 'is_dentist'])->get();
         } else if(request()->input('export-sendgrid')) {
             ini_set("memory_limit",-1);
-            $users = $users->whereNull('unsubscribe')->select(['id', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender', 'is_partner', 'is_dentist', 'is_clinic', 'platform'])->get();
+            $users = $users->whereNull('unsubscribe')->select(['id','slug', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender', 'is_partner', 'is_dentist', 'is_clinic', 'platform'])->get();
         } else if($results == 0) {
             $users = $users->take(3000)->get();
         } else {
