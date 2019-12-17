@@ -98,12 +98,11 @@
                             @endif
                             @if($item->is_dentist)
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Slug</label>
-                                    <div class="col-md-10">
-                                        @include('admin.parts.user-field',[
-                                            'key' => 'slug',
-                                            'info' => $fields['slug']
-                                        ])
+                                    <label class="col-md-2 control-label">TRP Url</label>
+                                    <div class="col-md-10" style="display: flex; align-items: center;">
+                                        <span>https://reviews.dentacoin.com/en/dentist/</span>
+                                        <input class="form-control" id="user-slug" disabled="disabled" name="slug" type="text" value="{{ $item->slug }}" style="flex: 1;height: 30px;margin-left: 2px;">
+                                        <a href="javascript:;" class="btn btn-sm btn-primary" id="edit-slug" style="margin-left: 2px;">Edit</a>
                                     </div>
                                 </div>
                             @endif
@@ -343,10 +342,14 @@
                                     </div>
                                 </div>
                             @endif
+                            <div class="form-group">
+                                <div class="col-md-12" style="text-align: right;">
+                                    <span style="color: black;">Registered at: {{ $item->created_at->toDateTimeString() }}</span><br/>
+                                </div>
+                            </div>
                             @if(!empty($item->deleted_at))
                                 <div class="form-group">
                                     <div class="col-md-12" style="text-align: right;">
-                                        <span style="color: black;">Registered at: {{ $item->created_at->toDateTimeString() }}</span><br/><br/>
                                         <span style="color: black;">Deleted at: {{ $item->deleted_at->toDateTimeString() }}</span><br/><br/>
                                         <span style="color: black;">(A user can be deleted if an administrator deletes it OR automatically if falls in blacklist, duplicated Civic ID)</span>
                                     </div>

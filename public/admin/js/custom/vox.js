@@ -407,5 +407,4 @@ $(document).ready(function(){
 		$(this).parent().find('.target-wrapper').show();
 		$(this).hide();
 	});
-
 });

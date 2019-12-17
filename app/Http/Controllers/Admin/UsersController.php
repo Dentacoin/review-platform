@@ -1025,8 +1025,6 @@ class UsersController extends AdminController
                                         $item->$key = $this->request->input($key);
                                     }
                                 }
-                            } else {
-                                $item->$key = $this->request->input($key);
                             }
                         } else if($key=='name' || $key=='email') {
                             $existing = User::withTrashed()->where('id', '!=', $item->id)->where($key, 'like', $this->request->input($key))->first();

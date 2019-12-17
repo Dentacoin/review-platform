@@ -65,4 +65,10 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+	$('#edit-slug').click( function(e) {
+		e.preventDefault();
+		$('#user-slug').prop("disabled", false);
+	});
+
 });
