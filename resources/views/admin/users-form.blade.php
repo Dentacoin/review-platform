@@ -498,6 +498,34 @@
         </div>
     </div>
 
+    @if(!empty($item->patient_invites_dentist))
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-inverse">
+                    <div class="panel-heading">
+                        <div class="panel-heading-btn">
+                            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        </div>
+                        <h4 class="panel-title"> Added dentists </h4>
+                    </div>
+                    <div class="panel-body">
+                        @include('admin.parts.table', [
+                            'table_id' => 'dentist-invited',
+                            'table_fields' => [
+                                'created_at'        => array('format' => 'datetime','width' => '20%'),
+                                'dentist'           => array('template' => 'admin.parts.table-added-dentist', 'label' => 'Dentist'),
+                            ],
+                            'table_subpage' => 'reviews',
+                            'table_data' => $item->patient_invites_dentist,
+                            'table_pagination' => false,
+                            'pagination_link' => array()
+                        ])
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
 @endif
 
 @if($item->vox_surveys_and_polls->isNotEmpty())
