@@ -21,7 +21,7 @@
 		@endif
 	</div>
 @elseif($question->type == 'multiple_choice')
-	<div class="question-group question-group-{{ $question->id }} multiple-choice shuffle" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  trigger-type="{{ $question->trigger_type }}" welcome="{!! $question->vox->id == 11 ? '1' : '' !!}">
+	<div class="question-group question-group-{{ $question->id }} multiple-choice {!! empty($question->dont_randomize_answers) ? 'shuffle' : ''  !!}" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  trigger-type="{{ $question->trigger_type }}" welcome="{!! $question->vox->id == 11 ? '1' : '' !!}">
 		<div class="question">
 			{!! nl2br($question->questionWithTooltips()) !!}
 		</div>

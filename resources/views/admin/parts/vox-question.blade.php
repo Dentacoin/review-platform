@@ -59,15 +59,11 @@
                             {!! nl2br(trans('admin.page.'.$current_page.'.question-scale-hint')) !!}
                         </div>
                     </div>
-                    <div class="form-group clearfix" id="randomize-single">
+                    <div class="form-group clearfix">
                         <label class="col-md-2 control-label" for="dont_randomize_answers">Don’t randomize</label>
                         <div class="col-md-1">
                             <input type="checkbox" name="dont_randomize_answers" class="form-control" value="1" id="dont_randomize_answers" style="vertical-align: sub;width: 30px;" {!! !empty($question) && !empty($question->dont_randomize_answers) ? 'checked="checked"' : '' !!} />
-                        </div>
-                        <div class="col-md-5">
-                            Single choice questions are randomizing only if they are not a predefined scale.
-                        </div>
-                        
+                        </div>                        
                     </div>
 
                     @foreach($langs as $code => $lang_info)
