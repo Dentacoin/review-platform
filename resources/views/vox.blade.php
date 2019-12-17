@@ -222,10 +222,12 @@
 				</div>
 			</header>
 
-			<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner">
-				<img class="close-banner" src="{{ url('new-vox-img/close-popup.png') }}">
-				<video class="video-banner" id="christmasBanner" playsinline autoplay muted loop src="{{ url('new-vox-img/christmas-banner.mp4') }}" type="video/mp4" controls="" mobile-src="{{ url('new-vox-img/mobile-christmas-banner3.mp4') }}"></video>
-			</a>
+			@if($current_page != 'profile')
+				<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner">
+					<img class="close-banner" src="{{ url('new-vox-img/close-popup.png') }}">
+					<video class="video-banner" id="christmasBanner" playsinline autoplay muted loop src="{{ url('new-vox-img/christmas-banner.mp4') }}" type="video/mp4" controls="" mobile-src="{{ url('new-vox-img/mobile-christmas-banner3.mp4') }}"></video>
+				</a>
+			@endif
 
 			<div class="site-content">
 		   

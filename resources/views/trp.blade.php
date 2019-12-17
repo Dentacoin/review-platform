@@ -214,31 +214,33 @@
 
 
 
-		<div class="bottom-drawer">
-			<!--
-				<a id="ids" href="https://ids.dentacoin.com/" target="_blank">
-					<i class="fas fa-times-circle"></i>
-				</a>
-			-->
+		@if($current_page != 'profile')
+			<div class="bottom-drawer">
+				<!--
+					<a id="ids" href="https://ids.dentacoin.com/" target="_blank">
+						<i class="fas fa-times-circle"></i>
+					</a>
+				-->
 
-			<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner">
-				<img class="close-banner" src="{{ url('new-vox-img/close-popup.png') }}">
-				<video class="video-banner" id="christmasBanner" playsinline autoplay muted loop src="{{ url('img-trp/christmas-banner.mp4') }}" type="video/mp4" controls="" mobile-src="{{ url('img-trp/mobile-christmas-banner3.mp4') }}"></video>
-			</a>
-
-			<div id="cookiebar" >
-				<p>
-					{!! nl2br( trans('trp.common.cookiebar-hint',[
-						'link' => '<a href="//dentacoin.com/privacy-policy" target="_blank">',
-						'endlink' => '</a>',
-					]) ) !!}
-				</p>
-				<a class="accept" href="javascript:;">
-					{!! nl2br( trans('trp.common.cookiebar-button') ) !!}
+				<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner">
+					<img class="close-banner" src="{{ url('new-vox-img/close-popup.png') }}">
+					<video class="video-banner" id="christmasBanner" playsinline autoplay muted loop src="{{ url('img-trp/christmas-banner.mp4') }}" type="video/mp4" controls="" mobile-src="{{ url('img-trp/mobile-christmas-banner3.mp4') }}"></video>
 				</a>
+
+				<div id="cookiebar" >
+					<p>
+						{!! nl2br( trans('trp.common.cookiebar-hint',[
+							'link' => '<a href="//dentacoin.com/privacy-policy" target="_blank">',
+							'endlink' => '</a>',
+						]) ) !!}
+					</p>
+					<a class="accept" href="javascript:;">
+						{!! nl2br( trans('trp.common.cookiebar-button') ) !!}
+					</a>
+				</div>
+
 			</div>
-
-		</div>
+		@endif
 
 		<div class="tooltip-window" style="display: none;"></div>
 
