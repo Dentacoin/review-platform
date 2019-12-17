@@ -80,7 +80,7 @@
 						</div>
 					@endforeach
 
-					@if(!$user || ($user && !$user->birthyear))
+					@if(!$user || ($user && empty($user->birthyear))
 						<div class="question-group birthyear-question" data-id="birthyear" style="display: none;">
 							<div class="question">
 								{!! trans('vox.page.questionnaire.question-birth') !!}

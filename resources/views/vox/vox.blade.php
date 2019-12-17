@@ -121,7 +121,7 @@
 							@endforeach
 						@endif
 
-						@if(!$user->birthyear)
+						@if(empty($user->birthyear))
 							<div class="question-group birthyear-question tac user-detail-question" style="display: none;">
 								<div class="question">
 									{!! trans('vox.page.questionnaire.question-birth') !!}

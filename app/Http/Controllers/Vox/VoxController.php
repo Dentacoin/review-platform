@@ -527,7 +527,7 @@ class VoxController extends FrontController
 		        		
 		        		} else if ($type == 'birthyear-question') {
 
-		        			if($this->user->birthyear===null) {
+		        			if($this->user->birthyear===null || $this->user->birthyear===0) {
 			        			DcnReward::where('user_id', $this->user->id )->where('platform', 'vox')->where('reference_id',$vox->id )->where('type', 'survey')->update(
 			        				array(
 			        					'reward' => DB::raw('`reward` + '.$vox->getRewardPerQuestion()->dcn
