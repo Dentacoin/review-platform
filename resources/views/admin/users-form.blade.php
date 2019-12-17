@@ -96,6 +96,17 @@
                                     </div>
                                 </div>
                             @endif
+                            @if($item->is_dentist)
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Slug</label>
+                                    <div class="col-md-10">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'slug',
+                                            'info' => $fields['slug']
+                                        ])
+                                    </div>
+                                </div>
+                            @endif
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Gender</label>
                                 <div class="col-md-10">
