@@ -818,7 +818,7 @@ class RegisterController extends FrontController
 
                 if(empty($email) || empty($phone)) {
                     $ret['weak'] = true;
-                } else if(!empty(User::where( 'email','LIKE', $email )->withTrashed()->first())) {
+                } else if(!empty(User::where( 'email','LIKE', $email )->withTrashed()->first()) && (!empty(User::where( 'email','LIKE', $email )->withTrashed()->first()->deleted_at || !empty(User::where( 'email','LIKE', $email )->withTrashed()->first()->self_deleted)) {
                     $ret['message'] = 'User with this email already exists';
                 } else {
 
