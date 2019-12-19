@@ -484,7 +484,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                             })->orderBy('id', 'desc')->first();
                             
                             if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                                return Response::json(['success' => false, 'message' => 'This patient already submitted a review for your dental practice recently. Try again next month.' ] );
+                                return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.' ] );
                             }
                         }
 
