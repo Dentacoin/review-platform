@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 use App\Models\Country;
 use App\Models\City;
+use App\Models\Review;
 use App\Models\User;
 use App\Models\DentistClaim;
 use App\Models\IncompleteRegistration;
@@ -373,7 +374,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 	        }
         }
 
-        return $this->dentist($locale);
+        return redirect($user->getLink().'?'. http_build_query(['popup'=> 'popup-claim' ));
 
 	}
 
@@ -383,7 +384,200 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
             'want_to_invite_dentist' => true,
         ];
         session($sess);
+	}
 
-	}	
+	public function lead_magnet_step1($locale=null) {
+
+		if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
+            request()->merge([
+                'website' => 'http://'.request('website')
+            ]);
+        }
+
+		$validator = Validator::make(Request::all(), [
+            'name' => array('required', 'min:3'),
+            'country' => array('required', 'exists:countries,id'),
+            'website' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
+            'email' => array('required', 'email'),
+            'agree' =>  array('required', 'accepted'),
+        ]);
+
+        if ($validator->fails()) {
+            $msg = $validator->getMessageBag()->toArray();
+            $ret = array(
+                'success' => false,
+                'messages' => array()
+            );
+
+            foreach ($msg as $field => $errors) {
+                if($field=='website') {
+                    $ret['messages'][$field] = trans('trp.common.invalid-website');
+                } else {
+                    $ret['messages'][$field] = implode(', ', $errors);
+                }
+            }
+
+            return Response::json( $ret );
+        } else {
+
+        	$sess = [
+	            'lead_magnet' => [
+	            	'answers' => [
+		            	'name' => Request::input('name'),
+		            	'country' => Request::input('country'),
+		            	'website' => Request::input('website'),
+		            	'email' => Request::input('email'),
+	            	]
+	            ]
+	        ];
+	        session($sess);
+
+            return Response::json([
+                'success' => true,
+            ] );
+
+        }
+	}
+
+	public function lead_magnet_step2($locale=null) {
+
+		$points = [
+			'answer-2' => [
+				'1' => 1,
+				'2' => 1,
+				'3' => 1,
+				'4' => 2,
+				'5' => 3,
+				'6' => 0,
+			], 
+			'answer-3' => [
+				'1' => 1,
+				'2' => 3,
+				'3' => 2,
+				'4' => 0,
+			],  
+			'answer-4' => [
+				'1' => 3,
+				'2' => 2,
+				'3' => 1,
+			], 
+			'answer-5' => [
+				'1' => 3,
+				'2' => 2,
+				'3' => 1,
+				'4' => 0,
+			],  
+
+		];
+
+		$total_points = 0;
+
+		foreach (Request::all() as $key => $value) {
+			if (isset($points[$key])) {
+
+				if ($key == 'answer-3') {
+					foreach ($value as $k => $v) {
+						$total_points += $points[$key][$v];
+					}
+				} else {
+					$total_points += $points[$key][$value];
+				}
+				
+			}
+		}	
+		$review_collection = $points['answer-2'][Request::input('answer-2')] + (!empty(Request::input('answer-4')) ? $points['answer-4'][Request::input('answer-4')] : 0);
+		$review_volume = !empty(Request::input('answer-4')) ? $points['answer-4'][Request::input('answer-4')] : 0;
+		$impact = $points['answer-5'][Request::input('answer-5')];
+
+		foreach (Request::input('answer-3') as $key => $value) {
+			$review_collection += $points['answer-3'][$value];
+			$review_volume += $points['answer-3'][$value];
+			$impact += $points['answer-3'][$value];
+		}
+
+		$session = session('lead_magnet');
+
+		$session['answers']['answer-1'] = Request::input('answer-1');
+		$session['answers']['answer-2'] = Request::input('answer-2');
+		$session['answers']['answer-3'] = Request::input('answer-3');
+		$session['answers']['answer-4'] = !empty(Request::input('answer-4')) ? Request::input('answer-4') : '';
+		$session['answers']['answer-5'] = Request::input('answer-5');
+
+		$session['points'] = [
+			'total_points' => $total_points,
+			'review_collection' => $review_collection,
+			'review_volume' => $review_volume,
+			'impact' => $impact,
+		];
+
+		session([
+			'lead_magnet' => $session
+		]);
+		
+		return Response::json([
+            'success' => true,
+            'url' => getLangUrl('lead-magnet-results')
+        ] );
+	}
+
+    public function lead_magnet_results($locale=null) {
+
+    	if (!empty(session('lead_magnet'))) {
+
+    		$country_id = $this->country_id;
+
+    		$to_month = Carbon::now()->modify('-0 months');
+        	$from_month = Carbon::now()->modify('-1 months');
+
+            $country_reviews = Review::whereHas('user', function ($query) use ($country_id) {
+                $query->where('country_id', $country_id);
+            })
+            ->where('created_at', '>=', $from_month)
+        	->where('created_at', '<=', $to_month)
+        	->get();
+
+            $country_rating = 0;
+            foreach ($country_reviews as $c_review) {
+                $country_rating += $c_review->rating;
+            }
+
+            $avg_country_rating = number_format($country_rating / $country_reviews->count(), 2);
+            $country_reviews = $country_reviews->count();
+
+            if (empty($country_reviews)) {
+            	$country_reviews = Review::whereHas('user')
+	            ->where('created_at', '>=', $from_month)
+	        	->where('created_at', '<=', $to_month)
+	        	->get();
+
+	            $country_rating = 0;
+	            foreach ($country_reviews as $c_review) {
+	                $country_rating += $c_review->rating;
+	            }
+
+	            $avg_country_rating = number_format($country_rating / $country_reviews->count(), 2);
+	            $country_reviews = $country_reviews->count();
+            }
+
+    		$total_points = session('lead_magnet')['points']['total_points'];
+    		$review_collection = session('lead_magnet')['points']['review_collection'];
+    		$review_volume = session('lead_magnet')['points']['review_volume'];
+    		$impact = session('lead_magnet')['points']['impact'];
+    		$first_answer = session('lead_magnet')['answers']['answer-1'];
+
+	        return $this->ShowView('lead-magnet', array(
+	        	'total_points' => $total_points,
+	        	'review_collection' => $review_collection,
+	        	'review_volume' => $review_volume,
+	        	'impact' => $impact,
+	        	'avg_country_rating' => $avg_country_rating,
+	        	'country_reviews' => $country_reviews,
+	        	'first_answer' => $first_answer
+	        ));
+    	} else {
+    		return redirect( getLangUrl('page-not-found') );
+    	}
+
+    }
 
 }
