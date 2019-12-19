@@ -236,7 +236,7 @@ class LoginController extends FrontController
         }
 
         if ($s_user->getEmail() && !empty(User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->first())) {
-            return redirect( getLanUrl('/').'?'. http_build_query(['popup'=>'popup-register']).'&error-message='.urlencode('User with this email already exists.'));
+            return redirect( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']).'&error-message='.urlencode('User with this email already exists.'));
         }
 
         if ($user) {
