@@ -103,7 +103,15 @@ class AddDentistController extends FrontController
                     return Response::json( $ret );
                 }
 
-                if (!empty($this->country_id) && Request::input('country_id') != $this->country_id) {
+                if (!empty($this->user->country_id) && Request::input('country_id') != $this->user->country_id) {
+                    $ret = array(
+                        'success' => false,
+                        'messages' =>[
+                            'address' => 'Unable to proceed. Please, invite a dentist from your country.'
+                        ]
+                    );
+                    return Response::json( $ret );
+                } else if (!empty($this->country_id) && Request::input('country_id') != $this->country_id) {
                     $ret = array(
                         'success' => false,
                         'messages' =>[
