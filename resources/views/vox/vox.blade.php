@@ -225,14 +225,14 @@
 						</div>
 					</div>
 
-					@if(count($suggested_voxes) || !empty($related_voxes))
+					@if($suggested_voxes->count() || !empty($related_voxes))
 						<div class="related-wrap">
 							@if(!empty($related_voxes))
 								<div class="section-recent-surveys">
 									<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.related-surveys-title') !!}</h3>
 
-									<div class="swiper-container">
-									    <div class="swiper-wrapper">
+									<div class="swipe-cont {{ count($related_voxes) > 2 ? 'swiper-container' : '' }}">
+					    				<div class="swiper-wrapper {{ count($related_voxes) <= 2 ? 'flex' : '' }}">
 									    	@foreach($related_voxes as $survey)
 										    	<div class="swiper-slide" survey-id="{{ $survey->id }}">
 											      	@include('vox.template-parts.vox-taken-swiper-slider')
@@ -247,8 +247,8 @@
 								<div class="section-recent-surveys">
 									<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.next-surveys-title') !!}</h3>
 
-									<div class="swiper-container">
-									    <div class="swiper-wrapper">
+									<div class="swipe-cont {{ $suggested_voxes->count() > 2 ? 'swiper-container' : '' }}">
+					    				<div class="swiper-wrapper {{ $suggested_voxes->count() <= 2 ? 'flex' : '' }}">
 									    	@foreach($suggested_voxes as $survey)
 										    	<div class="swiper-slide" survey-id="{{ $survey->id }}">
 											      	@include('vox.template-parts.vox-taken-swiper-slider')
@@ -268,7 +268,7 @@
 						</div>
 					@endif
 
-					<div class="taken-vox-stats {!! empty($related_voxes) ? 'without-line' : '' !!}">
+					<div class="taken-vox-stats {!! empty($related_voxes) || $suggested_voxes->isEmpty() ? 'without-line' : '' !!}">
 						<div class="container">
 							<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.survey-stats-title') !!}</h3>
 							<a class="video-parent" href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}">
@@ -284,13 +284,13 @@
 						</div>
 					</div>
 
-					@if(!empty($related_voxes) && !empty($suggested_voxes))
+					@if(!empty($related_voxes) && $suggested_voxes->count())
 						<div class="suggested-wrap">
 							<div class="section-recent-surveys new-style-swiper">
 								<h3 class="taken-title">{!! trans('vox.page.taken-questionnaire.next-surveys-title') !!}</h3>
 
-								<div class="swiper-container">
-								    <div class="swiper-wrapper">
+								<div class="swipe-cont {{ $suggested_voxes->count() > 2 ? 'swiper-container' : '' }}">
+					    			<div class="swiper-wrapper {{ $suggested_voxes->count() <= 2 ? 'flex' : '' }}">
 								    	@foreach($suggested_voxes as $survey)
 									    	<div class="swiper-slide" survey-id="{{ $survey->id }}">
 										      	@include('vox.template-parts.vox-taken-swiper-slider')

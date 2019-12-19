@@ -1124,23 +1124,4 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         return false;
     }
 
-    public function lead_magnet($locale=null, $slug) {
-
-        if(!empty($this->user) && $this->user->isBanned('trp')) {
-            return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
-        }
-
-        $item = User::where('slug', 'LIKE', $slug)->first();
-
-        if (empty($item) || !$item->is_dentist || empty($this->user) || (!empty($this->user) && $item->id != $this->user->id )) {
-            return redirect( getLangUrl('page-not-found') );
-        }
-
-        return $this->ShowView('lead-magnet', array(
-            // 'js' => [
-            //  'leadmagnet.js',
-            // ],
-        )); 
-    }
-
 }

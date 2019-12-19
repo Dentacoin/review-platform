@@ -1583,8 +1583,23 @@ p.h2-bold {
 
 		@media #{$phone} {
 			padding-bottom: 50px;
-		}		
-    }
+		}
+	}
+
+	.swiper-wrapper {
+		&.flex {
+			align-items: center;
+			justify-content: center;
+
+			.swiper-slide {
+				max-width: 33%;
+
+				@media screen and (max-width: 1200px) {
+					max-width: 50%;
+				}
+			}
+		}
+	}
 
     .swiper-pagination-bullet {
 	    width: 16px;

@@ -417,7 +417,7 @@ $(document).ready(function(){
                             
                             
                             $("#question-done").show();
-                            if ($('.swiper-container').length) {
+                            if ($('.swiper-container').length || $('.swipe-cont').length) {
 
                                 if (window.innerWidth > 768) {
 
@@ -430,7 +430,7 @@ $(document).ready(function(){
                                             clickable: true,
                                         },
                                         breakpoints: {
-                                            900: {
+                                            1200: {
                                               slidesPerView: 2,
                                             },
                                         },
@@ -439,6 +439,11 @@ $(document).ready(function(){
                                         },
                                     });
                                 } else {
+                                    if ($('.swipe-cont').length) {
+                                        $('.swipe-cont').addClass('swiper-container');
+                                        $('.swipe-cont').find('.swiper-wrapper').removeClass('flex');
+                                    }
+
                                     var swiper_done = new Swiper('.swiper-container', {
                                         slidesPerView: 1,
                                         spaceBetween: 0,

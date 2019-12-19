@@ -1145,7 +1145,7 @@ class VoxController extends FrontController
         $all_surveys = Vox::where('type', 'normal')->get();
         $done_all = false;
 
-        if (($all_surveys->count() - 1) == count($taken)) {
+        if (($all_surveys->count() - 1) == count($this->user->filledVoxes())) {
         	$done_all = true;
         }
 
@@ -1153,14 +1153,13 @@ class VoxController extends FrontController
 		$related_voxes_ids = [];
 		if ($vox->related->isNotEmpty()) {
 			foreach ($vox->related as $r) {
-				if (!in_array($r->related_vox_id, $taken)) {
+				if (!in_array($r->related_vox_id, $this->user->filledVoxes())) {
 					$related_voxes[] = Vox::find($r->related_vox_id);
 					$related_voxes_ids[] = $r->related_vox_id;
 				}
 			}
 		}
-
-		$suggested_voxes = Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $taken)->take(9)->get();
+		$suggested_voxes = Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->whereNotIn('id', $related_voxes_ids)->whereNotIn('id', $this->user->filledVoxes())->take(9)->get();
 
 		if ($this->user->country_id) {
 			$arrr = [];

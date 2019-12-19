@@ -11,7 +11,7 @@ $(document).ready(function(){
                 clickable: true,
             },
             breakpoints: {
-                1120: {
+                1200: {
                   slidesPerView: 2,
                 },
             },
@@ -20,7 +20,14 @@ $(document).ready(function(){
             // },
             resizeReInit: true,
         });
+
     } else {
+
+        if ($('.swipe-cont').length) {
+            $('.swipe-cont').addClass('swiper-container');
+            $('.swipe-cont').find('.swiper-wrapper').removeClass('flex');
+        }
+
         var swiper = new Swiper('.swiper-container', {
             slidesPerView: 1,
             spaceBetween: 0,

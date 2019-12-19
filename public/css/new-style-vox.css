@@ -1149,6 +1149,14 @@ p.h2-bold {
   @media screen and (max-width: 768px) {
     .section-recent-surveys .swiper-container {
       padding-bottom: 50px; } }
+.section-recent-surveys .swiper-wrapper.flex {
+  align-items: center;
+  justify-content: center; }
+  .section-recent-surveys .swiper-wrapper.flex .swiper-slide {
+    max-width: 33%; }
+    @media screen and (max-width: 1200px) {
+      .section-recent-surveys .swiper-wrapper.flex .swiper-slide {
+        max-width: 50%; } }
 .section-recent-surveys .swiper-pagination-bullet {
   width: 16px;
   height: 16px; }

@@ -351,7 +351,7 @@
                                 <div class="form-group">
                                     <div class="col-md-12" style="text-align: right;">
                                         <span style="color: black;">Deleted at: {{ $item->deleted_at->toDateTimeString() }}</span><br/><br/>
-                                        <span style="color: black;">(A user can be deleted if an administrator deletes it OR automatically if falls in blacklist, duplicated Civic ID)</span>
+                                        <span style="color: black;">(User can be deleted if an administrator deletes it OR automatically if falls in blacklist, duplicated Civic ID)</span>
                                     </div>
                                 </div>
                             @endif
