@@ -206,8 +206,8 @@ $reviewRoutes = function () {
 			Route::any('/', 									'IndexController@home');
 			Route::get('pending-dentist', 						'IndexController@pending');
 			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
-			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
 			Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
+			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
 			Route::get('want-to-invite-dentist', 				'IndexController@want_to_invite_dentist');
 			
@@ -267,6 +267,8 @@ $reviewRoutes = function () {
 			Route::get('dentist-listings-by-country', 			'DentistsController@country');
 			Route::get('dentists-in-{country_slug}', 			'DentistsController@state');
 			Route::get('dentists-in-{country_slug}/{state}', 	'DentistsController@city');
+
+			Route::any('dentist/{slug}/claim/{id}/',			'DentistController@claim_dentist');
 
 			Route::get('dentist/{slug}/confirm-review/{secret}', 	'DentistController@confirmReview');
 			Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');
