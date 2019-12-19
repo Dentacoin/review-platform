@@ -374,7 +374,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 	        }
         }
 
-        return redirect($user->getLink().'?'. http_build_query(['popup'=> 'popup-claim' ));
+        return redirect($user->getLink().'?'. http_build_query(['popup'=> 'popup-claim'] ));
 
 	}
 
