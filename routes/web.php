@@ -207,9 +207,13 @@ $reviewRoutes = function () {
 			Route::get('pending-dentist', 						'IndexController@pending');
 			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
-			Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
 			Route::get('want-to-invite-dentist', 				'IndexController@want_to_invite_dentist');
+			
+			Route::post('lead-magnet-step1', 					'IndexController@lead_magnet_step1');
+			Route::post('lead-magnet-step2', 					'IndexController@lead_magnet_step2');
+
+			Route::get('lead-magnet-results', 					'IndexController@lead_magnet_results');
 
 			Route::any('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
 
@@ -230,8 +234,6 @@ $reviewRoutes = function () {
 			Route::any('invite-clinic', 						'RegisterController@invite_clinic');
 			Route::any('invite-dentist', 						'RegisterController@invite_dentist');
 
-			Route::any('invite-new-dentist', 					'AddDentistController@invite_new_dentist');
-
 			Route::get('login/facebook', 						'LoginController@facebook_login');
 			Route::get('login/twitter', 						'LoginController@twitter_login');
 			Route::get('login/gplus', 							'LoginController@gplus_login');
@@ -249,7 +251,7 @@ $reviewRoutes = function () {
 			Route::get('register/callback/twitter', 			'LoginController@twitter_callback_register');
 			Route::get('register/callback/gplus', 				'LoginController@gplus_callback_register');
 
-			Route::any('status', 								'LoginController@status');
+			Route::post('status', 								'LoginController@status');
 
 			Route::post('register/step1', 						'RegisterController@check_step_one');
 			Route::post('register/step2', 						'RegisterController@check_step_two');
@@ -258,13 +260,15 @@ $reviewRoutes = function () {
 
 			Route::post('register/civic', 						'RegisterController@civic');
 
-			Route::any('vpn', 									'VpnController@list');
+			//Route::get('vpn', 									'VpnController@list');
 
 			Route::get('dentists/{query?}/{filter?}', 			'DentistsController@search');
 			Route::get('dentist-listings-by-country', 			'DentistsController@country');
 			Route::get('dentists-in-{country_slug}', 			'DentistsController@state');
 			Route::get('dentists-in-{country_slug}/{state}', 	'DentistsController@city');
 
+			Route::any('dentist/{slug}/claim/{id}/',			'IndexController@claim');
+			
 			Route::get('dentist/{slug}/confirm-review/{secret}', 	'DentistController@confirmReview');
 			Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');
 			Route::get('dentist/{slug}/ask/{verification?}',	'DentistController@ask');
@@ -277,9 +281,10 @@ $reviewRoutes = function () {
 
 			Route::get('faq', 									'FaqController@home');
 
-			Route::post('invite-patient-again',					'ProfileController@invite_patient_again');
-
 			Route::group(['middleware' => 'auth:web'], function () {
+
+				Route::any('invite-new-dentist', 				'AddDentistController@invite_new_dentist');
+
 				Route::any('profile', 							'ProfileController@home');
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');
 				Route::any('profile/home', 						'ProfileController@home');
@@ -292,6 +297,7 @@ $reviewRoutes = function () {
 				//Route::get('profile/trp', 						'ProfileController@trp');
 				Route::get('profile/trp-iframe', 				'ProfileController@trp');
 				//Route::get('profile/wallet', 					'ProfileController@wallet');
+				Route::post('invite-patient-again',				'ProfileController@invite_patient_again');
 				Route::any('profile/invite', 					'ProfileController@invite');
 				Route::post('profile/invite-whatsapp', 			'ProfileController@invite_whatsapp');
 				Route::post('profile/invite-copypaste', 		'ProfileController@invite_copypaste');
