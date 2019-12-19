@@ -781,10 +781,10 @@ class DentistController extends FrontController
     }
 
 
-    public function claim_dentist ($locale=null, $id) {
+    public function claim_dentist ($locale=null, $slug, $id) {
         $user = User::find($id);
 
-        if (!$user || ($user->status != 'added_approved' && $user->status != 'admin_imported')) {
+        if ($user->status != 'added_approved' && $user->status != 'admin_imported') {
             return redirect( getLangUrl('/') );
         }
 
@@ -864,7 +864,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
             }
         }
 
-        return $this->list($locale, $item->slug);
+        return $this->list($locale, $slug);
 
     }
 

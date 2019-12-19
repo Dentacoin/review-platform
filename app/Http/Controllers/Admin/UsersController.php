@@ -1043,7 +1043,7 @@ class UsersController extends AdminController
 
                                 if ($this->request->input($key)=='added_approved') {
                                     $patient = User::find($item->invited_by);
-                                    
+
                                     if (empty($item->slug)) {
                                         $item->slug = $item->makeSlug();
                                         $item->save();
@@ -1096,6 +1096,11 @@ class UsersController extends AdminController
                                         $item->restore();
                                     }
 
+                                    if (empty($item->slug)) {
+                                        $item->slug = $item->makeSlug();
+                                        $item->save();
+                                    }
+
                                     $platformMails = [
                                         'vox' => 84,
                                         'trp' => 26,
@@ -1122,11 +1127,6 @@ class UsersController extends AdminController
                                     $item->ownership = 'approved';
                                     $item->save();
                                     $to_ali->delete();
-
-                                    if (empty($item->slug)) {
-                                        $item->slug = $item->makeSlug();
-                                        $item->save();
-                                    }
 
                                 } else if( $this->request->input($key)=='pending' ) {
                                     $olde = $item->email;
