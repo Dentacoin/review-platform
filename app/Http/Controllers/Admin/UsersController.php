@@ -942,6 +942,9 @@ class UsersController extends AdminController
 
                 $newuser->save();
 
+                $newuser->slug = $newuser->makeSlug();
+                $newuser->save();
+
                 if( Request::file('image') && Request::file('image')->isValid() ) {
                     $img = Image::make( Input::file('image') )->orientate();
                     $newuser->addImage($img);
