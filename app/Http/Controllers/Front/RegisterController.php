@@ -823,7 +823,7 @@ class RegisterController extends FrontController
                 } else {
 
                     $user = User::where( 'civic_id','LIKE', $data['userId'] )->withTrashed()->first();
-                    if(empty($user)) {
+                    if(empty($user) && $email) {
                         $user = User::where( 'email','LIKE', $email )->withTrashed()->first();            
                     }
 
