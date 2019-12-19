@@ -1043,15 +1043,10 @@ class UsersController extends AdminController
 
                                 if ($this->request->input($key)=='added_approved') {
                                     $patient = User::find($item->invited_by);
-                                    
-                                    if (empty($item->slug)) {
-                                        $item->slug = $item->makeSlug();
-                                        $item->save();
-                                    }
 
                                     if (!empty($patient)) {
                                         $substitutions = [
-                                            "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
+                                            "invitation_link" => getLangUrl( 'welcome-dentist/claim/'.$item->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
                                         ];
 
                                         $item->sendGridTemplate(43, $substitutions);
@@ -1089,6 +1084,11 @@ class UsersController extends AdminController
                                         ];
 
                                         $patient->sendGridTemplate(65, $substitutions, 'trp');
+                                    }
+
+                                    if (empty($item->slug)) {
+                                        $item->slug = $item->makeSlug();
+                                        $item->save();
                                     }
                                 } else if( $this->request->input($key)=='approved' ) {
                                     if( $item->deleted_at ) {
