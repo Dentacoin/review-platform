@@ -235,6 +235,10 @@ class LoginController extends FrontController
             $user = User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->first();            
         }
 
+        if ($s_user->getEmail() && !empty(User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->first())) {
+            return redirect( getLanUrl('/').'?'. http_build_query(['popup'=>'popup-register']).'&error-message='.urlencode('User with this email already exists.'));
+        }
+
         if ($user) {
 
             if($user->deleted_at || $user->isBanned('trp')) {

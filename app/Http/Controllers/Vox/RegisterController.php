@@ -815,7 +815,7 @@ class RegisterController extends FrontController
                     return redirect(getVoxUrl('/').'?error-message='.urlencode('Please add an email address to your Civic account and try again.'));
                 } else if(empty($phone)) {
                     return redirect(getVoxUrl('/').'?error-message='.urlencode('Please add a phone number to your Civic account and try again.'));
-                } else if(!empty(User::where( 'email','LIKE', $email )->withTrashed()->first()) && (!empty(User::where( 'email','LIKE', $email )->withTrashed()->first()->deleted_at || !empty(User::where( 'email','LIKE', $email )->withTrashed()->first()->self_deleted)))) {
+                } else if(!empty(User::where( 'email','LIKE', $email )->withTrashed()->first())) {
                     return redirect(getVoxUrl('/').'?error-message='.urlencode('User with this email already exists.'));
                 } else {
 

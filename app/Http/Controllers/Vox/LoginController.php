@@ -149,8 +149,12 @@ class LoginController extends FrontController
         if($s_user->getId()) {
             $user = User::where( 'fb_id','LIKE', $s_user->getId() )->withTrashed()->first();
         }
-        if(empty($user) && $s_user->getEmail()) {
-            $user = User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->first();            
+        // if(empty($user) && $s_user->getEmail()) {
+        //     $user = User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->first();            
+        // }
+
+        if ($s_user->getEmail() && !empty(User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->first())) {
+            return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('User with this email already exists.'));
         }
 
         $stat_redirect = null;
