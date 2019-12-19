@@ -36,21 +36,21 @@
 			</div>
 
 			<div class="modern-field alert-after">
-				<input type="text" name="name" id="dentist-name" class="modern-input" autocomplete="off">
-				<label for="dentist-name">
+				<input type="text" name="name" id="dentist-name1" class="modern-input" autocomplete="off">
+				<label for="dentist-name1">
 					<span>{!! nl2br(trans('trp.page.invite.name')) !!}</span>
 				</label>
 			</div>
 
 			<div class="modern-field alert-after">
-				<input type="email" name="email" id="dentist-email" class="modern-input" autocomplete="off">
-				<label for="dentist-email">
+				<input type="email" name="email" id="dentist-email1" class="modern-input" autocomplete="off">
+				<label for="dentist-email1">
 					<span>{!! nl2br(trans('trp.page.invite.email')) !!}</span>
 				</label>
 			</div>
 
 			<div class="modern-field" style="display: none;">
-				<select name="country_id" id="dentist-country" class="modern-input country-select">
+				<select name="country_id" id="dentist-country1" class="modern-input country-select">
 					@if(!$country_id)
 						<option>-</option>
 					@endif
@@ -63,8 +63,8 @@
 			</div>
 
 			<div class="modern-field alert-after">
-				<input type="text" name="address" id="dentist-address" class="modern-input address-suggester" autocomplete="off" placeholder=" ">
-				<label for="dentist-address">
+				<input type="text" name="address" id="dentist-address1" class="modern-input address-suggester" autocomplete="off" placeholder=" ">
+				<label for="dentist-address1">
 					<span>{!! nl2br(trans('trp.page.invite.address')) !!}</span>
 				</label>
 			</div>
@@ -81,15 +81,15 @@
 		    </div>
 
 			<div class="modern-field alert-after">
-				<input type="text" name="website" id="dentist-website" class="modern-input" autocomplete="off">
-				<label for="dentist-website">
+				<input type="text" name="website" id="dentist-website1" class="modern-input" autocomplete="off">
+				<label for="dentist-website1">
 					<span>{!! nl2br(trans('trp.page.invite.website')) !!}</span>
 				</label>
 			</div>
 
 			<div class="modern-field alert-after">
-				<input type="text" name="phone" id="dentist-tel" class="modern-input" autocomplete="off">
-				<label for="dentist-tel">
+				<input type="text" name="phone" id="dentist-tel1" class="modern-input" autocomplete="off">
+				<label for="dentist-tel1">
 					<span>{!! nl2br(trans('trp.page.invite.phone')) !!}</span>
 				</label>
 			</div>
