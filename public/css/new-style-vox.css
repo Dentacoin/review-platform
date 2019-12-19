@@ -3307,6 +3307,11 @@ p.h2-bold {
     @media screen and (max-width: 1200px) {
       .page-statistics .stats .stat.stat-with-many-qs .more-q-content .chart .main-chart > div div[dir="ltr"] {
         margin: 0 auto; } }
+  .page-statistics .stats .stat .more-q-content .chart-1 {
+    max-width: 33.3%; }
+    @media screen and (max-width: 1200px) {
+      .page-statistics .stats .stat .more-q-content .chart-1 {
+        max-width: 100%; } }
   .page-statistics .stats .stat .loader-mask {
     z-index: 99; }
   .page-statistics .stats .stat .top-answers {

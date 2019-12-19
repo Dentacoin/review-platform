@@ -4888,6 +4888,17 @@ body.vox-public {
 				}
 			}
 
+			.more-q-content {
+
+				.chart-1 {
+					max-width: 33.3%;
+
+					@media screen and (max-width: 1200px) {
+						max-width: 100%;
+					}
+				}
+			}
+
 			.loader-mask {
 				z-index: 99;
 			}

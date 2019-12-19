@@ -1781,11 +1781,12 @@ $(document).ready(function(){
         
         $(container).find('.custom-legend').removeClass('verticle-gender').hide();
         $(container).find('.custom-legend[answer-id="'+a_id+'"]').addClass('verticle-gender').show();
+        console.log($(container));
         $(container).find('.custom-legend[answer-id="'+a_id+'"]').children().each( function() {
-            if (question_type == 'multiple_choice' || $(window).width() <= 768) {
+            if (question_type == 'multiple_choice' || ($(container).closest('.more-q-content').length) || $(window).width() <= 768) {
                 $(this).find('span').height($(this).find('span').outerWidth());
             } else {
-                $(this).find('span').height($(this).find('span').outerWidth() * 3);
+                $(this).find('span').height($(this).find('span').outerWidth() * 3 );
             }
             if ($(window).outerWidth()>768) {
                 $(this).find('span').width(140);
