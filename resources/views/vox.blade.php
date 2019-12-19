@@ -251,7 +251,11 @@
 		</style>
 
 		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && $current_page != 'register' && $current_page != 'login' && request()->getHost() != 'vox.dentacoin.com' && request()->getHost() != 'account.dentacoin.com' && empty($session_polls)) || $current_page == 'daily-polls' || !empty($closed_daily_poll) && $current_page != 'questionnaire')
-			@include('vox.popups.daily-poll')
+			@if(!empty($user) && $user->loggedFromBadIp())
+
+			@else
+				@include('vox.popups.daily-poll')
+			@endif
 		@endif
 
 		@if(!empty($unbanned))

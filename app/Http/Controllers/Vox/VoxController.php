@@ -146,6 +146,11 @@ class VoxController extends FrontController
 		$doing_details = false;
 		$doing_asl = false;
 
+		if($this->user->loggedFromBadIp()) {
+			Request::session()->flash('error-message', 'We have detected suspicious activity from your account.');
+			return redirect( getLangUrl('/') );
+		}
+
 		if(empty($vox) || ($this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') ) {
 			if($this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
             	Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
