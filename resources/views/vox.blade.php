@@ -525,10 +525,18 @@
 			</script>
 		@endif
 		@if(!empty( $markLogin ) || $current_page=='banned' ) 
-			@include('sso')
+			@if(!empty($user) && $user->platform == 'external')
+
+			@else
+				@include('sso')
+			@endif
 		@endif
 		@if(!empty( $markLogout )) 
-			@include('sso-logout')
+			@if(!empty($user) && $user->platform == 'external')
+
+			@else
+				@include('sso-logout')
+			@endif
 		@endif
 
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
