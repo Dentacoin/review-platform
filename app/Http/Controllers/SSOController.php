@@ -32,7 +32,7 @@ class SSOController extends BaseController
                     session(['logged_user' => $session_arr]);
                     Auth::login($user, true);
 
-                    return Response::json(['success' => true]);
+                    return redirect(getLangUrl('/'));
                 }
             } else {
                 return abort(404);
