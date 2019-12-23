@@ -147,6 +147,12 @@ class VoxController extends FrontController
 		$doing_asl = false;
 
 		if($this->user->loggedFromBadIp()) {
+
+            $this->user->deleted_reason = 'Automatically: Bad IP';
+            $this->user->save();
+            $this->user->deleteActions();
+            User::destroy( $this->user->id );
+            
 			Request::session()->flash('error-message', 'We have detected suspicious activity from your account.');
 			return redirect( getLangUrl('/') );
 		}

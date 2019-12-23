@@ -51,6 +51,12 @@ class LoginController extends FrontController
             } else {
 
                 if( $user->loggedFromBadIp() ) {
+
+                    $user->deleted_reason = 'Automatically: Bad IP';
+                    $user->save();
+                    $user->deleteActions();
+                    User::destroy( $user->id );
+
                     return redirect( getLangUrl('/').'?error-message='.urlencode('We have detected suspicious activity from your account.'));
                 } else if($user->self_deleted) {
                     return redirect( getLangUrl('/').'?error-message='.urlencode('Unable to sign you up for security reasons.'));
@@ -79,6 +85,12 @@ class LoginController extends FrontController
             if ($user) {
                 if($user->loggedFromBadIp()) {
                     //dd('Bad IP', $s_user, $s_user->user);
+
+                    $user->deleted_reason = 'Automatically: Bad IP';
+                    $user->save();
+                    $user->deleteActions();
+                    User::destroy( $user->id );
+
                     return redirect( getVoxUrl('/').'?suspended-popup' );
                 } else if($user->self_deleted) {
                     return redirect( getLangUrl('/').'?error-message='.urlencode('Unable to sign you up for security reasons.'));
@@ -170,6 +182,12 @@ class LoginController extends FrontController
                 //Request::session()->flash('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
                 return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('You have been permanently banned and cannot return to DentaVox anymore.'));
             } else if($user->loggedFromBadIp()) {
+
+                $user->deleted_reason = 'Automatically: Bad IP';
+                $user->save();
+                $user->deleteActions();
+                User::destroy( $user->id );
+
                 return redirect( getVoxUrl('/').'?suspended-popup' );
             } else if($user->self_deleted) {
                 return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Unable to sign you up for security reasons.'));
@@ -350,6 +368,12 @@ class LoginController extends FrontController
                 }
 
                 if($newuser->loggedFromBadIp()) {
+
+                    $newuser->deleted_reason = 'Automatically: Bad IP';
+                    $newuser->save();
+                    $newuser->deleteActions();
+                    User::destroy( $newuser->id );
+
                     return redirect( getVoxUrl('/').'?suspended-popup' );
                 }
 
@@ -417,6 +441,11 @@ class LoginController extends FrontController
 
                         if ($user) {
                             if($user->loggedFromBadIp()) {
+
+                                $user->deleted_reason = 'Automatically: Bad IP';
+                                $user->save();
+                                $user->deleteActions();
+                                User::destroy( $user->id );
                                 
                                 return redirect( getVoxUrl('/').'?suspended-popup' );
 

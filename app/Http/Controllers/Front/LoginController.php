@@ -68,6 +68,11 @@ class LoginController extends FrontController
             } else {
 
                 if( $user->loggedFromBadIp() ) {
+                    $user->deleted_reason = 'Automatically: Bad IP';
+                    $user->save();
+                    $user->deleteActions();
+                    User::destroy( $user->id );
+
                     return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
                     ->withInput();
                 } else if($user->self_deleted) {
@@ -104,6 +109,11 @@ class LoginController extends FrontController
                     ->withInput()
                     ->with('error-message', 'Unable to sign you up for security reasons.' );
                 } else if( $user->loggedFromBadIp() ) {
+                    $user->deleted_reason = 'Automatically: Bad IP';
+                    $user->save();
+                    $user->deleteActions();
+                    User::destroy( $user->id );
+
                     return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
                     ->withInput();
                 }
@@ -248,6 +258,11 @@ class LoginController extends FrontController
                 ->withInput()
                 ->with('error-message', 'Unable to sign you up for security reasons.' );
             } else if( $user->loggedFromBadIp() ) {
+                $user->deleted_reason = 'Automatically: Bad IP';
+                $user->save();
+                $user->deleteActions();
+                User::destroy( $user->id );
+
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
                 ->withInput();
             }
@@ -435,6 +450,12 @@ class LoginController extends FrontController
                 session($sess);
 
                 if( $newuser->loggedFromBadIp() ) {
+
+                    $newuser->deleted_reason = 'Automatically: Bad IP';
+                    $newuser->save();
+                    $newuser->deleteActions();
+                    User::destroy( $newuser->id );
+
                     return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'suspended-popup']))
                     ->withInput();
                 }
@@ -523,6 +544,12 @@ class LoginController extends FrontController
                             if( $user->isBanned('trp')) {
                                 $ret['popup'] = 'banned-popup';
                             } else if( $user->loggedFromBadIp() ) {
+
+                                $user->deleted_reason = 'Automatically: Bad IP';
+                                $user->save();
+                                $user->deleteActions();
+                                User::destroy( $user->id );
+
                                 $ret['popup'] = 'suspended-popup';
                             } else if($user->self_deleted) {
                                 return Response::json( [

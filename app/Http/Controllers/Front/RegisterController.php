@@ -832,6 +832,11 @@ class RegisterController extends FrontController
                         if($user->deleted_at || $user->isBanned('trp')) {
                             $ret['popup'] = 'banned-popup';
                         } else if( $user->loggedFromBadIp() ) {
+                            $user->deleted_reason = 'Automatically: Bad IP';
+                            $user->save();
+                            $user->deleteActions();
+                            User::destroy( $user->id );
+
                             $ret['popup'] = 'suspended-popup';
                         } else if($user->self_deleted) {
                             return Response::json( [
@@ -939,6 +944,11 @@ class RegisterController extends FrontController
                         session($sess);
 
                         if( $newuser->loggedFromBadIp() ) {
+                            $newuser->deleted_reason = 'Automatically: Bad IP';
+                            $newuser->save();
+                            $newuser->deleteActions();
+                            User::destroy( $newuser->id );
+                            
                             $ret['popup'] = 'suspended-popup';
                             $ret['success'] = false;
                         } else {

@@ -177,12 +177,6 @@ class RegisterController extends FrontController
                 //     $newuser->sendTemplate( 12 );
                 // }
 
-
-                if ($newuser->loggedFromBadIp()) {
-                    Request::session()->flash('error-message', trans('vox.common.invalid-email'));
-                    return redirect( getVoxUrl('/').'?suspended-popup' );
-                }
-
                 $mtext = 'New Dentavox dentist/clinic registration:
                 '.$newuser->getName().'
                 IP: '.User::getRealIp().'
@@ -764,6 +758,12 @@ class RegisterController extends FrontController
                         }
 
                         if ($newuser->loggedFromBadIp()) {
+
+                            $newuser->deleted_reason = 'Automatically: Bad IP';
+                            $newuser->save();
+                            $newuser->deleteActions();
+                            User::destroy( $newuser->id );
+
                             $ret['success'] = false;
                             $ret['popup'] = 'suspended-popup';
                         } else {
@@ -829,6 +829,12 @@ class RegisterController extends FrontController
                         if($user->deleted_at || $user->isBanned('vox')) {
                             return redirect(getVoxUrl('/').'?error-message='.urlencode('You have been permanently banned and cannot return to Dentavox anymore.' ));
                         } else if($user->loggedFromBadIp()) {
+
+                            $user->deleted_reason = 'Automatically: Bad IP';
+                            $user->save();
+                            $user->deleteActions();
+                            User::destroy( $user->id );
+
                             return redirect(getVoxUrl('/').'?error-message='.urlencode('We have detected a suspicious activity from your IP address.'));
                         } else if($user->self_deleted) {
                             return redirect(getVoxUrl('/').'?error-message='.urlencode('Unable to sign you up for security reasons.'));
@@ -922,6 +928,12 @@ class RegisterController extends FrontController
                         session($sess);
 
                         if ($newuser->loggedFromBadIp()) {
+
+                            $newuser->deleted_reason = 'Automatically: Bad IP';
+                            $newuser->save();
+                            $newuser->deleteActions();
+                            User::destroy( $newuser->id );
+                            
                             return redirect( getVoxUrl('/').'?suspended-popup' );
                         } else {
                             if( $newuser->email ) {

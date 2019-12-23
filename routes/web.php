@@ -213,6 +213,7 @@ $reviewRoutes = function () {
 			
 			Route::post('lead-magnet-step1', 					'IndexController@lead_magnet_step1');
 			Route::post('lead-magnet-step2', 					'IndexController@lead_magnet_step2');
+			Route::get('lead-magnet-session', 					'IndexController@lead_magnet_session');
 
 			Route::get('lead-magnet-results', 					'IndexController@lead_magnet_results');
 

@@ -580,4 +580,19 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
     }
 
+    public function lead_magnet_session($locale=null) {
+
+    	if (!empty(session('lead_magnet'))) {
+    		return Response::json([
+	            'session' => true,
+	            'url' => getLangUrl('lead-magnet-results')
+	        ] );
+    	} else {
+    		return Response::json([
+	            'session' => false,
+	        ] );
+    	}
+
+    }
+
 }

@@ -464,6 +464,7 @@ NEW & FAILED TRANSACTIONS
                     $userNames[] = $user->getName();
 
                     $user->status=='rejected';
+                    $user->deleted_reason = 'Automatically: Dentist with status pending over a week';
                     $user->save();
                     $user->deleteActions();
                     User::destroy( $user->id );
