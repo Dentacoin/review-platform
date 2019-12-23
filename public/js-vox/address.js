@@ -128,6 +128,7 @@ jQuery(document).ready(function($){
 	checkAddress = function(place, conatiner) {
         //conatiner.find('.address-suggester').blur();
         conatiner.find('.geoip-hint').hide();
+        conatiner.find('.different-country-hint').hide();
         conatiner.find('.geoip-confirmation').hide();
         conatiner.find('.suggester-map-div').hide();
 
@@ -137,19 +138,37 @@ jQuery(document).ready(function($){
     		
             var gstring = conatiner.find('.address-suggester').val();
             var country_name = conatiner.find('.country-select option:selected').text();
-            gstring = gstring.replace(', '+country_name, '');
-            conatiner.find('.address-suggester').val(gstring);
+            var country_code_name = conatiner.find('.country-select option:selected').attr('code').toUpperCase();
 
-            var coords = {
-                lat: place.geometry.location.lat(), 
-                lng: place.geometry.location.lng()
-            };
-            setupMap(conatiner, coords);
+            var address_country;
+            for (var i in place.address_components) {
+                for( var t in place.address_components[i].types) {
+                    if (place.address_components[i].types[t] == 'country') {
+                        address_country = place.address_components[i].short_name;
+                        break;
+                    }
+                }
+            }
 
-            conatiner.find('.geoip-confirmation').show();
-            
-            $('.go-to-next[step-number="3"]').removeClass('disabled');
-            return;
+            if (address_country == country_code_name) {
+
+                gstring = gstring.replace(', '+country_name, '');
+                conatiner.find('.address-suggester').val(gstring);
+
+                var coords = {
+                    lat: place.geometry.location.lat(), 
+                    lng: place.geometry.location.lng()
+                };
+                setupMap(conatiner, coords);
+
+                conatiner.find('.geoip-confirmation').show();
+                
+                $('.go-to-next[step-number="3"]').removeClass('disabled');
+                return;
+            } else {
+                conatiner.find('.different-country-hint').show();
+                $('.go-to-next[step-number="3"]').addClass('disabled');
+            }
        
         } else {
             conatiner.find('.geoip-hint').show();

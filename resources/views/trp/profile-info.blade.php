@@ -128,6 +128,9 @@
 			                                    <div class="alert alert-warning geoip-hint" style="display: none;">
 			                                    	{!! nl2br(trans('trp.common.invalid-address')) !!}
 			                                    </div>
+										        <div class="alert alert-warning different-country-hint mobile" style="display: none;">
+										        	Unable to proceed. Please, choose address from your country.
+										        </div>
 		                                    </div>
 		                                @elseif( $info['type'] == 'country')  
 		                                	<select class="form-control country-select" name="country_id">

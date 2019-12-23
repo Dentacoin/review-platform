@@ -127,31 +127,52 @@ jQuery(document).ready(function($){
         //conatiner.find('.address-suggester').blur();
         conatiner.find('.geoip-hint').hide();
         conatiner.find('.geoip-confirmation').hide();
+        conatiner.find('.geoip-confirmation').hide();
         conatiner.find('.suggester-map-div').hide();
+
             console.log('Geocoding result: ', place);
         
-    	if( place && place.geometry && place.types && (place.types.indexOf('street_address') != -1)) {
+    	if( place && place.geometry && place.types && (place.types.indexOf('street_address') != -1 || place.types.indexOf('establishment') != -1 || place.types.indexOf('point_of_interest') != -1 || place.types.indexOf('premise') != -1) ) {
     		//address_components
     		
             var gstring = conatiner.find('.address-suggester').val();
             var country_name = conatiner.find('.country-select option:selected').text();
-            gstring = gstring.replace(', '+country_name, '');
-            conatiner.find('.address-suggester').val(gstring);
+            var country_code_name = conatiner.find('.country-select option:selected').attr('code').toUpperCase();
 
-            var coords = {
-                lat: place.geometry.location.lat(), 
-                lng: place.geometry.location.lng()
-            };
-            setupMap(conatiner, coords);
-
-            conatiner.find('.geoip-confirmation').show();
-
-            if ($('.scrape-submit').length) {
-                $('.scrape-submit').removeAttr("disabled");
+            var address_country;
+            for (var i in place.address_components) {
+                for( var t in place.address_components[i].types) {
+                    if (place.address_components[i].types[t] == 'country') {
+                        address_country = place.address_components[i].short_name;
+                        break;
+                    }
+                }
             }
 
-            return;
-       
+            if (address_country == country_code_name) {
+                gstring = gstring.replace(', '+country_name, '');
+                conatiner.find('.address-suggester').val(gstring);
+
+                var coords = {
+                    lat: place.geometry.location.lat(), 
+                    lng: place.geometry.location.lng()
+                };
+                setupMap(conatiner, coords);
+
+                conatiner.find('.geoip-confirmation').show();
+
+                if ($('.scrape-submit').length) {
+                    $('.scrape-submit').removeAttr("disabled");
+                }
+
+                return;
+            } else {
+                conatiner.find('.different-country-hint').show();
+                if ($('.scrape-submit').length) {
+                    $('.scrape-submit').prop('disabled', 'disabled');
+                }
+            }
+            
         } else {
             conatiner.find('.geoip-hint').show();
             if ($('.scrape-submit').length) {

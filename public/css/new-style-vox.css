@@ -7655,12 +7655,15 @@ body.popup-visible {
     @media screen and (max-width: 768px) {
       .sign-in-step .specializations {
         margin-left: 15px; } }
+  .sign-in-step .different-country-hint,
   .sign-in-step .geoip-hint {
     margin-bottom: 20px;
     font-size: 14px;
     padding: 10px 20px 10px 50px; }
+    .sign-in-step .different-country-hint + .ajax-alert,
     .sign-in-step .geoip-hint + .ajax-alert {
       margin-top: -20px; }
+    .sign-in-step .different-country-hint:before,
     .sign-in-step .geoip-hint:before {
       font-size: 20px; }
   .sign-in-step .submit-register {

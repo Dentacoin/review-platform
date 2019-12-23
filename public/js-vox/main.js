@@ -252,6 +252,8 @@ $(document).ready(function(){
     	$(this).closest('form').find('input[name="address"]').val('');
     	$(this).closest('form').find('.suggester-map-div').hide();
     	$(this).closest('form').find('.geoip-confirmation').hide();
+        $(this).closest('form').find('.geoip-hint').hide();
+        $(this).closest('form').find('.different-country-hint').hide();
 
     	var city_select = $(this).closest('form').find('.city-select').first();
     	city_select.attr('disabled', 'disabled');

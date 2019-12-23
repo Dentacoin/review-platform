@@ -32,6 +32,8 @@ jQuery(document).ready(function($){
     	$(this).closest('form').find('input[name="address"]').val('');
     	$(this).closest('form').find('.suggester-map-div').hide();
     	$(this).closest('form').find('.geoip-confirmation').hide();
+        $(this).closest('form').find('.geoip-hint').hide();
+        $(this).closest('form').find('.different-country-hint').hide();
 
 		if(ajax_is_running) {
 			return;
@@ -910,6 +912,10 @@ jQuery(document).ready(function($){
 		} else {
 			$('#alert-name-dentist').hide();
 		}
+	});
+
+	$('.get-started-button').click( function() {
+		showPopup( 'popup-register-dentist' );
 	});
 
 });

@@ -69,6 +69,9 @@
         <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: -10px 0px 10px;">
         	{!! nl2br(trans('trp.common.invalid-address')) !!}
         </div>
+        <div class="alert alert-warning different-country-hint mobile" style="display: none; margin: -10px 0px 10px;">
+        	Unable to proceed. Please, invite a dentist from your country.
+        </div>
     </div>
 
 	<div class="modern-field alert-after">

@@ -72,6 +72,9 @@
                         <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
                         	{!! nl2br(trans('trp.common.invalid-address')) !!}
                         </div>
+				        <div class="alert alert-warning different-country-hint mobile" style="display: none; margin: -10px 0px 10px;">
+				        	Unable to proceed. Please, choose address from your country.
+				        </div>
                     </div>
 			    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time">
 			    	<div class="flex phone-widget">
@@ -369,6 +372,9 @@
 	                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: 10px 0px;">
 	                        	{!! nl2br(trans('trp.common.invalid-address')) !!}
 	                        </div>
+					        <div class="alert alert-warning different-country-hint mobile" style="display: none; margin: -10px 0px 10px;">
+					        	Unable to proceed. Please, choose address from your country.
+					        </div>
 	                    </div>
 				    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time">
 				    	<div class="flex phone-widget">

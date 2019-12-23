@@ -233,7 +233,10 @@
 			                        </div>
 			                        <div class="alert alert-warning geoip-hint mobile" style="display: none; margin: -10px 0px 10px;">
 			                        	{!! nl2br(trans('vox.common.invalid-address')) !!}
-			                        </div>		                        
+			                        </div>
+							        <div class="alert alert-warning different-country-hint mobile" style="display: none; margin: -10px 0px 10px;">
+							        	Unable to proceed. Please, choose address from your country.
+							        </div>
 			                    </div>
 
 			                    <div class="modern-field alert-after {{ $errors->has('website') ? 'has-error' : '' }}">
