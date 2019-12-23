@@ -691,12 +691,26 @@ class UsersController extends AdminController
         $item = User::find($id);
 
         if(!empty($item)) {
-            $item->deleteActions();
-            User::destroy( $id );
-        }
 
-        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/'.$this->current_page);
+            if (!empty(Request::input('deleted_reason'))) {
+                $item->deleted_reason = Request::input('deleted_reason');
+                $item->save();
+                $item->deleteActions();
+                User::destroy( $id );
+
+                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
+                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/'.$this->current_page);
+
+            } else {
+                $this->request->session()->flash('error-message', "You have to write a reason why this user has to be deleted" );
+                return redirect('cms/users/edit/'.$item->id);
+            }
+            
+        } else {
+            return redirect('cms/'.$this->current_page);
+        }
+        
+
     }
 
     public function massdelete(  ) {

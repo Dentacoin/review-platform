@@ -351,7 +351,9 @@
                                 <div class="form-group">
                                     <div class="col-md-12" style="text-align: right;">
                                         <span style="color: black;">Deleted at: {{ $item->deleted_at->toDateTimeString() }}</span><br/><br/>
-                                        <span style="color: black;">(User can be deleted if an administrator deletes it OR automatically if falls in blacklist, duplicated Civic ID)</span>
+                                        @if(!empty($item->deleted_reason))
+                                            <span style="color: red;">Reason for deletion: {{ $item->deleted_reason }}</span>
+                                        @endif
                                     </div>
                                 </div>
                             @endif
@@ -380,7 +382,9 @@
                                     @if(!empty($item->deleted_at))
                                         <a href="{{ url('cms/users/restore/'.$item->id) }}" class="btn btn-sm btn-info form-control user-b"> Restore </a>
                                     @else
-                                        <a href="{{ url('cms/users/delete/'.$item->id) }}" class="btn btn-sm btn-danger form-control user-b"> Delete </a>
+                                        <a class="btn btn-sm btn-danger form-control user-b" href="javascript:;" data-toggle="modal" data-target="#deleteModal">
+                                            Delete
+                                        </a>
                                     @endif
                                 </div>
                             </div>
@@ -861,3 +865,27 @@
 @endif
 
 @endsection
+
+
+
+<div id="deleteModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete user</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url('cms/users/delete/'.$item->id) }}" method="post">
+                    <textarea class="form-control" name="deleted_reason" placeholder="Write the reason why you want to delete this user"></textarea>
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Delete</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
