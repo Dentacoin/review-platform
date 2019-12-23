@@ -89,7 +89,7 @@
 			<a href="javascript:;" class="button button-inner-white bulk-invite-back" step="3">
 				{!! nl2br(trans('trp.popup.popup-invite.back')) !!}
 			</a>
-			<button type="submit" class="button final-button"><div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>{!! nl2br(trans('trp.popup.popup-invite.send')) !!}</button>
+			<button type="submit" class="button final-button copypaste-fourth"><div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>{!! nl2br(trans('trp.popup.popup-invite.send')) !!}</button>
 			<a href="javascript:;" class="button try-invite-again" style="display: none;">{!! nl2br(trans('trp.popup.popup-invite.invite-again')) !!}</a>
 		</div>
 	{!! Form::close() !!}

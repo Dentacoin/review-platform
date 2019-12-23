@@ -89,7 +89,7 @@
 			</div>
 
 			<div class="tac widget-button-next-wrap">
-				<a href="javascript:;" class="button widget-button" to-step="2">Next > </a>
+				<a href="javascript:;" class="button widget-button widget-layout-button" to-step="2">Next > </a>
 			</div>
 		</div>
 		<div class="widget-step widget-step-2" style="display: none;">

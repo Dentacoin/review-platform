@@ -11,7 +11,7 @@
 			{!! nl2br(trans('trp.popup.popup-invite.title')) !!}
 		</h2>
 
-		<div class="popup-tabs invite-tabs flex flex-mobile">
+		<div class="popup-tabs invite-tabs colorful-tabs flex flex-mobile">
 			<a class="active col" href="javascript:;" data-invite="copypaste" style="z-index: 3">
 				{!! nl2br(trans('trp.popup.popup-invite.copypaste.title')) !!}
 			</a>
@@ -104,7 +104,7 @@
 					-->
 				@endif
 				<div class="tac">
-					<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!}">
+					<input type="submit" class="button manually-send" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!}">
 				</div>
 			{!! Form::close() !!}
 		</div>

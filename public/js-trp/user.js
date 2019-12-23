@@ -537,6 +537,15 @@ $(document).ready(function(){
         $('.popup.active').animate({
             scrollTop: $('.popup.active').offset().top
         }, 500);
+
+        if( $(this).hasClass('widget-layout-button')) {
+            var selected_layout = $('[name="widget-layout"]:checked').val();
+
+            gtag('event', 'Layout', {
+                'event_category': 'Widgets',
+                'event_label': selected_layout,
+            });
+        }
     });
 
     $('.open-hidden-option').click( function() {
@@ -560,6 +569,7 @@ $(document).ready(function(){
     //Invites
 
     if( $('.invite-patient-form').length ) {
+
         $('.invite-patient-form').submit( function(e) {
             e.preventDefault();
 
@@ -594,8 +604,8 @@ $(document).ready(function(){
                         $('.invite-patient-form').find('.invite-name').val('').focus();
                         $('.invite-patient-form').find('.invite-alert').show().addClass('alert-success').html(data.message);
 
-                        gtag('event', 'Send', {
-                            'event_category': 'Reviews',
+                        gtag('event', 'AddManually', {
+                            'event_category': 'ReviewInvites',
                             'event_label': 'InvitesSent',
                         });
                     } else {
@@ -678,10 +688,10 @@ $(document).ready(function(){
 
                     that.closest('.invite-content').find('.invite-alert').show().addClass('alert-success').html(data.message);
 
-                    // gtag('event', 'Send', {
-                    //     'event_category': 'Reviews',
-                    //     'event_label': 'InvitesSent',
-                    // });
+                    gtag('event', 'Whatsapp', {
+                        'event_category': 'ReviewInvites',
+                        'event_label': 'InvitesSent',
+                    });
                 }
             },
             error: function(ret) {
@@ -750,6 +760,32 @@ $(document).ready(function(){
         $('.invite-input-radio').change( function() {
             $(this).closest('.copypaste-wrapper').find('.checkbox-wrapper').removeClass('active');
             $(this).closest('.checkbox-wrapper').addClass('active');
+
+            if( $(this).closest('#invite-option-copypaste').length) {
+                if($(this).closest('form').hasClass('invite-patient-copy-paste-form-emails')) {
+                    gtag('event', 'SelectEmails', {
+                        'event_category': 'ReviewInvites',
+                        'event_label': 'BulkInvites2',
+                    });
+                } else if($(this).closest('form').hasClass('invite-patient-copy-paste-form-names')) {
+                    gtag('event', 'SelectNames', {
+                        'event_category': 'ReviewInvites',
+                        'event_label': 'BulkInvites3',
+                    });
+                }
+            } else if($(this).closest('#invite-option-file').length) {
+                if($(this).closest('form').hasClass('invite-patient-copy-paste-form-emails')) {
+                    gtag('event', 'SelectEmails', {
+                        'event_category': 'ReviewInvites',
+                        'event_label': 'FileImport2',
+                    });
+                } else if($(this).closest('form').hasClass('invite-patient-copy-paste-form-names')) {
+                    gtag('event', 'SelectNames', {
+                        'event_category': 'ReviewInvites',
+                        'event_label': 'FileImport3',
+                    });
+                }
+            }
             $(this).closest('form').submit();
         });
 
@@ -817,6 +853,14 @@ $(document).ready(function(){
                         that.closest('.invite-content').find('.step4').find('.final-button').show(); 
                         that.closest('.invite-content').find('.step4').find('.bulk-invite-back').show();
                         that.closest('.invite-content').find('.step4').find('.try-invite-again').hide();
+
+                        if( that.closest('#invite-option-copypaste').length) {
+
+                            gtag('event', 'Paste', {
+                                'event_category': 'ReviewInvites',
+                                'event_label': 'BulkInvites1',
+                            });
+                        }
                     } else {
                         that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
                                         
@@ -945,6 +989,20 @@ $(document).ready(function(){
                     that.find('.final-button').hide(); 
                     that.find('.bulk-invite-back').hide(); 
                     that.find('.try-invite-again').show();
+
+                    if( that.closest('#invite-option-copypaste').length) {
+                        
+                        gtag('event', 'Copy-PasteBulk', {
+                            'event_category': 'ReviewInvites',
+                            'event_label': 'InvitesSent',
+                        });
+                    } else if(that.closest('#invite-option-file').length) {
+
+                        gtag('event', 'FileImport', {
+                            'event_category': 'ReviewInvites',
+                            'event_label': 'InvitesSent',
+                        });
+                    }
                 } else {
                     that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
                 }
@@ -1013,6 +1071,11 @@ $(document).ready(function(){
                 that.closest('.invite-content').find('.step4').find('.final-button').show(); 
                 that.closest('.invite-content').find('.step4').find('.bulk-invite-back').show();
                 that.closest('.invite-content').find('.step4').find('.try-invite-again').hide();
+
+                gtag('event', 'Upload', {
+                    'event_category': 'ReviewInvites',
+                    'event_label': 'FileImport1',
+                });
             } else {
                 that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
                                 
@@ -2124,6 +2187,13 @@ $(document).ready(function(){
             $('#symbols-count').removeClass('red');
         }
         $('#symbols-count').html(length);
+    });
+
+    $('.add-widget-button').click( function() {
+        gtag('event', 'Open', {
+            'event_category': 'Widgets',
+            'event_label': 'Popup',
+        });
     });
 
 });
