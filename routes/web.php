@@ -23,6 +23,7 @@ Route::get('question-count', 						'CitiesController@getQuestions');
 Route::any('suggest-clinic/{id?}', 					'CitiesController@getClinic');
 Route::any('suggest-dentist/{id?}', 				'CitiesController@getDentist');
 Route::get('custom-cookie', 						'SSOController@manageCustomCookie')->name('custom-cookie');
+Route::get('admin', 								'Front\IndexController@index');
 
 
 Route::post('wait', 									'CitiesController@wait');
@@ -189,7 +190,6 @@ $reviewRoutes = function () {
 	Route::get('sitemap-trusted-reviews.xml', 			'Front\SitemapController@links');
 	Route::get('sitemap.xml', 							'Front\SitemapController@sitemap');
 	Route::get('robots.txt', 							'Front\RobotsController@content');
-	Route::get('index.php', 							'Front\IndexController@index');
 
 	Route::get('user-logout',							'Auth\AuthenticateUser@getLogout');
 	
