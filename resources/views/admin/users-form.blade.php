@@ -889,3 +889,9 @@
 
     </div>
 </div>
+
+<style type="text/css">
+    tr {
+        font-size: 12px;
+    }
+</style>
