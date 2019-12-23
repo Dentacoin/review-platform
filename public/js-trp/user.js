@@ -527,6 +527,12 @@ $(document).ready(function(){
 
             $(this).closest('.get-widget-code-wrap').hide();
             $('.widget-last-step').show();
+
+            var selected_layout = $('[name="widget-layout"]:checked').val();
+            gtag('event', 'Code', {
+                'event_category': 'Widgets',
+                'event_label': selected_layout,
+            });
         }
     });
     
@@ -545,6 +551,14 @@ $(document).ready(function(){
                 'event_category': 'Widgets',
                 'event_label': selected_layout,
             });
+
+            if(selected_layout == 'badge') {
+
+                gtag('event', 'Code', {
+                    'event_category': 'Widgets',
+                    'event_label': selected_layout,
+                });
+            }
         }
     });
 
