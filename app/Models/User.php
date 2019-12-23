@@ -1329,7 +1329,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         } else {
             $users_with_same_ip = UserLogin::where('ip', 'like', self::getRealIp())->where('user_id', '!=', $this->id)->groupBy('user_id')->get()->count();
 
-            if ($users_with_same_ip >=2 && !$this->allow_withdraw && !$this->is_dentist && $this::getRealIp() != '78.130.213.163' && $this::getRealIp() != '213.91.254.194' ) {
+            if ($users_with_same_ip >=2 && !$this->allow_withdraw && !$this->is_dentist && $this::getRealIp() != '213.91.254.194' ) {
                 return true;
             } else {
                 return false;
