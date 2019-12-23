@@ -592,7 +592,10 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 	            'session' => false,
 	        ] );
     	}
+    }
 
+    public function index($locale=null) {
+        return redirect( getLangUrl('page-not-found') );
     }
 
 }
