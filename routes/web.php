@@ -201,10 +201,9 @@ $reviewRoutes = function () {
 		Route::get('widget/{id}/{hash}/{mode}', 				'WidgetController@widget');
 		Route::any('widget-new/{id}/{hash}', 					'WidgetController@widget_new');
 
-		Route::get('index.php', 								'IndexController@index');
-
 		Route::group(['namespace' => 'Front'], function () {
-			
+
+			Route::get('index.php', 							'IndexController@index');
 			Route::any('/', 									'IndexController@home');
 			Route::get('pending-dentist', 						'IndexController@pending');
 			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
