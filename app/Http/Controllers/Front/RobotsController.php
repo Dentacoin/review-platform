@@ -9,7 +9,7 @@ class RobotsController extends FrontController
 {
 	public function content($locale=null) {
 
-		if (Request::getHost() == 'urgent.reviews.dentacoin.com') {
+		if (Request::getHost() == 'urgent.reviews.dentacoin.com' || Request::getHost() == 'dev.reviews.dentacoin.com') {
 
 			$content = 'User-agent: *
 Disallow: /';
