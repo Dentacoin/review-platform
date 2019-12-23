@@ -866,7 +866,7 @@ class UsersController extends AdminController
         }
 
         $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.review-deleted') );
-        return redirect('cms/'.$this->current_page.'/edit/'.$uid);
+        return redirect('cms/'.$this->current_page.'/edit/'.$dentist->id);
     }
 
 
