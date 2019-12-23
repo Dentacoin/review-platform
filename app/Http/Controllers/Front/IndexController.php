@@ -594,8 +594,4 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
     	}
     }
 
-    public function index() {
-        return redirect( getLangUrl('page-not-found') );
-    }
-
 }

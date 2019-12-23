@@ -23,10 +23,8 @@ Route::get('question-count', 						'CitiesController@getQuestions');
 Route::any('suggest-clinic/{id?}', 					'CitiesController@getClinic');
 Route::any('suggest-dentist/{id?}', 				'CitiesController@getDentist');
 Route::get('custom-cookie', 						'SSOController@manageCustomCookie')->name('custom-cookie');
-Route::get('admin', 								'Front\IndexController@index');
 
-
-Route::post('wait', 									'CitiesController@wait');
+Route::post('wait', 								'CitiesController@wait');
 
 Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin'] ], function () {
 	Route::get('/', 								'HomeController@list');
@@ -183,9 +181,9 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 //Empty route
 $reviewRoutes = function () {
 	
-	Route::any('test', 									'Front\YouTubeController@test');
-	Route::any('civic', 								'CivicController@add');
-	Route::any('mobident', 								'MobidentController@reward');
+	//Route::any('test', 									'Front\YouTubeController@test');
+	Route::post('civic', 								'CivicController@add');
+	//Route::any('mobident', 								'MobidentController@reward');
 
 	Route::get('sitemap-trusted-reviews.xml', 			'Front\SitemapController@links');
 	Route::get('sitemap.xml', 							'Front\SitemapController@sitemap');
@@ -347,7 +345,7 @@ Route::domain('urgent.reviews.dentacoin.com')->group($reviewRoutes);
 
 $voxRoutes = function () {
 	
-	Route::any('test', 									'Front\YouTubeController@test');
+	//Route::any('test', 									'Front\YouTubeController@test');
 	Route::get('sitemap-dentavox.xml', 					'Vox\SitemapController@links');
 	Route::get('sitemap.xml', 							'Vox\SitemapController@sitemap');
 	Route::get('robots.txt', 							'Vox\RobotsController@content');
