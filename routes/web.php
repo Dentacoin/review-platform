@@ -203,11 +203,9 @@ $reviewRoutes = function () {
 		Route::group(['namespace' => 'Front'], function () {
 
 			Route::any('/', 									'IndexController@home');
-			Route::get('pending-dentist', 						'IndexController@pending');
 			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
 			Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
-			Route::any('accept-gdpr', 							'IndexController@gdpr');
 			Route::get('want-to-invite-dentist', 				'IndexController@want_to_invite_dentist');
 			
 			Route::post('lead-magnet-step1', 					'IndexController@lead_magnet_step1');
@@ -230,10 +228,10 @@ $reviewRoutes = function () {
 			Route::post('forgot-password', 						'RegisterController@forgot_form');
 			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
 			Route::post('recover/{id}/{hash}', 					'RegisterController@recover_form');
-			Route::any('verification-dentist', 					'RegisterController@verification_dentist');
-			Route::any('register-invite', 						'RegisterController@register_invite');
-			Route::any('invite-clinic', 						'RegisterController@invite_clinic');
-			Route::any('invite-dentist', 						'RegisterController@invite_dentist');
+			Route::post('verification-dentist', 				'RegisterController@verification_dentist');
+			Route::post('register-invite', 						'RegisterController@register_invite');
+			Route::post('invite-clinic', 						'RegisterController@invite_clinic');
+			Route::post('invite-dentist', 						'RegisterController@invite_dentist');
 
 			Route::get('login/facebook', 						'LoginController@facebook_login');
 			Route::get('login/twitter', 						'LoginController@twitter_login');
@@ -411,7 +409,7 @@ $voxRoutes = function () {
 			Route::post('get-poll-content/{id}', 				'PollsController@get_poll_content');
 			Route::post('get-poll-stats/{id}', 					'PollsController@get_poll_stats');
 
-			Route::any('vpn', 									'VpnController@list');
+			//Route::any('vpn', 									'VpnController@list');
 
 			Route::group(['middleware' => 'auth:web'], function () {
 				Route::any('welcome-to-dentavox', 				'RegisterController@register_success');

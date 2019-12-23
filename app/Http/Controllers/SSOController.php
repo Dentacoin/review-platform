@@ -20,9 +20,9 @@ class SSOController extends BaseController
 	            $type = $this->decrypt(request('type'));
                 $approved_statuses = array('approved', 'pending', 'test', 'added_approved', 'admin_imported');
                 if($user->self_deleted != NULL) {
-                    return abort(404);
+                    return redirect(getLangUrl('page-not-found'));
                 } else if(!in_array($user->status, $approved_statuses)) {
-                    return abort(404);
+                    return redirect(getLangUrl('page-not-found'));
                 } else {
                     $session_arr = [
                         'token' => $token,
@@ -35,7 +35,7 @@ class SSOController extends BaseController
                     return redirect(getLangUrl('/'));
                 }
             } else {
-                return abort(404);
+                return redirect(getLangUrl('page-not-found'));
             }
         } else if(!empty(request('logout-token'))) {
             //logging out
@@ -52,7 +52,7 @@ class SSOController extends BaseController
 	        }
             Auth::guard('web')->logout();
         } else {
-            return abort(404);
+            return redirect(getLangUrl('page-not-found'));
         }
     }
 

@@ -8,8 +8,23 @@ class RobotsController extends FrontController
 {
 	public function content($locale=null) {
 
-		$content = 'User-agent: *
-Disallow:';
+		if (Request::getHost() == 'urgent.reviews.dentacoin.com') {
+
+			$content = 'User-agent: *
+Disallow: /';
+
+		} else {
+
+			$content = 'User-agent: *
+Disallow: /cms/
+Disallow: /question-count/
+Disallow: /suggest-clinic/
+Disallow: /suggest-dentist/
+Disallow: /want-to-invite-dentist/
+Disallow: /lead-magnet-session/
+Disallow: /lead-magnet-results/
+';
+		}
 
 		return response($content, 200)
             ->header('Content-Type', 'text/plain');
