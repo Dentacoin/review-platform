@@ -189,6 +189,7 @@ $reviewRoutes = function () {
 	Route::get('sitemap-trusted-reviews.xml', 			'Front\SitemapController@links');
 	Route::get('sitemap.xml', 							'Front\SitemapController@sitemap');
 	Route::get('robots.txt', 							'Front\RobotsController@content');
+	Route::get('index.php', 							'Front\IndexController@index');
 
 	Route::get('user-logout',							'Auth\AuthenticateUser@getLogout');
 	
@@ -203,7 +204,6 @@ $reviewRoutes = function () {
 
 		Route::group(['namespace' => 'Front'], function () {
 
-			Route::get('index.php', 							'IndexController@index');
 			Route::any('/', 									'IndexController@home');
 			Route::get('pending-dentist', 						'IndexController@pending');
 			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
