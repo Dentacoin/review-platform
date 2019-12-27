@@ -15,6 +15,7 @@ class UserLogin extends Model {
         'brand',
         'model',
         'os',
+        'country',
     ];
 
     protected $dates = [
