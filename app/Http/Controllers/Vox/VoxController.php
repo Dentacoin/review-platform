@@ -47,7 +47,7 @@ class VoxController extends FrontController
 		$vox = Vox::find($id);
 
 		if (empty($vox)) {
-			return redirect( getLangUrl('/'));
+			return redirect( getLangUrl('page-not-found') );
 		}		
 
 		return $this->dovox($locale, $vox);
@@ -56,7 +56,7 @@ class VoxController extends FrontController
 		$vox = Vox::whereTranslationLike('slug', $slug)->with('questions.translations')->with('questions.vox')->with('categories.category')->with('categories.category.translations')->first();
 
 		if (empty($vox)) {
-			return redirect( getLangUrl('/'));
+			return redirect( getLangUrl('page-not-found') );
 		}
 
 		return $this->dovox($locale, $vox);
@@ -161,7 +161,7 @@ class VoxController extends FrontController
 			if($this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
             	Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
 			}
-			return redirect( getLangUrl('/') );
+			return redirect( getLangUrl('page-not-found') );
 		} else if( 
 	    	isset( $this->details_fields[$qtype] ) ||
 	    	$qtype=='gender-question' ||
@@ -233,7 +233,7 @@ class VoxController extends FrontController
         }
 
 		if (!$isAdmin && $vox->type=='hidden') {
-			return redirect( getLangUrl('/') );
+			return redirect( getLangUrl('page-not-found') );
 		}
 
 		if (!$testmode) {

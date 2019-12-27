@@ -153,7 +153,7 @@ class IndexController extends FrontController
 		if(empty($this->user) || (!empty($this->user) && !$this->user->madeTest(11) ) ) {
 			return $this->survey_list($locale);
 		} else {
-			return redirect(getLangUrl('/'));
+			return redirect(getLangUrl('page-not-found'));
 		}
 	}
 
@@ -162,7 +162,7 @@ class IndexController extends FrontController
 		$this->user->gdpr_privacy = true;
 		$this->user->save();
 
-		return redirect( getLangUrl('/') );
+		return redirect( getLangUrl('page-not-found') );
 	}
 
 
@@ -195,14 +195,14 @@ class IndexController extends FrontController
 		$first = Vox::with('questions.translations')->where('type', 'home')->first();
 
 		if ($this->user && $this->user->madeTest($first->id)) {
-			return redirect( getLangUrl('/') );
+			return redirect( getLangUrl('page-not-found') );
 		} else {
 
 			$has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
 
 			if($has_test) {
 				if($this->user) {
-					return redirect(getLangUrl('/'));
+					return redirect( getLangUrl('page-not-found') );
 				} else {
 					return redirect(getLangUrl('registration'));					
 				}

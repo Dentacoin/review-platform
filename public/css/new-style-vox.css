@@ -9421,3 +9421,26 @@ svg:not(:root) {
       font-weight: 800;
       font-size: 30px;
       margin-left: 5px; }
+
+.error-wrapper h2 {
+  color: #38393b;
+  margin: 30px 0px; }
+  @media screen and (max-width: 768px) {
+    .error-wrapper h2 {
+      font-size: 25px; } }
+.error-wrapper img {
+  max-width: 100%; }
+.error-wrapper .button {
+  text-transform: uppercase;
+  font-size: 21px;
+  color: white;
+  background-color: #46afda;
+  padding: 15px 42px;
+  border-radius: 5px;
+  display: inline-block; }
+  @media screen and (max-width: 768px) {
+    .error-wrapper .button {
+      font-size: 17px; } }
+
+.page-page-not-found .poll-bubble {
+  display: none !important; }

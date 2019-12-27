@@ -115,7 +115,7 @@ class ProfileController extends FrontController
     //
 
     public function home($locale=null) {
-        return redirect(getVoxUrl('/'));
+        return redirect( getVoxUrl('page-not-found'));
 
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='admin_imported' && $this->user->status!='test') {
             return redirect(getLangUrl('welcome-to-dentavox'));
@@ -159,7 +159,7 @@ class ProfileController extends FrontController
 
 
     public function withdraw($locale=null) {
-        return redirect(getVoxUrl('/'));
+        return redirect( getVoxUrl('page-not-found'));
 
         if($this->user->isBanned('vox') || !$this->user->canWithdraw('vox') ) {
             return;
@@ -337,7 +337,7 @@ class ProfileController extends FrontController
 
 
     public function privacy($locale=null) {
-        return redirect(getVoxUrl('/'));
+        return redirect( getVoxUrl('page-not-found'));
 
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
             return redirect(getLangUrl('welcome-to-dentavox'));
@@ -360,7 +360,7 @@ class ProfileController extends FrontController
                     $this->user->deleteActions();
                     User::destroy( $this->user->id );
                     Auth::guard('web')->logout();
-                    return redirect( getLangUrl('/') );
+                    return redirect( getLangUrl('page-not-found') );
                 }
             }
         }
@@ -375,7 +375,7 @@ class ProfileController extends FrontController
 
     public function privacy_download($locale=null) {
 
-        return redirect(getVoxUrl('/'));
+        return redirect( getVoxUrl('page-not-found'));
 
         $html = $this->showView('users-data', array(
             'genders' => $this->genders,
@@ -429,7 +429,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
     public function invite($locale=null) {
 
-        return redirect(getVoxUrl('/'));
+        return redirect( getVoxUrl('page-not-found'));
 
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
             return redirect(getLangUrl('welcome-to-dentavox'));
@@ -610,7 +610,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     
 
     public function info($locale=null) {
-        return redirect(getVoxUrl('/'));
+        return redirect( getVoxUrl('page-not-found'));
 
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
             return redirect(getLangUrl('welcome-to-dentavox'));
@@ -744,7 +744,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function change_password($locale=null) {
-        return redirect(getVoxUrl('/'));
+        return redirect( getVoxUrl('page-not-found'));
 
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
             return redirect(getLangUrl('welcome-to-dentavox'));
@@ -810,7 +810,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     }
 
     public function gdpr($locale=null) {
-        return redirect(getVoxUrl('/'));
+        return redirect( getVoxUrl('page-not-found'));
         
         $this->user->gdpr_privacy = true;
         $this->user->save();

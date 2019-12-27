@@ -308,7 +308,7 @@ class FrontController extends BaseController
 
     }
 
-    public function ShowVoxView($page, $params=array()) {
+    public function ShowVoxView($page, $params=array(), $statusCode=null) {
 
         if( session('login-logged') && $this->user && !Cookie::get('prev-login') ) {
             Cookie::queue('prev-login', $this->user->id, 60*24*31);
@@ -399,7 +399,12 @@ class FrontController extends BaseController
 
         $params['poll_scales'] = $poll_scales;
 
-        return view('vox.'.$page, $params);
+        if (!empty($statusCode)) {
+            return response()->view('vox.'.$page, $params, $statusCode);
+        } else {
+            return view('vox.'.$page, $params);
+        }
+        
     }
 
     public function ShowView($page, $params=array(), $statusCode=null) {

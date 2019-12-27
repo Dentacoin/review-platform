@@ -443,6 +443,9 @@ $voxRoutes = function () {
 			Route::any('appeal', 								'IndexController@appeal');
 			Route::any('accept-gdpr', 							'IndexController@gdpr');
 
+			Route::get('page-not-found', 						'NotFoundController@home');
+			Route::get('{catch?}', 								'NotFoundController@catch');
+
 		});
 	});
 };

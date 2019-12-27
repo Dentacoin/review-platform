@@ -13557,3 +13557,38 @@ svg:not(:root) {
 	    }
 	}
 }
+
+.error-wrapper {
+	h2 {
+		color: #38393b;
+		margin: 30px 0px;
+
+		@media #{$phone} {
+			font-size: 25px;
+		}
+	}
+
+	img {
+		max-width: 100%;
+	}
+
+	.button {
+		text-transform: uppercase;
+	    font-size: 21px;
+	    color: white;
+	    background-color: #46afda;
+	    padding: 15px 42px;
+	    border-radius: 5px;
+	    display: inline-block;
+
+	    @media #{$phone} {
+	    	font-size: 17px;
+	    }
+	}
+}
+
+.page-page-not-found {
+	.poll-bubble {
+		display: none !important;
+	}
+}

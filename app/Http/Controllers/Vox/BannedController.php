@@ -25,7 +25,7 @@ class BannedController extends FrontController
 	public function profile_redirect($locale=null) {
 
 		if (!empty($this->user) && !$this->user->isBanned('vox')) {
-			return redirect( getVoxUrl('/'));
+			return redirect( getVoxUrl('page-not-found'));
 		}
 			
 		return $this->ShowVoxView('profile-redirect');

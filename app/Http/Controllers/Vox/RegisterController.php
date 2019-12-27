@@ -473,7 +473,7 @@ class RegisterController extends FrontController
 
             return $this->ShowVoxView('register-success-dentist');
         } else {
-            return redirect( getLangUrl('/') );
+            return redirect( getLangUrl('page-not-found') );
         }
     }
 

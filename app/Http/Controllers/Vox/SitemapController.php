@@ -27,8 +27,6 @@ class SitemapController extends FrontController
 
 		$links = [
 			getLangUrl('/'),
-			//getLangUrl('login'),
-			//getLangUrl('registration'),
 			getLangUrl('welcome-survey'),
 			getLangUrl('dental-survey-stats'),
 			getLangUrl('daily-polls'),
