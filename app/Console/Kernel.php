@@ -1523,7 +1523,8 @@ NEW & FAILED TRANSACTIONS
 
             if ($logins->isNotEmpty()) {
                 foreach ($logins as $login) {
-                    
+                    $login->country = \GeoIP::getLocation($login->ip)->country;
+                    $login->save();
                 }
             }
 
