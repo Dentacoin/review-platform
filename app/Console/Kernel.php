@@ -14,6 +14,7 @@ use App\Models\Dcn;
 use App\Models\Review;
 use App\Models\Reward;
 use App\Models\VoxAnswer;
+use App\Models\UserLogin;
 use App\Models\Poll;
 use App\Models\UserInvite;
 use App\Models\DcnTransaction;
@@ -1496,7 +1497,7 @@ NEW & FAILED TRANSACTIONS
 
             echo 'amount reward vox_question CRON END';
 
-        })->everyMinute(); //05:00h
+        })->everyMinute();
 
 
         $schedule->call(function () {
@@ -1513,14 +1514,24 @@ NEW & FAILED TRANSACTIONS
 
             echo 'Self deleted users cron end';
 
-        })->daily(); //05:00h
+        })->daily();
+
+
+        $schedule->call(function () {
+
+            $logins = UserLogin::whereNull('country')->orderBy('id', 'desc')->take(100)->get();
+
+            foreach ($logins as $login) {
+                dd(\GeoIP::getLocation($login->ip)->country);
+            }
+
+        })->everyMinute();
 
 
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s');
 
-        })->cron("* * * * *"); //05:00h
-
+        })->cron("* * * * *");
 
     }
 

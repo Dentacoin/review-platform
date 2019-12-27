@@ -197,6 +197,15 @@ class IndexController extends FrontController
 
 		$social_image = url('img-trp/reviews-social-image.png');
 
+		// $current = Carbon::now();
+		// $new_year = Carbon::parse('2019-12-26');
+
+		// if($current <= $new_year) {
+		// 	$social_image = url('img-trp/reviews-social-new-image.png');
+		// } else {
+		// 	$social_image = url('img-trp/reviews-social-image.png');
+		// }
+
 		$strength_arr = null;
 		$completed_strength = null;
 		if ($this->user) {
