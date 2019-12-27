@@ -71,4 +71,23 @@ $(document).ready(function(){
 		$('#user-slug').prop("disabled", false);
 	});
 
+
+	$('.deletion-button').click( function() {
+		var action = $('#deleteModal form').attr('original-action') + '/' + $(this).attr('user-id');
+		$('#deleteModal form').attr('action' , action);
+	});
+
+	$('#mass-delete-button').click( function(e) {
+		e.preventDefault();
+
+		$('#massDeleteModal').modal('show');
+	});
+
+	$('#massDeleteModalButton').click( function(e) {
+		e.preventDefault();
+
+		$('#mass-delete-form').find('input[name="mass-delete-reasons"]').val($(this).parent().find('textarea').val());
+		$('#mass-delete-form').submit();
+	});
+
 });

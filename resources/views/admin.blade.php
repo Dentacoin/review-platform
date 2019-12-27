@@ -45,7 +45,7 @@
         <!-- ================== END PAGE LEVEL STYLE ================== -->
 
 
-        <link href="admin/css/custom.css" rel="stylesheet" />
+        <link href="admin/css/custom.css?ver={{ $cache_version }}" rel="stylesheet" />
         
         <!-- ================== BEGIN BASE JS ================== -->
         <script src="admin/plugins/pace/pace.min.js"></script>
@@ -238,10 +238,10 @@
 
         <!-- ================== CUSTOM JS ================== -->
         <script src="admin/js/ckeditor/ckeditor.js"></script>
-        <script src="admin/js/custom/all.js"></script>
+        <script src="admin/js/custom/all.js?ver={{ $cache_version }}"></script>
         @if( !empty( config('admin.pages.'.$current_page.'.js') ) )
             @foreach ( config('admin.pages.'.$current_page.'.js') as $file )
-                <script src="admin/js/custom/{{ $file }}"></script>
+                <script src="admin/js/custom/{{ $file }}?ver={{ $cache_version }}"></script>
             @endforeach
         @endif
 

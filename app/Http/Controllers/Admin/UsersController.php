@@ -636,7 +636,7 @@ class UsersController extends AdminController
 
         $table_fields['created_at'] = array('format' => 'datetime', 'label' => 'Registered');
         $table_fields['last_login'] = array('template' => 'admin.parts.table-users-last-login', 'label' => 'Last login');
-        $table_fields['delete'] = array('format' => 'delete');
+        $table_fields['delete'] = array('template' => 'admin.parts.table-users-delete');
 
         $vox_hidden = false;
         $trp_hidden = false;
@@ -717,6 +717,8 @@ class UsersController extends AdminController
         if( Request::input('ids') ) {
             $delusers = User::whereIn('id', Request::input('ids'))->get();
             foreach ($delusers as $du) {
+                $du->deleted_reason = Request::input('mass-delete-reasons');
+                $du->save();
                 $du->deleteActions();
                 $du->delete();
             }

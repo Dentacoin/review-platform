@@ -137,7 +137,7 @@
                 <!-- <b>
                     Showing {{ $users->isNotEmpty() ? $users->count() : '0' }} out of total {{ $total_count }} profiles that match this search
                 </b> -->
-                <form method="post" action="{{ url('cms/users/mass-delete') }}" >
+                <form method="post" action="{{ url('cms/users/mass-delete') }}" id="mass-delete-form">
                     {!! csrf_field() !!}
 					@include('admin.parts.table', [
 						'table_id' => 'users',
@@ -147,10 +147,59 @@
                         'pagination_link' => array()
 					])
 
-                    <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" onclick="return confirm('Are you sure?');">Delete selected users</button>
+                    <input type="hidden" name="mass-delete-reasons">
+                    <button type="submit" name="mass-delete" value="1" class="btn btn-block btn-primary" id="mass-delete-button">Delete selected users</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+<div id="deleteModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete user</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url('cms/users/delete/') }}" original-action="{{ url('cms/users/delete/') }}" method="post">
+                    <textarea class="form-control" name="deleted_reason" placeholder="Write the reason why you want to delete this user"></textarea>
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Delete</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="massDeleteModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete users</h4>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" name="deleted_reason" placeholder="Write the reason why you want to delete this users. This reason will be saved for all selected users."></textarea>
+                <button type="button" class="btn btn-primary btn-block" id="massDeleteModalButton" style="margin-top: 20px;">Delete selected users</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style type="text/css">
+    tr {
+        font-size: 12px;
+    }
+</style>
