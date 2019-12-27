@@ -787,6 +787,7 @@
                         'table_fields' => [
                             'created_at'        => array('format' => 'datetime','width' => '20%'),
                             'ip'                => array('template' => 'admin.parts.table-logins-user','width' => '30%'),
+                            'country'          => array('label' => 'Country','width' => '30%'),
                             'device'          => array('template' => 'admin.parts.table-logins-device','width' => '100%'),
                             'platform'          => array('template' => 'admin.parts.table-platforms'),
                         ],

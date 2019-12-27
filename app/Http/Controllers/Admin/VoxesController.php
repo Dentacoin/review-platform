@@ -1202,6 +1202,7 @@ class VoxesController extends AdminController
                 'Age',
                 'Sex',
             ];
+
             $cols2 = [
                 '',
                 '',
@@ -1209,6 +1210,13 @@ class VoxesController extends AdminController
                 '',
                 '',
             ];
+
+            if(!empty(Request::input('demographics'))) {
+                foreach(Request::input('demographics') as $dem) {
+                    $cols[] = config('vox.stats_scales')[$dem];
+                    $cols2[] = '';
+                }
+            }
 
             $vox = Vox::find( request('survey') );
             $slist = VoxScale::get();
@@ -1269,6 +1277,12 @@ class VoxesController extends AdminController
                     $user->user->birthyear ? ( date('Y') - $user->user->birthyear ) : '',
                     $user->user->gender ? ($user->user->gender=='m' ? 'Male' : 'Female') : '',
                 ];
+
+                if(!empty(Request::input('demographics'))) {
+                    foreach(Request::input('demographics') as $dem) {
+                        $row[] = $user->user->$dem ? config('vox.details_fields.'.$dem.'.values')[$user->user->$dem] : '';
+                    }
+                }
 
                 $answers = VoxAnswer::where('user_id', $user->user->id)
                 ->where('vox_id', $vox->id)

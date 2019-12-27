@@ -61,6 +61,12 @@ class VoxQuestion extends Model {
         return preg_replace('/\[([^\]]*)\]/', '<span class="tooltip-text" text="${1}">', $new_title);
     }
 
+    public function questionWithoutTooltips() {
+        $new_title = str_replace("[/]","",$this->question);
+        
+        return preg_replace('/\[([^\]]*)\]/', '', $new_title);
+    }
+
     public static function handleAnswerTooltip($answer) {
         $new_answer = str_replace("[/]","</span>", str_replace('"', '&quot;', $answer));
         

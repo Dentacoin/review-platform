@@ -22,13 +22,27 @@
                     {!! csrf_field() !!}
                     <div class="row">
                         <div class="col-md-6">
-                            <input type="text" class="form-control datepicker" name="date-from" value="" placeholder="Date from" style="margin-bottom: 10px;">
-                            <input type="text" class="form-control datepicker" name="date-to" value="" placeholder="Date to" style="margin-bottom: 10px;">
+                            <input type="text" class="form-control datepicker" name="date-from" value="" autocomplete="off" placeholder="Date from" style="margin-bottom: 10px;">
+                            <input type="text" class="form-control datepicker" name="date-to" value="" autocomplete="off" placeholder="Date to" style="margin-bottom: 10px;">
                             <select class="form-control" name="survey" style="margin-bottom: 10px;">
                                 @foreach($voxes as $vox)
                                     <option value="{{ $vox->id }}">{{ $vox->title }}</option>
                                 @endforeach
                             </select>
+                            <br/>
+                            <div class="form-group clearfix" id="stat_standard">
+                                <label class="col-md-2 control-label">Demographics</label>
+                                <div class="col-md-10">
+                                    @foreach( config('vox.stats_scales') as $k => $v)
+                                        @if($k != 'gender' && $k != 'age' && $k != 'country_id')
+                                            <label for="demographics-{{ $k }}">
+                                                <input type="checkbox" name="demographics[]" value="{{ $k }}" id="demographics-{{ $k }}" style="vertical-align: sub;" />
+                                                {{ trans('vox.page.stats.group-by-'.$k) }} &nbsp;&nbsp;&nbsp;&nbsp;
+                                            </label>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <select class="form-control" name="country_id[]" multiple style="min-height: 300px;">
