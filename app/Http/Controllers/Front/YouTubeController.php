@@ -33,8 +33,6 @@ class YouTubeController extends FrontController
 {
     public function test() {
 
-        file_put_contents( base_path().'/storage/logs/laravel.log', '');
-
     	// $users = Review::get();
 
     	// foreach ($users as $user) {
