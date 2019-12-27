@@ -5,20 +5,23 @@
 	<div class="page-dentists page-c">
 		<div class="black-overflow" style="display: none;">
 		</div>
-		<div class="home-search-form">
-		    @include('trp.parts.search-form')			
+
+		<div class="search-gradient-wave green-gradient">
+			<div class="home-search-form">
+			    @include('trp.parts.search-form')			
+			</div>
+
+			<div class="main-top">
+		    </div>
+
+		    <div class="sort-wrapper">
+		    	<h1 class="white-title">
+		    		{!! nl2br(trans('trp.page.search.city-title', [
+			            'country' => $all_cities->first()->state_name.', '.$country->name,
+			        ])) !!}
+		    	</h1>
+		    </div>
 		</div>
-
-		<div class="main-top">
-	    </div>
-
-	    <div class="sort-wrapper">
-	    	<h1 class="white-title">
-	    		{!! nl2br(trans('trp.page.search.city-title', [
-		            'country' => $all_cities->first()->state_name.', '.$country->name,
-		        ])) !!}
-	    	</h1>
-	    </div>
 
 	    <div class="countries-wrapper container">
 		    <div class="countries">
