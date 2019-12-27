@@ -1521,8 +1521,10 @@ NEW & FAILED TRANSACTIONS
 
             $logins = UserLogin::whereNull('country')->orderBy('id', 'desc')->take(100)->get();
 
-            foreach ($logins as $login) {
-                dd(\GeoIP::getLocation($login->ip)->country);
+            if ($logins->isNotEmpty()) {
+                foreach ($logins as $login) {
+                    
+                }
             }
 
         })->everyMinute();
