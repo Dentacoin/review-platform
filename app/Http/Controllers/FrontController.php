@@ -181,6 +181,7 @@ class FrontController extends BaseController
                 $ul->user_id = $this->user->id;
                 $ul->ip = User::getRealIp();
                 $ul->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
+                $ul->country = \GeoIP::getLocation()->country;
 
                 $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
                 $dd = new DeviceDetector($userAgent);
