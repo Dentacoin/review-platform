@@ -6,10 +6,14 @@ use App\Http\Controllers\FrontController;
 use App\Models\User;
 use App\Models\UserCategory;
 use App\Models\UserInvite;
+use App\Models\UserLogin;
 use App\Models\Country;
 use App\Models\City;
 use App\Models\Civic;
 use Carbon\Carbon;
+
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
 
 use Validator;
 use Auth;
@@ -928,6 +932,28 @@ class RegisterController extends FrontController
                         session($sess);
 
                         if ($newuser->loggedFromBadIp()) {
+                            
+                            $ul = new UserLogin;
+                            $ul->user_id = $newuser->id;
+                            $ul->ip = User::getRealIp();
+                            $ul->platform = 'trp';
+                            $ul->country = \GeoIP::getLocation()->country;
+
+                            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                            $dd = new DeviceDetector($userAgent);
+                            $dd->parse();
+
+                            if ($dd->isBot()) {
+                                // handle bots,spiders,crawlers,...
+                                $ul->device = $dd->getBot();
+                            } else {
+                                $ul->device = $dd->getDeviceName();
+                                $ul->brand = $dd->getBrandName();
+                                $ul->model = $dd->getModel();
+                                $ul->os = $dd->getOs()['name'];
+                            }
+                            
+                            $ul->save();
 
                             $newuser->deleted_reason = 'Automatically: Bad IP';
                             $newuser->save();

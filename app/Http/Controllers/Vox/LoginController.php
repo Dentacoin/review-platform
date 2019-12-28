@@ -7,6 +7,7 @@ use App\Models\Country;
 use App\Models\City;
 use App\Models\Civic;
 use App\Models\UserInvite;
+use App\Models\UserLogin;
 use Carbon\Carbon;
 
 use Session;
@@ -16,6 +17,9 @@ use Response;
 use Request;
 use Image;
 use Cookie;
+
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
 
 class LoginController extends FrontController
 {
@@ -363,11 +367,29 @@ class LoginController extends FrontController
                 ];
                 session($sess);
 
-                if( $newuser->email ) {
-                    $newuser->sendGridTemplate( 12 );
-                }
-
                 if($newuser->loggedFromBadIp()) {
+
+                    $ul = new UserLogin;
+                    $ul->user_id = $newuser->id;
+                    $ul->ip = User::getRealIp();
+                    $ul->platform = 'trp';
+                    $ul->country = \GeoIP::getLocation()->country;
+
+                    $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                    $dd = new DeviceDetector($userAgent);
+                    $dd->parse();
+
+                    if ($dd->isBot()) {
+                        // handle bots,spiders,crawlers,...
+                        $ul->device = $dd->getBot();
+                    } else {
+                        $ul->device = $dd->getDeviceName();
+                        $ul->brand = $dd->getBrandName();
+                        $ul->model = $dd->getModel();
+                        $ul->os = $dd->getOs()['name'];
+                    }
+                    
+                    $ul->save();
 
                     $newuser->deleted_reason = 'Automatically: Bad IP';
                     $newuser->save();
@@ -375,6 +397,10 @@ class LoginController extends FrontController
                     User::destroy( $newuser->id );
 
                     return redirect( getVoxUrl('/').'?suspended-popup' );
+                }
+
+                if( $newuser->email ) {
+                    $newuser->sendGridTemplate( 12 );
                 }
 
                 Auth::login($newuser, true);
