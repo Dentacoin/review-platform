@@ -1070,7 +1070,9 @@ class UsersController extends AdminController
                                             "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
                                         ];
 
-                                        $item->sendGridTemplate(43, $substitutions);
+                                        if(!empty($item->email)) {
+                                            $item->sendGridTemplate(43, $substitutions);
+                                        }                                        
 
                                         // $item->sendTemplate( 43  , [
                                         //     'dentist_name' => $item->name,
