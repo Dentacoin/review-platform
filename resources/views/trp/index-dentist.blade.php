@@ -121,6 +121,12 @@
     			{!! nl2br(trans('trp.page.index-dentist.signup')) !!}
     		</a>
     	</div>
+
+    	@if(!empty($admin))
+			<div class="tac">
+				<a href="javascript:;" class="get-started magnet-popup" data-url="{{ getLangUrl('lead-magnet-session') }}">Lead magnet</a>
+			</div>
+		@endif
     </div>
 
     <div class="testimonials-section">
@@ -153,7 +159,6 @@
     	<h2 class="tac">
     		{!! nl2br(trans('trp.page.index-dentist.how-works-title')) !!}
     	</h2>
-
 
     	<div class="clearfix mobile-flickity">
     		<div class="left">
@@ -231,4 +236,29 @@
 	    	</div>
     	</div>
     </div>
+
+    @if(!empty($admin))
+
+	    @include('trp.popups.lead-magnet')
+
+		<script>
+	        (function(w,d,t,u,n,a,m){
+	            if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
+	            w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),
+	            m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
+	        })(window,document,'script','https://dentacoin.ariticapp.com/ma/atc.js','at');
+	    </script> 
+	    <script type="text/javascript" src="https://dentacoin.ariticapp.com/ma/patc.js"></script>
+
+	    <script type="text/javascript">
+	    	function LeadMagenet() {
+			    _aaq.push(['setContactFields', {
+			    	name:document.getElementById("magnet-name").value,
+			    	website:document.getElementById("magnet-website").value,
+			    	email:document.getElementById("magnet-email").value,
+			    }]);
+				_aaq.push(['trackPageView']);
+			}
+	    </script>
+	@endif
 @endsection

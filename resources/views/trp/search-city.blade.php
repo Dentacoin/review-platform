@@ -32,7 +32,7 @@
 					    		@if(!is_object($cuser))
 					    			<span class="letter">{{ $cuser }}</span>
 					    		@else
-					    			<a href="{{ getLangUrl( str_replace([' ', "'"], ['-', ''], 'dentists/'.strtolower($cuser->city_name).'-'.$cuser->state_slug.'-'.$cuser->country->slug)) }}">{{ $cuser->city_name }}</a>
+					    			<a href="{{ getLangUrl( str_replace([' ', "'"], ['-', ''], 'dentists/'.strtolower($cuser->city_name).'-'.($cuser->state_slug == 'ega' ? '' : $cuser->state_slug.'-').$cuser->country->slug)) }}">{{ $cuser->city_name }}</a>
 					    		@endif
 					    		@if( $total_rows > 8 && in_array($key, $breakpoints) && !$loop->last)
 					    			</div>
