@@ -456,7 +456,7 @@ NEW & FAILED TRANSACTIONS
         $schedule->call(function () {
             echo 'Suspicious Dentist Delete Cron - START';
 
-            $users = User::where('is_dentist', '1')->where('status', 'pending')->where('created_at', '<', Carbon::now()->subDays(7) )->get();
+            $users = User::where('is_dentist', '1')->where('status', 'pending')->where('updated_at', '<', Carbon::now()->subDays(7) )->get();
 
             if ($users->isNotEmpty()) {
                 $userNames = [];
@@ -465,7 +465,7 @@ NEW & FAILED TRANSACTIONS
                     $userNames[] = $user->getName();
 
                     $user->status=='rejected';
-                    $user->deleted_reason = 'Automatically - Dentist with status pending over a week';
+                    $user->deleted_reason = 'Automatically - Dentist with status suspicious over a week';
                     $user->save();
                     $user->deleteActions();
                     User::destroy( $user->id );
