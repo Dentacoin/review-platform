@@ -148,7 +148,7 @@ class VoxController extends FrontController
 
 		if($this->user->loggedFromBadIp()) {
 
-            $this->user->deleted_reason = 'Automatically: Bad IP';
+            $this->user->deleted_reason = 'Automatically - Bad IP ( vox questionnaire )';
             $this->user->save();
             $this->user->deleteActions();
             User::destroy( $this->user->id );

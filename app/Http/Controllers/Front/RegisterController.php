@@ -836,7 +836,7 @@ class RegisterController extends FrontController
                         if($user->deleted_at || $user->isBanned('trp')) {
                             $ret['popup'] = 'banned-popup';
                         } else if( $user->loggedFromBadIp() ) {
-                            $user->deleted_reason = 'Automatically: Bad IP';
+                            $user->deleted_reason = 'Automatically - Bad IP ( login from register form Civic - TELL GERGANA ABOUT THIS!! )';
                             $user->save();
                             $user->deleteActions();
                             User::destroy( $user->id );
@@ -970,7 +970,7 @@ class RegisterController extends FrontController
                             
                             $ul->save();
 
-                            $newuser->deleted_reason = 'Automatically: Bad IP';
+                            $newuser->deleted_reason = 'Automatically - Bad IP ( Civic register )';
                             $newuser->save();
                             $newuser->deleteActions();
                             User::destroy( $newuser->id );

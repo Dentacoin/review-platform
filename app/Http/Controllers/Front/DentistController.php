@@ -246,7 +246,7 @@ class DentistController extends FrontController
                     //     ; //dgd
                     // }
                     if( $this->user->loggedFromBadIp() ) {
-                        $this->user->deleted_reason = 'Automatically: Bad IP';
+                        $this->user->deleted_reason = 'Automatically - Bad IP (Writing review)';
                         $this->user->save();
                         $this->user->deleteActions();
                         User::destroy( $this->user->id );

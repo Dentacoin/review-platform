@@ -56,7 +56,7 @@ class LoginController extends FrontController
 
                 if( $user->loggedFromBadIp() ) {
 
-                    $user->deleted_reason = 'Automatically: Bad IP';
+                    $user->deleted_reason = 'Automatically - Bad IP (FB login)';
                     $user->save();
                     $user->deleteActions();
                     User::destroy( $user->id );
@@ -90,7 +90,7 @@ class LoginController extends FrontController
                 if($user->loggedFromBadIp()) {
                     //dd('Bad IP', $s_user, $s_user->user);
 
-                    $user->deleted_reason = 'Automatically: Bad IP';
+                    $user->deleted_reason = 'Automatically - Bad IP (FB login)';
                     $user->save();
                     $user->deleteActions();
                     User::destroy( $user->id );
@@ -187,7 +187,7 @@ class LoginController extends FrontController
                 return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('You have been permanently banned and cannot return to DentaVox anymore.'));
             } else if($user->loggedFromBadIp()) {
 
-                $user->deleted_reason = 'Automatically: Bad IP';
+                $user->deleted_reason = 'Automatically - Bad IP (from register form FB login - TELL GERGANA ABOUT THIS!! )';
                 $user->save();
                 $user->deleteActions();
                 User::destroy( $user->id );
@@ -391,7 +391,7 @@ class LoginController extends FrontController
                     
                     $ul->save();
 
-                    $newuser->deleted_reason = 'Automatically: Bad IP';
+                    $newuser->deleted_reason = 'Automatically - Bad IP ( FB register )';
                     $newuser->save();
                     $newuser->deleteActions();
                     User::destroy( $newuser->id );
@@ -468,7 +468,7 @@ class LoginController extends FrontController
                         if ($user) {
                             if($user->loggedFromBadIp()) {
 
-                                $user->deleted_reason = 'Automatically: Bad IP';
+                                $user->deleted_reason = 'Automatically - Bad IP ( Civic login )';
                                 $user->save();
                                 $user->deleteActions();
                                 User::destroy( $user->id );

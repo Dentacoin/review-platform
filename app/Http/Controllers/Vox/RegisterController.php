@@ -763,7 +763,7 @@ class RegisterController extends FrontController
 
                         if ($newuser->loggedFromBadIp()) {
 
-                            $newuser->deleted_reason = 'Automatically: Bad IP';
+                            $newuser->deleted_reason = 'Automatically - Bad IP ( Civic register )';
                             $newuser->save();
                             $newuser->deleteActions();
                             User::destroy( $newuser->id );
@@ -834,7 +834,7 @@ class RegisterController extends FrontController
                             return redirect(getVoxUrl('/').'?error-message='.urlencode('You have been permanently banned and cannot return to Dentavox anymore.' ));
                         } else if($user->loggedFromBadIp()) {
 
-                            $user->deleted_reason = 'Automatically: Bad IP';
+                            $user->deleted_reason = 'Automatically - Bad IP ( civic login from register form - TELL GERGANA ABOUT THIS!!)';
                             $user->save();
                             $user->deleteActions();
                             User::destroy( $user->id );
@@ -955,7 +955,7 @@ class RegisterController extends FrontController
                             
                             $ul->save();
 
-                            $newuser->deleted_reason = 'Automatically: Bad IP';
+                            $newuser->deleted_reason = 'Automatically - Bad IP ( Civic register )';
                             $newuser->save();
                             $newuser->deleteActions();
                             User::destroy( $newuser->id );

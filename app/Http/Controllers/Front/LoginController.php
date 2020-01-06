@@ -72,7 +72,7 @@ class LoginController extends FrontController
             } else {
 
                 if( $user->loggedFromBadIp() ) {
-                    $user->deleted_reason = 'Automatically: Bad IP';
+                    $user->deleted_reason = 'Automatically - Bad IP (FB login)';
                     $user->save();
                     $user->deleteActions();
                     User::destroy( $user->id );
@@ -113,7 +113,7 @@ class LoginController extends FrontController
                     ->withInput()
                     ->with('error-message', 'Unable to sign you up for security reasons.' );
                 } else if( $user->loggedFromBadIp() ) {
-                    $user->deleted_reason = 'Automatically: Bad IP';
+                    $user->deleted_reason = 'Automatically - Bad IP (FB login)';
                     $user->save();
                     $user->deleteActions();
                     User::destroy( $user->id );
@@ -262,7 +262,7 @@ class LoginController extends FrontController
                 ->withInput()
                 ->with('error-message', 'Unable to sign you up for security reasons.' );
             } else if( $user->loggedFromBadIp() ) {
-                $user->deleted_reason = 'Automatically: Bad IP';
+                $user->deleted_reason = 'Automatically - Bad IP (from register form FB login - TELL GERGANA ABOUT THIS!! )';
                 $user->save();
                 $user->deleteActions();
                 User::destroy( $user->id );
@@ -477,7 +477,7 @@ class LoginController extends FrontController
                     
                     $ul->save();
 
-                    $newuser->deleted_reason = 'Automatically: Bad IP';
+                    $newuser->deleted_reason = 'Automatically - Bad IP ( FB register )';
                     $newuser->save();
                     $newuser->deleteActions();
                     User::destroy( $newuser->id );
@@ -571,7 +571,7 @@ class LoginController extends FrontController
                                 $ret['popup'] = 'banned-popup';
                             } else if( $user->loggedFromBadIp() ) {
 
-                                $user->deleted_reason = 'Automatically: Bad IP';
+                                $user->deleted_reason = 'Automatically - Bad IP (Civic login)';
                                 $user->save();
                                 $user->deleteActions();
                                 User::destroy( $user->id );
