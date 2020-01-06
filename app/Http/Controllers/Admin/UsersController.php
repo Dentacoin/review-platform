@@ -1046,13 +1046,18 @@ class UsersController extends AdminController
                                 }
                             }
                         } else if($key=='name' || $key=='email') {
-                            $existing = User::withTrashed()->where('id', '!=', $item->id)->where($key, 'like', $this->request->input($key))->first();
-
-                            if (!empty($existing)) {
-                                Request::session()->flash('error-message', 'This '.$key.' is already used by another user - ID '.$existing->id);
-                                return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
-                            } else {
+                            if ($key == 'email' && empty($this->request->input($key))) {
                                 $item->$key = $this->request->input($key);
+                            } else {
+                                
+                                $existing = User::withTrashed()->where('id', '!=', $item->id)->where($key, 'like', $this->request->input($key))->first();
+
+                                if (!empty($existing)) {
+                                    Request::session()->flash('error-message', 'This '.$key.' is already used by another user - ID '.$existing->id);
+                                    return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
+                                } else {
+                                    $item->$key = $this->request->input($key);
+                                }
                             }
                         } else if($key=='status') {
                             if( $this->request->input($key) && $item->$key!=$this->request->input($key) ) {
