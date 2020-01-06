@@ -768,10 +768,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
                 $final_message = '';
                 $alert_color = '';
+                $gtag_tracking = true;
 
                 if (!empty($invalid) && $invalid == count($emails)) {
                     $final_message = 'The review invitations were not sent. Please, provide valid patient emails and match them correctly with the corresponding column.';
                     $alert_color = 'warning';
+                    $gtag_tracking = false;
                 } else if(!empty($invalid) && $invalid != count($emails)) {
                     if (empty($already_invited)) {
                         $final_message = 'Review invitations were sent successfully to patients with valid email addresses. However, there were some unvalid emails in the provided contact info, which were skipped.';
@@ -783,6 +785,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 } else if(!empty($already_invited) && ($already_invited == count($emails))) {
                     $final_message = 'Sending review invitations failed! You already invited these patients to submit feedback this month.';
                     $alert_color = 'warning';
+                    $gtag_tracking = false;
                 } else if(!empty($already_invited) && $already_invited != count($emails)) {
                     $final_message = 'Review invitations were sent successfully to patients with valid email addresses. However, note that some patients were excluded from the invites because they already submitted feedback this month.';
                     $alert_color = 'orange';
@@ -909,6 +912,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     'success' => true,
                     'message' => $final_message,
                     'color' => $alert_color,
+                    'gtag_tracking' => $gtag_tracking,
                 ] );
             } else {
                 return Response::json([

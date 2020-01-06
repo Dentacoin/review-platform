@@ -1004,18 +1004,21 @@ $(document).ready(function(){
                     that.find('.bulk-invite-back').hide(); 
                     that.find('.try-invite-again').show();
 
-                    if( that.closest('#invite-option-copypaste').length) {
+                    if (data.gtag_tracking) {
                         
-                        gtag('event', 'Copy-PasteBulk', {
-                            'event_category': 'ReviewInvites',
-                            'event_label': 'InvitesSent',
-                        });
-                    } else if(that.closest('#invite-option-file').length) {
+                        if( that.closest('#invite-option-copypaste').length) {
+                            
+                            gtag('event', 'Copy-PasteBulk', {
+                                'event_category': 'ReviewInvites',
+                                'event_label': 'InvitesSent',
+                            });
+                        } else if(that.closest('#invite-option-file').length) {
 
-                        gtag('event', 'FileImport', {
-                            'event_category': 'ReviewInvites',
-                            'event_label': 'InvitesSent',
-                        });
+                            gtag('event', 'FileImport', {
+                                'event_category': 'ReviewInvites',
+                                'event_label': 'InvitesSent',
+                            });
+                        }
                     }
                 } else {
                     that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 

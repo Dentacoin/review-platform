@@ -514,7 +514,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
     public function lead_magnet_results($locale=null) {
 
-    	if (!empty(session('lead_magnet'))) {
+    	if (!empty(session('lead_magnet')) && empty($this->user)) {
 
     		$country_id = $this->country_id;
 
