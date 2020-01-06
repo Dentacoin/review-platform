@@ -248,7 +248,7 @@
 	            m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
 	        })(window,document,'script','https://dentacoin.ariticapp.com/ma/atc.js','at');
 	    </script> 
-	    <script type="text/javascript" src="https://dentacoin.ariticapp.com/ma/patc.js"></script>
+	    <script type="text/javascript" src="https://dentacoin.ariticapp.com/ma/13/patc.js"></script>
 
 	    <script type="text/javascript">
 	    	function LeadMagenet() {
