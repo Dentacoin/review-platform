@@ -19,9 +19,9 @@ class DentistsController extends FrontController
     public function getCorrectedQuery($query, $filter) {
         $query = trim(urldecode($query));
         if(!empty($filter)) {
-            $corrected_query = mb_strtolower(str_replace([',', "'", ' '], ['', '', '-'], $query )).'/'.$filter;
+            $corrected_query = mb_strtolower(str_replace([',', "'", ' ', '.'], ['', '', '-'. ''], $query )).'/'.$filter;
         } else {
-            $corrected_query = 'dentists/'.mb_strtolower(str_replace([',',  "'", ' '], ['', '', '-'], $query ));
+            $corrected_query = 'dentists/'.mb_strtolower(str_replace([',',  "'", ' ', '.'], ['', '', '-', ''], $query ));
         }
 
         return $corrected_query;
@@ -42,7 +42,6 @@ class DentistsController extends FrontController
         if (empty($query)) {
             return redirect( getLangUrl('page-not-found') );
         }
-
         // $corrected_query = mb_strtolower(str_replace([',', ' '], ['', '-'], $query )).(!empty($filter) ? '/'.$filter : '');
         $corrected_query = $this->getCorrectedQuery($query, $filter);
 
@@ -132,9 +131,8 @@ class DentistsController extends FrontController
             $corrected_query = $this->getCorrectedQuery(!empty($formattedAddress) ? $formattedAddress : $query, $filter);
             $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
             $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
-            if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
 
-
+            if ((urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) && App::getLocale().'/'.$corrected_query != 'en/dentists/federal-capital-territory-nigeria' ) {
                 $geores = \GoogleMaps::load('geocoding')
                 ->setParam ([
                     'latlng'    => $lat.','.$lon,
@@ -154,7 +152,8 @@ class DentistsController extends FrontController
                 $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
                 $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
                 if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
-                    if( !empty($geores->results) && $geores->results[0]->place_id ) {
+
+                    if( $geores->results[0]->place_id ) {
 
                         $geores = \GoogleMaps::load('geocoding')
                         ->setParam ([
