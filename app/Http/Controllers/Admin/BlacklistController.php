@@ -39,7 +39,7 @@ class BlacklistController extends AdminController
 
                     foreach ($users as $u) {
                         if (fnmatch(mb_strtolower($this->request->input('pattern')), mb_strtolower($u->email)) == true) {
-                            $u->deleted_reason = 'Automatically: Blacklisted IP';
+                            $u->deleted_reason = 'Automatically - Blacklisted IP';
                             $u->save();
                             $u->deleteActions();
                             User::destroy( $u->id );

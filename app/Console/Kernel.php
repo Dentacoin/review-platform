@@ -458,14 +458,14 @@ NEW & FAILED TRANSACTIONS
 
             $users = User::where('is_dentist', '1')->where('status', 'pending')->where('created_at', '<', Carbon::now()->subDays(7) )->get();
 
-            if (count($users)) {
+            if ($users->isNotEmpty()) {
                 $userNames = [];
 
                 foreach ($users as $user) {
                     $userNames[] = $user->getName();
 
                     $user->status=='rejected';
-                    $user->deleted_reason = 'Automatically: Dentist with status pending over a week';
+                    $user->deleted_reason = 'Automatically - Dentist with status pending over a week';
                     $user->save();
                     $user->deleteActions();
                     User::destroy( $user->id );
@@ -486,6 +486,7 @@ NEW & FAILED TRANSACTIONS
                     $message->from($sender, $sender_name);
                     $message->to( 'ali.hashem@dentacoin.com' );
                     $message->to( 'betina.bogdanova@dentacoin.com' );
+                    $message->to( 'gergana@youpluswe.com' );
                     //$message->to( 'dokinator@gmail.com' );
                     $message->subject('Suspicios dentists deleted');
                 });
