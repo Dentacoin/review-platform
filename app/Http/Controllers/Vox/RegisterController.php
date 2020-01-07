@@ -816,11 +816,11 @@ class RegisterController extends FrontController
                 }
 
                 if(empty($email)) {
-                    return redirect(getVoxUrl('registration').'?error-message='.urlencode('Please add an email address to your Civic account and try again.'));
+                    return redirect(getLangUrl('registration').'?error-message='.urlencode('Please add an email address to your Civic account and try again.'));
                 } else if(empty($phone)) {
-                    return redirect(getVoxUrl('registration').'?error-message='.urlencode('Please add a phone number to your Civic account and try again.'));
+                    return redirect(getLangUrl('registration').'?error-message='.urlencode('Please add a phone number to your Civic account and try again.'));
                 } else if(!empty(User::where( 'email','LIKE', $email )->withTrashed()->first())) {
-                    return redirect(getVoxUrl('registration').'?error-message='.urlencode('User with this email already exists. <a href="https://vox.dentacoin.com/en/login/">Log in here</a>'));
+                    return redirect(getLangUrl('registration').'?error-message='.urlencode('User with this email already exists. <a href="https://vox.dentacoin.com/en/login/">Log in here</a>'));
                 } else {
 
                     $user = User::where( 'civic_id','LIKE', $data['userId'] )->withTrashed()->first();
