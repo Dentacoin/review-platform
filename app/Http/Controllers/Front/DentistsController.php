@@ -128,7 +128,7 @@ class DentistsController extends FrontController
                 return redirect( getLangUrl('page-not-found') );
             }
 
-            $corrected_query = $this->getCorrectedQuery(!empty($formattedAddress) ? $formattedAddress : $query, $filter);
+            $corrected_query = $this->getCorrectedQuery(!empty($formattedAddress) && $formattedAddress != 'Ega Denmark ' ? $formattedAddress : $query, $filter);
             $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
             $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
 
