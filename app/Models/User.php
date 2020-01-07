@@ -489,19 +489,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     
     public function get_invite_token() {
         //dd($this->email.$this->id);
-        $token = md5($this->id.env('SALT_INVITE'));
+        $token = md5($this->id.date('WY').env('SALT_INVITE'));
         $token = preg_replace("/[^a-zA-Z0-9]/", "", $token);
         return $token;
     }
     public function get_token() {
         //dd($this->email.$this->id);
-        $token = md5($this->email.$this->id.env('SALT'));
+        $token = md5($this->email.$this->id.date('WY').env('SALT'));
         $token = preg_replace("/[^a-zA-Z0-9]/", "", $token);
         return $token;
     }
     public function get_widget_token() {
         //dd($this->email.$this->id);
-        $token = md5($this->email.$this->id.env('SALT_WIDGET'));
+        $token = md5($this->email.$this->id.date('WY').env('SALT_WIDGET'));
         $token = preg_replace("/[^a-zA-Z0-9]/", "", $token);
         return $token;
     }
