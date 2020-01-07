@@ -52,7 +52,7 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 
 		$user = User::find($user_id);
 
-		if (!empty($user) && $hash == $user->get_unsubscribe_token() ) {
+		if (!empty($user) && $hash == $user->get_token() ) {
 
 			if (!$user->unsubscribe) {
 				$user->unsubscribe = true;
