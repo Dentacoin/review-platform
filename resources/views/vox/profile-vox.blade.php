@@ -252,7 +252,7 @@
 			<img src="{{ url('new-vox-img/mistakes'.$prev_bans.'.png') }}" class="zman" />
 			<div class="inner">
 				<h2>{{ $ban_reason }}</h2>
-				@if($prev_bans!=4)
+				@if($prev_bans!=4 && !empty($current_ban->expires))
 					<h3>
 						{!! trans('vox.page.bans.banned-time-left') !!}:
 					</h3>
