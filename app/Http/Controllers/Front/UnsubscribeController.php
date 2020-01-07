@@ -46,7 +46,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 			if (!empty($on_invites)) {
 				foreach ($on_invites as $inv) {
-					$inv->unsubscribe = true;
+					$inv->unsubscribed = true;
 					$inv->save();
 				}
 			}
