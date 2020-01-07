@@ -42,7 +42,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 	            });
 			}
 
-			$on_invites = UserInvite::where('invited_id', $user->id)->whereNull('unsubscribe')->get();
+			$on_invites = UserInvite::where('invited_id', $user->id)->whereNull('unsubscribed')->get();
 
 			if (!empty($on_invites)) {
 				foreach ($on_invites as $inv) {
