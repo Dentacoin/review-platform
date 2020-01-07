@@ -173,6 +173,11 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::get('vox/recommendations', 				'RecommendationsController@list');
 
+	Route::get('pages/vox', 						'PagesController@vox_list');
+	Route::post('pages/vox/update', 				'PagesController@update_vox');
+	Route::get('pages/trp', 						'PagesController@trp_list');
+	Route::post('pages/trp/update', 				'PagesController@update_trp');
+
 
 	Route::any('logs', 								'LogsController@list');
 });
@@ -214,7 +219,8 @@ $reviewRoutes = function () {
 
 			Route::get('lead-magnet-results', 					'IndexController@lead_magnet_results');
 
-			Route::any('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
+			Route::get('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
+			Route::get('unsubscription/{user_id}/{hash}', 		'UnsubscribeController@new_unsubscribe');
 
 			Route::any('invite/', 								'RegisterController@invite_accept');
 

@@ -19,14 +19,46 @@ class UnsubscribeController extends FrontController
 
 		$user = User::find($user_id);
 
-		if (!empty($user) && $hash == $user->get_token() ) {
+		if (!empty($user) && !$user->unsubscribe) {
+
+			if (!$user->unsubscribe) {
+
+				$mtext = 'Dentist want\'s to be unsubscribed, but needs an approval
+Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+
+	            Mail::raw($mtext, function ($message) use ($user) {
+
+	                $sender = config('mail.from.address');
+	                $sender_name = config('mail.from.name');
+
+	                $message->from($sender, $sender_name);
+	                $message->to( 'petya.ivanova@dentacoin.com' );
+	                $message->to( 'gergana@youpluswe.com' );
+	                $message->to( 'donika.kraeva@dentacoin.com' );
+	                $message->replyTo($user->email, $user->getName());
+	                $message->subject('New unsubscribe request from dentist');
+	            });
+			}
+
+	        return $this->ShowView('unsubscribe-dentist', [
+	        	'noIndex' => true,
+	        ]);
+		}
+
+		return redirect( getLangUrl('/') );
+	}
+
+	public function new_unsubscribe($locale=null, $user_id, $hash) {
+
+		$user = User::find($user_id);
+
+		if (!empty($user) && $hash == $user->get_unsubscribe_token() ) {
 
 			if (!$user->unsubscribe) {
 				$user->unsubscribe = true;
 				$user->save();
 
-				$mtext = 'New user unsubscribe 
-Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+				$mtext = 'This dentist was automatically unsubscribed - https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 
 	            Mail::raw($mtext, function ($message) use ($user) {
 

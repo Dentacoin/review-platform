@@ -167,6 +167,9 @@ class UsersController extends AdminController
             'fb_recommendation' => [
                 'type' => 'bool',
             ],
+            'unsubscribe' => [
+                'type' => 'bool',
+            ],
             
     	];
     }
@@ -1185,6 +1188,22 @@ class UsersController extends AdminController
                             }
                         } else if($value['type']=='datepicker') {
                            $item->$key = $this->request->input($key) ? new Carbon( $this->request->input($key) ) : null;
+                        } else if($key=='unsubscribe') {
+
+                            $on_invites = UserInvite::where('invited_id', $item->id)->whereNull('unsubscribed')->get();
+
+                            if (!empty($on_invites)) {
+                                foreach ($on_invites as $inv) {
+                                    if (!empty($this->request->input($key))) {
+                                        $inv->unsubscribed = true;
+                                    } else {
+                                        $inv->unsubscribed = false;
+                                    }
+                                    $inv->save();
+                                }
+                            }
+
+                            $item->$key = $this->request->input($key);
                         } else {
                            $item->$key = $this->request->input($key);                            
                         }

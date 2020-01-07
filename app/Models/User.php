@@ -579,7 +579,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 "trp_profile" => $this->getLink(),
                 "town" => $this->city_name ? $this->city_name : 'your town',
                 "country" => $this->country_id ? Country::find($this->country_id)->name : 'your country',
-                "unsubscribe" => getLangUrl( 'unsubscribe/'.$this->id.'/'.$this->get_token(), null, $domain),
+                "unsubscribe" => getLangUrl( 'unsubscription/'.$this->id.'/'.$this->get_token(), null, $domain),
                 "pageviews" => $pageviews,
                 "trp" => url('https://reviews.dentacoin.com/'),
                 "trp-dentist" => url('https://reviews.dentacoin.com/en/welcome-dentist/'),

@@ -215,12 +215,21 @@
 
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Website / FB URL</label>
-                                <div class="col-md-10">
+                                <div class="col-md-{{ $item->is_dentist ? '7' : '10' }}" >
                                     @include('admin.parts.user-field',[
                                         'key' => 'website',
                                         'info' => $fields['website']
                                     ])
                                 </div>
+                                @if($item->is_dentist)
+                                    <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Unsubscribed</label>
+                                    <div class="col-md-1" style="padding-left: 0px;">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'unsubscribe',
+                                            'info' => $fields['unsubscribe']
+                                        ])
+                                    </div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Facebook ID</label>
