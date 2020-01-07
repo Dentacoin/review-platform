@@ -39,5 +39,3 @@
 		</div>
 	</div>
 </div>
-
-<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner white-banner"></a>

@@ -222,11 +222,6 @@
 					</a>
 				-->
 
-				<a href="https://dentacoin.com/holiday-calendar-2019" target="_blank" class="christmas-banner">
-					<img class="close-banner" src="{{ url('new-vox-img/close-popup.png') }}">
-					<video class="video-banner" id="christmasBanner" playsinline autoplay muted loop src="{{ url('img-trp/christmas-banner.mp4') }}" type="video/mp4" controls="" mobile-src="{{ url('img-trp/mobile-christmas-banner3.mp4') }}"></video>
-				</a>
-
 				<div id="cookiebar" >
 					<p>
 						{!! nl2br( trans('trp.common.cookiebar-hint',[
@@ -323,7 +318,9 @@
 			</script>
 		@endif
 
-		@if(!empty($admin))
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
+
+        @if(!empty($admin))
 			<script>
 		        (function(w,d,t,u,n,a,m){
 		            if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
@@ -343,9 +340,7 @@
 					_aaq.push(['trackPageView']);
 				}
 		    </script>
-		@endif		
-
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
+		@endif
 
 		@if(!empty($trackEvents))
 	        <script type="text/javascript">
