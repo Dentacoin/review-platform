@@ -170,7 +170,7 @@ class LoginController extends FrontController
         // }
 
         if ($s_user->getEmail() && !empty(User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->first())) {
-            return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('User with this email already exists.'));
+            return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('User with this email already exists. <a href="https://vox.dentacoin.com/en/login/">Log in here</a>'));
         }
 
         $stat_redirect = null;
