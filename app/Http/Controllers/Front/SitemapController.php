@@ -53,7 +53,7 @@ class SitemapController extends FrontController
     	}
 
     	foreach ($dentist_cities as $user) {
-    		$links[] = getLangUrl( str_replace([' ', "'"], ['-', ''], 'dentists/'.strtolower($user->city_name).'-'.$user->state_slug.'-'.$user->country->slug));
+    		$links[] = getLangUrl( str_replace([' ', "'", '.'], ['-', '',''], 'dentists/'.strtolower($user->city_name).'-'.$user->state_slug.'-'.$user->country->slug));
     	}
 
 		$content = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">';
