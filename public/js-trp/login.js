@@ -20,7 +20,7 @@ $(document).ready(function(){
     });
 
     var civicError = function() {
-    	$('.register-civic-button').removeClass('loading')
+    	$('.register-civic-button').removeClass('loading');
         $('.register-civic-button').show();
     	lastCivicForm.find('.civic-wait').hide();
         $('html, body').animate({
@@ -72,6 +72,9 @@ $(document).ready(function(){
                                 } else {
                                     lastCivicForm.find('.civic-error').show();
                                     lastCivicForm.find('.civic-error span').html(data.message);
+                                    $('.log-in-button').click( function() {
+                                        switchLogins('login');
+                                    });
                                     civicError();
                                 }
                             }, "json"

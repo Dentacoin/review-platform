@@ -62,6 +62,9 @@ $(document).ready(function(){
                                     } else {
                                         $('#civic-error').show();
                                         $('#civic-error span').html(data.message);
+                                        $('.log-in-button').click( function() {
+                                            switchLogins('login');
+                                        });
                                         civicError();
                                     }
                                 }, "json"

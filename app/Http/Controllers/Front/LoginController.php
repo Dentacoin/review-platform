@@ -250,7 +250,7 @@ class LoginController extends FrontController
         }
 
         if ($s_user->getEmail() && !empty(User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->first())) {
-            return redirect( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']).'&error-message='.urlencode('User with this email already exists.'));
+            return redirect( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']).'&error-message='.urlencode('User with this email already exists. <a href="javascript:;" class="log-in-button button-login-patient">Log in here</a>'));
         }
 
         if ($user) {
