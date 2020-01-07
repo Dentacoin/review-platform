@@ -35,6 +35,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 	                $message->from($sender, $sender_name);
 	                $message->to( 'petya.ivanova@dentacoin.com' );
+	                $message->to( 'gergana@youpluswe.com' );
 	                $message->to( 'donika.kraeva@dentacoin.com' );
 	                $message->replyTo($user->email, $user->getName());
 	                $message->subject('New dentist unsubscribe');
