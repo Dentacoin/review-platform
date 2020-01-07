@@ -40,9 +40,7 @@
 		</a>
 	</div>
 
-	<img src="{{ url('new-vox-img/blogg-laptop.png') }}" style="display: none;">
-
-	<div class="check-statictics-wrapper tac">
+	<div class="check-statictics-wrapper tac" id="stats-wrap-index" style="display: none;">
 		<div class="container">
 			<p class="h2-bold">DENTAL STATISTICS</p>
 			<h2>Check up-to-date market statistics to stay on top of industry trends!</h2>

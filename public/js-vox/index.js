@@ -187,4 +187,11 @@ $(document).ready(function(){
     }
 
 
+    $(window).on('scroll', function() {
+        if($('#stats-wrap-index').length && !$('#stats-wrap-index:visible').length) {
+            $('#stats-wrap-index').show();
+        }
+    });
+
+
 });
