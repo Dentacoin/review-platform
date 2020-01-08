@@ -26,7 +26,7 @@
 			    <div class="flickity-dentists-form">
 			    	<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}"> Dentists {{ !empty($city_cookie) || !empty($city_id) || (!empty($user) && !empty($user->city_name)) ? 'near' : 'in' }}: 
 			    	<a href="javascript:;" data-popup="change-dentist-popup" class="current-city">
-			    		{{ !empty($city_cookie) ? $city_cookie['city_name'] : (!empty($city_id) ? App\Models\City::find($city_id)->name : (!empty($user) && !empty($user->city_name) ? $user->city_name : (!empty($country_id) ? App\Models\Country::find($country_id)->name : null))) }}
+			    		{{ !empty($city_cookie) ? $city_cookie['city_name'] : (!empty($city_id) ? \GeoIP::getLocation()->city : (!empty($user) && !empty($user->city_name) ? $user->city_name : \GeoIP::getLocation()->country)) }}
 			    		<i class="fas fa-caret-down"></i>
 			    	</a>
 			    </div>
