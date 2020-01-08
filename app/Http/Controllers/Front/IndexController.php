@@ -169,7 +169,7 @@ class IndexController extends FrontController
 
 				if( $homeDentists->count() < 12 && $this->user->country_id ) {
 					$addMore = clone $featured;
-					$addMore = $addMore->where('country_id', 'LIKE', $this->user->country_id)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
+					$addMore = $addMore->where('country_id', $this->user->country_id)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
 					$homeDentists = $homeDentists->concat($addMore);
 				}
 
@@ -177,13 +177,13 @@ class IndexController extends FrontController
 
 				if( $homeDentists->count() < 12 && $this->city_id ) {
 					$addMore = clone $featured;
-					$addMore = $addMore->where('city_id', 'LIKE', $this->city_id)->take( 12 - $homeDentists->count() )->get();
+					$addMore = $addMore->where('city_id', $this->city_id)->take( 12 - $homeDentists->count() )->get();
 					$homeDentists = $homeDentists->concat($addMore);
 				}
 
 				if( $homeDentists->count() < 12 && $this->country_id ) {
 					$addMore = clone $featured;
-					$addMore = $addMore->where('country_id', 'LIKE', $this->country_id)->take( 12 - $homeDentists->count() )->get();
+					$addMore = $addMore->where('country_id', $this->country_id)->take( 12 - $homeDentists->count() )->get();
 					$homeDentists = $homeDentists->concat($addMore);				
 				}
 			}
