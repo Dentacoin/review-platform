@@ -205,7 +205,6 @@ class ProfileController extends FrontController
         }
 
         $params = [
-            'countries' => Country::with('translations')->get(),
             'menu' => $this->menu,
             'currencies' => file_get_contents('/tmp/dcn_currncies'),
             'history' => $this->user->history->where('type', '=', 'vox-cashout'),

@@ -432,7 +432,6 @@ class DentistsController extends FrontController
         }
        
 		return $this->ShowView('search', [
-            'countries' => Country::with('translations')->get(),
             'search_title' => !empty($search_title) ? $search_title : null,
             'seo_title' => !empty($seo_title) ? $seo_title : null,
             'seo_description' => !empty($seo_description) ? $seo_description : null,

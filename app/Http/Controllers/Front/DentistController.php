@@ -539,7 +539,6 @@ class DentistController extends FrontController
             'social_image' => $social_image,
             'canonical' => $item->getLink(),
             'og_url' => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
-            'countries' => Country::with('translations')->get(),
             'js' => [
                 'videojs.record.min.js',
                 'user.js',

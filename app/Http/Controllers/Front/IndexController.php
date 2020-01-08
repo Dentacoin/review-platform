@@ -207,7 +207,6 @@ class IndexController extends FrontController
 		$params = array(
 			'strength_arr' => $strength_arr,
 			'completed_strength' => $completed_strength,
-            'countries' => !empty($this->user) ? Country::with('translations')->get() : '',
 			'featured' => $homeDentists,
 			'city_cookie' => $city_cookie,
 			'social_image' => $social_image,
