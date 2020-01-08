@@ -204,12 +204,17 @@ class IndexController extends FrontController
 			$completed_strength = $this->user->getStrengthCompleted('trp');
 		}
 
+		$current_city = \GeoIP::getLocation()->city;
+		$current_country = \GeoIP::getLocation()->country;
+
 		$params = array(
 			'strength_arr' => $strength_arr,
 			'completed_strength' => $completed_strength,
 			'featured' => $homeDentists,
 			'city_cookie' => $city_cookie,
 			'social_image' => $social_image,
+			'current_city' => $current_city,
+			'current_country' => $current_country,
 			'js' => [
 				'index.js',
                 'search.js',

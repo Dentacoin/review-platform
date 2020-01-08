@@ -30,26 +30,7 @@
         <meta name="fb:app_id" content="1906201509652855"/>
 
 
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
-		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/ids.css').'?ver='.$cache_version }}" /> -->
-		@if( $current_page=='dentist' )
-			<link rel="stylesheet" type="text/css" href="{{ url('/css/lightbox.css').'?ver='.$cache_version }}" />
-		@endif
-		
-        @if(!empty($css) && is_array($css))
-            @foreach($css as $file)
-				<link rel="stylesheet" type="text/css" href="{{ url('/css/'.$file).'?ver='.$cache_version }}" />
-            @endforeach
-        @endif
-
-        @if(!empty($csscdn) && is_array($csscdn))
-            @foreach($csscdn as $file)
-				<link rel="stylesheet" type="text/css" href="{{ $file }}" />
-            @endforeach
-        @endif
 
         @if(!empty($noIndex))
         	<meta name="robots" content="noindex">
@@ -210,7 +191,8 @@
 					</div>
 				</div>
 
-				@if(!empty($admin) && $current_page == 'welcome-dentist' )
+				@if($current_page == 'welcome-dentist')
+
 					<script>
 				        (function(w,d,t,u,n,a,m){
 				            if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
@@ -275,6 +257,26 @@
 			@include('trp/popups/invite-new-dentist-success')
 		@endif
 
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+
+		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/ids.css').'?ver='.$cache_version }}" /> -->
+		@if( $current_page=='dentist' )
+			<link rel="stylesheet" type="text/css" href="{{ url('/css/lightbox.css').'?ver='.$cache_version }}" />
+		@endif
+		
+        @if(!empty($css) && is_array($css))
+            @foreach($css as $file)
+				<link rel="stylesheet" type="text/css" href="{{ url('/css/'.$file).'?ver='.$cache_version }}" />
+            @endforeach
+        @endif
+
+        @if(!empty($csscdn) && is_array($csscdn))
+            @foreach($csscdn as $file)
+				<link rel="stylesheet" type="text/css" href="{{ $file }}" />
+            @endforeach
+        @endif
 
 		@if($current_page == 'index')
 			<script type='application/ld+json'> 
@@ -389,17 +391,5 @@
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         	var images_path = '{{ url('img-trp') }}';
         </script>
-
-        @if(!$user || $new_auth)
-        	
-			<div id="fb-root"></div>
-			<script>(function(d, s, id) {
-			var js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) return;
-			js = d.createElement(s); js.id = id;
-			js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=1906201509652855&autoLogAppEvents=1';
-			fjs.parentNode.insertBefore(js, fjs);
-			}(document, 'script', 'facebook-jssdk'));</script>
-        @endif
     </body>
 </html>
