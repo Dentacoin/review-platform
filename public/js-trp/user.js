@@ -2213,4 +2213,19 @@ $(document).ready(function(){
         });
     });
 
+
+    $('.invite-tabs a').click( function() {
+        $('.invite-tabs a').removeClass('active');
+        $(this).addClass('active');
+        $('.invite-content').hide();
+        $('#invite-option-'+$(this).attr('data-invite')).show();
+    });
+
+    $('.widget-tabs a').click( function() {
+        $('.widget-tabs a').removeClass('active');
+        $(this).addClass('active');
+        $('.widget-content').hide();
+        $('#widget-option-'+$(this).attr('data-widget')).show();
+    });
+
 });
