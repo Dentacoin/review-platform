@@ -209,6 +209,28 @@
 						<a class="social" href="https://www.facebook.com/dentacoin.trusted.reviews/" target="_blank"><i class="fab fa-facebook-f"></i></a>
 					</div>
 				</div>
+
+				@if(!empty($admin) && $current_page == 'welcome-dentist' )
+					<script>
+				        (function(w,d,t,u,n,a,m){
+				            if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
+				            w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),
+				            m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
+				        })(window,document,'script','https://dentacoin.ariticapp.com/ma/atc.js','at');
+				    </script> 
+				    <script type="text/javascript" src="https://dentacoin.ariticapp.com/ma/patc.js"></script>
+
+				    <script type="text/javascript">
+				    	function LeadMagenet() {
+						    _aaq.push(['setContactFields', {
+						    	firstname:document.getElementById("magnet-name").value,
+						    	website:document.getElementById("magnet-website").value,
+						    	email:document.getElementById("magnet-email").value,
+						    }]);
+							_aaq.push(['trackPageView']);
+						}
+				    </script>
+				@endif
 			</footer>
 		</div>
 
@@ -319,28 +341,6 @@
 		@endif
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
-
-        @if(!empty($admin))
-			<script>
-		        (function(w,d,t,u,n,a,m){
-		            if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
-		            w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),
-		            m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
-		        })(window,document,'script','https://dentacoin.ariticapp.com/ma/atc.js','at');
-		    </script> 
-		    <script type="text/javascript" src="https://dentacoin.ariticapp.com/ma/1/patc.js"></script>
-
-		    <script type="text/javascript">
-		    	function LeadMagenet() {
-				    _aaq.push(['setContactFields', {
-				    	name:document.getElementById("magnet-name").value,
-				    	website:document.getElementById("magnet-website").value,
-				    	email:document.getElementById("magnet-email").value,
-				    }]);
-					_aaq.push(['trackPageView']);
-				}
-		    </script>
-		@endif
 
 		@if(!empty($trackEvents))
 	        <script type="text/javascript">
