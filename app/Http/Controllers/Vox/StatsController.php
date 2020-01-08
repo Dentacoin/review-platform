@@ -176,7 +176,7 @@ class StatsController extends FrontController
             }
 
             foreach ($answers as $key => $value) {
-                if(mb_strpos($value, '!')===0) {
+                if(mb_strpos($value, '!')===0 || mb_strpos($value, '#')===0) {
                     $answers[$key] = mb_substr($value, 1);
                 }
                 $main_chart[$answers[$key]] = 0;
@@ -216,13 +216,13 @@ class StatsController extends FrontController
 
                 $answers_related = json_decode($question->related->answers);
                 foreach ($answers_related as $key => $value) {
-                    if(mb_strpos($value, '!')===0) {
+                    if(mb_strpos($value, '!')===0 || mb_strpos($value, '#')===0) {
                         $answers_related[$key] = mb_substr($value, 1);
                     }
                 }
                 $main_chart = [];
                 foreach ($answers_related as $key => $value) {
-                    if(mb_strpos($value, '!')===0) {
+                    if(mb_strpos($value, '!')===0 || mb_strpos($value, '#')===0) {
                         $answers_related[$key] = mb_substr($value, 1);
                     }
                     $main_chart[$answers_related[$key]] = 0;
