@@ -272,6 +272,9 @@ class IndexController extends FrontController
 				'address.js',
 				'index-dentist.js'
 			],
+			'css' => [
+				'trp-index-dentist.css'
+			],
 			'regData' => $regData,
 			'unsubscribed' => $unsubscribed,
 			'testimonials' => $testimonials,

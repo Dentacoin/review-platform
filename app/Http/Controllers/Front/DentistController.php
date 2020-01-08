@@ -553,6 +553,7 @@ class DentistController extends FrontController
             ],
             'css' => [
                 'codemirror.css',
+                'trp-users.css'
             ],
         ];
 
