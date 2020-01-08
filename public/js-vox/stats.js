@@ -1189,12 +1189,23 @@ $(document).ready(function(){
 
 
 
-    var drawChart = function(rows, container, more_options, is_main, can_click_on_legend) {        
+    var drawChart = function(rows, container, more_options, is_main, can_click_on_legend) {
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Genders');
         data.addColumn('number', 'Answers');
-        data.addRows(rows);
 
+        var myArray = rows;
+        myArray.sort(function(a, b) {
+            return a[1] - b[1];
+        });
+
+        var index, entry;
+        for (index = 0; index < myArray.length; ++index) {
+            entry = myArray[index];
+            //console.log(index + ": " + entry[0] + " - " + entry[1]);
+        }
+
+        data.addRows(myArray);
         // Set chart options
         var options = {
             backgroundColor: 'transparent',
@@ -1438,6 +1449,7 @@ $(document).ready(function(){
                 fontSize = 8;                
             }
 
+            console.log(rows);
             var data = google.visualization.arrayToDataTable(rows);
             
             var options = {
