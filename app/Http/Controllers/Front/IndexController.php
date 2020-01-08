@@ -207,7 +207,7 @@ class IndexController extends FrontController
 		$params = array(
 			'strength_arr' => $strength_arr,
 			'completed_strength' => $completed_strength,
-            'countries' => Country::with('translations')->get(),
+            'countries' => !empty($this->user) ? Country::with('translations')->get() : '',
 			'featured' => $homeDentists,
 			'city_cookie' => $city_cookie,
 			'social_image' => $social_image,
@@ -387,7 +387,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
         }
 
 		$validator = Validator::make(Request::all(), [
-            'name' => array('required', 'min:3'),
+            'firstname' => array('required', 'min:3'),
             'country' => array('required', 'exists:countries,id'),
             'website' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
             'email' => array('required', 'email'),
@@ -415,7 +415,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
         	$sess = [
 	            'lead_magnet' => [
 	            	'answers' => [
-		            	'name' => Request::input('name'),
+		            	'firstname' => Request::input('firstname'),
 		            	'country' => Request::input('country'),
 		            	'website' => Request::input('website'),
 		            	'email' => Request::input('email'),

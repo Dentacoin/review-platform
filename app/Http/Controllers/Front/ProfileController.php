@@ -1429,20 +1429,20 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         ]);
 
         if ($validator->fails()) {
-            return redirect( getLangUrl('profile/info') )
+            return redirect( getLangUrl('/') )
             ->withInput()
             ->withErrors($validator);
         } else {
             if ( !Hash::check(Request::input('cur-password'), $this->user->password) ) {
                 Request::session()->flash('error-message', trans('trp.page.profile.wrong-password'));
-                return redirect( getLangUrl('profile/info') );
+                return redirect( getLangUrl('/') );
             }
             
             $this->user->password = bcrypt(Request::input('new-password'));
             $this->user->save();
             
             Request::session()->flash('success-message', trans('trp.page.profile.info.password-updated'));
-            return redirect( getLangUrl('profile/info'));
+            return redirect( getLangUrl('/'));
         }
     }
 
