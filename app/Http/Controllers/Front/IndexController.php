@@ -175,11 +175,11 @@ class IndexController extends FrontController
 
 			} else {
 
-				if( $homeDentists->count() < 12 && $this->city_id ) {
-					$addMore = clone $featured;
-					$addMore = $addMore->where('city_id', $this->city_id)->take( 12 - $homeDentists->count() )->get();
-					$homeDentists = $homeDentists->concat($addMore);
-				}
+				// if( $homeDentists->count() < 12 && $this->city_id ) {
+				// 	$addMore = clone $featured;
+				// 	$addMore = $addMore->where('city_id', $this->city_id)->take( 12 - $homeDentists->count() )->get();
+				// 	$homeDentists = $homeDentists->concat($addMore);
+				// }
 
 				if( $homeDentists->count() < 12 && $this->country_id ) {
 					$addMore = clone $featured;
