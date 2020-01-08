@@ -56,11 +56,6 @@ class LoginController extends FrontController
 
                 if( $user->loggedFromBadIp() ) {
 
-                    $user->deleted_reason = 'Automatically - Bad IP (FB login)';
-                    $user->save();
-                    $user->deleteActions();
-                    User::destroy( $user->id );
-
                     return redirect( getLangUrl('/').'?error-message='.urlencode('We have detected suspicious activity from your account.'));
                 } else if($user->self_deleted) {
                     return redirect( getLangUrl('/').'?error-message='.urlencode('Unable to sign you up for security reasons.'));
@@ -89,6 +84,28 @@ class LoginController extends FrontController
             if ($user) {
                 if($user->loggedFromBadIp()) {
                     //dd('Bad IP', $s_user, $s_user->user);
+
+                    $ul = new UserLogin;
+                    $ul->user_id = $user->id;
+                    $ul->ip = User::getRealIp();
+                    $ul->platform = 'trp';
+                    $ul->country = \GeoIP::getLocation()->country;
+
+                    $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                    $dd = new DeviceDetector($userAgent);
+                    $dd->parse();
+
+                    if ($dd->isBot()) {
+                        // handle bots,spiders,crawlers,...
+                        $ul->device = $dd->getBot();
+                    } else {
+                        $ul->device = $dd->getDeviceName();
+                        $ul->brand = $dd->getBrandName();
+                        $ul->model = $dd->getModel();
+                        $ul->os = $dd->getOs()['name'];
+                    }
+                    
+                    $ul->save();
 
                     $user->deleted_reason = 'Automatically - Bad IP (FB login)';
                     $user->save();
@@ -467,6 +484,28 @@ class LoginController extends FrontController
 
                         if ($user) {
                             if($user->loggedFromBadIp()) {
+
+                                $ul = new UserLogin;
+                                $ul->user_id = $user->id;
+                                $ul->ip = User::getRealIp();
+                                $ul->platform = 'trp';
+                                $ul->country = \GeoIP::getLocation()->country;
+
+                                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                                $dd = new DeviceDetector($userAgent);
+                                $dd->parse();
+
+                                if ($dd->isBot()) {
+                                    // handle bots,spiders,crawlers,...
+                                    $ul->device = $dd->getBot();
+                                } else {
+                                    $ul->device = $dd->getDeviceName();
+                                    $ul->brand = $dd->getBrandName();
+                                    $ul->model = $dd->getModel();
+                                    $ul->os = $dd->getOs()['name'];
+                                }
+                                
+                                $ul->save();
 
                                 $user->deleted_reason = 'Automatically - Bad IP ( Civic login )';
                                 $user->save();
