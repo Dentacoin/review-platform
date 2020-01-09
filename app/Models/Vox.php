@@ -17,6 +17,8 @@ use App\Models\VoxBadge;
 use App\Models\VoxRelated;
 use App\Models\VoxAnswer;
 
+use WebPConvert\WebPConvert;
+
 class Vox extends Model {
     
     use \Dimsav\Translatable\Translatable;
@@ -274,6 +276,12 @@ class Vox extends Model {
         $img->save($to_thumb);
         $this->hasimage = true;
         $this->save();
+
+        $destination = self::getImagePath().'.webp';
+        WebPConvert::convert(self::getImagePath(), $destination, []);
+
+        $destination_thumb = self::getImagePath(true).'.webp';
+        WebPConvert::convert(self::getImagePath(true), $destination_thumb, []);
     }
 
     public function getSocialImageUrl($type = 'social') {
