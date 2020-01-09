@@ -126,7 +126,9 @@ jQuery(document).ready(function($){
             $(this).serialize() , 
             function( data ) {
                 if(data.success) {
-                	window.location.href = data.url;
+                    setTimeout(function(){
+                	   window.location.href = data.url;
+                    }, 6000);
                 } else {
                 	console.log('error');
                 }

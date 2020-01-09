@@ -29,7 +29,7 @@
 
 				<div class="first-form">
 					<div class="modern-field alert-after">
-						<input type="text" name="name" id="magnet-name" class="modern-input magnet-name" autocomplete="off">
+						<input type="text" name="firstname" id="magnet-name" class="modern-input magnet-name" autocomplete="off">
 						<label for="magnet-name">
 							<span>Enter your practice name:</span>
 						</label>

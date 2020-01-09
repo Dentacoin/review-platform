@@ -173,10 +173,11 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::get('vox/recommendations', 				'RecommendationsController@list');
 
-	Route::get('pages/vox', 						'PagesController@vox_list');
-	Route::post('pages/vox/update', 				'PagesController@update_vox');
-	Route::get('pages/trp', 						'PagesController@trp_list');
-	Route::post('pages/trp/update', 				'PagesController@update_trp');
+	Route::get('pages/vox', 						'PagesSeoController@vox_list');
+	Route::any('pages/{platform}/add', 				'PagesSeoController@add');
+	Route::any('pages/edit/{id}', 					'PagesSeoController@edit');
+	Route::any('pages/edit/{id}/removepic', 		'PagesSeoController@removepic');
+	Route::get('pages/trp', 						'PagesSeoController@trp_list');
 
 
 	Route::any('logs', 								'LogsController@list');
