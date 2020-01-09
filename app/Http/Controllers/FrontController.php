@@ -414,18 +414,18 @@ class FrontController extends BaseController
 
         $params['countries'] = Country::with('translations')->get();
 
-        if (!empty($params['jscdn']) && empty( $this->user )) {
+        // if (!empty($params['jscdn']) && empty( $this->user )) {
         
-            if(is_array($params['jscdn'])) {
-                if( array_search('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', $params['jscdn'])===false ) {
-                    $params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
-                }
-            } else {
-                $params['jscdn'] = [
-                    'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en',
-                ];
-            }
-        }
+        //     if(is_array($params['jscdn'])) {
+        //         if( array_search('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', $params['jscdn'])===false ) {
+        //             $params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
+        //         }
+        //     } else {
+        //         $params['jscdn'] = [
+        //             'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en',
+        //         ];
+        //     }
+        // }
         if (!empty($statusCode)) {
             return response()->view('trp.'.$page, $params, $statusCode);
         } else {

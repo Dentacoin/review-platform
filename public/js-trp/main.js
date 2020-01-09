@@ -137,11 +137,11 @@ jQuery(document).ready(function($){
     }
 
     var loadMapScript = function() {
-    	if (!$('#map-script').length) {
+    	if (!$('script[src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en"]').length) {
 
     		$.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
 
-	    		$('body').append( $('<script id="map-script" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en"></script>') );
+	    		$('body').append( $('<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en"></script>') );
     		} );
     	}
     }

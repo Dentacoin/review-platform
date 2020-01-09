@@ -550,6 +550,10 @@ class DentistController extends FrontController
                 'https://www.amcharts.com/lib/4/charts.js',
                 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js',
                 'https://codemirror.net/addon/display/placeholder.js',
+                'https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js'
+            ],
+            'csscdn' => [
+                'https://unpkg.com/flickity@2/dist/flickity.min.css'
             ],
             'css' => [
                 'codemirror.css',
@@ -635,7 +639,7 @@ class DentistController extends FrontController
         if(!empty($this->user) && !$this->user->civic_id) {
             $view_params['js'][] = 'civic.js';
             $view_params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
-            $view_params['csscdn'] = [
+            $view_params['csscdn'][] = [
                 'https://hosted-sip.civic.com/css/civic-modal.min.css',
             ];
 

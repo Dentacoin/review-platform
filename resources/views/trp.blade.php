@@ -249,7 +249,6 @@
 
 
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 		
 		@if( $current_page=='dentist' )
 			<link rel="stylesheet" type="text/css" href="{{ url('/css/lightbox.css').'?ver='.$cache_version }}" />
@@ -348,7 +347,6 @@
 		@endif
 
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-        <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 		<script src="{{ url('/js-trp/main.js').'?ver='.$cache_version }}"></script>
 		
         @if( $current_page=='dentist' )

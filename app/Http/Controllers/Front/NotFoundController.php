@@ -70,7 +70,13 @@ class NotFoundController extends FrontController
 			'js' => [
 				'index.js',
 			],
-			'gray_footer' => true
+			'gray_footer' => true,
+			'jscdn' => [
+				'https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js'
+			],
+			'csscdn' => [
+				'https://unpkg.com/flickity@2/dist/flickity.min.css'
+			]
         );
 
 		return $this->ShowView('404', $params, 404);	
