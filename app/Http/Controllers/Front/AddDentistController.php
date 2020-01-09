@@ -33,7 +33,7 @@ class AddDentistController extends FrontController
             $validator = Validator::make(Request::all(), [
                 'mode' => array('required', 'in:dentist,clinic'),
                 'name' => array('required', 'min:3'),
-                'email' => array('required', 'email'),
+                'email' => array('required', 'email', 'unique:users,email'),
                 'address' =>  array('required', 'string'),
                 'website' =>  array('required', 'regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'),
                 'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
