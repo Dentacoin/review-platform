@@ -639,9 +639,7 @@ class DentistController extends FrontController
         if(!empty($this->user) && !$this->user->civic_id) {
             $view_params['js'][] = 'civic.js';
             $view_params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
-            $view_params['csscdn'][] = [
-                'https://hosted-sip.civic.com/css/civic-modal.min.css',
-            ];
+            $view_params['csscdn'][] = 'https://hosted-sip.civic.com/css/civic-modal.min.css';
 
         }
 
