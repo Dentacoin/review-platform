@@ -1342,7 +1342,13 @@ class UsersController extends AdminController
                 ];
             }
 
+            $duplicated_mails = null;
+            if( !empty($item->email)) {
+                $duplicated_mails = User::where('id', '!=', $item->id)->where('email', 'LIKE', $item->email)->get();
+            }
+
             return $this->showView('users-form', array(
+                'duplicated_mails' => $duplicated_mails,
                 'habits_test_ans' => $habits_test_ans,
                 'item' => $item,
                 'categories' => $this->categories,
