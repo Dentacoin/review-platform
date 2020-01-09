@@ -220,9 +220,9 @@ class IndexController extends FrontController
                 'search.js',
                 'address.js'
 			],
-			'jscdn' => [
-				'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
-			]
+			// 'jscdn' => [
+			// 	'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
+			// ]
         );
 
 		if (!empty($this->user)) {
@@ -284,9 +284,6 @@ class IndexController extends FrontController
 			'unsubscribed' => $unsubscribed,
 			'testimonials' => $testimonials,
 			'social_image' => $social_image,
-			'jscdn' => [
-				'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
-			]
         ));	
 	}
 

@@ -136,6 +136,20 @@ jQuery(document).ready(function($){
     	}
     }
 
+    var loadMapScript = function() {
+    	if (!$('#map-script').length) {
+
+    		$.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
+
+	    		$('body').append( $('<script id="map-script" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en"></script>') );
+    		} );
+    	}
+    }
+
+    $('#search-input, .address-suggester').click( function() {
+    	loadMapScript();
+    });
+
 	showPopup = function(id, e) {
 		if(id=='popup-login') {
 			loadCaptchaScript();
