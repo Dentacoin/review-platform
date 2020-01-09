@@ -48,7 +48,8 @@
 				<div class="poll-question">
 					{{ !empty($daily_poll) ? $daily_poll->question  : '' }}
 				</div>
-				<div class="poll-answers {!! !empty($daily_poll) && $daily_poll->type == 'scale' ? 'poll-scale-answers' : '' !!}">
+				<div class="poll-answers {!! !empty($daily_poll) && $daily_poll->type == 'scale' ? 'poll-scale-answers' : '' !!} {!! !empty($daily_poll) && $daily_poll->type != 'scale' && empty(
+					$daily_poll->dont_randomize_answers) ? 'shuffle-answers' : '' !!}">
 					@if(!empty($daily_poll))
 						@foreach($daily_poll->scale_id && !empty($poll_scales[$daily_poll->scale_id]) ? explode(',', $poll_scales[$daily_poll->scale_id]->answers) : json_decode($daily_poll->answers, true) as $key => $answer)
 							<label class="poll-answer" for="ans-{{ $key }}">

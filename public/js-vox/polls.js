@@ -31,6 +31,21 @@ $(document).ready(function(){
                 	for (var i in ret.answers ) {
                 		$('#poll-popup .poll-answers').append('<label class="poll-answer" for="ans-'+(parseInt(i) + 1)+'"><input type="radio" name="answer" class="answer" value="'+(parseInt(i) + 1)+'" id="ans-'+(parseInt(i) + 1)+'">'+ret.answers[i]+'</label>');
                 	}
+
+                    if (ret.randomize_answers) {
+                        $('#poll-popup .poll-answers').addClass('shuffle-answers');
+                    } else {
+                        $('#poll-popup .poll-answers').removeClass('shuffle-answers');
+                    }
+
+                    if ($('#poll-popup .poll-answers').hasClass('shuffle-answers')) {
+                        var divs = $('#poll-popup .poll-answers').children();
+
+                        while (divs.length) {
+                            $('#poll-popup .poll-answers').prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+                        }
+                    }
+
                 	$('#poll-popup').find('.poll-stats-wrapper h3').html($('#poll-popup').find('.poll-stats-wrapper h3').attr('title'));
                 	$('#poll-popup').find('.content').hide();
                 	$('#poll-popup').find('.poll-form-wrapper').show();

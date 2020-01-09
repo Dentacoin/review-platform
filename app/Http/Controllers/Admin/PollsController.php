@@ -92,6 +92,7 @@ class PollsController extends AdminController
     		    $newpoll->category = $this->request->input('category');
                 $newpoll->status = 'scheduled';
                 $newpoll->scale_id = $this->request->input('scale-id');
+                $newpoll->dont_randomize_answers = $this->request->input('dont_randomize_answers');
     	        $newpoll->save();
 
     	        foreach ($this->langs as $key => $value) {
@@ -145,6 +146,7 @@ class PollsController extends AdminController
             		$item->launched_at = $this->request->input('launched_at');
     		        $item->category = $this->request->input('category');
                     $item->scale_id = $this->request->input('scale-id');
+                    $item->dont_randomize_answers = $this->request->input('dont_randomize_answers');
     		        $item->save();
 
     		        foreach ($this->langs as $key => $value) {

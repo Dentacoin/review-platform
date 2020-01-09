@@ -204,11 +204,14 @@ class PollsController extends FrontController
 				$answers[] = Poll::handleAnswerTooltip($answer);
 			}
 
+			$randomize_answers = empty($poll->dont_randomize_answers) && $poll->type != 'scale' ? true : false;
+
 			$ret = [
 	        	'success' => true,
 	        	'title' => $poll->question,
 	        	'url' => getLangUrl('poll/'.$poll->id),
 	        	'answers' => $answers,
+	        	'randomize_answers' => $randomize_answers,
 	        ];
 
 		} else {

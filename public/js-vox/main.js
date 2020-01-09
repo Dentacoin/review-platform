@@ -962,6 +962,14 @@ $(document).ready(function(){
 	showPopup = function(id, e) {
 		if(id=='poll-popup') {
 			$('.poll-bubble').hide();
+
+			if ($('#poll-popup').length && $('#poll-popup .poll-answers').hasClass('shuffle-answers')) {
+		        var divs = $('#poll-popup .poll-answers').children();
+
+		        while (divs.length) {
+		            $('#poll-popup .poll-answers').prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+		        }
+		    }
 		}
 
 		$('.popup').removeClass('active');

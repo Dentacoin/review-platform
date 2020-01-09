@@ -79,6 +79,13 @@
 	                        </div>
 	                    </div>
 
+	                    <div class="form-group clearfix">
+	                        <label class="col-md-2 control-label" for="dont_randomize_answers">Don’t randomize answers</label>
+	                        <div class="col-md-1">
+	                            <input type="checkbox" name="dont_randomize_answers" class="form-control" value="1" id="dont_randomize_answers" style="vertical-align: sub;width: 30px;" {!! !empty($item) && !empty($item->dont_randomize_answers) ? 'checked="checked"' : '' !!} />
+	                        </div>                        
+	                    </div>
+
 	                    @foreach($langs as $code => $lang_info)
 	                        <div class="tab-pane questions-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}" lang="{{ $code }}">
 	                            <div class="form-group answers-group">
