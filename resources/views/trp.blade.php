@@ -7,7 +7,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="google-site-verification" content="b0VE72mRJqqUuxWJZklHQnvRZV4zdJkDymC0RD9hPhE" />
 
-
         <title>{{ $seo_title }}</title>
         <meta name="description" content="{{ $seo_description }}">
         <link rel="canonical" href="{{ $canonical }}" />
@@ -29,8 +28,13 @@
         
         <meta name="fb:app_id" content="1906201509652855"/>
 
-
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
+		
+        @if(!empty($css) && is_array($css))
+            @foreach($css as $file)
+				<link rel="stylesheet" type="text/css" href="{{ url('/css/'.$file).'?ver='.$cache_version }}" />
+            @endforeach
+        @endif
 
         @if(!empty($noIndex))
         	<meta name="robots" content="noindex">
@@ -61,7 +65,6 @@
 			fbq('track', 'PageView');
 		</script>
 
-
 		<!-- End Facebook Pixel Code -->
 		<link rel="apple-touch-icon" sizes="57x57" href="{{ url('trp-fav/apple-icon-57x57.png') }}">
 		<link rel="apple-touch-icon" sizes="60x60" href="{{ url('trp-fav/apple-icon-60x60.png') }}">
@@ -90,13 +93,7 @@
   				<div class="container">
 				    <div class="navbar-header">
 						<a class="logo" href="{{ getLangUrl('/') }}"></a>
-						<div class="header-info">
-
-	                        @if($current_page=='profile')
-	                        	<a href="javascript:;" class="profile-menu-mobile">
-	                        	</a>
-							@endif
-								
+						<div class="header-info">								
 							@if($current_page=='dentist')
 								<i class="fas fa-search"></i>
 							@endif
@@ -192,7 +189,6 @@
 				</div>
 
 				@if($current_page == 'welcome-dentist')
-
 					<script>
 				        (function(w,d,t,u,n,a,m){
 				            if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
@@ -204,28 +200,23 @@
 
 				    <script type="text/javascript">
 				    	function LeadMagenet() {
-						    _aaq.push(['setContactFields', {
-						    	firstname:document.getElementById("magnet-name").value,
-						    	website:document.getElementById("magnet-website").value,
-						    	email:document.getElementById("magnet-email").value,
-						    }]);
-							_aaq.push(['trackPageView']);
+				    		setTimeout( function() {
+							    _aaq.push(['setContactFields', {
+							    	firstname:document.getElementById("magnet-name").value,
+							    	website:document.getElementById("magnet-website").value,
+							    	email:document.getElementById("magnet-email").value,
+							    }]);
+								_aaq.push(['trackPageView']);
+
+				    		}, 5000);
 						}
 				    </script>
 				@endif
 			</footer>
 		</div>
 
-
-
 		@if($current_page != 'profile')
 			<div class="bottom-drawer">
-				<!--
-					<a id="ids" href="https://ids.dentacoin.com/" target="_blank">
-						<i class="fas fa-times-circle"></i>
-					</a>
-				-->
-
 				<div id="cookiebar" >
 					<p>
 						{!! nl2br( trans('trp.common.cookiebar-hint',[
@@ -237,7 +228,6 @@
 						{!! nl2br( trans('trp.common.cookiebar-button') ) !!}
 					</a>
 				</div>
-
 			</div>
 		@endif
 
@@ -260,17 +250,10 @@
 
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-
-		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/ids.css').'?ver='.$cache_version }}" /> -->
+		
 		@if( $current_page=='dentist' )
 			<link rel="stylesheet" type="text/css" href="{{ url('/css/lightbox.css').'?ver='.$cache_version }}" />
 		@endif
-		
-        @if(!empty($css) && is_array($css))
-            @foreach($css as $file)
-				<link rel="stylesheet" type="text/css" href="{{ url('/css/'.$file).'?ver='.$cache_version }}" />
-            @endforeach
-        @endif
 
         @if(!empty($csscdn) && is_array($csscdn))
             @foreach($csscdn as $file)

@@ -26,6 +26,8 @@ use Carbon\Carbon;
 use Spatie\Sitemap\SitemapGenerator;
 use Spatie\Sitemap\Tags\Url;
 
+use WebPConvert\WebPConvert;
+
 use Mail;
 use DB;
 
@@ -1530,6 +1532,26 @@ NEW & FAILED TRANSACTIONS
             }
 
         })->everyMinute();
+
+        $schedule->call(function () {
+
+            $users = User::where('hasimage', 1)->whereNull('haswebp')->take(100)->get();
+
+            if ($users->isNotEmpty()) {
+                
+                foreach ($users as $user) {
+                    $destination = $user->getImagePath().'.webp';
+                    WebPConvert::convert($user->getImagePath(), $destination, []);
+
+                    $destination_thumb = $user->getImagePath(true).'.webp';
+                    WebPConvert::convert($user->getImagePath(true), $destination_thumb, []);
+
+                    $user->haswebp = true;
+                    $user->save();
+                }
+            }
+
+        })->everyFiveMinutes();
 
 
         $schedule->call(function () {

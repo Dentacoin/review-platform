@@ -8,32 +8,36 @@ use DeviceDetector\Parser\Device\DeviceParserAbstract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
+
+use Illuminate\Support\Str;
 use Illuminate\Auth\Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
+use WebPConvert\WebPConvert;
+
+use Carbon\Carbon;
+
+use App\Models\Vox;
 use App\Models\Email;
 use App\Models\Reward;
-use App\Models\DcnReward;
-use App\Models\DcnCashout;
-use App\Models\DentistClaim;
-use App\Models\VoxCrossCheck;
 use App\Models\UserBan;
 use App\Models\UserAsk;
 use App\Models\UserTeam;
-use App\Models\DcnTransaction;
 use App\Models\UserLogin;
-use App\Models\WhitelistIp;
+use App\Models\DcnReward;
 use App\Models\Blacklist;
+use App\Models\DcnCashout;
+use App\Models\WhitelistIp;
+use App\Models\DentistClaim;
+use App\Models\VoxCrossCheck;
+use App\Models\DcnTransaction;
 use App\Models\BlacklistBlock;
-use App\Models\DentistPageview;
 use App\Models\Recommendation;
-use App\Models\Vox;
-use Carbon\Carbon;
+use App\Models\DentistPageview;
 
 use Request;
 use Image;
@@ -131,6 +135,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'fb_recommendation',
         'first_login_recommendation',
         'deleted_reason',
+        'haswebp',
     ];
     protected $dates = [
         'phone_verified_on',
@@ -936,6 +941,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->updateStrength();
         $this->refreshReviews();
         $this->save();
+
+        $destination = self::getImagePath().'.webp';
+        WebPConvert::convert(self::getImagePath(), $destination, []);
+
+        $destination_thumb = self::getImagePath(true).'.webp';
+        WebPConvert::convert(self::getImagePath(true), $destination_thumb, []);
+
     }
 
     public function recalculateRating() {
