@@ -133,12 +133,12 @@
                                     ])
                                 </div>
                             </div>
-                            <!-- @if(!empty($duplicated_mails))
+                            @if(!empty($duplicated_mails))
                                 <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this email already exists:</p>
                                 @foreach($duplicated_mails as $dm)
                                     <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dm->id) }}">{{ $dm->name }}</p>
                                 @endforeach
-                            @endif -->
+                            @endif
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Public Email</label>
                                 <div class="col-md-10">
