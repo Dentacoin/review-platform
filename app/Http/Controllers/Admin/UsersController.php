@@ -1342,7 +1342,7 @@ class UsersController extends AdminController
                 ];
             }
 
-            $duplicated_mails = null;
+            $duplicated_mails = collect();
             if( !empty($item->email)) {
                 $duplicated_mails = User::where('id', '!=', $item->id)->where('email', 'LIKE', $item->email)->get();
             }
