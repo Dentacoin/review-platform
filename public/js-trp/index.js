@@ -86,4 +86,23 @@ jQuery(document).ready(function($){
         );
 	});
 
+	$(window).scroll( function() {
+		if (!$('#to-append').hasClass('appended')) {
+			$.ajax({
+	            type: "GET",
+	            url: lang + '/index-down/',
+	            success: function(ret) {
+	            	if (!$('#to-append').hasClass('appended')) {
+	            		$('#to-append').append(ret);
+	            		$('#to-append').addClass('appended');
+	            	}
+	                
+	            },
+	            error: function(ret) {
+	                console.log('error');
+	            }
+	        });
+		}
+	});
+
 });

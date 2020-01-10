@@ -209,6 +209,7 @@ $reviewRoutes = function () {
 		Route::group(['namespace' => 'Front'], function () {
 
 			Route::any('/', 									'IndexController@home');
+			Route::get('index-down', 							'IndexController@index_down');
 			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
 			Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');

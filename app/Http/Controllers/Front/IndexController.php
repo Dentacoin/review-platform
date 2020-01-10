@@ -236,6 +236,35 @@ class IndexController extends FrontController
 	}
 
 
+	public function index_down($locale=null) {
+		if(!empty($this->user) && $this->user->isBanned('trp')) {
+			return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+		}
+
+		if(!empty($this->user) && $this->user->is_dentist) {
+			return redirect( $this->user->getLink() );
+		}
+
+		$strength_arr = null;
+		$completed_strength = null;
+		if ($this->user) {
+			$strength_arr = UserStrength::getStrengthPlatform('trp', $this->user);
+			$completed_strength = $this->user->getStrengthCompleted('trp');
+		}
+
+		$params = array(
+			'strength_arr' => $strength_arr,
+			'completed_strength' => $completed_strength,
+        );
+
+		if (!empty($this->user)) {
+			$params['extra_body_class'] = 'strength-pb';
+		}
+
+		return $this->ShowView('index-down', $params);	
+	}
+
+
 	public function unsubscribe ($locale=null, $session_id=null, $hash=null) {
 		return $this->dentist($locale, $session_id, $hash, true);
 	}
