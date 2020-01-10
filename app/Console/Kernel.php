@@ -1548,11 +1548,15 @@ NEW & FAILED TRANSACTIONS
             if ($users->isNotEmpty()) {
                 
                 foreach ($users as $user) {
-                    $destination = $user->getImagePath().'.webp';
-                    WebPConvert::convert($user->getImagePath(), $destination, []);
-
-                    $destination_thumb = $user->getImagePath(true).'.webp';
-                    WebPConvert::convert($user->getImagePath(true), $destination_thumb, []);
+                    if (file_exists($user->getImagePath())) {
+                        $destination = $user->getImagePath().'.webp';
+                        WebPConvert::convert($user->getImagePath(), $destination, []);
+                    }
+                    
+                    if (file_exists($user->getImagePath(true))) {
+                        $destination_thumb = $user->getImagePath(true).'.webp';
+                        WebPConvert::convert($user->getImagePath(true), $destination_thumb, []);
+                    }
 
                     $user->haswebp = true;
                     $user->save();
