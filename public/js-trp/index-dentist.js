@@ -128,7 +128,7 @@ jQuery(document).ready(function($){
                 if(data.success) {
                     setTimeout(function(){
                 	   window.location.href = data.url;
-                    }, 6000);
+                    }, 8000);
                 } else {
                 	console.log('error');
                 }

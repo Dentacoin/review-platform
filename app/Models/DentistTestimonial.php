@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use WebPConvert\WebPConvert;
+
 use Image;
 
 class DentistTestimonial extends Model {
@@ -42,6 +44,9 @@ class DentistTestimonial extends Model {
         $img->save($to);
         $this->image = true;
         $this->save();
+
+        $destination = self::getImagePath().'.webp';
+        WebPConvert::convert(self::getImagePath(), $destination, []);
     }
     
 }

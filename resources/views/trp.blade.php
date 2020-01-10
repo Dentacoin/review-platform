@@ -190,13 +190,13 @@
 
 				@if($current_page == 'welcome-dentist')
 					<script>
-				        (function(w,d,t,u,n,a,m){
-				            if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
-				            w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),
-				            m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
-				        })(window,document,'script','https://dentacoin.ariticapp.com/ma/atc.js','at');
-				    </script> 
-				    <script type="text/javascript" src="https://dentacoin.ariticapp.com/ma/patc.js"></script>
+			            (function(w,d,t,u,n,a,m){
+			                if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
+			                w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),
+			                m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
+			            })(window,document,'script','https://dentacoin.ariticapp.com/ma/atc.js','at');
+			        </script> 
+			        <script type="text/javascript" src="https://dentacoin.ariticapp.com/ma/patc.js"></script>
 
 				    <script type="text/javascript">
 				    	function LeadMagenet() {
