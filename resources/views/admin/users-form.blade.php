@@ -368,13 +368,19 @@
                                     <span style="color: black;">Registered at: {{ $item->created_at->toDateTimeString() }}</span><br/>
                                 </div>
                             </div>
-                            @if(!empty($item->deleted_at))
+                            @if(!empty($item->actions()))
+                                <div class="form-group">
+                                    <div class="col-md-12" style="text-align: right;">
+                                        @foreach($item->actions as $act)
+                                            <span style="color: {{ $act->action == 'deleted' ? 'red' : 'black' }};"><span style="text-transform: capitalize;">{{ $act->action }}</span> at: {{ $act->actioned_at->toDateTimeString() }}</span><br/>
+                                            <span style="color: {{ $act->action == 'deleted' ? 'red' : 'black' }};">Reason: {{ $act->reason }}</span><br/><br/>
+                                        @endforeach
+                                    </div>
+                                </div>                                
+                            @elseif(!empty($item->deleted_at))
                                 <div class="form-group">
                                     <div class="col-md-12" style="text-align: right;">
                                         <span style="color: black;">Deleted at: {{ $item->deleted_at->toDateTimeString() }}</span><br/><br/>
-                                        @if(!empty($item->deleted_reason))
-                                            <span style="color: red;">Reason for deletion: {{ $item->deleted_reason }}</span>
-                                        @endif
                                     </div>
                                 </div>
                             @endif
@@ -401,7 +407,9 @@
                                 <div class="col-md-6"></div>
                                 <div class="col-md-6">
                                     @if(!empty($item->deleted_at))
-                                        <a href="{{ url('cms/users/restore/'.$item->id) }}" class="btn btn-sm btn-info form-control user-b"> Restore </a>
+                                        <a class="btn btn-sm btn-info form-control user-b" href="javascript:;" data-toggle="modal" data-target="#restoreModal">
+                                            Restore
+                                        </a>
                                     @else
                                         <a class="btn btn-sm btn-danger form-control user-b" href="javascript:;" data-toggle="modal" data-target="#deleteModal">
                                             Delete
@@ -902,6 +910,28 @@
                 <form action="{{ url('cms/users/delete/'.$item->id) }}" method="post">
                     <textarea class="form-control" name="deleted_reason" placeholder="Write the reason why you want to delete this user"></textarea>
                     <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Delete</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="restoreModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Restore user</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url('cms/users/restore/'.$item->id) }}" method="post">
+                    <textarea class="form-control" name="restored_reason" placeholder="Write the reason why you want to restore this user"></textarea>
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Restore</button>
                 </form>
             </div>
             <div class="modal-footer">

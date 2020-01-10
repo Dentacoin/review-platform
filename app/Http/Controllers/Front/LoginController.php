@@ -7,6 +7,7 @@ use App\Models\Dcn;
 use App\Models\Country;
 use App\Models\Civic;
 use App\Models\UserInvite;
+use App\Models\UserAction;
 use App\Models\UserLogin;
 use Carbon\Carbon;
 
@@ -131,8 +132,13 @@ class LoginController extends FrontController
                     
                     $ul->save();
 
-                    $user->deleted_reason = 'Automatically - Bad IP (FB login)';
-                    $user->save();
+                    $action = new UserAction;
+                    $action->user_id = $user->id;
+                    $action->action = 'deleted';
+                    $action->reason = 'Automatically - Bad IP (FB login)';
+                    $action->actioned_at = Carbon::now();
+                    $action->save();
+
                     $user->deleteActions();
                     User::destroy( $user->id );
 
@@ -280,8 +286,34 @@ class LoginController extends FrontController
                 ->withInput()
                 ->with('error-message', 'Unable to sign you up for security reasons.' );
             } else if( $user->loggedFromBadIp() ) {
-                $user->deleted_reason = 'Automatically - Bad IP (from register form FB login - TELL GERGANA ABOUT THIS!! )';
-                $user->save();
+
+                $ul = new UserLogin;
+                $ul->user_id = $user->id;
+                $ul->ip = User::getRealIp();
+                $ul->platform = 'trp';
+                $ul->country = \GeoIP::getLocation()->country;
+
+                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                $dd = new DeviceDetector($userAgent);
+                $dd->parse();
+
+                if ($dd->isBot()) {
+                    // handle bots,spiders,crawlers,...
+                    $ul->device = $dd->getBot();
+                } else {
+                    $ul->device = $dd->getDeviceName();
+                    $ul->brand = $dd->getBrandName();
+                    $ul->model = $dd->getModel();
+                    $ul->os = $dd->getOs()['name'];
+                }
+
+                $action = new UserAction;
+                $action->user_id = $user->id;
+                $action->action = 'deleted';
+                $action->reason = 'Automatically - Bad IP (from register form FB login - TELL GERGANA ABOUT THIS!! )';
+                $action->actioned_at = Carbon::now();
+                $action->save();
+
                 $user->deleteActions();
                 User::destroy( $user->id );
 
@@ -337,7 +369,7 @@ class LoginController extends FrontController
 
             if (!empty($s_user->getEmail())) {
 
-                $name = $s_user->getName() ? $s_user->getName() : ( !empty($s_user->user['first_name']) && !empty($s_user->user['last_name']) ? $s_user->user['first_name'].' '.$s_user->user['last_name'] : ( !empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' ) );
+                $name = $s_user->getName() ? $s_user->getName() : ( !empty($s_user->getNickname()) ? $s_user->getNickname() : ( !empty($s_user->user['first_name']) && !empty($s_user->user['last_name']) ? $s_user->user['first_name'].' '.$s_user->user['last_name'] : ( !empty($s_user->getEmail()) ? explode('@', $s_user->getEmail() )[0] : 'User' ) ));
 
 
                 $is_blocked = User::checkBlocks( $name , $s_user->getEmail() );
@@ -495,8 +527,13 @@ class LoginController extends FrontController
                     
                     $ul->save();
 
-                    $newuser->deleted_reason = 'Automatically - Bad IP ( FB register )';
-                    $newuser->save();
+                    $action = new UserAction;
+                    $action->user_id = $newuser->id;
+                    $action->action = 'deleted';
+                    $action->reason = 'Automatically - Bad IP ( FB register )';
+                    $action->actioned_at = Carbon::now();
+                    $action->save();
+
                     $newuser->deleteActions();
                     User::destroy( $newuser->id );
 
@@ -611,8 +648,13 @@ class LoginController extends FrontController
                                 
                                 $ul->save();
 
-                                $user->deleted_reason = 'Automatically - Bad IP (Civic login)';
-                                $user->save();
+                                $action = new UserAction;
+                                $action->user_id = $user->id;
+                                $action->action = 'deleted';
+                                $action->reason = 'Automatically - Bad IP ( Civic login )';
+                                $action->actioned_at = Carbon::now();
+                                $action->save();
+
                                 $user->deleteActions();
                                 User::destroy( $user->id );
 

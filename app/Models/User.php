@@ -30,6 +30,7 @@ use App\Models\UserTeam;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\Blacklist;
+use App\Models\UserAction;
 use App\Models\DcnCashout;
 use App\Models\WhitelistIp;
 use App\Models\DentistClaim;
@@ -149,6 +150,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'grace_end',
     ];
 
+    public function actions() {
+        return $this->hasMany('App\Models\UserAction', 'user_id', 'id');
+    }
     public function city() {
         return $this->hasOne('App\Models\City', 'id', 'city_id');
     }

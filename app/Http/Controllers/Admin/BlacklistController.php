@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
 use App\Models\User;
+use App\Models\UserAction;
 use App\Models\Blacklist;
 use Carbon\Carbon;
 
@@ -39,8 +40,13 @@ class BlacklistController extends AdminController
 
                     foreach ($users as $u) {
                         if (fnmatch(mb_strtolower($this->request->input('pattern')), mb_strtolower($u->email)) == true) {
-                            $u->deleted_reason = 'Automatically - Blacklisted IP';
-                            $u->save();
+                            $action = new UserAction;
+                            $action->user_id = $u->id;
+                            $action->action = 'deleted';
+                            $action->reason = 'Automatically - Blacklisted';
+                            $action->actioned_at = Carbon::now();
+                            $action->save();
+                            
                             $u->deleteActions();
                             User::destroy( $u->id );
                         }

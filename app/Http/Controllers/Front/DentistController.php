@@ -23,6 +23,7 @@ use App\Models\ReviewUpvote;
 use App\Models\ReviewDownvote;
 use App\Models\ReviewAnswer;
 use App\Models\UserInvite;
+use App\Models\UserAction;
 use App\Models\UserAsk;
 use App\Models\Dcn;
 use App\Models\Reward;
@@ -246,7 +247,14 @@ class DentistController extends FrontController
                     //     ; //dgd
                     // }
                     if( $this->user->loggedFromBadIp() ) {
-                        $this->user->deleted_reason = 'Automatically - Bad IP (Writing review)';
+
+                        $action = new UserAction;
+                        $action->user_id = $this->user->id;
+                        $action->action = 'deleted';
+                        $action->reason = 'Automatically - Bad IP (Writing review)';
+                        $action->actioned_at = Carbon::now();
+                        $action->save();
+
                         $this->user->save();
                         $this->user->deleteActions();
                         User::destroy( $this->user->id );

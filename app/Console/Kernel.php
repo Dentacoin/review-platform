@@ -17,6 +17,7 @@ use App\Models\VoxAnswer;
 use App\Models\UserLogin;
 use App\Models\Poll;
 use App\Models\UserInvite;
+use App\Models\UserAction;
 use App\Models\DcnTransaction;
 use App\Models\ScrapeDentist;
 use App\Models\ScrapeDentistResult;
@@ -467,8 +468,15 @@ NEW & FAILED TRANSACTIONS
                     $userNames[] = $user->getName();
 
                     $user->status=='rejected';
-                    $user->deleted_reason = 'Automatically - Dentist with status suspicious over a week';
                     $user->save();
+
+                    $action = new UserAction;
+                    $action->user_id = $user->id;
+                    $action->action = 'deleted';
+                    $action->reason = 'Automatically - Dentist with status suspicious over a week';
+                    $action->actioned_at = Carbon::now();
+                    $action->save();
+
                     $user->deleteActions();
                     User::destroy( $user->id );
                 }

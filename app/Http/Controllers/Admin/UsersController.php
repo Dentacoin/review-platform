@@ -25,6 +25,7 @@ use App\Models\ReviewAnswer;
 use App\Models\IncompleteRegistration;
 use App\Models\UserInvite;
 use App\Models\UserAsk;
+use App\Models\UserAction;
 use App\Models\OldSlug;
 
 use Illuminate\Support\Facades\Input;
@@ -696,8 +697,13 @@ class UsersController extends AdminController
         if(!empty($item)) {
 
             if (!empty(Request::input('deleted_reason'))) {
-                $item->deleted_reason = Request::input('deleted_reason');
-                $item->save();
+                $action = new UserAction;
+                $action->user_id = $item->id;
+                $action->action = 'deleted';
+                $action->reason = Request::input('deleted_reason');
+                $action->actioned_at = Carbon::now();
+                $action->save();
+
                 $item->deleteActions();
                 User::destroy( $id );
 
@@ -720,8 +726,13 @@ class UsersController extends AdminController
         if( Request::input('ids') ) {
             $delusers = User::whereIn('id', Request::input('ids'))->get();
             foreach ($delusers as $du) {
-                $du->deleted_reason = Request::input('mass-delete-reasons');
-                $du->save();
+                $action = new UserAction;
+                $action->user_id = $du->id;
+                $action->action = 'deleted';
+                $action->reason = Request::input('mass-delete-reasons');
+                $action->actioned_at = Carbon::now();
+                $action->save();
+
                 $du->deleteActions();
                 $du->delete();
             }
@@ -881,12 +892,28 @@ class UsersController extends AdminController
         $item = User::onlyTrashed()->find($id);
 
         if(!empty($item)) {
-            $item->restoreActions();
-            $item->restore();
+
+            if (!empty(Request::input('restored_reason'))) {
+                $action = new UserAction;
+                $action->user_id = $item->id;
+                $action->action = 'restored';
+                $action->reason = Request::input('restored_reason');
+                $action->actioned_at = Carbon::now();
+                $action->save();
+
+                $item->restoreActions();
+                $item->restore();
+
+                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.restored') );
+                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/'.$this->current_page);
+
+            } else {
+                $this->request->session()->flash('error-message', "You have to write a reason why this user has to be restored" );
+                return redirect('cms/users/edit/'.$item->id);
+            }            
         }
 
-        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.restored') );
-        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/'.$this->current_page);
+        return redirect('cms/users/');
     }
 
 
@@ -1344,7 +1371,7 @@ class UsersController extends AdminController
 
             $duplicated_mails = collect();
             if( !empty($item->email)) {
-                $duplicated_mails = User::where('id', '!=', $item->id)->where('email', 'LIKE', $item->email)->get();
+                $duplicated_mails = User::where('id', '!=', $item->id)->where('email', 'LIKE', $item->email)->withTrashed()->get();
             }
 
             return $this->showView('users-form', array(

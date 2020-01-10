@@ -8,6 +8,7 @@ use App\Models\UserCategory;
 use App\Models\UserInvite;
 use App\Models\UserTeam;
 use App\Models\UserLogin;
+use App\Models\UserAction;
 use App\Models\Country;
 use App\Models\Civic;
 use App\Models\IncompleteRegistration;
@@ -835,8 +836,36 @@ class RegisterController extends FrontController
                         if($user->deleted_at || $user->isBanned('trp')) {
                             $ret['popup'] = 'banned-popup';
                         } else if( $user->loggedFromBadIp() ) {
-                            $user->deleted_reason = 'Automatically - Bad IP ( login from register form Civic - TELL GERGANA ABOUT THIS!! )';
-                            $user->save();
+
+                            $ul = new UserLogin;
+                            $ul->user_id = $user->id;
+                            $ul->ip = User::getRealIp();
+                            $ul->platform = 'trp';
+                            $ul->country = \GeoIP::getLocation()->country;
+
+                            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                            $dd = new DeviceDetector($userAgent);
+                            $dd->parse();
+
+                            if ($dd->isBot()) {
+                                // handle bots,spiders,crawlers,...
+                                $ul->device = $dd->getBot();
+                            } else {
+                                $ul->device = $dd->getDeviceName();
+                                $ul->brand = $dd->getBrandName();
+                                $ul->model = $dd->getModel();
+                                $ul->os = $dd->getOs()['name'];
+                            }
+                            
+                            $ul->save();
+
+                            $action = new UserAction;
+                            $action->user_id = $user->id;
+                            $action->action = 'deleted';
+                            $action->reason = 'Automatically - Bad IP ( login from register form Civic - TELL GERGANA ABOUT THIS!! )';
+                            $action->actioned_at = Carbon::now();
+                            $action->save();
+
                             $user->deleteActions();
                             User::destroy( $user->id );
 
@@ -969,8 +998,13 @@ class RegisterController extends FrontController
                             
                             $ul->save();
 
-                            $newuser->deleted_reason = 'Automatically - Bad IP ( Civic register )';
-                            $newuser->save();
+                            $action = new UserAction;
+                            $action->user_id = $newuser->id;
+                            $action->action = 'deleted';
+                            $action->reason = 'Automatically - Bad IP ( Civic register )';
+                            $action->actioned_at = Carbon::now();
+                            $action->save();
+
                             $newuser->deleteActions();
                             User::destroy( $newuser->id );
                             

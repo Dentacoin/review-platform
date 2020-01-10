@@ -27,6 +27,7 @@ use App\Models\VoxQuestion;
 use App\Models\VoxCrossCheck;
 use App\Models\VoxScale;
 use App\Models\UserInvite;
+use App\Models\UserAction;
 use App\Models\Dcn;
 use App\Models\Email;
 use App\Models\Reward;
@@ -148,8 +149,13 @@ class VoxController extends FrontController
 
 		if($this->user->loggedFromBadIp()) {
 
-            $this->user->deleted_reason = 'Automatically - Bad IP ( vox questionnaire )';
-            $this->user->save();
+			$action = new UserAction;
+            $action->user_id = $this->user->id;
+            $action->action = 'deleted';
+            $action->reason = 'Automatically - Bad IP ( vox questionnaire )';
+            $action->actioned_at = Carbon::now();
+            $action->save();
+
             $this->user->deleteActions();
             User::destroy( $this->user->id );
             
