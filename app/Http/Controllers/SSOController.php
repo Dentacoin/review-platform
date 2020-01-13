@@ -19,6 +19,11 @@ class SSOController extends BaseController
             	$token = $this->decrypt(request('token'));
 	            $type = $this->decrypt(request('type'));
                 $approved_statuses = array('approved', 'pending', 'test', 'added_approved', 'admin_imported');
+
+                if (Request::getHost() == 'dentavox.dentacoin.com' || Request::getHost() == 'vox.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com') {
+                    $approved_statuses[] = 'external';
+                }
+
                 if($user->self_deleted != NULL) {
                     return redirect(getLangUrl('page-not-found'));
                 } else if(!in_array($user->status, $approved_statuses)) {
