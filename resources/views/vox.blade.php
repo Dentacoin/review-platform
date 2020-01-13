@@ -288,7 +288,7 @@
 
 
 
-        @if(!empty($user) && $new_auth)
+        @if(!empty($user) && $user->platform != 'external' && $new_auth)
 			<div class="new-auth active">
 				<div class="wrapper">
 					<div class="inner">
