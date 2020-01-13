@@ -134,6 +134,7 @@ class AddDentistController extends FrontController
                 $newdentist->is_dentist = 1;
                 $newdentist->is_clinic = Request::input('mode')=='clinic' ? 1 : 0;
                 $newdentist->invited_by = $this->user->id;
+                $newdentist->invited_from_form = true;
 
                 $newdentist->save();
 

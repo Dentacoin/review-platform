@@ -43,10 +43,27 @@
                                             <div>
                                                 <label class="control-label" style="padding-right: 10px;">Status</label>
                                                 <div style="display: inline-block;">
-                                                    @include('admin.parts.user-field',[
-                                                        'key' => 'status',
-                                                        'info' => $fields['status']
-                                                    ])
+                                                    <select class="form-control" name="status">
+                                                        @if($item->status == 'added_new' || $item->status == 'added_rejected')
+                                                            <option value="added_new" {{ $item->status == 'added_new' ? 'selected="selected"' : ''}} >Added New</option>
+                                                            <option value="added_approved" {{ $item->status == 'added_approved' ? 'selected="selected"' : ''}} >Added Approved</option>
+                                                            <option value="added_rejected" {{ $item->status == 'added_rejected' ? 'selected="selected"' : ''}} >Added Rejected</option>
+                                                        @elseif($item->status == 'added_approved')
+                                                            <option value="approved" {{ $item->status == 'approved' ? 'selected="selected"' : ''}} >Approved</option>
+                                                            <option value="added_new" {{ $item->status == 'added_new' ? 'selected="selected"' : ''}} >Added New</option>
+                                                            <option value="added_approved" {{ $item->status == 'added_approved' ? 'selected="selected"' : ''}} >Added Approved</option>
+                                                            <option value="added_rejected" {{ $item->status == 'added_rejected' ? 'selected="selected"' : ''}} >Added Rejected</option>
+                                                        @elseif($item->status == 'admin_imported')
+                                                            <option value="admin_imported" {{ $item->status == 'admin_imported' ? 'selected="selected"' : ''}} >Imported by Admin</option>
+                                                            <option value="approved" {{ $item->status == 'approved' ? 'selected="selected"' : ''}} >Approved</option>
+                                                        @else
+                                                            <option value="new" {{ $item->status == 'new' ? 'selected="selected"' : ''}} >New</option>
+                                                            <option value="approved" {{ $item->status == 'approved' ? 'selected="selected"' : ''}} >Approved</option>
+                                                            <option value="pending" {{ $item->status == 'pending' ? 'selected="selected"' : ''}} >Suspicious</option>
+                                                            <option value="rejected" {{ $item->status == 'rejected' ? 'selected="selected"' : ''}} >Rejected</option>
+                                                            <option value="test" {{ $item->status == 'test' ? 'selected="selected"' : ''}} >Test</option>
+                                                        @endif
+                                                    </select>
                                                 </div>
                                             </div>
                                             <!-- @if($item->invited_by)
@@ -387,7 +404,19 @@
                             @if(!empty($item->invited_by) && $item->is_dentist)
                                 <div class="form-group" style="text-align: right;">
                                     <div class="col-md-12">
-                                        Added by patient <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                        @if($item->platform == 'trp')
+                                            @if($item->id <= 79174)
+                                                Added by patient <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                            @else
+                                                @if($item->invited_from_form)
+                                                    Added by patient <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                @else
+                                                    Registered from {{ config('platforms')[$item->platform]['name'] }} friend invite <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                @endif
+                                            @endif
+                                        @else
+                                            Registered from {{ config('platforms')[$item->platform]['name'] }} friend invite <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                        @endif
                                     </div>
                                 </div>
                             @endif
