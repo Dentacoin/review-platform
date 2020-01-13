@@ -280,7 +280,7 @@ class VoxController extends FrontController
 				if ($this->user->isVoxRestricted($vox)) {
 					$res_desc = 'The target group of this survey consists of respondents with different demographics. No worries: We have plenty of other opportunities for you! ';
 				} else {
-					$res_desc = 'It seems this survey reached the limit for users from your country. Check again later. No worries: We have plenty of other opportunities for you! ';
+					$res_desc = 'This survey reached the limit for users with your demographics. Check again later. No worries: We have plenty of other opportunities for you! ';
 				}
 
 				return $this->showVoxView('restricted-survey', [
