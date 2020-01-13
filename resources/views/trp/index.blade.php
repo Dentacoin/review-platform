@@ -120,6 +120,18 @@
 				<img src="{{ url('img-trp/index-dentist.png') }}">
 			</div>
 		</div>
+
+		<div class="invite-new-dentist-wrapper white-invite">
+
+			<div class="invite-new-dentist-titles">
+				<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
+				<h3 class="gbb">{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
+			</div>
+
+			<div class="colorfull-wrapper">
+				@include('trp.parts.invite-new-dentist-form')
+			</div>
+		</div>
 	@endif
 
 	<div id="to-append"></div>
