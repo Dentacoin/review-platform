@@ -742,7 +742,21 @@ class VoxesController extends AdminController
                 }
 
                 if(!empty( $data['answers-'.$key] )) {
+
+                    foreach ($data['answers-'.$key] as $answ) {
+                        if (strpos($answ, '[')) {
+                            $first_bracket = substr_count($answ,"[");
+                            $second_bracket = substr_count($answ,"]");
+                            if ($first_bracket != 2 || $second_bracket != 2) {
+                                Request::session()->flash('error-message', 'Missing answer/s tooltip brackets');
+                            }
+                        }
+                    }
+                    
+
                     $translation->answers = json_encode( $data['answers-'.$key] );
+
+
                 } else {
                     $translation->answers = '';                            
                 }

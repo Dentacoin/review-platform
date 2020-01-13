@@ -199,18 +199,18 @@
 			        <script type="text/javascript" src="https://dentacoin.ariticapp.com/ma/patc.js"></script>
 
 				    <script type="text/javascript">
-				    	function LeadMagenet() {
-				    		setTimeout( function() {
-							    _aaq.push(['setContactFields', {
-							    	firstname:document.getElementById("magnet-name").value,
-							    	website:document.getElementById("magnet-website").value,
-							    	email:document.getElementById("magnet-email").value,
-							    }]);
+					    function LeadMagenet() {
+					   		setTimeout( function() {
+					   			_aaq.push(['setContactFields', {
+					    			firstname:document.getElementById("magnet-name").value,
+					    			website:document.getElementById("magnet-website").value,
+					    			email:document.getElementById("magnet-email").value,
+					   			}]);
 								_aaq.push(['trackPageView']);
 
-				    		}, 5000);
+						    }, 5000);
 						}
-				    </script>
+					</script>
 				@endif
 			</footer>
 		</div>
