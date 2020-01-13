@@ -39,4 +39,9 @@ return [
 		'url' => 'account.dentacoin.com',
 		'balance' => false,
 	],
+	'external' => [
+		'name' => 'DentaVox',
+		'url' => 'dentavox.dentacoin.com',
+		'balance' => false,
+	],
 ];
