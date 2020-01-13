@@ -10,9 +10,11 @@ use Auth;
 class SSOController extends BaseController
 {
 	protected function manageCustomCookie() {
+
         if(!empty(request('slug')) && !empty(request('type')) && !empty(request('token'))) {
             //logging
 	        $slug = $this->decrypt(request('slug'));
+
             $user = User::find( $slug );
 
             if($user) {
@@ -20,13 +22,24 @@ class SSOController extends BaseController
 	            $type = $this->decrypt(request('type'));
                 $approved_statuses = array('approved', 'pending', 'test', 'added_approved', 'admin_imported');
 
-                if (Request::getHost() == 'dentavox.dentacoin.com' || Request::getHost() == 'vox.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com') {
-                    $approved_statuses[] = 'external';
+                $external_patient = false;
+                if ($user->platform == 'external' && (Request::getHost() == 'dentavox.dentacoin.com' || Request::getHost() == 'vox.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com')) {
+                    $external_patient = true;
                 }
 
                 if($user->self_deleted != NULL) {
                     return redirect(getLangUrl('page-not-found'));
-                } else if(!in_array($user->status, $approved_statuses)) {
+                } else if($external_patient) {
+                    $session_arr = [
+                        'token' => $token,
+                        'id' => $slug,
+                        'type' => $type
+                    ];
+                    session(['logged_user' => $session_arr]);
+                    Auth::login($user, true);
+
+                    return redirect(getLangUrl('/'));
+                } else if(!in_array($user->status, $approved_statuses) ) {
                     return redirect(getLangUrl('page-not-found'));
                 } else {
                     $session_arr = [
