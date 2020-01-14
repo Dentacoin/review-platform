@@ -3,7 +3,7 @@
 		<div class="slide-padding">
   			<a href="{{ $survey->getLink() }}" class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title ]) }}'>
   				@if($survey->featured)
-  					<img class="featured-img doublecoin" src="{{ url('new-vox-img/flipping-coin.gif') }}">
+  					<img class="featured-img doublecoin" src="{{ url('new-vox-img/dentavox-dentacoin-flipping-coin.gif') }}" alt="Dentavox dentacoin flipping coin">
   				@endif
   			</a>							
 			<div class="vox-header clearfix">

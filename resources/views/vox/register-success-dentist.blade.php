@@ -6,7 +6,7 @@
 
 		<div class="container">
 			<div class="col-md-12 tac">
-				<img src="{{ url('new-vox-img/welcome-dentist.png') }}">
+				<img src="{{ url('new-vox-img/welcome-dentist.png') }}" alt="Dentavox man welcome dentist">
 				<div class="right-content {!! $user->short_description ? 'active' : '' !!}">
 					<div class="verification-content">
 						<h1>

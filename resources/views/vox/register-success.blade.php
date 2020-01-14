@@ -6,7 +6,7 @@
 
 		<div class="container">
 			<div class="col-md-12 tac">
-				<img src="{{ url('new-vox-img/register-success.png') }}">
+				<img src="{{ url('new-vox-img/dentavox-man-successful-registration.png') }}" alt="Dentavox man successful registration">
 
 				<h2>
 					{!! nl2br( trans('vox.page.welcome-to-dentavox.title') ) !!}
@@ -103,7 +103,7 @@
 
 	<div class="section-stats">
 		<div class="container">
-			<img src="{{ url('new-vox-img/stats-front.png') }}">
+			<img src="{{ url('new-vox-img/dentavox-dental-statistics-icon.png') }}" alt="Dentavox dental statistics icon">>
 			<h3>
 				{!! nl2br(trans('vox.page.welcome-to-dentavox.curious')) !!}
 			</h3>

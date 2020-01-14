@@ -29,7 +29,7 @@
 		<div class="flex more-q-content">
 	@endif
 	<div class="loader-mask stats-mask">
-	    <img class="stats-loader" src="{{ url('new-vox-img/stats-loader.gif') }}">
+	    <img class="stats-loader" src="{{ url('new-vox-img/dentavox-statistics-loader.gif') }}" alt="Dentavox statistics loader">
   	</div>
 
 	<div class="chart chart-1">
@@ -121,11 +121,11 @@
 
 			<div class="total-gender">
 				<label for="scale-gender-f-{{ $question->id }}" class="total total-f">
-					<img src="{{ url('new-vox-img/women-icon.svg') }}">
+					<img src="{{ url('new-vox-img/women-icon.svg') }}" alt="Dentavox statistics woman icon">
 					{!! trans('vox.page.stats.total-women') !!}: <b></b>
 				</label>
 				<label for="scale-gender-m-{{ $question->id }}" class="total total-m">
-					<img src="{{ url('new-vox-img/man-icon.svg') }}">
+					<img src="{{ url('new-vox-img/man-icon.svg') }}" alt="Dentavox statistics man icon">>
 					{!! trans('vox.page.stats.total-men') !!}: <b></b>
 				</label>
 			</div>

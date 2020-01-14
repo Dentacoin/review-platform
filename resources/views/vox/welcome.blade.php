@@ -19,7 +19,7 @@
 			</div>
 
 			<div class="col-md-3">
-				<img class="image-left" src="{{ url('new-vox-img/welcome.png') }}">
+				<img class="image-left" src="{{ url('new-vox-img/dentavox-surveys-welcome-blinking-man.png') }}" alt="Dentavox surveys welcome blinking man">
 			</div>
 
 			<div class="col-md-9">
@@ -169,7 +169,7 @@
 			<div class="container">
 
 				<div class="col-md-3">
-					<img class="image-left" src="{{ url('new-vox-img/register.png') }}">
+					<img class="image-left" src="{{ url('new-vox-img/dentavox-man-surveys-registration.png') }}" alt="Dentavox man surveys registration ">
 				</div>
 
 				<div class="col-md-9 tac">
@@ -184,7 +184,7 @@
 
 			<div class="section-stats">
 				<div class="container">
-					<img src="{{ url('new-vox-img/stats-front.png') }}">
+					<img src="{{ url('new-vox-img/dentavox-dental-statistics-icon.png') }}" alt="Dentavox dental statistics icon">
 					<h3>Curious to see our survey stats?</h3>
 					<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">Check stats</a>
 				</div>

@@ -1,8 +1,8 @@
 @if(!empty($daily_poll))
 	<div class="poll-bubble">
-		<img class="small-bubble-image" src="{{ url('new-vox-img/small-poll.png') }}">
+		<img class="small-bubble-image" src="{{ url('new-vox-img/dentavox-daily-polls-popup-mobile.png') }}" alt="Dentavox daily polls popup mobile">>
 		<div class="bubble-inner">
-			<img class="main-bubble-image" src="{{ url('new-vox-img/daily-poll-first.png') }}">
+			<img class="main-bubble-image" src="{{ url('new-vox-img/dentavox-man-daily-polls-rewards.png') }}" alt="Dentavox man daily polls rewards">
 			<div class="white-bubble">
 				<a href="javascript:;" class="close-bubble"><img src="{{ url('new-vox-img/close-popup.png') }}"></a>
 				<h4>{!! nl2br(trans('vox.daily-polls.popup.title')) !!}</h4>
@@ -14,9 +14,9 @@
 	</div>
 @elseif(!empty($closed_daily_poll))
 	<div class="poll-bubble">
-		<img class="small-bubble-image" src="{{ url('new-vox-img/small-poll.png') }}">
+		<img class="small-bubble-image" src="{{ url('new-vox-img/dentavox-daily-polls-popup-mobile.png') }}" alt="Dentavox daily polls popup mobile">
 		<div class="bubble-inner">
-			<img class="main-bubble-image" src="{{ url('new-vox-img/daily-poll-first.png') }}">
+			<img class="main-bubble-image" src="{{ url('new-vox-img/dentavox-man-daily-polls-rewards.png') }}" alt="Dentavox man daily polls rewards">
 			<div class="white-bubble closed-bubble">
 				<a href="javascript:;" class="close-bubble"><img src="{{ url('new-vox-img/close-popup.png') }}"></a>
 				<h4>Daily Poll</h4>
@@ -37,7 +37,7 @@
 			</div>
 		</a>
 		<div class="daily-image">
-			<img class="main-bubble-image" src="{{ url('new-vox-img/daily-poll-first.png') }}">
+			<img class="main-bubble-image" src="{{ url('new-vox-img/dentavox-man-daily-polls-rewards.png') }}" alt="Dentavox man daily polls rewards">
 		</div>
 		<div class="content poll-form-wrapper">
 			<form action="{{ !empty($daily_poll) ? getLangUrl('poll/'.$daily_poll->id) : '' }}" class="poll-form">
@@ -87,7 +87,7 @@
 				<div class="get-reward-buttons">
 					@if($current_page != 'daily-polls')
 						<a href="{{ getLangUrl('daily-polls') }}" class="white-button browse-polls">
-							<img src="{{ url('new-vox-img/polls-calendar.svg') }}">
+							<img src="{{ url('new-vox-img/polls-calendar.svg') }}" alt="Dentavox daily polls calendar">>
 							{!! nl2br(trans('vox.daily-polls.popup.browse-polls')) !!}
 						</a>
 					@else					

@@ -31,7 +31,7 @@
 
 			<div class="container wrapper-flex" id="step-1">
 				<div class="col">
-					<img class="image-left" src="{{ url('new-vox-img/register.png') }}">
+					<img class="image-left" src="{{ url('new-vox-img/dentavox-man-surveys-registration.png') }}" alt="Dentavox man surveys registration ">
 				</div>
 
 				<div class="col">

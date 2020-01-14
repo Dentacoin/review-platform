@@ -128,8 +128,8 @@
 				<div class="container">
 					<div class="navbar clearfix {{ !empty($user) && $user->platform == 'external' ? 'external-navbar' : '' }}">
 						<a href="{{ getLangUrl('/') }}" class="logo col-md-4">
-							<img src="{{ url('new-vox-img/logo-vox.png') }}" class="desktop">
-							<img src="{{ url('new-vox-img/logo-vox-mobile.png') }}" class="mobile">
+							<img src="{{ url('new-vox-img/logo-vox.png') }}" alt="Dentavox logo" class="desktop">
+							<img src="{{ url('new-vox-img/logo-vox-mobile.png') }}" alt="Dentavox logo mobile" class="mobile">
 						</a>
 						<div class="header-title col-md-4">
 							@if($current_page=='index')
@@ -396,7 +396,7 @@
 			<footer>
 				<div class="container clearfix">
 					<a href="https://dentacoin.com/" target="_blank" class="footer-logo col-md-3 flex flex-center">
-						<img src="{{ url('img-vox/dc-logo.png') }}">
+						<img src="{{ url('img-vox/dc-logo.png') }}" alt="Dentavox footer logo">
 						<p class="bold">
 							{{ trans('vox.footer.company-name') }}
 						</p>

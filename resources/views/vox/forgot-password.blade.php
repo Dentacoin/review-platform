@@ -6,7 +6,7 @@
 
 		<div class="container wrapper-flex">
 			<div class="col">
-				<img class="image-left" src="{{ url('new-vox-img/register-dentist.png') }}">
+				<img class="image-left" src="{{ url('new-vox-img/register-dentist.png') }}" alt="Dentavox man recover password">
 			</div>
 
 			<div class="col">

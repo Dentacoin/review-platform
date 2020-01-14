@@ -79,7 +79,7 @@
 	      			sort-order="{{ $vox->sort_order }}" 
 				>
 					@if($vox->stats_featured)
-						<img class="featured" src="{{ url('new-vox-img/star.svg') }}">
+						<img class="featured" src="{{ url('new-vox-img/star.svg') }}" alt="Dentavox featured statistic">
 					@endif
 					<a href="{{ $vox->getStatsList() }}">
 						<img class="cover" src="{{ $vox->getImageUrl(true) }}" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title]) }}' />
@@ -146,7 +146,7 @@
 				<a href="https://dentavox.dentacoin.com/blog" target="_blank" class="white-button">VISIT BLOG</a>
 			</div>
 			<div class="col">
-				<img src="{{ url('new-vox-img/a.png') }}">
+				<img src="{{ url('new-vox-img/dentavox-blog-preview.png') }}" alt="Dentavox blog preview">
 			</div>
 		</div>
 	</div>
@@ -154,7 +154,7 @@
 	@if(!empty($user))
 		<div class="section-take-surveys">
 			<div class="container">
-				<img src="{{ url('new-vox-img/custom-survey-vox.png') }}">
+				<img src="{{ url('new-vox-img/custom-survey-vox.png') }}" alt="Dentavox custom survey">
 				<h3>
 					@if($user->is_dentist)
 						You  want to explore a topic <br> within a targeted audience?

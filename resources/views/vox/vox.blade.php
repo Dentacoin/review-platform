@@ -203,7 +203,7 @@
 					<div class="container">
 						<div class="flex">
 							<div class="col">
-								<img class="taken-survey-image" src="{{ url('new-vox-img/questions-done-man.jpg') }}">
+								<img class="taken-survey-image" src="{{ url('new-vox-img/dentavox-man-survey-taken.jpg') }}" alt="Dentavox man survey taken">
 							</div>
 							<div class="col taken-survey-description">
 								@if($testmode)
