@@ -84,21 +84,26 @@ class Vox extends Model {
     }
 
     public function questionsCount() {
-        $date = $this->last_count_at;
-        $now = Carbon::now();
-
-        $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
-
-        if ($diff >= 1) {
-
-            $this->questions_count = $this->questions()->count();
-            $this->last_count_at = Carbon::now();
-            $this->save();
-
+        if ($this->type == 'hidden') {
             return $this->questions()->count();
-
         } else {
-            return $this->questions_count;
+            
+            $date = $this->last_count_at;
+            $now = Carbon::now();
+
+            $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
+
+            if ($diff >= 1) {
+
+                $this->questions_count = $this->questions()->count();
+                $this->last_count_at = Carbon::now();
+                $this->save();
+
+                return $this->questions()->count();
+
+            } else {
+                return $this->questions_count;
+            }
         }
     }
 
