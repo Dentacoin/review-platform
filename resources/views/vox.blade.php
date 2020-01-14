@@ -92,7 +92,7 @@
 			s.parentNode.insertBefore(t,s)}(window,document,'script',
 			'https://connect.facebook.net/en_US/fbevents.js');
 			fbq('init', '2010503399201502'); 
-			 fbq('init', '2366034370318681'); 
+			fbq('init', '2366034370318681'); 
 			fbq('track', 'PageView');
 		</script>
 		<!-- End Facebook Pixel Code -->
@@ -126,7 +126,7 @@
 		<div class="above-fold">
 			<header>
 				<div class="container">
-					<div class="navbar clearfix">
+					<div class="navbar clearfix {{ !empty($user) && $user->platform == 'external' ? 'external-navbar' : '' }}">
 						<a href="{{ getLangUrl('/') }}" class="logo col-md-4">
 							<img src="{{ url('new-vox-img/logo-vox.png') }}" class="desktop">
 							<img src="{{ url('new-vox-img/logo-vox-mobile.png') }}" class="mobile">
@@ -156,40 +156,43 @@
 										<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
 									</a>
 								</div>
-								<a class="header-a" href="https://account.dentacoin.com/?platform=dentavox" >
-									<img class="header-avatar" src="{{ $user->getImageUrl(true) }}">
-								</a>
+								@if( $user->platform!='external' )
+									<a class="header-a" href="https://account.dentacoin.com/?platform=dentavox" >
+										<img class="header-avatar" src="{{ $user->getImageUrl(true) }}">
+									</a>
+								@endif
 
 								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
-
-								<div class="expander-wrapper{!! $user->hasimage ? ' has-image' : '' !!}">
-									<div class="expander">
-										<a href="javascript:;" class="close-explander">Close<span>X</span></a>
-										<div class="expander-content">
-											@foreach(getDentacoinHubApplications() as $dcn_platform)
-										        <a href="{{ $dcn_platform->link ? $dcn_platform->link : 'javascript:;' }}" target="_blank" class="platform-icon">
-										            <figure class="text-center" itemtype="http://schema.org/ImageObject">
-										               	<img src="{{ $dcn_platform->media_name }}" itemprop="contentUrl" alt="{{ $dcn_platform->media_alt }}"> 
-										               	<figcaption>{{ $dcn_platform->title }}</figcaption>
-										            </figure>
-										        </a>
-										    @endforeach
-										</div>
-										<div class="expander-footer">
-											<div class="col">
-												<a href="{{ getLangUrl('logout') }}">
-													<i class="fas fa-power-off"></i>
-													Log out
-												</a>
+								@if( $user->platform!='external' )
+									<div class="expander-wrapper{!! $user->hasimage ? ' has-image' : '' !!}">
+										<div class="expander">
+											<a href="javascript:;" class="close-explander">Close<span>X</span></a>
+											<div class="expander-content">
+												@foreach(getDentacoinHubApplications() as $dcn_platform)
+											        <a href="{{ $dcn_platform->link ? $dcn_platform->link : 'javascript:;' }}" target="_blank" class="platform-icon">
+											            <figure class="text-center" itemtype="http://schema.org/ImageObject">
+											               	<img src="{{ $dcn_platform->media_name }}" itemprop="contentUrl" alt="{{ $dcn_platform->media_alt }}"> 
+											               	<figcaption>{{ $dcn_platform->title }}</figcaption>
+											            </figure>
+											        </a>
+											    @endforeach
 											</div>
-											<div class="col">
-												<a class="btn" href="https://account.dentacoin.com/?platform=dentavox">
-													My Account
-												</a>
+											<div class="expander-footer">
+												<div class="col">
+													<a href="{{ getLangUrl('logout') }}">
+														<i class="fas fa-power-off"></i>
+														Log out
+													</a>
+												</div>
+												<div class="col">
+													<a class="btn" href="https://account.dentacoin.com/?platform=dentavox">
+														My Account
+													</a>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
+								@endif
 							@elseif($current_page=='welcome-survey')
 								@if(!empty($prev_user))
 									<div class="twerk-it">

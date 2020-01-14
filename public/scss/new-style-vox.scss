@@ -573,6 +573,37 @@ header {
 	    .col-md-4 {
 	    	padding: 0px;
 	    }
+
+	    &.external-navbar {
+	    	@media #{$phone} {
+	    		justify-content: space-between;
+	    	}
+	    	.logo {
+	    		@media #{$phone} {
+	    			flex: 1;
+	    		}
+	    	}
+	    	.header-title {
+	    		@media #{$phone} {
+	    			display: none;
+	    		}
+	    	}
+	    	.header-right {
+	    		@media #{$phone} {
+	    		    margin-top: 12px;
+	    		}
+
+				.header-a {
+
+					&.user-and-price {
+						
+						@media #{$phone} {
+							display: block;
+						}
+					}
+				}
+			}
+	    }
 	}
 
 	.logo {

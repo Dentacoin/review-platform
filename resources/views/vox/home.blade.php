@@ -43,7 +43,7 @@
 		    </div>
 		@endif
 
-		@if(!empty($user))
+		@if(!empty($user) && $user->platform != 'external')
 			<div class="strength-parent" id="strength-parent">
 				@include('vox.template-parts.strength-scale')
 			</div>
@@ -66,11 +66,15 @@
 							'endlink' => '</a>',
 						])) !!}
 					@else
-						{!! nl2br(trans('vox.page.home.patients.alert-done-all-surveys', [
-							'link' => '<a href="https://account.dentacoin.com/invite?platform=dentavox">',
-							'link_stats' => '<a href="'.getLangUrl('dental-survey-stats').'">',
-							'endlink' => '</a>',
-						])) !!}
+						@if($user->platform == 'external')
+							Looks like you have taken all surveys. Good job! While waiting for the next topic, you can browse our <a href=" {{ getLangUrl('dental-survey-stats') }}"> survey statistics</a>. Stay tuned for more updates!
+						@else
+							{!! nl2br(trans('vox.page.home.patients.alert-done-all-surveys', [
+								'link' => '<a href="https://account.dentacoin.com/invite?platform=dentavox">',
+								'link_stats' => '<a href="'.getLangUrl('dental-survey-stats').'">',
+								'endlink' => '</a>',
+							])) !!}
+						@endif
 					@endif
 				</div>
 			@else

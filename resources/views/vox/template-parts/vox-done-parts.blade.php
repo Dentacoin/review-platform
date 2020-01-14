@@ -10,11 +10,13 @@
 	</div>
 </div>
 
-<a href="https://account.dentacoin.com/invite?platform=dentavox" class="sticky-invite">
-	<div class="sticky-box">
-		<img src="{{ url('new-vox-img/invite-icon.png') }}">
-		<p>
-			{{ $user->is_dentist ? trans('vox.page.questionnaire.invite-patients') : trans('vox.page.questionnaire.invite-friends') }}
-		</p>
-	</div>
-</a>
+@if($user->platform != 'external')
+	<a href="https://account.dentacoin.com/invite?platform=dentavox" class="sticky-invite">
+		<div class="sticky-box">
+			<img src="{{ url('new-vox-img/invite-icon.png') }}">
+			<p>
+				{{ $user->is_dentist ? trans('vox.page.questionnaire.invite-patients') : trans('vox.page.questionnaire.invite-friends') }}
+			</p>
+		</div>
+	</a>
+@endif

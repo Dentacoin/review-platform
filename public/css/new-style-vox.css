@@ -450,6 +450,21 @@ header {
         height: 60px; } }
     header .navbar .col-md-4 {
       padding: 0px; }
+    @media screen and (max-width: 768px) {
+      header .navbar.external-navbar {
+        justify-content: space-between; } }
+    @media screen and (max-width: 768px) {
+      header .navbar.external-navbar .logo {
+        flex: 1; } }
+    @media screen and (max-width: 768px) {
+      header .navbar.external-navbar .header-title {
+        display: none; } }
+    @media screen and (max-width: 768px) {
+      header .navbar.external-navbar .header-right {
+        margin-top: 12px; } }
+    @media screen and (max-width: 768px) {
+      header .navbar.external-navbar .header-right .header-a.user-and-price {
+        display: block; } }
   header .logo img.desktop {
     width: 138px; }
   header .logo img.mobile {
