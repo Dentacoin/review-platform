@@ -82,7 +82,7 @@
 						<img class="featured" src="{{ url('new-vox-img/star.svg') }}" alt="Dentavox featured statistic">
 					@endif
 					<a href="{{ $vox->getStatsList() }}">
-						<img class="cover" src="{{ $vox->getImageUrl(true) }}" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title]) }}' />
+						<img class="cover" src="{{ $vox->getImageUrl(true) }}" alt='"{{ $vox->title }}" Survey Statistics' />
 					</a>
 					<div class="stats-info flex">
 						<h3>
