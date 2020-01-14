@@ -214,13 +214,19 @@
 										'who' => '<span class="blue-text">'.$user->getName().'</span>'
 									]) !!}
 								</h3>
-								<p>
-									{!! nl2br(trans('vox.page.questionnaire.well-done-content', [
-										'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
-										'link' => '<a href="https://account.dentacoin.com/?platform=dentavox">',
-										'endlink' => '</a>',
-									])) !!}
-								</p>
+								@if($user->platform == 'external')
+									<p>
+										You’ve just earned <span class="coins-test"> {{ $vox->getRewardTotal() }}</span> DCN!
+									</p>
+								@else
+									<p>
+										{!! nl2br(trans('vox.page.questionnaire.well-done-content', [
+											'amount' => '<span class="coins-test">'.$vox->getRewardTotal().'</span>',
+											'link' => '<a href="https://account.dentacoin.com/?platform=dentavox">',
+											'endlink' => '</a>',
+										])) !!}
+									</p>
+								@endif
 							</div>
 						</div>
 					</div>
