@@ -404,7 +404,7 @@
                             @if(!empty($item->invited_by) && $item->is_dentist)
                                 <div class="form-group" style="text-align: right;">
                                     <div class="col-md-12">
-                                        @if($item->platform == 'trp')
+                                        @if(!empty($item->platform) && $item->platform == 'trp')
                                             @if($item->id <= 79174)
                                                 Added by patient <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
                                             @else
@@ -415,7 +415,7 @@
                                                 @endif
                                             @endif
                                         @else
-                                            Registered from {{ config('platforms')[$item->platform]['name'] }} friend invite <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                            Registered from {{ !empty($item->platform) ? config('platforms')[$item->platform]['name'] : '' }} friend invite <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
                                         @endif
                                     </div>
                                 </div>
