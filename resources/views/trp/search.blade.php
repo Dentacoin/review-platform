@@ -160,7 +160,7 @@
 
 			<div class="index-invite-dentist patient-invite">
 				<div class="container">
-					<img src="{{ url('img-trp/index-dentist.png') }}">
+					<img src="{{ url('img-trp/dentacoin-dentist-icon.png') }}" alt="Dentacoin dentist icon">
 				</div>
 			</div>
 
@@ -180,7 +180,7 @@
 				<div class="container">
 					<div class="flex flex-mobile">
 						<div class="col">
-							<img src="{{ url('img-trp/index-dentist.png') }}">
+							<img src="{{ url('img-trp/dentacoin-dentist-icon.png') }}" alt="Dentacoin dentist icon">
 						</div>
 						<div class="col">
 							<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>

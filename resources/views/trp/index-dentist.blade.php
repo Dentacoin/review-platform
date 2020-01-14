@@ -34,7 +34,7 @@
 	    </div>
 
 	    <div class="signin-form-wrapper">
-	    	<img src="{{ url('img-trp/dentist.png') }}">
+	    	<img src="{{ url('img-trp/dentacoin-trusted-reviews-dentist-front-page.png') }}" alt="Dentacoin trusted reviews dentist front page">
 	    	<div class="container clearfix">
 	    		<form class="signin-form tablet-fixes">
 
@@ -84,14 +84,14 @@
 
     	<div class="flex">
     		<div class="col tac">
-    			<img src="{{ url('img-trp/index-dentist-1.png') }}">
+    			<img src="{{ url('img-trp/dentacoin-attract-new-patients-icon.png') }}" alt="Dentacoin attract new patients icon">
     			<div class="info-padding">
 	    			<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-1-title')) !!}</h3>
 	    			<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-1-description')) !!}</p>
 	    		</div>
     		</div>
     		<div class="col tac">
-    			<img src="{{ url('img-trp/index-dentist-2.png') }}">   
+    			<img src="{{ url('img-trp/dentacoin-get-more-reviews-icon.png') }}" alt="Dentacoin get more reviews icon">   
     			<div class="info-padding"> 			
 	    			<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-2-title')) !!}</h3>
 	    			<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-2-description')) !!}</p>
@@ -101,14 +101,14 @@
 
     	<div class="flex">
     		<div class="col tac">
-    			<img src="{{ url('img-trp/index-dentist-3.png') }}">
+    			<img src="{{ url('img-trp/dentacoin-better-google-ranking-icon.png') }}" alt="Dentacoin better google ranking icon">
     			<div class="info-padding">
 	    			<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-3-title')) !!}</h3>
 	    			<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-3-description')) !!}</p>
 	    		</div>
     		</div>
     		<div class="col tac">
-    			<img src="{{ url('img-trp/index-dentist-4.png') }}">
+    			<img src="{{ url('img-trp/dentacoin-better-online-reputation-icon.png') }}" alt="Dentacoin better online reputation icon">
     			<div class="info-padding">
 	    			<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-4-title')) !!}</h3>
 	    			<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-4-description')) !!}</p>
@@ -223,7 +223,7 @@
     <div class="section-learn">
     	<div class="container flex">
     		<div class="col">
-    			<img src="{{ url('img-trp/statistick-bubble.png') }}">
+    			<img src="{{ url('img-trp/dentacoin-patients-rely-on-only-reviews.png') }}" alt="Dentacoin patients rely on only reviews">
     		</div>
     		<div class="col">
 	    		<h2>
@@ -238,8 +238,7 @@
     </div>
 
     @if(!empty($admin))
-
-	    @include('trp.popups.lead-magnet')
-	    
+		@include('trp.popups.lead-magnet')
 	@endif
+	
 @endsection

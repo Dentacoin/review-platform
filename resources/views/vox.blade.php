@@ -396,7 +396,7 @@
 			<footer>
 				<div class="container clearfix">
 					<a href="https://dentacoin.com/" target="_blank" class="footer-logo col-md-3 flex flex-center">
-						<img src="{{ url('img-vox/dc-logo.png') }}" alt="Dentavox footer logo">
+						<img src="{{ url('img-vox/dc-logo.png') }}" alt="Dentacoin logo">
 						<p class="bold">
 							{{ trans('vox.footer.company-name') }}
 						</p>

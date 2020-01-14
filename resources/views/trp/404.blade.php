@@ -4,7 +4,7 @@
 
 	<div class="error-wrapper">
 		<div class="blue-line"></div>
-		<img src="{{ url('img-trp/404.jpg') }}">
+		<img src="{{ url('img-trp/404.jpg') }}" alt="Dentacoin page not found">
 
 		<div class="error-container container">
 			<h2>Sorry, Page Was Not Found. <br> Maybe You Are Looking for One of the Dentists Around You.</h2>

@@ -100,13 +100,13 @@
 
 		<div class="lead-magnet-info container tac">
 			<div class="info-container">
-				<img class="trp-logo" src="{{ url('img-trp/logo-blue.png') }}">
+				<img class="trp-logo" src="{{ url('img-trp/logo-blue.png') }}" alt="Dentacoin trusted reviews logo">
 
 				<h2>UNLEASH THE POWER OF GENUINE DENTACOIN TRUSTEDREVIEWS</h2>
 
 				<div class="info-box flex">
 					<div class="info-icon">
-						<img src="{{ url('img-trp/index-dentist-2.png') }}">
+						<img src="{{ url('img-trp/dentacoin-make-your-voice-heard-icon.png') }}" alt="Dentacoin make your voice heard icon">
 					</div>
 					<div class="info-text">
 						<h3>Get more genuine reviews with less efforts</h3>
@@ -116,7 +116,7 @@
 
 				<div class="info-box flex">
 					<div class="info-icon">
-						<img src="{{ url('img-trp/lead-magnet-2.png') }}">
+						<img src="{{ url('img-trp/dentacoin-trusted-reviews-whatsapp-invites-icon.png') }}" alt="Dentacoin trusted reviews whatsapp invites icon">
 					</div>
 					<div class="info-text">
 						<h3>NEW WhatsApp integration</h3>
@@ -126,7 +126,7 @@
 
 				<div class="info-box flex">
 					<div class="info-icon">
-						<img src="{{ url('img-trp/lead-magnet-3.png') }}">
+						<img src="{{ url('img-trp/dentacoin-trusted-reviews-free-for-dentists-icon.png') }}" alt="Dentacoin trusted reviews free for dentists icon">
 					</div>
 					<div class="info-text">
 						<h3>Motivate patients to contribute at no cost</h3>

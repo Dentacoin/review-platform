@@ -164,7 +164,7 @@
 			<footer>
 				<div class="container clearfix">
 					<a href="https://dentacoin.com/" target="_blank" class="footer-logo col-md-3 flex break-mobile flex-center">
-						<img src="{{ url('img-trp/dc-logo.png') }}">
+						<img src="{{ url('img-trp/dc-logo.png') }}" alt="Dentacoin logo">
 						<p class="bold">
 							Powered by Dentacoin
 						</p>

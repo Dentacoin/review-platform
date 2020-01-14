@@ -6,7 +6,7 @@
 
 			<div class="info-box flex flex-mobile">
 				<div class="info-icon">
-					<img src="{{ url('img-trp/index-icon-1.png') }}">
+					<img src="{{ url('img-trp/dentacoin-find-the-best-dentist-icon.png') }}" alt="Dentacoin find the best dentist icon">
 				</div>
 				<div class="info-text">
 					<h3>{!! nl2br(trans('trp.page.index.intro-title-1')) !!}</h3>
@@ -15,7 +15,7 @@
 			</div>
 			<div class="info-box flex flex-mobile">
 				<div class="info-icon">
-					<img src="{{ url('img-trp/index-icon-2.png') }}">
+					<img src="{{ url('img-trp/dentacoin-make-your-voice-heard-icon.png') }}" alt="Dentacoin make your voice heard icon">
 				</div>
 				<div class="info-text">
 					<h3>{!! nl2br(trans('trp.page.index.intro-title-2')) !!}</h3>
@@ -24,7 +24,7 @@
 			</div>
 			<div class="info-box flex flex-mobile">
 				<div class="info-icon">
-					<img src="{{ url('img-trp/index-icon-3.png') }}">
+					<img src="{{ url('img-trp/dentacoin-get-rewarded-icon.png') }}" alt="Dentacoin get rewarded icon">
 				</div>
 				<div class="info-text">
 					<h3>{!! nl2br(trans('trp.page.index.intro-title-3')) !!}</h3>
@@ -42,13 +42,13 @@
 			<div class="flex flex-mobile">
 				<div class="col">
 					<div class="practice-image">
-						<img class="pc-practice-img" src="{{ url('img-trp/index-rated-dentist.png') }}">
+						<img class="pc-practice-img" src="{{ url('img-trp/dentacoin-trusted-reviews-add-practice-icon.png') }}" alt="Dentacoin trusted reviews add practice icon">
 					</div>
 				</div>
 				<div class="col">
 					<h2>{!! nl2br(trans('trp.page.index.first-rated-dentist.title')) !!}</h2>
 					<div class="mobile-practice-img">
-						<img src="{{ url('img-trp/index-rated-dentist.png') }}">
+						<img src="{{ url('img-trp/dentacoin-trusted-reviews-add-practice-icon.png') }}" alt="Dentacoin trusted reviews add practice icon mobile">
 					</div>
 					<p class="practice-subtitle">{!! nl2br(trans('trp.page.index.first-rated-dentist.subtitle')) !!}</p>
 					<p>
