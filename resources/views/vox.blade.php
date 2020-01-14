@@ -149,12 +149,17 @@
 							@if( !empty($user) && $user->status!='approved' && $user->status!='test' )
 							@elseif($user)
 								<div class="user-and-price header-a">
-									<a class="my-name" href="https://account.dentacoin.com/?platform=dentavox">
-										Hello, {{ $user->getName() }}
-									</a>
-									<a href="https://account.dentacoin.com/?platform=dentavox">
+									@if( $user->platform=='external' )
+										<r style="display: block; color: #38ace5;">Hello, {{ $user->getName() }}</r>
 										<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
-									</a>
+									@else
+										<a class="my-name" href="https://account.dentacoin.com/?platform=dentavox">
+											Hello, {{ $user->getName() }}
+										</a>
+										<a href="https://account.dentacoin.com/?platform=dentavox">
+											<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
+										</a>
+									@endif
 								</div>
 								@if( $user->platform!='external' )
 									<a class="header-a" href="https://account.dentacoin.com/?platform=dentavox" >
