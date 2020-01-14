@@ -385,7 +385,7 @@
                                     <span style="color: black;">Registered at: {{ $item->created_at->toDateTimeString() }}</span><br/>
                                 </div>
                             </div>
-                            @if(!empty($item->actions()))
+                            @if($item->actions->isNotEmpty())
                                 <div class="form-group">
                                     <div class="col-md-12" style="text-align: right;">
                                         @foreach($item->actions as $act)
@@ -393,11 +393,14 @@
                                             <span style="color: {{ $act->action == 'deleted' ? 'red' : 'black' }};">Reason: {{ $act->reason }}</span><br/><br/>
                                         @endforeach
                                     </div>
-                                </div>                                
+                                </div>
                             @elseif(!empty($item->deleted_at))
                                 <div class="form-group">
                                     <div class="col-md-12" style="text-align: right;">
-                                        <span style="color: black;">Deleted at: {{ $item->deleted_at->toDateTimeString() }}</span><br/><br/>
+                                        <span style="color: red;">Deleted at: {{ $item->deleted_at->toDateTimeString() }}</span><br/><br/>
+                                        @if(!empty($item->deleted_reason))
+                                            <span style="color: red;">Deleted reason: {{ $item->deleted_reason }}</span><br/>
+                                        @endif
                                     </div>
                                 </div>
                             @endif
