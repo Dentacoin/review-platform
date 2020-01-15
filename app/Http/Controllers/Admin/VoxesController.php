@@ -11,6 +11,7 @@ use App\Models\VoxToCategory;
 use App\Models\VoxScale;
 use App\Models\VoxBadge;
 use App\Models\VoxAnswer;
+use App\Models\User;
 use App\Models\DcnReward;
 use App\Models\VoxRelated;
 use Illuminate\Support\Facades\Input;
@@ -605,6 +606,22 @@ class VoxesController extends AdminController
     }
 
     private function saveOrUpdate($item) {
+
+        if ($this->request->input('type') == 'normal' && $item->type == 'hidden') {
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_POST => 1,
+                CURLOPT_URL => 'https://hub-app-api.dentacoin.com/internal-api/push-notification/',
+                CURLOPT_SSL_VERIFYPEER => 0,
+                CURLOPT_POSTFIELDS => array(
+                    'data' => User::encrypt(json_encode(array('type' => 'new-survey')))
+                )
+            ));
+             
+            $resp = json_decode(curl_exec($curl));
+            curl_close($curl);
+        }
 
         $item->type = $this->request->input('type');
         $item->featured = $this->request->input('featured');
