@@ -26,7 +26,9 @@
 					</div>
 		      		<div class="slider-inner">
 			    		<div class="slide-padding">
-			      			<a href="javascript:;" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title]) }}'></a>							
+			      			<a href="javascript:;" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title]) }}'>
+  								<img src="{{ $vox->getImageUrl(true) }}" alt="{{ $vox->title }} - Dental Survey" style="display: none !important;"> 
+			      			</a>							
 							<div class="vox-header clearfix">
 								<div class="survey-cats"> 
 									@foreach( $vox->categories as $c)
@@ -68,7 +70,8 @@
 			      	<div class="swiper-slide">
 			      		<div class="slider-inner">
 				    		<div class="slide-padding">
-				      			<a href="{{ $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title]) }}'>
+				      			<a href="{{ $vox->getLink() }}" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');">
+  									<img src="{{ $vox->getImageUrl(true) }}" alt="{{ $vox->title }} - Dental Survey" style="display: none !important;"> 
 				      				@if($vox->featured)
 				      					<img class="featured-img doublecoin" src="{{ url('new-vox-img/dentavox-dentacoin-flipping-coin.gif') }}" alt="Dentavox dentacoin flipping coin">
 				      				@endif

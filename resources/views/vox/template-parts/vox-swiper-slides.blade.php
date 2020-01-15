@@ -1,7 +1,8 @@
 <div class="swiper-slide" survey-id="{{ $survey->id }}">
 	<div class="slider-inner">
 		<div class="slide-padding">
-  			<a href="{{ $survey->getLink() }}" class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title ]) }}'>
+  			<a href="{{ $survey->getLink() }}" class="cover" style="background-image: url('{{ $survey->getImageUrl() }}');">
+  				<img src="{{ $survey->getImageUrl(true) }}" alt="{{ $survey->title }} - Dental Survey" style="display: none !important;"> 
   				@if($survey->featured)
   					<img class="featured-img doublecoin" src="{{ url('new-vox-img/dentavox-dentacoin-flipping-coin.gif') }}" alt="Dentavox dentacoin flipping coin">
   				@endif

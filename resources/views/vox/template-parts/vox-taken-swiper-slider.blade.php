@@ -1,6 +1,7 @@
 <div class="slider-inner">
 	<div class="slide-padding">
-		<a href="{{ !empty($taken) && in_array($survey->id, $taken) ? 'javascript:;' : $survey->getLink() }}" class="cover" style="background-image: url('{{ $survey->getImageUrl(true) }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $survey->title ]) }}'>
+		<a href="{{ !empty($taken) && in_array($survey->id, $taken) ? 'javascript:;' : $survey->getLink() }}" class="cover" style="background-image: url('{{ $survey->getImageUrl(true) }}');">
+  			<img src="{{ $survey->getImageUrl(true) }}" alt="{{ $survey->title }} - Dental Survey" style="display: none !important;"> 
 			@if($survey->featured)
 				<img class="featured-img doublecoin" src="{{ url('new-vox-img/dentavox-dentacoin-flipping-coin.gif') }}" alt="Dentavox dentacoin flipping coin">
 			@endif
