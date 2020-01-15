@@ -93,7 +93,7 @@ class EmailsController extends AdminController
             $user = User::find($u->id);
 
             if (!empty($user)) {
-                $user->sendGridTemplate(49);
+                $user->sendGridTemplate(49, null, 'trp');
             }
         }
 

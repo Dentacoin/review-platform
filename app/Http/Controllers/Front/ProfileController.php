@@ -536,7 +536,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                             "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
                         ];
 
-                        $existing_patient->sendGridTemplate(68, $substitutions);
+                        $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
 
                     } else {
 
@@ -559,12 +559,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                                 ];
 
 
-                                $this->user->sendGridTemplate(59, $substitutions);
+                                $this->user->sendGridTemplate(59, $substitutions, 'trp');
                             } else {
                                 $this->user->sendTemplate( 17 , [
                                     'friend_name' => $dentist_name,
                                     'invitation_id' => $invitation->id
-                                ]);
+                                ], 'trp');
                             }
 
                             // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
@@ -860,7 +860,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                                     "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
                                 ];
 
-                                $existing_patient->sendGridTemplate(68, $substitutions);
+                                $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
 
                             } else {
 
@@ -881,12 +881,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                                     ];
 
 
-                                    $this->user->sendGridTemplate(59, $substitutions);
+                                    $this->user->sendGridTemplate(59, $substitutions, 'trp');
                                 } else {
                                     $this->user->sendTemplate( 17 , [
                                         'friend_name' => $dentist_name,
                                         'invitation_id' => $invitation->id
-                                    ]);
+                                    ], 'trp');
                                 }
 
                                 // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
@@ -1070,7 +1070,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $last_invite->id)))), null, 'https://reviews.dentacoin.com/'),
                     ];
 
-                    $existing_patient->sendGridTemplate(68, $substitutions);
+                    $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
 
                     return Response::json(['success' => true, 'url' => getLangUrl('/').'?tab=asks' ] );
                 } else {
@@ -1137,7 +1137,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $this->user->sendTemplate( 1 , [
                     'clinic_name' => $dentist_name,
                     'invitation_id' => $invitation->id
-                ]);
+                ], 'trp');
 
                 //Back to original
                 $this->user->name = $dentist_name;
@@ -1501,7 +1501,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $ask->user->sendTemplate( $ask->on_review ? 64 : 24 ,[
                     'dentist_name' => $this->user->getName(),
                     'dentist_link' => $this->user->getLink(),
-                ]);
+                ], 'trp');
 
 
                 $d_id = $this->user->id;
@@ -1707,7 +1707,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
             $dentist->sendTemplate(36, [
                 'clinic-name' => $this->user->getName()
-            ]);
+            ], 'trp');
         }
         
         return Response::json( [
@@ -1728,7 +1728,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
             $dentist->sendTemplate(35, [
                 'clinic-name' => $this->user->getName()
-            ]);
+            ], 'trp');
         }
 
         return Response::json( [
@@ -1746,7 +1746,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
             $clinic->sendTemplate(38, [
                 'dentist-name' => $this->user->getName()
-            ]);
+            ], 'trp');
         }
 
         return Response::json( [
@@ -1770,7 +1770,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
                 $clinic->sendTemplate(34, [
                     'dentist-name' =>$this->user->getName()
-                ]);
+                ], 'trp');
 
                 return Response::json( [
                     'success' => true,
@@ -1803,7 +1803,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $dentist->sendTemplate(33, [
                     'clinic-name' => $this->user->getName(),
                     'clinic-link' => $this->user->getLink()
-                ]);
+                ], 'trp');
 
                 return Response::json( [
                     'success' => true,

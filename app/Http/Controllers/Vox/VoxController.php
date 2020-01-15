@@ -1058,7 +1058,7 @@ class VoxController extends FrontController
 
 	                                    $this->user->invitor->sendGridTemplate( 82, [
 	                                        'who_joined_name' => $this->user->getName()
-	                                    ] );
+	                                    ], 'vox' );
 	                                }
 	                            }
 					        }

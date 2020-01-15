@@ -1000,7 +1000,7 @@ class UsersController extends AdminController
                     "invitation_link" => getLangUrl( 'welcome-dentist/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
                 ];
 
-                $newuser->sendGridTemplate(81, $substitutions);
+                $newuser->sendGridTemplate(81, $substitutions, 'trp');
 
                 Request::session()->flash('success-message', 'Dentist Added');
                 return redirect('cms/'.$this->current_page.'/edit/'.$newuser->id);
@@ -1106,7 +1106,7 @@ class UsersController extends AdminController
                                         ];
 
                                         if(!empty($item->email)) {
-                                            $item->sendGridTemplate(43, $substitutions);
+                                            $item->sendGridTemplate(43, $substitutions, 'trp');
                                         }                                        
 
                                         // $item->sendTemplate( 43  , [

@@ -26,6 +26,10 @@
 
                     <div class="row">
                         <div class="col-md-6">
+
+                            @if($item->platform == 'external')
+                                <span style="color: blue; font-weight: bold;">External Patient</span>
+                            @endif
                             @if($item->id == 79003)
                                 <div class="col-md-9 col-md-offset-2" style="color: red; margin-bottom: 20px;">This dentist has been rejected because he already exists - ID: 6119</div>
                             @endif

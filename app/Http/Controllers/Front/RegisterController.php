@@ -492,7 +492,7 @@ class RegisterController extends FrontController
                 $clinic->sendTemplate(2, [
                     'dentist-name' => $user->getName(),
                     'profile-link' => $user->getLink()
-                ]);
+                ], 'trp');
 
             }
 
@@ -555,7 +555,7 @@ class RegisterController extends FrontController
                         $clinic->sendTemplate(34, [
                             'dentist-name' => $user->getName(),
                             'profile-link' => $user->getLink()
-                        ]);
+                        ], 'trp');
                     }
 
                     return Response::json( [
@@ -593,7 +593,7 @@ class RegisterController extends FrontController
                         $dentist->sendTemplate(33, [
                             'clinic-name' => $user->getName(),
                             'clinic-link' => $user->getLink()
-                        ]);
+                        ], 'trp');
                     }
 
                     return Response::json( [
@@ -650,7 +650,7 @@ class RegisterController extends FrontController
 
                 $user->sendTemplate( 42  , [
                     'dentist_name' => $dentist_name,
-                ]);
+                ], 'trp');
 
                 //Back to original
                 $user->name = $dentist_name;
@@ -734,7 +734,7 @@ class RegisterController extends FrontController
             return redirect( getLangUrl('forgot-password') );
         }
 
-        $user->sendTemplate(13);
+        $user->sendTemplate(13, null, 'trp');
 
         Request::session()->flash('success-message', trans('trp.popup.registration.email-success'));
         return redirect( getLangUrl('forgot-password') );

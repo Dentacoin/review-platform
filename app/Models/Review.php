@@ -81,12 +81,12 @@ class Review extends Model {
         if( $this->dentist ) {
             $this->dentist->sendTemplate( $this->verified ? 21 : 6, [
                 'review_id' => $this->id,
-            ]);            
+            ], 'trp');            
         }
         if( $this->clinic ) {
             $this->clinic->sendTemplate( $this->verified ? 21 : 6, [
                 'review_id' => $this->id,
-            ]);            
+            ], 'trp');            
         }
 
         if($this->verified) {
@@ -144,7 +144,7 @@ class Review extends Model {
                 
                 $this->user->invitor->sendTemplate( 22, [
                     'who_joined_name' => $this->user->getName()
-                ] );
+                ], 'trp' );
             }
         }
 

@@ -55,7 +55,7 @@ class DentistController extends FrontController
                         
             $item->sendTemplate(6, [
                 'review_id' => $old_review->id,
-            ]);
+            ], 'trp');
 
             if( $old_review->dentist_id ) {
                 $old_review->dentist->recalculateRating();                
@@ -918,12 +918,12 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
                             "requests_link" => getLangUrl( '/' , null, 'https://reviews.dentacoin.com').'?'. http_build_query(['popup'=>'popup-login-dentist']),
                         ];
 
-                        $item->sendGridTemplate(71, $substitutions);
+                        $item->sendGridTemplate(71, $substitutions, 'trp');
                     } else {
                         $item->sendTemplate( !empty($verification) ? 63 : 23 ,[
                             'patient_name' => $this->user->name,
                             'invitation_link' => $item->getLink()
-                        ] );
+                        ], 'trp' );
                     }
 
 
@@ -1042,7 +1042,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
             $review->save();
             $review->user->sendTemplate(8, [
                 'review_id' => $review->id,
-            ]);
+            ], 'trp');
         }
 
         return Response::json( ['success' => true, 'reply' => nl2br( $review->reply )] );
@@ -1216,7 +1216,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     $ban->type = 'reviews';
                     $ban->save();
 
-                    $patient->sendGridTemplate(70);
+                    $patient->sendGridTemplate(70, null, 'trp');
 
                     return true;
                 }

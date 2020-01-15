@@ -176,7 +176,7 @@ Click the check box and confirm the CAPTCHA.
                         $u->email = $notify->email;
                         $u->name = $notify->name;
                         $u->save();
-                        $mail = $u->sendTemplate($time['tempalte_id']);
+                        $mail = $u->sendTemplate($time['tempalte_id'], null, 'trp');
 
                         $u->email = $tmpEmail;
                         $u->name = $tmpName;
@@ -508,9 +508,6 @@ NEW & FAILED TRANSACTIONS
 
 
 
-
-
-
         $schedule->call(function () {
             echo 'First 3 weeks engagement email 2 START';
 
@@ -544,8 +541,8 @@ NEW & FAILED TRANSACTIONS
                 foreach ($emails as $e) {                
                     $user = User::find($e->user_id);
                     if (!empty($user)) {
-                        $user->sendGridTemplate(44);
-                    }                
+                        $user->sendGridTemplate(44, null, 'trp');
+                    }
                 }
             }
 
@@ -606,9 +603,9 @@ NEW & FAILED TRANSACTIONS
                                 'profile_missing_info' => $missingInfo[0],
                             ];
 
-                            $user->sendGridTemplate(45, $substitutions);
+                            $user->sendGridTemplate(45, $substitutions, 'trp');
                         } else {
-                            $user->sendGridTemplate(45, null, null, 1);
+                            $user->sendGridTemplate(45, null, 'trp', 1);
                         }
                     }           
                 }
@@ -641,9 +638,9 @@ NEW & FAILED TRANSACTIONS
                 foreach ($emails as $e) {
                     $user = User::find($e->user_id);
                     if (!empty($user) && $user->invites->isNotEmpty()) {
-                        $user->sendGridTemplate(46);
+                        $user->sendGridTemplate(46, null, 'trp');
                     } else {
-                        $user->sendGridTemplate(47);
+                        $user->sendGridTemplate(47, null, 'trp');
                     }       
                 }
             }
@@ -681,7 +678,7 @@ NEW & FAILED TRANSACTIONS
                             'reviews_last_month_num' => $user->reviews_in()->count().($user->reviews_in()->count() > 1 ? ' reviews' : ' review'),
                         ];
 
-                        $user->sendGridTemplate(48, $substitutions);
+                        $user->sendGridTemplate(48, $substitutions, 'trp');
                     }
                 }
             }
@@ -783,7 +780,7 @@ NEW & FAILED TRANSACTIONS
                 foreach ($emails as $e) {
                     $user = User::find($e->user_id);
                     if (!empty($user)) {
-                        $user->sendGridTemplate(50);
+                        $user->sendGridTemplate(50, null, 'trp');
                     }
                 }
             }
@@ -852,10 +849,10 @@ NEW & FAILED TRANSACTIONS
                             'results_sentence' => $results_sentence
                         ];
 
-                        $user->sendGridTemplate(51, $substitutions);
+                        $user->sendGridTemplate(51, $substitutions, 'trp');
 
                     } else {
-                        $user->sendGridTemplate(52);
+                        $user->sendGridTemplate(52, null, 'trp');
                     }   
                 }
             }
@@ -926,10 +923,10 @@ NEW & FAILED TRANSACTIONS
                             'results_sentence' => $results_sentence
                         ];
 
-                        $user->sendGridTemplate(53, $substitutions);
+                        $user->sendGridTemplate(53, $substitutions, 'trp');
 
                     } else {
-                        $user->sendGridTemplate(54);
+                        $user->sendGridTemplate(54, null, 'trp');
                     }   
                 }
             }
@@ -1172,7 +1169,7 @@ NEW & FAILED TRANSACTIONS
                                 'reviews_num_percent_month' => $reviews_num_percent_month,
                                 'change_month_num' => $change_month_num,
                                 // 'top3-dentists' => implode('<br/>',$top3_dentists)
-                            ]);
+                            ], 'trp');
 
                         } else {
 
@@ -1200,7 +1197,7 @@ NEW & FAILED TRANSACTIONS
                                 $user->sendGridTemplate(56, [
                                     'month' => $month->subMonth()->format('F'),
                                     'compare_with_others' => $compare_with_others,
-                                ]);
+                                ], 'trp');
                             }
                         }       
                     }

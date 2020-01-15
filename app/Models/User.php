@@ -432,9 +432,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 'expires' => $ban->expires->toFormattedDateString().', '.$ban->expires->toTimeString(),
                 'ban_days' => $days,
                 'ban_hours' => $days*24
-            ]);
+            ], 'vox');
         } else {
-            $this->sendTemplate(16);              
+            $this->sendTemplate(16, null, 'vox');              
         }
 
         return [
