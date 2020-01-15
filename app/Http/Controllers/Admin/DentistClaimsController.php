@@ -57,25 +57,11 @@ class DentistClaimsController extends AdminController
         $user->ownership = 'approved';
         $user->save();
 
-        $u = User::find(3);
-        $tmpEmail = $u->email;
-        $tmpName = $u->name;
-
-        $u->email = $item->email;
-        $u->name = $item->name;
-        $u->save();
-
         $substitutions = [
             'trp_profile' => getLangUrl('dentist/'.$user->slug, null, 'https://reviews.dentacoin.com/'),
         ];
 
-        $mail = $u->sendGridTemplate(26, $substitutions, 'trp');
-
-        $u->email = $tmpEmail;
-        $u->name = $tmpName;
-        $u->save();
-
-        $mail->delete();
+        $user->sendGridTemplate(26, $substitutions, 'trp');
 
         return redirect( 'cms/users/edit/'.$item->dentist_id );
 
