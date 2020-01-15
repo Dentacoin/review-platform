@@ -1196,7 +1196,7 @@ $(document).ready(function(){
 
         var myArray = rows;
         myArray.sort(function(a, b) {
-            return a[1] - b[1];
+            return b[1] - a[1];
         });
 
         var index, entry;
