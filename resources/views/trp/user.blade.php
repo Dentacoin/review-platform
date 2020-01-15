@@ -176,7 +176,9 @@
 			@if($item->status == 'added_approved' || $item->status == 'admin_imported')
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
-			<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
+			<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');">
+				<img src="{{ $item->getImageUrl(true) }}" alt="Reviews for dentist {{ $item->getName() }} in {{ $item->city_name ? $item->city_name.', ' : '' }}{{ $item->state_name ? $item->state_name.', ' : '' }}{{ $item->country->name }}" style="display: none !important;"> 
+			</div>
 			<div class="profile-mobile-info tac">
 				<h3>
 					{{ $item->getName() }}
@@ -473,7 +475,9 @@
 			@endif
 
     		<div class="view-profile clearfix">
-				<div class="avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
+				<div class="avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');">
+					<img src="{{ $item->getImageUrl(true) }}" alt="Reviews for dentist {{ $item->getName() }} in {{ $item->city_name ? $item->city_name.', ' : '' }}{{ $item->state_name ? $item->state_name.', ' : '' }}{{ $item->country->name }}" style="display: none !important;"> 
+				</div>
 				<div class="media-right">
 					<h3>
 						{{ $item->getName() }}
