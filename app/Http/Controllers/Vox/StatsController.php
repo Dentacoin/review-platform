@@ -444,7 +444,7 @@ class StatsController extends FrontController
             $main_chart = $this->processArray($main_chart);
             $second_chart = $this->processArray($second_chart);
             $third_chart = $this->processArray($third_chart);
-
+            
         	return Response::json( [
                 'related_question_type' => $related_question_type,
         		'main_chart' => $main_chart,
@@ -455,6 +455,7 @@ class StatsController extends FrontController
         		'totalf' => $totalf,
                 'relation_info' => $relation_info,
         		'answer_id' => $answer_id,
+                'vox_scale_id' => !empty($question->vox_scale_id) ? true : false,
                 'question_type' => $question->type,
                 'multiple_top_answers' => !empty($question->stats_top_answers) ? intval(explode('_', $question->stats_top_answers)[1]) : null,
         	] );

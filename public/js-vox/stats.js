@@ -716,7 +716,7 @@ $(document).ready(function(){
                     if (($(this).find('.multiple-stat').length || data.related_question_type == 'multiple') && data.related_question_type != 'single' ) {
                         drawMultipleColumns(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, data.total, data.multiple_top_answers);
                     } else {
-                        drawChart(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, true, can_click_on_legend);
+                        drawChart(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, true, can_click_on_legend, data.vox_scale_id, data.question_type);
                     }
 
                     if($(window).outerWidth() <= 768 && $('.mobile-button-legend').length && scale!='country_id') {
@@ -798,7 +798,7 @@ $(document).ready(function(){
                             drawChart(rows, $(this).find('.second-chart')[0], {
                                 pieHole: 0.6,
                                 width: 270,
-                            }, can_click_on_legend);
+                            }, can_click_on_legend, null, data.vox_scale_id, data.question_type);
                         }
 
 
@@ -847,7 +847,7 @@ $(document).ready(function(){
                             drawChart(rows, $(this).find('.third-chart')[0], {
                                 pieHole: 0.6,
                                 width: 270,
-                            }, can_click_on_legend);
+                            }, can_click_on_legend, null, data.vox_scale_id, data.question_type);
                         }
 
                         if (data.question_type != 'multiple_choice' && data.answer_id) {
@@ -1189,23 +1189,30 @@ $(document).ready(function(){
 
 
 
-    var drawChart = function(rows, container, more_options, is_main, can_click_on_legend) {
+    var drawChart = function(rows, container, more_options, is_main, can_click_on_legend, vox_scale_id, question_type) {
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Genders');
         data.addColumn('number', 'Answers');
 
-        var myArray = rows;
-        myArray.sort(function(a, b) {
-            return b[1] - a[1];
-        });
+        if (question_type == 'single_choice' && vox_scale_id) {
+            data.addRows(rows);
+        } else {
 
-        var index, entry;
-        for (index = 0; index < myArray.length; ++index) {
-            entry = myArray[index];
-            //console.log(index + ": " + entry[0] + " - " + entry[1]);
+            var myArray = rows;
+            myArray.sort(function(a, b) {
+                return b[1] - a[1];
+            });
+
+            var index, entry;
+            for (index = 0; index < myArray.length; ++index) {
+                entry = myArray[index];
+                //console.log(index + ": " + entry[0] + " - " + entry[1]);
+            }
+            data.addRows(myArray);
+
         }
 
-        data.addRows(myArray);
+        
         // Set chart options
         var options = {
             backgroundColor: 'transparent',
