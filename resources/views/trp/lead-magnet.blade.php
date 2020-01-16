@@ -106,7 +106,7 @@
 
 				<div class="info-box flex">
 					<div class="info-icon">
-						<img src="{{ url('img-trp/dentacoin-make-your-voice-heard-icon.png') }}" alt="Dentacoin make your voice heard icon">
+						<img src="{{ url('img-trp/dentacoin-get-more-reviews-icon.png') }}" alt="Dentacoin get more reviews icon">
 					</div>
 					<div class="info-text">
 						<h3>Get more genuine reviews with less efforts</h3>

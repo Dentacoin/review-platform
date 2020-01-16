@@ -556,7 +556,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
     public function lead_magnet_results($locale=null) {
 
-    	if (!empty(session('lead_magnet')) && empty($this->user)) {
+    	if (!empty(session('lead_magnet')) && !empty(session('lead_magnet')['points']) && empty($this->user)) {
 
     		$country_id = $this->country_id;
 
@@ -616,7 +616,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
     public function lead_magnet_session($locale=null) {
 
-    	if (!empty(session('lead_magnet'))) {
+    	if (!empty(session('lead_magnet')) && !empty(session('lead_magnet')['points'])) {
     		return Response::json([
 	            'session' => true,
 	            'url' => getLangUrl('lead-magnet-results')

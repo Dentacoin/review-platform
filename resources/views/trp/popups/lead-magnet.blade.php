@@ -68,7 +68,7 @@
 					<div class="alert magnet-alert" style="display: none; margin-top: 20px;">
 					</div>
 					<div class="tac">
-						<a href="javascript:;" class="button first-form-button" data-validator="{{ getLangUrl('lead-magnet-step1') }}">Get Started"</a>
+						<a href="javascript:;" class="button first-form-button" data-validator="{{ getLangUrl('lead-magnet-step1') }}">Get Started</a>
 					</div>
 				</div>
 			</div>

@@ -1197,17 +1197,32 @@ $(document).ready(function(){
         if (question_type == 'single_choice' && vox_scale_id) {
             data.addRows(rows);
         } else {
-
             var myArray = rows;
             myArray.sort(function(a, b) {
                 return b[1] - a[1];
             });
+
+            var diez = [];
 
             var index, entry;
             for (index = 0; index < myArray.length; ++index) {
                 entry = myArray[index];
                 //console.log(index + ": " + entry[0] + " - " + entry[1]);
             }
+
+            for (var i in myArray) {
+                if (myArray[i][0].search( '#' ) !== -1) {
+                    diez.push(myArray[i]);
+
+                    myArray.splice(i, 1);
+                }
+            }
+
+            for (var i in diez) {
+                diez[i][0] = diez[i][0].substring(1);
+                myArray.push(diez[i]);
+            }
+
             data.addRows(myArray);
 
         }
@@ -1244,7 +1259,7 @@ $(document).ready(function(){
             options.height = $(container).closest('.graphs').innerWidth()/2;
         }
         
-
+        console.log(container);
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart( container );
 

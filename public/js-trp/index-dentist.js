@@ -126,6 +126,14 @@ jQuery(document).ready(function($){
             $(this).serialize() , 
             function( data ) {
                 if(data.success) {
+
+                    $('#ariticform_input_leadmagnetform_practice_name').val( $('#magnet-name').val() );
+                    $('#ariticform_input_leadmagnetform_website').val( $('#magnet-website').val() );
+                    $('#ariticform_input_leadmagnetform_country').val( $('#magnet-country option:selected').text() );
+                    $('#ariticform_input_leadmagnetform_email').val( $('#magnet-email').val() );
+                    $('#ariticform_checkboxgrp_checkbox_gdpr_checkbox').prop('checked', true);
+
+                    $('#ariticform_input_leadmagnetform_submit').trigger('click');
                     setTimeout( function() {
                         window.location.href = data.url;
                     }, 8000);
