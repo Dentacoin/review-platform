@@ -273,6 +273,12 @@ class UsersController extends AdminController
                 $query->where('reference_id', '!=', 11);
             }, '>=', $this->request->input('search-surveys-taken'));
         }
+
+        if(!empty($this->request->input('search-dentist-claims'))) {
+            $users = $users->whereHas('claims', function ($query) {
+                $query->where('status', $this->request->input('search-dentist-claims'));
+            });
+        }
         if(!empty($this->request->input('search-register-from'))) {
             $firstday = new Carbon($this->request->input('search-register-from'));
             $users = $users->where('created_at', '>=', $firstday);
@@ -680,6 +686,7 @@ class UsersController extends AdminController
             'search_surveys_taken' => $this->request->input('search-surveys-taken'),
             'search_login_after' => $this->request->input('search-login-after'),
             'search_login_number' => $this->request->input('search-login-number'),
+            'search_dentist_claims' => $this->request->input('search-dentist-claims'),
             'user_platforms' => $user_platforms,
             'countries' => Country::with('translations')->get(),
             'trp_hidden' =>  $trp_hidden,

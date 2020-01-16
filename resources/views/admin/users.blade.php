@@ -75,6 +75,15 @@
                         <div class="col-md-2 {!! !empty($trp_hidden) ? 'filter-hidden' : '' !!}">
                             <input type="text" class="form-control" name="search-review" value="{{ $search_review }}" placeholder="Review (0 -no reviews; number)">
                         </div>
+                        <div class="col-md-2 {!! !empty($trp_hidden) ? 'filter-hidden' : '' !!}">
+                            <select class="form-control" name="search-dentist-claims">
+                                <option value="">Profile claim</option>
+                                <option value="waiting" {!! $search_dentist_claims == 'waiting' ? 'selected="selected"' : '' !!}>Pending</option>
+                                <option value="approved" {!! $search_dentist_claims == 'approved' ? 'selected="selected"' : '' !!}>Approved</option>
+                                <option value="rejected" {!! $search_dentist_claims == 'rejected' ? 'selected="selected"' : '' !!}>Rejected</option>
+                                <option value="suspicious" {!! $search_dentist_claims == 'suspicious' ? 'selected="selected"' : '' !!}>Suspicious</option>
+                            </select>                            
+                        </div>
                         <div class="col-md-2 {!! !empty($vox_hidden) ? 'filter-hidden' : '' !!}">
                             <input type="text" class="form-control" name="search-surveys-taken" value="{{ $search_surveys_taken }}" placeholder="Surveys taken (0 -no surveys; number)">
                         </div>

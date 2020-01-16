@@ -560,23 +560,29 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
     		$country_id = $this->country_id;
 
-    		$to_month = Carbon::now()->modify('-0 months');
-        	$from_month = Carbon::now()->modify('-1 months');
+    		if(!empty($country_id)) {
 
-            $country_reviews = Review::whereHas('user', function ($query) use ($country_id) {
-                $query->where('country_id', $country_id);
-            })
-            ->where('created_at', '>=', $from_month)
-        	->where('created_at', '<=', $to_month)
-        	->get();
+	    		$to_month = Carbon::now()->modify('-0 months');
+	        	$from_month = Carbon::now()->modify('-1 months');
 
-            $country_rating = 0;
-            foreach ($country_reviews as $c_review) {
-                $country_rating += $c_review->rating;
-            }
+	            $country_reviews = Review::whereHas('user', function ($query) use ($country_id) {
+	                $query->where('country_id', $country_id);
+	            })
+	            ->where('created_at', '>=', $from_month)
+	        	->where('created_at', '<=', $to_month)
+	        	->get();
 
-            $avg_country_rating = number_format($country_rating / $country_reviews->count(), 2);
-            $country_reviews = $country_reviews->count();
+	            $country_rating = 0;
+	            foreach ($country_reviews as $c_review) {
+	                $country_rating += $c_review->rating;
+	            }
+
+	            $avg_country_rating = number_format($country_rating / $country_reviews->count(), 2);
+	            $country_reviews = $country_reviews->count();
+    		} else {
+    			$country_reviews = null;
+    		}
+
 
             if (empty($country_reviews)) {
             	$country_reviews = Review::whereHas('user')
