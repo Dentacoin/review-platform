@@ -1,0 +1,1 @@
+{{ !empty($item) ? config('user-statuses')[$item->status] : '' }}

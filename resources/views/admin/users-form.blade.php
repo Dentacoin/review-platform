@@ -586,6 +586,7 @@
                             'table_fields' => [
                                 'created_at'        => array('format' => 'datetime','width' => '20%'),
                                 'dentist'           => array('template' => 'admin.parts.table-added-dentist', 'label' => 'Dentist'),
+                                'status'           => array('template' => 'admin.parts.table-added-dentist-status', 'label' => 'Status'),
                             ],
                             'table_subpage' => 'reviews',
                             'table_data' => $item->patient_invites_dentist,
