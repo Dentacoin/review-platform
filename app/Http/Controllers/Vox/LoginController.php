@@ -128,6 +128,13 @@ class LoginController extends FrontController
                 ];
                 session($sess);
 
+                $fb_name = $s_user->getName() ? $s_user->getName() : ( !empty($s_user->getNickname()) ? $s_user->getNickname() : null );
+
+                if (!empty($user->civic_id) && !empty($fb_name)) {
+                    $user->name = $fb_name;
+                    $user->save();
+                }
+
                 Auth::login($user, true);
                 
                 if($user->isBanned('vox')) {
