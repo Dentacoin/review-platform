@@ -1,6 +1,6 @@
 @if(!empty($daily_poll))
 	<div class="poll-bubble">
-		<img class="small-bubble-image" src="{{ url('new-vox-img/dentavox-daily-polls-popup-mobile.png') }}" alt="Dentavox daily polls popup mobile">>
+		<img class="small-bubble-image" src="{{ url('new-vox-img/dentavox-daily-polls-popup-mobile.png') }}" alt="Dentavox daily polls popup mobile">
 		<div class="bubble-inner">
 			<img class="main-bubble-image" src="{{ url('new-vox-img/dentavox-man-daily-polls-rewards.png') }}" alt="Dentavox man daily polls rewards">
 			<div class="white-bubble">
