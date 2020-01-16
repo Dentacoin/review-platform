@@ -153,7 +153,7 @@ class IndexController extends FrontController
 		if(empty($this->user) || (!empty($this->user) && !$this->user->madeTest(11) ) ) {
 			return $this->survey_list($locale);
 		} else {
-			return redirect(getLangUrl('page-not-found'));
+			return redirect(getLangUrl('/'));
 		}
 	}
 
