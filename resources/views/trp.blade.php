@@ -188,7 +188,7 @@
 					</div>
 				</div>
 
-				@if($current_page == 'welcome-dentist')
+				@if(!empty($admin) && $current_page == 'welcome-dentist')
 					<script>
 			            (function(w,d,t,u,n,a,m){
 			                if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
