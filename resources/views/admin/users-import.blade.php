@@ -32,6 +32,7 @@
                             <button type="submit" class="btn btn-sm btn-success btn-block">Submit</button>
                         </div>
                     </div>
+                    <a href="{{ url('dentist_import.xls') }}">Download sample</a>
                 </form>
             </div>
         </div>
