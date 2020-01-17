@@ -20,6 +20,8 @@
 				<div class="alert alert-info">
 					{!! nl2br(trans('trp.page.profile.trp.no-reviews')) !!}
 				</div>
+
+				<a href="https://reviews.dentacoin.com" class="button" style="color: white;">FIND YOUR DENTIST</a>
 			@else
 			    <div class="details-wrapper profile-reviews-space">
 				@foreach($reviews as $review)
