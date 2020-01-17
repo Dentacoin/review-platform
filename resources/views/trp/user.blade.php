@@ -297,9 +297,7 @@
 			    </div>		    	
 			</div>
 		</div>
-		@if(!empty($item->short_description))
-			<a href="javascript:;" class="short-desc-arrow"></a>
-		@endif
+		<a href="javascript:;" class="short-desc-arrow"></a>
 	</div>
 
 	<div class="information flex">
@@ -560,9 +558,7 @@
 					Is this your practice?
 				</a>
 			@endif
-			@if(!empty($item->short_description))
-				<a href="javascript:;" class="short-desc-arrow"></a>
-			@endif
+			<a href="javascript:;" class="short-desc-arrow"></a>
 
 		</div>
 
@@ -605,6 +601,10 @@
 	@if(!empty($item->short_description))
 		<div class="dentist-short-desc">
 			{{ $item->short_description }}
+		</div>
+	@else
+		<div class="dentist-short-desc">
+			General {{ $item->is_clinic ? 'clinic' : 'dentist' }} in {{ $item->city_name ? $item->city_name.', ' : '' }}{{ $item->state_name ? $item->state_name.', ' : '' }}{{ $item->country->name }}.
 		</div>
 	@endif
 
