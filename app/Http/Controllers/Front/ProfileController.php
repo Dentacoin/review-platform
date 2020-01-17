@@ -1576,7 +1576,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             'menu' => $this->menu,
             'css' => [
                 'common-profile.css',
-                'trp-index-dentist.css'
+                'trp-users.css'
             ],
             'js' => [
                 'profile.js',
