@@ -15,6 +15,7 @@ use App\Models\Review;
 use App\Models\Reward;
 use App\Models\VoxAnswer;
 use App\Models\UserLogin;
+use App\Models\LeadMagnet;
 use App\Models\Poll;
 use App\Models\UserInvite;
 use App\Models\UserAction;
@@ -1561,6 +1562,23 @@ NEW & FAILED TRANSACTIONS
             }
 
         })->everyFiveMinutes();
+
+
+        $schedule->call(function () {
+            echo 'Lead Magnet Delete Cron - START';
+
+            $leads = LeadMagnet::where('created_at', '<', Carbon::now()->subDays(14) )->get();
+
+            if ($leads->isNotEmpty()) {
+
+                foreach ($leads as $lead) {
+                    LeadMagnet::destroy( $lead->id );
+                }
+            }
+
+            echo 'Lead Magnet Delete Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->cron("30 7 * * *"); //10:30h BG Time
 
 
         $schedule->call(function () {

@@ -14,6 +14,7 @@ var fixFlickty;
 var suggestTO;
 var refreshOnClosePopup = false;
 var onloadCallback;
+var map_loaded = false;
 
 var initLoginScripts;
 var prepareLoginFucntion;
@@ -137,11 +138,11 @@ jQuery(document).ready(function($){
     }
 
     var loadMapScript = function() {
-    	if (!$('script[src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en"]').length) {
+    	if (!map_loaded) {
 
     		$.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
 
-	    		$('body').append( $('<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en"></script>') );
+	    		map_loaded = true;
     		} );
     	}
     }

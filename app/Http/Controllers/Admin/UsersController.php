@@ -1477,15 +1477,25 @@ class UsersController extends AdminController
 
                 if (!empty(!empty($u->answers) && !empty(json_decode($u->answers, true)[3]))) {
                     foreach (json_decode($u->answers, true)[3] as $u_ans) {
-                        dd($u_ans);
-                        $third_answer += config('trp.lead_magnet')[3][$u_ans].';';
+                        if (!empty($u_ans)) {
+                            if (empty($third_answer)) {
+                                $third_answer = config('trp.lead_magnet')[3][$u_ans].'|';
+                            } else {
+                                $third_answer = $third_answer.config('trp.lead_magnet')[3][$u_ans].'|';
+                            }
+                        }
                     }
+                }
+
+                if (!empty($third_answer)) {
+                    $third_answer = substr($third_answer, 0, -1);
                 }
 
                 $info = [
                     'recent_conversion_date' => $u->created_at,
                     'firstname' => $u->name,
                     'email' => $u->email,
+                    'website' => $u->website,
                     'country' => Country::find($u->country_id)->name,
                     'priority' => !empty($u->answers) ? config('trp.lead_magnet')[1][json_decode($u->answers, true)[1]] : '',
                     'reviews_tool' => !empty($u->answers) ? config('trp.lead_magnet')[2][json_decode($u->answers, true)[2]] : '',
@@ -1501,7 +1511,7 @@ class UsersController extends AdminController
             }
 
             $csv = [
-                ['recent_conversion_date','firstname','email','country', 'priority', 'reviews_tool', 'ask_reviews', 'frequently_reviews', 'reviews_reply', 'reviews_score']
+                ['recent_conversion_date','firstname','email', 'website', 'country', 'priority', 'reviews_tool', 'ask_reviews', 'frequently_reviews', 'reviews_reply', 'reviews_score']
             ];
 
 
