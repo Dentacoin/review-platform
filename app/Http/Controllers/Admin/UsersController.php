@@ -1477,7 +1477,9 @@ class UsersController extends AdminController
 
                 if (!empty(!empty($u->answers) && !empty(json_decode($u->answers, true)[3]))) {
                     foreach (json_decode($u->answers, true)[3] as $u_ans) {
-                        $third_answer += $u_ans.';';
+                        dd($u_ans);
+                        $third_answer += config('trp.lead_magnet')[3][$u_ans].';';
+                        dd()
                     }
                 }
 
@@ -1594,6 +1596,9 @@ class UsersController extends AdminController
                                     $newuser->place_id = $row[10];
                                     $newuser->status = 'admin_imported';
                                     $newuser->platform = 'trp';
+                                    $newuser->save();
+
+                                    $newuser->slug = $newuser->makeSlug();
                                     $newuser->save();
 
                                     if (!empty($row[9])) {
