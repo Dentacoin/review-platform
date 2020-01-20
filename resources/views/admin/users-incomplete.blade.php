@@ -130,7 +130,7 @@
                                                 {{ !empty($lead->answers) ? config('trp.lead_magnet')[5][json_decode($lead->answers, true)[5]] : '' }}
                                             </td>
                                             <td>
-                                                @if(!empty($lead->total))
+                                                @if(!empty($lead->total) || $lead->total === 0)
                                                     {{ $lead->total }}%
                                                 @endif
                                             </td>

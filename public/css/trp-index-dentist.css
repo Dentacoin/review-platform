@@ -340,15 +340,13 @@
 .section-learn {
   background: url("../img-trp/learn-section-background.jpg") 50% 100% no-repeat;
   background-size: cover;
-  padding-top: 15px;
-  padding-bottom: 25px;
+  padding-top: 40px;
+  padding-bottom: 45px;
   position: relative; }
   @media screen and (max-width: 768px) {
     .section-learn {
       position: relative;
       text-align: center;
-      padding-top: 45px;
-      padding-bottom: 45px;
       overflow: hidden; } }
   .section-learn .container {
     position: static; }
@@ -417,10 +415,10 @@
       width: 223px;
       background-color: #c1c1c1; }
   .section-dentist-info .flex {
-    margin-bottom: 70px; }
+    margin-bottom: 100px; }
     @media screen and (max-width: 768px) {
       .section-dentist-info .flex {
-        margin-bottom: 30px; } }
+        margin-bottom: 80px; } }
   .section-dentist-info .col-icon {
     max-width: 65px;
     margin-right: 30px; }
@@ -457,7 +455,7 @@
   background-size: 100% 370px;
   padding-bottom: 40px;
   position: relative;
-  margin-top: 140px; }
+  margin-top: 100px; }
   @media screen and (max-width: 768px) {
     .testimonials-section {
       background-size: 300% 390px; } }

@@ -8,7 +8,7 @@
 			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
 		<h2>
-			Discover your reputation strength
+			{!! nl2br(trans('trp.popup.popup-lead-magnet.title')) !!}
 		</h2>
 
 		<div class="popup-tabs colorful-tabs flex flex-mobile">
@@ -31,13 +31,13 @@
 					<div class="modern-field alert-after">
 						<input type="text" name="firstname" id="magnet-name" class="modern-input magnet-name" autocomplete="off">
 						<label for="magnet-name">
-							<span>Enter your practice name:</span>
+							<span>{!! trans('trp.popup.popup-lead-magnet.name') !!}</span>
 						</label>
 					</div>
 					<div class="modern-field alert-after">
 						<input type="text" name="website" id="magnet-website" class="modern-input magnet-website" autocomplete="off">
 						<label for="magnet-website">
-							<span>Website/ FB page:</span>
+							<span>{!! trans('trp.popup.popup-lead-magnet.website') !!}</span>
 						</label>
 					</div>
 					<div class="modern-field alert-after">
@@ -55,20 +55,23 @@
 					<div class="modern-field alert-after">
 						<input type="email" name="email" id="magnet-email" class="modern-input magnet-email" autocomplete="off">
 						<label for="magnet-email">
-							<span>Your email:</span>
+							<span>{!! trans('trp.popup.popup-lead-magnet.email') !!}</span>
 						</label>
 					</div>
 
 					<label class="checkbox-label agree-label" for="magnet-agree">
 						<input type="checkbox" class="special-checkbox" id="magnet-agree" name="agree" value="1">
 						<i class="far fa-square"></i>
-						By submitting the form, you agree to our <a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">Privacy Policy</a>.
+						{!! trans('trp.popup.popup-lead-magnet.privacy', [
+							'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
+							'endlink' => '<a/>',
+						]) !!}
 					</label>
 
 					<div class="alert magnet-alert" style="display: none; margin-top: 20px;">
 					</div>
 					<div class="tac">
-						<a href="javascript:;" class="button first-form-button" data-validator="{{ getLangUrl('lead-magnet-step1') }}">RUN FREE TEST</a>
+						<a href="javascript:;" class="button first-form-button" data-validator="{{ getLangUrl('lead-magnet-step1') }}">{!! trans('trp.popup.popup-lead-magnet.first-step-submit') !!}</a>
 					</div>
 				</div>
 			</div>
@@ -103,9 +106,9 @@
 								Both
 							</label>
 						</div>
-						<div class="alert alert-warning" style="display: none;">Please, select an answer.</div>
+						<div class="alert alert-warning" style="display: none;">{!! trans('trp.popup.popup-lead-magnet.select-answer-error') !!}</div>
 						<div class="tac">
-							<a href="javascript:;" class="button magnet-validator">Next</a>
+							<a href="javascript:;" class="button magnet-validator">{!! trans('trp.popup.popup-lead-magnet.next') !!}</a>
 						</div>
 					</div>
 					<div class="answer-radios-magnet clearfix">
@@ -156,9 +159,9 @@
 								I don’t use one
 							</label>
 						</div> 
-						<div class="alert alert-warning" style="display: none;">Please, select an answer.</div>
+						<div class="alert alert-warning" style="display: none;">{!! trans('trp.popup.popup-lead-magnet.select-answer-error') !!}</div>
 						<div class="tac">
-							<a href="javascript:;" class="button magnet-validator">Next</a>
+							<a href="javascript:;" class="button magnet-validator">{!! trans('trp.popup.popup-lead-magnet.next') !!}</a>
 						</div>
 					</div>
 					<div class="answer-radios-magnet clearfix">
@@ -188,9 +191,9 @@
 								No
 							</label>
 						</div> 
-						<div class="alert alert-warning" style="display: none;">Please, select at least one answer.</div>
+						<div class="alert alert-warning" style="display: none;">{!! trans('trp.popup.popup-lead-magnet.select-answer-error') !!}</div>
 						<div class="tac">
-							<a href="javascript:;" class="button magnet-validator validator-skip">Next</a>
+							<a href="javascript:;" class="button magnet-validator validator-skip">{!! trans('trp.popup.popup-lead-magnet.next') !!}</a>
 						</div>
 					</div>
 					<div class="answer-radios-magnet clearfix">
@@ -220,9 +223,9 @@
 								It happened a few times only
 							</label>
 						</div> 
-						<div class="alert alert-warning" style="display: none;">Please, select an answer.</div>
+						<div class="alert alert-warning" style="display: none;">{!! trans('trp.popup.popup-lead-magnet.select-answer-error') !!}</div>
 						<div class="tac">
-							<a href="javascript:;" class="button magnet-validator">Next</a>
+							<a href="javascript:;" class="button magnet-validator">{!! trans('trp.popup.popup-lead-magnet.next') !!}</a>
 						</div>
 					</div>
 					<div class="answer-radios-magnet clearfix">
@@ -259,9 +262,9 @@
 								No
 							</label>
 						</div> 
-						<div class="alert alert-warning" style="display: none;">Please, select an answer.</div>
+						<div class="alert alert-warning" style="display: none;">{!! trans('trp.popup.popup-lead-magnet.select-answer-error') !!}</div>
 						<div class="tac">
-							<button class="button" id="magnet-submit" onclick="LeadMagenet()" type="submit">SEE YOUR SCORE</button>
+							<button class="button" id="magnet-submit" onclick="LeadMagenet()" type="submit">{!! trans('trp.popup.popup-lead-magnet.second-step-submit') !!}</button>
 						</div>
 					</div>
 				</div>

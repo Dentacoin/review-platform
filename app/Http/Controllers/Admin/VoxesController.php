@@ -748,6 +748,13 @@ class VoxesController extends AdminController
             if(!empty($data['question-'.$key])) {
                 $translation = $question->translateOrNew($key);
                 $translation->vox_question_id = $question->id;
+                if (strpos($data['question-'.$key], '[')) {
+                    $first_bracket_q = substr_count($data['question-'.$key],"[");
+                    $second_bracket_q = substr_count($data['question-'.$key],"]");
+                    if ($first_bracket_q != 2 || $second_bracket_q != 2) {
+                        Request::session()->flash('warning-message', 'Missing or more than necessary question/s tooltip brackets');
+                    }
+                }
                 $translation->question = $data['question-'.$key];
                 if(!empty( $data['stats_title-'.$key] )) {
                     $translation->stats_title = $data['stats_title-'.$key];                    
@@ -765,7 +772,7 @@ class VoxesController extends AdminController
                             $first_bracket = substr_count($answ,"[");
                             $second_bracket = substr_count($answ,"]");
                             if ($first_bracket != 2 || $second_bracket != 2) {
-                                Request::session()->flash('error-message', 'Missing answer/s tooltip brackets');
+                                Request::session()->flash('error-message', 'Missing or more than necessary answer/s tooltip brackets');
                             }
                         }
                     }

@@ -453,16 +453,14 @@ $phone: "screen and (max-width: 768px)";
 .section-learn {
 	background: url('../img-trp/learn-section-background.jpg') 50% 100% no-repeat;
 	background-size: cover;
-    padding-top: 15px;
-    padding-bottom: 25px;
+    padding-top: 40px;
+    padding-bottom: 45px;
     position: relative;
     //overflow: hidden;
 
     @media #{$phone} {
     	position: relative;
     	text-align: center;
-    	padding-top: 45px;
-    	padding-bottom: 45px;
     	overflow: hidden;
     }
 
@@ -557,10 +555,10 @@ $phone: "screen and (max-width: 768px)";
     }
 
 	.flex {
-		margin-bottom: 70px;
+		margin-bottom: 100px;
 
 		@media #{$phone} {
-    		margin-bottom: 30px;
+    		margin-bottom: 80px;
     	}
 	}
 
@@ -620,7 +618,7 @@ $phone: "screen and (max-width: 768px)";
     background-size: 100% 370px;
     padding-bottom: 40px;
     position: relative;
-    margin-top: 140px;
+    margin-top: 100px;
 
     @media #{$phone} {
     	background-size: 300% 390px;

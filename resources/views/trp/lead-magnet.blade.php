@@ -15,13 +15,21 @@
 			@endif
 
 			@if($total_points <= 5)
-				<h1 class="red">Currently your practice is not utilizing online reviews effectively.</h1>
-				<h4>{!! $first_answer == '3' ? 'То keep current and attract new patients' : 'To attract new patients' !!} successfully it needs major improvements in almost all areas.</h4>
+				<h1 class="red">{{ nl2br(trans('trp.page.lead-magnet-results.title.under-five-points')) }}</h1>
+				<h4>
+					{{ nl2br(trans('trp.page.lead-magnet-results.subtitle.under-five-points', [
+						'first_part' => $first_answer == '3' ? 'То keep current and attract new patients' : 'To attract new patients'
+					])) }}
+				</h4>
 			@elseif($total_points <= 10)
-				<h1 class="yellow">Currently your practice is not utilizing the full potential of online reviews.</h1>
-				<h4>{!! $first_answer == '3' ? 'То keep current and attract new patients' : 'To attract new patients' !!} successfully it needs improvements in some areas.</h4>
+				<h1 class="yellow">{{ nl2br(trans('trp.page.lead-magnet-results.title.under-ten-points')) }}</h1>
+				<h4>
+					{{ nl2br(trans('trp.page.lead-magnet-results.subtitle.under-ten-points', [
+						'first_part' => $first_answer == '3' ? 'То keep current and attract new patients' : 'To attract new patients'
+					])) }}
+				</h4>
 			@else 
-				<h1 class="green">Congrats! You are on the right track.</h1>
+				<h1 class="green">{{ nl2br(trans('trp.page.lead-magnet-results.title.over-nine-points')) }}</h1>
 			@endif
 
 			<div class="flex flex-charts">
@@ -39,15 +47,15 @@
 				          a 15.9155 15.9155 0 0 1 0 -31.831"
 				      	/>
 				      	<text x="18" y="20.35" class="percentage">{{ round(($total_points / 15) * 100) }}%</text>
-				      	<text x="18" y="25.35" class="info">Overall score</text>
+				      	<text x="18" y="25.35" class="info">{{ nl2br(trans('trp.page.lead-magnet-results.total-score')) }}</text>
 				    </svg>
 				</div>
 				<div class="column-chart">
-					<h4>Review collection</h4>
+					<h4>{{ nl2br(trans('trp.page.lead-magnet-results.review-collection-score')) }}</h4>
 					<div class="result-column"><div class="result-percentage" style="width: {{ round(($review_collection / 12) * 100) }}%;"></div></div>
-					<h4>Review volume</h4>
+					<h4>{{ nl2br(trans('trp.page.lead-magnet-results.review-volume-score')) }}</h4>
 					<div class="result-column"><div class="result-percentage" style="width: {{ round(($review_volume / 9) * 100) }}%;"></div></div>
-					<h4>Impact score</h4>
+					<h4>{{ nl2br(trans('trp.page.lead-magnet-results.impact-score')) }}</h4>
 					<div class="result-column"><div class="result-percentage" style="width: {{ round(($impact / 9) * 100) }}%;"></div></div>
 				</div>
 			</div>
@@ -57,27 +65,33 @@
 					<img src="{{ url('img-trp/dentist-image.png') }}">
 				</div>
 				<div class="tips-content">
-					<h2><img src="{{ url('img-trp/bulb.png') }}">Pro tips</h2>
+					<h2><img src="{{ url('img-trp/bulb.png') }}">{{ nl2br(trans('trp.page.lead-magnet-results.pro-tips')) }}</h2>
 					@if($total_points <= 5)
-						<b>Start with a more proactive approach by regularly inviting patients to leave a review.</b> Point them to a platform, which clearly indicates feedback from invited patients as ‘verified’. This will help prospective patients distinguish genuine reviews. Also, it will guarantee you have sufficient number of reviews to substantiate your overall star ratings. <b> <br/><br/>Another area you have to work on is replying to reviews.</b> A well-crafted response leaves a good impression both to current and prospective patients. It shows you appreciate and take into consideration patient feedback. <b>Moreover, it gives you a chance to turn unfavourable reviews into positive marketing opportunities.</b>
+						{!! nl2br(trans('trp.page.lead-magnet-results.pro-tips.under-five-points')) !!}
 					@elseif($total_points <= 10)
-						<b>Strengthen your online reputation with constant flow of fresh reviews.</b> By regularly inviting patients to leave a review you can get more recent reviews to substantiate your overall star rating. Point patients to a platform, which clearly indicates feedback from invited patients as ‘verified’. This will help highlight genuine feedback. <br/><br/> <b>Dedicate time to respond to reviews.</b> It leaves a good impression both to current and prospective patients. Also, it shows that patient feedback is appreciated and taken into account. <b>Moreover, it gives you a chance to turn unfavourable feedback into positive marketing opportunities.</b>
+						{!! nl2br(trans('trp.page.lead-magnet-results.pro-tips.under-ten-points')) !!}
 					@else
-						However, there are some things, which you can help you unleash the full power of patient feedback and {!! $first_answer == '3' ? 'tо keep current and attract new patients' : 'to attract new patients' !!}.
+						{!! nl2br(trans('trp.page.lead-magnet-results.pro-tips.over-nine-points', [
+							'last_part' => $first_answer == '3' ? 'tо keep current and attract new patients' : 'to attract new patients'
+						])) !!}
 					@endif
 				</div>
 			</div>
 
-			<a href="javascript:;" class="get-started get-started-button button-sign-up-dentist">IMPROVE RESULTS</a>
+			<a href="javascript:;" class="get-started get-started-button button-sign-up-dentist">{{ nl2br(trans('trp.page.lead-magnet-results.button-improve-results')) }}</a>
 		</div>
 
 		<div class="country-dentist-rating">
 			<div class="container">
-				<h2>Other dentists in: <nl><img src="{{ url('img-trp/white-pin.png') }}"><span class="country">{{ App\Models\Country::find($country_id)->name }}</span><nl></h2>
+				@if(!empty($country_id))
+					<h2>{{ nl2br(trans('trp.page.lead-magnet-results.dentists-in')) }}: <nl><img src="{{ url('img-trp/white-pin.png') }}"><span class="country">{{ App\Models\Country::find($country_id)->name }}</span><nl></h2>
+				@else
+					<h2>{{ nl2br(trans('trp.page.lead-magnet-results.dentists-in')) }} <nl><span class="country">Your Area</span><nl></h2>
+				@endif
 				<div class="rating-wrapper">
 					<div class="avg-rating block">
 						<img src="{{ url('img-trp/lead-magnet-rating.png') }}">
-						<h3>Average Rating</h3>
+						<h3>{{ nl2br(trans('trp.page.lead-magnet-results.avg-rating')) }}</h3>
 						<div class="ratings big">
 							<div class="stars">
 								<div class="bar" style="width: {{ $avg_country_rating/5*100 }}%;"></div>
@@ -87,12 +101,16 @@
 					</div>
 					<div class="avg-reviews block">
 						<img src="{{ url('img-trp/lead-magnet-reviews.png') }}">
-						<h3>Recommended Min. Number of Reviews</h3>
-						<p>{{ $country_reviews }} reviews monthly</p>
+						<h3>{{ nl2br(trans('trp.page.lead-magnet-results.recommended-reviews')) }}</h3>
+						<p>
+							{{ nl2br(trans('trp.page.lead-magnet-results.reviews-monthly', [
+								'reviews' => $country_reviews
+							])) }}
+						</p>
 					</div>
 				</div>
 
-				<p class="rating-info">based on insights from Dentacoin Trusted Reviews</p>
+				<p class="rating-info">{{ nl2br(trans('trp.page.lead-magnet-results.based')) }}</p>
 			</div>
 		</div>
 
@@ -100,15 +118,15 @@
 			<div class="info-container">
 				<img class="trp-logo" src="{{ url('img-trp/logo-blue.png') }}" alt="Dentacoin trusted reviews logo">
 
-				<h2>IMPROVE REPUTATION SCORE WITH DENTACOIN TRUSTED REVIEWS</h2>
+				<h2>{{ nl2br(trans('trp.page.lead-magnet-results.improve-title')) }}</h2>
 
 				<div class="info-box flex">
 					<div class="info-icon">
 						<img src="{{ url('img-trp/dentacoin-get-more-reviews-icon.png') }}" alt="Dentacoin get more reviews icon">
 					</div>
 					<div class="info-text">
-						<h3>Get more genuine reviews with less efforts</h3>
-						<p>Upload or copy/paste patient file and send personal review invites to all your patients in a minute. </p>
+						<h3>{{ nl2br(trans('trp.page.lead-magnet-results.improve-first-title')) }}</h3>
+						<p>{{ nl2br(trans('trp.page.lead-magnet-results.improve-first-subtitle')) }}</p>
 					</div>
 				</div>
 
@@ -117,8 +135,8 @@
 						<img src="{{ url('img-trp/dentacoin-trusted-reviews-whatsapp-invites-icon.png') }}" alt="Dentacoin trusted reviews whatsapp invites icon">
 					</div>
 					<div class="info-text">
-						<h3>NEW WhatsApp integration</h3>
-						<p>Don’t have patient email address? No worries, send a personal invite via WhatsApp for FREE.</p>
+						<h3>{{ nl2br(trans('trp.page.lead-magnet-results.improve-second-title')) }}</h3>
+						<p>{{ nl2br(trans('trp.page.lead-magnet-results.improve-second-subtitle')) }}</p>
 					</div>
 				</div>
 
@@ -127,12 +145,12 @@
 						<img src="{{ url('img-trp/dentacoin-trusted-reviews-free-for-dentists-icon.png') }}" alt="Dentacoin trusted reviews free for dentists icon">
 					</div>
 					<div class="info-text">
-						<h3>Motivate patients to contribute at no cost</h3>
-						<p>Patients are rewarded for their genuine feedback in DCN tokens at no cost for your dental practice.</p>
+						<h3>{{ nl2br(trans('trp.page.lead-magnet-results.improve-third-title')) }}</h3>
+						<p>{{ nl2br(trans('trp.page.lead-magnet-results.improve-third-subtitle')) }}</p>
 					</div>
 				</div>
 			</div>
-			<a href="javascript:;" class="get-started get-started-button button-sign-up-dentist">Get started</a>
+			<a href="javascript:;" class="get-started get-started-button button-sign-up-dentist">{{ nl2br(trans('trp.page.lead-magnet-results.button-get-started')) }}</a>
 		</div>
 
 	</div>
