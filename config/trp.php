@@ -65,6 +65,38 @@ return [
 			'other',
 		],
 	],
+	'lead_magnet' => [
+		1 => [
+			1 => 'To acquire new patients',
+			2 => 'To keep existing patients',
+			3 => 'Both',
+		],
+		2 => [
+			1 => 'Your website',
+			2 => 'Google',
+			3 => 'Facebook or other social media',
+			4 => 'General review platform (e.g. Trustpilot)',
+			5 => 'Specialized review platform (e.g. Dentacoin Trusted Reviews, Zocdoc.)',
+			6 => 'I don’t use one',
+		],
+		3 => [
+			1 => 'Yes, in person',
+			2 => 'Yes, by email',
+			3 => 'Yes, by SMS',
+			4 => 'No',
+		],
+		4 => [
+			1 => 'Every day',
+			2 => 'Occasionally',
+			3 => 'It happened a few times only',
+		],
+		5 => [
+			1 => 'Yes, to all reviews',
+			2 => 'Yes, only to negative reviews',
+			3 => 'Yes, from time to time',
+			4 => 'No'
+		],
+	],
 ];
 
 ?>

@@ -11,6 +11,7 @@ use App\Models\IncompleteRegistration;
 use App\Models\DentistTestimonial;
 use CArbon\Carbon;
 use App\Models\UserStrength;
+use App\Models\LeadMagnet;
 
 use App;
 use Mail;
@@ -453,6 +454,12 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
             return Response::json( $ret );
         } else {
+			$new_lead = new LeadMagnet;
+			$new_lead->name = Request::input('firstname');
+			$new_lead->email = Request::input('email');
+			$new_lead->website = Request::input('website');
+			$new_lead->country_id = Request::input('country');
+			$new_lead->save();
 
         	$sess = [
 	            'lead_magnet' => [
@@ -461,9 +468,12 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 		            	'country' => Request::input('country'),
 		            	'website' => Request::input('website'),
 		            	'email' => Request::input('email'),
-	            	]
+	            	],
+	            	'id' => $new_lead->id,
 	            ]
 	        ];
+
+
 	        session($sess);
 
             return Response::json([
@@ -544,6 +554,26 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 			'impact' => $impact,
 		];
 
+		$answers_arr = [
+			1 => Request::input('answer-1'),
+			2 => Request::input('answer-2'),
+			3 => Request::input('answer-3'),
+			4 => !empty(Request::input('answer-4')) ? Request::input('answer-4') : '',
+			5 => Request::input('answer-5'),
+		];
+
+		$lead = LeadMagnet::find(session('lead_magnet')['id']);
+
+		if (!empty($lead)) {
+			$lead->answers = json_encode($answers_arr);
+			$lead->total = round(($total_points / 15) * 100);
+			$lead->review_collection = round(($review_collection / 12) * 100);
+			$lead->review_volume = round(($review_volume / 9) * 100);
+			$lead->impact = round(($impact / 9) * 100);
+			$lead->save();
+		}
+
+
 		session([
 			'lead_magnet' => $session
 		]);
@@ -559,11 +589,11 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
     	if (!empty(session('lead_magnet')) && !empty(session('lead_magnet')['points']) && empty($this->user)) {
 
     		$country_id = $this->country_id;
+    		$to_month = Carbon::now()->modify('-0 months');
+        	$from_month = Carbon::now()->modify('-1 months');
 
     		if(!empty($country_id)) {
 
-	    		$to_month = Carbon::now()->modify('-0 months');
-	        	$from_month = Carbon::now()->modify('-1 months');
 
 	            $country_reviews = Review::whereHas('user', function ($query) use ($country_id) {
 	                $query->where('country_id', $country_id);
@@ -597,6 +627,10 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
 	            $avg_country_rating = number_format($country_rating / $country_reviews->count(), 2);
 	            $country_reviews = $country_reviews->count();
+            }
+
+            if ($country_reviews <= 15) {
+            	$country_reviews = 16;
             }
 
     		$total_points = session('lead_magnet')['points']['total_points'];

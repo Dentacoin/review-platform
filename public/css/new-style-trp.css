@@ -6668,6 +6668,11 @@ body.strength-pb {
   @media screen and (max-width: 768px) {
     .get-started {
       margin-right: -30px; } }
+  @media screen and (max-width: 768px) {
+    .get-started.big-magnet {
+      max-width: 85%;
+      padding: 4px 30px;
+      font-size: 23px; } }
   .get-started:after {
     content: '';
     position: absolute;

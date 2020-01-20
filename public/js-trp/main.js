@@ -351,6 +351,10 @@ jQuery(document).ready(function($){
             } else {
                 $('.all-days-equal').hide();
 	        }
+		} else if(id == 'popup-lead-magnet') {
+		    $('#magnet-website').on('keyup keydown', function() {
+		        $(this).val($(this).val().toLowerCase());
+		    });
 		}
 
 		$('.popup').removeClass('active');

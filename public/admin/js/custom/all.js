@@ -21,6 +21,11 @@ $(document).ready(function(){
 		window.open(window.location.href+extra);
 	});
 
+	$('.btn-export-lead').click( function(e) {
+		var extra = window.location.href.indexOf('?')==-1 ? '?export-lead=1' : '&export-lead=1';
+		window.open(window.location.href+extra);
+	});
+
 	$('.btn-export-fb').click( function(e) {
 		var extra = window.location.href.indexOf('?')==-1 ? '?export-fb=1' : '&export-fb=1';
 		window.open(window.location.href+extra);
@@ -273,7 +278,12 @@ $(document).ready(function(){
 
     } );
 
+	$('#reg-leads').change( function() {
+		$('#incomplete-regs').hide();
+		$('#leads').hide();
 
+		$('#'+$(this).val()).show();
+	});
 
 
     Upload = function (file, url, success) {

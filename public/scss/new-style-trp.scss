@@ -9155,6 +9155,14 @@ body.strength-pb {
 		margin-right: -30px;
 	}
 
+	&.big-magnet {
+		@media #{$phone} {
+			max-width: 85%;
+		    padding: 4px 30px;
+		    font-size: 23px;
+		}
+	}
+
 	&:after {
 		content: '';
 	    position: absolute;

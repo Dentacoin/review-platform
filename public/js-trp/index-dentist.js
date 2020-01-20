@@ -77,6 +77,7 @@ jQuery(document).ready(function($){
             $(this).serialize() , 
             function( data ) {
                 if(data.success) {
+
                 	that.closest('.magnet-content').next().show();
                 	that.closest('.magnet-content').hide();
 
@@ -91,6 +92,7 @@ jQuery(document).ready(function($){
 						draggable: false,
 						pageDots: true,
 					});
+
                 } else {
                     that.find('.ajax-alert').remove();
                     for(var i in data.messages) {
@@ -126,14 +128,8 @@ jQuery(document).ready(function($){
             $(this).serialize() , 
             function( data ) {
                 if(data.success) {
+                    console.log(data.success, data.url);
 
-                    $('#ariticform_input_leadmagnetform_practice_name').val( $('#magnet-name').val() );
-                    $('#ariticform_input_leadmagnetform_website').val( $('#magnet-website').val() );
-                    $('#ariticform_input_leadmagnetform_country').val( $('#magnet-country option:selected').text() );
-                    $('#ariticform_input_leadmagnetform_email').val( $('#magnet-email').val() );
-                    $('#ariticform_checkboxgrp_checkbox_gdpr_checkbox').prop('checked', true);
-
-                    $('#ariticform_input_leadmagnetform_submit').trigger('click');
                     setTimeout( function() {
                         window.location.href = data.url;
                     }, 8000);
@@ -203,6 +199,15 @@ jQuery(document).ready(function($){
                         draggable: false,
                         pageDots: true,
                     });
+
+                    
+                    $('#ariticform_input_leadmagnetform_practice_name').val( $('#magnet-name').val() );
+                    $('#ariticform_input_leadmagnetform_website').val( $('#magnet-website').val() );
+                    $('#ariticform_input_leadmagnetform_country').val( $('#magnet-country option:selected').text() );
+                    $('#ariticform_input_leadmagnetform_email').val( $('#magnet-email').val() );
+                    $('#ariticform_checkboxgrp_checkbox_gdpr_checkbox').prop('checked', true);
+
+                    $('#ariticform_input_leadmagnetform_submit').trigger('click');
 
                 } else {
                     that.closest('form').find('.ajax-alert').remove();

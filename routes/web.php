@@ -90,7 +90,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('transactions/mass-stop', 			'TransactionsController@massstop');
 
 	Route::get('spending', 							'SpendingController@list');
-	
 
 	Route::get('questions', 						'QuestionsController@list');
 	Route::any('questions/add', 					'QuestionsController@add');
@@ -148,7 +147,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::get('emails', 							'EmailsController@list');
 	Route::get('emails/{what?}', 					'EmailsController@list');
-	Route::get('emails/trp/send-engagement-email', 'EmailsController@engagement_email');
+	Route::get('emails/trp/send-engagement-email',  'EmailsController@engagement_email');
 	Route::get('emails/edit/{id}', 					'EmailsController@edit');
 	Route::post('emails/edit/{id}', 				'EmailsController@save');
 
@@ -178,7 +177,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('pages/edit/{id}', 					'PagesSeoController@edit');
 	Route::any('pages/edit/{id}/removepic', 		'PagesSeoController@removepic');
 	Route::get('pages/trp', 						'PagesSeoController@trp_list');
-
 
 	Route::any('logs', 								'LogsController@list');
 });

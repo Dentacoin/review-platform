@@ -435,7 +435,7 @@
 			<div id="cookiebar" >
 				<p>
 					{!! nl2br( trans('vox.common.cookiebar-hint',[
-						'link' => '<a href="//dentacoin.com/privacy-policy" target="_blank">',
+						'link' => '<a href="https://dentacoin.com/privacy-policy" target="_blank">',
 						'endlink' => '</a>',
 					]) ) !!}
 				</p>

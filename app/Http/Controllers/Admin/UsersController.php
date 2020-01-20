@@ -26,6 +26,7 @@ use App\Models\IncompleteRegistration;
 use App\Models\UserInvite;
 use App\Models\UserAsk;
 use App\Models\UserAction;
+use App\Models\LeadMagnet;
 use App\Models\OldSlug;
 
 use Illuminate\Support\Facades\Input;
@@ -1466,9 +1467,74 @@ class UsersController extends AdminController
 
         }
 
+
+        if(request('export-lead')) {
+            $leads_export = LeadMagnet::orderBy('id', 'desc')->get();
+            $export = [];
+            foreach ($leads_export as $u) {
+
+                $third_answer = '';
+
+                if (!empty(!empty($u->answers) && !empty(json_decode($u->answers, true)[3]))) {
+                    foreach (json_decode($u->answers, true)[3] as $u_ans) {
+                        $third_answer += $u_ans.';';
+                    }
+                }
+
+                $info = [
+                    'recent_conversion_date' => $u->created_at,
+                    'firstname' => $u->name,
+                    'email' => $u->email,
+                    'country' => Country::find($u->country_id)->name,
+                    'priority' => !empty($u->answers) ? config('trp.lead_magnet')[1][json_decode($u->answers, true)[1]] : '',
+                    'reviews_tool' => !empty($u->answers) ? config('trp.lead_magnet')[2][json_decode($u->answers, true)[2]] : '',
+                    'ask_reviews' => $third_answer,
+                    'frequently_reviews' => !empty($u->answers) && !empty(json_decode($u->answers, true)[4]) ? config('trp.lead_magnet')[4][json_decode($u->answers, true)[4]] : '',
+                    'reviews_reply' => !empty($u->answers) ? config('trp.lead_magnet')[5][json_decode($u->answers, true)[5]] : '',
+                    'reviews_score' => !empty($u->total) ? $u->total : ''
+                ];
+
+                //phone
+                //country
+                $export[] = $info;
+            }
+
+            $csv = [
+                ['recent_conversion_date','firstname','email','country', 'priority', 'reviews_tool', 'ask_reviews', 'frequently_reviews', 'reviews_reply', 'reviews_score']
+            ];
+
+
+            foreach ($export as $row) {
+                $tmp = array_values($row);
+                foreach ($tmp as $key => $value) {
+                    $value = preg_replace('/[ ]{2,}|[\t]/', ' ', trim($value));
+                    $tmp[$key] = str_replace(',', ' ', trim($value));
+                }
+
+
+                $csv[] = $tmp;
+            }
+
+            header("Content-type: text/csv");
+            header("Content-Disposition: attachment; filename=export-incompletes.csv");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+
+            foreach ($csv as $item) {
+                echo implode(',', $item);
+                echo '
+    ';
+            }
+            exit;
+
+        }
+
+
+        $leads = LeadMagnet::orderBy('id', 'desc')->get();
         $incomplete = IncompleteRegistration::orderBy('id', 'desc')->take(50)->get();
         return $this->showView('users-incomplete', array(
             'items' => $incomplete,
+            'leads' => $leads,
         ));
     }
 
@@ -1501,9 +1567,9 @@ class UsersController extends AdminController
                         foreach ($results as $k => $row) {
 
                             //dd($results, $k, $row);
-                            if (!empty($row[2]) && !empty($row[0]) && filter_var($row[2], FILTER_VALIDATE_EMAIL) && !empty($row[10])) {
+                            if (!empty($row[2]) && !empty($row[0]) && filter_var($row[2], FILTER_VALIDATE_EMAIL)) {
                                 $existing_user = User::where('email', 'like', $row[2] )->first();
-                                $existing_place = User::where('place_id', $row[10] )->first();
+                                $existing_place = !empty($row[10]) ? User::where('place_id', $row[10] )->first() : null;
 
                                 if (!empty($existing_user)) {
                                     $not_imported[] = $row[0];

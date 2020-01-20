@@ -807,8 +807,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             if( empty($ret['country_name']) ) {
                 foreach ($components as $ac) {
                     if( in_array($sf, $ac->types) ) {
-                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-                        $cname = iconv('ASCII', 'UTF-8', $cname);
+                        
+                        if (preg_match('/[اأإء-ي]/ui', $ac->long_name)) {
+                            $cname = $ac->long_name;
+                        } else {
+                            $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                            $cname = iconv('ASCII', 'UTF-8', $cname);
+                        }
                         $ret['country_name'] = $cname;
                         break;
                     }
@@ -829,8 +834,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             if( empty($ret['state_name']) ) {
                 foreach ($components as $ac) {
                     if( in_array($sf, $ac->types) ) {
-                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-                        $cname = iconv('ASCII', 'UTF-8', $cname);
+                        if (preg_match('/[اأإء-ي]/ui', $ac->long_name)) {
+                            $cname = $ac->long_name;
+                        } else {
+                            $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                            $cname = iconv('ASCII', 'UTF-8', $cname);
+                        }
                         $ret['state_name'] = $cname;
                         $ret['state_slug'] = str_replace([' ', "'"], ['-', ''], strtolower($cname));
                         break;
@@ -857,8 +866,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             if( empty($ret['city_name']) ) {
                 foreach ( $components as $ac) {
                     if( in_array($sf, $ac->types) ) {
-                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-                        $cname = iconv('ASCII', 'UTF-8', $cname);
+                        
+                        if (preg_match('/[اأإء-ي]/ui', $ac->long_name)) {
+                            $cname = $ac->long_name;
+                        } else {
+                            $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                            $cname = iconv('ASCII', 'UTF-8', $cname);
+                        }
                         $ret['city_name'] = $cname;
                         break;
                     }
@@ -877,8 +891,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             if( empty($ret['zip']) ) {
                 foreach ( $components as $ac) {
                     if( in_array($sf, $ac->types) ) {
-                        $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
-                        $cname = iconv('ASCII', 'UTF-8', $cname);
+                        
+                        if (preg_match('/[اأإء-ي]/ui', $ac->long_name)) {
+                            $cname = $ac->long_name;
+                        } else {
+                            $cname = iconv('UTF-8', 'ASCII//TRANSLIT', $ac->long_name);
+                            $cname = iconv('ASCII', 'UTF-8', $cname);
+                        }
                         $ret['zip'] = $cname;
                         break;
                     }

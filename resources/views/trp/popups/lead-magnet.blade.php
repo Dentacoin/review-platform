@@ -8,7 +8,7 @@
 			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
 		<h2>
-			Quiz: How effectively do you use patient online reviews?
+			Discover your reputation strength
 		</h2>
 
 		<div class="popup-tabs colorful-tabs flex flex-mobile">
@@ -68,7 +68,7 @@
 					<div class="alert magnet-alert" style="display: none; margin-top: 20px;">
 					</div>
 					<div class="tac">
-						<a href="javascript:;" class="button first-form-button" data-validator="{{ getLangUrl('lead-magnet-step1') }}">Get Started</a>
+						<a href="javascript:;" class="button first-form-button" data-validator="{{ getLangUrl('lead-magnet-step1') }}">RUN FREE TEST</a>
 					</div>
 				</div>
 			</div>
@@ -261,7 +261,7 @@
 						</div> 
 						<div class="alert alert-warning" style="display: none;">Please, select an answer.</div>
 						<div class="tac">
-							<button class="button" id="magnet-submit" onclick="LeadMagenet()" type="submit">Calculate</button>
+							<button class="button" id="magnet-submit" onclick="LeadMagenet()" type="submit">SEE YOUR SCORE</button>
 						</div>
 					</div>
 				</div>
