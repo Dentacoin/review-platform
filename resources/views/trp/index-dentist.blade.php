@@ -77,6 +77,7 @@
 	    </div>
 	</div>
 
+
     <div class="container section-dentist-info">
     	<h2 class="tac">
     		{!! nl2br(trans('trp.page.index-dentist.usp-title')) !!}
@@ -122,12 +123,17 @@
     		</a>
     	</div>
 
-    	@if(!empty($admin))
-			<div class="tac">
-				<a href="javascript:;" class="get-started magnet-popup" data-url="{{ getLangUrl('lead-magnet-session') }}">Lead magnet</a>
-			</div>
-		@endif
+		<div class="tac">
+			<a href="javascript:;" class="button button-yellow magnet-popup" id="open-magnet" data-url="{{ getLangUrl('lead-magnet-session') }}">{{ trans('trp.page.index-dentist.button-lead-magnet') }}</a>
+		</div>
     </div>
+
+    <style type="text/css">
+		#ariticform_wrapper_leadmagnetform {
+			display: none;
+		}
+	</style>
+	<script type="text/javascript" src="//dentacoin.ariticapp.com/ma/form/generate.js?id=13"></script>
 
     <div class="testimonials-section">
     	<div class="container tac">
@@ -237,8 +243,7 @@
     	</div>
     </div>
 
-    @if(!empty($admin))
-		@include('trp.popups.lead-magnet')
-	@endif
+
+	@include('trp.popups.lead-magnet')
 	
 @endsection

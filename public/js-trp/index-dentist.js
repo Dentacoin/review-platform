@@ -122,13 +122,21 @@ jQuery(document).ready(function($){
         ajax_is_running = true;
 
         var that = $(this);
+        $('.loader').fadeIn();
+        $('.loader-mask').fadeIn();
+        //$('#magnet-submit').append('<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>');
 
         $.post( 
             $(this).attr('action'), 
             $(this).serialize() , 
             function( data ) {
                 if(data.success) {
-                    console.log(data.success, data.url);
+                    fbq('track', 'TRPMagnetComplete');
+
+                    gtag('event', 'SeeScore', {
+                        'event_category': 'LeadMagnet',
+                        'event_label': 'ReplyToReviews',
+                    });
 
                     setTimeout( function() {
                         window.location.href = data.url;
@@ -150,6 +158,19 @@ jQuery(document).ready(function($){
 
     $('.lead-magnet-checkbox').change( function() {
     	$(this).closest('label').toggleClass('active');
+
+        if ($(this).hasClass('disabler')) {
+            if ($(this).prop('checked')) {
+
+                $(this).closest('.buttons-list').find('.lead-magnet-checkbox').not(this).prop('disabled', true);
+                $(this).closest('.buttons-list').find('.lead-magnet-checkbox').not(this).prop('checked', false);
+                $(this).closest('.buttons-list').find('.magnet-label:not(.disabler-label)').addClass('disabled-label');
+                $(this).closest('.buttons-list').find('.magnet-label:not(.disabler-label)').removeClass('active');
+            } else {
+                $(this).closest('.buttons-list').find('.lead-magnet-checkbox').not(this).prop('disabled', false);
+                $(this).closest('.buttons-list').find('.magnet-label:not(.disabler-label)').removeClass('disabled-label');
+            }
+        }
     });
 
     $('.magnet-validator').click( function() {
@@ -169,6 +190,41 @@ jQuery(document).ready(function($){
     		$(this).closest('.answer-radios-magnet').find('.alert-warning').show();
     	}
 
+    });
+
+    $('#open-magnet').click( function() {
+        gtag('event', 'Open', {
+            'event_category': 'LeadMagnet',
+            'event_label': 'Popup',
+        });
+    });
+
+    $('#q-one-magnet').click( function() {
+        gtag('event', 'Next', {
+            'event_category': 'LeadMagnet',
+            'event_label': 'Priority',
+        });
+    });
+
+    $('#q-two-magnet').click( function() {
+        gtag('event', 'Next', {
+            'event_category': 'LeadMagnet',
+            'event_label': 'Tool',
+        });
+    });
+
+    $('#q-three-magnet').click( function() {
+        gtag('event', 'Next', {
+            'event_category': 'LeadMagnet',
+            'event_label': 'AskForReviews',
+        });
+    });
+
+    $('#q-four-magnet').click( function() {
+        gtag('event', 'Next', {
+            'event_category': 'LeadMagnet',
+            'event_label': 'Frequency',
+        });
     });
 
     $('.first-form-button').click( function(e) {
@@ -208,6 +264,13 @@ jQuery(document).ready(function($){
                     $('#ariticform_checkboxgrp_checkbox_gdpr_checkbox').prop('checked', true);
 
                     $('#ariticform_input_leadmagnetform_submit').trigger('click');
+
+                    fbq('track', 'TRPMagnetStart');
+
+                    gtag('event', 'RunTest', {
+                        'event_category': 'LeadMagnet',
+                        'event_label': 'ContactDetails',
+                    });
 
                 } else {
                     that.closest('form').find('.ajax-alert').remove();

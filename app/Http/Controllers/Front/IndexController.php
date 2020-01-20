@@ -649,7 +649,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 	        	'first_answer' => $first_answer
 	        ));
     	} else {
-    		return redirect( getLangUrl('page-not-found') );
+    		return redirect( getLangUrl('welcome-dentist') );
     	}
 
     }

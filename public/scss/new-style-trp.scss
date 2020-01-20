@@ -4309,6 +4309,10 @@ textarea.input {
 						    margin-bottom: 15px;
 						    position: relative;
 
+						    &.disabled-label {
+						    	background-color: #f7f7f7;
+						    }
+
 						    @media #{$phone} {
 						    	font-size: 16px;
 						    	padding: 10px;
@@ -4417,6 +4421,18 @@ textarea.input {
 					.button {
 						margin-top: 20px;
 					}
+				}
+
+				#magnet-submit {
+					// .loader {
+					// 	display: inline-block;
+
+					// 	i {
+					// 		font-size: 20px;
+					// 		color: white;
+					// 		margin-left: 10px;
+					// 	}
+					// }
 				}
 
 				.alert {
@@ -9171,5 +9187,79 @@ body.strength-pb {
 			height: 76px;
 			left: -40px;
 	    }
+	}
+}
+
+.loader-mask {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #fff;
+	z-index: 99999;
+
+	&.stats-mask {
+		position: absolute;
+	}
+
+	.loader {
+		-webkit-border-radius: 50%;
+		border-radius: 50%;
+		width: 10em;
+		height: 10em;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		font-size: 15px;
+		width: 5em;
+		height: 5em;
+		margin: -25px 0 0 -25px;
+		text-indent: -9999em;
+		border-top: 0.5em solid #121212;
+		border-right: 0.5em solid rgba(245, 245, 245, 0.5);
+		border-bottom: 0.5em solid rgba(245, 245, 245, 0.5);
+		border-left: 0.5em solid rgba(245, 245, 245, 0.5);
+		-webkit-transform: translateZ(0);
+		-ms-transform: translateZ(0);
+		transform: translateZ(0);
+		-webkit-animation: load8 1.1s infinite linear;
+		animation: load8 1.1s infinite linear;
+
+		@media #{$phone} {
+			font-size: 5px;
+		}
+
+		&:after {
+			-webkit-border-radius: 50%;
+			border-radius: 50%;
+			width: 10em;
+			height: 10em;
+		}
+	}
+}
+
+
+
+@-webkit-keyframes load8 {
+	0% {
+	    -webkit-transform: rotate(0deg);
+	    transform: rotate(0deg);
+	}
+  	100% {
+	    -webkit-transform: rotate(360deg);
+	    transform: rotate(360deg);
+	}
+}
+
+@keyframes load8 {
+  	0% {
+	    -webkit-transform: rotate(0deg);
+	    transform: rotate(0deg);
+	}
+  	100% {
+	    -webkit-transform: rotate(360deg);
+	    transform: rotate(360deg);
 	}
 }

@@ -188,7 +188,7 @@
 					</div>
 				</div>
 
-				@if(!empty($admin) && $current_page == 'welcome-dentist')
+				@if($current_page == 'welcome-dentist')
 					<script>
 			            (function(w,d,t,u,n,a,m){
 			                if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
@@ -220,7 +220,7 @@
 				<div id="cookiebar" >
 					<p>
 						{!! nl2br( trans('trp.common.cookiebar-hint',[
-							'link' => '<a href="//dentacoin.com/privacy-policy" target="_blank">',
+							'link' => '<a href="https://dentacoin.com/privacy-policy" target="_blank">',
 							'endlink' => '</a>',
 						]) ) !!}
 					</p>
