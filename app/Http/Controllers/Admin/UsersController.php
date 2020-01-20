@@ -1479,7 +1479,6 @@ class UsersController extends AdminController
                     foreach (json_decode($u->answers, true)[3] as $u_ans) {
                         dd($u_ans);
                         $third_answer += config('trp.lead_magnet')[3][$u_ans].';';
-                        dd()
                     }
                 }
 
