@@ -4,6 +4,9 @@
 		    <div class="loader">
 		      	"Loading..."
 		    </div>
+		    <div class="loader-text">
+		    	Calculating your score.
+		    </div>
 		</div>
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
@@ -111,10 +114,6 @@
 								Both
 							</label>
 						</div>
-						<div class="alert alert-warning" style="display: none;">{!! trans('trp.popup.popup-lead-magnet.select-answer-error') !!}</div>
-						<div class="tac">
-							<a href="javascript:;" class="button magnet-validator" id="q-one-magnet">{!! trans('trp.popup.popup-lead-magnet.next') !!}</a>
-						</div>
 					</div>
 					<div class="answer-radios-magnet clearfix">
 						<div class="answer-question">
@@ -126,7 +125,7 @@
 									<span></span>
 								</span>
 								<input id="answer-2-1" type="radio" name="answer-2" class="lead-magnet-radio" value="1">
-								Your website
+								My website
 							</label>
 							<label class="magnet-label" for="answer-2-2">
 								<span class="modern-radio">
@@ -163,10 +162,6 @@
 								<input id="answer-2-6" type="radio" name="answer-2" class="lead-magnet-radio" value="6">
 								I don’t use one
 							</label>
-						</div> 
-						<div class="alert alert-warning" style="display: none;">{!! trans('trp.popup.popup-lead-magnet.select-answer-error') !!}</div>
-						<div class="tac">
-							<a href="javascript:;" class="button magnet-validator" id="q-two-magnet">{!! trans('trp.popup.popup-lead-magnet.next') !!}</a>
 						</div>
 					</div>
 					<div class="answer-radios-magnet clearfix">
@@ -227,10 +222,6 @@
 								<input id="answer-4-3" type="radio" name="answer-4" class="lead-magnet-radio" value="3">
 								It happened a few times only
 							</label>
-						</div> 
-						<div class="alert alert-warning" style="display: none;">{!! trans('trp.popup.popup-lead-magnet.select-answer-error') !!}</div>
-						<div class="tac">
-							<a href="javascript:;" class="button magnet-validator" id="q-four-magnet">{!! trans('trp.popup.popup-lead-magnet.next') !!}</a>
 						</div>
 					</div>
 					<div class="answer-radios-magnet clearfix">
@@ -267,8 +258,7 @@
 								No
 							</label>
 						</div> 
-						<div class="alert alert-warning" style="display: none;">{!! trans('trp.popup.popup-lead-magnet.select-answer-error') !!}</div>
-						<div class="tac">
+						<div class="tac" style="display: none;">
 							<button class="button" id="magnet-submit" onclick="LeadMagenet()" type="submit">{!! trans('trp.popup.popup-lead-magnet.second-step-submit') !!}<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div></button>
 						</div>
 					</div>

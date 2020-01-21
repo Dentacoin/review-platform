@@ -124,6 +124,7 @@ jQuery(document).ready(function($){
         var that = $(this);
         $('.loader').fadeIn();
         $('.loader-mask').fadeIn();
+        $('.loader-text').fadeIn();
         //$('#magnet-submit').append('<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>');
 
         $.post( 
@@ -173,9 +174,41 @@ jQuery(document).ready(function($){
         }
     });
 
+    $('.lead-magnet-radio').click( function() {
+        if ($(this).attr('name') == 'answer-1') {
+            gtag('event', 'Next', {
+                'event_category': 'LeadMagnet',
+                'event_label': 'Priority',
+            });
+        } else if ($(this).attr('name') == 'answer-2') {
+            gtag('event', 'Next', {
+                'event_category': 'LeadMagnet',
+                'event_label': 'Tool',
+            });
+        } else if ($(this).attr('name') == 'answer-4') {
+            gtag('event', 'Next', {
+                'event_category': 'LeadMagnet',
+                'event_label': 'Frequency',
+            });
+        }
+
+        if ($(this).attr('name') == 'answer-5') {
+            $(this).closest('form').find('button').trigger('click');
+        } else {
+
+            $('.flickity-magnet').flickity('next');
+        }
+
+    });
+
     $('.magnet-validator').click( function() {
     		
 	    if($(this).closest('.answer-radios-magnet').find('input:checked').length) {
+            gtag('event', 'Next', {
+                'event_category': 'LeadMagnet',
+                'event_label': 'AskForReviews',
+            });
+
 	    	if ($(this).hasClass('validator-skip')) {
 	    		if ($(this).closest('.answer-radios-magnet').find('input:checked').val() == '4') {
 	    			$('.flickity-magnet').flickity( 'select', 4 );
@@ -196,34 +229,6 @@ jQuery(document).ready(function($){
         gtag('event', 'Open', {
             'event_category': 'LeadMagnet',
             'event_label': 'Popup',
-        });
-    });
-
-    $('#q-one-magnet').click( function() {
-        gtag('event', 'Next', {
-            'event_category': 'LeadMagnet',
-            'event_label': 'Priority',
-        });
-    });
-
-    $('#q-two-magnet').click( function() {
-        gtag('event', 'Next', {
-            'event_category': 'LeadMagnet',
-            'event_label': 'Tool',
-        });
-    });
-
-    $('#q-three-magnet').click( function() {
-        gtag('event', 'Next', {
-            'event_category': 'LeadMagnet',
-            'event_label': 'AskForReviews',
-        });
-    });
-
-    $('#q-four-magnet').click( function() {
-        gtag('event', 'Next', {
-            'event_category': 'LeadMagnet',
-            'event_label': 'Frequency',
         });
     });
 

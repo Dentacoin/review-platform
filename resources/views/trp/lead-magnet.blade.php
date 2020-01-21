@@ -78,7 +78,7 @@
 				</div>
 			</div>
 
-			<a href="javascript:;" class="get-started get-started-button button-sign-up-dentist">{{ nl2br(trans('trp.page.lead-magnet-results.button-improve-results')) }}</a>
+			<a href="javascript:;" class="button button-yellow get-started-button button-sign-up-dentist">{{ nl2br(trans('trp.page.lead-magnet-results.button-improve-results')) }}</a>
 		</div>
 
 		<div class="country-dentist-rating">

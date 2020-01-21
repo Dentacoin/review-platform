@@ -8716,6 +8716,10 @@ body.strength-pb {
 
 	.sign {
 		max-width: 76px;
+
+		@media #{$phone} {
+			max-width: 50px;
+		}
 	}
 
 	.lead-magnet-top {
@@ -8723,10 +8727,19 @@ body.strength-pb {
 		height: 1px;
 		margin-bottom: 100px;
 
+		@media screen and (max-height: 800px) and (min-width: 769px ) {
+			margin-bottom: 50px;
+		}
+
 		@media #{$tablet} {
 			border-top: 40px solid #1591d9;
     		padding-top: 40px;
     		margin-bottom: 10px;
+		}
+
+		@media #{$phone} {
+    		padding-top: 30px;
+    		margin-bottom: 0px;
 		}
 
 		&:after {
@@ -8754,8 +8767,12 @@ body.strength-pb {
 		    margin-top: 10px;
 		    margin-bottom: 20px;
 
+		    @media screen and (max-height: 800px) and (min-width: 769px ) {
+			    font-size: 30px;
+			}
+
 		    @media #{$phone} {
-		    	font-size: 30px;
+		    	font-size: 26px;
 		    }
 
 		    &.red {
@@ -8776,8 +8793,12 @@ body.strength-pb {
 			color: #333;
 			font-size: 24px;
 
+			@media screen and (max-height: 800px) and (min-width: 769px ) {
+			    font-size: 22px;
+			}
+
 			@media #{$phone} {
-		    	font-size: 20px;
+		    	font-size: 19px;
 		    }
 		}
 	}
@@ -8785,6 +8806,10 @@ body.strength-pb {
 	.flex-charts {
 		max-width: 840px;
 		margin: 50px auto 70px;
+
+		@media screen and (max-height: 800px) and (min-width: 769px ) {
+			margin: 30px auto;
+		}
 
 		@media #{$tablet} {
 			margin-bottom: 130px;
@@ -8800,6 +8825,10 @@ body.strength-pb {
 	  	justify-content: space-around;
 	  	margin-right: 40px;
 
+	  	@media screen and (max-height: 800px) and (min-width: 769px ) {
+			width: 170px;
+		}
+
 	  	@media #{$tablet} {
 	  		width: 200px;
 	  	}
@@ -8808,6 +8837,7 @@ body.strength-pb {
 	  		margin-left: auto;
 	  		margin-right: auto;
 	  		margin-bottom: 20px;
+	  		width: 150px;
 	  	}
 
 		.circular-chart {
@@ -8859,12 +8889,25 @@ body.strength-pb {
     		margin-bottom: 10px;
     		font-size: 26px;
 
+    		@media screen and (max-height: 800px) and (min-width: 769px ) {
+				margin-bottom: 5px;
+    			font-size: 20px;
+			}
+
     		@media #{$tablet} {
     			font-size: 22px;
     		}
 
+    		@media #{$phone} {
+    			font-size: 18px;
+    		}
+
     		&:first-child {
     			margin-top: 10px;
+
+    			@media screen and (max-height: 800px) and (min-width: 769px ) {
+					margin-top: 0px;
+				}
     		}
     	}
 
@@ -8876,6 +8919,10 @@ body.strength-pb {
 		    position: relative;
 		    overflow: hidden;
 		    margin-bottom: 18px;
+
+		    @media #{$phone} {
+		    	margin-bottom: 7px;
+		    }
 
 		    .result-percentage {
 		    	background-image: url('../img-trp/gradient-magnet.jpg');
@@ -8948,6 +8995,10 @@ body.strength-pb {
 
 		.tips-image {
 			min-width: 318px;
+
+			@media screen and (max-height: 800px) and (min-width: 769px ) {
+			    min-width: 238px;
+			}
 
 			@media #{$tablet} {
 				min-width: auto;
@@ -9210,14 +9261,14 @@ body.strength-pb {
 		width: 10em;
 		height: 10em;
 		position: absolute;
-		left: 50%;
+		left: 48%;
 		top: 50%;
 		font-size: 15px;
 		width: 5em;
 		height: 5em;
 		margin: -25px 0 0 -25px;
 		text-indent: -9999em;
-		border-top: 0.5em solid #121212;
+		border-top: 0.5em solid #0fb0e5;
 		border-right: 0.5em solid rgba(245, 245, 245, 0.5);
 		border-bottom: 0.5em solid rgba(245, 245, 245, 0.5);
 		border-left: 0.5em solid rgba(245, 245, 245, 0.5);
@@ -9229,6 +9280,7 @@ body.strength-pb {
 
 		@media #{$phone} {
 			font-size: 5px;
+			left: 54%;
 		}
 
 		&:after {
@@ -9236,6 +9288,19 @@ body.strength-pb {
 			border-radius: 50%;
 			width: 10em;
 			height: 10em;
+		}
+	}
+
+	.loader-text {
+		position: absolute;
+		top: calc(50% + 80px);
+		left: 50%;
+		transform: translateY(-50%) translateX(-50%);
+		font-size: 20px;
+
+		@media #{$phone} {
+			font-size: 12px;
+			top: calc(50% + 20px);
 		}
 	}
 }
@@ -9261,5 +9326,127 @@ body.strength-pb {
   	100% {
 	    -webkit-transform: rotate(360deg);
 	    transform: rotate(360deg);
+	}
+}
+
+.privacy-policy-cookie {
+	padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: black;
+    color: white;
+    width: 100%;
+    font-size: 0;
+    position: relative;
+
+    .customize-cookies {
+		background-color: black;
+		padding: 20px;
+		color: white;
+		width: 95%;
+		max-width: 550px;
+		bottom: calc(100% + 15px);
+		position: absolute;
+		left: 50%;
+		-webkit-transform: translateX(-50%);
+		-ms-transform: translateX(-50%);
+		transform: translateX(-50%);
+		-webkit-border-radius: 15px;
+		-moz-border-radius: 15px;
+		-ms-border-radius: 15px;
+		border-radius: 15px;
+
+		.close-customize-cookies {
+	        font-size: 30px;
+	        color: white;
+	        position: absolute;
+	        right: 10px;
+	        top: 0;
+	    }
+
+	    .cookie-icon {
+        	width: 40px;
+        }
+
+        .cookies-options-list {
+	        padding-left: 20px;
+	        padding-right: 20px;
+	        font-size: 0;
+	    }
+
+	    ul {
+			width: 50%;
+			display: inline-block;
+			vertical-align: text-bottom;
+
+			li {
+            	padding-bottom: 20px;
+
+            	.pretty {
+            		.svg-icon {
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 18px;
+						height: 18px;
+					}
+
+					label {
+						font-size: 18px;
+						padding-left: 25px;
+						text-indent: 0;
+						cursor: pointer;
+
+						&:before,
+						&:after {
+							top: 0;
+			                width: 18px;
+			                height: 18px;
+			                border: 1px solid white;
+						}
+
+						i {
+                			color: #969696;
+                		}
+		            }
+				}
+            }
+	    }
+
+	    .actions {
+	    	a {
+		        margin-top: 20px;
+		        display: inline-block;
+		        max-width: 150px;
+		        width: 100%;
+		        padding-left: 0;
+		        padding-right: 0;
+		        text-align: center;
+		    }
+		}
+
+		.custom-triangle {
+	        top: calc(100% - 20px);
+	        background-color: black;
+	        width: 30px;
+	        height: 30px;
+	        position: absolute;
+	        left: 50%;
+	        -webkit-transform: rotate(45deg) translateX(-50%);
+	        -ms-transform: rotate(45deg) translateX(-50%);
+	        transform: rotate(45deg) translateX(-50%);
+	        transform-origin: 0;
+	    }
+  	}
+
+  	.cookies-text {
+		font-size: 18px;
+		width: calc(100% - 150px);
+		padding-right: 15px;
+		color: white;
+
+		a {
+			color: #679dca;
+			font-size: 18px;
+		}
 	}
 }

@@ -72,7 +72,7 @@ return [
 			3 => 'Both',
 		],
 		2 => [
-			1 => 'Your website',
+			1 => 'My website',
 			2 => 'Google',
 			3 => 'Facebook or other social media',
 			4 => 'General review platform (e.g. Trustpilot)',

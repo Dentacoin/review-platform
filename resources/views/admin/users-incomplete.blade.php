@@ -113,7 +113,7 @@
                                             <td>
                                                 {{ !empty($lead->answers) ? config('trp.lead_magnet')[1][json_decode($lead->answers, true)[1]] : '' }}
                                             </td>
-                                            <td>
+                                            <td style="max-width: 160px;">
                                                 {{ !empty($lead->answers) ? config('trp.lead_magnet')[2][json_decode($lead->answers, true)[2]] : '' }}
                                             </td>
                                             <td>
