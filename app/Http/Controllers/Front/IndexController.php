@@ -205,8 +205,14 @@ class IndexController extends FrontController
 			$completed_strength = $this->user->getStrengthCompleted('trp');
 		}
 
-		$current_city = \GeoIP::getLocation()->city;
-		$current_country = \GeoIP::getLocation()->country;
+		if (!empty(Cookie::get('functionality_cookies'))) {
+			$current_city = \GeoIP::getLocation()->city;
+			$current_country = \GeoIP::getLocation()->country;
+		} else {
+			$current_city = null;
+			$current_country = null;
+		}
+		
 
 		$params = array(
 			'strength_arr' => $strength_arr,
