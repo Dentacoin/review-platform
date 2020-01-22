@@ -613,7 +613,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 	                $country_rating += $c_review->rating;
 	            }
 
-	            if (!empty($country_rating)) {
+	            if (!empty($country_rating) && !empty($country_reviews->count())) {
 		            $avg_country_rating = number_format($country_rating / $country_reviews->count(), 2);
 		            $country_reviews = $country_reviews->count();
 	            } else {
