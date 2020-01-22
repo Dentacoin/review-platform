@@ -46,6 +46,37 @@ jQuery(document).ready(function($){
 
 			$('.privacy-policy-cookie').hide();
 			$('.agree-cookies').hide();
+
+			if($('body').hasClass('page-welcome-dentist')) {
+				$('body').append("<script>\
+                    (function(w,d,t,u,n,a,m){\
+                        if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;\
+                        w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),\
+                        m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)\
+                    })(window,document,'script','https://dentacoin.ariticapp.com/ma/atc.js','at');\
+                </script>");
+
+                $.getScript('https://dentacoin.ariticapp.com/ma/patc.js', function() {
+                    console.log('patc')
+                } );
+
+                $('body').append('<script type="text/javascript">\
+                    function LeadMagenet() {\
+                        setTimeout( function() {\
+                            _aaq.push(["setContactFields", {\
+                                firstname:document.getElementById("magnet-name").value,\
+                                website:document.getElementById("magnet-website").value,\
+                                email:document.getElementById("magnet-email").value,\
+                            }]);\
+                            _aaq.push(["trackPageView"]);\
+                        }, 5000);\
+                    }\
+                </script>');
+
+                $.getScript('//dentacoin.ariticapp.com/ma/form/generate.js?id=13', function() {
+                    console.log('gdpr')
+                } );
+			}
 		});
 
 		$('.adjust-cookies').click(function() {
@@ -65,6 +96,37 @@ jQuery(document).ready(function($){
 
 				if($('#marketing-cookies').is(':checked')) {
 					basic.cookies.set('marketing_cookies', 1);
+
+					if($('body').hasClass('page-welcome-dentist')) {
+						$('body').append("<script>\
+                            (function(w,d,t,u,n,a,m){\
+                                if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;\
+                                w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),\
+                                m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)\
+                            })(window,document,'script','https://dentacoin.ariticapp.com/ma/atc.js','at');\
+                        </script>");
+
+                        $.getScript('https://dentacoin.ariticapp.com/ma/patc.js', function() {
+                            console.log('patc')
+                        } );
+
+                        $('body').append('<script type="text/javascript">\
+                            function LeadMagenet() {\
+                                setTimeout( function() {\
+                                    _aaq.push(["setContactFields", {\
+                                        firstname:document.getElementById("magnet-name").value,\
+                                        website:document.getElementById("magnet-website").value,\
+                                        email:document.getElementById("magnet-email").value,\
+                                    }]);\
+                                    _aaq.push(["trackPageView"]);\
+                                }, 5000);\
+                            }\
+                        </script>');
+
+                        $.getScript('//dentacoin.ariticapp.com/ma/form/generate.js?id=13', function() {
+                            console.log('gdpr')
+                        } );
+					}
 				}
 
 				if($('#performance-cookies').is(':checked')) {
