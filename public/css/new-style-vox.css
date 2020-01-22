@@ -3411,7 +3411,8 @@ p.h2-bold {
       line-height: 28px;
       background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
       background-size: 29px;
-      padding-left: 40px; }
+      padding-left: 40px;
+      margin-top: 0px; }
       @media screen and (max-width: 1080px) {
         .page-statistics .stats .stat a.title h2 {
           width: 100%; } }
