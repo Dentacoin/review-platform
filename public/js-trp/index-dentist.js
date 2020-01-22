@@ -61,57 +61,6 @@ jQuery(document).ready(function($){
 		});
 	}
 
-	$('.lead-magnet-form-step1').submit( function(e) {
-        e.preventDefault();
-
-        if(ajax_is_running) {
-            return;
-        }
-
-        ajax_is_running = true;
-
-        var that = $(this);
-
-        $.post( 
-            $(this).attr('action'), 
-            $(this).serialize() , 
-            function( data ) {
-                if(data.success) {
-
-                	that.closest('.magnet-content').next().show();
-                	that.closest('.magnet-content').hide();
-
-                	that.closest('.popup-inner').find('.colorful-tabs').find('.col').removeClass('active');
-                	that.closest('.popup-inner').find('.colorful-tabs').find('.second-step').addClass('active');
-
-                	var $carousel = $('.flickity-magnet');
-
-					$carousel.flickity({
-				    	//wrapAround: true,
-						adaptiveHeight: true,
-						draggable: false,
-						pageDots: true,
-					});
-
-                } else {
-                    that.find('.ajax-alert').remove();
-                    for(var i in data.messages) {
-                        // $('#register-error span').append(data.messages[i] + '<br/>');
-                        that.find('[name="'+i+'"]').addClass('has-error');
-                        that.find('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>'); 
-
-                        if (that.find('[name="'+i+'"]').closest('.agree-label').length) {
-                            that.find('[name="'+i+'"]').closest('.agree-label').addClass('has-error');
-                       	}  
-                    }
-                }
-                ajax_is_running = false;
-            }, "json"
-        );
-
-        return false;
-    } );
-
 	$('.lead-magnet-form-step2').submit( function(e) {
         e.preventDefault();
 
@@ -246,7 +195,7 @@ jQuery(document).ready(function($){
             function( data ) {
                 if(data.success) {
 
-                    if (!Cookies.get('marketing_policy')) {
+                    if (!Cookies.get('marketing_cookies') && !$('#ariticform_wrapper_leadmagnetform').length) {
                         basic.cookies.set('marketing_cookies', 1);
 
                         $('body').append("<script>\
@@ -279,19 +228,44 @@ jQuery(document).ready(function($){
                         } );
                     }
 
-                    setTimeout( function() {
 
-                        if (!Cookies.get('performance_cookies')) {
-                            basic.cookies.set('performance_cookies', 1);
-                        }
-                        if (!Cookies.get('functionality_cookies')) {
-                            basic.cookies.set('functionality_cookies', 1);
-                        }
-                        if (!Cookies.get('strictly_necessary_policy')) {
-                            basic.cookies.set('strictly_necessary_policy', 1);
-                        }
+                    if (!Cookies.get('performance_cookies')) {
+                        basic.cookies.set('performance_cookies', 1);
+                    }
+                    if (!Cookies.get('functionality_cookies')) {
+                        basic.cookies.set('functionality_cookies', 1);
+                    }
+                    if (!Cookies.get('strictly_necessary_policy')) {
+                        basic.cookies.set('strictly_necessary_policy', 1);
+                    }
 
+                    if ($('.privacy-policy-cookie').length) {
                         $('.privacy-policy-cookie').hide();
+                    }
+
+                    that.closest('.magnet-content').next().show();
+                    that.closest('.magnet-content').hide();
+
+                    that.closest('.popup-inner').find('.colorful-tabs').find('.col').removeClass('active');
+                    that.closest('.popup-inner').find('.colorful-tabs').find('.second-step').addClass('active');
+
+                    var $carousel = $('.flickity-magnet');
+
+                    $carousel.flickity({
+                        //wrapAround: true,
+                        adaptiveHeight: true,
+                        draggable: false,
+                        pageDots: true,
+                    });
+
+                    fbq('track', 'TRPMagnetStart');
+
+                    gtag('event', 'RunTest', {
+                        'event_category': 'LeadMagnet',
+                        'event_label': 'ContactDetails',
+                    });
+
+                    setTimeout( function() {
                         
                         $('#ariticform_input_leadmagnetform_practice_name').val( $('#magnet-name').val() );
                         $('#ariticform_input_leadmagnetform_website').val( $('#magnet-website').val() );
@@ -300,28 +274,6 @@ jQuery(document).ready(function($){
                         $('#ariticform_checkboxgrp_checkbox_gdpr_checkbox').prop('checked', true);
 
                         $('#ariticform_input_leadmagnetform_submit').trigger('click');
-
-                        that.closest('.magnet-content').next().show();
-                        that.closest('.magnet-content').hide();
-
-                        that.closest('.popup-inner').find('.colorful-tabs').find('.col').removeClass('active');
-                        that.closest('.popup-inner').find('.colorful-tabs').find('.second-step').addClass('active');
-
-                        var $carousel = $('.flickity-magnet');
-
-                        $carousel.flickity({
-                            //wrapAround: true,
-                            adaptiveHeight: true,
-                            draggable: false,
-                            pageDots: true,
-                        });
-
-                        fbq('track', 'TRPMagnetStart');
-
-                        gtag('event', 'RunTest', {
-                            'event_category': 'LeadMagnet',
-                            'event_label': 'ContactDetails',
-                        });
                     }, 2000);
 
 
