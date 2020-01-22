@@ -246,36 +246,84 @@ jQuery(document).ready(function($){
             function( data ) {
                 if(data.success) {
 
-                    that.closest('.magnet-content').next().show();
-                    that.closest('.magnet-content').hide();
+                    if (!Cookies.get('marketing_policy')) {
+                        basic.cookies.set('marketing_cookies', 1);
 
-                    that.closest('.popup-inner').find('.colorful-tabs').find('.col').removeClass('active');
-                    that.closest('.popup-inner').find('.colorful-tabs').find('.second-step').addClass('active');
+                        $('body').append("<script>\
+                            (function(w,d,t,u,n,a,m){\
+                                if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;\
+                                w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),\
+                                m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)\
+                            })(window,document,'script','https://dentacoin.ariticapp.com/ma/atc.js','at');\
+                        </script>");
 
-                    var $carousel = $('.flickity-magnet');
+                        $.getScript('https://dentacoin.ariticapp.com/ma/patc.js', function() {
+                            console.log('patc')
+                        } );
 
-                    $carousel.flickity({
-                        //wrapAround: true,
-                        adaptiveHeight: true,
-                        draggable: false,
-                        pageDots: true,
-                    });
+                        $('body').append('<script type="text/javascript">\
+                            function LeadMagenet() {\
+                                setTimeout( function() {\
+                                    _aaq.push(["setContactFields", {\
+                                        firstname:document.getElementById("magnet-name").value,\
+                                        website:document.getElementById("magnet-website").value,\
+                                        email:document.getElementById("magnet-email").value,\
+                                    }]);\
+                                    _aaq.push(["trackPageView"]);\
+                                }, 5000);\
+                            }\
+                        </script>');
 
-                    
-                    $('#ariticform_input_leadmagnetform_practice_name').val( $('#magnet-name').val() );
-                    $('#ariticform_input_leadmagnetform_website').val( $('#magnet-website').val() );
-                    $('#ariticform_input_leadmagnetform_country').val( $('#magnet-country option:selected').text() );
-                    $('#ariticform_input_leadmagnetform_email').val( $('#magnet-email').val() );
-                    $('#ariticform_checkboxgrp_checkbox_gdpr_checkbox').prop('checked', true);
+                        $.getScript('//dentacoin.ariticapp.com/ma/form/generate.js?id=13', function() {
+                            console.log('gdpr')
+                        } );
+                    }
 
-                    $('#ariticform_input_leadmagnetform_submit').trigger('click');
+                    setTimeout( function() {
 
-                    fbq('track', 'TRPMagnetStart');
+                        if (!Cookies.get('performance_cookies')) {
+                            basic.cookies.set('performance_cookies', 1);
+                        }
+                        if (!Cookies.get('functionality_cookies')) {
+                            basic.cookies.set('functionality_cookies', 1);
+                        }
+                        if (!Cookies.get('strictly_necessary_policy')) {
+                            basic.cookies.set('strictly_necessary_policy', 1);
+                        }
 
-                    gtag('event', 'RunTest', {
-                        'event_category': 'LeadMagnet',
-                        'event_label': 'ContactDetails',
-                    });
+                        $('.privacy-policy-cookie').hide();
+                        
+                        $('#ariticform_input_leadmagnetform_practice_name').val( $('#magnet-name').val() );
+                        $('#ariticform_input_leadmagnetform_website').val( $('#magnet-website').val() );
+                        $('#ariticform_input_leadmagnetform_country').val( $('#magnet-country option:selected').text() );
+                        $('#ariticform_input_leadmagnetform_email').val( $('#magnet-email').val() );
+                        $('#ariticform_checkboxgrp_checkbox_gdpr_checkbox').prop('checked', true);
+
+                        $('#ariticform_input_leadmagnetform_submit').trigger('click');
+
+                        that.closest('.magnet-content').next().show();
+                        that.closest('.magnet-content').hide();
+
+                        that.closest('.popup-inner').find('.colorful-tabs').find('.col').removeClass('active');
+                        that.closest('.popup-inner').find('.colorful-tabs').find('.second-step').addClass('active');
+
+                        var $carousel = $('.flickity-magnet');
+
+                        $carousel.flickity({
+                            //wrapAround: true,
+                            adaptiveHeight: true,
+                            draggable: false,
+                            pageDots: true,
+                        });
+
+                        fbq('track', 'TRPMagnetStart');
+
+                        gtag('event', 'RunTest', {
+                            'event_category': 'LeadMagnet',
+                            'event_label': 'ContactDetails',
+                        });
+                    }, 2000);
+
 
                 } else {
                     that.closest('form').find('.ajax-alert').remove();

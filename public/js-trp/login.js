@@ -9,9 +9,13 @@ $(document).ready(function(){
 
      // Step 3: Start scope request.
     $('.register-civic-button').click(function () {
-    	if( $(this).closest('#signin-form-popup-left').length && ( !$('#register-agree:checked').length || $(this).hasClass('loading') ) ) {
+    	if( ($(this).closest('#signin-form-popup-left').length && ( !$('#register-agree:checked').length || $(this).hasClass('loading')) ) ) {
     		return;
     	}
+
+        if (!Cookies.get('strictly_necessary_policy')) {
+            return;
+        }
     	$(this).addClass('loading');
         $('#civic-error').hide();
         $('#withdraw-widget .alert').hide();

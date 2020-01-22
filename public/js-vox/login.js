@@ -11,6 +11,10 @@ $(document).ready(function(){
         	if( $(this).hasClass('loading') ) {
         		return;
         	}
+
+            if (!Cookies.get('strictly_necessary_policy')) {
+                return;
+            }
         	$(this).addClass('loading');
             $('#civic-error').hide();
             $('#withdraw-widget .alert').hide();

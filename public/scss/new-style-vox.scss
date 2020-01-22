@@ -10614,6 +10614,14 @@ body.popup-visible {
     	margin-left: auto;
     }
 
+    &.dark-tooltip {
+		background-color: black;
+		color: white;
+		max-width: 150px;
+		font-size: 13px;
+		z-index: 1011;
+    }
+
     &::after {
     	content: '';
     	position: absolute;
@@ -13621,5 +13629,262 @@ svg:not(:root) {
 .page-page-not-found {
 	.poll-bubble {
 		display: none !important;
+	}
+}@keyframes cookiebar-blink-animation {
+    0%     {background-color:black;}
+    50.0%  {background-color:red;}
+    100.0%  {background-color:black;}
+}
+
+.privacy-policy-cookie {
+	padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: black;
+    color: white;
+    width: 100%;
+    font-size: 0;
+    position: relative;
+
+    &.blink {
+	    animation-name: cookiebar-blink-animation;
+	    animation-duration: 1.5s;
+	    animation-timing-function: ease-in-out;
+	    animation-iteration-count: infinite;    
+	    animation-play-state: running;
+    }
+
+    .container-cookie {
+    	justify-content: space-between;
+    	align-items: center;
+    	padding: 0px 80px;
+
+    	@media #{$tablet} {
+    		padding: 0px 40px;
+    	}
+
+    	@media #{$phone} {
+    		display: flex;
+    		flex-direction: column;
+    		padding: 0px 20px;
+    	}
+    }
+
+    .customize-cookies {
+		background-color: black;
+		padding: 20px;
+		color: white;
+		width: 95%;
+		max-width: 550px;
+		bottom: calc(100% + 15px);
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+		border-radius: 15px;
+
+		.close-customize-cookies-icon {
+	        font-size: 30px;
+	        color: white;
+	        position: absolute;
+	        right: 10px;
+	        top: 0;
+	        outline: none;
+	        background: black;
+    		border: none;
+	    }
+
+	    .cookie-popup-title {
+	    	color: white;
+	    	font-weight: bold;
+	    	font-size: 18px;
+	    	margin-top: 10px;
+	    	margin-bottom: 20px;
+	    }
+
+	    .cookie-icon {
+        	width: 40px;
+        }
+
+        .cookies-options-list {
+	        flex-flow: row wrap;
+	        padding-left: 20px;
+	        padding-right: 20px;
+
+	        @media #{$phone} {
+	        	padding: 0px;
+	        }
+
+	        .cookie-checkbox-wrapper {
+	        	min-width: 50%;
+
+	        	.cookie-label {
+	        		color: white;
+	        		font-size: 17px;
+	        		display: flex;
+    				align-items: center;
+    				margin-bottom: 17px;
+
+    				@media #{$phone} {
+    					margin-bottom: 11px;
+    				}
+
+	        		span {
+	        			color: white;
+						font-size: 16px;
+						font-weight: normal;
+
+						@media #{$phone} {
+							font-size: 18px;
+						}
+
+	        			&.gray {
+	        				opacity: 0.5;
+	        			}
+	        		}
+
+	        		.info-cookie {
+	        			color: #969696;
+	        			margin-left: 6px;
+
+	        			&:before {
+
+		        			@media #{$phone} {
+		        				font-size: 17px;
+		        			}
+	        			}
+
+	        		}
+
+	        		input {
+	        			display: none;
+	        		}
+
+	        		.checkbox-icon {
+	        			color: white;
+	        			font-size: 20px;
+	        			margin-right: 10px;
+
+	        			&:before {
+	        				@media #{$phone} {
+	        					font-size: 20px;
+	        				}
+	        			}
+	        		}
+
+	        		&.active {
+	        			.checkbox-icon {
+	        				&:before {
+	        					content: '\f14a';
+	        				}
+	        			}
+	        		}
+	        	}
+
+	        }
+	    }
+
+	    .actions {
+	    	align-items: center;
+	    	justify-content: center;
+
+	    	@media #{$phone} {
+	    		display: flex;
+	    	}
+
+	    	a {
+	    		flex: 1;
+		        margin-top: 20px;
+			    max-width: 150px;
+			    width: 100%;
+			    padding-left: 0;
+			    padding-right: 0;
+			    text-align: center;
+			    padding: 15px 0px;
+
+			    @media #{$phone} {
+			    	max-width: 115px;
+			    	padding: 13px 0px;
+			    }
+
+			    &:first-child {
+			    	margin-right: 17px;
+			    }
+		    }
+		}
+
+		.custom-triangle {
+	        top: calc(100% - 20px);
+	        background-color: black;
+	        width: 30px;
+	        height: 30px;
+	        position: absolute;
+	        left: 50%;
+	        transform: rotate(45deg) translateX(-50%);
+	        transform-origin: 0;
+	        z-index: -1;
+	    }
+  	}
+
+  	.cookies-text {
+		font-size: 16px;
+		padding-right: 15px;
+		color: white;
+
+		@media #{$phone} {
+			margin-bottom: 20px;
+		}
+
+		a {
+			color: #679dca;
+			font-size: 16px;
+			font-weight: bold;
+		}
+	}
+
+	.close-cookie-button,
+	.custom-cookie-save,
+	.accept-all {
+		background-color: #679dca;
+		color: white;
+		font-size: 18px;
+		display: inline-block;
+		padding: 12px 24px;
+		font-weight: bold;
+		border: 2px solid white;
+		cursor: pointer;
+		border-radius: 12px;
+		transition: 0.3s;
+
+		@media #{$phone} {
+			min-width: auto;
+			font-size: 17px;
+			padding: 9px 18px;
+		}
+
+		&:hover {
+			border: 2px solid #041e42;
+			background-color: #041e42;
+		    color: white;
+		    text-decoration: none;
+		}
+	}
+
+	.accept-all {
+		font-size: 16px;
+		padding: 10px 13px;
+		min-width: 162px;
+
+		@media #{$phone} {
+			width: 100%;
+			text-align: center;
+		}
+	}
+
+	.close-cookie-button {
+	    background-color: #041e42;
+
+		&:hover {
+			border: 2px solid #679dca;
+			background-color: #679dca;
+		}
 	}
 }

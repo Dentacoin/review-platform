@@ -42,8 +42,12 @@
 								</label>
 							</div>
 
+							<div class="alert alert-danger agree-cookies" style="display: none;">
+								You must accept at least the strictly necessary cookies in order to proceed. 
+							</div>
+
 							<div class="form-group">
-								<button class="btn btn-primary btn-block" type="submit">
+								<button class="btn btn-primary btn-block has-cookies-button" type="submit">
 									{{ trans('vox.page.login.submit') }}
 								</button>
 							</div>
@@ -99,6 +103,10 @@
 					{{ trans('vox.page.login.subtitle')  }}
 				</p>
 
+				<div class="alert alert-danger agree-cookies" style="display: none;">
+					You must accept at least the strictly necessary cookies in order to proceed. 
+				</div>
+
 				<form action="{{ getVoxUrl('login') }}" method="post" class="form-horizontal">
 					{!! csrf_field() !!}
 
@@ -126,7 +134,7 @@
 							</h4>
 
 							<div class="fb-button-inside">
-								<a href="javascript:;" class="fb-login-button-new"></a>
+								<a href="javascript:;" class="fb-login-button-new has-cookies-button"></a>
 								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
 							</div>
 
@@ -136,7 +144,7 @@
 								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
 							</div> -->
 					
-							<div class="civic-button" id="register-civic-button">
+							<div class="civic-button has-cookies-button" id="register-civic-button">
 								<i class="fas fa-circle-notch fa-spin"></i>
 								Continue with Civic
 							</div>
@@ -188,7 +196,7 @@
 							</div>							
 
 							<div class="form-group">
-								<button class="btn btn-primary btn-block" type="submit">
+								<button class="btn btn-primary btn-block has-cookies-button" type="submit">
 									{{ trans('vox.page.login.submit') }}
 								</button>
 							</div>

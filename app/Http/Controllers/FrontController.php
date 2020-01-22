@@ -266,7 +266,7 @@ class FrontController extends BaseController
                 Cookie::queue(Cookie::forget('first-login-recommendation'));
             }
 
-            if(!empty($this->user) && count($this->user->filledVoxes()) >= 5 && empty($this->user->first_login_recommendation) && empty(Cookie::get('first-login-recommendation')) && (Request::getHost() == 'dentavox.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com' )) {
+            if(!empty($this->user) && count($this->user->filledVoxes()) >= 5 && empty($this->user->first_login_recommendation) && !empty(Cookie::get('marketing_cookies')) && empty(Cookie::get('first-login-recommendation')) && (Request::getHost() == 'dentavox.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com' )) {
                 Cookie::queue('first-login-recommendation', true, 1440, null, null, false, false);
                 $this->user->first_login_recommendation = true;
                 $this->user->save();
@@ -311,7 +311,7 @@ class FrontController extends BaseController
 
     public function ShowVoxView($page, $params=array(), $statusCode=null) {
 
-        if( session('login-logged') && $this->user && !Cookie::get('prev-login') ) {
+        if( session('login-logged') && $this->user && !Cookie::get('prev-login') && !empty(Cookie::get('functionality_cookies')) ) {
             Cookie::queue('prev-login', $this->user->id, 60*24*31);
         }
 
@@ -678,6 +678,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2020-01-21-01';
+        $params['cache_version'] = '2020-01-22-01';
     }
 }

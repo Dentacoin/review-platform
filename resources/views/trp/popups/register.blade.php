@@ -32,13 +32,13 @@
 							{!! nl2br(trans('trp.popup.popup-register.signup-title')) !!}
 						</h2>
 
-						<a href="{{ getLangUrl('register/facebook') }}" class="fb-login log-button">
+						<a href="{{ getLangUrl('register/facebook') }}" class="fb-login log-button has-cookies-button">
 							<span>
 								<i class="fab fa-facebook"></i>
 							</span>
 							Continue with Facebook							
 						</a>
-						<a href="javascript:;" class="civic-login log-button register-civic-button">
+						<a href="javascript:;" class="civic-login log-button register-civic-button has-cookies-button">
 							<span>
 								<img src="img-trp/civic.png">
 							</span>
@@ -78,6 +78,9 @@
 							])) !!}
 							
 						</label>
+						<div class="alert alert-warning agree-cookies" style="display: none;">
+							You must accept at least the strictly necessary cookies in order to proceed. 
+						</div>
 
 						<div class="cta">
 							<i class="fas fa-sign-in-alt"></i>
@@ -108,13 +111,13 @@
 							{!! nl2br(trans('trp.popup.popup-register.login')) !!}
 						</h2>
 
-						<a href="{{ getLangUrl('login/facebook') }}" class="fb-login log-button">
+						<a href="{{ getLangUrl('login/facebook') }}" class="fb-login log-button has-cookies-button">
 							<span>
 								<i class="fab fa-facebook"></i>
 							</span>
 							Continue with Facebook
 						</a>
-						<a href="javascript:;" class="civic-login log-button register-civic-button">
+						<a href="javascript:;" class="civic-login log-button register-civic-button has-cookies-button">
 							<span>
 								<img src="img-trp/civic.png">
 							</span>
@@ -143,6 +146,9 @@
 						</div>
 						<div class="alert alert-info civic-wait" style="display: none;">
 							{!! nl2br(trans('front.common.civic.wait')) !!}
+						</div>						
+						<div class="alert alert-warning agree-cookies" style="display: none;">
+							You must accept at least the strictly necessary cookies in order to proceed. 
 						</div>
 						<input type="hidden" class="jwtAddress" value="{{ getLangUrl('login/civic') }}" />
 					</div>
@@ -434,9 +440,12 @@
 						</div>
 
 						<div class="form-info tac">
-							<input class="button login-button" type="submit" value="{!! nl2br(trans('trp.popup.popup-register.login')) !!}"/>
+							<input class="button login-button has-cookies-button" type="submit" value="{!! nl2br(trans('trp.popup.popup-register.login')) !!}"/>
 							<div class="alert alert-warning login-error" style="display: none;">
 								
+							</div>
+							<div class="alert alert-warning agree-cookies" style="display: none;">
+								You must accept at least the strictly necessary cookies in order to proceed. 
 							</div>
 						</div>
 						<div class="login-without-account">

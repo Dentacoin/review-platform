@@ -72,9 +72,13 @@
 						<i class="far fa-square"></i>
 						{!! trans('trp.popup.popup-lead-magnet.privacy', [
 							'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
-							'endlink' => '<a/>',
+							'endlink' => '</a>',
 						]) !!}
 					</label>
+
+					<div class="alert alert-warning agree-cookies" style="display: none; margin-bottom: 20px;">
+						You must accept all cookies in order to proceed. 
+					</div>
 
 					<div class="alert magnet-alert" style="display: none; margin-top: 20px;">
 					</div>

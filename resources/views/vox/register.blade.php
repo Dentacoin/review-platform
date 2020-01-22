@@ -56,6 +56,10 @@
 						</div>
 					</div>
 
+					<div class="alert alert-danger agree-cookies" style="display: none;">
+						You must accept at least the strictly necessary cookies in order to proceed. 
+					</div>
+
 					<div class="user-type-mobile">
 						<a href="javascript:;" type="reg-patients">
 							{{ trans('vox.common.type-patient-mobile')  }}
@@ -77,7 +81,7 @@
 							</h4>
 
 							<div class="fb-button-inside">								
-								<a href="javascript:;" class="fb-register-button-new"></a>
+								<a href="javascript:;" class="fb-register-button-new has-cookies-button"></a>
 								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
 							</div>
 
@@ -87,7 +91,7 @@
 								<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
 							</div> -->
 
-							<div class="civic-button" id="register-civic-button">
+							<div class="civic-button has-cookies-button" id="register-civic-button">
 								<i class="fas fa-circle-notch fa-spin"></i>
 								Continue with Civic
 							</div>

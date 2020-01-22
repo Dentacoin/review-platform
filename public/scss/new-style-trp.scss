@@ -5689,6 +5689,10 @@ textarea.input {
 	    	font-size: 20px;
 	    }		
 	}
+
+	.checkbox-label {
+		text-align: left;
+	}
 }
 
 .modern-field {
@@ -6371,6 +6375,14 @@ textarea[name="short_description"] {
     	font-size: 14px;
     	padding: 10px;
     	max-width: 200px;
+    }
+
+    &.dark-tooltip {
+		background-color: black;
+		color: white;
+		max-width: 150px;
+		font-size: 13px;
+		z-index: 1011;
     }
 
     &::after {
@@ -9329,6 +9341,12 @@ body.strength-pb {
 	}
 }
 
+@keyframes cookiebar-blink-animation {
+    0%     {background-color:black;}
+    50.0%  {background-color:red;}
+    100.0%  {background-color:black;}
+}
+
 .privacy-policy-cookie {
 	padding-top: 20px;
     padding-bottom: 20px;
@@ -9337,6 +9355,30 @@ body.strength-pb {
     width: 100%;
     font-size: 0;
     position: relative;
+
+    &.blink {
+	    animation-name: cookiebar-blink-animation;
+	    animation-duration: 1.5s;
+	    animation-timing-function: ease-in-out;
+	    animation-iteration-count: infinite;    
+	    animation-play-state: running;
+    }
+
+    .container-cookie {
+    	justify-content: space-between;
+    	align-items: center;
+    	padding: 0px 80px;
+
+    	@media #{$tablet} {
+    		padding: 0px 40px;
+    	}
+
+    	@media #{$phone} {
+    		display: flex;
+    		flex-direction: column;
+    		padding: 0px 20px;
+    	}
+    }
 
     .customize-cookies {
 		background-color: black;
@@ -9347,20 +9389,24 @@ body.strength-pb {
 		bottom: calc(100% + 15px);
 		position: absolute;
 		left: 50%;
-		-webkit-transform: translateX(-50%);
-		-ms-transform: translateX(-50%);
 		transform: translateX(-50%);
-		-webkit-border-radius: 15px;
-		-moz-border-radius: 15px;
-		-ms-border-radius: 15px;
 		border-radius: 15px;
 
-		.close-customize-cookies {
+		.close-customize-cookies-icon {
 	        font-size: 30px;
 	        color: white;
 	        position: absolute;
 	        right: 10px;
 	        top: 0;
+	        outline: none;
+	    }
+
+	    .cookie-popup-title {
+	    	color: white;
+	    	font-weight: bold;
+	    	font-size: 20px;
+	    	margin-top: 10px;
+	    	margin-bottom: 20px;
 	    }
 
 	    .cookie-icon {
@@ -9368,59 +9414,90 @@ body.strength-pb {
         }
 
         .cookies-options-list {
+	        flex-flow: row wrap;
 	        padding-left: 20px;
 	        padding-right: 20px;
-	        font-size: 0;
-	    }
 
-	    ul {
-			width: 50%;
-			display: inline-block;
-			vertical-align: text-bottom;
+	        @media #{$phone} {
+	        	padding: 0px;
+	        }
 
-			li {
-            	padding-bottom: 20px;
+	        .cookie-checkbox-wrapper {
+	        	min-width: 50%;
 
-            	.pretty {
-            		.svg-icon {
-						position: absolute;
-						top: 0;
-						left: 0;
-						width: 18px;
-						height: 18px;
-					}
+	        	.cookie-label {
+	        		color: white;
+	        		font-size: 18px;
+	        		display: flex;
+    				align-items: center;
+    				margin-bottom: 17px;
 
-					label {
-						font-size: 18px;
-						padding-left: 25px;
-						text-indent: 0;
-						cursor: pointer;
+    				@media #{$phone} {
+    					margin-bottom: 11px;
+    				}
 
-						&:before,
-						&:after {
-							top: 0;
-			                width: 18px;
-			                height: 18px;
-			                border: 1px solid white;
-						}
+	        		span {
+	        			color: white;
+	        			font-size: 18px;
 
-						i {
-                			color: #969696;
-                		}
-		            }
-				}
-            }
+	        			&.gray {
+	        				opacity: 0.5;
+	        			}
+	        		}
+
+	        		.info-cookie {
+	        			color: #969696;
+	        			margin-left: 6px;
+	        		}
+
+	        		input {
+	        			display: none;
+	        		}
+
+	        		.checkbox-icon {
+	        			color: white;
+	        			font-size: 20px;
+	        			margin-right: 10px;
+	        		}
+
+	        		&.active {
+	        			.checkbox-icon {
+	        				&:before {
+	        					content: '\f14a';
+	        				}
+	        			}
+	        		}
+	        	}
+
+	        }
 	    }
 
 	    .actions {
+	    	align-items: center;
+	    	justify-content: center;
+
+	    	@media #{$phone} {
+	    		display: flex;
+	    	}
+
 	    	a {
+	    		flex: 1;
 		        margin-top: 20px;
-		        display: inline-block;
-		        max-width: 150px;
-		        width: 100%;
-		        padding-left: 0;
-		        padding-right: 0;
-		        text-align: center;
+			    max-width: 150px;
+			    width: 100%;
+			    padding-left: 0;
+			    padding-right: 0;
+			    text-align: center;
+			    padding: 15px 0px;
+
+			    @media #{$phone} {
+			    	max-width: 115px;
+			    	padding: 13px 0px;
+			    }
+
+			    &:first-child {
+			    	margin-right: 17px;
+			    }
 		    }
 		}
 
@@ -9431,22 +9508,76 @@ body.strength-pb {
 	        height: 30px;
 	        position: absolute;
 	        left: 50%;
-	        -webkit-transform: rotate(45deg) translateX(-50%);
-	        -ms-transform: rotate(45deg) translateX(-50%);
 	        transform: rotate(45deg) translateX(-50%);
 	        transform-origin: 0;
+	        z-index: -1;
 	    }
   	}
 
   	.cookies-text {
 		font-size: 18px;
-		width: calc(100% - 150px);
 		padding-right: 15px;
 		color: white;
+
+		@media #{$phone} {
+			margin-bottom: 20px;
+		}
 
 		a {
 			color: #679dca;
 			font-size: 18px;
+			font-weight: bold;
 		}
 	}
+
+	.close-cookie-button,
+	.custom-cookie-save,
+	.accept-all {
+		background-color: #679dca;
+		color: white;
+		font-size: 20px;
+		display: inline-block;
+		padding: 12px 24px;
+		font-weight: bold;
+		border: 2px solid white;
+		cursor: pointer;
+		border-radius: 12px;
+		transition: 0.3s;
+
+		@media #{$phone} {
+			min-width: auto;
+			font-size: 17px;
+			padding: 9px 18px;
+		}
+
+		&:hover {
+			border: 2px solid #041e42;
+			background-color: #041e42;
+		    color: white;
+		}
+	}
+
+	.accept-all {
+		font-size: 18px;
+		padding: 10px 13px;
+		min-width: 163px;
+
+		@media #{$phone} {
+			width: 100%;
+			text-align: center;
+		}
+	}
+
+	.close-cookie-button {
+	    background-color: #041e42;
+
+		&:hover {
+			border: 2px solid #679dca;
+			background-color: #679dca;
+		}
+	}
+}
+
+#ariticform_wrapper_leadmagnetform {
+	display: none;
 }

@@ -14,7 +14,13 @@ $(document).ready(function(){
 			if (!$('#read-privacy').prop("checked")) {
 				$('#read-privacy').closest('.form-group').addClass('has-error');
 				return;
-			}
+			} else {
+                $('#read-privacy').closest('.form-group').removeClass('has-error');
+            }
+
+            if (!Cookies.get('strictly_necessary_policy')) {
+                return;
+            }
 			
         	// if( $(this).hasClass('loading') ) {
         	// 	return;
@@ -152,7 +158,14 @@ $(document).ready(function(){
     $('.fb-register-button-new').click( function(rerequest){
         rerequest.preventDefault();
 
+
         if ($('#read-privacy').prop("checked")) {
+
+            $('#read-privacy').closest('.form-group').removeClass('has-error');
+            if (!Cookies.get('strictly_necessary_policy')) {
+                return;
+            }
+
             var that = $(this);
 
             FB.login(function (response) {

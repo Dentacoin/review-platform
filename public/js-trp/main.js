@@ -372,7 +372,10 @@ jQuery(document).ready(function($){
 			custom_widget_popup = true;
 		}
 		$('.popup').removeClass('active');
-		$('body').removeClass('popup-visible');		
+		$('body').removeClass('popup-visible');
+		if ($('.privacy-policy-cookie').length) {
+			$('.privacy-policy-cookie').removeClass('blink');
+		}			
 
 		if( refreshOnClosePopup ) {
 			window.location.reload();
@@ -601,26 +604,6 @@ jQuery(document).ready(function($){
 		window.location.href = $(this).attr('href');
 	} );
 
-	if(!Cookies.get('no-ids')) {
-		$('#ids').css('display', 'block');
-
-		$('#ids i').click( function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-			Cookies.set('no-ids', true, { expires: 365 });
-			$('#ids').hide();
-		});
-	}
-
-	if(!Cookies.get('cookiebar') && !$('body').hasClass('sp-trp-iframe') ) {
-		$('#cookiebar').css('display', 'flex');
-		$('#cookiebar a.accept').click( function() {
-			Cookies.set('cookiebar', true, { expires: 365 });
-			$('#cookiebar').hide();
-			showStrength();
-		} );
-	}
-
 	$('.button-sign-up-dentist').click( function() {
 		fbq('track', 'DentistInitiateRegistration');
 		gtag('event', 'ClickSignup', {
@@ -676,6 +659,12 @@ jQuery(document).ready(function($){
         }
 
         $('.tooltip-window').css('display', 'block');
+
+        if ($(this).closest('.tooltip-text').hasClass('info-cookie')) {
+        	$('.tooltip-window').addClass('dark-tooltip');
+        } else {
+        	$('.tooltip-window').removeClass('dark-tooltip');
+        }
     }
 
     attachTooltips = function() {
@@ -731,7 +720,9 @@ jQuery(document).ready(function($){
 			// $('.strength-wrapper').css('top', '100%');
 			$('.stretching-box').css('height', 0);
 
-			Cookies.set('hide-strength', true, { expires: 1 });
+			if (Cookies.get('functionality_cookies')) {
+				Cookies.set('hide-strength', true, { expires: 1 });
+			}
 		} else {
 			$(this).addClass('active');
 			$('body').addClass('dark');
@@ -757,7 +748,7 @@ jQuery(document).ready(function($){
 
 		if(($('body').hasClass('page-dentist') || $('body').hasClass('page-index')) && $('.strength-parent').length) {
 
-			if(!Cookies.get('cookiebar')) {
+			if(!Cookies.get('strictly_necessary_policy')) {
 				$('.strength-parent').hide();
 			} else {
 				$('.strength-parent').css('display', 'block');

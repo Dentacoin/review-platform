@@ -128,12 +128,9 @@
 		</div>
     </div>
 
-    <style type="text/css">
-		#ariticform_wrapper_leadmagnetform {
-			display: none;
-		}
-	</style>
-	<script type="text/javascript" src="//dentacoin.ariticapp.com/ma/form/generate.js?id=13"></script>
+    @if(!empty($_COOKIE['marketing_cookies']))
+		<script type="text/javascript" src="//dentacoin.ariticapp.com/ma/form/generate.js?id=13"></script>
+	@endif
 
     <div class="testimonials-section">
     	<div class="container tac">

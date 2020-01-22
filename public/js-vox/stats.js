@@ -2031,7 +2031,9 @@ $(document).ready(function(){
 
     $('.blurred-button').click( function(e) {
         e.preventDefault();
-        Cookies.set('stat-url', window.location.href, { expires: 1 , domain: '.dentacoin.com'});
+        if(Cookies.get('functionality_cookies')) {
+            Cookies.set('stat-url', window.location.href, { expires: 1 , domain: '.dentacoin.com'});
+        }
         window.location.href = $(this).attr('href');
     });
 });

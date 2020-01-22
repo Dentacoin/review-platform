@@ -277,12 +277,6 @@ $(document).ready(function(){
 		});
     } );
 
-
-	$('.alert-update button').click( function() {
-		Cookies.set('show-update', 'ok', { expires: 365 });
-	} );
-
-
     $('.second-absolute').click( function(e) {
 		$('html, body').animate({
         	scrollTop: $('.section-recent-surveys').offset().top
@@ -306,7 +300,10 @@ $(document).ready(function(){
 		$('.reg-wrapper .col').removeClass('active');
 		$('.'+$(this).attr('type')).addClass('active');
 
-		Cookies.set('user-type', $(this).attr('type'), { expires: 365 });
+		if(Cookies.get('functionality_cookies')) {
+			Cookies.set('user-type', $(this).attr('type'), { expires: 365 });
+		}
+		
 	} );
 
 	if( Cookies.get('user-type') ) {
@@ -936,25 +933,6 @@ $(document).ready(function(){
 		} );
 	}
 
-	if(!Cookies.get('no-ids')) {
-		$('#ids').css('display', 'block');
-
-		$('#ids i').click( function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-			Cookies.set('no-ids', true, { expires: 365 });
-			$('#ids').hide();
-		});
-	}
-
-	if(!Cookies.get('cookiebar') && !$('body').hasClass('sp-vox-iframe') ) {
-		$('#cookiebar').css('display', 'flex');
-		$('#cookiebar a.accept').click( function() {
-			Cookies.set('cookiebar', true, { expires: 365 });
-			$('#cookiebar').hide();
-		} );
-	}
-
     if(getUrlParameter('suspended-popup')) {
 		$('#suspended-popup').addClass('active');
 	}
@@ -1023,6 +1001,12 @@ $(document).ready(function(){
 	        // }
 
 	        e.stopPropagation();
+
+	        if ($(this).closest('.tooltip-text').hasClass('info-cookie')) {
+	        	$('.tooltip-window').addClass('dark-tooltip');
+	        } else {
+	        	$('.tooltip-window').removeClass('dark-tooltip');
+	        }
 
 	    }
 
@@ -1390,7 +1374,7 @@ $(document).ready(function(){
 	pollsFunction();
 
 	$('.close-bubble').click( function() {
-		if (window.innerWidth <= 768) {
+		if (window.innerWidth <= 768 && Cookies.get('functionality_cookies')) {
 			Cookies.set('small-poll-bubble', true, { expires: 1 });
 		}
 		$('.poll-bubble').hide();
@@ -1450,6 +1434,10 @@ $(document).ready(function(){
     }(document, 'script', 'facebook-jssdk'));
 
     $('.fb-login-button-new').click( function(rerequest){
+
+    	if (!Cookies.get('strictly_necessary_policy')) {
+    		return;
+    	}
 
         var that = $(this);
 

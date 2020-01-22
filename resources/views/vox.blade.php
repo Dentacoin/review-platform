@@ -13,10 +13,11 @@
 
         <title>{{ $seo_title }}</title>
         <meta name="description" content="{{ $seo_description }}">
+        <link rel="canonical" href="{{ $canonical }}" />
+
         @if(!empty($keywords))
         	<meta name="keywords" content="{{ $keywords }}">
         @endif
-        <link rel="canonical" href="{{ $canonical }}" />
 
         <meta property="og:locale" content="{{ App::getLocale() }}" />
         <meta property="og:title" content="{{ $social_title }}"/>
@@ -29,37 +30,14 @@
         <meta name="twitter:description" content="{{ $social_description }}" />
         <meta name="twitter:image" content="{{ $social_image }}"/>
 
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-        @if(config('langs')[App::getLocale()]['rtl'])
-        	<link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css" crossorigin="anonymous">
-        @else
-        	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        @endif
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
 		{!! config('langs')[App::getLocale()]['font'] !!}
-		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css').'?ver='.$cache_version }}" /> -->
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/flickity.min.css').'?ver='.$cache_version }}" />
+
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-vox.css').'?ver='.$cache_version }}" />
-		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/ids.css').'?ver='.$cache_version }}" /> -->
-		<!-- <link rel="stylesheet" type="text/css" href="{{ url('/css/style-vox.css').'?ver='.$cache_version }}" /> -->
 
         @if(!empty($css) && is_array($css))
             @foreach($css as $file)
 				<link rel="stylesheet" type="text/css" href="{{ url('/css/'.$file).'?ver='.$cache_version }}" />
-            @endforeach
-        @endif
-
-        @if($current_page == 'daily-polls')
-        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/core/main.min.css').'?ver='.$cache_version }}" />
-        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/daygrid/main.min.css').'?ver='.$cache_version }}" />
-        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/timegrid/main.min.css').'?ver='.$cache_version }}" />
-        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/list/main.min.css').'?ver='.$cache_version }}" />
-        @endif
-
-        @if(!empty($csscdn) && is_array($csscdn))
-            @foreach($csscdn as $file)
-				<link rel="stylesheet" type="text/css" href="{{ $file }}" />
             @endforeach
         @endif
 
@@ -78,7 +56,11 @@
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());
 
-			gtag('config', 'UA-108398439-2');
+			@if(empty($_COOKIE['performance_cookies']))
+				gtag('config', 'UA-108398439-2', {'anonymize_ip': true});
+			@else
+				gtag('config', 'UA-108398439-2');
+			@endif
 		</script>
 
 		<!-- Facebook Pixel Code -->
@@ -91,6 +73,11 @@
 			t.src=v;s=b.getElementsByTagName(e)[0];
 			s.parentNode.insertBefore(t,s)}(window,document,'script',
 			'https://connect.facebook.net/en_US/fbevents.js');
+			@if(empty($_COOKIE['marketing_cookies']))
+				fbq('consent', 'revoke');
+			@else
+				fbq('consent', 'grant');
+			@endif
 			fbq('init', '2010503399201502'); 
 			fbq('init', '2366034370318681'); 
 			fbq('track', 'PageView');
@@ -325,9 +312,20 @@
 
 							</p>
 
+							<div class="alert alert-danger agree-cookies" style="display: none;">
+								You must accept at least the strictly necessary cookies in order to proceed. 
+							</div>
+
 							<form action="{{ getLangUrl('new-login/facebook', null, 'https://dentavox.dentacoin.com/') }}" method="post" id="new-login-form" style="display: none;">
 								{!! csrf_field() !!}
 								<input type="text" name="access-token" value="">
+								<input type="hidden" name="intended" value="{{ !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '' }}">
+								<button type="submit"></button>			
+							</form>
+
+							<form action="{{ getLangUrl('login/civic', null, 'https://dentavox.dentacoin.com/') }}" method="post" id="new-civic-login-form" style="display: none;">
+								{!! csrf_field() !!}
+								<input type="text" name="jwtToken" value="">
 								<input type="hidden" name="intended" value="{{ !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '' }}">
 								<button type="submit"></button>			
 							</form>
@@ -335,21 +333,17 @@
 							<div class="form-group buttons">
 							  	<div class="col-md-12 text-center">
 									<div class="fb-button-inside">
-										<a href="javascript:;" class="fb-login-button-new"></a>
-										<div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+										<a href="javascript:;" class="fb-login-button-new has-cookies-button"></a>
+										<div class="fb-login-button has-cookies-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
 									</div>
 								</div>
 
 							  	<div class="col-md-12 text-center">
 
-									<form action="{{ getLangUrl('login') }}" method="post">
-										<div class="civic-button" id="register-civic-button">
-											<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
-											Continue with Civic
-										</div>
-										{!! csrf_field() !!}
-									</form>
-									<input type="hidden" id="jwtAddress" value="{{ getLangUrl('login/civic') }}" />
+									<div class="civic-button has-cookies-button" id="register-civic-button">
+										<i class="fas fa-circle-notch fa-spin"></i>
+										Continue with Civic
+									</div>
 								</div>
 
 								<!-- @if( $user->grace_end && $user->grace_end->timestamp+86400*31 < time() )
@@ -426,13 +420,8 @@
 
 
 		<div class="bottom-drawer">
-			<!--
-			<a id="ids" href="https://ids.dentacoin.com/" target="_blank">
-				<i class="fas fa-times-circle"></i>
-			</a>
-		-->
 			
-			<div id="cookiebar" >
+			<!-- <div id="cookiebar" >
 				<p>
 					{!! nl2br( trans('vox.common.cookiebar-hint',[
 						'link' => '<a href="https://dentacoin.com/privacy-policy" target="_blank">',
@@ -442,7 +431,62 @@
 				<a class="accept" href="javascript:;">
 					{!! nl2br( trans('vox.common.cookiebar-button') ) !!}
 				</a>
-			</div>
+			</div> -->
+
+			@if(empty($_COOKIE['performance_cookies']) && empty($_COOKIE['marketing_cookies']) && empty($_COOKIE['strictly_necessary_policy']) && empty($_COOKIE['functionality_cookies']))
+				<div class="privacy-policy-cookie">
+					<div class="container-cookie flex">
+						<div class="cookies-text">
+							This site uses cookies. Find out more on how we use cookies in our <a href="https://dentacoin.com/privacy-policy" target="_blank">Privacy Policy</a>. | <a href="javascript:;" class="adjust-cookies">Adjust cookies</a>
+						</div>
+						<a href="javascript:;" class="accept-all">Accept all cookies</a>
+					</div>
+					<div id="customize-cookies" class="customize-cookies" style="display: none;">
+						<button class="close-customize-cookies-icon close-customize-cookies-popup">×</button>
+						<div class="tac"><img src="/img-trp/cookie-icon.svg" alt="Cookie icon" class="cookie-icon"/></div>
+						<div class="tac cookie-popup-title">Select cookies to accept:</div>
+						<div class="cookies-options-list flex">
+							<div class="cookie-checkbox-wrapper">
+								<label class="cookie-label active" for="strictly-necessary-cookies">
+									<i class="far fa-square checkbox-icon"></i>
+									<input checked disabled id="strictly-necessary-cookies" type="checkbox" class="cookie-checkbox">
+									<span class="gray">Strictly necessary</span> 
+									<i class="fas fa-info-circle info-cookie tooltip-text" text="Cookies essential to navigate around the website and use its features. Without them, you wouldn’t be able to use basic services like signup or login."></i>
+								</label>
+							</div>
+							<div class="cookie-checkbox-wrapper">
+								<label class="cookie-label active" for="performance-cookies">
+									<i class="far fa-square checkbox-icon"></i>
+									<input checked id="performance-cookies" type="checkbox" class="cookie-checkbox">
+									<span>Performance cookies</span> 
+									<i class="fas fa-info-circle info-cookie tooltip-text" text="These cookies collect data for statistical purposes on how visitors use a website, they don’t contain personal data and are used to improve user experience."></i>
+								</label>
+							</div>
+							<div class="cookie-checkbox-wrapper">
+								<label class="cookie-label active" for="functionality-cookies">
+									<i class="far fa-square checkbox-icon"></i>
+									<input checked id="functionality-cookies" type="checkbox" class="cookie-checkbox">
+									<span>Functionality cookies</span> 
+									<i class="fas fa-info-circle info-cookie tooltip-text" text="These cookies allow users to customise how a website looks for them; they can remember usernames, preferences, etc."></i>
+								</label>
+							</div>
+							<div class="cookie-checkbox-wrapper">
+								<label class="cookie-label active" for="marketing-cookies">
+									<i class="far fa-square checkbox-icon"></i>
+									<input checked id="marketing-cookies" type="checkbox" class="cookie-checkbox">
+									<span>Marketing cookies</span> 
+									<i class="fas fa-info-circle info-cookie tooltip-text" text="Marketing cookies are used e.g. to deliver advertisements more relevant to you or limit the number of times you see an advertisement."></i>
+								</label>
+							</div>
+						</div>
+						<div class="flex actions">
+							<a href="javascript:;" class="close-cookie-button close-customize-cookies-popup">CANCEL</a>
+							<a href="javascript:;" class="custom-cookie-save">SAVE</a>
+						</div>
+						<div class="custom-triangle"></div>
+					</div>
+				</div>
+			@endif
 
 		</div>
 
@@ -509,7 +553,29 @@
 		}
 		</script>
 
-        <script  src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
+
+        @if($current_page == 'daily-polls')
+        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/core/main.min.css').'?ver='.$cache_version }}" />
+        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/daygrid/main.min.css').'?ver='.$cache_version }}" />
+        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/timegrid/main.min.css').'?ver='.$cache_version }}" />
+        	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/list/main.min.css').'?ver='.$cache_version }}" />
+        @endif
+
+        @if(!empty($csscdn) && is_array($csscdn))
+            @foreach($csscdn as $file)
+				<link rel="stylesheet" type="text/css" href="{{ $file }}" />
+            @endforeach
+        @endif
+
+		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
+        @if(config('langs')[App::getLocale()]['rtl'])
+        	<link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css" crossorigin="anonymous">
+        @else
+        	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        @endif
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
 
 
 		@if(!empty($trackEvents))
@@ -545,6 +611,7 @@
 		<script src="{{ url('/js-vox/bootstrap-datepicker.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js-vox/flickity.pkgd.min.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js-vox/main.js').'?ver='.$cache_version }}"></script>
+		<script src="{{ url('/js/both.js').'?ver='.$cache_version }}"></script>
 		@if(!empty($plotly))
 			<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 		@endif

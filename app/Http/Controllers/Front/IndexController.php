@@ -112,7 +112,7 @@ class IndexController extends FrontController
 							$this->user->save();
 				        }
 
-			        	Cookie::queue('dentists_city', json_encode($final_info), 60*24*31);
+				        Cookie::queue('dentists_city', json_encode($final_info), 60*24*31);
 
 			            return Response::json( ['success' => true] );
 			        } else {

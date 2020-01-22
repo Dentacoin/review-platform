@@ -12,6 +12,8 @@ class EncryptCookies extends BaseEncrypter
      * @var array
      */
     protected $except = [
-        'stat-url'
+        'stat-url',
+        'functionality_cookies',
+        'marketing_cookies',
     ];
 }

@@ -6,6 +6,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="google-site-verification" content="b0VE72mRJqqUuxWJZklHQnvRZV4zdJkDymC0RD9hPhE" />
+        
+        @if(!empty($noIndex))
+        	<meta name="robots" content="noindex">
+        @endif
 
         <title>{{ $seo_title }}</title>
         <meta name="description" content="{{ $seo_description }}">
@@ -36,18 +40,18 @@
             @endforeach
         @endif
 
-        @if(!empty($noIndex))
-        	<meta name="robots" content="noindex">
-        @endif
-
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108398439-1"></script>
 		<script>
-		  window.dataLayer = window.dataLayer || [];
-		  function gtag(){dataLayer.push(arguments);}
-		  gtag('js', new Date());
+		  	window.dataLayer = window.dataLayer || [];
+		  	function gtag(){dataLayer.push(arguments);}
+		  	gtag('js', new Date());
 
-		  gtag('config', 'UA-108398439-1');
+		  	@if(empty($_COOKIE['performance_cookies']))
+				gtag('config', 'UA-108398439-1', {'anonymize_ip': true});
+			@else
+				gtag('config', 'UA-108398439-1');
+			@endif
 		</script>
 
 		<!-- Facebook Pixel Code -->
@@ -60,6 +64,11 @@
 			t.src=v;s=b.getElementsByTagName(e)[0];
 			s.parentNode.insertBefore(t,s)}(window,document,'script',
 			'https://connect.facebook.net/en_US/fbevents.js');
+			@if(empty($_COOKIE['marketing_cookies']))
+				fbq('consent', 'revoke');
+			@else
+				fbq('consent', 'grant');
+			@endif
 			fbq('init', '2010503399201502'); 
 			fbq('init', '2366034370318681');
 			fbq('track', 'PageView');
@@ -188,7 +197,7 @@
 					</div>
 				</div>
 
-				@if($current_page == 'welcome-dentist')
+				@if($current_page == 'welcome-dentist' && !empty($_COOKIE['marketing_cookies']) )
 					<script>
 			            (function(w,d,t,u,n,a,m){
 			                if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
@@ -217,7 +226,7 @@
 
 		@if($current_page != 'profile')
 			<div class="bottom-drawer">
-				<div id="cookiebar" >
+				<!-- <div id="cookiebar" >
 					<p>
 						{!! nl2br( trans('trp.common.cookiebar-hint',[
 							'link' => '<a href="https://dentacoin.com/privacy-policy" target="_blank">',
@@ -227,7 +236,63 @@
 					<a class="accept" href="javascript:;">
 						{!! nl2br( trans('trp.common.cookiebar-button') ) !!}
 					</a>
-				</div>
+				</div> -->
+
+				@if(empty($_COOKIE['performance_cookies']) && empty($_COOKIE['marketing_cookies']) && empty($_COOKIE['strictly_necessary_policy']) && empty($_COOKIE['functionality_cookies']))
+					<div class="privacy-policy-cookie">
+						<div class="container-cookie flex">
+							<div class="cookies-text">
+								This site uses cookies. Find out more on how we use cookies in our <a href="https://dentacoin.com/privacy-policy" target="_blank">Privacy Policy</a>. | <a href="javascript:;" class="adjust-cookies">Adjust cookies</a>
+							</div>
+							<a href="javascript:;" class="accept-all">Accept all cookies</a>
+						</div>
+						<div id="customize-cookies" class="customize-cookies" style="display: none;">
+							<button class="close-customize-cookies-icon close-customize-cookies-popup">×</button>
+							<div class="tac"><img src="/img-trp/cookie-icon.svg" alt="Cookie icon" class="cookie-icon"/></div>
+							<div class="tac cookie-popup-title">Select cookies to accept:</div>
+							<div class="cookies-options-list flex">
+								<div class="cookie-checkbox-wrapper">
+									<label class="cookie-label active" for="strictly-necessary-cookies">
+										<i class="far fa-square checkbox-icon"></i>
+										<input checked disabled id="strictly-necessary-cookies" type="checkbox" class="cookie-checkbox">
+										<span class="gray">Strictly necessary</span> 
+										<i class="fas fa-info-circle info-cookie tooltip-text" text="Cookies essential to navigate around the website and use its features. Without them, you wouldn’t be able to use basic services like signup or login."></i>
+									</label>
+								</div>
+								<div class="cookie-checkbox-wrapper">
+									<label class="cookie-label active" for="performance-cookies">
+										<i class="far fa-square checkbox-icon"></i>
+										<input checked id="performance-cookies" type="checkbox" class="cookie-checkbox">
+										<span>Performance cookies</span> 
+										<i class="fas fa-info-circle info-cookie tooltip-text" text="These cookies collect data for statistical purposes on how visitors use a website, they don’t contain personal data and are used to improve user experience."></i>
+									</label>
+								</div>
+								<div class="cookie-checkbox-wrapper">
+									<label class="cookie-label active" for="functionality-cookies">
+										<i class="far fa-square checkbox-icon"></i>
+										<input checked id="functionality-cookies" type="checkbox" class="cookie-checkbox">
+										<span>Functionality cookies</span> 
+										<i class="fas fa-info-circle info-cookie tooltip-text" text="These cookies allow users to customise how a website looks for them; they can remember usernames, preferences, etc."></i>
+									</label>
+								</div>
+								<div class="cookie-checkbox-wrapper">
+									<label class="cookie-label active" for="marketing-cookies">
+										<i class="far fa-square checkbox-icon"></i>
+										<input checked id="marketing-cookies" type="checkbox" class="cookie-checkbox">
+										<span>Marketing cookies</span> 
+										<i class="fas fa-info-circle info-cookie tooltip-text" text="Marketing cookies are used e.g. to deliver advertisements more relevant to you or limit the number of times you see an advertisement."></i>
+									</label>
+								</div>
+							</div>
+							<div class="flex actions">
+								<a href="javascript:;" class="close-cookie-button close-customize-cookies-popup">CANCEL</a>
+								<a href="javascript:;" class="custom-cookie-save">SAVE</a>
+							</div>
+							<div class="custom-triangle"></div>
+						</div>
+					</div>
+				@endif
+
 			</div>
 		@endif
 
@@ -248,7 +313,7 @@
 		@endif
 
 
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
 		
 		@if( $current_page=='dentist' )
 			<link rel="stylesheet" type="text/css" href="{{ url('/css/lightbox.css').'?ver='.$cache_version }}" />
@@ -324,7 +389,7 @@
 			</script>
 		@endif
 
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
 
 		@if(!empty($trackEvents))
 	        <script type="text/javascript">
@@ -348,6 +413,7 @@
 
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 		<script src="{{ url('/js-trp/main.js').'?ver='.$cache_version }}"></script>
+		<script src="{{ url('/js/both.js').'?ver='.$cache_version }}"></script>
 		
         @if( $current_page=='dentist' )
 			<script src="//vjs.zencdn.net/6.4.0/video.min.js"></script>
