@@ -143,52 +143,53 @@
 		</div>
 	@endif
 
-	
-	<div class="popup fixed-popup" id="change-dentist-popup">
-		<div class="popup-inner inner-white">
-			<div class="popup-pc-buttons">
-				<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
-			</div>
+	@if(!empty($country_id) && !empty($_COOKIE['functionality_cookies']))
+		<div class="popup fixed-popup" id="change-dentist-popup">
+			<div class="popup-inner inner-white">
+				<div class="popup-pc-buttons">
+					<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+				</div>
 
-			<div class="popup-mobile-buttons">
-				<a href="javascript:;" class="close-popup">< back</a>
-			</div>
-			<h2>
-				<img src="{{ url('img-trp/pin-gray.png') }}">
-				{!! nl2br(trans('trp.popup.change-dentist-popup.title')) !!}
-			</h2>
+				<div class="popup-mobile-buttons">
+					<a href="javascript:;" class="close-popup">< back</a>
+				</div>
+				<h2>
+					<img src="{{ url('img-trp/pin-gray.png') }}">
+					{!! nl2br(trans('trp.popup.change-dentist-popup.title')) !!}
+				</h2>
 
-			<h4 class="popup-title tac">
-				{!! nl2br(trans('trp.popup.change-dentist-popup.subtitle')) !!}
-			</h4>
+				<h4 class="popup-title tac">
+					{!! nl2br(trans('trp.popup.change-dentist-popup.subtitle')) !!}
+				</h4>
 
-			{!! Form::open(array('method' => 'post', 'id' => 'search-dentists-city') ) !!}
-				{!! csrf_field() !!}
-				<div class="address-suggester-wrapper">
-					<div class="modern-field alert-after">
-						<input type="text" name="dentists-city" id="dentist-city" class="modern-input address-suggester city-dentist" autocomplete="off">
-						<label for="dentist-city">
-							<span>{!! nl2br(trans('trp.popup.change-dentist-popup.city')) !!}:</span>
-						</label>
+				{!! Form::open(array('method' => 'post', 'id' => 'search-dentists-city') ) !!}
+					{!! csrf_field() !!}
+					<div class="address-suggester-wrapper">
+						<div class="modern-field alert-after">
+							<input type="text" name="dentists-city" id="dentist-city" class="modern-input address-suggester city-dentist" autocomplete="off">
+							<label for="dentist-city">
+								<span>{!! nl2br(trans('trp.popup.change-dentist-popup.city')) !!}:</span>
+							</label>
+						</div>
+
+						@if(!empty($user))
+							<label class="checkbox-label" for="change-city" >
+								<input type="checkbox" class="special-checkbox" id="change-city" name="change-city"/>
+								<i class="far fa-square"></i>
+								{!! nl2br(trans('trp.popup.change-dentist-popup.save-location')) !!}
+							</label>
+						@endif
 					</div>
 
-					@if(!empty($user))
-						<label class="checkbox-label" for="change-city" >
-							<input type="checkbox" class="special-checkbox" id="change-city" name="change-city"/>
-							<i class="far fa-square"></i>
-							{!! nl2br(trans('trp.popup.change-dentist-popup.save-location')) !!}
-						</label>
-					@endif
-				</div>
-
-				<div class="alert alert-warning" style="display: none; margin-top: 20px;">
-					{!! nl2br(trans('trp.popup.change-dentist-popup.error')) !!}
-				</div>
-				<div class="tac">
-					<button type="submit" class="button">{!! nl2br(trans('trp.popup.change-dentist-popup.search')) !!}</button>
-				</div>
-			{!! Form::close() !!}
+					<div class="alert alert-warning" style="display: none; margin-top: 20px;">
+						{!! nl2br(trans('trp.popup.change-dentist-popup.error')) !!}
+					</div>
+					<div class="tac">
+						<button type="submit" class="button">{!! nl2br(trans('trp.popup.change-dentist-popup.search')) !!}</button>
+					</div>
+				{!! Form::close() !!}
+			</div>
 		</div>
-	</div>
+	@endif
 
 @endsection
