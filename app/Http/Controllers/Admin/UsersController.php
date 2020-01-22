@@ -1382,8 +1382,14 @@ class UsersController extends AdminController
                 $duplicated_mails = User::where('id', '!=', $item->id)->where('email', 'LIKE', $item->email)->withTrashed()->get();
             }
 
+            $duplicated_wallets = collect();
+            if( !empty($item->dcn_address)) {
+                $duplicated_wallets = User::where('id', '!=', $item->id)->where('dcn_address', 'LIKE', $item->dcn_address)->withTrashed()->get();
+            }
+
             return $this->showView('users-form', array(
                 'duplicated_mails' => $duplicated_mails,
+                'duplicated_wallets' => $duplicated_wallets,
                 'habits_test_ans' => $habits_test_ans,
                 'item' => $item,
                 'categories' => $this->categories,

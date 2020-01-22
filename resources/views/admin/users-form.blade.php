@@ -309,6 +309,12 @@
                                     ])
                                 </div>
                             </div>
+                            @if($duplicated_wallets->isNotEmpty())
+                                <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this dcn address already exists:</p>
+                                @foreach($duplicated_wallets as $dw)
+                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dw->id) }}">{{ $dw->name }}</p>
+                                @endforeach
+                            @endif
                             @if($item->is_dentist)
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">New Password</label>
