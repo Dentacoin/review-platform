@@ -93,6 +93,14 @@ b {
 .inline-block {
   display: inline-block; }
 
+h1, h2, h3, h4, h5 {
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  color: inherit;
+  margin-top: 20px;
+  margin-bottom: 10px; }
+
 h2 {
   margin-top: 0px;
   font-size: 35px; }
