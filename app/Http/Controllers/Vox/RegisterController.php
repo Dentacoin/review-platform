@@ -225,6 +225,9 @@ class RegisterController extends FrontController
                     'register.js',
                     'address.js',
                 ],
+                'css' => [
+                    'vox-log-reg.css',
+                ],
                 'jscdn' => [
                     'https://hosted-sip.civic.com/js/civic.sip.min.js',
                     'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en',

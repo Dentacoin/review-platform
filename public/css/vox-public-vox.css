@@ -1,0 +1,403 @@
+@media screen and (max-height: 800px) and (min-width: 769px) {
+  body.vox-public .site-content {
+    padding-top: 0px; } }
+
+.section-vox-not-login {
+  position: relative;
+  padding-bottom: 60px;
+  margin-bottom: -60px; }
+  @media screen and (max-width: 768px) {
+    .section-vox-not-login {
+      margin-bottom: 40px;
+      padding-bottom: 40px; } }
+  .section-vox-not-login:after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 410px;
+    height: 1px;
+    background-color: #d3ebfb; }
+    @media screen and (max-width: 768px) {
+      .section-vox-not-login:after {
+        width: 230px; } }
+  @media screen and (max-width: 768px) {
+    .section-vox-not-login .container {
+      padding: 0px; } }
+  .section-vox-not-login h2 {
+    font-weight: 600;
+    margin-bottom: 30px; }
+    @media screen and (max-width: 1080px) {
+      .section-vox-not-login h2 {
+        margin-bottom: 30px;
+        line-height: normal; } }
+    @media screen and (max-height: 700px) and (min-width: 769px) {
+      .section-vox-not-login h2 {
+        margin-bottom: 10px;
+        font-size: 28px;
+        line-height: 32px; } }
+    @media screen and (max-width: 768px) {
+      .section-vox-not-login h2 {
+        font-size: 18px; } }
+  .section-vox-not-login .vox-title {
+    font-weight: 900;
+    color: #3daee6;
+    text-transform: uppercase;
+    margin-bottom: 0px; }
+    @media screen and (max-width: 1080px) {
+      .section-vox-not-login .vox-title {
+        margin-top: 0px; } }
+    @media screen and (max-height: 700px) and (min-width: 769px) {
+      .section-vox-not-login .vox-title {
+        margin-top: -30px; } }
+    @media screen and (max-width: 768px) {
+      .section-vox-not-login .vox-title {
+        margin-bottom: 10px; } }
+  .section-vox-not-login .login-buttons {
+    padding-top: 30px;
+    text-align: center; }
+    @media screen and (max-height: 800px) and (min-width: 769px) {
+      .section-vox-not-login .login-buttons {
+        padding-top: 20px; } }
+    @media screen and (max-width: 768px) {
+      .section-vox-not-login .login-buttons {
+        padding-top: 20px; } }
+    .section-vox-not-login .login-buttons p {
+      color: #060606;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 20px; }
+      @media screen and (max-height: 800px) and (min-width: 769px) {
+        .section-vox-not-login .login-buttons p {
+          margin-bottom: 10px; } }
+      @media screen and (max-width: 768px) {
+        .section-vox-not-login .login-buttons p {
+          font-size: 14px;
+          text-align: left; } }
+    .section-vox-not-login .login-buttons a {
+      display: block;
+      padding: 12px 20px;
+      font-size: 20px;
+      font-weight: 900; }
+      @media screen and (max-width: 1200px) {
+        .section-vox-not-login .login-buttons a {
+          font-size: 15px; } }
+      @media screen and (max-width: 768px) {
+        .section-vox-not-login .login-buttons a {
+          font-size: 14px;
+          padding: 8px 0px; } }
+    .section-vox-not-login .login-buttons .white-button {
+      border-color: white;
+      font-weight: bold;
+      color: #3daee6; }
+      .section-vox-not-login .login-buttons .white-button:hover {
+        color: #3daee6;
+        background-color: #f1fdff;
+        border-color: #f1fdff; }
+      .section-vox-not-login .login-buttons .white-button img {
+        max-width: 25px;
+        vertical-align: sub;
+        margin-right: 10px; }
+        @media screen and (max-width: 1200px) {
+          .section-vox-not-login .login-buttons .white-button img {
+            max-width: 17px; } }
+    .section-vox-not-login .login-buttons .col:first-child {
+      border-right: 2px solid white;
+      padding-right: 60px; }
+      @media screen and (max-width: 1200px) {
+        .section-vox-not-login .login-buttons .col:first-child {
+          padding-right: 20px; } }
+      @media screen and (max-width: 768px) {
+        .section-vox-not-login .login-buttons .col:first-child {
+          padding-right: 10px; } }
+    .section-vox-not-login .login-buttons .col:last-child {
+      padding-left: 60px; }
+      @media screen and (max-width: 1200px) {
+        .section-vox-not-login .login-buttons .col:last-child {
+          padding-left: 20px; } }
+      @media screen and (max-width: 768px) {
+        .section-vox-not-login .login-buttons .col:last-child {
+          padding-left: 10px; } }
+  .section-vox-not-login .swiper-slide {
+    max-width: 730px;
+    margin: 0 auto;
+    position: relative; }
+    @media screen and (max-width: 1200px) {
+      .section-vox-not-login .swiper-slide {
+        max-width: 640px; } }
+    @media screen and (max-width: 1080px) {
+      .section-vox-not-login .swiper-slide {
+        max-width: 460px; } }
+    @media screen and (max-width: 768px) {
+      .section-vox-not-login .swiper-slide {
+        max-width: 100%;
+        display: flex;
+        flex-flow: row wrap; } }
+    .section-vox-not-login .swiper-slide .slider-inner {
+      padding: 0px; }
+    .section-vox-not-login .swiper-slide .survey-cats {
+      margin-bottom: 15px; }
+      @media screen and (max-height: 800px) and (min-width: 769px) {
+        .section-vox-not-login .swiper-slide .survey-cats {
+          display: none; } }
+    .section-vox-not-login .swiper-slide .wing {
+      width: 205px;
+      height: 170px;
+      background-color: #d3ebfb;
+      border-radius: 7px;
+      position: absolute;
+      top: 55px;
+      text-align: center; }
+      @media screen and (max-height: 800px) and (min-width: 769px) {
+        .section-vox-not-login .swiper-slide .wing {
+          width: 155px; } }
+      @media screen and (max-width: 920px) {
+        .section-vox-not-login .swiper-slide .wing {
+          width: 125px; } }
+      @media screen and (max-width: 768px) {
+        .section-vox-not-login .swiper-slide .wing {
+          position: static;
+          flex: 1;
+          margin-bottom: 10px;
+          height: auto;
+          padding: 10px 0px;
+          min-width: 40%; } }
+      .section-vox-not-login .swiper-slide .wing.left-wing {
+        left: -205px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px; }
+        @media screen and (max-height: 800px) and (min-width: 769px) {
+          .section-vox-not-login .swiper-slide .wing.left-wing {
+            left: -155px; } }
+        @media screen and (max-width: 920px) {
+          .section-vox-not-login .swiper-slide .wing.left-wing {
+            left: -125px; } }
+        @media screen and (max-width: 768px) {
+          .section-vox-not-login .swiper-slide .wing.left-wing {
+            margin-right: 10px;
+            border-radius: 7px; } }
+      .section-vox-not-login .swiper-slide .wing.right-wing {
+        right: -205px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px; }
+        @media screen and (max-height: 800px) and (min-width: 769px) {
+          .section-vox-not-login .swiper-slide .wing.right-wing {
+            right: -155px; } }
+        @media screen and (max-width: 920px) {
+          .section-vox-not-login .swiper-slide .wing.right-wing {
+            right: -125px; } }
+        @media screen and (max-width: 768px) {
+          .section-vox-not-login .swiper-slide .wing.right-wing {
+            border-radius: 7px; } }
+      .section-vox-not-login .swiper-slide .wing .wing-box {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%); }
+      .section-vox-not-login .swiper-slide .wing img {
+        max-width: 42px; }
+        @media screen and (max-width: 768px) {
+          .section-vox-not-login .swiper-slide .wing img {
+            max-width: 30px; } }
+      .section-vox-not-login .swiper-slide .wing p {
+        font-size: 30px;
+        font-weight: bold; }
+        @media screen and (max-height: 800px) and (min-width: 769px) {
+          .section-vox-not-login .swiper-slide .wing p {
+            font-size: 23px; } }
+        @media screen and (max-width: 920px) {
+          .section-vox-not-login .swiper-slide .wing p {
+            font-size: 20px; } }
+        @media screen and (max-width: 768px) {
+          .section-vox-not-login .swiper-slide .wing p {
+            font-size: 14px; } }
+        .section-vox-not-login .swiper-slide .wing p:last-child {
+          font-weight: 900; }
+    .section-vox-not-login .swiper-slide .cover {
+      border-radius: 7px; }
+      @media screen and (max-width: 1080px) {
+        .section-vox-not-login .swiper-slide .cover {
+          padding-top: 45%; } }
+    .section-vox-not-login .swiper-slide .survey-cats span {
+      font-size: 16px;
+      margin-top: 5px; }
+      @media screen and (max-height: 800px) and (min-width: 769px) {
+        .section-vox-not-login .swiper-slide .survey-cats span {
+          font-size: 14px; } }
+      @media screen and (max-width: 768px) {
+        .section-vox-not-login .swiper-slide .survey-cats span {
+          font-size: 11px; } }
+    @media screen and (max-height: 800px) and (min-width: 769px) {
+      .section-vox-not-login .swiper-slide .vox-header {
+        padding: 10px; } }
+    @media screen and (max-width: 768px) {
+      .section-vox-not-login .swiper-slide .vox-header {
+        padding: 10px 0px 0px; } }
+    .section-vox-not-login .swiper-slide .vox-header .left .vox-description {
+      font-size: 18px;
+      max-height: none; }
+      @media screen and (max-height: 800px) and (min-width: 769px) {
+        .section-vox-not-login .swiper-slide .vox-header .left .vox-description {
+          font-size: 16px; } }
+      @media screen and (max-width: 768px) {
+        .section-vox-not-login .swiper-slide .vox-header .left .vox-description {
+          font-size: 14px; } }
+  .section-vox-not-login .slide-padding {
+    padding: 15px; }
+    @media screen and (max-height: 800px) and (min-width: 769px) {
+      .section-vox-not-login .slide-padding {
+        padding: 10px; } }
+
+.section-reasons {
+  padding: 120px 0px; }
+  @media screen and (max-width: 1080px) {
+    .section-reasons {
+      padding: 80px 0px; } }
+  @media screen and (max-width: 768px) {
+    .section-reasons {
+      padding: 40px 0px; } }
+  .section-reasons h2 {
+    text-align: center;
+    margin-bottom: 80px; }
+    @media screen and (max-width: 768px) {
+      .section-reasons h2 {
+        margin-bottom: 30px; } }
+  .section-reasons .reasons-wrap {
+    max-width: 820px;
+    margin: 0 auto 50px; }
+    @media screen and (max-width: 768px) {
+      .section-reasons .reasons-wrap {
+        display: block;
+        margin-bottom: 30px; } }
+    .section-reasons .reasons-wrap:last-child {
+      margin-bottom: 0px; }
+  .section-reasons .reason-number {
+    max-width: 90px;
+    margin-right: 40px; }
+    @media screen and (max-width: 768px) {
+      .section-reasons .reason-number {
+        max-width: none;
+        margin-right: 0px; } }
+    .section-reasons .reason-number div {
+      width: 90px;
+      height: 90px;
+      background-color: #aee2ff;
+      border-radius: 50%;
+      text-align: center;
+      font-size: 31px;
+      font-weight: bold;
+      color: white;
+      line-height: 90px; }
+      @media screen and (max-width: 768px) {
+        .section-reasons .reason-number div {
+          margin: 0 auto 20px;
+          width: 60px;
+          height: 60px;
+          font-size: 20px;
+          line-height: 60px; } }
+  .section-reasons .reason-title {
+    max-width: 210px;
+    margin-right: 20px;
+    position: relative; }
+    @media screen and (max-width: 768px) {
+      .section-reasons .reason-title {
+        max-width: none;
+        margin-right: 0px;
+        padding-bottom: 15px;
+        margin-bottom: 15px; } }
+    .section-reasons .reason-title::after {
+      position: absolute;
+      right: 0px;
+      top: 50%;
+      transform: translateY(-50%);
+      content: '';
+      width: 1px;
+      height: 36px;
+      background-color: black; }
+      @media screen and (max-width: 768px) {
+        .section-reasons .reason-title::after {
+          width: 70px;
+          height: 1px;
+          right: unset;
+          top: unset;
+          bottom: 0px;
+          left: 50%;
+          transform: translateX(-50%); } }
+    .section-reasons .reason-title h4 {
+      font-weight: 700;
+      font-size: 18px;
+      text-transform: uppercase; }
+      @media screen and (max-width: 768px) {
+        .section-reasons .reason-title h4 {
+          text-align: center; } }
+  @media screen and (max-width: 768px) {
+    .section-reasons .reason-desc p {
+      text-align: center; } }
+  .section-reasons .reason-desc p a {
+    font-weight: bold;
+    text-decoration: none; }
+    .section-reasons .reason-desc p a:hover {
+      text-decoration: underline !important; }
+
+.section-work {
+  padding-top: 150px; }
+  @media screen and (max-width: 1080px) {
+    .section-work {
+      padding-top: 80px; } }
+  @media screen and (max-width: 768px) {
+    .section-work {
+      padding-top: 0px;
+      padding-bottom: 30px; } }
+  @media screen and (max-width: 768px) {
+    .section-work p.h2-bold {
+      margin-top: 30px; } }
+  .section-work h2 {
+    text-align: center;
+    margin-bottom: 30px; }
+    @media screen and (max-width: 768px) {
+      .section-work h2 {
+        margin-bottom: 20px; } }
+  .section-work .work-desc {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto 70px; }
+    @media screen and (max-width: 768px) {
+      .section-work .work-desc {
+        margin-bottom: 30px; } }
+  .section-work .flex {
+    justify-content: center; }
+    @media screen and (max-width: 768px) {
+      .section-work .flex {
+        display: block; }
+        .section-work .flex .col {
+          display: flex;
+          align-items: center;
+          text-align: left;
+          margin-bottom: 40px; } }
+  .section-work .image-wrapper {
+    display: inline-block;
+    position: relative; }
+    @media screen and (max-width: 768px) {
+      .section-work .image-wrapper img {
+        width: 50px;
+        height: 50px;
+        margin-right: 16px;
+        display: block; } }
+  .section-work h4 {
+    margin-top: 30px;
+    font-weight: bold;
+    margin-bottom: 30px; }
+    @media screen and (max-width: 768px) {
+      .section-work h4 {
+        margin-top: 0px;
+        margin-bottom: 10px;
+        font-size: 20px; } }
+  .section-work .black-button {
+    margin-top: 100px; }
+    @media screen and (max-width: 1080px) {
+      .section-work .black-button {
+        margin-top: 60px; } }
+    @media screen and (max-width: 768px) {
+      .section-work .black-button {
+        top: auto;
+        margin-top: 20px; } }

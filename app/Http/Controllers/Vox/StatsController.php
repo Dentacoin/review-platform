@@ -89,6 +89,9 @@ class StatsController extends FrontController
             'js' => [
                 'stats.js'
             ],
+            'css' => [
+                'vox-stats.css'
+            ],
             'jscdn' => [
                 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js',
             ],
@@ -534,6 +537,7 @@ class StatsController extends FrontController
 			],
 			'css' => [
                 'daterangepicker.min.css',
+                'vox-stats.css'
 			],
 
             'canonical' => $vox->getStatsList(),

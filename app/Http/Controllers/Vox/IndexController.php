@@ -85,6 +85,9 @@ class IndexController extends FrontController
         	'js' => [
         		'home.js'
         	],
+        	'css' => [
+        		'vox-home.css'
+        	],
 	        'jscdn' => [
 	            'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js',
 	        ],
@@ -137,6 +140,9 @@ class IndexController extends FrontController
 				'social_image' => $social_image,
 	        	'js' => [
 	        		'index.js'
+	        	],
+	        	'css' => [
+	        		'vox-index.css'
 	        	],
 	            'jscdn' => [
 	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
@@ -216,7 +222,10 @@ class IndexController extends FrontController
 				'total_questions' => $total_questions,
 				'js' => [
 					'index.js'
-				]
+				],
+				'css' => [
+					'vox-questionnaries.css'
+				],
 	        ));
 	    }
 	}

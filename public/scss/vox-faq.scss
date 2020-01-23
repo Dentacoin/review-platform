@@ -1,0 +1,201 @@
+$tablet: "screen and (max-width: 1080px)";
+$phone: "screen and (max-width: 768px)";
+$phone_up: "screen and (min-width: 769px)";
+
+$main-color: #38ace5;
+
+.page-faq {
+
+	.site-content {
+		overflow: hidden;		
+	}
+
+	.faq-block {
+		min-height: 750px;
+
+		@media #{$phone} {
+			min-height: 0;
+		}
+
+		.container {
+			width: 1030px;
+			padding-left: 330px;
+			position: relative;
+
+			@media #{$tablet} {
+				width: 740px;
+				padding-left: 220px;
+			}
+
+			@media #{$phone} {
+				width: 100%;
+				padding-left: 20px;
+				padding-right: 20px;
+				padding-bottom: 40px;
+			}
+
+			.ball {
+				content: '';
+				height: 100%;
+				border-radius: 50%;
+				position: absolute;
+				top: 0px;
+    			right: 790px;
+				/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#38ace5+0,aee2ff+100 */
+				background: rgb(56,172,229); /* Old browsers */
+				background: -moz-linear-gradient(top, rgba(56,172,229,1) 0%, rgba(174,226,255,1) 100%); /* FF3.6-15 */
+				background: -webkit-linear-gradient(top, rgba(56,172,229,1) 0%,rgba(174,226,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
+				background: linear-gradient(to bottom, rgba(56,172,229,1) 0%,rgba(174,226,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#38ace5', endColorstr='#aee2ff',GradientType=0 ); /* IE6-9 */
+				opacity: 0.3;
+
+				@media #{$tablet} {
+					right: 600px;
+				}
+				@media #{$phone} {
+					display: none;
+				}
+
+				&.bigger {
+					height: 130%;
+					top: -15%;
+				}
+			}
+
+			@media #{$phone} {
+				.flex {
+					display: block;
+				}
+			}
+
+			.col {
+				padding: 0px;
+
+				&:nth-child(2) {
+					padding-left: 120px;
+					@media #{$tablet} {
+						padding-left: 40px;
+					}
+					@media #{$phone} {
+						padding-left: 0px;
+					}
+				}
+
+				@media #{$phone} {
+					&.active {
+						p {
+							display: block;
+						}
+					}
+				}
+			}
+
+			h1,h2 {
+				font-size: 40px;
+				font-weight: bold;
+				color: #060606;
+				text-transform: uppercase;
+				margin-bottom: 50px;
+
+				@media #{$phone} {
+					font-size: 22px;
+					font-weight: normal;
+					margin-bottom: 30px;
+					text-align: center;
+				}
+			}
+
+			h3 {
+				font-weight: bold;
+				font-size: 18px;
+				color: #060606;
+				margin-bottom: 18px;
+
+				@media #{$phone} {
+					font-size: 14px;
+				}
+
+				span {
+					font-size: 18px;
+
+					@media #{$phone} {
+						width: 15px;
+						height: 15px;
+						border-radius: 50%;
+						background: $main-color;
+						font-size: 0px;
+						line-height: 15px;
+					    display: block;
+					    float: left;
+					    margin-right: 10px;
+					    text-align: center;
+					    color: white;
+
+					    &:after {
+					    	position: absolute;
+					    	content: '-';
+							top: 0px;
+							left: 0px;
+						    line-height: 14px;
+						    width: 15px;
+						    font-size: 20px;
+					    }
+					}
+				}
+			}
+
+			p {
+				font-weight: normal;
+				font-size: 15px;
+				color: #555;
+				margin-bottom: 55px;
+
+				@media #{$phone} {
+					font-weight: normal;
+					margin-bottom: 18px;
+					display: none;
+				}
+
+				a {
+					text-decoration: none;
+
+					@media #{$phone} {
+						font-size: 14px;
+						font-weight: bold;
+					}
+
+					&:hover {
+						text-decoration: underline !important;
+					}
+				}
+			}
+		}
+
+		&:nth-child(2n) {
+			.container {
+				padding-right: 330px;
+				padding-left: 0px;
+
+				@media #{$tablet} {
+					padding-right: 220px;
+					padding-left: 0px;
+				}
+
+				@media #{$phone} {
+					padding-right: 20px;
+					padding-left: 20px;
+				}
+			}
+
+			.ball {
+				right: auto;
+				left: 790px;
+
+				@media #{$tablet} {
+					right: auto;
+					left: 600px;
+				}
+			}
+		}
+	}
+}

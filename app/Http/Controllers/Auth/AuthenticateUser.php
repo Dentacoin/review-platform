@@ -62,6 +62,9 @@ class AuthenticateUser extends FrontController
             'js' => [
                 'login.js'
             ],
+            'css' => [
+                'vox-log-reg.css',
+            ],
             'jscdn' => [
                 'https://hosted-sip.civic.com/js/civic.sip.min.js',
             ],

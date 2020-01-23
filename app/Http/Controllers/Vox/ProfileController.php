@@ -320,6 +320,7 @@ class ProfileController extends FrontController
             ],
             'css' => [
                 'vox-profile-fix.css',
+                'vox-profile.css',
             ],
         ];
 

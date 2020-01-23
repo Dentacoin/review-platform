@@ -1,0 +1,589 @@
+$tablet: "screen and (max-width: 1080px)";
+$phone: "screen and (max-width: 768px)";
+$phone_up: "screen and (min-width: 769px)";
+
+$main-color: #38ace5;
+
+body.vox-public {
+	.site-content {
+		@media screen and (max-height: 800px) and (min-width: 769px ) {
+			padding-top: 0px;
+		}
+	}
+}
+
+.section-vox-not-login {
+	position: relative;
+    padding-bottom: 60px;
+    margin-bottom: -60px;
+
+    @media #{$phone} {
+    	margin-bottom: 40px;
+    	padding-bottom: 40px;
+    }
+
+    &:after {
+    	content: '';
+    	position: absolute;
+    	bottom: 0px;
+    	left: 50%;
+    	transform: translateX(-50%);
+    	width: 410px;
+    	height: 1px;
+    	background-color: #d3ebfb;
+
+    	@media #{$phone} {
+    		width: 230px;
+    	}
+    }
+
+    .container {
+    	@media #{$phone} {
+    		padding: 0px;
+    	}
+    }
+
+	h2 {
+		font-weight: 600;
+		margin-bottom: 30px;
+
+		@media #{$tablet} {
+			margin-bottom: 30px;
+			line-height: normal;
+		}
+
+		@media screen and (max-height: 700px) and (min-width: 769px ) {
+			margin-bottom: 10px;
+			font-size: 28px;
+			line-height: 32px;
+		}
+
+		@media #{$phone} {
+			font-size: 18px;
+		}
+	}
+
+	.vox-title {
+		font-weight: 900;
+	    color: #3daee6;
+	    text-transform: uppercase;
+	    margin-bottom: 0px;
+
+	    @media #{$tablet} {
+	    	margin-top: 0px;
+	    }
+
+	    @media screen and (max-height: 700px) and (min-width: 769px ) {
+	    	margin-top: -30px;
+	    }
+
+	    @media #{$phone} {
+	    	margin-bottom: 10px;
+	    }
+	}
+
+	.login-buttons {
+		padding-top: 30px;
+		text-align: center;
+
+		@media screen and (max-height: 800px) and (min-width: 769px ) {
+			padding-top: 20px;
+		}
+
+		@media #{$phone} {
+	    	padding-top: 20px;
+	    }
+
+		p {
+			color: #060606;
+			font-weight: bold;
+			font-size: 18px;
+			margin-bottom: 20px;
+
+			@media screen and (max-height: 800px) and (min-width: 769px ) {
+				margin-bottom: 10px;
+			}
+
+			@media #{$phone} {
+				font-size: 14px;
+				text-align: left;
+			}
+		}
+
+		a {
+			display: block;
+			padding: 12px 20px;
+			font-size: 20px;
+			font-weight: 900;
+
+			@media screen and (max-width: 1200px) {
+				font-size: 15px;
+			}
+
+			@media #{$phone} {
+				font-size: 14px;
+				padding: 8px 0px;
+			}
+		}
+
+		.white-button {
+			border-color: white;
+			font-weight: bold;
+			color: #3daee6;
+
+			&:hover {
+				color: #3daee6;
+				background-color: #f1fdff;
+				border-color: #f1fdff;
+			}
+
+			img {
+				max-width: 25px;
+				vertical-align: sub;
+			    margin-right: 10px;
+
+			    @media screen and (max-width: 1200px) {
+			    	max-width: 17px;
+			    }
+			}
+		}
+
+		.col {
+
+			&:first-child {
+				border-right: 2px solid white;
+				padding-right: 60px;
+
+				@media screen and (max-width: 1200px) {
+					padding-right: 20px;
+				}
+
+				@media #{$phone} {
+					padding-right: 10px;
+				}
+			}
+
+			&:last-child {
+				padding-left: 60px;
+
+				@media screen and (max-width: 1200px) {
+					padding-left: 20px;
+				}
+
+				@media #{$phone} {
+					padding-left: 10px;
+				}
+			}
+		}
+	}
+
+    .swiper-slide {
+        max-width: 730px;
+    	margin: 0 auto;
+    	position: relative;
+
+    	@media screen and (max-width: 1200px) {
+    		max-width: 640px;
+    	}
+
+    	@media #{$tablet} {
+			max-width: 460px;
+		}
+
+		@media #{$phone} {
+			max-width: 100%;
+			display: flex;
+			flex-flow: row wrap;
+		}
+
+    	.slider-inner {
+    		padding: 0px;
+    	}
+
+    	.survey-cats {
+    		margin-bottom: 15px;
+
+    		@media screen and (max-height: 800px) and (min-width: 769px ) {
+	    		display: none;
+	    	}
+    	}
+
+    	.wing {
+    		width: 205px;
+    		height: 170px;
+    		background-color: #d3ebfb;
+    		border-radius: 7px;
+    		position: absolute;
+    		top: 55px;
+    		text-align: center;
+
+    		@media screen and (max-height: 800px) and (min-width: 769px ) {
+    			width: 155px;
+    		}
+
+    		@media screen and (max-width: 920px ) {
+    			width: 125px;
+    		}
+
+    		@media #{$phone} {
+    			position: static;
+    			flex: 1;
+    			margin-bottom: 10px;
+    			height: auto;
+    		    padding: 10px 0px;
+    		    min-width: 40%;
+    		}
+
+    		&.left-wing {
+    			left: -205px;
+    			border-top-right-radius: 0px;
+    			border-bottom-right-radius: 0px;
+
+    			@media screen and (max-height: 800px) and (min-width: 769px ) {
+    				left: -155px;
+    			}
+
+	    		@media screen and (max-width: 920px ) {
+	    			left: -125px;
+	    		}
+
+    			@media #{$phone} {
+    				margin-right: 10px;
+    		    	border-radius: 7px;
+    			}
+    		}
+
+    		&.right-wing {
+    			right: -205px;
+    			border-top-left-radius: 0px;
+    			border-bottom-left-radius: 0px;
+
+    			@media screen and (max-height: 800px) and (min-width: 769px ) {
+    				right: -155px;
+    			}
+
+	    		@media screen and (max-width: 920px ) {
+	    			right: -125px;
+	    		}
+
+    			@media #{$phone} {
+    		    	border-radius: 7px;
+    			}
+    		}
+
+    		.wing-box {
+    			position: relative;
+			    top: 50%;
+			    transform: translateY(-50%);
+    		}
+
+    		img {
+    			max-width: 42px;
+
+    			@media #{$phone} {
+    				max-width: 30px;
+    			}
+    		}
+
+    		p {
+    			font-size: 30px;
+    			font-weight: bold;
+
+    			@media screen and (max-height: 800px) and (min-width: 769px ) {
+		    		font-size: 23px;
+		    	}
+
+		    	@media screen and (max-width: 920px ) {
+		    		font-size: 20px;
+		    	}
+
+		    	@media #{$phone} {
+		    		font-size: 14px;
+		    	}
+
+    			&:last-child {
+    				font-weight: 900;
+    			}
+    		}
+    	}
+
+    	.cover {
+		    border-radius: 7px;
+
+		    @media #{$tablet} {
+		    	padding-top: 45%;
+		    }
+
+		    // @media screen and (max-height: 800px) and (min-width: 769px ) {
+		    // 	padding-top: 34%;
+		    // }
+		}
+
+		.survey-cats {
+			span {
+			    font-size: 16px;
+			    margin-top: 5px;
+
+			    @media screen and (max-height: 800px) and (min-width: 769px ) {
+			    	font-size: 14px;
+			    }
+
+			    @media #{$phone} {
+			    	font-size: 11px;
+			    }
+			}
+		}
+
+		.vox-header {
+
+			@media screen and (max-height: 800px) and (min-width: 769px ) {
+				padding: 10px;
+			}
+
+			@media #{$phone} {
+		    	padding: 10px 0px 0px;
+		    }
+
+			.left {
+				.vox-description {
+				    font-size: 18px;
+				    max-height: none;
+
+				    @media screen and (max-height: 800px) and (min-width: 769px ) {
+				    	font-size: 16px;
+				    }
+
+				    @media #{$phone} {
+				    	font-size: 14px;
+				    }
+				}
+			}
+		}
+	}
+
+	.slide-padding {
+	    padding: 15px;
+
+	    @media screen and (max-height: 800px) and (min-width: 769px ) {
+	    	padding: 10px;
+	    }
+	}
+}
+
+.section-reasons {
+	padding: 120px 0px;
+
+	@media #{$tablet} {
+		padding: 80px 0px;
+	}
+
+	@media #{$phone} {
+		padding: 40px 0px;
+	}
+
+	h2 {
+		text-align: center;
+		margin-bottom: 80px;
+
+		@media #{$phone} {
+			margin-bottom: 30px;
+		}
+	}
+
+	.reasons-wrap {
+		max-width: 820px;
+		margin: 0 auto 50px;
+
+		@media #{$phone} {
+			display: block;
+			margin-bottom: 30px;
+		}
+
+		&:last-child {
+			margin-bottom: 0px;
+		}
+	}
+
+	.reason-number {
+		max-width: 90px;
+		margin-right: 40px;
+
+		@media #{$phone} {
+			max-width: none;
+			margin-right: 0px;
+		}
+
+		div {
+			width: 90px;
+			height: 90px;
+			background-color: #aee2ff;
+			border-radius: 50%;
+			text-align: center;
+			font-size: 31px;
+			font-weight: bold;
+			color: white;
+			line-height: 90px;
+
+			@media #{$phone} {
+				margin: 0 auto 20px;
+				width: 60px;
+			    height: 60px;
+			    font-size: 20px;
+			    line-height: 60px;
+			}
+		}
+	}
+
+	.reason-title {
+		max-width: 210px;
+		margin-right: 20px;
+		position: relative;
+
+		@media #{$phone} {
+			max-width: none;
+			margin-right: 0px;
+			padding-bottom: 15px;
+			margin-bottom: 15px;
+		}
+
+		&::after {
+			position: absolute;
+			right: 0px;
+			top: 50%;
+			transform: translateY(-50%);
+			content: '';
+			width: 1px;
+			height: 36px;
+			background-color: black;
+
+			@media #{$phone} {
+				width: 70px;
+				height: 1px;
+				right: unset;
+				top: unset;
+				bottom: 0px;
+				left: 50%;
+				transform: translateX(-50%);
+			}
+		}
+
+		h4 {
+			font-weight: 700;
+			font-size: 18px;
+			text-transform: uppercase;
+
+			@media #{$phone} {
+				text-align: center;
+			}
+		}
+	}
+
+	.reason-desc {
+		p {
+			@media #{$phone} {
+				text-align: center;
+			}
+
+			a {
+				font-weight: bold;
+				text-decoration: none;
+
+				&:hover {
+					text-decoration: underline !important;
+				}
+			}
+		}
+	}
+}
+.section-work {
+	padding-top: 150px;
+
+	@media #{$tablet} {
+		padding-top: 80px;
+	}
+
+	@media #{$phone} {
+		padding-top: 0px;
+		padding-bottom: 30px;
+	}
+
+	p.h2-bold {
+		@media #{$phone} {
+			margin-top: 30px;
+		}
+	}
+
+
+	h2 {
+		text-align: center;
+		margin-bottom: 30px;
+
+		@media #{$phone} {
+			margin-bottom: 20px;
+		}
+	}
+
+	.work-desc {
+		text-align: center;
+		max-width: 900px;
+	    margin: 0 auto 70px;
+
+	    @media #{$phone} {
+			margin-bottom: 30px;
+		}
+	}
+
+	.flex {
+    	justify-content: center;
+
+		@media #{$phone} {
+			display: block;
+
+			.col {
+				display: flex;
+    			align-items: center;
+				text-align: left;
+				margin-bottom: 40px;
+			}
+		}
+	}
+
+	.image-wrapper {
+		display: inline-block;
+		position: relative;
+
+		img {
+		    @media #{$phone} {
+		    	width: 50px;
+		    	height: 50px;
+		    	margin-right: 16px;
+		    	display: block;
+		    }
+		}
+	}
+
+	h4 {
+		margin-top: 30px;
+		font-weight: bold;
+		margin-bottom: 30px;
+
+		@media #{$phone} {
+			margin-top: 0px;
+			margin-bottom: 10px;
+			font-size: 20px;
+		}
+	}
+
+	.black-button {
+		margin-top: 100px;
+
+		@media #{$tablet} {
+			margin-top: 60px;
+		}
+
+		@media #{$phone} {
+			top: auto;
+			margin-top: 20px;
+		}
+	}
+}

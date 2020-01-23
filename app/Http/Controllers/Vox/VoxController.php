@@ -90,6 +90,9 @@ class VoxController extends FrontController
 					'js' => [
 						'vox.js'
 					],
+					'css' => [
+						'vox-public-vox.css'
+					],
 		            'csscdn' => [
 		                'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
 		                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
@@ -1232,6 +1235,9 @@ class VoxController extends FrontController
 			'first_question_num' => $first_question_num,
 			'js' => [
 				'vox.js'
+			],
+			'css' => [
+				'vox-questionnaries.css'
 			],
             'jscdn' => [
                 'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',

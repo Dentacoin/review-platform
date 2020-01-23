@@ -33,7 +33,7 @@
 			<div class="strength-divider" style="left: {{ (100 / count($strength_arr)) * $loop->iteration }}%"></div>
 		@endforeach
 		<div class="strength-tick {{ $completed_strength == 0 ? 'zero' : '' }}" style="left: {{ (100 / count($strength_arr)) * $completed_strength }}%"></div>
-		<div class="strength-star {{ $completed_strength == count($strength_arr) ? 'full' : '' }}"></div>
+		<div class="strength-star {{ $completed_strength == count($strength_arr) ? 'full-star' : '' }}"></div>
 		<div class="strength-scale">
 			<div class="strength-scale-inner" style="width: {{ (100 / count($strength_arr)) * $completed_strength }}% "></div>
 		</div>

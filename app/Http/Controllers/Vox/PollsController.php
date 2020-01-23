@@ -42,6 +42,9 @@ class PollsController extends FrontController
 			'js' => [
         		'polls.js'
         	],
+			'css' => [
+        		'vox-daily-polls.css'
+        	],
 			'social_image' => $social_image,
         ));
 	}
@@ -61,6 +64,9 @@ class PollsController extends FrontController
 			'date_poll' => $newformat,
 			'js' => [
         		'polls.js'
+        	],
+			'css' => [
+        		'vox-daily-polls.css'
         	],
 			'social_image' => $social_image,
 			'canonical' => getLangUrl('daily-polls/'.$date),
@@ -86,6 +92,9 @@ class PollsController extends FrontController
 			'poll_stats' => true,
 			'js' => [
         		'polls.js'
+        	],
+			'css' => [
+        		'vox-daily-polls.css'
         	],
 			'social_image' => $social_image,
 			'canonical' => getLangUrl('daily-polls/'.$date.'/stats'),

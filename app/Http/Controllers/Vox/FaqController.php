@@ -18,6 +18,9 @@ class FaqController extends FrontController
 			'content' => $content,
 			'js' => [
 				'faq.js'
+			],
+			'css' => [
+				'vox-faq.css'
 			]
         ));
 
