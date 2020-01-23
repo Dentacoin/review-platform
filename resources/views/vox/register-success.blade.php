@@ -102,7 +102,7 @@
 	</div>
 
 	<div class="section-stats">
-		<div class="container">
+		<div class="container clearfix">
 			<img src="{{ url('new-vox-img/dentavox-dental-statistics-icon.png') }}" alt="Dentavox dental statistics icon">>
 			<h3>
 				{!! nl2br(trans('vox.page.welcome-to-dentavox.curious')) !!}

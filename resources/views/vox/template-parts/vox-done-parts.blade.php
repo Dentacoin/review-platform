@@ -1,5 +1,5 @@
 <div class="section-stats">
-	<div class="container">
+	<div class="container clearfix">
 		<img src="{{ url('new-vox-img/dentavox-dental-statistics-icon.png') }}" alt="Dentavox dental statistics icon">>
 		<h3>
 			{!! $vox->has_stats && !empty($related_vox) ? trans('vox.page.questionnaire.curious-related-survey', ['title' => $vox->title]) : trans('vox.page.questionnaire.curious-related-surveys') !!}

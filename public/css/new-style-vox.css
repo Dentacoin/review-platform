@@ -1664,6 +1664,7 @@ p.h2-bold {
     position: absolute;
     top: 50%;
     left: 50%;
+    margin-top: 0px;
     transform: translateY(-50%) translateX(-50%); }
     @media screen and (max-width: 768px) {
       .section-stats h3 {

@@ -2328,6 +2328,7 @@ body.vox-public {
 	    position: absolute;
 	    top: 50%;
 	    left: 50%;
+	    margin-top: 0px;
 	    transform: translateY(-50%) translateX(-50%);
 
 		@media #{$phone} {

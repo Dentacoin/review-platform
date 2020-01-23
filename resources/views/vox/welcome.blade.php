@@ -183,7 +183,7 @@
 			</div>
 
 			<div class="section-stats">
-				<div class="container">
+				<div class="container clearfix">
 					<img src="{{ url('new-vox-img/dentavox-dental-statistics-icon.png') }}" alt="Dentavox dental statistics icon">
 					<h3>Curious to see our survey stats?</h3>
 					<a href="{{ getLangUrl('dental-survey-stats') }}" class="check-stats">Check stats</a>
