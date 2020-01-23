@@ -48,7 +48,7 @@
 				<video class="inited-video video-stats" id="myVideo" playsinline autoplay muted loop video-url="{{ url('new-vox-img/stats.m4v') }}" type="video/mp4" controls=""></video>
 			</a>
 			<a class="video-parent-mobile" href="{{ getLangUrl('dental-survey-stats') }}">
-				<video class="inited-video video-stats" id="myVideoMobile" playsinline autoplay muted loop video-url="{{ url('new-vox-img/stats-mobile.m4v') }}" type="video/mp4" controls=""></video>
+				<video class="inited-video video-stats" id="myVideoMobile" playsinline autoplay muted loop video-url="{{ url('new-vox-img/stats-mobile.mp4') }}" type="video/mp4" controls=""></video>
 			</a>
 		</div>
 
