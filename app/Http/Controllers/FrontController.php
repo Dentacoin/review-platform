@@ -320,7 +320,7 @@ class FrontController extends BaseController
                 $params['prev_user'] = User::find( Cookie::get('prev-login') );
             }
 
-            if(empty( $params['prev_user'] )) {
+            if(empty( $params['prev_user'] ) && !empty(Cookie::get('functionality_cookies'))) {
                 $uid = User::lastLoginUserId();
                 if($uid) {
                     $params['prev_user'] = User::find( $uid->user_id );
