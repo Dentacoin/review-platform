@@ -83,10 +83,12 @@ class IndexController extends FrontController
         	'voxes' => $voxList,
         	'vox_categories' => VoxCategory::with('translations')->whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
         	'js' => [
-        		'home.js'
+        		'home.js',
+        		'flickity.pkgd.min.js'
         	],
         	'css' => [
-        		'vox-home.css'
+        		'vox-home.css',
+        		'flickity.min.css'
         	],
 	        'jscdn' => [
 	            'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js',
@@ -212,7 +214,6 @@ class IndexController extends FrontController
 				} else {
 					return redirect(getLangUrl('registration'));					
 				}
-
 			}
 
 			$total_questions = $first->questions->count() + 3;

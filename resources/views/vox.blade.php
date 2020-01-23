@@ -31,7 +31,6 @@
         <meta name="twitter:image" content="{{ $social_image }}"/>
 
 		{!! config('langs')[App::getLocale()]['font'] !!}
-		<link rel="stylesheet" type="text/css" href="{{ url('/css/flickity.min.css').'?ver='.$cache_version }}" />
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-vox.css').'?ver='.$cache_version }}" />
 
@@ -568,9 +567,7 @@
         @endif
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
-
 		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
-
 
 		@if(!empty($trackEvents))
 	        <script type="text/javascript">
@@ -601,8 +598,6 @@
 		@endif
 
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-		<script src="{{ url('/js-vox/bootstrap-datepicker.js').'?ver='.$cache_version }}"></script>
-		<script src="{{ url('/js-vox/flickity.pkgd.min.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js-vox/main.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js/both.js').'?ver='.$cache_version }}"></script>
 		@if(!empty($plotly))

@@ -1234,10 +1234,12 @@ class VoxController extends FrontController
 			'first_question' => $first_question,
 			'first_question_num' => $first_question_num,
 			'js' => [
-				'vox.js'
+				'vox.js',
+        		'flickity.pkgd.min.js'
 			],
 			'css' => [
-				'vox-questionnaries.css'
+				'vox-questionnaries.css',
+        		'flickity.min.css'
 			],
             'jscdn' => [
                 'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
