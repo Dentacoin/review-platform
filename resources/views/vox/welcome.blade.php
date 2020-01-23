@@ -4,7 +4,7 @@
 
 	<div class="section-welcome">
 
-		<div class="container">
+		<div class="container flex">
 
 			<div class="mobile-welcome-images">
 				<img class="mobile-bubble-effect" src="{{ url('new-vox-img/blue-circle.png') }}">
@@ -18,11 +18,11 @@
 				</div>
 			</div>
 
-			<div class="col-md-3">
+			<div class="flex-3">
 				<img class="image-left" src="{{ url('new-vox-img/dentavox-surveys-welcome-blinking-man.png') }}" alt="Dentavox surveys welcome blinking man">
 			</div>
 
-			<div class="col-md-9">
+			<div class="flex-9">
 				<div class="questions">
 					<h3 class="questionnaire-title tac">
 						{{ $vox->title }}
@@ -37,15 +37,15 @@
 						<div class="dot" id="current-question-bar" style="width: 0%;"></div>
 					</div>
 					<div class="triangle"></div>
-					<div class="row questions-header clearfix">
-						<div class="col-md-6">
+					<div class="questions-header clearfix">
+						<div class="flex-1">
 							<span>
 								{!! trans('vox.common.estimated_time', [
 									'time' => '<span id="current-question-num"></span>'
 								]) !!}
 							</span>
 						</div>
-						<div class="col-md-6 tar">
+						<div class="flex-1 tar">
 							<span>
 								<span id="dcn-test-reward-before">
 									{!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
@@ -166,13 +166,13 @@
 
 	@if($user)
 		<div class="section-welcome-done" style="display: none;">
-			<div class="container">
+			<div class="container flex">
 
-				<div class="col-md-3">
+				<div class="flex-3">
 					<img class="image-left" src="{{ url('new-vox-img/dentavox-man-surveys-registration.png') }}" alt="Dentavox man surveys registration ">
 				</div>
 
-				<div class="col-md-9 tac">
+				<div class="flex-9 tac">
 					<h3 class="done-title">Good job, <span class="blue-text"> {{ $user->getName() }}!</span></h3>
 					<h4>
 						You’ve just earned <span class="coins-test">{{ $vox->getRewardTotal() }}</span> DCN! To withdraw your <br/> reward, just go to your <a href="https://account.dentacoin.com/?platform=dentavox">Wallet.</a> Ready to get more <br/> Dentacoin tokens?

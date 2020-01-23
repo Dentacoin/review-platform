@@ -111,6 +111,7 @@ b {
 }
 
 h2 {
+	margin-top: 0px;
 	font-size: 35px;
 
 	@media #{$phone} {
@@ -196,6 +197,10 @@ Flexes
     	flex: 8;
     }
 
+    .flex-9 {
+    	flex: 9;
+    }
+
 
     &.break-tablet {
     	@media #{$tablet} {
@@ -268,6 +273,9 @@ Flexes
 .flex-bottom {
     align-items: flex-end;
 }
+.flex-end {
+    align-items: end;
+}
 
 .flex-item-right {
 	margin-left: auto;
@@ -276,14 +284,39 @@ Flexes
 	margin-right: auto;
 }
 
+.btn {
+	display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-appearance: button;
+    cursor: pointer;
+    font-family: inherit;
+}
+
 
 /*
 Content
 */
 
 .container {
-	margin-left: auto;
-	margin-right: auto;
+	padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
 
 	@media screen and (min-width: 768px) {
 		width: 750px;
@@ -570,25 +603,24 @@ header {
 			height: 60px;
 		}
 
-	    .col-md-4 {
-	    	padding: 0px;
-	    }
-
 	    &.external-navbar {
 	    	@media #{$phone} {
 	    		justify-content: space-between;
 	    	}
 	    	.logo {
+
 	    		@media #{$phone} {
 	    			flex: 1;
 	    		}
 	    	}
 	    	.header-title {
+
 	    		@media #{$phone} {
 	    			display: none;
 	    		}
 	    	}
 	    	.header-right {
+
 	    		@media #{$phone} {
 	    		    margin-top: 12px;
 	    		}
@@ -607,6 +639,8 @@ header {
 	}
 
 	.logo {
+		flex: 4;
+
 		img {
 			&.desktop {
 				width: 138px;
@@ -631,6 +665,7 @@ header {
 	}
 
 	.header-title {
+		flex: 4;
 
 		@media #{$tablet} {
 			margin: 0 auto;
@@ -709,6 +744,7 @@ header {
 	}
 
 	.header-right {
+		flex: 4;
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;
@@ -1177,7 +1213,7 @@ p.h2-bold {
 	padding-bottom: 0px;
 
 	@media #{$phone} {
-		font-weight: 800;
+		font-weight: 900;
 		font-size: 26px;
 		padding-bottom: 0px;
 	}
@@ -2574,6 +2610,20 @@ body.vox-public {
 	}
 }
 
+.section-welcome-done,
+.section-welcome {
+	.flex-3 {
+		@media screen and (max-width: 1200px) {
+			display: none;
+		}
+	}
+	.flex-9 {
+		@media screen and (max-width: 1200px) {
+			flex: 1;
+		}
+	}
+}
+
 .section-manage {
 	padding-top: 40px;
 	margin-top: 40px;
@@ -2739,6 +2789,12 @@ body.vox-public {
 			margin-bottom: 5px;
 			padding: 0px 20px;
 		}
+	}
+
+	.quest-wrap {
+		max-width: 760px;
+	    margin-left: auto;
+	    margin-right: auto;
 	}
 
 	.answered-box {
@@ -7481,7 +7537,7 @@ body.vox-public {
 			h2 {
 				color: #060606;
 				font-size: 35px;
-				font-weight: 800;
+				font-weight: 900;
 
 				@media screen and (max-width: 1100px) {
 					font-size: 30px;
@@ -9096,7 +9152,7 @@ body.popup-visible {
 		h2 {
 			color: #060606;
 			font-size: 25px;
-			font-weight: 800;
+			font-weight: 900;
 			margin-bottom: 20px;
 
 			@media #{$phone} {
@@ -10380,7 +10436,7 @@ body.popup-visible {
             	text-align: center;
 				margin-top: 0px;
 				font-family: 'Nunito';
-				font-weight: 800;
+				font-weight: 900;
 				font-size: 45px;
 
                 @media #{$phone} {
@@ -12424,6 +12480,10 @@ svg:not(:root) {
 		    margin-right: 50px;
 		    text-align: center;
 		}
+
+		h2 {
+			font-weight: 600;
+		}
 	}
 
 	.fc-button-group {
@@ -13573,7 +13633,7 @@ svg:not(:root) {
 
 	.hours-countdown {
 		font-size: 20px;
-	    font-weight: 800;
+	    font-weight: 900;
 	    display: flex;
 	    align-items: center;
 
@@ -13591,7 +13651,7 @@ svg:not(:root) {
 	    }
 
 	    span {
-	    	font-weight: 800;
+	    	font-weight: 900;
     		font-size: 30px;
     		margin-left: 5px;
 	    }

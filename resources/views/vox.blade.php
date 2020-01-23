@@ -114,11 +114,11 @@
 			<header>
 				<div class="container">
 					<div class="navbar clearfix {{ !empty($user) && $user->platform == 'external' ? 'external-navbar' : '' }}">
-						<a href="{{ getLangUrl('/') }}" class="logo col-md-4">
+						<a href="{{ getLangUrl('/') }}" class="logo">
 							<img src="{{ url('new-vox-img/logo-vox.png') }}" alt="Dentavox logo" class="desktop">
 							<img src="{{ url('new-vox-img/logo-vox-mobile.png') }}" alt="Dentavox logo mobile" class="mobile">
 						</a>
-						<div class="header-title col-md-4">
+						<div class="header-title">
 							@if($current_page=='index')
 								<table>
 									<tr>
@@ -132,7 +132,7 @@
 								</table>
 							@endif
 						</div>
-						<div class="header-right col-md-4 tar flex">
+						<div class="header-right tar flex">
 							@if( !empty($user) && $user->status!='approved' && $user->status!='test' )
 							@elseif($user)
 								<div class="user-and-price header-a">
@@ -388,14 +388,14 @@
 		
 		<div class="footer-expander">
 			<footer>
-				<div class="container clearfix">
-					<a href="https://dentacoin.com/" target="_blank" class="footer-logo col-md-3 flex flex-center">
+				<div class="container flex flex-end">
+					<a href="https://dentacoin.com/" target="_blank" class="footer-logo flex-3 flex flex-center">
 						<img src="{{ url('img-vox/dc-logo.png') }}" alt="Dentacoin logo">
 						<p class="bold">
 							{{ trans('vox.footer.company-name') }}
 						</p>
 					</a>
-					<div class="footer-text col-md-6 tac">
+					<div class="footer-text flex-6 tac">
 						<div class="footer-menu">
 							<a href="{{ getLangUrl('daily-polls') }}">{{ trans('vox.footer.daily-polls') }}</a>
 							<a href="{{ getLangUrl('dental-survey-stats') }}">{{ trans('vox.footer.stats') }}</a>
@@ -407,7 +407,7 @@
 							{{ trans('vox.footer.copyrights') }}
 						</small>
 					</div>
-					<div class="socials col-md-3">
+					<div class="socials flex-3">
 						{{ trans('vox.footer.socials') }}
 						 &nbsp;
 						<a class="social" href="https://t.me/dentacoin" target="_blank"><i class="fab fa-telegram-plane"></i></a>
@@ -568,12 +568,6 @@
         @endif
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
-        @if(config('langs')[App::getLocale()]['rtl'])
-        	<link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css" crossorigin="anonymous">
-        @else
-        	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        @endif
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
 		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
 
@@ -606,7 +600,6 @@
 			@endif
 		@endif
 
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 		<script src="{{ url('/js-vox/bootstrap-datepicker.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js-vox/flickity.pkgd.min.js').'?ver='.$cache_version }}"></script>

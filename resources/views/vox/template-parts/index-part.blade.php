@@ -73,12 +73,10 @@
 			</div>
 		</div>
 
-		<div class="row tac">
-			<div class="col">
-				<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">
-					{!! nl2br(trans('vox.page.index.start')) !!}
-				</a>
-			</div>
+		<div class="tac">
+			<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">
+				{!! nl2br(trans('vox.page.index.start')) !!}
+			</a>
 		</div>
 	</div>
 </div>

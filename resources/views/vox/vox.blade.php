@@ -27,7 +27,7 @@
 			<div class="container" id="question-meta">
 				<div class="questions">
 
-					<div class="col-md-8 col-md-offset-2 clearfix">
+					<div class="quest-wrap">
 						<h1 class="questionnaire-title tac vox-survey-title">
 							- {{ $vox->title }} -
 							@if($testmode)
@@ -65,15 +65,15 @@
 						<div class="questions-dots">
 							<div class="dot" id="current-question-bar" style="width: 0%;"></div>
 						</div>
-						<div class="row questions-header clearfix">
-							<div class="col-md-6">
+						<div class="flex questions-header clearfix">
+							<div class="flex-1">
 								<span>
 									{!! trans('vox.common.estimated_time', [
 										'time' => '<span id="current-question-num"></span>'
 									]) !!}
 								</span>
 							</div>
-							<div class="col-md-6 tar">
+							<div class="flex-1 tar">
 								<span>
 									<span id="dcn-test-reward-before">
 										{{ $vox->complex ? 'Max ' : '' }} {!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
@@ -99,7 +99,7 @@
 							{!! trans('vox.page.questionnaire.wrong-answer') !!}
 						</div>
 					</div>
-					<div class="col-md-8 col-md-offset-2 clearfix">
+					<div class="quest-wrap">
 
 						@if(!$not_bot)
 							<div class="question-group" data-id="bot" id="bot-group">

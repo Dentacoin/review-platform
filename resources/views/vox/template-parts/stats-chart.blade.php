@@ -125,7 +125,7 @@
 					{!! trans('vox.page.stats.total-women') !!}: <b></b>
 				</label>
 				<label for="scale-gender-m-{{ $question->id }}" class="total total-m">
-					<img src="{{ url('new-vox-img/man-icon.svg') }}" alt="Dentavox statistics man icon">>
+					<img src="{{ url('new-vox-img/man-icon.svg') }}" alt="Dentavox statistics man icon">
 					{!! trans('vox.page.stats.total-men') !!}: <b></b>
 				</label>
 			</div>

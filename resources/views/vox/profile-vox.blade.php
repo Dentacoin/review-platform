@@ -242,51 +242,52 @@
 		</div>
 	</div>
 
+	@if($current_ban)
+		
+		<div class="popup banned active">
+			<div class="wrapper">
+				<img src="{{ url('new-vox-img/mistakes'.$prev_bans.'.png') }}" class="zman" />
+				<div class="inner">
+					<h2>{{ $ban_reason }}</h2>
+					@if($prev_bans!=4 && !empty($current_ban->expires))
+						<h3>
+							{!! trans('vox.page.bans.banned-time-left') !!}:
+						</h3>
+						<div class="countdown">
+							<div class="hours-countdown">
+								{!! trans('vox.page.bans.bans-countdown') !!}:
+								<span>{{ $time_left }}</span>
+							</div>
+						</div>
+					@else
+						<br/>
+						<br/>
+					@endif
+					<div class="alternatives">
+						<div>
+							{!! $ban_alternatives !!}							
+						</div>
+						{!! $ban_alternatives_buttons !!}
+					</div>
 
-
-
-@if($current_ban)
-	
-	<div class="popup banned active">
-		<div class="wrapper">
-			<img src="{{ url('new-vox-img/mistakes'.$prev_bans.'.png') }}" class="zman" />
-			<div class="inner">
-				<h2>{{ $ban_reason }}</h2>
-				@if($prev_bans!=4 && !empty($current_ban->expires))
-					<h3>
-						{!! trans('vox.page.bans.banned-time-left') !!}:
-					</h3>
-					<div class="countdown">
-						<div class="hours-countdown">
-							{!! trans('vox.page.bans.bans-countdown') !!}:
-							<span>{{ $time_left }}</span>
+					<div class="bans-received">
+						{!! trans('vox.page.bans.bans-received') !!}:
+						<div class="flex">
+							@for($i=1;$i<=4;$i++)
+								<img src="{{ url('new-vox-img/popup-sign-'.($i==4 ? ($prev_bans==4 ? '4' : '5') : ( $i<=$prev_bans ? $i : '0' )).'.png') }}" />
+							@endfor
 						</div>
 					</div>
-				@else
-					<br/>
-					<br/>
-				@endif
-				<div class="alternatives">
-					<div>
-						{!! $ban_alternatives !!}							
-					</div>
-					{!! $ban_alternatives_buttons !!}
 				</div>
-
-				<div class="bans-received">
-					{!! trans('vox.page.bans.bans-received') !!}:
-					<div class="flex">
-						@for($i=1;$i<=4;$i++)
-							<img src="{{ url('new-vox-img/popup-sign-'.($i==4 ? ($prev_bans==4 ? '4' : '5') : ( $i<=$prev_bans ? $i : '0' )).'.png') }}" />
-						@endfor
-					</div>
-				</div>
+				<a class="closer x">
+					<i class="fas fa-times"></i>
+				</a>
 			</div>
-			<a class="closer x">
-				<i class="fas fa-times"></i>
-			</a>
 		</div>
-	</div>
-@endif
+	@endif
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 @endsection

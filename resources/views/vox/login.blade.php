@@ -47,7 +47,7 @@
 							</div>
 
 							<div class="form-group">
-								<button class="btn btn-primary btn-block has-cookies-button" type="submit">
+								<button class="has-cookies-button" type="submit">
 									{{ trans('vox.page.login.submit') }}
 								</button>
 							</div>
@@ -196,7 +196,7 @@
 							</div>							
 
 							<div class="form-group">
-								<button class="btn btn-primary btn-block has-cookies-button" type="submit">
+								<button class="has-cookies-button" type="submit">
 									{{ trans('vox.page.login.submit') }}
 								</button>
 							</div>

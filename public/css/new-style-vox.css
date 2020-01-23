@@ -94,6 +94,7 @@ b {
   display: inline-block; }
 
 h2 {
+  margin-top: 0px;
   font-size: 35px; }
   @media screen and (max-width: 768px) {
     h2 {
@@ -155,6 +156,9 @@ Flexes
   .flex-mobile .flex-8,
   .flex .flex-8 {
     flex: 8; }
+  .flex-mobile .flex-9,
+  .flex .flex-9 {
+    flex: 9; }
   @media screen and (max-width: 1080px) {
     .flex-mobile.break-tablet,
     .flex.break-tablet {
@@ -213,18 +217,45 @@ Flexes
 .flex-bottom {
   align-items: flex-end; }
 
+.flex-end {
+  align-items: end; }
+
 .flex-item-right {
   margin-left: auto; }
 
 .flex-item-left {
   margin-right: auto; }
 
+.btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-appearance: button;
+  cursor: pointer;
+  font-family: inherit; }
+
 /*
 Content
 */
 .container {
-  margin-left: auto;
-  margin-right: auto; }
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto; }
   @media screen and (min-width: 768px) {
     .container {
       width: 750px; } }
@@ -448,8 +479,6 @@ header {
     @media screen and (max-width: 768px) {
       header .navbar {
         height: 60px; } }
-    header .navbar .col-md-4 {
-      padding: 0px; }
     @media screen and (max-width: 768px) {
       header .navbar.external-navbar {
         justify-content: space-between; } }
@@ -465,41 +494,45 @@ header {
     @media screen and (max-width: 768px) {
       header .navbar.external-navbar .header-right .header-a.user-and-price {
         display: block; } }
-  header .logo img.desktop {
-    width: 138px; }
-  header .logo img.mobile {
-    width: 46px;
-    display: none; }
-  @media screen and (max-width: 768px) {
+  header .logo {
+    flex: 4; }
     header .logo img.desktop {
-      display: none; }
+      width: 138px; }
     header .logo img.mobile {
-      display: block; } }
-  @media screen and (max-width: 1080px) {
-    header .header-title {
-      margin: 0 auto; } }
-  header .header-title table {
-    margin: 0 auto; }
-    @media screen and (max-width: 1080px) {
-      header .header-title table {
-        min-width: 300px; } }
+      width: 46px;
+      display: none; }
     @media screen and (max-width: 768px) {
-      header .header-title table {
-        min-width: 170px; }
-        header .header-title table * {
-          font-size: 9px; } }
-    header .header-title table tr td {
-      width: 50%;
-      padding: 0px 3px; }
+      header .logo img.desktop {
+        display: none; }
+      header .logo img.mobile {
+        display: block; } }
+  header .header-title {
+    flex: 4; }
+    @media screen and (max-width: 1080px) {
+      header .header-title {
+        margin: 0 auto; } }
+    header .header-title table {
+      margin: 0 auto; }
+      @media screen and (max-width: 1080px) {
+        header .header-title table {
+          min-width: 300px; } }
       @media screen and (max-width: 768px) {
-        header .header-title table tr td {
-          width: 60%; }
-          header .header-title table tr td:first-child {
-            width: 40%; } }
-  header .header-title span {
-    font-size: 14px; }
-  header .header-title b {
-    font-weight: 900; }
+        header .header-title table {
+          min-width: 170px; }
+          header .header-title table * {
+            font-size: 9px; } }
+      header .header-title table tr td {
+        width: 50%;
+        padding: 0px 3px; }
+        @media screen and (max-width: 768px) {
+          header .header-title table tr td {
+            width: 60%; }
+            header .header-title table tr td:first-child {
+              width: 40%; } }
+    header .header-title span {
+      font-size: 14px; }
+    header .header-title b {
+      font-weight: 900; }
   header .start-button {
     border: 2px solid white;
     color: #040404;
@@ -528,6 +561,7 @@ header {
         border-width: 1px;
         border-radius: 5px; } }
   header .header-right {
+    flex: 4;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -854,7 +888,7 @@ p.h2-bold {
   padding-bottom: 0px; }
   @media screen and (max-width: 768px) {
     p.h2-bold {
-      font-weight: 800;
+      font-weight: 900;
       font-size: 26px;
       padding-bottom: 0px; } }
 
@@ -1822,6 +1856,15 @@ p.h2-bold {
       padding: 10px 45px;
       font-size: 13px; } }
 
+@media screen and (max-width: 1200px) {
+  .section-welcome-done .flex-3,
+  .section-welcome .flex-3 {
+    display: none; } }
+@media screen and (max-width: 1200px) {
+  .section-welcome-done .flex-9,
+  .section-welcome .flex-9 {
+    flex: 1; } }
+
 .section-manage {
   padding-top: 40px;
   margin-top: 40px;
@@ -1941,6 +1984,10 @@ p.h2-bold {
       font-weight: 600;
       margin-bottom: 5px;
       padding: 0px 20px; } }
+.questions .quest-wrap {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto; }
 .questions .answered-box {
   text-align: center;
   margin-top: -20px;
@@ -5146,7 +5193,7 @@ p.h2-bold {
       .popup .wrapper .inner h2 {
         color: #060606;
         font-size: 35px;
-        font-weight: 800; }
+        font-weight: 900; }
         @media screen and (max-width: 1100px) {
           .popup .wrapper .inner h3,
           .popup .wrapper .inner h2 {
@@ -6294,7 +6341,7 @@ body.popup-visible {
     .popcircle .wrapper h2 {
       color: #060606;
       font-size: 25px;
-      font-weight: 800;
+      font-weight: 900;
       margin-bottom: 20px; }
       @media screen and (max-width: 768px) {
         .popcircle .wrapper h2 {
@@ -7222,7 +7269,7 @@ body.popup-visible {
         text-align: center;
         margin-top: 0px;
         font-family: 'Nunito';
-        font-weight: 800;
+        font-weight: 900;
         font-size: 45px; }
         @media screen and (max-width: 768px) {
           .suspended-popup .popup-inner .content .h1 {
@@ -8644,6 +8691,8 @@ svg:not(:root) {
       flex: 1;
       margin-right: 50px;
       text-align: center; } }
+  #calendar .fc-center h2 {
+    font-weight: 600; }
   #calendar .fc-button-group .fc-listMonth-button,
   #calendar .fc-button-group .fc-dayGridMonth-button {
     background-color: white;
@@ -9427,7 +9476,7 @@ svg:not(:root) {
       margin-bottom: 0px; } }
   .daily-limit-reached .hours-countdown {
     font-size: 20px;
-    font-weight: 800;
+    font-weight: 900;
     display: flex;
     align-items: center; }
     @media screen and (max-width: 768px) {
@@ -9440,7 +9489,7 @@ svg:not(:root) {
         .daily-limit-reached .hours-countdown img {
           margin-right: 10px; } }
     .daily-limit-reached .hours-countdown span {
-      font-weight: 800;
+      font-weight: 900;
       font-size: 30px;
       margin-left: 5px; }
 
