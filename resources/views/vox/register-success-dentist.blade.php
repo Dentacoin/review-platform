@@ -6,7 +6,7 @@
 
 		<div class="container">
 			<div class="col-md-12 tac">
-				<img src="{{ url('new-vox-img/welcome-dentist.png') }}" alt="Dentavox man welcome dentist">
+				<img src="{{ url('new-vox-img/dentavox-man-welcome-dentist.png') }}" alt="Dentavox man welcome dentist">
 				<div class="right-content {!! $user->short_description ? 'active' : '' !!}">
 					<div class="verification-content">
 						<h1>
@@ -69,9 +69,5 @@
 			</div>
 		</div>
 	</div>
-
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 @endsection

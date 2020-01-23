@@ -326,6 +326,7 @@ Content
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
+    position: relative;
 
 	@media screen and (min-width: 768px) {
 		width: 750px;
@@ -2436,6 +2437,10 @@ body.vox-public {
 			left: -140px;
 			top: 0px;
 
+			@media screen and (max-width: 1200px) {
+				display: none;
+			}
+
 			@media #{$phone} {
 				position: static;
 				display: block;
@@ -2449,10 +2454,6 @@ body.vox-public {
 			margin-left: 400px;
 
 			@media screen and (max-width: 1200px) {
-				margin-left: 340px;
-			}
-			
-			@media #{$phone} {
 				margin-left: 0px;
 			}
 

@@ -263,7 +263,8 @@ Content
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
-  margin-left: auto; }
+  margin-left: auto;
+  position: relative; }
   @media screen and (min-width: 768px) {
     .container {
       width: 750px; } }
@@ -1744,6 +1745,9 @@ p.h2-bold {
   position: absolute;
   left: -140px;
   top: 0px; }
+  @media screen and (max-width: 1200px) {
+    .section-register-success.success-dentist img {
+      display: none; } }
   @media screen and (max-width: 768px) {
     .section-register-success.success-dentist img {
       position: static;
@@ -1754,9 +1758,6 @@ p.h2-bold {
 .section-register-success.success-dentist .right-content {
   margin-left: 400px; }
   @media screen and (max-width: 1200px) {
-    .section-register-success.success-dentist .right-content {
-      margin-left: 340px; } }
-  @media screen and (max-width: 768px) {
     .section-register-success.success-dentist .right-content {
       margin-left: 0px; } }
   .section-register-success.success-dentist .right-content h1 {
