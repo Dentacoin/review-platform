@@ -1465,7 +1465,10 @@ $(document).ready(function(){
 	});
 
 	if ($('.video-stats').length) {
-    	$('.video-stats')[0].play();
+		if (!$('.video-stats').hasClass('inited-video')) {
+			$('.video-stats')[0].play();
+		}
+    	
 	}
 
     $('#request-survey-form').submit( function(e) {
