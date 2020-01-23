@@ -433,7 +433,7 @@
 				</a>
 			</div> -->
 
-			@if(empty($_COOKIE['performance_cookies']) && empty($_COOKIE['marketing_cookies']) && empty($_COOKIE['strictly_necessary_policy']) && empty($_COOKIE['functionality_cookies']))
+			@if(empty($user) && empty($_COOKIE['performance_cookies']) && empty($_COOKIE['marketing_cookies']) && empty($_COOKIE['strictly_necessary_policy']) && empty($_COOKIE['functionality_cookies']))
 				<div class="privacy-policy-cookie">
 					<div class="container-cookie flex">
 						<div class="cookies-text">

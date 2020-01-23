@@ -296,6 +296,7 @@ class PollsController extends FrontController
 				if(!Auth::guard('admin')->user()) {
 					$answer = new PollAnswer;
 			        $answer->user_id = 0;
+			        $answer->ip = User::getRealIp();
 			        $answer->poll_id = $poll->id;
 			        $answer->answer = $a;
 		        	$answer->save();
@@ -332,6 +333,7 @@ class PollsController extends FrontController
 				if(!Auth::guard('admin')->user()) {
 					$answer = new PollAnswer;
 			        $answer->user_id = $this->user->id;
+			        $answer->ip = User::getRealIp();
 			        $answer->poll_id = $poll->id;
 			        $answer->answer = $a;
 		        	$answer->save();
