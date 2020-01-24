@@ -88,7 +88,6 @@
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ url('trp-fav/favicon-32x32.png') }}">
 		<link rel="icon" type="image/png" sizes="96x96" href="{{ url('trp-fav/favicon-96x96.png') }}">
 		<link rel="icon" type="image/png" sizes="16x16" href="{{ url('trp-fav/favicon-16x16.png') }}">
-		<link rel="manifest" href="{{ url('trp-fav/manifest.json') }}">
 		<meta name="msapplication-TileColor" content="#ffffff">
 		<meta name="msapplication-TileImage" content="{{ url('trp-fav/ms-icon-144x144.png') }}">
 		<meta name="theme-color" content="#ffffff">
@@ -204,21 +203,25 @@
 			                w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),
 			                m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
 			            })(window,document,'script','https://dentacoin.ariticapp.com/ma/atc.js','at');
+
 			        </script> 
 			        <script type="text/javascript" src="https://dentacoin.ariticapp.com/ma/patc.js"></script>
+			        <script type="text/javascript">
+				        _aaq.push(['trackPageView']);
+				    </script>
 
 				    <script type="text/javascript">
 					    function LeadMagenet() {
-					   		setTimeout( function() {
-					   			_aaq.push(['setContactFields', {
-					    			firstname:document.getElementById("magnet-name").value,
-					    			website:document.getElementById("magnet-website").value,
-					    			email:document.getElementById("magnet-email").value,
-					   			}]);
-					   			_aaq.push('rememberConsentGiven', false, document.getElementById("ariticform_leadmagnetform_id").value);
-								_aaq.push(['trackPageView']);
+					    	setTimeout( function() {
+					    		_aaq.push(['setContactFields', {
+			                        firstname:document.getElementById("magnet-name").value,
+			                        website:document.getElementById("magnet-website").value,
+			                        email:document.getElementById("magnet-email").value,
+			                    }]);
 
-						    }, 5000);
+                    			//_aaq.push('rememberConsentGiven', false, 3);
+                    			_aaq.push(['trackPageView']);
+                    		}, 5000);
 						}
 					</script>
 				@endif
