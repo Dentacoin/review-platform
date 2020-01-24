@@ -215,6 +215,7 @@
 					    			website:document.getElementById("magnet-website").value,
 					    			email:document.getElementById("magnet-email").value,
 					   			}]);
+					   			_aaq.push('rememberConsentGiven', false, document.getElementById("ariticform_leadmagnetform_id").value);
 								_aaq.push(['trackPageView']);
 
 						    }, 5000);
