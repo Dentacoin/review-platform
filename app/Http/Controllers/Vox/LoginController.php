@@ -89,7 +89,7 @@ class LoginController extends FrontController
                     $ul = new UserLogin;
                     $ul->user_id = $user->id;
                     $ul->ip = User::getRealIp();
-                    $ul->platform = 'trp';
+                    $ul->platform = 'vox';
                     $ul->country = \GeoIP::getLocation()->country;
 
                     $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
@@ -220,7 +220,7 @@ class LoginController extends FrontController
                 $ul = new UserLogin;
                 $ul->user_id = $user->id;
                 $ul->ip = User::getRealIp();
-                $ul->platform = 'trp';
+                $ul->platform = 'vox';
                 $ul->country = \GeoIP::getLocation()->country;
 
                 $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
@@ -429,7 +429,7 @@ class LoginController extends FrontController
                     $ul = new UserLogin;
                     $ul->user_id = $newuser->id;
                     $ul->ip = User::getRealIp();
-                    $ul->platform = 'trp';
+                    $ul->platform = 'vox';
                     $ul->country = \GeoIP::getLocation()->country;
 
                     $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
@@ -533,7 +533,7 @@ class LoginController extends FrontController
                                 $ul = new UserLogin;
                                 $ul->user_id = $user->id;
                                 $ul->ip = User::getRealIp();
-                                $ul->platform = 'trp';
+                                $ul->platform = 'vox';
                                 $ul->country = \GeoIP::getLocation()->country;
 
                                 $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
