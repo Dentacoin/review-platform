@@ -585,19 +585,24 @@ class RegisterController extends FrontController
 
     public function recover($locale=null, $id, $hash) {
 
-        $user = User::find($id);
+        if(empty($this->user)) {
 
-        if (!empty($user)) {
+            $user = User::find($id);
 
-            if ($hash == $user->get_token()) {
+            if (!empty($user)) {
 
-                return $this->ShowVoxView('recover-password', array(
-                    'id' => $id,
-                    'hash' => $hash,
-                ));
+                if ($hash == $user->get_token()) {
+
+                    return $this->ShowVoxView('recover-password', array(
+                        'id' => $id,
+                        'hash' => $hash,
+                    ));
+                }
             }
+            return redirect('/');
+        } else {
+            return redirect(getVoxUrl('/'));
         }
-        return redirect('/');
     }
 
     public function recover_form($locale=null, $id, $hash) {
