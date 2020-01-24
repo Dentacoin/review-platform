@@ -108,7 +108,13 @@
                                         'info' => $fields['name']
                                     ])
                                 </div>
-                            </div>
+                            </div>                            
+                            @if($duplicated_names->isNotEmpty())
+                                <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this name already exists:</p>
+                                @foreach($duplicated_names as $dn)
+                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dn->id) }}">{{ $dn->name }}</a></p>
+                                @endforeach
+                            @endif
                             @if($item->is_dentist && !$item->is_clinic)
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Title</label>
@@ -160,7 +166,7 @@
                             @if($duplicated_mails->isNotEmpty())
                                 <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this email already exists:</p>
                                 @foreach($duplicated_mails as $dm)
-                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dm->id) }}">{{ $dm->name }}</p>
+                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dm->id) }}">{{ $dm->name }}</a></p>
                                 @endforeach
                             @endif
                             <div class="form-group">
@@ -312,7 +318,7 @@
                             @if($duplicated_wallets->isNotEmpty())
                                 <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this dcn address already exists:</p>
                                 @foreach($duplicated_wallets as $dw)
-                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dw->id) }}">{{ $dw->name }}</p>
+                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dw->id) }}">{{ $dw->name }}</a></p>
                                 @endforeach
                             @endif
                             @if($item->is_dentist)
