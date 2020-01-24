@@ -150,7 +150,7 @@ class VoxController extends FrontController
 		$doing_details = false;
 		$doing_asl = false;
 
-		if($this->user->loggedFromBadIp()) {
+		if($this->user->loggedFromBadIp() && !$this->user->is_dentist) {
 
 			$action = new UserAction;
             $action->user_id = $this->user->id;
