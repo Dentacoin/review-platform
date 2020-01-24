@@ -40,7 +40,7 @@ class TransactionsController extends AdminController
         if(!empty($this->request->input('search-email'))) {
             $mail = $this->request->input('search-email');
             $transactions = $transactions->whereHas('user', function ($query) use ($mail) {
-                $query->where('email', 'like', $mail);
+                $query->where('email', 'like', '%'.trim($mail).'%');
             });
         } 
 

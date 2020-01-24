@@ -1083,8 +1083,8 @@ class UsersController extends AdminController
                                     }
                                 }
                             }
-                        } else if($key=='name' || $key=='email') {
-                            if ($key == 'email' && empty($this->request->input($key))) {
+                        } else if($key=='email') {
+                            if (empty($this->request->input($key))) {
                                 $item->$key = $this->request->input($key);
                             } else {
                                 
