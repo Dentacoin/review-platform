@@ -535,7 +535,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 				
 			}
 		}	
-		$review_collection = $points['answer-2'][Request::input('answer-2')] + (!empty(Request::input('answer-4')) ? $points['answer-4'][Request::input('answer-4')] : 0);
+		$review_collection = intval($points['answer-2'][Request::input('answer-2')]) + (!empty(Request::input('answer-4')) ? intval($points['answer-4'][Request::input('answer-4')]) : 0);
 		$review_volume = !empty(Request::input('answer-4')) ? $points['answer-4'][Request::input('answer-4')] : 0;
 		$impact = $points['answer-5'][Request::input('answer-5')];
 

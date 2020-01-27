@@ -100,21 +100,21 @@
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-1-1" type="radio" name="answer-1" class="lead-magnet-radio" value="1">
+								<input id="answer-1-1" type="radio" name="answer-1" class="lead-magnet-radio" ans-text="To acquire new patients" value="1">
 								To acquire new patients
 							</label>
 							<label class="magnet-label" for="answer-1-2">
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-1-2" type="radio" name="answer-1" class="lead-magnet-radio" value="2">
+								<input id="answer-1-2" type="radio" name="answer-1" class="lead-magnet-radio" ans-text="To keep existing patients" value="2">
 								To keep existing patients
 							</label>
 							<label class="magnet-label" for="answer-1-3">
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-1-3" type="radio" name="answer-1" class="lead-magnet-radio" value="3">
+								<input id="answer-1-3" type="radio" name="answer-1" class="lead-magnet-radio" ans-text="Both" value="3">
 								Both
 							</label>
 						</div>
@@ -128,42 +128,42 @@
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-2-1" type="radio" name="answer-2" class="lead-magnet-radio" value="1">
+								<input id="answer-2-1" type="radio" name="answer-2" class="lead-magnet-radio" ans-text="My website" value="1">
 								My website
 							</label>
 							<label class="magnet-label" for="answer-2-2">
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-2-2" type="radio" name="answer-2" class="lead-magnet-radio" value="2">
+								<input id="answer-2-2" type="radio" name="answer-2" class="lead-magnet-radio" ans-text="Google" value="2">
 								Google
 							</label>
 							<label class="magnet-label" for="answer-2-3">
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-2-3" type="radio" name="answer-2" class="lead-magnet-radio" value="3">
+								<input id="answer-2-3" type="radio" name="answer-2" class="lead-magnet-radio" ans-text="Facebook or other social media" value="3">
 								Facebook or other social media
 							</label>
 							<label class="magnet-label" for="answer-2-4">
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-2-4" type="radio" name="answer-2" class="lead-magnet-radio" value="4">
+								<input id="answer-2-4" type="radio" name="answer-2" class="lead-magnet-radio" ans-text="General review platform (e.g. Trustpilot)" value="4">
 								General review platform (e.g. Trustpilot)
 							</label>
 							<label class="magnet-label" for="answer-2-5">
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-2-5" type="radio" name="answer-2" class="lead-magnet-radio" value="5">
+								<input id="answer-2-5" type="radio" name="answer-2" class="lead-magnet-radio" ans-text="Specialized review platform (e.g. Dentacoin Trusted Reviews, Zocdoc.)" value="5">
 								Specialized review platform (e.g. Dentacoin Trusted Reviews, Zocdoc.)
 							</label>
 							<label class="magnet-label" for="answer-2-6">
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-2-6" type="radio" name="answer-2" class="lead-magnet-radio" value="6">
+								<input id="answer-2-6" type="radio" name="answer-2" class="lead-magnet-radio" ans-text="I don’t use one" value="6">
 								I don’t use one
 							</label>
 						</div>
@@ -176,22 +176,22 @@
 							<p>(Select all that apply)</p>
 							<label class="magnet-label" for="answer-3-1">
 								<i class="far fa-square"></i>
-								<input id="answer-3-1" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox" value="1">
+								<input id="answer-3-1" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox" ans-text="Yes, in person" value="1">
 								Yes, in person
 							</label>
 							<label class="magnet-label" for="answer-3-2">
 								<i class="far fa-square"></i>
-								<input id="answer-3-2" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox" value="2">
+								<input id="answer-3-2" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox" ans-text="Yes, by email" value="2">
 								Yes, by email
 							</label>
 							<label class="magnet-label" for="answer-3-3">
 								<i class="far fa-square"></i>
-								<input id="answer-3-3" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox" value="3">
+								<input id="answer-3-3" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox" ans-text="Yes, by SMS" value="3">
 								Yes, by SMS
 							</label>
 							<label class="magnet-label disabler-label" for="answer-3-4">
 								<i class="far fa-square"></i>
-								<input id="answer-3-4" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox disabler" value="4">
+								<input id="answer-3-4" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox disabler" ans-text="No" value="4">
 								No
 							</label>
 						</div> 
@@ -209,21 +209,21 @@
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-4-1" type="radio" name="answer-4" class="lead-magnet-radio" value="1">
+								<input id="answer-4-1" type="radio" name="answer-4" class="lead-magnet-radio" ans-text="Every day" value="1">
 								Every day
 							</label>
 							<label class="magnet-label" for="answer-4-2">
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-4-2" type="radio" name="answer-4" class="lead-magnet-radio" value="2">
+								<input id="answer-4-2" type="radio" name="answer-4" class="lead-magnet-radio" ans-text="Occasionally" value="2">
 								Occasionally
 							</label>
 							<label class="magnet-label" for="answer-4-3">
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-4-3" type="radio" name="answer-4" class="lead-magnet-radio" value="3">
+								<input id="answer-4-3" type="radio" name="answer-4" class="lead-magnet-radio" ans-text="It happened a few times only" value="3">
 								It happened a few times only
 							</label>
 						</div>
@@ -237,28 +237,28 @@
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-5-1" type="radio" name="answer-5" class="lead-magnet-radio" value="1">
+								<input id="answer-5-1" type="radio" name="answer-5" class="lead-magnet-radio" ans-text="Yes, to all reviews" value="1">
 								Yes, to all reviews
 							</label>
 							<label class="magnet-label" for="answer-5-2">
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-5-2" type="radio" name="answer-5" class="lead-magnet-radio" value="2">
+								<input id="answer-5-2" type="radio" name="answer-5" class="lead-magnet-radio" ans-text="Yes, only to negative reviews" value="2">
 								Yes, only to negative reviews
 							</label>
 							<label class="magnet-label" for="answer-5-3">
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-5-3" type="radio" name="answer-5" class="lead-magnet-radio" value="3">
+								<input id="answer-5-3" type="radio" name="answer-5" class="lead-magnet-radio" ans-text="Yes, from time to time" value="3">
 								Yes, from time to time
 							</label>
 							<label class="magnet-label" for="answer-5-4">
 								<span class="modern-radio">
 									<span></span>
 								</span>
-								<input id="answer-5-4" type="radio" name="answer-5" class="lead-magnet-radio" value="4">
+								<input id="answer-5-4" type="radio" name="answer-5" class="lead-magnet-radio" ans-text="No" value="4">
 								No
 							</label>
 						</div> 

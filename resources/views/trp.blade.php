@@ -74,6 +74,26 @@
 			fbq('track', 'PageView');
 		</script>
 
+		@if(!empty($_COOKIE['marketing_cookies']))
+			<script type="text/javascript">
+			    if (typeof AriticSDKLoaded == 'undefined') {
+			        var AriticSDKLoaded = true;
+			        var head            = document.getElementsByTagName('head')[0];
+			        var script          = document.createElement('script');
+			        script.type         = 'text/javascript';
+			        script.src          = 'https://ariticpinpoint.dentacoin.com/ma/media/js/aritic-form.min.js';
+			        script.onload       = function() {
+			            AriticSDK.onLoad();
+			        };
+			        head.appendChild(script);
+			        var AriticDomain = 'https://ariticpinpoint.dentacoin.com/ma';
+			        var AriticLang   = {
+			            'submittingMessage': "Please wait..."
+			        }
+			    }
+			</script>
+		@endif
+
 		<!-- End Facebook Pixel Code -->
 		<link rel="apple-touch-icon" sizes="57x57" href="{{ url('trp-fav/apple-icon-57x57.png') }}">
 		<link rel="apple-touch-icon" sizes="60x60" href="{{ url('trp-fav/apple-icon-60x60.png') }}">
