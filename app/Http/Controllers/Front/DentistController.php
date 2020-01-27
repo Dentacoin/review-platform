@@ -1225,17 +1225,22 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         return false;
     }
 
-    public function dentist_fb_tab() {
+    public function dentist_fb_tab($hash) {
 
-        if(!empty($this->user)) {
+        if (!empty(Request::input('id'))) {
+            $user = User::find(Request::input('id'));
 
-            $reviews = $this->user->reviews_in();
+            if (!empty($user)) {
+                $reviews = $user->reviews_in();
 
-            return $this->showView('facebook-tab', [
-                'reviews' => $reviews,
-            ]);
+                return $this->showView('facebook-tab', [
+                    'reviews' => $reviews,
+                    'u' => $user
+                ]);
+            }
         }
-        
+
+        return redirect(getLangUrl('/'));
     }
 
 }
