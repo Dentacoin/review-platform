@@ -184,7 +184,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 //Empty route
 $reviewRoutes = function () {
-	
 	//Route::any('test', 									'Front\YouTubeController@test');
 	Route::post('civic', 								'CivicController@add');
 	//Route::any('mobident', 								'MobidentController@reward');
@@ -285,6 +284,11 @@ $reviewRoutes = function () {
 			Route::get('page-not-found', 						'NotFoundController@home');
 
 			Route::get('faq', 									'FaqController@home');
+
+			Route::get('login-dentist/facebook', 				'LoginController@facebook_login_dentist');
+			Route::get('login-dentist/callback/facebook', 		'LoginController@facebook_callback_dentist');
+
+			Route::any('facebook-tab', 							'DentistController@dentist_fb_tab');
 
 			Route::group(['middleware' => 'auth:web'], function () {
 

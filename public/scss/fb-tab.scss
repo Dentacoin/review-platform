@@ -1,0 +1,259 @@
+@font-face {
+    font-family: 'Calibri';
+    src: url('../fonts/Calibri-Bold.eot');
+    src: url('../fonts/Calibri-Bold.woff2') format('woff2'),
+         url('../fonts/Calibri-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: bold;
+}
+
+@font-face {
+    font-family: 'Calibri';
+    src: url('../fonts/Calibri.eot');
+    src: url('../fonts/Calibri.woff2') format('woff2'),
+         url('../fonts/Calibri.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Calibri';
+    src: url('../fonts/Calibri-Light.eot');
+    src: url('../fonts/Calibri-Light.woff2') format('woff2'),
+         url('../fonts/Calibri-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: bold;
+}
+
+$tablet: "screen and (max-width: 998px)";
+$phone: "screen and (max-width: 768px)";
+
+#trp-facebook-tab {
+
+	div, span, h1, h2, h3, h4, h5, h6, p, a, img, i {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font: inherit;
+		vertical-align: baseline;
+		font-family: 'Calibri', sans-serif;
+		font-size: 16px;
+		line-height: normal;
+		background-color: transparent;
+		color: black;
+	}
+
+	html {
+	  	box-sizing: border-box;
+	}
+	*, *:before, *:after {
+	  	box-sizing: border-box;
+	}
+
+	.review-avatar {
+		display: block;
+		text-decoration: none;
+		width: 84px;
+		height: 84px;
+	    background-size: cover;
+	    border-radius: 50%;
+	    margin-bottom: 15px;
+	    position: relative;
+
+	    &:before {
+	    	content: '';
+		    position: absolute;
+		    left: 0px;
+		    right: 0;
+		    top: 0px;
+		    bottom: 0;
+		    width: 100%;
+		    background: url(../img-trp/avatar-border.svg) no-repeat 50% 50%;
+	    }
+	}
+
+	.review-title {
+		text-decoration: none;
+		font-size: 20px;
+		font-weight: bold;
+		font-style: italic;
+		text-transform: uppercase;
+	}
+
+	.ratings {
+	    margin-top: 12px;
+
+	    .stars {
+	        width: 117px;
+	        height: 20px;
+	        display: inline-block;
+	        background: url('../img-trp/new-stars-gray.png') 50% 50% no-repeat;
+	        background-size: contain;
+
+	        .bar {
+	            background: url('../img-trp/new-stars-blue.png') 0% 50% no-repeat;
+	            background-size: cover;
+	            height: 20px;
+	        }
+	    }
+	    &.average {
+		    .stars {
+		        width: 180px;
+		        height: 31px;
+		        background: url('../img-trp/new-stars-gray-average.png') 50% 50% no-repeat;
+		        background-size: contain;
+
+		        .bar {
+		            background: url('../img-trp/new-stars-blue-average.png') 0% 50% no-repeat;
+		            background-size: cover;
+		            height: 31px;
+		        }
+		    }
+	    }
+	}
+
+	.review-name {
+		font-weight: bold;
+	    font-size: 14px;
+	    margin-top: 16px;
+	    display: block;
+	    color: #333;
+	}
+
+	.list-reviews {
+
+		.list-review {
+			display: flex;
+		    padding-bottom: 30px;
+		    border-bottom: 1px solid #ccc;
+		    padding-top: 30px;
+
+		    @media #{$phone} {
+		    	flex-direction: column;
+		    	border-bottom: none;
+		    	position: relative;
+		    }
+
+		    &:after {
+		    	@media #{$phone} {
+		    		content: '';
+		    		position: absolute;
+		    		bottom: 0px;
+		    		width: 213px;
+		    		height: 2px;
+		    		left: 50%;
+		    		transform: translateX(-50%);
+		    		background-color: #eeeeee;
+		    	}
+		    }
+
+		    &:last-child {
+		    	margin-bottom: 0px;
+		    	border-bottom: none;
+
+		    	&:after {
+			    	@media #{$phone} {
+			    		display: none;
+			    	}
+			    }
+		    }
+
+			.list-review-left {
+				margin-right: 30px;
+				text-align: center;
+
+				@media #{$phone} {
+					margin-right: 0px;
+				}
+			}
+
+			.list-review-right {
+				text-align: left;
+
+				@media #{$phone} {
+					text-align: center;
+				}
+			}
+
+			.review-date {
+				color: #888888;
+				text-align: center;
+				font-size: 14px;
+
+				@media #{$phone} {
+					display: none;
+				}
+			}
+
+			.review-content {
+				font-size: 18px;
+				font-weight: 300;
+				margin-top: 9px;
+				overflow: hidden;
+			    display: -webkit-box;
+			    -webkit-line-clamp: 2;
+			    -webkit-box-orient: vertical;
+
+			    @media #{$phone} {
+			    	-webkit-line-clamp: 4;
+			    	margin-top: 12px;
+			    }
+			}
+
+			.ratings {
+			    margin-top: 5px;
+
+			    @media #{$phone} {
+			    	margin-top: 14px;
+			    }
+			}
+
+			.review-avatar {
+				margin-bottom: 11px;
+
+			    @media #{$phone} {
+					margin-left: auto;
+					margin-right: auto;
+					margin-bottom: 14px;
+			    }
+			}
+
+			.review-name {				
+
+			    @media #{$phone} {
+			    	font-size: 16px;
+			    	margin-bottom: 15px;
+			    }
+			}
+
+			.mobile-review-date {
+				display: none;
+				text-align: center;
+				color: #888888;
+
+				@media #{$phone} {
+					display: block;
+				}
+			}
+		}
+	}
+
+	.widget-logo-wrap {
+		display: block;
+		text-align: center;
+		margin-top: 70px;
+		margin-bottom: 30px;
+
+		@media #{$phone} {
+			margin-top: 20px;
+		}
+
+		img {
+			max-width: 170px;
+		}
+	}
+
+	.tac {
+		text-align: center;
+	}
+}
