@@ -988,7 +988,10 @@ NEW & FAILED TRANSACTIONS
                     $user = User::find($u->user_id);
 
                     if (!empty($user)) {
-                        $user_links[] = 'https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+                        $user_links[] = [
+                            'link' => 'https://reviews.dentacoin.com/cms/users/edit/'.$user->id,
+                            'name' => $user->name,
+                        ];
                     }
                 }
             }
@@ -996,15 +999,15 @@ NEW & FAILED TRANSACTIONS
             if (!empty($user_links)) {
                 $mtext = 'Users with balance of 500,000 DCN or more.
                 
-                Link to profiles in CMS:
-
-                '.implode('
-', $user_links ).'
+                Link to profiles in CMS:  
 
                 ';
 
-                Mail::raw($mtext, function ($message) {
+                foreach ($user_links as $ul) {
+                    $mtext .= '<a href="'.$ul['link'].'">'.$ul['name'].'</a> , ';
+                }
 
+                Mail::send([], [], function ($message) use ($mtext) {
                     $sender = config('mail.from.address');
                     $sender_name = config('mail.from.name');
 
@@ -1014,6 +1017,7 @@ NEW & FAILED TRANSACTIONS
                     //$message->to( 'gergana@youpluswe.com' );
                     //$message->to( 'dokinator@gmail.com' );
                     $message->subject('Users with high balance');
+                    $message->setBody($mtext, 'text/html'); // for HTML rich messages
                 });
             }
             echo 'Balance over 500 000 Email 2 DONE';
