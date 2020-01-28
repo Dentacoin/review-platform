@@ -37,7 +37,8 @@
     }(document, 'script', 'facebook-jssdk'));
 
     // set a variable with the signed_request sent to your app URL by Facebook via POST
-    var signedRequest = "<?php echo $_REQUEST["signed_request"] ?>";
+
+    var signedRequest = "{{ request('signed_request') }}";
 
     FB.getLoginStatus(function (response) {
         // do not use the response.authResponse.signedRequest but the one above instead
