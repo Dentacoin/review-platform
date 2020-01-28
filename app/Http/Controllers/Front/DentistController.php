@@ -1225,22 +1225,43 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         return false;
     }
 
-    public function dentist_fb_tab($hash) {
+    public function dentist_fb_tab() {
 
-        if (!empty(Request::input('id'))) {
-            $user = User::find(Request::input('id'));
+        if(Request::isMethod('post')) {
+            
+            if (!empty(Request::input('pageid'))) {
+                $dentist = User::where('fb_pages', 'LIKE', 'pageid')->first();
 
-            if (!empty($user)) {
-                $reviews = $user->reviews_in();
+                if (!empty($dentist)) {
+                    $reviews_obj = $user->reviews_in();
+                    $reviews = [];
 
-                return $this->showView('facebook-tab', [
-                    'reviews' => $reviews,
-                    'u' => $user
-                ]);
+                    foreach ($reviews_obj as $review) {
+                        $review->patient_avatar = $review->user->getImageUrl(true);
+                        $review->date_converted = $review->created_at ? date('d/m/Y', $review->created_at->timestamp) : '-';
+                        $review->rating_converted = $review->rating/5*100;
+                        $review->converted_answer = nl2br($review->answer);
+                        $review->converted_title = !empty($review->title) ? '<a href="'.$dentist->getLink().'?review_id='.$review->id.'" target="_blank" class="review-title">“'.$review->title.'”</a>' : '';
+                        $review->patient_name = !empty($review->user->self_deleted) ? ($review->verified ? "Verified Patient" : "Deleted User") : $review->user->name;
+                        $reviews[] = $review->toArray();
+                    }
+
+                    $ret = [
+                        'success' => true,
+                        'reviews' => $reviews,
+                        'dentist_link' => $dentist->getLink()
+                    ];
+
+                    return Response::json( $ret );
+                }
             }
+
+            return Response::json( [
+                'success' => false,
+            ] );
         }
 
-        return redirect(getLangUrl('/'));
+        return $this->showView('facebook-tab');
     }
 
 }
