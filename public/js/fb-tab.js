@@ -1,3 +1,5 @@
+var signedRequest;
+
 $(document).ready(function(){
 
 	const fb_config = {
@@ -14,6 +16,7 @@ $(document).ready(function(){
             xfbml: true,
             version: 'v2.8'
         });
+        FB.AppEvents.logPageView();
     };
 
     (function (d, s, id) {
@@ -29,9 +32,6 @@ $(document).ready(function(){
 
     // set a variable with the signed_request sent to your app URL by Facebook via POST
 
-    {{ dd(request('signed_request')) }}
-    var signedRequest = "{{ request('signed_request') }}";
-
     FB.getLoginStatus(function (response) {
         // do not use the response.authResponse.signedRequest but the one above instead
         // and let the javascript SDK parse the good signed_request for you
@@ -42,6 +42,8 @@ $(document).ready(function(){
         var isLiked = page.liked;
         // and here is the Facebook page ID
         var pageID = page.id;
+
+        console.log(pageID);
         if (response.status === 'connected') {
 
 
