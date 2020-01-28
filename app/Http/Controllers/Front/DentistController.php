@@ -1225,15 +1225,16 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         return false;
     }
 
-    public function dentist_fb_tab() {
+    public function dentist_fb_tab($locale=null) {
+
 
         if(Request::isMethod('post')) {
             
             if (!empty(Request::input('pageid'))) {
-                $dentist = User::where('fb_pages', 'LIKE', 'pageid')->first();
+                $dentist = User::where('fb_pages', 'LIKE', Request::input('pageid'))->first();
 
                 if (!empty($dentist)) {
-                    $reviews_obj = $user->reviews_in();
+                    $reviews_obj = $dentist->reviews_in();
                     $reviews = [];
 
                     foreach ($reviews_obj as $review) {
@@ -1262,6 +1263,139 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         }
 
         return $this->showView('facebook-tab');
+    }
+
+
+    public function recommend_dentist() {
+
+        $validator = Validator::make(Request::all(), [
+            'email' => ['required', 'email'],
+            'name' => ['required', 'string'],
+        ]);
+
+        if ($validator->fails()) {
+            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
+        } else {
+            // $invitation = UserInvite::where([
+            //     ['user_id', $this->user->id],
+            //     ['invited_email', 'LIKE', Request::Input('email')],
+            // ])->first();
+
+            // $existing_patient = User::where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 0)->first();
+
+            // if($invitation) {
+
+            //     if(!empty($existing_patient)) {
+            //         $d_id = $this->user->id;
+
+            //         $patient_review = Review::where('user_id', $existing_patient->id )->where(function($query) use ($d_id) {
+            //             $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
+            //         })->orderBy('id', 'desc')->first();
+                    
+            //         if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
+            //             return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.' ] );
+            //         }
+            //     }
+
+            //     if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
+            //         return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.'] );
+            //     }
+
+            //     $invitation->invited_name = Request::Input('name');
+            //     $invitation->created_at = Carbon::now();
+
+            //     if (empty($invitation->unsubscribed)) {
+            //         $invitation->review = true;
+            //         $invitation->completed = null;
+            //         $invitation->notified1 = null;
+            //         $invitation->notified2 = null;
+            //         $invitation->notified3 = null;
+            //     }
+            //     $invitation->save();
+
+            //     if(!empty($existing_patient)) {
+            //         $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
+            //         if(!empty($last_ask)) {
+            //             $last_ask->created_at = Carbon::now();
+            //             $last_ask->on_review = true;
+            //             $last_ask->save();
+            //         } else {
+            //             $ask = new UserAsk;
+            //             $ask->user_id = $existing_patient->id;
+            //             $ask->dentist_id = $this->user->id;
+            //             $ask->status = 'yes';
+            //             $ask->on_review = true;
+            //             $ask->save();
+            //         }
+            //     }
+            // } else {
+            //     $invitation = new UserInvite;
+            //     $invitation->user_id = $this->user->id;
+            //     $invitation->invited_email = Request::Input('email');
+            //     $invitation->invited_name = Request::Input('name');
+            //     $invitation->review = true;
+            //     $invitation->save();
+            // }
+
+            // if(!empty($existing_patient)) {
+
+            //     $substitutions = [
+            //         'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+            //         'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
+            //         'invited_user_name' => Request::Input('name'),
+            //         "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
+            //     ];
+
+            //     $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
+
+            // } else {
+
+            //     if(Request::Input('email') != $this->user->email) {
+
+            //         //Mega hack
+            //         $dentist_name = $this->user->name;
+            //         $dentist_email = $this->user->email;
+            //         $this->user->name = Request::Input('name');
+            //         $this->user->email = Request::Input('email');
+            //         $this->user->save();
+
+
+            //         if ( $this->user->is_dentist) {
+            //             $substitutions = [
+            //                 'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+            //                 'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
+            //                 'invited_user_name' => $this->user->name,
+            //                 "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
+            //             ];
+
+
+            //             $this->user->sendGridTemplate(59, $substitutions, 'trp');
+            //         } else {
+            //             $this->user->sendTemplate( 17 , [
+            //                 'friend_name' => $dentist_name,
+            //                 'invitation_id' => $invitation->id
+            //             ], 'trp');
+            //         }
+
+            //         // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
+            //         //     'friend_name' => $dentist_name,
+            //         //     'invitation_id' => $invitation->id
+            //         // ]);
+
+            //         //Back to original
+            //         $this->user->name = $dentist_name;
+            //         $this->user->email = $dentist_email;
+            //         $this->user->save();
+
+            //     } else {
+            //         return Response::json(['success' => false, 'message' => 'You can\'t invite yourself' ] );
+            //     }
+
+            // }
+
+
+            return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
+        }
     }
 
 }
