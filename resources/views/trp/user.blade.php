@@ -173,7 +173,7 @@
 				<img src="{{ url('img-trp/share.svg') }}">
 				{!! nl2br(trans('trp.common.share')) !!}
 			</a>
-			@if(!empty($user) && $user->id!=$item->id && !empty($my_review))
+			@if(!empty($user) && $user->id!=$item->id && !empty($writes_review))
 				<a href="javascript:;" class="recommend-mobile" data-popup="recommend-dentist">
 					<img src="{{ url('img-trp/thumb-up.svg') }}">
 					Recommend
@@ -311,7 +311,7 @@
 			<img src="{{ url('img-trp/share.svg') }}">
 			{!! nl2br(trans('trp.common.share')) !!}
 		</a>
-		@if(!empty($user) && $user->id!=$item->id && !empty($my_review))
+		@if(!empty($user) && $user->id!=$item->id && !empty($writes_review))
 			<a href="javascript:;" class="recommend-button" data-popup="recommend-dentist">
 				<img src="{{ url('img-trp/thumb-up.svg') }}">
 				Recommend
@@ -1281,7 +1281,7 @@
 			@include('trp.popups.workplace')
 		@endif
 	@else
-		@if(!empty($my_review))
+		@if(!empty($writes_review))
 			@include('trp.popups.recommend-dentist')
 		@endif
 		@include('trp.popups.submit-review')

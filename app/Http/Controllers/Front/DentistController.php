@@ -529,6 +529,24 @@ class DentistController extends FrontController
             $completed_strength = $this->user->getStrengthCompleted('trp');
         }
 
+        if(!empty($this->user)) {
+            $dent_id = $item->id;
+            $reviews = Review::where(function($query) use ($dent_id) {
+                $query->where( 'dentist_id', $dent_id)->orWhere('clinic_id', $dent_id);
+            })->where('user_id', $this->user->id)
+            ->first();
+
+            if (!empty($reviews)) {
+                $writes_review = true;
+            } else {
+                $writes_review = false;
+            }
+            
+        } else {
+            $writes_review = false;
+        }       
+
+
         $view_params = [
             'strength_arr' => $strength_arr,
             'completed_strength' => $completed_strength,
@@ -537,6 +555,7 @@ class DentistController extends FrontController
             'is_trusted' => $isTrusted,
             'canAskDentist' => $canAskDentist,
             'my_review' => !empty($this->user) ? $this->user->cantSubmitReviewToSameDentist($item->id) : null,
+            'writes_review' => $writes_review,
             'my_upvotes' => !empty($this->user) ? $this->user->usefulVotesForDenist($item->id) : null,
             'my_downvotes' => !empty($this->user) ? $this->user->unusefulVotesForDenist($item->id) : null,
             'questions' => $questions,
