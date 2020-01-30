@@ -148,6 +148,18 @@
       display: inline-block;
       max-width: 16px;
       vertical-align: middle; }
+  .information .recommend-button {
+    position: absolute;
+    right: 91px;
+    top: 16px;
+    color: #46afda;
+    font-size: 18px;
+    width: 123px;
+    z-index: 10; }
+    .information .recommend-button img {
+      max-width: 17px;
+      vertical-align: middle;
+      margin-right: 2px; }
   .information h3 {
     line-height: 35px;
     margin-bottom: 10px; }
@@ -204,6 +216,17 @@
     font-size: 14px;
     width: 48px; }
     .profile-info-mobile .share-mobile img {
+      display: inline-block;
+      max-width: 12px;
+      vertical-align: middle; }
+  .profile-info-mobile .recommend-mobile {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    color: #46afda;
+    font-size: 14px;
+    width: 88px; }
+    .profile-info-mobile .recommend-mobile img {
       display: inline-block;
       max-width: 12px;
       vertical-align: middle; }
@@ -636,6 +659,14 @@
     @media screen and (max-width: 768px) {
       .details-wrapper .review {
         margin-left: 10px; } }
+    .details-wrapper .review .recommend-button {
+      color: #46afda;
+      font-size: 18px;
+      margin-top: 5px;
+      display: block; }
+      .details-wrapper .review .recommend-button img {
+        max-width: 16px;
+        margin-right: 2px; }
   .details-wrapper .review-avatar {
     width: 20px;
     height: 20px;
@@ -1362,3 +1393,21 @@ body.edit-user .information {
   @media screen and (max-width: 998px) {
     .chart-overlap {
       display: block; } }
+
+.popup#recommend-dentist .popup-inner h2 {
+  margin-bottom: 25px; }
+.popup#recommend-dentist .popup-inner .popup-title {
+  font-weight: bold; }
+.popup#recommend-dentist .popup-inner .rec-first {
+  margin-right: 18px; }
+  @media screen and (max-width: 768px) {
+    .popup#recommend-dentist .popup-inner .rec-first {
+      margin-right: 0px; } }
+.popup#recommend-dentist .popup-inner .modern-field .modern-input {
+  border-radius: 7px;
+  border-width: 1px; }
+.popup#recommend-dentist .popup-inner input[type="submit"] {
+  background-color: #0cafd4;
+  margin-top: 25px;
+  margin-bottom: 30px;
+  padding: 12px 52px; }

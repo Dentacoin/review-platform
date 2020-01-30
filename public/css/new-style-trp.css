@@ -6195,6 +6195,42 @@ body.strength-pb {
       right: 24px; } }
   .widget-step .copy-widget i {
     color: #4e4c4e; }
+.widget-step .facebook-tab .tab-info {
+  font-size: 22px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: flex-start;
+  max-width: 720px;
+  margin-right: auto;
+  margin-left: auto; }
+  .widget-step .facebook-tab .tab-info img {
+    max-width: 18px;
+    margin-top: 6px;
+    margin-right: 5px; }
+.widget-step .facebook-tab .fb-l-button {
+  background-color: #4267B2;
+  color: white;
+  border-radius: 5px;
+  margin-bottom: 17px;
+  padding: 10px 15px;
+  font-size: 20px;
+  padding-left: 15px;
+  border: none;
+  width: 350px; }
+  .widget-step .facebook-tab .fb-l-button span {
+    display: inline-block;
+    vertical-align: sub;
+    width: 27px;
+    text-align: center;
+    margin-right: 10px; }
+    .widget-step .facebook-tab .fb-l-button span i {
+      color: white;
+      font-size: 30px; }
+.widget-step .facebook-tab .tab-note {
+  font-size: 17px;
+  color: #888888;
+  text-align: center;
+  margin-bottom: 20px; }
 
 .list-reviews label {
   display: flex;

@@ -173,6 +173,12 @@
 				<img src="{{ url('img-trp/share.svg') }}">
 				{!! nl2br(trans('trp.common.share')) !!}
 			</a>
+			@if(!empty($user) && $user->id!=$item->id && !empty($my_review))
+				<a href="javascript:;" class="recommend-mobile" data-popup="recommend-dentist">
+					<img src="{{ url('img-trp/thumb-up.svg') }}">
+					Recommend
+				</a>
+			@endif
 			@if($item->status == 'added_approved' || $item->status == 'admin_imported')
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
@@ -305,6 +311,12 @@
 			<img src="{{ url('img-trp/share.svg') }}">
 			{!! nl2br(trans('trp.common.share')) !!}
 		</a>
+		@if(!empty($user) && $user->id!=$item->id && !empty($my_review))
+			<a href="javascript:;" class="recommend-button" data-popup="recommend-dentist">
+				<img src="{{ url('img-trp/thumb-up.svg') }}">
+				Recommend
+			</a>
+		@endif
 		
     	<div class="profile-info col">
 
@@ -1269,6 +1281,9 @@
 			@include('trp.popups.workplace')
 		@endif
 	@else
+		@if(!empty($my_review))
+			@include('trp.popups.recommend-dentist')
+		@endif
 		@include('trp.popups.submit-review')
 		@if(empty($is_trusted) && !$has_asked_dentist)
 			@include('trp.popups.ask-dentist')
@@ -1285,7 +1300,7 @@
 
 
 <script type="text/javascript">
-
+	var fb_page_param = {!! !empty(request('fb-pages')) ? true : 0 !!};
 	var aggregated_reviews = {!! json_encode($aggregated, JSON_HEX_QUOT) !!};
 </script>
 

@@ -28,232 +28,365 @@
 $tablet: "screen and (max-width: 998px)";
 $phone: "screen and (max-width: 768px)";
 
-#trp-facebook-tab {
+body {
+	background-color: white;
+	margin: 0px;
+}
 
-	div, span, h1, h2, h3, h4, h5, h6, p, a, img, i {
-		margin: 0;
-		padding: 0;
-		border: 0;
-		font: inherit;
-		vertical-align: baseline;
-		font-family: 'Calibri', sans-serif;
-		font-size: 16px;
-		line-height: normal;
-		background-color: transparent;
-		color: black;
+
+div, span, h1, h2, h3, h4, h5, h6, p, a, img, i {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font: inherit;
+	vertical-align: baseline;
+	font-family: 'Calibri', sans-serif;
+	font-size: 16px;
+	line-height: normal;
+	background-color: transparent;
+	color: black;
+}
+
+html {
+  	box-sizing: border-box;
+}
+*, *:before, *:after {
+  	box-sizing: border-box;
+}
+
+.flex {
+	display: flex;
+
+	.col {
+		flex: 1;
+	}
+}
+
+.tar {
+	text-align: right;
+}
+
+.reviews-header {
+	align-items: center;
+    padding: 20px 50px;
+    box-shadow: 0px 0 29px -6px #dcdcdc;
+
+	.write-review {
+		background-color: #31beb2;
+	    color: white;
+	    font-size: 24px;
+	    padding: 15px 22px;
+	    text-decoration: none;
+	    border-radius: 5px;
 	}
 
-	html {
-	  	box-sizing: border-box;
-	}
-	*, *:before, *:after {
-	  	box-sizing: border-box;
-	}
-
-	.review-avatar {
-		display: block;
-		text-decoration: none;
-		width: 84px;
-		height: 84px;
-	    background-size: cover;
-	    border-radius: 50%;
-	    margin-bottom: 15px;
-	    position: relative;
-
-	    &:before {
-	    	content: '';
-		    position: absolute;
-		    left: 0px;
-		    right: 0;
-		    top: 0px;
-		    bottom: 0;
-		    width: 100%;
-		    background: url(../img-trp/avatar-border.svg) no-repeat 50% 50%;
-	    }
+	b {
+		font-size: 24px;
+	    font-weight: 900;
+	    margin-bottom: 10px;
+	    display: block;
 	}
 
-	.review-title {
-		text-decoration: none;
-		font-size: 20px;
-		font-weight: bold;
-		font-style: italic;
-		text-transform: uppercase;
+	p {
+		font-size: 18px;
+
+		a {
+			color: #31beb2;
+			text-decoration: none;
+			font-size: 18px;
+			font-weight: bold;
+		}
 	}
 
-	.ratings {
-	    margin-top: 12px;
+	.mini-wrap {
+		margin-bottom: 12px;
 
-	    .stars {
-	        width: 117px;
-	        height: 20px;
-	        display: inline-block;
-	        background: url('../img-trp/new-stars-gray.png') 50% 50% no-repeat;
-	        background-size: contain;
+		.ratings {
+			margin-top: 0px;
+			display: inline-block;
+			vertical-align: middle;
 
-	        .bar {
-	            background: url('../img-trp/new-stars-blue.png') 0% 50% no-repeat;
-	            background-size: cover;
-	            height: 20px;
-	        }
-	    }
-	    &.average {
-		    .stars {
-		        width: 180px;
-		        height: 31px;
+			.stars {
+		        width: 139px;
+		        height: 24px;
 		        background: url('../img-trp/new-stars-gray-average.png') 50% 50% no-repeat;
 		        background-size: contain;
+
+		        @media #{$phone} {
+		        	width: 109px;
+					height: 19px;
+		        }
 
 		        .bar {
 		            background: url('../img-trp/new-stars-blue-average.png') 0% 50% no-repeat;
 		            background-size: cover;
-		            height: 31px;
+		            height: 24px;
+
+		            @media #{$phone} {
+						height: 19px;
+			        }
 		        }
 		    }
-	    }
-	}
+		}
 
-	.review-name {
-		font-weight: bold;
-	    font-size: 14px;
-	    margin-top: 16px;
-	    display: block;
-	    color: #333;
-	}
+		.rating {
+			display: inline-block;
+		    font-size: 25px;
+		    font-weight: 300;
+		    color: #31beb2;
+		    vertical-align: middle;
+		    position: relative;
+		    padding-right: 10px;
+			margin-right: 6px;
 
-	.list-reviews {
+			@media #{$phone} {
+				padding-right: 6px;
+				margin-right: 3px;
+				font-size: 18px;
+			}
 
-		.list-review {
-			display: flex;
-		    padding-bottom: 30px;
-		    border-bottom: 1px solid #ccc;
-		    padding-top: 30px;
+		    &:before {
+		    	content: '';
+		    	position: absolute;
+		    	width: 2px;
+		    	height: 21px;
+		    	right: 0px;
+		    	top: 6px;
+		    	background-color: #48c3b8;
 
-		    @media #{$phone} {
-		    	flex-direction: column;
-		    	border-bottom: none;
-		    	position: relative;
-		    }
-
-		    &:after {
 		    	@media #{$phone} {
-		    		content: '';
-		    		position: absolute;
-		    		bottom: 0px;
-		    		width: 213px;
-		    		height: 2px;
-		    		left: 50%;
-		    		transform: translateX(-50%);
-		    		background-color: #eeeeee;
+		    		width: 1px;
+		    		top: 1px;
 		    	}
 		    }
+		}
+	}
+}
 
-		    &:last-child {
-		    	margin-bottom: 0px;
-		    	border-bottom: none;
 
-		    	&:after {
-			    	@media #{$phone} {
-			    		display: none;
-			    	}
-			    }
+
+.review-avatar {
+	display: block;
+	text-decoration: none;
+	width: 64px;
+	height: 64px;
+    background-size: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    position: relative;
+
+    &:before {
+    	content: '';
+	    position: absolute;
+	    left: 0px;
+	    right: 0;
+	    top: 0px;
+	    bottom: 0;
+	    width: 100%;
+	    background: url(../img-trp/avatar-border.svg) no-repeat 50% 50%;
+    }
+}
+
+.review-title {
+	text-decoration: none;
+	font-size: 18px;
+	font-weight: bold;
+	font-style: italic;
+	text-transform: uppercase;
+}
+
+.ratings {
+    margin-top: 12px;
+
+    .stars {
+		width: 81px;
+		height: 14px;
+        display: inline-block;
+        background: url('../img-trp/new-stars-gray.png') 50% 50% no-repeat;
+        background-size: contain;
+
+        .bar {
+            background: url('../img-trp/new-stars-blue.png') 0% 50% no-repeat;
+            background-size: cover;
+            height: 14px;
+        }
+    }
+    &.average {
+	    .stars {
+	        width: 180px;
+	        height: 31px;
+	        background: url('../img-trp/new-stars-gray-average.png') 50% 50% no-repeat;
+	        background-size: contain;
+
+	        .bar {
+	            background: url('../img-trp/new-stars-blue-average.png') 0% 50% no-repeat;
+	            background-size: cover;
+	            height: 31px;
+	        }
+	    }
+    }
+}
+
+.review-name {
+	font-weight: bold;
+    font-size: 13px;
+    margin-top: 16px;
+    display: block;
+    color: #333;
+}
+
+.list-reviews-wrap {
+	padding: 0px 50px;
+	overflow-y: scroll;
+    height: calc(100vh - 255px);
+    position: relative;
+
+    .list-reviews {
+    	margin-top: 22px;
+    }    
+
+	.list-review {
+		display: flex;
+	    padding-bottom: 20px;
+	    border-bottom: 1px solid #ccc;
+	    padding-top: 20px;
+
+	    @media #{$phone} {
+	    	flex-direction: column;
+	    	border-bottom: none;
+	    	position: relative;
+	    }
+
+	    &:after {
+	    	@media #{$phone} {
+	    		content: '';
+	    		position: absolute;
+	    		bottom: 0px;
+	    		width: 213px;
+	    		height: 2px;
+	    		left: 50%;
+	    		transform: translateX(-50%);
+	    		background-color: #eeeeee;
+	    	}
+	    }
+
+	    &:last-child {
+	    	margin-bottom: 0px;
+	    	border-bottom: none;
+
+	    	&:after {
+		    	@media #{$phone} {
+		    		display: none;
+		    	}
 		    }
+	    }
 
-			.list-review-left {
-				margin-right: 30px;
+		.list-review-left {
+			margin-right: 30px;
+			text-align: center;
+
+			@media #{$phone} {
+				margin-right: 0px;
+			}
+		}
+
+		.list-review-right {
+			text-align: left;
+
+			@media #{$phone} {
 				text-align: center;
-
-				@media #{$phone} {
-					margin-right: 0px;
-				}
 			}
+		}
 
-			.list-review-right {
-				text-align: left;
+		.review-date {
+			color: #888888;
+			text-align: center;
+			font-size: 13px;
 
-				@media #{$phone} {
-					text-align: center;
-				}
-			}
-
-			.review-date {
-				color: #888888;
-				text-align: center;
-				font-size: 14px;
-
-				@media #{$phone} {
-					display: none;
-				}
-			}
-
-			.review-content {
-				font-size: 18px;
-				font-weight: 300;
-				margin-top: 9px;
-				overflow: hidden;
-			    display: -webkit-box;
-			    -webkit-line-clamp: 2;
-			    -webkit-box-orient: vertical;
-
-			    @media #{$phone} {
-			    	-webkit-line-clamp: 4;
-			    	margin-top: 12px;
-			    }
-			}
-
-			.ratings {
-			    margin-top: 5px;
-
-			    @media #{$phone} {
-			    	margin-top: 14px;
-			    }
-			}
-
-			.review-avatar {
-				margin-bottom: 11px;
-
-			    @media #{$phone} {
-					margin-left: auto;
-					margin-right: auto;
-					margin-bottom: 14px;
-			    }
-			}
-
-			.review-name {				
-
-			    @media #{$phone} {
-			    	font-size: 16px;
-			    	margin-bottom: 15px;
-			    }
-			}
-
-			.mobile-review-date {
+			@media #{$phone} {
 				display: none;
-				text-align: center;
-				color: #888888;
+			}
+		}
 
-				@media #{$phone} {
-					display: block;
-				}
+		.review-content {
+			font-size: 16px;
+			font-weight: 300;
+			margin-top: 3px;
+			overflow: hidden;
+		    display: -webkit-box;
+		    -webkit-line-clamp: 2;
+		    -webkit-box-orient: vertical;
+
+		    @media #{$phone} {
+		    	-webkit-line-clamp: 4;
+		    	margin-top: 12px;
+		    }
+		}
+
+		.ratings {
+		    margin-top: 5px;
+
+		    @media #{$phone} {
+		    	margin-top: 14px;
+		    }
+		}
+
+		.review-avatar {
+			margin-bottom: 11px;
+
+		    @media #{$phone} {
+				margin-left: auto;
+				margin-right: auto;
+				margin-bottom: 14px;
+		    }
+		}
+
+		.review-name {				
+
+		    @media #{$phone} {
+		    	font-size: 16px;
+		    	margin-bottom: 15px;
+		    }
+		}
+
+		.mobile-review-date {
+			display: none;
+			text-align: center;
+			color: #888888;
+
+			@media #{$phone} {
+				display: block;
 			}
 		}
 	}
+}
 
-	.widget-logo-wrap {
-		display: block;
-		text-align: center;
-		margin-top: 70px;
-		margin-bottom: 30px;
+.widget-logo-wrap {
+	display: block;
+	text-align: center;
+	margin-top: 70px;
+	margin-bottom: 30px;
 
-		@media #{$phone} {
-			margin-top: 20px;
-		}
-
-		img {
-			max-width: 170px;
-		}
+	@media #{$phone} {
+		margin-top: 20px;
 	}
 
-	.tac {
-		text-align: center;
+	img {
+		max-width: 170px;
 	}
+}
+
+.tac {
+	text-align: center;
+}
+
+.reviews-footer {
+	background: url('../img-trp/footer-gradient.jpg') 0% 50% no-repeat;
+	background-size: cover;
+    text-align: center;
+    padding: 20px 0px;
+
+    img {
+    	max-width: 160px;
+    }
 }

@@ -6,33 +6,39 @@ use App\Http\Controllers\FrontController;
 use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
 
-use Mail;
-use Response;
-use Request;
-use Validator;
 use Illuminate\Support\Facades\Input;
-use App\Models\User;
-use App\Models\UserBan;
-use App\Models\OldSlug;
-use App\Models\City;
-use App\Models\Country;
-use App\Models\Question;
-use App\Models\Secret;
-use App\Models\Review;
-use App\Models\ReviewUpvote;
+use Cloutier\PhpIpfsApi\IPFS;
+
+use App\Models\DentistRecommendation;
+use App\Models\DentistPageview;
 use App\Models\ReviewDownvote;
+use App\Models\DentistFbPage;
+use App\Models\ReviewUpvote;
 use App\Models\ReviewAnswer;
+use App\Models\UserStrength;
 use App\Models\UserInvite;
 use App\Models\UserAction;
-use App\Models\UserAsk;
-use App\Models\Dcn;
-use App\Models\Reward;
 use App\Models\DcnReward;
-use App\Models\UserStrength;
-use App\Models\DentistPageview;
+use App\Models\Question;
+use App\Models\UserBan;
+use App\Models\OldSlug;
+use App\Models\UserAsk;
+use App\Models\Country;
+use App\Models\Secret;
+use App\Models\Review;
+use App\Models\Reward;
+use App\Models\User;
+use App\Models\City;
+use App\Models\Dcn;
+
 use Carbon\Carbon;
+
+use Validator;
+use Socialite;
+use Response;
+use Request;
 use Auth;
-use Cloutier\PhpIpfsApi\IPFS;
+use Mail;
 
 
 class DentistController extends FrontController
@@ -1225,46 +1231,6 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         return false;
     }
 
-    public function dentist_fb_tab($locale=null) {
-
-
-        if(Request::isMethod('post')) {
-            
-            if (!empty(Request::input('pageid'))) {
-                $dentist = User::where('fb_pages', 'LIKE', Request::input('pageid'))->first();
-
-                if (!empty($dentist)) {
-                    $reviews_obj = $dentist->reviews_in();
-                    $reviews = [];
-
-                    foreach ($reviews_obj as $review) {
-                        $review->patient_avatar = $review->user->getImageUrl(true);
-                        $review->date_converted = $review->created_at ? date('d/m/Y', $review->created_at->timestamp) : '-';
-                        $review->rating_converted = $review->rating/5*100;
-                        $review->converted_answer = nl2br($review->answer);
-                        $review->converted_title = !empty($review->title) ? '<a href="'.$dentist->getLink().'?review_id='.$review->id.'" target="_blank" class="review-title">“'.$review->title.'”</a>' : '';
-                        $review->patient_name = !empty($review->user->self_deleted) ? ($review->verified ? "Verified Patient" : "Deleted User") : $review->user->name;
-                        $reviews[] = $review->toArray();
-                    }
-
-                    $ret = [
-                        'success' => true,
-                        'reviews' => $reviews,
-                        'dentist_link' => $dentist->getLink()
-                    ];
-
-                    return Response::json( $ret );
-                }
-            }
-
-            return Response::json( [
-                'success' => false,
-            ] );
-        }
-
-        return $this->showView('facebook-tab');
-    }
-
 
     public function recommend_dentist() {
 
@@ -1276,126 +1242,236 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         if ($validator->fails()) {
             return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
         } else {
-            // $invitation = UserInvite::where([
-            //     ['user_id', $this->user->id],
-            //     ['invited_email', 'LIKE', Request::Input('email')],
-            // ])->first();
+            $recommendation = DentistRecommendation::where([
+                ['user_id', $this->user->id],
+                ['dentist_id', Request::Input('dentist-id')],
+                ['friend_email', 'LIKE', Request::Input('email')],
+            ])->first();
 
-            // $existing_patient = User::where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 0)->first();
+            $recommended_user = User::find(Request::Input('dentist-id'));
+            $type = $recommended_user->is_clinic ? 'dental clinic' : 'dentist';
 
-            // if($invitation) {
+            if($recommendation) {
+                return Response::json(['success' => false, 'message' => 'You already recommend your '.$type.' to your friend' ] );
+            } else if(Request::Input('email') == $this->user->email) {
+                return Response::json(['success' => false, 'message' => 'You can\'t recommend this '.$type.' to yourself' ] );
+            } else {
+                $new_recommendation = new DentistRecommendation;
+                $new_recommendation->user_id = $this->user->id;
+                $new_recommendation->dentist_id = Request::Input('dentist-id');
+                $new_recommendation->friend_email = Request::Input('email');
+                $new_recommendation->friend_name = Request::Input('name');
+                $new_recommendation->save();
 
-            //     if(!empty($existing_patient)) {
-            //         $d_id = $this->user->id;
+                $substitutions = [
+                    'type' => $type,
+                    'invited_user_name' => Request::Input('name'),
+                    'inviting_user_name' => $this->user->name,
+                    'recommended_dentist' => $recommended_user->getName(),
+                    'recommend_dentist_link' => $recommended_user->getLink(),
+                    'image_recommended_dentist' => $recommended_user->getSocialCover(),
+                ];
 
-            //         $patient_review = Review::where('user_id', $existing_patient->id )->where(function($query) use ($d_id) {
-            //             $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
-            //         })->orderBy('id', 'desc')->first();
-                    
-            //         if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-            //             return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.' ] );
-            //         }
-            //     }
+                //Mega hack
+                $user_name = $this->user->name;
+                $user_email = $this->user->email;
+                $this->user->name = Request::Input('name');
+                $this->user->email = Request::Input('email');
+                $this->user->save();
 
-            //     if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-            //         return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.'] );
-            //     }
+                $this->user->sendGridTemplate(89, $substitutions, 'trp');
 
-            //     $invitation->invited_name = Request::Input('name');
-            //     $invitation->created_at = Carbon::now();
+                //Back to original
+                $this->user->name = $user_name;
+                $this->user->email = $user_email;
+                $this->user->save();
 
-            //     if (empty($invitation->unsubscribed)) {
-            //         $invitation->review = true;
-            //         $invitation->completed = null;
-            //         $invitation->notified1 = null;
-            //         $invitation->notified2 = null;
-            //         $invitation->notified3 = null;
-            //     }
-            //     $invitation->save();
-
-            //     if(!empty($existing_patient)) {
-            //         $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
-            //         if(!empty($last_ask)) {
-            //             $last_ask->created_at = Carbon::now();
-            //             $last_ask->on_review = true;
-            //             $last_ask->save();
-            //         } else {
-            //             $ask = new UserAsk;
-            //             $ask->user_id = $existing_patient->id;
-            //             $ask->dentist_id = $this->user->id;
-            //             $ask->status = 'yes';
-            //             $ask->on_review = true;
-            //             $ask->save();
-            //         }
-            //     }
-            // } else {
-            //     $invitation = new UserInvite;
-            //     $invitation->user_id = $this->user->id;
-            //     $invitation->invited_email = Request::Input('email');
-            //     $invitation->invited_name = Request::Input('name');
-            //     $invitation->review = true;
-            //     $invitation->save();
-            // }
-
-            // if(!empty($existing_patient)) {
-
-            //     $substitutions = [
-            //         'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-            //         'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
-            //         'invited_user_name' => Request::Input('name'),
-            //         "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
-            //     ];
-
-            //     $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
-
-            // } else {
-
-            //     if(Request::Input('email') != $this->user->email) {
-
-            //         //Mega hack
-            //         $dentist_name = $this->user->name;
-            //         $dentist_email = $this->user->email;
-            //         $this->user->name = Request::Input('name');
-            //         $this->user->email = Request::Input('email');
-            //         $this->user->save();
-
-
-            //         if ( $this->user->is_dentist) {
-            //             $substitutions = [
-            //                 'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-            //                 'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
-            //                 'invited_user_name' => $this->user->name,
-            //                 "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
-            //             ];
-
-
-            //             $this->user->sendGridTemplate(59, $substitutions, 'trp');
-            //         } else {
-            //             $this->user->sendTemplate( 17 , [
-            //                 'friend_name' => $dentist_name,
-            //                 'invitation_id' => $invitation->id
-            //             ], 'trp');
-            //         }
-
-            //         // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
-            //         //     'friend_name' => $dentist_name,
-            //         //     'invitation_id' => $invitation->id
-            //         // ]);
-
-            //         //Back to original
-            //         $this->user->name = $dentist_name;
-            //         $this->user->email = $dentist_email;
-            //         $this->user->save();
-
-            //     } else {
-            //         return Response::json(['success' => false, 'message' => 'You can\'t invite yourself' ] );
-            //     }
-
-            // }
-
-
-            return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
+                return Response::json(['success' => true, 'message' => 'Your recommendation is sent.' ] );
+            }            
         }
+    }
+
+    public function facebook_login_dentist($locale=null) {
+        config(['services.facebook.redirect' => getLangUrl('login-dentist/callback/facebook')]);
+        return Socialite::driver('facebook')->scopes(['publish_pages', 'manage_pages'])->redirect();
+    }
+
+    public function facebook_callback_dentist() {
+        if (!Request::has('code') || Request::has('denied')) {
+            return redirect( getLangUrl('/'));
+        }
+        config(['services.facebook.redirect' => getLangUrl('login-dentist/callback/facebook')]);
+        return $this->try_social_login_dentist(Socialite::driver('facebook')->fields(['accounts'])->user());
+    }
+
+    private function try_social_login_dentist($s_user) {
+
+        $fb = new \Facebook\Facebook([
+          'app_id' => '1906201509652855',
+          'app_secret' => env('FB_APP_SECRET'),
+          'default_graph_version' => 'v2.11',
+          //'default_access_token' => '{access-token}', // optional
+        ]);
+
+        $duplicate = User::where('fb_id', $s_user->getId() )->first();
+        if ( !$duplicate ) {
+
+            if (empty($this->user->fb_id)) {
+                $this->user->fb_id = $s_user->getId();
+                $this->user->save();
+            }
+        }
+
+        try {
+          // Get the \Facebook\GraphNodes\GraphUser object for the current user.
+          // If you provided a 'default_access_token', the '{access-token}' is optional.
+            $response = $fb->get(
+                $s_user->id.'/accounts',
+                $s_user->token
+            );
+
+          //$response = $fb->get('/me', 'EAAbFrhZCaaXcBALswD8ERn7hB7svzYoEYMgxJCIJKkGZC2eCoudsZA6NIDAZCNeblBfCd8KsRULkRFSvZBHPVHZBrIAllTRl8APZCHEJv1FUV0B2v0VXM6S9eqlUFqs7aKnG3ZApLJVJdmen6TwySGPmphM7SQeBZAgBww0wHW4BbhmwgR4oEd0Tv8HN1WuzGrBZB39IisUKOSTgZDZD');
+        } catch(\Facebook\Exceptions\FacebookResponseException $e) {
+            // When Graph returns an error
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch(\Facebook\Exceptions\FacebookSDKException $e) {
+            // When validation fails or other local issues
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+
+        //page id =  1827135107521294
+
+        $pages = $response->getGraphEdge()->asArray();
+
+        if(!empty($pages)) {
+
+            $this->user->fb_pages = $pages;
+            $this->user->save();
+
+            return redirect( getLangUrl('dentist/'.$this->user->slug).'?'. http_build_query(['popup'=>'popup-widget']) .'&'. http_build_query(['fb-pages'=> $s_user->token])  );
+            
+         ?>
+
+            <form action="https://urgent.reviews.dentacoin.com/en/login-dentist/tab/<?php echo $s_user->token; ?>" method="POST">
+                <select name="page" single>
+                    <?php foreach ($pages as $p) { ?>
+                        <option value="<?php echo $p['id']; ?>"><?php echo $p['name']; ?></option>
+                    <?php } ?>
+                </select>
+                <input type="submit" name="submit">
+            </form>
+
+        <?php } else { ?>
+
+            <div>
+                No Facebook Page exists
+            </div>
+
+        <?php }
+       // dd($response->getGraphEdge()->asArray());
+
+
+
+        // try { 
+        //     $tab = $fb->get('/'.request('page').'/tabs/1906201509652855');
+        //     dd($tab->getDecodedBody());
+        //     $fb_tab_link = $tab['data'][0]['link'];
+        // } catch (FacebookApiException $e) {
+        //     echo '<!-- '.htmlspecialchars(print_r($e, true)).' -->';
+        // }
+
+
+        //  dd($response->getDecodedBody());
+        // $me = $response->getGraphUser();
+        // echo 'Logged in as ' . $me->getName();
+
+
+        // dd($me);
+        
+    }
+
+    public function facebook_tab($locale=null, $token) {
+
+        $fb = new \Facebook\Facebook([
+            'app_id' => '1906201509652855',
+            'app_secret' => env('FB_APP_SECRET'),
+            'default_graph_version' => 'v2.11',
+            'default_access_token' => $token, // optional
+        ]);
+
+        $exists_p = DentistFbPage::where('dentist_id', $this->user->id)->where('fb_page', 'LIKE', request('page'))->first();
+
+        if (empty($exists_p)) {            
+            $dp = new DentistFbPage;
+            $dp->dentist_id = $this->user->id;
+            $dp->fb_page = request('page');
+            $dp->save();
+        }
+
+        $fb->setDefaultAccessToken($token);
+
+        $page = $fb->get('/'.request('page').'?fields=access_token, name, id, fan_count');
+        $page = $page->getGraphNode()->asArray();
+
+        if($page['fan_count'] < 2000) {
+            return Response::json(['success' => false, 'message' => 'This page has less than 2000 likes' ] );
+        } else {
+
+            $addTab = $fb->post('/'.$page['id'].'/tabs', array('app_id' => '1906201509652855'), $page['access_token']);
+            $addTab = $addTab->getGraphNode()->asArray();
+            if ($addTab['success'] == 1){
+                return Response::json(['success' => true, 'message' => 'Tab added' ] );
+            } else {
+                return Response::json(['success' => false, 'message' => 'There is some error. Please try again later' ] );
+            }
+        }
+
+    }
+
+    public function dentist_fb_tab_reviews($locale=null) {
+
+        if (!empty(Request::input('pageid'))) {
+            $dentist_page = DentistFbPage::where('fb_page', 'LIKE', Request::input('pageid'))->first();
+            $dentist = User::find($dentist_page->dentist_id);
+
+            if (!empty($dentist)) {
+                $reviews_obj = $dentist->reviews_in();
+                $reviews = [];
+
+                foreach ($reviews_obj as $review) {
+                    $review->patient_avatar = $review->user->getImageUrl(true);
+                    $review->date_converted = $review->created_at ? date('d/m/Y', $review->created_at->timestamp) : '-';
+                    $review->rating_converted = $review->rating/5*100;
+                    $review->converted_answer = nl2br($review->answer);
+                    $review->converted_title = !empty($review->title) ? '<a href="'.$dentist->getLink().'?review_id='.$review->id.'" target="_blank" class="review-title">“'.$review->title.'”</a>' : '';
+                    $review->patient_name = !empty($review->user->self_deleted) ? ($review->verified ? "Verified Patient" : "Deleted User") : $review->user->name;
+                    $reviews[] = $review->toArray();
+                }
+
+                $ret = [
+                    'success' => true,
+                    'reviews' => $reviews,
+                    'reviews_count' => count($reviews),
+                    'dentist_link' => $dentist->getLink(),
+                    'avg_rating' => $dentist->avg_rating,
+                    'avg_rating_percantage' => $dentist->avg_rating/5*100,
+                ];
+
+                return Response::json( $ret );
+            }
+        }
+
+        return Response::json( [
+            'success' => false,
+        ] );
+    }
+
+
+    public function dentist_fb_tab($locale=null) {
+
+        return $this->showView('facebook-tab');
     }
 
 }

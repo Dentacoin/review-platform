@@ -37,19 +37,19 @@ return [
     
     'facebook' => [
         'client_id' => '1906201509652855',
-        'client_secret' => 'd3be0739681b061dcab618623d9853dd',
+        'client_secret' => env('FB_APP_SECRET'),
         'redirect' => ('login/callback/facebook'),
     ],
     
     'twitter' => [
         'client_id' => 'qtsd7dH0IOO6hv77XlVswPQWx',
-        'client_secret' => 'hQ1JcZBciOdOSWFaCKaL8zyxA2HFkA8UJ7QlmcPIEWQ5Xo7ESi',
+        'client_secret' => env('TWITTER_SECRET'),
         'redirect' => ('login/callback/twitter'),
     ],
     
     'google' => [
         'client_id' => '23312461529-il5nho35bplnu3huuife61jl4t8cciv4.apps.googleusercontent.com',
-        'client_secret' => 'WLdK71fPK3b5ICuAGPUnnEAG',
+        'client_secret' => env('GOOGLE_SECRET'),
         'redirect' => ('login/callback/gplus'),
     ],
 

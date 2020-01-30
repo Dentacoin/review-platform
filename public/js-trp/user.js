@@ -12,6 +12,7 @@ var suggestedDentistClick;
 var suggestClinicClick;
 var aggregated_reviews;
 var editor;
+var fb_page_param;
 
 $(document).ready(function(){
 
@@ -397,6 +398,7 @@ $(document).ready(function(){
     //
 
     //Widget
+
     if( $('#widget-carousel').length ) {
         $(".select-me").on("click focus", function () {
             $(this).select();
@@ -407,7 +409,7 @@ $(document).ready(function(){
             document.execCommand('copy');
         });
 
-        $('.widget-tabs .col, #select-reviews-popup input, #popup-widget input, #popup-widget select').on('click change keyup keypress', function(e) {
+        $('.widget-tabs .col, #select-reviews-popup input, #popup-widget input, #popup-widget select:not(#dentist-page)').on('click change keyup keypress', function(e) {
             if(typeof widet_url=='undefined') {
                 return;
             }
@@ -440,6 +442,11 @@ $(document).ready(function(){
             var custom_heigth = false;
 
             $('.select-reviews').show();
+            $('.facebook-tab').hide();
+            if ($('form .get-widget-code-wrap').length) {
+                $('form .get-widget-code-wrap').hide();
+            }
+            
             if (layout == 'carousel') {
                 if ($('[name="slide-results"][cant-select]').length && parseInt($('[name="slide-results"]').val()) == 3) {
                     getParams += '&slide=1';
@@ -508,6 +515,14 @@ $(document).ready(function(){
                 $('.widget-last-step').show();
             }
 
+            if(layout == 'fb') {
+                $('.get-widget-code-wrap').hide();
+                $('.widget-last-step').hide();
+                $('form .get-widget-code-wrap').show();
+                $('.select-reviews').hide();
+                $('.facebook-tab').show();
+            }
+
             $('.widget-custom-reviews-alert').hide();
 
             var iframe_url = parsedUrl.replace('&width=','&customwidth=').replace('&height=','&customheight=');
@@ -515,8 +530,8 @@ $(document).ready(function(){
             $('#option-js textarea').val('<!--Trusted Reviews Widget-->\n\r<div id="trp-widget"></div><script type="text/javascript" src="https://reviews.dentacoin.com/js-trp/widget.js"></script> <script type="text/javascript"> TRPWidget.init("'+parsedUrl+'"); </script>\n\r<!--End Trusted Reviews Widget-->');
         });
         $('#widget-carousel').trigger('change');
-
     }
+    
 
     $('.get-widget-code').click( function() {
         if($('[name="review-type"]:checked').val() == 'custom' && !$('[name="widget-custom-review"]:checked').length) {
@@ -558,6 +573,14 @@ $(document).ready(function(){
                     'event_category': 'Widgets',
                     'event_label': selected_layout,
                 });
+            }
+
+            if (selected_layout == 'fb') {
+                $('.show-fb').show();
+                $('.hide-fb').hide();
+            } else {
+                $('.show-fb').hide();
+                $('.hide-fb').show();
             }
         }
     });
@@ -2227,5 +2250,108 @@ $(document).ready(function(){
         $('.widget-content').hide();
         $('#widget-option-'+$(this).attr('data-widget')).show();
     });
+
+    if( $('.recommend-dentist-form').length ) {
+
+        $('.recommend-dentist-form').submit( function(e) {
+            e.preventDefault();
+
+            if(ajax_is_running) {
+                return;
+            }
+
+            ajax_is_running = true;
+
+            $(this).find('.recommend-alert').hide().removeClass('alert-warning').removeClass('alert-success');
+
+
+            var formData = new FormData();
+
+            // add assoc key values, this will be posts values
+            formData.append("_token", $(this).find('input[name="_token"]').val());            
+            formData.append("name", $(this).find('.recommend-name').val());
+            formData.append("email", $(this).find('.recommend-email').val());
+            formData.append("dentist-id", $(this).find('.recommend-dentist-id').val());
+
+
+            $.ajax({
+                type: "POST",
+                url: $(this).attr('action'),
+                success: function (data) {
+                    if(data.success) {
+                        $('.recommend-dentist-form').find('.recommend-email').val('');
+                        $('.recommend-dentist-form').find('.recommend-name').val('').focus();
+                        $('.recommend-dentist-form').find('.recommend-alert').show().addClass('alert-success').html(data.message);
+
+                        gtag('event', 'Submit', {
+                            'event_category': 'Recommend',
+                            'event_label': 'RecommendSent',
+                        });
+                    } else {
+                        $('.recommend-dentist-form').find('.recommend-alert').show().addClass('alert-warning').html(data.message);                    
+                    }
+                    ajax_is_running = false;
+                },
+                error: function (error) {
+                    console.log('error');
+                },
+                async: true,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                timeout: 60000
+            });
+        } );
+    }
+
+    $('.form-fb-tab').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+
+        ajax_is_running = true;
+
+        $(this).find('.fbtab-alert').hide().removeClass('alert-warning').removeClass('alert-success');
+
+        var that = $(this);
+
+        $.ajax({
+            type: "POST",
+            url: that.attr('action'),
+            data: {
+                page: $('#dentist-page').val(),
+                _token: $('input[name="_token"]').val(),
+            },
+            dataType: 'json',
+            success: function(data) {
+                if(data.success) {
+                    $('.form-fb-tab').find('.fbtab-alert').show().addClass('alert-success').html(data.message);
+
+                    // gtag('event', 'AddManually', {
+                    //     'event_category': 'ReviewInvites',
+                    //     'event_label': 'InvitesSent',
+                    // });
+                } else {
+                    $('.form-fb-tab').find('.fbtab-alert').show().addClass('alert-warning').html(data.message);                    
+                }
+                ajax_is_running = false;
+            },
+            error: function(data) {
+                console.log('error');
+            }
+        });
+    });
+
+
+    $('.recommend-button').click( function() {
+        gtag('event', 'Open', {
+            'event_category': 'Recommend',
+            'event_label': 'RecommendPopup',
+        });
+    });
+    
 
 });

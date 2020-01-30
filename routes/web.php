@@ -227,6 +227,8 @@ $reviewRoutes = function () {
 			Route::get('useful/{id}', 							'DentistController@useful');
 			Route::get('unuseful/{id}', 						'DentistController@unuseful');
 
+			Route::post('recommend-dentist', 					'DentistController@recommend_dentist');
+
 			Route::get('register', 								'RegisterController@register');
 			Route::post('register', 							'RegisterController@register_form');
 			Route::get('forgot-password', 						'RegisterController@forgot');
@@ -285,10 +287,12 @@ $reviewRoutes = function () {
 
 			Route::get('faq', 									'FaqController@home');
 
-			Route::get('login-dentist/facebook', 				'LoginController@facebook_login_dentist');
-			Route::get('login-dentist/callback/facebook', 		'LoginController@facebook_callback_dentist');
+			Route::get('login-dentist/facebook', 				'DentistController@facebook_login_dentist');
+			Route::any('login-dentist/callback/facebook', 		'DentistController@facebook_callback_dentist');
+			Route::post('login-dentist/tab/{token}', 			'DentistController@facebook_tab');
 
-			Route::any('facebook-tab', 							'DentistController@dentist_fb_tab');
+			Route::post('facebook-tab', 						'DentistController@dentist_fb_tab');
+			Route::any('facebook-tab-reviews', 					'DentistController@dentist_fb_tab_reviews');
 
 			Route::group(['middleware' => 'auth:web'], function () {
 

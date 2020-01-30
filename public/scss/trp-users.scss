@@ -192,7 +192,7 @@ $phone: "screen and (max-width: 768px)";
     }
 
     .share-button {
-		position: absolute;
+    	position: absolute;
 	    right: 21px;
 	    top: 16px;
 	    color: #46afda;
@@ -204,6 +204,22 @@ $phone: "screen and (max-width: 768px)";
 			display: inline-block;
 			max-width: 16px;
 			vertical-align: middle;
+		}
+    }
+
+    .recommend-button {
+		position: absolute;
+		right: 91px;
+		top: 16px;
+		color: #46afda;
+		font-size: 18px;
+		width: 123px;
+		z-index: 10;
+
+		img {
+			max-width: 17px;
+			vertical-align: middle;
+			margin-right: 2px;
 		}
     }
 
@@ -282,6 +298,21 @@ $phone: "screen and (max-width: 768px)";
 		color: #46afda;
 		font-size: 14px;
 		width: 48px;
+
+		img {
+			display: inline-block;
+			max-width: 12px;
+			vertical-align: middle;
+		}
+    }
+
+    .recommend-mobile {
+		position: absolute;
+		left: 10px;
+		top: 10px;
+		color: #46afda;
+		font-size: 14px;
+		width: 88px;
 
 		img {
 			display: inline-block;
@@ -970,6 +1001,18 @@ $phone: "screen and (max-width: 768px)";
 		@media #{$phone} {
 			margin-left: 10px;
 		}
+
+		.recommend-button {
+			color: #46afda;
+			font-size: 18px;
+			margin-top: 5px;
+			display: block;
+
+			img {
+				max-width: 16px;
+				margin-right: 2px;
+			}
+	    }
 	}
 
 	.review-avatar {
@@ -2020,5 +2063,43 @@ body.edit-user {
 
 	@media #{$tablet} {
 		display: block;
+	}
+}
+
+.popup {
+	&#recommend-dentist {
+
+		.popup-inner {
+
+			h2 {
+				margin-bottom: 25px;
+			}
+
+			.popup-title {
+				font-weight: bold;
+			}
+
+			.rec-first {
+				margin-right: 18px;
+
+				@media #{$phone} {
+					margin-right: 0px;
+				}
+			}
+
+			.modern-field {
+				.modern-input {
+					border-radius: 7px;
+					border-width: 1px; 
+				}
+			}
+
+			input[type="submit"] {
+				background-color: #0cafd4;
+			    margin-top: 25px;
+			    margin-bottom: 30px;
+			    padding: 12px 52px;
+			}
+		}
 	}
 }

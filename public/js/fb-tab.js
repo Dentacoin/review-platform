@@ -8,16 +8,6 @@ $(document).ready(function(){
         platform: 'fb'
     };
 
-    //application init
-    window.fbAsyncInit = function () {
-        FB.init({
-            appId: fb_config.app_id,
-            cookie: true,
-            xfbml: true,
-            version: 'v2.8'
-        });
-        FB.AppEvents.logPageView();
-    };
 
     (function (d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
@@ -30,25 +20,29 @@ $(document).ready(function(){
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-    // set a variable with the signed_request sent to your app URL by Facebook via POST
+    //application init
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: fb_config.app_id,
+            cookie: true,
+            xfbml: true,
+            version: 'v2.8'
+        });
+        FB.AppEvents.logPageView();
 
-    FB.getLoginStatus(function (response) {
-        // do not use the response.authResponse.signedRequest but the one above instead
-        // and let the javascript SDK parse the good signed_request for you
-        var page = this.parseSignedRequest(signedRequest).page;
-        // is the current user an admin of this page? true/false
-        var isAdmin = page.admin;
-        // do you like this page? true/false
-        var isLiked = page.liked;
-        // and here is the Facebook page ID
-        var pageID = page.id;
-
-        console.log(pageID);
-        if (response.status === 'connected') {
-
+	    FB.getLoginStatus(function (response) {
+	        // do not use the response.authResponse.signedRequest but the one above instead
+	        // and let the javascript SDK parse the good signed_request for you
+	        var page = this.parseSignedRequest(signedRequest).page;
+	        // is the current user an admin of this page? true/false
+	        var isAdmin = page.admin;
+	        // do you like this page? true/false
+	        var isLiked = page.liked;
+	        // and here is the Facebook page ID
+	        var pageID = page.id;
 
 		    $.ajax( {
-		        url: window.location.origin+'/en/facebook-tab/',
+		        url: window.location.origin+'/en/facebook-tab-reviews/',
 		        type: 'POST',
 		        dataType: 'json',
 		        data: {
@@ -57,8 +51,26 @@ $(document).ready(function(){
 		        },
 		        success: function(data) {
 		        	if (data.success) {
+
+		            	$('.reviews-header').append('<div class="col">\
+							<b>We Value Patient Feedback</b>\
+							<div class="mini-wrap">\
+								<div class="rating">'+data.avg_rating+'</div>\
+								<div class="ratings">\
+									<div class="stars">\
+										<div class="bar" style="width: '+data.avg_rating_percantage+'%;">\
+										</div>\
+									</div>\
+								</div>\
+							</div>\
+							<p>See all '+data.reviews_count+' reviews on <a href="'+data.dentist_link+'">Trusted Reviews</a></p>\
+						</div>\
+						<div class="col tar">\
+							<a href="'+data.dentist_link+'" target="_blank" class="write-review">Write a review</a>\
+						</div>');
+						
 			            for (var i in data.reviews) {
-			            	console.log(data);
+
 			            	$('.list-reviews').append('<div class="list-review">\
 								<div class="list-review-left">\
 									<a href="'+data.dentist_link+'?review_id='+data.reviews[i]['id']+'" target="_blank" class="review-avatar" style="background-image: url('+data.reviews[i]['patient_avatar']+');"></a>\
@@ -87,14 +99,21 @@ $(document).ready(function(){
 		            console.log('error');
 		        }
 		    });
-		} else if (response.status === 'not_authorized') {
-            // the user is logged in to Facebook,
-            // but has not authenticated your app
 
-        } else {
-            // the user isn't logged in to Facebook.
+	  //       if (response.status === 'connected') {
 
-        }
 
-    }, true);
+			// } else if (response.status === 'not_authorized') {
+	  //           // the user is logged in to Facebook,
+	  //           // but has not authenticated your app
+
+	  //       } else {
+	  //           // the user isn't logged in to Facebook.
+
+	  //       }
+
+	    }, true);
+    };
+    // set a variable with the signed_request sent to your app URL by Facebook via POST
+
 });

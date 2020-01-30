@@ -151,6 +151,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'grace_end',
     ];
 
+    protected $casts = [
+        'fb_pages' => 'array',
+    ];
+
     public function actions() {
         return $this->hasMany('App\Models\UserAction', 'user_id', 'id');
     }
@@ -601,7 +605,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 "dentist" => url('https://dentists.dentacoin.com/'),
                 "dentacare" => url('https://dentacare.dentacoin.com/'),
                 "giftcards" => url('https://dentacoin.com/?payment=bidali-gift-cards'),
-                "image_recommended_dentist" => $this->getSocialCover(),
             ];
 
             if ($substitutions) {
