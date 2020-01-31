@@ -22,6 +22,7 @@ use App\Models\User;
 use App\Models\Vox;
 use App\Models\VoxRelated;
 use App\Models\VoxAnswer;
+use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\VoxQuestion;
 use App\Models\VoxCrossCheck;
@@ -32,6 +33,9 @@ use App\Models\Dcn;
 use App\Models\Email;
 use App\Models\Reward;
 use App\Models\Admin;
+
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
 
 
 class VoxController extends FrontController
@@ -151,6 +155,28 @@ class VoxController extends FrontController
 		$doing_asl = false;
 
 		if($this->user->loggedFromBadIp() && !$this->user->is_dentist) {
+
+			$ul = new UserLogin;
+            $ul->user_id = $this->user->id;
+            $ul->ip = User::getRealIp();
+            $ul->platform = 'vox';
+            $ul->country = \GeoIP::getLocation()->country;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+            $dd = new DeviceDetector($userAgent);
+            $dd->parse();
+
+            if ($dd->isBot()) {
+                // handle bots,spiders,crawlers,...
+                $ul->device = $dd->getBot();
+            } else {
+                $ul->device = $dd->getDeviceName();
+                $ul->brand = $dd->getBrandName();
+                $ul->model = $dd->getModel();
+                $ul->os = $dd->getOs()['name'];
+            }
+            
+            $ul->save();
 
 			$action = new UserAction;
             $action->user_id = $this->user->id;
