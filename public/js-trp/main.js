@@ -892,6 +892,30 @@ jQuery(document).ready(function($){
             $(this).serialize() , 
             function( data ) {
                 if(data.success) {
+                	var ans_3 = '';
+
+                    $('.lead-magnet-checkbox[name="answer-3[]"]:checked').each( function() {
+                        ans_3 += $(this).attr('ans-text')+'|';
+                    });
+
+                    ans_3.slice(0,-1);
+
+                    _aaq.push(['setContactFields', {
+                        firstname:$("#magnet-name").val(),
+                        website:$("#magnet-website").val(),
+                        email:$("#magnet-email").val(),
+                        country:$('#magnet-country option:selected').text(),
+                        priority:$('.lead-magnet-radio[name="answer-1"]:checked').attr('ans-text'),
+                        reviews_tool:$('.lead-magnet-radio[name="answer-2"]:checked').attr('ans-text'),
+                        ask_reviews:ans_3,
+                        frequently_reviews: $('.lead-magnet-radio[name="answer-4"]:checked').length ? $('.lead-magnet-radio[name="answer-4"]:checked').attr('ans-text') : '',
+                        reviews_reply:$('.lead-magnet-radio[name="answer-5"]:checked').attr('ans-text'),
+                    }]);
+                    _aaq.push(['rememberConsentGiven', false, 2]);
+                    _aaq.push(['trackPageView']);
+
+                    console.log('push', _aaq);
+
                     fbq('track', 'TRPMagnetComplete');
 
                     gtag('event', 'SeeScore', {

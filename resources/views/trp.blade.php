@@ -233,13 +233,13 @@
 				    <script type="text/javascript">
 					    function LeadMagenet() {
 					    	setTimeout( function() {
-					    		_aaq.push(['setContactFields', {
-			                        firstname:document.getElementById("magnet-name").value,
-			                        website:document.getElementById("magnet-website").value,
-			                        email:document.getElementById("magnet-email").value,
-			                    }]);
-					    		//_aaq.push(['rememberConsentGiven', false, 3]);
-                    			_aaq.push(['trackPageView']);
+					    		// _aaq.push(['setContactFields', {
+			        //                 firstname:document.getElementById("magnet-name").value,
+			        //                 website:document.getElementById("magnet-website").value,
+			        //                 email:document.getElementById("magnet-email").value,
+			        //             }]);
+					    		// _aaq.push(['rememberConsentGiven', false, 2]);
+           //          			_aaq.push(['trackPageView']);
                     		}, 5000);
 						}
 					</script>
