@@ -1164,7 +1164,7 @@ NEW & FAILED TRANSACTIONS
                             //  $top3_dentists[] = '<a href="'.$top3_dentist->getLink().'">'.$top3_dentist->getName().'</a>';
                             // }
 
-                            $user->sendGridTemplate(55, [
+                            $user->sendGridTemplate(90, [
                                 'score_last_month_aver' => $cur_month_rating,
                                 'score_percent_month' => $cur_month_rating_percent,
                                 'change_month' => $change_month,
@@ -1199,7 +1199,7 @@ NEW & FAILED TRANSACTIONS
 
                                 $month = \Carbon\Carbon::now();
 
-                                $user->sendGridTemplate(56, [
+                                $user->sendGridTemplate(91, [
                                     'month' => $month->subMonth()->format('F'),
                                     'compare_with_others' => $compare_with_others,
                                 ], 'trp');

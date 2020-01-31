@@ -187,7 +187,7 @@ class LoginController extends FrontController
         if (!Request::has('code') || Request::has('denied')) {
             return redirect( getVoxUrl('/') );
         }
-        return $this->try_social_register(Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email', 'gender', 'birthday', 'location'])->user(), 'fb');
+        return $this->try_social_register(Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email', 'location'])->user(), 'fb');
     }
 
     private function try_social_register($s_user, $network) {
