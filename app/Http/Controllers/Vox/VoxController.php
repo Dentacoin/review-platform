@@ -34,9 +34,6 @@ use App\Models\Email;
 use App\Models\Reward;
 use App\Models\Admin;
 
-use DeviceDetector\DeviceDetector;
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-
 
 class VoxController extends FrontController
 {
