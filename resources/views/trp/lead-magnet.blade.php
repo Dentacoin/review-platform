@@ -78,7 +78,7 @@
 				</div>
 			</div>
 
-			<a href="javascript:;" class="button button-yellow get-started-button button-sign-up-dentist">{{ nl2br(trans('trp.page.lead-magnet-results.button-improve-results')) }}</a>
+			<a href="{!! !empty($user) ? $user->getLink().'?popup=popup-invite' : 'javascript:;' !!}" class="button button-yellow {!! empty($user) ? 'get-started-button' : '' !!}">{{ nl2br(trans('trp.page.lead-magnet-results.button-improve-results')) }}</a>
 		</div>
 
 		<div class="country-dentist-rating">
@@ -150,7 +150,7 @@
 					</div>
 				</div>
 			</div>
-			<a href="javascript:;" class="get-started get-started-button button-sign-up-dentist">{{ nl2br(trans('trp.page.lead-magnet-results.button-get-started')) }}</a>
+			<a href="{!! !empty($user) ? $user->getLink().'?popup=popup-invite' : 'javascript:;' !!}" class="get-started {!! empty($user) ? 'get-started-button' : '' !!}">{{ nl2br(trans('trp.page.lead-magnet-results.button-get-started')) }}</a>
 		</div>
 
 	</div>

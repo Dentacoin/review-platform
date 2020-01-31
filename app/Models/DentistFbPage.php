@@ -9,7 +9,9 @@ class DentistFbPage extends Model {
         
     protected $fillable = [
         'dentist_id',
-        'fb_page'
+        'fb_page',
+        'reviews_type',
+        'reviews_count',
     ];
 
     protected $dates = [

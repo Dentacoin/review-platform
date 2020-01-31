@@ -13,6 +13,7 @@ var suggestClinicClick;
 var aggregated_reviews;
 var editor;
 var fb_page_param;
+var fb_page_error;
 
 $(document).ready(function(){
 
@@ -442,7 +443,6 @@ $(document).ready(function(){
             var custom_heigth = false;
 
             $('.select-reviews').show();
-            $('.facebook-tab').hide();
             if ($('form .get-widget-code-wrap').length) {
                 $('form .get-widget-code-wrap').hide();
             }
@@ -519,8 +519,11 @@ $(document).ready(function(){
                 $('.get-widget-code-wrap').hide();
                 $('.widget-last-step').hide();
                 $('form .get-widget-code-wrap').show();
-                $('.select-reviews').hide();
-                $('.facebook-tab').show();
+                if (fb_page_param) {
+                    $('.select-reviews').show();
+                } else {
+                    $('.select-reviews').hide();
+                }
             }
 
             $('.widget-custom-reviews-alert').hide();
@@ -2308,6 +2311,11 @@ $(document).ready(function(){
     $('.form-fb-tab').submit( function(e) {
         e.preventDefault();
 
+        if($('[name="review-type"]:checked').val() == 'custom' && !$('[name="widget-custom-review"]:checked').length) {
+            $('.widget-custom-reviews-fb-alert').show();
+            return;
+        }
+
         if(ajax_is_running) {
             return;
         }
@@ -2318,17 +2326,34 @@ $(document).ready(function(){
 
         var that = $(this);
 
+        var reviews_cust = [];
+        if($('[name="review-type"]:checked').val() == 'custom') {
+            $('[name="widget-custom-review"]:checked').each( function() {
+                reviews_cust.push($(this).val());
+            });
+        }
+
         $.ajax({
             type: "POST",
             url: that.attr('action'),
             data: {
                 page: $('#dentist-page').val(),
+                reviews_type: $('[name="review-type"]:checked').val(),
+                all_reviews: $('[name="all-reviews-option"]:checked').val(),
+                trusted_reviews: $('[name="trusted-reviews-option"]:checked').val(),
+                custom_reviews: reviews_cust,
                 _token: $('input[name="_token"]').val(),
             },
             dataType: 'json',
             success: function(data) {
                 if(data.success) {
-                    $('.form-fb-tab').find('.fbtab-alert').show().addClass('alert-success').html(data.message);
+                    $('.widget-step-1').show();
+                    $('.widget-step-2').hide();
+                    $('#popup-widget').removeClass('active');
+                    $('#popup-widget').removeClass('active');
+                    $('#facebook-tab-success').addClass('active');
+
+                    // $('.form-fb-tab').find('.fbtab-alert').show().addClass('alert-success').html(data.message);
 
                     // gtag('event', 'AddManually', {
                     //     'event_category': 'ReviewInvites',

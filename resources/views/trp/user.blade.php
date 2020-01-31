@@ -1291,7 +1291,7 @@
 	@endif
 @endif
 @include('trp.popups.detailed-review')
-
+@include('trp.popups.lead-magnet')
 
 
 <script type="application/ld+json">
@@ -1300,6 +1300,7 @@
 
 
 <script type="text/javascript">
+	var fb_page_error = {!! !empty(request('fb-pages-error')) ? true : 0 !!}
 	var fb_page_param = {!! !empty(request('fb-pages')) ? true : 0 !!};
 	var aggregated_reviews = {!! json_encode($aggregated, JSON_HEX_QUOT) !!};
 </script>

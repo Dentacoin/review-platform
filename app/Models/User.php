@@ -170,6 +170,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function cross_check() {
         return $this->hasMany('App\Models\VoxCrossCheck', 'user_id', 'id');
     }
+    public function dentist_fb_page() {
+        return $this->hasMany('App\Models\DentistFbPage', 'dentist_id', 'id');
+    }
     public function invitor() {
         return $this->hasOne('App\Models\User', 'id', 'invited_by');
     }
@@ -589,6 +592,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 "name" => $this->getNameSendGrid(),
                 "platform" => $item->platform,
                 "invite-patient" => getLangUrl( 'dentist/'.$this->slug, null, $domain).'?'. http_build_query(['popup'=>'popup-invite']),
+                "lead-magnet-link" => $this->getLink().'?'. http_build_query(['popup'=>'popup-lead-magnet']),
                 "homepage" => getLangUrl('/', null, $domain),
                 "trp_profile" => $this->getLink(),
                 "town" => $this->city_name ? $this->city_name : 'your town',

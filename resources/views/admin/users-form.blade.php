@@ -943,9 +943,44 @@
     </div>
 @endif
 
-@endsection
+@if($item->is_dentist && $item->dentist_fb_page->isNotEmpty())
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Facebook Page Tabs</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="panel-body">
+                        <div class="row">
 
-
+                            <table class="table table-striped table-question-list">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($item->dentist_fb_page as $dpt)
+                                        <tr>
+                                            <td>
+                                                {{ $dpt->created_at->toDateTimeString() }}
+                                            </td>
+                                            <td>
+                                                <a href="https://www.facebook.com/profile.php?id={{ $dpt->fb_page }}" target="_blank">{{ $dpt->fb_page }}</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 
 <div id="deleteModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -996,3 +1031,5 @@
         font-size: 12px;
     }
 </style>
+
+@endsection

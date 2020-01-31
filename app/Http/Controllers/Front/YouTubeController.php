@@ -20,13 +20,6 @@ use App\Models\Review;
 use App\Models\VoxQuestion;
 use App\Models\Email;
 
-use \SendGrid\Mail\From as From;
-use \SendGrid\Mail\To as To;
-use \SendGrid\Mail\Subject as Subject;
-use \SendGrid\Mail\PlainTextContent as PlainTextContent;
-use \SendGrid\Mail\HtmlContent as HtmlContent;
-use \SendGrid\Mail\Mail as Mail;
-
 use Carbon\Carbon;
 
 class YouTubeController extends FrontController
@@ -49,7 +42,7 @@ class YouTubeController extends FrontController
     	// $user = User::find(37530);
     	// $user->generateSocialCover();
     	// dd($user->getSocialCover());
-
+        
     	exit;
     }
 }

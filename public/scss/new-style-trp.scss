@@ -9631,3 +9631,43 @@ body.strength-pb {
 #ariticform_wrapper_leadmagnetform {
 	display: none;
 }
+
+.header-success-tab {
+	background-color: transparent;
+
+	img {
+		max-width: 120px;
+		margin-bottom: 10px;
+
+		@media #{$phone} {
+			max-width: 60px;
+		}
+	}        	
+
+	h2 {
+		text-transform: uppercase;
+		font-weight: bold;
+		font-size: 38px;
+		color: #126585 !important;
+		margin-bottom: 13px !important;
+		margin-top: 30px !important;
+
+		@media #{$phone} {
+			font-size: 24px;
+			margin-top: 0px !important;
+			margin-bottom: 20px !important;
+		}
+	}
+
+	h4 {
+		color: #333;
+		max-width: 620px;
+		margin-right: auto;
+		margin-left: auto;
+
+		@media #{$phone} {
+			font-size: 16px;
+			margin-bottom: 25px;
+		}
+	}
+}

@@ -1370,80 +1370,80 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
             $this->user->save();
 
             return redirect( getLangUrl('dentist/'.$this->user->slug).'?'. http_build_query(['popup'=>'popup-widget']) .'&'. http_build_query(['fb-pages'=> $s_user->token])  );
-            
-         ?>
 
-            <form action="https://urgent.reviews.dentacoin.com/en/login-dentist/tab/<?php echo $s_user->token; ?>" method="POST">
-                <select name="page" single>
-                    <?php foreach ($pages as $p) { ?>
-                        <option value="<?php echo $p['id']; ?>"><?php echo $p['name']; ?></option>
-                    <?php } ?>
-                </select>
-                <input type="submit" name="submit">
-            </form>
-
-        <?php } else { ?>
-
-            <div>
-                No Facebook Page exists
-            </div>
-
-        <?php }
-       // dd($response->getGraphEdge()->asArray());
-
-
-
-        // try { 
-        //     $tab = $fb->get('/'.request('page').'/tabs/1906201509652855');
-        //     dd($tab->getDecodedBody());
-        //     $fb_tab_link = $tab['data'][0]['link'];
-        // } catch (FacebookApiException $e) {
-        //     echo '<!-- '.htmlspecialchars(print_r($e, true)).' -->';
-        // }
-
-
-        //  dd($response->getDecodedBody());
-        // $me = $response->getGraphUser();
-        // echo 'Logged in as ' . $me->getName();
-
-
-        // dd($me);
+        } else {
+            return redirect( getLangUrl('dentist/'.$this->user->slug).'?'. http_build_query(['popup'=>'popup-widget']) .'&fb-pages-error=1'  );
+        }
         
     }
 
     public function facebook_tab($locale=null, $token) {
 
-        $fb = new \Facebook\Facebook([
-            'app_id' => '1906201509652855',
-            'app_secret' => env('FB_APP_SECRET'),
-            'default_graph_version' => 'v2.11',
-            'default_access_token' => $token, // optional
+        $validator = Validator::make(Request::all(), [
+            'reviews_type' => array('required'),
+            'page' => array('required'),
         ]);
 
-        $exists_p = DentistFbPage::where('dentist_id', $this->user->id)->where('fb_page', 'LIKE', request('page'))->first();
+        if ($validator->fails()) {
 
-        if (empty($exists_p)) {            
-            $dp = new DentistFbPage;
-            $dp->dentist_id = $this->user->id;
-            $dp->fb_page = request('page');
-            $dp->save();
-        }
+            $msg = $validator->getMessageBag()->toArray();
+            $ret = array(
+                'success' => false,
+                'message' => array()
+            );
 
-        $fb->setDefaultAccessToken($token);
+            foreach ($msg as $field => $errors) {
+                $ret['message'][$field] = implode(', ', $errors);
+            }
 
-        $page = $fb->get('/'.request('page').'?fields=access_token, name, id, fan_count');
-        $page = $page->getGraphNode()->asArray();
-
-        if($page['fan_count'] < 2000) {
-            return Response::json(['success' => false, 'message' => 'This page has less than 2000 likes' ] );
+            return Response::json( $ret );
         } else {
 
-            $addTab = $fb->post('/'.$page['id'].'/tabs', array('app_id' => '1906201509652855'), $page['access_token']);
-            $addTab = $addTab->getGraphNode()->asArray();
-            if ($addTab['success'] == 1){
-                return Response::json(['success' => true, 'message' => 'Tab added' ] );
+            $fb = new \Facebook\Facebook([
+                'app_id' => '1906201509652855',
+                'app_secret' => env('FB_APP_SECRET'),
+                'default_graph_version' => 'v2.11',
+                'default_access_token' => $token, // optional
+            ]);
+
+            $exists_p = DentistFbPage::where('dentist_id', $this->user->id)->where('fb_page', 'LIKE', request('page'))->first();
+
+            if (empty($exists_p)) {            
+                $dp = new DentistFbPage;
             } else {
-                return Response::json(['success' => false, 'message' => 'There is some error. Please try again later' ] );
+                $dp = $exists_p;
+            }
+
+            $dp->dentist_id = $this->user->id;
+            $dp->fb_page = request('page');
+            $dp->reviews_type = request('reviews_type');
+
+            if (request('reviews_type') == 'all') {
+                $dp->reviews_count = request('all_reviews');
+            } else if(request('reviews_type') == 'trusted') {
+                $dp->reviews_count = request('trusted_reviews');
+            } else {
+                $dp->reviews_count = json_encode(request('custom_reviews'));
+            }
+
+            $dp->save();
+
+            $fb->setDefaultAccessToken($token);
+
+            $page = $fb->get('/'.request('page').'?fields=access_token, name, id, fan_count');
+            $page = $page->getGraphNode()->asArray();
+
+            if($page['fan_count'] < 2000) {
+                return Response::json(['success' => false, 'message' => 'This page has less than 2000 likes' ] );
+            } else {
+
+                $addTab = $fb->post('/'.$page['id'].'/tabs', array('app_id' => '1906201509652855'), $page['access_token']);
+                $addTab = $addTab->getGraphNode()->asArray();
+                if ($addTab['success'] == 1){
+                    return Response::json(['success' => true, 'message' => 'Tab added' ] );
+                } else {
+                    return Response::json(['success' => false, 'message' => 'There is some error. Please try again later' ] );
+                }
             }
         }
 
@@ -1456,7 +1456,33 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
             $dentist = User::find($dentist_page->dentist_id);
 
             if (!empty($dentist)) {
-                $reviews_obj = $dentist->reviews_in();
+
+                if ($dentist_page->reviews_type == 'all') {
+                    $reviews_obj = $dentist->reviews_in();
+
+                    if ($dentist_page->reviews_count != 'all') {
+                        $all_count = intval($dentist_page->reviews_count);
+                        $reviews_obj = $dentist->reviews_in()->take($all_count);
+                    }
+                } else if ($dentist_page->reviews_type == 'trusted') {
+
+                    if ($dentist_page->reviews_count != 'all') {
+                        $trusted_count = intval($dentist_page->reviews_count);
+                        $reviews_obj = $dentist->reviews_in()->where('verified', 1)->take($trusted_count);
+                    } else {
+                        $reviews_obj = $dentist->reviews_in()->where('verified', 1);
+                    }
+                    
+                } else if($dentist_page->reviews_type == 'custom') {
+                    $reviews_obj = [];
+                    $d_id = $dentist->id;
+                    foreach (json_decode($dentist_page->reviews_count, true) as $k => $cr) {
+                        $reviews_obj[] = Review::where('id', $cr)->where(function($query) use ($d_id) {
+                            $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
+                        })->first();
+                    }
+                }
+
                 $reviews = [];
 
                 foreach ($reviews_obj as $review) {
@@ -1472,7 +1498,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                 $ret = [
                     'success' => true,
                     'reviews' => $reviews,
-                    'reviews_count' => count($reviews),
+                    'reviews_count' => count($dentist->reviews_in()),
                     'dentist_link' => $dentist->getLink(),
                     'avg_rating' => $dentist->avg_rating,
                     'avg_rating_percantage' => $dentist->avg_rating/5*100,

@@ -74,7 +74,7 @@
 			fbq('track', 'PageView');
 		</script>
 
-		@if(!empty($_COOKIE['marketing_cookies']))
+		@if(!empty($_COOKIE['marketing_cookies']) && ($current_page == 'welcome-dentist' || $current_page == 'dentist') )
 			<script type="text/javascript">
 			    if (typeof AriticSDKLoaded == 'undefined') {
 			        var AriticSDKLoaded = true;
@@ -216,7 +216,7 @@
 					</div>
 				</div>
 
-				@if($current_page == 'welcome-dentist' && !empty($_COOKIE['marketing_cookies']) )
+				@if(($current_page == 'welcome-dentist' || $current_page == 'dentist') && !empty($_COOKIE['marketing_cookies']) )
 					<script>
 			            (function(w,d,t,u,n,a,m){
 			                if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
@@ -238,8 +238,7 @@
 			                        website:document.getElementById("magnet-website").value,
 			                        email:document.getElementById("magnet-email").value,
 			                    }]);
-
-                    			//_aaq.push('rememberConsentGiven', false, 3);
+					    		//_aaq.push(['rememberConsentGiven', false, 3]);
                     			_aaq.push(['trackPageView']);
                     		}, 5000);
 						}

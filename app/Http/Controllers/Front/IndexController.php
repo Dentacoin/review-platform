@@ -592,7 +592,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
     public function lead_magnet_results($locale=null) {
 
-    	if (!empty(session('lead_magnet')) && !empty(session('lead_magnet')['points']) && empty($this->user)) {
+    	if (!empty(session('lead_magnet')) && !empty(session('lead_magnet')['points'])) {
 
     		$country_id = $this->country_id;
     		$to_month = Carbon::now()->modify('-0 months');
@@ -660,9 +660,12 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 	        	'first_answer' => $first_answer
 	        ));
     	} else {
-    		return redirect( getLangUrl('welcome-dentist') );
+    		if(!empty($this->user)) {
+    			return redirect( getLangUrl('/') );
+    		} else {
+    			return redirect( getLangUrl('welcome-dentist') );
+    		}    		
     	}
-
     }
 
     public function lead_magnet_session($locale=null) {
