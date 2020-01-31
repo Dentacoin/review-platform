@@ -63,7 +63,7 @@ $(document).ready(function(){
 									</div>\
 								</div>\
 							</div>\
-							<p>See all '+data.reviews_count+' reviews on <a href="'+data.dentist_link+'">Trusted Reviews</a></p>\
+							<p>See all '+data.reviews_count+' reviews on <a href="'+data.dentist_link+'" target="_blank">Trusted Reviews</a></p>\
 						</div>\
 						<div class="col tar">\
 							<a href="'+data.dentist_link+'" target="_blank" class="write-review">Write a review</a>\

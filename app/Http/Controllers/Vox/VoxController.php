@@ -3,9 +3,26 @@
 namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
 
-
-use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
+use DeviceDetector\DeviceDetector;
+
+use App\Models\VoxCrossCheck;
+use App\Models\VoxQuestion;
+use App\Models\UserInvite;
+use App\Models\UserAction;
+use App\Models\VoxRelated;
+use App\Models\VoxAnswer;
+use App\Models\UserLogin;
+use App\Models\DcnReward;
+use App\Models\VoxScale;
+use App\Models\Reward;
+use App\Models\Admin;
+use App\Models\Email;
+use App\Models\User;
+use App\Models\Vox;
+use App\Models\Dcn;
+
+use Carbon\Carbon;
 
 use Validator;
 use Response;
@@ -17,22 +34,6 @@ use Auth;
 use App;
 use Mail;
 use DB;
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Vox;
-use App\Models\VoxRelated;
-use App\Models\VoxAnswer;
-use App\Models\UserLogin;
-use App\Models\DcnReward;
-use App\Models\VoxQuestion;
-use App\Models\VoxCrossCheck;
-use App\Models\VoxScale;
-use App\Models\UserInvite;
-use App\Models\UserAction;
-use App\Models\Dcn;
-use App\Models\Email;
-use App\Models\Reward;
-use App\Models\Admin;
 
 
 class VoxController extends FrontController

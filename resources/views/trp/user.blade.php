@@ -166,8 +166,6 @@
 			{!! Form::close() !!}
 		@endif
 
-
-
 		<div class="view-profile">
 			<a href="javascript:;" class="share-mobile" data-popup="popup-share">
 				<img src="{{ url('img-trp/share.svg') }}">

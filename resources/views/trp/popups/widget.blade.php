@@ -8,13 +8,11 @@
 		<div class="popup-mobile-buttons">
 			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
-		<h2>
-			{!! nl2br(trans('trp.popup.popup-widget.title')) !!}
-		</h2>
+		<h2 class="hide-fb">{!! nl2br(trans('trp.popup.popup-widget.title')) !!}</h2>
+		<h2 class="show-fb" style="display: none;">Display Reviews on Your Facebook Page</h2>
 
-		<h4 class="popup-title">
-			{!! nl2br(trans('trp.popup.popup-widget.subtitle')) !!}
-		</h4>
+		<h4 class="popup-title hide-fb">{!! nl2br(trans('trp.popup.popup-widget.subtitle')) !!}</h4>
+		<h4 class="popup-title show-fb" style="display: none;">Facebook Reviews Tab</h4>
 
 		<div class="widget-step widget-step-1">
 			<p class="popup-desc">
@@ -86,6 +84,21 @@
 				    	</div>
 				  	</label>
 				</div>
+				<div class="radio-label">
+				  	<label for="widget-fb" class="flex mobile-tac">
+						<span class="modern-radio">
+							<span></span>
+						</span>
+						@if($item->id == 79697)
+				    		<input class="type-radio" type="radio" name="widget-layout" id="widget-fb" value="fb">
+				    	@endif
+				    	<img class="layout-img" src="{{ url('img-trp/fb-tab.png') }}" alt="Dentacoin trusted reviews facebook tab preview">
+				    	<div class="widget-option">
+				    		<p layout-text="Facebook tab">• Facebook tab</p>
+				    		<h3 style="color: #46afda; margin-top: -10px; font-size: 22px;">COMING SOON</h3>
+				    	</div>
+				  	</label>
+				</div>
 			</div>
 
 			<div class="tac widget-button-next-wrap">
@@ -94,12 +107,57 @@
 		</div>
 		<div class="widget-step widget-step-2" style="display: none;">
 
-			<h4 class="widget-step-title">{!! nl2br(trans('trp.popup.popup-widget.step2.title')) !!}</h3>
-			<p class="step-description"><!-- {!! nl2br(trans('trp.popup.popup-widget.step2.subtitle')) !!} --> Selected layout: <text id="selected-layout">Carousel</text></p>
+			<h3 class="widget-step-title hide-fb">{!! nl2br(trans('trp.popup.popup-widget.step2.title')) !!}</h3>
+			@if(empty(request('fb-pages')))
+				<h3 class="widget-step-title show-fb" style="display: none; margin-bottom: 30px !important;"><span>Step 2:</span> LINK WITH YOUR FACEBOOK PAGE</h3>
+			@else
+				<h3 class="widget-step-title show-fb" style="display: none; margin-bottom: 30px !important;"><span>Step 3:</span> FINAL SET-UP</h3>
+			@endif
+			<p class="step-description hide-fb"><!-- {!! nl2br(trans('trp.popup.popup-widget.step2.subtitle')) !!} --> Selected layout: <text id="selected-layout">Carousel</text></p>
 
 			<div class="tac">
 				<img id="selected-image-layout" src="{{ url('img-trp/widget-carousel.png') }}">
 			</div>
+
+			<div class="facebook-tab show-fb">
+
+				@if(empty(request('fb-pages')))
+
+					<p class="tab-info"><img src="{{ url('img-trp/info.svg') }}">Your reviews will be displayed in Trusted Reviews Tab like "About", "Events", "Photos" on your Facebook page. </p>
+
+					<div class="tac">
+						<a href="{{ getLangUrl('login-dentist/facebook') }}" class="button fb-l-button">
+							<span>
+								<i class="fab fa-facebook"></i>
+							</span>
+							Continue with Facebook
+						</a>
+					</div>
+
+					<p class="tab-note">Note: the feature is available only for Facebook pages with more than 2000 likes.</p>
+				@endif
+
+				@if(!empty(request('fb-pages-error')))
+					<div class="alert mobile-alert alert-warning">
+						No facebook pages found. If you have any, please give us permission for them.
+					</div>
+				@endif
+
+			</div>
+
+			@if(!empty($item->fb_pages) && !empty(request('fb-pages')))
+				<form class="form-fb-tab" action="{{ getLangUrl('login-dentist/tab/'.request('fb-pages')) }}" method="POST">
+					<div class="modern-field">
+			  			<select name="page" id="dentist-page" class="modern-input">
+			  				@foreach($item->fb_pages as $p)
+		                        <option value="{{ $p['id'] }}">{{ $p['name'] }}</option>
+		                    @endforeach
+			  			</select>
+						<label for="dentist-page">
+							<span>Select page</span>
+						</label>
+					</div>
+			@endif
 
 			<div class="select-reviews">
 				<h4 class="widget-subtitle">• {!! nl2br(trans('trp.popup.popup-widget.reviews')) !!}</h3>
@@ -204,6 +262,19 @@
 			<div class="alert mobile-alert alert-warning widget-custom-reviews-alert" style="display: none;">
 				{!! nl2br(trans('trp.popup.popup-widget.reviews.custom.error')) !!}
 			</div>
+			<div class="alert mobile-alert alert-warning widget-custom-reviews-fb-alert" style="display: none;">
+				Please select reviews
+			</div>
+
+			@if(!empty($item->fb_pages) && !empty(request('fb-pages')))
+					<div class="alert fbtab-alert" style="display: none; margin-top: 20px; margin-bottom: 20px;"></div>
+
+					<div class="tac get-widget-code-wrap">
+						<input type="submit" class="button" name="submit" value="Done">
+					</div>
+	                
+	            </form>
+			@endif
 
 			<div class="tac get-widget-code-wrap">
 				<a href="javascript:;" class="button widget-button back-widget" to-step="1">< Back</a>
@@ -375,6 +446,24 @@
 
 		<div class="tac">
 			<a href="javascript:;" class="button close-popup">Done</a>
+		</div>
+	</div>
+</div>
+
+<div class="popup fixed-popup" id="facebook-tab-success">
+	<div class="popup-inner inner-white">
+		<div class="popup-pc-buttons">
+			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+		</div>
+
+		<div class="popup-mobile-buttons">
+			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
+		</div>
+		<div class="header-success-tab tac">
+			<img src="{{ url('img-trp/verification-check.png') }}">
+			<h2>Well done!</h2>
+			<h4>Your reviews are now displayed to your followers in the Trusted Reviews tab on your Facebook page!</h4>
+			<a href="javascript:;" class="button close-popup">{!! nl2br(trans('trp.popup.popup-claim-profile.thank-you.ok')) !!}</a>
 		</div>
 	</div>
 </div>
