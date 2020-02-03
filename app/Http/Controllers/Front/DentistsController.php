@@ -75,7 +75,7 @@ class DentistsController extends FrontController
         // }
         // dd('ok');
 
-        $items = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported']);
+        $items = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported'])->whereNull('self_deleted');
         $mode = 'map';
         $formattedAddress = $query;
         $country_search = false;

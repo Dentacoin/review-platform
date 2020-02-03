@@ -172,7 +172,12 @@ class DentistController extends FrontController
         // exit;
 
         $review_id = request('review_id');
-        $item = User::where('slug', 'LIKE', $slug)->first();
+
+        if (!empty($this->admin)) {
+            $item = User::where('slug', 'LIKE', $slug)->first();
+        } else {
+            $item = User::where('slug', 'LIKE', $slug)->whereNull('self_deleted')->first();
+        }
 
         if(empty($item)) {
             $old_slug = OldSlug::where('slug', 'LIKE', $slug)->first();

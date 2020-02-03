@@ -126,7 +126,7 @@ class IndexController extends FrontController
 		$city_cookie = json_decode(Cookie::get('dentists_city'), true);
 		//dd($city_cookie);
 
-		$featured = User::where('is_dentist', 1)->with('country.translations')->whereIn('status', ['approved','added_approved','admin_imported'])->orderBy('avg_rating', 'DESC');
+		$featured = User::where('is_dentist', 1)->with('country.translations')->whereIn('status', ['approved','added_approved','admin_imported'])->whereNull('self_deleted')->orderBy('avg_rating', 'DESC');
 		$homeDentists = collect();
 
 		if (!empty($city_cookie)) {
