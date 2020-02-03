@@ -614,7 +614,25 @@
 		</div>
 	@else
 		<div class="dentist-short-desc">
-			General {{ $item->is_clinic ? 'clinic' : 'dentist' }} in {{ $item->city_name ? $item->city_name.', ' : '' }}{{ $item->state_name ? $item->state_name.', ' : '' }}{{ $item->country->name }}.
+
+			@if($item->is_clinic)
+				@if(array_key_exists('general-dentists', $item->parseCategories($categories)))
+					General dental clinic 
+				@else
+					Dental clinic  
+				@endif
+			@else
+				@if(array_key_exists('general-dentists', $item->parseCategories($categories)))
+					General dentistry 
+				@else
+					Dentist 
+				@endif
+			@endif
+			in {{ $item->city_name ? $item->city_name.', ' : '' }}{{ $item->state_name ? $item->state_name.', ' : '' }}{{ $item->country->name }}
+
+			@if($item->categories->isNotEmpty())
+				specialized in {{ implode(', ', $item->parseCategories($categories)) }}.
+			@endif
 		</div>
 	@endif
 
