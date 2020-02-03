@@ -2,27 +2,29 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Validator;
 use App\Http\Controllers\AdminController;
-use App\Models\Vox;
+use Illuminate\Support\Facades\Input;
+
+use App\Models\VoxToCategory;
 use App\Models\VoxCategory;
 use App\Models\VoxQuestion;
-use App\Models\VoxToCategory;
+use App\Models\VoxRelated;
+use App\Models\VoxAnswer;
+use App\Models\DcnReward;
 use App\Models\VoxScale;
 use App\Models\VoxBadge;
-use App\Models\VoxAnswer;
 use App\Models\User;
-use App\Models\DcnReward;
-use App\Models\VoxRelated;
-use Illuminate\Support\Facades\Input;
-use Image;
-use Request;
+use App\Models\Vox;
+
+use Carbon\Carbon;
+
+use Validator;
 use Response;
+use Request;
+use Image;
 use Route;
 use Excel;
 use DB;
-use Carbon\Carbon;
-
 
 class VoxesController extends AdminController
 {
@@ -364,6 +366,8 @@ class VoxesController extends AdminController
 
         if(!empty($item) && Input::file('table')) {
 
+            session()->pull('brackets');
+
             global $i;
             $i = $item->questions->last() ? intval($item->questions->last()->order)+1 : 1;
 
@@ -425,6 +429,15 @@ class VoxesController extends AdminController
                 $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.imported'));
 
             });
+
+            if (!empty(session('brackets'))) {
+                if (!empty(session('brackets')['q_br'])) {
+                    Request::session()->flash('warning-message', 'Missing or more than necessary question/s tooltip brackets: '.implode(' ;     ', session('brackets')['q_br'] ));
+                }
+                if (!empty(session('brackets')['a_br'])) {
+                    Request::session()->flash('error-message', 'Missing or more than necessary answers/s tooltip brackets: '.implode(' ;     ', session('brackets')['a_br'] ));
+                }
+            }
             
             return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
 
@@ -744,6 +757,19 @@ class VoxesController extends AdminController
         
         $question->save();
 
+        if (!empty(session('brackets'))) {
+            $sess = session('brackets');
+        } else {                     
+            $sess = [
+                'q_br' => [],
+                'a_br' => [],
+            ];
+
+            session([
+                'brackets' => $sess
+            ]);
+        }
+
         foreach ($this->langs as $key => $value) {
             if(!empty($data['question-'.$key])) {
                 $translation = $question->translateOrNew($key);
@@ -752,7 +778,9 @@ class VoxesController extends AdminController
                     $first_bracket_q = substr_count($data['question-'.$key],"[");
                     $second_bracket_q = substr_count($data['question-'.$key],"]");
                     if ($first_bracket_q != 2 || $second_bracket_q != 2) {
-                        Request::session()->flash('warning-message', 'Missing or more than necessary question/s tooltip brackets');
+                        $sess['q_br'][] = $data['question-'.$key];
+                        //dd($sess);
+                        //Request::session()->flash('warning-message', 'Missing or more than necessary question/s tooltip brackets');
                     }
                 }
                 $translation->question = $data['question-'.$key];
@@ -772,14 +800,13 @@ class VoxesController extends AdminController
                             $first_bracket = substr_count($answ,"[");
                             $second_bracket = substr_count($answ,"]");
                             if ($first_bracket != 2 || $second_bracket != 2) {
-                                Request::session()->flash('error-message', 'Missing or more than necessary answer/s tooltip brackets');
+                                $sess['a_br'][] = $answ;
+                                //Request::session()->flash('error-message', 'Missing or more than necessary answer/s tooltip brackets');
                             }
                         }
                     }
-                    
 
                     $translation->answers = json_encode( $data['answers-'.$key] );
-
 
                 } else {
                     $translation->answers = '';                            
@@ -790,6 +817,9 @@ class VoxesController extends AdminController
         }
         $question->save();
 
+        session([
+            'brackets' => $sess
+        ]);
     }
 
     public function categories( ) {
