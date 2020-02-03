@@ -10,7 +10,7 @@ var basic = {
             var d = new Date();
             d.setTime(d.getTime() + (100*24*60*60*1000));
             var expires = "expires="+d.toUTCString();
-            document.cookie = name + "=" + value + "; " + expires + ";domain=.dentacoin.com;path=/";
+            document.cookie = name + "=" + value + "; " + expires + ";domain=.dentacoin.com;path=/;secure";
             if(name == "cookieLaw"){
                 $(".cookies_popup").slideUp();
             }

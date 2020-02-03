@@ -2032,7 +2032,7 @@ $(document).ready(function(){
     $('.blurred-button').click( function(e) {
         e.preventDefault();
         if(Cookies.get('functionality_cookies')) {
-            Cookies.set('stat-url', window.location.href, { expires: 1 , domain: '.dentacoin.com'});
+            Cookies.set('stat-url', window.location.href, { expires: 1 , domain: '.dentacoin.com', secure: true});
         }
         window.location.href = $(this).attr('href');
     });

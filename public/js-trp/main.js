@@ -734,7 +734,7 @@ jQuery(document).ready(function($){
 			$('.stretching-box').css('height', 0);
 
 			if (Cookies.get('functionality_cookies')) {
-				Cookies.set('hide-strength', true, { expires: 1 });
+				Cookies.set('hide-strength', true, { expires: 1, secure: true });
 			}
 		} else {
 			$(this).addClass('active');

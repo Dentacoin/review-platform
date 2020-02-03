@@ -301,7 +301,7 @@ $(document).ready(function(){
 		$('.'+$(this).attr('type')).addClass('active');
 
 		if(Cookies.get('functionality_cookies')) {
-			Cookies.set('user-type', $(this).attr('type'), { expires: 365 });
+			Cookies.set('user-type', $(this).attr('type'), { expires: 365, secure: true });
 		}
 		
 	} );
@@ -1375,7 +1375,7 @@ $(document).ready(function(){
 
 	$('.close-bubble').click( function() {
 		if (window.innerWidth <= 768 && Cookies.get('functionality_cookies')) {
-			Cookies.set('small-poll-bubble', true, { expires: 1 });
+			Cookies.set('small-poll-bubble', true, { expires: 1, secure: true });
 		}
 		$('.poll-bubble').hide();
 	});

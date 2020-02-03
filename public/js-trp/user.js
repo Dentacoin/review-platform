@@ -2355,10 +2355,10 @@ $(document).ready(function(){
 
                     // $('.form-fb-tab').find('.fbtab-alert').show().addClass('alert-success').html(data.message);
 
-                    // gtag('event', 'AddManually', {
-                    //     'event_category': 'ReviewInvites',
-                    //     'event_label': 'InvitesSent',
-                    // });
+                    gtag('event', 'Done', {
+                        'event_category': 'Widgets',
+                        'event_label': 'FB Complete',
+                    });
                 } else {
                     $('.form-fb-tab').find('.fbtab-alert').show().addClass('alert-warning').html(data.message);                    
                 }
@@ -2367,6 +2367,13 @@ $(document).ready(function(){
             error: function(data) {
                 console.log('error');
             }
+        });
+    });
+
+    $('.fb-l-button').click( function() {
+        gtag('event', 'Connect', {
+            'event_category': 'Widgets',
+            'event_label': 'FB Step 2',
         });
     });
 
