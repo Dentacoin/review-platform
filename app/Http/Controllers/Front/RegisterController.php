@@ -517,6 +517,28 @@ class RegisterController extends FrontController
                 $message->subject('New Dentist/Clinic registration');
             });
 
+            $ul = new UserLogin;
+            $ul->user_id = $newuser->id;
+            $ul->ip = User::getRealIp();
+            $ul->platform = 'trp';
+            $ul->country = \GeoIP::getLocation()->country;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+            $dd = new DeviceDetector($userAgent);
+            $dd->parse();
+
+            if ($dd->isBot()) {
+                // handle bots,spiders,crawlers,...
+                $ul->device = $dd->getBot();
+            } else {
+                $ul->device = $dd->getDeviceName();
+                $ul->brand = $dd->getBrandName();
+                $ul->model = $dd->getModel();
+                $ul->os = $dd->getOs()['name'];
+            }
+            
+            $ul->save();
+
 
             //Auth::login($newuser, Request::input('remember'));
 
