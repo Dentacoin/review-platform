@@ -526,7 +526,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 44
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00' 
                     AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
@@ -562,7 +562,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 45
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*3)." 00:00:00' 
             ";
@@ -626,7 +626,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id IN ( 46, 47)
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
             ";
@@ -660,7 +660,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 48
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*10)." 00:00:00'
             ";
@@ -721,6 +721,7 @@ NEW & FAILED TRANSACTIONS
                         `is_dentist` = 1
                         AND `unsubscribe` is null
                         AND `status` = 'approved'
+                        AND `self_deleted` is null
                         AND `dcn_address` is not null
                         AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) > 3000
                         AND `deleted_at` is null
@@ -767,7 +768,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 50 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
             ";
@@ -804,7 +805,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*7)." 00:00:00'
             ";
@@ -878,7 +879,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*14)." 00:00:00'
             ";
@@ -1044,7 +1045,7 @@ NEW & FAILED TRANSACTIONS
                     AND `created_at` < '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                     AND `deleted_at` is null
                     AND `unsubscribe` is null
-
+                    AND `self_deleted` is null
                     AND `status` IN ('approved', 'test')
             ";
 

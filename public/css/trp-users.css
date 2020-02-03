@@ -37,6 +37,8 @@
         width: 14px !important;
         max-width: none;
         margin-top: 2px; }
+    .information .profile-info .workplace-p a:hover {
+      color: #46afda; }
     .information .profile-info .avatar {
       box-sizing: inherit;
       position: relative;

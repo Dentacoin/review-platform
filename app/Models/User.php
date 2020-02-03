@@ -1542,10 +1542,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         if($this->my_workplace->isNotEmpty()) {
             foreach($this->my_workplace as $workplace) {
                 if( $workplace->approved ) {
-                    $ret[] = $workplace->clinic->getName();
+                    $ret[] = '<a href="'.$workplace->clinic->getLink().'">'.$workplace->clinic->getName().'</a>';
                 } else {
                     if( $isme ) {
-                        $ret[] = $workplace->clinic->getName().' (pending)';
+                        $ret[] = '<a href="'.$workplace->clinic->getLink().'">'.$workplace->clinic->getName().' (pending)</a>';
                     }
                 }
             }

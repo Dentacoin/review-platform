@@ -280,11 +280,13 @@
 		    	@endif
 
 		    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
-		    		<div class="p">
+		    		<div class="p workplace-p">
 			    		<div class="img">
 			    			<img class="black-filter" src="{{ url('img-trp/clinic.png') }}">
 			    		</div>
-		    			{!! $workplace !!}
+				    	<div>
+		    				{!! $workplace !!}
+		    			</div>
 		    		</div>
 		    	@endif
 			    <div class="p profile-socials">
@@ -536,11 +538,13 @@
 			    		</a>
 			    	@endif
 			    	@if( $workplace = $item->getWorkplaceText( !empty($user) && $user->id==$item->id ) )
-			    		<div class="p">
+			    		<div class="p workplace-p">
 				    		<div class="img">
 				    			<img class="black-filter" src="{{ url('img-trp/clinic.png') }}">
 				    		</div>
-			    			{!! $workplace !!}
+				    		<div>
+			    				{!! $workplace !!}
+			    			</div>
 			    		</div>
 			    	@endif
 				    <div class="p profile-socials">

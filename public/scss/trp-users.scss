@@ -63,6 +63,14 @@ $phone: "screen and (max-width: 768px)";
     		}
     	}
 
+    	.workplace-p {
+    		a {
+    			&:hover {
+    				color: #46afda;
+    			}
+    		}
+    	}
+
 	    .avatar {
 	    	box-sizing: inherit;
 	    	position: relative;
