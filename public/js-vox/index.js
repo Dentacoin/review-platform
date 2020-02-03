@@ -92,7 +92,7 @@ $(document).ready(function(){
         group.attr('data-answer', answer);
 
         if( group.next().hasClass('question-done') ) {
-            $.cookie('first_test', first_test, { expires: 1, path: '/', domain: 'dentacoin.com' });
+            $.cookie('first_test', first_test, { expires: 1, path: '/', domain: 'dentacoin.com', secure: true });
 
             $.ajax( {
                 url: lang,
