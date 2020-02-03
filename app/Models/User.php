@@ -2062,6 +2062,5 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
         }
 
         return $is_restricted;
-
     }
 }

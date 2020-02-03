@@ -39,6 +39,9 @@
 			    	@foreach( $featured as $dentist )
 						<a class="slider-wrapper" href="{{ $dentist->getLink() }}">
 							<div class="slider-inner">
+								@if(!empty($user) && $user->hasReviewTo($dentist->id))
+									<img class="has-review-image" src="{{ url('img-trp/patient-review.svg') }}">
+								@endif
 								<div class="slider-image-wrapper">
 									<div class="slider-image" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
 										<img src="{{ $dentist->getImageUrl(true) }}" alt="Reviews for dentist {{ $dentist->getName() }} in {{ $dentist->city_name ? $dentist->city_name.', ' : '' }}{{ $dentist->state_name ? $dentist->state_name.', ' : '' }}{{ $dentist->country->name }}" style="display: none !important;"> 

@@ -5452,6 +5452,7 @@ body.strength-pb {
           .index-gradient .flickity-oval .flickity .slider-wrapper {
             width: 260px; } }
         .index-gradient .flickity-oval .flickity .slider-wrapper .slider-inner {
+          position: relative;
           border-radius: 5px;
           height: 100%;
           display: flex;
@@ -5464,6 +5465,12 @@ body.strength-pb {
           border-bottom-right-radius: 0px; }
         .index-gradient .flickity-oval .flickity .slider-wrapper:hover .slider-inner {
           box-shadow: 0px 0px 33px -2px rgba(0, 0, 0, 0.4); }
+        .index-gradient .flickity-oval .flickity .slider-wrapper .has-review-image {
+          position: absolute;
+          width: 70px;
+          z-index: 10;
+          right: -13px;
+          top: -13px; }
         .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper {
           position: relative; }
           .index-gradient .flickity-oval .flickity .slider-wrapper .slider-image-wrapper::before {
