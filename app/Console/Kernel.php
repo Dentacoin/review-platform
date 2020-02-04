@@ -1572,7 +1572,7 @@ NEW & FAILED TRANSACTIONS
         $schedule->call(function () {
             echo 'Lead Magnet Delete Cron - START';
 
-            $leads = LeadMagnet::where('created_at', '<', Carbon::now()->subDays(14) )->get();
+            $leads = LeadMagnet::where('created_at', '<', Carbon::now()->subDays(30) )->get();
 
             if ($leads->isNotEmpty()) {
 
