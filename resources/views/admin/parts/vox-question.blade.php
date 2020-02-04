@@ -136,7 +136,7 @@
                                     @if(!empty($question) && !empty($question->question_trigger) )
                                         @foreach(explode(';',$question->question_trigger) as $trigger)
                                             @if( $trigger==-1 )
-                                                <div class="input-group same-as-before" id="trigger-group-template" >
+                                                <div class="input-group same-as-before" id="trigger-group-template" style="display: block;">
                                                     <div class="template-box clearfix" style="line-height: 34px; font-size: 18px;"> 
                                                         This question will have the same trigger as the one before it
                                                         <input type="hidden" name="triggers[]" value="-1">
@@ -148,8 +148,8 @@
                                                     </div>
                                                 </div>
                                             @else
-                                                <div class="input-group">
-                                                    <div class="template-box clearfix"> 
+                                                <div class="input-group clearfix" style="display: block;">
+                                                    <div class="template-box clearfix" style="width: 96%; float: left;">
                                                         {{ Form::select('triggers[]', ['' => 'Select question'] + $item->questions->pluck('question', 'id')->toArray(), explode(':', $trigger)[0], array('class' => 'form-control select2', 'style' => 'width: 50%; float: left;')) }} 
                                                         {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
                                                     </div>
