@@ -1587,6 +1587,54 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
+            echo 'Dentists with ?? in address Cron - START';
+
+            $users->where('is_dentist', 1)->where(function ($query) {
+                $query->where('city_name', 'LIKE', '%??%')
+                ->orWhere('state_name', 'LIKE', '%??%');
+            })->whereNotIn('status', ['rejected', 'test'])
+            ->get();
+
+            $user_links = [];
+
+            if ($users->isNotEmpty()) {
+                foreach ($users as $user) {
+                    $user_links[] = [
+                        'link' => 'https://reviews.dentacoin.com/cms/users/edit/'.$user->id,
+                        'name' => $user->name,
+                    ];
+                }
+            }
+
+            if (!empty($user_links)) {
+                $mtext = 'Dentists with ?? in city/state.
+                
+                Link to profiles in CMS:  
+
+                ';
+
+                foreach ($user_links as $ul) {
+                    $mtext .= '<a href="'.$ul['link'].'">'.$ul['name'].'</a> , ';
+                }
+
+                Mail::send([], [], function ($message) use ($mtext) {
+                    $sender = config('mail.from.address');
+                    $sender_name = config('mail.from.name');
+
+                    $message->from($sender, $sender_name);
+                    $message->to( 'petya.ivanova@dentacoin.com' );
+                    $message->to( 'donika.kraeva@dentacoin.com' );
+                    $message->subject('Users with ?? in city/state');
+                    $message->setBody($mtext, 'text/html'); // for HTML rich messages
+                });
+            }
+
+            echo 'Dentists with ?? in address Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->cron("30 7 * * *"); //10:30h BG Time
+
+
+        $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s');
 
         })->cron("* * * * *");
