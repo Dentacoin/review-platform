@@ -634,6 +634,9 @@ class VoxesController extends AdminController
              
             $resp = json_decode(curl_exec($curl));
             curl_close($curl);
+
+            $item->last_count_at = null;
+            $item->save();
         }
 
         $item->type = $this->request->input('type');
