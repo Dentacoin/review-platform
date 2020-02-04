@@ -1607,7 +1607,7 @@ NEW & FAILED TRANSACTIONS
             }
 
             if (!empty($user_links)) {
-                $mtext = 'Dentists with ?? in city/state.
+                $mtext = 'Dentist with ?? symbols in address.
                 
                 Link to profiles in CMS:  
 
@@ -1624,7 +1624,7 @@ NEW & FAILED TRANSACTIONS
                     $message->from($sender, $sender_name);
                     $message->to( 'petya.ivanova@dentacoin.com' );
                     $message->to( 'donika.kraeva@dentacoin.com' );
-                    $message->subject('Users with ?? in city/state');
+                    $message->subject('Dentist with ?? symbols in address');
                     $message->setBody($mtext, 'text/html'); // for HTML rich messages
                 });
             }
