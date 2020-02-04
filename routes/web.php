@@ -294,6 +294,8 @@ $reviewRoutes = function () {
 			Route::post('facebook-tab', 						'DentistController@dentist_fb_tab');
 			Route::any('facebook-tab-reviews', 					'DentistController@dentist_fb_tab_reviews');
 
+			Route::post('dentist-fb-tab', 						'DentistController@fb_tab');
+
 			Route::group(['middleware' => 'auth:web'], function () {
 
 				Route::any('invite-new-dentist', 				'AddDentistController@invite_new_dentist');

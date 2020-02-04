@@ -1524,4 +1524,56 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         return $this->showView('facebook-tab');
     }
 
+    public function fb_tab($locale=null) {
+
+        $validator = Validator::make(Request::all(), [
+            'reviews_type' => array('required'),
+            'page' => array('required'),
+        ]);
+
+        if ($validator->fails()) {
+
+            $msg = $validator->getMessageBag()->toArray();
+            $ret = array(
+                'success' => false,
+                'message' => array()
+            );
+
+            foreach ($msg as $field => $errors) {
+                $ret['message'][$field] = implode(', ', $errors);
+            }
+
+            return Response::json( $ret );
+        } else {
+
+            $exists_p = DentistFbPage::where('dentist_id', $this->user->id)->where('fb_page', 'LIKE', request('page'))->first();
+
+            if (empty($exists_p)) {            
+                $dp = new DentistFbPage;
+            } else {
+                $dp = $exists_p;
+            }
+
+            $dp->dentist_id = $this->user->id;
+            $dp->fb_page = request('page');
+            $dp->reviews_type = request('reviews_type');
+
+            if (request('reviews_type') == 'all') {
+                $dp->reviews_count = request('all_reviews');
+            } else if(request('reviews_type') == 'trusted') {
+                $dp->reviews_count = request('trusted_reviews');
+            } else {
+                $dp->reviews_count = json_encode(request('custom_reviews'));
+            }
+
+            $dp->save();
+
+            return Response::json([
+                'success' => true,
+                'link' => 'https://www.facebook.com/dialog/pagetab?app_id=1906201509652855&redirect_uri='.$this->user->getLink().'?popup=facebook-tab-success',
+            ] );
+        }
+
+    }
+
 }

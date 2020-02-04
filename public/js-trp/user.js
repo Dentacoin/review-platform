@@ -12,7 +12,6 @@ var suggestedDentistClick;
 var suggestClinicClick;
 var aggregated_reviews;
 var editor;
-var fb_page_param;
 var fb_page_error;
 
 $(document).ready(function(){
@@ -256,15 +255,15 @@ $(document).ready(function(){
 
     handleReviewEvents = function() {
 
-    	$('.thumbs-up, .thumbs-down').off('click').click( function() {
-    		
+        $('.thumbs-up, .thumbs-down').off('click').click( function() {
+            
             var type = $(this).hasClass('thumbs-up') ? 'useful' : 'unuseful';
-			var that = this;
-			$.ajax( {
-				url: '/'+lang+'/'+type+'/' + $(this).closest('.review-wrapper').attr('review-id'),
-				type: 'GET',
-				dataType: 'json',
-				success: (function( data ) {
+            var that = this;
+            $.ajax( {
+                url: '/'+lang+'/'+type+'/' + $(this).closest('.review-wrapper').attr('review-id'),
+                type: 'GET',
+                dataType: 'json',
+                success: (function( data ) {
                     if(data.success) {
 
                         $(that).closest('.review-footer').find('.thumbs-up span').html( data.upvotes );
@@ -288,9 +287,9 @@ $(document).ready(function(){
                         icon_up.find('img').attr('src', data.upvote_image);
                         icon_down.find('img').attr('src', data.downvote_image);
                     }
-				}).bind(that)
-			});	
-    	} );
+                }).bind(that)
+            }); 
+        } );
 
         $('.reply-button.show-hide').off('click').click( function() {
             var tmp = $(this).attr('alternative');
@@ -443,9 +442,6 @@ $(document).ready(function(){
             var custom_heigth = false;
 
             $('.select-reviews').show();
-            if ($('form .get-widget-code-wrap').length) {
-                $('form .get-widget-code-wrap').hide();
-            }
             
             if (layout == 'carousel') {
                 if ($('[name="slide-results"][cant-select]').length && parseInt($('[name="slide-results"]').val()) == 3) {
@@ -516,14 +512,7 @@ $(document).ready(function(){
             }
 
             if(layout == 'fb') {
-                $('.get-widget-code-wrap').hide();
                 $('.widget-last-step').hide();
-                $('form .get-widget-code-wrap').show();
-                if (fb_page_param) {
-                    $('.select-reviews').show();
-                } else {
-                    $('.select-reviews').hide();
-                }
             }
 
             $('.widget-custom-reviews-alert').hide();
@@ -1648,34 +1637,34 @@ $(document).ready(function(){
     //End Popups
     //
 
-	$('#write-review-form').submit( function(e) {
-		e.preventDefault();
+    $('#write-review-form').submit( function(e) {
+        e.preventDefault();
 
         $('#treatment-error').hide();
         $('#review-crypto-error').hide();
         $('#review-answer-error').hide();
-		$('#review-short-text').hide();
-		$('#review-error').hide();
+        $('#review-short-text').hide();
+        $('#review-error').hide();
         $('#video-not-agree').hide();
         $('#write-review-form .rating-error').hide();
 
-		var allgood = true;
+        var allgood = true;
 
-		$(this).find('input[type="hidden"]').each( function() {
+        $(this).find('input[type="hidden"]').each( function() {
             if ($(this).closest('.question').hasClass('hidden-review-question') && !$('#clinic_dentists').val()) {
                 console.log('Skip 4th question'); //don't check because it's 4th question and I didn't pick a dentist
             } else {
-    			if( !parseInt($(this).val()) && $(this).attr('name')!='_token' && $(this).attr('name')!='youtube_id' ) {
-    				allgood = false;
-    				$(this).closest('.question').find('.rating-error').show();
+                if( !parseInt($(this).val()) && $(this).attr('name')!='_token' && $(this).attr('name')!='youtube_id' ) {
+                    allgood = false;
+                    $(this).closest('.question').find('.rating-error').show();
 
                     $('html, body').animate({
                         scrollTop: $(this).closest('.question').offset().top - 20
                     }, 500);
-    				return false;
-    			}
+                    return false;
+                }
             }
-		} );
+        } );
 
         if( $('#youtube_id').val().trim().length && !$('#video-agree').is(':checked') ) {
             allgood = false;
@@ -1695,19 +1684,19 @@ $(document).ready(function(){
 
         }
 
-		if( !$('#review-title').val().trim().length || (!$('#review-answer').val().trim().length && !$('#youtube_id').val().trim().length) ) {
-			allgood = false;
-			$('#review-answer-error').show();
+        if( !$('#review-title').val().trim().length || (!$('#review-answer').val().trim().length && !$('#youtube_id').val().trim().length) ) {
+            allgood = false;
+            $('#review-answer-error').show();
             $('html, body').animate({
                 scrollTop: $('.review-tabs').offset().top - 20
             }, 500);
 
-		}
+        }
 
-		if(ajax_is_running || !allgood) {
-			return;
-		}
-		ajax_is_running = true;
+        if(ajax_is_running || !allgood) {
+            return;
+        }
+        ajax_is_running = true;
 
 
         var btn = $(this).find('[type="submit"]').first();
@@ -1744,18 +1733,18 @@ $(document).ready(function(){
                     } else if(data.ban) {
                         window.location.reload(); 
                     } else {
-                    	$('#review-error').show();
+                        $('#review-error').show();
 
-    	                $('html, body').animate({
-    	                	scrollTop: $('.review-tabs').offset().top - 20
-    	                }, 500);
+                        $('html, body').animate({
+                            scrollTop: $('.review-tabs').offset().top - 20
+                        }, 500);
                     }
                 }
                 
                 btn.html( btn.attr('data-old') );
                 ajax_is_running = false;
             }, "json"
-        );			
+        );          
 
 
         return false;
@@ -2370,10 +2359,73 @@ $(document).ready(function(){
         });
     });
 
-    $('.fb-l-button').click( function() {
-        gtag('event', 'Connect', {
-            'event_category': 'Widgets',
-            'event_label': 'FB Step 2',
+    $('.fb-tab-submit').click( function(e) {
+        e.preventDefault();
+
+        $('.ajax-alert').remove();
+        $('.has-error').removeClass('has-error');
+
+        if($('[name="review-type"]:checked').val() == 'custom' && !$('[name="widget-custom-review"]:checked').length) {
+            $('.widget-custom-reviews-fb-alert').show();
+            return;
+        }
+
+        if(!$('#fb-page-id').val()) {
+            $('#fb-page-id').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="page">Please, add your Facebook Page ID</div>');
+            $('#fb-page-id').addClass('has-error');
+            return;
+        }
+
+        if(ajax_is_running) {
+            return;
+        }
+
+        ajax_is_running = true;
+
+        var that = $(this);
+
+        var reviews_cust = [];
+        if($('[name="review-type"]:checked').val() == 'custom') {
+            $('[name="widget-custom-review"]:checked').each( function() {
+                reviews_cust.push($(this).val());
+            });
+        }
+
+        $.ajax({
+            type: "POST",
+            url: that.attr('fb-url'),
+            data: {
+                page: $('#fb-page-id').val(),
+                reviews_type: $('[name="review-type"]:checked').val(),
+                all_reviews: $('[name="all-reviews-option"]:checked').val(),
+                trusted_reviews: $('[name="trusted-reviews-option"]:checked').val(),
+                custom_reviews: reviews_cust,
+                _token: $('input[name="_token"]').val(),
+            },
+            dataType: 'json',
+            success: function(data) {
+                if(data.success) {
+                    window.location.href = data.link;
+                    // $('.widget-step-1').show();
+                    // $('.widget-step-2').hide();
+                    // $('#popup-widget').removeClass('active');
+                    // $('#popup-widget').removeClass('active');
+                    // $('#facebook-tab-success').addClass('active');
+
+                    // $('.form-fb-tab').find('.fbtab-alert').show().addClass('alert-success').html(data.message);
+
+                    gtag('event', 'Done', {
+                        'event_category': 'Widgets',
+                        'event_label': 'FB Complete',
+                    });
+                } else {
+                    $('.form-fb-tab').find('.fbtab-alert').show().addClass('alert-warning').html(data.message);                    
+                }
+                ajax_is_running = false;
+            },
+            error: function(data) {
+                console.log('error');
+            }
         });
     });
 

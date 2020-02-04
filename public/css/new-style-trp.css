@@ -6206,10 +6206,7 @@ body.strength-pb {
   font-size: 22px;
   margin-bottom: 30px;
   display: flex;
-  align-items: flex-start;
-  max-width: 720px;
-  margin-right: auto;
-  margin-left: auto; }
+  align-items: flex-start; }
   .widget-step .facebook-tab .tab-info img {
     max-width: 18px;
     margin-top: 6px;

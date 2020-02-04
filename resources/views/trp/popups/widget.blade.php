@@ -89,9 +89,7 @@
 						<span class="modern-radio">
 							<span></span>
 						</span>
-						@if($item->id == 79697)
-				    		<input class="type-radio" type="radio" name="widget-layout" id="widget-fb" value="fb">
-				    	@endif
+				    	<input class="type-radio" type="radio" name="widget-layout" id="widget-fb" value="fb">
 				    	<img class="layout-img" src="{{ url('img-trp/fb-tab.png') }}" alt="Dentacoin trusted reviews facebook tab preview">
 				    	<div class="widget-option">
 				    		<p layout-text="Facebook tab">• Facebook tab</p>
@@ -108,11 +106,7 @@
 		<div class="widget-step widget-step-2" style="display: none;">
 
 			<h3 class="widget-step-title hide-fb">{!! nl2br(trans('trp.popup.popup-widget.step2.title')) !!}</h3>
-			@if(empty(request('fb-pages')))
-				<h3 class="widget-step-title show-fb" style="display: none; margin-bottom: 30px !important;"><span>Step 2:</span> LINK WITH YOUR FACEBOOK PAGE</h3>
-			@else
-				<h3 class="widget-step-title show-fb" style="display: none; margin-bottom: 30px !important;"><span>Step 3:</span> FINAL SET-UP</h3>
-			@endif
+			<h3 class="widget-step-title show-fb" style="display: none; margin-bottom: 30px !important;"><span>Step 2:</span> LINK WITH YOUR FACEBOOK PAGE</h3>
 			<p class="step-description hide-fb"><!-- {!! nl2br(trans('trp.popup.popup-widget.step2.subtitle')) !!} --> Selected layout: <text id="selected-layout">Carousel</text></p>
 
 			<div class="tac">
@@ -120,44 +114,15 @@
 			</div>
 
 			<div class="facebook-tab show-fb">
-
-				@if(empty(request('fb-pages')))
-
-					<p class="tab-info"><img src="{{ url('img-trp/info.svg') }}">Your reviews will be displayed in Trusted Reviews Tab like "About", "Events", "Photos" on your Facebook page. </p>
-
-					<div class="tac">
-						<a href="{{ getLangUrl('login-dentist/facebook') }}" class="button fb-l-button">
-							<span>
-								<i class="fab fa-facebook"></i>
-							</span>
-							Continue with Facebook
-						</a>
-					</div>
-
-					<p class="tab-note">Note: the feature is available only for Facebook pages with more than 2000 likes.</p>
-				@endif
-
-				@if(!empty(request('fb-pages-error')))
-					<div class="alert mobile-alert alert-warning">
-						No facebook pages found. If you have any, please give us permission for them.
-					</div>
-				@endif
-
+				<p class="tab-info"><img src="{{ url('img-trp/info.svg') }}">Your reviews will be displayed in Trusted Reviews Tab like "About", "Events", "Photos" on your Facebook page. </p>
+				<div class="modern-field alert-after">
+					<input type="text" name="fb-page-id" id="fb-page-id" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+					<label for="fb-page-id">
+						<span>Facebook Page ID</span>
+					</label>
+					<p>To find your Page ID, go to "About" tab of your Facebook page and scroll down.</p>
+				</div>
 			</div>
-
-			@if(!empty($item->fb_pages) && !empty(request('fb-pages')))
-				<form class="form-fb-tab" action="{{ getLangUrl('login-dentist/tab/'.request('fb-pages')) }}" method="POST">
-					<div class="modern-field">
-			  			<select name="page" id="dentist-page" class="modern-input">
-			  				@foreach($item->fb_pages as $p)
-		                        <option value="{{ $p['id'] }}">{{ $p['name'] }}</option>
-		                    @endforeach
-			  			</select>
-						<label for="dentist-page">
-							<span>Select page</span>
-						</label>
-					</div>
-			@endif
 
 			<div class="select-reviews">
 				<h4 class="widget-subtitle">• {!! nl2br(trans('trp.popup.popup-widget.reviews')) !!}</h3>
@@ -266,19 +231,12 @@
 				Please select reviews
 			</div>
 
-			@if(!empty($item->fb_pages) && !empty(request('fb-pages')))
-					<div class="alert fbtab-alert" style="display: none; margin-top: 20px; margin-bottom: 20px;"></div>
-
-					<div class="tac get-widget-code-wrap">
-						<input type="submit" class="button" name="submit" value="Done">
-					</div>
-	                
-	            </form>
-			@endif
+			<div class="alert fbtab-alert" style="display: none; margin-top: 20px; margin-bottom: 20px;">Please, add your Facebook Page ID</div>
 
 			<div class="tac get-widget-code-wrap">
 				<a href="javascript:;" class="button widget-button back-widget" to-step="1">< Back</a>
-				<a href="javascript:;" class="button get-widget-code">{!! nl2br(trans('trp.popup.popup-widget.get-code')) !!}</a>
+				<a href="javascript:;" class="button get-widget-code hide-fb">{!! nl2br(trans('trp.popup.popup-widget.get-code')) !!}</a>
+				<a href="javascript:;" class="button fb-tab-submit show-fb" fb-url="{{ getLangUrl('dentist-fb-tab') }}">Done</a>
 			</div>
 
 			<div class="widget-last-step" style="display: none;">

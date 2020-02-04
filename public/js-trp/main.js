@@ -1,6 +1,4 @@
 var slider = null;
-var fb_page_param;
-var fb_page_error;
 var sliderTO = null;
 var showPopup = null;
 var closePopup = null;
@@ -430,17 +428,6 @@ jQuery(document).ready(function($){
 	}
 	if(getUrlParameter('popup')) {
 		showPopup( getUrlParameter('popup') );
-
-		if (getUrlParameter('popup') == 'popup-widget') {
-			setTimeout( function() {
-
-				if (fb_page_param || fb_page_error) {
-		            $('#widget-fb').prop('checked', true);
-		            $('#widget-fb').trigger('change');
-		            $('.widget-button[to-step="2"]').trigger('click');
-		        }
-			}, 100);
-		}
 	}
 
 	function fix_header(e){
