@@ -1110,6 +1110,7 @@ class UsersController extends AdminController
 
                                     if (!empty($patient)) {
                                         $substitutions = [
+                                            "image_unclaimed_profile" => $item->getSocialCover(),
                                             "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
                                         ];
 
