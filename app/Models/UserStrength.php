@@ -79,7 +79,7 @@ class UserStrength extends Model
 
                         $ret[] = [
                             'title' => trans('trp.strength.dentist.invites.check-rating.title', ['month' => $prev_month]),
-                            'text' =>  trans('trp.strength.dentist.invites.check-rating.text', ['prev_month_rating' => $prev_month_rating, 'prev_month_category' => $prev_month_label]),
+                            'text' =>  trans('trp.strength.dentist.invites.check-rating.text', ['month_rating' => round($prev_month_rating, 2), 'prev_month_category' => $prev_month_label]),
                             'image' => 'check-rating',
                             'completed' => false,
                             'buttonText' => trans('trp.strength.dentist.invites.check-rating.button-text'),
