@@ -93,7 +93,6 @@
 				    	<img class="layout-img" src="{{ url('img-trp/fb-tab.png') }}" alt="Dentacoin trusted reviews facebook tab preview">
 				    	<div class="widget-option">
 				    		<p layout-text="Facebook tab">• Facebook tab</p>
-				    		<h3 style="color: #46afda; margin-top: -10px; font-size: 22px;">COMING SOON</h3>
 				    	</div>
 				  	</label>
 				</div>
