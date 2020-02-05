@@ -300,6 +300,7 @@ jQuery(document).ready(function($){
 
 					if( !$(this).closest('.question').next().next().hasClass('question') || $(this).closest('.question').next().hasClass('skippable') ) {
 						$(this).closest('.question').next().next().removeClass('hidden');
+						$(this).closest('.question').next().next().show();
 					}
 				}
 
