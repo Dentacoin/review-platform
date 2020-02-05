@@ -312,9 +312,9 @@ class DentistController extends FrontController
                         $crypto_data['answer'] = strip_tags(Request::input( 'answer' ));
                         foreach ($questions as $question) {
                             
-                            if($question->id == 4 && $item->is_clinic && empty( Request::input( 'clinic_dentists' ) )  ) {
-                                continue;
-                            }
+                            // if($question->id == 4 && $item->is_clinic && empty( Request::input( 'clinic_dentists' ) )  ) {
+                            //     continue;
+                            // }
 
                             $crypto_data['question-'.$question->id] = [];
                             $answer_rates[$question->id] = 0;
