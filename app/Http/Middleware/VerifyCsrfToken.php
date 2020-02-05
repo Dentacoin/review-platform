@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
+use Carbon\Carbon;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class VerifyCsrfToken extends BaseVerifier
 {
@@ -48,4 +50,18 @@ class VerifyCsrfToken extends BaseVerifier
         '*/facebook-tab*',
         //'*/paid-dental-surveys/*',
     ];
+
+
+    protected function addCookieToResponse($request, $response) {
+        $config = config('session');
+ 
+        $response->headers->setCookie(
+            new Cookie(
+                'XSRF-TOKEN', $request->session()->token(), Carbon::now()->getTimestamp() + 60 * $config['lifetime'],
+                $config['path'], $config['domain'], $config['secure'], true
+            )
+        );
+ 
+        return $response;
+    }
 }

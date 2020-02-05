@@ -104,6 +104,8 @@ class FrontController extends BaseController
 
         //$this->user = Auth::guard('web')->user();
         $this->middleware(function ($request, $next) {
+
+
             $this->admin = Auth::guard('admin')->user();
             $this->user = Auth::guard('web')->user();
 
@@ -292,7 +294,13 @@ class FrontController extends BaseController
             //     exit;
             // }
 
-            return $next($request);
+            $response = $next($request);
+            $response->headers->set('Referrer-Policy', 'no-referrer');
+            $response->headers->set('X-XSS-Protection', '1; mode=block');
+     
+            return $response;
+
+            //return $next($request);
         });
 
         $this->categories = [];
