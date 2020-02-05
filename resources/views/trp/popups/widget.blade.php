@@ -12,7 +12,7 @@
 		<h2 class="show-fb" style="display: none;">Display Reviews on Your Facebook Page</h2>
 
 		<h4 class="popup-title hide-fb">{!! nl2br(trans('trp.popup.popup-widget.subtitle')) !!}</h4>
-		<h4 class="popup-title show-fb" style="display: none;">Facebook Reviews Tab</h4>
+		<h4 class="popup-title show-fb" style="display: none;">Trusted Reviews Facebook Tab</h4>
 
 		<div class="widget-step widget-step-1">
 			<p class="popup-desc">
