@@ -747,18 +747,14 @@ jQuery(document).ready(function($){
 	var showStrength = function() {
 
 		if(($('body').hasClass('page-dentist') || $('body').hasClass('page-index')) && $('.strength-parent').length) {
+			
+			$('.strength-parent').css('display', 'block');
+			$carousel.flickity('resize');
 
-			if(!Cookies.get('strictly_necessary_policy')) {
-				$('.strength-parent').hide();
-			} else {
-				$('.strength-parent').css('display', 'block');
-				$carousel.flickity('resize');
-
-				if(!Cookies.get('hide-strength')) {
-					setTimeout( function() {
-						$('.strength-button').trigger('click');
-					}, 1000);
-				}
+			if(!Cookies.get('hide-strength')) {
+				setTimeout( function() {
+					$('.strength-button').trigger('click');
+				}, 1000);
 			}
 		}
 	}
