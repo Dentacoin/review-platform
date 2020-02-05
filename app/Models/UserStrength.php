@@ -83,7 +83,7 @@ class UserStrength extends Model
                             'image' => 'check-rating',
                             'completed' => false,
                             'buttonText' => trans('trp.strength.dentist.invites.check-rating.button-text'),
-                            'buttonHref' => $user->getLink().'/#reviews',
+                            'buttonjs' => 'str-see-reviews',
                             'target' => false,
                             'event_category' => 'ProfileStrengthDentist',
                             'event_action' => 'Check',
@@ -96,7 +96,7 @@ class UserStrength extends Model
                             'image' => 'check-rating',
                             'completed' => false,
                             'buttonText' => trans('trp.strength.dentist.invites.check-no-rating.button-text'),
-                            'buttonHref' => getLangUrl('dentist/'.$user->slug).'?'. http_build_query(['popup'=>'popup-invite']),
+                            'buttonjs' => 'str-invite',
                             'target' => true,
                             'event_category' => 'ProfileStrengthDentist',
                             'event_action' => 'Invite',
@@ -119,7 +119,7 @@ class UserStrength extends Model
                             'image' => 'invite-patients',
                             'completed' => false,
                             'buttonText' => trans('trp.strength.dentist.invites.send-last-month.button-text'),
-                            'buttonHref' => getLangUrl('dentist/'.$user->slug).'?'. http_build_query(['popup'=>'popup-invite']),
+                            'buttonjs' => 'str-invite',
                             'target' => true,
                             'event_category' => 'ProfileStrengthDentist',
                             'event_action' => 'Invite',
@@ -132,7 +132,7 @@ class UserStrength extends Model
                             'image' => 'invite-patients',
                             'completed' => false,
                             'buttonText' => trans('trp.strength.dentist.invites.not-send-last-month.button-text'),
-                            'buttonHref' => getLangUrl('dentist/'.$user->slug).'?'. http_build_query(['popup'=>'popup-invite']),
+                            'buttonjs' => 'str-invite',
                             'target' => true,
                             'event_category' => 'ProfileStrengthDentist',
                             'event_action' => 'Invite',
@@ -171,7 +171,7 @@ class UserStrength extends Model
                                 'image' => 'outrank-dentists',
                                 'completed' => false,
                                 'buttonText' => trans('trp.strength.dentist.invites.country-rating-last-month.button-text'),
-                                'buttonHref' => getLangUrl('dentist/'.$user->slug).'?'. http_build_query(['popup'=>'popup-invite']),
+                                'buttonjs' => 'str-invite',
                                 'target' => true,
                                 'event_category' => 'ProfileStrengthDentist',
                                 'event_action' => 'Invite',
@@ -229,7 +229,7 @@ class UserStrength extends Model
                                 'image' => 'invite-patients',
                                 'completed' => false,
                                 'buttonText' => trans('trp.strength.dentist.invites.rating-this-month.button-text'),
-                                'buttonHref' => getLangUrl('dentist/'.$user->slug).'?'. http_build_query(['popup'=>'popup-invite']),
+                                'buttonjs' => 'str-invite',
                                 'event_category' => 'ProfileStrengthDentist',
                                 'event_action' => 'Check',
                                 'event_label' => 'ScoreRatingThisMonth',
@@ -242,7 +242,7 @@ class UserStrength extends Model
                                 'image' => 'invite-patients',
                                 'completed' => false,
                                 'buttonText' => trans('trp.strength.dentist.invites.sent-this-month.button-text'),
-                                'buttonHref' => getLangUrl('dentist/'.$user->slug).'?'. http_build_query(['popup'=>'popup-invite']),
+                                'buttonjs' => 'str-invite',
                                 'event_category' => 'ProfileStrengthDentist',
                                 'event_action' => 'Invite',
                                 'event_label' => 'InvitesThisMonth',
@@ -256,7 +256,7 @@ class UserStrength extends Model
                             'image' => 'invite-patients',
                             'completed' => false,
                             'buttonText' => trans('trp.strength.dentist.invite-patients.button-text'),
-                            'buttonHref' => getLangUrl('dentist/'.$user->slug).'?'. http_build_query(['popup'=>'popup-invite']),
+                            'buttonjs' => 'str-invite',
                             'event_category' => 'ProfileStrengthDentist',
                             'event_action' => 'Invite',
                             'event_label' => 'PatientInvites',
@@ -291,7 +291,7 @@ class UserStrength extends Model
                                 'image' => 'outrank-dentists',
                                 'completed' => false,
                                 'buttonText' => trans('trp.strength.dentist.invites.country-rating-this-month.button-text'),
-                                'buttonHref' => getLangUrl('dentist/'.$user->slug).'?'. http_build_query(['popup'=>'popup-invite']),
+                                'buttonjs' => 'str-invite',
                                 'target' => true,
                                 'event_category' => 'ProfileStrengthDentist',
                                 'event_action' => 'Invite',
@@ -345,7 +345,7 @@ class UserStrength extends Model
                         'text' => nl2br(trans('trp.strength.dentist.complete-profile.text', ['missing' => $missing_parts])),
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.complete-profile.button-text'),
-                        'buttonHref' => getLangUrl('/'),
+                        'buttonjs' => 'str-edit',
                         'event_category' => 'ProfileStrengthDentist',
                         'event_action' => 'Add',
                         'event_label' => $missing_parts_event,
@@ -392,7 +392,7 @@ class UserStrength extends Model
                         'image' => 'description',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-description.button-text'),
-                        'buttonHref' => getLangUrl('/'),
+                        'buttonjs' => 'str-description',
                         'event_category' => 'ProfileStrengthDentist',
                         'event_action' => 'Add',
                         'event_label' => 'Description',
@@ -415,7 +415,7 @@ class UserStrength extends Model
                         'image' => 'socials',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-socials.button-text'),
-                        'buttonHref' => getLangUrl('/'),
+                        'buttonjs' => 'str-socials',
                         'event_category' => 'ProfileStrengthDentist',
                         'event_action' => 'Add',
                         'event_label' => 'Social',
@@ -430,7 +430,7 @@ class UserStrength extends Model
                         'image' => 'team',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.clinic.show-team.button-text'),
-                        'buttonHref' => $user->getLink().'?popup-loged=add-team-popup',
+                        'buttonjs' => 'str-team',
                         'event_category' => 'ProfileStrengthDentist',
                         'event_action' => 'Add',
                         'event_label' => 'Team',
@@ -454,7 +454,7 @@ class UserStrength extends Model
                         'image' => 'photos',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-photos.button-text'),
-                        'buttonHref' => getLangUrl('/'),
+                        'buttonjs' => 'str-photos',
                         'event_category' => 'ProfileStrengthDentist',
                         'event_action' => 'Add',
                         'event_label' => 'Photos',
@@ -477,7 +477,7 @@ class UserStrength extends Model
                         'image' => 'work-hours',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.add-work-hours.button-text'),
-                        'buttonHref' => $user->getLink().'?popup-loged=popup-wokring-time',
+                        'buttonjs' => 'str-working-hours',
                         'event_category' => 'ProfileStrengthDentist',
                         'event_action' => 'Add',
                         'event_label' => 'Hours',
@@ -502,7 +502,7 @@ class UserStrength extends Model
                             'image' => 'widget',
                             'completed' => false,
                             'buttonText' => trans('trp.strength.dentist.add-widget.button-text'),
-                            'buttonHref' => $user->getLink().'?popup-loged=popup-widget',
+                            'buttonjs' => 'str-widget',
                             'event_category' => 'ProfileStrengthDentist',
                             'event_action' => 'Add',
                             'event_label' => 'Widget',
@@ -587,13 +587,13 @@ class UserStrength extends Model
                 ];
                 $array_number_shuffle['not_important']++;
 
-                // $first_part = array_slice($ret, 0, $array_number_shuffle['important'], true);
-                // shuffle($first_part);
+                $first_part = array_slice($ret, 0, $array_number_shuffle['important'], true);
+                shuffle($first_part);
 
-                // $last_part = array_slice($ret, $array_number_shuffle['important'], $array_number_shuffle['not_important'], true);
-                // shuffle($last_part);
+                $last_part = array_slice($ret, $array_number_shuffle['important'], $array_number_shuffle['not_important'], true);
+                shuffle($last_part);
 
-                // $ret = array_merge($first_part, $last_part);
+                $ret = array_merge($first_part, $last_part);
 
 
                 // $ret['photo-dentist'] = $user->hasimage ? true : false;
@@ -659,32 +659,17 @@ class UserStrength extends Model
                     }
                 }
 
-                if( $user->reviews_out->isNotEmpty()) {
-                    $ret[] = [
-                        'title' => trans('trp.strength.patient.invite-dentist.title'),
-                        'text' => nl2br(trans('trp.strength.patient.invite-dentist.text')),
-                        'image' => 'invite-dentist',
-                        'completed' => true,
-                        'buttonText' => trans('trp.strength.patient.invite-dentist.button-text'),
-                        'buttonHref' => getLangUrl('/').'?popup=invite-new-dentist-popup',
-                        'event_category' => 'ProfileStrengthPatient',
-                        'event_action' => 'Invite',
-                        'event_label' => 'AddNewDentist',
-                    ];
-                } else {
-                    $ret[] = [
-                        'title' => trans('trp.strength.patient.invite-dentist.title'),
-                        'text' => nl2br(trans('trp.strength.patient.invite-dentist.text')),
-                        'image' => 'invite-dentist',
-                        'completed' => false,
-                        'buttonText' => trans('trp.strength.patient.invite-dentist.button-text'),
-                        'buttonHref' => getLangUrl('/').'?popup=invite-new-dentist-popup',
-                        'event_category' => 'ProfileStrengthPatient',
-                        'event_action' => 'Invite',
-                        'event_label' => 'AddNewDentist',
-                    ];
-                }
-
+                $ret[] = [
+                    'title' => trans('trp.strength.patient.invite-dentist.title'),
+                    'text' => nl2br(trans('trp.strength.patient.invite-dentist.text')),
+                    'image' => 'invite-dentist',
+                    'completed' => $user->reviews_out->isNotEmpty() ? true : false,
+                    'buttonText' => trans('trp.strength.patient.invite-dentist.button-text'),
+                    'buttonHref' => getLangUrl('/').'?popup=invite-new-dentist-popup',
+                    'event_category' => 'ProfileStrengthPatient',
+                    'event_action' => 'Invite',
+                    'event_label' => 'AddNewDentist',
+                ];
 
                 if( $user->dcn_address) {
                     $ret[] = [

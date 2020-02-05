@@ -780,6 +780,69 @@ jQuery(document).ready(function($){
         });
 	});
 
+	$('.str-invite').click( function() {
+		$('.strength-button.active').trigger('click');
+		showPopup('popup-invite');
+	});
+
+	$('.str-edit').click( function() {
+		$('body, html').animate({
+            scrollTop: 0
+        }, 500);
+		$('.strength-button.active').trigger('click');
+		$('.open-edit:visible').trigger('click');
+	});
+
+	$('.str-description').click( function() {
+		$('body, html').animate({
+            scrollTop: $('.profile-tabs').offset().top
+        }, 500);
+		$('.strength-button.active').trigger('click');
+		$('[data-tab="about"]').trigger('click');
+		$('.about-content[role="presenter"] a').trigger('click');
+		$('#dentist-description').css('box-shadow', '0px 0px 14px 2px #F44336');
+	});
+
+	$('.str-socials').click( function() {
+		$('body, html').animate({
+            scrollTop: 0
+        }, 500);
+		$('.strength-button.active').trigger('click');
+		$('.open-edit:visible').trigger('click');
+		$('.social-wrap:visible').css('box-shadow', '0px 0px 13px -1px #F44336');
+	});
+
+	$('.str-team').click( function() {
+		$('.strength-button.active').trigger('click');
+		showPopup('add-team-popup');
+	});
+
+	$('.str-photos').click( function() {
+		$('body, html').animate({
+            scrollTop: $('.profile-tabs').offset().top
+        }, 500);
+		$('.strength-button.active').trigger('click');
+		$('[data-tab="about"]').trigger('click');
+	});
+
+	$('.str-working-hours').click( function() {
+		$('.strength-button.active').trigger('click');
+		showPopup('popup-wokring-time');
+	});
+
+	$('.str-widget').click( function() {
+		$('.strength-button.active').trigger('click');
+		showPopup('popup-widget');
+	});
+
+	$('.str-see-reviews').click( function() {
+		$('.strength-button.active').trigger('click');
+		$('[data-tab="reviews"]').trigger('click');
+		$('body, html').animate({
+            scrollTop: $('.review-wrapper').first().offset().top - 200
+        }, 500);
+	});
+
     $('#claim-profile-form').submit( function(e) {
         e.preventDefault();
 
@@ -879,6 +942,7 @@ jQuery(document).ready(function($){
             $(this).serialize() , 
             function( data ) {
                 if(data.success) {
+
                 	// var ans_3 = '';
 
                  //    $('.lead-magnet-checkbox[name="answer-3[]"]:checked').each( function() {
