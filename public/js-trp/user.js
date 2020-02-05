@@ -2436,6 +2436,5 @@ $(document).ready(function(){
             'event_label': 'RecommendPopup',
         });
     });
-    
 
 });

@@ -110,7 +110,7 @@ class AdminController extends BaseController
         $params['counters'] = [];
         $params['counters']['youtube'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
         
-        $params['cache_version'] = '2019-01-17';
+        $params['cache_version'] = '2019-02-05';
         //dd($params['counters']);
 
         if($this->current_page!='home' && !isset($menu[$this->current_page])) {

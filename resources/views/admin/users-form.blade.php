@@ -992,8 +992,18 @@
             </div>
             <div class="modal-body">
                 <form action="{{ url('cms/users/delete/'.$item->id) }}" method="post">
-                    <textarea class="form-control" name="deleted_reason" placeholder="Write the reason why you want to delete this user"></textarea>
-                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Delete</button>
+                    @if($item->platform == 'external')
+                        <div class="external-patients-wrap">
+                            <p style="color: red;">You are about to delete Dentaprimes patient. Are you sure you want to continue? This type of users are using the Hub App application.</p>
+                            <div style="text-align: center;">
+                                <a href="javascript:;" class="btn btn-success external-patients-button" style="margin-right: 20px;">Yes</a><a href="javascript:;" class="btn btn-primary" data-dismiss="modal">No</a>
+                            </div>
+                        </div>
+                    @endif
+                    <div class="reason-wrap" style="{!! $item->platform == 'external' ? 'display: none;' : ''; !!}">
+                        <textarea class="form-control" name="deleted_reason" placeholder="Write the reason why you want to delete this user"></textarea>
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Delete</button>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

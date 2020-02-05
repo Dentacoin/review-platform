@@ -89,5 +89,10 @@ $(document).ready(function(){
 		$('#mass-delete-form').find('input[name="mass-delete-reasons"]').val($(this).parent().find('textarea').val());
 		$('#mass-delete-form').submit();
 	});
+    
+    $('.external-patients-button').click( function() {
+        $(this).closest('.external-patients-wrap').next().show();
+        $(this).closest('.external-patients-wrap').hide();
+    });
 
 });
