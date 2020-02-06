@@ -24,6 +24,7 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\Poll;
 use App\Models\PollAnswer;
+use App\Models\Country;
 use App\Models\VoxCategory;
 use App\Models\VoxScale;
 use App\Models\DcnReward;
@@ -303,9 +304,12 @@ class PollsController extends FrontController
 			if(!$this->user) {
 
 				if(!Auth::guard('admin')->user()) {
+					$country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
+					$country_db = Country::where('code', 'like', $country_code)->first();
+
 					$answer = new PollAnswer;
 			        $answer->user_id = 0;
-			        $answer->ip = User::getRealIp();
+			        $answer->country_id = !empty($country_db) ? $country_db->id : null;
 			        $answer->poll_id = $poll->id;
 			        $answer->answer = $a;
 		        	$answer->save();
@@ -340,9 +344,13 @@ class PollsController extends FrontController
 			if( empty($taken_daily_poll) ) {
 
 				if(!Auth::guard('admin')->user()) {
+
+					$country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
+					$country_db = Country::where('code', 'like', $country_code)->first();
+
 					$answer = new PollAnswer;
 			        $answer->user_id = $this->user->id;
-			        $answer->ip = User::getRealIp();
+			        $answer->country_id = !empty($this->user->country_id) ? $this->user->country_id : (!empty($country_db) ? $country_db->id : null);
 			        $answer->poll_id = $poll->id;
 			        $answer->answer = $a;
 		        	$answer->save();

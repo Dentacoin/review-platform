@@ -10,6 +10,7 @@ class PollAnswer extends Model {
         'user_id',
         'poll_id',
         'answer',
+        'country_id',
     ];
 
     protected $dates = [
