@@ -525,9 +525,13 @@ $main-color: #38ace5;
 									}
 
 									&.active-label {
-								    	padding: 4px 30px;
+										padding: 10px 30px;
 		    							margin-top: 1px;
 		    							color: white;
+
+										@media #{$phone} {
+								    		padding: 4px 30px;
+								    	}
 									}
 								}
 							}

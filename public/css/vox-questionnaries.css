@@ -405,9 +405,12 @@
                   font-size: 15px;
                   margin-bottom: 10px; } }
               .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list .answer-radio.active-label {
-                padding: 4px 30px;
+                padding: 10px 30px;
                 margin-top: 1px;
                 color: white; }
+                @media screen and (max-width: 768px) {
+                  .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list .answer-radio.active-label {
+                    padding: 4px 30px; } }
         .questions .question-group .answers .answers-inner .flickity .flickity-prev-next-button {
           display: none; }
       .questions .question-group .answers .answers-inner .answer-radios-group {
