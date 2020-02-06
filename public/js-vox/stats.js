@@ -805,7 +805,7 @@ $(document).ready(function(){
                         if(data.question_type == 'multiple_choice') {
                             $(this).find('.legend').hide();
                         } else {
-                            setupLegend(main_chart_data, data.total ,$(this).find('.legend'), legend, data.answer_id, can_click_on_legend);
+                            setupLegend(data.main_chart, data.total ,$(this).find('.legend'), legend, data.answer_id, can_click_on_legend);
                         }
 
                         if((data.question_type == 'multiple_choice' && $('.main-multiple-gender').length && data.answer_id) || (data.question_type != 'multiple_choice' && data.answer_id )) {
@@ -1090,6 +1090,7 @@ $(document).ready(function(){
     }
 
     var setupLegend = function(rows, totalCount, container, legend, answer, can_click_on_legend) {
+
         container.html('');
         if(container.hasClass('more-q-legend')) {
             container.append('<div class="col f-c"></div><div class="col s-c"></div><div class="col t-c"></div>');
@@ -1194,36 +1195,62 @@ $(document).ready(function(){
         data.addColumn('string', 'Genders');
         data.addColumn('number', 'Answers');
 
+        var arr_colors = chart_colors;
+
         if (question_type == 'single_choice' && vox_scale_id) {
             data.addRows(rows);
         } else {
-            var myArray = rows;
-            myArray.sort(function(a, b) {
-                return b[1] - a[1];
+
+            var arrmyArray = rows;
+            for (var w in arrmyArray) {
+                arrmyArray[w].push(chart_colors[w]);              
+            }
+
+            for(var i in arrmyArray) {
+                var a = arrmyArray[i];
+            }
+
+            arrmyArray.sort(function(a, b) {
+                if( b[0].search( '#' ) === 0 ) {
+                    return -1;
+                } else if( a[0].search( '#' ) === 0 ) {
+                    return 1;
+                } else {
+                    return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+                }
             });
+
+            // var index, entry;
+            // for (index = 0; index < arrmyArray.length; ++index) {
+            //     entry = arrmyArray[index];
+            //     //console.log(index + ": " + entry[0] + " - " + entry[1]);
+            // }
+
+            arr_colors = [];
+            for( var q in arrmyArray) {
+                arr_colors.push(arrmyArray[q][2]);
+            }
+            
+            for( var t in arrmyArray) {
+                arrmyArray[t].splice(-1,1);
+            }
 
             var diez = [];
 
-            var index, entry;
-            for (index = 0; index < myArray.length; ++index) {
-                entry = myArray[index];
-                //console.log(index + ": " + entry[0] + " - " + entry[1]);
-            }
+            for (var i in arrmyArray) {
+                if (arrmyArray[i][0].search( '#' ) === 0 ) {
+                    diez.push(arrmyArray[i]);
 
-            for (var i in myArray) {
-                if (myArray[i][0].search( '#' ) !== -1) {
-                    diez.push(myArray[i]);
-
-                    myArray.splice(i, 1);
+                    arrmyArray.splice(i, 1);
                 }
             }
 
             for (var i in diez) {
                 diez[i][0] = diez[i][0].substring(1);
-                myArray.push(diez[i]);
+                arrmyArray.push(diez[i]);
             }
 
-            data.addRows(myArray);
+            data.addRows(arrmyArray);
 
         }
 
@@ -1237,7 +1264,7 @@ $(document).ready(function(){
                 width:more_options.slices ? '70%' : '80%',
                 height: more_options.slices ? (more_options.with_long_hint ? '60%' : '70%' ) : '80%'
             },
-            colors: chart_colors,
+            colors: arr_colors,
             legend: {
                 position: 'none'
             },
@@ -1259,7 +1286,7 @@ $(document).ready(function(){
             options.height = $(container).closest('.graphs').innerWidth()/2;
         }
         
-        console.log(container);
+        //console.log(container);
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart( container );
 
@@ -2070,3 +2097,14 @@ function componentToHex(c) {
     var hex = c.toString(16);
     return hex.length == 1 ? "0" + hex : hex;
 }
+
+String.prototype.hashCode = function() {
+  var hash = 0, i, chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr   = this.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return Math.abs(hash);
+};
