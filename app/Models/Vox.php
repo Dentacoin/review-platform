@@ -577,7 +577,6 @@ class Vox extends Model {
                 $this->users_percentage = $arr;
                 $this->save();
             }
-
         }
     }
 }

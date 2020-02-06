@@ -665,12 +665,12 @@ $(document).ready(function(){
             }
         } );
 
-        if (window.innerWidth < 768) {
+        //if (window.innerWidth < 768) {
 
             if( $(this).closest('.flickity').length ) {
                 $(this).closest('.flickity').flickity('next');
             }
-        }
+        //}
 
     } );
 

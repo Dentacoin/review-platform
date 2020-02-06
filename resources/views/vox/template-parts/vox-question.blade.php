@@ -54,28 +54,6 @@
 
 			<div class="answers-inner">
 
-				<div class="clearfix mobile-hide static-titles">
-					<div class="answer-title" style="width: 20%;">
-						&nbsp;
-					</div>
-					@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $key => $ans)											
-						<div class="answer-title" style="width: {{ (100 - 20) / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
-							<span>{{ $ans }}</span>
-						</div>
-					@endforeach
-				</div>
-
-				<div class="clearfix mobile-hide fixed-titles">
-					<div class="answer-title" style="width: 20%;">
-						&nbsp;
-					</div>
-					@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $key => $ans)											
-						<div class="answer-title" style="width: {{ (100 - 20) / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
-							<span>{{ $ans }}</span>
-						</div>
-					@endforeach
-				</div>
-
 				<div class="flickity">
 					@foreach(json_decode($question->answers, true) as $k => $answer)
 						<div class="answer-radios-group clearfix">
