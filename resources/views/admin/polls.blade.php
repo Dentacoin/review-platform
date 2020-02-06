@@ -21,7 +21,7 @@
             	<input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
             </div>
             <div class="col-md-2">
-            	<a class="btn btn-sm btn-success form-control user-b" href="javascript:;" data-toggle="modal" data-target="#infoModal">Show users percentage</a>
+            	<a class="btn btn-sm btn-success form-control user-b" href="javascript:;" data-toggle="modal" data-target="#infoModal">Show restricted countries</a>
             </div>
         </div>
     </form>
@@ -138,7 +138,7 @@
 	        <div class="modal-content">
 	            <div class="modal-header">
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h4 class="modal-title">Users percentage</h4>
+	                <h4 class="modal-title">Restricted countries</h4>
 	            </div>
 	            <div class="modal-body">
                     @foreach(App\Models\PollRestrictedCountries::find(1)->users_percentage as $c => $up)
