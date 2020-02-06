@@ -20,6 +20,9 @@
             <div class="col-md-2">
             	<input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
             </div>
+            <div class="col-md-2">
+            	<a class="btn btn-sm btn-success form-control user-b" href="javascript:;" data-toggle="modal" data-target="#infoModal">Show users percentage</a>
+            </div>
         </div>
     </form>
 
@@ -100,5 +103,54 @@
 		    </div>
 		</div>
 	{{ Form::close() }}
+
+	@if($total_pages > 1)
+        <nav aria-label="Page navigation" style="text-align: center;">
+            <ul class="pagination">
+                <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
+                    <a class="page-link" href="{{ url('cms/vox/polls/?page=1'.$pagination_link) }}" aria-label="Previous">
+                        <span aria-hidden="true"> << </span>
+                    </a>
+                </li>
+                <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
+                    <a class="page-link prev" href="{{ url('cms/vox/polls/?page='.($page>1 ? $page-1 : '1').$pagination_link) }}"  aria-label="Previous">
+                        <span aria-hidden="true"> < </span>
+                    </a>
+                </li>
+                @for($i=$start; $i<=$end; $i++)
+                    <li class="{{ ($i == $page ?  'active' : '') }}">
+                        <a class="page-link" href="{{ url('cms/vox/polls/?page='.$i.$pagination_link) }}">{{ $i }}</a>
+                    </li>
+                @endfor
+                <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
+                    <a class="page-link next" href="{{ url('cms/vox/polls/?page='.($page < $total_pages ? $page+1 :  $total_pages).$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
+                </li>
+                <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
+                    <a class="page-link" href="{{ url('cms/vox/polls/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
+                </li>
+            </ul>
+        </nav>
+    @endif
+
+    <div id="infoModal" class="modal fade" role="dialog">
+	    <div class="modal-dialog">
+	        <!-- Modal content-->
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                <h4 class="modal-title">Users percentage</h4>
+	            </div>
+	            <div class="modal-body">
+                    @foreach(App\Models\PollRestrictedCountries::find(1)->users_percentage as $c => $up)
+                        <p {!! intval($up) > 20 ? 'style="color:red;"' : '' !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
+                    @endforeach
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	            </div>
+	        </div>
+
+	    </div>
+	</div>
 
 @endsection

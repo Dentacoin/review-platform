@@ -3,34 +3,34 @@
 namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
 
-
 use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
+
+use App\Models\PollRestrictedCountries;
+use App\Models\VoxCategory;
+use App\Models\PollAnswer;
+use App\Models\DcnReward;
+use App\Models\VoxScale;
+use App\Models\Country;
+use App\Models\Reward;
+use App\Models\Admin;
+use App\Models\User;
+use App\Models\Poll;
+use App\Models\Dcn;
+
+use Carbon\Carbon;
 
 use Validator;
 use Response;
 use Request;
 use Session;
+use Cookie;
 use Route;
 use Hash;
 use Auth;
 use App;
 use Mail;
 use DB;
-use Cookie;
-
-use Carbon\Carbon;
-use App\Models\Admin;
-use App\Models\User;
-use App\Models\Poll;
-use App\Models\PollAnswer;
-use App\Models\Country;
-use App\Models\VoxCategory;
-use App\Models\VoxScale;
-use App\Models\DcnReward;
-use App\Models\Dcn;
-use App\Models\Reward;
-
 
 class PollsController extends FrontController
 {
@@ -314,6 +314,8 @@ class PollsController extends FrontController
 			        $answer->answer = $a;
 		        	$answer->save();
 
+		        	PollRestrictedCountries::find(1)->recalculateUsersPercentage();
+
 		        	$cv = Cookie::get('daily_poll');
 		        	if(empty($cv)) {
 		        		$cv = [];
@@ -354,6 +356,8 @@ class PollsController extends FrontController
 			        $answer->poll_id = $poll->id;
 			        $answer->answer = $a;
 		        	$answer->save();
+
+		        	PollRestrictedCountries::find(1)->recalculateUsersPercentage();
 
 					$reward = new DcnReward;
 			        $reward->user_id = $this->user->id;

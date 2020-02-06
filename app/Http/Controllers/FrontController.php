@@ -33,6 +33,8 @@ use App\Models\VoxAnswer;
 use App\Models\VoxScale;
 use App\Models\Vox;
 use App\Models\UserLogin;
+use App\Models\PollRestrictedCountries;
+
 
 class FrontController extends BaseController
 {
@@ -374,7 +376,28 @@ class FrontController extends BaseController
             $params['noindex'] = true;
         }
 
-        $daily_poll = Poll::with('translations')->where('launched_at', date('Y-m-d') )->where('status', 'open')->first();
+
+        ///Daily Polls
+
+        $restrictions = false;
+
+        if(!empty($this->user) && !empty($this->user->country_id)) {
+            $restrictions = PollRestrictedCountries::isPollRestricted($this->user->country_id);
+        } else {
+
+            $country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
+            $country_db = Country::where('code', 'like', $country_code)->first();
+
+            if (!empty($country_db)) {
+                $restrictions = PollRestrictedCountries::isPollRestricted($country_db->id);
+            }
+        }
+
+        if($restrictions) {
+            $daily_poll = null;
+        } else {
+            $daily_poll = Poll::with('translations')->where('launched_at', date('Y-m-d') )->where('status', 'open')->first();
+        }        
 
         if (!empty($daily_poll)) {
             $params['daily_poll'] = $daily_poll;

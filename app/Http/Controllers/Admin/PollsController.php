@@ -60,8 +60,43 @@ class PollsController extends AdminController
             $polls = $polls->where('launched_at', '<=', $lastday);
         }
 
+        $total_count = $polls->count();
+        $page = max(1,intval(request('page')));
+        
+        $ppp = 100;
+        $adjacents = 2;
+        $total_pages = ceil($total_count/$ppp);
 
-        $polls = $polls->get()->take(500);
+        //Here we generates the range of the page numbers which will display.
+        if($total_pages <= (1+($adjacents * 2))) {
+          $start = 1;
+          $end   = $total_pages;
+        } else {
+          if(($page - $adjacents) > 1) { 
+            if(($page + $adjacents) < $total_pages) { 
+              $start = ($page - $adjacents);            
+              $end   = ($page + $adjacents);         
+            } else {             
+              $start = ($total_pages - (1+($adjacents*2)));  
+              $end   = $total_pages;               
+            }
+          } else {               
+            $start = 1;                                
+            $end   = (1+($adjacents * 2));             
+          }
+        }
+
+        $polls = $polls->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+        //If you want to display all page links in the pagination then
+        //uncomment the following two lines
+        //and comment out the whole if condition just above it.
+        /*$start = 1;
+        $end = $total_pages;*/
+
+        $current_url = url('cms/vox/polls');
+
+        $pagination_link = (!empty($this->request->input('search-polls-from')) ? '?search-polls-from='.$this->request->input( 'search-polls-from' ) : '').(!empty($this->request->input('search-polls-to')) ? '&search-polls-to='.$this->request->input( 'search-polls-to' ) : '');
 
     	return $this->showView('polls', array(
             'search_polls_from' => $this->request->input('search-polls-from'),
@@ -69,6 +104,14 @@ class PollsController extends AdminController
     		'categories' => $this->poll_categories,
             'polls' => $polls,
 	        'statuses' => $this->statuses,
+            'total_count' => $total_count,
+            'count' =>($page - 1)*$ppp ,
+            'start' => $start,
+            'end' => $end,
+            'total_pages' => $total_pages,
+            'page' => $page,
+            'pagination_link' => $pagination_link,
+            'current_url' => $current_url,
         ));
     }
 
