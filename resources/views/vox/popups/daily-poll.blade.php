@@ -87,7 +87,7 @@
 				<div class="get-reward-buttons">
 					@if($current_page != 'daily-polls')
 						<a href="{{ getLangUrl('daily-polls') }}" class="white-button browse-polls">
-							<img src="{{ url('new-vox-img/polls-calendar.svg') }}" alt="Dentavox daily polls calendar">>
+							<img src="{{ url('new-vox-img/polls-calendar.svg') }}" alt="Dentavox daily polls calendar">
 							{!! nl2br(trans('vox.daily-polls.popup.browse-polls')) !!}
 						</a>
 					@else					
