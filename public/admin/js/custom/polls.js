@@ -64,7 +64,7 @@ $(document).ready(function(){
 
     var handleScaleChanges = function() {
 
-        if($('.scale-input').val().length ) {
+        if($('.scale-input').val() ) {
             $('.answers-group, .answers-group-add').hide();
         } else {
             $('.answers-group, .answers-group-add').show();

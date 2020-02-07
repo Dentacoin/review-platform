@@ -11,6 +11,7 @@ class PollAnswer extends Model {
         'poll_id',
         'answer',
         'country_id',
+        'editing',
     ];
 
     protected $dates = [

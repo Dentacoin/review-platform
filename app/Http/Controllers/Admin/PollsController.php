@@ -200,7 +200,26 @@ class PollsController extends AdminController
     		            }
 
     		            if(!empty( $this->request->input('answers-'.$key) )) {
-    	                    $translation->answers = json_encode( $this->request->input('answers-'.$key) );
+                            $oldAnswers = json_decode($translation->answers);
+                            $newAnswers = $this->request->input('answers-'.$key);
+    	                    $translation->answers = json_encode( $newAnswers );
+
+                            $translator = [];
+
+                            foreach ($oldAnswers as $key => $value) {
+                                $translator[($key+1)] = array_search($value, $newAnswers) + 1;
+                            }
+
+                            PollAnswer::where('poll_id', $item->id)->update([
+                                'editing' => 1
+                            ]);
+                            foreach ($translator as $old => $new) {
+                                PollAnswer::where('poll_id', $item->id)->where('answer', $old)->where('editing', 1)->update([
+                                    'answer' => $new,
+                                    'editing' => null
+                                ]);
+                            }
+
     	                } else {
     	                    $translation->answers = '';
     	                }
