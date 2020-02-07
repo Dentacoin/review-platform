@@ -68,7 +68,7 @@ jQuery(document).ready(function($){
                                 website:document.getElementById("magnet-website").value,\
                                 email:document.getElementById("magnet-email").value,\
                             }]);\
-                            _aaq.push("rememberConsentGiven", false, 3);\
+                            _aaq.push("rememberConsentGiven", false, 4);\
                             _aaq.push(["trackPageView"]);\
                         }, 5000);\
                     }\
@@ -143,7 +143,7 @@ jQuery(document).ready(function($){
                                         website:document.getElementById("magnet-website").value,\
                                         email:document.getElementById("magnet-email").value,\
                                     }]);\
-                                    _aaq.push("rememberConsentGiven", false, 3);\
+                                    _aaq.push("rememberConsentGiven", false, 4);\
                                     _aaq.push(["trackPageView"]);\
                                 }, 5000);\
                             }\

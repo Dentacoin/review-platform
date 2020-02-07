@@ -233,14 +233,14 @@
 				    <script type="text/javascript">
 					    function LeadMagenet() {
 					    	setTimeout( function() {
-					    		_aaq.push(['setContactFields', {
-			                        firstname:document.getElementById("magnet-name").value,
-			                        website:document.getElementById("magnet-website").value,
-			                        email:document.getElementById("magnet-email").value,
-			                        priority:'Both',
-			                    }]);
-					    		_aaq.push(['rememberConsentGiven', false, 2]);
-                    			_aaq.push(['trackPageView']);
+					    		// _aaq.push(['setContactFields', {
+			        //                 firstname:document.getElementById("magnet-name").value,
+			        //                 website:document.getElementById("magnet-website").value,
+			        //                 email:document.getElementById("magnet-email").value,
+			        //                 priority:'Both',
+			        //             }]);
+					    		// _aaq.push(['rememberConsentGiven', false, 4]);
+           //          			_aaq.push(['trackPageView']);
                     		}, 5000);
 						}
 					</script>
