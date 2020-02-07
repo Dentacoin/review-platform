@@ -948,6 +948,8 @@ jQuery(document).ready(function($){
 
                     ans_3.slice(0,-1);
 
+                    var ans_4 = $('.lead-magnet-radio[name="answer-4"]:checked').length ? $('.lead-magnet-radio[name="answer-4"]:checked').attr('ans-text') : '';
+
                     _aaq.push(['setContactFields', {
                         firstname:$("#magnet-name").val(),
                         website:$("#magnet-website").val(),
@@ -956,13 +958,11 @@ jQuery(document).ready(function($){
                         priority:$('.lead-magnet-radio[name="answer-1"]:checked').attr('ans-text'),
                         reviews_tool:$('.lead-magnet-radio[name="answer-2"]:checked').attr('ans-text'),
                         ask_reviews:ans_3,
-                        frequently_reviews: $('.lead-magnet-radio[name="answer-4"]:checked').length ? $('.lead-magnet-radio[name="answer-4"]:checked').attr('ans-text') : '',
+                        frequently_reviews: ans_4,
                         reviews_reply:$('.lead-magnet-radio[name="answer-5"]:checked').attr('ans-text'),
                     }]);
                     _aaq.push(['rememberConsentGiven', false, 4]);
                     _aaq.push(['trackPageView']);
-
-                    console.log('push', _aaq);
 
                     fbq('track', 'TRPMagnetComplete');
 
@@ -1093,19 +1093,8 @@ jQuery(document).ready(function($){
                             console.log('patc')
                         } );
 
-                        $('body').append('<script type="text/javascript">\
-                            function LeadMagenet() {\
-                                setTimeout( function() {\
-                                    _aaq.push(["setContactFields", {\
-                                        firstname:document.getElementById("magnet-name").value,\
-                                        website:document.getElementById("magnet-website").value,\
-                                        email:document.getElementById("magnet-email").value,\
-                                    }]);\
-                                    _aaq.push("rememberConsentGiven", false, 4);\
-                                    _aaq.push(["trackPageView"]);\
-                                }, 5000);\
-                            }\
-                        </script>');
+                        _aaq.push(['rememberConsentGiven', false, 4]);
+                        _aaq.push(['trackPageView']);
 
                         $('head').append("<script type='text/javascript'>\
                             if (typeof AriticSDKLoaded == 'undefined') {\

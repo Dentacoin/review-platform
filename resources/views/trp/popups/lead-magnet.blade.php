@@ -893,7 +893,7 @@
 							</label>
 						</div> 
 						<div class="tac" style="display: none;">
-							<button class="button" id="magnet-submit" onclick="LeadMagenet()" type="submit">{!! trans('trp.popup.popup-lead-magnet.second-step-submit') !!}<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div></button>
+							<button class="button" id="magnet-submit" type="submit">{!! trans('trp.popup.popup-lead-magnet.second-step-submit') !!}<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div></button>
 						</div>
 					</div>
 				</div>

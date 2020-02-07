@@ -60,19 +60,8 @@ jQuery(document).ready(function($){
                     console.log('patc')
                 } );
 
-                $('body').append('<script type="text/javascript">\
-                    function LeadMagenet() {\
-                        setTimeout( function() {\
-                            _aaq.push(["setContactFields", {\
-                                firstname:document.getElementById("magnet-name").value,\
-                                website:document.getElementById("magnet-website").value,\
-                                email:document.getElementById("magnet-email").value,\
-                            }]);\
-                            _aaq.push("rememberConsentGiven", false, 4);\
-                            _aaq.push(["trackPageView"]);\
-                        }, 5000);\
-                    }\
-                </script>');
+                _aaq.push(['rememberConsentGiven', false, 4]);
+                _aaq.push(['trackPageView']);
 
                 if ($('body').hasClass('page-dentist') || $('body').hasClass('page-welcome-dentist') ) {
                     $('head').append("<script type='text/javascript'>\
@@ -135,19 +124,8 @@ jQuery(document).ready(function($){
                             console.log('patc')
                         } );
 
-                        $('body').append('<script type="text/javascript">\
-                            function LeadMagenet() {\
-                                setTimeout( function() {\
-                                    _aaq.push(["setContactFields", {\
-                                        firstname:document.getElementById("magnet-name").value,\
-                                        website:document.getElementById("magnet-website").value,\
-                                        email:document.getElementById("magnet-email").value,\
-                                    }]);\
-                                    _aaq.push("rememberConsentGiven", false, 4);\
-                                    _aaq.push(["trackPageView"]);\
-                                }, 5000);\
-                            }\
-                        </script>');
+                        _aaq.push(['rememberConsentGiven', false, 4]);
+                        _aaq.push(['trackPageView']);
 
                         if ($('body').hasClass('page-dentist') || $('body').hasClass('page-welcome-dentist') ) {
                             $('head').append("<script type='text/javascript'>\
