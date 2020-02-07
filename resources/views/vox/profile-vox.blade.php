@@ -47,7 +47,7 @@
 								@if( $completed->vox )
 		            				<tr>
 		            					<td>
-		            						{{ $completed->created_at->toDateString().', '.$completed->created_at->toTimeString() }}
+		            						{{ !empty($completed->created_at) ? ($completed->created_at->toDateString().', '.$completed->created_at->toTimeString()) : '-' }}
 		            					</td>
 		            					<td>
 											{{ $completed->vox->title }}

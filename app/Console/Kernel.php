@@ -1589,7 +1589,7 @@ NEW & FAILED TRANSACTIONS
         $schedule->call(function () {
             echo 'Dentists with ?? in address Cron - START';
 
-            $users->where('is_dentist', 1)->where(function ($query) {
+            $users = User::where('is_dentist', 1)->where(function ($query) {
                 $query->where('city_name', 'LIKE', '%??%')
                 ->orWhere('state_name', 'LIKE', '%??%');
             })->whereNotIn('status', ['rejected', 'test'])
