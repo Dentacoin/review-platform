@@ -23,7 +23,7 @@ class UnsubscribeController extends FrontController
 
 			if (!$user->unsubscribe) {
 
-				$mtext = 'Dentist want\'s to be unsubscribed, but needs an approval
+				$mtext = 'User want\'s to be unsubscribed, but needs an approval
 Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 
 	            Mail::raw($mtext, function ($message) use ($user) {
@@ -57,7 +57,7 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 				$user->unsubscribe = true;
 				$user->save();
 
-				$mtext = 'This dentist was automatically unsubscribed - https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+				$mtext = 'This user was automatically unsubscribed - https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 
 	            Mail::raw($mtext, function ($message) use ($user) {
 
