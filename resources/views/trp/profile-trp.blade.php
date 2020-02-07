@@ -73,11 +73,12 @@
 								
 							</a>
 						</div>
-						<a href="{{ $review->dentist->getLink() }}?popup=recommend-dentist" class="recommend-button">
-							<img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
-							Recommend to a friend
-						</a>
-
+						@if(!empty($review->dentist))
+							<a href="{{ $review->dentist->getLink() }}?popup=recommend-dentist" class="recommend-button">
+								<img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
+								Recommend to a friend
+							</a>
+						@endif
 		    		</div>
 		    	@endforeach
 			@endif
