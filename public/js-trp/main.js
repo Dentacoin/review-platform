@@ -957,9 +957,10 @@ jQuery(document).ready(function($){
                         country:$('#magnet-country option:selected').text(),
                         priority:$('.lead-magnet-radio[name="answer-1"]:checked').attr('ans-text'),
                         reviews_tool:$('.lead-magnet-radio[name="answer-2"]:checked').attr('ans-text'),
-                        ask_reviews:$('.lead-magnet-radio[name="answer-2"]:checked').attr('ans-text'),
+                        ask_reviews:ans_3,
                         frequently_reviews:ans_4,
                         reviews_reply:$('.lead-magnet-radio[name="answer-5"]:checked').attr('ans-text'),
+                        reviews_score:'Hardcode 80%',
                     }]);
                     _aaq.push(['rememberConsentGiven', false, 4]);
                     _aaq.push(['trackPageView']);
