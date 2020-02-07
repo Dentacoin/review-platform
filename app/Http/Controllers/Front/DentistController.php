@@ -968,7 +968,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
     public function useful($locale=null, $review_id) {
         $review = Review::find($review_id);
-        if(!empty($review)) {
+        if(!empty($review) && !empty($this->user)) {
             $myvotes = $this->user->usefulVotesForDenist($review->dentist_id);
             $mydownvotes = $this->user->unusefulVotesForDenist($review->dentist_id);
 

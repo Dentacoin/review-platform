@@ -946,7 +946,7 @@ jQuery(document).ready(function($){
                         ans_3 += $(this).attr('ans-text')+'|';
                     });
 
-                    ans_3.slice(0,-1);
+                    ans_3 = ans_3.slice(0,-1);
 
                     var ans_4 = $('.lead-magnet-radio[name="answer-4"]:checked').length ? $('.lead-magnet-radio[name="answer-4"]:checked').attr('ans-text') : '';
 
@@ -957,8 +957,8 @@ jQuery(document).ready(function($){
                         country:$('#magnet-country option:selected').text(),
                         priority:$('.lead-magnet-radio[name="answer-1"]:checked').attr('ans-text'),
                         reviews_tool:$('.lead-magnet-radio[name="answer-2"]:checked').attr('ans-text'),
-                        ask_reviews:ans_3,
-                        frequently_reviews: ans_4,
+                        ask_reviews: 'Hardcode',
+                        frequently_reviews: 'Hardcode 2',
                         reviews_reply:$('.lead-magnet-radio[name="answer-5"]:checked').attr('ans-text'),
                     }]);
                     _aaq.push(['rememberConsentGiven', false, 4]);
