@@ -52,16 +52,16 @@ class VerifyCsrfToken extends BaseVerifier
     ];
 
 
-    protected function addCookieToResponse($request, $response) {
-        $config = config('session');
+    // protected function addCookieToResponse($request, $response) {
+    //     $config = config('session');
  
-        $response->headers->setCookie(
-            new Cookie(
-                'XSRF-TOKEN', $request->session()->token(), Carbon::now()->getTimestamp() + 60 * $config['lifetime'],
-                $config['path'], $config['domain'], $config['secure'], true
-            )
-        );
+    //     $response->headers->setCookie(
+    //         new Cookie(
+    //             'XSRF-TOKEN', $request->session()->token(), Carbon::now()->getTimestamp() + 60 * $config['lifetime'],
+    //             $config['path'], $config['domain'], $config['secure'], true
+    //         )
+    //     );
  
-        return $response;
-    }
+    //     return $response;
+    // }
 }
