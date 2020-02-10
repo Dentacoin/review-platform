@@ -1162,6 +1162,8 @@ jQuery(document).ready(function($){
                     });
 
                     setTimeout( function() {
+                        _aaq.push(['rememberConsentGiven', false, 4]);
+                        _aaq.push(['trackPageView']);
                         
                         $('#ariticform_input_leadmagnetform_practice_name').val( $('#magnet-name').val() );
                         $('#ariticform_input_leadmagnetform_website').val( $('#magnet-website').val() );
@@ -1171,8 +1173,6 @@ jQuery(document).ready(function($){
 
                         $('#ariticform_input_leadmagnetform_submit').trigger('click');
                         
-                        _aaq.push(['rememberConsentGiven', false, 4]);
-                        _aaq.push(['trackPageView']);
                     }, 2000);
 
 
