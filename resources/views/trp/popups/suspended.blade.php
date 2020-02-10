@@ -7,11 +7,9 @@
 			<div class="content">
 				<p class="h1">
 					{!! nl2br(trans('trp.popup.suspended-popup.title')) !!}
-					
 				</p>
 				<h3>
 					{!! nl2br(trans('trp.popup.suspended-popup.hint')) !!}
-					
 				</h3>
 			</div>
 		</div>

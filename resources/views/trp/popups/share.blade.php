@@ -9,17 +9,14 @@
 		</div>
 		<h2>
 			{!! nl2br(trans('trp.popup.popup-share.title')) !!}
-			
 		</h2>
 
 		<h4 class="popup-title">
 			{!! nl2br(trans('trp.popup.popup-share.subtitle')) !!}
-			
 		</h4>
 
 		<p class="popup-desc">
 			{!! nl2br(trans('trp.popup.popup-share.hint')) !!}
-			
 		</p>
 
 		<div class="flex copy-wrapper">
@@ -48,7 +45,6 @@
 				{!! csrf_field() !!}
 				<p>
 					{!! nl2br(trans('trp.popup.popup-share.email-title')) !!}
-					
 				</p>
 				<div class="flex">
 					<div class="flex-9">
@@ -60,16 +56,13 @@
 				</div>
 				<p class="small-info">
 					{!! nl2br(trans('trp.popup.popup-share.no-spam')) !!}
-					
 				</p>
 				<input type="hidden" name="address" id="share-address">
 				<div class="alert alert-success" style="display: none;">
 					{!! nl2br(trans('trp.popup.popup-share.email-success')) !!}
-					
 				</div>
 				<div class="alert alert-warning" style="display: none;">
 					{!! nl2br(trans('trp.popup.popup-share.email-failure')) !!}
-					
 				</div>
 			</form>
 		@endif

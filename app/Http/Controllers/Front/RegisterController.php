@@ -286,7 +286,7 @@ class RegisterController extends FrontController
                             session($sess);
 
                             if (!empty($inv) && !empty($inv->invited_id)) {
-                                $text = 'You already registered from this invite. Log in to submit a review.';
+                                $text = trans('trp.popup.registration.aready-registered-invite');
 
                                 session()->pull('invitation_id');
                             } else {
@@ -845,7 +845,10 @@ class RegisterController extends FrontController
                 if(empty($email) || empty($phone)) {
                     $ret['weak'] = true;
                 } else if(!empty(User::where( 'email','LIKE', $email )->withTrashed()->first())) {
-                    $ret['message'] = 'User with this email already exists. <a href="javascript:;" class="log-in-button button-login-patient">Log in here</a>';
+                    $ret['message'] = trans('trp.popup.registration.existing-email', [
+                        'link' => '<a href="javascript:;" class="log-in-button button-login-patient">',
+                        'endlink' => '</a>',
+                    ]);
                 } else {
 
                     $user = User::where( 'civic_id','LIKE', $data['userId'] )->withTrashed()->first();
@@ -895,7 +898,7 @@ class RegisterController extends FrontController
                         } else if($user->self_deleted) {
                             return Response::json( [
                                 'success' => false, 
-                                'message' => 'Unable to sign you up for security reasons.',
+                                'message' => trans('trp.popup.login.error-fb.self-deleted'),
                             ] );
                         } else {
 
@@ -904,7 +907,7 @@ class RegisterController extends FrontController
                             if ($existing_phone) {
                                 return Response::json( [
                                     'success' => false, 
-                                    'message' => 'User with this phone number already exists.',
+                                    'message' => trans('trp.common.civic.duplicate-phone'),
                                 ] );
                             }
 
@@ -925,7 +928,7 @@ class RegisterController extends FrontController
                         if ($existing_phone) {
                             return Response::json( [
                                 'success' => false, 
-                                'message' => 'User with this phone number already exists.',
+                                'message' => trans('trp.common.civic.duplicate-phone'),
                             ] );
                         }
 

@@ -635,7 +635,7 @@
 		      	"Loading..."
 		    </div>
 		    <div class="loader-text">
-		    	Calculating your score.
+		    	{!! nl2br(trans('trp.popup.popup-lead-magnet.loader')) !!}
 		    </div>
 		</div>
 		<div class="popup-pc-buttons">
@@ -707,7 +707,7 @@
 					</label>
 
 					<div class="alert alert-warning agree-cookies" style="display: none; margin-bottom: 20px;">
-						You must accept all cookies in order to proceed. 
+						{!! trans('trp.popup.popup-lead-magnet.accept-cookies') !!}
 					</div>
 
 					<div class="alert magnet-alert" style="display: none; margin-top: 20px;">

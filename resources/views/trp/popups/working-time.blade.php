@@ -9,7 +9,6 @@
 		</div>
 		<h2>
             {!! nl2br(trans('trp.popup.popup-wokring-time.title')) !!}
-            
         </h2>
 
 		{!! Form::open(array('method' => 'post', 'url' => getLangUrl('profile/info') )) !!}
@@ -67,7 +66,7 @@
                     </div>
 
                     @if($day == 1)
-                        <a href="javascript:;" class="all-days-equal">use the same hours for weekdays</a>
+                        <a href="javascript:;" class="all-days-equal">{!! nl2br(trans('trp.popup.popup-wokring-time.user-same-hours')) !!}</a>
                     @endif
                 </div>
 

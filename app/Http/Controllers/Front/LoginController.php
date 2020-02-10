@@ -78,7 +78,7 @@ class LoginController extends FrontController
                 } else if($user->self_deleted) {
                     return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-login']))
                     ->withInput()
-                    ->with('error-message', 'Unable to sign you up for security reasons.' );
+                    ->with('error-message', trans('trp.popup.login.error-fb.self-deleted') );
                 }
 
                 $user->fb_id = $s_user->getId();
@@ -107,7 +107,7 @@ class LoginController extends FrontController
                 } else if($user->self_deleted) {
                     return redirect()->to( getLangUrl('/', null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'popup-login']))
                     ->withInput()
-                    ->with('error-message', 'Unable to sign you up for security reasons.' );
+                    ->with('error-message', trans('trp.popup.login.error-fb.self-deleted') );
                 } else if( $user->loggedFromBadIp() ) {
 
                     $ul = new UserLogin;
@@ -281,7 +281,10 @@ class LoginController extends FrontController
         }
 
         if ($s_user->getEmail() && !empty(User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->first())) {
-            return redirect( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']).'&error-message='.urlencode('User with this email already exists. <a href="javascript:;" class="log-in-button button-login-patient">Log in here</a>'));
+            return redirect( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']).'&error-message='.urlencode(trans('trp.popup.registration.existing-email', [
+                'link' => '<a href="javascript:;" class="log-in-button button-login-patient">',
+                'endlink' => '</a>',
+            ])));
         }
 
         if ($user) {
@@ -291,7 +294,7 @@ class LoginController extends FrontController
             } else if($user->self_deleted) {
                 return redirect()->to( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-login']))
                 ->withInput()
-                ->with('error-message', 'Unable to sign you up for security reasons.' );
+                ->with('error-message', trans('trp.popup.login.error-fb.self-deleted') );
             } else if( $user->loggedFromBadIp() ) {
 
                 $ul = new UserLogin;
@@ -552,10 +555,6 @@ class LoginController extends FrontController
                     $newuser->sendGridTemplate( 4 );
                 }
 
-                //
-                //To be deleted
-                //
-
                 Auth::login($newuser, true);
 
                 $want_to_invite = false;
@@ -610,7 +609,7 @@ class LoginController extends FrontController
                         $duplicate = User::where('civic_id', $data['userId'] )->first();
 
                         if( $duplicate ) {
-                            $ret['message'] = 'There\'s another profile registered with this Civic Account';
+                            $ret['message'] = trans('trp.common.civic.duplicate');
                         } else {
                             $user->civic_id = $data['userId'];
                             $user->save();
@@ -669,7 +668,7 @@ class LoginController extends FrontController
                             } else if($user->self_deleted) {
                                 return Response::json( [
                                     'success' => false, 
-                                    'message' => 'Unable to sign you up for security reasons.',
+                                    'message' => trans('popup.login.error-fb.self-deleted'),
                                 ] );
                             } else {
 
@@ -678,7 +677,7 @@ class LoginController extends FrontController
                                 if ($existing_phone) {
                                     return Response::json( [
                                         'success' => false, 
-                                        'message' => 'User with this phone number already exists.',
+                                        'message' => trans('trp.common.civic.duplicate-phone'),
                                     ] );
                                 }
 

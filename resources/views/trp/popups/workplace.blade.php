@@ -9,17 +9,14 @@
 		</div>
 		<h2>
 			{!! nl2br(trans('trp.popup.popup-wokrplace.title')) !!}
-			
 		</h2>
 
 		<h4 class="popup-title">
 			{!! nl2br(trans('trp.popup.popup-wokrplace.subtitle')) !!}
-			
 		</h4>
 
 		<p class="popup-desc">
 			{!! nl2br(trans('trp.popup.popup-wokrplace.hint')) !!}
-			
 		</p>
 
 		<div class="search-dentist clinic-suggester-wrapper suggester-wrapper">

@@ -168,21 +168,18 @@
 							'link' => '<a href="javascript:;" data-popup="popup-register">',
 							'endlink' => '</a>',
 						])) !!}
-	    				
 	    			</p>
 	    		</div>
     			<div class="how-block flex flex-center">
 	    			<span class="how-number">02</span>
 	    			<p>
 	    				{!! nl2br(trans('trp.page.index-dentist.step-2')) !!}
-	    				
 	    			</p>
 	    		</div>
     			<div class="how-block flex flex-center">
 	    			<span class="how-number">03</span>
 	    			<p>
 	    				{!! nl2br(trans('trp.page.index-dentist.step-3')) !!}
-	    				
 	    			</p>
 	    		</div>
     		</div>
@@ -194,21 +191,18 @@
 							'link' => '<a href="https://wallet.dentacoin.com/" target="_blank">',
 							'endlink' => '</a>',
 						])) !!}
-	    				
 	    			</p>
 	    		</div>
     			<div class="how-block flex flex-center">
 	    			<span class="how-number">05</span>
 	    			<p>
 	    				{!! nl2br(trans('trp.page.index-dentist.step-5')) !!}
-	    				
 	    			</p>
 	    		</div>
     			<div class="how-block flex flex-center">
 	    			<span class="how-number">06</span>
 	    			<p>
 	    				{!! nl2br(trans('trp.page.index-dentist.step-6')) !!}
-	    				
 	    			</p>
 	    		</div>
     		</div>
@@ -227,7 +221,6 @@
     		<div class="col">
 	    		<h2>
 	    			{!! nl2br(trans('trp.page.index-dentist.cta')) !!}
-	    			
 	    		</h2>
 	    		<a href="javascript:;" class="button button-yellow button-sign-up-dentist" data-popup="popup-register">
 	    			{!! nl2br(trans('trp.page.index-dentist.signup')) !!}

@@ -11,13 +11,10 @@
 		</div>
 		<h2>
 			{!! nl2br(trans('trp.popup.view-review-popup.title', [ 'name' => $item->getName() ])) !!}
-			
 		</h2>
 
 		<div id="the-detailed-review">
 			
 		</div>
-
-
 	</div>
 </div>

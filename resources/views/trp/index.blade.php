@@ -15,13 +15,12 @@
 		    	</h1>
 		    </div>
 		    @include('trp.parts.search-form')
-			
 		</div>
 
 		<div class="main-top">
 	    </div>
 
-	    @if(!empty($country_id) && !empty($_COOKIE['functionality_cookies']))
+	    @if(!empty($_COOKIE['functionality_cookies']) && !empty($country_id))
 		    <div class="container">
 			    <div class="flickity-dentists-form">
 			    	<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}"> Dentists {{ !empty($city_cookie) || !empty($city_id) || (!empty($user) && !empty($user->city_name)) ? 'near' : 'in' }}: 

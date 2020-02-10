@@ -137,7 +137,7 @@
 								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
 								<div class="expander-wrapper{!! $user->hasimage ? ' has-image' : '' !!}">
 									<div class="expander">
-										<a href="javascript:;" class="close-explander">Close<span>X</span></a>
+										<a href="javascript:;" class="close-explander">{!! trans('trp.header.close') !!}<span>X</span></a>
 										<div class="expander-content">
 											@foreach(getDentacoinHubApplications() as $dcn_platform)
 										        <a href="{{ $dcn_platform->link ? $dcn_platform->link : 'javascript:;' }}" target="_blank" class="platform-icon">
@@ -152,12 +152,12 @@
 											<div class="col">
 												<a href="{{ getLangUrl('logout') }}">
 													<i class="fas fa-power-off"></i>
-													Log out
+													{!! trans('trp.header.logout') !!}
 												</a>
 											</div>
 											<div class="col">
 												<a class="btn" href="https://account.dentacoin.com/?platform=trusted-reviews">
-													My Account
+													{!! trans('trp.header.my-account') !!}
 												</a>
 											</div>
 										</div>
@@ -166,15 +166,15 @@
 	                        @else
 	                        	@if($current_page=='welcome-dentist')
 	                        		<a href="{{ getLangUrl('/') }}" class="button-dentists">
-										For patients
+										{!! trans('trp.header.for-patients') !!}
 									</a>
 	                        	@else
 									<a href="{{ getLangUrl('welcome-dentist') }}" class="button-dentists">
-										For dentists
+										{!! trans('trp.header.for-dentists') !!}
 									</a>
 								@endif
 								<a href="javascript:;" class="button-sign-in {{ $current_page!='welcome-dentist' ? 'button-login-patient' : '' }}" data-popup="popup-login">
-									{{ $current_page=='welcome-dentist' ? 'Log in' : 'Sign in' }}
+									{{ $current_page=='welcome-dentist' ? trans('trp.header.login') : trans('trp.header.signin') }}
 								</a>
 	                        @endif
 
@@ -194,7 +194,7 @@
 					<a href="https://dentacoin.com/" target="_blank" class="footer-logo col-md-3 flex break-mobile flex-center">
 						<img src="{{ url('img-trp/dc-logo.png') }}" alt="Dentacoin logo">
 						<p class="bold">
-							Powered by Dentacoin
+							{!! trans('trp.footer.powered') !!}
 						</p>
 					</a>
 					<div class="footer-text col-md-6 tac">
@@ -206,11 +206,13 @@
 							<a href="https://dentacare.dentacoin.com/" target="_blank">Dentacare App</a>
 						</div>
 						<small>
-							Copyright © 2019. Dentacoin Foundation. All rights reserved
+							{!! trans('trp.footer.copyright', [
+								'year' => date('Y')
+							]) !!}
 						</small>
 					</div>
 					<div class="socials col-md-3">
-						Stay in the loop: &nbsp;
+						{!! trans('trp.footer.stay') !!}: &nbsp;
 						<a class="social" href="https://t.me/dentacoin" target="_blank"><i class="fab fa-telegram-plane"></i></a>
 						<a class="social" href="https://www.facebook.com/dentacoin.trusted.reviews/" target="_blank"><i class="fab fa-facebook-f"></i></a>
 					</div>
@@ -235,67 +237,60 @@
 
 		@if($current_page != 'profile')
 			<div class="bottom-drawer">
-				<!-- <div id="cookiebar" >
-					<p>
-						{!! nl2br( trans('trp.common.cookiebar-hint',[
-							'link' => '<a href="https://dentacoin.com/privacy-policy" target="_blank">',
-							'endlink' => '</a>',
-						]) ) !!}
-					</p>
-					<a class="accept" href="javascript:;">
-						{!! nl2br( trans('trp.common.cookiebar-button') ) !!}
-					</a>
-				</div> -->
 
 				@if(empty($user) && empty($_COOKIE['performance_cookies']) && empty($_COOKIE['marketing_cookies']) && empty($_COOKIE['strictly_necessary_policy']) && empty($_COOKIE['functionality_cookies']))
 					<div class="privacy-policy-cookie">
 						<div class="container-cookie flex">
 							<div class="cookies-text">
-								This site uses cookies. Find out more on how we use cookies in our <a href="https://dentacoin.com/privacy-policy" target="_blank">Privacy Policy</a>. | <a href="javascript:;" class="adjust-cookies">Adjust cookies</a>
+								{!! trans('trp.cookiebar.text', [
+									'privacylink' => '<a href="https://dentacoin.com/privacy-policy" target="_blank">',
+									'adjustcookieslink' => '<a href="javascript:;" class="adjust-cookies">',
+									'endlink' => '</a>',
+								]) !!}
 							</div>
-							<a href="javascript:;" class="accept-all">Accept all cookies</a>
+							<a href="javascript:;" class="accept-all">{!! trans('trp.cookiebar.accept') !!}</a>
 						</div>
 						<div id="customize-cookies" class="customize-cookies" style="display: none;">
 							<button class="close-customize-cookies-icon close-customize-cookies-popup">×</button>
 							<div class="tac"><img src="/img-trp/cookie-icon.svg" alt="Cookie icon" class="cookie-icon"/></div>
-							<div class="tac cookie-popup-title">Select cookies to accept:</div>
+							<div class="tac cookie-popup-title">{!! trans('trp.cookiebar.select') !!}:</div>
 							<div class="cookies-options-list flex">
 								<div class="cookie-checkbox-wrapper">
 									<label class="cookie-label active" for="strictly-necessary-cookies">
 										<i class="far fa-square checkbox-icon"></i>
 										<input checked disabled id="strictly-necessary-cookies" type="checkbox" class="cookie-checkbox">
-										<span class="gray">Strictly necessary</span> 
-										<i class="fas fa-info-circle info-cookie tooltip-text" text="Cookies essential to navigate around the website and use its features. Without them, you wouldn’t be able to use basic services like signup or login."></i>
+										<span class="gray">{!! trans('trp.cookiebar.strictly') !!}</span> 
+										<i class="fas fa-info-circle info-cookie tooltip-text" text="{!! trans('trp.cookiebar.strictly.tooltip') !!}"></i>
 									</label>
 								</div>
 								<div class="cookie-checkbox-wrapper">
 									<label class="cookie-label active" for="performance-cookies">
 										<i class="far fa-square checkbox-icon"></i>
 										<input checked id="performance-cookies" type="checkbox" class="cookie-checkbox">
-										<span>Performance cookies</span> 
-										<i class="fas fa-info-circle info-cookie tooltip-text" text="These cookies collect data for statistical purposes on how visitors use a website, they don’t contain personal data and are used to improve user experience."></i>
+										<span>{!! trans('trp.cookiebar.performance') !!}</span> 
+										<i class="fas fa-info-circle info-cookie tooltip-text" text="{!! trans('trp.cookiebar.performance.tooltip') !!}"></i>
 									</label>
 								</div>
 								<div class="cookie-checkbox-wrapper">
 									<label class="cookie-label active" for="functionality-cookies">
 										<i class="far fa-square checkbox-icon"></i>
 										<input checked id="functionality-cookies" type="checkbox" class="cookie-checkbox">
-										<span>Functionality cookies</span> 
-										<i class="fas fa-info-circle info-cookie tooltip-text" text="These cookies allow users to customise how a website looks for them; they can remember usernames, preferences, etc."></i>
+										<span>{!! trans('trp.cookiebar.functionality') !!}</span> 
+										<i class="fas fa-info-circle info-cookie tooltip-text" text="{!! trans('trp.cookiebar.functionality.tooltip') !!}"></i>
 									</label>
 								</div>
 								<div class="cookie-checkbox-wrapper">
 									<label class="cookie-label active" for="marketing-cookies">
 										<i class="far fa-square checkbox-icon"></i>
 										<input checked id="marketing-cookies" type="checkbox" class="cookie-checkbox">
-										<span>Marketing cookies</span> 
-										<i class="fas fa-info-circle info-cookie tooltip-text" text="Marketing cookies are used e.g. to deliver advertisements more relevant to you or limit the number of times you see an advertisement."></i>
+										<span>{!! trans('trp.cookiebar.marketing') !!}</span> 
+										<i class="fas fa-info-circle info-cookie tooltip-text" text="{!! trans('trp.cookiebar.marketing.tooltip') !!}"></i>
 									</label>
 								</div>
 							</div>
 							<div class="flex actions">
-								<a href="javascript:;" class="close-cookie-button close-customize-cookies-popup">CANCEL</a>
-								<a href="javascript:;" class="custom-cookie-save">SAVE</a>
+								<a href="javascript:;" class="close-cookie-button close-customize-cookies-popup">{!! trans('trp.cookiebar.cancel') !!}</a>
+								<a href="javascript:;" class="custom-cookie-save">{!! trans('trp.cookiebar.save') !!}</a>
 							</div>
 							<div class="custom-triangle"></div>
 						</div>
@@ -320,7 +315,6 @@
 			@include('trp/popups/invite-new-dentist')
 			@include('trp/popups/invite-new-dentist-success')
 		@endif
-
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
 		

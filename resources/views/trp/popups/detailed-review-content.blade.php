@@ -2,7 +2,7 @@
 	<div class="review review-wrapper" review-id="{{ $review->id }}">
 		<div class="review-header">
 			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
-			<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? 'Verified Patient' : 'Deleted User') : $review->user->name }}: </span>
+			<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}: </span>
 			@if($review->verified)
 				<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
 					{!! nl2br(trans('trp.common.trusted-review')) !!}
@@ -50,7 +50,6 @@
 					<a class="reply-review" href="javascript:;">
 						<span>
 							{!! nl2br(trans('trp.popup.view-review-popup.reply')) !!}
-							
 						</span>
 					</a>
 				@endif
@@ -71,7 +70,7 @@
 				<a class="share-review" href="javascript:;" data-popup="popup-share" share-href="{{ $item->getLink() }}?review_id={{ $review->id }}" >
 					<img src="{{ url('img-trp/share-review.png') }}">
 					<span>
-						Share
+						{!! trans('trp.common.share') !!}
 					</span>
 				</a>
 			</div>
@@ -140,8 +139,6 @@
 	</div>
 
 	<div class="review-container clearfix">
-
-
 		@foreach($review->answers as $answer)
 
 			<div class="overview-column">

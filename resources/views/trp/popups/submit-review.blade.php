@@ -25,7 +25,7 @@
 						{!! nl2br(trans('trp.popup.submit-review-popup.limit-send')) !!}
 					</a>
 				@else
-					You already reached your review limit to this dentist for the period. Ask for an invitation next month.
+					{!! nl2br(trans('trp.popup.submit-review-popup.next-month')) !!}
 				@endif
 			</div>
 		@elseif($user->is_dentist)
@@ -57,7 +57,7 @@
 							<div class="review-answers">
 								<div class="clearfix subquestion">
 								   <select name="dentist_clinics" class="input" id="dentist_clinics">
-										<option value="" disabled selected>Please select</option>
+										<option value="" disabled selected>{{ trans('trp.popup.submit-review-popup.select') }}</option>
 										<option value="">{{ trans('trp.popup.submit-review-popup.dentist-cabinet') }}</option>
 										@foreach($item->my_workplace_approved as $workplace)
 											<option value="{{ $workplace->clinic->id }}">{{ $workplace->clinic->getName() }}</option>
@@ -88,7 +88,6 @@
 							    </div>
 							</div>
 						@endif
-
 
 						<div class="question {{ $item->is_clinic && $item->teamApproved->isNotEmpty() && $item->teamApproved->count() > 1 && $loop->iteration == 4 ? 'hidden-review-question' : '' }}" {{ $item->is_clinic && $item->teamApproved->isNotEmpty() && $item->teamApproved->count() > 1 && $loop->iteration == 4 ? 'style=display:none;' : '' }}>
 							<h4 class="popup-title">
@@ -144,8 +143,8 @@
 									@endif
 								@endforeach
 
-								<p class="treatment-category more-treatments-title">• If you can’t find your treatment, you can search from the list with all types of dental treatment: </p>
-								<a href="javascript:;" class="more-treatments"><i class="fas fa-plus"></i> All treatments</a>
+								<p class="treatment-category more-treatments-title">• {{ trans('trp.treatments.info') }}: </p>
+								<a href="javascript:;" class="more-treatments"><i class="fas fa-plus"></i> {{ trans('trp.treatments.all-treatments') }}</a>
 
 								<div class="treatments-hidden">
 									@foreach(config('trp.treatments') as $t => $treatment)
@@ -172,21 +171,17 @@
 					</div>
 
 					<div class="question">
-
 						<h4 class="popup-title">
 							<span class="blue">
 								{!! nl2br(trans('trp.popup.submit-review-popup.last-question')) !!}
 							</span>
 							{!! nl2br(trans('trp.popup.submit-review-popup.last-question-text', ['name' => $item->getName()])) !!}
 						</h4>
-						
 
 						<div class="reviews-wrapper">
-
 							<div class="review-tabs flex-tablet">
 								<a class="active" href="javascript:;" data-type="text">
 									{!! nl2br(trans('trp.popup.submit-review-popup.text-review')) !!}
-									
 								</a>
 								<span>or</span>
 								<a class="video-button" href="javascript:;" data-type="video">
@@ -216,32 +211,26 @@
 									@else
 										<p>
 											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-title')) !!}
-											
 										</p>
 										<span class="option-span">
 											<b>01</b>
 											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-1')) !!}
-											
 										</span>
 										<span class="option-span">
 											<b>02</b>
 											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-2')) !!}
-											
 										</span>
 										<span class="option-span">
 											<b>03</b>
 											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-3')) !!}
-											
 										</span>
 										<span class="option-span">
 											<b>04</b>
 											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-4')) !!}
-											
 										</span>
 										<span class="option-span">
 											<b>05</b>
 											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-5')) !!}
-											
 										</span>
 
 										<label class="checkbox-label" for="video-agree">
@@ -251,7 +240,6 @@
 												'link' => '<a class="read-privacy" target="_blank" href="https://dentacoin.com/privacy-policy">',
 												'endlink' => '</a>',												
 											])) !!}
-											
 										</label>
 
 										<div class="alert alert-warning" style="display: none;" id="video-not-agree">
@@ -270,7 +258,6 @@
 											<div class="alert alert-warning" style="display: none;" id="video-short">
 												{{ trans('trp.popup.submit-review-popup.video-short') }}
 											</div>
-
 
 											<a href="javascript:;" id="init-video" class="button">
 												<i class="fas fa-video" style="color: white; margin-right: 5px;"></i>
@@ -315,7 +302,6 @@
 							</button>
 						</div>
 
-
 						<div class="alert alert-warning" id="review-answer-error" style="display: none;">
 							{{ trans( 'trp.popup.submit-review-popup.last-question-invalid' ) }}
 						</div>
@@ -352,10 +338,7 @@
 				            	</a>
 				            @endif
 			            </div>
-
 					</div>
-
-
 		        </div>
 			{!! Form::close() !!}
 		@endif

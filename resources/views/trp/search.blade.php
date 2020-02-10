@@ -36,11 +36,9 @@
 	    </div>
 
 	    @if(!empty($search_title))
-
 		    <div class="container overflow-container">
 		    	<h1>{{ $search_title }}</h1>
 		    </div>
-
 		@endif
 
 		@if(($items->count() == 0 && !empty($user) && !$user->is_dentist) || (empty($user) && $items->count() == 0))
@@ -152,7 +150,6 @@
 			<div class="pagination" style="display: none;">
 				
 			</div>
-
 		</div>
 
 	@if(($items->count() == 0 && !empty($user) && !$user->is_dentist) || (empty($user) && $items->count() == 0))
@@ -169,7 +166,6 @@
 			</div>
 
 			<div class="invite-new-dentist-wrapper white-invite">
-
 				<div class="invite-new-dentist-titles">
 					<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
 					<h3 class="gbb">{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
@@ -287,7 +283,6 @@
 		<div class="popup-inner inner-white">
 			<a href="javascript:;" class="close-popup close-map">
 				{!! nl2br(trans('trp.page.search.close-map')) !!}
-				
 				<i class="fas fa-times"></i>
 			</a>
 
@@ -295,14 +290,11 @@
 				<div class="flex-2">
 					<h2><img src="{{ url('img-trp/sort-gray-small.png') }}">
 						{!! nl2br(trans('trp.page.search.filter')) !!}
-						
 					</h2>
-    				
     				<form class="search-get-form" method="get" base-href="{{ getLangUrl($query) }}">
 
 						<div class="sort-stars">
 							<h4 class="popup-title">{!! nl2br(trans('trp.page.search.stars')) !!}</h4>
-
 							<div class="ratings">
 								<div class="stars">
 									<div class="bar" style="width: {{ intval($stars)/5*100 }}%;">
@@ -314,7 +306,6 @@
 
 						<div class="sort-category">
 							<h4 class="popup-title">{!! nl2br(trans('trp.page.search.category')) !!}</h4>
-
 							@foreach( config('categories') as $cat_id => $cat )
 								<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat, $searchCategories) ? ' active' : '' !!}" for="checkbox-filter-{{ $cat }}">
 									<input type="checkbox" class="special-checkbox" id="checkbox-filter-{{ $cat }}" value="{{ $cat }}" {!! !empty($searchCategories) && in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
@@ -326,7 +317,6 @@
 
 						<div class="sort-partners">
 							<h4 class="popup-title">{!! nl2br(trans('trp.page.search.partners')) !!}</h4>
-
 							<label class="checkbox-label{!! $partner ? ' active' : '' !!}" for="checkbox-partner">
 								<input type="checkbox" class="special-checkbox" id="checkbox-partner" name="partner" value="1" {!! $partner ? 'checked="checked"' : '' !!}>
 								<i class="far fa-square"></i>
@@ -334,7 +324,6 @@
 								<img src="{{ url('img-trp/mini-logo-black.png') }}">
 							</label>
 						</div>
-
 
 						<div class="sort-by">
 							<h4 class="popup-title">
@@ -404,8 +393,7 @@
 							</a>
 
 						@endforeach
-			
-
+						
 						<div class="pagination" style="display: none;">
 							
 						</div>

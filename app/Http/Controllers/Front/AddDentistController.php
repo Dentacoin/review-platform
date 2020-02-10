@@ -107,7 +107,7 @@ class AddDentistController extends FrontController
                     $ret = array(
                         'success' => false,
                         'messages' =>[
-                            'address' => 'Unable to proceed. Please, invite a dentist from your country.'
+                            'address' => trans('trp.invite.invalid-address')
                         ]
                     );
                     return Response::json( $ret );
@@ -115,7 +115,7 @@ class AddDentistController extends FrontController
                     $ret = array(
                         'success' => false,
                         'messages' =>[
-                            'address' => 'Unable to proceed. Please, invite a dentist from your country.'
+                            'address' => trans('trp.invite.invalid-address')
                         ]
                     );
                     return Response::json( $ret );

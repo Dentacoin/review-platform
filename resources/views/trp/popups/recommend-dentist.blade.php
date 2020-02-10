@@ -8,15 +8,15 @@
 			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
 		<h2>
-			Recommend to a Friend
+			{!! nl2br(trans('trp.popup.popup-recommend-dentist.title')) !!}
 		</h2>
 
 		<h4 class="popup-title">
-			VIA EMAIL
+			{!! nl2br(trans('trp.popup.popup-recommend-dentist.via-email')) !!}
 		</h4>
 
 		<p class="popup-desc">
-			• Just enter a name and email address and we will send an email with link to the profile of your recommended dentist.
+			• {!! nl2br(trans('trp.popup.popup-recommend-dentist.info')) !!}
 		</p>
 		<br/>
 		<br/>
@@ -29,7 +29,7 @@
 					<div class="modern-field">
 						<input type="text" name="name" id="recommend-name" class="modern-input recommend-name" autocomplete="off">
 						<label for="recommend-name">
-							<span>{!! nl2br(trans('trp.popup.popup-invite.name')) !!}:</span>
+							<span>{!! trans('trp.popup.popup-recommend-dentist.name') !!}:</span>
 						</label>
 					</div>
 				</div>
@@ -37,7 +37,7 @@
 					<div class="modern-field">
 						<input type="email" name="email" id="recommend-email" class="modern-input recommend-email" autocomplete="off">
 						<label for="recommend-email">
-							<span>{!! nl2br(trans('trp.popup.popup-invite.email')) !!}:</span>
+							<span>{!! trans('trp.popup.popup-recommend-dentist.email') !!}:</span>
 						</label>
 					</div>
 				</div>
@@ -48,7 +48,7 @@
 			</div>
 
 			<div class="tac">
-				<input type="submit" class="button" value="Recommend">
+				<input type="submit" class="button" value="{!! trans('trp.popup.popup-recommend-dentist.recommend') !!}">
 			</div>
 		{!! Form::close() !!}	
 	</div>

@@ -7,7 +7,7 @@
 		<img src="{{ url('img-trp/404.jpg') }}" alt="Dentacoin page not found">
 
 		<div class="error-container container">
-			<h2>Sorry, Page Was Not Found. <br> Maybe You Are Looking for One of the Dentists Around You.</h2>
+			<h2>{!! nl2br(trans('trp.page.404.title')) !!}</h2>
 
 			<div class="index-gradient">
 
@@ -75,7 +75,7 @@
 				</div>
 			</div>
 			<div class="tac">
-	    		<a href="{{ getLangUrl('/') }}" class="button">Back to home page</a>
+	    		<a href="{{ getLangUrl('/') }}" class="button">{!! nl2br(trans('trp.page.404.back')) !!}</a>
 	    	</div>
 		</div>
 	</div>

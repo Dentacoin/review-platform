@@ -7,11 +7,9 @@
 			<div class="content">
 				<p class="h1">
 					{!! nl2br(trans('trp.popup.banned-popup.title')) !!}
-					
 				</p>
 				<h3>
 					{!! nl2br(trans('trp.popup.banned-popup.hint')) !!}
-					
 				</h3>
 			</div>
 		</div>

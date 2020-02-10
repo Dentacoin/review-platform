@@ -44,8 +44,7 @@
 				<input type="text" name="name_alternative" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alternative }}">
 				<div class="profile-details address-suggester-wrapper">
 					<div class="alert alert-warning mobile ip-country" style="display: none;">
-                    	Hmm... Your IP thinks differently. <br/>
-						Sure you've entered the right country?
+                    	{!! nl2br(trans('trp.common.different-ip')) !!}
                     </div>	
 
                     @if(!empty($user->country_id))
@@ -53,7 +52,7 @@
 	                		<option value="{{ \App\Models\Country::find($user->country_id)->name }}" code="{{ \App\Models\Country::find($user->country_id)->code }}" selected="selected" >{{ \App\Models\Country::find($user->country_id)->name }}</option>
 	                	</select>
 	                	<div class="alert alert-warning mobile" style="margin: 10px 0px;">
-                        	Your country is uneditable. If you’ve moved to another country, contact us at admin@dentacoin.com.
+                        	{!! nl2br(trans('trp.page.user.uneditable-country')) !!}
                         </div>
                     @else
 	                	<select class="input country-select country-dropdown" name="country_id" {!! !empty($country_id) ? 'disabled="disabled"' : '' !!} real-country="{{ !empty($country_id) ? $country_id : '' }}">
@@ -352,8 +351,7 @@
 						<input type="text" name="name_alternative" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alternative }}">
 
 						<div class="alert alert-warning mobile ip-country" style="display: none;">
-	                    	Hmm... Your IP thinks differently. <br/>
-							Sure you've entered the right country?
+	                    	{!! nl2br(trans('trp.common.different-ip')) !!}
 	                    </div>	
 
 	                    @if(!empty($user->country_id))
@@ -361,7 +359,7 @@
 		                		<option value="{{ \App\Models\Country::find($user->country_id)->name }}" code="{{ \App\Models\Country::find($user->country_id)->code }}" selected="selected" >{{ \App\Models\Country::find($user->country_id)->name }}</option>
 		                	</select>		                	
 		                	<div class="alert alert-warning mobile" style="margin: 10px 0px;">
-	                        	Your country is uneditable. If you’ve moved to another country, contact us at admin@dentacoin.com.
+	                        	{!! nl2br(trans('trp.page.user.uneditable-country')) !!}
 	                        </div>
 	                    @else
 		                	<select class="input country-select country-dropdown" name="country_id" {!! !empty($country_id) ? 'disabled="disabled"' : '' !!} real-country="{{ !empty($country_id) ? $country_id : '' }}">
@@ -674,7 +672,7 @@
     	<div class="tab-container" id="reviews">
     		<div class="container">
 	    		<h2 class="black-left-line section-title">
-	    			Overview
+	    			{!! nl2br(trans('trp.page.user.overview')) !!}
 	    		</h2>
 	    	</div>
 
@@ -704,7 +702,7 @@
 			    	<div class="review review-wrapper" review-id="{{ $review->id }}">
 						<div class="review-header">
 			    			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
-			    			<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? 'Verified Patient' : 'Deleted User') : $review->user->name }}: </span>
+			    			<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}: </span>
 							@if($review->verified)
 				    			<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
 				    				{!! nl2br(trans('trp.common.trusted')) !!}
@@ -851,8 +849,7 @@
 		@if( $item->reviews_in_video()->count() )
 	    	<div class="tab-container" id="videos">
 	    		<h2 class="black-left-line section-title">
-	    			{!! nl2br(trans('trp.page.user.reviews-video')) !!}
-	    			
+	    			{!! nl2br(trans('trp.page.user.reviews-video')) !!}	    			
 	    		</h2>
 
 	    		<div class="video-review-container clearfix">
@@ -894,14 +891,12 @@
 				{!! nl2br(trans('trp.page.user.about-who',[
 					'name' => $item->getName()
 				])) !!}
-				
 			</h2>
 
 			<div class="about-container">
 				@if($item->categories->isNotEmpty() || (!empty($user) && $item->id==$user->id))
 	    			<div class="specialization" role="presenter">
 						<img src="{{ url('img-trp/graduate-hat.png') }}">
-
 		    			<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.specialty-empty')) }}">
 		    				{{ $item->categories->isNotEmpty() ? implode(', ', $item->parseCategories($categories)) : nl2br(trans('trp.page.user.specialty-empty')) }}
 	    				</span>

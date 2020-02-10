@@ -9,17 +9,14 @@
 		</div>
 		<h2>
 			{!! nl2br(trans('trp.popup.add-team-popup.title')) !!}
-			
 		</h2>
 
 		<h4 class="popup-title">
 			{!! nl2br(trans('trp.popup.add-team-popup.subtitle')) !!}
-			
 		</h4>
 
 		<p class="popup-desc">
 			{!! nl2br(trans('trp.popup.add-team-popup.hint')) !!}
-			
 		</p>
 
 		<div class="search-dentist dentist-suggester-wrapper suggester-wrapper">
@@ -37,7 +34,6 @@
 			<p class="info">
 				<img src="img/info.png"/>
 				{!! nl2br(trans('trp.popup.add-team-popup.invite')) !!}
-				 
 			</p>
 
 			{!! Form::open(array('method' => 'post', 'files'=> true, 'class' => 'search-dentist-form invite-patient-form', 'url' => getLangUrl('profile/invite-new') )) !!}
@@ -59,58 +55,62 @@
 
 				<div class="alert invite-alert" style="display: none; margin-top: 20px;">
 				</div>
-				<!--
-				<a href="javascript:;" class="add-dentist">+ Add another dentist</a>
-			-->
+				@if(false)
+					<!--
+					<a href="javascript:;" class="add-dentist">+ Add another dentist</a>
+				-->
+				@endif
 				<div class="tac">
 					<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.add-team-popup.send')) !!}">
 				</div>
 			{!! Form::close() !!}
 
-			<!--
-				<h4 class="popup-title">
-					{!! nl2br(trans('trp.popup.add-team-popup.list')) !!}
-					
-				</h4>
-
-				<div class="invited-dentists">
-					<div class="flex">
-						<div class="flex-3">
-							Mr. Kenneth Burrett
-						</div>
-						<div class="flex-7">
-							kennyburrett@aol.com
-						</div>
-						<div class="flex-2 tar">
-							<a class="remove-dentist" href="javascript:;">
-								<i class="fas fa-times-circle"></i>
-								Remove
-							</a>
-						</div>
-					</div>
-					<div class="flex">
-						<div class="flex-3">
-							Mr. Kenneth Burrett
-						</div>
-						<div class="flex-7">
-							kennyburrett@aol.com
-						</div>
-						<div class="flex-2 tar">
-							<a class="remove-dentist" href="javascript:;">
-								<i class="fas fa-times-circle"></i>
-								Remove
-							</a>
-						</div>
-					</div>
-				</div>
-
-				<div class="tac">
-					<button type="submit" class="button">
-						{!! nl2br(trans('trp.popup.add-team-popup.add')) !!}
+			@if(false)
+				<!--
+					<h4 class="popup-title">
+						{!! nl2br(trans('trp.popup.add-team-popup.list')) !!}
 						
-					</button>
-				</div>
-			-->
+					</h4>
+
+					<div class="invited-dentists">
+						<div class="flex">
+							<div class="flex-3">
+								Mr. Kenneth Burrett
+							</div>
+							<div class="flex-7">
+								kennyburrett@aol.com
+							</div>
+							<div class="flex-2 tar">
+								<a class="remove-dentist" href="javascript:;">
+									<i class="fas fa-times-circle"></i>
+									Remove
+								</a>
+							</div>
+						</div>
+						<div class="flex">
+							<div class="flex-3">
+								Mr. Kenneth Burrett
+							</div>
+							<div class="flex-7">
+								kennyburrett@aol.com
+							</div>
+							<div class="flex-2 tar">
+								<a class="remove-dentist" href="javascript:;">
+									<i class="fas fa-times-circle"></i>
+									Remove
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<div class="tac">
+						<button type="submit" class="button">
+							{!! nl2br(trans('trp.popup.add-team-popup.add')) !!}
+							
+						</button>
+					</div>
+				-->
+			@endif
 		</div>
 	</div>
 </div>

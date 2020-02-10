@@ -1233,7 +1233,6 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                         $message->from($sender, $sender_name);
                         $message->to( 'petya.ivanova@dentacoin.com' );
                         $message->to( 'donika.kraeva@dentacoin.com' );
-                        $message->to( 'gergana@youpluswe.com' );
                         $message->replyTo($patient->email, $patient->name);
                         $message->subject('Suspicious Patient Activity - 3 Reviews');
                     });
@@ -1276,9 +1275,9 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
             $type = $recommended_user->is_clinic ? 'dental clinic' : 'dentist';
 
             if($recommendation) {
-                return Response::json(['success' => false, 'message' => 'You already recommend your '.$type.' to your friend' ] );
+                return Response::json(['success' => false, 'message' => trans('popup.popup-recommend-dentist.аlready-recommended', ['type' => $type ]) ] );
             } else if(Request::Input('email') == $this->user->email) {
-                return Response::json(['success' => false, 'message' => 'You can\'t recommend this '.$type.' to yourself' ] );
+                return Response::json(['success' => false, 'message' => trans('popup.popup-recommend-dentist.recommended-yourself', ['type' => $type ]) ] );
             } else {
                 $new_recommendation = new DentistRecommendation;
                 $new_recommendation->user_id = $this->user->id;
@@ -1310,7 +1309,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                 $this->user->email = $user_email;
                 $this->user->save();
 
-                return Response::json(['success' => true, 'message' => 'Your recommendation is sent.' ] );
+                return Response::json(['success' => true, 'message' => trans('popup.popup-recommend-dentist.success') ] );
             }            
         }
     }
@@ -1496,7 +1495,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     $review->rating_converted = $review->rating/5*100;
                     $review->converted_answer = nl2br($review->answer);
                     $review->converted_title = !empty($review->title) ? '<a href="'.$dentist->getLink().'?review_id='.$review->id.'" target="_blank" class="review-title">“'.$review->title.'”</a>' : '';
-                    $review->patient_name = !empty($review->user->self_deleted) ? ($review->verified ? "Verified Patient" : "Deleted User") : $review->user->name;
+                    $review->patient_name = !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name;
                     $reviews[] = $review->toArray();
                 }
 

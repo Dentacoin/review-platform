@@ -11,7 +11,6 @@
 	    		{{ trans('trp.page.'.$current_page.'.hint') }}
 	    	</p>
 
-
     		<form class="signin-form" action="{{ getLangUrl('recover/'.$id.'/'.$hash) }}" method="post">
     			{!! csrf_field() !!}
 
@@ -20,7 +19,6 @@
 					<input type="password" name="password-repeat" placeholder="{{ trans('trp.page.'.$current_page.'.repeat') }}" class="input">
 					<button type="submit" class="button">{{ trans('trp.page.'.$current_page.'.update') }}</button>
 				</div>
-
     		</form>
 
     		@if(!empty($changed))
@@ -30,7 +28,6 @@
 			        		'link' => '<a href="javascript:;" data-popup="popup-login">',
 			        		'endlink' => '</a>',
 			        	]) !!}
-			        	
 			        </strong>
 			    </div>
     		@endif

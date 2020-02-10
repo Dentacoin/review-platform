@@ -1,4 +1,3 @@
-
 <div class="popup fixed-popup" id="popup-widget">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
@@ -9,10 +8,10 @@
 			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
 		<h2 class="hide-fb">{!! nl2br(trans('trp.popup.popup-widget.title')) !!}</h2>
-		<h2 class="show-fb" style="display: none;">Display Reviews on Your Facebook Page</h2>
+		<h2 class="show-fb" style="display: none;">{!! nl2br(trans('trp.popup.popup-widget.facebook-title')) !!}</h2>
 
 		<h4 class="popup-title hide-fb">{!! nl2br(trans('trp.popup.popup-widget.subtitle')) !!}</h4>
-		<h4 class="popup-title show-fb" style="display: none;">Trusted Reviews Facebook Tab</h4>
+		<h4 class="popup-title show-fb" style="display: none;">{!! nl2br(trans('trp.popup.popup-widget.facebook-subtitle')) !!}</h4>
 
 		<div class="widget-step widget-step-1">
 			<p class="popup-desc">
@@ -92,34 +91,34 @@
 				    	<input class="type-radio" type="radio" name="widget-layout" id="widget-fb" value="fb">
 				    	<img class="layout-img" src="{{ url('img-trp/fb-tab.png') }}" alt="Dentacoin trusted reviews facebook tab preview">
 				    	<div class="widget-option">
-				    		<p layout-text="Facebook tab">• Facebook tab</p>
+				    		<p layout-text="{!! nl2br(trans('trp.popup.popup-widget.layout.fb')) !!}">• {!! nl2br(trans('trp.popup.popup-widget.layout.fb')) !!}</p>
 				    	</div>
 				  	</label>
 				</div>
 			</div>
 
 			<div class="tac widget-button-next-wrap">
-				<a href="javascript:;" class="button widget-button widget-layout-button" to-step="2">Next > </a>
+				<a href="javascript:;" class="button widget-button widget-layout-button" to-step="2">{!! trans('trp.common.next') !!} > </a>
 			</div>
 		</div>
 		<div class="widget-step widget-step-2" style="display: none;">
 
 			<h3 class="widget-step-title hide-fb">{!! nl2br(trans('trp.popup.popup-widget.step2.title')) !!}</h3>
-			<h3 class="widget-step-title show-fb" style="display: none; margin-bottom: 30px !important;"><span>Step 2:</span> LINK WITH YOUR FACEBOOK PAGE</h3>
-			<p class="step-description hide-fb"><!-- {!! nl2br(trans('trp.popup.popup-widget.step2.subtitle')) !!} --> Selected layout: <text id="selected-layout">Carousel</text></p>
+			<h3 class="widget-step-title show-fb" style="display: none; margin-bottom: 30px !important;">{!! nl2br(trans('trp.popup.popup-widget.step2-facebook.title')) !!}</h3>
+			<p class="step-description hide-fb"><!-- {!! nl2br(trans('trp.popup.popup-widget.step2.subtitle')) !!} --> {!! trans('trp.popup.popup-widget.selected-layout') !!}: <text id="selected-layout">Carousel</text></p>
 
 			<div class="tac">
 				<img id="selected-image-layout" src="{{ url('img-trp/widget-carousel.png') }}">
 			</div>
 
 			<div class="facebook-tab show-fb">
-				<p class="tab-info"><img src="{{ url('img-trp/info.svg') }}">Your reviews will be displayed in Trusted Reviews Tab like "About", "Events", "Photos" on your Facebook page. </p>
+				<p class="tab-info"><img src="{{ url('img-trp/info.svg') }}">{!! trans('trp.popup.popup-widget.fb-info') !!}</p>
 				<div class="modern-field alert-after">
 					<input type="text" name="fb-page-id" id="fb-page-id" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 					<label for="fb-page-id">
-						<span>Facebook Page ID</span>
+						<span>{!! trans('trp.popup.popup-widget.fb-page-id') !!}</span>
 					</label>
-					<p>To find your Page ID, go to "About" tab of your Facebook page and scroll down.</p>
+					<p>{!! trans('trp.popup.popup-widget.fb-page-id.info') !!}</p>
 				</div>
 			</div>
 
@@ -214,7 +213,11 @@
 					    	<a href="javascript:;" class="open-hidden-option"><i class="fas fa-caret-down"></i></a>
 
 					    	<div class="hidden-option">
-					    		<p>You have selected <text id="custom-reviews-length">0</text> reviews to be shown</p>
+					    		<p>
+					    			{!! nl2br(trans('trp.popup.popup-widget.reviews.custom.selected', [
+					    				'count' => '<text id="custom-reviews-length">0</text>'
+					    			])) !!}
+					    		</p>
 
 					    		<a href="javascript:;" data-popup="select-reviews-popup" class="button">{!! nl2br(trans('trp.popup.popup-widget.reviews.custom.button')) !!}</a>
 					    	</div>
@@ -227,15 +230,15 @@
 				{!! nl2br(trans('trp.popup.popup-widget.reviews.custom.error')) !!}
 			</div>
 			<div class="alert mobile-alert alert-warning widget-custom-reviews-fb-alert" style="display: none;">
-				Please select reviews
+				{!! nl2br(trans('trp.popup.popup-widget.reviews.fb-custom.error')) !!}
 			</div>
 
-			<div class="alert fbtab-alert" style="display: none; margin-top: 20px; margin-bottom: 20px;">Please, add your Facebook Page ID</div>
+			<div class="alert fbtab-alert" style="display: none; margin-top: 20px; margin-bottom: 20px;">{!! nl2br(trans('trp.popup.popup-widget.reviews.fb.error')) !!}</div>
 
 			<div class="tac get-widget-code-wrap">
-				<a href="javascript:;" class="button widget-button back-widget" to-step="1">< Back</a>
+				<a href="javascript:;" class="button widget-button back-widget" to-step="1">< {!! nl2br(trans('trp.page.invite.popup.success.button')) !!}</a>
 				<a href="javascript:;" class="button get-widget-code hide-fb">{!! nl2br(trans('trp.popup.popup-widget.get-code')) !!}</a>
-				<a href="javascript:;" class="button fb-tab-submit show-fb" fb-url="{{ getLangUrl('dentist-fb-tab') }}">Done</a>
+				<a href="javascript:;" class="button fb-tab-submit show-fb" fb-url="{{ getLangUrl('dentist-fb-tab') }}">{!! nl2br(trans('trp.popup.popup-widget.done')) !!}</a>
 			</div>
 
 			<div class="widget-last-step" style="display: none;">
@@ -328,8 +331,8 @@
 					</div>
 				</div>
 				<div class="tac">
-					<a href="javascript:;" class="button widget-button back-widget" to-step="1">< Back</a>
-					<a href="javascript:;" class="button close-popup">Done</a>
+					<a href="javascript:;" class="button widget-button back-widget" to-step="1">< {!! nl2br(trans('trp.page.invite.popup.success.button')) !!}</a>
+					<a href="javascript:;" class="button close-popup">{!! nl2br(trans('trp.popup.popup-widget.done')) !!}</a>
 				</div>
 			</div>
 
@@ -391,7 +394,7 @@
 							<div class="review-content">
 								{!! nl2br($review->answer) !!}
 							</div>
-							<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? 'Verified Patient' : 'Deleted User') : $review->user->name }}</span>
+							<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}</span>
 							<span class="mobile-review-date">
 								{{ $review->created_at ? date('d/m/Y', $review->created_at->timestamp) : '-' }}
 							</span>
@@ -402,7 +405,7 @@
 		</div>
 
 		<div class="tac">
-			<a href="javascript:;" class="button close-popup">Done</a>
+			<a href="javascript:;" class="button close-popup">{!! nl2br(trans('trp.popup.popup-widget.done')) !!}</a>
 		</div>
 	</div>
 </div>
@@ -418,8 +421,8 @@
 		</div>
 		<div class="header-success-tab tac">
 			<img src="{{ url('img-trp/verification-check.png') }}">
-			<h2>Well done!</h2>
-			<h4>Your reviews are now displayed to your followers in the Trusted Reviews tab on your Facebook page!</h4>
+			<h2>{!! nl2br(trans('trp.popup.popup-widget.success.title')) !!}</h2>
+			<h4>{!! nl2br(trans('trp.popup.popup-widget.success.subtitle')) !!}</h4>
 			<a href="javascript:;" class="button close-popup">{!! nl2br(trans('trp.popup.popup-claim-profile.thank-you.ok')) !!}</a>
 		</div>
 	</div>

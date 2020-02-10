@@ -13,7 +13,6 @@
 			<h2 class="page-title">
 				<img src="{{ url('new-vox-img/profile-trp.png') }}" />
 				{!! nl2br(trans('trp.page.profile.trp.title')) !!}
-	            
 			</h2>
 
 			@if($reviews->isEmpty())
@@ -21,7 +20,7 @@
 					{!! nl2br(trans('trp.page.profile.trp.no-reviews')) !!}
 				</div>
 
-				<a href="https://reviews.dentacoin.com" class="button" style="color: white;">FIND YOUR DENTIST</a>
+				<a href="https://reviews.dentacoin.com" class="button" style="color: white;">{!! nl2br(trans('trp.page.profile.trp.find-dentist-button')) !!}</a>
 			@else
 			    <div class="details-wrapper profile-reviews-space">
 				@foreach($reviews as $review)
@@ -30,7 +29,7 @@
 						<div class="review-header">
 			    			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
 			    			@if($user->is_dentist)
-			    				<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? 'Verified Patient' : 'Deleted User') : $review->user->name }}: </span>
+			    				<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}: </span>
 			    			@else
 			    				<span class="review-name">to {{ $review->dentist ? $review->dentist->name : $review->clinic->name }}: </span>
 			    			@endif
@@ -76,7 +75,7 @@
 						@if(!empty($review->dentist))
 							<a href="{{ $review->dentist->getLink() }}?popup=recommend-dentist" class="recommend-button">
 								<img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
-								Recommend to a friend
+								{!! nl2br(trans('trp.page.profile.trp.recommend-dentist')) !!}
 							</a>
 						@endif
 		    		</div>
@@ -95,10 +94,10 @@
 					</div>
 					<div class="content">
 						<p class="h1">
-							You've been banned for suspicious activity.
+							{!! nl2br(trans('trp.page.profile.trp.ban-title')) !!}
 						</p>
 						<h3>
-							You will no longer be able to submit feedback on Dentacoin Trusted Reviews.
+							{!! nl2br(trans('trp.page.profile.trp.ban-subtitle')) !!}
 						</h3>
 					</div>
 				</div>

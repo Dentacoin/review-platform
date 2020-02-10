@@ -11,7 +11,6 @@
 	    		{{ trans('trp.page.'.$current_page.'.hint') }}
 	    	</p>
 
-
     		<form class="signin-form" action="{{ getLangUrl('forgot-password') }}" method="post">
     			{!! csrf_field() !!}
 

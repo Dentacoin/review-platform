@@ -1,15 +1,11 @@
 <div class="popup" id="popup-register">
 	<div class="popup-inner">
-
-
 		<div class="mobile-buttons flex-mobile">
 			<a href="javascript:;" class="button col switch-forms-mobile" data-form="user-form">
 				{!! nl2br(trans('trp.popup.popup-register.user')) !!}
-				
 			</a>
 			<a href="javascript:;" class="button col switch-forms-mobile" data-form="dentist-form">
 				{!! nl2br(trans('trp.popup.popup-register.dentist')) !!}
-				
 			</a>
 		</div>
 		<div class="tablet-buttons">
@@ -22,7 +18,6 @@
 				</a> -->
 				<a href="javascript:;" class="form-button">
 					{!! nl2br(trans('trp.popup.popup-register.user')) !!}
-					
 				</a>
 				<form id="signin-form-popup-left" class="signin-form blue-form">
 					{!! csrf_field() !!}
@@ -36,14 +31,13 @@
 							<span>
 								<i class="fab fa-facebook"></i>
 							</span>
-							Continue with Facebook							
+							{!! nl2br(trans('trp.popup.popup-register.fb')) !!}
 						</a>
 						<a href="javascript:;" class="civic-login log-button register-civic-button has-cookies-button">
 							<span>
 								<img src="img-trp/civic.png">
 							</span>
 							{!! nl2br(trans('trp.popup.popup-register.civic')) !!}
-							
 						</a>
 						<!-- <a href="javascript:;" class="uport-login log-button">
 							<span>
@@ -52,7 +46,6 @@
 							with uPort
 						</a> -->
 						@include('front.errors')
-
 
 						<div class="alert alert-info civic-cancelled" style="display: none;">
 							{!! nl2br(trans('front.common.civic.cancelled')) !!}
@@ -76,16 +69,14 @@
 								'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
 								'endlink' => '</a>',
 							])) !!}
-							
 						</label>
 						<div class="alert alert-warning agree-cookies" style="display: none;">
-							You must accept at least the strictly necessary cookies in order to proceed. 
+							{!! nl2br(trans('trp.common.accept-cookies')) !!}
 						</div>
 
 						<div class="cta">
 							<i class="fas fa-sign-in-alt"></i>
 							{!! nl2br(trans('trp.popup.popup-register.cta')) !!}
-							
 						</div>
 					</div>
 
@@ -94,7 +85,6 @@
 						
 						<a class="log-in-button button-login-patient" href="javascript:;">
 							{!! nl2br(trans('trp.popup.popup-register.login')) !!}
-							
 						</a>
 					</p>
 	    		</form>
@@ -115,14 +105,13 @@
 							<span>
 								<i class="fab fa-facebook"></i>
 							</span>
-							Continue with Facebook
+							{!! nl2br(trans('trp.popup.popup-register.fb')) !!}
 						</a>
 						<a href="javascript:;" class="civic-login log-button register-civic-button has-cookies-button">
 							<span>
 								<img src="img-trp/civic.png">
 							</span>
 							{!! nl2br(trans('trp.popup.popup-register.civic')) !!}
-							
 						</a>
 						<!-- <a href="javascript:;" class="uport-login log-button">
 							<span>
@@ -131,8 +120,6 @@
 							with uPort
 						</a> -->
 						@include('front.errors')
-						
-
 
 						<div class="alert alert-info civic-cancelled" style="display: none;">
 							{!! nl2br(trans('front.common.civic.cancelled')) !!}
@@ -148,7 +135,7 @@
 							{!! nl2br(trans('front.common.civic.wait')) !!}
 						</div>						
 						<div class="alert alert-warning agree-cookies" style="display: none;">
-							You must accept at least the strictly necessary cookies in order to proceed. 
+							{!! nl2br(trans('trp.common.accept-cookies')) !!}
 						</div>
 						<input type="hidden" class="jwtAddress" value="{{ getLangUrl('login/civic') }}" />
 					</div>
@@ -158,7 +145,6 @@
 						
 						<a class="sign-in-button button-sign-up-patient" href="javascript:;">
 							{!! nl2br(trans('trp.popup.popup-register.signup')) !!}
-							
 						</a>
 					</p>
 	    		</form>
@@ -174,8 +160,7 @@
 				<form id="signin-form-popup" class="signin-form" action="{{ getLangUrl('register') }}" method="post">
 					{!! csrf_field() !!}
 
-					<div class="form-inner">
-						
+					<div class="form-inner">						
 						<div class="cta">
 							<i class="fas fa-sign-in-alt"></i>
 							{!! nl2br(trans('trp.popup.popup-register.cta')) !!}
@@ -238,13 +223,13 @@
 											<span></span>
 										</span>
 								    	<input class="type-radio" type="radio" name="mode" id="mode-clinic" value="clinic" {!! !empty($regData) && $regData['mode']=='clinic' ? 'checked="checked"' : '' !!}>
-								    	{!! nl2br(trans('trp.popup.popup-register.mode.clinic')) !!}								    	
+								    	{!! nl2br(trans('trp.popup.popup-register.mode.clinic')) !!}
 								  	</label>
 								  	<span>{!! nl2br(trans('trp.popup.popup-register.mode.clinic.description')) !!}</span>
 								</div>
 							</div>
 
-					  		<div class="modern-field title-wrap alert-after tooltip-text fixed-tooltip" text="Please choose the right title." {!! !empty($regData) && $regData['mode']=='dentist' ? '' : 'style="display: none;"' !!}>
+					  		<div class="modern-field title-wrap alert-after tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.title.tooltip') !!}" {!! !empty($regData) && $regData['mode']=='dentist' ? '' : 'style="display: none;"' !!}>
 					  			<select name="title" id="dentist-title" class="modern-input" value="{{ $regData['title'] ?? old('title') }}">
 					  				@foreach(config('titles') as $k => $v)
 					  					<option value="{{ $k }}" {!! !empty($regData) && !empty($regData['title'] && ($regData['title'] == $k)) ? 'selected="selected"' : '' !!}>{{ $v }}</option>
@@ -255,7 +240,7 @@
 								</label>
 							</div>
 
-					  		<div class="modern-field alert-after tooltip-text fixed-tooltip" text="Write your names (or your official practice name) in full! This ensures that patients who search for you will find you easily.">
+					  		<div class="modern-field alert-after tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.name.tooltip') !!}">
 								<input type="text" name="name" id="dentist-name" class="modern-input dentist-name-register" value="{{ !empty($regData) && $regData['name'] ?? old('name') }}" autocomplete="off">
 								<label for="dentist-name">
 									<span>{!! nl2br(trans('trp.popup.popup-register.name')) !!}</span>
@@ -265,7 +250,7 @@
 
 							<div class="alert alert-warning" id="alert-name-dentist" style="display: none;">Latin letters only. Please add the alternative spelling below.</div>
 
-					  		<div class="modern-field tooltip-text fixed-tooltip" text="Patients who search for your name in your language will still find your profile.">
+					  		<div class="modern-field tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.name_alternative.tooltip') !!}">
 								<input type="text" name="name_alternative" id="dentist-name_alternative" class="modern-input" value="{{ $regData['name_alternative'] ?? old('name_alternative') }}" autocomplete="off">
 								<label for="dentist-name_alternative">
 									<span>{!! nl2br(trans('trp.popup.popup-register.name_alterantive')) !!}</span>
@@ -288,8 +273,7 @@
 						</div>
 						<div class="sign-in-step address-suggester-wrapper {!! !empty($regData) && empty($regData['country_id']) && !empty($regData['name']) ? 'active' : '' !!}" id="step-3">
 							<div class="alert alert-warning ip-country mobile" style="display: none;">
-	                        	Hmm... Your IP thinks differently. <br/>
-								Sure you've entered the right country?
+	                        	{!! nl2br(trans('trp.common.different-ip')) !!}
 	                        </div>	
 							<div class="modern-field">
 					  			<select name="country_id" id="dentist-country" class="modern-input country-select country-dropdown" real-country="{{ !empty($country_id) ? $country_id : '' }}">
@@ -302,7 +286,7 @@
 					  			</select>
 							</div>
 
-							<div class="modern-field alert-after tooltip-text fixed-tooltip" text="Enter your full address, in the same way it is displayed on your website / Facebook page / Google Business profile.">
+							<div class="modern-field alert-after tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.address.tooltip') !!}">
 								<input type="text" name="address" id="dentist-address" class="modern-input address-suggester" autocomplete="off" value="{{ $regData['address'] ?? old('address') }}">
 								<label for="dentist-address">
 									<span>{!! nl2br(trans('trp.popup.popup-register.address')) !!}</span>
@@ -324,7 +308,7 @@
 						        </div>
 		                    </div>
 
-							<div class="modern-field alert-after tooltip-text fixed-tooltip" text="Website URL or Facebook page">
+							<div class="modern-field alert-after tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.website.tooltip') !!}">
 								<input type="text" name="website" id="dentist-website" class="modern-input" autocomplete="off" value="{{ !empty($regData) && $regData['website'] ?? old('website') }}">
 								<label for="dentist-website">
 									<span>{!! nl2br(trans('trp.popup.popup-register.website')) !!}</span>
@@ -336,7 +320,7 @@
 								<div>
 				    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>
 								</div>
-								<div style="flex: 1;" class="modern-field tooltip-text fixed-tooltip" text="Enter your official practice phone number exactly as it is on your website / Facebook page.">
+								<div style="flex: 1;" class="modern-field tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.phone.tooltip') !!}">
 									<input type="text" name="phone" id="dentist-tel" class="modern-input" autocomplete="off" value="{{ !empty($regData) && $regData['phone'] ?? old('phone') }}">
 									<label for="dentist-tel">
 										<span>{!! nl2br(trans('trp.popup.popup-register.phone')) !!}</span>
@@ -354,7 +338,7 @@
 						<div class="sign-in-step {!! !empty($regData) && !empty($regData['country_id']) ? 'active' : '' !!} tac" id="step-4">
 							<div class="flex flex-mobile alert-after">
 								<div class="col" style="max-width: 154px;">
-									<label for="add-avatar" class="image-label tooltip-text fixed-tooltip" text="Photos build trust. Add a clear image of you/your team or upload your practice logo." {!! !empty($regData) && !empty($regData['photoThumb']) ? 'style="background-image:url('.$regData['photoThumb'].');"' : '' !!} >
+									<label for="add-avatar" class="image-label tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.add-photo.tooltip') !!}" {!! !empty($regData) && !empty($regData['photoThumb']) ? 'style="background-image:url('.$regData['photoThumb'].');"' : '' !!} >
 										@if(empty( $regData['photo'] ))
 											<div class="centered-hack">
 												<i class="fas fa-plus"></i>
@@ -375,7 +359,6 @@
 									<div class="specilializations">
 										<p class="checkbox-question">
 											{!! nl2br(trans('trp.popup.popup-register.specialization')) !!}
-											
 										</p>
 								    	@foreach($categories as $k => $v)
 											<label class="checkbox-label{!! !empty($regData) && !empty($regData['specialization']) && in_array($loop->index, $regData['specialization']) ? ' active' : '' !!}" for="checkbox-{{ $k }}">
@@ -445,7 +428,7 @@
 								
 							</div>
 							<div class="alert alert-warning agree-cookies" style="display: none;">
-								You must accept at least the strictly necessary cookies in order to proceed. 
+								{!! nl2br(trans('trp.common.accept-cookies')) !!}
 							</div>
 						</div>
 						<div class="login-without-account">
@@ -461,7 +444,6 @@
 							{!! nl2br(trans('trp.popup.popup-register.forgot')) !!}							
 						</a>
 					</p>
-
 	    		</form>
 	    	</div>
     	</div>

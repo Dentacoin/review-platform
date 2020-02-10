@@ -200,8 +200,6 @@ class ProfileController extends FrontController
                 
                 return redirect( getLangUrl('profile'));
             }
-
-
         }
 
         $params = [
@@ -405,58 +403,58 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         if(Request::isMethod('post') && $this->user->canInvite('trp') ) {
 
             if(Request::Input('is_contacts')) {
-                if(empty(Request::Input('contacts')) || !is_array( Request::Input('contacts') ) ) {
-                    return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.contacts-none-selected') ] );
-                }
+                // if(empty(Request::Input('contacts')) || !is_array( Request::Input('contacts') ) ) {
+                //     return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.contacts-none-selected') ] );
+                // }
 
-                foreach (Request::Input('contacts') as $inv_info) {
-                    $inv_arr = explode('|', $inv_info);
-                    $email = $name = '';
-                    if(count($inv_arr)>1) {
-                        $email = $inv_arr[ count($inv_arr)-1 ];
-                        $name = $inv_arr[0];
-                    } else {
-                        $email = $inv_arr[0];
-                    }
-                    $invitation = UserInvite::where([
-                        ['user_id', $this->user->id],
-                        ['invited_email', 'LIKE', $email],
-                    ])->first();
+                // foreach (Request::Input('contacts') as $inv_info) {
+                //     $inv_arr = explode('|', $inv_info);
+                //     $email = $name = '';
+                //     if(count($inv_arr)>1) {
+                //         $email = $inv_arr[ count($inv_arr)-1 ];
+                //         $name = $inv_arr[0];
+                //     } else {
+                //         $email = $inv_arr[0];
+                //     }
+                //     $invitation = UserInvite::where([
+                //         ['user_id', $this->user->id],
+                //         ['invited_email', 'LIKE', $email],
+                //     ])->first();
 
-                    if($invitation) {
-                        if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                            return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.' ] );
-                        }
-                        $invitation->invited_name = $name;
-                        $invitation->created_at = Carbon::now();
-                        $invitation->save();
-                    } else {
-                        $invitation = new UserInvite;
-                        $invitation->user_id = $this->user->id;
-                        $invitation->invited_email = $email;
-                        $invitation->invited_name = $name;
-                        $invitation->save();
-                    }
-                    //Mega hack
-                    $dentist_name = $this->user->name;
-                    $dentist_email = $this->user->email;
-                    $this->user->name = '';
-                    $this->user->email = $email;
-                    $this->user->save();
+                //     if($invitation) {
+                //         if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
+                //             return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.' ] );
+                //         }
+                //         $invitation->invited_name = $name;
+                //         $invitation->created_at = Carbon::now();
+                //         $invitation->save();
+                //     } else {
+                //         $invitation = new UserInvite;
+                //         $invitation->user_id = $this->user->id;
+                //         $invitation->invited_email = $email;
+                //         $invitation->invited_name = $name;
+                //         $invitation->save();
+                //     }
+                //     //Mega hack
+                //     $dentist_name = $this->user->name;
+                //     $dentist_email = $this->user->email;
+                //     $this->user->name = '';
+                //     $this->user->email = $email;
+                //     $this->user->save();
 
-                    $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17, [
-                        'friend_name' => $dentist_name,
-                        'invitation_id' => $invitation->id
-                    ]);
+                //     $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17, [
+                //         'friend_name' => $dentist_name,
+                //         'invitation_id' => $invitation->id
+                //     ]);
 
-                    //Back to original
-                    $this->user->name = $dentist_name;
-                    $this->user->email = $dentist_email;
-                    $this->user->save();
+                //     //Back to original
+                //     $this->user->name = $dentist_name;
+                //     $this->user->email = $dentist_email;
+                //     $this->user->save();
 
-                }
+                // }
 
-                return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.contacts-success') ] );
+                // return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.contacts-success') ] );
             } else {
                 $validator = Validator::make(Request::all(), [
                     'email' => ['required', 'email'],
@@ -483,12 +481,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                             })->orderBy('id', 'desc')->first();
                             
                             if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                                return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.' ] );
+                                return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited-month') ] );
                             }
                         }
 
                         if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                            return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.'] );
+                            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited-month')] );
                         }
 
                         $invitation->invited_name = Request::Input('name');
@@ -578,7 +576,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                             $this->user->save();
 
                         } else {
-                            return Response::json(['success' => false, 'message' => 'You can\'t invite yourself' ] );
+                            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.yourself') ] );
                         }
 
                     }
@@ -634,7 +632,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             if ($validator->fails()) {
                 $ret = array(
                     'success' => false,
-                    'message' => 'Please paste information, containing names and emails, separated by commas or tabs',
+                    'message' => trans('trp.page.profile.invite.copypaste.error'),
                 );
 
                 return Response::json( $ret );
@@ -649,7 +647,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 if (count($rows[0]) <= 1) {
                     return Response::json([
                         'success' => false,
-                        'message' => 'Please paste information, containing names and emails, separated by commas or tabs',
+                        'message' => trans('trp.page.profile.invite.copypaste.error'),
                     ] );
                 }
 
@@ -770,23 +768,23 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $gtag_tracking = true;
 
                 if (!empty($invalid) && $invalid == count($emails)) {
-                    $final_message = 'The review invitations were not sent. Please, provide valid patient emails and match them correctly with the corresponding column.';
+                    $final_message = trans('trp.page.profile.invite.copypaste.all-not-sent');
                     $alert_color = 'warning';
                     $gtag_tracking = false;
                 } else if(!empty($invalid) && $invalid != count($emails)) {
                     if (empty($already_invited)) {
-                        $final_message = 'Review invitations were sent successfully to patients with valid email addresses. However, there were some unvalid emails in the provided contact info, which were skipped.';
+                        $final_message = trans('trp.page.profile.invite.copypaste.unvalid-emails');
                         $alert_color = 'orange';
                     } else {
-                        $final_message = 'Review invitations were sent successfully to patients with valid email addresses. However, note that some patients were excluded from the invites because they already submitted feedback this month or their email addresses were invalid.';
+                        $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback');
                         $alert_color = 'orange';
                     }
                 } else if(!empty($already_invited) && ($already_invited == count($emails))) {
-                    $final_message = 'Sending review invitations failed! You already invited these patients to submit feedback this month.';
+                    $final_message = trans('trp.page.profile.invite.copypaste.all-submitted-feedback');
                     $alert_color = 'warning';
                     $gtag_tracking = false;
                 } else if(!empty($already_invited) && $already_invited != count($emails)) {
-                    $final_message = 'Review invitations were sent successfully to patients with valid email addresses. However, note that some patients were excluded from the invites because they already submitted feedback this month.';
+                    $final_message = trans('trp.page.profile.invite.copypaste.submitted-feedback-invalid-emails');
                     $alert_color = 'orange';
                 } else {
                     $final_message = trans('trp.page.profile.invite.success');
@@ -916,7 +914,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             } else {
                 return Response::json([
                     'success' => false,
-                    'message' => 'Something went wrong, please try again from first step',
+                    'message' => trans('trp.page.profile.invite.copypaste.failed'),
                 ] );
             }
         }
@@ -936,7 +934,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
  
             if ($validator->fails()) {
 
-                $ret['message'] = 'Please upload a file, containing names and emails, separated by commas or tabs';
+                $ret['message'] = trans('trp.page.profile.invite.file.error');
                 return Response::json($ret);
 
             } else {
@@ -951,7 +949,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     if (count($rows[0]) <= 1) {
                         return Response::json([
                             'success' => false,
-                            'message' => 'Please upload a file, containing names and emails, separated by commas or tabs',
+                            'message' => trans('trp.page.profile.invite.file.error'),
                         ] );
                     }
 
@@ -1105,7 +1103,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
                 if($invitation) {
                     if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                        return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.' ] );
+                        return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited-month') ] );
                     }
                     $invitation->invited_name = Request::Input('name');
                     $invitation->created_at = Carbon::now();
@@ -1288,7 +1286,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $ret = [
                         'success' => false,
                         'messages' => [
-                            'description' => 'Your description exceeds the maximum length of 512 characters. Please, edit it and save again.'
+                            'description' => trans('trp.common.invalid-description')
                         ]
                     ];
                     return Response::json($ret);
