@@ -30,12 +30,6 @@ return [
         'spending' => array(
             'icon' => 'area-chart',
         ),
-        'questions' => array(
-            'icon' => 'question-circle',
-            'js' => array(
-                'questions.js'
-            ),
-        ),
         'reviews' => array(
             'icon' => 'edit',
         ),
@@ -110,6 +104,12 @@ return [
                 'vox' => 'vox',
                 'validation' => 'validation',
             )
+        ),
+        'questions' => array(
+            'icon' => 'question-circle',
+            'js' => array(
+                'questions.js'
+            ),
         ),
         'admins' => array(
             'icon' => 'user-plus',
