@@ -1079,6 +1079,8 @@ jQuery(document).ready(function($){
             function( data ) {
                 if(data.success) {
 
+                	console.log('11111');
+
                     if (!Cookies.get('marketing_cookies') && !$('#ariticform_wrapper_leadmagnetform').length) {
                         basic.cookies.set('marketing_cookies', 1);
 
@@ -1093,9 +1095,6 @@ jQuery(document).ready(function($){
                         $.getScript('https://dentacoin.ariticapp.com/ma/patc.js', function() {
                             console.log('patc')
                         } );
-
-                        _aaq.push(['rememberConsentGiven', false, 4]);
-                        _aaq.push(['trackPageView']);
 
                         $('head').append("<script type='text/javascript'>\
                             if (typeof AriticSDKLoaded == 'undefined') {\
@@ -1141,6 +1140,8 @@ jQuery(document).ready(function($){
                     that.closest('.magnet-content').next().show();
                     that.closest('.magnet-content').hide();
 
+                	console.log('2222');
+
                     that.closest('.popup-inner').find('.colorful-tabs').find('.col').removeClass('active');
                     that.closest('.popup-inner').find('.colorful-tabs').find('.second-step').addClass('active');
 
@@ -1169,6 +1170,9 @@ jQuery(document).ready(function($){
                         $('#ariticform_checkboxgrp_checkbox_gdpr_checkbox').prop('checked', true);
 
                         $('#ariticform_input_leadmagnetform_submit').trigger('click');
+                        
+                        _aaq.push(['rememberConsentGiven', false, 4]);
+                        _aaq.push(['trackPageView']);
                     }, 2000);
 
 
