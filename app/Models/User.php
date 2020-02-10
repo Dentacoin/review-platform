@@ -1659,6 +1659,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         $location = wordwrap($location, 50); 
         $top2 = count(explode("\n", $location));
         $top2 = 365 + $above_pushing;
+        $lines = count(explode("\n", $location));
         if($lines == 2) {
             $top2 -= 20;
         }
