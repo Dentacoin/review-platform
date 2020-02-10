@@ -402,7 +402,9 @@
 							<a class="privacy-item" href="https://dentacoin.com/privacy-policy/" target="_blank">{{ trans('vox.footer.privacy') }}</a>
 						</div>
 						<small>
-							{{ trans('vox.footer.copyrights') }}
+							{{ trans('vox.footer.copyrights', [
+								'year' => date('Y')
+							]) }}
 						</small>
 					</div>
 					<div class="socials flex-3">
