@@ -586,6 +586,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 		
 		return Response::json([
             'success' => true,
+            'total_points' => $total_points,
             'url' => getLangUrl('lead-magnet-results')
         ] );
 	}

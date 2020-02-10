@@ -960,7 +960,7 @@ jQuery(document).ready(function($){
                         ask_reviews:ans_3,
                         frequently_reviews:ans_4,
                         reviews_reply:$('.lead-magnet-radio[name="answer-5"]:checked').attr('ans-text'),
-                        reviews_score:'Hardcode 80%',
+                        reviews_score:data.total_points+'%',
                     }]);
                     _aaq.push(['rememberConsentGiven', false, 4]);
                     _aaq.push(['trackPageView']);
