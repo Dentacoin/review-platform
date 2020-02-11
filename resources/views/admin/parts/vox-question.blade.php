@@ -307,7 +307,18 @@
                     <div class="form-group clearfix" id="stat_relations">
                         <label class="col-md-2 control-label">Related question</label>
                         <div class="col-md-5">
-                            {{ Form::select('stats_relation_id', $item->questions->pluck('question', 'id')->toArray(), !empty($question) && $question->used_for_stats=='dependency' ? $question->stats_relation_id : old('stats_relation_id'), array('class' => 'form-control')) }}
+                            <select name="stats_relation_id" class="form-control">
+                                <optgroup label="Welcome survey questions">
+                                    @foreach(App\Models\Vox::find(11)->questions as $wq)
+                                        <option value="{{ $wq->id }}" {{ !empty($question) && $question->used_for_stats=='dependency' && $question->stats_relation_id == $wq->id ? 'selected="selected"' : '' }}>{{ $wq->question }}</option>
+                                    @endforeach
+                                </optgroup>
+                                <optgroup label="{{ $item->title }} survey questions">
+                                    @foreach($item->questions as $iq)
+                                        <option value="{{ $iq->id }}" {{ !empty($question) && $question->used_for_stats=='dependency' && $question->stats_relation_id == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                                    @endforeach
+                                </optgroup>
+                            </select>
                         </div>
                         <div class="col-md-5">
                             <input type="text" name="stats_answer_id" class="form-control" value="{!! !empty($question) && $question->used_for_stats=='dependency' ? $question->stats_answer_id : old('stats_answer_id') !!}" placeholder="Select answer number">
