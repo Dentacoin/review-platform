@@ -468,7 +468,7 @@ class VoxesController extends AdminController
     public function edit_question( $id, $question_id ) {
         $question = VoxQuestion::find($question_id);
 
-        if(!empty($question) && $question->vox->id==$id) {
+        if(!empty($question) && $question->vox_id==$id) {
 
             $trigger_question_id = null;
             $trigger_valid_answers = null;
@@ -481,6 +481,7 @@ class VoxesController extends AdminController
                 if($q->order>=$question->order) {
                     break;
                 }
+
                 
                 if ($q->question_trigger) {
                     if($q->question_trigger!='-1') {
@@ -565,7 +566,7 @@ class VoxesController extends AdminController
     public function delete_question( $id, $question_id ) {
         $question = VoxQuestion::find($question_id);
 
-        if(!empty($question) && $question->vox->id==$id) {
+        if(!empty($question) && $question->vox_id==$id) {
 
             $question->delete();
             $question->vox->checkComplex();
@@ -581,7 +582,7 @@ class VoxesController extends AdminController
     public function order_question( $id, $question_id ) {
         $question = VoxQuestion::find($question_id);
 
-        if(!empty($question) && $question->vox->id==$id) {
+        if(!empty($question) && $question->vox_id==$id) {
             $question->order = Request::input('val');
             $question->save();
             return Response::json( ['success' => true] );
@@ -609,7 +610,7 @@ class VoxesController extends AdminController
     public function change_question_text( $id, $question_id ) {
         $question = VoxQuestion::find($question_id);
 
-        if(!empty($question) && $question->vox->id==$id) {
+        if(!empty($question) && $question->vox_id==$id) {
             $translation = $question->translateOrNew('en');
             $translation->question = Request::input('val');
             $translation->save();
