@@ -1864,7 +1864,13 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
         $data = $arr[0];
         $iv = $arr[1];
         $iv = base64_decode($iv);
-        $raw_text = openssl_decrypt($data, env('CRYPTO_METHOD'), env('CRYPTO_KEY'), 0, $iv);
+
+        try {
+            $raw_text = openssl_decrypt($data, env('CRYPTO_METHOD'), env('CRYPTO_KEY'), 0, $iv);
+        } catch (\Exception $e) {
+            $raw_text = false;
+        }
+
         return $raw_text;
     }
 
