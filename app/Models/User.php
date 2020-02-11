@@ -1439,7 +1439,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $reward->device = $dd->getDeviceName();
                     $reward->brand = $dd->getBrandName();
                     $reward->model = $dd->getModel();
-                    $reward->os = $dd->getOs()['name'];
+                    $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
                 }
 
                 $reward->save();

@@ -103,7 +103,7 @@ class LoginController extends FrontController
                         $ul->device = $dd->getDeviceName();
                         $ul->brand = $dd->getBrandName();
                         $ul->model = $dd->getModel();
-                        $ul->os = $dd->getOs()['name'];
+                        $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
                     }
                     
                     $ul->save();
@@ -234,7 +234,7 @@ class LoginController extends FrontController
                     $ul->device = $dd->getDeviceName();
                     $ul->brand = $dd->getBrandName();
                     $ul->model = $dd->getModel();
-                    $ul->os = $dd->getOs()['name'];
+                    $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
                 }
                 
                 $ul->save();
@@ -443,7 +443,7 @@ class LoginController extends FrontController
                         $ul->device = $dd->getDeviceName();
                         $ul->brand = $dd->getBrandName();
                         $ul->model = $dd->getModel();
-                        $ul->os = $dd->getOs()['name'];
+                        $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
                     }
                     
                     $ul->save();
@@ -547,7 +547,7 @@ class LoginController extends FrontController
                                     $ul->device = $dd->getDeviceName();
                                     $ul->brand = $dd->getBrandName();
                                     $ul->model = $dd->getModel();
-                                    $ul->os = $dd->getOs()['name'];
+                                    $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
                                 }
                                 
                                 $ul->save();

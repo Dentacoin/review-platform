@@ -162,7 +162,7 @@ class VoxController extends FrontController
                 $ul->device = $dd->getDeviceName();
                 $ul->brand = $dd->getBrandName();
                 $ul->model = $dd->getModel();
-                $ul->os = $dd->getOs()['name'];
+                $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
             }
             
             $ul->save();
@@ -1000,7 +1000,7 @@ class VoxController extends FrontController
 				                    $reward->device = $dd->getDeviceName();
 				                    $reward->brand = $dd->getBrandName();
 				                    $reward->model = $dd->getModel();
-				                    $reward->os = $dd->getOs()['name'];
+                					$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
 				                }
 
 						        $reward->save();
@@ -1034,7 +1034,7 @@ class VoxController extends FrontController
 				                    $reward->device = $dd->getDeviceName();
 				                    $reward->brand = $dd->getBrandName();
 				                    $reward->model = $dd->getModel();
-				                    $reward->os = $dd->getOs()['name'];
+                					$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
 				                }
 
 						        $reward->save();
@@ -1066,7 +1066,7 @@ class VoxController extends FrontController
 						                    $reward->device = $dd->getDeviceName();
 						                    $reward->brand = $dd->getBrandName();
 						                    $reward->model = $dd->getModel();
-						                    $reward->os = $dd->getOs()['name'];
+                							$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
 						                }
 
 								        $reward->save();

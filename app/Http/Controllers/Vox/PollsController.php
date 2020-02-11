@@ -394,7 +394,7 @@ class PollsController extends FrontController
 	                    $reward->device = $dd->getDeviceName();
 	                    $reward->brand = $dd->getBrandName();
 	                    $reward->model = $dd->getModel();
-	                    $reward->os = $dd->getOs()['name'];
+                		$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
 	                }
 
 			        $reward->save();

@@ -108,7 +108,7 @@ class Review extends Model {
                 $reward->device = $dd->getDeviceName();
                 $reward->brand = $dd->getBrandName();
                 $reward->model = $dd->getModel();
-                $reward->os = $dd->getOs()['name'];
+                $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
             }
 
             $reward->save();
@@ -137,7 +137,7 @@ class Review extends Model {
                     $reward->device = $dd->getDeviceName();
                     $reward->brand = $dd->getBrandName();
                     $reward->model = $dd->getModel();
-                    $reward->os = $dd->getOs()['name'];
+                    $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
                 }
 
                 $reward->save();
