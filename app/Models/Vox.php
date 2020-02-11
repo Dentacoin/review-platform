@@ -67,6 +67,7 @@ class Vox extends Model {
 
     protected $dates = [
         'last_count_at',
+        'respondents_last_count_at',
         'created_at',
         'launched_at',
         'updated_at',
@@ -116,14 +117,14 @@ class Vox extends Model {
     }
     
     public function respondentsCount() {
-        $date = $this->last_count_at;
+        $date = $this->respondents_last_count_at;
         $now = Carbon::now();
 
-        $diff = !$this->last_count_at ? 1 : $date->diffInDays($now);
+        $diff = !$this->respondents_last_count_at ? 1 : $date->diffInDays($now);
 
         if ($diff >= 1) {
 
-            $this->last_count_at = Carbon::now();
+            $this->respondents_last_count_at = Carbon::now();
             $this->respondents_count = DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->count();
             $this->save();
 
@@ -135,7 +136,7 @@ class Vox extends Model {
     }
 
     public function realRespondentsCountForAdminPurposes() {
-         return DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->count();
+        return DcnReward::where('reference_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->has('user')->count();
     }
 
     public function respondentsCountryCount() {

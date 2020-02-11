@@ -57,7 +57,6 @@ class PagesSeoController extends AdminController
 
                 $validator = Validator::make($this->request->all(), [
                     'seo-title-en' => array('required'),
-                    'seo-description-en' => array('required'),
                 ]);
 
                 if ($validator->fails()) {
@@ -80,6 +79,7 @@ class PagesSeoController extends AdminController
     		        }
 
     		        if( Request::file('image') && Request::file('image')->isValid() ) {
+                        $img = Image::make( Input::file('image') )->orientate();
 		                $item->addImage($img);
 		            }
 

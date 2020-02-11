@@ -3,25 +3,27 @@
 namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
 
-use Auth;
+use App\Models\VoxQuestion;
+use App\Models\VoxCategory;
+use App\Models\VoxAnswer;
+use App\Models\VoxScale;
+use App\Models\PageSeo;
+use App\Models\Country;
+use App\Models\User;
+use App\Models\Dcn;
+use App\Models\Vox;
+
+use Carbon\Carbon;
+
 use Validator;
 use Response;
 use Request;
 use Route;
 use Hash;
 use Mail;
-use DB;
+use Auth;
 use App;
-use Carbon\Carbon;
-use App\Models\Dcn;
-use App\Models\Country;
-use App\Models\User;
-use App\Models\Vox;
-use App\Models\VoxScale;
-use App\Models\VoxAnswer;
-use App\Models\VoxQuestion;
-use App\Models\VoxCategory;
-
+use DB;
 
 class StatsController extends FrontController
 {
@@ -35,8 +37,6 @@ class StatsController extends FrontController
             'newest' => trans('vox.page.stats.sort-newest'),
             // 'popular' => trans('vox.page.stats.sort-popular'),
         ];
-
-        $social_image = url('new-vox-img/dentavox-dental-stats.jpg');
 
         $name = !empty(Request::input('survey-search')) ? trim(Request::input('survey-search')) : null;
 
@@ -73,6 +73,8 @@ class StatsController extends FrontController
             }
         }
 
+        $seos = PageSeo::find(11);
+
         return $this->ShowVoxView('stats', array(
             'name' => $name,
             'taken' => $this->user ? $this->user->filledVoxes() : [],
@@ -81,11 +83,11 @@ class StatsController extends FrontController
             'voxes' => $voxes,
             'cats' => VoxCategory::with('voxes.vox')->with('translations')->get(),
             'sorts' => $sorts,
-            'social_image' => $social_image,
-            'seo_title' => trans('vox.seo.stats-all.title'),
-            'seo_description' => trans('vox.seo.stats-all.description'),
-            'social_title' => trans('vox.social.stats-all.title'),
-            'social_description' => trans('vox.social.stats-all.description'),
+            'social_image' => $seos->getImageUrl(),
+            'seo_title' => $seos->seo_title,
+            'seo_description' => $seos->seo_description,
+            'social_title' => $seos->social_title,
+            'social_description' => $seos->social_description,
             'js' => [
                 'stats.js'
             ],
@@ -498,6 +500,14 @@ class StatsController extends FrontController
         $launched = strtotime($vox->launched_at);
         $launched_date = date('Y-m-d',$launched);
 
+        $seos = PageSeo::find(12);
+        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
+        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
+        $seo_description = str_replace(':respondents_country', $respondents_country_count, $seo_description);
+        $seo_description = str_replace(':respondents', $respondents_count, $seo_description);
+        $social_title = str_replace(':title', $vox->title, $seos->social_title);
+        $social_description = str_replace(':description', $vox->description, $seos->social_description);
+
 		return $this->ShowVoxView('stats-survey', array(
             'taken' => $this->user ? $this->user->filledVoxes() : [],
             'respondents' => $respondents_count,
@@ -542,34 +552,10 @@ class StatsController extends FrontController
 
             'canonical' => $vox->getStatsList(),
             'social_image' => $vox->getSocialImageUrl('stats'),
-            'seo_title' => trans('vox.seo.stats.title', [
-                'title' => $vox->title,
-                'description' => $vox->description,
-                'stats_description' => $vox->stats_description,
-                'respondents' => $respondents_count,
-                'respondents_country' => $respondents_country_count,
-            ]),
-            'seo_description' => trans('vox.seo.stats.description', [
-                'title' => $vox->title,
-                'description' => $vox->description,
-                'stats_description' => $vox->stats_description,
-                'respondents' => $respondents_count,
-                'respondents_country' => $respondents_country_count,
-            ]),
-            'social_title' => trans('vox.social.stats.title', [
-                'title' => $vox->title,
-                'description' => $vox->description,
-                'stats_description' => $vox->stats_description,
-                'respondents' => $respondents_count,
-                'respondents_country' => $respondents_country_count,
-            ]),
-            'social_description' => trans('vox.social.stats.description', [
-                'title' => $vox->title,
-                'description' => $vox->description,
-                'stats_description' => $vox->stats_description,
-                'respondents' => $respondents_count,
-                'respondents_country' => $respondents_country_count,
-            ]),
+            'seo_title' => $seo_title,
+            'seo_description' => $seo_description,
+            'social_title' => $social_title,
+            'social_description' => $social_description,
         ));
 	}
 

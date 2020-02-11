@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\FrontController;
-use App\User;
+
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\RedirectResponse;
-use Auth;
-use Lang;
+use Illuminate\Http\Request;
+
+use App\Models\User as RealUser;
+use App\Models\PageSeo;
+
+use App\User;
+
 use Validator;
 use Response;
 use Session;
-use App\Models\User as RealUser;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Auth;
+use Lang;
 
 class AuthenticateUser extends FrontController
 {
@@ -55,6 +60,8 @@ class AuthenticateUser extends FrontController
         if (request()->getHost() == 'dentavox.dentacoin.com') {
             return redirect('https://vox.dentacoin.com/en/login/');
         }
+
+        $seos = PageSeo::find(8);
         
         return $this->ShowVoxView('login',[
             'workaround' => session('vox-redirect-workaround'),
@@ -71,6 +78,11 @@ class AuthenticateUser extends FrontController
             'csscdn' => [
                 'https://hosted-sip.civic.com/css/civic-modal.min.css',
             ],
+            'social_image' => $seos->getImageUrl(),
+            'seo_title' => $seos->seo_title,
+            'seo_description' => $seos->seo_description,
+            'social_title' => $seos->social_title,
+            'social_description' => $seos->social_description,
         ]);
     }
 

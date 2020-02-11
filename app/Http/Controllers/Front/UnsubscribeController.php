@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
-use App\Models\User;
+
 use App\Models\UserInvite;
+use App\Models\PageSeo;
+use App\Models\User;
+
 use CArbon\Carbon;
 
-use App;
-use Mail;
+use Validator;
 use Response;
 use Request;
-use Validator;
+use Mail;
+use App;
 
 class UnsubscribeController extends FrontController
 {
@@ -35,12 +38,19 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 	                $message->to( 'petya.ivanova@dentacoin.com' );
 	                $message->to( 'donika.kraeva@dentacoin.com' );
 	                $message->replyTo($user->email, $user->getName());
-	                $message->subject('New unsubscribe request from dentist');
+	                $message->subject('New unsubscribe request');
 	            });
 			}
 
+			$seos = PageSeo::find(31);
+
 	        return $this->ShowView('unsubscribe-dentist', [
 	        	'noIndex' => true,
+				'social_image' => $seos->getImageUrl(),
+	            'seo_title' => $seos->seo_title,
+	            'seo_description' => $seos->seo_description,
+	            'social_title' => $seos->social_title,
+	            'social_description' => $seos->social_description,
 	        ]);
 		}
 
@@ -68,7 +78,7 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 	                $message->to( 'petya.ivanova@dentacoin.com' );
 	                $message->to( 'donika.kraeva@dentacoin.com' );
 	                $message->replyTo($user->email, $user->getName());
-	                $message->subject('New dentist unsubscribe');
+	                $message->subject('New user unsubscribe');
 	            });
 			}
 
@@ -81,8 +91,15 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 				}
 			}
 
+			$seos = PageSeo::find(31);
+
 	        return $this->ShowView('unsubscribe-dentist', [
 	        	'noIndex' => true,
+				'social_image' => $seos->getImageUrl(),
+	            'seo_title' => $seos->seo_title,
+	            'seo_description' => $seos->seo_description,
+	            'social_title' => $seos->social_title,
+	            'social_description' => $seos->social_description,
 	        ]);
 		}
 

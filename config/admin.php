@@ -71,13 +71,13 @@ return [
                 'polls.js',
             ),
         ),
-        // 'pages' => array(
-        //     'icon' => 'image',
-        //     'subpages' => array(
-        //         'vox' => 'vox',
-        //         'trp' => 'trp',
-        //     )
-        // ),
+        'pages' => array(
+            'icon' => 'image',
+            'subpages' => array(
+                'vox' => 'vox',
+                'trp' => 'trp',
+            )
+        ),
         'rewards' => array(
             'icon' => 'bitcoin',
         ),

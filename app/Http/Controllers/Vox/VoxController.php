@@ -15,6 +15,7 @@ use App\Models\VoxAnswer;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\VoxScale;
+use App\Models\PageSeo;
 use App\Models\Reward;
 use App\Models\Admin;
 use App\Models\Email;
@@ -85,6 +86,13 @@ class VoxController extends FrontController
 		            'intended' => $vox->getLink(),
 		        ]);
 
+		        $seos = PageSeo::find(16);
+
+		        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
+		        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
+		        $social_title = str_replace(':title', $vox->title, $seos->social_title);
+		        $social_description = str_replace(':description', $vox->description, $seos->social_description);
+
 				return $this->ShowVoxView('vox-public', array(
 					'voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
 					'vox' => $vox,
@@ -104,27 +112,10 @@ class VoxController extends FrontController
 		            ],
 		            'canonical' => $vox->getLink(),
 		            'social_image' => $vox->getSocialImageUrl('survey'),
-
-		            'seo_title' => trans('vox.seo.questionnaire.title', [
-		                'title' => $vox->title,
-		                'description' => $vox->description,
-		                'stats_description' => $vox->stats_description
-		            ]),
-		            'seo_description' => trans('vox.seo.questionnaire.description', [
-		                'title' => $vox->title,
-		                'description' => $vox->description,
-		                'stats_description' => $vox->stats_description
-		            ]),
-		            'social_title' => trans('vox.social.questionnaire.title', [
-		                'title' => $vox->title,
-		                'description' => $vox->description,
-		                'stats_description' => $vox->stats_description
-		            ]),
-		            'social_description' => trans('vox.social.questionnaire.description', [
-		                'title' => $vox->title,
-		                'description' => $vox->description,
-		                'stats_description' => $vox->stats_description
-		            ]),
+		            'seo_title' => $seo_title,
+		            'seo_description' => $seo_description,
+		            'social_title' => $social_title,
+		            'social_description' => $social_description,
 		        ));
 		    }
 		}
@@ -237,16 +228,21 @@ class VoxController extends FrontController
 				}
 			}
 
+	        $seos = PageSeo::find(17);
+
+	        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
+	        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
+	        $social_title = str_replace(':title', $vox->title, $seos->social_title);
+	        $social_description = str_replace(':title', $vox->description, $seos->social_description);
+
 			return $this->showVoxView('taken-survey', [
 				'vox' => $vox,
 				'related_voxes' => $related_voxes,
 	            'suggested_voxes' => $suggested_voxes,
-	            'seo_title' => trans('vox.seo.taken-questionnaire.title', [
-	                'title' => $vox->title,
-	            ]),
-	            'seo_description' => trans('vox.seo.taken-questionnaire.description', [
-	                'title' => $vox->title,
-	            ]),
+	            'seo_title' => $seo_title,
+	            'seo_description' => $seo_description,
+	            'social_title' => $social_title,
+	            'social_description' => $social_description,
             	'canonical' => $vox->getLink(),
             	'social_image' => $vox->getSocialImageUrl('survey'),
 				'js' => [
@@ -310,17 +306,22 @@ class VoxController extends FrontController
 					$res_desc = 'This survey reached the limit for users with your demographics. Check again later. No worries: We have plenty of other opportunities for you! ';
 				}
 
+				$seos = PageSeo::find(18);
+
+		        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
+		        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
+		        $social_title = str_replace(':title', $vox->title, $seos->social_title);
+		        $social_description = str_replace(':title', $vox->description, $seos->social_description);
+
 				return $this->showVoxView('restricted-survey', [
 					'res_desc' => $res_desc,
 					'vox' => $vox,
 					'related_voxes' => $related_voxes,
 		            'suggested_voxes' => $suggested_voxes,
-		            'seo_title' => trans('vox.seo.taken-questionnaire.title', [
-		                'title' => $vox->title,
-		            ]),
-		            'seo_description' => trans('vox.seo.taken-questionnaire.description', [
-		                'title' => $vox->title,
-		            ]),
+		            'seo_title' => $seo_title,
+		            'seo_description' => $seo_description,
+		            'social_title' => $social_title,
+		            'social_description' => $social_description,
 		            'canonical' => $vox->getLink(),
 		            'social_image' => $vox->getSocialImageUrl('survey'),
 					'js' => [
@@ -347,32 +348,22 @@ class VoxController extends FrontController
 	            str_pad($last_vox->created_at->diffInMinutes($now)%60, 2, '0', STR_PAD_LEFT).':'.
 	            str_pad($last_vox->created_at->diffInSeconds($now)%60, 2, '0', STR_PAD_LEFT);
 
+				$seos = PageSeo::find(19);
+
+		        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
+		        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
+		        $social_title = str_replace(':title', $vox->title, $seos->social_title);
+		        $social_description = str_replace(':description', $vox->description, $seos->social_description);
+
 				return $this->ShowVoxView('daily-limit-reached', array(
 					'vox' => $vox,
 					'time_left' => $time_left,					
 		            'canonical' => $vox->getLink(),
 		            'social_image' => $vox->getSocialImageUrl('survey'),
-
-		            'seo_title' => trans('vox.seo.questionnaire.title', [
-		                'title' => $vox->title,
-		                'description' => $vox->description,
-		                'stats_description' => $vox->stats_description
-		            ]),
-		            'seo_description' => trans('vox.seo.questionnaire.description', [
-		                'title' => $vox->title,
-		                'description' => $vox->description,
-		                'stats_description' => $vox->stats_description
-		            ]),
-		            'social_title' => trans('vox.social.questionnaire.title', [
-		                'title' => $vox->title,
-		                'description' => $vox->description,
-		                'stats_description' => $vox->stats_description
-		            ]),
-		            'social_description' => trans('vox.social.questionnaire.description', [
-		                'title' => $vox->title,
-		                'description' => $vox->description,
-		                'stats_description' => $vox->stats_description
-		            ]),
+		            'seo_title' => $seo_title,
+		            'seo_description' => $seo_description,
+		            'social_title' => $social_title,
+		            'social_description' => $social_description,
 				));
 			}
 		}
@@ -1241,6 +1232,13 @@ class VoxController extends FrontController
 			}
 		}
 
+		$seos = PageSeo::find(15);
+
+        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
+        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
+        $social_title = str_replace(':title', $vox->title, $seos->social_title);
+        $social_description = str_replace(':description', $vox->description, $seos->social_description);
+
 		return $this->ShowVoxView('vox', array(
 			'welcome_vox' => $welcome_vox,
 			'related_voxes' => $related_voxes,
@@ -1273,28 +1271,10 @@ class VoxController extends FrontController
             ],
             'canonical' => $vox->getLink(),
             'social_image' => $vox->getSocialImageUrl('survey'),
-
-            'seo_title' => trans('vox.seo.questionnaire.title', [
-                'title' => $vox->title,
-                'description' => $vox->description,
-                'stats_description' => $vox->stats_description
-            ]),
-            'seo_description' => trans('vox.seo.questionnaire.description', [
-                'title' => $vox->title,
-                'description' => $vox->description,
-                'stats_description' => $vox->stats_description
-            ]),
-            'social_title' => trans('vox.social.questionnaire.title', [
-                'title' => $vox->title,
-                'description' => $vox->description,
-                'stats_description' => $vox->stats_description
-            ]),
-            'social_description' => trans('vox.social.questionnaire.description', [
-                'title' => $vox->title,
-                'description' => $vox->description,
-                'stats_description' => $vox->stats_description
-            ]),
-
+            'seo_title' => $seo_title,
+            'seo_description' => $seo_description,
+            'social_title' => $social_title,
+            'social_description' => $social_description,
             'email_data' => [
             	'title' => $email_subject,
             	'content' => $email_content,

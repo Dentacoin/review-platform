@@ -12,6 +12,7 @@ use App\Models\PollAnswer;
 use App\Models\DcnReward;
 use App\Models\VoxScale;
 use App\Models\Country;
+use App\Models\PageSeo;
 use App\Models\Reward;
 use App\Models\Admin;
 use App\Models\User;
@@ -37,7 +38,7 @@ class PollsController extends FrontController
 
 	public function list($locale=null) {
 
-		$social_image = url('new-vox-img/daily-polls-home.jpg');
+		$seos = PageSeo::find(14);
 		
 		return $this->ShowVoxView('daily-polls', array(
 			'js' => [
@@ -46,7 +47,11 @@ class PollsController extends FrontController
 			'css' => [
         		'vox-daily-polls.css'
         	],
-			'social_image' => $social_image,
+			'social_image' => $seos->getImageUrl(),
+            'seo_title' => $seos->seo_title,
+            'seo_description' => $seos->seo_description,
+            'social_title' => $seos->social_title,
+            'social_description' => $seos->social_description,
         ));
 	}
 
@@ -54,11 +59,13 @@ class PollsController extends FrontController
 		$time = strtotime($date);
 		$newformat = date('Y-m-d',$time);
 
+		$seos = PageSeo::find(14);
+
 		$poll = Poll::where('launched_at', $newformat )->first();
 		if (!empty($poll)) {
 			$social_image = $poll->getSocialCover();
 		} else {
-			$social_image = url('new-vox-img/daily-polls-home.jpg');
+			$social_image = $seos->getImageUrl();
 		}
 		
 		return $this->ShowVoxView('daily-polls', array(
@@ -70,6 +77,10 @@ class PollsController extends FrontController
         		'vox-daily-polls.css'
         	],
 			'social_image' => $social_image,
+            'seo_title' => $seos->seo_title,
+            'seo_description' => $seos->seo_description,
+            'social_title' => $seos->social_title,
+            'social_description' => $seos->social_description,
 			'canonical' => getLangUrl('daily-polls/'.$date),
 			'noindex' => true,
         ));
@@ -81,11 +92,13 @@ class PollsController extends FrontController
 		$time = strtotime($date);
 		$newformat = date('Y-m-d',$time);
 
+		$seos = PageSeo::find(14);
+
 		$poll = Poll::where('launched_at', $newformat )->first();
 		if (!empty($poll)) {
 			$social_image = $poll->getSocialCover();
 		} else {
-			$social_image = url('new-vox-img/daily-polls-home.jpg');
+			$social_image = $seos->getImageUrl();
 		}
 		
 		return $this->ShowVoxView('daily-polls', array(
@@ -98,6 +111,10 @@ class PollsController extends FrontController
         		'vox-daily-polls.css'
         	],
 			'social_image' => $social_image,
+            'seo_title' => $seos->seo_title,
+            'seo_description' => $seos->seo_description,
+            'social_title' => $seos->social_title,
+            'social_description' => $seos->social_description,
 			'canonical' => getLangUrl('daily-polls/'.$date.'/stats'),
 			'noindex' => true,
         ));

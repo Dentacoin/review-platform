@@ -3,29 +3,31 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
-use App\Models\User;
-use App\Models\UserCategory;
-use App\Models\UserInvite;
-use App\Models\UserTeam;
-use App\Models\UserLogin;
-use App\Models\UserAction;
-use App\Models\Country;
-use App\Models\Civic;
-use App\Models\IncompleteRegistration;
-use Carbon\Carbon;
-
-use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
+use DeviceDetector\DeviceDetector;
 
-use Validator;
-use Auth;
-use Request;
-use Response;
-use Redirect;
-use Mail;
-use Image;
 use Illuminate\Support\Facades\Input;
 
+use App\Models\IncompleteRegistration;
+use App\Models\UserCategory;
+use App\Models\UserAction;
+use App\Models\UserInvite;
+use App\Models\UserLogin;
+use App\Models\UserTeam;
+use App\Models\PageSeo;
+use App\Models\Country;
+use App\Models\Civic;
+use App\Models\User;
+
+use Carbon\Carbon;
+
+use Validator;
+use Response;
+use Redirect;
+use Request;
+use Image;
+use Auth;
+use Mail;
 
 class RegisterController extends FrontController
 {
@@ -739,8 +741,15 @@ class RegisterController extends FrontController
 
     public function forgot($locale=null) {
 
+        $seos = PageSeo::find(24);
+
 		return $this->ShowView('forgot-password',[
             'extra_body_class' => 'white-header',
+            'social_image' => $seos->getImageUrl(),
+            'seo_title' => $seos->seo_title,
+            'seo_description' => $seos->seo_description,
+            'social_title' => $seos->social_title,
+            'social_description' => $seos->social_description,
         ]);
     }
 
@@ -770,10 +779,17 @@ class RegisterController extends FrontController
 
             if ($hash == $user->get_token()) {
 
+                $seos = PageSeo::find(24);
+
                 return $this->ShowView('recover-password', array(
                     'extra_body_class' => 'white-header',
                     'id' => $id,
                     'hash' => $hash,
+                    'social_image' => $seos->getImageUrl(),
+                    'seo_title' => $seos->seo_title,
+                    'seo_description' => $seos->seo_description,
+                    'social_title' => $seos->social_title,
+                    'social_description' => $seos->social_description,
                 ));
             }
         }

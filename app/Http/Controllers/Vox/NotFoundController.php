@@ -5,6 +5,7 @@ use App\Http\Controllers\FrontController;
 use App\Models\Country;
 use App\Models\City;
 use App\Models\User;
+use App\Models\PageSeo;
 use CArbon\Carbon;
 
 use App;
@@ -22,7 +23,15 @@ class NotFoundController extends FrontController
 			return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
 		}
 
-		return $this->ShowVoxView('404', [] , 404);	
+		$seos = PageSeo::find(4);
+
+		return $this->ShowVoxView('404', array(
+			'social_image' => $seos->getImageUrl(),
+            'seo_title' => $seos->seo_title,
+            'seo_description' => $seos->seo_description,
+            'social_title' => $seos->social_title,
+            'social_description' => $seos->social_description,
+		), 404);	
 	}
 
 	public function catch($locale=null) {

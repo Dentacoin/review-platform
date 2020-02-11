@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
-use Response;
-use Request;
 use Illuminate\Support\Facades\Input;
+
+use App\Models\UserPhoto;
+use App\Models\Country;
+use App\Models\PageSeo;
 use App\Models\User;
 use App\Models\City;
-use App\Models\Country;
-use App\Models\UserPhoto;
-use GoogleMaps;
-use App;
 
+use GoogleMaps;
+use Response;
+use Request;
+use App;
 
 class DentistsController extends FrontController
 {
@@ -339,24 +341,29 @@ class DentistsController extends FrontController
             $staticmap = null;
         }
 
+        $social_image = '';
+
         $search_title = '';
         if (!empty($query)) {
-            $seo_title = trans('trp.seo.location.title', [
-                'location' => $formattedAddress,
-                'dentists_number' => $items->count(),
+                //dd('with filter eg worldwide, gen dentists');
+
+            $search_title = trans('trp.page.search.all-results.title', [
+                'name' => $formattedAddress,
             ]);
-            $seo_description = trans('trp.seo.location.description', [
-                'location' => $formattedAddress,
-                'dentists_number' => $items->count(),
-            ]);
-            $social_title = trans('trp.social.location.title', [
-                'location' => $formattedAddress,
-                'dentists_number' => $items->count(),
-            ]);
-            $social_description = trans('trp.social.location.description', [
-                'location' => $formattedAddress,
-                'dentists_number' => $items->count(),
-            ]);
+
+            $seos = PageSeo::find(26);
+
+            $seo_title = str_replace(':location', $formattedAddress, $seos->seo_title);
+
+            $seo_description = str_replace(':location', $formattedAddress, $seos->seo_description);
+            $seo_description = str_replace(':dentists_number', $items->count(), $seo_description);
+
+            $social_title = str_replace(':location', $formattedAddress, $seos->social_title);
+
+            $social_description = str_replace(':location', $formattedAddress, $seos->social_description);
+            $social_description = str_replace(':dentists_number', $items->count(), $social_description);
+
+            $social_image = $seos->getImageUrl();
 
             if($query=='worldwide') {
                 $search_title = trans('trp.page.search.location.title-worldwide', [
@@ -371,6 +378,7 @@ class DentistsController extends FrontController
 
         if (!empty($filter)) {
             if($filter == 'all-results') {
+
                 $seo_title = trans('trp.seo.all-results.title', [
                     'name' => $formattedAddress,
                 ]);
@@ -405,24 +413,23 @@ class DentistsController extends FrontController
                 // dd(implode(', ', $categoryNames));
                 // implode(', ', $categoryNames)
 
-                $seo_title = trans('trp.seo.location.category.title', [
-                    'location' => $formattedAddress,
-                    'category' => implode(', ', $categoryNames),
-                ]);
-                $seo_description = trans('trp.seo.location.category.description', [
-                    'location' => $formattedAddress,
-                    'category' => implode(', ', $categoryNames),
-                    'results_number' => $items->count(),
-                ]);
-                $social_title = trans('trp.social.location.category.title', [
-                    'location' => $formattedAddress,
-                    'category' => implode(', ', $categoryNames),
-                ]);
-                $social_description = trans('trp.social.location.category.description', [
-                    'location' => $formattedAddress,
-                    'category' => implode(', ', $categoryNames),
-                    'results_number' => $items->count(),
-                ]);
+                $seos = PageSeo::find(27);
+
+                $seo_title = str_replace(':location', $formattedAddress, $seos->seo_title);
+                $seo_title = str_replace(':category', implode(', ', $categoryNames), $seo_title);
+
+                $seo_description = str_replace(':location', $formattedAddress, $seos->seo_description);
+                $seo_description = str_replace(':category', implode(', ', $categoryNames), $seo_description);
+                $seo_description = str_replace(':results_number', $items->count(), $seo_description);
+
+                $social_title = str_replace(':location', $formattedAddress, $seos->social_title);
+                $social_title = str_replace(':category', implode(', ', $categoryNames), $social_title);
+
+                $social_description = str_replace(':location', $formattedAddress, $seos->social_description);
+                $social_description = str_replace(':category', implode(', ', $categoryNames), $social_description);
+                $social_description = str_replace(':results_number', $items->count(), $social_description);
+
+                $social_image = $seos->getImageUrl();
 
                 $search_title = trans('trp.page.search.location.category.title', [
                     'location' => $formattedAddress,
@@ -437,6 +444,7 @@ class DentistsController extends FrontController
             'seo_description' => !empty($seo_description) ? $seo_description : null,
             'social_title' => !empty($social_title) ? $social_title : null,
             'social_description' => !empty($social_description) ? $social_description : null,
+            'social_image' => !empty($social_image) ? $social_image : null,
             'formattedAddress' => $formattedAddress,
             'canonical' => getLangUrl((empty($filter) ? 'dentists/' : '').str_replace([' ', "'"], ['-', ''], $query).(!empty($filter) ? '/'.$filter : '')),
             'worldwide' => $query=='worldwide',
@@ -540,28 +548,22 @@ class DentistsController extends FrontController
 
         $all_dentists = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported'])->whereNotNull('country_id')->whereNotNull('city_name')->get();
 
-        $seo_title = trans('trp.seo.dentist-listings-by-country.title', [
-            'countries_number' => count($dentist_countries),
-            'listings_number' => count($all_dentists),
-        ]);
-        $seo_description = trans('trp.seo.dentist-listings-by-country.description', [
-            'countries_number' => count($dentist_countries),
-            'listings_number' => count($all_dentists),
-        ]);
-        $social_title = trans('trp.social.dentist-listings-by-country.title', [
-            'countries_number' => count($dentist_countries),
-            'listings_number' => count($all_dentists),
-        ]);
-        $social_description = trans('trp.social.dentist-listings-by-country.description', [
-            'countries_number' => count($dentist_countries),
-            'listings_number' => count($all_dentists),
-        ]);
+        $seos = PageSeo::find(28);
+
+        $seo_title = $seos->seo_title;
+
+        $seo_description = str_replace(':countries_number', count($dentist_countries), $seos->seo_description);
+        $seo_description = str_replace(':listings_number', count($all_dentists), $seo_description);
+
+        $social_title = $seos->social_title;
+        $social_description = $seos->social_description;
 
         return $this->ShowView('search-country', array(            
             'seo_title' => !empty($seo_title) ? $seo_title : null,
             'seo_description' => !empty($seo_description) ? $seo_description : null,
             'social_title' => !empty($social_title) ? $social_title : null,
             'social_description' => !empty($social_description) ? $social_description : null,
+            'social_image' => $seos->getImageUrl(),
             'countries_groups' => $countries_groups,
             'breakpoints' => $breakpoints,
             'js' => [
@@ -576,7 +578,6 @@ class DentistsController extends FrontController
 
     public function city($locale=null, $country_slug, $state_slug) {
 
-
         if(!empty($this->user) && $this->user->isBanned('trp')) {
             return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
         }
@@ -590,10 +591,7 @@ class DentistsController extends FrontController
         //         echo 'key-> '.$key.' | value-> '.$value.'<br/>';
         //         $user->$key = $value;
         //     }
-            
         // }
-
-
 
         $country = Country::where('slug', 'like', $country_slug )->first();
 
@@ -642,33 +640,24 @@ class DentistsController extends FrontController
 
         // var_dump($breakpoints);
 
-        $seo_title = trans('trp.seo.country-cities.title', [
-            'country' => $country->name,
-            'results_number' => $all_dentists,
-            'cities_number' => count($cities_name),
-        ]);
-        $seo_description = trans('trp.seo.country-cities.description', [
-            'country' => $country->name,
-            'results_number' => $all_dentists,
-            'cities_number' => count($cities_name),
-        ]);
-        $social_title = trans('trp.social.country-cities.title', [
-            'country' => $country->name,
-            'results_number' => $all_dentists,
-            'cities_number' => count($cities_name),
-        ]);
-        $social_description = trans('trp.social.country-cities.description', [
-            'country' => $country->name,
-            'results_number' => $all_dentists,
-            'cities_number' => count($cities_name),
-        ]);
+        $seos = PageSeo::find(30);
 
+        $seo_title = str_replace(':country', $country->name, $seos->seo_title);
+
+        $seo_description = str_replace(':country', $country->name, $seos->seo_description);
+        $seo_description = str_replace(':cities_number', count($cities_name), $seo_description);
+
+        $social_title = str_replace(':country', $country->name, $seos->social_title);
+
+        $social_description = str_replace(':country', $country->name, $seos->social_description);
+        $social_description = str_replace(':results_number', $all_dentists, $social_description);
 
         return $this->ShowView('search-city', array(
             'seo_title' => !empty($seo_title) ? $seo_title : null,
             'seo_description' => !empty($seo_description) ? $seo_description : null,
             'social_title' => !empty($social_title) ? $social_title : null,
             'social_description' => !empty($social_description) ? $social_description : null,
+            'social_image' => $seos->getImageUrl(),
             'all_cities' => $cities_name,
             'cities_name' => $cities_groups,
             'breakpoints' => $breakpoints,
@@ -685,7 +674,6 @@ class DentistsController extends FrontController
     }
 
     public function state($locale=null, $country_slug) {
-
 
         if(!empty($this->user) && $this->user->isBanned('trp')) {
             return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
@@ -738,32 +726,24 @@ class DentistsController extends FrontController
             }
         }
 
-        $seo_title = trans('trp.seo.country-states.title', [
-            'country' => $country->name,
-            'results_number' => $all_dentists,
-            'states_number' => count($states),
-        ]);
-        $seo_description = trans('trp.seo.country-states.description', [
-            'country' => $country->name,
-            'results_number' => $all_dentists,
-            'states_number' => count($states),
-        ]);
-        $social_title = trans('trp.social.country-states.title', [
-            'country' => $country->name,
-            'results_number' => $all_dentists,
-            'states_number' => count($states),
-        ]);
-        $social_description = trans('trp.social.country-states.description', [
-            'country' => $country->name,
-            'results_number' => $all_dentists,
-            'states_number' => count($states),
-        ]);
+        $seos = PageSeo::find(29);
+
+        $seo_title = str_replace(':country', $country->name, $seos->seo_title);
+
+        $seo_description = str_replace(':country', $country->name, $seos->seo_description);
+        $seo_description = str_replace(':states_number', count($states), $seo_description);
+
+        $social_title = str_replace(':country', $country->name, $seos->social_title);
+
+        $social_description = str_replace(':country', $country->name, $seos->social_description);
+        $social_description = str_replace(':results_number', $all_dentists, $social_description);
 
         return $this->ShowView('search-state', array(            
             'seo_title' => !empty($seo_title) ? $seo_title : null,
             'seo_description' => !empty($seo_description) ? $seo_description : null,
             'social_title' => !empty($social_title) ? $social_title : null,
             'social_description' => !empty($social_description) ? $social_description : null,
+            'social_image' => $seos->getImageUrl(),
             'states_name' => $states_groups,
             'breakpoints' => $breakpoints,
             'country' => $country,

@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
+
 use App\Models\Country;
+use App\Models\PageSeo;
 use App\Models\City;
 use App\Models\User;
+
 use CArbon\Carbon;
 
-use App;
-use Mail;
+use Validator;
 use Response;
 use Request;
 use Cookie;
-use Validator;
+use Mail;
+use App;
 
 class NotFoundController extends FrontController
 {
@@ -65,6 +68,8 @@ class NotFoundController extends FrontController
 			$homeDentists = $homeDentists->concat($addMore);	
 		}
 
+		$seos = PageSeo::find(21);
+
 		$params = array(
 			'featured' => $homeDentists,
 			'js' => [
@@ -76,7 +81,12 @@ class NotFoundController extends FrontController
 			],
 			'csscdn' => [
 				'https://unpkg.com/flickity@2/dist/flickity.min.css'
-			]
+			],
+			'social_image' => $seos->getImageUrl(),
+            'seo_title' => $seos->seo_title,
+            'seo_description' => $seos->seo_description,
+            'social_title' => $seos->social_title,
+            'social_description' => $seos->social_description,
         );
 
 		return $this->ShowView('404', $params, 404);	

@@ -11,8 +11,8 @@
         	<meta name="robots" content="noindex">
         @endif
 
-        <title>{{ $seo_title }}</title>
-        <meta name="description" content="{{ $seo_description }}">
+        <title>{!! $seo_title !!}</title>
+        <meta name="description" content="{!! $seo_description !!}">
         <link rel="canonical" href="{{ $canonical }}" />
 
         @if(!empty($keywords))
@@ -20,14 +20,14 @@
         @endif
 
         <meta property="og:locale" content="{{ App::getLocale() }}" />
-        <meta property="og:title" content="{{ $social_title }}"/>
-        <meta property="og:description" content="{{ $social_description }}"/>
+        <meta property="og:title" content="{!! $social_title !!}"/>
+        <meta property="og:description" content="{!! $social_description !!}"/>
         <meta property="og:image" content="{{ $social_image }}"/>
         <meta property="og:site_name" content="{{ trans('vox.social.site-name') }}" />
         
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="{{ $social_title }}" />
-        <meta name="twitter:description" content="{{ $social_description }}" />
+        <meta name="twitter:title" content="{!! $social_title !!}" />
+        <meta name="twitter:description" content="{!! $social_description !!}" />
         <meta name="twitter:image" content="{{ $social_image }}"/>
 
 		{!! config('langs')[App::getLocale()]['font'] !!}
@@ -418,20 +418,7 @@
 			</footer>
 		</div>
 
-
 		<div class="bottom-drawer">
-			
-			<!-- <div id="cookiebar" >
-				<p>
-					{!! nl2br( trans('vox.common.cookiebar-hint',[
-						'link' => '<a href="https://dentacoin.com/privacy-policy" target="_blank">',
-						'endlink' => '</a>',
-					]) ) !!}
-				</p>
-				<a class="accept" href="javascript:;">
-					{!! nl2br( trans('vox.common.cookiebar-button') ) !!}
-				</a>
-			</div> -->
 
 			@if(empty($user) && empty($_COOKIE['performance_cookies']) && empty($_COOKIE['marketing_cookies']) && empty($_COOKIE['strictly_necessary_policy']) && empty($_COOKIE['functionality_cookies']))
 				<div class="privacy-policy-cookie">

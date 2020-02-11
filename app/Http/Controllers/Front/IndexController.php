@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
-use App\Models\Country;
-use App\Models\City;
-use App\Models\Review;
-use App\Models\User;
-use App\Models\DentistClaim;
+
 use App\Models\IncompleteRegistration;
 use App\Models\DentistTestimonial;
-use CArbon\Carbon;
+use App\Models\DentistClaim;
 use App\Models\UserStrength;
 use App\Models\LeadMagnet;
+use App\Models\PageSeo;
+use App\Models\Country;
+use App\Models\Review;
+use App\Models\User;
+use App\Models\City;
 
-use App;
-use Mail;
+use Carbon\Carbon;
+
+use Validator;
 use Response;
 use Request;
 use Cookie;
-use Validator;
+use Mail;
+use App;
 
 class IndexController extends FrontController
 {
@@ -196,8 +199,6 @@ class IndexController extends FrontController
 			$homeDentists = $homeDentists->concat($addMore);	
 		}
 
-		$social_image = url('img-trp/reviews-social-new-image.png');
-
 		$strength_arr = null;
 		$completed_strength = null;
 		if ($this->user) {
@@ -212,14 +213,19 @@ class IndexController extends FrontController
 			$current_city = null;
 			$current_country = null;
 		}
-		
+
+		$seos = PageSeo::find(20);		
 
 		$params = array(
 			'strength_arr' => $strength_arr,
 			'completed_strength' => $completed_strength,
 			'featured' => $homeDentists,
 			'city_cookie' => $city_cookie,
-			'social_image' => $social_image,
+			'social_image' => $seos->getImageUrl(),
+            'seo_title' => $seos->seo_title,
+            'seo_description' => $seos->seo_description,
+            'social_title' => $seos->social_title,
+            'social_description' => $seos->social_description,
 			'current_city' => $current_city,
 			'current_country' => $current_country,
 			'js' => [
@@ -308,7 +314,7 @@ class IndexController extends FrontController
 
     	$testimonials = DentistTestimonial::orderBy('id', 'desc')->get();
 
-		$social_image = url('img-trp/welcome-dentist-social-image.jpg');
+		$seos = PageSeo::find(23);
 
 		return $this->ShowView('index-dentist', array(
 			//'extra_body_class' => 'white-header',
@@ -322,7 +328,11 @@ class IndexController extends FrontController
 			'regData' => $regData,
 			'unsubscribed' => $unsubscribed,
 			'testimonials' => $testimonials,
-			'social_image' => $social_image,
+			'social_image' => $seos->getImageUrl(),
+            'seo_title' => $seos->seo_title,
+            'seo_description' => $seos->seo_description,
+            'social_title' => $seos->social_title,
+            'social_description' => $seos->social_description,
 			'jscdn' => [
 				'https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js'
 			],
@@ -651,6 +661,8 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
     		$impact = session('lead_magnet')['points']['impact'];
     		$first_answer = session('lead_magnet')['answers']['answer-1'];
 
+    		$seos = PageSeo::find(25);
+
 	        return $this->ShowView('lead-magnet', array(
 	        	'total_points' => $total_points,
 	        	'review_collection' => $review_collection,
@@ -658,7 +670,12 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 	        	'impact' => $impact,
 	        	'avg_country_rating' => $avg_country_rating,
 	        	'country_reviews' => $country_reviews,
-	        	'first_answer' => $first_answer
+	        	'first_answer' => $first_answer,
+				'social_image' => $seos->getImageUrl(),
+	            'seo_title' => $seos->seo_title,
+	            'seo_description' => $seos->seo_description,
+	            'social_title' => $seos->social_title,
+	            'social_description' => $seos->social_description,
 	        ));
     	} else {
     		if(!empty($this->user)) {

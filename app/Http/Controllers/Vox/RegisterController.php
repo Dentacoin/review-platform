@@ -3,27 +3,30 @@
 namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
 
-use App\Models\User;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
+use DeviceDetector\DeviceDetector;
+
+use Illuminate\Support\Facades\Input;
+
 use App\Models\UserCategory;
 use App\Models\UserInvite;
-use App\Models\UserLogin;
 use App\Models\UserAction;
+use App\Models\UserLogin;
+use App\Models\PageSeo;
 use App\Models\Country;
-use App\Models\City;
 use App\Models\Civic;
+use App\Models\City;
+use App\Models\User;
+
 use Carbon\Carbon;
 
-use DeviceDetector\DeviceDetector;
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-
 use Validator;
-use Auth;
-use Request;
 use Response;
-use Image;
-use Mail;
+use Request;
 use Cookie;
-use Illuminate\Support\Facades\Input;
+use Image;
+use Auth;
+use Mail;
 
 class RegisterController extends FrontController
 {
@@ -217,6 +220,8 @@ class RegisterController extends FrontController
                 return redirect('https://vox.dentacoin.com/en/registration');
             }
 
+            $seos = PageSeo::find(10);
+
             return $this->ShowVoxView('register', array(
                 'test_country_id' => $test_country_id,
                 'noindex' => ' ',
@@ -234,7 +239,12 @@ class RegisterController extends FrontController
                 ],
                 'csscdn' => [
                     'https://hosted-sip.civic.com/css/civic-modal.min.css',
-                ],
+                ],                
+                'social_image' => $seos->getImageUrl(),
+                'seo_title' => $seos->seo_title,
+                'seo_description' => $seos->seo_description,
+                'social_title' => $seos->social_title,
+                'social_description' => $seos->social_description,
 
             ));
         }
@@ -446,6 +456,7 @@ class RegisterController extends FrontController
 
     public function register_success($locale=null) {
         $this->user->checkForWelcomeCompletion();
+
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
             if(Request::isMethod('post')) {
 
@@ -478,8 +489,15 @@ class RegisterController extends FrontController
                 }
             }
 
+            $seos = PageSeo::find(9);
 
-            return $this->ShowVoxView('register-success-dentist');
+            return $this->ShowVoxView('register-success-dentist', array(
+                'social_image' => $seos->getImageUrl(),
+                'seo_title' => $seos->seo_title,
+                'seo_description' => $seos->seo_description,
+                'social_title' => $seos->social_title,
+                'social_description' => $seos->social_description,
+            ));
         } else {
             return redirect( getLangUrl('page-not-found') );
         }
@@ -554,9 +572,17 @@ class RegisterController extends FrontController
 
     public function forgot($locale=null) {
         $this->current_page = 'forgot-password';
+
+        $seos = PageSeo::find(7);
+
         return $this->ShowVoxView('forgot-password', array(
             'canonical' => getLangUrl('recover-password'),
             'noindex' => ' ',
+            'social_image' => $seos->getImageUrl(),
+            'seo_title' => $seos->seo_title,
+            'seo_description' => $seos->seo_description,
+            'social_title' => $seos->social_title,
+            'social_description' => $seos->social_description,
         ));
     }
 
@@ -593,9 +619,16 @@ class RegisterController extends FrontController
 
                 if ($hash == $user->get_token()) {
 
+                    $seos = PageSeo::find(7);
+
                     return $this->ShowVoxView('recover-password', array(
                         'id' => $id,
                         'hash' => $hash,
+                        'social_image' => $seos->getImageUrl(),
+                        'seo_title' => $seos->seo_title,
+                        'seo_description' => $seos->seo_description,
+                        'social_title' => $seos->social_title,
+                        'social_description' => $seos->social_description,
                     ));
                 }
             }

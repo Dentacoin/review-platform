@@ -24,6 +24,7 @@ use App\Models\UserBan;
 use App\Models\OldSlug;
 use App\Models\UserAsk;
 use App\Models\Country;
+use App\Models\PageSeo;
 use App\Models\Secret;
 use App\Models\Review;
 use App\Models\Reward;
@@ -600,52 +601,44 @@ class DentistController extends FrontController
         ];
 
         if( $is_review ) {
-            $view_params['seo_title'] = trans('trp.seo.review.title', [
-                'dentist_name' => $item->getName(),
-                'user_name' => $current_review->user->getName(),
-            ]);
-            $view_params['social_title'] = trans('trp.social.review.title', [
-                'dentist_name' => $item->getName(),
-                'user_name' => $current_review->user->getName(),
-            ]);
-            $view_params['seo_description'] = trans('trp.seo.review.description', [
-                'review_title' => $current_review->title,
-                'review_text' => $current_review->answer,
-            ]);
-            $view_params['social_description'] = trans('trp.social.review.description', [
-                'review_title' => $current_review->title,
-                'review_text' => $current_review->answer,
-            ]);
+            $seos = PageSeo::find(33);
+
+            $seo_title = str_replace(':dentist_name', $item->getName(), $seos->seo_title);
+            $seo_title = str_replace(':user_name', $current_review->user->getName(), $seo_title);
+
+            $seo_description = str_replace(':review_title', $current_review->title, $seos->seo_description);
+            $seo_description = str_replace(':review_text', $current_review->answer, $seo_description);
+
+            $social_title = str_replace(':dentist_name', $item->getName(), $seos->social_title);
+            $social_title = str_replace(':user_name', $current_review->user->getName(), $social_title);
+
+            $social_description = str_replace(':review_title', $current_review->title, $seos->social_description);
+            $social_description = str_replace(':review_text', $current_review->answer, $social_description);
+
+            $view_params['seo_title'] = $seo_title;
+            $view_params['seo_description'] = $seo_description;
+            $view_params['social_title'] = $social_title;
+            $view_params['social_description'] = $social_description;
 
         } else {
-            $view_params['seo_title'] = trans('trp.seo.dentist.title', [
-                'name' => $item->getName(),
-                'country' => $item->country ? $item->country->name : '',
-                'city' => $item->city_name ? $item->city_name : '',
-                'reviews_number' => intval($item->ratings),
-            ]);
-            $view_params['social_title'] = trans('trp.social.dentist.title', [
-                'name' => $item->getName(),
-                'country' => $item->country ? $item->country->name : '',
-                'city' => $item->city_name ? $item->city_name : '',
-                'reviews_number' => intval($item->ratings),
-            ]);
+            $seos = PageSeo::find(32);
 
-            $view_params['seo_description'] = trans('trp.seo.dentist.description', [
-                'name' => $item->getName(),
-                'country' => $item->country ? $item->country->name : '',
-                'city' => $item->city_name ? $item->city_name : '',
-                'reviews_number' => intval($item->ratings),
-            ]);
-            $view_params['social_description'] = trans('trp.social.dentist.description', [
-                'name' => $item->getName(),
-                'country' => $item->country ? $item->country->name : '',
-                'city' => $item->city_name ? $item->city_name : '',
-                'reviews_number' => intval($item->ratings),
-            ]);
+            $seo_title = str_replace(':name', $item->getName(), $seos->seo_title);
+            $seo_title = str_replace(':country', $item->country ? $item->country->name : '', $seo_title);
+            $seo_title = str_replace(':city', $item->city_name ? $item->city_name : '', $seo_title);
+
+            $seo_description = str_replace(':name', $item->getName(), $seos->seo_description);
+            $seo_description = str_replace(':city', $item->city_name ? $item->city_name : '', $seo_description);
+            $seo_description = str_replace(':reviews_number', intval($item->ratings), $seo_description);
+
+            $social_title = str_replace(':name', $item->getName(), $seos->social_title);
+            $social_description = str_replace(':name', $item->getName(), $seos->social_description);
+
+            $view_params['seo_title'] = $seo_title;
+            $view_params['seo_description'] = $seo_description;
+            $view_params['social_title'] = $social_title;
+            $view_params['social_description'] = $social_description;
         }
-        
-        
 
         $addGM = false;
         if($item->lat && $item->lon) {

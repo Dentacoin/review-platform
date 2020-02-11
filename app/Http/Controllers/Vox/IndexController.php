@@ -6,6 +6,7 @@ use App\Models\Vox;
 use App\Models\User;
 use App\Models\UserLogin;
 use App\Models\VoxAnswer;
+use App\Models\PageSeo;
 use App\Models\UserStrength;
 use App\Models\VoxCategory;
 use App\Models\Country;
@@ -35,8 +36,6 @@ class IndexController extends FrontController
 			'taken' => trans('vox.page.home.sort-taken'),
 			'all' => trans('vox.page.home.sort-all'),
 		];
-
-		$social_image = url('new-vox-img/paid-dental-surveys.png');
 
 		$strength_arr = null;
 		$completed_strength = null;
@@ -71,12 +70,18 @@ class IndexController extends FrontController
 			}
 		}
 
+		$seos = PageSeo::find(2);
+
 		return $this->ShowVoxView('home', array(
 			'strength_arr' => $strength_arr,
 			'completed_strength' => $completed_strength,
 			'countries' => Country::with('translations')->get(),
 			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',
-			'social_image' => $social_image,
+			'social_image' => $seos->getImageUrl(),
+            'seo_title' => $seos->seo_title,
+            'seo_description' => $seos->seo_description,
+            'social_title' => $seos->social_title,
+            'social_description' => $seos->social_description,
 			'sorts' => $sorts,
 			'filters' => $filters,
 			'taken' => !empty($this->user) ? $this->user->filledVoxes() : null,
@@ -130,8 +135,8 @@ class IndexController extends FrontController
 			} else {
 				$subtitle = nl2br(trans('vox.page.index.subtitle'));
 			}
-			
-			$social_image = url('new-vox-img/dentavox-home.jpg');
+
+			$seos = PageSeo::find(3);
 			
 			return $this->ShowVoxView('index', array(
 				'subtitle' => $subtitle,
@@ -139,7 +144,11 @@ class IndexController extends FrontController
 				'users_count' => User::getCount('vox'),
 	        	'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
 	        	'taken' => $this->user ? $this->user->filledVoxes() : [],
-				'social_image' => $social_image,
+				'social_image' => $seos->getImageUrl(),
+	            'seo_title' => $seos->seo_title,
+	            'seo_description' => $seos->seo_description,
+	            'social_title' => $seos->social_title,
+	            'social_description' => $seos->social_description,
 	        	'js' => [
 	        		'index.js'
 	        	],
@@ -217,7 +226,9 @@ class IndexController extends FrontController
 			}
 
 			$total_questions = $first->questions->count() + 3;
-			
+				
+			$seos = PageSeo::find(13);
+
 			return $this->ShowVoxView('welcome', array(
 				'vox' => $first,
 				'total_questions' => $total_questions,
@@ -227,6 +238,11 @@ class IndexController extends FrontController
 				'css' => [
 					'vox-questionnaries.css'
 				],
+				'social_image' => $seos->getImageUrl(),
+	            'seo_title' => $seos->seo_title,
+	            'seo_description' => $seos->seo_description,
+	            'social_title' => $seos->social_title,
+	            'social_description' => $seos->social_description,
 	        ));
 	    }
 	}

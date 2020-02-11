@@ -31,7 +31,7 @@ class PageSeo extends Model {
     ];
 
     public function getImageUrl($thumb = false) {
-        return $this->hasimage ? url('/storage/pagesseo/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg') : url('img-vox/logo-text.png');
+        return $this->hasimage ? url('/storage/pagesseo/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg').'?rev='.$this->updated_at->timestamp : ( $this->platform == 'vox' ? url('img-vox/logo-text.png') : url('img-trp/socials-cover.jpg'));
     }
     public function getImagePath($thumb = false) {
         $folder = storage_path().'/app/public/pagesseo/'.($this->id%100);
@@ -51,7 +51,15 @@ class PageSeo extends Model {
             $constraint->upsize();
         });
         $img->save($to);
-        $img->fit( 520, 352 );
+
+        if ($img->height() > $img->width()) {
+            $img->heighten(400);
+        } else {
+            $img->widen(400);
+        }
+        $img->resizeCanvas(400, 400);
+
+        //$img->fit( 400, 400 );
         $img->save($to_thumb);
         $this->hasimage = true;
         $this->save();
