@@ -289,10 +289,6 @@ $reviewRoutes = function () {
 
 			Route::get('faq', 									'FaqController@home');
 
-			Route::get('login-dentist/facebook', 				'DentistController@facebook_login_dentist');
-			Route::any('login-dentist/callback/facebook', 		'DentistController@facebook_callback_dentist');
-			Route::post('login-dentist/tab/{token}', 			'DentistController@facebook_tab');
-
 			Route::post('facebook-tab', 						'DentistController@dentist_fb_tab');
 			Route::any('facebook-tab-reviews', 					'DentistController@dentist_fb_tab_reviews');
 
