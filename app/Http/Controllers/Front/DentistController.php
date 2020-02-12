@@ -283,6 +283,8 @@ class DentistController extends FrontController
                         } else {
                             $review = new Review;
                             $review->user_id = $this->user->id;
+                            $review->review_to_id = $item->id;
+
                             if($item->is_clinic) {
                                 $review->clinic_id = $item->id;
                                 if(!empty(Request::input( 'clinic_dentists' ))) {

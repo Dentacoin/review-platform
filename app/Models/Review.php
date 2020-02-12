@@ -26,6 +26,7 @@ class Review extends Model {
         'user_id',
         'dentist_id',
         'clinic_id',
+        'review_to_id',
         'rating',
         'youtube_id',
         'youtube_approved',
@@ -58,6 +59,10 @@ class Review extends Model {
     
     public function dentist() {
         return $this->hasOne('App\Models\User', 'id', 'dentist_id')->withTrashed();
+    }
+    
+    public function original_dentist() {
+        return $this->hasOne('App\Models\User', 'id', 'review_to_id')->withTrashed();
     }
     
     public function clinic() {
