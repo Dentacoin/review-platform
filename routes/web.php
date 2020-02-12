@@ -179,6 +179,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('pages/trp', 						'PagesSeoController@trp_list');
 
 	Route::any('logs', 								'LogsController@list');
+	
+	Route::any('export-import', 					'ImportExportController@list');
 });
 
 

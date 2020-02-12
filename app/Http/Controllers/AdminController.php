@@ -73,17 +73,18 @@ class AdminController extends BaseController
         
         if($params['admin']->role=='translator') {
             foreach ($menu as $key => $value) {
-                if($key!='translations') {
+                if($key!='translations' && $key!='export-import' ) {
                     unset($menu[$key]);
                 } else {
-                    foreach ($menu[$key]['subpages'] as $sk => $sv) {
-                        if(!in_array($sk, explode(',', $params['admin']->text_domain))) {
-                            unset( $menu[$key]['subpages'][$sk] );
+                    if ($key=='translations') {
+                        foreach ($menu[$key]['subpages'] as $sk => $sv) {
+                            if(!in_array($sk, explode(',', $params['admin']->text_domain))) {
+                                unset( $menu[$key]['subpages'][$sk] );
+                            }
                         }
                     }
                 }
             }
-
         }
 
         if($params['admin']->role=='voxer') {

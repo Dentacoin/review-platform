@@ -30,6 +30,12 @@ return [
         'spending' => array(
             'icon' => 'area-chart',
         ),
+        'questions' => array(
+            'icon' => 'question-circle',
+            'js' => array(
+                'questions.js'
+            ),
+        ),
         'reviews' => array(
             'icon' => 'edit',
         ),
@@ -105,11 +111,8 @@ return [
                 'validation' => 'validation',
             )
         ),
-        'questions' => array(
-            'icon' => 'question-circle',
-            'js' => array(
-                'questions.js'
-            ),
+        'export-import' => array(
+            'icon' => 'globe',
         ),
         'admins' => array(
             'icon' => 'user-plus',
