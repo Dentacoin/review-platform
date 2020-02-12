@@ -31,10 +31,10 @@
 			    			@if($user->is_dentist)
 			    				<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}: </span>
 			    			@else
-			    				<span class="review-name">to {{ $review->original_dentist->name }}: </span>
+			    				<span class="review-name">to {{ !empty($review->review_to_id) ? $review->original_dentist->name : ($review->dentist ? $review->dentist->name : $review->clinic->name) }}: </span>
 			    			@endif
 							@if($review->verified)
-				    			<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $review->original_dentist->name ])) !!}">
+				    			<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => !empty($review->review_to_id) ? $review->original_dentist->name : ($review->dentist ? $review->dentist->name : $review->clinic->name) ])) !!}">
 				    				{!! nl2br(trans('trp.common.trusted')) !!}
 			    					<i class="fas fa-info-circle"></i>
 				    			</div>
@@ -45,7 +45,7 @@
 			    			</span>
 			    			@endif
 							@if($review->verified)
-				    			<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $review->original_dentist->name ])) !!}">
+				    			<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => !empty($review->review_to_id) ? $review->original_dentist->name : ($review->dentist ? $review->dentist->name : $review->clinic->name) ])) !!}">
 				    				{!! nl2br(trans('trp.common.trusted')) !!}
 			    					<i class="fas fa-info-circle"></i>
 				    			</div>
@@ -67,13 +67,23 @@
 						</div>
 						<div class="review-content">
 							{!! nl2br($review->answer) !!}
-							<a href="{{ $review->original_dentist->getLink() }}?review_id={{ $review->id }}" class="more">
+							<a href="{{ !empty($review->review_to_id) ? $review->original_dentist->getLink() : ($review->dentist ? $review->dentist->getLink() : $review->clinic->getLink()) }}?review_id={{ $review->id }}" class="more">
 								{!! nl2br(trans('trp.page.profile.trp.show-entire')) !!}
 								
 							</a>
 						</div>
-						@if(!empty($review->original_dentist))
+						@if(!empty($review->review_to_id) && !empty($review->original_dentist))
 							<a href="{{ $review->original_dentist->getLink() }}?popup=recommend-dentist" class="recommend-button">
+								<img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
+								{!! nl2br(trans('trp.page.profile.trp.recommend-dentist')) !!}
+							</a>
+						@elseif(!empty($review->dentist))
+							<a href="{{ $review->dentist->getLink() }}?popup=recommend-dentist" class="recommend-button">
+								<img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
+								{!! nl2br(trans('trp.page.profile.trp.recommend-dentist')) !!}
+							</a>
+						@elseif(!empty($review->clinic))
+							<a href="{{ $review->clinic->getLink() }}?popup=recommend-dentist" class="recommend-button">
 								<img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
 								{!! nl2br(trans('trp.page.profile.trp.recommend-dentist')) !!}
 							</a>
