@@ -166,7 +166,6 @@ jQuery(document).ready(function($){
                     $('.invite-new-dentist-form').find('.button').removeClass('disabled');
                 }
 
-                return;
             } else {
                 conatiner.find('.different-country-hint').show();
                 $('.go-to-next[step-number="3"]').addClass('disabled');

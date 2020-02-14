@@ -164,7 +164,6 @@ jQuery(document).ready(function($){
                 conatiner.find('.geoip-confirmation').show();
                 
                 $('.go-to-next[step-number="3"]').removeClass('disabled');
-                return;
             } else {
                 conatiner.find('.different-country-hint').show();
                 $('.go-to-next[step-number="3"]').addClass('disabled');
