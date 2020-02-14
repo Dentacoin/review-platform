@@ -161,12 +161,17 @@ jQuery(document).ready(function($){
 
                 conatiner.find('.geoip-confirmation').show();
 
+                console.log('to removeClass disabled');
+
                 $('.go-to-next[step-number="3"]').removeClass('disabled');
                 if ($('.invite-new-dentist-form').length) {
                     $('.invite-new-dentist-form').find('.button').removeClass('disabled');
                 }
 
             } else {
+
+                console.log('to add disabled');
+
                 conatiner.find('.different-country-hint').show();
                 $('.go-to-next[step-number="3"]').addClass('disabled');
                 
@@ -177,6 +182,9 @@ jQuery(document).ready(function($){
 
        
         } else {
+
+            console.log('to add disabled 2');
+
             conatiner.find('.geoip-hint').show();
             $('.go-to-next[step-number="3"]').addClass('disabled');
             
