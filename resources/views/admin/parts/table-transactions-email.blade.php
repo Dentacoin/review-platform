@@ -1,0 +1,1 @@
+{{ !empty($item->user) ? $item->user->email : ''  }}

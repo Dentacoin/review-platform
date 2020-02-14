@@ -82,6 +82,7 @@
                                     'checkboxes' => array('format' => 'checkboxes'),
                                     'created_at'        => array('format' => 'datetime','order' => true, 'orderKey' => 'created','label' => 'Date'),
                                     'user'              => array('template' => 'admin.parts.table-transactions-user'),
+                                    'email'              => array('template' => 'admin.parts.table-transactions-email'),
                                     'amount'              => array(),
                                     'address'              => array(),
                                     'tx_hash'              => array('template' => 'admin.parts.table-transactions-hash'),
