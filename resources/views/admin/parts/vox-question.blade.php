@@ -148,9 +148,21 @@
                                                     </div>
                                                 </div>
                                             @else
-                                                <div class="input-group clearfix" style="display: block;">
-                                                    <div class="template-box clearfix" style="width: 96%; float: left;">
-                                                        {{ Form::select('triggers[]', ['' => 'Select question'] + $item->questions->pluck('question', 'id')->toArray(), explode(':', $trigger)[0], array('class' => 'form-control select2', 'style' => 'width: 50%; float: left;')) }} 
+                                                <div class="input-group clearfix">
+                                                    <div class="template-box clearfix">
+                                                        <select name="triggers[]" class="form-control select2" style="width: 50%; float: left;">
+                                                            <option value="">Select question</option>
+                                                            <optgroup label="Welcome survey questions">
+                                                                @foreach(App\Models\Vox::find(11)->questions as $wq)
+                                                                    <option value="{{ $wq->id }}" {{ !empty($question) && explode(':', $trigger)[0] == $wq->id ? 'selected="selected"' : '' }}>{{ $wq->question }}</option>
+                                                                @endforeach
+                                                            </optgroup>
+                                                            <optgroup label="{{ $item->title }} survey questions">
+                                                                @foreach($item->questions as $iq)
+                                                                    <option value="{{ $iq->id }}" {{ !empty($question) && explode(':', $trigger)[0] == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                                                                @endforeach
+                                                            </optgroup>
+                                                        </select>
                                                         {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
                                                     </div>
                                                     <div class="input-group-btn">
@@ -413,7 +425,19 @@
             @foreach($triggers_ids as $q => $a)
                 <div class="input-group">
                     <div class="template-box clearfix"> 
-                        {{ Form::select('triggers[]', ['' => 'Select question'] + $item->questions->pluck('question', 'id')->toArray(), $q, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
+                        <select name="triggers[]" class="form-control" style="width: 50%; float: left;">
+                            <option value="">Select question</option>
+                            <optgroup label="Welcome survey questions">
+                                @foreach(App\Models\Vox::find(11)->questions as $wq)
+                                    <option value="{{ $wq->id }}" {{ $q == $wq->id ? 'selected="selected"' : '' }}>{{ $wq->question }}</option>
+                                @endforeach
+                            </optgroup>
+                            <optgroup label="{{ $item->title }} survey questions">
+                                @foreach($item->questions as $iq)
+                                    <option value="{{ $iq->id }}" {{ $q == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                                @endforeach
+                            </optgroup>
+                        </select>
                         {{ Form::text('answers-number[]', !empty($a) ? $a : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
                     </div>
                     <div class="input-group-btn">
@@ -426,7 +450,19 @@
         @else 
             <div class="input-group">
                 <div class="template-box clearfix"> 
-                    {{ Form::select('triggers[]', ['' => 'Select question'] + $item->questions->pluck('question', 'id')->toArray(), !empty($trigger_question_id) ? $trigger_question_id : null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
+                    <select name="triggers[]" class="form-control" style="width: 50%; float: left;">
+                        <option value="">Select question</option>
+                        <optgroup label="Welcome survey questions">
+                            @foreach(App\Models\Vox::find(11)->questions as $wq)
+                                <option value="{{ $wq->id }}" {{ !empty($trigger_question_id) && $trigger_question_id == $wq->id ? 'selected="selected"' : '' }}>{{ $wq->question }}</option>
+                            @endforeach
+                        </optgroup>
+                        <optgroup label="{{ $item->title }} survey questions">
+                            @foreach($item->questions as $iq)
+                                <option value="{{ $iq->id }}" {{ !empty($trigger_question_id) && $trigger_question_id == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                            @endforeach
+                        </optgroup>
+                    </select>
                     {{ Form::text('answers-number[]', !empty($trigger_valid_answers) ? $trigger_valid_answers : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
                 </div>
                 <div class="input-group-btn">
@@ -445,7 +481,19 @@
 
     <div class="input-group" id="new-trigger-group-template" >
         <div class="template-box clearfix"> 
-            {{ Form::select('triggers[]',  ['' => 'Select question'] + $item->questions->pluck('question', 'id')->toArray(), null, array('class' => 'form-control', 'style' => 'width: 50%; float: left;')) }} 
+            <select name="triggers[]" class="form-control" style="width: 50%; float: left;">
+                <option value="">Select question</option>
+                <optgroup label="Welcome survey questions">
+                    @foreach(App\Models\Vox::find(11)->questions as $wq)
+                        <option value="{{ $wq->id }}">{{ $wq->question }}</option>
+                    @endforeach
+                </optgroup>
+                <optgroup label="{{ $item->title }} survey questions">
+                    @foreach($item->questions as $iq)
+                        <option value="{{ $iq->id }}">{{ $iq->question }}</option>
+                    @endforeach
+                </optgroup>
+            </select>
             {{ Form::text('answers-number[]', null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
         </div>
         <div class="input-group-btn">

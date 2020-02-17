@@ -187,6 +187,20 @@ $(document).ready(function(){
 				// $('.coins-test').html( old + parseInt(vox.reward_single) );
 
 			} else if( doingWelcome ) {
+                            
+                var w_answers = [];
+                if($('#welcome_answ').length) {
+                    $('.question-group[welcome=1]').each( function() {
+                        var d_ans = $(this).attr('data-answer');
+
+                        if (typeof d_ans !== typeof undefined && d_ans !== false) {
+                            w_answers.push($(this).attr('data-id')+':'+$(this).attr('data-answer'));
+                        }
+                        
+                    });
+                    $('#welcome_answ').val(w_answers.join(';'));
+                }
+                
 				console.log('doingWelcome');
 				$('#current-question-reward').html( (vox.current / welcome_vox_q_count) * 100 );
 				$('#dcn-test-reward-before').html('DCN: 100');

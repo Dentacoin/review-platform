@@ -1232,6 +1232,18 @@ class VoxController extends FrontController
 			}
 		}
 
+		$welcome_answers = VoxAnswer::where('vox_id', 11)->where('user_id', $this->user->id)->get();
+		$welcome_arr = [];
+		//dd($welcome_answers);
+		if (!empty($welcome_answers)) {
+			//$welcome_arr = $welcome_answers->pluck('question_id', 'answer')->toArray();
+
+			foreach ($welcome_answers as $wa) {
+				$welcome_arr[] = $wa->question_id.':'.$wa->answer;
+			}
+			$welcome_arr = implode(';', $welcome_arr);
+		}
+
 		$seos = PageSeo::find(15);
 
         $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
@@ -1241,6 +1253,7 @@ class VoxController extends FrontController
 
 		return $this->ShowVoxView('vox', array(
 			'welcome_vox' => $welcome_vox,
+			'welcome_arr' => $welcome_arr,
 			'related_voxes' => $related_voxes,
             'suggested_voxes' => $suggested_voxes,
 			'cross_checks' => $cross_checks,

@@ -484,24 +484,42 @@ $(document).ready(function(){
                             var trigger = group.next().attr('data-trigger');
                             var trigger_logical_operator = group.next().attr('trigger-type');
                             if(trigger && trigger!='-1') {
+                                var welcome_answ = $('#welcome_answ').val();
+                                var welcome_qs = [];
+
+                                if(welcome_answ) {
+                                    welcome_qs = welcome_answ.split(';');
+                                }
+
                                 console.log(group.find('.question').text());
                                 console.log(trigger, trigger_logical_operator);
                                 var trigger_statuses = [];
                                 var trigger_list = trigger.split(';');
+
                                 for(var i in trigger_list) {
                                     var trigger_status = false;
                                     var parts = trigger_list[i].trim().split(':');
                                     var trigger_question = parts[0].trim(); // 15 въпрос
+
                                     var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
                                     var trigger_type = $('.question-group-' + trigger_question).hasClass('birthyear-question') ? 'birthyear' : 'standard';
+
+                                    if (!given_answer && welcome_qs) {
+                                        given_answer = welcome_qs[i].trim().split(':')[1].trim();
+                                        trigger_type = 'standard';
+                                    }
+                                    
                                     var parsed_given_answer = given_answer && given_answer.length && given_answer!="0" ? given_answer.split(',') : null;
+
                                     if( parsed_given_answer ) {
                                         if( parts[1] ) {
                                             var trigger_answers = parts[1].split(','); // 2,6 // [2,6]
+
                                             if( trigger_type=='birthyear' ) {
                                                 var age = new Date().getFullYear() - parseInt(parsed_given_answer);
                                                 console.log('AGE: '+age);
                                                 trigger_status = true;
+
                                                 for(var i in trigger_answers) {
                                                     var ti = trigger_answers[i].trim();
                                                     if( ti.indexOf('-')!=-1 ) {

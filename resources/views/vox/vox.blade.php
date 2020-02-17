@@ -188,6 +188,7 @@
 						@endforeach
 	 				</div>
 				</div>
+				<input type="hidden" name="welcome_answ" id="welcome_answ" value="{{ $welcome_arr }}">
 				<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-warning">
 					{!! trans('vox.page.questionnaire.answer-error') !!}
 				</div>
