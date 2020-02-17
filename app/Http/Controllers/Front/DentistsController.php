@@ -191,6 +191,8 @@ class DentistsController extends FrontController
                     $country = Country::find(116);
                 } else if($country_n == 'Iran') {
                     $country = Country::find(103);
+                } else if($country_n == 'Czechia') {
+                    $country = Country::find(58);
                 } else {
                     $country = Country::with('translations')->whereHas('translations', function ($query) use ($country_n) {
                         $query->where('name', 'LIKE', $country_n);
