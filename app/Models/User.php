@@ -985,7 +985,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function recalculateRating() {
         $rating = 0;
         foreach ($this->reviews_in() as $review) {
-            $rating += $review->rating;
+            if (!empty($review->team_doctor_rating) && ($this->id == $review->dentist_id)) {
+                $rating += $review->team_doctor_rating;
+            } else {
+                $rating += $review->rating;
+            }
         }
 
         $this->avg_rating = $this->reviews_in()->count() ? $rating / $this->reviews_in()->count() : 0;
@@ -1569,7 +1573,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         $path = $this->getSocialCoverPath();
 
         $img = Image::canvas(1200, 628, '#fff');
-        
 
         if ($this->hasimage) {
             $img->insert( public_path().'/img-trp/cover-dentist-new.png');
@@ -1583,6 +1586,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         } else {
             $img->insert( public_path().'/img-trp/cover-dentist-new-no-avatar.png');
         }
+
 
         if($this->avg_rating) {
             $reviews = '('.intval($this->ratings).' reviews)';
@@ -1610,7 +1614,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
             $rest = ( $this->avg_rating - floor( $this->avg_rating ) );
             if($rest) {
-                $halfstar = Image::canvas(60*$rest, 61, '#fff');
+                $halfstar = Image::canvas(ceil(60*$rest), 61, '#fff');
                 $halfstar->insert( public_path().'/img-trp/cover-star-review-new.png', 'top-left', 0, 0 );
                 $img->insert($halfstar , 'top-left', $startX, 452 );
             }
