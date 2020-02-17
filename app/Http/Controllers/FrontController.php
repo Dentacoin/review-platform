@@ -514,21 +514,23 @@ class FrontController extends BaseController
                 'mark-login' => false
             ]);
 
-            if( $this->user->is_dentist ) {
-                $params['trackEvents'][] = [
-                    'fb' => $ep.'DentistLoginSaved',
-                    'ga_category' => 'DentistLogin',
-                    'ga_action' => 'NoButton',
-                    'ga_label' => 'DentistLoginSaved',
-                ];
+            if (!empty($this->user)) {
+                if( $this->user->is_dentist ) {
+                    $params['trackEvents'][] = [
+                        'fb' => $ep.'DentistLoginSaved',
+                        'ga_category' => 'DentistLogin',
+                        'ga_action' => 'NoButton',
+                        'ga_label' => 'DentistLoginSaved',
+                    ];
 
-            } else {
-                $params['trackEvents'][] = [
-                    'fb' => $ep.'PatientLoginSaved',
-                    'ga_category' => 'PatientLogin',
-                    'ga_action' => 'NoButton',
-                    'ga_label' => 'PatientLoginSaved',
-                ];
+                } else {
+                    $params['trackEvents'][] = [
+                        'fb' => $ep.'PatientLoginSaved',
+                        'ga_category' => 'PatientLogin',
+                        'ga_action' => 'NoButton',
+                        'ga_label' => 'PatientLoginSaved',
+                    ];
+                }
             }
 
             $params['markLogin'] = true;
@@ -570,7 +572,7 @@ class FrontController extends BaseController
                 'just_login' => false
             ]);
 
-            if( $this->user->is_dentist ) {
+            if (!empty($this->user) && $this->user->is_dentist) {
                 if( $platfrom=='trp' ) {
                     $params['trackEvents'][] = [
                         'fb' => 'DentistLogin',
@@ -585,9 +587,7 @@ class FrontController extends BaseController
                         'ga_category' => 'DentistLogin',
                         'ga_label' => 'DentistLoginSuccess',
                     ];
-
                 }
-
             }
         }
 
@@ -709,6 +709,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2020-02-17';
+        $params['cache_version'] = '2020-02-17-01';
     }
 }
