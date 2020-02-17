@@ -859,10 +859,16 @@ class UsersController extends AdminController
                 ['review_id', $item->id],
             ])
             ->delete();
+
+            $dentist = null;
+            $clinic = null;
+
             if($item->dentist_id) {
                 $dentist = User::find($item->dentist_id);
-            } else if($item->clinic_id) {
-                $dentist = User::find($item->clinic_id);
+            }
+
+            if($item->clinic_id) {
+                $clinic = User::find($item->clinic_id);
             }
 
             $reward_for_review = DcnReward::where('user_id', $patient->id)->where('platform', 'trp')->where('type', 'review')->where('reference_id', $item->id)->first();
@@ -880,6 +886,15 @@ class UsersController extends AdminController
                 $dentist->sendGridTemplate(87, $substitutions, 'trp');
             }
 
+            if( !empty($clinic) ) {
+                $clinic->recalculateRating();
+                $substitutions = [
+                    'spam_author_name' => $patient->name,
+                ];
+                
+                $clinic->sendGridTemplate(87, $substitutions, 'trp');
+            }
+
             $ban = new UserBan;
             $ban->user_id = $patient->id;
             $ban->domain = 'trp';
@@ -887,10 +902,13 @@ class UsersController extends AdminController
             $ban->save();
 
             $patient->sendGridTemplate(86, null, 'trp');
+
+            $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.review-deleted') );
+            return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : ('cms/'.$this->current_page.'/edit/'.(!empty($item->dentist_id) ? $item->dentist_id : $item->clinic_id )));
         }
 
-        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.review-deleted') );
-        return redirect('cms/'.$this->current_page.'/edit/'.$dentist->id);
+        return redirect('cms/users');
+
     }
 
 
@@ -1005,6 +1023,7 @@ class UsersController extends AdminController
                 }
 
                 $substitutions = [
+                    "image_unclaimed_profile" => $newuser->getSocialCover(),
                     "invitation_link" => getLangUrl( 'welcome-dentist/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
                 ];
 
