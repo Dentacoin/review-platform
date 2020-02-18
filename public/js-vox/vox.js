@@ -486,9 +486,14 @@ $(document).ready(function(){
                             if(trigger && trigger!='-1') {
                                 var welcome_answ = $('#welcome_answ').val();
                                 var welcome_qs = [];
+                                var welcome_q_ids = [];
 
                                 if(welcome_answ) {
                                     welcome_qs = welcome_answ.split(';');
+
+                                    for (var i in welcome_qs) {
+                                        welcome_q_ids.push(welcome_qs[i].trim().split(':')[0].trim());
+                                    }
                                 }
 
                                 console.log(group.find('.question').text());
@@ -501,13 +506,17 @@ $(document).ready(function(){
                                     var parts = trigger_list[i].trim().split(':');
                                     var trigger_question = parts[0].trim(); // 15 въпрос
 
-                                    if (welcome_qs[trigger_question]) {
-                                        given_answer = welcome_qs[i].trim().split(':')[1].trim();
-                                        trigger_type = 'standard';
-                                    } else {
+                                    if (welcome_q_ids && jQuery.inArray(trigger_question, welcome_q_ids) !== -1) {
+                                        for(var u in welcome_qs) {
+                                            if (welcome_qs[u].trim().split(':')[0].trim() == trigger_question) {
+                                                var given_answer = welcome_qs[u].trim().split(':')[1].trim();
+                                            }
+                                        }
                                         
+                                        var trigger_type = 'standard';
+
+                                    } else {
                                         var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
-                                        console.log(given_answer);
                                         var trigger_type = $('.question-group-' + trigger_question).hasClass('birthyear-question') ? 'birthyear' : 'standard';
                                     }
 
