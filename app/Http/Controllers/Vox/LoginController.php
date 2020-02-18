@@ -39,7 +39,17 @@ class LoginController extends FrontController
         }
     	//config(['services.facebook.redirect' =>  getLangUrl('login/callback/facebook') ]);
         config(['services.facebook.redirect' =>  'https://dev.dentavox.dentacoin.com/en/login/callback/facebook'.($path ? '/'.$path : '') ]);
-        return $this->try_social_login(Socialite::driver('facebook')->user(), $path);
+
+        try {
+            $user = Socialite::driver('facebook')->user();
+        } catch (\Exception $e) {
+            $user = false;
+        }
+        if (!empty($user)) {
+            return $this->try_social_login($user, $path);
+        } else {
+            return redirect(getVoxUrl('/'));
+        }
     }
 
     private function try_social_login($s_user, $path = null) {
@@ -187,7 +197,18 @@ class LoginController extends FrontController
         if (!Request::has('code') || Request::has('denied')) {
             return redirect( getVoxUrl('/') );
         }
-        return $this->try_social_register(Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email', 'location'])->user(), 'fb');
+
+        try {
+            $user = Socialite::driver('facebook')->fields(['first_name', 'last_name', 'email', 'location'])->user();
+        } catch (\Exception $e) {
+            $user = false;
+        }
+        if (!empty($user)) {
+            return $this->try_social_register($user, 'fb');
+        } else {
+            return redirect(getVoxUrl('/'));
+        }
+        
     }
 
     private function try_social_register($s_user, $network) {
