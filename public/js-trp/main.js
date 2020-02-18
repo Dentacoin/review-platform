@@ -296,7 +296,7 @@ jQuery(document).ready(function($){
 				} );
 
 				if(ok) {
-					$(this).closest('.question').next().removeClass('hidden');
+					$(this).closest('.question').nextAll(".question").not('.do-not-show').first().removeClass('hidden');
 
 					if( !$(this).closest('.question').next().next().hasClass('question') || $(this).closest('.question').next().hasClass('skippable') ) {
 						$(this).closest('.question').next().next().removeClass('hidden');

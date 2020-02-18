@@ -54,11 +54,11 @@
 		    			<div class="review-rating">
 		    				<div class="ratings">
 								<div class="stars">
-									<div class="bar" style="width: {{ $review->rating/5*100 }}%;">
+									<div class="bar" style="width: {{ !empty($review->team_doctor_rating) && ($review->review_to_id == $review->dentist_id) ? $review->team_doctor_rating/5*100 : $review->rating/5*100 }}%;">
 									</div>
 								</div>
 								<span class="rating">
-									({{ $review->rating }})
+									({{ !empty($review->team_doctor_rating) && ($review->review_to_id == $review->dentist_id) ? $review->team_doctor_rating : $review->rating }})
 								</span>
 							</div>
 							<span class="review-date">

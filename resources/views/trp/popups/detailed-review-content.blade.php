@@ -24,11 +24,11 @@
 		<div class="review-rating">
 			<div class="ratings average">
 				<div class="stars">
-					<div class="bar" style="width: {{ $review->rating/5*100 }}%;">
+					<div class="bar" style="width: {{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating/5*100 : $review->rating/5*100 }}%;">
 					</div>
 				</div>
 				<span class="rating">
-					({{ $review->rating }})
+					({{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating : $review->rating }})
 				</span>
 			</div>
 			<span class="review-date">
@@ -140,19 +140,24 @@
 
 	<div class="review-container clearfix">
 		@foreach($review->answers as $answer)
+			@if((!empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) && ($answer->question_id == 4 || $answer->question_id == 6 || $answer->question_id == 7 )) ||
+				(!empty($review->team_doctor_rating) && ($item->id == $review->clinic_id)) ||
+				empty($review->team_doctor_rating)
+			)
 
-			<div class="overview-column">
-				<p>{{ $answer->question['label'] }}</p>
-				<div class="ratings">
-					<div class="stars">
-						<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;">
+				<div class="overview-column">
+					<p>{{ $answer->question['label'] }}</p>
+					<div class="ratings">
+						<div class="stars">
+							<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;">
+							</div>
 						</div>
+						<span class="rating">
+							({{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) }}) 
+						</span>
 					</div>
-					<span class="rating">
-						({{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) }}) 
-					</span>
 				</div>
-			</div>
+			@endif
 		@endforeach
 	</div>
 </div>
@@ -166,39 +171,48 @@
 	<div class="review-container">
 
 		@foreach($review->answers as $answer)
-			<div class="detailed-container">
-				<div class="detailed-title tac">
-					<span>{{ $answer->question['label'] }}</span>
-					<div class="ratings tac">
-						<div class="stars">
-							<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;">
-							</div>
-						</div>
-						<span class="rating">
-							({{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) }}) 
-						</span>
-					</div>
-				</div>
+			@if((!empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) && ($answer->question_id == 4 || $answer->question_id == 6 || $answer->question_id == 7 )) ||
+				(!empty($review->team_doctor_rating) && ($item->id == $review->clinic_id)) ||
+				empty($review->team_doctor_rating)
+			)
 
-            	@foreach(json_decode($answer->question['options'], true) as $i => $option)
-					<div class="clearfix flex-mobile">
-						<div class="detailed-review-column">
-	                		{{ $option[0] }}
+				<div class="detailed-container">
+					<div class="detailed-title tac">
+						<span>{{ $answer->question['label'] }}</span>
+						<div class="ratings tac">
+							<div class="stars">
+								<div class="bar" style="width: {{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) / 5 * 100 }}%;">
+								</div>
+							</div>
+							<span class="rating">
+								({{ array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)) }}) 
+							</span>
 						</div>
-						<div class="detailed-review-column">
-							<div class="ratings tac">
-								<div class="stars">
-									<div class="bar" style="width: {{ json_decode($answer->options, true)[$i] / 5 * 100 }}%;">
+					</div>
+					@if($answer->question_id == 4 && !empty($review->team_doctor_rating) && ($item->id == $review->clinic_id) && !empty($review->dentist_id) && !empty(App\Models\User::find($review->dentist_id)))
+						<div class="treating-dentist">Treating dentist: <a href="{{ !empty(App\Models\User::find($review->dentist_id)->email) ? App\Models\User::find($review->dentist_id)->getLink() : 'javascript:;' }}">{{ App\Models\User::find($review->dentist_id)->getName() }}</a></div>
+					@endif
+
+	            	@foreach(json_decode($answer->question['options'], true) as $i => $option)
+						<div class="clearfix flex-mobile">
+							<div class="detailed-review-column">
+		                		{{ $option[0] }}
+							</div>
+							<div class="detailed-review-column">
+								<div class="ratings tac">
+									<div class="stars">
+										<div class="bar" style="width: {{ json_decode($answer->options, true)[$i] / 5 * 100 }}%;">
+										</div>
 									</div>
 								</div>
 							</div>
+							<div class="detailed-review-column tar">
+		                		{{ $option[1] }}
+							</div>
 						</div>
-						<div class="detailed-review-column tar">
-	                		{{ $option[1] }}
-						</div>
-					</div>
-            	@endforeach
-			</div>
+	            	@endforeach
+				</div>
+			@endif
 		@endforeach
 	</div>
 </div>

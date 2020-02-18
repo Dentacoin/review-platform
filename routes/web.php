@@ -72,7 +72,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('users/edit/{id}/delete-unfinished/{vox_id}', 	'UsersController@delete_unfinished');
 	Route::any('users/delete/{id}', 				'UsersController@delete');
 	Route::any('users/restore/{id}', 				'UsersController@restore');
-	Route::any('users/reviews/delete/{id}', 		'UsersController@delete_review');
+	Route::any('users/reviews/delete/{id}',		 	'UsersController@delete_review');
 
 	Route::get('users_stats', 						'UsersStatsController@list');
 

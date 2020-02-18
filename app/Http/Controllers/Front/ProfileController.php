@@ -107,7 +107,7 @@ class ProfileController extends FrontController
             ],
             'short_description' => [
                 'type' => 'textarea',
-                'required' => true,
+                'required' => false,
                 'max' => 150
             ],
             'email_public' => [
@@ -464,6 +464,13 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 if ($validator->fails()) {
                     return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
                 } else {
+
+                    $is_dentist = User::where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 1)->first();
+
+                    if (!empty($is_dentist)) {
+                        return Response::json(['success' => false, 'message' => 'You can\'t invite dentist/clinic for review'] );
+                    }
+
                     $invitation = UserInvite::where([
                         ['user_id', $this->user->id],
                         ['invited_email', 'LIKE', Request::Input('email')],
@@ -1282,11 +1289,21 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     ]);
                 }
 
-                if (!empty(Request::input('description')) && mb_strlen(json_encode(Request::input('description'))) > 512) {
+                if (!empty(Request::input('description')) && mb_strlen(Request::input('description')) > 512) {
                     $ret = [
                         'success' => false,
                         'messages' => [
                             'description' => trans('trp.common.invalid-description')
+                        ]
+                    ];
+                    return Response::json($ret);
+                }
+
+                if (!empty(Request::input('short_description')) && mb_strlen(json_encode(Request::input('short_description'))) > 150) {
+                    $ret = [
+                        'success' => false,
+                        'messages' => [
+                            'short_description' => trans('trp.common.invalid-short-description')
                         ]
                     ];
                     return Response::json($ret);

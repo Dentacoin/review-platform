@@ -833,7 +833,11 @@ NEW & FAILED TRANSACTIONS
 
                             $rating = 0;
                             foreach($prev_reviews as $reviews) {
-                                $rating += $reviews->rating;
+                                if (!empty($reviews->team_doctor_rating) && ($user->id == $reviews->dentist_id)) {
+                                    $rating += $reviews->team_doctor_rating;
+                                } else {
+                                    $rating += $reviews->rating;
+                                }
                             }
 
                             $rating_avg = !empty($rating) ? $rating / $prev_reviews->count() : 0;
@@ -907,7 +911,11 @@ NEW & FAILED TRANSACTIONS
 
                             $rating = 0;
                             foreach($prev_reviews as $reviews) {
-                                $rating += $reviews->rating;
+                                if (!empty($reviews->team_doctor_rating) && ($user->id == $reviews->dentist_id)) {
+                                    $rating += $reviews->team_doctor_rating;
+                                } else {
+                                    $rating += $reviews->rating;
+                                }
                             }
 
                             $rating_avg = !empty($rating) ? $rating / $prev_reviews->count() : 0;
@@ -1078,7 +1086,12 @@ NEW & FAILED TRANSACTIONS
 
                             $avg_rating = 0;
                             foreach($user->getMontlyRating() as $cur_month_reviews) {
-                                $avg_rating += $cur_month_reviews->rating;
+
+                                if (!empty($cur_month_reviews->team_doctor_rating) && ($user->id == $cur_month_reviews->dentist_id)) {
+                                    $avg_rating += $cur_month_reviews->team_doctor_rating;
+                                } else {
+                                    $avg_rating += $cur_month_reviews->rating;
+                                }
                             }
 
                             $cur_month_rating = number_format($avg_rating / $user->getMontlyRating()->count(), 2);
@@ -1086,7 +1099,11 @@ NEW & FAILED TRANSACTIONS
 
                             $prev_avg_rating = 0;
                             foreach($user->getMontlyRating(1) as $prev_month_reviews) {
-                                $prev_avg_rating += $prev_month_reviews->rating;
+                                if (!empty($prev_month_reviews->team_doctor_rating) && ($user->id == $prev_month_reviews->dentist_id)) {
+                                    $prev_avg_rating += $prev_month_reviews->team_doctor_rating;
+                                } else {
+                                    $prev_avg_rating += $prev_month_reviews->rating;
+                                }
                             }
 
                             $prev_month_rating = !empty($prev_avg_rating) ? $prev_avg_rating / $user->getMontlyRating(1)->count() : 0;

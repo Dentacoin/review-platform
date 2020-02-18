@@ -1235,6 +1235,8 @@ body.edit-user .information {
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 60px; }
+  .review-chart.with-three-columns {
+    max-width: 660px; }
   @media screen and (max-width: 768px) {
     .review-chart {
       height: 250px; } }
@@ -1382,6 +1384,11 @@ body.edit-user .information {
         .review-chart .review-charts-wrapper #reviews-chart {
           height: 250px;
           left: -23px; } }
+      .review-chart .review-charts-wrapper #reviews-chart.three-columns {
+        width: calc(100% - 16px); }
+        @media screen and (max-width: 570px) {
+          .review-chart .review-charts-wrapper #reviews-chart.three-columns {
+            width: 500px; } }
 
 .chart-overlap {
   display: none;

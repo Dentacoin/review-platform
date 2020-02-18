@@ -85,10 +85,16 @@ class ReviewsController extends AdminController
                 ['review_id', $item->id],
             ])
             ->delete();
+
+            $dentist = null;
+            $clinic = null;
+
             if($item->dentist_id) {
                 $dentist = User::find($item->dentist_id);
-            } else if($item->clinic_id) {
-                $dentist = User::find($item->clinic_id);
+            }
+
+            if($item->clinic_id) {
+                $clinic = User::find($item->clinic_id);
             }
 
             
@@ -99,6 +105,7 @@ class ReviewsController extends AdminController
             }
 
             Review::destroy( $id );
+
             if( !empty($dentist) ) {
                 $dentist->recalculateRating();
                 $substitutions = [
@@ -106,6 +113,15 @@ class ReviewsController extends AdminController
                 ];
                 
                 $dentist->sendGridTemplate(87, $substitutions, 'trp');
+            }
+
+            if( !empty($clinic)) {
+                $clinic->recalculateRating();
+                $substitutions = [
+                    'spam_author_name' => $patient->name,
+                ];
+                
+                $clinic->sendGridTemplate(87, $substitutions, 'trp');
             }
 
             $ban = new UserBan;
@@ -134,10 +150,16 @@ class ReviewsController extends AdminController
                         ['review_id', $item->id],
                     ])
                     ->delete();
+
+                    $dentist = null;
+                    $clinic = null;
+
                     if($item->dentist_id) {
                         $dentist = User::find($item->dentist_id);
-                    } else if($item->clinic_id) {
-                        $dentist = User::find($item->clinic_id);
+                    }
+
+                    if($item->clinic_id) {
+                        $clinic = User::find($item->clinic_id);
                     }
 
             
@@ -146,7 +168,9 @@ class ReviewsController extends AdminController
                     if (!empty($reward_for_review)) {
                         $reward_for_review->delete();
                     }
+
                     Review::destroy( $r_id );
+
                     if( !empty($dentist) ) {
                         $dentist->recalculateRating();
                         $substitutions = [
@@ -154,6 +178,14 @@ class ReviewsController extends AdminController
                         ];
                         
                         $dentist->sendGridTemplate(87, $substitutions, 'trp');
+                    }
+                    if( !empty($clinic) ) {
+                        $clinic->recalculateRating();
+                        $substitutions = [
+                            'spam_author_name' => $patient->name,
+                        ];
+                        
+                        $clinic->sendGridTemplate(87, $substitutions, 'trp');
                     }
 
                     $ban = new UserBan;
@@ -168,7 +200,7 @@ class ReviewsController extends AdminController
             //Review::whereIn('id', Request::input('ids'))->delete();            
         }
 
-        $this->request->session()->flash('success-message', 'All selected reviews and now deleted' );
+        $this->request->session()->flash('success-message', 'All selected reviews are now deleted' );
         return redirect('cms/'.$this->current_page);
     }
 
@@ -183,13 +215,23 @@ class ReviewsController extends AdminController
             ])
             ->restore();
 
+            $dentist = null;
+            $clinic = null;
+
             if($item->dentist_id) {
                 $dentist = User::find($item->dentist_id);
-            } else if($item->clinic_id) {
-                $dentist = User::find($item->clinic_id);
             }
+
+            if($item->clinic_id) {
+                $clinic = User::find($item->clinic_id);
+            }
+            
             if( !empty($dentist) ) {
                 $dentist->recalculateRating();
+            }
+            
+            if( !empty($clinic) ) {
+                $clinic->recalculateRating();
             }
         }
 

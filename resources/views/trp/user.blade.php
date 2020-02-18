@@ -85,8 +85,6 @@
 			    	@if(!$user->is_clinic)
 			    		<input type="text" name="open" class="input wokrplace-input" placeholder="{!! nl2br(trans('trp.page.user.my-workplace')) !!}" value="{{ strip_tags($user->getWorkplaceText(true)) }}" autocomplete="off" data-popup-logged="popup-wokrplace">
 			    	@endif	
-			    	<textarea class="input" name="short_description" placeholder="{!! nl2br(trans('trp.page.user.short-description')) !!}" maxsymb="150">{{ $user->short_description }}</textarea>
-					<div class="alert short-descr-error alert-warning" style="display: none;">{!! nl2br(trans('trp.page.user.short_description.error')) !!}</div>
 			    	<div class="email-wrapper">
 				    	<div class="flex flexed-wrap email-wrap">
 				    		<div class="col social-networks">
@@ -456,10 +454,7 @@
 				    	@endif
 					</div>
 					<div class="clearfix">
-						<div class="clear flex flex-bottom">
-							<div class="edit-short-description">
-								<textarea class="input" name="short_description" placeholder="{!! nl2br(trans('trp.page.user.short-description')) !!}" maxsymb="150">{{ $user->short_description }}</textarea>
-							</div>
+						<div class="clear flex flex-bottom" style="justify-content: flex-end;">
 							<div class="edit-buttons">
 								<button class="button" type="submit">
 									{!! nl2br(trans('trp.page.user.save')) !!}
@@ -470,7 +465,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="alert short-descr-error alert-warning" style="display: none;">{!! nl2br(trans('trp.page.user.short_description.error')) !!}</div>
 					<div class="edit-error alert alert-warning" style="display: none;">
 					</div>
 					<input type="hidden" name="json" value="1">
@@ -618,27 +612,19 @@
 		<div class="dentist-short-desc">
 
 			@if($item->is_clinic)
-				@if(array_key_exists('general-dentists', $item->parseCategories($categories)))
-					General dental clinic 
-				@else
-					Dental clinic  
-				@endif
+				Dental clinic
 			@else
-				@if(array_key_exists('general-dentists', $item->parseCategories($categories)))
-					General dentistry 
-				@else
-					Dentist 
-				@endif
+				Dentist
 			@endif
 			in {{ $item->city_name ? $item->city_name.', ' : '' }}{{ $item->state_name ? $item->state_name.', ' : '' }}{{ $item->country->name }}
 
 			@if($item->categories->isNotEmpty())
-				specialized in {{ implode(', ', $item->parseCategories($categories)) }}.
+				specialized in {{ strtolower(implode(', ', $item->parseCategories($categories))) }}.
 			@endif
 		</div>
 	@endif
 
-    <div class="profile-tabs {!! $item->reviews_in_standard()->count() && $item->reviews_in_video()->count() && (!empty($user) && $user->id==$item->id && ($user->invites->isNotEmpty() || $user->asks->isNotEmpty())) ? 'full-tabs' : '' !!}">
+    <div class="profile-tabs {!! $item->reviews_in_standard()->count() && $item->reviews_in_video()->count() && (!empty($user) && $user->id==$item->id && ($user->patients_invites->isNotEmpty() || $user->asks->isNotEmpty())) ? 'full-tabs' : '' !!}">
     	@if( $item->reviews_in_standard()->count() )
 	    	<a class="tab" data-tab="reviews" href="javascript:;" style="z-index: 5;">
 	    		{!! nl2br(trans('trp.page.user.reviews')) !!}
@@ -657,7 +643,7 @@
     		{!! nl2br(trans('trp.page.user.about')) !!}
     	</a>
 
-    	@if(!empty($user) && $user->id==$item->id && ($user->invites->isNotEmpty() || $user->asks->isNotEmpty()))
+    	@if(!empty($user) && $user->id==$item->id && ($user->patients_invites->isNotEmpty() || $user->asks->isNotEmpty()))
     		<a class="tab {!! $patient_asks ? 'force-active' : '' !!}" data-tab="asks" href="javascript:;" style="z-index: 2;">
     			{!! nl2br(trans('trp.page.user.my-patients')) !!}
 
@@ -676,7 +662,7 @@
 	    		</h2>
 	    	</div>
 
-	    	<div class="review-chart">
+	    	<div class="review-chart {{ empty($item->is_clinic) && $item->my_workplace_approved->isNotEmpty() ? 'with-three-columns' : '' }}">
 		    	<img class="slide-animation" src="{{ url('img-trp/slide.gif') }}">
 	    		<div class="chart-stars">
 		    		<img src="{{ url('img-trp/five-stars.png') }}">
@@ -686,7 +672,7 @@
 		    		<img src="{{ url('img-trp/one-star.png') }}">
 		    	</div>
 		    	<div class="review-charts-wrapper">
-	    			<div id="reviews-chart">
+	    			<div id="reviews-chart" class="{{ empty($item->is_clinic) && $item->my_workplace_approved->isNotEmpty() ? 'three-columns' : '' }}">
 	    				
 	    				<div class="chart-overlap"></div>
 	    			</div>
@@ -725,11 +711,11 @@
 		    			<div class="review-rating">
 		    				<div class="ratings">
 								<div class="stars">
-									<div class="bar" style="width: {{ $review->rating/5*100 }}%;">
+									<div class="bar" style="width: {{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating/5*100 : $review->rating/5*100 }}%;">
 									</div>
 								</div>
 								<span class="rating">
-									({{ $review->rating }})
+									({{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating : $review->rating }})
 								</span>
 							</div>
 							<span class="review-date">
@@ -862,11 +848,11 @@
 		    				<div>
 			    				<div class="ratings">
 									<div class="stars">
-										<div class="bar" style="width: {{ $review->rating/5*100 }}%;">
+										<div class="bar" style="width: {{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating/5*100 : $review->rating/5*100 }}%;">
 										</div>
 									</div>
 									<span class="rating">
-										({{ $review->rating }})
+										({{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating : $review->rating }})
 									</span>
 								</div>
 								@if($review->verified)
@@ -1144,9 +1130,34 @@
 					</div>
 				@endif
 			@endif
+
+			@if(!empty($user) && $item->id==$user->id)
+				<div class="about-container">
+	    			<div class="short-content" role="presenter" style="margin-top: 40px;">
+	    				<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.description-empty')) }}">
+		    				{!! $item->short_description ? nl2br($item->short_description) : nl2br(trans('trp.page.user.short-description-empty')) !!}
+		    			</span>
+    					<a>
+    						<img src="{{ url('img-trp/pencil.png') }}">
+    					</a>
+	    			</div>
+	    			<div class="short-content" role="editor" style="display: none;margin-top: 40px;">
+						{{ Form::open(array('class' => 'edit-description', 'method' => 'post', 'url' => getLangUrl('profile/info') )) }}
+							{!! csrf_field() !!}
+							<textarea class="input" name="short_description" id="dentist-short-description" placeholder="{!! nl2br(trans('trp.page.user.short-description')) !!}">{{ $item->short_description }}</textarea>
+							<p class="symbols-wrapper"><span id="symbols-count-short">0</span> / max length 150</p>
+                            <input type="hidden" name="field" value="short_description" />
+                            <input type="hidden" name="json" value="1" />
+							<button type="submit" class="button">{!! nl2br(trans('trp.page.user.save')) !!}</button>
+							<div class="alert alert-warning" style="display: none;">
+							</div>
+						{!! Form::close() !!}
+	    			</div>
+	    		</div>
+			@endif
 		</div>
 
-		@if(!empty($user) && $user->id==$item->id && ($user->invites->isNotEmpty() || $user->asks->isNotEmpty()))
+		@if(!empty($user) && $user->id==$item->id && ($user->patients_invites->isNotEmpty() || $user->asks->isNotEmpty()))
 			<div class="tab-container" id="asks">
 
 				@if($user->asks->isNotEmpty())
@@ -1210,9 +1221,9 @@
 					</div>
 				@endif
 
-				@if($user->invites->isNotEmpty())
+				@if($user->patients_invites->isNotEmpty())
 		    		<h2 class="black-left-line section-title">
-		    			{!! nl2br(trans('trp.page.user.review-invitation')) !!} ({{ $user->invites->count() }})
+		    			{!! nl2br(trans('trp.page.user.review-invitation')) !!} ({{ $user->patients_invites->count() }})
 		    		</h2>
 
 		    		<div class="asks-container">
@@ -1235,7 +1246,7 @@
 			        			</tr>
 			        		</thead>
 			        		<tbody>
-			        			@foreach( $user->invites as $inv )
+			        			@foreach( $user->patients_invites as $inv )
 			        				<tr>
 			        					<td>
 			        						{{ $inv->created_at->toDateString() }}
@@ -1276,6 +1287,7 @@
 			</div>
 		@endif
 	</div>
+	<input type="hidden" name="cur_dent_id" id="cur_dent_id" value="{{ $item->id }}">
 </div>
 
 @if(!empty($user) && $item->id==$user->id)

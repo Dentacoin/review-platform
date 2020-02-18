@@ -387,7 +387,7 @@
 			    			@endif
 			    			<div class="ratings">
 								<div class="stars">
-									<div class="bar" style="width: {{ $review->rating/5*100 }}%;">
+									<div class="bar" style="width: {{ !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating/5*100 : $review->rating/5*100 }}%;">
 									</div>
 								</div>
 							</div>

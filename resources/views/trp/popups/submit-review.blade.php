@@ -58,7 +58,7 @@
 								<div class="clearfix subquestion">
 								   <select name="dentist_clinics" class="input" id="dentist_clinics">
 										<option value="" disabled selected>{{ trans('trp.popup.submit-review-popup.select') }}</option>
-										<option value="">{{ trans('trp.popup.submit-review-popup.dentist-cabinet') }}</option>
+										<option value="own">{{ trans('trp.popup.submit-review-popup.dentist-cabinet', [ 'name' => $item->getName() ]) }}</option>
 										@foreach($item->my_workplace_approved as $workplace)
 											<option value="{{ $workplace->clinic->id }}">{{ $workplace->clinic->getName() }}</option>
 										@endforeach
@@ -89,7 +89,7 @@
 							</div>
 						@endif
 
-						<div class="question {{ $item->is_clinic && $item->teamApproved->isNotEmpty() && $item->teamApproved->count() > 1 && $loop->iteration == 4 ? 'hidden-review-question' : '' }}" {{ $item->is_clinic && $item->teamApproved->isNotEmpty() && $item->teamApproved->count() > 1 && $loop->iteration == 4 ? 'style=display:none;' : '' }}>
+						<div class="question {{ $item->is_clinic && $item->teamApproved->isNotEmpty() && $item->teamApproved->count() > 1 && $loop->iteration == 4 ? 'hidden-review-question' : '' }}" {{ $item->is_clinic && $item->teamApproved->isNotEmpty() && $item->teamApproved->count() > 1 && $loop->iteration == 4 ? 'style=display:none;' : '' }} q-id="{{ $question->id }}">
 							<h4 class="popup-title">
 								{{ str_replace('{name}', $item->name, $question->question) }}
 							</h4>
@@ -119,6 +119,7 @@
 								{!! nl2br(trans('trp.popup.submit-review-popup.answer-all')) !!}
 							</div>
 						</div>
+
 					@endforeach
 
 					<div class="question question-treatments">
@@ -170,7 +171,7 @@
 					    </div>
 					</div>
 
-					<div class="question">
+					<div class="question review-desc">
 						<h4 class="popup-title">
 							<span class="blue">
 								{!! nl2br(trans('trp.popup.submit-review-popup.last-question')) !!}
@@ -333,11 +334,19 @@
 				            	{{ trans('trp.popup.submit-review-popup.done-non-trusted') }}
 				            	<br/>
 				            	<br/>
-				            	<a class="button ask-review-button" data-popup-logged="popup-ask-dentist">
-				            		{{ trans('trp.popup.submit-review-popup.done-non-trusted-invite') }}
-				            	</a>
+				            	@if(false)
+					            	<!-- <a class="button ask-review-button" data-popup-logged="popup-ask-dentist">
+					            		Request Verification
+					            	</a> -->
+					            @endif
+				            	<a href="{{ getLangUrl('dentist/'.$item->slug.'/ask') }}" class="button ask-dentist-submit-review">
+									{!! nl2br(trans('trp.popup.submit-review-popup.done-non-trusted-invite')) !!}
+								</a>
 				            @endif
 			            </div>
+			            <div class="alert alert-success ask-success-alert" style="display: none;">
+							{!! nl2br(trans('trp.popup.popup-ask-dentist.sent', [ 'name' => $item->getName() ])) !!}
+						</div>
 					</div>
 		        </div>
 			{!! Form::close() !!}

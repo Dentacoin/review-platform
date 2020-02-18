@@ -58,10 +58,10 @@ class DentistController extends FrontController
             $old_review->secret->used = true;
             $old_review->secret->save();
             $old_review->save();
-
                         
             $item->sendTemplate(6, [
                 'review_id' => $old_review->id,
+                'dentist' => $item->id,
             ], 'trp');
 
             if( $old_review->dentist_id ) {
@@ -89,7 +89,14 @@ class DentistController extends FrontController
         if(empty($review)) {
             return '';
         } else {
-            $item = $review->dentist_id ? User::find($review->dentist_id) : User::find($review->clinic_id);
+
+            $d_id = Request::input('d_id');
+
+            $item = User::find($d_id);
+
+            if(empty($item)) {
+                $item = $review->dentist_id ? User::find($review->dentist_id) : User::find($review->clinic_id);
+            }           
 
             return $this->ShowView('popups.detailed-review-content', [
                 'item' => $item,
@@ -204,9 +211,7 @@ class DentistController extends FrontController
 
         $questions = Question::with('translations')->get();
 
-
         if(Request::isMethod('post')) {
-
             $ret = array(
                 'success' => false
             );
@@ -216,17 +221,30 @@ class DentistController extends FrontController
                 'treatments' => ['required']
             ];
             foreach ($questions as $question) {
-                if($question->id == 4 && $item->is_clinic && empty( Request::input( 'clinic_dentists' ) )  ) {
-                    continue;
+                // if($question->id == 4 && $item->is_clinic && empty( Request::input( 'clinic_dentists' ) )  ) {
+                //     continue;
+                // }
+
+                if(!empty(Request::input( 'dentist_clinics' )) && Request::input('dentist_clinics') == 'own') {
+                    $validator_arr['option.4.0'] = ['required', 'numeric', 'min:1', 'max:5'];
+                    $validator_arr['option.4.1'] = ['required', 'numeric', 'min:1', 'max:5'];
+                    $validator_arr['option.4.2'] = ['required', 'numeric', 'min:1', 'max:5'];
+                    $validator_arr['option.4.3'] = ['required', 'numeric', 'min:1', 'max:5'];
+
+                    $validator_arr['option.6.0'] = ['required', 'numeric', 'min:1', 'max:5'];
+                    $validator_arr['option.6.1'] = ['required', 'numeric', 'min:1', 'max:5'];
+                    $validator_arr['option.6.2'] = ['required', 'numeric', 'min:1', 'max:5'];
+                    $validator_arr['option.6.3'] = ['required', 'numeric', 'min:1', 'max:5'];
+
+                    $validator_arr['option.7.0'] = ['required', 'numeric', 'min:1', 'max:5'];
+                    $validator_arr['option.7.1'] = ['required', 'numeric', 'min:1', 'max:5'];
+                } else {
+                    $opts = json_decode($question['options'], true);
+
+                    foreach ($opts as $i => $nosense) {
+                        $validator_arr['option.'.$question->id.'.'.$i] = ['required', 'numeric', 'min:1', 'max:5'];
+                    }                    
                 }
-
-                    
-                $opts = json_decode($question['options'], true);
-
-                foreach ($opts as $i => $nosense) {
-                }
-
-                $validator_arr['option.'.$question->id.'.'.$i] = ['required', 'numeric', 'min:1', 'max:5'];
             }
 
             $validator = Validator::make(Request::all(), $validator_arr);
@@ -259,6 +277,27 @@ class DentistController extends FrontController
                     //     ; //dgd
                     // }
                     if( $this->user->loggedFromBadIp() ) {
+                        $ul = new UserLogin;
+                        $ul->user_id = $this->user->id;
+                        $ul->ip = User::getRealIp();
+                        $ul->platform = 'trp';
+                        $ul->country = \GeoIP::getLocation()->country;
+
+                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                        $dd = new DeviceDetector($userAgent);
+                        $dd->parse();
+
+                        if ($dd->isBot()) {
+                            // handle bots,spiders,crawlers,...
+                            $ul->device = $dd->getBot();
+                        } else {
+                            $ul->device = $dd->getDeviceName();
+                            $ul->brand = $dd->getBrandName();
+                            $ul->model = $dd->getModel();
+                            $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                        }
+                        
+                        $ul->save();
 
                         $action = new UserAction;
                         $action->user_id = $this->user->id;
@@ -292,11 +331,12 @@ class DentistController extends FrontController
                                 }
                             } else {
                                 $review->dentist_id = $item->id;
-                                if(!empty(Request::input( 'dentist_clinics' ))) {
+                                if(!empty(Request::input( 'dentist_clinics' )) && Request::input('dentist_clinics') != 'own') {
                                     $review->clinic_id = Request::input( 'dentist_clinics' );
+                                } else if (!empty(Request::input( 'dentist_clinics' )) && Request::input('dentist_clinics') == 'own') {
+                                    $review->team_own_practice = true;
                                 }
                             }
-                            
                         }
 
                         $review->rating = 0;
@@ -311,10 +351,27 @@ class DentistController extends FrontController
 
                         $total = 0;
                         $answer_rates = [];
+                        $answer_three_qs_rates = [];
                         $crypto_data = [];
                         $crypto_data['answer'] = strip_tags(Request::input( 'answer' ));
                         foreach ($questions as $question) {
-                            
+
+                            if ($question->id == 4 || $question->id == 6 || $question->id == 7) {
+                                $answer_three_qs_rates[$question->id] = 0;
+
+                                $options_three = json_decode($question['options'], true);
+
+                                foreach ($options_three as $i => $n) {
+                                    $re = Request::input( 'option.'.$question->id.'.'.$i );
+
+                                    //if($r != null) {
+                                        $answer_three_qs_rates[$question->id] += $re;
+                                    //}
+                                }
+
+                                $answer_three_qs_rates[$question->id] /= count($options_three);
+                            }
+
                             // if($question->id == 4 && $item->is_clinic && empty( Request::input( 'clinic_dentists' ) )  ) {
                             //     continue;
                             // }
@@ -323,10 +380,14 @@ class DentistController extends FrontController
                             $answer_rates[$question->id] = 0;
                             $option_answers = [];
                             $options = json_decode($question['options'], true);
+
                             foreach ($options as $i => $nosense) {
                                 $r = Request::input( 'option.'.$question->id.'.'.$i );
-                                $option_answers[] = $r;
-                                $answer_rates[$question->id] += $r;
+
+                                //if($r != null) {
+                                    $option_answers[] = $r;
+                                    $answer_rates[$question->id] += $r;
+                                //}
                             }
 
                             $answer_rates[$question->id] /= count($options);
@@ -344,19 +405,30 @@ class DentistController extends FrontController
                             $answer->options = json_encode($option_answers);
                             $crypto_data['question-'.$question->id] = $option_answers;
                             $answer->save();
+
                         }
 
-                        $review->rating = array_sum($answer_rates) / count($answer_rates);
+                        $review->rating = array_sum($answer_rates) / (!empty(Request::input( 'dentist_clinics' )) && Request::input( 'dentist_clinics' ) == 'own' ? 3 : count($answer_rates));
+                        $review->team_doctor_rating = !empty(Request::input( 'dentist_clinics' )) || !empty(Request::input( 'clinic_dentists' )) ? array_sum($answer_three_qs_rates) / 3 : null;
                         $review->save();
 
                         $ipfs = new IPFS("127.0.0.1", "8080", "5001");
                         $review->ipfs = $ipfs->add(json_encode($crypto_data));
                         $review->save();
 
-                        $the_dentist = !empty($review->dentist_id) ? User::find($review->dentist_id) : User::find($review->clinic_id);
-                        $the_dentist->recalculateRating();
-                        $the_dentist->hasimage_social = false;
-                        $the_dentist->save();
+                        if (!empty($review->dentist_id)) {
+                            $the_dentist = User::find($review->dentist_id);
+                            $the_dentist->recalculateRating();
+                            $the_dentist->hasimage_social = false;
+                            $the_dentist->save();
+                        }
+
+                        if (!empty($review->clinic_id)) {
+                            $the_clinic = User::find($review->clinic_id);
+                            $the_clinic->recalculateRating();
+                            $the_clinic->hasimage_social = false;
+                            $the_clinic->save();
+                        }
                         
                         //Send & confirm
                         $is_video = $review->youtube_id ? '_video' : '';
@@ -445,31 +517,48 @@ class DentistController extends FrontController
         $aggregated = [];
         if (count($reviews)) {
 
+            $aggregated_count_opt = [];
+
             foreach ($reviews as $rev) {
                 foreach($rev->answers as $answer) {
-                    //echo $rev->answers->count().'  '.$answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
-                    if(!isset($aggregated[$answer->question['label']])) {
-                        $aggregated[$answer->question['label']] = 0;
-                    }
 
-                    $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                    if ($item->my_workplace_approved->isEmpty() || ($item->my_workplace_approved->isNotEmpty() && ($answer->question_id == 4 || $answer->question_id == 6 || $answer->question_id == 7))) {
+
+                        //echo $rev->answers->count().'  '.$answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
+                        if(!isset($aggregated[$answer->question['label']])) {
+                            $aggregated[$answer->question['label']] = 0;
+                        }
+
+                        if(!isset($aggregated_count_opt[$answer->question['label']])) {
+                            $aggregated_count_opt[$answer->question['label']] = 0;
+                        }
+
+                        $arr_sum = array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+
+                        if(!empty($arr_sum)) {
+                            $aggregated_count_opt[$answer->question['label']] += 1;
+                        }
+
+                        $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                    }
                 }
 
-                if ($rev->answers->count() == 9) {
-                    if (array_key_exists("Doctor",$aggregated)) {
-                        $aggregated['Doctor'] += 5;
-                    } else {
-                        $aggregated['Doctor'] = 5;
-                    }
+                //dd($answer->question, $aggregated);
+
+                // if ($rev->answers->count() == 9) {
+                //     if (array_key_exists("Doctor",$aggregated)) {
+                //         $aggregated['Doctor'] += 5;
+                //     } else {
+                //         $aggregated['Doctor'] = 5;
+                //     }
                     
-                }
+                // }
             }
 
-            foreach ($aggregated as $key => $value) {
-                $aggregated[$key] /= $reviews->count();
+            foreach ($aggregated_count_opt as $key => $value) {
+                $aggregated[$key] /= $value;
             }
         }
-
 
         $aggregated_rates = [];
         $aggregated_rates_total = [];
@@ -477,16 +566,19 @@ class DentistController extends FrontController
         if($count) {
             foreach ($reviews as $review) {
                 foreach($review->answers as $answer) {
-                    if(empty($aggregated_rates[$answer->question->id])) {
-                        $aggregated_rates[$answer->question->id] = [];
-                    }
-                        
-                    $opts = json_decode($answer->options, true);
-                    foreach(json_decode($answer->question['options'], true) as $i => $option) {
-                        if(empty($aggregated_rates[$answer->question->id][$i])) {
-                            $aggregated_rates[$answer->question->id][$i] = 0;
+                    if ($item->my_workplace_approved->isEmpty() || ($item->my_workplace_approved->isNotEmpty() && ($answer->question_id == 4 || $answer->question_id == 6 || $answer->question_id == 7))) {
+
+                        if(empty($aggregated_rates[$answer->question->id])) {
+                            $aggregated_rates[$answer->question->id] = [];
                         }
-                        $aggregated_rates[$answer->question->id][$i] += $opts[$i];
+                            
+                        $opts = json_decode($answer->options, true);
+                        foreach(json_decode($answer->question['options'], true) as $i => $option) {
+                            if(empty($aggregated_rates[$answer->question->id][$i])) {
+                                $aggregated_rates[$answer->question->id][$i] = 0;
+                            }
+                            $aggregated_rates[$answer->question->id][$i] += $opts[$i];
+                        }
                     }
                 }
             }
@@ -501,6 +593,8 @@ class DentistController extends FrontController
             }
         }
 
+        //dd($aggregated_rates_total);
+
         $dentist_limit_reached = !empty($this->user) ? $this->user->cantReviewDentist($item->id) : null;
         $has_asked_dentist = $this->user ? $this->user->hasAskedDentist($item->id) : null;
 
@@ -511,11 +605,14 @@ class DentistController extends FrontController
             $review_reward = $review_reward_video = 0;
         }
 
-
         $social_image = $item->getSocialCover();
         $is_review = false;
         if( request('review_id') && $current_review = $reviews->where('id', request('review_id'))->first() ) {
-            $social_image = $current_review->getSocialCover();
+            if(!empty($current_review->dentist_id) && !empty($current_review->clinic_id)) {
+                $current_review->generateSocialCover($item->id);
+            }
+            
+            $social_image = $current_review->getSocialCover($item->id);
             $is_review = true;
         }
 
@@ -528,7 +625,6 @@ class DentistController extends FrontController
                 }
             }
         }
-
 
         $strength_arr = null;
         $completed_strength = null;
@@ -749,7 +845,7 @@ class DentistController extends FrontController
                     "reviewRating" => [
                         "@type" => "Rating",
                         "bestRating" => 5,
-                        "ratingValue" => $review->rating,
+                        "ratingValue" => !empty($review->team_doctor_rating) && ($item->id == $review->dentist_id) ? $review->team_doctor_rating : $review->rating,
                         "worstRating" => 1,
                     ]
                 ];
@@ -908,6 +1004,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
 
     public function ask($locale=null, $slug, $verification=null) {
+
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
 
         if(!empty($item)) {
@@ -1061,12 +1158,15 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
     }
 
     public function reply($locale=null, $slug, $review_id) {
+        $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
+
         $review = Review::find($review_id);
         if(!empty($review) && ($this->user->id==$review->clinic_id || $this->user->id==$review->dentist_id ) ) {
             $review->reply = strip_tags(Request::input( 'reply' ));
             $review->save();
             $review->user->sendTemplate(8, [
                 'review_id' => $review->id,
+                'dentist' => $item->id
             ], 'trp');
         }
 
@@ -1348,7 +1448,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                 foreach ($reviews_obj as $review) {
                     $review->patient_avatar = $review->user->getImageUrl(true);
                     $review->date_converted = $review->created_at ? date('d/m/Y', $review->created_at->timestamp) : '-';
-                    $review->rating_converted = $review->rating/5*100;
+                    $review->rating_converted = !empty($review->team_doctor_rating) && ($dentist->id == $review->dentist_id) ? $review->team_doctor_rating/5*100 : $review->rating/5*100;
                     $review->converted_answer = nl2br($review->answer);
                     $review->converted_title = !empty($review->title) ? '<a href="'.$dentist->getLink().'?review_id='.$review->id.'" target="_blank" class="review-title">“'.$review->title.'”</a>' : '';
                     $review->patient_name = !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name;

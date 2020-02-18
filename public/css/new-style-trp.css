@@ -2483,6 +2483,16 @@ textarea.input {
       .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container .detailed-title .rating {
         font-size: 14px;
         font-weight: normal; }
+    .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container .treating-dentist {
+      display: block;
+      text-align: center;
+      margin-top: -20px;
+      margin-bottom: 30px;
+      font-size: 18px; }
+      .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container .treating-dentist a {
+        font-size: 18px; }
+        .fixed-popup .popup-inner .detailed-review-wrapper .detailed-container .treating-dentist a:hover {
+          color: #0fb0e5; }
   .fixed-popup .popup-inner .popup-title {
     background-color: #eee;
     margin-right: -100px;

@@ -27,7 +27,9 @@ class Review extends Model {
         'dentist_id',
         'clinic_id',
         'review_to_id',
+        'team_own_practice',
         'rating',
+        "team_doctor_rating",
         'youtube_id',
         'youtube_approved',
         'title',
@@ -86,11 +88,13 @@ class Review extends Model {
         if( $this->dentist ) {
             $this->dentist->sendTemplate( $this->verified ? 21 : 6, [
                 'review_id' => $this->id,
+                'dentist_id' => $this->dentist->id,
             ], 'trp');            
         }
         if( $this->clinic ) {
             $this->clinic->sendTemplate( $this->verified ? 21 : 6, [
                 'review_id' => $this->id,
+                'dentist_id' => $this->clinic->id,
             ], 'trp');            
         }
 
@@ -161,13 +165,13 @@ class Review extends Model {
         }
     }
 
-    public function generateSocialCover() {
+    public function generateSocialCover($d_id) {
 
-        $path = $this->getSocialCoverPath();
+        $path = $this->getSocialCoverPath($d_id);
 
         $img = Image::canvas(1200, 628, '#fff');
 
-        $dentist = $this->dentist ? $this->dentist : $this->clinic;
+        $dentist = User::find($d_id);
 
         if ($dentist->hasimage) {
             $img->insert( public_path().'/img-trp/new-cover-review.png');
@@ -292,12 +296,15 @@ class Review extends Model {
 
         $step = 67;
         $startX = 573;
-        for($i=1;$i<=$this->rating;$i++) {
+
+        $item_rating = !empty($this->team_doctor_rating) && ($d_id == $this->dentist_id) ? $this->team_doctor_rating : $this->rating;
+
+        for($i=1;$i<=$item_rating;$i++) {
             $img->insert( public_path().'/img-trp/cover-star-review-new.png' , 'top-left', $startX, $title ? 409 : 390 );
             $startX += $step;
         }
 
-        $rest = ( $this->rating - floor( $this->rating ) );
+        $rest = ( $item_rating - floor( $item_rating ) );
         if($rest) {
             $halfstar = Image::canvas(60*$rest, 61, '#fff');
             $halfstar->insert( public_path().'/img-trp/cover-star-review-new.png', 'top-left', 0, 0 );
@@ -309,16 +316,16 @@ class Review extends Model {
         $this->save();
     }
 
-    public function getSocialCoverPath() {
+    public function getSocialCoverPath($d_id) {
         $folder = storage_path().'/app/public/reviews/'.($this->id%100);
         if(!is_dir($folder)) {
             mkdir($folder);
         }
         return $folder.'/'.$this->id.'-cover.jpg';
     }
-    public function getSocialCover() {
+    public function getSocialCover($d_id) {
         if(!$this->hasimage_social) {
-            $this->generateSocialCover();
+            $this->generateSocialCover($d_id);
         }
         return url('/storage/reviews/'.($this->id%100).'/'.$this->id.'-cover.jpg').'?rev='.$this->updated_at->timestamp.'12';
     }

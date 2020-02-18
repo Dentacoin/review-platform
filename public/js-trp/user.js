@@ -46,11 +46,14 @@ $(document).ready(function(){
    }
    handleGalleryRemoved();
 
-    showFullReview = function(id) {
+    showFullReview = function(id, d_id) {
         showPopup('view-review-popup');
         $.ajax( {
             url: '/'+lang+'/review/' + id,
             type: 'GET',
+            data: {
+                d_id: d_id,
+            },
             success: (function( data ) {
                 $('#the-detailed-review').html(data);
                 showPopup('view-review-popup');
@@ -227,7 +230,7 @@ $(document).ready(function(){
     }
 
     if(getUrlParameter('review_id')) {
-        showFullReview( getUrlParameter('review_id') );
+        showFullReview( getUrlParameter('review_id'), $('#cur_dent_id').val() );
     }
 
     $('#clinic_dentists').change( function() {
@@ -235,7 +238,24 @@ $(document).ready(function(){
     });
 
     $('#dentist_clinics').change( function() {
-        $(this).closest('.question').next().show();
+        $(this).closest('.questions-wrapper').find('input[type="hidden"]').val('');
+        $(this).closest('.questions-wrapper').find('.bar').css('width', '0px');
+
+        if ($(this).val() == 'own') {
+            $('.questions-wrapper .question:not(.skippable):not(.question-treatments):not(.review-desc)').addClass('do-not-show');
+            $('.questions-wrapper .question.skippable').next().hide();
+            $('.questions-wrapper .question[q-id="4"]').removeClass('do-not-show');
+            $('.questions-wrapper .question[q-id="6"]').removeClass('do-not-show');
+            $('.questions-wrapper .question[q-id="7"]').removeClass('do-not-show');
+            $('.questions-wrapper .question:not(.skippable):not(.question-treatments):not(.review-desc)').addClass('hidden');
+            $('.questions-wrapper .question[q-id="4"]').removeClass('hidden');
+            $(this).closest('.questions-wrapper').addClass('team-dentist');
+        } else {
+            $('.questions-wrapper .question').removeClass('do-not-show');
+            $('.questions-wrapper .question:not(.skippable):not(.question-treatments):not(.review-desc)').addClass('hidden');
+            $(this).closest('.question').next().show();
+            $(this).closest('.questions-wrapper').removeClass('team-dentist');
+        }
     });
 
     handleDCNreward = function() {
@@ -350,7 +370,7 @@ $(document).ready(function(){
 
     $('.more').click( function() {
         var id = $(this).closest('.review-wrapper').attr('review-id');
-        showFullReview(id);
+        showFullReview(id, $('#cur_dent_id').val());
     } );
 
     $('#write-review-form .stars').mousemove( function(e) {
@@ -1284,6 +1304,34 @@ $(document).ready(function(){
         );
     } );
 
+    $('.ask-dentist-submit-review').click( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+        var that = $(this);
+
+        $.get( 
+            $(this).attr('href'), 
+            function( data ) {
+                if(data.success) {
+                    $('.ask-dentist').closest('.alert').hide();
+                    $('.ask-success-alert').show();
+                    $('#review-confirmed').hide();                 
+
+                    gtag('event', 'Request', {
+                        'event_category': 'Reviews',
+                        'event_label': 'InvitesAsk',
+                    });
+                } else {
+                    console.log('error');
+                }
+            }
+        );
+    } );
+
     $('.team-container .delete-invite').click( function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -1637,6 +1685,8 @@ $(document).ready(function(){
     //End Popups
     //
 
+    //Write review 
+
     $('#write-review-form').submit( function(e) {
         e.preventDefault();
 
@@ -1650,9 +1700,15 @@ $(document).ready(function(){
 
         var allgood = true;
 
+        var coun_vals = 0;
+
         $(this).find('input[type="hidden"]').each( function() {
             if ($(this).closest('.question').hasClass('hidden-review-question') && !$('#clinic_dentists').val()) {
                 console.log('Skip 4th question'); //don't check because it's 4th question and I didn't pick a dentist
+            } else if($(this).closest('.questions-wrapper').hasClass('team-dentist')) {
+                if($(this).val() != '' && $(this).attr('name')!='_token' && $(this).attr('name')!='youtube_id') {
+                    coun_vals++;
+                }
             } else {
                 if( !parseInt($(this).val()) && $(this).attr('name')!='_token' && $(this).attr('name')!='youtube_id' ) {
                     allgood = false;
@@ -1666,6 +1722,11 @@ $(document).ready(function(){
             }
         } );
 
+        if ($(this).find('.questions-wrapper').hasClass('team-dentist') && coun_vals != 10) {
+            allgood = false;
+            return false;
+        }
+
         if( $('#youtube_id').val().trim().length && !$('#video-agree').is(':checked') ) {
             allgood = false;
             $('#video-not-agree').show();
@@ -1674,7 +1735,6 @@ $(document).ready(function(){
             }, 500);
         }
 
-        console.log($('.treatment').val());
         if( !$('.treatment').is(':checked') ) {
             allgood = false;
             $('#treatment-error').show();
@@ -1703,6 +1763,8 @@ $(document).ready(function(){
         btn.attr('data-old', btn.html());
         btn.html('<i class="fa fa-spinner fa-pulse fa-fw"></i> '+btn.attr('data-loading'));
 
+        var that = $(this);
+
         $.post( 
             $(this).attr('action'), 
             $(this).serialize() , 
@@ -1711,6 +1773,10 @@ $(document).ready(function(){
                     console.log('success');
                     $('#review-confirmed').show();
                     $('#review-submit-button').hide();
+
+                    that.find('.question:not(.review-desc)').hide();
+                    that.find('.review-desc').find('.popup-title').hide();
+                    that.find('.review-desc').find('.reviews-wrapper').hide();  
 
                     gtag('event', 'Submit', {
                         'event_category': 'Reviews',
@@ -2021,7 +2087,7 @@ $(document).ready(function(){
 
     $('.ask-review').click( function() {
         var id = $(this).attr('review-id');
-        showFullReview(id);
+        showFullReview(id, $('#cur_dent_id').val());
     } );
 
 
@@ -2085,7 +2151,14 @@ $(document).ready(function(){
             series.columns.template.column.cornerRadiusTopLeft = 15;
             series.columns.template.column.cornerRadiusTopRight = 15;
             // series.columns.template.column.fillOpacity = 0.8;
-            series.columns.template.width = am4core.percent(35);
+
+            //tuk
+            if ($('#reviews-chart').hasClass('three-columns')) {
+                series.columns.template.width = 65;
+            } else {
+                series.columns.template.width = am4core.percent(35);
+            }
+            
 
             // on hover, make corner radiuses bigger
             var hoverState = series.columns.template.column.states.create("hover");
@@ -2210,6 +2283,10 @@ $(document).ready(function(){
         $('#symbols-count').html($('#dentist-description').val().length);
     }
 
+    if($('#symbols-count-short').length) {
+        $('#symbols-count-short').html($('#dentist-short-description').val().length);
+    }
+
     $('#dentist-description').keyup(function() {
         var length = $(this).val().length;
 
@@ -2219,6 +2296,17 @@ $(document).ready(function(){
             $('#symbols-count').removeClass('red');
         }
         $('#symbols-count').html(length);
+    });
+
+    $('#dentist-short-description').keyup(function() {
+        var length = $(this).val().length;
+
+        if (length > 150) {
+            $('#symbols-count-short').addClass('red');
+        } else {
+            $('#symbols-count-short').removeClass('red');
+        }
+        $('#symbols-count-short').html(length);
     });
 
     $('.add-widget-button').click( function() {
