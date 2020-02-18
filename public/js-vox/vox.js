@@ -501,13 +501,16 @@ $(document).ready(function(){
                                     var parts = trigger_list[i].trim().split(':');
                                     var trigger_question = parts[0].trim(); // 15 въпрос
 
-                                    var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
-                                    var trigger_type = $('.question-group-' + trigger_question).hasClass('birthyear-question') ? 'birthyear' : 'standard';
-
-                                    if (!given_answer && welcome_qs) {
+                                    if (welcome_qs[trigger_question]) {
                                         given_answer = welcome_qs[i].trim().split(':')[1].trim();
                                         trigger_type = 'standard';
+                                    } else {
+                                        
+                                        var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
+                                        console.log(given_answer);
+                                        var trigger_type = $('.question-group-' + trigger_question).hasClass('birthyear-question') ? 'birthyear' : 'standard';
                                     }
+
                                     
                                     var parsed_given_answer = given_answer && given_answer.length && given_answer!="0" ? given_answer.split(',') : null;
 

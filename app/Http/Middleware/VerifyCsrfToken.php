@@ -48,7 +48,8 @@ class VerifyCsrfToken extends BaseVerifier
         '*/get-polls/*',
         '*/login-dentist/*',
         '*/facebook-tab*',
-        //'*/paid-dental-surveys/*',
+        // '*/paid-dental-surveys/*',
+        // '*/start-over'
     ];
 
 
