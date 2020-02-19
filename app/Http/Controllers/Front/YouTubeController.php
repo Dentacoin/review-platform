@@ -27,63 +27,129 @@ class YouTubeController extends FrontController
 {
     public function test() {
 
-        // $vox = Vox::find(48);
+        // $vox = Vox::find(45);
+        // $max = $this->tryAll($vox, null, []);
 
-        // $q = $vox->questions->first();
-
-        // $max = $this->tryAll($vox, $q, []);
-
-        //-----------------------------
-
-        // $item = User::find(37530);
-
-        // $substitutions = [
-        //     "image_unclaimed_profile" => $item->getSocialCover(),
-        //     "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
-        // ];
-
-        // if(!empty($item->email)) {
-        //     $item->sendGridTemplate(43, $substitutions, 'trp');
-        // }    
+        // echo '<br/><br/>Max: '.$max;
 
 
-        //-----------------------------
 
-    	// $users = Review::get();
+        //to add trigger answers like 1-3
+        //to add welcome q's triggers
+        //scale qs triggers?
 
-    	// foreach ($users as $user) {
-    	// 	$user->hasimage_social = false;
-    	// 	$user->save();
-    	// }
-
-    	// $review = Review::find(8600);
-
-    	// $review->generateSocialCover();
-    	// dd($review->getSocialCover());
-
-
-    	// $user = User::find(37530);
-    	// $user->generateSocialCover();
-    	// dd($user->getSocialCover());
-        
     	exit;
     }
 
     // public function tryAll($vox, $question, $answers) {
 
-    //     $answers_count = count(json_decode($question->answers, true));
-
     //     $found = false;
     //     foreach ($vox->questions as $vq) {
-    //         if( $found ) {
+
+    //         if( $found || empty($question) ) {
     //             $paths = [];
-    //             for ($i=1; $i <= $answers_count ; $i++) { 
-    //                 $newAnswers = $answers;
-    //                 $newAnswers[$question->id] = $i;
-    //                 $paths[$i] = $this->tryAll($vox, $vq, $newAnswers);
+
+    //             //
+    //             //Tova trigger li e?
+    //             //
+    //             $skip = false;
+    //             if($vq->question_trigger) {
+    //                 $skip = true;
+
+
+    //                 if($vq->question_trigger=='-1') {
+    //                     foreach ($vox->questions as $originalTrigger) {
+    //                         if($originalTrigger->id == $vq->id) {
+    //                             break;
+    //                         }
+
+    //                         if( $originalTrigger->question_trigger && $originalTrigger->question_trigger!='-1' ) {
+    //                            $triggers = $originalTrigger->question_trigger;
+    //                         }
+    //                     }
+    //                 } else {
+    //                     $triggers = $vq->question_trigger;
+    //                 }
+
+    //                 $triggers = explode(';', $triggers);
+
+
+    //                 foreach ($triggers as $trigger) {
+
+
+    //                     list($triggerId, $triggerAnswers) = explode(':', $trigger);
+    //                     $triggerAnswers = explode(',', $triggerAnswers);
+
+    //                     //echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($triggerAnswers, true).' / Answer: '.$answers[$triggerId].'<br/>';
+
+    //                     if( !empty($answers[$triggerId]) && in_array($answers[$triggerId], $triggerAnswers) ) {
+    //                         $skip = false;
+    //                         //echo 'OK<br/>';
+    //                     } else {
+    //                         //echo 'SKIP<br/>';
+    //                     }
+
+    //                 }
     //             }
 
-    //             return 1 + max($paths);
+
+
+
+
+
+
+
+    //             //
+    //             //Ima li trigger, koito zavisi ot tozi vapros?
+    //             //
+
+    //             $hasRelatedTrigger = [];
+
+    //             foreach ($vox->questions as $tq) {
+    //                 if($tq->question_trigger) {
+    //                     $triggers = explode(';', $tq->question_trigger);
+    //                     foreach ($triggers as $trigger) {
+    //                         $triggerQuestion = explode(':', $trigger)[0];
+    //                         if($triggerQuestion==$vq->id) {
+    //                             $triggerAnswers = explode(',' , explode(':', $trigger)[1]);
+    //                             $hasRelatedTrigger = array_merge( $hasRelatedTrigger, $triggerAnswers );
+    //                         }
+    //                     }
+    //                 }
+    //             }
+
+    //             //
+    //             //Davame otgovori
+    //             //
+
+    //             if($hasRelatedTrigger) {
+    //                 echo '<br/><br/>';
+    //                 $answers_count = count(json_decode($vq->answers, true));
+    //                 foreach ($hasRelatedTrigger as $i) {
+    //                     $newAnswers = $answers;
+    //                     $newAnswers[$vq->id] = $i;
+    //                     echo $vq->id.' ('.$i.' | '.($skip ? 0 : 1).') => ';
+    //                     $paths[] = $this->tryAll($vox, $vq, $newAnswers);
+    //                 }
+
+    //                 if( $answers_count != count( $hasRelatedTrigger ) ) {
+    //                     $newAnswers = $answers;
+    //                     $newAnswers[$vq->id] = 'x';
+    //                     echo $vq->id.' (x | '.($skip ? 0 : 1).') => ';
+    //                     $paths[] = $this->tryAll($vox, $vq, $newAnswers);    
+    //                 }
+    //             } else {
+    //                 $newAnswers = $answers;
+    //                 $newAnswers[$vq->id] = 'x';
+    //                 echo $vq->id.' (x | '.($skip ? 0 : 1).') => ';
+    //                 $paths[] = $this->tryAll($vox, $vq, $newAnswers);
+    //             }
+
+    //             //if( empty($question) ) {
+    //             //    echo 'RESULT: '.(($skip ? 0 : 1) + max($paths)).'<br/>';
+    //             //}
+
+    //             return ($skip ? 0 : 1) + max($paths);
 
     //         }
 
@@ -92,15 +158,7 @@ class YouTubeController extends FrontController
     //         }
     //     }
 
-    //     $backtrack = array_keys($answers);
-    //     $cbacktrack = count($backtrack);
-    //     for( $i = $cbacktrack-1;$i>=0;$i--) {
-    //         echo $backtrack[$i].' - ';
-    //     }
-
-    //     echo $question->id;
-
     //     echo '<br/>';
-    //     return 1;
-    //}
+    //     return 0;
+    // }
 }
