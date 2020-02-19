@@ -504,6 +504,7 @@ class RegisterController extends FrontController
 
 
                     $newuser->status = 'added_by_clinic_approved';
+                    $newuser->slug = $newuser->makeSlug();
                     $newuser->save();
                     $join_clinic_team = true;
 
