@@ -683,7 +683,7 @@ $(document).ready(function(){
                     });
 
                     if(data.join_clinic) {
-                        window.location.reload();
+                        window.location.href = data.join_clinic;
                     } else {
                         closePopup();
                         showPopup(data.popup);
