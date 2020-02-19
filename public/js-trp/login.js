@@ -188,7 +188,9 @@ $(document).ready(function(){
                     $('.invite-dentist-form').hide();
                 }
 
-                if(data.popup) {
+                if(data.join_clinic) {
+                    window.location.reload();
+                } else if(data.popup) {
                     closePopup();
                     showPopup(data.popup);
                 } else if(data.success) {

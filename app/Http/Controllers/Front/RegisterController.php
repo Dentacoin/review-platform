@@ -487,7 +487,7 @@ class RegisterController extends FrontController
                     $newclinic = new UserTeam;
                     $newclinic->dentist_id = $newuser->id;
                     $newclinic->user_id = $inv->user_id;
-                    $newclinic->approved = 0;
+                    $newclinic->approved = 1;
                     $newclinic->save();
 
                     $clinic = User::find($inv->user_id);
@@ -504,6 +504,8 @@ class RegisterController extends FrontController
                     $newuser->status = 'added_by_clinic_approved';
                     $newuser->save();
 
+                    Auth::login($newuser);
+
                     $mtext = 'Clinic '.$clinic->getName().' added a new team member. Link to profile:
                     '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
                     '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
@@ -516,9 +518,8 @@ class RegisterController extends FrontController
                         $sender_name = config('mail.from.name');
 
                         $message->from($sender, $sender_name);
-                        // $message->to( 'ali.hashem@dentacoin.com' );
-                        // $message->to( 'betina.bogdanova@dentacoin.com' );
-                        $message->to( 'gergana@youpluswe.com' );
+                        $message->to( 'ali.hashem@dentacoin.com' );
+                        $message->to( 'betina.bogdanova@dentacoin.com' );
                         $message->replyTo($newuser->email, $newuser->getName());
                         $message->subject('Clinic '.$clinic->getName().' added a new team member');
                     });
@@ -582,6 +583,7 @@ class RegisterController extends FrontController
                 'id' => $newuser->id,
                 'short_description' => $newuser->short_description,
                 'is_clinic' => $newuser->is_clinic,
+                'join_clinic' => !empty(session('join_clinic')) ? true : false,
             ] );
 
         }
