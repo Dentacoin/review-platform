@@ -481,53 +481,49 @@ class RegisterController extends FrontController
                 $inv_id = session('invitation_id');
                 if($inv_id) {
                     $inv = UserInvite::find($inv_id);
-                    if($inv && $inv->user_id == session('join_clinic')) {
-                        $inv->invited_id = $newuser->id;
-                        $inv->save();
-                        if($inv->join_clinic) {
-                            $approve_join = 1;
-                        }
+                    $inv->invited_id = $newuser->id;
+                    $inv->save();
+
+                    $newclinic = new UserTeam;
+                    $newclinic->dentist_id = $newuser->id;
+                    $newclinic->user_id = $inv->user_id;
+                    $newclinic->approved = 0;
+                    $newclinic->save();
+
+                    $clinic = User::find($inv->user_id);
+
+                    if(!empty($clinic)) {
+
+                        $clinic->sendTemplate(2, [
+                            'dentist-name' => $newuser->getName(),
+                            'profile-link' => $newuser->getLink()
+                        ], 'trp');
                     }
+
+
+                    $newuser->status = 'added_by_clinic_approved';
+                    $newuser->save();
+
+                    $mtext = 'Clinic '.$clinic->getName().' added a new team member. Link to profile:
+                    '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
+                    '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
+
+                    ';
+
+                    Mail::raw($mtext, function ($message) use ($newuser, $clinic) {
+
+                        $sender = config('mail.from.address');
+                        $sender_name = config('mail.from.name');
+
+                        $message->from($sender, $sender_name);
+                        // $message->to( 'ali.hashem@dentacoin.com' );
+                        // $message->to( 'betina.bogdanova@dentacoin.com' );
+                        $message->to( 'gergana@youpluswe.com' );
+                        $message->replyTo($newuser->email, $newuser->getName());
+                        $message->subject('Clinic '.$clinic->getName().' added a new team member');
+                    });
                 }
 
-                $newclinic = new UserTeam;
-                $newclinic->dentist_id = $newuser->id;
-                $newclinic->user_id = request('clinic_id');
-                $newclinic->approved = 0;
-                $newclinic->save();
-
-                $clinic = User::find(request('clinic_id'));
-
-                if(!empty($clinic)) {
-
-                    $clinic->sendTemplate(2, [
-                        'dentist-name' => $newuser->getName(),
-                        'profile-link' => $newuser->getLink()
-                    ], 'trp');
-                }
-
-
-                $newuser->status = 'added_by_clinic_approved';
-                $newuser->save();
-
-                $mtext = 'Clinic '.$clinic->getName().' added a new team member. Link to profile:
-                '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
-                '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
-
-                ';
-
-                Mail::raw($mtext, function ($message) use ($newuser, $clinic) {
-
-                    $sender = config('mail.from.address');
-                    $sender_name = config('mail.from.name');
-
-                    $message->from($sender, $sender_name);
-                    // $message->to( 'ali.hashem@dentacoin.com' );
-                    // $message->to( 'betina.bogdanova@dentacoin.com' );
-                    $message->to( 'gergana@youpluswe.com' );
-                    $message->replyTo($newuser->email, $newuser->getName());
-                    $message->subject('Clinic '.$clinic->getName().' added a new team member');
-                });
 
             } else {
 
