@@ -188,9 +188,7 @@ $(document).ready(function(){
                     $('.invite-dentist-form').hide();
                 }
 
-                if(data.join_clinic) {
-                    window.location.reload();
-                } else if(data.popup) {
+                if(data.popup) {
                     closePopup();
                     showPopup(data.popup);
                 } else if(data.success) {
@@ -683,23 +681,28 @@ $(document).ready(function(){
                         'event_category': 'DentistRegistration',
                         'event_label': 'DentistRegistrationComplete',
                     });
-                    closePopup();
-                    showPopup(data.popup);
 
-                    if (data.hash) {
-                        $('input[name="last_user_hash"]').val(data.hash);
+                    if(data.join_clinic) {
+                        window.location.reload();
+                    } else {
+                        closePopup();
+                        showPopup(data.popup);
+                        if (data.hash) {
+                            $('input[name="last_user_hash"]').val(data.hash);
+                        }
+                        if (data.id) {
+                            $('input[name="last_user_id"]').val(data.id);
+                        }                     
+                        if (data.short_description && $('.verification-form').length) {
+                            $('.verification-form').hide();
+                        }
+                        if (data.is_clinic && $('.invite-clinic-form').length) {
+                            $('.invite-clinic-form').hide();
+                        } else if($('.invite-dentist-form').length) {
+                            $('.invite-dentist-form').hide();
+                        }
                     }
-                    if (data.id) {
-                        $('input[name="last_user_id"]').val(data.id);
-                    }                     
-                    if (data.short_description && $('.verification-form').length) {
-                        $('.verification-form').hide();
-                    }
-                    if (data.is_clinic && $('.invite-clinic-form').length) {
-                        $('.invite-clinic-form').hide();
-                    } else if($('.invite-dentist-form').length) {
-                        $('.invite-dentist-form').hide();
-                    }
+
 
                 } else {
                     // $('#register-error span').html('');
