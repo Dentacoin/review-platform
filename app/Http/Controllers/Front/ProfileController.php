@@ -1141,7 +1141,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
                 $this->user->sendGridTemplate( 92 , [
                     'clinic_name' => $dentist_name,
-                    "invitation_link" => getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']),
+                    "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
                 ], 'trp');
 
                 //Back to original
