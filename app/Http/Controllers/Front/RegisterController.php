@@ -482,7 +482,7 @@ class RegisterController extends FrontController
                 if($inv_id) {
                     $inv = UserInvite::find($inv_id);
                     if($inv && $inv->user_id == session('join_clinic')) {
-                        $inv->invited_id = $user->id;
+                        $inv->invited_id = $newuser->id;
                         $inv->save();
                         if($inv->join_clinic) {
                             $approve_join = 1;
@@ -491,7 +491,7 @@ class RegisterController extends FrontController
                 }
 
                 $newclinic = new UserTeam;
-                $newclinic->dentist_id = $user->id;
+                $newclinic->dentist_id = $newuser->id;
                 $newclinic->user_id = request('clinic_id');
                 $newclinic->approved = 0;
                 $newclinic->save();
@@ -501,8 +501,8 @@ class RegisterController extends FrontController
                 if(!empty($clinic)) {
 
                     $clinic->sendTemplate(2, [
-                        'dentist-name' => $user->getName(),
-                        'profile-link' => $user->getLink()
+                        'dentist-name' => $newuser->getName(),
+                        'profile-link' => $newuser->getLink()
                     ], 'trp');
                 }
 
