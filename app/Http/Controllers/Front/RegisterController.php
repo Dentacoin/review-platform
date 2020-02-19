@@ -476,6 +476,8 @@ class RegisterController extends FrontController
                 }
             }
 
+            $join_clinic_team = false;
+
             if(session('join_clinic') && session('invitation_id')) {
                 $approve_join = 0;
                 $inv_id = session('invitation_id');
@@ -503,6 +505,7 @@ class RegisterController extends FrontController
 
                     $newuser->status = 'added_by_clinic_approved';
                     $newuser->save();
+                    $join_clinic_team = true;
 
                     Auth::login($newuser);
 
@@ -583,7 +586,7 @@ class RegisterController extends FrontController
                 'id' => $newuser->id,
                 'short_description' => $newuser->short_description,
                 'is_clinic' => $newuser->is_clinic,
-                'join_clinic' => !empty(session('join_clinic')) ? true : false,
+                'join_clinic' => $join_clinic_team,
             ] );
 
         }
