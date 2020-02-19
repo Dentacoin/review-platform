@@ -229,6 +229,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function invites() {
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->orderBy('created_at', 'DESC');
     }
+    public function invites_team_unverified() {
+        return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->whereNotNull('for_team')->whereNull('invited_id')->orderBy('created_at', 'DESC');
+    }
     public function patients_invites() {
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->whereNull('for_team')->orderBy('created_at', 'DESC');
     }

@@ -1017,7 +1017,7 @@
 	    			{!! nl2br(trans('trp.page.user.team')) !!}
 	    		</h2>
 
-	    		<div class="team-container {!! count($item->teamApproved) > 3 ? 'with-arrows' : '' !!}">
+	    		<div class="team-container {!! count($item->teamApproved) + count($item->invites_team_unverified) > 3 ? 'with-arrows' : '' !!}">
 		    		<div class="flickity">
 		    			@if( (!empty($user) && $item->id==$user->id) )
 							<div class="slider-wrapper">
@@ -1076,34 +1076,32 @@
 							</a>
 						@endforeach
 
-						@if($item->invites->isNotEmpty())
-				        	@foreach( $item->invites as $invite)
-				        		@if(!$invite->invited_id && $invite->for_team)
-									<a class="slider-wrapper" href="javascript:;" invite-id="{{ $invite->id }}">
-										<div class="slider-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')">
-											@if( (!empty($user) && $item->id==$user->id) )
-												<div class="delete-invite delete-button" sure="{!! trans('trp.page.user.delete-sure', ['name' => $invite->invited_name ]) !!}">
-													<i class="fas fa-times"></i>
-												</div>
-											@endif
-										</div>
-									    <div class="slider-container">
-									    	<div class="not-verified">Not verified</div>
-									    	<h4>{{ $invite->invited_name }}</h4>
-										    <div class="ratings">
-												<div class="stars">
-													<div class="bar" style="width: 0%;">
-													</div>
-												</div>
-												<span class="rating">
-													(0 reviews)
-												</span>
+						@if($item->invites_team_unverified->isNotEmpty())
+				        	@foreach( $item->invites_team_unverified as $invite)
+								<a class="slider-wrapper" href="javascript:;" invite-id="{{ $invite->id }}">
+									<div class="slider-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')">
+										@if( (!empty($user) && $item->id==$user->id) )
+											<div class="delete-invite delete-button" sure="{!! trans('trp.page.user.delete-sure', ['name' => $invite->invited_name ]) !!}">
+												<i class="fas fa-times"></i>
 											</div>
-									    </div>
-								    	<div class="flickity-buttons clearfix">
-								    	</div>
-									</a>
-								@endif
+										@endif
+									</div>
+								    <div class="slider-container">
+								    	<div class="not-verified">Not verified</div>
+								    	<h4>{{ $invite->invited_name }}</h4>
+									    <div class="ratings">
+											<div class="stars">
+												<div class="bar" style="width: 0%;">
+												</div>
+											</div>
+											<span class="rating">
+												(0 reviews)
+											</span>
+										</div>
+								    </div>
+							    	<div class="flickity-buttons clearfix">
+							    	</div>
+								</a>
 							@endforeach
 						@endif
 					</div>
