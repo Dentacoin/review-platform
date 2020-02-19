@@ -168,7 +168,7 @@ class ProfileController extends FrontController
 
         return redirect(getLangUrl('/'));
 
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test') {
             return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
@@ -307,7 +307,7 @@ class ProfileController extends FrontController
     public function privacy($locale=null) {
         return redirect(getLangUrl('/'));
 
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test') {
             return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
@@ -395,7 +395,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     //
 
     public function invite($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test') {
             return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
@@ -1040,7 +1040,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         $id = Request::input('id');
 
         if (!empty($id)) {
-            if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
+            if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test') {
                 return redirect(getLangUrl('/'));
             }
 
@@ -1087,9 +1087,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     }
 
 
-    public function invite_new($locale=null) {
+    public function invite_team_member($locale=null) {
 
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test') {
             return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
         }
 
@@ -1139,9 +1139,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $this->user->email = Request::Input('email');
                 $this->user->save();
 
-                $this->user->sendTemplate( 1 , [
+                $this->user->sendGridTemplate( 92 , [
                     'clinic_name' => $dentist_name,
-                    'invitation_id' => $invitation->id
+                    "invitation_link" => getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']),
                 ], 'trp');
 
                 //Back to original
@@ -1163,7 +1163,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     //
 
     public function upload($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test') {
             return Response::json(['success' => false ]);
         }
         $this->handleMenu();
@@ -1198,7 +1198,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     
 
     public function info($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test') {
             return redirect(getLangUrl('/'));
         }
         $this->handleMenu();
@@ -1432,7 +1432,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
 
     public function change_password($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test') {
             return redirect(getLangUrl('/'));
         }
 
@@ -1465,7 +1465,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     //
 
     public function asks($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test') {
             return redirect(getLangUrl('/'));
         }
         if (!$this->user->is_dentist) {
@@ -1484,7 +1484,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         ]);
     }
     public function asks_accept($locale=null, $ask_id) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test') {
             return redirect(getLangUrl('/'));
         }
         if (!$this->user->is_dentist) {
@@ -1562,7 +1562,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         return redirect( getLangUrl('/').'?tab=asks');
     }
     public function asks_deny($locale=null, $ask_id) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test') {
             return redirect(getLangUrl('/'));
         }
         if (!$this->user->is_dentist) {
@@ -1663,7 +1663,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             return Response::json( $ret );
         }
         
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test') {
+        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test') {
             $ret['message'] = 'not-verified';
             return Response::json( $ret );
         }

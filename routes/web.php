@@ -318,7 +318,7 @@ $reviewRoutes = function () {
 				Route::post('profile/invite-copypaste-names', 	'ProfileController@invite_copypaste_names');
 				Route::post('profile/invite-copypaste-final', 	'ProfileController@invite_copypaste_final');
 				Route::post('profile/invite-file',			 	'ProfileController@invite_file');
-				Route::any('profile/invite-new', 				'ProfileController@invite_new');
+				Route::any('profile/invite-new', 				'ProfileController@invite_team_member');
 				Route::get('profile/asks', 						'ProfileController@asks');
 				Route::get('profile/asks/accept/{id}', 			'ProfileController@asks_accept');
 				Route::get('profile/asks/deny/{id}', 			'ProfileController@asks_deny');

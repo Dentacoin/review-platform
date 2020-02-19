@@ -66,6 +66,8 @@
                                                             <option value="pending" {{ $item->status == 'pending' ? 'selected="selected"' : ''}} >Suspicious</option>
                                                             <option value="rejected" {{ $item->status == 'rejected' ? 'selected="selected"' : ''}} >Rejected</option>
                                                             <option value="test" {{ $item->status == 'test' ? 'selected="selected"' : ''}} >Test</option>
+                                                            <option value="test" {{ $item->status == 'added_by_clinic_approved' ? 'selected="selected"' : ''}} >Added by Clinic Approved</option>
+
                                                         @endif
                                                     </select>
                                                 </div>

@@ -9,4 +9,5 @@ return [
     'added_approved' => 'success',
     'added_rejected' => 'danger',
     'admin_imported' => 'info',
+    'added_by_clinic_approved' => 'success',
 ];

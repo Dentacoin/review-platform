@@ -114,7 +114,12 @@ class RegisterController extends FrontController
             );
 
             foreach ($msg as $field => $errors) {
-                $ret['messages'][$field] = implode(', ', $errors);
+
+                if($field == 'mode') {
+                    $ret['messages']['mode'] = 'Please choose a type?';
+                } else {
+                    $ret['messages'][$field] = implode(', ', $errors);
+                }
             }
 
         } else {
@@ -491,33 +496,61 @@ class RegisterController extends FrontController
                 $newclinic->approved = 0;
                 $newclinic->save();
 
-                $clinic->sendTemplate(2, [
-                    'dentist-name' => $user->getName(),
-                    'profile-link' => $user->getLink()
-                ], 'trp');
+                $clinic = User::find(request('clinic_id'));
 
+                if(!empty($clinic)) {
+
+                    $clinic->sendTemplate(2, [
+                        'dentist-name' => $user->getName(),
+                        'profile-link' => $user->getLink()
+                    ], 'trp');
+                }
+
+
+                $newuser->status = 'added_by_clinic_approved';
+                $newuser->save();
+
+                $mtext = 'Clinic '.$clinic->getName().' added a new team member. Link to profile:
+                '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
+                '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
+
+                ';
+
+                Mail::raw($mtext, function ($message) use ($newuser, $clinic) {
+
+                    $sender = config('mail.from.address');
+                    $sender_name = config('mail.from.name');
+
+                    $message->from($sender, $sender_name);
+                    // $message->to( 'ali.hashem@dentacoin.com' );
+                    // $message->to( 'betina.bogdanova@dentacoin.com' );
+                    $message->to( 'gergana@youpluswe.com' );
+                    $message->replyTo($newuser->email, $newuser->getName());
+                    $message->subject('Clinic '.$clinic->getName().' added a new team member');
+                });
+
+            } else {
+
+                $mtext = 'New dentist/clinic registration:
+                '.$newuser->getName().'
+                IP: '.User::getRealIp().'
+                '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
+                '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
+
+                ';
+
+                Mail::raw($mtext, function ($message) use ($newuser) {
+
+                    $sender = config('mail.from.address');
+                    $sender_name = config('mail.from.name');
+
+                    $message->from($sender, $sender_name);
+                    $message->to( 'ali.hashem@dentacoin.com' );
+                    $message->to( 'betina.bogdanova@dentacoin.com' );
+                    $message->replyTo($newuser->email, $newuser->getName());
+                    $message->subject('New Dentist/Clinic registration');
+                });
             }
-
-
-            $mtext = 'New dentist/clinic registration:
-            '.$newuser->getName().'
-            IP: '.User::getRealIp().'
-            '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
-            '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
-
-            ';
-
-            Mail::raw($mtext, function ($message) use ($newuser) {
-
-                $sender = config('mail.from.address');
-                $sender_name = config('mail.from.name');
-
-                $message->from($sender, $sender_name);
-                $message->to( 'ali.hashem@dentacoin.com' );
-                $message->to( 'betina.bogdanova@dentacoin.com' );
-                $message->replyTo($newuser->email, $newuser->getName());
-                $message->subject('New Dentist/Clinic registration');
-            });
 
             $ul = new UserLogin;
             $ul->user_id = $newuser->id;
