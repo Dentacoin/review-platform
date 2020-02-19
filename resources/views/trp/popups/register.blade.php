@@ -177,7 +177,7 @@
 						</div>
 						<div class="sign-in-step {!! empty($regData) ? 'active' : '' !!}" id="step-1">
 							@include('front.errors')
-							<div class="modern-field alert-after">
+							<div class="modern-field alert-after" {!! session('join_clinic') && session('invited_by') ? 'style="margin-top: 20px;"' : '' !!}>
 								<input type="email" name="email" id="dentist-email" class="modern-input" value="{{ !empty($regData) && $regData['email'] ?? old('email') }}" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 								<label for="dentist-email">
 									<span>{!! nl2br(trans('trp.popup.popup-register.email')) !!}</span>
@@ -212,7 +212,7 @@
 										<span class="modern-radio">
 											<span></span>
 										</span>
-								    	<input class="type-radio" type="radio" name="mode" id="mode-dentist" value="dentist" {!! !empty($regData) && $regData['mode']=='dentist' ? 'checked="checked"' : '' !!}>
+								    	<input class="type-radio" type="radio" name="mode" id="mode-dentist" value="dentist" {!! (session('join_clinic') && session('invited_by')) || (!empty($regData) && $regData['mode']=='dentist') ? 'checked="checked"' : '' !!}>
 								    	{!! nl2br(trans('trp.popup.popup-register.mode.dentist')) !!}
 								  	</label>
 								  	<span>{!! nl2br(trans('trp.popup.popup-register.mode.dentist.description')) !!}</span>
