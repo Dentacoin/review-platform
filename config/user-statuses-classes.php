@@ -10,4 +10,6 @@ return [
     'added_rejected' => 'danger',
     'admin_imported' => 'info',
     'added_by_clinic_approved' => 'success',
+    'added_by_clinic_new' => 'info',
+    'dentist_no_email' => 'success',
 ];

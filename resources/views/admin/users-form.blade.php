@@ -66,8 +66,9 @@
                                                             <option value="pending" {{ $item->status == 'pending' ? 'selected="selected"' : ''}} >Suspicious</option>
                                                             <option value="rejected" {{ $item->status == 'rejected' ? 'selected="selected"' : ''}} >Rejected</option>
                                                             <option value="test" {{ $item->status == 'test' ? 'selected="selected"' : ''}} >Test</option>
-                                                            <option value="test" {{ $item->status == 'added_by_clinic_approved' ? 'selected="selected"' : ''}} >Added by Clinic Approved</option>
-
+                                                            <option value="added_by_clinic_approved" {{ $item->status == 'added_by_clinic_approved' ? 'selected="selected"' : ''}} >Added by Clinic Approved</option>
+                                                            <option value="added_by_clinic_new" {{ $item->status == 'added_by_clinic_new' ? 'selected="selected"' : ''}} >Added by Clinic New</option>
+                                                            <option value="dentist_no_email" {{ $item->status == 'dentist_no_email' ? 'selected="selected"' : ''}} >Dentist No Email</option>
                                                         @endif
                                                     </select>
                                                 </div>
