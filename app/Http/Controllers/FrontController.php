@@ -457,6 +457,25 @@ class FrontController extends BaseController
         //         ];
         //     }
         // }
+        
+
+        if (empty($this->user)) {
+            $params['hours'] = [];
+            for($i=0;$i<=23;$i++) {
+                $h = str_pad($i, 2, "0", STR_PAD_LEFT);
+                $params['hours'][$h] = $h;
+            }
+
+            $params['minutes'] = [
+                '00' => '00',
+                '10' => '10',
+                '20' => '20',
+                '30' => '30',
+                '40' => '40',
+                '50' => '50',
+            ];
+        }
+        
         if (!empty($statusCode)) {
             return response()->view('trp.'.$page, $params, $statusCode);
         } else {
@@ -709,6 +728,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2020-02-19-03';
+        $params['cache_version'] = '2020-02-26';
     }
 }

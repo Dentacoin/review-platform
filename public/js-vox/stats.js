@@ -793,7 +793,7 @@ $(document).ready(function(){
                         $(this).find('.total-f').show().find('b').html(data.totalf);
                         
                         if(data.question_type == 'multiple_choice' || data.answer_id) {
-                            drawGenderColumns(rows, rowsm, $(this).find('.second-chart')[0], options, data.totalf, data.totalm, scale_options_arr, data.answer_id, main_chart_data, data.multiple_top_answers);
+                            drawGenderColumns(rows, rowsm, $(this).find('.second-chart')[0], options, data.totalf, data.totalm, scale_options_arr, data.answer_id, main_chart_data, data.multiple_top_answers, data.vox_scale_id, data.question_type, );
                         } else {
                             drawChart(rows, $(this).find('.second-chart')[0], {
                                 pieHole: 0.6,
@@ -1197,7 +1197,7 @@ $(document).ready(function(){
 
         var arr_colors = chart_colors;
 
-        if (question_type == 'single_choice' && vox_scale_id) {
+        if ((question_type == 'single_choice' && vox_scale_id) || $(window).outerWidth() <= 768) {
             data.addRows(rows);
         } else {
 
@@ -1686,7 +1686,7 @@ $(document).ready(function(){
         // });
     }
 
-    var drawGenderColumns = function(rowsf, rowsm, container, more_options, totalfCount, totalmCount, scale_options_arr, a_id, mainChartRows, multiple_top_answers) {
+    var drawGenderColumns = function(rowsf, rowsm, container, more_options, totalfCount, totalmCount, scale_options_arr, a_id, mainChartRows, multiple_top_answers, vox_scale_id, question_type) {
         $(container).html('<div class="mobile-chart"></div>');
         container = $(container).find('.mobile-chart');
         container.addClass('multiple-gender-chart');
@@ -1842,7 +1842,7 @@ $(document).ready(function(){
         
         $(container).find('.custom-legend').removeClass('verticle-gender').hide();
         $(container).find('.custom-legend[answer-id="'+a_id+'"]').addClass('verticle-gender').show();
-        console.log($(container));
+        
         $(container).find('.custom-legend[answer-id="'+a_id+'"]').children().each( function() {
             if (question_type == 'multiple_choice' || ($(container).closest('.more-q-content').length) || $(window).width() <= 768) {
                 $(this).find('span').height($(this).find('span').outerWidth());
