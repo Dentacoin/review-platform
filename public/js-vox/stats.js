@@ -1768,7 +1768,6 @@ $(document).ready(function(){
                     }
                 }
             }
-
             for(var j=1; j<rowsf[i].length; j++) {
 
                 if($(window).outerWidth() > 768) {
@@ -1781,13 +1780,13 @@ $(document).ready(function(){
 
                 if( typeof(rowsf[0][j])!='object' ) {
                     $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').attr('votes', mainChartRows[i][j]);
-                    if(rowsf[i][j]){
+                    // if(rowsf[i][j]){
                         $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix"> <img src="'+window.location.origin+'/new-vox-img/women-icon.svg"><span style="width: '+parseInt(plf)+'%; opacity: 0.4; background-color: '+chart_colors[i]+';"></span> '+((rowsf[i][j]/ totalfCount)*100).toFixed(1)+'%</div>');
-                    }
+                    // }
 
-                    if(rowsm[i][j]) {
+                    // if(rowsm[i][j]) {
                         $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix"> <img src="'+window.location.origin+'/new-vox-img/man-icon.svg"><span style="width: '+parseInt(plm)+'%; opacity: 0.7; background-color: '+chart_colors[i]+';"></span> '+((rowsm[i][j]/ totalmCount)*100).toFixed(1)+'%</div>');
-                    }
+                    // }
                 }
             }
         }
