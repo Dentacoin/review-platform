@@ -174,7 +174,7 @@
 					Recommend
 				</a>
 			@endif
-			@if($item->status == 'added_approved' || $item->status == 'admin_imported')
+			@if($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed')
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
 			<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');">
@@ -201,7 +201,7 @@
 						{!! nl2br(trans('trp.page.user.edit-profile')) !!}
 					</a>
 				@endif
-				@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported'))
+				@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed'))
 					<a class="claim-button" href="javascript:;"  data-popup="claim-popup">
 						Is this your practice?
 					</a>
@@ -472,7 +472,7 @@
 			@endif
 
 
-			@if($item->status == 'added_approved' || $item->status == 'admin_imported')
+			@if($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed')
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
 
@@ -559,7 +559,7 @@
 					{!! nl2br(trans('trp.page.user.edit-profile')) !!}
 				</a>
 			@endif
-			@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported'))
+			@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed'))
 				<a class="claim-button" href="javascript:;" data-popup="claim-popup">
 					Is this your practice?
 				</a>
@@ -1012,12 +1012,12 @@
 			</div>
 
 
-		    @if($item->is_clinic && ( (!empty($user) && $item->id==$user->id) || $item->teamApproved->isNotEmpty() ) )
+		    @if($item->is_clinic && ( (!empty($user) && $item->id==$user->id) || $item->teamApproved->isNotEmpty() || $item->invites_team_unverified->isNotEmpty() ) )
 	    		<h2 class="black-left-line">
 	    			{!! nl2br(trans('trp.page.user.team')) !!}
 	    		</h2>
 
-	    		<div class="team-container {!! count($item->teamApproved) + count($item->invites_team_unverified) > 3 ? 'with-arrows' : '' !!}">
+	    		<div class="team-container {!! count($item->teamApproved) + count($item->invites_team_unverified) > (!empty($user) && $item->id==$user->id ? 3 : 4) ? 'with-arrows' : '' !!}">
 		    		<div class="flickity">
 		    			@if( (!empty($user) && $item->id==$user->id) )
 							<div class="slider-wrapper">
@@ -1032,7 +1032,7 @@
 							</div>
 						@endif
 			        	@foreach( !empty($user) && $item->id==$user->id ? $item->team : $item->teamApproved as $team)
-							<a class="slider-wrapper{!! $team->approved ? '' : ' pending' !!}" href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
+							<a class="slider-wrapper {!! $team->approved ? '' : 'pending' !!} {!! $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'no-upper' : '' !!}" href="{{ $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'javascript:;' : $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
 								<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 									@if( $team->clinicTeam->is_partner )
 										<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic }}"/>
@@ -1065,20 +1065,22 @@
 								    	</div>
 							    	@endif
 							    </div>
-						    	<div class="flickity-buttons clearfix">
-						    		<div>
-						    			{!! nl2br(trans('trp.common.see-profile')) !!}
-						    		</div>
-						    		<div href="{{ $team->clinicTeam->getLink() }}?popup-loged=submit-review-popup">
-						    			{!! nl2br(trans('trp.common.submit-review')) !!}
-						    		</div>
-						    	</div>
+							    @if($team->clinicTeam->status != 'dentist_no_email' && $team->clinicTeam->status != 'added_new')
+							    	<div class="flickity-buttons clearfix">
+							    		<div>
+							    			{!! nl2br(trans('trp.common.see-profile')) !!}
+							    		</div>
+							    		<div href="{{ $team->clinicTeam->getLink() }}?popup-loged=submit-review-popup">
+							    			{!! nl2br(trans('trp.common.submit-review')) !!}
+							    		</div>
+							    	</div>
+							    @endif
 							</a>
 						@endforeach
 
 						@if($item->invites_team_unverified->isNotEmpty())
 				        	@foreach( $item->invites_team_unverified as $invite)
-								<a class="slider-wrapper" href="javascript:;" invite-id="{{ $invite->id }}">
+								<a class="slider-wrapper no-upper" href="javascript:;" invite-id="{{ $invite->id }}">
 									<div class="slider-image" style="background-image: url('{{ $invite->getImageUrl(true) }}')">
 										@if( (!empty($user) && $item->id==$user->id) )
 											<div class="delete-invite delete-button" sure="{!! trans('trp.page.user.delete-sure', ['name' => $invite->invited_name ]) !!}">
@@ -1087,17 +1089,23 @@
 										@endif
 									</div>
 								    <div class="slider-container">
-								    	<div class="not-verified">Not verified</div>
+								    	@if(empty($invite->job))
+								    		<div class="not-verified">Not verified</div>
+								    	@endif
 								    	<h4>{{ $invite->invited_name }}</h4>
-									    <div class="ratings">
-											<div class="stars">
-												<div class="bar" style="width: 0%;">
+								    	@if(empty($invite->job))
+										    <div class="ratings">
+												<div class="stars">
+													<div class="bar" style="width: 0%;">
+													</div>
 												</div>
+												<span class="rating">
+													(0 reviews)
+												</span>
 											</div>
-											<span class="rating">
-												(0 reviews)
-											</span>
-										</div>
+										@else
+											<p style="margin-top: 18px;color: #0fb0e5;">{!! config('trp.team_jobs')[$invite->job] !!}</p>
+										@endif
 								    </div>
 							    	<div class="flickity-buttons clearfix">
 							    	</div>

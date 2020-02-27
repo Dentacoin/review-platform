@@ -97,6 +97,14 @@ return [
 			4 => 'No'
 		],
 	],
+	'team_jobs' => [
+		'practice_manager' => 'Practice Manager',
+		'dentist' => 'Dentist',
+		'dental_hygienist' => 'Dental Hygienist',
+		'dental_assistant' => 'Dental Assistant',
+		'marketing_specialist' => 'Marketing Specialist',
+		'other' => 'Other',
+	],
 ];
 
 ?>

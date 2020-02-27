@@ -169,7 +169,7 @@ $(document).ready(function(){
         
         $.post(
             $(this).attr('action'), 
-            $(this).serialize() , 
+            $(this).serialize(),
             (function( data ) {
                 if (data.hash) {
                     $('input[name="last_user_hash"]').val(data.hash);
@@ -177,15 +177,25 @@ $(document).ready(function(){
                 if (data.id) {
                     $('input[name="last_user_id"]').val(data.id);
                 }
-                               
-                if (data.short_description && $('.verification-form').length) {
+
+                if (data.description && $('.verification-form').length) {
                     $('.verification-form').hide();
                 }
-                
-                if (data.is_clinic && $('.invite-clinic-form').length) {
-                    $('.invite-clinic-form').hide();
-                } else if($('.invite-dentist-form').length) {
-                    $('.invite-dentist-form').hide();
+                if (data.work_hours || data.is_clinic) {
+                    $('.wh-btn').hide();
+                }
+
+                if(data.description && data.work_hours) {
+                    $('.verification-info').hide();
+                }
+
+                if (data.is_clinic) {
+                    $('#title-clinic').show();
+                    $('#title-dentist').hide();
+                } else {
+                    $('#title-clinic').hide();
+                    $('#title-dentist').show();
+                    $('#clinic-add-team').remove();
                 }
 
                 if(data.popup) {
@@ -473,14 +483,14 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(ret) {
                 if (ret.success) {
-                    $('.popup .alert-success').html(ret.message).show();
+                    $('.popup .alert-success-d').html(ret.message).show();
 
                     gtag('event', 'Invite', {
                         'event_category': 'DentistRegistration',
                         'event_label': 'ClinicTeam',
                     });
                 } else {
-                    $('.popup .alert-warning').html(ret.message).show();
+                    $('.popup .alert-warning-d').html(ret.message).show();
                 }
             }
         });
@@ -533,6 +543,10 @@ $(document).ready(function(){
 
     } );
 
+    $('.wh-btn').click( function() {
+        showPopup('popup-wokring-time-waiting');
+    });
+
     $('.verification-form').submit( function(e) {
 
         e.preventDefault();
@@ -545,20 +559,31 @@ $(document).ready(function(){
         }
         ajax_is_running = true;
 
+        var that = $(this);
 
         $.ajax({
             type: "POST",
             url: $(this).attr('action'),
             data: {
-                short_description: $('[name="short_description"]').val(),
+                description: that.find('[name="description"]').val(),
                 user_id: $('input[name="last_user_id"]').val(),
                 user_hash: $('input[name="last_user_hash"]').val(),
-                _token: $(this).find('input[name="_token"]').val(),
+                _token: that.find('input[name="_token"]').val(),
             },
             dataType: 'json',
             success: (function(ret) {
                 if (ret.success) {
-                    $(this).hide();
+
+                    if (ret.user == 'dentist') {
+                        if($('.wh-btn:visible').length) {
+                            that.hide();
+                        } else {
+                            $('.verification-info').hide()
+                        }
+                    } else {
+                        $('.verification-form').hide();
+                    }
+                    
                     $('.popup .alert-success').html(ret.message).show();
 
                     if (ret.user == 'dentist') {
@@ -573,9 +598,8 @@ $(document).ready(function(){
                         });
                     }
                 } else {
-                    $('.popup .alert-warning:not(.short-descr-error)').html('').show();
+                    $('.popup .descr-error').show();
                     for(var i in ret.messages) {
-                        $('.popup .alert-warning:not(.short-descr-error)').append(ret.messages[i] + '<br/>');
                         $('[name="'+i+'"]').addClass('has-error');
                     }
                 }
@@ -584,6 +608,14 @@ $(document).ready(function(){
         });
 
     } );
+
+    $('#team-job').change( function() {
+        if ($(this).val() == 'dentist') {
+            $('.mail-col').show();
+        } else {
+            $('.mail-col').hide();
+        }
+    });
 
 
     $('input[name="mode"]').change( function() {
@@ -692,15 +724,22 @@ $(document).ready(function(){
                         }
                         if (data.id) {
                             $('input[name="last_user_id"]').val(data.id);
-                        }                     
-                        if (data.short_description && $('.verification-form').length) {
-                            $('.verification-form').hide();
                         }
-                        if (data.is_clinic && $('.invite-clinic-form').length) {
-                            $('.invite-clinic-form').hide();
-                        } else if($('.invite-dentist-form').length) {
-                            $('.invite-dentist-form').hide();
+
+                        if (data.is_clinic) {
+                            $('.wh-btn').hide();
                         }
+
+                        if (data.is_clinic) {
+                            $('#title-clinic').show();
+                            $('#title-dentist').hide();
+                        } else {
+                            $('#title-clinic').hide();
+                            $('#title-dentist').show();
+                            $('#clinic-add-team').remove();
+                        }
+
+                        $('.image-label').css('background-image', 'none');
                     }
 
 

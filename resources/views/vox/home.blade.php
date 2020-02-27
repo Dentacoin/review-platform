@@ -183,7 +183,7 @@
 										<div class="survey-time flex">
 											<div class="col">
 												<img src="{{ url('new-vox-img/coin-icon.png') }}">
-												<p>Max {{ $vox->getRewardTotal() }} DCN</p>
+												<p>{{ !empty($vox->complex) ? 'Max' : '' }} {{ $vox->getRewardTotal() }} DCN</p>
 											</div>
 											<div class="col">
 												<img src="{{ url('new-vox-img/clock-icon.svg') }}">

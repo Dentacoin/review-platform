@@ -1018,14 +1018,14 @@ body.blur .site-content {
     @media screen and (max-width: 768px) {
       .flickity .slider-wrapper {
         width: 66%; } }
-    .flickity .slider-wrapper:hover:not(.pending) .flickity-buttons {
-      display: block; }
-    .flickity .slider-wrapper:hover:not(.pending) .slider-container {
+    .flickity .slider-wrapper:hover:not(.pending):not(.no-upper) .slider-container {
       transition: all 0.3s ease;
       transform: translateY(-41px); }
       @media screen and (max-width: 998px) {
-        .flickity .slider-wrapper:hover:not(.pending) .slider-container {
+        .flickity .slider-wrapper:hover:not(.pending):not(.no-upper) .slider-container {
           margin-top: 0px; } }
+    .flickity .slider-wrapper:hover:not(.pending) .flickity-buttons {
+      display: block; }
     .flickity .slider-wrapper .slider-container {
       z-index: 2;
       width: 100%;
@@ -1935,6 +1935,25 @@ textarea.input {
         .verification-popup.fixed-popup .popup-inner .verification-content h4 {
           font-size: 16px;
           margin-bottom: 25px; } }
+  .verification-popup.fixed-popup .popup-inner #clinic-add-team .popup-title {
+    margin-right: -125px;
+    margin-left: -125px; }
+    @media screen and (max-width: 998px) {
+      .verification-popup.fixed-popup .popup-inner #clinic-add-team .popup-title {
+        margin-right: -80px;
+        margin-left: -80px; } }
+  .verification-popup.fixed-popup .popup-inner #clinic-add-team form {
+    margin-bottom: 30px; }
+    .verification-popup.fixed-popup .popup-inner #clinic-add-team form .flex {
+      margin: 0px -10px; }
+    .verification-popup.fixed-popup .popup-inner #clinic-add-team form .col {
+      margin: 0px 10px; }
+  .verification-popup.fixed-popup .popup-inner .info {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center; }
+    .verification-popup.fixed-popup .popup-inner .info img {
+      margin-right: 5px; }
   .verification-popup.fixed-popup .popup-inner .verification-info {
     border-top: 1px solid black;
     padding: 30px 65px 0px; }
@@ -3244,11 +3263,11 @@ textarea.input {
     margin-top: 40px;
     margin-bottom: 30px;
     position: relative; }
-    .fixed-popup .popup-inner .search-dentist input {
+    .fixed-popup .popup-inner .search-dentist:not(.iconn) input {
       width: 100%;
       height: 40px;
       padding-left: 45px; }
-    .fixed-popup .popup-inner .search-dentist i {
+    .fixed-popup .popup-inner .search-dentist:not(.iconn) i {
       position: absolute;
       top: 10px;
       left: 20px;
@@ -4518,10 +4537,10 @@ textarea.input {
   .modern-radios.has-error .radio-label label {
     border-color: #ffd7d7; }
 
-#popup-wokring-time .popup-inner .day-wrapper {
+.popup-wokring-time .popup-inner .day-wrapper {
   margin-bottom: 50px;
   text-align: center; }
-  #popup-wokring-time .popup-inner .day-wrapper .all-days-equal {
+  .popup-wokring-time .popup-inner .day-wrapper .all-days-equal {
     color: #126585;
     font-weight: bold;
     padding: 10px;
@@ -4529,24 +4548,24 @@ textarea.input {
     border: 1px solid #126585;
     border-radius: 5px;
     transition: all 0.3s ease; }
-    #popup-wokring-time .popup-inner .day-wrapper .all-days-equal:hover {
+    .popup-wokring-time .popup-inner .day-wrapper .all-days-equal:hover {
       transition: all 0.3s ease;
       background-color: #126585;
       color: white; }
-#popup-wokring-time .popup-inner .popup-desc {
+.popup-wokring-time .popup-inner .popup-desc {
   display: flex;
   justify-content: center;
   align-items: baseline;
   margin-top: -15px;
   margin-bottom: 20px; }
-  #popup-wokring-time .popup-inner .popup-desc label {
+  .popup-wokring-time .popup-inner .popup-desc label {
     margin-right: 5px; }
-  #popup-wokring-time .popup-inner .popup-desc select {
+  .popup-wokring-time .popup-inner .popup-desc select {
     width: 65px;
     padding-left: 5px;
     padding-right: 5px;
     margin: 0px 5px; }
-  #popup-wokring-time .popup-inner .popup-desc .separator {
+  .popup-wokring-time .popup-inner .popup-desc .separator {
     background: #333333;
     width: 36px;
     height: 2px;
@@ -7057,3 +7076,20 @@ body.strength-pb {
       .header-success-tab h4 {
         font-size: 16px;
         margin-bottom: 25px; } }
+
+.existing-dentists .dentist-exists {
+  display: flex;
+  margin-bottom: 20px;
+  align-items: center;
+  margin-right: 20px; }
+  .existing-dentists .dentist-exists .ex-dentist-avatar {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: 50% 50%; }
+  .existing-dentists .dentist-exists .ex-d-info {
+    margin-left: 20px; }
+  .existing-dentists .dentist-exists .ex-d-btns {
+    flex: 1;
+    text-align: right; }

@@ -186,8 +186,8 @@ class VoxController extends FrontController
 			return redirect( getLangUrl('/') );
 		}
 
-		if(empty($vox) || ($this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test' && $this->user->status!='added_by_clinic_new') ) {
-			if($this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_approved' && $this->user->status!='test' && $this->user->status!='added_by_clinic_new') {
+		if(empty($vox) || ($this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') ) {
+			if($this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') {
             	Request::session()->flash('error-message', 'We\'re currently verifying your profile. Meanwhile you won\'t be able to take surveys or edit your profile. Please be patient, we\'ll send you an email once the procedure is completed.');
 			}
 			return redirect( getLangUrl('page-not-found') );

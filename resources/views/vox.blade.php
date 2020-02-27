@@ -131,7 +131,7 @@
 							@endif
 						</div>
 						<div class="header-right tar flex">
-							@if( !empty($user) && $user->status!='approved' && $user->status!='test' )
+							@if( !empty($user) && $user->status!='approved' && $user->status!='test' && $user->status!='added_by_clinic_claimed' )
 							@elseif($user)
 								<div class="user-and-price header-a">
 									@if( $user->platform=='external' )

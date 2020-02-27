@@ -617,63 +617,65 @@ $(document).ready(function(){
 
     //Invites
 
-    if( $('.invite-patient-form').length ) {
 
-        $('.invite-patient-form').submit( function(e) {
-            e.preventDefault();
+    $('.invite-patient-form').submit( function(e) {
+        e.preventDefault();
 
-            if(ajax_is_running) {
-                return;
-            }
+        if(ajax_is_running) {
+            return;
+        }
 
-            ajax_is_running = true;
+        ajax_is_running = true;
 
-            $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
+        $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
 
 
-            var formData = new FormData();
+        var formData = new FormData();
 
-            // add assoc key values, this will be posts values
-            formData.append("_token", $(this).find('input[name="_token"]').val());
-            if ($(this).find('input[name="image"]').length) {
-                var this_file = $(this).find('input[name="image"]')[0].files[0];
+        // add assoc key values, this will be posts values
+        formData.append("_token", $(this).find('input[name="_token"]').val());
+        if ($(this).find('input[name="image"]').length) {
+            var this_file = $(this).find('input[name="image"]')[0].files[0];
+            if (this_file) {
                 formData.append("image", this_file, this_file.name);
             }
             
-            formData.append("name", $(this).find('.invite-name').val());
-            formData.append("email", $(this).find('.invite-email').val());
+        }
+        
+        formData.append("name", $(this).find('.invite-name').val());
+        formData.append("email", $(this).find('.invite-email').val());
 
 
-            $.ajax({
-                type: "POST",
-                url: $(this).attr('action'),
-                success: function (data) {
-                    if(data.success) {
-                        $('.invite-patient-form').find('.invite-email').val('');
-                        $('.invite-patient-form').find('.invite-name').val('').focus();
-                        $('.invite-patient-form').find('.invite-alert').show().addClass('alert-success').html(data.message);
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            success: function (data) {
+                if(data.success) {
+                    $('.invite-patient-form').find('.invite-email').val('');
+                    $('.invite-patient-form').find('.invite-name').val('').focus();
+                    $('.invite-patient-form').find('.invite-alert').show().addClass('alert-success').html(data.message);
 
-                        gtag('event', 'AddManually', {
-                            'event_category': 'ReviewInvites',
-                            'event_label': 'InvitesSent',
-                        });
-                    } else {
-                        $('.invite-patient-form').find('.invite-alert').show().addClass('alert-warning').html(data.message);                    
-                    }
-                    ajax_is_running = false;
-                },
-                error: function (error) {
-                    console.log('error');
-                },
-                async: true,
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                timeout: 60000
-            });
-        } );
-    }
+                    gtag('event', 'AddManually', {
+                        'event_category': 'ReviewInvites',
+                        'event_label': 'InvitesSent',
+                    });
+                } else {
+                    $('.invite-patient-form').find('.invite-alert').show().addClass('alert-warning').html(data.message);                    
+                }
+                ajax_is_running = false;
+            },
+            error: function (error) {
+                console.log('error');
+            },
+            async: true,
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            timeout: 60000
+        });
+    } );
+
 
     if( $('#invite-no-address').length ) {
 
@@ -1208,36 +1210,6 @@ $(document).ready(function(){
     } );
 
     //Work hours
-    $('.work-hour-cb').change( function() {
-        var active = $(this).is(':checked');
-        var texts = $(this).closest('.popup-desc').find('select');
-        if(active) {
-            texts.prop("disabled", false);
-        } else {
-            texts.attr('disabled', 'disabled');
-        }
-
-        if ($(this).attr('name') == 'day-1') {
-            if ($(this).is(':checked')) {
-                $('.all-days-equal').show();
-            } else {
-                $('.all-days-equal').hide();
-            }
-        }
-    } );
-
-    $('.all-days-equal').click( function() {
-        for (var i = 2; i<6; i++) {
-            if (!$('#day-'+i).is(':checked')) {
-                $('#day-'+i).click();
-            }
-            $('[name="work_hours['+i+'][0][0]"]').val($('[name="work_hours[1][0][0]"]').val());
-            $('[name="work_hours['+i+'][0][1]"]').val($('[name="work_hours[1][0][1]"]').val());
-            $('[name="work_hours['+i+'][1][0]"]').val($('[name="work_hours[1][1][0]"]').val());
-            $('[name="work_hours['+i+'][1][1]"]').val($('[name="work_hours[1][1][1]"]').val());
-        }
-        
-    });
 
     $('#popup-wokring-time form').off('submit').submit( function(e) {
         e.preventDefault();

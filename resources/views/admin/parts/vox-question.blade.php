@@ -151,7 +151,13 @@
                                                 <div class="input-group clearfix">
                                                     <div class="template-box clearfix">
                                                         <select name="triggers[]" class="form-control select2" style="width: 50%; float: left;">
-                                                            <option value="">Select question</option>
+                                                            <!-- <option value="">Select question</option>                                                            
+                                                            <optgroup label="Demographic questions">
+                                                                @foreach(config('vox.details_fields') as $kdf => $dq)
+                                                                    <option value="{{ $kdf }}" {{ !empty($question) && explode(':', $trigger)[0] == $kdf ? 'selected="selected"' : '' }}>{{ $dq['label'] }}</option>
+                                                                @endforeach
+                                                                <option value="age_groups" {{ !empty($question) && explode(':', $trigger)[0] == 'age_groups' ? 'selected="selected"' : '' }}>Age Group</option>
+                                                            </optgroup> -->
                                                             <optgroup label="Welcome survey questions">
                                                                 @foreach(App\Models\Vox::find(11)->questions as $wq)
                                                                     <option value="{{ $wq->id }}" {{ !empty($question) && explode(':', $trigger)[0] == $wq->id ? 'selected="selected"' : '' }}>{{ $wq->question }}</option>

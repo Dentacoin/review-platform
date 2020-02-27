@@ -37,19 +37,22 @@
 					</label>
 				</div>
 
-				<div class="modern-field alert-after">
-					<input type="text" name="job" id="claim-job" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
-					<label for="claim-job">
-						<span>{!! nl2br(trans('trp.popup.popup-claim-profile.job')) !!}</span>
-					</label>
-				</div>
+				@if(empty(request()->input('without-info')))
+				
+					<div class="modern-field alert-after">
+						<input type="text" name="job" id="claim-job" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+						<label for="claim-job">
+							<span>{!! nl2br(trans('trp.popup.popup-claim-profile.job')) !!}</span>
+						</label>
+					</div>
 
-				<div class="modern-field alert-after">
-					<textarea class="modern-input" id="claim-explain-related" name="explain-related"></textarea>
-					<label for="claim-explain-related">
-						<span>{!! nl2br(trans('trp.popup.popup-claim-profile.explain-related')) !!}</span>
-					</label>
-				</div>
+					<div class="modern-field alert-after">
+						<textarea class="modern-input" id="claim-explain-related" name="explain-related"></textarea>
+						<label for="claim-explain-related">
+							<span>{!! nl2br(trans('trp.popup.popup-claim-profile.explain-related')) !!}</span>
+						</label>
+					</div>
+				@endif
 
 				<div class="modern-field alert-after">
 					<input type="password" name="password" id="claim-password" class="modern-input" autocomplete="off">
@@ -65,6 +68,15 @@
 						<span>{!! nl2br(trans('trp.popup.popup-claim-profile.repeat-password')) !!}</span>
 					</label>
 				</div>
+
+				<label class="checkbox-label agree-label" for="claim-agree" style="text-align: left; margin-bottom: 30px; margin-top: -20px;">
+					<input type="checkbox" class="special-checkbox" id="claim-agree" name="agree" value="1">
+					<i class="far fa-square"></i>
+					{!! trans('trp.popup.popup-lead-magnet.privacy', [
+						'link' => '<a class="read-privacy" href="https://dentacoin.com/privacy-policy/" target="_blank">',
+						'endlink' => '</a>',
+					]) !!}
+				</label>
 
 				<div class="tac">
 					<input type="submit" value="{!! nl2br(trans('trp.popup.popup-claim-profile.submit')) !!}" class="button"/>

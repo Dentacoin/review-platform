@@ -21,19 +21,22 @@ class CitiesController extends BaseController
 		$users = User::where('is_dentist', true)->where(function($query) use ($username) {
 			$query->where('name', 'LIKE', '%'.$username.'%')
 			->orWhere('name_alternative', 'LIKE', '%'.$username.'%');
-		})->whereIn('status', ['approved','added_approved','admin_imported'])->take(10)->get();
+		})->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed', 'dentist_no_email'])
+		->whereNull('self_deleted')->take(10)->get();
 		$user_list = [];
 		foreach ($users as $user) {
 			$user_list[] = [
 				'name' => $user->getName().( $user->name_alternative && mb_strtolower($user->name)!=mb_strtolower($user->name_alternative) ? ' / '.$user->name_alternative : '' ) ,
-				'link' => $user->getLink(),
+				'link' => $user->status=='dentist_no_email' ? User::find($user->invited_by)->getLink() : (!empty($user->slug) ? $user->getLink() : ''),
 				'type' => $user->is_clinic ? trans('front.common.clinic') : trans('front.common.dentist'),
 				'is_clinic' => $user->is_clinic,
 				'rating' => $user->avg_rating,
 				'reviews' => $user->ratings,
-				'location' => $user->city_name.', '.$user->country->name,
+				'location' => !empty($user->country) ? $user->city_name.', '.$user->country->name : '',
 				'lat' => $user->lat,
 				'lon' => $user->lon,
+				'status' => $user->status,
+				'team_clinic_name' => $user->status=='dentist_no_email' ? User::find($user->invited_by)->getName() : '',
 			];
 		}
 
@@ -46,7 +49,8 @@ class CitiesController extends BaseController
 		$users = User::where('is_dentist', true)->where(function($query) use ($username) {
 			$query->where('name', 'LIKE', '%'.$username.'%')
 			->orWhere('name_alternative', 'LIKE', '%'.$username.'%');
-		})->whereIn('status', ['approved','added_approved','admin_imported'])->take(10)->get();
+		})->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed', 'dentist_no_email'])
+		->whereNull('self_deleted')->take(10)->get();
 		$user_list = [];
 		foreach ($users as $user) {
 			$user_list[] = [
@@ -184,7 +188,8 @@ class CitiesController extends BaseController
 	            $query->where('dentist_id', $id);
 	        });
 		}
-		$clinics = $clinics->where('name', 'LIKE', $joinclinic.'%')->take(10)->get();
+		$clinics = $clinics->where('name', 'LIKE', $joinclinic.'%')->whereIn('status', ['approved','added_approved','admin_imported'])
+		->whereNull('self_deleted')->take(10)->get();
 
 		$clinic_list = [];
 		foreach ($clinics as $clinic) {
@@ -212,7 +217,8 @@ class CitiesController extends BaseController
 	        });
 		}
 
-        $dentists = $dentists->where('name', 'LIKE', $invitedentist.'%')->take(10)->get();
+        $dentists = $dentists->where('name', 'LIKE', $invitedentist.'%')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed'])
+		->whereNull('self_deleted')->take(10)->get();
 
 		$dentist_list = [];
 		foreach ($dentists as $dentist) {

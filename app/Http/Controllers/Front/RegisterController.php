@@ -503,7 +503,7 @@ class RegisterController extends FrontController
                     }
 
 
-                    $newuser->status = 'added_by_clinic_approved';
+                    $newuser->status = 'added_by_clinic_claimed';
                     $newuser->slug = $newuser->makeSlug();
                     $newuser->save();
 
@@ -586,7 +586,8 @@ class RegisterController extends FrontController
                 'popup' => 'verification-popup',
                 'hash' => $newuser->get_token(),
                 'id' => $newuser->id,
-                'short_description' => $newuser->short_description,
+                'work_hours' => null,
+                'description' => null,
                 'is_clinic' => $newuser->is_clinic,
                 'join_clinic' => $join_clinic_team,
             ] );
@@ -647,13 +648,14 @@ class RegisterController extends FrontController
                         $newdentist = new UserTeam;
                         $newdentist->dentist_id = $dentist->id;
                         $newdentist->user_id = $user->id;
-                        $newdentist->approved = 1;
+                        $newdentist->approved = 0;
+                        $newdentist->new_clinic = 1;
                         $newdentist->save();
 
-                        $dentist->sendTemplate(33, [
-                            'clinic-name' => $user->getName(),
-                            'clinic-link' => $user->getLink()
-                        ], 'trp');
+                        // $dentist->sendTemplate(33, [
+                        //     'clinic-name' => $user->getName(),
+                        //     'clinic-link' => $user->getLink()
+                        // ], 'trp');
                     }
 
                     return Response::json( [
@@ -739,7 +741,7 @@ class RegisterController extends FrontController
             $user = User::find(request('user_id'));
 
             $validator = Validator::make(Request::all(), [
-                'short_description' => array('required', 'max:150'),
+                'description' => array('required', 'max:512'),
             ]);
 
             if ($validator->fails()) {
@@ -757,7 +759,7 @@ class RegisterController extends FrontController
                 return Response::json( $ret );
             } else {
 
-                $user->short_description = Request::Input('short_description');
+                $user->description = Request::Input('description');
                 $user->save();
 
                 return Response::json( [
@@ -772,8 +774,43 @@ class RegisterController extends FrontController
             'success' => false,
             'message' => trans('trp.popup.verification-popup.user-info.error'),
         ] );
-
     }
+
+    public function add_work_hours($locale=null) {
+
+        if (request('last_user_id')) {
+
+            $user = User::find(request('last_user_id'));
+
+            $wh = Request::input('work_hours');
+            foreach ($wh as $k => $v) {
+                if( empty($wh[$k][0][0]) || empty($wh[$k][0][1]) || empty($wh[$k][1][0]) || empty($wh[$k][1][1]) ) { 
+                    unset($wh[$k]);
+                    continue;
+                }
+
+                if( !empty($wh[$k][0]) ) {
+                    $wh[$k][0] = implode(':', $wh[$k][0]);
+                }
+                if( !empty($wh[$k][1]) ) {
+                    $wh[$k][1] = implode(':', $wh[$k][1]);
+                }
+            }
+
+            $user->work_hours = $wh;
+            $user->save();
+
+            return Response::json( [
+                'success' => true,
+            ] );
+        }
+
+        return Response::json( [
+            'success' => false,
+            'message' => 'Something went wrong. Please try again later.',
+        ] );
+
+    }    
 
     public function forgot($locale=null) {
 

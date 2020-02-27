@@ -240,9 +240,11 @@ jQuery(document).ready(function($){
 					$('.search-form .results .dentists-results').show();
 					$('.search-form .results .dentists-results .list').html('');
 					for(var i in data) {
+						var u_name = data[i].status == 'dentist_no_email' ? 'We found dentist with this name at '+data[i].team_clinic_name+' clinic' : data[i].name+' - '+data[i].location;
+
 						$('.search-form .results .dentists-results .list').append('\
 							<a class="clearfix" href="'+data[i].link+'">\
-								'+data[i].name+' - '+data[i].location+'\
+								'+u_name+'\
 								<div class="ratings">\
 									<div class="stars">\
 										<div class="bar" style="width: '+(data[i].rating ? parseFloat(data[i].rating)/5*100 : 0)+'%;">\

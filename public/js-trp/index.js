@@ -41,7 +41,6 @@ jQuery(document).ready(function($){
 
 
 	$('.button-want-to-add-dentist').click( function() {
-		console.log('vvv');
 		$.ajax({
             type: "GET",
             url: lang + '/want-to-invite-dentist',

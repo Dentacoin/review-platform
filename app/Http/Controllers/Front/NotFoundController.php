@@ -25,7 +25,7 @@ class NotFoundController extends FrontController
 			return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
 		}
 
-		$featured = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_approved'])->orderBy('avg_rating', 'DESC');
+		$featured = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed'])->orderBy('avg_rating', 'DESC');
 		$homeDentists = collect();
 
 		if( !empty($this->user) ) {

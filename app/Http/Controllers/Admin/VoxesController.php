@@ -204,6 +204,28 @@ class VoxesController extends AdminController
             }
 
 
+            $q_triggers_arr = [];
+            $q_trigger_obj = [];
+
+            if ($item->questions->isNotEmpty()) {
+                
+                foreach ($item->questions as $iq) {
+                    if (!empty($iq->question_trigger) && $iq->question_trigger != '-1') {
+                        $trgs = explode(';', $iq->question_trigger);
+
+                        foreach ($trgs as $trg) {
+                            $q_triggers_arr[] = explode(':', $trg)[0];
+                        }
+                    }
+                }
+            }
+
+            if (!empty($q_triggers_arr)) {
+                
+                foreach ($q_triggers_arr as $q_trigger) {
+                    $q_trigger_obj[] = VoxQuestion::find($q_trigger);
+                }
+            }
 
             return $this->showView('voxes-form', array(
                 'types' => $this->types,
@@ -218,6 +240,7 @@ class VoxesController extends AdminController
                 'trigger_question_id' => $trigger_question_id,
                 'trigger_valid_answers' => $trigger_valid_answers,
                 'all_voxes' => Vox::orderBy('sort_order', 'ASC')->get(),
+                'q_trigger_obj' => $q_trigger_obj,
             ));
         } else {
             return redirect('cms/'.$this->current_page);
@@ -636,9 +659,6 @@ class VoxesController extends AdminController
              
             $resp = json_decode(curl_exec($curl));
             curl_close($curl);
-
-            $item->last_count_at = null;
-            $item->save();
         }
 
         $item->type = $this->request->input('type');
@@ -660,6 +680,7 @@ class VoxesController extends AdminController
         $item->countries_ids = $this->request->input('countries_ids');
         $item->country_percentage = $this->request->input('country_percentage');
         $item->dentists_patients = $this->request->input('dentists_patients');
+        $item->last_count_at = null;
 
         $item->save();
 

@@ -202,7 +202,11 @@ class UsersController extends AdminController
             'dentist.added_approved' => 'Dentists (Added Approved)',
             'dentist.added_rejected' => 'Dentists (Added Rejected)',
             'dentist.admin_imported' => 'Dentists (Admin Imported)', 
-            'dentist.added_by_clinic_approved' => 'Dentists (Added by Clinic Approved)', 
+            'dentist.added_by_clinic_new' => 'Dentists (Added by Clinic New)', 
+            'dentist.added_by_clinic_claimed' => 'Dentists (Added by Clinic Claimed)', 
+            'dentist.added_by_clinic_unclaimed' => 'Dentists (Added by Clinic Unclaimed)', 
+            'dentist.added_by_clinic_rejected' => 'Dentists (Added by Clinic Rejected)', 
+            'dentist.dentist_no_email' => 'Dentists (No Email For Team)', 
             'clinic.all' => 'Clinics (All)',
             'clinic.new' => 'Clinics (New)',
             'clinic.pending' => 'Clinics (Suspicious)',
@@ -339,6 +343,8 @@ class UsersController extends AdminController
             if( $status=='self_deleted' ) {
                 $users = $users->whereNotNull('self_deleted')->withTrashed();
             }
+        } else {
+            $users = $users->whereNull('self_deleted');
         }
 
         if(!empty($this->request->input('survey-count'))) {
@@ -1210,6 +1216,40 @@ class UsersController extends AdminController
                                     $item->save();
                                     $to_ali->delete();
 
+                                    if($item->is_clinic && $item->team_new_clinic->isNotEmpty()) {
+                                        foreach ($item->team_new_clinic as $tnc) {
+                                            $tnc->approved = true;
+                                            $tnc->new_clinic = false;
+                                            $tnc->save();
+
+                                            $dent = User::find($tnc->dentist_id);
+
+                                            if( !empty($dent)) {
+
+                                                if ($dent->status == 'added_by_clinic_new') {
+                                                    $dent->status = 'added_by_clinic_unclaimed';
+                                                    $dent->slug = $dent->makeSlug();
+                                                    $dent->save();
+
+                                                    $dent->sendGridTemplate( 92 , [
+                                                        'clinic_name' => $item->getName(),
+                                                        "invitation_link" => getLangUrl( 'dentist/'.$dent->slug.'/claim/'.$dent->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
+                                                    ], 'trp');
+
+                                                    $dent->sendTemplate(33, [
+                                                        'clinic-name' => $item->getName(),
+                                                        'clinic-link' => $item->getLink()
+                                                    ], 'trp');
+                                                } else {
+                                                    $dent->sendTemplate(33, [
+                                                        'clinic-name' => $item->getName(),
+                                                        'clinic-link' => $item->getLink()
+                                                    ], 'trp');
+                                                }
+                                            }
+                                        }
+                                    }
+
                                 } else if( $this->request->input($key)=='pending' ) {
                                     $olde = $item->email;
                                     $item->email = 'ali.hashem@dentacoin.com';
@@ -1297,6 +1337,13 @@ class UsersController extends AdminController
                 // }
 
                 if($item->status=='rejected' && empty($item->deleted_at)) {
+                    $action = new UserAction;
+                    $action->user_id = $item->id;
+                    $action->action = 'deleted';
+                    $action->reason = 'Rejected by admin';
+                    $action->actioned_at = Carbon::now();
+                    $action->save();
+
                     $item->deleteActions();
                     User::destroy( $item->id );
                 }

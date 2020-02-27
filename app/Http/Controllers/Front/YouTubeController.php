@@ -26,7 +26,7 @@ use Carbon\Carbon;
 class YouTubeController extends FrontController
 {
     public function test() {
-
+        
         // $vox = Vox::find(45);
         // $max = $this->tryAll($vox, null, []);
 

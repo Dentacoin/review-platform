@@ -61,7 +61,7 @@
 						</p>
 					</div>
 					<div class="stats-cta flex">
-						<a class="blue-button {!! $user->status != 'approved' && $user->status != 'test' ? 'disabled' : '' !!}" href="javascript:;" data-popup="request-survey-popup">
+						<a class="blue-button {!! $user->status != 'approved' && $user->status != 'added_by_clinic_claimed' && $user->status != 'test' ? 'disabled' : '' !!}" href="javascript:;" data-popup="request-survey-popup">
 							{{ trans('vox.page.home.request-survey.request') }}
 						</a>
 					</div>
@@ -163,7 +163,7 @@
 					@endif
 				</h3>
 				@if($user->is_dentist)
-					<a href="javascript:;" data-popup="request-survey-popup" class="white-button {!! $user->status != 'approved' && $user->status != 'test' ? 'disabled' : '' !!}">
+					<a href="javascript:;" data-popup="request-survey-popup" class="white-button {!! $user->status != 'approved' && $user->status != 'added_by_clinic_claimed' && $user->status != 'test' ? 'disabled' : '' !!}">
 						REQUEST A SURVEY
 					</a>
 				@else
@@ -176,7 +176,7 @@
 	@endif
 
 	@if(!empty($user))
-		@if($user->is_dentist && ($user->status == 'approved' || $user->status == 'test'))
+		@if($user->is_dentist && ($user->status == 'approved' || $user->status == 'test' || $user->status == 'added_by_clinic_claimed'))
 			@include('vox.popups.request-survey')
 		@elseif(!$user->is_dentist)
 			@include('vox.popups.request-survey-patients')

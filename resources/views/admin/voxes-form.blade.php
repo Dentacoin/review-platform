@@ -334,6 +334,27 @@
                         </div>
                     </div>
 
+                    <!-- @if(!empty($item->complex))
+                        <div class="form-group col-md-12">
+                            <h3 style="display: inline-block; margin-right: 20px;">Calculating the right max. DCN amount</h3>
+
+                            @foreach($q_trigger_obj as $iq)
+                                <div class="col-md-12" style="display: flex;">
+                                    <select name="count_dcn_questions[]" class="form-control col" style="flex:1;">
+                                        <option value="{{ $iq->id }}">{{ $iq->question }}</option>
+                                    </select>
+                                        
+                                    <select name="count_dcn_answers[]" class="form-control col" style="flex:1;">
+                                        @foreach(json_decode($iq->answers, true) as $key => $ans)
+                                            <option value="{{ $key }}">{{ $ans }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                            @endforeach
+                        </div>
+                    @endif -->
+
                     <div class="form-group">
                         <div class="col-md-12">
                             <button type="submit" class="btn btn-primary btn-block">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}</button>

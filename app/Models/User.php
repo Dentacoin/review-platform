@@ -253,6 +253,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function team() {
         return $this->hasMany('App\Models\UserTeam', 'user_id', 'id');
     }
+    public function team_new_clinic() {
+        return $this->hasMany('App\Models\UserTeam', 'user_id', 'id')->where('new_clinic', true);
+    }
     public function teamApproved() {
         return $this->hasMany('App\Models\UserTeam', 'user_id', 'id')->where('approved', true);
     }
@@ -1193,9 +1196,29 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         })->get();
 
         if (!empty($teams)) {
-           foreach ($teams as $team) {
-               $team->delete();
-           }
+            foreach ($teams as $team) {
+                $dent_id = $team->dentist_id;
+                $team->delete();
+
+                $dent = User::find($dent_id);
+                if(!empty($dent) && $dent->is_clinic) {
+
+                    if ($dent->status == 'added_by_clinic_new') {
+                        $dent->status = 'added_by_clinic_rejected';
+                        $dent->save();
+                    } else if($dent->status == 'dentist_no_email') {
+                        $action = new UserAction;
+                        $action->user_id = $dent->id;
+                        $action->action = 'deleted';
+                        $action->reason = 'his dentist was deleted/rejected';
+                        $action->actioned_at = Carbon::now();
+                        $action->save();
+
+                        $dent->deleteActions();
+                        self::destroy( $dent->id );
+                    }
+                }
+            }
         }
 
         $user_invites = UserInvite::where(function($query) use ($id) {
@@ -1283,11 +1306,11 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     }
 
     public function canInvite($platform) {
-        return ($this->status=='approved' || $this->status=='added_approved' || $this->status=='test' || $this->status=='admin_imported' || $this->status=='added_by_clinic_approved' || $this->status=='added_by_clinic_new') && !$this->loggedFromBadIp();
+        return ($this->status=='approved' || $this->status=='test' || $this->status=='added_by_clinic_claimed') && !$this->loggedFromBadIp();
     }
 
     public function canWithdraw($platform) {
-        return ($this->status=='approved' || $this->status=='added_approved' || $this->status=='test' || $this->status=='admin_imported' || $this->status=='added_by_clinic_approved' || $this->status=='added_by_clinic_new') && $this->civic_kyc && !$this->loggedFromBadIp() && ($this->created_at->timestamp <= (time() - 259200)) ;
+        return ($this->status=='approved' || $this->status=='test' || $this->status=='added_by_clinic_claimed') && $this->civic_kyc && !$this->loggedFromBadIp() && ($this->created_at->timestamp <= (time() - 259200)) ;
     }
 
     public function getSameIPUsers() {
@@ -1852,7 +1875,7 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
         $arr = $this->toArray();
         $arr['avatar_url'] = $this->getImageUrl();
         $arr['thumbnail_url'] = $this->getImageUrl(true);
-        $arr['trp_public_profile_link'] = $this->is_dentist && ($this->status=='approved' || $this->status=='test' || $this->status=='added_approved' || $this->status=='admin_imported' || $this->status=='added_by_clinic_approved' || $this->status=='added_by_clinic_new') ? $this->getLink() : null;
+        $arr['trp_public_profile_link'] = $this->is_dentist && ($this->status=='approved' || $this->status=='test' || $this->status=='added_approved' || $this->status=='admin_imported' || $this->status=='added_by_clinic_claimed' || $this->status=='added_by_clinic_unclaimed') ? $this->getLink() : null;
 
         return $arr;
     }

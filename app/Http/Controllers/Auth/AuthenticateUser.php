@@ -106,13 +106,14 @@ class AuthenticateUser extends FrontController
                 ] );
             }
 
-            if( Auth::guard('web')->user()->is_dentist && Auth::guard('web')->user()->status!='approved' && Auth::guard('web')->user()->status!='test') {
+            if( Auth::guard('web')->user()->is_dentist && Auth::guard('web')->user()->status!='approved' && Auth::guard('web')->user()->status!='added_by_clinic_claimed' && Auth::guard('web')->user()->status!='test') {
                 $array = [
                     'success' => false, 
                     'popup' => 'verification-popup',
                     'hash' => Auth::guard('web')->user()->get_token(),
                     'id' => Auth::guard('web')->user()->id,
-                    'short_description' => Auth::guard('web')->user()->short_description,
+                    'work_hours' => Auth::guard('web')->user()->work_hours,
+                    'description' => Auth::guard('web')->user()->description,
                     'is_clinic' => Auth::guard('web')->user()->is_clinic,
                 ];
                 Auth::guard('web')->logout();
@@ -148,7 +149,7 @@ class AuthenticateUser extends FrontController
                 return redirect( getLangUrl('login').'?suspended-popup' );
             }
 
-            if( Auth::guard('web')->user()->is_dentist && Auth::guard('web')->user()->status!='approved' && Auth::guard('web')->user()->status!='test') {
+            if( Auth::guard('web')->user()->is_dentist && Auth::guard('web')->user()->status!='approved' && Auth::guard('web')->user()->status!='approved' && Auth::guard('web')->user()->status!='test') {
                 return redirect( getLangUrl('welcome-to-dentavox') );
             }
 

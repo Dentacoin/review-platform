@@ -60,14 +60,17 @@
                                                         @elseif($item->status == 'admin_imported')
                                                             <option value="admin_imported" {{ $item->status == 'admin_imported' ? 'selected="selected"' : ''}} >Imported by Admin</option>
                                                             <option value="approved" {{ $item->status == 'approved' ? 'selected="selected"' : ''}} >Approved</option>
+                                                        @elseif($item->status == 'added_by_clinic_new' || $item->status == 'added_by_clinic_rejected' || $item->status == 'added_by_clinic_claimed' || $item->status == 'added_by_clinic_unclaimed')
+                                                            <option value="added_by_clinic_new" {{ $item->status == 'added_by_clinic_new' ? 'selected="selected"' : ''}} >Added by Clinic New</option>
+                                                            <option value="added_by_clinic_claimed" {{ $item->status == 'added_by_clinic_claimed' ? 'selected="selected"' : ''}} >Added by Clinic Claimed</option>
+                                                            <option value="added_by_clinic_unclaimed" {{ $item->status == 'added_by_clinic_unclaimed' ? 'selected="selected"' : ''}} >Added by Clinic Unclaimed</option>
+                                                            <option value="added_by_clinic_rejected" {{ $item->status == 'added_by_clinic_rejected' ? 'selected="selected"' : ''}} >Added by Clinic Rejected</option>
                                                         @else
                                                             <option value="new" {{ $item->status == 'new' ? 'selected="selected"' : ''}} >New</option>
                                                             <option value="approved" {{ $item->status == 'approved' ? 'selected="selected"' : ''}} >Approved</option>
                                                             <option value="pending" {{ $item->status == 'pending' ? 'selected="selected"' : ''}} >Suspicious</option>
                                                             <option value="rejected" {{ $item->status == 'rejected' ? 'selected="selected"' : ''}} >Rejected</option>
                                                             <option value="test" {{ $item->status == 'test' ? 'selected="selected"' : ''}} >Test</option>
-                                                            <option value="added_by_clinic_approved" {{ $item->status == 'added_by_clinic_approved' ? 'selected="selected"' : ''}} >Added by Clinic Approved</option>
-                                                            <option value="added_by_clinic_new" {{ $item->status == 'added_by_clinic_new' ? 'selected="selected"' : ''}} >Added by Clinic New</option>
                                                             <option value="dentist_no_email" {{ $item->status == 'dentist_no_email' ? 'selected="selected"' : ''}} >Dentist No Email</option>
                                                         @endif
                                                     </select>
@@ -551,6 +554,103 @@
             </div>
         </div>
     </div>
+
+    @if($item->is_clinic)
+        @if($item->team->isNotEmpty())
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-inverse">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Clinic's Team</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="panel-body">
+                                <div class="row">
+
+                                    <table class="table table-striped table-question-list">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Dentist</th>
+                                                <th>Job</th>
+                                                <th>Is approved?</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($item->team as $team)
+                                                <tr>
+                                                    <td>
+                                                        {{ $team->created_at->toDateTimeString() }}
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ url('/cms/users/edit/'.$team->clinicTeam->id) }}">
+                                                            {{ $team->clinicTeam->getName() }}
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        Dentist
+                                                    </td>
+                                                    <td>
+                                                        {!! $team->approved ? '<span class="label label-success">'.trans('admin.common.yes').'</span>' : '<span class="label label-warning">'.trans('admin.common.no').'</span>' !!}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            @foreach($item->invites_team_unverified as $team_invited)
+                                                <tr>
+                                                    <td>
+                                                        {{ $team_invited->created_at->toDateTimeString() }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $team_invited->invited_name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ !empty($team_invited->job) ? config('trp.team_jobs')[$team_invited->job] : '' }}
+                                                    </td>
+                                                    <td>
+                                                        <span class="label label-success">Yes</span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @else
+        @if($item->my_workplace->isNotEmpty())
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-inverse">
+                        <div class="panel-heading">
+                            <div class="panel-heading-btn">
+                                <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                            </div>
+                            <h4 class="panel-title">Workplace</h4>
+                        </div>
+                        <div class="panel-body">
+                            @include('admin.parts.table', [
+                                'table_id' => 'team',
+                                'table_fields' => [
+                                    'created_at'        => array('format' => 'datetime','width' => '20%'),
+                                    'clinic'              => array('template' => 'admin.parts.table-team-clinic', 'width' => '30%'),
+                                    'approved'              => array('format' => 'bool'),
+                                ],
+                                'table_subpage' => 'my_workplace',
+                                'table_data' => $item->my_workplace,
+                                'table_pagination' => false,
+                                'pagination_link' => array()
+                            ])
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endif
 
 @else
 

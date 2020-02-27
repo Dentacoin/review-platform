@@ -21,6 +21,7 @@ use Response;
 use Request;
 use Cookie;
 use Mail;
+use Auth;
 use App;
 
 class IndexController extends FrontController
@@ -129,7 +130,7 @@ class IndexController extends FrontController
 		$city_cookie = json_decode(Cookie::get('dentists_city'), true);
 		//dd($city_cookie);
 
-		$featured = User::where('is_dentist', 1)->with('country.translations')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_approved'])->whereNull('self_deleted')->orderBy('avg_rating', 'DESC');
+		$featured = User::where('is_dentist', 1)->with('country.translations')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed'])->whereNull('self_deleted')->orderBy('avg_rating', 'DESC');
 		$homeDentists = collect();
 
 		if (!empty($city_cookie)) {
@@ -345,20 +346,21 @@ class IndexController extends FrontController
 	public function claim ($locale=null, $id) {
 		$user = User::find($id);
 
-        if (!$user || ($user->status != 'added_approved' && $user->status != 'admin_imported')) {
+        if (!$user || ($user->status != 'added_approved' && $user->status != 'admin_imported' && $user->status != 'added_by_clinic_unclaimed')) {
             return redirect( getLangUrl('/') );
         }
 
 		if(Request::isMethod('post')) {
-            $validator = Validator::make(Request::all(), [
-	            'name' => array('required', 'min:3'),
-	            'email' => 'sometimes|required|email',
-	            'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
-	            'job' =>  array('required', 'string'),
-	            'explain-related' =>  array('required'),
+			$validator = Validator::make(Request::all(), [
+                'name' => array('required', 'min:3'),
+                'email' => 'sometimes|required|email',
+                'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
+                'job' =>  'sometimes|required|string',
+                'explain-related' => 'sometimes|required|string',
                 'password' => array('required', 'min:6'),
-            	'password-repeat' => 'required|same:password',
-	        ]);
+                'password-repeat' => 'required|same:password',
+                'agree' => 'required|accepted',
+            ]);
 
 	        if ($validator->fails()) {
 
@@ -384,44 +386,62 @@ class IndexController extends FrontController
 	                ] );
 	            }
 
-	            $fromm = !empty(Request::input('email')) ? 'from site' : 'from mail';
+	            if (!empty(Request::input('job'))) {
 
-	            $claim = new DentistClaim;
-	            $claim->dentist_id = $user->id;
-	            $claim->name = Request::input('name');
-	            $claim->email = Request::input('email') ? Request::input('email') : $user->email;
-	            $claim->phone = Request::input('phone');
-	            $claim->password = bcrypt(Request::input('password'));
-	            $claim->job = Request::input('job');
-	            $claim->explain_related = Request::input('explain-related');
-	            $claim->status = 'waiting';
-	            $claim->from_mail = !empty(Request::input('email')) ? false : true;
-	            $claim->save();
+                    $fromm = !empty(Request::input('email')) ? 'from site' : 'from mail';
+
+                    $claim = new DentistClaim;
+                    $claim->dentist_id = $user->id;
+                    $claim->name = Request::input('name');
+                    $claim->email = Request::input('email') ? Request::input('email') : $user->email;
+                    $claim->phone = Request::input('phone');
+                    $claim->password = bcrypt(Request::input('password'));
+                    $claim->job = Request::input('job');
+                    $claim->explain_related = Request::input('explain-related');
+                    $claim->status = 'waiting';
+                    $claim->from_mail = !empty(Request::input('email')) ? false : true;
+                    $claim->save();
 
 
-	            $mtext = 'Dentist claimed his profile '.$fromm.'<br/>
-Name: '.$claim->name.' <br/>
-Phone: '.$claim->phone.' <br/>
-Email: '.$claim->email.' <br/>
-Job position: '.$claim->job.' <br/>
-Explain how dentist is related to this office: '.$claim->explain_related.' <br/>
-Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+                    $mtext = 'Dentist claimed his profile '.$fromm.'<br/>
+    Name: '.$claim->name.' <br/>
+    Phone: '.$claim->phone.' <br/>
+    Email: '.$claim->email.' <br/>
+    Job position: '.$claim->job.' <br/>
+    Explain how dentist is related to this office: '.$claim->explain_related.' <br/>
+    Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 
-				Mail::send([], [], function ($message) use ($mtext, $user) {
-		            $sender = config('mail.from.address');
-		            $sender_name = config('mail.from.name');
+                    Mail::send([], [], function ($message) use ($mtext, $user) {
+                        $sender = config('mail.from.address');
+                        $sender_name = config('mail.from.name');
 
-		            $message->from($sender, $sender_name);
-                    $message->to( 'ali.hashem@dentacoin.com' );
-                    $message->to( 'betina.bogdanova@dentacoin.com' );
-		            $message->replyTo($user->email, $user->getName());
-		            $message->subject('Invited Dentist Claimed His Profile');
-		            $message->setBody($mtext, 'text/html'); // for HTML rich messages
-		        });
+                        $message->from($sender, $sender_name);
+                        $message->to( 'ali.hashem@dentacoin.com' );
+                        $message->to( 'betina.bogdanova@dentacoin.com' );
+                        $message->replyTo($user->email, $user->getName());
+                        $message->subject('Invited Dentist Claimed His Profile');
+                        $message->setBody($mtext, 'text/html'); // for HTML rich messages
+                    });
 
-	            return Response::json( [
-	                'success' => true,
-	            ] );
+                    return Response::json( [
+                        'success' => true,
+                        'reload' => false,
+                    ] );
+                    
+                } else {
+                    $user->name = Request::input('name');
+                    $user->phone = Request::input('phone');
+                    $user->status = 'added_by_clinic_claimed';
+                    $user->password = bcrypt(Request::input('password'));
+                    $user->save();
+
+                    Auth::login($user);
+
+                    return Response::json( [
+                        'success' => true,
+                        'reload' => true,
+                    ] );
+                }
 	        }
         }
 

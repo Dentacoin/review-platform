@@ -238,6 +238,8 @@ $reviewRoutes = function () {
 			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
 			Route::post('recover/{id}/{hash}', 					'RegisterController@recover_form');
 			Route::post('verification-dentist', 				'RegisterController@verification_dentist');
+			Route::post('clinic-add-team', 						'RegisterController@clinic_add_team');
+			Route::post('add-working-hours',					'RegisterController@add_work_hours');
 			Route::post('register-invite', 						'RegisterController@register_invite');
 			Route::post('invite-clinic', 						'RegisterController@invite_clinic');
 			Route::post('invite-dentist', 						'RegisterController@invite_dentist');
@@ -294,6 +296,9 @@ $reviewRoutes = function () {
 
 			Route::post('dentist-fb-tab', 						'DentistController@fb_tab');
 
+			Route::post('profile/invite-new', 					'ProfileController@invite_team_member');
+			Route::post('profile/add-existing-dentist-team', 	'ProfileController@invite_existing_team_member');
+
 			Route::group(['middleware' => 'auth:web'], function () {
 
 				Route::any('invite-new-dentist', 				'AddDentistController@invite_new_dentist');
@@ -318,7 +323,6 @@ $reviewRoutes = function () {
 				Route::post('profile/invite-copypaste-names', 	'ProfileController@invite_copypaste_names');
 				Route::post('profile/invite-copypaste-final', 	'ProfileController@invite_copypaste_final');
 				Route::post('profile/invite-file',			 	'ProfileController@invite_file');
-				Route::any('profile/invite-new', 				'ProfileController@invite_team_member');
 				Route::get('profile/asks', 						'ProfileController@asks');
 				Route::get('profile/asks/accept/{id}', 			'ProfileController@asks_accept');
 				Route::get('profile/asks/deny/{id}', 			'ProfileController@asks_deny');
