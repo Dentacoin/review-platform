@@ -1113,7 +1113,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             if ($validator->fails()) {
                 return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite-team.failure') ] );
             } else {
-
                 if (Request::input('team-job') != 'dentist') {
                     $invitation = new UserInvite;
                     $invitation->user_id = $current_user->id;
@@ -1170,22 +1169,49 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                                 'dentists' => $user_list
                             ] );
                         }
-                    } else {
-                        if(!empty(Request::input('email'))) {
+                    }
 
-                            if (!filter_var(Request::input('email'), FILTER_VALIDATE_EMAIL)) {
-                                return Response::json(['success' => false, 'message' => 'Please, enter a valid email address' ] );
-                            }
 
-                            $existing_dentist = User::where('email', 'LIKE', Request::input('email'))->withTrashed()->first();
+                    if(!empty(Request::input('email'))) {
 
-                            if( !empty($existing_dentist)) {
+                        if (!filter_var(Request::input('email'), FILTER_VALIDATE_EMAIL)) {
+                            return Response::json(['success' => false, 'message' => 'Please, enter a valid email address' ] );
+                        }
 
-                                $existing_team = UserTeam::where('user_id', $current_user->id)->where('dentist_id', $existing_dentist->id )->first();
+                        $existing_dentist = User::where('email', 'LIKE', Request::input('email'))->withTrashed()->first();
 
-                                if(!empty($existing_team)) {
-                                    return Response::json(['success' => false, 'message' => 'This dentist is already in your team.' ] );
-                                } else if(empty($existing_dentist->deleted_at) && ($existing_dentist->status == 'approved' || $existing_dentist->status == 'added_by_clinic_claimed' || $existing_dentist->status == 'added_by_clinic_unclaimed' || $existing_dentist->status == 'test' || $existing_dentist->status == 'added_approved' || $existing_dentist->status == 'added_new' || $existing_dentist->status == 'admin_imported' || $existing_dentist->status == 'added_by_clinic_new') ) {
+                        if( !empty($existing_dentist)) {
+
+                            $existing_team = UserTeam::where('user_id', $current_user->id)->where('dentist_id', $existing_dentist->id )->first();
+
+                            if(!empty($existing_team)) {
+                                return Response::json(['success' => false, 'message' => 'This dentist is already in your team.' ] );
+                            } else if(empty($existing_dentist->deleted_at) && ($existing_dentist->status == 'approved' || $existing_dentist->status == 'added_by_clinic_claimed' || $existing_dentist->status == 'added_by_clinic_unclaimed' || $existing_dentist->status == 'test' || $existing_dentist->status == 'added_approved' || $existing_dentist->status == 'added_new' || $existing_dentist->status == 'admin_imported' || $existing_dentist->status == 'added_by_clinic_new') ) {
+
+
+                                $newteam = new UserTeam;
+                                $newteam->dentist_id = $existing_dentist->id;
+                                $newteam->user_id = $current_user->id;
+                                $newteam->approved = 1;
+                                $newteam->save();
+
+                                if(!empty($this->user) && ($existing_dentist->status == 'approved' || $existing_dentist->status == 'added_by_clinic_claimed' || $existing_dentist->status == 'test')) {
+
+                                    $existing_dentist->sendTemplate(33, [
+                                        'clinic-name' => $this->user->getName(),
+                                        'clinic-link' => $this->user->getLink()
+                                    ], 'trp');
+                                }
+
+                                return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
+                            } else if(empty($existing_dentist->deleted_at) && ($existing_dentist->status == 'new') ) {
+
+                                if (!empty($this->user)) {
+                                    $existing_dentist->status = 'added_by_clinic_claimed';
+                                    $existing_dentist->slug = $existing_dentist->makeSlug();
+                                    $existing_dentist->save();
+
+                                    $existing_dentist->sendGridTemplate(26);
 
                                     $newteam = new UserTeam;
                                     $newteam->dentist_id = $existing_dentist->id;
@@ -1193,132 +1219,107 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                                     $newteam->approved = 1;
                                     $newteam->save();
 
-                                    if(!empty($this->user) && ($existing_dentist->status == 'approved' || $existing_dentist->status == 'added_by_clinic_claimed' || $existing_dentist->status == 'test')) {
-
-                                        $existing_dentist->sendTemplate(33, [
-                                            'clinic-name' => $this->user->getName(),
-                                            'clinic-link' => $this->user->getLink()
-                                        ], 'trp');
-                                    }
-
-                                    return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
-                                } else if(empty($existing_dentist->deleted_at) && ($existing_dentist->status == 'new') ) {
-
-                                    if (!empty($this->user)) {
-                                        $existing_dentist->status = 'added_by_clinic_claimed';
-                                        $existing_dentist->slug = $existing_dentist->makeSlug();
-                                        $existing_dentist->save();
-
-                                        $existing_dentist->sendGridTemplate(26);
-
-                                        $newteam = new UserTeam;
-                                        $newteam->dentist_id = $existing_dentist->id;
-                                        $newteam->user_id = $current_user->id;
-                                        $newteam->approved = 1;
-                                        $newteam->save();
-
-                                        $existing_dentist->sendTemplate(33, [
-                                            'clinic-name' => $this->user->getName(),
-                                            'clinic-link' => $this->user->getLink()
-                                        ], 'trp');
-                                    } else {
-
-                                        $newteam = new UserTeam;
-                                        $newteam->dentist_id = $existing_dentist->id;
-                                        $newteam->user_id = $current_user->id;
-                                        $newteam->approved = 0;
-                                        $newteam->new_clinic = 1;
-                                        
-                                        $newteam->save();
-                                    }
-
-                                    return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
+                                    $existing_dentist->sendTemplate(33, [
+                                        'clinic-name' => $this->user->getName(),
+                                        'clinic-link' => $this->user->getLink()
+                                    ], 'trp');
                                 } else {
-                                    $mtext = 'Clinic '.$current_user->getName().' added a new team member that is deleted OR with status rejected/suspicious. Link to dentist\'s profile:
-                                    '.url('https://reviews.dentacoin.com/cms/users/edit/'.$existing_dentist->id).'
-                                    Link to clinic\'s profile: 
-                                    '.url('https://reviews.dentacoin.com/cms/users/edit/'.$current_user->id).'
-                                    '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
-                                    ';
 
-                                    Mail::raw($mtext, function ($message) use ($current_user) {
-
-                                        $sender = config('mail.from.address');
-                                        $sender_name = config('mail.from.name');
-
-                                        $message->from($sender, $sender_name);
-                                        $message->to( 'petya.ivanova@dentacoin.com' );
-                                        $message->to( 'donika.kraeva@dentacoin.com' );
-                                        $message->to( 'ali.hashem@dentacoin.com' );
-                                        $message->to( 'betina.bogdanova@dentacoin.com' );
-                                        $message->subject('Clinic '.$current_user->getName().' added a new team member that is deleted OR with status rejected/suspicious');
-                                    });
-
-                                    return Response::json(['success' => false, 'message' => 'There is some suspicious activity detected with this email. Please add another email' ] );
+                                    $newteam = new UserTeam;
+                                    $newteam->dentist_id = $existing_dentist->id;
+                                    $newteam->user_id = $current_user->id;
+                                    $newteam->approved = 0;
+                                    $newteam->new_clinic = 1;
+                                    
+                                    $newteam->save();
                                 }
+
+                                return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
+                            } else {
+                                $mtext = 'Clinic '.$current_user->getName().' added a new team member that is deleted OR with status rejected/suspicious. Link to dentist\'s profile:
+                                '.url('https://reviews.dentacoin.com/cms/users/edit/'.$existing_dentist->id).'
+                                Link to clinic\'s profile: 
+                                '.url('https://reviews.dentacoin.com/cms/users/edit/'.$current_user->id).'
+                                '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
+                                ';
+
+                                Mail::raw($mtext, function ($message) use ($current_user) {
+
+                                    $sender = config('mail.from.address');
+                                    $sender_name = config('mail.from.name');
+
+                                    $message->from($sender, $sender_name);
+                                    $message->to( 'petya.ivanova@dentacoin.com' );
+                                    $message->to( 'donika.kraeva@dentacoin.com' );
+                                    $message->to( 'ali.hashem@dentacoin.com' );
+                                    $message->to( 'betina.bogdanova@dentacoin.com' );
+                                    $message->subject('Clinic '.$current_user->getName().' added a new team member that is deleted OR with status rejected/suspicious');
+                                });
+
+                                return Response::json(['success' => false, 'message' => 'There is some suspicious activity detected with this email. Please add another email' ] );
                             }
-
-                            $newuser = new User;
-                            $newuser->name = Request::input('name');
-                            $newuser->email = Request::input('email');
-                            $newuser->status = !empty($this->user) ? 'added_by_clinic_unclaimed' : 'added_by_clinic_new';
-                            $newuser->country_id = $current_user->country_id;
-                            $newuser->address = $current_user->address;
-
-                        } else {
-                            $newuser = new User;
-                            $newuser->name = Request::input('name');
-                            $newuser->status = 'dentist_no_email';
                         }
 
-                        $newuser->platform = 'trp';                    
-                        $newuser->gdpr_privacy = true;
-                        $newuser->is_dentist = 1;
-                        $newuser->invited_by = $current_user->id;
-                        $newuser->save();
+                        $newuser = new User;
+                        $newuser->name = Request::input('name');
+                        $newuser->email = Request::input('email');
+                        $newuser->status = !empty($this->user) ? 'added_by_clinic_unclaimed' : 'added_by_clinic_new';
+                        $newuser->country_id = $current_user->country_id;
+                        $newuser->address = $current_user->address;
 
-                        if( Request::input('photo') ) {
-                            $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
-                            $newuser->addImage($img);
+                    } else {
+                        $newuser = new User;
+                        $newuser->name = Request::input('name');
+                        $newuser->status = 'dentist_no_email';
+                    }
+
+                    $newuser->platform = 'trp';                    
+                    $newuser->gdpr_privacy = true;
+                    $newuser->is_dentist = 1;
+                    $newuser->invited_by = $current_user->id;
+                    $newuser->save();
+
+                    if( Request::input('photo') ) {
+                        $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
+                        $newuser->addImage($img);
+                    }
+
+                    $newteam = new UserTeam;
+                    $newteam->dentist_id = $newuser->id;
+                    $newteam->user_id = $current_user->id;
+                    $newteam->approved = 1;
+                    $newteam->save();
+
+                    if(!empty(Request::input('email'))) {
+
+                        if(!empty($this->user)) {
+
+                            $newuser->slug = $newuser->makeSlug();
+                            $newuser->save();
+
+                            $newuser->sendGridTemplate( 92 , [
+                                'clinic_name' => $current_user->getName(),
+                                "invitation_link" => getLangUrl( 'dentist/'.$newuser->slug.'/claim/'.$newuser->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
+                            ], 'trp');
                         }
 
-                        $newteam = new UserTeam;
-                        $newteam->dentist_id = $newuser->id;
-                        $newteam->user_id = $current_user->id;
-                        $newteam->approved = 1;
-                        $newteam->save();
 
-                        if(!empty(Request::input('email'))) {
+                        $mtext = 'Clinic '.$current_user->getName().' added a new team member. Link to profile:
+                        '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
+                        '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
 
-                            if(!empty($this->user)) {
+                        ';
 
-                                $newuser->slug = $newuser->makeSlug();
-                                $newuser->save();
+                        Mail::raw($mtext, function ($message) use ( $current_user) {
 
-                                $newuser->sendGridTemplate( 92 , [
-                                    'clinic_name' => $current_user->getName(),
-                                    "invitation_link" => getLangUrl( 'dentist/'.$newuser->slug.'/claim/'.$newuser->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
-                                ], 'trp');
-                            }
+                            $sender = config('mail.from.address');
+                            $sender_name = config('mail.from.name');
 
-
-                            $mtext = 'Clinic '.$current_user->getName().' added a new team member. Link to profile:
-                            '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
-                            '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
-
-                            ';
-
-                            Mail::raw($mtext, function ($message) use ( $current_user) {
-
-                                $sender = config('mail.from.address');
-                                $sender_name = config('mail.from.name');
-
-                                $message->from($sender, $sender_name);
-                                $message->to( 'ali.hashem@dentacoin.com' );
-                                $message->to( 'betina.bogdanova@dentacoin.com' );
-                                $message->subject('Clinic '.$current_user->getName().' added a new team member');
-                            });
-                        }
+                            $message->from($sender, $sender_name);
+                            $message->to( 'ali.hashem@dentacoin.com' );
+                            $message->to( 'betina.bogdanova@dentacoin.com' );
+                            $message->subject('Clinic '.$current_user->getName().' added a new team member');
+                        });
                     }
                 }
             }
