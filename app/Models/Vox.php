@@ -48,6 +48,7 @@ class Vox extends Model {
         'hasimage_stats',
         'country_count',
         'questions_count',
+        'dcn_questions_count',
         'respondents_count',
         'rewards_count',
         'sort_order',
@@ -103,7 +104,7 @@ class Vox extends Model {
                 return $this->questions()->count();
 
             } else {
-                return $this->questions_count;
+                return !empty($this->questions_count) ? $this->questions_count : $this->questions()->count();
             }
         }
     }
