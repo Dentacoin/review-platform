@@ -309,7 +309,7 @@ UNCONFIRMED TRANSACTIONS
 
                 }
 
-                if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*24) {
+                if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*3) {
                     Dcn::retry($trans);
                     echo 'RETRYING -> '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
                 }
@@ -526,7 +526,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 44
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00' 
                     AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
@@ -562,7 +562,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 45
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*3)." 00:00:00' 
             ";
@@ -626,7 +626,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id IN ( 46, 47)
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
             ";
@@ -660,7 +660,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 48
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*10)." 00:00:00'
             ";
@@ -720,7 +720,7 @@ NEW & FAILED TRANSACTIONS
                     WHERE
                         `is_dentist` = 1
                         AND `unsubscribe` is null
-                        AND `status` = 'approved'
+                        AND `status` IN ('approved','added_by_clinic_claimed')
                         AND `self_deleted` is null
                         AND `dcn_address` is not null
                         AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) > 3000
@@ -768,7 +768,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 50 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
             ";
@@ -805,7 +805,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*7)." 00:00:00'
             ";
@@ -883,7 +883,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` = 'approved' AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*14)." 00:00:00'
             ";
@@ -1054,7 +1054,7 @@ NEW & FAILED TRANSACTIONS
                     AND `deleted_at` is null
                     AND `unsubscribe` is null
                     AND `self_deleted` is null
-                    AND `status` IN ('approved', 'test')
+                    AND `status` IN ('approved', 'test', 'added_by_clinic_claimed')
             ";
 
             // Cron runs 1x per month
@@ -1609,7 +1609,7 @@ NEW & FAILED TRANSACTIONS
             $users = User::where('is_dentist', 1)->where(function ($query) {
                 $query->where('city_name', 'LIKE', '%??%')
                 ->orWhere('state_name', 'LIKE', '%??%');
-            })->whereNotIn('status', ['rejected', 'test'])
+            })->whereNotIn('status', ['rejected', 'test', 'added_by_clinic_rejected'])
             ->get();
 
             $user_links = [];
@@ -1649,6 +1649,56 @@ NEW & FAILED TRANSACTIONS
             echo 'Dentists with ?? in address Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->cron("30 7 * * *"); //10:30h BG Time
+
+        $schedule->call(function () {
+            echo 'Count Unknown Countries from UserLogin Cron - START';
+
+            $query = "
+                SELECT 
+                    * 
+                FROM 
+                    user_logins 
+                WHERE 
+                    country LIKE 'Unknown'
+                GROUP BY 
+                    `user_id`
+            ";
+
+            $uknown_by_user = DB::select(
+                DB::raw($query), []
+            );
+
+            $query2 = "
+                SELECT 
+                    * 
+                FROM 
+                    user_logins 
+                WHERE 
+                    country LIKE 'Unknown'
+                GROUP BY 
+                    `user_id`
+            ";
+
+            $uknown = DB::select(
+                DB::raw($query2), []
+            );
+
+            $mtext = 'There are '.$uknown->count().' results from Uknown county by '.$uknown_by_user->count().' users';
+
+            Mail::raw($mtext, function ($message) {
+
+                $sender = config('mail.from.address');
+                $sender_name = config('mail.from.name');
+
+                $message->from($sender, $sender_name);
+                $message->to( 'petya.ivanova@dentacoin.com' );
+                $message->to( 'gergana@youpluswe.com' );
+                $message->subject('Uknown counties count');
+            });
+
+            echo 'Count Unknown Countries from UserLogin Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->cron('0 0 */14 * *'); //10:30h BG Time
 
 
         $schedule->call(function () {
