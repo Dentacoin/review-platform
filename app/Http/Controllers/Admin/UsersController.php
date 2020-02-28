@@ -949,6 +949,35 @@ class UsersController extends AdminController
         return redirect('cms/users/');
     }
 
+    public function restore_self_deleted( $id ) {
+
+        $item = User::withTrashed()->find($id);
+
+        if(!empty($item)) {
+
+            if (!empty(Request::input('restored_reason'))) {
+                $action = new UserAction;
+                $action->user_id = $item->id;
+                $action->action = 'restored_self_deleted';
+                $action->reason = Request::input('restored_reason');
+                $action->actioned_at = Carbon::now();
+                $action->save();
+
+                $item->self_deleted = null;
+                $item->save();
+
+                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.restored') );
+                return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/'.$this->current_page);
+
+            } else {
+                $this->request->session()->flash('error-message', "You have to write a reason why this user has to be restored" );
+                return redirect('cms/users/edit/'.$item->id);
+            }            
+        }
+
+        return redirect('cms/users/');
+    }
+
 
     public function loginas( $id, $platform=null ) {
 

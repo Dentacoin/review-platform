@@ -411,7 +411,7 @@
                                 <div class="form-group">
                                     <div class="col-md-12" style="text-align: right;">
                                         @foreach($item->actions as $act)
-                                            <span style="color: {{ $act->action == 'deleted' ? 'red' : 'black' }};"><span style="text-transform: capitalize;">{{ $act->action }}</span> at: {{ $act->actioned_at->toDateTimeString() }}</span><br/>
+                                            <span style="color: {{ $act->action == 'deleted' ? 'red' : 'black' }};"><span style="text-transform: capitalize;">{{ $act->action == 'restored_self_deleted' ? 'Self Deleted Restored' : $act->action }}</span> at: {{ $act->actioned_at->toDateTimeString() }}</span><br/>
                                             <span style="color: {{ $act->action == 'deleted' ? 'red' : 'black' }};">Reason: {{ $act->reason }}</span><br/><br/>
                                         @endforeach
                                     </div>
@@ -471,6 +471,16 @@
                                     @endif
                                 </div>
                             </div>
+                            @if($item->self_deleted)
+                                <div class="form-group">
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6">
+                                        <a href="javascript:;" data-toggle="modal" data-target="#restoreSelfDeletedModal" class="btn btn-sm btn-info form-control user-b">
+                                            Restore Self Deleted
+                                        </a>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="form-group">
                                 <div class="col-md-6"></div>
                                 <div class="col-md-6">
@@ -1127,6 +1137,28 @@
             </div>
             <div class="modal-body">
                 <form action="{{ url('cms/users/restore/'.$item->id) }}" method="post">
+                    <textarea class="form-control" name="restored_reason" placeholder="Write the reason why you want to restore this user"></textarea>
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Restore</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="restoreSelfDeletedModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Restore self deleted user</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url('cms/users/restore-self-deleted/'.$item->id) }}" method="post">
                     <textarea class="form-control" name="restored_reason" placeholder="Write the reason why you want to restore this user"></textarea>
                     <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Restore</button>
                 </form>
