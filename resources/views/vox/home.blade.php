@@ -161,7 +161,7 @@
 			      			sort-order="{{ $vox->sort_order ? $vox->sort_order : 0 }}" 
 			      			popular="{{ intval($vox->rewardsCount()) }}" 
 			      			dcn="{{ intval($vox->getRewardTotal()) }}" 
-			      			duration="{{ !empty($vox->manually_calc_reward) && !empty($vox->dcn_questions_count) ? (ceil( $vox->dcn_questions_count/6)) : (ceil( $vox->questionsCount()/6)) ) }}" 
+			      			duration="{{ ceil( $vox->questionsCount()/6) }}" 
 			      			{!! !empty($taken) ? 'taken="'.intval(!in_array($vox->id, $taken) ? 0 : 1).'"' : '' !!}
 			      			>
 
