@@ -165,7 +165,10 @@ class VoxesController extends AdminController
                         if($question_id==-1) {
                             $triggers[$question->id] .= 'Same as previous<br/>';
                             $linked_triggers[] = $question->id;
+                        } else if(!is_numeric($question_id)) {
+                            $triggers[$question->id] .= ($question_id == 'age_groups' ? 'Age groups' : ($question_id == 'gender' ? 'Gender' : config('vox.details_fields.'.$question_id)['label'])).' : '.explode(':',$v)[1];
                         } else {
+
                             $q = VoxQuestion::find($question_id);
 
                             if(!empty($q)) {
@@ -208,23 +211,30 @@ class VoxesController extends AdminController
             $q_trigger_obj = [];
 
             if ($item->questions->isNotEmpty()) {
-                
                 foreach ($item->questions as $iq) {
                     if (!empty($iq->question_trigger) && $iq->question_trigger != '-1') {
                         $trgs = explode(';', $iq->question_trigger);
 
                         foreach ($trgs as $trg) {
-                            $q_triggers_arr[] = explode(':', $trg)[0];
+                            if(!in_array(explode(':', $trg)[0], $q_triggers_arr)) {
+                                $q_triggers_arr[] = explode(':', $trg)[0];
+                            }
+                            
                         }
                     }
                 }
             }
 
             if (!empty($q_triggers_arr)) {
-                
                 foreach ($q_triggers_arr as $q_trigger) {
-                    $q_trigger_obj[] = VoxQuestion::find($q_trigger);
+                    $q_trigger_obj[] = is_numeric($q_trigger) ? VoxQuestion::find($q_trigger) : $q_trigger ;
                 }
+            }
+
+            $slist = VoxScale::get();
+            $scales = [];
+            foreach ($slist as $sitem) {
+                $scales[$sitem->id] = $sitem;
             }
 
             return $this->showView('voxes-form', array(
@@ -233,6 +243,7 @@ class VoxesController extends AdminController
                 'question_types' => $this->question_types,
                 'stat_types' => $this->stat_types,
                 'stat_top_answers' => $this->stat_top_answers,
+                'scales' => $scales,
                 'item' => $item,
                 'category_list' => VoxCategory::get(),
                 'triggers' => $triggers,
@@ -680,7 +691,18 @@ class VoxesController extends AdminController
         $item->countries_ids = $this->request->input('countries_ids');
         $item->country_percentage = $this->request->input('country_percentage');
         $item->dentists_patients = $this->request->input('dentists_patients');
+        $item->manually_calc_reward = !empty($this->request->input('manually_calc_reward')) ? 1 : null;
         $item->last_count_at = null;
+
+        if (!empty($this->request->input('manually_calc_reward'))) {
+            $trigger_qs = [];
+            foreach ($this->request->input('count_dcn_questions') as $k => $v) {
+                $trigger_qs[$this->request->input('count_dcn_questions')[$k]] = $this->request->input('count_dcn_answers')[$k];
+            }
+
+            $item->dcn_questions_triggers = $trigger_qs;
+            $item->getLongestPath();
+        }
 
         $item->save();
 
@@ -776,6 +798,10 @@ class VoxesController extends AdminController
                     }
                 }
                 $question->question_trigger = implode(';', $help_array);
+
+                $q_vox = Vox::find($question->vox_id);
+                $q_vox->manually_calc_reward = null;
+                $q_vox->save();
             } else {
                 $question->question_trigger = '';
             }

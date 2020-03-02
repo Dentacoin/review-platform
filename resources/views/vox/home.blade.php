@@ -161,7 +161,7 @@
 			      			sort-order="{{ $vox->sort_order ? $vox->sort_order : 0 }}" 
 			      			popular="{{ intval($vox->rewardsCount()) }}" 
 			      			dcn="{{ intval($vox->getRewardTotal()) }}" 
-			      			duration="{{ ceil( $vox->questionsCount()/6 ) }}" 
+			      			duration="{{ !empty($vox->manually_calc_reward) && !empty($vox->dcn_questions_count) ? ceil( $vox->dcn_questions_count/6 : ceil( $vox->questionsCount()/6 ) }}" 
 			      			{!! !empty($taken) ? 'taken="'.intval(!in_array($vox->id, $taken) ? 0 : 1).'"' : '' !!}
 			      			>
 
@@ -183,7 +183,7 @@
 										<div class="survey-time flex">
 											<div class="col">
 												<img src="{{ url('new-vox-img/coin-icon.png') }}">
-												<p>{{ !empty($vox->complex) ? 'Max' : '' }} {{ $vox->getRewardTotal() }} DCN</p>
+												<p>{{ !empty($vox->complex) && empty($vox->manually_calc_reward) && empty($vox->dcn_questions_count) ? 'Max' : '' }} {{ $vox->getRewardTotal() }} DCN</p>
 											</div>
 											<div class="col">
 												<img src="{{ url('new-vox-img/clock-icon.svg') }}">

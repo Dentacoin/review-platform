@@ -141,6 +141,11 @@ $(document).ready(function(){
             if( group.find('select').length ) {
                 if( group.find('select').val() ) {
                     var answer = group.find('select').val();
+
+                    if($('#demogr_answ').length) {
+                        var dem_vals = !$('#demogr_answ').val() ? $('#demogr_answ').val() : $('#demogr_answ').val() + ';';
+                        $('#demogr_answ').val(dem_vals + (group.attr('demogr-id')+':'+group.find('select option:selected').attr('demogr-index')) );
+                    }
                 } else {
                     $('.answer-error').show().insertAfter($(this));
                     ajax_is_running = false;
@@ -148,7 +153,13 @@ $(document).ready(function(){
                 }
             } else {
                 var answer = $(this).attr('data-num');
+
+                if($('#demogr_answ').length) {
+                    var dem_vals = !$('#demogr_answ').val() ? $('#demogr_answ').val() : $('#demogr_answ').val() + ';';
+                    $('#demogr_answ').val(dem_vals + (group.attr('demogr-id')+':'+$(this).find('input').attr('demogr-index')) );
+                }
             }
+
             type = group.attr('custom-type');
 
         } else if (group.hasClass('location-question')) {
@@ -168,6 +179,12 @@ $(document).ready(function(){
 
             if ( $('#birthyear-answer').val().length && parseInt( $('#birthyear-answer').val() ) <= maxYear ) {
                 var answer = $('#birthyear-answer').val();
+
+                if($('#demogr_answ').length) {
+                    var dem_vals = !$('#demogr_answ').val() ? $('#demogr_answ').val() : $('#demogr_answ').val() + ';';
+                    $('#demogr_answ').val(dem_vals + (group.attr('demogr-id')+':'+group.find('select option:selected').attr('demogr-index')) );
+                }
+
                 type = 'birthyear-question';
             } else {
                 $('.answer-error').show().insertAfter($(this));
@@ -178,6 +195,12 @@ $(document).ready(function(){
         } else if (group.hasClass('single-choice')) {
 
             var answer = $(this).attr('data-num');
+
+            if($('#demogr_answ').length && group.hasClass('gender-question')) {
+                var dem_vals = !$('#demogr_answ').val() ? $('#demogr_answ').val() : $('#demogr_answ').val() + ';';
+                $('#demogr_answ').val(dem_vals + (group.attr('demogr-id')+':'+$(this).find('input').attr('demogr-index')) );
+            }
+
             type = group.hasClass('gender-question') ? 'gender-question' : 'single';
 
         } else if(group.hasClass('multiple-choice')) {
@@ -496,6 +519,19 @@ $(document).ready(function(){
                                     }
                                 }
 
+
+                                var demogr_answ = $('#demogr_answ').val();
+                                var demogr_qs = [];
+                                var demogr_q_ids = [];
+
+                                if(demogr_answ) {
+                                    demogr_qs = demogr_answ.split(';');
+
+                                    for (var i in demogr_qs) {
+                                        demogr_q_ids.push(demogr_qs[i].trim().split(':')[0].trim());
+                                    }
+                                }
+
                                 console.log(group.find('.question').text());
                                 console.log(trigger, trigger_logical_operator);
                                 var trigger_statuses = [];
@@ -515,6 +551,14 @@ $(document).ready(function(){
                                         
                                         var trigger_type = 'standard';
 
+                                    } else if(demogr_q_ids && jQuery.inArray(trigger_question, demogr_q_ids) !== -1) {
+                                        for(var u in demogr_qs) {
+                                            if (demogr_qs[u].trim().split(':')[0].trim() == trigger_question) {
+                                                var given_answer = demogr_qs[u].trim().split(':')[1].trim();
+                                            }
+                                        }
+                                        
+                                        var trigger_type = 'standard';
                                     } else {
                                         var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
                                         var trigger_type = $('.question-group-' + trigger_question).hasClass('birthyear-question') ? 'birthyear' : 'standard';

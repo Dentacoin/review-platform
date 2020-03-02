@@ -1245,6 +1245,44 @@ class VoxController extends FrontController
 			$welcome_arr = implode(';', $welcome_arr);
 		}
 
+		$demogr_arr = [];
+		foreach (config('vox.details_fields') as $key => $value) {
+			if(!empty($this->user->$key) || $this->user->$key === '0') {
+				$i = 0;
+				foreach (config('vox.details_fields.'.$key.'.values') as $k => $v) {
+					$i++;
+					if($k == $this->user->$key) {
+						$demogr_arr[] = $key.':'.$i;
+					}
+				}
+				
+			}
+		}
+
+		if(!empty($this->user->gender)) {
+			$demogr_arr[] = 'gender:'.($this->user->gender == 'm' ? '1' : '2');
+		}
+
+		if(!empty($this->user->birthyear)) {			
+			$age = date('Y') - $this->user->birthyear;
+          
+            if ($age <= 24) {
+                $demogr_arr[] = 'age_groups:1';
+            } else if($age <= 34) {
+                $demogr_arr[] = 'age_groups:2';
+            } else if($age <= 44) {
+                $demogr_arr[] = 'age_groups:3';
+            } else if($age <= 54) {
+                $demogr_arr[] = 'age_groups:4';
+            } else if($age <= 64) {
+                $demogr_arr[] = 'age_groups:5';
+            } else if($age <= 74) {
+                $demogr_arr[] = 'age_groups:6';
+            } else if($age > 74) {
+                $demogr_arr[] = 'age_groups:7';
+            }
+		}
+
 		$seos = PageSeo::find(15);
 
         $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
@@ -1255,6 +1293,7 @@ class VoxController extends FrontController
 		return $this->ShowVoxView('vox', array(
 			'welcome_vox' => $welcome_vox,
 			'welcome_arr' => $welcome_arr,
+			'demogr_arr' => !empty($demogr_arr) ? implode(';', $demogr_arr) : '',
 			'related_voxes' => $related_voxes,
             'suggested_voxes' => $suggested_voxes,
 			'cross_checks' => $cross_checks,

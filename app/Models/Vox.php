@@ -49,6 +49,7 @@ class Vox extends Model {
         'country_count',
         'questions_count',
         'dcn_questions_count',
+        'manually_calc_reward',
         'respondents_count',
         'rewards_count',
         'sort_order',
@@ -78,6 +79,7 @@ class Vox extends Model {
     protected $casts = [
         'countries_ids' => 'array',
         'users_percentage' => 'array',
+        'dcn_questions_triggers' => 'array',
     ];
 
     
@@ -221,7 +223,7 @@ class Vox extends Model {
         } else if ($this->type == 'user_details') {
             return 0;
         } else {
-            return ( $inusd ? $this->getRewardPerQuestion()->amount : $this->getRewardPerQuestion()->dcn) * $this->questionsCount();
+            return ( $inusd ? $this->getRewardPerQuestion()->amount : $this->getRewardPerQuestion()->dcn) * (!empty($this->dcn_questions_count) ? $this->dcn_questions_count : $this->questionsCount());
         }        
     }
 
@@ -580,6 +582,116 @@ class Vox extends Model {
                 $this->save();
             }
         }
+    }
+
+    public function getLongestPath() {
+        $res = 0;
+
+        $givenAnswers = [];
+
+        foreach ($this->questions as $q) {
+
+            //Davame otgovor
+
+            $givenAnswers = $this->dcn_questions_triggers;
+
+            //Ako ima trigger
+            if($q->question_trigger) {
+
+                //Ako e same as previous
+                if($q->question_trigger=='-1') {
+                    foreach ($this->questions as $originalTrigger) {
+                        if($originalTrigger->id == $q->id) {
+                            break;
+                        }
+
+                        if( $originalTrigger->question_trigger && $originalTrigger->question_trigger!='-1' ) {
+                           $triggers = $originalTrigger->question_trigger;
+                        }
+                    }
+                } else {
+                    $triggers = $q->question_trigger;
+                }
+
+                $triggers = explode(';', $triggers);
+
+
+                $triggerSuccess = [];
+
+                foreach ($triggers as $trigger) {
+
+                    list($triggerId, $triggerAnswers) = explode(':', $trigger);
+                    if(mb_strpos($triggerAnswers, '-')!==false) {
+                        list($from, $to) = explode('-', $triggerAnswers);
+
+                        $allowedAnswers = [];
+                        for ($i=$from; $i <= $to ; $i++) { 
+                            $allowedAnswers[] = $i;
+                        }
+
+                    } else {
+                        $allowedAnswers = explode(',', $triggerAnswers);
+                    }
+
+                    //echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($triggerAnswers, true).' / Answer: '.$answers[$triggerId].'<br/>';
+                    if( !empty($givenAnswers[$triggerId]) && in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                        $triggerSuccess[] = true;
+                    } else {
+                        $triggerSuccess[] = false;
+                    }
+                }
+
+                //dd($triggerSuccess);
+
+                if( $q->trigger_type == 'or' ) { // ANY of the conditions should be met (A or B or C)
+                    if( in_array(true, $triggerSuccess) ) {
+                        $res++;
+                    }
+                }  else { //ALL the conditions should be met (A and B and C)
+                    if( !in_array(false, $triggerSuccess) ) {
+                        $res++;
+                    }
+                }
+
+            } else {
+                //Inache go go pravim vinagi
+                $res++;
+            }
+
+
+        }
+
+        $this->dcn_questions_count = $res;
+        $this->save();
+
+    }
+
+    public static function getBirthyearOptions() {
+        $ret = '';        
+
+        for($i=(date('Y')-18);$i>=(date('Y')-90);$i--) {
+            $age = date('Y') - $i;
+
+            if ($age <= 24) {
+                $index = '1';
+            } else if($age <= 34) {
+                $index = '2';
+            } else if($age <= 44) {
+                $index = '3';
+            } else if($age <= 54) {
+                $index = '4';
+            } else if($age <= 64) {
+                $index = '5';
+            } else if($age <= 74) {
+                $index = '6';
+            } else if($age > 74) {
+                $index = '7';
+            }
+
+            $ret .= '<option value="'.$i.'" demogr-index="'.$index.'">'.$i.'</option>';
+        }
+
+        return $ret;
     }
 }
 

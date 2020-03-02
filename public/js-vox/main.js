@@ -205,6 +205,7 @@ $(document).ready(function(){
 				$('#current-question-reward').html( (vox.current / welcome_vox_q_count) * 100 );
 				$('#dcn-test-reward-before').html('DCN: 100');
 			} else { //Нормални
+				
 				console.log('normal');
 				var reward = 0;
 				if( $('body').hasClass('page-welcome-survey') ) {

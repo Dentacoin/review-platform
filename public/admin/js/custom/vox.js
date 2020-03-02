@@ -407,4 +407,17 @@ $(document).ready(function(){
 		$(this).parent().find('.target-wrapper').show();
 		$(this).hide();
 	});
+
+	$('#manually-calc-reward').change( function() {
+		if ($(this).is(':checked')) {
+			$('.calculating-wrapper').show();
+		} else {
+			$('.calculating-wrapper').hide();
+		}
+		
+	});
+
+	if($('#manually-calc-reward:checked').length) {
+		$('.calculating-wrapper').show();
+	}
 });

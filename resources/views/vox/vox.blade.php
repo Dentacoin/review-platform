@@ -76,7 +76,7 @@
 							<div class="flex-1 tar">
 								<span>
 									<span id="dcn-test-reward-before">
-										{{ $vox->complex ? 'Max ' : '' }} {!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
+										{{ !empty($vox->complex) && empty($vox->manually_calc_reward) && empty($vox->dcn_questions_count) ? 'Max ' : '' }} {!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
 									</span>
 									<span id="dcn-test-reward-after" style="display: none;">
 										{!! trans('vox.common.dcn_collected') !!}:
@@ -122,16 +122,14 @@
 						@endif
 
 						@if(empty($user->birthyear))
-							<div class="question-group birthyear-question tac user-detail-question" style="display: none;">
+							<div class="question-group birthyear-question tac user-detail-question" demogr-id="age_groups" style="display: none;">
 								<div class="question">
 									{!! trans('vox.page.questionnaire.question-birth') !!}
 								</div>
 								<div class="answers">
 									<select class="answer" name="birthyear-answer" id="birthyear-answer">
 	                            		<option value="">-</option>
-										@for($i=(date('Y')-18);$i>=(date('Y')-90);$i--)
-	                            			<option value="{{ $i }}">{{ $i }}</option>
-	                            		@endfor
+										{!! App\Models\Vox::getBirthyearOptions() !!}
 	                            	</select>
 								</div>
 
@@ -140,17 +138,17 @@
 						@endif
 
 						@if(!$user->gender)
-							<div class="question-group gender-question single-choice user-detail-question" style="display: none;">
+							<div class="question-group gender-question single-choice user-detail-question" demogr-id="gender" style="display: none;">
 								<div class="question">
 									{!! trans('vox.page.questionnaire.question-sex') !!}
 								</div>
 								<div class="answers">
-									<a class="answer answer" for="answer-gende-m" data-num="m">
-										<input id="answer-gender-m" type="radio" name="gender-answer" class="answer" value="m" style="display: none;">
+									<a class="answer answer" for="answer-gender-m" data-num="m">
+										<input id="answer-gender-m" type="radio" demogr-index="1" name="gender-answer" class="answer" value="m" style="display: none;">
 										{!! trans('vox.page.questionnaire.question-sex-m') !!}
 									</a>
 									<a class="answer answer" for="answer-gender-f" data-num="f">
-										<input id="answer-gender-f" type="radio" name="gender-answer" class="answer" value="f" style="display: none;">
+										<input id="answer-gender-f" type="radio" demogr-index="2" name="gender-answer" class="answer" value="f" style="display: none;">
 										{!! trans('vox.page.questionnaire.question-sex-f') !!}
 									</a>
 								</div>
@@ -189,6 +187,7 @@
 	 				</div>
 				</div>
 				<input type="hidden" name="welcome_answ" id="welcome_answ" value="{{ $welcome_arr }}">
+				<input type="hidden" name="demogr_answ" id="demogr_answ" value="{{ $demogr_arr }}">
 				<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-warning">
 					{!! trans('vox.page.questionnaire.answer-error') !!}
 				</div>

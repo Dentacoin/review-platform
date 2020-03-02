@@ -131,7 +131,10 @@
 
                         <div id="trigger-widgets" {!! empty($question) || empty($question->question_trigger) ? 'style="display: none;"' : '' !!} class="col-md-11" >
                             <div class="form-group clearfix">
-                                <label class="col-md-1 control-label">{{ trans('admin.page.'.$current_page.'.question-trigger') }}</label>
+                                <label class="col-md-1 control-label">
+                                    {{ trans('admin.page.'.$current_page.'.question-trigger') }} <br/><br/>
+                                    <div class="legend-btn" data-toggle="modal" data-target="#legendModal" style="background-color: #ab3bff;text-align: center;color: white;padding: 10px;border-radius: 5px;font-size: 9px;">Check Demographic's Answers</div>
+                                </label>
                                 <div class="col-md-11 triggers-list">
                                     @if(!empty($question) && !empty($question->question_trigger) )
                                         @foreach(explode(';',$question->question_trigger) as $trigger)
@@ -150,23 +153,24 @@
                                             @else
                                                 <div class="input-group clearfix">
                                                     <div class="template-box clearfix">
-                                                        <select name="triggers[]" class="form-control select2" style="width: 50%; float: left;">
-                                                            <!-- <option value="">Select question</option>                                                            
-                                                            <optgroup label="Demographic questions">
-                                                                @foreach(config('vox.details_fields') as $kdf => $dq)
-                                                                    <option value="{{ $kdf }}" {{ !empty($question) && explode(':', $trigger)[0] == $kdf ? 'selected="selected"' : '' }}>{{ $dq['label'] }}</option>
+                                                        <select name="triggers[]" class="form-control select2 trigger-select" style="width: 50%; float: left;">
+                                                            <option value="">Select question</option>                                                            
+                                                            <optgroup label="{{ $item->title }} survey questions">
+                                                                @foreach($item->questions as $iq)
+                                                                    <option value="{{ $iq->id }}" {{ !empty($question) && explode(':', $trigger)[0] == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
                                                                 @endforeach
-                                                                <option value="age_groups" {{ !empty($question) && explode(':', $trigger)[0] == 'age_groups' ? 'selected="selected"' : '' }}>Age Group</option>
-                                                            </optgroup> -->
+                                                            </optgroup>
                                                             <optgroup label="Welcome survey questions">
                                                                 @foreach(App\Models\Vox::find(11)->questions as $wq)
                                                                     <option value="{{ $wq->id }}" {{ !empty($question) && explode(':', $trigger)[0] == $wq->id ? 'selected="selected"' : '' }}>{{ $wq->question }}</option>
                                                                 @endforeach
                                                             </optgroup>
-                                                            <optgroup label="{{ $item->title }} survey questions">
-                                                                @foreach($item->questions as $iq)
-                                                                    <option value="{{ $iq->id }}" {{ !empty($question) && explode(':', $trigger)[0] == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                                                            <optgroup label="Demographic questions">
+                                                                @foreach(config('vox.details_fields') as $kdf => $dq)
+                                                                    <option value="{{ $kdf }}" demographic-ans {{ !empty($question) && explode(':', $trigger)[0] == $kdf ? 'selected="selected"' : '' }}>{{ $dq['label'] }}</option>
                                                                 @endforeach
+                                                                <option value="age_groups" demographic-ans {{ !empty($question) && explode(':', $trigger)[0] == 'age_groups' ? 'selected="selected"' : '' }}>Age Groups</option>
+                                                                <option value="gender" demographic-ans {{ !empty($question) && explode(':', $trigger)[0] == 'gender' ? 'selected="selected"' : '' }}>Gender</option>
                                                             </optgroup>
                                                         </select>
                                                         {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
@@ -430,18 +434,25 @@
         @if(!empty($question) && !empty($triggers_ids) )
             @foreach($triggers_ids as $q => $a)
                 <div class="input-group">
-                    <div class="template-box clearfix"> 
-                        <select name="triggers[]" class="form-control" style="width: 50%; float: left;">
-                            <option value="">Select question</option>
+                    <div class="template-box clearfix">
+                        <select name="triggers[]" class="form-control trigger-select" style="width: 50%; float: left;">
+                            <option value="">Select question</option>                                                            
+                            <optgroup label="{{ $item->title }} survey questions">
+                                @foreach($item->questions as $iq)
+                                    <option value="{{ $iq->id }}" {{ $q == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                                @endforeach
+                            </optgroup>
                             <optgroup label="Welcome survey questions">
                                 @foreach(App\Models\Vox::find(11)->questions as $wq)
                                     <option value="{{ $wq->id }}" {{ $q == $wq->id ? 'selected="selected"' : '' }}>{{ $wq->question }}</option>
                                 @endforeach
                             </optgroup>
-                            <optgroup label="{{ $item->title }} survey questions">
-                                @foreach($item->questions as $iq)
-                                    <option value="{{ $iq->id }}" {{ $q == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                            <optgroup label="Demographic questions">
+                                @foreach(config('vox.details_fields') as $kdf => $dq)
+                                    <option value="{{ $kdf }}" demographic-ans {{ $q == $kdf ? 'selected="selected"' : '' }}>{{ $dq['label'] }}</option>
                                 @endforeach
+                                <option value="age_groups" demographic-ans {{ $q == 'age_groups' ? 'selected="selected"' : '' }}>Age Groups</option>
+                                <option value="gender" demographic-ans {{ $q == 'gender' ? 'selected="selected"' : '' }}>Gender</option>
                             </optgroup>
                         </select>
                         {{ Form::text('answers-number[]', !empty($a) ? $a : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
@@ -456,17 +467,24 @@
         @else 
             <div class="input-group">
                 <div class="template-box clearfix"> 
-                    <select name="triggers[]" class="form-control" style="width: 50%; float: left;">
+                    <select name="triggers[]" class="form-control trigger-select" style="width: 50%; float: left;">
                         <option value="">Select question</option>
+                        <optgroup label="{{ $item->title }} survey questions">
+                            @foreach($item->questions as $iq)
+                                <option value="{{ $iq->id }}" {{ !empty($trigger_question_id) && $trigger_question_id == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                            @endforeach
+                        </optgroup>
                         <optgroup label="Welcome survey questions">
                             @foreach(App\Models\Vox::find(11)->questions as $wq)
                                 <option value="{{ $wq->id }}" {{ !empty($trigger_question_id) && $trigger_question_id == $wq->id ? 'selected="selected"' : '' }}>{{ $wq->question }}</option>
                             @endforeach
                         </optgroup>
-                        <optgroup label="{{ $item->title }} survey questions">
-                            @foreach($item->questions as $iq)
-                                <option value="{{ $iq->id }}" {{ !empty($trigger_question_id) && $trigger_question_id == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                        <optgroup label="Demographic questions">
+                            @foreach(config('vox.details_fields') as $kdf => $dq)
+                                <option value="{{ $kdf }}" demographic-ans {{ !empty($trigger_question_id) && $trigger_question_id == $kdf ? 'selected="selected"' : '' }}>{{ $dq['label'] }}</option>
                             @endforeach
+                            <option value="age_groups" demographic-ans {{ !empty($trigger_question_id) && $trigger_question_id == 'age_groups' ? 'selected="selected"' : '' }}>Age Groups</option>
+                            <option value="gender" demographic-ans {{ !empty($trigger_question_id) && $trigger_question_id == 'gender' ? 'selected="selected"' : '' }}>Gender</option>
                         </optgroup>
                     </select>
                     {{ Form::text('answers-number[]', !empty($trigger_valid_answers) ? $trigger_valid_answers : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
@@ -489,15 +507,22 @@
         <div class="template-box clearfix"> 
             <select name="triggers[]" class="form-control" style="width: 50%; float: left;">
                 <option value="">Select question</option>
+                <optgroup label="{{ $item->title }} survey questions">
+                    @foreach($item->questions as $iq)
+                        <option value="{{ $iq->id }}" {{ !empty($question) && $question->id == $iq->id ? 'selected="selected"' : '' }}>{{ $iq->question }}</option>
+                    @endforeach
+                </optgroup>
                 <optgroup label="Welcome survey questions">
                     @foreach(App\Models\Vox::find(11)->questions as $wq)
                         <option value="{{ $wq->id }}">{{ $wq->question }}</option>
                     @endforeach
                 </optgroup>
-                <optgroup label="{{ $item->title }} survey questions">
-                    @foreach($item->questions as $iq)
-                        <option value="{{ $iq->id }}">{{ $iq->question }}</option>
+                <optgroup label="Demographic questions">
+                    @foreach(config('vox.details_fields') as $kdf => $dq)
+                        <option value="{{ $kdf }}" demographic-ans>{{ $dq['label'] }}</option>
                     @endforeach
+                    <option value="age_groups" demographic-ans>Age Groups</option>
+                    <option value="gender" demographic-ans>Gender</option>
                 </optgroup>
             </select>
             {{ Form::text('answers-number[]', null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
@@ -507,5 +532,44 @@
                 <i class="glyphicon glyphicon-remove"></i>
             </button>
         </div>
+    </div>
+</div>
+
+
+
+<div id="legendModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Demographic answers</h4>
+            </div>
+            <div class="modal-body">
+                @foreach(config('vox.details_fields') as $key => $value)
+                    <h4>{{ $value['label'] }}</h4>
+
+                    @foreach($value['values'] as $k => $v)
+                        <p><b>{{ $loop->iteration }}</b> : {{ $v }}</p>
+                    @endforeach
+                    <br/>
+                @endforeach
+
+                <h4>Age groups</h4>
+                @foreach(config('vox.age_groups') as $key => $value)
+                    <p><b>{{ $loop->iteration }}</b> : {{ $value }}</p>
+                @endforeach
+                <br/>
+
+                <h4>Gender</h4>
+                <p><b>1</b> : Male</p>
+                <p><b>2</b> : Female</p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
     </div>
 </div>

@@ -13,7 +13,7 @@
 						<h4 class="survey-title bold">{{ $survey->title }}</h4>
 					</div>
 					<div class="col right">
-						<span class="bold">{{ !empty($survey->complex) ? 'max ' : '' }} {{ $survey->getRewardTotal() }} DCN</span>
+						<span class="bold">{{ !empty($survey->complex) && empty($survey->manually_calc_reward) && empty($survey->dcn_questions_count) ? 'max ' : '' }} {{ $survey->getRewardTotal() }} DCN</span>
 						<p>{{ $survey->formatDuration() }}</p>
 					</div>					
 				</div>

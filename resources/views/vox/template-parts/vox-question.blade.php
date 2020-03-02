@@ -1,15 +1,20 @@
 @if(!empty($details_question_id))
-	<div class="question-group question-group-details question-group-{{ $details_question_id }} single-choice user-detail-question" data-id="{{ $details_question_id }}" custom-type="{{ $details_question_id }}" style="display: none;">
+	<div class="question-group question-group-details question-group-{{ $details_question_id }} single-choice user-detail-question" data-id="{{ $details_question_id }}" demogr-id="{{ $details_question_id }}" custom-type="{{ $details_question_id }}" style="display: none;">
 		<div class="question">
 			{!! nl2br($details_question['label']) !!}
 		</div>
 		<div class="answers">
 			@if(count($details_question['values'])>5)
-				{{ Form::select( $details_question_id , ['' => '-'] + $details_question['values'] , null , array('class' => 'form-control') ) }}
+				<select name="{{ $details_question_id }}" class="form-control">
+					<option value="">-</option>
+					@foreach($details_question['values'] as $answer_id => $answer)
+						<option value="{{ $answer_id }}" demogr-index="{{ $loop->iteration }}">{{ $answer }}</option>
+					@endforeach
+				</select>
 			@else
 				@foreach($details_question['values'] as $answer_id => $answer)
 					<a class="answer answer" data-num="{{ $answer_id }}" for="answer-{{ $details_question_id }}-{{ $answer_id }}">
-						<input id="answer-{{ $details_question_id }}-{{ $answer_id }}" type="radio" name="answer" class="answer" value="{{ $answer_id }}" style="display: none;">
+						<input id="answer-{{ $details_question_id }}-{{ $answer_id }}" type="radio" name="answer" class="answer" value="{{ $answer_id }}"  demogr-index="{{ $loop->iteration }}" style="display: none;">
 						{{ $answer }}											
 					</a>
 				@endforeach

@@ -89,13 +89,21 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.reward_usd') }}</label>
                             <label class="col-md-10  control-label" style="text-align: left;">
-                                {{ $item->questions->count() }} x {{ $item->getRewardPerQuestion()->dcn }} = {{ $item->getRewardTotal() }} DCN (${{ $item->getRewardTotal(true) }})
+                                @if(!empty($item->manually_calc_reward) && !empty($item->dcn_questions_count))
+                                    {{ $item->dcn_questions_count }} x {{ $item->getRewardPerQuestion()->dcn }} = {{ $item->getRewardTotal() }} DCN (${{ $item->getRewardTotal(true) }})
+                                @else
+                                    {{ $item->questions->count() }} x {{ $item->getRewardPerQuestion()->dcn }} = {{ $item->getRewardTotal() }} DCN (${{ $item->getRewardTotal(true) }})
+                                @endif
                             </label>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.duration') }}</label>
                             <label class="col-md-10  control-label" style="text-align: left;">
-                                {{ $item->questions->count() }} x 10sec = ~{{ ceil( $item->questions->count()/6 ) }} min
+                                @if(!empty($item->manually_calc_reward) && !empty($item->dcn_questions_count))
+                                    {{ $item->dcn_questions_count }} x 10sec = ~{{ ceil( $item->dcn_questions_count/6 ) }} min
+                                @else
+                                    {{ $item->questions->count() }} x 10sec = ~{{ ceil( $item->questions->count()/6 ) }} min
+                                @endif
                             </label>
                         </div>
                     @endif
@@ -243,6 +251,9 @@
 
                     <div class="form-group col-md-12">
                         <h3 style="display: inline-block; margin-right: 20px;">TARGETING</h3> <a href="javascript:;" class="btn btn-primary target-button">Show target groups</a>
+                        @if(empty($item->country_percentage))
+                            <div class="alert alert-danger" style="display: inline-block;">Missing Country Percentage</div>
+                        @endif
                         <div class="col-md-12">
 
                             <div class="target-wrapper" style="display: none; margin-top: 30px;"> 
@@ -334,26 +345,48 @@
                         </div>
                     </div>
 
-                    <!-- @if(!empty($item->complex))
+                    @if(!empty($item->complex))
                         <div class="form-group col-md-12">
-                            <h3 style="display: inline-block; margin-right: 20px;">Calculating the right max. DCN amount</h3>
+                            <h3 style="display: inline-block; margin-right: 20px;">Calculating survey max DCN reward <input type="checkbox" name="manually_calc_reward" id="manually-calc-reward" value="1" {!! !empty($item->manually_calc_reward) ? 'checked="checked"' : '' !!}></h3>
 
-                            @foreach($q_trigger_obj as $iq)
-                                <div class="col-md-12" style="display: flex;">
-                                    <select name="count_dcn_questions[]" class="form-control col" style="flex:1;">
-                                        <option value="{{ $iq->id }}">{{ $iq->question }}</option>
-                                    </select>
+                            @if(empty($item->manually_calc_reward))
+                                <div class="alert alert-danger" style="display: inline-block;">Not calculated reward</div>
+                            @endif
+                            <br/>                            
+
+                            <div class="calculating-wrapper" style="display: none;">
+                                @foreach($q_trigger_obj as $iq)
+                                    <div class="col-md-12" style="display: flex;">
+                                        <select name="count_dcn_questions[]" class="form-control col" style="flex:1;">
+                                            <option value="{{ is_object($iq) ? $iq->id : $iq }}">{{ is_object($iq) ? $iq->question : ($iq == 'age_groups' ? 'Age groups' : ( $iq == 'gender' ? 'Gender' : config('vox.details_fields.'.$iq)['label'])) }}</option>
+                                        </select>
                                         
-                                    <select name="count_dcn_answers[]" class="form-control col" style="flex:1;">
-                                        @foreach(json_decode($iq->answers, true) as $key => $ans)
-                                            <option value="{{ $key }}">{{ $ans }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                            @endforeach
+                                        <select name="count_dcn_answers[]" class="form-control col" style="flex:1;">
+                                            <option value="">-</option>
+                                            @if(is_object($iq))
+                                                @foreach($iq->vox_scale_id && !empty($scales[$iq->vox_scale_id]) ? explode(',', $scales[$iq->vox_scale_id]->answers) :  json_decode($iq->answers, true) as $key => $ans)
+                                                    <option value="{{ $key + 1 }}" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq->id, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq->id]) == ($key + 1) ) ? 'selected="selected"' : '' !!}>{{ $ans }}</option>
+                                                @endforeach
+                                            @else
+                                                @if($iq == 'gender')
+                                                    <option value="1" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq]) == 1 ) ? 'selected="selected"' : '' !!}>Male</option>
+                                                    <option value="2" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq]) == 2 ) ? 'selected="selected"' : '' !!}>Female</option>
+                                                @elseif($iq == 'age_groups')
+                                                    @foreach(config('vox.age_groups') as $key => $val)
+                                                        <option value="{{ $loop->iteration }}" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq]) == $loop->iteration ) ? 'selected="selected"' : '' !!}>{{ $val }}</option>
+                                                    @endforeach
+                                                @else
+                                                    @foreach(config('vox.details_fields.'.$iq.'.values') as $key => $val)
+                                                        <option value="{{ $loop->iteration }}" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq]) == $loop->iteration ) ? 'selected="selected"' : '' !!}>{{ $val }}</option>
+                                                    @endforeach
+                                                @endif
+                                            @endif
+                                        </select>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                    @endif -->
+                    @endif
 
                     <div class="form-group">
                         <div class="col-md-12">
