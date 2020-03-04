@@ -119,7 +119,7 @@ class StatsController extends FrontController
             ]);
         }
 
-        if(!$vox->has_stats) {
+        if(!$vox->has_stats && empty($this->admin)) {
             return redirect( getLangUrl('dental-survey-stats') );
         }
 

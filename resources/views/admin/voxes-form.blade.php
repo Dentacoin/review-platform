@@ -40,10 +40,11 @@
                                 </div>
                                 @if(!empty($item))
                                     <div class="col-md-2">
-                                        <a href="{{ $item->getLink().'?testmode=0' }}" target="_blank" class="btn btn-primary btn-block">Preview Survey</a>
+                                        <!-- <a href="{{ $item->getLink().'?testmode=0' }}" target="_blank" class="btn btn-primary btn-block">Preview Survey</a> -->
+                                        <a href="{{ $item->getStatsList() }}" target="_blank" class="btn btn-primary btn-block">Preview Stats</a>
                                     </div>
                                     <div class="col-md-2">
-                                        <a href="{{ $item->getLink().'?testmode=1' }}" target="_blank" class="btn btn-primary btn-block">Test</a>
+                                        <a href="{{ $item->getLink().'?testmode=1' }}" target="_blank" class="btn btn-primary btn-block">Test Survey</a>
                                     </div>
                                 @endif
                             </div>
