@@ -10,6 +10,7 @@ use DB;
 use App\Models\Blacklist;
 use App\Models\Country;
 use App\Models\Dcn;
+use App\Models\Poll;
 use App\Models\PollAnswer;
 use App\Models\DcnReward;
 use App\Models\DcnTransaction;
@@ -27,8 +28,7 @@ class YouTubeController extends FrontController
 {
     public function test() {
 
-
-
+        
     	exit;
     }
 }

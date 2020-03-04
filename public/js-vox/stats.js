@@ -863,9 +863,9 @@ $(document).ready(function(){
                         } else {
 
                             if (data.answer_id) {
-                                $(this).find('.hint').html('').html('Click on a pie slice to see data only for the respective answer or <a href="javascript:;" class="to-all">see all</a>').show();
+                                $(this).find('.hint').html('').html('Click on a pie slice to see data <br/> only for the respective answer or <a href="javascript:;" class="to-all">see all</a>').show();
                             } else {
-                                $(this).find('.hint').html('').html('Click on a pie slice to see data only for the respective answer.').show();
+                                $(this).find('.hint').html('').html('Click on a pie slice to see data <br/> only for the respective answer.').show();
                             }
                         }
 
@@ -918,9 +918,9 @@ $(document).ready(function(){
                         if(data.question_type != 'multiple_choice') {
                             setupLegend(main_chart_data, data.total, $(this).find('.legend'), legend, data.answer_id, can_click_on_legend);
                             if (data.answer_id) {
-                                $(this).find('.hint').html('').html('Click on a pie slice to see data only for the respective answer or <a href="javascript:;" class="to-all">see all</a>').show();
+                                $(this).find('.hint').html('').html('Click on a pie slice to see data <br/> only for the respective answer or <a href="javascript:;" class="to-all">see all</a>').show();
                             } else {
-                                $(this).find('.hint').html('').html('Click on a pie slice to see data only for the respective answer.').show();
+                                $(this).find('.hint').html('').html('Click on a pie slice to see data <br/> only for the respective answer.').show();
                             }
                         } else {
                             setupMultipleLegend($(this).find('.main-chart'), legend, data.answer_id, can_click_on_legend);
