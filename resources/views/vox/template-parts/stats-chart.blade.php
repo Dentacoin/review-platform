@@ -22,7 +22,7 @@
 
 <div class="graphs flex {!! $question->type=='multiple_choice' ? 'multiple-stat' : '' !!} " >
 
-	@if(count(json_decode($question->answers, true)) > 9)
+	@if(false && count(json_decode($question->answers, true)) > 9)
 		<div class="legend flex more-q-legend">
 			
 		</div>
@@ -153,7 +153,7 @@
 			@endif
 		@endif
 	</div>
-	@if(count(json_decode($question->answers, true)) <= 9)
+	@if( true || count(json_decode($question->answers, true)) <= 9)
 		<div class="legend flex">
 		</div>
 	@else

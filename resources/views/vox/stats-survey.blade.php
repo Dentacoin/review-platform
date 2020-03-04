@@ -74,7 +74,7 @@
 		<div class="stats">
 			@foreach($vox->stats_questions as $question)
 				@if(!empty($user) || (empty($user) && $loop->iteration <=3))
-					<div class="stat {!! count(json_decode($question->answers, true)) > 9 ? 'stat-with-many-qs' : '' !!} {!! $question->stats_top_answers ? 'multipletop_ans' : '' !!}" question-id="{{ $question->id }}" stat-type="{{ $question->used_for_stats }}" {!! !empty($question->stats_scale_answers) ? 'scale-answer-id="1"' : '' !!}>
+					<div class="stat {!! false && count(json_decode($question->answers, true)) > 9 ? 'stat-with-many-qs' : '' !!} {!! $question->stats_top_answers ? 'multipletop_ans' : '' !!}" question-id="{{ $question->id }}" stat-type="{{ $question->used_for_stats }}" {!! !empty($question->stats_scale_answers) ? 'scale-answer-id="1"' : '' !!}>
 						<a class="title" href="javascript:;">
 							<h2 class="container">
 								{{ $question->translateorNew(App::getLocale())->stats_title }}

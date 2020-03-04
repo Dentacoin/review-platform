@@ -1080,7 +1080,7 @@
           transform: translateX(-50%) translateY(-50%); } }
       .page-statistics .stats .stat .contents .graphs .hint {
         bottom: auto;
-        top: 5px;
+        top: 10px;
         font-style: italic;
         font-size: 14px;
         padding: 0px 10px; }
@@ -1257,6 +1257,7 @@
             margin-right: auto;
             margin-left: auto; } }
       .page-statistics .stats .stat .contents .graphs .main-chart {
+        flex: 1;
         padding-bottom: 30px;
         background: #f6f6f6;
         padding-top: 40px; }
@@ -1265,6 +1266,8 @@
         justify-content: center;
         margin-left: 20px;
         padding-right: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
         order: 3; }
         @media screen and (max-width: 1200px) {
           .page-statistics .stats .stat .contents .graphs .legend {

@@ -1096,6 +1096,30 @@ $(document).ready(function(){
             container.append('<div class="col f-c"></div><div class="col s-c"></div><div class="col t-c"></div>');
         }
 
+        var diez = [];
+        var noDiez = [];
+
+        for (var i in rows) {
+
+            if (rows[i][0].search( '#' ) === 0 ) {
+                diez.push(rows[i]);
+            } else {
+                noDiez.push(rows[i]);
+            }
+        }
+
+        var allArr = [];
+        for (var e in noDiez) {
+            allArr.push(noDiez[e]);
+        }
+
+        for (var r in diez) {
+            diez[r][0] = diez[r][0].substring(1);
+            allArr.push(diez[r]);
+        }
+
+        rows = allArr;
+
         var count = rows.length;
         var middle = Math.ceil(count/3);
         var last = Math.ceil((count/3)*2);
@@ -1108,25 +1132,25 @@ $(document).ready(function(){
                 }
             }
 
-            if(container.hasClass('more-q-legend')) {
-                var d = rows.length / 3;
+            // if(container.hasClass('more-q-legend')) {
+            //     var d = rows.length / 3;
 
-                if (parseInt(i)+1<=middle) {
-                    container.find('.f-c').append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+chart_colors[i]+';"></span>'+rows[i][0]+'</div>') );
-                } else if(parseInt(i)+1>middle && parseInt(i)+1<=last) {
-                    container.find('.s-c').append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+chart_colors[i]+';"></span>'+rows[i][0]+'</div>') );
-                } else if(parseInt(i)+1>last) {
-                    container.find('.t-c').append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+chart_colors[i]+';"></span>'+rows[i][0]+'</div>') );
-                }
+            //     if (parseInt(i)+1<=middle) {
+            //         container.find('.f-c').append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+arr_colors[i]+';"></span>'+rows[i][0]+'</div>') );
+            //     } else if(parseInt(i)+1>middle && parseInt(i)+1<=last) {
+            //         container.find('.s-c').append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+arr_colors[i]+';"></span>'+rows[i][0]+'</div>') );
+            //     } else if(parseInt(i)+1>last) {
+            //         container.find('.t-c').append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+arr_colors[i]+';"></span>'+rows[i][0]+'</div>') );
+            //     }
 
-                if ($(window).outerWidth() <= 768) {
+            //     if ($(window).outerWidth() <= 768) {
 
-                    for(var j=1; j<rows[i].length; j++) {
-                        $(container).find('.legend-div[l-id="'+i+'"] .mobile-percentage').append(((rows[i][j]/ totalCount )*100).toFixed(1)+'%');
-                    }
-                }
+            //         for(var j=1; j<rows[i].length; j++) {
+            //             $(container).find('.legend-div[l-id="'+i+'"] .mobile-percentage').append(((rows[i][j]/ totalCount )*100).toFixed(1)+'%');
+            //         }
+            //     }
                     
-            } else {
+            // } else {
                 container.append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+chart_colors[i]+';"></span>'+rows[i][0]+'</div>') );
                 
                 if ($(window).outerWidth() <= 768) {
@@ -1135,14 +1159,14 @@ $(document).ready(function(){
                         $(container).find('.legend-div[l-id="'+i+'"] .mobile-percentage').append(((rows[i][j]/ totalCount )*100).toFixed(1)+'%');
                     }
                 }
-            }
+            // }
         }
 
-        if ($(window).outerWidth() <= 768) {
-            if(container.hasClass('more-q-legend')) {
-                container.parent().find('.more-q-content').prepend(container);
-            }
-        }
+        // if ($(window).outerWidth() <= 768) {
+        //     if(container.hasClass('more-q-legend')) {
+        //         container.parent().find('.more-q-content').prepend(container);
+        //     }
+        // }
 
         container.find('.legend-div').click( function() {
             var container = $(this).closest('.stat');
@@ -1197,28 +1221,45 @@ $(document).ready(function(){
 
         var arr_colors = chart_colors;
 
+        console.log(rows);
+
         if ((question_type == 'single_choice' && vox_scale_id) || $(window).outerWidth() <= 768) {
+
             data.addRows(rows);
         } else {
-
             var arrmyArray = rows;
             for (var w in arrmyArray) {
                 arrmyArray[w].push(chart_colors[w]);              
             }
 
-            for(var i in arrmyArray) {
-                var a = arrmyArray[i];
+            // for(var i in arrmyArray) {
+            //     var a = arrmyArray[i];
+            // }
+            var count_diez = 0;
+            for (var i in arrmyArray) {
+
+                if (arrmyArray[i][0].search( '#' ) === 0 ) {
+                    count_diez++;
+                }
             }
 
-            arrmyArray.sort(function(a, b) {
-                if( b[0].search( '#' ) === 0 ) {
-                    return -1;
-                } else if( a[0].search( '#' ) === 0 ) {
-                    return 1;
-                } else {
+            if(arrmyArray.length == count_diez) {
+                arrmyArray.sort(function(a, b) {
                     return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-                }
-            });
+                });
+            } else {
+
+                arrmyArray.sort(function(a, b) {
+                    if( b[0].search( '#' ) === 0 ) {
+                        return -1;
+                    } else if( a[0].search( '#' ) === 0 ) {
+                        return 1;
+                    } else {
+                        return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+                    }
+                });
+            }
+
 
             // var index, entry;
             // for (index = 0; index < arrmyArray.length; ++index) {
@@ -1236,21 +1277,28 @@ $(document).ready(function(){
             }
 
             var diez = [];
+            var noDiez = [];
 
             for (var i in arrmyArray) {
+
                 if (arrmyArray[i][0].search( '#' ) === 0 ) {
                     diez.push(arrmyArray[i]);
-
-                    arrmyArray.splice(i, 1);
+                } else {
+                    noDiez.push(arrmyArray[i]);
                 }
             }
 
-            for (var i in diez) {
-                diez[i][0] = diez[i][0].substring(1);
-                arrmyArray.push(diez[i]);
+            var allArr = [];
+            for (var e in noDiez) {
+                allArr.push(noDiez[e]);
             }
 
-            data.addRows(arrmyArray);
+            for (var r in diez) {
+                diez[r][0] = diez[r][0].substring(1);
+                allArr.push(diez[r]);
+            }
+
+            data.addRows(allArr);
 
         }
 
