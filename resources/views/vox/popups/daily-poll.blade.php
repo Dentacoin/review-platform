@@ -52,9 +52,9 @@
 					$daily_poll->dont_randomize_answers) ? 'shuffle-answers' : '' !!}">
 					@if(!empty($daily_poll))
 						@foreach($daily_poll->scale_id && !empty($poll_scales[$daily_poll->scale_id]) ? explode(',', $poll_scales[$daily_poll->scale_id]->answers) : json_decode($daily_poll->answers, true) as $key => $answer)
-							<label class="poll-answer" for="ans-{{ $key }}">
+							<label class="poll-answer {{ mb_substr($answer, 0, 1)=='#' ? 'dont-shuffle' : '' }}" for="ans-{{ $key }}">
 								<input type="radio" name="answer" class="answer" value="{{ $loop->index+1 }}" id="ans-{{ $key }}">
-								{!! nl2br( App\Models\Poll::handleAnswerTooltip($answer)) !!}
+								{!! nl2br( App\Models\Poll::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer)) !!}
 							</label>
 						@endforeach
 					@endif

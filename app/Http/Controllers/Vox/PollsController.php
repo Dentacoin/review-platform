@@ -6,7 +6,6 @@ use App\Http\Controllers\FrontController;
 use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
 
-use App\Models\PollRestrictedCountries;
 use App\Models\VoxCategory;
 use App\Models\PollAnswer;
 use App\Models\DcnReward;
@@ -331,7 +330,7 @@ class PollsController extends FrontController
 			        $answer->answer = $a;
 		        	$answer->save();
 
-		        	PollRestrictedCountries::find(1)->recalculateUsersPercentage();
+		        	$poll->recalculateUsersPercentage();
 
 		        	$cv = Cookie::get('daily_poll');
 		        	if(empty($cv)) {
@@ -374,7 +373,7 @@ class PollsController extends FrontController
 			        $answer->answer = $a;
 		        	$answer->save();
 
-		        	PollRestrictedCountries::find(1)->recalculateUsersPercentage();
+		        	$poll->recalculateUsersPercentage();
 
 					$reward = new DcnReward;
 			        $reward->user_id = $this->user->id;
@@ -456,7 +455,7 @@ class PollsController extends FrontController
 		}
 
         foreach ($ans_array as $ans) {
-            $answers[] = Poll::handleAnswerTooltip($ans);
+            $answers[] = Poll::handleAnswerTooltip(mb_substr($ans, 0, 1)=='#' ? mb_substr($ans, 1) : $ans);
         }
 
         foreach ($answers as $key => $value) {

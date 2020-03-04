@@ -119,45 +119,60 @@ class PollsController extends AdminController
 
         if(Request::isMethod('post')) {
 
+            $newpoll = new Poll;
+        	$newpoll->launched_at = !empty($this->request->input('launched_at')) ? $this->request->input('launched_at') : null ;
+		    $newpoll->category = !empty($this->request->input('category')) ? $this->request->input('category') : null;
+            $newpoll->status = 'scheduled';
+            $newpoll->scale_id = $this->request->input('scale-id');
+            $newpoll->dont_randomize_answers = $this->request->input('dont_randomize_answers');
+	        $newpoll->save();
+
+	        foreach ($this->langs as $key => $value) {
+	            if(!empty($this->request->input('question-'.$key))) {
+	                $translation = $newpoll->translateOrNew($key);
+	                $translation->poll_id = $newpoll->id;
+	                $translation->question = $this->request->input('question-'.$key);
+	            }
+
+	            if(!empty( $this->request->input('answers-'.$key) )) {
+                    $newAnswers = $this->request->input('answers-'.$key);
+
+                    $newAnswersArr = [];
+                    foreach ($newAnswers as $ka => $va) {
+                       if(!empty($va)) {
+                            $newAnswersArr[] = $va;
+                       }
+                    }
+                    $translation->answers = json_encode( $newAnswersArr );
+                } else {
+                    $translation->answers = '';
+                }
+
+                $translation->save();
+	        }
+	        $newpoll->save();
+
+            $exisiting_date = Poll::where('id', '!=', $newpoll->id)->where('launched_at', $this->request->input('launched_at'))->first();
+
+            if(!empty($exisiting_date)) {
+                Request::session()->flash('error-message', 'Daily Poll launched date ('.$this->request->input('launched_at').') is already taken');
+                return redirect('cms/vox/polls/edit/'.$newpoll->id);
+            }
+
             $validator = Validator::make($this->request->all(), [
                 'launched_at' => array('required'),
                 'category' => array('required'),
             ]);
 
             if ($validator->fails()) {
-                return redirect('cms/vox/polls/add')
+                return redirect('cms/vox/polls/edit/'.$newpoll->id)
                 ->withInput()
                 ->withErrors($validator);
             } else {
-
-                $newpoll = new Poll;
-            	$newpoll->launched_at = $this->request->input('launched_at');
-    		    $newpoll->category = $this->request->input('category');
-                $newpoll->status = 'scheduled';
-                $newpoll->scale_id = $this->request->input('scale-id');
-                $newpoll->dont_randomize_answers = $this->request->input('dont_randomize_answers');
-    	        $newpoll->save();
-
-    	        foreach ($this->langs as $key => $value) {
-    	            if(!empty($this->request->input('question-'.$key))) {
-    	                $translation = $newpoll->translateOrNew($key);
-    	                $translation->poll_id = $newpoll->id;
-    	                $translation->question = $this->request->input('question-'.$key);
-    	            }
-
-    	            if(!empty( $this->request->input('answers-'.$key) )) {
-                        $translation->answers = json_encode( $this->request->input('answers-'.$key) );
-                    } else {
-                        $translation->answers = '';
-                    }
-
-                    $translation->save();
-    	        }
-    	        $newpoll->save();
-
                 Request::session()->flash('success-message', 'Daily Poll Added');
                 return redirect('cms/vox/polls');
-            }            
+
+            }       
         }
 
         return $this->showView('polls-form', array(
@@ -185,6 +200,13 @@ class PollsController extends AdminController
                     ->withErrors($validator);
                 } else {
 
+                    $exisiting_date = Poll::where('id', '!=', $item->id)->where('launched_at', $this->request->input('launched_at'))->first();
+
+                    if(!empty($exisiting_date)) {
+                        Request::session()->flash('error-message', 'Daily Poll launched date ('.$this->request->input('launched_at').') is already taken');
+                        return redirect('cms/vox/polls/edit/'.$item->id);
+                    }
+
     		        $item->status = $this->request->input('status');
             		$item->launched_at = $this->request->input('launched_at');
     		        $item->category = $this->request->input('category');
@@ -202,12 +224,19 @@ class PollsController extends AdminController
     		            if(!empty( $this->request->input('answers-'.$key) )) {
                             $oldAnswers = json_decode($translation->answers);
                             $newAnswers = $this->request->input('answers-'.$key);
-    	                    $translation->answers = json_encode( $newAnswers );
+
+                            $newAnswersArr = [];
+                            foreach ($newAnswers as $ka => $va) {
+                               if(!empty($va)) {
+                                    $newAnswersArr[] = $va;
+                               }
+                            }
+    	                    $translation->answers = json_encode( $newAnswersArr );
 
                             $translator = [];
 
                             foreach ($oldAnswers as $key => $value) {
-                                $translator[($key+1)] = array_search($value, $newAnswers) + 1;
+                                $translator[($key+1)] = array_search($value, $newAnswersArr) + 1;
                             }
 
                             PollAnswer::where('poll_id', $item->id)->update([
@@ -233,8 +262,12 @@ class PollsController extends AdminController
                 }
 	        }
 
-            $time = $item->launched_at->timestamp;
-            $newformat = date('d-m-Y',$time);
+            $time = !empty($item->launched_at) ? $item->launched_at->timestamp : '';
+            if (!empty($time)) {
+                $newformat = date('d-m-Y',$time);
+            } else {
+                $newformat = null;
+            }            
 
 	        return $this->showView('polls-form', array(
 	            'item' => $item,

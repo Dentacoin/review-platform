@@ -5,7 +5,11 @@
 
 	<h1 class="page-header">
 	    {{ empty($item) ? 'Add new Daily Poll' : 'Edit Daily Poll' }}
+		@if(!empty($item) && !empty($item->users_percentage))
+		    <a class="btn btn-sm btn-success form-control user-b" style="max-width: 200px; float: right;" href="javascript:;" data-toggle="modal" data-target="#infoModal">Show restricted countries</a>
+		@endif
 	</h1>
+
 	<!-- end page-header -->
 
 	<div class="row">
@@ -186,5 +190,28 @@
 	        </div>
 	    </div>
 	</div>
+
+	@if(!empty($item) && !empty($item->users_percentage))
+	    <div id="infoModal" class="modal fade" role="dialog">
+		    <div class="modal-dialog">
+		        <!-- Modal content-->
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal">&times;</button>
+		                <h4 class="modal-title">Restricted countries</h4>
+		            </div>
+		            <div class="modal-body">
+	                    @foreach($item->users_percentage as $c => $up)
+	                        <p {!! intval($up) > 20 ? 'style="color:red;"' : '' !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
+	                    @endforeach
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		            </div>
+		        </div>
+
+		    </div>
+		</div>
+	@endif
 
 @endsection

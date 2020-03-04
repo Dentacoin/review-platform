@@ -41,6 +41,14 @@ class Poll extends Model {
         'updated_at',
         'deleted_at'
     ];
+
+    protected $casts = [
+        'users_percentage' => 'array',
+    ];
+
+    public function answers_count() {
+        return $this->hasMany('App\Models\PollAnswer', 'poll_id', 'id')->count();
+    }
     
     public function respondentsCount() {
         return PollAnswer::where('poll_id', $this->id)->count();   
@@ -129,6 +137,45 @@ class Poll extends Model {
         $img->save($path);
         $this->hasimage_social = true;
         $this->save();
+    }
+
+    public function recalculateUsersPercentage() {
+
+        $respondents_count = PollAnswer::count();
+        $respondents_users = PollAnswer::get();
+
+        $arr = [];
+        foreach ($respondents_users as $ru) {
+            if (!empty($ru->country_id)) {
+
+                if (!isset($arr[$ru->country_id])) {
+                    $arr[$ru->country_id] = 0;
+                }
+                $arr[$ru->country_id] += 1;
+            }
+        }
+
+        foreach ($arr as $key => $value) {
+            $arr[$key] = round((($value / $respondents_count) * 100), 2);
+        }
+
+        $this->users_percentage = $arr;
+        $this->save();
+    }
+
+    public function isPollRestricted($country_id) {
+
+        $is_restricted = false;
+
+        if(!empty($this->users_percentage) && $this->answers_count() >= 8 ) {
+            $rescricted_countries = $this->users_percentage;
+
+            if(array_key_exists($country_id, $rescricted_countries) && $rescricted_countries[$country_id] >= 20 ) {
+                $is_restricted = true;
+            }
+        }
+
+        return $is_restricted;
     }
     
 }

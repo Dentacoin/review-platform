@@ -59,6 +59,7 @@ $(document).ready(function(){
         if (keyCode === 13) { 
             e.preventDefault();
             $(this).closest('.questions-pane').find('.btn-add-answer').trigger('click');
+            $(this).closest('.answers-list').find('.poll-answers').last().focus();
         }
     });
 

@@ -33,7 +33,6 @@ use App\Models\VoxAnswer;
 use App\Models\VoxScale;
 use App\Models\Vox;
 use App\Models\UserLogin;
-use App\Models\PollRestrictedCountries;
 
 
 class FrontController extends BaseController
@@ -379,25 +378,28 @@ class FrontController extends BaseController
 
         ///Daily Polls
 
-        $restrictions = false;
+        $daily_poll = Poll::with('translations')->where('launched_at', date('Y-m-d') )->where('status', 'open')->first();
 
-        if(!empty($this->user) && !empty($this->user->country_id)) {
-            $restrictions = PollRestrictedCountries::isPollRestricted($this->user->country_id);
-        } else {
+        if(!empty($daily_poll)) {
+            
+            $restrictions = false;
 
-            $country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
-            $country_db = Country::where('code', 'like', $country_code)->first();
+            if(!empty($this->user) && !empty($this->user->country_id)) {
+                $restrictions = $daily_poll->isPollRestricted($this->user->country_id);
+            } else {
 
-            if (!empty($country_db)) {
-                $restrictions = PollRestrictedCountries::isPollRestricted($country_db->id);
+                $country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
+                $country_db = Country::where('code', 'like', $country_code)->first();
+
+                if (!empty($country_db)) {
+                    $restrictions =  $daily_poll->isPollRestricted($country_db->id);
+                }
+            }
+
+            if($restrictions) {
+                $daily_poll = null;
             }
         }
-
-        if($restrictions) {
-            $daily_poll = null;
-        } else {
-            $daily_poll = Poll::with('translations')->where('launched_at', date('Y-m-d') )->where('status', 'open')->first();
-        }        
 
         if (!empty($daily_poll)) {
             $params['daily_poll'] = $daily_poll;
@@ -728,6 +730,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2020-03-03';
+        $params['cache_version'] = '2020-03-04';
     }
 }

@@ -20,9 +20,6 @@
             <div class="col-md-2">
             	<input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="Search">
             </div>
-            <div class="col-md-2">
-            	<a class="btn btn-sm btn-success form-control user-b" href="javascript:;" data-toggle="modal" data-target="#infoModal">Show restricted countries</a>
-            </div>
         </div>
     </form>
 
@@ -131,26 +128,5 @@
             </ul>
         </nav>
     @endif
-
-    <div id="infoModal" class="modal fade" role="dialog">
-	    <div class="modal-dialog">
-	        <!-- Modal content-->
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h4 class="modal-title">Restricted countries</h4>
-	            </div>
-	            <div class="modal-body">
-                    @foreach(App\Models\PollRestrictedCountries::find(1)->users_percentage as $c => $up)
-                        <p {!! intval($up) > 20 ? 'style="color:red;"' : '' !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
-                    @endforeach
-	            </div>
-	            <div class="modal-footer">
-	                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	            </div>
-	        </div>
-
-	    </div>
-	</div>
 
 @endsection

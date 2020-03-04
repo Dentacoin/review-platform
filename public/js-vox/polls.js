@@ -24,12 +24,14 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(ret) {
+
                 if(ret.success) {
                 	$('#poll-popup .poll-answers').html('');
                 	$('#poll-popup').find('.poll-question').html(ret.title);
                 	$('#poll-popup').find('form').attr('action', ret.url);
+
                 	for (var i in ret.answers ) {
-                		$('#poll-popup .poll-answers').append('<label class="poll-answer" for="ans-'+(parseInt(i) + 1)+'"><input type="radio" name="answer" class="answer" value="'+(parseInt(i) + 1)+'" id="ans-'+(parseInt(i) + 1)+'">'+ret.answers[i]+'</label>');
+                		$('#poll-popup .poll-answers').append('<label class="poll-answer '+(ret.answers[i].indexOf('#') > -1 ? 'dont-shuffle' : '')+'" for="ans-'+(parseInt(i) + 1)+'"><input type="radio" name="answer" class="answer" value="'+(parseInt(i) + 1)+'" id="ans-'+(parseInt(i) + 1)+'">'+ret.answers[i].substr(1)+'</label>');
                 	}
 
                     if (ret.randomize_answers) {
@@ -39,7 +41,7 @@ $(document).ready(function(){
                     }
 
                     if ($('#poll-popup .poll-answers').hasClass('shuffle-answers')) {
-                        var divs = $('#poll-popup .poll-answers').children();
+                        var divs = $('#poll-popup .poll-answers').children().not(".dont-shuffle");
 
                         while (divs.length) {
                             $('#poll-popup .poll-answers').prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
