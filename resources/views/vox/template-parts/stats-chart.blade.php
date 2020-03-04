@@ -120,11 +120,11 @@
 		@if($question->used_for_stats=='standard')
 
 			<div class="total-gender">
-				<label for="scale-gender-f-{{ $question->id }}" class="total total-f">
+				<label for="scale-gender-m-{{ $question->id }}" class="total total-f" custom-for="scale-gender-m-{{ $question->id }}">
 					<img src="{{ url('new-vox-img/women-icon.svg') }}" alt="Dentavox statistics woman icon">
 					{!! trans('vox.page.stats.total-women') !!}: <b></b>
 				</label>
-				<label for="scale-gender-m-{{ $question->id }}" class="total total-m">
+				<label for="scale-gender-f-{{ $question->id }}" class="total total-m" custom-for="scale-gender-f-{{ $question->id }}">
 					<img src="{{ url('new-vox-img/man-icon.svg') }}" alt="Dentavox statistics man icon">
 					{!! trans('vox.page.stats.total-men') !!}: <b></b>
 				</label>

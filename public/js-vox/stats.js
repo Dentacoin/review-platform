@@ -802,6 +802,12 @@ $(document).ready(function(){
                         }
 
 
+                        if ($(window).outerWidth() <= 768) {
+                            $(this).find('.total.total-f').attr('for', $(this).find('.total.total-f').attr('custom-for') + '-1');
+                            $(this).find('.total.total-m').attr('for', $(this).find('.total.total-m').attr('custom-for') + '-1');
+                        }
+
+
                         if(data.question_type == 'multiple_choice') {
                             $(this).find('.legend').hide();
                         } else {
@@ -1829,17 +1835,34 @@ $(document).ready(function(){
                 if( typeof(rowsf[0][j])!='object' ) {
                     $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').attr('votes', mainChartRows[i][j]);
                     // if(rowsf[i][j]){
-                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix"> <img src="'+window.location.origin+'/new-vox-img/women-icon.svg"><span style="width: '+parseInt(plf)+'%; opacity: 0.4; background-color: '+chart_colors[i]+';"></span> '+((rowsf[i][j]/ totalfCount)*100).toFixed(1)+'%</div>');
+                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-f"> <img src="'+window.location.origin+'/new-vox-img/women-icon.svg"><span style="width: '+parseInt(plf)+'%; opacity: 0.4; background-color: '+chart_colors[i]+';"></span> '+((rowsf[i][j]/ totalfCount)*100).toFixed(1)+'%</div>');
                     // }
 
                     // if(rowsm[i][j]) {
-                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix"> <img src="'+window.location.origin+'/new-vox-img/man-icon.svg"><span style="width: '+parseInt(plm)+'%; opacity: 0.7; background-color: '+chart_colors[i]+';"></span> '+((rowsm[i][j]/ totalmCount)*100).toFixed(1)+'%</div>');
+                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-m"> <img src="'+window.location.origin+'/new-vox-img/man-icon.svg"><span style="width: '+parseInt(plm)+'%; opacity: 0.7; background-color: '+chart_colors[i]+';"></span> '+((rowsm[i][j]/ totalmCount)*100).toFixed(1)+'%</div>');
                     // }
                 }
             }
         }
 
-
+        if (scale_options_arr.length && scale_options_arr.length == 1) {
+            if (scale_options_arr[0] == 'f') {
+                container.find('.legend-m').hide();
+                container.find('.legend-f').show();
+            } else if(scale_options_arr[0] == 'm') {
+                container.find('.legend-f').hide();
+                container.find('.legend-m').show();
+            }
+            if ($(window).width() > 768) {
+                container.closest('.stat').find('.multiple-gender-chart').css('margin-top', '100px');
+            }            
+        } else {
+            container.find('.legend-f').show();
+            container.find('.legend-m').show();
+            if ($(window).width() > 768) {
+                container.closest('.stat').find('.multiple-gender-chart').css('margin-top', '0px');
+            }
+        }
 
         var list = container.children();
 
