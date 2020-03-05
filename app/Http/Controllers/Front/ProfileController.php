@@ -42,17 +42,9 @@ class ProfileController extends FrontController
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
         parent::__construct($request, $route, $locale);
 
-        $this->menu = [
-            'home' => trans('trp.page.profile.menu.wallet'),
-            'info' => trans('trp.page.profile.menu.info'),
-            'privacy' => trans('trp.page.profile.menu.privacy'),
-            'invite' => trans('trp.page.profile.menu.invite-patient'),
-        ];
-
         $this->profile_fields = [
             'title' => [
                 'type' => 'select',
-                'required' => true,
                 'values' => config('titles')
             ],
             'name' => [
@@ -118,41 +110,7 @@ class ProfileController extends FrontController
                 'is_email' => true,
             ],
         ];
-
-        $this->genders = [
-            '' => null,
-            'm' => trans('admin.common.gender.m'),
-            'f' => trans('admin.common.gender.f'),
-        ];
     }
-
-    public function handleMenu() {
-        if($this->user->is_dentist) {
-            $this->menu['invite'] = trans('trp.page.profile.menu.invite-dentist');
-            
-            if( $this->user->is_clinic ) {
-                unset($this->profile_fields['title']);
-            }
-
-            if($this->user->asks->isNotEmpty()) {
-                $this->menu['asks'] = trans('trp.page.profile.menu.asks');
-            }
-        } else {
-            $this->menu['trp'] = trans('trp.page.profile.menu.trp');
-            unset($this->profile_fields['title']);
-            unset($this->profile_fields['phone']);
-            unset($this->profile_fields['address']);
-            unset($this->profile_fields['specialization']);
-            unset($this->profile_fields['description']);
-            unset($this->profile_fields['short_description']);
-            unset($this->profile_fields['website']);
-            unset($this->profile_fields['socials']);
-            unset($this->profile_fields['name_alternative']);
-            unset($this->profile_fields['email_public']);     
-            unset($this->profile_fields['accepted_payment']);            
-        }
-    }
-
 
     public function setGrace($locale=null) {
         if(empty($this->user->grace_end)) {
@@ -163,452 +121,149 @@ class ProfileController extends FrontController
     }
 
     //
-    //Home
-    //
-
-    public function home($locale=null) {
-
-        return redirect(getLangUrl('/'));
-
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') {
-            return redirect(getLangUrl('/'));
-        }
-        $this->handleMenu();
-
-        if(Request::isMethod('post')) {
-            $va = trim(Request::input('vox-address'));
-            $error = null;
-            if(empty($va) || mb_strlen($va)!=42) {
-                $error = trans('trp.page.profile.home.address-invalid');
-            } else if(!$this->user->canIuseAddress($va)) {
-                $error = trans('trp.page.profile.home.address-used');
-            } else {
-                $this->user->dcn_address = Request::input('vox-address');
-                $this->user->save();
-            }
-            
-            if(Request::input('json')) {
-                $ret = [
-                    'success' => !$error,
-                    'message' => $error ? $error : trans('trp.page.profile.home.address-saved')
-                ];
-                return Response::json( $ret );
-            } else {
-                if($error) {
-                    Request::session()->flash('error-message', $error);                    
-                } else {
-                    Request::session()->flash('success-message', trans('trp.page.profile.home.address-saved'));
-                }
-                
-                return redirect( getLangUrl('profile'));
-            }
-        }
-
-        $params = [
-            'menu' => $this->menu,
-            'currencies' => file_get_contents('/tmp/dcn_currncies'),
-            'history' => $this->user->history->where('type', '=', 'vox-cashout'),
-            'js' => [
-                'profile.js',
-                'address.js',
-            ],
-            'css' => [
-                'common-profile.css',
-            ],
-            'jscdn' => [
-                'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
-            ]
-        ];
-
-        if(!$this->user->civic_kyc) {
-            $params['js'][] = 'civic.js';
-            if(empty($params['jscdn'])) {
-                $params['jscdn'] = [];
-            }
-            $params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
-            $params['csscdn'] = [
-                'https://hosted-sip.civic.com/css/civic-modal.min.css',
-            ];
-        }
-
-        return $this->ShowView('profile', $params);
-    }
-
-
-    public function withdraw($locale=null) {
-
-        return redirect(getLangUrl('/'));
-
-        if(!$this->user->canWithdraw('trp') ) {
-            return;
-        }
-
-        $va = trim(Request::input('vox-address'));
-        if(empty($va) || mb_strlen($va)!=42) {
-            $ret = [
-                'success' => false,
-                'message' => trans('trp.page.profile.home.address-invalid')
-            ];
-            return Response::json( $ret );
-        } else if(!$this->user->canIuseAddress($va)) {
-            $ret = [
-                'success' => false,
-                'message' => trans('trp.page.profile.home.address-used')
-            ];
-            return Response::json( $ret );
-        } else {
-            $this->user->dcn_address = Request::input('vox-address');
-            $this->user->save();
-        }
-        
-
-        $amount = intval(Request::input('wallet-amount'));
-        if($amount > $this->user->getTotalBalance('vox')) {
-            $ret = [
-                'success' => false,
-                'message' => trans('trp.page.profile.home.amount-too-high')
-            ];
-        } else if($amount<env('VOX_MIN_WITHDRAW')) {
-            $ret = [
-                'success' => false,
-                'message' => trans('trp.page.profile.home.amount-too-low', [
-                    'minimum' => '<b>'.env('VOX_MIN_WITHDRAW').'</b>'
-                ])
-            ];
-        } else {
-            $cashout = new DcnCashout;
-            $cashout->user_id = $this->user->id;
-            $cashout->platform = 'trp';
-            $cashout->reward = $amount;
-            $cashout->address = $this->user->dcn_address;
-            $cashout->save();
-
-            $ret = Dcn::send($this->user, $this->user->dcn_address, $amount, 'vox-cashout', [$cashout->id]);
-            $ret['balance'] = $this->user->getTotalBalance('trp');
-            
-            if($ret['success']) {
-                $cashout->tx_hash = $ret['message'];
-                $cashout->save();
-            } else if (!empty($ret['valid_input'])) {
-                $ret['success'] = true;
-            }
-
-            if( empty($ret['success']) ) {
-                $cashout->delete();
-            }
-        }
-
-        return Response::json( $ret );
-    }
-
-    //
-    //Privacy
-    //
-
-
-    public function privacy($locale=null) {
-        return redirect(getLangUrl('/'));
-
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') {
-            return redirect(getLangUrl('/'));
-        }
-        $this->handleMenu();
-        
-
-
-        if(Request::isMethod('post')) {
-            if( Request::input('action') ) {
-                if( Request::input('action')=='delete' ) {
-                    $this->user->sendTemplate( 30 );
-                    $this->user->self_deleted = 1;
-                    $this->user->hasimage = false;
-                    $this->user->self_deleted_at = Carbon::now();
-                    $this->user->save();
-                    $this->user->deleteActions();
-                    User::destroy( $this->user->id );
-                    session(['login-logged' => true]);
-                    Auth::guard('web')->logout();
-                    return redirect( getLangUrl('/') );
-                }
-            }
-        }
-
-        return $this->ShowView('profile-privacy', [
-            'menu' => $this->menu,
-            'css' => [
-                'common-profile.css',
-            ],
-            'js' => [
-                'profile.js',
-            ],
-        ]);
-    }
-
-    public function privacy_download($locale=null) {
-
-        return redirect(getLangUrl('/'));
-
-        $html = $this->showView('users-data', array(
-            'genders' => $this->genders,
-        ))->render();
-
-        $tmp_path = '/tmp/'.$this->user->id;
-        if(!is_dir($tmp_path)) {
-            mkdir($tmp_path);
-        }
-
-        file_put_contents($tmp_path.'/my-private-info.html', $html);
-
-        if($this->user->hasimage) {
-            copy( $this->user->getImagePath(), $tmp_path.'/'.$this->user->id.'.jpg' );
-        }
-
-        if($this->user->photos->isNotEmpty()) {
-            foreach ($this->user->photos as $photo) {
-                copy( $photo->getImagePath(), $tmp_path.'/'.$photo->id.'.jpg' );
-            }
-        }
-
-        exec('zip -rj0 '.$tmp_path.'.zip '.$tmp_path.'/*');
-        exec('rm -rf '.$tmp_path);
-
-        $mtext = $this->user->getName().' just requested his/hers personal information<br/>
-User\'s email is: '.$this->user->email.'<br/>
-Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$this->user->id;
-
-        Mail::send([], [], function ($message) use ($mtext) {
-            $sender = config('mail.from.address');
-            $sender_name = config('mail.from.name');
-
-            $message->from($sender, $sender_name);
-            $message->to( 'privacy@dentacoin.com' ); //$sender
-            //$message->to( 'dokinator@gmail.com' );
-            $message->replyTo($sender, $sender_name);
-            $message->subject('New Personal Data Download Request');
-            $message->attach('/tmp/'.$this->user->id.'.zip');
-            $message->setBody($mtext, 'text/html'); // for HTML rich messages
-        });
-
-        return Response::download($tmp_path.'.zip', 'your-private-info.zip');
-    }
-
-    //
     //Invites
     //
 
     public function invite($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') {
-            return redirect(getLangUrl('/'));
-        }
-        $this->handleMenu();
 
-        if(Request::isMethod('post') && $this->user->canInvite('trp') ) {
+        if($this->user->canInvite('trp') ) {
 
-            if(Request::Input('is_contacts')) {
-                // if(empty(Request::Input('contacts')) || !is_array( Request::Input('contacts') ) ) {
-                //     return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.contacts-none-selected') ] );
-                // }
+            $validator = Validator::make(Request::all(), [
+                'email' => ['required', 'email'],
+                'name' => ['required', 'string'],
+            ]);
 
-                // foreach (Request::Input('contacts') as $inv_info) {
-                //     $inv_arr = explode('|', $inv_info);
-                //     $email = $name = '';
-                //     if(count($inv_arr)>1) {
-                //         $email = $inv_arr[ count($inv_arr)-1 ];
-                //         $name = $inv_arr[0];
-                //     } else {
-                //         $email = $inv_arr[0];
-                //     }
-                //     $invitation = UserInvite::where([
-                //         ['user_id', $this->user->id],
-                //         ['invited_email', 'LIKE', $email],
-                //     ])->first();
-
-                //     if($invitation) {
-                //         if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                //             return Response::json(['success' => false, 'message' => 'Sending review invitation failed! You already invited this patient to submit feedback this month.' ] );
-                //         }
-                //         $invitation->invited_name = $name;
-                //         $invitation->created_at = Carbon::now();
-                //         $invitation->save();
-                //     } else {
-                //         $invitation = new UserInvite;
-                //         $invitation->user_id = $this->user->id;
-                //         $invitation->invited_email = $email;
-                //         $invitation->invited_name = $name;
-                //         $invitation->save();
-                //     }
-                //     //Mega hack
-                //     $dentist_name = $this->user->name;
-                //     $dentist_email = $this->user->email;
-                //     $this->user->name = '';
-                //     $this->user->email = $email;
-                //     $this->user->save();
-
-                //     $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17, [
-                //         'friend_name' => $dentist_name,
-                //         'invitation_id' => $invitation->id
-                //     ]);
-
-                //     //Back to original
-                //     $this->user->name = $dentist_name;
-                //     $this->user->email = $dentist_email;
-                //     $this->user->save();
-
-                // }
-
-                // return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.contacts-success') ] );
+            if ($validator->fails()) {
+                return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
             } else {
-                $validator = Validator::make(Request::all(), [
-                    'email' => ['required', 'email'],
-                    'name' => ['required', 'string'],
-                ]);
 
-                if ($validator->fails()) {
-                    return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.failure') ] );
-                } else {
+                $is_dentist = User::where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 1)->first();
 
-                    $is_dentist = User::where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 1)->first();
+                if (!empty($is_dentist)) {
+                    return Response::json(['success' => false, 'message' => 'You can\'t invite dentist/clinic for review'] );
+                }
 
-                    if (!empty($is_dentist)) {
-                        return Response::json(['success' => false, 'message' => 'You can\'t invite dentist/clinic for review'] );
-                    }
+                $invitation = UserInvite::where([
+                    ['user_id', $this->user->id],
+                    ['invited_email', 'LIKE', Request::Input('email')],
+                ])->first();
 
-                    $invitation = UserInvite::where([
-                        ['user_id', $this->user->id],
-                        ['invited_email', 'LIKE', Request::Input('email')],
-                    ])->first();
+                $existing_patient = User::where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 0)->first();
 
-                    $existing_patient = User::where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 0)->first();
-
-                    if($invitation) {
-
-                        if(!empty($existing_patient)) {
-                            $d_id = $this->user->id;
-
-                            $patient_review = Review::where('user_id', $existing_patient->id )->where(function($query) use ($d_id) {
-                                $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
-                            })->orderBy('id', 'desc')->first();
-                            
-                            if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                                return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited-month') ] );
-                            }
-                        }
-
-                        if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
-                            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited-month')] );
-                        }
-
-                        $invitation->invited_name = Request::Input('name');
-                        $invitation->created_at = Carbon::now();
-
-                        if (empty($invitation->unsubscribed)) {
-                            $invitation->review = true;
-                            $invitation->completed = null;
-                            $invitation->notified1 = null;
-                            $invitation->notified2 = null;
-                            $invitation->notified3 = null;
-                        }
-                        $invitation->save();
-
-                        if(!empty($existing_patient)) {
-                            $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
-                            if(!empty($last_ask)) {
-                                $last_ask->created_at = Carbon::now();
-                                $last_ask->on_review = true;
-                                $last_ask->save();
-                            } else {
-                                $ask = new UserAsk;
-                                $ask->user_id = $existing_patient->id;
-                                $ask->dentist_id = $this->user->id;
-                                $ask->status = 'yes';
-                                $ask->on_review = true;
-                                $ask->save();
-                            }
-                        }
-                    } else {
-                        $invitation = new UserInvite;
-                        $invitation->user_id = $this->user->id;
-                        $invitation->invited_email = Request::Input('email');
-                        $invitation->invited_name = Request::Input('name');
-                        $invitation->review = true;
-                        $invitation->save();
-                    }
+                if($invitation) {
 
                     if(!empty($existing_patient)) {
+                        $d_id = $this->user->id;
 
-                        $substitutions = [
-                            'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-                            'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
-                            'invited_user_name' => Request::Input('name'),
-                            "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
-                        ];
-
-                        $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
-
-                    } else {
-
-                        if(Request::Input('email') != $this->user->email) {
-
-                            //Mega hack
-                            $dentist_name = $this->user->name;
-                            $dentist_email = $this->user->email;
-                            $this->user->name = Request::Input('name');
-                            $this->user->email = Request::Input('email');
-                            $this->user->save();
-
-
-                            if ( $this->user->is_dentist) {
-                                $substitutions = [
-                                    'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-                                    'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
-                                    'invited_user_name' => $this->user->name,
-                                    "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
-                                ];
-
-
-                                $this->user->sendGridTemplate(59, $substitutions, 'trp');
-                            } else {
-                                $this->user->sendTemplate( 17 , [
-                                    'friend_name' => $dentist_name,
-                                    'invitation_id' => $invitation->id
-                                ], 'trp');
-                            }
-
-                            // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
-                            //     'friend_name' => $dentist_name,
-                            //     'invitation_id' => $invitation->id
-                            // ]);
-
-                            //Back to original
-                            $this->user->name = $dentist_name;
-                            $this->user->email = $dentist_email;
-                            $this->user->save();
-
-                        } else {
-                            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.yourself') ] );
+                        $patient_review = Review::where('user_id', $existing_patient->id )->where(function($query) use ($d_id) {
+                            $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
+                        })->orderBy('id', 'desc')->first();
+                        
+                        if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
+                            return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited-month') ] );
                         }
-
                     }
 
+                    if($invitation->created_at->timestamp > Carbon::now()->subMonths(1)->timestamp) {
+                        return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.already-invited-month')] );
+                    }
 
-                    return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
+                    $invitation->invited_name = Request::Input('name');
+                    $invitation->created_at = Carbon::now();
+
+                    if (empty($invitation->unsubscribed)) {
+                        $invitation->review = true;
+                        $invitation->completed = null;
+                        $invitation->notified1 = null;
+                        $invitation->notified2 = null;
+                        $invitation->notified3 = null;
+                    }
+                    $invitation->save();
+
+                    if(!empty($existing_patient)) {
+                        $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
+                        if(!empty($last_ask)) {
+                            $last_ask->created_at = Carbon::now();
+                            $last_ask->on_review = true;
+                            $last_ask->save();
+                        } else {
+                            $ask = new UserAsk;
+                            $ask->user_id = $existing_patient->id;
+                            $ask->dentist_id = $this->user->id;
+                            $ask->status = 'yes';
+                            $ask->on_review = true;
+                            $ask->save();
+                        }
+                    }
+                } else {
+                    $invitation = new UserInvite;
+                    $invitation->user_id = $this->user->id;
+                    $invitation->invited_email = Request::Input('email');
+                    $invitation->invited_name = Request::Input('name');
+                    $invitation->review = true;
+                    $invitation->save();
                 }
-            }
 
+                if(!empty($existing_patient)) {
+
+                    $substitutions = [
+                        'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                        'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
+                        'invited_user_name' => Request::Input('name'),
+                        "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
+                    ];
+
+                    $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
+
+                } else {
+
+                    if(Request::Input('email') != $this->user->email) {
+
+                        //Mega hack
+                        $dentist_name = $this->user->name;
+                        $dentist_email = $this->user->email;
+                        $this->user->name = Request::Input('name');
+                        $this->user->email = Request::Input('email');
+                        $this->user->save();
+
+
+                        if ( $this->user->is_dentist) {
+                            $substitutions = [
+                                'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                                'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
+                                'invited_user_name' => $this->user->name,
+                                "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
+                            ];
+
+
+                            $this->user->sendGridTemplate(59, $substitutions, 'trp');
+                        } else {
+                            $this->user->sendTemplate( 17 , [
+                                'friend_name' => $dentist_name,
+                                'invitation_id' => $invitation->id
+                            ], 'trp');
+                        }
+
+                        // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
+                        //     'friend_name' => $dentist_name,
+                        //     'invitation_id' => $invitation->id
+                        // ]);
+
+                        //Back to original
+                        $this->user->name = $dentist_name;
+                        $this->user->email = $dentist_email;
+                        $this->user->save();
+
+                    } else {
+                        return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.yourself') ] );
+                    }
+                }
+
+                return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
+            }
         }
 
         return redirect(getLangUrl('/'));
-
-        return $this->ShowView('profile-invite', [
-            'menu' => $this->menu,
-            'css' => [
-                'common-profile.css',
-            ],
-            'js' => [
-                'profile.js',
-                'hello.all.js',
-            ],
-        ]);
     }
 
     public function invite_whatsapp($locale=null) {
@@ -716,7 +371,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     'info' => $bulk_invites,
                     'emails' => $p_emails,
                 ] );
-
             }
         }
     }
@@ -742,7 +396,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     'success' => true,
                     'names' => $p_names,
                 ] );
-
             }
         }
     }
@@ -799,7 +452,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $final_message = trans('trp.page.profile.invite.success');
                     $alert_color = 'success';
                 }
-
 
                 foreach ($emails as $key => $email) {
                     if(!empty($names[$key]) && ($email != $this->user->email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -1030,10 +682,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 return Response::json([
                     'success' => true,
                     'info' => $reversedRows,
-                ] );
-                
+                ] ); 
             }
-
         }
     }
 
@@ -1042,9 +692,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         $id = Request::input('id');
 
         if (!empty($id)) {
-            if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') {
-                return redirect(getLangUrl('/'));
-            }
 
             if(Request::isMethod('post') && $this->user->canInvite('trp') ) {
 
@@ -1084,8 +731,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     return Response::json(['success' => false ] );
                 }
             }
-        }
 
+            return redirect(getLangUrl('/'));
+        }
     }
 
 
@@ -1371,7 +1019,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_clinic_unclaimed' && $this->user->status!='test') {
             return Response::json(['success' => false ]);
         }
-        $this->handleMenu();
 
         if( Request::file('image') && Request::file('image')->isValid() ) {
             $img = Image::make( Input::file('image') )->orientate();
@@ -1397,7 +1044,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
             return Response::json(['success' => true, 'thumb' => $this->user->getImageUrl(true), 'name' => '' ]);
         }
-    
         
     }
     
@@ -1406,262 +1052,212 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') {
             return redirect(getLangUrl('/'));
         }
-        $this->handleMenu();
 
-        if(Request::isMethod('post')) {
-
-            $validator_arr = [];
-            foreach ($this->profile_fields as $key => $value) {
-                if( Request::input('field') && $key!=Request::input('field') ) {
-                    continue;
-                }
-
-                $arr = [];
-                if (!empty($value['required'])) {
-                    $arr[] = 'required';
-                }
-                if (!empty($value['is_email'])) {
-                    $arr[] = 'email';
-                    $arr[] = 'unique:users,email,'.$this->user->id;
-                }
-                if (!empty($value['min'])) {
-                    $arr[] = 'min:'.$value['min'];
-                }
-                if (!empty($value['max'])) {
-                    $arr[] = 'max:'.$value['max'];
-                }
-                if (!empty($value['number'])) {
-                    $arr[] = 'numeric';
-                }
-                if (!empty($value['array'])) {
-                    $arr[] = 'array';
-                }
-                if (!empty($value['values'])) {
-                    $arr[] = 'in:'.implode(',', array_keys($value['values']) );
-                }
-                if (!empty($value['regex'])) {
-                    $arr[] = $value['regex'];
-                }
-
-                if (!empty($arr)) {
-                    $validator_arr[$key] = $arr;
-                }
+        $validator_arr = [];
+        foreach ($this->profile_fields as $key => $value) {
+            if( Request::input('field') && $key!=Request::input('field') ) {
+                continue;
             }
 
-            if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
-                request()->merge([
-                    'website' => 'http://'.request('website')
-                ]);
+            $arr = [];
+            if (!empty($value['required'])) {
+                $arr[] = 'required';
+            }
+            if (!empty($value['is_email'])) {
+                $arr[] = 'email';
+                $arr[] = 'unique:users,email,'.$this->user->id;
+            }
+            if (!empty($value['min'])) {
+                $arr[] = 'min:'.$value['min'];
+            }
+            if (!empty($value['max'])) {
+                $arr[] = 'max:'.$value['max'];
+            }
+            if (!empty($value['number'])) {
+                $arr[] = 'numeric';
+            }
+            if (!empty($value['array'])) {
+                $arr[] = 'array';
+            }
+            if (!empty($value['values'])) {
+                $arr[] = 'in:'.implode(',', array_keys($value['values']) );
+            }
+            if (!empty($value['regex'])) {
+                $arr[] = $value['regex'];
             }
 
-            $validator = Validator::make(Request::all(), $validator_arr);
+            if (!empty($arr)) {
+                $validator_arr[$key] = $arr;
+            }
+        }
 
-            if ($validator->fails()) {
+        if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
+            request()->merge([
+                'website' => 'http://'.request('website')
+            ]);
+        }
 
+        $validator = Validator::make(Request::all(), $validator_arr);
+
+        if ($validator->fails()) {
+
+            if( Request::input('json') ) {
+                $ret = [
+                    'success' => false
+                ];
+
+                $msg = $validator->getMessageBag()->toArray();
+                $ret['messages'] = [];
+                foreach ($msg as $field => $errors) {
+                    $ret['messages'][$field] = implode(', ', $errors);
+                }
+                return Response::json($ret);
+            }
+
+            return redirect( getLangUrl('/') )
+            ->withInput()
+            ->withErrors($validator);
+        } else {
+
+            if(is_numeric(request('country_id')) && empty(Request::input('field')) && $this->user->is_dentist && !User::validateAddress( $this->user->country_id, request('address') ) ) {
                 if( Request::input('json') ) {
                     $ret = [
-                        'success' => false
+                        'success' => false,
+                        'messages' => [
+                            'address' => trans('trp.common.invalid-address')
+                        ]
                     ];
-
-                    $msg = $validator->getMessageBag()->toArray();
-                    $ret['messages'] = [];
-                    foreach ($msg as $field => $errors) {
-                        $ret['messages'][$field] = implode(', ', $errors);
-                    }
                     return Response::json($ret);
                 }
 
                 return redirect( getLangUrl('/') )
                 ->withInput()
-                ->withErrors($validator);
-            } else {
+                ->withErrors([
+                    'address' => trans('trp.common.invalid-address')
+                ]);
+            }
 
-                if(is_numeric(request('country_id')) && empty(Request::input('field')) && $this->user->is_dentist && !User::validateAddress( $this->user->country_id, request('address') ) ) {
-                    if( Request::input('json') ) {
-                        $ret = [
-                            'success' => false,
-                            'messages' => [
-                                'address' => trans('trp.common.invalid-address')
-                            ]
-                        ];
-                        return Response::json($ret);
-                    }
+            if (!empty(Request::input('description')) && mb_strlen(Request::input('description')) > 512) {
+                $ret = [
+                    'success' => false,
+                    'messages' => [
+                        'description' => trans('trp.common.invalid-description')
+                    ]
+                ];
+                return Response::json($ret);
+            }
 
-                    return redirect( getLangUrl('/') )
-                    ->withInput()
-                    ->withErrors([
-                        'address' => trans('trp.common.invalid-address')
-                    ]);
-                }
+            if (!empty(Request::input('short_description')) && mb_strlen(json_encode(Request::input('short_description'))) > 150) {
+                $ret = [
+                    'success' => false,
+                    'messages' => [
+                        'short_description' => trans('trp.common.invalid-short-description')
+                    ]
+                ];
+                return Response::json($ret);
+            }
 
-                if (!empty(Request::input('description')) && mb_strlen(Request::input('description')) > 512) {
-                    $ret = [
-                        'success' => false,
-                        'messages' => [
-                            'description' => trans('trp.common.invalid-description')
-                        ]
-                    ];
-                    return Response::json($ret);
-                }
-
-                if (!empty(Request::input('short_description')) && mb_strlen(json_encode(Request::input('short_description'))) > 150) {
-                    $ret = [
-                        'success' => false,
-                        'messages' => [
-                            'short_description' => trans('trp.common.invalid-short-description')
-                        ]
-                    ];
-                    return Response::json($ret);
-                }
-
-                if(!empty(Request::input('name')) && (User::validateLatin(Request::input('name')) == false)) {
-                    if( Request::input('json') ) {
-                        $ret = [
-                            'success' => false,
-                            'messages' => [
-                                'name' => trans('trp.common.invalid-name')
-                            ]
-                        ];
-                        return Response::json($ret);
-                    }
-
-                    return redirect( getLangUrl('/') )
-                    ->withInput()
-                    ->withErrors([
-                        'name' => trans('trp.common.invalid-name')
-                    ]);
-                }
-
-                if($this->user->validateMyEmail() == true) {
-                    return redirect( getLangUrl('/') )
-                    ->withInput()
-                    ->withErrors([
-                        'email' => trans('trp.common.invalid-email')
-                    ]);
-                }
-
-                foreach ($this->profile_fields as $key => $value) {
-                    if( Request::exists($key) || (Request::input('field')=='specialization' && $key=='specialization') || $key=='email_public' || (Request::input('field')=='accepted_payment' && $key=='accepted_payment') ) {
-                        if($key=='work_hours') {
-                            $wh = Request::input('work_hours');
-                            foreach ($wh as $k => $v) {
-                                if( empty($wh[$k][0][0]) || empty($wh[$k][0][1]) || empty($wh[$k][1][0]) || empty($wh[$k][1][1]) ) { 
-                                    unset($wh[$k]);
-                                    continue;
-                                }
-
-
-                                if( !empty($wh[$k][0]) ) {
-                                    $wh[$k][0] = implode(':', $wh[$k][0]);
-                                }
-                                if( !empty($wh[$k][1]) ) {
-                                    $wh[$k][1] = implode(':', $wh[$k][1]);
-                                }
-                            }
-                            $this->user->$key = $wh;
-                        } else if($value['type']=='specialization') {
-                            UserCategory::where('user_id', $this->user->id)->delete();
-                            if(!empty(Request::input('specialization'))) {
-                                foreach (Request::input('specialization') as $cat) {
-                                    $newc = new UserCategory;
-                                    $newc->user_id = $this->user->id;
-                                    $newc->category_id = $cat;
-                                    $newc->save();
-                                }
-                            }
-                        } else {
-                            $this->user->$key = Request::input($key);
-                        }
-                    }
-                }
-
-                $this->user->hasimage_social = false;
-                $this->user->save();
-
-                foreach ($this->user->reviews_out as $review_out) {
-                    $review_out->hasimage_social = false;
-                    $review_out->save();
-                }
-
-                foreach ($this->user->reviews_in_dentist as $review_in_dentist) {
-                    $review_in_dentist->hasimage_social = false;
-                    $review_in_dentist->save();
-                }
-
-                foreach ($this->user->reviews_in_clinic as $review_in_clinic) {
-                    $review_in_clinic->hasimage_social = false;
-                    $review_in_clinic->save();
-                }
-                
+            if(!empty(Request::input('name')) && (User::validateLatin(Request::input('name')) == false)) {
                 if( Request::input('json') ) {
                     $ret = [
-                        'success' => true,
-                        'href' => getLangUrl('/')
+                        'success' => false,
+                        'messages' => [
+                            'name' => trans('trp.common.invalid-name')
+                        ]
                     ];
-
-                    if( Request::input('field') ) {
-                        if( Request::input('field')=='specialization' ) {
-                            $ret['value'] = implode(', ', $this->user->parseCategories( $this->categories ));
-                        } else if( Request::input('field')=='work_hours' ) {
-                            $ret['value'] = strip_tags( $this->user->getWorkHoursText() );
-                        } else if( Request::input('field')=='accepted_payment' ) {
-                            $ret['value'] = $this->user->parseAcceptedPayment( $this->user->accepted_payment );
-                        } else {
-                            $ret['value'] = nl2br($this->user[ Request::input('field') ]) ;                            
-                        }
-                    }
                     return Response::json($ret);
                 }
 
-                Request::session()->flash('success-message', trans('trp.page.profile.info.updated'));
-                return redirect( getLangUrl('/') );
-
+                return redirect( getLangUrl('/') )
+                ->withInput()
+                ->withErrors([
+                    'name' => trans('trp.common.invalid-name')
+                ]);
             }
-        }
 
-        return redirect(getLangUrl('/'));
-
-        return $this->ShowView('profile-info', [
-            'menu' => $this->menu,
-            'fields' => $this->profile_fields,
-            'css' => [
-                'common-profile.css',
-            ],
-            'js' => [
-                'profile.js',
-                'upload.js',
-            ],
-
-        ]);
-    }
-
-
-    public function change_password($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') {
-            return redirect(getLangUrl('/'));
-        }
-
-        $validator = Validator::make(Request::all(), [
-            'cur-password' => 'required',
-            'new-password' => 'required|min:6',
-            'new-password-repeat' => 'required|same:new-password',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect( getLangUrl('/') )
-            ->withInput()
-            ->withErrors($validator);
-        } else {
-            if ( !Hash::check(Request::input('cur-password'), $this->user->password) ) {
-                Request::session()->flash('error-message', trans('trp.page.profile.wrong-password'));
-                return redirect( getLangUrl('/') );
+            if($this->user->validateMyEmail() == true) {
+                return redirect( getLangUrl('/') )
+                ->withInput()
+                ->withErrors([
+                    'email' => trans('trp.common.invalid-email')
+                ]);
             }
-            
-            $this->user->password = bcrypt(Request::input('new-password'));
+
+            foreach ($this->profile_fields as $key => $value) {
+                if( Request::exists($key) || (Request::input('field')=='specialization' && $key=='specialization') || $key=='email_public' || (Request::input('field')=='accepted_payment' && $key=='accepted_payment') ) {
+                    if($key=='work_hours') {
+                        $wh = Request::input('work_hours');
+                        foreach ($wh as $k => $v) {
+                            if( empty($wh[$k][0][0]) || empty($wh[$k][0][1]) || empty($wh[$k][1][0]) || empty($wh[$k][1][1]) ) { 
+                                unset($wh[$k]);
+                                continue;
+                            }
+
+
+                            if( !empty($wh[$k][0]) ) {
+                                $wh[$k][0] = implode(':', $wh[$k][0]);
+                            }
+                            if( !empty($wh[$k][1]) ) {
+                                $wh[$k][1] = implode(':', $wh[$k][1]);
+                            }
+                        }
+                        $this->user->$key = $wh;
+                    } else if($value['type']=='specialization') {
+                        UserCategory::where('user_id', $this->user->id)->delete();
+                        if(!empty(Request::input('specialization'))) {
+                            foreach (Request::input('specialization') as $cat) {
+                                $newc = new UserCategory;
+                                $newc->user_id = $this->user->id;
+                                $newc->category_id = $cat;
+                                $newc->save();
+                            }
+                        }
+                    } else {
+                        $this->user->$key = Request::input($key);
+                    }
+                }
+            }
+
+            $this->user->hasimage_social = false;
             $this->user->save();
+
+            foreach ($this->user->reviews_out as $review_out) {
+                $review_out->hasimage_social = false;
+                $review_out->save();
+            }
+
+            foreach ($this->user->reviews_in_dentist as $review_in_dentist) {
+                $review_in_dentist->hasimage_social = false;
+                $review_in_dentist->save();
+            }
+
+            foreach ($this->user->reviews_in_clinic as $review_in_clinic) {
+                $review_in_clinic->hasimage_social = false;
+                $review_in_clinic->save();
+            }
             
-            Request::session()->flash('success-message', trans('trp.page.profile.info.password-updated'));
-            return redirect( getLangUrl('/'));
+            if( Request::input('json') ) {
+                $ret = [
+                    'success' => true,
+                    'href' => getLangUrl('/')
+                ];
+
+                if( Request::input('field') ) {
+                    if( Request::input('field')=='specialization' ) {
+                        $ret['value'] = implode(', ', $this->user->parseCategories( $this->categories ));
+                    } else if( Request::input('field')=='work_hours' ) {
+                        $ret['value'] = strip_tags( $this->user->getWorkHoursText() );
+                    } else if( Request::input('field')=='accepted_payment' ) {
+                        $ret['value'] = $this->user->parseAcceptedPayment( $this->user->accepted_payment );
+                    } else {
+                        $ret['value'] = nl2br($this->user[ Request::input('field') ]) ;                            
+                    }
+                }
+                return Response::json($ret);
+            }
+
+            Request::session()->flash('success-message', trans('trp.page.profile.info.updated'));
+            return redirect( getLangUrl('/') );
         }
     }
 
@@ -1669,33 +1265,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     //Patients ask dentist to confirm they are patients
     //
 
-    public function asks($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_clinic_unclaimed' && $this->user->status!='test') {
-            return redirect(getLangUrl('/'));
-        }
-        if (!$this->user->is_dentist) {
-            return redirect( getLangUrl('profile') );
-        }
-        $this->handleMenu();
-
-        return $this->ShowView('profile-ask', [
-            'menu' => $this->menu,
-            'css' => [
-                'common-profile.css',
-            ],
-            'js' => [
-                'profile.js',
-            ],
-        ]);
-    }
     public function asks_accept($locale=null, $ask_id) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_clinic_unclaimed' && $this->user->status!='test') {
+        if(($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') || !$this->user->is_dentist) {
             return redirect(getLangUrl('/'));
         }
-        if (!$this->user->is_dentist) {
-            return redirect( getLangUrl('profile') );
-        }
-        $this->handleMenu();
 
         $ask = UserAsk::find($ask_id);
         if(!empty($ask) && $ask->dentist_id==$this->user->id && $ask->status=='waiting') {
@@ -1766,14 +1339,11 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         Request::session()->flash('success-message', trans('trp.page.profile.asks.accepted'));
         return redirect( getLangUrl('/').'?tab=asks');
     }
+
     public function asks_deny($locale=null, $ask_id) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_clinic_unclaimed' && $this->user->status!='test') {
+        if(($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') || !$this->user->is_dentist) {
             return redirect(getLangUrl('/'));
         }
-        if (!$this->user->is_dentist) {
-            return redirect( getLangUrl('profile') );
-        }
-        $this->handleMenu();
 
         $ask = UserAsk::find($ask_id);
         if(!empty($ask) && $ask->dentist_id==$this->user->id && $ask->status=='waiting') {
@@ -1793,7 +1363,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 
         $params = [
             'reviews' => $this->user->is_dentist ? $this->user->reviews_in() : $this->user->reviews_out,
-            'menu' => $this->menu,
             'css' => [
                 'common-profile.css',
                 'trp-users.css'
@@ -1814,8 +1383,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         if ($path == 'trp-iframe') {
             $params['skipSSO'] = true;
         }
-
-        $this->handleMenu();
 
         return $this->ShowView('profile-trp', $params);
     }
@@ -1852,52 +1419,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             'success' => true,
         ] );
     }
-
-
-    //
-    //Other
-    //
-
-
-    public function jwt($locale=null) {
-        $ret = [
-            'success' => false
-        ];
-        if($this->user->isBanned('trp')) {
-            $ret['message'] = 'banned';
-            return Response::json( $ret );
-        }
-        
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_clinic_unclaimed' && $this->user->status!='test') {
-            $ret['message'] = 'not-verified';
-            return Response::json( $ret );
-        }
-
-        $jwt = Request::input('jwtToken');
-        $civic = Civic::where('jwtToken', 'LIKE', $jwt)->first();
-        if(!empty($civic)) {
-            $ret = $this->user->validateCivicKyc($civic);
-            if($ret['success']) {
-                Request::session()->flash('success-message', trans('trp.page.profile.wallet.civic-validated'));        
-            }
-        }
-
-        
-        return Response::json( $ret );
-    }
-
-    public function balance($locale=null) {
-        return Response::json( User::getBalance( Request::input('vox-address') ) );
-    }
-
-    public function gdpr($locale=null) {
-        $this->user->gdpr_privacy = true;
-        $this->user->save();
-        Request::session()->flash('success-message', trans('trp.page.profile.gdpr-done'));
-        return redirect( getLangUrl('profile'));
-    }
-
-
 
     //
     //Dentist <-> Clinic relationship
@@ -1968,8 +1489,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             'success' => true,
         ] );
     }
-
-
     
     public function clinics_delete( $locale=null, $id ) {
         $res = UserTeam::where('dentist_id', $this->user->id)->where('user_id', $id)->delete();
@@ -2016,7 +1535,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             'success' => false,
             'message' => trans('trp.page.user.clinic-invited-error')
         ] );
-
     }
 
     public function inviteDentist() {
@@ -2049,7 +1567,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             'success' => false,
             'message' => trans('trp.page.user.dentist-invited-error')
         ] );
-
     }
 
     public function invites_delete( $locale=null, $id ) {
@@ -2060,6 +1577,4 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             'success' => true,
         ] );
     }
-
-
 }

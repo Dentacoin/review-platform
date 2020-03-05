@@ -5,9 +5,6 @@
 	<div class="blue-background"></div>
 
 	<div class="container flex break-tablet">
-		<div class="col">
-			@include('trp.parts.profile-menu')
-		</div>
 		<div class="flex-3">
 
 			<h2 class="page-title">

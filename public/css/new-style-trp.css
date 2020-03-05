@@ -5287,8 +5287,7 @@ textarea[name="short_description"] {
 body.sp-trp-iframe header,
 body.sp-trp-iframe .footer-expander,
 body.sp-trp-iframe .blue-background,
-body.sp-trp-iframe .strength-wrapper,
-body.sp-trp-iframe .profile-menu {
+body.sp-trp-iframe .strength-wrapper {
   display: none; }
 body.sp-trp-iframe .flex-3 {
   flex: 1; }
@@ -5296,6 +5295,9 @@ body.sp-trp-iframe .col {
   flex: none; }
 body.sp-trp-iframe .container {
   width: 100%; }
+body.sp-trp-iframe .trusted-sticker,
+body.sp-trp-iframe .trusted-sticker i {
+  color: white !important; }
 body.sp-trp-iframe .site-content {
   min-height: auto !important; }
 body.sp-trp-iframe .profile-reviews-space {

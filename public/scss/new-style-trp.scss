@@ -7162,8 +7162,7 @@ body.sp-trp-iframe {
 	header,
 	.footer-expander,
 	.blue-background,
-	.strength-wrapper,
-	.profile-menu {
+	.strength-wrapper {
 		display: none;
 	}
 
@@ -7177,6 +7176,11 @@ body.sp-trp-iframe {
 
 	.container {
 		width: 100%;
+	}
+
+	.trusted-sticker,
+	.trusted-sticker i {
+		color: white !important;
 	}
 
 	.site-content {

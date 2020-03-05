@@ -304,34 +304,24 @@ $reviewRoutes = function () {
 
 				Route::any('invite-new-dentist', 				'AddDentistController@invite_new_dentist');
 
-				Route::any('profile', 							'ProfileController@home');
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');
-				Route::any('profile/home', 						'ProfileController@home');
 				Route::post('profile/info/upload', 				'ProfileController@upload');
 				Route::post('profile/gallery', 					'ProfileController@gallery');				
 				Route::any('profile/gallery/delete/{id}', 		'ProfileController@gallery_delete');
-				Route::any('profile/info', 						'ProfileController@info');
-				Route::get('profile/password', 					'ProfileController@password');
-				Route::post('profile/password', 				'ProfileController@change_password');
-				//Route::get('profile/trp', 						'ProfileController@trp');
+				Route::post('profile/info', 					'ProfileController@info');
 				Route::get('profile/trp-iframe', 				'ProfileController@trp');
-				//Route::get('profile/wallet', 					'ProfileController@wallet');
+
 				Route::post('invite-patient-again',				'ProfileController@invite_patient_again');
-				Route::any('profile/invite', 					'ProfileController@invite');
+				Route::post('profile/invite', 					'ProfileController@invite');
 				Route::post('profile/invite-whatsapp', 			'ProfileController@invite_whatsapp');
 				Route::post('profile/invite-copypaste', 		'ProfileController@invite_copypaste');
 				Route::post('profile/invite-copypaste-emails', 	'ProfileController@invite_copypaste_emails');
 				Route::post('profile/invite-copypaste-names', 	'ProfileController@invite_copypaste_names');
 				Route::post('profile/invite-copypaste-final', 	'ProfileController@invite_copypaste_final');
 				Route::post('profile/invite-file',			 	'ProfileController@invite_file');
-				Route::get('profile/asks', 						'ProfileController@asks');
+
 				Route::get('profile/asks/accept/{id}', 			'ProfileController@asks_accept');
 				Route::get('profile/asks/deny/{id}', 			'ProfileController@asks_deny');
-
-				Route::post('profile/jwt', 						'ProfileController@jwt');
-				Route::post('profile/withdraw', 				'ProfileController@withdraw');
-				Route::any('profile/privacy', 					'ProfileController@privacy');
-				Route::any('profile/privacy-download', 			'ProfileController@privacy_download');
 
 				Route::any('profile/dentists/reject/{id}', 		'ProfileController@dentists_reject');
 				Route::any('profile/dentists/delete/{id}', 		'ProfileController@dentists_delete');
@@ -342,9 +332,7 @@ $reviewRoutes = function () {
 
 				Route::any('profile/invites/delete/{id}', 		'ProfileController@invites_delete');
 
-				Route::get('gdpr', 								'ProfileController@gdpr');
-
-				Route::post('share', 								'MiscController@share');
+				Route::post('share', 							'MiscController@share');
 				
 			});
 
@@ -433,24 +421,8 @@ $voxRoutes = function () {
 			Route::group(['middleware' => 'auth:web'], function () {
 				Route::any('welcome-to-dentavox', 				'RegisterController@register_success');
 				
-				Route::any('profile', 							'ProfileController@home');
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');
-				Route::post('profile/address', 					'ProfileController@address');
-				//Route::any('profile/vox', 						'ProfileController@vox');
 				Route::any('profile/vox-iframe', 				'ProfileController@vox');
-				Route::any('profile/home', 						'ProfileController@home');
-				Route::any('profile/info', 						'ProfileController@info');
-				Route::post('profile/info/upload', 				'ProfileController@upload');
-				Route::post('profile/password', 				'ProfileController@change_password');
-				Route::post('profile/balance', 					'ProfileController@balance');
-				Route::post('profile/withdraw', 				'ProfileController@withdraw');
-				Route::any('profile/invite', 					'ProfileController@invite');
-				Route::any('profile/setEmail', 					'ProfileController@setEmail');
-				Route::post('profile/jwt', 						'ProfileController@jwt');
-				Route::any('profile/privacy', 					'ProfileController@privacy');
-				Route::any('profile/privacy-download', 			'ProfileController@privacy_download');
-				
-				Route::get('gdpr', 								'ProfileController@gdpr');
 
 			});
 
