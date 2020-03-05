@@ -25,6 +25,7 @@ jQuery(document).ready(function($){
                 
                 var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({'location': this.getPosition()}, (function(results, status) {
+
                     if (status == 'OK') {
 
                         var gstring = results[0].formatted_address;
@@ -68,6 +69,7 @@ jQuery(document).ready(function($){
                         lat: parseFloat( conatiner.find('.suggester-map-div').attr('lat') ), 
                         lng: parseFloat( conatiner.find('.suggester-map-div').attr('lon') )
                     };
+
                     setupMap(conatiner, coords);
 	            }
 
@@ -88,12 +90,10 @@ jQuery(document).ready(function($){
                     this.conatiner.find('.address-suggester').val(place.formatted_address ? place.formatted_address : place.name).blur();
 	            }).bind(GMautocomplete));
 
-
                 $(this).blur( function(e) {
                     var conatiner = $(this).closest('.address-suggester-wrapper');
                     var country_name = conatiner.find('.country-select option:selected').text();
                     var country_code = conatiner.find('.country-select option:selected').attr('code');
-
 
                     var geocoder = new google.maps.Geocoder();
                     var address = $(this).val();
@@ -221,6 +221,7 @@ initMap = function () {
             console.log(status);
             if (status == google.maps.GeocoderStatus.OK) {
                 if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+                    console.log('initmap');
                     var position = {
                         lat: results[0].geometry.location.lat(), 
                         lng: results[0].geometry.location.lng()
