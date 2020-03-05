@@ -726,7 +726,7 @@ NEW & FAILED TRANSACTIONS
                         AND `status` IN ('approved','added_by_clinic_claimed')
                         AND `self_deleted` is null
                         AND `dcn_address` is null
-                        AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) > 10000
+                        AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) > ".env('VOX_MIN_WITHDRAW')."
                         AND `deleted_at` is null
                         AND `id` NOT IN ( 
                             SELECT `user_id` FROM emails WHERE template_id = 57 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
