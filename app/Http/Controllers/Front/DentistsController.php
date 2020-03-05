@@ -101,9 +101,7 @@ class DentistsController extends FrontController
             //         $lon = parseFloat($arr[1]);
             //     }
             // }
-
             if(empty($lat) || empty($lon)) {
-
                 $query = str_replace('-', ' ', $query);
 
                 $geores = \GoogleMaps::load('geocoding')
@@ -113,10 +111,10 @@ class DentistsController extends FrontController
                 ->get();
 
                 $geores = json_decode($geores);
-                
                 if(!empty($geores->results[0]->geometry->location)) {
 
                     $parsedAddress = User::parseAddress( $geores->results[0]->address_components );
+
                     $formattedAddress = !empty($parsedAddress['city_name']) ? $parsedAddress['city_name'].' ' : '';
                     $formattedAddress .= !empty($parsedAddress['state_name']) ? $parsedAddress['state_name'].' ' : '';
                     $formattedAddress .= !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'].' ' : '';
@@ -183,8 +181,9 @@ class DentistsController extends FrontController
                     }
                 }
             }
-            if (empty($parsedAddress['city_name']) && empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) {
-                $country_n = $parsedAddress['country_name'];
+
+            if ((empty($parsedAddress['city_name']) && empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) || $query == 'ireland') {
+                $country_n = !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'] : $query;
                 if ($country_n == 'Vietnam') {
                     $country = Country::find(238);
                 } else if($country_n == 'South Korea' || $country_n == 'North Korea') {
@@ -204,6 +203,7 @@ class DentistsController extends FrontController
                 // }
 
                 $items->where('country_id', $country->id);
+
                 $country_search = true;
                 
                 
