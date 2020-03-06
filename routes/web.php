@@ -384,6 +384,8 @@ $voxRoutes = function () {
 			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
 			Route::post('recover/{id}/{hash}', 					'RegisterController@recover_form');
 
+			Route::any('welcome-to-dentavox', 					'RegisterController@register_success');
+
 			Route::any('new-login/facebook', 					'LoginController@new_facebook_login');
 			
 			Route::get('login/facebook/{query?}', 				'LoginController@facebook_login')->where('query','.+');
@@ -419,7 +421,6 @@ $voxRoutes = function () {
 			//Route::any('vpn', 									'VpnController@list');
 
 			Route::group(['middleware' => 'auth:web'], function () {
-				Route::any('welcome-to-dentavox', 				'RegisterController@register_success');
 				
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');
 				Route::any('profile/vox-iframe', 				'ProfileController@vox');

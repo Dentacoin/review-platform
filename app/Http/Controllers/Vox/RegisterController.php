@@ -455,9 +455,11 @@ class RegisterController extends FrontController
     }
 
     public function register_success($locale=null) {
-        $this->user->checkForWelcomeCompletion();
 
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_approved' && $this->user->status!='admin_imported' && $this->user->status!='test' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_clinic_unclaimed') {
+        if(!empty($this->user) && $this->user->is_dentist && ($this->user->status=='new' || $this->user->status=='test')) {
+
+            $this->user->checkForWelcomeCompletion();
+
             if(Request::isMethod('post')) {
 
                 $validator = Validator::make(Request::all(), [
@@ -498,9 +500,9 @@ class RegisterController extends FrontController
                 'social_title' => $seos->social_title,
                 'social_description' => $seos->social_description,
             ));
-        } else {
-            return redirect( getLangUrl('page-not-found') );
         }
+
+        return redirect( getLangUrl('page-not-found') );
     }
 
     public function invite_accept($locale=null) {
