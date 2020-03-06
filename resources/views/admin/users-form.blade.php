@@ -70,9 +70,9 @@
                                                             <option value="approved" {{ $item->status == 'approved' ? 'selected="selected"' : ''}} >Approved</option>
                                                             <option value="pending" {{ $item->status == 'pending' ? 'selected="selected"' : ''}} >Suspicious</option>
                                                             <option value="rejected" {{ $item->status == 'rejected' ? 'selected="selected"' : ''}} >Rejected</option>
-                                                            <option value="test" {{ $item->status == 'test' ? 'selected="selected"' : ''}} >Test</option>
                                                             <option value="dentist_no_email" {{ $item->status == 'dentist_no_email' ? 'selected="selected"' : ''}} >Dentist No Email</option>
                                                         @endif
+                                                        <option value="test" {{ $item->status == 'test' ? 'selected="selected"' : ''}} >Test</option>
                                                     </select>
                                                 </div>
                                             </div>
