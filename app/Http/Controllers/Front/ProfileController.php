@@ -126,7 +126,7 @@ class ProfileController extends FrontController
 
     public function invite($locale=null) {
 
-        if($this->user->canInvite('trp') ) {
+        if(!empty($this->user) && $this->user->canInvite('trp') ) {
 
             $validator = Validator::make(Request::all(), [
                 'email' => ['required', 'email'],
@@ -268,7 +268,7 @@ class ProfileController extends FrontController
 
     public function invite_whatsapp($locale=null) {
 
-        if($this->user->canInvite('trp') ) {
+        if(!empty($this->user) && $this->user->canInvite('trp') ) {
 
             $invitation = new UserInvite;
             $invitation->user_id = $this->user->id;
@@ -287,7 +287,7 @@ class ProfileController extends FrontController
 
     public function invite_copypaste($locale=null) {
 
-        if($this->user->canInvite('trp') ) {
+        if(!empty($this->user) && $this->user->canInvite('trp') ) {
 
             $validator = Validator::make(Request::all(), [
                 'copypaste' => array('required'),
@@ -349,7 +349,7 @@ class ProfileController extends FrontController
 
     public function invite_copypaste_emails($locale=null) {
 
-        if($this->user->canInvite('trp') ) {
+        if(!empty($this->user) && $this->user->canInvite('trp') ) {
 
             if(Request::Input('patient-emails')) {
 
@@ -377,7 +377,7 @@ class ProfileController extends FrontController
 
     public function invite_copypaste_names($locale=null) {
 
-        if($this->user->canInvite('trp') ) {
+        if(!empty($this->user) && $this->user->canInvite('trp') ) {
 
             if(Request::Input('patient-names')) {
 
@@ -402,7 +402,7 @@ class ProfileController extends FrontController
 
     public function invite_copypaste_final($locale=null) {
 
-        if($this->user->canInvite('trp') ) {
+        if(!empty($this->user) && $this->user->canInvite('trp') ) {
 
             if(session('bulk_names') && session('bulk_emails')) {
                 $emails = session('bulk_emails');
@@ -583,7 +583,7 @@ class ProfileController extends FrontController
 
     public function invite_file($locale=null) {
 
-        if($this->user->canInvite('trp') ) {
+        if(!empty($this->user) && $this->user->canInvite('trp') ) {
 
             $validator = Validator::make(request()->all(), [
                 'invite-file' => array('required','file', 'mimes:txt,csv'),
@@ -691,7 +691,7 @@ class ProfileController extends FrontController
     public function invite_patient_again($locale=null) {
         $id = Request::input('id');
 
-        if (!empty($id)) {
+        if (!empty($this->user) && !empty($id)) {
 
             if(Request::isMethod('post') && $this->user->canInvite('trp') ) {
 
@@ -1049,7 +1049,7 @@ class ProfileController extends FrontController
     
 
     public function info($locale=null) {
-        if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') {
+        if(empty($this->user) || ($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test')) {
             return redirect(getLangUrl('/'));
         }
 
@@ -1266,7 +1266,7 @@ class ProfileController extends FrontController
     //
 
     public function asks_accept($locale=null, $ask_id) {
-        if(($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') || !$this->user->is_dentist) {
+        if(empty($this->user) || ($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') || !$this->user->is_dentist) {
             return redirect(getLangUrl('/'));
         }
 
@@ -1341,7 +1341,7 @@ class ProfileController extends FrontController
     }
 
     public function asks_deny($locale=null, $ask_id) {
-        if(($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') || !$this->user->is_dentist) {
+        if(empty($this->user) || ($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='test') || !$this->user->is_dentist) {
             return redirect(getLangUrl('/'));
         }
 
