@@ -56,7 +56,7 @@
 						</div>
 					</div>
 
-					<div class="alert alert-danger agree-cookies" style="display: none;">
+					<div class="alert alert-warning agree-cookies" style="display: none;">
 						You must accept at least the strictly necessary cookies in order to proceed. 
 					</div>
 
