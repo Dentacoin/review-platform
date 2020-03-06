@@ -1686,7 +1686,7 @@ NEW & FAILED TRANSACTIONS
                 DB::raw($query2), []
             );
 
-            $mtext = 'There are '.$uknown->count().' results from Uknown county by '.$uknown_by_user->count().' users';
+            $mtext = 'There are '.count($uknown).' results from Uknown county by '.count($uknown_by_user).' users';
 
             Mail::raw($mtext, function ($message) {
 
