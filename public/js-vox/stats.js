@@ -831,6 +831,8 @@ $(document).ready(function(){
                                     //console.log('bbb');
                                     $(this).find('.gender-text').text($(this).find('.legend-div:not(.inactive)').attr('legend-text'));
                                     $(this).find('.nav-color').css('background-color', $(this).find('.legend-div:not(.inactive)').find('span:not(.mobile-percentage)').css('background-color'));
+
+                                    $(this).find('.custom-legend').first().find('span').css('background-color', $(this).find('.legend-div:not(.inactive)').find('span:not(.mobile-percentage)').css('background-color'));
                                 }
 
                                 $(this).find('.multiple-gender-nav').css('display', 'flex');
@@ -1102,6 +1104,44 @@ $(document).ready(function(){
             container.append('<div class="col f-c"></div><div class="col s-c"></div><div class="col t-c"></div>');
         }
 
+        for (var w in rows) {
+            rows[w].push(chart_colors[w]);              
+        }
+
+        var count_diez = 0;
+        for (var i in rows) {
+
+            if (rows[i][0].search( '#' ) === 0 ) {
+                count_diez++;
+            }
+        }
+
+        if(rows.length == count_diez) {
+            rows.sort(function(a, b) {
+                return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+            });
+        } else {
+
+            rows.sort(function(a, b) {
+                if( b[0].search( '#' ) === 0 ) {
+                    return -1;
+                } else if( a[0].search( '#' ) === 0 ) {
+                    return 1;
+                } else {
+                    return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+                }
+            });
+        }
+
+        arr_colors = [];
+        for( var q in rows) {
+            arr_colors.push(rows[q][2]);
+        }
+        
+        for( var t in rows) {
+            rows[t].splice(-1,1);
+        }
+
         var diez = [];
         var noDiez = [];
 
@@ -1157,7 +1197,7 @@ $(document).ready(function(){
             //     }
                     
             // } else {
-                container.append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+chart_colors[i]+';"></span>'+rows[i][0]+'</div>') );
+                container.append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+arr_colors[i]+';"></span>'+rows[i][0]+'</div>') );
                 
                 if ($(window).outerWidth() <= 768) {
 
@@ -1221,15 +1261,14 @@ $(document).ready(function(){
 
 
     var drawChart = function(rows, container, more_options, is_main, can_click_on_legend, vox_scale_id, question_type) {
+
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Genders');
         data.addColumn('number', 'Answers');
 
         var arr_colors = chart_colors;
 
-        console.log(rows);
-
-        if ((question_type == 'single_choice' && vox_scale_id) || $(window).outerWidth() <= 768) {
+        if ((question_type == 'single_choice' && vox_scale_id)) {
 
             data.addRows(rows);
         } else {
@@ -1348,7 +1387,9 @@ $(document).ready(function(){
 
         if( is_main ) {
             google.visualization.events.addListener(chart, 'select', (function() {
+
                 var selection = this.getSelection();
+                console.log(selection, this);
 
                 if( typeof selection[0].row!='undefined' ) {
                     var container = $(this.container).closest('.stat');
@@ -1748,7 +1789,73 @@ $(document).ready(function(){
         container.closest('.stat').find('.total-m').show();
         container.closest('.stat').find('.total-f').show();
 
+        console.log('bbbb', question_type);
+
         if (!multiple_top_answers) {
+            if (question_type == 'single_choice') {
+
+                var arrmyArray = rowsf;
+                var count_diez = 0;
+                for (var i in arrmyArray) {
+
+                    if (arrmyArray[i][0].search( '#' ) === 0 ) {
+                        count_diez++;
+                    }
+                }
+
+                if(arrmyArray.length == count_diez) {
+                    arrmyArray.sort(function(a, b) {
+                        return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+                    });
+                } else {
+
+                    arrmyArray.sort(function(a, b) {
+                        if( b[0].search( '#' ) === 0 ) {
+                            return -1;
+                        } else if( a[0].search( '#' ) === 0 ) {
+                            return 1;
+                        } else {
+                            return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+                        }
+                    });
+                }
+
+                var diez = [];
+                var noDiez = [];
+
+                for (var i in arrmyArray) {
+
+                    if (arrmyArray[i][0].search( '#' ) === 0 ) {
+                        diez.push(arrmyArray[i]);
+                    } else {
+                        noDiez.push(arrmyArray[i]);
+                    }
+                }
+
+                var allArr = [];
+                for (var e in noDiez) {
+                    allArr.push(noDiez[e]);
+                }
+
+                for (var r in diez) {
+                    diez[r][0] = diez[r][0].substring(1);
+                    allArr.push(diez[r]);
+                }
+
+                rowsf = allArr;
+                var rosm_new = [];
+
+                for(var i in rowsf) {
+                    for(var u in rowsm) {
+                        if (rowsf[i][0] == rowsm[u][0]) {
+                            rosm_new.push(rowsm[u]);
+                        }
+                    }
+                }
+
+                rowsm = rosm_new;
+            }
+
 
             var c = 0;
             container.closest('.stat').find('.main-multiple-gender .custom-legend').each( function() {
@@ -1826,10 +1933,15 @@ $(document).ready(function(){
 
                 if($(window).outerWidth() > 768) {
                     var plf = 80*rowsf[i][j]/maxf + 1;
-                    var plm = 80*rowsm[i][j]/maxm + 1;
+                    if(rowsm[i]) {
+                        var plm = 80*rowsm[i][j]/maxm + 1;
+                    }
+                    
                 } else {
                     var plf = 72*rowsf[i][j]/maxf + 1;
-                    var plm = 72*rowsm[i][j]/maxm + 1;
+                    if(rowsm[i]) {
+                        var plm = 72*rowsm[i][j]/maxm + 1;
+                    }
                 }
 
                 if( typeof(rowsf[0][j])!='object' ) {
@@ -1839,7 +1951,7 @@ $(document).ready(function(){
                     // }
 
                     // if(rowsm[i][j]) {
-                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-m"> <img src="'+window.location.origin+'/new-vox-img/man-icon.svg"><span style="width: '+parseInt(plm)+'%; opacity: 0.7; background-color: '+chart_colors[i]+';"></span> '+((rowsm[i][j]/ totalmCount)*100).toFixed(1)+'%</div>');
+                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-m"> <img src="'+window.location.origin+'/new-vox-img/man-icon.svg"><span style="width: '+parseInt(plm)+'%; opacity: 0.7; background-color: '+chart_colors[i]+';"></span> '+(( (rowsm[i] ? rowsm[i][j] : 0 )/ totalmCount)*100).toFixed(1)+'%</div>');
                     // }
                 }
             }
@@ -1899,11 +2011,26 @@ $(document).ready(function(){
 
         if (!multiple_top_answers ) {
 
+            if (question_type == 'single_choice') {
+                console.log($(container).closest('.stat').find('.legend-div').length);
+                if ($(container).closest('.stat').find('.legend-div').length) {
+                    var arr_colors = [];
+                    $(container).closest('.stat').find('.legend-div').each( function() {
+                        arr_colors.push($(this).find('span:not(.mobile-percentage)').css('background-color'));
+                    });
+                } else {
+                    var arr_colors = chart_colors;
+                }
+            } else {
+                var arr_colors = chart_colors;
+            }
+
             var c = 0;
             $(container).find('.custom-legend').each( function() {
-                $(this).find('span').css('background-color', chart_colors[c]);
+                $(this).find('span').css('background-color', arr_colors[c]);
                 c++;
             });
+            
         }
 
     }

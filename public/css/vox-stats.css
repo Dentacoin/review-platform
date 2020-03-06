@@ -580,7 +580,7 @@
   .page-statistics .stats .stat[stat-type="dependency"] .contents .graphs {
     min-height: 380px; }
     .page-statistics .stats .stat[stat-type="dependency"] .contents .graphs .total {
-      top: calc(50% + 165px); }
+      top: calc(100% - 40px); }
       @media screen and (max-width: 1200px) {
         .page-statistics .stats .stat[stat-type="dependency"] .contents .graphs .total {
           top: auto; } }

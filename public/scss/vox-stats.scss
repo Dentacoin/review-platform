@@ -859,7 +859,8 @@ $main-color: #38ace5;
 						min-height: 380px;
 						
 						.total {
-						    top: calc(50% + 165px);
+							top: calc(100% - 40px);
+						    //top: calc(50% + 165px);
 
 						    @media screen and (max-width: 1200px) {
 						    	top: auto;
