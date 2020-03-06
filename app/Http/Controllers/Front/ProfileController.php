@@ -1360,31 +1360,33 @@ class ProfileController extends FrontController
     //
 
      public function trp($locale=null) {
-                
-        $params = [
-            'reviews' => $this->user->is_dentist ? $this->user->reviews_in() : $this->user->reviews_out,
-            'css' => [
-                'common-profile.css',
-                'trp-users.css'
-            ],
-            'js' => [
-                'profile.js',
-            ],
-            'csscdn' => [
-                'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
-            ],
-        ];
+        if(!empty($this->user)) {
+            
+            $params = [
+                'reviews' => $this->user->is_dentist ? $this->user->reviews_in() : $this->user->reviews_out,
+                'css' => [
+                    'common-profile.css',
+                    'trp-users.css'
+                ],
+                'js' => [
+                    'profile.js',
+                ],
+                'csscdn' => [
+                    'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
+                ],
+            ];
 
-        if ($this->user->isBanned('trp')) {
-            $params['current_ban'] = true;
+            if ($this->user->isBanned('trp')) {
+                $params['current_ban'] = true;
+            }
+
+            $path = explode('/', request()->path())[2];
+            if ($path == 'trp-iframe') {
+                $params['skipSSO'] = true;
+            }
+
+            return $this->ShowView('profile-trp', $params);
         }
-
-        $path = explode('/', request()->path())[2];
-        if ($path == 'trp-iframe') {
-            $params['skipSSO'] = true;
-        }
-
-        return $this->ShowView('profile-trp', $params);
     }
 
     //

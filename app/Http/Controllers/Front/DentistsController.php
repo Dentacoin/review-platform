@@ -152,8 +152,8 @@ class DentistsController extends FrontController
                 $corrected_query = iconv('UTF-8', 'ASCII//TRANSLIT', $corrected_query);
                 $corrected_query = iconv('ASCII', 'UTF-8', $corrected_query);
                 if (urldecode(Request::path()) != App::getLocale().'/'.$corrected_query) {
-
-                    if( $geores->results[0]->place_id ) {
+                    
+                    if( $geores->results && $geores->results[0]->place_id ) {
 
                         $geores = \GoogleMaps::load('geocoding')
                         ->setParam ([
