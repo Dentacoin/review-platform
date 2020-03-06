@@ -16,9 +16,11 @@
 
 		    <div class="sort-wrapper">
 		    	<h1 class="white-title">
-		    		{!! nl2br(trans('trp.page.search.city-title', [
-			            'country' => $all_cities->first()->state_name.', '.$country->name,
-			        ])) !!}
+		    		@if($all_cities->isNotEmpty())
+			    		{!! nl2br(trans('trp.page.search.city-title', [
+				            'country' => $all_cities->first()->state_name.', '.$country->name,
+				        ])) !!}
+				    @endif
 		    	</h1>
 		    </div>
 		</div>
