@@ -408,16 +408,23 @@ $(document).ready(function(){
 		$(this).hide();
 	});
 
-	$('#manually-calc-reward').change( function() {
-		if ($(this).is(':checked')) {
-			$('.calculating-wrapper').show();
-		} else {
-			$('.calculating-wrapper').hide();
-		}
-		
+	$('.triggers-button').click( function() {
+		$(this).parent().find('.calculating-wrapper').show();
+		$(this).hide();
 	});
 
-	if($('#manually-calc-reward:checked').length) {
-		$('.calculating-wrapper').show();
-	}
+	
+
+	// $('#manually-calc-reward').change( function() {
+	// 	if ($(this).is(':checked')) {
+	// 		$('.calculating-wrapper').show();
+	// 	} else {
+	// 		$('.calculating-wrapper').hide();
+	// 	}
+		
+	// });
+
+	// if($('#manually-calc-reward:checked').length) {
+	// 	$('.calculating-wrapper').show();
+	// }
 });

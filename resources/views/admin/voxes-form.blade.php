@@ -347,8 +347,8 @@
                     </div>
 
                     @if(!empty($item->complex))
-                        <div class="form-group col-md-12">
-                            <h3 style="display: inline-block; margin-right: 20px;">Calculating survey max DCN reward <input type="checkbox" name="manually_calc_reward" id="manually-calc-reward" value="1" {!! !empty($item->manually_calc_reward) ? 'checked="checked"' : '' !!}></h3>
+                        <div class="form-group triggers-wrapper col-md-12">
+                            <h3 style="display: inline-block; margin-right: 20px;">Calculating survey max DCN reward <input type="checkbox" name="manually_calc_reward" id="manually-calc-reward" value="1" {!! !empty($item->manually_calc_reward) ? 'checked="checked"' : '' !!}></h3> <a href="javascript:;" class="btn btn-primary triggers-button">Show triggers</a>
 
                             @if(empty($item->manually_calc_reward))
                                 <div class="alert alert-danger" style="display: inline-block;">Not calculated reward</div>
