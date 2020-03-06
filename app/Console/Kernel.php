@@ -435,7 +435,7 @@ NEW & FAILED TRANSACTIONS
             }
 
             //Cron log
-            unlink('/tmp/cron-'.date('Ymd'));
+            //unlink('/tmp/cron-'.date('Ymd'));
             echo 'DCN Low Balance Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("30 7 * * *"); //10:30h BG Time
