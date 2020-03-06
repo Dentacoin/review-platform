@@ -414,7 +414,7 @@ $voxRoutes = function () {
 			Route::any('daily-polls/{date}', 					'PollsController@show_popup_poll');
 			Route::any('daily-polls/{date}/stats', 				'PollsController@show_popup_stats_poll');
 			Route::post('get-polls', 							'PollsController@get_polls');
-			Route::post('poll/{id}', 							'PollsController@dopoll');
+			Route::any('poll/{id}', 							'PollsController@dopoll');
 			Route::post('get-poll-content/{id}', 				'PollsController@get_poll_content');
 			Route::post('get-poll-stats/{id}', 					'PollsController@get_poll_stats');
 

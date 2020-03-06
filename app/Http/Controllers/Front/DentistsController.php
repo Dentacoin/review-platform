@@ -412,7 +412,8 @@ class DentistsController extends FrontController
                 }
                 $categoryNames = [];
                 foreach ($searchCategories as $slug) {
-                    $categoryNames[] = $this->categories_dentists[$slug];
+                    $categoryNames[] = in_array($slug, $this->categories_dentists) ? $this->categories_dentists[$slug] : '';
+
                 }
 
                 // dd(implode(', ', $categoryNames));

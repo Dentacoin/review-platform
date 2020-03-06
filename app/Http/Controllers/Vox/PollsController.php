@@ -290,136 +290,140 @@ class PollsController extends FrontController
 
 	public function dopoll($locale=null, $id) {
 
-		$poll = Poll::find($id);
+		if(Request::isMethod('post')) {
+			$poll = Poll::find($id);
 
-		if (!empty($poll)) {
+			if (!empty($poll)) {
 
-			if ($poll->respondentsCount() >= 100) {
-				$ret = [
-		        	'success' => false,
-		        	'closed_poll' => $poll->id,
-		        ];
+				if ($poll->respondentsCount() >= 100) {
+					$ret = [
+			        	'success' => false,
+			        	'closed_poll' => $poll->id,
+			        ];
 
-		        return Response::json( $ret );
-			}
+			        return Response::json( $ret );
+				}
 
-			$slist = VoxScale::get();
-	        $poll_scales = [];
-	        foreach ($slist as $sitem) {
-	            $poll_scales[$sitem->id] = $sitem;
-	        }
-
-			if (!empty($poll->scale_id) && !empty($poll_scales[$poll->scale_id])) {
-				$json_answers = explode(',', $poll_scales[$poll->scale_id]->answers);
-			} else {
-				$json_answers = json_decode($poll->answers, true);
-			}
-
-			$a = intval(Request::input('answer'));
-
-			if(!$this->user) {
-
-				if(!Auth::guard('admin')->user()) {
-					$country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
-					$country_db = Country::where('code', 'like', $country_code)->first();
-
-					$answer = new PollAnswer;
-			        $answer->user_id = 0;
-			        $answer->country_id = !empty($country_db) ? $country_db->id : null;
-			        $answer->poll_id = $poll->id;
-			        $answer->answer = $a;
-		        	$answer->save();
-
-		        	$poll->recalculateUsersPercentage();
-
-		        	$cv = Cookie::get('daily_poll');
-		        	if(empty($cv)) {
-		        		$cv = [];
-		        	} else {
-		        		$cv = json_decode($cv, true);
-		        	}
-					
-					$cv[$poll->id] = $answer->id;
-		        	Cookie::queue('daily_poll', json_encode($cv), 1440, null, '.dentacoin.com');
+				$slist = VoxScale::get();
+		        $poll_scales = [];
+		        foreach ($slist as $sitem) {
+		            $poll_scales[$sitem->id] = $sitem;
 		        }
 
-	        	$this->checkStatus($poll);
+				if (!empty($poll->scale_id) && !empty($poll_scales[$poll->scale_id])) {
+					$json_answers = explode(',', $poll_scales[$poll->scale_id]->answers);
+				} else {
+					$json_answers = json_decode($poll->answers, true);
+				}
 
-		        $ret = [
-		        	'success' => true,
-		        	'logged' => false,
-		        	'chart' => $this->chartData($poll),
-        			'respondents' => 'Respondents: '.$poll->respondentsCount().'/100 people',
-        			'has_user' => false,
-		        ];
+				$a = intval(Request::input('answer'));
 
-				return Response::json( $ret );
-			}
+				if(!$this->user) {
+
+					if(!Auth::guard('admin')->user()) {
+						$country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
+						$country_db = Country::where('code', 'like', $country_code)->first();
+
+						$answer = new PollAnswer;
+				        $answer->user_id = 0;
+				        $answer->country_id = !empty($country_db) ? $country_db->id : null;
+				        $answer->poll_id = $poll->id;
+				        $answer->answer = $a;
+			        	$answer->save();
+
+			        	$poll->recalculateUsersPercentage();
+
+			        	$cv = Cookie::get('daily_poll');
+			        	if(empty($cv)) {
+			        		$cv = [];
+			        	} else {
+			        		$cv = json_decode($cv, true);
+			        	}
+						
+						$cv[$poll->id] = $answer->id;
+			        	Cookie::queue('daily_poll', json_encode($cv), 1440, null, '.dentacoin.com');
+			        }
+
+		        	$this->checkStatus($poll);
+
+			        $ret = [
+			        	'success' => true,
+			        	'logged' => false,
+			        	'chart' => $this->chartData($poll),
+	        			'respondents' => 'Respondents: '.$poll->respondentsCount().'/100 people',
+	        			'has_user' => false,
+			        ];
+
+					return Response::json( $ret );
+				}
 
 
-			$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first();
+				$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first();
 
-			if( empty($taken_daily_poll) ) {
+				if( empty($taken_daily_poll) ) {
 
-				if(!Auth::guard('admin')->user()) {
+					if(!Auth::guard('admin')->user()) {
 
-					$country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
-					$country_db = Country::where('code', 'like', $country_code)->first();
+						$country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
+						$country_db = Country::where('code', 'like', $country_code)->first();
 
-					$answer = new PollAnswer;
-			        $answer->user_id = $this->user->id;
-			        $answer->country_id = !empty($this->user->country_id) ? $this->user->country_id : (!empty($country_db) ? $country_db->id : null);
-			        $answer->poll_id = $poll->id;
-			        $answer->answer = $a;
-		        	$answer->save();
+						$answer = new PollAnswer;
+				        $answer->user_id = $this->user->id;
+				        $answer->country_id = !empty($this->user->country_id) ? $this->user->country_id : (!empty($country_db) ? $country_db->id : null);
+				        $answer->poll_id = $poll->id;
+				        $answer->answer = $a;
+			        	$answer->save();
 
-		        	$poll->recalculateUsersPercentage();
+			        	$poll->recalculateUsersPercentage();
 
-					$reward = new DcnReward;
-			        $reward->user_id = $this->user->id;
-			        $reward->reference_id = $poll->id;
-			        $reward->platform = 'vox';
-			        $reward->type = 'daily_poll';
-			        $reward->reward = Reward::getReward('daily_polls');
+						$reward = new DcnReward;
+				        $reward->user_id = $this->user->id;
+				        $reward->reference_id = $poll->id;
+				        $reward->platform = 'vox';
+				        $reward->type = 'daily_poll';
+				        $reward->reward = Reward::getReward('daily_polls');
 
-			        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-	                $dd = new DeviceDetector($userAgent);
-	                $dd->parse();
+				        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+		                $dd = new DeviceDetector($userAgent);
+		                $dd->parse();
 
-	                if ($dd->isBot()) {
-	                    // handle bots,spiders,crawlers,...
-	                    $reward->device = $dd->getBot();
-	                } else {
-	                    $reward->device = $dd->getDeviceName();
-	                    $reward->brand = $dd->getBrandName();
-	                    $reward->model = $dd->getModel();
-                		$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-	                }
+		                if ($dd->isBot()) {
+		                    // handle bots,spiders,crawlers,...
+		                    $reward->device = $dd->getBot();
+		                } else {
+		                    $reward->device = $dd->getDeviceName();
+		                    $reward->brand = $dd->getBrandName();
+		                    $reward->model = $dd->getModel();
+	                		$reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+		                }
 
-			        $reward->save();
-			    }
+				        $reward->save();
+				    }
 
-		        $this->checkStatus($poll);
+			        $this->checkStatus($poll);
 
-		        $taken_daily_polls = PollAnswer::where('user_id', $this->user->id)->pluck('poll_id')->toArray();
-	        	$more_polls_to_take = Poll::where('status', 'open')->whereNotIn('id', $taken_daily_polls)->first();
+			        $taken_daily_polls = PollAnswer::where('user_id', $this->user->id)->pluck('poll_id')->toArray();
+		        	$more_polls_to_take = Poll::where('status', 'open')->whereNotIn('id', $taken_daily_polls)->first();
 
-	        	$ret = [
-		        	'success' => true,
-		        	'chart' => $this->chartData($poll),
-		        	'next_poll' => $more_polls_to_take ? $more_polls_to_take->id : false,
-	        		'respondents' => 'Respondents: '.$poll->respondentsCount().'/100 people',
-	        		'has_user' => true,
-		        ];
+		        	$ret = [
+			        	'success' => true,
+			        	'chart' => $this->chartData($poll),
+			        	'next_poll' => $more_polls_to_take ? $more_polls_to_take->id : false,
+		        		'respondents' => 'Respondents: '.$poll->respondentsCount().'/100 people',
+		        		'has_user' => true,
+			        ];
 
-	    	} else {
-	    		$ret = [
-		        	'success' => false,
-		        ];
-	    	}
+		    	} else {
+		    		$ret = [
+			        	'success' => false,
+			        ];
+		    	}
 
-	    	return Response::json( $ret );
-	    }
+		    	return Response::json( $ret );
+		    }
+		} else {
+			return redirect(getLangUrl('/'));
+		}
 	}
 
 	private function checkStatus($poll) {
