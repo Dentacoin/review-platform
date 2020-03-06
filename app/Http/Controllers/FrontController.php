@@ -360,7 +360,7 @@ class FrontController extends BaseController
         if( session('unbanned') ) {
             session(['unbanned' => null]);
             $params['unbanned'] = true;
-            $params['unbanned_times'] = $this->user->getPrevBansCount();
+            $params['unbanned_times'] = $this->user->getPrevBansCount('vox');
             if( $params['unbanned_times']==1 ) {
                 $params['unbanned_text'] = nl2br(trans('vox.page.bans.unbanned-text-1'));
             } else if( $params['unbanned_times']==2 ) {
