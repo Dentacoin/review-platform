@@ -100,6 +100,7 @@ return [
 	'team_jobs' => [
 		'practice_manager' => 'Practice Manager',
 		'dentist' => 'Dentist',
+		'dental_technician' => 'Dental Technician',
 		'dental_hygienist' => 'Dental Hygienist',
 		'dental_assistant' => 'Dental Assistant',
 		'marketing_specialist' => 'Marketing Specialist',
