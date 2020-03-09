@@ -246,21 +246,10 @@ $reviewRoutes = function () {
 			Route::post('invite-dentist', 						'RegisterController@invite_dentist');
 
 			Route::get('login/facebook', 						'LoginController@facebook_login');
-			// Route::get('login/twitter', 						'LoginController@twitter_login');
-			// Route::get('login/gplus', 							'LoginController@gplus_login');
 			Route::post('login/civic', 							'LoginController@civic');
-
 			Route::get('login/callback/facebook', 				'LoginController@facebook_callback');
-			// Route::get('login/callback/twitter', 				'LoginController@twitter_callback');
-			// Route::get('login/callback/gplus', 					'LoginController@gplus_callback');
-
 			Route::get('register/facebook/{is_dentist?}', 		'LoginController@facebook_register');
-			// Route::get('register/twitter/{is_dentist?}', 		'LoginController@twitter_register');
-			// Route::get('register/gplus/{is_dentist?}', 			'LoginController@gplus_register');
-
 			Route::get('register/callback/facebook', 			'LoginController@facebook_callback_register');
-			// Route::get('register/callback/twitter', 			'LoginController@twitter_callback_register');
-			// Route::get('register/callback/gplus', 				'LoginController@gplus_callback_register');
 
 			Route::post('status', 								'LoginController@status');
 

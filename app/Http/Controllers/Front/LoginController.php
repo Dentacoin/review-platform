@@ -28,19 +28,6 @@ class LoginController extends FrontController
         return Socialite::driver('facebook')->redirect();
     }
 
-    public function twitter_login($locale=null) {
-
-    	config(['services.twitter.redirect' => getLangUrl('login/callback/twitter')]);
-        return Socialite::driver('twitter')->redirect();
-    }
-
-    public function gplus_login($locale=null) {
-
-    	config(['services.google.redirect' => getLangUrl('login/callback/gplus')]);
-        return Socialite::driver('google')->redirect();
-    }
-
-
     public function facebook_callback() {
         if (!Request::has('code') || Request::has('denied')) {
             return redirect( getLangUrl('login'));
@@ -58,17 +45,6 @@ class LoginController extends FrontController
             return redirect(getLangUrl('/'));
         }
     }
-
-    public function twitter_callback() {
-    	config(['services.twitter.redirect' => getLangUrl('login/callback/twitter')]);
-        return $this->try_social_login(Socialite::driver('twitter')->user());
-    }
-
-    public function gplus_callback() {
-    	config(['services.google.redirect' => getLangUrl('login/callback/gplus')]);
-        return $this->try_social_login(Socialite::driver('google')->user());
-    }
-
 
     private function try_social_login($s_user) {
 
@@ -222,27 +198,11 @@ class LoginController extends FrontController
 
     }
 
-
-
-
     public function facebook_register($locale=null, $type='patient') {
         config(['services.facebook.redirect' => getLangUrl('register/callback/facebook') ]);
         return Socialite::driver('facebook')->scopes(['user_location'])
         ->redirect();
     }
-/*
-    public function twitter_register($locale=null, $is_dentist) {
-    	session(['is_dentist' => $is_dentist ]);
-        config(['services.twitter.redirect' => getLangUrl('register/callback/twitter') ]);
-        return Socialite::driver('twitter')->redirect();
-    }
-
-    public function gplus_register($locale=null, $is_dentist) {
-    	session(['is_dentist' => $is_dentist ]);
-        config(['services.google.redirect' => getLangUrl('register/callback/gplus') ]);
-        return Socialite::driver('google')->redirect();
-    }
-*/
 
     public function facebook_callback_register() {
         
@@ -263,26 +223,6 @@ class LoginController extends FrontController
             return redirect(getLangUrl('/'));
         }
     }
-/*
-    public function twitter_callback_register() {
-        config(['services.twitter.redirect' => getLangUrl('register/callback/twitter') ]);
-
-        // if (!Request::has('code') || Request::has('denied')) {
-        //     dd('bla');
-        //     return redirect('register');
-        // }
-        return $this->try_social_register(Socialite::driver('twitter')->user(), 'tw');
-    }
-
-    public function gplus_callback_register() {
-        config(['services.google.redirect' => getLangUrl('register/callback/gplus') ]);
-
-        if (!Request::has('code') || Request::has('denied')) {
-            return redirect( getLangUrl('register') );
-        }
-        return $this->try_social_register(Socialite::driver('google')->user(), 'gp');
-    }
-*/
 
     private function try_social_register($s_user, $network) {
 
@@ -622,7 +562,6 @@ class LoginController extends FrontController
                     $ret['weak'] = true;
                 } else {
 
-
                     if( session('new_auth') ) {
                         $user = $this->user;
 
@@ -645,7 +584,6 @@ class LoginController extends FrontController
                         if(empty($user) && $email) {
                             $user = User::where( 'email','LIKE', $email )->first();            
                         }
-
 
                         if ($user) {
                             if( $user->isBanned('trp')) {
@@ -749,13 +687,11 @@ class LoginController extends FrontController
 
                                     $ret['redirect'] = getLangUrl('/').($want_to_invite ? '?'.http_build_query(['popup'=>'invite-new-dentist-popup']) : '' );
                                 }
-
                             }
                         } else {
 
                             $ret['message'] = trans('trp.common.civic.not-found');
                         }
-
                     }
                 }
 
@@ -763,14 +699,11 @@ class LoginController extends FrontController
                 $ret['weak'] = true;
             }
         }
-
         
         return Response::json( $ret );
     }
     
-
     public function status() {
         return !empty($this->user) ? $this->user->convertForResponse() : null;
     }
-
 }
