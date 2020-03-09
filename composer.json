@@ -7,6 +7,7 @@
     "require": {
         "php": ">=5.6.4",
         "alexpechkarev/google-maps": "1.0.9",
+        "barryvdh/laravel-dompdf": "^0.8.6",
         "cloutier/php-ipfs-api": "^0.0.6",
         "dimsav/laravel-translatable": "8.*",
         "facebook/graph-sdk": "^5.7",

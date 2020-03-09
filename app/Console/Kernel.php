@@ -6,26 +6,25 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use App\Models\IncompleteRegistration;
-use App\Models\Article;
-use App\Models\Email;
-use App\Models\User;
-use App\Models\Country;
-use App\Models\Dcn;
-use App\Models\Review;
-use App\Models\Reward;
-use App\Models\VoxAnswer;
-use App\Models\UserLogin;
-use App\Models\LeadMagnet;
-use App\Models\Poll;
-use App\Models\UserInvite;
-use App\Models\UserAction;
+use App\Models\ScrapeDentistResult;
 use App\Models\DcnTransaction;
 use App\Models\ScrapeDentist;
-use App\Models\ScrapeDentistResult;
-
-use Carbon\Carbon;
+use App\Models\LeadMagnet;
+use App\Models\UserInvite;
+use App\Models\UserAction;
+use App\Models\VoxAnswer;
+use App\Models\UserLogin;
+use App\Models\Article;
+use App\Models\Country;
+use App\Models\Review;
+use App\Models\Reward;
+use App\Models\Email;
+use App\Models\User;
+use App\Models\Poll;
+use App\Models\Dcn;
 
 use WebPConvert\WebPConvert;
+use Carbon\Carbon;
 
 use Mail;
 use DB;
