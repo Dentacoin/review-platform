@@ -407,12 +407,13 @@ $voxRoutes = function () {
 			Route::post('get-poll-content/{id}', 				'PollsController@get_poll_content');
 			Route::post('get-poll-stats/{id}', 					'PollsController@get_poll_stats');
 
+			Route::any('profile/vox-iframe', 					'ProfileController@vox');
+
 			//Route::any('vpn', 									'VpnController@list');
 
 			Route::group(['middleware' => 'auth:web'], function () {
 				
 				Route::get('profile/setGrace', 					'ProfileController@setGrace');
-				Route::any('profile/vox-iframe', 				'ProfileController@vox');
 
 			});
 

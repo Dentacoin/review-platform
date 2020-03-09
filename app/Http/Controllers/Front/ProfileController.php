@@ -263,7 +263,7 @@ class ProfileController extends FrontController
             }
         }
 
-        return redirect(getLangUrl('/'));
+        return null;
     }
 
     public function invite_whatsapp($locale=null) {
