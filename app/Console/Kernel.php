@@ -198,42 +198,24 @@ Click the check box and confirm the CAPTCHA.
             echo 'DCN Prices cron - Start';
 
             $price = null;
-            //for($i=0;$i<5;$i++) {
 
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_URL => "https://api.coingecko.com/api/v3/coins/dentacoin",
+                CURLOPT_URL => 'https://indacoin.com/api/GetCoinConvertAmount/USD/DCN/100/dentacoin',
                 CURLOPT_SSL_VERIFYPEER => 0
             ));
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
             $resp = json_decode(curl_exec($curl));
             curl_close($curl);
+
             if(!empty($resp))   {
-                if(!empty($resp->market_data->current_price->usd))  {
-                   $price = floatval($resp->market_data->current_price->usd);
-                   file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
-                }
+                $price = 1 / (int)((int)$resp / 100);
             }
-            
-            // $info = @file_get_contents('https://api.coinmarketcap.com/v1/ticker/dentacoin/');
-            // $p = json_decode($info, true);
-            // if(!empty($p) && !empty($p[0]['price_usd'])) {
-            //     $price = floatval($p[0]['price_usd']);
-            //     file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
-            // }
-            
-            // if(!empty($p) && !empty($p[0]['percent_change_24h'])) {
-            //     $pc = floatval($p[0]['percent_change_24h']);
-            //     file_put_contents('/tmp/dcn_change', $pc);
-            // }
-            
-            //     if($i!=4) {
-            //         sleep(10);
-            //     }                
-            // }
 
             if(!empty($price)) {
+                file_put_contents('/tmp/dcn_price', sprintf('%.10F',$price));
+
                 DB::table('voxes')
                 ->where('reward_usd', '>', 0)
                 ->update([
