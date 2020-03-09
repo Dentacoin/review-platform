@@ -25,9 +25,6 @@ use App\Models\ScrapeDentistResult;
 
 use Carbon\Carbon;
 
-use Spatie\Sitemap\SitemapGenerator;
-use Spatie\Sitemap\Tags\Url;
-
 use WebPConvert\WebPConvert;
 
 use Mail;

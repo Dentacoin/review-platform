@@ -190,7 +190,6 @@ return [
         \Torann\GeoIP\GeoIPServiceProvider::class,
         Propaganistas\LaravelPhone\PhoneServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Spatie\Sitemap\SitemapServiceProvider::class,
         GoogleMaps\ServiceProvider\GoogleMapsServiceProvider::class,
         Collective\Remote\RemoteServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
