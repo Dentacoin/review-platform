@@ -803,7 +803,11 @@ $phone: "screen and (max-width: 768px)";
 
 	.edit-buttons {
 		float: right;
-    	margin-top: 20px;
+    	margin-top: 40px;
+
+    	@media #{$phone} {
+    		margin-top: 20px;
+    	}
 
     	.button {
     		font-size: 14px;

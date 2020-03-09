@@ -518,7 +518,10 @@
     text-align: right; }
 .edit-profile-wrapper .edit-buttons {
   float: right;
-  margin-top: 20px; }
+  margin-top: 40px; }
+  @media screen and (max-width: 768px) {
+    .edit-profile-wrapper .edit-buttons {
+      margin-top: 20px; } }
   .edit-profile-wrapper .edit-buttons .button {
     font-size: 14px;
     text-transform: unset;
