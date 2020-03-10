@@ -190,7 +190,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         \Torann\GeoIP\GeoIPServiceProvider::class,
         Propaganistas\LaravelPhone\PhoneServiceProvider::class,
-        //Maatwebsite\Excel\ExcelServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         GoogleMaps\ServiceProvider\GoogleMapsServiceProvider::class,
         Collective\Remote\RemoteServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
@@ -251,7 +251,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'GeoIP' => \Torann\GeoIP\Facades\GeoIP::class,
-        //'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'GoogleMaps' => GoogleMaps\Facade\GoogleMapsFacade::class,
         'SSH' => Collective\Remote\RemoteFacade::class,
 
