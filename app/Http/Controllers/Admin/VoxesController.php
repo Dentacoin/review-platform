@@ -16,6 +16,7 @@ use App\Models\VoxBadge;
 use App\Models\User;
 use App\Models\Vox;
 
+use App\Imports\Import;
 use Carbon\Carbon;
 
 use Validator;
@@ -408,63 +409,56 @@ class VoxesController extends AdminController
 
             $that = $this;
 
-            Excel::load( Input::file('table')->path() , function($reader) use ($item, $that)  { //
+            
+            $newName = '/tmp/'.str_replace(' ', '-', Input::file('table')->getClientOriginalName());
+            copy( Input::file('table')->path(), $newName );
 
-                // Getting all results
-                global $results, $i;
-                $results = [];
-                $reader->each(function($sheet) {
-                    global $results;
-                    $results[] = $sheet->toArray();
-                });
+            $results = Excel::toArray(new Import, $newName );
 
-                if(!empty($results)) {
-                    if(is_array($results[0]) && count($results[0])>10) {
-                        $results = $results[0];
-                    }
-                    $q = null;
-                    $a = [];
-                    foreach ($results as $row) {
-                        $text = current($row);
+            if(!empty($results)) {
+                if(is_array($results[0]) && count($results[0])>10) {
+                    $results = $results[0];
+                }
+                $q = null;
+                $a = [];
+                foreach ($results as $row) {
+                    $text = current($row);
 
-                        if(empty($text) && $text != '0') {
-                            if($q && !empty($a)) {
-                                $qdata = [
-                                    'order' => $i,
-                                    'type' => 'single_choice',
-                                    'is_control' => null,
-                                    'question_scale' => null,
-                                    'question_trigger' => null,
-                                    'question-en' => $q,
-                                    'answers-en' => $a,
-                                ];
+                    if(empty($text) && $text != '0') {
+                        if($q && !empty($a)) {
+                            $qdata = [
+                                'order' => $i,
+                                'type' => 'single_choice',
+                                'is_control' => null,
+                                'question_scale' => null,
+                                'question_trigger' => null,
+                                'question-en' => $q,
+                                'answers-en' => $a,
+                            ];
 
-                                $qobj = new VoxQuestion;
-                                $qobj->vox_id = $item->id;
-                                $that->saveOrUpdateQuestion($qobj, $qdata);
+                            $qobj = new VoxQuestion;
+                            $qobj->vox_id = $item->id;
+                            $that->saveOrUpdateQuestion($qobj, $qdata);
 
-                                //var_dump($qdata);
+                            //var_dump($qdata);
 
-                                $q=null;
-                                $a=[];
-                                $i++;
-                            }
+                            $q=null;
+                            $a=[];
+                            $i++;
+                        }
+                    } else {
+                        if(empty($q)) {
+                            $q = $text;
                         } else {
-                            if(empty($q)) {
-                                $q = $text;
-                            } else {
-                                $a[] = $text;
-                            }
+                            $a[] = $text;
                         }
                     }
                 }
-
-                //exit;
-
-                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.imported'));
-
-            });
-
+            }
+            
+            $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.imported'));
+            
+            
             if (!empty(session('brackets'))) {
                 if (!empty(session('brackets')['q_br'])) {
                     Request::session()->flash('warning-message', 'Missing or more than necessary question/s tooltip brackets: '.implode(' ;     ', session('brackets')['q_br'] ));

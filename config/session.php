@@ -1,6 +1,6 @@
 <?php
 
-$website = $_SERVER['SERVER_NAME'] ?? $_SERVER['HTTP_HOST'] ?? 'reviews.dentacoin.com';
+$website = $_SERVER['SERVER_NAME'] ?? $_SERVER['HTTP_HOST'] ?? env('APP_URL', 'http://localhost');
 $website = str_replace(['dev.', 'urgent.'], '', $website);
 
 return [

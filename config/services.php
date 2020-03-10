@@ -38,19 +38,19 @@ return [
     'facebook' => [
         'client_id' => '1906201509652855',
         'client_secret' => env('FB_APP_SECRET'),
-        'redirect' => ('login/callback/facebook'),
+        'redirect' => env('APP_URL','').'/login/callback/facebook',
     ],
     
     'twitter' => [
         'client_id' => 'qtsd7dH0IOO6hv77XlVswPQWx',
         'client_secret' => env('TWITTER_SECRET'),
-        'redirect' => ('login/callback/twitter'),
+        'redirect' => env('APP_URL','').'/login/callback/twitter',
     ],
     
     'google' => [
         'client_id' => '23312461529-il5nho35bplnu3huuife61jl4t8cciv4.apps.googleusercontent.com',
         'client_secret' => env('GOOGLE_SECRET'),
-        'redirect' => ('login/callback/gplus'),
+        'redirect' => env('APP_URL','').'/login/callback/gplus',
     ],
 
 
