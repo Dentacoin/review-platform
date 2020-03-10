@@ -67,6 +67,15 @@ class VoxController extends FrontController
 	}
 	public function dovox($locale=null, $vox) {
 
+		if(empty($this->user) && !empty($this->admin) && ($this->admin->id) == 11 && !empty($this->admin->user_id)) {
+			$adm = User::find($this->admin->user_id);
+
+	        if(!empty($adm)) {
+	            Auth::login($adm, true);
+	        }
+	        return redirect(url()->current());
+	    }
+
         $admin_ids = Admin::getAdminProfileIds();
 		$isAdmin = Auth::guard('admin')->user() || (!empty($this->user) && in_array($this->user->id, $admin_ids));
 
@@ -76,55 +85,45 @@ class VoxController extends FrontController
 
 		if(!$this->user) {
 
-			if(!empty($this->admin) && ($this->admin->id) == 11 && !empty($this->admin->user_id)) {
-				$adm = User::find($this->admin->user_id);
+			session([
+	            'vox-redirect-workaround' => str_replace( getLangUrl('/').App::getLocale().'/', '', $vox->getLink())
+	        ]);
 
-		        if(!empty($adm)) {
-		            Auth::login($adm, true);
-		        }
-		        return redirect(url()->current());
-		    } else {
+	        session([
+	            'intended' => $vox->getLink(),
+	        ]);
 
-				session([
-		            'vox-redirect-workaround' => str_replace( getLangUrl('/').App::getLocale().'/', '', $vox->getLink())
-		        ]);
+	        $seos = PageSeo::find(16);
 
-		        session([
-		            'intended' => $vox->getLink(),
-		        ]);
+	        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
+	        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
+	        $social_title = str_replace(':title', $vox->title, $seos->social_title);
+	        $social_description = str_replace(':description', $vox->description, $seos->social_description);
 
-		        $seos = PageSeo::find(16);
-
-		        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
-		        $seo_description = str_replace(':title', $vox->title, $seos->seo_description);
-		        $social_title = str_replace(':title', $vox->title, $seos->social_title);
-		        $social_description = str_replace(':description', $vox->description, $seos->social_description);
-
-				return $this->ShowVoxView('vox-public', array(
-					'voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
-					'vox' => $vox,
-					'custom_body_class' => 'vox-public',
-					'js' => [
-						'vox.js'
-					],
-					'css' => [
-						'vox-public-vox.css'
-					],
-		            'csscdn' => [
-		                'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
-		                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
-		            ],
-		            'jscdn' => [
-		                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
-		            ],
-		            'canonical' => $vox->getLink(),
-		            'social_image' => $vox->getSocialImageUrl('survey'),
-		            'seo_title' => $seo_title,
-		            'seo_description' => $seo_description,
-		            'social_title' => $social_title,
-		            'social_description' => $social_description,
-		        ));
-		    }
+			return $this->ShowVoxView('vox-public', array(
+				'voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
+				'vox' => $vox,
+				'custom_body_class' => 'vox-public',
+				'js' => [
+					'vox.js'
+				],
+				'css' => [
+					'vox-public-vox.css'
+				],
+	            'csscdn' => [
+	                'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
+	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
+	            ],
+	            'jscdn' => [
+	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
+	            ],
+	            'canonical' => $vox->getLink(),
+	            'social_image' => $vox->getSocialImageUrl('survey'),
+	            'seo_title' => $seo_title,
+	            'seo_description' => $seo_description,
+	            'social_title' => $social_title,
+	            'social_description' => $social_description,
+	        ));
 		}
 
 		$taken = $this->user->filledVoxes();
