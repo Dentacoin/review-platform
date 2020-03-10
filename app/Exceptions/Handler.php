@@ -35,14 +35,14 @@ class Handler extends ExceptionHandler
      */
      public function report(Exception $exception)
     {
-        // if( \App::runningInConsole() || $exception instanceof \Illuminate\Session\TokenMismatchException || get_class($exception) == 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' ) {
-        //     ;
-        // } else {
-        //     Log::error("URL: " . Request::url().' - Method: '.Request::method());
-        //     Log::error("GET: " . json_encode($_GET));
-        //     Log::error("POST: " . json_encode($_POST));
-        //     Log::error("EXCEPTION TYPE: " . get_class($exception));
-        // }
+        if( \App::runningInConsole() || $exception instanceof \Illuminate\Session\TokenMismatchException || get_class($exception) == 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' ) {
+            ;
+        } else {
+            Log::error("URL: " . Request::url().' - Method: '.Request::method());
+            Log::error("GET: " . json_encode($_GET));
+            Log::error("POST: " . json_encode($_POST));
+            Log::error("EXCEPTION TYPE: " . get_class($exception));
+        }
 
         parent::report($exception);
     }
