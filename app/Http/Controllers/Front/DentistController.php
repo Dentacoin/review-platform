@@ -7,7 +7,6 @@ use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
 
 use Illuminate\Support\Facades\Input;
-use Cloutier\PhpIpfsApi\IPFS;
 
 use App\Models\DentistRecommendation;
 use App\Models\DentistPageview;
@@ -410,10 +409,6 @@ class DentistController extends FrontController
 
                         $review->rating = array_sum($answer_rates) / (!empty(Request::input( 'dentist_clinics' )) && Request::input( 'dentist_clinics' ) == 'own' ? 3 : count($answer_rates));
                         $review->team_doctor_rating = !empty(Request::input( 'dentist_clinics' )) || !empty(Request::input( 'clinic_dentists' )) ? array_sum($answer_three_qs_rates) / 3 : null;
-                        $review->save();
-
-                        $ipfs = new IPFS("127.0.0.1", "8080", "5001");
-                        $review->ipfs = $ipfs->add(json_encode($crypto_data));
                         $review->save();
 
                         if (!empty($review->dentist_id)) {
