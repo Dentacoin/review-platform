@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\Dcn;
 use App\Models\User;
-use App\Models\Secret;
 use App\Models\Reward;
 use App\Models\DcnReward;
 use App\Models\ReviewAnswer;
@@ -50,10 +49,6 @@ class Review extends Model {
         'updated_at',
         'deleted_at'
     ];
-
-    public function secret() {
-        return $this->hasOne('App\Models\Secret', 'id', 'secret_id')->withTrashed();
-    }
 
     public function user() {
         return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();

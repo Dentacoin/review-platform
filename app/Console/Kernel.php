@@ -703,7 +703,9 @@ NEW & FAILED TRANSACTIONS
                         AND `unsubscribe` is null
                         AND `status` IN ('approved','added_by_clinic_claimed')
                         AND `self_deleted` is null
-                        AND `dcn_address` is null
+                        AND `id` NOT IN ( 
+                            SELECT `user_id` FROM wallet_addresses
+                        )
                         AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) > ".env('VOX_MIN_WITHDRAW')."
                         AND `deleted_at` is null
                         AND `id` NOT IN ( 

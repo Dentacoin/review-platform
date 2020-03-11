@@ -43,10 +43,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('admins/edit/{id}',					'AdminsController@update');
 	Route::post('admins/add',						'AdminsController@add');
 
-	Route::get('secrets', 							'SecretsController@list');
-	Route::post('secrets', 							'SecretsController@add');
-	Route::get('secrets/delete/{id}',				'SecretsController@delete');
-
 	Route::get('scammers', 							'ScammersController@list');
 
 	Route::any('blacklist', 						'BlacklistController@list');
@@ -269,7 +265,6 @@ $reviewRoutes = function () {
 
 			Route::any('dentist/{slug}/claim/{id}/',			'DentistController@claim_dentist');
 
-			Route::get('dentist/{slug}/confirm-review/{secret}', 	'DentistController@confirmReview');
 			Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');
 			Route::get('dentist/{slug}/ask/{verification?}',	'DentistController@ask');
 			Route::any('dentist/{slug}/{review_id}', 			'DentistController@list');
@@ -392,6 +387,7 @@ $voxRoutes = function () {
 
 			Route::any('dental-survey-stats', 					'StatsController@home');
 			Route::any('dental-survey-stats/{id}', 				'StatsController@stats');
+			Route::any('create-stat-pdf', 						'StatsController@createPdf');
 
 			Route::any('questionnaire/{id}', 					'VoxController@home');
 			Route::any('paid-dental-surveys', 					'IndexController@surveys_public');

@@ -1409,7 +1409,6 @@ class ProfileController extends FrontController
                 'original' => $dapic->getImageUrl(),
             ]);
         }
-        $this->user->updateStrength();
         $ret = [
             'success' => true
         ];

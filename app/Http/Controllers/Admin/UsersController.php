@@ -154,9 +154,6 @@ class UsersController extends AdminController {
             'civic_kyc' => [
                 'type' => 'bool',
             ],
-            'dcn_address' => [
-                'type' => 'text',
-            ],
             'ownership' => [
                 'type' => 'select',
                 'values' => $this->ownership
@@ -256,7 +253,10 @@ class UsersController extends AdminController {
             $users = $users->where('email', 'LIKE', '%'.trim($this->request->input('search-email')).'%');
         }
         if(!empty($this->request->input('search-address'))) {
-            $users = $users->where('dcn_address', 'LIKE', '%'.trim($this->request->input('search-address')).'%');
+            $dcn_address = $this->request->input('search-address');
+            $users = $users->whereHas('wallet_addresses', function ($query) use ($dcn_address) {
+                $query->where('dcn_address', 'like', $dcn_address);
+            });
         }
         if(!empty($this->request->input('search-id'))) {
             $users = $users->where('id', $this->request->input('search-id') );
@@ -1470,11 +1470,6 @@ class UsersController extends AdminController {
                 $duplicated_mails = User::where('id', '!=', $item->id)->where('email', 'LIKE', $item->email)->withTrashed()->get();
             }
 
-            $duplicated_wallets = collect();
-            if( !empty($item->dcn_address)) {
-                $duplicated_wallets = User::where('id', '!=', $item->id)->where('dcn_address', 'LIKE', $item->dcn_address)->withTrashed()->get();
-            }
-
             $duplicated_names = collect();
             if( !empty($item->name)) {
                 $duplicated_names = User::where('id', '!=', $item->id)->where('name', 'LIKE', $item->name)->withTrashed()->get();
@@ -1483,7 +1478,6 @@ class UsersController extends AdminController {
             return $this->showView('users-form', array(
                 'duplicated_names' => $duplicated_names,
                 'duplicated_mails' => $duplicated_mails,
-                'duplicated_wallets' => $duplicated_wallets,
                 'habits_test_ans' => $habits_test_ans,
                 'item' => $item,
                 'categories' => $this->categories,

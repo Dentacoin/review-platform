@@ -183,11 +183,13 @@
 						<td> {{ $item->civic_id }} </td>
 					</tr>
 				@endif
-				@if($item->dcn_address)
-					<tr class="row">
-						<td> <b> Wallet address </b> </td>
-						<td> {{ $item->dcn_address }} </td>
-					</tr>
+				@if($item->wallet_addresses->isNotEmpty())
+					@foreach($item->wallet_addresses as $wa)
+						<tr class="row">
+							<td> <b> Wallet address {{ !empty($wa->dcn_address_label) ? '"'.$wa->dcn_address_label.'"' : '' }}</b> </td>
+							<td> {{ $wa->dcn_address }} </td>
+						</tr>
+					@endforeach
 				@endif			
 				<tr class="row">
 					<td> <b> Privacy Policy accepted ? </b> </td>
@@ -210,7 +212,7 @@
 						<tr>
 						
 							<td>{{ $reward->created_at->toDateTimeString() }}</td>
-							<td>{{ $reward->vox->title }}</td>
+							<td>{{ !empty($reward->vox) ? $reward->vox->title : 'Deleted' }}</td>
 							<td>{{ $reward->reward }}</td>
 						</tr>
 					@endforeach

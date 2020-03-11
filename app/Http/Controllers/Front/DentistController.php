@@ -24,7 +24,6 @@ use App\Models\OldSlug;
 use App\Models\UserAsk;
 use App\Models\Country;
 use App\Models\PageSeo;
-use App\Models\Secret;
 use App\Models\Review;
 use App\Models\Reward;
 use App\Models\User;
@@ -43,45 +42,6 @@ use Mail;
 
 class DentistController extends FrontController
 {
-    public function confirmReview($locale=null, $slug, $secret) {
-        $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
-
-        if(empty($item)) {
-            return redirect( getLangUrl('dentists') );
-        }
-
-        $old_review = $this->user->hasReviewTo($item->id);
-        //dd($old_review);
-        if($old_review && $old_review->status=='pending' && $old_review->secret->secret==$secret) {
-            $old_review->status = 'accepted';
-            $old_review->secret->used = true;
-            $old_review->secret->save();
-            $old_review->save();
-                        
-            $item->sendTemplate(6, [
-                'review_id' => $old_review->id,
-                'dentist' => $item->id,
-            ], 'trp');
-
-            if( $old_review->dentist_id ) {
-                $old_review->dentist->recalculateRating();                
-            }
-            if( $old_review->clinic_id ) {
-                $old_review->clinic->recalculateRating();                
-            }
-            
-            Request::session()->flash('success-message', trans('trp.page.dentist.review-submitted'));
-
-            return Response::json( [
-                'success' => true,
-            ] );
-        }
-        
-        return Response::json( [
-            'success' => false,
-        ] );
-    }
-
     public function fullReview($locale=null, $id) {
         $review = Review::find($id);
 
@@ -314,8 +274,6 @@ class DentistController extends FrontController
                         ; //dgd
                     } else {
 
-                        $secret = Secret::getNext();
-
                         if($old_review && $old_review->status=='pending') {
                             $review = $old_review;
                         } else {
@@ -344,7 +302,7 @@ class DentistController extends FrontController
                         $review->youtube_id = strip_tags(Request::input( 'youtube_id' ));
                         $review->verified = !empty($isTrusted);
                         $review->status = 'pending';
-                        $review->secret_id = $secret->id;
+                        $review->secret_id = null;
                         $review->treatments = Request::input( 'treatments' );
                         $review->save();
 
@@ -454,8 +412,6 @@ class DentistController extends FrontController
                         }
 
                         $review->status = 'accepted';
-                        $review->secret->used = true;
-                        $review->secret->save();
                         $review->save();
 
                         if(!$review->youtube_id) {

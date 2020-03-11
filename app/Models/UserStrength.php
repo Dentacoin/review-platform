@@ -353,7 +353,7 @@ class UserStrength extends Model
                 }
                 $array_number_shuffle['important']++;
 
-                if( !empty($user->dcn_address )) {
+                if( $user->wallet_addresses->isNotEmpty() ) {
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.set-wallet.title'),
                         'text' => nl2br(trans('trp.strength.dentist.set-wallet.text')),
@@ -671,7 +671,7 @@ class UserStrength extends Model
                     'event_label' => 'AddNewDentist',
                 ];
 
-                if( $user->dcn_address) {
+                if( $user->wallet_addresses->isNotEmpty()) {
                     $ret[] = [
                         'title' => trans('trp.strength.patient.set-wallet.title'),
                         'text' => nl2br(trans('trp.strength.patient.set-wallet.text')),
@@ -845,7 +845,7 @@ class UserStrength extends Model
                 ];
 
 
-                if( $user->dcn_address) {
+                if( $user->wallet_addresses->isNotEmpty()) {
                     $ret[] = [
                         'title' => trans('vox.strength.dentist.set-wallet.title'),
                         'text' => nl2br(trans('vox.strength.dentist.set-wallet.text')),
@@ -958,14 +958,6 @@ class UserStrength extends Model
                     'event_label' => 'Dentacare',
                 ];
 
-                // $ret['photo-dentist'] = $user->hasimage ? true : false;
-                // $ret['info'] = ($user->name && $user->phone && $user->description && $user->email && $user->country_id && $user->city_id && $user->zip && $user->address && $user->website) ? true : false;
-                // $ret['gallery'] = $user->photos->isNotEmpty() ? true : false;
-                // $ret['wallet'] = $user->dcn_address ? true : false;
-                // $ret['invite-dentist'] = $user->invites->isNotEmpty() ? true : false;
-                // $ret['widget'] = $user->widget_activated ? true : false;
-
-
             } else {
 
                 $all_surveys = Vox::where('type', 'normal')->get();
@@ -1018,7 +1010,7 @@ class UserStrength extends Model
                     ];
                 }
 
-                if( $user->dcn_address) {
+                if( $user->wallet_addresses->isNotEmpty()) {
                     $ret[] = [
                         'title' => trans('vox.strength.patient.set-wallet.title'),
                         'text' => nl2br(trans('vox.strength.patient.set-wallet.text')),

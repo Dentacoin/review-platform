@@ -308,10 +308,21 @@
                             <div class="form-group">
                                 <label class="col-md-2 control-label">DCN Address</label>
                                 <div class="col-md-7">
-                                    @include('admin.parts.user-field',[
-                                        'key' => 'dcn_address',
-                                        'info' => $fields['dcn_address']
-                                    ])
+                                    @if($item->wallet_addresses->isNotEmpty())
+                                        @foreach($item->wallet_addresses as $wa)
+                                            <input type="text" name="dcn_address" class="form-control" value="{{ $wa->dcn_address }}" disabled="disabled"> <br/>
+
+                                            @if(App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get()->isNotEmpty())
+
+                                                <p style="color: red;" class="col-md-12">⇧ User/s with this dcn address already exists:</p>
+                                                @foreach(App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get() as $dw)
+                                                    <p style="color: red;" class="col-md-12">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dw->user_id) }}">{{ App\Models\User::withTrashed()->find($dw->user_id)->name }}</a></p>
+                                                @endforeach
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <input type="text" name="dcn_address" class="form-control" disabled="disabled">
+                                    @endif
                                 </div>
                                 <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Allow withdraw</label>
                                 <div class="col-md-1" style="padding-left: 0px;">
@@ -321,12 +332,6 @@
                                     ])
                                 </div>
                             </div>
-                            @if($duplicated_wallets->isNotEmpty())
-                                <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this dcn address already exists:</p>
-                                @foreach($duplicated_wallets as $dw)
-                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dw->id) }}">{{ $dw->name }}</a></p>
-                                @endforeach
-                            @endif
                             @if($item->is_dentist)
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">New Password</label>

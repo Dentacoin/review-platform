@@ -90,11 +90,6 @@ return [
         'youtube' => array(
             'icon' => 'film',
         ),
-        /*
-        'secrets' => array(
-            'icon' => 'key',
-        ),
-        */
         'registrations' => array(
             'icon' => 'plus-circle',
         ),

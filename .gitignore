@@ -16,7 +16,4 @@ artisan
 sitemaps
 lang
 /app/Http/Controllers/MobidentController.php
-/public/poll-import-template.xlsx
-/public/survey-import-template.xlsx
-/public/dentist_import.xls
 /public/socials.html

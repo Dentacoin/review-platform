@@ -167,6 +167,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function categories() {
         return $this->hasMany('App\Models\UserCategory', 'user_id', 'id');
     }
+    public function wallet_addresses() {
+        return $this->hasMany('App\Models\WalletAddress', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
+    public function main_wallet_address() {
+        return $this->hasOne('App\Models\WalletAddress', 'id', 'user_id')->where('main', 1);
+    }
     public function cross_check() {
         return $this->hasMany('App\Models\VoxCrossCheck', 'user_id', 'id');
     }
@@ -361,25 +367,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return false;
     }
 
-    public function getStrength() {
-        $ret = [];
-
-        if($this->is_dentist) {
-            $ret['photo-dentist'] = $this->hasimage ? true : false;
-            $ret['info'] = ($this->name && $this->phone && $this->description && $this->email && $this->country_id && $this->city_id && $this->zip && $this->address && $this->website) ? true : false;
-            $ret['gallery'] = $this->photos->isNotEmpty() ? true : false;
-            $ret['wallet'] = $this->dcn_address ? true : false;
-            $ret['invite-dentist'] = $this->invites->isNotEmpty() ? true : false;
-            $ret['widget'] = $this->widget_activated ? true : false;
-        } else {
-            $ret['photo-patient'] = $this->hasimage ? true : false;
-            $ret['wallet'] = $this->dcn_address ? true : false;
-            $ret['review'] = $this->reviews_out->isNotEmpty() ? true : false;
-            $ret['invite-patient'] = $this->invites->isNotEmpty() ? true : false;
-        }
-        return $ret;
-    }
-
     public function getStrengthCompleted($platform) {
             
         $num = 0;
@@ -391,24 +378,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
 
         return $num;
-    }
-
-    public function getStrengthNumber() {
-            
-        $num = 0;
-        $s = $this->getStrength();
-        foreach ($s as $val) {
-            if ($val == true) {
-                $num++;
-            }            
-        }
-
-        return $num;
-    }
-
-    public function updateStrength() {
-        $this->strength = $this->getStrengthNumber();
-        $this->save();
     }
 
     public function getPrevBansCount($domain='vox', $type=null) {
@@ -979,7 +948,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $img->save($to_thumb);
         $this->hasimage = true;
         $this->hasimage_social = false;
-        $this->updateStrength();
         $this->refreshReviews();
         $this->save();
 
@@ -1076,11 +1044,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function canIuseAddress( $address ) {
-        $used = self::where('dcn_address', 'LIKE', $address)->first();
-        if($used && $used->id!=$this->id) {
-            return false;
-        }
-
+        
         return true;
     }
 
