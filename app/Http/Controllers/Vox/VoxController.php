@@ -73,7 +73,7 @@ class VoxController extends FrontController
 	        if(!empty($adm)) {
 	            Auth::login($adm, true);
 	        }
-	        return redirect(url()->current());
+	        return redirect(url()->current().'?testmode=1');
 	    }
 
         $admin_ids = Admin::getAdminProfileIds();
