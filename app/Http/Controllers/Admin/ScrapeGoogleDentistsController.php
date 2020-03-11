@@ -3,18 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
+use Maatwebsite\Excel\Facades\Excel;
 
+use App\Models\ScrapeDentistResult;
+use App\Models\ScrapeDentist;
 use App\Models\Country;
 use App\Models\User;
-use App\Models\ScrapeDentist;
-use App\Models\ScrapeDentistResult;
+
+use App\Exports\Export;
 
 use Validator;
 use Request;
-use Excel;
 
-class ScrapeGoogleDentistsController extends AdminController
-{
+class ScrapeGoogleDentistsController extends AdminController {
+
     public function list( ) {
 
     	if(Request::isMethod('post')) {
@@ -132,19 +134,9 @@ class ScrapeGoogleDentistsController extends AdminController
 	        }
 	        $fname = $dir.'export';
 
-	        Excel::create($fname, function($excel) use ($flist) {
 
-	            $excel->sheet('Sheet1', function($sheet) use ($flist) {
-
-	                $sheet->fromArray($flist);
-	                //$sheet->setWrapText(true);
-	                //$sheet->getStyle('D1:E999')->getAlignment()->setWrapText(true); 
-
-	            });
-
-
-
-	        })->export('xls');
+	        $export = new Export($flist);
+            return Excel::download($export, 'scrapes.xls');
 	    }
     }
 

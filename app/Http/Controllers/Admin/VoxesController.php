@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Input;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\VoxToCategory;
 use App\Models\VoxCategory;
@@ -16,6 +17,8 @@ use App\Models\VoxBadge;
 use App\Models\User;
 use App\Models\Vox;
 
+use App\Exports\MultipleLangSheetExport;
+use App\Exports\Export;
 use App\Imports\Import;
 use Carbon\Carbon;
 
@@ -24,7 +27,6 @@ use Response;
 use Request;
 use Image;
 use Route;
-use Excel;
 use DB;
 
 class VoxesController extends AdminController
@@ -316,17 +318,7 @@ class VoxesController extends AdminController
                 }
             }
 
-
-            Excel::create($item->title, function($excel) use ($flist) {
-                foreach ($flist as $lang => $list) {
-                    //dd($list);
-
-                    $excel->sheet($lang, function($sheet) use ($list) {
-                        $sheet->fromArray($list);
-
-                    });
-                }
-            })->export('xls');
+            return (new MultipleLangSheetExport($flist))->download($item->title.'-translations.xlsx');
 
         } else {
             return redirect('cms/'.$this->current_page);
@@ -335,22 +327,23 @@ class VoxesController extends AdminController
 
 
     public function import( $id ) {
+
+        return 'This doesn\'t work. Tell the developer about it';
+
         $item = Vox::find($id);
 
         if(!empty($item)) {
 
             $that = $this;
 
-            Excel::load( Input::file('table')->path() , function($reader) use ($item, $that)  { //
+            $newName = '/tmp/'.str_replace(' ', '-', Input::file('table')->getClientOriginalName());
+            copy( Input::file('table')->path(), $newName );
 
-                // Getting all results
-                global $results;
-                $results = [];
-                $reader->each(function($sheet) {
-                    global $results;
-                    $results[$sheet->getTitle()] = $sheet->toArray();
-                });
+            $results = Excel::toArray(new Import, $newName );
 
+            dd($results);
+
+            if(!empty($results)) {
                 $maxlen = 0;
                 foreach ($results as $r) {
                     if(count($r)>$maxlen) {
@@ -365,7 +358,9 @@ class VoxesController extends AdminController
                         'question_scale' => null,
                         'question_trigger' => null,
                     ];
+
                     foreach ($results as $lang => $list) {
+                        //problemut e tuk, che $lang ne e ezik a chislo
                         $qdata['question-'.$lang] = !empty($list[$i]['question']) ? $list[$i]['question'] : null;
                         $qdata['answers-'.$lang] = [];
                         for($q=1;$q<=10;$q++) {
@@ -385,10 +380,11 @@ class VoxesController extends AdminController
 
                     $that->saveOrUpdateQuestion($qobj, $qdata);
                 }
+            }
 
-                $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.imported'));
+            unlink($newName);
 
-            });
+            $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.imported'));
             
             return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
 
@@ -409,7 +405,6 @@ class VoxesController extends AdminController
 
             $that = $this;
 
-            
             $newName = '/tmp/'.str_replace(' ', '-', Input::file('table')->getClientOriginalName());
             copy( Input::file('table')->path(), $newName );
 
@@ -455,6 +450,8 @@ class VoxesController extends AdminController
                     }
                 }
             }
+
+            unlink($newName);
             
             $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.imported'));
             
@@ -1305,8 +1302,6 @@ class VoxesController extends AdminController
 
     public function export_survey_data() {
 
-
-
         if(Request::isMethod('post')) {
 
             $cols = [
@@ -1338,7 +1333,6 @@ class VoxesController extends AdminController
             foreach ($slist as $sitem) {
                 $scales[$sitem->id] = $sitem;
             }
-
 
             foreach( $vox->questions as $question ) {
                 if( $question->type == 'single_choice' ) {
@@ -1409,12 +1403,12 @@ class VoxesController extends AdminController
                     } );
 
                     if( $question->type == 'single_choice' ) {
-                        $answerwords = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true);
+                        $answerwords = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true);
                         $row[] = $qanswers->last() && $qanswers->last()->answer && isset( $answerwords[ ($qanswers->last()->answer)-1 ] ) ? $answerwords[ ($qanswers->last()->answer)-1 ] : '';
                     } else if( $question->type == 'scale' ) {
                         $list = json_decode($question->answers, true);
                         $i=1;
-                        $answerwords = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true);
+                        $answerwords = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true);
                         foreach ($list as $l) {
                             $thisanswer = $qanswers->filter( function($item) use ($i) {
                                 return $i == $item->answer;
@@ -1425,7 +1419,7 @@ class VoxesController extends AdminController
                         }
 
                     } else if( $question->type == 'multiple_choice' ) {
-                        $list = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true);
+                        $list = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true);
                         $i=1;
                         foreach ($list as $l) {
                             $thisanswer = $qanswers->filter( function($item) use ($i) {
@@ -1437,34 +1431,19 @@ class VoxesController extends AdminController
                     }
                 }
 
-
                 $rows[] = $row;
             }
-
             
             $fname = $vox->title;
 
-            Excel::create($fname, function($excel) use ($rows) {
-
-                $excel->sheet('Sheet1', function($sheet) use ($rows) {
-
-                    $sheet->with($rows, null, 'A1', false, false);
-                    //$sheet->setWrapText(true);
-                    //$sheet->getStyle('D1:E999')->getAlignment()->setWrapText(true); 
-
-                });
-
-
-
-            })->export('xlsx');
+            $export = new Export($rows);
+            return Excel::download($export, $fname.'.xlsx');
         }
 
         return $this->showView('voxes-export-survey-data', array(
             'voxes' => Vox::orderBy('sort_order', 'ASC')->get()
         ));
     }
-
-
 
     public function duplicate_question() {
         $qObj = VoxQuestion::find($this->request->input('d-question'));
@@ -1476,7 +1455,6 @@ class VoxesController extends AdminController
             $q['answers-'.$key] = json_decode(stripcslashes($translation->answers));
         }
         $q['question_scale'] = $qObj->vox_scale_id;
-
 
         $item = Vox::find($this->request->input('duplicate-question-vox'));
 

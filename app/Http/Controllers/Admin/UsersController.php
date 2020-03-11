@@ -2,48 +2,50 @@
 
 namespace App\Http\Controllers\Admin;
 
-use DeviceDetector\DeviceDetector;
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-
 use App\Http\Controllers\AdminController;
 
-use App\Models\Email;
-use App\Models\User;
-use App\Models\UserLogin;
-use App\Models\Reward;
-use App\Models\Vox;
-use App\Models\UserBan;
-use App\Models\VoxQuestion;
-use App\Models\VoxAnswer;
-use App\Models\DcnReward;
-use App\Models\VoxCrossCheck;
-use App\Models\City;
-use App\Models\Country;
-use App\Models\UserCategory;
-use App\Models\Review;
-use App\Models\ReviewAnswer;
-use App\Models\IncompleteRegistration;
-use App\Models\UserInvite;
-use App\Models\UserAsk;
-use App\Models\UserAction;
-use App\Models\LeadMagnet;
-use App\Models\OldSlug;
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
+use DeviceDetector\DeviceDetector;
 
 use Illuminate\Support\Facades\Input;
+use Maatwebsite\Excel\Facades\Excel;
 
+use App\Models\IncompleteRegistration;
+use App\Models\ReviewAnswer;
+use App\Models\UserCategory;
+use App\Models\VoxCrossCheck;
+use App\Models\VoxQuestion;
+use App\Models\UserInvite;
+use App\Models\UserAction;
+use App\Models\LeadMagnet;
+use App\Models\UserLogin;
+use App\Models\VoxAnswer;
+use App\Models\DcnReward;
+use App\Models\UserBan;
+use App\Models\UserAsk;
+use App\Models\OldSlug;
+use App\Models\Country;
+use App\Models\Review;
+use App\Models\Reward;
+use App\Models\Email;
+use App\Models\City;
+use App\Models\User;
+use App\Models\Vox;
+
+use App\Exports\Export;
+use App\Imports\Import;
 use Carbon\Carbon;
 
 use Validator;
 use Response;
 use Request;
+use Image;
 use Route;
 use Auth;
 use DB;
-use Excel;
-use Image;
 
-class UsersController extends AdminController
-{
+class UsersController extends AdminController {
+
     private $fields;
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
         parent::__construct($request, $route, $locale);
@@ -416,19 +418,8 @@ class UsersController extends AdminController
             }
             $fname = $dir.'export';
 
-            Excel::create($fname, function($excel) use ($flist) {
-
-                $excel->sheet('Sheet1', function($sheet) use ($flist) {
-
-                    $sheet->fromArray($flist);
-                    //$sheet->setWrapText(true);
-                    //$sheet->getStyle('D1:E999')->getAlignment()->setWrapText(true); 
-
-                });
-
-
-
-            })->export('xls');
+            $export = new Export($flist);
+            return Excel::download($export, 'users.xls');
 
         } else if( request()->input('export-sendgrid') ) {
 
@@ -1663,28 +1654,27 @@ class UsersController extends AdminController
         if(Request::isMethod('post')) {
 
             if(Input::file('file')) {
-                if (Input::file('file')->getMimeType() != 'application/vnd.ms-office') {
+
+                if (Input::file('file')->getMimeType() != 'application/vnd.ms-excel') {
                     $this->request->session()->flash('error-message', 'File format not accepted. Upload .xls');
                     return redirect('cms/'.$this->current_page.'/import');
                 }
 
                 global $results, $not_imported;
 
-                Excel::load( Input::file('file')->path() , function($reader)  { //
+                $newName = '/tmp/'.str_replace(' ', '-', Input::file('file')->getClientOriginalName());
+                copy( Input::file('file')->path(), $newName );
 
-                    global $results, $not_imported;
+                $results = Excel::toArray(new Import, $newName );
+
+                if(!empty($results)) {
+
+                    unset($results[0][0]);
+
                     $not_imported = [];
-                    $results = [];
-                    $reader->each(function($sheet) {
-                        global $results;
-                        $results[] = $sheet->toArray();
-                    });
-
-                    unset($results[0]);
-                    //dd($results);
                     if(!empty($results)) {
 
-                        foreach ($results as $k => $row) {
+                        foreach ($results[0] as $k => $row) {
 
                             //dd($results, $k, $row);
                             if (!empty($row[2]) && !empty($row[0]) && filter_var($row[2], FILTER_VALIDATE_EMAIL)) {
@@ -1737,7 +1727,9 @@ class UsersController extends AdminController
                         }
                     }
 
-                });
+                }
+
+                unlink($newName);
 
                 if(!empty($not_imported)) {
                     $this->request->session()->flash('warning-message', 'Dentists were imported successfully. However, there were some invalid or missing dentist emails which were skipped - '.implode(',', $not_imported));

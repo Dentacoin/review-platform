@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\AdminController;
+
+use Illuminate\Support\Facades\Input;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
+use App\Exports\MultipleLangSheetExport;
+use App\Exports\Export;
+use App\Imports\Import;
 use App\Http\Requests;
-use App\Http\Controllers\AdminController;
-use Lang;
-use Validator;
-use Illuminate\Support\Facades\Input;
-use Excel;
 
-class TranslationsController extends AdminController
-{
+use Validator;
+use Lang;
+
+class TranslationsController extends AdminController {
 
 	public function add() {
+
         $validator = Validator::make($this->request->all(), [
             'key' => array('required'), //, 'regex:/[\W.]+/'
             'val' => array('required'),
@@ -42,6 +47,7 @@ class TranslationsController extends AdminController
 	}
 
 	public function update() {
+
 		$validator = Validator::make($this->request->all(), [
             'source' => array('required'),
             'target' => array('required'),
@@ -84,50 +90,51 @@ class TranslationsController extends AdminController
         }
         $fname = $dir.'export';
 
-        Excel::create($fname, function($excel) use ($flist) {
-
-            $excel->sheet('Sheet1', function($sheet) use ($flist) {
-
-                $sheet->fromArray($flist);
-                //$sheet->setWrapText(true);
-                //$sheet->getStyle('D1:E999')->getAlignment()->setWrapText(true); 
-
-            });
-
-
-
-        })->export('xls');
-
-        //dd('aleee');
+        $export = new Export($flist);
+        return Excel::download($export, 'translations.xls');
     }
 
     public function import($subpage=null, $source=null) {
 
-        $list = Lang::get($this->current_subpage, array(), $source);
-        Excel::load( Input::file('table')->path() , function($reader) use ($source) {
+        if(!empty(Input::file('table'))) {
+            
+            $list = Lang::get($this->current_subpage, array(), $source);
 
-            // Getting all results
-            $results = $reader->toArray();
-            $proper = [];
-            foreach($results as $k => $v) {
-                $key = current($v);
-                next($v);
-                $text = current($v);
-                if(!empty($text)) {
-                    $proper[$key] = str_replace('"', '', $text);
+            $newName = '/tmp/'.str_replace(' ', '-', Input::file('table')->getClientOriginalName());
+            copy( Input::file('table')->path(), $newName );
+
+            $results = Excel::toArray(new Import, $newName );
+
+            if(!empty($results)) {
+                // Getting all results
+                $proper = [];
+
+                foreach($results[0] as $k => $v) {
+                    $key = current($v);
+                    next($v);
+                    $text = current($v);
+
+                    if(!empty($text)) {
+                        $proper[$key] = str_replace('"', '', $text);
+                    }
                 }
+                //dd($proper);
+                $this->translations_save($source, $proper);
+
+                unlink($newName);
+
+                $this->request->session()->flash('success-message', trans('admin.page.translations.imported'));
+
             }
-            //dd($proper);
-            $this->translations_save($source, $proper);
-
-            $this->request->session()->flash('success-message', trans('admin.page.translations.imported'));
-
-        });
+        } else {
+            $this->request->session()->flash('error-message', 'Please first upload a file.');
+        }
         
         return redirect('cms/'.$this->current_page.'/'.$this->current_subpage.'/'.$source.'/'.$source);
     }
 
 	public function delete($subpage=null, $source=null, $target=null, $delid=null) {
+
         foreach (config('langs') as $lang => $bla) {
             $keysarr = Lang::get($this->current_subpage, array(), $lang);
             if(isset($keysarr[$delid])) {
@@ -141,7 +148,9 @@ class TranslationsController extends AdminController
 	}
 
     public function list($subpage=null, $source=null, $target=null) {
+
         $available_langs = config('langs');
+
         if($this->user->role=='translator') {
             $source = $this->user->lang_from;
             $target = $this->user->lang_to;
@@ -185,7 +194,6 @@ class TranslationsController extends AdminController
         );
 
         return $this->ShowView('translations', $attrs);
-
     }
 
     private function translations_save($lang, $data) {
@@ -218,6 +226,4 @@ return [
 		}
 		file_put_contents($pathToFile, $output);
     }
-
-
 }

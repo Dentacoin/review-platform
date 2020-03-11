@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
-use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
+use DeviceDetector\DeviceDetector;
 
 use Illuminate\Support\Facades\Input;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\UserCategory;
 use App\Models\UserInvite;
@@ -23,13 +24,13 @@ use App\Models\Civic;
 use App\Models\User;
 use App\Models\Dcn;
 
+use App\Imports\Import;
 use Carbon\Carbon;
 
 use Validator;
 use Response;
 use Request;
 use Image;
-use Excel;
 use Route;
 use Hash;
 use Mail;
@@ -603,8 +604,11 @@ class ProfileController extends FrontController
                 if (Input::file('invite-file')->getMimeType() == 'text/plain') {
                     $columns = explode(PHP_EOL, File::get(Input::file('invite-file')->path()));
                     $rows = [];
+
                     foreach ($columns as $column) {
-                        $rows[] = preg_split('/[\t,]/', $column);
+                        if(!empty($column)) {
+                            $rows[] = preg_split('/[\t,]/', $column);
+                        }                        
                     }
 
                     if (count($rows[0]) <= 1) {
@@ -633,18 +637,15 @@ class ProfileController extends FrontController
                     }
 
                 } else {
-
+                    //not using
                     global $reversedRows;
 
-                    Excel::load( Input::file('invite-file')->path() , function($reader)  {
+                    $newName = '/tmp/'.str_replace(' ', '-', Input::file('invite-file')->getClientOriginalName());
+                    copy( Input::file('invite-file')->path(), $newName );
 
-                        // Getting all results
-                        global $results, $reversedRows;
-                        $results = [];
-                        $reader->each(function($sheet) {
-                            global $results;
-                            $results[] = $sheet->toArray();
-                        });
+                    $results = Excel::toArray(new Import, $newName );
+
+                    if(!empty($results)) {
 
                         $reversedRows = [];
                         $maxcnt = 0;
@@ -669,8 +670,9 @@ class ProfileController extends FrontController
                                 $reversedRows[$i][] = isset($row[$i]) ? trim($row[$i]) : '';
                             }
                         }
+                    }
 
-                    });
+                    unlink($newName);
                 }
 
 

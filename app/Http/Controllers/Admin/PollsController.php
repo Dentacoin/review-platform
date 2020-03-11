@@ -3,28 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
-
-use App\Models\Poll;
-use App\Models\PollAnswer;
-use App\Models\VoxCategory;
-use App\Models\VoxScale;
-use App\Models\DcnReward;
-
 use Illuminate\Support\Facades\Input;
+use Maatwebsite\Excel\Facades\Excel;
 
-use Image;
-use Request;
-use Response;
-use Route;
-use Excel;
-use DB;
-use Validator;
+use App\Models\VoxCategory;
+use App\Models\PollAnswer;
+use App\Models\DcnReward;
+use App\Models\VoxScale;
+use App\Models\Poll;
 
+use App\Imports\Import;
 use Carbon\Carbon;
 
+use Validator;
+use Response;
+use Request;
+use Image;
+use Route;
+use DB;
 
-class PollsController extends AdminController
-{
+class PollsController extends AdminController {
 
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
         parent::__construct($request, $route, $locale);
@@ -389,20 +387,20 @@ class PollsController extends AdminController
 
             global $reversedRows;
 
-            Excel::load( Input::file('table')->path() , function($reader) use ($item)  {
+            $newName = '/tmp/'.str_replace(' ', '-', Input::file('table')->getClientOriginalName());
+            copy( Input::file('table')->path(), $newName );
 
-                // Getting all results
-                global $results, $reversedRows;
-                $results = [];
-                $reader->each(function($sheet) {
-                    global $results;
-                    $results[] = $sheet->toArray();
-                });
+            $results = Excel::toArray(new Import, $newName );
+
+            if(!empty($results)) {
 
                 $answers = [];
                 foreach ($results[0] as $key => $value) {
                     foreach ($value as $k => $v) {
-                        $answers[] = $v;
+                        if(!empty($v)) {
+                            $answers[] = $v;
+                        }
+                        
                     }
                 }
 
@@ -417,7 +415,9 @@ class PollsController extends AdminController
                     $translation->save();
                 }
 
-            });
+            }
+            
+            unlink($newName);
 
             $this->request->session()->flash('success-message', 'Answers imported');
             return redirect('cms/vox/polls/edit/'.$item->id);
