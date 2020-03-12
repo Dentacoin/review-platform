@@ -685,7 +685,7 @@ class VoxesController extends AdminController
         $item->manually_calc_reward = !empty($this->request->input('manually_calc_reward')) ? 1 : null;
         $item->last_count_at = null;
 
-        if (!empty($this->request->input('manually_calc_reward'))) {
+        if (!empty($this->request->input('count_dcn_questions'))) {
             $trigger_qs = [];
             foreach ($this->request->input('count_dcn_questions') as $k => $v) {
                 $trigger_qs[$this->request->input('count_dcn_questions')[$k]] = $this->request->input('count_dcn_answers')[$k];

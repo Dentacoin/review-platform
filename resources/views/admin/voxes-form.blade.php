@@ -90,7 +90,7 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.reward_usd') }}</label>
                             <label class="col-md-10  control-label" style="text-align: left;">
-                                @if(!empty($item->manually_calc_reward) && !empty($item->dcn_questions_count))
+                                @if(!empty($item->dcn_questions_count))
                                     {{ $item->dcn_questions_count }} x {{ $item->getRewardPerQuestion()->dcn }} = {{ $item->getRewardTotal() }} DCN (${{ $item->getRewardTotal(true) }})
                                 @else
                                     {{ $item->questions->count() }} x {{ $item->getRewardPerQuestion()->dcn }} = {{ $item->getRewardTotal() }} DCN (${{ $item->getRewardTotal(true) }})
@@ -100,7 +100,7 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" style="max-width: 200px;">{{ trans('admin.page.'.$current_page.'.duration') }}</label>
                             <label class="col-md-10  control-label" style="text-align: left;">
-                                @if(!empty($item->manually_calc_reward) && !empty($item->dcn_questions_count))
+                                @if(!empty($item->dcn_questions_count))
                                     {{ $item->dcn_questions_count }} x 10sec = ~{{ ceil( $item->dcn_questions_count/6 ) }} min
                                 @else
                                     {{ $item->questions->count() }} x 10sec = ~{{ ceil( $item->questions->count()/6 ) }} min

@@ -190,7 +190,7 @@
 							<td> {{ $wa->dcn_address }} </td>
 						</tr>
 					@endforeach
-				@endif			
+				@endif
 				<tr class="row">
 					<td> <b> Privacy Policy accepted ? </b> </td>
 					<td> {{ $item->gdpr_privacy ? 'Yes' : 'No'  }} </td>

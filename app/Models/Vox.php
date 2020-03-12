@@ -223,7 +223,7 @@ class Vox extends Model {
         } else if ($this->type == 'user_details') {
             return 0;
         } else {
-            return ( $inusd ? $this->getRewardPerQuestion()->amount : $this->getRewardPerQuestion()->dcn) * (!empty($this->dcn_questions_count) ? $this->dcn_questions_count : $this->questionsCount());
+            return ( $inusd ? $this->getRewardPerQuestion()->amount : $this->getRewardPerQuestion()->dcn) * (!empty($this->manually_calc_reward) && !empty($this->dcn_questions_count) ? $this->dcn_questions_count : $this->questionsCount());
         }        
     }
 
@@ -590,9 +590,7 @@ class Vox extends Model {
         $givenAnswers = [];
 
         foreach ($this->questions as $q) {
-
             //Davame otgovor
-
             $givenAnswers = $this->dcn_questions_triggers;
 
             //Ako ima trigger
@@ -614,7 +612,6 @@ class Vox extends Model {
                 }
 
                 $triggers = explode(';', $triggers);
-
 
                 $triggerSuccess = [];
 
@@ -657,13 +654,10 @@ class Vox extends Model {
                 //Inache go go pravim vinagi
                 $res++;
             }
-
-
         }
 
         $this->dcn_questions_count = $res;
         $this->save();
-
     }
 
     public static function getBirthyearOptions() {
