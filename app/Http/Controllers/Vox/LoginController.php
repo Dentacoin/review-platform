@@ -170,8 +170,8 @@ class LoginController extends FrontController
                 //     'endlink' => '</a>',
                 // ]));
                 return redirect( getLangUrl('login', null, 'https://vox.dentacoin.com/').'?error-message='.urlencode(trans('vox.page.login.error-fb', [
-                    'link' => '[]',
-                    'endlink' => '[/]',
+                    'link' => '[startlink]',
+                    'endlink' => '[/endlink]',
                 ])));
             }
         }

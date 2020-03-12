@@ -19,7 +19,7 @@
 @if(request('error-message'))
     <!-- Form Error List -->
     <div class="alert alert-warning">
-        <strong>{!! request('error-message') !!}</strong>
+        <strong>{!! str_replace( '[/endlink]', '</a>', str_replace('[startlink]', '<a href="https://vox.dentacoin.com/en/registration">', request('error-message'))) !!}</strong>
     </div>
 @endif
 @if(Session::has('success-message'))
