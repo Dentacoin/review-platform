@@ -252,12 +252,12 @@ class UsersController extends AdminController {
         if(!empty($this->request->input('search-email'))) {
             $users = $users->where('email', 'LIKE', '%'.trim($this->request->input('search-email')).'%');
         }
-        // if(!empty($this->request->input('search-address'))) {
-        //     $dcn_address = $this->request->input('search-address');
-        //     $users = $users->whereHas('wallet_addresses', function ($query) use ($dcn_address) {
-        //         $query->where('dcn_address', 'like', $dcn_address);
-        //     });
-        // }
+        if(!empty($this->request->input('search-address'))) {
+            $dcn_address = $this->request->input('search-address');
+            $users = $users->whereHas('wallet_addresses', function ($query) use ($dcn_address) {
+                $query->where('dcn_address', 'like', $dcn_address);
+            });
+        }
         if(!empty($this->request->input('search-id'))) {
             $users = $users->where('id', $this->request->input('search-id') );
         }
