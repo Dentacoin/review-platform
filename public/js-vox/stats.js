@@ -220,11 +220,6 @@ $(document).ready(function(){
                     $(this).find('.second-chart').parent().removeClass('country-legend');
                     //console.log($(this).find('.main-chart'));
 
-
-                    // if(data.q_id == 7116) {
-                    //     console.log(data.main_chart);
-                    //     return;
-                    // }
                     if (($(this).find('.multiple-stat').length || data.related_question_type == 'multiple') && data.related_question_type != 'single' ) {
                         drawMultipleColumns(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, data.total, data.multiple_top_answers);
                     } else {
@@ -236,12 +231,6 @@ $(document).ready(function(){
                         $('.mobile-button-legend').show();
                         $('.legend.open').removeClass('open');
                     }
-
-                    // if(data.q_id == 7116) {
-                    //     console.log(main_chart_data_clone);
-                    //     return;
-                    // }
-                    
 
                     $(this).find('.multiple-gender-nav').hide();
                     $(this).find('.multiple-stat').addClass('mobile-bottom-margin');
@@ -260,7 +249,6 @@ $(document).ready(function(){
                     $(elm).find('.legend').show();
 
                     if(scale=='dependency') {
-                        //console.log('dependency');
                         var rows = [];
 
                         rows.push([ 'Answer', 'Respondents', { role: 'style' } ]);
@@ -437,11 +425,13 @@ $(document).ready(function(){
 
                         var rows = [];
                         var headers = [];
+                        var arrmyArray = $.extend(true, [], main_chart_data_clone);
+
                         headers.push( scale_name );
 
                         $(this).find('.third-chart').html('');
                         if(data.question_type != 'multiple_choice') {
-                            setupLegend(main_chart_data, data.total, $(this).find('.legend'), legend, data.answer_id, can_click_on_legend);
+                            setupLegend(main_chart_data_clone, data.total, $(this).find('.legend'), legend, data.answer_id, can_click_on_legend);
                             if (data.answer_id) {
                                 $(this).find('.hint').html('').html('Click on a pie slice to see data <br/> only for the respective answer or <a href="javascript:;" class="to-all">see all</a>').show();
                             } else {
@@ -483,15 +473,86 @@ $(document).ready(function(){
                             }
 
                         } else {
+                            // console.log(data.second_chart,data.second_chart[0]);
+                            // for(var i in data.second_chart[0]) {
+                            //     if(i!=0 && (!data.answer_id || i==data.answer_id )) {
+                            //         headers.push(data.second_chart[0][i][0]);
+                            //     }
+                            // }
 
-                            for(var i in data.second_chart[0]) {
-                                if(i!=0 && (!data.answer_id || i==data.answer_id )) {
-                                    headers.push(data.second_chart[0][i][0]);
+
+                            //nachalo prerazpredelenie ot nai-mnogo otg kym nai-malko
+                            
+                            for (var w in arrmyArray) {
+                                arrmyArray[w].push(chart_colors[w]);              
+                            }
+
+                            var count_diez = 0;
+                            for (var i in arrmyArray) {
+
+                                if (arrmyArray[i][0].search( '#' ) === 0 ) {
+                                    count_diez++;
                                 }
                             }
+
+                            if(arrmyArray.length == count_diez) {
+                                arrmyArray.sort(function(a, b) {
+                                    return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+                                });
+                            } else {
+                                arrmyArray.sort(function(a, b) {
+                                    if( b[0].search( '#' ) === 0 ) {
+                                        return -1;
+                                    } else if( a[0].search( '#' ) === 0 ) {
+                                        return 1;
+                                    } else {
+                                        return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+                                    }
+                                });
+                            }
+
+                            arr_colors = [];
+                            for( var q in arrmyArray) {
+                                arr_colors.push(arrmyArray[q][2]);
+                            }
+                            
+                            for( var t in arrmyArray) {
+                                arrmyArray[t].splice(-1,1);
+                            }
+
+                            var diez = [];
+                            var noDiez = [];
+
+                            for (var i in arrmyArray) {
+
+                                if (arrmyArray[i][0].search( '#' ) === 0 ) {
+                                    diez.push(arrmyArray[i]);
+                                } else {
+                                    noDiez.push(arrmyArray[i]);
+                                }
+                            }
+
+                            var allArr = [];
+                            for (var e in noDiez) {
+                                allArr.push(noDiez[e]);
+                            }
+
+                            for (var r in diez) {
+                                diez[r][0] = diez[r][0].substring(1);
+                                allArr.push(diez[r]);
+                            }
+
+                            //krai prerazpredelenie ot nai-mnogo otg kym nai-malko
+
+                            //dobavqne na imeto ot legendata
+                            for (var i in allArr) {
+                                if(!data.answer_id || i== (parseInt(data.answer_id) - 1) ) {
+                                    headers.push(allArr[i][0]);
+                                }
+                            }
+
                         }
 
-                        //console.log(headers);
                         rows.push(headers);
 
                         var newArr = [];
@@ -522,12 +583,31 @@ $(document).ready(function(){
 
                                 newArr.push(newArrRow);
                             }
+                        } else {
+                            reorder_array = [];
 
+                            for(var i in data.second_chart) {
+                                little_array = [];
+                                little_array.push(data.second_chart[i][0]);
+
+                                for( var e in allArr) {
+                                    for( var u in data.second_chart[i]) {
+                                        var num = parseInt(u) + 1;
+                                        if(typeof data.second_chart[i][num] != 'undefined') {
+
+                                            if(allArr[e][0] == data.second_chart[i][num][0] || '#'+allArr[e][0] == data.second_chart[i][num][0]) {
+                                                little_array.push(data.second_chart[i][num]);
+                                            }
+                                        }
+                                    }
+                                }
+                                reorder_array.push(little_array);
+                            }
                         }
 
-                        var new_array = newArr.length ? newArr : data.second_chart;
-                        //console.log(new_array);
+                        var new_array = newArr.length ? newArr : reorder_array;
                         for(var i in new_array) {
+
                             var key = new_array[i][0];
                             var line = [];
                             for(var j in new_array[i]) {
@@ -536,6 +616,9 @@ $(document).ready(function(){
                                 }
                                 line.push(new_array[i][j][1]);
                             }
+
+                            //console.log(line);
+
                             var newline = [];
                             var sum = line.reduce(function(a, b) { return a + b; }, 0);
                             //console.log(line);
@@ -552,6 +635,7 @@ $(document).ready(function(){
                             var arr = key.toString().split(' ');
                             var newi = arr.join('\n\r');
                             newline.unshift(newi.trim());
+
                             rows.push( newline );
                         }
 
@@ -570,7 +654,6 @@ $(document).ready(function(){
                         //     }
                         // }
 
-                        //console.log(rows);
                         drawColumns(rows, $(this).find('.second-chart')[0], null, data.answer_id, false, null, data.question_type == 'multiple_choice' ? data.multiple_top_answers : null);
 
                     }
@@ -1441,7 +1524,6 @@ $(document).ready(function(){
             google.visualization.events.addListener(chart, 'select', (function() {
 
                 var selection = this.getSelection();
-                console.log(selection, this);
 
                 if( typeof selection[0].row!='undefined' ) {
                     var container = $(this.container).closest('.stat');
@@ -1619,10 +1701,12 @@ $(document).ready(function(){
                                 }
                             }
                         }
+
+                        var colors_array = typeof arr_colors != 'undefined' ? arr_colors : chart_colors;
                         
                         for(var j=1; j<rows[i].length; j++) {
                             var pl = 80*rows[i][j]/max + 1;
-                            var color = fixedColor ? chart_colors[fixedColor-1] : (multiple_top_answers ? top_answers_colors[j-1] : chart_colors[j-1]);
+                            var color = fixedColor ? colors_array[fixedColor-1] : (multiple_top_answers ? top_answers_colors[j-1] : colors_array[j-1]);
                             if( typeof(rows[0][j])!='object' ) {
                                 $(container).find('.mobile-wrap[m-id="'+i+'"]').append('<div class="custombar" votes="'+(rows[i][j]*100).toFixed(1)+'"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(1)+'%</div>');
                             }
@@ -1645,6 +1729,8 @@ $(document).ready(function(){
             }
 
             //console.log(rows);
+
+            var colors_array = typeof arr_colors != 'undefined' ? arr_colors : chart_colors;
             var data = google.visualization.arrayToDataTable(rows);
             
             var options = {
@@ -1655,7 +1741,7 @@ $(document).ready(function(){
                     width:'80%',
                     height:'80%'
                 },
-                colors: fixedColor ? [ chart_colors[fixedColor-1] ] : (top_answers_colors && multiple_top_answers ? top_answers_colors : chart_colors),
+                colors: fixedColor ? [ colors_array[fixedColor-1] ] : (top_answers_colors && multiple_top_answers ? top_answers_colors : colors_array),
                 legend: {
                     position: 'none'
                 },
@@ -1841,12 +1927,10 @@ $(document).ready(function(){
         container.closest('.stat').find('.total-m').show();
         container.closest('.stat').find('.total-f').show();
 
-        console.log('bbbb', question_type);
-
         if (!multiple_top_answers) {
             if (question_type == 'single_choice') {
 
-                var arrmyArray = rowsf;
+                var arrmyArray = $.extend(true, [], rowsf);
                 var count_diez = 0;
                 for (var i in arrmyArray) {
 
@@ -1897,9 +1981,9 @@ $(document).ready(function(){
                 rowsf = allArr;
                 var rosm_new = [];
 
-                for(var i in rowsf) {
+                for(var i in allArr) {
                     for(var u in rowsm) {
-                        if (rowsf[i][0] == rowsm[u][0]) {
+                        if (allArr[i][0] == rowsm[u][0] || '#'+allArr[i][0] == rowsm[u][0] ) {
                             rosm_new.push(rowsm[u]);
                         }
                     }
@@ -1974,7 +2058,6 @@ $(document).ready(function(){
             if( globalmMax ) {
                 var maxm = globalmMax;
             } else {
-                console.log(rowsm, rowsm[i])
                 var maxm = 0;
                 if(rowsm.length) {
 
@@ -2068,7 +2151,7 @@ $(document).ready(function(){
         if (!multiple_top_answers ) {
 
             if (question_type == 'single_choice') {
-                console.log($(container).closest('.stat').find('.legend-div').length);
+
                 if ($(container).closest('.stat').find('.legend-div').length) {
                     var arr_colors = [];
                     $(container).closest('.stat').find('.legend-div').each( function() {
