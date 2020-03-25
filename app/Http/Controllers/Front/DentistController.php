@@ -638,7 +638,8 @@ class DentistController extends FrontController
                 'https://www.amcharts.com/lib/4/charts.js',
                 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js',
                 'https://codemirror.net/addon/display/placeholder.js',
-                'https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js'
+                'https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js',
+                'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
             ],
             'csscdn' => [
                 'https://unpkg.com/flickity@2/dist/flickity.min.css'
