@@ -157,10 +157,16 @@ class AuthenticateUser extends FrontController
                 'just_login' => true,
             ];
             session($sess);
+
+            $stat_redirect = null;
+            if (Cookie::get('stat-url') && Cookie::get('stat-url') !== 'undefined') {
+                $stat_redirect = Cookie::get('stat-url');
+                Cookie::queue(Cookie::forget('stat-url'));
+            }
             
             $intended = session()->pull('our-intended');
 
-            return redirect( $intended ? $intended : ( $request->input('intended') ? $request->input('intended') : getLangUrl('/')) );
+            return redirect( !empty($stat_redirect) ? $stat_redirect : ($intended ? $intended : ( $request->input('intended') ? $request->input('intended') : getLangUrl('/')) ));
         } else {
             return redirect( getLangUrl('login') )
             ->withInput()

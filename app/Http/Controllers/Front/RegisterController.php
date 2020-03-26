@@ -283,14 +283,25 @@ class RegisterController extends FrontController
                             ];
 
                             $inv = UserInvite::find($inv_id);
-                            if(!empty($inv)) {
-                                $sess['invitation_id'] = $inv->id;
 
-                                if($inv->join_clinic) {
-                                    $sess['join_clinic'] = true;
+                            if(!$user->is_dentist) {
+                                $sess['invitation_by_patient'] = true;
+
+                                if(!empty($inv)) {
+                                    $sess['invitation_id'] = $inv->id;
+                                }
+
+                            } else {
+                                if(!empty($inv)) {
+                                    $sess['invitation_id'] = $inv->id;
+
+                                    if($inv->join_clinic) {
+                                        $sess['join_clinic'] = true;
+                                    }
                                 }
                             }
                             session($sess);
+
 
                             if (!empty($inv) && !empty($inv->invited_id)) {
                                 $text = trans('trp.popup.registration.aready-registered-invite');
@@ -1060,22 +1071,85 @@ class RegisterController extends FrontController
                         $newuser->slug = $newuser->makeSlug();
                         $newuser->save();
 
-                        if($newuser->invited_by && $newuser->invitor->canInvite('trp') && !empty(session('invitation_id'))) {
-                            $inv_id = session('invitation_id');
-                            $inv = UserInvite::find($inv_id);
-
-                            if (!empty($inv) && empty($inv->invited_id)) {
-                                $inv->invited_id = $newuser->id;
-
-                                if ($inv->invited_email == 'whatsapp') {
+                        if(!empty(session('invitation_by_patient'))) {
+                            if($newuser->invited_by && $newuser->invitor->canInvite('trp') && !empty(session('invited_by'))) {
+                                $inv_id = session('invitation_id');
+                                if($inv_id) {
+                                    $inv = UserInvite::find($inv_id);
+                                } else {
+                                    $inv = new UserInvite;
+                                    $inv->user_id = $newuser->invited_by;
                                     $inv->invited_email = $newuser->email;
                                     $inv->invited_name = $newuser->name;
+                                    $inv->save();
                                 }
+
+                                $inv->rewarded = true;
+                                $inv->invited_id = $newuser->id;
+                                $inv->created_at = Carbon::now();
                                 $inv->save();
-                                
-                                // $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
-                                //     'who_joined_name' => $newuser->getName()
-                                // ] );
+
+                                $reward = new DcnReward;
+                                $reward->user_id = $newuser->invited_by;
+                                $reward->reference_id = $newuser->id;
+                                $reward->type = 'invitation';
+                                $reward->platform = 'trp';
+                                $reward->reward = Reward::getReward('reward_invite');
+
+                                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                                $dd = new DeviceDetector($userAgent);
+                                $dd->parse();
+
+                                if ($dd->isBot()) {
+                                    // handle bots,spiders,crawlers,...
+                                    $reward->device = $dd->getBot();
+                                } else {
+                                    $reward->device = $dd->getDeviceName();
+                                    $reward->brand = $dd->getBrandName();
+                                    $reward->model = $dd->getModel();
+                                    $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                                }
+
+                                $reward->save();
+                            }
+                        } else {
+                            if($newuser->invited_by && $newuser->invitor->canInvite('trp') && !empty(session('invitation_id'))) {
+                                $inv_id = session('invitation_id');
+                                $inv = UserInvite::find($inv_id);
+
+                                if ($inv && empty($inv->invited_id)) {
+                                    $inv->invited_id = $newuser->id;
+
+                                    if ($inv->invited_email == 'whatsapp') {
+                                        $inv->invited_email = $newuser->email;
+                                        $inv->invited_name = $newuser->name;
+                                    }
+                                    $inv->rewarded = true;
+                                    $inv->save();
+
+                                    $reward = new DcnReward;
+                                    $reward->user_id = $newuser->invited_by;
+                                    $reward->reference_id = $newuser->id;
+                                    $reward->type = 'invitation';
+                                    $reward->platform = 'trp';
+                                    $reward->reward = Reward::getReward('reward_invite');
+
+                                    $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                                    $dd = new DeviceDetector($userAgent);
+                                    $dd->parse();
+
+                                    if ($dd->isBot()) {
+                                        // handle bots,spiders,crawlers,...
+                                        $reward->device = $dd->getBot();
+                                    } else {
+                                        $reward->device = $dd->getDeviceName();
+                                        $reward->brand = $dd->getBrandName();
+                                        $reward->model = $dd->getModel();
+                                        $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                                    }
+
+                                    $reward->save();
+                                }
                             }
                         }
 
@@ -1086,6 +1160,7 @@ class RegisterController extends FrontController
                             'invitation_id' => null,
                             'just_registered' => true,
                             'civic_registered' => true,
+                            'invitation_by_patient' => null,
                         ];
                         session($sess);
 

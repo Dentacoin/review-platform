@@ -1,28 +1,33 @@
 <?php
 
 namespace App\Http\Controllers\Front;
+
 use App\Http\Controllers\FrontController;
-use App\Models\User;
-use App\Models\Dcn;
-use App\Models\Country;
-use App\Models\Civic;
-use App\Models\UserInvite;
-use App\Models\UserAction;
-use App\Models\UserLogin;
-use Carbon\Carbon;
 
 use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
 
+use App\Models\UserInvite;
+use App\Models\UserAction;
+use App\Models\UserLogin;
+use App\Models\DcnReward;
+use App\Models\Country;
+use App\Models\Reward;
+use App\Models\Civic;
+use App\Models\User;
+use App\Models\Dcn;
+
+use Carbon\Carbon;
+
 use Socialite;
-use Auth;
 use Response;
 use Request;
 use Image;
 use Mail;
+use Auth;
 
-class LoginController extends FrontController
-{
+class LoginController extends FrontController {
+
     public function facebook_login($locale=null) {
     	config(['services.facebook.redirect' => getLangUrl('login/callback/facebook')]);
         return Socialite::driver('facebook')->redirect();
@@ -443,24 +448,85 @@ class LoginController extends FrontController
                     $newuser->addImage($img);
                 }
 
-
-                if($newuser->invited_by && $newuser->invitor->canInvite('trp') && !empty(session('invitation_id'))) {
-                    $inv_id = session('invitation_id');
-                    $inv = UserInvite::find($inv_id);
-
-                    if ($inv && empty($inv->invited_id)) {
-                        $inv->invited_id = $newuser->id;
-
-                        if ($inv->invited_email == 'whatsapp') {
+                if(!empty(session('invitation_by_patient'))) {
+                    if($newuser->invited_by && $newuser->invitor->canInvite('trp') && !empty(session('invited_by'))) {
+                        $inv_id = session('invitation_id');
+                        if($inv_id) {
+                            $inv = UserInvite::find($inv_id);
+                        } else {
+                            $inv = new UserInvite;
+                            $inv->user_id = $newuser->invited_by;
                             $inv->invited_email = $newuser->email;
                             $inv->invited_name = $newuser->name;
+                            $inv->save();
                         }
+
                         $inv->rewarded = true;
+                        $inv->invited_id = $newuser->id;
+                        $inv->created_at = Carbon::now();
                         $inv->save();
-                        
-                        // $newuser->invitor->sendTemplate( $newuser->invitor->is_dentist ? 18 : 19, [
-                        //     'who_joined_name' => $newuser->getName()
-                        // ] );
+
+                        $reward = new DcnReward;
+                        $reward->user_id = $newuser->invited_by;
+                        $reward->reference_id = $newuser->id;
+                        $reward->type = 'invitation';
+                        $reward->platform = 'trp';
+                        $reward->reward = Reward::getReward('reward_invite');
+
+                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                        $dd = new DeviceDetector($userAgent);
+                        $dd->parse();
+
+                        if ($dd->isBot()) {
+                            // handle bots,spiders,crawlers,...
+                            $reward->device = $dd->getBot();
+                        } else {
+                            $reward->device = $dd->getDeviceName();
+                            $reward->brand = $dd->getBrandName();
+                            $reward->model = $dd->getModel();
+                            $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                        }
+
+                        $reward->save();
+                    }
+                } else {
+                    if($newuser->invited_by && $newuser->invitor->canInvite('trp') && !empty(session('invitation_id'))) {
+                        $inv_id = session('invitation_id');
+                        $inv = UserInvite::find($inv_id);
+
+                        if ($inv && empty($inv->invited_id)) {
+                            $inv->invited_id = $newuser->id;
+
+                            if ($inv->invited_email == 'whatsapp') {
+                                $inv->invited_email = $newuser->email;
+                                $inv->invited_name = $newuser->name;
+                            }
+                            $inv->rewarded = true;
+                            $inv->save();
+
+                            $reward = new DcnReward;
+                            $reward->user_id = $newuser->invited_by;
+                            $reward->reference_id = $newuser->id;
+                            $reward->type = 'invitation';
+                            $reward->platform = 'trp';
+                            $reward->reward = Reward::getReward('reward_invite');
+
+                            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                            $dd = new DeviceDetector($userAgent);
+                            $dd->parse();
+
+                            if ($dd->isBot()) {
+                                // handle bots,spiders,crawlers,...
+                                $reward->device = $dd->getBot();
+                            } else {
+                                $reward->device = $dd->getDeviceName();
+                                $reward->brand = $dd->getBrandName();
+                                $reward->model = $dd->getModel();
+                                $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                            }
+
+                            $reward->save();
+                        }
                     }
                 }
 
@@ -468,6 +534,7 @@ class LoginController extends FrontController
                     'invited_by' => null,
                     'invitation_name' => null,
                     'invitation_email' => null,
+                    'invitation_by_patient' => null,
                     'invitation_id' => null,
                     'just_registered' => true,
                 ];
