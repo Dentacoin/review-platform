@@ -503,29 +503,6 @@ class LoginController extends FrontController {
                             }
                             $inv->rewarded = true;
                             $inv->save();
-
-                            $reward = new DcnReward;
-                            $reward->user_id = $newuser->invited_by;
-                            $reward->reference_id = $newuser->id;
-                            $reward->type = 'invitation';
-                            $reward->platform = 'trp';
-                            $reward->reward = Reward::getReward('reward_invite');
-
-                            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                            $dd = new DeviceDetector($userAgent);
-                            $dd->parse();
-
-                            if ($dd->isBot()) {
-                                // handle bots,spiders,crawlers,...
-                                $reward->device = $dd->getBot();
-                            } else {
-                                $reward->device = $dd->getDeviceName();
-                                $reward->brand = $dd->getBrandName();
-                                $reward->model = $dd->getModel();
-                                $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                            }
-
-                            $reward->save();
                         }
                     }
                 }
