@@ -412,7 +412,7 @@ class DentistsController extends FrontController
                 }
                 $categoryNames = [];
                 foreach ($searchCategories as $slug) {
-                    if(isset($slug, $this->categories_dentists)) {
+                    if(array_key_exists($slug, $this->categories_dentists)) {
                         $categoryNames[] = $this->categories_dentists[$slug];
                     }
                 }
