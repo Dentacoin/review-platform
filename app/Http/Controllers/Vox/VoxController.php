@@ -446,6 +446,8 @@ class VoxController extends FrontController
 
         if(Request::isMethod('post')) {
 
+            ini_set('memory_limit', '256М');
+
         	$ret = [
         		'success' => true,
         	];
