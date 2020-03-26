@@ -17,6 +17,7 @@ use App\User;
 use Validator;
 use Response;
 use Session;
+use Cookie;
 use Auth;
 use Lang;
 
