@@ -144,9 +144,10 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::get('emails', 							'EmailsController@list');
 	Route::get('emails/{what?}', 					'EmailsController@list');
-	Route::get('emails/trp/send-engagement-email',  'EmailsController@engagement_email');
 	Route::get('emails/edit/{id}', 					'EmailsController@edit');
 	Route::post('emails/edit/{id}', 				'EmailsController@save');
+	Route::get('emails/trp/send-engagement-email',  'EmailsController@engagement_email');
+	Route::get('emails/trp/send-monthly-email',  		'EmailsController@monthly_email');
 
 	Route::any('rewards', 							'RewardsController@list');
 
@@ -387,7 +388,11 @@ $voxRoutes = function () {
 
 			Route::any('dental-survey-stats', 					'StatsController@home');
 			Route::any('dental-survey-stats/{id}', 				'StatsController@stats');
-			Route::any('create-stat-pdf', 						'StatsController@createPdf');
+			Route::post('create-stat-pdf', 						'StatsController@createPdf');
+			Route::post('create-stat-png', 						'StatsController@createPng');
+			Route::any('download-statistics', 					'StatsController@download');
+			Route::any('download-pdf/{name}', 					'StatsController@download_file');
+			Route::any('download-png/{name}', 					'StatsController@download_file_png');
 
 			Route::any('questionnaire/{id}', 					'VoxController@home');
 			Route::any('paid-dental-surveys', 					'IndexController@surveys_public');
