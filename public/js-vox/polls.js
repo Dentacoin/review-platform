@@ -8,11 +8,12 @@ var calendarListEvents;
 var showStats;
 var go_to_date;
 var poll_stats;
+var showPoll;
 
 $(document).ready(function(){
 
 
-	var showPoll = function(poll_id) {
+	showPoll = function(poll_id) {
 
 		var p_id = poll_id;
 

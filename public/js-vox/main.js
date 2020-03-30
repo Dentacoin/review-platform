@@ -22,6 +22,7 @@ var tooltipsFunction;
 var calendarEvents;
 var calendarListEvents;
 var showStats;
+var showPoll;
 
 var preloadImages = function(urls, allImagesLoadedCallback){
     var loadedCounter = 0;
@@ -825,6 +826,13 @@ $(document).ready(function(){
 				calendarEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
 				calendarListEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
 			}
+
+			if($(this).hasClass('download-stats-popup')) {
+				$('.stat[question-id="'+$(this).find('.demogr-inner').attr('inner')+'"]').after($(this).find('.demogr-inner'));
+				$('.demogr-inner').hide();
+
+				$(this).find('.ajax-alert').remove();
+			}
 		}
 	} );
 
@@ -843,6 +851,15 @@ $(document).ready(function(){
 		if ($(this).closest('.popup').hasClass('daily-poll') && $('#calendar').length) {
 			calendarEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
 			calendarListEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
+		}
+
+		if($(this).closest('.popup').hasClass('download-stats-popup')) {
+			var id = $(this).closest('.popup').find('.demogr-inner').attr('inner');
+
+			$('.stat[question-id="'+$(this).closest('.popup').find('.demogr-inner').attr('inner')+'"]').after($(this).closest('.popup').find('.demogr-inner'));
+
+			$('.demogr-inner').hide();
+			$(this).closest('.popup').find('.ajax-alert').remove();
 		}
 	} );
 
@@ -976,6 +993,13 @@ $(document).ready(function(){
 
 	closePopup = function() {
 		$('.popup').removeClass('active');
+		console.log('eee');
+		if($('.popup').hasClass('download-stats-popup')) {
+			console.log($('.popup').find('.demogr-inner').attr('inner'));
+			console.log($('.stat[question-id="'+$('.popup').find('.demogr-inner').attr('inner')+'"]'));
+			console.log($('.popup').find('.demogr-inner'));
+			$('.stat[question-id="'+$('.popup').find('.demogr-inner').attr('inner')+'"]').after($('.popup').find('.demogr-inner'));
+		}
 	}
 
 	handlePopups = function(id) {
@@ -1370,7 +1394,12 @@ $(document).ready(function(){
 			}
 		});
 
-		$('.answer-poll').click( function() {
+		$('.answer-poll').click( function(e) {
+			if($(this).hasClass('regenerate-poll-popup')) {
+
+				showPoll($(this).attr('cur-poll-id'));
+			}
+
 			var q = $(this).attr('q');
 
         	gtag('event', 'Click', {

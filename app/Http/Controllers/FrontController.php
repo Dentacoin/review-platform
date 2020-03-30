@@ -114,6 +114,7 @@ class FrontController extends BaseController
                 $u_id = User::decrypt(Request::input('inviter'));
 
                 $user = User::find($u_id);
+
                 if(!empty($user)) {
                     return redirect(getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $user->id, 'hash' => $user->get_invite_token()))))));
                 }
@@ -730,6 +731,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2020-03-23-01';
+        $params['cache_version'] = '2020-03-30';
     }
 }
