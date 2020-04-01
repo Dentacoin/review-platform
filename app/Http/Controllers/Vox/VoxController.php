@@ -66,6 +66,9 @@ class VoxController extends FrontController
 		return $this->dovox($locale, $vox);
 	}
 	public function dovox($locale=null, $vox) {
+        ini_set('max_execution_time', 0);
+        set_time_limit(0);
+        ini_set('memory_limit','1024M');
 
 		if(empty($this->user) && !empty($this->admin) && ($this->admin->id) == 11 && !empty($this->admin->user_id)) {
 			$adm = User::find($this->admin->user_id);
@@ -446,7 +449,9 @@ class VoxController extends FrontController
 
         if(Request::isMethod('post')) {
 
-            ini_set('memory_limit', '1024М');
+            ini_set('max_execution_time', 0);
+            set_time_limit(0);
+            ini_set('memory_limit','1024M');
 
         	$ret = [
         		'success' => true,
