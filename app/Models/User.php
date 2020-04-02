@@ -136,7 +136,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'recover_token',
         'fb_recommendation',
         'first_login_recommendation',
-        'deleted_reason',
         'haswebp',
     ];
     protected $dates = [

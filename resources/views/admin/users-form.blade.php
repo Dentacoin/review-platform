@@ -425,9 +425,6 @@
                                 <div class="form-group">
                                     <div class="col-md-12" style="text-align: right;">
                                         <span style="color: red;">Deleted at: {{ $item->deleted_at->toDateTimeString() }}</span><br/><br/>
-                                        @if(!empty($item->deleted_reason))
-                                            <span style="color: red;">Deleted reason: {{ $item->deleted_reason }}</span><br/>
-                                        @endif
                                     </div>
                                 </div>
                             @endif
