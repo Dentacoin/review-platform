@@ -2,6 +2,7 @@ var sendReCaptcha;
 var recaptchaCode = null;
 var sendValidation;
 var preloadImages;
+var checkFilledDots;
 
 $(document).ready(function(){
 
@@ -72,7 +73,23 @@ $(document).ready(function(){
                 function( data ) {
                     if(data.success) {
                         $('input[name="_token"]').val(data.token);
-                        $('#bot-group').next().show();
+                        
+                        var q_group = $('#bot-group').next();
+                        q_group.show();
+
+                        if (q_group.hasClass('scale')) {
+                            console.log('has class');
+
+                            q_group.find('.flickity').flickity({
+                                wrapAround: true,
+                                adaptiveHeight: true,
+                                draggable: false
+                            });
+
+                            q_group.find('.flickity').on( 'select.flickity', checkFilledDots);
+                            q_group.find('.next-answer').hide();
+                        }
+
                         $('#bot-group').remove();
 
                         fbq('track', 'SurveyLaunch');
@@ -327,13 +344,13 @@ $(document).ready(function(){
                     var should_skip = false;
 
                     if( multi_skips.length ) {
-                        console.log('MULTI SKIP');
+                        //console.log('MULTI SKIP');
                         var next_real = group.nextAll(':not([skipped="skipped"])').first().prev();
                         VoxTest.handleNextQuestion();
 
-                        console.log(group);
+                        ///console.log(group);
                         group = next_real;
-                        console.log(group);
+                        //console.log(group);
                     } 
 
                     if(data.ban) {
@@ -498,7 +515,7 @@ $(document).ready(function(){
                                 'event_label': 'SurveyComplete',
                             });
 
-                            console.log(data.recommend);
+                            //console.log(data.recommend);
                             if(data.recommend) {
                                 $('#recommend-popup').addClass('active');
                             }
@@ -532,8 +549,8 @@ $(document).ready(function(){
                                     }
                                 }
 
-                                console.log(group.find('.question').text());
-                                console.log(trigger, trigger_logical_operator);
+                                //console.log(group.find('.question').text());
+                                //console.log(trigger, trigger_logical_operator);
                                 var trigger_statuses = [];
                                 var trigger_list = trigger.split(';');
 
@@ -573,30 +590,30 @@ $(document).ready(function(){
 
                                             if( trigger_type=='birthyear' ) {
                                                 var age = new Date().getFullYear() - parseInt(parsed_given_answer);
-                                                console.log('AGE: '+age);
+                                                //console.log('AGE: '+age);
                                                 trigger_status = true;
 
                                                 for(var i in trigger_answers) {
                                                     var ti = trigger_answers[i].trim();
                                                     if( ti.indexOf('-')!=-1 ) {
                                                         var range = ti.split('-');
-                                                        console.log('Check: '+range[0]+' < ' + age + ' < ' + range[1]);
+                                                        //console.log('Check: '+range[0]+' < ' + age + ' < ' + range[1]);
                                                         if( parseInt(range[0]) > age || age > parseInt(range[1]) ) {
-                                                            console.log('NO!');
+                                                            //console.log('NO!');
                                                             trigger_status = false;
                                                             break;
                                                         }
                                                     } else if( ti.charAt(0)=='<' ) {
-                                                        console.log('Check: '+age+' < ' + ti.substring(1));
+                                                        //console.log('Check: '+age+' < ' + ti.substring(1));
                                                         if( age > parseInt(ti.substring(1)) ) {
-                                                            console.log('NO!');
+                                                            //console.log('NO!');
                                                             trigger_status = false;
                                                             break;
                                                         }
                                                     } else if( ti.charAt(0)=='>' ) {
-                                                        console.log('Check: '+age+' > ' + ti.substring(1));
+                                                        //console.log('Check: '+age+' > ' + ti.substring(1));
                                                         if( age < parseInt(ti.substring(1)) ) {
-                                                            console.log('NO!');
+                                                            ///console.log('NO!');
                                                             trigger_status = false;
                                                             break;
                                                         }
@@ -631,14 +648,14 @@ $(document).ready(function(){
                                     trigger_statuses.push(trigger_status);
                                 }
 
-                                console.log( 'Trigger statuses: ', trigger_statuses );
+                                //console.log( 'Trigger statuses: ', trigger_statuses );
 
                                 if( trigger_logical_operator=='or' ) {
                                     should_skip = !(trigger_statuses.indexOf(true)!=-1);
                                 } else { //and
                                     should_skip = trigger_statuses.indexOf(false)!=-1;                                    
                                 }
-                                console.log( 'should skip: ', should_skip );
+                                //console.log( 'should skip: ', should_skip );
                             }
 
 
