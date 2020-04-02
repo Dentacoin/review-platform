@@ -426,9 +426,6 @@ class LoginController extends FrontController {
                 if(!empty(session('invited_by'))) {
                     $newuser->invited_by = session('invited_by');
                 }
-                if(!empty(session('invite_secret'))) {
-                    $newuser->invite_secret = session('invite_secret');
-                }
                 
                 $newuser->save();
 

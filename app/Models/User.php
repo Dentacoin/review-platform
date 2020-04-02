@@ -107,7 +107,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'widget_activated',
         'invited_by',
         'invited_from_form',
-        'invite_secret',
         'hasimage',
         'hasimage_social',
         'register_reward',
