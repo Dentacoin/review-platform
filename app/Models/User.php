@@ -89,7 +89,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'ownership',
         'is_verified',
         'is_approved',
-        'phone_verified',
         'city_id',
         'country_id',
         'gender',
@@ -137,7 +136,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'haswebp',
     ];
     protected $dates = [
-        'phone_verified_on',
         'verified_on',
         'recover_at',
         'self_deleted_at',

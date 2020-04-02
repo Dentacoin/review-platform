@@ -501,14 +501,6 @@ class FrontController extends BaseController
         $params['user'] = $this->user;
         $params['is_ajax'] = !empty($params['is_ajax']) ? $params['is_ajax'] : false;
 
-        if($this->user && !$this->user->phone_verified) {
-            $countries = Country::with('translations')->get();
-            $params['phone_codes'] = [];
-            foreach ($countries as $country) {
-                $params['phone_codes'][$country->id] = mb_strtoupper($country->code).' ('.$country->phone_code.')';
-            }
-        }
-
         $params['seo_title'] = !empty($params['seo_title']) ? $params['seo_title'] : trans($text_domain.'.seo.'.$this->current_page.'.title');
         $params['seo_description'] = !empty($params['seo_description']) ? $params['seo_description'] : trans($text_domain.'.seo.'.$this->current_page.'.description');
 
