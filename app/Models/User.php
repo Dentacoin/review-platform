@@ -110,7 +110,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'hasimage',
         'hasimage_social',
         'register_reward',
-        'register_tx',
         'dcn_address',
         'vox_address',
         'tw_id',
