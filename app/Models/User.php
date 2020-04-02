@@ -89,7 +89,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'ownership',
         'is_verified',
         'is_approved',
-        'verification_code',
         'phone_verified',
         'city_id',
         'country_id',
