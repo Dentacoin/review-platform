@@ -519,11 +519,6 @@ class FrontController extends BaseController
         $params['social_image'] = !empty($params['social_image']) ? $params['social_image'] : url( $text_domain=='trp' ? '/img-trp/socials-cover.jpg' : '/img-vox/logo-text.png'  );
         //dd($params['pages_header']);
 
-        if( $text_domain=='vox' && !empty($this->user) && !$this->user->vox_active) {
-            $this->user->vox_active = true;
-            $this->user->save();
-        }
-
         //
         //Global
         //
