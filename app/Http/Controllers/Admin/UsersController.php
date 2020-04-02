@@ -1233,6 +1233,7 @@ class UsersController extends AdminController {
 
                                     $item->email = $olde;
                                     $item->ownership = 'approved';
+                                    $item->verified_on = Carbon::now();
                                     $item->save();
                                     $to_ali->delete();
 
