@@ -514,7 +514,7 @@ class VoxController extends FrontController
 		        		$valid = false;
 		        		$type = Request::input('type');
 
-		        		$answer_count = count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true) );
+		        		$answer_count = $type == 'multiple' || $type == 'scale' || $type == 'single' ? count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true) ) : 0;
 
 		        		if ($type == 'skip') {
 		        			$valid = true;
