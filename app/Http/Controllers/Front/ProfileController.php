@@ -933,11 +933,12 @@ class ProfileController extends FrontController
                         $img = Image::make( User::getTempImagePath( Request::input('photo') ) )->orientate();
                         $newuser->addImage($img);
                     }
-
+                    
                     $newteam = new UserTeam;
                     $newteam->dentist_id = $newuser->id;
                     $newteam->user_id = $current_user->id;
                     $newteam->approved = 1;
+                    $newteam->new_clinic = 1;
                     $newteam->save();
 
                     if(!empty(Request::input('email'))) {
