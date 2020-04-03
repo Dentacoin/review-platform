@@ -48,10 +48,13 @@
                     </div>	
 
                     @if(!empty($user->country_id))
-                    	<select class="input country-select country-dropdown" name="country_id" disabled="disabled">
-	                		<option value="{{ \App\Models\Country::find($user->country_id)->name }}" code="{{ \App\Models\Country::find($user->country_id)->code }}" selected="selected" >{{ \App\Models\Country::find($user->country_id)->name }}</option>
-	                	</select>
-	                	<div class="alert alert-warning mobile" style="margin: 10px 0px;">
+	                    <div class="user-country" style="position: relative;">
+	                    	<div class="covering" style="position: absolute;top: 0px;bottom: 0px;left: 0px;right: 0px; z-index: 1000;background: transparent;"></div>
+	                    	<select class="input country-select country-dropdown" name="country_id" disabled="disabled">
+		                		<option value="{{ \App\Models\Country::find($user->country_id)->name }}" code="{{ \App\Models\Country::find($user->country_id)->code }}" selected="selected" >{{ \App\Models\Country::find($user->country_id)->name }}</option>
+		                	</select>
+		                </div>
+	                	<div class="alert alert-warning mobile" style="margin: 10px 0px; display: none;">
                         	{!! nl2br(trans('trp.page.user.uneditable-country')) !!}
                         </div>
                     @else
@@ -353,10 +356,13 @@
 	                    </div>	
 
 	                    @if(!empty($user->country_id))
-	                    	<select class="input country-select country-dropdown" name="country_id" disabled="disabled">
-		                		<option value="{{ \App\Models\Country::find($user->country_id)->name }}" code="{{ \App\Models\Country::find($user->country_id)->code }}" selected="selected" >{{ \App\Models\Country::find($user->country_id)->name }}</option>
-		                	</select>		                	
-		                	<div class="alert alert-warning mobile" style="margin: 10px 0px;">
+		                    <div class="user-country" style="position: relative;">
+		                    	<div class="covering" style="position: absolute;top: 0px;bottom: 0px;left: 0px;right: 0px; z-index: 1000;background: transparent;"></div>
+		                    	<select class="input country-select country-dropdown" name="country_id" disabled="disabled">
+			                		<option value="{{ \App\Models\Country::find($user->country_id)->name }}" code="{{ \App\Models\Country::find($user->country_id)->code }}" selected="selected" >{{ \App\Models\Country::find($user->country_id)->name }}</option>
+			                	</select>
+			                </div>		                	
+		                	<div class="alert alert-warning mobile" style="margin: 10px 0px; display: none;">
 	                        	{!! nl2br(trans('trp.page.user.uneditable-country')) !!}
 	                        </div>
 	                    @else

@@ -2496,5 +2496,12 @@ $(document).ready(function(){
             'event_label': 'RecommendPopup',
         });
     });
+    
+    $('.user-country').click( function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('eee');
+        $(this).next().show();
+    });
 
 });
