@@ -1256,11 +1256,6 @@ class UsersController extends AdminController {
                                                         'clinic_name' => $item->getName(),
                                                         "invitation_link" => getLangUrl( 'dentist/'.$dent->slug.'/claim/'.$dent->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
                                                     ], 'trp');
-
-                                                    $dent->sendTemplate(33, [
-                                                        'clinic-name' => $item->getName(),
-                                                        'clinic-link' => $item->getLink()
-                                                    ], 'trp');
                                                 } else {
                                                     $dent->sendTemplate(33, [
                                                         'clinic-name' => $item->getName(),
