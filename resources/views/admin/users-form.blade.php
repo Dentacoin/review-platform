@@ -593,7 +593,7 @@
                                             @foreach($item->team as $team)
                                                 <tr>
                                                     <td>
-                                                        {{ $team->created_at->toDateTimeString() }}
+                                                        {{ $team->created_at ? $team->created_at->toDateTimeString() : '' }}
                                                     </td>
                                                     <td>
                                                         <a href="{{ url('/cms/users/edit/'.$team->clinicTeam->id) }}">
