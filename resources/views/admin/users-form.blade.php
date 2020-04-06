@@ -596,8 +596,8 @@
                                                         {{ $team->created_at ? $team->created_at->toDateTimeString() : '' }}
                                                     </td>
                                                     <td>
-                                                        <a href="{{ url('/cms/users/edit/'.$team->clinicTeam->id) }}">
-                                                            {{ $team->clinicTeam->getName() }}
+                                                        <a href="{{ url('/cms/users/edit/'.$team->clinicTeamWithTrashed->id) }}">
+                                                            {{ $team->clinicTeamWithTrashed->getName() }} {{ $team->clinicTeamWithTrashed->deleted_at ? '(deleted)' : '' }}
                                                         </a>
                                                     </td>
                                                     <td>

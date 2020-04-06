@@ -25,9 +25,12 @@ class UserTeam extends Model {
         'deleted_at',
     ];
 
-	public function clinicTeam() {
-	    return $this->hasOne('App\Models\User', 'id', 'dentist_id');
-	}
+    public function clinicTeam() {
+        return $this->hasOne('App\Models\User', 'id', 'dentist_id');
+    }
+    public function clinicTeamWithTrashed() {
+        return $this->hasOne('App\Models\User', 'id', 'dentist_id')->withTrashed();
+    }
 	public function clinic() {
 	    return $this->hasOne('App\Models\User', 'id', 'user_id');
 	}
