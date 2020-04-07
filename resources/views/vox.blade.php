@@ -203,7 +203,7 @@
 								@endif
 							@elseif( $current_page!='register' || (!empty($session_polls) && $current_page=='register') )
 								<span class="dcn-rate">
-									1 DCN = $<span id="header-rate">{{ sprintf('%.5F', $dcn_price) }}</span> 
+									1 DCN = $<span id="header-rate">{{ sprintf('%.6F', $dcn_price) }}</span> 
 									<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
 								</span>
 								<a href="{{ getVoxUrl('login') }}" class="start-button">
@@ -585,7 +585,7 @@
 			@endif
 		@endif
 
-        <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+		<script src="{{ url('/js/cookie.min.js') }}"></script>
 		<script src="{{ url('/js-vox/main.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js/both.js').'?ver='.$cache_version }}"></script>
 		@if(!empty($plotly))
