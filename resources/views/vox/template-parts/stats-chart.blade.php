@@ -18,9 +18,9 @@
 			</a>
 		</div>
 		@if(!empty($user))
-			<a href="javascript:;" style="display: none;" class="red-button download-stats-popup-btn" for-stat="{{ $question->id }}" {!! !empty($question->stats_scale_answers) ? 'for-scale="'.($key + 1).'"' : '' !!}">
+			<a href="javascript:;" class="red-button download-stats-popup-btn" for-stat="{{ $question->id }}" {!! !empty($question->stats_scale_answers) ? 'for-scale="'.($key + 1).'"' : '' !!}">
 		@else
-			<a href="javascript:;" style="display: none;" class="red-button scroll-to-blurred">
+			<a href="javascript:;" class="red-button scroll-to-blurred">
 		@endif
 			<img src="{{ url('new-vox-img/download.png') }}"/>Download
 		</a>
