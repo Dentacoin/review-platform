@@ -672,6 +672,7 @@ $(document).ready(function(){
                             vox.current++;
                             if (!should_skip) {
                                 $('.question-group').find('.loader').remove();
+                                $('.question-group').find('.loader-survey').hide();
                                 $('.question-group').hide();
                                 group.next().show();
                                 if( group.next().find('.question').offset().top < $(window).scrollTop() ) {

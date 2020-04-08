@@ -2,41 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
-use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
+use DeviceDetector\DeviceDetector;
 
-use App;
-use Auth;
-use Session;
-use DB;
-use Request;
-use Route;
-use Cookie;
-use Redirect;
-
-use Carbon\Carbon;
-
-use App\Models\Reward;
-use App\Models\User;
-use App\Models\Category;
-use App\Models\Country;
-use App\Models\City;
-use App\Models\Poll;
 use App\Models\PollAnswer;
+use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\VoxAnswer;
 use App\Models\VoxScale;
+use App\Models\Category;
+use App\Models\Country;
+use App\Models\Reward;
+use App\Models\User;
+use App\Models\City;
+use App\Models\Poll;
 use App\Models\Vox;
-use App\Models\UserLogin;
 
+use Carbon\Carbon;
 
-class FrontController extends BaseController
-{
+use Redirect;
+use Session;
+use Request;
+use Cookie;
+use Route;
+use Auth;
+use App;
+use DB;
+
+class FrontController extends BaseController {
+
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
     public $request;
@@ -201,10 +200,10 @@ class FrontController extends BaseController
                     $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
                 }
 
-                
                 if (!(User::getRealIp() == '213.91.254.194' || User::getRealIp() == '78.130.213.163' || !empty($this->admin))) {
                     $ul->save();
                 }
+
 
                 $tokenobj = $this->user->createToken('LoginToken');
                 $tokenobj->token->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
@@ -718,6 +717,6 @@ class FrontController extends BaseController
             }
         }
 
-        $params['cache_version'] = '2020-04-08-02';
+        $params['cache_version'] = '2020-04-08-03';
     }
 }
