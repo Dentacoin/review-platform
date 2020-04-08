@@ -86,7 +86,7 @@ class StatsController extends FrontController
         $seos = PageSeo::find(11);
 
         if(!empty($this->admin)) {
-            dd(php_info());
+            dd(phpinfo());
         }
 
         return $this->ShowVoxView('stats', array(
