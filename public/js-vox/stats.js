@@ -308,7 +308,7 @@ $(document).ready(function(){
                         $(this).find('.total-f').show().find('b').html(data.totalf);
 
                         if(data.question_type == 'multiple_choice' || data.answer_id) {
-                            drawGenderColumns(rows, rowsm, $(this).find('.second-chart')[0], options, data.totalf, data.totalm, scale_options_arr, data.answer_id, main_chart_data, data.multiple_top_answers, data.vox_scale_id, data.question_type, );
+                            drawGenderColumns(main_chart_data, rows, rowsm, $(this).find('.second-chart')[0], options, data.totalf, data.totalm, scale_options_arr, data.answer_id, main_chart_data, data.multiple_top_answers, data.vox_scale_id, data.question_type, );
                         } else {
                             drawChart(rows, $(this).find('.second-chart')[0], {
                                 pieHole: 0.6,
@@ -1956,7 +1956,7 @@ $(document).ready(function(){
         // });
     }
 
-    var drawGenderColumns = function(rowsf, rowsm, container, more_options, totalfCount, totalmCount, scale_options_arr, a_id, mainChartRows, multiple_top_answers, vox_scale_id, question_type) {
+    var drawGenderColumns = function(main_chart_rows, rowsf, rowsm, container, more_options, totalfCount, totalmCount, scale_options_arr, a_id, mainChartRows, multiple_top_answers, vox_scale_id, question_type) {
         $(container).html('<div class="mobile-chart"></div>');
         container = $(container).find('.mobile-chart');
         container.addClass('multiple-gender-chart');
@@ -1967,60 +1967,72 @@ $(document).ready(function(){
         if (!multiple_top_answers) {
             if (question_type == 'single_choice') {
 
-                var arrmyArray = $.extend(true, [], rowsf);
-                var count_diez = 0;
-                for (var i in arrmyArray) {
+                // var arrmyArray = $.extend(true, [], rowsf);
+                // var count_diez = 0;
+                // for (var i in arrmyArray) {
 
-                    if (arrmyArray[i][0].search( '#' ) === 0 ) {
-                        count_diez++;
-                    }
-                }
+                //     if (arrmyArray[i][0].search( '#' ) === 0 ) {
+                //         count_diez++;
+                //     }
+                // }
 
-                if(arrmyArray.length == count_diez) {
-                    arrmyArray.sort(function(a, b) {
-                        return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-                    });
-                } else {
+                // if(arrmyArray.length == count_diez) {
+                //     arrmyArray.sort(function(a, b) {
+                //         return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+                //     });
+                // } else {
 
-                    arrmyArray.sort(function(a, b) {
-                        if( b[0].search( '#' ) === 0 ) {
-                            return -1;
-                        } else if( a[0].search( '#' ) === 0 ) {
-                            return 1;
-                        } else {
-                            return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+                //     arrmyArray.sort(function(a, b) {
+                //         if( b[0].search( '#' ) === 0 ) {
+                //             return -1;
+                //         } else if( a[0].search( '#' ) === 0 ) {
+                //             return 1;
+                //         } else {
+                //             return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+                //         }
+                //     });
+                // }
+
+                // var diez = [];
+                // var noDiez = [];
+
+                // for (var i in arrmyArray) {
+
+                //     if (arrmyArray[i][0].search( '#' ) === 0 ) {
+                //         diez.push(arrmyArray[i]);
+                //     } else {
+                //         noDiez.push(arrmyArray[i]);
+                //     }
+                // }
+
+                // var allArr = [];
+                // for (var e in noDiez) {
+                //     allArr.push(noDiez[e]);
+                // }
+
+                // for (var r in diez) {
+                //     diez[r][0] = diez[r][0].substring(1);
+                //     allArr.push(diez[r]);
+                // }
+
+                // rowsf = allArr;
+                var rosf_new = [];
+
+                for(var i in main_chart_rows) {
+                    for(var u in rowsf) {
+                        if (main_chart_rows[i][0] == rowsf[u][0] || '#'+main_chart_rows[i][0] == rowsf[u][0] ) {
+                            rosf_new.push(rowsf[u]);
                         }
-                    });
-                }
-
-                var diez = [];
-                var noDiez = [];
-
-                for (var i in arrmyArray) {
-
-                    if (arrmyArray[i][0].search( '#' ) === 0 ) {
-                        diez.push(arrmyArray[i]);
-                    } else {
-                        noDiez.push(arrmyArray[i]);
                     }
                 }
 
-                var allArr = [];
-                for (var e in noDiez) {
-                    allArr.push(noDiez[e]);
-                }
+                rowsf = rosf_new;
 
-                for (var r in diez) {
-                    diez[r][0] = diez[r][0].substring(1);
-                    allArr.push(diez[r]);
-                }
-
-                rowsf = allArr;
                 var rosm_new = [];
 
-                for(var i in allArr) {
+                for(var i in main_chart_rows) {
                     for(var u in rowsm) {
-                        if (allArr[i][0] == rowsm[u][0] || '#'+allArr[i][0] == rowsm[u][0] ) {
+                        if (main_chart_rows[i][0] == rowsm[u][0] || '#'+main_chart_rows[i][0] == rowsm[u][0] ) {
                             rosm_new.push(rowsm[u]);
                         }
                     }
