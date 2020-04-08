@@ -1355,9 +1355,20 @@ class StatsController extends FrontController
                     }
                 }
 
+                $demographics_details = Request::input('download-demographic');
+
+                
+                if(Request::input('download-format') != 'xlsx') {
+                    $removed_key = array_search('country_id', $demographics_details);
+
+                    if(!empty($removed_key)) {
+                        unset($demographics_details[$removed_key]);
+                    }
+                }
+
                 $ret = array(
                     'success' => true,
-                    'tail' => '?create-stat-pdf=true&stats-for='.Request::input('stats-for').$for_scale.'&format='.Request::input('download-format').'&download-date='.$date.'&demographics='.implode(',', Request::input('download-demographic')).$tail
+                    'tail' => '?create-stat-pdf=true&stats-for='.Request::input('stats-for').$for_scale.'&format='.Request::input('download-format').'&download-date='.$date.'&demographics='.implode(',', $demographics_details).$tail
                 );
             }
             return Response::json( $ret );

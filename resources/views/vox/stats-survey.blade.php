@@ -116,7 +116,7 @@
 														<input type="checkbox" name="download-demographic[]" value="gender" id="format-gender-{{ $question->id }}-{{ $key + 1 }}" class="download-demographic-checkbox" checked="checked">
 														Sex
 												@elseif($sk == 'country_id')
-													<label for="format-country_id-{{ $question->id }}-{{ $key + 1 }}" class="{{ $loop->first ? 'active' : '' }} dem-label">
+													<label for="format-country_id-{{ $question->id }}-{{ $key + 1 }}" class="{{ $loop->first ? 'active' : '' }} dem-label" style="display: none;">
 														<input type="checkbox" name="download-demographic[]" value="country_id" id="format-country_id-{{ $question->id }}-{{ $key + 1 }}" class="download-demographic-checkbox">
 														Location
 												@elseif($sk == 'age')
@@ -194,7 +194,7 @@
 										<input type="checkbox" name="download-demographic[]" value="gender" id="format-gender-{{ $question->id }}" class="download-demographic-checkbox" checked="checked">
 										Sex
 								@elseif($sk == 'country_id')
-									<label for="format-country_id-{{ $question->id }}" class="{{ $loop->first ? 'active' : '' }} dem-label">
+									<label for="format-country_id-{{ $question->id }}" class="{{ $loop->first ? 'active' : '' }} dem-label" style="display: none;">
 										<input type="checkbox" name="download-demographic[]" value="country_id" id="format-country_id-{{ $question->id }}" class="download-demographic-checkbox">
 										Location
 								@elseif($sk == 'age')

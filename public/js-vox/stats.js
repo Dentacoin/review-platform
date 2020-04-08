@@ -2440,6 +2440,13 @@ $(document).ready(function(){
     $('.download-format-radio').change( function(e) {
         $(this).closest('.download-formats').find('label').removeClass('active');
         $(this).closest('label').addClass('active');
+
+        console.log($(this).val());
+        if($(this).val() != 'xlsx') {
+            $('[name="download-demographic[]"][value="country_id"]').closest('label').hide();
+        } else {
+            $('[name="download-demographic[]"][value="country_id"]').closest('label').show();
+        }
     });
 
     var popupDownloadAction = function() {
