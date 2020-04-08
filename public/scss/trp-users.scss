@@ -1535,7 +1535,33 @@ $phone: "screen and (max-width: 768px)";
 	    	}
 
 			td {
-				vertical-align: top;
+				vertical-align: middle;
+
+				.invite-again {
+					font-size: 16px;
+    				padding: 5px;
+    				width: 100%;
+    				text-align: center;
+
+    				@media #{$pc} {
+    					font-size: 12px;
+    				}
+				}
+
+				.ask-review {
+					border: 1px solid #126585;
+					font-size: 16px;
+					padding: 4px 5px;
+					background: transparent;
+					color: #126585;
+					margin-top: 2px;
+					display: block;
+					text-align: center;
+
+    				@media #{$pc} {
+    					font-size: 12px;
+    				}
+				}
 			}
     	}
 

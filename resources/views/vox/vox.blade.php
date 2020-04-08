@@ -123,6 +123,7 @@
 
 						@if(empty($user->birthyear))
 							<div class="question-group birthyear-question tac user-detail-question" demogr-id="age_groups" style="display: none;">
+								<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 								<div class="question">
 									{!! trans('vox.page.questionnaire.question-birth') !!}
 								</div>
@@ -139,6 +140,7 @@
 
 						@if(!$user->gender)
 							<div class="question-group gender-question single-choice user-detail-question" demogr-id="gender" style="display: none;">
+								<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 								<div class="question">
 									{!! trans('vox.page.questionnaire.question-sex') !!}
 								</div>
@@ -157,6 +159,7 @@
 
 						@if(!$user->country_id )
 							<div class="question-group location-question user-detail-question" style="display: none;">
+								<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 								<div class="question">
 									{!! trans('vox.page.questionnaire.question-country') !!}
 								</div>

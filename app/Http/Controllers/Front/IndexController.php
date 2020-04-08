@@ -232,13 +232,11 @@ class IndexController extends FrontController
 			'js' => [
 				'index.js',
                 'search.js',
-                'address.js'
+                'address.js',
+                'flickity.min.js',
 			],
-			'jscdn' => [
-				'https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js'
-			],
-			'csscdn' => [
-				'https://unpkg.com/flickity@2/dist/flickity.min.css'
+			'css' => [
+                'flickity.min.css',
 			]
         );
 
@@ -321,7 +319,8 @@ class IndexController extends FrontController
 			//'extra_body_class' => 'white-header',
 			'js' => [
 				'address.js',
-				'index-dentist.js'
+				'index-dentist.js',
+                'flickity.min.js',
 			],
 			'css' => [
 				'trp-index-dentist.css'
@@ -334,11 +333,8 @@ class IndexController extends FrontController
             'seo_description' => $seos->seo_description,
             'social_title' => $seos->social_title,
             'social_description' => $seos->social_description,
-			'jscdn' => [
-				'https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js'
-			],
-			'csscdn' => [
-				'https://unpkg.com/flickity@2/dist/flickity.min.css'
+			'css' => [
+                'flickity.min.css',
 			]
         ));	
 	}

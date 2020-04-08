@@ -24,6 +24,10 @@ class VoxAnswer extends Model {
     public function user() {
         return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
+    
+    public function country() {
+        return $this->hasOne('App\Models\Country', 'id', 'country_id');
+    }
 
     public static function getCount($reload=false) {
         $fn = storage_path('vox_count');

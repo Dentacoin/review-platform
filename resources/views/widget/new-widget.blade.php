@@ -2,7 +2,7 @@
 <link rel="stylesheet" type="text/css" href="https://reviews.dentacoin.com/css/widget.css" />
 
 @if($layout == 'carousel')
-	<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+	<link rel="stylesheet" type="text/css" href="https://reviews.dentacoin.com/css/flickity.min.css" />
 @endif
 
 @if(!empty($height))
@@ -188,7 +188,7 @@
 
 
 @if($layout == 'carousel')
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
-	<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+	<script src="https://reviews.dentacoin.com/js/jquery-3.4.1.min.js"></script>
+	<script src="https://reviews.dentacoin.com/js-trp/flickity.min.js"></script>
 	<script src="https://reviews.dentacoin.com/js-trp/widget.js"></script>
 @endif

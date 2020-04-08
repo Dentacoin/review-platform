@@ -990,7 +990,27 @@
       line-height: 1.42857143;
       text-align: left; }
     .details-wrapper .asks-container table td {
-      vertical-align: top; }
+      vertical-align: middle; }
+      .details-wrapper .asks-container table td .invite-again {
+        font-size: 16px;
+        padding: 5px;
+        width: 100%;
+        text-align: center; }
+        @media screen and (max-width: 1200px) {
+          .details-wrapper .asks-container table td .invite-again {
+            font-size: 12px; } }
+      .details-wrapper .asks-container table td .ask-review {
+        border: 1px solid #126585;
+        font-size: 16px;
+        padding: 4px 5px;
+        background: transparent;
+        color: #126585;
+        margin-top: 2px;
+        display: block;
+        text-align: center; }
+        @media screen and (max-width: 1200px) {
+          .details-wrapper .asks-container table td .ask-review {
+            font-size: 12px; } }
   .details-wrapper .asks-container .btn.compact {
     height: 22px;
     line-height: 23px;

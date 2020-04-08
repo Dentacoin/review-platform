@@ -184,15 +184,14 @@ $(document).ready(function(){
             if (window.innerWidth > 768) {
                 var draggable_gallery = false;
             } else {
-                 var draggable_gallery = true;
+                var draggable_gallery = true;
             }
 
             if (window.innerWidth > 992) {
                 var draggable_team = false;
             } else {
-                 var draggable_team = true;
+                var draggable_team = true;
             }
-
 
             galleryFlickty = $('.gallery-flickity').flickity({
                 autoPlay: false,
@@ -2221,7 +2220,7 @@ $(document).ready(function(){
         $('.tab[data-tab="'+window.location.hash.substring(1)+'"]').trigger( "click" );
     }
 
-    $('#invite-again').click( function(e) {
+    $('.invite-again').click( function(e) {
         e.preventDefault();
 
         var invite_url = $(this).attr('data-href');

@@ -262,6 +262,7 @@ $(document).ready(function(){
         
         $('#wrong-control').hide();
         group.find('.answers').append('<div class="loader"><i class="fas fa-circle-notch fa-spin fa-3x fa-fw"></i></div>');
+        group.find('.loader-survey').hide();
 
         //Skip skipped :)
         if (group.attr('cross-check-correct') && !group.attr('skipped') ) {
@@ -680,6 +681,8 @@ $(document).ready(function(){
                                 }
                                 VoxTest.handleNextQuestion();
                             } else {
+                                $('.question-group').find('.loader').remove();
+                                $('.question-group').find('.loader-survey').show();
                                 group.next().attr('skipped', 'skipped');
                             }         
                         }

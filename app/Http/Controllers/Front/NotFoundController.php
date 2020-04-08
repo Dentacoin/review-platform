@@ -74,13 +74,11 @@ class NotFoundController extends FrontController
 			'featured' => $homeDentists,
 			'js' => [
 				'index.js',
+                'flickity.min.js',
 			],
 			'gray_footer' => true,
-			'jscdn' => [
-				'https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js'
-			],
-			'csscdn' => [
-				'https://unpkg.com/flickity@2/dist/flickity.min.css'
+			'css' => [
+                'flickity.min.css',
 			],
 			'social_image' => $seos->getImageUrl(),
             'seo_title' => $seos->seo_title,

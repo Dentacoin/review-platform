@@ -1,5 +1,6 @@
 @if(!empty($details_question_id))
 	<div class="question-group question-group-details question-group-{{ $details_question_id }} single-choice user-detail-question" data-id="{{ $details_question_id }}" demogr-id="{{ $details_question_id }}" custom-type="{{ $details_question_id }}" style="display: none;">
+		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 		<div class="question">
 			{!! nl2br($details_question['label']) !!}
 		</div>
@@ -27,6 +28,7 @@
 	</div>
 @elseif($question->type == 'multiple_choice')
 	<div class="question-group question-group-{{ $question->id }} multiple-choice {!! empty($question->dont_randomize_answers) ? 'shuffle' : ''  !!}" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  trigger-type="{{ $question->trigger_type }}" welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
+		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 		<div class="question">
 			{!! nl2br($question->questionWithTooltips()) !!}
 		</div>
@@ -52,6 +54,7 @@
 	</div>
 @elseif($question->type == 'scale')
 	<div class="question-group question-group-{{ $question->id }} scale" data-id="{{ $question->id }}" {!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? 'data-trigger="'.$question->question_trigger.'"' : "" !!} trigger-type="{{ $question->trigger_type }}" welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
+		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 		<div class="question">
 			{!! nl2br($question->questionWithTooltips()) !!}
 		</div>
@@ -86,6 +89,7 @@
 	</div>
 @elseif(array_key_exists($question->id, $cross_checks) && $question->cross_check == 'birthyear')
 	<div class="question-group question-group-{{ $question->id }} birthyear-question {{ $question->is_control == -1 ? 'shuffle' : '' }}" data-answer="{!! $user->birthyear !!}" data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  trigger-type="{{ $question->trigger_type }}" {!! array_key_exists($question->id, $cross_checks) ? 'cross-check-correct="'.$cross_checks[$question->id].'" cross-check-id="'.$cross_checks_references[$question->id].'"' : '' !!} welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
+		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 
 		<div class="question">
 			{!! nl2br($question->questionWithTooltips()) !!}
@@ -103,6 +107,7 @@
 	</div>
 @else
 	<div class="question-group question-group-{{ $question->id }} single-choice {{ $question->is_control == -1 || (empty($question->dont_randomize_answers) && empty($question->vox_scale_id) && empty($scales[$question->vox_scale_id])) ? 'shuffle' : '' }}" {!! isset($answered[$question->id]) ? 'data-answer="'.$answered[$question->id].'"' : '' !!} data-id="{{ $question->id }}" {!! $question->id==$first_question ? '' : 'style="display: none;"' !!} {!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  trigger-type="{{ $question->trigger_type }}" {!! array_key_exists($question->id, $cross_checks) ? 'cross-check-correct="'.$cross_checks[$question->id].'" cross-check-id="'.$cross_checks_references[$question->id].'"' : '' !!} welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
+		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 		<div class="question">
 			{!! nl2br($question->questionWithTooltips()) !!}
 		</div>

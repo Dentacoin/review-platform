@@ -696,8 +696,6 @@ class VoxTranslation extends Model {
         'title',
         'description',
         'stats_description',
-        'seo_title',
-        'seo_description',
         'slug',
     ];
 

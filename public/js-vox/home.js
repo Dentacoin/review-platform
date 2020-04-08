@@ -210,4 +210,22 @@ $(document).ready(function(){
         }, 500);
 	});
 
+	$('input[name="target"]').change( function() {
+        $(this).closest('.modern-radios').removeClass('has-error');
+        $('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
+        var val = $('#target-specific:checked').length;
+        if(val) {
+            $('.target-row').show();
+        } else {
+            $('.target-row').hide();
+        }
+    } );
+
+    if ($('.select2').length) {
+        $(".select2").select2({
+            multiple: true,
+            placeholder: 'Select Country/ies',
+        });
+    }
+
 });

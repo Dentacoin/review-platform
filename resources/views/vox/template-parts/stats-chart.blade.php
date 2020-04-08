@@ -17,10 +17,17 @@
 				<i class="fab fa-twitter"></i>
 			</a>
 		</div>
+		@if(!empty($user))
+			<a href="javascript:;" class="red-button download-stats-popup-btn" for-stat="{{ $question->id }}" {!! !empty($question->stats_scale_answers) ? 'for-scale="'.($key + 1).'"' : '' !!}">
+		@else
+			<a href="javascript:;" class="red-button scroll-to-blurred">
+		@endif
+			<img src="{{ url('new-vox-img/download.png') }}"/>Download
+		</a>
 	</div>
 </div>
 
-<div class="graphs flex {!! $question->type=='multiple_choice' ? 'multiple-stat' : '' !!} " >
+<div class="graphs flex {!! $question->type=='multiple_choice' ? 'multiple-stat' : '' !!}">
 
 	@if(false && count(json_decode($question->answers, true)) > 9)
 		<div class="legend flex more-q-legend">
@@ -33,7 +40,7 @@
   	</div>
 
 	<div class="chart chart-1">
-		<div class="main-chart"></div>
+		<div class="main-chart" chart></div>
 		<div class="total total-all">
 			{!! trans('vox.page.stats.total') !!}: <b></b>
 		</div>
@@ -116,7 +123,7 @@
 	</div>
 	<div class="chart chart-2">
 		<div class="dependency-question"></div>
-		<div class="second-chart"></div>
+		<div class="second-chart" chart></div>
 		@if($question->used_for_stats=='standard')
 
 			<div class="total-gender">
@@ -142,7 +149,7 @@
 		@endif
 	</div>
 	<div class="chart chart-3">
-		<div class="third-chart"></div>
+		<div class="third-chart" chart></div>
 		@if($question->used_for_stats=='standard')
 			<div class="total total-m">
 				{!! trans('vox.page.stats.total-men') !!}: <b></b>

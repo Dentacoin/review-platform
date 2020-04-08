@@ -100,12 +100,28 @@
         font-size: 12px; } }
 .questions .question-group {
   margin-bottom: 80px;
-  text-align: center; }
+  text-align: center;
+  position: relative; }
   @media screen and (max-width: 768px) {
     .questions .question-group {
       margin-bottom: 20px; } }
   .questions .question-group.multiple-choice .answers .answer-checkbox .tooltip-text {
     font-size: 16px; }
+  .questions .question-group .loader-survey {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.7); }
+    .questions .question-group .loader-survey img {
+      max-width: 50%;
+      position: absolute;
+      top: 0px;
+      left: 50%;
+      transform: translateX(-50%); }
   .questions .question-group .question {
     font-weight: bold;
     font-size: 25px;

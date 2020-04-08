@@ -269,12 +269,15 @@ class PollsController extends FrontController
 		    	$next_stat = Poll::where('status', '!=', 'scheduled')->orderBy('id', 'desc')->first();
 		    }
 
+		    $time = !empty($poll->launched_at) ? $poll->launched_at->timestamp : '';
+
 			$ret = [
 	        	'success' => true,
 	        	'title' => $poll->question,
 	        	'chart' => $this->chartData($poll),
 		        'next_poll' => $more_polls_to_take ? $more_polls_to_take->id : false,
 		        'closed' => $poll->status == 'closed' ? true : false,
+		        'date' => !empty($time) ? date('d/m/Y',$time) : false,
 		        'has_user' => !empty($this->user) ? true : false,
 		        'next_stat' => $next_stat->id,
 	        ];

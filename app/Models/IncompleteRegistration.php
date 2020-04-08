@@ -20,11 +20,13 @@ class IncompleteRegistration extends Model {
         'phone',
         'website',
         'country_id',
-        'specialization',
-        'photo',
-        'photoThumb',
-        'clinic_id',
         'clinic_name',
+        'clinic_email',
+        'dentist_practice',
+        'worker_name',
+        'working_position',
+        'working_position_label',
+        'platform',
         'completed',
         'notified1',
         'notified2',
@@ -37,22 +39,6 @@ class IncompleteRegistration extends Model {
         'updated_at',
         'deleted_at'
     ];
-
-    
-
-    public function getSpecializationAttribute($value) {
-        if(!empty($value)) {
-            return explode(',', $value);            
-        }
-        return [];
-    }
-    
-    public function setSpecializationAttribute($value) {
-        $this->attributes['specialization'] = null;
-        if(!empty($value) && is_array($value)) {
-            $this->attributes['specialization'] = implode(',', $value);            
-        }
-    }
     
 }
 

@@ -931,7 +931,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'Balance over 500 000 Email 2 START';
+            echo 'Balance over 1 000 000 Email 2 START';
             //users with balance over 500,000 DCN
 
             $query = "
@@ -964,7 +964,7 @@ NEW & FAILED TRANSACTIONS
                     ON
                         `u`.`id` = `rewards`.`user_id`
                     WHERE 
-                        (rewards_total - IF (withdraws_total IS NULL, 0, withdraws_total) ) >= 500000
+                        (rewards_total - IF (withdraws_total IS NULL, 0, withdraws_total) ) >= 1000000
                         AND `deleted_at` is null
 
             ";
@@ -989,7 +989,7 @@ NEW & FAILED TRANSACTIONS
             }
 
             if (!empty($user_links)) {
-                $mtext = 'Users with balance of 500,000 DCN or more.
+                $mtext = 'Users with balance of 1,000,000 DCN or more.
                 
                 Link to profiles in CMS:  
 
@@ -1012,9 +1012,9 @@ NEW & FAILED TRANSACTIONS
                     $message->setBody($mtext, 'text/html'); // for HTML rich messages
                 });
             }
-            echo 'Balance over 500 000 Email 2 DONE';
+            echo 'Balance over 1 000 000 Email 2 DONE';
 
-        })->cron("0 10 * * *"); //05:00h
+        })->cron("00 10 * * 1"); //05:00h
 
 
 
@@ -1658,15 +1658,13 @@ NEW & FAILED TRANSACTIONS
                     user_logins 
                 WHERE 
                     country LIKE 'Unknown'
-                GROUP BY 
-                    `user_id`
             ";
 
             $uknown = DB::select(
                 DB::raw($query2), []
             );
 
-            $mtext = 'There are '.count($uknown).' results from Uknown county by '.count($uknown_by_user).' users';
+            $mtext = 'There are '.count($uknown).' results from Unknown country by '.count($uknown_by_user).' users';
 
             Mail::raw($mtext, function ($message) {
 
@@ -1676,12 +1674,51 @@ NEW & FAILED TRANSACTIONS
                 $message->from($sender, $sender_name);
                 $message->to( 'petya.ivanova@dentacoin.com' );
                 $message->to( 'gergana@youpluswe.com' );
-                $message->subject('Uknown counties count');
+                $message->subject('Unknown countries count');
             });
 
             echo 'Count Unknown Countries from UserLogin Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
             
         })->cron('0 0 */14 * *'); //10:30h BG Time
+
+
+
+        $schedule->call(function () {
+            echo 'Remove pdf and png stats files cron';
+
+            $files = glob(storage_path().'/app/public/pdf/*.pdf');
+
+            foreach ($files as $file) {
+
+                if (Carbon::now()->addDays(-1)->timestamp > filectime($file)) {
+                    unlink($file);
+                }
+            }
+
+            $zips = glob(storage_path().'/app/public/png/*.zip');
+
+            foreach ($zips as $zip) {
+
+                if (Carbon::now()->addDays(-1)->timestamp > filectime($zip)) {
+                    unlink($zip);
+                }
+            }
+
+            $files_png = glob(storage_path().'/app/public/png/*');
+
+            foreach ($files_png as $file_png) {
+                
+                if (Carbon::now()->addDays(-1)->timestamp > filectime($file_png)) {
+                    array_map('unlink', glob($file_png.'/*'));
+                    rmdir($file_png);
+                }
+            }
+
+            echo 'Remove pdf and png stats files cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+            
+        })->dailyAt('10:00');
+
+
 
 
         $schedule->call(function () {

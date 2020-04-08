@@ -2,43 +2,47 @@
 
 namespace App\Models;
 
-use DeviceDetector\DeviceDetector;
-use DeviceDetector\Parser\Device\DeviceParserAbstract;
-
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
-use Laravel\Passport\HasApiTokens;
-
-use Illuminate\Support\Str;
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Support\Str;
 
+use \SendGrid\Mail\PlainTextContent as PlainTextContent;
+use \SendGrid\Mail\HtmlContent as HtmlContent;
+use \SendGrid\Mail\Mail as SendGridMail;
+use \SendGrid\Mail\Subject as Subject;
+use \SendGrid\Mail\From as From;
+use \SendGrid\Mail\To as To;
+
+use DeviceDetector\Parser\Device\DeviceParserAbstract;
+use DeviceDetector\DeviceDetector;
+
+use Laravel\Passport\HasApiTokens;
 use WebPConvert\WebPConvert;
-
 use Carbon\Carbon;
 
-use App\Models\Vox;
-use App\Models\Email;
-use App\Models\Reward;
-use App\Models\UserBan;
-use App\Models\UserAsk;
-use App\Models\UserTeam;
+use App\Models\DentistPageview;
+use App\Models\BlacklistBlock;
+use App\Models\Recommendation;
+use App\Models\DcnTransaction;
+use App\Models\VoxCrossCheck;
+use App\Models\DentistClaim;
+use App\Models\WhitelistIp;
+use App\Models\UserAction;
+use App\Models\DcnCashout;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\Blacklist;
-use App\Models\UserAction;
-use App\Models\DcnCashout;
-use App\Models\WhitelistIp;
-use App\Models\DentistClaim;
-use App\Models\VoxCrossCheck;
-use App\Models\DcnTransaction;
-use App\Models\BlacklistBlock;
-use App\Models\Recommendation;
-use App\Models\DentistPageview;
+use App\Models\UserTeam;
+use App\Models\UserBan;
+use App\Models\UserAsk;
+use App\Models\Reward;
+use App\Models\Email;
+use App\Models\Vox;
 
 use Request;
 use Image;
@@ -46,16 +50,8 @@ use Auth;
 use Mail;
 use App;
 
-use \SendGrid\Mail\From as From;
-use \SendGrid\Mail\To as To;
-use \SendGrid\Mail\Subject as Subject;
-use \SendGrid\Mail\PlainTextContent as PlainTextContent;
-use \SendGrid\Mail\HtmlContent as HtmlContent;
-use \SendGrid\Mail\Mail as SendGridMail;
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
-
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract
-{
     use Notifiable, HasApiTokens, SoftDeletes, Authenticatable, CanResetPassword;
 
     protected $fillable = [
@@ -84,6 +80,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'website',
         'socials',
         'work_hours',
+        'working_position',
+        'working_position_label',
         'accepted_payment',
         'status',
         'ownership',
@@ -132,6 +130,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'fb_recommendation',
         'first_login_recommendation',
         'haswebp',
+        'old_unclaimed',
     ];
     protected $dates = [
         'verified_on',

@@ -13,6 +13,8 @@ class VoxQuestion extends Model {
     public $translatedAttributes = [
         'question',
         'answers',
+        'stats_title',
+        'stats_subtitle',
     ];
 
     protected $fillable = [

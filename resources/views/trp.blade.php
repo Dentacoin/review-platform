@@ -413,8 +413,8 @@
 		@if(!empty( $markLogout )) 
 			@include('sso-logout')
 		@endif
-
-        <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+		
+		<script src="{{ url('/js/cookie.min.js') }}"></script>
 		<script src="{{ url('/js-trp/main.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js/both.js').'?ver='.$cache_version }}"></script>
 		

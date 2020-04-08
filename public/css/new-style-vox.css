@@ -427,6 +427,22 @@ select:focus > option:checked {
       border-color: #2196F3;
       background-color: #2196F3; }
 
+.red-button {
+  border: 2px solid #ff0045;
+  background-color: #ff0045;
+  color: white;
+  font-size: 16px;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  border-radius: 10px;
+  display: inline-block;
+  transition: all 0.3s ease;
+  cursor: pointer; }
+  .red-button:focus, .red-button:hover {
+    color: white;
+    background-color: #eb3869;
+    border-color: #eb3869; }
+
 .white-button {
   background-color: white;
   border: 2px solid #41afff;
@@ -3162,6 +3178,340 @@ p.h2-bold {
         display: none !important; }
       .popup.recommend-popup .popup-inner .content .recommend-fb video::-webkit-media-controls-enclosure {
         display: none !important; }
+  .popup.download-stats-popup {
+    overflow-y: auto; }
+    @media screen and (max-width: 768px) {
+      .popup.download-stats-popup {
+        padding: 0px 10px; } }
+    .popup.download-stats-popup .popup-inner {
+      width: 830px;
+      position: relative;
+      top: 100px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      padding: 50px 150px 40px;
+      text-align: center;
+      box-shadow: 0 0 23px 0px #a3a2a2; }
+      @media screen and (max-width: 768px) {
+        .popup.download-stats-popup .popup-inner {
+          width: 100%;
+          padding: 30px 10px 18px;
+          top: 80px; } }
+      .popup.download-stats-popup .popup-inner .closer {
+        position: absolute;
+        right: -14px;
+        top: -14px;
+        z-index: 100;
+        box-shadow: 0 0 7px 0px #a3a2a2;
+        border-radius: 50%;
+        display: block; }
+        @media screen and (max-width: 768px) {
+          .popup.download-stats-popup .popup-inner .closer {
+            right: auto;
+            left: 50%;
+            transform: translateX(-50%); } }
+        .popup.download-stats-popup .popup-inner .closer img {
+          display: block; }
+      @media screen and (max-width: 768px) {
+        .popup.download-stats-popup .popup-inner .content {
+          width: 100%; } }
+      .popup.download-stats-popup .popup-inner .content .h1 {
+        font-size: 39px;
+        font-weight: 900;
+        margin-top: 0px;
+        margin-bottom: 30px; }
+        @media screen and (max-width: 768px) {
+          .popup.download-stats-popup .popup-inner .content .h1 {
+            font-size: 22px;
+            max-width: 300px;
+            margin-right: auto;
+            margin-left: auto;
+            margin-bottom: 20px; } }
+      .popup.download-stats-popup .popup-inner .content .download-formats {
+        display: flex;
+        margin-bottom: 15px; }
+        .popup.download-stats-popup .popup-inner .content .download-formats label {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          border: 1px solid #38ace5;
+          color: black;
+          flex: 1;
+          margin-right: 12px;
+          padding: 11px 0px;
+          border-radius: 10px; }
+          @media screen and (max-width: 768px) {
+            .popup.download-stats-popup .popup-inner .content .download-formats label {
+              font-size: 16px; } }
+          .popup.download-stats-popup .popup-inner .content .download-formats label:last-child {
+            margin-right: 0px; }
+          .popup.download-stats-popup .popup-inner .content .download-formats label:hover, .popup.download-stats-popup .popup-inner .content .download-formats label.active {
+            background-color: #38ace5;
+            color: white; }
+            .popup.download-stats-popup .popup-inner .content .download-formats label:hover i, .popup.download-stats-popup .popup-inner .content .download-formats label.active i {
+              color: white; }
+          .popup.download-stats-popup .popup-inner .content .download-formats label.active i:before {
+            content: '\f192'; }
+          .popup.download-stats-popup .popup-inner .content .download-formats label i {
+            font-size: 24px;
+            color: #38ace5;
+            margin-left: -32px;
+            margin-right: 15px; }
+            @media screen and (max-width: 768px) {
+              .popup.download-stats-popup .popup-inner .content .download-formats label i {
+                font-size: 16px;
+                margin-left: -5px;
+                margin-right: 7px; } }
+            @media screen and (max-width: 768px) {
+              .popup.download-stats-popup .popup-inner .content .download-formats label i:before {
+                font-size: inherit; } }
+          .popup.download-stats-popup .popup-inner .content .download-formats label input {
+            display: none; }
+      .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper {
+        margin-top: 30px; }
+        .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap {
+          text-align: left; }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap b {
+            font-size: 19px; }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label {
+            font-size: 19px;
+            padding: 0px 10px;
+            cursor: pointer; }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label span {
+              font-size: 19px; }
+              @media screen and (max-width: 768px) {
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label span.d {
+                  display: none; } }
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label span.m {
+                display: none; }
+                @media screen and (max-width: 768px) {
+                  .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label span.m {
+                    display: inline-block; } }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label:hover, .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label.active {
+              color: #38a2e5; }
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label:hover span, .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label.active span {
+                color: #38a2e5; }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label:nth-last-child(2) {
+              border-right: 2px solid #525252; }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label:last-child {
+              border-right: none; }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom-wrap label input {
+              display: none; }
+        .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom {
+          display: block; }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom .close-custom-datepicker {
+            position: absolute;
+            right: 4px;
+            z-index: 10;
+            top: 0px;
+            padding: 5px; }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download {
+            position: relative;
+            display: inline-block; }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper {
+              border: none;
+              background: transparent;
+              padding: 0px;
+              display: block; }
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .drp_top-bar {
+                display: none; }
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper {
+                border: none;
+                background: none; }
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper table {
+                  background: white; }
+                  .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper table .caption {
+                    background-color: #38a2e5;
+                    height: auto; }
+                    .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper table .caption div, .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper table .caption span {
+                      color: white; }
+                  .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper table .day.real-today {
+                    background-color: #00c9b7;
+                    color: white !important; }
+                @media screen and (max-width: 768px) {
+                  .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .date-picker-wrapper .month-wrapper .time1 {
+                    width: auto; } }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepicker {
+              display: flex; }
+              @media screen and (max-width: 992px) {
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepicker {
+                  display: block;
+                  padding-top: 30px; } }
+              @media screen and (max-width: 992px) {
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepicker table {
+                  width: 100%; } }
+              @media screen and (max-width: 992px) {
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepicker tbody.datepickerDays a {
+                  text-align: center;
+                  width: 100%; } }
+            @media screen and (max-width: 992px) {
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepickerSpace,
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepickerBlock,
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #custom-datepicker-download .datepickerContainer > table > tbody > tr {
+                display: block; } }
+          .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download {
+            text-align: center;
+            align-items: center;
+            display: flex;
+            margin-bottom: 10px;
+            justify-content: center; }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .flex {
+              line-height: 30px;
+              align-items: baseline; }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder {
+              display: flex;
+              align-items: center;
+              margin-top: 35px; }
+              @media screen and (max-width: 992px) {
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder {
+                  display: block;
+                  margin-top: 15px; } }
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder .btn {
+                height: 30px;
+                line-height: 30px;
+                border-radius: 15px;
+                color: white;
+                background: #38ace5;
+                padding: 0px 20px;
+                text-align: center;
+                display: inline-block;
+                float: left;
+                margin-left: 10px; }
+                @media screen and (max-width: 992px) {
+                  .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder .btn {
+                    float: none;
+                    display: block; } }
+              .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder .text {
+                display: inline-block;
+                margin-left: 10px;
+                cursor: pointer;
+                color: #38ace5; }
+                .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder .text:hover {
+                  text-decoration: underline; }
+                @media screen and (max-width: 992px) {
+                  .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download .button-holder .text {
+                    display: block;
+                    text-align: center;
+                    margin-left: 0px;
+                    margin-top: 10px; } }
+            .popup.download-stats-popup .popup-inner .content .page-statistics .filters-wrapper .filters-custom #datepicker-extras-download input {
+              height: 30px;
+              line-height: 30px;
+              border-radius: 15px;
+              width: 90px;
+              border-color: #a3a3a3;
+              margin: 0px 10px;
+              border: none;
+              padding: 0px 5px;
+              border: 1px solid #38a2e5;
+              text-align: center; }
+      .popup.download-stats-popup .popup-inner .content .download-demographics {
+        text-align: left; }
+        .popup.download-stats-popup .popup-inner .content .download-demographics b {
+          font-size: 19px;
+          display: block;
+          margin-bottom: 20px; }
+        .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label {
+          position: relative;
+          margin-bottom: 15px;
+          margin-right: 6px;
+          display: inline-block;
+          vertical-align: text-top;
+          cursor: pointer;
+          border: 1px solid #55b4dd;
+          color: #888888;
+          padding: 5px 20px;
+          border-radius: 5px;
+          font-size: 18px; }
+          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:hover, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:focus, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.active {
+            background-color: #e6f1ff;
+            color: #4b607d; }
+            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:hover .dem-arrow i, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label:focus .dem-arrow i, .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.active .dem-arrow i {
+              color: #4b607d; }
+          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.active {
+            font-weight: bold;
+            padding-right: 50px; }
+            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.active .active-removal {
+              display: block; }
+          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label .active-removal {
+            display: none;
+            background-color: #55b4dd;
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            bottom: -1px;
+            width: 30px;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px; }
+            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label .active-removal span {
+              position: absolute;
+              top: 46%;
+              left: 50%;
+              transform: translateX(-50%) translateY(-50%);
+              color: white;
+              display: block;
+              font-size: 20px; }
+          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label .dem-arrow {
+            display: inline-block;
+            margin-left: 6px;
+            margin-right: -8px; }
+            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label .dem-arrow i {
+              color: #55b4dd; }
+          .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options {
+            display: none;
+            text-align: left;
+            position: absolute;
+            z-index: 10;
+            background-color: white;
+            top: 35px;
+            left: 0px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0px 3px 5px 5px rgba(0, 0, 0, 0.11);
+            min-width: 210px; }
+            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options .close-dem-options {
+              position: absolute;
+              top: 12px;
+              right: 10px;
+              width: 20px;
+              height: 20px;
+              text-align: center;
+              line-height: 18px;
+              border-radius: 50%;
+              box-shadow: 0 0 3px black; }
+            .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label {
+              display: block;
+              cursor: pointer;
+              font-weight: normal;
+              color: #333;
+              padding: 5px 0px;
+              font-size: 14px; }
+              .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label.active i:before {
+                content: '\f14a'; }
+              .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label.select-all-dem-label {
+                color: #64c1e0;
+                font-weight: bold;
+                border-bottom: 1px solid #65c1e0;
+                margin-bottom: 5px;
+                padding-bottom: 10px; }
+                .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label.select-all-dem-label i {
+                  display: none; }
+              .popup.download-stats-popup .popup-inner .content .download-demographics .dem-label.dem-dropdown .demogr-options label i {
+                margin-right: 5px;
+                font-size: 14px; }
+        .popup.download-stats-popup .popup-inner .content .download-demographics input {
+          display: none; }
+      .popup.download-stats-popup .popup-inner .content .red-button {
+        font-size: 20px;
+        padding: 18px 51px;
+        margin-top: 35px; }
+        @media screen and (max-width: 768px) {
+          .popup.download-stats-popup .popup-inner .content .red-button {
+            padding: 13px 40px;
+            margin-top: 15px; } }
 
 body.popup-visible {
   overflow-y: hidden; }
@@ -4217,16 +4567,17 @@ svg:not(:root) {
             margin-right: auto;
             margin-left: auto; } }
     .poll-bubble .white-bubble .close-bubble {
-      display: none;
       position: absolute;
-      top: -15px;
-      left: 50%;
-      transform: translateX(-50%);
+      right: 90px;
+      top: 1px;
       border-radius: 50%;
       box-shadow: 0 0 8px 0px #afaaaa; }
       @media screen and (max-width: 768px) {
         .poll-bubble .white-bubble .close-bubble {
-          display: block; } }
+          top: -15px;
+          right: auto;
+          left: 50%;
+          transform: translateX(-50%); } }
       .poll-bubble .white-bubble .close-bubble img {
         display: block; }
     .poll-bubble .white-bubble .poll-reward {

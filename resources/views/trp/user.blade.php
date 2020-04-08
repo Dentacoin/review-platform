@@ -1274,9 +1274,9 @@
 
 												@if(!empty($inv->hasReview($user->id)))
 													@if(!empty($inv->dentistInviteAgain($user->id)))
-														<a href="javascript:;" class="button" id="invite-again" data-href="{{ getLangUrl('invite-patient-again') }}" inv-id="{{ $inv->id }}" style="font-size: 16px;padding: 5px;">Invite again</a><br>
+														<a href="javascript:;" class="button invite-again" data-href="{{ getLangUrl('invite-patient-again') }}" inv-id="{{ $inv->id }}">{{ trans('trp.page.profile.invite.invite-again') }}</a><br>
 													@endif
-													<a review-id="{{ $inv->hasReview($user->id)->id }}" href="javascript:;" class="ask-review">
+													<a review-id="{{ $inv->hasReview($user->id)->id }}" href="javascript:;" class="ask-review button">
 														{{ trans('trp.page.profile.invite.status-review') }}
 													</a>
 												@else

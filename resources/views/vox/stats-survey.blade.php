@@ -20,6 +20,11 @@
 						{{ trans('vox.common.take-the-test') }}
 					</a>
 				@endif
+				@if(false && !empty($user))
+					<a href="javascript:;" class="red-button download-stats-popup-btn" for-stat="all">
+						<img src="{{ url('new-vox-img/download.png') }}"/>Download All Stats
+					</a>
+				@endif
 			</div>
 
 			<div class="filters-wrapper">
@@ -71,10 +76,10 @@
 			</div>
 		</div>
 		
-		<div class="stats">
+		<div class="stats" id="all-stat-wrap">
 			@foreach($vox->stats_questions as $question)
 				@if(!empty($user) || (empty($user) && $loop->iteration <=3))
-					<div class="stat {!! false && count(json_decode($question->answers, true)) > 9 ? 'stat-with-many-qs' : '' !!} {!! $question->stats_top_answers ? 'multipletop_ans' : '' !!}" question-id="{{ $question->id }}" stat-type="{{ $question->used_for_stats }}" {!! !empty($question->stats_scale_answers) ? 'scale-answer-id="1"' : '' !!}>
+					<div class="stat {!! false && count(json_decode($question->answers, true)) > 9 ? 'stat-with-many-qs' : '' !!} {!! $question->stats_top_answers ? 'multipletop_ans' : '' !!} {{ $loop->last ? 'last-stat' : '' }} {!! !empty($question->stats_scale_answers) ? 'has-scales' : '' !!}" question-id="{{ $question->id }}" stat-type="{{ $question->used_for_stats }}" {!! !empty($question->stats_scale_answers) ? 'scale-answer-id="1"' : '' !!}>
 						<a class="title" href="javascript:;">
 							<h2 class="container">
 								{{ $question->translateorNew(App::getLocale())->stats_title }}
@@ -97,6 +102,72 @@
 												@include('vox.template-parts.stats-chart')
 											</div>
 										</div>
+										<div class="demogr-inner" style="display: none" inner="{{ $question->id }}" scale="{{ $key + 1 }}">
+											@if($question->used_for_stats=='dependency')
+												<label for="format-relation-{{ $question->id }}-{{ $key + 1 }}" class="active dem-label">
+													<input type="checkbox" name="download-demographic[]" value="relation" id="format-relation-{{ $question->id }}-{{ $key + 1 }}" class="download-demographic-checkbox" checked="checked">
+													Relation
+													<div class="active-removal"><span>x</span></div>
+												</label>
+											@endif
+											@foreach( $question->stats_fields as $sk)
+												@if($sk == 'gender')
+													<label for="format-gender-{{ $question->id }}-{{ $key + 1 }}" class="{{ $loop->first ? 'active' : '' }} dem-label">
+														<input type="checkbox" name="download-demographic[]" value="gender" id="format-gender-{{ $question->id }}-{{ $key + 1 }}" class="download-demographic-checkbox" checked="checked">
+														Sex
+												@elseif($sk == 'country_id')
+													<label for="format-country_id-{{ $question->id }}-{{ $key + 1 }}" class="{{ $loop->first ? 'active' : '' }} dem-label">
+														<input type="checkbox" name="download-demographic[]" value="country_id" id="format-country_id-{{ $question->id }}-{{ $key + 1 }}" class="download-demographic-checkbox">
+														Location
+												@elseif($sk == 'age')
+													<label for="format-age-{{ $question->id }}-{{ $key + 1 }}" class="{{ $loop->first ? 'active' : '' }} dem-dropdown dem-label">
+														<input type="checkbox" name="download-demographic[]" value="age" id="format-age-{{ $question->id }}-{{ $key + 1 }}" class="download-demographic-checkbox">
+														Age group
+														<div class="dem-arrow">
+															<i class="fas fa-caret-down"></i>
+														</div>
+														<div class="demogr-options">
+															<div class="close-dem-options">x</div>
+															<label for="download-age-all-{{ $question->id }}-{{ $key + 1 }}" class="select-all-dem-label active">
+																<i class="far fa-square"></i>
+																<input type="checkbox" name="download-age[]" value="all" id="download-age-all-{{ $question->id }}-{{ $key + 1 }}" class="select-all-dem dem-checkbox" checked="checked">
+																Select all
+															</label>
+															@foreach(config('vox.age_groups') as $ak => $av)
+																<label for="download-age-{{ $ak }}-{{ $question->id }}-{{ $key + 1 }}" class="active">
+																	<i class="far fa-square"></i>
+																	<input type="checkbox" name="download-age[]" value="{{ $ak }}" id="download-age-{{ $ak }}-{{ $question->id }}-{{ $key + 1 }}" class="dem-checkbox" checked="checked">
+																	{{ $av }}
+																</label>
+															@endforeach
+														</div>
+												@else
+													<label for="format-{{ $sk }}-{{ $question->id }}-{{ $key + 1 }}" class="{{ $loop->first ? 'active' : '' }} dem-dropdown dem-label">
+														<input type="checkbox" name="download-demographic[]" value="{{ $sk }}" id="format-{{ $sk }}-{{ $question->id }}-{{ $key + 1 }}" class="download-demographic-checkbox">
+														{{ trans('vox.page.stats.group-by-'.$sk) }}
+														<div class="dem-arrow">
+															<i class="fas fa-caret-down"></i>
+														</div>
+														<div class="demogr-options">
+															<div class="close-dem-options">x</div>
+															<label for="download-{{ $sk }}-all-{{ $question->id }}-{{ $key + 1 }}" class="select-all-dem-label active">
+																<i class="far fa-square"></i>
+																<input type="checkbox" name="download-{{ $sk }}[]" value="all" id="download-{{ $sk }}-all-{{ $question->id }}-{{ $key + 1 }}" class="select-all-dem dem-checkbox" checked="checked">
+																Select all
+															</label>
+															@foreach(config('vox.details_fields.'.$sk.'.values') as $skk => $sv)
+																<label for="download-{{ $sk }}-{{ $skk }}-{{ $question->id }}-{{ $key + 1 }}" class="active">
+																	<i class="far fa-square"></i>
+																	<input type="checkbox" name="download-{{ $sk }}[]" value="{{ $skk }}" id="download-{{ $sk }}-{{ $skk }}-{{ $question->id }}-{{ $key + 1 }}" class="dem-checkbox" checked="checked">
+																	{{ $sv }}
+																</label>
+															@endforeach
+														</div>
+												@endif
+													<div class="active-removal"><span>x</span></div>
+												</label>
+											@endforeach
+										</div>
 									@endif
 								@endforeach
 							@else
@@ -107,11 +178,79 @@
 							@endif
 						</div>
 					</div>
+
+					@if(empty($question->stats_scale_answers))
+						<div class="demogr-inner" style="display: none" inner="{{ $question->id }}">
+							@if($question->used_for_stats=='dependency')
+								<label for="format-relation-{{ $question->id }}" class="active dem-label">
+									<input type="checkbox" name="download-demographic[]" value="relation" id="format-relation-{{ $question->id }}" class="download-demographic-checkbox" checked="checked">
+									Relation
+									<div class="active-removal"><span>x</span></div>
+								</label>
+							@endif
+							@foreach( $question->stats_fields as $sk)
+								@if($sk == 'gender')
+									<label for="format-gender-{{ $question->id }}" class="{{ $loop->first ? 'active' : '' }} dem-label">
+										<input type="checkbox" name="download-demographic[]" value="gender" id="format-gender-{{ $question->id }}" class="download-demographic-checkbox" checked="checked">
+										Sex
+								@elseif($sk == 'country_id')
+									<label for="format-country_id-{{ $question->id }}" class="{{ $loop->first ? 'active' : '' }} dem-label">
+										<input type="checkbox" name="download-demographic[]" value="country_id" id="format-country_id-{{ $question->id }}" class="download-demographic-checkbox">
+										Location
+								@elseif($sk == 'age')
+									<label for="format-age-{{ $question->id }}" class="{{ $loop->first ? 'active' : '' }} dem-dropdown dem-label">
+										<input type="checkbox" name="download-demographic[]" value="age" id="format-age-{{ $question->id }}" class="download-demographic-checkbox">
+										Age group
+										<div class="dem-arrow">
+											<i class="fas fa-caret-down"></i>
+										</div>
+										<div class="demogr-options">
+											<div class="close-dem-options">x</div>
+											<label for="download-age-all-{{ $question->id }}" class="select-all-dem-label active">
+												<i class="far fa-square"></i>
+												<input type="checkbox" name="download-age[]" value="all" id="download-age-all-{{ $question->id }}" class="select-all-dem dem-checkbox" checked="checked">
+												Select all
+											</label>
+											@foreach(config('vox.age_groups') as $ak => $av)
+												<label for="download-age-{{ $ak }}-{{ $question->id }}" class="active">
+													<i class="far fa-square"></i>
+													<input type="checkbox" name="download-age[]" value="{{ $ak }}" id="download-age-{{ $ak }}-{{ $question->id }}" class="dem-checkbox" checked="checked">
+													{{ $av }}
+												</label>
+											@endforeach
+										</div>
+								@else
+									<label for="format-{{ $sk }}-{{ $question->id }}" class="{{ $loop->first ? 'active' : '' }} dem-dropdown dem-label">
+										<input type="checkbox" name="download-demographic[]" value="{{ $sk }}" id="format-{{ $sk }}-{{ $question->id }}" class="download-demographic-checkbox">
+										{{ trans('vox.page.stats.group-by-'.$sk) }}
+										<div class="dem-arrow">
+											<i class="fas fa-caret-down"></i>
+										</div>
+										<div class="demogr-options">
+											<div class="close-dem-options">x</div>
+											<label for="download-{{ $sk }}-all-{{ $question->id }}" class="select-all-dem-label active">
+												<i class="far fa-square"></i>
+												<input type="checkbox" name="download-{{ $sk }}[]" value="all" id="download-{{ $sk }}-all-{{ $question->id }}" class="select-all-dem dem-checkbox" checked="checked">
+												Select all
+											</label>
+											@foreach(config('vox.details_fields.'.$sk.'.values') as $skk => $sv)
+												<label for="download-{{ $sk }}-{{ $skk }}-{{ $question->id }}" class="active">
+													<i class="far fa-square"></i>
+													<input type="checkbox" name="download-{{ $sk }}[]" value="{{ $skk }}" id="download-{{ $sk }}-{{ $skk }}-{{ $question->id }}" class="dem-checkbox" checked="checked">
+													{{ $sv }}
+												</label>
+											@endforeach
+										</div>
+								@endif
+									<div class="active-removal"><span>x</span></div>
+								</label>
+							@endforeach
+						</div>
+					@endif
 				@endif
 			@endforeach
 		</div>
 	</div>
-
 
 	@if(!empty($blurred_stats))
 		<div class="stats-blurred">
@@ -125,8 +264,16 @@
 					<img class="pc-blurred" src="{{ url('new-vox-img/blurred-stats-1.jpg') }}">
 					<img class="mobile-blurred" src="{{ url('new-vox-img/blurred-stats-mobile.jpg') }}">
 					<div class="blurred-text">
-						<h2>Curious to learn more?</h2>
-						<p>Unlock up-to-date, live dental market statistics!</p>
+						<div class="free-text">Free</div>
+						<h2>EXCLUSIVE FUNCTIONS</h2>
+						<p>for registered users only</p>
+						<div class="download-functions-wrap">
+							<div class="download-functions">
+								<p>✓ Access to all public statistics</p>
+								<p>✓ Downloads in .pdf, .png, .xlsx</p>
+								<p>✓ Custom survey orders available</p>
+							</div>
+						</div>
 						<a href="https://vox.dentacoin.com/en/registration/" stat-url="{{ !empty($_SERVER['HTTP_REFERER']) ? ($_SERVER['HTTP_REFERER'].ltrim($_SERVER['REQUEST_URI'], '/')) : '' }}" class="blue-button blurred-button">SIGN UP FOR FREE</a>
 						<span>Already have an account? <a class="blurred-button" stat-url="{{ !empty($_SERVER['HTTP_REFERER']) ? ($_SERVER['HTTP_REFERER'].ltrim($_SERVER['REQUEST_URI'], '/')) : '' }}" href="https://vox.dentacoin.com/en/login">Log in</a></span>
 					</div>
@@ -146,9 +293,13 @@
 			<a href="{{ getLangUrl('dental-survey-stats') }}" class="blue-button">Back to all stats</a>
 		</div>
 	</div>
+	<a style="display: none;" id="download-link" class="{{ session('download_stat') ? 'for-download' : '' }}" href="{{ session('download_stat') ? getLangUrl('download-pdf/'.session('download_stat')) : 'javascript:;' }}">Download link</a>
+	<a style="display: none;" id="download-link-png" class="{{ session('download_stat_png') ? 'for-download' : '' }}" href="{{ session('download_stat_png') ? getLangUrl('download-png/'.session('download_stat_png')) : 'javascript:;' }}">Download png link</a>
 
 	@if(empty($user))
 		@include('vox.popups.login-register')
+	@else
+		@include('vox.popups.download-stats')
 	@endif
 
 @endsection

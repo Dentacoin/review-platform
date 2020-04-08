@@ -143,7 +143,7 @@ $main-color: #38ace5;
 	.question-group {
 		margin-bottom: 80px;
 		text-align: center;
-
+		position: relative;
 
 		@media #{$phone} {
 			margin-bottom: 20px;
@@ -156,6 +156,25 @@ $main-color: #38ace5;
 						font-size: 16px;
 					}
 				}
+			}
+		}
+
+		.loader-survey {
+			display: none;
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			z-index: 1000;
+			background-color: rgba(255, 255, 255, 0.7);
+
+			img {
+				max-width: 50%;
+				position: absolute;
+				top: 0px;
+				left: 50%;
+				transform: translateX(-50%);
 			}
 		}
 

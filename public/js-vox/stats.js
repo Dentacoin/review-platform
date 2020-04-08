@@ -56,16 +56,19 @@ var map_country_data;
 var showPopup;
 ajax_is_running = false;
 var chartsToLoaded = 0;
+var getUrlParameter;
+var first_stat_loaded = false;
+var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+var is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+var open_download_popup = false;
 
 $(document).ready(function(){
 
     //All surveys
-
     $('.stats-cats a.cat').click( function() {
         $(this).toggleClass('active');
         $(this).next().toggleClass('active');
     });
-
 
     var reloadGraph = function( elm ) {
 
@@ -256,8 +259,15 @@ $(document).ready(function(){
                         for(var i in data.second_chart) {
                             line.push(data.second_chart[i][1]);
                         }
-                        var sum = line.reduce(function(a, b) { return a + b; }, 0);
-                            
+
+                        if(data.question_type == 'multiple_choice') {
+                            var sum = data.total;
+                        } else {
+                            var sum = line.reduce(function(a, b) { return a + b; }, 0);
+                        }
+                        
+                        
+                        //console.log(sum);
                         var j=0;
                         for(var i in data.second_chart) {
                             var arr = data.second_chart[i][0].split(' ');
@@ -690,6 +700,23 @@ $(document).ready(function(){
                     $(this).find('.loader').fadeOut();
                     $(this).find('.loader-mask').delay(350).fadeOut('slow');
 
+
+                    if ((is_safari || is_firefox) && !first_stat_loaded && getUrlParameter('download') && $('#download-link').hasClass('for-download')) {
+
+                        window.location.href = $('#download-link').attr('href');
+                        first_stat_loaded = true;
+                    }
+                    if ((is_safari || is_firefox) && !first_stat_loaded && getUrlParameter('download-png') && $('#download-link-png').hasClass('for-download')) {
+
+                        window.location.href = $('#download-link-png').attr('href');
+                        first_stat_loaded = true;
+                    }
+
+                    // if(getUrlParameter('download') && first_stat_loaded) {
+                    //     // $('#download-link').trigger('click');
+                    //     window.location.href = $('#download-link').attr('href');
+                    // }
+
                     if(chartsToLoad && $('#make-stat-image-btn').length) {
                         chartsToLoaded++;
 
@@ -710,6 +737,15 @@ $(document).ready(function(){
         );
 
     }
+
+    if(!is_safari && !is_firefox && getUrlParameter('download') && $('#download-link').hasClass('for-download')) {
+        window.location.href = $('#download-link').attr('href');
+    }
+
+    if(!is_safari && !is_firefox && getUrlParameter('download-png') && $('#download-link-png').hasClass('for-download')) {
+        window.location.href = $('#download-link-png').attr('href');
+    }
+
 
     var handleFilters = function() {
         if(!$('.sort-menu a.active').length) {
@@ -905,6 +941,7 @@ $(document).ready(function(){
     });
     google.charts.setOnLoadCallback(function() {
         gc_loaded = true;
+
         $('.stat.active').each( function() {
             if($(this).find('.scale-stat-q').length) {
                 $(this).find('.scale-stat-q').first().addClass('active');
@@ -1525,7 +1562,7 @@ $(document).ready(function(){
 
                 var selection = this.getSelection();
 
-                if( typeof selection[0].row!='undefined' ) {
+                if( typeof selection[0] !='undefined' && typeof selection[0].row!='undefined' ) {
                     var container = $(this.container).closest('.stat');
 
                     if(  container.attr('answer-id')==(selection[0].row + 1) ) {
@@ -2400,11 +2437,14 @@ $(document).ready(function(){
         window.location.href = $(this).attr('href');
     });
 
-    $('.download-format-checkbox').change( function(e) {
-        $(this).closest('label').toggleClass('active');
+    $('.download-format-radio').change( function(e) {
+        $(this).closest('.download-formats').find('label').removeClass('active');
+        $(this).closest('label').addClass('active');
     });
 
     var popupDownloadAction = function() {
+
+        console.log('vliza');
 
         $('.download-demographic-checkbox').change( function(e) {
             $(this).closest('label').addClass('active');
@@ -2429,10 +2469,12 @@ $(document).ready(function(){
                 $(this).closest('label').addClass('active');
                 $(this).closest('label').find('.download-demographic-checkbox').prop('checked', true);
             }
+            $('.demogr-options').hide();
             $(this).closest('label').find('.demogr-options').show();
         });
 
         $('.dem-checkbox').change( function(e) {
+        console.log('smenq');
             e.preventDefault();
             e.stopPropagation();
             
@@ -2440,6 +2482,7 @@ $(document).ready(function(){
                 $(this).closest('.demogr-options').find('label').addClass('active');
                 $(this).closest('.demogr-options').find('input').prop('checked', true);
             } else {
+                console.log($(this).closest('label'));
                 $(this).closest('label').toggleClass('active');
                 $(this).closest('.demogr-options').find('.select-all-dem').prop('checked', false);
                 $(this).closest('.demogr-options').find('.select-all-dem-label').removeClass('active');
@@ -2539,7 +2582,11 @@ $(document).ready(function(){
             $('#scale-for').val($(this).attr('for-scale'));
         }
 
-        popupDownloadAction();
+        if(!open_download_popup) {
+
+            open_download_popup = true;
+            popupDownloadAction();
+        }
     });
 
     $('#download-form').submit( function(e) {
@@ -2560,16 +2607,21 @@ $(document).ready(function(){
             $(this).serialize(), 
             function( data ) {
                 if(data.success) {
-                    window.location.href = window.location.href+data.tail;
+                    window.location.href = window.location.origin+window.location.pathname+data.tail;
                 } else {
+
+                    console.log(that);
                     for(var i in data.messages) {
                         if(i == 'download-date' || i == 'date-from-download' || i == 'date-to-download' ) {
                             if(!that.find('[error="download-date"]').length) {
                                 that.find('[name="download-date"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="download-date">'+data.messages[i]+'</div>');
                             }                            
-                        } else {
+                        } else if(i == 'download-demographic') {
                             that.find('[name="'+i+'[]"]').addClass('has-error');
                             that.find('[name="'+i+'[]"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
+                        } else {
+                            that.find('[name="'+i+'"]').addClass('has-error');
+                            that.find('[name="'+i+'"]').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="'+i+'">'+data.messages[i]+'</div>');
                         }
                     }
                 }
@@ -2611,9 +2663,10 @@ $(document).ready(function(){
                         console.error('oops, something went wrong!', error);
                     });
                 } else {
+
                     setTimeout( function() {
 
-                        console.log($('#stats-imgs').outerHeight());
+                        //console.log($('#stats-imgs').outerHeight());
                         $('#hidden_heigth').val($('#stats-imgs').outerHeight());
 
                         $('#hidden_html').val($('#stats-imgs').html());
@@ -2623,7 +2676,54 @@ $(document).ready(function(){
                 }
             }
         }
-        generateImage();
+
+        var generatePngImage = function() {
+
+            var elm = $('.echo-png').first();
+            if(elm.length) {
+                domtoimage.toPng(elm[0])
+                .then( (function (dataUrl) {
+                    var img = new Image();
+                    img.src = dataUrl;
+                    //$('#stats-png-imgs').html('');
+                    $('#stats-png-imgs').append(img);
+                    elm.remove();
+
+                    generatePngImage();
+
+                    // domtoimage.toBlob($('#stats-png-imgs')[0])
+                    // .then(function (blob) {
+                    //     window.saveAs(blob, 'stats.png');
+                    //     generatePngImage();
+                    // });
+
+                }).bind(elm) )
+                .catch(function (error) {
+                    console.error('oops, something went wrong!', error);
+                });
+
+
+            } else {
+
+                console.log('gotovo');
+
+                setTimeout( function() {
+                    $('#download-form-png').submit();
+                }, 300);
+                
+            }
+        }
+
+        if($('.echo-png').length) {
+            setTimeout( function() {
+                generatePngImage();
+            }, 100);
+        } else {
+            setTimeout( function() {
+                generateImage();
+            }, 100);
+        }        
+        
     });
 
 
@@ -2642,7 +2742,6 @@ $(document).ready(function(){
             $(this).serialize(), 
             function( data ) {
                 if(data.success) {
-                    console.log(data.url);
                     window.location.href = data.url;
                 } else {
                     console.log('download error');
@@ -2652,9 +2751,105 @@ $(document).ready(function(){
         );
     });
 
-    if(getUrlParameter('download')) {
-        $('#download-link').trigger('click');
+    var getBase64Image = function(img) {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+        return dataURL.replace(/^data:image\/png;base64,/, "");
+
+        //
     }
+
+    /**
+    * Convert a base64 string in a Blob according to the data and contentType.
+    * 
+    * @param b64Data {String} Pure base64 string without contentType
+    * @param contentType {String} the content type of the file i.e (image/jpeg - image/png - text/plain)
+    * @param sliceSize {Int} SliceSize to process the byteCharacters
+    * @see http://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+    * @return Blob
+    */
+    function b64toBlob(b64Data, contentType, sliceSize) {
+        contentType = contentType || '';
+        sliceSize = sliceSize || 512;
+        var byteCharacters = atob(b64Data);
+        var byteArrays = [];
+
+        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
+        }
+
+        var blob = new Blob(byteArrays, {type: contentType});
+        return blob;
+    }
+
+    $('#download-form-png').submit( function(e) {
+        e.preventDefault();
+
+        if(ajax_is_running) {
+            return;
+        }
+
+        ajax_is_running = true;
+
+        var formData = new FormData();
+        formData.append("_token", $(this).find('input[name="_token"]').val());
+        formData.append("stat_url", $(this).find('input[name="stat_url_png"]').val());
+        formData.append("stat_title", $(this).find('input[name="stat_title_png"]').val());
+
+        var i=0;
+        $('#stats-png-imgs img').each( function() {
+            i++;
+
+            var base64 = getBase64Image($(this)[0]);
+            var contentType = 'image/png';// In this case "image/gif"
+            var blob = b64toBlob(base64, contentType);
+            formData.append('picture'+i, blob);
+        });
+
+        var that = $(this);
+
+        $.ajax({
+            type: "POST",
+            url: that.attr('action'),
+            success: function (data) {
+                if(data.success) {
+                    window.location.href = data.url;
+                } else {
+                    console.log('not ok');
+                }
+                ajax_is_running = false;
+            },
+            error: function (error) {
+                console.log('error');
+            },
+            async: true,
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            timeout: 60000
+        });
+    });
+
+
+    $('.scroll-to-blurred').click( function() {
+        $('html, body').animate({
+            scrollTop: $(".stats-blurred").offset().top
+        }, 500);
+    });
 
 
 });
