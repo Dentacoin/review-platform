@@ -1371,7 +1371,7 @@ class StatsController extends FrontController
         if(!empty($this->user) && !empty(Request::input("hidden_html"))) {
 
             set_time_limit(300);
-            ini_set('memory_limit', '256М');
+            ini_set('memory_limit', '1024М');
 
             $html = Request::input("hidden_html");
             $title = Request::input("stats-title");
