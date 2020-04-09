@@ -1302,6 +1302,10 @@ class VoxesController extends AdminController
 
     public function export_survey_data() {
 
+        ini_set('max_execution_time', 0);
+        set_time_limit(0);
+        ini_set('memory_limit','1024M');
+
         if(Request::isMethod('post')) {
 
             $cols = [
@@ -1357,6 +1361,7 @@ class VoxesController extends AdminController
                 $cols,
                 $cols2
             ];
+
 
             $users = DcnReward::where('reference_id',$vox->id )->where('platform', 'vox')->where('type', 'survey')->with('user');
             if( request('date-from') ) {

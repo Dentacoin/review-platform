@@ -24,13 +24,13 @@
                         <div class="col-md-6">
                             <input type="text" class="form-control datepicker" name="date-from" value="" autocomplete="off" placeholder="Date from" style="margin-bottom: 10px;">
                             <input type="text" class="form-control datepicker" name="date-to" value="" autocomplete="off" placeholder="Date to" style="margin-bottom: 10px;">
-                            <select class="form-control" name="survey" style="margin-bottom: 10px;">
+                            <select class="form-control select2" name="survey">
                                 @foreach($voxes as $vox)
                                     <option value="{{ $vox->id }}">{{ $vox->title }}</option>
                                 @endforeach
                             </select>
                             <br/>
-                            <div class="form-group clearfix" id="stat_standard">
+                            <div class="form-group clearfix" id="stat_standard" style="margin-top: 10px;">
                                 <label class="col-md-2 control-label">Demographics</label>
                                 <div class="col-md-10">
                                     @foreach( config('vox.stats_scales') as $k => $v)
