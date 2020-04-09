@@ -323,7 +323,8 @@ class IndexController extends FrontController
                 'flickity.min.js',
 			],
 			'css' => [
-				'trp-index-dentist.css'
+				'trp-index-dentist.css',
+                'flickity.min.css',
 			],
 			'regData' => $regData,
 			'unsubscribed' => $unsubscribed,
@@ -333,9 +334,6 @@ class IndexController extends FrontController
             'seo_description' => $seos->seo_description,
             'social_title' => $seos->social_title,
             'social_description' => $seos->social_description,
-			'css' => [
-                'flickity.min.css',
-			]
         ));	
 	}
 
