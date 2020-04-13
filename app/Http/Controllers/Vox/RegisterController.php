@@ -213,9 +213,9 @@ class RegisterController extends FrontController
             }
         } else {
 
-            if (request()->getHost() == 'dentavox.dentacoin.com') {
-                return redirect('https://vox.dentacoin.com/en/registration');
-            }
+            // if (request()->getHost() == 'dentavox.dentacoin.com') {
+            //     return redirect('https://vox.dentacoin.com/en/registration');
+            // }
 
             $seos = PageSeo::find(10);
 
