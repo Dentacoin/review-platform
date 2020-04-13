@@ -58,9 +58,9 @@ class AuthenticateUser extends FrontController
             return redirect(getLangUrl('/'));
         }
 
-        if (request()->getHost() == 'dentavox.dentacoin.com') {
-            return redirect('https://vox.dentacoin.com/en/login/');
-        }
+        // if (request()->getHost() == 'dentavox.dentacoin.com') {
+        //     return redirect('https://vox.dentacoin.com/en/login/');
+        // }
 
         $seos = PageSeo::find(8);
         
