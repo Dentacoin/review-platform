@@ -330,6 +330,19 @@
                                         <!-- <br/> (this will not apply if there is only one selected country) -->
                                     </label>
                                     <div class="col-md-2">
+
+                                        <style type="text/css">
+                                            input::-webkit-outer-spin-button,
+                                            input::-webkit-inner-spin-button {
+                                              -webkit-appearance: none;
+                                              margin: 0;
+                                            }
+
+                                            /* Firefox */
+                                            input[type=number] {
+                                              -moz-appearance: textfield;
+                                            }
+                                        </style>
                                         {{ Form::number( 'country_percentage', !empty($item) ? $item->country_percentage : '' , array('class' => 'form-control', 'placeholder' => 'Number from 1 to 100') ) }}
                                     </div>
                                     @if(!empty($item) && !empty($item->users_percentage) && !empty($item->country_percentage))

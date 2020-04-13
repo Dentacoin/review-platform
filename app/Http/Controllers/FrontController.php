@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
 use DeviceDetector\DeviceDetector;
 
+use App\Models\UserGuidedTour;
 use App\Models\PollAnswer;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
@@ -203,6 +204,29 @@ class FrontController extends BaseController {
                 if (!(User::getRealIp() == '213.91.254.194' || User::getRealIp() == '78.130.213.163' || !empty($this->admin))) {
                     $ul->save();
                 }
+
+                // if($this->user->is_dentist) {
+                //     $gt_exist = UserGuidedTour::where('user_id', $this->user->id)->first();
+
+                //     if(!empty($gt_exist)) {
+
+                //         if(empty($gt_exist->first_login_trp) && mb_strpos( Request::getHost(), 'vox' )===false) {
+                //             $gt_exist->first_login_trp = true;
+                //             $gt_exist->save();
+                //         }
+
+                //     } else {
+
+                //         $gt = new UserGuidedTour;
+                //         $gt->user_id = $this->user->id;
+
+                //         if(mb_strpos( Request::getHost(), 'vox' )===false) {
+                //             $gt->first_login_trp = true;
+                //         }
+
+                //         $gt->save();
+                //     }
+                // }
 
 
                 $tokenobj = $this->user->createToken('LoginToken');
@@ -717,6 +741,6 @@ class FrontController extends BaseController {
             }
         }
 
-        $params['cache_version'] = '2020-04-08-02';
+        $params['cache_version'] = '2020-04-13';
     }
 }

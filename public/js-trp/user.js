@@ -2503,4 +2503,28 @@ $(document).ready(function(){
         $(this).next().show();
     });
 
+    $('.go-first-tour').click( function() {
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $.ajax( {
+            url: window.location.origin+'/en/profile/first-guided-tour/?full=true',
+            type: 'GET',
+            dataType: 'json',
+            success: function( data ) {
+                $('#first-guided-tour').removeClass('active');
+
+                console.log(data.steps);
+                ajax_is_running = false;
+            },
+            error: function(data) {
+                console.log(data);
+                ajax_is_running = false;
+            }
+        });
+
+    });
+
 });

@@ -413,6 +413,9 @@ $(document).ready(function(){
 		$(this).hide();
 	});
 
+	$('input[name="country_percentage"]').on('wheel.disableScroll', function (e) {
+		e.preventDefault()
+	});
 	
 
 	// $('#manually-calc-reward').change( function() {

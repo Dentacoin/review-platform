@@ -21,7 +21,7 @@ class CitiesController extends BaseController
 		$users = User::where('is_dentist', true)->where(function($query) use ($username) {
 			$query->where('name', 'LIKE', '%'.$username.'%')
 			->orWhere('name_alternative', 'LIKE', '%'.$username.'%');
-		})->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed', 'dentist_no_email'])
+		})->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed', 'dentist_no_email'])
 		->whereNull('self_deleted')->take(10)->get();
 		$user_list = [];
 		foreach ($users as $user) {
@@ -49,7 +49,7 @@ class CitiesController extends BaseController
 		$users = User::where('is_dentist', true)->where(function($query) use ($username) {
 			$query->where('name', 'LIKE', '%'.$username.'%')
 			->orWhere('name_alternative', 'LIKE', '%'.$username.'%');
-		})->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed', 'dentist_no_email'])
+		})->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed', 'dentist_no_email'])
 		->whereNull('self_deleted')->take(10)->get();
 		$user_list = [];
 		foreach ($users as $user) {
@@ -217,7 +217,7 @@ class CitiesController extends BaseController
 	        });
 		}
 
-        $dentists = $dentists->where('name', 'LIKE', $invitedentist.'%')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed'])
+        $dentists = $dentists->where('name', 'LIKE', $invitedentist.'%')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])
 		->whereNull('self_deleted')->take(10)->get();
 
 		$dentist_list = [];

@@ -202,8 +202,8 @@ class UsersController extends AdminController {
             'dentist.added_rejected' => 'Dentists (Added Rejected)',
             'dentist.admin_imported' => 'Dentists (Admin Imported)', 
             'dentist.added_by_clinic_new' => 'Dentists (Added by Clinic New)', 
-            'dentist.added_by_clinic_claimed' => 'Dentists (Added by Clinic Claimed)', 
             'dentist.added_by_clinic_unclaimed' => 'Dentists (Added by Clinic Unclaimed)', 
+            'dentist.added_by_clinic_claimed' => 'Dentists (Added by Clinic Claimed)', 
             'dentist.added_by_clinic_rejected' => 'Dentists (Added by Clinic Rejected)', 
             'dentist.dentist_no_email' => 'Dentists (No Email For Team)', 
             'clinic.all' => 'Clinics (All)',
@@ -216,6 +216,10 @@ class UsersController extends AdminController {
             'clinic.added_approved' => 'Clinics (Added Approved)',
             'clinic.added_rejected' => 'Clinics (Added Rejected)',
             'clinic.admin_imported' => 'Clinics (Admin Imported)',
+            'clinic.added_by_dentist_new' => 'Clinics (Added by Dentist New)', 
+            'clinic.added_by_dentist_unclaimed' => 'Clinics (Added by Dentist Unclaimed)', 
+            'clinic.added_by_dentist_claimed' => 'Clinics (Added by Dentist Claimed)', 
+            'clinic.added_by_dentist_rejected' => 'Clinics (Added by Dentist Rejected)',
             'dentist_clinic.all' => 'Dentists & Clinics (All)',
             'dentist_clinic.new' => 'Dentists & Clinics (New)',
             'dentist_clinic.pending' => 'Dentists & Clinics (Suspicious)',
@@ -1265,6 +1269,25 @@ class UsersController extends AdminController {
                                             }
                                         }
                                     }
+
+                                } else if( $this->request->input($key)=='added_by_dentist_unclaimed' ) {
+                                    $item->status = 'added_by_dentist_unclaimed';
+                                    $item->slug = $dent->makeSlug();
+                                    $item->save();
+
+                                    $dent_name = null;
+                                    if(!empty($item->invited_by)) {
+                                        $dent = User::find($item->invited_by);
+
+                                        if(!empty($dent)) {
+                                            $dent_name = $dent->getName();
+                                        }
+                                    }
+
+                                    $item->sendGridTemplate( 93 , [
+                                        'dentist_name' => !empty($dent_name) ? $dent_name : 'Name',
+                                        "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
+                                    ], 'trp');
 
                                 } else if( $this->request->input($key)=='pending' ) {
                                     $olde = $item->email;

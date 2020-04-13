@@ -204,6 +204,16 @@ $main-color: #38ace5;
 				padding: 10px;
 				padding-left: 0px;
 			}
+
+			span {
+				color: #126585;
+				text-decoration: underline;
+				font-size: inherit;
+
+				&:hover {
+					color: #268db5;
+				}
+			}
 		}
 	}
 

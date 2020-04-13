@@ -27,12 +27,12 @@
 
 			<h2>{!! nl2br(trans('trp.popup.verification-popup.subtitle')) !!}</h2>
 
-			<a href="javascript:;" class="button wh-btn" style="margin-bottom: 20px;">Add opening hours</a>
+			<a href="javascript:;" class="button wh-btn" style="margin-bottom: 20px;">{{ trans('trp.popup.verification-popup.open-hours') }}</a>
 
 			<div id="clinic-add-team">
 
 				<h4 class="popup-title">
-					Show the world your dream team!
+					{{ trans('trp.popup.verification-popup.show-team') }}
 				</h4>
 				{!! Form::open(array('method' => 'post', 'class' => 'invite-dentist-form', 'url' => getLangUrl('invite-dentist') )) !!}
 					{!! csrf_field() !!}
@@ -70,7 +70,7 @@
 
 					<p class="info">
 						<img src="img/info.png">
-						You couldn't find anything? Invite your team members to register via email.
+						{{ trans('trp.popup.verification-popup.info-add-team') }}
 					</p>
 
 					<div class="flex">
@@ -80,7 +80,7 @@
 								<div class="centered-hack">
 									<i class="fas fa-plus"></i>
 									<p>
-										{!! nl2br(trans('trp.popup.popup-register.add-photo')) !!}													
+										{{ trans('trp.popup.verification-popup.add-photo') }}
 									</p>
 								</div>
 					    		<div class="loader">
@@ -95,7 +95,7 @@
 							<div class="modern-field">
 								<input type="text" class="modern-input team-member-name" id="team-member-name" name="name"></textarea>
 								<label for="team-member-name">
-									<span>{!! nl2br(trans('trp.popup.add-team-popup.name')) !!}</span>
+									<span>{{ trans('trp.popup.verification-popup.add-team-name') }}</span>
 								</label>
 							</div>
 						</div>
@@ -107,7 +107,7 @@
 					  				@endforeach
 					  			</select>
 								<label for="team-member-job">
-									<span>Position:</span>
+									<span>{{ trans('trp.popup.verification-popup.add-team-position') }}:</span>
 								</label>
 							</div>
 						</div>
@@ -115,7 +115,7 @@
 							<div class="modern-field">
 								<input type="email" class="modern-input team-member-email" id="team-member-email" name="email" placeholder="(optional)"></textarea>
 								<label for="team-member-email">
-									<span>{!! nl2br(trans('trp.popup.add-team-popup.email')) !!}</span>
+									<span>{{ trans('trp.popup.verification-popup.add-team-email') }}</span>
 								</label>
 							</div>
 						</div>
@@ -124,7 +124,7 @@
 					<div class="alert member-alert" style="display: none; margin-top: 20px;">
 					</div>
 					<div class="tac">
-						<input type="submit" class="button" value="Add team">
+						<input type="submit" class="button" value="{{ trans('trp.popup.verification-popup.add-team-button') }}">
 					</div>
 				{!! Form::close() !!}
 			</div>
@@ -144,7 +144,7 @@
 				</div>
 
 				<div class="alert alert-warning descr-error" style="display: none; margin-top: 20px;">
-					The description should be limited to 512 characters.
+					{{ trans('trp.popup.verification-popup.description-error') }}
 				</div>
 
 				<div class="tac">
@@ -257,7 +257,7 @@
 			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
 		<h2>
-            Is this your team member?
+            {{ trans('trp.popup.verification-popup.existing-team-title') }}
         </h2>
 
         <div class="existing-dentists">

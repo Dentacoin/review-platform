@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <div class="black-overflow" style="display: none;">
 </div>
 <div class="home-search-form">
@@ -177,7 +176,7 @@
 					Recommend
 				</a>
 			@endif
-			@if($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed')
+			@if($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed')
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
 			<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');">
@@ -204,7 +203,7 @@
 						{!! nl2br(trans('trp.page.user.edit-profile')) !!}
 					</a>
 				@endif
-				@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed'))
+				@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed'))
 					<a class="claim-button" href="javascript:;"  data-popup="claim-popup">
 						Is this your practice?
 					</a>
@@ -478,7 +477,7 @@
 			@endif
 
 
-			@if($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed')
+			@if($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed')
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
 
@@ -565,7 +564,7 @@
 					{!! nl2br(trans('trp.page.user.edit-profile')) !!}
 				</a>
 			@endif
-			@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed'))
+			@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed'))
 				<a class="claim-button" href="javascript:;" data-popup="claim-popup">
 					Is this your practice?
 				</a>
@@ -1096,7 +1095,7 @@
 									</div>
 								    <div class="slider-container">
 								    	@if(empty($invite->job))
-								    		<div class="not-verified">Not verified</div>
+								    		<div class="not-verified">{!! nl2br(trans('trp.page.user.team-not-verified')) !!}</div>
 								    	@endif
 								    	<h4>{{ $invite->invited_name }}</h4>
 								    	@if(empty($invite->job))

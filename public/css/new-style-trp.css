@@ -5125,11 +5125,11 @@ textarea[name="short_description"] {
           padding: 10px;
           padding-left: 0px;
           font-size: 14px; } }
-      .strength-wrapper .strength-box .strength-desc a {
+      .strength-wrapper .strength-box .strength-desc span {
         color: #126585;
         text-decoration: underline;
         font-size: inherit; }
-        .strength-wrapper .strength-box .strength-desc a:hover {
+        .strength-wrapper .strength-box .strength-desc span:hover {
           color: #268db5; }
   .strength-wrapper .strength-urls {
     text-align: right;

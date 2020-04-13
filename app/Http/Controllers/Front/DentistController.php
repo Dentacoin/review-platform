@@ -869,7 +869,7 @@ class DentistController extends FrontController
     public function claim_dentist ($locale=null, $slug, $id) {
         $user = User::find($id);
 
-        if ($user->status != 'added_approved' && $user->status != 'admin_imported' && $user->status != 'added_by_clinic_unclaimed') {
+        if ($user->status != 'added_approved' && $user->status != 'admin_imported' && $user->status != 'added_by_clinic_unclaimed' && $user->status != 'added_by_dentist_unclaimed') {
             return redirect( getLangUrl('/') );
         }
 
@@ -952,11 +952,18 @@ class DentistController extends FrontController
                     ] );
                     
                 } else {
+
                     $user->name = Request::input('name');
                     $user->phone = Request::input('phone');
-                    $user->status = 'added_by_clinic_claimed';
                     $user->password = bcrypt(Request::input('password'));
+                    if($user->status == 'added_by_clinic_unclaimed') {
+                        $user->status = 'added_by_clinic_claimed';
+                    } else {
+                        $user->status = 'added_by_dentist_claimed';
+                    }
                     $user->save();
+
+                    $user->sendGridTemplate(26, [], 'trp');
 
                     Auth::login($user);
 

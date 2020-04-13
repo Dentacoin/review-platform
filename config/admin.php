@@ -53,6 +53,7 @@ return [
                 'dentacare' => 'dentacare',
                 'assurance' => 'assurance',
                 'dentacoin' => 'dentacoin',
+                'dentists' => 'dentists',
                 'common' => 'common',
             ),
         ),

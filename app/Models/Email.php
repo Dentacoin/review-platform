@@ -35,7 +35,7 @@ class Email extends Model
 
 
 	public static $template_types = [
-		'trp', 'vox', 'common', 'assurance', 'dentacare', 'dentacoin'
+		'trp', 'vox', 'common', 'assurance', 'dentacare', 'dentacoin', 'dentists',
 	];
 
 	public function template() {

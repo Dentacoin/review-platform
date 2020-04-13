@@ -1695,6 +1695,11 @@ $(document).ready(function(){
 		hoursCountdown();
 	}
 
+
+    $('.open-str-link').click( function() {
+    	window.open($(this).attr('href'), '_blank');
+    });
+
 });
 
 

@@ -56,6 +56,7 @@ class WidgetController extends BaseController
             if(!empty($_SERVER['HTTP_REFERER'])) {
                 $parts = parse_url($_SERVER['HTTP_REFERER']);
                 if(!empty($parts['host']) && mb_strpos( $parts['host'], 'dentacoin.com' )===false ) {
+                    $user->widget_site = $_SERVER['HTTP_REFERER'];
                     $user->widget_activated = true;
                     $user->save();
                 }

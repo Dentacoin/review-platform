@@ -165,12 +165,13 @@ $phone: "screen and (max-width: 768px)";
 	    .claim-button,
 	    .edit-button {
 	    	margin-top: 0px;
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			font-weight: bold;
+		    position: absolute;
+		    bottom: -10px;
+		    left: -10px;
+		    font-weight: bold;
 		    color: #46afda;
 		    font-size: 20px;
+		    padding: 10px 10px;
 
 		    @media #{$pc} {
 	    		font-size: 18px;
@@ -2163,5 +2164,129 @@ body.edit-user {
 		label[for="add-invite-image"] {
 			margin-bottom: 20px;
 		}
+	}
+}
+
+#first-guided-tour {
+	background-color: rgba(0, 0, 0, 0.6);
+
+	.popup-inner-tour {		
+		position: absolute;
+		left: 50%;
+		top: 50%;
+    	transform: translateX(-50%) translateY(-50%);
+		margin-bottom: 60px;
+		background: #24c7ca;
+	    background: -moz-linear-gradient(top, #24c7ca 0%, #1c88d6 100%);
+	    background: -webkit-linear-gradient(top, #24c7ca 0%, #1c88d6 100%);
+	    background: linear-gradient(to bottom, #24c7ca 0%, #1c88d6 100%);
+	    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24c7ca', endColorstr='#1c88d6',GradientType=0 );
+		width: 870px;
+		border-radius: 15px;
+		padding: 40px 100px;
+		box-shadow: 0 4px 14px 0px rgba(0, 0, 0, 0.7);
+
+		.avatar {
+	    	box-sizing: inherit;
+	    	position: relative;
+	    	width: 200px;
+	    	min-width: 200px;
+	    	height: 200px;
+	    	border-radius: 50%;
+			margin-right: auto;
+			background-size: cover;
+			margin-left: auto;
+
+	    	@media #{$pc} {
+	    		width: 120px;
+			    min-width: 120px;
+			    height: 120px;
+			    margin-right: 40px;
+			    margin-top: 30px;
+	    	}
+
+	    	@media #{$tablet} {
+	    		width: 100%;
+	    		height: 100%;
+	    		min-width: auto;
+	    		margin-right: 0px;
+	    		margin-top: 0px;
+	    	}
+
+	    	&:before {
+	    		content: '';
+	    		position: absolute;
+				left: -7px;
+			    right: 0;
+			    top: -7px;
+			    bottom: 0;
+			    width: 215px;
+			    height: 215px;
+	    		background: url('../img-trp/avatar-border.svg') no-repeat 50% 50%;
+
+	    		@media #{$pc} {
+					left: -4px;
+					top: -4px;
+					width: 128px;
+					height: 128px;
+	    		}
+
+	    		@media #{$tablet} {
+					left: 0px;
+					top: 0px;
+					width: 100%;
+					height: 100%;
+	    		}
+	    	}
+	    }
+
+	    h2 {
+	    	font-size: 42px;
+		    color: white;
+		    font-weight: 300;
+		    margin-top: 20px;
+	    }
+
+	    p {
+	    	font-size: 25px;
+		    font-weight: 300;
+		    color: white;
+	    }
+
+	    .tour-buttons {
+	    	margin-top: 60px; 
+	    }
+
+	    .tour-button {
+	    	padding: 13px;
+	    	display: inline-block;
+	    	font-size: 20px;
+	    	border: 1px solid white;
+	    	width: 217px;
+	    	border-radius: 5px;
+	    	margin: 0px 7px;
+	    	color: white;
+	    	transition: all 0.3s ease;
+
+	    	&.button-white {
+	    		background-color: white;
+	    		color: #46afda;
+	    		font-weight: bold;
+	    		text-transform: uppercase;
+	    	}
+
+	    	&:hover {
+	    		box-shadow: 0 0 9px 0px rgba(0, 0, 0, 0.4);
+	    		transition: all 0.3s ease;
+	    	}
+	    }
+	}
+}
+
+.guided-tour-wrapper {
+	.guided-tour-part {
+		position: fixed;
+		background-color: rgba(0, 0, 0, 0.6);
+    	z-index: 1000;
 	}
 }

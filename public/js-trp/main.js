@@ -483,8 +483,11 @@ jQuery(document).ready(function($){
 	})
 
 	$('.popup').click( function(e) {
-		if( !$(e.target).closest('.popup-inner').length ) {
-			closePopup();
+		if(!$(this).hasClass('first-guided-tour-popup')) {
+			
+			if( !$(e.target).closest('.popup-inner').length ) {
+				closePopup();
+			}
 		}
 	} );
 
@@ -893,6 +896,25 @@ jQuery(document).ready(function($){
 		$('body, html').animate({
             scrollTop: $('.review-wrapper').first().offset().top - 200
         }, 500);
+
+  //       if(ajax_is_running) {
+		// 	return;
+		// }
+		// ajax_is_running = true;
+
+  //   	$.ajax( {
+		// 	url: window.location.origin+'/en/profile/check-reviews/',
+		// 	type: 'GET',
+		// 	dataType: 'json',
+		// 	success: function( data ) {
+		// 		console.log('success-reviews');
+		// 	    ajax_is_running = false;
+		// 	},
+		// 	error: function(data) {
+		// 		console.log(data);
+		// 	    ajax_is_running = false;
+		// 	}
+		// });
 	});
 
 	$('#popup-wokring-time-waiting form').off('submit').submit( function(e) {
@@ -1510,6 +1532,54 @@ jQuery(document).ready(function($){
     	inputJob();
     	id_counter++;
     });
+
+    $('.str-check-assurance').click( function() {
+    	if(ajax_is_running) {
+			return;
+		}
+		ajax_is_running = true;
+
+    	$.ajax( {
+			url: window.location.origin+'/en/profile/check-assurance/',
+			type: 'GET',
+			dataType: 'json',
+			success: function( data ) {
+				console.log('success-assurance');
+			    ajax_is_running = false;
+			},
+			error: function(data) {
+				console.log(data);
+			    ajax_is_running = false;
+			}
+		});
+    });
+
+    $('.str-check-dentacare').click( function() {
+    	if(ajax_is_running) {
+			return;
+		}
+		ajax_is_running = true;
+
+    	$.ajax( {
+			url: window.location.origin+'/en/profile/check-dentacare/',
+			type: 'GET',
+			dataType: 'json',
+			success: function( data ) {
+				console.log('success-dentacare');
+			    ajax_is_running = false;
+			},
+			error: function(data) {
+				console.log(data);
+			    ajax_is_running = false;
+			}
+		});
+    });
+
+
+    $('.open-str-link').click( function() {
+    	window.open($(this).attr('href'), '_blank');
+    });
+
 
 });
 

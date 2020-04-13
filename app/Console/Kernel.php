@@ -22,6 +22,7 @@ use App\Models\Email;
 use App\Models\User;
 use App\Models\Poll;
 use App\Models\Dcn;
+use App\Models\Vox;
 
 use WebPConvert\WebPConvert;
 use Carbon\Carbon;
@@ -507,7 +508,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 44
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00' 
                     AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
@@ -543,7 +544,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 45
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*3)." 00:00:00' 
             ";
@@ -607,7 +608,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id IN ( 46, 47)
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
             ";
@@ -641,7 +642,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 48
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*10)." 00:00:00'
             ";
@@ -701,7 +702,7 @@ NEW & FAILED TRANSACTIONS
                     WHERE
                         `is_dentist` = 1
                         AND `unsubscribe` is null
-                        AND `status` IN ('approved','added_by_clinic_claimed')
+                        AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed')
                         AND `self_deleted` is null
                         AND `id` NOT IN ( 
                             SELECT `user_id` FROM wallet_addresses
@@ -751,7 +752,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 50 AND `created_at` > '".date('Y-m-d', time() - 86400*93)." 00:00:00'
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
             ";
@@ -788,7 +789,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*7)." 00:00:00'
             ";
@@ -866,7 +867,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 49 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*14)." 00:00:00'
             ";
@@ -1037,7 +1038,7 @@ NEW & FAILED TRANSACTIONS
                     AND `deleted_at` is null
                     AND `unsubscribe` is null
                     AND `self_deleted` is null
-                    AND `status` IN ('approved', 'test', 'added_by_clinic_claimed')
+                    AND `status` IN ('approved', 'test', 'added_by_clinic_claimed','added_by_dentist_claimed')
             ";
 
             // Cron runs 1x per month
@@ -1592,7 +1593,7 @@ NEW & FAILED TRANSACTIONS
             $users = User::where('is_dentist', 1)->where(function ($query) {
                 $query->where('city_name', 'LIKE', '%??%')
                 ->orWhere('state_name', 'LIKE', '%??%');
-            })->whereNotIn('status', ['rejected', 'test', 'added_by_clinic_rejected'])
+            })->whereNotIn('status', ['rejected', 'test', 'added_by_clinic_rejected', 'added_by_dentist_rejected'])
             ->get();
 
             $user_links = [];

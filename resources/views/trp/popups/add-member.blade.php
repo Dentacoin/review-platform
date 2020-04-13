@@ -143,7 +143,7 @@
 					  				@endforeach
 					  			</select>
 								<label for="team-member-job-logged-">
-									<span>Position:</span>
+									<span>{!! nl2br(trans('trp.popup.add-team-popup.position')) !!}:</span>
 								</label>
 							</div>
 						</div>
@@ -171,7 +171,7 @@
 			<a href="javascript:;" class="close-popup">< {!! nl2br(trans('trp.common.back')) !!}</a>
 		</div>
 		<h2>
-            Is this your team member?
+            {!! nl2br(trans('trp.popup.add-team-popup.existing-team-title')) !!}
         </h2>
 
         <div class="existing-dentists">

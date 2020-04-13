@@ -14,4 +14,8 @@ return [
     'added_by_clinic_new' => 'info',
     'added_by_clinic_rejected' => 'danger',
     'dentist_no_email' => 'success',
+    'added_by_dentist_claimed' => 'success',
+    'added_by_dentist_unclaimed' => 'success',
+    'added_by_dentist_new' => 'info',
+    'added_by_dentist_rejected' => 'danger',
 ];

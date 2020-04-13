@@ -103,6 +103,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'ratings',
         'strength',
         'widget_activated',
+        'widget_site',
         'invited_by',
         'invited_from_form',
         'hasimage',
@@ -359,6 +360,24 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return false;
     }
 
+    // public function getStrengthCompletedd($platform) {
+            
+    //     $num = 0;
+    //     $s = UserStrength::getStrengthPlatform($platform, $this);
+
+    //     if($platform == 'trp' && $this->is_dentist) {
+    //         $num = intval($s['completed_steps']);
+    //     } else {
+
+    //         foreach ($s as $val) {
+    //             if ($val['completed'] == true) {
+    //                 $num++;
+    //             }
+    //         }
+    //     }
+    //     return $num;
+    // }
+
     public function getStrengthCompleted($platform) {
             
         $num = 0;
@@ -371,6 +390,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         return $num;
     }
+
+
 
     public function getPrevBansCount($domain='vox', $type=null) {
         $times = 0;
@@ -1262,11 +1283,11 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     }
 
     public function canInvite($platform) {
-        return ($this->status=='approved' || $this->status=='test' || $this->status=='added_by_clinic_claimed') && !$this->loggedFromBadIp();
+        return ($this->status=='approved' || $this->status=='test' || $this->status=='added_by_clinic_claimed' || $this->status=='added_by_dentist_claimed') && !$this->loggedFromBadIp();
     }
 
     public function canWithdraw($platform) {
-        return ($this->status=='approved' || $this->status=='test' || $this->status=='added_by_clinic_claimed') && $this->civic_kyc && !$this->loggedFromBadIp() && ($this->created_at->timestamp <= (time() - 259200)) ;
+        return ($this->status=='approved' || $this->status=='test' || $this->status=='added_by_clinic_claimed' || $this->status=='added_by_dentist_claimed') && $this->civic_kyc && !$this->loggedFromBadIp() && ($this->created_at->timestamp <= (time() - 259200)) ;
     }
 
     public function getSameIPUsers() {
@@ -1831,7 +1852,7 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
         $arr = $this->toArray();
         $arr['avatar_url'] = $this->getImageUrl();
         $arr['thumbnail_url'] = $this->getImageUrl(true);
-        $arr['trp_public_profile_link'] = $this->is_dentist && ($this->status=='approved' || $this->status=='test' || $this->status=='added_approved' || $this->status=='admin_imported' || $this->status=='added_by_clinic_claimed' || $this->status=='added_by_clinic_unclaimed') ? $this->getLink() : null;
+        $arr['trp_public_profile_link'] = $this->is_dentist && ($this->status=='approved' || $this->status=='test' || $this->status=='added_approved' || $this->status=='admin_imported' || $this->status=='added_by_clinic_claimed' || $this->status=='added_by_clinic_unclaimed' || $this->status=='added_by_dentist_unclaimed' || $this->status=='added_by_dentist_claimed') ? $this->getLink() : null;
 
         return $arr;
     }

@@ -7,6 +7,7 @@ use App\Http\Controllers\FrontController;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
+use App\Models\UserGuidedTour;
 use App\Models\VoxQuestion;
 use App\Models\VoxCategory;
 use App\Models\VoxAnswer;
@@ -136,6 +137,15 @@ class StatsController extends FrontController
         if(!empty($this->user) && $this->user->isBanned('vox')) {
             return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
         }
+
+        // if(!empty($this->user) && $this->user->is_dentist) {
+        //     $gt = UserGuidedTour::where('user_id', $this->user->id)->first();
+
+        //     if(!empty($gt) && (empty($gt->check_stats_on) || (!empty($gt->check_stats_on) && $gt->check_stats_on < Carbon::now()->subDays(1)))) {
+        //         $gt->check_stats_on = Carbon::now();
+        //         $gt->save();
+        //     }
+        // }
 
         if(Request::isMethod('post')) {
         	$dates = !empty(Request::input('download-date')) && Request::input('download-date') != 'all' ? explode('-', Request::input('download-date')) : Request::input('timeframe');

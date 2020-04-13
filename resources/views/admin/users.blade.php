@@ -53,6 +53,7 @@
                                 <option value="vox" {!! 'vox'==$registered_platform ? 'selected="selected"' : '' !!}>DentaVox</option>
                                 <option value="dentists" {!! 'dentists'==$registered_platform ? 'selected="selected"' : '' !!}>Dentists</option>
                                 <option value="dentacoin" {!! 'dentacoin'==$registered_platform ? 'selected="selected"' : '' !!}>Dentacoin</option>
+                                <option value="assurance" {!! 'assurance'==$registered_platform ? 'selected="selected"' : '' !!}>Assurance</option>
                             </select>
                         </div>
                     </div>

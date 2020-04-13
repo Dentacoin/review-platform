@@ -107,7 +107,7 @@ class AuthenticateUser extends FrontController
                 ] );
             }
 
-            if( Auth::guard('web')->user()->is_dentist && Auth::guard('web')->user()->status!='approved' && Auth::guard('web')->user()->status!='added_by_clinic_claimed' && Auth::guard('web')->user()->status!='test') {
+            if( Auth::guard('web')->user()->is_dentist && Auth::guard('web')->user()->status!='approved' && Auth::guard('web')->user()->status!='added_by_clinic_claimed' && Auth::guard('web')->user()->status!='added_by_dentist_claimed' && Auth::guard('web')->user()->status!='test') {
                 $array = [
                     'success' => false, 
                     'popup' => 'verification-popup',

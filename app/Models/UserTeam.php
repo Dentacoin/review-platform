@@ -31,9 +31,12 @@ class UserTeam extends Model {
     public function clinicTeamWithTrashed() {
         return $this->hasOne('App\Models\User', 'id', 'dentist_id')->withTrashed();
     }
-	public function clinic() {
-	    return $this->hasOne('App\Models\User', 'id', 'user_id');
-	}
+    public function clinic() {
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
+    public function clinicWithTrashed() {
+        return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();
+    }
 }
 
 ?>

@@ -489,6 +489,8 @@ class RegisterController extends FrontController
 
             $join_clinic_team = false;
 
+
+            //depricated
             if(session('join_clinic') && session('invitation_id')) {
                 $approve_join = 0;
                 $inv_id = session('invitation_id');

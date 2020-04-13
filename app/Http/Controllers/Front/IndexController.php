@@ -130,7 +130,7 @@ class IndexController extends FrontController
 		$city_cookie = json_decode(Cookie::get('dentists_city'), true);
 		//dd($city_cookie);
 
-		$featured = User::where('is_dentist', 1)->with('country.translations')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed'])->whereNull('self_deleted')->orderBy('avg_rating', 'DESC');
+		$featured = User::where('is_dentist', 1)->with('country.translations')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->whereNull('self_deleted')->orderBy('avg_rating', 'DESC');
 		$homeDentists = collect();
 
 		if (!empty($city_cookie)) {
@@ -340,7 +340,7 @@ class IndexController extends FrontController
 	public function claim ($locale=null, $id) {
 		$user = User::find($id);
 
-        if (!$user || ($user->status != 'added_approved' && $user->status != 'admin_imported' && $user->status != 'added_by_clinic_unclaimed')) {
+        if (!$user || ($user->status != 'added_approved' && $user->status != 'admin_imported' && $user->status != 'added_by_clinic_unclaimed' && $user->status != 'added_by_dentist_unclaimed')) {
             return redirect( getLangUrl('/') );
         }
 
@@ -423,11 +423,19 @@ class IndexController extends FrontController
                     ] );
                     
                 } else {
+
+                	//tuk
                     $user->name = Request::input('name');
-                    $user->phone = Request::input('phone');
-                    $user->status = 'added_by_clinic_claimed';
+                    $user->phone = Request::input('phone');                    
+                    if($user->status == 'added_by_clinic_unclaimed') {
+                        $user->status = 'added_by_clinic_claimed';
+                    } else {
+                        $user->status = 'added_by_dentist_claimed';
+                    }
                     $user->password = bcrypt(Request::input('password'));
                     $user->save();
+
+                    $user->sendGridTemplate(26, [], 'trp');
 
                     Auth::login($user);
 
