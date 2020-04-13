@@ -169,7 +169,7 @@ class LoginController extends FrontController
                 //     'link' => '<a href="'.getVoxUrl('/').'">',
                 //     'endlink' => '</a>',
                 // ]));
-                return redirect( getLangUrl('login', null, 'https://vox.dentacoin.com/').'?error-message='.urlencode(trans('vox.page.login.error-fb', [
+                return redirect( getLangUrl('login', null, 'https://dentavox.dentacoin.com/').'?error-message='.urlencode(trans('vox.page.login.error-fb', [
                     'link' => '[startlink]',
                     'endlink' => '[/endlink]',
                 ])));
@@ -221,7 +221,7 @@ class LoginController extends FrontController
         // }
 
         if ($s_user->getEmail() && !empty(User::where( 'email','LIKE', $s_user->getEmail() )->withTrashed()->first())) {
-            return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('User with this email already exists. <a href="https://vox.dentacoin.com/en/login/">Log in here</a>'));
+            return redirect(getLangUrl('registration', null, 'https://dentavox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('User with this email already exists. <a href="https://dentavox.dentacoin.com/en/login/">Log in here</a>'));
         }
 
         $stat_redirect = null;
@@ -235,7 +235,7 @@ class LoginController extends FrontController
         if ($user) {
             if($user->deleted_at) {
                 //Request::session()->flash('error-message', 'You have been permanently banned and cannot return to DentaVox anymore.');
-                return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('You have been permanently banned and cannot return to DentaVox anymore.'));
+                return redirect(getLangUrl('registration', null, 'https://dentavox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('You have been permanently banned and cannot return to DentaVox anymore.'));
             } else if($user->loggedFromBadIp()) {
 
                 $ul = new UserLogin;
@@ -272,7 +272,7 @@ class LoginController extends FrontController
 
                 return redirect( getVoxUrl('/').'?suspended-popup' );
             } else if($user->self_deleted) {
-                return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Unable to sign you up for security reasons.'));
+                return redirect(getLangUrl('registration', null, 'https://dentavox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Unable to sign you up for security reasons.'));
             } else {
 
                 Auth::login($user, true);
@@ -293,12 +293,12 @@ class LoginController extends FrontController
                 $is_blocked = User::checkBlocks($name, $s_user->getEmail());
                 if( $is_blocked ) {
                     //Request::session()->flash('error-message', $is_blocked );
-                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode($is_blocked));                
+                    return redirect(getLangUrl('registration', null, 'https://dentavox.dentacoin.com/').'?noredirect=1&error-message='.urlencode($is_blocked));                
                 }            
 
                 if($s_user->getEmail() && (User::validateEmail($s_user->getEmail()) == true)) {
                     //Request::session()->flash('error-message', nl2br(trans('front.page.login.existing_email')) );
-                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('vox.page.login.existing_email')));
+                    return redirect(getLangUrl('registration', null, 'https://dentavox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('vox.page.login.existing_email')));
                 }
 
                 $gender = !empty($s_user->user['gender']) ? ($s_user->user['gender']=='male' ? 'm' : 'f') : null;
@@ -306,7 +306,7 @@ class LoginController extends FrontController
 
                 if($birthyear && (intval(date('Y')) - $birthyear) < 18 ) {
                     //Request::session()->flash('error-message', nl2br(trans('front.page.login.over18')) );
-                    return redirect(getLangUrl('registration', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.page.login.over18')));
+                    return redirect(getLangUrl('registration', null, 'https://dentavox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.page.login.over18')));
                 }
                 
                 $has_test = !empty($_COOKIE['first_test']) ? json_decode($_COOKIE['first_test'], true) : null;
@@ -518,9 +518,9 @@ class LoginController extends FrontController
                 }
 
                 if(empty($email)) {
-                    return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Please add an email address to your Civic account and try again.'));
+                    return redirect(getLangUrl('login', null, 'https://dentavox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Please add an email address to your Civic account and try again.'));
                 } else if(empty($phone)) {
-                    return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Please add a phone number to your Civic account and try again.'));
+                    return redirect(getLangUrl('login', null, 'https://dentavox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Please add a phone number to your Civic account and try again.'));
                 } else {
 
                     if( session('new_auth') ) {
@@ -529,7 +529,7 @@ class LoginController extends FrontController
                         $duplicate = User::where('civic_id', $data['userId'] )->first();
 
                         if( $duplicate ) {
-                            return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('There\'s another profile registered with this Civic Account'));
+                            return redirect(getLangUrl('login', null, 'https://dentavox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('There\'s another profile registered with this Civic Account'));
                         } else {
                             $user->civic_id = $data['userId'];
                             $user->save();
@@ -589,7 +589,7 @@ class LoginController extends FrontController
                                 $existing_phone = User::where('id', '!=', $user->id)->where('phone', 'LIKE', $phone)->first();
 
                                 if ($existing_phone) {
-                                    return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('User with this phone number already exists'));
+                                    return redirect(getLangUrl('login', null, 'https://dentavox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('User with this phone number already exists'));
                                 }
 
                                 Auth::login($user, true);
@@ -610,13 +610,13 @@ class LoginController extends FrontController
 
                         } else {
 
-                            return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.common.civic.not-found')));
+                            return redirect(getLangUrl('login', null, 'https://dentavox.dentacoin.com/').'?noredirect=1&error-message='.urlencode(trans('front.common.civic.not-found')));
                         }
                     }
                 }
 
             } else {
-                return redirect(getLangUrl('login', null, 'https://vox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Please add an email address and phone number to your Civic account and try again.'));
+                return redirect(getLangUrl('login', null, 'https://dentavox.dentacoin.com/').'?noredirect=1&error-message='.urlencode('Please add an email address and phone number to your Civic account and try again.'));
             }
         }
     }
