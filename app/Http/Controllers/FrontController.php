@@ -80,9 +80,9 @@ class FrontController extends BaseController {
             Redirect::to(getLangUrl('page-not-found'))->send();
         }
         // Fck FB
-        if( Request::getHost() == 'vox.dentacoin.com' && Request::server('HTTP_REFERER') && Request::isMethod('get') && request()->url() != 'https://vox.dentacoin.com/en/registration' && request()->url() != 'https://vox.dentacoin.com/en/login') {
-            Redirect::to( str_replace('vox.', 'dentavox.', Request::url() ) )->send();
-        }
+        // if( Request::getHost() == 'vox.dentacoin.com' && Request::server('HTTP_REFERER') && Request::isMethod('get') && request()->url() != 'https://vox.dentacoin.com/en/registration' && request()->url() != 'https://vox.dentacoin.com/en/login') {
+        //     Redirect::to( str_replace('vox.', 'dentavox.', Request::url() ) )->send();
+        // }
         
         //VPNs
         // $myips = session('my-ips');
