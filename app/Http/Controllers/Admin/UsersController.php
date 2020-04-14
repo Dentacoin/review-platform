@@ -1229,11 +1229,7 @@ class UsersController extends AdminController {
                                     $item->email = 'ali.hashem@dentacoin.com';
                                     $item->save();
 
-                                    if ($item->platform == 'trp') {
-                                        $to_ali = $item->sendGridTemplate(26);
-                                    } else {
-                                        $to_ali = $item->sendGridTemplate(26);
-                                    }
+                                    $to_ali = $item->sendGridTemplate($platformMails[$item->platform]);
 
                                     $item->email = $olde;
                                     $item->ownership = 'approved';
