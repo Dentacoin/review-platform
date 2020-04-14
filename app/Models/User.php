@@ -569,10 +569,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $email->addBcc("4097841@bcc.hubspot.com");
             }
 
-            if ($item->template->category) {
-                $email->addCategory($item->template->category);
+            if($this->id == 3 && ($item->template->id == 84 || $item->template->id == 26 || $item->template->id == 83 || $item->template->id == 85 ) ) {
+
             } else {
-                $email->addCategory(strtoupper($item->platform).' Service '.($this->is_dentist ? 'Dentist' : 'Patient'));
+                if ($item->template->category) {
+                    $email->addCategory($item->template->category);
+                } else {
+                    $email->addCategory(strtoupper($item->platform).' Service '.($this->is_dentist ? 'Dentist' : 'Patient'));
+                }
             }
 
             $domain = 'https://'.config('platforms.'.$this->platform.'.url').'/';
