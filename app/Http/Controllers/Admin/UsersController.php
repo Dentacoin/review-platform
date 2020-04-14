@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\IncompleteRegistration;
+use App\Models\UnclaimedDentist;
 use App\Models\ReviewAnswer;
 use App\Models\UserCategory;
 use App\Models\VoxCrossCheck;
@@ -1321,7 +1322,7 @@ class UsersController extends AdminController {
                            $item->$key = $this->request->input($key) ? new Carbon( $this->request->input($key) ) : null;
                         } else if($key=='unsubscribe') {
 
-                            $on_invites = UserInvite::where('invited_id', $item->id)->whereNull('unsubscribed')->get();
+                            $on_invites = UserInvite::where('invited_id', $item->id)->get();
 
                             if (!empty($on_invites)) {
                                 foreach ($on_invites as $inv) {
@@ -1332,6 +1333,17 @@ class UsersController extends AdminController {
                                     }
                                     $inv->save();
                                 }
+                            }
+
+                            $unclaimed_dentist = UnclaimedDentist::find($item->id);
+
+                            if(!empty($unclaimed_dentist)) {
+                                if (!empty($this->request->input($key))) {
+                                    $unclaimed_dentist->unsubscribed = true;
+                                } else {
+                                    $unclaimed_dentist->unsubscribed = false;
+                                }
+                                $unclaimed_dentist->save();
                             }
 
                             $item->$key = $this->request->input($key);

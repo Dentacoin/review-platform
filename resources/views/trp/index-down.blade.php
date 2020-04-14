@@ -76,11 +76,6 @@
 						<p>
 							{!! nl2br(trans('trp.page.index.usp-3-content')) !!}
 						</p>
-						<div class="tac">
-							<a href="javascript:;" class="button button-white button-sign-up-patient" data-popup="popup-register">
-								{!! nl2br(trans('trp.page.index.usp.join-now')) !!}
-							</a>
-						</div>
 					</div>
 				</div>
 			</div>

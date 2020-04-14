@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Front;
+namespace App\Http\Controllers\Vox;
 use App\Http\Controllers\FrontController;
 
 use App\Models\UnclaimedDentist;
@@ -28,7 +28,7 @@ class UnsubscribeController extends FrontController
 			if (!$user->unsubscribe) {
 
 				$mtext = 'User want\'s to be unsubscribed, but needs an approval
-Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+Link in CMS: https://dentavox.dentacoin.com/cms/users/edit/'.$user->id;
 
 	            Mail::raw($mtext, function ($message) use ($user) {
 
@@ -45,7 +45,7 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 
 			$seos = PageSeo::find(31);
 
-	        return $this->ShowView('unsubscribe-dentist', [
+	        return $this->ShowVoxView('unsubscribe-dentist', [
 	        	'noIndex' => true,
 				'social_image' => $seos->getImageUrl(),
 	            'seo_title' => $seos->seo_title,
@@ -68,7 +68,7 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 				$user->unsubscribe = true;
 				$user->save();
 
-				$mtext = 'This user was automatically unsubscribed - https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+				$mtext = 'This user was automatically unsubscribed - https://dentavox.dentacoin.com/cms/users/edit/'.$user->id;
 
 	            Mail::raw($mtext, function ($message) use ($user) {
 
@@ -101,7 +101,7 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 
 			$seos = PageSeo::find(31);
 
-	        return $this->ShowView('unsubscribe-dentist', [
+	        return $this->ShowVoxView('unsubscribe-dentist', [
 	        	'noIndex' => true,
 				'social_image' => $seos->getImageUrl(),
 	            'seo_title' => $seos->seo_title,

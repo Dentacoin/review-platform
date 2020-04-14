@@ -1665,7 +1665,18 @@ NEW & FAILED TRANSACTIONS
                 DB::raw($query2), []
             );
 
-            $mtext = 'There are '.count($uknown).' results from Unknown country by '.count($uknown_by_user).' users';
+            $mtext = 'There are '.count($uknown).' results from Unknown country by '.count($uknown_by_user).' users
+                
+            Link to profiles in CMS:  
+
+            ';
+
+            if (!empty($uknown_by_user)) {
+                foreach ($uknown_by_user as $u) {
+                    $user = User::where('id', $u->user_id)->withTrashed()->first();
+                    $mtext .= '<a href="https://reviews.dentacoin.com/cms/users/edit/'.$user->id.'">'.$user->name.'</a>';
+                }
+            }
 
             Mail::raw($mtext, function ($message) {
 

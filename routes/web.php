@@ -317,6 +317,11 @@ $reviewRoutes = function () {
 
 				Route::any('profile/invites/delete/{id}', 		'ProfileController@invites_delete');
 
+				Route::get('profile/check-assurance', 			'ProfileController@checkAssurance');
+				Route::get('profile/check-dentacare', 			'ProfileController@checkDentacare');
+				Route::get('profile/check-reviews', 			'ProfileController@checkReviews');
+				Route::get('profile/first-guided-tour', 		'ProfileController@firstGuidedTour');
+
 				Route::post('share', 							'MiscController@share');
 				
 			});
@@ -349,6 +354,9 @@ $voxRoutes = function () {
 		Route::get('logout',									'Auth\AuthenticateUser@getLogout');
 
 		Route::group(['namespace' => 'Vox'], function () {
+
+			Route::get('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
+			Route::get('unsubscription/{user_id}/{hash}', 		'UnsubscribeController@new_unsubscribe');
 
 			Route::get('faq', 									'FaqController@home');
 

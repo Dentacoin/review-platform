@@ -2,6 +2,7 @@ var slider = null;
 var sliderTO = null;
 var displaySuggestions;
 var sendSuggestions;
+var handlePopups;
 
 jQuery(document).ready(function($){
 
@@ -94,6 +95,8 @@ jQuery(document).ready(function($){
 	            	if (!$('#to-append').hasClass('appended')) {
 	            		$('#to-append').append(ret);
 	            		$('#to-append').addClass('appended');
+
+	            		handlePopups();
 	            	}
 	                
 	            },
