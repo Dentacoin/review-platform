@@ -796,7 +796,7 @@ class ProfileController extends FrontController
                         $dentists_with_same_name = User::where('is_dentist', true)->where('is_clinic', '!=', 1)->where(function($query) use ($username) {
                             $query->where('name', 'LIKE', $username)
                             ->orWhere('name_alternative', 'LIKE', $username);
-                        })->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])
+                        })->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed'])
                         ->whereNull('self_deleted');
 
                         if (!empty($team_ids)) {
@@ -847,7 +847,7 @@ class ProfileController extends FrontController
                             if(!empty($existing_team)) {
                                 return Response::json(['success' => false, 'message' => trans('trp.popup.verification-popup.clinic.existing-team-error') ] );
 
-                            } else if(empty($existing_dentist->deleted_at) && ($existing_dentist->status == 'approved' || $existing_dentist->status == 'added_by_clinic_claimed' || $existing_dentist->status == 'added_by_clinic_unclaimed' || $existing_dentist->status == 'test' || $existing_dentist->status == 'added_approved' || $existing_dentist->status == 'added_new' || $existing_dentist->status == 'admin_imported' || $existing_dentist->status == 'added_by_clinic_new') ) {
+                            } else if(empty($existing_dentist->self_deleted) && empty($existing_dentist->deleted_at) && ($existing_dentist->status == 'approved' || $existing_dentist->status == 'added_by_clinic_claimed' || $existing_dentist->status == 'added_by_clinic_unclaimed' || $existing_dentist->status == 'test' || $existing_dentist->status == 'added_approved' || $existing_dentist->status == 'added_new' || $existing_dentist->status == 'admin_imported' || $existing_dentist->status == 'added_by_clinic_new') ) {
 
 
                                 $newteam = new UserTeam;
@@ -865,7 +865,7 @@ class ProfileController extends FrontController
                                 }
 
                                 return Response::json(['success' => true, 'message' => trans('trp.popup.verification-popup.clinic.success') ] );
-                            } else if(empty($existing_dentist->deleted_at) && ($existing_dentist->status == 'new') ) {
+                            } else if(empty($existing_dentist->self_deleted) && empty($existing_dentist->deleted_at) && ($existing_dentist->status == 'new') ) {
 
                                 if (!empty($this->user)) {
                                     $existing_dentist->status = 'added_by_clinic_claimed';
@@ -896,7 +896,9 @@ class ProfileController extends FrontController
                                 }
 
                                 return Response::json(['success' => true, 'message' => trans('trp.popup.verification-popup.clinic.success') ] );
-                            } else {
+
+                            } else if(!empty($existing_dentist->self_deleted) || !empty($existing_dentist->deleted_at) || $existing_dentist->status == 'rejected' || $existing_dentist->status == 'added_by_clinic_rejected' || $existing_dentist->status == 'added_rejected' || $existing_dentist->status == 'pending') {
+
                                 $mtext = 'Clinic '.$current_user->getName().' added a new team member that is deleted OR with status rejected/suspicious. Link to dentist\'s profile:
                                 '.url('https://reviews.dentacoin.com/cms/users/edit/'.$existing_dentist->id).'
                                 Link to clinic\'s profile: 
