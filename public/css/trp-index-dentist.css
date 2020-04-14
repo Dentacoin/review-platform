@@ -380,11 +380,13 @@
       .section-learn img {
         top: 120px; } }
 
-.section-dentist-info {
-  max-width: 840px;
-  padding-top: 30px;
+.section-dentist-info-wrap {
   margin-top: -1px;
   background: white; }
+
+.section-dentist-info {
+  max-width: 840px;
+  padding-top: 30px; }
   @media screen and (max-width: 1450px) {
     .section-dentist-info {
       padding-top: 0px; } }
