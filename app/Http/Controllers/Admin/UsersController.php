@@ -1232,7 +1232,7 @@ class UsersController extends AdminController {
                                     if ($item->platform == 'trp') {
                                         $to_ali = $item->sendGridTemplate(26);
                                     } else {
-                                        $to_ali = $item->sendTemplate(26);
+                                        $to_ali = $item->sendGridTemplate(26);
                                     }
 
                                     $item->email = $olde;
