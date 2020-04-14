@@ -510,8 +510,11 @@ $phone: "screen and (max-width: 768px)";
 }
 
 .section-dentist-info-wrap {
+	//na po-malko ekrani ima sinq cherta
     margin-top: -1px;
     background: white;
+    position: relative;
+    z-index: 1;
 }
 
 .section-dentist-info {

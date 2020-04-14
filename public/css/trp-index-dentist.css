@@ -382,7 +382,9 @@
 
 .section-dentist-info-wrap {
   margin-top: -1px;
-  background: white; }
+  background: white;
+  position: relative;
+  z-index: 1; }
 
 .section-dentist-info {
   max-width: 840px;
