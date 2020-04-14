@@ -468,3 +468,8 @@ table .order.desc::after {
 .image-label.loading .centered-hack {
     display: none;
 }
+
+.slimScrollBar {
+    background: #00acac !important;
+    opacity: 1 !important;
+}
