@@ -220,6 +220,7 @@ $reviewRoutes = function () {
 
 			Route::get('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
 			Route::get('unsubscription/{user_id}/{hash}', 		'UnsubscribeController@new_unsubscribe');
+			Route::get('unsubscribe-incomplete/{id}/{hash}', 	'UnsubscribeController@unsubscribe_incomplete');
 
 			Route::any('invite/', 								'RegisterController@invite_accept');
 
@@ -357,6 +358,7 @@ $voxRoutes = function () {
 
 			Route::get('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
 			Route::get('unsubscription/{user_id}/{hash}', 		'UnsubscribeController@new_unsubscribe');
+			Route::get('unsubscribe-incomplete/{id}/{hash}', 	'UnsubscribeController@unsubscribe_incomplete');
 
 			Route::get('faq', 									'FaqController@home');
 

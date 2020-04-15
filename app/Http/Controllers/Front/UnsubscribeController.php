@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
+use App\Models\IncompleteRegistration;
 use App\Models\UnclaimedDentist;
 use App\Models\UserInvite;
 use App\Models\PageSeo;
@@ -52,6 +53,7 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 	            'seo_description' => $seos->seo_description,
 	            'social_title' => $seos->social_title,
 	            'social_description' => $seos->social_description,
+	            'incomplete_alert' => false,
 	        ]);
 		}
 
@@ -108,6 +110,34 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 	            'seo_description' => $seos->seo_description,
 	            'social_title' => $seos->social_title,
 	            'social_description' => $seos->social_description,
+	            'incomplete_alert' => false,
+	        ]);
+		}
+
+		return redirect( getLangUrl('/') );
+	}
+
+	public function unsubscribe_incomplete($locale=null, $id, $hash) {
+
+		$ir = IncompleteRegistration::find($id);
+
+		if (!empty($ir) && $hash == md5($id.env('SALT_INVITE')) ) {
+
+			if (!$ir->unsubscribed) {
+				$ir->unsubscribed = true;
+				$ir->save();
+			}
+
+			$seos = PageSeo::find(31);
+
+	        return $this->ShowView('unsubscribe-dentist', [
+	        	'noIndex' => true,
+				'social_image' => $seos->getImageUrl(),
+	            'seo_title' => $seos->seo_title,
+	            'seo_description' => $seos->seo_description,
+	            'social_title' => $seos->social_title,
+	            'social_description' => $seos->social_description,
+	            'incomplete_alert' => true,
 	        ]);
 		}
 
