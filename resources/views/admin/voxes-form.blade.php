@@ -350,7 +350,7 @@
                                             <b> Current users percentage :</b> <br/><br/>
 
                                             @foreach($item->users_percentage as $c => $up)
-                                                <p {!! intval($item->country_percentage) < intval($up) ? 'style="color:red;"' : '' !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
+                                                <p {!! intval($item->country_percentage) <= intval($up) ? 'style="color:red;"' : '' !!}> {{ App\Models\Country::find($c)->name }} : {{ $up }}% <p/>
                                             @endforeach
                                         </div>
                                     @endif

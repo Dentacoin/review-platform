@@ -56,7 +56,7 @@ class IndexController extends FrontController
 			foreach ($voxList as $vl) {
 				$has_started_the_survey = VoxAnswer::where('vox_id', $vl->id)->where('user_id', $this->user->id)->first();
 
-	            if(!empty($vl->country_percentage) && !empty($vl->users_percentage) && array_key_exists($this->user->country_id, $vl->users_percentage) && $vl->users_percentage[$this->user->country_id] > $vl->country_percentage  && empty($has_started_the_survey)) {
+	            if(!empty($vl->country_percentage) && !empty($vl->users_percentage) && array_key_exists($this->user->country_id, $vl->users_percentage) && $vl->users_percentage[$this->user->country_id] >= $vl->country_percentage  && empty($has_started_the_survey)) {
 	                $arr[] = $vl->id;
 	            }
 			}
