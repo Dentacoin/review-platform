@@ -98,7 +98,7 @@
 			<div class="header-claim tac">
 				<img src="{{ url('img-trp/verification-check.png') }}">
 				<h2>{!! nl2br(trans('trp.popup.popup-claim-profile.thank-you.title')) !!}</h2>
-				<h4>{!! !empty(request()->input('old-dentist')) ? 'Your information was successfully saved. You will receive an email notification once your account is updated with the new login details.' : nl2br(trans('trp.popup.popup-claim-profile.thank-you.subtitle')) !!}</h4>
+				<h4>{!! !empty(request()->input('old-dentist')) ? nl2br(trans('trp.popup.popup-claim-profile.old-dentist.thank-you.subtitle')) : nl2br(trans('trp.popup.popup-claim-profile.thank-you.subtitle')) !!}</h4>
 				<a href="javascript:;" class="button claimed-ok">{!! nl2br(trans('trp.popup.popup-claim-profile.thank-you.ok')) !!}</a>
 			</div>
 		</div>
