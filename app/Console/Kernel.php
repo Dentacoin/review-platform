@@ -128,7 +128,7 @@ class Kernel extends ConsoleKernel
                     if(!empty($list)) {
                         foreach ($list as $notify) {
                             if (!empty($notify->email) && filter_var($notify->email, FILTER_VALIDATE_EMAIL)) {
-                                echo 'USER: '.$notify;
+                                echo 'USER: '.$notify->id;
                                 $u = User::find(3);
                                 $tmpEmail = $u->email;
                                 $tmpName = $u->name;
