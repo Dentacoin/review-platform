@@ -82,6 +82,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'work_hours',
         'working_position',
         'working_position_label',
+        'dentist_practice',
         'accepted_payment',
         'status',
         'ownership',
@@ -131,7 +132,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'fb_recommendation',
         'first_login_recommendation',
         'haswebp',
-        'old_unclaimed',
     ];
     protected $dates = [
         'verified_on',
@@ -205,6 +205,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 return $review->id;
             }
         });
+    }
+    public function old_unclaimed_profile() {
+        return $this->hasOne('App\Models\UnclaimedDentist', 'user_id', 'id')->whereNull('completed');
     }
     public function reviews_in_standard() {
         return $this->reviews_in()->reject(function($item) {

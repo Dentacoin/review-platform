@@ -40,6 +40,12 @@
     </div>
 @endif
 
+@if(!empty($item->old_unclaimed_profile))
+    <div class="alert alert-info">
+        This dentist is old added by patient with unclaimed profile.
+    </div>
+@endif
+
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-inverse">

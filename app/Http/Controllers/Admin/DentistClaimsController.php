@@ -25,43 +25,75 @@ class DentistClaimsController extends AdminController
         $item->status = 'approved';
         $item->save();
 
-        $dentist_claims = DentistClaim::where('dentist_id', $item->dentist_id)->where('id', '!=', $item->id)->get();
-
-        if (!empty($dentist_claims)) {
-            foreach ($dentist_claims as $dk) {
-                $dk->status = 'rejected';
-                $dk->save();
-
-                $u = User::find(3);
-                $tmpEmail = $u->email;
-                $tmpName = $u->name;
-
-                $u->email = $dk->email;
-                $u->name = $dk->name;
-                $u->save();
-                $mail = $u->sendGridTemplate(66, null, 'trp');
-
-                $u->email = $tmpEmail;
-                $u->name = $tmpName;
-                $u->save();
-
-                $mail->delete();
-            }
-        }
-
         $user = User::find($item->dentist_id);
-        $user->email_public = $user->email;
-        $user->email = $item->email;
-        $user->password = $item->password;
-        $user->status = 'approved';
-        $user->ownership = 'approved';
-        $user->save();
 
-        $substitutions = [
-            'trp_profile' => getLangUrl('dentist/'.$user->slug, null, 'https://reviews.dentacoin.com/'),
-        ];
+        //if phone is empty is old added by patient dentist
+        if(empty($item->phone) && !empty($user->old_unclaimed_profile)) {
+            $user->password = $item->password;
+            $user->save();
 
-        $user->sendGridTemplate(26, $substitutions, 'trp');
+            $user->old_unclaimed_profile->completed = true;
+            $user->old_unclaimed_profile->save();
+
+
+            $user->sendGridTemplate(104, [], 'trp');
+
+            $mtext = 'Old Added by Patient Dentist claim request was approved<br/>
+Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+
+            Mail::send([], [], function ($message) use ($mtext, $user) {
+                $sender = config('mail.from.address');
+                $sender_name = config('mail.from.name');
+
+                $message->from($sender, $sender_name);
+                $message->to( 'ali.hashem@dentacoin.com' );
+                $message->to( 'betina.bogdanova@dentacoin.com' );
+                $message->to( 'petya.ivanova@dentacoin.com' );
+                $message->replyTo($user->email, $user->getName());
+                $message->subject('Old Added by Patient Dentist claim request was approved');
+                $message->setBody($mtext, 'text/html'); // for HTML rich messages
+            });
+
+        } else {
+
+            $dentist_claims = DentistClaim::where('dentist_id', $item->dentist_id)->where('id', '!=', $item->id)->get();
+
+            if (!empty($dentist_claims)) {
+                foreach ($dentist_claims as $dk) {
+                    $dk->status = 'rejected';
+                    $dk->save();
+
+                    $u = User::find(3);
+                    $tmpEmail = $u->email;
+                    $tmpName = $u->name;
+
+                    $u->email = $dk->email;
+                    $u->name = $dk->name;
+                    $u->save();
+                    $mail = $u->sendGridTemplate(66, null, 'trp');
+
+                    $u->email = $tmpEmail;
+                    $u->name = $tmpName;
+                    $u->save();
+
+                    $mail->delete();
+                }
+            }
+
+            $user->email_public = $user->email;
+            $user->email = $item->email;
+            $user->password = $item->password;
+            $user->status = 'approved';
+            $user->ownership = 'approved';
+            $user->save();
+
+            $substitutions = [
+                'trp_profile' => getLangUrl('dentist/'.$user->slug, null, 'https://reviews.dentacoin.com/'),
+            ];
+
+            $user->sendGridTemplate(26, $substitutions, 'trp');
+        }
+        
 
         return redirect( 'cms/users/edit/'.$item->dentist_id );
 
@@ -104,6 +136,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
             
             $message->to( 'ali.hashem@dentacoin.com' );
             $message->to( 'betina.bogdanova@dentacoin.com' );
+            $message->to( 'petya.ivanova@dentacoin.com' );
             //$message->to( 'dokinator@gmail.com' );
             $message->replyTo($user->email, $user->getName());
             $message->subject('Dentist claim request was rejected');
@@ -151,6 +184,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
             $message->from($sender, $sender_name);
             $message->to( 'ali.hashem@dentacoin.com' );
             $message->to( 'betina.bogdanova@dentacoin.com' );
+            $message->to( 'petya.ivanova@dentacoin.com' );
             $message->replyTo($user->email, $user->getName());
             $message->subject('Dentist claim request was suspicious');
             $message->setBody($mtext, 'text/html'); // for HTML rich messages

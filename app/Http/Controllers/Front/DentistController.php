@@ -869,15 +869,20 @@ class DentistController extends FrontController
     public function claim_dentist ($locale=null, $slug, $id) {
         $user = User::find($id);
 
-        if ($user->status != 'added_approved' && $user->status != 'admin_imported' && $user->status != 'added_by_clinic_unclaimed' && $user->status != 'added_by_dentist_unclaimed') {
-            return redirect( getLangUrl('/') );
+        if (!empty($user->old_unclaimed_profile)) {
+
+        } else {
+
+            if($user->status != 'added_approved' && $user->status != 'admin_imported' && $user->status != 'added_by_clinic_unclaimed' && $user->status != 'added_by_dentist_unclaimed') {
+                return redirect( getLangUrl('/') );
+            }
         }
 
         if(Request::isMethod('post')) {
             $validator = Validator::make(Request::all(), [
                 'name' => array('required', 'min:3'),
                 'email' => 'sometimes|required|email',
-                'phone' =>  array('required', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
+                'phone' =>  array('sometimes', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
                 'job' =>  'sometimes|required|string',
                 'explain-related' => 'sometimes|required|string',
                 'password' => array('required', 'min:6'),
@@ -917,22 +922,28 @@ class DentistController extends FrontController
                     $claim->dentist_id = $user->id;
                     $claim->name = Request::input('name');
                     $claim->email = Request::input('email') ? Request::input('email') : $user->email;
-                    $claim->phone = Request::input('phone');
+                    $claim->phone = !empty(Request::input('phone')) ? Request::input('phone') : '';
                     $claim->password = bcrypt(Request::input('password'));
                     $claim->job = Request::input('job');
-                    $claim->explain_related = Request::input('explain-related');
+                    $claim->explain_related = empty(Request::input('explain-related')) ? Request::input('explain-related') : '';
                     $claim->status = 'waiting';
                     $claim->from_mail = !empty(Request::input('email')) ? false : true;
                     $claim->save();
 
-
-                    $mtext = 'Dentist claimed his profile '.$fromm.'<br/>
-    Name: '.$claim->name.' <br/>
-    Phone: '.$claim->phone.' <br/>
-    Email: '.$claim->email.' <br/>
-    Job position: '.$claim->job.' <br/>
-    Explain how dentist is related to this office: '.$claim->explain_related.' <br/>
-    Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+                    if(!empty($claim->phone)) {
+                        $mtext = 'Dentist claimed his profile '.$fromm.'<br/>
+                        Name: '.$claim->name.' <br/>
+                        Phone: '.$claim->phone.' <br/>
+                        Email: '.$claim->email.' <br/>
+                        Job position: '.$claim->job.' <br/>
+                        Explain how dentist is related to this office: '.$claim->explain_related.' <br/>
+                        Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+                    } else {
+                        $mtext = 'Old Added by Patient Dentist claimed his profile '.$fromm.'<br/>
+                        Name: '.$claim->name.' <br/>
+                        Job position: '.$claim->job.' <br/>
+                        Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+                    }                    
 
                     Mail::send([], [], function ($message) use ($mtext, $user) {
                         $sender = config('mail.from.address');
@@ -941,6 +952,7 @@ class DentistController extends FrontController
                         $message->from($sender, $sender_name);
                         $message->to( 'ali.hashem@dentacoin.com' );
                         $message->to( 'betina.bogdanova@dentacoin.com' );
+                        $message->to( 'petya.ivanova@dentacoin.com' );
                         $message->replyTo($user->email, $user->getName());
                         $message->subject('Invited Dentist Claimed His Profile');
                         $message->setBody($mtext, 'text/html'); // for HTML rich messages
@@ -972,13 +984,10 @@ class DentistController extends FrontController
                         'reload' => true,
                     ] );
                 }
-
-                
             }
         }
 
         return $this->list($locale, $slug);
-
     }
 
 

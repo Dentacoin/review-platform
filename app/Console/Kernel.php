@@ -190,6 +190,94 @@ Click the check box and confirm the CAPTCHA.
 
             echo 'Dentist Invite Patient For Review cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
         })->cron("*/5 * * * *"); //every 5 min
+
+
+        $schedule->call(function () {
+
+            echo 'Old added by patient dentist';
+
+            $query = "
+                SELECT 
+                    * 
+                FROM 
+                    emails 
+                WHERE 
+                    template_id = 102
+                    AND `user_id` NOT IN ( 
+                        SELECT `user_id` FROM emails WHERE template_id = 103
+                    )
+                    AND `user_id` IN ( 
+                        SELECT `user_id` FROM unclaimed_dentists WHERE `unsubscribed` is null AND `completed` is null AND `notified1` is not null AND `notified2` is null AND `notified3` is null
+                    )
+                    AND `created_at` < '".date('Y-m-d', time() - 86400*13)." 00:00:00'
+                GROUP BY 
+                    `user_id`
+            ";
+
+            $emails = DB::select(
+                DB::raw($query), []
+            );
+
+            if (!empty($emails)) {
+                foreach ($emails as $e) {                
+                    $user = User::find($e->user_id);
+                    if (!empty($user)) {
+
+                        $arr["image_unclaimed_profile"] = $user->getSocialCover();
+                        $arr['claim_link'] = getLangUrl( 'dentist/'.$user->slug.'/claim/'.$user->id, null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']).'&old-dentist=true';
+                        $user->sendGridTemplate(103, $arr, 'trp');
+
+                        $user->old_unclaimed_profile->notified2 = true;
+                        $user->old_unclaimed_profile->save();
+                    }
+                }
+            }
+
+
+            $query = "
+                SELECT 
+                    * 
+                FROM 
+                    emails 
+                WHERE 
+                    template_id = 103
+                    AND `user_id` NOT IN ( 
+                        SELECT `user_id` FROM emails WHERE template_id = 105
+                    )                    
+                    AND `user_id` IN ( 
+                        SELECT `user_id` FROM unclaimed_dentists WHERE `unsubscribed` is null AND `completed` is null AND `notified1` is not null AND `notified2` is not null AND `notified3` is null
+                    )
+                    AND `created_at` < '".date('Y-m-d', time() - 86400)." 00:00:00'
+                GROUP BY 
+                    `user_id`
+            ";
+
+
+            $emails = DB::select(
+                DB::raw($query), []
+            );
+
+            if (!empty($emails)) {
+                foreach ($emails as $e) {                
+                    $user = User::find($e->user_id);
+                    if (!empty($user)) {
+
+                        $arr["image_unclaimed_profile"] = $user->getSocialCover();
+                        $arr['claim_link'] = getLangUrl( 'dentist/'.$user->slug.'/claim/'.$user->id, null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']).'&old-dentist=true';
+                        $user->sendGridTemplate(105, $arr, 'trp');
+
+                        $user->old_unclaimed_profile->notified3 = true;
+                        $user->old_unclaimed_profile->save();
+
+                        $user->status = 'added_approved';
+                        $user->save();
+                    }
+                }
+            }
+
+            echo 'Old added by patient dentist cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+        })->cron("*/5 * * * *"); //every 5 min
+
         
         $schedule->call(function () {
             echo 'DCN Prices cron - Start';
@@ -479,9 +567,8 @@ NEW & FAILED TRANSACTIONS
                     $message->from($sender, $sender_name);
                     $message->to( 'ali.hashem@dentacoin.com' );
                     $message->to( 'betina.bogdanova@dentacoin.com' );
-                    $message->to( 'gergana@youpluswe.com' );
                     //$message->to( 'dokinator@gmail.com' );
-                    $message->subject('Suspicios dentists deleted');
+                    $message->subject('Suspicious dentists deleted');
                 });
             }
 
