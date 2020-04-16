@@ -568,7 +568,7 @@ class LoginController extends FrontController {
 
                 return redirect( $newuser->invited_by && $newuser->invitor->is_dentist ? $newuser->invitor->getLink().'?'.http_build_query(['popup'=>'submit-review-popup']) : getLangUrl('/').($want_to_invite ? '?'.http_build_query(['popup'=>'invite-new-dentist-popup']) : '' ) );
             } else {
-                return redirect( getLanUrl('/').'?'. http_build_query(['popup'=>'popup-register']).'&error-message='.urlencode(trans('trp.popup.login.no-fb-email')));
+                return redirect( getLangUrl('/').'?'. http_build_query(['popup'=>'popup-register']).'&error-message='.urlencode(trans('trp.popup.login.no-fb-email')));
             }
         }
     }
