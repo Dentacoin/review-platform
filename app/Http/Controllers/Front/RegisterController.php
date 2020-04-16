@@ -144,6 +144,7 @@ class RegisterController extends FrontController
             }
 
             $this->saveIncompleteRegistration(request('email'), [
+                'platform' => 'trp',
                 'email' => request('email'),
                 'password' => request('password'),
                 'mode' => request('mode'),

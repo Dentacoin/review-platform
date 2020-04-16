@@ -54,88 +54,136 @@ class Kernel extends ConsoleKernel
             echo 'Incomplete Dentist Registrations cron - START';
             
 
-            $notificaitons[] = [
-                'time' => Carbon::now()->addHours(-1),
-                'tempalte_id' => 3,
+            $notifications = [];
+
+            $notifications['trp'] = [
+                [
+                    'time' => Carbon::now()->addHours(-1),
+                    'tempalte_id' => 3,
+                ],
+                [
+                    'time' => Carbon::now()->addDays(-1),
+                    'tempalte_id' => 5,
+                ],
+                [
+                    'time' => Carbon::now()->addDays(-3),
+                    'tempalte_id' => 41,
+                ]
             ];
-            $notificaitons[] = [
+
+            $notifications['vox'][] = [
                 'time' => Carbon::now()->addDays(-1),
-                'tempalte_id' => 5,
+                'tempalte_id' => 94,
             ];
-            $notificaitons[] = [
-                'time' => Carbon::now()->addDays(-3),
-                'tempalte_id' => 41,
+
+            $notifications['assurance'][] = [
+                'time' => Carbon::now()->addDays(-1),
+                'tempalte_id' => 98,
             ];
-            foreach ($notificaitons as $key => $time) {
-                $field = 'notified'.(intval($key)+1);
-                $list = IncompleteRegistration::whereNull('completed')->whereNull('unsubscribed')->whereNull( $field )->where('created_at', '<', $time['time'])->get();
-                foreach ($list as $notify) {
-                    if (!empty($notify->email) && filter_var($notify->email, FILTER_VALIDATE_EMAIL)) {
-                        echo 'USER: '.$notify;
-                        $u = User::find(3);
-                        $tmpEmail = $u->email;
-                        $tmpName = $u->name;
 
-                        echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
+            $notifications['dentacoin'] = [
+                [
+                    'time' => Carbon::now()->addHours(-1),
+                    'tempalte_id' => 95,
+                ],
+                [
+                    'time' => Carbon::now()->addDays(-1),
+                    'tempalte_id' => 96,
+                ],
+                [
+                    'time' => Carbon::now()->addDays(-3),
+                    'tempalte_id' => 97,
+                ]
+            ];
 
-                        $missingInfo = '';
-                        if($time['tempalte_id']==3) {
-                            if(empty($notify->address)) {
-                                $missingInfo .= '<b>Enter your clinic address and webpage or social media page. </b>
-Your practice will be easily found by patients looking for a dentist in your area.
+            $notifications['dentists'] = [
+                [
+                    'time' => Carbon::now()->addHours(-1),
+                    'tempalte_id' => 99,
+                ],
+                [
+                    'time' => Carbon::now()->addDays(-1),
+                    'tempalte_id' => 100,
+                ],
+                [
+                    'time' => Carbon::now()->addDays(-3),
+                    'tempalte_id' => 101,
+                ]
+            ];
 
-';
-                            }
+            
+            foreach ($notifications as $key => $value) {
+                $i = 0;
+                foreach ($value as $k => $v) {
+                    $i++;
+                    if($key == 'vox' || $key == 'assurance') {
+                        $field = 'notified2';
+                    } else {
+                        $field = 'notified'.$i;
+                    }
 
-                            if(empty($notify->photo)) {
-                                $missingInfo .= '<b>Select your specialties</b>
-Based on your selection, your profile will show to patients who are searching for a particular type of dental specialist.
+                    $list = IncompleteRegistration::whereNull('completed')->whereNull('unsubscribed')->whereNull( $field )->whereNotNull( 'platform' )->where('platform', $key)->where('created_at', '<', $v['time'])->get();
+                    
 
-<b>Upload your profile photo</b> - e.g. picture of you, the team, the clinic or your logo.
-Why include a photo? Profile photo makes your practice more recognizable and easier for patients to remember.';
+                    if(!empty($list)) {
+                        foreach ($list as $notify) {
+                            if (!empty($notify->email) && filter_var($notify->email, FILTER_VALIDATE_EMAIL)) {
+                                echo 'USER: '.$notify;
+                                $u = User::find(3);
+                                $tmpEmail = $u->email;
+                                $tmpName = $u->name;
 
-                            }
+                                echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
 
-                            if(!empty($notify->address) && !empty($notify->photo)) {
-                                $missingInfo .= '<b>Create your profile.</b>
-Click the check box and confirm the CAPTCHA.
+                                $missingInfo = '';
 
-';
+                                if(!empty($notify->address)) {
+                                    $missingInfo .= 'Select the areas of specialty, upload a logo or photo of your team, and click complete.';
+                                } else {
+                                    $missingInfo .= 'Fill in the contact info about your practice, select the areas of specialty, upload a logo or photo of your team, and click complete.';
+                                }
+
+                                $active_voxes_count = Vox::where('type', '!=', 'hidden')->count();
+
+                                $u->email = $notify->email;
+                                $u->name = $notify->name;
+                                $u->save();
+
+
+                                $arr = [];
+
+                                if($key == 'trp') {
+                                    $arr['trp-signup-continue'] = 'https://reviews.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                } else if($key == 'vox') {
+                                    $arr['vox-signup-continue'] = 'https://dentavox.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                } else if($key == 'assurance') {
+                                    $arr['assurance-signup-continue'] = 'https://assurance.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                } else if($key == 'dentacoin') {
+                                    $arr['dcn-signup-continue'] = 'https://dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                } else if($key == 'dentists') {
+                                    $arr['dentists-signup-continue'] = 'https://dentists.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                }
+
+                                $arr['missing-info'] = $missingInfo;
+                                $arr['active-surveys'] = $active_voxes_count;
+
+                                $domain = 'https://'.config('platforms.'.($key == 'trp' ? 'trp' : 'vox').'.url').'/';
+
+                                $arr['unsubscribe-incomplete'] = getLangUrl( 'unsubscribe-incomplete/'.$notify->id.'/'.md5($notify->id.env('SALT_INVITE')), null, $domain);
+
+
+                                $mail = $u->sendGridTemplate($v['tempalte_id'], $arr, $key);
+
+                                $u->email = $tmpEmail;
+                                $u->name = $tmpName;
+                                $u->save();
+
+                                $notify->$field = true;
+                                $notify->save();
+
+                                $mail->delete();
                             }
                         }
-                        if($time['tempalte_id']==5) {
-                            $parts = [];
-                            if(empty($notify->address)) {
-                                $parts[] = 'dental clinic contact details';
-                            }
-
-                            if(empty($notify->photo)) {
-                                $parts[] = 'profile photo';
-                            }
-
-                            if(!empty( $parts )) {
-                                $missingInfo .= 'It looks like last time you didn\'t have at hand your '.implode(' and ', $parts).'.';
-                            } else {
-                                $missingInfo .= 'It looks like you did not complete only the last step of your registration.';
-                            }
-                        }
-
-                        $u->email = $notify->email;
-                        $u->name = $notify->name;
-                        $u->save();
-                        $mail = $u->sendTemplate($time['tempalte_id'], [
-                            'link' => $notify->id.'/'.md5($notify->id.env('SALT_INVITE')),
-                            'missing-info' => $missingInfo,
-                        ]);
-
-                        $u->email = $tmpEmail;
-                        $u->name = $tmpName;
-                        $u->save();
-
-                        $notify->$field = true;
-                        $notify->save();
-
-                        $mail->delete();
                     }
                 }
             }
