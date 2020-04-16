@@ -6,8 +6,8 @@
 		<div class="claim-details">
 			<div class="header-claim tac">
 				<img src="{{ url('img-trp/verification-check.png') }}">
-				<h2>{!! !empty(request()->input('old-dentist')) ? 'UPDATE YOUR DETAILS' : nl2br(trans('trp.popup.popup-claim-profile.title')) !!}</h2>
-				<h3>{!! !empty(request()->input('old-dentist')) ? 'and keep access to your profile on <br/> Dentacoin Trusted Reviews!' : nl2br(trans('trp.popup.popup-claim-profile.subtitle')) !!}</h3>
+				<h2>{!! !empty(request()->input('old-dentist')) ? nl2br(trans('trp.popup.popup-claim-profile.old-dentist.title')) : nl2br(trans('trp.popup.popup-claim-profile.title')) !!}</h2>
+				<h3>{!! !empty(request()->input('old-dentist')) ? nl2br(trans('trp.popup.popup-claim-profile.old-dentist.subtitle')) : nl2br(trans('trp.popup.popup-claim-profile.subtitle')) !!}</h3>
 				@if(!empty(request()->input('old-dentist')))
 					<h4></h4>
 				@else
@@ -67,7 +67,7 @@
 					<label for="claim-password">
 						<span>{!! nl2br(trans('trp.popup.popup-claim-profile.password')) !!}</span>
 					</label>
-					<p>{!! !empty(request()->input('old-dentist')) ? 'This will be your new login password!' : nl2br(trans('trp.popup.popup-claim-profile.password.hint')) !!}</p>
+					<p>{!! !empty(request()->input('old-dentist')) ? nl2br(trans('trp.popup.popup-claim-profile.old-dentist.password.hint')) : nl2br(trans('trp.popup.popup-claim-profile.password.hint')) !!}</p>
 				</div>
 				
 				<div class="modern-field alert-after">
@@ -87,7 +87,7 @@
 				</label>
 
 				<div class="tac">
-					<input type="submit" value="{!! !empty(request()->input('old-dentist')) ? 'Update now' : nl2br(trans('trp.popup.popup-claim-profile.submit')) !!}" class="button"/>
+					<input type="submit" value="{!! !empty(request()->input('old-dentist')) ? trans('trp.popup.popup-claim-profile.old-dentist.submit') : trans('trp.popup.popup-claim-profile.submit') !!}" class="button"/>
 				</div>
 
 				<div class="alert alert-success" style="display: none;"></div>
