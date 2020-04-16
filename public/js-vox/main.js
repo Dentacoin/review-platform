@@ -1449,13 +1449,11 @@ $(document).ready(function(){
 	pollsFunction();
 
 	$('.close-bubble').click( function() {
-		if (window.innerWidth <= 768 && Cookies.get('functionality_cookies')) {
+		if (Cookies.get('functionality_cookies')) {
 			Cookies.set('small-poll-bubble', true, { expires: 1, secure: true });
-		} else if(window.innerWidth > 768) {
-			$('.poll-bubble').addClass('hide-it');
 		}
-		//tuk
-		$('.poll-bubble').hide();
+
+		$('.poll-bubble').addClass('hide-it');
 	});
 
 	if (window.innerWidth <= 768) {
@@ -1467,6 +1465,10 @@ $(document).ready(function(){
 			$(this).removeClass('small-bubble');
 			Cookies.remove('small-poll-bubble');
 		});
+	} else {
+		if(Cookies.get('small-poll-bubble')) {
+			$('.poll-bubble').addClass('hide-it');
+		}
 	}
 
 	if ($('.poll-bubble').length && window.innerWidth >= 768) {

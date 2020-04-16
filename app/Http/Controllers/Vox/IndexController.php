@@ -89,7 +89,7 @@ class IndexController extends FrontController
         	'vox_categories' => VoxCategory::with('translations')->whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
         	'js' => [
         		'home.js',
-        		'flickity.pkgd.min.js'
+                'flickity.min.js',
         	],
         	'css' => [
         		'vox-home.css',

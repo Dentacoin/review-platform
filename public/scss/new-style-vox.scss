@@ -6288,6 +6288,10 @@ svg:not(:root) {
 	    }
     }
 
+    &.hide-it {
+    	display: none;
+    }
+
     .small-bubble-image {
     	display: none;
 		float: right;

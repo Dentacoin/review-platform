@@ -4498,6 +4498,8 @@ svg:not(:root) {
         display: block; }
       .poll-bubble.small-bubble .bubble-inner {
         display: none; } }
+  .poll-bubble.hide-it {
+    display: none; }
   .poll-bubble .small-bubble-image {
     display: none;
     float: right;
