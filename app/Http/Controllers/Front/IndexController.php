@@ -447,6 +447,14 @@ class IndexController extends FrontController
 
                     $user->sendGridTemplate(26, [], 'trp');
 
+                    if($user->status == 'added_by_dentist_claimed') {
+
+                        $dent = User::find($user->invited_by);
+                        $user->sendTemplate(34, [
+                            'dentist-name' => $dent->getName()
+                        ], 'trp');
+                    }
+
                     Auth::login($user);
 
                     return Response::json( [
