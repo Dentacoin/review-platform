@@ -153,7 +153,7 @@
 								@endif
 
 								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
-								@if( $user->platform!='external' )
+								@if( $user->platform!='external' && !empty(getDentacoinHubApplications()) )
 									<div class="expander-wrapper{!! $user->hasimage ? ' has-image' : '' !!}">
 										<div class="expander">
 											<a href="javascript:;" class="close-explander">Close<span>X</span></a>

@@ -134,35 +134,37 @@
 									<img src="{{ $user->getImageUrl(true) }}" {!! $user->hasimage ? '' : 'class="default-avatar"' !!}>
 								</a>
 
+								@if(!empty(getDentacoinHubApplications()))
 								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
-								<div class="expander-wrapper{!! $user->hasimage ? ' has-image' : '' !!}">
-									<div class="expander">
-										<a href="javascript:;" class="close-explander">{!! trans('trp.header.close') !!}<span>X</span></a>
-										<div class="expander-content">
-											@foreach(getDentacoinHubApplications() as $dcn_platform)
-										        <a href="{{ $dcn_platform->link ? $dcn_platform->link : 'javascript:;' }}" target="_blank" class="platform-icon">
-										            <figure class="text-center" itemtype="http://schema.org/ImageObject">
-										               	<img src="{{ $dcn_platform->media_name }}" itemprop="contentUrl" alt="{{ $dcn_platform->media_alt }}"> 
-										               	<figcaption>{{ $dcn_platform->title }}</figcaption>
-										            </figure>
-										        </a>
-										    @endforeach
-										</div>
-										<div class="expander-footer">
-											<div class="col">
-												<a href="{{ getLangUrl('logout') }}">
-													<i class="fas fa-power-off"></i>
-													{!! trans('trp.header.logout') !!}
-												</a>
+									<div class="expander-wrapper{!! $user->hasimage ? ' has-image' : '' !!}">
+										<div class="expander">
+											<a href="javascript:;" class="close-explander">{!! trans('trp.header.close') !!}<span>X</span></a>
+											<div class="expander-content">
+												@foreach(getDentacoinHubApplications() as $dcn_platform)
+											        <a href="{{ $dcn_platform->link ? $dcn_platform->link : 'javascript:;' }}" target="_blank" class="platform-icon">
+											            <figure class="text-center" itemtype="http://schema.org/ImageObject">
+											               	<img src="{{ $dcn_platform->media_name }}" itemprop="contentUrl" alt="{{ $dcn_platform->media_alt }}"> 
+											               	<figcaption>{{ $dcn_platform->title }}</figcaption>
+											            </figure>
+											        </a>
+											    @endforeach
 											</div>
-											<div class="col">
-												<a class="btn" href="https://account.dentacoin.com/?platform=trusted-reviews">
-													{!! trans('trp.header.my-account') !!}
-												</a>
+											<div class="expander-footer">
+												<div class="col">
+													<a href="{{ getLangUrl('logout') }}">
+														<i class="fas fa-power-off"></i>
+														{!! trans('trp.header.logout') !!}
+													</a>
+												</div>
+												<div class="col">
+													<a class="btn" href="https://account.dentacoin.com/?platform=trusted-reviews">
+														{!! trans('trp.header.my-account') !!}
+													</a>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
+								@endif
 	                        @else
 	                        	@if($current_page=='welcome-dentist')
 	                        		<a href="{{ getLangUrl('/') }}" class="button-dentists">
