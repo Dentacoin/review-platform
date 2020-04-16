@@ -417,6 +417,7 @@ $voxRoutes = function () {
 			Route::any('poll/{id}', 							'PollsController@dopoll');
 			Route::post('get-poll-content/{id}', 				'PollsController@get_poll_content');
 			Route::post('get-poll-stats/{id}', 					'PollsController@get_poll_stats');
+			Route::get('hide-dailypoll', 						'PollsController@hidePoll');
 
 			Route::any('profile/vox-iframe', 					'ProfileController@vox');
 

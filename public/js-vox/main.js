@@ -1449,10 +1449,24 @@ $(document).ready(function(){
 	pollsFunction();
 
 	$('.close-bubble').click( function() {
-		if (Cookies.get('functionality_cookies')) {
+		if (window.innerWidth <= 768 && Cookies.get('functionality_cookies')) {
 			Cookies.set('small-poll-bubble', true, { expires: 1, secure: true });
+		} else if(window.innerWidth > 768) {
+			$.ajax( {
+				url: window.location.origin+'/en/hide-dailypoll',
+				type: 'GET',
+				dataType: 'json',
+				success: function( data ) {
+					console.log('success-hide');
+				    ajax_is_running = false;
+				},
+				error: function(data) {
+					console.log(data);
+				    ajax_is_running = false;
+				}
+			});
 		}
-
+		//tuk
 		$('.poll-bubble').addClass('hide-it');
 	});
 
@@ -1465,10 +1479,6 @@ $(document).ready(function(){
 			$(this).removeClass('small-bubble');
 			Cookies.remove('small-poll-bubble');
 		});
-	} else {
-		if(Cookies.get('small-poll-bubble')) {
-			$('.poll-bubble').addClass('hide-it');
-		}
 	}
 
 	if ($('.poll-bubble').length && window.innerWidth >= 768) {

@@ -479,5 +479,16 @@ class PollsController extends FrontController
         return $chart;
 	}
 
-	
+
+	public function hidePoll( $locale=null ) {
+
+		$sess = [
+            'hide_poll' => true,
+        ];
+        session($sess);
+
+	    return Response::json( [
+	        'success' => true,
+	    ] );
+    }
 }

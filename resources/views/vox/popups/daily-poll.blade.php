@@ -1,5 +1,5 @@
 @if(!empty($daily_poll))
-	<div class="poll-bubble">
+	<div class="poll-bubble {!! !empty(session('hide_poll')) ? 'hide-it' : '' !!}">
 		<img class="small-bubble-image" src="{{ url('new-vox-img/dentavox-daily-polls-popup-mobile.png') }}" alt="Dentavox daily polls popup mobile">
 		<div class="bubble-inner">
 			<img class="main-bubble-image" src="{{ url('new-vox-img/dentavox-man-daily-polls-rewards.png') }}" alt="Dentavox man daily polls rewards">
@@ -13,7 +13,7 @@
 		</div>
 	</div>
 @elseif(!empty($closed_daily_poll))
-	<div class="poll-bubble">
+	<div class="poll-bubble {!! !empty(session('hide_poll')) ? 'hide-it' : '' !!}">
 		<img class="small-bubble-image" src="{{ url('new-vox-img/dentavox-daily-polls-popup-mobile.png') }}" alt="Dentavox daily polls popup mobile">
 		<div class="bubble-inner">
 			<img class="main-bubble-image" src="{{ url('new-vox-img/dentavox-man-daily-polls-rewards.png') }}" alt="Dentavox man daily polls rewards">
