@@ -1286,6 +1286,11 @@ class UsersController extends AdminController {
                                         "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
                                     ], 'trp');
 
+                                } else if( $this->request->input($key)=='test' ) {
+                                    $item->status = 'test';
+                                    $item->slug = $item->makeSlug();
+                                    $item->save();
+
                                 } else if( $this->request->input($key)=='pending' ) {
                                     $olde = $item->email;
                                     $item->email = 'ali.hashem@dentacoin.com';
