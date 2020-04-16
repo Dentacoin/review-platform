@@ -1269,7 +1269,7 @@ class UsersController extends AdminController {
 
                                 } else if( $this->request->input($key)=='added_by_dentist_unclaimed' ) {
                                     $item->status = 'added_by_dentist_unclaimed';
-                                    $item->slug = $dent->makeSlug();
+                                    $item->slug = $item->makeSlug();
                                     $item->save();
 
                                     $dent_name = null;
