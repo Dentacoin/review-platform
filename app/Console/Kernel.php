@@ -599,6 +599,7 @@ NEW & FAILED TRANSACTIONS
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00' 
                     AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
+                    AND `deleted_at` is null
                 GROUP BY 
                     `user_id`
             ";
