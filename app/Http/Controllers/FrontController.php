@@ -11,6 +11,7 @@ use DeviceDetector\Parser\Device\DeviceParserAbstract;
 use DeviceDetector\DeviceDetector;
 
 use App\Models\UserGuidedTour;
+use App\Models\WhitelistIp;
 use App\Models\PollAnswer;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
