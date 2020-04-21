@@ -1,4 +1,4 @@
-@if($item->user->status != 'approved' && $item->user->status != 'added_by_dentist_claimed' && $item->status == 'waiting')
+@if( ( $item->user->status == 'approved' && !empty($item->user->old_unclaimed_profile ) || ($item->user->status != 'approved' && $item->user->status != 'added_by_dentist_claimed' && $item->user->status != 'added_by_clinic_claimed')) && $item->status == 'waiting')
 	<a class="btn btn-sm label label-success" href="{{ url('cms/claims/approve/'.$item->id) }}" style="display: block; font-size: 13px; margin-bottom: 5px;">
 	    Approve
 	</a>

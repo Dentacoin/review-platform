@@ -165,7 +165,7 @@
                                         'info' => $fields['name']
                                     ])
                                 </div>
-                            </div>                            
+                            </div>
                             @if($duplicated_names->isNotEmpty())
                                 <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this name already exists:</p>
                                 @foreach($duplicated_names as $dn)
