@@ -1453,15 +1453,20 @@ class StatsController extends FrontController
 
         $picture_title = strtolower(str_replace(['?', ' ', ':'], [' ', '-', ' '] ,Request::input("stat_title"))).'-dentavox-';
 
+        $count_img = 0;
         for ($i=1; $i < 7; $i++) { 
 
             if(!empty(Input::file('picture'.$i))) {
+                $count_img++;
+
                 $newName = $folder.'/'.$picture_title.$i.'.png';
                 copy( Input::file('picture'.$i)->path(), $newName );
             }
         }
 
-        exec('cd '.$folder.' && zip -r0 '.$folder.'.zip ./*');
+        if($count_img > 1) {
+            exec('cd '.$folder.' && zip -r0 '.$folder.'.zip ./*');
+        }        
 
         $sess = [
             'download_stat_png' => $png_title
@@ -1486,10 +1491,16 @@ class StatsController extends FrontController
 
 
     public function download_file_png($locale=null,$name) {
-
         session()->pull('download_stat_png');
 
         $file = storage_path().'/app/public/png/'.$name.'.zip';
-        return response()->download($file);
+
+        if (file_exists($file)) {
+            return response()->download($file);
+        } else {
+            $png_file = storage_path().'/app/public/png/'.$name.'/'.mb_substr($name, 0, -10).'-1.png';
+            return response()->download($png_file);
+        }
+        
     }
 }

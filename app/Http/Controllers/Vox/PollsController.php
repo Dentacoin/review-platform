@@ -482,10 +482,10 @@ class PollsController extends FrontController
 
 	public function hidePoll( $locale=null ) {
 
-		$sess = [
-            'hide_poll' => true,
-        ];
-        session($sess);
+		// $sess = [
+  //           'hide_poll' => true,
+  //       ];
+  //       session($sess);
 
 	    return Response::json( [
 	        'success' => true,
