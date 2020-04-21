@@ -107,6 +107,14 @@ $(document).ready(function(){
         }
     }
 
+    if($('.question-group:visible').hasClass('scale')) {
+        $('.question-group:visible .flickity').flickity({
+            wrapAround: true,
+            adaptiveHeight: true,
+            draggable: false
+        });
+    }
+
     $('#iagree').change( sendValidation );
 
     sendReCaptcha = function(code) {

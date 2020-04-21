@@ -227,7 +227,7 @@ $(document).ready(function(){
 		//if (window.innerWidth < 768 && $('.question-group:visible').hasClass('scale')) {
 		if ($('.question-group:visible').hasClass('scale')) {
 
-			flickityScales = $('.question-group:visible .flickity').flickity({
+			$('.question-group:visible .flickity').flickity({
 				wrapAround: true,
 				adaptiveHeight: true,
 				draggable: false
