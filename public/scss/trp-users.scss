@@ -1468,9 +1468,18 @@ $phone: "screen and (max-width: 768px)";
 		}
 
     	.flickity {
-    		width: 100%;
+    		width: 100%;//
 
 			.slider-wrapper {
+
+				&.no-upper {
+					cursor: inherit;
+				}
+
+				.deleter,
+				.delete-button {
+					cursor: pointer;
+				}
 
 				.slider-image {
 					&.add-team-member {

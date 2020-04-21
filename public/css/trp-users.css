@@ -951,6 +951,11 @@
     display: block; }
   .details-wrapper .team-container .flickity {
     width: 100%; }
+    .details-wrapper .team-container .flickity .slider-wrapper.no-upper {
+      cursor: inherit; }
+    .details-wrapper .team-container .flickity .slider-wrapper .deleter,
+    .details-wrapper .team-container .flickity .slider-wrapper .delete-button {
+      cursor: pointer; }
     .details-wrapper .team-container .flickity .slider-wrapper .slider-image.add-team-member {
       display: block;
       background-color: #e3e3e3;
