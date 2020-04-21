@@ -172,6 +172,17 @@
                                     <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dn->id) }}">{{ $dn->name }}</a></p>
                                 @endforeach
                             @endif
+                            @if(!$item->is_dentist && !empty($item->user_patient_type))
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Type</label>
+                                    <div class="col-md-10">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'user_patient_type',
+                                            'info' => $fields['user_patient_type']
+                                        ])
+                                    </div>
+                                </div>
+                            @endif
                             @if($item->is_dentist && !$item->is_clinic)
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Title</label>
@@ -182,6 +193,37 @@
                                         ])
                                     </div>
                                 </div>
+                            @endif
+                            @if($item->is_clinic && !empty($item->worker_name))
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Worker Name</label>
+                                    <div class="col-md-10">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'worker_name',
+                                            'info' => $fields['worker_name']
+                                        ])
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Working Position</label>
+                                    <div class="col-md-10">
+                                        @include('admin.parts.user-field',[
+                                            'key' => 'working_position',
+                                            'info' => $fields['working_position']
+                                        ])
+                                    </div>
+                                </div>
+                                @if(!empty($item->working_position) && $item->working_position == 'other')
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Other Working Position</label>
+                                        <div class="col-md-10">
+                                            @include('admin.parts.user-field',[
+                                                'key' => 'working_position_label',
+                                                'info' => $fields['working_position_label']
+                                            ])
+                                        </div>
+                                    </div>
+                                @endif
                             @endif
                             @if($item->is_dentist)
                                 <div class="form-group">

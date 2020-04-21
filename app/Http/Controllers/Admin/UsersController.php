@@ -84,14 +84,40 @@ class UsersController extends AdminController {
     		'phone' => [
     			'type' => 'text',
     		],
-    		'type' => [
+            'type' => [
                 'type' => 'select',
                 'values' => [
                     'patient' => 'Patient',
                     'dentist' => 'Dentist',
                     'clinic' => 'Clinic'
                 ]
-    		],
+            ],
+            'user_patient_type' => [
+                'type' => 'select',
+                'values' => [
+                    'journalist' => 'Journalist',
+                    'supplier' => 'Supplier/ Manufacturer',
+                    'researcher' => 'Researcher',
+                    'dental_student' => 'Dental/ Medical Student',
+                ]
+            ],
+            'worker_name' => [
+                'type' => 'text',
+            ],
+            'working_position' => [
+                'type' => 'select',
+                'values' => [
+                    'practice_manager' => 'Practice Manager',
+                    'dentist' => 'Dentist',
+                    'dental_hygienist' => 'Dental Hygienist',
+                    'dental_assistant' => 'Dental Assistant',
+                    'marketing_specialist' => 'Marketing Specialist',
+                    'other' => 'Other',
+                ]
+            ],
+            'working_position_label' => [
+                'type' => 'text',
+            ],
             'is_partner' => [
                 'type' => 'select',
                 'values' => [
