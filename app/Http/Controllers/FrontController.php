@@ -201,7 +201,8 @@ class FrontController extends BaseController {
                     $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
                 }
 
-                if (!(User::getRealIp() == '213.91.254.194' || User::getRealIp() == '78.130.213.163' || !empty($this->admin))) {
+                $is_whitelist_ip = WhitelistIp::where('ip', 'like', User::getRealIp())->first();
+                if (User::getRealIp() != '213.91.254.194' && empty($this->admin) && empty($is_whitelist_ip)) {
                     $ul->save();
                 }
 
