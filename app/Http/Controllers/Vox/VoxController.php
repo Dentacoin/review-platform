@@ -1316,7 +1316,7 @@ class VoxController extends FrontController
 			'first_question_num' => $first_question_num,
 			'js' => [
 				'vox.js',
-        		'flickity.min.js'
+        		'flickity.pkgd.min.js'
 			],
 			'css' => [
 				'vox-questionnaries.css',
