@@ -257,6 +257,7 @@ class UsersController extends AdminController {
             'dentist_clinic.added_approved' => 'Dentists & Clinics (Added Approved)',
             'dentist_clinic.added_rejected' => 'Dentists & Clinics (Added Rejected)',
             'dentist_clinic.admin_imported' => 'Dentists & Clinics (Admin Imported)',
+            'dentist_clinic.test' => 'Dentists & Clinics (Test)',
         ];
 
         $user_statuses = [
@@ -1289,6 +1290,17 @@ class UsersController extends AdminController {
                                                         'clinic-link' => $item->getLink()
                                                     ], 'trp');
                                                 }
+                                            }
+                                        }
+                                    }
+
+                                    if($item->is_dentist && !$item->is_clinic && $item->my_workplace_unapproved->isNotEmpty() ) {
+                                        foreach ($item->my_workplace_unapproved as $wp) {
+                                            if($wp->clinic->status == 'approved' || $wp->clinic->status == 'added_by_dentist_claimed') {
+                                                    
+                                                $wp->clinic->sendTemplate(34, [
+                                                    'dentist-name' => $item->getName()
+                                                ], 'trp');
                                             }
                                         }
                                     }
