@@ -183,4 +183,80 @@ class AuthenticateUser extends FrontController
         return redirect( getLangUrl('/') );
     }
 
+    public function authenticateUser(Request $request) {
+
+        $validator = Validator::make($request->input(), [
+            'token' => array('required'),
+            'id' => array('required'),
+        ]);
+
+        if ($validator->fails()) {
+
+            $msg = $validator->getMessageBag()->toArray();
+            $ret = array(
+                'success' => false,
+                'messages' => array()
+            );
+
+            foreach ($msg as $field => $errors) {
+                $ret['messages'][$field] = implode(', ', $errors);
+            }
+
+            // 'token.required' => 'Token is required.',
+            // 'type.required' => 'Type is required.',
+            // 'id.required' => 'ID is required.'
+
+            return Response::json( $ret );
+        } else {
+
+            $checkToken = $this->checkUserIdAndToken($request->input('id'), $request->input('token'));
+
+            if(is_object($checkToken) && property_exists($checkToken, 'success') && $checkToken->success) {
+
+                $user = User::find($request->input('id'));
+
+                if(!empty($user)) {
+
+                    Auth::login($user);
+
+                    return Response::json( [
+                        'success' => true
+                    ] );
+                }
+            }
+
+            return Response::json( [
+                'error' => true
+            ] );
+        }
+    }
+
+
+    public function checkUserIdAndToken($id, $token)  {
+        $header = array();
+        $header[] = 'Accept: */*';
+        $header[] = 'Authorization: Bearer ' . $token;
+        $header[] = 'Cache-Control: no-cache';
+
+        $cpost = [
+            'user_id' => $id
+        ];
+        $ch = curl_init('https://api.dentacoin.com/api/check-user-info/');
+        curl_setopt($ch, CURLOPT_HEADER, $header);
+        curl_setopt ($ch, CURLOPT_POST, 1);
+        curl_setopt ($ch, CURLOPT_POSTFIELDS, http_build_query($cpost));
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);    
+        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        if($response) {
+            $api_response = json_decode($response, true);
+            if(!empty($api_response['success'])) {
+                return $api_response;
+            }
+        }
+
+        return false;
+    }
+
 }

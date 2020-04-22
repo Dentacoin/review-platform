@@ -348,6 +348,8 @@ $voxRoutes = function () {
 
 	Route::get('user-logout',									'Auth\AuthenticateUser@getLogout');
 
+	Route::post('authenticate-user',							'Auth\AuthenticateUser@authenticateUser');
+
 	Route::group(['prefix' => '{locale?}'], function(){
 
 		Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginFormVox'] );
