@@ -1304,13 +1304,73 @@ $(document).ready(function(){
 	}
 
 
-	pollsFunction = function() {
-		
+	showPoll = function(poll_id) {
 
-		$('.answer').change( function(e) {
+		var p_id = poll_id;
+
+		$.ajax({
+            type: "POST",
+            url: window.location.origin+'/en/get-poll-content/'+p_id,
+            data: {
+                _token: $('input[name="_token"]').val(),
+            },
+            dataType: 'json',
+            success: function(ret) {
+
+                if(ret.success) {
+                	$('#poll-popup .poll-answers').html('');
+                	$('#poll-popup').find('.poll-question').html(ret.title);
+                	$('#poll-popup').find('form').attr('action', ret.url);
+
+                	for (var i in ret.answers ) {
+                		$('#poll-popup .poll-answers').append('<label class="poll-answer '+(ret.answers[i].indexOf('#') > -1 ? 'dont-shuffle' : '')+'" for="ans-'+(parseInt(i) + 1)+'"><input type="radio" name="answer" class="answer" value="'+(parseInt(i) + 1)+'" id="ans-'+(parseInt(i) + 1)+'">'+(ret.answers[i].indexOf('#') > -1 ? ret.answers[i].substr(1) : ret.answers[i]) +'</label>');
+                	}
+
+                    if (ret.randomize_answers) {
+                        $('#poll-popup .poll-answers').addClass('shuffle-answers');
+                    } else {
+                        $('#poll-popup .poll-answers').removeClass('shuffle-answers');
+                    }
+
+                    if ($('#poll-popup .poll-answers').hasClass('shuffle-answers')) {
+                        var divs = $('#poll-popup .poll-answers').children().not(".dont-shuffle");
+
+                        while (divs.length) {
+                            $('#poll-popup .poll-answers').prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+                        }
+                    }
+
+                	$('#poll-popup').find('.poll-stats-wrapper h3').html($('#poll-popup').find('.poll-stats-wrapper h3').attr('title'));
+                	$('#poll-popup').find('.content').hide();
+                	$('#poll-popup').find('.poll-form-wrapper').show();
+                	$('#poll-popup').addClass('active');
+
+                	tooltipsFunction();
+                	pollStats();
+                	pollsFunction();
+
+                    var q = $('#poll-popup .poll-form-wrapper .poll-question').html();
+
+                    gtag('event', 'Click', {
+                        'event_category': 'DailyPollCallendar',
+                        'event_label': q+'-DailyPollQuestion',
+                    });
+                } else {
+    				console.log('error');
+                }
+            },
+            error: function(ret) {
+                console.log('error');
+            }
+        });
+	}
+
+
+	pollsFunction = function() {
+
+		$('.poll-answer .answer').change( function(e) {
 			$(this).closest('form').submit();
 		});
-
 
 		$('.poll-form').submit( function(e) {
 			e.preventDefault();
