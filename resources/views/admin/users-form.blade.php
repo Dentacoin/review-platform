@@ -106,7 +106,7 @@
                                                             <option value="added_by_clinic_new" {{ $item->status == 'added_by_clinic_new' ? 'selected="selected"' : ''}} >Added by Clinic New</option>
 
                                                         @elseif($item->status == 'added_by_clinic_claimed')
-                                                            <option value="added_by_clinic_claimed" {{ $item->status == 'added_by_clinic_claimed' ? 'selected="selected"' : ''}} >Added by Clinic Claimed</option>
+                                                            <option value="added_by_clinic_claimed" {{ $item->status == 'added_by_clinic_claimed' ? 'selected="selected"' : ''}} >Added by Clinic Approved</option>
 
                                                         @elseif($item->status == 'added_by_dentist_new' || $item->status == 'added_by_dentist_rejected' || $item->status == 'added_by_dentist_unclaimed')
                                                             <option value="added_by_dentist_new" {{ $item->status == 'added_by_dentist_new' ? 'selected="selected"' : ''}} >Added by Dentist New</option>
@@ -114,7 +114,7 @@
                                                             <option value="added_by_dentist_rejected" {{ $item->status == 'added_by_dentist_rejected' ? 'selected="selected"' : ''}} >Added by Dentist Rejected</option>     
 
                                                         @elseif($item->status == 'added_by_dentist_claimed')
-                                                            <option value="added_by_dentist_claimed" {{ $item->status == 'added_by_dentist_claimed' ? 'selected="selected"' : ''}} >Added by Dentist Claimed</option>
+                                                            <option value="added_by_dentist_claimed" {{ $item->status == 'added_by_dentist_claimed' ? 'selected="selected"' : ''}} >Added by Dentist Approved</option>
 
                                                         @else
                                                             <option value="new" {{ $item->status == 'new' ? 'selected="selected"' : ''}} >New</option>
