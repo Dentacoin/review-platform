@@ -58,7 +58,7 @@ class Kernel extends ConsoleKernel
 
             $notifications['trp'] = [
                 [
-                    'time' => Carbon::now()->addHours(1),
+                    'time' => Carbon::now()->addHours(3),
                     'tempalte_id' => 3,
                 ],
                 [
@@ -83,7 +83,7 @@ class Kernel extends ConsoleKernel
 
             $notifications['dentacoin'] = [
                 [
-                    'time' => Carbon::now()->addHours(1),
+                    'time' => Carbon::now()->addHours(3),
                     'tempalte_id' => 95,
                 ],
                 [
@@ -98,7 +98,7 @@ class Kernel extends ConsoleKernel
 
             $notifications['dentists'] = [
                 [
-                    'time' => Carbon::now()->addHours(1),
+                    'time' => Carbon::now()->addHours(3),
                     'tempalte_id' => 99,
                 ],
                 [
