@@ -980,9 +980,13 @@ class DentistController extends FrontController
                     if($user->status == 'added_by_dentist_claimed') {
 
                         $dent = User::find($user->invited_by);
-                        $user->sendTemplate(34, [
-                            'dentist-name' => $dent->getName()
-                        ], 'trp');
+
+                        if(!empty($dent) && $dent->status == 'approved') {
+                            
+                            $user->sendTemplate(34, [
+                                'dentist-name' => $dent->getName()
+                            ], 'trp');
+                        }
                     }
 
                     Auth::login($user);
