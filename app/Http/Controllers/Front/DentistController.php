@@ -68,53 +68,59 @@ class DentistController extends FrontController
 
     public function youtube($locale=null) {
 
-        $fn = microtime(true).'-'.$this->user->id;
-        $fileName   = storage_path(). '/app/public/'.$fn.'.webm';
-        //echo 'https://reviews.dentacoin.com/storage/qqfile.webm';
-        //dd($fileName);
+        if(!empty($this->user)) {
+            $fn = microtime(true).'-'.$this->user->id;
+            $fileName   = storage_path(). '/app/public/'.$fn.'.webm';
+            //echo 'https://reviews.dentacoin.com/storage/qqfile.webm';
+            //dd($fileName);
 
-        if ($this->request->hasFile('qqfile')) {
-            $image      = $this->request->file('qqfile');
-            copy($image, $fileName);
-        } else {
-            dd('upload a video first');
+            if ($this->request->hasFile('qqfile')) {
+                $image      = $this->request->file('qqfile');
+                copy($image, $fileName);
+            } else {
+                dd('upload a video first');
+            }
+
+
+
+            // Define an object that will be used to make all API requests.
+            $client = $this->getClient();
+            $service = new \Google_Service_YouTube($client);
+
+            if (isset($_SESSION['token'])) {
+                $client->setAccessToken($_SESSION['token']);
+            }
+
+            if (!$client->getAccessToken()) {
+                print("no access token");
+                exit;
+            }
+
+
+            $url = $this->videosInsert($client,
+                $service,
+                $fileName,
+                array('snippet.categoryId' => '22',
+                       'snippet.defaultLanguage' => '',
+                       'snippet.description' => $this->user->getName().'\'s video review on ',
+                       'snippet.tags[]' => '',
+                       'snippet.title' => 'Dentist review by '.$this->user->getName(),
+                       'status.embeddable' => '',
+                       'status.license' => '',
+                       'status.privacyStatus' => 'unlisted',
+                       'status.publicStatsViewable' => ''),
+                'snippet,status', array());
+
+
+
+            return Response::json( [
+                'url' => $url
+            ] );
+
         }
 
-
-
-        // Define an object that will be used to make all API requests.
-        $client = $this->getClient();
-        $service = new \Google_Service_YouTube($client);
-
-        if (isset($_SESSION['token'])) {
-            $client->setAccessToken($_SESSION['token']);
-        }
-
-        if (!$client->getAccessToken()) {
-            print("no access token");
-            exit;
-        }
-
-
-        $url = $this->videosInsert($client,
-            $service,
-            $fileName,
-            array('snippet.categoryId' => '22',
-                   'snippet.defaultLanguage' => '',
-                   'snippet.description' => $this->user->getName().'\'s video review on ',
-                   'snippet.tags[]' => '',
-                   'snippet.title' => 'Dentist review by '.$this->user->getName(),
-                   'status.embeddable' => '',
-                   'status.license' => '',
-                   'status.privacyStatus' => 'unlisted',
-                   'status.publicStatsViewable' => ''),
-            'snippet,status', array());
-
-
-
-        return Response::json( [
-            'url' => $url
-        ] );
+        print("no user");
+        exit;
     }
 
 

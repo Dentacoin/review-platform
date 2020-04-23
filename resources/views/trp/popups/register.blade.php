@@ -178,21 +178,21 @@
 						<div class="sign-in-step {!! empty($regData) ? 'active' : '' !!}" id="step-1">
 							@include('front.errors')
 							<div class="modern-field alert-after" {!! session('join_clinic') && session('invited_by') ? 'style="margin-top: 20px;"' : '' !!}>
-								<input type="email" name="email" id="dentist-email" class="modern-input" value="{{ !empty($regData) && $regData['email'] ?? old('email') }}" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+								<input type="email" name="email" id="dentist-email" class="modern-input" value="{{ !empty($regData) && $regData['email'] ? $regData['email'] : old('email') }}" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
 								<label for="dentist-email">
 									<span>{!! nl2br(trans('trp.popup.popup-register.email')) !!}</span>
 								</label>
 							</div>
 							
 							<div class="modern-field alert-after">
-								<input type="password" name="password" id="dentist-password" class="modern-input" value="{{ !empty($regData) && $regData['password'] ?? old('password') }}" autocomplete="off">
+								<input type="password" name="password" id="dentist-password" class="modern-input" value="{{ !empty($regData) && $regData['password'] ? $regData['password'] : old('password') }}" autocomplete="off">
 								<label for="dentist-password">
 									<span>{!! nl2br(trans('trp.popup.popup-register.password')) !!}</span>
 								</label>
 							</div>
 							
 							<div class="modern-field alert-after">
-								<input type="password" name="password-repeat" id="dentist-password-repeat" class="modern-input" value="{{ !empty($regData) && $regData['password'] ?? old('password-repeat') }}" autocomplete="off">
+								<input type="password" name="password-repeat" id="dentist-password-repeat" class="modern-input" value="{{ !empty($regData) && $regData['password'] ? $regData['password'] : old('password-repeat') }}" autocomplete="off">
 								<label for="dentist-password-repeat">
 									<span>{!! nl2br(trans('trp.popup.popup-register.repeat-password')) !!}</span>
 								</label>
@@ -230,7 +230,7 @@
 							</div>
 
 					  		<div class="modern-field title-wrap alert-after tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.title.tooltip') !!}" {!! !empty($regData) && $regData['mode']=='dentist' ? '' : 'style="display: none;"' !!}>
-					  			<select name="title" id="dentist-title" class="modern-input" value="{{ $regData['title'] ?? old('title') }}">
+					  			<select name="title" id="dentist-title" class="modern-input" value="{{ $regData['title'] ? $regData['title'] : old('title') }}">
 					  				@foreach(config('titles') as $k => $v)
 					  					<option value="{{ $k }}" {!! !empty($regData) && !empty($regData['title'] && ($regData['title'] == $k)) ? 'selected="selected"' : '' !!}>{{ $v }}</option>
 					  				@endforeach
@@ -241,7 +241,7 @@
 							</div>
 
 					  		<div class="modern-field alert-after tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.name.tooltip') !!}">
-								<input type="text" name="name" id="dentist-name" class="modern-input dentist-name-register" value="{{ !empty($regData) && $regData['name'] ?? old('name') }}" autocomplete="off">
+								<input type="text" name="name" id="dentist-name" class="modern-input dentist-name-register" value="{{ !empty($regData) && $regData['name'] ? $regData['name'] : old('name') }}" autocomplete="off">
 								<label for="dentist-name">
 									<span>{!! nl2br(trans('trp.popup.popup-register.name')) !!}</span>
 								</label>
@@ -251,7 +251,7 @@
 							<div class="alert alert-warning" id="alert-name-dentist" style="display: none;">Latin letters only. Please add the alternative spelling below.</div>
 
 					  		<div class="modern-field tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.name_alternative.tooltip') !!}">
-								<input type="text" name="name_alternative" id="dentist-name_alternative" class="modern-input" value="{{ $regData['name_alternative'] ?? old('name_alternative') }}" autocomplete="off">
+								<input type="text" name="name_alternative" id="dentist-name_alternative" class="modern-input" value="{{ $regData['name_alternative'] ? $regData['name_alternative'] : old('name_alternative') }}" autocomplete="off">
 								<label for="dentist-name_alternative">
 									<span>{!! nl2br(trans('trp.popup.popup-register.name_alterantive')) !!}</span>
 								</label>
@@ -287,7 +287,7 @@
 							</div>
 
 							<div class="modern-field alert-after tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.address.tooltip') !!}">
-								<input type="text" name="address" id="dentist-address" class="modern-input address-suggester" autocomplete="off" value="{{ $regData['address'] ?? old('address') }}">
+								<input type="text" name="address" id="dentist-address" class="modern-input address-suggester" autocomplete="off" value="{{ $regData['address'] ? $regData['address'] : old('address') }}">
 								<label for="dentist-address">
 									<span>{!! nl2br(trans('trp.popup.popup-register.address')) !!}</span>
 								</label>
@@ -309,7 +309,7 @@
 		                    </div>
 
 							<div class="modern-field alert-after tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.website.tooltip') !!}">
-								<input type="text" name="website" id="dentist-website" class="modern-input" autocomplete="off" value="{{ !empty($regData) && $regData['website'] ?? old('website') }}">
+								<input type="text" name="website" id="dentist-website" class="modern-input" autocomplete="off" value="{{ !empty($regData) && $regData['website'] ? $regData['website'] : old('website') }}">
 								<label for="dentist-website">
 									<span>{!! nl2br(trans('trp.popup.popup-register.website')) !!}</span>
 								</label>
@@ -321,7 +321,7 @@
 				    				<span class="phone-code-holder">{{ $country_id ? '+'.$countries->where('id', $country_id)->first()->phone_code : '' }}</span>
 								</div>
 								<div style="flex: 1;" class="modern-field tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.phone.tooltip') !!}">
-									<input type="text" name="phone" id="dentist-tel" class="modern-input" autocomplete="off" value="{{ !empty($regData) && $regData['phone'] ?? old('phone') }}">
+									<input type="text" name="phone" id="dentist-tel" class="modern-input" autocomplete="off" value="{{ !empty($regData) && $regData['phone'] ? $regData['phone'] : old('phone') }}">
 									<label for="dentist-tel">
 										<span>{!! nl2br(trans('trp.popup.popup-register.phone')) !!}</span>
 									</label>
@@ -352,8 +352,8 @@
 							    		</div>
 										<input type="file" name="image" id="add-avatar" upload-url="{{ getLangUrl('register/upload') }}">
 									</label>
-									<input type="hidden" id="photo-name" name="photo" value="{{ !empty($regData) && $regData['photo'] ?? '' }}" >
-									<input type="hidden" id="photo-thumb" name="photo-thumb" value="{{ $regData['photoThumb'] ?? '' }}" >
+									<input type="hidden" id="photo-name" name="photo" value="{{ !empty($regData) && $regData['photo'] ? $regData['photo'] : '' }}" >
+									<input type="hidden" id="photo-thumb" name="photo-thumb" value="{{ $regData['photoThumb'] ? $regData['photoThumb'] : '' }}" >
 								</div>
 								<div class="col">
 									<div class="specilializations">
