@@ -251,7 +251,7 @@
 							<div class="alert alert-warning" id="alert-name-dentist" style="display: none;">Latin letters only. Please add the alternative spelling below.</div>
 
 					  		<div class="modern-field tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.name_alternative.tooltip') !!}">
-								<input type="text" name="name_alternative" id="dentist-name_alternative" class="modern-input" value="{{ $regData['name_alternative'] ? $regData['name_alternative'] : old('name_alternative') }}" autocomplete="off">
+								<input type="text" name="name_alternative" id="dentist-name_alternative" class="modern-input" value="{{ !empty($regData) && $regData['name_alternative'] ? $regData['name_alternative'] : old('name_alternative') }}" autocomplete="off">
 								<label for="dentist-name_alternative">
 									<span>{!! nl2br(trans('trp.popup.popup-register.name_alterantive')) !!}</span>
 								</label>
@@ -287,7 +287,7 @@
 							</div>
 
 							<div class="modern-field alert-after tooltip-text fixed-tooltip" text="{!! trans('trp.popup.popup-register.address.tooltip') !!}">
-								<input type="text" name="address" id="dentist-address" class="modern-input address-suggester" autocomplete="off" value="{{ $regData['address'] ? $regData['address'] : old('address') }}">
+								<input type="text" name="address" id="dentist-address" class="modern-input address-suggester" autocomplete="off" value="{{ !empty($regData) && $regData['address'] ? $regData['address'] : old('address') }}">
 								<label for="dentist-address">
 									<span>{!! nl2br(trans('trp.popup.popup-register.address')) !!}</span>
 								</label>
@@ -353,7 +353,7 @@
 										<input type="file" name="image" id="add-avatar" upload-url="{{ getLangUrl('register/upload') }}">
 									</label>
 									<input type="hidden" id="photo-name" name="photo" value="{{ !empty($regData) && $regData['photo'] ? $regData['photo'] : '' }}" >
-									<input type="hidden" id="photo-thumb" name="photo-thumb" value="{{ $regData['photoThumb'] ? $regData['photoThumb'] : '' }}" >
+									<input type="hidden" id="photo-thumb" name="photo-thumb" value="{{ !empty($regData) && $regData['photoThumb'] ? $regData['photoThumb'] : '' }}" >
 								</div>
 								<div class="col">
 									<div class="specilializations">
