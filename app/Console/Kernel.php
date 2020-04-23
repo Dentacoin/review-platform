@@ -653,7 +653,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 44
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null AND `platform` = 'trp'
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00' 
                     AND `created_at` > '".date('Y-m-d', time() - 86400*7)." 00:00:00'
@@ -690,7 +690,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 45
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null AND `platform` = 'trp'
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*3)." 00:00:00' 
             ";
@@ -754,7 +754,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id IN ( 46, 47)
                     )
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null AND `platform` = 'trp'
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*4)." 00:00:00'
             ";
@@ -788,7 +788,7 @@ NEW & FAILED TRANSACTIONS
                         SELECT `user_id` FROM emails WHERE template_id = 48
                     )                    
                     AND `user_id` IN ( 
-                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null
+                        SELECT `id` FROM users WHERE is_dentist = 1 AND `status` IN ('approved','added_by_clinic_claimed','added_by_dentist_claimed') AND unsubscribe is null AND `self_deleted` is null AND `platform` = 'trp'
                     )
                     AND `created_at` < '".date('Y-m-d', time() - 86400*10)." 00:00:00'
             ";
