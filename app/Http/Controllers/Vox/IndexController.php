@@ -114,7 +114,7 @@ class IndexController extends FrontController
 		if(!empty($this->user)) {
 			
 	        if($this->user->is_dentist && $this->user->status != 'approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status != 'test') {
-	            return redirect(getLangUrl('welcome-to-dentavox'));
+	            return redirect(getLangUrl('/'));
 	        }
 
 	        if($this->user->isBanned('vox')) {
@@ -137,12 +137,26 @@ class IndexController extends FrontController
 			}
 
 			$seos = PageSeo::find(3);
+
+			$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
+
+			if( $featured_voxes->count() < 9 ) {
+
+				$arr_v = [];
+				foreach ($featured_voxes as $fv) {
+					$arr_v[] = $fv->id;
+				}
+
+				$swiper_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
+
+				$featured_voxes = $featured_voxes->concat($swiper_voxes);
+			}
 			
 			return $this->ShowVoxView('index', array(
 				'subtitle' => $subtitle,
 				'title' => $title,
 				'users_count' => User::getCount('vox'),
-	        	'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
+	        	'voxes' => $featured_voxes,
 	        	'taken' => $this->user ? $this->user->filledVoxes() : [],
 				'social_image' => $seos->getImageUrl(),
 	            'seo_title' => $seos->seo_title,
@@ -174,40 +188,6 @@ class IndexController extends FrontController
 		}
 	}
 
-	public function gdpr($locale=null) {
-
-		$this->user->gdpr_privacy = true;
-		$this->user->save();
-
-		return redirect( getLangUrl('page-not-found') );
-	}
-
-
-	public function appeal($locale=null) {
-
-		$user_login = UserLogin::where('user_id', $this->user->id )->first();
-
-		$mtext = $this->user->getName().' wants to withdraw or do a survey, but is blocked due to bad IP.
-                
-        Link to CMS: '.url("/cms/users/edit/".$this->user->id).'
-        IP address: '.$user_login->ip;
-
-        Mail::raw($mtext, function ($message) {
-
-            $sender = 'petar.stoykov@dentacoin.com';
-            $sender_name = config('mail.from.name-vox');
-
-            $message->from($sender, $sender_name);
-            $message->to( $sender );
-            $message->replyTo($sender, $sender_name);
-            $message->subject('Scammer Appeal');
-        });
-
-        Request::session()->flash('success-message', trans('vox.common.appeal-sent'));
-        return Response::json(['success' => true]);
-	}
-
-
 	public function welcome($locale=null) {
 		$first = Vox::with('questions.translations')->where('type', 'home')->first();
 
@@ -221,7 +201,7 @@ class IndexController extends FrontController
 				if($this->user) {
 					return redirect( getLangUrl('page-not-found') );
 				} else {
-					return redirect(getLangUrl('registration'));					
+					return redirect(getLangUrl('/'));
 				}
 			}
 
