@@ -103,8 +103,22 @@ class VoxController extends FrontController
 	        $social_title = str_replace(':title', $vox->title, $seos->social_title);
 	        $social_description = str_replace(':description', $vox->description, $seos->social_description);
 
+	        $featured_voxes = Vox::where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
+
+			if( $featured_voxes->count() < 9 ) {
+
+				$arr_v = [];
+				foreach ($featured_voxes as $fv) {
+					$arr_v[] = $fv->id;
+				}
+
+				$swiper_voxes = Vox::where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
+
+				$featured_voxes = $featured_voxes->concat($swiper_voxes);
+			}
+
 			return $this->ShowVoxView('vox-public', array(
-				'voxes' => Vox::where('type', 'normal')->orderBy('sort_order', 'ASC')->take(9)->get(),
+				'voxes' => $featured_voxes,
 				'vox' => $vox,
 				'custom_body_class' => 'vox-public',
 				'js' => [
