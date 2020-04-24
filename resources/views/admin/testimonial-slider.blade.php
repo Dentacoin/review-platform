@@ -61,7 +61,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Image</label>
                         <div class="col-md-4">
-                            {{ Form::file('image', '', array('class' => 'form-control')) }}
+                            <input type="file" name="image" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">
