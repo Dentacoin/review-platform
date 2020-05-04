@@ -531,7 +531,15 @@
                                                 @if($item->invited_from_form)
                                                     Added by patient <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
                                                 @else
-                                                    Registered from {{ config('platforms')[$item->platform]['name'] }} friend invite <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                    @if($item->is_dentist)
+                                                        @if(App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->is_clinic)
+                                                            Added by clinic at {{ config('platforms')[$item->platform]['name'] }} - <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                        @else
+                                                            Added by dentist at {{ config('platforms')[$item->platform]['name'] }} signup <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                        @endif
+                                                    @else
+                                                        Registered from {{ config('platforms')[$item->platform]['name'] }} friend invite <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                                    @endif
                                                 @endif
                                             @endif
                                         @else
