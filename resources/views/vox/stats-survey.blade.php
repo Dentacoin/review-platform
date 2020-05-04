@@ -274,8 +274,8 @@
 								<p>✓ Custom survey orders available</p>
 							</div>
 						</div>
-						<a href="https://dentavox.dentacoin.com/en/registration/" stat-url="{{ !empty($_SERVER['HTTP_REFERER']) ? ($_SERVER['HTTP_REFERER'].ltrim($_SERVER['REQUEST_URI'], '/')) : '' }}" class="blue-button blurred-button">SIGN UP FOR FREE</a>
-						<span>Already have an account? <a class="blurred-button" stat-url="{{ !empty($_SERVER['HTTP_REFERER']) ? ($_SERVER['HTTP_REFERER'].ltrim($_SERVER['REQUEST_URI'], '/')) : '' }}" href="https://dentavox.dentacoin.com/en/login">Log in</a></span>
+						<a href="javascript:;" class="blue-button blurred-button">SIGN UP FOR FREE</a>
+						<span>Already have an account? <a class="blurred-button log" href="javascript:;">Log in</a></span>
 					</div>
 				</div>
 			</div>

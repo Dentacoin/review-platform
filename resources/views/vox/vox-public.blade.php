@@ -43,11 +43,11 @@
 								<div class="flex login-buttons">
 									<div class="col">
 										<p>{{ trans('vox.page.questionnaire.not-logged-register-title') }}</p>
-										<a href="{{ getLangUrl('registration') }}" class="blue-button">{{ trans('vox.page.questionnaire.not-logged-register-button') }}</a>
+										<a href="javascript:;" class="blue-button open-dentacoin-gateway patient-register">{{ trans('vox.page.questionnaire.not-logged-register-button') }}</a>
 									</div>
 									<div class="col">
 										<p>{{ trans('vox.page.questionnaire.not-logged-login-title') }}</p>
-										<a href="{{ getLangUrl('login') }}" class="white-button"><img src="{{ url('new-vox-img/log-in-icon.svg') }}">{{ trans('vox.page.questionnaire.not-logged-login-button') }}</a>
+										<a href="javascript:;" class="white-button open-dentacoin-gateway patient-login"><img src="{{ url('new-vox-img/log-in-icon.svg') }}">{{ trans('vox.page.questionnaire.not-logged-login-button') }}</a>
 									</div>
 								</div>
 							</div>

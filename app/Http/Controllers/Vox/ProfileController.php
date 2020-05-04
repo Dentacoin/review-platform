@@ -24,15 +24,6 @@ use Carbon\Carbon;
 
 class ProfileController extends FrontController {
 
-    public function setGrace($locale=null) {
-
-        if(empty($this->user->grace_end)) {
-            $this->user->grace_end = Carbon::now();
-            $this->user->save();
-        }
-        session(['new_auth' => null]);
-    }
-
     public function vox($locale=null) {
 
         if(!empty($this->user)) {

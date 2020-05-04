@@ -290,7 +290,6 @@ $reviewRoutes = function () {
 
 				Route::any('invite-new-dentist', 				'AddDentistController@invite_new_dentist');
 
-				Route::get('profile/setGrace', 					'ProfileController@setGrace');
 				Route::post('profile/info/upload', 				'ProfileController@upload');
 				Route::post('profile/gallery', 					'ProfileController@gallery');				
 				Route::any('profile/gallery/delete/{id}', 		'ProfileController@gallery_delete');
@@ -341,10 +340,9 @@ Route::domain('urgent.reviews.dentacoin.com')->group($reviewRoutes);
 
 $voxRoutes = function () {
 	
-	//Route::any('test', 									'Front\YouTubeController@test');
-	Route::get('sitemap-dentavox.xml', 					'Vox\SitemapController@links');
-	Route::get('sitemap.xml', 							'Vox\SitemapController@sitemap');
-	Route::get('robots.txt', 							'Vox\RobotsController@content');
+	Route::get('sitemap-dentavox.xml', 							'Vox\SitemapController@links');
+	Route::get('sitemap.xml', 									'Vox\SitemapController@sitemap');
+	Route::get('robots.txt', 									'Vox\RobotsController@content');
 
 	Route::get('user-logout',									'Auth\AuthenticateUser@getLogout');
 
@@ -352,8 +350,6 @@ $voxRoutes = function () {
 
 	Route::group(['prefix' => '{locale?}'], function(){
 
-		Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginFormVox'] );
-		Route::post('login',									'Auth\AuthenticateUser@postLoginVox');
 		Route::get('logout',									'Auth\AuthenticateUser@getLogout');
 
 		Route::group(['namespace' => 'Vox'], function () {
@@ -369,34 +365,7 @@ $voxRoutes = function () {
 
 			Route::any('invite', 								'RegisterController@invite_accept');
 			
-			Route::any('registration', 							'RegisterController@register');
-			Route::post('registration/step1', 					'RegisterController@check_step_one');
-			Route::post('registration/step2', 					'RegisterController@check_step_two');
-			Route::post('registration/step3', 					'RegisterController@check_step_three');
-			Route::post('registration/step4', 					'RegisterController@check_step_four');
-			Route::post('registration/upload', 					'RegisterController@upload');
-
-			Route::get('recover-password', 						'RegisterController@forgot');
-			Route::post('recover-password', 					'RegisterController@forgot_form');
-			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
-			Route::post('recover/{id}/{hash}', 					'RegisterController@recover_form');
-
-			Route::any('welcome-to-dentavox', 					'RegisterController@register_success');
-
-			Route::any('new-login/facebook', 					'LoginController@new_facebook_login');
-			
-			Route::get('login/facebook/{query?}', 				'LoginController@facebook_login')->where('query','.+');
-			Route::get('login/callback/facebook/{query?}', 		'LoginController@facebook_callback')->where('query','.+');
-			Route::any('login/civic', 							'LoginController@civic');
-
-			Route::any('new-register/facebook', 				'LoginController@new_facebook_register');
-			Route::post('new-register/civic', 					'RegisterController@new_civic_register');
-			
 			Route::any('status', 								'LoginController@status');
-
-			Route::post('register/civic', 						'RegisterController@civic');
-			Route::get('register/facebook', 					'LoginController@facebook_register');
-			Route::get('register/callback/facebook', 			'LoginController@facebook_callback_register');
 
 			Route::any('dental-survey-stats', 					'StatsController@home');
 			Route::any('dental-survey-stats/{id}', 				'StatsController@stats');
@@ -427,7 +396,6 @@ $voxRoutes = function () {
 
 			Route::group(['middleware' => 'auth:web'], function () {
 				
-				Route::get('profile/setGrace', 					'ProfileController@setGrace');
 
 			});
 
@@ -436,8 +404,6 @@ $voxRoutes = function () {
 			Route::post('request-survey-patients', 				'IndexController@request_survey_patients');
 			Route::post('recommend', 							'IndexController@recommend');
 			Route::get('welcome-survey', 						'IndexController@welcome');
-			Route::any('appeal', 								'IndexController@appeal');
-			Route::any('accept-gdpr', 							'IndexController@gdpr');
 
 			Route::get('page-not-found', 						'NotFoundController@home');
 			Route::get('{catch?}', 								'NotFoundController@catch');

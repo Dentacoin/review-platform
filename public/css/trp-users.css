@@ -319,9 +319,6 @@
       .profile-info-mobile .profile-rating .button:not(.button-inner-white):hover {
         background-color: #2d95bf;
         border-color: #2d95bf; }
-  .profile-info-mobile .short-desc-arrow {
-    left: 50%;
-    transform: translateX(-50%); }
 
 .profile-info {
   padding: 15px;
@@ -1049,22 +1046,6 @@
     background-color: #9d9d9d;
     color: white; }
 
-.short-desc-arrow {
-  width: 33px;
-  height: 22px;
-  display: block;
-  position: absolute;
-  bottom: -37px;
-  left: 10px;
-  background: url("../img-trp/desc-arrow-down.png") no-repeat 50% 100%;
-  background-size: cover;
-  z-index: -1; }
-  @media screen and (max-width: 768px) {
-    .short-desc-arrow {
-      bottom: -23px; } }
-  .short-desc-arrow.active {
-    background-image: url("../img-trp/desc-arrow-up.png"); }
-
 .edit-short-description {
   float: left;
   width: 340px;
@@ -1096,9 +1077,6 @@ body.edit-user .profile-info {
     @media screen and (max-width: 998px) {
       body.edit-user .profile-info .media-right {
         width: 100%; } }
-body.edit-user .dentist-short-desc,
-body.edit-user .short-desc-arrow {
-  display: none; }
 body.edit-user .profile-info-mobile .share-mobile {
   display: none; }
 body.edit-user .profile-info-mobile .profile-details {

@@ -102,7 +102,7 @@
 					</a>
 				</div>
 			@else
-				<a href="{{ getLangUrl('registration') }}" class="blue-button sign">
+				<a href="javascript:;" class="blue-button sign open-dentacoin-gateway patient-register">
 					<img src="{{ url('new-vox-img/coins.svg') }}">
 					{!! nl2br(trans('vox.daily-polls.popup.signin')) !!}
 				</a>

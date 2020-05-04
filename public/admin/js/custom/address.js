@@ -126,7 +126,7 @@ jQuery(document).ready(function($){
 	checkAddress = function(place, conatiner) {
         //conatiner.find('.address-suggester').blur();
         conatiner.find('.geoip-hint').hide();
-        conatiner.find('.geoip-confirmation').hide();
+        conatiner.find('.different-country-hint').hide();
         conatiner.find('.geoip-confirmation').hide();
         conatiner.find('.suggester-map-div').hide();
 

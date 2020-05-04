@@ -723,7 +723,7 @@
 				<div class="flickity-magnet">
 					<div class="answer-radios-magnet clearfix">
 						<div class="answer-question">
-							<h4>1. What is the main priority for your practice management?</h4>
+							<h4>1. {!! trans('trp.popup.popup-lead-magnet.question1') !!}</h4>
 						</div>
 						<div class="buttons-list clearfix"> 
 							<label class="magnet-label" for="answer-1-1">
@@ -731,27 +731,27 @@
 									<span></span>
 								</span>
 								<input id="answer-1-1" type="radio" name="answer-1" class="lead-magnet-radio" ans-text="To acquire new patients" value="1">
-								To acquire new patients
+								{!! trans('trp.popup.popup-lead-magnet.question1.answer1') !!}
 							</label>
 							<label class="magnet-label" for="answer-1-2">
 								<span class="modern-radio">
 									<span></span>
 								</span>
 								<input id="answer-1-2" type="radio" name="answer-1" class="lead-magnet-radio" ans-text="To keep existing patients" value="2">
-								To keep existing patients
+								{!! trans('trp.popup.popup-lead-magnet.question1.answer2') !!}
 							</label>
 							<label class="magnet-label" for="answer-1-3">
 								<span class="modern-radio">
 									<span></span>
 								</span>
 								<input id="answer-1-3" type="radio" name="answer-1" class="lead-magnet-radio" ans-text="Both" value="3">
-								Both
+								{!! trans('trp.popup.popup-lead-magnet.question1.answer3') !!}
 							</label>
 						</div>
 					</div>
 					<div class="answer-radios-magnet clearfix">
 						<div class="answer-question">
-							<h4>2. What is your primary online tool for collecting patient reviews?</h4>
+							<h4>2. {!! trans('trp.popup.popup-lead-magnet.question2') !!}</h4>
 						</div>
 						<div class="buttons-list clearfix"> 
 							<label class="magnet-label" for="answer-2-1">
@@ -759,70 +759,70 @@
 									<span></span>
 								</span>
 								<input id="answer-2-1" type="radio" name="answer-2" class="lead-magnet-radio" ans-text="My website" value="1">
-								My website
+								{!! trans('trp.popup.popup-lead-magnet.question2.answer1') !!}
 							</label>
 							<label class="magnet-label" for="answer-2-2">
 								<span class="modern-radio">
 									<span></span>
 								</span>
 								<input id="answer-2-2" type="radio" name="answer-2" class="lead-magnet-radio" ans-text="Google" value="2">
-								Google
+								{!! trans('trp.popup.popup-lead-magnet.question2.answer2') !!}
 							</label>
 							<label class="magnet-label" for="answer-2-3">
 								<span class="modern-radio">
 									<span></span>
 								</span>
 								<input id="answer-2-3" type="radio" name="answer-2" class="lead-magnet-radio" ans-text="Facebook or other social media" value="3">
-								Facebook or other social media
+								{!! trans('trp.popup.popup-lead-magnet.question2.answer3') !!}
 							</label>
 							<label class="magnet-label" for="answer-2-4">
 								<span class="modern-radio">
 									<span></span>
 								</span>
 								<input id="answer-2-4" type="radio" name="answer-2" class="lead-magnet-radio" ans-text="General review platform (e.g. Trustpilot)" value="4">
-								General review platform (e.g. Trustpilot)
+								{!! trans('trp.popup.popup-lead-magnet.question2.answer4') !!}
 							</label>
 							<label class="magnet-label" for="answer-2-5">
 								<span class="modern-radio">
 									<span></span>
 								</span>
 								<input id="answer-2-5" type="radio" name="answer-2" class="lead-magnet-radio" ans-text="Specialized review platform (e.g. Dentacoin Trusted Reviews, Zocdoc.)" value="5">
-								Specialized review platform (e.g. Dentacoin Trusted Reviews, Zocdoc.)
+								{!! trans('trp.popup.popup-lead-magnet.question2.answer5') !!}
 							</label>
 							<label class="magnet-label" for="answer-2-6">
 								<span class="modern-radio">
 									<span></span>
 								</span>
 								<input id="answer-2-6" type="radio" name="answer-2" class="lead-magnet-radio" ans-text="I don’t use one" value="6">
-								I don’t use one
+								{!! trans('trp.popup.popup-lead-magnet.question2.answer6') !!}
 							</label>
 						</div>
 					</div>
 					<div class="answer-radios-magnet clearfix">
 						<div class="answer-question">
-							<h4>3. Do you typically ask your patients to leave an online review?</h4>
+							<h4>3. {!! trans('trp.popup.popup-lead-magnet.question3') !!}</h4>
 						</div>
 						<div class="buttons-list clearfix"> 
-							<p>(Select all that apply)</p>
+							<p>{!! trans('trp.popup.popup-lead-magnet.select-all') !!}</p>
 							<label class="magnet-label" for="answer-3-1">
 								<i class="far fa-square"></i>
 								<input id="answer-3-1" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox" ans-text="Yes, in person" value="1">
-								Yes, in person
+								{!! trans('trp.popup.popup-lead-magnet.question3.asnwer1') !!}
 							</label>
 							<label class="magnet-label" for="answer-3-2">
 								<i class="far fa-square"></i>
 								<input id="answer-3-2" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox" ans-text="Yes, by email" value="2">
-								Yes, by email
+								{!! trans('trp.popup.popup-lead-magnet.question3.asnwer2') !!}
 							</label>
 							<label class="magnet-label" for="answer-3-3">
 								<i class="far fa-square"></i>
 								<input id="answer-3-3" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox" ans-text="Yes, by SMS" value="3">
-								Yes, by SMS
+								{!! trans('trp.popup.popup-lead-magnet.question3.asnwer3') !!}
 							</label>
 							<label class="magnet-label disabler-label" for="answer-3-4">
 								<i class="far fa-square"></i>
 								<input id="answer-3-4" type="checkbox" name="answer-3[]" class="lead-magnet-checkbox disabler" ans-text="No" value="4">
-								No
+								{!! trans('trp.popup.popup-lead-magnet.question3.asnwer4') !!}
 							</label>
 						</div> 
 						<div class="alert alert-warning" style="display: none;">{!! trans('trp.popup.popup-lead-magnet.select-answer-error') !!}</div>
@@ -832,7 +832,7 @@
 					</div>
 					<div class="answer-radios-magnet clearfix">
 						<div class="answer-question">
-							<h4>4. How frequently do you invite patients to leave a review?</h4>
+							<h4>4. {!! trans('trp.popup.popup-lead-magnet.question4') !!}</h4>
 						</div>
 						<div class="buttons-list clearfix"> 
 							<label class="magnet-label" for="answer-4-1">
@@ -840,27 +840,27 @@
 									<span></span>
 								</span>
 								<input id="answer-4-1" type="radio" name="answer-4" class="lead-magnet-radio" ans-text="Every day" value="1">
-								Every day
+								{!! trans('trp.popup.popup-lead-magnet.question4.asnwer1') !!}
 							</label>
 							<label class="magnet-label" for="answer-4-2">
 								<span class="modern-radio">
 									<span></span>
 								</span>
 								<input id="answer-4-2" type="radio" name="answer-4" class="lead-magnet-radio" ans-text="Occasionally" value="2">
-								Occasionally
+								{!! trans('trp.popup.popup-lead-magnet.question4.asnwer2') !!}
 							</label>
 							<label class="magnet-label" for="answer-4-3">
 								<span class="modern-radio">
 									<span></span>
 								</span>
 								<input id="answer-4-3" type="radio" name="answer-4" class="lead-magnet-radio" ans-text="It happened a few times only" value="3">
-								It happened a few times only
+								{!! trans('trp.popup.popup-lead-magnet.question4.asnwer3') !!}
 							</label>
 						</div>
 					</div>
 					<div class="answer-radios-magnet clearfix">
 						<div class="answer-question">
-							<h4>5. Do you reply to online reviews?</h4>
+							<h4>5. {!! trans('trp.popup.popup-lead-magnet.question5') !!}</h4>
 						</div>
 						<div class="buttons-list clearfix"> 
 							<label class="magnet-label" for="answer-5-1">
@@ -868,28 +868,28 @@
 									<span></span>
 								</span>
 								<input id="answer-5-1" type="radio" name="answer-5" class="lead-magnet-radio" ans-text="Yes, to all reviews" value="1">
-								Yes, to all reviews
+								{!! trans('trp.popup.popup-lead-magnet.question5.asnwer1') !!}
 							</label>
 							<label class="magnet-label" for="answer-5-2">
 								<span class="modern-radio">
 									<span></span>
 								</span>
 								<input id="answer-5-2" type="radio" name="answer-5" class="lead-magnet-radio" ans-text="Yes, only to negative reviews" value="2">
-								Yes, only to negative reviews
+								{!! trans('trp.popup.popup-lead-magnet.question5.asnwer2') !!}
 							</label>
 							<label class="magnet-label" for="answer-5-3">
 								<span class="modern-radio">
 									<span></span>
 								</span>
 								<input id="answer-5-3" type="radio" name="answer-5" class="lead-magnet-radio" ans-text="Yes, from time to time" value="3">
-								Yes, from time to time
+								{!! trans('trp.popup.popup-lead-magnet.question5.asnwer3') !!}
 							</label>
 							<label class="magnet-label" for="answer-5-4">
 								<span class="modern-radio">
 									<span></span>
 								</span>
 								<input id="answer-5-4" type="radio" name="answer-5" class="lead-magnet-radio" ans-text="No" value="4">
-								No
+								{!! trans('trp.popup.popup-lead-magnet.question5.asnwer4') !!}
 							</label>
 						</div> 
 						<div class="tac" style="display: none;">

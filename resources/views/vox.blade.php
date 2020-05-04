@@ -30,6 +30,8 @@
         <meta name="twitter:description" content="{{ $social_description }}" />
         <meta name="twitter:image" content="{{ $social_image }}"/>
 
+        <meta name="csrf-token" content="{{ csrf_token() }}"/>
+
 		{!! config('langs')[App::getLocale()]['font'] !!}
 
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-vox.css').'?ver='.$cache_version }}" />
@@ -102,11 +104,13 @@
 
     </head>
 
-    <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($satic_page) ? 'page-page' : '' }} {{ (config('langs')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }} {{ !empty($user) ? 'logged-in' : 'logged-out' }} {{ !empty($custom_body_class) ? $custom_body_class : '' }}">
+    <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ (config('langs')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }} {{ !empty($user) ? 'logged-in' : 'logged-out' }} {{ !empty($custom_body_class) ? $custom_body_class : '' }}">
 		<noscript>
 			<img height="1" width="1" src="https://www.facebook.com/tr?id=2010503399201502&ev=PageView&noscript=1"/>
 		 	<img height="1" width="1" src="https://www.facebook.com/tr?id=2366034370318681&ev=PageView&noscript=1"/>
 		</noscript>
+
+		<div id="site-url" url="{{ empty($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/en/welcome-survey/' ? getLangUrl('/') : 'https://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] }}"></div>
 		
 		<div class="above-fold">
 			<header>
@@ -191,11 +195,11 @@
 												Already been here?
 											</span>
 											<br/>
-											<a class="my-name" style="font-weight: bold;" href="{{ getVoxUrl('login') }}">
+											<a class="my-name open-dentacoin-gateway patient-login" style="font-weight: bold;" href="javascript:;">
 												Log into your Profile!
 											</a>
 										</div>
-										<a class="header-a" href="{{ getVoxUrl('login') }}">
+										<a class="header-a open-dentacoin-gateway patient-login" href="javascript:;">
 											<img class="header-avatar" src="{{ $prev_user->getImageUrl(true) }}">
 										</a>
 									</div>
@@ -206,7 +210,7 @@
 									1 DCN = $<span id="header-rate">{{ sprintf('%.6F', $dcn_price) }}</span> 
 									<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
 								</span>
-								<a href="{{ getVoxUrl('login') }}" class="start-button">
+								<a href="javascript:;" class="start-button open-dentacoin-gateway patient-login">
 									Log in
 								</a>
 							@endif
@@ -223,17 +227,14 @@
 		</div>
 
 
-		@if(empty($user))
-			@include('vox.popups.suspended')	
-		@else
+		@if(!empty($user))
 			@include('vox.popups.recommend')
 		@endif
 
 		<style type="text/css">
-			.page-login .poll-bubble, .page-register .poll-bubble, .page-profile .poll-bubble {
+			.page-profile .poll-bubble {
 				display: none !important;
 			}
-
 		</style>
 
 		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && $current_page != 'register' && $current_page != 'login' && request()->getHost() != 'vox.dentacoin.com' && request()->getHost() != 'account.dentacoin.com' && empty($session_polls)) || $current_page == 'daily-polls' || !empty($closed_daily_poll) && $current_page != 'questionnaire')
@@ -276,113 +277,7 @@
 					</a>
 				</div>
 			</div>
-
 		@endif
-
-
-
-        @if(!empty($user) && $user->platform != 'external' && $new_auth)
-			<div class="new-auth active">
-				<div class="wrapper">
-					<div class="inner">
-						@include('front.errors')
-						<h2>
-							{!! trans('vox.page.auth.after-login.title') !!}
-						</h2>
-						<div class="flex break-mobile">
-							<p>
-								<b>
-									{!! trans('vox.page.auth.after-login.dear', [
-										'name' => '<span class="blue">'.$user->getName().'</span>'
-									]) !!}
-								</b>
-								<br/>
-								<br/>
-								@if( $user->grace_end && $user->grace_end->timestamp+86400*31 < time() )
-									{!! nl2br(trans('vox.page.auth.after-login.hint-expired')) !!}
-								@elseif($user->grace_end)
-									{!! nl2br(trans('vox.page.auth.after-login.hint-grace',[
-										'days' => floor(($user->grace_end->timestamp+86400*31 - time()) / 86400)
-									])) !!}
-								@else 
-									If you already have a Facebook or Civic account, just continue with your preferred option and your DentaVox account with be automatically connected.
-								@endif
-
-							</p>
-
-							<div class="alert alert-danger agree-cookies" style="display: none;">
-								You must accept at least the strictly necessary cookies in order to proceed. 
-							</div>
-
-							<form action="{{ getLangUrl('new-login/facebook', null, 'https://dentavox.dentacoin.com/') }}" method="post" id="new-login-form" style="display: none;">
-								{!! csrf_field() !!}
-								<input type="text" name="access-token" value="">
-								<input type="hidden" name="intended" value="{{ !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '' }}">
-								<button type="submit"></button>			
-							</form>
-
-							<form action="{{ getLangUrl('login/civic', null, 'https://dentavox.dentacoin.com/') }}" method="post" id="new-civic-login-form" style="display: none;">
-								{!! csrf_field() !!}
-								<input type="text" name="jwtToken" value="">
-								<input type="hidden" name="intended" value="{{ !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '' }}">
-								<button type="submit"></button>			
-							</form>
-								
-							<div class="form-group buttons">
-							  	<div class="col-md-12 text-center">
-									<div class="fb-button-inside">
-										<a href="javascript:;" class="fb-login-button-new has-cookies-button"></a>
-										<div class="fb-login-button has-cookies-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
-									</div>
-								</div>
-
-							  	<div class="col-md-12 text-center">
-
-									<div class="civic-button has-cookies-button" id="register-civic-button">
-										<i class="fas fa-circle-notch fa-spin"></i>
-										Continue with Civic
-									</div>
-								</div>
-
-								<!-- @if( $user->grace_end && $user->grace_end->timestamp+86400*31 < time() )
-								@else
-								  	<div class="col-md-12 text-center">
-										<div class="grace-button" id="grace-button">
-											{!! trans('vox.page.auth.after-login.button-grace') !!}
-											
-										</div>
-								  	</div>
-								@endif -->
-
-							</div>
-						</div>
-
-						<div id="civic-cancelled" class="alert alert-info" style="display: none;">
-							{!! nl2br(trans('front.common.civic.cancelled')) !!}
-						</div>
-						<div id="civic-error" class="alert alert-warning" style="display: none;">
-							{!! nl2br(trans('front.common.civic.error')) !!}
-							<span></span>
-						</div>
-						<div id="civic-weak" class="alert alert-warning" style="display: none;">
-							{!! nl2br(trans('front.common.civic.weak')) !!}
-						</div>
-						<div id="civic-wait" class="alert alert-info" style="display: none;">
-							{!! nl2br(trans('front.common.civic.wait')) !!}
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div id="fb-root"></div>
-			<script>(function(d, s, id) {
-			var js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) return;
-			js = d.createElement(s); js.id = id;
-			js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=1906201509652855&autoLogAppEvents=1';
-			fjs.parentNode.insertBefore(js, fjs);
-			}(document, 'script', 'facebook-jssdk'));</script>
-        @endif
 		
 		<div class="footer-expander">
 			<footer>
@@ -485,62 +380,62 @@
 		</div>
 
 		<script type='application/ld+json'> 
-		{
-		  "@context": "http://www.schema.org",
-		  "@type": "Corporation",
-		  "name": "DentaVox",
-		  "description": "DentaVox aims to improve global dental care by supplying the industry with valuable patient insights on various dental health topics. Respondents are rewarded with the first dedicated currency Dentacoin that can be used to cover preventive services and other treatments. DentaVox is a focal point for dental professionals, manufacturers and patients from all corners of the world.",
-		  "logo": "https://dentavox.dentacoin.com/new-vox-img/logo-vox.png",
-		  "image": "https://dentavox.dentacoin.com/new-vox-img/logo-vox.png",
-		  "url": "https://dentavox.dentacoin.com",
-		  "sameAs": ["https://www.facebook.com/dentavox.dentacoin/"],
-		  "address": {
-		    "@type": "PostalAddress",
-		    "streetAddress": "Wim Duisenbergplantsoen 31, ",
-		    "addressLocality": "Maastricht",
-		    "postalCode": "6221 SE ",
-		    "addressCountry": "Netherlands"
-		    },
-		    "foundingDate": "03/22/2017",
-			"founders": [
-		    {
-				"@type": "Person",
-		        "jobTitle": "Founder",
-				"familyName": "Dimitrakiev",
-				"givenName": "Dimitar ",
-				"honorificPrefix": "Prof. Dr. ",
-		        "sameAs": "https://www.linkedin.com/in/dimitar-dimitrakiev/"
-		        },
-		    {
-				"@type": "Person",
-				"familyName": "Grenzebach",
-				"givenName": "Philipp",
-				"jobTitle": "Co-Founder & Business Developer",
-		        "sameAs": "https://www.linkedin.com/in/philipp-g-986861146/"
-		    },
-		    {
-				"@type": "Person",
-				"familyName": "Grenzebach",
-				"givenName": "Jeremias",
-				"jobTitle": "Co-Founder & Core Developer",
-		        "sameAs": "https://twitter.com/neptox"
+			{
+		  		"@context": "http://www.schema.org",
+				"@type": "Corporation",
+				"name": "DentaVox",
+				"description": "DentaVox aims to improve global dental care by supplying the industry with valuable patient insights on various dental health topics. Respondents are rewarded with the first dedicated currency Dentacoin that can be used to cover preventive services and other treatments. DentaVox is a focal point for dental professionals, manufacturers and patients from all corners of the world.",
+				"logo": "https://dentavox.dentacoin.com/new-vox-img/logo-vox.png",
+				"image": "https://dentavox.dentacoin.com/new-vox-img/logo-vox.png",
+				"url": "https://dentavox.dentacoin.com",
+				"sameAs": ["https://www.facebook.com/dentavox.dentacoin/"],
+				"address": {
+	   				"@type": "PostalAddress",
+				    "streetAddress": "Wim Duisenbergplantsoen 31, ",
+				    "addressLocality": "Maastricht",
+				    "postalCode": "6221 SE ",
+				    "addressCountry": "Netherlands"
+	    		},
+			    "foundingDate": "03/22/2017",
+				"founders": [
+		    		{
+						"@type": "Person",
+				        "jobTitle": "Founder",
+						"familyName": "Dimitrakiev",
+						"givenName": "Dimitar ",
+						"honorificPrefix": "Prof. Dr. ",
+				        "sameAs": "https://www.linkedin.com/in/dimitar-dimitrakiev/"
+		        	},
+		    		{
+						"@type": "Person",
+						"familyName": "Grenzebach",
+						"givenName": "Philipp",
+						"jobTitle": "Co-Founder & Business Developer",
+				        "sameAs": "https://www.linkedin.com/in/philipp-g-986861146/"
+				    },
+		    		{
+						"@type": "Person",
+						"familyName": "Grenzebach",
+						"givenName": "Jeremias",
+						"jobTitle": "Co-Founder & Core Developer",
+				        "sameAs": "https://twitter.com/neptox"
+					}
+		    	],
+		  		"owns": {
+		   			"@type": "Product",
+					"name": "DentaVox",
+					"image": "https://dentavox.dentacoin.com/new-vox-img/logo-vox.png",
+					"description": "Take genuine paid surveys online and get rewarded! DentaVox is a market research platfom designed to provide valuable patient insights to the dental industry. Our large database with reliable dental statistics is available for free for anyone who's interested. Feel free to become a respondent yourself and help improve global dental care while also earning your first Dentacoin tokens with DentaVox.",
+		  			"aggregateRating": {
+					    "@type": "AggregateRating",
+					    "ratingValue": "5",
+					    "ratingCount": "31"
+		  			}
+				}
 			}
-		    ],
-		  "owns": {
-		   "@type": "Product",
-		  "name": "DentaVox",
-		  "image": "https://dentavox.dentacoin.com/new-vox-img/logo-vox.png",
-		  "description": "Take genuine paid surveys online and get rewarded! DentaVox is a market research platfom designed to provide valuable patient insights to the dental industry. Our large database with reliable dental statistics is available for free for anyone who's interested. Feel free to become a respondent yourself and help improve global dental care while also earning your first Dentacoin tokens with DentaVox.",
-		  "aggregateRating": {
-		    "@type": "AggregateRating",
-		    "ratingValue": "5",
-		    "ratingCount": "31"
-		  }
-		}
-		}
 		</script>
 
-
+		<!-- css -->
         @if($current_page == 'daily-polls')
         	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/core/main.min.css').'?ver='.$cache_version }}" />
         	<link rel="stylesheet" type="text/css" href="{{ url('/calendar/daygrid/main.min.css').'?ver='.$cache_version }}" />
@@ -554,8 +449,22 @@
             @endforeach
         @endif
 
+        <link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-login-gateway/css/dentacoin-login-gateway-style.css?v=1.0.1"/>
 		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
+		<!-- end css -->
+
+		<!-- js -->
 		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
+		<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js?v={{ $cache_version }}"></script>
+
+		@if(empty($user))
+			<script type="text/javascript">
+				dcnGateway.init({
+					'platform' : 'dentavox',
+					'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=dentavox'
+				});				
+			</script>
+		@endif
 
 		@if(!empty($trackEvents))
 	        <script type="text/javascript">
@@ -588,9 +497,6 @@
 		<script src="{{ url('/js/cookie.min.js') }}"></script>
 		<script src="{{ url('/js-vox/main.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js/both.js').'?ver='.$cache_version }}"></script>
-		@if(!empty($plotly))
-			<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-		@endif
         @if(!empty($js) && is_array($js))
             @foreach($js as $file)
                 <script src="{{ url('/js-vox/'.$file).'?ver='.$cache_version }}"></script>
@@ -613,5 +519,6 @@
         	var lang = '{{ App::getLocale() }}';
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         </script>
+        <!-- endjs -->
     </body>
 </html>

@@ -105,6 +105,8 @@ return [
                 'trp' => 'trp',
                 'vox' => 'vox',
                 'validation' => 'validation',
+                'translations' => 'translations',
+                'login-register' => 'login-register',
             )
         ),
         'export-import' => array(

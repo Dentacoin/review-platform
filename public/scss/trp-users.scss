@@ -474,11 +474,6 @@ $phone: "screen and (max-width: 768px)";
     		}
     	}
     }
-
-    .short-desc-arrow {
-    	left: 50%;
-    	transform: translateX(-50%);
-    }
 }
 
 .profile-info {
@@ -1619,26 +1614,6 @@ $phone: "screen and (max-width: 768px)";
     }
 }
 
-.short-desc-arrow {
-	width: 33px;
-	height: 22px;
-	display: block;
-	position: absolute;
-	bottom: -37px;
-	left: 10px;
-	background: url('../img-trp/desc-arrow-down.png') no-repeat 50% 100%;
-	background-size: cover;
-	z-index: -1;
-
-	@media #{$phone} {
-		bottom: -23px;
-	}
-
-	&.active {
-		background-image: url('../img-trp/desc-arrow-up.png');
-	}
-}
-
 .edit-short-description {
 	float: left;
     width: 340px;
@@ -1680,11 +1655,6 @@ body.edit-user {
 		    	width: 100%;
 		    }
 		}
-	}
-
-	.dentist-short-desc,
-	.short-desc-arrow {
-		display: none;
 	}
 
 	.profile-info-mobile {

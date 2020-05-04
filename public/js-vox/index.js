@@ -92,7 +92,7 @@ $(document).ready(function(){
         group.attr('data-answer', answer);
 
         if( group.next().hasClass('question-done') ) {
-            $.cookie('first_test', first_test, { expires: 1, path: '/', domain: 'dentacoin.com', secure: true });
+            Cookies.set('first_test', first_test, { expires: 1, secure: true });
 
             $.ajax( {
                 url: lang,
@@ -123,14 +123,14 @@ $(document).ready(function(){
                             });
                             
                             setTimeout( function() {
-                                window.location.href = register_url;
+                                $.event.trigger({type: 'openPatientRegister'});
                             }, 2000 );
                         });
                     }
 
                 } else {
                     setTimeout( function() {
-                        window.location.href = register_url;
+                        $.event.trigger({type: 'openPatientRegister'});
                     }, 1000 );
                 }
                 

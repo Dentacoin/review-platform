@@ -2441,12 +2441,13 @@ $(document).ready(function(){
     //     $('#login-register-popup').addClass('active');
     // });
 
-    $('.blurred-button').click( function(e) {
-        e.preventDefault();
-        if(Cookies.get('functionality_cookies')) {
-            Cookies.set('stat-url', window.location.href, { expires: 1 , domain: '.dentacoin.com', secure: true});
+    $('.blurred-button').click( function() {
+        if($(this).hasClass('log')) {
+            $.event.trigger({type: 'openPatientLogin'});
+        } else {
+            $.event.trigger({type: 'openPatientRegister'});
         }
-        window.location.href = $(this).attr('href');
+
     });
 
     $('.download-format-radio').change( function(e) {

@@ -164,7 +164,6 @@
 			reward_single: {{ $vox->getRewardPerQuestion()->dcn }},
 			current: 1
 		}
-		var register_url = '{{ getLangUrl('registration') }}';
 	</script>
 
 

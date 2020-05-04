@@ -1232,7 +1232,6 @@ class StatsController extends FrontController
     			// 'answer_aggregates' => $answer_aggregates,
     			// 'chart_data' => $chart_data,
     			// 'colors' => $colors,
-    			// 'plotly' => true,
     			'js' => [
     				'stats.js',
                     'moment.js',

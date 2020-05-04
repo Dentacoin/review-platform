@@ -16,7 +16,7 @@
 						<p class="flex-1">
 							{{ trans('vox.page.questionnaire.not-logged-register-content') }}
 						</p>
-						<a class="btn reg-but" href="{{ getLangUrl('welcome-survey') }}">
+						<a class="btn reg-but check-welcome" href="{{ getLangUrl('welcome-survey') }}">
 							{{ trans('vox.page.questionnaire.not-logged-register-button') }}
 						</a>
 					</div>
@@ -30,7 +30,7 @@
 						<p class="flex-1">
 							{{ trans('vox.page.questionnaire.not-logged-login-content') }}
 						</p>
-						<a class="btn" href="{{ getLangUrl('login') }}">
+						<a class="btn open-dentacoin-gateway patient-login" href="javascript:;">
 							{{ trans('vox.page.questionnaire.not-logged-login-button') }}
 						</a>
 					</div>

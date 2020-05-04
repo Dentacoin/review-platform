@@ -5,7 +5,7 @@
 		</div>
 
 		<div class="popup-mobile-buttons">
-			<a href="javascript:;" class="close-popup">< back</a>
+			<a href="javascript:;" class="close-popup">< {!! trans('trp.common.back') !!}</a>
 		</div>
 		<h2>
 			{!! nl2br(trans('trp.popup.popup-wokrplace.title')) !!}

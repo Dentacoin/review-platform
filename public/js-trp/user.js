@@ -1929,16 +1929,6 @@ $(document).ready(function(){
         });
     }
 
-    $('.short-desc-arrow').click( function() {
-        if ($(this).hasClass('active')) {
-            $(this).removeClass('active');
-            $(this).closest('.edit-profile-wrapper').find('.dentist-short-desc').removeClass('active');
-        } else {
-            $(this).addClass('active');
-            $(this).closest('.edit-profile-wrapper').find('.dentist-short-desc').addClass('active');
-        }
-    });
-
     $('.current-social').click( function(e) {
         var elem = $(this).closest('.social-networks').find('.social-dropdown');
         $('.social-dropdown').each( function() {

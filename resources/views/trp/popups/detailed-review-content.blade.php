@@ -190,7 +190,7 @@
 						</div>
 					</div>
 					@if($answer->question_id == 4 && !empty($review->team_doctor_rating) && ($item->id == $review->clinic_id) && !empty($review->dentist_id) && !empty(App\Models\User::find($review->dentist_id)))
-						<div class="treating-dentist">Treating dentist: <a href="{{ !empty(App\Models\User::find($review->dentist_id)->email) ? App\Models\User::find($review->dentist_id)->getLink() : 'javascript:;' }}">{{ App\Models\User::find($review->dentist_id)->getName() }}</a></div>
+						<div class="treating-dentist">{!! nl2br(trans('trp.popup.view-review-popup.treating-dentist')) !!}: <a href="{{ !empty(App\Models\User::find($review->dentist_id)->email) ? App\Models\User::find($review->dentist_id)->getLink() : 'javascript:;' }}">{{ App\Models\User::find($review->dentist_id)->getName() }}</a></div>
 					@endif
 
 	            	@foreach(json_decode($answer->question['options'], true) as $i => $option)

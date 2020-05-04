@@ -253,12 +253,6 @@ class FrontController extends BaseController {
                         session(['unbanned' => true]);
                     }
                 }
-
-                if( !$this->user->fb_id && !$this->user->civic_id && !$this->user->is_dentist ) {
-                    session(['new_auth' => true]);
-                } else {
-                    session(['new_auth' => null]);
-                }
             }
 
 
@@ -374,15 +368,6 @@ class FrontController extends BaseController {
         $params['users_count'] = User::getCount('vox');
         //dd($params['header_questions']);
 
-
-        $params['show_tutorial'] = false;
-        // if($this->user) {
-        //     if(empty($_COOKIE['show_tutorial3'])) {
-        //         $params['show_tutorial'] = true;
-        //         setcookie('show_tutorial3', time(), time()+86400*7);
-        //     }
-        // }
-
         if( session('unbanned') ) {
             session(['unbanned' => null]);
             $params['unbanned'] = true;
@@ -400,7 +385,6 @@ class FrontController extends BaseController {
         if( Request::getHost() == 'vox.dentacoin.com' ) {
             $params['noindex'] = true;
         }
-
 
         ///Daily Polls
 
@@ -589,14 +573,6 @@ class FrontController extends BaseController {
                     'ga_category' => 'PatientLogin',
                     'ga_label' => 'LoginSuccess',
                 ];
-            } else {
-                $params['trackEvents'][] = [
-                    'fb' => 'DVPatientLogin',
-                    'ga_action' => 'ClickLogin',
-                    'ga_category' => 'PatientLogin',
-                    'ga_label' => 'PatientLoginSuccess',
-                ];
-
             }
         }
 
@@ -613,13 +589,6 @@ class FrontController extends BaseController {
                         'ga_action' => 'ClickLogin',
                         'ga_category' => 'DentistLogin',
                         'ga_label' => 'DentistLogin',
-                    ];
-                } else {
-                    $params['trackEvents'][] = [
-                        'fb' => 'DVDentistLogin',
-                        'ga_action' => 'ClickLogin',
-                        'ga_category' => 'DentistLogin',
-                        'ga_label' => 'DentistLoginSuccess',
                     ];
                 }
             }
@@ -661,88 +630,8 @@ class FrontController extends BaseController {
 
                 }
             }
-
         }
 
-
-        //
-        //Vox
-        //
-
-        if( session('just_registered_patient_vox') ) {
-            session([
-                'just_registered_patient_vox' => false
-            ]);
-            $params['trackEvents'][] = [
-                'fb' => 'DVPatientRegistration',
-                'ga_action' => 'ClickContinue',
-                'ga_category' => 'PatientRegistration',
-                'ga_label' => 'PatientRegistrationComplete',
-            ];
-        }
-
-
-        if( session('just_registered_dentist_vox') ) {
-            session([
-                'just_registered_dentist_vox' => false
-            ]);
-            $params['trackEvents'][] = [
-                'fb' => 'DVDentistRegistrationStep1',
-                'ga_action' => 'ClickSubmit',
-                'ga_category' => 'DentistRegistration',
-                'ga_label' => 'DentistRegistrationStep1',
-            ];
-        }
-
-        if( session('success_registered_dentist_vox') ) {
-            session([
-                'success_registered_dentist_vox' => false
-            ]);
-            $params['trackEvents'][] = [
-                'fb' => 'DVDentistRegistrationComplete',
-                'ga_action' => 'ClickSubmit',
-                'ga_category' => 'DentistRegistration',
-                'ga_label' => 'DentistRegistrationComplete',
-            ];
-        }
-
-
-
-
-
-        $params['new_auth'] = false;
-        if( session('new_auth') && !empty($this->user) && empty($this->user->fb_id) && empty($this->user->civic_id) ) {
-            $params['new_auth'] = true;
-
-            if (!empty($params['js'])) {
-                if(is_array($params['js'])) {
-                    $params['js'][] = 'login.js';
-                } else {
-                    $params['js'] = ['login.js'];
-                }
-            }
-
-            if (!empty($params['jscdn'])) {
-                if(is_array($params['jscdn'])) {
-                    $params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
-                } else {
-                    $params['jscdn'] = [
-                        'https://hosted-sip.civic.com/js/civic.sip.min.js',
-                    ];
-                }
-            }
-
-            if (!empty($params['csscdn'])) {
-                if(is_array($params['csscdn'])) {
-                    $params['csscdn'][] = 'https://hosted-sip.civic.com/css/civic-modal.min.css';
-                } else {
-                    $params['csscdn'] = [
-                        'https://hosted-sip.civic.com/css/civic-modal.min.css',
-                    ];
-                }
-            }
-        }
-
-        $params['cache_version'] = '2020-04-22';
+        $params['cache_version'] = '2020-05-04-01';
     }
 }

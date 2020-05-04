@@ -113,7 +113,7 @@
 						</div>
 						<div class="col mail-col" style="display: none;">
 							<div class="modern-field">
-								<input type="email" class="modern-input team-member-email" id="team-member-email" name="email" placeholder="(optional)"></textarea>
+								<input type="email" class="modern-input team-member-email" id="team-member-email" name="email" placeholder="{{ trans('trp.common.optional') }}"></textarea>
 								<label for="team-member-email">
 									<span>{{ trans('trp.popup.verification-popup.add-team-email') }}</span>
 								</label>
@@ -135,7 +135,7 @@
 				<input type="hidden" name="last_user_id" value="">
 				<input type="hidden" name="last_user_hash" value="">
 
-				<div class="modern-field tooltip-text fixed-tooltip" text="What's the most important thing patients should know about your practice?">
+				<div class="modern-field tooltip-text fixed-tooltip" text="{!! nl2br(trans('trp.popup.verification-popup.description.tooltip')) !!}">
 					<textarea class="modern-input" id="dentist-description" name="description" maxsymb="512"></textarea>
 					<label for="dentist-description">
 						<span>{!! nl2br(trans('trp.popup.verification-popup.description')) !!}</span>

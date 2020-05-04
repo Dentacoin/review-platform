@@ -275,14 +275,14 @@ class Email extends Model
 			), $content);
 		}
 
-		if($this->template->id==26 || $this->template->id==40 || $this->template->id==14) { //Dentist approved
+		if($this->template->id==26) { //Dentist approved
 			$content = str_replace(array(
 				'[welcome_link]',
 				'[/welcome_link]',
 				'[become_dcn_dentist]',
 				'[/become_dcn_dentist]',
 			), array(
-				'<a '.$this->text_style.' href="'.getLangUrl('welcome-to-dentavox', null, $domain).'">',
+				'<a '.$this->text_style.' href="'.getLangUrl('/', null, $domain).'">',
 				'</a>',		
 				'<a '.$this->button_style.' target="_blank" href="https://dentists.dentacoin.com/#contacts">',
 				'</a>',				

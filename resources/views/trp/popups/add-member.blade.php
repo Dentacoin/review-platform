@@ -5,7 +5,7 @@
 		</div>
 
 		<div class="popup-mobile-buttons">
-			<a href="javascript:;" class="close-popup">< back</a>
+			<a href="javascript:;" class="close-popup">< {{ trans('trp.common.back') }}</a>
 		</div>
 		<h2>
 			{!! nl2br(trans('trp.popup.add-team-popup.title')) !!}
@@ -80,13 +80,13 @@
 				  				@endforeach
 				  			</select>
 							<label for="team-member-job-logged">
-								<span>Position:</span>
+								<span>{!! nl2br(trans('trp.popup.add-team-popup.position')) !!}:</span>
 							</label>
 						</div>
 					</div>
 					<div class="col mail-col" style="display: none;">
 						<div class="modern-field">
-							<input type="email" class="modern-input team-member-email" id="team-member-email-logged" name="email" placeholder="(optional)"></textarea>
+							<input type="email" class="modern-input team-member-email" id="team-member-email-logged" name="email" placeholder="{{ trans('trp.common.optional') }}"></textarea>
 							<label for="team-member-email-logged">
 								<span>{!! nl2br(trans('trp.popup.add-team-popup.email')) !!}</span>
 							</label>
@@ -99,65 +99,10 @@
 
 				<div class="alert member-alert" style="display: none; margin-top: 20px;">
 				</div>
-				@if(false)
-					<a href="javascript:;" class="add-dentist">+ Add another dentist</a>
-				@endif
 				<div class="tac">
-					<input type="submit" class="button" value="Add team">
+					<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.add-team-popup.submit')) !!}">
 				</div>
 			{!! Form::close() !!}
-
-			@if(false)
-				<div class="add-more" style="display: none;">
-					<div class="flex">
-						<div style="margin-bottom: 20px;">
-							<label for="add-avatar-member-login-" class="image-label">
-								<div class="centered-hack">
-									<i class="fas fa-plus"></i>
-									<p>
-										{!! nl2br(trans('trp.popup.popup-register.add-photo')) !!}													
-									</p>
-								</div>
-					    		<div class="loader">
-					    			<i class="fas fa-circle-notch fa-spin"></i>
-					    		</div>
-								<input type="file" name="image" class="add-avatar-member" id="add-avatar-member-login-" upload-url="{{ getLangUrl('register/upload') }}">
-								
-							</label>
-							<input type="hidden" class="photo-name-team" name="photo[]" >
-							<input type="hidden" class="photo-thumb-team" name="photo-thumb[]" >
-						</div>
-						<div class="col">
-							<div class="modern-field">
-								<input type="text" class="modern-input team-member-name" id="team-member-name-logged-" name="name[]"></textarea>
-								<label for="team-member-name-logged-">
-									<span>{!! nl2br(trans('trp.popup.add-team-popup.name')) !!}</span>
-								</label>
-							</div>
-						</div>
-						<div class="col">
-							<div class="modern-field alert-after">
-					  			<select name="team-job[]" id="team-member-job-logged-" class="modern-input team-member-job">
-					  				@foreach(config('trp.team_jobs') as $k => $v)
-					  					<option value="{{ $k }}">{{ $v }}</option>
-					  				@endforeach
-					  			</select>
-								<label for="team-member-job-logged-">
-									<span>{!! nl2br(trans('trp.popup.add-team-popup.position')) !!}:</span>
-								</label>
-							</div>
-						</div>
-						<div class="col mail-col" style="display: none;">
-							<div class="modern-field">
-								<input type="email" class="modern-input team-member-email" id="team-member-email-logged-" name="email[]" placeholder="(optional)"></textarea>
-								<label for="team-member-email-logged-">
-									<span>{!! nl2br(trans('trp.popup.add-team-popup.email')) !!}</span>
-								</label>
-							</div>
-						</div>
-					</div>
-				</div>
-			@endif
 		</div>
 	</div>
 </div>

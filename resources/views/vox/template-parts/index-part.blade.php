@@ -74,7 +74,7 @@
 		</div>
 
 		<div class="tac">
-			<a class="black-button" href="{{ getLangUrl('welcome-survey') }}">
+			<a class="black-button check-welcome" href="{{ getLangUrl('welcome-survey') }}">
 				{!! nl2br(trans('vox.page.index.start')) !!}
 			</a>
 		</div>
