@@ -302,7 +302,6 @@
 			    </div>		    	
 			</div>
 		</div>
-		<a href="javascript:;" class="short-desc-arrow"></a>
 	</div>
 
 	<div class="information flex">
@@ -569,7 +568,6 @@
 					Is this your practice?
 				</a>
 			@endif
-			<a href="javascript:;" class="short-desc-arrow"></a>
 
 		</div>
 
@@ -608,26 +606,6 @@
 
 		</div>
     </div>
-
-	@if(!empty($item->short_description))
-		<div class="dentist-short-desc">
-			{{ $item->short_description }}
-		</div>
-	@else
-		<div class="dentist-short-desc">
-
-			@if($item->is_clinic)
-				Dental clinic
-			@else
-				Dentist
-			@endif
-			in {{ $item->city_name ? $item->city_name.', ' : '' }}{{ $item->state_name ? $item->state_name.', ' : '' }}{{ $item->country->name }}
-
-			@if($item->categories->isNotEmpty())
-				specialized in {{ strtolower(implode(', ', $item->parseCategories($categories))) }}.
-			@endif
-		</div>
-	@endif
 
     <div class="profile-tabs {!! $item->reviews_in_standard()->count() && $item->reviews_in_video()->count() && (!empty($user) && $user->id==$item->id && ($user->patients_invites->isNotEmpty() || $user->asks->isNotEmpty())) ? 'full-tabs' : '' !!}">
     	@if( $item->reviews_in_standard()->count() )
@@ -1140,31 +1118,6 @@
 						
 					</div>
 				@endif
-			@endif
-
-			@if(!empty($user) && $item->id==$user->id)
-				<div class="about-container">
-	    			<div class="short-content" role="presenter" style="margin-top: 40px;">
-	    				<span class="value-here" empty-value="{{ nl2br(trans('trp.page.user.description-empty')) }}">
-		    				{!! $item->short_description ? nl2br($item->short_description) : nl2br(trans('trp.page.user.short-description-empty')) !!}
-		    			</span>
-    					<a>
-    						<img src="{{ url('img-trp/pencil.png') }}">
-    					</a>
-	    			</div>
-	    			<div class="short-content" role="editor" style="display: none;margin-top: 40px;">
-						{{ Form::open(array('class' => 'edit-description', 'method' => 'post', 'url' => getLangUrl('profile/info') )) }}
-							{!! csrf_field() !!}
-							<textarea class="input" name="short_description" id="dentist-short-description" placeholder="{!! nl2br(trans('trp.page.user.short-description')) !!}">{{ $item->short_description }}</textarea>
-							<p class="symbols-wrapper"><span id="symbols-count-short">0</span> / max length 150</p>
-                            <input type="hidden" name="field" value="short_description" />
-                            <input type="hidden" name="json" value="1" />
-							<button type="submit" class="button">{!! nl2br(trans('trp.page.user.save')) !!}</button>
-							<div class="alert alert-warning" style="display: none;">
-							</div>
-						{!! Form::close() !!}
-	    			</div>
-	    		</div>
 			@endif
 		</div>
 
