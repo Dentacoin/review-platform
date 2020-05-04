@@ -30,6 +30,8 @@ class DentistClaimsController extends AdminController
         //if phone is empty is old added by patient dentist
         if(empty($item->phone) && !empty($user->old_unclaimed_profile)) {
             $user->password = $item->password;
+            $user->status = 'approved';
+            $user->ownership = 'approved';
             $user->save();
 
             $user->old_unclaimed_profile->completed = true;
