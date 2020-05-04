@@ -750,7 +750,7 @@ class RegisterController extends FrontController
 
     public function verification_dentist($locale=null) {
 
-        if (request('user_id')) {
+        if (request('user_id') && !empty(User::find(request('user_id'))) && !empty(request('user_hash')) && request('user_hash') == User::find(request('user_id'))->get_token()) {
 
             $user = User::find(request('user_id'));
 
@@ -792,7 +792,7 @@ class RegisterController extends FrontController
 
     public function add_work_hours($locale=null) {
 
-        if (request('last_user_id')) {
+        if (request('last_user_id') && !empty(User::find(request('last_user_id'))) && !empty(request('last_user_hash')) && request('last_user_hash') == User::find(request('last_user_id'))->get_token()) {
 
             $user = User::find(request('last_user_id'));
 

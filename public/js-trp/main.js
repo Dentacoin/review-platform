@@ -1519,20 +1519,6 @@ jQuery(document).ready(function($){
     }
     inputJob();
 
-    $('.add-dentist').click( function() {
-    	$(this).closest('.add-t').find('.add-more .flex').find('[id]').each( function() {
-    		$(this).attr('id', $(this).attr('id') + id_counter);
-    	});
-    	$(this).closest('.add-t').find('.add-more .flex').find('[for]').each( function() {
-    		$(this).attr('for', $(this).attr('for') + id_counter);
-    	});
-    	$(this).closest('.add-t').find('.add-more .flex').clone().appendTo($(this).closest('.add-t').find('.more-d'));
-    	modernFieldsUpdate();
-    	uploadTeamImage();
-    	inputJob();
-    	id_counter++;
-    });
-
     $('.str-check-assurance').click( function() {
     	if(ajax_is_running) {
 			return;

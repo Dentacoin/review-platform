@@ -114,14 +114,6 @@ class ProfileController extends FrontController
         ];
     }
 
-    public function setGrace($locale=null) {
-        if(empty($this->user->grace_end)) {
-            $this->user->grace_end = Carbon::now();
-            $this->user->save();
-        }
-        session(['new_auth' => null]);
-    }
-
     //
     //Invites
     //
@@ -742,7 +734,7 @@ class ProfileController extends FrontController
 
     public function invite_team_member($locale=null) {
 
-        if( (!empty($this->user) && $this->user->canInvite('trp')) || (empty($this->user) && !empty(request('last_user_id')) && !empty(User::find(request('last_user_id'))) )) {
+        if( (!empty($this->user) && $this->user->canInvite('trp')) || (empty($this->user) && !empty(request('last_user_id')) && !empty(User::find(request('last_user_id'))) && !empty(request('last_user_hash')) && request('last_user_hash') == User::find(request('last_user_id'))->get_token() )) {
 
             if (!empty($this->user)) {
                 $current_user = $this->user;

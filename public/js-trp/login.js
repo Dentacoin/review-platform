@@ -116,15 +116,6 @@ $(document).ready(function(){
     });
 
 
-    $('#grace-button').click( function() {
-        $.ajax({
-            type: "GET",
-            url: lang + '/profile/setGrace',
-        });
-        $('.new-auth').remove();
-    } );
-
-
     //
     //New Form
     //
@@ -185,7 +176,7 @@ $(document).ready(function(){
                     $('.wh-btn').hide();
                 }
 
-                if(data.description && data.work_hours) {
+                if(!data.is_clinic && data.description && data.work_hours) {
                     $('.verification-info').hide();
                 }
 
