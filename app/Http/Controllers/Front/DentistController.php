@@ -769,9 +769,7 @@ class DentistController extends FrontController
             $view_params['schema']["hasMap"] = "https://www.google.com/maps/@".$item->lat.",".$item->lon.",15z";
         }
 
-        if(!empty($item->short_description)){
-            $view_params['schema']["description"] = $item->short_description;
-        }
+        $view_params['schema']["description"] = !empty($item->short_description) ? $item->short_description : (($item->is_clinic ? 'Dental clinic' : 'Dentist').' in '.($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country_id ? $item->country->name : '').($item->categories->isNotEmpty() ? ' specialized in '.strtolower(implode(', ', $item->parseCategories($this->categories))) : '')) ;
 
         if (!empty($item->website)) {
             $view_params['schema']["url"] = $item->website;
