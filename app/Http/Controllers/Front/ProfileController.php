@@ -1003,7 +1003,7 @@ class ProfileController extends FrontController
                 }
             }
 
-            return Response::json(['success' => true, 'message' => trans('trp.popup.verification-popup.clinic.success') ] );
+            return Response::json(['success' => true, 'message' => trans('trp.popup.verification-popup.clinic.success'), 'with_email' => ($newuser->status == 'dentist_no_email' ? false : true) ] );
         }
         
         return Response::json(['success' => false, 'message' => trans('trp.common.something-wrong') ] );

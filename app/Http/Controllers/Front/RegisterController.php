@@ -185,39 +185,42 @@ class RegisterController extends FrontController
 
 
     public function verification_dentist($locale=null) {
-
-        if (request('user_id') && !empty(User::find(request('user_id'))) && !empty(request('user_hash')) && request('user_hash') == User::find(request('user_id'))->get_token()) {
+        if (request('user_id') && !empty(User::find(request('user_id'))) && !empty(request('user_hash'))) {
 
             $user = User::find(request('user_id'));
 
-            $validator = Validator::make(Request::all(), [
-                'description' => array('required', 'max:512'),
-            ]);
+            if($user->get_token() == request('user_hash')) {
 
-            if ($validator->fails()) {
+                $validator = Validator::make(Request::all(), [
+                    'description' => array('required', 'max:512'),
+                ]);
 
-                $msg = $validator->getMessageBag()->toArray();
-                $ret = array(
-                    'success' => false,
-                    'messages' => array()
-                );
+                if ($validator->fails()) {
 
-                foreach ($msg as $field => $errors) {
-                    $ret['messages'][$field] = implode(', ', $errors);
+                    $msg = $validator->getMessageBag()->toArray();
+                    $ret = array(
+                        'success' => false,
+                        'messages' => array()
+                    );
+
+                    foreach ($msg as $field => $errors) {
+                        $ret['messages'][$field] = implode(', ', $errors);
+                    }
+
+                    return Response::json( $ret );
+                } else {
+
+                    $user->description = Request::Input('description');
+                    $user->save();
+
+                    return Response::json( [
+                        'success' => true,
+                        'user' => $user->is_clinic ? 'clinic' : 'dentist',
+                        'message' => trans('trp.popup.verification-popup.user-info.success'),
+                    ] );
                 }
-
-                return Response::json( $ret );
-            } else {
-
-                $user->description = Request::Input('description');
-                $user->save();
-
-                return Response::json( [
-                    'success' => true,
-                    'user' => $user->is_clinic ? 'clinic' : 'dentist',
-                    'message' => trans('trp.popup.verification-popup.user-info.success'),
-                ] );
             }
+
         }
 
         return Response::json( [
