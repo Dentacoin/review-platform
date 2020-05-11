@@ -20,7 +20,7 @@
 			</div>
 
 			<div class="tac button-wrap">
-				<a href="javascript:;" class="button button-sign-up-dentist" data-popup="popup-register">
+				<a href="javascript:;" class="button button-sign-up-dentist open-dentacoin-gateway dentist-register">
 	    			{!! nl2br(trans('trp.page.index-dentist.signup')) !!}
 	    		</a>
 	    	</div>
@@ -34,7 +34,7 @@
 	    </div>
 
 	    <div class="signin-form-wrapper">
-	    	<img src="{{ url('img-trp/dentacoin-trusted-reviews-dentist-front-page.png') }}" alt="Dentacoin trusted reviews dentist front page">
+	    	<img src="{{ url('img-trp/dentacoin-trusted-reviews-dentist-front-page.png') }}" alt="{{ trans('trp.alt-tags.index') }}">
 	    	<div class="container clearfix">
 	    		<form class="signin-form tablet-fixes">
 
@@ -67,7 +67,7 @@
 
 					<p class="have-account">
 						{!! nl2br(trans('trp.page.index-dentist.have-account', [
-							'link' => '<a href="javascript:;" data-popup="popup-login">',
+							'link' => '<a href="javascript:;" class="open-dentacoin-gateway dentist-login">',
 							'endlink' => '</a>',
 						])) !!}					
 					</p>
@@ -85,14 +85,14 @@
 
 	    	<div class="flex">
 	    		<div class="col tac">
-	    			<img src="{{ url('img-trp/dentacoin-attract-new-patients-icon.png') }}" alt="Dentacoin attract new patients icon">
+	    			<img src="{{ url('img-trp/dentacoin-attract-new-patients-icon.png') }}" alt="{{ trans('trp.alt-tags.attract-new-patients') }}">
 	    			<div class="info-padding">
 		    			<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-1-title')) !!}</h3>
 		    			<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-1-description')) !!}</p>
 		    		</div>
 	    		</div>
 	    		<div class="col tac">
-	    			<img src="{{ url('img-trp/dentacoin-get-more-reviews-icon.png') }}" alt="Dentacoin get more reviews icon">   
+	    			<img src="{{ url('img-trp/dentacoin-get-more-reviews-icon.png') }}" alt="{{ trans('trp.alt-tags.more-reviews') }}">   
 	    			<div class="info-padding"> 			
 		    			<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-2-title')) !!}</h3>
 		    			<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-2-description')) !!}</p>
@@ -102,14 +102,14 @@
 
 	    	<div class="flex">
 	    		<div class="col tac">
-	    			<img src="{{ url('img-trp/dentacoin-better-google-ranking-icon.png') }}" alt="Dentacoin better google ranking icon">
+	    			<img src="{{ url('img-trp/dentacoin-better-google-ranking-icon.png') }}" alt="{{ trans('trp.alt-tags.better-google-ranking') }}">
 	    			<div class="info-padding">
 		    			<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-3-title')) !!}</h3>
 		    			<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-3-description')) !!}</p>
 		    		</div>
 	    		</div>
 	    		<div class="col tac">
-	    			<img src="{{ url('img-trp/dentacoin-better-online-reputation-icon.png') }}" alt="Dentacoin better online reputation icon">
+	    			<img src="{{ url('img-trp/dentacoin-better-online-reputation-icon.png') }}" alt="{{ trans('trp.alt-tags.better-online-reputation') }}">
 	    			<div class="info-padding">
 		    			<h3>{!! nl2br(trans('trp.page.index-dentist.usp.step-4-title')) !!}</h3>
 		    			<p>{!! nl2br(trans('trp.page.index-dentist.usp.step-4-description')) !!}</p>
@@ -118,7 +118,7 @@
 	    	</div>
 
 	    	<div class="tac button-wrap">
-				<a href="javascript:;" class="button button-sign-up-dentist" data-popup="popup-register">
+				<a href="javascript:;" class="button button-sign-up-dentist open-dentacoin-gateway dentist-register">
 	    			{!! nl2br(trans('trp.page.index-dentist.signup')) !!}
 	    		</a>
 	    	</div>
@@ -166,7 +166,7 @@
 	    			<span class="how-number">01</span>
 	    			<p>
 	    				{!! nl2br(trans('trp.page.index-dentist.step-1', [
-							'link' => '<a href="javascript:;" data-popup="popup-register">',
+							'link' => '<a href="javascript:;" class="open-dentacoin-gateway dentist-register">',
 							'endlink' => '</a>',
 						])) !!}
 	    			</p>
@@ -210,27 +210,27 @@
     	</div>
 
     	<div class="tac">
-    		<a href="javascript::" class="button button-sign-up-dentist" data-popup="popup-register">{!! nl2br(trans('trp.page.index-dentist.create-listing')) !!}</a>
+    		<a href="javascript::" class="button button-sign-up-dentist open-dentacoin-gateway dentist-register">{!! nl2br(trans('trp.page.index-dentist.create-listing')) !!}</a>
     	</div>
     </div>
 
     <div class="section-learn">
     	<div class="container flex">
     		<div class="col">
-    			<img src="{{ url('img-trp/dentacoin-patients-rely-on-only-reviews.png') }}" alt="Dentacoin patients rely on only reviews">
+    			<img src="{{ url('img-trp/dentacoin-patients-rely-on-only-reviews.png') }}" alt="{{ trans('trp.alt-tags.patients-rely-reviews') }}">
     		</div>
     		<div class="col">
 	    		<h2>
 	    			{!! nl2br(trans('trp.page.index-dentist.cta')) !!}
 	    		</h2>
-	    		<a href="javascript:;" class="button button-yellow button-sign-up-dentist" data-popup="popup-register">
+	    		<a href="javascript:;" class="button button-yellow button-sign-up-dentist open-dentacoin-gateway dentist-register">
 	    			{!! nl2br(trans('trp.page.index-dentist.signup')) !!}
 	    		</a>
 	    	</div>
     	</div>
     </div>
 
-
+	@include('trp/popups/claim-profile')
 	@include('trp.popups.lead-magnet')
 	
 @endsection

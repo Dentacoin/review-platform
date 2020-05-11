@@ -1373,23 +1373,37 @@ $(document).ready(function(){
         }
         ajax_is_running = true;
 
+        if($('.alert-success-d').length && $('.alert-warning-d').length) {
+            $('.alert-success-d').hide();
+            $('.alert-warning-d').hide();
+
+        }
+
         $.ajax( {
             url: lang + '/profile/dentists/invite',
             type: 'POST',
             dataType: 'json',
             data: {
-                invitedentistid: $(elm).attr('data-id')
+                invitedentistid: $(elm).attr('data-id'),
+                user_id: $('input[name="last_user_id"]').length ? $('input[name="last_user_id"]').val() : '',
+                user_hash: $('input[name="last_user_hash"]').length ? $('input[name="last_user_hash"]').val() : '',
             },
             success: (function( data ) {
-                $('#dentist-add-result').html(data.message).attr('class', 'alert '+(data.success ? 'alert-success' : 'alert-warning')).show();
+                if($('.alert-success-d').length && $('.alert-warning-d').length) {
+                    if(data.success) {
+                        $('.alert-success-d').html(data.message).show();
+                    } else {
+                        $('.alert-warning-d').html(data.message).show();
+                    }
+                } else {
+                    $('#dentist-add-result').html(data.message).attr('class', 'alert '+(data.success ? 'alert-success' : 'alert-warning')).show();
+                }
                 refreshOnClosePopup = true;
 
                 ajax_is_running = false;
 
             }).bind(this)
         });
-
-
     }
 
     suggestDentist = function() {
@@ -1400,7 +1414,7 @@ $(document).ready(function(){
         ajax_is_running = true;
 
         $.ajax( {
-            url: 'suggest-dentist'+(user_id ? '/'+user_id : ''),
+            url: 'suggest-dentist'+(user_id ? '/'+user_id : ($('input[name="last_user_id"]').length ? '/'+$('input[name="last_user_id"]').val() : '' )),
             type: 'POST',
             dataType: 'json',
             data: {
@@ -1953,7 +1967,7 @@ $(document).ready(function(){
         el.find('.social-link-input').attr('name', 'socials['+$(this).attr('social-type')+']');
         el.find('.social-dropdown').removeClass('active');
 
-        // el.closest('.address-suggester-wrapper').find('.social-dropdown .social-link[social-type="'+ $(this).attr('social-type') +'"]').each( function() {
+        // el.closest('.address-suggester-wrapper-input').find('.social-dropdown .social-link[social-type="'+ $(this).attr('social-type') +'"]').each( function() {
         //     $(this).addClass('inactive');
         // });
 
@@ -1980,8 +1994,8 @@ $(document).ready(function(){
 
     $('.add-social-profile').click( function() {
 
-        var social_wrapper = $(this).closest('.address-suggester-wrapper').find('.social-wrap');
-        var cloned = social_wrapper.first().clone(true).insertAfter( $(this).closest('.address-suggester-wrapper').find('.social-wrap').last() );
+        var social_wrapper = $(this).closest('.address-suggester-wrapper-input').find('.social-wrap');
+        var cloned = social_wrapper.first().clone(true).insertAfter( $(this).closest('.address-suggester-wrapper-input').find('.social-wrap').last() );
 
         cloned.find('.social-link-input').val('');
         cloned.find('.social-dropdown .social-link:not(.inactive)').first().trigger('click');

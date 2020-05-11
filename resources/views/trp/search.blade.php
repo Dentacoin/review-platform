@@ -79,7 +79,7 @@
 				<a href="{{ $dentist->getLink() }}" class="result-container dentist clearfix" full-dentist-id="{{ $dentist->id }}">
 					<div class="avatar{!! $dentist->hasimage ? '' : ' default-avatar' !!}"  style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
 						@if($dentist->hasimage)
-							<img src="{{ $dentist->getImageUrl(true) }}" alt="Reviews for dentist {{ $dentist->getName() }} in {{ $dentist->city_name ? $dentist->city_name.', ' : '' }}{{ $dentist->state_name ? $dentist->state_name.', ' : '' }}{{ $dentist->country->name }}" style="display: none !important;"> 
+							<img src="{{ $dentist->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $dentist->getName(), 'location' => ($dentist->city_name ? $dentist->city_name.', ' : '').($dentist->state_name ? $dentist->state_name.', ' : '').($dentist->country->name) ]) }}" style="display: none !important;"> 
 						@endif
 					</div>
 					<div class="media-right">
@@ -127,7 +127,7 @@
 								</div>
 							</div>
 							<span class="rating">
-								({{ intval($dentist->ratings) }} reviews)
+								({{ trans('trp.common.reviews-count', [ 'count' => intval($dentist->ratings)]) }})
 							</span>
 						</div>
 						@if(!empty($user) && $user->is_dentist)
@@ -161,7 +161,7 @@
 
 			<div class="index-invite-dentist patient-invite">
 				<div class="container">
-					<img src="{{ url('img-trp/dentacoin-dentist-icon.png') }}" alt="Dentacoin dentist icon">
+					<img src="{{ url('img-trp/dentacoin-dentist-icon.png') }}" alt="{{ trans('trp.alt-tags.dentist-icon') }}">
 				</div>
 			</div>
 
@@ -180,12 +180,12 @@
 				<div class="container">
 					<div class="flex flex-mobile">
 						<div class="col">
-							<img src="{{ url('img-trp/dentacoin-dentist-icon.png') }}" alt="Dentacoin dentist icon">
+							<img src="{{ url('img-trp/dentacoin-dentist-icon.png') }}" alt="{{ trans('trp.alt-tags.dentist-icon') }}">
 						</div>
 						<div class="col">
 							<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
 							<h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
-							<a href="javascript:;" data-popup="popup-register" class="button button-yellow button-sign-up-patient button-want-to-add-dentist">{!! nl2br(trans('trp.page.invite.add-dentist')) !!}</a>
+							<a href="javascript:;" class="button button-yellow button-sign-up-patient button-want-to-add-dentist open-dentacoin-gateway patient-register">{!! nl2br(trans('trp.page.invite.add-dentist')) !!}</a>
 						</div>
 					</div>
 				</div>
@@ -358,7 +358,7 @@
 							<a href="{{ $dentist->getLink() }}" class="result-container dentist clearfix" {!! $dentist->address ? 'lat="'.$dentist->lat.'" lon="'.$dentist->lon.'"' : '' !!} dentist-id="{{ $dentist->id }}">
 								<div class="avatar{!! $dentist->hasimage ? '' : ' default-avatar' !!}" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
 									@if($dentist->hasimage)
-										<img src="{{ $dentist->getImageUrl(true) }}" alt="Reviews for dentist {{ $dentist->getName() }} in {{ $dentist->city_name ? $dentist->city_name.', ' : '' }}{{ $dentist->state_name ? $dentist->state_name.', ' : '' }}{{ $dentist->country->name }}" style="display: none !important;"> 
+										<img src="{{ $dentist->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $dentist->getName(), 'location' => ($dentist->city_name ? $dentist->city_name.', ' : '').($dentist->state_name ? $dentist->state_name.', ' : '').($dentist->country->name) ]) }}" style="display: none !important;"> 
 									@endif
 									@if($dentist->is_partner)
 										<img class="tooltip-text" src="{{ url('img-trp/mini-logo.png') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}">
@@ -386,7 +386,7 @@
 											</div>
 										</div>
 										<span class="rating">
-											({{ intval($dentist->ratings) }} reviews)
+											({{ trans('trp.common.reviews-count', [ 'count' => intval($dentist->ratings)]) }})
 										</span>
 									</div>
 								</div>

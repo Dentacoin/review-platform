@@ -633,6 +633,7 @@ class DentistController extends FrontController
             'social_image' => $social_image,
             'canonical' => $item->getLink(),
             'og_url' => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
+            'countries' => Country::with('translations')->get(),
             'js' => [
                 'videojs.record.min.js',
                 'user.js',
@@ -643,9 +644,6 @@ class DentistController extends FrontController
                 'codemirror.min.js',
                 'codemirror-placeholder.js',
                 'flickity.min.js',
-            ],
-            'jscdn' => [
-                'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
             ],
             'css' => [
                 'codemirror.css',
@@ -720,14 +718,6 @@ class DentistController extends FrontController
             $addGM = true;
         }
 
-
-        if(!empty($this->user) && !$this->user->civic_id) {
-            $view_params['js'][] = 'civic.js';
-            $view_params['jscdn'][] = 'https://hosted-sip.civic.com/js/civic.sip.min.js';
-            $view_params['csscdn'][] = 'https://hosted-sip.civic.com/css/civic-modal.min.css';
-
-        }
-
         if( $addGM ) {
             $view_params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
         }
@@ -769,7 +759,29 @@ class DentistController extends FrontController
             $view_params['schema']["hasMap"] = "https://www.google.com/maps/@".$item->lat.",".$item->lon.",15z";
         }
 
-        $view_params['schema']["description"] = !empty($item->short_description) ? $item->short_description : (($item->is_clinic ? 'Dental clinic' : 'Dentist').' in '.($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country_id ? $item->country->name : '').($item->categories->isNotEmpty() ? ' specialized in '.strtolower(implode(', ', $item->parseCategories($this->categories))) : '')) ;
+        if(!empty($item->short_description)) {
+
+            $short_description = $item->short_description;
+
+        } else {
+            if($item->is_clinic) {
+                $short_description = trans('trp.page.user.short_description.clinic', ['location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country_id ? $item->country->name : '') ]);
+
+                if($item->categories->isNotEmpty()) {
+                    $short_description.= ' '.trans('trp.page.user.short_description.categories', ['categories' => strtolower(implode(', ', $item->parseCategories($this->categories))) ]);
+                }
+            } else {
+
+                $short_description = trans('trp.page.user.short_description.dentist', ['location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country_id ? $item->country->name : '') ]);
+                
+                if($item->categories->isNotEmpty()) {
+                    $short_description.= ' '.trans('trp.page.user.short_description.categories', ['categories' => strtolower(implode(', ', $item->parseCategories($this->categories))) ]);
+                }
+
+            }
+        }
+
+        $view_params['schema']["description"] =  $short_description;
 
         if (!empty($item->website)) {
             $view_params['schema']["url"] = $item->website;
@@ -1041,7 +1053,7 @@ class DentistController extends FrontController
 
                         $substitutions = [
                             'patient_name' => $this->user->name,
-                            "requests_link" => getLangUrl( '/' , null, 'https://reviews.dentacoin.com').'?'. http_build_query(['popup'=>'popup-login-dentist']),
+                            "requests_link" => getLangUrl( '/' , null, 'https://reviews.dentacoin.com').'?'. http_build_query(['dcn-gateway-type'=>'dentist-login']),
                         ];
 
                         $item->sendGridTemplate(71, $substitutions, 'trp');

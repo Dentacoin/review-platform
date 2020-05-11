@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Vox;
+namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\FrontController;
 
@@ -8,7 +8,7 @@ class BannedController extends FrontController {
 
 	public function home($locale=null) {
 			
-		return $this->ShowVoxView('banned', array(
+		return $this->ShowView('banned', array(
 			'ban_expires' => session('ban-expires'),
 			'noIndex' => true,
 			'js' => [
@@ -19,11 +19,11 @@ class BannedController extends FrontController {
 
 	public function profile_redirect($locale=null) {
 
-		if (!empty($this->user) && !$this->user->isBanned('vox')) {
-			return redirect( getVoxUrl('page-not-found'));
+		if (!empty($this->user) && !$this->user->isBanned('trp')) {
+			return redirect( getLangUrl('page-not-found'));
 		}
 			
-		return $this->ShowVoxView('profile-redirect', array(
+		return $this->ShowView('profile-redirect', array(
 			'noIndex' => true,
         ));
 	}

@@ -229,7 +229,7 @@ class Email extends Model
 				'[/invitelink]',
 			), array(
 				$this->meta['clinic_name'] ?? '',
-				'<a '.$this->button_style.' href="'.getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $this->meta['invitation_id'])))), null, $domain).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id) ]).'">',
 				'</a>',
 			), $content);
 		}
@@ -242,7 +242,7 @@ class Email extends Model
 				'[/invitelink]',
 			), array(
 				$this->meta['friend_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $this->meta['invitation_id'] ?? '')))), null, $domain).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl('/', null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id) ]).'">',
 				'</a>',
 			), $content);
 		}
@@ -488,7 +488,7 @@ class Email extends Model
 				'[/invitation_link]',
 			), array(
 				$this->meta['patient_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl( '/' , null, $domain).'?'. http_build_query(['popup'=>'popup-login-dentist']).'">',
+				'<a '.$this->button_style.' href="'.getLangUrl( '/' , null, $domain).'?'. http_build_query(['dcn-gateway-type'=>'dentist-login']).'">',
 				'</a>',				
 			), $content);
 		}

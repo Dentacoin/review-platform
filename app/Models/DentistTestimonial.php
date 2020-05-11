@@ -10,8 +10,16 @@ use WebPConvert\WebPConvert;
 use Image;
 
 class DentistTestimonial extends Model {
+
+    use \Dimsav\Translatable\Translatable;
     
     use SoftDeletes;
+    
+    public $translatedAttributes = [
+        'description',
+        'name',
+        'job',
+    ];
 
     protected $fillable = [
         'image',
@@ -29,6 +37,7 @@ class DentistTestimonial extends Model {
     public function getImageUrl() {
         return url('/storage/testimonials/'.($this->id%100).'/'.$this->id.'.png').'?rev='.$this->updated_at->timestamp;
     }
+    
     public function getImagePath() {
         $folder = storage_path().'/app/public/testimonials/'.($this->id%100);
         if(!is_dir($folder)) {
@@ -51,6 +60,18 @@ class DentistTestimonial extends Model {
     
 }
 
+
+class DentistTestimonialTranslation extends Model {
+
+    public $timestamps = false;
+    protected $fillable = [
+        'dentist_testimonial_id',
+        'description',
+        'name',
+        'job',
+    ];
+
+}
 
 
 ?>

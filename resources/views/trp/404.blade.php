@@ -4,7 +4,7 @@
 
 	<div class="error-wrapper">
 		<div class="blue-line"></div>
-		<img src="{{ url('img-trp/404.jpg') }}" alt="Dentacoin page not found">
+		<img src="{{ url('img-trp/404.jpg') }}" alt="{{ trans('trp.alt-tags.404') }}">
 
 		<div class="error-container container">
 			<h2>{!! nl2br(trans('trp.page.404.title')) !!}</h2>
@@ -19,7 +19,7 @@
 									<div class="slider-inner">
 										<div class="slider-image-wrapper">
 											<div class="slider-image" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
-												<img src="{{ $dentist->getImageUrl(true) }}" alt="Reviews for dentist {{ $dentist->getName() }} in {{ $dentist->city_name ? $dentist->city_name.', ' : '' }}{{ $dentist->state_name ? $dentist->state_name.', ' : '' }}{{ $dentist->country->name }}" style="display: none !important;"> 
+												<img src="{{ $dentist->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $dentist->getName(), 'location' => ($dentist->city_name ? $dentist->city_name.', ' : '').($dentist->state_name ? $dentist->state_name.', ' : '').($dentist->country->name) ]) }}" style="display: none !important;"> 
 												@if($dentist->is_partner)
 													<img class="tooltip-text" src="{{ url('img-trp/mini-logo.png') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}" />
 												@endif
@@ -55,7 +55,7 @@
 													</div>
 												</div>
 												<span class="rating">
-													({{ intval($dentist->ratings) }} reviews)
+													({{ trans('trp.common.reviews-count', [ 'count' => intval($dentist->ratings)]) }})
 												</span>
 											</div>
 									    </div>

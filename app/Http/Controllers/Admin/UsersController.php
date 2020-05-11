@@ -1225,7 +1225,7 @@ class UsersController extends AdminController {
 
                                         $substitutions = [
                                             'added_dentist_name' => $item->getName(),
-                                            'trp_added_dentist_prf' => $item->getLink().'?popup=popup-login',
+                                            'trp_added_dentist_prf' => $item->getLink().'?dcn-gateway-type=patient-login',
                                         ];
 
                                         $patient->sendGridTemplate(65, $substitutions, 'trp');

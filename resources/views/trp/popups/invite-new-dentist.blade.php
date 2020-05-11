@@ -9,7 +9,7 @@
 		<h4 class="popup-title">
 			{!! trans('trp.page.invite.subtitle') !!}
 		</h4>
-		<form class="invite-new-dentist-form address-suggester-wrapper" action="{{ getLangUrl('invite-new-dentist') }}" method="post">
+		<form class="invite-new-dentist-form address-suggester-wrapper-input" action="{{ getLangUrl('invite-new-dentist') }}" method="post">
 			{!! csrf_field() !!}
 
 			<div class="mobile-radios modern-radios alert-after flex">
@@ -63,7 +63,7 @@
 			</div>
 
 			<div class="modern-field alert-after">
-				<input type="text" name="address" id="dentist-address1" class="modern-input address-suggester" autocomplete="off" placeholder=" ">
+				<input type="text" name="address" id="dentist-address1" class="modern-input address-suggester-input" autocomplete="off" placeholder=" ">
 				<label for="dentist-address1">
 					<span>{!! nl2br(trans('trp.page.invite.address')) !!}</span>
 				</label>

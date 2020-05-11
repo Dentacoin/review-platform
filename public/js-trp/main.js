@@ -4,7 +4,6 @@ var showPopup = null;
 var closePopup = null;
 var handlePopups = null;
 var ajax_is_running = false;
-var switchLogins;
 var prepareMapFucntion;
 var mapsLoaded = false;
 var mapsWaiting = [];
@@ -13,13 +12,8 @@ var mapMarkers = {};
 var fixFlickty;
 var suggestTO;
 var refreshOnClosePopup = false;
-var onloadCallback;
 var map_loaded = false;
 
-var initLoginScripts;
-var prepareLoginFucntion;
-var loginLoaded = false;
-var loginsWaiting = [];
 var handleTooltip;
 var attachTooltips;
 var modernFieldsUpdate;
@@ -101,45 +95,8 @@ jQuery(document).ready(function($){
 		$(this).removeClass('has-error');
 	});
 
-    switchLogins = function(what) {
-        if(what=='login') {
-            $('#signin-form-popup').hide();
-            $('#signin-form-popup-left').hide();
-            $('#login-form-popup').show();
-            $('#login-form-popup-left').show();
-        } else {
-            $('#signin-form-popup').show();
-            $('#signin-form-popup-left').show();
-            $('#login-form-popup').hide();
-            $('#login-form-popup-left').hide();
-        }
-    }
-
-    onloadCallback = function() {
-        grecaptcha.render('captcha-div', {
-          'sitekey' : '6LfmCmEUAAAAAH20CTYH0Dg6LGOH7Ko7Wv1DZlO0',
-          'size' : 'compact'
-        });
-      };
-
-    var loadCaptchaScript = function() {
-    	if (!$('#captcha-script').length) {
-
-		    $('body').append( $('<link rel="stylesheet" type="text/css" href="https://hosted-sip.civic.com/css/civic-modal.min.css" />') );
-    		$.getScript('https://hosted-sip.civic.com/js/civic.sip.min.js', function() {
-    			$.getScript(window.location.origin+'/js-trp/login.js', function() {
-    				initLoginScripts();
-    			});
-		    	$('body').append( $('<script src="'+window.location.origin+'/js-trp/upload.js"></script>') );
-		    	$('body').append( $('<script src="'+window.location.origin+'/js-trp/address.js"></script>') );
-
-	    		$('body').append( $('<script id="captcha-script" src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer"></script>') );
-    		} );
-    	}
-    }
-
     var loadMapScript = function() {
-    	if (!map_loaded) {
+    	if (!map_loaded && typeof google === 'undefined' ) {
 
     		$.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
 
@@ -148,31 +105,12 @@ jQuery(document).ready(function($){
     	}
     }
 
-    $('#search-input, .address-suggester').click( function() {
+    $('#search-input, .address-suggester-input').click( function() {
     	loadMapScript();
     });
 
 	showPopup = function(id, e) {
-		if(id=='popup-login') {
-			loadCaptchaScript();
-			id = 'popup-register';
-			switchLogins('login');
-		} else if(id=='popup-login-dentist') {
-			loadCaptchaScript();
-			id = 'popup-register';
-			switchLogins('login');
-			$('.form-wrapper').removeClass('chosen');
-			$('.form-button.white-form-button').closest('.form-wrapper').addClass('chosen');
-		} else if(id=='popup-register-dentist') {
-			loadCaptchaScript();
-			id = 'popup-register';
-			switchLogins('register');
-			$('.form-wrapper').removeClass('chosen');
-			$('.form-button.white-form-button').closest('.form-wrapper').addClass('chosen');
-		} else if(id=='popup-register') {
-			loadCaptchaScript();
-			switchLogins('register');
-		} else if(id=='map-results-popup') {
+		if(id=='map-results-popup') {
 			prepareMapFucntion( function() {    
 				var search_map = new google.maps.Map(document.getElementById('search-map'), {
 					center: {
@@ -416,13 +354,15 @@ jQuery(document).ready(function($){
 			if( user_id ) {
 				showPopup( $(this).attr('data-popup-logged'), e );				
 			} else {
-				showPopup( 'popup-register', e );
-				var cta = $('#popup-register .cta');
-				cta.show();
-				for(i=0;i<3;i++) {
-					cta.fadeTo('slow', 0).fadeTo('slow', 1);
-				}
+				$.event.trigger({type: 'openPatientRegister'});
 
+				$(document).on('dentacoinLoginGatewayLoaded', function (event) {
+					var cta = $('.dentacoin-login-gateway-container .cta');
+					cta.show();
+					for(i=0;i<3;i++) {
+						cta.fadeTo('slow', 0).fadeTo('slow', 1);
+					}
+		        });
 			}
 		}
 
@@ -439,12 +379,15 @@ jQuery(document).ready(function($){
 		if( user_id ) {
 			showPopup( getUrlParameter('popup-loged') );
 		} else {
-			showPopup( 'popup-register' );
-			var cta = $('#popup-register .cta');
-			cta.show();
-			for(i=0;i<3;i++) {
-				cta.fadeTo('slow', 0).fadeTo('slow', 1);
-			}
+			$.event.trigger({type: 'openPatientRegister'});
+
+			$(document).on('dentacoinLoginGatewayLoaded', function (event) {
+				var cta = $('.dentacoin-login-gateway-container .cta');
+				cta.show();
+				for(i=0;i<3;i++) {
+					cta.fadeTo('slow', 0).fadeTo('slow', 1);
+				}
+	        });
 		}
 	}
 	if(getUrlParameter('popup')) {
@@ -553,7 +496,7 @@ jQuery(document).ready(function($){
         $(this).closest('.modern-radios').removeClass('has-error');
     } );
 
-    $('.invite-new-dentist-form .address-suggester').focus(function(e) {
+    $('.invite-new-dentist-form .address-suggester-input').focus(function(e) {
         $('.invite-new-dentist-form .button').addClass('disabled');
     });
 
@@ -750,23 +693,6 @@ jQuery(document).ready(function($){
     }
     attachTooltips();
 
-    var symbolsCount = function() {
-        var length = $(this).val().length;
-
-        if (length > parseInt($(this).attr('maxsymb'))) {
-            $('.short-descr-error').show();
-            $(this).addClass('has-error');
-        } else {
-            $('.short-descr-error').hide();
-            $(this).removeClass('has-error');
-        }
-    }
-
-    $('textarea[name="short_description"]').keyup(symbolsCount);
-    if( $('textarea[name="short_description"]').length ) {
-        symbolsCount.bind($('textarea[name="short_description"]'))();
-    }
-
     $('.close-explander').click( function() {
     	$(this).closest('.expander-wrapper').removeClass('active');
     });
@@ -948,6 +874,20 @@ jQuery(document).ready(function($){
         return false;
     });
 
+    var hasNumber = function(myString) {
+        return /\d/.test(myString);
+    }
+    var hasLowerCase = function(str) {
+        return (/[a-z]/.test(str));
+    }
+    var hasUpperCase = function(str) {
+        return (/[A-Z]/.test(str));
+    }
+    var validatePassword = function(password) {
+
+        return password.trim().length >= 8 && password.trim().length <= 30 && hasLowerCase(password) && hasUpperCase(password) && hasNumber(password);
+    }
+
     $('#claim-profile-form').submit( function(e) {
         e.preventDefault();
 
@@ -959,6 +899,14 @@ jQuery(document).ready(function($){
         $(this).find('.ajax-alert').remove();
         $(this).find('.alert').hide();
         $(this).find('.has-error').removeClass('has-error');
+
+        if($('#claim-password').val() && !validatePassword($('#claim-password').val()) ) {
+
+        	$('#password-validator').show();
+        	ajax_is_running = false;
+        	return;
+        }
+
 
         var formData = new FormData(this);
 
@@ -1068,7 +1016,6 @@ jQuery(document).ready(function($){
 	});
 
 	$('.country-dropdown').change( function() {
-
 		if ($(this).attr('real-country') != '') {
 			if ($(this).val() != $(this).attr('real-country')) {
 				$(this).parent().parent().find('.ip-country').show();
@@ -1078,22 +1025,11 @@ jQuery(document).ready(function($){
 		}
 	});
 
-	$('.dentist-name-register').on('keyup keypress', function() {
-
-		if($(this).val() && !$(this).val().match(/^[\w\d\s\+\'\&.,-]*$/)) {
-			$('#alert-name-dentist').show();
-			$('.tooltip-window').hide();
-		} else {
-			$('#alert-name-dentist').hide();
-		}
-	});
-
 	$('.get-started-button').click( function() {
-		showPopup( 'popup-register-dentist' );
+		$.event.trigger({type: 'openDentistRegister'});
 	});
 
 	
-
 	$('.lead-magnet-form-step2').submit( function(e) {
         e.preventDefault();
 
@@ -1440,23 +1376,6 @@ jQuery(document).ready(function($){
 
         $(this).find('.member-alert').hide().removeClass('alert-warning').removeClass('alert-success');
 
-
-        // var formData = new FormData();
-
-        // // add assoc key values, this will be posts values
-        // formData.append("_token", $(this).find('input[name="_token"]').val());
-        // if ($(this).find('input[name="photo"]').length) {
-        //     formData.append("photo", $(this).find('input[name="photo"]').val());
-        // }
-        
-        // formData.append("name", $(this).find('.team-member-name').val());
-        // formData.append("email", $(this).find('.team-member-email').val());
-        // formData.append("job", $(this).find('.team-member-job').val());
-        // formData.append("check-for-same", $(this).find('.check-for-same').val());
-        // if($(this).find('input[name="last_user_id"]').length) {
-        // 	formData.append("user_id", $(this).find('input[name="last_user_id"]').val());
-        // }
-
         that = $(this);
 
         $.post( 
@@ -1566,28 +1485,54 @@ jQuery(document).ready(function($){
     	window.open($(this).attr('href'), '_blank');
     });
 
+    $(document).on('dentistAuthSuccessResponse', async function ( event) {
+    	if(event.response_data.trp_ban) {
+    		window.location.href = $('#site-url').attr('url')+lang+'/banned/';
+    	} else {
+    		window.location.href = $('#site-url').attr('url');
+    	}
+    });
+
+
+    $(document).on('patientAuthSuccessResponse', async function ( event) {
+    	if(event.response_data.trp_ban) {
+    		window.location.href = $('#site-url').attr('url')+lang+'/banned/';
+    	} else {
+    		window.location.href = $('#site-url').attr('url');
+    	}
+    });
+
+
+    $(document).on('dentistRegisterSuccessResponseTrustedReviews', async function ( event) {
+    	showPopup('verification-popup');
+
+    	if (event.response_data.token_user) {
+            $('input[name="last_user_hash"]').val(event.response_data.token_user);
+        }
+        if (event.response_data.data.id) {
+            $('input[name="last_user_id"]').val(event.response_data.data.id);
+        }
+        if (event.response_data.data.is_clinic) {
+
+            $('.wh-btn').hide();
+            $('#title-clinic').show();
+            $('#title-dentist').hide();
+        } else {
+        	$('#title-clinic').hide();
+            $('#title-dentist').show();
+            $('#clinic-add-team').remove();
+        }
+
+        $('.image-label').css('background-image', 'none');
+
+        handlePopups();
+
+        $.getScript(window.location.origin+'/js-trp/login.js', function() {
+		});
+    });
+
 
 });
-
-//
-//Logins function
-//
-
-prepareLoginFucntion = function( callback ) {
-
-    if(loginLoaded) {
-        callback();
-    } else {
-        loginsWaiting.push(callback);
-    }
-}
-
-initLoginScripts = function () {
-    loginLoaded = true;
-    for(var i in loginsWaiting) {
-        setTimeout(loginsWaiting[i]);
-    }
-}
 
 //
 //Maps stuff

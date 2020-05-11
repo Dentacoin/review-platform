@@ -103,7 +103,7 @@
 							<div class="modern-field alert-after">
 					  			<select name="team-job" id="team-member-job" class="modern-input team-member-job">
 					  				@foreach(config('trp.team_jobs') as $k => $v)
-					  					<option value="{{ $k }}">{{ $v }}</option>
+					  					<option value="{{ $k }}">{{ trans('trp.team-jobs.'.$k) }}</option>
 					  				@endforeach
 					  			</select>
 								<label for="team-member-job">

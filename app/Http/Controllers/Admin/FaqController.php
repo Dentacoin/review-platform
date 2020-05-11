@@ -12,9 +12,9 @@ use Route;
 class FaqController extends AdminController
 {
 
-    public function faq() {
+    public function faq($locale = null) {
 
-        $pathToFile = base_path().'/resources/lang/en/faq-trp.php';
+        $pathToFile = base_path().'/resources/lang/'.($locale ? $locale : 'en').'/faq-trp.php';
         $content = json_decode( file_get_contents($pathToFile), true );
 
 

@@ -134,7 +134,7 @@ class ProfileController extends FrontController
                 $is_dentist = User::where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 1)->first();
 
                 if (!empty($is_dentist)) {
-                    return Response::json(['success' => false, 'message' => 'You can\'t invite dentist/clinic for review'] );
+                    return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite-dentist.failure')] );
                 }
 
                 $invitation = UserInvite::where([
@@ -204,7 +204,7 @@ class ProfileController extends FrontController
                         'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                         'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
                         'invited_user_name' => Request::Input('name'),
-                        "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
+                        "invitation_link" => getLangUrl('/', null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id) ]),
                     ];
 
                     $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
@@ -226,7 +226,7 @@ class ProfileController extends FrontController
                                 'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                                 'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
                                 'invited_user_name' => $this->user->name,
-                                "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
+                                "invitation_link" => getLangUrl('/', null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id) ]),
                             ];
 
 
@@ -269,7 +269,7 @@ class ProfileController extends FrontController
             $invitation->invited_email = 'whatsapp';
             $invitation->save();
 
-            $text = 'Dr. '.$this->user->name.' invited you to leave a review on Trusted Reviews - the only platform, which rewards patients for their verified feedback! '.rawurlencode(getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'));
+            $text = trans('trp.page.profile.invite.whatsapp', ['name' => $this->user->name ]).rawurlencode(getLangUrl('/', null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id) ]));
 
             return Response::json([
                 'success' => true,
@@ -510,7 +510,7 @@ class ProfileController extends FrontController
                                     'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                                     'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
                                     'invited_user_name' => $names[$key],
-                                    "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
+                                    "invitation_link" => getLangUrl('/', null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id) ]),
                                 ];
 
                                 $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
@@ -530,7 +530,7 @@ class ProfileController extends FrontController
                                         'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                                         'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
                                         'invited_user_name' => $this->user->name,
-                                        "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $invitation->id)))), null, 'https://reviews.dentacoin.com/'),
+                                        "invitation_link" => getLangUrl('/', null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id) ]),
                                     ];
 
 
@@ -716,7 +716,7 @@ class ProfileController extends FrontController
                         'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                         'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
                         'invited_user_name' => $last_invite->invited_name,
-                        "invitation_link" => getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $this->user->id, 'hash' => $this->user->get_invite_token(),'inv_id' => $last_invite->id)))), null, 'https://reviews.dentacoin.com/'),
+                        "invitation_link" => getLangUrl('/', null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id) ]),
                     ];
 
                     $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
@@ -1571,27 +1571,35 @@ class ProfileController extends FrontController
 
     public function inviteDentist() {
 
-        if(!empty(Request::input('invitedentistid'))) {
+        if(!empty(Request::input('invitedentistid')) && (!empty($this->user) || !empty(Request::input('user_id'))) ) {
 
             $dentist = User::find( Request::input('invitedentistid') );
 
             if(!empty($dentist)) {
 
-                $newdentist = new UserTeam;
-                $newdentist->dentist_id = Request::input('invitedentistid');
-                $newdentist->user_id = $this->user->id;
-                $newdentist->approved = 1;
-                $newdentist->save();
+                $user = !empty($this->user) ? $this->user : (!empty(Request::input('user_id')) && !empty(User::find(Request::input('user_id'))) ? User::find(Request::input('user_id')) : '');
 
-                $dentist->sendTemplate(33, [
-                    'clinic-name' => $this->user->getName(),
-                    'clinic-link' => $this->user->getLink()
-                ], 'trp');
+                if(!empty($user)) {
 
-                return Response::json( [
-                    'success' => true,
-                    'message' => trans('trp.page.user.dentist-invited', ['name' => $dentist->getName() ])
-                ] );
+                    $newdentist = new UserTeam;
+                    $newdentist->dentist_id = Request::input('invitedentistid');
+                    $newdentist->user_id = $user->id;
+                    $newdentist->approved = !empty($this->user) ? 1 : 0;
+                    $newdentist->new_clinic = !empty($this->user) ? 0 : 1;
+                    $newdentist->save();
+
+                    if(!empty($this->user)) {                        
+                        $dentist->sendTemplate(33, [
+                            'clinic-name' => $this->user->getName(),
+                            'clinic-link' => $this->user->getLink()
+                        ], 'trp');
+                    }
+
+                    return Response::json( [
+                        'success' => true,
+                        'message' => trans('trp.page.user.dentist-invited', ['name' => $dentist->getName() ])
+                    ] );
+                }
             }
         }
 

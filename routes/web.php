@@ -97,7 +97,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('youtube/approve/{id}', 				'YoutubeController@approve');
 	Route::any('youtube/delete/{id}', 				'YoutubeController@delete');
 
-	Route::any('trp-faq', 							'FaqController@faq');
+	Route::any('trp-faq/{locale?}', 				'FaqController@faq');
 
 	Route::get('vox', 								'VoxesController@list');
 	Route::get('vox/list', 							'VoxesController@list');
@@ -176,7 +176,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('pages/edit/{id}/removepic', 		'PagesSeoController@removepic');
 	Route::get('pages/trp', 						'PagesSeoController@trp_list');
 
-	Route::any('logs', 								'LogsController@list');
+	Route::any('logs/{type?}', 						'LogsController@list');
 	
 	Route::any('export-import', 					'ImportExportController@list');
 });
@@ -193,11 +193,11 @@ $reviewRoutes = function () {
 	Route::get('robots.txt', 							'Front\RobotsController@content');
 
 	Route::get('user-logout',							'Auth\AuthenticateUser@getLogout');
+	Route::post('authenticate-user',					'Auth\AuthenticateUser@authenticateUser');
 	
 	Route::group(['prefix' => '{locale?}'], function(){
 
 		Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginForm'] );
-		Route::post('login',									'Auth\AuthenticateUser@postLogin');
 		Route::get('logout',									'Auth\AuthenticateUser@getLogout');
 
 		Route::get('widget/{id}/{hash}/{mode}', 				'WidgetController@widget');
@@ -215,27 +215,14 @@ $reviewRoutes = function () {
 			Route::post('lead-magnet-step1', 					'IndexController@lead_magnet_step1');
 			Route::post('lead-magnet-step2', 					'IndexController@lead_magnet_step2');
 			Route::get('lead-magnet-session', 					'IndexController@lead_magnet_session');
-
 			Route::get('lead-magnet-results', 					'IndexController@lead_magnet_results');
 
 			Route::get('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
 			Route::get('unsubscription/{user_id}/{hash}', 		'UnsubscribeController@new_unsubscribe');
 			Route::get('unsubscribe-incomplete/{id}/{hash}', 	'UnsubscribeController@unsubscribe_incomplete');
 
-			Route::any('invite/', 								'RegisterController@invite_accept');
-
-			Route::get('review/{id}', 							'DentistController@fullReview');
-			Route::get('useful/{id}', 							'DentistController@useful');
-			Route::get('unuseful/{id}', 						'DentistController@unuseful');
-
-			Route::post('recommend-dentist', 					'DentistController@recommend_dentist');
-
+			Route::post('register/upload', 						'RegisterController@upload');
 			Route::get('register', 								'RegisterController@register');
-			Route::post('register', 							'RegisterController@register_form');
-			Route::get('forgot-password', 						'RegisterController@forgot');
-			Route::post('forgot-password', 						'RegisterController@forgot_form');
-			Route::get('recover/{id}/{hash}', 					'RegisterController@recover');
-			Route::post('recover/{id}/{hash}', 					'RegisterController@recover_form');
 			Route::post('verification-dentist', 				'RegisterController@verification_dentist');
 			Route::post('clinic-add-team', 						'RegisterController@clinic_add_team');
 			Route::post('add-working-hours',					'RegisterController@add_work_hours');
@@ -243,20 +230,7 @@ $reviewRoutes = function () {
 			Route::post('invite-clinic', 						'RegisterController@invite_clinic');
 			Route::post('invite-dentist', 						'RegisterController@invite_dentist');
 
-			Route::get('login/facebook', 						'LoginController@facebook_login');
-			Route::post('login/civic', 							'LoginController@civic');
-			Route::get('login/callback/facebook', 				'LoginController@facebook_callback');
-			Route::get('register/facebook/{is_dentist?}', 		'LoginController@facebook_register');
-			Route::get('register/callback/facebook', 			'LoginController@facebook_callback_register');
-
 			Route::post('status', 								'LoginController@status');
-
-			Route::post('register/step1', 						'RegisterController@check_step_one');
-			Route::post('register/step2', 						'RegisterController@check_step_two');
-			Route::post('register/step3', 						'RegisterController@check_step_three');
-			Route::post('register/upload', 						'RegisterController@upload');
-
-			Route::post('register/civic', 						'RegisterController@civic');
 
 			//Route::get('vpn', 									'VpnController@list');
 
@@ -266,25 +240,30 @@ $reviewRoutes = function () {
 			Route::get('dentists-in-{country_slug}/{state}', 	'DentistsController@city');
 
 			Route::any('dentist/{slug}/claim/{id}/',			'DentistController@claim_dentist');
-
 			Route::post('dentist/{slug}/reply/{review_id}', 	'DentistController@reply');
 			Route::get('dentist/{slug}/ask/{verification?}',	'DentistController@ask');
 			Route::any('dentist/{slug}/{review_id}', 			'DentistController@list');
 			Route::any('dentist/{slug}', 						'DentistController@list');
 			Route::any('youtube', 								'DentistController@youtube');
 			Route::any('full-review/{id}',						'DentistController@fullReview');
+			Route::get('review/{id}', 							'DentistController@fullReview');
+			Route::get('useful/{id}', 							'DentistController@useful');
+			Route::get('unuseful/{id}', 						'DentistController@unuseful');
+			Route::post('recommend-dentist', 					'DentistController@recommend_dentist');
+			Route::post('facebook-tab', 						'DentistController@dentist_fb_tab');
+			Route::any('facebook-tab-reviews', 					'DentistController@dentist_fb_tab_reviews');
+			Route::post('dentist-fb-tab', 						'DentistController@fb_tab');
 
 			Route::get('page-not-found', 						'NotFoundController@home');
 
 			Route::get('faq', 									'FaqController@home');
 
-			Route::post('facebook-tab', 						'DentistController@dentist_fb_tab');
-			Route::any('facebook-tab-reviews', 					'DentistController@dentist_fb_tab_reviews');
-
-			Route::post('dentist-fb-tab', 						'DentistController@fb_tab');
-
 			Route::post('profile/invite-new', 					'ProfileController@invite_team_member');
 			Route::post('profile/add-existing-dentist-team', 	'ProfileController@invite_existing_team_member');
+			Route::any('profile/dentists/invite', 				'ProfileController@inviteDentist');
+
+			Route::get('banned', 								'BannedController@home');
+			Route::get('profile-redirect', 						'BannedController@profile_redirect');
 
 			Route::group(['middleware' => 'auth:web'], function () {
 
@@ -311,7 +290,6 @@ $reviewRoutes = function () {
 				Route::any('profile/dentists/reject/{id}', 		'ProfileController@dentists_reject');
 				Route::any('profile/dentists/delete/{id}', 		'ProfileController@dentists_delete');
 				Route::any('profile/dentists/accept/{id}', 		'ProfileController@dentists_accept');
-				Route::any('profile/dentists/invite', 			'ProfileController@inviteDentist');
 				Route::any('profile/clinics/delete/{id}', 		'ProfileController@clinics_delete');
 				Route::any('profile/clinics/invite', 			'ProfileController@inviteClinic');
 
@@ -351,6 +329,7 @@ $voxRoutes = function () {
 	Route::group(['prefix' => '{locale?}'], function(){
 
 		Route::get('logout',									'Auth\AuthenticateUser@getLogout');
+		Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginForm'] );
 
 		Route::group(['namespace' => 'Vox'], function () {
 
@@ -362,8 +341,6 @@ $voxRoutes = function () {
 
 			Route::get('banned', 								'BannedController@home');
 			Route::get('profile-redirect', 						'BannedController@profile_redirect');
-
-			Route::any('invite', 								'RegisterController@invite_accept');
 			
 			Route::any('status', 								'LoginController@status');
 

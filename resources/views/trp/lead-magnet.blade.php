@@ -18,14 +18,14 @@
 				<h1 class="red">{{ nl2br(trans('trp.page.lead-magnet-results.title.under-five-points')) }}</h1>
 				<h4>
 					{{ nl2br(trans('trp.page.lead-magnet-results.subtitle.under-five-points', [
-						'first_part' => $first_answer == '3' ? 'То keep current and attract new patients' : 'To attract new patients'
+						'first_part' => $first_answer == '3' ? trans('trp.page.lead-magnet-results.subtitle.under-five-points.first') : trans('trp.page.lead-magnet-results.subtitle.under-five-points.second')
 					])) }}
 				</h4>
 			@elseif($total_points <= 10)
 				<h1 class="yellow">{{ nl2br(trans('trp.page.lead-magnet-results.title.under-ten-points')) }}</h1>
 				<h4>
 					{{ nl2br(trans('trp.page.lead-magnet-results.subtitle.under-ten-points', [
-						'first_part' => $first_answer == '3' ? 'То keep current and attract new patients' : 'To attract new patients'
+						'first_part' => $first_answer == '3' ? trans('trp.page.lead-magnet-results.subtitle.under-ten-points.first') : trans('trp.page.lead-magnet-results.subtitle.under-ten-points.second')
 					])) }}
 				</h4>
 			@else 
@@ -72,7 +72,7 @@
 						{!! nl2br(trans('trp.page.lead-magnet-results.pro-tips.under-ten-points')) !!}
 					@else
 						{!! nl2br(trans('trp.page.lead-magnet-results.pro-tips.over-nine-points', [
-							'last_part' => $first_answer == '3' ? 'tо keep current and attract new patients' : 'to attract new patients'
+							'last_part' => $first_answer == '3' ? trans('trp.page.lead-magnet-results.pro-tips.over-nine-points.first') : trans('trp.page.lead-magnet-results.pro-tips.over-nine-points.second')
 						])) !!}
 					@endif
 				</div>
@@ -86,7 +86,7 @@
 				@if(!empty($country_id))
 					<h2>{{ nl2br(trans('trp.page.lead-magnet-results.dentists-in')) }}: <nl><img src="{{ url('img-trp/white-pin.png') }}"><span class="country">{{ App\Models\Country::find($country_id)->name }}</span><nl></h2>
 				@else
-					<h2>{{ nl2br(trans('trp.page.lead-magnet-results.dentists-in')) }} <nl><span class="country">Your Area</span><nl></h2>
+					<h2>{{ nl2br(trans('trp.page.lead-magnet-results.dentists-in')) }} <nl><span class="country">{{ nl2br(trans('trp.page.lead-magnet-results.your-area')) }}</span><nl></h2>
 				@endif
 				<div class="rating-wrapper">
 					<div class="avg-rating block">
@@ -116,13 +116,13 @@
 
 		<div class="lead-magnet-info container tac">
 			<div class="info-container">
-				<img class="trp-logo" src="{{ url('img-trp/logo-blue.png') }}" alt="Dentacoin trusted reviews logo">
+				<img class="trp-logo" src="{{ url('img-trp/logo-blue.png') }}" alt="{{ trans('trp.alt-tags.logo') }}">
 
 				<h2>{{ nl2br(trans('trp.page.lead-magnet-results.improve-title')) }}</h2>
 
 				<div class="info-box flex">
 					<div class="info-icon">
-						<img src="{{ url('img-trp/dentacoin-get-more-reviews-icon.png') }}" alt="Dentacoin get more reviews icon">
+						<img src="{{ url('img-trp/dentacoin-get-more-reviews-icon.png') }}" alt="{{ trans('trp.alt-tags.more-reviews') }}">
 					</div>
 					<div class="info-text">
 						<h3>{{ nl2br(trans('trp.page.lead-magnet-results.improve-first-title')) }}</h3>
@@ -132,7 +132,7 @@
 
 				<div class="info-box flex">
 					<div class="info-icon">
-						<img src="{{ url('img-trp/dentacoin-trusted-reviews-whatsapp-invites-icon.png') }}" alt="Dentacoin trusted reviews whatsapp invites icon">
+						<img src="{{ url('img-trp/dentacoin-trusted-reviews-whatsapp-invites-icon.png') }}" alt="{{ trans('trp.alt-tags.whatsapp-invites') }}">
 					</div>
 					<div class="info-text">
 						<h3>{{ nl2br(trans('trp.page.lead-magnet-results.improve-second-title')) }}</h3>
@@ -142,7 +142,7 @@
 
 				<div class="info-box flex">
 					<div class="info-icon">
-						<img src="{{ url('img-trp/dentacoin-trusted-reviews-free-for-dentists-icon.png') }}" alt="Dentacoin trusted reviews free for dentists icon">
+						<img src="{{ url('img-trp/dentacoin-trusted-reviews-free-for-dentists-icon.png') }}" alt="{{ trans('trp.alt-tags.free-for-dentists') }}">
 					</div>
 					<div class="info-text">
 						<h3>{{ nl2br(trans('trp.page.lead-magnet-results.improve-third-title')) }}</h3>

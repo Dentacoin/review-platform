@@ -936,22 +936,25 @@ $(document).ready(function(){
 
     //vmetso 'current' da probvam s '43' zaradi greshkata s `font not loaded`
 
-    google.charts.load('current', {
-        packages: ['corechart', 'bar'],
-    });
-    google.charts.setOnLoadCallback(function() {
-        gc_loaded = true;
+    if(typeof google !== 'undefined') {
+        
+        google.charts.load('current', {
+            packages: ['corechart', 'bar'],
+        });
+        google.charts.setOnLoadCallback(function() {
+            gc_loaded = true;
 
-        $('.stat.active').each( function() {
-            if($(this).find('.scale-stat-q').length) {
-                $(this).find('.scale-stat-q').first().addClass('active');
-                reloadGraph($(this).find('.scale-stat-q').first());
-            } else {
-                reloadGraph(this);
-            }
-            
-        } );
-    });
+            $('.stat.active').each( function() {
+                if($(this).find('.scale-stat-q').length) {
+                    $(this).find('.scale-stat-q').first().addClass('active');
+                    reloadGraph($(this).find('.scale-stat-q').first());
+                } else {
+                    reloadGraph(this);
+                }
+                
+            } );
+        });
+    }
 
     var handleFilterChange  = function() {
         time_filter = $('.filters a.active').attr('filter');

@@ -1,24 +1,35 @@
 var ajax_is_running = false;
-var modernFieldsUpdate;
 jQuery(document).ready(function($){
 
 	$('.signin-form-wrapper form').submit( function(e) {
 		e.preventDefault();
-		showPopup('popup-register');
-		modernFieldsUpdate();
-		$('.switch-forms').first().click();
-		$('#dentist-email').val( $(this).find('input[name="email"]').val() );
-		$('#dentist-password').val( $(this).find('input[name="password"]').val() );
-		$('#dentist-password-repeat').val( $(this).find('input[name="password-repeat"]').val() );
-		prepareLoginFucntion( function() {
-			$('.go-to-next:visible').click();
-		});
+
+		$.event.trigger({type: 'openDentistRegister'});
+
+		var that = $(this);
+		
+		$(document).on('dentacoinLoginGatewayLoaded', function (event) {
+			$('#dentist-register-email').val( that.find('input[name="email"]').val() );
+			$('#dentist-register-email').addClass('gateway-platform-border-color-important');
+			$('label[for="dentist-register-email"]').addClass('active-label gateway-platform-color-important');
+
+			$('#dentist-register-password').val( that.find('input[name="password"]').val() );
+			$('#dentist-register-password').addClass('gateway-platform-border-color-important');
+			$('label[for="dentist-register-password"]').addClass('active-label gateway-platform-color-important');
+
+			$('#dentist-register-repeat-password').val( that.find('input[name="password-repeat"]').val() );
+			$('#dentist-register-repeat-password').addClass('gateway-platform-border-color-important');
+			$('label[for="dentist-register-repeat-password"]').addClass('active-label gateway-platform-color-important');
+
+        	$('.form-register .next-step[data-current-step="first"]').trigger('click');
+        });
 		
     } );
 
     if( $('#dentist-email').val() ) {
-		showPopup('popup-register');
+		$.event.trigger({type: 'openDentistRegister'});
     }
+
     var $carousel = $('.flickity-testimonial');
 
 	$('.testimonial img').on('load', function() {

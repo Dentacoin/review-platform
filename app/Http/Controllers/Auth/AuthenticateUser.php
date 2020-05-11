@@ -45,97 +45,18 @@ class AuthenticateUser extends FrontController
     protected function guard() {
         return Auth::guard('web');
     }
-    public function showLoginForm()
-    {
+
+
+    public function showLoginForm() {
+
         if(!empty($this->user)) {
             return redirect(getLangUrl('/'));
         }
-        return redirect( getLangUrl('/').'?popup=popup-login' );
+        return redirect( getLangUrl('/').'?'. http_build_query(['dcn-gateway-type'=>'patient-login']) );
     }
-
-    public function postLogin(Request $request)
-    {
-        if (Auth::guard('web')->attempt( ['email' => $request->input('email'), 'password' => $request->input('password') ], $request->input('remember') )) {
-            
-            if( Auth::guard('web')->user()->isBanned('trp') ) {
-                Auth::guard('web')->logout();
-                return Response::json( [
-                    'success' => false, 
-                    'popup' => 'banned-popup'
-                ] );
-            }
-
-            if(Auth::guard('web')->user()->loggedFromBadIp()) {
-                Auth::guard('web')->logout();
-                return Response::json( [
-                    'success' => false, 
-                    'popup' => 'suspended-popup'
-                ] );
-            }
-
-            if( Auth::guard('web')->user()->is_dentist && Auth::guard('web')->user()->status!='approved' && Auth::guard('web')->user()->status!='added_by_clinic_claimed' && Auth::guard('web')->user()->status!='added_by_dentist_claimed' && Auth::guard('web')->user()->status!='test') {
-                $array = [
-                    'success' => false, 
-                    'popup' => 'verification-popup',
-                    'hash' => Auth::guard('web')->user()->get_token(),
-                    'id' => Auth::guard('web')->user()->id,
-                    'work_hours' => Auth::guard('web')->user()->work_hours,
-                    'description' => Auth::guard('web')->user()->description,
-                    'is_clinic' => Auth::guard('web')->user()->is_clinic,
-                ];
-                Auth::guard('web')->logout();
-                return Response::json( $array );
-            }
-
-            $sess = [
-                'just_login' => true,
-            ];
-            session($sess);
-
-            return Response::json( [
-                'success' => true
-            ] );
-        } else {
-            return Response::json( [
-                'success' => false, 
-                'message' => trans('front.page.login.error')
-            ] );
-        }
-    }
-
-    // public function postLoginVox(Request $request)
-    // {
-    //     if (Auth::guard('web')->attempt( ['email' => $request->input('email'), 'password' => $request->input('password') ], $request->input('remember') )) {
-
-    //         if(Auth::guard('web')->user()->isBanned('vox')) {
-    //             return redirect( getLangUrl('banned'));
-    //         }
-
-    //         if(Auth::guard('web')->user()->loggedFromBadIp()) {
-    //             Auth::guard('web')->logout();
-    //             return redirect( getLangUrl('login').'?suspended-popup' );
-    //         }
-
-    //         if( Auth::guard('web')->user()->is_dentist && Auth::guard('web')->user()->status!='approved' && Auth::guard('web')->user()->status!='approved' && Auth::guard('web')->user()->status!='test') {
-    //             return redirect( getLangUrl('welcome-to-dentavox') );
-    //         }
-
-    //         $sess = [
-    //             'just_login' => true,
-    //         ];
-    //         session($sess);
-            
-    //         $intended = session()->pull('our-intended');
-
-    //         return redirect( $intended ? $intended : ( $request->input('intended') ? $request->input('intended') : getLangUrl('/')) );
-    //     } else {
-    //         return redirect( getLangUrl('login') )
-    //         ->withInput()
-    //         ->with('error-message', trans('front.page.login.error'));         
-    //     }
-    // }
 
     public function getLogout() {
+
         if( Auth::guard('web')->user() ) {
             Auth::guard('web')->user()->logoutActions();
         }
@@ -187,7 +108,6 @@ class AuthenticateUser extends FrontController
         }
     }
 
-
     public function checkUserIdAndToken($id, $token)  {
         $header = array();
         $header[] = 'Accept: */*';
@@ -215,5 +135,4 @@ class AuthenticateUser extends FrontController
             return false;
         }
     }
-
 }

@@ -149,39 +149,29 @@ class Kernel extends ConsoleKernel
                                 $u->name = $notify->name;
                                 $u->save();
 
+                                $arr = [];
+
                                 if($key == 'trp') {
-
-                                    $mail = $u->sendTemplate($v['tempalte_id'], [
-                                        'link' => $notify->id.'/'.md5($notify->id.env('SALT_INVITE')),
-                                        'missing-info' => $missingInfo,
-                                    ]);
-
-                                } else {
-
-                                    $arr = [];
-
-                                    if($key == 'trp') {
-                                        $arr['trp-signup-continue'] = 'https://reviews.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                    } else if($key == 'vox') {
-                                        $arr['vox-signup-continue'] = 'https://dentavox.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                    } else if($key == 'assurance') {
-                                        $arr['assurance-signup-continue'] = 'https://assurance.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                    } else if($key == 'dentacoin') {
-                                        $arr['dcn-signup-continue'] = 'https://dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                    } else if($key == 'dentists') {
-                                        $arr['dentists-signup-continue'] = 'https://dentists.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                    }
-
-                                    $arr['missing-info'] = $missingInfo;
-                                    $arr['active-surveys'] = $active_voxes_count;
-
-                                    $domain = 'https://'.config('platforms.'.($key == 'trp' ? 'trp' : 'vox').'.url').'/';
-
-                                    $arr['unsubscribe-incomplete'] = getLangUrl( 'unsubscribe-incomplete/'.$notify->id.'/'.md5($notify->id.env('SALT_INVITE')), null, $domain);
-
-
-                                    $mail = $u->sendGridTemplate($v['tempalte_id'], $arr, $key);
+                                    $arr['trp-signup-continue'] = 'https://reviews.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                } else if($key == 'vox') {
+                                    $arr['vox-signup-continue'] = 'https://dentavox.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                } else if($key == 'assurance') {
+                                    $arr['assurance-signup-continue'] = 'https://assurance.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                } else if($key == 'dentacoin') {
+                                    $arr['dcn-signup-continue'] = 'https://dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                } else if($key == 'dentists') {
+                                    $arr['dentists-signup-continue'] = 'https://dentists.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
                                 }
+
+                                $arr['missing-info'] = $missingInfo;
+                                $arr['active-surveys'] = $active_voxes_count;
+
+                                $domain = 'https://'.config('platforms.'.($key == 'trp' ? 'trp' : 'vox').'.url').'/';
+
+                                $arr['unsubscribe-incomplete'] = getLangUrl( 'unsubscribe-incomplete/'.$notify->id.'/'.md5($notify->id.env('SALT_INVITE')), null, $domain);
+
+
+                                $mail = $u->sendGridTemplate($v['tempalte_id'], $arr, $key);
 
 
                                 $u->email = $tmpEmail;

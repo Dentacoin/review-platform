@@ -132,7 +132,8 @@ jQuery(document).ready(function($){
 
             console.log('Geocoding result: ', place);
         
-    	if( place && place.geometry && place.types && (place.types.indexOf('street_address') != -1 || place.types.indexOf('establishment') != -1 || place.types.indexOf('point_of_interest') != -1 || place.types.indexOf('premise') != -1) ) {
+    	if( place && typeof place.geometry !== null ) {
+            //&& place.types && (place.types.indexOf('street_address') != -1 || place.types.indexOf('establishment') != -1 || place.types.indexOf('point_of_interest') != -1 || place.types.indexOf('premise') != -1) ) {
     		//address_components
     		
             var gstring = conatiner.find('.address-suggester').val();
@@ -149,7 +150,7 @@ jQuery(document).ready(function($){
                 }
             }
 
-            if (address_country == country_code_name) {
+            if ( (country_code_name == 'XK' && (address_country == 'XK' || typeof address_country === 'undefined') ) || (address_country == country_code_name) ) {
                 gstring = gstring.replace(', '+country_name, '');
                 conatiner.find('.address-suggester').val(gstring);
 

@@ -48,7 +48,11 @@ class AddDentistController extends FrontController
                 );
 
                 foreach ($msg as $field => $errors) {
-                    $ret['messages'][$field] = implode(', ', $errors);
+                    if($field == 'mode') {
+                        $ret['messages']['mode'] = trans('trp.invite.mode.error');
+                    } else {
+                        $ret['messages'][$field] = implode(', ', $errors);
+                    }                    
                 }
 
                 return Response::json( $ret );

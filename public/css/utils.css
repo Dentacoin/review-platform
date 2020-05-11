@@ -325,7 +325,8 @@ h4 {
   .container-middle img {
     max-width: 100%; }
 
-.alert {
+.fixed-popup .alert,
+.site-content .alert {
   border-radius: 10px;
   background: white;
   border: 2px solid white;
@@ -336,13 +337,16 @@ h4 {
   word-break: break-word;
   margin-top: 20px;
   background: white; }
-  .alert:first-child {
+  .fixed-popup .alert:first-child,
+  .site-content .alert:first-child {
     margin-top: 0px; }
   @media screen and (max-width: 768px) {
-    .alert {
+    .fixed-popup .alert,
+    .site-content .alert {
       padding: 10px 10px 10px 40px;
       font-size: 14px; } }
-  .alert:before {
+  .fixed-popup .alert:before,
+  .site-content .alert:before {
     display: inline-block;
     font-style: normal;
     font-variant: normal;
@@ -354,62 +358,87 @@ h4 {
     transform: translateY(-50%);
     font-size: 40px; }
     @media screen and (max-width: 768px) {
-      .alert:before {
+      .fixed-popup .alert:before,
+      .site-content .alert:before {
         left: 10px;
         font-size: 20px; } }
-  .alert.mobile {
+  .fixed-popup .alert.mobile,
+  .site-content .alert.mobile {
     padding: 10px 10px 10px 40px;
     font-size: 14px; }
-    .alert.mobile:before {
+    .fixed-popup .alert.mobile:before,
+    .site-content .alert.mobile:before {
       left: 10px;
       font-size: 20px; }
-  .alert.alert-warning {
+  .fixed-popup .alert.alert-warning,
+  .site-content .alert.alert-warning {
     border-color: #7b1a23;
     color: #7b1a23; }
-    .alert.alert-warning strong {
+    .fixed-popup .alert.alert-warning strong,
+    .site-content .alert.alert-warning strong {
       color: #7b1a23; }
-    .alert.alert-warning:before {
+    .fixed-popup .alert.alert-warning:before,
+    .site-content .alert.alert-warning:before {
       font-family: "Font Awesome 5 Free";
       font-weight: 900;
       content: "\f071"; }
-  .alert.alert-orange {
+  .fixed-popup .alert.alert-orange,
+  .site-content .alert.alert-orange {
     border-color: #f59c1a;
     color: #f59c1a; }
-    .alert.alert-orange strong {
+    .fixed-popup .alert.alert-orange strong,
+    .site-content .alert.alert-orange strong {
       color: #f59c1a; }
-    .alert.alert-orange:before {
+    .fixed-popup .alert.alert-orange:before,
+    .site-content .alert.alert-orange:before {
       font-family: "Font Awesome 5 Free";
       font-weight: 900;
       content: "\f071"; }
-  .alert.alert-success {
+  .fixed-popup .alert.alert-success,
+  .site-content .alert.alert-success {
     border-color: #2b9b60;
     color: #2b9b60; }
-    .alert.alert-success strong {
+    .fixed-popup .alert.alert-success strong,
+    .site-content .alert.alert-success strong {
       color: #2b9b60; }
-    .alert.alert-success:before {
+    .fixed-popup .alert.alert-success:before,
+    .site-content .alert.alert-success:before {
       font-family: "Font Awesome 5 Free";
       font-weight: 900;
       content: "\f058"; }
-  .alert.alert-info {
+  .fixed-popup .alert.alert-info,
+  .site-content .alert.alert-info {
     border-color: #11aee1;
     color: #11aee1; }
-    .alert.alert-info strong {
+    .fixed-popup .alert.alert-info strong,
+    .site-content .alert.alert-info strong {
       color: #11aee1; }
-    .alert.alert-info:before {
+    .fixed-popup .alert.alert-info:before,
+    .site-content .alert.alert-info:before {
       font-family: "Font Awesome 5 Free";
       font-weight: 900;
       content: "\f05a"; }
-  .alert a:not(.button) {
+  .fixed-popup .alert a:not(.button),
+  .site-content .alert a:not(.button) {
     color: inherit;
     text-decoration: underline; }
-    .alert a:not(.button):hover {
+    .fixed-popup .alert a:not(.button):hover,
+    .site-content .alert a:not(.button):hover {
       color: inherit;
       text-decoration: underline; }
-  .alert span {
+  .fixed-popup .alert span,
+  .site-content .alert span {
     display: block; }
-  .alert.ajax-alert {
+  .fixed-popup .alert#password-validator, .fixed-popup .alert.ajax-alert,
+  .site-content .alert#password-validator,
+  .site-content .alert.ajax-alert {
     margin-bottom: 20px;
     font-size: 14px;
     padding: 10px 20px 10px 50px; }
-    .alert.ajax-alert:before {
+    .fixed-popup .alert#password-validator:before, .fixed-popup .alert.ajax-alert:before,
+    .site-content .alert#password-validator:before,
+    .site-content .alert.ajax-alert:before {
       font-size: 20px; }
+  .fixed-popup .alert#password-validator,
+  .site-content .alert#password-validator {
+    margin-top: -20px; }

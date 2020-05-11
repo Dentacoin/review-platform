@@ -25,11 +25,10 @@ class TestimonialSliderController extends AdminController
     }
 
     public function add() {
+
         $validator = Validator::make($this->request->all(), [
+            'name-en' => array('required'),
             'image' => array('required'),
-            'name' => array('required'),
-            'job' => array('required'),
-            'description' => array('required')
         ]);
 
         if ($validator->fails()) {
@@ -37,14 +36,20 @@ class TestimonialSliderController extends AdminController
             ->withInput()
             ->withErrors($validator);
         } else {
-            
-            $newtestimonial = new DentistTestimonial;
-            $newtestimonial->name = $this->request->input('name');
-            $newtestimonial->job = $this->request->input('job');
-            $newtestimonial->description = $this->request->input('description');
+            $newtestimonial = new DentistTestimonial; 
             $newtestimonial->save();
 
-            //Image
+            foreach ($this->langs as $key => $value) {
+                if(!empty($this->request->input('name-'.$key))) {
+                    $translation = $newtestimonial->translateOrNew($key);
+                    $translation->dentist_testimonial_id = $newtestimonial->id;
+                    $translation->name = $this->request->input('name-'.$key);
+                    $translation->description = $this->request->input('description-'.$key);
+                    $translation->job = $this->request->input('job-'.$key);
+                }
+                $translation->save();
+            }
+
             if( Request::file('image') && Request::file('image')->isValid() ) {
                 $img = Image::make( Input::file('image') )->orientate();
                 $newtestimonial->addImage($img);
@@ -62,9 +67,7 @@ class TestimonialSliderController extends AdminController
 
         	if (Request::isMethod('post')) {
         		$validator = Validator::make($this->request->all(), [
-		            'name' => array('required'),
-		            'job' => array('required'),
-		            'description' => array('required')
+		            'name-en' => array('required'),
 	            ]);
 
 	            if ($validator->fails()) {
@@ -72,10 +75,18 @@ class TestimonialSliderController extends AdminController
 		            ->withInput()
 		            ->withErrors($validator);
 		        } else {
+
+                    foreach ($this->langs as $key => $value) {
+                        if(!empty($this->request->input('name-'.$key))) {
+                            $translation = $item->translateOrNew($key);
+                            $translation->dentist_testimonial_id = $item->id;
+                            $translation->name = $this->request->input('name-'.$key);
+                            $translation->description = $this->request->input('description-'.$key);
+                            $translation->job = $this->request->input('job-'.$key);
+                        }
+                        $translation->save();
+                    }
 		            
-		            $item->name = $this->request->input('name');
-		            $item->job = $this->request->input('job');
-		            $item->description = $this->request->input('description');
 		            $item->save();
 
 		            $this->request->session()->flash('success-message', trans('Testimonial edited') );

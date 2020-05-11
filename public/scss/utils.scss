@@ -414,119 +414,126 @@ h4 {
 	}
 }
 
-.alert {
-	border-radius: 10px;
-	background: white;
-	border: 2px solid white;
-	font-size: 18px;
-	padding: 25px 20px 25px 80px;
-	text-align: left;
-	position: relative;
-    word-break: break-word;
-    margin-top: 20px;
-    background: white;
+.fixed-popup,
+.site-content {
+	.alert {
+		border-radius: 10px;
+		background: white;
+		border: 2px solid white;
+		font-size: 18px;
+		padding: 25px 20px 25px 80px;
+		text-align: left;
+		position: relative;
+	    word-break: break-word;
+	    margin-top: 20px;
+	    background: white;
 
-    &:first-child {
-    	margin-top: 0px;
-    }
+	    &:first-child {
+	    	margin-top: 0px;
+	    }
 
 
-	@media #{$phone} {
-		padding: 10px 10px 10px 40px;
-		font-size: 14px;
-	}
-
-	&:before {
-	    display: inline-block;
-	    font-style: normal;
-	    font-variant: normal;
-	    text-rendering: auto;
-	    -webkit-font-smoothing: antialiased;
-	    position: absolute;
-	    left: 20px;
-	    top: 50%;
-	    transform: translateY(-50%);
-	    font-size: 40px;
-		
 		@media #{$phone} {
-			left: 10px;
-			font-size: 20px;
+			padding: 10px 10px 10px 40px;
+			font-size: 14px;
 		}
-	}
-	
-    &.mobile {
-		padding: 10px 10px 10px 40px;
-		font-size: 14px;
-		&:before {
-			left: 10px;
-			font-size: 20px;
-		}
-	}
 
-	&.alert-warning {
-		border-color: #7b1a23;
-		color: #7b1a23;			
-		strong {
+		&:before {
+		    display: inline-block;
+		    font-style: normal;
+		    font-variant: normal;
+		    text-rendering: auto;
+		    -webkit-font-smoothing: antialiased;
+		    position: absolute;
+		    left: 20px;
+		    top: 50%;
+		    transform: translateY(-50%);
+		    font-size: 40px;
+			
+			@media #{$phone} {
+				left: 10px;
+				font-size: 20px;
+			}
+		}
+		
+	    &.mobile {
+			padding: 10px 10px 10px 40px;
+			font-size: 14px;
+			&:before {
+				left: 10px;
+				font-size: 20px;
+			}
+		}
+
+		&.alert-warning {
+			border-color: #7b1a23;
 			color: #7b1a23;			
+			strong {
+				color: #7b1a23;			
+			}
+			&:before {
+	    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f071";
+			}
 		}
-		&:before {
-    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f071";
-		}
-	}
 
-	&.alert-orange {
-		border-color: #f59c1a;
-		color: #f59c1a;			
-		strong {
+		&.alert-orange {
+			border-color: #f59c1a;
 			color: #f59c1a;			
+			strong {
+				color: #f59c1a;			
+			}
+			&:before {
+	    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f071";
+			}
 		}
-		&:before {
-    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f071";
-		}
-	}
-	&.alert-success {
-		border-color: #2b9b60;
-		color: #2b9b60;
-		strong {
+		&.alert-success {
+			border-color: #2b9b60;
 			color: #2b9b60;
+			strong {
+				color: #2b9b60;
+			}
+			&:before {
+	    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f058";
+			}
 		}
-		&:before {
-    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f058";
-		}
-	}
-	&.alert-info {
-		border-color: #11aee1;
-		color: #11aee1;
-		strong {
+		&.alert-info {
+			border-color: #11aee1;
 			color: #11aee1;
+			strong {
+				color: #11aee1;
+			}
+			&:before {
+	    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f05a";
+			}
 		}
-		&:before {
-    		font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f05a";
-		}
-	}
 
-	a:not(.button) {
-		color: inherit;
-		text-decoration: underline;
-
-		&:hover {
+		a:not(.button) {
 			color: inherit;
 			text-decoration: underline;
+
+			&:hover {
+				color: inherit;
+				text-decoration: underline;
+			}
 		}
-	}
 
-	span {
-		display: block;
-	}
+		span {
+			display: block;
+		}
 
+		&#password-validator,
+		&.ajax-alert {
+		    margin-bottom: 20px;
+		    font-size: 14px;
+		    padding: 10px 20px 10px 50px;
 
-	&.ajax-alert {
-	    margin-bottom: 20px;
-	    font-size: 14px;
-	    padding: 10px 20px 10px 50px;
+		    &:before {
+		    	font-size: 20px;
+		    }
+		}
 
-	    &:before {
-	    	font-size: 20px;
-	    }
+		&#password-validator {
+			margin-top: -20px;
+		}
 	}
 }

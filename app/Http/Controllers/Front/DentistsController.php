@@ -470,7 +470,8 @@ class DentistsController extends FrontController
             'page_num' => $page,
             'orders' => $orders,
             'is_ajax' => $ajax,
-            'noIndex' => $nonCannonicalUrl || !$items->count(),
+            'noIndex' => $nonCannonicalUrl || !$items->count(),            
+            'countries' => Country::with('translations')->get(),
             'js' => [
                 'search.js',
                 'address.js'

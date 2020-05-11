@@ -23,13 +23,13 @@
 							<h4>Errors</h4>
 						</div>
 
-						<a href="{{ url('cms/logs') }}?clear=1" class="btn btn-primary pull-right" onclick="return confirm('Are you sure?')">
+						<a href="{{ url('cms/logs/'.$type) }}?clear=1" class="btn btn-primary pull-right" onclick="return confirm('Are you sure?')">
 							clear
 						</a>
 					</div>
 
 					<pre>
-						{!! @file_get_contents( base_path().'/storage/logs/laravel.log' ) !!}
+						{!! @file_get_contents( base_path().'\/../'.$type.'/storage/logs/laravel.log' ) !!}
 					</pre>
                 </div>
             </div>

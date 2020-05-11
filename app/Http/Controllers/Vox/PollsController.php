@@ -192,59 +192,61 @@ class PollsController extends FrontController
 
 	public function get_poll_content($locale=null, $poll_id) {
 
-		$poll = Poll::find($poll_id);
+		if(!empty($poll_id)) {
 
-		if (!empty($this->user)) {
-			$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first();
-		} else {
-			if (Cookie::get('daily_poll')) {
-				$cv = json_decode(Cookie::get('daily_poll'), true);
-				foreach ($cv as $pid => $aid) {
-					if ($pid == $poll->id) {
-						$taken_daily_poll = PollAnswer::find($aid);
-					} else {
-						$taken_daily_poll = null;
-					}
-				}				
+			$poll = Poll::find($poll_id);
+
+			if (!empty($this->user)) {
+				$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first();
 			} else {
-				$taken_daily_poll = null;
+				if (Cookie::get('daily_poll')) {
+					$cv = json_decode(Cookie::get('daily_poll'), true);
+					foreach ($cv as $pid => $aid) {
+						if ($pid == $poll->id) {
+							$taken_daily_poll = PollAnswer::find($aid);
+						} else {
+							$taken_daily_poll = null;
+						}
+					}				
+				} else {
+					$taken_daily_poll = null;
+				}
+			}
+
+			if (!empty($poll) && $poll->status == 'open' && empty($taken_daily_poll) || !empty($this->admin)) {
+
+				$slist = VoxScale::get();
+		        $poll_scales = [];
+		        foreach ($slist as $sitem) {
+		            $poll_scales[$sitem->id] = $sitem;
+		        }
+
+				if (!empty($poll->scale_id) && !empty($poll_scales[$poll->scale_id])) {
+					$json_answers = explode(',', $poll_scales[$poll->scale_id]->answers);
+				} else {
+					$json_answers = json_decode($poll->answers, true);
+				}
+
+				$answers = [];
+				foreach ($json_answers as $key => $answer) {
+					$answers[] = Poll::handleAnswerTooltip($answer);
+				}
+
+				$randomize_answers = empty($poll->dont_randomize_answers) && $poll->type != 'scale' ? true : false;
+
+				$ret = [
+		        	'success' => true,
+		        	'title' => $poll->question,
+		        	'url' => getLangUrl('poll/'.$poll->id),
+		        	'answers' => $answers,
+		        	'randomize_answers' => $randomize_answers,
+		        ];
 			}
 		}
 
-		if (!empty($poll) && $poll->status == 'open' && empty($taken_daily_poll) || !empty($this->admin)) {
-
-			$slist = VoxScale::get();
-	        $poll_scales = [];
-	        foreach ($slist as $sitem) {
-	            $poll_scales[$sitem->id] = $sitem;
-	        }
-
-			if (!empty($poll->scale_id) && !empty($poll_scales[$poll->scale_id])) {
-				$json_answers = explode(',', $poll_scales[$poll->scale_id]->answers);
-			} else {
-				$json_answers = json_decode($poll->answers, true);
-			}
-
-			$answers = [];
-			foreach ($json_answers as $key => $answer) {
-				$answers[] = Poll::handleAnswerTooltip($answer);
-			}
-
-			$randomize_answers = empty($poll->dont_randomize_answers) && $poll->type != 'scale' ? true : false;
-
-			$ret = [
-	        	'success' => true,
-	        	'title' => $poll->question,
-	        	'url' => getLangUrl('poll/'.$poll->id),
-	        	'answers' => $answers,
-	        	'randomize_answers' => $randomize_answers,
-	        ];
-
-		} else {
-			$ret = [
-	        	'success' => false,
-	        ];
-		}
+		$ret = [
+        	'success' => false,
+        ];
 		
         return Response::json( $ret );
 	}

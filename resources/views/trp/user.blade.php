@@ -41,7 +41,7 @@
 				@endif
 				<input type="text" name="name" class="input dentist-name" placeholder="{!! nl2br(trans('trp.page.user.name')) !!}" value="{{ $user->name }}">
 				<input type="text" name="name_alternative" class="input" placeholder="{!! nl2br(trans('trp.page.user.name_alterantive')) !!}" value="{{ $user->name_alternative }}">
-				<div class="profile-details address-suggester-wrapper">
+				<div class="profile-details address-suggester-wrapper-input">
 					<div class="alert alert-warning mobile ip-country" style="display: none;">
                     	{!! nl2br(trans('trp.common.different-ip')) !!}
                     </div>	
@@ -64,7 +64,7 @@
 	                	</select>
 	                @endif
 				    <div>
-				    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
+				    	<input type="text" name="address" class="input address-suggester-input" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
                         <div class="suggester-map-div" {!! $user->lat ? 'lat="'.$user->lat.'" lon="'.$user->lon.'"' : '' !!} style="height: 100px; display: none; margin: 10px 0px;">
                         </div>
                         <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px;">
@@ -74,7 +74,7 @@
                         	{!! nl2br(trans('trp.common.invalid-address')) !!}
                         </div>
 				        <div class="alert alert-warning different-country-hint mobile" style="display: none; margin: -10px 0px 10px;">
-				        	Unable to proceed. Please, choose address from your country.
+				        	{!! nl2br(trans('trp.page.user.invalid-country')) !!}
 				        </div>
                     </div>
 			    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time">
@@ -173,14 +173,14 @@
 			@if(!empty($user) && $user->id!=$item->id && !empty($writes_review))
 				<a href="javascript:;" class="recommend-mobile" data-popup="recommend-dentist">
 					<img src="{{ url('img-trp/thumb-up.svg') }}">
-					Recommend
+					{{ trans('trp.page.user.recommend') }}
 				</a>
 			@endif
 			@if($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed')
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
 			<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');">
-				<img src="{{ $item->getImageUrl(true) }}" alt="Reviews for dentist {{ $item->getName() }} in {{ $item->city_name ? $item->city_name.', ' : '' }}{{ $item->state_name ? $item->state_name.', ' : '' }}{{ $item->country->name }}" style="display: none !important;"> 
+				<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getName(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" style="display: none !important;"> 
 			</div>
 			<div class="profile-mobile-info tac">
 				<h3>
@@ -195,7 +195,7 @@
 							{!! nl2br(trans('trp.page.user.partner')) !!}
 						</span> 
 					@endif
-					{{ $item->is_clinic ? 'Clinic' : 'Dentist' }}
+					{{ $item->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}
 				</span>
 				@if(!empty($user) && $user->id==$item->id)
 					<a class="edit-button open-edit" href="javascript:;">
@@ -205,7 +205,7 @@
 				@endif
 				@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed'))
 					<a class="claim-button" href="javascript:;"  data-popup="claim-popup">
-						Is this your practice?
+						{{ trans('trp.common.claim-practice') }}
 					</a>
 				@endif
 			</div>
@@ -218,7 +218,7 @@
 				</div>
 
 				<div class="rating">
-					({{ intval($item->ratings) }} reviews)
+					({{ trans('trp.common.reviews-count', [ 'count' => intval($item->ratings)]) }})
 				</div>
 
 				@if(!empty($user) && $user->id==$item->id)
@@ -312,7 +312,7 @@
 		@if(!empty($user) && $user->id!=$item->id && !empty($writes_review))
 			<a href="javascript:;" class="recommend-button" data-popup="recommend-dentist">
 				<img src="{{ url('img-trp/thumb-up.svg') }}">
-				Recommend
+				{{ trans('trp.page.user.recommend') }}
 			</a>
 		@endif
 		
@@ -338,7 +338,7 @@
 						<input type="file" name="image" id="add-avatar" upload-url="{{ getLangUrl('profile/info/upload') }}">
 					</label>
 
-					<div class="media-right address-suggester-wrapper">
+					<div class="media-right address-suggester-wrapper-input">
 						@if(!$user->is_clinic)
 							<div class="flex">
 								{{ Form::select( 'title' , config('titles') , $user->title , array('class' => 'input') ) }}
@@ -371,7 +371,7 @@
 		                	</select>
 		                @endif
 	                	<div>
-					    	<input type="text" name="address" class="input address-suggester" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
+					    	<input type="text" name="address" class="input address-suggester-input" autocomplete="off" placeholder="{!! nl2br(trans('trp.page.user.city-street')) !!}" value="{{ $user->address }}">
 	                        <div class="suggester-map-div" {!! $user->lat ? 'lat="'.$user->lat.'" lon="'.$user->lon.'"' : '' !!} style="height: 100px; display: none; margin: 10px 0px;">
 	                        </div>
 	                        <div class="alert alert-info geoip-confirmation mobile" style="display: none; margin: 10px 0px;">
@@ -381,7 +381,7 @@
 	                        	{!! nl2br(trans('trp.common.invalid-address')) !!}
 	                        </div>
 					        <div class="alert alert-warning different-country-hint mobile" style="display: none; margin: -10px 0px 10px;">
-					        	Unable to proceed. Please, choose address from your country.
+					        	{!! nl2br(trans('trp.page.user.invalid-country')) !!}
 					        </div>
 	                    </div>
 				    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time">
@@ -482,7 +482,7 @@
 
     		<div class="view-profile clearfix">
 				<div class="avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');">
-					<img src="{{ $item->getImageUrl(true) }}" alt="Reviews for dentist {{ $item->getName() }} in {{ $item->city_name ? $item->city_name.', ' : '' }}{{ $item->state_name ? $item->state_name.', ' : '' }}{{ $item->country->name }}" style="display: none !important;"> 
+					<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getName(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" style="display: none !important;"> 
 				</div>
 				<div class="media-right">
 					<h3>
@@ -496,7 +496,7 @@
 						@if($item->is_partner)
 							<span> {!! nl2br(trans('trp.page.user.partner')) !!}</span> 
 						@endif
-						{{ $item->is_clinic ? 'Clinic' : 'Dentist' }}
+						{{ $item->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}
 					</span>
 					<a href="javascript:;" class="p scroll-to-map" map-tooltip="{{ $item->address ? $item->address.', ' : '' }} {{ $item->country->name }} ">
 						<div class="img">
@@ -565,7 +565,7 @@
 			@endif
 			@if(empty($user) && ($item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed'))
 				<a class="claim-button" href="javascript:;" data-popup="claim-popup">
-					Is this your practice?
+					{{ trans('trp.common.claim-practice') }}
 				</a>
 			@endif
 
@@ -581,7 +581,7 @@
 			</div>
 
 			<div class="rating">
-				(based on {{ intval($item->ratings) }} reviews)
+				({{ trans('trp.page.user.based-reviews-count', [ 'count' => intval($item->ratings)]) }})
 			</div>
 
 			@if(!empty($user) && $user->id==$item->id)
@@ -1004,7 +1004,7 @@
 		    		<div class="flickity">
 		    			@if( (!empty($user) && $item->id==$user->id) )
 							<div class="slider-wrapper">
-								<a href="javascript:;" class="slider-image add-team-member"  data-popup-logged="add-team-popup">
+								<a href="javascript:;" class="slider-image add-team-member" data-popup="add-team-popup">
 									<div class="plus-team">
 										<img src="{{ url('img-trp/add-member.png') }}">
 										<span>
@@ -1034,7 +1034,7 @@
 											</div>
 										</div>
 										<span class="rating">
-											({{ intval($team->clinicTeam->ratings) }} reviews)
+											({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam->ratings)]) }})
 										</span>
 									</div>
 							    	@if( !$team->approved )
@@ -1083,11 +1083,11 @@
 													</div>
 												</div>
 												<span class="rating">
-													(0 reviews)
+													({{ trans('trp.common.reviews-count', [ 'count' => '0']) }})
 												</span>
 											</div>
 										@else
-											<p style="margin-top: 18px;color: #0fb0e5;">{!! config('trp.team_jobs')[$invite->job] !!}</p>
+											<p style="margin-top: 18px;color: #0fb0e5;">{!! trans('trp.team-jobs.'.$invite->job) !!}</p>
 										@endif
 								    </div>
 							    	<div class="flickity-buttons clearfix">
@@ -1280,6 +1280,8 @@
 			@include('trp.popups.ask-dentist')
 		@endif
 	@endif
+@elseif(empty($user) && $item->status == 'added_approved' || $item->status == 'admin_imported' || $item->status == 'added_by_clinic_unclaimed' || $item->status == 'added_by_dentist_unclaimed')
+	@include('trp/popups/claim-profile')
 @endif
 @include('trp.popups.detailed-review')
 @include('trp.popups.lead-magnet')

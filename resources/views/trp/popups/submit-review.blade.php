@@ -34,7 +34,7 @@
 			</div>
 		@elseif(!empty($user))
 			<div class="dcn-review-reward" {!! $is_trusted ? '' : 'style="display: none;"' !!}>
-				<img src="{{ url('img-trp/mini-logo-blue.png') }}" alt="Dentacoin trusted reviews logo">
+				<img src="{{ url('img-trp/mini-logo-blue.png') }}" alt="{{ trans('trp.alt-tags.logo') }}">
 				<span class="reward-info">
 					DCN 
 					<span id="review-reward-so-far">0</span> / 

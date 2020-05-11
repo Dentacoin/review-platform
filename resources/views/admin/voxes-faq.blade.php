@@ -4,7 +4,11 @@
 
 <h1 class="page-header">FAQ</h1>
 <!-- end page-header -->
-
+<div style="margin-bottom: 20px;">
+    @foreach($langs as $code => $lang_info)
+        <a href="{{ url('cms/trp-faq/'.$code) }}" class="btn btn-success">{{ $lang_info['name'] }}</a>
+    @endforeach
+</div>
 
 <div class="panel-group" id="faq-accordion" role="tablist" aria-multiselectable="true">
     @foreach( $content as $section )

@@ -28,7 +28,7 @@
 							<span></span>
 						</span>
 				    	<input class="type-radio" type="radio" name="widget-layout" id="widget-carousel" value="carousel" checked="checked">
-				    	<img class="layout-img" src="{{ url('img-trp/widget-carousel.png') }}" alt="Dentacoin trusted reviews carousel widget preview">
+				    	<img class="layout-img" src="{{ url('img-trp/widget-carousel.png') }}" alt="{{ trans('trp.alt-tags.widget-carousel') }}">
 				    	<div class="widget-option">
 				    		<p layout-text="{!! nl2br(trans('trp.popup.popup-widget.layout.carousel')) !!}">• {!! nl2br(trans('trp.popup.popup-widget.layout.carousel')) !!}</p>
 				    		<div class="select-wrap flex flex-mobile">
@@ -50,7 +50,7 @@
 							<span></span>
 						</span>
 				    	<input class="type-radio" type="radio" name="widget-layout" id="widget-list" value="list">
-				    	<img class="layout-img" src="{{ url('img-trp/widget-list.png') }}" alt="Dentacoin trusted reviews list widget preview">
+				    	<img class="layout-img" src="{{ url('img-trp/widget-list.png') }}" alt="{{ trans('trp.alt-tags.widget-list') }}">
 				    	<div class="widget-option">
 				    		<p layout-text="{!! nl2br(trans('trp.popup.popup-widget.layout.list')) !!}">• {!! nl2br(trans('trp.popup.popup-widget.layout.list')) !!}</p>
 				    		<div class="select-wrap flex flex-mobile">
@@ -70,7 +70,7 @@
 							<span></span>
 						</span>
 				    	<input class="type-radio" type="radio" name="widget-layout" id="widget-badge" value="badge">
-				    	<img class="layout-img" src="{{ url('img-trp/widget-badge.png') }}" alt="Dentacoin trusted reviews badge widget preview">
+				    	<img class="layout-img" src="{{ url('img-trp/widget-badge.png') }}" alt="{{ trans('trp.alt-tags.widget-badge') }}">
 				    	<div class="widget-option">
 				    		<p layout-text="{!! nl2br(trans('trp.popup.popup-widget.layout.badge')) !!}">• {!! nl2br(trans('trp.popup.popup-widget.layout.badge')) !!}</p>					    		
 				    		<div class="select-wrap flex flex-mobile">
@@ -89,7 +89,7 @@
 							<span></span>
 						</span>
 				    	<input class="type-radio" type="radio" name="widget-layout" id="widget-fb" value="fb">
-				    	<img class="layout-img" src="{{ url('img-trp/fb-tab.png') }}" alt="Dentacoin trusted reviews facebook tab preview">
+				    	<img class="layout-img" src="{{ url('img-trp/fb-tab.png') }}" alt="{{ trans('trp.alt-tags.fb-tab') }}">
 				    	<div class="widget-option">
 				    		<p layout-text="{!! nl2br(trans('trp.popup.popup-widget.layout.fb')) !!}">• {!! nl2br(trans('trp.popup.popup-widget.layout.fb')) !!}</p>
 				    	</div>

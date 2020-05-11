@@ -449,7 +449,7 @@
             @endforeach
         @endif
 
-        <link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-login-gateway/css/dentacoin-login-gateway-style.css?v=1.0.1"/>
+        <link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-login-gateway/css/dentacoin-login-gateway-style.css?v={{ $cache_version }}"/>
 		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
 		<!-- end css -->
 
@@ -460,7 +460,7 @@
 		@if(empty($user))
 			<script type="text/javascript">
 				dcnGateway.init({
-					'platform' : 'dentavox',
+					'platform' : '{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.dentavox' : 'dentavox' !!}',
 					'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=dentavox'
 				});				
 			</script>

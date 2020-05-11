@@ -218,6 +218,7 @@ class IndexController extends FrontController
 		$seos = PageSeo::find(20);		
 
 		$params = array(
+			'countries' => Country::with('translations')->get(),
 			'strength_arr' => $strength_arr,
 			'completed_strength' => $completed_strength,
 			'featured' => $homeDentists,
@@ -311,7 +312,7 @@ class IndexController extends FrontController
         	$regData = IncompleteRegistration::find(session('incomplete-registration'));
         }
 
-    	$testimonials = DentistTestimonial::orderBy('id', 'desc')->get();
+    	$testimonials = DentistTestimonial::with('translations')->orderBy('id', 'desc')->get();
 
 		$seos = PageSeo::find(23);
 
@@ -334,6 +335,7 @@ class IndexController extends FrontController
             'seo_description' => $seos->seo_description,
             'social_title' => $seos->social_title,
             'social_description' => $seos->social_description,
+			'countries' => Country::with('translations')->get(),
         ));	
 	}
 

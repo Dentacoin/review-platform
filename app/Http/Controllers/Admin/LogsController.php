@@ -6,18 +6,22 @@ use App\Http\Controllers\AdminController;
 
 class LogsController extends AdminController
 {
-    public function list() {
+    public function list($type=null) {
 
-    	if(request('clear')) {
-    		file_put_contents( base_path().'/storage/logs/laravel.log', '');
-    		file_put_contents( base_path().'/storage/logs/laravel.log', '');
+        if(!empty($type)) {
 
+        	if(request('clear')) {
+        		file_put_contents( base_path().'\/../'.$type.'/storage/logs/laravel.log', '');
 
-            request()->session()->flash('success-message', 'Errors deleted');
-            return redirect('cms/logs');
-    	}
+                request()->session()->flash('success-message', 'Errors deleted');
+                return redirect('cms/logs/'.$type);
+        	}
 
-        return $this->ShowView('logs', array(
-        ));
+            return $this->ShowView('logs', array(
+                'type' => $type,
+            ));
+        } else {
+            return redirect( url('cms/logs/trp'));
+        }
     }
 }

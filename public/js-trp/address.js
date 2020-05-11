@@ -21,7 +21,7 @@ jQuery(document).ready(function($){
 
             marker.addListener('dragend', function(e) {
                 this.map.panTo( this.getPosition() );
-                var container = $(this.map.getDiv()).closest('.address-suggester-wrapper');
+                var container = $(this.map.getDiv()).closest('.address-suggester-wrapper-input');
                 
                 var geocoder = new google.maps.Geocoder();
                 geocoder.geocode({'location': this.getPosition()}, (function(results, status) {
@@ -32,7 +32,7 @@ jQuery(document).ready(function($){
                         gstring = gstring.replace(', '+country_name, '');
                         console.log( gstring );
 
-                        this.find('.address-suggester').val(gstring).blur();
+                        this.find('.address-suggester-input').val(gstring).blur();
                     } else {
                         checkAddress(null, this);
                     }
@@ -51,8 +51,8 @@ jQuery(document).ready(function($){
 
         prepareMapFucntion( function() {
 
-            $('.address-suggester').each( function() {
-            	var conatiner = $(this).closest('.address-suggester-wrapper');
+            $('.address-suggester-input').each( function() {
+            	var conatiner = $(this).closest('.address-suggester-wrapper-input');
 	            
 	            conatiner.find('.country-select').change( function() {
 	                var cc = $(this).find('option:selected').attr('code');
@@ -84,12 +84,12 @@ jQuery(document).ready(function($){
 	            GMautocomplete.conatiner = conatiner;
 	            google.maps.event.addListener(GMautocomplete, 'place_changed', (function () {
 	            	var place = this.getPlace();
-                    this.conatiner.find('.address-suggester').val(place.formatted_address ? place.formatted_address : place.name).blur();
+                    this.conatiner.find('.address-suggester-input').val(place.formatted_address ? place.formatted_address : place.name).blur();
 	            }).bind(GMautocomplete));
 
 
                 $(this).blur( function(e) {
-                    var conatiner = $(this).closest('.address-suggester-wrapper');
+                    var conatiner = $(this).closest('.address-suggester-wrapper-input');
                     var country_name = conatiner.find('.country-select option:selected').text();
                     var country_code = conatiner.find('.country-select option:selected').attr('code');
 
@@ -113,7 +113,7 @@ jQuery(document).ready(function($){
             
         });
 
-        $('.address-suggester').on('keyup keypress', function(e) {
+        $('.address-suggester-input').on('keyup keypress', function(e) {
             var keyCode = e.keyCode || e.which;
             if (keyCode === 13) { 
                 e.preventDefault();
@@ -123,7 +123,7 @@ jQuery(document).ready(function($){
 	}
 
 	checkAddress = function(place, conatiner) {
-        //conatiner.find('.address-suggester').blur();
+        //conatiner.find('.address-suggester-input').blur();
         conatiner.find('.geoip-hint').hide();
         conatiner.find('.different-country-hint').hide();
         conatiner.find('.geoip-confirmation').hide();
@@ -131,10 +131,11 @@ jQuery(document).ready(function($){
             
             //console.log('Geocoding result: ', place);
         
-    	if( place && place.geometry && place.types && (place.types.indexOf('street_address') != -1 || place.types.indexOf('establishment') != -1 || place.types.indexOf('point_of_interest') != -1 || place.types.indexOf('premise') != -1) ) {
-    		//address_components
+    	if( place && typeof place.geometry !== null) {
+      //    && place.types && (place.types.indexOf('street_address') != -1 || place.types.indexOf('establishment') != -1 || place.types.indexOf('point_of_interest') != -1 || place.types.indexOf('premise') != -1) ) {
+    		// //address_components
     		
-            var gstring = conatiner.find('.address-suggester').val();
+            var gstring = conatiner.find('.address-suggester-input').val();
             var country_name = conatiner.find('.country-select option:selected').text();
             var country_code_name = conatiner.find('.country-select option:selected').attr('code').toUpperCase();
 
@@ -148,10 +149,10 @@ jQuery(document).ready(function($){
                 }
             }
 
-            if (address_country == country_code_name) {
+            if ( (country_code_name == 'XK' && (address_country == 'XK' || typeof address_country === 'undefined') ) || (address_country == country_code_name) ) {
 
                 gstring = gstring.replace(', '+country_name, '');
-                conatiner.find('.address-suggester').val(gstring);
+                conatiner.find('.address-suggester-input').val(gstring);
 
                 var coords = {
                     lat: place.geometry.location.lat(), 
@@ -190,7 +191,7 @@ jQuery(document).ready(function($){
 
 	}
 
-    if( $('.address-suggester').length ) {
+    if( $('.address-suggester-input').length ) {
     	initAddressSuggesters();
     }
 });

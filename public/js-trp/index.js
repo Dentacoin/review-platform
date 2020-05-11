@@ -8,7 +8,6 @@ jQuery(document).ready(function($){
 
 	if ($('.slider-wrapper').length <= 4 && $(window).outerWidth() > 998) {
 		$('.flickity').addClass('flex');
-		
 	} else {
 		$('.flickity').flickity({
 			autoPlay: false,
@@ -35,11 +34,8 @@ jQuery(document).ready(function($){
 			} );
 			$(this).find('.slider-container').css('height', mh+'px');
 		} );
-
-
 	}
 	fixFlicktyInner();
-
 
 	$('.button-want-to-add-dentist').click( function() {
 		$.ajax({

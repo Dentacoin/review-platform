@@ -23,7 +23,7 @@
 	    @if(!empty($_COOKIE['functionality_cookies']) && !empty($country_id))
 		    <div class="container">
 			    <div class="flickity-dentists-form">
-			    	<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}"> Dentists {{ !empty($city_cookie) || !empty($city_id) || (!empty($user) && !empty($user->city_name)) ? 'near' : 'in' }}: 
+			    	<img class="black-filter" src="{{ url('img-trp/map-pin.png') }}"> {{ !empty($city_cookie) || !empty($city_id) || (!empty($user) && !empty($user->city_name)) ? trans('trp.page.index.dentists.near') : trans('trp.page.index.dentists.in') }}: 
 			    	<a href="javascript:;" data-popup="change-dentist-popup" class="current-city">
 			    		{{ !empty($city_cookie) ? $city_cookie['city_name'] : (!empty($city_id) ? $current_city : (!empty($user) && !empty($user->city_name) ? $user->city_name : $current_country)) }}
 			    		<i class="fas fa-caret-down"></i>
@@ -43,7 +43,7 @@
 								@endif
 								<div class="slider-image-wrapper">
 									<div class="slider-image" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
-										<img src="{{ $dentist->getImageUrl(true) }}" alt="Reviews for dentist {{ $dentist->getName() }} in {{ $dentist->city_name ? $dentist->city_name.', ' : '' }}{{ $dentist->state_name ? $dentist->state_name.', ' : '' }}{{ $dentist->country->name }}" style="display: none !important;"> 
+										<img src="{{ $dentist->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $dentist->getName(), 'location' => ($dentist->city_name ? $dentist->city_name.', ' : '').($dentist->state_name ? $dentist->state_name.', ' : '').($dentist->country->name) ]) }}" style="display: none !important;"> 
 										@if($dentist->is_partner)
 											<img class="tooltip-text" src="{{ url('img-trp/mini-logo.png') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}" />
 										@endif
@@ -79,7 +79,7 @@
 											</div>
 										</div>
 										<span class="rating">
-											({{ intval($dentist->ratings) }} reviews)
+											({{ trans('trp.common.reviews-count', [ 'count' => intval($dentist->ratings)]) }})
 										</span>
 									</div>
 							    </div>
@@ -105,12 +105,12 @@
 			<div class="container">
 				<div class="flex flex-mobile">
 					<div class="col">
-						<img src="{{ url('img-trp/dentacoin-dentist-icon.png') }}" alt="Dentacoin dentist icon">
+						<img src="{{ url('img-trp/dentacoin-dentist-icon.png') }}" alt="{{ trans('trp.alt-tags.dentist-icon') }}">
 					</div>
 					<div class="col">
 						<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
 						<h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
-						<a href="javascript:;" data-popup="popup-register" class="button button-yellow button-sign-up-patient button-want-to-add-dentist">{!! nl2br(trans('trp.page.invite.add-dentist')) !!}</a>
+						<a href="javascript:;" class="button button-yellow button-sign-up-patient button-want-to-add-dentist open-dentacoin-gateway patient-register">{!! nl2br(trans('trp.page.invite.add-dentist')) !!}</a>
 					</div>
 				</div>
 			</div>
@@ -120,7 +120,7 @@
 
 		<div class="index-invite-dentist patient-invite">
 			<div class="container">
-				<img src="{{ url('img-trp/dentacoin-dentist-icon.png') }}" alt="Dentacoin dentist icon">
+				<img src="{{ url('img-trp/dentacoin-dentist-icon.png') }}" alt="{{ trans('trp.alt-tags.dentist-icon') }}">
 			</div>
 		</div>
 
@@ -166,9 +166,9 @@
 
 				{!! Form::open(array('method' => 'post', 'id' => 'search-dentists-city') ) !!}
 					{!! csrf_field() !!}
-					<div class="address-suggester-wrapper">
+					<div class="address-suggester-wrapper-input">
 						<div class="modern-field alert-after">
-							<input type="text" name="dentists-city" id="dentist-city" class="modern-input address-suggester city-dentist" autocomplete="off">
+							<input type="text" name="dentists-city" id="dentist-city" class="modern-input address-suggester-input city-dentist" autocomplete="off">
 							<label for="dentist-city">
 								<span>{!! nl2br(trans('trp.popup.change-dentist-popup.city')) !!}:</span>
 							</label>

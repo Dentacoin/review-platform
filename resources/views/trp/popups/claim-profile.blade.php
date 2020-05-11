@@ -69,6 +69,7 @@
 					</label>
 					<p>{!! !empty(request()->input('old-dentist')) ? nl2br(trans('trp.popup.popup-claim-profile.old-dentist.password.hint')) : nl2br(trans('trp.popup.popup-claim-profile.password.hint')) !!}</p>
 				</div>
+				<div class="alert alert-warning" id="password-validator" style="display: none;">{{ trans('trp.popup.popup-claim-profile.password.error') }}</div>
 				
 				<div class="modern-field alert-after">
 					<input type="password" name="password-repeat" id="claim-password-repeat" class="modern-input" autocomplete="off">

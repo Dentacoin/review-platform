@@ -1177,6 +1177,8 @@ body.blur {
 	}
 }
 
+
+//index
 .front-info {
 
 	@media #{$phone} {
@@ -1595,13 +1597,6 @@ textarea.input {
 			color: #126585;
 		}
 	}
-}
-
-.checkbox-question {
-	margin-top: -4px;
-	text-align: left;
-	color: #888888;
-    margin-bottom: 5px;
 }
 
 .centered-hack {
@@ -4559,510 +4554,6 @@ textarea.input {
 	}
 }
 
-.switch-forms-mobile {
-	text-align: center;
-	text-transform: unset;
-	border-radius: 0px;
-}
-
-.switch-forms-mobile[data-form="user-form"] {
-    border: 3px solid white;
-    border-right-width: 1px;
-}
-
-.switch-forms-mobile[data-form="dentist-form"] {
-    color: black;
-    background-color: white;
-    border: 3px solid white;
-    border-left-width: 1px;
-}
-
-.forms {
-
-	@media #{$tablet} {
-		height: calc(100% - 47px);
-	}
-
-	.form-button {
-		display: block;
-	    width: 100%;
-	    border: 3px solid white;
-	    color: white;
-	    background-color: #126585;
-	    font-size: 35px;
-	    text-align: center;
-		padding: 10px 0px;
-
-	    @media #{$phone} {
-			display: none;
-		}
-	}
-
-	.form-wrapper {
-		position: relative;
-		background-color: transparent;
-		flex: 1;
-	    display: flex;
-	    flex-direction: column;
-
-		@media #{$phone} {
-			display: none;
-		}
-
-		@media #{$tablet} {
-			flex: 1;
-			max-width: 50%;
-		}
-
-		@media #{$phone} {
-		    max-width: 100%;
-    		height: 100%;
-    	}
-
-    	.cta {
-		    color: white;
-		    margin-top: 30px;
-		    margin-bottom: -40px;
-		    display: flex;
-		    align-items: center;
-		    font-size: 14px;
-		    display: none;
-
-		    @media #{$phone} {
-    			margin-bottom: -10px;
-    		}
-
-		    i {
-			    color: white;
-			    margin-right: 5px;
-		    }
-    	}
-
-		.switch-forms {
-			display: none;
-		}
-
-		&.chosen {
-
-			@media #{$phone} {
-				display: block;
-			}
-
-    		form {
-				opacity: 1;
-				z-index: 0;
-    		}
-
-    		.switch-forms {
-    			display: block;
-
-    			@media #{$phone} {
-					display: none;
-				}
-    		}
-		}
-
-		.white-form-button {
-			color: black;
-			background-color: white;
-			padding: 10px 0px;
-			border-bottom: 1px solid #000000;
-    		padding-bottom: 12px;
-		}
-
-		#login-form-popup {
-			display: none;
-		}
-
-		.signin-form {
-		    min-width: 430px;
-
-		    @media #{$tablet} {
-				height: 100%;
-				min-width: unset;
-			}
-
-			.login-without-account {
-				text-align: center;
-				margin-top: 25px;
-
-				a {
-					font-size: 20px;
-					font-weight: bold;
-
-					&:hover {
-						text-decoration: underline;
-					}
-				}
-			}
-
-			.forgot-password-wrap {
-				a {
-					color: #999999;
-					font-size: 16px;
-				}
-			}
-		}
-
-		.log-button {
-			display: block;
-			background-color: white;
-			border-radius: 5px;
-			margin-bottom: 17px;
-			padding: 10px 15px;
-			font-size: 20px;
-			padding-left: 15px;
-			box-shadow: 0px 1px 11px 1px rgba(0, 0, 0, 0.3);
-
-			span {
-				display: inline-block;
-				vertical-align: sub;
-				width: 27px;
-				text-align: center;
-				margin-right: 10px; //was 30
-			}
-
-			&.fb-login {
-				background-color: #4267B2;
-    			color: white;
-
-    			i {
-					color: white;
-					font-size: 30px;
-    			}
-			}
-		}
-
-		form {
-			background-color: white;
-		    border-bottom-left-radius: 3px;
-		    border-bottom-right-radius: 3px;
-			opacity: 0;
-			z-index: -1;
-			position: relative;
-		    display: flex;
-		    flex-direction: column;
-    		flex: 1;
-
-		    &.blue-form {
-				background-color: #126585;
-				border: 3px solid white;
-				margin-top: -3px;
-				border-top-width: 1px;
-
-				h2 {
-					color: white;
-				}
-
-				.have-account {
-    				border-color: white;
-    				color: white;
-
-    				a {
-    					color: white;
-    				}
-				}
-
-				.agree-label {
-					text-align: center;
-					margin-top: 0px;
-				    color: white;
-    				padding-bottom: 10px;
-
-				    &.blink {
-					    animation-name: login-blink-animation;
-					    animation-duration: 1.5s;
-					    animation-timing-function: ease-in-out;
-					    animation-iteration-count: infinite;    
-					    animation-play-state: running;
-				    }
-
-					@keyframes login-blink-animation {
-					    0%     {background-color:transparent;}
-					    50.0%  {background-color:red;}
-					    100.0%  {background-color:transparent;}
-					}
-
-				    @media #{$phone} {
-						padding-left: 20px;
-						padding-right: 20px;
-						font-size: 13px;
-					}
-
-				    a,
-				    i {
-				    	color: white;
-				    	background: transparent;
-
-				    	@media #{$phone} {
-							font-size: 13px;
-						}
-				    }
-
-				    a {
-				    	font-size: 16px;
-				    	font-weight: normal;
-
-				    	@media #{$phone} {
-							font-size: 13px;
-						}
-				    }
-				}
-		    }
-
-			.signin-radios {
-				text-align: center;
-				margin-bottom: 50px;
-
-				@media #{$tablet} {
-					display: none;
-				}
-
-		    	input {
-		    		display: none;
-		    	}
-
-		    	label {
-		    		height: 40px;
-    				line-height: 38px;
-		    		font-size: 20px;
-		    		cursor: pointer;
-		    		color: #999999;
-		    		background-color: white;
-		    		border: 1px solid #999999;
-
-		    		&.active {
-			    		color: white;
-			    		background-color: #126585;
-			    		border-color: #126585;
-		    		}
-		    	}
-			}
-
-			.form-inner {
-				padding: 0px 55px;
-    			flex: 1;
-
-				#register-error {
-					margin-top: -20px;
-					margin-bottom: 20px;
-				}
-
-				@media #{$tablet} {
-					padding: 0px 20px 20px;
-				}
-
-				h2 {
-					text-transform: uppercase;
-					padding-top: 30px;
-				}
-
-				.mobile-radios {
-					margin-bottom: 20px;
-				}
-			}
-
-			.form-info {
-				margin-top: 30px;
-
-				.back,
-				span {
-					float: left;
-					margin-top: 11px;
-					color: #999999;
-					font-size: 14px;
-					font-weight: 300;
-
-					.read-privacy {
-						font-size: 14px;
-						font-weight: normal;
-						color: black;
-
-						&:hover {
-				    		text-decoration: underline;
-				    	}
-					}
-				}
-
-				.button {
-					float: right;
-					text-transform: unset;
-				}
-
-				.login-button {
-					float: none;
-				}
-			}
-
-			.have-account {
-				margin-top: 30px;
-				text-align: center;
-				border-top: 1px solid #000000;
-				padding-top: 20px;
-				padding-bottom: 23px;
-				color: black;
-				width: 90%;
-				margin-right: auto;
-				margin-left: auto;
-
-				@media #{$tablet} {
-					width: 100%;
-					margin-top: 0px;
-				}
-
-			    @media #{$phone} {
-					padding-top: 15px;
-					padding-bottom: 15px;
-				}
-
-			    a {
-			    	font-weight: bold;
-			    	font-size: 20px;
-
-			    	&:hover {
-			    		text-decoration: underline;
-			    	}
-			    }
-			}
-
-			.specilializations {
-				margin-left: 20px;
-
-				.checkbox-label {
-					text-align: left;
-
-					i {
-						margin-top: 3px;
-					}
-				}
-			}
-
-			.image-label {
-
-			    width: 100%;
-			    height: 0;
-			    padding: 100% 0 0 0;
-			    display: block;
-
-				.centered-hack {
-					padding: 20px;
-
-					@media #{$phone} {
-						padding: 0px;
-					}
-				}
-			}
-
-			.sign-in-step {
-				display: none;
-
-				&.active {
-					display: block;
-				}
-
-				.input-flex {
-					align-items: center;
-					@media #{$phone} {
-						display: flex;
-					}
-
-					.phone-code-holder {
-						margin-bottom: 27px;
-						display: block;
-						text-align: right;
-						padding-right: 10px;
-						font-size: 18px;
-
-						@media #{$phone} {
-							margin-bottom: 18px;
-							font-size: 14px;
-						}
-					}
-
-					& + .ajax-alert {
-						margin-top: -20px;
-
-						@media #{$phone} {
-							margin-top: -10px;
-						}
-					}
-				}
-			}
-
-			#step-4 {
-				min-width: 340px;
-
-				@media #{$phone} {
-					min-width: unset;
-				}
-			}
-
-			.search-input {
-				margin-top: 30px;
-
-				label {
-					color: #999999;
-					font-size: 14px;
-					font-weight: 300;
-
-					.input-wrapper {
-						margin-top: 10px;
-						position: relative;
-
-						i {
-							position: absolute;
-						    left: 10px;
-						    top: 8px;
-						    color: #9e9e9e;
-						}
-
-						input {
-						    padding-left: 33px;
-						}
-					}
-				}
-			}			
-		}
-	}
-}
-
-.switch-forms {
-	position: absolute;
-    top: 50%;
-    z-index: 10;
-    background-color: #00aee6;
-    width: 36px;
-    height: 36px;
-    text-align: center;
-    line-height: 45px;
-    border-radius: 50%;
-    padding-right: 4px;
-
-    @media #{$phone} {
-		display: none;
-	}
-
-    &.user-choice {
-    	background-color: white;
-    	padding-right: 0px;
-    	padding-left: 3px;
-    }
-}
-
-#dentist-form {
-	.switch-forms {
-		left: 0;
-		margin-left: -18px;
-	}
-}
-
-#user-form {
-	.switch-forms {
-		right: 0;
-		margin-right: -18px;
-	}
-}
-
 .results-static-map {
     position: relative;
     border-radius: 5px;
@@ -5279,16 +4770,6 @@ textarea.input {
 	    margin-right: auto;
 	    margin-bottom: 20px;
     }
-}
-
-#signin-form-popup-left,
-#signin-form-popup {
-	.form-inner {
-		>h2 {
-			font-size: 30px;
-			text-transform: unset;
-		}
-	}
 }
 
 .page-dentist,
@@ -5721,35 +5202,6 @@ textarea.input {
     }
 }
 
-#popup-register {
-	.popup-inner {
-		width: 70%;
-		max-width: 1000px;
-
-		@media #{$pc} {
-			width: auto;
-		}
-
-		@media #{$tablet} {
-			width: 100%;
-		}
-	}
-
-	.close-popup {
-	    right: 6px;
-	    top: 3px;
-	    z-index: 10;
-
-	    i {
-	    	font-size: 20px;
-	    }		
-	}
-
-	.checkbox-label {
-		text-align: left;
-	}
-}
-
 .modern-field {
 	margin-bottom: 25px;
 	position: relative;
@@ -6149,8 +5601,11 @@ textarea.input {
 	}
 }
 
-.pac-container {
-	z-index: 2000 !important;
+.site-content {
+	.pac-container {
+		z-index: 2000 !important;
+	}
+	
 }
 
 // .partner-tooltip {
@@ -6178,15 +5633,6 @@ textarea.input {
 // 	    border-color: #07a9df transparent transparent transparent;
 //     }
 // }
-
-#captcha-div {
-	text-align: center;
-	margin-top: 40px;
-
-	> div {
-	    display: inline-block;
-	}
-}
 
 .bottom-drawer {
 	position: fixed;
@@ -6375,30 +5821,6 @@ textarea.input {
 	@media #{$phone} {
     	font-size: 30px;
     }
-}
-
-.dentist-short-desc {
-	display: none;
-	margin-top: 30px;
-    margin-left: 13px;
-    max-width: 600px;
-
-    &.active {
-    	display: block;
-    }
-
-    @media #{$pc} {
-	    max-width: 500px;
-	}
-
-    @media #{$tablet} {
-	    max-width: 100%;
-	}
-}
-
-textarea[name="short_description"] {
-	height: 87px;
-	margin-bottom: 0px;
 }
 
 .clear {
@@ -9760,5 +9182,76 @@ body.strength-pb {
 			flex: 1;
     		text-align: right;
 		}
+	}
+}
+
+
+.dentacoin-login-gateway-container {
+
+	& * {
+		font-family: inherit;
+	}
+
+	.dentacoin-login-gateway-wrapper {
+		background-color: transparent;
+
+		.popup-body {
+			.dentist,
+			.patient {
+				h2 {
+					font-weight: inherit;
+					margin-bottom: inherit;
+					text-align: left;
+				}
+			}
+		}
+
+		.facebook-custom-btn {
+
+			.inline-block {
+			    color: white;
+			}
+		}
+
+		.inline-block {
+		    font-size: inherit;
+		}
+	}
+
+	a:hover {
+	    color: inherit;
+	}
+
+	.custom-checkbox-style {
+		.custom-checkbox-label {
+		    color: white;
+		}
+	}
+
+	.privacy-policy-row {
+		.custom-checkbox-label {
+		    color: black;
+		}
+	}
+	
+	.specializations {
+		.custom-checkbox-style {
+			.custom-checkbox-label {
+			    color: black;
+			}
+		}
+	}
+
+	.padding-top-50 {
+		color: white;
+	}
+
+	.fa-sign-in-alt {
+		color: white;
+	}
+
+	.cr-viewport,
+	.cr-overlay {
+		background: transparent !important;
 	}
 }

@@ -126,6 +126,11 @@ return [
         ),
         'logs' => array(
             'icon' => 'bug',
+            'subpages' => array(
+                'trp' => 'trp',
+                'trp-urgent' => 'trp-urgent',
+                'api' => 'api',
+            ),
         ),
     )
 ];

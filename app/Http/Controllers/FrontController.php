@@ -111,17 +111,6 @@ class FrontController extends BaseController {
             $this->admin = Auth::guard('admin')->user();
             $this->user = Auth::guard('web')->user();
 
-            if(!empty(Request::input('inviter'))) {
-                $u_id = User::decrypt(Request::input('inviter'));
-
-                $user = User::find($u_id);
-
-                if(!empty($user)) {
-                    return redirect(getLangUrl('invite/?info='.base64_encode(User::encrypt(json_encode(array('user_id' => $user->id, 'hash' => $user->get_invite_token()))))));
-                }
-                
-            }
-
             if (!empty($this->user) && !$this->user->is_dentist && session('intended') && !$this->user->isBanned('vox')) {
                 $intended = session()->pull('intended');
                 
@@ -182,30 +171,30 @@ class FrontController extends BaseController {
             }
 
             if(!empty($this->user) && session('login-logged')!=$this->user->id){
-                $ul = new UserLogin;
-                $ul->user_id = $this->user->id;
-                $ul->ip = User::getRealIp();
-                $ul->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
-                $ul->country = \GeoIP::getLocation()->country;
+                // $ul = new UserLogin;
+                // $ul->user_id = $this->user->id;
+                // $ul->ip = User::getRealIp();
+                // $ul->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
+                // $ul->country = \GeoIP::getLocation()->country;
 
-                $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                $dd = new DeviceDetector($userAgent);
-                $dd->parse();
+                // $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                // $dd = new DeviceDetector($userAgent);
+                // $dd->parse();
 
-                if ($dd->isBot()) {
-                    // handle bots,spiders,crawlers,...
-                    $ul->device = $dd->getBot();
-                } else {
-                    $ul->device = $dd->getDeviceName();
-                    $ul->brand = $dd->getBrandName();
-                    $ul->model = $dd->getModel();
-                    $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                }
+                // if ($dd->isBot()) {
+                //     // handle bots,spiders,crawlers,...
+                //     $ul->device = $dd->getBot();
+                // } else {
+                //     $ul->device = $dd->getDeviceName();
+                //     $ul->brand = $dd->getBrandName();
+                //     $ul->model = $dd->getModel();
+                //     $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                // }
 
-                $is_whitelist_ip = WhitelistIp::where('ip', 'like', User::getRealIp())->first();
-                if (User::getRealIp() != '213.91.254.194' && empty($this->admin) && empty($is_whitelist_ip)) {
-                    $ul->save();
-                }
+                // $is_whitelist_ip = WhitelistIp::where('ip', 'like', User::getRealIp())->first();
+                // if (User::getRealIp() != '213.91.254.194' && empty($this->admin) && empty($is_whitelist_ip)) {
+                //     $ul->save();
+                // }
 
                 // if($this->user->is_dentist) {
                 //     $gt_exist = UserGuidedTour::where('user_id', $this->user->id)->first();
@@ -453,23 +442,7 @@ class FrontController extends BaseController {
 
     public function ShowView($page, $params=array(), $statusCode=null) {
 
-        $this->PrepareViewData($page, $params, 'trp');
-
-        $params['countries'] = Country::with('translations')->get();
-
-        // if (!empty($params['jscdn']) && empty( $this->user )) {
-        
-        //     if(is_array($params['jscdn'])) {
-        //         if( array_search('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', $params['jscdn'])===false ) {
-        //             $params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
-        //         }
-        //     } else {
-        //         $params['jscdn'] = [
-        //             'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en',
-        //         ];
-        //     }
-        // }
-        
+        $this->PrepareViewData($page, $params, 'trp');    
 
         if (empty($this->user)) {
             $params['hours'] = [];
@@ -560,78 +533,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-
-        if( session('login_patient') ) {
-            session([
-                'login_patient' => false
-            ]);
-
-            if( $platfrom=='trp' ) {
-                $params['trackEvents'][] = [
-                    'fb' => 'PatientLoginSuccess',
-                    'ga_action' => 'ClickLogin',
-                    'ga_category' => 'PatientLogin',
-                    'ga_label' => 'LoginSuccess',
-                ];
-            }
-        }
-
-
-        if( session('just_login') ) {
-            session([
-                'just_login' => false
-            ]);
-
-            if (!empty($this->user) && $this->user->is_dentist) {
-                if( $platfrom=='trp' ) {
-                    $params['trackEvents'][] = [
-                        'fb' => 'DentistLogin',
-                        'ga_action' => 'ClickLogin',
-                        'ga_category' => 'DentistLogin',
-                        'ga_label' => 'DentistLogin',
-                    ];
-                }
-            }
-        }
-
-        //
-        //TRP
-        //
-
-        if( session('just_registered') ) {
-            session([
-                'just_registered' => false
-            ]);
-
-            $civic_registered = false;
-            if( session('civic_registered') ) {
-                $civic_registered = true;
-                session([
-                    'civic_registered' => false
-                ]);
-            }
-
-
-            if( !empty($this->user) && !$this->user->is_dentist ) {
-                if( $civic_registered) {
-                    $params['trackEvents'][] = [
-                        'fb' => 'CompleteRegistrationCivic',
-                        'ga_action' => 'ClickCivic',
-                        'ga_category' => 'PatientRegistration',
-                        'ga_label' => 'TRPCivicPatientRegistration',
-                    ];
-                } else {
-                    $params['trackEvents'][] = [
-                        'fb' => 'CompleteRegistrationFB',
-                        'ga_action' => 'ClickFB',
-                        'ga_category' => 'PatientRegistration',
-                        'ga_label' => 'FBPatientRegistration',
-                    ];
-
-                }
-            }
-        }
-
-        $params['cache_version'] = '2020-05-04-01';
+        $params['cache_version'] = '2020-05-07-01';
     }
 }

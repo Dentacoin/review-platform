@@ -32,6 +32,8 @@
         
         <meta name="fb:app_id" content="1906201509652855"/>
 
+        <meta name="csrf-token" content="{{ csrf_token() }}"/>
+
 		<link rel="stylesheet" type="text/css" href="{{ url('/css/new-style-trp.css').'?ver='.$cache_version }}" />
 		
         @if(!empty($css) && is_array($css))
@@ -116,6 +118,7 @@
     </head>
 
     <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($extra_body_class) ? $extra_body_class : '' }} {{ !empty($satic_page) ? 'page-page' : '' }} {{ (config('langs')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }}">
+    	<div id="site-url" url="{{ empty($_SERVER['REQUEST_URI']) ? getLangUrl('/') : 'https://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] }}"></div>
 		<header class="header">
 	       	<nav class="navbar navbar-default navbar-fixed-top">
   				<div class="container">
@@ -175,7 +178,7 @@
 										{!! trans('trp.header.for-dentists') !!}
 									</a>
 								@endif
-								<a href="javascript:;" class="button-sign-in {{ $current_page!='welcome-dentist' ? 'button-login-patient' : '' }}" data-popup="popup-login">
+								<a href="javascript:;" class="button-sign-in open-dentacoin-gateway {{ $current_page!='welcome-dentist' ? 'patient-login' : 'dentist-login' }}">
 									{{ $current_page=='welcome-dentist' ? trans('trp.header.login') : trans('trp.header.signin') }}
 								</a>
 	                        @endif
@@ -306,18 +309,13 @@
 
 		@include('trp/popups/share')
 		@if(empty($user))
-			@include('trp/popups/register')
 			@include('trp/popups/dentist-verification')
-			@include('trp/popups/banned')
-			@include('trp/popups/suspended')
-			@if($current_page == 'welcome-dentist' || $current_page == 'dentist')
-				@include('trp/popups/claim-profile')
-			@endif
-		@else
+		@elseif(!$user->is_dentist)
 			@include('trp/popups/invite-new-dentist')
 			@include('trp/popups/invite-new-dentist-success')
 		@endif
 
+        <link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-login-gateway/css/dentacoin-login-gateway-style.css?v={{ $cache_version }}"/>
 		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
 		
 		@if( $current_page=='dentist' )
@@ -333,26 +331,26 @@
 		@if($current_page == 'index')
 			<script type='application/ld+json'> 
 			{
-			  "@context": "http://www.schema.org",
-			  "@type": "Corporation",
-			  "name": "Dentacoin Trusted Reviews",
-			  "description": "Through creating and implementing the first Blockchain-based platform for trusted dental treatment reviews, Dentacoin Trusted Reviews allows patients voices to be heard and provides dentists with access to up-to-date, extremely valuable market research data and qualified patient feedback - the most powerful tool to improve service quality and to establish a loyal patient base.",
-			  "logo": "https://dentacoin.com/assets/uploads/trusted-reviews.svg",
-			  "image": "https://dentacoin.com/assets/uploads/trusted-reviews.svg",
-			  "url": "https://reviews.dentacoin.com/",
-			  "sameAs": ["https://www.facebook.com/dentacoin.trusted.reviews/"],
-			  "contactPoint": {
-			    "@type": "ContactPoint",
-			    "email": "reviews@dentacoin.com",
-			    "url": "https://reviews.dentacoin.com",
-			    "contactType": "customer service"
+			  	"@context": "http://www.schema.org",
+			  	"@type": "Corporation",
+			  	"name": "Dentacoin Trusted Reviews",
+			  	"description": "{{ trans('trp.schema.description') }}",
+			  	"logo": "https://dentacoin.com/assets/uploads/trusted-reviews.svg",
+			  	"image": "https://dentacoin.com/assets/uploads/trusted-reviews.svg",
+			  	"url": "https://reviews.dentacoin.com/",
+			  	"sameAs": ["https://www.facebook.com/dentacoin.trusted.reviews/"],
+			  	"contactPoint": {
+			    	"@type": "ContactPoint",
+			   		"email": "reviews@dentacoin.com",
+			    	"url": "https://reviews.dentacoin.com",
+			    	"contactType": "customer service"
 			    },
-			  "address": {
-			    "@type": "PostalAddress",
-			    "streetAddress": "Wim Duisenbergplantsoen 31, ",
-			    "addressLocality": "Maastricht",
-			    "postalCode": "6221 SE ",
-			    "addressCountry": "Netherlands"
+			  	"address": {
+			    	"@type": "PostalAddress",
+			    	"streetAddress": "Wim Duisenbergplantsoen 31, ",
+			    	"addressLocality": "Maastricht",
+			    	"postalCode": "6221 SE ",
+			    	"addressCountry": "Netherlands"
 			    },
 			    "foundingDate": "08/08/2017",
 			    "founders": [
@@ -379,22 +377,35 @@
 			        "sameAs": "https://twitter.com/neptox"
 			    }
 			    ],
-			  "owns": {
-			   "@type": "Product",
-			  "name": "Dentacoin Trusted Reviews",
-			  "image": "https://dentacoin.com/assets/uploads/trusted-reviews.svg",
-			  "description": "Dentacoin Trusted Reviews is the first platform for detailed, verified and incentivized dental treatment reviews. Patients are invited by their dentists, verified through Blockchain-based identity system and rewarded for providing valuable feedback. Dentists have the chance to improve upon the feedback received and are incentivized for willing to do so.",
-			  "aggregateRating": {
-			    "@type": "AggregateRating",
-			    "ratingValue": "5",
-			    "ratingCount": "26"
-			  }
-			}
+			  	"owns": {
+			   		"@type": "Product",
+			  		"name": "Dentacoin Trusted Reviews",
+			  		"image": "https://dentacoin.com/assets/uploads/trusted-reviews.svg",
+			  		"description": "{{ trans('trp.schema.owns.description') }}",
+			  		"aggregateRating": {
+			    		"@type": "AggregateRating",
+			    		"ratingValue": "5",
+			    		"ratingCount": "26"
+			  		}
+				}
 			}
 			</script>
 		@endif
 
 		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
+
+		<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js?v={{ $cache_version }}"></script>
+
+		@if(empty($user))
+			<script type="text/javascript">
+				dcnGateway.init({
+					'platform' : '{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.reviews' : 'reviews' !!}',
+					'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=trusted-reviews'
+				});				
+			</script>
+		@endif
+
+		
 
 		@if(!empty($trackEvents))
 	        <script type="text/javascript">
