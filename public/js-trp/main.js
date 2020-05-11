@@ -857,6 +857,12 @@ jQuery(document).ready(function($){
             $(this).serialize() , 
             (function( data ) {
                 if (data.success) {
+
+                	gtag('event', 'Add', {
+                        'event_category': 'DentistRegistration',
+                        'event_label': 'OpenHours',
+                    });
+
                     closePopup();
 
                     if($('.verification-form:visible').length) {
@@ -1415,6 +1421,18 @@ jQuery(document).ready(function($){
 	                    that.find('.team-member-name').val('').focus();
 	                    that.find('.member-alert').show().addClass('alert-success').html(data.message);
 	                    $('.existing-dentists').children().remove();
+
+	                    if (data.with_email) {
+	                    	gtag('event', 'Invite', {
+	                            'event_category': 'DentistRegistration',
+	                            'event_label': 'ClinicTeam',
+	                        });
+	                    } else {
+	                    	gtag('event', 'Add', {
+	                            'event_category': 'DentistRegistration',
+	                            'event_label': 'ClinicTeam',
+	                        });
+	                    }
                 	}
                     
                 } else {
