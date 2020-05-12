@@ -5,14 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
 use Illuminate\Support\Facades\Input;
-use Request;
-use Image;
-use Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\PageSeo;
 
-class PagesSeoController extends AdminController
-{
+use App\Exports\Export;
+use App\Imports\Import;
+
+use Validator;
+use Request;
+use Image;
+
+class PagesSeoController extends AdminController {
+
     public function vox_list() {
     	$pages = PageSeo::where('platform', 'vox')->get();
 
@@ -108,6 +113,115 @@ class PagesSeoController extends AdminController
         }
 
         return redirect('cms');
+    }
 
+
+    public function export($platform) {
+
+
+        $from = Request::input('from');
+        $to = Request::input('to');
+
+        $groups['Seo'] = [];
+        $list = PageSeo::where('platform', $platform)->get();
+        foreach ($list as $item) {
+            $groups['Seo'][$item->id] = [];                 
+            foreach ($item->translatedAttributes as $field) {
+                $groups['Seo'][$item->id][$field] = [
+                    $item->translateOrNew($from)->$field,
+                    $item->translateOrNew($to)->$field,
+                ];    
+            }
+        }
+        
+        $dir = storage_path().'/app/public/xls/';
+        if(!is_dir($dir)) {
+            mkdir($dir);
+        }
+
+        $flat = [];
+
+        foreach ($groups as $gname => $glist) {
+
+            $title = 'Reviews Questions';
+            $flat[$title] = [];
+            
+            foreach ($glist as $item_id => $grow) {
+                $found = false;
+
+                foreach ($grow as $key => $value) {
+                    if(!empty($value[0]) || !empty($value[1]) ) {
+                        $found = true;
+                        break;
+                    }
+                }
+
+                if($found) {
+                    foreach ($grow as $key => $value) {
+                        $flat[$title][] = [$item_id.'.'.$key, $from => $value[0], ($to == $from ? $to.'-1': $to) =>  empty($value[1]) ? '' : $value[1] ];
+                    }
+                    $flat[$title][] = ['', '' , ''];
+                }
+
+            }
+        }
+
+
+        $export = new Export($flat);
+        return Excel::download($export, $platform.'-seo-translations.xls');
+    }
+
+
+    public function import($platform) {
+
+        $source = Request::input('source');
+        $from = Request::input('from');
+        $that = $this;
+
+        $newName = '/tmp/'.str_replace(' ', '-', Input::file('table')->getClientOriginalName());
+        copy( Input::file('table')->path(), $newName );
+
+        $rows = Excel::toArray(new Import, $newName );
+
+        if(!empty($rows)) {
+
+            $objects = [];
+
+            foreach($rows[0] as $row){
+                if( $row[0] ) {
+                    $arr = explode('.', $row[0]);
+                    if(!isset($objects[$arr[0]])) {
+                        $objects[$arr[0]] = [];
+                    }
+                    $objects[$arr[0]][$arr[1]] = $row[2];     
+
+                }
+            }
+
+            foreach ($objects as $id => $obj) {
+                $item = PageSeo::find( $id );
+                if( $item ) {
+                    $translation = $item->translateOrNew($from);
+                    $column_names = Schema::getColumnListing($translation->getTable());
+                    $rel_field = $column_names[1];
+                    $translation->$rel_field = $item->id;
+
+                    foreach ($obj as $key => $value) {
+                        $translation->$key = $value; 
+                    }
+                    $translation->save();                                    
+                }
+            }
+
+            Request::session()->flash('success-message', 'Translations save');
+        }
+
+        unlink($newName);
+        
+        $pages = PageSeo::where('platform', $platform)->get();
+
+        return $this->ShowView('pages-'.$platform, array(
+            'pages' => $pages
+        ));
     }
 }

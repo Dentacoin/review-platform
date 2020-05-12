@@ -74,13 +74,14 @@ class TranslationsController extends AdminController {
         }
 	}
 
-    public function export($subpage=null, $source=null) {
+    public function export($subpage=null, $source=null, $target=null) {
 
         $list = Lang::get($this->current_subpage, array(), $source);
+        $target_list = Lang::get($this->current_subpage, array(), $target);
         //dd($list);
         $flist = [];
         foreach ($list as $key => $value) {
-            $flist[] = [$key, $value ];
+            $flist[] = [$key, $value, isset($target_list[$key]) ? $target_list[$key] : ''  ];
         }
         //dd($flist);
 
@@ -88,17 +89,14 @@ class TranslationsController extends AdminController {
         if(!is_dir($dir)) {
             mkdir($dir);
         }
-        $fname = $dir.'export';
 
         $export = new Export($flist);
         return Excel::download($export, 'translations.xls');
     }
 
-    public function import($subpage=null, $source=null) {
+    public function import($subpage=null, $source=null, $target=null) {
 
         if(!empty(Input::file('table'))) {
-            
-            $list = Lang::get($this->current_subpage, array(), $source);
 
             $newName = '/tmp/'.str_replace(' ', '-', Input::file('table')->getClientOriginalName());
             copy( Input::file('table')->path(), $newName );
@@ -111,6 +109,8 @@ class TranslationsController extends AdminController {
 
                 foreach($results[0] as $k => $v) {
                     $key = current($v);
+
+                    next($v);
                     next($v);
                     $text = current($v);
 
@@ -119,7 +119,7 @@ class TranslationsController extends AdminController {
                     }
                 }
                 //dd($proper);
-                $this->translations_save($source, $proper);
+                $this->translations_save($target, $proper);
 
                 unlink($newName);
 

@@ -1,5 +1,6 @@
 var lastCivicForm = null;
 var suggestClinic;
+var suggestDentist;
 
 $(document).ready(function(){
 

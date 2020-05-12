@@ -1549,7 +1549,6 @@ jQuery(document).ready(function($){
 		});
     });
 
-
 });
 
 //

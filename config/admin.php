@@ -39,12 +39,6 @@ return [
         'reviews' => array(
             'icon' => 'edit',
         ),
-        'trp-faq' => array(
-            'icon' => 'comments',
-            'js' => array(
-                'faq.js',
-            ),
-        ),
         'emails' => array(
             'icon' => 'envelope',
             'subpages' => array(
@@ -101,16 +95,23 @@ return [
             ),
             'subpages' => array(
                 'admin' => 'admin',
-                'front' => 'front',
+                //'front' => 'front',
                 'trp' => 'trp',
                 'vox' => 'vox',
                 'validation' => 'validation',
                 'translations' => 'translations',
                 'login-register' => 'login-register',
+                'api' => 'api',
             )
         ),
         'export-import' => array(
             'icon' => 'globe',
+        ),
+        'trp-faq' => array(
+            'icon' => 'comments',
+            'js' => array(
+                'faq.js',
+            ),
         ),
         'admins' => array(
             'icon' => 'user-plus',
