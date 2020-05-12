@@ -33,6 +33,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('translations/{subpage?}/add', 									'TranslationsController@add');
 	Route::post('translations/{subpage?}/update', 								'TranslationsController@update');
 	Route::get('translations/{subpage?}/export/{source}/{target}', 				'TranslationsController@export');
+	Route::get('translations/{subpage?}/export-missing/{source}/{target}', 		'TranslationsController@export_missing');
 	Route::post('translations/{subpage?}/import/{source}/{target}', 			'TranslationsController@import');
 	Route::get('translations/{subpage?}/{source?}/{target?}', 					'TranslationsController@list');
 	Route::get('translations/{subpage?}/{source?}/{target?}/del/{delkey?}', 	'TranslationsController@delete');

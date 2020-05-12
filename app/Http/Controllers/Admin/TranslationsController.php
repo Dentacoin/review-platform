@@ -81,7 +81,7 @@ class TranslationsController extends AdminController {
         //dd($list);
         $flist = [];
         foreach ($list as $key => $value) {
-            $flist[] = [$key, $value, isset($target_list[$key]) ? $target_list[$key] : ''  ];
+            $flist[] = [$key, $value, !empty($target_list[$key]) ? $target_list[$key] : ''  ];
         }
         //dd($flist);
 
@@ -92,6 +92,28 @@ class TranslationsController extends AdminController {
 
         $export = new Export($flist);
         return Excel::download($export, 'translations.xls');
+    }
+
+    public function export_missing($subpage=null, $source=null, $target=null) {
+
+        $list = Lang::get($this->current_subpage, array(), $source);
+        $target_list = Lang::get($this->current_subpage, array(), $target);
+        //dd($list);
+        $flist = [];
+        foreach ($list as $key => $value) {
+            if(empty($target_list[$key])) {
+                $flist[] = [$key, $value, ''];
+            }
+            
+        }
+
+        $dir = storage_path().'/app/public/xls/';
+        if(!is_dir($dir)) {
+            mkdir($dir);
+        }
+
+        $export = new Export($flist);
+        return Excel::download($export, 'missing-translations.xls');
     }
 
     public function import($subpage=null, $source=null, $target=null) {
@@ -183,6 +205,28 @@ class TranslationsController extends AdminController {
             $sa_new[$nk][$key] = $value;
         }
 
+
+        $translations_count_arr = [];
+
+        foreach($this->langs as $key => $lang_info) {
+            $i = 0;
+
+            foreach (Lang::get($this->current_subpage, array(), $key) as $k => $v) {
+                if(!empty($v)) {
+                    $i++;
+                }
+            }
+
+            $translations_count_arr[$key] = $i;
+        }
+
+        $all_translations_count = 0;
+        foreach ($translations_count_arr as $key => $value) {
+            if($all_translations_count < $value ) {
+                $all_translations_count = $value;
+            }
+        }
+
         $attrs = array(
             'source' => $source,
             'target' => $target,
@@ -191,6 +235,8 @@ class TranslationsController extends AdminController {
             'target_arr' => $ta,
             'reload' => request('reload'),
             'reloaded' => request('reloaded'),
+            'translations_count_arr' => $translations_count_arr,
+            'all_translations_count' => $all_translations_count
         );
 
         return $this->ShowView('translations', $attrs);

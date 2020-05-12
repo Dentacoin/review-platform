@@ -663,18 +663,6 @@ NEW & FAILED TRANSACTIONS
                         $user->sendGridTemplate(44, null, 'trp');
                     }
                 }
-
-                $mtext = 'Engagement first email send';
-
-                Mail::raw($mtext, function ($message) {
-
-                    $sender = config('mail.from.address');
-                    $sender_name = config('mail.from.name');
-
-                    $message->from($sender, $sender_name);
-                    $message->to( 'gergana@youpluswe.com' );
-                    $message->subject('Engagement first email send');
-                });
             }
 
             echo 'First 3 weeks engagement email 2 DONE';

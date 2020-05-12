@@ -9,6 +9,10 @@
 @endif
 
 <h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
+
+@foreach($translations_count_arr as $k => $v)
+    <p {!! $all_translations_count > $v ? 'style="color: red;"' : '' !!}> {{ config('langs.'.$k.'.name') }} - {{ $v }}</p>
+@endforeach
 <!-- end page-header -->
 
 <!-- begin row -->
@@ -110,7 +114,8 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">{{ trans('admin.page.'.$current_page.'.export', ['lang' => $langs[$source]['name'] ]) }}</label>
                         <div class="col-md-9">
-                            <a target="_blank" href="{{ url('cms/'.$current_page.'/'.$current_subpage.'/export/'.$source.'/'.$target) }}" class="btn btn-sm btn-primary">{{ trans('admin.page.'.$current_page.'.export-btn') }}</a>
+                            <a target="_blank" href="{{ url('cms/'.$current_page.'/'.$current_subpage.'/export/'.$source.'/'.$target) }}" class="btn btn-sm btn-primary">Export</a>
+                            <a target="_blank" href="{{ url('cms/'.$current_page.'/'.$current_subpage.'/export-missing/'.$source.'/'.$target) }}" class="btn btn-sm btn-primary">Export missing</a>
                         </div>
                     </div>
                     <div class="form-group">
