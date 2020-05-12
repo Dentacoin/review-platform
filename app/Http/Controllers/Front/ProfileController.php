@@ -269,7 +269,7 @@ class ProfileController extends FrontController
             $invitation->invited_email = 'whatsapp';
             $invitation->save();
 
-            $text = trans('trp.page.profile.invite.whatsapp', ['name' => $this->user->name ]).rawurlencode(getLangUrl('/', null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id) ]));
+            $text = trans('trp.page.profile.invite.whatsapp', ['name' => $this->user->name ]).rawurlencode($this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id) ]));
 
             return Response::json([
                 'success' => true,
