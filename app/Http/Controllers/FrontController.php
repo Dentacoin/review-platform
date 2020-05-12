@@ -505,25 +505,6 @@ class FrontController extends BaseController {
                 'mark-login' => false
             ]);
 
-            if (!empty($this->user)) {
-                if( $this->user->is_dentist ) {
-                    $params['trackEvents'][] = [
-                        'fb' => $ep.'DentistLoginSaved',
-                        'ga_category' => 'DentistLogin',
-                        'ga_action' => 'NoButton',
-                        'ga_label' => 'DentistLoginSaved',
-                    ];
-
-                } else {
-                    $params['trackEvents'][] = [
-                        'fb' => $ep.'PatientLoginSaved',
-                        'ga_category' => 'PatientLogin',
-                        'ga_action' => 'NoButton',
-                        'ga_label' => 'PatientLoginSaved',
-                    ];
-                }
-            }
-
             $params['markLogin'] = true;
         }
         if( session('login-logged-out') && empty($params['skipSSO']) ) {
@@ -533,6 +514,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '2020-05-12-04';
+        $params['cache_version'] = '2020-05-12-05';
     }
 }
