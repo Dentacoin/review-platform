@@ -863,6 +863,8 @@ $(document).ready(function(){
                             $('.get-reward-buttons').hide();
                             $('.sign').show();
                         }
+
+                        $('.poll-bubble').addClass('hide-it');
 	                } else {
 	                	if (data.closed_poll) {
 	                		$('#poll-popup').find('.content').hide();

@@ -173,7 +173,7 @@ class FrontController extends BaseController {
             if(!empty($this->user) && session('login-logged')!=$this->user->id){
 
                 // if(!session('user_login')) {
-                    
+
                 //     $ul = new UserLogin;
                 //     $ul->user_id = $this->user->id;
                 //     $ul->ip = User::getRealIp();
@@ -201,6 +201,9 @@ class FrontController extends BaseController {
 
                 //     session(['user_login' => true]);
                 // }
+
+
+
 
                 // if($this->user->is_dentist) {
                 //     $gt_exist = UserGuidedTour::where('user_id', $this->user->id)->first();
@@ -520,6 +523,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '2020-05-12-05';
+        $params['cache_version'] = '2020-05-12-06';
     }
 }
