@@ -4250,7 +4250,7 @@ textarea.input {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 1000; }
+  z-index: 10000; }
   .bottom-drawer #cookiebar {
     padding: 20px;
     background: rgba(10, 10, 10, 0.7);
