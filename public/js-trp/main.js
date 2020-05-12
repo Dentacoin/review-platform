@@ -1547,6 +1547,8 @@ jQuery(document).ready(function($){
 
         $.getScript(window.location.origin+'/js-trp/login.js', function() {
 		});
+        $.getScript(window.location.origin+'/js-trp/upload.js', function() {
+		});
     });
 
 });
