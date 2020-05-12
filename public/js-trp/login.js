@@ -1,8 +1,46 @@
 var lastCivicForm = null;
 var suggestClinic;
-var suggestDentist;
 
 $(document).ready(function(){
+
+    suggestDentist = function() {
+
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $.ajax( {
+            url: 'suggest-dentist'+(user_id ? '/'+user_id : ''),
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                invitedentist: $(this).val()
+            },
+            success: (function( data ) {
+                console.log(data);
+                var container = $(this).closest('.dentist-suggester-wrapper').find('.suggest-results');
+                
+                if (data.length) {
+                    container.html('').show();
+                    for(var i in data) {
+                        container.append('<a href="javascript:;" data-id="'+data[i].id+'">'+data[i].name+'</a>');
+                    }
+
+                    container.find('a').click( function() {
+                        $(this).closest('.suggest-results').hide();
+                        $(this).closest('.dentist-suggester-wrapper').find('.dentist-suggester').val( $(this).text() ).blur();
+                        $(this).closest('.dentist-suggester-wrapper').find('.suggester-hidden').val( $(this).attr('data-id') ).trigger('change');
+                    } );
+                } else {
+                    container.hide();                    
+                }
+
+                ajax_is_running = false;
+
+            }).bind(this)
+        });
+    }
 
     $('.dentist-suggester').closest('form').on('keyup keypress', function(e) {
         var keyCode = e.keyCode || e.which;
