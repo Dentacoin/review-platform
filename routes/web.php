@@ -32,8 +32,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::post('translations/{subpage?}/add', 									'TranslationsController@add');
 	Route::post('translations/{subpage?}/update', 								'TranslationsController@update');
-	Route::get('translations/{subpage?}/export/{source}', 					'TranslationsController@export');
-	Route::post('translations/{subpage?}/import/{source}', 					'TranslationsController@import');
+	Route::get('translations/{subpage?}/export/{source}/{target}', 				'TranslationsController@export');
+	Route::post('translations/{subpage?}/import/{source}/{target}', 			'TranslationsController@import');
 	Route::get('translations/{subpage?}/{source?}/{target?}', 					'TranslationsController@list');
 	Route::get('translations/{subpage?}/{source?}/{target?}/del/{delkey?}', 	'TranslationsController@delete');
 
@@ -167,14 +167,18 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('testimonial-slider/edit/{id}', 		'TestimonialSliderController@edit');
 	Route::any('testimonial-slider/edit/{id}/addavatar', 	'TestimonialSliderController@add_avatar');
 	Route::any('testimonial-slider/delete/{id}', 	'TestimonialSliderController@delete');
+	Route::post('testimonial-slider/export', 		'TestimonialSliderController@export');
+	Route::post('testimonial-slider/import', 		'TestimonialSliderController@import');
 
 	Route::get('vox/recommendations', 				'RecommendationsController@list');
 
 	Route::get('pages/vox', 						'PagesSeoController@vox_list');
+	Route::get('pages/trp', 						'PagesSeoController@trp_list');
 	Route::any('pages/{platform}/add', 				'PagesSeoController@add');
 	Route::any('pages/edit/{id}', 					'PagesSeoController@edit');
 	Route::any('pages/edit/{id}/removepic', 		'PagesSeoController@removepic');
-	Route::get('pages/trp', 						'PagesSeoController@trp_list');
+	Route::any('pages/{platform}/export', 			'PagesSeoController@export');
+	Route::any('pages/{platform}/import', 			'PagesSeoController@import');
 
 	Route::any('logs/{type?}', 						'LogsController@list');
 	
