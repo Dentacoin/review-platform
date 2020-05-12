@@ -172,32 +172,35 @@ class FrontController extends BaseController {
 
             if(!empty($this->user) && session('login-logged')!=$this->user->id){
 
+                // if(!session('user_login')) {
+                    
+                //     $ul = new UserLogin;
+                //     $ul->user_id = $this->user->id;
+                //     $ul->ip = User::getRealIp();
+                //     $ul->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
+                //     $ul->country = \GeoIP::getLocation()->country;
 
-                    $ul = new UserLogin;
-                    $ul->user_id = $this->user->id;
-                    $ul->ip = User::getRealIp();
-                    $ul->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
-                    $ul->country = \GeoIP::getLocation()->country;
+                //     $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                //     $dd = new DeviceDetector($userAgent);
+                //     $dd->parse();
 
-                    $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                    $dd = new DeviceDetector($userAgent);
-                    $dd->parse();
+                //     if ($dd->isBot()) {
+                //         // handle bots,spiders,crawlers,...
+                //         $ul->device = $dd->getBot();
+                //     } else {
+                //         $ul->device = $dd->getDeviceName();
+                //         $ul->brand = $dd->getBrandName();
+                //         $ul->model = $dd->getModel();
+                //         $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                //     }
 
-                    if ($dd->isBot()) {
-                        // handle bots,spiders,crawlers,...
-                        $ul->device = $dd->getBot();
-                    } else {
-                        $ul->device = $dd->getDeviceName();
-                        $ul->brand = $dd->getBrandName();
-                        $ul->model = $dd->getModel();
-                        $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                    }
+                //     $is_whitelist_ip = WhitelistIp::where('ip', 'like', User::getRealIp())->first();
+                //     if (User::getRealIp() != '213.91.254.194' && empty($this->admin) && empty($is_whitelist_ip)) {
+                //         $ul->save();
+                //     }
 
-                    $is_whitelist_ip = WhitelistIp::where('ip', 'like', User::getRealIp())->first();
-                    if (User::getRealIp() != '213.91.254.194' && empty($this->admin) && empty($is_whitelist_ip)) {
-                        $ul->save();
-                    }
-
+                //     session(['user_login' => true]);
+                // }
 
                 // if($this->user->is_dentist) {
                 //     $gt_exist = UserGuidedTour::where('user_id', $this->user->id)->first();
