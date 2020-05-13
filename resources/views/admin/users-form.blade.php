@@ -174,7 +174,7 @@
                                         'info' => $fields['name']
                                     ])
                                     @if(!empty($item->invited_himself_reg))
-                                        Duplicated email
+                                        <span style="color: red;">Duplicated email</span>
                                     @endif
                                 </div>
                             </div>

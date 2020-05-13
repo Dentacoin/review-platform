@@ -2,7 +2,7 @@
 
 @section('content')
 
-@if(!empty($user) && $user->id==$item->id )
+<!-- @if(!empty($user) && $user->id==$item->id )
 	<div class="guided-overflow-wrapper">
 		<div class="guided-tour-part guided-overflow-top"></div>
 		<div class="guided-tour-part guided-overflow-right"></div>
@@ -10,7 +10,7 @@
 		<div class="guided-tour-part guided-overflow-bottom"></div>
 		<div class="guided-tour-tooltip"></div>
 	</div>
-@endif
+@endif -->
 
 <div class="black-overflow" style="display: none;">
 </div>
@@ -1276,7 +1276,6 @@
 		@include('trp.popups.widget')
 		@include('trp.popups.invite')
 		@include('trp.popups.working-time')
-		@include('trp.popups.first-guided-tour')
 		@if( $user->is_clinic )
 			@include('trp.popups.add-member')
 		@else
