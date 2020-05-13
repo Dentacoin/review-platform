@@ -192,6 +192,10 @@ class PollsController extends FrontController
 
 	public function get_poll_content($locale=null, $poll_id) {
 
+		$ret = [
+        	'success' => false,
+        ];
+
 		if(!empty($poll_id)) {
 
 			$poll = Poll::find($poll_id);
@@ -212,6 +216,7 @@ class PollsController extends FrontController
 					$taken_daily_poll = null;
 				}
 			}
+
 
 			if (!empty($poll) && $poll->status == 'open' && empty($taken_daily_poll) || !empty($this->admin)) {
 
@@ -243,10 +248,6 @@ class PollsController extends FrontController
 		        ];
 			}
 		}
-
-		$ret = [
-        	'success' => false,
-        ];
 		
         return Response::json( $ret );
 	}
