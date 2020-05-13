@@ -46,6 +46,12 @@
     </div>
 @endif
 
+@if(!empty($item->invited_himself_reg))
+    <div class="alert alert-info">
+        This dentist added himself as practice on registraion
+    </div>
+@endif
+
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-inverse">
@@ -116,6 +122,9 @@
                                                         @elseif($item->status == 'added_by_dentist_claimed')
                                                             <option value="added_by_dentist_claimed" {{ $item->status == 'added_by_dentist_claimed' ? 'selected="selected"' : ''}} >Added by Dentist Claimed</option>
 
+                                                        @elseif($item->status == 'duplicated_email')
+                                                            <option value="duplicated_email" {{ $item->status == 'duplicated_email' ? 'selected="selected"' : ''}} >Duplicated Email</option>
+
                                                         @else
                                                             <option value="new" {{ $item->status == 'new' ? 'selected="selected"' : ''}} >New</option>
                                                             <option value="approved" {{ $item->status == 'approved' ? 'selected="selected"' : ''}} >Approved</option>
@@ -164,6 +173,9 @@
                                         'key' => 'name',
                                         'info' => $fields['name']
                                     ])
+                                    @if(!empty($item->invited_himself_reg))
+                                        Duplicated email
+                                    @endif
                                 </div>
                             </div>
                             @if($duplicated_names->isNotEmpty())

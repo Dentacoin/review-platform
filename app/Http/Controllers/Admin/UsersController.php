@@ -258,6 +258,7 @@ class UsersController extends AdminController {
             'dentist_clinic.added_rejected' => 'Dentists & Clinics (Added Rejected)',
             'dentist_clinic.admin_imported' => 'Dentists & Clinics (Admin Imported)',
             'dentist_clinic.test' => 'Dentists & Clinics (Test)',
+            'dentist_clinic.duplicated_email' => 'Dentists & Clinics (Duplicated Email)', 
         ];
 
         $user_statuses = [
@@ -1169,8 +1170,32 @@ class UsersController extends AdminController {
                                 $existing = User::withTrashed()->where('id', '!=', $item->id)->where($key, 'like', $this->request->input($key))->first();
 
                                 if (!empty($existing)) {
-                                    Request::session()->flash('error-message', 'This '.$key.' is already used by another user - ID '.$existing->id);
-                                    return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
+                                    if($existing->status == 'added_by_dentist_new' || $existing->status == 'added_new' || $existing->status == 'added_by_clinic_new') {
+
+                                        $existing->email = $existing->email.'d';
+                                        $existing->status = 'duplicated_email';
+                                        $existing->save();
+
+                                        if(empty($existing->deleted_at) && empty($existing->self_deleted) ) {
+
+                                            $action = new UserAction;
+                                            $action->user_id = $existing->id;
+                                            $action->action = 'deleted';
+                                            $action->reason = 'duplicated email';
+                                            $action->actioned_at = Carbon::now();
+                                            $action->save();
+
+                                            $existing->deleteActions();
+                                            User::destroy( $existing->id );
+                                        }
+
+
+                                        $item->$key = $this->request->input($key);
+                                    } else {
+                                        Request::session()->flash('error-message', 'This '.$key.' is already used by another user - ID '.$existing->id);
+                                        return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
+                                    }
+                                    
                                 } else {
                                     $item->$key = $this->request->input($key);
                                 }

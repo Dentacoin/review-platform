@@ -107,6 +107,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'widget_site',
         'invited_by',
         'invited_from_form',
+        'invited_himself_reg',
         'hasimage',
         'hasimage_social',
         'register_reward',
@@ -453,10 +454,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             ['user_id', $this->id],
             ['dentist_id', $dentist_id],
         ])->orderBy('id', 'desc')->first();
+
         $cr = Review::where([
             ['user_id', $this->id],
             ['clinic_id', $dentist_id],
         ])->orderBy('id', 'desc')->first();
+
         return $dr ? $dr : ( $cr ? $cr : null );
     }
 

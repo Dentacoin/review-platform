@@ -18,4 +18,5 @@ return [
     'added_by_dentist_unclaimed' => 'Added by Dentist Approved',
     'added_by_dentist_new' => 'Added by Dentist New',
     'added_by_dentist_rejected' => 'Added by Dentist Rejected',
+    'duplicated_email' => 'Duplicated Email',
 ];
