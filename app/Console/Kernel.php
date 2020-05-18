@@ -1803,19 +1803,18 @@ NEW & FAILED TRANSACTIONS
 
             $mtext = 'There are '.count($uknown).' results from Unknown country by '.count($uknown_by_user).' users
                 
-            Link to profiles in CMS:  
+            Link to profiles in CMS:  <br/><br/>
 
             ';
 
             if (!empty($uknown_by_user)) {
                 foreach ($uknown_by_user as $u) {
                     $user = User::where('id', $u->user_id)->withTrashed()->first();
-                    $mtext .= '<a href="https://reviews.dentacoin.com/cms/users/edit/'.$user->id.'">'.$user->name.'</a>';
+                    $mtext .= '<a href="https://reviews.dentacoin.com/cms/users/edit/'.$user->id.'">'.$user->name.'</a><br/>';
                 }
             }
 
-            Mail::raw($mtext, function ($message) {
-
+            Mail::send([], [], function ($message) use ($mtext) {
                 $sender = config('mail.from.address');
                 $sender_name = config('mail.from.name');
 
@@ -1823,6 +1822,7 @@ NEW & FAILED TRANSACTIONS
                 $message->to( 'petya.ivanova@dentacoin.com' );
                 $message->to( 'gergana@youpluswe.com' );
                 $message->subject('Unknown countries count');
+                $message->setBody($mtext, 'text/html'); // for HTML rich messages
             });
 
             echo 'Count Unknown Countries from UserLogin Cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;

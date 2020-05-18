@@ -76,7 +76,7 @@
 							<div class="flex-1 tar">
 								<span>
 									<span id="dcn-test-reward-before">
-										{{ !empty($vox->complex) && empty($vox->manually_calc_reward) && empty($vox->dcn_questions_count) ? 'Max ' : '' }} {!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
+										{{ !empty($vox->complex) ? 'Max ' : '' }} {!! trans('vox.common.dcn_to_be_collected') !!}: {{ $vox->getRewardTotal() }}
 									</span>
 									<span id="dcn-test-reward-after" style="display: none;">
 										{!! trans('vox.common.dcn_collected') !!}:
