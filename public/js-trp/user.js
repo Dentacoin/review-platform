@@ -2575,6 +2575,13 @@ $(document).ready(function(){
 
         $('body').css('overflow-y', 'hidden');
 
+        if(tour_item == 'guided-action' && $(window).outerWidth() <= 768) {
+
+            $(window).on('scroll', function() {
+                resizeGuidedTourWindow($('[guided-action="'+step.action+'"]'), false);
+            });
+        }
+
         $('.bubble-guided-tour h4').html(step.title);
         $('#cur-step').html(step_number + 1);
         $('#all-steps').html(data.count_all_steps);
