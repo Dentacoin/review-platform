@@ -1326,17 +1326,20 @@ class ProfileController extends FrontController
                     'dentist_name' => $this->user->getName(),
                     'dentist_link' => $this->user->getLink(),
                 ], 'trp');
+            }
 
+            $d_id = $this->user->id;
+            $reviews = Review::where(function($query) use ($d_id) {
+                $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
+            })->where('user_id', $ask->user->id)
+            ->get();
 
-                $d_id = $this->user->id;
-                $reviews = Review::where(function($query) use ($d_id) {
-                    $query->where( 'dentist_id', $d_id)->orWhere('clinic_id', $d_id);
-                })->where('user_id', $ask->user->id)
-                ->get();
+            if ($reviews->count()) {
+                
+                foreach ($reviews as $review) {
 
-                if ($reviews->count()) {
-                    
-                    foreach ($reviews as $review) {
+                    if(empty($review->verified)) {
+                        
                         $review->verified = true;
                         $review->save();
 
