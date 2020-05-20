@@ -2416,6 +2416,7 @@ body.edit-user {
     	background-color: rgba(0, 0, 0, 0.6);
 	    position: fixed;
 	    z-index: 10000;
+	    touch-action: none;
 
     	&.guided-overflow-top {
     		top: 0;
