@@ -282,7 +282,7 @@
                         </div>
                     </div>
                     
-                    @if(!empty($question) && $question->type == 'multiple_choice')
+                    @if(empty($question) || (!empty($question) && $question->type == 'multiple_choice'))
                         <div class="stat_title">
                             <div class="form-group clearfix">
                                 <label class="col-md-2 control-label">
