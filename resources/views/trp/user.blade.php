@@ -1333,11 +1333,11 @@
 <div class="popup fixed-popup first-guided-tour-done-popup tour-popup" id="first-guided-tour-done">
 	<div class="popup-inner-tour tac">
 
-		<h2>Well Done!</h2>
+		<h2>{{ trans('trp.guided-tour.well-done') }}</h2>
 
 		<div class="tour-buttons">
 			<a href="javascript:;" class="button-white tour-button done-tour">
-				OK
+				{{ trans('trp.guided-tour.ok') }}
 			</a>
 		</div>
 	</div>
