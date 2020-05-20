@@ -2417,6 +2417,7 @@ body.edit-user {
 	    position: fixed;
 	    z-index: 10000;
 	    -webkit-backface-visibility: hidden;
+	    -webkit-transform: translateZ(0);
 
     	&.guided-overflow-top {
     		top: 0;
