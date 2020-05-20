@@ -1571,7 +1571,8 @@ body.edit-user .information {
   border-radius: 14px;
   padding: 25px 30px;
   max-width: 355px;
-  z-index: 10000; }
+  z-index: 10000;
+  touch-action: none; }
   @media screen and (max-width: 768px) {
     .bubble-guided-tour {
       max-width: 300px; } }
@@ -1645,6 +1646,7 @@ body.edit-user .information {
       left: 0;
       right: 0; }
     .guided-overflow-wrapper .guided-tour-part img {
+      touch-action: none;
       position: fixed;
       background-color: transparent; }
 

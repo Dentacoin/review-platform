@@ -2335,6 +2335,7 @@ body.edit-user {
     padding: 25px 30px;
     max-width: 355px;
     z-index: 10000;
+    touch-action: none;
 
     @media #{$phone} {
     	max-width: 300px;
@@ -2451,6 +2452,7 @@ body.edit-user {
     	}
 
     	img {
+    		touch-action: none;
     		position: fixed;
     		background-color: transparent;
     	}
