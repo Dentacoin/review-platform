@@ -1659,6 +1659,7 @@ NEW & FAILED TRANSACTIONS
 
             foreach ($self_deleted_users as $sdu) {
                 $sdu->name = 'Anonymous';
+                $sdu->slug = '';                
                 $sdu->email = $rand;
                 $sdu->save();
             }

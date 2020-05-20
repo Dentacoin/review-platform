@@ -489,7 +489,10 @@
                                             ({{ intval($item->ratings) }} reviews)
                                         </span>
                                         <div style="margin-top: 10px;">Average rating: {{ !empty($item->avg_rating) ? $item->avg_rating : 'N/A' }}</div>
-                                        <a class="open-trp-link" target="_blank" href="{{ 'https://reviews.dentacoin.com'.explode('.com', $item->getLink())[1]}}">Open TRP Profile</a>
+                                        @if(!empty($item->self_deleted ) && $item->name == 'Anonymous')
+                                        @else
+                                            <a class="open-trp-link" target="_blank" href="{{ 'https://reviews.dentacoin.com'.explode('.com', $item->getLink())[1]}}">Open TRP Profile</a>
+                                        @endif
                                     </div>
                                 @endif
                             </div>
