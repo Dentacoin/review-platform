@@ -1211,15 +1211,16 @@ class UsersController extends AdminController {
                                         $item->save();
                                     }
 
-                                    if (!empty($patient)) {
-                                        $substitutions = [
-                                            "image_unclaimed_profile" => $item->getSocialCover(),
-                                            "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
-                                        ];
+                                    $substitutions = [
+                                        "image_unclaimed_profile" => $item->getSocialCover(),
+                                        "invitation_link" => getLangUrl( 'dentist/'.$item->slug.'/claim/'.$item->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
+                                    ];
 
-                                        if(!empty($item->email)) {
-                                            $item->sendGridTemplate(43, $substitutions, 'trp');
-                                        }                                        
+                                    if(!empty($item->email)) {
+                                        $item->sendGridTemplate(43, $substitutions, 'trp');
+                                    }
+                                    
+                                    if (!empty($patient)) {
 
                                         // $item->sendTemplate( 43  , [
                                         //     'dentist_name' => $item->name,

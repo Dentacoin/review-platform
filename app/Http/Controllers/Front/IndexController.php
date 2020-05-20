@@ -356,7 +356,7 @@ class IndexController extends FrontController
                 'email' => 'sometimes|required|email',
                 'phone' =>  array('sometimes', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
                 'job' =>  'sometimes|required|string',
-                'explain-related' => 'sometimes|required|string',
+                'explain-related' => 'sometimes|required|string|max:300',
                 'password' => array('required', 'min:6'),
                 'password-repeat' => 'required|same:password',
                 'agree' => 'required|accepted',
