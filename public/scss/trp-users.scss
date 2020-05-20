@@ -2416,8 +2416,6 @@ body.edit-user {
     	background-color: rgba(0, 0, 0, 0.6);
 	    position: fixed;
 	    z-index: 10000;
-	    -webkit-backface-visibility: hidden;
-	    -webkit-transform: translateZ(0);
 
     	&.guided-overflow-top {
     		top: 0;

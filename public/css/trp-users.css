@@ -1624,9 +1624,7 @@ body.edit-user .information {
   .guided-overflow-wrapper .guided-tour-part {
     background-color: rgba(0, 0, 0, 0.6);
     position: fixed;
-    z-index: 10000;
-    -webkit-backface-visibility: hidden;
-    -webkit-transform: translateZ(0); }
+    z-index: 10000; }
     .guided-overflow-wrapper .guided-tour-part.guided-overflow-top {
       top: 0;
       left: 0;
