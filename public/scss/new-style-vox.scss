@@ -5291,12 +5291,6 @@ svg:not(:root) {
 	}
 }
 
-@keyframes cookiebar-blink-animation {
-    0%     {background-color:black;}
-    50.0%  {background-color:red;}
-    100.0%  {background-color:black;}
-}
-
 .privacy-policy-cookie {
 	padding-top: 20px;
     padding-bottom: 20px;
@@ -5305,14 +5299,6 @@ svg:not(:root) {
     width: 100%;
     font-size: 0;
     position: relative;
-
-    &.blink {
-	    animation-name: cookiebar-blink-animation;
-	    animation-duration: 1.5s;
-	    animation-timing-function: ease-in-out;
-	    animation-iteration-count: infinite;    
-	    animation-play-state: running;
-    }
 
     .container-cookie {
     	justify-content: space-between;

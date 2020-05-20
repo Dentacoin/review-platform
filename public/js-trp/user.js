@@ -116,15 +116,13 @@ $(document).ready(function(){
                     var cls = $(this).closest('[role="editor"]').attr('class');
                     $('.'+cls+'[role="editor"]').hide();
                     $('.'+cls+'[role="presenter"]').show();
-                    console.log( data.value );
+
                     var value_here = $('.'+cls+'[role="presenter"] .value-here');
 
                     if(data.value.length) {
                         value_here.html(data.value);
-                        console.log('has value');
                     } else {
                         value_here.html(value_here.attr('empty-value'));
-                        console.log('empty value');
                     }
                     $(this).find('.alert').hide();
                 } else {
@@ -559,6 +557,10 @@ $(document).ready(function(){
                 'event_category': 'Widgets',
                 'event_label': selected_layout,
             });
+
+            if($('body').hasClass('guided-tour')) {
+                $('.next-tour-step').trigger('click');
+            }
         }
     });
     
@@ -566,9 +568,12 @@ $(document).ready(function(){
     $('.widget-button').click( function() {
         $(this).closest('.widget-step').hide();
         $('.widget-step-'+$(this).attr('to-step')).show();
-        $('.popup.active').animate({
-            scrollTop: $('.popup.active').offset().top
-        }, 500);
+        if(!$('body').hasClass('reviews-guided-tour')) {
+
+            $('.popup.active').animate({
+                scrollTop: $('.popup.active').offset().top
+            }, 200);
+        }
 
         if( $(this).hasClass('widget-layout-button')) {
             var selected_layout = $('[name="widget-layout"]:checked').val();
@@ -628,28 +633,18 @@ $(document).ready(function(){
 
         $(this).find('.invite-alert').hide().removeClass('alert-warning').removeClass('alert-success');
 
-
-        var formData = new FormData();
-
-        // add assoc key values, this will be posts values
-        formData.append("_token", $(this).find('input[name="_token"]').val());
-        if ($(this).find('input[name="image"]').length) {
-            var this_file = $(this).find('input[name="image"]')[0].files[0];
-            if (this_file) {
-                formData.append("image", this_file, this_file.name);
-            }
-            
-        }
-        
-        formData.append("name", $(this).find('.invite-name').val());
-        formData.append("email", $(this).find('.invite-email').val());
-
-
         $.ajax({
             type: "POST",
             url: $(this).attr('action'),
-            success: function (data) {
+            data: {
+                _token: $(this).find('input[name="_token"]').val(),
+                name: $(this).find('.invite-name').val(),
+                email: $(this).find('.invite-email').val(),
+            },
+            dataType: 'json',
+            success: function(data) {
                 if(data.success) {
+
                     $('.invite-patient-form').find('.invite-email').val('');
                     $('.invite-patient-form').find('.invite-name').val('').focus();
                     $('.invite-patient-form').find('.invite-alert').show().addClass('alert-success').html(data.message);
@@ -661,18 +656,14 @@ $(document).ready(function(){
                 } else {
                     $('.invite-patient-form').find('.invite-alert').show().addClass('alert-warning').html(data.message);                    
                 }
-                ajax_is_running = false;
             },
-            error: function (error) {
+            error: function(ret) {
                 console.log('error');
-            },
-            async: true,
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            timeout: 60000
+            }
         });
+        ajax_is_running = false;
+
+
     } );
 
 
@@ -970,7 +961,6 @@ $(document).ready(function(){
                     inviteRadio();
 
                 } else {
-                    console.log(data.message);
                     that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
                                     
                 }
@@ -1003,7 +993,6 @@ $(document).ready(function(){
                     that.closest('.copypaste-wrapper').hide().next().show();
 
                 } else {
-                    console.log(data.message);
                     that.find('.invite-alert').show().addClass('alert-warning').html(data.message); 
                                     
                 }
@@ -1015,7 +1004,7 @@ $(document).ready(function(){
 
     $('.invite-patient-copy-paste-form-final').submit( function(e) {
         e.preventDefault();
-
+        
         if(ajax_is_running) {
             return;
         }
@@ -1067,7 +1056,6 @@ $(document).ready(function(){
 
     $('#invite-file').change(function() {
         var file = $('#invite-file')[0].files[0].name;
-        console.log(file);
         $(this).closest('label').find('span').text(file);
     });
 
@@ -1201,11 +1189,15 @@ $(document).ready(function(){
             galleryFlickty.flickity( 'insert', $(html), 1 );
             handleGalleryRemoved();
 
+            if($('body').hasClass('guided-tour')) {
+                $('.bubble-guided-tour .skip-step').trigger('click');
+            }
+
+
             ajax_is_running = false;
         });
 
         upload.doUpload();
-
     } );
 
     //Work hours
@@ -1421,7 +1413,6 @@ $(document).ready(function(){
                 invitedentist: $(this).val()
             },
             success: (function( data ) {
-                console.log(data);
                 var container = $(this).closest('.dentist-suggester-wrapper').find('.suggest-results');
                 
                 if (data.length) {
@@ -1499,7 +1490,6 @@ $(document).ready(function(){
 
     suggestClinicClick = function(elm) {
         var id = $(elm).attr('data-id');
-        console.log(elm, id);
 
         $(elm).closest('.suggest-results').hide();
         $(elm).closest('.suggester-wrapper').find('.suggester-input').val('');
@@ -1542,7 +1532,6 @@ $(document).ready(function(){
                 joinclinic: $(this).val()
             },
             success: (function( data ) {
-                console.log(data);
                 var container = $(this).closest('.clinic-suggester-wrapper').find('.suggest-results');
                 
                 if (data.length) {
@@ -1625,7 +1614,6 @@ $(document).ready(function(){
         $.get( 
             $(this).attr('href'),
             (function( data ) {
-                console.log($(this));
                 $(this).closest('.flex').remove();
                 refreshOnClosePopup = true;
                 ajax_is_running = false;
@@ -1755,7 +1743,6 @@ $(document).ready(function(){
             $(this).serialize() , 
             function( data ) {
                 if(data.success) {
-                    console.log('success');
                     $('#review-confirmed').show();
                     $('#review-submit-button').hide();
 
@@ -1980,7 +1967,6 @@ $(document).ready(function(){
         } )
 
         $('.s-wrap .social-dropdown').each( function() {
-            //console.log($(this).attr('cur-type'));
             $(this).find('a').each( function() {
                 if( hideClasses.indexOf( $(this).attr('social-type') ) == -1 ) {
                     $(this).removeClass('inactive');
@@ -2002,6 +1988,10 @@ $(document).ready(function(){
 
         if((social_wrapper.length +1) == social_wrapper.first().find('.social-dropdown a').length ) {
             $(this).hide();
+        }
+
+        if($('body').hasClass('guided-tour')) {
+            resizeGuidedTourWindow($('.social-wrapper:visible'), false);
         }
         
     });
@@ -2229,8 +2219,6 @@ $(document).ready(function(){
 
         var invite_url = $(this).attr('data-href');
         var invitation_id = $(this).attr('inv-id');
-
-        console.log(invite_url);
 
         $.ajax({
             type: "POST",
@@ -2503,32 +2491,422 @@ $(document).ready(function(){
     $('.user-country').click( function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log('eee');
         $(this).next().show();
     });
 
-    $('.go-first-tour').click( function() {
+    var resizeGuidedTourWindow = function(elm, bubble_at_top) {
+
+        var element_top = elm.offset().top - $(window).scrollTop();
+        var element_left = elm.offset().left;
+        var element_heigth = elm.outerHeight();
+        var element_width = elm.outerWidth();
+
+        if(bubble_at_top) {
+            $('.bubble-guided-tour').css('top', element_top - $('.bubble-guided-tour').outerHeight() - 20 );
+        } else {
+            $('.bubble-guided-tour').css('top', element_top + element_heigth + 20 );
+        }
+
+        $('.bubble-guided-tour').css('left', element_left );
+
+        if($(window).outerWidth() <= 768) {
+            setTimeout( function() {
+
+                if ((element_left + $('.bubble-guided-tour').outerWidth() + 20) > $(window).outerWidth() ) {
+                    $('.bubble-guided-tour').css('left', 105 );
+                }
+            }, 200);
+
+            $('.bubble-guided-tour .cap').css('left', element_left + (element_width / 2) - 14);
+            if(bubble_at_top) {
+                $('.bubble-guided-tour .cap').css('top', element_top - 20 );
+            } else {
+                $('.bubble-guided-tour .cap').css('top', element_top + element_heigth + 7 );
+            }
+        }        
+
+        $('.guided-overflow-top').css('height', element_top);
+
+        $('.guided-overflow-right').css('top', element_top);
+        $('.guided-overflow-right').css('left', element_left + element_width);
+        $('.guided-overflow-right').css('height', element_heigth);
+        $('.guided-overflow-right .top').css('top', element_top);
+        $('.guided-overflow-right .top').css('left', element_left + element_width - 13);
+        $('.guided-overflow-right .bottom').css('top', element_top + element_heigth - 13);
+        $('.guided-overflow-right .bottom').css('left', element_left + element_width - 13);
+
+        $('.guided-overflow-left').css('top', element_top);
+        $('.guided-overflow-left').css('right', $(window).width() - element_left);
+        $('.guided-overflow-left').css('height', element_heigth);
+        $('.guided-overflow-left .top').css('top', element_top);
+        $('.guided-overflow-left .top').css('left', element_left);
+        $('.guided-overflow-left .bottom').css('top', element_top + element_heigth - 13);
+        $('.guided-overflow-left .bottom').css('left', element_left);
+
+        $('.guided-overflow-bottom').css('height', $(window).height() - (element_top + element_heigth) );
+
+        $('.guided-overflow-wrapper').show();
+    }
+
+    var guidedTour = function(data, step, step_number, tour_item, bubble_at_top) {
+
+        $('body').css('overflow-y', 'auto');
+
+        if(step.action == 'description') {
+            $('html, body').animate({
+                scrollTop: $('.profile-tabs').offset().top
+            }, 0);
+            $('.profile-tabs .tab[data-tab="about"]').trigger('click');
+
+        } else if(step.action == 'photos') {
+            $('.profile-tabs .tab[data-tab="about"]').trigger('click');
+            $('html, body').animate({
+                scrollTop: $('.gallery-slider').offset().top - 100
+            }, 0);
+
+        } else {
+            if(!$('.popup.active').length) {
+                console.log('dfgfdg');
+                $('html, body').animate({
+                    scrollTop: $('['+tour_item+'="'+step.action+'"]:visible').offset().top - 200
+                }, 0);
+            }
+        }
+
+        $('body').css('overflow-y', 'hidden');
+
+        $('.bubble-guided-tour h4').html(step.title);
+        $('#cur-step').html(step_number + 1);
+        $('#all-steps').html(data.count_all_steps);
+        $('.bubble-guided-tour p').html(step.description);
+        $('.bubble-guided-tour').attr('step-number', step_number);
+        
+        if(step.skip) {
+
+            if(tour_item == 'reviews-guided-action') {
+                $('.bubble-guided-tour .skip-reviews-step').show();
+                
+            } else {
+
+                if(step_number == 2 && $(window).outerWidth() <= 768) {
+
+                    //to not skip save, because invite button is hidden in edit mode
+                    $('.bubble-guided-tour .skip-step').hide();
+                } else {
+
+                    $('.bubble-guided-tour .skip-step').html(step.skip_text);
+                    $('.bubble-guided-tour .skip-step').show();
+                }
+            }
+        } else {
+            $('.bubble-guided-tour .skip-step').hide();
+            $('.bubble-guided-tour .skip-reviews-step').hide();
+        }
+
+        resizeGuidedTourWindow($('['+tour_item+'="'+step.action+'"]:visible'), bubble_at_top);
+    }
+
+    $('.skip-step, .go-first-tour, [guided-action]').click( function() {
+
+        if(!$(this).hasClass('dont-count')) {
+
+            if($(this).hasClass('go-first-tour')) {
+                $('body').addClass('guided-tour');
+
+                if ('scrollRestoration' in history) {
+                    history.scrollRestoration = 'manual';
+                }
+            }
+
+            if($('body').hasClass('guided-tour')) {
+
+                var that = $(this);
+
+                $.ajax( {
+                    url: window.location.origin+'/en/profile/first-guided-tour/'+ ( $(this).hasClass('go-login-tour') ? '?full=true' : ''),
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function( data ) {
+
+                        if(that.hasClass('go-login-tour')) {
+                            $('#first-guided-tour').removeClass('active');
+
+                            var step = data.steps[0];
+                            var step_number = 0;
+
+                        } else if(that.hasClass('go-tour')) {
+                            var step = data.steps[0];
+                            var step_number = 0;
+
+                            //if its in edit mode, to return to view profile mode
+                            $('.view-profile').addClass('active');
+                            $('.edit-profile').removeClass('active');
+                            $('.edit-button').removeClass('active');
+                            $('body').removeClass('edit-user');
+
+                        } else {
+                            var step = data.steps[parseInt($('.bubble-guided-tour').attr('step-number')) + 1];
+                            var step_number = parseInt($('.bubble-guided-tour').attr('step-number')) + 1;
+                        }
+
+                        if(typeof step !== 'undefined') {
+
+                            if(step.action == 'work_hours') {
+                                $('#popup-wokring-time').css('z-index', 10000);
+                            }
+
+                            if(step.action == 'invite') {
+                                $('#popup-invite').css('z-index', 10000);
+                            }
+
+                            if(step.action == 'team') {
+                                $('#add-team-popup').css('z-index', 10000);
+                            }
+
+                            var cookie_step = null;
+                            var n = null
+
+                            //save a cookie if there is refresh on page
+                            for (var i in data.steps) {
+                                if (data.steps[i].action == 'save') {
+                                    n = parseInt(i) + 1;
+                                }
+                            }
+
+                            if(n && typeof data.steps[n] !== 'undefined') {
+                                cookie_step = data.steps[n].action;
+                            }
+
+                            if(cookie_step && step.action == cookie_step && !that.hasClass('skip-step')) {
+                                if(Cookies.get('functionality_cookies')) {
+                                    Cookies.set('save-guided-tour', true, { expires: 1, secure: true });
+                                }
+                                
+                            } else {
+                                guidedTour(data, step, step_number, 'guided-action', false);
+                            }
+
+                        } else {
+                            $.ajax( {
+                                url: window.location.origin+'/en/profile/first-guided-tour-remove/',
+                                type: 'GET',
+                            });
+
+                            showPopup('first-guided-tour-done');
+                            $('.guided-overflow-wrapper').hide();
+                        }
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+                });
+            }
+        }
+    });
+
+
+    $('.skip-first-tour').click( function() {
         if(ajax_is_running) {
             return;
         }
         ajax_is_running = true;
 
         $.ajax( {
-            url: window.location.origin+'/en/profile/first-guided-tour/?full=true',
+            url: window.location.origin+'/en/profile/first-guided-tour/',
             type: 'GET',
             dataType: 'json',
             success: function( data ) {
                 $('#first-guided-tour').removeClass('active');
+            },
+        });
+        ajax_is_running = false;
+    });
 
-                console.log(data.steps);
-                ajax_is_running = false;
+
+    $('.skip-reviews-tour').click( function() {
+        if(ajax_is_running) {
+            return;
+        }
+        ajax_is_running = true;
+
+        $.ajax( {
+            url: window.location.origin+'/en/profile/reviews-guided-tour/',
+            type: 'GET',
+            dataType: 'json',
+            success: function( data ) {
+                $('#first-guided-tour').removeClass('active');
+            }
+        });
+        ajax_is_running = false;
+    });
+
+
+    if(Cookies.get('save-guided-tour')) {
+
+        Cookies.remove('save-guided-tour');
+
+        $('body').addClass('guided-tour');
+        
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+
+        $.ajax( {
+            url: window.location.origin+'/en/profile/first-guided-tour/',
+            type: 'GET',
+            dataType: 'json',
+            success: function( data ) {
+                for (var i in data.steps) {
+                    if (data.steps[i].action == 'save') {
+                        var n = parseInt(i) + 1;
+                    }
+                }
+
+                var step = data.steps[n];
+                var step_number = n;
+
+                if(step.action == 'invite') {
+                    $('#popup-invite').css('z-index', 10000);
+                }
+                
+                guidedTour(data, step, step_number, 'guided-action', false);
             },
             error: function(data) {
                 console.log(data);
-                ajax_is_running = false;
             }
         });
+    }
 
+
+    $('.guided-description').click( function() {
+        resizeGuidedTourWindow($('.edit-descr-container'), false);
     });
+
+
+    $('.done-tour').click( function() {
+        window.location.reload();
+        // closePopup();
+        // $('body').removeClass('guided-tour');
+        // $('body').removeClass('dark');
+        // $('body').css('overflow-y', 'auto');
+    });
+
+
+    $('.back-widget, .copy-widget, .fb-tab-submit, .skip-reviews-step, .done-widget, .next-tour-step, .widget-layout-button, .go-reviews-tour, [reviews-guided-action]').click( function() {
+
+        if($(this).hasClass('get-widget-code')) {
+            //get widget code
+            $('a.hide-fb.get-widget-code').trigger('click');
+            return;
+        }
+
+        if(!$(this).hasClass('dont-count')) {
+            var that = $(this);
+
+            if(that.hasClass('go-reviews-tour')) {
+                $('body').addClass('guided-tour reviews-guided-tour');
+            }
+
+            if($('body').hasClass('guided-tour')) {
+
+                if ('scrollRestoration' in history) {
+                    //to forget scroll on page
+                    history.scrollRestoration = 'manual';
+                }
+
+                if(that.hasClass('with-layout')) {
+                    var layout = $('[name="widget-layout"]:checked').val();
+                } else {
+                    var layout = null;
+                }
+
+                $.ajax( {
+                    url: window.location.origin+'/en/profile/reviews-guided-tour/'+(layout ? layout : ''),
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function( data ) {
+
+                        $('.bubble-guided-tour img').attr('src', data.image );
+
+                        if(that.hasClass('go-reviews-tour')) {
+                            $('#first-guided-tour').removeClass('active');
+
+                            var step = data.steps[0];
+                            var step_number = 0;
+                            
+                        } else if(that.hasClass('back-widget')) {
+                            //back button to return to step one
+                            var step = data.steps[1];
+                            var step_number = 1;
+
+                        } else {
+                            var step = data.steps[parseInt($('.bubble-guided-tour').attr('step-number')) + 1];
+                            var step_number = parseInt($('.bubble-guided-tour').attr('step-number')) + 1;
+                        }
+
+                        if(typeof step !== 'undefined') {
+
+                            if( step_number) {
+                                //tooltip at top of element and triangle at bottom
+                                $('.bubble-guided-tour').addClass('bubble-reviews');
+                                var bubble_at_top = true;
+                            } else {
+                                var bubble_at_top = false;
+                            }
+
+                            if(step_number == 1) {
+                                //if popup was opened on second page to return to first
+                                $('.widget-step').hide();
+                                $('.widget-step-1').show();
+                            }                            
+
+                            if(that.hasClass('add-widget-button')) {
+                                $('.popup.active').animate({
+                                    scrollTop: $('.widget-step-title').offset().top - 150
+                                }, 0);
+                            }
+
+                            guidedTour(data, step, step_number, 'reviews-guided-action', bubble_at_top);
+
+                            if(step_number) {
+
+                                $('.popup.active').on('scroll', function() {
+                                    resizeGuidedTourWindow($('[reviews-guided-action="'+step.action+'"]'), bubble_at_top);
+                                });
+
+                                $('.popup.active').animate({
+                                    scrollTop: $('[reviews-guided-action="'+step.action+'"]:visible').position().top - $('.bubble-guided-tour').outerHeight()
+                                }, 0);
+
+                                //ok button must get code too
+                                if(step_number == 2 && (layout == 'list' || layout == 'carousel') ) {
+
+                                    if($('.widget-last-step:visible').length) {
+                                        $('.bubble-guided-tour .skip-reviews-step').removeClass('get-widget-code');
+                                    } else {
+                                        $('.bubble-guided-tour .skip-reviews-step').addClass('get-widget-code');
+                                    }
+                                }
+                            }
+
+                        } else {
+
+                            $.ajax( {
+                                url: window.location.origin+'/en/profile/first-guided-tour-remove/',
+                                type: 'GET',
+                            });
+
+                            showPopup('first-guided-tour-done');
+                            $('.guided-overflow-wrapper').hide();
+                        }
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+                });
+            }
+        }
+    });
+
 
 });

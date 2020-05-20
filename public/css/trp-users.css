@@ -302,7 +302,7 @@
           padding-right: 20px;
           text-align: right; } }
   .profile-info-mobile .profile-rating {
-    margin-top: 20px; }
+    margin-top: -10px; }
     .profile-info-mobile .profile-rating .rating {
       margin-bottom: 20px;
       font-size: 12px; }
@@ -313,6 +313,9 @@
       margin-bottom: 0px;
       max-width: none;
       font-size: 14px; }
+      @media screen and (max-width: 768px) {
+        .profile-info-mobile .profile-rating .button.add-widget-button {
+          padding: 10px 16px; } }
     .profile-info-mobile .profile-rating .button:not(.button-inner-white) {
       background-color: #46afda;
       border: 1px solid #46afda; }
@@ -466,7 +469,7 @@
   font-size: 16px;
   clear: both; }
 .edit-profile-wrapper .profile-info-mobile .edit-button {
-  padding-top: 10px;
+  padding: 10px;
   display: inline-block; }
 .edit-profile-wrapper .profile-info-mobile .profile-details {
   width: 100%;
@@ -478,11 +481,9 @@
       width: 230px; } }
 .edit-profile-wrapper .profile-info-mobile .edit-buttons {
   float: none; }
-  .edit-profile-wrapper .profile-info-mobile .edit-buttons button,
   .edit-profile-wrapper .profile-info-mobile .edit-buttons a {
     width: 49%;
     text-align: center; }
-    .edit-profile-wrapper .profile-info-mobile .edit-buttons button.button,
     .edit-profile-wrapper .profile-info-mobile .edit-buttons a.button {
       background-color: #46afda; }
 .edit-profile-wrapper .details-wrapper {
@@ -515,8 +516,9 @@
     padding-right: 20px;
     text-align: right; }
 .edit-profile-wrapper .edit-buttons {
-  float: right;
-  margin-top: 40px; }
+  margin-top: 15px;
+  display: flex;
+  align-items: center; }
   @media screen and (max-width: 768px) {
     .edit-profile-wrapper .edit-buttons {
       margin-top: 20px; } }
@@ -1060,6 +1062,8 @@
       margin-right: 0px;
       margin-top: 40px; } }
 
+body.edit-user .strength-parent {
+  display: none !important; }
 body.edit-user .profile-info {
   background-image: none;
   background-color: white;
@@ -1091,6 +1095,18 @@ body.edit-user .information {
     display: none; }
   body.edit-user .information .profile-rating {
     margin-top: 100px; }
+
+.social-wrapper {
+  text-align: right; }
+  @media screen and (max-width: 768px) {
+    .social-wrapper {
+      text-align: left; } }
+  .social-wrapper .add-social-profile {
+    display: inline-block;
+    font-size: 14px !important;
+    font-weight: 300;
+    color: #1d6786;
+    margin-top: 10px; }
 
 .flexed-wrap {
   align-items: baseline !important; }
@@ -1176,20 +1192,6 @@ body.edit-user .information {
     margin-right: 2px; }
 .email-wrapper .email-wrap .social-networks .current-social:after {
   display: none; }
-
-.add-social-profile {
-  position: absolute;
-  display: block;
-  bottom: -25px;
-  right: 0;
-  font-size: 14px;
-  font-weight: 300;
-  color: #1d6786; }
-  @media screen and (max-width: 768px) {
-    .add-social-profile {
-      position: unset;
-      margin-top: 10px;
-      font-size: 14px !important; } }
 
 .profile-socials {
   margin-top: 20px; }
@@ -1433,9 +1435,9 @@ body.edit-user .information {
 #add-team-popup form label[for="add-invite-image"] {
   margin-bottom: 20px; }
 
-#first-guided-tour {
+.tour-popup {
   background-color: rgba(0, 0, 0, 0.6); }
-  #first-guided-tour .popup-inner-tour {
+  .tour-popup .popup-inner-tour {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -1450,7 +1452,15 @@ body.edit-user .information {
     border-radius: 15px;
     padding: 40px 100px;
     box-shadow: 0 4px 14px 0px rgba(0, 0, 0, 0.7); }
-    #first-guided-tour .popup-inner-tour .avatar {
+    @media screen and (max-width: 1300px) {
+      .tour-popup .popup-inner-tour {
+        width: 630px;
+        padding: 40px 50px; } }
+    @media screen and (max-width: 768px) {
+      .tour-popup .popup-inner-tour {
+        width: 90%;
+        padding: 30px 20px; } }
+    .tour-popup .popup-inner-tour .avatar {
       box-sizing: inherit;
       position: relative;
       width: 200px;
@@ -1460,21 +1470,17 @@ body.edit-user .information {
       margin-right: auto;
       background-size: cover;
       margin-left: auto; }
-      @media screen and (max-width: 1200px) {
-        #first-guided-tour .popup-inner-tour .avatar {
+      @media screen and (max-width: 1300px) {
+        .tour-popup .popup-inner-tour .avatar {
           width: 120px;
           min-width: 120px;
-          height: 120px;
-          margin-right: 40px;
-          margin-top: 30px; } }
-      @media screen and (max-width: 998px) {
-        #first-guided-tour .popup-inner-tour .avatar {
-          width: 100%;
-          height: 100%;
-          min-width: auto;
-          margin-right: 0px;
-          margin-top: 0px; } }
-      #first-guided-tour .popup-inner-tour .avatar:before {
+          height: 120px; } }
+      @media screen and (max-width: 768px) {
+        .tour-popup .popup-inner-tour .avatar {
+          width: 80px;
+          min-width: 80px;
+          height: 80px; } }
+      .tour-popup .popup-inner-tour .avatar:before {
         content: '';
         position: absolute;
         left: -7px;
@@ -1484,30 +1490,43 @@ body.edit-user .information {
         width: 215px;
         height: 215px;
         background: url("../img-trp/avatar-border.svg") no-repeat 50% 50%; }
-        @media screen and (max-width: 1200px) {
-          #first-guided-tour .popup-inner-tour .avatar:before {
+        @media screen and (max-width: 1300px) {
+          .tour-popup .popup-inner-tour .avatar:before {
             left: -4px;
             top: -4px;
             width: 128px;
             height: 128px; } }
-        @media screen and (max-width: 998px) {
-          #first-guided-tour .popup-inner-tour .avatar:before {
+        @media screen and (max-width: 768px) {
+          .tour-popup .popup-inner-tour .avatar:before {
             left: 0px;
             top: 0px;
             width: 100%;
             height: 100%; } }
-    #first-guided-tour .popup-inner-tour h2 {
+    .tour-popup .popup-inner-tour h2 {
       font-size: 42px;
       color: white;
       font-weight: 300;
       margin-top: 20px; }
-    #first-guided-tour .popup-inner-tour p {
+      @media screen and (max-width: 768px) {
+        .tour-popup .popup-inner-tour h2 {
+          font-size: 32px;
+          margin-bottom: 20px; } }
+    .tour-popup .popup-inner-tour p {
       font-size: 25px;
       font-weight: 300;
       color: white; }
-    #first-guided-tour .popup-inner-tour .tour-buttons {
+      @media screen and (max-width: 768px) {
+        .tour-popup .popup-inner-tour p {
+          font-size: 20px; } }
+    .tour-popup .popup-inner-tour .tour-buttons {
       margin-top: 60px; }
-    #first-guided-tour .popup-inner-tour .tour-button {
+      @media screen and (max-width: 1300px) {
+        .tour-popup .popup-inner-tour .tour-buttons {
+          margin-top: 40px; } }
+      @media screen and (max-width: 768px) {
+        .tour-popup .popup-inner-tour .tour-buttons {
+          margin-top: 30px; } }
+    .tour-popup .popup-inner-tour .tour-button {
       padding: 13px;
       display: inline-block;
       font-size: 20px;
@@ -1517,16 +1536,458 @@ body.edit-user .information {
       margin: 0px 7px;
       color: white;
       transition: all 0.3s ease; }
-      #first-guided-tour .popup-inner-tour .tour-button.button-white {
+      @media screen and (max-width: 768px) {
+        .tour-popup .popup-inner-tour .tour-button {
+          font-size: 18px;
+          width: auto;
+          margin: 0px 0px; } }
+      .tour-popup .popup-inner-tour .tour-button.button-white {
         background-color: white;
         color: #46afda;
         font-weight: bold;
         text-transform: uppercase; }
-      #first-guided-tour .popup-inner-tour .tour-button:hover {
+      .tour-popup .popup-inner-tour .tour-button:hover {
         box-shadow: 0 0 9px 0px rgba(0, 0, 0, 0.4);
         transition: all 0.3s ease; }
+  .tour-popup.first-guided-tour-done-popup .popup-inner-tour {
+    width: 540px; }
+    @media screen and (max-width: 768px) {
+      .tour-popup.first-guided-tour-done-popup .popup-inner-tour {
+        width: 90%; } }
+    .tour-popup.first-guided-tour-done-popup .popup-inner-tour .tour-button {
+      width: 100px; }
 
 .guided-tour-wrapper .guided-tour-part {
   position: fixed;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 1000; }
+
+.bubble-guided-tour {
+  position: fixed;
+  top: 50px;
+  left: 50px;
+  background-color: white;
+  z-index: 100;
+  border-radius: 14px;
+  padding: 25px 30px;
+  max-width: 355px;
+  z-index: 10000; }
+  @media screen and (max-width: 768px) {
+    .bubble-guided-tour {
+      max-width: 300px; } }
+  @media screen and (max-width: 768px) {
+    .bubble-guided-tour .flex {
+      display: flex; } }
+  .bubble-guided-tour h4 {
+    color: #333;
+    margin-bottom: 17px;
+    font-weight: bold; }
+  .bubble-guided-tour .guided-icon {
+    min-width: 40px;
+    max-width: 40px;
+    margin-right: 10px; }
+    @media screen and (max-width: 768px) {
+      .bubble-guided-tour .guided-icon {
+        display: none; } }
+  .bubble-guided-tour .guided-info-wrap {
+    margin-bottom: 20px; }
+  .bubble-guided-tour .guided-buttons {
+    justify-content: space-between; }
+    .bubble-guided-tour .guided-buttons .steps {
+      font-weight: 300; }
+      .bubble-guided-tour .guided-buttons .steps span {
+        font-weight: bold;
+        font-size: 18px; }
+    .bubble-guided-tour .guided-buttons .skip-step {
+      color: #126585; }
+  .bubble-guided-tour .cap {
+    background-color: transparent;
+    position: absolute;
+    top: -13px;
+    left: 24px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 14px 13px 14px;
+    border-color: transparent transparent #ffffff transparent; }
+    @media screen and (max-width: 768px) {
+      .bubble-guided-tour .cap {
+        position: fixed; } }
+  .bubble-guided-tour.bubble-reviews .cap {
+    top: auto;
+    bottom: -13px;
+    border-width: 13px 14px 0 14px;
+    border-color: #ffffff transparent transparent transparent; }
+
+.guided-overflow-wrapper {
+  display: none; }
+  .guided-overflow-wrapper .guided-tour-part {
+    background-color: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    z-index: 10000; }
+    .guided-overflow-wrapper .guided-tour-part.guided-overflow-top {
+      top: 0;
+      left: 0;
+      right: 0; }
+    .guided-overflow-wrapper .guided-tour-part.guided-overflow-right {
+      right: 0; }
+      .guided-overflow-wrapper .guided-tour-part.guided-overflow-right img.top {
+        transform: rotate(90deg); }
+      .guided-overflow-wrapper .guided-tour-part.guided-overflow-right img.bottom {
+        transform: rotate(180deg); }
+    .guided-overflow-wrapper .guided-tour-part.guided-overflow-left {
+      left: 0; }
+      .guided-overflow-wrapper .guided-tour-part.guided-overflow-left img.bottom {
+        transform: rotate(-90deg); }
+    .guided-overflow-wrapper .guided-tour-part.guided-overflow-bottom {
+      bottom: 0;
+      left: 0;
+      right: 0; }
+    .guided-overflow-wrapper .guided-tour-part img {
+      position: fixed;
+      background-color: transparent; }
+
+.widget-step .widget-step-title {
+  color: #126585;
+  font-size: 24px;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 10px !important; }
+  .widget-step .widget-step-title span {
+    color: black;
+    font-size: 24px;
+    text-transform: uppercase; }
+.widget-step .popup-desc {
+  font-weight: 300;
+  margin-bottom: 10px; }
+.widget-step .popup-title {
+  color: #333333;
+  padding: 7px 100px 9px; }
+.widget-step .step-description {
+  font-size: 18px;
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 30px; }
+.widget-step .modern-radios {
+  display: block; }
+  @media screen and (max-width: 768px) {
+    .widget-step .modern-radios {
+      margin-bottom: 47px; } }
+  .widget-step .modern-radios .radio-label {
+    margin-bottom: 35px; }
+    @media screen and (max-width: 768px) {
+      .widget-step .modern-radios .radio-label {
+        margin-bottom: 10px;
+        border-bottom: 2px solid #dadada;
+        padding-bottom: 20px; } }
+    .widget-step .modern-radios .radio-label:first-child {
+      margin-right: 0px; }
+    .widget-step .modern-radios .radio-label label {
+      border-color: transparent;
+      align-items: center;
+      padding: 18px 15px;
+      display: flex; }
+      @media screen and (max-width: 768px) {
+        .widget-step .modern-radios .radio-label label {
+          display: block; } }
+      .widget-step .modern-radios .radio-label label.active {
+        border-color: #126585; }
+        .widget-step .modern-radios .radio-label label.active .modern-radio span {
+          background-color: #126585; }
+        .widget-step .modern-radios .radio-label label.active .widget-option p {
+          color: #126585;
+          font-weight: bold; }
+        .widget-step .modern-radios .radio-label label.active:hover {
+          border-color: #126585; }
+      .widget-step .modern-radios .radio-label label:hover {
+        border-color: #ccc; }
+      .widget-step .modern-radios .radio-label label .modern-radio {
+        min-width: 36px;
+        width: 36px;
+        height: 36px;
+        border-color: #979797;
+        background-color: #ebebeb;
+        margin-right: 13px; }
+        @media screen and (max-width: 768px) {
+          .widget-step .modern-radios .radio-label label .modern-radio {
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
+            margin-bottom: 14px; } }
+        .widget-step .modern-radios .radio-label label .modern-radio span {
+          width: 20px;
+          height: 20px; }
+      .widget-step .modern-radios .radio-label label .layout-img {
+        max-width: 398px; }
+        @media screen and (max-width: 998px) {
+          .widget-step .modern-radios .radio-label label .layout-img {
+            max-width: 260px; } }
+        @media screen and (max-width: 768px) {
+          .widget-step .modern-radios .radio-label label .layout-img {
+            margin-bottom: 20px; } }
+      .widget-step .modern-radios .radio-label label .widget-option {
+        margin-left: 40px; }
+        @media screen and (max-width: 998px) {
+          .widget-step .modern-radios .radio-label label .widget-option {
+            margin-left: 20px; } }
+        .widget-step .modern-radios .radio-label label .widget-option p {
+          font-size: 20px;
+          font-weight: 300;
+          margin-bottom: 20px; }
+        .widget-step .modern-radios .radio-label label .widget-option .select-wrap {
+          margin-bottom: 14px; }
+          @media screen and (max-width: 768px) {
+            .widget-step .modern-radios .radio-label label .widget-option .select-wrap {
+              justify-content: center; } }
+          .widget-step .modern-radios .radio-label label .widget-option .select-wrap:last-child {
+            margin-bottom: 0px; }
+          .widget-step .modern-radios .radio-label label .widget-option .select-wrap span {
+            font-size: 18px;
+            font-weight: 300; }
+          .widget-step .modern-radios .radio-label label .widget-option .select-wrap select,
+          .widget-step .modern-radios .radio-label label .widget-option .select-wrap input {
+            display: block;
+            border: 1px solid #d7d7d7;
+            margin: 0px 5px;
+            border-radius: 4px;
+            padding: 0px 5px;
+            font-size: 18px;
+            font-weight: 300; }
+            .widget-step .modern-radios .radio-label label .widget-option .select-wrap select:hover, .widget-step .modern-radios .radio-label label .widget-option .select-wrap select:focus,
+            .widget-step .modern-radios .radio-label label .widget-option .select-wrap input:hover,
+            .widget-step .modern-radios .radio-label label .widget-option .select-wrap input:focus {
+              outline: none; }
+          .widget-step .modern-radios .radio-label label .widget-option .select-wrap input {
+            max-width: 59px;
+            -moz-appearance: textfield; }
+            .widget-step .modern-radios .radio-label label .widget-option .select-wrap input::-webkit-outer-spin-button, .widget-step .modern-radios .radio-label label .widget-option .select-wrap input::-webkit-inner-spin-button {
+              /* display: none; <- Crashes Chrome on hover */
+              -webkit-appearance: none;
+              margin: 0;
+              /* <-- Apparently some margin are still there even though it's hidden */ }
+.widget-step #selected-image-layout {
+  margin-bottom: 25px;
+  max-width: 398px; }
+  @media screen and (max-width: 768px) {
+    .widget-step #selected-image-layout {
+      max-width: 100%; } }
+.widget-step #selected-layout {
+  color: #126585;
+  font-weight: bold;
+  text-transform: capitalize; }
+.widget-step .widget-subtitle {
+  font-size: 22px;
+  margin-bottom: 30px !important; }
+.widget-step .popup-tabs {
+  margin-top: 0px !important; }
+  @media screen and (max-width: 768px) {
+    .widget-step .popup-tabs {
+      flex-direction: column; } }
+  @media screen and (max-width: 768px) {
+    .widget-step .popup-tabs a {
+      margin-right: 0px;
+      margin-left: 0px; } }
+  @media screen and (max-width: 768px) {
+    .widget-step .popup-tabs a:first-child {
+      margin-bottom: 10px; } }
+.widget-step .instructions-image {
+  position: relative;
+  display: block; }
+  .widget-step .instructions-image .magnifier {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    background-color: transparent; }
+.widget-step .select-reviews .modern-radios .radio-label {
+  margin-bottom: 27px; }
+  @media screen and (max-width: 768px) {
+    .widget-step .select-reviews .modern-radios .radio-label {
+      border-bottom: 0px;
+      padding-bottom: 0px; } }
+  .widget-step .select-reviews .modern-radios .radio-label label {
+    border-color: #d6d6d7;
+    display: block;
+    border-width: 1px;
+    position: relative; }
+    .widget-step .select-reviews .modern-radios .radio-label label.active {
+      border-color: #126585; }
+      .widget-step .select-reviews .modern-radios .radio-label label.active span {
+        font-weight: bold;
+        color: #126585; }
+    .widget-step .select-reviews .modern-radios .radio-label label span {
+      font-size: 20px;
+      font-weight: 300; }
+    .widget-step .select-reviews .modern-radios .radio-label label .info {
+      vertical-align: middle;
+      margin-left: 5px; }
+    .widget-step .select-reviews .modern-radios .radio-label label .hidden-option {
+      display: none;
+      padding-left: 40px;
+      padding-top: 18px; }
+      @media screen and (max-width: 768px) {
+        .widget-step .select-reviews .modern-radios .radio-label label .hidden-option {
+          padding-left: 30px; } }
+      .widget-step .select-reviews .modern-radios .radio-label label .hidden-option.active {
+        display: block; }
+      .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .option-checkboxes {
+        display: flex; }
+        .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .option-checkboxes label {
+          border: none;
+          padding: 0px;
+          margin-right: 30px;
+          font-size: 18px; }
+          .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .option-checkboxes label.active .modern-radio span {
+            background-color: #126585; }
+          .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .option-checkboxes label:last-child {
+            margin-right: 0px; }
+          .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .option-checkboxes label .modern-radio span {
+            background-color: transparent; }
+      .widget-step .select-reviews .modern-radios .radio-label label .hidden-option p {
+        font-size: 18px;
+        margin-bottom: 15px; }
+      .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .button {
+        background-color: white;
+        border: 1px solid #126585;
+        color: #126585;
+        text-transform: none;
+        font-size: 18px;
+        padding: 7px 20px;
+        margin-bottom: 0px; }
+        .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .button:hover {
+          background-color: #126585;
+          color: white; }
+    .widget-step .select-reviews .modern-radios .radio-label label .modern-radio {
+      min-width: 24px;
+      width: 24px;
+      height: 24px; }
+      @media screen and (max-width: 768px) {
+        .widget-step .select-reviews .modern-radios .radio-label label .modern-radio {
+          display: inline-block;
+          margin-bottom: 0px;
+          margin-right: 5px; } }
+      .widget-step .select-reviews .modern-radios .radio-label label .modern-radio span {
+        width: 13px;
+        height: 13px; }
+    .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option {
+      padding: 20px;
+      padding-bottom: 19px;
+      position: absolute;
+      right: 2px;
+      top: 0px; }
+      @media screen and (max-width: 768px) {
+        .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option {
+          padding: 10px;
+          top: 13px; } }
+      .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option i {
+        font-size: 20px;
+        color: #636363; }
+        .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option i:before {
+          content: "\f0d7"; }
+      .widget-step .select-reviews .modern-radios .radio-label label .open-hidden-option.active i:before {
+        content: "\f0d8"; }
+.widget-step .widget-code-wrap {
+  background-color: #126585;
+  margin: 20px -100px 50px;
+  padding: 25px 100px;
+  position: relative; }
+  @media screen and (max-width: 768px) {
+    .widget-step .widget-code-wrap {
+      margin: 20px -20px 50px;
+      padding: 25px 20px; } }
+  .widget-step .widget-code-wrap textarea {
+    height: 170px;
+    box-shadow: none;
+    padding: 10px 15px; }
+    @media screen and (max-width: 998px) {
+      .widget-step .widget-code-wrap textarea {
+        height: 210px; } }
+    @media screen and (max-width: 768px) {
+      .widget-step .widget-code-wrap textarea {
+        height: 300px; } }
+.widget-step .button {
+  border: 1px solid #46afda;
+  font-size: 25px;
+  background-color: #46afda;
+  padding: 12px 73px;
+  margin-bottom: 30px; }
+  @media screen and (max-width: 768px) {
+    .widget-step .button {
+      font-size: 19px;
+      padding: 9px 45px; } }
+  .widget-step .button.back-widget {
+    background-color: white;
+    color: #46afda;
+    margin-right: 10px; }
+.widget-step .copy-widget {
+  position: absolute;
+  right: 104px;
+  background: #f1eff1;
+  color: #4e4c4e;
+  display: block;
+  padding: 6px 10px;
+  top: 29px; }
+  @media screen and (max-width: 768px) {
+    .widget-step .copy-widget {
+      right: 24px; } }
+  .widget-step .copy-widget i {
+    color: #4e4c4e; }
+.widget-step .facebook-tab .tab-info {
+  font-size: 22px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: flex-start; }
+  .widget-step .facebook-tab .tab-info img {
+    max-width: 18px;
+    margin-top: 6px;
+    margin-right: 5px; }
+.widget-step .facebook-tab .fb-l-button {
+  background-color: #4267B2;
+  color: white;
+  border-radius: 5px;
+  margin-bottom: 17px;
+  padding: 10px 15px;
+  font-size: 20px;
+  padding-left: 15px;
+  border: none;
+  width: 350px; }
+  .widget-step .facebook-tab .fb-l-button span {
+    display: inline-block;
+    vertical-align: sub;
+    width: 27px;
+    text-align: center;
+    margin-right: 10px; }
+    .widget-step .facebook-tab .fb-l-button span i {
+      color: white;
+      font-size: 30px; }
+.widget-step .facebook-tab .tab-note {
+  font-size: 17px;
+  color: #888888;
+  text-align: center;
+  margin-bottom: 20px; }
+
+body.reviews-guided-tour .widget-step .facebook-tab .modern-field {
+  padding: 13px 5px 10px; }
+body.reviews-guided-tour .widget-step .select-reviews .widget-subtitle {
+  display: none; }
+@media screen and (max-width: 768px) {
+  body.reviews-guided-tour .widget-step .select-reviews .modern-radios .radio-label label .hidden-option .option-checkboxes label {
+    margin-right: 16px; } }
+body.reviews-guided-tour [reviews-guided-action="reviews_type"],
+body.reviews-guided-tour .widget-first-inner,
+body.reviews-guided-tour [reviews-guided-action="copy"] {
+  padding: 10px; }
+body.reviews-guided-tour .skip-reviews-step {
+  padding: 3px 11px; }
+body.reviews-guided-tour #select-reviews-popup {
+  z-index: 10000; }
+@media screen and (max-width: 768px) {
+  body.reviews-guided-tour .button {
+    padding: 9px 35px; } }
+body.reviews-guided-tour .widget-code-wrap {
+  margin: 20px -110px 50px; }
+  @media screen and (max-width: 768px) {
+    body.reviews-guided-tour .widget-code-wrap {
+      margin: 20px -30px 50px; } }

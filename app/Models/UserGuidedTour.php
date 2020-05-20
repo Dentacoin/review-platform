@@ -11,6 +11,7 @@ class UserGuidedTour extends Model {
     protected $fillable = [
         'user_id',
         'first_login_trp',
+        'login_after_first_review',
         'dcn_assurance',
         'dentacare_app',
     ];

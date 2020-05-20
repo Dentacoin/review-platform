@@ -112,7 +112,6 @@ jQuery(document).ready(function($){
 		});
 
 		$('.adjust-cookies').click(function() {
-			$('.privacy-policy-cookie').removeClass('blink');
 			$('#customize-cookies').show();
 
 			$('.close-customize-cookies-popup').click(function() {
@@ -210,7 +209,6 @@ jQuery(document).ready(function($){
 	$('.has-cookies-button').click( function(e) {
 	    if (!Cookies.get('strictly_necessary_policy')) {
 	        $('.agree-cookies').show();
-	        $('.privacy-policy-cookie').addClass('blink');
 	        $('.bottom-drawer').css('z-index', '1010');
 	        e.preventDefault();
 	        e.stopPropagation();

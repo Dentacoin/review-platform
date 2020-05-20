@@ -138,14 +138,14 @@ class StatsController extends FrontController
             return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
         }
 
-        // if(!empty($this->user) && $this->user->is_dentist) {
-        //     $gt = UserGuidedTour::where('user_id', $this->user->id)->first();
+        if(!empty($this->user) && $this->user->is_dentist) {
+            $gt = UserGuidedTour::where('user_id', $this->user->id)->first();
 
-        //     if(!empty($gt) && (empty($gt->check_stats_on) || (!empty($gt->check_stats_on) && $gt->check_stats_on < Carbon::now()->subDays(1)))) {
-        //         $gt->check_stats_on = Carbon::now();
-        //         $gt->save();
-        //     }
-        // }
+            if(!empty($gt) && (empty($gt->check_stats_on) || (!empty($gt->check_stats_on) && $gt->check_stats_on < Carbon::now()->subDays(1)))) {
+                $gt->check_stats_on = Carbon::now();
+                $gt->save();
+            }
+        }
 
         if(Request::isMethod('post')) {
         	$dates = !empty(Request::input('download-date')) && Request::input('download-date') != 'all' ? explode('-', Request::input('download-date')) : Request::input('timeframe');

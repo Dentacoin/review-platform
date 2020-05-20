@@ -276,7 +276,7 @@ jQuery(document).ready(function($){
 
 			if($('#'+id).is('[empty-hours]')) {
 				setTimeout( function() {
-		        	$('.work-hour-cb').trigger('click');
+		        	$('.work-hour-cb:not([name="day-6"]):not([name="day-7"])').trigger('click');
 		        }, 200 );
 				
 				$('.popup-desc').each( function() {
@@ -319,6 +319,10 @@ jQuery(document).ready(function($){
 		}
 		if($('#popup-existing-dentist').hasClass('active')) {
 			existing_dentist = true;
+		}
+
+		if(($('#add-team-popup').hasClass('active') || $('#popup-invite').hasClass('active')) && $('body').hasClass('guided-tour')) {
+			$('.bubble-guided-tour .skip-step').trigger('click');
 		}
 
 		if(existing_dentist) {
@@ -705,9 +709,6 @@ jQuery(document).ready(function($){
 			// $('.strength-wrapper').css('top', '100%');
 			$('.stretching-box').css('height', 0);
 
-			if (Cookies.get('functionality_cookies')) {
-				Cookies.set('hide-strength', true, { expires: 1, secure: true });
-			}
 		} else {
 			$(this).addClass('active');
 			$('body').addClass('dark');
@@ -735,12 +736,6 @@ jQuery(document).ready(function($){
 			
 			$('.strength-parent').css('display', 'block');
 			$carousel.flickity('resize');
-
-			if(!Cookies.get('hide-strength')) {
-				setTimeout( function() {
-					$('.strength-button').trigger('click');
-				}, 1000);
-			}
 		}
 	}
 	showStrength();
@@ -764,14 +759,6 @@ jQuery(document).ready(function($){
 	$('.str-invite').click( function() {
 		$('.strength-button.active').trigger('click');
 		showPopup('popup-invite');
-	});
-
-	$('.str-edit').click( function() {
-		$('body, html').animate({
-            scrollTop: 0
-        }, 500);
-		$('.strength-button.active').trigger('click');
-		$('.open-edit:visible').trigger('click');
 	});
 
 	$('.str-description').click( function() {
@@ -811,11 +798,6 @@ jQuery(document).ready(function($){
 		showPopup('popup-wokring-time');
 	});
 
-	$('.str-widget').click( function() {
-		$('.strength-button.active').trigger('click');
-		showPopup('popup-widget');
-	});
-
 	$('.str-see-reviews').click( function() {
 		$('.strength-button.active').trigger('click');
 		$('[data-tab="reviews"]').trigger('click');
@@ -843,9 +825,9 @@ jQuery(document).ready(function($){
 		// });
 	});
 
-	$('#popup-wokring-time-waiting form').off('submit').submit( function(e) {
-        e.preventDefault();
-
+	$('#popup-wokring-time-waiting form').submit( function(e) {
+		e.preventDefault();
+		
         if(ajax_is_running) {
             return;
         }
@@ -865,10 +847,13 @@ jQuery(document).ready(function($){
 
                     closePopup();
 
-                    if($('.verification-form:visible').length) {
-                        $('.wh-btn').hide();
-                    } else {
-                        $('.verification-info').hide()
+                    if($('.verification-info').length) {
+
+	                    if($('.verification-form:visible').length) {
+	                        $('.wh-btn').hide();
+	                    } else {
+	                        $('.verification-info').hide()
+	                    }
                     }
                 } else {
                     console.log('error');

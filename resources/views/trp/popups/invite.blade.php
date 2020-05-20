@@ -1,4 +1,4 @@
-<div class="popup fixed-popup" id="popup-invite">
+<div class="popup fixed-popup popup-invite-patients" id="popup-invite">
 	<div class="popup-inner inner-white">
 		<div class="popup-pc-buttons">
 			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>

@@ -2,15 +2,31 @@
 
 @section('content')
 
-<!-- @if(!empty($user) && $user->id==$item->id )
+@if(!empty($user) && $user->id==$item->id )
 	<div class="guided-overflow-wrapper">
 		<div class="guided-tour-part guided-overflow-top"></div>
-		<div class="guided-tour-part guided-overflow-right"></div>
-		<div class="guided-tour-part guided-overflow-left"></div>
+		<div class="guided-tour-part guided-overflow-right"><img class="top" src="{{ url('img-trp/border-tooltips.png') }}"><img class="bottom" src="{{ url('img-trp/border-tooltips.png') }}"></div>
+		<div class="guided-tour-part guided-overflow-left"><img class="top" src="{{ url('img-trp/border-tooltips.png') }}"><img class="bottom" src="{{ url('img-trp/border-tooltips.png') }}"></div>
 		<div class="guided-tour-part guided-overflow-bottom"></div>
-		<div class="guided-tour-tooltip"></div>
+
+		<div class="bubble-guided-tour">
+			<div class="cap"></div>
+			<h4>Complete your profile</h4>
+			<div class="flex guided-info-wrap">
+				<div class="guided-icon">
+					<img src="{{ url('img-trp/edit-profile.svg') }}"/>
+				</div>
+				<p>Click "Edit profile" to add the basic info about your practice.</p>
+			</div>
+
+			<div class="flex guided-buttons">
+				<div class="steps">Steps: <span id="cur-step">1</span><span>/</span><span id="all-steps">7</span></div>
+				<a href="javascript:;" class="skip-step">Skip this step</a>
+				<a href="javascript:;" class="skip-reviews-step with-layout button" style="display: none;">Ok</a>
+			</div>
+		</div>
 	</div>
-@endif -->
+@endif
 
 <div class="black-overflow" style="display: none;">
 </div>
@@ -87,7 +103,7 @@
 				        	{!! nl2br(trans('trp.page.user.invalid-country')) !!}
 				        </div>
                     </div>
-			    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time">
+			    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time" guided-action="work_hours">
 			    	<div class="flex phone-widget">
 				    	<span class="phone-code-holder">{{ $user->country_id ? '+'.$user->country->phone_code : '' }}</span>
 						<input type="tel" name="phone" class="input" placeholder="{!! nl2br(trans('trp.page.user.phone')) !!}" value="{{ $user->phone }}">
@@ -115,56 +131,60 @@
 						</label>			    	
 				    </div>
 			    	
-			    	<div class="s-wrap"> 
-				    	@if(!empty($user->socials))
-				    		@foreach($user->socials as $k => $v)
+			    	<div class="social-wrapper dont-count" guided-action="socials" style="padding: 5px; margin: -5px;">
+				    	<div class="s-wrap"> 
+					    	@if(!empty($user->socials))
+					    		@foreach($user->socials as $k => $v)
+							    	<div class="flex social-wrap flexed-wrap">
+							    		<div class="col social-networks">
+							    			<a href="javascript:;" class="current-social" cur-type="{{ $k }}">
+						    					<i class="{{ config('trp.social_network')[$k] }}"></i>
+						    				</a>
+							    			<div class="social-dropdown"> 
+								    			@foreach(config('trp.social_network') as $key => $sn)
+								    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! isset($user->socials[$key]) ? 'inactive' : ''; !!}">
+								    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
+								    				</a>
+								    			@endforeach
+								    		</div>
+							    		</div>
+							    		<div class="col">
+							    			<input type="text" name="socials[{{ $k }}]" class="input social-link-input" value="{{ $v }}" maxlength="300">
+							    		</div>
+							    	</div>
+							    @endforeach
+						    @else
 						    	<div class="flex social-wrap flexed-wrap">
 						    		<div class="col social-networks">
-						    			<a href="javascript:;" class="current-social" cur-type="{{ $k }}">
-					    					<i class="{{ config('trp.social_network')[$k] }}"></i>
+						    			<a href="javascript:;" class="current-social" cur-type="{{ array_values(config('trp.social_network'))[0] }}">
+					    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
 					    				</a>
 						    			<div class="social-dropdown"> 
 							    			@foreach(config('trp.social_network') as $key => $sn)
-							    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! isset($user->socials[$key]) ? 'inactive' : ''; !!}">
+							    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! $loop->first ? 'inactive' : '' !!}">
 							    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
 							    				</a>
 							    			@endforeach
 							    		</div>
 						    		</div>
 						    		<div class="col">
-						    			<input type="text" name="socials[{{ $k }}]" class="input social-link-input" value="{{ $v }}" maxlength="300">
+						    			<input type="text" name="socials[{{ key(config('trp.social_network')) }}]" class="input social-link-input" maxlength="300">
 						    		</div>
 						    	</div>
-						    @endforeach
-					    @else
-					    	<div class="flex social-wrap flexed-wrap">
-					    		<div class="col social-networks">
-					    			<a href="javascript:;" class="current-social" cur-type="{{ array_values(config('trp.social_network'))[0] }}">
-				    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
-				    				</a>
-					    			<div class="social-dropdown"> 
-						    			@foreach(config('trp.social_network') as $key => $sn)
-						    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! $loop->first ? 'inactive' : '' !!}">
-						    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
-						    				</a>
-						    			@endforeach
-						    		</div>
-					    		</div>
-					    		<div class="col">
-					    			<input type="text" name="socials[{{ key(config('trp.social_network')) }}]" class="input social-link-input" maxlength="300">
-					    		</div>
-					    	</div>
-					    @endif
-					</div>
-				    
-				    @if(empty($user->socials) || (!empty($user->socials) && (count($user->socials) != count(config('trp.social_network')))))
-			    		<a href="javascript:;" class="add-social-profile">{!! nl2br(trans('trp.page.user.add-social-profile')) !!}</a>
-			    	@endif
+						    @endif
+						</div>
+					    
+					    @if(empty($user->socials) || (!empty($user->socials) && (count($user->socials) != count(config('trp.social_network')))))
+				    		<a href="javascript:;" class="add-social-profile">{!! nl2br(trans('trp.page.user.add-social-profile')) !!}</a>
+				    	@endif
+				    </div>
 				</div>
 				<div class="edit-buttons">
-					<button class="button" type="submit">
-						{!! nl2br(trans('trp.page.user.save')) !!}
-					</button>
+					<div style="padding: 5px; width: 49%;" guided-action="save">
+						<button class="button" type="submit" style="width: 100%;">
+							{!! nl2br(trans('trp.page.user.save')) !!}
+						</button>
+					</div>
 					<a href="javascript:;" class="cancel-edit open-edit">
 						{!! nl2br(trans('trp.page.user.cancel')) !!}
 					</a>
@@ -208,7 +228,7 @@
 					{{ $item->is_clinic ? trans('trp.page.user.clinic') : trans('trp.page.user.dentist') }}
 				</span>
 				@if(!empty($user) && $user->id==$item->id)
-					<a class="edit-button open-edit" href="javascript:;">
+					<a class="edit-button open-edit" guided-action="edit" href="javascript:;">
 						<img src="{{ url('img-trp/penci-bluel.png') }}">
 						{!! nl2br(trans('trp.page.user.edit-profile')) !!}
 					</a>
@@ -232,11 +252,13 @@
 				</div>
 
 				@if(!empty($user) && $user->id==$item->id)
-					<a href="javascript:;" class="button" data-popup-logged="popup-invite">
-						{!! nl2br(trans('trp.page.user.invite')) !!}
-					</a>
+					<div style="padding: 5px;display: inline-block;" guided-action="invite" class="dont-count">
+						<a href="javascript:;" class="button" data-popup-logged="popup-invite">
+							{!! nl2br(trans('trp.page.user.invite')) !!}
+						</a>
+					</div>
 					@if( $item->reviews_in_standard()->count() )
-						<a href="javascript:;" class="button button-inner-white add-widget-button" data-popup-logged="popup-widget" style="text-transform: initial;">
+						<a href="javascript:;" class="button button-inner-white add-widget-button" reviews-guided-action="add" data-popup-logged="popup-widget" style="text-transform: initial;">
 							{!! nl2br(trans('trp.page.user.widget')) !!}
 						</a>
 					@endif
@@ -394,7 +416,7 @@
 					        	{!! nl2br(trans('trp.page.user.invalid-country')) !!}
 					        </div>
 	                    </div>
-				    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time">
+				    	<input type="text" name="open" class="input" placeholder="{!! nl2br(trans('trp.page.user.open-hours')) !!}" value="{{ strip_tags($user->getWorkHoursText()) }}" autocomplete="off" data-popup-logged="popup-wokring-time" guided-action="work_hours">
 				    	<div class="flex phone-widget">
 					    	<span class="phone-code-holder">{{ $user->country_id ? '+'.$user->country->phone_code : '' }}</span>
 							<input type="tel" name="phone" class="input" placeholder="{!! nl2br(trans('trp.page.user.phone')) !!}" value="{{ $user->phone }}">
@@ -421,58 +443,62 @@
 								{!! nl2br(trans('trp.page.user.user-registration-email')) !!}
 							</label>			    	
 					    </div>
-					    <div class="s-wrap">
-					    	@if(!empty($user->socials))
-					    		@foreach($user->socials as $k => $v)
+					    <div class="social-wrapper dont-count" guided-action="socials" style="padding: 5px; margin: -5px;">
+						    <div class="s-wrap">
+						    	@if(!empty($user->socials))
+						    		@foreach($user->socials as $k => $v)
+								    	<div class="flex social-wrap flexed-wrap">
+								    		<div class="col social-networks">
+								    			<a href="javascript:;" class="current-social" cur-type="{{ $k }}">
+							    					<i class="{{ config('trp.social_network')[$k] }}"></i>
+							    				</a>
+								    			<div class="social-dropdown"> 
+									    			@foreach(config('trp.social_network') as $key => $sn)
+									    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! isset($user->socials[$key]) ? 'inactive' : ''; !!}">
+									    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
+									    				</a>
+									    			@endforeach
+									    		</div>
+								    		</div>
+								    		<div class="col">
+								    			<input type="text" name="socials[{{ $k }}]" class="input social-link-input" value="{{ $v }}" maxlength="300">
+								    		</div>
+								    	</div>
+								    @endforeach
+							    @else
 							    	<div class="flex social-wrap flexed-wrap">
 							    		<div class="col social-networks">
-							    			<a href="javascript:;" class="current-social" cur-type="{{ $k }}">
-						    					<i class="{{ config('trp.social_network')[$k] }}"></i>
+							    			<a href="javascript:;" class="current-social" cur-type="{{ array_values(config('trp.social_network'))[0] }}">
+						    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
 						    				</a>
 							    			<div class="social-dropdown"> 
 								    			@foreach(config('trp.social_network') as $key => $sn)
-								    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! isset($user->socials[$key]) ? 'inactive' : ''; !!}">
+								    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! $loop->first ? 'inactive' : '' !!}">
 								    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
 								    				</a>
 								    			@endforeach
 								    		</div>
 							    		</div>
 							    		<div class="col">
-							    			<input type="text" name="socials[{{ $k }}]" class="input social-link-input" value="{{ $v }}" maxlength="300">
+							    			<input type="text" name="socials[{{ key(config('trp.social_network')) }}]" class="input social-link-input" maxlength="300">
 							    		</div>
 							    	</div>
-							    @endforeach
-						    @else
-						    	<div class="flex social-wrap flexed-wrap">
-						    		<div class="col social-networks">
-						    			<a href="javascript:;" class="current-social" cur-type="{{ array_values(config('trp.social_network'))[0] }}">
-					    					<i class="{{ array_values(config('trp.social_network'))[0] }}"></i>
-					    				</a>
-						    			<div class="social-dropdown"> 
-							    			@foreach(config('trp.social_network') as $key => $sn)
-							    				<a href="javascript:;" social-type="{{ $key }}" social-class="{{ $sn }}" class="social-link {!! $loop->first ? 'inactive' : '' !!}">
-							    					<i class="{{ $sn }}" class-attr="{{ $sn }}"></i>
-							    				</a>
-							    			@endforeach
-							    		</div>
-						    		</div>
-						    		<div class="col">
-						    			<input type="text" name="socials[{{ key(config('trp.social_network')) }}]" class="input social-link-input" maxlength="300">
-						    		</div>
-						    	</div>
-						    @endif
-						</div>
-					    
-					    @if(empty($user->socials) || (!empty($user->socials) && (count($user->socials) != count(config('trp.social_network')))))
-				    		<a href="javascript:;" class="add-social-profile">{!! nl2br(trans('trp.page.user.add-social-profile')) !!}</a>
-				    	@endif
+							    @endif
+							</div>
+						    
+						    @if(empty($user->socials) || (!empty($user->socials) && (count($user->socials) != count(config('trp.social_network')))))
+					    		<a href="javascript:;" class="add-social-profile">{!! nl2br(trans('trp.page.user.add-social-profile')) !!}</a>
+					    	@endif
+					    </div>
 					</div>
 					<div class="clearfix">
 						<div class="clear flex flex-bottom" style="justify-content: flex-end;">
 							<div class="edit-buttons">
-								<button class="button" type="submit">
-									{!! nl2br(trans('trp.page.user.save')) !!}
-								</button>
+								<div style="padding: 5px;" guided-action="save">
+									<button class="button" type="submit">
+										{!! nl2br(trans('trp.page.user.save')) !!}
+									</button>
+								</div>
 								<a href="javascript:;" class="cancel-edit open-edit">
 									{!! nl2br(trans('trp.page.user.cancel')) !!}
 								</a>
@@ -568,7 +594,7 @@
 				</div>
 			</div>
 			@if(!empty($user) && $user->id==$item->id)
-				<a class="edit-button open-edit" href="javascript:;">
+				<a class="edit-button open-edit" guided-action="edit" href="javascript:;">
 					<img src="{{ url('img-trp/penci-bluel.png') }}">
 					{!! nl2br(trans('trp.page.user.edit-profile')) !!}
 				</a>
@@ -595,13 +621,17 @@
 			</div>
 
 			@if(!empty($user) && $user->id==$item->id)
-				<a href="javascript:;" class="button" data-popup-logged="popup-invite">
-					{!! nl2br(trans('trp.page.user.invite')) !!}
-				</a>
-				@if( $item->reviews_in_standard()->count() )
-					<a href="javascript:;" class="button button-inner-white add-widget-button" data-popup-logged="popup-widget" style="text-transform: initial;">
-						{!! nl2br(trans('trp.page.user.widget')) !!}
+				<div style="padding: 5px;display: inline-block;" guided-action="invite" class="dont-count">
+					<a href="javascript:;" class="button" data-popup-logged="popup-invite">
+						{!! nl2br(trans('trp.page.user.invite')) !!}
 					</a>
+				</div>
+				@if( $item->reviews_in_standard()->count() )
+					<div style="padding: 5px;display: inline-block;" reviews-guided-action="add">
+						<a href="javascript:;" class="button button-inner-white add-widget-button" data-popup-logged="popup-widget" style="text-transform: initial;">
+							{!! nl2br(trans('trp.page.user.widget')) !!}
+						</a>
+					</div>
 				@endif
 			@elseif( empty($user) || !$user->is_dentist )
 				<a href="javascript:;" class="button" data-popup-logged="submit-review-popup">
@@ -949,20 +979,20 @@
 		    				{!! $item->description ? nl2br($item->description) : nl2br(trans('trp.page.user.description-empty')) !!}
 		    			</span>
 	    				@if(!empty($user) && $item->id==$user->id)
-	    					<a>
+	    					<a class="dont-count guided-description" guided-action="description" style="padding: 10px; margin: -10px; margin-left: 0px;">
 	    						<img src="{{ url('img-trp/pencil.png') }}">
 	    					</a>
 	    				@endif
 	    			</div>
 	    			@if(!empty($user) && $item->id==$user->id)
-		    			<div class="about-content" role="editor" style="display: none;">
+		    			<div class="about-content edit-descr-container" role="editor" style="display: none; padding: 5px;">
 							{{ Form::open(array('class' => 'edit-description', 'method' => 'post', 'url' => getLangUrl('profile/info') )) }}
 								{!! csrf_field() !!}
 								<textarea class="input" name="description" id="dentist-description" placeholder="{!! nl2br(trans('trp.page.user.description-placeholder')) !!}">{{ $item->description }}</textarea>
 								<p class="symbols-wrapper"><span id="symbols-count">0</span> / max length 512</p>
 	                            <input type="hidden" name="field" value="description" />
 	                            <input type="hidden" name="json" value="1" />
-								<button type="submit" class="button">{!! nl2br(trans('trp.page.user.save')) !!}</button>
+								<button type="submit" class="button skip-step">{!! nl2br(trans('trp.page.user.save')) !!}</button>
 								<div class="alert alert-warning" style="display: none;">
 								</div>
 							{!! Form::close() !!}
@@ -975,7 +1005,7 @@
 			    			@if( (!empty($user) && $item->id==$user->id && $item->photos->count() < 10 ) )
 								<div class="slider-wrapper">
 									{{ Form::open(array('class' => 'gallery-add', 'method' => 'post', 'files' => true)) }}
-										<label for="add-gallery-photo" class="add-gallery-image slider-image cover image-label">
+										<label for="add-gallery-photo" class="add-gallery-image slider-image cover image-label dont-count" guided-action="photos">
 											<div class="plus-gallery-image">
 												<i class="fas fa-plus"></i>
 												<span>{!! nl2br(trans('trp.page.user.reviews-image')) !!}</span>
@@ -1014,7 +1044,7 @@
 		    		<div class="flickity">
 		    			@if( (!empty($user) && $item->id==$user->id) )
 							<div class="slider-wrapper">
-								<a href="javascript:;" class="slider-image add-team-member" data-popup="add-team-popup">
+								<a href="javascript:;" class="slider-image add-team-member dont-count" data-popup="add-team-popup" guided-action="team">
 									<div class="plus-team">
 										<img src="{{ url('img-trp/add-member.png') }}">
 										<span>
@@ -1276,6 +1306,9 @@
 		@include('trp.popups.widget')
 		@include('trp.popups.invite')
 		@include('trp.popups.working-time')
+		@if(!empty(session('first_guided_tour')) || !empty(session('reviews_guided_tour')))
+			@include('trp.popups.first-guided-tour')
+		@endif
 		@if( $user->is_clinic )
 			@include('trp.popups.add-member')
 		@else
@@ -1296,6 +1329,19 @@
 @include('trp.popups.detailed-review')
 @include('trp.popups.lead-magnet')
 
+
+<div class="popup fixed-popup first-guided-tour-done-popup tour-popup" id="first-guided-tour-done">
+	<div class="popup-inner-tour tac">
+
+		<h2>Well Done!</h2>
+
+		<div class="tour-buttons">
+			<a href="javascript:;" class="button-white tour-button done-tour">
+				OK
+			</a>
+		</div>
+	</div>
+</div>
 
 <script type="application/ld+json">
 	{!! json_encode($schema, JSON_UNESCAPED_SLASHES) !!}

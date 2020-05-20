@@ -367,38 +367,23 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return false;
     }
 
-    // public function getStrengthCompletedd($platform) {
-            
-    //     $num = 0;
-    //     $s = UserStrength::getStrengthPlatform($platform, $this);
-
-    //     if($platform == 'trp' && $this->is_dentist) {
-    //         $num = intval($s['completed_steps']);
-    //     } else {
-
-    //         foreach ($s as $val) {
-    //             if ($val['completed'] == true) {
-    //                 $num++;
-    //             }
-    //         }
-    //     }
-    //     return $num;
-    // }
-
     public function getStrengthCompleted($platform) {
             
         $num = 0;
         $s = UserStrength::getStrengthPlatform($platform, $this);
-        foreach ($s as $val) {
-            if ($val['completed'] == true) {
-                $num++;
+
+        if($platform == 'trp' && $this->is_dentist) {
+            $num = intval($s['completed_steps']);
+        } else {
+
+            foreach ($s as $val) {
+                if ($val['completed'] == true) {
+                    $num++;
+                }
             }
         }
-
         return $num;
     }
-
-
 
     public function getPrevBansCount($domain='vox', $type=null) {
         $times = 0;

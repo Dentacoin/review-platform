@@ -3818,13 +3818,6 @@ svg:not(:root) {
 .page-page-not-found .poll-bubble {
   display: none !important; }
 
-@keyframes cookiebar-blink-animation {
-  0% {
-    background-color: black; }
-  50.0% {
-    background-color: red; }
-  100.0% {
-    background-color: black; } }
 .privacy-policy-cookie {
   padding-top: 20px;
   padding-bottom: 20px;
@@ -3833,12 +3826,6 @@ svg:not(:root) {
   width: 100%;
   font-size: 0;
   position: relative; }
-  .privacy-policy-cookie.blink {
-    animation-name: cookiebar-blink-animation;
-    animation-duration: 1.5s;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-play-state: running; }
   .privacy-policy-cookie .container-cookie {
     justify-content: space-between;
     align-items: center;

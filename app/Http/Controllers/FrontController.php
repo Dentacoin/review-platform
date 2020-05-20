@@ -170,63 +170,53 @@ class FrontController extends BaseController {
                 
             }
 
-            if(!empty($this->user) && session('login-logged')!=$this->user->id){
+            if(!empty($this->user) && session('login-logged')!=$this->user->id) {
+                //after login actions
 
-                // if(!session('user_login')) {
+                if($this->user->is_dentist) {
+                    $gt_exist = UserGuidedTour::where('user_id', $this->user->id)->first();
 
-                //     $ul = new UserLogin;
-                //     $ul->user_id = $this->user->id;
-                //     $ul->ip = User::getRealIp();
-                //     $ul->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
-                //     $ul->country = \GeoIP::getLocation()->country;
+                    if(!empty($gt_exist)) {
 
-                //     $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
-                //     $dd = new DeviceDetector($userAgent);
-                //     $dd->parse();
+                        if(empty($gt_exist->first_login_trp) && mb_strpos( Request::getHost(), 'vox' )===false) {
+                            $gt_exist->first_login_trp = true;
+                            $gt_exist->save();
 
-                //     if ($dd->isBot()) {
-                //         // handle bots,spiders,crawlers,...
-                //         $ul->device = $dd->getBot();
-                //     } else {
-                //         $ul->device = $dd->getDeviceName();
-                //         $ul->brand = $dd->getBrandName();
-                //         $ul->model = $dd->getModel();
-                //         $ul->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
-                //     }
+                            session(['first_guided_tour' => true]);
 
-                //     $is_whitelist_ip = WhitelistIp::where('ip', 'like', User::getRealIp())->first();
-                //     if (User::getRealIp() != '213.91.254.194' && empty($this->admin) && empty($is_whitelist_ip)) {
-                //         $ul->save();
-                //     }
+                        } else if(empty($gt_exist->login_after_first_review) && mb_strpos( Request::getHost(), 'vox' )===false && empty(session('first_guided_tour')) && empty($this->user->widget_activated) && $this->user->dentist_fb_page->isEmpty() && $this->user->reviews_in_standard()->count() == 1 ) {
 
-                //     session(['user_login' => true]);
-                // }
+                            $date = null;
 
+                            foreach ($this->user->reviews_in_standard() as $review) {
+                                $date = $review->created_at;
+                            }
 
+                            $last_login = UserLogin::where('user_id', $this->user->id)->where('created_at', '<=', Carbon::now()->addMinutes(-10))->where('created_at', '>', $date)->first();
 
+                            if(empty($last_login)) {
+                                $gt_exist->login_after_first_review = true;
+                                $gt_exist->save();
+                                
+                                session(['reviews_guided_tour' => true]);
+                            }
+                        }
 
-                // if($this->user->is_dentist) {
-                //     $gt_exist = UserGuidedTour::where('user_id', $this->user->id)->first();
+                    } else {
 
-                //     if(!empty($gt_exist)) {
+                        $gt = new UserGuidedTour;
+                        $gt->user_id = $this->user->id;
 
-                //         if(empty($gt_exist->first_login_trp) && mb_strpos( Request::getHost(), 'vox' )===false) {
-                //             $gt_exist->first_login_trp = true;
-                //             $gt_exist->save();
-                //         }
+                        if(mb_strpos( Request::getHost(), 'vox' )===false) {
+                            $gt->first_login_trp = true;
+                            
+                            session(['first_guided_tour' => true]);
+                        }
 
-                //     } else {
+                        $gt->save();
+                    }
 
-                //         $gt = new UserGuidedTour;
-                //         $gt->user_id = $this->user->id;
-
-                //         if(mb_strpos( Request::getHost(), 'vox' )===false) {
-                //             $gt->first_login_trp = true;
-                //         }
-
-                //         $gt->save();
-                //     }
-                // }
+                }
 
 
                 $tokenobj = $this->user->createToken('LoginToken');
@@ -523,6 +513,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '2020-05-12-07';
+        $params['cache_version'] = '2020-05-20';
     }
 }

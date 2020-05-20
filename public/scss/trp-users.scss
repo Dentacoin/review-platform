@@ -444,7 +444,7 @@ $phone: "screen and (max-width: 768px)";
     }
 
     .profile-rating {
-    	margin-top: 20px;
+    	margin-top: -10px;
 
     	.rating {
 		    margin-bottom: 20px;
@@ -462,6 +462,12 @@ $phone: "screen and (max-width: 768px)";
 		    margin-bottom: 0px; 
 		    max-width: none;
 		    font-size: 14px;
+
+		    &.add-widget-button {
+		    	@media #{$phone} {
+		    		padding: 10px 16px;
+		    	}
+		    }
 		}
 
 		.button:not(.button-inner-white) {
@@ -707,7 +713,7 @@ $phone: "screen and (max-width: 768px)";
 		}
 
 		.edit-button {
-			padding-top: 10px;
+			padding: 10px;
 			display: inline-block;
 		}
 
@@ -725,7 +731,6 @@ $phone: "screen and (max-width: 768px)";
 		.edit-buttons {
 			float: none;
 
-			button,
 			a {
 				width: 49%;
 				text-align: center;
@@ -798,8 +803,9 @@ $phone: "screen and (max-width: 768px)";
 	}
 
 	.edit-buttons {
-		float: right;
-    	margin-top: 40px;
+    	margin-top: 15px;
+    	display: flex;
+    	align-items: center;
 
     	@media #{$phone} {
     		margin-top: 20px;
@@ -1632,6 +1638,10 @@ $phone: "screen and (max-width: 768px)";
 }
 
 body.edit-user {
+	.strength-parent {
+		display: none !important;
+	}
+
 	.profile-info {
 		background-image: none;
 		background-color: white;
@@ -1681,6 +1691,22 @@ body.edit-user {
 		.profile-rating {
 	    	margin-top: 100px;
 	    }
+	}
+}
+
+.social-wrapper {
+	text-align: right;
+
+    @media #{$phone} {	    	
+    	text-align: left;
+    }
+
+	.add-social-profile {
+		display: inline-block;
+	    font-size: 14px !important;;
+	    font-weight: 300;
+	    color: #1d6786;
+	    margin-top: 10px;
 	}
 }
 
@@ -1804,22 +1830,6 @@ body.edit-user {
 			}
 		}
 	}
-}
-
-.add-social-profile {
-	position: absolute;
-	display: block;
-    bottom: -25px;
-    right: 0;
-    font-size: 14px;
-    font-weight: 300;
-    color: #1d6786;
-
-    @media #{$phone} {
-    	position: unset;
-    	margin-top: 10px;
-    	font-size: 14px !important;
-    }
 }
 
 .profile-socials {
@@ -2146,7 +2156,7 @@ body.edit-user {
 	}
 }
 
-#first-guided-tour {
+.tour-popup {
 	background-color: rgba(0, 0, 0, 0.6);
 
 	.popup-inner-tour {		
@@ -2165,6 +2175,16 @@ body.edit-user {
 		padding: 40px 100px;
 		box-shadow: 0 4px 14px 0px rgba(0, 0, 0, 0.7);
 
+		@media screen and (max-width: 1300px) {
+		    width: 630px;
+		    padding: 40px 50px;
+		}
+
+		@media #{$phone} {
+			width: 90%;
+    		padding: 30px 20px;
+		}
+
 		.avatar {
 	    	box-sizing: inherit;
 	    	position: relative;
@@ -2176,21 +2196,17 @@ body.edit-user {
 			background-size: cover;
 			margin-left: auto;
 
-	    	@media #{$pc} {
+	    	@media screen and (max-width: 1300px) {
 	    		width: 120px;
 			    min-width: 120px;
 			    height: 120px;
-			    margin-right: 40px;
-			    margin-top: 30px;
 	    	}
 
-	    	@media #{$tablet} {
-	    		width: 100%;
-	    		height: 100%;
-	    		min-width: auto;
-	    		margin-right: 0px;
-	    		margin-top: 0px;
-	    	}
+	    	@media #{$phone} {
+				width: 80px;
+				min-width: 80px;
+				height: 80px;
+			}
 
 	    	&:before {
 	    		content: '';
@@ -2203,14 +2219,14 @@ body.edit-user {
 			    height: 215px;
 	    		background: url('../img-trp/avatar-border.svg') no-repeat 50% 50%;
 
-	    		@media #{$pc} {
+	    		@media screen and (max-width: 1300px) {
 					left: -4px;
 					top: -4px;
 					width: 128px;
 					height: 128px;
 	    		}
 
-	    		@media #{$tablet} {
+	    		@media #{$phone} {
 					left: 0px;
 					top: 0px;
 					width: 100%;
@@ -2224,16 +2240,33 @@ body.edit-user {
 		    color: white;
 		    font-weight: 300;
 		    margin-top: 20px;
+
+		    @media #{$phone} {
+		    	font-size: 32px;
+		    	margin-bottom: 20px;
+		    }
 	    }
 
 	    p {
 	    	font-size: 25px;
 		    font-weight: 300;
 		    color: white;
+
+		    @media #{$phone} {
+		    	font-size: 20px;
+		    }
 	    }
 
 	    .tour-buttons {
 	    	margin-top: 60px; 
+
+	    	@media screen and (max-width: 1300px) {
+	    		margin-top: 40px;
+	    	}
+
+	    	@media #{$phone} {
+	    		margin-top: 30px;
+	    	}
 	    }
 
 	    .tour-button {
@@ -2246,6 +2279,12 @@ body.edit-user {
 	    	margin: 0px 7px;
 	    	color: white;
 	    	transition: all 0.3s ease;
+
+	    	@media #{$phone} {
+	    		font-size: 18px;
+			    width: auto;
+			    margin: 0px 0px;
+	    	}
 
 	    	&.button-white {
 	    		background-color: white;
@@ -2260,6 +2299,22 @@ body.edit-user {
 	    	}
 	    }
 	}
+
+	&.first-guided-tour-done-popup {
+
+		.popup-inner-tour {
+			width: 540px;
+
+			@media #{$phone} {
+				width: 90%;
+			}
+
+			.tour-button {
+				width: 100px;
+			}
+		}
+		
+	}
 }
 
 .guided-tour-wrapper {
@@ -2268,4 +2323,695 @@ body.edit-user {
 		background-color: rgba(0, 0, 0, 0.6);
     	z-index: 1000;
 	}
+}
+
+.bubble-guided-tour {
+	position: fixed;
+    top: 50px;
+    left: 50px;
+    background-color: white;
+    z-index: 100;
+    border-radius: 14px;
+    padding: 25px 30px;
+    max-width: 355px;
+    z-index: 10000;
+
+    @media #{$phone} {
+    	max-width: 300px;
+    }
+
+    .flex {
+    	@media #{$phone} {
+    		display: flex;
+    	}
+    }
+
+    h4 {
+    	color: #333;
+	    margin-bottom: 17px;
+	    font-weight: bold;
+    }
+
+    .guided-icon {
+		min-width: 40px;
+		max-width: 40px;
+   		margin-right: 10px;
+
+   		@media #{$phone} {
+   			display: none;
+   		}
+    }
+
+    .guided-info-wrap {
+    	margin-bottom: 20px;
+    }
+
+    .guided-buttons {
+    	justify-content: space-between;
+
+    	.steps {
+    	    font-weight: 300;
+
+    	    span {
+    	    	font-weight: bold;
+    			font-size: 18px;
+    	    }
+    	}
+
+    	.skip-step {
+    		color: #126585;
+    	}
+    }
+
+    .cap {
+    	background-color: transparent;
+    	position: absolute;
+    	top: -13px;
+    	left: 24px;
+    	width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 0 14px 13px 14px;
+		border-color: transparent transparent #ffffff transparent;
+
+		@media #{$phone} {
+			position: fixed;
+		}
+    }
+
+    &.bubble-reviews {
+    	.cap {
+			top: auto;
+			bottom: -13px;
+			border-width: 13px 14px 0 14px;
+			border-color: #ffffff transparent transparent transparent;
+		}
+    }
+}
+
+.guided-overflow-wrapper {
+    display: none;
+
+    .guided-tour-part {
+    	background-color: rgba(0, 0, 0, 0.6);
+	    position: fixed;
+	    z-index: 10000;
+
+    	&.guided-overflow-top {
+    		top: 0;
+		    left: 0;
+		    right: 0;
+    	}
+
+    	&.guided-overflow-right {
+		    right: 0;
+
+		    img.top {
+		    	transform: rotate(90deg);
+		    }
+
+		    img.bottom {
+		    	transform: rotate(180deg);
+		    }
+    	}
+
+    	&.guided-overflow-left {
+		    left: 0;
+
+		    img.bottom {
+		    	transform: rotate(-90deg);
+		    }
+    	}
+
+    	&.guided-overflow-bottom {
+    		bottom: 0;
+		    left: 0;
+		    right: 0;
+    	}
+
+    	img {
+    		position: fixed;
+    		background-color: transparent;
+    	}
+    }
+}
+
+
+.widget-step {
+	.widget-step-title {
+		color: #126585;
+		font-size: 24px;
+		text-transform: uppercase;
+		text-align: center;
+		font-weight: bold;
+		margin-top: 30px;
+		margin-bottom: 10px !important;
+
+		span {
+			color: black;
+			font-size: 24px;
+			text-transform: uppercase;
+		}
+	}
+
+	.popup-desc {
+		font-weight: 300;
+		margin-bottom: 10px;
+	}
+
+	.popup-title {
+		color: #333333;
+	    padding: 7px 100px 9px;
+	}
+
+	.step-description {
+		font-size: 18px;
+		font-weight: 300;
+		text-align: center;
+		margin-bottom: 30px;
+	}
+
+	.modern-radios {
+		display: block;
+
+		@media #{$phone} {
+			margin-bottom: 47px;
+		}
+
+		.radio-label {
+			margin-bottom: 35px;
+
+			@media #{$phone} {
+				margin-bottom: 10px;
+			    border-bottom: 2px solid #dadada;
+			    padding-bottom: 20px;
+			}
+
+			&:first-child {
+			    margin-right: 0px;
+			}
+
+			label {
+				border-color: transparent;
+				align-items: center;
+				padding: 18px 15px;
+				display: flex;
+
+				@media #{$phone} {
+					display: block;
+				}
+
+				&.active {
+					border-color: #126585;
+
+					.modern-radio {
+						span {
+				    		background-color: #126585;
+					    }
+					}
+
+					.widget-option {
+						p {
+							color: #126585;
+							font-weight: bold;
+						}
+					}
+
+					&:hover {
+						border-color: #126585;
+					}
+				}
+
+				&:hover {
+					border-color: #ccc;
+				}
+
+				.modern-radio {
+					min-width: 36px;
+				    width: 36px;
+				    height: 36px;
+				    border-color: #979797;
+				    background-color: #ebebeb;
+				    margin-right: 13px;
+
+				    @media #{$phone} {
+					    display: block;
+					    margin-right: auto;
+					    margin-left: auto;
+					    margin-bottom: 14px;
+					}
+
+				    span {
+				    	width: 20px;
+				    	height: 20px;
+				    }
+				}
+
+				.layout-img {
+					max-width: 398px;
+
+					@media #{$tablet} {
+				    	max-width: 260px;
+				    }
+
+				    @media #{$phone} {
+				    	margin-bottom: 20px;
+				    }
+				}
+
+				.widget-option {
+					margin-left: 40px;
+
+					@media #{$tablet} {
+				    	margin-left: 20px;
+				    }
+
+					p {
+						font-size: 20px;
+						font-weight: 300;
+						margin-bottom: 20px;
+					}
+
+					.select-wrap {
+						margin-bottom: 14px;
+
+						@media #{$phone} {
+							justify-content: center;
+						}
+
+						&:last-child {
+							margin-bottom: 0px;
+						}
+
+						span {
+							font-size: 18px;
+							font-weight: 300;
+						}
+						select,
+						input {
+							display: block;
+							border: 1px solid #d7d7d7;
+							margin: 0px 5px;
+							border-radius: 4px;
+							padding: 0px 5px;
+							font-size: 18px;
+							font-weight: 300;
+
+							&:hover,
+							&:focus {
+								outline: none;
+							}
+						}
+
+						input {
+							max-width: 59px;
+							-moz-appearance:textfield;
+
+							&::-webkit-outer-spin-button,
+							&::-webkit-inner-spin-button {
+							    /* display: none; <- Crashes Chrome on hover */
+							    -webkit-appearance: none;
+							    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	#selected-image-layout {
+		margin-bottom: 25px;
+		max-width: 398px;
+
+		@media #{$phone} {
+			max-width: 100%;
+		}
+	}
+
+	#selected-layout {
+		color: #126585;
+		font-weight: bold;
+		text-transform: capitalize;
+	}
+
+	.widget-subtitle {
+		font-size: 22px;
+		margin-bottom: 30px !important;
+	}
+
+	.popup-tabs {
+		margin-top: 0px !important;
+
+		@media #{$phone} {
+			flex-direction: column;
+		}
+
+		a {
+			@media #{$phone} {
+				margin-right: 0px;
+				margin-left: 0px;
+			}
+
+			&:first-child {
+				@media #{$phone} {
+					margin-bottom: 10px;
+				}
+			}
+		}
+	}
+
+	.instructions-image {
+		position: relative;
+		display: block;
+
+		.magnifier {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translateY(-50%) translateX(-50%);
+			background-color: transparent;
+		}
+	}
+
+	.select-reviews {
+		.modern-radios {
+			.radio-label {
+				margin-bottom: 27px;
+
+				@media #{$phone} {
+					border-bottom: 0px;
+					padding-bottom: 0px;
+				}
+
+				label {
+					border-color: #d6d6d7;
+					display: block;
+					border-width: 1px;
+					position: relative;
+
+					&.active {
+						border-color: #126585;
+
+						span {
+							font-weight: bold;
+							color: #126585;
+						}
+					}
+
+					span {
+						font-size: 20px;
+						font-weight: 300;
+					}
+
+					.info {
+						vertical-align: middle;
+    					margin-left: 5px;
+					}
+
+					.hidden-option {
+						display: none;
+						padding-left: 40px;
+						padding-top: 18px;
+
+						@media #{$phone} {
+							padding-left: 30px;
+						}
+
+						&.active {
+							display: block;
+						}
+
+						.option-checkboxes {
+							display: flex;
+
+							label {
+								border: none;
+								padding: 0px;
+								margin-right: 30px;
+								font-size: 18px;
+
+								&.active {
+									.modern-radio {
+										span {
+											background-color: #126585;
+										}								    
+									}
+								}
+
+								&:last-child {
+									margin-right: 0px;
+								}
+
+								.modern-radio {
+									span {
+										background-color: transparent;
+									}								    
+								}
+							}
+						}
+
+						p {
+							font-size: 18px;
+    						margin-bottom: 15px;
+						}
+
+						.button {
+							background-color: white;
+							border: 1px solid #126585;
+							color: #126585;
+							text-transform: none;
+							font-size: 18px;
+							padding: 7px 20px;
+							margin-bottom: 0px;
+
+							&:hover {
+								background-color: #126585;
+								color: white;
+							}
+						}
+					}
+
+					.modern-radio {
+						min-width: 24px;
+					    width: 24px;
+					    height: 24px;
+
+					    @media #{$phone} {
+							display: inline-block;
+							margin-bottom: 0px;
+							margin-right: 5px;
+					    }
+
+					    span {
+					    	width: 13px;
+    						height: 13px;
+					    }
+					}
+
+					.open-hidden-option {
+						padding: 20px;
+					    padding-bottom: 19px;
+					    position: absolute;
+					    right: 2px;
+					    top: 0px;
+
+					    @media #{$phone} {
+					    	padding: 10px;
+						    top: 13px;
+					    }
+
+						i {
+							font-size: 20px;
+							color: #636363;
+
+							&:before {
+							    content: "\f0d7";
+							}
+						}
+
+						&.active {
+							i {
+								&:before {
+									content: "\f0d8";
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.widget-code-wrap {
+		background-color: #126585;
+	    margin: 20px -100px 50px;
+	    padding: 25px 100px;
+	    position: relative;
+
+	    @media #{$phone} {
+	    	margin: 20px -20px 50px;
+	    	padding: 25px 20px;
+	    }
+
+	    textarea {
+	    	height: 170px;
+    		box-shadow: none;
+    	    padding: 10px 15px;
+
+    	    @media #{$tablet} {
+    	    	height: 210px;
+    	    }
+
+    	    @media #{$phone} {
+    	    	height: 300px;
+    	    }
+	    }
+	}
+
+	.button {
+		border: 1px solid #46afda;
+		font-size: 25px;
+		background-color: #46afda;
+		padding: 12px 73px;
+		margin-bottom: 30px;
+
+		@media #{$phone} {
+			font-size: 19px;
+		    padding: 9px 45px;
+		}
+
+		&.back-widget {
+			background-color: white;
+			color: #46afda;
+			margin-right: 10px;
+		}
+	}
+
+	.copy-widget {
+		position: absolute;
+	    right: 104px;
+	    background: #f1eff1;
+	    color: #4e4c4e;
+	    display: block;
+	    padding: 6px 10px;
+	    top: 29px;
+
+	    @media #{$phone} {
+	    	right: 24px;
+	    }
+
+	    i {
+	    	color: #4e4c4e;
+	    }
+	}
+
+	.facebook-tab {
+		.tab-info {
+			font-size: 22px;
+			margin-bottom: 30px;
+			display: flex;
+    		align-items: flex-start;
+
+			img {
+				max-width: 18px;
+			    margin-top: 6px;
+			    margin-right: 5px;
+			}
+		}
+
+		.fb-l-button {
+			background-color: #4267B2;
+			color: white;
+			border-radius: 5px;
+			margin-bottom: 17px;
+			padding: 10px 15px;
+			font-size: 20px;
+			padding-left: 15px;
+			border: none;
+			width: 350px;
+
+			span {
+				display: inline-block;
+			    vertical-align: sub;
+			    width: 27px;
+			    text-align: center;
+			    margin-right: 10px;
+
+			    i {
+					color: white;
+					font-size: 30px;
+			    }
+			}
+		}
+
+		.tab-note {
+			font-size: 17px;
+		    color: #888888;
+		    text-align: center;
+		    margin-bottom: 20px;
+		}
+	}
+}
+
+body.reviews-guided-tour {
+	.widget-step {
+
+		.facebook-tab {
+			.modern-field {
+				padding: 13px 5px 10px;
+			}
+		}
+
+		.select-reviews {
+			.widget-subtitle {
+				display: none;
+			}
+
+			.modern-radios {
+				.radio-label {
+					label {
+						.hidden-option {
+							.option-checkboxes {
+								label {
+									@media #{$phone} {
+			    						margin-right: 16px;
+			    					}
+			    				}
+			    			}
+			    		}
+			    	}
+			    }
+			}
+		}
+	}
+
+	[reviews-guided-action="reviews_type"],
+	.widget-first-inner,
+	[reviews-guided-action="copy"] {
+		padding: 10px;
+	}
+
+	.skip-reviews-step {
+		padding: 3px 11px;
+	}
+
+	#select-reviews-popup {
+		z-index: 10000;
+	}
+
+	.button {
+		@media #{$phone} {
+	    	padding: 9px 35px;
+	    }
+	}
+
+	.widget-code-wrap {
+	    margin: 20px -110px 50px;
+
+	    @media #{$phone} {
+	    	margin: 20px -30px 50px;
+	    }
+	}
+
 }

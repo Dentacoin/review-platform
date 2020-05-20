@@ -22,6 +22,20 @@ return [
   //   'font_css' => "font-family: 'Nunito', sans-serif;",
   //   'rtl' => false,
   // ],
+  'de' => [
+    'name' => 'Deutsch',
+    'flag' => 'DE',
+    'font' => '<link href="https://fonts.googleapis.com/css?family=Nunito:400,700&amp;subset=latin-ext" rel="stylesheet">',
+    'font_css' => "font-family: 'Nunito', sans-serif;",
+    'rtl' => false,
+  ],
+  // 'es' => [
+  //   'name' => 'Español',
+  //   'flag' => 'ES',
+  //   'font' => '<link href="https://fonts.googleapis.com/css?family=Nunito:400,700&amp;subset=latin-ext" rel="stylesheet">',
+  //   'font_css' => "font-family: 'Nunito', sans-serif;",
+  //   'rtl' => false,
+  // ],
   // 'zh' => [
   //   'name' => 'Chinese',
   //   'flag' => 'CN',

@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\UserGuidedTour;
+
 use Carbon\Carbon;
 
 use App;
 
-class UserStrength extends Model
-{
+class UserStrength extends Model {
     
     public static function getStrengthPlatform($platform, $user) {
 
@@ -18,14 +20,51 @@ class UserStrength extends Model
 
             if($user->is_dentist) {
 
+                //steps count = 10 hardcode
+                $ret['completed_steps'] = 0;
+
                 $array_number_shuffle = [
                     'important' => 0,
                     'not_important' => 0,
                 ];
 
+                $missing_info = true;
+
+                if(!empty($user->description) && !empty($user->work_hours) && $user->photos->isNotEmpty() && !empty($user->socials)) {
+                    $missing_info = false;
+
+                    if( $user->is_clinic) {
+
+                        if( $user->invites_team_unverified->isNotEmpty() || $user->team->isNotEmpty() ) {
+                            $missing_info = false;
+                        } else {
+                            $missing_info = true;
+                        }
+                    } 
+                }
+
+
+                if( empty($missing_info )) {
+                    $ret['completed_steps']++;
+                } else {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.complete-profile.title'),
+                        'image' => 'complete-profile',
+                        'text' => nl2br(trans('trp.strength.dentist.complete-profile.text')),
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.dentist.complete-profile.button-text'),
+                        'buttonjs' => 'go-first-tour go-tour',
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Add',
+                        'event_label' => 'MissingInfo',
+                    ];
+                    $array_number_shuffle['important']++;
+                }
+
+
                 //Monthly progress
 
-                $carbon_month = \Carbon\Carbon::now();
+                $carbon_month = Carbon::now();
                 $prev_month = $carbon_month->subMonth()->format('F');
 
                 $first_day_of_month = Carbon::now()->startOfMonth();
@@ -33,7 +72,22 @@ class UserStrength extends Model
 
                 $today = Carbon::now();
 
-                if ($today < $five_day) {
+                $new_user = $user->created_at > Carbon::now()->subDays(30);
+
+
+                $current_month_invitations = UserInvite::where( 'user_id', $user->id)
+                ->where('created_at', '>=', $first_day_of_month)
+                ->get();
+
+                if($current_month_invitations->count()) {
+                    $ret['completed_steps']++;
+
+                    if($current_month_invitations->count() > 10) {
+                        $ret['completed_steps']++;
+                    }
+                }
+
+                if ($today < $five_day && !$new_user) {
 
                     $id = $user->id;
 
@@ -53,12 +107,21 @@ class UserStrength extends Model
 
                         foreach ($last_month_reviews as $rev) {
                             foreach($rev->answers as $answer) {
-                                //echo $answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
-                                if(!isset($aggregated[$answer->question['label']])) {
-                                    $aggregated[$answer->question['label']] = 0;
-                                }
+                                if(!$user->is_clinic && $user->my_workplace_approved->isNotEmpty()) {
+                                    if($answer->question['label'] == 'Doctor' || $answer->question['label'] == 'Treatment experience' || $answer->question['label'] == 'Treatment quality' ) {
+                                        if(!isset($aggregated[$answer->question['label']])) {
+                                            $aggregated[$answer->question['label']] = 0;
+                                        }
 
-                                $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                                        $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                                    }
+                                } else {
+                                    if(!isset($aggregated[$answer->question['label']])) {
+                                        $aggregated[$answer->question['label']] = 0;
+                                    }
+
+                                    $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                                }
                             }
                         }
 
@@ -68,13 +131,16 @@ class UserStrength extends Model
 
                         $now = Carbon::now();
 
-                        if ($now->month == '8') {
-                            $prev_month_rating = array_values($aggregated)[0];
-                            $prev_month_label = array_keys($aggregated)[0];
-                            
-                        } else {
-                            $prev_month_rating = array_values($aggregated)[1];
-                            $prev_month_label = array_keys($aggregated)[1];
+                        $arrayIndex = (intval(date('Y')) - 2019)*12 + intval(date('n')); // + ....
+                        $arrayIndex = $arrayIndex % count($aggregated);
+
+                        $prev_month_rating = array_values($aggregated)[$arrayIndex];
+                        $prev_month_label = array_keys($aggregated)[$arrayIndex];
+
+                        $check_reviews = UserGuidedTour::where('user_id', $user->id)->whereNotNull('check_reviews_on')->where('check_reviews_on', '>', $first_day_of_month)->first();
+
+                        if(!empty($check_reviews)) {
+                            $ret['completed_steps']++;
                         }
 
                         $ret[] = [
@@ -113,6 +179,7 @@ class UserStrength extends Model
                     ->get();
 
                     if($last_month_invitations->count() && $last_month_reviews->count()) {
+
                         $ret[] = [
                             'title' => trans('trp.strength.dentist.invites.send-last-month.title', ['last_month_invitations' => $last_month_invitations->count()]),
                             'text' => trans('trp.strength.dentist.invites.send-last-month.text'),
@@ -183,10 +250,6 @@ class UserStrength extends Model
                         }
                     }
                 } else {
-                    $current_month_invitations = UserInvite::where( 'user_id', $user->id)
-                    ->where('created_at', '>=', $first_day_of_month)
-                    ->get();
-
                     //2.
 
                     if ($current_month_invitations->count()) {
@@ -202,12 +265,23 @@ class UserStrength extends Model
                         if ($current_month_reviews->count()) {
                             foreach ($current_month_reviews as $rev) {
                                 foreach($rev->answers as $answer) {
-                                    //echo $answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
-                                    if(!isset($aggregated[$answer->question['label']])) {
-                                        $aggregated[$answer->question['label']] = 0;
-                                    }
+                                    if(!$user->is_clinic && $user->my_workplace_approved->isNotEmpty()) {
+                                        if($answer->question['label'] == 'Doctor' || $answer->question['label'] == 'Treatment experience' || $answer->question['label'] == 'Treatment quality' ) {
+                                            if(!isset($aggregated[$answer->question['label']])) {
+                                                $aggregated[$answer->question['label']] = 0;
+                                            }
 
-                                    $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                                            $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                                        }
+                                    } else {
+
+                                        //echo $answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
+                                        if(!isset($aggregated[$answer->question['label']])) {
+                                            $aggregated[$answer->question['label']] = 0;
+                                        }
+
+                                        $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
+                                    }
                                 }
                             }
 
@@ -218,10 +292,17 @@ class UserStrength extends Model
                             $now = Carbon::now();
 
                             $arrayIndex = (intval(date('Y')) - 2019)*12 + intval(date('n')); // + ....
-                            $arrayIndex = $arrayIndex % 9;
+
+                            $arrayIndex = $arrayIndex % count($aggregated);
 
                             $cur_month_rating = array_values($aggregated)[$arrayIndex];
                             $cur_month_label = array_keys($aggregated)[$arrayIndex];
+
+                            $check_reviews = UserGuidedTour::where('user_id', $user->id)->whereNotNull('check_reviews_on')->where('check_reviews_on', '>', $first_day_of_month)->first();
+
+                            if(!empty($check_reviews)) {
+                                $ret['completed_steps']++;
+                            }
 
                             $ret[] = [
                                 'title' => trans('trp.strength.dentist.invites.rating-this-month.title'),
@@ -229,13 +310,12 @@ class UserStrength extends Model
                                 'image' => 'invite-patients',
                                 'completed' => false,
                                 'buttonText' => trans('trp.strength.dentist.invites.rating-this-month.button-text'),
-                                'buttonjs' => 'str-invite',
+                                'buttonjs' => 'str-see-reviews',
                                 'event_category' => 'ProfileStrengthDentist',
                                 'event_action' => 'Check',
                                 'event_label' => 'ScoreRatingThisMonth',
                             ];
                         } else {
-
                             $ret[] = [
                                 'title' => trans('trp.strength.dentist.invites.sent-this-month.title', ['invites_number' => $current_month_invitations->count() ]),
                                 'text' => trans('trp.strength.dentist.invites.sent-this-month.text'),
@@ -250,6 +330,7 @@ class UserStrength extends Model
                         }
 
                     } else {
+
                         $ret[] = [
                             'title' => trans('trp.strength.dentist.invite-patients.title'),
                             'text' => nl2br(trans('trp.strength.dentist.invite-patients.text')),
@@ -264,7 +345,7 @@ class UserStrength extends Model
                     }
                     $array_number_shuffle['important']++;
 
-                    //3.
+                    //3. DENTIST IN COUNTRY
 
                     if($user->country_id) {
                         $country_id = $user->country_id;
@@ -304,197 +385,11 @@ class UserStrength extends Model
 
                 //End Monthly progress
 
-                $missing_info = [];
-                $event_missing = [];
-
-                if(empty($user->short_description)) {
-                    $missing_info[] = 'a short bio';
-                    $event_missing[] = 'ShortDescription';
-                }
-                if(empty($user->description)) {
-                    $missing_info[] = 'a longer description';
-                    $event_missing[] = 'Description';
-                }
-                if(empty($user->work_hours)) {
-                    $missing_info[] = 'working hours';
-                    $event_missing[] = 'WorkHours';
-                }
-                if($user->photos->isEmpty()) {
-                    $missing_info[] = 'photos';
-                    $event_missing[] = 'Photos';
-                }
-                if(empty($user->socials)) {
-                    $missing_info[] = 'social channels';
-                    $event_missing[] = 'SocialChannels';
-                }                
-
-                if( empty($missing_info )) {
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.complete-profile.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.complete-profile.text-complete')),
-                        'image' => 'complete-profile',
-                        'completed' => true,
-                        'buttonText' => trans('trp.strength.dentist.complete-profile.button-text'),
-                    ];
-                } else {
-                    $missing_parts = count($missing_info) > 1 ? $missing_info[0].' and '.$missing_info[1] : $missing_info[0];
-                    $missing_parts_event = count($event_missing) > 1 ? $event_missing[0].'And'.$event_missing[1] : $event_missing[0];
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.complete-profile.title'),
-                        'image' => 'complete-profile',
-                        'text' => nl2br(trans('trp.strength.dentist.complete-profile.text', ['missing' => $missing_parts])),
-                        'completed' => false,
-                        'buttonText' => trans('trp.strength.dentist.complete-profile.button-text'),
-                        'buttonjs' => 'str-edit',
-                        'event_category' => 'ProfileStrengthDentist',
-                        'event_action' => 'Add',
-                        'event_label' => $missing_parts_event,
-                    ];
-                }
-                $array_number_shuffle['important']++;
-
-                if( $user->wallet_addresses->isNotEmpty() ) {
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.set-wallet.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.set-wallet.text')),
-                        'image' => 'wallet',
-                        'completed' => true,
-                        'buttonText' => trans('trp.strength.dentist.set-wallet.button-text'),
-                    ];
-                } else {
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.set-wallet.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.set-wallet.text')),
-                        'image' => 'wallet',
-                        'completed' => false,
-                        'buttonText' => trans('trp.strength.dentist.set-wallet.button-text'),
-                        'buttonHref' => 'https://wallet.dentacoin.com/',
-                        'target' => true,
-                        'event_category' => 'ProfileStrengthDentist',
-                        'event_action' => 'Create',
-                        'event_label' => 'NewWallet',
-                    ];
-                }
-                $array_number_shuffle['important']++;
-
-                if( !empty($user->description )) {
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.add-description.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.add-description.text')),
-                        'image' => 'description',
-                        'completed' => true,
-                        'buttonText' => trans('trp.strength.dentist.add-description.button-text'),
-                    ];
-                } else {
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.add-description.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.add-description.text')),
-                        'image' => 'description',
-                        'completed' => false,
-                        'buttonText' => trans('trp.strength.dentist.add-description.button-text'),
-                        'buttonjs' => 'str-description',
-                        'event_category' => 'ProfileStrengthDentist',
-                        'event_action' => 'Add',
-                        'event_label' => 'Description',
-                    ];
-                }
-                $array_number_shuffle['important']++;
-
-                if( !empty($user->socials )) {
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.add-socials.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.add-socials.text')),
-                        'image' => 'socials',
-                        'completed' => true,
-                        'buttonText' => trans('trp.strength.dentist.add-socials.button-text'),
-                    ];
-                } else {
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.add-socials.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.add-socials.text')),
-                        'image' => 'socials',
-                        'completed' => false,
-                        'buttonText' => trans('trp.strength.dentist.add-socials.button-text'),
-                        'buttonjs' => 'str-socials',
-                        'event_category' => 'ProfileStrengthDentist',
-                        'event_action' => 'Add',
-                        'event_label' => 'Social',
-                    ];
-                }
-                $array_number_shuffle['important']++;
-
-                if ($user->is_clinic) {
-                    $ret[] = [
-                        'title' => trans('trp.strength.clinic.show-team.title'),
-                        'text' => nl2br(trans('trp.strength.clinic.show-team.text')),
-                        'image' => 'team',
-                        'completed' => false,
-                        'buttonText' => trans('trp.strength.clinic.show-team.button-text'),
-                        'buttonjs' => 'str-team',
-                        'event_category' => 'ProfileStrengthDentist',
-                        'event_action' => 'Add',
-                        'event_label' => 'Team',
-                    ];
-
-                    $array_number_shuffle['not_important']++;
-                }
-
-                if($user->photos->isNotEmpty() && $user->photos->count() >= 10) {
-                    $ret[] = [                        
-                        'title' => trans('trp.strength.dentist.add-photos.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.add-photos.text')),
-                        'image' => 'photos',
-                        'completed' => true,
-                        'buttonText' => trans('trp.strength.dentist.add-photos.button-text'),
-                    ];
-                } else {
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.add-photos.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.add-photos.text')),
-                        'image' => 'photos',
-                        'completed' => false,
-                        'buttonText' => trans('trp.strength.dentist.add-photos.button-text'),
-                        'buttonjs' => 'str-photos',
-                        'event_category' => 'ProfileStrengthDentist',
-                        'event_action' => 'Add',
-                        'event_label' => 'Photos',
-                    ];
-                }
-                $array_number_shuffle['not_important']++;
-
-                if( !empty($user->work_hours )) {
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.add-work-hours.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.add-work-hours.text')),
-                        'image' => 'work-hours',
-                        'completed' => true,
-                        'buttonText' => trans('trp.strength.dentist.add-work-hours.button-text'),
-                    ];
-                } else {
-                    $ret[] = [
-                        'title' => trans('trp.strength.dentist.add-work-hours.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.add-work-hours.text')),
-                        'image' => 'work-hours',
-                        'completed' => false,
-                        'buttonText' => trans('trp.strength.dentist.add-work-hours.button-text'),
-                        'buttonjs' => 'str-working-hours',
-                        'event_category' => 'ProfileStrengthDentist',
-                        'event_action' => 'Add',
-                        'event_label' => 'Hours',
-                    ];
-                }
-                $array_number_shuffle['not_important']++;
 
                 if($user->reviews_in_standard()->count()) {
                     
-                    if( $user->widget_activated) {
-                        $ret[] = [
-                            'title' => trans('trp.strength.dentist.add-widget.title'),
-                            'text' => nl2br(trans('trp.strength.dentist.add-widget.text')),
-                            'image' => 'widget',
-                            'completed' => true,
-                            'buttonText' => trans('trp.strength.dentist.add-widget.button-text'),
-                        ];
+                    if( $user->widget_activated || $user->dentist_fb_page->isNotEmpty()) {
+                        $ret['completed_steps']++;
                     } else {
                         $ret[] = [
                             'title' => trans('trp.strength.dentist.add-widget.title'),
@@ -502,7 +397,7 @@ class UserStrength extends Model
                             'image' => 'widget',
                             'completed' => false,
                             'buttonText' => trans('trp.strength.dentist.add-widget.button-text'),
-                            'buttonjs' => 'str-widget',
+                            'buttonjs' => 'go-reviews-tour',
                             'event_category' => 'ProfileStrengthDentist',
                             'event_action' => 'Add',
                             'event_label' => 'Widget',
@@ -511,11 +406,31 @@ class UserStrength extends Model
                     $array_number_shuffle['not_important']++;
                 }
 
+
+                if( $user->wallet_addresses->isNotEmpty() ) {
+                    $ret['completed_steps']++;
+                } else {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.set-wallet.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.set-wallet.text')),
+                        'image' => 'wallet',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.dentist.set-wallet.button-text'),
+                        'buttonHref' => 'https://account.dentacoin.com/?platform=trusted-reviews',
+                        'target' => true,
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Create',
+                        'event_label' => 'NewWallet',
+                    ];
+                }
+                $array_number_shuffle['important']++;
+
+
                 $total_balance = $user->getTotalBalance();
                 if ($total_balance > env('VOX_MIN_WITHDRAW') ) {
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.withdraw-rewards.title'),
-                        'text' => nl2br(trans('trp.strength.dentist.withdraw-rewards.text', ['link' => '<a href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/" target="_blank">', 'endlink' => '</a>'])),
+                        'text' => nl2br(trans('trp.strength.dentist.withdraw-rewards.text', ['link' => '<span class="open-str-link" href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/">', 'endlink' => '</span>'])),
                         'image' => 'balance',
                         'completed' => false,
                         'buttonText' => trans('trp.strength.dentist.withdraw-rewards.button-text'),
@@ -525,11 +440,20 @@ class UserStrength extends Model
                         'event_label' => 'WithdrawRewards',
                     ];
                     $array_number_shuffle['not_important']++;
+                } else if ( $user->history->isNotEmpty() && $total_balance < env('VOX_MIN_WITHDRAW') ) {
+                    $ret['completed_steps']++;
                 }
 
-                $stats = Vox::where('has_stats', 1)->where('featured', 1)->orderBy('id', 'desc')->first();
+
+                $check_stats = UserGuidedTour::where('user_id', $user->id)->whereNotNull('check_stats_on')->where('check_stats_on', '>', $first_day_of_month)->first();
+
+                if(!empty($check_stats)) {
+                    $ret['completed_steps']++;
+                }
+                $stats = Vox::where('has_stats', 1)->where('stats_featured', 1)->orderBy('sort_order', 'asc')->first();
+
                 if (empty($stats)) {
-                    $stats = Vox::where('has_stats', 1)->orderBy('id', 'desc')->first();
+                    $stats = Vox::where('has_stats', 1)->orderBy('sort_order', 'asc')->first();
                 }
                 $ret[] = [
                     'title' => trans('trp.strength.dentist.check-stats.title'),
@@ -545,62 +469,65 @@ class UserStrength extends Model
                 ];
                 $array_number_shuffle['not_important']++;
 
-                $ret[] = [
-                    'title' => trans('trp.strength.dentist.browse-surveys.title'),
-                    'text' => nl2br(trans('trp.strength.dentist.browse-surveys.text')),
-                    'image' => 'dentavox',
-                    'completed' => false,
-                    'buttonText' => trans('trp.strength.dentist.browse-surveys.button-text'),
-                    'buttonHref' => getVoxUrl('/'),
-                    'target' => true,
-                    'event_category' => 'ProfileStrengthDentist',
-                    'event_action' => 'Browse',
-                    'event_label' => 'SurveysList',
-                ];
-                $array_number_shuffle['not_important']++;
 
-                $ret[] = [
-                    'title' => trans('trp.strength.dentist.join-assurance.title'),
-                    'text' => nl2br(trans('trp.strength.dentist.join-assurance.text')),
-                    'image' => 'assurance',
-                    'completed' => false,
-                    'buttonText' => trans('trp.strength.dentist.join-assurance.button-text'),
-                    'buttonHref' => 'https://assurance.dentacoin.com',
-                    'target' => true,
-                    'event_category' => 'ProfileStrengthDentist',
-                    'event_action' => 'Join',
-                    'event_label' => 'Assurance',
-                ];
-                $array_number_shuffle['not_important']++;
+                $check_assurance = UserGuidedTour::where('user_id', $user->id)->whereNotNull('dcn_assurance')->first();
 
-                $ret[] = [
-                    'title' => trans('trp.strength.dentist.join-dentacare.title'),
-                    'text' => nl2br(trans('trp.strength.dentist.join-dentacare.text')),
-                    'image' => 'dentacare',
-                    'completed' => false,
-                    'buttonText' => trans('trp.strength.dentist.join-dentacare.button-text'),
-                    'buttonHref' => 'https://dentacare.dentacoin.com',
-                    'target' => true,
-                    'event_category' => 'ProfileStrengthDentist',
-                    'event_action' => 'Recommend',
-                    'event_label' => 'Dentacare',
-                ];
-                $array_number_shuffle['not_important']++;
+                if(!empty($check_assurance)) {
+                    $ret['completed_steps']++;
+                } else {
 
-                $first_part = array_slice($ret, 0, $array_number_shuffle['important'], true);
-                shuffle($first_part);
-
-                $last_part = array_slice($ret, $array_number_shuffle['important'], $array_number_shuffle['not_important'], true);
-                shuffle($last_part);
-
-                $ret = array_merge($first_part, $last_part);
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.join-assurance.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.join-assurance.text')),
+                        'image' => 'assurance',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.dentist.join-assurance.button-text'),
+                        'buttonHref' => 'https://assurance.dentacoin.com',
+                        'buttonjs' => 'str-check-assurance',
+                        'target' => true,
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Join',
+                        'event_label' => 'Assurance',
+                    ];
+                    $array_number_shuffle['not_important']++;
+                }
 
 
-                // $ret['photo-dentist'] = $user->hasimage ? true : false;
-                // $ret['info'] = ($user->name && $user->phone && $user->description && $user->email && $user->country_id && $user->city_id && $user->zip && $user->address && $user->website) ? true : false;
-                // $ret['gallery'] = $user->photos->isNotEmpty() ? true : false;
-                // $ret['invite-dentist'] = $user->invites->isNotEmpty() ? true : false;
-                // $ret['widget'] = $user->widget_activated ? true : false;
+                $check_dentacare = UserGuidedTour::where('user_id', $user->id)->whereNotNull('dentacare_app')->first();
+
+                if(!empty($check_dentacare)) {
+                    $ret['completed_steps']++;
+                } else {
+                    $ret[] = [
+                        'title' => trans('trp.strength.dentist.join-dentacare.title'),
+                        'text' => nl2br(trans('trp.strength.dentist.join-dentacare.text')),
+                        'image' => 'dentacare',
+                        'completed' => false,
+                        'buttonText' => trans('trp.strength.dentist.join-dentacare.button-text'),
+                        'buttonHref' => 'https://dentacare.dentacoin.com',
+                        'buttonjs' => 'str-check-dentacare',
+                        'target' => true,
+                        'event_category' => 'ProfileStrengthDentist',
+                        'event_action' => 'Recommend',
+                        'event_label' => 'Dentacare',
+                    ];
+                    $array_number_shuffle['not_important']++;
+                }
+
+                // $first_part = array_slice($ret, 0, $array_number_shuffle['important'], true);
+                // shuffle($first_part);
+
+                // $last_part = array_slice($ret, $array_number_shuffle['important'], $array_number_shuffle['not_important'], true);
+                // shuffle($last_part);
+
+                // $ret = array_merge($first_part, $last_part);
+
+
+                // $completed = $ret['completed_steps'];
+                // unset($ret['completed_steps']);
+                // shuffle($ret);
+
+                // $ret['completed_steps'] = $completed;
 
             } else {
 
@@ -804,9 +731,9 @@ class UserStrength extends Model
                     'event_label' => 'TRP',
                 ];
 
-                $stats = Vox::where('has_stats', 1)->where('featured', 1)->orderBy('id', 'desc')->first();
+                $stats = Vox::where('has_stats', 1)->where('stats_featured', 1)->orderBy('sort_order', 'asc')->first();
                 if (empty($stats)) {
-                    $stats = Vox::where('has_stats', 1)->orderBy('id', 'desc')->first();
+                    $stats = Vox::where('has_stats', 1)->orderBy('sort_order', 'asc')->first();
                 }
                 $ret[] = [
                     'title' => trans('vox.strength.dentist.check-stats.title'),
@@ -871,10 +798,6 @@ class UserStrength extends Model
                 $missing_info = [];
                 $event_missing = [];
 
-                if(empty($user->short_description)) {
-                    $missing_info[] = 'a short bio';
-                    $event_missing[] = 'ShortDescription';
-                }
                 if(empty($user->description)) {
                     $missing_info[] = 'a longer description';
                     $event_missing[] = 'Description';
@@ -1037,7 +960,7 @@ class UserStrength extends Model
                 if ($total_balance > env('VOX_MIN_WITHDRAW') ) {
                     $ret[] = [
                         'title' => trans('vox.strength.patient.withdraw-rewards.title'),
-                        'text' => nl2br(trans('vox.strength.patient.withdraw-rewards.text', ['link' => '<a href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/" target="_blank">', 'endlink' => '</a>'])),
+                        'text' => nl2br(trans('vox.strength.patient.withdraw-rewards.text', ['link' => '<span class="open-str-link" href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/">', 'endlink' => '</span>'])),
                         'image' => 'balance',
                         'completed' => false,
                         'buttonText' => trans('vox.strength.patient.withdraw-rewards.button-text'),

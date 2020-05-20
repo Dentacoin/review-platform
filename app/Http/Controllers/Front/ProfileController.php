@@ -1673,44 +1673,194 @@ class ProfileController extends FrontController
     }
 
     public function firstGuidedTour($locale=null) {
+        session()->pull('first_guided_tour');
 
         if(!empty($this->user) && $this->user->is_dentist) {
 
-            $arr=[];
+            if(empty(session('guided_tour'))) {
 
-            if(empty($this->user->work_hours) || empty($this->user->socials)) {
-                $arr[] = 'edit';
+                $arr=[];
 
-                if(empty($this->user->work_hours)) {
-                    $arr[] = 'work_hours';
+                if(empty($this->user->work_hours) || empty($this->user->socials)) {
+                    $arr[] = [
+                        'action' => 'edit',
+                        'title' => trans('trp.guided-tour.first.edit.title'),
+                        'description' => trans('trp.guided-tour.first.edit.description'),
+                        'skip' => false,
+                    ];
+
+                    if(empty($this->user->work_hours)) {
+                        $arr[] = [
+                            'action' => 'work_hours',
+                            'title' => trans('trp.guided-tour.first.work-hours.title'),
+                            'description' => trans('trp.guided-tour.first.work-hours.description'),
+                            'skip' => true,
+                            'skip_text' => trans('trp.guided-tour.skip-step'),
+                        ];
+                    }
+
+                    if(empty($this->user->socials)) {
+                        $arr[] = [
+                            'action' => 'socials',
+                            'title' => trans('trp.guided-tour.first.socials.title'),
+                            'description' => trans('trp.guided-tour.first.socials.description'),
+                            'skip' => true,
+                            'skip_text' => trans('trp.guided-tour.ok'),
+                        ];
+                    }
+
+                    $arr[] = [
+                        'action' => 'save',
+                        'title' => trans('trp.guided-tour.first.save.title'),
+                        'description' => trans('trp.guided-tour.first.save.description'),
+                        'skip' => true,
+                        'skip_text' => trans('trp.guided-tour.skip-step'),
+                    ];
                 }
 
-                if(empty($this->user->socials)) {
-                    $arr[] = 'socials';
+                if(!empty(Request::input('full'))) {
+                    $arr[] = [
+                        'action' => 'invite',
+                        'title' => trans('trp.guided-tour.first.invite.title'),
+                        'description' => trans('trp.guided-tour.first.invite.description'),
+                        'skip' => true,
+                        'skip_text' => trans('trp.guided-tour.skip-step'),
+                    ];
                 }
 
-                $arr[] = 'save';
+                if(empty($this->user->description)) {
+                    $arr[] = [
+                        'action' => 'description',
+                        'title' => trans('trp.guided-tour.first.description.title'),
+                        'description' => trans('trp.guided-tour.first.description.description'),
+                        'skip' => true,
+                        'skip_text' => trans('trp.guided-tour.skip-step'),
+                    ];
+                }
+
+                if($this->user->photos->isEmpty()) {
+                    $arr[] = [
+                        'action' => 'photos',
+                        'title' => trans('trp.guided-tour.first.photos.title'),
+                        'description' => trans('trp.guided-tour.first.photos.description'),
+                        'skip' => true,
+                        'skip_text' => trans('trp.guided-tour.skip-step'),
+                    ];
+                }
+
+                if(!empty($this->user->is_clinic) && ($this->user->team->isEmpty() || $this->user->invites_team_unverified->isEmpty() )) {
+
+                    $arr[] = [
+                        'action' => 'team',
+                        'title' => trans('trp.guided-tour.first.team.title'),
+                        'description' => trans('trp.guided-tour.first.team.description'),
+                        'skip' => true,
+                        'skip_text' => trans('trp.guided-tour.skip-step'),
+                    ];
+                }
+
+                session(['guided_tour_count' => count($arr)]);
+
+                session(['guided_tour' => $arr]);
             }
 
-            if(!empty(Request::input('full'))) {
-                $arr[] = 'invite';
+            return Response::json([
+                'success' => true,
+                'steps' => session('guided_tour'),
+                'count_all_steps' => session('guided_tour_count'),
+            ] );
+        }
+
+        return Response::json([
+            'success' => false,
+        ]);
+    }
+
+    public function removeFirstGuidedTour($locale=null) {
+        session()->pull('reviews_guided_tour');
+
+        session()->pull('guided_tour');
+        session()->pull('guided_tour_count');
+
+        return Response::json([
+            'success' => false,
+        ]);
+    }
+
+    public function reviewsGuidedTour($locale=null, $layout=null) {
+        session()->pull('reviews_guided_tour');
+        
+        if(!empty($this->user) && $this->user->is_dentist && $this->user->reviews_in_standard()->isNotEmpty()) {
+
+            $arr = [
+                [
+                    'action' => 'add',
+                    'title' => trans('trp.guided-tour.reviews.add.title'),
+                    'description' => trans('trp.guided-tour.reviews.add.description'),
+                ],
+                [
+                    'action' => 'layout',
+                    'title' => trans('trp.guided-tour.reviews.layout.title'),
+                    'description' => trans('trp.guided-tour.reviews.layout.description'),
+                ],
+            ];
+
+            if($layout && ($layout == 'list' || $layout == 'carousel')) {
+
+                $arr[] = [
+                    'action' => 'reviews_type',
+                    'title' => trans('trp.guided-tour.reviews.reviews-type.title'),
+                    'description' => trans('trp.guided-tour.reviews.reviews-type.description'),
+                    'skip' => true,
+                    'skip_text' => trans('trp.guided-tour.ok'),
+                ];
+
+                $arr[] = [
+                    'action' => 'copy',
+                    'title' => trans('trp.guided-tour.reviews.copy.title'),
+                    'description' => trans('trp.guided-tour.reviews.copy.description'),
+                ];
             }
 
-            if(empty($this->user->description)) {
-                $arr[] = 'description';
+            if($layout && $layout == 'badge') {
+
+                $arr[] = [
+                    'action' => 'copy',
+                    'title' => trans('trp.guided-tour.reviews.copy.title'),
+                    'description' => trans('trp.guided-tour.reviews.copy.description'),
+                ];
             }
 
-            if(empty($this->user->photos)) {
-                $arr[] = 'photos';
+            if($layout && $layout == 'fb') {
+
+                $arr[] = [
+                    'action' => 'fb_id',
+                    'title' => trans('trp.guided-tour.reviews.fb.title'),
+                    'description' => trans('trp.guided-tour.reviews.fb.description'),
+                    'skip' => true,
+                    'skip_text' => trans('trp.guided-tour.ok'),
+                ];
+
+                $arr[] = [
+                    'action' => 'reviews_type',
+                    'title' => trans('trp.guided-tour.reviews.reviews-type.title'),
+                    'description' => trans('trp.guided-tour.reviews.reviews-type.description'),
+                    'skip' => true,
+                    'skip_text' => trans('trp.guided-tour.ok'),
+                ];
             }
 
             return Response::json([
                 'success' => true,
                 'steps' => $arr,
+                'count_all_steps' => $layout == 'badge' ? 3 : 4,
+                'image' => url('img-trp/reviews-step-icon.svg'),
             ] );
         }
 
-        return redirect(getLangUrl('/'));
+        return Response::json([
+            'success' => false,
+        ]);
     }
 
 }
