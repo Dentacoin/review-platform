@@ -2502,7 +2502,7 @@ $(document).ready(function(){
         var element_width = elm.outerWidth();
 
         if(bubble_at_top) {
-            $('.bubble-guided-tour').css('top', element_top - $('.bubble-guided-tour').outerHeight() - 20 );
+            $('.bubble-guided-tour').css('top', element_top - $('.bubble-guided-tour').innerHeight() - 20 );
         } else {
             $('.bubble-guided-tour').css('top', element_top + element_heigth + 20 );
         }
