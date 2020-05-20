@@ -532,7 +532,7 @@ class StatsController extends FrontController
         		'answer_id' => $answer_id,
                 'vox_scale_id' => !empty($question->vox_scale_id) || !empty($question->dont_randomize_answers) ? true : false,
                 'question_type' => $question->type,
-                'multiple_top_answers' => !empty($question->stats_top_answers) ? intval(explode('_', $question->stats_top_answers)[1]) : null,
+                'multiple_top_answers' => !empty($question->stats_top_answers) && $question->type == 'multiple_choice' ? intval(explode('_', $question->stats_top_answers)[1]) : null,
                 'q_id' => $question->id,
         	] );
         }
