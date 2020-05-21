@@ -1200,7 +1200,7 @@ $(document).ready(function(){
 
     //Work hours
 
-    $('#popup-wokring-time form').off('submit').submit( function(e) {
+    $('#popup-wokring-time form').submit( function(e) {
         e.preventDefault();
 
         if(ajax_is_running) {
@@ -2516,7 +2516,9 @@ $(document).ready(function(){
             $('.bubble-guided-tour').css('top', element_top + element_heigth + 20 );
         }
 
-        $('.bubble-guided-tour').css('left', element_left );
+        if($(window).outerWidth() > 768) {
+            $('.bubble-guided-tour').css('left', element_left );
+        }
 
         if($(window).outerWidth() <= 768) {
             setTimeout( function() {
@@ -2531,7 +2533,7 @@ $(document).ready(function(){
                     $('.bubble-guided-tour').css('left', 10 );
                 }
 
-            }, 100);
+            }, 1);
 
             $('.bubble-guided-tour .cap').css('left', element_left + (element_width / 2) - 14);
             if(bubble_at_top) {

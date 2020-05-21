@@ -5587,6 +5587,10 @@ textarea.input {
 				padding-left: 5px;
 				padding-right: 5px;
 				margin: 0px 5px;
+
+				&.grayed {
+					background-color: #eee;
+				}
 			}
 
 			.separator {

@@ -57,7 +57,7 @@
 		    		<div class="loader">
 		    			<i class="fas fa-circle-notch fa-spin"></i>
 		    		</div>
-					<input type="file" name="image" id="add-avatar-mobile" upload-url="{{ getLangUrl('profile/info/upload') }}">
+					<input type="file" name="image" id="add-avatar-mobile" upload-url="{{ getLangUrl('profile/info/upload') }}" accept="image/png,image/jpeg,image/jpg">
 				</label>
 				<a href="javascript:;" class="share-mobile" data-popup="popup-share">
 					<i class="fas fa-share-alt"></i>
@@ -367,7 +367,7 @@
 			    		<div class="loader">
 			    			<i class="fas fa-circle-notch fa-spin"></i>
 			    		</div>
-						<input type="file" name="image" id="add-avatar" upload-url="{{ getLangUrl('profile/info/upload') }}">
+						<input type="file" name="image" id="add-avatar" upload-url="{{ getLangUrl('profile/info/upload') }}" accept="image/png,image/jpeg,image/jpg">
 					</label>
 
 					<div class="media-right address-suggester-wrapper-input">
@@ -1013,7 +1013,7 @@
 								    		<div class="loader">
 								    			<i class="fas fa-circle-notch fa-spin"></i>
 								    		</div>
-											<input type="file" name="image" id="add-gallery-photo" upload-url="{{ getLangUrl('profile/gallery') }}" sure-trans="{!! trans('trp.page.user.gallery-sure') !!}">
+											<input type="file" name="image" id="add-gallery-photo" upload-url="{{ getLangUrl('profile/gallery') }}" sure-trans="{!! trans('trp.page.user.gallery-sure') !!}" accept="image/png,image/jpeg,image/jpg">
 										</label>
 									{!! Form::close() !!}
 								</div>			    				

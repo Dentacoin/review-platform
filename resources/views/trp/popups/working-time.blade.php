@@ -29,9 +29,8 @@
                             $hours,
                             !empty($user->work_hours[$day][0]) ? explode(':', $user->work_hours[$day][0])[0] : '' , 
                             array(
-                                'class' => 'input', 
+                                'class' => !empty($user->work_hours[$day]) ? 'input' : 'input grayed', 
                                 'placeholder' => 'HH',
-                                !empty($user->work_hours[$day]) ? 'something' : 'disabled' => 'disabled'
                             ) 
                         ) }}
                         {{ Form::select( 
@@ -39,9 +38,8 @@
                             $minutes,
                             !empty($user->work_hours[$day][0]) ? explode(':', $user->work_hours[$day][0])[1] : '' , 
                             array(
-                                'class' => 'input', 
+                                'class' => !empty($user->work_hours[$day]) ? 'input' : 'input grayed', 
                                 'placeholder' => 'MM',
-                                !empty($user->work_hours[$day]) ? 'something' : 'disabled' => 'disabled'
                             ) 
                         ) }}
                         <div class="separator"></div> 
@@ -50,9 +48,8 @@
                             $hours,
                             !empty($user->work_hours[$day][1]) ? explode(':', $user->work_hours[$day][1])[0] : '' , 
                             array(
-                                'class' => 'input', 
+                                'class' => !empty($user->work_hours[$day]) ? 'input' : 'input grayed', 
                                 'placeholder' => 'HH',
-                                !empty($user->work_hours[$day]) ? 'something' : 'disabled' => 'disabled'
                             ) 
                         ) }}
                         {{ Form::select( 
@@ -60,9 +57,8 @@
                             $minutes,
                             !empty($user->work_hours[$day][1]) ? explode(':', $user->work_hours[$day][1])[1] : '' , 
                             array(
-                                'class' => 'input', 
+                                'class' => !empty($user->work_hours[$day]) ? 'input' : 'input grayed', 
                                 'placeholder' => 'MM',
-                                !empty($user->work_hours[$day]) ? 'something' : 'disabled' => 'disabled'
                             ) 
                         ) }}
                     </div>
@@ -80,9 +76,9 @@
 			
 			<input type="hidden" name="json" value="1" />
 			<input type="hidden" name="field" value="work_hours" />
-			<div class="tac">
+			<!-- <div class="tac">
 				<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-wokring-time.save')) !!}">
-			</div>
+			</div> -->
 
 		{!! Form::close() !!}
 	</div>

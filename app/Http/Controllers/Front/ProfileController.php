@@ -1218,17 +1218,17 @@ class ProfileController extends FrontController
                 if( Request::exists($key) || (Request::input('field')=='specialization' && $key=='specialization') || $key=='email_public' || (Request::input('field')=='accepted_payment' && $key=='accepted_payment') ) {
                     if($key=='work_hours') {
                         $wh = Request::input('work_hours');
+
                         foreach ($wh as $k => $v) {
-                            if( empty($wh[$k][0][0]) || empty($wh[$k][0][1]) || empty($wh[$k][1][0]) || empty($wh[$k][1][1]) ) { 
+                            if( empty($wh[$k][0][0]) || empty($wh[$k][0][1]) || empty($wh[$k][1][0]) || empty($wh[$k][1][1]) || empty(Request::input('day-'.$k))) { 
                                 unset($wh[$k]);
                                 continue;
                             }
 
-
-                            if( !empty($wh[$k][0]) ) {
+                            if( !empty($wh[$k][0]) && !empty(Request::input('day-'.$k))) {
                                 $wh[$k][0] = implode(':', $wh[$k][0]);
                             }
-                            if( !empty($wh[$k][1]) ) {
+                            if( !empty($wh[$k][1]) && !empty(Request::input('day-'.$k)) ) {
                                 $wh[$k][1] = implode(':', $wh[$k][1]);
                             }
                         }

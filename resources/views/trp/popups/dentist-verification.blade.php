@@ -188,9 +188,8 @@
                             $hours,
                             '' , 
                             array(
-                                'class' => 'input', 
+                                'class' => 'input grayed', 
                                 'placeholder' => 'HH',
-                                'disabled' => 'disabled'
                             ) 
                         ) }}
                         {{ Form::select( 
@@ -198,9 +197,8 @@
                             $minutes,
                             '' , 
                             array(
-                                'class' => 'input', 
+                                'class' => 'input grayed', 
                                 'placeholder' => 'MM',
-                                'disabled' => 'disabled'
                             ) 
                         ) }}
                         <div class="separator"></div> 
@@ -209,9 +207,8 @@
                             $hours,
                             '' , 
                             array(
-                                'class' => 'input', 
+                                'class' => 'input grayed', 
                                 'placeholder' => 'HH',
-                                'disabled' => 'disabled'
                             ) 
                         ) }}
                         {{ Form::select( 
@@ -219,9 +216,8 @@
                             $minutes,
                             '' , 
                             array(
-                                'class' => 'input', 
+                                'class' => 'input grayed', 
                                 'placeholder' => 'MM',
-                                'disabled' => 'disabled'
                             ) 
                         ) }}
                     </div>
@@ -239,9 +235,9 @@
 			
 			<input type="hidden" name="json" value="1" />
 			<input type="hidden" name="field" value="work_hours" />
-			<div class="tac">
+			<!-- <div class="tac">
 				<input type="submit" class="button" value="{!! nl2br(trans('trp.popup.popup-wokring-time.save')) !!}">
-			</div>
+			</div> -->
 
 		{!! Form::close() !!}
 	</div>

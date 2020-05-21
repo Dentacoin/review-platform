@@ -275,9 +275,9 @@ jQuery(document).ready(function($){
 		} else if(id=='popup-wokring-time' || id=='popup-wokring-time-waiting') {
 
 			if($('#'+id).is('[empty-hours]')) {
-				setTimeout( function() {
-		        	$('.work-hour-cb:not([name="day-6"]):not([name="day-7"])').trigger('click');
-		        }, 200 );
+				// setTimeout( function() {
+		  //       	$('.work-hour-cb:not([name="day-6"]):not([name="day-7"])').trigger('click');
+		  //       }, 200 );
 				
 				$('.popup-desc').each( function() {
 					$(this).find('select').first().find('option[value="09"]').attr('selected','selected');
@@ -316,6 +316,7 @@ jQuery(document).ready(function($){
 		}
 		if($('#popup-wokring-time-waiting').hasClass('active')) {
 			waiting_for_approval = true;
+			$('#popup-wokring-time-waiting form').submit();
 		}
 		if($('#popup-existing-dentist').hasClass('active')) {
 			existing_dentist = true;
@@ -323,6 +324,10 @@ jQuery(document).ready(function($){
 
 		if(($('#add-team-popup').hasClass('active') || $('#popup-invite').hasClass('active')) && $('body').hasClass('guided-tour')) {
 			$('.bubble-guided-tour .skip-step').trigger('click');
+		}
+
+		if($('#popup-wokring-time').hasClass('active')) {
+			$('#popup-wokring-time form').submit();
 		}
 
 		if(existing_dentist) {
@@ -347,6 +352,7 @@ jQuery(document).ready(function($){
 		if (waiting_for_approval) {
 			showPopup( 'verification-popup' );
 		}
+
 	}
 
 	handlePopups = function(id) {
@@ -469,9 +475,11 @@ jQuery(document).ready(function($){
         var active = $(this).is(':checked');
         var texts = $(this).closest('.popup-desc').find('select');
         if(active) {
-            texts.prop("disabled", false);
+        	texts.removeClass('grayed');
+            //texts.prop("disabled", false);
         } else {
-            texts.attr('disabled', 'disabled');
+        	texts.addClass('grayed');
+            //texts.attr('disabled', 'disabled');
         }
 
         if ($(this).attr('name') == 'day-1') {
@@ -483,6 +491,17 @@ jQuery(document).ready(function($){
         }
     } );
 
+    $('.popup-wokring-time select').on('change click',  function() {
+    	$(this).closest('.popup-desc').find('input').prop('checked', true);
+    	$(this).closest('.popup-desc').find('select').removeClass('grayed');
+
+    	if ($('#day-1').is(':checked')) {
+            $('.all-days-equal').show();
+        } else {
+            $('.all-days-equal').hide();
+        }
+    });
+
     $('.all-days-equal').click( function() {
         for (var i = 2; i<6; i++) {
             if (!$('#day-'+i).is(':checked')) {
@@ -493,7 +512,6 @@ jQuery(document).ready(function($){
             $('[name="work_hours['+i+'][1][0]"]').val($('[name="work_hours[1][1][0]"]').val());
             $('[name="work_hours['+i+'][1][1]"]').val($('[name="work_hours[1][1][1]"]').val());
         }
-        
     });
 
 	$('input[name="mode"]').change( function() {

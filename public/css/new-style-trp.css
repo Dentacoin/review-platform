@@ -4231,6 +4231,8 @@ textarea.input {
     padding-left: 5px;
     padding-right: 5px;
     margin: 0px 5px; }
+    .popup-wokring-time .popup-inner .popup-desc select.grayed {
+      background-color: #eee; }
   .popup-wokring-time .popup-inner .popup-desc .separator {
     background: #333333;
     width: 36px;
