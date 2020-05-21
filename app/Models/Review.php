@@ -95,7 +95,7 @@ class Review extends Model {
 
         if($this->verified) {
             $reward = new DcnReward();
-            $reward->user_id = $this->dentist_id ? $this->dentist_id : $this->clinic_id;
+            $reward->user_id = $this->review_to_id;
             $reward->platform = 'trp';
             $reward->reward = Reward::getReward('reward_dentist');
             $reward->type = 'dentist-review';
@@ -116,6 +116,33 @@ class Review extends Model {
             }
 
             $reward->save();
+
+
+            $dent_id = $this->review_to_id;
+            $reviews = self::where(function($query) use ($dent_id) {
+                $query->where( 'dentist_id', $dent_id)->orWhere('clinic_id', $dent_id);
+            })->where('user_id', $this->user_id)
+            ->get();
+
+            if ($reviews->count()) {
+                
+                foreach ($reviews as $review) {
+                    if(empty($review->verified)) {
+                        
+                        $review->verified = true;
+                        $review->save();
+
+                        $reward = new DcnReward();
+                        $reward->user_id = $this->user_id;
+                        $reward->platform = 'trp';
+                        $reward->reward = Reward::getReward('review_trusted');
+                        $reward->type = 'review_trusted';
+                        $reward->reference_id = $this->id;
+
+                        $reward->save();
+                    }
+                }
+            }
         }
 
 
