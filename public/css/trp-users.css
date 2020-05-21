@@ -1575,7 +1575,8 @@ body.edit-user .information {
   touch-action: none; }
   @media screen and (max-width: 768px) {
     .bubble-guided-tour {
-      max-width: 300px; } }
+      max-width: 300px;
+      min-width: 300px; } }
   @media screen and (max-width: 768px) {
     .bubble-guided-tour .flex {
       display: flex; } }

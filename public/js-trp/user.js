@@ -662,8 +662,6 @@ $(document).ready(function(){
             }
         });
         ajax_is_running = false;
-
-
     } );
 
 
@@ -1217,6 +1215,11 @@ $(document).ready(function(){
                 if(data.success) {
                     $('input[data-popup-logged="popup-wokring-time"]').val(data.value);
                     closePopup();
+
+                    if($('body').hasClass('guided-tour')) {
+                        $('.bubble-guided-tour .skip-step').trigger('click');
+                    }
+
                 } else {
                     $(this).find('.alert').show();
 
@@ -2422,7 +2425,13 @@ $(document).ready(function(){
         }
 
         if(!$('#fb-page-id').val()) {
-            $('#fb-page-id').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="page">Please, add your Facebook Page ID</div>');
+            $('#fb-page-id').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="page">'+$('.facebook-tab').attr('error-missing')+'</div>');
+            $('#fb-page-id').addClass('has-error');
+            return;
+        }
+
+        if(!$.isNumeric($('#fb-page-id'))) {
+            $('#fb-page-id').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="page">'+$('.facebook-tab').attr('error-not-numeric')+'</div>');
             $('#fb-page-id').addClass('has-error');
             return;
         }
@@ -2512,10 +2521,17 @@ $(document).ready(function(){
         if($(window).outerWidth() <= 768) {
             setTimeout( function() {
 
-                if ((element_left + $('.bubble-guided-tour').outerWidth() + 20) > $(window).outerWidth() ) {
-                    $('.bubble-guided-tour').css('left', 105 );
+                $('.bubble-guided-tour').css('left', element_left + ( ( element_width - $('.bubble-guided-tour').outerWidth() ) / 2) );
+
+                if( $('.bubble-guided-tour').offset().left + $('.bubble-guided-tour').outerWidth() > $(window).width() - 10 ) {
+                    $('.bubble-guided-tour').css('left', $(window).width() - $('.bubble-guided-tour').outerWidth() - 10 );
                 }
-            }, 200);
+
+                if( $('.bubble-guided-tour').offset().left < 10 ) {
+                    $('.bubble-guided-tour').css('left', 10 );
+                }
+
+            }, 100);
 
             $('.bubble-guided-tour .cap').css('left', element_left + (element_width / 2) - 14);
             if(bubble_at_top) {
@@ -2566,7 +2582,6 @@ $(document).ready(function(){
 
         } else {
             if(!$('.popup.active').length) {
-                console.log('dfgfdg');
                 $('html, body').animate({
                     scrollTop: $('['+tour_item+'="'+step.action+'"]:visible').offset().top - 200
                 }, 0);
@@ -2588,7 +2603,7 @@ $(document).ready(function(){
                 
             } else {
 
-                if(step_number == 2 && $(window).outerWidth() <= 768) {
+                if(step.action == 'save' && $(window).outerWidth() <= 768) {
 
                     //to not skip save, because invite button is hidden in edit mode
                     $('.bubble-guided-tour .skip-step').hide();
@@ -2892,7 +2907,7 @@ $(document).ready(function(){
                         } else {
 
                             $.ajax( {
-                                url: window.location.origin+'/en/profile/first-guided-tour-remove/',
+                                url: window.location.origin+'/en/profile/reviews-guided-tour-remove/',
                                 type: 'GET',
                             });
 

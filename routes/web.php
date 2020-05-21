@@ -305,6 +305,7 @@ $reviewRoutes = function () {
 				Route::get('profile/check-reviews', 					'ProfileController@checkReviews');
 				Route::get('profile/first-guided-tour', 				'ProfileController@firstGuidedTour');
 				Route::get('profile/first-guided-tour-remove', 			'ProfileController@removeFirstGuidedTour');
+				Route::get('profile/reviews-guided-tour-remove', 		'ProfileController@removeReviewsGuidedTour');
 				Route::get('profile/reviews-guided-tour/{layout?}', 	'ProfileController@reviewsGuidedTour');
 
 				Route::post('share', 									'MiscController@share');

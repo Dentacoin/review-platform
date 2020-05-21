@@ -2339,6 +2339,7 @@ body.edit-user {
 
     @media #{$phone} {
     	max-width: 300px;
+    	min-width: 300px;
     }
 
     .flex {

@@ -1708,7 +1708,7 @@ class ProfileController extends FrontController
                             'title' => trans('trp.guided-tour.first.socials.title'),
                             'description' => trans('trp.guided-tour.first.socials.description'),
                             'skip' => true,
-                            'skip_text' => trans('trp.guided-tour.ok'),
+                            'skip_text' => strtoupper(trans('trp.guided-tour.ok')),
                         ];
                     }
 
@@ -1780,10 +1780,18 @@ class ProfileController extends FrontController
     }
 
     public function removeFirstGuidedTour($locale=null) {
-        session()->pull('reviews_guided_tour');
 
         session()->pull('guided_tour');
         session()->pull('guided_tour_count');
+
+        return Response::json([
+            'success' => false,
+        ]);
+    }
+
+    public function removeReviewsGuidedTour($locale=null) {
+
+        session()->pull('reviews_guided_tour');
 
         return Response::json([
             'success' => false,

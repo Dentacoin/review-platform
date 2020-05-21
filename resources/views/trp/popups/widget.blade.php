@@ -93,6 +93,10 @@
 					    	<img class="layout-img" src="{{ url('img-trp/fb-tab.png') }}" alt="{{ trans('trp.alt-tags.fb-tab') }}">
 					    	<div class="widget-option">
 					    		<p layout-text="{!! nl2br(trans('trp.popup.popup-widget.layout.fb')) !!}">• {!! nl2br(trans('trp.popup.popup-widget.layout.fb')) !!}</p>
+
+					    		<div class="select-wrap flex flex-mobile">
+					    		 	<span>{!! nl2br(trans('trp.popup.popup-widget.layout.fb.hint')) !!}</span>
+					    		</div>
 					    	</div>
 					  	</label>
 					</div>
@@ -113,7 +117,7 @@
 				<img id="selected-image-layout" src="{{ url('img-trp/widget-carousel.png') }}">
 			</div>
 
-			<div class="facebook-tab show-fb">
+			<div class="facebook-tab show-fb" error-missing="{{ trans('trp.popup.popup-widget.fb-page-id.missing-page-id') }}" error-not-numeric="{{ trans('trp.popup.popup-widget.fb-page-id.not-numeric-page-id', ['link' => '<a href="https://reviews.dentacoin.com/blog/display-trusted-reviews-on-facebook-with-the-new-tab/" target="_blank">', 'endlink' => '</a>']) }}">
 				<p class="tab-info"><img src="{{ url('img-trp/info.svg') }}">{!! trans('trp.popup.popup-widget.fb-info') !!}</p>
 				<div class="modern-field alert-after dont-count" reviews-guided-action="fb_id">
 					<input type="text" name="fb-page-id" id="fb-page-id" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
