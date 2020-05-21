@@ -1539,6 +1539,18 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
 
             $dp->save();
 
+            $mtext = 'Dentist <a href="'.$this->user->getLink().'">'.$this->user->getName().'</a> add a FB Tab';
+
+            Mail::send([], [], function ($message) use ($mtext) {
+                $sender = config('mail.from.address');
+                $sender_name = config('mail.from.name');
+
+                $message->from($sender, $sender_name);
+                $message->to( 'petya.ivanova@dentacoin.com' );
+                $message->subject('Dentist add a FB Tab');
+                $message->setBody($mtext, 'text/html'); // for HTML rich messages
+            });
+
             return Response::json([
                 'success' => true,
                 'link' => 'https://www.facebook.com/dialog/pagetab?app_id=1906201509652855&redirect_uri='.$this->user->getLink().'?popup=facebook-tab-success',
