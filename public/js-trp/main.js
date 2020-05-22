@@ -113,22 +113,22 @@ jQuery(document).ready(function($){
 		if(id=='popup-login') {
 			setTimeout( function() {
 				$.event.trigger({type: 'openPatientLogin'});
-			}, 1000);
+			}, 500);
 
 		} else if(id=='popup-login-dentist') {
 			setTimeout( function() {
 				$.event.trigger({type: 'openDentistLogin'});
-			}, 1000);
+			}, 500);
 
 		} else if(id=='popup-register-dentist') {
 			setTimeout( function() {
 				$.event.trigger({type: 'openDentistRegister'});
-			}, 1000);
+			}, 500);
 
 		} else if(id=='popup-register') {
 			setTimeout( function() {
 				$.event.trigger({type: 'openPatientRegister'});
-			}, 1000);
+			}, 500);
 
 		} else if(id=='map-results-popup') {
 			prepareMapFucntion( function() {    
