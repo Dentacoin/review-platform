@@ -185,7 +185,20 @@ $(document).ready(function(){
 		VoxTest.handleNextQuestion();		
 	}
 
-	if ($('#bot-group').length) {
+	var urlParam = function(name){
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if(results) {
+	    	return results[1];
+	    } else {
+	    	return 0;
+	    }
+	    
+	}
+
+	if(urlParam('testmode') !== 0 && urlParam('q-id') !== 0 ) {
+		$('.question-group').hide();
+		$('.question-group-'+urlParam('q-id')).show();
+	} else if ($('#bot-group').length) {
 		$('.question-group').hide();
         $('#bot-group').show();
 	} else if ($('.question-group[welcome=1]').length) {

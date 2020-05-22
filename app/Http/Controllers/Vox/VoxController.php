@@ -764,7 +764,10 @@ class VoxController extends FrontController
 							        $answer->answer = 0;
 							        $answer->is_skipped = true;
 							        $answer->country_id = $this->user->country_id;
-							        $answer->save();
+							        
+							        if(!$testmode) {
+							        	$answer->save();
+							        }
 							        $answered[$q] = 0;
 
 							        $skips = request('skips');
@@ -779,7 +782,9 @@ class VoxController extends FrontController
 										        $answer->answer = 0;
 										        $answer->is_skipped = true;
 										        $answer->country_id = $this->user->country_id;
-										        $answer->save();
+										        if(!$testmode) {
+										        	$answer->save();
+										        }
 										        $answered[$skip_id] = 0;
 							        		}
 							        	}
@@ -797,7 +802,9 @@ class VoxController extends FrontController
 							        $answer->answer = $a;
 							        $answer->country_id = $this->user->country_id;
 							        $this->setupAnswerStats($answer);
-						        	$answer->save();
+						        	if(!$testmode) {
+							        	$answer->save();
+							        }
 							        $answered[$q] = $a;
 
 							        if( $found->cross_check ) {
@@ -877,7 +884,9 @@ class VoxController extends FrontController
 									        $answer->answer = 0;
 									        $answer->country_id = $this->user->country_id;
 							        		$this->setupAnswerStats($answer);
-									        $answer->save();
+									        if(!$testmode) {
+									        	$answer->save();
+									        }
 									        $answered[$q] = 0;
 
 							    		}
@@ -898,7 +907,9 @@ class VoxController extends FrontController
 								        $answer->country_id = $this->user->country_id;
 							        	$this->setupAnswerStats($answer);
 
-								        $answer->save();
+								        if(!$testmode) {
+								        	$answer->save();
+								        }
 			        				}
 								    $answered[$q] = $a;
 			        			} else if($type == 'scale') {
@@ -915,7 +926,9 @@ class VoxController extends FrontController
 								        $answer->scale = $value;
 								        $answer->country_id = $this->user->country_id;
 							        	$this->setupAnswerStats($answer);
-								        $answer->save();
+								        if(!$testmode) {
+								        	$answer->save();
+								        }
 			        				}
 								    $answered[$q] = $a;
 			        			}

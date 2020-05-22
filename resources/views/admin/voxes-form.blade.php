@@ -440,6 +440,7 @@
                                     <th>{{ trans('admin.page.'.$current_page.'.question-type') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-trigger') }}</th>
                                     <th>Respondents</th>
+                                    <th>Test question</th>
                                     <th>Duplicate</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-edit') }}</th>
                                     <th>{{ trans('admin.page.'.$current_page.'.question-delete') }}</th>
@@ -472,6 +473,11 @@
                                             </a>
                                         </td>
                                         <td>
+                                            <a class="btn btn-sm btn-info" href="{{ $item->getLink().'?testmode=1&q-id='.$question->id }}" target="_blank">
+                                                Test
+                                            </a>
+                                        </td>
+                                        <td>
                                             <a class="btn btn-sm btn-success diplicate-q-button" href="javascript:;" q-id="{{ $question->id }}" data-toggle="modal" data-target="#duplicateModal">
                                                 <i class="fa fa-paste"></i>
                                             </a>
@@ -493,8 +499,6 @@
                     </div>
                 </div>
             @endif
-
-
 
             <a class="btn btn-primary btn-block" href="javascript: $('#add-new-question').show(); $('#add-new-question').prev().hide();">
                 Add Question
