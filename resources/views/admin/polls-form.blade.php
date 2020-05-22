@@ -47,11 +47,11 @@
 		                        </div>
 		                    @endif
 	                    </div>
-	                        
+	                    
 	                	<div class="form-group">
 	                       	<label class="col-md-2 control-label">Calendar date</label>
 			                <div class="col-md-5">
-			                    {{ Form::text('launched_at', !empty($item) && $item->launched_at ? date('Y-m-d', $item->launched_at->timestamp ) : null, array('class' => 'form-control polldatepicker', 'autocomplete' => 'off')) }}
+			                    {{ Form::text('launched_at', !empty($item) && $item->launched_at ? date('Y-m-d', $item->launched_at->timestamp ) : date('Y-m-d', \App\Models\Poll::orderby('id','desc')->first()->launched_at->timestamp + 86400), array('class' => 'form-control polldatepicker', 'autocomplete' => 'off')) }}
 			                </div>
 			            </div>
 	                        
