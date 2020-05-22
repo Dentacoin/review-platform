@@ -4018,3 +4018,6 @@ svg:not(:root) {
   color: black; }
 .dentacoin-login-gateway-container .padding-top-50 {
   color: white; }
+.dentacoin-login-gateway-container .blue-a {
+  color: #0fb0e5;
+  font-size: 18px; }

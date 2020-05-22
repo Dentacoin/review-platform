@@ -1574,6 +1574,13 @@ jQuery(document).ready(function($){
 		});
     });
 
+
+    // $('.log-link').click( function(e) {
+    // 	e.preventDefault();
+    // 	console.log('asdfdsf');
+    // 	//window.location.href = window.location.href+'?dcn-gateway-type=patient-login';
+    // });
+
 });
 
 //

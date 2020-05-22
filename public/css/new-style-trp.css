@@ -6405,3 +6405,6 @@ body.strength-pb {
 .dentacoin-login-gateway-container .cr-viewport,
 .dentacoin-login-gateway-container .cr-overlay {
   background: transparent !important; }
+.dentacoin-login-gateway-container .blue-a {
+  color: #0fb0e5;
+  font-size: 18px; }
