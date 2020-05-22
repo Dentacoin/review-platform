@@ -110,7 +110,27 @@ jQuery(document).ready(function($){
     });
 
 	showPopup = function(id, e) {
-		if(id=='map-results-popup') {
+		if(id=='popup-login') {
+			setTimeout( function() {
+				$.event.trigger({type: 'openPatientLogin'});
+			}, 500);
+
+		} else if(id=='popup-login-dentist') {
+			setTimeout( function() {
+				$.event.trigger({type: 'openDentistLogin'});
+			}, 500);
+
+		} else if(id=='popup-register-dentist') {
+			setTimeout( function() {
+				$.event.trigger({type: 'openDentistRegister'});
+			}, 500);
+
+		} else if(id=='popup-register') {
+			setTimeout( function() {
+				$.event.trigger({type: 'openPatientRegister'});
+			}, 500);
+
+		} else if(id=='map-results-popup') {
 			prepareMapFucntion( function() {    
 				var search_map = new google.maps.Map(document.getElementById('search-map'), {
 					center: {
