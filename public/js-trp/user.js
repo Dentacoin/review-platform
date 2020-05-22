@@ -2605,15 +2605,8 @@ $(document).ready(function(){
                 
             } else {
 
-                if(step.action == 'save' && $(window).outerWidth() <= 768) {
-
-                    //to not skip save, because invite button is hidden in edit mode
-                    $('.bubble-guided-tour .skip-step').hide();
-                } else {
-
-                    $('.bubble-guided-tour .skip-step').html(step.skip_text);
-                    $('.bubble-guided-tour .skip-step').show();
-                }
+                $('.bubble-guided-tour .skip-step').html(step.skip_text);
+                $('.bubble-guided-tour .skip-step').show();
             }
         } else {
             $('.bubble-guided-tour .skip-step').hide();
@@ -2651,6 +2644,11 @@ $(document).ready(function(){
                             var step = data.steps[0];
                             var step_number = 0;
 
+                            gtag('event', 'Start', {
+                                'event_category': 'GuidedTour',
+                                'event_label': 'WelcomeStart',
+                            });
+
                         } else if(that.hasClass('go-tour')) {
                             var step = data.steps[0];
                             var step_number = 0;
@@ -2660,6 +2658,11 @@ $(document).ready(function(){
                             $('.edit-profile').removeClass('active');
                             $('.edit-button').removeClass('active');
                             $('body').removeClass('edit-user');
+
+                            gtag('event', 'Start', {
+                                'event_category': 'GuidedTour',
+                                'event_label': 'WelcomeStart',
+                            });
 
                         } else {
                             var step = data.steps[parseInt($('.bubble-guided-tour').attr('step-number')) + 1];
@@ -2704,6 +2707,11 @@ $(document).ready(function(){
                             }
 
                         } else {
+                            gtag('event', 'Finish', {
+                                'event_category': 'GuidedTour',
+                                'event_label': 'WelcomeComplete',
+                            });
+
                             $.ajax( {
                                 url: window.location.origin+'/en/profile/first-guided-tour-remove/',
                                 type: 'GET',
@@ -2850,6 +2858,11 @@ $(document).ready(function(){
 
                             var step = data.steps[0];
                             var step_number = 0;
+
+                            gtag('event', 'Start', {
+                                'event_category': 'GuidedTour',
+                                'event_label': 'WidgetsStart',
+                            });
                             
                         } else if(that.hasClass('back-widget')) {
                             //back button to return to step one
@@ -2907,6 +2920,10 @@ $(document).ready(function(){
                             }
 
                         } else {
+                            gtag('event', 'Finish', {
+                                'event_category': 'GuidedTour',
+                                'event_label': 'WidgetsComplete',
+                            });
 
                             $.ajax( {
                                 url: window.location.origin+'/en/profile/reviews-guided-tour-remove/',

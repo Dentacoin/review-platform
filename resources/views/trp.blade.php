@@ -404,7 +404,7 @@
 				dcnGateway.init({
 					'platform' : '{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.reviews' : 'trusted-reviews' !!}',
 					'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=trusted-reviews'
-				});				
+				});
 			</script>
 		@endif
 

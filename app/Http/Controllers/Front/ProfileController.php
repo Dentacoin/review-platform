@@ -1716,8 +1716,7 @@ class ProfileController extends FrontController
                         'action' => 'save',
                         'title' => trans('trp.guided-tour.first.save.title'),
                         'description' => trans('trp.guided-tour.first.save.description'),
-                        'skip' => true,
-                        'skip_text' => trans('trp.guided-tour.skip-step'),
+                        'skip' => false,
                     ];
                 }
 
