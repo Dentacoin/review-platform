@@ -2741,7 +2741,7 @@ $(document).ready(function(){
             type: 'GET',
             dataType: 'json',
             success: function( data ) {
-                $('#first-guided-tour').removeClass('active');
+                window.location.reload();
             },
         });
         ajax_is_running = false;
@@ -2759,7 +2759,7 @@ $(document).ready(function(){
             type: 'GET',
             dataType: 'json',
             success: function( data ) {
-                $('#first-guided-tour').removeClass('active');
+                window.location.reload();
             }
         });
         ajax_is_running = false;
