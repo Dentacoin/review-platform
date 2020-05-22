@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1 class="page-header">IPs with more than 1 user in the last 31 days</h1>
+<h1 class="page-header">IPs with more than 1 user</h1>
 <!-- end page-header -->
 
 <div class="row">
@@ -31,4 +31,33 @@
         </div>
     </div>
 </div>
+
+@if($total_pages > 1)
+    <nav aria-label="Page navigation" style="text-align: center;">
+        <ul class="pagination">
+            <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
+                <a class="page-link" href="{{ url('cms/scammers/?page=1') }}" aria-label="Previous">
+                    <span aria-hidden="true"> << </span>
+                </a>
+            </li>
+            <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
+                <a class="page-link prev" href="{{ url('cms/scammers/?page='.($page>1 ? $page-1 : '1')) }}"  aria-label="Previous">
+                    <span aria-hidden="true"> < </span>
+                </a>
+            </li>
+            @for($i=$start; $i<=$end; $i++)
+                <li class="{{ ($i == $page ?  'active' : '') }}">
+                    <a class="page-link" href="{{ url('cms/scammers/?page='.$i) }}">{{ $i }}</a>
+                </li>
+            @endfor
+            <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
+                <a class="page-link next" href="{{ url('cms/scammers/?page='.($page < $total_pages ? $page+1 :  $total_pages)) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
+            </li>
+            <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
+                <a class="page-link" href="{{ url('cms/scammers/?page='.$total_pages) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
+            </li>
+        </ul>
+    </nav>
+@endif
+
 @endsection
