@@ -264,7 +264,7 @@
                             <div class="form-group clearfix">
                                 @foreach($langs as $code => $lang_info)
                                     <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} col-md-12">
-                                        {{ Form::textarea('stats_subtitle-'.$code, !empty($question) ? $question->translateorNew($code)->stats_subtitle : old('stats_subtitle-'.$code), array('maxlength' => 2048, 'class' => 'form-control input-title', 'style' => 'max-height: 100px;', 'placeholder' => 'Statistics subtitle in '.$lang_info['name'])) }}
+                                        {{ Form::text('stats_subtitle-'.$code, !empty($question) ? $question->translateorNew($code)->stats_subtitle : old('stats_subtitle-'.$code), array('maxlength' => 2048, 'class' => 'form-control input-title', 'style' => 'max-height: 100px;', 'placeholder' => 'Statistics subtitle in '.$lang_info['name'])) }}
                                     </div>
                                 @endforeach
                             </div>
