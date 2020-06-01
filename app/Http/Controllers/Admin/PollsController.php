@@ -130,6 +130,7 @@ class PollsController extends AdminController {
 	                $translation = $newpoll->translateOrNew($key);
 	                $translation->poll_id = $newpoll->id;
 	                $translation->question = $this->request->input('question-'.$key);
+                    $translation->save();
 	            }
 	            if(!empty( $this->request->input('answers-'.$key) )) {
                     $newAnswers = $this->request->input('answers-'.$key);
