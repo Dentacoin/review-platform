@@ -131,7 +131,6 @@ class PollsController extends AdminController {
 	                $translation->poll_id = $newpoll->id;
 	                $translation->question = $this->request->input('question-'.$key);
 	            }
-
 	            if(!empty( $this->request->input('answers-'.$key) )) {
                     $newAnswers = $this->request->input('answers-'.$key);
 
@@ -141,6 +140,7 @@ class PollsController extends AdminController {
                             $newAnswersArr[] = $va;
                        }
                     }
+                    $translation = $newpoll->translateOrNew($key);
                     $translation->answers = json_encode( $newAnswersArr );
                 } else {
                     $translation->answers = '';
@@ -234,7 +234,7 @@ class PollsController extends AdminController {
                             $translator = [];
 
                             if(!empty($oldAnswers)) {
-                                
+
                                 foreach ($oldAnswers as $key => $value) {
                                     $translator[($key+1)] = array_search($value, $newAnswersArr) + 1;
                                 }
