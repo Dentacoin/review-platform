@@ -503,11 +503,11 @@
             @endforeach
         @endif
         @if($current_page == 'daily-polls')
-        	<script src="{{ url('/calendar/core/main.min.js').'?ver='.$cache_version }}"></script>
-        	<script src="{{ url('/calendar/interaction/main.min.js').'?ver='.$cache_version }}"></script>
-        	<script src="{{ url('/calendar/daygrid/main.min.js').'?ver='.$cache_version }}"></script>
-        	<script src="{{ url('/calendar/timegrid/main.min.js').'?ver='.$cache_version }}"></script>
-        	<script src="{{ url('/calendar/list/main.min.js').'?ver='.$cache_version }}"></script>
+        	<script src="{{ url('/calendar/core/main.min.js') }}"></script>
+        	<script src="{{ url('/calendar/interaction/main.min.js') }}"></script>
+        	<script src="{{ url('/calendar/daygrid/main.min.js') }}"></script>
+        	<script src="{{ url('/calendar/timegrid/main.min.js') }}"></script>
+        	<script src="{{ url('/calendar/list/main.min.js') }}"></script>
         @endif
         @if(!empty($jscdn) && is_array($jscdn))
             @foreach($jscdn as $file)

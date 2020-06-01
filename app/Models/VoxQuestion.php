@@ -51,10 +51,10 @@ class VoxQuestion extends Model {
     }
 
     public function respondents() {
-        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user');
+        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->whereNull('is_admin')->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user');
     }
     public function respondent_count() {
-        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->select(DB::raw('count( distinct `user_id`) as num'))->first()->num;
+        return $this->hasMany('App\Models\VoxAnswer', 'question_id', 'id')->whereNull('is_admin')->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->select(DB::raw('count( distinct `user_id`) as num'))->first()->num;
     }
 
     public function questionWithTooltips() {

@@ -62,10 +62,56 @@ class VoxesController extends AdminController
 
     public function list( ) {
 
+        $error = false;
+        $error_arr = [];
+
+        $voxes_stats = Vox::where('has_stats', 1)->where('type', '!=', 'hidden')->get();
+
+        foreach ($voxes_stats as $voxes_stat) {
+
+            if(empty($voxes_stat->stats_description)) {
+                $error_arr[] = [
+                    'error' => 'Missing stats description',
+                    'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$voxes_stat->id,
+                ];
+
+                $error = true;
+            }
+
+            if(empty($voxes_stat->stats_questions)) {
+                $error_arr[] = [
+                    'error' => 'Missing stats questions',
+                    'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$voxes_stat->id,
+                ];
+
+                $error = true;
+            } else {
+
+                foreach ($voxes_stat->stats_questions as $stat) {
+                    if(empty($stat->stats_title)) {
+                        $error_arr[] = [
+                            'error' => 'Missing stats question title',
+                            'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$voxes_stat->id.'/question/'.$stat->id.'/',
+                        ];
+                        $error = true;
+                    }
+                    if(empty($stat->stats_fields) && $stat->used_for_stats != 'dependency') {
+                        $error_arr[] = [
+                            'error' => 'Missing stats question demographics',
+                            'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$voxes_stat->id.'/question/'.$stat->id.'/',
+                        ];
+                        $error = true;
+                    }
+                }
+            }
+        }
+
     	return $this->showView('voxes', array(
             'voxes' => Vox::orderBy('sort_order', 'ASC')->get(),
             'active_voxes_count' => Vox::where('type', '!=', 'hidden')->count(),
             'hidden_voxes_count' => Vox::where('type', 'hidden')->count(),
+            'error_arr' => $error_arr,
+            'error' => $error,
         ));
     }
 
@@ -240,6 +286,47 @@ class VoxesController extends AdminController
                 $scales[$sitem->id] = $sitem;
             }
 
+
+            $error = false;
+            $error_arr = [];
+
+            if($item->has_stats) {
+
+                if(empty($item->stats_description)) {
+                    $error_arr[] = [
+                        'error' => 'Missing stats description',
+                    ];
+
+                    $error = true;
+                }
+
+                if(empty($item->stats_questions)) {
+                    $error_arr[] = [
+                        'error' => 'Missing stats questions',
+                    ];
+
+                    $error = true;
+                } else {
+
+                    foreach ($item->stats_questions as $stat) {
+                        if(empty($stat->stats_title)) {
+                            $error_arr[] = [
+                                'error' => 'Missing stats question title',
+                                'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$item->id.'/question/'.$stat->id.'/',
+                            ];
+                            $error = true;
+                        }
+                        if(empty($stat->stats_fields) && $stat->used_for_stats != 'dependency') {
+                            $error_arr[] = [
+                                'error' => 'Missing stats question demographics',
+                                'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$item->id.'/question/'.$stat->id.'/',
+                            ];
+                            $error = true;
+                        }
+                    }
+                }
+            }
+
             return $this->showView('voxes-form', array(
                 'types' => $this->types,
                 'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
@@ -255,6 +342,8 @@ class VoxesController extends AdminController
                 'trigger_valid_answers' => $trigger_valid_answers,
                 'all_voxes' => Vox::orderBy('sort_order', 'ASC')->get(),
                 'q_trigger_obj' => $q_trigger_obj,
+                'error_arr' => $error_arr,
+                'error' => $error,
             ));
         } else {
             return redirect('cms/'.$this->current_page);
@@ -568,8 +657,28 @@ class VoxesController extends AdminController
             ->pluck('total', 'answer')
             ->toArray();
 
+            $error = false;
+            $error_arr = [];
+
+            if($question->used_for_stats) {
+
+                if(empty($question->stats_title)) {
+                    $error_arr[] = [
+                        'error' => 'Missing stats question title',
+                    ];
+                    $error = true;
+                }
+                if(empty($question->stats_fields) && $question->used_for_stats != 'dependency') {
+                    $error_arr[] = [
+                        'error' => 'Missing stats question demographics',
+                    ];
+                    $error = true;
+                }
+            }
 
             return $this->showView('voxes-form-question', array(
+                'error' => $error,
+                'error_arr' => $error_arr,
                 'question' => $question,
                 'question_answers_count' => $question_answers_count,
                 'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
@@ -1108,7 +1217,8 @@ class VoxesController extends AdminController
             if (!empty($question_id)) {
 
                 if (request()->input( 'country' )) {
-                    $items_count = VoxAnswer::where('question_id',$question_id )
+                    $items_count = VoxAnswer::whereNull('is_admin')
+                    ->where('question_id',$question_id )
                     ->select('vox_answers.*')
                     ->where('is_completed', 1)
                     ->where('is_skipped', 0)
@@ -1118,7 +1228,8 @@ class VoxesController extends AdminController
                     ->join('countries', 'users.country_id', '=', 'countries.id')
                     ->count();
                 } else {
-                    $items_count = VoxAnswer::where('question_id',$question_id )
+                    $items_count = VoxAnswer::whereNull('is_admin')
+                    ->where('question_id',$question_id )
                     ->where('is_completed', 1)
                     ->where('is_skipped', 0)
                     ->where('answer', '!=', 0)
@@ -1156,7 +1267,13 @@ class VoxesController extends AdminController
             }
        
             if (!empty($question_id)) {
-                $question_respondents = VoxAnswer::where('question_id',$question_id )->where('is_completed', 1)->where('is_skipped', 0)->where('answer', '!=', 0)->has('user')->select('vox_answers.*');
+                $question_respondents = VoxAnswer::whereNull('is_admin')
+                ->where('question_id',$question_id )
+                ->where('is_completed', 1)
+                ->where('is_skipped', 0)
+                ->where('answer', '!=', 0)
+                ->has('user')
+                ->select('vox_answers.*');
 
                 if (request()->input( 'country' )) {
                     $order = request()->input( 'country' );
@@ -1397,7 +1514,8 @@ class VoxesController extends AdminController
                     }
                 }
 
-                $answers = VoxAnswer::where('user_id', $user->user->id)
+                $answers = VoxAnswer::whereNull('is_admin')
+                ->where('user_id', $user->user->id)
                 ->where('vox_id', $vox->id)
                 ->get();
 

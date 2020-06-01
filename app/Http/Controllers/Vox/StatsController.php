@@ -578,7 +578,9 @@ class StatsController extends FrontController
                     }
 
                     if (Request::input('download-date') == 'all') {
-                        $results =  VoxAnswer::where('question_id', Request::input('stats-for'))->where('is_completed', 1)
+                        $results =  VoxAnswer::whereNull('is_admin')
+                        ->where('question_id', Request::input('stats-for'))
+                        ->where('is_completed', 1)
                         ->where('is_skipped', 0)
                         ->has('user');
 
@@ -587,7 +589,9 @@ class StatsController extends FrontController
                         $from = Carbon::parse(explode('-', Request::input('download-date'))[0]);
                         $to = Carbon::parse(explode('-', Request::input('download-date'))[1]);
 
-                        $results = VoxAnswer::where('question_id', Request::input('stats-for'))->where('is_completed', 1)
+                        $results = VoxAnswer::whereNull('is_admin')
+                        ->where('question_id', Request::input('stats-for'))
+                        ->where('is_completed', 1)
                         ->where('is_skipped', 0)
                         ->has('user')
                         ->where('created_at', '>=', $from)
@@ -776,7 +780,7 @@ class StatsController extends FrontController
 
                                         $list = $q->related->vox_scale_id && !empty($scales[$q->related->vox_scale_id]) ? explode(',', $scales[$q->related->vox_scale_id]->answers) :  json_decode($q->related->answers, true);
 
-                                        $given_related_answer = VoxAnswer::where('user_id', $answ->user_id)->where('question_id', $q->related->id)->first();
+                                        $given_related_answer = VoxAnswer::whereNull('is_admin')->where('user_id', $answ->user_id)->where('question_id', $q->related->id)->first();
                                         $row[] = $given_related_answer ? $q->removeAnswerTooltip($list[$given_related_answer->answer - 1]) : '0';
                                     }
                                 }
@@ -884,7 +888,8 @@ class StatsController extends FrontController
 
                                 $cur_chart = [];
 
-                                $all_results = VoxAnswer::where('question_id', $q->id)
+                                $all_results = VoxAnswer::whereNull('is_admin')
+                                ->where('question_id', $q->id)
                                 ->where('is_completed', 1)
                                 ->where('is_skipped', 0)
                                 ->has('user');
@@ -1003,7 +1008,8 @@ class StatsController extends FrontController
 
                                     $breakdown_rows_count = count($answers_array);
 
-                                    $all_related_original_results = VoxAnswer::where('question_id', $q->id)
+                                    $all_related_original_results = VoxAnswer::whereNull('is_admin')
+                                    ->where('question_id', $q->id)
                                     ->where('is_skipped', 0)
                                     ->has('user')
                                     ->whereIn('user_id', function($query) use ($q, $i) {
@@ -1258,7 +1264,8 @@ class StatsController extends FrontController
 
 	private function prepareQuery($question_id, $dates, $options = []) {
 
-    	$results = VoxAnswer::where('question_id', $question_id)
+    	$results = VoxAnswer::whereNull('is_admin')
+        ->where('question_id', $question_id)
     	->where('is_completed', 1)
     	->where('is_skipped', 0)
         ->has('user');

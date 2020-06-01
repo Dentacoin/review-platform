@@ -13,7 +13,19 @@ class VoxAnswer extends Model {
         'answer',
         'scale',
         'country_id',
+        'gender',
+        'marital_status',
+        'children',
+        'education',
+        'employment',
+        'age',
+        'household_children',
+        'job_title',
+        'income',
         'is_scam',
+        'is_completed',
+        'is_skipped',
+        'is_admin'
     ];
 
     protected $dates = [
