@@ -233,8 +233,11 @@ class PollsController extends AdminController {
 
                             $translator = [];
 
-                            foreach ($oldAnswers as $key => $value) {
-                                $translator[($key+1)] = array_search($value, $newAnswersArr) + 1;
+                            if(!empty($oldAnswers)) {
+                                
+                                foreach ($oldAnswers as $key => $value) {
+                                    $translator[($key+1)] = array_search($value, $newAnswersArr) + 1;
+                                }
                             }
 
                             PollAnswer::where('poll_id', $item->id)->update([
