@@ -47,7 +47,7 @@
 		                        </div>
 		                    @endif
 	                    </div>
-	                    
+
 	                	<div class="form-group">
 	                       	<label class="col-md-2 control-label">Calendar date</label>
 			                <div class="col-md-5">
@@ -89,6 +89,19 @@
 	                            <input type="checkbox" name="dont_randomize_answers" class="form-control" value="1" id="dont_randomize_answers" style="vertical-align: sub;width: 30px;" {!! !empty($item) && !empty($item->dont_randomize_answers) ? 'checked="checked"' : '' !!} />
 	                        </div>                        
 	                    </div>
+
+	                    <div class="form-group">
+	                        <label class="col-md-2 control-label" style="padding-top: 0px;">Excel answers</label>
+	                        <div class="col-md-9">
+	                    		<textarea id="excell_answers" placeholder="Paste answers from excell" class="form-control"></textarea>
+	                    	</div>
+	                        <div class="col-md-1"><a href="javascript:;" id="excell-poll-answers" class="btn btn-primary">Go</a></div>
+	                    </div>
+	                    <!-- !!!!!!Може би едно поле където да paste-ва и след това да се генерират answers!!!!!! -->
+	                    <!-- !!!!!!Може би едно поле където да paste-ва и след това да се генерират answers!!!!!! -->
+	                    <!-- !!!!!!Може би едно поле където да paste-ва и след това да се генерират answers!!!!!! -->
+	                    <!-- !!!!!!Може би едно поле където да paste-ва и след това да се генерират answers!!!!!! -->
+	                    <!-- !!!!!!Може би едно поле където да paste-ва и след това да се генерират answers!!!!!! -->
 
 	                    @foreach($langs as $code => $lang_info)
 	                        <div class="tab-pane questions-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}" lang="{{ $code }}">

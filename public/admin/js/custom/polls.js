@@ -75,4 +75,22 @@ $(document).ready(function(){
     $('.scale-input').change(handleScaleChanges);
     handleScaleChanges();
 
+
+    $('#excell-poll-answers').click( function(e) {
+        e.preventDefault();
+
+        if($('#excell_answers').val()) {
+            var val = $('#excell_answers').val().replace('\n', '<br/>');
+            textarea_val = val.split('<br/>');
+            for( var i in textarea_val) {
+                $('.polls-form .questions-pane').each( function() {
+                    var code = $(this).attr('lang');
+                    var newinput = $('#input-group-template').clone(true).removeAttr('id')
+                    newinput.find('input.answer-name').attr('name', 'answers-'+code+'[]');
+                    newinput.find('input').val(textarea_val[i]);
+                    $(this).find('.answers-list').append(newinput);
+                } );
+            }
+        }
+    });
 });
