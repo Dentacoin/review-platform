@@ -4,7 +4,7 @@ $(document).ready(function(){
 		$('.polls-form .questions-pane').each( function() {
 			var code = $(this).attr('lang');
 			var newinput = $('#input-group-template').clone(true).removeAttr('id')
-			newinput.find('input.answer-name').attr('name', 'answers-'+code+'[]');
+			newinput.find('textarea.answer-name').attr('name', 'answers-'+code+'[]');
 			$(this).find('.answers-list').append(newinput);
 		} );
 	} );
@@ -63,6 +63,52 @@ $(document).ready(function(){
         }
     });
 
+    function catchPaste(evt, elem, callback) {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        // modern approach with Clipboard API
+        navigator.clipboard.readText().then(callback);
+      } else if (evt.originalEvent && evt.originalEvent.clipboardData) {
+        // OriginalEvent is a property from jQuery, normalizing the event object
+        callback(evt.originalEvent.clipboardData.getData('text'));
+      } else if (evt.clipboardData) {
+        // used in some browsers for clipboardData
+        callback(evt.clipboardData.getData('text/plain'));
+      } else if (window.clipboardData) {
+        // Older clipboardData version for Internet Explorer only
+        callback(window.clipboardData.getData('Text'));
+      } else {
+        // Last resort fallback, using a timer
+        setTimeout(function() {
+          callback(elem.value)
+        }, 100);
+      }
+    }
+
+    $('.poll-answers').first().bind("paste", function(e) {
+
+        catchPaste(e, this, function(clipData) {
+            var val = clipData.replace('\n', '<br/>');
+            textarea_val = val.split('<br/>');
+
+            console.log(textarea_val.length);
+            if(textarea_val.length > 1) {
+
+                for( var i in textarea_val) {
+                    $('.polls-form .questions-pane').each( function() {
+                        var code = $(this).attr('lang');
+                        var newinput = $('#input-group-template').clone(true).removeAttr('id')
+                        newinput.find('textarea.answer-name').attr('name', 'answers-'+code+'[]');
+                        newinput.find('textarea').val(textarea_val[i]);
+                        $(this).find('.answers-list').append(newinput);
+                        $('.first-group').remove();
+                    } );
+                }
+            }
+
+        });
+
+    });
+
     var handleScaleChanges = function() {
 
         if($('.scale-input').val() ) {
@@ -74,23 +120,4 @@ $(document).ready(function(){
 
     $('.scale-input').change(handleScaleChanges);
     handleScaleChanges();
-
-
-    $('#excell-poll-answers').click( function(e) {
-        e.preventDefault();
-
-        if($('#excell_answers').val()) {
-            var val = $('#excell_answers').val().replace('\n', '<br/>');
-            textarea_val = val.split('<br/>');
-            for( var i in textarea_val) {
-                $('.polls-form .questions-pane').each( function() {
-                    var code = $(this).attr('lang');
-                    var newinput = $('#input-group-template').clone(true).removeAttr('id')
-                    newinput.find('input.answer-name').attr('name', 'answers-'+code+'[]');
-                    newinput.find('input').val(textarea_val[i]);
-                    $(this).find('.answers-list').append(newinput);
-                } );
-            }
-        }
-    });
 });

@@ -90,19 +90,6 @@
 	                        </div>                        
 	                    </div>
 
-	                    <div class="form-group">
-	                        <label class="col-md-2 control-label" style="padding-top: 0px;">Excel answers</label>
-	                        <div class="col-md-9">
-	                    		<textarea id="excell_answers" placeholder="Paste answers from excell" class="form-control"></textarea>
-	                    	</div>
-	                        <div class="col-md-1"><a href="javascript:;" id="excell-poll-answers" class="btn btn-primary">Go</a></div>
-	                    </div>
-	                    <!-- !!!!!!Може би едно поле където да paste-ва и след това да се генерират answers!!!!!! -->
-	                    <!-- !!!!!!Може би едно поле където да paste-ва и след това да се генерират answers!!!!!! -->
-	                    <!-- !!!!!!Може би едно поле където да paste-ва и след това да се генерират answers!!!!!! -->
-	                    <!-- !!!!!!Може би едно поле където да paste-ва и след това да се генерират answers!!!!!! -->
-	                    <!-- !!!!!!Може би едно поле където да paste-ва и след това да се генерират answers!!!!!! -->
-
 	                    @foreach($langs as $code => $lang_info)
 	                        <div class="tab-pane questions-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}" lang="{{ $code }}">
 	                            <div class="form-group answers-group">
@@ -110,9 +97,9 @@
 	                                <div class="col-md-10 answers-list answers-draggable">
 	                                    @if(!empty($item) && !empty($item->{'answers:'.$code}) )
 	                                        @foreach(json_decode($item->{'answers:'.$code}, true) as $key => $ans)
-	                                            <div class="flex input-group">
+	                                            <div class="flex input-group first-group">
 	                                                <div class="col">
-	                                                    {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 2048, 'class' => 'form-control poll-answers', 'placeholder' => 'Answer', 'style' => 'display: inline-block; width: calc(100% - 60px);')) }}
+	                                                    {{ Form::textarea('answers-'.$code.'[]', $ans, array('maxlength' => 2048, 'class' => 'form-control poll-answers', 'placeholder' => 'Answer', 'style' => 'display: inline-block; width: calc(100% - 60px);max-height: 34px;')) }}
 	                                                    
 	                                                    <div class="input-group-btn" style="display: inline-block;">
 	                                                        <button class="btn btn-default btn-remove-answer" type="button" style="height: 34px;">
@@ -123,8 +110,8 @@
 	                                            </div>
 	                                        @endforeach
 	                                    @else
-	                                        <div class="input-group">
-	                                            {{ Form::text('answers-'.$code.'[]', '', array('maxlength' => 2048, 'class' => 'form-control poll-answers', 'placeholder' => 'Answer')) }}
+	                                        <div class="input-group first-group">
+	                                            {{ Form::textarea('answers-'.$code.'[]', '', array('maxlength' => 2048, 'class' => 'form-control poll-answers', 'placeholder' => 'Answer', 'style' => 'max-height: 34px;')) }}
 	                                            <div class="input-group-btn">
 	                                                <button class="btn btn-default btn-remove-answer" type="button" style="height: 34px;">
 	                                                    <i class="glyphicon glyphicon-remove"></i>
@@ -194,7 +181,7 @@
 	<div style="display: none;">
 	    <div class="flex input-group ui-sortable-handle" id="input-group-template">
 	        <div class="col">
-	            {{ Form::text('something', '', array('maxlength' => 2048, 'class' => 'form-control answer-name poll-answers', 'placeholder' => 'Answer', 'style' => 'display: inline-block; width: calc(100% - 60px);')) }}
+	            {{ Form::textarea('something', '', array('maxlength' => 2048, 'class' => 'form-control answer-name poll-answers', 'placeholder' => 'Answer', 'style' => 'display: inline-block; width: calc(100% - 60px);max-height: 34px;')) }}
 	            <div class="input-group-btn" style="display: inline-block;">
 	                <button class="btn btn-default btn-remove-answer" type="button" style="height: 34px;">
 	                    <i class="glyphicon glyphicon-remove"></i>
