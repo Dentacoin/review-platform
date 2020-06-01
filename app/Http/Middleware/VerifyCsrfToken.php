@@ -47,8 +47,8 @@ class VerifyCsrfToken extends BaseVerifier
         '*/download-statistics/',
         '*/create-stat-pdf/',
         '*/create-stat-png/',
-        // '*/paid-dental-surveys/*',
-        // '*/start-over'
+        '*/paid-dental-surveys/*',
+        '*/start-over'
     ];
 
 
