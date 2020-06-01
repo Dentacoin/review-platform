@@ -48,6 +48,7 @@ $(document).ready(function(){
 
 
     calendarEvents = function(month, year) {
+
     	if(ajax_is_running) {
 			return;
 		}
@@ -131,11 +132,14 @@ $(document).ready(function(){
 
     if (go_to_date !== undefined && go_to_date) {
         calendar.gotoDate(go_to_date);
+        calendarEvents(go_to_month, go_to_year);
+    } else {
+
+        if ($(window).innerWidth() >= 768) {
+            calendarEvents();
+        }
     }
 
-    if ($(window).innerWidth() >= 768) {
-        calendarEvents();
-    }
 
     $('.fc-prev-button, .fc-next-button').click(function(){
     	var c_date = calendar.getDate();
@@ -245,6 +249,7 @@ $(document).ready(function(){
                             if (poll_stats !== undefined && poll_stats) {
                                 showStats($('.list-event[data-date="'+go_to_date+'"]').attr('poll-id'));
                             } else {
+                                console.log(go_to_date);
                                 $('.list-event[data-date="'+go_to_date+'"]').trigger('click');
                             }
                             
@@ -264,7 +269,12 @@ $(document).ready(function(){
 
 
 	$('.fc-listMonth-button').click( function() {
-		calendarListEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
+
+        if (go_to_date !== undefined && go_to_date) {
+            calendarListEvents(go_to_month, go_to_year);
+        } else {
+            calendarListEvents($('#calendar').attr('month'), $('#calendar').attr('year'));
+        }
 	});
 
 	$(window).off('click').click( function(e) {

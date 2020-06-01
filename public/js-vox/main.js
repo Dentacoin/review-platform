@@ -787,7 +787,6 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(ret) {
-
                 if(ret.success) {
                 	$('#poll-popup .poll-answers').html('');
                 	$('#poll-popup').find('.poll-question').html(ret.title);

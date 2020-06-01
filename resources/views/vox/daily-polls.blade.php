@@ -15,6 +15,9 @@
 		@if(!empty($date_poll))
 			<script type="text/javascript">
 				var go_to_date = '{!! $date_poll !!}';
+				var go_to_month = '{!! $poll_month !!}';
+				var go_to_year = '{!! $poll_year !!}';
+				var cur_date = '{!! date("Y-m-d") !!}';
 				@if(!empty($poll_stats))
 					var poll_stats = true;
 				@endif

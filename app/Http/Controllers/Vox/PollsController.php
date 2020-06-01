@@ -57,6 +57,8 @@ class PollsController extends FrontController
 	public function show_popup_poll($locale=null, $date) {
 		$time = strtotime($date);
 		$newformat = date('Y-m-d',$time);
+		$month = date('m',$time);
+		$year = date('Y',$time);
 
 		$seos = PageSeo::find(14);
 
@@ -69,6 +71,8 @@ class PollsController extends FrontController
 		
 		return $this->ShowVoxView('daily-polls', array(
 			'date_poll' => $newformat,
+			'poll_month' => $month,
+			'poll_year' => $year,
 			'js' => [
         		'polls.js'
         	],
@@ -90,6 +94,8 @@ class PollsController extends FrontController
 
 		$time = strtotime($date);
 		$newformat = date('Y-m-d',$time);
+		$month = date('m',$time);
+		$year = date('Y',$time);
 
 		$seos = PageSeo::find(14);
 
@@ -102,6 +108,8 @@ class PollsController extends FrontController
 		
 		return $this->ShowVoxView('daily-polls', array(
 			'date_poll' => $newformat,
+			'poll_month' => $month,
+			'poll_year' => $year,
 			'poll_stats' => true,
 			'js' => [
         		'polls.js'
