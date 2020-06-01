@@ -143,11 +143,9 @@ class PollsController extends AdminController {
                     }
                     $translation = $newpoll->translateOrNew($key);
                     $translation->answers = json_encode( $newAnswersArr );
-                } else {
-                    $translation->answers = '';
+                    $translation->save();
                 }
 
-                $translation->save();
 	        }
 	        $newpoll->save();
 
