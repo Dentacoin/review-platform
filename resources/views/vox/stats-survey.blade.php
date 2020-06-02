@@ -82,7 +82,7 @@
 					<div class="stat {!! false && count(json_decode($question->answers, true)) > 9 ? 'stat-with-many-qs' : '' !!} {!! $question->stats_top_answers ? 'multipletop_ans' : '' !!} {{ $loop->last ? 'last-stat' : '' }} {!! !empty($question->stats_scale_answers) ? 'has-scales' : '' !!}" question-id="{{ $question->id }}" stat-type="{{ $question->used_for_stats }}" {!! !empty($question->stats_scale_answers) ? 'scale-answer-id="1"' : '' !!}>
 						<a class="title" href="javascript:;">
 							<h2 class="container">
-								{{ $question->translateorNew(App::getLocale())->stats_title }}
+								{{ !empty($question->stats_title_question) ? $question->questionWithoutTooltips() : $question->translateorNew(App::getLocale())->stats_title }}
 							</h2>
 						</a>
 						<div class="contents container">

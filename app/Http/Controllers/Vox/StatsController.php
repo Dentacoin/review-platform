@@ -676,7 +676,7 @@ class StatsController extends FrontController
                         }
 
                         if( $q->type == 'single_choice' ) {
-                            $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : $q->stats_title;
+                            $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : (!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
                             $cols2[] = '';
                         } else if( $q->type == 'scale' ) {
                             $list = json_decode($q->answers, true);
@@ -696,7 +696,7 @@ class StatsController extends FrontController
                             }
 
                             foreach ($list_done as $l) {
-                                $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : $q->stats_title;
+                                $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : (!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
                                 $cols2[] = $q->removeAnswerTooltip(mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l);
                             }
                         }
@@ -1074,9 +1074,9 @@ class StatsController extends FrontController
                         } else {
                             if(!empty(Request::input('scale-for'))) {
                                 $list = json_decode($q->answers, true);
-                                $title_stats = $q->stats_title.' ['.$list[(Request::input('scale-for') - 1)].']';
+                                $title_stats = (!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title).' ['.$list[(Request::input('scale-for') - 1)].']';
                             } else {
-                                $title_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).$q->stats_title;
+                                $title_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
                             }
 
                             $cols_q_title_second = [

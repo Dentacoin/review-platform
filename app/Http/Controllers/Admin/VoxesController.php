@@ -88,7 +88,7 @@ class VoxesController extends AdminController
             } else {
 
                 foreach ($voxes_stat->stats_questions as $stat) {
-                    if(empty($stat->stats_title)) {
+                    if(empty($stat->stats_title_question) && empty($stat->stats_title)) {
                         $error_arr[] = [
                             'error' => 'Missing stats question title',
                             'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$voxes_stat->id.'/question/'.$stat->id.'/',
@@ -309,7 +309,7 @@ class VoxesController extends AdminController
                 } else {
 
                     foreach ($item->stats_questions as $stat) {
-                        if(empty($stat->stats_title)) {
+                        if(empty($stat->stats_title_question) && empty($stat->stats_title)) {
                             $error_arr[] = [
                                 'error' => 'Missing stats question title',
                                 'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$item->id.'/question/'.$stat->id.'/',
@@ -662,7 +662,7 @@ class VoxesController extends AdminController
 
             if($question->used_for_stats) {
 
-                if(empty($question->stats_title)) {
+                if(empty($question->stats_title_question) && empty($question->stats_title)) {
                     $error_arr[] = [
                         'error' => 'Missing stats question title',
                     ];
@@ -882,9 +882,10 @@ class VoxesController extends AdminController
             $question->trigger_type = $data['trigger_type'];
         }
 
-        $question->used_for_stats = !empty($data['used_for_stats']) ? $data['used_for_stats'] : null;;
+        $question->used_for_stats = !empty($data['used_for_stats']) ? $data['used_for_stats'] : null;
         $question->stats_relation_id = $question->used_for_stats=='dependency' ? $data['stats_relation_id'] : null;
         $question->stats_answer_id = $question->used_for_stats=='dependency' ? $data['stats_answer_id'] : null;
+        $question->stats_title_question = !empty($data['stats_title_question']) ? $data['stats_title_question'] : null;
 
 
         if( $justCopy ) {

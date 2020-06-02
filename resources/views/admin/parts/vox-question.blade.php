@@ -261,6 +261,12 @@
                                     </div>
                                 @endforeach
                             </div>
+
+                            <label for="stats_title_question" style="display: block;margin-top: -20px;margin-bottom: 20px;">
+                                <input type="checkbox" name="stats_title_question" value="1" id="stats_title_question" {!! !empty($question->stats_title_question) ? 'checked="checked"' : '' !!} style="vertical-align:sub;"/>
+                                Take question as is
+                            </label>
+
                             <div class="form-group clearfix">
                                 @foreach($langs as $code => $lang_info)
                                     <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} col-md-12">

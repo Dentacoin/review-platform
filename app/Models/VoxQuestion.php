@@ -29,6 +29,7 @@ class VoxQuestion extends Model {
         'order',
         'used_for_stats',
         'stats_title',
+        'stats_title_question',
         'stats_subtitle',
         'stats_relation_id',
         'stats_answer_id',
