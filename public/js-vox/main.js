@@ -197,7 +197,19 @@ $(document).ready(function(){
 
 	if(urlParam('testmode') !== 0 && urlParam('q-id') !== 0 ) {
 		$('.question-group').hide();
-		$('.question-group-'+urlParam('q-id')).show();
+
+		var question = $('.question-group-'+urlParam('q-id'));
+		question.show();
+
+		if(question.hasClass('shuffle')) {
+			console.log('dfdf');
+			var parent = question.find('.answers');
+		    var divs = parent.children().not(".disabler-label");
+
+		    while (divs.length) {
+		        parent.prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+		    }
+		}
 	} else if ($('#bot-group').length) {
 		$('.question-group').hide();
         $('#bot-group').show();
