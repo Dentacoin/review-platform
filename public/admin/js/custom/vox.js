@@ -342,6 +342,9 @@ $(document).ready(function(){
 			$(".questions-draggable").find("textarea").bind('mousedown.ui-disableSelection selectstart.ui-disableSelection', function(e) {
 		      	e.stopImmediatePropagation();
 		    });
+			$(".questions-draggable").find("input").bind('mousedown.ui-disableSelection selectstart.ui-disableSelection', function(e) {
+		      	e.stopImmediatePropagation();
+		    });
 		 },
 		update: function( event, ui ) {	
 			console.log('update');
@@ -373,6 +376,10 @@ $(document).ready(function(){
 	});
 
 	$(".questions-draggable").find("textarea").bind('mousedown.ui-disableSelection selectstart.ui-disableSelection', function(e) {
+	  	e.stopImmediatePropagation();
+	});
+
+	$(".questions-draggable").find("input").bind('mousedown.ui-disableSelection selectstart.ui-disableSelection', function(e) {
 	  	e.stopImmediatePropagation();
 	});
 
