@@ -1193,9 +1193,10 @@ $(document).ready(function(){
             //     $(this).toggleClass('open');
             // }
 
-            if( $('.loader-mask:visible').length) {
-                return;
-            }
+            //not do graph
+            // if( $('.loader-mask:visible').length) {
+            //     return;
+            // }
             
             $(this).closest('.scales').find('a').removeClass('active');
             $(this).addClass('active');
