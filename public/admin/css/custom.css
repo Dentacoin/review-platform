@@ -121,6 +121,16 @@ table.table .table-search {
     border: 1px solid rgb(182, 194, 201);
 }
 
+table-striped>tbody>tr:nth-of-type(odd).selected,
+.ui-sortable-handle.selected {
+    background-color: rgba(0, 172, 172, 0.6) !important;
+}
+
+table-striped>tbody>tr:nth-of-type(odd).selected td,
+.ui-sortable-handle.selected td {
+    background-color: transparent !important;
+}
+
 .panel-heading {
     position: relative;
 }

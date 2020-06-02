@@ -287,7 +287,7 @@ $(document).ready(function(){
 	});
 
 	$('.question-number, .question-question').on('change blur', function() {
-		console.log( $(this).attr('data-qid'), $(this).val() );
+		//console.log( $(this).attr('data-qid'), $(this).val() );
 
         if(ajax_action) {
             return;
@@ -334,7 +334,11 @@ $(document).ready(function(){
 
 
 	$( ".answers-draggable" ).sortable().disableSelection();
-	$( ".questions-draggable" ).sortable({
+	
+	$( ".questions-draggable" ).multisortable({
+		items: "tr",
+		selectedClass: "selected",
+		click:function(e) { console.log('click', e); },
 		update: function( event, ui ) {	
 			console.log('update');
 			setTimeout( function(){
@@ -362,7 +366,37 @@ $(document).ready(function(){
 		        });
 			}, 0);
 		},
-	}).disableSelection();
+	});
+	
+	// $( ".questions-draggable" ).sortable({
+	// 	update: function( event, ui ) {	
+	// 		console.log('update');
+	// 		setTimeout( function(){
+	// 			var ids = [];
+	// 			$('.questions-draggable tr').each( function() {
+	// 				ids.push( $(this).attr('question-id') );
+	// 			} )
+
+	// 	        $.ajax({
+	// 	            url     : $('#page-add').attr('action') + '/change-all',
+	// 	            type    : 'POST',
+	// 	            data 	: {
+	// 	            	list: ids
+	// 	            },
+	// 	            dataType: 'json',
+	// 	            success : (function( res ) {
+	// 	            	var i=1;
+	// 	            	$('.questions-draggable tr').each( function() {
+	// 						$(this).find('.question-number').val(i);
+	// 						i++;
+	// 					} )
+	// 	            }).bind( this ),
+	// 	            error : function( data ) {
+	// 	            }
+	// 	        });
+	// 		}, 0);
+	// 	},
+	// }).disableSelection();
 
 	var symbolsCount = function() {
 		var parent = $(this).closest('.col-md-4');

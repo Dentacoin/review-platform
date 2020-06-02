@@ -1655,4 +1655,19 @@ class VoxesController extends AdminController
         return Response::json($list);
     }
 
+    public function massdelete() {
+
+        if( Request::input('ids') ) {
+
+            $delqs = VoxQuestion::whereIn('id', Request::input('ids'))->get();
+
+            foreach ($delqs as $dq) {
+                $dq->delete();
+            }
+        }
+
+        $this->request->session()->flash('success-message', 'All selected questions are deleted' );
+        return redirect(url()->previous());
+    }
+
 }

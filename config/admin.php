@@ -70,6 +70,7 @@ return [
                 'vox.js',
                 'faq.js',
                 'polls.js',
+                'jquery.multisortable.js',
             ),
         ),
         'pages' => array(
