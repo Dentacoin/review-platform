@@ -9,13 +9,6 @@
 </h1>
 <!-- end page-header -->
 
-<!-- <div class="row">
-    <div class="col-md-12">
-        <input type="text" name="search-questions" class="form-control">
-    </div>
-</div>
- -->
-
 @if(!empty($error))
    <i class="fa fa-exclamation-triangle" data-toggle="modal" data-target="#errorsModal" style="color: red;font-size: 20px;margin-bottom: 20px;"></i>
 @endif
@@ -31,9 +24,23 @@
                 <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title') }}</h4>
             </div>
             <div class="panel-body">
-                All voxes: {{ $voxes->count() }} <br/>
-                Active voxes: {{ $active_voxes_count }} <br/>
-                Hidden voxes: {{ $hidden_voxes_count }} <br/>
+                <div class="row" style="display: flex;align-items: flex-end;">
+                    <div class="col-md-6"> 
+                        All voxes: {{ $voxes->count() }} <br/>
+                        Active voxes: {{ $active_voxes_count }} <br/>
+                        Hidden voxes: {{ $hidden_voxes_count }} <br/>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="search-questions-wrapper">
+                            <label style="width: auto;display: flex;align-items: center;justify-content: flex-end;">
+                                <span style="font-weight: normal;">Search by keyword:</span>
+                                <input type="text" name="search-questions" id="search-questions" class="form-control" url="{{ url('cms/search-questions') }}" style="display: inline-block;max-width: 156px;margin-right: 17px;margin-left: 6px;height: 30px;">
+                            </label>
+                            <div class="results"  style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
         		<div class="panel-body">
 					@include('admin.parts.table', [
 						'table_id' => 'voxs',

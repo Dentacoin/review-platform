@@ -430,4 +430,64 @@ $(document).ready(function(){
 	// if($('#manually-calc-reward:checked').length) {
 	// 	$('.calculating-wrapper').show();
 	// }
+
+
+	$('#search-questions').on('keyup keypress', function(e) {
+
+        var query = $(this).val();
+
+		$('.search-questions-wrapper .results').show();
+		$('.search-questions-wrapper .results').html('');
+		$('.search-questions-wrapper .results .result').remove();
+		$('.search-questions-wrapper .results .loader').remove();
+        $('.search-questions-wrapper .results').append('<div class="loader"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>')
+
+		if(query.length >= 3) {
+
+	        $.ajax( {
+				url: $(this).attr('url'),
+				type: 'POST',
+				data: {
+					title: query
+				},
+				dataType: 'json',
+				success: function( data ) {
+					$('.search-questions-wrapper .results .result').remove();
+					$('.search-questions-wrapper .results .loader').remove();
+
+					var count = $.map(data, function(n, i) { return i; }).length;
+
+					if(count) {
+						for(var i in data) {
+							if(data[i].questions) {
+								var qs = '';
+								for( var q in data[i].questions) {
+									qs+='<a href="'+data[i].questions[q].link+'">'+data[i].questions[q].name+'</a>';
+								}
+							}
+
+							$('.search-questions-wrapper .results').append('\
+								<div class="result">\
+									<a target="_blank" href="'+data[i].link+'">'+data[i].name+'</a><div id="q'+i+'" class="questions-titles"></div>\
+								</div>\
+							');
+
+							for( var q in data[i].questions) {
+								$('#q'+i).append('<a target="_blank" href="'+data[i].questions[q].link+'">'+data[i].questions[q].name+'</a>');
+							}
+						}
+					} else {
+						$('.search-questions-wrapper .results .result').remove();
+						$('.search-questions-wrapper .results .result').hide();
+						$('.search-questions-wrapper .results').html('<p>no results</p>');
+					}
+				},
+				error: function(data) {
+					console.log('error');
+				}
+			});
+		} else {
+			$('.search-questions-wrapper .results').hide();
+		}
+	});
 });

@@ -1607,4 +1607,52 @@ class VoxesController extends AdminController
         }
     }
 
+
+    public function getTitle() {
+
+        $title = trim(Request::input('title'));
+
+        $voxes = Vox::with('translations')->whereHas('translations', function ($query) use ($title) {
+            $query->where('title', 'LIKE', '%'.$title.'%')->where('locale', 'LIKE', 'en');
+        })->get();
+
+        $list = [];
+
+        if($voxes->isNotEmpty()) {
+            foreach ($voxes as $vox) {
+
+                $list[$vox->id] = [
+                    'name' => $vox->title,
+                    'link' => url('cms/vox/edit/'.$vox->id),
+                    'questions' => [], 
+                ];
+            }
+        }
+
+        $questions = VoxQuestion::has('vox')->whereHas('translations', function ($query) use ($title) {
+            $query->where('question', 'LIKE', '%'.$title.'%')->where('locale', 'LIKE', 'en');
+        })->get();
+
+        if($questions->isNotEmpty()) {
+
+            foreach ($questions as $question) {
+
+                if(!isset($list[$question->vox->id])) {
+                    $list[$question->vox->id] = [
+                        'name' => $question->vox->title,
+                        'link' => url('cms/vox/edit/'.$question->vox->id),
+                        'questions' => [], 
+                    ];
+                }
+
+                $list[$question->vox->id]['questions'][] = [
+                    'name' => $question->question,
+                    'link' => url('cms/vox/edit/'.$question->vox->id.'/question/'.$question->id),
+                ];
+            }
+        }
+
+        return Response::json($list);
+    }
+
 }

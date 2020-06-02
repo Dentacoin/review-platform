@@ -473,3 +473,57 @@ table .order.desc::after {
     background: #00acac !important;
     opacity: 1 !important;
 }
+
+.search-questions-wrapper .results {
+    background-color: white;
+    border: 2px solid #00acac;
+    position: absolute;
+    z-index: 10;
+    top: 30px;
+    right: 17px;
+    border-radius: 4px;
+    overflow-y: scroll;
+    max-height: 600px;
+    min-width: 167px;
+}
+
+.search-questions-wrapper .results p {
+    text-align: center;
+}
+
+.search-questions-wrapper .results .loader {
+    text-align: center;
+    padding: 5px;
+}
+
+.search-questions-wrapper .results .loader i {
+    font-size: 30px;
+}
+
+.search-questions-wrapper .results .result {
+    border-bottom: 1px solid #00acac;
+}
+
+.search-questions-wrapper .results .result:last-child {
+    border-bottom: none;
+}
+
+.search-questions-wrapper .results .result a {
+    padding: 5px 10px;
+    display: block;
+    color: black;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.search-questions-wrapper .results .result a:hover {
+    background-color: rgba(0, 172, 172, 0.1);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.search-questions-wrapper .results .result .questions-titles a {
+    padding-left: 20px;
+    display: block;
+    font-weight: normal;
+}

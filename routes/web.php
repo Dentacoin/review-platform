@@ -132,6 +132,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('vox/explorer/{vox_id?}/{question_id?}', 	'VoxesController@explorer');
 	Route::any('vox/export-survey-data', 			'VoxesController@export_survey_data');
 	Route::any('vox/duplicate-question', 			'VoxesController@duplicate_question');
+	Route::post('search-questions', 				'VoxesController@getTitle');
 
 	Route::get('vox/polls', 						'PollsController@list');
 	Route::any('vox/polls/add', 					'PollsController@add');
