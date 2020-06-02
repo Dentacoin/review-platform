@@ -3,6 +3,7 @@ var recaptchaCode = null;
 var sendValidation;
 var preloadImages;
 var checkFilledDots;
+var skip = 0;
 
 $(document).ready(function(){
 
@@ -679,6 +680,7 @@ $(document).ready(function(){
 
                             vox.current++;
                             if (!should_skip) {
+                                skip = 0;
                                 $('.question-group').find('.loader').remove();
                                 $('.question-group').find('.loader-survey').hide();
                                 $('.question-group').hide();
@@ -690,8 +692,13 @@ $(document).ready(function(){
                                 }
                                 VoxTest.handleNextQuestion();
                             } else {
-                                $('.question-group').find('.loader').remove();
-                                $('.question-group').find('.loader-survey').show();
+                                skip++;
+
+                                if(skip > 3) {
+                                    $('.question-group').find('.loader').remove();
+                                    $('.question-group').find('.loader-survey').show();
+                                }
+
                                 group.next().attr('skipped', 'skipped');
                             }         
                         }
