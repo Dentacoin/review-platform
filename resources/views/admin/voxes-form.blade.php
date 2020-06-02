@@ -434,7 +434,6 @@
 
                     For bulk delete you need to check the checkboxes, then click button 'Delete selected questions'. <br/>
                     For multiple re-arrange - hold the CTRL button and click on the questions. <br/>
-                    To change the title or order of question you need click on the textarea with the RIGHT mouse button. <br/>
                 </p>
                 <div class="panel panel-inverse">
                     <div class="panel-heading">
