@@ -338,7 +338,11 @@ $(document).ready(function(){
 	$( ".questions-draggable" ).multisortable({
 		items: "tr",
 		selectedClass: "selected",
-		click:function(e) { console.log('click', e); },
+		click: function(e) { 
+			$(".questions-draggable").find("textarea").bind('mousedown.ui-disableSelection selectstart.ui-disableSelection', function(e) {
+		      	e.stopImmediatePropagation();
+		    });
+		 },
 		update: function( event, ui ) {	
 			console.log('update');
 			setTimeout( function(){
@@ -367,6 +371,11 @@ $(document).ready(function(){
 			}, 0);
 		},
 	});
+
+	$(".questions-draggable").find("textarea").bind('mousedown.ui-disableSelection selectstart.ui-disableSelection', function(e) {
+	  	e.stopImmediatePropagation();
+	});
+
 	
 	// $( ".questions-draggable" ).sortable({
 	// 	update: function( event, ui ) {	
