@@ -210,6 +210,17 @@ $(document).ready(function(){
 		        parent.prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
 		    }
 		}
+		if (question.hasClass('scale')) {
+
+			question.find('.flickity').flickity({
+				wrapAround: true,
+				adaptiveHeight: true,
+				draggable: false
+			});
+
+			question.find('.flickity').on( 'select.flickity', checkFilledDots);
+			question.find('.next-answer').hide();
+		}
 	} else if ($('#bot-group').length) {
 		$('.question-group').hide();
         $('#bot-group').show();
