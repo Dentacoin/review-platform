@@ -334,7 +334,7 @@ $(document).ready(function(){
 					var my_amount = parseInt($('#header-balance').html()) * data.dcn_price_full
 
 					$('#header_questions').html(data.question_count);
-					$('#header-rate').html(data.dcn_price);
+					$('#header-rate').html(data.header_price);
 					$('#header-change').html('('+data.dcn_change+'%)').css('color', parseFloat(data.dcn_change)>0 ? '#4caf50' : '#e91e63' );
 					$('#header-usd').html( '$' + parseFloat(my_amount).toFixed(2) );
 				}
