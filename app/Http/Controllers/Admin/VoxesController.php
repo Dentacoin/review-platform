@@ -897,11 +897,13 @@ class VoxesController extends AdminController
                         $help_array[] = $trg.( !empty( $data['answers-number'][$i] ) ? ':'.$data['answers-number'][$i] : '' );
                     }
                 }
-                $question->question_trigger = implode(';', $help_array);
 
-                $q_vox = Vox::find($question->vox_id);
-                $q_vox->manually_calc_reward = null;
-                $q_vox->save();
+                if($question->question_trigger != implode(';', $help_array)) {
+                    $q_vox = Vox::find($question->vox_id);
+                    $q_vox->manually_calc_reward = null;
+                    $q_vox->save();
+                }
+                $question->question_trigger = implode(';', $help_array);
             } else {
                 $question->question_trigger = '';
             }
