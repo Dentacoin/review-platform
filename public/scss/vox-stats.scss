@@ -2303,7 +2303,7 @@ $main-color: #38ace5;
 }
 
 .stats-blurred {
-	border-top: 1px solid #f3f3f3;
+	//border-top: 1px solid #f3f3f3;
 
 	.blurred-title {
 		font-size: 20px;
@@ -2332,7 +2332,7 @@ $main-color: #38ace5;
 		    background-size: 29px;
 		    padding-left: 40px;
 		    color: #333;
-		    filter: blur(4px);
+		    //filter: blur(4px);
 
 		    @media #{$tablet} {
 				width: 100%;

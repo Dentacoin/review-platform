@@ -256,7 +256,11 @@
 		<div class="stats-blurred">
 			<a class="blurred-title" href="javascript:;">
 				<h2 class="container">
-					This is some blurred statistic question
+					@foreach($vox->stats_questions as $question)
+						@if($loop->iteration == 4)
+							{{ !empty($question->stats_title_question) ? $question->questionWithoutTooltips() : $question->translateorNew(App::getLocale())->stats_title }}
+						@endif
+					@endforeach
 				</h2>
 			</a>
 			<div class="container">

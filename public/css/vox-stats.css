@@ -1497,152 +1497,149 @@
       .all-stats-section p {
         font-size: 15px; } }
 
-.stats-blurred {
-  border-top: 1px solid #f3f3f3; }
-  .stats-blurred .blurred-title {
+.stats-blurred .blurred-title {
+  font-size: 20px;
+  display: block;
+  line-height: 28px;
+  padding: 11px 0px;
+  padding-left: 35px;
+  background-color: #d3ebfb;
+  box-shadow: 0 3px 5px #d3ebfb;
+  margin-bottom: 4px; }
+  @media screen and (max-width: 768px) {
+    .stats-blurred .blurred-title {
+      font-size: 14px;
+      line-height: 1;
+      padding-left: 25px;
+      box-shadow: 0 0px 5px #d3ebfb; } }
+  .stats-blurred .blurred-title h2 {
+    font-weight: bold;
     font-size: 20px;
-    display: block;
+    text-align: left;
+    margin-bottom: 0px;
     line-height: 28px;
-    padding: 11px 0px;
-    padding-left: 35px;
-    background-color: #d3ebfb;
-    box-shadow: 0 3px 5px #d3ebfb;
-    margin-bottom: 4px; }
+    background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
+    background-size: 29px;
+    padding-left: 40px;
+    color: #333; }
+    @media screen and (max-width: 1080px) {
+      .stats-blurred .blurred-title h2 {
+        width: 100%; } }
     @media screen and (max-width: 768px) {
-      .stats-blurred .blurred-title {
-        font-size: 14px;
-        line-height: 1;
-        padding-left: 25px;
-        box-shadow: 0 0px 5px #d3ebfb; } }
-    .stats-blurred .blurred-title h2 {
-      font-weight: bold;
-      font-size: 20px;
-      text-align: left;
-      margin-bottom: 0px;
-      line-height: 28px;
-      background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
-      background-size: 29px;
-      padding-left: 40px;
-      color: #333;
-      filter: blur(4px); }
-      @media screen and (max-width: 1080px) {
-        .stats-blurred .blurred-title h2 {
-          width: 100%; } }
+      .stats-blurred .blurred-title h2 {
+        font-size: 16px;
+        line-height: normal;
+        max-width: 100%;
+        background-size: 20px;
+        padding-left: 30px; } }
+.stats-blurred .blurred-stat {
+  position: relative; }
+  .stats-blurred .blurred-stat img {
+    display: block;
+    max-width: 100%; }
+    .stats-blurred .blurred-stat img.mobile-blurred {
+      display: none; }
       @media screen and (max-width: 768px) {
-        .stats-blurred .blurred-title h2 {
-          font-size: 16px;
-          line-height: normal;
-          max-width: 100%;
-          background-size: 20px;
-          padding-left: 30px; } }
-  .stats-blurred .blurred-stat {
-    position: relative; }
-    .stats-blurred .blurred-stat img {
-      display: block;
-      max-width: 100%; }
-      .stats-blurred .blurred-stat img.mobile-blurred {
-        display: none; }
-        @media screen and (max-width: 768px) {
-          .stats-blurred .blurred-stat img.mobile-blurred {
-            display: block; } }
-      @media screen and (max-width: 768px) {
-        .stats-blurred .blurred-stat img.pc-blurred {
-          display: none; } }
-    .stats-blurred .blurred-stat .blurred-text {
+        .stats-blurred .blurred-stat img.mobile-blurred {
+          display: block; } }
+    @media screen and (max-width: 768px) {
+      .stats-blurred .blurred-stat img.pc-blurred {
+        display: none; } }
+  .stats-blurred .blurred-stat .blurred-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+    width: 570px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 17px -2px rgba(0, 0, 0, 0.5);
+    padding-top: 50px;
+    padding-bottom: 30px;
+    background-image: url("../new-vox-img/stats-pdf-background.jpg");
+    background-position: 50% 100%;
+    background-repeat: no-repeat; }
+    @media screen and (max-width: 1080px) {
+      .stats-blurred .blurred-stat .blurred-text {
+        background-position: 50% 120%; } }
+    @media screen and (max-width: 768px) {
+      .stats-blurred .blurred-stat .blurred-text {
+        width: 100%; } }
+    .stats-blurred .blurred-stat .blurred-text .free-text {
       position: absolute;
-      top: 50%;
+      top: -33px;
       left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-      text-align: center;
-      width: 570px;
+      transform: translateX(-50%);
+      font-size: 50px;
+      font-weight: 900;
+      color: #3daee6;
       background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 0 17px -2px rgba(0, 0, 0, 0.5);
-      padding-top: 50px;
-      padding-bottom: 30px;
-      background-image: url("../new-vox-img/stats-pdf-background.jpg");
-      background-position: 50% 100%;
-      background-repeat: no-repeat; }
+      box-shadow: 0 0 15px -2px rgba(0, 0, 0, 0.5);
+      text-transform: uppercase;
+      padding: 0px 50px;
+      border-radius: 10px; }
       @media screen and (max-width: 1080px) {
-        .stats-blurred .blurred-stat .blurred-text {
-          background-position: 50% 120%; } }
+        .stats-blurred .blurred-stat .blurred-text .free-text {
+          top: -27px;
+          font-size: 40px; } }
+    .stats-blurred .blurred-stat .blurred-text h2 {
+      font-size: 39px;
+      font-weight: 900;
+      margin-bottom: 0px;
+      max-width: 100%; }
+      @media screen and (max-width: 1080px) {
+        .stats-blurred .blurred-stat .blurred-text h2 {
+          font-size: 30px; } }
       @media screen and (max-width: 768px) {
-        .stats-blurred .blurred-stat .blurred-text {
-          width: 100%; } }
-      .stats-blurred .blurred-stat .blurred-text .free-text {
-        position: absolute;
-        top: -33px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 50px;
-        font-weight: 900;
-        color: #3daee6;
-        background-color: white;
-        box-shadow: 0 0 15px -2px rgba(0, 0, 0, 0.5);
-        text-transform: uppercase;
-        padding: 0px 50px;
-        border-radius: 10px; }
-        @media screen and (max-width: 1080px) {
-          .stats-blurred .blurred-stat .blurred-text .free-text {
-            top: -27px;
-            font-size: 40px; } }
-      .stats-blurred .blurred-stat .blurred-text h2 {
-        font-size: 39px;
-        font-weight: 900;
-        margin-bottom: 0px;
-        max-width: 100%; }
-        @media screen and (max-width: 1080px) {
-          .stats-blurred .blurred-stat .blurred-text h2 {
-            font-size: 30px; } }
-        @media screen and (max-width: 768px) {
-          .stats-blurred .blurred-stat .blurred-text h2 {
-            font-size: 25px; } }
-      .stats-blurred .blurred-stat .blurred-text p {
-        font-size: 24px;
-        margin-bottom: 45px; }
-        @media screen and (max-width: 1080px) {
-          .stats-blurred .blurred-stat .blurred-text p {
-            font-size: 20px; } }
-        @media screen and (max-width: 768px) {
-          .stats-blurred .blurred-stat .blurred-text p {
-            font-size: 16px; } }
-      .stats-blurred .blurred-stat .blurred-text .download-functions-wrap {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 15px; }
-        .stats-blurred .blurred-stat .blurred-text .download-functions-wrap .download-functions p {
-          font-weight: bold;
-          color: white;
-          font-size: 20px;
-          margin-bottom: 6px;
-          text-align: left; }
-          @media screen and (max-width: 1080px) {
-            .stats-blurred .blurred-stat .blurred-text .download-functions-wrap .download-functions p {
-              font-size: 16px; } }
-      .stats-blurred .blurred-stat .blurred-text .blue-button {
+        .stats-blurred .blurred-stat .blurred-text h2 {
+          font-size: 25px; } }
+    .stats-blurred .blurred-stat .blurred-text p {
+      font-size: 24px;
+      margin-bottom: 45px; }
+      @media screen and (max-width: 1080px) {
+        .stats-blurred .blurred-stat .blurred-text p {
+          font-size: 20px; } }
+      @media screen and (max-width: 768px) {
+        .stats-blurred .blurred-stat .blurred-text p {
+          font-size: 16px; } }
+    .stats-blurred .blurred-stat .blurred-text .download-functions-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px; }
+      .stats-blurred .blurred-stat .blurred-text .download-functions-wrap .download-functions p {
         font-weight: bold;
-        border: 2px solid #ff0045;
-        background-color: #ff0045;
-        padding: 9px 40px; }
-        .stats-blurred .blurred-stat .blurred-text .blue-button:hover {
-          background-color: #e6013f; }
-      .stats-blurred .blurred-stat .blurred-text span {
-        display: block;
-        margin-top: 15px;
         color: white;
-        font-size: 20px; }
+        font-size: 20px;
+        margin-bottom: 6px;
+        text-align: left; }
         @media screen and (max-width: 1080px) {
-          .stats-blurred .blurred-stat .blurred-text span {
+          .stats-blurred .blurred-stat .blurred-text .download-functions-wrap .download-functions p {
+            font-size: 16px; } }
+    .stats-blurred .blurred-stat .blurred-text .blue-button {
+      font-weight: bold;
+      border: 2px solid #ff0045;
+      background-color: #ff0045;
+      padding: 9px 40px; }
+      .stats-blurred .blurred-stat .blurred-text .blue-button:hover {
+        background-color: #e6013f; }
+    .stats-blurred .blurred-stat .blurred-text span {
+      display: block;
+      margin-top: 15px;
+      color: white;
+      font-size: 20px; }
+      @media screen and (max-width: 1080px) {
+        .stats-blurred .blurred-stat .blurred-text span {
+          font-size: 18px; } }
+      .stats-blurred .blurred-stat .blurred-text span a {
+        font-size: 20px;
+        color: white;
+        font-weight: 900;
+        text-transform: uppercase;
+        text-decoration: underline; }
+        @media screen and (max-width: 1080px) {
+          .stats-blurred .blurred-stat .blurred-text span a {
             font-size: 18px; } }
-        .stats-blurred .blurred-stat .blurred-text span a {
-          font-size: 20px;
-          color: white;
-          font-weight: 900;
-          text-transform: uppercase;
-          text-decoration: underline; }
-          @media screen and (max-width: 1080px) {
-            .stats-blurred .blurred-stat .blurred-text span a {
-              font-size: 18px; } }
 
 .search-survey {
   position: relative;
