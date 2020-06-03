@@ -333,7 +333,7 @@ class VoxesController extends AdminController
                 'question_types' => $this->question_types,
                 'stat_types' => $this->stat_types,
                 'stat_top_answers' => $this->stat_top_answers,
-                'scales' => $scales,
+                'scales_arr' => $scales,
                 'item' => $item,
                 'category_list' => VoxCategory::get(),
                 'triggers' => $triggers,
@@ -570,9 +570,27 @@ class VoxesController extends AdminController
             $question->vox_id = $item->id;
             $this->saveOrUpdateQuestion($question);
             $item->checkComplex();
+
+            if(request('used_for_stats')=='standard' && !request('stats_fields')) {
+                Request::session()->flash('error-message', 'Please, select the demographic details which should be used for the statistics.');
+                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+            } else if ($question->type == 'scale' && request('used_for_stats')=='standard' && !request('stats_fields') && !request('stats_scale_answers')) {
+                Request::session()->flash('error-message', 'Please, select the demographic details and scale answers which should be used for the statistics.');
+                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+            } else if ($question->type == 'scale' && !request('question_scale')) {
+                Request::session()->flash('error-message', 'Please, pick a scale.');
+                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+            } else if(!empty(request('used_for_stats')) && empty(request('stats_title-en'))) {
+                Request::session()->flash('error-message', 'Stats title required' );
+                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+            } else if(!empty(request('used_for_stats')) && empty(request('stats_subtitle-en'))) {
+                Request::session()->flash('error-message', 'Stats description required' );
+                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+            } else {
+                Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-added'));
+                return redirect('cms/'.$this->current_page.'/edit/'.$id);
+            }
         
-            Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-added'));
-            return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
 
         } else {
             return redirect('cms/'.$this->current_page);
@@ -635,6 +653,12 @@ class VoxesController extends AdminController
                     return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
                 } else if ($question->type == 'scale' && !request('question_scale')) {
                     Request::session()->flash('error-message', 'Please, pick a scale.');
+                    return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
+                } else if(!empty(request('used_for_stats')) && empty(request('stats_title-en'))) {
+                    Request::session()->flash('error-message', 'Stats title required' );
+                    return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
+                } else if(!empty(request('used_for_stats')) && empty(request('stats_subtitle-en'))) {
+                    Request::session()->flash('error-message', 'Stats description required' );
                     return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
                 } else {
                     Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-updated'));
@@ -940,7 +964,7 @@ class VoxesController extends AdminController
                 }
                 $translation->question = $data['question-'.$key];
                 if(!empty( $data['stats_title-'.$key] )) {
-                    $translation->stats_title = $data['stats_title-'.$key];                    
+                    $translation->stats_title = $data['stats_title-'.$key];
                 }
                 if(!empty( $data['stats_subtitle-'.$key] )) {
                     $translation->stats_subtitle = $data['stats_subtitle-'.$key];

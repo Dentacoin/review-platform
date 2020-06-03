@@ -8,7 +8,7 @@
 	</h1>
 
 	@if(!empty($error))
-	   <i class="fa fa-exclamation-triangle" data-toggle="modal" data-target="#errorsModal" style="color: red;font-size: 20px;margin-bottom: 20px;"></i>
+	   <i class="fa fa-exclamation-triangle err-vox" data-toggle="modal" data-target="#errorsModal"></i>
 	@endif
 	<!-- end page-header -->
 

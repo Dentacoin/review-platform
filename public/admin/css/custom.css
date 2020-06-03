@@ -537,3 +537,13 @@ table .order.desc::after {
     display: block;
     font-weight: normal;
 }
+
+.err-vox {
+    color: red;
+    font-size: 20px;
+    margin-bottom: 20px;
+    position: fixed;
+    z-index: 12000;
+    top: 20px;
+    left: 120px;
+}

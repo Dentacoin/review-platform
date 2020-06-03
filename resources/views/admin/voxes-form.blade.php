@@ -8,7 +8,7 @@
 </h1>
 
 @if(!empty($error))
-   <i class="fa fa-exclamation-triangle" data-toggle="modal" data-target="#errorsModal" style="color: red;font-size: 20px;margin-bottom: 20px;"></i>
+   <i class="fa fa-exclamation-triangle err-vox" data-toggle="modal" data-target="#errorsModal"></i>
 @endif
 <!-- end page-header -->
 
@@ -387,7 +387,7 @@
                                             <select name="count_dcn_answers[]" class="form-control col" style="flex:1;">
                                                 <option value="">-</option>
                                                 @if(is_object($iq))
-                                                    @foreach($iq->vox_scale_id && !empty($scales[$iq->vox_scale_id]) ? explode(',', $scales[$iq->vox_scale_id]->answers) :  json_decode($iq->answers, true) as $key => $ans)
+                                                    @foreach($iq->vox_scale_id && !empty($scales_arr[$iq->vox_scale_id]) ? explode(',', $scales_arr[$iq->vox_scale_id]->answers) :  json_decode($iq->answers, true) as $key => $ans)
                                                         <option value="{{ $key + 1 }}" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq->id, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq->id]) == ($key + 1) ) ? 'selected="selected"' : '' !!}>{{ $ans }}</option>
                                                     @endforeach
                                                 @else
