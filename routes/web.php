@@ -391,6 +391,7 @@ $voxRoutes = function () {
 			Route::post('request-survey-patients', 				'IndexController@request_survey_patients');
 			Route::post('recommend', 							'IndexController@recommend');
 			Route::get('welcome-survey', 						'IndexController@welcome');
+			Route::any('voxes-sort', 							'IndexController@voxesSort');
 
 			Route::get('page-not-found', 						'NotFoundController@home');
 			Route::get('{catch?}', 								'NotFoundController@catch');

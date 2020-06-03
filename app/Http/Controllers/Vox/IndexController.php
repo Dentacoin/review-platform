@@ -412,4 +412,15 @@ class IndexController extends FrontController
 		}
 	}
 
+	public function voxesSort($locale=null) {
+		if(request('sort')) {
+			session([
+	            'voxes-sort' => request('sort')
+	        ]);			
+		}
+		return Response::json( [
+            'sort' => session('voxes-sort'),
+        ] );
+	}
+
 }

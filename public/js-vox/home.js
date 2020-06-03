@@ -148,7 +148,20 @@ $(document).ready(function(){
 			$(this).toggleClass('order-asc');
 		}
 
-		window.location.hash = $(this).attr('sort')+( $(this).attr('sort')!='featured' && $(this).attr('sort')!='untaken' && $(this).attr('sort')!='all' && $(this).attr('sort')!='taken' ? '-'+($(this).hasClass('order-asc') ? 'asc' : 'desc') : '' )
+		window.location.hash = $(this).attr('sort')+( $(this).attr('sort')!='featured' && $(this).attr('sort')!='untaken' && $(this).attr('sort')!='all' && $(this).attr('sort')!='taken' ? '-'+($(this).hasClass('order-asc') ? 'asc' : 'desc') : '' );
+
+		$.ajax( {
+			url: '/en/voxes-sort',
+			type: 'POST',
+			data: {
+				_token: $('meta[name="csrf-token"]').attr('content'),
+				sort: window.location.hash
+			},
+			dataType: 'json',
+			success: function( ) {
+				
+			}
+		});
 
 		handleSorts();
 		surveyTitleHeight();
@@ -162,17 +175,37 @@ $(document).ready(function(){
 		surveyTitleHeight();
 	});
 
-	if (window.location.hash.length) {
-		var parts = window.location.hash.substring(1).split('-');
-		if($('a[sort="'+parts[0]+'"]').length) {
-			$('a[sort="'+parts[0]+'"]').trigger( "click" );			
-			if(parts[1] && parts[1]=='asc') {
-				$('a[sort="'+parts[0]+'"]').trigger( "click" );			
+	$.ajax( {
+		url: '/en/voxes-sort',
+		type: 'GET',
+		dataType: 'json',
+		success: function( data ) {
+			
+			if(data.sort) {
+
+				var parts = data.sort.substring(1).split('-');
+				if($('a[sort="'+parts[0]+'"]').length) {
+					$('a[sort="'+parts[0]+'"]').trigger( "click" );			
+					if(parts[1] && parts[1]=='asc') {
+						$('a[sort="'+parts[0]+'"]').trigger( "click" );			
+					}
+				}
+			} else {
+
+				if (window.location.hash.length) {
+					var parts = window.location.hash.substring(1).split('-');
+					if($('a[sort="'+parts[0]+'"]').length) {
+						$('a[sort="'+parts[0]+'"]').trigger( "click" );			
+						if(parts[1] && parts[1]=='asc') {
+							$('a[sort="'+parts[0]+'"]').trigger( "click" );			
+						}
+					}
+				} else {
+					// $('.sort-menu a').first().trigger('click');
+				}
 			}
 		}
-	} else {
-		// $('.sort-menu a').first().trigger('click');
-	}
+	});
 
 	$('#survey-search').on('change keyup', function() {
 		handleSorts();
