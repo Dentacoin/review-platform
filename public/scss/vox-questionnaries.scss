@@ -440,7 +440,7 @@ $main-color: #38ace5;
 
 						.flickity-page-dots {
 							bottom: auto;
-							top: 76px;
+							top: 84px;
 
 							@media #{$phone} {
 								top: 6px;
@@ -490,14 +490,15 @@ $main-color: #38ace5;
 							.answer-question {
 								margin-bottom: 18px;
 								background: #e0f0fd;
-								padding: 30px 0px 65px 0px;
 								width: 100%;
 								text-align: center;
 								border-radius: 20px;
+								height: 127px;
 
 								@media #{$phone} {
 									padding: 24px 0px 5px 0px;
 									border-radius: 0px;
+									height: auto;
 								}
 
 								h3 {
@@ -507,8 +508,25 @@ $main-color: #38ace5;
 									display: inline-block;
 									font-size: 20px;
 
+									height: 86px;
+								    display: flex;
+								    align-items: center;
+								    justify-content: center;
+
 									@media #{$phone} {
+										height: auto;
+										display: block;
 										font-size: 17px;
+									}
+
+									span {
+										font-size: 20px;
+										margin: 0px 5px;
+
+										@media #{$phone} {
+											margin: 0px;
+											font-size: 17px;
+										}
 									}
 								}
 							}

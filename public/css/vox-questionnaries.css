@@ -342,7 +342,7 @@
             margin: 0px -15px; } }
         .questions .question-group .answers .answers-inner .flickity .flickity-page-dots {
           bottom: auto;
-          top: 76px; }
+          top: 84px; }
           @media screen and (max-width: 768px) {
             .questions .question-group .answers .answers-inner .flickity .flickity-page-dots {
               top: 6px; } }
@@ -378,23 +378,37 @@
           .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question {
             margin-bottom: 18px;
             background: #e0f0fd;
-            padding: 30px 0px 65px 0px;
             width: 100%;
             text-align: center;
-            border-radius: 20px; }
+            border-radius: 20px;
+            height: 127px; }
             @media screen and (max-width: 768px) {
               .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question {
                 padding: 24px 0px 5px 0px;
-                border-radius: 0px; } }
+                border-radius: 0px;
+                height: auto; } }
             .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 {
               text-align: center;
               padding: 0px 20px;
               margin: 0px 0px 5px 0px;
               display: inline-block;
-              font-size: 20px; }
+              font-size: 20px;
+              height: 86px;
+              display: flex;
+              align-items: center;
+              justify-content: center; }
               @media screen and (max-width: 768px) {
                 .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 {
+                  height: auto;
+                  display: block;
                   font-size: 17px; } }
+              .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 span {
+                font-size: 20px;
+                margin: 0px 5px; }
+                @media screen and (max-width: 768px) {
+                  .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 span {
+                    margin: 0px;
+                    font-size: 17px; } }
           .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list {
             display: inline-block;
             position: relative;
