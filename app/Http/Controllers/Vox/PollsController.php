@@ -274,10 +274,10 @@ class PollsController extends FrontController
 		    	$more_polls_to_take = null;
 		    }
 
-		    $next_stat = Poll::orderBy('id', 'desc')->where('id', '<', $poll_id)->first();
+		    $next_stat = Poll::where('status', '!=', 'scheduled')->where('launched_at', '>', $poll->launched_at)->first();
 
 		    if (empty($next_stat)) {
-		    	$next_stat = Poll::where('status', '!=', 'scheduled')->orderBy('id', 'desc')->first();
+		    	$next_stat = Poll::where('status', '!=', 'scheduled')->orderBy('id', 'asc')->first();
 		    }
 
 		    $time = !empty($poll->launched_at) ? $poll->launched_at->timestamp : '';
