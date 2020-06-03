@@ -154,6 +154,7 @@ $(document).ready(function(){
 				$('#current-question-reward').html( Math.round(reward) );
 				$('#dcn-test-reward-before').hide();
 				$('#dcn-test-reward-after').show();
+
 				$('.coins-test').html( Math.round(reward) );
 			}
 		}

@@ -183,7 +183,11 @@
 										<div class="survey-time flex">
 											<div class="col">
 												<img src="{{ url('new-vox-img/coin-icon.png') }}">
-												<p>{{ !empty($vox->complex) ? 'Max' : '' }} {{ $vox->getRewardTotal() }} DCN</p>
+												@if(!empty($user) && !empty($taken) && in_array($vox->id, $taken) && !empty(\App\Models\DcnReward::where('user_id', $user->id)->where('type', 'survey')->where('platform', 'vox')->where('reference_id', $vox->id)->first()))
+													<p>{{ \App\Models\DcnReward::where('user_id', $user->id)->where('type', 'survey')->where('platform', 'vox')->where('reference_id', $vox->id)->first()->reward }} DCN</p>
+												@else
+													<p>{{ !empty($vox->complex) ? 'Max' : '' }} {{ $vox->getRewardTotal() }} DCN</p>
+												@endif
 											</div>
 											<div class="col">
 												<img src="{{ url('new-vox-img/clock-icon.svg') }}">

@@ -1477,4 +1477,5 @@ class VoxController extends FrontController
 		return Response::json( $ret );
 	}
 	
+	
 }
