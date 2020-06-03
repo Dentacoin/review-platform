@@ -453,7 +453,9 @@
                   .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list.in-columns .answer-inner .answer-radio {
                     width: 100%;
                     display: flex;
-                    align-items: center; } }
+                    align-items: center; }
+                    .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list.in-columns .answer-inner .answer-radio span {
+                      margin-right: 5px; } }
         .questions .question-group .answers .answers-inner .flickity .flickity-prev-next-button {
           display: none; }
       .questions .question-group .answers .answers-inner .answer-radios-group {
@@ -503,7 +505,9 @@
             .questions .question-group .answers.in-columns .checkbox .answer-checkbox > i {
               margin-right: 4px;
               position: static;
-              margin-left: -30px; } }
+              margin-left: -30px; }
+            .questions .question-group .answers.in-columns .checkbox .answer-checkbox span {
+              margin-right: 5px; } }
 .questions .question-group.scale .answers {
   width: 100%; }
 .questions .next-answer {

@@ -590,6 +590,12 @@ $main-color: #38ace5;
 						   						width: 100%;
 											    display: flex;
 											    align-items: center;
+
+											    
+
+						   						span {
+						   							margin-right: 5px;
+						   						}
 						   					}
 						   				}
 									}
@@ -709,6 +715,10 @@ $main-color: #38ace5;
 	   							margin-right: 4px;
 	   							position: static;
 	   							margin-left: -30px;
+	   						}
+
+	   						span {
+	   							margin-right: 5px;
 	   						}
 	   					}
 	   				}
