@@ -10,6 +10,7 @@ use App\Models\DcnTransaction;
 use App\Models\ScrapeDentist;
 use App\Models\VoxQuestion;
 use App\Models\PollAnswer;
+use App\Models\UserAction;
 use App\Models\UserInvite;
 use App\Models\Blacklist;
 use App\Models\DcnReward;
@@ -34,7 +35,6 @@ class YouTubeController extends FrontController
 {
     public function test() {
 
-        
         exit;
 
 

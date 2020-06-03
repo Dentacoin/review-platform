@@ -420,23 +420,19 @@
 				<div class="inner">
 					<h2 class="tac">
 						{!! trans('vox.page.bans.rules-title') !!}
-						
 					</h2>
 					<div class="flex rules">
 						<div class="col flex flex-center">
 							{!! trans('vox.page.bans.rules-time') !!}
-							
 							<img src="{{ url('new-vox-img/popup-time.png') }}" />
 						</div>
 						<div class="col flex flex-center">
 							<img src="{{ url('new-vox-img/popup-focused.png') }}" />
 							{!! trans('vox.page.bans.rules-focus') !!}
-							
 						</div>
 					</div>
 					<h3 class="tac">
 						{!! trans('vox.page.bans.rules-banned') !!}
-						
 					</h3>
 					<div class="flex icons">
 						<div class="col">
@@ -455,14 +451,23 @@
 							<img src="{{ url('new-vox-img/popup-sign-4.png') }}" />
 							<b>
 								{!! trans('vox.page.bans.rules-permaban') !!}
-								
 							</b>
 						</div>
 					</div>
 					<div class="tac">
-						<a class="btn closer">
-							{!! trans('vox.page.bans.rules-got-it') !!}
-							
+						<div class="checkbox">
+							<label class="checkbox-label agree-label" for="agree-faq" style="text-align: left; margin-bottom: 30px; margin-top: -20px;">
+							<input type="checkbox" class="special-checkbox" id="agree-faq" name="agree-faq" value="1">
+							<i class="far fa-square"></i>
+							{!! trans('vox.page.bans.agree-faq', [
+								'link' => '<a href="'.getLangUrl('faq').'" target="_blank">',
+								'endlink' => '</a>',
+							]) !!}
+							</label>
+						</div>
+						<div class="alert alert-warning rules-error" style="display: none;margin-bottom: 20px;">Please, read the FAQ and agree to the Terms.</div> 
+						<a class="btn rules-ok">
+							{!! trans('vox.page.bans.rules-got-it') !!}							
 						</a>
 					</div>
 				</div>

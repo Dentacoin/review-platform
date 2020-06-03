@@ -533,7 +533,11 @@ $(document).ready(function(){
 
                             var trigger = group.next().attr('data-trigger');
                             var trigger_logical_operator = group.next().attr('trigger-type');
+                            var invert_trigger_logic = group.next().hasClass('invert-trigger-logic');
+
                             if(trigger && trigger!='-1') {
+
+                                //welcome answers
                                 var welcome_answ = $('#welcome_answ').val();
                                 var welcome_qs = [];
                                 var welcome_q_ids = [];
@@ -546,7 +550,7 @@ $(document).ready(function(){
                                     }
                                 }
 
-
+                                //demogr answers
                                 var demogr_answ = $('#demogr_answ').val();
                                 var demogr_qs = [];
                                 var demogr_q_ids = [];
@@ -663,7 +667,7 @@ $(document).ready(function(){
                                 if( trigger_logical_operator=='or' ) {
                                     should_skip = !(trigger_statuses.indexOf(true)!=-1);
                                 } else { //and
-                                    should_skip = trigger_statuses.indexOf(false)!=-1;                                    
+                                    should_skip = trigger_statuses.indexOf(false)!=-1;
                                 }
                                 //console.log( 'should skip: ', should_skip );
                             }
@@ -874,5 +878,22 @@ $(document).ready(function(){
         });
     });
 
+    $('.first-test .checkbox input').change( function() {
+        $(this).closest('label').toggleClass('active');
+    });
+
+    $('.rules-ok').click( function(e) {
+        e.preventDefault();
+
+        if($('#agree-faq').is(':checked')) {
+            $('.rules-error').hide();
+            $(this).closest('.popup').removeClass('active');
+            $('body').removeClass('popup-visible');
+        } else {
+            $('.rules-error').show();
+        }
+
+
+    });
 
 });

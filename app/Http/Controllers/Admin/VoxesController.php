@@ -607,6 +607,7 @@ class VoxesController extends AdminController
 
             $triggers_ids = [];
             $trigger_type = null;
+            $invert_trigger_logic = null;
 
             foreach ($question->vox->questions as $q) {
 
@@ -629,6 +630,7 @@ class VoxesController extends AdminController
                             }                            
                         }
                         $trigger_type = $q->trigger_type;
+                        $invert_trigger_logic = $q->invert_trigger_logic;
                     }
                 }
             }
@@ -714,6 +716,7 @@ class VoxesController extends AdminController
                 'trigger_valid_answers' => $trigger_valid_answers,
                 'triggers_ids' => $triggers_ids,
                 'trigger_type' => $trigger_type,
+                'invert_trigger_logic' => $invert_trigger_logic,
             ));
 
         } else {
@@ -933,6 +936,8 @@ class VoxesController extends AdminController
                 $question->question_trigger = '';
             }
         }
+
+        $question->invert_trigger_logic = $data['invert_trigger_logic'] ?? null;
         
         $question->save();
 

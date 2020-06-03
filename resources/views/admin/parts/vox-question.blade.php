@@ -174,6 +174,11 @@
                                                             </optgroup>
                                                         </select>
                                                         {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
+                                                        <!-- <br/>
+                                                        <label for="invert_trigger_logic" class="col-md-6 col-md-offset-6" style="padding-left: 0px;">
+                                                            <input type="checkbox" name="invert_trigger_logic" value="1" id="invert_trigger_logic" style="vertical-align: sub;" {!! !empty($question->invert_trigger_logic) ? 'checked="checked"' : '' !!} />
+                                                            Not chosen
+                                                        </label> -->
                                                     </div>
                                                     <div class="input-group-btn">
                                                         <button class="btn btn-default btn-remove-trigger" type="button">
@@ -462,6 +467,11 @@
                             </optgroup>
                         </select>
                         {{ Form::text('answers-number[]', !empty($a) ? $a : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
+                        <!-- <br/>
+                        <label for="invert_trigger_logic" class="col-md-6 col-md-offset-6" style="padding-left: 0px;">
+                            <input type="checkbox" name="invert_trigger_logic" value="1" id="invert_trigger_logic" style="vertical-align: sub;" {!! !empty($invert_trigger_logic) ? 'checked="checked"' : '' !!} />
+                            Not chosen
+                        </label> -->
                     </div>
                     <div class="input-group-btn">
                         <button class="btn btn-default btn-remove-trigger" type="button">
@@ -494,6 +504,11 @@
                         </optgroup>
                     </select>
                     {{ Form::text('answers-number[]', !empty($trigger_valid_answers) ? $trigger_valid_answers : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
+                    <!-- <br/>
+                    <label for="invert_trigger_logic" class="col-md-6 col-md-offset-6" style="padding-left: 0px;">
+                        <input type="checkbox" name="invert_trigger_logic" value="1" id="invert_trigger_logic" style="vertical-align: sub;" />
+                        Not chosen
+                    </label> -->
                 </div>
                 <div class="input-group-btn">
                     <button class="btn btn-default btn-remove-trigger" type="button">
@@ -532,6 +547,11 @@
                 </optgroup>
             </select>
             {{ Form::text('answers-number[]', null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
+            <br/>
+            <!-- <label for="invert_trigger_logic" class="col-md-6 col-md-offset-6" style="padding-left: 0px;">
+                <input type="checkbox" name="invert_trigger_logic" value="1" id="invert_trigger_logic" style="vertical-align: sub;" />
+                Not chosen
+            </label> -->
         </div>
         <div class="input-group-btn">
             <button class="btn btn-default btn-remove-trigger" type="button">
