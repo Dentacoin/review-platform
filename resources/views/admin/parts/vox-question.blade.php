@@ -234,7 +234,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group clearfix">
+                            <!-- <div class="form-group clearfix">
                                 <label class="col-md-1 control-label">
                                     Trigger invert logic
                                 </label>
@@ -244,7 +244,7 @@
                                         Not chosen
                                     </label>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 
