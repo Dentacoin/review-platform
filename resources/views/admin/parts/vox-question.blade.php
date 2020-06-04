@@ -180,12 +180,7 @@
                                                                 <option value="gender" demographic-ans {{ !empty($question) && explode(':', $trigger)[0] == 'gender' ? 'selected="selected"' : '' }}>Gender</option>
                                                             </optgroup>
                                                         </select>
-                                                        {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}
-                                                        <br/>
-                                                        <label for="invert_trigger_logic" class="col-md-6 col-md-offset-6" style="padding-left: 0px;">
-                                                            <input type="checkbox" name="invert_trigger_logic" value="1" id="invert_trigger_logic" style="vertical-align: sub;" {!! !empty($question->invert_trigger_logic) ? 'checked="checked"' : '' !!} />
-                                                            Not chosen
-                                                        </label>
+                                                        {{ Form::text('answers-number[]', !empty(explode(':', $trigger)[1]) ? explode(':', $trigger)[1] : null, array('maxlength' => 256, 'class' => 'form-control', 'style' => 'width: 50%; float: left;', 'placeholder' => 'Answer numbers')) }}                                                       
                                                     </div>
                                                     <div class="input-group-btn">
                                                         <button class="btn btn-default btn-remove-trigger" type="button">
@@ -236,6 +231,17 @@
                                     <label for="trigger-type-no" style="display: block;">
                                         <input type="radio" id="trigger-type-no" name="trigger_type" value="and" {!! !empty($question) && $question->trigger_type=='and' ? 'checked="checked"' : '' !!} />
                                         ALL the conditions should be met (A and B and C)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="col-md-1 control-label">
+                                    Trigger invert logic
+                                </label>
+                                <div class="col-md-11">
+                                    <label for="invert_trigger_logic">
+                                        <input type="checkbox" name="invert_trigger_logic" value="1" id="invert_trigger_logic" style="vertical-align: sub;" {!! !empty($question->invert_trigger_logic) ? 'checked="checked"' : '' !!} />
+                                        Not chosen
                                     </label>
                                 </div>
                             </div>

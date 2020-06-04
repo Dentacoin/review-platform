@@ -1488,7 +1488,71 @@ class VoxesController extends AdminController
             }
 
             foreach( $vox->questions as $question ) {
-                if( $question->type == 'single_choice' ) {
+                if($question->question_trigger) {
+                    $trigger_qs = [];
+
+                    foreach (explode(';', $question->question_trigger) as $v)  {
+                        $trigger_qs[] = explode(':', $v)[0];
+                    }
+
+                    $trigger_ans = [];
+                    foreach (explode(';', $question->question_trigger) as $triggers)  {
+                        if(isset(explode(':', $triggers)[1])) {
+
+                            list($triggerId, $triggerAnswers) = explode(':', $triggers);
+
+                            if(mb_strpos($triggerAnswers, '-')!==false) {
+                                list($from, $to) = explode('-', $triggerAnswers);
+
+                                $allowedAnswers = [];
+                                for ($i=$from; $i <= $to ; $i++) { 
+                                    $allowedAnswers[] = json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($i)-1];
+                                }
+
+                            } else {
+                                $answer_names = [];
+                                foreach (explode(',', $triggerAnswers) as $value) {
+                                    $answer_names[] = json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($value)-1];
+                                }
+
+                                $allowedAnswers = $answer_names;
+                            }
+
+                            $trigger_ans[$triggerId] = $allowedAnswers;
+                        }
+                    }
+
+                    if($trigger_qs) {
+
+                        $cols[] = $question->question;
+
+                        if(!empty($trigger_ans)) {
+                            $triggers = [];
+
+                            foreach ($trigger_qs as $tq) {
+                                if(isset($trigger_ans[$tq])) {
+                                    $triggers[] = VoxQuestion::find($tq)->question.' - '.($question->invert_trigger_logic ? '(NOT) ' : '').implode(',', $trigger_ans[$tq]);
+                                    
+                                } else {
+                                    $triggers[] = VoxQuestion::find($tq)->question ?? '';
+                                }                                
+                            }
+
+                            $trg = implode('; ', $triggers);
+                            
+                        } else {
+                            $q_titles = [];
+                            foreach ($trigger_qs as $key => $value) {
+                                $q_titles = VoxQuestion::find($value)->question ?? '';
+                            }
+                            $trg = implode('; ', $q_titles);
+                        }
+
+                        $trg_logic = $question->trigger_type == 'or' ? 'ANY' : 'ALL';
+
+                        $cols2[] = 'Triggers: (trigger logic '.$trg_logic.') '.$trg;
+                    }
+                } else if( $question->type == 'single_choice' ) {
                     $cols[] = $question->question;
                     $cols2[] = '';
                 } else if( $question->type == 'scale' ) {
@@ -1644,7 +1708,9 @@ class VoxesController extends AdminController
 
         $title = trim(Request::input('title'));
 
-        $voxes = Vox::with('translations')->whereHas('translations', function ($query) use ($title) {
+        $test_surveys_ids = [48,80];
+
+        $voxes = Vox::with('translations')->whereNotIn('id', $test_surveys_ids)->whereHas('translations', function ($query) use ($title) {
             $query->where('title', 'LIKE', '%'.$title.'%')->where('locale', 'LIKE', 'en');
         })->get();
 
@@ -1661,7 +1727,7 @@ class VoxesController extends AdminController
             }
         }
 
-        $questions = VoxQuestion::has('vox')->whereHas('translations', function ($query) use ($title) {
+        $questions = VoxQuestion::has('vox')->whereNotIn('vox_id', $test_surveys_ids)->whereHas('translations', function ($query) use ($title) {
             $query->where('question', 'LIKE', '%'.$title.'%')->where('locale', 'LIKE', 'en');
         })->get();
 

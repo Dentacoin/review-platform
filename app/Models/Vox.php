@@ -631,10 +631,19 @@ class Vox extends Model {
                     }
 
                     //echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($triggerAnswers, true).' / Answer: '.$answers[$triggerId].'<br/>';
-                    if( !empty($givenAnswers[$triggerId]) && in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
-                        $triggerSuccess[] = true;
+                    if($q->invert_trigger_logic) {
+                        if( !empty($givenAnswers[$triggerId]) && !in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                            $triggerSuccess[] = true;
+                        } else {
+                            $triggerSuccess[] = false;
+                        }
                     } else {
-                        $triggerSuccess[] = false;
+
+                        if( !empty($givenAnswers[$triggerId]) && in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                            $triggerSuccess[] = true;
+                        } else {
+                            $triggerSuccess[] = false;
+                        }
                     }
                 }
 
