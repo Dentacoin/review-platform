@@ -643,21 +643,31 @@ $(document).ready(function(){
                                                         range[1] = parseInt(range[1]);
                                                         for(var qnum=range[0]; qnum<=range[1]; qnum++) {
                                                             
-                                                            if(invert_trigger_logic && parsed_given_answer.indexOf(qnum.toString())==-1 ) {
-                                                                trigger_status = true;
-                                                                break;
-                                                            } else if( parsed_given_answer.indexOf(qnum.toString())!=-1 ) {
-                                                                trigger_status = true;
-                                                                break;
-                                                            }    
+                                                            if(invert_trigger_logic) {
+                                                                if(!(parsed_given_answer.indexOf(qnum.toString())!=-1)) {
+                                                                    trigger_status = true;
+                                                                    break;
+                                                                }
+                                                            } else {
+
+                                                                if( parsed_given_answer.indexOf(qnum.toString())!=-1 ) {
+                                                                    trigger_status = true;
+                                                                    break;
+                                                                }
+                                                            }
                                                         }
                                                     } else {
-                                                        if(invert_trigger_logic && parsed_given_answer.indexOf(trigger_answers[i].trim().toString())==-1 ) {
-                                                            trigger_status = true;
-                                                            break;
-                                                        } else if( parsed_given_answer.indexOf(trigger_answers[i].trim().toString())!=-1 ) {
-                                                            trigger_status = true;
-                                                            break;
+
+                                                        if(invert_trigger_logic) {
+                                                            if(!(parsed_given_answer.indexOf(trigger_answers[i].trim().toString())!=-1)) {
+                                                                trigger_status = true;
+                                                                break;
+                                                            }
+                                                        } else {
+                                                            if( parsed_given_answer.indexOf(trigger_answers[i].trim().toString())!=-1 ) {
+                                                                trigger_status = true;
+                                                                break;
+                                                            }
                                                         }
                                                     }
                                                 }
