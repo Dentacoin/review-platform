@@ -1488,6 +1488,23 @@ class VoxesController extends AdminController
             }
 
             foreach( $vox->questions as $question ) {
+                if( $question->type == 'single_choice' ) {
+                    $cols[] = $question->question;
+                    $cols2[] = '';
+                } else if( $question->type == 'scale' ) {
+                    $list = json_decode($question->answers, true);
+                    foreach ($list as $l) {
+                        $cols[] = $question->question;
+                        $cols2[] = $l;
+                    }
+                } else if( $question->type == 'multiple_choice' ) {
+                    $list = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true);
+                    foreach ($list as $l) {
+                        $cols[] = $question->question;
+                        $cols2[] = mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l;
+                    }
+                }
+
                 if($question->question_trigger) {
                     $trigger_qs = [];
 
@@ -1524,8 +1541,6 @@ class VoxesController extends AdminController
 
                     if($trigger_qs) {
 
-                        $cols[] = $question->question;
-
                         if(!empty($trigger_ans)) {
                             $triggers = [];
 
@@ -1534,7 +1549,7 @@ class VoxesController extends AdminController
                                     $triggers[] = VoxQuestion::find($tq)->question.' - '.($question->invert_trigger_logic ? '(NOT) ' : '').implode(',', $trigger_ans[$tq]);
                                     
                                 } else {
-                                    $triggers[] = VoxQuestion::find($tq)->question ?? '';
+                                    $triggers[] = VoxQuestion::find($tq)->question ? VoxQuestion::find($value)->question : '';
                                 }                                
                             }
 
@@ -1543,36 +1558,31 @@ class VoxesController extends AdminController
                         } else {
                             $q_titles = [];
                             foreach ($trigger_qs as $key => $value) {
-                                $q_titles = VoxQuestion::find($value)->question ?? '';
+                                $q_titles = VoxQuestion::find($value) ? VoxQuestion::find($value)->question : '';
                             }
-                            $trg = implode('; ', $q_titles);
+                            if($q_titles) {
+
+                                $trg = implode('; ', $q_titles);
+                            } else {
+                                $trg = '';
+                            }
                         }
 
                         $trg_logic = $question->trigger_type == 'or' ? 'ANY' : 'ALL';
 
-                        $cols2[] = 'Triggers: (trigger logic '.$trg_logic.') '.$trg;
+                        $cols3[] = 'Triggers: (trigger logic '.$trg_logic.') '.$trg;
+                    } else {
+                        $cols3[] = '';
                     }
-                } else if( $question->type == 'single_choice' ) {
-                    $cols[] = $question->question;
-                    $cols2[] = '';
-                } else if( $question->type == 'scale' ) {
-                    $list = json_decode($question->answers, true);
-                    foreach ($list as $l) {
-                        $cols[] = $question->question;
-                        $cols2[] = $l;
-                    }
-                } else if( $question->type == 'multiple_choice' ) {
-                    $list = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true);
-                    foreach ($list as $l) {
-                        $cols[] = $question->question;
-                        $cols2[] = mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l;
-                    }
+                } else {
+                    $cols3[] = '';
                 }
             }
 
             $rows = [
                 $cols,
-                $cols2
+                $cols2,
+                $cols3
             ];
 
 
