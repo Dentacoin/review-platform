@@ -1473,10 +1473,19 @@ class VoxesController extends AdminController
                 '',
             ];
 
+            $cols3 = [
+                '',
+                '',
+                '',
+                '',
+                '',
+            ];
+
             if(!empty(Request::input('demographics'))) {
                 foreach(Request::input('demographics') as $dem) {
                     $cols[] = config('vox.stats_scales')[$dem];
                     $cols2[] = '';
+                    $cols3[] = '';
                 }
             }
 
