@@ -642,13 +642,20 @@ $(document).ready(function(){
                                                         range[0] = parseInt(range[0]);
                                                         range[1] = parseInt(range[1]);
                                                         for(var qnum=range[0]; qnum<=range[1]; qnum++) {
-                                                            if( parsed_given_answer.indexOf(qnum.toString())!=-1 ) {
+                                                            
+                                                            if(invert_trigger_logic && parsed_given_answer.indexOf(qnum.toString())==-1 ) {
+                                                                trigger_status = true;
+                                                                break;
+                                                            } else if( parsed_given_answer.indexOf(qnum.toString())!=-1 ) {
                                                                 trigger_status = true;
                                                                 break;
                                                             }    
                                                         }
                                                     } else {
-                                                        if( parsed_given_answer.indexOf(trigger_answers[i].trim().toString())!=-1 ) {
+                                                        if(invert_trigger_logic && parsed_given_answer.indexOf(trigger_answers[i].trim().toString())==-1 ) {
+                                                            trigger_status = true;
+                                                            break;
+                                                        } else if( parsed_given_answer.indexOf(trigger_answers[i].trim().toString())!=-1 ) {
                                                             trigger_status = true;
                                                             break;
                                                         }
