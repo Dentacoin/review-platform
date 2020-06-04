@@ -1515,74 +1515,82 @@ class VoxesController extends AdminController
                 }
 
                 if($question->question_trigger) {
-                    $trigger_qs = [];
 
-                    foreach (explode(';', $question->question_trigger) as $v)  {
-                        $trigger_qs[] = explode(':', $v)[0];
-                    }
-
-                    $trigger_ans = [];
-                    foreach (explode(';', $question->question_trigger) as $triggers)  {
-                        if(isset(explode(':', $triggers)[1])) {
-
-                            list($triggerId, $triggerAnswers) = explode(':', $triggers);
-
-                            if(mb_strpos($triggerAnswers, '-')!==false) {
-                                list($from, $to) = explode('-', $triggerAnswers);
-
-                                $allowedAnswers = [];
-                                for ($i=$from; $i <= $to ; $i++) { 
-                                    $allowedAnswers[] = json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($i)-1];
-                                }
-
-                            } else {
-                                $answer_names = [];
-                                foreach (explode(',', $triggerAnswers) as $value) {
-                                    $answer_names[] = json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($value)-1];
-                                }
-
-                                $allowedAnswers = $answer_names;
-                            }
-
-                            $trigger_ans[$triggerId] = $allowedAnswers;
-                        }
-                    }
-
-                    if($trigger_qs) {
-
-                        if(!empty($trigger_ans)) {
-                            $triggers = [];
-
-                            foreach ($trigger_qs as $tq) {
-                                if(isset($trigger_ans[$tq])) {
-                                    $triggers[] = VoxQuestion::find($tq)->question.' - '.($question->invert_trigger_logic ? '(NOT) ' : '').implode(',', $trigger_ans[$tq]);
-                                    
-                                } else {
-                                    $triggers[] = VoxQuestion::find($tq)->question ? VoxQuestion::find($value)->question : '';
-                                }                                
-                            }
-
-                            $trg = implode('; ', $triggers);
-                            
-                        } else {
-                            $q_titles = [];
-                            foreach ($trigger_qs as $key => $value) {
-                                $q_titles = VoxQuestion::find($value) ? VoxQuestion::find($value)->question : '';
-                            }
-                            if($q_titles) {
-
-                                $trg = implode('; ', $q_titles);
-                            } else {
-                                $trg = '';
-                            }
-                        }
-
-                        $trg_logic = $question->trigger_type == 'or' ? 'ANY' : 'ALL';
-
-                        $cols3[] = 'Triggers: (trigger logic '.$trg_logic.') '.$trg;
+                    if($question->question_trigger == -1) {
+                        $cols3[] = 'Triggers: SAME AS BEFORE';
                     } else {
-                        $cols3[] = '';
+
+                        $trigger_qs = [];
+
+                        foreach (explode(';', $question->question_trigger) as $v)  {
+                            $trigger_qs[] = explode(':', $v)[0];
+                        }
+
+                        $trigger_ans = [];
+                        foreach (explode(';', $question->question_trigger) as $triggers)  {
+                            if(isset(explode(':', $triggers)[1])) {
+
+                                list($triggerId, $triggerAnswers) = explode(':', $triggers);
+
+                                if(mb_strpos($triggerAnswers, '-')!==false) {
+                                    list($from, $to) = explode('-', $triggerAnswers);
+
+                                    $allowedAnswers = [];
+                                    for ($i=$from; $i <= $to ; $i++) { 
+                                        $allowedAnswers[] = json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($i)-1];
+                                    }
+
+                                } else {
+                                    $answer_names = [];
+                                    foreach (explode(',', $triggerAnswers) as $value) {
+                                        $answer_names[] = json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($value)-1];
+                                    }
+
+                                    $allowedAnswers = $answer_names;
+                                }
+
+                                $trigger_ans[$triggerId] = $allowedAnswers;
+                            }
+                        }
+
+                        if($trigger_qs) {
+
+                            if(!empty($trigger_ans)) {
+                                $triggers = [];
+
+                                foreach ($trigger_qs as $tq) {
+                                    if(isset($trigger_ans[$tq])) {
+                                        $triggers[] = VoxQuestion::find($tq)->question.' - '.($question->invert_trigger_logic ? '(NOT) ' : '').implode(',', $trigger_ans[$tq]);
+                                        
+                                    } else {
+                                        $triggers[] = VoxQuestion::find($tq)->question ? VoxQuestion::find($value)->question : '';
+                                    }                                
+                                }
+
+                                $trg = implode('; ', $triggers);
+                                
+                            } else {
+                                $q_titles = [];
+                                foreach ($trigger_qs as $key => $value) {
+                                    $q_titles = VoxQuestion::find($value) ? VoxQuestion::find($value)->question : '';
+                                }
+                                if($q_titles) {
+
+                                    $trg = implode('; ', $q_titles);
+                                } else {
+                                    $trg = '';
+                                }
+                            }
+
+                            $trg_logic = $question->trigger_type == 'or' ? 'ANY' : 'ALL';
+
+                            $cols3[] = 'Triggers: (trigger logic '.$trg_logic.') '.$trg;
+                        } else {
+                            $cols3[] = '';
+                        }
+
                     }
+
                 } else {
                     $cols3[] = '';
                 }
