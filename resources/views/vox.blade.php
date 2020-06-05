@@ -200,6 +200,8 @@
 
 		@if(!empty($user))
 			@include('vox.popups.recommend')
+		@else
+			@include('vox/popups/failed-reg-login')
 		@endif
 
 		<style type="text/css">
@@ -441,15 +443,17 @@
 				<script src="https://dentacoin.com/assets/libs/dentacoin-mini-hub/js/init.js?v={{ $cache_version }}"></script>
 
 				<script type="text/javascript">
-					var miniHubParams = {
-						'element_id_to_bind' : 'header-avatar',
-						'platform' : 'dentavox',
-						'log_out_link' : 'https://{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.dentavox' : 'dentavox' !!}.dentacoin.com/user-logout'
-					};
+					if(typeof dcnHub !== 'undefined') {
+						var miniHubParams = {
+							'element_id_to_bind' : 'header-avatar',
+							'platform' : 'dentavox',
+							'log_out_link' : 'https://{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.dentavox' : 'dentavox' !!}.dentacoin.com/user-logout'
+						};
 
-					miniHubParams.type_hub = '{{ $user->is_dentist ? 'mini-hub-dentists' : 'mini-hub-patients' }}';
+						miniHubParams.type_hub = '{{ $user->is_dentist ? 'mini-hub-dentists' : 'mini-hub-patients' }}';
 
-					dcnHub.initMiniHub(miniHubParams);
+						dcnHub.initMiniHub(miniHubParams);
+					}
 				</script>
 			@endif
 		@endif

@@ -122,16 +122,24 @@ $(document).ready(function(){
                                 $(this).addClass('effect-loaded');
                             });
                             
-                            setTimeout( function() {
-                                $.event.trigger({type: 'openPatientRegister'});
-                            }, 2000 );
+                            if(typeof dcnGateway === 'undefined') {
+                                showPopup('failed-popup');
+                            } else {
+                                setTimeout( function() {
+                                    $.event.trigger({type: 'openPatientRegister'});
+                                }, 2000 );
+                            }
                         });
                     }
 
                 } else {
-                    setTimeout( function() {
-                        $.event.trigger({type: 'openPatientRegister'});
-                    }, 1000 );
+                    if(typeof dcnGateway === 'undefined') {
+                        showPopup('failed-popup');
+                    } else {
+                        setTimeout( function() {
+                            $.event.trigger({type: 'openPatientRegister'});
+                        }, 1000 );
+                    }
                 }
                 
 

@@ -550,6 +550,10 @@ $(document).ready(function(){
 		}
 	}
 
+	$('.close-popup').click( function() {
+		closePopup();
+	});
+
 	handlePopups = function(id) {
 		var dataPopupClick = function(e) {
 			showPopup( $(this).attr('data-popup'), e );
@@ -561,6 +565,10 @@ $(document).ready(function(){
 
     if(getUrlParameter('popup')) {
 		showPopup( getUrlParameter('popup') );
+	}
+
+	if(getUrlParameter('dcn-gateway-type') && typeof dcnGateway === 'undefined') {
+		showPopup('failed-popup');
 	}
 
 	tooltipsFunction = function() {
@@ -1248,9 +1256,21 @@ $(document).ready(function(){
     	e.preventDefault();
 
     	if (Cookies.get('first_test')) {
-    		$.event.trigger({type: 'openPatientRegister'});
+    		if(typeof dcnGateway === 'undefined') {
+	    		e.stopImmediatePropagation();
+	    		showPopup('failed-popup');
+	    	} else {
+    			$.event.trigger({type: 'openPatientRegister'});
+    		}
     	} else {
     		window.location.href = $(this).attr('href');
+    	}
+    });
+
+    $('.open-dentacoin-gateway').click(function(e) {
+    	if(typeof dcnGateway === 'undefined' && !user_id) {
+    		e.stopImmediatePropagation();
+    		showPopup('failed-popup');
     	}
     });
 

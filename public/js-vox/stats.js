@@ -2445,11 +2445,16 @@ $(document).ready(function(){
     //     $('#login-register-popup').addClass('active');
     // });
 
-    $('.blurred-button').click( function() {
-        if($(this).hasClass('log')) {
-            $.event.trigger({type: 'openPatientLogin'});
+    $('.blurred-button').click( function(e) {
+        if(typeof dcnGateway === 'undefined') {
+            e.stopImmediatePropagation();
+            showPopup('failed-popup');
         } else {
-            $.event.trigger({type: 'openPatientRegister'});
+            if($(this).hasClass('log')) {
+                $.event.trigger({type: 'openPatientLogin'});
+            } else {
+                $.event.trigger({type: 'openPatientRegister'});
+            }
         }
 
     });

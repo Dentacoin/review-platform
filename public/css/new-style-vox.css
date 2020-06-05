@@ -2532,6 +2532,36 @@ p.h2-bold {
       .popup.recommend-popup .popup-inner .content .recommend-fb video::-webkit-media-controls-enclosure {
         display: none !important; }
 
+.failed-popup.fixed-popup .popup-inner {
+  max-width: 600px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  height: 200px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  background: white;
+  left: 50%;
+  position: absolute;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 20px 100px; }
+  @media screen and (max-width: 1080px) {
+    .failed-popup.fixed-popup .popup-inner {
+      width: 90%;
+      padding: 20px 20px; } }
+  .failed-popup.fixed-popup .popup-inner .close-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px; }
+  .failed-popup.fixed-popup .popup-inner p {
+    font-size: 20px; }
+  @media screen and (max-width: 1080px) {
+    .failed-popup.fixed-popup .popup-inner .close-popup:not(.button) {
+      top: 10px; }
+      .failed-popup.fixed-popup .popup-inner .close-popup:not(.button) i {
+        font-size: 20px; } }
+
 body.popup-visible {
   overflow-y: hidden; }
 

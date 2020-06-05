@@ -281,6 +281,7 @@
 		@include('trp/popups/share')
 		@if(empty($user))
 			@include('trp/popups/dentist-verification')
+			@include('trp/popups/failed-reg-login')
 		@elseif(!$user->is_dentist)
 			@include('trp/popups/invite-new-dentist')
 			@include('trp/popups/invite-new-dentist-success')
@@ -380,15 +381,18 @@
 				<script src="https://dentacoin.com/assets/libs/dentacoin-mini-hub/js/init.js?v={{ $cache_version }}"></script>
 
 				<script type="text/javascript">
-					var miniHubParams = {
-						'element_id_to_bind' : 'header-avatar',
-						'platform' : 'trusted-reviews',
-						'log_out_link' : 'https://{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.reviews' : 'reviews' !!}.dentacoin.com/user-logout'
-					};
+					if(typeof dcnHub !== 'undefined') {
 
-					miniHubParams.type_hub = '{{ $user->is_dentist ? 'mini-hub-dentists' : 'mini-hub-patients' }}';
+						var miniHubParams = {
+							'element_id_to_bind' : 'header-avatar',
+							'platform' : 'trusted-reviews',
+							'log_out_link' : 'https://{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.reviews' : 'reviews' !!}.dentacoin.com/user-logout'
+						};
 
-					dcnHub.initMiniHub(miniHubParams);
+						miniHubParams.type_hub = '{{ $user->is_dentist ? 'mini-hub-dentists' : 'mini-hub-patients' }}';
+
+						dcnHub.initMiniHub(miniHubParams);
+					}
 				</script>
 			@endif
 		@endif
@@ -437,7 +441,6 @@
         @endif
         
         <script type="text/javascript">
-        	var areYouSure = '{{ trans('front.common.sure') }}';
         	var lang = '{{ App::getLocale() }}';
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         	var images_path = '{{ url('img-trp') }}';

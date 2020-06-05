@@ -2165,6 +2165,26 @@ textarea.input {
 .claim-popup.fixed-popup.claimed .popup-inner .claim-details {
   display: none; }
 
+.failed-popup.fixed-popup .popup-inner {
+  max-width: 600px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  height: 200px;
+  display: flex;
+  align-items: center;
+  text-align: center; }
+  @media screen and (max-width: 998px) {
+    .failed-popup.fixed-popup .popup-inner {
+      left: 50%;
+      width: 90%; } }
+  .failed-popup.fixed-popup .popup-inner p {
+    font-size: 20px; }
+  @media screen and (max-width: 998px) {
+    .failed-popup.fixed-popup .popup-inner .close-popup:not(.button) {
+      top: 10px; }
+      .failed-popup.fixed-popup .popup-inner .close-popup:not(.button) i {
+        font-size: 20px; } }
+
 @media screen and (max-width: 768px) {
   #sort-popup .popup-title {
     text-align: left;

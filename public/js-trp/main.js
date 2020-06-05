@@ -111,24 +111,40 @@ jQuery(document).ready(function($){
 
 	showPopup = function(id, e) {
 		if(id=='popup-login') {
-			setTimeout( function() {
-				$.event.trigger({type: 'openPatientLogin'});
-			}, 500);
+			if(typeof dcnGateway === 'undefined' && !user_id) {
+	    		showPopup('failed-popup');
+	    	} else {
+				setTimeout( function() {
+					$.event.trigger({type: 'openPatientLogin'});
+				}, 500);
+			}
 
 		} else if(id=='popup-login-dentist') {
-			setTimeout( function() {
-				$.event.trigger({type: 'openDentistLogin'});
-			}, 500);
+			if(typeof dcnGateway === 'undefined' && !user_id) {
+	    		showPopup('failed-popup');
+	    	} else {
+				setTimeout( function() {
+					$.event.trigger({type: 'openDentistLogin'});
+				}, 500);
+			}
 
 		} else if(id=='popup-register-dentist') {
-			setTimeout( function() {
-				$.event.trigger({type: 'openDentistRegister'});
-			}, 500);
+			if(typeof dcnGateway === 'undefined' && !user_id) {
+	    		showPopup('failed-popup');
+	    	} else {
+				setTimeout( function() {
+					$.event.trigger({type: 'openDentistRegister'});
+				}, 500);
+			}
 
 		} else if(id=='popup-register') {
-			setTimeout( function() {
-				$.event.trigger({type: 'openPatientRegister'});
-			}, 500);
+			if(typeof dcnGateway === 'undefined' && !user_id) {
+	    		showPopup('failed-popup');
+	    	} else {
+				setTimeout( function() {
+					$.event.trigger({type: 'openPatientRegister'});
+				}, 500);
+			}
 
 		} else if(id=='map-results-popup') {
 			prepareMapFucntion( function() {    
@@ -384,15 +400,19 @@ jQuery(document).ready(function($){
 			if( user_id ) {
 				showPopup( $(this).attr('data-popup-logged'), e );				
 			} else {
-				$.event.trigger({type: 'openPatientRegister'});
+				if(typeof dcnGateway === 'undefined') {
+		    		showPopup('failed-popup');
+		    	} else {
+					$.event.trigger({type: 'openPatientRegister'});
 
-				$(document).on('dentacoinLoginGatewayLoaded', function (event) {
-					var cta = $('.dentacoin-login-gateway-container .cta');
-					cta.show();
-					for(i=0;i<3;i++) {
-						cta.fadeTo('slow', 0).fadeTo('slow', 1);
-					}
-		        });
+					$(document).on('dentacoinLoginGatewayLoaded', function (event) {
+						var cta = $('.dentacoin-login-gateway-container .cta');
+						cta.show();
+						for(i=0;i<3;i++) {
+							cta.fadeTo('slow', 0).fadeTo('slow', 1);
+						}
+			        });
+			    }
 			}
 		}
 
@@ -409,19 +429,27 @@ jQuery(document).ready(function($){
 		if( user_id ) {
 			showPopup( getUrlParameter('popup-loged') );
 		} else {
-			$.event.trigger({type: 'openPatientRegister'});
+			if(typeof dcnGateway === 'undefined') {
+	    		showPopup('failed-popup');
+	    	} else {
+				$.event.trigger({type: 'openPatientRegister'});
 
-			$(document).on('dentacoinLoginGatewayLoaded', function (event) {
-				var cta = $('.dentacoin-login-gateway-container .cta');
-				cta.show();
-				for(i=0;i<3;i++) {
-					cta.fadeTo('slow', 0).fadeTo('slow', 1);
-				}
-	        });
+				$(document).on('dentacoinLoginGatewayLoaded', function (event) {
+					var cta = $('.dentacoin-login-gateway-container .cta');
+					cta.show();
+					for(i=0;i<3;i++) {
+						cta.fadeTo('slow', 0).fadeTo('slow', 1);
+					}
+		        });
+		   	}
 		}
 	}
 	if(getUrlParameter('popup')) {
 		showPopup( getUrlParameter('popup') );
+	}
+
+	if(getUrlParameter('dcn-gateway-type') && typeof dcnGateway === 'undefined') {
+		showPopup('failed-popup');
 	}
 
 	function fix_header(e){
@@ -1048,7 +1076,11 @@ jQuery(document).ready(function($){
 	});
 
 	$('.get-started-button').click( function() {
-		$.event.trigger({type: 'openDentistRegister'});
+		if(typeof dcnGateway === 'undefined' && !user_id) {
+    		showPopup('failed-popup');
+    	} else {
+			$.event.trigger({type: 'openDentistRegister'});
+		}
 	});
 
 	
@@ -1320,11 +1352,7 @@ jQuery(document).ready(function($){
             }, 
             "json"
         );
-
     } );
-
-
-
 
     var chooseExistingDentistActions = function() {
     	$('.close-ex-d').click( function(e) {
@@ -1382,7 +1410,6 @@ jQuery(document).ready(function($){
 	                console.log('error');
 	            }
 	        });
-			
 	    });
     }
 
@@ -1519,52 +1546,61 @@ jQuery(document).ready(function($){
     	window.open($(this).attr('href'), '_blank');
     });
 
-    $(document).on('dentistAuthSuccessResponse', async function ( event) {
-    	if(event.response_data.trp_ban) {
-    		window.location.href = $('#site-url').attr('url')+lang+'/banned/';
-    	} else {
-    		window.location.href = $('#site-url').attr('url');
+    if(typeof dcnGateway !== 'undefined') {
+    	
+	    $(document).on('dentistAuthSuccessResponse', async function ( event) {
+	    	if(event.response_data.trp_ban) {
+	    		window.location.href = $('#site-url').attr('url')+lang+'/banned/';
+	    	} else {
+	    		window.location.href = $('#site-url').attr('url');
+	    	}
+	    });
+	    $(document).on('patientAuthSuccessResponse', async function ( event) {
+	    	if(event.response_data.trp_ban) {
+	    		window.location.href = $('#site-url').attr('url')+lang+'/banned/';
+	    	} else {
+	    		window.location.href = $('#site-url').attr('url');
+	    	}
+	    });
+
+	    $(document).on('dentistRegisterSuccessResponseTrustedReviews', async function ( event) {
+	    	showPopup('verification-popup');
+
+	    	if (event.response_data.token_user) {
+	            $('input[name="last_user_hash"]').val(event.response_data.token_user);
+	        }
+	        if (event.response_data.data.id) {
+	            $('input[name="last_user_id"]').val(event.response_data.data.id);
+	        }
+	        if (event.response_data.data.is_clinic) {
+
+	            $('.wh-btn').hide();
+	            $('#title-clinic').show();
+	            $('#title-dentist').hide();
+	        } else {
+	        	$('#title-clinic').hide();
+	            $('#title-dentist').show();
+	            $('#clinic-add-team').remove();
+	        }
+
+	        $('.image-label').css('background-image', 'none');
+
+	        handlePopups();
+
+	        $.getScript(window.location.origin+'/js-trp/login.js', function() {
+			});
+	        $.getScript(window.location.origin+'/js-trp/upload.js', function() {
+			});
+	    });
+    }
+
+
+    $('.open-dentacoin-gateway').click(function(e) {
+
+    	if(typeof dcnGateway === 'undefined' && !user_id) {
+    		e.stopImmediatePropagation();
+    		showPopup('failed-popup');
     	}
-    });
-
-
-    $(document).on('patientAuthSuccessResponse', async function ( event) {
-    	if(event.response_data.trp_ban) {
-    		window.location.href = $('#site-url').attr('url')+lang+'/banned/';
-    	} else {
-    		window.location.href = $('#site-url').attr('url');
-    	}
-    });
-
-
-    $(document).on('dentistRegisterSuccessResponseTrustedReviews', async function ( event) {
-    	showPopup('verification-popup');
-
-    	if (event.response_data.token_user) {
-            $('input[name="last_user_hash"]').val(event.response_data.token_user);
-        }
-        if (event.response_data.data.id) {
-            $('input[name="last_user_id"]').val(event.response_data.data.id);
-        }
-        if (event.response_data.data.is_clinic) {
-
-            $('.wh-btn').hide();
-            $('#title-clinic').show();
-            $('#title-dentist').hide();
-        } else {
-        	$('#title-clinic').hide();
-            $('#title-dentist').show();
-            $('#clinic-add-team').remove();
-        }
-
-        $('.image-label').css('background-image', 'none');
-
-        handlePopups();
-
-        $.getScript(window.location.origin+'/js-trp/login.js', function() {
-		});
-        $.getScript(window.location.origin+'/js-trp/upload.js', function() {
-		});
     });
 
 

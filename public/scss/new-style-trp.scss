@@ -2488,6 +2488,37 @@ textarea.input {
     }
 }
 
+.failed-popup.fixed-popup {
+	.popup-inner {
+		max-width: 600px;
+		top: 50%;
+		transform: translateY(-50%) translateX(-50%);
+		height: 200px;
+		display: flex;
+		align-items: center;
+		text-align: center;
+
+		@media #{$tablet} {
+			left: 50%;
+    		width: 90%;
+		}
+
+		p {
+			font-size: 20px;
+		}
+
+		@media #{$tablet} {
+			.close-popup:not(.button) {
+				top: 10px;
+
+				i {
+					font-size: 20px;
+				}
+			}
+		}
+	}
+}
+
 #sort-popup {
 	.popup-title {
 		@media #{$phone} {
