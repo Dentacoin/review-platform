@@ -583,9 +583,6 @@ class VoxesController extends AdminController
             } else if(!empty(request('used_for_stats')) && empty(request('stats_title-en'))) {
                 Request::session()->flash('error-message', 'Stats title required' );
                 return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
-            } else if(!empty(request('used_for_stats')) && empty(request('stats_subtitle-en'))) {
-                Request::session()->flash('error-message', 'Stats description required' );
-                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
             } else {
                 Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-added'));
                 return redirect('cms/'.$this->current_page.'/edit/'.$id);
@@ -658,9 +655,6 @@ class VoxesController extends AdminController
                     return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
                 } else if(!empty(request('used_for_stats')) && empty(request('stats_title-en'))) {
                     Request::session()->flash('error-message', 'Stats title required' );
-                    return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
-                } else if(!empty(request('used_for_stats')) && empty(request('stats_subtitle-en'))) {
-                    Request::session()->flash('error-message', 'Stats description required' );
                     return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
                 } else {
                     Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-updated'));
