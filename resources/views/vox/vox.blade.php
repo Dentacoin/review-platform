@@ -29,6 +29,7 @@
 
 					<div class="quest-wrap">
 						<h1 class="questionnaire-title tac vox-survey-title">
+							- {{ $vox->title }} -
 							@if($testmode)
 								<a href="{{ $vox->getLink() }}?goback=1&q-id={{ request('q-id') ?? '0' }}" class="go-back-admin">&laquo; Back</a>
 							@endif
