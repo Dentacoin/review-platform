@@ -32,6 +32,10 @@
 							- {{ $vox->title }} -
 							@if($testmode)
 								<a href="{{ $vox->getLink() }}?goback=1&q-id={{ request('q-id') ?? '0' }}" class="go-back-admin">&laquo; Back</a>
+
+								@if(request('q-id') || request('back-q'))
+									<a href="javascript:;" class="refresh-q">Refresh</a>
+								@endif
 							@endif
 							@if($isAdmin)
 								<div class="vox-mode-wrapper">

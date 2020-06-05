@@ -1159,3 +1159,31 @@ $main-color: #38ace5;
 		}
 	}
 }
+
+.refresh-q,
+.go-back-admin {
+    padding: 2px 10px;
+    background: #41afff;
+    color: white;
+    border-radius: 10px;
+    font-size: 16px;
+    position: absolute;
+    right: 0px;
+    top: 4px;
+
+    &:hover {
+    	color: white;
+    }
+
+    @media #{$phone} {
+	    padding: 0px 5px;
+	    font-size: 15px;
+	    top: 3px;
+	    right: 0px;
+    }
+
+    &.refresh-q {
+	    background: #03d3f4;
+	    top: -26px;
+    }
+}

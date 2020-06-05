@@ -909,8 +909,10 @@ $(document).ready(function(){
         } else {
             $('.rules-error').show();
         }
+    });
 
-
+    $('.refresh-q').click( function() {
+        window.location.search = '?testmode=1&q-id='+$('.question-group:visible').attr('data-id');
     });
 
 });
