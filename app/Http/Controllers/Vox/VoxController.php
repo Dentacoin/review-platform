@@ -449,10 +449,10 @@ class VoxController extends FrontController
 
 
 		if(Request::input('goback') && $testmode) {
-			$this->goBack($answered, $list, $vox);
+			$q_id = $this->goBack($answered, $list, $vox);
 
 
-            return redirect( $vox->getLink() );
+            return redirect( $vox->getLink().'?back-q='.$q_id );
 		}
 
 		$slist = VoxScale::get();
@@ -1186,13 +1186,19 @@ class VoxController extends FrontController
 		    		}
 		    	}
         	} else {
-        		foreach ($vox->questions as $question) {
-		    		$first_question_num++;
-		    		if(!isset($answered[$question->id])) {
-		    			$first_question = $question->id;
-		    			break;
-		    		}
-		    	}
+        		if($testmode && request('back-q')) {
+        			$first_question_num++;
+        			$first_question = request('back-q');
+        		} else {
+
+	        		foreach ($vox->questions as $question) {
+			    		$first_question_num++;
+			    		if(!isset($answered[$question->id])) {
+			    			$first_question = $question->id;
+			    			break;
+			    		}
+			    	}
+        		}
         	}
         } else {
 	    	$first_question_num++;
