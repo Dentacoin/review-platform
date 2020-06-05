@@ -174,11 +174,23 @@ $(document).ready(function(){
 
 		if($('.question-group:visible').hasClass('shuffle')) {
 			var parent = $('.question-group:visible .answers');
-		    var divs = parent.children().not(".disabler-label");
 
-		    while (divs.length) {
-		        parent.prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
-		    }
+			if(parent.hasClass('in-columns')) {
+				parent.find('.answers-column').each( function() {
+					var divs = $(this).children().not(".disabler-label");
+
+				    while (divs.length) {
+				        $(this).prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+				    }
+				});
+			} else {
+
+			    var divs = parent.children().not(".disabler-label");
+
+			    while (divs.length) {
+			        parent.prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+			    }
+			}
 		}
 	}
 	
@@ -203,13 +215,23 @@ $(document).ready(function(){
 		question.show();
 
 		if(question.hasClass('shuffle')) {
-			console.log('dfdf');
 			var parent = question.find('.answers');
-		    var divs = parent.children().not(".disabler-label");
 
-		    while (divs.length) {
-		        parent.prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
-		    }
+			if(parent.hasClass('in-columns')) {
+				question.find('.answers-column').each( function() {
+					var divs = $(this).children().not(".disabler-label");
+
+				    while (divs.length) {
+				        $(this).prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+				    }
+				});
+			} else {
+			    var divs = parent.children().not(".disabler-label");
+
+			    while (divs.length) {
+			        parent.prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+			    }
+			}
 		}
 		if (question.hasClass('scale')) {
 

@@ -635,13 +635,6 @@ jQuery(document).ready(function($){
 	$(window).resize( fixFlickty );
 	fixFlickty();
 
-	if($(window).width() < 768) {
-		$('header .profile-btn').off('click').click( function(e) {
-			e.preventDefault();
-			$(this).closest('.header-info').find('.expander-wrapper').addClass('active');
-		} );
-	}
-
 	$('.slider-wrapper [href]').click( function(e) {
 		e.stopPropagation();
 		e.preventDefault();

@@ -133,44 +133,12 @@
 							@endif
 
 	                        @if(!empty($user))
-								<a href="https://account.dentacoin.com/?platform=trusted-reviews" class="profile-btn">
+								<a href="javascript:;" class="profile-btn" id="header-avatar">
 									<span class="name">
 										{{ $user->getNameShort() }}
 									</span>
 									<img src="{{ $user->getImageUrl(true) }}" {!! $user->hasimage ? '' : 'class="default-avatar"' !!}>
 								</a>
-
-								@if(!empty(getDentacoinHubApplications()))
-								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
-									<div class="expander-wrapper{!! $user->hasimage ? ' has-image' : '' !!}">
-										<div class="expander">
-											<a href="javascript:;" class="close-explander">{!! trans('trp.header.close') !!}<span>X</span></a>
-											<div class="expander-content">
-												@foreach(getDentacoinHubApplications() as $dcn_platform)
-											        <a href="{{ $dcn_platform->link ? $dcn_platform->link : 'javascript:;' }}" target="_blank" class="platform-icon">
-											            <figure class="text-center" itemtype="http://schema.org/ImageObject">
-											               	<img src="{{ $dcn_platform->media_name }}" itemprop="contentUrl" alt="{{ $dcn_platform->media_alt }}"> 
-											               	<figcaption>{{ $dcn_platform->title }}</figcaption>
-											            </figure>
-											        </a>
-											    @endforeach
-											</div>
-											<div class="expander-footer">
-												<div class="col">
-													<a href="{{ getLangUrl('logout') }}">
-														<i class="fas fa-power-off"></i>
-														{!! trans('trp.header.logout') !!}
-													</a>
-												</div>
-												<div class="col">
-													<a class="btn" href="https://account.dentacoin.com/?platform=trusted-reviews">
-														{!! trans('trp.header.my-account') !!}
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-								@endif
 	                        @else
 	                        	@if($current_page=='welcome-dentist')
 	                        		<a href="{{ getLangUrl('/') }}" class="button-dentists">
@@ -318,7 +286,6 @@
 			@include('trp/popups/invite-new-dentist-success')
 		@endif
 
-        <link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-login-gateway/css/dentacoin-login-gateway-style.css?v={{ $cache_version }}"/>
 		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
 		
 		@if( $current_page=='dentist' )
@@ -397,15 +364,33 @@
 
 		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
 
-		<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js?v={{ $cache_version }}"></script>
 
 		@if(empty($user))
+        	<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-login-gateway/css/dentacoin-login-gateway-style.css?v={{ $cache_version }}"/>
+			<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js?v={{ $cache_version }}"></script>
 			<script type="text/javascript">
 				dcnGateway.init({
 					'platform' : '{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.reviews' : 'trusted-reviews' !!}',
 					'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=trusted-reviews'
 				});
 			</script>
+		@else
+			@if($user->platform != 'external')
+				<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-mini-hub/css/style.css?v={{ $cache_version }}">
+				<script src="https://dentacoin.com/assets/libs/dentacoin-mini-hub/js/init.js?v={{ $cache_version }}"></script>
+
+				<script type="text/javascript">
+					var miniHubParams = {
+						'element_id_to_bind' : 'header-avatar',
+						'platform' : 'trusted-reviews',
+						'log_out_link' : 'https://{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.reviews' : 'reviews' !!}.dentacoin.com/user-logout'
+					};
+
+					miniHubParams.type_hub = '{{ $user->is_dentist ? 'mini-hub-dentists' : 'mini-hub-patients' }}';
+
+					dcnHub.initMiniHub(miniHubParams);
+				</script>
+			@endif
 		@endif
 
 		

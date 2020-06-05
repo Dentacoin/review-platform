@@ -44,6 +44,9 @@
 			{!! nl2br($question->questionWithTooltips()) !!}
 		</div>
 		<div class="answers {!! count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8 ? 'in-columns' : '' !!}">
+			@if(count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8)
+				<div class="answers-column"> 
+			@endif
 			@foreach( $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $k => $answer)
 				<div class="checkbox {!! mb_substr($answer, 0, 1)=='!' || mb_substr($answer, 0, 1)=='#' ? ' disabler-label' : '' !!}">
 					<label class="answer-checkbox no-mobile-tooltips {{ !empty($question->hasAnswerTooltip($answer, $question)) ? 'tooltip-text' : '' }}" for="answer-{{ $question->id }}-{{ $loop->index+1 }}" {!! !empty($question->hasAnswerTooltip($answer, $question)) ? 'text="'.$question->hasAnswerTooltip($answer, $question).'"' : '' !!}>
@@ -58,7 +61,15 @@
 						@endif
 					</label>
 				</div>
+				@if(count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8 && round(count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) / 2) == $loop->iteration )
+					</div> 
+					<div class="answers-column"> 
+				@endif
 			@endforeach
+
+			@if(count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8)
+				</div> 
+			@endif
 		</div>
 
 		<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
@@ -80,10 +91,9 @@
 			{!! nl2br($question->questionWithTooltips()) !!}
 		</div>
 		<div class="answers">
-
 			<div class="answers-inner">
-
 				<div class="flickity">
+					
 					@foreach(json_decode($question->answers, true) as $k => $answer)
 						<div class="answer-radios-group clearfix">
 							<div class="answer-question">
@@ -91,6 +101,9 @@
 								</h3>
 							</div>
 							<div class="buttons-list clearfix {!! count(explode(',', $scales[$question->vox_scale_id]->answers)) >= 8 ? 'in-columns' : '' !!}"> 
+								@if(count(explode(',', $scales[$question->vox_scale_id]->answers)) >= 8)
+									<div class="answers-column"> 
+								@endif
 								@foreach( explode(',', $scales[$question->vox_scale_id]->answers) as $ans)
 									<div class="tac answer-inner" style="width: {{ 100 / count(explode(',', $scales[$question->vox_scale_id]->answers)) }}%;">
 										<label class="answer-radio" for="answer-{{ $question->id }}-{{ $loop->index+1 }}-{{ $k }}">
@@ -98,10 +111,18 @@
 											{{ $ans }}											
 										</label>
 									</div>
+									@if(count(explode(',', $scales[$question->vox_scale_id]->answers)) >= 8 && round(count(explode(',', $scales[$question->vox_scale_id]->answers)) / 2) == $loop->iteration )
+										</div> 
+										<div class="answers-column"> 
+									@endif
 								@endforeach
+								@if(count(explode(',', $scales[$question->vox_scale_id]->answers)) >= 8)
+									</div> 
+								@endif
 							</div> 
 						</div>
 					@endforeach
+
 				</div>
 			</div>
 		</div>

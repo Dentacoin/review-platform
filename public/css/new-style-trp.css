@@ -6408,3 +6408,9 @@ body.strength-pb {
 .dentacoin-login-gateway-container .blue-a {
   color: #0fb0e5;
   font-size: 18px; }
+
+.list-with-apps {
+  background: transparent; }
+
+.dcn-hub-mini.with-apps {
+  z-index: 1000 !important; }

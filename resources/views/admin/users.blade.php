@@ -54,6 +54,7 @@
                                 <option value="dentists" {!! 'dentists'==$registered_platform ? 'selected="selected"' : '' !!}>Dentists</option>
                                 <option value="dentacoin" {!! 'dentacoin'==$registered_platform ? 'selected="selected"' : '' !!}>Dentacoin</option>
                                 <option value="assurance" {!! 'assurance'==$registered_platform ? 'selected="selected"' : '' !!}>Assurance</option>
+                                <option value="external" {!! 'external'==$registered_platform ? 'selected="selected"' : '' !!}>External</option>
                             </select>
                         </div>
                     </div>

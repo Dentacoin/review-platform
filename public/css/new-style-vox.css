@@ -4003,3 +4003,7 @@ svg:not(:root) {
 .dentacoin-login-gateway-container .blue-a {
   color: #0fb0e5;
   font-size: 18px; }
+
+@media screen and (max-width: 768px) {
+  .logout-btn-parent i {
+    vertical-align: unset !important; } }

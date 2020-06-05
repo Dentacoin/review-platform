@@ -104,7 +104,8 @@
   position: relative; }
   @media screen and (max-width: 768px) {
     .questions .question-group {
-      margin-bottom: 20px; } }
+      margin-bottom: 20px;
+      padding: 0px 15px; } }
   .questions .question-group.multiple-choice .answers .answer-checkbox .tooltip-text {
     font-size: 16px; }
   .questions .question-group .loader-survey {
@@ -441,21 +442,17 @@
                 @media screen and (max-width: 768px) {
                   .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list .answer-radio.active-label {
                     padding: 4px 30px; } }
-            @media screen and (min-width: 769px) {
-              .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list.in-columns {
-                display: flex;
-                flex-wrap: wrap; }
-                .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list.in-columns .answer-inner {
-                  width: calc(50% - 10px) !important;
-                  display: flex; }
-                  .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list.in-columns .answer-inner:nth-child(2n) {
-                    margin-left: 20px; }
-                  .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list.in-columns .answer-inner .answer-radio {
-                    width: 100%;
-                    display: flex;
-                    align-items: center; }
-                    .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list.in-columns .answer-inner .answer-radio span {
-                      margin-right: 5px; } }
+            .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list.in-columns {
+              display: flex; }
+              @media screen and (max-width: 768px) {
+                .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list.in-columns {
+                  display: block; } }
+              .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list.in-columns .answers-column {
+                flex: 1;
+                margin-right: 20px; }
+                @media screen and (max-width: 768px) {
+                  .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list.in-columns .answers-column {
+                    margin-right: 0px; } }
         .questions .question-group .answers .answers-inner .flickity .flickity-prev-next-button {
           display: none; }
       .questions .question-group .answers .answers-inner .answer-radios-group {
@@ -489,25 +486,17 @@
         .questions .question-group .answers .answers-inner .answer-radios-group .buttons-list {
           width: auto;
           flex: none; }
-    @media screen and (min-width: 769px) {
-      .questions .question-group .answers.in-columns {
-        display: flex;
-        flex-wrap: wrap; }
-        .questions .question-group .answers.in-columns .checkbox {
-          width: calc(50% - 10px);
-          display: flex; }
-          .questions .question-group .answers.in-columns .checkbox:nth-child(2n) {
-            margin-left: 20px; }
-          .questions .question-group .answers.in-columns .checkbox .answer-checkbox {
-            width: 100%;
-            display: flex;
-            align-items: center; }
-            .questions .question-group .answers.in-columns .checkbox .answer-checkbox > i {
-              margin-right: 4px;
-              position: static;
-              margin-left: -30px; }
-            .questions .question-group .answers.in-columns .checkbox .answer-checkbox span {
-              margin-right: 5px; } }
+    .questions .question-group .answers.in-columns {
+      display: flex; }
+      @media screen and (max-width: 768px) {
+        .questions .question-group .answers.in-columns {
+          display: block; } }
+      .questions .question-group .answers.in-columns .answers-column {
+        flex: 1;
+        margin-right: 20px; }
+        @media screen and (max-width: 768px) {
+          .questions .question-group .answers.in-columns .answers-column {
+            margin-right: 0px; } }
 .questions .question-group.scale .answers {
   width: 100%; }
 .questions .next-answer {

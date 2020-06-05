@@ -147,6 +147,7 @@ $main-color: #38ace5;
 
 		@media #{$phone} {
 			margin-bottom: 20px;
+			padding: 0px 15px;
 		}
 
 		&.multiple-choice {
@@ -572,32 +573,20 @@ $main-color: #38ace5;
 									}
 								}
 
-								@media screen and (min-width: 769px) {
+								&.in-columns {
+									display: flex;
 
-									&.in-columns {
-										display: flex;
-						   				flex-wrap: wrap;
+									@media #{$phone} {
+										display: block;
+									}
 
-						   				.answer-inner {
-						   					width: calc(50% - 10px) !important;
-						   					display: flex;
+									.answers-column {
+										flex: 1;
+					    				margin-right: 20px;
 
-						   					&:nth-child(2n) {
-						   						margin-left: 20px;
-						   					}
-
-						   					.answer-radio {
-						   						width: 100%;
-											    display: flex;
-											    align-items: center;
-
-											    
-
-						   						span {
-						   							margin-right: 5px;
-						   						}
-						   					}
-						   				}
+					    				@media #{$phone} {
+					    					margin-right: 0px;
+					    				}
 									}
 								}
 							}
@@ -692,39 +681,22 @@ $main-color: #38ace5;
 				}
 			}
 
-			@media screen and (min-width: 769px) {
+			&.in-columns {
+				display: flex;
 
-				&.in-columns {
-					display: flex;
-	   				flex-wrap: wrap;
+				@media #{$phone} {
+					display: block;
+				}
 
-	   				.checkbox {
-	   					width: calc(50% - 10px);
-	   					display: flex;
+				.answers-column {
+					flex: 1;
+    				margin-right: 20px;
 
-	   					&:nth-child(2n) {
-	   						margin-left: 20px;
-	   					}
-
-	   					.answer-checkbox {
-	   						width: 100%;
-						    display: flex;
-						    align-items: center;
-
-	   						> i {
-	   							margin-right: 4px;
-	   							position: static;
-	   							margin-left: -30px;
-	   						}
-
-	   						span {
-	   							margin-right: 5px;
-	   						}
-	   					}
-	   				}
+    				@media #{$phone} {
+    					margin-right: 0px;
+    				}
 				}
 			}
-
 		}
 	}
 

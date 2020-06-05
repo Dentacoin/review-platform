@@ -152,41 +152,12 @@
 								</div>
 								@if( $user->platform!='external' )
 									<a class="header-a" href="https://account.dentacoin.com/?platform=dentavox" >
-										<img class="header-avatar" src="{{ $user->getImageUrl(true) }}">
+										<img class="header-avatar" id="header-avatar" src="{{ $user->getImageUrl(true) }}">
 									</a>
 								@endif
 
 								<!-- <a class="header-a" href="{{ getLangUrl('logout') }}"><i class="fas fa-sign-out-alt"></i></a> -->							
-								@if( $user->platform!='external' && !empty(getDentacoinHubApplications()) )
-									<div class="expander-wrapper{!! $user->hasimage ? ' has-image' : '' !!}">
-										<div class="expander">
-											<a href="javascript:;" class="close-explander">Close<span>X</span></a>
-											<div class="expander-content">
-												@foreach(getDentacoinHubApplications() as $dcn_platform)
-											        <a href="{{ $dcn_platform->link ? $dcn_platform->link : 'javascript:;' }}" target="_blank" class="platform-icon">
-											            <figure class="text-center" itemtype="http://schema.org/ImageObject">
-											               	<img src="{{ $dcn_platform->media_name }}" itemprop="contentUrl" alt="{{ $dcn_platform->media_alt }}"> 
-											               	<figcaption>{{ $dcn_platform->title }}</figcaption>
-											            </figure>
-											        </a>
-											    @endforeach
-											</div>
-											<div class="expander-footer">
-												<div class="col">
-													<a href="{{ getLangUrl('logout') }}">
-														<i class="fas fa-power-off"></i>
-														Log out
-													</a>
-												</div>
-												<div class="col">
-													<a class="btn" href="https://account.dentacoin.com/?platform=dentavox">
-														My Account
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-								@endif
+								
 							@elseif($current_page=='welcome-survey')
 								@if(!empty($prev_user))
 									<div class="twerk-it">
@@ -200,7 +171,7 @@
 											</a>
 										</div>
 										<a class="header-a open-dentacoin-gateway patient-login" href="javascript:;">
-											<img class="header-avatar" src="{{ $prev_user->getImageUrl(true) }}">
+											<img class="header-avatar" id="header-avatar" src="{{ $prev_user->getImageUrl(true) }}">
 										</a>
 									</div>
 
@@ -448,22 +419,39 @@
 				<link rel="stylesheet" type="text/css" href="{{ $file }}" />
             @endforeach
         @endif
-
-        <link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-login-gateway/css/dentacoin-login-gateway-style.css?v={{ $cache_version }}"/>
+        
 		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
 		<!-- end css -->
 
 		<!-- js -->
 		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
-		<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js?v={{ $cache_version }}"></script>
 
 		@if(empty($user))
+			<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-login-gateway/css/dentacoin-login-gateway-style.css?v={{ $cache_version }}"/>
+			<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js?v={{ $cache_version }}"></script>
 			<script type="text/javascript">
 				dcnGateway.init({
 					'platform' : '{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.dentavox' : 'dentavox' !!}',
 					'forgotten_password_link' : 'https://account.dentacoin.com/forgotten-password?platform=dentavox'
-				});				
+				});	
 			</script>
+		@else
+			@if($user->platform != 'external')
+				<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-mini-hub/css/style.css?v={{ $cache_version }}">
+				<script src="https://dentacoin.com/assets/libs/dentacoin-mini-hub/js/init.js?v={{ $cache_version }}"></script>
+
+				<script type="text/javascript">
+					var miniHubParams = {
+						'element_id_to_bind' : 'header-avatar',
+						'platform' : 'dentavox',
+						'log_out_link' : 'https://{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.dentavox' : 'dentavox' !!}.dentacoin.com/user-logout'
+					};
+
+					miniHubParams.type_hub = '{{ $user->is_dentist ? 'mini-hub-dentists' : 'mini-hub-patients' }}';
+
+					dcnHub.initMiniHub(miniHubParams);
+				</script>
+			@endif
 		@endif
 
 		@if(!empty($trackEvents))
@@ -518,6 +506,7 @@
         	var images_path = '{{ url('img-trp') }}'; //Map pins
         	var lang = '{{ App::getLocale() }}';
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
+        	var user_type = '{{ !empty($user) ? ($user->is_dentist ? 'dentist' : 'patient') : 'null' }}';
         </script>
         <!-- endjs -->
     </body>
