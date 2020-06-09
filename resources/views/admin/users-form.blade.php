@@ -48,7 +48,7 @@
 
 @if(!empty($item->invited_himself_reg))
     <div class="alert alert-info">
-        This dentist added himself as practice on registraion
+        This dentist added himself as practice on registration
     </div>
 @endif
 
