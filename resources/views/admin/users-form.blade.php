@@ -340,9 +340,18 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Dental Practice</label>
-                                    <div class="col-md-10">
+                                    <div class="col-md-{{ $item->is_dentist ? '7' : '10' }}">
                                         {{ Form::text( 'address', $item->address, array('class' => 'form-control address-suggester', 'autocomplete' => 'off' )) }}
                                     </div>
+                                    @if($item->is_dentist)
+                                        <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Featured</label>
+                                        <div class="col-md-1" style="padding-left: 0px;">
+                                            @include('admin.parts.user-field',[
+                                                'key' => 'featured',
+                                                'info' => $fields['featured']
+                                            ])
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <div>

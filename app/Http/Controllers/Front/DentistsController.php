@@ -284,32 +284,23 @@ class DentistsController extends FrontController
 
         $items = $items->with('country.translations')->get(); //->take($ppp)->skip( ($page-1)*$ppp )
 
-        if($sort == 'rating') {
+        $order_by = $order_to_field[$sort];
+        $items = $items->sortByDesc(function ($dentist, $key) use ($order_by) {
+            if($dentist->featured) {
+                return 100000 + round($dentist->$order_by);
+            } else {
 
-            $items = $items->sortByDesc(function ($dentist, $key) {
-                if($dentist->avg_rating) {
-                    return 100000 + round($dentist->avg_rating);
+                if($dentist->$order_by) {
+                    return 10000 + round($dentist->$order_by);
                 } else {
                     if($dentist->is_partner) {
-                        return 1 + round($dentist->avg_rating);
+                        return 1 + round($dentist->$order_by);
                     } else {
                         return -1;
                     }
                 }
-            });
-        } else {
-            $items = $items->sortByDesc(function ($dentist, $key) {
-                if($dentist->ratings) {
-                    return 100000 + $dentist->ratings;
-                } else {
-                    if($dentist->is_partner) {
-                        return 1 + $dentist->ratings;
-                    } else {
-                        return -1;
-                    }
-                }
-            });
-        }
+            }
+        });
 
         $zoom = $country_search ? 5 : ($query=='worldwide' ? 1 : 13);
         $size = $query=='worldwide' ? '670x288' : '670x188';

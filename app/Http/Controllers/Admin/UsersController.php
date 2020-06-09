@@ -198,6 +198,9 @@ class UsersController extends AdminController {
             'unsubscribe' => [
                 'type' => 'bool',
             ],
+            'featured' => [
+                'type' => 'bool',
+            ],
             
     	];
     }
