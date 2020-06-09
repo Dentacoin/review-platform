@@ -2533,30 +2533,61 @@ p.h2-bold {
         display: none !important; }
 
 .failed-popup.fixed-popup .popup-inner {
-  max-width: 600px;
-  top: 50%;
-  transform: translateY(-50%) translateX(-50%);
-  height: 200px;
-  display: flex;
-  align-items: center;
-  text-align: center;
+  width: 800px;
+  top: 70px;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  padding: 0px;
   background: white;
   left: 50%;
   position: absolute;
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 20px 100px; }
+  box-shadow: 0px 0 12px black; }
   @media screen and (max-width: 1080px) {
     .failed-popup.fixed-popup .popup-inner {
+      width: 760px;
+      height: auto;
+      left: 50%; } }
+  @media screen and (max-width: 768px) {
+    .failed-popup.fixed-popup .popup-inner {
       width: 90%;
-      padding: 20px 20px; } }
+      padding: 30px; } }
+  .failed-popup.fixed-popup .popup-inner h2 {
+    margin-bottom: 0px;
+    font-size: 40px;
+    font-weight: bold;
+    color: black;
+    text-transform: uppercase;
+    margin-top: 30px;
+    text-align: center; }
+    @media screen and (max-width: 768px) {
+      .failed-popup.fixed-popup .popup-inner h2 {
+        margin-top: 0px;
+        font-size: 30px; } }
+  .failed-popup.fixed-popup .popup-inner .col {
+    padding: 0px; }
   .failed-popup.fixed-popup .popup-inner .close-popup {
     position: absolute;
     top: 10px;
     right: 10px; }
   .failed-popup.fixed-popup .popup-inner p {
-    font-size: 20px; }
-  @media screen and (max-width: 1080px) {
+    font-size: 20px;
+    padding-right: 60px; }
+    @media screen and (max-width: 768px) {
+      .failed-popup.fixed-popup .popup-inner p {
+        padding-right: 0px;
+        text-align: center; } }
+  .failed-popup.fixed-popup .popup-inner img {
+    max-width: 420px;
+    display: block;
+    margin-right: 50px;
+    border-bottom-left-radius: 10px; }
+    @media screen and (max-width: 768px) {
+      .failed-popup.fixed-popup .popup-inner img {
+        max-width: 200px;
+        margin: 20px auto; } }
+  @media screen and (max-width: 768px) {
+    .failed-popup.fixed-popup .popup-inner .flex {
+      display: block; }
     .failed-popup.fixed-popup .popup-inner .close-popup:not(.button) {
       top: 10px; }
       .failed-popup.fixed-popup .popup-inner .close-popup:not(.button) i {
