@@ -422,7 +422,7 @@ class UsersController extends AdminController {
             $users = $users->select(['id', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender', 'is_dentist'])->get();
         } else if(request()->input('export-sendgrid')) {
             ini_set("memory_limit",-1);
-            $users = $users->whereNull('unsubscribe')->select(['id','slug', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender', 'is_partner', 'is_dentist', 'is_clinic', 'platform'])->get();
+            $users = $users->whereNull('unsubscribe')->select(['id','slug', 'name', 'email', 'country_id', 'phone', 'zip', 'city_name', 'state_name', 'birthyear', 'gender', 'is_partner', 'is_dentist', 'is_clinic', 'platform', 'working_position'])->get();
         } else if($results == 0) {
             $users = $users->take(3000)->get();
         } else {
@@ -473,6 +473,8 @@ class UsersController extends AdminController {
                 $fn = str_replace(["'", '"'], '', $fn);
                 $ln = str_replace(["'", '"'], '', $ln);
 
+
+
                 $info = [
                     'user_id' => $u->id,
                     'email' => $u->email,
@@ -486,6 +488,7 @@ class UsersController extends AdminController {
                     'partner' => $u->is_partner ? 'partner' : '',
                     'tool' => $u->platform,
                     'trp_link' => $u->getLink(),
+                    'workplace' => $u->working_position ? config('trp.team_jobs')[$u->working_position] : '',
                 ];
 
                 if( $u->country_id ) {
@@ -1446,7 +1449,7 @@ class UsersController extends AdminController {
                 } else {
                     $item->top_dentist_month = null;
                 }
-                
+
                 $item->save();
 
                 foreach ($item->reviews_out as $review_out) {
