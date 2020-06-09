@@ -116,11 +116,21 @@
 				    	@if( $dentist->website )
 				    		<div class="p dentist-website" href="{{ $dentist->getWebsiteUrl() }}" target="_blank">
 				    			<div class="img">
-				    				<img src="{{ url('img-trp/site.png') }}">
-				    			</div>
-				    			{{ $dentist->website }}
+					    			<img class="black-filter" src="{{ url('img-trp/website-icon.svg') }}">
+					    		</div>
+					    		<span>
+						    		{{ $dentist->website }}
+						    	</span>
 				    		</div>
 				    	@endif
+				    	@if($dentist->top_dentist_month)
+							<div class="top-dentist">
+								<img src="{{ url('img-trp/top-dentist.png') }}">
+				    			<span>
+				    				{!! trans('trp.common.top-dentist') !!}
+			    				</span>
+			    			</div>
+						@endif
 					    <div class="ratings">
 							<div class="stars">
 								<div class="bar" style="width: {{ $dentist->avg_rating/5*100 }}%;">

@@ -1434,6 +1434,19 @@ class UsersController extends AdminController {
                 }
                 $item->hasimage_social = false;
 
+                if(!empty(request('badge-months')) && !empty(request('badge-year'))) {
+                    $help_array = [];
+                    foreach(request('badge-year') as $i => $trg) {
+                        if(!empty($trg)) {
+                            $help_array[] = $trg.':'.request('badge-months')[$i];
+                        }
+                    }
+                    $item->top_dentist_month = implode(';', $help_array);
+                    
+                } else {
+                    $item->top_dentist_month = null;
+                }
+                
                 $item->save();
 
                 foreach ($item->reviews_out as $review_out) {

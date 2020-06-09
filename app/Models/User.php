@@ -64,6 +64,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'is_clinic',
         'is_partner',
         'featured',
+        'top_dentist_month',
         'title',
         'name',
         'name_alternative',
@@ -147,9 +148,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'grace_end',
     ];
 
-    protected $casts = [
-        'fb_pages' => 'array',
-    ];
+    // protected $casts = [
+    //     'top_dentist_month' => 'array',
+    // ];
 
     public function actions() {
         return $this->hasMany('App\Models\UserAction', 'user_id', 'id');
@@ -2079,5 +2080,22 @@ Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$t
         }
 
         return $is_restricted;
+    }
+
+    public function getLastTopDentistBadge() {
+
+        $text = '';
+        if(!empty($this->top_dentist_month)) {
+
+            $time = 0;
+            foreach (explode(';', $this->top_dentist_month) as $badge) {
+                if($time < strtotime('01-'.explode(':', $badge)[1].'-'.explode(':', $badge)[0])) {
+                    $time = strtotime('01-'.explode(':', $badge)[1].'-'.explode(':', $badge)[0]);
+                    $text = trans('trp.months.'.config('months')[explode(':', $badge)[1]]).' '.explode(':', $badge)[0];
+                }
+            }
+        }
+
+        return $text;
     }
 }

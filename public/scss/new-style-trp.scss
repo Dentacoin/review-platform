@@ -4735,9 +4735,62 @@ textarea.input {
 		    flex: 8;
 	    }
 
-	    
     	div {
     		word-break: break-word;
+    	}
+
+    	h4 {
+    		margin-bottom: 20px;
+
+    		@media #{$phone} {
+    			margin-bottom: 10px;
+    		}
+    	}
+
+    	.dentist-website {
+    		display: flex;
+
+    		.img {
+    			width: auto;
+
+    			img {
+    				display: block;
+				    width: 14px !important;
+				    max-width: none;
+				    margin-top: 2px;
+    			}
+    		}
+
+    		span {
+				height: 20px;
+				overflow: hidden;
+				margin-left: 13px;
+				color: black !important;
+
+				@media #{$phone} {
+				    height: 15px;
+				}
+    		}
+    	}
+
+    	.top-dentist {
+    		display: flex;
+    		align-items: center;
+    		margin-bottom: 20px;
+
+    		img {
+    			max-width: 15px;
+    			margin-right: 12px;
+    		}
+
+    		span {
+				color: gray;
+				font-size: 14px;
+
+				@media #{$phone} {
+					font-size: 12px;
+				}
+			}
     	}
     }
 
@@ -4794,7 +4847,11 @@ textarea.input {
 
 		span {
 			font-size: 14px;
-			color: gray;
+
+			&:not(.green-text) {
+
+				color: gray;
+			}
 
 			@media #{$phone} {
 				font-size: 12px;

@@ -3658,6 +3658,41 @@ textarea.input {
         flex: 8; } }
     .result-container .media-right div {
       word-break: break-word; }
+    .result-container .media-right h4 {
+      margin-bottom: 20px; }
+      @media screen and (max-width: 768px) {
+        .result-container .media-right h4 {
+          margin-bottom: 10px; } }
+    .result-container .media-right .dentist-website {
+      display: flex; }
+      .result-container .media-right .dentist-website .img {
+        width: auto; }
+        .result-container .media-right .dentist-website .img img {
+          display: block;
+          width: 14px !important;
+          max-width: none;
+          margin-top: 2px; }
+      .result-container .media-right .dentist-website span {
+        height: 20px;
+        overflow: hidden;
+        margin-left: 13px;
+        color: black !important; }
+        @media screen and (max-width: 768px) {
+          .result-container .media-right .dentist-website span {
+            height: 15px; } }
+    .result-container .media-right .top-dentist {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px; }
+      .result-container .media-right .top-dentist img {
+        max-width: 15px;
+        margin-right: 12px; }
+      .result-container .media-right .top-dentist span {
+        color: gray;
+        font-size: 14px; }
+        @media screen and (max-width: 768px) {
+          .result-container .media-right .top-dentist span {
+            font-size: 12px; } }
   .result-container .type {
     color: #9f9f9f;
     font-size: 14px;
@@ -3691,8 +3726,9 @@ textarea.input {
       .result-container .p .img img {
         height: 14px; }
     .result-container .p span {
-      font-size: 14px;
-      color: gray; }
+      font-size: 14px; }
+      .result-container .p span:not(.green-text) {
+        color: gray; }
       @media screen and (max-width: 768px) {
         .result-container .p span {
           font-size: 12px; } }

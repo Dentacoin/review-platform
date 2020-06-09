@@ -463,8 +463,44 @@
                                         ])
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"><img src="{{ url('img-trp/top-dentist.png') }}" style="max-width: 18px;" /> Top Dentist</label>
+                                    <div class="col-md-10 top-list">
+                                        @if($item->top_dentist_month )
+                                            @foreach(explode(';',$item->top_dentist_month) as $badge)
+                                                <div class="input-group clearfix">
+                                                    <div class="template-box clearfix">
+                                                        <select name="badge-months[]" class="form-control badge-select" style="width: 50%; float: left; text-transform: capitalize;">
+                                                            @foreach(config('months') as $m => $month)
+                                                                <option value="{{ $m }}" {{ explode(':', $badge)[1] == $m ? 'selected="selected"' : '' }}>{{ $month }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <select name="badge-year[]" class="form-control badge-select" style="width: 50%; float: left;">
+                                                            @for($i=date('Y');$i>=2017;$i--)
+                                                                <option value="{{ $i }}" {{ explode(':', $badge)[0] == $i ? 'selected="selected"' : '' }}>{{ $i }}</option>
+                                                            @endfor
+                                                        </select>                                          
+                                                    </div>
+                                                    <div class="input-group-btn">
+                                                        <button class="btn btn-default btn-remove-badge" type="button">
+                                                            <i class="glyphicon glyphicon-remove"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="form-group clearfix">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <a href="javascript:;" class="btn btn-primary btn-block btn-add-new-badge" style="margin-top: -10px;" >
+                                            Аdd badge
+                                        </a>
+                                    </div>
+                                </div>
                             @endif
-                            
                         </div>
                         <div class="col-md-6">
                             <div class="form-group avatar-group">
@@ -1295,6 +1331,29 @@
             </div>
         </div>
 
+    </div>
+</div>
+
+<div style="display: none;">
+
+    <div class="input-group clearfix" id="badge-group-template">
+        <div class="template-box clearfix">
+            <select name="badge-months[]" class="form-control badge-select" style="width: 50%; float: left;text-transform: capitalize;"> 
+                @foreach(config('months') as $m => $month)
+                    <option value="{{ $m }}" {{ date('n') == $m ? 'selected="selected"' : '' }}>{{ $month }}</option>
+                @endforeach
+            </select>
+            <select name="badge-year[]" class="form-control badge-select" style="width: 50%; float: left;">
+                @for($i=date('Y');$i>=2017;$i--)
+                    <option value="{{ $i }}" {{ date('Y') == $i ? 'selected="selected"' : '' }}>{{ $i }}</option>
+                @endfor
+            </select>                                          
+        </div>
+        <div class="input-group-btn">
+            <button class="btn btn-default btn-remove-badge" type="button">
+                <i class="glyphicon glyphicon-remove"></i>
+            </button>
+        </div>
     </div>
 </div>
 

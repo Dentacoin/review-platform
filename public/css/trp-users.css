@@ -294,6 +294,13 @@
         width: 14px !important;
         max-width: none;
         margin-top: 2px; }
+    .profile-info-mobile .profile-details .top-dentist {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px; }
+      .profile-info-mobile .profile-details .top-dentist img {
+        max-width: 16px;
+        margin-right: 10px; }
     @media screen and (max-width: 768px) {
       .profile-info-mobile .profile-details .flex.phone-widget {
         display: flex;
@@ -846,13 +853,25 @@
     height: 300px; }
     .details-wrapper .map-container .gm-ui-hover-effect {
       display: none !important; }
+  .details-wrapper .about-container .top-dentist {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; }
+    @media screen and (max-width: 768px) {
+      .details-wrapper .about-container .top-dentist {
+        display: none; } }
+    .details-wrapper .about-container .top-dentist img {
+      max-width: 20px;
+      margin-right: 5px; }
+    .details-wrapper .about-container .top-dentist span {
+      font-weight: 300; }
   .details-wrapper .about-container .dentist-payments,
   .details-wrapper .about-container .specialization {
     position: relative;
     margin-bottom: 20px;
     padding-right: 30px;
     display: flex;
-    align-items: center; }
+    align-items: baseline; }
     .details-wrapper .about-container .dentist-payments .img,
     .details-wrapper .about-container .specialization .img {
       text-align: center; }

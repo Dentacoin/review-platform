@@ -95,4 +95,13 @@ $(document).ready(function(){
         $(this).closest('.external-patients-wrap').hide();
     });
 
+    $('.btn-add-new-badge').click( function() {
+		var newinput = $('#badge-group-template').clone(true).removeAttr('id');
+		$('.top-list').append(newinput);
+	} );
+
+	$('.btn-remove-badge').click( function() {
+		$(this).closest('.input-group').remove();
+	} );
+
 });

@@ -32,7 +32,6 @@
 </div>
 <div class="home-search-form">
 	@include('trp.parts.search-form')
-	
 </div>
 
 <div class="blue-background"></div>
@@ -320,6 +319,14 @@
 		    			</div>
 		    		</div>
 		    	@endif
+		    	@if($item->top_dentist_month)
+					<div class="top-dentist">
+						<img src="{{ url('img-trp/top-dentist.png') }}">
+		    			<span>
+		    				{!! trans('trp.common.top-dentist') !!}
+	    				</span>
+	    			</div>
+				@endif
 			    <div class="p profile-socials">
 		    		<a class="social" href="mailto:{{ $item->email_public ? $item->email_public : $item->email }}">
 		    			<i class="fas fa-envelope"></i>
@@ -903,6 +910,15 @@
 			</h2>
 
 			<div class="about-container">
+
+				@if($item->top_dentist_month)
+					<div class="top-dentist">
+						<img src="{{ url('img-trp/top-dentist.png') }}">
+		    			<span>
+		    				{!! trans('trp.common.top-dentist') !!}: {{ $item->getLastTopDentistBadge() }}
+	    				</span>
+	    			</div>
+				@endif
 				@if($item->categories->isNotEmpty() || (!empty($user) && $item->id==$user->id))
 	    			<div class="specialization" role="presenter">
 						<img src="{{ url('img-trp/graduate-hat.png') }}">

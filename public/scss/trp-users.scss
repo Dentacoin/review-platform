@@ -427,6 +427,17 @@ $phone: "screen and (max-width: 768px)";
     		}
     	}
 
+    	.top-dentist {
+    		display: flex;
+    		align-items: center;
+    		margin-bottom: 20px;
+
+    		img {
+    			max-width: 16px;
+    			margin-right: 10px;
+    		}
+    	}
+
 		.flex {
 
 			&.phone-widget {
@@ -1302,13 +1313,33 @@ $phone: "screen and (max-width: 768px)";
 	}
 
     .about-container {
+
+    	.top-dentist {
+    		display: flex;
+    		align-items: center;
+    		margin-bottom: 20px;
+
+    		@media #{$phone} {
+    			display: none;
+    		}
+
+    		img {
+    			max-width: 20px;
+    			margin-right: 5px;
+    		}
+
+    		span {
+    			font-weight: 300;
+    		}
+    	}
+
     	.dentist-payments,
     	.specialization {
     		position: relative;
     		margin-bottom: 20px;
     		padding-right: 30px;
 		    display: flex;
-		    align-items: center;
+		    align-items: baseline;
 
 		    .img {
 		    	text-align: center;
