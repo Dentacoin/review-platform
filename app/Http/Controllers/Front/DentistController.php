@@ -157,7 +157,7 @@ class DentistController extends FrontController
 
             if (!empty($old_slug)) {
                 $item = User::where('id', $old_slug->user_id)->first();
-                return redirect( getLangUrl('dentist/'.$item->slug) );
+                return redirect( getLangUrl('dentist/'.$item->slug), 301 );
             }
         }
 
