@@ -4507,7 +4507,7 @@ textarea.input {
     color: white;
     max-width: 150px;
     font-size: 13px;
-    z-index: 1011; }
+    z-index: 10111; }
   .tooltip-window::after {
     content: '';
     position: absolute;

@@ -110,25 +110,27 @@
 		 	<img height="1" width="1" src="https://www.facebook.com/tr?id=2366034370318681&ev=PageView&noscript=1"/>
 		</noscript>
 
-		<!-- Load Facebook SDK for JavaScript -->
-		<div id="fb-root" class="fb_chb"></div>
-	    <script>
-	        window.fbAsyncInit = function() {
-	          	FB.init({
-	          		appId: '1906201509652855',
-	            	xfbml: true,
-	            	version: 'v7.0',
-	          	});
-	        };
+		@if(!empty($_COOKIE['marketing_cookies']) )
+			<!-- Load Facebook SDK for JavaScript -->
+			<div id="fb-root" class="fb_chb"></div>
+		    <script>
+		        window.fbAsyncInit = function() {
+		          	FB.init({
+		          		appId: '1906201509652855',
+		            	xfbml: true,
+		            	version: 'v7.0',
+		          	});
+		        };
 
-	        (function(d, s, id) {
-	        	var js, fjs = d.getElementsByTagName(s)[0];
-	        	if (d.getElementById(id)) return;
-        		js = d.createElement(s); js.id = id;
-	        	js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-	        	fjs.parentNode.insertBefore(js, fjs);
-	      	}(document, 'script', 'facebook-jssdk'));
-	    </script>
+		        (function(d, s, id) {
+		        	var js, fjs = d.getElementsByTagName(s)[0];
+		        	if (d.getElementById(id)) return;
+	        		js = d.createElement(s); js.id = id;
+		        	js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+		        	fjs.parentNode.insertBefore(js, fjs);
+		      	}(document, 'script', 'facebook-jssdk'));
+		    </script>
+		@endif
 
       	<!-- Your Chat Plugin code -->
       	<div class="fb-customerchat"
