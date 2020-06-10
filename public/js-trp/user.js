@@ -2430,7 +2430,7 @@ $(document).ready(function(){
             return;
         }
 
-        if(!$.isNumeric($('#fb-page-id'))) {
+        if(!$.isNumeric($('#fb-page-id').val())) {
             $('#fb-page-id').closest('.alert-after').after('<div class="alert alert-warning ajax-alert" error="page">'+$('.facebook-tab').attr('error-not-numeric')+'</div>');
             $('#fb-page-id').addClass('has-error');
             return;
