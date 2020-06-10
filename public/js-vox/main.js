@@ -1035,9 +1035,7 @@ $(document).ready(function(){
 	pollsFunction();
 
 	$('.close-bubble').click( function() {
-		if (window.innerWidth <= 768 && Cookies.get('functionality_cookies')) {
-			Cookies.set('small-poll-bubble', true, { expires: 1, secure: true });
-		} else if(window.innerWidth > 768) {
+		if(window.innerWidth > 768) {
 			$.ajax( {
 				url: window.location.origin+'/en/hide-dailypoll',
 				type: 'GET',
@@ -1057,13 +1055,10 @@ $(document).ready(function(){
 	});
 
 	if (window.innerWidth <= 768) {
-		if(Cookies.get('small-poll-bubble')) {
-			$('.poll-bubble').addClass('small-bubble');
-		}
+		$('.poll-bubble').addClass('small-bubble');
 
 		$('.small-bubble').click( function() {
 			$(this).removeClass('small-bubble');
-			Cookies.remove('small-poll-bubble');
 		});
 	}
 
@@ -1273,6 +1268,12 @@ $(document).ready(function(){
     		showPopup('failed-popup');
     	}
     });
+
+    if(typeof FB !== 'undefined') {
+	    setTimeout( function() {
+	    	FB.CustomerChat.showDialog();
+	    }, 60000);	
+    }
 
 });
 

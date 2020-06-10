@@ -110,6 +110,35 @@
 		 	<img height="1" width="1" src="https://www.facebook.com/tr?id=2366034370318681&ev=PageView&noscript=1"/>
 		</noscript>
 
+		<!-- Load Facebook SDK for JavaScript -->
+		<div id="fb-root" class="fb_chb"></div>
+	    <script>
+	        window.fbAsyncInit = function() {
+	          	FB.init({
+	          		appId: '1906201509652855',
+	            	xfbml: true,
+	            	version: 'v7.0',
+	          	});
+	        };
+
+	        (function(d, s, id) {
+	        	var js, fjs = d.getElementsByTagName(s)[0];
+	        	if (d.getElementById(id)) return;
+        		js = d.createElement(s); js.id = id;
+	        	js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+	        	fjs.parentNode.insertBefore(js, fjs);
+	      	}(document, 'script', 'facebook-jssdk'));
+	    </script>
+
+      	<!-- Your Chat Plugin code -->
+      	<div class="fb-customerchat"
+        attribution=setup_tool
+        page_id="1578351428897849"
+        greeting_dialog_display="hide"
+  		logged_in_greeting="👋  {!! !empty($user) ? trans('vox.chatbox.greeting.login',['name' => $user->getNameShort() ]) : trans('vox.chatbox.greeting.not-login')  !!}"
+  		logged_out_greeting="👋  {!! !empty($user) ? trans('vox.chatbox.greeting.login',['name' => $user->getNameShort() ]) : trans('vox.chatbox.greeting.not-login')  !!}">
+      	</div>
+
 		<div id="site-url" url="{{ empty($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/en/welcome-survey/' ? getLangUrl('/') : 'https://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] }}"></div>
 		
 		<div class="above-fold">

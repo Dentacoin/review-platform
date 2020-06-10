@@ -3294,6 +3294,11 @@ svg:not(:root) {
     max-width: 80px;
     margin-right: 10px;
     margin-bottom: 10px; }
+    @media screen and (max-width: 768px) {
+      .poll-bubble .small-bubble-image {
+        max-width: 60px;
+        margin-right: 10px;
+        margin-bottom: 18pt; } }
   .poll-bubble .main-bubble-image {
     vertical-align: bottom;
     margin-right: -110px;
@@ -4068,3 +4073,19 @@ svg:not(:root) {
 @media screen and (max-width: 768px) {
   .logout-btn-parent i {
     vertical-align: unset !important; } }
+
+.fb_dialog {
+  right: auto !important;
+  left: 18pt !important; }
+  @media screen and (max-width: 768px) {
+    .fb_dialog {
+      left: 10px !important; } }
+
+.fb_customer_chat_bounce_in_v2,
+.fb_customer_chat_bounce_out_v2 {
+  right: auto !important;
+  left: 9pt !important; }
+  @media screen and (max-width: 768px) {
+    .fb_customer_chat_bounce_in_v2,
+    .fb_customer_chat_bounce_out_v2 {
+      left: 70px !important; } }

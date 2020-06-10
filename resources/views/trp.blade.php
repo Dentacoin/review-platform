@@ -78,6 +78,7 @@
 			fbq('init', '2366034370318681');
 			fbq('track', 'PageView');
 		</script>
+		<!-- End Facebook Pixel Code -->
 
 		@if(!empty($_COOKIE['marketing_cookies']) && ($current_page == 'welcome-dentist' || $current_page == 'dentist') )
 			<script type="text/javascript">
@@ -99,7 +100,6 @@
 			</script>
 		@endif
 
-		<!-- End Facebook Pixel Code -->
 		<link rel="apple-touch-icon" sizes="57x57" href="{{ url('trp-fav/apple-icon-57x57.png') }}">
 		<link rel="apple-touch-icon" sizes="60x60" href="{{ url('trp-fav/apple-icon-60x60.png') }}">
 		<link rel="apple-touch-icon" sizes="72x72" href="{{ url('trp-fav/apple-icon-72x72.png') }}">
@@ -120,7 +120,36 @@
 
     </head>
 
-    <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($extra_body_class) ? $extra_body_class : '' }} {{ !empty($satic_page) ? 'page-page' : '' }} {{ (config('langs')[App::getLocale()]['rtl']) ? 'rtl' : 'ltr' }} {{ !empty(session('first_guided_tour')) ? 'guided-tour' : '' }}">
+    <body class="page-{{ $current_page }} sp-{{ $current_subpage }} {{ !empty($extra_body_class) ? $extra_body_class : '' }} {{ !empty(session('first_guided_tour')) ? 'guided-tour' : '' }}">
+    	<!-- Load Facebook SDK for JavaScript -->
+	    <div id="fb-root"></div>
+	    <script>
+	        window.fbAsyncInit = function() {
+	          	FB.init({
+	          		appId: '1906201509652855',
+	            	xfbml: true,
+	            	version: 'v7.0',
+	          	});
+	        };
+
+	        (function(d, s, id) {
+	        	var js, fjs = d.getElementsByTagName(s)[0];
+	        	if (d.getElementById(id)) return;
+        		js = d.createElement(s); js.id = id;
+	        	js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+	        	fjs.parentNode.insertBefore(js, fjs);
+	      	}(document, 'script', 'facebook-jssdk'));
+	    </script>
+
+      	<!-- Your Chat Plugin code -->
+      	<div class="fb-customerchat"
+        attribution=setup_tool
+        page_id="127981491160115"
+        greeting_dialog_display="hide"
+  		logged_in_greeting="👋  {!! !empty($user) ? trans('trp.chatbox.greeting.login',['name' => $user->getNameShort() ]) : trans('trp.chatbox.greeting.not-login')  !!}"
+  		logged_out_greeting="👋  {!! !empty($user) ? trans('trp.chatbox.greeting.login',['name' => $user->getNameShort() ]) : trans('trp.chatbox.greeting.not-login')  !!}">
+      	</div>
+
     	<div id="site-url" url="{{ empty($_SERVER['REQUEST_URI']) ? getLangUrl('/') : 'https://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] }}"></div>
 		<header class="header">
 	       	<nav class="navbar navbar-default navbar-fixed-top">

@@ -4521,6 +4521,12 @@ svg:not(:root) {
 		max-width: 80px;
 		margin-right: 10px;
 		margin-bottom: 10px;
+
+		@media #{$phone} {
+		    max-width: 60px;
+		    margin-right: 10px;
+		    margin-bottom: 18pt;
+		}
     }
 
     .main-bubble-image {
@@ -5679,5 +5685,24 @@ svg:not(:root) {
 		@media #{$phone} {
 			vertical-align: unset !important;
 		}
+	}
+}
+
+.fb_dialog {
+	right: auto !important;
+	left: 18pt !important;
+
+	@media #{$phone} {
+		left: 10px !important;
+	}
+}
+
+.fb_customer_chat_bounce_in_v2,
+.fb_customer_chat_bounce_out_v2 {
+	right: auto !important;
+	left: 9pt !important;
+
+	@media #{$phone} {
+		left: 70px !important;
 	}
 }

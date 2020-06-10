@@ -1,3 +1,6 @@
+.page-questionnaire.logged-in .fb_chb {
+  display: none !important; }
+
 .questions h3 {
   color: #060606;
   margin-bottom: 10px; }

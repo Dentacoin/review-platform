@@ -1413,7 +1413,6 @@ jQuery(document).ready(function($){
 	    });
     }
 
-
     $('.add-team-member-form').submit( function(e) {
         e.preventDefault();
 
@@ -1541,7 +1540,6 @@ jQuery(document).ready(function($){
 		});
     });
 
-
     $('.open-str-link').click( function() {
     	window.open($(this).attr('href'), '_blank');
     });
@@ -1594,7 +1592,6 @@ jQuery(document).ready(function($){
 	    });
     }
 
-
     $('.open-dentacoin-gateway').click(function(e) {
 
     	if(typeof dcnGateway === 'undefined' && !user_id) {
@@ -1603,12 +1600,11 @@ jQuery(document).ready(function($){
     	}
     });
 
-
-    // $('.log-link').click( function(e) {
-    // 	e.preventDefault();
-    // 	console.log('asdfdsf');
-    // 	//window.location.href = window.location.href+'?dcn-gateway-type=patient-login';
-    // });
+    if(typeof FB !== 'undefined') {
+	    setTimeout( function() {
+	    	FB.CustomerChat.showDialog();
+	    }, 60000);	
+    }
 
 });
 
