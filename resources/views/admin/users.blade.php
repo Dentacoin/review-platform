@@ -22,11 +22,11 @@
                 </div>
                 <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-filter') }} </h4>
             </div>
-            <div class="panel-body">
+            <div class="panel-body users-filters">
                 <form method="get" action="{{ url('cms/'.$current_page) }}" id="users-filter-form">
                     <div class="row" style="margin-bottom: 10px;">                        
                         <div class="col-md-2">
-                            <select class="form-control" name="search-platform">
+                            <select class="form-control" id="search-platform" name="search-platform">
                                 @foreach($user_platforms as $p => $platform)
                                     <option value="{{ $p }}" {!! $p==$search_platform ? 'selected="selected"' : '' !!}>{{ $platform }}</option>
                                 @endforeach
@@ -72,12 +72,12 @@
                             <input type="text" class="form-control datepicker" name="search-login-after" value="{{ $search_login_after }}" placeholder="Logged in after" autocomplete="off">
                         </div>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" name="search-login-number" value="{{ $search_login_number }}" placeholder="Logins number (after date selected)">
+                            <input type="text" class="form-control" name="search-login-number" value="{{ $search_login_number }}" placeholder="Min logins number (after date selected)">
                         </div>
-                        <div class="col-md-2 {!! !empty($trp_hidden) ? 'filter-hidden' : '' !!}">
+                        <div class="col-md-2 filter trp-filter">
                             <input type="text" class="form-control" name="search-review" value="{{ $search_review }}" placeholder="Review (0 -no reviews; number)">
                         </div>
-                        <div class="col-md-2 {!! !empty($trp_hidden) ? 'filter-hidden' : '' !!}">
+                        <div class="col-md-2 filter trp-filter">
                             <select class="form-control" name="search-dentist-claims">
                                 <option value="">Profile claim</option>
                                 <option value="waiting" {!! $search_dentist_claims == 'waiting' ? 'selected="selected"' : '' !!}>Pending</option>
@@ -86,7 +86,7 @@
                                 <option value="suspicious" {!! $search_dentist_claims == 'suspicious' ? 'selected="selected"' : '' !!}>Suspicious</option>
                             </select>                            
                         </div>
-                        <div class="col-md-2 {!! !empty($vox_hidden) ? 'filter-hidden' : '' !!}">
+                        <div class="col-md-2 filter vox-filter">
                             <input type="text" class="form-control" name="search-surveys-taken" value="{{ $search_surveys_taken }}" placeholder="Surveys taken (0 -no surveys; number)">
                         </div>
                     </div>
@@ -118,6 +118,22 @@
                             <input type="text" class="form-control" name="search-address" value="{{ $search_address }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-address') }}">
                         </div>
                     </div>
+                    <!-- <p>Exclude from:</p>
+                    <div class="row custom-row" style="margin-bottom: 10px;">
+                        <div class="col-md-2">
+                            <select class="form-control select2" multiple name="exclude-country">
+                                @foreach( $countries as $country )
+                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <style type="text/css">
+                            .select2-container--default .select2-selection--multiple {
+                                height: auto !important;
+                            }
+                        </style>
+                    </div> -->
                     <div class="row">                        
                         <div class="col-md-12">
                             <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="{{ trans('admin.page.'.$current_page.'.title-filter-submit') }}">

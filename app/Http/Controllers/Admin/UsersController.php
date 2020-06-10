@@ -12,9 +12,10 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\IncompleteRegistration;
 use App\Models\UnclaimedDentist;
+use App\Models\UserGuidedTour;
+use App\Models\VoxCrossCheck;
 use App\Models\ReviewAnswer;
 use App\Models\UserCategory;
-use App\Models\VoxCrossCheck;
 use App\Models\VoxQuestion;
 use App\Models\UserInvite;
 use App\Models\UserAction;
@@ -686,17 +687,6 @@ class UsersController extends AdminController {
         $table_fields['last_login'] = array('template' => 'admin.parts.table-users-last-login', 'label' => 'Last login');
         $table_fields['delete'] = array('template' => 'admin.parts.table-users-delete');
 
-        $vox_hidden = false;
-        $trp_hidden = false;
-
-        if (empty($this->request->input('search-platform')) || $this->request->input('search-platform') == 'trp') {
-            $vox_hidden = true;
-        }
-
-        if (empty($this->request->input('search-platform')) || $this->request->input('search-platform') == 'vox') {
-            $trp_hidden = true;
-        }
-
         // dd($getArrNoSort);
         $current_url = url('cms/users/').'?'.http_build_query($getArrNoSort);
 
@@ -727,8 +717,6 @@ class UsersController extends AdminController {
             'search_dentist_claims' => $this->request->input('search-dentist-claims'),
             'user_platforms' => $user_platforms,
             'countries' => Country::with('translations')->get(),
-            'trp_hidden' =>  $trp_hidden,
-            'vox_hidden' =>  $vox_hidden,
             'table_fields' =>  $table_fields,
             'current_url' => $current_url,
         ));
@@ -1871,6 +1859,18 @@ class UsersController extends AdminController {
             list($thumb, $full, $name) = User::addTempImage($img);
             return Response::json(['success' => true, 'thumb' => $thumb, 'name' => $name ]);
         }
+    }
+
+    public function resetFirstGudedTour($id) {
+
+        $item = UserGuidedTour::where('user_id', $id)->first();
+
+        if(!empty($item)) {
+            $item->first_login_trp = null;
+            $item->save();
+        }
+
+        return redirect('cms/users/edit/'.$id);
     }
 
 }

@@ -7,6 +7,9 @@
     @if( $item->getSameIPUsers() && !$item->is_dentist )
         <a class="label label-danger" href="{{ url('cms/users/edit/'.$item->id) }}#logins-list">Click for Suspicious Logins</a>
     @endif
+    @if($item->is_dentist)
+        <a href="{{ url('cms/users/reset-first-guided-tour/'.$item->id) }}" class="btn btn-primary" style="float: right;">Reset first guided tour</a>
+    @endif
 </h1>
 <!-- end page-header -->
 
@@ -51,6 +54,7 @@
         This dentist added himself as practice on registration
     </div>
 @endif
+
 
 <div class="row">
     <div class="col-md-12">

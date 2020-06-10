@@ -104,4 +104,31 @@ $(document).ready(function(){
 		$(this).closest('.input-group').remove();
 	} );
 
+
+	var userFilter = function() {
+		if($('#search-platform').val() != '') {
+			$('.users-filters .filter').hide();
+			if($('#search-platform').val() == 'vox') {
+				$('.users-filters .vox-filter').show();
+			} else {
+				$('.users-filters .trp-filter').show();
+			}
+		} else {
+			$('.users-filters .filter').hide();
+		}
+	}
+
+	userFilter();
+
+	$('#search-platform').change( function() {
+		userFilter();
+	});
+
+	if ($('.select2').length) {
+        $(".select2").select2({
+            multiple: true,
+            placeholder: 'Exclude Country/ies',
+        });
+    }
+
 });
