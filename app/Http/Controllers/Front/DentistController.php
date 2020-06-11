@@ -1182,7 +1182,7 @@ class DentistController extends FrontController
             $review->save();
             $review->user->sendTemplate(8, [
                 'review_id' => $review->id,
-                'dentist' => $item->id
+                'dentist_id' => $item->id
             ], 'trp');
         }
 
