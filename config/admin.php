@@ -46,9 +46,9 @@ return [
             'icon' => 'list-alt',
             'subpages' => array(
                 'reviews' => 'reviews',
+                'youtube' => 'youtube',
                 'questions' => 'questions',
                 'faq' => 'faq',
-                'youtube' => 'youtube',
                 'testimonials' => 'testimonials',
                 'scrape-google-dentists' => 'scrape-google-dentists',
             ),
