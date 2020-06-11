@@ -23,6 +23,7 @@ var calendarEvents;
 var calendarListEvents;
 var showStats;
 var showPoll;
+var dentacoin_down = false;
 
 var preloadImages = function(urls, allImagesLoadedCallback){
     var loadedCounter = 0;
@@ -44,6 +45,18 @@ var preloadImages = function(urls, allImagesLoadedCallback){
 }
 
 $(document).ready(function(){
+
+	$.ajax( {
+		url: 'https://dentacoin.com',
+		type: 'GET',
+		success: function( data ) {
+			dentacoin_down = false;
+		},
+		error: function(data) {
+		    dentacoin_down = true;
+		},
+		timeout: 5000
+	});
 
 	checkFilledDots = function( event, index) {
 		var goods = new Array;
@@ -567,7 +580,7 @@ $(document).ready(function(){
 		showPopup( getUrlParameter('popup') );
 	}
 
-	if(getUrlParameter('dcn-gateway-type') && typeof dcnGateway === 'undefined') {
+	if(getUrlParameter('dcn-gateway-type') && dentacoin_down) {
 		showPopup('failed-popup');
 	}
 
@@ -1251,7 +1264,7 @@ $(document).ready(function(){
     	e.preventDefault();
 
     	if (Cookies.get('first_test')) {
-    		if(typeof dcnGateway === 'undefined') {
+    		if(dentacoin_down) {
 	    		e.stopImmediatePropagation();
 	    		showPopup('failed-popup');
 	    	} else {
@@ -1263,7 +1276,7 @@ $(document).ready(function(){
     });
 
     $('.open-dentacoin-gateway').click(function(e) {
-    	if(typeof dcnGateway === 'undefined' && !user_id) {
+    	if(dentacoin_down && !user_id) {
     		e.stopImmediatePropagation();
     		showPopup('failed-popup');
     	}

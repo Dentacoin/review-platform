@@ -4,7 +4,7 @@ jQuery(document).ready(function($){
 	$('.signin-form-wrapper form').submit( function(e) {
 		e.preventDefault();
 
-		if(typeof dcnGateway === 'undefined' && !user_id) {
+		if(dentacoin_down && !user_id) {
     		e.stopImmediatePropagation();
     		showPopup('failed-popup');
     	} else {
@@ -33,7 +33,7 @@ jQuery(document).ready(function($){
 
     if( $('#dentist-email').val() ) {
 
-    	if(typeof dcnGateway === 'undefined' && !user_id) {
+    	if(dentacoin_down && !user_id) {
     		showPopup('failed-popup');
     	} else {
 			$.event.trigger({type: 'openDentistRegister'});

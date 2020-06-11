@@ -19,8 +19,21 @@ var attachTooltips;
 var modernFieldsUpdate;
 var uploadTeamImage;
 var id_counter=0;
+var dentacoin_down = false;
 
 jQuery(document).ready(function($){
+
+    $.ajax( {
+		url: 'https://dentacoin.com',
+		type: 'GET',
+		success: function( data ) {
+			dentacoin_down = false;
+		},
+		error: function(data) {
+		    dentacoin_down = true;
+		},
+		timeout: 5000
+	});
 
 	//To be deleted
 	$('.country-select').change( function() {
@@ -111,7 +124,7 @@ jQuery(document).ready(function($){
 
 	showPopup = function(id, e) {
 		if(id=='popup-login') {
-			if(typeof dcnGateway === 'undefined' && !user_id) {
+			if(dentacoin_down && !user_id) {
 	    		showPopup('failed-popup');
 	    	} else {
 				setTimeout( function() {
@@ -120,7 +133,7 @@ jQuery(document).ready(function($){
 			}
 
 		} else if(id=='popup-login-dentist') {
-			if(typeof dcnGateway === 'undefined' && !user_id) {
+			if(dentacoin_down && !user_id) {
 	    		showPopup('failed-popup');
 	    	} else {
 				setTimeout( function() {
@@ -129,7 +142,7 @@ jQuery(document).ready(function($){
 			}
 
 		} else if(id=='popup-register-dentist') {
-			if(typeof dcnGateway === 'undefined' && !user_id) {
+			if(dentacoin_down && !user_id) {
 	    		showPopup('failed-popup');
 	    	} else {
 				setTimeout( function() {
@@ -138,7 +151,7 @@ jQuery(document).ready(function($){
 			}
 
 		} else if(id=='popup-register') {
-			if(typeof dcnGateway === 'undefined' && !user_id) {
+			if(dentacoin_down && !user_id) {
 	    		showPopup('failed-popup');
 	    	} else {
 				setTimeout( function() {
@@ -400,7 +413,7 @@ jQuery(document).ready(function($){
 			if( user_id ) {
 				showPopup( $(this).attr('data-popup-logged'), e );				
 			} else {
-				if(typeof dcnGateway === 'undefined') {
+				if(dentacoin_down) {
 		    		showPopup('failed-popup');
 		    	} else {
 					$.event.trigger({type: 'openPatientRegister'});
@@ -429,7 +442,7 @@ jQuery(document).ready(function($){
 		if( user_id ) {
 			showPopup( getUrlParameter('popup-loged') );
 		} else {
-			if(typeof dcnGateway === 'undefined') {
+			if(dentacoin_down) {
 	    		showPopup('failed-popup');
 	    	} else {
 				$.event.trigger({type: 'openPatientRegister'});
@@ -448,7 +461,7 @@ jQuery(document).ready(function($){
 		showPopup( getUrlParameter('popup') );
 	}
 
-	if(getUrlParameter('dcn-gateway-type') && typeof dcnGateway === 'undefined') {
+	if(getUrlParameter('dcn-gateway-type') && dentacoin_down) {
 		showPopup('failed-popup');
 	}
 
@@ -1076,7 +1089,7 @@ jQuery(document).ready(function($){
 	});
 
 	$('.get-started-button').click( function() {
-		if(typeof dcnGateway === 'undefined' && !user_id) {
+		if(dentacoin_down && !user_id) {
     		showPopup('failed-popup');
     	} else {
 			$.event.trigger({type: 'openDentistRegister'});
@@ -1544,7 +1557,7 @@ jQuery(document).ready(function($){
     	window.open($(this).attr('href'), '_blank');
     });
 
-    if(typeof dcnGateway !== 'undefined') {
+    if(dentacoin_down) {
     	
 	    $(document).on('dentistAuthSuccessResponse', async function ( event) {
 	    	if(event.response_data.trp_ban) {
@@ -1594,7 +1607,7 @@ jQuery(document).ready(function($){
 
     $('.open-dentacoin-gateway').click(function(e) {
 
-    	if(typeof dcnGateway === 'undefined' && !user_id) {
+    	if(dentacoin_down && !user_id) {
     		e.stopImmediatePropagation();
     		showPopup('failed-popup');
     	}

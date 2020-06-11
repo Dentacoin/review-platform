@@ -122,7 +122,7 @@ $(document).ready(function(){
                                 $(this).addClass('effect-loaded');
                             });
                             
-                            if(typeof dcnGateway === 'undefined') {
+                            if(dentacoin_down) {
                                 showPopup('failed-popup');
                             } else {
                                 setTimeout( function() {
@@ -133,7 +133,7 @@ $(document).ready(function(){
                     }
 
                 } else {
-                    if(typeof dcnGateway === 'undefined') {
+                    if(dentacoin_down) {
                         showPopup('failed-popup');
                     } else {
                         setTimeout( function() {

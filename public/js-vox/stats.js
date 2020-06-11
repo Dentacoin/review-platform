@@ -2446,7 +2446,7 @@ $(document).ready(function(){
     // });
 
     $('.blurred-button').click( function(e) {
-        if(typeof dcnGateway === 'undefined') {
+        if(dentacoin_down) {
             e.stopImmediatePropagation();
             showPopup('failed-popup');
         } else {
