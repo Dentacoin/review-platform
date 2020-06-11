@@ -16,7 +16,7 @@
                 <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-filter') }} </h4>
             </div>
             <div class="panel-body">
-                <form class="col-md-12" method="get" action="{{ url('cms/'.$current_page) }}" >
+                <form class="col-md-12" method="get" action="{{ url('cms/trp/'.$current_subpage) }}" >
                     <div class="col-md-2">
                         <input type="text" class="form-control" name="search-name-dentist" value="{{ $search_name_dentist }}" placeholder="Dentist/Clinic name">
                     </div>
@@ -55,7 +55,7 @@
                 <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title') }}</h4>
             </div>
             <div class="panel-body">
-                <form method="post" action="{{ url('cms/reviews/mass-delete') }}" >
+                <form method="post" action="{{ url('cms/trp/reviews/mass-delete') }}" >
     				@include('admin.parts.table', [
     					'table_id' => 'users',
     					'table_fields' => [

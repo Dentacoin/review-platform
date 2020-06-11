@@ -280,69 +280,69 @@ class UsersController extends AdminController {
 
         $users = User::orderBy('id', 'DESC');
 
-        if(!empty($this->request->input('search-name'))) {
-            $users = $users->where('name', 'LIKE', '%'.trim($this->request->input('search-name')).'%');
+        if(!empty(request('search-name'))) {
+            $users = $users->where('name', 'LIKE', '%'.trim(request('search-name')).'%');
         }
-        if(!empty($this->request->input('search-phone'))) {
-            $users = $users->where('phone', 'LIKE', '%'.trim($this->request->input('search-phone')).'%');
+        if(!empty(request('search-phone'))) {
+            $users = $users->where('phone', 'LIKE', '%'.trim(request('search-phone')).'%');
         }
-        if(!empty($this->request->input('search-email'))) {
-            $users = $users->where('email', 'LIKE', '%'.trim($this->request->input('search-email')).'%');
+        if(!empty(request('search-email'))) {
+            $users = $users->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
         }
-        if(!empty($this->request->input('search-address'))) {
-            $dcn_address = $this->request->input('search-address');
+        if(!empty(request('search-address'))) {
+            $dcn_address = request('search-address');
             $users = $users->whereHas('wallet_addresses', function ($query) use ($dcn_address) {
                 $query->where('dcn_address', 'like', $dcn_address);
             });
         }
-        if(!empty($this->request->input('search-id'))) {
-            $users = $users->where('id', $this->request->input('search-id') );
+        if(!empty(request('search-id'))) {
+            $users = $users->where('id', request('search-id') );
         }
-        if(!empty($this->request->input('search-ip-address'))) {
-            $ip = $this->request->input('search-ip-address');
+        if(!empty(request('search-ip-address'))) {
+            $ip = request('search-ip-address');
             $users = $users->whereHas('logins', function ($query) use ($ip) {
                 $query->where('ip', 'like', $ip);
             });
         }
-        if(!empty($this->request->input('registered-platform'))) {
-            $users = $users->where('platform', $this->request->input('registered-platform') );
+        if(!empty(request('registered-platform'))) {
+            $users = $users->where('platform', request('registered-platform') );
         }
-        if(!empty($this->request->input('search-country'))) {
-            $users = $users->where('country_id', $this->request->input('search-country') );
+        if(!empty(request('search-country'))) {
+            $users = $users->where('country_id', request('search-country') );
         }
-        if(!empty($this->request->input('search-review'))) {
-            $users = $users->has('reviews_in_dentist', '=', $this->request->input('search-review'));
+        if(!empty(request('search-review'))) {
+            $users = $users->has('reviews_in_dentist', '=', request('search-review'));
         }
-        if(!empty($this->request->input('search-surveys-taken'))) {
+        if(!empty(request('search-surveys-taken'))) {
             $users = $users->whereHas('surveys_rewards', function ($query) {
                 $query->where('reference_id', '!=', 11);
-            }, '>=', $this->request->input('search-surveys-taken'));
+            }, '>=', request('search-surveys-taken'));
         }
 
-        if(!empty($this->request->input('search-dentist-claims'))) {
+        if(!empty(request('search-dentist-claims'))) {
             $users = $users->whereHas('claims', function ($query) {
-                $query->where('status', $this->request->input('search-dentist-claims'));
+                $query->where('status', request('search-dentist-claims'));
             });
         }
-        if(!empty($this->request->input('search-register-from'))) {
-            $firstday = new Carbon($this->request->input('search-register-from'));
+        if(!empty(request('search-register-from'))) {
+            $firstday = new Carbon(request('search-register-from'));
             $users = $users->where('created_at', '>=', $firstday);
         }
-        if(!empty($this->request->input('search-register-to'))) {
-            $firstday = new Carbon($this->request->input('search-register-to'));
+        if(!empty(request('search-register-to'))) {
+            $firstday = new Carbon(request('search-register-to'));
             $users = $users->where('created_at', '<=', $firstday);
         }
-        if(!empty($this->request->input('search-login-after'))) {
-            $date = new Carbon($this->request->input('search-login-after'));
+        if(!empty(request('search-login-after'))) {
+            $date = new Carbon(request('search-login-after'));
 
-            $minLogins = max(1, intval($this->request->input('search-login-number')));
+            $minLogins = max(1, intval(request('search-login-number')));
             $users = $users->whereHas('logins', function ($query) use ($date) {
                 $query->where('created_at', '>=', $date);
             }, '>=', $minLogins);
         }
 
-        if(!empty($this->request->input('search-type'))) {
-            $tmp = explode('.', $this->request->input('search-type'));
+        if(!empty(request('search-type'))) {
+            $tmp = explode('.', request('search-type'));
             $type = $tmp[0];
             $status = isset($tmp[1]) && isset( config('user-statuses')[ $tmp[1] ] ) ? $tmp[1] : null;
             if( $type=='patient' ) {
@@ -367,12 +367,10 @@ class UsersController extends AdminController {
             } else if(!empty($tmp[1]) && $tmp[1] == 'partners') {
                 $users = $users->where('is_partner', 1);
             }
-
         }
 
-
-        if(!empty($this->request->input('search-status'))) {
-            $status = $this->request->input('search-status');
+        if(!empty(request('search-status'))) {
+            $status = request('search-status');
             if( $status=='all' ) {
                 $users = $users->withTrashed();
             }
@@ -386,7 +384,7 @@ class UsersController extends AdminController {
             $users = $users->whereNull('self_deleted');
         }
 
-        if(!empty($this->request->input('survey-count'))) {
+        if(!empty(request('survey-count'))) {
             $order = request()->input( 'survey-count' );
             $users->getQuery()->orders = null;
             $users = $users
@@ -398,21 +396,30 @@ class UsersController extends AdminController {
             ->groupBy('dcn_rewards.user_id')
             ->orderByRaw('count(dcn_rewards.id) '.$order);
 
-            // dd($users->take(20)->get());
-
             unset($getArrNoSort['survey-count']);
         }
 
-        // dd($users->first());
+        if(!empty(request('exclude-countries'))) {
+            $users = $users->whereNotIn('country_id', request('exclude-countries') );
+        }
 
+        if(!empty(request('exclude-permaban'))) {
+            $users = $users->doesntHave('permanentBans' );
+        }
 
-        if( null !== $this->request->input('results-number')) {
-            $results = trim($this->request->input('results-number'));
+        if(!empty(request('exclude-unsubscribed'))) {
+            $users = $users->whereNull('unsubscribe');
+        }
+
+        if(!empty(request('fb-tab'))) {
+            $users = $users->has('dentist_fb_page');
+        }
+
+        if( null !== request('results-number')) {
+            $results = trim(request('results-number'));
         } else {
             $results = 50;
         }
-
-        // dd($results);
 
         $total_count = $users->count();
         if( request()->input('export') ) {
@@ -674,12 +681,12 @@ class UsersController extends AdminController {
         ];
 
 
-        if($this->request->input('search-platform') == 'trp') {
+        if(request('search-platform') == 'trp') {
             $table_fields['ratings'] = array('template' => 'admin.parts.table-users-ratings');
             $table_fields['reviews'] = array('template' => 'admin.parts.table-users-reviews', 'label' => 'Reviews');
         }
 
-        if($this->request->input('search-platform') == 'vox') {
+        if(request('search-platform') == 'vox') {
             $table_fields['surveys'] = array('template' => 'admin.parts.table-users-surveys', 'label' => 'Surveys','order' => true, 'orderKey' => 'survey-count');
         }
 
@@ -695,26 +702,30 @@ class UsersController extends AdminController {
             'total_count' => $total_count,
             'user_types' => $user_types,
             'user_statuses' => $user_statuses,
-            'search_register_from' => $this->request->input('search-register-from'),
-            'search_register_to' => $this->request->input('search-register-to'),
-            'search_email' => $this->request->input('search-email'),
-            'search_phone' => $this->request->input('search-phone'),
-            'search_name' => $this->request->input('search-name'),
-            'search_id' => $this->request->input('search-id'),
-            'search_address' => $this->request->input('search-address'),
-            'search_tx' => $this->request->input('search-tx'),
-            'results_number' => $this->request->input('results-number'),
-            'search_ip_address' => $this->request->input('search-ip-address'),
-            'search_type' => $this->request->input('search-type'),
-            'search_status' => $this->request->input('search-status'),
-            'search_platform' => $this->request->input('search-platform'),
-            'registered_platform' => $this->request->input('registered-platform'),
-            'search_country' => $this->request->input('search-country'),
-            'search_review' => $this->request->input('search-review'),
-            'search_surveys_taken' => $this->request->input('search-surveys-taken'),
-            'search_login_after' => $this->request->input('search-login-after'),
-            'search_login_number' => $this->request->input('search-login-number'),
-            'search_dentist_claims' => $this->request->input('search-dentist-claims'),
+            'search_register_from' => request('search-register-from'),
+            'search_register_to' => request('search-register-to'),
+            'search_email' => request('search-email'),
+            'search_phone' => request('search-phone'),
+            'search_name' => request('search-name'),
+            'search_id' => request('search-id'),
+            'search_address' => request('search-address'),
+            'search_tx' => request('search-tx'),
+            'results_number' => request('results-number'),
+            'search_ip_address' => request('search-ip-address'),
+            'search_type' => request('search-type'),
+            'search_status' => request('search-status'),
+            'search_platform' => request('search-platform'),
+            'registered_platform' => request('registered-platform'),
+            'search_country' => request('search-country'),
+            'search_review' => request('search-review'),
+            'search_surveys_taken' => request('search-surveys-taken'),
+            'search_login_after' => request('search-login-after'),
+            'search_login_number' => request('search-login-number'),
+            'search_dentist_claims' => request('search-dentist-claims'),
+            'exclude_countries' => request('exclude-countries'),
+            'exclude_permaban' => request('exclude-permaban'),
+            'exclude_unsubscribed' => request('exclude-unsubscribed'),
+            'fb_tab' => request('fb-tab'),
             'user_platforms' => $user_platforms,
             'countries' => Country::with('translations')->get(),
             'table_fields' =>  $table_fields,

@@ -133,8 +133,8 @@ class ReviewsController extends AdminController
             $patient->sendGridTemplate(86, null, 'trp');
         }
 
-        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
-        return redirect('cms/'.$this->current_page);
+        $this->request->session()->flash('success-message', 'Review deleted' );
+        return redirect('cms/trp/'.$this->current_subpage);
     }
 
     public function massdelete(  ) {
@@ -201,7 +201,7 @@ class ReviewsController extends AdminController
         }
 
         $this->request->session()->flash('success-message', 'All selected reviews are now deleted' );
-        return redirect('cms/'.$this->current_page);
+        return redirect('cms/trp/'.$this->current_subpage);
     }
 
 
@@ -235,8 +235,8 @@ class ReviewsController extends AdminController
             }
         }
 
-        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.restored') );
-        return redirect('cms/'.$this->current_page);
+        $this->request->session()->flash('success-message', 'Review restored' );
+        return redirect('cms/trp/'.$this->current_subpage);
     }
 
 }

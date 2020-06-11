@@ -45,8 +45,8 @@ class QuestionsController extends AdminController
                 }
             }
         
-            Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.added'));
-            return redirect('cms/'.$this->current_page);
+            Request::session()->flash('success-message', 'Question added');
+            return redirect('cms/trp/'.$this->current_subpage);
         }
 
         return $this->showView('questions-form', array(
@@ -56,8 +56,8 @@ class QuestionsController extends AdminController
     public function delete( $id ) {
         Question::destroy( $id );
 
-        $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted') );
-        return redirect('cms/'.$this->current_page);
+        $this->request->session()->flash('success-message', 'Question deleted' );
+        return redirect('cms/trp/'.$this->current_subpage);
     }
 
     public function edit( $id ) {
@@ -90,15 +90,15 @@ class QuestionsController extends AdminController
                 }
                 $item->save();
             
-                Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.updated'));
-                return redirect('cms/'.$this->current_page);
+                Request::session()->flash('success-message', 'Question updated');
+                return redirect('cms/trp/'.$this->current_subpage);
             }
 
             return $this->showView('questions-form', array(
                 'item' => $item,
             ));
         } else {
-            return redirect('cms/'.$this->current_page);
+            return redirect('cms/trp/'.$this->current_subpage);
         }
     }
 

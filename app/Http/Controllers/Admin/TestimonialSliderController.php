@@ -35,7 +35,7 @@ class TestimonialSliderController extends AdminController {
         ]);
 
         if ($validator->fails()) {
-            return redirect('cms/testimonial-slider')
+            return redirect('cms/trp/testimonials')
             ->withInput()
             ->withErrors($validator);
         } else {
@@ -59,7 +59,7 @@ class TestimonialSliderController extends AdminController {
             }
 
             $this->request->session()->flash('success-message', trans('Testimonial added') );
-            return redirect('cms/testimonial-slider');
+            return redirect('cms/trp/testimonials');
         }
     }
 
@@ -74,7 +74,7 @@ class TestimonialSliderController extends AdminController {
 	            ]);
 
 	            if ($validator->fails()) {
-		            return redirect('cms/testimonial-slider/edit/'.$item->id)
+		            return redirect('cms/trp/testimonials/edit/'.$item->id)
 		            ->withInput()
 		            ->withErrors($validator);
 		        } else {
@@ -93,7 +93,7 @@ class TestimonialSliderController extends AdminController {
 		            $item->save();
 
 		            $this->request->session()->flash('success-message', trans('Testimonial edited') );
-		            return redirect('cms/testimonial-slider');
+		            return redirect('cms/trp/testimonials');
 		        }
         	}
 
@@ -101,7 +101,7 @@ class TestimonialSliderController extends AdminController {
                 'item' => $item,
             ));
         } else {
-            return redirect('cms/testimonial-slider');
+            return redirect('cms/trp/testimonials');
         }
     }
 
@@ -120,7 +120,7 @@ class TestimonialSliderController extends AdminController {
         DentistTestimonial::destroy( $id );
 
         $this->request->session()->flash('success-message', 'Testimonial deleted' );
-        return redirect('cms/testimonial-slider');
+        return redirect('cms/trp/testimonials');
     }
 
 

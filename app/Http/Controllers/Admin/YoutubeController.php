@@ -67,14 +67,14 @@ class YoutubeController extends AdminController
                 $review->save();
 
                 $review->afterSubmitActions();
-                Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.approved'));                
+                Request::session()->flash('success-message', 'Review was approved');                
             } else {
-                Request::session()->flash('error-message', trans('admin.page.'.$this->current_page.'.approved-error'));                
+                Request::session()->flash('error-message', 'Review error approved');                
             }
 
 
         }
-        return redirect('cms/'.$this->current_page);
+        return redirect('cms/trp/'.$this->current_subpage);
     }
 
     public function delete($rid) {
@@ -87,15 +87,15 @@ class YoutubeController extends AdminController
             
             if($status) {
                 $review->delete();
-                Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.deleted'));                
+                Request::session()->flash('success-message', 'The video and the review are deleted');                
             } else {
-                Request::session()->flash('error-message', trans('admin.page.'.$this->current_page.'.deleted-error'));                
+                Request::session()->flash('error-message', 'Deleted error');                
             }
 
 
         }
 
-        return redirect('cms/'.$this->current_page);
+        return redirect('cms/trp/'.$this->current_subpage);
     }
 
 

@@ -58,15 +58,15 @@
                                         </td>
                                     @elseif($v['format']=='update')
                                         <td>
-                                            <a class="btn btn-sm btn-primary" href="{{ url('cms/'.$current_page.( !empty($table_subpage) ? '/'.$table_subpage : '' ).'/edit/'.$row->id) }}">
+                                            <a class="btn btn-sm btn-primary" href="{{ url('cms/'.$current_page.( !empty($current_subpage) ? '/'.$current_subpage : '' ).'/edit/'.$row->id) }}">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
                                         </td>
                                     @elseif($v['format']=='delete')
                                         @if(!empty($row->deleted_at))
-                                            <td><a class="btn btn-sm btn-deafult" href="{{ url('cms/'.$current_page.( !empty($table_subpage) ? '/'.$table_subpage : '' ).'/restore/'.$row->id) }}">{{ trans('admin.table.restore') }}</a></td>
+                                            <td><a class="btn btn-sm btn-deafult" href="{{ url('cms/'.$current_page.( !empty($current_subpage) ? '/'.$current_subpage : '' ).'/restore/'.$row->id) }}">{{ trans('admin.table.restore') }}</a></td>
                                         @else
-                                            <td><a class="btn btn-sm btn-deafult" href="{{ url('cms/'.$current_page.( !empty($table_subpage) ? '/'.$table_subpage : '' ).'/delete/'.$row->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a></td>
+                                            <td><a class="btn btn-sm btn-deafult" href="{{ url('cms/'.$current_page.( !empty($current_subpage) ? '/'.$current_subpage : '' ).'/delete/'.$row->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a></td>
                                         @endif
                                     @elseif($v['format']=='date')
                                         <td {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>{{ !empty($row[$k]->timestamp) && $row[$k]->timestamp>0 ? date('d.m.Y', $row[$k]->timestamp) : trans('admin.table.na') }}</td>

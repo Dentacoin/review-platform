@@ -24,6 +24,35 @@
             </div>
             <div class="panel-body users-filters">
                 <form method="get" action="{{ url('cms/'.$current_page) }}" id="users-filter-form">
+                    <div class="row custom-row" style="margin-bottom: 10px;">
+                        <div class="col-md-2">
+                            <select class="form-control select2" multiple name="exclude-countries[]">
+                                @foreach( $countries as $country )
+                                    <option value="{{ $country->id }}" {{ !empty($exclude_countries) && in_array($country->id, $exclude_countries) ? 'selected="selected"' : '' }}>{{ $country->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="exclude-permaban" style="display: flex;align-items: center;margin-top: 7px;color: #767676;font-weight: normal;">
+                                <input id="exclude-permaban" type="checkbox" name="exclude-permaban" value="1" {!! !empty($exclude_permaban) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                Exclude Permaban (Vox & TRP)
+                            </label>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="exclude-unsubscribed" style="display: flex;align-items: center;margin-top: 7px;color: #767676;font-weight: normal;">
+                                <input id="exclude-unsubscribed" type="checkbox" name="exclude-unsubscribed" value="1" {!! !empty($exclude_unsubscribed) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                Exclude Unsubscribed
+                            </label>
+                        </div>
+
+                        <style type="text/css">
+                            .select2-container--default .select2-selection--multiple {
+                                height: auto !important;
+                            }
+                        </style>
+                    </div>
                     <div class="row" style="margin-bottom: 10px;">                        
                         <div class="col-md-2">
                             <select class="form-control" id="search-platform" name="search-platform">
@@ -86,6 +115,12 @@
                                 <option value="suspicious" {!! $search_dentist_claims == 'suspicious' ? 'selected="selected"' : '' !!}>Suspicious</option>
                             </select>                            
                         </div>
+                        <div class="col-md-2 filter trp-filter">
+                            <label for="fb-tab" style="display: flex;align-items: center;margin-top: 7px;color: #767676;font-weight: normal;">
+                                <input id="fb-tab" type="checkbox" name="fb-tab" value="1" {!! !empty($fb_tab) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
+                                With fb page tab
+                            </label>
+                        </div>
                         <div class="col-md-2 filter vox-filter">
                             <input type="text" class="form-control" name="search-surveys-taken" value="{{ $search_surveys_taken }}" placeholder="Surveys taken (0 -no surveys; number)">
                         </div>
@@ -118,22 +153,6 @@
                             <input type="text" class="form-control" name="search-address" value="{{ $search_address }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-address') }}">
                         </div>
                     </div>
-                    <!-- <p>Exclude from:</p>
-                    <div class="row custom-row" style="margin-bottom: 10px;">
-                        <div class="col-md-2">
-                            <select class="form-control select2" multiple name="exclude-country">
-                                @foreach( $countries as $country )
-                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <style type="text/css">
-                            .select2-container--default .select2-selection--multiple {
-                                height: auto !important;
-                            }
-                        </style>
-                    </div> -->
                     <div class="row">                        
                         <div class="col-md-12">
                             <input type="submit" class="btn btn-sm btn-primary btn-block" name="search" value="{{ trans('admin.page.'.$current_page.'.title-filter-submit') }}">

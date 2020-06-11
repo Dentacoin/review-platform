@@ -75,12 +75,34 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::get('users_stats', 						'UsersStatsController@list');
 
-	Route::get('reviews', 							'ReviewsController@list');
-	Route::post('reviews/mass-delete', 				'ReviewsController@massdelete');
-	Route::any('reviews/add', 						'ReviewsController@add');
-	Route::any('reviews/delete/{id}', 				'ReviewsController@delete');
-	Route::any('reviews/restore/{id}', 				'ReviewsController@restore');
-	Route::any('reviews/edit/{id}', 				'ReviewsController@edit');
+	Route::get('trp/reviews', 						'ReviewsController@list');
+	Route::post('trp/reviews/mass-delete', 			'ReviewsController@massdelete');
+	Route::any('trp/reviews/add', 					'ReviewsController@add');
+	Route::any('trp/reviews/delete/{id}', 			'ReviewsController@delete');
+	Route::any('trp/reviews/restore/{id}', 			'ReviewsController@restore');
+	Route::any('trp/reviews/edit/{id}', 			'ReviewsController@edit');
+
+	Route::get('trp/questions', 					'QuestionsController@list');
+	Route::any('trp/questions/add', 				'QuestionsController@add');
+	Route::any('trp/questions/edit/{id}', 			'QuestionsController@edit');
+	Route::any('trp/questions/delete/{id}', 		'QuestionsController@delete');
+
+	Route::any('trp/faq/{locale?}', 				'FaqController@faq');
+
+	Route::any('trp/youtube', 						'YoutubeController@list');
+	Route::any('trp/youtube/approve/{id}', 			'YoutubeController@approve');
+	Route::any('trp/youtube/delete/{id}', 			'YoutubeController@delete');
+
+	Route::get('trp/testimonials', 					'TestimonialSliderController@list');
+	Route::post('trp/testimonials/add', 			'TestimonialSliderController@add');
+	Route::any('trp/testimonials/edit/{id}', 		'TestimonialSliderController@edit');
+	Route::any('trp/testimonials/edit/{id}/addavatar', 	'TestimonialSliderController@add_avatar');
+	Route::any('trp/testimonials/delete/{id}', 		'TestimonialSliderController@delete');
+	Route::post('trp/testimonials/export', 			'TestimonialSliderController@export');
+	Route::post('trp/testimonials/import', 			'TestimonialSliderController@import');
+
+	Route::any('trp/scrape-google-dentists', 		'ScrapeGoogleDentistsController@list');
+	Route::any('trp/scrape-google-dentists/{id}', 	'ScrapeGoogleDentistsController@download');
 
 	Route::any('transactions', 						'TransactionsController@list');
 	Route::any('transactions/bump/{id}', 			'TransactionsController@bump');
@@ -89,17 +111,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::post('transactions/mass-stop', 			'TransactionsController@massstop');
 
 	Route::get('spending', 							'SpendingController@list');
-
-	Route::get('questions', 						'QuestionsController@list');
-	Route::any('questions/add', 					'QuestionsController@add');
-	Route::any('questions/edit/{id}', 				'QuestionsController@edit');
-	Route::any('questions/delete/{id}', 			'QuestionsController@delete');
-
-	Route::any('youtube', 							'YoutubeController@list');
-	Route::any('youtube/approve/{id}', 				'YoutubeController@approve');
-	Route::any('youtube/delete/{id}', 				'YoutubeController@delete');
-
-	Route::any('trp-faq/{locale?}', 				'FaqController@faq');
 
 	Route::get('vox', 								'VoxesController@list');
 	Route::get('vox/list', 							'VoxesController@list');
@@ -162,17 +173,6 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('claims/approve/{id}', 				'DentistClaimsController@approve');
 	Route::any('claims/reject/{id}', 				'DentistClaimsController@reject');
 	Route::any('claims/suspicious/{id}', 			'DentistClaimsController@suspicious');
-
-	Route::any('scrape-google-dentists', 			'ScrapeGoogleDentistsController@list');
-	Route::any('scrape-google-dentists/{id}', 		'ScrapeGoogleDentistsController@download');
-
-	Route::get('testimonial-slider', 				'TestimonialSliderController@list');
-	Route::post('testimonial-slider/add', 			'TestimonialSliderController@add');
-	Route::any('testimonial-slider/edit/{id}', 		'TestimonialSliderController@edit');
-	Route::any('testimonial-slider/edit/{id}/addavatar', 	'TestimonialSliderController@add_avatar');
-	Route::any('testimonial-slider/delete/{id}', 	'TestimonialSliderController@delete');
-	Route::post('testimonial-slider/export', 		'TestimonialSliderController@export');
-	Route::post('testimonial-slider/import', 		'TestimonialSliderController@import');
 
 	Route::get('vox/recommendations', 				'RecommendationsController@list');
 

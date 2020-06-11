@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
+<h1 class="page-header">Testimonial slider</h1>
 <!-- end page-header -->
 
 
@@ -13,7 +13,7 @@
                 <div class="panel-heading-btn">
                     <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                 </div>
-                <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title') }}</h4>
+                <h4 class="panel-title">Testimonial slider</h4>
             </div>
             <div class="panel-body">
         		<div class="panel-body">
@@ -40,7 +40,7 @@
 <div class="row">
     <!-- begin col-6 -->
     <div class="col-md-12">
-        <form class="form-horizontal" id="admin-add" method="post" enctype= multipart/form-data action="{{ url('cms/testimonial-slider/add') }}">
+        <form class="form-horizontal" id="admin-add" method="post" enctype= multipart/form-data action="{{ url('cms/trp/testimonials/add') }}">
             {!! csrf_field() !!}
             <!-- begin panel -->
 
@@ -119,7 +119,7 @@
                 <h4 class="panel-title">Export Translations</h4>
             </div>
             <div class="panel-body">
-                <form class="form-horizontal" method="post" action="{{ url('cms/testimonial-slider/export') }}">
+                <form class="form-horizontal" method="post" action="{{ url('cms/trp/testimonials/export') }}">
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <div class="col-md-12">
@@ -171,7 +171,7 @@
             </div>
             <div class="panel-body">
 
-                <form class="form-horizontal" method="post" enctype="multipart/form-data" action="{{ url('cms/testimonial-slider/import') }}">
+                <form class="form-horizontal" method="post" enctype="multipart/form-data" action="{{ url('cms/trp/testimonials/import') }}">
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <div class="col-md-12">

@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
+<h1 class="page-header">Scrape Dentists</h1>
 <!-- end page-header -->
 
 
@@ -18,7 +18,7 @@
                 <h4 class="panel-title">Search dentists</h4>
             </div>
             <div class="panel-body">
-                <form class="form-horizontal" id="scrape-dentists" method="post" action="{{ url('cms/'.$current_page) }}">
+                <form class="form-horizontal" id="scrape-dentists" method="post" action="{{ url('cms/trp/'.$current_subpage) }}">
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <label class="col-md-1 control-label">City</label>
@@ -74,7 +74,7 @@
                                     <br>
                                 </div>
                                 <div class="col-md-2">
-                                    <a href="{{ url('cms/scrape-google-dentists/'.$scrape->id) }}" class="btn btn-sm btn-success btn-block">Download</a>
+                                    <a href="{{ url('cms/trp/scrape-google-dentists/'.$scrape->id) }}" class="btn btn-sm btn-success btn-block">Download</a>
                                 </div>
                             </div>
                         @endforeach

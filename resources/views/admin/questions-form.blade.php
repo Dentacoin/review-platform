@@ -3,7 +3,7 @@
 
 @section('content')
 
-<h1 class="page-header">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.title') : trans('admin.page.'.$current_page.'.edit.title') }}</h1>
+<h1 class="page-header">{{ empty($item) ? 'Add question' : 'Edit question' }}</h1>
 <!-- end page-header -->
 
 <div class="row">
@@ -17,7 +17,7 @@
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.title') : trans('admin.page.'.$current_page.'.edit.title') }}</h4>
+                    <h4 class="panel-title">{{ empty($item) ? 'Add question' : 'Edit question' }}</h4>
                 </div>
                 <div class="panel-body">
                     {!! csrf_field() !!}
@@ -92,7 +92,7 @@
             <div class="form-group">
                 <label class="col-md-10 control-label"></label>
                 <div class="col-md-1">
-                    <button type="submit" class="btn btn-block btn-sm btn-success">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}</button>
+                    <button type="submit" class="btn btn-block btn-sm btn-success">{{ empty($item) ? 'Add' : 'Save' }}</button>
                 </div>
             </div>
 

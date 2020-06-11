@@ -232,6 +232,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function bans() {
         return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->orderBy('id', 'DESC');
     }
+    public function permanentBans() {
+        return $this->hasMany('App\Models\UserBan', 'user_id', 'id')->whereNull('expires')->orderBy('id', 'DESC');
+    }
     public function invites() {
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->orderBy('created_at', 'DESC');
     }

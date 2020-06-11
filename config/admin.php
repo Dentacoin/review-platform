@@ -30,15 +30,6 @@ return [
         'spending' => array(
             'icon' => 'area-chart',
         ),
-        'questions' => array(
-            'icon' => 'question-circle',
-            'js' => array(
-                'questions.js'
-            ),
-        ),
-        'reviews' => array(
-            'icon' => 'edit',
-        ),
         'emails' => array(
             'icon' => 'envelope',
             'subpages' => array(
@@ -49,6 +40,21 @@ return [
                 'dentacoin' => 'dentacoin',
                 'dentists' => 'dentists',
                 'common' => 'common',
+            ),
+        ),
+        'trp' => array(
+            'icon' => 'list-alt',
+            'subpages' => array(
+                'reviews' => 'reviews',
+                'questions' => 'questions',
+                'faq' => 'faq',
+                'youtube' => 'youtube',
+                'testimonials' => 'testimonials',
+                'scrape-google-dentists' => 'scrape-google-dentists',
+            ),
+            'js' => array(
+                'questions.js',
+                'faq.js',
             ),
         ),
         'vox' => array(
@@ -83,9 +89,6 @@ return [
         'rewards' => array(
             'icon' => 'bitcoin',
         ),
-        'youtube' => array(
-            'icon' => 'film',
-        ),
         'registrations' => array(
             'icon' => 'plus-circle',
         ),
@@ -108,23 +111,11 @@ return [
         'export-import' => array(
             'icon' => 'globe',
         ),
-        'trp-faq' => array(
-            'icon' => 'comments',
-            'js' => array(
-                'faq.js',
-            ),
-        ),
         'admins' => array(
             'icon' => 'user-plus',
         ),
         'incomplete' => array(
             'icon' => 'heartbeat',
-        ),
-        'scrape-google-dentists' => array(
-            'icon' => 'download',
-        ),
-        'testimonial-slider' => array(
-            'icon' => 'film',
         ),
         'logs' => array(
             'icon' => 'bug',
