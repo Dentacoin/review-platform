@@ -30,7 +30,7 @@
 						'table_id' => 'emails-system',
 						'table_fields' => [
 							'name'				=> array(),
-							'update'			=> array('format' => 'update'),
+                            'update'            => array('template' => 'admin.parts.table-emails-edit'),
 						],
                         'table_data' => $templates,
 						'table_pagination' => false,
