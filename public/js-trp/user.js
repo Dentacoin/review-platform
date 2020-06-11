@@ -2586,7 +2586,7 @@ $(document).ready(function(){
         } else if(step.action == 'team') {
             $('.profile-tabs .tab[data-tab="about"]').trigger('click');
             $('html, body').animate({
-                scrollTop: $('.team-container ').offset().top - 100
+                scrollTop: $('.team-container').offset().top - 100
             }, 0);
 
         } else {
