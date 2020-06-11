@@ -113,6 +113,7 @@ $(document).ready(function(){
             $(this).serialize() , 
             (function( data ) {
                 if(data.success) {
+                    console.log('sdfdf');
                     var cls = $(this).closest('[role="editor"]').attr('class');
                     $('.'+cls+'[role="editor"]').hide();
                     $('.'+cls+'[role="presenter"]').show();
@@ -2582,6 +2583,12 @@ $(document).ready(function(){
                 scrollTop: $('.gallery-slider').offset().top - 100
             }, 0);
 
+        } else if(step.action == 'team') {
+            $('.profile-tabs .tab[data-tab="about"]').trigger('click');
+            $('html, body').animate({
+                scrollTop: $('.team-container ').offset().top - 100
+            }, 0);
+
         } else {
             if(!$('.popup.active').length) {
                 $('html, body').animate({
@@ -2805,7 +2812,7 @@ $(document).ready(function(){
 
     $('.guided-description').click( function() {
         if($('body').hasClass('guided-tour')) {
-            resizeGuidedTourWindow($('.edit-descr-container'), false);
+            resizeGuidedTourWindow($('#edit-descr-container'), false);
         }
     });
 

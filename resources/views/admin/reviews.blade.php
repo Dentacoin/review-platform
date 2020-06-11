@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
+<h1 class="page-header">Reviews</h1>
 <!-- end page-header -->
 
 
@@ -13,7 +13,7 @@
                 <div class="panel-heading-btn">
                     <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                 </div>
-                <h4 class="panel-title"> {{ trans('admin.page.'.$current_page.'.title-filter') }} </h4>
+                <h4 class="panel-title"> Filters </h4>
             </div>
             <div class="panel-body">
                 <form class="col-md-12" method="get" action="{{ url('cms/trp/'.$current_subpage) }}" >
@@ -52,7 +52,7 @@
                 <div class="panel-heading-btn">
                     <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                 </div>
-                <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.title') }}</h4>
+                <h4 class="panel-title">Reviews</h4>
             </div>
             <div class="panel-body">
                 <form method="post" action="{{ url('cms/trp/reviews/mass-delete') }}" >

@@ -5077,7 +5077,8 @@ body.sp-trp-iframe .profile-reviews-space {
     cursor: pointer;
     color: #126585;
     margin-right: 10px;
-    font-weight: bold; }
+    font-weight: bold;
+    margin-bottom: 10px; }
     .pager span.active {
       background-color: #126585;
       color: white; }
