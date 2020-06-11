@@ -1242,24 +1242,24 @@ $(document).ready(function(){
     	window.open($(this).attr('href'), '_blank');
     });
 
+    if(!dentacoin_down) {
+	    $(document).on('dentistAuthSuccessResponse', async function ( event) {
+	    	if(event.response_data.vox_ban) {
+	    		window.location.href = $('#site-url').attr('url')+lang+'/banned/';
+	    	} else {
+	    		window.location.href = $('#site-url').attr('url');
+	    	}
+	    });
 
-    $(document).on('dentistAuthSuccessResponse', async function ( event) {
-    	if(event.response_data.vox_ban) {
-    		window.location.href = $('#site-url').attr('url')+lang+'/banned/';
-    	} else {
-    		window.location.href = $('#site-url').attr('url');
-    	}
-    });
 
-
-    $(document).on('patientAuthSuccessResponse', async function ( event) {
-    	if(event.response_data.vox_ban) {
-    		window.location.href = $('#site-url').attr('url')+lang+'/banned/';
-    	} else {
-    		window.location.href = $('#site-url').attr('url');
-    	}
-    });
-    
+	    $(document).on('patientAuthSuccessResponse', async function ( event) {
+	    	if(event.response_data.vox_ban) {
+	    		window.location.href = $('#site-url').attr('url')+lang+'/banned/';
+	    	} else {
+	    		window.location.href = $('#site-url').attr('url');
+	    	}
+	    });
+	}
 
     $('.check-welcome').click( function(e) {
     	e.preventDefault();

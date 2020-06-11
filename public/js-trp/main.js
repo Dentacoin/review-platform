@@ -1557,7 +1557,7 @@ jQuery(document).ready(function($){
     	window.open($(this).attr('href'), '_blank');
     });
 
-    if(dentacoin_down) {
+    if(!dentacoin_down) {
     	
 	    $(document).on('dentistAuthSuccessResponse', async function ( event) {
 	    	if(event.response_data.trp_ban) {
