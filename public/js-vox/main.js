@@ -565,6 +565,7 @@ $(document).ready(function(){
 
 	$('.close-popup').click( function() {
 		closePopup();
+		$('body').removeClass('popup-visible');
 	});
 
 	handlePopups = function(id) {
