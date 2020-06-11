@@ -156,7 +156,7 @@ class DentistController extends FrontController
             $old_slug = OldSlug::where('slug', 'LIKE', $slug)->first();
 
             if (!empty($old_slug)) {
-                $item = User::where('id', $old_slug->user_id)->first();
+                $item = User::find($old_slug->user_id);
                 return redirect( getLangUrl('dentist/'.$item->slug), 301 );
             }
         }
