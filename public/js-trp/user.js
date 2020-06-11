@@ -2804,7 +2804,9 @@ $(document).ready(function(){
 
 
     $('.guided-description').click( function() {
-        resizeGuidedTourWindow($('.edit-descr-container'), false);
+        if($('body').hasClass('guided-tour')) {
+            resizeGuidedTourWindow($('.edit-descr-container'), false);
+        }
     });
 
 
