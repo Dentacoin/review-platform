@@ -230,7 +230,7 @@ class ProfileController extends FrontController
                             ];
 
 
-                            $this->user->sendGridTemplate(59, $substitutions, 'trp');
+                            $this->user->sendGridTemplate(106, $substitutions, 'trp');
                         } else {
                             $this->user->sendTemplate( 17 , [
                                 'friend_name' => $dentist_name,
@@ -534,7 +534,7 @@ class ProfileController extends FrontController
                                     ];
 
 
-                                    $this->user->sendGridTemplate(59, $substitutions, 'trp');
+                                    $this->user->sendGridTemplate(106, $substitutions, 'trp');
                                 } else {
                                     $this->user->sendTemplate( 17 , [
                                         'friend_name' => $dentist_name,
