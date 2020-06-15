@@ -34,14 +34,14 @@
                         </div>
 
                         <div class="col-md-2">
-                            <label for="exclude-permaban" style="display: flex;align-items: center;margin-top: 7px;color: #767676;font-weight: normal;">
+                            <label for="exclude-permaban" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
                                 <input id="exclude-permaban" type="checkbox" name="exclude-permaban" value="1" {!! !empty($exclude_permaban) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
-                                Exclude Permaban (Vox & TRP)
+                                Exclude Permaban
                             </label>
                         </div>
 
                         <div class="col-md-2">
-                            <label for="exclude-unsubscribed" style="display: flex;align-items: center;margin-top: 7px;color: #767676;font-weight: normal;">
+                            <label for="exclude-unsubscribed" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
                                 <input id="exclude-unsubscribed" type="checkbox" name="exclude-unsubscribed" value="1" {!! !empty($exclude_unsubscribed) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
                                 Exclude Unsubscribed
                             </label>
