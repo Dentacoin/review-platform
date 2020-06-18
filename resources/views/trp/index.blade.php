@@ -101,7 +101,7 @@
 
 	@if(empty($user))
 
-		<div class="index-invite-dentist">
+		<div class="index-invite-dentist" id="index-invite-dentist">
 			<div class="container">
 				<div class="flex flex-mobile">
 					<div class="col">
