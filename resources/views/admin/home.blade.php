@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1 class="page-header"><- Start here</h1>
+<h1 class="page-header">Have a nice day :)</h1>
 <!-- end page-header -->
 
 @endsection
