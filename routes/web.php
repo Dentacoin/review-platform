@@ -220,7 +220,6 @@ $reviewRoutes = function () {
 			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
 			Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
-			Route::get('want-to-invite-dentist', 				'IndexController@want_to_invite_dentist');
 			
 			Route::post('lead-magnet-step1', 					'IndexController@lead_magnet_step1');
 			Route::post('lead-magnet-step2', 					'IndexController@lead_magnet_step2');

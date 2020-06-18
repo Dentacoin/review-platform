@@ -1570,7 +1570,16 @@ jQuery(document).ready(function($){
 	    	if(event.response_data.trp_ban) {
 	    		window.location.href = $('#site-url').attr('url')+lang+'/banned/';
 	    	} else {
-	    		window.location.href = $('#site-url').attr('url');
+
+	    		var attr = $('#site-url').attr('open-popup');
+
+				if (typeof attr !== typeof undefined && attr !== false && attr == 'invite-dentist') {
+				    window.location.href = $('#site-url').attr('url')+'?popup=invite-new-dentist-popup';
+				} else {
+					window.location.href = $('#site-url').attr('url');
+				}
+
+	    		
 	    	}
 	    });
 
@@ -1618,6 +1627,15 @@ jQuery(document).ready(function($){
 	    	FB.CustomerChat.showDialog();
 	    }, 60000);	
     }
+
+	if(!user_id) {
+
+		$('.button-want-to-add-dentist').click( function(e) {
+			$('#site-url').attr('open-popup', 'invite-dentist');
+
+			$.event.trigger({type: 'openPatientRegister'});
+		});
+	}
 
 });
 

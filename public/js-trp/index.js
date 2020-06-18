@@ -37,13 +37,6 @@ jQuery(document).ready(function($){
 	}
 	fixFlicktyInner();
 
-	$('.button-want-to-add-dentist').click( function() {
-		$.ajax({
-            type: "GET",
-            url: lang + '/want-to-invite-dentist',
-        });
-	});
-
 	if( window.location.hash == '#invite-form' ) {
         $('html, body').animate({
             scrollTop: $(".invite-new-dentist-wrapper").offset().top - $('.header').height()

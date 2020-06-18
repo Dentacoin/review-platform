@@ -474,14 +474,6 @@ class IndexController extends FrontController
 
 	}
 
-	public function want_to_invite_dentist($locale=null) {
-
-		$sess = [
-            'want_to_invite_dentist' => true,
-        ];
-        session($sess);
-	}
-
 	public function lead_magnet_step1($locale=null) {
 
 		if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {

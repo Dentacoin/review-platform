@@ -195,7 +195,7 @@
 						<div class="col">
 							<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
 							<h3>{!! nl2br(trans('trp.page.invite.subtitle')) !!}</h3>
-							<a href="javascript:;" class="button button-yellow button-sign-up-patient button-want-to-add-dentist open-dentacoin-gateway patient-register">{!! nl2br(trans('trp.page.invite.add-dentist')) !!}</a>
+							<a href="javascript:;" class="button button-yellow button-sign-up-patient button-want-to-add-dentist">{!! nl2br(trans('trp.page.invite.add-dentist')) !!}</a>
 						</div>
 					</div>
 				</div>
