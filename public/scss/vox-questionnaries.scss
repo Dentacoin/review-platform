@@ -717,28 +717,6 @@ $main-color: #38ace5;
 					}
 				}
 
-				.fixed-titles {
-					display: none;
-					position: fixed;
-				    top: 0;
-				    width: 730px;
-				    background: white;
-				    z-index: 10;
-				    margin-top: 0px;
-
-				    @media screen and (max-width: 1200px) {
-				        width: 596.66px;
-				    }
-
-				    @media screen and (max-width: 992px) {
-				        width: 690px;
-				    }
-
-				    &.active {
-				    	display: block;
-				    }
-				}
-
 				.answer-title {
 					float: left;
 		    		padding: 0px 10px;

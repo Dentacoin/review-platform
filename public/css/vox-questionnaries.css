@@ -564,22 +564,6 @@
       @media screen and (max-width: 768px) {
         .questions .question-group .answers .answers-inner .mobile-hide {
           display: none; } }
-      .questions .question-group .answers .answers-inner .fixed-titles {
-        display: none;
-        position: fixed;
-        top: 0;
-        width: 730px;
-        background: white;
-        z-index: 10;
-        margin-top: 0px; }
-        @media screen and (max-width: 1200px) {
-          .questions .question-group .answers .answers-inner .fixed-titles {
-            width: 596.66px; } }
-        @media screen and (max-width: 992px) {
-          .questions .question-group .answers .answers-inner .fixed-titles {
-            width: 690px; } }
-        .questions .question-group .answers .answers-inner .fixed-titles.active {
-          display: block; }
       .questions .question-group .answers .answers-inner .answer-title {
         float: left;
         padding: 0px 10px;

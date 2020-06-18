@@ -882,16 +882,6 @@ $(document).ready(function(){
         }
     });
 
-    if (window.innerWidth > 768) {
-        $(window).on('scroll', function() {
-            if ( $('.question-group:visible').find('.static-titles').length && $(window).scrollTop() >= $('.question-group:visible').find('.static-titles').offset().top ) {
-                $('.question-group:visible').find('.fixed-titles').addClass('active');
-            } else {
-                $('.question-group:visible').find('.fixed-titles').removeClass('active');
-            }
-        });
-    }
-
     if (window.innerWidth < 768) {
         $(window).on('scroll', function() {
 
@@ -907,7 +897,6 @@ $(document).ready(function(){
             }
         });
     }
-
 
 
     $('.start-over').click( function() {
@@ -968,7 +957,7 @@ $(document).ready(function(){
     });
 
     if($( ".answers-draggable" ).length) {
-        
+
         $( ".answers-draggable" ).sortable({
             containment: "window",
             axis: "y",
