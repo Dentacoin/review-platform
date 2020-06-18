@@ -80,11 +80,11 @@
 			@foreach($vox->stats_questions as $question)
 				@if(!empty($user) || (empty($user) && $loop->iteration <=3))
 					<div class="stat {!! false && count(json_decode($question->answers, true)) > 9 ? 'stat-with-many-qs' : '' !!} {!! $question->stats_top_answers ? 'multipletop_ans' : '' !!} {{ $loop->last ? 'last-stat' : '' }} {!! !empty($question->stats_scale_answers) ? 'has-scales' : '' !!}" question-id="{{ $question->id }}" stat-type="{{ $question->used_for_stats }}" {!! !empty($question->stats_scale_answers) ? 'scale-answer-id="1"' : '' !!}>
-						<a class="title" href="javascript:;">
+						<div class="title" href="javascript:;">
 							<h2 class="container">
-								{{ !empty($question->stats_title_question) ? $question->questionWithoutTooltips() : $question->translateorNew(App::getLocale())->stats_title }}
+								{!! nl2br(strip_tags(!empty($question->stats_title_question) ? $question->questionWithoutTooltips() : $question->translateorNew(App::getLocale())->stats_title, ['a'])) !!}
 							</h2>
-						</a>
+						</div>
 						<div class="contents container">
 							@if(!empty($question->stats_scale_answers))
 								@if(!empty($question->translateorNew(App::getLocale())->stats_subtitle))
@@ -93,11 +93,11 @@
 								@foreach(json_decode($question->{'answers:en'}, true) as $key => $ans)
 									@if( in_array(($key + 1), json_decode($question->stats_scale_answers, true)))
 										<div class="stat scale-stat-q {!! $loop->iteration == 1 ? 'first-scale-stat' : '' !!}" question-id="{{ $question->id }}" scale-answer-id="{{ $key + 1 }}" stat-type="{{ $question->used_for_stats }}">
-											<a class="title" href="javascript:;">
+											<div class="title" href="javascript:;">
 												<h2>
-													{{ $question->removeAnswerTooltip($ans) }}
+													{!! nl2br(strip_tags($question->removeAnswerTooltip($ans), ['a'])) !!}
 												</h2>
-											</a>
+											</div>
 											<div class="contents scale-contents">
 												@include('vox.template-parts.stats-chart')
 											</div>
@@ -254,15 +254,15 @@
 
 	@if(!empty($blurred_stats))
 		<div class="stats-blurred">
-			<a class="blurred-title" href="javascript:;">
+			<div class="blurred-title" href="javascript:;">
 				<h2 class="container">
 					@foreach($vox->stats_questions as $question)
 						@if($loop->iteration == 4)
-							{{ !empty($question->stats_title_question) ? $question->questionWithoutTooltips() : $question->translateorNew(App::getLocale())->stats_title }}
+							{!! nl2br(strip_tags(!empty($question->stats_title_question) ? $question->questionWithoutTooltips() : $question->translateorNew(App::getLocale())->stats_title, ['a'])) !!}
 						@endif
 					@endforeach
 				</h2>
-			</a>
+			</div>
 			<div class="container">
 				<div class="blurred-stat">
 					<img class="pc-blurred" src="{{ url('new-vox-img/blurred-stats-1.jpg') }}">

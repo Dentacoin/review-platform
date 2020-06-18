@@ -729,19 +729,20 @@
       .page-statistics .stats:not(.st-download) .stat .share-buttons .red-button img {
         max-width: 12px;
         margin-right: 7px; }
-  .page-statistics .stats:not(.st-download) .stat a.title {
+  .page-statistics .stats:not(.st-download) .stat .title {
     font-size: 20px;
     display: block;
     line-height: 28px;
     padding: 11px 0px;
     padding-left: 35px;
-    background-color: #d3ebfb; }
+    background-color: #d3ebfb;
+    cursor: pointer; }
     @media screen and (max-width: 768px) {
-      .page-statistics .stats:not(.st-download) .stat a.title {
+      .page-statistics .stats:not(.st-download) .stat .title {
         font-size: 14px;
         line-height: 1;
         padding-left: 25px; } }
-    .page-statistics .stats:not(.st-download) .stat a.title h2 {
+    .page-statistics .stats:not(.st-download) .stat .title h2 {
       font-weight: bold;
       font-size: 20px;
       text-align: left;
@@ -752,15 +753,20 @@
       padding-left: 40px;
       margin-top: 0px; }
       @media screen and (max-width: 1080px) {
-        .page-statistics .stats:not(.st-download) .stat a.title h2 {
+        .page-statistics .stats:not(.st-download) .stat .title h2 {
           width: 100%; } }
       @media screen and (max-width: 768px) {
-        .page-statistics .stats:not(.st-download) .stat a.title h2 {
+        .page-statistics .stats:not(.st-download) .stat .title h2 {
           font-size: 16px;
           line-height: normal;
           max-width: 100%;
           background-size: 20px;
           padding-left: 30px; } }
+      .page-statistics .stats:not(.st-download) .stat .title h2 a {
+        color: #41afff; }
+        @media screen and (max-width: 768px) {
+          .page-statistics .stats:not(.st-download) .stat .title h2 a {
+            font-size: 16px; } }
   .page-statistics .stats:not(.st-download) .stat .stats-subtitle {
     margin-bottom: 30px;
     font-size: 16px; }
@@ -1236,6 +1242,8 @@
             display: block;
             margin-top: 5px;
             font-weight: 600; }
+            .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart .group-heading a {
+              color: #41afff; }
           .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .mobile-chart.multiple-gender-chart {
             padding: 0px 70px; }
             @media screen and (max-width: 1200px) {
@@ -1298,6 +1306,8 @@
           color: #070707;
           font-size: 14px;
           cursor: pointer; }
+          .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend div a {
+            color: #41afff; }
           .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend div.inactive {
             opacity: 0.2; }
           .page-statistics .stats:not(.st-download) .stat .contents .graphs .legend div.standard {
@@ -1345,22 +1355,22 @@
           .page-statistics .stats:not(.st-download) .stat .contents .stat.scale-stat-q .share-buttons {
             position: absolute;
             margin-right: 0px; } }
-      .page-statistics .stats:not(.st-download) .stat .contents .stat a.title {
+      .page-statistics .stats:not(.st-download) .stat .contents .stat .title {
         padding: 16px 0px;
         padding-left: 30px;
         padding-right: 20px;
         font-weight: bold;
         background-color: transparent; }
         @media screen and (max-width: 768px) {
-          .page-statistics .stats:not(.st-download) .stat .contents .stat a.title {
+          .page-statistics .stats:not(.st-download) .stat .contents .stat .title {
             padding-left: 10px;
             padding-right: 10px; } }
-        .page-statistics .stats:not(.st-download) .stat .contents .stat a.title h2 {
+        .page-statistics .stats:not(.st-download) .stat .contents .stat .title h2 {
           font-weight: bold;
           background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
           background-size: 29px; }
           @media screen and (max-width: 768px) {
-            .page-statistics .stats:not(.st-download) .stat .contents .stat a.title h2 {
+            .page-statistics .stats:not(.st-download) .stat .contents .stat .title h2 {
               background-size: 20px; } }
       .page-statistics .stats:not(.st-download) .stat .contents .stat .share-buttons {
         position: absolute;
@@ -1402,16 +1412,16 @@
       .page-statistics .stats:not(.st-download) .stat .contents .stat.active {
         border-radius: 30px;
         margin-bottom: 35px; }
-        .page-statistics .stats:not(.st-download) .stat .contents .stat.active a.title h2 {
+        .page-statistics .stats:not(.st-download) .stat .contents .stat.active .title h2 {
           background-image: url(../new-vox-img/stats-up.png); }
         .page-statistics .stats:not(.st-download) .stat .contents .stat.active .contents {
           display: block; }
-  .page-statistics .stats:not(.st-download) .stat:hover a.title {
+  .page-statistics .stats:not(.st-download) .stat:hover .title {
     color: black; }
   @media screen and (max-width: 768px) {
     .page-statistics .stats:not(.st-download) .stat.active {
       padding-bottom: 20px; } }
-  .page-statistics .stats:not(.st-download) .stat.active a.title h2 {
+  .page-statistics .stats:not(.st-download) .stat.active .title h2 {
     background-image: url(../new-vox-img/stats-up.png); }
   .page-statistics .stats:not(.st-download) .stat.active .contents {
     display: block; }
@@ -1534,6 +1544,8 @@
         max-width: 100%;
         background-size: 20px;
         padding-left: 30px; } }
+    .stats-blurred .blurred-title h2 a {
+      color: #41afff; }
 .stats-blurred .blurred-stat {
   position: relative; }
   .stats-blurred .blurred-stat img {
@@ -1941,14 +1953,14 @@ body {
     .page-statistics.download-statistics .stats.st-download .stat .box {
       align-items: baseline;
       justify-content: space-between; }
-    .page-statistics.download-statistics .stats.st-download .stat a.title {
+    .page-statistics.download-statistics .stats.st-download .stat .title {
       font-size: 20px;
       display: block;
       line-height: 28px;
       padding: 11px 0px;
       padding-left: 35px;
       background-color: #d3ebfb; }
-      .page-statistics.download-statistics .stats.st-download .stat a.title h2 {
+      .page-statistics.download-statistics .stats.st-download .stat .title h2 {
         font-weight: bold;
         font-size: 20px;
         text-align: left;
@@ -2282,13 +2294,13 @@ body {
           margin-bottom: 15px; }
         .page-statistics.download-statistics .stats.st-download .stat .contents .stat.scale-stat-q .share-buttons {
           position: unset; }
-        .page-statistics.download-statistics .stats.st-download .stat .contents .stat a.title {
+        .page-statistics.download-statistics .stats.st-download .stat .contents .stat .title {
           padding: 16px 0px;
           padding-left: 30px;
           padding-right: 20px;
           font-weight: bold;
           background-color: transparent; }
-          .page-statistics.download-statistics .stats.st-download .stat .contents .stat a.title h2 {
+          .page-statistics.download-statistics .stats.st-download .stat .contents .stat .title h2 {
             font-weight: bold;
             background: url(../new-vox-img/stats-down.png) 1px 50% no-repeat;
             background-size: 29px; }
@@ -2311,7 +2323,7 @@ body {
         .page-statistics.download-statistics .stats.st-download .stat .contents .stat.active {
           border-radius: 30px;
           margin-bottom: 35px; }
-          .page-statistics.download-statistics .stats.st-download .stat .contents .stat.active a.title h2 {
+          .page-statistics.download-statistics .stats.st-download .stat .contents .stat.active .title h2 {
             background-image: url(../new-vox-img/stats-up.png); }
           .page-statistics.download-statistics .stats.st-download .stat .contents .stat.active .contents {
             display: block; }

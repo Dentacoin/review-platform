@@ -344,10 +344,11 @@ $(document).ready(function(){
                                     $(this).find('.nav-color').css('background-color', $(this).find('.custom-legend:not(.inactive)').find('.custombar span').css('background-color'));
                                 } else {
                                     //console.log('bbb');
-                                    $(this).find('.gender-text').text($(this).find('.legend-div:not(.inactive)').attr('legend-text'));
-                                    $(this).find('.nav-color').css('background-color', $(this).find('.legend-div:not(.inactive)').find('span:not(.mobile-percentage)').css('background-color'));
+                                    $(this).find('.gender-text').text($(this).find('.legend-div:not(.inactive)').find('.legend-text').text());
 
-                                    $(this).find('.custom-legend').first().find('span').css('background-color', $(this).find('.legend-div:not(.inactive)').find('span:not(.mobile-percentage)').css('background-color'));
+                                    $(this).find('.nav-color').css('background-color', $(this).find('.legend-div:not(.inactive)').find('.legend-color').css('background-color'));
+
+                                    $(this).find('.custom-legend').first().find('span').css('background-color', $(this).find('.legend-div:not(.inactive)').find('.legend-color').css('background-color'));
                                 }
 
                                 $(this).find('.multiple-gender-nav').css('display', 'flex');
@@ -563,6 +564,10 @@ $(document).ready(function(){
 
                         }
 
+                        headers = $.map(headers, function(str, i){
+                          return $("<div/>").html(str).text();
+                        });
+
                         rows.push(headers);
 
                         var newArr = [];
@@ -664,6 +669,13 @@ $(document).ready(function(){
                         //     }
                         // }
 
+                        //rows_array = $.map(rows, function(str, i){
+                        //   return $("<div/>").html(str[0]).text();
+                        // });
+
+                        // for( var i in rows) {
+                        //     rows[i][0] = rows_array[i];
+                        // }
                         drawColumns(rows, $(this).find('.second-chart')[0], null, data.answer_id, false, null, data.question_type == 'multiple_choice' ? data.multiple_top_answers : null);
 
                     }
@@ -1064,7 +1076,7 @@ $(document).ready(function(){
     $('#custom-dates-save').click(handleFilterChange);
     handleFilterChange();
 
-    $('.stats .stat a.title').click( function() {
+    $('.stats .stat .title').click( function() {
         if( $( '.stat.restore-me' ).length || $('.loader-mask:visible').length) {
             return;
         }
@@ -1372,7 +1384,7 @@ $(document).ready(function(){
             //     }
                     
             // } else {
-                container.append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+arr_colors[i]+';"></span>'+rows[i][0]+'</div>') );
+                container.append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text=""><span class="legend-text" style="display:none;">'+rows[i][0]+'</span><span class="mobile-percentage"></span><span class="legend-color" style="background-color: '+arr_colors[i]+';"></span>'+rows[i][0]+'</div>') );
                 
                 if ($(window).outerWidth() <= 768) {
 
@@ -1441,8 +1453,18 @@ $(document).ready(function(){
         var arr_colors = chart_colors;
         if ((question_type == 'single_choice' && vox_scale_id)) {
 
+            rows_array = $.map(rows, function(str, i){
+              return $("<div/>").html(str[0]).text();
+            });
+
+            for( var i in rows) {
+                rows[i][0] = rows_array[i];
+            }
+
             data.addRows(rows);
+
         } else {
+
             var arrmyArray = rows;
             for (var w in arrmyArray) {
                 arrmyArray[w].push(chart_colors[w]);              
@@ -1514,9 +1536,17 @@ $(document).ready(function(){
                 allArr.push(diez[r]);
             }
 
-            data.addRows(allArr);
+            rows_array = $.map(allArr, function(str, i){
+              return $("<div/>").html(str[0]).text();
+            });
 
+            for( var i in allArr) {
+                allArr[i][0] = rows_array[i];
+            }
+
+            data.addRows(allArr);
         }
+
 
         
         // Set chart options
@@ -1646,7 +1676,7 @@ $(document).ready(function(){
                         var color = fixedColor ? chart_colors[fixedColor-1] : rows[i][2];
                     
                         $(container).find('.dependency[d="'+i+'"]').attr('votes', (rows[i][1]*100).toFixed(1));
-                        $(container).find('.dependency[d="'+i+'"]').append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][1]*100).toFixed(1)+'%</div>');
+                        $(container).find('.dependency[d="'+i+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][1]*100).toFixed(1)+'%</div>');
                     }
 
                     var list = container.children();
@@ -1695,7 +1725,7 @@ $(document).ready(function(){
                             var color = fixedColor ? chart_colors[fixedColor-1] : chart_colors[i-1];
                             if( typeof(rows[0][j])!='object' ) {
                                 $(container).find('.sort-stat[answer-id="'+i+'"]').attr('votes', (rows[i][j]*1000).toFixed(1));
-                                $(container).find('.sort-stat[answer-id="'+i+'"]').append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(1)+'%</div>');
+                                $(container).find('.sort-stat[answer-id="'+i+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(1)+'%</div>');
                             }
                         }
                     }
@@ -1749,7 +1779,7 @@ $(document).ready(function(){
                             var pl = 80*rows[i][j]/max + 1;
                             var color = fixedColor ? colors_array[fixedColor-1] : (multiple_top_answers ? top_answers_colors[j-1] : colors_array[j-1]);
                             if( typeof(rows[0][j])!='object' ) {
-                                $(container).find('.mobile-wrap[m-id="'+i+'"]').append('<div class="custombar" votes="'+(rows[i][j]*100).toFixed(1)+'"> <span style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(1)+'%</div>');
+                                $(container).find('.mobile-wrap[m-id="'+i+'"]').append('<div class="custombar" votes="'+(rows[i][j]*100).toFixed(1)+'"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(1)+'%</div>');
                             }
                         }
                     }
@@ -1768,8 +1798,6 @@ $(document).ready(function(){
             } else if(rows.length>=9) {
                 fontSize = 8;                
             }
-
-            //console.log(rows);
 
             var colors_array = typeof arr_colors != 'undefined' ? arr_colors : chart_colors;
             var data = google.visualization.arrayToDataTable(rows);
@@ -1831,8 +1859,6 @@ $(document).ready(function(){
             options.width = $(container).closest('.st-download').length ? options.width : $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth() : options.width);
             options.height = $(container).closest('.st-download').length ? options.height : $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : options.height);
                 
-
-            //console.log( options );
             var chart = new google.charts.Bar( container );
             //chart.draw(data, options);
 
@@ -1882,7 +1908,7 @@ $(document).ready(function(){
                 var pl = 80*rows[i][j]/max + 1;
                 if( typeof(rows[0][j])!='object' ) {
                     $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').attr('votes', rows[i][j]);
-                    $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar"> <span style="width: '+parseInt(pl)+'%; background-color: '+chart_colors[i]+'"></span> '+((rows[i][j]/ totalCount)*100).toFixed(1)+'%</div>');
+                    $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+chart_colors[i]+'"></span> '+((rows[i][j]/ totalCount)*100).toFixed(1)+'%</div>');
                 }
             }
         }
@@ -2045,9 +2071,8 @@ $(document).ready(function(){
                 rowsm = rosm_new;
             }
 
-
             var c = 0;
-            container.closest('.stat').find('.main-multiple-gender .custom-legend').each( function() {
+            container.closest('.stat').find('.multiple-gender-chart').find('.custom-legend').each( function() {
                 $(this).find('span').css('background-color', chart_colors[c]);
                 c++;
             });
@@ -2137,13 +2162,14 @@ $(document).ready(function(){
                 }
 
                 if( typeof(rowsf[0][j])!='object' ) {
+                    console.log(chart_colors[i]);
                     $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').attr('votes', mainChartRows[i][j]);
                     // if(rowsf[i][j]){
-                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-f"> <img src="'+window.location.origin+'/new-vox-img/women-icon.svg"><span style="width: '+parseInt(plf)+'%; opacity: 0.4; background-color: '+chart_colors[i]+';"></span> '+((rowsf[i][j]/ totalfCount)*100).toFixed(1)+'%</div>');
+                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-f"> <img src="'+window.location.origin+'/new-vox-img/women-icon.svg"><span class="legend-color" style="width: '+parseInt(plf)+'%; opacity: 0.4; background-color: '+chart_colors[i]+';"></span> '+((rowsf[i][j]/ totalfCount)*100).toFixed(1)+'%</div>');
                     // }
 
                     // if(rowsm[i][j]) {
-                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-m"> <img src="'+window.location.origin+'/new-vox-img/man-icon.svg"><span style="width: '+parseInt(plm)+'%; opacity: 0.7; background-color: '+chart_colors[i]+';"></span> '+(( (rowsm[i] ? rowsm[i][j] : 0 )/ totalmCount)*100).toFixed(1)+'%</div>');
+                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-m"> <img src="'+window.location.origin+'/new-vox-img/man-icon.svg"><span class="legend-color" style="width: '+parseInt(plm)+'%; opacity: 0.7; background-color: '+chart_colors[i]+';"></span> '+(( (rowsm[i] ? rowsm[i][j] : 0 )/ totalmCount)*100).toFixed(1)+'%</div>');
                     // }
                 }
             }
@@ -2208,7 +2234,7 @@ $(document).ready(function(){
                 if ($(container).closest('.stat').find('.legend-div').length) {
                     var arr_colors = [];
                     $(container).closest('.stat').find('.legend-div').each( function() {
-                        arr_colors.push($(this).find('span:not(.mobile-percentage)').css('background-color'));
+                        arr_colors.push($(this).find('.legend-color').css('background-color'));
                     });
                 } else {
                     var arr_colors = chart_colors;
@@ -2219,10 +2245,9 @@ $(document).ready(function(){
 
             var c = 0;
             $(container).find('.custom-legend').each( function() {
-                $(this).find('span').css('background-color', arr_colors[c]);
+                $(this).find('.legend-color').css('background-color', arr_colors[c]);
                 c++;
             });
-            
         }
 
     }

@@ -116,10 +116,45 @@ $(document).ready(function(){
 			return;
 		}
 
-		if(qtype!='scale' && $('.question-scale-input').val().length ) {
+		// if(qtype!='scale' && $('.question-scale-input').val().length) {
+		// 	$('.answers-group, .answers-group-add').hide();
+		// } else {
+		// 	$('.answers-group, .answers-group-add').show();
+		// }
+
+		if(qtype!='scale' && $('.question-scale-input').val().length) {
 			$('.answers-group, .answers-group-add').hide();
 		} else {
-			$('.answers-group, .answers-group-add').show();
+			if (qtype == 'number') {
+				$('.answers-group, .answers-group-add').hide();
+			} else {
+				$('.answers-group, .answers-group-add').show();
+			}
+		}
+
+		if(qtype == 'number') {
+			$('.answers-randomize').hide();
+			$('.question-scale-wrapper').hide();
+			$('.question-number-wrapper').show();
+			$('.question-control-wrap').hide();
+			$('.hint-for-scale').hide();
+			$('.question-control-wrap').hide();
+		} else {
+			if(qtype == 'rank') {
+				$('.answers-randomize').hide();
+				$('.question-scale-wrapper').hide();
+				$('.hint-for-scale').hide();
+				$('.question-stats').hide();
+				$('.question-control-wrap').hide();
+			} else {
+				$('.answers-randomize').show();
+				$('.question-scale-wrapper').show();
+				$('.hint-for-scale').show();
+				$('.question-stats').show();
+				$('.question-control-wrap').show();
+			}
+			
+			$('.question-number-wrapper').hide();
 		}
 
 		if (qtype == 'single_choice') {
@@ -539,5 +574,27 @@ $(document).ready(function(){
 		} else {
 			$('.search-questions-wrapper .results').hide();
 		}
+	});
+
+	$('.delete-answer-avatar').click( function(e) {
+		e.preventDefault();
+
+		var that = $(this);
+
+		$.ajax( {
+			url: $(this).attr('href'),
+			type: 'GET',
+			dataType: 'json',
+			success: function( data ) {
+				console.log('success');
+
+				that.closest('.input-group').find('[type="file"]').show();
+				that.closest('.input-group').find('.answer-image-wrap').hide();
+
+			},
+			error: function(data) {
+				console.log('error');
+			}
+		});
 	});
 });

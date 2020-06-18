@@ -92,7 +92,7 @@
 
 	                    @foreach($langs as $code => $lang_info)
 	                        <div class="tab-pane questions-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}" lang="{{ $code }}">
-	                            <div class="form-group answers-group">
+	                            <div class="form-group answers-group-poll">
 	                       			<label class="col-md-2 control-label">Answers</label>
 	                                <div class="col-md-10 answers-list answers-draggable">
 	                                    @if(!empty($item) && !empty($item->{'answers:'.$code}) )
@@ -121,7 +121,7 @@
 	                                    @endif
 	                                </div>
 	                            </div>
-	                            <div class="form-group answers-group-add">
+	                            <div class="form-group answers-group-add-poll">
 	                                <label class="col-md-2 control-label"></label>
 	                                <div class="col-md-10">	                    
 				                        How ANSWER tooltips work: <br/>

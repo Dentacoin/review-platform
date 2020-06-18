@@ -1143,13 +1143,14 @@ $main-color: #38ace5;
 			    }
 			}
 
-			a.title {
+			.title {
 				font-size: 20px;
 				display: block;
 				line-height: 28px;
 				padding: 11px 0px;
 				padding-left: 35px;
 				background-color: #d3ebfb;
+				cursor: pointer;
 
 				@media #{$phone} {
 					font-size: 14px;
@@ -1178,6 +1179,14 @@ $main-color: #38ace5;
 						max-width: 100%;
 						background-size: 20px;
 						padding-left: 30px;
+					}
+
+					a {
+						color: #41afff;
+
+						@media #{$phone} {
+							font-size: 16px;
+						}
 					}
 				}
 			}
@@ -1900,6 +1909,10 @@ $main-color: #38ace5;
 								display: block;
 								margin-top: 5px;
 								font-weight: 600;
+
+								a {
+									color: #41afff;
+								}
 							}
 
 							&.multiple-gender-chart {
@@ -1993,6 +2006,10 @@ $main-color: #38ace5;
 							font-size: 14px;
 							cursor: pointer;
 
+							a {
+								color: #41afff;
+							}
+
 						    &.inactive {
 						    	opacity: 0.2;
 						    }
@@ -2069,7 +2086,7 @@ $main-color: #38ace5;
 						}
 					}
 
-					a.title {
+					.title {
 						padding: 16px 0px;
 						padding-left: 30px;
 						padding-right: 20px;
@@ -2155,7 +2172,7 @@ $main-color: #38ace5;
 						border-radius: 30px;
 						margin-bottom: 35px;
 
-						a.title {
+						.title {
 
 							h2 {
 								background-image: url(../new-vox-img/stats-up.png);
@@ -2170,7 +2187,7 @@ $main-color: #38ace5;
 			}
 
 			&:hover {
-				a.title {
+				.title {
 					color: black;
 				}
 			}
@@ -2181,7 +2198,7 @@ $main-color: #38ace5;
 					padding-bottom: 20px;
 				}
 
-				a.title {
+				.title {
 
 					h2 {
 						background-image: url(../new-vox-img/stats-up.png);
@@ -2348,6 +2365,10 @@ $main-color: #38ace5;
 				max-width: 100%;
 				background-size: 20px;
 				padding-left: 30px;
+			}
+
+			a {
+				color: #41afff;
 			}
 	    }
 	}
@@ -2965,7 +2986,7 @@ body {
     			justify-content: space-between;
 			}
 
-			a.title {
+			.title {
 				font-size: 20px;
 				display: block;
 				line-height: 28px;
@@ -3492,7 +3513,7 @@ body {
 						}
 					}
 
-					a.title {
+					.title {
 						padding: 16px 0px;
 						padding-left: 30px;
 						padding-right: 20px;
@@ -3537,7 +3558,7 @@ body {
 						border-radius: 30px;
 						margin-bottom: 35px;
 
-						a.title {
+						.title {
 
 							h2 {
 								background-image: url(../new-vox-img/stats-up.png);

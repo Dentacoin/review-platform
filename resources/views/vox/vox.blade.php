@@ -31,7 +31,7 @@
 						<h1 class="questionnaire-title tac vox-survey-title">
 							- {{ $vox->title }} -
 							@if($testmode)
-								<a href="{{ $vox->getLink() }}?goback=1&q-id={{ request('q-id') ?? '0' }}" class="go-back-admin">&laquo; Back</a>
+								<a href="{{ $vox->getLink() }}?testmode=1&goback=1&q-id={{ request('q-id') ?? '0' }}" class="go-back-admin">&laquo; Back</a>
 
 								@if(request('q-id') || request('back-q'))
 									<a href="javascript:;" class="refresh-q">Refresh</a>
@@ -53,7 +53,7 @@
 								<p>
 									{!! trans('vox.page.questionnaire.unfinished-survey.text') !!}
 								</p>
-								<a href="javascript:;" class="start-over" u-id="{{ $user->id }}" vox-id="{{ $vox->id }}" url="{{ getLangUrl('start-over') }}">
+								<a href="javascript:;" class="start-over" u-id="{{ $user->id }}" vox-id="{{ $vox->id }}" url="{{ getLangUrl('start-over') }}" cur-url="{{ $vox->getLink() }}?testmode=1">
 									<img src="{{ url('new-vox-img/start-over.svg') }}">
 									{!! trans('vox.page.questionnaire.unfinished-survey.button') !!}
 								</a>
@@ -214,7 +214,7 @@
 							</div>
 							<div class="col taken-survey-description">
 								@if($testmode)
-									<a href="{{ $vox->getLink() }}?goback=1" class="go-back-admin">&laquo; Back</a>
+									<a href="{{ $vox->getLink() }}?testmode=1&goback=1" class="go-back-admin">&laquo; Back</a>
 								@endif
 								<h3 class="done-title">
 									{!! trans('vox.page.questionnaire.well-done', [

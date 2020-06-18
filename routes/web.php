@@ -125,6 +125,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('vox/delete/{id}', 					'VoxesController@delete');
 	Route::post('vox/edit/{id}/question/add', 		'VoxesController@add_question');
 	Route::any('vox/edit/{id}/question/{question_id}', 		'VoxesController@edit_question');
+	Route::any('vox/edit/{id}/question/{question_id}/delete-question-image', 'VoxesController@deleteQuestionImage');
+	Route::any('vox/edit/{id}/question/{question_id}/delete-answer-image/{answer}', 'VoxesController@deleteAnswerImage');
 	Route::get('vox/edit/{id}/question-del/{question_id}', 		'VoxesController@delete_question');
 	Route::any('vox/edit/{id}/change-all', 			'VoxesController@reorder');
 	Route::any('vox/edit/{id}/change-number/{question_id}', 		'VoxesController@order_question');

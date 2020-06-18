@@ -8,6 +8,40 @@ $main-color: #38ace5;
 	.fb_chb {
 		display: none !important;
 	}
+
+	.lightboxOverlay {
+		background-color: rgba(229, 243, 247, 0.75);
+	}
+
+	.lightbox {
+		.lb-image {
+		    border-radius: 10px;
+		    border: 2px solid #37a8ff;
+		}
+	}
+
+	.lb-outerContainer {
+		border-radius: 10px;
+	}
+
+	.lb-dataContainer {
+		position: absolute;
+		top: 0px;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 100;
+	}
+
+	.lb-data {
+		.lb-close {
+			background-image: url('../new-vox-img/close-tooltip.png');
+			background-size: cover;
+			box-shadow: 0 0 4px 0px black;
+    		border-radius: 50%;
+    		width: 40px;
+    		height: 40px;
+		}
+	}
 }
 
 .questions {
@@ -159,6 +193,8 @@ $main-color: #38ace5;
 		&.multiple-choice {
 			.answers {
 				.answer-checkbox {
+
+					a,
 					.tooltip-text {
 						font-size: 16px;
 					}
@@ -198,6 +234,78 @@ $main-color: #38ace5;
 				margin-top: 20px;
 			}
 
+			&.question-with-image {
+				display: flex;
+				align-items: center;
+
+				@media #{$phone} {
+					flex-flow: row wrap;
+				    align-items: center;
+				    justify-content: center;
+				}
+			}
+
+			p {
+				font-size: 18px;
+				color: #888888;
+				font-weight: normal;
+
+				@media #{$phone} {
+					font-size: 15px;
+
+					br {
+						display: none;
+					}
+				}
+			}
+
+			a {
+				color: #41afff;
+
+				@media #{$phone} {
+					font-size: 17px;
+				}
+			}
+
+			.question-image {
+				min-width: 90px;
+				display: flex;
+    			align-items: center;
+    			position: relative;
+
+    			.q-img {
+    				max-width: 100%;
+				    border: 2px solid #37a8ff;
+				    border-radius: 13px;
+    			}
+
+    			.zoom-img {
+    				max-width: 30px;
+				    position: absolute;
+				    right: 0;
+				    bottom: 0px;
+    			}
+
+    			&:hover {
+    				.zoom-img {
+    					transform: scale(1.2);
+    					transform-origin: right bottom;
+    				}
+    			}
+			}
+
+			.q-text {
+				margin-left: 20px;
+				text-align: left;
+
+				@media #{$phone} {
+				    font-size: 17px;
+				    text-align: center;
+				    margin-left: 0px;
+				    margin-top: 20px;
+				}
+			}
+
 			.tooltip-text {
 				font-size: 25px;
 		    	font-weight: bold;
@@ -213,6 +321,188 @@ $main-color: #38ace5;
 			display: inline-block;
 			position: relative;
 			width: auto;
+
+			&.answers-draggable {
+				@media #{$phone} {
+					width: 100%;
+				}
+				.answer-rank {
+					cursor: n-resize;
+					display: flex;
+				    align-items: center;
+				    border: 1px solid #9c9c9c;
+				    border-radius: 9px;
+				    margin-bottom: 13px;
+				    padding: 3px 14px;
+				    background-color: white;
+				    min-width: 500px;
+				    font-size: 18px;
+				    text-align-last:center;
+
+				    @media #{$phone} {
+				    	min-width: auto;
+				    	width: 100%;
+				    	font-size: 16px;
+				    }
+
+    				select {
+    					padding: 0px 10px;
+					    width: 68px;
+					    height: 37px;
+					    border-radius: 5px;
+    					margin-top: 0px;
+    					margin-bottom: 0px;
+					    margin-left: 40px;
+    					margin-right: 32px;
+    					font-weight: normal;
+    					border-color: #9c9c9c;
+
+				    	@media #{$phone} {
+						    width: 58px;
+						    margin-left: 14px;
+						    margin-right: 14px;
+						}
+    				}
+				}
+			}
+
+			&.question-pictures {
+				display: flex;
+    			flex-wrap: wrap;
+				max-width: 500px;
+				margin: 0 auto;
+
+				@media #{$phone} {
+					justify-content: space-between;
+				}
+
+				.checkbox,
+    			.answer {
+				    width: calc(33% - 33px);
+				    border: none;
+				    margin-left: 0px;
+				    margin-right: 50px;
+				    padding: 0px;
+				    margin-bottom: 30px;
+
+				    @media #{$phone} {
+					    width: calc(33% - 14px);
+					    margin-right: 4px;
+					    margin-bottom: 10px;
+					}
+
+				    &.active-label,
+					&:hover {
+						@media #{$phone_up} {
+							border-color: transparent;
+							color: #333;
+						    background: transparent;
+
+						    // i {
+						    // 	color: #333;
+						    // }
+
+						    a,
+						    .tooltip-text {
+								color: #41afff;
+							}
+						}
+					}
+
+					.answer-checkbox {
+						border: none;
+				    	padding: 0px;
+				    	text-align: center;
+
+				    	&.active,
+						&:hover {
+							@media #{$phone_up} {
+								border-color: transparent;
+								color: #333;
+							    background: transparent;
+
+							    // i {
+							    // 	color: #333;
+							    // }
+
+							    a,
+							    .tooltip-text {
+									color: #41afff;
+								}
+							}
+						}
+
+						&.active {
+							.answer-image {
+								.img-checked {
+									display: block;
+								}
+							}
+						}
+					}
+
+				    &:nth-child(3n) {
+				    	margin-right: 0px;
+				    }
+
+				    .answer-image {
+				    	position: relative;
+				    	width: 132px;
+    					height: 132px;
+					    background-repeat: no-repeat;
+					    border: 2px solid #37a8ff;
+					    border-radius: 16px;
+					    background-size: cover;
+					    margin-bottom: 10px;
+
+					    @media #{$phone} {
+					    	width: 100%;
+					    	height: auto;
+					    	padding-top: 100%;
+					    }
+
+					    .img-checked {
+					    	display: none;
+					    	position: absolute;
+					    	left: -2px;
+					    	top: -2px;
+					    	width: 37px;
+
+							@media #{$phone} {
+								width: 27px;
+							}
+					    }
+
+					    .zoom-answer {
+							display: block;
+							position: absolute;
+							right: -2px;
+							bottom: -2px;
+
+							&:hover {
+		    					transform: scale(1.1);
+		    					transform-origin: right bottom;
+			    			}
+
+							img {
+								width: 37px;
+								display: block;
+
+								@media #{$phone} {
+									width: 27px;
+								}
+							}
+					    }
+				    }
+
+				    .answer-mobile-tooltip {
+				    	@media #{$phone} {
+				    		top: 70%;
+				    		right: -21px;
+				    	}
+				    }
+    			}
+			}
 
 			.loader {
 	    		position: absolute;
@@ -284,6 +574,7 @@ $main-color: #38ace5;
 					}
 				}
 
+				a,
 				.tooltip-text {
 				    font-size: 18px;
 					color: #41afff;
@@ -294,6 +585,33 @@ $main-color: #38ace5;
 				}
 			}
 
+			.answer-number {
+			    width: 100px;
+			    padding: 10px 15px;
+			    margin: 1px auto;
+			    border: 1px solid #bdbdbd;
+			    border-radius: 10px;
+			    font-size: 18px;
+			    font-weight: normal;
+			    margin-bottom: 15px;
+			    position: relative;
+			    text-align: center;
+			    -moz-appearance: textfield;
+
+			    @media #{$phone} {
+					font-size: 15px;
+				}
+
+				&.wrong {
+					border-color: #f33651;
+				}
+			}
+
+			.answer-number::-webkit-outer-spin-button,
+			.answer-number::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}
 
 			.answer-radio,
 			.answer-checkbox,
@@ -310,6 +628,7 @@ $main-color: #38ace5;
 					    	color: white;
 					    }
 
+					    a,
 					    .tooltip-text {
 							color: white;
 						}
@@ -516,22 +835,19 @@ $main-color: #38ace5;
 									font-size: 20px;
 
 									height: 86px;
-								    display: flex;
-								    align-items: center;
-								    justify-content: center;
+								    line-height: 86px;
 
 									@media #{$phone} {
 										height: auto;
+										line-height: normal;
 										display: block;
 										font-size: 17px;
 									}
 
-									span {
-										font-size: 20px;
-										margin: 0px 5px;
+									a {
+										color: #41afff;
 
 										@media #{$phone} {
-											margin: 0px;
 											font-size: 17px;
 										}
 									}
@@ -877,6 +1193,10 @@ $main-color: #38ace5;
 					@media #{$phone} {
 						font-size: 18px;
 					}
+				}
+
+				.rules-ok {
+					-webkit-appearance: none;
 				}
 			}
 		}

@@ -551,3 +551,46 @@ table .order.desc::after {
 .users-filters .filter {
     display: none;
 }
+
+.answer-image-wrap {
+    position: relative;
+    width: 100px;
+    min-width: 100px;
+    margin-right: 0px;
+}
+
+.answer-image-wrap img {
+    max-width: 120px;
+    max-height: 60px;
+}
+
+.delete-answer-avatar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    max-width: 20px;
+    display: block;
+    padding: 0px;
+}
+
+.delete-answer-avatar i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+@media screen and (max-width: 767px) {
+    .col-60 {
+        max-width: 30px;
+    }
+}

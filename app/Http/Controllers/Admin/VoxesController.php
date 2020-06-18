@@ -46,6 +46,8 @@ class VoxesController extends AdminController
             'single_choice' => trans('admin.enums.question-type.single_choice'),
             'multiple_choice' => trans('admin.enums.question-type.multiple_choice'),
             'scale' => trans('admin.enums.question-type.scale'),
+            'number' => 'Number',
+            'rank' => 'Rank',
         ];
         $this->stat_types = [
             '' => 'No',
@@ -228,9 +230,7 @@ class VoxesController extends AdminController
                                     $triggers[$question->id] .= $q->question.'<br/>';
                                 }                            
                             }
-                        }
-
-                        
+                        }                        
                     }
                 }
             }
@@ -583,6 +583,9 @@ class VoxesController extends AdminController
             } else if(!empty(request('used_for_stats')) && empty(request('stats_title_question')) && empty(request('stats_title-en'))) {
                 Request::session()->flash('error-message', 'Stats title required' );
                 return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
+            } else if($question->type == 'number' && empty($question->number_limit)) {
+                Request::session()->flash('error-message', 'Number limit requited' );
+                return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
             } else {
                 Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-added'));
                 return redirect('cms/'.$this->current_page.'/edit/'.$id);
@@ -656,6 +659,9 @@ class VoxesController extends AdminController
                 } else if(!empty(request('used_for_stats')) && empty(request('stats_title_question')) && empty(request('stats_title-en'))) {
                     Request::session()->flash('error-message', 'Stats title required' );
                     return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question_id);
+                } else if($question->type == 'number' && empty($question->number_limit)) {
+                    Request::session()->flash('error-message', 'Number limit requited' );
+                    return redirect('cms/'.$this->current_page.'/edit/'.$id.'/question/'.$question->id);
                 } else {
                     Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.question-updated'));
                     return redirect('cms/'.$this->current_page.'/edit/'.$id);
@@ -666,6 +672,7 @@ class VoxesController extends AdminController
             ->join('users', 'users.id', '=', 'vox_answers.user_id')
             ->whereNull('users.deleted_at')
             ->whereNull('vox_answers.deleted_at')
+            ->whereNull('vox_answers.is_admin')
             ->where('vox_id', $id )
             ->where('question_id', $question_id)
             ->where('is_completed', 1)
@@ -931,6 +938,17 @@ class VoxesController extends AdminController
             }
         }
 
+        if(isset($data['number-min']) && $data['number-max'] && (!empty($data['number-min']) || $data['number-min'] === '0' ) && !empty($data['number-max'])) {
+            $array = [
+                $data['number-min'],
+                $data['number-max']
+            ];
+            
+            $question->number_limit = implode(':', $array);
+        } else {
+            $question->number_limit = '';
+        }
+
         $question->invert_trigger_logic = $data['invert_trigger_logic'] ?? null;
         
         $question->save();
@@ -970,7 +988,7 @@ class VoxesController extends AdminController
                 } else {
                     $translation->stats_subtitle = '';
                 }
-
+                //dd($data['answers-'.$key]);
                 if(!empty( $data['answers-'.$key] )) {
 
                     foreach ($data['answers-'.$key] as $answ) {
@@ -984,8 +1002,7 @@ class VoxesController extends AdminController
                         }
                     }
 
-                    $translation->answers = json_encode( $data['answers-'.$key] );
-
+                    $translation->answers = json_encode( $data['answers-'.$key], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE );
                 } else {
                     $translation->answers = '';                            
                 }
@@ -994,6 +1011,45 @@ class VoxesController extends AdminController
             }
         }
         $question->save();
+
+
+        if( Input::file('answer-photos') ) {
+            $image_filename = [];
+
+            foreach (json_decode($question->answers, true) as $k => $v) {
+
+                if(!empty(Input::file('answer-photos')[$k])) {
+                    $unique = 'ans-'.mb_substr(microtime(true), 0, 10).$k;
+
+                    $image_filename[] = $unique;
+                    $img = Image::make( Input::file('answer-photos')[$k] )->orientate();
+                    $question->addAnswerImage($img, $unique);
+                } else {
+                    if(!empty($data['filename'][$k])) {
+                        $image_filename[] = $data['filename'][$k];
+                    } else {
+                        $image_filename[] = '';
+                    }
+                }
+            }
+
+            $question->answers_images_filename = json_encode($image_filename);
+            $question->save();
+
+        } else if(!empty($data['filename'])) {
+            $imgs_arr = [];
+            foreach (json_decode($question->answers, true) as $k => $v) {
+                $imgs_arr[] = !empty($data['filename'][$k]) ? $data['filename'][$k] : '';
+            }
+
+            $question->answers_images_filename = json_encode($imgs_arr);
+            $question->save();
+        }
+
+        if( Input::file('question-photo') ) {
+            $img = Image::make( Input::file('question-photo') )->orientate();
+            $question->addImage($img);
+        }
 
         session([
             'brackets' => $sess
@@ -1491,103 +1547,25 @@ class VoxesController extends AdminController
             }
 
             foreach( $vox->questions as $question ) {
-                if( $question->type == 'single_choice' ) {
+                if( $question->type == 'single_choice' || $question->type == 'number' ) {
                     $cols[] = $question->question;
                     $cols2[] = '';
-                } else if( $question->type == 'scale' ) {
+                    $cols3[] = $this->exportQuestionTriggers($question);
+                } else if( $question->type == 'scale' || $question->type == 'rank' ) {
                     $list = json_decode($question->answers, true);
                     foreach ($list as $l) {
                         $cols[] = $question->question;
                         $cols2[] = $l;
+                        $cols3[] = $this->exportQuestionTriggers($question);
                     }
                 } else if( $question->type == 'multiple_choice' ) {
                     $list = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true);
                     foreach ($list as $l) {
                         $cols[] = $question->question;
                         $cols2[] = mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l;
+                        $cols3[] = $this->exportQuestionTriggers($question);
                     }
-                }
-
-                if($question->question_trigger) {
-
-                    if($question->question_trigger == -1) {
-                        $cols3[] = 'Triggers: SAME AS BEFORE';
-                    } else {
-
-                        $trigger_qs = [];
-
-                        foreach (explode(';', $question->question_trigger) as $v)  {
-                            $trigger_qs[] = explode(':', $v)[0];
-                        }
-
-                        $trigger_ans = [];
-                        foreach (explode(';', $question->question_trigger) as $triggers)  {
-                            if(isset(explode(':', $triggers)[1])) {
-
-                                list($triggerId, $triggerAnswers) = explode(':', $triggers);
-
-                                if(mb_strpos($triggerAnswers, '-')!==false) {
-                                    list($from, $to) = explode('-', $triggerAnswers);
-
-                                    $allowedAnswers = [];
-                                    for ($i=$from; $i <= $to ; $i++) { 
-                                        $allowedAnswers[] = json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($i)-1];
-                                    }
-
-                                } else {
-                                    $answer_names = [];
-                                    foreach (explode(',', $triggerAnswers) as $value) {
-                                        $answer_names[] = json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($value)-1];
-                                    }
-
-                                    $allowedAnswers = $answer_names;
-                                }
-
-                                $trigger_ans[$triggerId] = $allowedAnswers;
-                            }
-                        }
-
-                        if($trigger_qs) {
-
-                            if(!empty($trigger_ans)) {
-                                $triggers = [];
-
-                                foreach ($trigger_qs as $tq) {
-                                    if(isset($trigger_ans[$tq])) {
-                                        $triggers[] = VoxQuestion::find($tq)->question.' - '.($question->invert_trigger_logic ? '(NOT) ' : '').implode(',', $trigger_ans[$tq]);
-                                        
-                                    } else {
-                                        $triggers[] = VoxQuestion::find($tq)->question ? VoxQuestion::find($value)->question : '';
-                                    }                                
-                                }
-
-                                $trg = implode('; ', $triggers);
-                                
-                            } else {
-                                $q_titles = [];
-                                foreach ($trigger_qs as $key => $value) {
-                                    $q_titles = VoxQuestion::find($value) ? VoxQuestion::find($value)->question : '';
-                                }
-                                if($q_titles) {
-
-                                    $trg = implode('; ', $q_titles);
-                                } else {
-                                    $trg = '';
-                                }
-                            }
-
-                            $trg_logic = $question->trigger_type == 'or' ? 'ANY' : 'ALL';
-
-                            $cols3[] = 'Triggers: (trigger logic '.$trg_logic.') '.$trg;
-                        } else {
-                            $cols3[] = '';
-                        }
-
-                    }
-
-                } else {
-                    $cols3[] = '';
-                }
+                }                
             }
 
             $rows = [
@@ -1595,7 +1573,6 @@ class VoxesController extends AdminController
                 $cols2,
                 $cols3
             ];
-
 
             $users = DcnReward::where('reference_id',$vox->id )->where('platform', 'vox')->where('type', 'survey')->with('user');
             if( request('date-from') ) {
@@ -1645,7 +1622,9 @@ class VoxesController extends AdminController
                     if( $question->type == 'single_choice' ) {
                         $answerwords = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true);
                         $row[] = $qanswers->last() && $qanswers->last()->answer && isset( $answerwords[ ($qanswers->last()->answer)-1 ] ) ? $answerwords[ ($qanswers->last()->answer)-1 ] : '';
-                    } else if( $question->type == 'scale' ) {
+                    } else if( $question->type == 'number' ) {
+                        $row[] = $qanswers->last()->answer;
+                    } else if( $question->type == 'scale' || $question->type == 'rank' ) {
                         $list = json_decode($question->answers, true);
                         $i=1;
                         $answerwords = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true);
@@ -1787,6 +1766,123 @@ class VoxesController extends AdminController
 
         $this->request->session()->flash('success-message', 'All selected questions are deleted' );
         return redirect(url()->previous());
+    }
+
+    public function deleteAnswerImage( $vox_id, $q_id, $answer ) {
+        $question = VoxQuestion::find($q_id);
+
+        if(!empty($question)) {
+
+            $images_files = json_decode($question->answers_images_filename);
+            $k = array_search($answer, $images_files);
+            if($k) {
+                unset($images_files[$k]);
+            }
+
+            $question->answers_images_filename = json_encode($images_files);
+            $question->save();
+        }
+
+        return Response::json( [
+            'success' => true,
+        ] );
+    }
+
+    public function deleteQuestionImage( $vox_id, $q_id ) {
+        $item = VoxQuestion::find($q_id);
+
+        if(!empty($item)) {
+
+            $item->has_image = false;
+            $item->save();
+        }
+
+        $this->request->session()->flash('success-message', 'Photo deleted!' );
+        return redirect('cms/'.$this->current_page.'/edit/'.$vox_id.'/question/'.$q_id);
+    }
+
+    private function exportQuestionTriggers($question) {
+        if($question->question_trigger) {
+
+            if($question->question_trigger == -1) {
+                $cols3[] = 'Trigger: SAME AS BEFORE';
+            } else {
+
+                $trigger_qs = [];
+
+                foreach (explode(';', $question->question_trigger) as $v)  {
+                    $trigger_qs[] = explode(':', $v)[0];
+                }
+
+                $trigger_ans = [];
+                foreach (explode(';', $question->question_trigger) as $triggers)  {
+                    if(isset(explode(':', $triggers)[1])) {
+
+                        list($triggerId, $triggerAnswers) = explode(':', $triggers);
+
+                        if(mb_strpos($triggerAnswers, '-')!==false) {
+                            list($from, $to) = explode('-', $triggerAnswers);
+
+                            $allowedAnswers = [];
+                            for ($i=$from; $i <= $to ; $i++) { 
+                                $allowedAnswers[] = json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($i)-1];
+                            }
+
+                        } else {
+
+                            $answer_names = [];
+                            foreach (explode(',', $triggerAnswers) as $value) {
+                                $answer_names[] = isset(json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($value)-1]) ? json_decode(VoxQuestion::find($triggerId)->answers, true)[intval($value)-1] : $value;
+                            }
+
+                            $allowedAnswers = $answer_names;
+                        }
+
+                        $trigger_ans[$triggerId] = $allowedAnswers;
+                    }
+                }
+
+                if($trigger_qs) {
+
+                    if(!empty($trigger_ans)) {
+                        $triggers = [];
+
+                        foreach ($trigger_qs as $tq) {
+                            if(isset($trigger_ans[$tq])) {
+                                $triggers[] = VoxQuestion::find($tq)->question.' - '.($question->invert_trigger_logic ? '(NOT) ' : '').implode(',', $trigger_ans[$tq]);
+                                
+                            } else {
+                                $triggers[] = VoxQuestion::find($tq)->question ? VoxQuestion::find($value)->question : '';
+                            }                                
+                        }
+
+                        $trg = implode('; ', $triggers);
+                        
+                    } else {
+                        $q_titles = [];
+                        foreach ($trigger_qs as $key => $value) {
+                            $q_titles = VoxQuestion::find($value) ? VoxQuestion::find($value)->question : '';
+                        }
+                        if($q_titles) {
+
+                            $trg = implode('; ', $q_titles);
+                        } else {
+                            $trg = '';
+                        }
+                    }
+
+                    $trg_logic = $question->trigger_type == 'or' ? 'ANY' : 'ALL';
+
+                    return 'Trigger: (trigger logic '.$trg_logic.') '.$trg;
+                } else {
+                    return '';
+                }
+
+            }
+
+        } else {
+            return '';
+        }
     }
 
 }

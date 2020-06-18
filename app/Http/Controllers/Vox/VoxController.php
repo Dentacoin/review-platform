@@ -447,12 +447,11 @@ class VoxController extends FrontController
 
 		$not_bot = $testmode || session('not_not-'.$vox->id);
 
-
+		//dd($answered);
 		if(Request::input('goback') && $testmode) {
 			$q_id = $this->goBack($answered, $list, $vox);
 
-
-            return redirect( $vox->getLink().'?back-q='.$q_id );
+            return redirect( $vox->getLink().'?testmode=1&back-q='.$q_id );
 		}
 
 		$slist = VoxScale::get();
@@ -528,14 +527,13 @@ class VoxController extends FrontController
 		        		$valid = false;
 		        		$type = Request::input('type');
 
-		        		$answer_count = $type == 'multiple' || $type == 'scale' || $type == 'single' ? count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true) ) : 0;
+		        		$answer_count = $type == 'multiple' || $type == 'rank' || $type == 'scale' || $type == 'single' ? count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true) ) : 0;
 
 		        		if ($type == 'skip') {
 		        			$valid = true;
 		        			$a = 0;
 
 		        		} else if ( isset( $this->details_fields[$type] ) ) {
-
 
 		        			$should_reward = false;
 		        			if($this->user->$type===null) {
@@ -620,19 +618,8 @@ class VoxController extends FrontController
 		        			$valid = true;
 		        			$a = Request::input('answer');
 
-		        		} else if ($type == 'multiple') {
+		        		} else if ($type == 'multiple' || $type == 'scale' || $type == 'rank') {
 
-		        			$valid = true;
-		        			$a = Request::input('answer');
-		        			foreach ($a as $value) {
-		        				if (!($value>=1 && $value<=$answer_count)) {
-		        					$valid = false; 
-		        					break;
-		        				}
-		        			}
-		        			
-		        		} else if($type == 'scale') {
-	        				
 		        			$valid = true;
 		        			$a = Request::input('answer');
 		        			foreach ($a as $k => $value) {
@@ -641,10 +628,18 @@ class VoxController extends FrontController
 		        					break;
 		        				}
 		        			}
-
+		        			
 		        		} else if ($type == 'single') {
 	        				$a = intval(Request::input('answer'));
 	        				$valid = $a>=1 && $a<=$answer_count;
+
+		        		} else if ($type == 'number') {
+
+		        			$cur_question = VoxQuestion::find($q);
+		        			$min_num = intval(explode(':',$cur_question->number_limit)[0]);
+		        			$max_num = intval(explode(':',$cur_question->number_limit)[1]);
+	        				$a = intval(Request::input('answer'));
+	        				$valid = $a>=$min_num && $a<=$max_num;
 		        		}
 
 
@@ -653,6 +648,7 @@ class VoxController extends FrontController
 		        			VoxAnswer::where('user_id', $this->user->id )->where('vox_id',$vox->id )->where('question_id', $q)->delete();
 
 		        			$is_scam = false;
+
 					        if($question->is_control) {
 
 					        	if ($question->is_control == '-1') {
@@ -895,10 +891,28 @@ class VoxController extends FrontController
 									        }
 									        $answer->save();
 									        $answered[$q] = 0;
-
 							    		}
 			        				}
 
+			        			} else if($type == 'number') {
+		        					$answer = new VoxAnswer;
+							        $answer->user_id = $this->user->id;
+							        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
+							        if (in_array($q, $welcome_vox_question_ids)===true) {
+							        	$answer->is_completed = 1;
+						        		$answer->is_skipped = 0;
+							        }
+							        $answer->question_id = $q;
+							        $answer->answer = $a;
+							        $answer->country_id = $this->user->country_id;
+						        	$this->setupAnswerStats($answer);
+						        
+							        if($testmode) {
+							        	$answer->is_admin = true;
+							        }
+							        $answer->save();
+
+								    $answered[$q] = $a;
 
 			        			} else if($type == 'multiple') {
 			        				foreach ($a as $value) {
@@ -920,7 +934,8 @@ class VoxController extends FrontController
 								        $answer->save();
 			        				}
 								    $answered[$q] = $a;
-			        			} else if($type == 'scale') {
+
+			        			} else if($type == 'scale' || $type == 'rank') {
 			        				foreach ($a as $k => $value) {
 			        					$answer = new VoxAnswer;
 								        $answer->user_id = $this->user->id;
@@ -1048,7 +1063,6 @@ class VoxController extends FrontController
 				                }
 
 						        $reward->save();
-	        					# code...
 	        				}
 
 					        if(count($answered) == count($vox->questions)) {
@@ -1363,10 +1377,14 @@ class VoxController extends FrontController
 			'first_question_num' => $first_question_num,
 			'js' => [
 				'vox.js',
-        		'flickity.pkgd.min.js'
+				'../js/lightbox.js',
+				'../js/jquery-ui.min.js',
+				'../js/jquery-ui-touch.min.js',
+        		'flickity.pkgd.min.js',
 			],
 			'css' => [
 				'vox-questionnaries.css',
+				'lightbox.css',
         		'flickity.min.css'
 			],
             'jscdn' => [

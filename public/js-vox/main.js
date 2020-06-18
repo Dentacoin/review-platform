@@ -587,6 +587,45 @@ $(document).ready(function(){
 
 	tooltipsFunction = function() {
 
+		// var tooltipSize = function(that) {
+			//pri load tooltip with images na desktop bug
+		// 	if(window.innerWidth > 768 && $('.tooltip-window').hasClass('tooltip-with-image')) {
+	 //        	var y = that.offset().top + that.outerHeight() / 2 - $('.tooltip-window').outerHeight() / 2;
+		//     	var x = that.offset().left + that.outerWidth() + 20;
+	 //        } else {
+		//     	var y = that.offset().top + that.outerHeight() + 10;
+		//     	var x = that.offset().left + that.outerWidth() / 2 - $('.tooltip-window').outerWidth() / 2 ;
+	 //        }
+
+	 //        $('.tooltip-window').css('left', x );
+	 //        $('.tooltip-window').css('top', y );
+		// }
+
+		var loadTooltipImage = function(elm) {
+			var that = elm;
+
+			$(".tooltip-window img").on('load', function(){
+				if(window.innerWidth > 768) {
+
+		        	var y = that.offset().top + that.outerHeight() / 2 - $('.tooltip-window').outerHeight() / 2;
+			    	var x = that.offset().left + that.outerWidth() + 20;
+				} else {
+					console.log(that.offset().left, that.outerWidth() / 2 , $('.tooltip-window').outerWidth() / 2);
+					var y = that.offset().top + that.outerHeight() + 10;
+		    		var x = that.offset().left + that.outerWidth() / 2 - $('.tooltip-window').outerWidth() / 2 ;
+				}
+
+		    	$('.tooltip-window').css('left', x );
+	        	$('.tooltip-window').css('top', y );
+			});
+		}
+
+		var closeTooltip = function() {
+			$('.close-tooltip').click( function() {
+				$('.tooltip-window').hide();
+			});
+		}
+
 	    var handleTooltip = function(e) {
 
 	    	if( $(this).closest('.no-mobile-tooltips').length ) {
@@ -595,20 +634,54 @@ $(document).ready(function(){
 	    		var that = $(this).closest('.tooltip-text');
 	    	}
 
-	    	//console.log( $(this).closest('.tooltip-text').attr('text') );
+	        $('.tooltip-window').html( $(this).closest('.tooltip-text').attr('text') );
 
-	        $('.tooltip-window').text( $(this).closest('.tooltip-text').attr('text') );
-	        $('.tooltip-window').css('display', 'block');
+	        var elem = $(this).closest('.tooltip-text');
 
-	    	var y = that.offset().top + that.outerHeight() + 10;
-	    	var x = that.offset().left + that.outerWidth() / 2 - $('.tooltip-window').outerWidth() / 2 ;
+	        if(elem.closest('.answer-radios-group').length) {
+	        	var parent = elem.closest('h3');
+	        } else {
+	        	var parent = elem.closest('label');
+	        }
+
+	        if (parent.length && typeof parent.attr('tooltip-image') !== typeof undefined && parent.attr('tooltip-image') !== false) {
+	        	$('.tooltip-window').addClass('tooltip-with-image');
+	        	$('.tooltip-window').prepend('<img src="'+parent.attr('tooltip-image')+'"/>');
+
+	        	if(window.innerWidth > 768) {
+	        		$('.tooltip-window').prepend('<p>'+elem.text()+'</p>');
+	        	} else {
+	        		$('.tooltip-window').prepend('<p>'+elem.parent().find('span.tooltip-text').text()+'</p>');
+	        		$('.tooltip-window').prepend('<span class="close-tooltip"></span>');
+	        		closeTooltip();
+	        	}
+	        } else {
+	        	$('.tooltip-window').removeClass('tooltip-with-image');
+	        }
+
+	        if(window.innerWidth > 768 && $('.tooltip-window').hasClass('tooltip-with-image')) {
+	        	var y = that.offset().top + that.outerHeight() / 2 - $('.tooltip-window').outerHeight() / 2;
+		    	var x = that.offset().left + that.outerWidth() + 20;
+	        } else {
+		    	var y = that.offset().top + that.outerHeight() + 10;
+		    	var x = that.offset().left + that.outerWidth() / 2 - $('.tooltip-window').outerWidth() / 2 ;
+	        }
+
+	    	if($('.tooltip-window').hasClass('tooltip-with-image')) {
+	    		loadTooltipImage(that);
+	    	}
 
 	        $('.tooltip-window').css('left', x );
 	        $('.tooltip-window').css('top', y );
+	        $('.tooltip-window').css('display', 'block');
 
-	        // if ( window.innerWidth < 768 && window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
-	        //     $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
-	        // }
+	        $('.tooltip-window').removeClass('small-window');
+
+	        if (that.closest('.question-pictures').length && window.innerWidth < 768 && window.innerWidth - $('.tooltip-window').outerWidth() - 20 < e.pageX ) {
+	            $('.tooltip-window').css('left', window.innerWidth - $('.tooltip-window').outerWidth() - 20 );
+	            console.log('vliza li');
+	            $('.tooltip-window').addClass('small-window');
+	        }
 
 	        e.stopPropagation();
 
@@ -651,9 +724,16 @@ $(document).ready(function(){
 	    	e.stopPropagation();
 	    	e.preventDefault();
 
-	    	if (window.innerWidth < 768 && !$(this).hasClass('no-mobile-tooltips')) {
-	            handleTooltip.bind(this)(e);
-	        }
+	    	if($(this).hasClass('shown')) {
+	    		$('.tooltip-window').hide();
+	    	} else {
+	    		
+		    	if (window.innerWidth < 768 && !$(this).hasClass('no-mobile-tooltips')) {
+		            handleTooltip.bind(this)(e);
+		        }
+	    	}
+
+	    	$(this).toggleClass('shown');
 	    });
 	}
 

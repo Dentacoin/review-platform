@@ -61,7 +61,7 @@
 								<div class="echo {{ $format == 'png' ? 'echo-png' : '' }}">
 									<a class="title" href="javascript:;">
 										<h2 class="container">
-											{{ !empty($question->stats_title_question) ? $question->questionWithoutTooltips() : $question->translateorNew(App::getLocale())->stats_title }}
+											{!! strip_tags(!empty($question->stats_title_question) ? $question->questionWithoutTooltips() : $question->translateorNew(App::getLocale())->stats_title) !!}
 										</h2>
 									</a>
 									<div class="echo-inner">
@@ -120,7 +120,7 @@
 									<div class="echo {{ $format == 'png' ? 'echo-png' : '' }}">
 										<a class="title" href="javascript:;">
 											<h2 class="container">
-												{{ !empty($question->stats_title_question) ? $question->questionWithoutTooltips() : $question->translateorNew(App::getLocale())->stats_title }}
+												{!! strip_tags(!empty($question->stats_title_question) ? $question->questionWithoutTooltips() : $question->translateorNew(App::getLocale())->stats_title) !!}
 											</h2>
 										</a>
 										<div class="echo-inner">

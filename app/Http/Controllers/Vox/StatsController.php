@@ -195,9 +195,17 @@ class StatsController extends FrontController
                     $answers[$key] = trim($question->removeAnswerTooltip($value));
                 }
             } else {
-                $ans_array = json_decode($question->answers);
-                foreach ($ans_array as $ans) {
-                    $answers[] = $question->removeAnswerTooltip($ans);
+
+                if($question->type == 'number') {
+                    $ans_array = VoxAnswer::where('question_id', $question_id)->groupBy('answer')->select('answer')->get();
+                    foreach ($ans_array as $ans) {
+                        $answers[] = $ans->answer;
+                    }
+                } else {
+                    $ans_array = json_decode($question->answers);
+                    foreach ($ans_array as $ans) {
+                        $answers[] = strip_tags($question->removeAnswerTooltip($ans), ['a']);
+                    }
                 }
             }
 
@@ -207,7 +215,6 @@ class StatsController extends FrontController
                 }
                 $main_chart[$answers[$key]] = 0;
             }
-
 
             $related_question_type = false;
 
@@ -298,34 +305,48 @@ class StatsController extends FrontController
                 }
 
                 foreach ($results_main_chart as $res_main) {
-                    if(!isset( $answers[ $res_main->$answerField-1 ] )) {
+
+                    if($question->type == 'number') {
+                        $answer_number = $res_main->$answerField;
+                    } else {
+                        $answer_number = $answers[ $res_main->$answerField-1];
+                    }
+
+                    if(!isset( $answer_number )) {
                         continue;
                     }
 
-                    if(!isset($main_chart[ $answers[ $res_main->$answerField-1 ] ])) {
-                        $main_chart[ $answers[ $res_main->$answerField-1 ] ] = 0;
+                    if(!isset($main_chart[ $answer_number ])) {
+                        $main_chart[ $answer_number ] = 0;
                     }
-                    $main_chart[ $answers[ $res_main->$answerField-1 ] ] += $res_main->cnt;
+                    $main_chart[ $answer_number ] += $res_main->cnt;
                 }
-
                 
         		foreach ($results as $res) {
-                    if(!isset( $answers[ $res->$answerField-1 ] )) {
+
+                    if($question->type == 'number') {
+                        $answer_number = $res->$answerField;
+                    } else {
+                        $answer_number = $answers[ $res->$answerField-1];
+                    }
+
+                    if(!isset( $answer_number )) {
                         continue;
                     }
 
-        			if(!isset($second_chart[ $answers[ $res->$answerField-1 ] ])) {
+        			if(!isset($second_chart[ $answer_number ])) {
         				//$main_chart[ $answers[ $res->$answerField-1 ] ] = 0;
-        				$second_chart[ $answers[ $res->$answerField-1 ] ] = 0; //m
-        				$third_chart[ $answers[ $res->$answerField-1 ] ] = 0; //f
+        				$second_chart[ $answer_number ] = 0; //m
+        				$third_chart[ $answer_number ] = 0; //f
         			}
         			//$main_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt;
         			if($res->gender=='f') {
-        				$second_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt; //m
+        				$second_chart[ $answer_number ] += $res->cnt; //m
         			}
         			if($res->gender=='m') {
-        				$third_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt; //f
+        				$third_chart[ $answer_number ] += $res->cnt; //f
         			}
+
                     $totalm = $totalf = 0;
                     $totalQuery = $this->prepareQuery($question_id, $dates, [
                         'scale_answer_id' => $scale_answer_id, 
@@ -352,14 +373,21 @@ class StatsController extends FrontController
         		$results = $results->get();
 
         		foreach ($results as $res) {
-                    if(!isset( $answers[ $res->$answerField-1 ] )) {
+
+                    if($question->type == 'number') {
+                        $answer_number = $res->$answerField;
+                    } else {
+                        $answer_number = $answers[ $res->$answerField-1];
+                    }
+
+                    if(!isset( $answer_number )) {
                         continue;
                     }
 
-        			if(!isset($main_chart[ $answers[ $res->$answerField-1 ] ])) {
-        				$main_chart[ $answers[ $res->$answerField-1 ] ] = 0;
+        			if(!isset($main_chart[ $answer_number ])) {
+        				$main_chart[ $answer_number ] = 0;
         			}
-        			$main_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt;
+        			$main_chart[ $answer_number ] += $res->cnt;
 
         			if( $res->country_id ) {
                         $country = $countries->get($res->country_id);
@@ -373,7 +401,7 @@ class StatsController extends FrontController
                             }
         				}
                         if(empty($answer_id) || $res->$answerField==$answer_id) {
-                            $second_chart[ $country->code ][ $answers[ $res->$answerField-1 ] ] = $res->cnt; //m
+                            $second_chart[ $country->code ][ $answer_number ] = $res->cnt; //m
                         }
         			}
         		}
@@ -411,18 +439,25 @@ class StatsController extends FrontController
                 }
 
         		foreach ($results as $res) {
-                    if(!isset( $answers[ $res->$answerField-1 ] )) {
+
+                    if($question->type == 'number') {
+                        $answer_number = $res->$answerField;
+                    } else {
+                        $answer_number = $answers[ $res->$answerField-1];
+                    }
+
+                    if(!isset( $answer_number )) {
                         continue;
                     }
                     
-        			if(!isset($main_chart[ $answers[ $res->$answerField-1 ] ])) {
-        				$main_chart[ $answers[ $res->$answerField-1 ] ] = 0;
+        			if(!isset($main_chart[ $answer_number ])) {
+        				$main_chart[ $answer_number ] = 0;
         			}
-        			$main_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt;
+        			$main_chart[ $answer_number ] += $res->cnt;
 
 
         			if( $res->age ) {
-	        			$second_chart[ $age_to_group[$res->age] ][ $answers[ $res->$answerField-1 ] ] = $res->cnt; //m
+	        			$second_chart[ $age_to_group[$res->age] ][ $answer_number ] = $res->cnt; //m
         			}
         		}
                 
@@ -462,21 +497,28 @@ class StatsController extends FrontController
 
                 //dd( $results->toArray() );
         		foreach ($results as $res) {
-                    if($res->$scale===null || !isset( $answers[ $res->$answerField-1 ] )) {
+
+                    if($question->type == 'number') {
+                        $answer_number = $res->$answerField;
+                    } else {
+                        $answer_number = $answers[ $res->$answerField-1];
+                    }
+
+                    if($res->$scale===null || !isset( $answer_number )) {
                         continue;
                     }
 
 
-        			if(!isset($main_chart[ $answers[ $res->$answerField-1 ] ])) {
-        				$main_chart[ $answers[ $res->$answerField-1 ] ] = 0;
+        			if(!isset($main_chart[ $answer_number ])) {
+        				$main_chart[ $answer_number ] = 0;
         			}
-        			$main_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt;
+        			$main_chart[ $answer_number ] += $res->cnt;
 
 
         			if( $res->$scale ) {
-    	        		$second_chart[ $age_to_group[$res->$scale] ][ $answers[ $res->$answerField-1 ] ] = $res->cnt; //m
+    	        		$second_chart[ $age_to_group[$res->$scale] ][ $answer_number ] = $res->cnt; //m
         			}
-        		}
+    		    }
         	}
 
             $main_chart = $this->processArray($main_chart);
@@ -676,7 +718,7 @@ class StatsController extends FrontController
                         }
 
                         if( $q->type == 'single_choice' ) {
-                            $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : (!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+                            $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
                             $cols2[] = '';
                         } else if( $q->type == 'scale' ) {
                             $list = json_decode($q->answers, true);
@@ -696,7 +738,7 @@ class StatsController extends FrontController
                             }
 
                             foreach ($list_done as $l) {
-                                $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : (!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+                                $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
                                 $cols2[] = $q->removeAnswerTooltip(mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l);
                             }
                         }
@@ -791,9 +833,9 @@ class StatsController extends FrontController
 
                                 if(isset( $answerwords[ ($answ->answer)-1 ] )) {
                                     if(mb_strpos($answerwords[ ($answ->answer)-1 ], '!')===0 || mb_strpos($answerwords[ ($answ->answer)-1 ], '#')===0) {
-                                        $row[] = $q->removeAnswerTooltip(mb_substr($answerwords[ ($answ->answer)-1 ], 1));
+                                        $row[] = strip_tags($q->removeAnswerTooltip(mb_substr($answerwords[ ($answ->answer)-1 ], 1)));
                                     } else {
-                                        $row[] = $q->removeAnswerTooltip($answerwords[ ($answ->answer)-1 ]);
+                                        $row[] = strip_tags($q->removeAnswerTooltip($answerwords[ ($answ->answer)-1 ]));
                                     }
                                 } else {
                                     $row[] = '0';
@@ -1074,9 +1116,9 @@ class StatsController extends FrontController
                         } else {
                             if(!empty(Request::input('scale-for'))) {
                                 $list = json_decode($q->answers, true);
-                                $title_stats = (!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title).' ['.$list[(Request::input('scale-for') - 1)].']';
+                                $title_stats = strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title).' ['.$list[(Request::input('scale-for') - 1)].']';
                             } else {
-                                $title_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+                                $title_stats = ($q->type == 'multiple_choice' ? '[Multiple choice] ' : '' ).strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
                             }
 
                             $cols_q_title_second = [
@@ -1266,9 +1308,9 @@ class StatsController extends FrontController
 
     	$results = VoxAnswer::whereNull('is_admin')
         ->where('question_id', $question_id)
-    	->where('is_completed', 1)
-    	->where('is_skipped', 0)
-        ->has('user');
+        ->where('is_completed', 1)
+        ->where('is_skipped', 0)
+        ->has('user');        
 
         if( isset($options['dependency_question']) && isset($options['dependency_answer']) ) {
 

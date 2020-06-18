@@ -477,7 +477,7 @@
                                                 @if($question->used_for_stats=='standard')
                                                     Yes
                                                 @elseif($question->used_for_stats=='dependency')
-                                                    Related to: {{ $question->related->question }}
+                                                    Related to: {!! $question->related->question !!}
                                                 @endif
                                             </td>
                                             <td>{{ trans('admin.enums.question-type.'.$question->type) }}</td>

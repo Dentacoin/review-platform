@@ -53,7 +53,7 @@ $(document).ready(function(){
     }
 
 	
-    $('.question-group a.answer, .question-group a.next-answer').click( function() {
+    $('.question-group label.answer, .question-group a.next-answer').click( function() {
         var group = $(this).closest('.question-group');
         var qid = group.attr('data-id');
         var answer = null;

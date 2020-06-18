@@ -218,6 +218,46 @@ $(document).ready(function(){
                 return;
             }
 
+        } else if (group.hasClass('number')) {
+
+            var number_input = group.find('.answer-number');
+            var minNum = number_input.attr('min');
+            var maxNum = number_input.attr('max');
+
+            if ( number_input.val().length && parseInt( number_input.val() ) <= maxNum && parseInt( number_input.val() ) >= minNum ) {
+                var answer = number_input.val();
+
+                type = 'number';
+                group.find('.answer-number-error').hide();
+            } else {
+                group.find('.answer-number-error').show();
+                ajax_is_running = false;
+                return;
+            }
+
+        } else if (group.hasClass('rank')) {
+
+            type = 'rank';
+
+            var without_error = true;
+            group.find('select').each(function(){
+                if(!$(this).val()){
+                    without_error = false;
+                }
+            });
+
+            if (without_error ) {
+                var answer = [];
+                group.find('.answer-rank').each( function() {
+                    answer.push($(this).attr('data-num'));
+                });
+                group.find('.answer-rank-error').hide();
+            } else {
+                group.find('.answer-rank-error').show();
+                ajax_is_running = false;
+                return;
+            }
+
         } else if (group.hasClass('single-choice')) {
 
             var answer = $(this).attr('data-num');
@@ -290,7 +330,7 @@ $(document).ready(function(){
                     //Copy value
                     $('.popup.cross-checks .cross-checks-answers select').val( group.find('select').val() );
                 } else {
-                    group.find('.answers a.answer').each( function() {
+                    group.find('.answers label.answer').each( function() {
                         $('.popup.cross-checks .cross-checks-answers').append('<label for="cc-answer-'+group.attr('data-id')+'-'+$(this).find('input').val()+'">'+$(this).text()+'<i class="popup-check"></i><input id="cc-answer-'+group.attr('data-id')+'-'+$(this).find('input').val()+'" type="radio" name="answer" class="answer" value="'+$(this).find('input').val()+'" style="display:none;"></label>');
                     });
                 }
@@ -424,15 +464,14 @@ $(document).ready(function(){
 
                     } else {
                         
-
                         if (
+                            group.hasClass('single-choice') ||
+                            group.hasClass('number') ||
                             group.hasClass('gender-question') ||
                             group.hasClass('question-group-details') ||
                             group.hasClass('location-question') ||
                             group.hasClass('birthyear-question')
                         ) {
-                            group.attr('data-answer', answer);
-                        } else if (group.hasClass('single-choice')) {
                             group.attr('data-answer', answer);
                         } else {
                             group.attr('data-answer', !answer ? '' : answer.join(','));
@@ -757,8 +796,20 @@ $(document).ready(function(){
         $('.loader-mask').delay(350).fadeOut('slow');
     }
 
-    $('.question-group a.answer').click( sendAnswer );
+    //$('.question-group label.answer').click( sendAnswer );
+    $('.question-group label.answer').click( function(e) {
+        if( $(e.target).closest('.zoom-answer').length ) {
+        } else if($(e.target).is( "a" )) {
+        } else {
+            console.log($(e.target));
+            sendAnswer.bind(this)();
+        }
+        
+    } );
     $('.question-group a.next-answer').click( sendAnswer );
+    // $('.question-group label.answer a').click( function(e) {
+    //     e.stopPropagation();
+    // });
 
     // $('.question-group .answer-checkbox').click( function() {
     //     if( $(this).find('input').prop('disabled') ) {
@@ -869,6 +920,7 @@ $(document).ready(function(){
         var link = $(this).attr('url');
         var user_id = $(this).attr('u-id');
         var vox_id = $(this).attr('vox-id');
+        var cur_url = $(this).attr('cur-url');
 
         $.ajax({
             type: "POST",
@@ -882,7 +934,7 @@ $(document).ready(function(){
 
             success: function(ret) {
                 if (ret.success) {
-                    window.location.reload();
+                    window.location.href = cur_url;
 
                 } else {
                     console.log('error');
@@ -915,4 +967,46 @@ $(document).ready(function(){
         window.location.search = '?testmode=1&q-id='+$('.question-group:visible').attr('data-id');
     });
 
+    if($( ".answers-draggable" ).length) {
+        
+        $( ".answers-draggable" ).sortable({
+            containment: "window",
+            axis: "y",
+            update: function (event, ui) {
+                $( this ).children().each(function (i) {
+                    var numbering = i + 1;
+                    $(this).find('select').val(numbering);
+                    $(this).attr('rank-order', numbering);
+                });
+            }
+        });
+        //}).disableSelection();
+
+        $('.answers-draggable').on('sortupdate',function() {
+            $( this ).children().each(function (i) {
+                var numbering = i + 1;
+                $(this).find('select').val(numbering);
+                $(this).attr('rank-order', numbering);
+            });
+        });
+
+        $('.rank-order').on('touchstart', function(e) {
+            e.stopImmediatePropagation();
+        });
+
+        $('.rank-order').change( function(e) {
+            e.stopImmediatePropagation();
+            var child = $(this).val();
+            var elm = $(this).closest('.answer-rank');
+            var elm_after = $(this).closest('.answers-draggable').find('.answer-rank:nth-child('+child+')');
+
+            if(elm.attr('rank-order') > parseInt(child) ) {
+                elm.insertBefore( elm_after );
+            } else {
+                elm.insertAfter( elm_after );
+            }
+
+            $(this).closest('.answers-draggable').trigger('sortupdate');
+        });
+    }
 });

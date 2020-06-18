@@ -112,9 +112,9 @@ $(document).ready(function(){
     var handleScaleChanges = function() {
 
         if($('.scale-input').val() ) {
-            $('.answers-group, .answers-group-add').hide();
+            $('.answers-group-poll, .answers-group-add-poll').hide();
         } else {
-            $('.answers-group, .answers-group-add').show();
+            $('.answers-group-poll, .answers-group-add-poll').show();
         }
     }
 

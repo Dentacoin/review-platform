@@ -4,7 +4,7 @@
         <a href="{{ url('cms/vox/edit/'.$item->id) }}"> {{ $item->title }}</a>  
         @if(!empty($question))
         &raquo;
-        {{ $question->question }}
+        {!! $question->question !!}
         @endif
     </div>
     @if(!empty($question))
@@ -20,7 +20,7 @@
 <div class="row">
     <div class="col-md-12">
 
-        {{ Form::open(array('id' => 'question-'.( !empty($question) ? 'edit' : 'add') , 'url' => url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.( !empty($question) ? $question->id : 'add') ), 'class' => 'form-horizontal questions-form', 'method' => 'post')) }}
+        {{ Form::open(array('id' => 'question-'.( !empty($question) ? 'edit' : 'add') , 'url' => url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.( !empty($question) ? $question->id : 'add') ), 'class' => 'form-horizontal questions-form', 'method' => 'post', 'files' => true)) }}
 
 
             <div class="panel panel-inverse panel-with-tabs custom-tabs">
@@ -44,7 +44,7 @@
                             {{ Form::text('order', !empty($question) ? $question->order : (!empty($next) ? $next : ''), array('maxlength' => 256, 'class' => 'form-control input-title', 'style' => 'width: 50px;' )) }}
                             @foreach($langs as $code => $lang_info)
                                 <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }} " style="flex: 1;">
-                                    {{ Form::textarea('question-'.$code, !empty($question) ? $question->{'question:'.$code} : '', array('maxlength' => 2048, 'class' => 'form-control input-title', 'style' => 'max-height: 34px;')) }}
+                                    {{ Form::textarea('question-'.$code, !empty($question) ? $question->{'question:'.$code} : '', array('maxlength' => 2048, 'class' => 'form-control input-title', 'style' => 'height: 34px;')) }}
                                 </div>
                             @endforeach
                         </div>
@@ -58,21 +58,45 @@
                         <div class="col-md-2">
                             {{ Form::select('type', $question_types, !empty($question) ? $question->type : null, array('class' => 'form-control question-type-input')) }}
                         </div>
-                        <label class="col-md-1 control-label">{{ trans('admin.page.'.$current_page.'.question-scale') }}</label>
-                        <div class="col-md-2">
-                            {{ Form::select('question_scale', ['' => '-'] + $scales, !empty($question) ? $question->vox_scale_id : '', array('class' => 'form-control question-scale-input')) }}
+                        <div class="col-md-3 question-scale-wrapper">
+                            <label class="col-md-4 control-label">{{ trans('admin.page.'.$current_page.'.question-scale') }}</label>
+                            <div class="col-md-8" style="padding-right: 0px;">
+                                {{ Form::select('question_scale', ['' => '-'] + $scales, !empty($question) ? $question->vox_scale_id : '', array('class' => 'form-control question-scale-input')) }}
+                            </div>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-3 question-number-wrapper">
+                            <label class="col-md-4 control-label">Number limit</label>
+                            <div class="col-md-4">
+                                <input type="number" name="number-min" placeholder="From" value="{!! !empty($question) && !empty($question->number_limit) ? explode(':', $question->number_limit)[0] : '' !!}" class="form-control">
+                            </div>
+                            <div class="col-md-4" style="padding-right: 0px;">
+                                <input type="number" name="number-max" placeholder="To" value="{!! !empty($question) && !empty($question->number_limit) ? explode(':', $question->number_limit)[1] : '' !!}" class="form-control">                                
+                            </div>
+                        </div>
+                        <div class="col-md-5 hint-for-scale">
                             {!! nl2br(trans('admin.page.'.$current_page.'.question-scale-hint')) !!}
                         </div>
                     </div>
-                    <div class="form-group clearfix">
+                    <div class="form-group answers-randomize clearfix">
                         <label class="col-md-2 control-label" for="dont_randomize_answers">Don’t randomize</label>
                         <div class="col-md-1">
                             <input type="checkbox" name="dont_randomize_answers" class="form-control" value="1" id="dont_randomize_answers" style="vertical-align: sub;width: 30px;" {!! !empty($question) && !empty($question->dont_randomize_answers) ? 'checked="checked"' : '' !!} />
                         </div>                        
                     </div>
-
+                    <div class="form-group clearfix">
+                        <label class="col-md-2 control-label" for="q_img">Question Image</label>
+                        <div class="col-md-5">
+                            @if(!empty($question) && $question->has_image)
+                                <a target="_blank" href="{{ $question->getImageUrl() }}">
+                                    <img src="{{ $question->getImageUrl(true) }}" style="background: #2f7de1; max-width: 200px;" />
+                                </a>
+                                <br/>
+                                <a href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.$question->id.'/delete-question-image') }}">Delete photo</a>
+                            @else
+                                {{ Form::file('question-photo', ['id' => 'q_img' ,'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}
+                            @endif
+                        </div>
+                    </div>
                     @foreach($langs as $code => $lang_info)
                         <div class="tab-pane questions-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}" lang="{{ $code }}">
                             <div class="form-group answers-group">
@@ -84,10 +108,25 @@
                                                 <div class="col col-60">
                                                     {{ $question_answers_count[$key+1] ?? '' }}
                                                 </div>
-                                                <div class="col">
-                                                    {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 2048, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);')) }}
+                                                <div class="col" style="display: flex; align-items: center;">
+                                                    {{ Form::text('answers-'.$code.'[]', $ans, array('maxlength' => 2048, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);margin-right: 20px;')) }}
+
+                                                    @if($question->answers_images_filename && !empty(json_decode($question->answers_images_filename, true)[$key]) )
+                                                        <div class="answer-image-wrap">
+                                                            <a href="{{ $question->getAnswerImageUrl(false, $key) }}" target="_blank">
+                                                                <img src="{{ $question->getAnswerImageUrl(true, $key) }}">
+                                                            </a>
+                                                            <a class="btn btn-primary delete-answer-avatar" href="{{ url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.$question->id.'/delete-answer-image/'.(json_decode($question->answers_images_filename, true)[$key])) }}">
+                                                                <i class="fa fa-remove"></i>
+                                                            </a>
+                                                        </div>
+                                                    @endif
+                                                    <!-- da se dobavi novo pole v bazata, za imenata na failovete -->
+                                                    <!-- pri triene i razmestvane na vuprosi ne raboti -->
+                                                    <input type="hidden" name="filename[]" value="{{ !empty($question->answers_images_filename) && !empty(json_decode($question->answers_images_filename, true)[$key]) ? json_decode($question->answers_images_filename, true)[$key] : '' }}">
+                                                    <input accept="image/gif, image/jpg, image/jpeg, image/png" style="width: 100px; display: {{ $question->answers_images_filename && !empty(json_decode($question->answers_images_filename, true)[$key]) ? 'none' : 'inline-block' }};" name="answer-photos[]" type="file">
                                                     
-                                                    <div class="input-group-btn" style="display: inline-block;">
+                                                    <div class="input-group-btn" style="display: inline-block;width: auto;">
                                                         <button class="btn btn-default btn-remove-answer" type="button">
                                                             <i class="glyphicon glyphicon-remove"></i>
                                                         </button>
@@ -96,9 +135,13 @@
                                             </div>
                                         @endforeach
                                     @else
-                                        <div class="input-group">
+                                        <div class="flex input-group">
                                             {{ Form::text('answers-'.$code.'[]', '', array('maxlength' => 2048, 'class' => 'form-control', 'placeholder' => 'Answer or name of the scale:weak,medium,strong')) }}
-                                            <div class="input-group-btn">
+
+                                            <input type="hidden" name="filename[]" value="">
+                                            {{ Form::file('answer-photos[]', ['accept' => 'image/gif, image/jpg, image/jpeg, image/png', 'style' => 'width: 100px;']) }}
+                                            
+                                            <div class="input-group-btn" style="display: inline-block;width: auto;">
                                                 <button class="btn btn-default btn-remove-answer" type="button">
                                                     <i class="glyphicon glyphicon-remove"></i>
                                                 </button>
@@ -115,7 +158,11 @@
                                     * Use "#" before an answer to disable randomizing.<br/><br/>
 
                                     How ANSWER tooltips work: <br/>
-                                    Do you [includes cigars, e-cigarettes and any other tobacco products]smoke cigarettes[/]?<br/>
+                                    Do you [includes cigars, e-cigarettes and any other tobacco products]smoke cigarettes[/]?<br/><br/>
+
+                                    How clickable links works: <br/>
+                                    I think {https://dentavox.dentacoin.com}DentaVox{/} is the best site ever <br/><br/>
+
                                     <br/>
                                     <a href="javascript:;" class="btn btn-success btn-block btn-add-answer">{{ trans('admin.page.'.$current_page.'.answers-add') }}</a>
                                 </div>
@@ -248,7 +295,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group question-control-wrap">
                         <label class="col-md-2 control-label">{{ trans('admin.page.'.$current_page.'.question-control') }}</label>
                         <div class="col-md-5">
                             {{ Form::text('is_control', !empty($question) && ($question->is_control != '-1') ? $question->is_control : '', array('maxlength' => 256, 'class' => 'form-control input-title')) }}
@@ -264,8 +311,7 @@
                         </div>
                     </div>
 
-
-                    <div class="form-group clearfix">
+                    <div class="form-group question-stats clearfix">
                         <h3 class="col-md-1" style="margin-top: 0px;">Stats</h3>
                         <label class="col-md-1 control-label">Show in Stats</label>
                         <div class="col-md-2">
@@ -343,7 +389,7 @@
                                 @foreach(json_decode($question->{'answers:en'}, true) as $key => $ans)
                                     <label for="stats-scale-answers-{{ $key + 1 }}">
                                         <input type="checkbox" name="stats_scale_answers[]" value="{{ $key + 1 }}" id="stats-scale-answers-{{ $key + 1 }}" style="vertical-align: sub;" {!! !empty($question->stats_scale_answers) && in_array(($key+1), json_decode($question->stats_scale_answers, true)) ? 'checked="checked"' : '' !!} />
-                                        {{ $question->removeAnswerTooltip($ans) }} &nbsp;&nbsp;&nbsp;&nbsp;
+                                        {!! strip_tags($question->removeAnswerTooltip($ans)) !!} &nbsp;&nbsp;&nbsp;&nbsp;
                                     </label>
                                 @endforeach
                             </div>
@@ -430,9 +476,13 @@
         <div class="col col-60">
 
         </div>
-        <div class="col">
-            {{ Form::text('something', '', array('maxlength' => 2048, 'class' => 'form-control answer-name', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);')) }}
-            <div class="input-group-btn" style="display: inline-block;">
+        <div class="col" style="display: flex; align-items: center;">
+            {{ Form::text('something', '', array('maxlength' => 2048, 'class' => 'form-control answer-name', 'placeholder' => 'Answer or name of the scale:weak,medium,strong', 'style' => 'display: inline-block; width: calc(100% - 60px);margin-right: 20px;')) }}
+
+            <input type="hidden" name="filename[]" value="">
+            {{ Form::file('answer-photos[]', ['accept' => 'image/gif, image/jpg, image/jpeg, image/png', 'style' => 'width: 100px; display: inline-block;']) }}
+            
+            <div class="input-group-btn" style="display: inline-block;width: auto;">
                 <button class="btn btn-default btn-remove-answer" type="button">
                     <i class="glyphicon glyphicon-remove"></i>
                 </button>
