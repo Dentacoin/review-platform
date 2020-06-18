@@ -56,8 +56,8 @@
 				</div>
 			@endif
 		</div>
-		<div class="answers {!! count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8 ? 'in-columns' : '' !!} {{ $question->allAnswersHaveImages() ? 'question-pictures' : '' }}">
-			@if(count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8)
+		<div class="answers {!! !$question->allAnswersHaveImages() && count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8 ? 'in-columns' : '' !!} {{ $question->allAnswersHaveImages() ? 'question-pictures' : '' }}">
+			@if(!$question->allAnswersHaveImages() && count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8)
 				<div class="answers-column"> 
 			@endif
 			@foreach( $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true) as $k => $answer)
@@ -84,13 +84,13 @@
 						@endif
 					</label>
 				</div>
-				@if(count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8 && round(count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) / 2) == $loop->iteration )
+				@if(!$question->allAnswersHaveImages() && count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8 && round(count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) / 2) == $loop->iteration )
 					</div> 
 					<div class="answers-column"> 
 				@endif
 			@endforeach
 
-			@if(count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8)
+			@if( !$question->allAnswersHaveImages() && count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8)
 				</div> 
 			@endif
 		</div>
