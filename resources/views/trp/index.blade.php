@@ -124,7 +124,7 @@
 			</div>
 		</div>
 
-		<div class="invite-new-dentist-wrapper white-invite">
+		<div class="invite-new-dentist-wrapper white-invite" id="index-invite-dentist">
 
 			<div class="invite-new-dentist-titles">
 				<h2>{!! nl2br(trans('trp.page.invite.title')) !!}</h2>
