@@ -106,7 +106,12 @@
 					<img src="{{ url('new-vox-img/coins.svg') }}">
 					{!! nl2br(trans('vox.daily-polls.popup.signin')) !!}
 				</a>
+
 				<div class="get-reward-buttons" style="display: none;">
+					<a href="javascript:;" class="white-button next-stat">
+						NEXT RESULTS
+						<img src="{{ url('new-vox-img/next-arrow-blue.svg') }}">
+					</a>
 					<a href="javascript:;" class="blue-button next-poll">
 						{!! nl2br(trans('vox.daily-polls.popup.next-poll')) !!}
 						<img src="{{ url('new-vox-img/next-arrow.svg') }}">
