@@ -991,11 +991,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->save();
     }
 
-    public function sendSMS($sms_text) {
-        $formatted_phone = $this->country->phone_code.$this->phone;
-        file_get_contents('https://bulksrv.allterco.net/sendsms/sms.php?nmb_from=1909&user=SWISSDENTAPRIME&pass=m9rr95er9em&nmb_to='.$formatted_phone.'&text='.urlencode($sms_text).'&dlrr=1');
-    }
-
     public function getReviewLimits() {
         if( Auth::guard('admin')->user() ) {
             return null;
@@ -1065,43 +1060,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return true;
     }
 
-    public static function getBalance($address) {
-
-        $ret = [
-            'success' => false
-        ];
-        $curl = file_get_contents('https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x08d32b0da63e2C3bcF8019c9c5d849d7a9d791e6&address='.$address.'&tag=latest&apikey='.env('ETHERSCAN_API'));
-        if(!empty($curl)) {
-            $curl = json_decode($curl, true);
-            if($curl['status']) {
-                $ret['success'] = true;
-                $ret['result'] = $curl['result'];
-            }
-        }
-
-        return $ret;
-    }
-
-    public function getTrpBalance() {
-        $income = DcnReward::where('user_id', $this->id)->where('platform', 'trp')->sum('reward');
-        $cashouts = DcnCashout::where('user_id', $this->id)->where('platform', 'trp')->sum('reward');
-
-        return $income - $cashouts;
-    }
-
     //
     //
     // Vox 
     //
     //
-
-    public function getVoxBalance() {
-
-        $income = DcnReward::where('user_id', $this->id)->where('platform', 'vox')->sum('reward');
-        $cashouts = DcnCashout::where('user_id', $this->id)->where('platform', 'vox')->sum('reward');
-
-        return $income - $cashouts;
-    }
 
     public function getTotalBalance($platform=null) {
         $income = DcnReward::where('user_id', $this->id);
@@ -1288,10 +1251,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
     public function canInvite($platform) {
         return ($this->status=='approved' || $this->status=='test' || $this->status=='added_by_clinic_claimed' || $this->status=='added_by_dentist_claimed') && !$this->loggedFromBadIp();
-    }
-
-    public function canWithdraw($platform) {
-        return ($this->status=='approved' || $this->status=='test' || $this->status=='added_by_clinic_claimed' || $this->status=='added_by_dentist_claimed') && $this->civic_kyc && !$this->loggedFromBadIp() && ($this->created_at->timestamp <= (time() - 259200)) ;
     }
 
     public function getSameIPUsers() {
@@ -1750,68 +1709,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     public static function getRealIp() {
         return !empty($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : Request::ip();
     }
-
-    //Handles Civic Scam
-    public function validateCivicKyc($civic) {
-        $data = json_decode($civic->response, true);
-        $ret = [
-            'success' => false,
-            'weak' => true
-        ];
-
-        if(!empty($data['data'])) {
-            foreach ($data['data'] as $key => $value) {
-                if( mb_strpos( $value['label'], 'documents.' ) !==false ) {
-                    unset($ret['weak']);
-                    break;
-                }
-            }
-        } 
-        if(empty($ret['weak']) && !empty($data['userId'])) {
-            $u = self::where('civic_id', 'LIKE', $data['userId'])->first();
-            if(!empty($u) && $u->id != $this->id) {
-                $ret['duplicate'] = true;
-            } else {
-
-                $u = self::where('civic_kyc_hash', 'LIKE', $civic->hash)->first();
-                if(!empty($u) && $u->id != $this->id) {
-                    $ret['duplicate'] = true;
-                    $notifyMe = [
-                        //'official@youpluswe.com',
-                        'petya.ivanova@dentacoin.com',
-                        'donika.kraeva@dentacoin.com',
-                        //'daria.kerancheva@dentacoin.com',
-                        'petar.stoykov@dentacoin.com'
-                    ];
-                    $mtext = 'A user just tried to withdraw with duplicated ID card:
-Original holder: '.$u->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$u->id.')
-Scammer: '.$this->getName().' (https://reviews.dentacoin.com/cms/users/edit/'.$this->id.')';
-
-                    foreach ($notifyMe as $n) {
-                        Mail::raw($mtext, function ($message) use ($n) {
-                            $message->from(config('mail.from.address'), config('mail.from.name'));
-                            $message->to( $n );
-                            $message->subject('New Scam attempt');
-                        });
-                    }
-
-                    $this->deleteActions();
-                    self::destroy( $this->id );
-                    $u->deleteActions();
-                    self::destroy( $u->id );
-
-                } else {
-                    $this->civic_kyc_hash = $civic->hash;
-                    $this->civic_kyc = 1;
-                    $this->civic_id = $data['userId'];
-                    $this->save();
-                    $ret['success'] = true;            
-                }
-            }
-        }
-        return $ret;
-    }
-
 
     public function logoutActions() {
         session([

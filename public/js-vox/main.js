@@ -1128,7 +1128,11 @@ $(document).ready(function(){
 	}
 	pollsFunction();
 
-	$('.close-bubble').click( function() {
+
+
+	$('.close-bubble').click( function(e) {
+		e.stopPropagation();
+
 		if(window.innerWidth > 768) {
 			$.ajax( {
 				url: window.location.origin+'/en/hide-dailypoll',
@@ -1136,40 +1140,39 @@ $(document).ready(function(){
 				dataType: 'json',
 				success: function( data ) {
 					console.log('success-hide');
-				    ajax_is_running = false;
+					$(this).closest('.poll-bubble').addClass('small-bubble');
 				},
 				error: function(data) {
 					console.log(data);
-				    ajax_is_running = false;
 				}
 			});
 		}
 		//tuk
-		$('.poll-bubble').addClass('hide-it');
+		$(this).closest('.poll-bubble').addClass('small-bubble');
 	});
 
 	if (window.innerWidth <= 768) {
 		$('.poll-bubble').addClass('small-bubble');
-
-		$('.small-bubble').click( function() {
-			$(this).removeClass('small-bubble');
-		});
 	}
 
-	if ($('.poll-bubble').length && window.innerWidth >= 768) {
-		$(window).on("scroll", function() {
-			if(!$('.poll-bubble').hasClass('hide-it')) {
+	$('.small-bubble').click( function() {
+		$(this).removeClass('small-bubble');
+	});
 
-				var scrollHeight = $(document).height();
-				var scrollPosition = $(window).height() + $(window).scrollTop();
-				if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
-				    $('.poll-bubble').fadeOut();
-				} else {
-					$('.poll-bubble').fadeIn();
-				}
-			}
-		});
-	}
+	// if ($('.poll-bubble').length && window.innerWidth >= 768) {
+	// 	$(window).on("scroll", function() {
+	// 		if(!$('.poll-bubble').hasClass('hide-it')) {
+
+	// 			var scrollHeight = $(document).height();
+	// 			var scrollPosition = $(window).height() + $(window).scrollTop();
+	// 			if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+	// 			    $('.poll-bubble').fadeOut();
+	// 			} else {
+	// 				$('.poll-bubble').fadeIn();
+	// 			}
+	// 		}
+	// 	});
+	// }
 
 	$('.country-dropdown').change( function() {
 

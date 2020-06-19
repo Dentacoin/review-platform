@@ -3318,21 +3318,20 @@ svg:not(:root) {
   @media screen and (max-width: 768px) {
     .poll-bubble {
       left: 0; } }
-  @media screen and (max-width: 768px) {
-    .poll-bubble.small-bubble {
-      left: auto; }
-      .poll-bubble.small-bubble .small-bubble-image {
-        display: block; }
-      .poll-bubble.small-bubble .bubble-inner {
-        display: none; } }
+  .poll-bubble.small-bubble {
+    left: auto; }
+    .poll-bubble.small-bubble .small-bubble-image {
+      display: block; }
+    .poll-bubble.small-bubble .bubble-inner {
+      display: none; }
   .poll-bubble.hide-it {
     display: none; }
   .poll-bubble .small-bubble-image {
     display: none;
     float: right;
-    max-width: 80px;
-    margin-right: 10px;
-    margin-bottom: 10px; }
+    max-width: 60px;
+    margin-right: 20px;
+    margin-bottom: 25px; }
     @media screen and (max-width: 768px) {
       .poll-bubble .small-bubble-image {
         max-width: 60px;

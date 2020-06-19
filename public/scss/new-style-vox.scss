@@ -4551,17 +4551,15 @@ svg:not(:root) {
     }
 
     &.small-bubble {
-    	@media #{$phone} {
-    		left: auto;
+		left: auto;
 
-	    	.small-bubble-image {
-	    		display: block;
-	    	}
+    	.small-bubble-image {
+    		display: block;
+    	}
 
-	    	.bubble-inner {
-	    		display: none;
-	    	}
-	    }
+    	.bubble-inner {
+    		display: none;
+    	}
     }
 
     &.hide-it {
@@ -4571,9 +4569,9 @@ svg:not(:root) {
     .small-bubble-image {
     	display: none;
 		float: right;
-		max-width: 80px;
-		margin-right: 10px;
-		margin-bottom: 10px;
+		max-width: 60px;
+	    margin-right: 20px;
+	    margin-bottom: 25px;
 
 		@media #{$phone} {
 		    max-width: 60px;
