@@ -74,7 +74,7 @@
 								<img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
 								{!! nl2br(trans('trp.page.profile.trp.recommend-dentist')) !!}
 							</a>
-						@elseif(!empty($review->dentist))
+						@elseif(!empty($review->dentist) && !$user->is_dentist)
 							<a href="{{ $review->dentist->getLink() }}?popup=recommend-dentist" class="recommend-button">
 								<img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
 								{!! nl2br(trans('trp.page.profile.trp.recommend-dentist')) !!}
