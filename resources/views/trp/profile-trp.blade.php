@@ -69,7 +69,7 @@
 								
 							</a>
 						</div>
-						@if(!empty($review->review_to_id) && !empty($review->original_dentist))
+						@if(!empty($review->review_to_id) && !empty($review->original_dentist) && !$user->is_dentist)
 							<a href="{{ $review->original_dentist->getLink() }}?popup=recommend-dentist" class="recommend-button">
 								<img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
 								{!! nl2br(trans('trp.page.profile.trp.recommend-dentist')) !!}
@@ -79,7 +79,7 @@
 								<img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
 								{!! nl2br(trans('trp.page.profile.trp.recommend-dentist')) !!}
 							</a>
-						@elseif(!empty($review->clinic))
+						@elseif(!empty($review->clinic) && !$user->is_dentist)
 							<a href="{{ $review->clinic->getLink() }}?popup=recommend-dentist" class="recommend-button">
 								<img src="https://reviews.dentacoin.com/img-trp/thumb-up.svg">
 								{!! nl2br(trans('trp.page.profile.trp.recommend-dentist')) !!}
