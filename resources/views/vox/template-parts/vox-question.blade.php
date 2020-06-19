@@ -83,6 +83,7 @@
 							</div>
 						@endif
 					</label>
+					{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? '<img src="'.$question->getAnswerImageUrl(false, $k).'" style="display: none !important;" />' : '' !!}
 				</div>
 				@if(!$question->allAnswersHaveImages() && count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) >= 8 && round(count($question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) :  json_decode($question->answers, true)) / 2) == $loop->iteration )
 					</div> 
@@ -134,6 +135,7 @@
 							<div class="answer-question">
 								<h3 {!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $k ).'"' : '' !!}>{!!  nl2br( App\Models\VoxQuestion::handleAnswerTooltip($answer)) !!}
 								</h3>
+								{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? '<img src="'.$question->getAnswerImageUrl(false, $k).'" style="display: none !important;" />' : '' !!}
 							</div>
 							<div class="buttons-list clearfix {!! count(explode(',', $scales[$question->vox_scale_id]->answers)) >= 8 ? 'in-columns' : '' !!}"> 
 								@if(count(explode(',', $scales[$question->vox_scale_id]->answers)) >= 8)
@@ -277,13 +279,16 @@
 							<option value="{{ $i }}">{{ $i }}</option>
 						@endfor
 					</select>
+					<div class="rank-answer"> 
 
-					{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}
+						{!! App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer) !!}
+					</div>
 
 					@if(!empty($question->hasAnswerTooltip($answer, $question)))
 						<div class="answer-mobile-tooltip tooltip-text" text="{!! $question->hasAnswerTooltip($answer, $question) !!}"><i class="fas fa-question-circle"></i>
 						</div>
 					@endif
+					{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? '<img src="'.$question->getAnswerImageUrl(false, $key).'" style="display: none !important;" />' : '' !!}
 				</label>
 			@endforeach
 		</div>
@@ -346,6 +351,7 @@
 						<div class="answer-mobile-tooltip tooltip-text" text="{!! $question->hasAnswerTooltip($answer, $question) !!}"><i class="fas fa-question-circle"></i>
 						</div>
 					@endif
+					{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $key)) ? '<img src="'.$question->getAnswerImageUrl(false, $key).'" style="display: none !important;" />' : '' !!}
 				</label>
 			@endforeach
 		</div>

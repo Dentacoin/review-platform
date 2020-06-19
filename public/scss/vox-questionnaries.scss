@@ -333,17 +333,54 @@ $main-color: #38ace5;
 				    border: 1px solid #9c9c9c;
 				    border-radius: 9px;
 				    margin-bottom: 13px;
+				    font-size: 18px;
 				    padding: 3px 14px;
 				    background-color: white;
 				    min-width: 500px;
-				    font-size: 18px;
 				    text-align-last:center;
+				    position: relative;
 
 				    @media #{$phone} {
 				    	min-width: auto;
 				    	width: 100%;
 				    	font-size: 16px;
 				    }
+
+				    .rank-answer {
+				    	font-size: 18px;
+				    	text-align: left;
+				    	text-align-last: left;
+
+				    	@media #{$phone} {
+				    		font-size: 16px;
+				    	}
+				    }
+
+					a, span {
+						color: #41afff;
+					    font-size: 18px;
+
+						@media #{$phone} {
+							font-size: 16px;
+						}
+					}
+
+					.answer-mobile-tooltip {
+						position: absolute;
+						right: -25px;
+						padding: 10px;
+						padding-right: 0px;
+						top: 50%;
+						transform: translateY(-50%);
+
+						i {
+							color: #41afff;
+
+							&:before {
+								font-size: 17px;
+							}
+						}
+					}
 
     				select {
     					padding: 0px 10px;
