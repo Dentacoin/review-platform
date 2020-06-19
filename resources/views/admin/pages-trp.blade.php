@@ -22,7 +22,7 @@
 						'table_fields' => [
 							'name'			    => array('width' => '20%'),
 							'url'			    => array('width' => '100%'),
-							'update'			=> array('format' => 'update'),
+							'update'			=> array('template' => 'admin.parts.table-voxes-edit'),
 						],
                         'table_data' => $pages,
 						'table_pagination' => false,
