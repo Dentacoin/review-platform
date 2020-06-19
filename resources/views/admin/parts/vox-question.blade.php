@@ -205,8 +205,8 @@
                                                     </div>
                                                 </div>
                                             @else
-                                                <div class="input-group clearfix">
-                                                    <div class="template-box clearfix">
+                                                <div class="input-group clearfix" style="display: flex;">
+                                                    <div class="template-box clearfix" style="max-width: calc(100% - 40px);">
                                                         <select name="triggers[]" class="form-control select2 trigger-select" style="width: 50%; float: left;">
                                                             <option value="">Select question</option>                                                            
                                                             <optgroup label="{{ $item->title }} survey questions">

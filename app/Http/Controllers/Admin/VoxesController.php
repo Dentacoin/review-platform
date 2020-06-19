@@ -258,6 +258,7 @@ class VoxesController extends AdminController
 
             $q_triggers_arr = [];
             $q_trigger_obj = [];
+            $q_trigger_multiple_answ = [];
 
             if ($item->questions->isNotEmpty()) {
                 foreach ($item->questions as $iq) {
@@ -277,6 +278,21 @@ class VoxesController extends AdminController
             if (!empty($q_triggers_arr)) {
                 foreach ($q_triggers_arr as $q_trigger) {
                     $q_trigger_obj[] = is_numeric($q_trigger) ? VoxQuestion::find($q_trigger) : $q_trigger ;
+                    if(is_numeric($q_trigger) && VoxQuestion::find($q_trigger)->type == 'multiple_choice') {
+                        $q_trigger_multiple_answ[VoxQuestion::find($q_trigger)->id] = '';
+                    }
+                }
+            }
+
+            if(!empty($q_trigger_multiple_answ)) {
+                foreach ($q_trigger_multiple_answ as $key => $value) {
+                    $answe = [];
+                    foreach (json_decode(VoxQuestion::find($key)->answers, true) as $k => $ans) {
+                        if(mb_strpos($ans, '!')===false) {
+                            $answe[] = $k + 1;
+                        }
+                    }
+                    $q_trigger_multiple_answ[$key] = implode(',', $answe);
                 }
             }
 
@@ -342,6 +358,7 @@ class VoxesController extends AdminController
                 'trigger_valid_answers' => $trigger_valid_answers,
                 'all_voxes' => Vox::orderBy('sort_order', 'ASC')->get(),
                 'q_trigger_obj' => $q_trigger_obj,
+                'q_trigger_multiple_answ' => $q_trigger_multiple_answ,
                 'error_arr' => $error_arr,
                 'error' => $error,
             ));
@@ -822,6 +839,7 @@ class VoxesController extends AdminController
         $item->manually_calc_reward = !empty($this->request->input('manually_calc_reward')) ? 1 : null;
         $item->last_count_at = null;
 
+        //dd($this->request->input('count_dcn_questions'), $this->request->input('count_dcn_answers'));
         if (!empty($this->request->input('count_dcn_questions'))) {
             $trigger_qs = [];
             foreach ($this->request->input('count_dcn_questions') as $k => $v) {

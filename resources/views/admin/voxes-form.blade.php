@@ -379,33 +379,42 @@
 
                                 @foreach($q_trigger_obj as $iq)
                                     @if(!empty($iq))
-                                        <div class="col-md-12" style="display: flex;">
-                                            <select name="count_dcn_questions[]" class="form-control col" style="flex:1;">
-                                                <option value="{{ is_object($iq) ? $iq->id : $iq }}">{{ is_object($iq) ? $iq->question : ($iq == 'age_groups' ? 'Age groups' : ( $iq == 'gender' ? 'Gender' : config('vox.details_fields.'.$iq)['label'])) }}</option>
-                                            </select>
-                                            
-                                            <select name="count_dcn_answers[]" class="form-control col" style="flex:1;">
-                                                <option value="">-</option>
-                                                @if(is_object($iq))
-                                                    @foreach($iq->vox_scale_id && !empty($scales_arr[$iq->vox_scale_id]) ? explode(',', $scales_arr[$iq->vox_scale_id]->answers) :  json_decode($iq->answers, true) as $key => $ans)
-                                                        <option value="{{ $key + 1 }}" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq->id, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq->id]) == ($key + 1) ) ? 'selected="selected"' : '' !!}>{{ $ans }}</option>
-                                                    @endforeach
-                                                @else
-                                                    @if($iq == 'gender')
-                                                        <option value="1" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq]) == 1 ) ? 'selected="selected"' : '' !!}>Male</option>
-                                                        <option value="2" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq]) == 2 ) ? 'selected="selected"' : '' !!}>Female</option>
-                                                    @elseif($iq == 'age_groups')
-                                                        @foreach(config('vox.age_groups') as $key => $val)
-                                                            <option value="{{ $loop->iteration }}" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq]) == $loop->iteration ) ? 'selected="selected"' : '' !!}>{{ $val }}</option>
+                                        @if($iq->type == 'multiple_choice')
+                                            <div class="col-md-12" style="display: none;">
+                                                <select name="count_dcn_questions[]" class="form-control col" style="flex:1;">
+                                                    <option value="{{ $iq->id }}">{{ $iq->question }}</option>
+                                                </select>
+                                                <input type="text" name="count_dcn_answers[]" value="{!! $q_trigger_multiple_answ[$iq->id] !!}">
+                                            </div>
+                                        @else
+                                            <div class="col-md-12" style="display: flex;">
+                                                <select name="count_dcn_questions[]" class="form-control col" style="flex:1;">
+                                                    <option value="{{ is_object($iq) ? $iq->id : $iq }}">{{ is_object($iq) ? $iq->question : ($iq == 'age_groups' ? 'Age groups' : ( $iq == 'gender' ? 'Gender' : config('vox.details_fields.'.$iq)['label'])) }}</option>
+                                                </select>
+                                                
+                                                <select name="count_dcn_answers[]" class="form-control col" style="flex:1;">
+                                                    <option value="">-</option>
+                                                    @if(is_object($iq))
+                                                        @foreach($iq->vox_scale_id && !empty($scales_arr[$iq->vox_scale_id]) ? explode(',', $scales_arr[$iq->vox_scale_id]->answers) :  json_decode($iq->answers, true) as $key => $ans)
+                                                            <option value="{{ $key + 1 }}" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq->id, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq->id]) == ($key + 1) ) ? 'selected="selected"' : '' !!}>{{ $ans }}</option>
                                                         @endforeach
                                                     @else
-                                                        @foreach(config('vox.details_fields.'.$iq.'.values') as $key => $val)
-                                                            <option value="{{ $loop->iteration }}" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq]) == $loop->iteration ) ? 'selected="selected"' : '' !!}>{{ $val }}</option>
-                                                        @endforeach
+                                                        @if($iq == 'gender')
+                                                            <option value="1" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq]) == 1 ) ? 'selected="selected"' : '' !!}>Male</option>
+                                                            <option value="2" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq]) == 2 ) ? 'selected="selected"' : '' !!}>Female</option>
+                                                        @elseif($iq == 'age_groups')
+                                                            @foreach(config('vox.age_groups') as $key => $val)
+                                                                <option value="{{ $loop->iteration }}" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq]) == $loop->iteration ) ? 'selected="selected"' : '' !!}>{{ $val }}</option>
+                                                            @endforeach
+                                                        @else
+                                                            @foreach(config('vox.details_fields.'.$iq.'.values') as $key => $val)
+                                                                <option value="{{ $loop->iteration }}" {!! !empty($item->dcn_questions_triggers) && array_key_exists($iq, $item->dcn_questions_triggers) && (intval($item->dcn_questions_triggers[$iq]) == $loop->iteration ) ? 'selected="selected"' : '' !!}>{{ $val }}</option>
+                                                            @endforeach
+                                                        @endif
                                                     @endif
-                                                @endif
-                                            </select>
-                                        </div>
+                                                </select>
+                                            </div>
+                                        @endif
                                     @endif
                                 @endforeach
                             </div>

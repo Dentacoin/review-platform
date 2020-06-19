@@ -170,7 +170,6 @@ class Vox extends Model {
         } else {
             return $this->country_count;
         }
-        
     }
 
     public function questionsReal() {
@@ -245,6 +244,7 @@ class Vox extends Model {
     public function getStatsList() {
         return getLangUrl('dental-survey-stats/'.$this->translate(App::getLocale(), true)->slug );        
     }
+
     public function getLink() {
         return $this->type=='hidden' || $this->type=='normal' ? getLangUrl('paid-dental-surveys/'.$this->translate(App::getLocale(), true)->slug ) : getLangUrl( $this->translate(App::getLocale(), true)->slug );        
     }
@@ -259,10 +259,10 @@ class Vox extends Model {
         }
     }
 
-
     public function getImageUrl($thumb = false) {
         return $this->hasimage ? url('/storage/voxes/'.($this->id%100).'/'.$this->id.($thumb ? '-thumb' : '').'.jpg') : url('new-vox-img/stats-dummy.png');
     }
+
     public function getImagePath($thumb = false) {
         $folder = storage_path().'/app/public/voxes/'.($this->id%100);
         if(!is_dir($folder)) {
@@ -296,6 +296,7 @@ class Vox extends Model {
     public function getSocialImageUrl($type = 'social') {
         return $this->hasimage_social ? url('/storage/voxes/'.($this->id%100).'/'.$this->id.'-'.$type.'.png').'?rev='.$this->updated_at->timestamp : url('new-vox-img/stats-dummy.png');
     }
+
     public function getSocialImagePath($type = 'social') {
         $folder = storage_path().'/app/public/voxes/'.($this->id%100);
         if(!is_dir($folder)) {
@@ -319,6 +320,7 @@ class Vox extends Model {
 
         $this->regenerateSocialImages();
     }
+
     public function regenerateSocialImages() {
 
         if( $this->hasimage_social ) {
@@ -341,8 +343,6 @@ class Vox extends Model {
 
         $this->updated_at = Carbon::now();
     }
-
-
 
     public function setTypeAttribute($newvalue) {
         if (!empty($this->attributes['type']) && $this->attributes['type'] != 'normal' && $newvalue == 'normal' && empty($this->attributes['launched_at'])) {
@@ -390,9 +390,7 @@ class Vox extends Model {
                 } else {
                     $welcome_answers[$key] = config('vox.details_fields')[$key]['values'];
                 }
-                
             }
-            
         }
 
         return $welcome_answers;
@@ -631,12 +629,24 @@ class Vox extends Model {
                     }
 
                     //echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($triggerAnswers, true).' / Answer: '.$answers[$triggerId].'<br/>';
-                    if($q->invert_trigger_logic) {
-                        if( !empty($givenAnswers[$triggerId]) && !in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+
+                    if(!empty($givenAnswers[$triggerId]) && strpos(',',$givenAnswers[$triggerId]) !== 0) {
+                        $given_answers_array = explode(',', $givenAnswers[$triggerId]);
+
+                        $found = false;
+                        foreach ($given_answers_array as $key => $value) {
+                            if(in_array($value, $allowedAnswers)) {
+                                $found = true;
+                                break;
+                            }
+                        }
+
+                        if($found) {
                             $triggerSuccess[] = true;
                         } else {
                             $triggerSuccess[] = false;
                         }
+
                     } else {
 
                         if( !empty($givenAnswers[$triggerId]) && in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
