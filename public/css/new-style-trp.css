@@ -4121,6 +4121,9 @@ textarea.input {
       border-color: rgba(255, 0, 0, 0.2); }
     .modern-field .modern-input:-webkit-autofill {
       background-color: transparent !important; }
+    .modern-field .modern-input.disabled {
+      background: #f1f1f1;
+      cursor: no-drop; }
   .modern-field textarea.modern-input {
     height: 96px;
     resize: none; }

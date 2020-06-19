@@ -8,7 +8,12 @@
         <a class="label label-danger" href="{{ url('cms/users/edit/'.$item->id) }}#logins-list">Click for Suspicious Logins</a>
     @endif
     @if($item->is_dentist)
-        <a href="{{ url('cms/users/reset-first-guided-tour/'.$item->id) }}" class="btn btn-primary" style="float: right;">Reset first guided tour</a>
+        @if($item->status == 'admin_imported')
+            <a onclick="$('#claim-link').show();" class="btn btn-primary" style="float: right;">Short Claim Form</a>
+            <p id="claim-link" style="display:none;font-size: 12px;text-align: right;clear: both;">{{ getLangUrl( 'welcome-dentist/claim/'.$item->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']) }}</p>
+        @else
+            <a href="{{ url('cms/users/reset-first-guided-tour/'.$item->id) }}" class="btn btn-primary" style="float: right;">Reset first guided tour</a>
+        @endif
     @endif
 </h1>
 <!-- end page-header -->

@@ -18,6 +18,15 @@
 			<form class="claim-profile-form" id="claim-profile-form" enctype="multipart/form-data" method="post" {!! $current_page == 'dentist' ? 'action="'.getLangUrl('welcome-dentist/claim/'.$item->id).'"' : '' !!}>
 				{!! csrf_field() !!}
 
+				@if( !empty($claim_user))
+					<div class="modern-field alert-after">
+						<input type="email" name="email" id="claim-email" value="{{ $claim_user->email }}" disabled="disabled" class="modern-input disabled" autocomplete="off">
+						<label for="claim-email">
+							<span>{!! nl2br(trans('trp.popup.popup-claim-profile.email')) !!}</span>
+						</label>
+					</div>
+				@endif
+
 				<div class="modern-field alert-after">
 					<input type="text" name="name" id="claim-name" class="modern-input" autocomplete="off">
 					<label for="claim-name">
@@ -25,7 +34,7 @@
 					</label>
 				</div>
 
-				@if(empty(request()->input('utm_content')))
+				@if(empty(request()->input('utm_content')) && empty($claim_user))
 					<div class="modern-field alert-after">
 						<input type="email" name="email" id="claim-email" class="modern-input" autocomplete="off">
 						<label for="claim-email">
@@ -34,7 +43,7 @@
 					</div>
 				@endif
 
-				@if(empty(request()->input('old-dentist')))
+				@if(empty(request()->input('old-dentist')) && empty($claim_user))
 					<div class="modern-field alert-after">
 						<input type="text" name="phone" id="claim-tel" class="modern-input" autocomplete="off">
 						<label for="claim-tel">
@@ -43,7 +52,7 @@
 					</div>
 				@endif
 
-				@if(empty(request()->input('without-info')))
+				@if(empty(request()->input('without-info')) && empty($claim_user))
 					
 					<div class="modern-field alert-after">
 						<input type="text" name="job" id="claim-job" class="modern-input" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">

@@ -282,7 +282,7 @@ class IndexController extends FrontController
 		return $this->dentist($locale, $session_id, $hash, true);
 	}
 
-	public function dentist($locale=null, $session_id=null, $hash=null, $unsubscribe = false) {
+	public function dentist($locale=null, $session_id=null, $hash=null, $unsubscribe = false, $claim_id = false) {
 		
 		if(!empty($this->user) && $this->user->isBanned('trp')) {
 			return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
@@ -316,8 +316,11 @@ class IndexController extends FrontController
 
 		$seos = PageSeo::find(23);
 
+		$claim_user = !empty($claim_id) ? User::find($claim_id) : null;
+
 		return $this->ShowView('index-dentist', array(
 			//'extra_body_class' => 'white-header',
+			'claim_user' => $claim_user,
 			'js' => [
 				'address.js',
 				'index-dentist.js',
@@ -339,7 +342,7 @@ class IndexController extends FrontController
         ));	
 	}
 
-	public function claim ($locale=null, $id) {
+	public function claim($locale=null, $id) {
 		$user = User::find($id);
 
 		if ($user && !empty($user->old_unclaimed_profile)) {
@@ -438,11 +441,15 @@ class IndexController extends FrontController
                 } else {
 
                     $user->name = Request::input('name');
-                    $user->phone = Request::input('phone');                    
-                    if($user->status == 'added_by_clinic_unclaimed') {
-                        $user->status = 'added_by_clinic_claimed';
+                    $user->phone = Request::input('phone');
+                    if($user->status == 'admin_imported') {
+                    	$user->status = 'approved';
                     } else {
-                        $user->status = 'added_by_dentist_claimed';
+	                    if($user->status == 'added_by_clinic_unclaimed') {
+	                        $user->status = 'added_by_clinic_claimed';
+	                    } else {
+	                        $user->status = 'added_by_dentist_claimed';
+	                    }
                     }
                     $user->password = bcrypt(Request::input('password'));
                     $user->save();
@@ -470,7 +477,7 @@ class IndexController extends FrontController
 	        }
         }
 
-        return $this->dentist($locale);
+        return $this->dentist($locale, null, null, false, $user->status == 'admin_imported' ? $id : false);
 
 	}
 

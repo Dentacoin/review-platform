@@ -984,10 +984,14 @@ class DentistController extends FrontController
                     $user->name = Request::input('name');
                     $user->phone = Request::input('phone');
                     $user->password = bcrypt(Request::input('password'));
-                    if($user->status == 'added_by_clinic_unclaimed') {
-                        $user->status = 'added_by_clinic_claimed';
+                    if($user->status == 'admin_imported') {
+                        $user->status = 'approved';
                     } else {
-                        $user->status = 'added_by_dentist_claimed';
+                        if($user->status == 'added_by_clinic_unclaimed') {
+                            $user->status = 'added_by_clinic_claimed';
+                        } else {
+                            $user->status = 'added_by_dentist_claimed';
+                        }
                     }
                     $user->save();
 
