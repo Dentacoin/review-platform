@@ -379,7 +379,7 @@
 
                                 @foreach($q_trigger_obj as $iq)
                                     @if(!empty($iq))
-                                        @if($iq->type == 'multiple_choice')
+                                        @if(is_object($iq) && $iq->type == 'multiple_choice')
                                             <div class="col-md-12" style="display: none;">
                                                 <select name="count_dcn_questions[]" class="form-control col" style="flex:1;">
                                                     <option value="{{ $iq->id }}">{{ $iq->question }}</option>

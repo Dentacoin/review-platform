@@ -278,7 +278,7 @@ class VoxesController extends AdminController
             if (!empty($q_triggers_arr)) {
                 foreach ($q_triggers_arr as $q_trigger) {
                     $q_trigger_obj[] = is_numeric($q_trigger) ? VoxQuestion::find($q_trigger) : $q_trigger ;
-                    if(is_numeric($q_trigger) && VoxQuestion::find($q_trigger)->type == 'multiple_choice') {
+                    if(is_numeric($q_trigger) && !empty(VoxQuestion::find($q_trigger)) && VoxQuestion::find($q_trigger)->type == 'multiple_choice') {
                         $q_trigger_multiple_answ[VoxQuestion::find($q_trigger)->id] = '';
                     }
                 }
