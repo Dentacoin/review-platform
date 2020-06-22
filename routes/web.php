@@ -170,7 +170,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 	Route::any('registrations', 					'StatsController@registrations');
 
-	Route::any('incomplete', 						'UsersController@incomplete');
+	Route::any('incomplete/incomplete', 			'UsersController@incomplete');
+	Route::any('incomplete/leads', 					'UsersController@leads');
 
 	Route::any('claims/approve/{id}', 				'DentistClaimsController@approve');
 	Route::any('claims/reject/{id}', 				'DentistClaimsController@reject');

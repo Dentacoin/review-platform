@@ -555,26 +555,6 @@ NEW & FAILED TRANSACTIONS
 
         })->cron("30 7 * * *"); //10:30h BG Time
 
-
-
-        $schedule->call(function () {
-            echo 'DCN grace Cron - START!';
-
-            $notify = User::where( 'grace_end', '>', Carbon::now()->addDays(23) )->whereNull('grace_notified')->get();
-            if($notify->isNotEmpty()) {
-                foreach ($notify as $nuser) {
-                    if (!empty($nuser->email)) {
-                        echo 'Grace user email: '.$nuser->email;
-                        $nuser->sendTemplate( $nuser->platform=='vox' ? 11 : 39, null, ($nuser->platform=='vox' ? 'vox' : 'trp') ); 
-                        $nuser->grace_notified = true;
-                        $nuser->save();
-                    }
-                }
-            }
-
-        })->cron("30 10 * * *"); //13:30h BG Time
-
-
         $schedule->call(function () {
             echo 'Suspicious Dentist Delete Cron - START';
 

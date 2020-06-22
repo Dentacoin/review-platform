@@ -116,6 +116,10 @@ return [
         ),
         'incomplete' => array(
             'icon' => 'heartbeat',
+            'subpages' => array(
+                'incomplete' => 'incomplete',
+                'leads' => 'leads',
+            ),
         ),
         'logs' => array(
             'icon' => 'bug',

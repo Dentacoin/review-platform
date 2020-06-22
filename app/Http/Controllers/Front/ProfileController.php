@@ -1476,12 +1476,7 @@ class ProfileController extends FrontController
         }
 
         $res = UserTeam::where('user_id', $this->user->id)->where('dentist_id', $id)->delete();
-
-        // if( $res ) {
-            // $dentist->sendTemplate(37, [
-            //     'clinic-name' => $this->user->getName()
-            // ]);
-        // }
+        
         return Response::json( [
             'success' => true,
         ] );

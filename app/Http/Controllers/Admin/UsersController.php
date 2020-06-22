@@ -1235,10 +1235,6 @@ class UsersController extends AdminController {
                                     
                                     if (!empty($patient)) {
 
-                                        // $item->sendTemplate( 43  , [
-                                        //     'dentist_name' => $item->name,
-                                        //     'patient_name' => $patient->name,
-                                        // ]);
                                         $amount = Reward::getReward('patient_add_dentist');
                                         $reward = new DcnReward();
                                         $reward->user_id = $patient->id;
@@ -1683,6 +1679,81 @@ class UsersController extends AdminController {
 
         }
 
+        $incompletes = IncompleteRegistration::orderBy('id', 'desc');
+
+        if(!empty(request('search-name'))) {
+            $incompletes = $incompletes->where('name', 'LIKE', '%'.trim(request('search-name')).'%');
+        }
+        if(!empty(request('search-phone'))) {
+            $incompletes = $incompletes->where('phone', 'LIKE', '%'.trim(request('search-phone')).'%');
+        }
+        if(!empty(request('search-email'))) {
+            $incompletes = $incompletes->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
+        }
+        if(!empty(request('search-country'))) {
+            $incompletes = $incompletes->where('country_id', request('search-country') );
+        }
+        if(!empty(request('search-website'))) {
+            $incompletes = $incompletes->where('website', 'LIKE', '%'.trim(request('search-website')).'%');
+        }
+
+        $total_count = $incompletes->count();
+
+
+        $page = max(1,intval(request('page')));
+        
+        $ppp = 25;
+        $adjacents = 2;
+        $total_pages = ceil($total_count/$ppp);
+
+        //Here we generates the range of the page numbers which will display.
+        if($total_pages <= (1+($adjacents * 2))) {
+          $start = 1;
+          $end   = $total_pages;
+        } else {
+          if(($page - $adjacents) > 1) { 
+            if(($page + $adjacents) < $total_pages) { 
+              $start = ($page - $adjacents);            
+              $end   = ($page + $adjacents);         
+            } else {             
+              $start = ($total_pages - (1+($adjacents*2)));  
+              $end   = $total_pages;               
+            }
+          } else {               
+            $start = 1;                                
+            $end   = (1+($adjacents * 2));             
+          }
+        }
+
+        $incompletes = $incompletes->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+        //If you want to display all page links in the pagination then
+        //uncomment the following two lines
+        //and comment out the whole if condition just above it.
+        /*$start = 1;
+        $end = $total_pages;*/
+
+        $pagination_link = (!empty(request('search-email')) ? '&search-email='.request( 'search-email' ) : '').(!empty(request('search-phone')) ? '&search-phone='.request( 'search-phone' ) : '').(!empty(request('search-name')) ? '&search-name='.request( 'search-name' ) : '').(!empty(request('search-country')) ? '&search-country='.request( 'search-country' ) : '');
+
+        return $this->showView('users-incomplete', array(
+            'items' => $incompletes,
+            'total_count' => $total_count,
+            'search_email' =>  request('search-email'),
+            'search_phone' =>  request('search-phone'),
+            'search_name' =>  request('search-name'),
+            'search_country' =>  request('search-country'),
+            'search_website' =>  request('search-website'),
+            'countries' => Country::with('translations')->get(),
+            'count' =>($page - 1)*$ppp ,
+            'start' => $start,
+            'end' => $end,
+            'total_pages' => $total_pages,
+            'page' => $page,
+            'pagination_link' => $pagination_link,
+        ));
+    }
+
+    public function leads() {
 
         if(request('export-lead')) {
             $leads_export = LeadMagnet::orderBy('id', 'desc')->get();
@@ -1758,9 +1829,7 @@ class UsersController extends AdminController {
 
 
         $leads = LeadMagnet::orderBy('id', 'desc')->get();
-        $incomplete = IncompleteRegistration::orderBy('id', 'desc')->take(50)->get();
-        return $this->showView('users-incomplete', array(
-            'items' => $incomplete,
+        return $this->showView('users-leads', array(
             'leads' => $leads,
         ));
     }

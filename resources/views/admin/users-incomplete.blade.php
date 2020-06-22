@@ -2,23 +2,8 @@
 
 @section('content')
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-12">
-                <select class="form-control" name="reg-leads" id="reg-leads" style="margin-bottom: 30px;">
-                    <option value="">Select</option>
-                    <option value="incomplete-regs">Incomplete Dentist Registrations</option>
-                    <option value="leads">Lead Magnet</option>
-                </select>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="incomplete-regs" style="display: none;">
     <h1 class="page-header">
-        Incomplete Dentist Registrations (last 50)
+        Incomplete Dentist Registrations
         <a href="javascript:;" class="btn btn-primary pull-right btn-export">Export</a>
     </h1>
 
@@ -27,9 +12,52 @@
             <div class="panel panel-inverse">
                 <div class="panel-heading">
                     <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title"> Filter Incompletes </h4>
+                </div>
+                <div class="panel-body">
+                    <form method="get" action="{{ url('cms/incomplete/incomplete/') }}" >
+
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" name="search-name" value="{{ $search_name }}" placeholder="Name">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder="Email">
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-control" name="search-country">
+                                    <option value="">All Countries</option>
+                                    @foreach( $countries as $country )
+                                        <option value="{{ $country->id }}" {!! $country->id==$search_country ? 'selected="selected"' : '' !!}>{{ $country->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" name="search-phone" value="{{ $search_phone }}" placeholder="Phone">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" name="search-website" value="{{ $search_website }}" placeholder="Website">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="submit" class="btn btn-block btn-primary btn-block" name="search" value="Submit">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
                         <a href="{{ url('/cms/incomplete/') }}?export=1" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title">Incomplete Dentist Registrations (last 50)</h4>
+                    <h4 class="panel-title">Incomplete Dentist Registrations</h4>
                 </div>
                 <div class="panel-body">
             		<div class="panel-body">
@@ -59,93 +87,33 @@
             </div>
         </div>
     </div>
-</div>
 
-
-<div id="leads" style="display: none;">
-    <h1 class="page-header">
-        Lead Magnet
-        <a href="javascript:;" class="btn btn-primary pull-right btn-export-lead">Export</a>
-    </h1>
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-inverse">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Lead Magnet Results</h4>
-                </div>
-                <div class="panel-body">
-                    <div class="panel-body">
-                        <div class="row">
-
-                            <table class="table table-striped table-question-list">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Website</th>
-                                        <th>Country</th>
-                                        <th title="What is the main priority for your practice management?" style="color: #2196F3;">Q 1</th>
-                                        <th title="What is your primary online tool for collecting patient reviews?" style="color: #2196F3;">Q 2</th>
-                                        <th title="Do you typically ask your patients to leave an online review?" style="color: #2196F3;">Q 3</th>
-                                        <th title="How frequently do you invite patients to leave a review?" style="color: #2196F3;">Q 4</th>
-                                        <th title="Do you reply to online reviews?" style="color: #2196F3;">Q 5</th>
-                                        <th>Total<br/></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($leads as $lead)
-                                        <tr>
-                                            <td>
-                                                {{ $lead->created_at->toDateTimeString() }}
-                                            </td>
-                                            <td>
-                                                {{ $lead->name }}
-                                            </td>
-                                            <td>
-                                                {{ $lead->email }}
-                                            </td>
-                                            <td>
-                                                {{ $lead->website }}
-                                            </td>
-                                            <td>
-                                                {!! \App\Models\Country::find($lead->country_id)->name !!}
-                                            </td>
-                                            <td>
-                                                {{ !empty($lead->answers) ? config('trp.lead_magnet')[1][json_decode($lead->answers, true)[1]] : '' }}
-                                            </td>
-                                            <td style="max-width: 160px;">
-                                                {{ !empty($lead->answers) ? config('trp.lead_magnet')[2][json_decode($lead->answers, true)[2]] : '' }}
-                                            </td>
-                                            <td>
-                                                @if(!empty($lead->answers) && !empty(json_decode($lead->answers, true)[3]))
-                                                    @foreach(json_decode($lead->answers, true)[3] as $ans_3)
-                                                        -{{ config('trp.lead_magnet')[3][$ans_3] }}<br/>
-                                                    @endforeach
-                                                @endif
-                                            </td>
-                                            <td>
-                                                {{ !empty($lead->answers) && !empty(json_decode($lead->answers, true)[4]) ? config('trp.lead_magnet')[4][json_decode($lead->answers, true)[4]] : '' }}
-                                            </td>
-                                            <td>
-                                                {{ !empty($lead->answers) ? config('trp.lead_magnet')[5][json_decode($lead->answers, true)[5]] : '' }}
-                                            </td>
-                                            <td>
-                                                @if(!empty($lead->total) || $lead->total === 0)
-                                                    {{ $lead->total }}%
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    @if($total_pages > 1)
+        <nav aria-label="Page navigation" style="text-align: center;">
+            <ul class="pagination">
+                <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
+                    <a class="page-link" href="{{ url('cms/incomplete/incomplete/?page=1'.$pagination_link) }}" aria-label="Previous">
+                        <span aria-hidden="true"> << </span>
+                    </a>
+                </li>
+                <li class="{{ ($page <= 1 ?  'disabled' : '' ) }}">
+                    <a class="page-link prev" href="{{ url('cms/incomplete/incomplete/?page='.($page>1 ? $page-1 : '1').$pagination_link) }}"  aria-label="Previous">
+                        <span aria-hidden="true"> < </span>
+                    </a>
+                </li>
+                @for($i=$start; $i<=$end; $i++)
+                    <li class="{{ ($i == $page ?  'active' : '') }}">
+                        <a class="page-link" href="{{ url('cms/incomplete/incomplete/?page='.$i.$pagination_link) }}">{{ $i }}</a>
+                    </li>
+                @endfor
+                <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
+                    <a class="page-link next" href="{{ url('cms/incomplete/incomplete/?page='.($page < $total_pages ? $page+1 :  $total_pages).$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> > </span> </a>
+                </li>
+                <li class="{{ ($page >= $total_pages ? 'disabled' : '') }}">
+                    <a class="page-link" href="{{ url('cms/incomplete/incomplete/?page='.$total_pages.$pagination_link) }}" aria-label="Next"> <span aria-hidden="true"> >> </span>  </a>
+                </li>
+            </ul>
+        </nav>
+    @endif
 
 @endsection
