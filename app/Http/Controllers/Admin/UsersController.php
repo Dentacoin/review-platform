@@ -1097,7 +1097,7 @@ class UsersController extends AdminController {
 
                 $substitutions = [
                     "image_unclaimed_profile" => $newuser->getSocialCover(),
-                    "invitation_link" => getLangUrl( 'welcome-dentist/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
+                    "invitation_link" => getLangUrl( 'dentist/'.$newuser->slug.'/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
                 ];
 
                 $newuser->sendGridTemplate(81, $substitutions, 'trp');
@@ -1900,7 +1900,7 @@ class UsersController extends AdminController {
                                     }
 
                                     $substitutions = [
-                                        "invitation_link" => getLangUrl( 'welcome-dentist/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
+                                        "invitation_link" => getLangUrl( 'dentist/'.$newuser->slug.'/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
                                     ];
 
                                     $newuser->sendGridTemplate(81, $substitutions);

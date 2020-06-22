@@ -33,7 +33,7 @@ class RegisterController extends FrontController
 {
     public function register($locale=null) {
 
-        return Redirect::to( getLangUrl('welcome-dentist'), 301); 
+        return redirect( getLangUrl('welcome-dentist'), 301 );
     }
 
     public function upload($locale=null) {

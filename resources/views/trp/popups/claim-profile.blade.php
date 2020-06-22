@@ -15,10 +15,10 @@
 				@endif
 			</div>
 
-			<form class="claim-profile-form" id="claim-profile-form" enctype="multipart/form-data" method="post" {!! $current_page == 'dentist' ? 'action="'.getLangUrl('welcome-dentist/claim/'.$item->id).'"' : '' !!}>
+			<form class="claim-profile-form" id="claim-profile-form" enctype="multipart/form-data" method="post" action="{{ getLangUrl('dentist/'.$item->slug.'/claim/'.$item->id) }}">
 				{!! csrf_field() !!}
 
-				@if( !empty($claim_user))
+				@if( !empty($claim_user) && !empty(request()->input('utm_content')))
 					<div class="modern-field alert-after">
 						<input type="email" name="email" id="claim-email" value="{{ $claim_user->email }}" disabled="disabled" class="modern-input disabled" autocomplete="off">
 						<label for="claim-email">

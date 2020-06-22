@@ -343,141 +343,14 @@ class IndexController extends FrontController
 	}
 
 	public function claim($locale=null, $id) {
+
 		$user = User::find($id);
 
-		if ($user && !empty($user->old_unclaimed_profile)) {
-
-        } else {
-	        if (!$user || ($user->status != 'added_approved' && $user->status != 'admin_imported' && $user->status != 'added_by_clinic_unclaimed' && $user->status != 'added_by_dentist_unclaimed')) {
-	            return redirect( getLangUrl('/') );
-	        }
-	    }
-
-		if(Request::isMethod('post')) {
-			$validator = Validator::make(Request::all(), [
-                'name' => array('required', 'min:3'),
-                'email' => 'sometimes|required|email',
-                'phone' =>  array('sometimes', 'regex: /^[- +()]*[0-9][- +()0-9]*$/u'),
-                'job' =>  'sometimes|required|string',
-                'explain-related' => 'sometimes|required|string|max:300',
-                'password' => array('required', 'min:6'),
-                'password-repeat' => 'required|same:password',
-                'agree' => 'required|accepted',
-            ]);
-
-	        if ($validator->fails()) {
-
-	            $msg = $validator->getMessageBag()->toArray();
-	            $ret = array(
-	                'success' => false,
-	                'messages' => array()
-	            );
-
-	            foreach ($msg as $field => $errors) {
-	                $ret['messages'][$field] = implode(', ', $errors);
-	            }
-
-	            return Response::json( $ret );
-	        } else {
-
-	            if(User::validateLatin(Request::input('name')) == false) {
-	                return Response::json( [
-	                    'success' => false, 
-	                    'messages' => [
-	                        'name' => trans('trp.common.invalid-name')
-	                    ]
-	                ] );
-	            }
-
-	            if (!empty(Request::input('job'))) {
-
-                    $fromm = !empty(Request::input('email')) ? 'from site' : 'from mail';
-
-                    $claim = new DentistClaim;
-                    $claim->dentist_id = $user->id;
-                    $claim->name = Request::input('name');
-                    $claim->email = Request::input('email') ? Request::input('email') : $user->email;
-                    $claim->phone = !empty(Request::input('phone')) ? Request::input('phone') : '';
-                    $claim->password = bcrypt(Request::input('password'));
-                    $claim->job = Request::input('job');
-                    $claim->explain_related = !empty(Request::input('explain-related')) ? Request::input('explain-related') : '';
-                    $claim->status = 'waiting';
-                    $claim->from_mail = !empty(Request::input('email')) ? false : true;
-                    $claim->save();
-
-                    if(!empty($claim->phone)) {
-                        $mtext = 'Dentist claimed his profile '.$fromm.'<br/>
-                        Name: '.$claim->name.' <br/>
-                        Phone: '.$claim->phone.' <br/>
-                        Email: '.$claim->email.' <br/>
-                        Job position: '.$claim->job.' <br/>
-                        Explain how dentist is related to this office: '.$claim->explain_related.' <br/>
-                        Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
-                    } else {
-                        $mtext = 'Old Added by Patient Dentist claimed his profile '.$fromm.'<br/>
-                        Name: '.$claim->name.' <br/>
-                        Job position: '.$claim->job.' <br/>
-                        Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
-                    }                    
-
-                    Mail::send([], [], function ($message) use ($mtext, $user) {
-                        $sender = config('mail.from.address');
-                        $sender_name = config('mail.from.name');
-
-                        $message->from($sender, $sender_name);
-                        $message->to( 'ali.hashem@dentacoin.com' );
-                        $message->to( 'betina.bogdanova@dentacoin.com' );
-                        $message->to( 'petya.ivanova@dentacoin.com' );                        
-                        $message->replyTo($user->email, $user->getName());
-                        $message->subject('Invited Dentist Claimed His Profile');
-                        $message->setBody($mtext, 'text/html'); // for HTML rich messages
-                    });
-
-                    return Response::json( [
-                        'success' => true,
-                        'reload' => false,
-                    ] );
-                    
-                } else {
-
-                    $user->name = Request::input('name');
-                    $user->phone = Request::input('phone');
-                    if($user->status == 'admin_imported') {
-                    	$user->status = 'approved';
-                    } else {
-	                    if($user->status == 'added_by_clinic_unclaimed') {
-	                        $user->status = 'added_by_clinic_claimed';
-	                    } else {
-	                        $user->status = 'added_by_dentist_claimed';
-	                    }
-                    }
-                    $user->password = bcrypt(Request::input('password'));
-                    $user->save();
-
-                    $user->sendGridTemplate(26, [], 'trp');
-
-                    if($user->status == 'added_by_dentist_claimed') {
-
-                        $dent = User::find($user->invited_by);
-                        if(!empty($dent) && $dent->status == 'approved') {
-                            
-                            $user->sendTemplate(34, [
-                                'dentist-name' => $dent->getName()
-                            ], 'trp');
-                        }
-                    }
-
-                    Auth::login($user);
-
-                    return Response::json( [
-                        'success' => true,
-                        'reload' => true,
-                    ] );
-                }
-	        }
-        }
-
-        return $this->dentist($locale, null, null, false, $user->status == 'admin_imported' ? $id : false);
+		if(!empty($user)) {
+			return redirect( getLangUrl( 'dentist/'.$user->slug.'/claim/'.$user->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup', 'utm_content' => '1']), 301 );
+		} else {
+			return redirect( getLangUrl('page-not-found') );
+		}
 
 	}
 

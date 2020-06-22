@@ -436,19 +436,19 @@ class Email extends Model
 			), $content);
 		}
 
-		if($this->template->id==43 ) { // Patient Invites Dentist To Register
-			$content = str_replace(array(
-				'[patient-name]',
-				'[dentist-name]',
-				'[button]',
-				'[/button]',
-			), array(
-				$this->meta['patient_name'],
-				$this->meta['dentist_name'],
-				'<a '.$this->button_style.' href="'.getLangUrl( 'welcome-dentist/claim/'.$this->user_id.'/'.$this->user->get_invite_token() , null, $domain).'?'. http_build_query(['popup'=>'claim-popup']).'">',
-				'</a>',
-			), $content);
-		}
+		// if($this->template->id==43 ) { // Patient Invites Dentist To Register
+		// 	$content = str_replace(array(
+		// 		'[patient-name]',
+		// 		'[dentist-name]',
+		// 		'[button]',
+		// 		'[/button]',
+		// 	), array(
+		// 		$this->meta['patient_name'],
+		// 		$this->meta['dentist_name'],
+		// 		'<a '.$this->button_style.' href="'.getLangUrl( 'welcome-dentist/claim/'.$this->user_id.'/'.$this->user->get_invite_token() , null, $domain).'?'. http_build_query(['popup'=>'claim-popup']).'">',
+		// 		'</a>',
+		// 	), $content);
+		// }
 
 		if( $this->template->id==45 ) { //Dentist First 3 weeks engagement Email 3
 			$content = str_replace(array(

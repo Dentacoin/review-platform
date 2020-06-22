@@ -152,11 +152,11 @@ class EmailTemplate extends Model
             $codes[] = '[dentist-name]';
         }
 
-        if( $this->id==43 ) { // Patient Invites Dentist To Register
-            $codes[] = '[button]Click here to register[/button]';
-            $codes[] = '[dentist-name]';
-            $codes[] = '[patient-name]';
-        }
+        // if( $this->id==43 ) { // Patient Invites Dentist To Register
+        //     $codes[] = '[button]Click here to register[/button]';
+        //     $codes[] = '[dentist-name]';
+        //     $codes[] = '[patient-name]';
+        // }
 
         if( $this->id==45 ) { //Dentist First 3 weeks engagement Email 3
             $codes[] = '[missing-info]';
