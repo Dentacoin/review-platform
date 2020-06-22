@@ -3865,6 +3865,7 @@ body.popup-visible {
     	border-width: 2px;
 		max-width: 270px;
 		text-align: center;
+		padding: 15px 30px;
 
 		@media #{$phone} {
 			width: 270px;
@@ -3874,6 +3875,12 @@ body.popup-visible {
 			display: block;
 			max-width: 100%;
 			margin-bottom: 10px;
+
+			//@media #{$phone} {
+				max-height: 130px;
+				margin-right: auto;
+				margin-left: auto;
+			//}
 		}
 
 		p {
