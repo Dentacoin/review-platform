@@ -14,10 +14,10 @@
 				</select>
 			@else
 				@foreach($details_question['values'] as $answer_id => $answer)
-					<a class="answer answer" data-num="{{ $answer_id }}" for="answer-{{ $details_question_id }}-{{ $answer_id }}">
+					<label class="answer answer" data-num="{{ $answer_id }}" for="answer-{{ $details_question_id }}-{{ $answer_id }}">
 						<input id="answer-{{ $details_question_id }}-{{ $answer_id }}" type="radio" name="answer" class="answer" value="{{ $answer_id }}"  demogr-index="{{ $loop->iteration }}" style="display: none;">
 						{{ $answer }}											
-					</a>
+					</label>
 				@endforeach
 			@endif
 		</div>
