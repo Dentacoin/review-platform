@@ -230,7 +230,6 @@
     	</div>
     </div>
 
-	@include('trp/popups/claim-profile')
 	@include('trp.popups.lead-magnet')
 	
 @endsection
