@@ -213,7 +213,7 @@
 	            			@foreach( $user->bans as $ban )
 	            				<tr>
 	            					<td>
-	            						{{ $ban->created_at ? ($ban->created_at->toDateString().', '.$ban->created_at->toTimeString()_ : '' }}
+	            						{{ $ban->created_at ? ($ban->created_at->toDateString().', '.$ban->created_at->toTimeString()) : '' }}
 	            					</td>
 	            					<td>
 	            						{{ $ban->created_at->diffInHours($ban->expires)  }}h
