@@ -885,6 +885,7 @@ class DentistController extends FrontController
 
 
     public function claim_dentist($locale=null, $slug, $id) {
+
         $user = User::find($id);
 
         if(!empty($user)) {
@@ -1023,7 +1024,7 @@ class DentistController extends FrontController
                 }
             }
 
-            return $this->list($locale, $slug, $user->status == 'admin_imported' ? $id : false);
+            return $this->list($locale, $slug, $user->status == 'admin_imported' && empty(request('long')) ? $id : false);
         }
 
         return redirect( getLangUrl('page-not-found') );
