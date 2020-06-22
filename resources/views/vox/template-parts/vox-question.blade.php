@@ -69,6 +69,7 @@
 
 						@if($question->allAnswersHaveImages() && !empty($question->getAnswerImageUrl(false, $k)))
 							<div class="answer-image" style="background-image: url({{ $question->getAnswerImageUrl(true, $k ) }})">
+								<img class="img-unchecked" src="{{ url('new-vox-img/non-selected-img-answer-icon.svg') }}">
 								<img class="img-checked" src="{{ url('new-vox-img/selected-img-answer-icon.svg') }}"/>
 								<a class="zoom-answer" data-lightbox="an-{{ $question->id }}-{{ $k }}" href="{{ $question->getAnswerImageUrl(false, $k ) }}">
 									<img src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>

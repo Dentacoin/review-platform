@@ -338,6 +338,9 @@
           .questions .question-group .answers.question-pictures .checkbox .answer-checkbox.active .answer-image .img-checked,
           .questions .question-group .answers.question-pictures .answer .answer-checkbox.active .answer-image .img-checked {
             display: block; }
+          .questions .question-group .answers.question-pictures .checkbox .answer-checkbox.active .answer-image .img-unchecked,
+          .questions .question-group .answers.question-pictures .answer .answer-checkbox.active .answer-image .img-unchecked {
+            display: none; }
         .questions .question-group .answers.question-pictures .checkbox:nth-child(3n),
         .questions .question-group .answers.question-pictures .answer:nth-child(3n) {
           margin-right: 0px; }
@@ -357,7 +360,9 @@
               width: 100%;
               height: auto;
               padding-top: 100%; } }
+          .questions .question-group .answers.question-pictures .checkbox .answer-image .img-unchecked,
           .questions .question-group .answers.question-pictures .checkbox .answer-image .img-checked,
+          .questions .question-group .answers.question-pictures .answer .answer-image .img-unchecked,
           .questions .question-group .answers.question-pictures .answer .answer-image .img-checked {
             display: none;
             position: absolute;
@@ -365,9 +370,14 @@
             top: -2px;
             width: 37px; }
             @media screen and (max-width: 768px) {
+              .questions .question-group .answers.question-pictures .checkbox .answer-image .img-unchecked,
               .questions .question-group .answers.question-pictures .checkbox .answer-image .img-checked,
+              .questions .question-group .answers.question-pictures .answer .answer-image .img-unchecked,
               .questions .question-group .answers.question-pictures .answer .answer-image .img-checked {
                 width: 27px; } }
+          .questions .question-group .answers.question-pictures .checkbox .answer-image .img-unchecked,
+          .questions .question-group .answers.question-pictures .answer .answer-image .img-unchecked {
+            display: block; }
           .questions .question-group .answers.question-pictures .checkbox .answer-image .zoom-answer,
           .questions .question-group .answers.question-pictures .answer .answer-image .zoom-answer {
             display: block;

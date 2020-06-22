@@ -474,6 +474,9 @@ $main-color: #38ace5;
 								.img-checked {
 									display: block;
 								}
+								.img-unchecked {
+									display: none;
+								}
 							}
 						}
 					}
@@ -498,6 +501,7 @@ $main-color: #38ace5;
 					    	padding-top: 100%;
 					    }
 
+					    .img-unchecked,
 					    .img-checked {
 					    	display: none;
 					    	position: absolute;
@@ -508,6 +512,10 @@ $main-color: #38ace5;
 							@media #{$phone} {
 								width: 27px;
 							}
+					    }
+
+					    .img-unchecked {
+					    	display: block;
 					    }
 
 					    .zoom-answer {
