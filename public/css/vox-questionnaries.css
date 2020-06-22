@@ -497,10 +497,6 @@
           font-size: 15px; } }
       .questions .question-group .answers .answer-number.wrong {
         border-color: #f33651; }
-    .questions .question-group .answers .answer-number::-webkit-outer-spin-button,
-    .questions .question-group .answers .answer-number::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0; }
     @media screen and (min-width: 769px) {
       .questions .question-group .answers .answer-radio.active-label, .questions .question-group .answers .answer-radio:hover,
       .questions .question-group .answers .answer-checkbox.active-label,
