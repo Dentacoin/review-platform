@@ -75,7 +75,7 @@
 							</div>
 							<div class="answers tac">
 								@foreach(json_decode($question->answers, true) as $answer)
-									<a href="javascript:;" class="answer" data-num="{{ $loop->index+1 }}">{{ $answer }}</a>
+									<label href="javascript:;" class="answer" data-num="{{ $loop->index+1 }}">{{ $answer }}</label>
 								@endforeach
 							</div>
 						</div>
@@ -107,15 +107,15 @@
 								{!! trans('vox.page.questionnaire.question-sex') !!}
 							</div>
 							<div class="answers">
-								<a class="answer answer" for="answer-gende-m" data-num="m">
+								<label class="answer answer" for="answer-gende-m" data-num="m">
 									<input id="answer-gender-m" type="radio" name="gender-answer" class="answer" value="m" style="display: none;">
 									{!! trans('vox.page.questionnaire.question-sex-m') !!}
 									
-								</a>
-								<a class="answer answer" for="answer-gender-f" data-num="f">
+								</label>
+								<label class="answer answer" for="answer-gender-f" data-num="f">
 									<input id="answer-gender-f" type="radio" name="gender-answer" class="answer" value="f" style="display: none;">
 									{!! trans('vox.page.questionnaire.question-sex-f') !!}
-								</a>
+								</label>
 							</div>
 						</div>
 					@endif
