@@ -16,4 +16,5 @@ artisan
 sitemaps
 lang
 /app/Http/Controllers/MobidentController.php
+/app/Http/Controllers/Front/YouTubeController.php
 /public/socials.html
