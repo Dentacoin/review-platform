@@ -7,12 +7,13 @@ $(document).ready(function(){
                     event_id: 'iframe_size_event',
                     data: {
                         width: $('.site-content').width(),
-                        height: $('.site-content').height()
+                        height: $('.site-content').outerHeight()
                     }
                 },
                 "*"
             );
         }
+
         triggerIframeSizeEventForParent();
         $(window).resize(triggerIframeSizeEventForParent);
 
