@@ -661,11 +661,11 @@
               display: inline-block;
               font-size: 20px;
               height: 86px;
-              line-height: 86px; }
+              display: flex;
+              align-items: center; }
               @media screen and (max-width: 768px) {
                 .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 {
                   height: auto;
-                  line-height: normal;
                   display: block;
                   font-size: 17px; } }
               .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 a {
@@ -673,6 +673,11 @@
                 @media screen and (max-width: 768px) {
                   .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 a {
                     font-size: 17px; } }
+              .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 a, .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 span {
+                margin: 0px 5px; }
+                @media screen and (max-width: 768px) {
+                  .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 a, .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 span {
+                    margin: 0px; } }
           .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list {
             display: inline-block;
             position: relative;

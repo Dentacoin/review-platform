@@ -5349,7 +5349,7 @@ svg:not(:root) {
 .daily-limit-reached {
 	margin-bottom: -80px;
 
-	@media #{$phone} {
+	@media screen and (max-width: 1200px) {
 		margin-bottom: 0px;
 	}
 

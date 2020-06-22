@@ -3859,7 +3859,7 @@ svg:not(:root) {
 
 .daily-limit-reached {
   margin-bottom: -80px; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1200px) {
     .daily-limit-reached {
       margin-bottom: 0px; } }
   .daily-limit-reached .hours-countdown {

@@ -851,11 +851,11 @@ $main-color: #38ace5;
 									font-size: 20px;
 
 									height: 86px;
-								    line-height: 86px;
+								    display: flex;
+    								align-items: center;
 
 									@media #{$phone} {
 										height: auto;
-										line-height: normal;
 										display: block;
 										font-size: 17px;
 									}
@@ -865,6 +865,14 @@ $main-color: #38ace5;
 
 										@media #{$phone} {
 											font-size: 17px;
+										}
+									}
+
+									a,span {
+										margin: 0px 5px;
+
+										@media #{$phone} {
+											margin: 0px;
 										}
 									}
 								}
