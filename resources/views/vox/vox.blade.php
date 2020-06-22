@@ -149,14 +149,14 @@
 									{!! trans('vox.page.questionnaire.question-sex') !!}
 								</div>
 								<div class="answers">
-									<a class="answer answer" for="answer-gender-m" data-num="m">
+									<label class="answer answer" for="answer-gender-m" data-num="m">
 										<input id="answer-gender-m" type="radio" demogr-index="1" name="gender-answer" class="answer" value="m" style="display: none;">
 										{!! trans('vox.page.questionnaire.question-sex-m') !!}
-									</a>
-									<a class="answer answer" for="answer-gender-f" data-num="f">
+									</label>
+									<label class="answer answer" for="answer-gender-f" data-num="f">
 										<input id="answer-gender-f" type="radio" demogr-index="2" name="gender-answer" class="answer" value="f" style="display: none;">
 										{!! trans('vox.page.questionnaire.question-sex-f') !!}
-									</a>
+									</label>
 								</div>
 							</div>
 						@endif
