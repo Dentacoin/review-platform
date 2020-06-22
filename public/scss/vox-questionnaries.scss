@@ -853,6 +853,7 @@ $main-color: #38ace5;
 									height: 86px;
 								    display: flex;
     								align-items: center;
+    								justify-content: center;
 
 									@media #{$phone} {
 										height: auto;

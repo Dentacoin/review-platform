@@ -662,7 +662,8 @@
               font-size: 20px;
               height: 86px;
               display: flex;
-              align-items: center; }
+              align-items: center;
+              justify-content: center; }
               @media screen and (max-width: 768px) {
                 .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 {
                   height: auto;
