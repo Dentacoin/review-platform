@@ -6816,6 +6816,12 @@ body.sp-trp-iframe {
     				margin-top: 30px;
 				}
 			}
+
+			&:after {
+				@media #{$tablet} {
+					display: none;
+				}
+			}
 		}
 	}
 }

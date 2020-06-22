@@ -5062,6 +5062,9 @@ body.sp-trp-iframe .profile-reviews-space {
   body.sp-trp-iframe #banned-popup .popup-inner .icon {
     max-width: 90px;
     margin-top: 30px; } }
+@media screen and (max-width: 998px) {
+  body.sp-trp-iframe #banned-popup .popup-inner:after {
+    display: none; } }
 
 .pager {
   text-align: center;
