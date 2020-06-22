@@ -182,41 +182,40 @@
 	            </div>
         	@endif
 
-        	<div class="bans-section">
+        	@if($user->vox_bans->isNotEmpty())
+	        	<div class="bans-section">
 
-				<div class="black-line-title">
-	                <h4 class="bold">
-	                	{{ trans('vox.page.profile.vox.bans-title') }}
-	                </h4>
-	            </div>
-            	<table class="table">
-            		<thead>
-            			<tr>
-	            			<th>
-	            				{{ trans('vox.page.profile.vox.ban-date') }}
-	            			</th>
-            				<th>
-	            				{{ trans('vox.page.profile.vox.ban-duration') }}
-            					
-            				</th>
-	            			<th>
-	            				{{ trans('vox.page.profile.vox.ban-reason') }}
-	            			</th>
-	            			<th>
-	            				{{ trans('vox.page.profile.vox.ban-expires') }}
-	            			</th>
-            			</tr>
-            		</thead>
-            		<tbody>
-
-		  				@if($user->bans->isNotEmpty())
-	            			@foreach( $user->bans as $ban )
+					<div class="black-line-title">
+		                <h4 class="bold">
+		                	{{ trans('vox.page.profile.vox.bans-title') }}
+		                </h4>
+		            </div>
+	            	<table class="table">
+	            		<thead>
+	            			<tr>
+		            			<th>
+		            				{{ trans('vox.page.profile.vox.ban-date') }}
+		            			</th>
+	            				<th>
+		            				{{ trans('vox.page.profile.vox.ban-duration') }}
+	            					
+	            				</th>
+		            			<th>
+		            				{{ trans('vox.page.profile.vox.ban-reason') }}
+		            			</th>
+		            			<th>
+		            				{{ trans('vox.page.profile.vox.ban-expires') }}
+		            			</th>
+	            			</tr>
+	            		</thead>
+	            		<tbody>
+	            			@foreach( $user->vox_bans as $ban )
 	            				<tr>
 	            					<td>
 	            						{{ $ban->created_at ? ($ban->created_at->toDateString().', '.$ban->created_at->toTimeString()) : '' }}
 	            					</td>
 	            					<td>
-	            						{{ $ban->created_at->diffInHours($ban->expires)  }}h
+	            						{{ $ban->created_at ? $ban->created_at->diffInHours($ban->expires) : 0  }}h
 	            					</td>
 	            					<td>
 	            						{{ trans('vox.page.profile.vox.ban-reason-'.$ban->type) }}
@@ -232,10 +231,10 @@
 	            					</td>
 	            				</tr>
 	            			@endforeach
-			    		@endif
-        			</tbody>
-            	</table>
-	        </div>
+	        			</tbody>
+	            	</table>
+	        	</div>
+			@endif
 		</div>
 	</div>
 
