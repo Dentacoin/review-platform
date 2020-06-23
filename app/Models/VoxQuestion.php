@@ -23,7 +23,6 @@ class VoxQuestion extends Model {
         'type',
         'question_trigger',
         'trigger_type',
-        'invert_trigger_logic',
         'question',
         'answers',
         'answers_images_filename',

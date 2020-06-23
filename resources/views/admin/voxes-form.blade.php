@@ -449,7 +449,7 @@
                         <h4 class="panel-title">{{ trans('admin.page.'.$current_page.'.questions') }}</h4>
                     </div>
                     <div class="tab-content">
-                        <form method="post" action="{{ url('cms/vox-questions/mass-delete') }}" id="mass-delete-form">
+                        <form method="post" action="{{ url('cms/vox-questions/mass-delete') }}" class="table-responsive-md" id="mass-delete-form">
                             <table class="table table-striped table-question-list">
                                 <thead>
                                     <tr>
@@ -524,6 +524,12 @@
                         </form>
                     </div>
                 </div>
+
+                <style type="text/css">
+                    table tr td:nth-child(7) {
+                        word-break: break-all;
+                    }
+                </style>
             @endif
 
             <a class="btn btn-primary btn-block" href="javascript: $('#add-new-question').show(); $('#add-new-question').prev().hide();">
@@ -597,11 +603,7 @@
                     </div>
                 </div>
             </div>
-
-
         @endif
-
-
     </div>
 </div>
 

@@ -206,7 +206,7 @@
                                                 </div>
                                             @else
                                                 <div class="input-group clearfix" style="display: flex;">
-                                                    <div class="template-box clearfix" style="max-width: calc(100% - 40px);">
+                                                    <div class="template-box clearfix" style="max-width: calc(100% - 40px);width: 100%;">
                                                         <select name="triggers[]" class="form-control select2 trigger-select" style="width: 50%; float: left;">
                                                             <option value="">Select question</option>                                                            
                                                             <optgroup label="{{ $item->title }} survey questions">
@@ -245,7 +245,8 @@
                                 </label>
                                 <div class="col-md-11">
                                     To enable a trigger, first select the question from the dropdown and then type the number of the answer(s) that will trigger the present question.<br/>
-                                    Example: "Question text?" / One trigger answer: 1 (for the first answer), 2 (for the second answer, etc.); 2+ answers: 1, 2, 3, 4<br/>
+                                    Example: "Question text?" / One trigger answer: 1 (for the first answer), 2 (for the second answer, etc.); 2+ answers: 1, 2, 3, 4<br/><br/>
+                                    For NOT chosen trigger answers - add ! before the answers<br/>
                                     <!-- To enable a previously selected trigger, click Add previous trigger. -->
                                     <span style="display: none;" class="show-me">To enable another trigger, click <a href="javascript:;" id="close-and-add-trigger">here</a>.</span>
                                 </div>
@@ -281,17 +282,6 @@
                                     </label>
                                 </div>
                             </div>
-                            <!-- <div class="form-group clearfix">
-                                <label class="col-md-1 control-label">
-                                    Trigger invert logic
-                                </label>
-                                <div class="col-md-11">
-                                    <label for="invert_trigger_logic">
-                                        <input type="checkbox" name="invert_trigger_logic" value="1" id="invert_trigger_logic" style="vertical-align: sub;" {!! !empty($question->invert_trigger_logic) ? 'checked="checked"' : '' !!} />
-                                        Not chosen
-                                    </label>
-                                </div>
-                            </div> -->
                         </div>
                     </div>
 
@@ -578,7 +568,7 @@
 
 
     <div class="input-group" id="new-trigger-group-template" >
-        <div class="template-box clearfix"> 
+        <div class="template-box clearfix" style="width: 100%;">
             <select name="triggers[]" class="form-control" style="width: 50%; float: left;">
                 <option value="">Select question</option>
                 <optgroup label="{{ $item->title }} survey questions">

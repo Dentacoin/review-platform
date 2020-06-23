@@ -29,8 +29,8 @@
 @elseif($question->type == 'multiple_choice')
 	<div class="
 		question-group question-group-{{ $question->id }} multiple-choice 
-		{!! empty($question->dont_randomize_answers) ? 'shuffle' : ''  !!} 
-		{!! $question->question_trigger && $question->invert_trigger_logic ? "invert-trigger-logic" : "" !!}" 
+		{!! empty($question->dont_randomize_answers) ? 'shuffle' : ''  !!}
+	" 
 
 	{!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} 
 	data-id="{{ $question->id }}" 
@@ -100,9 +100,7 @@
 		<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
 	</div>
 @elseif($question->type == 'scale')
-	<div class="
-		question-group question-group-{{ $question->id }} scale 
-		{!! $question->question_trigger && $question->invert_trigger_logic ? "invert-trigger-logic" : "" !!}" 
+	<div class="question-group question-group-{{ $question->id }} scale"
 
 	data-id="{{ $question->id }}" 
 	{!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} 
@@ -171,7 +169,7 @@
 	<div class="
 		question-group question-group-{{ $question->id }} birthyear-question 
 		{{ $question->is_control == -1 ? 'shuffle' : '' }} 
-		{!! $question->question_trigger && $question->invert_trigger_logic ? "invert-trigger-logic" : "" !!}" 
+	" 
 
 	data-answer="{!! $user->birthyear !!}" 
 	data-id="{{ $question->id }}" 
@@ -198,9 +196,7 @@
 		<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
 	</div>
 @elseif($question->type == 'number')
-	<div class="
-		question-group question-group-{{ $question->id }} number
-		{!! $question->question_trigger && $question->invert_trigger_logic ? "invert-trigger-logic" : "" !!}" 
+	<div class="question-group question-group-{{ $question->id }} number" 
 
 	{!! isset($answered[$question->id]) ? 'data-answer="'.$answered[$question->id].'"' : '' !!} 
 	data-id="{{ $question->id }}" 
@@ -238,9 +234,7 @@
 		</div>
 	</div>
 @elseif($question->type == 'rank')
-	<div class="
-		question-group question-group-{{ $question->id }} rank
-		{!! $question->question_trigger && $question->invert_trigger_logic ? "invert-trigger-logic" : "" !!}" 
+	<div class="question-group question-group-{{ $question->id }} rank" 
 
 	{!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} 
 	data-id="{{ $question->id }}" 
@@ -304,7 +298,7 @@
 	<div class="
 		question-group question-group-{{ $question->id }} single-choice 
 		{{ $question->is_control == -1 || (empty($question->dont_randomize_answers) && empty($question->vox_scale_id) && empty($scales[$question->vox_scale_id])) ? 'shuffle' : '' }} 
-		{!! $question->question_trigger && $question->invert_trigger_logic ? "invert-trigger-logic" : "" !!}" 
+	" 
 
 	{!! isset($answered[$question->id]) ? 'data-answer="'.$answered[$question->id].'"' : '' !!} 
 	data-id="{{ $question->id }}" 

@@ -572,7 +572,6 @@ $(document).ready(function(){
 
                             var trigger = group.next().attr('data-trigger');
                             var trigger_logical_operator = group.next().attr('trigger-type');
-                            var invert_trigger_logic = group.next().hasClass('invert-trigger-logic');
 
                             if(trigger && trigger!='-1') {
 
@@ -639,7 +638,23 @@ $(document).ready(function(){
 
                                     if( parsed_given_answer ) {
                                         if( parts[1] ) {
-                                            var trigger_answers = parts[1].split(','); // 2,6 // [2,6]
+
+                                            var invert_trigger_logic = false;
+                                            if(parts[1].indexOf("!") >= 0) {
+                                                invert_trigger_logic = true;
+                                            }
+
+                                            var trigger_answers_array = parts[1].split(','); // 2,6 // [2,6]
+
+                                            trigger_answers = [];
+                                            for(var i in trigger_answers_array) {
+                                                if(trigger_answers_array[i].indexOf("!") >= 0) {
+                                                    trigger_answers.push(trigger_answers_array[i].substring(1));
+                                                } else {
+                                                    trigger_answers.push(trigger_answers_array[i]);
+                                                }
+                                            }
+                                            //console.log(trigger_answers,trigger_answers_array);
 
                                             if( trigger_type=='birthyear' ) {
                                                 var age = new Date().getFullYear() - parseInt(parsed_given_answer);
@@ -719,7 +734,7 @@ $(document).ready(function(){
                                 }
 
                                 //console.log( 'Trigger statuses: ', trigger_statuses );
-
+                                
                                 if( trigger_logical_operator=='or' ) {
                                     should_skip = !(trigger_statuses.indexOf(true)!=-1);
                                 } else { //and

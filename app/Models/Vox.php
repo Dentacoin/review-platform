@@ -592,7 +592,7 @@ class Vox extends Model {
             $givenAnswers = $this->dcn_questions_triggers;
 
             //Ako ima trigger
-            if($q->question_trigger) {
+            if($q->question_trigger && $q->type != 'multiple_choice') {
 
                 //Ako e same as previous
                 if($q->question_trigger=='-1') {
@@ -616,6 +616,14 @@ class Vox extends Model {
                 foreach ($triggers as $trigger) {
 
                     list($triggerId, $triggerAnswers) = explode(':', $trigger);
+
+                    if(mb_strpos($triggerAnswers, '!')!==false) {
+                        $invert_trigger_logic = true;
+                        $triggerAnswers = substr($triggerAnswers, 1);
+                    } else {
+                        $invert_trigger_logic = false;
+                    }
+
                     if(mb_strpos($triggerAnswers, '-')!==false) {
                         list($from, $to) = explode('-', $triggerAnswers);
 
@@ -641,18 +649,36 @@ class Vox extends Model {
                             }
                         }
 
-                        if($found) {
-                            $triggerSuccess[] = true;
+                        if($invert_trigger_logic) {
+                            if(!$found) {
+                                $triggerSuccess[] = true;
+                            } else {
+                                $triggerSuccess[] = false;
+                            }
                         } else {
-                            $triggerSuccess[] = false;
+
+                            if($found) {
+                                $triggerSuccess[] = true;
+                            } else {
+                                $triggerSuccess[] = false;
+                            }
                         }
 
                     } else {
 
-                        if( !empty($givenAnswers[$triggerId]) && in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
-                            $triggerSuccess[] = true;
+                        if($invert_trigger_logic) {
+                            if( !empty($givenAnswers[$triggerId]) && !in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                                $triggerSuccess[] = true;
+                            } else {
+                                $triggerSuccess[] = false;
+                            }
                         } else {
-                            $triggerSuccess[] = false;
+
+                            if( !empty($givenAnswers[$triggerId]) && in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                                $triggerSuccess[] = true;
+                            } else {
+                                $triggerSuccess[] = false;
+                            }
                         }
                     }
                 }

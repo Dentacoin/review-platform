@@ -624,7 +624,6 @@ class VoxesController extends AdminController
 
             $triggers_ids = [];
             $trigger_type = null;
-            $invert_trigger_logic = null;
 
             foreach ($question->vox->questions as $q) {
 
@@ -647,7 +646,6 @@ class VoxesController extends AdminController
                             }                            
                         }
                         $trigger_type = $q->trigger_type;
-                        $invert_trigger_logic = $q->invert_trigger_logic;
                     }
                 }
             }
@@ -734,7 +732,6 @@ class VoxesController extends AdminController
                 'trigger_valid_answers' => $trigger_valid_answers,
                 'triggers_ids' => $triggers_ids,
                 'trigger_type' => $trigger_type,
-                'invert_trigger_logic' => $invert_trigger_logic,
             ));
 
         } else {
@@ -966,8 +963,6 @@ class VoxesController extends AdminController
         } else {
             $question->number_limit = '';
         }
-
-        $question->invert_trigger_logic = $data['invert_trigger_logic'] ?? null;
         
         $question->save();
 
@@ -1867,7 +1862,7 @@ class VoxesController extends AdminController
 
                         foreach ($trigger_qs as $tq) {
                             if(isset($trigger_ans[$tq])) {
-                                $triggers[] = VoxQuestion::find($tq)->question.' - '.($question->invert_trigger_logic ? '(NOT) ' : '').implode(',', $trigger_ans[$tq]);
+                                $triggers[] = VoxQuestion::find($tq)->question.' - '.implode(',', $trigger_ans[$tq]);
                                 
                             } else {
                                 $triggers[] = VoxQuestion::find($tq)->question ? VoxQuestion::find($value)->question : '';
