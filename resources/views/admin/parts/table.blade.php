@@ -1,6 +1,6 @@
 <div class="dataTables_wrapper">
     <div class="row">
-    	<div class="col-sm-12">
+    	<div class="col-sm-12 table-responsive-md">
     		<table class="table table-striped">
                 <thead>
                     <tr>

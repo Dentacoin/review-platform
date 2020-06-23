@@ -594,3 +594,13 @@ input[type="number"]::-webkit-inner-spin-button {
         max-width: 30px;
     }
 }
+
+@media screen and (max-width: 767.98px) {
+    
+    .table-responsive-md {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}

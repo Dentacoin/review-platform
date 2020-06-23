@@ -1093,6 +1093,7 @@
 											({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam->ratings)]) }})
 										</span>
 									</div>
+									<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
 							    	@if( !$team->approved )
 							    		<div class="approve-buttons clearfix">
 								    		<div class="yes" action="{{ getLangUrl('profile/dentists/accept/'.$team->clinicTeam->id) }}">
@@ -1142,6 +1143,7 @@
 													({{ trans('trp.common.reviews-count', [ 'count' => '0']) }})
 												</span>
 											</div>
+											<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
 										@else
 											<p style="margin-top: 18px;color: #0fb0e5;">{!! trans('trp.team-jobs.'.$invite->job) !!}</p>
 										@endif

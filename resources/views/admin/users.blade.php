@@ -2,16 +2,32 @@
 
 @section('content')
 
-<h1 class="page-header">
-    {{ trans('admin.page.'.$current_page.'.title') }}
-    <a href="javascript:;" class="btn btn-primary pull-right btn-export">Export</a>
-    <a href="javascript:;" class="btn btn-primary pull-right btn-export-fb" style="margin-right: 10px;">FB Export</a>
-    <a href="javascript:;" class="btn btn-primary pull-right btn-export-sendgrid" style="margin-right: 10px;">SendGrid Export</a>
-    <a href="{{ url('cms/users/add') }}" class="btn btn-primary pull-right" style="margin-right: 10px;">Add dentist</a>
-    <a href="{{ url('cms/users/import') }}" class="btn btn-primary pull-right" style="margin-right: 10px;">Import dentists</a>
-</h1>
+<div class="flex" style="justify-content: space-between;">
+    <h1 class="page-header">
+        {{ trans('admin.page.'.$current_page.'.title') }}
+    </h1>
+    <div>
+        <a href="javascript:;" class="btn btn-primary pull-right btn-export">Export</a>
+        <a href="javascript:;" class="btn btn-primary pull-right btn-export-fb" style="margin-right: 10px;">FB Export</a>
+        <a href="javascript:;" class="btn btn-primary pull-right btn-export-sendgrid" style="margin-right: 10px;">SendGrid Export</a>
+        <a href="{{ url('cms/users/add') }}" class="btn btn-primary pull-right" style="margin-right: 10px;">Add dentist</a>
+        <a href="{{ url('cms/users/import') }}" class="btn btn-primary pull-right" style="margin-right: 10px;">Import dentists</a>
+    </div>
+</div>
 <!-- end page-header -->
 
+<style type="text/css">
+    @media screen and (max-width: 767px) {
+        .flex {
+            display: block;
+        }
+
+        .flex a {
+            float: none !important;
+            margin-bottom: 10px;
+        }
+    }
+</style>
 
 <div class="row">
     <div class="col-md-12">

@@ -60,33 +60,37 @@
                     <h4 class="panel-title">Incomplete Dentist Registrations</h4>
                 </div>
                 <div class="panel-body">
-            		<div class="panel-body">
-    					@include('admin.parts.table', [
-    						'table_id' => 'incomplete',
-    						'table_fields' => [
-                                'id'                => array('label' => '#'),
-                                'created_at'                => array('format' => 'datetime', 'label' => 'Date'),
-                                'name'              => array('label' => 'Name'),
-                                'email'              => array('label' => 'Email'),
-                                'phone'              => array('label' => 'Phone'),
-                                'country_id'                => array('format' => 'country', 'label' => 'Country'),
-                                'website'                => array('label' => 'Website'),
-                                'platform'                => array('label' => 'Platform'),
-                                'completed'                => array('format' => 'bool', 'label' => 'Registered'),
-                                'notified1'                => array('format' => 'bool', 'label' => 'Email 1h'),
-                                'notified2'                => array('format' => 'bool', 'label' => 'Email 24h'),
-                                'notified3'                => array('format' => 'bool', 'label' => 'Email 72h'),
-                                'unsubscribed'               => array('format' => 'bool', 'label' => 'Unsubscribed'),
-    						],
-                            'table_data' => $items,
-    						'table_pagination' => false,
-                            'pagination_link' => array()
-    					])
-                    </div>
+					@include('admin.parts.table', [
+						'table_id' => 'incomplete',
+						'table_fields' => [
+                            'id'                => array('label' => '#'),
+                            'created_at'                => array('format' => 'datetime', 'label' => 'Date'),
+                            'name'              => array('label' => 'Name'),
+                            'email'              => array('label' => 'Email'),
+                            'phone'              => array('label' => 'Phone'),
+                            'country_id'                => array('format' => 'country', 'label' => 'Country'),
+                            'website'                => array('label' => 'Website'),
+                            'platform'                => array('label' => 'Platform'),
+                            'completed'                => array('format' => 'bool', 'label' => 'Registered'),
+                            'notified1'                => array('format' => 'bool', 'label' => 'Email 1h'),
+                            'notified2'                => array('format' => 'bool', 'label' => 'Email 24h'),
+                            'notified3'                => array('format' => 'bool', 'label' => 'Email 72h'),
+                            'unsubscribed'               => array('format' => 'bool', 'label' => 'Unsubscribed'),
+						],
+                        'table_data' => $items,
+						'table_pagination' => false,
+                        'pagination_link' => array()
+					])
                 </div>
             </div>
         </div>
     </div>
+
+    <style type="text/css">
+        table tr td:nth-child(7) {
+            word-break: break-all;
+        }
+    </style>
 
     @if($total_pages > 1)
         <nav aria-label="Page navigation" style="text-align: center;">

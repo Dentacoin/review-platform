@@ -86,7 +86,7 @@
                             <div class="form-group">
                                 <label class="col-md-2 control-label">User Type</label>
                                 <div class="col-md-10">
-                                    <div class="flex" style="align-items: baseline;justify-content: space-between;">
+                                    <div class="flex first-section" style="align-items: baseline;justify-content: space-between;">
                                         <div>
                                             @include('admin.parts.user-field',[
                                                 'key' => 'type',
@@ -671,6 +671,24 @@
     </div>
 </div>
 
+<style type="text/css">
+    @media screen and (max-width: 767px) {
+        .first-section {
+            display: block;
+        }
+        .first-section > div {
+            display: block;
+            margin-bottom: 15px;
+        }
+        .first-section > div label {
+            display: block;
+        }
+        .first-section > div > div {
+            display: block !important;
+        }
+    }
+</style>
+
 @if($item->photos->isNotEmpty())
     <div class="row with-dropdown">
         <div class="col-md-12">
@@ -747,56 +765,54 @@
                             <h4 class="panel-title">Clinic's Team</h4>
                         </div>
                         <div class="panel-body">
-                            <div class="panel-body">
-                                <div class="row">
+                            <div class="row table-responsive-md">
 
-                                    <table class="table table-striped table-question-list">
-                                        <thead>
+                                <table class="table table-striped table-question-list">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Dentist</th>
+                                            <th>Job</th>
+                                            <th>Is approved?</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($item->team as $team)
                                             <tr>
-                                                <th>Date</th>
-                                                <th>Dentist</th>
-                                                <th>Job</th>
-                                                <th>Is approved?</th>
+                                                <td>
+                                                    {{ $team->created_at ? $team->created_at->toDateTimeString() : '' }}
+                                                </td>
+                                                <td>
+                                                    <a href="{{ url('/cms/users/edit/'.$team->clinicTeamWithTrashed->id) }}">
+                                                        {{ $team->clinicTeamWithTrashed->getName() }} {{ $team->clinicTeamWithTrashed->deleted_at ? '(deleted)' : '' }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    Dentist
+                                                </td>
+                                                <td>
+                                                    {!! $team->approved ? '<span class="label label-success">'.trans('admin.common.yes').'</span>' : '<span class="label label-warning">'.trans('admin.common.no').'</span>' !!}
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($item->team as $team)
-                                                <tr>
-                                                    <td>
-                                                        {{ $team->created_at ? $team->created_at->toDateTimeString() : '' }}
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{ url('/cms/users/edit/'.$team->clinicTeamWithTrashed->id) }}">
-                                                            {{ $team->clinicTeamWithTrashed->getName() }} {{ $team->clinicTeamWithTrashed->deleted_at ? '(deleted)' : '' }}
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        Dentist
-                                                    </td>
-                                                    <td>
-                                                        {!! $team->approved ? '<span class="label label-success">'.trans('admin.common.yes').'</span>' : '<span class="label label-warning">'.trans('admin.common.no').'</span>' !!}
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            @foreach($item->invites_team_unverified as $team_invited)
-                                                <tr>
-                                                    <td>
-                                                        {{ $team_invited->created_at->toDateTimeString() }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $team_invited->invited_name }}
-                                                    </td>
-                                                    <td>
-                                                        {{ !empty($team_invited->job) ? config('trp.team_jobs')[$team_invited->job] : '' }}
-                                                    </td>
-                                                    <td>
-                                                        <span class="label label-success">Yes</span>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        @endforeach
+                                        @foreach($item->invites_team_unverified as $team_invited)
+                                            <tr>
+                                                <td>
+                                                    {{ $team_invited->created_at->toDateTimeString() }}
+                                                </td>
+                                                <td>
+                                                    {{ $team_invited->invited_name }}
+                                                </td>
+                                                <td>
+                                                    {{ !empty($team_invited->job) ? config('trp.team_jobs')[$team_invited->job] : '' }}
+                                                </td>
+                                                <td>
+                                                    <span class="label label-success">Yes</span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -1030,6 +1046,7 @@
 @endif
 
 <h4 style="margin-bottom: 20px;">Activity History</h4>
+<p style="margin-bottom: 20px;">Current balance: {{ $item->getTotalBalance() }} DCN</p>
 
 @if($item->history->isNotEmpty())
     <div class="row show-hide-section">
@@ -1175,7 +1192,6 @@
                     <h4 class="panel-title">Profile Claims</h4>
                 </div>
                 <div class="panel-body">
-                <div class="panel-body">
                     @include('admin.parts.table', [
                         'table_id' => 'dentist-claims',
                         'table_fields' => [
@@ -1194,7 +1210,6 @@
                     ])
                 </div>
             </div>
-            </div>
         </div>
     </div>
 @endif
@@ -1210,7 +1225,6 @@
                     <h4 class="panel-title">Recommendations</h4>
                 </div>
                 <div class="panel-body">
-                <div class="panel-body">
                     @include('admin.parts.table', [
                         'table_id' => 'recommendations',
                         'table_fields' => [
@@ -1222,7 +1236,6 @@
                         'table_pagination' => false,
                     ])
                 </div>
-            </div>
             </div>
         </div>
     </div>
@@ -1236,30 +1249,28 @@
                     <h4 class="panel-title">Facebook Page Tabs</h4>
                 </div>
                 <div class="panel-body">
-                    <div class="panel-body">
-                        <div class="row">
+                    <div class="row table-responsive-md">
 
-                            <table class="table table-striped table-question-list">
-                                <thead>
+                        <table class="table table-striped table-question-list">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Link</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($item->dentist_fb_page as $dpt)
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Link</th>
+                                        <td>
+                                            {{ $dpt->created_at->toDateTimeString() }}
+                                        </td>
+                                        <td>
+                                            <a href="https://www.facebook.com/profile.php?id={{ $dpt->fb_page }}" target="_blank">{{ $dpt->fb_page }}</a>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($item->dentist_fb_page as $dpt)
-                                        <tr>
-                                            <td>
-                                                {{ $dpt->created_at->toDateTimeString() }}
-                                            </td>
-                                            <td>
-                                                <a href="https://www.facebook.com/profile.php?id={{ $dpt->fb_page }}" target="_blank">{{ $dpt->fb_page }}</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
