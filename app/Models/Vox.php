@@ -592,7 +592,7 @@ class Vox extends Model {
             $givenAnswers = $this->dcn_questions_triggers;
 
             //Ako ima trigger
-            if($q->question_trigger && $q->type != 'multiple_choice') {
+            if($q->question_trigger) {
 
                 //Ako e same as previous
                 if($q->question_trigger=='-1') {
