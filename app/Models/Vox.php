@@ -617,70 +617,80 @@ class Vox extends Model {
 
                     list($triggerId, $triggerAnswers) = explode(':', $trigger);
 
-                    if(mb_strpos($triggerAnswers, '!')!==false) {
-                        $invert_trigger_logic = true;
-                        $triggerAnswers = substr($triggerAnswers, 1);
+                    $trigger_question = VoxQuestion::find($triggerId);
+
+                    if ($trigger_question && $trigger_question->type == 'multiple_choice') {
+
+                        $triggerSuccess[] = true;
+
                     } else {
-                        $invert_trigger_logic = false;
-                    }
 
-                    if(mb_strpos($triggerAnswers, '-')!==false) {
-                        list($from, $to) = explode('-', $triggerAnswers);
-
-                        $allowedAnswers = [];
-                        for ($i=$from; $i <= $to ; $i++) { 
-                            $allowedAnswers[] = $i;
+                        if(mb_strpos($triggerAnswers, '!')!==false) {
+                            $invert_trigger_logic = true;
+                            $triggerAnswers = substr($triggerAnswers, 1);
+                        } else {
+                            $invert_trigger_logic = false;
                         }
 
-                    } else {
-                        $allowedAnswers = explode(',', $triggerAnswers);
-                    }
+                        if(mb_strpos($triggerAnswers, '-')!==false) {
+                            list($from, $to) = explode('-', $triggerAnswers);
 
-                    //echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($triggerAnswers, true).' / Answer: '.$answers[$triggerId].'<br/>';
-
-                    if(!empty($givenAnswers[$triggerId]) && strpos(',',$givenAnswers[$triggerId]) !== 0) {
-                        $given_answers_array = explode(',', $givenAnswers[$triggerId]);
-
-                        $found = false;
-                        foreach ($given_answers_array as $key => $value) {
-                            if(in_array($value, $allowedAnswers)) {
-                                $found = true;
-                                break;
+                            $allowedAnswers = [];
+                            for ($i=$from; $i <= $to ; $i++) { 
+                                $allowedAnswers[] = $i;
                             }
+
+                        } else {
+                            $allowedAnswers = explode(',', $triggerAnswers);
                         }
 
-                        if($invert_trigger_logic) {
-                            if(!$found) {
-                                $triggerSuccess[] = true;
+                        //echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($triggerAnswers, true).' / Answer: '.$answers[$triggerId].'<br/>';
+
+                        if(!empty($givenAnswers[$triggerId]) && strpos(',',$givenAnswers[$triggerId]) !== 0) {
+                            $given_answers_array = explode(',', $givenAnswers[$triggerId]);
+
+                            $found = false;
+                            foreach ($given_answers_array as $key => $value) {
+                                if(in_array($value, $allowedAnswers)) {
+                                    $found = true;
+                                    break;
+                                }
+                            }
+
+                            if($invert_trigger_logic) {
+                                if(!$found) {
+                                    $triggerSuccess[] = true;
+                                } else {
+                                    $triggerSuccess[] = false;
+                                }
                             } else {
-                                $triggerSuccess[] = false;
+
+                                if($found) {
+                                    $triggerSuccess[] = true;
+                                } else {
+                                    $triggerSuccess[] = false;
+                                }
                             }
+
                         } else {
 
-                            if($found) {
-                                $triggerSuccess[] = true;
+                            if($invert_trigger_logic) {
+                                if( !empty($givenAnswers[$triggerId]) && !in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                                    $triggerSuccess[] = true;
+                                } else {
+                                    $triggerSuccess[] = false;
+                                }
                             } else {
-                                $triggerSuccess[] = false;
-                            }
-                        }
 
-                    } else {
-
-                        if($invert_trigger_logic) {
-                            if( !empty($givenAnswers[$triggerId]) && !in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
-                                $triggerSuccess[] = true;
-                            } else {
-                                $triggerSuccess[] = false;
-                            }
-                        } else {
-
-                            if( !empty($givenAnswers[$triggerId]) && in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
-                                $triggerSuccess[] = true;
-                            } else {
-                                $triggerSuccess[] = false;
+                                if( !empty($givenAnswers[$triggerId]) && in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                                    $triggerSuccess[] = true;
+                                } else {
+                                    $triggerSuccess[] = false;
+                                }
                             }
                         }
                     }
+
                 }
 
                 //dd($triggerSuccess);
