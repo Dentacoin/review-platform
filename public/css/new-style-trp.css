@@ -6505,3 +6505,30 @@ body.strength-pb {
 
 .dcn-hub-mini.with-apps {
   z-index: 1000 !important; }
+
+.lang-wrapper {
+  position: relative;
+  padding-left: 10px;
+  border-left: 1px solid white;
+  margin-left: 10px; }
+  .lang-wrapper a {
+    display: block;
+    color: white; }
+    .lang-wrapper a i {
+      color: white;
+      font-size: 10px;
+      vertical-align: baseline; }
+  .lang-wrapper .lang-menu {
+    display: none;
+    position: absolute;
+    width: 104px;
+    right: 0px;
+    background: white; }
+    .lang-wrapper .lang-menu a {
+      color: black;
+      padding: 5px 10px;
+      border-bottom: 1px solid black; }
+      .lang-wrapper .lang-menu a:last-child {
+        border-bottom: none; }
+  .lang-wrapper:hover .lang-menu {
+    display: block; }
