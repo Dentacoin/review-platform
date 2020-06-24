@@ -20,7 +20,7 @@ class SSOController extends BaseController
             if($user) {
             	$token = $this->decrypt(request('token'));
 	            $type = $this->decrypt(request('type'));
-                $approved_statuses = array('approved', 'pending', 'test', 'added_approved', 'admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed');
+                $approved_statuses = array('approved', 'test', 'added_by_clinic_claimed','added_by_dentist_claimed');
 
                 $external_patient = false;
                 if ($user->platform == 'external' && (Request::getHost() == 'dentavox.dentacoin.com' || Request::getHost() == 'vox.dentacoin.com' || Request::getHost() == 'urgent.dentavox.dentacoin.com')) {
