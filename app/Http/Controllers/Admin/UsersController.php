@@ -1095,6 +1095,8 @@ class UsersController extends AdminController {
                     $newuser->addImage($img);
                 }
 
+                $newuser->generateSocialCover();
+
                 $substitutions = [
                     "image_unclaimed_profile" => $newuser->getSocialCover(),
                     "invitation_link" => getLangUrl( 'dentist/'.$newuser->slug.'/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
@@ -1376,6 +1378,10 @@ class UsersController extends AdminController {
                                 } else if( $this->request->input($key)=='rejected' ) {
                                     $item->sendTemplate(14);
                                 }
+                            }
+
+                            if(($this->request->input($key)=='added_approved' || $this->request->input($key)=='added_by_dentist_unclaimed' || $this->request->input($key)=='added_by_clinic_unclaimed') && !$item->hasimage_social) {
+                                $item->generateSocialCover();
                             }
                             $item->$key = $this->request->input($key);
                         } else if($key=='ownership') {
@@ -1898,6 +1904,8 @@ class UsersController extends AdminController {
                                         $img = Image::make( $row[9] )->orientate();
                                         $newuser->addImage($img);
                                     }
+
+                                    $newuser->generateSocialCover();
 
                                     $substitutions = [
                                         "invitation_link" => getLangUrl( 'dentist/'.$newuser->slug.'/claim/'.$newuser->id , null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']),
