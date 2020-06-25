@@ -49,7 +49,14 @@ $(document).ready(function(){
 		var field = $(this).attr('field');
         $.ajax({
             url     : 'cms/vox/edit-field/'+id+'/'+field+'/'+( $(this).is(':checked') ? 1 : 0 ),
-            type    : 'GET'
+            type    : 'GET',
+            success: function( data ) {
+            	if(data.message) {
+
+	            	$('#modal-error').modal('show');
+					$('#modal-error .modal-body p').html(data.message);
+            	}
+			}
         });
 
 	} );

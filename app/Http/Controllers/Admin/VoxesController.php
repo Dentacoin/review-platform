@@ -80,7 +80,7 @@ class VoxesController extends AdminController
                 $error = true;
             }
 
-            if(empty($voxes_stat->stats_questions)) {
+            if($voxes_stat->stats_questions->isEmpty()) {
                 $error_arr[] = [
                     'error' => 'Missing stats questions',
                     'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$voxes_stat->id,
@@ -180,6 +180,8 @@ class VoxesController extends AdminController
     public function edit_field( $id, $field, $value ) {
         $item = Vox::find($id);
 
+        $message_error = false;
+
         if(!empty($item)) {
             if($field=='featured') {
                 $item->$field = $value=='0' ? 0 : 1;
@@ -189,13 +191,19 @@ class VoxesController extends AdminController
                 $item->last_count_at = null;
             }
             if($field=='has_stats') {
-                $item->$field = $value=='0' ? 0 : 1;
+                if($item->stats_questions->isEmpty()) {
+                    $message_error = 'Missing stats questions';
+                } else {
+                    $item->$field = $value=='0' ? 0 : 1;
+                }
             }
             if($field=='stats_featured') {
                 $item->$field = $value=='0' ? 0 : 1;
             }
             $item->save();
         }
+
+        return Response::json( ['message' => $message_error] );
     }
 
     public function edit( $id ) {
@@ -238,8 +246,13 @@ class VoxesController extends AdminController
             if(Request::isMethod('post')) {
 
                 $this->saveOrUpdate($item);
+
+                if($item->has_stats && $item->stats_questions->isEmpty()) {
+                    Request::session()->flash('error-message', 'Missing stats questions');
+                } else {
+                    Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.updated'));
+                }
             
-                Request::session()->flash('success-message', trans('admin.page.'.$this->current_page.'.updated'));
                 return redirect('cms/'.$this->current_page.'/edit/'.$item->id);
             }
 
@@ -316,7 +329,7 @@ class VoxesController extends AdminController
                     $error = true;
                 }
 
-                if(empty($item->stats_questions)) {
+                if($item->stats_questions->isEmpty()) {
                     $error_arr[] = [
                         'error' => 'Missing stats questions',
                     ];
