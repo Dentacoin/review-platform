@@ -54,10 +54,10 @@ class CitiesController extends BaseController
 		$user_list = [];
 		foreach ($users as $user) {
 			$user_list[] = [
-				'location' => $user->city_name.', '.$user->country->name,
-				'location_link' => strtolower($user->city_name.'-'.$user->country->name),
-				'lat' => $user->lat,
-				'lon' => $user->lon,
+				'location' => $user->status == 'dentist_no_email' ? '-' : ($user->city_name.', '.$user->country->name),
+				'location_link' => $user->status == 'dentist_no_email' ? '-' : strtolower($user->city_name.'-'.$user->country->name),
+				'lat' => $user->status == 'dentist_no_email' ? '-' : $user->lat,
+				'lon' => $user->status == 'dentist_no_email' ? '-' : $user->lon,
 			];
 		}
 
