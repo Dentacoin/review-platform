@@ -87,6 +87,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'dentist_practice',
         'accepted_payment',
         'status',
+        'patient_status',
         'ownership',
         'is_verified',
         'is_approved',

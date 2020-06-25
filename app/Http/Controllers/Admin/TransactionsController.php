@@ -122,6 +122,11 @@ class TransactionsController extends AdminController
     public function bump( $id ) {
         $item = DcnTransaction::find($id);
 
+        if($item->status == 'first' && !empty($item->user) && !$item->user->is_dentist) {
+            $item->user->patient_status = 'new_verified';
+            $item->user->save();
+        }
+
         $item->status = 'new';
         $item->retries = 0;
 
@@ -146,6 +151,12 @@ class TransactionsController extends AdminController
         if( Request::input('ids') ) {
             $bumptrans = DcnTransaction::whereIn('id', Request::input('ids'))->get();
             foreach ($bumptrans as $bt) {
+
+                if($bt->status == 'first' && !empty($bt->user) && !$bt->user->is_dentist) {
+                    $bt->user->patient_status = 'new_verified';
+                    $bt->user->save();
+                }
+                
                 $bt->status = 'new';
                 $bt->retries = 0;
                 $bt->save();
