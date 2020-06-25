@@ -1185,8 +1185,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
-        if(!$this->is_dentist && !empty($this->email) && filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-            $this->sendTemplate(9);
+        if(!$this->is_dentist) {
+            $this->patient_status = 'deleted';
+            $this->save();
+            
+            if(!empty($this->email) && filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+                $this->sendTemplate(9);
+            }
         }
 
         if($this->reviews_out->isNotEmpty()) {
