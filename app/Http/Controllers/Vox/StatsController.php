@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Vox;
 
 use App\Http\Controllers\FrontController;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -61,7 +64,6 @@ class StatsController extends FrontController
                 ->whereHas('translations', function ($query) use ($name) {
                     $query->where('title', 'LIKE', '%'.$name.'%');
                 })->orderBy('stats_featured', 'DESC')
-                ->orderBy('sort_order', 'asc')
                 ->get();
             } else {
                 $voxes = Vox::where('type', '!=', 'hidden')
@@ -71,17 +73,28 @@ class StatsController extends FrontController
                 ->whereHas('translations', function ($query) use ($name) {
                     $query->where('title', 'LIKE', '%'.$name.'%');
                 })->orderBy('stats_featured', 'DESC')
-                ->orderBy('stats_featured', 'DESC')
-                ->orderBy('sort_order', 'asc')
                 ->get();
             }
         } else {
 
-            if (Auth::guard('admin')->user()) {
-                $voxes = Vox::with('stats_main_question')->where('has_stats', 1)->with('translations')->orderBy('stats_featured', 'DESC')->orderBy('sort_order', 'asc')->paginate(10);
-            } else {
-                $voxes = Vox::where('type', '!=', 'hidden')->with('stats_main_question')->where('has_stats', 1)->with('translations')->orderBy('stats_featured', 'DESC')->orderBy('sort_order', 'asc')->paginate(10);
+            $voxes = Vox::with('stats_main_question')->where('has_stats', 1)->with('translations');
+
+            if (!Auth::guard('admin')->user()) {
+                $voxes = $voxes->where('type', '!=', 'hidden');
             }
+
+            $voxes = $voxes->get();
+
+            $voxes = $voxes->sortByDesc(function ($vox, $key) {
+                if($vox->stats_featured) {
+                    return 10000000000 + ($vox->launched_at ? $vox->launched_at->timestamp : 0);
+                } else {
+
+                    return 10000 + ($vox->launched_at ? $vox->launched_at->timestamp : 0);
+                }
+            });
+
+            $voxes = $this->paginate($voxes)->withPath(App::getLocale().'/dental-survey-stats/');
         }
 
         $seos = PageSeo::find(11);
@@ -1550,5 +1563,10 @@ class StatsController extends FrontController
             return response()->download($png_file);
         }
         
+    }
+
+    public function paginate($items, $perPage = 10, $page = null, $options = []) {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }

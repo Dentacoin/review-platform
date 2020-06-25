@@ -759,119 +759,119 @@ $(document).ready(function(){
     }
 
 
-    var handleFilters = function() {
-        if(!$('.sort-menu a.active').length) {
-            return;
-        }
+    // var handleFilters = function() {
+    //     if(!$('.sort-menu a.active').length) {
+    //         return;
+    //     }
 
-        //$('#survey-search').val('');
+    //     //$('#survey-search').val('');
 
-        var sort = $('.sort-menu a.active').attr('sort');
-        var wrapper = $('.stats-holder');
-        var list = wrapper.children('.vox-stat');
+    //     var sort = $('.sort-menu a.active').attr('sort');
+    //     var wrapper = $('.stats-holder');
+    //     var list = wrapper.children('.vox-stat');
 
-        if (sort == 'featured') {
+    //     if (sort == 'featured') {
 
-            list.hide().attr("found", 0);
+    //         list.hide().attr("found", 0);
 
-            list.sort(function(a, b) {
-                if( parseInt($(a).attr('published')) > parseInt($(b).attr('published')) ) {
-                    return -1;
-                } else {
-                    return 1;
-                }
-            });
+    //         list.sort(function(a, b) {
+    //             if( parseInt($(a).attr('published')) > parseInt($(b).attr('published')) ) {
+    //                 return -1;
+    //             } else {
+    //                 return 1;
+    //             }
+    //         });
             
-            list.each( function() {
-                if ($(this).attr('featured')=='1') {
-                    $(this).show().attr("found", 1)
-                }
-            });
+    //         list.each( function() {
+    //             if ($(this).attr('featured')=='1') {
+    //                 $(this).show().attr("found", 1)
+    //             }
+    //         });
 
-            list.each(function() {
-                wrapper.append(this);
-            });
+    //         list.each(function() {
+    //             wrapper.append(this);
+    //         });
 
-        } else if (sort == 'all') {
+    //     } else if (sort == 'all') {
 
-            list.show().attr("found", 1);
+    //         list.show().attr("found", 1);
 
-            list.sort(function(a, b) {
-                if( parseInt($(a).attr('featured')) > parseInt($(b).attr('featured')) ) {
-                    return -1;
-                } else if( parseInt($(a).attr('featured')) < parseInt($(b).attr('featured')) ) {
-                    return 1;
-                } else {
-                    return parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ? -1 : 1;
-                }
-            });
+    //         list.sort(function(a, b) {
+    //             if( parseInt($(a).attr('featured')) > parseInt($(b).attr('featured')) ) {
+    //                 return -1;
+    //             } else if( parseInt($(a).attr('featured')) < parseInt($(b).attr('featured')) ) {
+    //                 return 1;
+    //             } else {
+    //                 return parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ? -1 : 1;
+    //             }
+    //         });
 
-            list.each(function() {
-                wrapper.append(this);
-            });
+    //         list.each(function() {
+    //             wrapper.append(this);
+    //         });
 
-            // list.show().attr("found", 1);
+    //         // list.show().attr("found", 1);
 
-            // list.sort(function(a, b) {
-            //     if( parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ) {
-            //         return -1;
-            //     } else {
-            //         return 1;
-            //     }
-            // });
+    //         // list.sort(function(a, b) {
+    //         //     if( parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ) {
+    //         //         return -1;
+    //         //     } else {
+    //         //         return 1;
+    //         //     }
+    //         // });
 
-            // list.each(function() {
-            //     wrapper.append(this);
-            // });
+    //         // list.each(function() {
+    //         //     wrapper.append(this);
+    //         // });
 
-        } else {
+    //     } else {
 
-            list.show().attr("found", 1);
+    //         list.show().attr("found", 1);
 
-            if(sort=='newest') {
-                list.sort(function(a, b) {
-                    if( parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
-                });
-            } else if(sort=='popular') {
-                list.sort(function(a, b) {
-                    if( parseInt($(a).attr('popular')) > parseInt($(b).attr('popular')) ) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
-                });
-            }
+    //         if(sort=='newest') {
+    //             list.sort(function(a, b) {
+    //                 if( parseInt($(a).attr('sort-order')) < parseInt($(b).attr('sort-order')) ) {
+    //                     return -1;
+    //                 } else {
+    //                     return 1;
+    //                 }
+    //             });
+    //         } else if(sort=='popular') {
+    //             list.sort(function(a, b) {
+    //                 if( parseInt($(a).attr('popular')) > parseInt($(b).attr('popular')) ) {
+    //                     return -1;
+    //                 } else {
+    //                     return 1;
+    //                 }
+    //             });
+    //         }
 
-            list.each(function() {
-                wrapper.append(this);
-            });
+    //         list.each(function() {
+    //             wrapper.append(this);
+    //         });
 
-            list.hide();
-            list.slice( 0, 5 ).show();
-        }
-    }
-    handleFilters();
+    //         list.hide();
+    //         list.slice( 0, 5 ).show();
+    //     }
+    // }
+    // handleFilters();
 
 
-    $('.sort-menu a').click( function(e) {
-        if (!$(this).hasClass('active')) {
-            $('.sort-menu a').removeClass('active');
-            $(this).addClass('active');
-        }
+    // $('.sort-menu a').click( function(e) {
+    //     if (!$(this).hasClass('active')) {
+    //         $('.sort-menu a').removeClass('active');
+    //         $(this).addClass('active');
+    //     }
 
-        window.location.hash = $(this).attr('sort');
+    //     window.location.hash = $(this).attr('sort');
 
-        handleFilters();
-        scroll_ribbon();
-    } );
+    //     handleFilters();
+    //     scroll_ribbon();
+    // } );
 
-    if (window.location.hash.length && $('a[sort="'+window.location.hash.substring(1)+'"]').length) {
-        $('a[sort="'+window.location.hash.substring(1)+'"]').trigger( "click" );
-    }
+    // if (window.location.hash.length && $('a[sort="'+window.location.hash.substring(1)+'"]').length) {
+    //     $('a[sort="'+window.location.hash.substring(1)+'"]').trigger( "click" );
+    // }
 
 
     function scroll_ribbon() {
