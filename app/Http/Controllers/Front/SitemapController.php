@@ -29,7 +29,7 @@ class SitemapController extends FrontController
 			getLangUrl('dentists/bucuresti-municipiul-bucuresti-romania/'),
 		];
 
-		$dentists = User::where('is_dentist', '1')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->get();
+		$dentists = User::where('is_dentist', '1')->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->whereNull('self_deleted')->get();
 
 		foreach ($dentists as $dentist) {
 			if($dentist->address) {
