@@ -1775,8 +1775,11 @@ $(document).ready(function(){
                             scrollTop: $('.review-tabs').offset().top - 20
                         }, 500);                        
                     } else if(data.ban) {
+
                         window.location.reload(); 
+
                     } else if(data.redirect) {
+                        
                         $('.sso img').remove();
 
                         for( var i in data.imgs_urls) {
