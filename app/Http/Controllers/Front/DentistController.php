@@ -274,7 +274,7 @@ class DentistController extends FrontController
                         $ret['valid_input'] = false;
                         $ret['redirect'] = 'https://account.dentacoin.com/account-on-hold?platform=trusted-reviews&key='.urlencode(User::encrypt($u_id));
 
-                        $token = (new \App\Http\Controllers\SSOController())->encrypt(session('login-logged-out'));
+                        $token = User::encrypt(session('login-logged-out'));
                         $imgs_urls = [];
                         foreach( config('platforms') as $k => $platform ) {
                             if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {

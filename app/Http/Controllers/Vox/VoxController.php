@@ -188,15 +188,9 @@ class VoxController extends FrontController
             
             $ul->save();
 
-			$action = new UserAction;
-            $action->user_id = $this->user->id;
-            $action->action = 'deleted';
-            $action->reason = 'Automatically - Bad IP ( vox questionnaire )';
-            $action->actioned_at = Carbon::now();
-            $action->save();
-
-            $this->user->deleteActions();
-            User::destroy( $this->user->id );
+            $u_id = $this->user->id;
+            Auth::guard('web')->user()->logoutActions();
+            Auth::guard('web')->logout();
             
 			Request::session()->flash('error-message', 'We have detected suspicious activity from your account.');
 			return redirect( getLangUrl('/') );
