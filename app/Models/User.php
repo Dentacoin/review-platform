@@ -1362,8 +1362,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             $users_with_same_ip = UserLogin::where('ip', 'like', self::getRealIp())->where('user_id', '!=', $this->id)->groupBy('user_id')->get()->count();
 
             if ($users_with_same_ip >=2 && !$this->ip_protected && !$this->allow_withdraw && !$this->is_dentist && $this::getRealIp() != '213.91.254.194' ) {
-                $user->patient_status == 'suspicious_badip';
-                $user->save();
+                $this->patient_status == 'suspicious_badip';
+                $this->save();
                 return true;
             } else {
                 return false;
