@@ -620,7 +620,6 @@ class Vox extends Model {
                         list($triggerId, $triggerAnswers) = explode(':', $trigger);
 
                         $trigger_question = VoxQuestion::find($triggerId);
-
                         if ($trigger_question && $trigger_question->type == 'multiple_choice') {
 
                             $triggerSuccess[] = true;
@@ -648,7 +647,7 @@ class Vox extends Model {
 
                             //echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($triggerAnswers, true).' / Answer: '.$answers[$triggerId].'<br/>';
 
-                            if(!empty($givenAnswers[$triggerId]) && strpos(',',$givenAnswers[$triggerId]) !== 0) {
+                            if(!empty($givenAnswers[$triggerId]) && strpos(',',$givenAnswers[$triggerId]) !== false) {
                                 $given_answers_array = explode(',', $givenAnswers[$triggerId]);
 
                                 $found = false;
@@ -675,27 +674,41 @@ class Vox extends Model {
                                 }
 
                             } else {
+                                if(strpos($allowedAnswers[0], '>') !== false) {
+                                    $trg_ans = substr($allowedAnswers[0], 1);
 
-                                if($invert_trigger_logic) {
-                                    if( !empty($givenAnswers[$triggerId]) && !in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                                    if(intval($givenAnswers[$triggerId]) > intval($trg_ans)) {
+                                        $triggerSuccess[] = true;
+                                    } else {
+                                        $triggerSuccess[] = false;
+                                    }
+                                } else if(strpos($allowedAnswers[0], '<') !== false) {
+                                    $trg_ans = substr($allowedAnswers[0], 1);
+
+                                    if(intval($givenAnswers[$triggerId]) < intval($trg_ans)) {
                                         $triggerSuccess[] = true;
                                     } else {
                                         $triggerSuccess[] = false;
                                     }
                                 } else {
-
-                                    if( !empty($givenAnswers[$triggerId]) && in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
-                                        $triggerSuccess[] = true;
+                                    if($invert_trigger_logic) {
+                                        if( !empty($givenAnswers[$triggerId]) && !in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                                            $triggerSuccess[] = true;
+                                        } else {
+                                            $triggerSuccess[] = false;
+                                        }
                                     } else {
-                                        $triggerSuccess[] = false;
-                                    }
+
+                                        if( !empty($givenAnswers[$triggerId]) && in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                                            $triggerSuccess[] = true;
+                                        } else {
+                                            $triggerSuccess[] = false;
+                                        }
+                                    }                                    
                                 }
                             }
                         }
-
                     }
-
-                    //dd($triggerSuccess);
 
                     if( $q->trigger_type == 'or' ) { // ANY of the conditions should be met (A or B or C)
                         if( in_array(true, $triggerSuccess) ) {
