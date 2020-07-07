@@ -36,6 +36,14 @@ class DcnTransaction extends Model {
         return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();
     }
 
+    public function user_patient_no_kyc() {
+        return $this->hasOne('App\Models\User', 'id', 'user_id')->where('is_dentist', 0)->where('civic_kyc', 0)->whereNull('self_deleted')->whereNull('patient_status');
+    }
+
+    public function user_patient_with_kyc() {
+        return $this->hasOne('App\Models\User', 'id', 'user_id')->where('is_dentist', 0)->where('civic_kyc', 1)->whereNull('self_deleted')->where('patient_status', '!=', 'old_verified_no_sc');
+    }
+
     public function shouldRetry() {
         $times = intval($this->retries)+1;
         $period = 3600 + (300*pow(2, $times));

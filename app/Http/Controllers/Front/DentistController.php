@@ -19,6 +19,7 @@ use App\Models\UserStrength;
 use App\Models\UserInvite;
 use App\Models\UserAction;
 use App\Models\DcnReward;
+use App\Models\UserLogin;
 use App\Models\Question;
 use App\Models\UserBan;
 use App\Models\OldSlug;
@@ -242,7 +243,7 @@ class DentistController extends FrontController
                     // if($old_review && $old_review->status=='accepted') {
                     //     ; //dgd
                     // }
-                    if( $this->user->loggedFromBadIp() ) {
+                    if( $this->user->loggedFromBadIp() || $this->user->email == 'gergana_vankova@abv.bg' ) {
                         $ul = new UserLogin;
                         $ul->user_id = $this->user->id;
                         $ul->ip = User::getRealIp();
@@ -264,17 +265,29 @@ class DentistController extends FrontController
                         }
                         
                         $ul->save();
+                        
+                        $u_id = $this->user->id;
+                        Auth::guard('web')->user()->logoutActions();
+                        Auth::guard('web')->logout();
 
-                        $action = new UserAction;
-                        $action->user_id = $this->user->id;
-                        $action->action = 'deleted';
-                        $action->reason = 'Automatically - Bad IP (Writing review)';
-                        $action->actioned_at = Carbon::now();
-                        $action->save();
+                        $ret['success'] = false;
+                        $ret['valid_input'] = false;
+                        $ret['redirect'] = 'https://account.dentacoin.com/account-on-hold?platform=trusted-reviews&key='.urlencode(User::encrypt($u_id));
 
-                        $this->user->save();
-                        $this->user->deleteActions();
-                        User::destroy( $this->user->id );
+                        $token = (new \App\Http\Controllers\SSOController())->encrypt(session('login-logged-out'));
+                        $imgs_urls = [];
+                        foreach( config('platforms') as $k => $platform ) {
+                            if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  ) {
+                                $imgs_urls[] = '//'.$platform['url'].'/custom-cookie?logout-token='.urlencode($token);
+                            }
+                        }
+                        $imgs_urls[] = '//vox.dentacoin.com/custom-cookie?logout-token='.urlencode($token);
+
+                        $ret['imgs_urls'] = $imgs_urls;
+
+                        return Response::json( $ret );
+
+
                     // } else if( $this->user->getReviewLimits() ) {
                     //     ; //dgd
                     } else if( $this->user->cantSubmitReviewToSameDentist($item->id) ) {

@@ -116,7 +116,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('vox/list', 							'VoxesController@list');
 	Route::post('vox/list/reorder', 					'VoxesController@reorderVoxes');
 	Route::any('vox/add', 							'VoxesController@add');
-	Route::any('vox/edit-field/{id}/{field}/{value}', 					'VoxesController@edit_field');
+	Route::any('vox/edit-field/{id}/{field}/{value}', 	'VoxesController@edit_field');
 	Route::any('vox/edit/{id}', 					'VoxesController@edit');
 	Route::any('vox/edit/{id}/delpic', 				'VoxesController@delpic');
 	Route::any('vox/edit/{id}/export', 				'VoxesController@export');
@@ -190,6 +190,10 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('logs/{type?}', 						'LogsController@list');
 	
 	Route::any('export-import', 					'ImportExportController@list');
+
+	Route::get('ban_appeals',	 					'BanAppealsController@list');
+	Route::post('ban_appeals/approve/{id}', 		'BanAppealsController@approve');
+	Route::post('ban_appeals/reject/{id}', 			'BanAppealsController@reject');
 });
 
 

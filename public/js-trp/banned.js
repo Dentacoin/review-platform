@@ -1,6 +1,7 @@
 var ssoLoaded = 0;
 var ssoTotal = 0;
 var redirectToAccount;
+var getUrlParameter;
 
 $(document).ready(function(){
 	redirectToAccount = function() {

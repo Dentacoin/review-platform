@@ -82,7 +82,7 @@
                                     <option value="{{ $p }}" {!! $p==$search_platform ? 'selected="selected"' : '' !!}>{{ $platform }}</option>
                                 @endforeach
                             </select>
-                        </div>                        
+                        </div>
                         <div class="col-md-2">
                             <select class="form-control" name="search-type">
                                 @foreach($user_types as $k => $type)

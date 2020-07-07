@@ -1746,6 +1746,8 @@ $(document).ready(function(){
             $(this).attr('action'), 
             $(this).serialize() , 
             function( data ) {
+
+                console.log(data, data.imgs_urls);
                 if(data.success) {
                     $('#review-confirmed').show();
                     $('#review-submit-button').hide();
@@ -1774,6 +1776,31 @@ $(document).ready(function(){
                         }, 500);                        
                     } else if(data.ban) {
                         window.location.reload(); 
+                    } else if(data.redirect) {
+                        $('.sso img').remove();
+
+                        for( var i in data.imgs_urls) {
+                            $('body').append('<img class="sso-imgs" src="'+data.imgs_urls[i]+'"/>');
+                        }
+
+                        var ssoTotal = $('.sso-imgs').length;
+                        var ssoLoaded = 0;
+                        $('.sso-imgs').each( function() {
+                            if( $(this)[0].complete ) {
+                                ssoLoaded++;        
+                                if(ssoLoaded==ssoTotal) {
+                                    window.location.href = data.redirect;
+                                }   
+                            }
+                        } );
+                        var ssoLoaded = 0;
+                        $('.sso-imgs').on('load error', function() {
+                            ssoLoaded++;        
+                            if(ssoLoaded==ssoTotal) {
+                                window.location.href = data.redirect;
+                            }
+                        });
+                        
                     } else {
                         $('#review-error').show();
 

@@ -221,7 +221,15 @@ class UsersController extends AdminController {
         $user_types = [
             '' => 'All user types',
             'patient_dentist_clinic.approved' => 'All Approved',
-            'patient' => 'Patients',
+            'patient.all' => 'Patients (All)',
+            'patient.old_verified_no_kyc' => 'Patients (Old verified - no KYC)',
+            'patient.old_verified_no_sc' => 'Patients (Old verified - no SC)',
+            'patient.new_verified' => 'Patients (New - verified)',
+            'patient.new_not_verified' => 'Patients (New - not verified)',
+            'patient.suspicious_badip' => 'Patients (Suspicious (Bad IP))',
+            'patient.suspicious_admin' => 'Patients (Suspicious (Admin))',
+            'patient.self_deleted' => 'Patients (Self-deleted)',
+            'patient.deleted' => 'Patients (Deleted)',
             'dentist.all' => 'Dentists (All)',
             'dentist.new' => 'Dentists (New)',
             'dentist.pending' => 'Dentists (Suspicious)',
@@ -341,10 +349,12 @@ class UsersController extends AdminController {
             }, '>=', $minLogins);
         }
 
+
         if(!empty(request('search-type'))) {
             $tmp = explode('.', request('search-type'));
             $type = $tmp[0];
             $status = isset($tmp[1]) && isset( config('user-statuses')[ $tmp[1] ] ) ? $tmp[1] : null;
+            $patient_status = isset($tmp[1]) && isset( config('patient-statuses')[ $tmp[1] ] ) ? $tmp[1] : null;
             if( $type=='patient' ) {
                 $users = $users->where(function ($query) {
                     $query->where('is_dentist', 0)
@@ -364,6 +374,16 @@ class UsersController extends AdminController {
 
             if( $status ) {
                 $users = $users->where('status', $status);
+            } else if($patient_status) {
+                $users = $users->where('patient_status', $patient_status);
+
+                if($patient_status == 'self_deleted') {
+                    Input::merge(['search-status' => 'self_deleted']);
+                } else if($patient_status == 'deleted') {
+                    Input::merge(['search-status' => 'deleted']);
+                } else {
+                    Input::merge(['search-status' => 'all']);
+                }
             } else if(!empty($tmp[1]) && $tmp[1] == 'partners') {
                 $users = $users->where('is_partner', 1);
             }
@@ -801,7 +821,7 @@ class UsersController extends AdminController {
     public function add_avatar( $id ) {
         $user = User::find($id);
 
-        if( Request::file('image') && Request::file('image')->isValid() ) {
+        if( !empty($user) && Request::file('image') && Request::file('image')->isValid() ) {
             $img = Image::make( Input::file('image') )->orientate();
             $user->addImage($img);
 
@@ -1288,13 +1308,13 @@ class UsersController extends AdminController {
                                         'wallet' => 83,
                                     ];
                                     
-                                    $item->sendGridTemplate($platformMails[$item->platform]);
+                                    $item->sendGridTemplate($platformMails[$item->platform], null, $item->platform);
 
                                     $olde = $item->email;
                                     $item->email = 'ali.hashem@dentacoin.com';
                                     $item->save();
 
-                                    $to_ali = $item->sendGridTemplate($platformMails[$item->platform]);
+                                    $to_ali = $item->sendGridTemplate($platformMails[$item->platform], null, $item->platform);
 
                                     $item->email = $olde;
                                     $item->ownership = 'approved';

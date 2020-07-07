@@ -27,6 +27,9 @@ return [
         'transactions' => array(
             'icon' => 'bitcoin',
         ),
+        'ban_appeals' => array(
+            'icon' => 'ban',
+        ),
         'spending' => array(
             'icon' => 'area-chart',
         ),

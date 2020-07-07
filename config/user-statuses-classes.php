@@ -19,4 +19,12 @@ return [
     'added_by_dentist_new' => 'info',
     'added_by_dentist_rejected' => 'danger',
     'duplicated_email' => 'danger',
+    'old_verified_no_kyc' => 'info',
+    'old_verified_no_sc' => 'info', 
+    'new_verified' => 'success', 
+    'new_not_verified' => 'info',
+    'suspicious_badip' => 'warning',
+    'suspicious_admin' => 'warning',
+    'self_deleted' => 'danger',
+    'deleted' => 'danger',
 ];

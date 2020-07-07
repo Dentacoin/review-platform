@@ -93,7 +93,7 @@
                                                 'info' => $fields['type']
                                             ])
                                         </div>
-                                        @if($item->is_dentist)
+                                        @if(!empty($item->is_dentist))
                                             <div>
                                                 <label class="control-label" style="padding-right: 10px;">Status</label>
                                                 <div style="display: inline-block;">
@@ -165,6 +165,18 @@
                                                     ])
                                                 </div>
                                             </div>
+                                        @else
+                                            <div>
+                                                <label class="control-label" style="padding-right: 10px;">Status</label>
+                                                <div style="display: inline-block;">
+                                                    <select class="form-control" name="patient_status">
+                                                        <option value="" {{ empty($item->status) ? 'selected="selected"' : ''}} >-</option>
+                                                        @foreach(config('patient-statuses') as $k => $v)
+                                                            <option value="{{ $k }}" {{ $item->status == $k ? 'selected="selected"' : ''}} >{{ $v }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
                                         @endif
                                         <div>
                                             <label class="control-label" style="padding-right: 10px;">{{ !$item->is_dentist ? 'User' : '' }} ID</label>
@@ -182,15 +194,12 @@
                                         'key' => 'name',
                                         'info' => $fields['name']
                                     ])
-                                    @if(!empty($item->invited_himself_reg))
-                                        <span style="color: red;">Duplicated email</span>
-                                    @endif
                                 </div>
                             </div>
                             @if($duplicated_names->isNotEmpty())
                                 <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this name already exists:</p>
                                 @foreach($duplicated_names as $dn)
-                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dn->id) }}">{{ $dn->name }}</a></p>
+                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dn->id) }}">{{ $dn->name }} {{ $dn->is_dentist ? '('.config('user-statuses')[$dn->status].')' : '' }}</a></p>
                                 @endforeach
                             @endif
                             @if(!$item->is_dentist && !empty($item->user_patient_type))
@@ -286,7 +295,7 @@
                             @if($duplicated_mails->isNotEmpty())
                                 <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this email already exists:</p>
                                 @foreach($duplicated_mails as $dm)
-                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dm->id) }}">{{ $dm->name }}</a></p>
+                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dm->id) }}">{{ $dm->name }} {{ $dm->is_dentist ? '('.config('user-statuses')[$dm->status].')' : '' }}</a></p>
                                 @endforeach
                             @endif
                             <div class="form-group">
@@ -571,6 +580,9 @@
                             @endif
                             <div class="form-group">
                                 <div class="col-md-12" style="text-align: right;">
+                                    @if(!empty($item->platform))
+                                        <span style="color: black;">Registered platform: {{ config('platforms')[$item->platform]['name'] }}</span><br/><br/>
+                                    @endif
                                     <span style="color: black;">Registered at: {{ $item->created_at->toDateTimeString() }}</span><br/>
                                 </div>
                             </div>
