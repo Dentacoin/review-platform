@@ -610,6 +610,7 @@ $(document).ready(function(){
                                     var trigger_status = false;
                                     var parts = trigger_list[i].trim().split(':');
                                     var trigger_question = parts[0].trim(); // 15 въпрос
+                                    var is_type_numeric = false;
 
                                     if (welcome_q_ids && jQuery.inArray(trigger_question, welcome_q_ids) !== -1) {
                                         for(var u in welcome_qs) {
@@ -629,12 +630,12 @@ $(document).ready(function(){
                                         
                                         var trigger_type = 'standard';
                                     } else {
+                                        var is_type_numeric = $('.question-group-' + trigger_question).hasClass('number') ? true : false;
                                         var given_answer = $('.question-group-' + trigger_question).attr('data-answer'); // 5  1,3,6  // [1,3,6]
                                         var trigger_type = $('.question-group-' + trigger_question).hasClass('birthyear-question') ? 'birthyear' : 'standard';
                                     }
 
-                                    
-                                    var parsed_given_answer = given_answer && given_answer.length && given_answer!="0" ? given_answer.split(',') : null;
+                                    var parsed_given_answer = given_answer && given_answer.length && (given_answer!="0" || (is_type_numeric && given_answer=="0" )) ? given_answer.split(',') : null;
 
                                     if( parsed_given_answer ) {
                                         if( parts[1] ) {
@@ -711,18 +712,36 @@ $(document).ready(function(){
                                                             }
                                                         }
                                                     } else {
+                                                        if(trigger_answers[i].indexOf("<") >= 0) {
+                                                            trg_ans = trigger_answers[i].substring(1);
 
-                                                        if(invert_trigger_logic) {
-                                                            if(!(parsed_given_answer.indexOf(trigger_answers[i].trim().toString())!=-1)) {
+                                                            if(parsed_given_answer < parseInt(trg_ans)) {
+                                                                trigger_status = true;
+                                                                break;
+                                                            }
+
+                                                        } else if(trigger_answers[i].indexOf(">") >= 0 ) {
+                                                            trg_ans = trigger_answers[i].substring(1);
+
+                                                            if(parsed_given_answer > parseInt(trg_ans)) {
                                                                 trigger_status = true;
                                                                 break;
                                                             }
                                                         } else {
-                                                            if( parsed_given_answer.indexOf(trigger_answers[i].trim().toString())!=-1 ) {
-                                                                trigger_status = true;
-                                                                break;
+
+                                                            if(invert_trigger_logic) {
+                                                                if(!(parsed_given_answer.indexOf(trigger_answers[i].trim().toString())!=-1)) {
+                                                                    trigger_status = true;
+                                                                    break;
+                                                                }
+                                                            } else {
+                                                                if( parsed_given_answer.indexOf(trigger_answers[i].trim().toString())!=-1 ) {
+                                                                    trigger_status = true;
+                                                                    break;
+                                                                }
                                                             }
                                                         }
+
                                                     }
                                                 }
                                             }
