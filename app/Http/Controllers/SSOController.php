@@ -87,7 +87,7 @@ class SSOController extends BaseController
             $tokenobj = $user->createToken('LoginToken');
             $tokenobj->token->platform = $platform;
             $tokenobj->token->save();
-            return $this->encrypt($tokenobj->accessToken);
+            return User::encrypt($tokenobj->accessToken);
         }
     }
 
