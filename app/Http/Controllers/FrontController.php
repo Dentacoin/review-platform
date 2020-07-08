@@ -512,7 +512,7 @@ class FrontController extends BaseController {
             $params['markLogin'] = true;
         }
         if( session('login-logged-out') && empty($params['skipSSO']) ) {
-            $params['markLogout'] = getLoginToken();
+            $params['markLogout'] = $this->getLoginToken();
             session([
                 'login-logged-out' => false
             ]);
