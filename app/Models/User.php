@@ -1741,7 +1741,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             'mark-login' => null,
             'login-logged' => null,
             'vox-welcome' => null,
-            'login-logged-out' => session('logged_user')['token'] ?? null,
+            'login-logged-out' => (new \App\Http\Controllers\SSOController())->getLoginToken()),
         ]);
     }
 
