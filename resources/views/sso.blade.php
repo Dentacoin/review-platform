@@ -1,5 +1,5 @@
-@php($slug = (new \App\Http\Controllers\SSOController())->encrypt($user->id))
-@php($type = (new \App\Http\Controllers\SSOController())->encrypt($user->is_dentist ? 'dentist' : 'patient'))
+@php($slug = App\Models\User::encrypt($user->id))
+@php($type = App\Models\User::encrypt($user->is_dentist ? 'dentist' : 'patient'))
 @php($token = (new \App\Http\Controllers\SSOController())->getLoginToken())
 <div class="sso" style="display: none;">
 	@foreach( config('platforms') as $k => $platform )
