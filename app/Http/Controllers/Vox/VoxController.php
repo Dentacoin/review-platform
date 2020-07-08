@@ -164,7 +164,7 @@ class VoxController extends FrontController
 		$doing_details = false;
 		$doing_asl = false;
 
-		if($this->user->loggedFromBadIp() && !$this->user->is_dentist && $this->user->platform != 'external') {
+		if(($this->user->loggedFromBadIp() && !$this->user->is_dentist && $this->user->platform != 'external') || $this->user->email == 'gergana_vankova@abv.bg') {
 
 			$ul = new UserLogin;
             $ul->user_id = $this->user->id;
@@ -192,8 +192,7 @@ class VoxController extends FrontController
             Auth::guard('web')->user()->logoutActions();
             Auth::guard('web')->logout();
             
-			Request::session()->flash('error-message', 'We have detected suspicious activity from your account.');
-			return redirect( getLangUrl('/') );
+			return redirect( 'https://account.dentacoin.com/account-on-hold?platform=dentavox&key='.urlencode(User::encrypt($u_id)) );
 		}
 
 		if(empty($vox) || ($this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test') ) {
