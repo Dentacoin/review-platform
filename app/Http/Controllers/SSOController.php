@@ -75,20 +75,22 @@ class SSOController extends BaseController
     }
 
     public function getLoginToken() {
-        $user = Auth::guard('web')->user();
-        if($user) {
+        // $user = Auth::guard('web')->user();
+        // if($user) {
 
-            if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
-                $platform = $user->platform;
-            } else {
-                $platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
-            }
+        //     if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
+        //         $platform = $user->platform;
+        //     } else {
+        //         $platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
+        //     }
 
-            $tokenobj = $user->createToken('LoginToken');
-            $tokenobj->token->platform = $platform;
-            $tokenobj->token->save();
-            return User::encrypt($tokenobj->accessToken);
-        }
+        //     $tokenobj = $user->createToken('LoginToken');
+        //     $tokenobj->token->platform = $platform;
+        //     $tokenobj->token->save();
+        //     return User::encrypt($tokenobj->accessToken);
+        // }
+
+        return User::encrypt(session('logged_user')['token']);
     }
 
     public function decrypt($encrypted_text) {

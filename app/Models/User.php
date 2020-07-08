@@ -1373,7 +1373,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
                 $this->patient_status = 'suspicious_badip';
                 $this->save();
-                
+
                 return true;
             } else {
                 return false;
@@ -1738,8 +1738,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
     public function logoutActions() {
         session([
-            'mark-login' => null,
-            'login-logged' => null,
+            'mark-login' => false,
             'vox-welcome' => null,
             'login-logged-out' => session('logged_user')['token'] ?? null,
         ]);

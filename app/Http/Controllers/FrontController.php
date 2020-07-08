@@ -176,6 +176,7 @@ class FrontController extends BaseController {
             }
 
             if(!empty($this->user) && session('login-logged')!=$this->user->id) {
+
                 //after login actions
 
                 if($this->user->is_dentist) {
@@ -224,19 +225,22 @@ class FrontController extends BaseController {
                 }
 
 
-                $tokenobj = $this->user->createToken('LoginToken');
-                $tokenobj->token->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
-                $tokenobj->token->save();
+                if(!session('login-logged')) {
 
-                session([
-                    'login-logged' => $this->user->id,
-                    'mark-login' => mb_strpos( Request::getHost(), 'vox' )!==false ? 'DV' : 'TRP',
-                    'logged_user' => [
-                        'token' => $tokenobj->accessToken,
-                        'id' => $this->user->id,
-                        'type' => $this->user->is_dentist ? 'dentist' : 'patient',
-                    ],
-                ]);
+                    $tokenobj = $this->user->createToken('LoginToken');
+                    $tokenobj->token->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
+                    $tokenobj->token->save();
+
+                    session([
+                        'login-logged' => $this->user->id,
+                        'mark-login' => mb_strpos( Request::getHost(), 'vox' )!==false ? 'DV' : 'TRP',
+                        'logged_user' => [
+                            'token' => $tokenobj->accessToken,
+                            'id' => $this->user->id,
+                            'type' => $this->user->is_dentist ? 'dentist' : 'patient',
+                        ],
+                    ]);
+                }
 
                 if( !$this->user->isBanned('vox') && !$this->user->isBanned('trp') && $this->user->bans->isNotEmpty() ) {
                     $last = $this->user->bans->last();
@@ -504,6 +508,7 @@ class FrontController extends BaseController {
 
         $params['trackEvents'] = [];
         if( session('mark-login') && empty($params['skipSSO']) ) {
+            //dd(session('mark-login'));
             $ep = session('mark-login');
             session([
                 'mark-login' => false
@@ -512,6 +517,7 @@ class FrontController extends BaseController {
             $params['markLogin'] = true;
         }
         if( session('login-logged-out') && empty($params['skipSSO']) ) {
+            //dd(session('login-logged-out'));
             $params['markLogout'] = session('login-logged-out');
             session([
                 'login-logged-out' => false
