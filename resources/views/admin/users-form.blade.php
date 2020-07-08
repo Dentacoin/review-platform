@@ -172,7 +172,7 @@
                                                     <select class="form-control" name="patient_status">
                                                         <option value="" {{ empty($item->status) ? 'selected="selected"' : ''}} >-</option>
                                                         @foreach(config('patient-statuses') as $k => $v)
-                                                            <option value="{{ $k }}" {{ $item->status == $k ? 'selected="selected"' : ''}} >{{ $v }}</option>
+                                                            <option value="{{ $k }}" {{ $item->patient_status == $k ? 'selected="selected"' : ''}} >{{ $v }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
