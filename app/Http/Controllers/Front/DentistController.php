@@ -267,6 +267,14 @@ class DentistController extends FrontController
                         $ul->save();
                         
                         $u_id = $this->user->id;
+
+                        $action = new UserAction;
+                        $action->user_id = $u_id;
+                        $action->action = 'bad_ip';
+                        $action->reason = 'Automatically - Bad IP (Writing review)';
+                        $action->actioned_at = Carbon::now();
+                        $action->save();
+                        
                         Auth::guard('web')->user()->logoutActions();
                         Auth::guard('web')->logout();
 

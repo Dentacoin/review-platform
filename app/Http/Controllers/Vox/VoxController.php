@@ -164,7 +164,7 @@ class VoxController extends FrontController
 		$doing_details = false;
 		$doing_asl = false;
 
-		if(($this->user->loggedFromBadIp() && !$this->user->is_dentist && $this->user->platform != 'external') || $this->user->email == 'gergana_vankova@abv.bg') {
+		if(($this->user->loggedFromBadIp() && !$this->user->is_dentist && $this->user->platform != 'external')) {
 
 			$ul = new UserLogin;
             $ul->user_id = $this->user->id;
@@ -187,8 +187,16 @@ class VoxController extends FrontController
             }
             
             $ul->save();
-
+            
             $u_id = $this->user->id;
+
+            $action = new UserAction;
+            $action->user_id = $u_id;
+            $action->action = 'bad_ip';
+            $action->reason = 'Automatically - Bad IP ( vox questionnaire )';
+            $action->actioned_at = Carbon::now();
+            $action->save();
+
             Auth::guard('web')->user()->logoutActions();
             Auth::guard('web')->logout();
             

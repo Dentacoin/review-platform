@@ -590,7 +590,7 @@
                                 <div class="form-group">
                                     <div class="col-md-12" style="text-align: right;">
                                         @foreach($item->actions as $act)
-                                            <span style="color: {{ $act->action == 'deleted' ? 'red' : 'black' }};"><span style="text-transform: capitalize;">{{ $act->action == 'restored_self_deleted' ? 'Self Deleted Restored' : $act->action }}</span> at: {{ $act->actioned_at->toDateTimeString() }}</span><br/>
+                                            <span style="color: {{ $act->action == 'deleted' || $act->action == 'bad_ip' ? 'red' : 'black' }};"><span style="text-transform: capitalize;">{{ $act->action == 'restored_self_deleted' ? 'Self Deleted Restored' : ($act->action == 'bad_ip' ? 'Bad IP' : $act->action) }}</span> at: {{ $act->actioned_at->toDateTimeString() }}</span><br/>
                                             <span style="color: {{ $act->action == 'deleted' ? 'red' : 'black' }};">Reason: {{ $act->reason }}</span><br/><br/>
                                         @endforeach
                                     </div>
