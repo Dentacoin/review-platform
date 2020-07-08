@@ -1,4 +1,4 @@
-@php($token = (new \App\Http\Controllers\SSOController())->getLoginToken())
+@php($token = (new \App\Http\Controllers\SSOController())->encrypt($markLogout))
 <div style="display: none;">
 	@foreach( config('platforms') as $k => $platform )
 		@if( !empty($platform['url']) && ( mb_strpos(request()->getHttpHost(), $platform['url'])===false || $platform['url']=='dentacoin.com' )  )
