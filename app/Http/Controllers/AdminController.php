@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Admin;
 use App\Models\Review;
+use App\Models\BanAppeal;
 
 use Auth;
 use DB;
@@ -110,6 +111,7 @@ class AdminController extends BaseController
         //Counts
         $params['counters'] = [];
         $params['counters']['youtube'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
+        $params['counters']['ban_appeals'] = BanAppeal::where('status', 'new')->count();
         
         $params['cache_version'] = '2020-06-25';
         //dd($params['counters']);

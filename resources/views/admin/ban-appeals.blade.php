@@ -27,6 +27,7 @@
 					                    	<th>Image</th>
 					                    	<th>Description</th>
 					                    	<th>Type</th>
+					                    	<th>Date</th>
 					                    	<th>Actions</th>
 					                    </tr>
 					                </thead>
@@ -51,6 +52,9 @@
 					                    		</td>
 					                    		<td>
 					                    			{{ $types[$item->type] }}
+					                    		</td>
+					                    		<td>
+					                    			{{ date('d.m.Y, H:i:s', $item->created_at->timestamp) }}
 					                    		</td>
 					                    		<td>
 					                    			<a class="btn btn-sm btn-primary" href="{{ url('cms/'.$current_page.'/approve/'.$item->id) }}">
