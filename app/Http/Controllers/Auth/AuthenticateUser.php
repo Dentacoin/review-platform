@@ -60,7 +60,7 @@ class AuthenticateUser extends FrontController
         if( Auth::guard('web')->user() ) {
             Auth::guard('web')->user()->logoutActions();
         }
-        Auth::guard('web')->logout();
+        //Auth::guard('web')->logout();
         return redirect( getLangUrl('/') );
     }
 
