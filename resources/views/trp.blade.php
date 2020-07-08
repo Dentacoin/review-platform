@@ -438,9 +438,7 @@
 					}
 				</script>
 			@endif
-		@endif
-
-		
+		@endif	
 
 		@if(!empty($trackEvents))
 	        <script type="text/javascript">

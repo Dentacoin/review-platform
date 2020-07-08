@@ -1779,11 +1779,11 @@ $(document).ready(function(){
                         window.location.reload(); 
 
                     } else if(data.redirect) {
-                        
+
                         $('.sso img').remove();
 
                         for( var i in data.imgs_urls) {
-                            $('body').append('<img class="sso-imgs" src="'+data.imgs_urls[i]+'"/>');
+                            $('body').append('<img class="sso-imgs hide" src="'+data.imgs_urls[i]+'"/>');
                         }
 
                         var ssoTotal = $('.sso-imgs').length;

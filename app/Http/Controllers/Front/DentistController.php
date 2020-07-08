@@ -243,7 +243,7 @@ class DentistController extends FrontController
                     // if($old_review && $old_review->status=='accepted') {
                     //     ; //dgd
                     // }
-                    if( $this->user->loggedFromBadIp() || $this->user->email == 'gergana_vankova@abv.bg' ) {
+                    if( $this->user->loggedFromBadIp() ) {
                         $ul = new UserLogin;
                         $ul->user_id = $this->user->id;
                         $ul->ip = User::getRealIp();
@@ -272,8 +272,7 @@ class DentistController extends FrontController
 
                         $ret['success'] = false;
                         $ret['valid_input'] = false;
-                        //$ret['redirect'] = 'https://account.dentacoin.com/account-on-hold?platform=trusted-reviews&key='.urlencode(User::encrypt($u_id));
-                        $ret['redirect'] = getLangUrl('/');
+                        $ret['redirect'] = 'https://account.dentacoin.com/account-on-hold?platform=trusted-reviews&key='.urlencode(User::encrypt($u_id));
 
                         $token = User::encrypt(session('login-logged-out'));
                         $imgs_urls = [];
