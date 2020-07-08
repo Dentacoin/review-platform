@@ -512,29 +512,12 @@ class FrontController extends BaseController {
             $params['markLogin'] = true;
         }
         if( session('login-logged-out') && empty($params['skipSSO']) ) {
-            $params['markLogout'] = $this->getLoginToken();
+            $params['markLogout'] = session('login-logged-out');
             session([
                 'login-logged-out' => false
             ]);
         }
 
         $params['cache_version'] = '2020-07-07';
-    }
-
-    public function getLoginToken() {
-        $user = Auth::guard('web')->user();
-        if($user) {
-
-            if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
-                $platform = $user->platform;
-            } else {
-                $platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
-            }
-
-            $tokenobj = $user->createToken('LoginToken');
-            $tokenobj->token->platform = $platform;
-            $tokenobj->token->save();
-            return $this->encrypt($tokenobj->accessToken);
-        }
     }
 }

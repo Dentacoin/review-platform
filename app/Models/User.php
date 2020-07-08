@@ -1373,7 +1373,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
                 $this->patient_status = 'suspicious_badip';
                 $this->save();
-                
+
                 return true;
             } else {
                 return false;
@@ -1741,8 +1741,25 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             'mark-login' => null,
             'login-logged' => null,
             'vox-welcome' => null,
-            'login-logged-out' => session('logged_user')['token'] ?? null,
+            'login-logged-out' => self::getLoginToken(),
         ]);
+    }
+
+    public static function getLoginToken() {
+        $user = Auth::guard('web')->user();
+        if($user) {
+
+            if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
+                $platform = $user->platform;
+            } else {
+                $platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
+            }
+
+            $tokenobj = $user->createToken('LoginToken');
+            $tokenobj->token->platform = $platform;
+            $tokenobj->token->save();
+            return self::encrypt($tokenobj->accessToken);
+        }
     }
 
     public function getMontlyRating($month=0) {
