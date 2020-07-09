@@ -60,7 +60,7 @@ class BanAppealsController extends AdminController {
             $action->reason = Request::input('approved_reason');
             $action->actioned_at = Carbon::now();
             $action->save();
-            
+
             $item->status = 'approved';
             $item->save();
 
@@ -69,7 +69,7 @@ class BanAppealsController extends AdminController {
             $this->request->session()->flash('error-message', "You have to write a reason why this appeal has to be approved" );
         }
 
-        return redirect('cms/ban_appeals');
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');
     }
 
     public function reject($id) {
@@ -100,7 +100,7 @@ class BanAppealsController extends AdminController {
             $this->request->session()->flash('error-message', "You have to write a reason why this appeal has to be rejected" );
         }
 
-        return redirect(url('cms/ban_appeals'));
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/ban_appeals');
 
     }
 
