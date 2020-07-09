@@ -111,5 +111,11 @@
     </div>
 </div>
 
+<style type="text/css">
+    html,body {
+        height: auto !important;
+    }
+</style>
+
 
 @endsection
