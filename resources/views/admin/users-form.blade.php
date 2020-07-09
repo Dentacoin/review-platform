@@ -703,6 +703,83 @@
     }
 </style>
 
+
+@if(!empty($item->banAppeal))
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">Ban Appeal</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="dataTables_wrapper">
+                        <div class="row">
+                            <div class="col-sm-12 table-responsive-md">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Link</th>
+                                            <th>Image</th>
+                                            <th>Description</th>
+                                            <th>Type</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <a href="{{ url('cms/users/edit/'.$item->id) }}">
+                                                    {{ $item->name }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{ $item->banAppeal->link }}
+                                            </td>
+                                            <td>
+                                                <a href="{{ $item->banAppeal->getImageUrl() }}" data-lightbox="banappeal{{ $item->banAppeal->id }}">
+                                                    <img src="{{ $item->banAppeal->getImageUrl(true) }}" style="max-width: 30px;">
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{ $item->banAppeal->description }}
+                                            </td>
+                                            <td>
+                                                {{ $ban_types[$item->banAppeal->type] }}
+                                            </td>
+                                            <td>
+                                                {{ date('d.m.Y, H:i:s', $item->banAppeal->created_at->timestamp) }}
+                                            </td>
+                                            <td>
+                                                @if($item->banAppeal->status == 'new')
+                                                    <a class="btn btn-sm btn-primary" href="{{ url('cms/ban_appeals/approve/'.$item->banAppeal->id) }}">
+                                                        Approve
+                                                    </a>
+                                                    <a class="btn btn-sm btn-danger" href="{{ url('cms/ban_appeals/reject/'.$item->banAppeal->id) }}">
+                                                        Reject
+                                                    </a>
+                                                @elseif($item->banAppeal->status == 'approved')
+                                                    Approved
+                                                @elseif($item->banAppeal->status == 'rejected')
+                                                    Rejected
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 @if($item->photos->isNotEmpty())
     <div class="row with-dropdown">
         <div class="col-md-12">

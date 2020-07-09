@@ -65,6 +65,11 @@ class UsersController extends AdminController {
             'suspicious' => 'Suspicious',
         ];
 
+        $this->ban_types = [
+            'deleted' => 'Deleted',
+            'bad_ip' => 'Bad IP',
+        ];
+
     	$this->fields = [
             'title' => [
                 'type' => 'select',
@@ -1628,6 +1633,7 @@ class UsersController extends AdminController {
                 'duplicated_mails' => $duplicated_mails,
                 'habits_test_ans' => $habits_test_ans,
                 'item' => $item,
+                'ban_types' => $this->ban_types,
                 'categories' => $this->categories,
                 'fields' => $this->fields,
                 'unfinished' => $unfinished,

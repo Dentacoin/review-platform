@@ -37,6 +37,7 @@ use App\Models\DcnCashout;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\Blacklist;
+use App\Models\BanAppeal;
 use App\Models\UserTeam;
 use App\Models\UserBan;
 use App\Models\UserAsk;
@@ -157,7 +158,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function had_first_transaction() {
         return $this->hasOne('App\Models\DcnTransaction', 'user_id', 'id')->oldest();
     }
-
+    public function banAppeal() {
+        return $this->hasOne('App\Models\BanAppeal', 'user_id', 'id')->oldest();
+    }
     public function actions() {
         return $this->hasMany('App\Models\UserAction', 'user_id', 'id');
     }
