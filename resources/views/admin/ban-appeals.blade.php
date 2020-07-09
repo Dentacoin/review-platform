@@ -51,7 +51,7 @@
 					                    			{{ $item->description }}
 					                    		</td>
 					                    		<td>
-					                    			{{ $types[$item->type] }}
+					                    			{{ $item->user->patient_status == 'deleted' ? 'Deleted' : $types[$item->type] }}
 					                    		</td>
 					                    		<td>
 					                    			{{ date('d.m.Y, H:i:s', $item->created_at->timestamp) }}
