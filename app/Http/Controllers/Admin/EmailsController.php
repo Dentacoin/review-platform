@@ -22,7 +22,7 @@ class EmailsController extends AdminController
             return redirect('cms/'.$this->current_page.'/'.current(Email::$template_types));
         }
 
-        $templates = EmailTemplate::where('type', $what)->orderBy('updated_at', 'ASC')->get();
+        $templates = EmailTemplate::where('type', $what)->orderBy('id', 'ASC')->get();
 
     	return $this->showView('emails', array(
             'templates' => $templates,
@@ -57,6 +57,7 @@ class EmailsController extends AdminController
                 $translation->category = $this->request->input('category_'.$langkey);
                 $translation->save();
             }
+            $template->subscribe_category = $this->request->input('subscribe_category');
             $template->save();
 
             $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.saved'));
