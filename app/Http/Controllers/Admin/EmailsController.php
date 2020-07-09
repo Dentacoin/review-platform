@@ -18,15 +18,48 @@ use Validator;
 class EmailsController extends AdminController
 {
     public function list( $what=null ) {
-        if(!in_array($what, Email::$template_types)) {
-            return redirect('cms/'.$this->current_page.'/'.current(Email::$template_types));
-        }
+        
 
-        $templates = EmailTemplate::where('type', $what)->orderBy('id', 'ASC')->get();
+        if(!empty(request('search-name')) || !empty(request('search-id')) || !empty(request('search-sendgrid-id')) || !empty(request('search-platform')) || !empty(request('without-category'))) {
+            $templates = EmailTemplate::orderBy('id', 'ASC');
+
+            if(!empty(request('search-name'))) {
+                $templates = $templates->where('name', 'LIKE', '%'.trim(request('search-name')).'%');
+            }
+            if(!empty(request('search-id'))) {
+                $templates = $templates->where('id', request('search-id') );
+            }
+            if(!empty(request('search-sendgrid-id'))) {
+                $si = request('search-sendgrid-id');
+                $templates = $templates->whereHas('translations', function ($query) use ($si) {
+                    $query->where('sendgrid_template_id', 'LIKE', $si);
+                });
+            }
+            if(!empty(request('search-platform'))) {
+                $templates = $templates->where('type', request('search-platform') );
+            }
+
+            if(!empty(request('without-category'))) {
+                $templates = $templates->whereNull('subscribe_category');
+            }
+
+            $templates = $templates->get();
+        } else {
+
+            if(!in_array($what, Email::$template_types)) {
+                return redirect('cms/'.$this->current_page.'/'.current(Email::$template_types));
+            }
+            $templates = EmailTemplate::where('type', $what)->orderBy('id', 'ASC')->get();
+        }
 
     	return $this->showView('emails', array(
             'templates' => $templates,
-            'platform' => $what
+            'platform' => $what,
+            'search_name' => request('search-name'),
+            'search_id' => request('search-id'),
+            'search_sendgrid_id' => request('search-sendgrid-id'),
+            'search_platform' => request('search-platform'),
+            'without_category' => request('without-category'),
         ));
     }
 
