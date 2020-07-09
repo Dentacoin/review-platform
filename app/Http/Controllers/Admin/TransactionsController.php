@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\AdminController;
 
 use App\Models\DcnTransaction;
+use App\Models\UserAction;
+use App\Models\User;
 
 use Carbon\Carbon;
 
@@ -139,8 +141,19 @@ class TransactionsController extends AdminController
     public function stop( $id ) {
         $item = DcnTransaction::find($id);
 
-        $item->status = 'stopped';
+        if($item->status == 'first') {
+            $action = new UserAction;
+            $action->user_id = $item->user->id;
+            $action->action = 'deleted';
+            $action->reason = 'Automatically - rejected first transaction';
+            $action->actioned_at = Carbon::now();
+            $action->save();
 
+            $item->user->deleteActions();
+            User::destroy( $id );
+        }
+
+        $item->status = 'stopped';
         $item->save();
 
         $this->request->session()->flash('success-message', 'Transaction stopped' );
@@ -171,6 +184,19 @@ class TransactionsController extends AdminController
         if( Request::input('ids') ) {
             $stoptrans = DcnTransaction::whereIn('id', Request::input('ids'))->get();
             foreach ($stoptrans as $st) {
+
+                if($st->status == 'first') {
+                    $action = new UserAction;
+                    $action->user_id = $st->user->id;
+                    $action->action = 'deleted';
+                    $action->reason = 'Automatically - rejected first transaction';
+                    $action->actioned_at = Carbon::now();
+                    $action->save();
+
+                    $st->user->deleteActions();
+                    User::destroy( $id );
+                }
+
                 $st->status = 'stopped';
                 $st->save();
             }
