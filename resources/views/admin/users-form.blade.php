@@ -170,10 +170,12 @@
                                                 <label class="control-label" style="padding-right: 10px;">Status</label>
                                                 <div style="display: inline-block;">
                                                     <select class="form-control" name="patient_status">
-                                                        <option value="" {{ empty($item->status) ? 'selected="selected"' : ''}} >-</option>
                                                         @foreach(config('patient-statuses') as $k => $v)
-                                                            <option value="{{ $k }}" {{ $item->patient_status == $k ? 'selected="selected"' : ''}} >{{ $v }}</option>
+                                                            @if($item->patient_status == $k)
+                                                                <option value="{{ $k }}" selected="selected" >{{ $v }}</option>
+                                                            @endif
                                                         @endforeach
+                                                        <option value="suspicious_admin">Suspicious (Admin)</option>
                                                     </select>
                                                 </div>
                                             </div>

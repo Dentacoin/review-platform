@@ -6,7 +6,13 @@ use App\Http\Controllers\AdminController;
 
 use Illuminate\Support\Facades\Input;
 
+
+use App\Models\DcnTransaction;
+use App\Models\UserAction;
 use App\Models\BanAppeal;
+use App\Models\User;
+
+use Carbon\Carbon;
 
 use Validator;
 use Request;
@@ -25,7 +31,7 @@ class BanAppealsController extends AdminController {
     }
 
     public function list() {
-    	$items = BanAppeal::get();
+    	$items = BanAppeal::orderBy('id', 'desc')->get();
 
     	return $this->ShowView('ban-appeals', array(
     		'types' => $this->types,
@@ -42,14 +48,60 @@ class BanAppealsController extends AdminController {
     public function approve($id) {
         $item = BanAppeal::find($id);
 
-        return $this->list();
+        $user = $item->user;
+
+        if($user->patient_status == 'deleted') {
+
+            $action = new UserAction;
+            $action->user_id = $user->id;
+            $action->action = 'restored';
+            $action->reason = 'Restored from Ban Appeal Approvement';
+            $action->actioned_at = Carbon::now();
+            $action->save();
+
+            $user->restoreActions();
+            $user->deleted_at = null;
+            $user->save();
+
+        } else {
+            $transactions = DcnTransaction::where('user_id', $user->id)->whereIn('status', ['stopped','first'])->get();
+
+            if ($transactions->isNotEmpty()) {
+                foreach ($transactions as $trans) {
+                    $trans->status = 'new';
+                    $trans->save();
+                }
+            }
+        }
+
+        if($user->history->isNotEmpty()) {
+            $user->patient_status = 'new_verified';
+        } else {
+            $user->patient_status = 'new_not_verified';
+        }
+
+        $user->save();
+
+        $item->status = 'approved';
+        $item->save();
+
+        return redirect(url('cms/ban_appeals'));
 
     }
 
     public function reject($id) {
         $item = BanAppeal::find($id);
 
-        return $this->list();
+        $user = $item->user;
+
+        $user->patient_status = 'deleted';
+        $user->deleted_at = Carbon::now();
+        $user->save();
+
+        $item->status = 'rejected';
+        $item->save();
+
+        return redirect(url('cms/ban_appeals'));
     }
 
 }

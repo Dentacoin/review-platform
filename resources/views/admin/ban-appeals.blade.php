@@ -57,12 +57,18 @@
 					                    			{{ date('d.m.Y, H:i:s', $item->created_at->timestamp) }}
 					                    		</td>
 					                    		<td>
-					                    			<a class="btn btn-sm btn-primary" href="{{ url('cms/'.$current_page.'/approve/'.$item->id) }}">
-		                                                Approve
-		                                            </a>
-					                    			<a class="btn btn-sm btn-danger" href="{{ url('cms/'.$current_page.'/reject/'.$item->id) }}">
-		                                                Reject
-		                                            </a>
+					                    			@if($item->status == 'new')
+						                    			<a class="btn btn-sm btn-primary" href="{{ url('cms/'.$current_page.'/approve/'.$item->id) }}">
+			                                                Approve
+			                                            </a>
+						                    			<a class="btn btn-sm btn-danger" href="{{ url('cms/'.$current_page.'/reject/'.$item->id) }}">
+			                                                Reject
+			                                            </a>
+			                                        @elseif($item->status == 'approved')
+			                                        	Approved
+			                                        @elseif($item->status == 'rejected')
+			                                        	Rejected
+			                                        @endif
 					                    		</td>
 					                    	</tr>
 					                    @endforeach

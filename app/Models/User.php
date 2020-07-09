@@ -1225,35 +1225,29 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     public function restoreActions() {
 
         $id = $this->id;
-        $teams = UserTeam::where(function($query) use ($id) {
-            $query->where( 'dentist_id', $id)->orWhere('user_id', $id);
-        })->get();
 
-        if (!empty($teams)) {
-           foreach ($teams as $team) {
-               $team->restore();
-           }
-        }
+        if($this->is_dentist) {
 
-        $user_invites = UserInvite::where(function($query) use ($id) {
-            $query->where( 'user_id', $id)->orWhere('invited_id', $id);
-        })->get();
+            $teams = UserTeam::where(function($query) use ($id) {
+                $query->where( 'dentist_id', $id)->orWhere('user_id', $id);
+            })->get();
 
-        if (!empty($user_invites)) {
-           foreach ($user_invites as $user_invite) {
-               $user_invite->restore();
-           }
-        }
+            if ($teams->isNotEmpty()) {
+               foreach ($teams as $team) {
+                   $team->restore();
+               }
+            }
 
-        $claims = DentistClaim::where('dentist_id', $id)->get();
+            $claims = DentistClaim::where('dentist_id', $id)->get();
 
-        if($claims->isNotEmpty()) {
-            foreach ($claims as $c) {
-                $c->restore();
+            if($claims->isNotEmpty()) {
+                foreach ($claims as $c) {
+                    $c->restore();
+                }
             }
         }
 
-        $transactions = DcnTransaction::where('user_id', $this->id)->where('status', 'stopped')->get();
+        $transactions = DcnTransaction::where('user_id', $this->id)->whereIn('status', ['stopped', 'first'])->get();
 
         if ($transactions->isNotEmpty()) {
             foreach ($transactions as $trans) {
