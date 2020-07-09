@@ -201,7 +201,7 @@
                             @if($duplicated_names->isNotEmpty())
                                 <p style="color: red;" class="col-md-10 col-md-offset-2">User/s with this name already exists:</p>
                                 @foreach($duplicated_names as $dn)
-                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dn->id) }}">{{ $dn->name }} {{ $dn->is_dentist ? '('.config('user-statuses')[$dn->status].')' : '' }}</a></p>
+                                    <p style="color: red;" class="col-md-10 col-md-offset-2">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dn->id) }}">{{ $dn->name }} {{ $dn->is_dentist ? '('.config('user-statuses')[$dn->status].($dn->deleted_at ? ', Deleted' : '').')' : '' }}</a></p>
                                 @endforeach
                             @endif
                             @if(!$item->is_dentist && !empty($item->user_patient_type))
