@@ -756,10 +756,10 @@
                                             </td>
                                             <td>
                                                 @if($item->banAppeal->status == 'new')
-                                                    <a class="btn btn-sm btn-primary" href="{{ url('cms/ban_appeals/approve/'.$item->banAppeal->id) }}">
+                                                    <a class="btn btn-sm btn-primary" href="javascript:;" data-toggle="modal" data-target="#approvedModal">
                                                         Approve
                                                     </a>
-                                                    <a class="btn btn-sm btn-danger" href="{{ url('cms/ban_appeals/reject/'.$item->banAppeal->id) }}">
+                                                    <a class="btn btn-sm btn-danger" href="javascript:;" data-toggle="modal" data-target="#rejectedModal">
                                                         Reject
                                                     </a>
                                                 @elseif($item->banAppeal->status == 'approved')
@@ -1444,6 +1444,52 @@
 
     </div>
 </div>
+
+@if(!empty($item->banAppeal))
+    <div id="rejectedModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Reject Appeal</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url('cms/ban_appeals/reject/'.$item->banAppeal->id) }}" method="post">
+                        <textarea class="form-control" name="rejected_reason" placeholder="Write the reason why you want to reject this appeal"></textarea>
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Reject</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="approvedModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Approve appeal</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url('cms/ban_appeals/approve/'.$item->banAppeal->id) }}" method="post">
+                        <textarea class="form-control" name="approved_reason" placeholder="Write the reason why you want to approve this appeal"></textarea>
+                        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 20px;">Approve</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+@endif
 
 <div style="display: none;">
 
