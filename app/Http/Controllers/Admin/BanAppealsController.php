@@ -64,23 +64,8 @@ class BanAppealsController extends AdminController {
             $user->save();
 
         } else {
-            $transactions = DcnTransaction::where('user_id', $user->id)->whereIn('status', ['stopped','first'])->get();
-
-            if ($transactions->isNotEmpty()) {
-                foreach ($transactions as $trans) {
-                    $trans->status = 'new';
-                    $trans->save();
-                }
-            }
+            $user->restoreActions();
         }
-
-        if($user->history->isNotEmpty()) {
-            $user->patient_status = 'new_verified';
-        } else {
-            $user->patient_status = 'new_not_verified';
-        }
-
-        $user->save();
 
         $item->status = 'approved';
         $item->save();

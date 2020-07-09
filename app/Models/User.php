@@ -1258,6 +1258,16 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $trans->save();
             }
         }
+
+        if(!$this->is_dentist) {
+            if($this->history->isNotEmpty()) {
+                $this->patient_status = 'new_verified';
+            } else {
+                $this->patient_status = 'new_not_verified';
+            }
+
+            $this->save();
+        }
     }
 
     public function canInvite($platform) {
