@@ -77,7 +77,15 @@
                         </fieldset>
                     @endforeach
 
-                    <fieldset>
+                    <fieldset style="border-top: 1px solid black;padding-top: 30px;">
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Subscribe Category</label>
+                            <div class="col-md-10">
+                                {{ Form::select('subscribe_category', ['' => '-'] + config('email-categories'), $item->subscribe_category, array('class' => 'form-control')) }}
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label class="col-md-11 control-label"></label>
                             <div class="col-md-1">
