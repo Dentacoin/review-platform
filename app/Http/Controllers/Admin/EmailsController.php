@@ -21,7 +21,7 @@ class EmailsController extends AdminController
         
 
         if(!empty(request('search-name')) || !empty(request('search-id')) || !empty(request('search-sendgrid-id')) || !empty(request('search-platform')) || !empty(request('without-category'))) {
-            $templates = EmailTemplate::orderBy('id', 'ASC');
+            $templates = EmailTemplate::whereNull('not_used')->orderBy('id', 'ASC');
 
             if(!empty(request('search-name'))) {
                 $templates = $templates->where('name', 'LIKE', '%'.trim(request('search-name')).'%');
@@ -49,7 +49,7 @@ class EmailsController extends AdminController
             if(!in_array($what, Email::$template_types)) {
                 return redirect('cms/'.$this->current_page.'/'.current(Email::$template_types));
             }
-            $templates = EmailTemplate::where('type', $what)->orderBy('id', 'ASC')->get();
+            $templates = EmailTemplate::whereNull('not_used')->where('type', $what)->orderBy('id', 'ASC')->get();
         }
 
     	return $this->showView('emails', array(

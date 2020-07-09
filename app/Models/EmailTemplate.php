@@ -28,6 +28,7 @@ class EmailTemplate extends Model
         "type",
         "category",
         "sendgrid_template_id",
+        "not_used", 
     ];
     
     protected $dates = [
