@@ -46,47 +46,62 @@ class BanAppealsController extends AdminController {
     }
 
     public function approve($id) {
-        $item = BanAppeal::find($id);
 
-        $user = $item->user;
+        if (!empty(Request::input('approved_reason'))) {
 
-        if($user->patient_status == 'deleted') {
+            $item = BanAppeal::find($id);
+            $user = $item->user;
+            $user->restoreActions();
+            $user->restore();
 
             $action = new UserAction;
             $action->user_id = $user->id;
             $action->action = 'restored';
-            $action->reason = 'Restored from Ban Appeal Approvement';
+            $action->reason = Request::input('approved_reason');
             $action->actioned_at = Carbon::now();
             $action->save();
+            
+            $item->status = 'approved';
+            $item->save();
 
-            $user->restoreActions();
-            $user->deleted_at = null;
-            $user->save();
-
+            $this->request->session()->flash('success-message', "Appeal approved" );
         } else {
-            $user->restoreActions();
+            $this->request->session()->flash('error-message', "You have to write a reason why this appeal has to be approved" );
         }
 
-        $item->status = 'approved';
-        $item->save();
-
-        return redirect(url('cms/ban_appeals'));
-
+        return redirect('cms/ban_appeals');
     }
 
     public function reject($id) {
-        $item = BanAppeal::find($id);
 
-        $user = $item->user;
+        if (!empty(Request::input('rejected_reason'))) {
 
-        $user->patient_status = 'deleted';
-        $user->deleted_at = Carbon::now();
-        $user->save();
+            $item = BanAppeal::find($id);
+            $user = $item->user;
 
-        $item->status = 'rejected';
-        $item->save();
+            $user->patient_status = 'deleted';
+            $user->save();
+
+            $action = new UserAction;
+            $action->user_id = $user->id;
+            $action->action = 'deleted';
+            $action->reason = Request::input('rejected_reason');
+            $action->actioned_at = Carbon::now();
+            $action->save();
+
+            $user->deleteActions();
+            User::destroy( $user->id );
+
+            $item->status = 'rejected';
+            $item->save();
+
+            $this->request->session()->flash('success-message', "Appeal rejected" );
+        } else {
+            $this->request->session()->flash('error-message', "You have to write a reason why this appeal has to be rejected" );
+        }
 
         return redirect(url('cms/ban_appeals'));
+
     }
 
 }

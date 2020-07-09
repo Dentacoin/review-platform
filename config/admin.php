@@ -29,6 +29,9 @@ return [
         ),
         'ban_appeals' => array(
             'icon' => 'ban',
+            'js' => array(
+                'ban-appeals.js',
+            ),
         ),
         'spending' => array(
             'icon' => 'area-chart',

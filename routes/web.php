@@ -192,8 +192,8 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('export-import', 					'ImportExportController@list');
 
 	Route::get('ban_appeals',	 					'BanAppealsController@list');
-	Route::get('ban_appeals/approve/{id}', 		'BanAppealsController@approve');
-	Route::get('ban_appeals/reject/{id}', 			'BanAppealsController@reject');
+	Route::any('ban_appeals/approve/{id}', 			'BanAppealsController@approve');
+	Route::any('ban_appeals/reject/{id}', 			'BanAppealsController@reject');
 });
 
 

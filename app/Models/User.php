@@ -1193,7 +1193,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
-        if(!$this->is_dentist) {
+        if(!$this->is_dentist && $this->patient_status != 'deleted') {
+
             $this->patient_status = 'deleted';
             $this->save();
             
