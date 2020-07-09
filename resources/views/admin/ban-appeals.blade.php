@@ -39,7 +39,7 @@
 														{{ $item->user->name }}
 													</a>
 					                    		</td>
-					                    		<td>
+					                    		<td style="word-break: break-all;">
 					                    			{{ $item->link }}
 					                    		</td>
 					                    		<td>
