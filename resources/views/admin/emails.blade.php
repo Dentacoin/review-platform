@@ -79,7 +79,8 @@
 					@include('admin.parts.table', [
 						'table_id' => 'emails-system',
 						'table_fields' => [
-							'name'				=> array(),
+                            'name'              => array(),
+                            'email_categories'  => array('template' => 'admin.parts.table-emails-categories'),
                             'update'            => array('template' => 'admin.parts.table-emails-edit'),
 						],
                         'table_data' => $templates,
