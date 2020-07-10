@@ -40,7 +40,7 @@
                     	<tr {!! !empty($row->id) ? 'item-id="'.$row->id.'"' : '' !!} {!! !empty($row->deleted_at) ? 'style="opacity: 0.7;"' : '' !!}>
                     		@foreach($table_fields as $k => $v)
                                 @if(!empty($v['template']))
-                                    <td {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>@include($v['template'], array('item' => $row) )</td>
+                                    <td {!! $k == 'tx_hash' ? 'class="break-all"' : '' !!} {!! !empty($v['width']) ? 'style="width:'.$v['width'].'"' : '' !!}>@include($v['template'], array('item' => $row) )</td>
                                 @elseif(!empty($v['format']))
                                     @if($v['format']=='selector')
                                         <td>
@@ -143,3 +143,9 @@
     </div>
     @endif
 </div>
+
+<style type="text/css">
+    .break-all {
+        word-break: break-all;
+    }
+</style>
