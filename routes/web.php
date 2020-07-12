@@ -109,6 +109,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('transactions/stop/{id}', 			'TransactionsController@stop');
 	Route::post('transactions/mass-bump', 			'TransactionsController@massbump');
 	Route::post('transactions/mass-stop', 			'TransactionsController@massstop');
+	Route::get('transactions/bump-dont-retry', 		'TransactionsController@bumpDontRetry');
 
 	Route::get('spending', 							'SpendingController@list');
 

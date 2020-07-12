@@ -1,8 +1,15 @@
 @extends('admin')
 
 @section('content')
-
-    <h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
+    
+    <div class="flex" style="justify-content: space-between;">
+        <h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
+        @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
+            <div>
+                <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-warning pull-right">BUMP TRANSACTIONS WITH STATUS 'DONT RETRY'</a>
+            </div>
+        @endif
+    </div>
     <!-- end page-header -->
 
 
@@ -33,6 +40,7 @@
                                     <option value="completed" {!! 'completed'==$search_status ? 'selected="selected"' : '' !!}>Completed</option>
                                     <option value="stopped" {!! 'stopped'==$search_status ? 'selected="selected"' : '' !!}>Stopped</option>
                                     <option value="first" {!! 'first'==$search_status ? 'selected="selected"' : '' !!}>First</option>
+                                    <option value="dont_retry" {!! 'dont_retry'==$search_status ? 'selected="selected"' : '' !!}>Don't Retry</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -56,9 +64,6 @@
             </div>
         </div>
     </div>
-
-
-
 
     <div class="row">
         <div class="col-md-12">

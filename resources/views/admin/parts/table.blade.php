@@ -143,9 +143,3 @@
     </div>
     @endif
 </div>
-
-<style type="text/css">
-    .break-all {
-        word-break: break-all;
-    }
-</style>

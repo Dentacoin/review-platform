@@ -71,6 +71,28 @@
                             <span class="icon-bar"></span>
                         </button>
                     </div>
+
+                    @if(!empty($dcn_warning_transaction))
+                        <span class="label label-danger blink" style="margin-top: 20px;display: inline-block;">BUG WITH TRANSACTIONS!!!</span>
+
+                        <style type="text/css">
+                            
+                            .blink {
+                              animation: blink-animation 1s steps(5, start) infinite;
+                              -webkit-animation: blink-animation 1s steps(5, start) infinite;
+                            }
+                            @keyframes blink-animation {
+                              to {
+                                visibility: hidden;
+                              }
+                            }
+                            @-webkit-keyframes blink-animation {
+                              to {
+                                visibility: hidden;
+                              }
+                            }
+                        </style>
+                    @endif
                     <!-- end mobile sidebar expand / collapse button -->
                     
                     <!-- begin header navigation right -->

@@ -68,6 +68,7 @@ class UsersController extends AdminController {
         $this->ban_types = [
             'deleted' => 'Deleted',
             'bad_ip' => 'Bad IP',
+            'suspicious_admin' => 'Suspicious (Admin)',
         ];
 
     	$this->fields = [

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Models\Review;
 use App\Models\BanAppeal;
+use App\Models\DcnTransaction;
 
 use Auth;
 use DB;
@@ -114,6 +115,8 @@ class AdminController extends BaseController
         $params['counters']['ban_appeals'] = BanAppeal::where('status', 'new')->count();
         
         $params['cache_version'] = '2020-06-25';
+
+        $params['dcn_warning_transaction'] = DcnTransaction::where('status', 'dont_retry')->count();
         //dd($params['counters']);
 
         if($this->current_page!='home' && !isset($menu[$this->current_page])) {

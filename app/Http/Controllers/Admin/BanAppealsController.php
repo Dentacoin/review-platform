@@ -27,6 +27,7 @@ class BanAppealsController extends AdminController {
         $this->types = [
             'deleted' => 'Deleted',
             'bad_ip' => 'Bad IP',
+            'suspicious_admin' => 'Suspicious (Admin)',
         ];
     }
 

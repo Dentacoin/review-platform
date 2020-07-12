@@ -206,4 +206,19 @@ class TransactionsController extends AdminController
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
+    public function bumpDontRetry() {
+
+        $transactions = DcnTransaction::where('status', 'dont_retry')->get();
+        foreach ($transactions as $transaction) {
+
+            $transaction->status = 'new';
+            $transaction->save();
+        }
+
+        $this->request->session()->flash('success-message', '"Dont retry" transactions are bumped' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+
+
 }
