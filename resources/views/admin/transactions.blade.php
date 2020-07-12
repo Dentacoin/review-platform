@@ -6,7 +6,7 @@
         <h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
         @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
             <div>
-                <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-warning pull-right">BUMP TRANSACTIONS WITH STATUS 'DONT RETRY'</a>
+                <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-warning pull-right">BUMP ALL TRANSACTIONS WITH STATUS 'DONT RETRY'</a>
             </div>
         @endif
     </div>
