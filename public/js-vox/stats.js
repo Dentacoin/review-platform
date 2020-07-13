@@ -1618,6 +1618,8 @@ $(document).ready(function(){
                             scrollTop: container.find('.mobile-button-legend').offset().top
                         }, 500);
                     }
+                    container.find('.loader').fadeIn();
+                    container.find('.loader-mask').fadeIn();
                     reloadGraph( container );
                 }
             }).bind(chart));
