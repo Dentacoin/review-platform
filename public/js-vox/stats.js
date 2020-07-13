@@ -227,7 +227,7 @@ $(document).ready(function(){
                     if (($(this).find('.multiple-stat').length || data.related_question_type == 'multiple') && data.related_question_type != 'single' ) {
                         drawMultipleColumns(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, data.total, data.multiple_top_answers);
                     } else {
-                        drawChart(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, true, can_click_on_legend, scale == 'dependency' ? true : data.vox_scale_id, scale == 'dependency' ? 'single_choice' : data.question_type);
+                        drawChart(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, true, can_click_on_legend, scale == 'dependency' ? true : data.vox_scale_id, scale == 'dependency' ? 'single_choice' : data.question_type, scale);
                     }
 
                     if($(window).outerWidth() <= 768 && $('.mobile-button-legend').length && scale!='country_id') {
@@ -1445,7 +1445,7 @@ $(document).ready(function(){
 
     }
 
-    var drawChart = function(rows, container, more_options, is_main, can_click_on_legend, vox_scale_id, question_type) {
+    var drawChart = function(rows, container, more_options, is_main, can_click_on_legend, vox_scale_id, question_type, scale) {
 
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Genders');
@@ -1547,7 +1547,9 @@ $(document).ready(function(){
 
             data.addRows(allArr);
 
-            colors = arr_colors;
+            if(typeof scale !== 'undefined' && scale == 'dependency') {
+                colors = arr_colors;
+            }
         //}
 
 
@@ -1618,8 +1620,10 @@ $(document).ready(function(){
                             scrollTop: container.find('.mobile-button-legend').offset().top
                         }, 500);
                     }
-                    container.find('.loader').fadeIn();
-                    container.find('.loader-mask').fadeIn();
+                    if(typeof scale !== 'undefined' && scale == 'dependency') {
+                        container.find('.loader').fadeIn();
+                        container.find('.loader-mask').fadeIn();
+                    }
                     reloadGraph( container );
                 }
             }).bind(chart));
@@ -1678,10 +1682,10 @@ $(document).ready(function(){
                             var pl = 72*rows[i][1]/max + 1;
                         }
                         
-                        if(typeof arr_colors != 'undefined') {
-                            var color = fixedColor ? arr_colors[fixedColor-1] : rows[i][2];
-                        } else {
+                        if(typeof colors != 'undefined') {
                             var color = fixedColor ? colors[fixedColor-1] : rows[i][2];
+                        } else {
+                            var color = fixedColor ? chart_colors[fixedColor-1] : rows[i][2];
                         }
                     
                         $(container).find('.dependency[d="'+i+'"]').attr('votes', (rows[i][1]*100).toFixed(1));
