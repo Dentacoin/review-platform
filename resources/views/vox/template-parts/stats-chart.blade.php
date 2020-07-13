@@ -124,40 +124,35 @@
 	<div class="chart chart-2">
 		<div class="dependency-question"></div>
 		<div class="second-chart" chart></div>
-		@if($question->used_for_stats=='standard')
 
-			<div class="total-gender">
-				<label for="scale-gender-m-{{ $question->id }}" class="total total-f" custom-for="scale-gender-m-{{ $question->id }}">
-					<img src="{{ url('new-vox-img/women-icon.svg') }}" alt="Dentavox statistics woman icon">
-					{!! trans('vox.page.stats.total-women') !!}: <b></b>
-				</label>
-				<label for="scale-gender-f-{{ $question->id }}" class="total total-m" custom-for="scale-gender-f-{{ $question->id }}">
-					<img src="{{ url('new-vox-img/man-icon.svg') }}" alt="Dentavox statistics man icon">
-					{!! trans('vox.page.stats.total-men') !!}: <b></b>
-				</label>
+		<div class="total-gender">
+			<label for="scale-gender-m-{{ $question->id }}" class="total total-f" custom-for="scale-gender-m-{{ $question->id }}">
+				<img src="{{ url('new-vox-img/women-icon.svg') }}" alt="Dentavox statistics woman icon">
+				{!! trans('vox.page.stats.total-women') !!}: <b></b>
+			</label>
+			<label for="scale-gender-f-{{ $question->id }}" class="total total-m" custom-for="scale-gender-f-{{ $question->id }}">
+				<img src="{{ url('new-vox-img/man-icon.svg') }}" alt="Dentavox statistics man icon">
+				{!! trans('vox.page.stats.total-men') !!}: <b></b>
+			</label>
+		</div>
+		@if($question->type!='multiple_choice')
+			<div class="total total-f">
+				{!! trans('vox.page.stats.total-women') !!}: <b></b>
 			</div>
-			@if($question->type!='multiple_choice')
-				<div class="total total-f">
-					{!! trans('vox.page.stats.total-women') !!}: <b></b>
-				</div>
-				<div class="icon total-f"></div>
-			@endif
-			<div class="map-hint">
-				{!! trans('vox.page.stats.respondents') !!}
-				
-			</div>
+			<div class="icon total-f"></div>
 		@endif
+		<div class="map-hint">
+			{!! trans('vox.page.stats.respondents') !!}
+		</div>
 	</div>
 	<div class="chart chart-3">
 		<div class="third-chart" chart></div>
-		@if($question->used_for_stats=='standard')
-			<div class="total total-m">
-				{!! trans('vox.page.stats.total-men') !!}: <b></b>
+		<div class="total total-m">
+			{!! trans('vox.page.stats.total-men') !!}: <b></b>
+		</div>
+		@if($question->type!='multiple_choice')
+			<div class="icon total-m">
 			</div>
-			@if($question->type!='multiple_choice')
-				<div class="icon total-m">
-				</div>
-			@endif
 		@endif
 	</div>
 	@if( true || count(json_decode($question->answers, true)) <= 9)
@@ -172,12 +167,10 @@
 			{{ $question->related->question }}
 		</div>
 	@endif	
-	@if($question->used_for_stats=='standard')
-		<a class="nav nav-left">
-		</a>
-		<a class="nav nav-right">
-		</a>
-	@endif
+	<a class="nav nav-left">
+	</a>
+	<a class="nav nav-right">
+	</a>
 </div>
 
 <div class="alert alert-info" id="daterange-error" style="display: none;">
