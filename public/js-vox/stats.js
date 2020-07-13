@@ -1451,19 +1451,19 @@ $(document).ready(function(){
         data.addColumn('number', 'Answers');
 
         var arr_colors = chart_colors;
-        if ((question_type == 'single_choice' && vox_scale_id)) {
+        // if ((question_type == 'single_choice' && vox_scale_id)) {
 
-            rows_array = $.map(rows, function(str, i){
-              return $("<div/>").html(str[0]).text();
-            });
+        //     rows_array = $.map(rows, function(str, i){
+        //       return $("<div/>").html(str[0]).text();
+        //     });
 
-            for( var i in rows) {
-                rows[i][0] = rows_array[i];
-            }
+        //     for( var i in rows) {
+        //         rows[i][0] = rows_array[i];
+        //     }
 
-            data.addRows(rows);
+        //     data.addRows(rows);
 
-        } else {
+        // } else {
 
             var arrmyArray = rows;
             for (var w in arrmyArray) {
@@ -1545,7 +1545,7 @@ $(document).ready(function(){
             }
 
             data.addRows(allArr);
-        }
+        //}
 
 
         
