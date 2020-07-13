@@ -10,6 +10,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
+use App\Models\VoxAnswersDependency;
 use App\Models\UserGuidedTour;
 use App\Models\VoxQuestion;
 use App\Models\VoxCategory;
@@ -186,10 +187,13 @@ class StatsController extends FrontController
                 if (empty($answer_id)) {
                     $answer_id = 1;
                 }
-                $results = $this->prepareQuery($question_id, $dates,[
-                    'dependency_answer' => $answer_id,
-                    'dependency_question' => $question->stats_relation_id,
-                ]);
+                if($dates) {
+
+                    $results = $this->prepareQuery($question_id, $dates,[
+                        'dependency_answer' => $answer_id,
+                        'dependency_question' => $question->stats_relation_id,
+                    ]);
+                }
             } else {
                 $results = $this->prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id
@@ -236,8 +240,32 @@ class StatsController extends FrontController
                 $total = $this->prepareQuery($question_id, $dates);
                 $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
-                $results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt');
-                $results = $results->get();
+                if($dates) {
+
+                    $results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt');
+                    $results = $results->get();
+                } else {
+                    $results = VoxAnswersDependency::where('question_id', $question_id)->where('question_dependency_id', $question->stats_relation_id)->where('updated_at', '>=', Carbon::now()->addDays(-3))->get();
+
+                    if($results->isEmpty()) {
+                        $results = $this->prepareQuery($question_id, null,[
+                            'dependency_answer' => $answer_id,
+                            'dependency_question' => $question->stats_relation_id,
+                        ]);
+
+                        $results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt');
+                        $results = $results->get();
+
+                        foreach ($results as $result) {
+                            $vda = new VoxAnswersDependency;
+                            $vda->question_dependency_id = $question->stats_relation_id;
+                            $vda->question_id = $question_id;
+                            $vda->answer = $result->answer;
+                            $vda->cnt = $result->cnt;
+                            $vda->save();
+                        }
+                    }
+                }
 
                 foreach ($answers as $key => $value) {
                     $second_chart_array[$value] = 0;
