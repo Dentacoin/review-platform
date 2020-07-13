@@ -161,6 +161,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function banAppeal() {
         return $this->hasOne('App\Models\BanAppeal', 'user_id', 'id')->oldest();
     }
+    public function newBanAppeal() {
+        return $this->hasOne('App\Models\BanAppeal', 'user_id', 'id')->where('status', 'new')->oldest();
+    }
     public function actions() {
         return $this->hasMany('App\Models\UserAction', 'user_id', 'id');
     }
@@ -1197,6 +1200,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
             $this->patient_status = 'deleted';
             $this->save();
+
+            if(!empty($this->newBanAppeal)) {
+                $this->newBanAppeal->status = 'rejected';
+                $this->newBanAppeal->save();
+            }
             
             if(!empty($this->email) && filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
                 $this->sendTemplate(9);
@@ -1265,6 +1273,11 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $this->patient_status = 'new_verified';
             } else {
                 $this->patient_status = 'new_not_verified';
+            }
+
+            if(!empty($this->newBanAppeal)) {
+                $this->newBanAppeal->status = 'approved';
+                $this->newBanAppeal->save();
             }
 
             $this->save();
