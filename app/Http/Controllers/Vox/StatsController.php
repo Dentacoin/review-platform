@@ -53,29 +53,26 @@ class StatsController extends FrontController
             // 'popular' => trans('vox.page.stats.sort-popular'),
         ];
 
-        $name = !empty(Request::input('survey-search')) ? trim(Request::input('survey-search')) : null;
+        $name = !empty(Request::input('survey-search')) ? Request::input('survey-search') : null;
 
         if(Request::isMethod('post') && !empty($name)) {
 
-            if (Auth::guard('admin')->user()) {
+            $searchValues = preg_split('/\s+/', $name, -1, PREG_SPLIT_NO_EMPTY); 
 
-                $voxes = Vox::with('stats_main_question')
-                ->where('has_stats', 1)
-                ->with('translations')
-                ->whereHas('translations', function ($query) use ($name) {
-                    $query->where('title', 'LIKE', '%'.$name.'%');
-                })->orderBy('stats_featured', 'DESC')
-                ->get();
-            } else {
-                $voxes = Vox::where('type', '!=', 'hidden')
-                ->with('stats_main_question')
-                ->where('has_stats', 1)
-                ->with('translations')
-                ->whereHas('translations', function ($query) use ($name) {
-                    $query->where('title', 'LIKE', '%'.$name.'%');
-                })->orderBy('stats_featured', 'DESC')
-                ->get();
-            }
+            $voxes = Vox::where('type', '!=', 'hidden')
+            ->with('stats_main_question')
+            ->where('has_stats', 1)
+            ->with('translations')
+            ->whereHas('translations', function ($query) use ($searchValues) {
+                foreach ($searchValues as $value) {
+                    $query->where(function($q) use ($value) {
+                        $q->orWhere('title', 'like', "%{$value}%");
+                    });
+                }
+            })->orderBy('stats_featured', 'DESC')
+            ->get();
+
+
         } else {
 
             $voxes = Vox::with('stats_main_question')->where('has_stats', 1)->with('translations');
