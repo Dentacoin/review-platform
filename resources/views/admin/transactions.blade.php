@@ -4,12 +4,21 @@
     
     <div class="flex" style="justify-content: space-between;">
         <h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
-        @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
-            <div>
-                <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-warning pull-right">BUMP ALL TRANSACTIONS WITH STATUS 'DONT RETRY'</a>
-            </div>
-        @endif
+        <div>
+            <a href="{{ $are_transactions_stopped ? url('cms/transactions/start') : url('cms/transactions/stop') }}" class="btn btn-{{ $are_transactions_stopped ? 'success' : 'danger' }} pull-right" style="margin-left: 10px;">{{ $are_transactions_stopped ? 'Allow users to withdraw' : 'Disallow users to withdraw' }}</a>
+
+            @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
+                <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-warning pull-right">Bump all transactions with status 'DONT RETRY'</a>
+            @endif
+        </div>
+
     </div>
+    @if($are_transactions_stopped)
+        <div>
+            <label class="alert alert-danger">Users can't withdraw. Allow them by click on 'Allow users to withdraw' button</label>
+        </div>
+    @endif
+
     <!-- end page-header -->
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
+use App\Models\StopTransaction;
 use App\Models\DcnTransaction;
 use App\Models\UserAction;
 use App\Models\User;
@@ -100,8 +101,10 @@ class TransactionsController extends AdminController
 
         $pagination_link = (!empty($this->request->input('search-address')) ? '&search-address='.$this->request->input( 'search-address' ) : '').(!empty($this->request->input('search-tx')) ? '&search-tx='.$this->request->input( 'search-tx' ) : '').(!empty($this->request->input('search-user-id')) ? '&search-user-id='.$this->request->input( 'search-user-id' ) : '').(!empty($this->request->input('search-email')) ? '&search-email='.$this->request->input( 'search-email' ) : '').(!empty($this->request->input('search-status')) ? '&search-status='.$this->request->input( 'search-status' ) : '').(!empty($this->request->input('search-from')) ? '&search-from='.$this->request->input( 'search-from' ) : '').(!empty($this->request->input('search-to')) ? '&search-to='.$this->request->input( 'search-to' ) : '');
 
+        $are_transactions_stopped = StopTransaction::find(1)->stopped;
 
         return $this->showView('transactions', array(
+            'are_transactions_stopped' => $are_transactions_stopped,
             'transactions' => $transactions,
             'total_count' => $total_count,
             'search_address' => $this->request->input('search-address'),
@@ -219,6 +222,24 @@ class TransactionsController extends AdminController
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
+    public function allowWithdraw() {
 
+        $allow = StopTransaction::find(1);
+        $allow->stopped = false;
+        $allow->save();
+
+        $this->request->session()->flash('success-message', 'Withdrawals are allowed!' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    public function disallowWithdraw() {
+
+        $allow = StopTransaction::find(1);
+        $allow->stopped = true;
+        $allow->save();
+
+        $this->request->session()->flash('success-message', 'Withdrawals are not allowed!' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
 
 }
