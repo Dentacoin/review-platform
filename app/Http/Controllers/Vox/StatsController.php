@@ -184,7 +184,7 @@ class StatsController extends FrontController
                 if (empty($answer_id)) {
                     $answer_id = 1;
                 }
-                if($dates) {
+                if($dates || $question->respondent_count() < 50) {
 
                     $results = $this->prepareQuery($question_id, $dates,[
                         'dependency_answer' => $answer_id,
@@ -237,7 +237,7 @@ class StatsController extends FrontController
                 $total = $this->prepareQuery($question_id, $dates);
                 $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
-                if($dates) {
+                if($dates || $question->respondent_count() < 50) {
 
                     $results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt');
                     $results = $results->get();
