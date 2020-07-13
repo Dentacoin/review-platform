@@ -167,6 +167,7 @@ $(document).ready(function(){
 		if(stats=='dependency') {
 			$('#stat_relations').show();
 			$('.stat_title').show();
+			$('#stat_standard').show();
 		} else if(stats=='standard') {
 			$('#stat_relations').hide();
 			$('.stat_title').show();
