@@ -9,6 +9,7 @@ class VoxAnswersDependency extends Model {
     protected $fillable = [
         'question_dependency_id',
         'question_id',
+        'answer_id',
         'answer',
         'cnt',
     ];

@@ -245,7 +245,7 @@ class StatsController extends FrontController
                     $results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt');
                     $results = $results->get();
                 } else {
-                    $results = VoxAnswersDependency::where('question_id', $question_id)->where('question_dependency_id', $question->stats_relation_id)->where('updated_at', '>=', Carbon::now()->addDays(-3))->get();
+                    $results = VoxAnswersDependency::where('question_id', $question_id)->where('question_dependency_id', $question->stats_relation_id)->where('answer_id', $answer_id)->where('updated_at', '>=', Carbon::now()->addDays(-7))->get();
 
                     if($results->isEmpty()) {
                         $results = $this->prepareQuery($question_id, null,[
@@ -260,6 +260,7 @@ class StatsController extends FrontController
                             $vda = new VoxAnswersDependency;
                             $vda->question_dependency_id = $question->stats_relation_id;
                             $vda->question_id = $question_id;
+                            $vda->answer_id = $answer_id;
                             $vda->answer = $result->answer;
                             $vda->cnt = $result->cnt;
                             $vda->save();

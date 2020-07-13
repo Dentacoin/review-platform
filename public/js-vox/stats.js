@@ -61,6 +61,7 @@ var first_stat_loaded = false;
 var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 var is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
 var open_download_popup = false;
+var colors = [];
 
 $(document).ready(function(){
 
@@ -1545,6 +1546,8 @@ $(document).ready(function(){
             }
 
             data.addRows(allArr);
+
+            colors = arr_colors;
         //}
 
 
@@ -1673,7 +1676,11 @@ $(document).ready(function(){
                             var pl = 72*rows[i][1]/max + 1;
                         }
                         
-                        var color = fixedColor ? chart_colors[fixedColor-1] : rows[i][2];
+                        if(typeof arr_colors != 'undefined') {
+                            var color = fixedColor ? arr_colors[fixedColor-1] : rows[i][2];
+                        } else {
+                            var color = fixedColor ? colors[fixedColor-1] : rows[i][2];
+                        }
                     
                         $(container).find('.dependency[d="'+i+'"]').attr('votes', (rows[i][1]*100).toFixed(1));
                         $(container).find('.dependency[d="'+i+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][1]*100).toFixed(1)+'%</div>');
