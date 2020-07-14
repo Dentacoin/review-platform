@@ -175,7 +175,9 @@
                                                                 <option value="{{ $k }}" selected="selected" >{{ $v }}</option>
                                                             @endif
                                                         @endforeach
-                                                        <option value="suspicious_admin">Suspicious (Admin)</option>
+                                                        @if($item->patient_status != 'suspicious_admin')
+                                                            <option value="suspicious_admin">Suspicious (Admin)</option>
+                                                        @endif
                                                     </select>
                                                 </div>
                                             </div>
