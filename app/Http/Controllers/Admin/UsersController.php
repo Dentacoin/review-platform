@@ -987,13 +987,6 @@ class UsersController extends AdminController {
 
             if (!empty(Request::input('restored_reason'))) {
 
-                $last_action = UserAction::where('user_id', $id)->orderBy('id', 'desc')->first();
-
-                if ($last_action && $last_action->action == 'deleted' && strpos(strtolower($last_action->reason), 'bad ip')) {
-                    $item->ip_protected = true;
-                    $item->save();
-                }
-
                 $action = new UserAction;
                 $action->user_id = $item->id;
                 $action->action = 'restored';

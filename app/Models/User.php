@@ -1269,6 +1269,11 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         }
 
         if(!$this->is_dentist) {
+            if($this->patient_status == 'suspicious_badip') {
+                $this->ip_protected = true;
+                $this->save();
+            }
+
             if($this->history->isNotEmpty()) {
                 $this->patient_status = 'new_verified';
             } else {
