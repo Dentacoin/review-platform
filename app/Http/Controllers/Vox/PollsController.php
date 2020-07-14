@@ -307,7 +307,7 @@ class PollsController extends FrontController
 		if(Request::isMethod('post')) {
 			$poll = Poll::find($id);
 
-			if (!empty($poll)) {
+			if (!empty($poll) && $poll->status == 'open')) {
 
 				if ($poll->respondentsCount() >= 100) {
 					$ret = [
