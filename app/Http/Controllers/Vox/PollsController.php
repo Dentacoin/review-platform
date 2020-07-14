@@ -307,7 +307,7 @@ class PollsController extends FrontController
 		if(Request::isMethod('post')) {
 			$poll = Poll::find($id);
 
-			if (!empty($poll) && $poll->status == 'open')) {
+			if (!empty($poll)) {
 
 				if ($poll->respondentsCount() >= 100) {
 					$ret = [
@@ -332,7 +332,7 @@ class PollsController extends FrontController
 
 				$a = intval(Request::input('answer'));
 
-				if(!$this->user) {
+				if(!$this->user && $poll->status == 'open') {
 
 					if(!Auth::guard('admin')->user()) {
 						$country_code = strtolower(\GeoIP::getLocation(User::getRealIp())->iso_code);
@@ -374,7 +374,7 @@ class PollsController extends FrontController
 
 				$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first();
 
-				if( empty($taken_daily_poll) ) {
+				if( empty($taken_daily_poll) && $poll->status == 'open' ) {
 
 					if(!Auth::guard('admin')->user()) {
 
