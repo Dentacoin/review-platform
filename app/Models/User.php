@@ -180,7 +180,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\WalletAddress', 'user_id', 'id')->orderBy('id', 'DESC');
     }
     public function main_wallet_address() {
-        return $this->hasOne('App\Models\WalletAddress', 'id', 'user_id')->where('main', 1);
+        return $this->hasOne('App\Models\WalletAddress', 'id', 'user_id')->where('selected_wallet_address', 1);
     }
     public function cross_check() {
         return $this->hasMany('App\Models\VoxCrossCheck', 'user_id', 'id');

@@ -13,7 +13,7 @@ class WalletAddress extends Model {
         'user_id',
         'dcn_address',
         'dcn_address_label',
-        'main',
+        'selected_wallet_address',
     ];
 
     protected $dates = [
