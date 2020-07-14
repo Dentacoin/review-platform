@@ -178,6 +178,12 @@
                                                         @if($item->patient_status != 'suspicious_admin')
                                                             <option value="suspicious_admin">Suspicious (Admin)</option>
                                                         @endif
+                                                        @if($item->patient_status != 'new_verified')
+                                                            <option value="new_verified">New - verified</option>
+                                                        @endif
+                                                        @if($item->patient_status != 'new_not_verified')
+                                                            <option value="new_not_verified">New - not verified</option>
+                                                        @endif
                                                     </select>
                                                 </div>
                                             </div>
