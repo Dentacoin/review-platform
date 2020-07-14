@@ -641,7 +641,7 @@ $(document).ready(function(){
 	        if(elem.closest('.answer-radios-group').length) {
 	        	var parent = elem.closest('h3');
 	        } else {
-	        	var parent = elem.closest('label');
+	        	var parent = elem.closest('.question').length ? elem.closest('.question') : elem.closest('label');
 	        }
 
 	        if (parent.length && typeof parent.attr('tooltip-image') !== typeof undefined && parent.attr('tooltip-image') !== false) {

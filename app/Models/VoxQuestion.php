@@ -43,6 +43,7 @@ class VoxQuestion extends Model {
         'cross_check',
         'dont_randomize_answers',
         'has_image',
+        'image_in_tooltip',
     ];
 
     public $timestamps = false;

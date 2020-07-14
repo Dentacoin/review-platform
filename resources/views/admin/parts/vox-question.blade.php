@@ -81,7 +81,7 @@
                         <label class="col-md-2 control-label" for="dont_randomize_answers">Don’t randomize</label>
                         <div class="col-md-1">
                             <input type="checkbox" name="dont_randomize_answers" class="form-control" value="1" id="dont_randomize_answers" style="vertical-align: sub;width: 30px;" {!! !empty($question) && !empty($question->dont_randomize_answers) ? 'checked="checked"' : '' !!} />
-                        </div>                        
+                        </div>
                     </div>
                     <div class="form-group clearfix">
                         <label class="col-md-2 control-label" for="q_img">Question Image</label>
@@ -95,6 +95,12 @@
                             @else
                                 {{ Form::file('question-photo', ['id' => 'q_img' ,'accept' => 'image/gif, image/jpg, image/jpeg, image/png']) }}
                             @endif
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="col-md-2 control-label" for="image_in_tooltip">Question image in tooltip</label>
+                        <div class="col-md-1">
+                            <input type="checkbox" name="image_in_tooltip" class="form-control" value="1" id="image_in_tooltip" style="vertical-align: sub;width: 30px;" {!! !empty($question) && !empty($question->image_in_tooltip) ? 'checked="checked"' : '' !!} />
                         </div>
                     </div>
                     @foreach($langs as $code => $lang_info)

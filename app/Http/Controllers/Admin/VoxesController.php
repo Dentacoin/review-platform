@@ -934,6 +934,8 @@ class VoxesController extends AdminController
         $question->stats_scale_answers = !empty($data['stats_scale_answers']) ? json_encode($data['stats_scale_answers']) : '';
         $question->vox_scale_id = !empty($data['question_scale']) ? $data['question_scale'] : null;
         $question->dont_randomize_answers = !empty($data['dont_randomize_answers']) ? $data['dont_randomize_answers'] : null;
+        $question->image_in_tooltip = !empty($data['image_in_tooltip']) ? $data['image_in_tooltip'] : null;  
+              
         if( !empty($data['trigger_type']) ) {
             $question->trigger_type = $data['trigger_type'];
         }
