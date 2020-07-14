@@ -202,7 +202,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 //Empty route
 $reviewRoutes = function () {
-	//Route::any('test', 									'Front\YouTubeController@test');
+	Route::any('test', 									'Front\YouTubeController@test');
 	Route::post('civic', 								'CivicController@add');
 	//Route::any('mobident', 								'MobidentController@reward');
 
