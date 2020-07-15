@@ -500,6 +500,9 @@ header {
     @media screen and (max-width: 768px) {
       header .navbar {
         height: 60px; } }
+    @media screen and (max-width: 1080px) {
+      header .navbar.external-navbar {
+        padding-top: 25px; } }
     @media screen and (max-width: 768px) {
       header .navbar.external-navbar {
         justify-content: space-between; } }

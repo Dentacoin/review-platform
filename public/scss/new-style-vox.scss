@@ -630,6 +630,9 @@ header {
 		}
 
 	    &.external-navbar {
+	    	@media #{$tablet} {
+	    		padding-top: 25px;
+	    	}
 	    	@media #{$phone} {
 	    		justify-content: space-between;
 	    	}
