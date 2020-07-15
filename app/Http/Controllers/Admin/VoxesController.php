@@ -953,7 +953,8 @@ class VoxesController extends AdminController
                 $help_array = [];
                 foreach($data['triggers'] as $i => $trg) {
                     if(!empty($trg)) {
-                        $help_array[] = $trg.( !empty( $data['answers-number'][$i] ) ? ':'.$data['answers-number'][$i] : '' );
+                        $q_trg = VoxQuestion::find($trg);
+                        $help_array[] = $trg.( !empty( $data['answers-number'][$i] ) || ($data['answers-number'][$i] == '0' && $q_trg->type == 'number') ? ':'.$data['answers-number'][$i] : '' );
                     }
                 }
 
