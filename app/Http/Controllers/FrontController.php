@@ -121,7 +121,7 @@ class FrontController extends BaseController {
                 $this->user->is_logout = null;
                 $this->user->save();
 
-                $this->user->logout();
+                Auth::guard('web')->user()->logout();
                 return redirect(getLangUrl('/'));
             }
 
