@@ -1764,12 +1764,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
     public function logoutActions() {
 
-        if( Auth::guard('web')->user() ) {
-            Auth::guard('web')->user()->tokens->each(function($token, $key) {
-                $token->delete();
-            });
-        }
-
         session([
             'mark-login' => false,
             'vox-welcome' => null,
