@@ -119,7 +119,7 @@ class FrontController extends BaseController {
 
             if(!empty($this->user) && $this->user->is_logout) {
                 $this->user->is_logout = null;
-                $this->save();
+                $this->user->save();
 
                 $this->user->logout();
                 return redirect(getLangUrl('/'));
