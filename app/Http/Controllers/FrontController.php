@@ -116,6 +116,15 @@ class FrontController extends BaseController {
             $this->admin = Auth::guard('admin')->user();
             $this->user = Auth::guard('web')->user();
 
+
+            if(!empty($this->user) && $this->user->is_logout) {
+                $this->user->is_logout = null;
+                $this->save();
+
+                $this->user->logout();
+                return redirect(getLangUrl('/'));
+            }
+
             if (!empty($this->user) && !$this->user->is_dentist && session('intended') && !$this->user->isBanned('vox')) {
                 $intended = session()->pull('intended');
                 

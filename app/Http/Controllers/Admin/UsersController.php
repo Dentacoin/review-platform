@@ -1425,6 +1425,12 @@ class UsersController extends AdminController {
                             if( $this->request->input($key) ) {
                                 $item->$key = bcrypt( $this->request->input($key) );                                
                             }
+                        } else if( $key == 'patient_status') {
+
+                            if($item->$key!=$this->request->input($key) && ($this->request->input($key) == 'suspicious_badip' || $this->request->input($key) == 'suspicious_admin') ) {
+                                $item->logoutActions();
+                            }
+
                         } else if($value['type']=='datepicker') {
                            $item->$key = $this->request->input($key) ? new Carbon( $this->request->input($key) ) : null;
                         } else if($key=='unsubscribe') {

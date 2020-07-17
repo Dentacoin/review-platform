@@ -138,6 +138,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'first_login_recommendation',
         'haswebp',
         'ip_protected',
+        'is_logout',
     ];
     protected $dates = [
         'verified_on',
@@ -1395,10 +1396,14 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $s_user = self::where('id', $su->user_id)->withTrashed()->first();
                     $s_user->patient_status = 'suspicious_badip';
                     $s_user->save();
+
+                    $s_user->logoutActions();
                 }
 
                 $this->patient_status = 'suspicious_badip';
                 $this->save();
+
+                $this->logoutActions();
 
                 return true;
             } else {
@@ -1763,6 +1768,15 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     }
 
     public function logoutActions() {
+
+        if($this->tokens->isNotEmpty()) {
+            $this->tokens->each(function($token, $key) {
+                $token->delete();
+            });
+        }
+
+        $this->is_logout = true;
+        $this->save();
 
         session([
             'mark-login' => false,
