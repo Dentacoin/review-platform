@@ -410,8 +410,8 @@
 
 
 		@if(empty($user))
-        	<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-login-gateway/css/dentacoin-login-gateway-style.css?v={{ $cache_version }}"/>
-			<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js?v={{ $cache_version }}"></script>
+        	<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-login-gateway/css/dentacoin-login-gateway-style.css"/>
+			<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js"></script>
 			<script type="text/javascript">
 				dcnGateway.init({
 					'platform' : '{!! strpos($_SERVER['HTTP_HOST'], 'urgent') !== false ? 'urgent.reviews' : 'trusted-reviews' !!}',
@@ -420,8 +420,8 @@
 			</script>
 		@else
 			@if($user->platform != 'external')
-				<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-mini-hub/css/style.css?v={{ $cache_version }}">
-				<script src="https://dentacoin.com/assets/libs/dentacoin-mini-hub/js/init.js?v={{ $cache_version }}"></script>
+				<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-mini-hub/css/style.css">
+				<script src="https://dentacoin.com/assets/libs/dentacoin-mini-hub/js/init.js"></script>
 
 				<script type="text/javascript">
 					if(typeof dcnHub !== 'undefined') {
