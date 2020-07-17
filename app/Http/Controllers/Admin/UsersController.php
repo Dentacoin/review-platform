@@ -1430,6 +1430,7 @@ class UsersController extends AdminController {
                             if($item->$key!=$this->request->input($key) && ($this->request->input($key) == 'suspicious_badip' || $this->request->input($key) == 'suspicious_admin') ) {
                                 $item->logoutActions();
                             }
+                            $item->$key = $this->request->input($key);
 
                         } else if($value['type']=='datepicker') {
                            $item->$key = $this->request->input($key) ? new Carbon( $this->request->input($key) ) : null;
