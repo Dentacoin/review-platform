@@ -118,6 +118,7 @@ class FrontController extends BaseController {
 
 
             if(!empty($this->user) && $this->user->is_logout) {
+                $this->user->logoutActions();
                 $this->user->is_logout = null;
                 $this->user->save();
 
