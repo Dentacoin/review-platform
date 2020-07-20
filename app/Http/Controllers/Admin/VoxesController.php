@@ -1700,7 +1700,7 @@ class VoxesController extends AdminController
         foreach ($this->langs as $key => $value) {
             $translation = $qObj->translateOrNew($key);
             $q['question-'.$key] = $translation->question;
-            $q['answers-'.$key] = json_decode(stripcslashes($translation->answers));
+            $q['answers-'.$key] = json_decode($translation->answers);
         }
         $q['question_scale'] = $qObj->vox_scale_id;
 

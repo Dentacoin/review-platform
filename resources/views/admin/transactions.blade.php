@@ -20,9 +20,9 @@
     @endif
 
     @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
-        <div>
+        <!-- <div>
             <label class="alert alert-warning">After refill, please click on "Bump all transactions with status 'DONT RETRY'" button</label>
-        </div>
+        </div> -->
     @endif
 
     <!-- end page-header -->
