@@ -62,6 +62,7 @@ var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 var is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
 var open_download_popup = false;
 var colors = [];
+var dep_answer = null;
 
 $(document).ready(function(){
 
@@ -281,6 +282,7 @@ $(document).ready(function(){
                             width: 750
                         }
 
+                        dep_answer = data.answer_id;
                         drawColumns(rows, $(this).find('.second-chart')[0], options, data.relation_info.answer+1, true,null);
                         if (($(this).find('.multiple-stat').length || data.related_question_type == 'multiple') && data.related_question_type != 'single' ) {
                             setupMultipleLegend($(this).find('.main-chart'), legend, data.answer_id, can_click_on_legend);
@@ -1681,11 +1683,18 @@ $(document).ready(function(){
                         } else {
                             var pl = 72*rows[i][1]/max + 1;
                         }
-                        
-                        if(typeof colors != 'undefined') {
+
+                        if(typeof colors != 'undefined' && colors.length) {
                             var color = fixedColor ? colors[fixedColor-1] : rows[i][2];
                         } else {
-                            var color = fixedColor ? chart_colors[fixedColor-1] : rows[i][2];
+                            var is_depencency = $(container).closest('.stat').attr('stat-type') == 'dependency' ? true : false;
+
+                            if(dep_answer && is_depencency && $(container).closest('.stat').find('custom-legend').length ) {
+                                var color = $(container).closest('.stat').find('custom-legend[answer-id='+dep_answer+']').find('.legend-color').css('background-color');
+                            } else {
+
+                                var color = fixedColor ? chart_colors[fixedColor-1] : rows[i][2];
+                            }
                         }
                     
                         $(container).find('.dependency[d="'+i+'"]').attr('votes', (rows[i][1]*100).toFixed(1));
@@ -1987,10 +1996,6 @@ $(document).ready(function(){
                 container.prepend('<p class="top-answers">Top '+multiple_top_answers+' answers</p>');
             }
         }
-
-
-
-
 
         // var c = 0;
         // $(container).find('.custom-legend').each( function() {
