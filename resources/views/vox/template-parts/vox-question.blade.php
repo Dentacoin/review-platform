@@ -132,7 +132,7 @@
 					@foreach(json_decode($question->answers, true) as $k => $answer)
 						<div class="answer-radios-group clearfix">
 							<div class="answer-question">
-								<h3 {!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $k ).'"' : '' !!}>{!!  nl2br( App\Models\VoxQuestion::handleAnswerTooltip($answer)) !!}
+								<h3 {!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? 'tooltip-image="'.$question->getAnswerImageUrl(false, $k ).'"' : '' !!}>{!!  nl2br( App\Models\VoxQuestion::handleAnswerTooltip(mb_substr($answer, 0, 1)=='#' ? mb_substr($answer, 1) : $answer)) !!}
 								</h3>
 								{!! !$question->allAnswersHaveImages() && $question->hasAnswerTooltip($answer, $question) && !empty($question->getAnswerImageUrl(false, $k)) ? '<img src="'.$question->getAnswerImageUrl(false, $k).'" style="display: none !important;" />' : '' !!}
 							</div>
