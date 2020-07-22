@@ -237,6 +237,7 @@ $(document).ready(function(){
                         $('.legend.open').removeClass('open');
                     }
 
+                    $(this).find('.chart-2').attr('chart-scale', scale);
                     $(this).find('.multiple-gender-nav').hide();
                     $(this).find('.multiple-stat').addClass('mobile-bottom-margin');
                     $(this).find('.total-gender').hide();

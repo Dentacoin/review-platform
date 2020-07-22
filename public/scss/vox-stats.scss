@@ -899,10 +899,10 @@ $main-color: #38ace5;
 							}
 						}
 
-						.chart-2 {
+						.chart-2[chart-scale="dependency"] {
 							justify-content: unset;
 
-							.second-chart {
+							.second-chart.dependency {
 								position: relative;
 							    top: 50%;
 							    transform: translateY(-50%);
