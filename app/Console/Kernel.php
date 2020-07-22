@@ -12,6 +12,7 @@ use App\Models\ScrapeDentist;
 use App\Models\LeadMagnet;
 use App\Models\UserInvite;
 use App\Models\UserAction;
+use App\Models\CronjobRun;
 use App\Models\VoxAnswer;
 use App\Models\UserLogin;
 use App\Models\Article;
@@ -51,7 +52,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
 
-            echo 'Incomplete Dentist Registrations cron - START';
+            echo 'Incomplete Dentist Registrations cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
             
 
             $notifications = [];
@@ -193,7 +194,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
 
-            echo 'Dentist Invite Patient For Review';
+            echo 'Dentist Invite Patient For Review'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $notificaitons[] = [
                 'time' => Carbon::now()->addDays(-2),
@@ -242,7 +243,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
 
-            echo 'Old added by patient dentist';
+            echo 'Old added by patient dentist'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $query = "
                 SELECT 
@@ -328,7 +329,7 @@ class Kernel extends ConsoleKernel
 
         
         $schedule->call(function () {
-            echo 'DCN Prices cron - Start';
+            echo 'DCN Prices cron - Start'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $price = null;
 
@@ -386,88 +387,105 @@ class Kernel extends ConsoleKernel
         
         $schedule->call(function () {
 
-            echo '
+            $cron_running = CronjobRun::first();
+
+            if(empty($cron_running) || (!empty($cron_running) && Carbon::now()->addHours(-1) > $cron_running->started_at )) {
+
+                if(!empty($cron_running)) {
+                    CronjobRun::destroy($cron_running->id);
+                }
+
+                $cronjob_stars = new CronjobRun;
+                $cronjob_stars->started_at = Carbon::now();
+                $cronjob_stars->save();
+
+                echo '
 UNCONFIRMED TRANSACTIONS
 
 ========================
 
 ';
 
-            $transactions = DcnTransaction::where('status', 'unconfirmed')->orderBy('id', 'asc')->take(10)->get(); //
-            $last_transactions = DcnTransaction::where('status', 'unconfirmed')->orderBy('id', 'desc')->whereNotIn('id', $transactions->pluck('id')->toArray())->take(10)->get(); //
-            $transactions = $transactions->concat($last_transactions);
+                $transactions = DcnTransaction::where('status', 'unconfirmed')->orderBy('id', 'asc')->take(10)->get(); //
+                $last_transactions = DcnTransaction::where('status', 'unconfirmed')->orderBy('id', 'desc')->whereNotIn('id', $transactions->pluck('id')->toArray())->take(10)->get(); //
+                $transactions = $transactions->concat($last_transactions);
 
-            foreach ($transactions as $trans) {
-                $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
-                echo $log.PHP_EOL;
+                foreach ($transactions as $trans) {
+                    $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
+                    echo $log.PHP_EOL;
 
-                $found = false;
-                if( $trans->tx_hash ) {
+                    $found = false;
+                    if( $trans->tx_hash ) {
 
-                    $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
-                    if(!empty($curl)) {
-                        $curl = json_decode($curl, true);
-                        if($curl['status']) {
-                            if(!empty($curl['result']['status'])) {
-                                $trans->status = 'completed';
-                                $trans->save();
-                                if( $trans->user && !empty($trans->user->email) ) {
-                                    $trans->user->sendTemplate( 20, [
-                                        'transaction_amount' => $trans->amount,
-                                        'transaction_address' => $trans->address,
-                                        'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
-                                    ], $trans->type=='vox' ? 'vox' : 'trp' );
+                        $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
+                        if(!empty($curl)) {
+                            $curl = json_decode($curl, true);
+                            if($curl['status']) {
+                                if(!empty($curl['result']['status'])) {
+                                    $trans->status = 'completed';
+                                    $trans->save();
+                                    if( $trans->user && !empty($trans->user->email) ) {
+                                        $trans->user->sendTemplate( 20, [
+                                            'transaction_amount' => $trans->amount,
+                                            'transaction_address' => $trans->address,
+                                            'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
+                                        ], $trans->type=='vox' ? 'vox' : 'trp' );
+                                    }
+                                    $found = true;
+                                    echo 'COMPLETED!'.PHP_EOL;
+                                    sleep(1);
                                 }
-                                $found = true;
-                                echo 'COMPLETED!'.PHP_EOL;
-                                sleep(1);
                             }
                         }
                     }
 
+                    if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*3) {
+                        Dcn::retry($trans);
+                        echo 'RETRYING -> '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
+                    }
                 }
 
-                if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*3) {
-                    Dcn::retry($trans);
-                    echo 'RETRYING -> '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
-                }
-            }
 
-
-            echo '
+                echo '
 NEW & FAILED TRANSACTIONS
 
 =========================
 
 ';
 
-            $executed = 0;
-            $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->where('created_at','<', Carbon::now()->subMinutes(10)->toDateTimeString())->orderBy('id', 'asc')->take(100)->get(); //
-            foreach ($transactions as $trans) {
-                $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
-                echo $log.PHP_EOL;
+                $executed = 0;
+                $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->where('created_at','<', Carbon::now()->subMinutes(10)->toDateTimeString())->orderBy('id', 'asc')->take(100)->get(); //
+                foreach ($transactions as $trans) {
+                    $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
+                    echo $log.PHP_EOL;
 
-                if($trans->status=='new' ||  $trans->shouldRetry()) {
-                    $executed++;
-                    Dcn::retry($trans);
-                    echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
-                } else {
-                    echo 'TOO EARLY TO RETRY'.PHP_EOL;
+                    if($trans->status=='new' ||  $trans->shouldRetry()) {
+                        $executed++;
+                        Dcn::retry($trans);
+                        echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
+                    } else {
+                        echo 'TOO EARLY TO RETRY'.PHP_EOL;
+                    }
+
+                    if($executed>10) {
+                        echo '5 executed - enough for now'.PHP_EOL;
+                        break;
+                    }
                 }
 
-                if($executed>10) {
-                    echo '5 executed - enough for now'.PHP_EOL;
-                    break;
-                }
+                echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+                CronjobRun::destroy($cronjob_stars->id);
+            } else {
+                echo 'New,failed & unconfirmed transaction cron - skipped!'.PHP_EOL.PHP_EOL.PHP_EOL;
             }
 
-            echo 'Transactions cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
         })->cron("*/5 * * * *");
 
 
         $schedule->call(function () {
 
-            echo 'DCN Low Balance Cron - START!';
+            echo 'DCN Low Balance Cron - START!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $alerts = [
                 [
@@ -556,7 +574,7 @@ NEW & FAILED TRANSACTIONS
         })->cron("30 7 * * *"); //10:30h BG Time
 
         $schedule->call(function () {
-            echo 'Suspicious Dentist Delete Cron - START';
+            echo 'Suspicious Dentist Delete Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $users = User::where('is_dentist', '1')->where('status', 'pending')->where('updated_at', '<', Carbon::now()->subDays(7) )->get();
 
@@ -607,7 +625,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'First 3 weeks engagement email 2 START';
+            echo 'First 3 weeks engagement email 2 START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             //First 3 weeks engagement      
 
@@ -645,7 +663,7 @@ NEW & FAILED TRANSACTIONS
                 }
             }
 
-            echo 'First 3 weeks engagement email 2 DONE';
+            echo 'First 3 weeks engagement email 2 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
         
 
             //Email 3
@@ -709,7 +727,7 @@ NEW & FAILED TRANSACTIONS
                     }           
                 }
             }
-            echo 'First 3 weeks engagement email 3 DONE';
+            echo 'First 3 weeks engagement email 3 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
 
             //Email 4
@@ -743,7 +761,7 @@ NEW & FAILED TRANSACTIONS
                     }       
                 }
             }
-            echo 'First 3 weeks engagement email 4 DONE';
+            echo 'First 3 weeks engagement email 4 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
             
 
             //Email 5
@@ -781,7 +799,7 @@ NEW & FAILED TRANSACTIONS
                     }
                 }
             }
-            echo 'First 3 weeks engagement email 5 DONE';
+            echo 'First 3 weeks engagement email 5 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             //Create a Wallet
             //!!!!!! (repeates for six months) !!!!!!!!!!
@@ -850,7 +868,7 @@ NEW & FAILED TRANSACTIONS
                 }
             }
 
-            echo 'Create Wallet Email DONE';
+            echo 'Create Wallet Email DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
 
             //No reviews last 30 days
@@ -886,7 +904,7 @@ NEW & FAILED TRANSACTIONS
                     }
                 }
             }
-            echo 'No reviews last 30 days Email 2 DONE';
+            echo 'No reviews last 30 days Email 2 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
 
             //Email3
@@ -962,7 +980,7 @@ NEW & FAILED TRANSACTIONS
                     }   
                 }
             }
-            echo 'No reviews last 30 days Email 3 DONE';
+            echo 'No reviews last 30 days Email 3 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
 
 
@@ -1040,7 +1058,7 @@ NEW & FAILED TRANSACTIONS
                     }   
                 }
             }
-            echo 'No reviews last 30 days Email 4 DONE';
+            echo 'No reviews last 30 days Email 4 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
 
         })->cron("15 */6 * * *"); //05:00h
@@ -1048,7 +1066,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'Balance over 1 000 000 Email 2 START';
+            echo 'Balance over 1 000 000 Email 2 START'.PHP_EOL.PHP_EOL.PHP_EOL;
             //users with balance over 500,000 DCN
 
             $query = "
@@ -1129,7 +1147,7 @@ NEW & FAILED TRANSACTIONS
                     $message->setBody($mtext, 'text/html'); // for HTML rich messages
                 });
             }
-            echo 'Balance over 1 000 000 Email 2 DONE';
+            echo 'Balance over 1 000 000 Email 2 DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("00 10 * * 1"); //05:00h
 
@@ -1141,7 +1159,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'Monthly score Email START';
+            echo 'Monthly score Email START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $query = "
                 SELECT 
@@ -1326,7 +1344,7 @@ NEW & FAILED TRANSACTIONS
                     }
                 }
             }
-            echo 'Monthly score Email  DONE';
+            echo 'Monthly score Email - DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
         })->monthlyOn(1, '12:30');
 
 
@@ -1334,7 +1352,7 @@ NEW & FAILED TRANSACTIONS
         //Daily Polls
 
         $schedule->call(function () {
-            echo 'Daily Poll START';
+            echo 'Daily Poll START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $daily_poll = Poll::where('launched_at', date('Y-m-d') )->first();
 
@@ -1342,14 +1360,14 @@ NEW & FAILED TRANSACTIONS
                 $daily_poll->status = 'open';
                 $daily_poll->save();
             }
-            echo 'Daily Poll DONE';
+            echo 'Daily Poll DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->dailyAt('01:00');
 
 
 
         $schedule->call(function () {
-            echo 'Scrape dentists scron';
+            echo 'Scrape dentists scron'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $scrapes = ScrapeDentist::whereNull('completed')->orderBy('id', 'desc')->get();
 
@@ -1510,13 +1528,13 @@ NEW & FAILED TRANSACTIONS
             }
 
 
-            echo 'Scrape dentists scron DONE';
+            echo 'Scrape dentists scron DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->everyFiveMinutes();
 
 
         $schedule->call(function () {
-            echo 'Scrape Dentist Emails Cron Start';
+            echo 'Scrape Dentist Emails Cron Start'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $sr = ScrapeDentistResult::whereNull('scrape_email')->orderBy('id', 'desc')->first();
 
@@ -1607,7 +1625,7 @@ NEW & FAILED TRANSACTIONS
                 $sr->save();
             }
             
-            echo 'Scrape Dentist Emails Cron END';
+            echo 'Scrape Dentist Emails Cron END'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->everyMinute();
 
@@ -1616,7 +1634,7 @@ NEW & FAILED TRANSACTIONS
             
             VoxAnswer::getCount(true);
 
-            echo 'Vox answers count Cron END';
+            echo 'Vox answers count Cron END'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->everyThirtyMinutes();
 
@@ -1632,7 +1650,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'Self deleted users cron start';
+            echo 'Self deleted users cron start'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $self_deleted_users = User::whereNotNull('self_deleted')->whereNotNull('self_deleted_at')->where('self_deleted_at', '<', Carbon::now()->subDays(90) )->take(100)->get();
             $rand = 'anonymous'.mb_substr(microtime(true), 0, 10);
@@ -1644,7 +1662,7 @@ NEW & FAILED TRANSACTIONS
                 $sdu->save();
             }
 
-            echo 'Self deleted users cron end';
+            echo 'Self deleted users cron end'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->daily();
 
@@ -1688,7 +1706,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'Lead Magnet Delete Cron - START';
+            echo 'Lead Magnet Delete Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $leads = LeadMagnet::where('created_at', '<', Carbon::now()->subDays(30) )->get();
 
@@ -1705,7 +1723,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'Dentists with ?? in address Cron - START';
+            echo 'Dentists with ?? in address Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $users = User::where('is_dentist', 1)->where(function ($query) {
                 $query->where('city_name', 'LIKE', '%??%')
@@ -1752,7 +1770,7 @@ NEW & FAILED TRANSACTIONS
         })->cron("30 7 * * *"); //10:30h BG Time
 
         $schedule->call(function () {
-            echo 'Count Unknown Countries from UserLogin Cron - START';
+            echo 'Count Unknown Countries from UserLogin Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $query = "
                 SELECT 
@@ -1813,7 +1831,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'Remove pdf and png stats files cron';
+            echo 'Remove pdf and png stats files cron'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $files = glob(storage_path().'/app/public/pdf/*.pdf');
 
@@ -1851,7 +1869,7 @@ NEW & FAILED TRANSACTIONS
 
 
         $schedule->call(function () {
-            echo 'TEST CRON END  '.date('Y-m-d H:i:s');
+            echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("* * * * *");
 
