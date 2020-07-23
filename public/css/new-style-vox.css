@@ -574,6 +574,9 @@ header {
     header .start-button:hover {
       border-color: black;
       transition: all 0.3s ease; }
+    @media screen and (max-width: 1080px) {
+      header .start-button {
+        padding: 0px 9px; } }
     @media screen and (max-width: 768px) {
       header .start-button {
         height: 32px;

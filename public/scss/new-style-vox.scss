@@ -760,6 +760,10 @@ header {
 	    	transition: all 0.3s ease;
 	    }
 
+	    @media #{$tablet} {
+	    	padding: 0px 9px;
+	    }
+
 	    @media #{$phone} {
 	    	height: 32px;
 	    	line-height: 32px;
