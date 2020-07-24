@@ -89,6 +89,8 @@ class BanAppealsController extends AdminController {
             $action->reason = Request::input('rejected_reason');
             $action->actioned_at = Carbon::now();
             $action->save();
+            
+            $user->sendTemplate(9);
 
             $user->deleteActions();
             User::destroy( $user->id );

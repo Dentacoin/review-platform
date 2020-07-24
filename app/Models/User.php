@@ -1232,6 +1232,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             }
         }
 
+        $this->removeTokens();
+
         $this->logoutActions();
     }
 
@@ -1273,6 +1275,14 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             if($this->patient_status == 'suspicious_badip') {
                 $this->ip_protected = true;
                 $this->save();
+            }
+
+            if($this->patient_status == 'suspicious_badip' || $this->patient_status == 'suspicious_admin') {
+                $this->sendTemplate(112, null, 'dentacoin');
+            }
+
+            if($this->patient_status == 'deleted') {
+                $this->sendTemplate(111, null, 'dentacoin');
             }
 
             if($this->history->isNotEmpty()) {
@@ -1397,12 +1407,18 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $s_user->patient_status = 'suspicious_badip';
                     $s_user->save();
 
+                    $s_user->sendTemplate(110, null, 'dentacoin');
+
+                    $s_user->removeTokens();
                     $s_user->logoutActions();
                 }
 
                 $this->patient_status = 'suspicious_badip';
                 $this->save();
+                
+                $this->sendTemplate(110, null, 'dentacoin');
 
+                $this->removeTokens();
                 $this->logoutActions();
 
                 return true;
@@ -1767,7 +1783,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         return !empty($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : Request::ip();
     }
 
-    public function logoutActions() {
+    public function removeTokens() {
 
         if($this->tokens->isNotEmpty()) {
             $this->tokens->each(function($token, $key) {
@@ -1777,6 +1793,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
         $this->is_logout = true;
         $this->save();
+    }
+
+    public function logoutActions() {
 
         session([
             'mark-login' => false,

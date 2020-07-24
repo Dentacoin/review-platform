@@ -198,6 +198,7 @@ class VoxController extends FrontController
             $action->save();
 
             Auth::guard('web')->user()->logoutActions();
+            Auth::guard('web')->user()->removeTokens();
             Auth::guard('web')->logout();
             
 			return redirect( 'https://account.dentacoin.com/account-on-hold?platform=dentavox&key='.urlencode(User::encrypt($u_id)) );

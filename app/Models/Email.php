@@ -505,6 +505,30 @@ class Email extends Model
 			), $content);
 		}
 
+		if($this->template->id==109 || $this->template->id==110 ) { // Patient Status from Deleted to Suspicious
+			$content = str_replace(array(
+				'[login-button]',
+				'[/login-button]',
+			), array(
+				'<a '.$this->button_style.' href="https://dentacoin.com/?dcn-gateway-type=patient-login">',
+				'</a>',
+			), $content);
+		}
+
+		if($this->template->id==111 || $this->template->id==112 ) { // Patient Status from Deleted to Verified
+			$content = str_replace(array(
+				'[login-button]',
+				'[/login-button]',
+				'[faq-link]',
+				'[/faq-link]',
+			), array(
+				'<a '.$this->button_style.' href="https://dentacoin.com/?dcn-gateway-type=patient-login">',
+				'</a>',
+				'<a '.$this->text_style.' href="https://dentavox.dentacoin.com/en/faq/">',
+				'</a>',
+			), $content);
+		}
+
 
 		return $content;
 	}

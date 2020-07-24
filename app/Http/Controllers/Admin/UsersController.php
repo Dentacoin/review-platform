@@ -1427,9 +1427,18 @@ class UsersController extends AdminController {
                             }
                         } else if( $key == 'patient_status') {
 
-                            if($item->$key!=$this->request->input($key) && ($this->request->input($key) == 'suspicious_badip' || $this->request->input($key) == 'suspicious_admin') ) {
-                                $item->logoutActions();
+                            if($item->$key!=$this->request->input($key)) {
+                                if($item->$key == 'deleted' && ($this->request->input($key) == 'suspicious_badip' || $this->request->input($key) == 'suspicious_admin')) {
+                                    $item->sendTemplate(109, null, 'dentacoin');
+                                } else if($item->$key == 'deleted' && ($this->request->input($key) == 'new_verified' || $this->request->input($key) == 'new_not_verified')) {
+                                    $item->sendTemplate(111, null, 'dentacoin');
+                                } else if($this->request->input($key) == 'suspicious_badip' || $this->request->input($key) == 'suspicious_admin') {
+                                    $item->sendTemplate(110, null, 'dentacoin');
+                                    $item->removeTokens();
+                                    $item->logoutActions();
+                                }
                             }
+                            
                             $item->$key = $this->request->input($key);
 
                         } else if($value['type']=='datepicker') {

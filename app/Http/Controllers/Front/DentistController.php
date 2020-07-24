@@ -276,6 +276,7 @@ class DentistController extends FrontController
                         $action->save();
                         
                         Auth::guard('web')->user()->logoutActions();
+                        Auth::guard('web')->user()->removeTokens();
                         Auth::guard('web')->logout();
 
                         $ret['success'] = false;
