@@ -1789,7 +1789,35 @@ NEW & FAILED TRANSACTIONS
         })->dailyAt('10:00');
 
 
+        $schedule->call(function () {
 
+            $users = User::onlyTrashed()->whereNull('test')->take(100)->get();
+
+            foreach ($users as $user) {
+                $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+                $query_params = new \stdClass();
+                $query_params->email = $user->email;
+
+                $response = $sg->client->contactdb()->recipients()->search()->get(null, $query_params);
+
+                if(isset(json_decode($response->body())->recipients[0])) {
+                    $recipient_id = json_decode($response->body())->recipients[0]->id;
+                } else {
+                    $recipient_id = null;
+                }
+
+                if(!empty($recipient_id)) {
+                    // delete from list
+                    $request_body = [$recipient_id];
+                    $response = $sg->client->contactdb()->recipients()->delete($request_body);
+                }
+                $user->test = true;
+                $user->save();
+            }
+
+        })->everyFiveMinutes();
+            
 
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
