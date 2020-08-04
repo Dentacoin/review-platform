@@ -12,6 +12,15 @@ return [
                 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en',
             ),
         ),
+        'anonymous_users' => array(
+            'icon' => 'user-secret',
+            'js' => array(
+                'anonymous-users.js'
+            ),
+        ),
+        'invites' => array(
+            'icon' => 'paper-plane-o',
+        ),
         'users_stats' => array(
             'icon' => 'users',
         ),
@@ -105,7 +114,7 @@ return [
             ),
             'subpages' => array(
                 'admin' => 'admin',
-                //'front' => 'front',
+                'front' => 'front',
                 'trp' => 'trp',
                 'vox' => 'vox',
                 'validation' => 'validation',

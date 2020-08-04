@@ -73,6 +73,12 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('users/reviews/delete/{id}',		 	'UsersController@delete_review');
 	Route::any('users/reset-first-guided-tour/{id}','UsersController@resetFirstGudedTour');
 
+	Route::get('anonymous_users', 					'UsersController@anonymous_list');
+	Route::get('anonymous_users/delete/{id}',		'UsersController@anonymousDelete');
+
+	Route::get('invites',							'InvitesController@list');
+	Route::get('invites/delete/{id}',				'InvitesController@delete');
+
 	Route::get('users_stats', 						'UsersStatsController@list');
 
 	Route::get('trp/reviews', 						'ReviewsController@list');
@@ -225,7 +231,6 @@ $reviewRoutes = function () {
 
 			Route::any('/', 									'IndexController@home');
 			Route::get('index-down', 							'IndexController@index_down');
-			Route::get('welcome-dentist/unsubscribe/{session_id?}/{hash?}',	'IndexController@unsubscribe');
 			Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
 			
@@ -244,7 +249,6 @@ $reviewRoutes = function () {
 			Route::post('clinic-add-team', 						'RegisterController@clinic_add_team');
 			Route::post('add-working-hours',					'RegisterController@add_work_hours');
 			Route::post('register-invite', 						'RegisterController@register_invite');
-			Route::post('invite-clinic', 						'RegisterController@invite_clinic');
 			Route::post('invite-dentist', 						'RegisterController@invite_dentist');
 
 			Route::post('status', 								'LoginController@status');

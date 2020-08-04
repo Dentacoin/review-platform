@@ -277,11 +277,6 @@ class IndexController extends FrontController
 		return $this->ShowView('index-down', $params);	
 	}
 
-
-	public function unsubscribe ($locale=null, $session_id=null, $hash=null) {
-		return $this->dentist($locale, $session_id, $hash, true);
-	}
-
 	public function dentist($locale=null, $session_id=null, $hash=null, $unsubscribe = false, $claim_id = false) {
 		
 		if(!empty($this->user) && $this->user->isBanned('trp')) {
@@ -291,26 +286,6 @@ class IndexController extends FrontController
 		if(!empty($this->user)) {
 			return redirect( getLangUrl('/') );
 		}
-
-		$unsubscribed = false;
-		$regData = null;
-        if($session_id && $hash) {
-        	$regData = IncompleteRegistration::find($session_id);
-        	if(!empty($regData) && $hash!=md5($session_id.env('SALT_INVITE'))) {
-        		$regData = null;
-        	}
-
-        	if($regData && $unsubscribe) {
-        		$regData->unsubscribed = true;
-        		$regData->save();
-        		$regData = null;
-        		$unsubscribed = true;
-        	}
-        }
-
-        if(empty($regData) && session('incomplete-registration')) {
-        	$regData = IncompleteRegistration::find(session('incomplete-registration'));
-        }
 
     	$testimonials = DentistTestimonial::with('translations')->orderBy('id', 'desc')->get();
 
@@ -330,8 +305,6 @@ class IndexController extends FrontController
 				'trp-index-dentist.css',
                 'flickity.min.css',
 			],
-			'regData' => $regData,
-			'unsubscribed' => $unsubscribed,
 			'testimonials' => $testimonials,
 			'social_image' => $seos->getImageUrl(),
             'seo_title' => $seos->seo_title,
@@ -393,6 +366,18 @@ class IndexController extends FrontController
 			$new_lead->website = Request::input('website');
 			$new_lead->country_id = Request::input('country');
 			$new_lead->save();
+
+
+			$existing_user = User::where('email', 'LIKE', Request::Input('email'))->first();
+			if( empty($existing_user)) {				
+				$existing_anonymous = AnonymousUser::where('email', 'LIKE', Request::Input('email'))->first();
+
+	            if(empty($existing_anonymous)) {
+	                $new_anonymous_user = new AnonymousUser;
+	                $new_anonymous_user->email = Request::Input('email');
+	                $new_anonymous_user->save();
+	            }
+			}
 
         	$sess = [
 	            'lead_magnet' => [

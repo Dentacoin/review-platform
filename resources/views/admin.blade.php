@@ -72,7 +72,7 @@
                         </button>
                     </div>
 
-                    @if(!empty($dcn_warning_transaction))
+                    @if(!empty($dcn_warning_transaction) && $admin->id == 1)
                         <span class="label label-danger blink" style="margin-top: 20px;display: inline-block;">BUG WITH TRANSACTIONS!!!</span>
 
                         <style type="text/css">

@@ -1,15 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\Front;
+
 use App\Http\Controllers\FrontController;
 use App\Models\User;
-use Request;
-use Response;
+
 use Validator;
+use Response;
+use Request;
 use App;
 
-class MiscController extends FrontController
-{
+class MiscController extends FrontController {
 
 	public function share($locale=null) {
 

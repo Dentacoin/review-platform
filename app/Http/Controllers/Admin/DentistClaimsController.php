@@ -4,20 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
-use App\Models\User;
+use App\Models\AnonymousUser;
+use App\Models\EmailTemplate;
 use App\Models\DentistClaim;
+use App\Models\User;
+
 use Carbon\Carbon;
 
-use DB;
 use Validator;
 use Response;
 use Request;
 use Route;
 use Auth;
 use Mail;
+use DB;
 
-class DentistClaimsController extends AdminController
-{
+class DentistClaimsController extends AdminController {
 
     public function approve($id) {
         $item = DentistClaim::find($id);
@@ -65,14 +67,17 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
                     $dk->status = 'rejected';
                     $dk->save();
 
+                    $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', $dk->email);
+
                     $u = User::find(3);
                     $tmpEmail = $u->email;
                     $tmpName = $u->name;
 
+                    //Mega hack
                     $u->email = $dk->email;
                     $u->name = $dk->name;
                     $u->save();
-                    $mail = $u->sendGridTemplate(66, null, 'trp');
+                    $mail = $u->sendGridTemplate(66, null, 'trp', $unsubscribed, $dk->email);
 
                     $u->email = $tmpEmail;
                     $u->name = $tmpName;
@@ -80,6 +85,11 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
                     $mail->delete();
                 }
+            }
+
+            $existing_anonymous = AnonymousUser::where('email', 'LIKE', $item->email)->first();
+            if(!empty($existing_anonymous)) {
+                AnonymousUser::destroy($existing_anonymous->id);
             }
 
             $user->email_public = $user->email;
@@ -95,7 +105,6 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
 
             $user->sendGridTemplate(26, $substitutions, 'trp');
         }
-        
 
         return redirect( 'cms/users/edit/'.$item->dentist_id );
 
@@ -111,14 +120,17 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
         $user->ownership = 'rejected';
         $user->save();
 
+        $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', $item->email);
+
         $u = User::find(3);
         $tmpEmail = $u->email;
         $tmpName = $u->name;
 
+        //Mega hack
         $u->email = $item->email;
         $u->name = $item->name;
         $u->save();
-        $mail = $u->sendGridTemplate(66, null, 'trp');
+        $mail = $u->sendGridTemplate(66, null, 'trp', $unsubscribed, $item->email);
 
         $u->email = $tmpEmail;
         $u->name = $tmpName;
@@ -160,14 +172,17 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
         $user->ownership = 'suspicious';
         $user->save();
 
+        $unsubscribed = User::isUnsubscribedAnonymous(67, 'trp', $item->email);
+
         $u = User::find(3);
         $tmpEmail = $u->email;
         $tmpName = $u->name;
 
+        //Mega hack
         $u->email = $item->email;
         $u->name = $item->name;
         $u->save();
-        $mail = $u->sendGridTemplate(67, null, 'trp');
+        $mail = $u->sendGridTemplate(67, null, 'trp', $unsubscribed, $item->email);
 
         $u->email = $tmpEmail;
         $u->name = $tmpName;

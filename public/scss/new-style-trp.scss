@@ -2243,32 +2243,6 @@ textarea.input {
 
         form {
 
-        	.invite-clinic-wrap {
-        		.invite-title {
-	        		position: relative;
-					margin-bottom: 25px;
-					margin-top: -5px;
-
-        			span {
-	        			color: black;
-					    background-color: white;
-					    position: relative;
-					    z-index: 10;
-					    padding: 0px 9px;
-        			}
-
-        			&:after {
-        				content: '';
-        				position: absolute;
-        				height: 1px;
-        				width: 100%;
-        			    top: 50%;
-        				left: 0;
-        				background-color: black;
-        			}
-        		}
-        	}
-
         	.big-button {
 			    padding: 15px 90px;
 

@@ -67,14 +67,17 @@ class CitiesController extends BaseController
 	public function getCities($id, $empty=false) {
 
 		$country = Country::find($id);
-		$arr = $country->cities->pluck('name', 'id')->toArray();
-		if($empty) {
-			$arr = ['' => '-'] + $arr;
+		if(!empty($country)) {
+			
+			$arr = $country->cities->pluck('name', 'id')->toArray();
+			if($empty) {
+				$arr = ['' => '-'] + $arr;
+			}
+			return Response::json([
+				'cities' => $arr,
+				'code' => '+'.$country->phone_code
+			]);
 		}
-		return Response::json([
-			'cities' => $arr,
-			'code' => '+'.$country->phone_code
-		]);
 	}
 
 	public function getLocation() {

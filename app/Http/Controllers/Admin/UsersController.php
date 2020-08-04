@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\IncompleteRegistration;
 use App\Models\UnclaimedDentist;
 use App\Models\UserGuidedTour;
+use App\Models\AnonymousUser;
 use App\Models\VoxCrossCheck;
 use App\Models\ReviewAnswer;
 use App\Models\UserCategory;
@@ -763,6 +764,23 @@ class UsersController extends AdminController {
         ));
     }
 
+    public function anonymous_list() {
+
+        if( Auth::guard('admin')->user()->role!='admin' ) {
+            return redirect('cms/users/edit/'.Auth::guard('admin')->user()->user_id);            
+        }
+
+        $users = AnonymousUser::orderBy('id', 'DESC');
+
+        if(!empty(request('search-email'))) {
+            $users = $users->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
+        }
+
+        return $this->showView('anonymous-users', array(
+            'users' => $users->get(),
+            'search_email' => request('search-email'),
+        ));
+    }
 
 
     public function delete( $id ) {
@@ -875,6 +893,17 @@ class UsersController extends AdminController {
         $ban = UserBan::find($ban_id);
 
         if(!empty($ban) && !empty($item) && $ban->user_id == $item->id) {
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+            if($ban->domain == 'trp') {
+                $group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
+            } else {
+                $group_id = config('email-preferences')['product_news']['vox']['sendgrid_group_id'];
+            }
+
+            $email = $item->email;
+            $response = $sg->client->asm()->groups()->_($group_id)->suppressions()->_($email)->delete();
+
             UserBan::destroy( $ban_id );
         }
 
@@ -966,6 +995,24 @@ class UsersController extends AdminController {
             $ban->domain = 'trp';
             $ban->type = 'spam-review';
             $ban->save();
+
+            $notifications = $patient->website_notifications;
+
+            if(!empty($notifications)) {
+
+                if (($key = array_search('trp', $notifications)) !== false) {
+                    unset($notifications[$key]);
+                }
+
+                $patient->website_notifications = $notifications;
+                $patient->save();
+            }
+
+            $request_body = new \stdClass();
+            $request_body->recipient_emails = [$patient->email];
+            
+            $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
+            $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
 
             $patient->sendGridTemplate(86, null, 'trp');
 
@@ -1325,6 +1372,35 @@ class UsersController extends AdminController {
                                     $item->save();
                                     $to_ali->delete();
 
+                                    $item->product_news = ['dentacoin', 'trp'];
+                                    $item->save();
+
+                                    //add to dcn sendgrid list
+                                    $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+                                    $user_info = new \stdClass();
+                                    $user_info->email = $item->email;
+                                    $user_info->title = config('titles')[$item->title];
+                                    $user_info->first_name = explode(' ', $item->name)[0];
+                                    $user_info->last_name = isset(explode(' ', $item->name)[1]) ? explode(' ', $item->name)[1] : '';
+                                    $user_info->type = 'dentist';
+                                    $user_info->partner = $item->is_partner ? 'yes' : 'no';
+
+                                    $request_body = [
+                                        $user_info
+                                    ];
+
+                                    $response = $sg->client->contactdb()->recipients()->post($request_body);
+                                    $recipient_id = isset(json_decode($response->body())->persisted_recipients[0]) ? json_decode($response->body())->persisted_recipients[0] : null;
+
+                                    //add to list
+                                    if($recipient_id) {
+
+                                        $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+                                        $list_id = config('email-preferences')['product_news']['dentacoin']['sendgrid_list_id'];
+                                        $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+                                    }
+
                                     if($item->is_clinic && $item->team_new_clinic->isNotEmpty()) {
                                         foreach ($item->team_new_clinic as $tnc) {
                                             $tnc->approved = true;
@@ -1427,9 +1503,18 @@ class UsersController extends AdminController {
                             }
                         } else if( $key == 'patient_status') {
 
-                            if($item->$key!=$this->request->input($key) && ($this->request->input($key) == 'suspicious_badip' || $this->request->input($key) == 'suspicious_admin') ) {
-                                $item->logoutActions();
+                            if($item->$key!=$this->request->input($key)) {
+                                if($item->$key == 'deleted' && ($this->request->input($key) == 'suspicious_badip' || $this->request->input($key) == 'suspicious_admin')) {
+                                    $item->sendTemplate(109, null, 'dentacoin');
+                                } else if($item->$key == 'deleted' && ($this->request->input($key) == 'new_verified' || $this->request->input($key) == 'new_not_verified')) {
+                                    $item->sendTemplate(111, null, 'dentacoin');
+                                } else if($this->request->input($key) == 'suspicious_badip' || $this->request->input($key) == 'suspicious_admin') {
+                                    $item->sendTemplate(110, null, 'dentacoin');
+                                    $item->removeTokens();
+                                    $item->logoutActions();
+                                }
                             }
+
                             $item->$key = $this->request->input($key);
 
                         } else if($value['type']=='datepicker') {
@@ -1991,5 +2076,18 @@ class UsersController extends AdminController {
 
         return redirect('cms/users/edit/'.$id);
     }
+
+    public function anonymousDelete($id) {
+
+        $item = AnonymousUser::find($id);
+
+        if(!empty($item)) {
+            $item->delete();
+        }
+
+        return redirect('cms/anonymous_users');
+    }
+
+
 
 }

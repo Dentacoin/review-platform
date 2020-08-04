@@ -213,7 +213,7 @@
 									<!-- <span id="header-change" style="color: #{{ $dcn_change>0 ? '4caf50' : 'e91e63' }};">({{ $dcn_change }}%)</span> -->
 								</span>
 								<a href="javascript:;" class="start-button open-dentacoin-gateway patient-login">
-									Log in
+									{{ trans('vox.common.sign-in') }}
 								</a>
 							@endif
 						</div>

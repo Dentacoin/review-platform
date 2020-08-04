@@ -9,6 +9,7 @@ use DeviceDetector\DeviceDetector;
 use Illuminate\Support\Facades\Input;
 
 use App\Models\IncompleteRegistration;
+use App\Models\AnonymousUser;
 use App\Models\UserCategory;
 use App\Models\UserAction;
 use App\Models\UserInvite;
@@ -121,68 +122,6 @@ class RegisterController extends FrontController
         ] );
 
     }
-
-    public function invite_clinic($locale=null) {
-
-        if (request('user_id')) {
-            $user = User::find(request('user_id'));
-
-            $validator = Validator::make(Request::all(), [
-                'clinic_name' => array('required', 'min:3'),
-                'clinic_email' => array('required', 'email', 'unique:users,email'),
-            ]);
-
-            if ($validator->fails()) {
-
-                $msg = $validator->getMessageBag()->toArray();
-                $ret = array(
-                    'success' => false,
-                    'messages' => array()
-                );
-
-                foreach ($msg as $field => $errors) {
-                    $ret['messages'][$field] = implode(', ', $errors);
-                }
-
-                return Response::json( $ret );
-            } else {
-
-                $invitation = new UserInvite;
-                $invitation->user_id = $user->id;
-                $invitation->invited_email = Request::Input('clinic_email');
-                $invitation->invited_name = Request::Input('clinic_name');
-                $invitation->save();
-
-                //Mega hack
-                $dentist_name = $user->name;
-                $dentist_email = $user->email;
-                $user->name = Request::Input('clinic_name');
-                $user->email = Request::Input('clinic_email');
-                $user->save();
-
-                $user->sendTemplate( 42  , [
-                    'dentist_name' => $dentist_name,
-                ], 'trp');
-
-                //Back to original
-                $user->name = $dentist_name;
-                $user->email = $dentist_email;
-                $user->save();
-
-                return Response::json( [
-                    'success' => true,
-                    'message' => trans('trp.popup.verification-popup.workplace.success', ['clinic-name' => request('clinic_name')]),
-                ] );
-            }
-        }
-
-        return Response::json( [
-            'success' => false,
-            'message' => trans('trp.popup.verification-popup.workplace.error'),
-        ] );
-
-    }
-
 
     public function verification_dentist($locale=null) {
         if (request('user_id') && !empty(User::find(request('user_id'))) && !empty(request('user_hash'))) {

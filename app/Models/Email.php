@@ -31,6 +31,7 @@ class Email extends Model
     	"meta",
     	"sent",
     	"platform",
+    	"unsubscribed",
 	];
 
 
@@ -50,53 +51,68 @@ class Email extends Model
 	private $text_style = 'style="text-decoration:underline; color: #38a2e5;"';
 																						
 
-	public function send() {
+	public function send($anonymous_email=null) {
 
 		if(!$this->user || !$this->user->email) {
 			return;
 		}
 
-		list($content, $title, $subtitle, $subject) = $this->prepareContent();
+        if(empty($anonymous_email)) {
+	        if($this->user->id != 3 && !empty($this->template->subscribe_category)) {
+	            $cat = $this->template->subscribe_category;
+	            if($this->platform != 'dentacare' && $this->platform != 'dentists' && !in_array($this->platform, $this->user->$cat)) {
+	                $this->unsubscribed = true;
+	                $this->save();
+	            }
+	        }
+	    }
 
-		$platform = $this->template_id==20 ? 'dentacoin' : $this->platform;
-		$sender = $platform=='vox' ? config('mail.from.address-vox') : config('mail.from.address-dentacoin');
-		if($this->template_id==40 || $this->template_id==14) {
-			$sender = 'ali.hashem@dentacoin.com';
+        if (empty($this->unsubscribed)) {
+			list($content, $title, $subtitle, $subject) = $this->prepareContent();
+
+			$platform = $this->template_id==20 ? 'dentacoin' : $this->platform;
+			$sender = $platform=='vox' ? config('mail.from.address-vox') : config('mail.from.address-dentacoin');
+			if($this->template_id==40 || $this->template_id==14) {
+				$sender = 'ali.hashem@dentacoin.com';
+			}
+			$sender_name = $platform=='vox' ? config('mail.from.name-vox') : config('mail.from.name-dentacoin');
+			
+			$contents = view('emails.template', [
+				'user' => $this->user,
+				'content' => $content,
+				'title' => $title,
+				'subtitle' => $subtitle,
+				'platform' => $platform,
+			])->render();
+
+	        $from = new From($sender, $sender_name);
+	        $tos = [new To( $this->user->email)];
+
+	        $email = new SendGridMail(
+	            $from,
+	            $tos
+	        );
+	        
+	        if ($this->template->category) {
+	        	$email->addCategory($this->template->category);
+	        } else {
+	        	$email->addCategory(strtoupper($platform).' Service '.($this->user->is_dentist ? 'Dentist' : 'Patient'));
+	        }
+	        $email->setSubject($subject);
+	        $email->setReplyTo($sender, $sender_name);
+			$email->addContent(
+			    "text/html", $contents
+			);
+	        
+	        $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
+	        $sendgrid->send($email);
+
+			$this->sent = 1;
+		} else {
+			$this->sent = 0;
 		}
-		$sender_name = $platform=='vox' ? config('mail.from.name-vox') : config('mail.from.name-dentacoin');
-		
-		$contents = view('emails.template', [
-			'user' => $this->user,
-			'content' => $content,
-			'title' => $title,
-			'subtitle' => $subtitle,
-			'platform' => $platform,
-		])->render();
 
-        $from = new From($sender, $sender_name);
-        $tos = [new To( $this->user->email)];
-
-        $email = new SendGridMail(
-            $from,
-            $tos
-        );
-        
-        if ($this->template->category) {
-        	$email->addCategory($this->template->category);
-        } else {
-        	$email->addCategory(strtoupper($platform).' Service '.($this->user->is_dentist ? 'Dentist' : 'Patient'));
-        }
-        $email->setSubject($subject);
-        $email->setReplyTo($sender, $sender_name);
-		$email->addContent(
-		    "text/html", $contents
-		);
-        
-        $sendgrid = new \SendGrid(env('SENDGRID_PASSWORD'));
-        $sendgrid->send($email);
-
-		$this->sent = 1;
-		$this->save();
+        $this->save();
 	}
 
 	public function prepareContent() {
@@ -501,6 +517,30 @@ class Email extends Model
 			), array(
 				$this->meta['dentist_name'],
 				'<a '.$this->button_style.' href="'.getLangUrl( 'profile/home' , null, $domain).'">',
+				'</a>',
+			), $content);
+		}
+
+		if($this->template->id==109 || $this->template->id==110 ) { // Patient Status from Deleted to Suspicious
+			$content = str_replace(array(
+				'[login-button]',
+				'[/login-button]',
+			), array(
+				'<a '.$this->button_style.' href="https://dentacoin.com/?dcn-gateway-type=patient-login">',
+				'</a>',
+			), $content);
+		}
+
+		if($this->template->id==111 || $this->template->id==112 ) { // Patient Status from Deleted to Verified
+			$content = str_replace(array(
+				'[login-button]',
+				'[/login-button]',
+				'[faq-link]',
+				'[/faq-link]',
+			), array(
+				'<a '.$this->button_style.' href="https://dentacoin.com/?dcn-gateway-type=patient-login">',
+				'</a>',
+				'<a '.$this->text_style.' href="https://dentavox.dentacoin.com/en/faq/">',
 				'</a>',
 			), $content);
 		}

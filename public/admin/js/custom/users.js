@@ -131,4 +131,32 @@ $(document).ready(function(){
         });
     }
 
+
+    $('.preferences-button').click( function() {
+    	var email = $(this).attr('email');
+
+    	$.ajax({
+            type: 'POST',
+            url: 'https://dev-api.dentacoin.com/api/anonymous-email-preferences',
+            data: {
+                email: email
+            },
+            dataType: 'json',
+            success: function (response) {
+            	if(response.data) {
+            		for( var i in response.data) {
+            			if(i == 'product_news' || i == 'blog') {
+
+            				for(var u in response.data[i]) {
+            					var value = response.data[i][u]['checked'] ? '<i class="fa fa-check-square-o" aria-hidden="true"></i>' : '<i class="fa fa-square-o" aria-hidden="true"></i>';
+            					$('#'+i).find('.'+u).html(value);
+            				}
+            			}
+            		}
+            	}
+                console.log(response);
+            }
+        });
+    });
+
 });

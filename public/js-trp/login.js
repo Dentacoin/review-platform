@@ -188,57 +188,6 @@ $(document).ready(function(){
         }
     });
 
-    $('.invite-clinic-wrap .cancel-invitation').click( function() {
-        $(this).closest('.invite-clinic-wrap').hide();
-    });
-
-    if ($('.invite-clinic-wrap').length) {
-        $('.cilnic-suggester').on( 'keyup', function(e) {
-
-            var container = $(this).closest('.cilnic-suggester-wrapper').find('.suggest-results');
-            var keyCode = e.keyCode || e.which;
-            if (keyCode === 13) {
-                if (!$('.verification-popup').find('input[name="clinic_id"]').val()) {
-                    $('.invite-clinic-wrap').show();
-                } else {
-                    $('.invite-clinic-wrap').hide();
-                }
-            }
-        });
-
-        $('.cilnic-suggester-wrapper .suggester-hidden').on( 'change', function(e) {
-            var form = $(this).closest('form');
-
-            $('.popup .alert').hide();
-
-            $.ajax({
-                type: "POST",
-                url: $(this).attr('url'),
-                data: {
-                    clinic_name: $('input[name="clinic_name"]').val(),
-                    clinic_id: $(this).val(),
-                    user_id: $('input[name="last_user_id"]').val(),
-                    user_hash: $('input[name="last_user_hash"]').val(),
-                    _token: form.find('input[name="_token"]').val(),
-                },
-                dataType: 'json',
-                success: function(ret) {
-                    if (ret.success) {
-                        $('.popup .alert-success').html(ret.message).show();
-
-                        gtag('event', 'Invite', {
-                            'event_category': 'DentistRegistration',
-                            'event_label': 'DentistWorkplace',
-                        });
-                    } else {
-                        $('.popup .alert-warning').html(ret.message).show();
-                    }
-                }
-            });
-
-        });
-    }
-
     $('.dentist-suggester-wrapper .suggester-hidden').on( 'change', function(e) {
         var form = $(this).closest('form');
 
@@ -270,52 +219,6 @@ $(document).ready(function(){
         });
 
     });
-
-    $('.invite-clinic-form').submit( function(e) {
-        e.preventDefault();
-
-        $('.popup .alert').hide();
-        $(this).find('.has-error').removeClass('has-error');
-
-        if(ajax_is_running) {
-            return;
-        }
-        ajax_is_running = true;
-
-
-        $.ajax({
-            type: "POST",
-            url: $(this).attr('action'),
-            data: {
-                clinic_name: $('input[name="clinic-name"]').val(),
-                clinic_email: $('input[name="clinic-email"]').val(),
-                user_id: $('input[name="last_user_id"]').val(),
-                user_hash: $('input[name="last_user_hash"]').val(),
-                _token: $(this).find('input[name="_token"]').val(),
-            },
-            dataType: 'json',
-            success: (function(ret) {
-                if (ret.success) {
-                    $(this).hide();
-                    $('.popup .alert-success').html(ret.message).show();
-
-                    gtag('event', 'Invite', {
-                        'event_category': 'DentistRegistration',
-                        'event_label': 'DentistWorkplace',
-                    });
-                } else {
-                    $('.popup .alert-warning').show();
-                    $('.popup .alert-warning').html('');
-                    for(var i in ret.messages) {
-                        $('.popup .alert-warning').append(ret.messages[i] + '<br/>');
-                        $('input[name="'+i+'"]').addClass('has-error');
-                    }
-                }
-                ajax_is_running = false;
-            }).bind(this)
-        });
-
-    } );
 
     $('.wh-btn').click( function() {
         showPopup('popup-wokring-time-waiting');

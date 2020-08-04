@@ -30,6 +30,10 @@ class UserInvite extends Model {
         'updated_at',
     ];
 
+    public function user() {
+        return $this->hasOne('App\Models\User', 'id', 'user_id')->withTrashed();
+    }
+
     public function invited() {
         return $this->hasOne('App\Models\User', 'id', 'invited_id')->withTrashed();
     }

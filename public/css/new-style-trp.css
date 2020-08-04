@@ -2007,24 +2007,6 @@ textarea.input {
         .verification-popup.fixed-popup .popup-inner .verification-info h2 {
           margin-top: 0px;
           margin-bottom: 20px; } }
-  .verification-popup.fixed-popup .popup-inner form .invite-clinic-wrap .invite-title {
-    position: relative;
-    margin-bottom: 25px;
-    margin-top: -5px; }
-    .verification-popup.fixed-popup .popup-inner form .invite-clinic-wrap .invite-title span {
-      color: black;
-      background-color: white;
-      position: relative;
-      z-index: 10;
-      padding: 0px 9px; }
-    .verification-popup.fixed-popup .popup-inner form .invite-clinic-wrap .invite-title:after {
-      content: '';
-      position: absolute;
-      height: 1px;
-      width: 100%;
-      top: 50%;
-      left: 0;
-      background-color: black; }
   .verification-popup.fixed-popup .popup-inner form .big-button {
     padding: 15px 90px; }
     @media screen and (max-width: 998px) {

@@ -12,6 +12,8 @@ use App\Models\DentistRecommendation;
 use App\Models\DentistPageview;
 use App\Models\ReviewDownvote;
 use App\Models\DentistFbPage;
+use App\Models\AnonymousUser;
+use App\Models\EmailTemplate;
 use App\Models\ReviewUpvote;
 use App\Models\ReviewAnswer;
 use App\Models\DentistClaim;
@@ -276,6 +278,7 @@ class DentistController extends FrontController
                         $action->save();
                         
                         Auth::guard('web')->user()->logoutActions();
+                        Auth::guard('web')->user()->removeTokens();
                         Auth::guard('web')->logout();
 
                         $ret['success'] = false;
@@ -455,6 +458,28 @@ class DentistController extends FrontController
                         }
 
                         if($this->patientSuspicious($this->user->id)) {
+
+                            $notifications = $this->user->website_notifications;
+
+                            if(!empty($notifications)) {
+                                
+                                if (($key = array_search('trp', $notifications)) !== false) {
+                                    unset($notifications[$key]);
+                                }
+
+                                $this->user->website_notifications = $notifications;
+                                $this->user->save();
+                            }
+
+                            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+                            $request_body = new \stdClass();
+                            $request_body->recipient_emails = [$this->user->email];
+                            
+                            $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
+                            $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
+
+
                             $ret['success'] = false;
                             $ret['ban'] = true;
                         }
@@ -972,6 +997,17 @@ class DentistController extends FrontController
                         $claim->from_mail = !empty(Request::input('email')) ? false : true;
                         $claim->save();
 
+                        if(!empty(Request::input('email'))) {
+
+                            $existing_anonymous = AnonymousUser::where('email', 'LIKE', Request::input('email'))->first();
+
+                            if(empty($existing_anonymous)) {
+                                $new_anonymous_user = new AnonymousUser;
+                                $new_anonymous_user->email = Request::input('email');
+                                $new_anonymous_user->save();
+                            }
+                        }
+
                         if(!empty($claim->phone)) {
                             $mtext = 'Dentist claimed his profile '.$fromm.'<br/>
                             Name: '.$claim->name.' <br/>
@@ -1020,6 +1056,39 @@ class DentistController extends FrontController
                             }
                         }
                         $user->save();
+
+                        $user->product_news = ['dentacoin', 'trp'];
+                        $user->save();
+
+                        //add to dcn sendgrid list
+                        $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+                        $user_info = new \stdClass();
+                        $user_info->email = $user->email;
+                        $user_info->title = config('titles')[$user->title];
+                        $user_info->first_name = explode(' ', $user->name)[0];
+                        $user_info->last_name = isset(explode(' ', $user->name)[1]) ? explode(' ', $user->name)[1] : '';
+                        $user_info->type = 'dentist';
+                        $user_info->partner = $user->is_partner ? 'yes' : 'no';
+
+                        $request_body = [
+                            $user_info
+                        ];
+                        $response = $sg->client->contactdb()->recipients()->post($request_body);
+                        $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
+
+                        //add to list
+                        if($recipient_id) {
+
+                            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+                            $list_id = config('email-preferences')['product_news']['dentacoin']['sendgrid_list_id'];
+                            $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+                        }
+
+                        $existing_anonymous = AnonymousUser::where('email', 'LIKE', $user->email)->first();
+                        if(!empty($existing_anonymous)) {
+                            AnonymousUser::destroy($existing_anonymous->id);
+                        }
 
                         $user->sendGridTemplate(26, [], 'trp');
 
@@ -1418,10 +1487,14 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
             $recommended_user = User::find(Request::Input('dentist-id'));
             $type = $recommended_user->is_clinic ? 'dental clinic' : 'dentist';
 
+            $existing_patient = User::withTrashed()->where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 0)->first();
+
             if($recommendation) {
-                return Response::json(['success' => false, 'message' => trans('popup.popup-recommend-dentist.аlready-recommended', ['type' => $type ]) ] );
+                return Response::json(['success' => false, 'message' => trans('trp.popup.popup-recommend-dentist.аlready-recommended', ['type' => $type ]) ] );
             } else if(Request::Input('email') == $this->user->email) {
-                return Response::json(['success' => false, 'message' => trans('popup.popup-recommend-dentist.recommended-yourself', ['type' => $type ]) ] );
+                return Response::json(['success' => false, 'message' => trans('trp.popup.popup-recommend-dentist.recommended-yourself', ['type' => $type ]) ] );
+            } else if(!empty($existing_patient) && !empty($existing_patient->deleted_at)) {
+                return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.patient-deleted', ['email' => Request::Input('email') ])] );
             } else {
                 $new_recommendation = new DentistRecommendation;
                 $new_recommendation->user_id = $this->user->id;
@@ -1439,6 +1512,33 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     'image_recommended_dentist' => $recommended_user->getSocialCover(),
                 ];
 
+                $existing_anonymous = AnonymousUser::where('email', 'LIKE', Request::Input('email'))->first();
+                
+                $unsubscribed = User::isUnsubscribedAnonymous(66, 'trp', $item->email);
+
+                if(empty($existing_patient)) {
+
+                    if(!empty($existing_anonymous)) {
+
+                        if(!$unsubscribed) {
+                            $subscribe_cats = $existing_anonymous->website_notifications;
+
+                            if(!isset($subscribe_cats['trp'])) {
+
+                                $subscribe_cats[] = 'trp';
+                                $existing_anonymous->website_notifications = $subscribe_cats;
+                                $existing_anonymous->save();
+                            }
+                        }
+
+                    } else {
+                        $new_anonymous_user = new AnonymousUser;
+                        $new_anonymous_user->email = Request::Input('email');
+                        $new_anonymous_user->website_notifications = ['trp'];
+                        $new_anonymous_user->save();
+                    }
+                }
+
                 //Mega hack
                 $user_name = $this->user->name;
                 $user_email = $this->user->email;
@@ -1446,14 +1546,16 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                 $this->user->email = Request::Input('email');
                 $this->user->save();
 
-                $this->user->sendGridTemplate(89, $substitutions, 'trp');
+                $mail = $this->user->sendGridTemplate(89, $substitutions, 'trp', $unsubscribed, Request::Input('email'));
 
                 //Back to original
                 $this->user->name = $user_name;
                 $this->user->email = $user_email;
                 $this->user->save();
 
-                return Response::json(['success' => true, 'message' => trans('popup.popup-recommend-dentist.success') ] );
+                $mail->delete();
+
+                return Response::json(['success' => true, 'message' => trans('trp.popup.popup-recommend-dentist.success') ] );
             }            
         }
     }

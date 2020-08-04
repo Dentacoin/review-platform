@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\UserGuidedTour;
+use App\Models\AnonymousUser;
+use App\Models\EmailTemplate;
 use App\Models\UserCategory;
 use App\Models\UserInvite;
 use App\Models\DcnCashout;
@@ -142,7 +144,12 @@ class ProfileController extends FrontController
                     ['invited_email', 'LIKE', Request::Input('email')],
                 ])->first();
 
-                $existing_patient = User::where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 0)->first();
+                $existing_patient = User::withTrashed()->where('email', 'LIKE', Request::Input('email') )->where('is_dentist', 0)->first();
+                $existing_anonymous = AnonymousUser::where('email', 'LIKE', Request::Input('email'))->first();
+
+                if(!empty($existing_patient) && !empty($existing_patient->deleted_at)) {
+                    return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.patient-deleted', ['email' => Request::Input('email') ])] );
+                }
 
                 if($invitation) {
 
@@ -220,8 +227,30 @@ class ProfileController extends FrontController
                         $this->user->email = Request::Input('email');
                         $this->user->save();
 
-
                         if ( $this->user->is_dentist) {
+
+                            $unsubscribed = User::isUnsubscribedAnonymous(106, 'trp', Request::Input('email'));
+
+                            if(!empty($existing_anonymous)) {
+
+                                if(!$unsubscribed) {
+                                    $subscribe_cats = $existing_anonymous->website_notifications;
+
+                                    if(!isset($subscribe_cats['trp'])) {
+
+                                        $subscribe_cats[] = 'trp';
+                                        $existing_anonymous->website_notifications = $subscribe_cats;
+                                        $existing_anonymous->save();
+                                    }
+                                }
+
+                            } else {
+                                $new_anonymous_user = new AnonymousUser;
+                                $new_anonymous_user->email = Request::Input('email');
+                                $new_anonymous_user->website_notifications = ['trp'];
+                                $new_anonymous_user->save();
+                            }
+
                             $substitutions = [
                                 'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
                                 'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
@@ -229,13 +258,35 @@ class ProfileController extends FrontController
                                 "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
                             ];
 
-
-                            $this->user->sendGridTemplate(106, $substitutions, 'trp');
+                            $mail = $this->user->sendGridTemplate(106, $substitutions, 'trp', $unsubscribed, Request::Input('email'));
                         } else {
-                            $this->user->sendTemplate( 17 , [
+
+                            $unsubscribed = User::isUnsubscribedAnonymous(17, 'trp', Request::Input('email'));
+
+                            if(!empty($existing_anonymous)) {
+
+                                if(!$unsubscribed) {
+                                    $subscribe_cats = $existing_anonymous->website_notifications;
+
+                                    if(!isset($subscribe_cats['trp'])) {
+
+                                        $subscribe_cats[] = 'trp';
+                                        $existing_anonymous->website_notifications = $subscribe_cats;
+                                        $existing_anonymous->save();
+                                    }
+                                }
+
+                            } else {
+                                $new_anonymous_user = new AnonymousUser;
+                                $new_anonymous_user->email = Request::Input('email');
+                                $new_anonymous_user->website_notifications = ['trp'];
+                                $new_anonymous_user->save();
+                            }
+
+                            $mail = $this->user->sendTemplate( 17 , [
                                 'friend_name' => $dentist_name,
                                 'invitation_id' => $invitation->id
-                            ], 'trp');
+                            ], 'trp', $unsubscribed, Request::Input('email'));
                         }
 
                         // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
@@ -247,6 +298,8 @@ class ProfileController extends FrontController
                         $this->user->name = $dentist_name;
                         $this->user->email = $dentist_email;
                         $this->user->save();
+
+                        $mail->delete();
 
                     } else {
                         return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.yourself') ] );
@@ -457,102 +510,153 @@ class ProfileController extends FrontController
                             ['invited_email', 'LIKE', $email],
                         ])->first();
 
-                        $existing_patient = User::where('email', 'LIKE', $email )->where('is_dentist', 0)->first();
+                        $existing_patient = User::withTrashed()->where('email', 'LIKE', $email )->where('is_dentist', 0)->first();
+                        $existing_anonymous = AnonymousUser::where('email', 'LIKE', $email)->first();
 
-                        if($invitation) {
+                        if(empty($existing_patient) || empty($existing_patient->deleted_at)) { ///da proveeq
 
-                            if ($invitation->created_at->timestamp < Carbon::now()->subMonths(1)->timestamp) {
+                            if($invitation) {
 
-                                $invitation->invited_name = $names[$key];
-                                $invitation->created_at = Carbon::now();
+                                if ($invitation->created_at->timestamp < Carbon::now()->subMonths(1)->timestamp) {
 
-                                if (empty($invitation->unsubscribed)) {
-                                    $invitation->review = true;
-                                    $invitation->completed = null;
-                                    $invitation->notified1 = null;
-                                    $invitation->notified2 = null;
-                                    $invitation->notified3 = null;
-                                }
-                                $invitation->save();
-                                $send_mail = true;
+                                    $invitation->invited_name = $names[$key];
+                                    $invitation->created_at = Carbon::now();
 
-                                if(!empty($existing_patient)) {
-                                    $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
-                                    if(!empty($last_ask)) {
-                                        $last_ask->created_at = Carbon::now();
-                                        $last_ask->on_review = true;
-                                        $last_ask->save();
-                                    } else {
-                                        $ask = new UserAsk;
-                                        $ask->user_id = $existing_patient->id;
-                                        $ask->dentist_id = $this->user->id;
-                                        $ask->status = 'yes';
-                                        $ask->on_review = true;
-                                        $ask->save();
+                                    if (empty($invitation->unsubscribed)) {
+                                        $invitation->review = true;
+                                        $invitation->completed = null;
+                                        $invitation->notified1 = null;
+                                        $invitation->notified2 = null;
+                                        $invitation->notified3 = null;
+                                    }
+                                    $invitation->save();
+                                    $send_mail = true;
+
+                                    if(!empty($existing_patient)) {
+                                        $last_ask = UserAsk::where('user_id', $existing_patient->id)->where('dentist_id', $this->user->id)->first();
+                                        if(!empty($last_ask)) {
+                                            $last_ask->created_at = Carbon::now();
+                                            $last_ask->on_review = true;
+                                            $last_ask->save();
+                                        } else {
+                                            $ask = new UserAsk;
+                                            $ask->user_id = $existing_patient->id;
+                                            $ask->dentist_id = $this->user->id;
+                                            $ask->status = 'yes';
+                                            $ask->on_review = true;
+                                            $ask->save();
+                                        }
                                     }
                                 }
-                            }
-                        } else {
-                            $invitation = new UserInvite;
-                            $invitation->user_id = $this->user->id;
-                            $invitation->invited_email = $email;
-                            $invitation->invited_name = $names[$key];
-                            $invitation->review = true;
-                            $invitation->save();
-
-                            $send_mail = true;
-                        }
-
-                        if ($send_mail) {
-                            if(!empty($existing_patient)) {
-
-                                $substitutions = [
-                                    'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-                                    'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
-                                    'invited_user_name' => $names[$key],
-                                    "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
-                                ];
-
-                                $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
-
                             } else {
+                                $invitation = new UserInvite;
+                                $invitation->user_id = $this->user->id;
+                                $invitation->invited_email = $email;
+                                $invitation->invited_name = $names[$key];
+                                $invitation->review = true;
+                                $invitation->save();
 
-                                    //Mega hack
-                                $dentist_name = $this->user->name;
-                                $dentist_email = $this->user->email;
-                                $this->user->name = $names[$key];
-                                $this->user->email = $email;
-                                $this->user->save();
+                                $send_mail = true;
+                            }
 
+                            if ($send_mail) {
+                                if(!empty($existing_patient)) {
 
-                                if ( $this->user->is_dentist) {
                                     $substitutions = [
                                         'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
-                                        'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
-                                        'invited_user_name' => $this->user->name,
-                                        "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
+                                        'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$this->user->name : $this->user->name,
+                                        'invited_user_name' => $names[$key],
+                                        "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-login', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
                                     ];
 
+                                    $existing_patient->sendGridTemplate(68, $substitutions, 'trp');
 
-                                    $this->user->sendGridTemplate(106, $substitutions, 'trp');
                                 } else {
-                                    $this->user->sendTemplate( 17 , [
-                                        'friend_name' => $dentist_name,
-                                        'invitation_id' => $invitation->id
-                                    ], 'trp');
+
+                                    //Mega hack
+                                    $dentist_name = $this->user->name;
+                                    $dentist_email = $this->user->email;
+                                    $this->user->name = $names[$key];
+                                    $this->user->email = $email;
+                                    $this->user->save();
+
+
+                                    if ( $this->user->is_dentist) {
+
+                                        $unsubscribed = User::isUnsubscribedAnonymous(106, 'trp', $email);
+
+                                        if(!empty($existing_anonymous)) {
+
+                                            if(!$unsubscribed) {
+                                                $subscribe_cats = $existing_anonymous->website_notifications;
+
+                                                if(!isset($subscribe_cats['trp'])) {
+
+                                                    $subscribe_cats[] = 'trp';
+                                                    $existing_anonymous->website_notifications = $subscribe_cats;
+                                                    $existing_anonymous->save();
+                                                }
+                                            }
+
+                                        } else {
+                                            $new_anonymous_user = new AnonymousUser;
+                                            $new_anonymous_user->email = $email;
+                                            $new_anonymous_user->website_notifications = ['trp'];
+                                            $new_anonymous_user->save();
+                                        }
+
+                                        $substitutions = [
+                                            'type' => $this->user->is_clinic ? 'dental clinic' : ($this->user->is_dentist ? 'your dentist' : ''),
+                                            'inviting_user_name' => ($this->user->is_dentist && !$this->user->is_clinic && $this->user->title) ? config('titles')[$this->user->title].' '.$dentist_name : $dentist_name,
+                                            'invited_user_name' => $this->user->name,
+                                            "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
+                                        ];
+
+
+                                        $this->user->sendGridTemplate(106, $substitutions, 'trp', $unsubscribed, $email);
+                                    } else {
+
+                                        $unsubscribed = User::isUnsubscribedAnonymous(17, 'trp', $email);
+
+                                        if(!empty($existing_anonymous)) {
+
+                                            if(!$unsubscribed) {
+                                                $subscribe_cats = $existing_anonymous->website_notifications;
+
+                                                if(!isset($subscribe_cats['trp'])) {
+
+                                                    $subscribe_cats[] = 'trp';
+                                                    $existing_anonymous->website_notifications = $subscribe_cats;
+                                                    $existing_anonymous->save();
+                                                }
+                                            }
+
+                                        } else {
+                                            $new_anonymous_user = new AnonymousUser;
+                                            $new_anonymous_user->email = $email;
+                                            $new_anonymous_user->website_notifications = ['trp'];
+                                            $new_anonymous_user->save();
+                                        }
+
+                                        $this->user->sendTemplate( 17 , [
+                                            'friend_name' => $dentist_name,
+                                            'invitation_id' => $invitation->id
+                                        ], 'trp', $unsubscribed, $email);
+                                    }
+
+                                    // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
+                                    //     'friend_name' => $dentist_name,
+                                    //     'invitation_id' => $invitation->id
+                                    // ]);
+
+                                    //Back to original
+                                    $this->user->name = $dentist_name;
+                                    $this->user->email = $dentist_email;
+                                    $this->user->save();
                                 }
-
-                                // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
-                                //     'friend_name' => $dentist_name,
-                                //     'invitation_id' => $invitation->id
-                                // ]);
-
-                                //Back to original
-                                $this->user->name = $dentist_name;
-                                $this->user->email = $dentist_email;
-                                $this->user->save();
                             }
                         }
+
 
                     }
                 }

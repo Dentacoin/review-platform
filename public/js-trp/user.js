@@ -638,7 +638,7 @@ $(document).ready(function(){
             type: "POST",
             url: $(this).attr('action'),
             data: {
-                _token: $(this).find('input[name="_token"]').val(),
+                token: $(this).find('input[name="_token"]').val(),
                 name: $(this).find('.invite-name').val(),
                 email: $(this).find('.invite-email').val(),
             },
@@ -659,6 +659,7 @@ $(document).ready(function(){
                 }
             },
             error: function(ret) {
+                console.log(ret);
                 console.log('error');
             }
         });

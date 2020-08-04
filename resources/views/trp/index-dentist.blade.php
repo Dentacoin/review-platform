@@ -25,12 +25,6 @@
 	    		</a>
 	    	</div>
 
-			@if($unsubscribed)
-				<div class="alert alert-info">
-					{{ trans('trp.page.index-dentist.unsubscribed') }}
-				</div>
-			@endif
-
 	    </div>
 
 	    <div class="signin-form-wrapper">

@@ -29,6 +29,8 @@ use App\Models\DentistPageview;
 use App\Models\BlacklistBlock;
 use App\Models\Recommendation;
 use App\Models\DcnTransaction;
+use App\Models\EmailTemplate;
+use App\Models\AnonymousUser;
 use App\Models\VoxCrossCheck;
 use App\Models\DentistClaim;
 use App\Models\WhitelistIp;
@@ -161,6 +163,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     public function banAppeal() {
         return $this->hasOne('App\Models\BanAppeal', 'user_id', 'id')->oldest();
+    }
+    public function allBanAppeals() {
+        return $this->hasMany('App\Models\BanAppeal', 'user_id', 'id')->orderBy('id', 'DESC');
     }
     public function newBanAppeal() {
         return $this->hasOne('App\Models\BanAppeal', 'user_id', 'id')->where('status', 'new')->oldest();
@@ -446,6 +451,27 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 'ban_hours' => $days*24
             ], 'vox');
         } else {
+
+            $notifications = $this->website_notifications;
+
+            if(!empty($notifications)) {
+                
+                if (($key = array_search('vox', $notifications)) !== false) {
+                    unset($notifications[$key]);
+                }
+
+                $this->website_notifications = $notifications;
+                $this->save();
+            }
+
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+            $request_body = new \stdClass();
+            $request_body->recipient_emails = [$this->email];
+            
+            $vox_group_id = config('email-preferences')['product_news']['vox']['sendgrid_group_id'];
+            $response = $sg->client->asm()->groups()->_($vox_group_id)->suppressions()->post($request_body);
+
             $this->sendTemplate(16, null, 'vox');              
         }
 
@@ -530,27 +556,34 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $token;
     }
 
-    public function sendTemplate($template_id, $params=null, $platform=null) {
+    public function sendTemplate($template_id, $params=null, $platform=null, $unsubscribed=null, $anonymous_email=null) {
         $item = new Email;
         $item->user_id = $this->id;
         $item->template_id = $template_id;
         $item->meta = $params;
+
         if($platform) {
             $item->platform = $platform;
         } else {
-             if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
+            if( mb_substr(Request::path(), 0, 3)=='cms' || empty(Request::getHost()) ) {
                 $item->platform = $this->platform;
-             } else {
+            } else {
                 $item->platform = mb_strpos( Request::getHost(), 'vox' )!==false ? 'vox' : 'trp';
-             }
+            }
         }
+
         $item->save();
-        $item->send();
+
+        if(!$unsubscribed) {
+
+            $item->send($anonymous_email);
+        }
 
         return $item;
     }
 
-    public function sendGridTemplate($template_id, $substitutions=null, $platform=null, $is_skipped=null) {
+    public function sendGridTemplate($template_id, $substitutions=null, $platform=null, $is_skipped=null, $anonymous_email=null) {
+
         $item = new Email;
         $item->user_id = $this->id;
         $item->template_id = $template_id;
@@ -566,7 +599,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
         $item->save();
 
-        if (empty($is_skipped)) {
+        if(empty($anonymous_email)) {
+            
+            if($this->id != 3 && !empty($item->template->subscribe_category)) {
+                $cat = $item->template->subscribe_category;
+                if($item->platform != 'dentacare' && $item->platform != 'dentists' && !in_array($item->platform, $this->$cat)) {
+                    $item->unsubscribed = true;
+                    $item->save();
+                }
+            }
+        }
+
+        if (empty($is_skipped) && empty($item->unsubscribed)) {
 
             $sender = $item->platform=='vox' ? config('mail.from.address-vox') : ($item->platform == 'trp' ? config('mail.from.address') : config('mail.from.address-dentacoin'));
             $sender_name = $item->platform=='vox' ? config('mail.from.name-vox') : ($item->platform == 'trp' ? config('mail.from.name') : config('mail.from.name-dentacoin'));
@@ -608,7 +652,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 "trp_profile" => $this->getLink(),
                 "town" => $this->city_name ? $this->city_name : 'your town',
                 "country" => $this->country_id ? Country::find($this->country_id)->name : 'your country',
-                "unsubscribe" => getLangUrl( 'unsubscription/'.$this->id.'/'.$this->get_token(), null, $domain),
+                //"unsubscribe" => getLangUrl( 'unsubscription/'.$this->id.'/'.$this->get_token(), null, $domain),
+                "unsubscribe" => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(self::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $this->email),'email_category' => $item->template->subscribe_category, 'platform' => $item->platform ))))]),
                 "pageviews" => $pageviews,
                 "trp" => url('https://reviews.dentacoin.com/'),
                 "trp-dentist" => url('https://reviews.dentacoin.com/en/welcome-dentist/'),
@@ -621,6 +666,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 "dentacare" => url('https://dentacare.dentacoin.com/'),
                 "giftcards" => url('https://dentacoin.com/?payment=bidali-gift-cards'),
             ];
+
 
             if ($substitutions) {
                 $defaulth_substitutions = array_merge($defaulth_substitutions, $substitutions);
@@ -1197,6 +1243,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
         }
 
+
         if(!$this->is_dentist && $this->patient_status != 'deleted') {
 
             $this->patient_status = 'deleted';
@@ -1232,7 +1279,34 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             }
         }
 
+        $this->removeFromSendgridSubscribes();
+
+        $this->removeTokens();
+            
         $this->logoutActions();
+    }
+
+    public function removeFromSendgridSubscribes() {
+
+        //get sendgrid user id
+        $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+        $query_params = new \stdClass();
+        $query_params->email = $this->email;
+
+        $response = $sg->client->contactdb()->recipients()->search()->get(null, $query_params);
+
+        if(isset(json_decode($response->body())->recipients[0])) {
+            $recipient_id = json_decode($response->body())->recipients[0]->id;
+        } else {
+            $recipient_id = null;
+        }
+
+        if(!empty($recipient_id)) {
+            // delete from list
+            $request_body = [$recipient_id];
+            $response = $sg->client->contactdb()->recipients()->delete($request_body);
+        }
     }
 
     public function restoreActions() {
@@ -1275,6 +1349,14 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $this->save();
             }
 
+            if($this->patient_status == 'suspicious_badip' || $this->patient_status == 'suspicious_admin') {
+                $this->sendTemplate(112, null, 'dentacoin');
+            }
+
+            if($this->patient_status == 'deleted') {
+                $this->sendTemplate(111, null, 'dentacoin');
+            }
+
             if($this->history->isNotEmpty()) {
                 $this->patient_status = 'new_verified';
             } else {
@@ -1287,7 +1369,67 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             }
 
             $this->save();
+
+
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+            $user_info = new \stdClass();
+            $user_info->email = $this->email;
+            $user_info->first_name = explode(' ', $this->name)[0];
+            $user_info->last_name = isset(explode(' ', $this->name)[1]) ? explode(' ', $this->name)[1] : '';
+            $user_info->type = 'patient';
+
+            $request_body = [
+                $user_info
+            ];
+
+            $response = $sg->client->contactdb()->recipients()->post($request_body);
+            $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
+
+            //add to list
+            if($recipient_id) {
+
+                $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+                $list_id = config('email-preferences')['product_news']['vox']['sendgrid_list_id'];
+                $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+            }
+
+        } else {
+
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+            $user_info = new \stdClass();
+            $user_info->email = $this->email;
+            $user_info->title = config('titles')[$this->title];
+            $user_info->first_name = explode(' ', $this->name)[0];
+            $user_info->last_name = isset(explode(' ', $this->name)[1]) ? explode(' ', $this->name)[1] : '';
+            $user_info->type = 'dentist';
+            $user_info->partner = $this->is_partner ? 'yes' : 'no';
+
+            $request_body = [
+                $user_info
+            ];
+
+            $response = $sg->client->contactdb()->recipients()->post($request_body);
+            $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
+
+            //add to list
+            if($recipient_id) {
+
+                $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+                $list_id = config('email-preferences')['product_news']['dentacoin']['sendgrid_list_id'];
+                $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+            }
         }
+    }
+
+    public function sendgridSubscribeToGroup($platform) {
+
+        $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+        $group_id = config('email-preferences')['product_news'][$platform]['sendgrid_group_id'];
+        $email = $this->email;
+
+        $response = $sg->client->asm()->groups()->_($group_id)->suppressions()->_($email)->delete();
     }
 
     public function canInvite($platform) {
@@ -1396,13 +1538,19 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $s_user = self::where('id', $su->user_id)->withTrashed()->first();
                     $s_user->patient_status = 'suspicious_badip';
                     $s_user->save();
+                    
+                    $s_user->sendTemplate(110, null, 'dentacoin');
 
+                    $s_user->removeTokens();
                     $s_user->logoutActions();
                 }
 
                 $this->patient_status = 'suspicious_badip';
                 $this->save();
 
+                $this->sendTemplate(110, null, 'dentacoin');
+
+                $this->removeTokens();
                 $this->logoutActions();
 
                 return true;
@@ -1767,7 +1915,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         return !empty($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : Request::ip();
     }
 
-    public function logoutActions() {
+    public function removeTokens() {
 
         if($this->tokens->isNotEmpty()) {
             $this->tokens->each(function($token, $key) {
@@ -1777,6 +1925,9 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
         $this->is_logout = true;
         $this->save();
+    }
+
+    public function logoutActions() {
 
         session([
             'mark-login' => false,
@@ -2063,5 +2214,82 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         }
 
         return $text;
+    }
+
+
+
+    public function setServiceInfoAttribute($value) {
+        $this->attributes['service_info'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['service_info'] = implode(',', $value);            
+        }
+    }
+    
+    public function getServiceInfoAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+
+    public function setWebsiteNotificationsAttribute($value) {
+        $this->attributes['website_notifications'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['website_notifications'] = implode(',', $value);            
+        }
+    }
+    
+    public function getWebsiteNotificationsAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+
+    public function setProductNewsAttribute($value) {
+        $this->attributes['product_news'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['product_news'] = implode(',', $value);            
+        }
+    }
+    
+    public function getProductNewsAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+
+    public function setBlogAttribute($value) {
+        $this->attributes['blog'] = null;
+        if(!empty($value) && is_array($value)) {
+            $this->attributes['blog'] = implode(',', $value);            
+        }
+    }
+    
+    public function getBlogAttribute($value) {
+        if(!empty($value)) {
+            return explode(',', $value);            
+        }
+        return [];
+    }
+
+    public static function isUnsubscribedAnonymous($template_id, $platform, $email) {
+        $unsubscribed = false;
+        $anonymous_user = AnonymousUser::where('email', 'LIKE', $email)->first();
+
+        if(!empty($anonymous_user)) {
+            $cat = EmailTemplate::find($template_id)->subscribe_category;
+
+            if(!empty($cat)) {
+                $unsub_cat = 'unsubscribed_'.$cat;
+
+                if(is_array($anonymous_user->$cat) && in_array($platform, $anonymous_user->$cat)) {
+                    $unsubscribed = true;
+                }
+            }
+        }
+
+        return $unsubscribed;
     }
 }

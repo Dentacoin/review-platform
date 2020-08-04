@@ -1,17 +1,20 @@
 <?php
 
 namespace App\Http\Controllers\Front;
+
 use App\Http\Controllers\FrontController;
 
+use Illuminate\Support\Facades\Input;
+
+use App\Models\AnonymousUser;
+use App\Models\Country;
+use App\Models\User;
+
+use Validator;
 use Response;
 use Request;
-use Validator;
-use Illuminate\Support\Facades\Input;
-use App\Models\User;
-use App\Models\Country;
 use Auth;
 use Mail;
-
 
 class AddDentistController extends FrontController
 {
@@ -141,7 +144,6 @@ class AddDentistController extends FrontController
                 $newdentist->invited_from_form = true;
 
                 $newdentist->save();
-
 
                 $mtext = 'Patient - '.$this->user->name.' invited his dentist to register 
     Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$this->user->id.'

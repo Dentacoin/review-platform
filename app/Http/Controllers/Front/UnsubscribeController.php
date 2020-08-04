@@ -62,6 +62,8 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 
 	public function new_unsubscribe($locale=null, $user_id, $hash) {
 
+		//в user anonymous също трябва да търся
+
 		$user = User::find($user_id);
 
 		if (!empty($user) && $hash == $user->get_token() ) {

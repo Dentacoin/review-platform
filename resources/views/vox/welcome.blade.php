@@ -128,8 +128,7 @@
 							</div>
 							<div class="answers">
 								<div class="alert alert-warning ip-country mobile" style="display: none;">
-	                        		Hmm... Your IP thinks differently. <br/>
-									Sure you've entered the right country?
+	                        		{!! trans('vox.common.different-ip') !!}
 		                        </div>
 								{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::with('translations')->get()->pluck('name', 'id')->toArray() , null , array('class' => 'country-select form-control country-dropdown', 'real-country' => !empty($country_id) ? $country_id : '') ) }}
 							</div>

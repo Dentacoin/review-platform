@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
-use App;
-use App\Models\User;
 use App\Models\Country;
+use App\Models\User;
 
+use App;
 
 class SitemapController extends FrontController
 {

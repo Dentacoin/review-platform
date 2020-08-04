@@ -712,7 +712,7 @@
 </style>
 
 
-@if(!empty($item->banAppeal))
+@if($item->allBanAppeals->isNotEmpty())
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-inverse">
@@ -739,44 +739,46 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <a href="{{ url('cms/users/edit/'.$item->id) }}">
-                                                    {{ $item->name }}
-                                                </a>
-                                            </td>
-                                            <td>
-                                                {{ $item->banAppeal->link }}
-                                            </td>
-                                            <td>
-                                                <a href="{{ $item->banAppeal->getImageUrl() }}" data-lightbox="banappeal{{ $item->banAppeal->id }}">
-                                                    <img src="{{ $item->banAppeal->getImageUrl(true) }}" style="max-width: 30px;">
-                                                </a>
-                                            </td>
-                                            <td>
-                                                {{ $item->banAppeal->description }}
-                                            </td>
-                                            <td>
-                                                {{ $ban_types[$item->banAppeal->type] }}
-                                            </td>
-                                            <td>
-                                                {{ date('d.m.Y, H:i:s', $item->banAppeal->created_at->timestamp) }}
-                                            </td>
-                                            <td>
-                                                @if($item->banAppeal->status == 'new')
-                                                    <a class="btn btn-sm btn-primary" href="javascript:;" data-toggle="modal" data-target="#approvedModal">
-                                                        Approve
+                                        @foreach($item->allBanAppeals as $ba)
+                                            <tr>
+                                                <td>
+                                                    <a href="{{ url('cms/users/edit/'.$item->id) }}">
+                                                        {{ $item->name }}
                                                     </a>
-                                                    <a class="btn btn-sm btn-danger" href="javascript:;" data-toggle="modal" data-target="#rejectedModal">
-                                                        Reject
+                                                </td>
+                                                <td>
+                                                    {{ $ba->link }}
+                                                </td>
+                                                <td>
+                                                    <a href="{{ $ba->getImageUrl() }}" data-lightbox="banappeal{{ $ba->id }}">
+                                                        <img src="{{ $ba->getImageUrl(true) }}" style="max-width: 30px;">
                                                     </a>
-                                                @elseif($item->banAppeal->status == 'approved')
-                                                    Approved
-                                                @elseif($item->banAppeal->status == 'rejected')
-                                                    Rejected
-                                                @endif
-                                            </td>
-                                        </tr>
+                                                </td>
+                                                <td>
+                                                    {{ $ba->description }}
+                                                </td>
+                                                <td>
+                                                    {{ $ban_types[$ba->type] }}
+                                                </td>
+                                                <td>
+                                                    {{ date('d.m.Y, H:i:s', $ba->created_at->timestamp) }}
+                                                </td>
+                                                <td>
+                                                    @if($ba->status == 'new')
+                                                        <a class="btn btn-sm btn-primary" href="javascript:;" data-toggle="modal" data-target="#approvedModal">
+                                                            Approve
+                                                        </a>
+                                                        <a class="btn btn-sm btn-danger" href="javascript:;" data-toggle="modal" data-target="#rejectedModal">
+                                                            Reject
+                                                        </a>
+                                                    @elseif($ba->status == 'approved')
+                                                        Approved
+                                                    @elseif($ba->status == 'rejected')
+                                                        Rejected
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -1376,6 +1378,108 @@
         </div>
     </div>
 @endif
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <h4 class="panel-title">Email Preferences</h4>
+            </div>
+            <div class="panel-body">
+                <div class="row table-responsive-md">
+
+                    <table class="table table-striped table-question-list">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Dentacoin</th>
+                                <th>TRP</th>
+                                <th>Dentavox</th>
+                                <th>Assurance</th>
+                                <th>Jaws of battle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Service information emails
+                                </td>
+                                <td>
+                                    {!! in_array('dentacoin', $item->service_info) ? '<i class="fa fa-check-square-o" aria-hidden="true"></i>' : '<i class="fa fa-square-o" aria-hidden="true"></i>' !!}
+                                </td>
+                                <td>
+                                    {!! in_array('trp', $item->service_info) ? '<i class="fa fa-check-square-o" aria-hidden="true"></i>' : '<i class="fa fa-square-o" aria-hidden="true"></i>' !!}
+                                </td>
+                                <td>
+                                    {!! in_array('vox', $item->service_info) ? '<i class="fa fa-check-square-o" aria-hidden="true"></i>' : '<i class="fa fa-square-o" aria-hidden="true"></i>' !!}
+                                </td>
+                                <td>
+                                    {!! in_array('assurance', $item->service_info) ? '<i class="fa fa-check-square-o" aria-hidden="true"></i>' : '<i class="fa fa-square-o" aria-hidden="true"></i>' !!}
+                                </td>
+                                <td>
+                                    {!!in_array('jaws', $item->service_info) ? '<i class="fa fa-check-square-o" aria-hidden="true"></i>' : '<i class="fa fa-square-o" aria-hidden="true"></i>' !!}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Website notifications
+                                </td>
+                                <td>
+                                    {!! in_array('dentacoin', $item->website_notifications) ? '<i class="fa fa-check-square-o" aria-hidden="true"></i>' : '<i class="fa fa-square-o" aria-hidden="true"></i>' !!}
+                                </td>
+                                <td>
+                                    {!! in_array('trp', $item->website_notifications) ? '<i class="fa fa-check-square-o" aria-hidden="true"></i>' : '<i class="fa fa-square-o" aria-hidden="true"></i>' !!}
+                                </td>
+                                <td>
+                                    {!! in_array('vox', $item->website_notifications) ? '<i class="fa fa-check-square-o" aria-hidden="true"></i>' : '<i class="fa fa-square-o" aria-hidden="true"></i>' !!}
+                                </td>
+                                <td>
+                                    {!! in_array('assurance', $item->website_notifications) ? '<i class="fa fa-check-square-o" aria-hidden="true"></i>' : '<i class="fa fa-square-o" aria-hidden="true"></i>' !!}
+                                </td>
+                                <td>
+                                    {!! in_array('jaws', $item->website_notifications) ? '<i class="fa fa-check-square-o" aria-hidden="true"></i>' : '<i class="fa fa-square-o" aria-hidden="true"></i>' !!}
+                                </td>
+                            </tr>
+                            <tr id="product_news">
+                                <td>
+                                    Product news and updates
+                                </td>
+                                <td class="dentacoin">
+                                    
+                                </td>
+                                <td class="trp">
+                                    
+                                </td>
+                                <td class="vox">
+                                    
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr id="blog">
+                                <td>
+                                    Blog digest and insights
+                                </td>
+                                <td class="dentacoin">
+                                    
+                                </td>
+                                <td class="trp">
+                                    
+                                </td>
+                                <td class="vox">
+                                    
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="javascript::" class="btn btn-info preferences-button" email="{{ App\Models\User::encrypt($item->email) }}">Check preferences for Product news & Blog</a> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div id="deleteModal" class="modal fade" role="dialog">
     <div class="modal-dialog">

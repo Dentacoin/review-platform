@@ -27,6 +27,7 @@ class EmailTemplate extends Model
     	"name",
         "type",
         "category",
+        "subscribe_category",
         "sendgrid_template_id",
         "not_used", 
     ];
@@ -176,7 +177,16 @@ class EmailTemplate extends Model
         if($this->id==64) {
             $codes[] = '[dentist_name]';
             $codes[] = '[rewardlink]Check Your Reward[/rewardlink]';
-        } 
+        }
+
+        if( $this->id==109 || $this->id==110 ) { // Patient Status from Deleted to Suspicious
+            $codes[] = '[login-button] LOG IN [/login-button]';
+        }
+
+        if( $this->id==111 || $this->id==112 ) { // Patient Status from Deleted to Verified
+            $codes[] = '[login-button] LOG IN [/login-button]';
+            $codes[] = '[faq-link] Link to FAQ [/faq-link]';
+        }
 
         return $codes;
     }

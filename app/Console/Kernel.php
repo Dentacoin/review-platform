@@ -8,7 +8,9 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Models\IncompleteRegistration;
 use App\Models\ScrapeDentistResult;
 use App\Models\DcnTransaction;
+use App\Models\EmailTemplate;
 use App\Models\ScrapeDentist;
+use App\Models\AnonymousUser;
 use App\Models\LeadMagnet;
 use App\Models\UserInvite;
 use App\Models\UserAction;
@@ -53,7 +55,6 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
 
             echo 'Incomplete Dentist Registrations cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
-            
 
             $notifications = [];
 
@@ -111,7 +112,6 @@ class Kernel extends ConsoleKernel
                     'tempalte_id' => 101,
                 ]
             ];
-
             
             foreach ($notifications as $key => $value) {
                 $i = 0;
@@ -124,11 +124,13 @@ class Kernel extends ConsoleKernel
                     }
 
                     $list = IncompleteRegistration::whereNull('completed')->whereNull('unsubscribed')->whereNull( $field )->whereNotNull( 'platform' )->where('platform', $key)->where('created_at', '<', $v['time'])->get();
-                    
 
                     if(!empty($list)) {
                         foreach ($list as $notify) {
                             if (!empty($notify->email) && filter_var($notify->email, FILTER_VALIDATE_EMAIL)) {
+
+                                $unsubscribed = User::isUnsubscribedAnonymous($v['tempalte_id'], 'trp', $notify->email);
+
                                 echo 'USER: '.$notify->id;
                                 $u = User::find(3);
                                 $tmpEmail = $u->email;
@@ -169,12 +171,11 @@ class Kernel extends ConsoleKernel
 
                                 $domain = 'https://'.config('platforms.'.($key == 'trp' ? 'trp' : 'vox').'.url').'/';
 
-                                $arr['unsubscribe-incomplete'] = getLangUrl( 'unsubscribe-incomplete/'.$notify->id.'/'.md5($notify->id.env('SALT_INVITE')), null, $domain);
+                                //$arr['unsubscribe-incomplete'] = getLangUrl( 'unsubscribe-incomplete/'.$notify->id.'/'.md5($notify->id.env('SALT_INVITE')), null, $domain);
 
+                                $mail = $u->sendGridTemplate($v['tempalte_id'], $arr, $key, $unsubscribed, $notify->email);
 
-                                $mail = $u->sendGridTemplate($v['tempalte_id'], $arr, $key);
-
-
+                                //Mega hack
                                 $u->email = $tmpEmail;
                                 $u->name = $tmpName;
                                 $u->save();
@@ -190,6 +191,7 @@ class Kernel extends ConsoleKernel
             }
 
             echo 'Incomplete Dentist Registrations cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
+
         })->cron("*/5 * * * *"); //every 5 min
 
         $schedule->call(function () {
@@ -208,11 +210,18 @@ class Kernel extends ConsoleKernel
                 'time' => Carbon::now()->addDays(-7),
                 'tempalte_id' => 74,
             ];
+
             foreach ($notificaitons as $key => $time) {
+
                 $field = 'notified'.(intval($key)+1);
+
                 $list = UserInvite::whereNull('completed')->whereNull('unsubscribed')->whereNotNull('review')->whereNull( $field )->where('created_at', '<', $time['time'])->get();
+
                 foreach ($list as $notify) {
                     if (!empty($notify->email) && filter_var($notify->email, FILTER_VALIDATE_EMAIL)) {
+
+                        $unsubscribed = User::isUnsubscribedAnonymous($time['tempalte_id'], 'trp', $notify->email);
+
                         echo 'USER: '.$notify;
                         $u = User::find(3);
                         $tmpEmail = $u->email;
@@ -223,8 +232,9 @@ class Kernel extends ConsoleKernel
                         $u->email = $notify->email;
                         $u->name = $notify->name;
                         $u->save();
-                        $mail = $u->sendTemplate($time['tempalte_id'], null, 'trp');
+                        $mail = $u->sendGridTemplate($time['tempalte_id'], null, 'trp', $unsubscribed, $notify->email);
 
+                        //Mega hack
                         $u->email = $tmpEmail;
                         $u->name = $tmpName;
                         $u->save();
@@ -238,93 +248,6 @@ class Kernel extends ConsoleKernel
             }
 
             echo 'Dentist Invite Patient For Review cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
-        })->cron("*/5 * * * *"); //every 5 min
-
-
-        $schedule->call(function () {
-
-            echo 'Old added by patient dentist'.PHP_EOL.PHP_EOL.PHP_EOL;
-
-            $query = "
-                SELECT 
-                    * 
-                FROM 
-                    emails 
-                WHERE 
-                    template_id = 102
-                    AND `user_id` NOT IN ( 
-                        SELECT `user_id` FROM emails WHERE template_id = 103
-                    )
-                    AND `user_id` IN ( 
-                        SELECT `user_id` FROM unclaimed_dentists WHERE `unsubscribed` is null AND `completed` is null AND `notified1` is not null AND `notified2` is null AND `notified3` is null
-                    )
-                    AND `created_at` < '".date('Y-m-d', time() - 86400*13)." 00:00:00'
-                GROUP BY 
-                    `user_id`
-            ";
-
-            $emails = DB::select(
-                DB::raw($query), []
-            );
-
-            if (!empty($emails)) {
-                foreach ($emails as $e) {                
-                    $user = User::find($e->user_id);
-                    if (!empty($user)) {
-
-                        $arr["image_unclaimed_profile"] = $user->getSocialCover();
-                        $arr['claim_link'] = getLangUrl( 'dentist/'.$user->slug.'/claim/'.$user->id, null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']).'&old-dentist=true';
-                        $user->sendGridTemplate(103, $arr, 'trp');
-
-                        $user->old_unclaimed_profile->notified2 = true;
-                        $user->old_unclaimed_profile->save();
-                    }
-                }
-            }
-
-
-            $query = "
-                SELECT 
-                    * 
-                FROM 
-                    emails 
-                WHERE 
-                    template_id = 103
-                    AND `user_id` NOT IN ( 
-                        SELECT `user_id` FROM emails WHERE template_id = 105
-                    )                    
-                    AND `user_id` IN ( 
-                        SELECT `user_id` FROM unclaimed_dentists WHERE `unsubscribed` is null AND `completed` is null AND `notified1` is not null AND `notified2` is not null AND `notified3` is null
-                    )
-                    AND `created_at` < '".date('Y-m-d', time() - 86400)." 00:00:00'
-                GROUP BY 
-                    `user_id`
-            ";
-
-
-            $emails = DB::select(
-                DB::raw($query), []
-            );
-
-            if (!empty($emails)) {
-                foreach ($emails as $e) {                
-                    $user = User::find($e->user_id);
-                    if (!empty($user)) {
-
-                        $arr["image_unclaimed_profile"] = $user->getSocialCover();
-                        $arr['claim_link'] = getLangUrl( 'dentist/'.$user->slug.'/claim/'.$user->id, null, 'https://reviews.dentacoin.com/').'?'. http_build_query(['popup'=>'claim-popup']).'&old-dentist=true';
-                        $user->sendGridTemplate(105, $arr, 'trp');
-
-                        $user->old_unclaimed_profile->notified3 = true;
-                        $user->old_unclaimed_profile->save();
-
-                        $user->status = 'added_approved';
-                        $user->save();
-                    }
-                }
-            }
-
-            echo 'Old added by patient dentist cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
         })->cron("*/5 * * * *"); //every 5 min
 
         

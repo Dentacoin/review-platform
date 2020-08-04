@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use Illuminate\Routing\Controller as BaseController;
+
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+
+use App\User;
+
+use Validator;
 use Auth;
 use Lang;
-use Validator;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class AuthenticateAdmin extends BaseController
 {

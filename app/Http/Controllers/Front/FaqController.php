@@ -5,8 +5,8 @@ use App\Http\Controllers\FrontController;
 
 use App\Models\PageSeo;
 
-use App;
 use Request;
+use App;
 
 class FaqController extends FrontController
 {
