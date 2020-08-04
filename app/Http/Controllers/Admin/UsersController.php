@@ -1514,7 +1514,6 @@ class UsersController extends AdminController {
                                     $item->logoutActions();
                                 }
                             }
-
                             $item->$key = $this->request->input($key);
 
                         } else if($value['type']=='datepicker') {

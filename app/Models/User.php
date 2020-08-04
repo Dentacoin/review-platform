@@ -1278,11 +1278,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $trans->save();
             }
         }
-
         $this->removeFromSendgridSubscribes();
-
         $this->removeTokens();
-            
         $this->logoutActions();
     }
 
@@ -1540,16 +1537,14 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $s_user->save();
                     
                     $s_user->sendTemplate(110, null, 'dentacoin');
-
                     $s_user->removeTokens();
                     $s_user->logoutActions();
                 }
 
                 $this->patient_status = 'suspicious_badip';
                 $this->save();
-
+                
                 $this->sendTemplate(110, null, 'dentacoin');
-
                 $this->removeTokens();
                 $this->logoutActions();
 
