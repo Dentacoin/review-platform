@@ -776,9 +776,47 @@ class UsersController extends AdminController {
             $users = $users->where('email', 'LIKE', '%'.trim(request('search-email')).'%');
         }
 
+        $total_count = $users->count();
+
+        $page = max(1,intval(request('page')));
+        
+        $ppp = 25;
+        $adjacents = 2;
+        $total_pages = ceil($total_count/$ppp);
+
+        //Here we generates the range of the page numbers which will display.
+        if($total_pages <= (1+($adjacents * 2))) {
+          $start = 1;
+          $end   = $total_pages;
+        } else {
+          if(($page - $adjacents) > 1) { 
+            if(($page + $adjacents) < $total_pages) { 
+              $start = ($page - $adjacents);            
+              $end   = ($page + $adjacents);         
+            } else {             
+              $start = ($total_pages - (1+($adjacents*2)));  
+              $end   = $total_pages;               
+            }
+          } else {               
+            $start = 1;                                
+            $end   = (1+($adjacents * 2));             
+          }
+        }
+
+        $users = $users->skip( ($page-1)*$ppp )->take($ppp)->get();
+
+        $pagination_link = (!empty($this->request->input('search-email')) ? '&search-email='.$this->request->input( 'search-email' ) : '');
+
         return $this->showView('anonymous-users', array(
-            'users' => $users->get(),
+            'users' => $users,
             'search_email' => request('search-email'),
+            'total_count' => $total_count,
+            'count' =>($page - 1)*$ppp ,
+            'start' => $start,
+            'end' => $end,
+            'total_pages' => $total_pages,
+            'page' => $page,
+            'pagination_link' => $pagination_link,
         ));
     }
 

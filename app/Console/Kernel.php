@@ -1845,6 +1845,24 @@ NEW & FAILED TRANSACTIONS
             
 
         $schedule->call(function () {
+
+            $incompletes = UserInvite::whereNull('test')->take(50)->get();
+
+            foreach ($incompletes as $incomplete) {
+                if(!empty($incomplete->invited_email) && empty(User::where('email', 'LIKE', $incomplete->invited_email )->first()) && empty(AnonymousUser::where('email', 'LIKE', $incomplete->invited_email )->first())) {
+                    $au = new AnonymousUser;
+                    $au->email = $incomplete->invited_email;
+                    $au->save();
+                }
+
+                $incomplete->test=true;
+                $incomplete->save();
+            }
+
+        })->everyFiveMinutes();
+
+
+        $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron("* * * * *");
