@@ -213,6 +213,9 @@ class UsersController extends AdminController {
             'featured' => [
                 'type' => 'bool',
             ],
+            'ip_protected' => [
+                'type' => 'bool',
+            ],
             
     	];
     }

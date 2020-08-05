@@ -529,6 +529,17 @@
                                     </div>
                                 </div>
                             @endif
+
+                            <div class="form-group">
+                                <label class="col-md-9 control-label"></label>
+                                <label class="col-md-2 control-label user-l" style="padding-left: 0px;">Bad IP Protected</label>
+                                <div class="col-md-1" style="padding-left: 0px;">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'ip_protected',
+                                        'info' => $fields['ip_protected']
+                                    ])
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group avatar-group">
