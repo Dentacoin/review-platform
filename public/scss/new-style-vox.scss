@@ -5754,21 +5754,26 @@ svg:not(:root) {
 	}
 }
 
-.fb_dialog {
-	right: auto !important;
-	left: 18pt !important;
+.fb-customerchat {
+	span {
+		> iframe {
 
-	@media #{$phone} {
-		left: 10px !important;
+			right: auto !important;
+			left: -6px !important;
+
+			@media #{$phone} {
+				left: 0px !important;
+			}
+		}
+
 	}
 }
 
-.fb_customer_chat_bounce_in_v2,
-.fb_customer_chat_bounce_out_v2 {
+[data-testid="bubble_iframe"] {
 	right: auto !important;
-	left: 9pt !important;
+	left: 4px !important;
 
 	@media #{$phone} {
-		left: 70px !important;
+		left: -1px !important;
 	}
 }

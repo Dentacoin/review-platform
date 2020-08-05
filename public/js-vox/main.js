@@ -1366,11 +1366,11 @@ $(document).ready(function(){
     	}
     });
 
-    if(typeof FB !== 'undefined') {
-	    setTimeout( function() {
-	    	FB.CustomerChat.showDialog();
-	    }, 60000);	
-    }
+    // if(typeof FB !== 'undefined') {
+	   //  setTimeout( function() {
+	   //  	FB.CustomerChat.showDialog();
+	   //  }, 60000);	
+    // }
 
 });
 

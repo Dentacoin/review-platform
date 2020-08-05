@@ -48,7 +48,7 @@
                         </div>                  
                         <div class="col-md-2">
                             <select class="form-control" name="search-category">
-                                <option value="">Category</option>
+                                <option value="">Subscribe Category</option>
                                 @foreach(config('email-categories') as $key => $category)
                                     <option value="{{ $key }}" {!! $key==$search_category ? 'selected="selected"' : '' !!}>{{ $category }}</option>
                                 @endforeach

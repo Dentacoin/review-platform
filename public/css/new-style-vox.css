@@ -4123,18 +4123,16 @@ svg:not(:root) {
   .logout-btn-parent i {
     vertical-align: unset !important; } }
 
-.fb_dialog {
+.fb-customerchat span > iframe {
   right: auto !important;
-  left: 18pt !important; }
+  left: -6px !important; }
   @media screen and (max-width: 768px) {
-    .fb_dialog {
-      left: 10px !important; } }
+    .fb-customerchat span > iframe {
+      left: 0px !important; } }
 
-.fb_customer_chat_bounce_in_v2,
-.fb_customer_chat_bounce_out_v2 {
+[data-testid="bubble_iframe"] {
   right: auto !important;
-  left: 9pt !important; }
+  left: 4px !important; }
   @media screen and (max-width: 768px) {
-    .fb_customer_chat_bounce_in_v2,
-    .fb_customer_chat_bounce_out_v2 {
-      left: 70px !important; } }
+    [data-testid="bubble_iframe"] {
+      left: -1px !important; } }

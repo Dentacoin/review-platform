@@ -6514,3 +6514,6 @@ body.strength-pb {
         border-bottom: none; }
   .lang-wrapper:hover .lang-menu {
     display: block; }
+
+[data-testid="unread_iframe"] {
+  display: none; }
