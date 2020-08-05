@@ -1372,6 +1372,11 @@ $(document).ready(function(){
 	   //  }, 60000);	
     // }
 
+    if(typeof FB !== 'undefined') {
+	    FB.CustomerChat.hideDialog();
+    }
+
+
 });
 
 var getUrlParameter = function(sParam) {
