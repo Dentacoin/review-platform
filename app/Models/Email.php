@@ -83,6 +83,7 @@ class Email extends Model
 				'title' => $title,
 				'subtitle' => $subtitle,
 				'platform' => $platform,
+				'unsubscribe' => 'https://api.dentacoin.com/api/update-single-email-preference/'.'?'. http_build_query(['fields'=>urlencode(User::encrypt(json_encode(array('email' => ($anonymous_email ? $anonymous_email : $this->user->email),'email_category' => $this->template->subscribe_category, 'platform' => $this->platform ))))]),
 			])->render();
 
 	        $from = new From($sender, $sender_name);

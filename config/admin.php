@@ -114,7 +114,7 @@ return [
             ),
             'subpages' => array(
                 'admin' => 'admin',
-                'front' => 'front',
+                //'front' => 'front',
                 'trp' => 'trp',
                 'vox' => 'vox',
                 'validation' => 'validation',
