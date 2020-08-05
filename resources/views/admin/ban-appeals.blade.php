@@ -23,7 +23,7 @@
                             <input type="text" class="form-control" name="search-user-id" value="{{ $search_user_id }}" placeholder="User ID">
                         </div>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder=Email>
+                            <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder="User Email">
                         </div>
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="search-name" value="{{ $search_name }}" placeholder="User Name">
