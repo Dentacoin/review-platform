@@ -783,7 +783,7 @@ class UsersController extends AdminController {
 
         $page = max(1,intval(request('page')));
         
-        $ppp = 25;
+        $ppp = 100;
         $adjacents = 2;
         $total_pages = ceil($total_count/$ppp);
 
@@ -2125,7 +2125,7 @@ class UsersController extends AdminController {
             $item->delete();
         }
 
-        return redirect('cms/anonymous_users');
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/anonymous_users');
     }
 
 
