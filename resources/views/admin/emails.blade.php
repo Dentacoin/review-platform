@@ -27,7 +27,7 @@
                     <div class="row" style="margin-bottom: 10px;">                        
                         <div class="col-md-2">
                             <select class="form-control" id="search-platform" name="search-platform">
-                                <option value="">-</option>
+                                <option value="">Platform</option>
                                 <option value="trp" {!! 'trp'==$search_platform ? 'selected="selected"' : '' !!}>TRP</option>
                                 <option value="vox" {!! 'vox'==$search_platform ? 'selected="selected"' : '' !!}>Dentavox</option>
                                 <option value="dentacare" {!! 'dentacare'==$search_platform ? 'selected="selected"' : '' !!}>Dentacare</option>
@@ -48,7 +48,7 @@
                         </div>                  
                         <div class="col-md-2">
                             <select class="form-control" name="search-category">
-                                <option value="">-</option>
+                                <option value="">Category</option>
                                 @foreach(config('email-categories') as $key => $category)
                                     <option value="{{ $key }}" {!! $key==$search_category ? 'selected="selected"' : '' !!}>{{ $category }}</option>
                                 @endforeach
