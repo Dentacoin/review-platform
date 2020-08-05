@@ -43,6 +43,10 @@ class EmailsController extends AdminController
                 $templates = $templates->whereNull('subscribe_category');
             }
 
+            if(!empty(request('search-category'))) {
+                $templates = $templates->where('subscribe_category', request('search-category'));
+            }
+
             $templates = $templates->get();
         } else {
 
@@ -60,6 +64,7 @@ class EmailsController extends AdminController
             'search_sendgrid_id' => request('search-sendgrid-id'),
             'search_platform' => request('search-platform'),
             'without_category' => request('without-category'),
+            'search_category' => request('search-category'),
         ));
     }
 
@@ -91,6 +96,7 @@ class EmailsController extends AdminController
                 $translation->save();
             }
             $template->subscribe_category = $this->request->input('subscribe_category');
+            $template->note = $this->request->input('note');
             $template->save();
 
             $this->request->session()->flash('success-message', trans('admin.page.'.$this->current_page.'.saved'));

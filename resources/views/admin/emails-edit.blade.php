@@ -82,7 +82,13 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Subscribe Category</label>
                             <div class="col-md-10">
-                                {{ Form::select('subscribe_category', ['' => '-'] + config('email-categories'), $item->subscribe_category, array('class' => 'form-control')) }}
+                                {{ Form::select('subscribe_category', ['' => '-'] + config('email-categories'), !empty($item) ? $item->subscribe_category : '', array('class' => 'form-control')) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Note</label>
+                            <div class="col-md-10">
+                                {{ Form::textarea('note', !empty($item) ? $item->note : null, array('maxlength' => 255, 'class' => 'form-control')) }}
                             </div>
                         </div>
 

@@ -40,13 +40,21 @@
                         <div class="col-md-1">
                             <input type="text" class="form-control" name="search-id" value="{{ $search_id }}" placeholder="ID">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <input type="text" class="form-control" name="search-sendgrid-id" value="{{ $search_sendgrid_id }}" placeholder="Sendgrid ID">
                         </div>
                         <div class="col-md-2">
                             <input type="text" class="form-control" name="search-name" value="{{ $search_name }}" placeholder="Name">
-                        </div>
+                        </div>                  
                         <div class="col-md-2">
+                            <select class="form-control" name="search-category">
+                                <option value="">-</option>
+                                @foreach(config('email-categories') as $key => $category)
+                                    <option value="{{ $key }}" {!! $key==$search_category ? 'selected="selected"' : '' !!}>{{ $category }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-1">
                             <label for="without-category" style="display: flex;align-items: center;margin-top: 7px;font-weight: normal;">
                                 <input id="without-category" type="checkbox" name="without-category" value="1" {!! !empty($without_category) ? 'checked="checked"' : '' !!} style="margin-top: 0px;margin-right: 4px;" />
                                 No category
@@ -81,6 +89,8 @@
 						'table_fields' => [
                             'name'              => array(),
                             'email_categories'  => array('template' => 'admin.parts.table-emails-categories'),
+                            'sendgrid_template_id'  => array(),
+                            'note'  => array(),
                             'update'            => array('template' => 'admin.parts.table-emails-edit'),
 						],
                         'table_data' => $templates,
