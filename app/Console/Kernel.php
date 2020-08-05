@@ -1592,11 +1592,12 @@ NEW & FAILED TRANSACTIONS
 
         $schedule->call(function () {
 
-            $logins = UserLogin::whereNull('country')->orderBy('id', 'desc')->take(100)->get();
+            $logins = UserLogin::whereNull('country')->whereNull('test')->orderBy('id', 'desc')->take(100)->get();
 
             if ($logins->isNotEmpty()) {
                 foreach ($logins as $login) {
                     $login->country = \GeoIP::getLocation($login->ip)->country;
+                    $login->test=true;
                     $login->save();
                 }
             }
@@ -1683,6 +1684,7 @@ NEW & FAILED TRANSACTIONS
                     $message->from($sender, $sender_name);
                     $message->to( 'petya.ivanova@dentacoin.com' );
                     $message->to( 'donika.kraeva@dentacoin.com' );
+                    $message->to( 'gergana@youpluswe.com' );
                     $message->subject('Dentist with ?? symbols in address');
                     $message->setBody($mtext, 'text/html'); // for HTML rich messages
                 });
