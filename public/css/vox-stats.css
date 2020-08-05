@@ -604,16 +604,6 @@
         top: 46px; } }
     .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-2[chart-scale="dependency"] {
       justify-content: unset; }
-      .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-2[chart-scale="dependency"] .second-chart.dependency {
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-        margin-top: -40px; }
-        @media screen and (max-width: 1200px) {
-          .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-2[chart-scale="dependency"] .second-chart.dependency {
-            top: auto;
-            transform: none;
-            margin-top: 0px; } }
   @media screen and (max-width: 768px) {
     .page-statistics .stats:not(.st-download) .stat[cur-scale="country_id"] .contents .scales.mobile-scales {
       order: 5; } }

@@ -903,16 +903,16 @@ $main-color: #38ace5;
 							justify-content: unset;
 
 							.second-chart.dependency {
-								position: relative;
-							    top: 50%;
-							    transform: translateY(-50%);
-							    margin-top: -40px;
+								// position: relative;
+							 //    top: 50%;
+							 //    transform: translateY(-50%);
+							 //    margin-top: -40px;
 
-							    @media screen and (max-width: 1200px) {
-							    	top: auto;
-								    transform: none;
-								    margin-top: 0px;
-							    }
+							 //    @media screen and (max-width: 1200px) {
+							 //    	top: auto;
+								//     transform: none;
+								//     margin-top: 0px;
+							 //    }
 							}
 						}
 					}
