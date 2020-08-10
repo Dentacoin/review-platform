@@ -1652,7 +1652,7 @@ class VoxesController extends AdminController
                         $answerwords = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true);
                         $row[] = $qanswers->last() && $qanswers->last()->answer && isset( $answerwords[ ($qanswers->last()->answer)-1 ] ) ? $answerwords[ ($qanswers->last()->answer)-1 ] : '';
                     } else if( $question->type == 'number' ) {
-                        $row[] = $qanswers->last()->answer;
+                        $row[] = $qanswers->last() ? $qanswers->last()->answer : '';
                     } else if( $question->type == 'scale' || $question->type == 'rank' ) {
                         $list = json_decode($question->answers, true);
                         $i=1;
