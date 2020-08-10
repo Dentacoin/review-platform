@@ -251,10 +251,26 @@ $(document).ready(function(){
 
                     $(this).find('.total-all b').html(data.total);
                     $(this).find('.total-all').show();
+                    $(this).find('.chart-1').removeClass('with-relation-hint');
+                    $(this).find('.second-chart').removeClass('verticle-align-chart');
 
                     $(elm).find('.legend').show();
 
                     if(scale=='dependency') {
+
+                        if(($(this).find('.multiple-stat').length || data.related_question_type == 'multiple') && data.related_question_type != 'single') {
+                            $(this).find('.chart-2').addClass('verticle-align-chart');
+
+                            $(this).find('.relation-hint').html($(this).find('.relation-hint').attr('for-multiple'));
+                        } else {
+                            $(this).find('.relation-hint').html($(this).find('.relation-hint').attr('for-single'))
+                        }
+
+                        if(data.relation_answer === false) {
+                            // to add relation hint
+                            $(this).find('.chart-1').addClass('with-relation-hint');
+                        }
+
                         var rows = [];
 
                         rows.push([ 'Answer', 'Respondents', { role: 'style' } ]);

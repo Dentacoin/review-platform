@@ -609,6 +609,7 @@ class StatsController extends FrontController
         		'total' => $total,
         		'totalm' => $totalm,
         		'totalf' => $totalf,
+                'relation_answer' => !empty($question->stats_answer_id) ? true : false,
                 'relation_info' => $relation_info,
         		'answer_id' => $answer_id,
                 'vox_scale_id' => !empty($question->vox_scale_id) || !empty($question->dont_randomize_answers) ? true : false,

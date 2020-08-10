@@ -899,20 +899,42 @@ $main-color: #38ace5;
 							}
 						}
 
+						.chart-1 {
+							&.with-relation-hint {
+								.relation-hint {
+									display: block !important;
+									position: absolute;
+								    top: 80px;
+								    font-style: italic;
+								    font-size: 14px;
+								    padding: 0px 10px;
+									width: 100%;
+									text-align: center;
+								}
+
+								.main-chart {
+									padding-top: 90px;
+								}
+							}
+						}
+
 						.chart-2[chart-scale="dependency"] {
 							justify-content: unset;
 
-							.second-chart.dependency {
-								// position: relative;
-							 //    top: 50%;
-							 //    transform: translateY(-50%);
-							 //    margin-top: -40px;
+							&.verticle-align-chart {
+								.second-chart {
+									position: relative;
+								    top: 50%;
+								    transform: translateY(-50%);
+								    margin-top: -40px;
 
-							 //    @media screen and (max-width: 1200px) {
-							 //    	top: auto;
-								//     transform: none;
-								//     margin-top: 0px;
-							 //    }
+								    @media screen and (max-width: 1200px) {
+								    	top: auto;
+									    transform: none;
+									    margin-top: 0px;
+								    }
+								}
+								
 							}
 						}
 					}

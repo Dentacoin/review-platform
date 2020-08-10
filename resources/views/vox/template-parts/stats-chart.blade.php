@@ -45,6 +45,7 @@
 			{!! trans('vox.page.stats.total') !!}: <b></b>
 		</div>
 		<div class="hint"></div>
+		<div class="relation-hint" style="display: none;" for-single="Click on a pie slice to see data for the respective answer." for-multiple="Click on a column to see data for the respective answer.">Click on a pie slice to see data for the respective answer.</div>
 	</div>
 	@if($question->type!='multiple_choice')
 		<a href="javascript:;" class="mobile-button-legend">
