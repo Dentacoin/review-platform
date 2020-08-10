@@ -163,9 +163,7 @@ class BanAppealsController extends AdminController {
             $action->actioned_at = Carbon::now();
             $action->save();
             
-            $user->sendTemplate(9);
-
-            $user->sendTemplate(9);
+            $user->sendTemplate(9, null, 'dentacoin');
 
             $user->deleteActions();
             User::destroy( $user->id );

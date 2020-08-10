@@ -1255,7 +1255,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             }
             
             if(!empty($this->email) && filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-                $this->sendTemplate(9);
+                $this->sendTemplate(9, null, 'dentacoin');
             }
         }
 
