@@ -98,6 +98,12 @@
                         </div>
                     </div>
                     <div class="form-group clearfix">
+                        <label class="col-md-2 control-label" for="image_in_question">Question image on left</label>
+                        <div class="col-md-1">
+                            <input type="checkbox" name="image_in_question" class="form-control" value="1" id="image_in_question" style="vertical-align: sub;width: 30px;" {!! !empty($question) && !empty($question->image_in_question) ? 'checked="checked"' : '' !!} />
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
                         <label class="col-md-2 control-label" for="image_in_tooltip">Question image in tooltip</label>
                         <div class="col-md-1">
                             <input type="checkbox" name="image_in_tooltip" class="form-control" value="1" id="image_in_tooltip" style="vertical-align: sub;width: 30px;" {!! !empty($question) && !empty($question->image_in_tooltip) ? 'checked="checked"' : '' !!} />

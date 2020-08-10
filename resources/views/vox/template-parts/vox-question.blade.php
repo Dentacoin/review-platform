@@ -41,8 +41,8 @@
 
 		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 
-		<div class="question {{ !empty($question->getImageUrl(false)) && empty($question->image_in_tooltip) ? 'question-with-image' : '' }}" {!! !empty($question->getImageUrl(false)) && !empty($question->image_in_tooltip) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
-			@if(!empty($question->getImageUrl(false)) && empty($question->image_in_tooltip))
+		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
+			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">
 					<img class="q-img" src="{{ $question->getImageUrl(true) }}" style="max-width: 100%;">
 					<img class="zoom-img" src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
@@ -52,7 +52,7 @@
 
 			{!! nl2br($question->questionWithTooltips()) !!}
 
-			@if(!empty($question->getImageUrl(false)) && empty($question->image_in_tooltip))
+			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				</div>
 			@endif
 		</div>
@@ -110,8 +110,8 @@
 	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
 
 		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
-		<div class="question {{ !empty($question->getImageUrl(false)) && empty($question->image_in_tooltip) ? 'question-with-image' : '' }}" {!! !empty($question->getImageUrl(false)) && !empty($question->image_in_tooltip) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
-			@if(!empty($question->getImageUrl(false)) && empty($question->image_in_tooltip))
+		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
+			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">
 					<img class="q-img" src="{{ $question->getImageUrl(true) }}" style="max-width: 100%;">
 					<img class="zoom-img" src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
@@ -121,7 +121,7 @@
 
 			{!! nl2br($question->questionWithTooltips()) !!}
 
-			@if(!empty($question->getImageUrl(false)) && empty($question->image_in_tooltip))
+			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				</div>
 			@endif
 		</div>
@@ -208,8 +208,8 @@
 
 		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 
-		<div class="question {{ !empty($question->getImageUrl(false)) && empty($question->image_in_tooltip) ? 'question-with-image' : '' }}" {!! !empty($question->getImageUrl(false)) && !empty($question->image_in_tooltip) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
-			@if(!empty($question->getImageUrl(false)) && empty($question->image_in_tooltip))
+		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
+			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">
 					<img class="q-img" src="{{ $question->getImageUrl(true) }}" style="max-width: 100%;">
 					<img class="zoom-img" src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
@@ -219,7 +219,7 @@
 
 			{!! nl2br($question->questionWithTooltips()) !!}
 
-			@if(!empty($question->getImageUrl(false)) && empty($question->image_in_tooltip))
+			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				</div>
 			@endif
 		</div>
@@ -245,8 +245,8 @@
 	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
 	
 		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
-		<div class="question {{ !empty($question->getImageUrl(false)) && empty($question->image_in_tooltip) ? 'question-with-image' : '' }}" {!! !empty($question->getImageUrl(false)) && !empty($question->image_in_tooltip) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
-			@if(!empty($question->getImageUrl(false)) && empty($question->image_in_tooltip))
+		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
+			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">
 					<img class="q-img" src="{{ $question->getImageUrl(true) }}" style="max-width: 100%;">
 					<img class="zoom-img" src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
@@ -256,7 +256,7 @@
 
 			{!! nl2br($question->questionWithTooltips()) !!}
 			<p>Please rank the following workplace attributes in order of <br/> importance - 1 being the most important to you.</p>
-			@if(!empty($question->getImageUrl(false)) && empty($question->image_in_tooltip))
+			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				</div>
 			@endif
 
@@ -309,8 +309,8 @@
 	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
 	
 		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
-		<div class="question {{ !empty($question->getImageUrl(false)) && empty($question->image_in_tooltip) ? 'question-with-image' : '' }}" {!! !empty($question->getImageUrl(false)) && !empty($question->image_in_tooltip) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
-			@if(!empty($question->getImageUrl(false)) && empty($question->image_in_tooltip))
+		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
+			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">
 					<img class="q-img" src="{{ $question->getImageUrl(true) }}" style="max-width: 100%;">
 					<img class="zoom-img" src="{{ url('new-vox-img/zoom-in-icon2.svg') }}"/>
@@ -320,7 +320,7 @@
 
 			{!! nl2br($question->questionWithTooltips()) !!}
 
-			@if(!empty($question->getImageUrl(false)) && empty($question->image_in_tooltip))
+			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				</div>
 			@endif
 		</div>

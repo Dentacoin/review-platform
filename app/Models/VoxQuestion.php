@@ -44,6 +44,7 @@ class VoxQuestion extends Model {
         'dont_randomize_answers',
         'has_image',
         'image_in_tooltip',
+        'image_in_question',
     ];
 
     public $timestamps = false;
@@ -202,6 +203,30 @@ class VoxQuestion extends Model {
 
         $destination_thumb = self::getImagePath(true).'.webp';
         WebPConvert::convert(self::getImagePath(true), $destination_thumb, []);
+    }
+
+    public function imageOnlyInQuestion() {
+        if(!empty($this->image_in_question) && !empty($this->getImageUrl(false)) && empty($this->image_in_tooltip)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function imageOnlyInTooltip() {
+        if(!empty($this->image_in_tooltip) && !empty($this->getImageUrl(false)) && empty($this->image_in_question)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function imageInTooltipAndQuestion() {
+        if(!empty($this->image_in_tooltip) && !empty($this->getImageUrl(false)) && !empty($this->image_in_question)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
