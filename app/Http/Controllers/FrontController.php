@@ -324,6 +324,7 @@ class FrontController extends BaseController {
             $response = $next($request);
             $response->headers->set('Referrer-Policy', 'no-referrer');
             $response->headers->set('X-XSS-Protection', '1; mode=block');
+            //$response->headers->set('X-Frame-Options', 'DENY');
      
             return $response;
 
@@ -449,6 +450,10 @@ class FrontController extends BaseController {
 
         $params['poll_scales'] = $poll_scales;
 
+        if(!isset($params['xframe'])) {
+            header("X-Frame-Options: DENY");
+        }
+
         if (!empty($statusCode)) {
             return response()->view('vox.'.$page, $params, $statusCode);
         } else {
@@ -476,6 +481,10 @@ class FrontController extends BaseController {
                 '40' => '40',
                 '50' => '50',
             ];
+        }
+        
+        if(!isset($params['xframe'])) {
+            header("X-Frame-Options: DENY");
         }
         
         if (!empty($statusCode)) {

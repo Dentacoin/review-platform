@@ -96,6 +96,7 @@ class ProfileController extends FrontController {
             }
 
             $params = [
+                'xframe' => true,
                 'latest_voxes' => Vox::where('type', 'normal')->orderBy('created_at', 'desc')->take(3)->get(),
                 'more_surveys' => $more_surveys,
                 'prev_bans' => $prev_bans,
