@@ -1653,7 +1653,7 @@ class VoxesController extends AdminController
                         $row[] = $qanswers->last() && $qanswers->last()->answer && isset( $answerwords[ ($qanswers->last()->answer)-1 ] ) ? $answerwords[ ($qanswers->last()->answer)-1 ] : '';
                     } else if( $question->type == 'number' ) {
                         $row[] = $qanswers->last() ? $qanswers->last()->answer : '';
-                    } else if( $question->type == 'scale' || $question->type == 'rank' ) {
+                    } else if( $question->type == 'scale' ) {
                         $list = json_decode($question->answers, true);
                         $i=1;
                         $answerwords = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true);
@@ -1664,6 +1664,18 @@ class VoxesController extends AdminController
 
                             $row[] = $thisanswer->count() && $thisanswer->first()->scale && isset( $answerwords[ ($thisanswer->first()->scale)-1 ] ) ? $answerwords[ ($thisanswer->first()->scale)-1 ] : '';
                             $i++;
+                        }
+
+                    } else if( $question->type == 'rank' ) {
+                        $list = json_decode($question->answers, true);
+                        $answerwords = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true);
+
+                        foreach ($list as $k => $l) {
+                            foreach ($qanswers as $qa) {
+                                if($qa->scale == $k) {
+                                    $row[] = $qa->answer;
+                                }
+                            }
                         }
 
                     } else if( $question->type == 'multiple_choice' ) {
