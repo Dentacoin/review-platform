@@ -587,6 +587,10 @@ header {
         border-color: black;
         border-width: 1px;
         border-radius: 5px; } }
+    @media screen and (max-width: 360px) {
+      header .start-button {
+        font-size: 11px;
+        padding: 0px 2px; } }
   header .header-right {
     flex: 4;
     display: flex;

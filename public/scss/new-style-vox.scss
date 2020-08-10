@@ -774,6 +774,11 @@ header {
 	    	border-width: 1px;
 	    	border-radius: 5px;
 	    }
+
+	    @media screen and (max-width: 360px) {
+			font-size: 11px;
+   			padding: 0px 2px;
+		}
 	}
 
 	.header-right {
