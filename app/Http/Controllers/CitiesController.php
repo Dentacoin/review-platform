@@ -18,12 +18,21 @@ class CitiesController extends BaseController
 	public function getUsername() {
 
 		$username = trim(Request::input('username'));
-		$users = User::where('is_dentist', true)->where(function($query) use ($username) {
-			$query->where('name', 'LIKE', '%'.$username.'%')
-			->orWhere('name_alternative', 'LIKE', '%'.$username.'%');
+
+		$searchValues = preg_split('/\s+/', $username, -1, PREG_SPLIT_NO_EMPTY);
+
+		$users = User::where('is_dentist', true)->where(function($query) use ($searchValues) {
+			foreach ($searchValues as $value) {
+                $query->where(function($q) use ($value) {
+                    $q->orWhere('name', 'like', "%{$value}%")
+                    ->orWhere('name_alternative', 'like', "%{$value}%");
+                });
+            }
 		})->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed', 'dentist_no_email'])
 		->whereNull('self_deleted')->take(10)->get();
+
 		$user_list = [];
+
 		foreach ($users as $user) {
 			$user_list[] = [
 				'name' => $user->getName().( $user->name_alternative && mb_strtolower($user->name)!=mb_strtolower($user->name_alternative) ? ' / '.$user->name_alternative : '' ) ,
