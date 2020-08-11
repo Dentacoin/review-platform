@@ -87,6 +87,9 @@
 				                    			<a href="{{ url('cms/users/edit/'.$item->user->id) }}">
 													{{ $item->user->name }}
 												</a>
+                                                @if($item->user->allBanAppeals->count() > 1)
+                                                    <br/> + {{ $item->user->allBanAppeals->count() - 1 }} ban{{ $item->user->allBanAppeals->count() - 1 > 1 ? 's' : ''}}
+                                                @endif
 				                    		</td>
 				                    		<td style="word-break: break-all;">
 				                    			{{ $item->link }}
