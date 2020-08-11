@@ -158,7 +158,6 @@ jQuery(document).ready(function($){
 					$.event.trigger({type: 'openPatientRegister'});
 				}, 500);
 			}
-
 		} else if(id=='map-results-popup') {
 			prepareMapFucntion( function() {    
 				var search_map = new google.maps.Map(document.getElementById('search-map'), {

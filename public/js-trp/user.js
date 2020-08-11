@@ -384,6 +384,7 @@ $(document).ready(function(){
         $(this).closest('.review-answers').find('.rating-error').hide();
         $(this).find('.bar').css('width', (rate*20)+'%' );
         handleDCNreward();
+
     } ).mouseout( function(e) {
         var rate = parseInt($(this).find('input').val());
         if(rate) {
@@ -1285,6 +1286,7 @@ $(document).ready(function(){
             $(this).attr('href'), 
             function( data ) {
                 if(data.success) {
+                    $('.button-inner-white.button-ask').hide();
                     $('.ask-dentist').closest('.alert').hide();
                     $('.ask-success-alert').show();
                     $('#review-confirmed').hide();                 
@@ -1958,7 +1960,8 @@ $(document).ready(function(){
                     $('#video-error').show();
                     $('#start-video').show();
                 }
-            }).fail( function() {
+            }).fail( function(error) {
+                console.log(error);
                 $('#video-error').show();
                 $('#start-video').show();
             } );
