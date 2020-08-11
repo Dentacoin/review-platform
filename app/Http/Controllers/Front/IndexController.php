@@ -126,7 +126,6 @@ class IndexController extends FrontController
 			}
 		}
 
-
 		$city_cookie = json_decode(Cookie::get('dentists_city'), true);
 		//dd($city_cookie);
 
@@ -176,6 +175,12 @@ class IndexController extends FrontController
 					$addMore = clone $featured;
 					$addMore = $addMore->where('country_id', $this->user->country_id)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
 					$homeDentists = $homeDentists->concat($addMore);
+				}
+
+				if( $homeDentists->count() < 12 && $this->country_id ) {
+					$addMore = clone $featured;
+					$addMore = $addMore->where('country_id', $this->country_id)->take( 12 - $homeDentists->count() )->get();
+					$homeDentists = $homeDentists->concat($addMore);				
 				}
 
 			} else {
