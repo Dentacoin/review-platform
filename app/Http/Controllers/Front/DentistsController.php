@@ -289,16 +289,18 @@ class DentistsController extends FrontController
         $items = $items->with('country.translations')->get(); //->take($ppp)->skip( ($page-1)*$ppp )
 
         $order_by = $order_to_field[$sort];
-        $items = $items->sortByDesc(function ($dentist, $key) use ($order_by) {
+        $items = $items->sortByDesc(function ($dentist, $key) use ($order_by, $sort) {
+            $sort_option = $sort == 'rating' ? $dentist->$order_by : round($dentist->$order_by);
+
             if($dentist->featured) {
-                return 100000 + round($dentist->$order_by);
+                return 100000 + $sort_option;
             } else {
 
                 if($dentist->$order_by) {
-                    return 10000 + round($dentist->$order_by);
+                    return 10000 + $sort_option;
                 } else {
                     if($dentist->is_partner) {
-                        return 1 + round($dentist->$order_by);
+                        return 1 + $sort_option;
                     } else {
                         return -1;
                     }
