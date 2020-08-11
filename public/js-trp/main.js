@@ -262,6 +262,11 @@ jQuery(document).ready(function($){
 
 			} );
 		} else if(id=='submit-review-popup') {
+
+			if(window.innerWidth < 768 && typeof FB !== 'undefined') {
+			    FB.CustomerChat.hide();
+		    }
+
 			$('.questions-wrapper .question').addClass('hidden');
 			if( $(window).width()<768 ) {
 				$('.questions-wrapper .question .review-answers .subquestion').addClass('hidden');
@@ -401,6 +406,10 @@ jQuery(document).ready(function($){
 		if (waiting_for_approval) {
 			showPopup( 'verification-popup' );
 		}
+
+		if(window.innerWidth < 768 && typeof FB !== 'undefined') {
+		    FB.CustomerChat.show();
+	    }
 
 	}
 
