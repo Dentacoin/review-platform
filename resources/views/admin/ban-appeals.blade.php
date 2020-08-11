@@ -88,7 +88,7 @@
 													{{ $item->user->name }}
 												</a>
                                                 @if($item->user->allBanAppeals->count() > 1)
-                                                    <br/> + {{ $item->user->allBanAppeals->count() - 1 }} ban{{ $item->user->allBanAppeals->count() - 1 > 1 ? 's' : ''}}
+                                                    <br/> <span style="color: red;"> + {{ $item->user->allBanAppeals->count() - 1 }} ban{{ $item->user->allBanAppeals->count() - 1 > 1 ? 's' : ''}}</span>
                                                 @endif
 				                    		</td>
 				                    		<td style="word-break: break-all;">
