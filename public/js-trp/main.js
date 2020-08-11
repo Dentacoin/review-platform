@@ -263,8 +263,14 @@ jQuery(document).ready(function($){
 			} );
 		} else if(id=='submit-review-popup') {
 
-			if(window.innerWidth < 768 && typeof FB !== 'undefined') {
+			if($(window).outerWidth() && typeof FB !== 'undefined') {
 			    FB.CustomerChat.hide();
+		    }
+
+		    if($(window).outerWidth() < 768) {
+		    	$(document.body).on('touchmove', function() {
+		    		$('.question').find('.popup-title').removeClass('sticky-q');
+		    	});
 		    }
 
 			$('.questions-wrapper .question').addClass('hidden');
@@ -291,6 +297,10 @@ jQuery(document).ready(function($){
 				if(ok) {
 					$(this).closest('.question').nextAll(".question").not('.do-not-show').first().removeClass('hidden');
 
+					if($(window).outerWidth() < 768) {
+						$(this).closest('.question').find('.popup-title').removeClass('sticky-q');
+					}
+
 					if( !$(this).closest('.question').next().next().hasClass('question') || $(this).closest('.question').next().hasClass('skippable') ) {
 						$(this).closest('.question').next().next().removeClass('hidden');
 						$(this).closest('.question').next().next().show();
@@ -301,12 +311,26 @@ jQuery(document).ready(function($){
 	                scrollTop: $('.questions-wrapper').innerHeight()
 	            }, 500);
 
+	            if($(window).outerWidth() < 768) {
+
+		            $('.question').find('.popup-title').removeClass('sticky-q');
+
+		            console.log($(this).closest('.question').offset().top - 100, $(this).closest('.question').next().length, $(this).closest('.question').next().attr('q-id') !== false , !ok);
+
+		            if($(this).closest('.question').offset().top - 100 < 0 && $(this).closest('.question').next().length && $(this).closest('.question').next().attr('q-id') !== false) {
+		            	if(!$(this).closest('.question').find('.popup-title').hasClass('sticky-q') && !ok) {
+		            		$(this).closest('.question').find('.popup-title').addClass('sticky-q');	
+		            	}
+		            }
+		        }
+	            
+
 			} );
 
 			$('.questions-wrapper .question').first().removeClass('hidden');
 			$('.questions-wrapper .question').each( function() {
 				$(this).find('.review-answers .subquestion').first().removeClass('hidden');
-			} )
+			} );
 			
 		} else if(id=='popup-share') {
 			var url = $(e.target).closest('[share-href]').length ? $(e.target).closest('[share-href]').attr('share-href') : window.location.href;
@@ -1632,9 +1656,11 @@ jQuery(document).ready(function($){
     });
 
     if(typeof FB !== 'undefined') {
-	    setTimeout( function() {
-	    	FB.CustomerChat.showDialog();
-	    }, 60000);	
+    	if(!$('#submit-review-popup').length || ($('#submit-review-popup').length && $('#submit-review-popup').is(':hidden'))) {
+		    setTimeout( function() {
+		    	//FB.CustomerChat.showDialog();
+		    }, 60000);	
+		}
     }
 
 	if(!user_id) {

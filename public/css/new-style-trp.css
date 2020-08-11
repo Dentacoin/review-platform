@@ -2591,6 +2591,11 @@ textarea.input {
         padding: 12px 10px 15px;
         font-size: 16px;
         text-align: center; } }
+    .fixed-popup .popup-inner .popup-title.sticky-q {
+      position: fixed;
+      top: 0;
+      width: calc(100% + 0px);
+      right: 20px; }
     .fixed-popup .popup-inner .popup-title .blue {
       color: #126585;
       font-size: 20px; }

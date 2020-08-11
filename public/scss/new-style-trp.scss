@@ -3145,6 +3145,13 @@ textarea.input {
 				text-align: center;
 			}
 
+			&.sticky-q {
+				position: fixed;
+			    top: 0;
+			    width: calc(100% + 0px);
+    			right: 20px;
+			}
+
 			.blue {
 				color: #126585;
 				font-size: 20px;
