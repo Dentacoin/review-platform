@@ -127,63 +127,69 @@ class Kernel extends ConsoleKernel
 
                     if(!empty($list)) {
                         foreach ($list as $notify) {
+
                             if (!empty($notify->email) && filter_var($notify->email, FILTER_VALIDATE_EMAIL)) {
 
-                                $unsubscribed = User::isUnsubscribedAnonymous($v['tempalte_id'], 'trp', $notify->email);
+                                $user = User::where('email', 'LIKE', $notify->email)->first();
 
-                                echo 'USER: '.$notify->id;
-                                $u = User::find(3);
-                                $tmpEmail = $u->email;
-                                $tmpName = $u->name;
+                                if(empty($user)) {
 
-                                echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
+                                    $unsubscribed = User::isUnsubscribedAnonymous($v['tempalte_id'], 'trp', $notify->email);
 
-                                $missingInfo = '';
+                                    echo 'USER: '.$notify->id;
+                                    $u = User::find(3);
+                                    $tmpEmail = $u->email;
+                                    $tmpName = $u->name;
 
-                                if(!empty($notify->address)) {
-                                    $missingInfo .= 'Select the areas of specialty, upload a logo or photo of your team, and click complete.';
-                                } else {
-                                    $missingInfo .= 'Fill in the contact info about your practice, select the areas of specialty, upload a logo or photo of your team, and click complete.';
+                                    echo 'Sending '.$field.' to '.$notify->name.' / '.$notify->email.PHP_EOL;
+
+                                    $missingInfo = '';
+
+                                    if(!empty($notify->address)) {
+                                        $missingInfo .= 'Select the areas of specialty, upload a logo or photo of your team, and click complete.';
+                                    } else {
+                                        $missingInfo .= 'Fill in the contact info about your practice, select the areas of specialty, upload a logo or photo of your team, and click complete.';
+                                    }
+
+                                    $active_voxes_count = Vox::where('type', '!=', 'hidden')->count();
+
+                                    $u->email = $notify->email;
+                                    $u->name = $notify->name;
+                                    $u->save();
+
+                                    $arr = [];
+
+                                    if($key == 'trp') {
+                                        $arr['trp-signup-continue'] = 'https://reviews.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                    } else if($key == 'vox') {
+                                        $arr['vox-signup-continue'] = 'https://dentavox.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                    } else if($key == 'assurance') {
+                                        $arr['assurance-signup-continue'] = 'https://assurance.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                    } else if($key == 'dentacoin') {
+                                        $arr['dcn-signup-continue'] = 'https://dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                    } else if($key == 'dentists') {
+                                        $arr['dentists-signup-continue'] = 'https://dentists.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
+                                    }
+
+                                    $arr['missing-info'] = $missingInfo;
+                                    $arr['active-surveys'] = $active_voxes_count;
+
+                                    $domain = 'https://'.config('platforms.'.($key == 'trp' ? 'trp' : 'vox').'.url').'/';
+
+                                    //$arr['unsubscribe-incomplete'] = getLangUrl( 'unsubscribe-incomplete/'.$notify->id.'/'.md5($notify->id.env('SALT_INVITE')), null, $domain);
+
+                                    $mail = $u->sendGridTemplate($v['tempalte_id'], $arr, $key, $unsubscribed, $notify->email);
+
+                                    //Mega hack
+                                    $u->email = $tmpEmail;
+                                    $u->name = $tmpName;
+                                    $u->save();
+
+                                    $notify->$field = true;
+                                    $notify->save();
+
+                                    $mail->delete();
                                 }
-
-                                $active_voxes_count = Vox::where('type', '!=', 'hidden')->count();
-
-                                $u->email = $notify->email;
-                                $u->name = $notify->name;
-                                $u->save();
-
-                                $arr = [];
-
-                                if($key == 'trp') {
-                                    $arr['trp-signup-continue'] = 'https://reviews.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                } else if($key == 'vox') {
-                                    $arr['vox-signup-continue'] = 'https://dentavox.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                } else if($key == 'assurance') {
-                                    $arr['assurance-signup-continue'] = 'https://assurance.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                } else if($key == 'dentacoin') {
-                                    $arr['dcn-signup-continue'] = 'https://dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                } else if($key == 'dentists') {
-                                    $arr['dentists-signup-continue'] = 'https://dentists.dentacoin.com/?temp-data-key='.md5($notify->id.env('SALT_INVITE')).'&temp-data-id='.$notify->id;
-                                }
-
-                                $arr['missing-info'] = $missingInfo;
-                                $arr['active-surveys'] = $active_voxes_count;
-
-                                $domain = 'https://'.config('platforms.'.($key == 'trp' ? 'trp' : 'vox').'.url').'/';
-
-                                //$arr['unsubscribe-incomplete'] = getLangUrl( 'unsubscribe-incomplete/'.$notify->id.'/'.md5($notify->id.env('SALT_INVITE')), null, $domain);
-
-                                $mail = $u->sendGridTemplate($v['tempalte_id'], $arr, $key, $unsubscribed, $notify->email);
-
-                                //Mega hack
-                                $u->email = $tmpEmail;
-                                $u->name = $tmpName;
-                                $u->save();
-
-                                $notify->$field = true;
-                                $notify->save();
-
-                                $mail->delete();
                             }
                         }
                     }
