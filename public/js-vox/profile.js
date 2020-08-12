@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    if ($('.swiper-container').length) {
+    if ($('.swiper-container').length && typeof Swiper !== 'undefined') {
 
         if (window.innerWidth > 768) {
 

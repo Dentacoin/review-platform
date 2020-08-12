@@ -20,7 +20,7 @@ $(document).ready(function(){
         });
     }
 
-    if ($('.swiper-container').length) {
+    if ($('.swiper-container').length && typeof Swiper !== 'undefined' ) {
 
         if (window.innerWidth > 768) {
 
@@ -506,7 +506,7 @@ $(document).ready(function(){
                             
                             
                             $("#question-done").show();
-                            if ($('.swiper-container').length || $('.swipe-cont').length) {
+                            if (($('.swiper-container').length || $('.swipe-cont').length)  && typeof Swiper !== 'undefined' ) {
 
                                 if (window.innerWidth > 768) {
 
