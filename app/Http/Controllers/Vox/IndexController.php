@@ -164,17 +164,13 @@ class IndexController extends FrontController
 	            'social_title' => $seos->social_title,
 	            'social_description' => $seos->social_description,
 	        	'js' => [
-	        		'index.js'
+	        		'index.js',
+					'swiper.min.js'
 	        	],
 	        	'css' => [
-	        		'vox-index.css'
+	        		'vox-index.css',
+					'swiper.min.css'
 	        	],
-	            'jscdn' => [
-	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
-	            ],
-	            'csscdn' => [
-	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
-	            ],
 	        ));			
 		}
 	}

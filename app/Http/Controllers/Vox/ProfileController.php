@@ -109,17 +109,15 @@ class ProfileController extends FrontController {
                 'payouts' => $this->user->history->where('type', '=', 'vox-cashout'),
                 'js' => [
                     'profile.js',
+                    'swiper.min.js'
                 ],
                 'csscdn' => [
                     'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
-                    'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
-                ],
-                'jscdn' => [
-                    'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
                 ],
                 'css' => [
                     'vox-profile-fix.css',
                     'vox-profile.css',
+                    'swiper.min.css'
                 ],
             ];
 

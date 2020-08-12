@@ -122,17 +122,15 @@ class VoxController extends FrontController
 				'vox' => $vox,
 				'custom_body_class' => 'vox-public',
 				'js' => [
-					'vox.js'
+					'vox.js',
+					'swiper.min.js'
 				],
 				'css' => [
-					'vox-public-vox.css'
+					'vox-public-vox.css',
+					'swiper.min.css'
 				],
 	            'csscdn' => [
 	                'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
-	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
-	            ],
-	            'jscdn' => [
-	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
 	            ],
 	            'canonical' => $vox->getLink(),
 	            'social_image' => $vox->getSocialImageUrl('survey'),
@@ -269,14 +267,12 @@ class VoxController extends FrontController
             	'canonical' => $vox->getLink(),
             	'social_image' => $vox->getSocialImageUrl('survey'),
 				'js' => [
-					'taken-vox.js'
+					'taken-vox.js',
+                    'swiper.min.js'
 				],
-	            'csscdn' => [
-	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
-	            ],
-	            'jscdn' => [
-	                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
-	            ],
+                'css' => [
+                    'swiper.min.css'
+                ],
 			]);
 		}
 
@@ -344,14 +340,12 @@ class VoxController extends FrontController
 		            'canonical' => $vox->getLink(),
 		            'social_image' => $vox->getSocialImageUrl('survey'),
 					'js' => [
-						'taken-vox.js'
+						'taken-vox.js',
+                    	'swiper.min.js'
 					],
-		            'csscdn' => [
-		                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
-		            ],
-		            'jscdn' => [
-		                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
-		            ],
+					'css' => [
+                    	'swiper.min.css'
+					],
 				]);
 			}
 
@@ -1383,18 +1377,14 @@ class VoxController extends FrontController
 				'../js/jquery-ui.min.js',
 				'../js/jquery-ui-touch.min.js',
         		'flickity.pkgd.min.js',
+                'swiper.min.js'
 			],
 			'css' => [
 				'vox-questionnaries.css',
 				'lightbox.css',
-        		'flickity.min.css'
+        		'flickity.min.css',
+                'swiper.min.css'
 			],
-            'jscdn' => [
-                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.min.js',
-            ],
-            'csscdn' => [
-                'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/css/swiper.min.css',
-            ],
             'canonical' => $vox->getLink(),
             'social_image' => $vox->getSocialImageUrl('survey'),
             'seo_title' => $seo_title,
