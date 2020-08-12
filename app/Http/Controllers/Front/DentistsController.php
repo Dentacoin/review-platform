@@ -186,7 +186,7 @@ class DentistsController extends FrontController
                 }
             }
 
-            if ((empty($parsedAddress['city_name']) && empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) || $query == 'ireland') {
+            if ((empty($parsedAddress['city_name']) && empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) || $query == 'ireland' || $parsedAddress['country_name'] == 'North Macedonia') {
                 $country_n = !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'] : $query;
                 if ($country_n == 'Vietnam') {
                     $country = Country::find(238);
@@ -196,6 +196,8 @@ class DentistsController extends FrontController
                     $country = Country::find(103);
                 } else if($country_n == 'Czechia') {
                     $country = Country::find(58);
+                } else if($country_n == 'North Macedonia') {
+                    $country = Country::find(129);
                 } else {
                     $country = Country::with('translations')->whereHas('translations', function ($query) use ($country_n) {
                         $query->where('name', 'LIKE', $country_n);
@@ -205,7 +207,6 @@ class DentistsController extends FrontController
 
                 // if (!empty($country) && !empty($country->id)) {
                 // }
-
                 $items->where('country_id', $country->id);
 
                 $country_search = true;
