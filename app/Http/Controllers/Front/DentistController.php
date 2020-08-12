@@ -85,10 +85,9 @@ class DentistController extends FrontController
                 dd('upload a video first');
             }
 
-
-
             // Define an object that will be used to make all API requests.
             $client = $this->getClient();
+
             $service = new \Google_Service_YouTube($client);
 
             if (isset($_SESSION['token'])) {
@@ -99,7 +98,6 @@ class DentistController extends FrontController
                 print("no access token");
                 exit;
             }
-
 
             $url = $this->videosInsert($client,
                 $service,
@@ -114,8 +112,6 @@ class DentistController extends FrontController
                        'status.privacyStatus' => 'unlisted',
                        'status.publicStatsViewable' => ''),
                 'snippet,status', array());
-
-
 
             return Response::json( [
                 'url' => $url
@@ -1043,7 +1039,37 @@ class DentistController extends FrontController
                         
                     } else {
 
-                        $user->name = Request::input('name');
+                        if($user->status == 'admin_imported') {
+
+                            $claim = new DentistClaim;
+                            $claim->dentist_id = $user->id;
+                            $claim->name = Request::input('name');
+                            $claim->email = $user->email;
+                            $claim->phone = '';
+                            $claim->password = bcrypt(Request::input('password'));
+                            $claim->status = 'approved';
+                            $claim->from_mail = true;
+                            $claim->save();
+
+                            $mtext = 'Dentist claimed his profile from short link. The profile was automatically approved.<br/>
+                            Name: '.$claim->name.' <br/>
+                            Email: '.$claim->email.' <br/>
+                            Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
+
+                            Mail::send([], [], function ($message) use ($mtext, $user) {
+                                $sender = config('mail.from.address');
+                                $sender_name = config('mail.from.name');
+
+                                $message->from($sender, $sender_name);
+                                $message->to( 'betina.bogdanova@dentacoin.com' );
+                                $message->to( 'petya.ivanova@dentacoin.com' );
+                                $message->subject('Imported Dentist Claimed His Profile');
+                                $message->setBody($mtext, 'text/html'); // for HTML rich messages
+                            });
+                        } else {
+                            $user->name = Request::input('name');
+                        }
+
                         $user->phone = Request::input('phone');
                         $user->password = bcrypt(Request::input('password'));
                         if($user->status == 'admin_imported') {
@@ -1065,7 +1091,7 @@ class DentistController extends FrontController
 
                         $user_info = new \stdClass();
                         $user_info->email = $user->email;
-                        $user_info->title = config('titles')[$user->title];
+                        $user_info->title = $user->title ? config('titles')[$user->title] : 'Dr';
                         $user_info->first_name = explode(' ', $user->name)[0];
                         $user_info->last_name = isset(explode(' ', $user->name)[1]) ? explode(' ', $user->name)[1] : '';
                         $user_info->type = 'dentist';
@@ -1320,7 +1346,7 @@ class DentistController extends FrontController
         $client->setAccessType('offline');
 
         // Load previously authorized credentials from a file.
-        $credentialsPath = storage_path() . 'yt-oauth2.json';
+        $credentialsPath = storage_path() . '/yt-oauth2.json';
         if (file_exists($credentialsPath)) {
             $accessToken = json_decode(file_get_contents($credentialsPath), true);
         } else {
@@ -1329,11 +1355,10 @@ class DentistController extends FrontController
             printf("Open the following link in your browser:\n%s\n", $authUrl);
             print 'Enter verification code: ';
 
-
             if (isset($_GET['code'])) {
 
 
-                $credentialsPath = storage_path() . 'yt-oauth2.json';
+                $credentialsPath = storage_path() . '/yt-oauth2.json';
                 // Exchange authorization code for an access token.
                 $accessToken = $client->fetchAccessTokenWithAuthCode($_GET['code']);
 
@@ -1353,6 +1378,7 @@ class DentistController extends FrontController
             $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
             file_put_contents($credentialsPath, json_encode($client->getAccessToken()));
         }
+
         return $client;
     }
 

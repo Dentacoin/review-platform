@@ -1193,6 +1193,7 @@ class UsersController extends AdminController {
                 $newuser->status = 'admin_imported';
                 $newuser->address = Request::input('address');
                 $newuser->website = Request::input('website');
+                $newuser->website_notifications = ['dentacoin','trp','vox','assurance','jaws'];
                 $newuser->is_dentist = 1;
                 $newuser->is_clinic = Request::input('type')=='clinic' ? 1 : 0;
 
