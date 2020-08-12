@@ -1098,9 +1098,18 @@ class VoxController extends FrontController
 
 		        				$vox->recalculateUsersPercentage($this->user);
 
-	                            if($this->user->invited_by) {
-	                                $inv = UserInvite::where('user_id', $this->user->invited_by)->where('invited_id', $this->user->id)->first();
-	                                if(!empty($inv) && !$inv->rewarded) {
+	                            if($this->user->invited_by && !empty($this->user->invitor)) {
+
+	                            	$inv = UserInvite::where('user_id', $this->user->invited_by)
+						            ->where(function ($query) {
+						                $query->where('platform', '!=' 'trp')
+						                ->orWhere('platform', null);
+						            })
+						            ->where('invited_id', $this->user->id)
+						            ->whereNull('rewarded')
+						            ->first();
+
+	                                if(!empty($inv)) {
 
 	                                	$reward = new DcnReward;
 								        $reward->user_id = $this->user->invited_by;
@@ -1127,14 +1136,10 @@ class VoxController extends FrontController
 
 	                                    $inv->rewarded = true;
 	                                    $inv->save();
-
-	                                    if(!empty($this->user->invitor)) {
 	                                    	
-		                                    $this->user->invitor->sendGridTemplate( 82, [
-		                                        'who_joined_name' => $this->user->getName()
-		                                    ], 'vox' );
-	                                    }
-
+	                                    $this->user->invitor->sendGridTemplate( 82, [
+	                                        'who_joined_name' => $this->user->getName()
+	                                    ], 'vox' );
 	                                }
 	                            }
 

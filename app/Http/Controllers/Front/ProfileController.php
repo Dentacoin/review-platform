@@ -201,6 +201,7 @@ class ProfileController extends FrontController
                     $invitation->user_id = $this->user->id;
                     $invitation->invited_email = Request::Input('email');
                     $invitation->invited_name = Request::Input('name');
+                    $invitation->platform = 'trp';
                     $invitation->review = true;
                     $invitation->save();
                 }
@@ -320,6 +321,7 @@ class ProfileController extends FrontController
             $invitation = new UserInvite;
             $invitation->user_id = $this->user->id;
             $invitation->invited_email = 'whatsapp';
+            $invitation->platform = 'trp';
             $invitation->save();
 
             $text = trans('trp.page.profile.invite.whatsapp', ['name' => $this->user->getName() ]).rawurlencode($this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]));
@@ -553,6 +555,7 @@ class ProfileController extends FrontController
                                 $invitation->user_id = $this->user->id;
                                 $invitation->invited_email = $email;
                                 $invitation->invited_name = $names[$key];
+                                $invitation->platform = 'trp';
                                 $invitation->review = true;
                                 $invitation->save();
 
@@ -868,6 +871,7 @@ class ProfileController extends FrontController
                     $invitation->job = Request::Input('team-job');
                     $invitation->join_clinic = true;
                     $invitation->for_team = true;
+                    $invitation->platform = 'trp';
                     $invitation->save();
 
                     if( Request::input('photo') ) {
@@ -1421,6 +1425,7 @@ class ProfileController extends FrontController
                 $inv->invited_email = $ask->user->email;
                 $inv->invited_name = $ask->user->name;
                 $inv->invited_id = $ask->user->id;
+                $inv->platform = 'trp';
                 $inv->rewarded = true;
                 $inv->save();                    
             }

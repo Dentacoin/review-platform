@@ -146,9 +146,18 @@ class Review extends Model {
         }
 
 
-        if($this->user->invited_by && !$this->user->invitor->is_dentist) {
-            $inv = UserInvite::where('user_id', $this->user->invited_by)->where('invited_id', $this->user->id)->first();
-            if(!empty($inv) && !$inv->rewarded) {
+        if($this->user->invited_by && !empty($this->user->invitor) && !$this->user->invitor->is_dentist) {
+
+            $inv = UserInvite::where('user_id', $this->user->invited_by)
+            ->where(function ($query) {
+                $query->where('platform', '!=' 'vox')
+                ->orWhere('platform', null);
+            })
+            ->where('invited_id', $this->user->id)
+            ->whereNull('rewarded')
+            ->first();
+
+            if(!empty($inv)) {
 
                 $reward = new DcnReward();
                 $reward->user_id = $this->user->invitor;
