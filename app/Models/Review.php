@@ -212,15 +212,19 @@ class Review extends Model {
         }
 
         $dentist_name = $dentist->name;
-
-        $img->text($dentist_name, 225, 547, function($font) {
+        $dentist_name = wordwrap($dentist_name, 27); 
+        $lines = count(explode("\n", $dentist_name));
+        $top = 547;
+        if($lines == 2) {
+            $top -= 20;
+        }
+        $img->text($dentist_name, 225, $top, function($font) {
             $font->file(public_path().'/fonts/Calibri-Bold.ttf');
             $font->size(33);
             $font->color('#ffffff');
             $font->align('center');
             $font->valign('top');
         });
-
 
         if( $this->title ) {
             //$img->insert( public_path().'/img-trp/cover-review.png');
