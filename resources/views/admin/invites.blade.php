@@ -60,6 +60,7 @@
                     <table class="table table-striped table-question-list">
                         <thead>
                             <tr>
+                                <th>Date</th>
                                 <th>Inviter</th>
                                 <th>Invited email</th>
                                 <th>Invited name</th>
@@ -70,9 +71,12 @@
                         <tbody>
                         	@foreach($items as $invite)
 	                            <tr>
-	                                <td>
-	                                    <a href="{{ url('cms/users/edit/'.$invite->user_id) }}"> {{ !empty($invite->user) ? $invite->user->name : 'unknown' }}</a>
-	                                </td>
+                                    <td>
+                                        {{ date('d.m.Y, H:i:s', $invite->created_at->timestamp) }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ url('cms/users/edit/'.$invite->user_id) }}"> {{ !empty($invite->user) ? $invite->user->name : 'unknown' }}</a>
+                                    </td>
                                     <td>
                                         {!! $invite->invited_email !!}
                                     </td>
