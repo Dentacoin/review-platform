@@ -1102,7 +1102,7 @@ class VoxController extends FrontController
 
 	                            	$inv = UserInvite::where('user_id', $this->user->invited_by)
 						            ->where(function ($query) {
-						                $query->where('platform', '!=' 'trp')
+						                $query->where('platform', '!=', 'trp')
 						                ->orWhere('platform', null);
 						            })
 						            ->where('invited_id', $this->user->id)

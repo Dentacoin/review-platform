@@ -150,7 +150,7 @@ class Review extends Model {
 
             $inv = UserInvite::where('user_id', $this->user->invited_by)
             ->where(function ($query) {
-                $query->where('platform', '!=' 'vox')
+                $query->where('platform', '!=', 'vox')
                 ->orWhere('platform', null);
             })
             ->where('invited_id', $this->user->id)
