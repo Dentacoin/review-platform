@@ -25,7 +25,7 @@ return [
 		'balance' => false,
 	],
 	'dentists' => [
-		'name' => 'Dentacoin Hub',
+		'name' => 'Dentists',
 		'url' => 'dentists.dentacoin.com',
 		'balance' => false,
 	],
