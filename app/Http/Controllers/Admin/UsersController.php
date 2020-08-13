@@ -242,7 +242,6 @@ class UsersController extends AdminController {
             'patient.new_not_verified' => 'Patients (New - not verified)',
             'patient.suspicious_badip' => 'Patients (Suspicious (Bad IP))',
             'patient.suspicious_admin' => 'Patients (Suspicious (Admin))',
-            'patient.self_deleted' => 'Patients (Self-deleted)',
             'patient.deleted' => 'Patients (Deleted)',
             'dentist.all' => 'Dentists (All)',
             'dentist.new' => 'Dentists (New)',
@@ -404,9 +403,7 @@ class UsersController extends AdminController {
 
                         $query = $query->where('patient_status', $patient_status);
 
-                        if($patient_status == 'self_deleted') {
-                            Input::merge(['search-status' => 'self_deleted']);
-                        } else {
+                        if($patient_status == 'deleted') {
                             Input::merge(['search-status' => 'all']);
                         }
                     } else if(!empty($tmp[1]) && $tmp[1] == 'partners') {
