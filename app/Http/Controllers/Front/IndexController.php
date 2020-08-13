@@ -179,7 +179,7 @@ class IndexController extends FrontController
 
 				if( $homeDentists->count() < 12 && $this->city_id && !empty(City::find($this->city_id)) ) {
 					$addMore = clone $featured;
-					$addMore = $addMore->where('city_name', 'LIKE', City::find($this->city_id)->name)->take( 12 - $homeDentists->count() )->get();
+					$addMore = $addMore->where('city_name', 'LIKE', City::find($this->city_id)->name)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
 					$homeDentists = $homeDentists->concat($addMore);
 				}
 
