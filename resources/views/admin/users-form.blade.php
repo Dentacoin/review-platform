@@ -650,6 +650,13 @@
                                     </div>
                                 </div>
                             @endif
+                            @if(!empty($item->invited_by) && !$item->is_dentist)
+                                <div class="form-group" style="text-align: right;">
+                                    <div class="col-md-12">
+                                        Registered from {{ !empty($item->platform) ? config('platforms')[$item->platform]['name'] : '' }} friend invite <a href="{{ url('cms/users/edit/'.App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->id) }}">{{ App\Models\User::where('id', $item->invited_by)->withTrashed()->first()->name }}</a>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="form-group">
                                 <div class="col-md-6"></div>
                                 <div class="col-md-6">

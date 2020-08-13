@@ -181,6 +181,9 @@ class Review extends Model {
                 }
 
                 $reward->save();
+
+                $inv->rewarded = true;
+                $inv->save();
                 
                 $this->user->invitor->sendTemplate( 22, [
                     'who_joined_name' => $this->user->getName()

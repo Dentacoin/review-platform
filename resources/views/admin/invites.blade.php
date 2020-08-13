@@ -66,6 +66,7 @@
                                 <th>Invited name</th>
                                 <th>Registered from invite</th>
                                 <th>Platform</th>
+                                <th>Rewarded</th>
                                 <th>Delete</th>
                             </tr>
                         </thead>
@@ -89,6 +90,9 @@
                                     </td>
                                     <td>
                                         {!! $invite->platform ? config('platforms')[$invite->platform]['name'] : '' !!}
+                                    </td>
+                                    <td>
+                                        {!! $invite->rewarded ? '<span class="label label-success">Yes</span>' : '<span class="label label-warning">No</span>' !!}
                                     </td>
                                     <td>
                                         <a class="btn btn-sm btn-deafult" href="{{ url('cms/invites/delete/'.$invite->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a>

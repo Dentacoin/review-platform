@@ -1,10 +1,10 @@
 @if( $item->clinic_id )
 	<a href="{{ url('/cms/users/edit/'.$item->clinic_id) }}">
-		{{ $item->clinic->name }}
+		{{ $item->clinic ? $item->clinic->name : 'Deleted clinic' }}
 	</a>
 @endif
 @if( $item->dentist_id )
 	<a href="{{ url('/cms/users/edit/'.$item->dentist_id) }}">
-		{{ $item->dentist->name }}
+		{{ $item->dentist ? $item->dentist->name : 'Deleted dentist' }}
 	</a>
 @endif
