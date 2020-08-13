@@ -84,11 +84,17 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <select class="form-control" name="search-type">
+                            <select class="form-control select2type" multiple name="search-type[]">
+                                @foreach($user_types as $k => $type)
+                                    <option value="{{ $k }}" {{ !empty($search_type) && in_array($k, $search_type) ? 'selected="selected"' : '' }}>{{ $type }}</option>
+                                @endforeach
+                            </select>
+
+                            <!-- <select class="form-control" name="search-type">
                                 @foreach($user_types as $k => $type)
                                     <option value="{{ $k }}" {!! $k==$search_type ? 'selected="selected"' : '' !!}>{{ $type }}</option>
                                 @endforeach
-                            </select>
+                            </select> -->
                         </div>
                         <div class="col-md-2">
                             <select class="form-control" name="search-status">

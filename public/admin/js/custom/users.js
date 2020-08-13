@@ -131,6 +131,13 @@ $(document).ready(function(){
         });
     }
 
+	if ($('.select2type').length) {
+        $(".select2type").select2({
+            multiple: true,
+            placeholder: 'User types',
+        });
+    }
+
 
     $('.preferences-button').click( function() {
     	var email = $(this).attr('email');

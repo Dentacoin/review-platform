@@ -365,42 +365,58 @@ class UsersController extends AdminController {
 
 
         if(!empty(request('search-type'))) {
-            $tmp = explode('.', request('search-type'));
-            $type = $tmp[0];
-            $status = isset($tmp[1]) && isset( config('user-statuses')[ $tmp[1] ] ) ? $tmp[1] : null;
-            $patient_status = isset($tmp[1]) && isset( config('patient-statuses')[ $tmp[1] ] ) ? $tmp[1] : null;
-            if( $type=='patient' ) {
-                $users = $users->where(function ($query) {
-                    $query->where('is_dentist', 0)
-                    ->orWhereNull('is_dentist');
-                });
-            } else if( $type=='clinic' ) {
-                $users = $users->where('is_dentist', 1)
-                ->where('is_clinic', 1);
-            } else if( $type=='dentist_clinic' ) {
-                $users = $users->where('is_dentist', 1);
-            } else if( $type=='dentist' ) {
-                $users = $users->where('is_dentist', 1)->where(function ($query) {
-                    $query->where('is_clinic', 0)
-                    ->orWhereNull('is_clinic');
-                });
-            }
 
-            if( $status ) {
-                $users = $users->where('status', $status);
-            } else if($patient_status) {
-                $users = $users->where('patient_status', $patient_status);
+            $users = $users->where(function ($query) {
+                foreach (request('search-type') as $stype) {
 
-                if($patient_status == 'self_deleted') {
-                    Input::merge(['search-status' => 'self_deleted']);
-                } else if($patient_status == 'deleted') {
-                    Input::merge(['search-status' => 'deleted']);
-                } else {
-                    Input::merge(['search-status' => 'all']);
+                    $tmp = explode('.', $stype);
+                    $type = $tmp[0];
+                    $status = isset($tmp[1]) && isset( config('user-statuses')[ $tmp[1] ] ) ? $tmp[1] : null;
+                    $patient_status = isset($tmp[1]) && isset( config('patient-statuses')[ $tmp[1] ] ) ? $tmp[1] : null;
+
+                    if( $type=='patient' ) {
+                        $query = $query->orWhere(function ($subquery) {
+                            $subquery->where('is_dentist', 0)
+                            ->orWhereNull('is_dentist');
+                        });
+                    } else if( $type=='clinic' ) {
+                        $query = $query->orWhere(function ($subquery) {
+                            $subquery->where('is_dentist', 1)
+                            ->where('is_clinic', 1);
+                        });
+                    } else if( $type=='dentist_clinic' ) {
+
+                        $query = $query->orWhere(function ($subquery) {
+                            $subquery->where('is_dentist', 1);
+                        });
+                    } else if( $type=='dentist' ) {
+                        $query = $query->orWhere(function ($subquery) {
+                            $subquery->where('is_dentist', 1)->where(function ($subsubquery) {
+                                $subsubquery->where('is_clinic', 0)
+                                ->orWhereNull('is_clinic');
+                            });
+                        });
+                    }
+
+                    if( $status ) {
+                        $query = $query->where('status', $status);
+                    } else if($patient_status) {
+
+                        $query = $query->where('patient_status', $patient_status);
+
+                        if($patient_status == 'self_deleted') {
+                            Input::merge(['search-status' => 'self_deleted']);
+                        } else {
+                            Input::merge(['search-status' => 'all']);
+                        }
+                    } else if(!empty($tmp[1]) && $tmp[1] == 'partners') {
+
+                        $query = $query->where('is_partner', 1);
+                    }
+
                 }
-            } else if(!empty($tmp[1]) && $tmp[1] == 'partners') {
-                $users = $users->where('is_partner', 1);
-            }
+            });
+
         }
 
         if(!empty(request('search-status'))) {
