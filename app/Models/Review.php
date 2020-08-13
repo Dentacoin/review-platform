@@ -160,7 +160,7 @@ class Review extends Model {
             if(!empty($inv)) {
 
                 $reward = new DcnReward();
-                $reward->user_id = $this->user->invitor;
+                $reward->user_id = $this->user->invited_by;
                 $reward->platform = 'trp';
                 $reward->reward = Reward::getReward('reward_invite');
                 $reward->type = 'invitation';
