@@ -263,7 +263,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->whereNotNull('for_team')->whereNull('invited_id')->orderBy('created_at', 'DESC');
     }
     public function patients_invites() {
-        return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->whereNull('for_team')->orderBy('created_at', 'DESC');
+        return $this->hasMany('App\Models\UserInvite', 'user_id', 'id')->whereNull('for_team')->where(function ($query) {
+            $query->where('platform', 'trp')
+            ->orWhere('platform', null);
+        })->orderBy('created_at', 'DESC');
     }
     public function claims() {
         return $this->hasMany('App\Models\DentistClaim', 'dentist_id', 'id')->orderBy('created_at', 'DESC');
