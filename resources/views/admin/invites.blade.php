@@ -65,6 +65,7 @@
                                 <th>Invited email</th>
                                 <th>Invited name</th>
                                 <th>Registered from invite</th>
+                                <th>Platform</th>
                                 <th>Delete</th>
                             </tr>
                         </thead>
@@ -85,6 +86,9 @@
                                     </td>
                                     <td>
                                         {!! $invite->invited_id ? '<a href="'.url('cms/users/edit/'.$invite->invited_id).'">'.(!empty($invite->invited) ? $invite->invited->name : 'unknown').'</a>' : '-' !!}
+                                    </td>
+                                    <td>
+                                        {!! $invite->platform ? config('platforms')[$invite->platform]['name'] : '' !!}
                                     </td>
                                     <td>
                                         <a class="btn btn-sm btn-deafult" href="{{ url('cms/invites/delete/'.$invite->id) }}" onclick="return confirm('Are you sure you want to DELETE this?');">{{ trans('admin.table.delete') }}</a>

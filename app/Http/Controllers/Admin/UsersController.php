@@ -1483,6 +1483,40 @@ class UsersController extends AdminController {
                                         }
                                     }
 
+                                    if($item->invited_by && !empty($item->invitor) && !$item->invitor->is_dentist) {
+
+                                        $inv = UserInvite::where('user_id', $item->invited_by)
+                                        ->where('invited_id', $item->id)
+                                        ->whereNull('rewarded')
+                                        ->first();
+
+                                        if(!empty($inv)) {
+
+                                            $reward = new DcnReward();
+                                            $reward->user_id = $item->invitor;
+                                            $reward->platform = 'trp';
+                                            $reward->reward = Reward::getReward('reward_invite');
+                                            $reward->type = 'invitation';
+                                            $reward->reference_id = $inv->id;
+
+                                            $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                                            $dd = new DeviceDetector($userAgent);
+                                            $dd->parse();
+
+                                            if ($dd->isBot()) {
+                                                // handle bots,spiders,crawlers,...
+                                                $reward->device = $dd->getBot();
+                                            } else {
+                                                $reward->device = $dd->getDeviceName();
+                                                $reward->brand = $dd->getBrandName();
+                                                $reward->model = $dd->getModel();
+                                                $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                                            }
+
+                                            $reward->save();
+                                        }
+                                    }
+
                                 } else if( $this->request->input($key)=='added_by_dentist_unclaimed' ) {
                                     $item->status = 'added_by_dentist_unclaimed';
                                     $item->slug = $item->makeSlug();

@@ -60,6 +60,7 @@
                     <h4 class="panel-title">Incomplete Dentist Registrations</h4>
                 </div>
                 <div class="panel-body">
+                    Total count: {{ $total_count }}
 					@include('admin.parts.table', [
 						'table_id' => 'incomplete',
 						'table_fields' => [
@@ -75,7 +76,6 @@
                             'notified1'                => array('format' => 'bool', 'label' => 'Email 1h'),
                             'notified2'                => array('format' => 'bool', 'label' => 'Email 24h'),
                             'notified3'                => array('format' => 'bool', 'label' => 'Email 72h'),
-                            'unsubscribed'               => array('format' => 'bool', 'label' => 'Unsubscribed'),
 						],
                         'table_data' => $items,
 						'table_pagination' => false,
