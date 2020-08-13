@@ -86,6 +86,8 @@
 		<div class="alert invite-alert" style="display: none; margin-top: 20px;"></div>
 
 		<div class="tac">
+			<br/>
+			@include('trp.parts.sample-invite')
 			<a href="javascript:;" class="button button-inner-white bulk-invite-back" step="3">
 				{!! nl2br(trans('trp.popup.popup-invite.back')) !!}
 			</a>

@@ -104,6 +104,7 @@
 					-->
 				@endif
 				<div class="tac">
+					@include('trp.parts.sample-invite')
 					<input type="submit" class="button manually-send" value="{!! nl2br(trans('trp.popup.popup-invite.send')) !!}">
 				</div>
 			{!! Form::close() !!}
@@ -201,3 +202,5 @@
 		@endif
 	</div>
 </div>
+
+@include('trp.popups.invite-sample')

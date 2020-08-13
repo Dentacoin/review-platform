@@ -387,9 +387,13 @@ jQuery(document).ready(function($){
 		var waiting_for_approval = false;
 		var custom_widget_popup = false;
 		var existing_dentist = false;
+		var invite_popup = false;
 
 		if($('#select-reviews-popup').hasClass('active')) {
 			custom_widget_popup = true;
+		}
+		if($('#invite-sample').hasClass('active')) {
+			invite_popup = true;
 		}
 		if($('#popup-wokring-time-waiting').hasClass('active')) {
 			waiting_for_approval = true;
@@ -420,6 +424,10 @@ jQuery(document).ready(function($){
 
 		if( refreshOnClosePopup ) {
 			window.location.reload();
+		}
+
+		if(invite_popup) {
+			showPopup( 'popup-invite' );
 		}
 
 		if(custom_widget_popup) {

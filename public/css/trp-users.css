@@ -2014,3 +2014,371 @@ body.reviews-guided-tour .widget-code-wrap {
   @media screen and (max-width: 768px) {
     body.reviews-guided-tour .widget-code-wrap {
       margin: 20px -30px 50px; } }
+
+.fixed-popup .popup-inner .invite-content {
+  padding-bottom: 40px; }
+  .fixed-popup .popup-inner .invite-content .popup-title {
+    font-weight: bold;
+    text-transform: uppercase; }
+  .fixed-popup .popup-inner .invite-content .popup-desc {
+    margin-top: -10px; }
+  .fixed-popup .popup-inner .invite-content .step-title {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #126585;
+    text-align: center;
+    font-size: 24px; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .invite-content .step-title {
+        font-size: 18px;
+        margin-bottom: 25px;
+        text-align: left; } }
+    .fixed-popup .popup-inner .invite-content .step-title span {
+      font-size: 24px;
+      color: black; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .invite-content .step-title span {
+          font-size: 18px; } }
+  .fixed-popup .popup-inner .invite-content .checkboxes-wrapper {
+    width: 100%;
+    overflow: hidden;
+    overflow-x: auto;
+    padding-bottom: 20px;
+    -webkit-overflow-scrolling: touch; }
+    .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkboxes-inner {
+      width: 1052px; }
+    .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper {
+      width: 243px;
+      float: left;
+      margin-right: 20px; }
+      .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper:last-child {
+        margin-right: 0px; }
+      .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper.active .invite-radio i:before {
+        content: "\f14a"; }
+      .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper.active .copypaste-box {
+        border-color: #126585; }
+      .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper .invite-radio {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-bottom: 9px; }
+        .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper .invite-radio input {
+          display: none; }
+        .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper .invite-radio i {
+          font-size: 28px;
+          color: #126585; }
+      .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper .copypaste-box {
+        border: 1px solid #d6d6d7;
+        border-radius: 8px;
+        padding: 15px 0px; }
+        .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper .copypaste-box p {
+          border-bottom: 1px solid #ebebeb;
+          color: #333;
+          padding: 4px 18px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis; }
+          .fixed-popup .popup-inner .invite-content .checkboxes-wrapper .checkbox-wrapper .copypaste-box p:last-child {
+            border-bottom: none; }
+  .fixed-popup .popup-inner .invite-content .label-file {
+    display: block;
+    width: 100%;
+    height: 62px;
+    border: 1px solid #d6d6d7;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .invite-content .label-file {
+        height: 50px; } }
+    .fixed-popup .popup-inner .invite-content .label-file .browse {
+      width: 132px;
+      text-align: center;
+      text-transform: uppercase;
+      background-color: #eee;
+      height: 60px;
+      line-height: 60px;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      font-size: 20px; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .invite-content .label-file .browse {
+          height: 48px;
+          line-height: 48px;
+          font-size: 16px;
+          width: 92px; } }
+    .fixed-popup .popup-inner .invite-content .label-file span {
+      flex: 1;
+      padding: 0px 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+    .fixed-popup .popup-inner .invite-content .label-file input {
+      opacity: 0;
+      z-index: -1;
+      width: 1px;
+      position: absolute; }
+  .fixed-popup .popup-inner .invite-content .file-info {
+    margin-bottom: 30px; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .invite-content .file-info {
+        margin-bottom: 0px; } }
+    .fixed-popup .popup-inner .invite-content .file-info .download-sample {
+      color: #0cafd4; }
+    .fixed-popup .popup-inner .invite-content .file-info img {
+      width: 10px;
+      margin-right: 3px; }
+    .fixed-popup .popup-inner .invite-content .file-info span {
+      display: block;
+      text-align: right;
+      color: #888888; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .invite-content .file-info span {
+          text-align: left;
+          margin-top: 10px; } }
+  .fixed-popup .popup-inner .invite-content .info {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center; }
+    .fixed-popup .popup-inner .invite-content .info img {
+      margin-right: 5px; }
+  .fixed-popup .popup-inner .invite-content .button {
+    padding: 12px 49px;
+    background-color: #0cafd4;
+    -webkit-appearance: none; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .invite-content .button {
+        width: 100%;
+        text-align: center; } }
+    .fixed-popup .popup-inner .invite-content .button i {
+      color: white; }
+    .fixed-popup .popup-inner .invite-content .button.button-inner-white {
+      background-color: white;
+      border-color: #0cafd4;
+      color: #0cafd4;
+      padding: 11px 77px; }
+    .fixed-popup .popup-inner .invite-content .button[disabled="disabled"] {
+      background-color: #aaaaaa; }
+  .fixed-popup .popup-inner .invite-content .whatsapp-button {
+    background-color: #24cd63;
+    padding: 12px 29px;
+    margin-top: 20px;
+    display: inline-block;
+    color: white;
+    text-transform: uppercase;
+    font-size: 20px;
+    border-radius: 5px;
+    cursor: pointer; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .invite-content .whatsapp-button {
+        margin-top: 0px; } }
+    .fixed-popup .popup-inner .invite-content .whatsapp-button i {
+      font-size: 28px;
+      display: inline-block;
+      color: white;
+      margin-left: 8px;
+      vertical-align: sub; }
+  .fixed-popup .popup-inner .invite-content .modern-field .modern-input {
+    border-width: 1px;
+    border-radius: 8px; }
+  .fixed-popup .popup-inner .invite-content .final-button {
+    position: relative; }
+    .fixed-popup .popup-inner .invite-content .final-button.waiting {
+      color: #0cafd4; }
+      .fixed-popup .popup-inner .invite-content .final-button.waiting .loader {
+        display: block; }
+    .fixed-popup .popup-inner .invite-content .final-button .loader {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%); }
+      .fixed-popup .popup-inner .invite-content .final-button .loader i {
+        font-size: 22px; }
+  .fixed-popup .popup-inner .invite-content .chosen-patient-info {
+    height: 62px;
+    border: 1px solid #d6d6d7;
+    border-radius: 8px;
+    margin-top: 25px; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .invite-content .chosen-patient-info {
+        height: auto; } }
+    .fixed-popup .popup-inner .invite-content .chosen-patient-info .patient-info-label {
+      height: 100%;
+      min-width: 160px;
+      text-align: center;
+      align-items: center;
+      line-height: 60px;
+      text-transform: uppercase;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+      background-color: #eeeeee; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .invite-content .chosen-patient-info .patient-info-label {
+          line-height: 40px;
+          border-top-right-radius: 8px;
+          border-bottom-left-radius: 0px; } }
+    .fixed-popup .popup-inner .invite-content .chosen-patient-info .patient-info-value {
+      height: 100%;
+      line-height: 60px;
+      margin: 0px 23px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .invite-content .chosen-patient-info .patient-info-value {
+          line-height: 50px;
+          margin: 0px 10px; } }
+  .fixed-popup .popup-inner .invite-content form .input-flex {
+    align-items: center; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .invite-content form .input-flex {
+        display: flex; } }
+    .fixed-popup .popup-inner .invite-content form .input-flex .code-wrapper {
+      flex: 1;
+      max-width: 68px;
+      text-align: center;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #eeeeee;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      border-right: none;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px; }
+      @media screen and (max-width: 998px) {
+        .fixed-popup .popup-inner .invite-content form .input-flex .code-wrapper {
+          height: 45px; } }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .invite-content form .input-flex .code-wrapper {
+          max-width: 58px; } }
+    .fixed-popup .popup-inner .invite-content form .input-flex .phone-code-holder {
+      display: block;
+      font-size: 16px;
+      color: #888888;
+      top: -4px; }
+      @media screen and (max-width: 768px) {
+        .fixed-popup .popup-inner .invite-content form .input-flex .phone-code-holder {
+          font-size: 14px; } }
+    .fixed-popup .popup-inner .invite-content form .input-flex .modern-field {
+      margin-bottom: 0px; }
+      .fixed-popup .popup-inner .invite-content form .input-flex .modern-field .modern-input + label {
+        height: 0px; }
+      .fixed-popup .popup-inner .invite-content form .input-flex .modern-field .modern-input {
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px; }
+  .fixed-popup .popup-inner .invite-content form #add-invite-image {
+    opacity: 0;
+    position: absolute;
+    z-index: -1; }
+  .fixed-popup .popup-inner .invite-content form label[for="add-invite-image"] {
+    position: relative;
+    width: 100%;
+    height: 41px;
+    background-color: #126585;
+    display: block;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    line-height: 41px;
+    cursor: pointer; }
+  .fixed-popup .popup-inner .invite-content form .col:first-child {
+    margin-left: 0px; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .invite-content form .col:first-child {
+        margin-right: 0px; } }
+  .fixed-popup .popup-inner .invite-content form .col {
+    margin-left: 15px; }
+    @media screen and (max-width: 768px) {
+      .fixed-popup .popup-inner .invite-content form .col {
+        margin-left: 0px; } }
+  .fixed-popup .popup-inner .invite-content form .add-dentist,
+  .fixed-popup .popup-inner .invite-content form .add-patient {
+    color: #126585; }
+  .fixed-popup .popup-inner .invite-content form .button {
+    margin-top: 25px;
+    padding: 12px 49px; }
+  .fixed-popup .popup-inner .invite-content .preview-invite {
+    font-size: 14px;
+    color: #0cafd4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 190px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: -10px;
+    margin-top: 10px; }
+    .fixed-popup .popup-inner .invite-content .preview-invite img {
+      max-width: 20px;
+      margin-right: 3px; }
+
+.sample-invite-wrapper p, .sample-invite-wrapper div, .sample-invite-wrapper a, .sample-invite-wrapper a strong {
+  font-family: arial,helvetica,sans-serif;
+  font-size: 14px;
+  line-height: 22px; }
+.sample-invite-wrapper a, .sample-invite-wrapper a strong {
+  text-decoration: none !important;
+  color: #1188E6; }
+.sample-invite-wrapper p {
+  margin: 0 !important;
+  padding: 0 !important; }
+.sample-invite-wrapper table.wrapper {
+  width: 100% !important;
+  table-layout: fixed !important;
+  -webkit-font-smoothing: antialiased !important;
+  -webkit-text-size-adjust: 100% !important;
+  -moz-text-size-adjust: 100% !important;
+  -ms-text-size-adjust: 100% !important; }
+.sample-invite-wrapper strong {
+  font-weight: bold; }
+.sample-invite-wrapper img.max-width {
+  max-width: 100% !important; }
+.sample-invite-wrapper .column.of-2 {
+  width: 50% !important; }
+.sample-invite-wrapper .column.of-3 {
+  width: 33.333% !important; }
+.sample-invite-wrapper .column.of-4 {
+  width: 25% !important; }
+@media screen and (max-width: 480px) {
+  .sample-invite-wrapper .preheader .rightColumnContent,
+  .sample-invite-wrapper .footer .rightColumnContent {
+    text-align: left !important; }
+  .sample-invite-wrapper .preheader .rightColumnContent div,
+  .sample-invite-wrapper .preheader .rightColumnContent span,
+  .sample-invite-wrapper .footer .rightColumnContent div,
+  .sample-invite-wrapper .footer .rightColumnContent span {
+    text-align: left !important; }
+  .sample-invite-wrapper .preheader .rightColumnContent,
+  .sample-invite-wrapper .preheader .leftColumnContent {
+    font-size: 80% !important;
+    padding: 5px 0 !important; }
+  .sample-invite-wrapper table.wrapper-mobile {
+    width: 100% !important;
+    table-layout: fixed; }
+  .sample-invite-wrapper img.max-width {
+    height: auto !important;
+    max-width: 100% !important; }
+  .sample-invite-wrapper a.bulletproof-button {
+    display: block !important;
+    width: auto !important;
+    font-size: 80%;
+    padding-left: 0 !important;
+    padding-right: 0 !important; }
+  .sample-invite-wrapper .columns {
+    width: 100% !important; }
+  .sample-invite-wrapper .column {
+    display: block !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important; }
+  .sample-invite-wrapper .social-icon-column {
+    display: inline-block !important; } }

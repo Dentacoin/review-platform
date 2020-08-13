@@ -1215,10 +1215,10 @@
 		            						{{ $ask->created_at->toDateString() }}
 		            					</td>
 		            					<td>
-		            						{{ $ask->user->name }}
+		            						{{ $ask->user ? $ask->user->name : "deleted user" }}
 		            					</td>
 		            					<td>
-		            						{{ $ask->user->email }}
+		            						{{ $ask->user? $ask->user->email : 'deleted user' }}
 		            					</td>
 		            					<td>
 		            						@if($ask->status=='waiting')
