@@ -1514,6 +1514,9 @@ class UsersController extends AdminController {
                                             }
 
                                             $reward->save();
+
+                                            $inv->rewarded = true;
+                                            $inv->save();
                                         }
                                     }
 
