@@ -91,7 +91,8 @@
                 </div>
                 <div class="panel-body">
                     <div>
-                        Transactions count: {{ $total_count }}
+                        Transactions count: {{ $total_count }} <br/>
+                        Sum: {{ $total_dcn_price }} DCN
                     </div>
             		<div class="panel-body">
                         <form method="post" action="{{ url('cms/transactions') }}" original-action="{{ url('cms/transactions') }}">

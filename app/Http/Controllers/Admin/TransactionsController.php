@@ -62,7 +62,7 @@ class TransactionsController extends AdminController
         }
 
         $total_count = $transactions->count();
-
+        $total_dcn_price = $transactions->sum('amount');
 
         $page = max(1,intval(request('page')));
         
@@ -118,6 +118,7 @@ class TransactionsController extends AdminController
             'start' => $start,
             'end' => $end,
             'total_pages' => $total_pages,
+            'total_dcn_price' => $total_dcn_price,
             'page' => $page,
             'pagination_link' => $pagination_link,
             'current_url' => $current_url,
