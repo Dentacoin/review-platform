@@ -255,7 +255,7 @@
 			@endif
 
 			{!! nl2br($question->questionWithTooltips()) !!}
-			<p>Please rank the following workplace attributes in order of <br/> importance - 1 being the most important to you.</p>
+			<p>{!! trans('vox.page.questionnaire.rank-info') !!}</p>
 			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				</div>
 			@endif
