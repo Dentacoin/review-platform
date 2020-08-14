@@ -114,7 +114,7 @@ class AdminController extends BaseController
         $params['counters']['youtube'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
         $params['counters']['ban_appeals'] = BanAppeal::where('status', 'new')->count();
         
-        $params['cache_version'] = '2020-07-13-01';
+        $params['cache_version'] = '2020-08-14';
 
         $params['dcn_warning_transaction'] = DcnTransaction::where('status', 'dont_retry')->count();
         //dd($params['counters']);

@@ -8,7 +8,7 @@ $(document).ready(function(){
 
     	$.ajax({
             type: 'POST',
-            url: 'https://dev-api.dentacoin.com/api/anonymous-email-preferences',
+            url: 'https://api.dentacoin.com/api/anonymous-email-preferences',
             data: {
                 email: email
             },
