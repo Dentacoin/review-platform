@@ -1814,9 +1814,9 @@ class VoxesController extends AdminController
         $question = VoxQuestion::find($q_id);
 
         if(!empty($question)) {
-
-            $images_files = json_decode($question->answers_images_filename);
-            $k = array_search($answer, $images_files);
+            $images_files = json_decode($question->answers_images_filename, true);
+            
+            $k = array_search($answer, $images_files ) ;
             if($k) {
                 unset($images_files[$k]);
             }
