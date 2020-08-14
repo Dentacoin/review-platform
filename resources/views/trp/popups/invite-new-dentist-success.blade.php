@@ -8,7 +8,11 @@
 			{!! trans('trp.page.invite.popup.success.title') !!}
 		</h2>
 		<p>
-			{!! nl2br(trans('trp.page.invite.popup.success.text', [ 'name' => '<span id="inv_dent_name">[Clinic/Dentist Name]</span>' ,'amount' => '<span>'.App\Models\Reward::getReward('patient_add_dentist').' DCN!</span>'])) !!}
+			@if(!empty($user))
+				{!! nl2br(trans('trp.page.invite.popup.success.text', [ 'name' => '<span id="inv_dent_name">[Clinic/Dentist Name]</span>' ,'amount' => '<span>'.App\Models\Reward::getReward('patient_add_dentist').' DCN</span>'])) !!}
+			@else
+				{!! nl2br(trans('trp.page.invite.popup.success.text.no-user', [ 'name' => '<span id="inv_dent_name">[Clinic/Dentist Name]</span>' ,'amount' => '<span>'.App\Models\Reward::getReward('patient_add_dentist').' DCN</span>'])) !!}
+			@endif
 		</p>
 		<a href="javascript:;" class="button close-popup">{!! trans('trp.page.invite.popup.success.button') !!}</a>
 	</div>

@@ -208,7 +208,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 //Empty route
 $reviewRoutes = function () {
-	// Route::any('test', 									'Front\YouTubeController@test');
+	//Route::any('test', 									'Front\YouTubeController@test');
 	Route::post('civic', 								'CivicController@add');
 	//Route::any('mobident', 								'MobidentController@reward');
 
@@ -287,9 +287,9 @@ $reviewRoutes = function () {
 			Route::get('banned', 								'BannedController@home');
 			Route::get('profile-redirect', 						'BannedController@profile_redirect');
 
-			Route::group(['middleware' => 'auth:web'], function () {
+			Route::any('invite-new-dentist', 					'AddDentistController@invite_new_dentist');
 
-				Route::any('invite-new-dentist', 						'AddDentistController@invite_new_dentist');
+			Route::group(['middleware' => 'auth:web'], function () {
 
 				Route::post('profile/info/upload', 						'ProfileController@upload');
 				Route::post('profile/gallery', 							'ProfileController@gallery');				

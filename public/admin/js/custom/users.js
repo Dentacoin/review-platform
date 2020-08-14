@@ -132,10 +132,12 @@ $(document).ready(function(){
     }
 
 	if ($('.select2type').length) {
-        $(".select2type").select2({
-            multiple: true,
-            placeholder: 'User types',
-        });
+		$(".select2type").multiSelect();
+
+		if( $('.multi-select-button').text() == '-- Select --') {
+
+			$('.multi-select-button').html('User types')
+		}
     }
 
 

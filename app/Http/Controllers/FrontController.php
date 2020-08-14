@@ -181,7 +181,49 @@ class FrontController extends BaseController {
                 if ($given_reward) {
                     return redirect(getLangUrl('/').'?daily-answer');
                 }
-                
+            }
+
+            if(!empty($this->user) && session('invite_new_dentist')) {
+                $new_dentist = User::find(session('invite_new_dentist'));
+
+                if(!empty($new_dentist) && $new_dentist->is_dentist && $new_dentist->invited_by === 0) {
+                    $new_dentist->invited_by = $this->user->id;
+                    $new_dentist->save();
+
+                    if($new_dentist->status == 'added_approved' || $new_dentist->status == 'approved') {
+                        $amount = Reward::getReward('patient_add_dentist');
+                        $reward = new DcnReward();
+                        $reward->user_id = $this->user->id;
+                        $reward->reward = $amount;
+                        $reward->platform = 'trp';
+                        $reward->type = 'added_dentist';
+                        $reward->reference_id = $new_dentist->id;
+
+                        $userAgent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+                        $dd = new DeviceDetector($userAgent);
+                        $dd->parse();
+
+                        if ($dd->isBot()) {
+                            // handle bots,spiders,crawlers,...
+                            $reward->device = $dd->getBot();
+                        } else {
+                            $reward->device = $dd->getDeviceName();
+                            $reward->brand = $dd->getBrandName();
+                            $reward->model = $dd->getModel();
+                            $reward->os = in_array('name', $dd->getOs()) ? $dd->getOs()['name'] : '';
+                        }
+                        $reward->save();
+
+                        $substitutions = [
+                            'added_dentist_name' => $new_dentist->getName(),
+                            'trp_added_dentist_prf' => $new_dentist->getLink().'?dcn-gateway-type=patient-login',
+                        ];
+
+                        $this->user->sendGridTemplate(65, $substitutions, 'trp');
+                    }
+                }
+
+                session()->pull('invite_new_dentist');
             }
 
             if(!empty($this->user) && session('login-logged')!=$this->user->id) {
@@ -542,6 +584,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '2020-08-14';
+        $params['cache_version'] = '2020-08-14-01';
     }
 }

@@ -650,6 +650,13 @@
                                     </div>
                                 </div>
                             @endif
+                            @if($item->invited_by===0 && $item->is_dentist)
+                                <div class="form-group" style="text-align: right;">
+                                    <div class="col-md-12">
+                                        Added by not registered patient
+                                    </div>
+                                </div>
+                            @endif
                             @if(!empty($item->invited_by) && !$item->is_dentist)
                                 <div class="form-group" style="text-align: right;">
                                     <div class="col-md-12">

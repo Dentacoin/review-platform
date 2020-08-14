@@ -324,8 +324,9 @@
 		@include('trp/popups/share')
 		@if(empty($user))
 			@include('trp/popups/dentist-verification')
-			@include('trp/popups/failed-reg-login')
-		@elseif(!$user->is_dentist)
+			@include('trp/popups/failed-reg-login')			
+		@endif
+		@if(empty($user) || !$user->is_dentist)
 			@include('trp/popups/invite-new-dentist')
 			@include('trp/popups/invite-new-dentist-success')
 		@endif

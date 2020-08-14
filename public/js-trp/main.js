@@ -1670,15 +1670,6 @@ jQuery(document).ready(function($){
 		}
     }
 
-	if(!user_id) {
-
-		$('.button-want-to-add-dentist').click( function(e) {
-			$('#site-url').attr('open-popup', 'invite-dentist');
-
-			$.event.trigger({type: 'openPatientRegister'});
-		});
-	}
-
 });
 
 //

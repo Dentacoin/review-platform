@@ -7,6 +7,7 @@ return [
             'js' => array(
                 'users.js',
                 'address.js',
+                '../jquery.multi-select.min.js',
             ),
             'jscdn' => array(
                 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en',
