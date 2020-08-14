@@ -16,8 +16,9 @@ class UserTeam extends Model {
         'user_id', //The clinic
         'dentist_id', //The dentist
         'approved',
+        'new_clinic',
+        'team_order',
     ];
-
 
     protected $dates = [
         'created_at',

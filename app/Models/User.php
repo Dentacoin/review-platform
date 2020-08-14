@@ -284,13 +284,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\UserLogin', 'user_id', 'id')->orderBy('id', 'DESC');
     }
     public function team() {
-        return $this->hasMany('App\Models\UserTeam', 'user_id', 'id');
+        return $this->hasMany('App\Models\UserTeam', 'user_id', 'id')->orderBy('approved', 'desc');
     }
     public function team_new_clinic() {
         return $this->hasMany('App\Models\UserTeam', 'user_id', 'id')->where('new_clinic', true);
     }
     public function teamApproved() {
-        return $this->hasMany('App\Models\UserTeam', 'user_id', 'id')->where('approved', true);
+        return $this->hasMany('App\Models\UserTeam', 'user_id', 'id')->where('approved', true)->orderBy('team_order', 'asc');
+    }
+    public function teamUnapproved() {
+        return $this->hasMany('App\Models\UserTeam', 'user_id', 'id')->where('approved', false);
     }
     public function my_workplace() {
         return $this->hasMany('App\Models\UserTeam', 'dentist_id', 'id');

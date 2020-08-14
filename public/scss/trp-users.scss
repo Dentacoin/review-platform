@@ -1500,7 +1500,15 @@ $phone: "screen and (max-width: 768px)";
 		}
 
     	.flickity {
-    		width: 100%;//
+    		width: 100%;
+
+    		&.no-b-padding {
+    			padding-bottom: 0px;
+
+    			@media #{$phone} {
+    				padding-bottom: 40px;
+    			}
+    		}
 
 			.slider-wrapper {
 
@@ -1550,6 +1558,19 @@ $phone: "screen and (max-width: 768px)";
 
 			.flickity-button {
 				display: none;
+			}
+		}
+
+		&.rearranging-team {
+			.flickity {
+				display: flex;
+				flex-wrap: wrap;
+
+				.slider-wrapper {
+					.deleter {
+						display: none;
+					}
+				}
 			}
 		}
     }
@@ -3578,4 +3599,13 @@ body.reviews-guided-tour {
         display: inline-block !important;
       }
     }
+}
+
+.rearrange-team {
+	background-color: #46afda;
+	margin-bottom: 100px;
+
+	@media #{$phone} {
+		display: none;
+	}
 }

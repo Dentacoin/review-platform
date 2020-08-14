@@ -208,7 +208,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 
 //Empty route
 $reviewRoutes = function () {
-	//Route::any('test', 									'Front\YouTubeController@test');
+	// Route::any('test', 									'Front\YouTubeController@test');
 	Route::post('civic', 								'CivicController@add');
 	//Route::any('mobident', 								'MobidentController@reward');
 
@@ -274,6 +274,7 @@ $reviewRoutes = function () {
 			Route::post('facebook-tab', 						'DentistController@dentist_fb_tab');
 			Route::any('facebook-tab-reviews', 					'DentistController@dentist_fb_tab_reviews');
 			Route::post('dentist-fb-tab', 						'DentistController@fb_tab');
+			Route::post('reorder-teams', 						'DentistController@reorderTeams');			
 
 			Route::get('page-not-found', 						'NotFoundController@home');
 

@@ -1052,12 +1052,12 @@
 
 
 		    @if($item->is_clinic && ( (!empty($user) && $item->id==$user->id) || $item->teamApproved->isNotEmpty() || $item->invites_team_unverified->isNotEmpty() ) )
-	    		<h2 class="black-left-line">
+	    		<h2 class="black-left-line clearfix">
 	    			{!! nl2br(trans('trp.page.user.team')) !!}
 	    		</h2>
 
-	    		<div class="team-container {!! count($item->teamApproved) + count($item->invites_team_unverified) > (!empty($user) && $item->id==$user->id ? 3 : 4) ? 'with-arrows' : '' !!}">
-		    		<div class="flickity">
+	    		<div class="team-container {!! (!empty($user) && $item->id==$user->id ? count($item->team) : count($item->teamApproved)) + count($item->invites_team_unverified) > (!empty($user) && $item->id==$user->id ? 3 : 4) ? 'with-arrows' : '' !!}" {!! !empty($user) && $item->id==$user->id ? 'team-reorder-link="'.getLangUrl('reorder-teams').'"' : '' !!}>
+		    		<div class="flickity {{ !empty($user) && $item->id==$user->id && $item->team->isNotEmpty() && count($item->team) > 1 ? 'no-b-padding' : '' }}">
 		    			@if( (!empty($user) && $item->id==$user->id) )
 							<div class="slider-wrapper">
 								<a href="javascript:;" class="slider-image add-team-member dont-count" data-popup="add-team-popup" guided-action="team">
@@ -1070,8 +1070,8 @@
 								</a>
 							</div>
 						@endif
-			        	@foreach( !empty($user) && $item->id==$user->id ? $item->team : $item->teamApproved as $team)
-							<a class="slider-wrapper {!! $team->approved ? '' : 'pending' !!} {!! $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'no-upper' : '' !!}" href="{{ $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'javascript:;' : $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
+			        	@foreach( $item->teamApproved as $team)
+							<a class="slider-wrapper approved-team {!! $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'no-upper' : '' !!}" href="{{ $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'javascript:;' : $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}" {!! !empty($user) && $item->id==$user->id ? 'team-id="'.$team->id.'"' : '' !!}>
 								<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 									@if( $team->clinicTeam->is_partner )
 										<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic }}"/>
@@ -1094,16 +1094,6 @@
 										</span>
 									</div>
 									<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
-							    	@if( !$team->approved )
-							    		<div class="approve-buttons clearfix">
-								    		<div class="yes" action="{{ getLangUrl('profile/dentists/accept/'.$team->clinicTeam->id) }}">
-								    			{!! nl2br(trans('trp.page.user.accept-dentist')) !!}
-								    		</div>
-								    		<div class="no" action="{{ getLangUrl('profile/dentists/reject/'.$team->clinicTeam->id) }}" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getName() ]) !!}">
-								    			{!! nl2br(trans('trp.page.user.reject-dentist')) !!}
-								    		</div>
-								    	</div>
-							    	@endif
 							    </div>
 							    @if($team->clinicTeam->status != 'dentist_no_email' && $team->clinicTeam->status != 'added_new')
 							    	<div class="flickity-buttons clearfix">
@@ -1153,9 +1143,53 @@
 								</a>
 							@endforeach
 						@endif
+
+						@if(!empty($user) && $item->id==$user->id)
+							@foreach( $item->teamUnapproved as $team)
+								<a class="slider-wrapper pending " href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
+									<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
+										@if( $team->clinicTeam->is_partner )
+											<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic }}"/>
+										@endif
+									</div>
+								    <div class="slider-container">
+								    	<h4>{{ $team->clinicTeam->getName() }}</h4>
+									    <div class="ratings">
+											<div class="stars">
+												<div class="bar" style="width: {{ $team->clinicTeam->avg_rating/5*100 }}%;">
+												</div>
+											</div>
+											<span class="rating">
+												({{ trans('trp.common.reviews-count', [ 'count' => intval($team->clinicTeam->ratings)]) }})
+											</span>
+										</div>
+										<p style="margin-top: 10px;color: #0fb0e5;">{!! trans('trp.team-jobs.dentist') !!}</p>
+							    		<div class="approve-buttons clearfix">
+								    		<div class="yes" action="{{ getLangUrl('profile/dentists/accept/'.$team->clinicTeam->id) }}">
+								    			{!! nl2br(trans('trp.page.user.accept-dentist')) !!}
+								    		</div>
+								    		<div class="no" action="{{ getLangUrl('profile/dentists/reject/'.$team->clinicTeam->id) }}" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getName() ]) !!}">
+								    			{!! nl2br(trans('trp.page.user.reject-dentist')) !!}
+								    		</div>
+								    	</div>
+								    </div>
+							    	<div class="flickity-buttons clearfix">
+							    		<div>
+							    			{!! nl2br(trans('trp.common.see-profile')) !!}
+							    		</div>
+							    		<div href="{{ $team->clinicTeam->getLink() }}?popup-loged=submit-review-popup">
+							    			{!! nl2br(trans('trp.common.submit-review')) !!}
+							    		</div>
+							    	</div>
+								</a>
+							@endforeach
+						@endif
 					</div>
 				</div>
 
+    			@if(!empty($user) && $item->id==$user->id && $item->team->isNotEmpty() && count($item->team) > 1)
+    				<a href="javascript:;" class="rearrange-team button" done-text="{!! trans('trp.page.user.rearrange-team-done') !!}" rearrange-text="{!! trans('trp.page.user.rearrange-team') !!}">{!! trans('trp.page.user.rearrange-team') !!}</a>
+    			@endif
 		    @endif
 
 		    @if( ($item->lat && $item->lon) || ( !empty($user) && $user->id==$item->id) )

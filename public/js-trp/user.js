@@ -2984,6 +2984,81 @@ $(document).ready(function(){
             }
         }
     });
+    
+    if($('.team-container .flickity').length && window.innerWidth > 768) {
+
+        var isFlickity = true;
+        // toggle Flickity on/off
+        $('.rearrange-team').click( function() {
+            if ( isFlickity ) {
+                // destroy Flickity
+                $('.team-container .slider-wrapper:not(.approved-team)').hide();
+                $('.team-container').addClass('rearranging-team');
+
+                $('.team-container .flickity').sortable({
+                    containment: "parent",
+                    update: function (event, ui) {
+                        console.log('update');
+                        setTimeout( function(){
+                            var ids = [];
+                            $('.team-container .approved-team').each( function() {
+                                ids.push( $(this).attr('team-id') );
+                            } )
+
+                            $.ajax({
+                                url     : $('.team-container').attr('team-reorder-link'),
+                                type    : 'POST',
+                                data    : {
+                                    list: ids,
+                                    _token: $('input[name="_token"]').val(),
+                                },
+                                dataType: 'json',
+                                success : function( res ) {
+                                    console.log('success');
+                                },
+                                error : function( data ) {
+                                    console.log('error');
+                                }
+                            });
+                        }, 0);
+                    }
+                });
+
+                teamFlickity.flickity('destroy');
+                isFlickity = false;
+                $(this).html($(this).attr('done-text'));
+
+            } else {
+                // init new Flickity
+
+                $('.team-container .slider-wrapper:not(.approved-team)').show();
+                $('.team-container').removeClass('rearranging-team');
+
+                if (window.innerWidth > 992) {
+                    var draggable_team = false;
+                } else {
+                    var draggable_team = true;
+                }
+
+                teamFlickity = $('.flickity').flickity({
+                    autoPlay: false,
+                    wrapAround: true,
+                    cellAlign: 'left',
+                    pageDots: false,
+                    freeScroll: true,
+                    groupCells: 1,
+                    draggable: draggable_team,
+                });
+
+                teamFlickity.resize();
+
+                isFlickity = true;
+                
+                $(this).html($(this).attr('rearrange-text'));
+
+            }
+        });
+    }
 
 
 });

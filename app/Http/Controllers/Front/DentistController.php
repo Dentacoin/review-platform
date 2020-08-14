@@ -22,6 +22,7 @@ use App\Models\UserInvite;
 use App\Models\UserAction;
 use App\Models\DcnReward;
 use App\Models\UserLogin;
+use App\Models\UserTeam;
 use App\Models\Question;
 use App\Models\UserBan;
 use App\Models\OldSlug;
@@ -687,6 +688,8 @@ class DentistController extends FrontController
                 'codemirror.min.js',
                 'codemirror-placeholder.js',
                 'flickity.min.js',
+                '../js/jquery-ui.min.js',
+                '../js/jquery-ui-touch.min.js',
             ],
             'css' => [
                 'codemirror.css',
@@ -1720,6 +1723,22 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
             ] );
         }
 
+    }
+
+    public function reorderTeams() {
+
+        $list = Request::input('list');
+        $i=1;
+        foreach ($list as $qid) {
+            $user_team = UserTeam::find($qid);
+            if( $user_team ) {
+                $user_team->team_order = $i;
+                $user_team->save();
+                $i++;
+            }
+        }
+
+        return Response::json( ['success' => true] );
     }
 
 }
