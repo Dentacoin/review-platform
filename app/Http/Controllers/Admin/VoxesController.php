@@ -1673,7 +1673,7 @@ class VoxesController extends AdminController
 
                         foreach ($list as $k => $l) {
                             foreach ($qanswers as $qa) {
-                                if($qa->scale == $k) {
+                                if($qa->scale == $k + 1) {
                                     $row[] = $qa->answer;
                                 }
                             }
