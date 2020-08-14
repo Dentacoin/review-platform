@@ -41,6 +41,25 @@
                                 <input type="text" class="form-control" name="search-website" value="{{ $search_website }}" placeholder="Website">
                             </div>
                             <div class="col-md-2">
+                                <select class="form-control" name="search-platform">
+                                    <option value="">Registered platform</option>
+                                    <option value="trp" {!! 'trp'==$search_platform ? 'selected="selected"' : '' !!}>Trusted Reviews</option>
+                                    <option value="vox" {!! 'vox'==$search_platform ? 'selected="selected"' : '' !!}>DentaVox</option>
+                                    <option value="dentists" {!! 'dentists'==$search_platform ? 'selected="selected"' : '' !!}>Dentists</option>
+                                    <option value="dentacoin" {!! 'dentacoin'==$search_platform ? 'selected="selected"' : '' !!}>Dentacoin</option>
+                                    <option value="assurance" {!! 'assurance'==$search_platform ? 'selected="selected"' : '' !!}>Assurance</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-md-2">
+                                <select class="form-control" name="search-registered">
+                                    <option value="">Is registered?</option>
+                                    <option value="yes" {!! 'yes'==$search_registered ? 'selected="selected"' : '' !!}>Yes</option>
+                                    <option value="no" {!! 'no'==$search_registered ? 'selected="selected"' : '' !!}>No</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
                                 <input type="submit" class="btn btn-block btn-primary btn-block" name="search" value="Submit">
                             </div>
                         </div>

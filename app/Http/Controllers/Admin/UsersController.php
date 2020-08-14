@@ -1686,7 +1686,7 @@ class UsersController extends AdminController {
                 //     }
                 // }
 
-                if($item->status=='rejected' && empty($item->deleted_at)) {
+                if(($item->status=='rejected' || $item->status=='added_rejected' || $item->status=='added_by_dentist_rejected' || $item->status=='added_by_clinic_rejected' ) && empty($item->deleted_at)) {
                     $action = new UserAction;
                     $action->user_id = $item->id;
                     $action->action = 'deleted';
@@ -1909,6 +1909,16 @@ class UsersController extends AdminController {
         if(!empty(request('search-website'))) {
             $incompletes = $incompletes->where('website', 'LIKE', '%'.trim(request('search-website')).'%');
         }
+        if(!empty(request('search-platform'))) {
+            $incompletes = $incompletes->where('platform', request('search-platform'));
+        }  
+        if(!empty(request('search-registered'))) {
+            if(request('search-registered') == 'yes') {
+                $incompletes = $incompletes->where('completed', 1);
+            } else {
+                $incompletes = $incompletes->whereNull('completed');
+            }
+        }
 
         $total_count = $incompletes->count();
 
@@ -1946,7 +1956,13 @@ class UsersController extends AdminController {
         /*$start = 1;
         $end = $total_pages;*/
 
-        $pagination_link = (!empty(request('search-email')) ? '&search-email='.request( 'search-email' ) : '').(!empty(request('search-phone')) ? '&search-phone='.request( 'search-phone' ) : '').(!empty(request('search-name')) ? '&search-name='.request( 'search-name' ) : '').(!empty(request('search-country')) ? '&search-country='.request( 'search-country' ) : '');
+        $pagination_link = '';
+
+        foreach (Request::all() as $key => $value) {
+            if($key != 'search') {
+                $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
+            }
+        }
 
         return $this->showView('users-incomplete', array(
             'items' => $incompletes,
@@ -1956,6 +1972,8 @@ class UsersController extends AdminController {
             'search_name' =>  request('search-name'),
             'search_country' =>  request('search-country'),
             'search_website' =>  request('search-website'),
+            'search_platform' =>  request('search-platform'),
+            'search_registered' =>  request('search-registered'),
             'countries' => Country::with('translations')->get(),
             'count' =>($page - 1)*$ppp ,
             'start' => $start,
