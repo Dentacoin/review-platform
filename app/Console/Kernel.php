@@ -371,7 +371,7 @@ UNCONFIRMED TRANSACTIONS
                     if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*24) {
                         $trans->unconfirmed_retry = true;
                         $trans->save();
-                        Dcn::retry($trans);
+                        //Dcn::retry($trans);
                         echo 'RETRYING -> '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
                     }
                 }
