@@ -6,12 +6,12 @@
 		Reject
 	</a>
 @else
-	@if($item->status == 'unconfirmed' || $item->status == 'failed' || $item->status == 'stopped' || $item->status == 'dont_retry' )
+	@if($item->status == 'failed' || $item->status == 'stopped' || $item->status == 'dont_retry' )
 		<a class="btn btn-primary" href="{{ url('cms/transactions/bump/'.$item->id) }}">
 			Bump
 		</a>
 	@endif
-	@if($item->status != 'completed' && $item->status != 'stopped' && $item->status != 'dont_retry')
+	@if($item->status != 'completed' && $item->status != 'unconfirmed' && $item->status != 'stopped' && $item->status != 'dont_retry')
 		<a class="btn btn-danger" href="{{ url('cms/transactions/stop/'.$item->id) }}">
 			Stop
 		</a>
