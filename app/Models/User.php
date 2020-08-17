@@ -161,6 +161,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function had_first_transaction() {
         return $this->hasOne('App\Models\DcnTransaction', 'user_id', 'id')->oldest();
     }
+    public function firstTransaction() {
+        return $this->hasOne('App\Models\DcnTransaction', 'user_id', 'id')->where('status', 'first');
+    }
     public function banAppeal() {
         return $this->hasOne('App\Models\BanAppeal', 'user_id', 'id')->oldest();
     }

@@ -737,6 +737,68 @@
 </style>
 
 
+@if(!empty($item->firstTransaction))
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">First Transaction</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="dataTables_wrapper">
+                        <div class="row">
+                            <div class="col-sm-12 table-responsive-md">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Address</th>
+                                            <th>TX hash</th>
+                                            <th>Type</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                {{ date('d.m.Y, H:i:s', $item->firstTransaction->created_at->timestamp) }}
+                                            </td>
+                                            <td>
+                                                {{ $item->firstTransaction->amount }}
+                                            </td>
+                                            <td>
+                                                {{ $item->firstTransaction->address }}
+                                            </td>
+                                            <td>
+                                                {{ $item->firstTransaction->tx_hash }}
+                                            </td>
+                                            <td>
+                                                {{ $item->firstTransaction->type }}
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-primary" href="{{ url('cms/transactions/bump/'.$item->firstTransaction->id) }}">
+                                                    Approve
+                                                </a>
+                                                <a class="btn btn-danger" href="{{ url('cms/transactions/stop/'.$item->firstTransaction->id) }}">
+                                                    Reject
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 @if($item->allBanAppeals->isNotEmpty())
     <div class="row">
         <div class="col-md-12">
@@ -754,7 +816,6 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>User</th>
                                             <th>Link</th>
                                             <th>Image</th>
                                             <th>Description</th>
@@ -766,11 +827,6 @@
                                     <tbody>
                                         @foreach($item->allBanAppeals as $ba)
                                             <tr>
-                                                <td>
-                                                    <a href="{{ url('cms/users/edit/'.$item->id) }}">
-                                                        {{ $item->name }}
-                                                    </a>
-                                                </td>
                                                 <td>
                                                     {{ $ba->link }}
                                                 </td>
