@@ -199,7 +199,7 @@ class VoxController extends FrontController
             Auth::guard('web')->user()->removeTokens();
             Auth::guard('web')->logout();
             
-			return redirect( 'https://account.dentacoin.com/account-on-hold?platform=dentavox&key='.urlencode(User::encrypt($u_id)) );
+			return redirect( 'https://account.dentacoin.com/account-on-hold?platform=dentavox&on-hold-type=bad_ip&key='.urlencode(User::encrypt($u_id)) );
 		}
 
 		if(empty($vox) || ($this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test') ) {
