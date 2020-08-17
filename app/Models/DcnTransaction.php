@@ -24,6 +24,7 @@ class DcnTransaction extends Model {
         'retries',
         'ip',
         'processing',
+        'unconfirmed_retry',
     ];
 
     protected $dates = [
