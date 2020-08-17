@@ -2434,6 +2434,12 @@ body.edit-user {
 
     	.skip-step {
     		color: #126585;
+
+    		&.button {
+				color: white;
+				padding: 5px 11px;
+				font-size: 15px;
+    		}
     	}
     }
 

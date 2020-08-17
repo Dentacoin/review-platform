@@ -1814,6 +1814,7 @@ class ProfileController extends FrontController
                             'description' => trans('trp.guided-tour.first.socials.description'),
                             'skip' => true,
                             'skip_text' => strtoupper(trans('trp.guided-tour.ok')),
+                            'is_button' => true
                         ];
                     }
 

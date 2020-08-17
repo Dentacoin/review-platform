@@ -2648,6 +2648,12 @@ $(document).ready(function(){
 
                 $('.bubble-guided-tour .skip-step').html(step.skip_text);
                 $('.bubble-guided-tour .skip-step').show();
+
+                if(step.is_button) {
+                    $('.bubble-guided-tour .skip-step').addClass('button');
+                } else {
+                    $('.bubble-guided-tour .skip-step').removeClass('button');
+                }
             }
         } else {
             $('.bubble-guided-tour .skip-step').hide();

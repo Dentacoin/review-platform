@@ -1631,6 +1631,10 @@ body.edit-user .information {
         font-size: 18px; }
     .bubble-guided-tour .guided-buttons .skip-step {
       color: #126585; }
+      .bubble-guided-tour .guided-buttons .skip-step.button {
+        color: white;
+        padding: 5px 11px;
+        font-size: 15px; }
   .bubble-guided-tour .cap {
     background-color: transparent;
     position: absolute;
