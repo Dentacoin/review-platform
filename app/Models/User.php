@@ -1541,13 +1541,17 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $similar_users = UserLogin::where('ip', 'like', $ip)->where('user_id', '!=', $this->id)->groupBy('user_id')->get();
 
                 foreach ($similar_users as $su) {
-                    $s_user = self::where('id', $su->user_id)->withTrashed()->first();
-                    $s_user->patient_status = 'suspicious_badip';
-                    $s_user->save();
                     
-                    $s_user->sendTemplate(110, null, 'dentacoin');
-                    $s_user->removeTokens();
-                    $s_user->logoutActions();
+                    $s_user = self::find($su->user_id);
+
+                    if(!empty($s_user) && !$s_user->ip_protected && !$s_user->allow_withdraw && !$s_user->is_dentist && !$s_user->patient_status == 'suspicious_badip') {
+                        $s_user->patient_status = 'suspicious_badip';
+                        $s_user->save();
+                        
+                        $s_user->sendTemplate(110, null, 'dentacoin');
+                        $s_user->removeTokens();
+                        $s_user->logoutActions();
+                    }
                 }
 
                 $this->patient_status = 'suspicious_badip';

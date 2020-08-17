@@ -335,8 +335,8 @@ UNCONFIRMED TRANSACTIONS
 
 ';
 
-                $transactions = DcnTransaction::where('status', 'unconfirmed')->orderBy('id', 'asc')->take(10)->get(); //
-                $last_transactions = DcnTransaction::where('status', 'unconfirmed')->orderBy('id', 'desc')->whereNotIn('id', $transactions->pluck('id')->toArray())->take(10)->get(); //
+                $transactions = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->orderBy('id', 'asc')->take(10)->get(); //
+                $last_transactions = DcnTransaction::where('status', 'unconfirmed')->where('processing', 0)->orderBy('id', 'desc')->whereNotIn('id', $transactions->pluck('id')->toArray())->take(10)->get();
                 $transactions = $transactions->concat($last_transactions);
 
                 foreach ($transactions as $trans) {
@@ -385,7 +385,7 @@ NEW & FAILED TRANSACTIONS
 ';
 
                 $executed = 0;
-                $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->where('created_at','<', Carbon::now()->subMinutes(10)->toDateTimeString())->orderBy('id', 'asc')->take(100)->get(); //
+                $transactions = DcnTransaction::whereIn('status', ['new', 'failed'])->where('processing', 0)->where('created_at','<', Carbon::now()->subMinutes(10)->toDateTimeString())->orderBy('id', 'asc')->take(100)->get(); //
                 foreach ($transactions as $trans) {
                     $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || '.$trans->tx_hash;
                     echo $log.PHP_EOL;
