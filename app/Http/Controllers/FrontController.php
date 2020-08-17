@@ -406,6 +406,10 @@ class FrontController extends BaseController {
             }
         }
 
+        if(!isset($params['xframe'])) {
+            header("X-Frame-Options: DENY");
+        }
+
         $this->PrepareViewData($page, $params, 'vox');
 
         $params['genders'] = [
@@ -492,10 +496,6 @@ class FrontController extends BaseController {
 
         $params['poll_scales'] = $poll_scales;
 
-        if(!isset($params['xframe'])) {
-            header("X-Frame-Options: DENY");
-        }
-
         if (!empty($statusCode)) {
             return response()->view('vox.'.$page, $params, $statusCode);
         } else {
@@ -505,6 +505,10 @@ class FrontController extends BaseController {
     }
 
     public function ShowView($page, $params=array(), $statusCode=null) {
+        
+        if(!isset($params['xframe'])) {
+            header("X-Frame-Options: DENY");
+        }
 
         $this->PrepareViewData($page, $params, 'trp');    
 
@@ -523,10 +527,6 @@ class FrontController extends BaseController {
                 '40' => '40',
                 '50' => '50',
             ];
-        }
-        
-        if(!isset($params['xframe'])) {
-            header("X-Frame-Options: DENY");
         }
         
         if (!empty($statusCode)) {
