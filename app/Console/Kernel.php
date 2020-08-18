@@ -17,6 +17,7 @@ use App\Models\UserAction;
 use App\Models\CronjobRun;
 use App\Models\VoxAnswer;
 use App\Models\UserLogin;
+use App\Models\GasPrice;
 use App\Models\Article;
 use App\Models\Country;
 use App\Models\Review;
@@ -1856,6 +1857,33 @@ NEW & FAILED TRANSACTIONS
             }
 
         })->cron('*/10 * * * *');
+
+
+        $schedule->call(function () {
+
+            echo 'Gas Price Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_URL => 'https://ethgasstation.info/json/ethgasAPI.json',
+                CURLOPT_SSL_VERIFYPEER => 0
+            ));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            $resp = json_decode(curl_exec($curl));
+            curl_close($curl);
+            if (!empty($resp))   {
+                $gas_price = $resp->average;
+                $gwei = ($gas_price - ( $gas_price * 10 / 100 ) ) / 10;
+
+                $gas = GasPrice::find(1);
+                $gas->gas_price = intval(number_format($gwei));
+                $gas->save();
+            }
+
+            echo 'Gas Price Cron - DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
+
+        })->cron("*/5 * * * *");
 
 
         $schedule->call(function () {
