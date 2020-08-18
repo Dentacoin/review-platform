@@ -173,7 +173,7 @@
                     <div class="panel-heading-btn">
                         <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
                     </div>
-                    <h4 class="panel-title">Withdrawal conditions</h4>
+                    <h4 class="panel-title">Withdrawals conditions</h4>
                 </div>
                 <div class="panel-body">
                     <form class="form-horizontal" method="post" action="{{ url('cms/transactions/conditions') }}">
