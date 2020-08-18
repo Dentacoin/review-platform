@@ -43,7 +43,10 @@
                             <div class="col-md-1">
                                 <input type="text" class="form-control" name="search-user-id" value="{{ $search_user_id }}" placeholder="{{ trans('admin.page.'.$current_page.'.title-filter-user-id') }}">
                             </div>  
-                            <div class="col-md-2">
+                            <div class="col-md-1">
+                                <input type="text" class="form-control" name="search-id" value="{{ $search_id }}" placeholder="Transaction ID" autocomplete="off">
+                            </div>  
+                            <div class="col-md-1">
                                 <input type="text" class="form-control" name="search-email" value="{{ $search_email }}" placeholder="User email" autocomplete="off">
                             </div>
                             <div class="col-md-1">
@@ -101,6 +104,7 @@
         						'table_id' => 'transactions',
         						'table_fields' => [
                                     'checkboxes' => array('format' => 'checkboxes'),
+                                    'id'           => array(),
                                     'created_at'        => array('format' => 'datetime','order' => true, 'orderKey' => 'created','label' => 'Date'),
                                     'user'              => array('template' => 'admin.parts.table-transactions-user'),
                                     'email'             => array('template' => 'admin.parts.table-transactions-email'),
@@ -157,5 +161,50 @@
             </ul>
         </nav>
     @endif
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                    </div>
+                    <h4 class="panel-title">Withdrawal conditions</h4>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" method="post" action="{{ url('cms/transactions/conditions') }}">
+                        {!! csrf_field() !!}
+                        <div class="form-group">
+                            <label class="col-md-2">Min amount</label>
+                            <div class="col-md-4">
+                                <input class="form-control" type="number" name="min-amount" value="{{ \App\Models\WithdrawalsCondition::find(1)->min_amount }}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2">Min TRP amount</label>
+                            <div class="col-md-4">
+                                <input class="form-control" type="number" name="min-trp-amount" value="{{ \App\Models\WithdrawalsCondition::find(1)->min_trp_amount }}" />
+                            </div>
+                        </div>                        
+                        <div class="form-group">
+                            <label class="col-md-2">Timerange (in days)</label>
+                            <div class="col-md-4">
+                                <input class="form-control" type="number" name="timerange" value="{{ \App\Models\WithdrawalsCondition::find(1)->timerange }}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-sm btn-success btn-block">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection

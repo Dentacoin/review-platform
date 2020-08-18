@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 
+use App\Models\WithdrawalsCondition;
 use App\Models\StopTransaction;
 use App\Models\DcnTransaction;
 use App\Models\UserAction;
@@ -28,6 +29,9 @@ class TransactionsController extends AdminController
         }
         if(!empty($this->request->input('search-user-id'))) {
             $transactions = $transactions->where('user_id', $this->request->input('search-user-id'));
+        }
+        if(!empty($this->request->input('search-id'))) {
+            $transactions = $transactions->where('id', $this->request->input('search-id'));
         }
         if(!empty($this->request->input('search-status'))) {
             $transactions = $transactions->where('status', $this->request->input('search-status'));
@@ -111,6 +115,7 @@ class TransactionsController extends AdminController
             'search_status' => $this->request->input('search-status'),
             'search_tx' => $this->request->input('search-tx'),
             'search_user_id' => $this->request->input('search-user-id'),
+            'search_id' => $this->request->input('search-id'),
             'search_to' => $this->request->input('search-to'),
             'search_from' => $this->request->input('search-from'),
             'search_email' =>  $this->request->input('search-email'),
@@ -243,4 +248,24 @@ class TransactionsController extends AdminController
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
+    public function withdrawalConditions() {
+
+        $withdrawal_conditions = WithdrawalsCondition::find(1);
+    
+        if(!empty(request('min-amount'))) {
+            $withdrawal_conditions->min_amount = request('min-amount');
+        }
+
+        if(!empty(request('min-trp-amount'))) {
+            $withdrawal_conditions->min_trp_amount = request('min-trp-amount');
+        }
+
+        if(!empty(request('timerange'))) {
+            $withdrawal_conditions->timerange = request('timerange');
+        }
+
+        $withdrawal_conditions->save();
+
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
 }

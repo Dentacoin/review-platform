@@ -118,6 +118,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::get('transactions/bump-dont-retry', 		'TransactionsController@bumpDontRetry');
 	Route::get('transactions/start', 				'TransactionsController@allowWithdraw');
 	Route::get('transactions/stop', 				'TransactionsController@disallowWithdraw');
+	Route::post('transactions/conditions', 			'TransactionsController@withdrawalConditions');
 
 	Route::get('spending', 							'SpendingController@list');
 
