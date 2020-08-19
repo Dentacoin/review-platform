@@ -2724,6 +2724,7 @@ $(document).ready(function(){
 
                             if(step.action == 'invite') {
                                 $('#popup-invite').css('z-index', 10000);
+                                $('#invite-sample').css('z-index', 10000);
                             }
 
                             if(step.action == 'team') {
