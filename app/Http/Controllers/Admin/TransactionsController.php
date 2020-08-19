@@ -256,8 +256,8 @@ class TransactionsController extends AdminController
             $withdrawal_conditions->min_amount = request('min-amount');
         }
 
-        if(!empty(request('min-trp-amount'))) {
-            $withdrawal_conditions->min_trp_amount = request('min-trp-amount');
+        if(!empty(request('min-vox-amount'))) {
+            $withdrawal_conditions->min_vox_amount = request('min-vox-amount');
         }
 
         if(!empty(request('timerange'))) {

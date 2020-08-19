@@ -186,9 +186,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2">Min TRP amount</label>
+                            <label class="col-md-2">Min VOX amount</label>
                             <div class="col-md-4">
-                                <input class="form-control" type="number" name="min-trp-amount" value="{{ \App\Models\WithdrawalsCondition::find(1)->min_trp_amount }}" />
+                                <input class="form-control" type="number" name="min-vox-amount" value="{{ \App\Models\WithdrawalsCondition::find(1)->min_vox_amount }}" />
                             </div>
                         </div>                        
                         <div class="form-group">

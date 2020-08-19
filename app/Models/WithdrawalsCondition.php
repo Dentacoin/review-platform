@@ -8,7 +8,7 @@ class WithdrawalsCondition extends Model {
     
     protected $fillable = [
         "min_amount",
-        "min_trp_amount",
+        "min_vox_amount",
         "timerange",
     ];
     
