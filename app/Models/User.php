@@ -1407,7 +1407,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
             $user_info = new \stdClass();
             $user_info->email = $this->email;
-            $user_info->title = config('titles')[$this->title];
+            $user_info->title = $this->title ? config('titles')[$this->title] : '';
             $user_info->first_name = explode(' ', $this->name)[0];
             $user_info->last_name = isset(explode(' ', $this->name)[1]) ? explode(' ', $this->name)[1] : '';
             $user_info->type = 'dentist';

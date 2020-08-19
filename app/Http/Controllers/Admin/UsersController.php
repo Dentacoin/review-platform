@@ -1435,7 +1435,7 @@ class UsersController extends AdminController {
 
                                     $user_info = new \stdClass();
                                     $user_info->email = $item->email;
-                                    $user_info->title = config('titles')[$item->title];
+                                    $user_info->title = $item->title ? config('titles')[$item->title] : '';
                                     $user_info->first_name = explode(' ', $item->name)[0];
                                     $user_info->last_name = isset(explode(' ', $item->name)[1]) ? explode(' ', $item->name)[1] : '';
                                     $user_info->type = 'dentist';
