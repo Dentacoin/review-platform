@@ -41,6 +41,7 @@ use App\Models\DcnReward;
 use App\Models\Blacklist;
 use App\Models\BanAppeal;
 use App\Models\UserTeam;
+use App\Models\GasPrice;
 use App\Models\UserBan;
 use App\Models\UserAsk;
 use App\Models\Reward;
@@ -1521,6 +1522,12 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         // } else {
         //     return false;
         // }
+
+        $gas = GasPrice::find(1);
+
+        if($gas->gas_price > config('gas-limit.max_gas_price')) {
+            return true;
+        }
 
         return false;
     }

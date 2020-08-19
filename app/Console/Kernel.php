@@ -417,6 +417,33 @@ NEW & FAILED TRANSACTIONS
 
         $schedule->call(function () {
 
+                echo '
+NOT SEND TRANSACTIONS
+
+========================
+
+';
+            $transactions = DcnTransaction::where('status', 'not_sent')->orderBy('id', 'desc')->take(10)->get(); //
+
+            if($transactions->isNotEmpty()) {
+
+                foreach ($transactions as $trans) {
+                    $log = str_pad($trans->id, 6, ' ', STR_PAD_LEFT).': '.str_pad($trans->amount, 10, ' ', STR_PAD_LEFT).' DCN '.str_pad($trans->status, 15, ' ', STR_PAD_LEFT).' -> '.$trans->address.' || ';
+                    echo $log.PHP_EOL;
+
+                    if(!User::isGasExpensive()) {
+
+                        Dcn::retry($trans);
+                        echo 'NEW STATUS: '.$trans->status.' / '.$trans->message.' '.$trans->tx_hash.PHP_EOL;
+                    }
+                }
+            }
+
+        })->cron("0 * * * *");
+
+
+        $schedule->call(function () {
+
             echo 'DCN Low Balance Cron - START!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $alerts = [
@@ -1874,7 +1901,8 @@ NEW & FAILED TRANSACTIONS
             curl_close($curl);
             if (!empty($resp))   {
                 $gas_price = $resp->average;
-                $gwei = ($gas_price - ( $gas_price * 10 / 100 ) ) / 10;
+                $gwei = $gas_price / 10;
+                // $gwei = ($gas_price - ( $gas_price * 10 / 100 ) ) / 10;
 
                 $gas = GasPrice::find(1);
                 $gas->gas_price = intval(number_format($gwei));
