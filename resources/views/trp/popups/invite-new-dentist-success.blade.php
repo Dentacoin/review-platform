@@ -14,6 +14,10 @@
 				{!! nl2br(trans('trp.page.invite.popup.success.text.no-user', [ 'name' => '<span id="inv_dent_name">[Clinic/Dentist Name]</span>' ,'amount' => '<span>'.App\Models\Reward::getReward('patient_add_dentist').' DCN</span>'])) !!}
 			@endif
 		</p>
-		<a href="javascript:;" class="button close-popup">{!! trans('trp.page.invite.popup.success.button') !!}</a>
+		@if(!empty($user))
+			<a href="javascript:;" class="button close-popup">{!! trans('trp.page.invite.popup.success.button') !!}</a>
+		@else
+			<a href="javascript:;" class="button close-popup open-dentacoin-gateway patient-login">{!! trans('trp.page.invite.popup.success.sign-up') !!}</a>
+		@endif
 	</div>
 </div>
