@@ -1901,8 +1901,7 @@ NOT SEND TRANSACTIONS
             curl_close($curl);
             if (!empty($resp))   {
                 $gas_price = $resp->average;
-                $gwei = $gas_price / 10;
-                // $gwei = ($gas_price - ( $gas_price * 10 / 100 ) ) / 10;
+                $gwei = ($gas_price - ( $gas_price * 10 / 100 ) ) / 10;
 
                 $gas = GasPrice::find(1);
                 $gas->gas_price = intval(number_format($gwei));
