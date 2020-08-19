@@ -1911,7 +1911,7 @@ NOT SEND TRANSACTIONS
 
             echo 'Gas Price Cron - DONE'.PHP_EOL.PHP_EOL.PHP_EOL;
 
-        })->cron("*/5 * * * *");
+        })->cron("*/1 * * * *");
 
 
         $schedule->call(function () {
