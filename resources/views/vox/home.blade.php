@@ -4,6 +4,8 @@
 
 	<div class="container">
 
+		<div class="alert alert-warning"> {{ trans('vox.page.home.high-gas-price') }} </div> 
+
 		@if(request()->exists('daily-answer'))
 			<div class="daily-poll-welcome">
 				<div class="flex-mobile">
