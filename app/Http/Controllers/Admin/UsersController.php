@@ -1403,29 +1403,34 @@ class UsersController extends AdminController {
                                         $item->save();
                                     }
 
-                                    $platformMails = [
-                                        'vox' => 84,
-                                        'trp' => 26,
-                                        'dentacare' => 83,
-                                        'assurance' => 85,
-                                        'dentacoin' => 83,
-                                        'dentists' => 83,
-                                        'wallet' => 83,
-                                    ];
                                     
-                                    $item->sendGridTemplate($platformMails[$item->platform], null, $item->platform);
+                                    if($item->id != 86870) {
+                                        $platformMails = [
+                                            'vox' => 84,
+                                            'trp' => 26,
+                                            'dentacare' => 83,
+                                            'assurance' => 85,
+                                            'dentacoin' => 83,
+                                            'dentists' => 83,
+                                            'wallet' => 83,
+                                        ];
 
-                                    $olde = $item->email;
-                                    $item->email = 'ali.hashem@dentacoin.com';
-                                    $item->save();
+                                        $item->sendGridTemplate($platformMails[$item->platform], null, $item->platform);
 
-                                    $to_ali = $item->sendGridTemplate($platformMails[$item->platform], null, $item->platform);
+                                        $olde = $item->email;
+                                        $item->email = 'ali.hashem@dentacoin.com';
+                                        $item->save();
 
-                                    $item->email = $olde;
-                                    $item->ownership = 'approved';
-                                    $item->verified_on = Carbon::now();
-                                    $item->save();
-                                    $to_ali->delete();
+                                        $to_ali = $item->sendGridTemplate($platformMails[$item->platform], null, $item->platform);
+                                        
+                                        $item->email = $olde;
+                                        $item->ownership = 'approved';
+                                        $item->verified_on = Carbon::now();
+                                        $item->save();
+                                        $to_ali->delete();
+                                    }
+
+
 
                                     $item->product_news = ['dentacoin', 'trp'];
                                     $item->save();
