@@ -314,6 +314,38 @@ class Kernel extends ConsoleKernel
         //     echo 'Currencies cron - DONE!'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         // })->cron("* * * * *"); //05:00h
+
+        $schedule->call(function () {
+
+            $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->orderBy('id', 'asc')->take(100)->get();
+
+            if($transactions->isNotEmpty()) {
+
+                foreach ($transactions as $trans) {
+
+                    $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
+                    if(!empty($curl)) {
+                        $curl = json_decode($curl, true);
+                        if($curl['status']) {
+                            if(!empty($curl['result']['status'])) {
+                                $trans->status = 'completed';
+                                $trans->save();
+                                if( $trans->user && !empty($trans->user->email) ) {
+                                    $trans->user->sendTemplate( 20, [
+                                        'transaction_amount' => $trans->amount,
+                                        'transaction_address' => $trans->address,
+                                        'transaction_link' => 'https://etherscan.io/tx/'.$trans->tx_hash
+                                    ], $trans->type=='vox' ? 'vox' : 'trp' );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        })->cron("*/5 * * * *");
+
+
         
         $schedule->call(function () {
 

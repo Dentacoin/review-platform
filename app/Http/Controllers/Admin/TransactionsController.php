@@ -147,6 +147,16 @@ class TransactionsController extends AdminController
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
+    public function pending( $id ) {
+        $item = DcnTransaction::find($id);
+
+        $item->status = 'pending';
+        $item->save();
+
+        $this->request->session()->flash('success-message', 'Transaction pending' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
     public function stop( $id ) {
         $item = DcnTransaction::find($id);
 
