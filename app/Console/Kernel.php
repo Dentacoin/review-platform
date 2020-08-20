@@ -369,7 +369,7 @@ UNCONFIRMED TRANSACTIONS
                         }
                     }
 
-                    if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*12 && !User::isGasExpensive()) {
+                    if(!$found && Carbon::now()->diffInMinutes($trans->updated_at) > 60*24 && !User::isGasExpensive()) {
                         $trans->unconfirmed_retry = true;
                         $trans->save();
                         Dcn::retry($trans);
