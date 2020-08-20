@@ -183,7 +183,7 @@ class YoutubeController extends AdminController
         $client->setAccessType('offline');
 
         // Load previously authorized credentials from a file.
-        $credentialsPath = storage_path() . 'yt-oauth2.json';
+        $credentialsPath = storage_path() . '/yt-oauth2.json';
         if (file_exists($credentialsPath)) {
             $accessToken = json_decode(file_get_contents($credentialsPath), true);
         } else {
@@ -196,7 +196,7 @@ class YoutubeController extends AdminController
             if (isset($_GET['code'])) {
 
 
-                $credentialsPath = storage_path() . 'yt-oauth2.json';
+                $credentialsPath = storage_path() . '/yt-oauth2.json';
                 // Exchange authorization code for an access token.
                 $accessToken = $client->fetchAccessTokenWithAuthCode($_GET['code']);
 

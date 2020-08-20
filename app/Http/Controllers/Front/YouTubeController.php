@@ -54,7 +54,7 @@ class YouTubeController extends FrontController
 
 
         // Load previously authorized credentials from a file.
-        $credentialsPath = storage_path() . 'yt-oauth2.json';
+        $credentialsPath = storage_path() . '/yt-oauth2.json';
         if (false && file_exists($credentialsPath)) {
             $accessToken = json_decode(file_get_contents($credentialsPath), true);
         } else {
@@ -65,7 +65,7 @@ class YouTubeController extends FrontController
 
             if (isset($_GET['code'])) {
 
-                $credentialsPath = storage_path() . 'yt-oauth2.json';
+                $credentialsPath = storage_path() . '/yt-oauth2.json';
                 // Exchange authorization code for an access token.
                 $accessToken = $client->fetchAccessTokenWithAuthCode($_GET['code']);
 

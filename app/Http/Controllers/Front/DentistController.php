@@ -1360,7 +1360,6 @@ class DentistController extends FrontController
 
             if (isset($_GET['code'])) {
 
-
                 $credentialsPath = storage_path() . '/yt-oauth2.json';
                 // Exchange authorization code for an access token.
                 $accessToken = $client->fetchAccessTokenWithAuthCode($_GET['code']);
@@ -1441,7 +1440,7 @@ class DentistController extends FrontController
         );
         $media->setFileSize(filesize($filePath));
 
-
+        //dd(filesize($filePath));
         // Read the media file and upload it chunk by chunk.
         $status = false;
         $handle = fopen($filePath, "rb");
