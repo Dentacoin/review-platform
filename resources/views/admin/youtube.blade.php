@@ -2,8 +2,15 @@
 
 @section('content')
 
-<h1 class="page-header">Video Reviews</h1>
+
 <!-- end page-header -->
+
+<div class="flex" style="justify-content: space-between;">
+    <h1 class="page-header">Video Reviews</h1>
+    <div>
+        <a href="{{ url('cms/trp/youtube/new-token') }}" class="btn btn-primary pull-right">Generate Access Token</a>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-12">

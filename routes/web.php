@@ -98,6 +98,7 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 	Route::any('trp/youtube', 						'YoutubeController@list');
 	Route::any('trp/youtube/approve/{id}', 			'YoutubeController@approve');
 	Route::any('trp/youtube/delete/{id}', 			'YoutubeController@delete');
+	Route::any('trp/youtube/new-token', 			'YoutubeController@generateNewAccessToken');
 
 	Route::get('trp/testimonials', 					'TestimonialSliderController@list');
 	Route::post('trp/testimonials/add', 			'TestimonialSliderController@add');
