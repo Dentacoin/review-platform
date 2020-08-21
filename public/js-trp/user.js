@@ -366,9 +366,12 @@ $(document).ready(function(){
     }
     handleReviewEvents();
 
-    $('.more').click( function() {
-        var id = $(this).closest('.review-wrapper').attr('review-id');
-        showFullReview(id, $('#cur_dent_id').val());
+    $('.more').click( function(e) {
+
+        if (!$(e.target).closest('.review-replied-wrapper').length && !$(e.target).closest('.review-footer').length) {
+            var id = $(this).closest('.review-wrapper').attr('review-id');
+            showFullReview(id, $('#cur_dent_id').val());
+        }
     } );
 
     $('#write-review-form .stars').mousemove( function(e) {
@@ -1898,7 +1901,7 @@ $(document).ready(function(){
         player.on('finishRecord', function() {
             videoLength = Date.now() - videoStart;
             console.log(videoLength);
-            if(videoLength<15000) {
+            if(false && videoLength<15000) {
                 videoLength = null;
                 videoStart = null;
                 $('#start-video').show();
@@ -1913,7 +1916,8 @@ $(document).ready(function(){
 
 
             var fd = new FormData();
-            fd.append('qqfile', player.recordedData.video ? player.recordedData.video : player.recordedData);
+            var vd = player.recordedData.video ? player.recordedData.video : player.recordedData;
+            fd.append('qqfile', vd);
             $.ajax({
                 xhr: function() {
                     var xhr = new window.XMLHttpRequest();

@@ -41,7 +41,15 @@
 			@endif
 		</div>
 		<div class="review-content">
-			{!! nl2br($review->answer) !!}
+			@if(!empty($review->youtube_id))
+				<div class="video-wrap">
+					<div class="video-wrapper">
+		                <iframe src="https://www.youtube.com/embed/{{ $review->youtube_id }}" frameborder="0"></iframe>
+		            </div>
+		        </div>
+			@else
+				{!! nl2br($review->answer) !!}
+			@endif
 		</div>
 
 		<div class="review-footer flex flex-mobile break-mobile">

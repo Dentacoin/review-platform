@@ -111,6 +111,7 @@ class AdminController extends BaseController
         
         //Counts
         $params['counters'] = [];
+        $params['counters']['trp'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
         $params['counters']['youtube'] = Review::where('youtube_id', '!=', '')->where('youtube_approved', 0)->count();
         $params['counters']['ban_appeals'] = BanAppeal::where('status', 'new')->count();
         

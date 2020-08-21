@@ -868,7 +868,7 @@
 	    			{!! nl2br(trans('trp.page.user.reviews-video')) !!}	    			
 	    		</h2>
 
-	    		<div class="video-review-container clearfix">
+	    		<div class="video-review-container flex">
 					@foreach($item->reviews_in_video() as $review)
 		    			<div class="video-review more review-wrapper" review-id="{{ $review->id }}">
 		    				<div class="video-image cover" style="background-image: url('https://img.youtube.com/vi/{{ $review->youtube_id }}/hqdefault.jpg');"></div>
@@ -896,6 +896,96 @@
 					    		<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
 				    			<span class="review-date">{{ $review->user->name }}, {{ $review->created_at ? $review->created_at->toFormattedDateString() : '-' }} </span>
 				    		</div>
+				    		<div class="review-footer flex flex-mobile break-mobile">
+
+								@if($review->reply)
+									<a class="reply-button show-hide" href="javascript:;" alternative="▾ Show replies" >
+										▴ {!! nl2br(trans('trp.page.user.hire-replies')) !!}
+									</a>
+								@endif
+								<div class="col">
+									@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
+										<a class="reply-review" href="javascript:;">
+											<span>
+												{!! nl2br(trans('trp.page.user.reply')) !!}
+											</span>
+										</a>
+									@endif
+									
+									<a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
+										<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}">
+										<span>
+											{{ intval($review->upvotes) }}
+										</span>
+									</a>
+									<a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes)) ? 'voted' : '' !!}" href="javascript:;">
+										<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}">
+										<span>
+											{{ intval($review->downvotes) }}
+										</span>
+									</a>
+
+									<a class="share-review" href="javascript:;" data-popup="popup-share" share-href="{{ $item->getLink() }}?review_id={{ $review->id }}">
+										<img src="{{ url('img-trp/share-review.png') }}">
+										<span>
+											{!! nl2br(trans('trp.common.share')) !!}
+										</span>
+									</a>
+								</div>
+							</div>
+							@if(!$review->reply && !empty($user) && ($review->dentist_id==$user->id || $review->clinic_id==$user->id) )
+								<div class="review-replied-wrapper reply-form" style="display: none;">
+									<div class="review">
+					    				<div class="review-header">
+							    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
+							    			<span class="review-name">{{ $item->getName() }}</span>
+						    			</div>
+										<div class="review-content">
+											<form method="post" action="{{ $item->getLink() }}reply/{{ $review->id }}" class="reply-form-element">
+												{!! csrf_field() !!}
+												<textarea class="input" name="reply" placeholder="{!! nl2br(trans('trp.page.user.reply-enter')) !!}"></textarea>
+												<button class="button" type="submit" name="">{!! nl2br(trans('trp.page.user.reply-submit')) !!}</button>
+												<div class="alert alert-warning" style="display: none;">
+													{!! nl2br(trans('trp.page.user.reply-error')) !!}
+													
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							@elseif($review->reply)
+								<div class="review-replied-wrapper">
+									<div class="review">
+					    				<div class="review-header">
+							    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
+							    			<span class="review-name">{{ $item->getName() }}</span>
+							    			<span class="review-date">
+												{{ $review->replied_at ? $review->replied_at->toFormattedDateString() : '-' }}
+											</span>
+						    			</div>
+										<div class="review-content">
+											{!! nl2br($review->reply) !!}
+										</div>
+
+										<div class="review-footer">
+											<div class="col">
+												<a class="thumbs-up {!! ($my_upvotes && in_array($review->id, $my_upvotes) ) ? 'voted' : '' !!}" href="javascript:;">
+													<img src="{{ url('img-trp/thumbs-up'.(($my_upvotes && in_array($review->id, $my_upvotes)) ? '-color' : '').'.png') }}">
+													<span>
+														{{ intval($review->upvotes_reply) }}
+													</span>
+												</a>
+												<a class="thumbs-down {!! ($my_downvotes && in_array($review->id, $my_downvotes) ) ? 'voted' : '' !!}" href="javascript:;">
+													<img src="{{ url('img-trp/thumbs-down'.(($my_downvotes && in_array($review->id, $my_downvotes)) ? '-color' : '').'.png') }}">
+													<span>
+														{{ intval($review->downvotes_reply) }}
+													</span>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							@endif
 		    			</div>
 		    		@endforeach
 	    		</div>

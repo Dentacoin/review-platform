@@ -935,6 +935,10 @@ $phone: "screen and (max-width: 768px)";
     	@media #{$phone} {
 			display: block;
 		}
+
+		@media screen and (max-width: 500px) {
+			display: none;
+		}
 	}
 
 	&.full-tabs {
@@ -965,6 +969,10 @@ $phone: "screen and (max-width: 768px)";
 			margin-right: 4px;
 			padding: 5px 10px;
 			min-width: auto;
+		}
+
+		@media screen and (max-width: 500px) {
+			margin-bottom: 4px;
 		}
 
 		&.active {
@@ -1230,21 +1238,21 @@ $phone: "screen and (max-width: 768px)";
     }
 
     .video-review-container {
+    	flex-wrap: wrap;
 
     	.video-review {
     		cursor: pointer;
-    		float: left;
-    		width: 240px;
-    		margin-right: 70px;
-    		margin-bottom: 40px;
+		    margin-right: 70px;
+		    margin-bottom: 40px;
+		    width: calc(33% - 43px);
 
     		@media #{$pc} {
-				width: 215px;
     			margin-right: 40px;
 			}
 
 			@media #{$tablet} {
-				width: 360px;
+				width: calc(50% - 10px);
+				margin-right: 20px;
 	    	}
 
 	    	@media #{$phone} {
@@ -1252,8 +1260,16 @@ $phone: "screen and (max-width: 768px)";
 	    	    margin-right: 0px;
 	    	}
 
-    		&:nth-child(4n) {
+    		&:nth-child(3n) {
     			margin-right: 0px;
+
+    			@media #{$tablet} {
+    				margin-right: 20px;
+    			}
+
+    			@media #{$phone} {
+    				margin-right: 0px;
+    			}
     		}
 
     		&:nth-child(2n) {
@@ -1269,13 +1285,19 @@ $phone: "screen and (max-width: 768px)";
     		}
     	}
 
+    	.review-footer .col {
+		    justify-content: unset;
+		}
+
     	.video-image {
-    		padding-top: 100%;
+    		padding-top: 75%;
     	}
 
     	.video-review-title {
     		font-weight: 300;
     		margin: 10px 0px;
+    		font-size: 18px;
+    		font-weight: bold;
     	}
 
     	.ratings {
@@ -3614,4 +3636,18 @@ body.reviews-guided-tour {
 	@media #{$phone} {
 		display: none;
 	}
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+
+    iframe {
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+    }
 }
