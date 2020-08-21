@@ -408,8 +408,14 @@ $(document).ready(function(){
         $('#review-option-'+$(this).attr('data-type')).show();
 
         if( $(this).attr('data-type')=='video' ) {
+            if($('.review-box').hasClass('hide-video-reviews')) {
+                $('#review-title').hide();
+            } else {
+                $('#review-title').show();
+            }
             $('#review-reward-total').html( $('#review-reward-total').attr('video') );
         } else {
+            $('#review-title').show();
             $('#review-reward-total').html( $('#review-reward-total').attr('standard') );
         }
         handleDCNreward();
@@ -1710,7 +1716,7 @@ $(document).ready(function(){
             return false;
         }
 
-        if( $('#youtube_id').val().trim().length && !$('#video-agree').is(':checked') ) {
+        if( $('#youtube_id').val().trim().length && !$('#video-agree').is(':checked')) {
             allgood = false;
             $('#video-not-agree').show();
             $('html, body').animate({

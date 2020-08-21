@@ -193,7 +193,7 @@
 								</a>
 							</div>
 
-							<div class="review-box">
+							<div class="review-box {{ $video_reviews_stopped ? 'hide-video-reviews' : '' }}">
 
 								<input type="text" class="input" id="review-title" name="title" value="{{ $my_review ? $my_review->title : '' }}" placeholder="{!! nl2br(trans('trp.popup.submit-review-popup.title-placeholder')) !!}">
 
@@ -202,93 +202,101 @@
 								</div>
 
 								<div id="review-option-video" class="review-type-content" style="display: none;">
-									@if($my_review && $my_review->youtube_id)
-										<div class="alert alert-info">
-											{!! nl2br(trans('trp.popup.submit-review-popup.video-already-shot')) !!}
-										</div>
-										<div class="videoWrapper">
-											<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ $my_review->youtube_id }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-										</div>
-									@else
+
+									@if($video_reviews_stopped)
 										<p>
-											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-title')) !!}
+											Due to maintenance this option is currently unavailable. Please, submit a text review or check again later.
 										</p>
-										<span class="option-span">
-											<b>01</b>
-											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-1')) !!}
-										</span>
-										<span class="option-span">
-											<b>02</b>
-											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-2')) !!}
-										</span>
-										<span class="option-span">
-											<b>03</b>
-											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-3')) !!}
-										</span>
-										<span class="option-span">
-											<b>04</b>
-											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-4')) !!}
-										</span>
-										<span class="option-span">
-											<b>05</b>
-											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-5')) !!}
-										</span>
-
-										<label class="checkbox-label" for="video-agree">
-											<input type="checkbox" class="special-checkbox" id="video-agree" name="video-agree" value="video-agree">
-											<i class="far fa-square"></i>
-											{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-terms', [
-												'link' => '<a class="read-privacy" target="_blank" href="https://dentacoin.com/privacy-policy">',
-												'endlink' => '</a>',												
-											])) !!}
-										</label>
-
-										<div class="alert alert-warning" style="display: none;" id="video-not-agree">
-											{!! nl2br(trans('trp.popup.submit-review-popup.video-agree')) !!}
-										</div>
-
-										<video id="myVideo" class="video-js vjs-default-skin"></video>
-
-										<div class="tac custom-controls" style="margin-top: 20px;">
-											<div class="alert alert-warning" style="display: none;" id="video-error">
-												{{ trans('trp.popup.submit-review-popup.video-error') }}
+									@else
+										@if($my_review && $my_review->youtube_id)
+											<div class="alert alert-info">
+												{!! nl2br(trans('trp.popup.submit-review-popup.video-already-shot')) !!}
 											</div>
-											<div class="alert alert-warning" style="display: none;" id="video-denied">
-												{{ trans('trp.popup.submit-review-popup.video-denied') }}
+											<div class="videoWrapper">
+												<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ $my_review->youtube_id }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 											</div>
-											<div class="alert alert-warning" style="display: none;" id="video-short">
-												{{ trans('trp.popup.submit-review-popup.video-short') }}
+										@else
+											<p>
+												{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-title')) !!}
+											</p>
+											<span class="option-span">
+												<b>01</b>
+												{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-1')) !!}
+											</span>
+											<span class="option-span">
+												<b>02</b>
+												{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-2')) !!}
+											</span>
+											<span class="option-span">
+												<b>03</b>
+												{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-3')) !!}
+											</span>
+											<span class="option-span">
+												<b>04</b>
+												{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-4')) !!}
+											</span>
+											<span class="option-span">
+												<b>05</b>
+												{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-5')) !!}
+											</span>
+
+											<label class="checkbox-label" for="video-agree">
+												<input type="checkbox" class="special-checkbox" id="video-agree" name="video-agree" value="video-agree">
+												<i class="far fa-square"></i>
+												{!! nl2br(trans('trp.popup.submit-review-popup.video-widget-terms', [
+													'link' => '<a class="read-privacy" target="_blank" href="https://dentacoin.com/privacy-policy">',
+													'endlink' => '</a>',												
+												])) !!}
+											</label>
+
+											<div class="alert alert-warning" style="display: none;" id="video-not-agree">
+												{!! nl2br(trans('trp.popup.submit-review-popup.video-agree')) !!}
 											</div>
 
-											<a href="javascript:;" id="init-video" class="button">
-												<i class="fas fa-video" style="color: white; margin-right: 5px;"></i>
-												{{ trans('trp.popup.submit-review-popup.video-allow') }}
-											</a>
-											
-											<a href="javascript:;" id="start-video" class="button" style="display: none;">
-												<i class="fas fa-film"></i>
-												{{ trans('trp.popup.submit-review-popup.video-start') }}
-											</a>
+											<video id="myVideo" class="video-js vjs-default-skin"></video>
 
-											<a href="javascript:;" id="stop-video" class="button" style="display: none;">
-												<i class="fas fa-stop-circle"></i>
-												{{ trans('trp.popup.submit-review-popup.video-stop') }}
-											</a>
-											
-											<div id="video-progress" style="display: none;">
-												{!! trans('trp.popup.submit-review-popup.video-processing',[
-													'percent' => '<span id="video-progress-percent"></span>'
-												]) !!}
+											<div class="tac custom-controls" style="margin-top: 20px;">
+												<div class="alert alert-warning" style="display: none;" id="video-error">
+													{{ trans('trp.popup.submit-review-popup.video-error') }}
+												</div>
+												<div class="alert alert-warning" style="display: none;" id="video-denied">
+													{{ trans('trp.popup.submit-review-popup.video-denied') }}
+												</div>
+												<div class="alert alert-warning" style="display: none;" id="video-short">
+													{{ trans('trp.popup.submit-review-popup.video-short') }}
+												</div>
+
+												<a href="javascript:;" id="init-video" class="button">
+													<i class="fas fa-video" style="color: white; margin-right: 5px;"></i>
+													{{ trans('trp.popup.submit-review-popup.video-allow') }}
+												</a>
+												
+												<a href="javascript:;" id="start-video" class="button" style="display: none;">
+													<i class="fas fa-film"></i>
+													{{ trans('trp.popup.submit-review-popup.video-start') }}
+												</a>
+
+												<a href="javascript:;" id="stop-video" class="button" style="display: none;">
+													<i class="fas fa-stop-circle"></i>
+													{{ trans('trp.popup.submit-review-popup.video-stop') }}
+												</a>
+												
+												<div id="video-progress" style="display: none;">
+													{!! trans('trp.popup.submit-review-popup.video-processing',[
+														'percent' => '<span id="video-progress-percent"></span>'
+													]) !!}
+												</div>
+												
+												<div id="video-youtube" style="display: none;">
+													{{ trans('trp.popup.submit-review-popup.video-youtube') }}
+												</div>
+												
+												<div class="alert alert-success" style="display: none;" id="video-uploaded">
+													{{ trans('trp.popup.submit-review-popup.video-uploaded') }}
+												</div>
 											</div>
-											
-											<div id="video-youtube" style="display: none;">
-												{{ trans('trp.popup.submit-review-popup.video-youtube') }}
-											</div>
-											
-											<div class="alert alert-success" style="display: none;" id="video-uploaded">
-												{{ trans('trp.popup.submit-review-popup.video-uploaded') }}
-											</div>
-										</div>
+										@endif
+										
 									@endif
 									<input type="hidden" id="youtube_id" name="youtube_id" value="{{ $my_review ? $my_review->youtube_id : '' }}" />
 

@@ -9,6 +9,7 @@ use DeviceDetector\Parser\Device\DeviceParserAbstract;
 use Illuminate\Support\Facades\Input;
 
 use App\Models\DentistRecommendation;
+use App\Models\StopVideoReview;
 use App\Models\DentistPageview;
 use App\Models\ReviewDownvote;
 use App\Models\DentistFbPage;
@@ -678,6 +679,7 @@ class DentistController extends FrontController
             'canonical' => $item->getLink(),
             'og_url' => $item->getLink().($review_id ? '?review_id='.$review_id : ''),
             'countries' => Country::with('translations')->get(),
+            'video_reviews_stopped' => StopVideoReview::find(1)->stopped ? true : false,
             'js' => [
                 'videojs.record.min.js',
                 'user.js',
