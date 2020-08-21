@@ -7,6 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use App\Models\IncompleteRegistration;
 use App\Models\ScrapeDentistResult;
+use App\Models\StopVideoReview;
 use App\Models\DcnTransaction;
 use App\Models\EmailTemplate;
 use App\Models\ScrapeDentist;
@@ -1944,6 +1945,21 @@ NOT SEND TRANSACTIONS
 
         })->cron("*/1 * * * *");
 
+        $schedule->call(function () {
+
+            $video_reviews = Review::where('youtube_id', '!=', '')->where('created_at', '>=', Carbon::now()->addDays(-1))->count();
+
+            if($video_reviews >= 5) {
+                $stop_video_reviews = StopVideoReview::find(1);
+                $stop_video_reviews->stopped = true;
+                $stop_video_reviews->save();
+            } else {
+                $stop_video_reviews = StopVideoReview::find(1);
+                $stop_video_reviews->stopped = false;
+                $stop_video_reviews->save();
+            }
+
+        })->cron('*/5 * * * *');
 
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;
