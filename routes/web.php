@@ -209,6 +209,11 @@ Route::group(['prefix' => 'cms', 'namespace' => 'Admin', 'middleware' => ['admin
 });
 
 
+Route::group(['prefix' => 'api', 'namespace' => 'Api' ], function () {
+	Route::get('users-stats', 						'IndexController@stats');
+});
+
+
 //Empty route
 $reviewRoutes = function () {
 	Route::any('test', 									'Front\YouTubeController@test');
