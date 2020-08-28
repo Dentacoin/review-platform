@@ -109,6 +109,16 @@
                             <input type="checkbox" name="image_in_tooltip" class="form-control" value="1" id="image_in_tooltip" style="vertical-align: sub;width: 30px;" {!! !empty($question) && !empty($question->image_in_tooltip) ? 'checked="checked"' : '' !!} />
                         </div>
                     </div>
+                    <!-- <div class="form-group clearfix">
+                        <label class="col-md-2 control-label" for="image_in_tooltip">Explanation</label>
+                        <div class="col-md-10">
+                            @foreach($langs as $code => $lang_info)
+                                <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}">
+                                    {{ Form::textarea('stats_title-'.$code, !empty($question) ? $question->translateorNew($code)->stats_title : old('stats_title-'.$code), array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => trans('vox.page.questionnaire.rank-info'), 'style' => 'max-height: 60px;')) }}
+                                </div>
+                            @endforeach
+                        </div>
+                    </div> -->
                     @foreach($langs as $code => $lang_info)
                         <div class="tab-pane questions-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}" lang="{{ $code }}">
                             <div class="form-group answers-group">
