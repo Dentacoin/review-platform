@@ -103,7 +103,6 @@ class ApiController extends BaseController {
 
             $response = $next($request);
             $response->headers->set('Referrer-Policy', 'no-referrer');
-            $response->headers->set('X-XSS-Protection', '1; mode=block');
             //$response->headers->set('X-Frame-Options', 'DENY');
      
             return $response;
