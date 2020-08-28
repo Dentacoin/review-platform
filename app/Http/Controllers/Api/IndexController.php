@@ -19,7 +19,7 @@ use Mail;
 class IndexController extends ApiController {
     
 	public function stats() {
-		
+		header('Access-Control-Allow-Origin: *');
 		return Response::json( array(
 			'users_count' => User::getCount('vox'),
 			'answers_count' => VoxAnswer::getCount(),
