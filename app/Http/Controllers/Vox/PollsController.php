@@ -203,10 +203,10 @@ class PollsController extends FrontController
 		$ret = [
         	'success' => false,
         ];
+		
+		$poll = Poll::find($poll_id);
 
-		if(!empty($poll_id)) {
-
-			$poll = Poll::find($poll_id);
+		if(!empty($poll)) {
 
 			if (!empty($this->user)) {
 				$taken_daily_poll = PollAnswer::where('poll_id', $poll->id)->where('user_id', $this->user->id)->first();

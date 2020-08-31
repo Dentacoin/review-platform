@@ -406,10 +406,6 @@ class FrontController extends BaseController {
             }
         }
 
-        if(!isset($params['xframe'])) {
-            header("X-Frame-Options: DENY");
-        }
-
         $this->PrepareViewData($page, $params, 'vox');
 
         $params['genders'] = [
@@ -496,20 +492,16 @@ class FrontController extends BaseController {
 
         $params['poll_scales'] = $poll_scales;
 
-        if (!empty($statusCode)) {
-            return response()->view('vox.'.$page, $params, $statusCode);
+        if(!isset($params['xframe'])) {
+            return response()->view('vox.'.$page, $params, $statusCode ? $statusCode : 200)->header('X-Frame-Options', 'DENY');
         } else {
-            return view('vox.'.$page, $params);
+            return response()->view('vox.'.$page, $params, $statusCode ? $statusCode : 200);
         }
         
     }
 
     public function ShowView($page, $params=array(), $statusCode=null) {
         
-        if(!isset($params['xframe'])) {
-            header("X-Frame-Options: DENY");
-        }
-
         $this->PrepareViewData($page, $params, 'trp');    
 
         if (empty($this->user)) {
@@ -528,13 +520,12 @@ class FrontController extends BaseController {
                 '50' => '50',
             ];
         }
-        
-        if (!empty($statusCode)) {
-            return response()->view('trp.'.$page, $params, $statusCode);
+
+        if(!isset($params['xframe'])) {
+            return response()->view('trp.'.$page, $params, $statusCode ? $statusCode : 200)->header('X-Frame-Options', 'DENY');
         } else {
-            return view('trp.'.$page, $params);
+            return response()->view('trp.'.$page, $params, $statusCode ? $statusCode : 200);
         }
-        
     }    
     public function PrepareViewData($page, &$params, $text_domain) {
 
