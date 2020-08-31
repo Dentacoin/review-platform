@@ -185,8 +185,8 @@ class DentistsController extends FrontController
                     }
                 }
             }
-
-            if ((empty($parsedAddress['city_name']) && empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) || $query == 'ireland' || $parsedAddress['country_name'] == 'North Macedonia') {
+            
+            if ((empty($parsedAddress['city_name']) && empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name'])) || $query == 'ireland' || !empty($parsedAddress['country_name']) && $parsedAddress['country_name'] == 'North Macedonia') {
                 $country_n = !empty($parsedAddress['country_name']) ? $parsedAddress['country_name'] : $query;
                 if ($country_n == 'Vietnam') {
                     $country = Country::find(238);
