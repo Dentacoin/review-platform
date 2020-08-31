@@ -362,24 +362,22 @@
                         </div>
                     </div>
                     
-                    @if(empty($question) || (!empty($question) && $question->type == 'multiple_choice'))
-                        <div class="stat_title">
-                            <div class="form-group clearfix">
-                                <label class="col-md-2 control-label">
-                                    Show Only Top Answers 
-                                    <!-- <br/>(multiple choice only) -->
-                                </label>
-                                <div class="col-md-2">
-                                    {{ Form::select('stats_top_answers', $stat_top_answers, !empty($question) ? $question->stats_top_answers : old('stats_top_answers'), array('class' => 'form-control')) }}
-                                </div>
-                                @if(!empty($question->{'answers:en'}))
-                                    <div class="col-md-3" style="margin-top: 8px;margin-left: -18px;color: #348fe2;">
-                                        Current answers count: {{ count(json_decode($question->{'answers:en'}, true)) }}
-                                    </div>
-                                @endif
+                    <div class="stat_title" style="display: {!! !empty($question) && $question->type == 'multiple_choice' ? 'block' : 'none' !!};">
+                        <div class="form-group clearfix">
+                            <label class="col-md-2 control-label">
+                                Show Only Top Answers 
+                                <br/>(multiple choice only)
+                            </label>
+                            <div class="col-md-2">
+                                {{ Form::select('stats_top_answers', $stat_top_answers, !empty($question) ? $question->stats_top_answers : old('stats_top_answers'), array('class' => 'form-control')) }}
                             </div>
+                            @if(!empty($question->{'answers:en'}))
+                                <div class="col-md-3" style="margin-top: 8px;margin-left: -18px;color: #348fe2;">
+                                    Current answers count: {{ count(json_decode($question->{'answers:en'}, true)) }}
+                                </div>
+                            @endif
                         </div>
-                    @endif
+                    </div>
                     <div class="form-group clearfix" id="stat_standard">
                         <label class="col-md-2 control-label">Demographics</label>
                         <div class="col-md-10">
