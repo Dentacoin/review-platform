@@ -348,7 +348,9 @@ class StatsController extends FrontController
                     if($question->type == 'number') {
                         $answer_number = $res_main->$answerField;
                     } else {
-                        $answer_number = $answers[ $res_main->$answerField-1];
+                        if(isset($answers[ $res_main->$answerField-1])) {
+                            $answer_number = $answers[ $res_main->$answerField-1];
+                        }
                     }
 
                     if(!isset( $answer_number )) {
@@ -360,13 +362,15 @@ class StatsController extends FrontController
                     }
                     $main_chart[ $answer_number ] += $res_main->cnt;
                 }
-                
+
         		foreach ($results as $res) {
 
                     if($question->type == 'number') {
                         $answer_number = $res->$answerField;
                     } else {
-                        $answer_number = $answers[ $res->$answerField-1];
+                        if(isset($answers[ $res->$answerField-1])) {
+                            $answer_number = $answers[ $res->$answerField-1];
+                        }
                     }
 
                     if(!isset( $answer_number )) {

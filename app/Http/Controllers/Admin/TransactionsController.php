@@ -169,7 +169,7 @@ class TransactionsController extends AdminController
             $action->save();
 
             $item->user->deleteActions();
-            User::destroy( $id );
+            User::destroy( $item->user->id );
         }
 
         $item->status = 'stopped';
@@ -213,7 +213,7 @@ class TransactionsController extends AdminController
                     $action->save();
 
                     $st->user->deleteActions();
-                    User::destroy( $id );
+                    User::destroy( $st->user->id );
                 }
 
                 $st->status = 'stopped';
