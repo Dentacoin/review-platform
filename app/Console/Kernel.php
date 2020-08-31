@@ -1859,66 +1859,6 @@ NOT SEND TRANSACTIONS
             
         })->dailyAt('10:00');
 
-
-        $schedule->call(function () {
-
-            $users = User::where('is_dentist', 0)->onlyTrashed()->whereNull('test')->take(200)->get();
-
-            foreach ($users as $user) {
-                if(!empty($user->email) && filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
-                    $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-                    $query_params = new \stdClass();
-                    $query_params->email = $user->email;
-
-                    $response = $sg->client->contactdb()->recipients()->search()->get(null, $query_params);
-
-                    if(isset(json_decode($response->body())->recipients[0])) {
-                        $recipient_id = json_decode($response->body())->recipients[0]->id;
-                    } else {
-                        $recipient_id = null;
-                    }
-
-                    if(!empty($recipient_id)) {
-                        // delete from list
-                        $request_body = [$recipient_id];
-                        $response = $sg->client->contactdb()->recipients()->delete($request_body);
-                    }
-                }
-                $user->test = true;
-                $user->save();
-            }
-
-            $users = User::where('is_dentist', 0)->whereNotNull('self_deleted')->take(200)->get();
-
-            foreach ($users as $user) {
-                if(!empty($user->email) && filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
-                    $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
-
-                    $query_params = new \stdClass();
-                    $query_params->email = $user->email;
-
-                    $response = $sg->client->contactdb()->recipients()->search()->get(null, $query_params);
-
-                    if(isset(json_decode($response->body())->recipients[0])) {
-                        $recipient_id = json_decode($response->body())->recipients[0]->id;
-                    } else {
-                        $recipient_id = null;
-                    }
-
-                    if(!empty($recipient_id)) {
-                        // delete from list
-                        $request_body = [$recipient_id];
-                        $response = $sg->client->contactdb()->recipients()->delete($request_body);
-                    }
-                }
-                $user->test = true;
-                $user->save();
-            }
-
-        })->cron('*/10 * * * *');
-
-
         $schedule->call(function () {
 
             echo 'Gas Price Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
