@@ -221,9 +221,13 @@ $(document).ready(function(){
 
 	$('#survey-more').click( function() {
 		var i=0;
+		var survey = null;
 		$('.swiper-slide[found="1"]:not(:visible)').each( function() {
 			i++;
 			if(i<=6) {
+				if(i == 1) {
+					survey = $(this);
+				}
 				$(this).show();
 			}
 		} );
@@ -233,6 +237,12 @@ $(document).ready(function(){
 		}
 
 		surveyTitleHeight();
+
+		if(survey) {
+			$('html, body').animate({
+	        	scrollTop: survey.offset().top
+	        }, 500);
+		}
 
 	} );
 
