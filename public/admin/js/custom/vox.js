@@ -139,6 +139,7 @@ $(document).ready(function(){
 			$('.question-control-wrap').hide();
 			$('.hint-for-scale').hide();
 			$('.question-control-wrap').hide();
+			$('.rank-explanation').hide();
 		} else {
 			if(qtype == 'rank') {
 				$('.answers-randomize').hide();
@@ -146,12 +147,14 @@ $(document).ready(function(){
 				$('.hint-for-scale').hide();
 				$('.question-stats').hide();
 				$('.question-control-wrap').hide();
+				$('.rank-explanation').show();
 			} else {
 				$('.answers-randomize').show();
 				$('.question-scale-wrapper').show();
 				$('.hint-for-scale').show();
 				$('.question-stats').show();
 				$('.question-control-wrap').show();
+				$('.rank-explanation').hide();
 			}
 			
 			$('.question-number-wrapper').hide();

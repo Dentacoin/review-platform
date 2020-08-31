@@ -109,8 +109,8 @@
                             <input type="checkbox" name="image_in_tooltip" class="form-control" value="1" id="image_in_tooltip" style="vertical-align: sub;width: 30px;" {!! !empty($question) && !empty($question->image_in_tooltip) ? 'checked="checked"' : '' !!} />
                         </div>
                     </div>
-                    <div class="form-group clearfix" style="display: {!! !empty($question) && $question->type == 'rank' ? 'block' : 'none' !!};">
-                        <label class="col-md-2 control-label" for="image_in_tooltip">Ranking explanation</label>
+                    <div class="form-group clearfix rank-explanation" style="display: {!! !empty($question) && $question->type == 'rank' ? 'block' : 'none' !!};">
+                        <label class="col-md-2 control-label">Ranking explanation</label>
                         <div class="col-md-10">
                             @foreach($langs as $code => $lang_info)
                                 <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}">
