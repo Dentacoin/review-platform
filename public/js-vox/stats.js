@@ -64,6 +64,13 @@ var open_download_popup = false;
 var colors = [];
 var dep_answer = null;
 
+
+// stats ordering answers logic:
+// - no scale, no # -> answers in stats are ordered by number of respondents who said so
+// - chosen scale - answers are ordered as in scale
+// - # in some of the answers - they remain at the end always, as in the questions; the rest are ordered by number of respondents
+// - # in all answers - keep the order as is, treat it as a scale
+
 $(document).ready(function(){
 
     //All surveys
@@ -346,7 +353,7 @@ $(document).ready(function(){
                         if(data.question_type == 'multiple_choice') {
                             $(this).find('.legend').hide();
                         } else {
-                            setupLegend(main_chart_data_clone, data.total ,$(this).find('.legend'), legend, data.answer_id, can_click_on_legend);
+                            setupLegend(main_chart_data_clone, data.total ,$(this).find('.legend'), legend, data.answer_id, can_click_on_legend, data.vox_scale_id);
                         }
 
                         if((data.question_type == 'multiple_choice' && $('.main-multiple-gender').length && data.answer_id) || (data.question_type != 'multiple_choice' && data.answer_id )) {
@@ -462,7 +469,7 @@ $(document).ready(function(){
 
                         $(this).find('.third-chart').html('');
                         if(data.question_type != 'multiple_choice') {
-                            setupLegend(main_chart_data_clone, data.total, $(this).find('.legend'), legend, data.answer_id, can_click_on_legend);
+                            setupLegend(main_chart_data_clone, data.total, $(this).find('.legend'), legend, data.answer_id, can_click_on_legend, data.vox_scale_id);
                             if (data.answer_id) {
                                 $(this).find('.hint').html('').html('Click on a pie slice to see data <br/> only for the respective answer or <a href="javascript:;" class="to-all">see all</a>').show();
                             } else {
@@ -527,9 +534,10 @@ $(document).ready(function(){
                             }
 
                             if(arrmyArray.length == count_diez) {
-                                arrmyArray.sort(function(a, b) {
-                                    return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-                                });
+                                //has to be loaded as their order
+                                // arrmyArray.sort(function(a, b) {
+                                //     return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+                                // });
                             } else {
                                 arrmyArray.sort(function(a, b) {
                                     if( b[0].search( '#' ) === 0 ) {
@@ -1304,7 +1312,7 @@ $(document).ready(function(){
         });
     }
 
-    var setupLegend = function(rows, totalCount, container, legend, answer, can_click_on_legend) {
+    var setupLegend = function(rows, totalCount, container, legend, answer, can_click_on_legend, vox_scale_id) {
 
         container.html('');
         if(container.hasClass('more-q-legend')) {
@@ -1323,10 +1331,11 @@ $(document).ready(function(){
             }
         }
 
-        if(rows.length == count_diez) {
-            rows.sort(function(a, b) {
-                return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-            });
+        if(rows.length == count_diez || vox_scale_id) {
+            //has to be loaded as their order
+            // rows.sort(function(a, b) {
+            //     return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+            // });
         } else {
 
             rows.sort(function(a, b) {
@@ -1502,10 +1511,11 @@ $(document).ready(function(){
                 }
             }
 
-            if(arrmyArray.length == count_diez) {
-                arrmyArray.sort(function(a, b) {
-                    return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-                });
+            if(arrmyArray.length == count_diez || vox_scale_id) {
+                //has to be loaded as their order
+                // arrmyArray.sort(function(a, b) {
+                //     return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
+                // });
             } else {
                 arrmyArray.sort(function(a, b) {
                     if( b[0].search( '#' ) === 0 ) {
