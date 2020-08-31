@@ -255,11 +255,10 @@
 			@endif
 
 			{!! nl2br($question->questionWithTooltips()) !!}
-			<p>{!! trans('vox.page.questionnaire.rank-info') !!}</p>
+			<p>{!! !empty($question->rank_explanation) ? $question->rank_explanation : trans('vox.page.questionnaire.rank-info') !!}</p>
 			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				</div>
 			@endif
-
 			
 		</div>
 		<div class="answers answers-draggable">

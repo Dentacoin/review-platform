@@ -109,16 +109,16 @@
                             <input type="checkbox" name="image_in_tooltip" class="form-control" value="1" id="image_in_tooltip" style="vertical-align: sub;width: 30px;" {!! !empty($question) && !empty($question->image_in_tooltip) ? 'checked="checked"' : '' !!} />
                         </div>
                     </div>
-                    <!-- <div class="form-group clearfix">
-                        <label class="col-md-2 control-label" for="image_in_tooltip">Explanation</label>
+                    <div class="form-group clearfix" style="display: {!! !empty($question) && $question->type == 'rank' ? 'block' : 'none' !!};">
+                        <label class="col-md-2 control-label" for="image_in_tooltip">Ranking explanation</label>
                         <div class="col-md-10">
                             @foreach($langs as $code => $lang_info)
                                 <div class="tab-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}">
-                                    {{ Form::textarea('stats_title-'.$code, !empty($question) ? $question->translateorNew($code)->stats_title : old('stats_title-'.$code), array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => trans('vox.page.questionnaire.rank-info'), 'style' => 'max-height: 60px;')) }}
+                                    {{ Form::textarea('rank_explanation-'.$code, !empty($question) ? $question->translateorNew($code)->rank_explanation : old('rank_explanation-'.$code), array('maxlength' => 256, 'class' => 'form-control', 'placeholder' => 'If empty - default is: '.trans('vox.page.questionnaire.rank-info'), 'style' => 'max-height: 60px;')) }}
                                 </div>
                             @endforeach
                         </div>
-                    </div> -->
+                    </div>
                     @foreach($langs as $code => $lang_info)
                         <div class="tab-pane questions-pane fade{{ $loop->first ? ' active in' : '' }} lang-{{ $code  }}" lang="{{ $code }}">
                             <div class="form-group answers-group">
@@ -143,8 +143,6 @@
                                                             </a>
                                                         </div>
                                                     @endif
-                                                    <!-- da se dobavi novo pole v bazata, za imenata na failovete -->
-                                                    <!-- pri triene i razmestvane na vuprosi ne raboti -->
                                                     <input type="hidden" name="filename[]" value="{{ !empty($question->answers_images_filename) && !empty(json_decode($question->answers_images_filename, true)[$key]) ? json_decode($question->answers_images_filename, true)[$key] : '' }}">
                                                     <input accept="image/gif, image/jpg, image/jpeg, image/png" style="width: 100px; display: {{ $question->answers_images_filename && !empty(json_decode($question->answers_images_filename, true)[$key]) ? 'none' : 'inline-block' }};" name="answer-photos[]" type="file">
                                                     

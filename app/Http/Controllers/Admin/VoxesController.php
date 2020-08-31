@@ -1013,6 +1013,11 @@ class VoxesController extends AdminController
                 if(!empty( $data['stats_title-'.$key] )) {
                     $translation->stats_title = $data['stats_title-'.$key];
                 }
+                if(!empty( $data['rank_explanation-'.$key])) {
+                    $translation->rank_explanation = $data['rank_explanation-'.$key];
+                } else {
+                    $translation->rank_explanation = '';
+                }
                 if(!empty( $data['stats_subtitle-'.$key] )) {
                     $translation->stats_subtitle = $data['stats_subtitle-'.$key];
                 } else {

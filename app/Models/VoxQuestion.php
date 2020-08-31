@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use DB;
-
 use Illuminate\Database\Eloquent\Model;
+
 use WebPConvert\WebPConvert;
+
+use DB;
 
 class VoxQuestion extends Model {
     
@@ -16,6 +17,7 @@ class VoxQuestion extends Model {
         'answers',
         'stats_title',
         'stats_subtitle',
+        'rank_explanation',
     ];
 
     protected $fillable = [
@@ -228,8 +230,6 @@ class VoxQuestion extends Model {
             return false;
         }
     }
-
-
 }
 
 class VoxQuestionTranslation extends Model {
@@ -240,10 +240,8 @@ class VoxQuestionTranslation extends Model {
         'answers',
         'stats_title',
         'stats_subtitle',
+        'rank_explanation',
     ];
-
 }
-
-
 
 ?>
