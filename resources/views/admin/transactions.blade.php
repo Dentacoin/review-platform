@@ -21,7 +21,7 @@
     @endif
     @if($is_warning_message_shown)
         <div>
-            <label class="alert alert-warning">Warning message on DV home page is shown. Hide it from the button "Hide warning message on DV homepage".</label>
+            <label class="alert alert-warning">Warning message on DV homepage is shown. Hide it from the button "Hide warning message on DV homepage".</label>
         </div>
     @endif
 
