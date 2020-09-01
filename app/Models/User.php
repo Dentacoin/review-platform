@@ -1283,7 +1283,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
             });
         }
 
-        $transactions = DcnTransaction::where('user_id', $this->id)->whereIn('status', ['unconfirmed', 'new', 'failed', 'first'])->get();
+        $transactions = DcnTransaction::where('user_id', $this->id)->whereIn('status', ['unconfirmed', 'new', 'failed', 'first', 'not_sent'])->get();
 
         if ($transactions->isNotEmpty()) {
             foreach ($transactions as $trans) {
