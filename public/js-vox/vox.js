@@ -993,7 +993,7 @@ $(document).ready(function(){
     if($( ".answers-draggable" ).length) {
 
         $( ".answers-draggable" ).sortable({
-            containment: "window",
+            containment: "parent",
             axis: "y",
             update: function (event, ui) {
                 $( this ).children().each(function (i) {
@@ -1001,7 +1001,7 @@ $(document).ready(function(){
                     $(this).find('select').val(numbering);
                     $(this).attr('rank-order', numbering);
                 });
-            }
+            },
         });
         //}).disableSelection();
 

@@ -323,6 +323,7 @@ $main-color: #38ace5;
 			width: auto;
 
 			&.answers-draggable {
+				overflow: auto;
 				@media #{$phone} {
 					width: 100%;
 				}
