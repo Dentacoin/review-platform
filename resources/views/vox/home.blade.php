@@ -4,7 +4,7 @@
 
 	<div class="container">
 
-		@if(!empty($user) && !empty(trans('vox.page.home.high-gas-price')))
+		@if($is_warning_message_shown)
 			<div class="alert alert-warning"> {{ trans('vox.page.home.high-gas-price') }} </div> 
 		@endif
 

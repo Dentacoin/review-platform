@@ -1,27 +1,31 @@
 <?php
 
 namespace App\Http\Controllers\Vox;
+
 use App\Http\Controllers\FrontController;
-use App\Models\Vox;
-use App\Models\User;
+
+use App\Models\StopTransaction;
+use App\Models\Recommendation;
+use App\Models\UserStrength;
+use App\Models\VoxCategory;
 use App\Models\UserLogin;
 use App\Models\VoxAnswer;
 use App\Models\PageSeo;
-use App\Models\UserStrength;
-use App\Models\VoxCategory;
 use App\Models\Country;
-use App\Models\Recommendation;
+use App\Models\User;
+use App\Models\Vox;
+
 use Carbon\Carbon;
 
+use Validator;
+use Response;
+use Request;
+use Cookie;
 use Mail;
 use App;
-use Cookie;
-use Request;
-use Response;
-use Validator;
 
-class IndexController extends FrontController
-{
+class IndexController extends FrontController {
+
 	public function survey_list($locale=null) {
 		$sorts = [
 			// 'featured' => trans('vox.page.home.sort-featured'),
@@ -71,9 +75,11 @@ class IndexController extends FrontController
 		}
 
 		$seos = PageSeo::find(2);
+        $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
 
 		return $this->ShowVoxView('home', array(
 			'strength_arr' => $strength_arr,
+            'is_warning_message_shown' => $is_warning_message_shown,
 			'completed_strength' => $completed_strength,
 			'countries' => Country::with('translations')->get(),
 			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',

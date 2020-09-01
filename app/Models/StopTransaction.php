@@ -8,6 +8,7 @@ class StopTransaction extends Model {
     
     protected $fillable = [
         "stopped",
+        "show_warning_text",
     ];
     
     protected $dates = [

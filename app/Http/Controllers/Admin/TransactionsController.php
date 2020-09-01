@@ -106,9 +106,11 @@ class TransactionsController extends AdminController
         $pagination_link = (!empty($this->request->input('search-address')) ? '&search-address='.$this->request->input( 'search-address' ) : '').(!empty($this->request->input('search-tx')) ? '&search-tx='.$this->request->input( 'search-tx' ) : '').(!empty($this->request->input('search-user-id')) ? '&search-user-id='.$this->request->input( 'search-user-id' ) : '').(!empty($this->request->input('search-email')) ? '&search-email='.$this->request->input( 'search-email' ) : '').(!empty($this->request->input('search-status')) ? '&search-status='.$this->request->input( 'search-status' ) : '').(!empty($this->request->input('search-from')) ? '&search-from='.$this->request->input( 'search-from' ) : '').(!empty($this->request->input('search-to')) ? '&search-to='.$this->request->input( 'search-to' ) : '');
 
         $are_transactions_stopped = StopTransaction::find(1)->stopped;
+        $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
 
         return $this->showView('transactions', array(
             'are_transactions_stopped' => $are_transactions_stopped,
+            'is_warning_message_shown' => $is_warning_message_shown,
             'transactions' => $transactions,
             'total_count' => $total_count,
             'search_address' => $this->request->input('search-address'),

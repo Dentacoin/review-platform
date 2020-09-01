@@ -5,6 +5,7 @@
     <div class="flex" style="justify-content: space-between;">
         <h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
         <div>
+            <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-info pull-right" style="margin-left: 10px;">{{ $is_warning_message_shown ? 'Hide warning message on DV homepage' : 'Show warning message on DV homepage' }}</a>
             <a href="{{ $are_transactions_stopped ? url('cms/transactions/start') : url('cms/transactions/stop') }}" class="btn btn-{{ $are_transactions_stopped ? 'success' : 'danger' }} pull-right" style="margin-left: 10px;">{{ $are_transactions_stopped ? 'Allow users to withdraw' : 'Disallow users to withdraw' }}</a>
 
             @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
@@ -15,7 +16,12 @@
     </div>
     @if($are_transactions_stopped)
         <div>
-            <label class="alert alert-danger">Users can't withdraw. Allow them by click on 'Allow users to withdraw' button</label>
+            <label class="alert alert-danger">Users can't withdraw. Allow them by click on 'Allow users to withdraw' button.</label>
+        </div>
+    @endif
+    @if($is_warning_message_shown)
+        <div>
+            <label class="alert alert-warning">Warning message on DV home page is shown. Hide it from the button "Hide warning message on DV homepage".</label>
         </div>
     @endif
 
