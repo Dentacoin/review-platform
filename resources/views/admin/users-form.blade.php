@@ -448,6 +448,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-md-2 control-label">Civic Email</label>
+                                <div class="col-md-7">
+                                    @include('admin.parts.user-field',[
+                                        'key' => 'civic_email',
+                                        'info' => $fields['civic_email']
+                                    ])
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-md-2 control-label">DCN Address</label>
                                 <div class="col-md-7">
                                     @if($item->wallet_addresses->isNotEmpty())

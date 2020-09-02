@@ -86,6 +86,9 @@ class UsersController extends AdminController {
             'email' => [
                 'type' => 'text',
             ],
+            'civic_email' => [
+                'type' => 'text',
+            ],
             'email_public' => [
                 'type' => 'text',
             ],
