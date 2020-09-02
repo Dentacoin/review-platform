@@ -5,7 +5,7 @@
     <div class="flex" style="justify-content: space-between;">
         <h1 class="page-header">{{ trans('admin.page.'.$current_page.'.title') }}</h1>
         <div>
-            <a href="{{ url('cms/transactions/bump-dont-retry') }}" class="btn btn-info pull-right" style="margin-left: 10px;">{{ $is_warning_message_shown ? 'Hide warning message on DV homepage' : 'Show warning message on DV homepage' }}</a>
+            <a href="{{ $is_warning_message_shown ? url('cms/transactions/remove-message') : url('cms/transactions/add-message') }}" class="btn btn-info pull-right" style="margin-left: 10px;">{{ $is_warning_message_shown ? 'Hide warning message on DV homepage' : 'Show warning message on DV homepage' }}</a>
             <a href="{{ $are_transactions_stopped ? url('cms/transactions/start') : url('cms/transactions/stop') }}" class="btn btn-{{ $are_transactions_stopped ? 'success' : 'danger' }} pull-right" style="margin-left: 10px;">{{ $are_transactions_stopped ? 'Allow users to withdraw' : 'Disallow users to withdraw' }}</a>
 
             @if(App\Models\DcnTransaction::where('status', 'dont_retry')->count())
@@ -107,29 +107,31 @@
             		<div class="panel-body">
                         <form method="post" action="{{ url('cms/transactions') }}" original-action="{{ url('cms/transactions') }}">
                             {!! csrf_field() !!}
-        					@include('admin.parts.table', [
-        						'table_id' => 'transactions',
-        						'table_fields' => [
-                                    'checkboxes' => array('format' => 'checkboxes'),
-                                    'id'           => array(),
-                                    'created_at'        => array('format' => 'datetime','order' => true, 'orderKey' => 'created','label' => 'Date'),
-                                    'user'              => array('template' => 'admin.parts.table-transactions-user'),
-                                    'email'             => array('template' => 'admin.parts.table-transactions-email'),
-                                    'user_status'       => array('template' => 'admin.parts.table-users-status'),
-                                    'amount'            => array(),
-                                    'address'           => array(),
-                                    'tx_hash'           => array('template' => 'admin.parts.table-transactions-hash'),
-                                    'status'            => array(),
-                                    'type'              => array(),
-                                    'message'           => array(),
-                                    'retries'           => array(),
-                                    'updated_at'        => array('format' => 'datetime', 'order' => true, 'orderKey' => 'attempt','label' => 'Last attempt'),
-                                    'bump'              =>array('template' => 'admin.parts.table-transactions-bump'),
-        						],
-                                'table_data' => $transactions,
-        						'table_pagination' => false,
-                                'pagination_link' => array()
-        					])
+                            <div class="table-responsive">
+            					@include('admin.parts.table', [
+            						'table_id' => 'transactions',
+            						'table_fields' => [
+                                        'checkboxes' => array('format' => 'checkboxes'),
+                                        'id'           => array(),
+                                        'created_at'        => array('format' => 'datetime','order' => true, 'orderKey' => 'created','label' => 'Date'),
+                                        'user'              => array('template' => 'admin.parts.table-transactions-user'),
+                                        'email'             => array('template' => 'admin.parts.table-transactions-email'),
+                                        'user_status'       => array('template' => 'admin.parts.table-users-status'),
+                                        'amount'            => array(),
+                                        'address'           => array(),
+                                        'tx_hash'           => array('template' => 'admin.parts.table-transactions-hash'),
+                                        'status'            => array(),
+                                        'type'              => array(),
+                                        'message'           => array(),
+                                        'retries'           => array(),
+                                        'updated_at'        => array('format' => 'datetime', 'order' => true, 'orderKey' => 'attempt','label' => 'Last attempt'),
+                                        'bump'              =>array('template' => 'admin.parts.table-transactions-bump'),
+            						],
+                                    'table_data' => $transactions,
+            						'table_pagination' => false,
+                                    'pagination_link' => array()
+            					])
+                            </div>
                             <div style="display: flex">
                                 <button type="submit" name="mass-bump" id="mass-bump" class="btn btn-primary" style="flex: 1">Bump transactions</button>
                                 <button type="submit" name="mass-stop" id="mass-stop" class="btn btn-danger" style="flex: 1">Stop transactions</button>

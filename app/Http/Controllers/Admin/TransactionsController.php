@@ -260,6 +260,26 @@ class TransactionsController extends AdminController
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
+    public function removeMessage() {
+
+        $allow = StopTransaction::find(1);
+        $allow->show_warning_text = false;
+        $allow->save();
+
+        $this->request->session()->flash('success-message', 'Message is removed!' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
+    public function addMessage() {
+
+        $allow = StopTransaction::find(1);
+        $allow->show_warning_text = true;
+        $allow->save();
+
+        $this->request->session()->flash('success-message', 'Messag is added!' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
     public function withdrawalConditions() {
 
         $withdrawal_conditions = WithdrawalsCondition::find(1);
