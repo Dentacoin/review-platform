@@ -133,7 +133,7 @@
 												<div class="flex box">
 													<div class="scales flex flex-center">
 														{!! $format == 'pdf' ? trans('vox.page.stats.scale-by') : 'Results by' !!}:
-														<a href="javascript:;" class="active" scale="{{ $sk }}">
+														<a href="javascript:;" class="active" scale="{{ $sk }}" scale-name="{{ trans('vox.page.stats.group-by-'.$sk) }}">
 															{{ trans('vox.page.stats.group-by-'.$sk) }}
 														</a>
 													</div>

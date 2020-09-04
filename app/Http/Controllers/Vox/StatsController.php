@@ -165,6 +165,7 @@ class StatsController extends FrontController
             $scale_answer_id = !empty(Request::input('scale_answer_id')) ? Request::input('scale_answer_id') : null;
         	$question = VoxQuestion::find($question_id);
         	$scale = Request::input('scale');
+            $scale_name = Request::input('scale_name');
         	$type = $question->used_for_stats;
             $scale_options  = Request::input('scale_options');
 
@@ -198,7 +199,7 @@ class StatsController extends FrontController
             }
 
     		$main_chart = [];
-    		$second_chart = [];
+            $second_chart = [];
     		$third_chart = [];
     		$relation_info = [];
     		$totalf = 0;
@@ -231,6 +232,8 @@ class StatsController extends FrontController
             }
 
             $related_question_type = false;
+
+            $converted_rows = [];
 
         	if($scale=='dependency') {
 
@@ -318,14 +321,69 @@ class StatsController extends FrontController
         		foreach ($results as $res) {
         			$main_chart[ $answers_related[ $res->$answerField-1 ] ] = $res->cnt;
         		}
-        		
+
+                $styles = new \stdClass();
+                $styles->role = 'style';
+
+                if($question->type == 'multiple_choice') {
+                    $sum = $total;
+                } else {
+                    $sum = 0;
+                    foreach ($second_chart as $key => $value) {
+                        $sum+=$value;
+                    }
+                }
+
+                foreach ($second_chart as $key => $value) {
+                    if(mb_strpos($key, '#')!==0) {
+                        $resp = $value ? $value/$sum : 0;
+
+                        $converted_rows[] = [
+                            $key,
+                            $resp,
+                        ];
+                    }
+                }
+
+                $keys = array_map(function($val) { return $val[1]; }, $converted_rows);
+                array_multisort($keys, SORT_DESC, $converted_rows);
+
+                $rows_diez = [];
+                foreach ($second_chart as $key => $value) {
+                    if(mb_strpos($key, '#')===0) {
+                        $resp = $value ? $value/$sum : 0;
+
+                        $rows_diez[] = [
+                            $key,
+                            $resp,
+                        ];
+                    }
+                }
+
+                if(!empty($rows_diez)) {
+
+                    $keys = array_map(function($val) { return $val[1]; }, $rows_diez);
+                    array_multisort($keys, SORT_DESC, $rows_diez);
+
+                    $rows_without_diez = [];
+                    foreach ($rows_diez as $key => $value) {
+                        $new_key = mb_substr($value[0], 1);
+                        $new_value = $value[1];
+                        $rows_without_diez[] = [
+                            $new_key,
+                            $new_value
+                        ];
+                    }
+                }
+
+                array_unshift($converted_rows , [
+                    'Answer',
+                    'Respondents',
+                    $styles,
+                ]);
 
         	} else if($scale=='gender') {
-                // if($question->type != 'multiple_choice') {
-                //     $answer_id = null;
-                // }                
 
-                //dd($answer_id);
                 $total = $this->prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id
                 ])->whereNotNull('gender')->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
@@ -405,6 +463,128 @@ class StatsController extends FrontController
                     }
         		}
 
+
+                $reorder = true;
+
+                $count_diez = 0;
+                foreach ($main_chart as $key => $value) {
+                    if(mb_strpos($key, '#')===0) {
+                        $count_diez++;
+                    }
+                }
+
+                if(count($main_chart) == $count_diez) {
+                    $reorder = false;
+                }
+
+                //reorder answers by respondents desc if they're not from scale!!
+                if(empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder) {
+                    $new_main_chart = [];
+                    foreach ($main_chart as $k => $v) {
+                        if(mb_strpos($k, '#')!==0) {
+                            $new_main_chart[$k] = $v;
+                        }
+                    }
+                    arsort($new_main_chart);
+
+                    $rows_diez = [];
+                    foreach ($main_chart as $k => $v) {
+                        if(mb_strpos($k, '#')===0) {
+                            $rows_diez[$k] = $v;
+                        }
+                    }
+
+                    if(!empty($rows_diez)) {
+                        arsort($rows_diez);
+
+                        $rows_without_diez = [];
+                        foreach ($rows_diez as $k => $v) {
+                            $new_key = mb_substr($k, 1);
+                            $new_value_second = $v;
+                            $rows_without_diez[$new_key] = $new_value_second;
+                        }
+
+                        $new_main_chart = array_merge($new_main_chart, $rows_without_diez);
+                    }
+
+                    $main_chart = $new_main_chart;
+
+                    foreach ($second_chart as $key => $value) {
+                        if(mb_strpos($key, '#')===0) {
+                            unset($second_chart[$key]);
+                            $second_chart[mb_substr($key, 1)] = $value;
+                        }
+                    }
+
+                    foreach ($third_chart as $key => $value) {
+                        if(mb_strpos($key, '#')===0) {
+                            unset($third_chart[$key]);
+                            $third_chart[mb_substr($key, 1)] = $value;
+                        }
+                    }
+
+                    $new_second_chart=[];
+                    foreach ($main_chart as $key => $value) {
+                        $new_second_chart[$key] = $second_chart[$key];
+                    }
+
+                    $new_third_chart=[];
+                    foreach ($main_chart as $key => $value) {
+                        $new_third_chart[$key] = $third_chart[$key];
+                    }
+
+                    $second_chart = $new_second_chart;
+                    $third_chart = $new_third_chart;
+                } else {
+
+                    foreach ($main_chart as $key => $value) {
+                        if(mb_strpos($key, '#')===0) {
+                            unset($main_chart[$key]);
+                            $main_chart[mb_substr($key, 1)] = $value;
+                        }
+                    }
+
+                    foreach ($second_chart as $key => $value) {
+                        if(mb_strpos($key, '#')===0) {
+                            unset($second_chart[$key]);
+                            $second_chart[mb_substr($key, 1)] = $value;
+                        }
+                    }
+
+                    foreach ($third_chart as $key => $value) {
+                        if(mb_strpos($key, '#')===0) {
+                            unset($third_chart[$key]);
+                            $third_chart[mb_substr($key, 1)] = $value;
+                        }
+                    }
+                }
+
+                if(!empty($question->stats_top_answers) && $question->type == 'multiple_choice') {
+                    $multiple_top_ans = intval(explode('_', $question->stats_top_answers)[1]);
+
+                    $i=0;
+                    foreach ($main_chart as $key => $value) {
+                        $i++;
+                        if($i > $multiple_top_ans) {
+                            unset($main_chart[$key]);
+                        }
+                    }
+                    $i=0;
+                    foreach ($second_chart as $key => $value) {
+                        $i++;
+                        if($i > $multiple_top_ans) {
+                            unset($second_chart[$key]);
+                        }
+                    }
+                    $i=0;
+                    foreach ($third_chart as $key => $value) {
+                        $i++;
+                        if($i > $multiple_top_ans) {
+                            unset($third_chart[$key]);
+                        }
+                    }
+                }
+
         	} else if($scale=='country_id') {
         		$countries = Country::with('translations')->get()->keyBy('id');
                 $total = $this->prepareQuery($question_id, $dates, [
@@ -415,6 +595,7 @@ class StatsController extends FrontController
         		$results = $results->groupBy($answerField, 'country_id')->selectRaw($answerField.', country_id, COUNT(*) as cnt');
         		$results = $results->get();
 
+                $second_chart_before = [];
         		foreach ($results as $res) {
 
                     if($question->type == 'number') {
@@ -435,19 +616,137 @@ class StatsController extends FrontController
         			if( $res->country_id ) {
                         $country = $countries->get($res->country_id);
                         $country->code = mb_strtoupper($country->code);
-        				if(!isset($second_chart[ $country->code ] )) {
-        					$second_chart[ $country->code ] = [
+        				if(!isset($second_chart_before[ $country->code ] )) {
+        					$second_chart_before[ $country->code ] = [
                                 'name' => $country->name
                             ];
                             foreach ($answers as $a) {
-                                $second_chart[ $country->code ][$a] = 0;
+                                $second_chart_before[ $country->code ][$a] = 0;
                             }
         				}
                         if(empty($answer_id) || $res->$answerField==$answer_id) {
-                            $second_chart[ $country->code ][ $answer_number ] = $res->cnt; //m
+                            $second_chart_before[ $country->code ][ $answer_number ] = $res->cnt; //m
                         }
         			}
         		}
+
+                $sum = 0;
+                foreach ($main_chart as $key => $value) {
+                    $sum+=$value;
+                }
+
+                foreach ($main_chart as $key => $value) {
+                    if(mb_strpos($key, '#')!==0) {
+                        $resp = $value ? $value/$sum : 0;
+
+                        $converted_rows[] = [
+                            $key,
+                            $resp,
+                        ];
+                    }
+                }
+
+                $keys = array_map(function($val) { return $val[1]; }, $converted_rows);
+                array_multisort($keys, SORT_DESC, $converted_rows);
+
+                $rows_diez = [];
+                foreach ($main_chart as $key => $value) {
+                    if(mb_strpos($key, '#')===0) {
+                        $resp = $value ? $value/$sum : 0;
+
+                        $rows_diez[] = [
+                            $key,
+                            $resp,
+                        ];
+                    }
+                }
+
+                if(!empty($rows_diez)) {
+
+                    $keys = array_map(function($val) { return $val[1]; }, $rows_diez);
+                    array_multisort($keys, SORT_DESC, $rows_diez);
+
+                    $rows_without_diez = [];
+                    foreach ($rows_diez as $key => $value) {
+                        $new_key = mb_substr($value[0], 1);
+                        $new_value = $value[1];
+                        $rows_without_diez[] = [
+                            $new_key,
+                            $new_value
+                        ];
+                    }
+
+                    $converted_rows = array_merge($converted_rows, $rows_without_diez);
+                }
+
+                //reorder and configure second chart & main chart
+                foreach ($second_chart_before as $key => $value) {
+                    $old_value = $value;
+                    $new_value = array_slice($value, 1);
+
+                    $new_ordered_array = [];
+                    foreach ($new_value as $k => $v) {
+                        if(mb_strpos($k, '#')!==0) {
+                            $new_ordered_array[$k] = $v;
+                        }
+                    }
+                    arsort($new_ordered_array);
+
+                    $rows_diez = [];
+                    foreach ($new_value as $k => $v) {
+                        if(mb_strpos($k, '#')===0) {
+                            $rows_diez[$k] = $v;
+                        }
+                    }
+
+                    if(!empty($rows_diez)) {
+                        arsort($rows_diez);
+
+                        $rows_without_diez = [];
+                        foreach ($rows_diez as $k => $v) {
+                            $new_key = mb_substr($k, 1);
+                            $new_value_second = $v;
+                            $rows_without_diez[$new_key] = $new_value_second;
+                        }
+
+                        $new_ordered_array = array_merge($new_ordered_array, $rows_without_diez);
+                    }
+
+                    $last_order_arr = [];
+                    foreach ($converted_rows as $k => $value) {
+                        $last_order_arr[$value[0]] = $new_ordered_array[$value[0]];
+                    }
+
+                    $last_order_arr=array("name"=>$old_value['name']) + $last_order_arr;
+                    $second_chart[$key] = $last_order_arr;
+                }
+
+                if(!empty($question->stats_top_answers) && $question->type == 'multiple_choice') {
+                    $multiple_top_ans = intval(explode('_', $question->stats_top_answers)[1]);
+
+                    foreach ($converted_rows as $key => $value) {
+                        if($key+1 > $multiple_top_ans) {
+                            unset($converted_rows[$key]);
+                        }
+                    }
+
+                    foreach ($second_chart as $key => $value) {
+                        $i=0;
+                        foreach ($value as $k => $v) {
+                            $i++;
+                            if($i > $multiple_top_ans + 1) {
+                                unset($value[$k]);
+                            }
+                        }
+                        $second_chart[$key] = $value;
+                    }
+                }
+
+                array_unshift($converted_rows , [
+                    '',
+                    '',
+                ]);
+
         	} else if($scale=='age') {
 
                 $total = $this->prepareQuery($question_id, $dates, [
@@ -467,16 +766,16 @@ class StatsController extends FrontController
 
                 if (!empty($scale_options)) {
                     foreach ($scale_options as $sv) {
-                        $second_chart[ config('vox.age_groups.'.$sv) ] = [];
+                        $second_chart_before[ config('vox.age_groups.'.$sv) ] = [];
                         foreach ($answers as $a) {
-                            $second_chart[ config('vox.age_groups.'.$sv) ][$a] = !empty($this->admin) && $total == 0 ? 1 : 0;
+                            $second_chart_before[ config('vox.age_groups.'.$sv) ][$a] = !empty($this->admin) && $total == 0 ? 1 : 0;
                         }
                     }
                 } else {
     				foreach ($age_to_group as $k => $v) {
-    					$second_chart[ $v ] = [];
+    					$second_chart_before[ $v ] = [];
     					foreach ($answers as $a) {
-    						$second_chart[ $v ][$a] = !empty($this->admin) && $total == 0 ? 1 : 0;
+    						$second_chart_before[ $v ][$a] = !empty($this->admin) && $total == 0 ? 1 : 0;
     					}
     				}
                 }
@@ -498,9 +797,8 @@ class StatsController extends FrontController
         			}
         			$main_chart[ $answer_number ] += $res->cnt;
 
-
         			if( $res->age ) {
-	        			$second_chart[ $age_to_group[$res->age] ][ $answer_number ] = $res->cnt; //m
+	        			$second_chart_before[ $age_to_group[$res->age] ][ $answer_number ] = $res->cnt; //m
         			}
         		}
                 
@@ -523,17 +821,17 @@ class StatsController extends FrontController
                 $age_to_group = config('vox.details_fields.'.$scale.'.values');
                 if (!empty($scale_options)) {
                     foreach ($scale_options as $sv) {
-                        $second_chart[ config('vox.details_fields.'.$scale.'.values.'.$sv) ] = [];
+                        $second_chart_before[ config('vox.details_fields.'.$scale.'.values.'.$sv) ] = [];
                         foreach ($answers as $a) {
-                            $second_chart[ config('vox.details_fields.'.$scale.'.values.'.$sv) ][ $a] = !empty($this->admin) && $total == 0 ? 1 : 0;
+                            $second_chart_before[ config('vox.details_fields.'.$scale.'.values.'.$sv) ][ $a] = !empty($this->admin) && $total == 0 ? 1 : 0;
                         }
                     }
                 } else {
             		
     				foreach ($age_to_group as $k => $v) {
-                        $second_chart[ $v ] = [];
+                        $second_chart_before[ $v ] = [];
                         foreach ($answers as $a) {
-                            $second_chart[ $v ][$a] = !empty($this->admin) && $total == 0 ? 1 : 0;
+                            $second_chart_before[ $v ][$a] = !empty($this->admin) && $total == 0 ? 1 : 0;
                         }
     				}
                 }
@@ -559,13 +857,149 @@ class StatsController extends FrontController
 
 
         			if( $res->$scale ) {
-    	        		$second_chart[ $age_to_group[$res->$scale] ][ $answer_number ] = $res->cnt; //m
+    	        		$second_chart_before[ $age_to_group[$res->$scale] ][ $answer_number ] = $res->cnt; //m
         			}
     		    }
+                
         	}
 
+            if($scale != 'dependency' && $scale != 'country_id' && $scale != 'gender') {
+                $reorder = true;
+
+                $count_diez = 0;
+                foreach ($main_chart as $key => $value) {
+                    if(mb_strpos($key, '#')===0) {
+                        $count_diez++;
+                    }
+                }
+
+                if(count($main_chart) == $count_diez) {
+                    $reorder = false;
+                }
+
+                //reorder answers by respondents desc if they're not from scale!!
+                if(empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder) {
+                    $new_main_chart = [];
+                    foreach ($main_chart as $k => $v) {
+                        if(mb_strpos($k, '#')!==0) {
+                            $new_main_chart[$k] = $v;
+                        }
+                    }
+                    arsort($new_main_chart);
+
+                    $rows_diez = [];
+                    foreach ($main_chart as $k => $v) {
+                        if(mb_strpos($k, '#')===0) {
+                            $rows_diez[$k] = $v;
+                        }
+                    }
+
+                    if(!empty($rows_diez)) {
+                        arsort($rows_diez);
+
+                        $rows_without_diez = [];
+                        foreach ($rows_diez as $k => $v) {
+                            $new_key = mb_substr($k, 1);
+                            $new_value_second = $v;
+                            $rows_without_diez[$new_key] = $new_value_second;
+                        }
+
+                        $new_main_chart = array_merge($new_main_chart, $rows_without_diez);
+                    }
+
+                    $main_chart = $new_main_chart;
+                } else {
+
+                    foreach ($main_chart as $key => $value) {
+                        if(mb_strpos($key, '#')===0) {
+                            unset($main_chart[$key]);
+                            $main_chart[mb_substr($key, 1)] = $value;
+                        }
+                    }
+                }
+
+                //remove diezes
+                foreach ($second_chart_before as $key => $value) {
+                    foreach ($value as $k => $v) {
+                        if(mb_strpos($k, '#')===0) {
+                            unset($value[$k]);
+                            $value[mb_substr($k, 1)] = $v;
+                            $second_chart_before[$key] = $value;
+                        }
+                    }
+                }
+
+                $second_chart_after = [];
+                foreach ($second_chart_before as $key => $value) {
+
+                    $last_order_arr = [];
+                    foreach ($main_chart as $k => $v) {
+                        $last_order_arr[$k] = $value[$k];
+                    }
+
+                    $second_chart_after[$key] = $last_order_arr;
+                }
+
+                //in percentage
+                $second_chart[] = [$scale_name];
+                foreach ($main_chart as $key => $value) {
+                    $second_chart[0][] = $key;
+                }
+                
+                foreach ($second_chart_after as $key => $value) {
+
+                    $sum = 0;
+                    foreach ($value as $k => $v) {
+                        $sum+=$v;
+                    }
+
+                    $array = [];
+                    $array[] = $key;
+
+                    foreach ($value as $k => $v) {
+                        $array[] = $v ? $v/$sum : 0;
+                    }
+
+                    $second_chart[] = $array;
+                }
+
+                if(!empty($question->stats_top_answers) && $question->type == 'multiple_choice') {
+                    $multiple_top_ans = intval(explode('_', $question->stats_top_answers)[1]);
+
+                    $i=0;
+                    foreach ($main_chart as $key => $value) {
+                        $i++;
+                        if($i > $multiple_top_ans) {
+                            unset($main_chart[$key]);
+                        }
+                    }
+                    foreach ($second_chart as $key => $value) {
+                        foreach ($value as $k => $v) {
+                            if($k > $multiple_top_ans) {
+                                unset($value[$k]);
+                            }
+                        }
+                        $value = array_values($value);
+                        $second_chart[$key] = $value;
+                    }
+                }
+
+                if(!empty($answer_id)) {
+                    foreach ($second_chart as $key => $value) {
+                        foreach ($value as $k => $v) {
+                            if($k!=$answer_id & $k!=0) {
+                                unset($value[$k]);
+                            }
+                        }
+                        $value = array_values($value);
+                        $second_chart[$key] = $value;
+                    }
+                }
+            } else {
+                $second_chart = $this->processArray($second_chart);
+            }
+
             $main_chart = $this->processArray($main_chart);
-            $second_chart = $this->processArray($second_chart);
             $third_chart = $this->processArray($third_chart);
 
 
@@ -607,13 +1041,13 @@ class StatsController extends FrontController
             
         	return Response::json( [
                 'related_question_type' => $related_question_type,
+                'converted_rows' => $converted_rows,
         		'main_chart' => $main_chart,
         		'second_chart' => $second_chart,
         		'third_chart' => $third_chart,
         		'total' => $total,
         		'totalm' => $totalm,
         		'totalf' => $totalf,
-                'relation_answer' => !empty($question->stats_answer_id) ? true : false,
                 'relation_info' => $relation_info,
         		'answer_id' => $answer_id,
                 'vox_scale_id' => !empty($question->vox_scale_id) || !empty($question->dont_randomize_answers) ? true : false,
@@ -1508,7 +1942,7 @@ class StatsController extends FrontController
                 mkdir($dir);
             }
 
-            $pdf_title = strtolower(str_replace(['?', ' ', ':'], [' ', '-', ' '] ,$original_title)).'-dentavox'.mb_substr(microtime(true), 0, 10);
+            $pdf_title = strtolower(str_replace(['?', ' ', ':', '&'], [' ', '-', ' ', 'and'] ,$original_title)).'-dentavox'.mb_substr(microtime(true), 0, 10);
 
             $pdf->save($dir.'/'.$pdf_title.'.pdf');
 
@@ -1536,7 +1970,7 @@ class StatsController extends FrontController
 
         $cur_time = mb_substr(microtime(true), 0, 10);
 
-        $png_title = strtolower(str_replace(['?', ' ', ':'], [' ', '-', ' '] ,Request::input("stat_title"))).'-dentavox'.$cur_time;
+        $png_title = strtolower(str_replace(['?', ' ', ':', '&'], [' ', '-', ' ', 'and'] ,Request::input("stat_title"))).'-dentavox'.$cur_time;
 
         $folder = storage_path().'/app/public/png/'.$png_title;
         if(!is_dir($folder)) {
@@ -1555,11 +1989,10 @@ class StatsController extends FrontController
                 copy( Input::file('picture'.$i)->path(), $newName );
             }
         }
-
         if($count_img > 1) {
             exec('cd '.$folder.' && zip -r0 '.$folder.'.zip ./*');
         }        
-
+        
         $sess = [
             'download_stat_png' => $png_title
         ];

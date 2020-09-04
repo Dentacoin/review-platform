@@ -51,6 +51,7 @@ var chart_colors = [
 
 var main_chart_options;
 var main_chart_data;
+var converted_rows;
 var map_country;
 var map_country_data;
 var showPopup;
@@ -62,7 +63,6 @@ var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 var is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
 var open_download_popup = false;
 var colors = [];
-var dep_answer = null;
 
 
 // stats ordering answers logic:
@@ -147,36 +147,26 @@ $(document).ready(function(){
             timeframe: phptimeframe,
             question_id: $(elm).attr('question-id'),
             scale_answer_id: $(elm).attr('scale-answer-id') ? $(elm).attr('scale-answer-id') : '',
-            //answer_id: $(elm).find('.scales a.active').attr('scale') == 'country_id' ? '' : ($(elm).attr('answer-id') ? $(elm).attr('answer-id') : ($(elm).find('.multiple-stat').length && $(elm).find('.scales a.active').attr('scale') != 'gender' ? $(elm).find('.multiple-stat').find('.custom-legend').first().attr('answer-id') : $(elm).attr('answer-id'))),
-            //answer_id: $(elm).find('.scales:visible a.active').attr('scale') == 'country_id' || ($(elm).hasClass('scale-stat-q') && $(elm).find('.scales a.active').attr('scale') == 'gender') ? '' : ($(elm).attr('answer-id') ? $(elm).attr('answer-id') : ($(window).outerWidth() <= 992 ? ($(elm).hasClass('multipletop_ans') ? $(elm).find('.main-chart .custom-legend').first().attr('answer-id') : 1) : $(elm).attr('answer-id'))),
             answer_id: chosen_answer,
             scale: $(elm).find('.scales:visible a.active').attr('scale'),
+            scale_name: $(elm).find('.scales:visible a.active').attr('scale-name'),
             scale_options: $(elm).is("[stat-dem-option]") ? $(elm).attr('stat-dem-option').split(',') : scale_options_arr,
         }
 
         $(elm).attr('cur-scale', $(elm).find('.scales:visible a.active').attr('scale'));
-
-
-        //console.log(params);
-
-        //console.log(scale_options_arr);
     
         $.post( 
             window.location.href, 
             params, 
             (function( data ) {
-                //console.log(data);
                 if(!data.total) {
                     $(this).find('.graphs').hide();
-                    //$('.stats .stat.active').removeClass('active').addClass('restore-me');
                     $('#daterange-error').show();
                     $('input').prop('disabled', false);
 
                     if($(this).closest('.st-download').length) {
-                        console.log('gggg');
                         $(this).find('.st-daterange-error').show();
                     }
-
                 } else {
                     var chartsToLoad = $(elm).closest('.st-download').length ? parseInt($(elm).closest('.st-download').attr('count-dems')) : '';
 
@@ -196,6 +186,12 @@ $(document).ready(function(){
                         main_chart_data.push(data.main_chart[i]);
                         legend.push(data.main_chart[i][0]);
                     }
+
+                    converted_rows = [];
+                    for(var i in data.converted_rows) {
+                        converted_rows.push(data.converted_rows[i]);
+                    }
+
 
                     main_chart_options = {};
                     if(scale=='dependency') {
@@ -226,11 +222,9 @@ $(document).ready(function(){
                         };
                     }
 
-                    //console.log('main chart data: ', main_chart_data);
                     $(this).find('.main-chart').parent().show();
                     $(this).find('.main-chart').removeClass('main-multiple-gender');
                     $(this).find('.second-chart').parent().removeClass('country-legend');
-                    //console.log($(this).find('.main-chart'));
 
                     if (($(this).find('.multiple-stat').length || data.related_question_type == 'multiple') && data.related_question_type != 'single' ) {
                         drawMultipleColumns(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, data.total, data.multiple_top_answers);
@@ -265,69 +259,25 @@ $(document).ready(function(){
 
                     if(scale=='dependency') {
 
-                        if(($(this).find('.multiple-stat').length || data.related_question_type == 'multiple') && data.related_question_type != 'single') {
-                            $(this).find('.chart-2').addClass('verticle-align-chart');
-
-                            $(this).find('.relation-hint').html($(this).find('.relation-hint').attr('for-multiple'));
-                        } else {
-                            $(this).find('.relation-hint').html($(this).find('.relation-hint').attr('for-single'))
-                        }
-
-                        if(data.relation_answer === false) {
-                            // to add relation hint
-                            $(this).find('.chart-1').addClass('with-relation-hint');
-                        }
-
-                        var rows = [];
-
-                        rows.push([ 'Answer', 'Respondents', { role: 'style' } ]);
-                        var line = [];
-                        for(var i in data.second_chart) {
-                            line.push(data.second_chart[i][1]);
-                        }
-
-                        if(data.question_type == 'multiple_choice') {
-                            var sum = data.total;
-                        } else {
-                            var sum = line.reduce(function(a, b) { return a + b; }, 0);
-                        }
+                        drawDependencyColumns(converted_rows, $(this).find('.second-chart')[0], data.relation_info.answer+1, data.answer_id);
                         
-                        
-                        //console.log(sum);
-                        var j=0;
-                        for(var i in data.second_chart) {
-                            var arr = data.second_chart[i][0].split(' ');
-                            var newi = arr.join('\n\r');
-                            rows.push([ newi, data.second_chart[i][1] ? data.second_chart[i][1]/sum : 0, chart_colors[j] ]);
-                            j++;
-                        }
-                        //console.log(rows);
-                        var options = {
-                            width: 750
-                        }
-
-                        dep_answer = data.answer_id;
-                        drawColumns(rows, $(this).find('.second-chart')[0], options, data.relation_info.answer+1, true,null);
                         if (($(this).find('.multiple-stat').length || data.related_question_type == 'multiple') && data.related_question_type != 'single' ) {
+                            $(this).find('.chart-2').addClass('verticle-align-chart');
+                            $(this).find('.relation-hint').html($(this).find('.relation-hint').attr('for-multiple'));
+
                             setupMultipleLegend($(this).find('.main-chart'), legend, data.answer_id, can_click_on_legend);
+                        } else {
+                            $(this).find('.relation-hint').html($(this).find('.relation-hint').attr('for-single'));
                         }
-                        
+
+                        $(this).find('.chart-1').addClass('with-relation-hint');
                         $(this).find('.hint').html( data.relation_info.question ).show();
                         $(this).find('.dependency-question').html( data.relation_info.current_question ).show();
                         $(this).find('.third-chart').html('');
-
                         $(elm).find('.legend').hide();
+
                     } else if(scale=='gender') {
 
-                        var rows = [];
-                        for(var i in data.second_chart) {
-                            rows.push(data.second_chart[i]);
-                        }
-
-                        var rowsm = [];
-                        for(var i in data.third_chart) {
-                            rowsm.push(data.third_chart[i]);
-                        }
                         if(data.question_type == 'multiple_choice' || data.answer_id) {
                             $(this).find('.total-gender').show();
                         }
@@ -335,20 +285,18 @@ $(document).ready(function(){
                         $(this).find('.total-f').show().find('b').html(data.totalf);
 
                         if(data.question_type == 'multiple_choice' || data.answer_id) {
-                            drawGenderColumns(main_chart_data, rows, rowsm, $(this).find('.second-chart')[0], options, data.totalf, data.totalm, scale_options_arr, data.answer_id, main_chart_data, data.multiple_top_answers, data.vox_scale_id, data.question_type, );
+                            drawGenderColumns(main_chart_data, data.second_chart, data.third_chart, $(this).find('.second-chart')[0], options, data.totalf, data.totalm, scale_options_arr, data.answer_id, main_chart_data, data.multiple_top_answers, data.vox_scale_id, data.question_type, );
                         } else {
-                            drawChart(rows, $(this).find('.second-chart')[0], {
+                            drawChart(data.second_chart, $(this).find('.second-chart')[0], {
                                 pieHole: 0.6,
                                 width: 270,
                             }, can_click_on_legend, null, data.vox_scale_id, data.question_type);
                         }
 
-
                         if ($(window).outerWidth() <= 768) {
                             $(this).find('.total.total-f').attr('for', $(this).find('.total.total-f').attr('custom-for') + '-1');
                             $(this).find('.total.total-m').attr('for', $(this).find('.total.total-m').attr('custom-for') + '-1');
                         }
-
 
                         if(data.question_type == 'multiple_choice') {
                             $(this).find('.legend').hide();
@@ -358,10 +306,8 @@ $(document).ready(function(){
 
                         if((data.question_type == 'multiple_choice' && $('.main-multiple-gender').length && data.answer_id) || (data.question_type != 'multiple_choice' && data.answer_id )) {
 
-                            // if (!data.multiple_top_answers && $(window).outerWidth() > 768) {
-                                $(this).find('.main-multiple-gender').find('.custom-legend').addClass('inactive');
-                                $(this).find('.main-multiple-gender').find('.custom-legend[answer-id="'+data.answer_id+'"]').removeClass('inactive');
-                            // }
+                            $(this).find('.main-multiple-gender').find('.custom-legend').addClass('inactive');
+                            $(this).find('.main-multiple-gender').find('.custom-legend[answer-id="'+data.answer_id+'"]').removeClass('inactive');
 
                             drawAnswerGenderColumns($(this).find('.second-chart')[0], data.answer_id, data.question_type);
 
@@ -370,11 +316,8 @@ $(document).ready(function(){
                                     $(this).find('.gender-text').text($(this).find('.custom-legend:not(.inactive)').find('.group-heading').text());
                                     $(this).find('.nav-color').css('background-color', $(this).find('.custom-legend:not(.inactive)').find('.custombar span').css('background-color'));
                                 } else {
-                                    //console.log('bbb');
                                     $(this).find('.gender-text').text($(this).find('.legend-div:not(.inactive)').find('.legend-text').text());
-
                                     $(this).find('.nav-color').css('background-color', $(this).find('.legend-div:not(.inactive)').find('.legend-color').css('background-color'));
-
                                     $(this).find('.custom-legend').first().find('span').css('background-color', $(this).find('.legend-div:not(.inactive)').find('.legend-color').css('background-color'));
                                 }
 
@@ -384,18 +327,8 @@ $(document).ready(function(){
                         } 
 
                         if(data.question_type == 'multiple_choice' || data.answer_id) {
-
                         } else {
-                            var rows = [];
-                            for(var i in data.third_chart) {
-                                rows.push(data.third_chart[i]);
-                            }
-                        }
-
-                        if(data.question_type == 'multiple_choice' || data.answer_id) {
-                            // drawMultipleColumns(rows, $(this).find('.third-chart')[0], options, data.totalm);
-                        } else {
-                            drawChart(rows, $(this).find('.third-chart')[0], {
+                            drawChart(data.third_chart, $(this).find('.third-chart')[0], {
                                 pieHole: 0.6,
                                 width: 270,
                             }, can_click_on_legend, null, data.vox_scale_id, data.question_type);
@@ -412,7 +345,6 @@ $(document).ready(function(){
                                 $(this).find('.hint').html('').html('Click on an answer to see data for it.').show();
                             }
                         } else {
-
                             if (data.answer_id) {
                                 $(this).find('.hint').html('').html('Click on a pie slice to see data <br/> only for the respective answer or <a href="javascript:;" class="to-all">see all</a>').show();
                             } else {
@@ -430,42 +362,22 @@ $(document).ready(function(){
                         map_country_data = null;
                         $(this).find('.main-chart').parent().hide();
                         $(this).find('.second-chart').parent().addClass('country-legend');
-                        
-                        var rows = [];
-                        for(var i in data.second_chart) {
-                            rows.push(data.second_chart[i]);
-                        }
                         $(this).find('.second-chart').html('');
-                        
                         $(this).find('.map-hint').html('Answers distribution by country').show();
 
                         setTimeout( (function() {
                             drawMap(this.rows, $(this.container).find('.third-chart')[0], data.question_type == 'multiple_choice' ? data.multiple_top_answers : null);
                         }).bind({
-                            rows: rows,
+                            rows: data.second_chart,
                             container: this
                         }), 100 );
-                        
-                        var total = main_chart_data.reduce(function(a, b) { return a + b[1]; }, 0);
-                        //console.log(total);
-                        for(var i in main_chart_data) {
-                            main_chart_data[i][1] = main_chart_data[i][1] / total;
-                        }
 
-                        main_chart_data.unshift(['', '']);
-                        //console.log(main_chart_data);
-                        drawColumns( main_chart_data, $(this).find('.second-chart')[0], null, null, true, 'country_id', data.question_type == 'multiple_choice' ? data.multiple_top_answers : null);
+                        drawMapColumns( converted_rows, $(this).find('.second-chart')[0], data.question_type == 'multiple_choice' ? data.multiple_top_answers : null);
                         
                         $('.mobile-button-legend').hide();
                         $(elm).find('.legend').hide();
                         $(this).find('.total-all').hide();
                     } else {
-
-                        var rows = [];
-                        var headers = [];
-                        var arrmyArray = $.extend(true, [], main_chart_data_clone);
-
-                        headers.push( scale_name );
 
                         $(this).find('.third-chart').html('');
                         if(data.question_type != 'multiple_choice') {
@@ -486,226 +398,7 @@ $(document).ready(function(){
                             $(elm).find('.legend').hide();
                         }
 
-                        if (data.multiple_top_answers) {
-                            var array = [];
-                            $(this).find('.custom-legend:visible').each( function() {
-                                if (typeof $(this).find('.group-heading').html() != 'undefined') {
-                                    array.push($(this).find('.group-heading').html());
-                                }
-                            });
-                            //console.log(data.second_chart[0], array);
-                            
-                            for(var u in data.second_chart[0]) {
-                                for(var i in array) {
-                                    if (!data.answer_id) {
-                                        if (data.second_chart[0][u][0] == array[i] ) {
-                                            headers.push(array[i]);
-                                        }
-                                    } else {
-                                        if (u==data.answer_id) {
-                                            headers.push(data.second_chart[0][u][0]);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-
-                        } else {
-                            // console.log(data.second_chart,data.second_chart[0]);
-                            // for(var i in data.second_chart[0]) {
-                            //     if(i!=0 && (!data.answer_id || i==data.answer_id )) {
-                            //         headers.push(data.second_chart[0][i][0]);
-                            //     }
-                            // }
-
-
-                            //nachalo prerazpredelenie ot nai-mnogo otg kym nai-malko
-                            
-                            for (var w in arrmyArray) {
-                                arrmyArray[w].push(chart_colors[w]);              
-                            }
-
-                            var count_diez = 0;
-                            for (var i in arrmyArray) {
-
-                                if (arrmyArray[i][0].search( '#' ) === 0 ) {
-                                    count_diez++;
-                                }
-                            }
-
-                            if(arrmyArray.length == count_diez) {
-                                //has to be loaded as their order
-                                // arrmyArray.sort(function(a, b) {
-                                //     return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-                                // });
-                            } else {
-                                arrmyArray.sort(function(a, b) {
-                                    if( b[0].search( '#' ) === 0 ) {
-                                        return -1;
-                                    } else if( a[0].search( '#' ) === 0 ) {
-                                        return 1;
-                                    } else {
-                                        return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-                                    }
-                                });
-                            }
-
-                            arr_colors = [];
-                            for( var q in arrmyArray) {
-                                arr_colors.push(arrmyArray[q][2]);
-                            }
-                            
-                            for( var t in arrmyArray) {
-                                arrmyArray[t].splice(-1,1);
-                            }
-
-                            var diez = [];
-                            var noDiez = [];
-
-                            for (var i in arrmyArray) {
-
-                                if (arrmyArray[i][0].search( '#' ) === 0 ) {
-                                    diez.push(arrmyArray[i]);
-                                } else {
-                                    noDiez.push(arrmyArray[i]);
-                                }
-                            }
-
-                            var allArr = [];
-                            for (var e in noDiez) {
-                                allArr.push(noDiez[e]);
-                            }
-
-                            for (var r in diez) {
-                                diez[r][0] = diez[r][0].substring(1);
-                                allArr.push(diez[r]);
-                            }
-
-                            //krai prerazpredelenie ot nai-mnogo otg kym nai-malko
-
-                            //dobavqne na imeto ot legendata
-                            for (var i in allArr) {
-                                if(!data.answer_id || i== (parseInt(data.answer_id) - 1) ) {
-                                    headers.push(allArr[i][0]);
-                                }
-                            }
-
-                        }
-
-                        headers = $.map(headers, function(str, i){
-                          return $("<div/>").html(str).text();
-                        });
-
-                        rows.push(headers);
-
-                        var newArr = [];
-                        if (data.multiple_top_answers) {
-
-                            var arrr = data.second_chart;
-
-                            for (var i=0; i< arrr.length; i++) {
-                                var newArrRow = [arrr[i][0]];
-
-                                for (var j = 1; j<arrr[i].length; j++) {
-
-                                    if (typeof arrr[i][j][0] == "string") {
-
-                                        var found = false;
-                                        for (var w in array) {
-                                            if (array[w] == arrr[i][j][0]) {
-                                                found = true;
-                                                break;
-                                            }
-                                        }
-
-                                        if(found) {
-                                            newArrRow.push(arrr[i][j])
-                                        }
-                                    }                        
-                                }
-
-                                newArr.push(newArrRow);
-                            }
-                        } else {
-                            reorder_array = [];
-
-                            for(var i in data.second_chart) {
-                                little_array = [];
-                                little_array.push(data.second_chart[i][0]);
-
-                                for( var e in allArr) {
-                                    for( var u in data.second_chart[i]) {
-                                        var num = parseInt(u) + 1;
-                                        if(typeof data.second_chart[i][num] != 'undefined') {
-
-                                            if(allArr[e][0] == data.second_chart[i][num][0] || '#'+allArr[e][0] == data.second_chart[i][num][0]) {
-                                                little_array.push(data.second_chart[i][num]);
-                                            }
-                                        }
-                                    }
-                                }
-                                reorder_array.push(little_array);
-                            }
-                        }
-
-                        var new_array = newArr.length ? newArr : reorder_array;
-                        for(var i in new_array) {
-
-                            var key = new_array[i][0];
-                            var line = [];
-                            for(var j in new_array[i]) {
-                                if(j==0) {
-                                    continue;
-                                }
-                                line.push(new_array[i][j][1]);
-                            }
-
-                            //console.log(line);
-
-                            var newline = [];
-                            var sum = line.reduce(function(a, b) { return a + b; }, 0);
-                            //console.log(line);
-                            for(var j in line) {
-                                //console.log(j);
-
-                                var oo = $(this).find('.custom-legend[answer-id="'+data.answer_id+'"]').attr('original-order');
-
-                                if(!data.answer_id || (data.multiple_top_answers ? j==oo : j==data.answer_id-1) ) {
-                                    newline.push( line[j] ? line[j]/sum : 0 );
-                                }
-                            }
-
-                            var arr = key.toString().split(' ');
-                            var newi = arr.join('\n\r');
-                            newline.unshift(newi.trim());
-
-                            rows.push( newline );
-                        }
-
-                        // if( data.answer_id ) {
-                        //     var total = 0;
-                        //     for(var i in rows) {
-                        //         if(i!=0) {
-                        //             total += rows[i][1];
-                        //         }
-                        //     }
-
-                        //     for(var i in rows) {
-                        //         if(i!=0) {
-                        //             rows[i][1] = rows[i][1] / total;
-                        //         }
-                        //     }
-                        // }
-
-                        //rows_array = $.map(rows, function(str, i){
-                        //   return $("<div/>").html(str[0]).text();
-                        // });
-
-                        // for( var i in rows) {
-                        //     rows[i][0] = rows_array[i];
-                        // }
-                        drawColumns(rows, $(this).find('.second-chart')[0], null, data.answer_id, false, null, data.question_type == 'multiple_choice' ? data.multiple_top_answers : null);
-
+                        drawColumns(data.second_chart, $(this).find('.second-chart')[0], data.answer_id);
                     }
 
                     $(this).find('.second-chart').attr('class', 'second-chart '+(scale) );
@@ -724,12 +417,7 @@ $(document).ready(function(){
                         $(elm).find('.main-chart').parent().css('max-width', 'auto');
                     }
 
-                    // if (data.question_type=='multiple_choice' && scale == 'gender') {
-                    //     $('.custom-legend').css('cursor', 'auto');
-                    // } else {
-                        $('.custom-legend').css('cursor', 'pointer');
-                    // }
-
+                    $('.custom-legend').css('cursor', 'pointer');
                     removeCurrentAnswer();
 
                     if ($(window).outerWidth() <= 768 && data.multiple_top_answers && $(this).find('.main-chart .custom-legend').length && !$(this).hasClass('already-clicked')) {
@@ -739,7 +427,6 @@ $(document).ready(function(){
 
                     $(this).find('.loader').fadeOut();
                     $(this).find('.loader-mask').delay(350).fadeOut('slow');
-
 
                     if ((is_safari || is_firefox) && !first_stat_loaded && getUrlParameter('download') && $('#download-link').hasClass('for-download')) {
 
@@ -752,15 +439,9 @@ $(document).ready(function(){
                         first_stat_loaded = true;
                     }
 
-                    // if(getUrlParameter('download') && first_stat_loaded) {
-                    //     // $('#download-link').trigger('click');
-                    //     window.location.href = $('#download-link').attr('href');
-                    // }
-
                     if(chartsToLoad && $('#make-stat-image-btn').length) {
                         chartsToLoaded++;
 
-                        console.log(chartsToLoaded, chartsToLoad);
                         if(chartsToLoaded==chartsToLoad) {
                             setTimeout( function() {
 
@@ -771,11 +452,8 @@ $(document).ready(function(){
                     }
                 }
 
-                //console.log(scale);
-
             }).bind(elm)
         );
-
     }
 
     if(!is_safari && !is_firefox && getUrlParameter('download') && $('#download-link').hasClass('for-download')) {
@@ -1191,7 +869,6 @@ $(document).ready(function(){
                         $(this).closest('.stat').find('.legend').find('.legend-div:not(.inactive)').trigger('click').trigger('click');
                         $(this).closest('.stat').addClass('two-clicks-triggerd');
                     }
-                    
                 } else {
                     if ($(this).closest('.stat').hasClass('two-clicks-triggerd')) {
                         $(this).closest('.stat').find('.main-chart').find('.custom-legend:not(.inactive)').trigger('click');
@@ -1201,15 +878,12 @@ $(document).ready(function(){
                     }                    
                 }
             } else {
-
                 if($(this).closest('.stat').find('.legend:visible').length) {
                     $(this).closest('.stat').find('.legend').find('.legend-div:not(.inactive)').trigger('click');
                 } else {
                     $(this).closest('.stat').find('.main-chart').find('.custom-legend:not(.inactive)').trigger('click');
                 }
             }
-
-            
             
         });
     }
@@ -1319,69 +993,6 @@ $(document).ready(function(){
             container.append('<div class="col f-c"></div><div class="col s-c"></div><div class="col t-c"></div>');
         }
 
-        for (var w in rows) {
-            rows[w].push(chart_colors[w]);              
-        }
-
-        var count_diez = 0;
-        for (var i in rows) {
-
-            if (rows[i][0].search( '#' ) === 0 ) {
-                count_diez++;
-            }
-        }
-
-        if(rows.length == count_diez || vox_scale_id) {
-            //has to be loaded as their order
-            // rows.sort(function(a, b) {
-            //     return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-            // });
-        } else {
-
-            rows.sort(function(a, b) {
-                if( b[0].search( '#' ) === 0 ) {
-                    return -1;
-                } else if( a[0].search( '#' ) === 0 ) {
-                    return 1;
-                } else {
-                    return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-                }
-            });
-        }
-
-        arr_colors = [];
-        for( var q in rows) {
-            arr_colors.push(rows[q][2]);
-        }
-        
-        for( var t in rows) {
-            rows[t].splice(-1,1);
-        }
-
-        var diez = [];
-        var noDiez = [];
-
-        for (var i in rows) {
-
-            if (rows[i][0].search( '#' ) === 0 ) {
-                diez.push(rows[i]);
-            } else {
-                noDiez.push(rows[i]);
-            }
-        }
-
-        var allArr = [];
-        for (var e in noDiez) {
-            allArr.push(noDiez[e]);
-        }
-
-        for (var r in diez) {
-            diez[r][0] = diez[r][0].substring(1);
-            allArr.push(diez[r]);
-        }
-
-        rows = allArr;
-
         var count = rows.length;
         var middle = Math.ceil(count/3);
         var last = Math.ceil((count/3)*2);
@@ -1393,42 +1004,15 @@ $(document).ready(function(){
                     max = rows[i][j];
                 }
             }
+            container.append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text=""><span class="legend-text" style="display:none;">'+rows[i][0]+'</span><span class="mobile-percentage"></span><span class="legend-color" style="background-color: '+chart_colors[i]+';"></span>'+rows[i][0]+'</div>') );
+            
+            if ($(window).outerWidth() <= 768) {
 
-            // if(container.hasClass('more-q-legend')) {
-            //     var d = rows.length / 3;
-
-            //     if (parseInt(i)+1<=middle) {
-            //         container.find('.f-c').append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+arr_colors[i]+';"></span>'+rows[i][0]+'</div>') );
-            //     } else if(parseInt(i)+1>middle && parseInt(i)+1<=last) {
-            //         container.find('.s-c').append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+arr_colors[i]+';"></span>'+rows[i][0]+'</div>') );
-            //     } else if(parseInt(i)+1>last) {
-            //         container.find('.t-c').append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text="'+rows[i][0]+'"><span class="mobile-percentage"></span><span style="background-color: '+arr_colors[i]+';"></span>'+rows[i][0]+'</div>') );
-            //     }
-
-            //     if ($(window).outerWidth() <= 768) {
-
-            //         for(var j=1; j<rows[i].length; j++) {
-            //             $(container).find('.legend-div[l-id="'+i+'"] .mobile-percentage').append(((rows[i][j]/ totalCount )*100).toFixed(1)+'%');
-            //         }
-            //     }
-                    
-            // } else {
-                container.append( $('<div l-id="'+i+'" answer-id="'+(parseInt(i)+1)+'" class="legend-div '+(rows.length>5 ? 'short' : 'standard')+(answer && i!=(answer-1) ? ' inactive' : '')+'" legend-text=""><span class="legend-text" style="display:none;">'+rows[i][0]+'</span><span class="mobile-percentage"></span><span class="legend-color" style="background-color: '+arr_colors[i]+';"></span>'+rows[i][0]+'</div>') );
-                
-                if ($(window).outerWidth() <= 768) {
-
-                    for(var j=1; j<rows[i].length; j++) {
-                        $(container).find('.legend-div[l-id="'+i+'"] .mobile-percentage').append(((rows[i][j]/ totalCount )*100).toFixed(1)+'%');
-                    }
+                for(var j=1; j<rows[i].length; j++) {
+                    $(container).find('.legend-div[l-id="'+i+'"] .mobile-percentage').append(((rows[i][j]/ totalCount )*100).toFixed(1)+'%');
                 }
-            // }
+            }
         }
-
-        // if ($(window).outerWidth() <= 768) {
-        //     if(container.hasClass('more-q-legend')) {
-        //         container.parent().find('.more-q-content').prepend(container);
-        //     }
-        // }
 
         container.find('.legend-div').click( function() {
             var container = $(this).closest('.stat');
@@ -1456,7 +1040,6 @@ $(document).ready(function(){
             }
         }
 
-
         container.find('.custom-legend').click( function() {
             var container = $(this).closest('.stat');
             if (container.attr('answer-id') == $(this).attr('answer-id')) {
@@ -1474,114 +1057,10 @@ $(document).ready(function(){
     }
 
     var drawChart = function(rows, container, more_options, is_main, can_click_on_legend, vox_scale_id, question_type, scale) {
-
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Genders');
         data.addColumn('number', 'Answers');
-
-        var arr_colors = chart_colors;
-        // if ((question_type == 'single_choice' && vox_scale_id)) {
-
-        //     rows_array = $.map(rows, function(str, i){
-        //       return $("<div/>").html(str[0]).text();
-        //     });
-
-        //     for( var i in rows) {
-        //         rows[i][0] = rows_array[i];
-        //     }
-
-        //     data.addRows(rows);
-
-        // } else {
-
-            var arrmyArray = rows;
-            for (var w in arrmyArray) {
-                arrmyArray[w].push(chart_colors[w]);              
-            }
-
-            // for(var i in arrmyArray) {
-            //     var a = arrmyArray[i];
-            // }
-
-            var count_diez = 0;
-            for (var i in arrmyArray) {
-
-                if (arrmyArray[i][0].search( '#' ) === 0 ) {
-                    count_diez++;
-                }
-            }
-
-            if(arrmyArray.length == count_diez || vox_scale_id) {
-                //has to be loaded as their order
-                // arrmyArray.sort(function(a, b) {
-                //     return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-                // });
-            } else {
-                arrmyArray.sort(function(a, b) {
-                    if( b[0].search( '#' ) === 0 ) {
-                        return -1;
-                    } else if( a[0].search( '#' ) === 0 ) {
-                        return 1;
-                    } else {
-                        return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-                    }
-                });
-            }
-
-
-            // var index, entry;
-            // for (index = 0; index < arrmyArray.length; ++index) {
-            //     entry = arrmyArray[index];
-            //     //console.log(index + ": " + entry[0] + " - " + entry[1]);
-            // }
-
-            arr_colors = [];
-            for( var q in arrmyArray) {
-                arr_colors.push(arrmyArray[q][2]);
-            }
-            
-            for( var t in arrmyArray) {
-                arrmyArray[t].splice(-1,1);
-            }
-
-            var diez = [];
-            var noDiez = [];
-
-            for (var i in arrmyArray) {
-
-                if (arrmyArray[i][0].search( '#' ) === 0 ) {
-                    diez.push(arrmyArray[i]);
-                } else {
-                    noDiez.push(arrmyArray[i]);
-                }
-            }
-
-            var allArr = [];
-            for (var e in noDiez) {
-                allArr.push(noDiez[e]);
-            }
-
-            for (var r in diez) {
-                diez[r][0] = diez[r][0].substring(1);
-                allArr.push(diez[r]);
-            }
-
-            rows_array = $.map(allArr, function(str, i){
-              return $("<div/>").html(str[0]).text();
-            });
-
-            for( var i in allArr) {
-                allArr[i][0] = rows_array[i];
-            }
-
-            data.addRows(allArr);
-
-            if(typeof scale !== 'undefined' && scale == 'dependency') {
-                colors = arr_colors;
-            }
-        //}
-
-
+        data.addRows(rows);
         
         // Set chart options
         var options = {
@@ -1592,7 +1071,7 @@ $(document).ready(function(){
                 width:more_options.slices ? '70%' : '80%',
                 height: more_options.slices ? (more_options.with_long_hint ? '60%' : '70%' ) : '80%'
             },
-            colors: arr_colors,
+            colors: chart_colors,
             legend: {
                 position: 'none'
             },
@@ -1615,14 +1094,8 @@ $(document).ready(function(){
                 options.height = $(container).closest('.graphs').innerWidth()/2;
             }
         }
-        //console.log(container);
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.PieChart( container );
-
-        // google.visualization.events.addListener(chart, 'ready', function(){
-        //     
-        // });
-
         chart.draw(data, options);
 
         if( is_main ) {
@@ -1663,19 +1136,106 @@ $(document).ready(function(){
         }
     }
 
-    var drawColumns = function(rows, container, more_options, fixedColor, dependency, scale, multiple_top_answers) {
+    var drawDependencyColumns = function(rows, container, fixedColor, dep_answer) {
+        $(container).html('<div class="mobile-chart"></div>');
+        container = $(container).find('.mobile-chart');
 
-        if( ($(window).width()<1200 && !$(container).closest('.st-download').length) || dependency ) {
+        var width = $(window).width()<1200 && !$(container).closest('.st-download').length ? $(container).closest('.graphs').innerWidth() : 750;
+        $(container).css('width', width );
+
+        var globalMax = null;
+        if( rows[0].length==2 ) {
+            var globalMax = 0 ;
+            for(var i=1;i<rows.length;i++) {
+                if( rows[i][1] > globalMax) {
+                    globalMax = rows[i][1];
+                }
+            }
+        }
+
+        if( globalMax ) {
+            var max = globalMax;
+        } else {
+            var max = 0;
+            for(var i=1; i<rows.length; i++) {
+                if(rows[i][1] > max) {
+                    max = rows[i][1];
+                } 
+            }
+        }
+
+        for(var i=1; i<rows.length; i++) {
+            if (rows[i][1]*100 == 0 && $(window).outerWidth() < 768) {
+            } else {
+                $(container).append('<div class="dependency" d="'+i+'"><div class="group-heading">'+rows[i][0]+'</div></div>');
+                var pl = ($(window).outerWidth() > 768 ? 84 : 72)*rows[i][1]/max + 1;
+
+                $(container).find('.dependency[d="'+i+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+chart_colors[fixedColor-1]+';"></span> '+(rows[i][1]*100).toFixed(1)+'%</div>');
+            }
+        }
+    }
+
+    var drawMapColumns = function(rows, container, multiple_top_answers) {
+
+        $(container).html('<div class="mobile-chart"></div>');
+        container = $(container).find('.mobile-chart');
+
+        var width = $(window).width()<1200 && !$(container).closest('.st-download').length ? $(container).closest('.graphs').innerWidth() : 540;
+
+        if(!$(container).hasClass('country_id')){
+            $(container).css('width', width );
+        }
+
+        var globalMax = null;
+        if( rows[0].length==2 ) {
+            var globalMax = 0 ;
+            for(var i=1;i<rows.length;i++) {
+                if( rows[i][1] > globalMax) {
+                    globalMax = rows[i][1];
+                }
+            }
+        }
+
+        for(var i=1; i<rows.length; i++) {
+            $(container).append('<div class="sort-stat" answer-id="'+i+'"><div class="group-heading">'+rows[i][0]+'</div></div>');
+
+            if( globalMax ) {
+                var max = globalMax;
+            } else {
+                var max = 0;
+                for(var j=1; j<rows[i].length; j++) {
+                    if(rows[i][j] > max) {
+                        max = rows[i][j];
+                    }
+                }
+            }
+
+            for(var j=1; j<rows[i].length; j++) {
+                var pl = 80*rows[i][j]/max + 1;
+                var color = chart_colors[i-1];
+                if( typeof(rows[0][j])!='object' ) {
+                    $(container).find('.sort-stat[answer-id="'+i+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+(pl ? parseInt(pl) : 1)+'%; background-color: '+color+';"></span> '+(!isNaN(rows[i][j]) ? (rows[i][j]*100).toFixed(1) : 0 ) +'%</div>');
+                }
+            }
+        }
+
+        if(multiple_top_answers) {
+            container.prepend('<p class="top-answers">Top '+multiple_top_answers+' answers</p>');
+        }
+    }
+
+    var drawColumns = function(rows, container, fixedColor) {
+
+        if( ($(window).width()<1200 && !$(container).closest('.st-download').length) ) {
             $(container).html('<div class="mobile-chart"></div>');
             container = $(container).find('.mobile-chart');
 
-            var width = $(window).width()<1200 && !$(container).closest('.st-download').length ? $(container).closest('.graphs').innerWidth() : (more_options && more_options.width ? more_options.width : 540);
+            var width = $(window).width()<1200 && !$(container).closest('.st-download').length ? $(container).closest('.graphs').innerWidth() : 540;
 
             if(!$(container).hasClass('country_id')){
                 $(container).css('width', width );
             }
 
-            //Dependency + Answer ID
             var globalMax = null;
             if( rows[0].length==2 ) {
                 var globalMax = 0 ;
@@ -1686,153 +1246,26 @@ $(document).ready(function(){
                 }
             }
 
-            if( typeof(rows[0][ rows[0].length-1 ])=='object' ) {
+            for(var i=1; i<rows.length; i++) {
+                $(container).append('<div class="mobile-wrap" m-id="'+i+'"><div class="group-heading">• '+rows[i][0]+'</div></div>');
 
                 if( globalMax ) {
                     var max = globalMax;
                 } else {
                     var max = 0;
-                    for(var i=1; i<rows.length; i++) {
-                        if(rows[i][1] > max) {
-                            max = rows[i][1];
-                        } 
-
+                    for(var j=1; j<rows[i].length; j++) {
+                        if(rows[i][j] > max) {
+                            max = rows[i][j];
+                        }
                     }
                 }
-
-                for(var i=1; i<rows.length; i++) {
-                    if (rows[i][1]*100 == 0 && $(window).outerWidth() < 768) {
-
-                    } else {
-                        $(container).append('<div class="dependency" d="'+i+'"><div class="group-heading">'+rows[i][0]+'</div></div>');
-                        if($(window).outerWidth() > 768) {
-                            var pl = 84*rows[i][1]/max + 1;
-                        } else {
-                            var pl = 72*rows[i][1]/max + 1;
-                        }
-
-                        if(typeof colors != 'undefined' && colors.length) {
-                            var color = fixedColor ? colors[fixedColor-1] : rows[i][2];
-                        } else {
-                            var is_depencency = $(container).closest('.stat').attr('stat-type') == 'dependency' ? true : false;
-
-                            if(dep_answer && is_depencency && $(container).closest('.stat').find('custom-legend').length ) {
-                                var color = $(container).closest('.stat').find('custom-legend[answer-id='+dep_answer+']').find('.legend-color').css('background-color');
-                            } else {
-
-                                var color = fixedColor ? chart_colors[fixedColor-1] : rows[i][2];
-                            }
-                        }
-                    
-                        $(container).find('.dependency[d="'+i+'"]').attr('votes', (rows[i][1]*100).toFixed(1));
-                        $(container).find('.dependency[d="'+i+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][1]*100).toFixed(1)+'%</div>');
+                
+                for(var j=1; j<rows[i].length; j++) {
+                    var pl = 80*rows[i][j]/max + 1;
+                    var color = fixedColor ? chart_colors[fixedColor-1] : chart_colors[j-1];
+                    if( typeof(rows[0][j])!='object' ) {
+                        $(container).find('.mobile-wrap[m-id="'+i+'"]').append('<div class="custombar" votes="'+(rows[i][j]*100).toFixed(1)+'"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(1)+'%</div>');
                     }
-
-                    var list = container.children();
-
-                    list.sort(function(a, b) {
-                        if( parseInt($(a).attr('votes')) > parseInt($(b).attr('votes')) ) {
-                            return -1;
-                        } else if( parseInt($(a).attr('votes')) < parseInt($(b).attr('votes')) ) {
-                            return 1;
-                        }
-                    });
-
-                    list.each(function() {
-                        container.append(this);
-                    });
-
-                    if (!fixedColor) {
-                        var c = 0;
-                        $(container).find('.dependency').each( function() {
-                            $(this).find('span').css('background-color', chart_colors[c]);
-                            c++;
-                        });
-                    }
-                }
-
-            } else {
-
-                if (scale && scale == 'country_id') {
-
-                    for(var i=1; i<rows.length; i++) {
-                        $(container).append('<div class="sort-stat" answer-id="'+i+'"><div class="group-heading">'+rows[i][0]+'</div></div>');
-
-                        if( globalMax ) {
-                            var max = globalMax;
-                        } else {
-                            var max = 0;
-                            for(var j=1; j<rows[i].length; j++) {
-                                if(rows[i][j] > max) {
-                                    max = rows[i][j];
-                                }
-                            }
-                        }
-
-                        for(var j=1; j<rows[i].length; j++) {
-                            var pl = 80*rows[i][j]/max + 1;
-                            var color = fixedColor ? chart_colors[fixedColor-1] : chart_colors[i-1];
-                            if( typeof(rows[0][j])!='object' ) {
-                                $(container).find('.sort-stat[answer-id="'+i+'"]').attr('votes', (rows[i][j]*1000).toFixed(1));
-                                $(container).find('.sort-stat[answer-id="'+i+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(1)+'%</div>');
-                            }
-                        }
-                    }
-
-                    var list = container.children();
-
-                    list.sort(function(a, b) {
-                        if( parseInt($(a).attr('votes')) > parseInt($(b).attr('votes')) ) {
-                            return -1;
-                        } else if( parseInt($(a).attr('votes')) < parseInt($(b).attr('votes')) ) {
-                            return 1;
-                        }
-                    });
-
-                    list.each(function() {
-                        container.append(this);
-                    });
-
-                    if(multiple_top_answers) {
-                        list.hide();
-                        list.slice( 0, multiple_top_answers ).show();
-
-                        container.prepend('<p class="top-answers">Top '+multiple_top_answers+' answers</p>');
-                    }
-
-                    var c = 0;
-                    $(container).find('.sort-stat').each( function() {
-                        $(this).find('span').css('background-color', chart_colors[c]);
-                        c++;
-                    });
-                    
-                } else {
-
-                    for(var i=1; i<rows.length; i++) {
-                        $(container).append('<div class="mobile-wrap" m-id="'+i+'"><div class="group-heading">• '+rows[i][0]+'</div></div>');
-
-                        if( globalMax ) {
-                            var max = globalMax;
-                        } else {
-                            var max = 0;
-                            for(var j=1; j<rows[i].length; j++) {
-                                if(rows[i][j] > max) {
-                                    max = rows[i][j];
-                                }
-                            }
-                        }
-
-                        var colors_array = typeof arr_colors != 'undefined' ? arr_colors : chart_colors;
-                        
-                        for(var j=1; j<rows[i].length; j++) {
-                            var pl = 80*rows[i][j]/max + 1;
-                            var color = fixedColor ? colors_array[fixedColor-1] : (multiple_top_answers ? top_answers_colors[j-1] : colors_array[j-1]);
-                            if( typeof(rows[0][j])!='object' ) {
-                                $(container).find('.mobile-wrap[m-id="'+i+'"]').append('<div class="custombar" votes="'+(rows[i][j]*100).toFixed(1)+'"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+color+';"></span> '+(rows[i][j]*100).toFixed(1)+'%</div>');
-                            }
-                        }
-                    }
-
                 }
             }
 
@@ -1841,14 +1274,10 @@ $(document).ready(function(){
             var fontSize = 10;
             if( rows.length<=5 && $(window).width()>768 ) {
                 fontSize = 15;
-                for(var i in rows) {
-                    rows[i][0] = rows[i][0].replace(new RegExp('\n', 'g'), ' ').replace(new RegExp('\r', 'g'), ' ')
-                }
             } else if(rows.length>=9) {
                 fontSize = 8;                
             }
 
-            var colors_array = typeof arr_colors != 'undefined' ? arr_colors : chart_colors;
             var data = google.visualization.arrayToDataTable(rows);
             
             var options = {
@@ -1859,7 +1288,7 @@ $(document).ready(function(){
                     width:'80%',
                     height:'80%'
                 },
-                colors: fixedColor ? [ colors_array[fixedColor-1] ] : (top_answers_colors && multiple_top_answers ? top_answers_colors : colors_array),
+                colors: fixedColor ? [ chart_colors[fixedColor-1] ] : chart_colors,
                 legend: {
                     position: 'none'
                 },
@@ -1899,12 +1328,6 @@ $(document).ready(function(){
                 }
             };
 
-            if(more_options) {
-                for(var i in more_options) {
-                    options[i] = more_options[i];
-                }
-            }
-
             options.width = $(container).closest('.st-download').length ? options.width : $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth() : options.width);
             options.height = $(container).closest('.st-download').length ? options.height : $(window).width()<768 ? $(container).closest('.graphs').innerWidth() : ( $(window).width()<1200 ? $(container).closest('.graphs').innerWidth()/2 : options.height);
                 
@@ -1921,12 +1344,9 @@ $(document).ready(function(){
         container = $(container).find('.mobile-chart');
 
         var width = $(window).width()<1200 && !$(container).closest('.st-download').length ? $(container).closest('.graphs').innerWidth() : 100+'%';
-
         $(container).css('width', width );
 
-        //Dependency + Answer ID
         var globalMax = null;
-
         if( rows[0].length==2 ) {
             var globalMax = 0 ;
             for(var i=0;i<rows.length;i++) {
@@ -1942,7 +1362,6 @@ $(document).ready(function(){
             array.push(rows[i][0]);
             $(container).append('<div answer-id="'+(i + 1)+'" class="custom-legend"><div class="group-heading">'+rows[i][0]+'</div></div>');
 
-
             if( globalMax ) {
                 var max = globalMax;
             } else {
@@ -1956,79 +1375,14 @@ $(document).ready(function(){
             for(var j=1; j<rows[i].length; j++) {
                 var pl = 80*rows[i][j]/max + 1;
                 if( typeof(rows[0][j])!='object' ) {
-                    $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').attr('votes', rows[i][j]);
                     $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+chart_colors[i]+'"></span> '+((rows[i][j]/ totalCount)*100).toFixed(1)+'%</div>');
                 }
             }
         }
 
-        if(!container.hasClass('gender') && !container.hasClass('country_id')) {
-            
-            
-            var list = container.children();
-
-            list.sort(function(a, b) {
-                if( parseInt($(a).attr('votes')) > parseInt($(b).attr('votes')) ) {
-                    return -1;
-                } else if( parseInt($(a).attr('votes')) < parseInt($(b).attr('votes')) ) {
-                    return 1;
-                }
-            });
-
-            list.each(function() {
-                container.append(this);
-            });
-
-            if (multiple_top_answers) {
-                
-                list.hide();
-                list.slice( 0, multiple_top_answers ).show();
-
-                top_answers_colors = [];
-
-                for( var c in array) {
-
-                    list.each(function() {
-                        if ($(this).is(":visible") && $(this).find('.group-heading').text() == array[c]) {
-                            top_answers_colors.push($(this).find('span').css('background-color'));
-                        }
-                    });
-                }
-
-                list.sort(function(a, b) {
-                    if( parseInt($(a).attr('answer-id')) < parseInt($(b).attr('answer-id')) ) {
-                        return -1;
-                    } else if( parseInt($(a).attr('answer-id')) > parseInt($(b).attr('answer-id')) ) {
-                        return 1;
-                    }
-                });
-
-                var ind = 0;
-                list.each( function() {
-                    if($(this).is(":visible")) {
-
-                        $(this).attr('original-order', ind);
-                        ind++;
-                    }
-                } );
-
-                list.sort(function(a, b) {
-                    if( parseInt($(a).attr('votes')) > parseInt($(b).attr('votes')) ) {
-                        return -1;
-                    } else if( parseInt($(a).attr('votes')) < parseInt($(b).attr('votes')) ) {
-                        return 1;
-                    }
-                });
-
-                container.prepend('<p class="top-answers">Top '+multiple_top_answers+' answers</p>');
-            }
+        if(!container.hasClass('gender') && !container.hasClass('country_id') && multiple_top_answers) {
+            container.prepend('<p class="top-answers">Top '+multiple_top_answers+' answers</p>');
         }
-
-        // var c = 0;
-        // $(container).find('.custom-legend').each( function() {
-        //     $(this).find('span').css('background-color', chart_colors[c]);
-        //     c++;
-        // });
     }
 
     var drawGenderColumns = function(main_chart_rows, rowsf, rowsm, container, more_options, totalfCount, totalmCount, scale_options_arr, a_id, mainChartRows, multiple_top_answers, vox_scale_id, question_type) {
@@ -2039,96 +1393,11 @@ $(document).ready(function(){
         container.closest('.stat').find('.total-m').show();
         container.closest('.stat').find('.total-f').show();
 
-        if (!multiple_top_answers) {
-            if (question_type == 'single_choice') {
-
-                // var arrmyArray = $.extend(true, [], rowsf);
-                // var count_diez = 0;
-                // for (var i in arrmyArray) {
-
-                //     if (arrmyArray[i][0].search( '#' ) === 0 ) {
-                //         count_diez++;
-                //     }
-                // }
-
-                // if(arrmyArray.length == count_diez) {
-                //     arrmyArray.sort(function(a, b) {
-                //         return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-                //     });
-                // } else {
-
-                //     arrmyArray.sort(function(a, b) {
-                //         if( b[0].search( '#' ) === 0 ) {
-                //             return -1;
-                //         } else if( a[0].search( '#' ) === 0 ) {
-                //             return 1;
-                //         } else {
-                //             return (b[1]*100 + b[0].hashCode()%100) - (a[1]*100 + a[0].hashCode()%100);
-                //         }
-                //     });
-                // }
-
-                // var diez = [];
-                // var noDiez = [];
-
-                // for (var i in arrmyArray) {
-
-                //     if (arrmyArray[i][0].search( '#' ) === 0 ) {
-                //         diez.push(arrmyArray[i]);
-                //     } else {
-                //         noDiez.push(arrmyArray[i]);
-                //     }
-                // }
-
-                // var allArr = [];
-                // for (var e in noDiez) {
-                //     allArr.push(noDiez[e]);
-                // }
-
-                // for (var r in diez) {
-                //     diez[r][0] = diez[r][0].substring(1);
-                //     allArr.push(diez[r]);
-                // }
-
-                // rowsf = allArr;
-                var rosf_new = [];
-
-                for(var i in main_chart_rows) {
-                    for(var u in rowsf) {
-                        if (main_chart_rows[i][0] == rowsf[u][0] || '#'+main_chart_rows[i][0] == rowsf[u][0] ) {
-                            rosf_new.push(rowsf[u]);
-                        }
-                    }
-                }
-
-                rowsf = rosf_new;
-
-                var rosm_new = [];
-
-                for(var i in main_chart_rows) {
-                    for(var u in rowsm) {
-                        if (main_chart_rows[i][0] == rowsm[u][0] || '#'+main_chart_rows[i][0] == rowsm[u][0] ) {
-                            rosm_new.push(rowsm[u]);
-                        }
-                    }
-                }
-
-                rowsm = rosm_new;
-            }
-
-            var c = 0;
-            container.closest('.stat').find('.multiple-gender-chart').find('.custom-legend').each( function() {
-                $(this).find('span').css('background-color', chart_colors[c]);
-                c++;
-            });
-        }
-
         if (scale_options_arr.length && scale_options_arr.length == 1) {
             if (scale_options_arr[0] == 'f') {
                 container.closest('.stat').find('.total-m').hide();
             } else if(scale_options_arr[0] == 'm') {
                 container.closest('.stat').find('.total-f').hide();
-                //console.log(container.closest('.stat').find('.total-f'));
             }
 
             container.closest('.stat').find('.main-multiple-gender').addClass('lower-margin');
@@ -2137,7 +1406,6 @@ $(document).ready(function(){
         }
 
         var width = $(window).width()<1200 && !$(container).closest('.st-download').length ? $(container).closest('.graphs').innerWidth() : 100+'%';
-
         $(container).css('width', width );
 
         //Dependency + Answer ID
@@ -2165,7 +1433,6 @@ $(document).ready(function(){
         for(var i=0; i<rowsf.length; i++) {
             //$(container).append('<div answer-id="'+(i + 1)+'" class="custom-legend"><div class="group-heading">'+rowsf[i][0]+'</div></div>');
             $(container).append('<div answer-id="'+(i + 1)+'" class="custom-legend"></div>');
-
 
             if( globalfMax ) {
                 var maxf = globalfMax;
@@ -2207,8 +1474,6 @@ $(document).ready(function(){
                 }
 
                 if( typeof(rowsf[0][j])!='object' ) {
-                    console.log(chart_colors[i]);
-                    $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').attr('votes', mainChartRows[i][j]);
                     // if(rowsf[i][j]){
                         $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-f"> <img src="'+window.location.origin+'/new-vox-img/women-icon.svg"><span class="legend-color" style="width: '+parseInt(plf)+'%; opacity: 0.4; background-color: '+chart_colors[i]+';"></span> '+((rowsf[i][j]/ totalfCount)*100).toFixed(1)+'%</div>');
                     // }
@@ -2239,28 +1504,6 @@ $(document).ready(function(){
             }
         }
 
-        var list = container.children();
-
-        if (container.closest('.stat').find('.graphs').hasClass('multiple-stat')) {
-
-            list.sort(function(a, b) {
-                if( parseInt($(a).attr('votes')) > parseInt($(b).attr('votes')) ) {
-                    return -1;
-                } else if( parseInt($(a).attr('votes')) < parseInt($(b).attr('votes')) ) {
-                    return 1;
-                }
-            });
-
-            list.each(function() {
-                container.append(this);
-            });
-        }
-
-        if (multiple_top_answers) {
-
-            list.hide();
-            list.slice( 0, multiple_top_answers ).show();
-        }
         container.closest('.stat').find('.main-multiple-gender .custom-legend').click( function() {
             var cont = $(this).closest('.stat');
             if (cont.attr('answer-id') == $(this).attr('answer-id')) {
@@ -2271,30 +1514,6 @@ $(document).ready(function(){
             
             reloadGraph( cont );
         } );
-
-        if (!multiple_top_answers ) {
-
-            if (question_type == 'single_choice') {
-
-                if ($(container).closest('.stat').find('.legend-div').length) {
-                    var arr_colors = [];
-                    $(container).closest('.stat').find('.legend-div').each( function() {
-                        arr_colors.push($(this).find('.legend-color').css('background-color'));
-                    });
-                } else {
-                    var arr_colors = chart_colors;
-                }
-            } else {
-                var arr_colors = chart_colors;
-            }
-
-            var c = 0;
-            $(container).find('.custom-legend').each( function() {
-                $(this).find('.legend-color').css('background-color', arr_colors[c]);
-                c++;
-            });
-        }
-
     }
 
     var drawAnswerGenderColumns = function(container, a_id, question_type) {
@@ -2363,7 +1582,7 @@ $(document).ready(function(){
 
                     ev.target.setState("highlight");
                     if(map_country_data.pieData!== undefined) {
-                        drawColumns( map_country_data.pieData, $(this).closest('.graphs').find('.second-chart')[0], null, null, true, 'country_id', multiple_top_answers);
+                        drawMapColumns( map_country_data.pieData, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers);
                         $(this).closest('.graphs').find('.map-hint').html('Answers distribution in <b>' + map_country + '</b>' ).show();
                     }
 
@@ -2371,7 +1590,7 @@ $(document).ready(function(){
                     map_country = null;
                     map_country_data = null;
 
-                    drawColumns( main_chart_data, $(this).closest('.graphs').find('.second-chart')[0], null, null, true, 'country_id', multiple_top_answers);
+                    drawMapColumns( converted_rows, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers);
                 }
             }
 
@@ -2388,7 +1607,7 @@ $(document).ready(function(){
                     ev.target.setState("hovered");                    
                     $(this).closest('.graphs').find('.map-hint').html('Answers distribution in <b>' + ev.target.tooltipDataItem.dataContext.name + '</b>' ).show();
                 }
-                drawColumns( ev.target.dataItem.dataContext.pieData, $(this).closest('.graphs').find('.second-chart')[0], null, null, true, 'country_id', multiple_top_answers);
+                drawMapColumns( ev.target.dataItem.dataContext.pieData, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers);
                 
             }
         }).bind(container));
@@ -2404,7 +1623,7 @@ $(document).ready(function(){
             }
 
             
-            drawColumns( map_country_data ? map_country_data.pieData : main_chart_data, $(this).closest('.graphs').find('.second-chart')[0], null, null, true, 'country_id', multiple_top_answers);
+            drawMapColumns( map_country_data ? map_country_data.pieData : converted_rows, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers);
         }).bind(container));
 
         polygonSeries.mapPolygons.template.adapter.add("tooltipText", function(text, target, key) {
@@ -2439,6 +1658,7 @@ $(document).ready(function(){
             }
             return a + rowTotal;
         }, 0);
+
         var chartData = [];
         for(var i in rows) {
             var rowTotal = rows[i].reduce(function (c, d) {

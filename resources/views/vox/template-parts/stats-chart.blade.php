@@ -55,10 +55,10 @@
 	<div class="scales flex flex-center mobile-scales">
 		{!! trans('vox.page.stats.scale-by') !!}:
 		@if($question->used_for_stats=='dependency')
-			<a href="javascript:;" class="active" scale="dependency">Relation</a>
+			<a href="javascript:;" class="active" scale="dependency" scale-name="Relation">Relation</a>
 		@endif
 		@foreach( $question->stats_fields as $sk)
-			<a href="javascript:;" class="{!! $loop->first && $question->used_for_stats!='dependency' ? 'active' : '' !!} {!! array_key_exists($sk, config('vox.details_fields')) || $sk == 'age' || ($sk == 'gender' && $question->type == 'multiple_choice') ? 'with-children' : '' !!}" scale="{{ $sk }}">
+			<a href="javascript:;" class="{!! $loop->first && $question->used_for_stats!='dependency' ? 'active' : '' !!} {!! array_key_exists($sk, config('vox.details_fields')) || $sk == 'age' || ($sk == 'gender' && $question->type == 'multiple_choice') ? 'with-children' : '' !!}" scale="{{ $sk }}"  scale-name="{{ trans('vox.page.stats.group-by-'.$sk) }}">
 				{{ trans('vox.page.stats.group-by-'.$sk) }}
 
 				@if(array_key_exists($sk, config('vox.details_fields')))
