@@ -6,12 +6,14 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use App\Models\IncompleteRegistration;
+use App\Models\VoxAnswersDependency;
 use App\Models\ScrapeDentistResult;
 use App\Models\StopVideoReview;
 use App\Models\DcnTransaction;
 use App\Models\EmailTemplate;
 use App\Models\ScrapeDentist;
 use App\Models\AnonymousUser;
+use App\Models\VoxQuestion;
 use App\Models\LeadMagnet;
 use App\Models\UserInvite;
 use App\Models\UserAction;
@@ -1874,7 +1876,7 @@ NOT SEND TRANSACTIONS
             curl_close($curl);
             if (!empty($resp))   {
                 $gas_price = $resp->average;
-                $gwei = ($gas_price - ( $gas_price * 10 / 100 ) ) / 10;
+                $gwei = $gas_price / 10;
 
                 $gas = GasPrice::find(1);
                 $gas->gas_price = intval(number_format($gwei));

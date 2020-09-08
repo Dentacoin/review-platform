@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'max_gas_price' => 200
+    'max_gas_price' => 110
 ];
