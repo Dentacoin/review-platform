@@ -286,28 +286,8 @@ class StatsController extends FrontController
                 }
 
                 foreach ($results as $res) {
-                    if($question->type == 'number') {
-                        foreach ($answers as $key => $value) {
-                            $value_string = $value;
-                            if (strpos( $value, '-') !== FALSE) {
-                                //from 0-100,0-1000
-                                $last_num = intval(explode('-', $value)[1]);
 
-                                if($res->$answerField <= $last_num) {
-                                    $answer_number = $value_string;
-                                    break;
-                                }
-                            } else {
-                                //from 0-10
-                                $answer_number = $res->$answerField;
-                                break;
-                            }
-                        }
-                    } else {
-                        if(isset($answers[ $res->$answerField-1])) {
-                            $answer_number = $answers[ $res->$answerField-1];
-                        }
-                    }
+                    $answer_number = $this->getAnswerNumber($question->type, $answers, $res->$answerField);
 
                     if(!isset( $answer_number )) {
                         continue;
@@ -356,32 +336,21 @@ class StatsController extends FrontController
         			$main_chart[ $answers_related[ $res->$answerField-1 ] ] = $res->cnt;
         		}
 
-                $reorder = true;
-
-                $count_diez = 0;
-                foreach ($main_chart as $key => $value) {
-                    if(mb_strpos($key, '#')===0) {
-                        $count_diez++;
-                    }
-                }
-
-                if(count($main_chart) == $count_diez) {
-                    $reorder = false;
-                }
 
                 $styles = new \stdClass();
                 $styles->role = 'style';
-                //reorder answers by respondents desc if they're not from scale!!
-                if(empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number') {
-
-                    if($question->type == 'multiple_choice') {
-                        $sum = $total;
-                    } else {
-                        $sum = 0;
-                        foreach ($second_chart as $key => $value) {
-                            $sum+=$value;
-                        }
+                if($question->type == 'multiple_choice') {
+                    $sum = $total;
+                } else {
+                    $sum = 0;
+                    foreach ($second_chart as $key => $value) {
+                        $sum+=$value;
                     }
+                }
+
+                $reorder = $this->reorderStats($main_chart, $question);
+                //reorder answers by respondents desc if they're not from scale!!
+                if($reorder) {
 
                     foreach ($second_chart as $key => $value) {
                         if(mb_strpos($key, '#')!==0) {
@@ -425,15 +394,6 @@ class StatsController extends FrontController
                         }
                     }
                 } else {
-                    if($question->type == 'multiple_choice') {
-                        $sum = $total;
-                    } else {
-                        $sum = 0;
-                        foreach ($second_chart as $key => $value) {
-                            $sum+=$value;
-                        }
-                    }
-
                     foreach ($second_chart as $key => $value) {
                         $resp = $value ? $value/$sum : 0;
 
@@ -470,28 +430,8 @@ class StatsController extends FrontController
                 }
 
                 foreach ($results_main_chart as $res_main) {
-                    if($question->type == 'number') {
-                        foreach ($answers as $key => $value) {
-                            $value_string = $value;
-                            if (strpos( $value, '-') !== FALSE) {
-                                //from 0-100,0-1000
-                                $last_num = intval(explode('-', $value)[1]);
 
-                                if($res_main->$answerField <= $last_num) {
-                                    $answer_number = $value_string;
-                                    break;
-                                }
-                            } else {
-                                //from 0-10
-                                $answer_number = $res_main->$answerField;
-                                break;
-                            }
-                        }
-                    } else {
-                        if(isset($answers[ $res_main->$answerField-1])) {
-                            $answer_number = $answers[ $res_main->$answerField-1];
-                        }
-                    }
+                    $answer_number = $this->getAnswerNumber($question->type, $answers, $res_main->$answerField);
 
                     if(!isset( $answer_number )) {
                         continue;
@@ -560,22 +500,9 @@ class StatsController extends FrontController
                     }
         		}
 
-
-                $reorder = true;
-
-                $count_diez = 0;
-                foreach ($main_chart as $key => $value) {
-                    if(mb_strpos($key, '#')===0) {
-                        $count_diez++;
-                    }
-                }
-
-                if(count($main_chart) == $count_diez) {
-                    $reorder = false;
-                }
-
+                $reorder = $this->reorderStats($main_chart, $question);
                 //reorder answers by respondents desc if they're not from scale!!
-                if(empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number') {
+                if($reorder) {
                     $new_main_chart = [];
                     foreach ($main_chart as $k => $v) {
                         if(mb_strpos($k, '#')!==0) {
@@ -695,26 +622,7 @@ class StatsController extends FrontController
                 $second_chart_before = [];
         		foreach ($results as $res) {
 
-                    if($question->type == 'number') {
-                        foreach ($answers as $key => $value) {
-                            $value_string = $value;
-                            if (strpos( $value, '-') !== FALSE) {
-                                //from 0-100,0-1000
-                                $last_num = intval(explode('-', $value)[1]);
-
-                                if($res->$answerField <= $last_num) {
-                                    $answer_number = $value_string;
-                                    break;
-                                }
-                            } else {
-                                //from 0-10
-                                $answer_number = $res->$answerField;
-                                break;
-                            }
-                        }
-                    } else {
-                        $answer_number = $answers[ $res->$answerField-1];
-                    }
+                    $answer_number = $this->getAnswerNumber($question->type, $answers, $res->$answerField);
 
                     if(!isset( $answer_number )) {
                         continue;
@@ -742,21 +650,9 @@ class StatsController extends FrontController
         			}
         		}
 
-                $reorder = true;
-
-                $count_diez = 0;
-                foreach ($main_chart as $key => $value) {
-                    if(mb_strpos($key, '#')===0) {
-                        $count_diez++;
-                    }
-                }
-
-                if(count($main_chart) == $count_diez) {
-                    $reorder = false;
-                }
-
+                $reorder = $this->reorderStats($main_chart, $question);
                 //reorder answers by respondents desc if they're not from scale!!
-                if(empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number') {
+                if($reorder) {
 
                     $sum = 0;
                     foreach ($main_chart as $key => $value) {
@@ -943,26 +839,7 @@ class StatsController extends FrontController
 
         		foreach ($results as $res) {
 
-                    if($question->type == 'number') {
-                        foreach ($answers as $key => $value) {
-                            $value_string = $value;
-                            if (strpos( $value, '-') !== FALSE) {
-                                //from 0-100,0-1000
-                                $last_num = intval(explode('-', $value)[1]);
-
-                                if($res->$answerField <= $last_num) {
-                                    $answer_number = $value_string;
-                                    break;
-                                }
-                            } else {
-                                //from 0-10
-                                $answer_number = $res->$answerField;
-                                break;
-                            }
-                        }
-                    } else {
-                        $answer_number = $answers[ $res->$answerField-1];
-                    }
+                    $answer_number = $this->getAnswerNumber($question->type, $answers, $res->$answerField);
 
                     if(!isset( $answer_number )) {
                         continue;
@@ -1012,30 +889,9 @@ class StatsController extends FrontController
     				}
                 }
 
-                //dd( $results->toArray() );
         		foreach ($results as $res) {
 
-                    if($question->type == 'number') {
-                        foreach ($answers as $key => $value) {
-                            $value_string = $value;
-                            if (strpos( $value, '-') !== FALSE) {
-                                //from 0-100,0-1000
-                                $last_num = intval(explode('-', $value)[1]);
-
-                                if($res->$answerField <= $last_num) {
-                                    $answer_number = $value_string;
-                                    break;
-                                }
-                            } else {
-                                //from 0-10
-                                $answer_number = $res->$answerField;
-                                break;
-                            }
-                        }
-                    } else {
-                        $answer_number = $answers[ $res->$answerField-1];
-                    }
-
+                    $answer_number = $this->getAnswerNumber($question->type, $answers, $res->$answerField);
                     if($res->$scale===null || !isset( $answer_number )) {
                         continue;
                     }
@@ -1045,30 +901,17 @@ class StatsController extends FrontController
         			}
         			$main_chart[ $answer_number ] += $res->cnt;
 
-
         			if( $res->$scale ) {
     	        		$second_chart_before[ $age_to_group[$res->$scale] ][ $answer_number ] = $res->cnt; //m
         			}
     		    }
-                
         	}
 
             if($scale != 'dependency' && $scale != 'country_id' && $scale != 'gender') {
-                $reorder = true;
-
-                $count_diez = 0;
-                foreach ($main_chart as $key => $value) {
-                    if(mb_strpos($key, '#')===0) {
-                        $count_diez++;
-                    }
-                }
-
-                if(count($main_chart) == $count_diez) {
-                    $reorder = false;
-                }
-
+                
+                $reorder = $this->reorderStats($main_chart, $question);
                 //reorder answers by respondents desc if they're not from scale!!
-                if(empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number') {
+                if($reorder) {
                     $new_main_chart = [];
                     foreach ($main_chart as $k => $v) {
                         if(mb_strpos($k, '#')!==0) {
@@ -2181,4 +2024,50 @@ class StatsController extends FrontController
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
+
+    private function getAnswerNumber($q_type, $answers, $answerfield) {
+        if($q_type == 'number') {
+            foreach ($answers as $key => $value) {
+                $value_string = $value;
+                if (strpos( $value, '-') !== FALSE) {
+                    //from 0-100,0-1000
+                    $last_num = intval(explode('-', $value)[1]);
+
+                    if($answerfield <= $last_num) {
+                        $answer_number = $value_string;
+                        break;
+                    }
+                } else {
+                    //from 0-10
+                    $answer_number = $answerfield;
+                    break;
+                }
+            }
+        } else {
+            if(isset($answers[ $answerfield-1])) {
+                $answer_number = $answers[ $answerfield-1];
+            }
+        }
+
+        return $answer_number;
+    }
+
+    private function reorderStats($main_chart, $question) {
+        $reorder = true;
+
+        $count_diez = 0;
+        foreach ($main_chart as $key => $value) {
+            if(mb_strpos($key, '#')===0) {
+                $count_diez++;
+            }
+        }
+
+        if(count($main_chart) == $count_diez) {
+            $reorder = false;
+        }
+
+        //reorder answers by respondents desc if they're not from scale!!
+        return empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number';
+    }
+                    
 }
