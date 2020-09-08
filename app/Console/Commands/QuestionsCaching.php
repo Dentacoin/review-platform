@@ -50,10 +50,12 @@ class QuestionsCaching extends Command
 
         foreach ($dependency_questions as $dq) {
 
-            $existing = VoxAnswersDependency::where('question_id', $dq->id)->first();
+            $existing = VoxAnswersDependency::where('question_id', $dq->id)->get();
 
-            if($existing) {
-                $existing->delete();
+            if($existing->isNotEmpty()) {
+                foreach ($existing as $exist) {
+                    $exist->delete();
+                }
             }
             
             if(!empty($dq->stats_answer_id)) {

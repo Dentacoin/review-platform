@@ -212,9 +212,31 @@ class StatsController extends FrontController
             } else {
 
                 if($question->type == 'number') {
-                    $ans_array = VoxAnswer::where('question_id', $question_id)->groupBy('answer')->select('answer')->get();
-                    foreach ($ans_array as $ans) {
-                        $answers[] = $ans->answer;
+                    $answers_min = intval(explode(':',$question->number_limit)[0]);
+                    $answers_max = intval(explode(':',$question->number_limit)[1]);
+
+                    if($answers_max <= 10) {
+                        for ($i=$answers_min; $i <= $answers_max; $i++) { 
+                            $answers[] = $i;
+                        }
+                    } else {
+                        if($answers_max <= 100) {
+                            $number_answer = 10;
+                        } else if($answers_max <= 1000) {
+                            $number_answer = 100;
+                        } else if($answers_max <= 10000) {
+                            $number_answer = 1000;
+                        }
+
+                        $max_count = ceil($answers_max / 10) * 10;
+                        $min_count = floor($answers_min / 10) * 10;
+
+                        for ($i=$min_count; $i <= $max_count; $i+=$number_answer) {
+                            if($i + $number_answer <= $max_count){
+
+                                $answers[] = ($i == $min_count ? $i : $i + 1).'-'.($i + $number_answer);
+                            }
+                        }
                     }
                 } else {
                     $ans_array = json_decode($question->answers);
@@ -223,6 +245,7 @@ class StatsController extends FrontController
                     }
                 }
             }
+
 
             foreach ($answers as $key => $value) {
                 if(mb_strpos($value, '!')===0 || ($question->type != 'single_choice' && mb_strpos($value, '#')===0)) {
@@ -245,7 +268,7 @@ class StatsController extends FrontController
                     $results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt');
                     $results = $results->get();
                 } else {
-                    $results = VoxAnswersDependency::where('question_id', $question_id)->where('question_dependency_id', $question->stats_relation_id)->where('answer_id', $answer_id)->where('updated_at', '>=', Carbon::now()->addDays(-7))->get();
+                    $results = VoxAnswersDependency::where('question_id', $question_id)->where('question_dependency_id', $question->stats_relation_id)->where('answer_id', $answer_id)->get();
 
                     if($results->isEmpty()) {
                         $results = VoxAnswer::prepareQuery($question_id, null,[
@@ -263,16 +286,37 @@ class StatsController extends FrontController
                 }
 
                 foreach ($results as $res) {
-                    if(!isset( $answers[ $res->$answerField-1 ] )) {
+                    if($question->type == 'number') {
+                        foreach ($answers as $key => $value) {
+                            $value_string = $value;
+                            if (strpos( $value, '-') !== FALSE) {
+                                //from 0-100,0-1000
+                                $last_num = intval(explode('-', $value)[1]);
+
+                                if($res->$answerField <= $last_num) {
+                                    $answer_number = $value_string;
+                                    break;
+                                }
+                            } else {
+                                //from 0-10
+                                $answer_number = $res->$answerField;
+                                break;
+                            }
+                        }
+                    } else {
+                        if(isset($answers[ $res->$answerField-1])) {
+                            $answer_number = $answers[ $res->$answerField-1];
+                        }
+                    }
+
+                    if(!isset( $answer_number )) {
                         continue;
                     }
-                    $second_chart_array[ $answers[ $res->$answerField-1 ] ] = $res->cnt;
+                    $second_chart_array[ $answer_number ] = $res->cnt;
                 }
 
                 foreach ($second_chart_array as $key => $value) {
-
                     if(mb_strpos($key, '!')===0 || mb_strpos($key, '#')===0) {
-
                         $second_chart[ $question->removeAnswerTooltip(mb_substr($key, 1)) ] = $value;
                     } else {
                         $second_chart[ $question->removeAnswerTooltip($key) ] = $value;
@@ -312,56 +356,90 @@ class StatsController extends FrontController
         			$main_chart[ $answers_related[ $res->$answerField-1 ] ] = $res->cnt;
         		}
 
-                $styles = new \stdClass();
-                $styles->role = 'style';
+                $reorder = true;
 
-                if($question->type == 'multiple_choice') {
-                    $sum = $total;
-                } else {
-                    $sum = 0;
-                    foreach ($second_chart as $key => $value) {
-                        $sum+=$value;
+                $count_diez = 0;
+                foreach ($main_chart as $key => $value) {
+                    if(mb_strpos($key, '#')===0) {
+                        $count_diez++;
                     }
                 }
 
-                foreach ($second_chart as $key => $value) {
-                    if(mb_strpos($key, '#')!==0) {
+                if(count($main_chart) == $count_diez) {
+                    $reorder = false;
+                }
+
+                $styles = new \stdClass();
+                $styles->role = 'style';
+                //reorder answers by respondents desc if they're not from scale!!
+                if(empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number') {
+
+                    if($question->type == 'multiple_choice') {
+                        $sum = $total;
+                    } else {
+                        $sum = 0;
+                        foreach ($second_chart as $key => $value) {
+                            $sum+=$value;
+                        }
+                    }
+
+                    foreach ($second_chart as $key => $value) {
+                        if(mb_strpos($key, '#')!==0) {
+                            $resp = $value ? $value/$sum : 0;
+
+                            $converted_rows[] = [
+                                $key,
+                                $resp,
+                            ];
+                        }
+                    }
+
+                    $keys = array_map(function($val) { return $val[1]; }, $converted_rows);
+                    array_multisort($keys, SORT_DESC, $converted_rows);
+
+                    $rows_diez = [];
+                    foreach ($second_chart as $key => $value) {
+                        if(mb_strpos($key, '#')===0) {
+                            $resp = $value ? $value/$sum : 0;
+
+                            $rows_diez[] = [
+                                $key,
+                                $resp,
+                            ];
+                        }
+                    }
+
+                    if(!empty($rows_diez)) {
+
+                        $keys = array_map(function($val) { return $val[1]; }, $rows_diez);
+                        array_multisort($keys, SORT_DESC, $rows_diez);
+
+                        $rows_without_diez = [];
+                        foreach ($rows_diez as $key => $value) {
+                            $new_key = mb_substr($value[0], 1);
+                            $new_value = $value[1];
+                            $rows_without_diez[] = [
+                                $new_key,
+                                $new_value
+                            ];
+                        }
+                    }
+                } else {
+                    if($question->type == 'multiple_choice') {
+                        $sum = $total;
+                    } else {
+                        $sum = 0;
+                        foreach ($second_chart as $key => $value) {
+                            $sum+=$value;
+                        }
+                    }
+
+                    foreach ($second_chart as $key => $value) {
                         $resp = $value ? $value/$sum : 0;
 
                         $converted_rows[] = [
                             $key,
                             $resp,
-                        ];
-                    }
-                }
-
-                $keys = array_map(function($val) { return $val[1]; }, $converted_rows);
-                array_multisort($keys, SORT_DESC, $converted_rows);
-
-                $rows_diez = [];
-                foreach ($second_chart as $key => $value) {
-                    if(mb_strpos($key, '#')===0) {
-                        $resp = $value ? $value/$sum : 0;
-
-                        $rows_diez[] = [
-                            $key,
-                            $resp,
-                        ];
-                    }
-                }
-
-                if(!empty($rows_diez)) {
-
-                    $keys = array_map(function($val) { return $val[1]; }, $rows_diez);
-                    array_multisort($keys, SORT_DESC, $rows_diez);
-
-                    $rows_without_diez = [];
-                    foreach ($rows_diez as $key => $value) {
-                        $new_key = mb_substr($value[0], 1);
-                        $new_value = $value[1];
-                        $rows_without_diez[] = [
-                            $new_key,
-                            $new_value
                         ];
                     }
                 }
@@ -392,9 +470,23 @@ class StatsController extends FrontController
                 }
 
                 foreach ($results_main_chart as $res_main) {
-
                     if($question->type == 'number') {
-                        $answer_number = $res_main->$answerField;
+                        foreach ($answers as $key => $value) {
+                            $value_string = $value;
+                            if (strpos( $value, '-') !== FALSE) {
+                                //from 0-100,0-1000
+                                $last_num = intval(explode('-', $value)[1]);
+
+                                if($res_main->$answerField <= $last_num) {
+                                    $answer_number = $value_string;
+                                    break;
+                                }
+                            } else {
+                                //from 0-10
+                                $answer_number = $res_main->$answerField;
+                                break;
+                            }
+                        }
                     } else {
                         if(isset($answers[ $res_main->$answerField-1])) {
                             $answer_number = $answers[ $res_main->$answerField-1];
@@ -414,7 +506,22 @@ class StatsController extends FrontController
         		foreach ($results as $res) {
 
                     if($question->type == 'number') {
-                        $answer_number = $res->$answerField;
+                        foreach ($answers as $key => $value) {
+                            $value_string = $value;
+                            if (strpos( $value, '-') !== FALSE) {
+                                //from 0-100,0-1000
+                                $last_num = intval(explode('-', $value)[1]);
+
+                                if($res->$answerField <= $last_num) {
+                                    $answer_number = $value_string;
+                                    break;
+                                }
+                            } else {
+                                //from 0-10
+                                $answer_number = $res->$answerField;
+                                break;
+                            }
+                        }
                     } else {
                         if(isset($answers[ $res->$answerField-1])) {
                             $answer_number = $answers[ $res->$answerField-1];
@@ -468,7 +575,7 @@ class StatsController extends FrontController
                 }
 
                 //reorder answers by respondents desc if they're not from scale!!
-                if(empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder) {
+                if(empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number') {
                     $new_main_chart = [];
                     foreach ($main_chart as $k => $v) {
                         if(mb_strpos($k, '#')!==0) {
@@ -589,7 +696,22 @@ class StatsController extends FrontController
         		foreach ($results as $res) {
 
                     if($question->type == 'number') {
-                        $answer_number = $res->$answerField;
+                        foreach ($answers as $key => $value) {
+                            $value_string = $value;
+                            if (strpos( $value, '-') !== FALSE) {
+                                //from 0-100,0-1000
+                                $last_num = intval(explode('-', $value)[1]);
+
+                                if($res->$answerField <= $last_num) {
+                                    $answer_number = $value_string;
+                                    break;
+                                }
+                            } else {
+                                //from 0-10
+                                $answer_number = $res->$answerField;
+                                break;
+                            }
+                        }
                     } else {
                         $answer_number = $answers[ $res->$answerField-1];
                     }
@@ -620,13 +742,119 @@ class StatsController extends FrontController
         			}
         		}
 
-                $sum = 0;
+                $reorder = true;
+
+                $count_diez = 0;
                 foreach ($main_chart as $key => $value) {
-                    $sum+=$value;
+                    if(mb_strpos($key, '#')===0) {
+                        $count_diez++;
+                    }
                 }
 
-                foreach ($main_chart as $key => $value) {
-                    if(mb_strpos($key, '#')!==0) {
+                if(count($main_chart) == $count_diez) {
+                    $reorder = false;
+                }
+
+                //reorder answers by respondents desc if they're not from scale!!
+                if(empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number') {
+
+                    $sum = 0;
+                    foreach ($main_chart as $key => $value) {
+                        $sum+=$value;
+                    }
+
+                    foreach ($main_chart as $key => $value) {
+                        if(mb_strpos($key, '#')!==0) {
+                            $resp = $value ? $value/$sum : 0;
+
+                            $converted_rows[] = [
+                                $key,
+                                $resp,
+                            ];
+                        }
+                    }
+
+                    $keys = array_map(function($val) { return $val[1]; }, $converted_rows);
+                    array_multisort($keys, SORT_DESC, $converted_rows);
+
+                    $rows_diez = [];
+                    foreach ($main_chart as $key => $value) {
+                        if(mb_strpos($key, '#')===0) {
+                            $resp = $value ? $value/$sum : 0;
+
+                            $rows_diez[] = [
+                                $key,
+                                $resp,
+                            ];
+                        }
+                    }
+
+                    if(!empty($rows_diez)) {
+
+                        $keys = array_map(function($val) { return $val[1]; }, $rows_diez);
+                        array_multisort($keys, SORT_DESC, $rows_diez);
+
+                        $rows_without_diez = [];
+                        foreach ($rows_diez as $key => $value) {
+                            $new_key = mb_substr($value[0], 1);
+                            $new_value = $value[1];
+                            $rows_without_diez[] = [
+                                $new_key,
+                                $new_value
+                            ];
+                        }
+
+                        $converted_rows = array_merge($converted_rows, $rows_without_diez);
+                    }
+
+                    //reorder and configure second chart & main chart
+                    foreach ($second_chart_before as $key => $value) {
+                        $old_value = $value;
+                        $new_value = array_slice($value, 1);
+
+                        $new_ordered_array = [];
+                        foreach ($new_value as $k => $v) {
+                            if(mb_strpos($k, '#')!==0) {
+                                $new_ordered_array[$k] = $v;
+                            }
+                        }
+                        arsort($new_ordered_array);
+
+                        $rows_diez = [];
+                        foreach ($new_value as $k => $v) {
+                            if(mb_strpos($k, '#')===0) {
+                                $rows_diez[$k] = $v;
+                            }
+                        }
+
+                        if(!empty($rows_diez)) {
+                            arsort($rows_diez);
+
+                            $rows_without_diez = [];
+                            foreach ($rows_diez as $k => $v) {
+                                $new_key = mb_substr($k, 1);
+                                $new_value_second = $v;
+                                $rows_without_diez[$new_key] = $new_value_second;
+                            }
+
+                            $new_ordered_array = array_merge($new_ordered_array, $rows_without_diez);
+                        }
+
+                        $last_order_arr = [];
+                        foreach ($converted_rows as $k => $value) {
+                            $last_order_arr[$value[0]] = $new_ordered_array[$value[0]];
+                        }
+
+                        $last_order_arr=array("name"=>$old_value['name']) + $last_order_arr;
+                        $second_chart[$key] = $last_order_arr;
+                    }
+                } else {
+                    $sum = 0;
+                    foreach ($main_chart as $key => $value) {
+                        $sum+=$value;
+                    }
+
+                    foreach ($main_chart as $key => $value) {
                         $resp = $value ? $value/$sum : 0;
 
                         $converted_rows[] = [
@@ -634,81 +862,24 @@ class StatsController extends FrontController
                             $resp,
                         ];
                     }
-                }
 
-                $keys = array_map(function($val) { return $val[1]; }, $converted_rows);
-                array_multisort($keys, SORT_DESC, $converted_rows);
+                    foreach ($second_chart_before as $key => $value) {
+                        $old_value = $value;
+                        $new_value = array_slice($value, 1);
 
-                $rows_diez = [];
-                foreach ($main_chart as $key => $value) {
-                    if(mb_strpos($key, '#')===0) {
-                        $resp = $value ? $value/$sum : 0;
-
-                        $rows_diez[] = [
-                            $key,
-                            $resp,
-                        ];
-                    }
-                }
-
-                if(!empty($rows_diez)) {
-
-                    $keys = array_map(function($val) { return $val[1]; }, $rows_diez);
-                    array_multisort($keys, SORT_DESC, $rows_diez);
-
-                    $rows_without_diez = [];
-                    foreach ($rows_diez as $key => $value) {
-                        $new_key = mb_substr($value[0], 1);
-                        $new_value = $value[1];
-                        $rows_without_diez[] = [
-                            $new_key,
-                            $new_value
-                        ];
-                    }
-
-                    $converted_rows = array_merge($converted_rows, $rows_without_diez);
-                }
-
-                //reorder and configure second chart & main chart
-                foreach ($second_chart_before as $key => $value) {
-                    $old_value = $value;
-                    $new_value = array_slice($value, 1);
-
-                    $new_ordered_array = [];
-                    foreach ($new_value as $k => $v) {
-                        if(mb_strpos($k, '#')!==0) {
+                        $new_ordered_array = [];
+                        foreach ($new_value as $k => $v) {
                             $new_ordered_array[$k] = $v;
                         }
-                    }
-                    arsort($new_ordered_array);
 
-                    $rows_diez = [];
-                    foreach ($new_value as $k => $v) {
-                        if(mb_strpos($k, '#')===0) {
-                            $rows_diez[$k] = $v;
-                        }
-                    }
-
-                    if(!empty($rows_diez)) {
-                        arsort($rows_diez);
-
-                        $rows_without_diez = [];
-                        foreach ($rows_diez as $k => $v) {
-                            $new_key = mb_substr($k, 1);
-                            $new_value_second = $v;
-                            $rows_without_diez[$new_key] = $new_value_second;
+                        $last_order_arr = [];
+                        foreach ($converted_rows as $k => $value) {
+                            $last_order_arr[$value[0]] = $new_ordered_array[$value[0]];
                         }
 
-                        $new_ordered_array = array_merge($new_ordered_array, $rows_without_diez);
+                        $last_order_arr=array("name"=>$old_value['name']) + $last_order_arr;
+                        $second_chart[$key] = $last_order_arr;
                     }
-
-                    $last_order_arr = [];
-                    foreach ($converted_rows as $k => $value) {
-                        $last_order_arr[$value[0]] = $new_ordered_array[$value[0]];
-                    }
-
-                    $last_order_arr=array("name"=>$old_value['name']) + $last_order_arr;
-                    $second_chart[$key] = $last_order_arr;
                 }
 
                 if(!empty($question->stats_top_answers) && $question->type == 'multiple_choice') {
@@ -773,7 +944,22 @@ class StatsController extends FrontController
         		foreach ($results as $res) {
 
                     if($question->type == 'number') {
-                        $answer_number = $res->$answerField;
+                        foreach ($answers as $key => $value) {
+                            $value_string = $value;
+                            if (strpos( $value, '-') !== FALSE) {
+                                //from 0-100,0-1000
+                                $last_num = intval(explode('-', $value)[1]);
+
+                                if($res->$answerField <= $last_num) {
+                                    $answer_number = $value_string;
+                                    break;
+                                }
+                            } else {
+                                //from 0-10
+                                $answer_number = $res->$answerField;
+                                break;
+                            }
+                        }
                     } else {
                         $answer_number = $answers[ $res->$answerField-1];
                     }
@@ -830,7 +1016,22 @@ class StatsController extends FrontController
         		foreach ($results as $res) {
 
                     if($question->type == 'number') {
-                        $answer_number = $res->$answerField;
+                        foreach ($answers as $key => $value) {
+                            $value_string = $value;
+                            if (strpos( $value, '-') !== FALSE) {
+                                //from 0-100,0-1000
+                                $last_num = intval(explode('-', $value)[1]);
+
+                                if($res->$answerField <= $last_num) {
+                                    $answer_number = $value_string;
+                                    break;
+                                }
+                            } else {
+                                //from 0-10
+                                $answer_number = $res->$answerField;
+                                break;
+                            }
+                        }
                     } else {
                         $answer_number = $answers[ $res->$answerField-1];
                     }
@@ -838,7 +1039,6 @@ class StatsController extends FrontController
                     if($res->$scale===null || !isset( $answer_number )) {
                         continue;
                     }
-
 
         			if(!isset($main_chart[ $answer_number ])) {
         				$main_chart[ $answer_number ] = 0;
@@ -868,7 +1068,7 @@ class StatsController extends FrontController
                 }
 
                 //reorder answers by respondents desc if they're not from scale!!
-                if(empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder) {
+                if(empty($question->vox_scale_id) && empty($question->dont_randomize_answers) && $reorder && $question->type != 'number') {
                     $new_main_chart = [];
                     foreach ($main_chart as $k => $v) {
                         if(mb_strpos($k, '#')!==0) {
@@ -1075,14 +1275,12 @@ class StatsController extends FrontController
 
                     $dem_not_null = [];
 
-
                     foreach ($demographics as $demographic) {
                         if($demographic != 'gender' && $demographic != 'country_id' && (!empty(Request::input('dem-'.$demographic)) || Request::input('dem-'.$demographic) == 0)) {
                             $dem_options[$demographic] = explode(',', Request::input('dem-'.$demographic));
                         }
 
                         if($demographic == 'gender' || $demographic == 'country_id') {
-
                             $dem_not_null[] = $demographic;
                         }
                     }
@@ -1185,7 +1383,7 @@ class StatsController extends FrontController
                             $scales[$sitem->id] = $sitem;
                         }
 
-                        if( $q->type == 'single_choice' ) {
+                        if( $q->type == 'single_choice' || $q->type == 'number') {
                             $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
                             $cols2[] = '';
                         } else if( $q->type == 'scale' ) {
@@ -1324,6 +1522,8 @@ class StatsController extends FrontController
                                     $row[] = $thisanswer ? '1' : '0';
                                     $i++;
                                 }
+                            } else if($q->type == 'number') {
+                                $row[] = $answ->answer;
                             }
 
                             $rows[] = $row;
