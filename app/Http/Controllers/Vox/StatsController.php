@@ -187,13 +187,13 @@ class StatsController extends FrontController
                 }
                 if($dates || $question->respondent_count() < 50) {
 
-                    $results = $this->prepareQuery($question_id, $dates,[
+                    $results = VoxAnswer::prepareQuery($question_id, $dates,[
                         'dependency_answer' => $answer_id,
                         'dependency_question' => $question->stats_relation_id,
                     ]);
                 }
             } else {
-                $results = $this->prepareQuery($question_id, $dates, [
+                $results = VoxAnswer::prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id
                 ]);
             }
@@ -237,7 +237,7 @@ class StatsController extends FrontController
 
         	if($scale=='dependency') {
 
-                $total = $this->prepareQuery($question_id, $dates);
+                $total = VoxAnswer::prepareQuery($question_id, $dates);
                 $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
                 if($dates || $question->respondent_count() < 50) {
@@ -248,23 +248,13 @@ class StatsController extends FrontController
                     $results = VoxAnswersDependency::where('question_id', $question_id)->where('question_dependency_id', $question->stats_relation_id)->where('answer_id', $answer_id)->where('updated_at', '>=', Carbon::now()->addDays(-7))->get();
 
                     if($results->isEmpty()) {
-                        $results = $this->prepareQuery($question_id, null,[
+                        $results = VoxAnswer::prepareQuery($question_id, null,[
                             'dependency_answer' => $answer_id,
                             'dependency_question' => $question->stats_relation_id,
                         ]);
 
                         $results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt');
                         $results = $results->get();
-
-                        foreach ($results as $result) {
-                            $vda = new VoxAnswersDependency;
-                            $vda->question_dependency_id = $question->stats_relation_id;
-                            $vda->question_id = $question_id;
-                            $vda->answer_id = $answer_id;
-                            $vda->answer = $result->answer;
-                            $vda->cnt = $result->cnt;
-                            $vda->save();
-                        }
                     }
                 }
 
@@ -315,7 +305,7 @@ class StatsController extends FrontController
                     }
                     $main_chart[$answers_related[$key]] = 0;
                 }
-        		$results = $this->prepareQuery($question->stats_relation_id, $dates);
+        		$results = VoxAnswer::prepareQuery($question->stats_relation_id, $dates);
         		$results = $results->groupBy($answerField)->selectRaw($answerField.', COUNT(*) as cnt');
         		$results = $results->get();
         		foreach ($results as $res) {
@@ -384,7 +374,7 @@ class StatsController extends FrontController
 
         	} else if($scale=='gender') {
 
-                $total = $this->prepareQuery($question_id, $dates, [
+                $total = VoxAnswer::prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id
                 ])->whereNotNull('gender')->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
@@ -449,7 +439,7 @@ class StatsController extends FrontController
         			}
 
                     $totalm = $totalf = 0;
-                    $totalQuery = $this->prepareQuery($question_id, $dates, [
+                    $totalQuery = VoxAnswer::prepareQuery($question_id, $dates, [
                         'scale_answer_id' => $scale_answer_id, 
                         'scale' => $scale, 
                         'scale_options' => $scale_options
@@ -587,7 +577,7 @@ class StatsController extends FrontController
 
         	} else if($scale=='country_id') {
         		$countries = Country::with('translations')->get()->keyBy('id');
-                $total = $this->prepareQuery($question_id, $dates, [
+                $total = VoxAnswer::prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id
                 ]);
                 $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
@@ -749,7 +739,7 @@ class StatsController extends FrontController
 
         	} else if($scale=='age') {
 
-                $total = $this->prepareQuery($question_id, $dates, [
+                $total = VoxAnswer::prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id, 
                     'scale' => $scale, 
                     'scale_options' => $scale_options
@@ -804,7 +794,7 @@ class StatsController extends FrontController
                 
         	} else {
 
-                $total = $this->prepareQuery($question_id, $dates, [
+                $total = VoxAnswer::prepareQuery($question_id, $dates, [
                     'scale_answer_id' => $scale_answer_id, 
                     'scale' => $scale, 
                     'scale_options' => $scale_options
@@ -1782,48 +1772,6 @@ class StatsController extends FrontController
         }
 	}
 
-	private function prepareQuery($question_id, $dates, $options = []) {
-
-    	$results = VoxAnswer::whereNull('is_admin')
-        ->where('question_id', $question_id)
-        ->where('is_completed', 1)
-        ->where('is_skipped', 0)
-        ->has('user');        
-
-        if( isset($options['dependency_question']) && isset($options['dependency_answer']) ) {
-
-            $q = $options['dependency_question'];
-            $a = $options['dependency_answer'];
-            $results = $results->whereIn('user_id', function($query) use ($q, $a) {
-                $query->select('user_id')
-                ->from('vox_answers')
-                ->where('question_id', $q)
-                ->where('answer', $a);
-            } );
-
-        }
-
-        if( isset($options['scale_answer_id']) ) {
-            $results = $results->where('answer', $options['scale_answer_id']);
-        }
-
-        if( isset($options['scale_options']) && isset( $options['scale'] ) ) {
-            //dd($scale_options, $scale);
-            $results = $results->whereIn($options['scale'], array_values($options['scale_options']));
-        }
-
-    	if(is_array($dates)) {
-    		$from = Carbon::parse($dates[0]);
-    		$to = Carbon::parse($dates[1]);
-    		$results = $results->where('created_at', '>=', $from)->where('created_at', '<=', $to);
-    	} else if($dates) {
-    		$from = Carbon::parse($dates);
-    		$results = $results->where('created_at', '>=', $from);
-    	}
-
-    	return $results;
-	}
-
     public function processArray($arr) {
         $newarr = [];
         foreach ($arr as $key => $value) {
@@ -1992,7 +1940,7 @@ class StatsController extends FrontController
         if($count_img > 1) {
             exec('cd '.$folder.' && zip -r0 '.$folder.'.zip ./*');
         }        
-        
+
         $sess = [
             'download_stat_png' => $png_title
         ];

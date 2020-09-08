@@ -6,14 +6,12 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use App\Models\IncompleteRegistration;
-use App\Models\VoxAnswersDependency;
 use App\Models\ScrapeDentistResult;
 use App\Models\StopVideoReview;
 use App\Models\DcnTransaction;
 use App\Models\EmailTemplate;
 use App\Models\ScrapeDentist;
 use App\Models\AnonymousUser;
-use App\Models\VoxQuestion;
 use App\Models\LeadMagnet;
 use App\Models\UserInvite;
 use App\Models\UserAction;
@@ -326,7 +324,11 @@ class Kernel extends ConsoleKernel
 
                 foreach ($transactions as $trans) {
 
-                    $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
+                    try {
+                        $curl = file_get_contents('https://api.etherscan.io/api?module=transaction&action=gettxreceiptstatus&txhash='.$trans->tx_hash.'&apikey='.env('ETHERSCAN_API'));
+                    } catch (\Exception $e) {
+                        $curl = false;
+                    }
                     if(!empty($curl)) {
                         $curl = json_decode($curl, true);
                         if($curl['status']) {
@@ -1888,10 +1890,13 @@ NOT SEND TRANSACTIONS
         })->cron("*/1 * * * *");
 
         $schedule->call(function () {
+            echo 'Video reviews cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
             $video_reviews = Review::where('youtube_id', '!=', '')->where('created_at', '>=', Carbon::now()->addDays(-1))->count();
 
             if($video_reviews >= 5) {
+                echo 'Stop video reviews'.PHP_EOL.PHP_EOL.PHP_EOL;
+                
                 $stop_video_reviews = StopVideoReview::find(1);
                 $stop_video_reviews->stopped = true;
                 $stop_video_reviews->save();
@@ -1900,6 +1905,8 @@ NOT SEND TRANSACTIONS
                 $stop_video_reviews->stopped = false;
                 $stop_video_reviews->save();
             }
+
+            echo 'Video reviews cron - Done'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron('*/5 * * * *');
 
