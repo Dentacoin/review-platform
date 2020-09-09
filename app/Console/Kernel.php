@@ -580,7 +580,7 @@ NOT SEND TRANSACTIONS
                 foreach ($users as $user) {
                     $userNames[] = $user->getName();
 
-                    $user->status=='rejected';
+                    $user->status='rejected';
                     $user->save();
 
                     $action = new UserAction;
