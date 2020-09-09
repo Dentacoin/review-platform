@@ -66,6 +66,7 @@
                                     <option value="first" {!! 'first'==$search_status ? 'selected="selected"' : '' !!}>First</option>
                                     <option value="dont_retry" {!! 'dont_retry'==$search_status ? 'selected="selected"' : '' !!}>Don't Retry</option>
                                     <option value="not_sent" {!! 'not_sent'==$search_status ? 'selected="selected"' : '' !!}>Not Sent</option>
+                                    <option value="pending" {!! 'pending'==$search_status ? 'selected="selected"' : '' !!}>Pending</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
