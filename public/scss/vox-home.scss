@@ -507,6 +507,10 @@ $main-color: #38ace5;
 
     		img {
     			max-width: 76px;
+
+    			@media #{$phone} {
+    				max-width: 62px;
+    			}
     		}
 
     		p {

@@ -358,6 +358,9 @@
             display: none; } }
       .level-wrapper .container .col img {
         max-width: 76px; }
+        @media screen and (max-width: 768px) {
+          .level-wrapper .container .col img {
+            max-width: 62px; } }
       .level-wrapper .container .col p {
         font-size: 20px;
         color: white;
