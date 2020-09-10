@@ -4902,6 +4902,10 @@ svg:not(:root) {
 				margin-right: 28px;
 				position: relative;
 
+				@media screen and (max-width: 992px) and (min-width: 769px ) {
+					margin-right: 19px;
+				}
+
 				&::after {
 					content: '';
 				    width: 2px;
@@ -4911,6 +4915,10 @@ svg:not(:root) {
 				    top: 50%;
 				    right: -15px;
 				    transform: translateY(-50%);
+
+				    @media screen and (max-width: 992px) and (min-width: 769px ) {
+						right: -11px;
+					}
 				}
 			}
 		}
@@ -5145,6 +5153,10 @@ svg:not(:root) {
 				margin-right: 28px;
 				position: relative;
 
+				@media screen and (max-width: 992px) and (min-width: 769px ) {
+					margin-right: 19px;
+				}
+
 				&::after {
 					content: '';
 				    width: 2px;
@@ -5154,6 +5166,10 @@ svg:not(:root) {
 				    top: 50%;
 				    right: -15px;
 				    transform: translateY(-50%);
+
+				    @media screen and (max-width: 992px) and (min-width: 769px ) {
+						right: -11px;
+					}
 				}
 			}
 		}

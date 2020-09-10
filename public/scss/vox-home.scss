@@ -437,6 +437,178 @@ $main-color: #38ace5;
 	}
 }
 
+.level-wrapper {
+	background-color: #42b0e7;
+	padding: 25px 0px;
+    margin-bottom: 70px;
+
+    @media #{$phone} {
+    	padding: 15px 0px;
+    	margin-bottom: 30px;
+    }
+
+	.container {
+		max-width: 980px;
+    	margin: 0 auto;
+
+    	@media screen and (max-width: 992px) and (min-width: 769px ) {
+    		width: 100%;
+    		max-width: none;
+		    width: auto;
+		    margin: 0px;
+		    padding: 0px;
+    	}
+
+    	@media #{$phone} {
+    		padding: 0px 10px;
+    	}
+
+    	.flex {
+    		@media #{$phone} {
+    			flex-wrap: wrap;
+    			align-items: unset;
+    		}
+    	}
+
+    	.col {
+    		text-align: center;
+    		position: relative;
+
+    		@media screen and (max-width: 992px) and (min-width: 769px ) {
+    			padding: 0px;
+    		}
+
+    		@media #{$phone} {
+    			flex: none;
+    			padding: 0px;
+    			width: 33%;
+    		}
+
+    		&:nth-child(2) {
+    			@media #{$phone} {
+    				order: -1;
+    			}
+    		}
+
+    		&:after {
+    			content: '';
+			    position: absolute;
+			    right: 0px;
+			    height: 91px;
+			    width: 1px;
+			    top: 50%;
+			    transform: translateY(-50%);
+    			background-image: url('../new-vox-img/lifetime-border.png');
+
+    			@media #{$phone} {
+    				display: none;
+    			}
+    		}
+
+    		img {
+    			max-width: 76px;
+    		}
+
+    		p {
+    			font-size: 20px;
+    			color: white;
+    			font-weight: 300;
+
+    			@media screen and (max-width: 1200px) {
+    				font-size: 19px;
+    			}
+
+    			@media screen and (max-width: 992px) and (min-width: 769px ) {
+    				font-size: 17px;
+    			}
+
+    			@media #{$phone} {
+    				font-size: 16px;
+    			}
+
+    			&.bold {
+    				font-weight: bold;
+    			}
+
+    			&.big {
+    				font-size: 40px;
+    				line-height: 33px;
+
+    				@media #{$phone} {
+	    				font-size: 30px;
+	    			}
+    			}
+    		}
+
+    		&.lifetime-rewards {
+    			text-align: left;
+    			padding-left: 20px;
+
+    			@media screen and (max-width: 992px) and (min-width: 769px ) {
+    				padding-left: 11px;
+    			}
+
+    			@media #{$phone} {
+    				width: 100%;
+    				display: flex;
+    				padding-left: 5px;
+					justify-content: space-between;
+					padding-top: 18px;
+    				margin-top: 15px;
+    			}
+
+    			&:after {
+    				display: none;
+
+    				@media #{$phone} {
+	    				display: block;
+	    				background-image: url('../new-vox-img/lifetime-border-horizontal.png');
+	    				width: 91px;
+	    				height: 1px;
+	    				top: 0px;
+	    				left: 50%;
+	    				transform: translateX(-50%);
+	    			}
+    			}
+
+    			.flex {
+    				@media #{$phone} {
+    					align-items: center;
+    				}
+    			}
+
+    			.flex:first-child {
+    				margin-bottom: 10px;
+
+    				@media #{$phone} {
+    					margin-bottom: 0px;
+    				}
+    			}
+
+    			.circle {
+    				width: 14px;
+    				min-width: 14px;
+				    height: 14px;
+				    background: white;
+				    border-radius: 50%;
+				    margin-right: 10px;
+
+				    @media #{$phone} {
+				    	width: 9px;
+	    				min-width: 9px;
+					    height: 9px;
+				    	margin-right: 5px;
+				    }
+
+				    @media screen and (max-width: 370px) {
+				    	display: none;
+				    }
+    			}
+    		}
+    	}
+	}
+}
+
 .daily-poll-welcome {
 	text-align: center;
 

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 177.1 177.1"
+	 style="enable-background:new 0 0 177.1 177.1;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{clip-path:url(#SVGID_4_);}
+	.st2{fill:#198DC6;}
+</style>
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  bottomLeftOrigin="true" height="193.9" width="177.1" x="-257.4" y="-4"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<circle class="st0" cx="88.5" cy="88.5" r="88.5"/>
+<g>
+	<defs>
+		<circle id="SVGID_1_" cx="88.5" cy="88.5" r="88.5"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+	</clipPath>
+</g>
+<g>
+	<defs>
+		<circle id="SVGID_3_" cx="88.5" cy="88.5" r="88.5"/>
+	</defs>
+	<clipPath id="SVGID_4_">
+		<use xlink:href="#SVGID_3_"  style="overflow:visible;"/>
+	</clipPath>
+	<g class="st1">
+		<path class="st2" d="M15.4,125.5c-8.1,0-14.5,6.7-14.1,14.8l1.5,31.9c0.1,1.6,1.4,2.9,3,2.9H25c1.6,0,3-1.3,3-2.9l1.5-31.9
+			C29.9,132.3,23.5,125.5,15.4,125.5z"/>
+		<path class="st2" d="M129,125.5L129,125.5c-8.1,0-14.5,6.7-14.1,14.8l1.5,31.9c0.1,1.6,1.4,2.9,3,2.9h19.1c1.6,0,3-1.3,3-2.9
+			l1.5-31.9C143.5,132.3,137,125.5,129,125.5z"/>
+		<path class="st2" d="M61.5,149.2l1-7.8c1-8.4-5.5-15.9-14-15.9h0c-8.5,0-15.1,7.4-14.1,15.8l1,7.9c0.3,2.3,0,4.7-0.8,7l-0.2,0.5
+			c-1.3,3.7-2,7.5-2,11.4l0,4c0,1.7,1.4,3,3,3h25.8c1.7,0,3-1.4,3-3l0-4c0-4-0.7-8-2.1-11.8C61.5,154,61.2,151.6,61.5,149.2z"/>
+		<path class="st2" d="M122.6,119.4c-1,0.4-2.1,0.6-3.2,0.6c-0.2,0-0.4,0-0.6,0c0.8,0.7,1.7,1.4,2.7,1.9c6,3.1,13.3,0.8,16.4-5.2
+			c3.1-6,0.8-13.3-5.2-16.4c-2.6-1.3-5.4-1.7-8.1-1.1l3.2,8.7C129.6,112.4,127.2,117.6,122.6,119.4z"/>
+		<path class="st2" d="M175,156.3c-0.8-2.3-1.1-4.7-0.8-7.1l1-7.8c1-8.4-5.5-15.9-14-15.9c-8.5,0-15.1,7.4-14.1,15.8l1,7.9
+			c0.3,2.3,0,4.7-0.8,7l-0.2,0.5c-1.3,3.7-2,7.5-2,11.4l0,4c0,1.7,1.4,3,3,3H174c1.7,0,3-1.4,3-3l0-4
+			C177.1,164.1,176.4,160.1,175,156.3z"/>
+		<path class="st2" d="M105.3,91.5l8.6,21.6c0.4,1.1,1.2,2,2,2.6c1,0.7,2.2,1.2,3.5,1.2c0.7,0,1.4-0.1,2.1-0.4
+			c3.1-1.2,4.7-4.6,3.5-7.7l-3.2-8.7l-10.3-27.7c-2.2-6-7.9-9.9-14.3-9.9H86c-4.4,0-8.4-2.3-10.6-6.1L59.3,28.7
+			c-1.2-2-3.3-3.1-5.4-3.1c-1.4,0-2.7,0.4-3.9,1.4v0c-2.3,1.8-3,5-1.7,7.6l22.4,45.8c3.7,6.9,0.2,18.1-1.8,30.6
+			c-1.4,8.7-1.5,14.5-0.8,22.1c1.4,15.3,3.1,43.4,3.7,55.3c0.2,3.1,2.8,5.5,5.9,5.5h0.9c3.1,0,5.7-2.4,5.9-5.6l2.9-53.4
+			c0-0.9,0.8-1.6,1.7-1.6c0,0,0,0,0,0c0.9,0,1.6,0.7,1.7,1.6l3.1,53.5c0.2,3.1,2.8,5.5,5.9,5.5c3.1,0,5.7-2.4,5.9-5.5
+			c0.7-11.7,2.4-39.1,3.1-54.4c0.4-7.7,0.2-15.9-1.1-23c-1.5-8.2-2.1-11.2-2.5-14.2c-0.2-1.5-0.2-3.1,0.1-4.6L105.3,91.5z"/>
+		
+			<ellipse transform="matrix(0.9538 -0.3004 0.3004 0.9538 -22.9148 13.5813)" class="st2" cx="32.7" cy="81.3" rx="12.2" ry="12.2"/>
+		<ellipse transform="matrix(0.9538 -0.3004 0.3004 0.9538 -8.7266 28.9146)" class="st2" cx="89.7" cy="42.8" rx="15" ry="15"/>
+		<ellipse transform="matrix(0.9528 -0.3036 0.3036 0.9528 -32.9826 9.9239)" class="st2" cx="15.4" cy="111" rx="12.2" ry="12.2"/>
+		
+			<ellipse transform="matrix(0.9528 -0.3036 0.3036 0.9528 -31.4237 19.9502)" class="st2" cx="48.4" cy="111" rx="12.2" ry="12.2"/>
+		
+			<ellipse transform="matrix(0.9528 -0.3036 0.3036 0.9528 -26.1059 54.152)" class="st2" cx="161.1" cy="111" rx="12.2" ry="12.2"/>
+		
+			<ellipse transform="matrix(0.9538 -0.3004 0.3004 0.9538 -17.7559 47.1317)" class="st2" cx="144.4" cy="81.3" rx="12.2" ry="12.2"/>
+	</g>
+</g>
+</svg>

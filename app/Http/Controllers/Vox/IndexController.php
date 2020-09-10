@@ -41,12 +41,12 @@ class IndexController extends FrontController {
 			'all' => trans('vox.page.home.sort-all'),
 		];
 
-		$strength_arr = null;
-		$completed_strength = null;
-		if ($this->user) {
-			$strength_arr = UserStrength::getStrengthPlatform('vox', $this->user);
-			$completed_strength = $this->user->getStrengthCompleted('vox');
-		}
+		// $strength_arr = null;
+		// $completed_strength = null;
+		// if ($this->user) {
+		// 	$strength_arr = UserStrength::getStrengthPlatform('vox', $this->user);
+		// 	$completed_strength = $this->user->getStrengthCompleted('vox');
+		// }
 
 		if( $this->user ) {
 			$voxList = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
@@ -78,9 +78,9 @@ class IndexController extends FrontController {
         $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
 
 		return $this->ShowVoxView('home', array(
-			'strength_arr' => $strength_arr,
             'is_warning_message_shown' => $is_warning_message_shown,
-			'completed_strength' => $completed_strength,
+			// 'strength_arr' => $strength_arr,
+			// 'completed_strength' => $completed_strength,
 			'countries' => Country::with('translations')->get(),
 			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',
 			'social_image' => $seos->getImageUrl(),

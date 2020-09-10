@@ -27,28 +27,28 @@ use Carbon\Carbon;
 
 use App\Models\DentistPageview;
 use App\Models\BlacklistBlock;
-use App\Models\Recommendation;
 use App\Models\DcnTransaction;
 use App\Models\EmailTemplate;
 use App\Models\AnonymousUser;
-use App\Models\VoxCrossCheck;
 use App\Models\DentistClaim;
+use App\Models\UserStrength;
 use App\Models\WhitelistIp;
 use App\Models\UserAction;
 use App\Models\DcnCashout;
 use App\Models\UserLogin;
 use App\Models\DcnReward;
 use App\Models\Blacklist;
-use App\Models\BanAppeal;
 use App\Models\UserTeam;
 use App\Models\GasPrice;
 use App\Models\UserBan;
 use App\Models\UserAsk;
 use App\Models\Reward;
+use App\Models\Review;
 use App\Models\Email;
 use App\Models\Vox;
 
 use Request;
+use Cookie;
 use Image;
 use Auth;
 use Mail;
@@ -781,10 +781,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $result;
     }
 
-
     public function getWorkHoursAttribute() {
         return json_decode($this->attributes['work_hours'], true);
     }
+
     public function setWorkHoursAttribute($value) {
         $this->attributes['work_hours'] = $value ? json_encode($value) : '';
     }
@@ -792,6 +792,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function getSocialsAttribute() {
         return json_decode($this->attributes['socials'], true);
     }
+
     public function setSocialsAttribute($value) {
         if (is_array($value)) {
             foreach ($value as $key => $v) {
@@ -868,8 +869,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             // foreach ($geores->results[0]->address_components as $ac) {
             //     $ret['info'][] = implode(', ', $ac->types).': '.$ac->long_name;
             // }
-
-        }    
+        }
 
         return $ret;
     }
@@ -927,7 +927,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 break;
             }
         }
-
 
         $city_fields = [
             'postal_town',
@@ -1141,6 +1140,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     //
     //
 
+    public function filledDailyPolls() {
+        return DcnReward::where('user_id', $this->id)->where('platform', 'vox')->where('type', 'daily_poll')->get()->pluck('reference_id')->toArray();
+    }
+
     public function getTotalBalance($platform=null) {
         $income = DcnReward::where('user_id', $this->id);
         if (!empty($platform)) {
@@ -1191,6 +1194,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function surveys_rewards() {
         return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->where('platform', 'vox')->where('type', 'survey')->orderBy('id', 'DESC');
+    }
+
+    public function countAllSurveysRewards() {
+        return count(DcnReward::where('user_id', $this->id)->where('platform', 'vox')->where('type', 'survey')->where('reference_id', '!=', 34)->get()->pluck('reference_id')->toArray());
     }
 
     public function vox_surveys_and_polls() {
@@ -1640,6 +1647,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
                 $reward->save();
             }
+
+            //Cookie::queue(Cookie::forget('first_test'));
             setcookie('first_test', null, time()-600, '/');
 
         }
@@ -1682,13 +1691,13 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
     public function getWorkHoursText() {
         $dows = [
-            1=> 'Mon',
-            'Tue',
-            'Wed',
-            'Thur',
-            'Fri',
-            'Sat',
-            'Sun',
+            1=> trans('trp.page.index.monday'),
+            trans('trp.page.index.tuesday'),
+            trans('trp.page.index.wednesday'),
+            trans('trp.page.index.thursday'),
+            trans('trp.page.index.friday'),
+            trans('trp.page.index.saturday'),
+            trans('trp.page.index.sunday'),
         ];
         $opens = null;
 
@@ -1707,7 +1716,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         $open = Carbon::createFromTime( intval($oa[0]), intval($oa[1]), 0, $tz );
                         $close = Carbon::createFromTime( intval($ca[0]), intval($ca[1]), 0, $tz );
                         if( $date->lessThan($close) && $date->greaterThan($open) ) {
-                            $opens = '<span class="green-text">Open now</span>&nbsp;<span>('.$work_h[$dow][0].' - '.$work_h[$dow][1].')</span>';
+                            $opens = '<span class="green-text">'.trans('trp.page.index.open-now').'</span>&nbsp;<span>('.$work_h[$dow][0].' - '.$work_h[$dow][1].')</span>';
                         }
                     }
                 } 
@@ -1716,7 +1725,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     while($dow<=7) {
                         $dow++;
                         if( isset( $work_h[$dow] ) ) {
-                            $opens = '<span>Opens on '.$dows[$dow].' at '.$work_h[$dow][0].'</span>';
+                            $opens = '<span>'.trans('trp.page.index.opens-on', ['day'=>$dows[$dow], 'hours'=>$work_h[$dow][0]]).'</span>';
                             break;
                         }
                     }
@@ -1724,7 +1733,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                         $wh = $work_h;
                         reset($wh);
                         $dow = key( $wh );
-                        $opens = '<span>Opens on '.$dows[$dow].' at '.$wh[$dow][0].'</span>';
+                        $opens = '<span>'.trans('trp.page.index.opens-on', ['day'=>$dows[$dow], 'hours'=>$wh[$dow][0]]).'</span>';
                     }
                 }
             }
@@ -1741,7 +1750,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                     $ret[] = '<a href="'.$workplace->clinic->getLink().'">'.$workplace->clinic->getName().'</a>';
                 } else {
                     if( $isme ) {
-                        $ret[] = '<a href="'.$workplace->clinic->getLink().'">'.$workplace->clinic->getName().' (pending)</a>';
+                        $ret[] = '<a href="'.$workplace->clinic->getLink().'">'.$workplace->clinic->getName().' ('.trans('trp.page.index.pending').')</a>';
                     }
                 }
             }
@@ -2309,5 +2318,22 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         }
 
         return $unsubscribed;
+    }
+
+    public function getVoxLevelName() {
+
+        $all_surveys_count = Vox::where('type', 'normal')->count();
+        $all_done_surveys_count = count($this->filledVoxes());
+
+        $percentage = ceil($all_done_surveys_count / $all_surveys_count * 100);
+
+        foreach (config('vox-levels-names') as $name => $value) {
+            if($percentage <= $value) {
+                $level_name = $name;
+                break;
+            }
+        }
+
+        return $level_name;
     }
 }

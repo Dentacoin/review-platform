@@ -3560,6 +3560,9 @@ svg:not(:root) {
         justify-content: flex-end;
         margin-right: 28px;
         position: relative; }
+        @media screen and (max-width: 992px) and (min-width: 769px) {
+          .taken-survey-wrapper .survey-time .col:first-child {
+            margin-right: 19px; } }
         .taken-survey-wrapper .survey-time .col:first-child::after {
           content: '';
           width: 2px;
@@ -3569,6 +3572,9 @@ svg:not(:root) {
           top: 50%;
           right: -15px;
           transform: translateY(-50%); }
+          @media screen and (max-width: 992px) and (min-width: 769px) {
+            .taken-survey-wrapper .survey-time .col:first-child::after {
+              right: -11px; } }
     .taken-survey-wrapper .survey-time p {
       display: inline-block; }
       @media screen and (max-width: 1300px) {
@@ -3716,6 +3722,9 @@ svg:not(:root) {
       justify-content: flex-end;
       margin-right: 28px;
       position: relative; }
+      @media screen and (max-width: 992px) and (min-width: 769px) {
+        .new-style-swiper .survey-time .col:first-child {
+          margin-right: 19px; } }
       .new-style-swiper .survey-time .col:first-child::after {
         content: '';
         width: 2px;
@@ -3725,6 +3734,9 @@ svg:not(:root) {
         top: 50%;
         right: -15px;
         transform: translateY(-50%); }
+        @media screen and (max-width: 992px) and (min-width: 769px) {
+          .new-style-swiper .survey-time .col:first-child::after {
+            right: -11px; } }
   .new-style-swiper .survey-time p {
     display: inline-block; }
     @media screen and (max-width: 1300px) {

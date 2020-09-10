@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\WithdrawalsCondition;
 use App\Models\UserGuidedTour;
 
 use Carbon\Carbon;
@@ -427,7 +428,7 @@ class UserStrength extends Model {
 
 
                 $total_balance = $user->getTotalBalance();
-                if ($total_balance > env('VOX_MIN_WITHDRAW') ) {
+                if ($total_balance > WithdrawalsCondition::find(1)->min_amount ) {
                     $ret[] = [
                         'title' => trans('trp.strength.dentist.withdraw-rewards.title'),
                         'text' => nl2br(trans('trp.strength.dentist.withdraw-rewards.text', ['link' => '<span class="open-str-link" href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/">', 'endlink' => '</span>'])),
@@ -440,7 +441,7 @@ class UserStrength extends Model {
                         'event_label' => 'WithdrawRewards',
                     ];
                     $array_number_shuffle['not_important']++;
-                } else if ( $user->history->isNotEmpty() && $total_balance < env('VOX_MIN_WITHDRAW') ) {
+                } else if ( $user->history->isNotEmpty() && $total_balance < WithdrawalsCondition::find(1)->min_amount ) {
                     $ret['completed_steps']++;
                 }
 
@@ -634,7 +635,7 @@ class UserStrength extends Model {
                 ];
 
                 $total_balance = $user->getTotalBalance();
-                if ($total_balance > env('VOX_MIN_WITHDRAW') ) {
+                if ($total_balance > WithdrawalsCondition::find(1)->min_amount ) {
                     $ret[] = [
                         'title' => trans('trp.strength.patient.withdraw-rewards.title'),
                         'text' => nl2br(trans('trp.strength.patient.withdraw-rewards.text', ['link' => '<a href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/" target="_blank">', 'endlink' => '</a>'])),
@@ -854,7 +855,7 @@ class UserStrength extends Model {
                 ];
 
                 $total_balance = $user->getTotalBalance();
-                if ($total_balance > env('VOX_MIN_WITHDRAW') ) {
+                if ($total_balance > WithdrawalsCondition::find(1)->min_vox_amount ) {
                     $ret[] = [
                         'title' => trans('vox.strength.dentist.withdraw-rewards.title'),
                         'text' => nl2br(trans('vox.strength.dentist.withdraw-rewards.text', ['link' => '<a href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/" target="_blank">', 'endlink' => '</a>' ])),
@@ -957,7 +958,7 @@ class UserStrength extends Model {
                 }
 
                 $total_balance = $user->getTotalBalance();
-                if ($total_balance > env('VOX_MIN_WITHDRAW') ) {
+                if ($total_balance > WithdrawalsCondition::find(1)->min_vox_amount ) {
                     $ret[] = [
                         'title' => trans('vox.strength.patient.withdraw-rewards.title'),
                         'text' => nl2br(trans('vox.strength.patient.withdraw-rewards.text', ['link' => '<span class="open-str-link" href="https://blog.dentacoin.com/what-is-dentacoin-8-use-cases/">', 'endlink' => '</span>'])),

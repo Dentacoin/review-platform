@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use App\Models\IncompleteRegistration;
+use App\Models\WithdrawalsCondition;
 use App\Models\ScrapeDentistResult;
 use App\Models\StopVideoReview;
 use App\Models\DcnTransaction;
@@ -317,6 +318,12 @@ class Kernel extends ConsoleKernel
         // })->cron("* * * * *"); //05:00h
 
         $schedule->call(function () {
+            echo '
+PENDING TRANSACTIONS
+
+========================
+
+';
 
             $transactions = DcnTransaction::where('status', 'pending')->whereNotNull('tx_hash')->orderBy('id', 'asc')->take(100)->get();
 
@@ -335,6 +342,7 @@ class Kernel extends ConsoleKernel
                             if(!empty($curl['result']['status'])) {
                                 $trans->status = 'completed';
                                 $trans->save();
+                                echo 'COMPLETED PENDING - '.$trans->id.PHP_EOL;
                                 if( $trans->user && !empty($trans->user->email) ) {
                                     $trans->user->sendTemplate( 20, [
                                         'transaction_amount' => $trans->amount,
@@ -837,7 +845,7 @@ NOT SEND TRANSACTIONS
                         AND `id` NOT IN ( 
                             SELECT `user_id` FROM wallet_addresses
                         )
-                        AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) > ".env('VOX_MIN_WITHDRAW')."
+                        AND (rewards_total - IF (withdraws_total IS NULL, 0,withdraws_total) ) > ".WithdrawalsCondition::find(1)->min_vox_amount."
                         AND `deleted_at` is null
                         AND `id` NOT IN ( 
                             SELECT `user_id` FROM emails WHERE template_id = 57 AND `created_at` > '".date('Y-m-d', time() - 86400*30)." 00:00:00'

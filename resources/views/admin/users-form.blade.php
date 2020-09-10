@@ -467,7 +467,9 @@
 
                                                 <p style="color: red;" class="col-md-12">⇧ User/s with this dcn address already exists:</p>
                                                 @foreach(App\Models\WalletAddress::where('user_id', '!=', $item->id)->where('dcn_address', 'LIKE', $wa->dcn_address)->get() as $dw)
-                                                    <p style="color: red;" class="col-md-12">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dw->user_id) }}">{{ App\Models\User::withTrashed()->find($dw->user_id)->name }}</a></p>
+                                                    @if(!empty(App\Models\User::withTrashed()->find($dw->user_id)))
+                                                        <p style="color: red;" class="col-md-12">{{ $loop->iteration }}. <a href="{{ url('cms/users/edit/'.$dw->user_id) }}">{{ App\Models\User::withTrashed()->find($dw->user_id)->name }}</a></p>
+                                                    @endif
                                                 @endforeach
                                             @endif
                                         @endforeach

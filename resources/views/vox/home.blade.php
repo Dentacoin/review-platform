@@ -1,6 +1,43 @@
 @extends('vox')
 
 @section('content')
+	
+	@if(!empty($user) && $user->platform != 'external')
+		<div class="level-wrapper">
+			<div class="container">
+				<div class="flex flex-center">
+					<div class="col">
+						<img src="{{ url('new-vox-img/vox-'.$user->getVoxLevelName().'-icon.svg') }}">
+						<p class="bold">{{ trans('vox.page.home.levels.'.$user->getVoxLevelName()) }}</p>
+					</div>
+					<div class="col">
+						<p class="big bold">{{ $user->countAllSurveysRewards() }}</p>
+						<p>Surveys Taken</p>
+					</div>
+					<div class="col">
+						<p class="big bold">{{ count($user->filledDailyPolls()) }}</p>
+						<p>Daily Polls</p>
+					</div>
+					<div class="col lifetime-rewards">
+						<div class="flex flex-center">
+							<div class="circle"></div>
+							<div class="rew">
+								<p class="bold">{{ number_format($user->vox_surveys_and_polls->sum('reward')) }} DCN</p>
+								<p>Lifetime Rewards</p>
+							</div>
+						</div>
+						<div class="flex flex-center">
+							<div class="circle"></div>
+							<div class="rew">
+								<p class="bold">{{ number_format($user->getTotalBalance('vox')) }} DCN</p>
+								<p>Currently redeemable</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	@endif
 
 	<div class="container">
 
@@ -45,12 +82,6 @@
 		    		</div>
 		    	</div>
 		    </div>
-		@endif
-
-		@if(!empty($user) && $user->platform != 'external')
-			<div class="strength-parent" id="strength-parent">
-				@include('vox.template-parts.strength-scale')
-			</div>
 		@endif
 		
 		<div class="another-questions">
