@@ -195,6 +195,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function cross_check() {
         return $this->hasMany('App\Models\VoxCrossCheck', 'user_id', 'id');
     }
+    public function all_rewards() {
+        return $this->hasMany('App\Models\DcnReward', 'user_id', 'id')->orderBy('id', 'DESC');
+    }
     public function dentist_fb_page() {
         return $this->hasMany('App\Models\DentistFbPage', 'dentist_id', 'id');
     }

@@ -22,14 +22,14 @@
 						<div class="flex flex-center">
 							<div class="circle"></div>
 							<div class="rew">
-								<p class="bold">{{ number_format($user->vox_surveys_and_polls->sum('reward')) }} DCN</p>
+								<p class="bold">{{ number_format($user->all_rewards->sum('reward')) }} DCN</p>
 								<p>Lifetime Rewards</p>
 							</div>
 						</div>
 						<div class="flex flex-center">
 							<div class="circle"></div>
 							<div class="rew">
-								<p class="bold">{{ number_format($user->getTotalBalance('vox')) }} DCN</p>
+								<p class="bold">{{ number_format($user->getTotalBalance()) }} DCN</p>
 								<p>Currently redeemable</p>
 							</div>
 						</div>
