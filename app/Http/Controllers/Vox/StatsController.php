@@ -703,6 +703,7 @@ class StatsController extends FrontController
         		}
 
                 $reorder = $this->reorderStats($main_chart, $question);
+
                 //reorder answers by respondents desc if they're not from scale!!
                 if($reorder) {
 
@@ -891,6 +892,7 @@ class StatsController extends FrontController
                     }
                 }
 
+                //dd($second_chart, $converted_rows);
                 if(!empty($question->stats_top_answers) && $question->type == 'multiple_choice') {
                     $multiple_top_ans = intval(explode('_', $question->stats_top_answers)[1]);
 
@@ -899,16 +901,22 @@ class StatsController extends FrontController
                             unset($converted_rows[$key]);
                         }
                     }
-
                     foreach ($second_chart as $key => $value) {
                         $i=0;
-                        foreach ($value as $k => $v) {
-                            $i++;
-                            if($i > $multiple_top_ans + 1) {
-                                unset($value[$k]);
+
+                        if(is_array($value)) {
+
+                            foreach ($value as $k => $v) {
+                                $i++;
+                                if($i > $multiple_top_ans + 1) {
+                                    if($k != 'all_count' && $k != 'count') {
+
+                                        unset($value[$k]);
+                                    }
+                                }
                             }
+                            $second_chart[$key] = $value;
                         }
-                        $second_chart[$key] = $value;
                     }
                 }
 
