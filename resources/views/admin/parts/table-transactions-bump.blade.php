@@ -6,7 +6,7 @@
 		Reject
 	</a>
 @else
-	@if($item->status == 'failed' || $item->status == 'stopped' || $item->status == 'dont_retry' || $item->status == 'pending' || $item->status == 'first' )
+	@if($item->status == 'failed' || $item->status == 'stopped' || $item->status == 'dont_retry' || $item->status == 'pending' )
 		<a class="btn btn-primary" href="{{ url('cms/transactions/bump/'.$item->id) }}">
 			Bump
 		</a>
