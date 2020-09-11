@@ -255,6 +255,12 @@ $(document).ready(function(){
 			$(this).closest('form').attr('action', $(this).closest('form').attr('original-action')+'/'+$(this).attr('id'));
 			$(this).closest('form').submit();
 		});
+		
+		$('#mass-pending').click( function(e) {
+			e.preventDefault();
+			$(this).closest('form').attr('action', $(this).closest('form').attr('original-action')+'/'+$(this).attr('id'));
+			$(this).closest('form').submit();
+		});
 	}
 
 

@@ -227,6 +227,20 @@ class TransactionsController extends AdminController
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
     }
 
+    public function massPending(  ) {
+        if( Request::input('ids') ) {
+            $pending_trans = DcnTransaction::whereIn('id', Request::input('ids'))->get();
+            foreach ($pending_trans as $pt) {
+
+                $pt->status = 'pending';
+                $pt->save();
+            }
+        }
+
+        $this->request->session()->flash('success-message', 'All selected transactions are pending' );
+        return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/transactions');
+    }
+
     public function bumpDontRetry() {
 
         $transactions = DcnTransaction::where('status', 'dont_retry')->get();

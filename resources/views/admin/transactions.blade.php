@@ -136,6 +136,7 @@
                             <div style="display: flex">
                                 <button type="submit" name="mass-bump" id="mass-bump" class="btn btn-primary" style="flex: 1">Bump transactions</button>
                                 <button type="submit" name="mass-stop" id="mass-stop" class="btn btn-danger" style="flex: 1">Stop transactions</button>
+                                <button type="submit" name="mass-pending" id="mass-pending" class="btn btn-warning" style="flex: 1">"Pending" transactions</button>
                             </div>
                         </form>
                     </div>
