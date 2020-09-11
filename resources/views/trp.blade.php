@@ -80,26 +80,6 @@
 		</script>
 		<!-- End Facebook Pixel Code -->
 
-		@if(!empty($_COOKIE['marketing_cookies']) && ($current_page == 'welcome-dentist' || $current_page == 'dentist') )
-			<script type="text/javascript">
-			    if (typeof AriticSDKLoaded == 'undefined') {
-			        var AriticSDKLoaded = true;
-			        var head            = document.getElementsByTagName('head')[0];
-			        var script          = document.createElement('script');
-			        script.type         = 'text/javascript';
-			        script.src          = 'https://ariticpinpoint.dentacoin.com/ma/media/js/aritic-form.min.js';
-			        script.onload       = function() {
-			            AriticSDK.onLoad();
-			        };
-			        head.appendChild(script);
-			        var AriticDomain = 'https://ariticpinpoint.dentacoin.com/ma';
-			        var AriticLang   = {
-			            'submittingMessage': "Please wait..."
-			        }
-			    }
-			</script>
-		@endif
-
 		<link rel="apple-touch-icon" sizes="57x57" href="{{ url('trp-fav/apple-icon-57x57.png') }}">
 		<link rel="apple-touch-icon" sizes="60x60" href="{{ url('trp-fav/apple-icon-60x60.png') }}">
 		<link rel="apple-touch-icon" sizes="72x72" href="{{ url('trp-fav/apple-icon-72x72.png') }}">
@@ -236,21 +216,6 @@
 						<a class="social" href="https://www.facebook.com/dentacoin.trusted.reviews/" target="_blank"><i class="fab fa-facebook-f"></i></a>
 					</div>
 				</div>
-
-				@if(($current_page == 'welcome-dentist' || $current_page == 'dentist') && !empty($_COOKIE['marketing_cookies']) )
-					<script>
-			            (function(w,d,t,u,n,a,m){
-			                if(typeof w['AriticTrackingObject'] !== 'undefined') return;w['AriticTrackingObject']=n;
-			                w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),
-			                m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
-			            })(window,document,'script','https://dentacoin.ariticapp.com/ma/atc.js','at');
-
-			        </script> 
-			        <script type="text/javascript" src="https://dentacoin.ariticapp.com/ma/patc.js"></script>
-			        <script type="text/javascript">
-				        _aaq.push(['trackPageView']);
-				    </script>
-				@endif
 			</footer>
 		</div>
 
