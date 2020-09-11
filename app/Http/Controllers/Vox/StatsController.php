@@ -176,7 +176,6 @@ class StatsController extends FrontController
 
             $answerField = $scale_answer_id ? 'scale' : 'answer';
 
-
             if($scale=='dependency') {
                 if(!empty($question->stats_answer_id)) {
                     $answer_id = $question->stats_answer_id;
@@ -255,7 +254,6 @@ class StatsController extends FrontController
             }
 
             $related_question_type = false;
-
             $converted_rows = [];
 
         	if($scale=='dependency') {
@@ -416,13 +414,37 @@ class StatsController extends FrontController
                     'scale_answer_id' => $scale_answer_id
                 ])->whereNotNull('gender')->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
-                $results_main_chart = $results->whereNotNull('gender')->groupBy($answerField, 'gender')->selectRaw($answerField.', gender, COUNT(*) as cnt')->get();
+                $results_main_chart = $results->whereNotNull('gender');
+                if($question->type == 'rank') {
+                    $results_main_chart = $results_main_chart->groupBy($answerField, 'scale', 'gender')->selectRaw($answerField.', 
+                        scale, 
+                        gender, 
+                        SUM(`scale`) AS `sbor`, 
+                        COUNT(*) as cnt, 
+                        ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
+                    ')->get();
+
+                    //SUM( '.(count($answers)+1).' - `scale`) / COUNT(*) AS `weight`
+                } else {
+                    $results_main_chart = $results_main_chart->groupBy($answerField, 'gender')->selectRaw($answerField.', gender, COUNT(*) as cnt')->get();
+                }
 
                 if( $scale_options ) {
                     $results = $results->whereIn($scale, array_values($scale_options));
                 }
-        		$results = $results->whereNotNull('gender')->groupBy($answerField, 'gender')->selectRaw($answerField.', gender, COUNT(*) as cnt');
-                $results = $results->get();
+        		$results = $results->whereNotNull('gender');
+
+                if($question->type == 'rank') {
+                    $results = $results->groupBy($answerField, 'scale', 'gender')->selectRaw($answerField.', 
+                        scale, 
+                        gender, 
+                        SUM(`scale`) AS `sbor`, 
+                        COUNT(*) as cnt, 
+                        ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
+                    ')->get();
+                } else {
+                    $results = $results->groupBy($answerField, 'gender')->selectRaw($answerField.', gender, COUNT(*) as cnt')->get();
+                }
 
                 foreach ($answers as $key => $value) {
                     $second_chart[$value] = 0;
@@ -430,9 +452,7 @@ class StatsController extends FrontController
                 }
 
                 foreach ($results_main_chart as $res_main) {
-
                     $answer_number = $this->getAnswerNumber($question->type, $answers, $res_main->$answerField);
-
                     if(!isset( $answer_number )) {
                         continue;
                     }
@@ -440,7 +460,12 @@ class StatsController extends FrontController
                     if(!isset($main_chart[ $answer_number ])) {
                         $main_chart[ $answer_number ] = 0;
                     }
-                    $main_chart[ $answer_number ] += $res_main->cnt;
+
+                    if($question->type == 'rank') {
+                        $main_chart[ $answer_number ] += $res_main->weight;
+                    } else {
+                        $main_chart[ $answer_number ] += $res_main->cnt;
+                    }
                 }
 
         		foreach ($results as $res) {
@@ -479,10 +504,18 @@ class StatsController extends FrontController
         			}
         			//$main_chart[ $answers[ $res->$answerField-1 ] ] += $res->cnt;
         			if($res->gender=='f') {
-        				$second_chart[ $answer_number ] += $res->cnt; //m
+                        if($question->type == 'rank') {
+                            $second_chart[ $answer_number ] += $res->weight; //m
+                        } else {
+                            $second_chart[ $answer_number ] += $res->cnt; //m
+                        }        				
         			}
         			if($res->gender=='m') {
-        				$third_chart[ $answer_number ] += $res->cnt; //f
+                        if($question->type == 'rank') {
+                            $third_chart[ $answer_number ] += $res->weight; //f
+                        } else {
+        				    $third_chart[ $answer_number ] += $res->cnt; //f
+                        }
         			}
 
                     $totalm = $totalf = 0;
@@ -616,9 +649,19 @@ class StatsController extends FrontController
                 ]);
                 $total = $total->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
 
-        		$results = $results->groupBy($answerField, 'country_id')->selectRaw($answerField.', country_id, COUNT(*) as cnt');
-        		$results = $results->get();
+                if($question->type == 'rank') {
+                    $results = $results->groupBy($answerField, 'scale', 'country_id')->selectRaw($answerField.', 
+                        scale, 
+                        country_id, 
+                        SUM(`scale`) AS `sbor`, 
+                        COUNT(*) as cnt, 
+                        ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
+                    ')->get();
+                } else {
+                    $results = $results->groupBy($answerField, 'country_id')->selectRaw($answerField.', country_id, COUNT(*) as cnt')->get();
+                }
 
+                $country_resp_count = [];
                 $second_chart_before = [];
         		foreach ($results as $res) {
 
@@ -631,7 +674,11 @@ class StatsController extends FrontController
         			if(!isset($main_chart[ $answer_number ])) {
         				$main_chart[ $answer_number ] = 0;
         			}
-        			$main_chart[ $answer_number ] += $res->cnt;
+                    if($question->type == 'rank') {
+                        $main_chart[ $answer_number ] += $res->weight;
+                    } else {
+                        $main_chart[ $answer_number ] += $res->cnt;
+                    }
 
         			if( $res->country_id ) {
                         $country = $countries->get($res->country_id);
@@ -645,7 +692,12 @@ class StatsController extends FrontController
                             }
         				}
                         if(empty($answer_id) || $res->$answerField==$answer_id) {
-                            $second_chart_before[ $country->code ][ $answer_number ] = $res->cnt; //m
+                            if($question->type == 'rank') {
+                                $second_chart_before[ $country->code ][ $answer_number ] = intval($res->weight);
+                                $country_resp_count[ $country->code ][ $answer_number ] = $res->cnt;
+                            } else {
+                                $second_chart_before[ $country->code ][ $answer_number ] = $res->cnt;
+                            }
                         }
         			}
         		}
@@ -654,6 +706,7 @@ class StatsController extends FrontController
                 //reorder answers by respondents desc if they're not from scale!!
                 if($reorder) {
 
+                    arsort($main_chart);
                     $sum = 0;
                     foreach ($main_chart as $key => $value) {
                         $sum+=$value;
@@ -743,7 +796,12 @@ class StatsController extends FrontController
 
                         $last_order_arr=array("name"=>$old_value['name']) + $last_order_arr;
                         $second_chart[$key] = $last_order_arr;
+
+                        if($question->type == 'rank') {
+                            
+                        }
                     }
+
                 } else {
                     $sum = 0;
                     foreach ($main_chart as $key => $value) {
@@ -775,6 +833,61 @@ class StatsController extends FrontController
 
                         $last_order_arr=array("name"=>$old_value['name']) + $last_order_arr;
                         $second_chart[$key] = $last_order_arr;
+                    }
+                }
+
+                if($question->type == 'rank') {
+                    $array_foreach = $country_resp_count;
+                } else {
+                    $array_foreach = $second_chart;
+                }
+
+                $max_resp_from_country = 0;
+                foreach ($array_foreach as $key => $value) {
+                    $max_resp = 0;
+                    $total_answr_count = 0;
+
+                    foreach ($value as $k => $v) {
+                        if(is_numeric($v)) {
+                            $total_answr_count+= $v;
+                            if($max_resp <= $v) {
+                                $max_resp = $v;
+                            }
+                        }
+                    }
+
+                    if($max_resp_from_country < $max_resp) {
+                        $max_resp_from_country = $max_resp;
+                    }
+
+                    $second_chart[$key]['all_count'] = $question->type != 'rank' ? $total_answr_count : 0;
+                    $second_chart[$key]['count'] = $max_resp;
+                }
+                $second_chart['max_resp_from_country'] = $max_resp_from_country;
+
+                if($question->type == 'rank') {
+                    foreach ($second_chart as $key => $value) {
+                        $total_answr_count = 0;
+
+                        if(is_array($value)) {
+
+                            foreach ($value as $k => $v) {
+                                if(is_numeric($v) && $k != 'count' ) {
+                                    $total_answr_count+= $v;
+                                }
+                            }
+
+                            $second_chart[$key]['all_count'] = $total_answr_count;
+                        }
+                    }
+                }
+
+                if($question->type == 'rank') {
+                    foreach ($converted_rows as $key => $value) {
+                        $converted_rows[$key] = [
+                            $value[0],
+                            $main_chart[$value[0]],
+                        ];
                     }
                 }
 
@@ -816,8 +929,17 @@ class StatsController extends FrontController
                 if( $scale_options ) {
                     $results = $results->whereIn($scale, array_values($scale_options));
                 }
-        		$results = $results->groupBy($answerField, 'age')->selectRaw($answerField.', age, COUNT(*) as cnt');
-        		$results = $results->get();
+                if($question->type == 'rank') {
+                    $results = $results->groupBy($answerField, 'scale', 'age')->selectRaw($answerField.', 
+                        scale, 
+                        age, 
+                        SUM(`scale`) AS `sbor`, 
+                        COUNT(*) as cnt, 
+                        ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
+                    ')->get();
+                } else {
+                    $results = $results->groupBy($answerField, 'age')->selectRaw($answerField.', age, COUNT(*) as cnt')->get();
+                }
 
         		$age_to_group = config('vox.age_groups');
 
@@ -848,10 +970,18 @@ class StatsController extends FrontController
         			if(!isset($main_chart[ $answer_number ])) {
         				$main_chart[ $answer_number ] = 0;
         			}
-        			$main_chart[ $answer_number ] += $res->cnt;
+                    if($question->type == 'rank') {
+                        $main_chart[ $answer_number ] += $res->weight;
+                    } else {
+                        $main_chart[ $answer_number ] += $res->cnt;
+                    }
 
         			if( $res->age ) {
-	        			$second_chart_before[ $age_to_group[$res->age] ][ $answer_number ] = $res->cnt; //m
+                        if($question->type == 'rank') {
+                            $second_chart_before[ $age_to_group[$res->age] ][ $answer_number ] = $res->weight; //m
+                        } else {
+                            $second_chart_before[ $age_to_group[$res->age] ][ $answer_number ] = $res->cnt; //m
+                        }
         			}
         		}
                 
@@ -867,9 +997,17 @@ class StatsController extends FrontController
                     $results = $results->whereIn($scale, array_values($scale_options));
                 }
                 
-        		$results = $results->groupBy($answerField, $scale)->selectRaw($answerField.', '.$scale.', COUNT(*) as cnt');
-        		$results = $results->get();
-
+                if($question->type == 'rank') {
+                    $results = $results->groupBy($answerField, 'scale', $scale)->selectRaw($answerField.', 
+                        scale, 
+                        '.$scale.', 
+                        SUM(`scale`) AS `sbor`, 
+                        COUNT(*) as cnt, 
+                        ( '.(count($answers)+1).' * COUNT(*) - SUM(`scale`) ) / COUNT(*) AS `weight`
+                    ')->get();
+                } else {
+                    $results = $results->groupBy($answerField, $scale)->selectRaw($answerField.', '.$scale.', COUNT(*) as cnt')->get();
+                }
 
                 $age_to_group = config('vox.details_fields.'.$scale.'.values');
                 if (!empty($scale_options)) {
@@ -899,10 +1037,18 @@ class StatsController extends FrontController
         			if(!isset($main_chart[ $answer_number ])) {
         				$main_chart[ $answer_number ] = 0;
         			}
-        			$main_chart[ $answer_number ] += $res->cnt;
+        			if($question->type == 'rank') {
+                        $main_chart[ $answer_number ] += $res->weight;
+                    } else {
+                        $main_chart[ $answer_number ] += $res->cnt;
+                    }
 
         			if( $res->$scale ) {
-    	        		$second_chart_before[ $age_to_group[$res->$scale] ][ $answer_number ] = $res->cnt; //m
+    	        		if($question->type == 'rank') {
+                            $second_chart_before[ $age_to_group[$res->$scale] ][ $answer_number ] = $res->weight; //m
+                        } else {
+                            $second_chart_before[ $age_to_group[$res->$scale] ][ $answer_number ] = $res->cnt; //m
+                        }
         			}
     		    }
         	}
@@ -1229,10 +1375,18 @@ class StatsController extends FrontController
                         if( $q->type == 'single_choice' || $q->type == 'number') {
                             $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
                             $cols2[] = '';
+
                         } else if( $q->type == 'scale' ) {
                             $list = json_decode($q->answers, true);
                             $cols[] = $q->stats_title.' ['.$list[(Request::input('scale-for') - 1)].']';
                             $cols2[] = '';
+
+                        } else if( $q->type == 'rank' ) {
+                            $list = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
+                            foreach ($list as $l) {
+                                $cols[] = in_array('relation', $demographics) ? $q->questionWithTooltips() : strip_tags(!empty($q->stats_title_question) ? $q->questionWithoutTooltips() : $q->stats_title);
+                                $cols2[] = $q->removeAnswerTooltip(mb_substr($l, 0, 1)=='!' ? mb_substr($l, 1) : $l);
+                            }
 
                         } else if( $q->type == 'multiple_choice' ) {
                             $list = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
@@ -1270,6 +1424,8 @@ class StatsController extends FrontController
 
                         if($q->type == 'scale') {
                             $all_results = $results->where('answer', Request::input('scale-for'))->get();
+                        } else if ($q->type == 'rank') {
+                            $all_results = $results->groupBy('user_id')->get();
                         } else {
                             $all_results = $results->get();
                         }
@@ -1356,14 +1512,22 @@ class StatsController extends FrontController
                                 $answerwords = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) : json_decode($q->answers, true);
                                 $row[] = isset( $answerwords[ ($answ->scale)-1 ] ) ? $answerwords[ ($answ->scale)-1 ] : '0';
 
+                            } else if( $q->type == 'rank' ) {
+                                $vox_answers = VoxAnswer::where('user_id', $answ->user_id)->where('question_id', $q->id)->get();
+                                foreach ($vox_answers as $va) {
+                                    $row[] = $va->scale;
+                                }
+                                
                             } else if( $q->type == 'multiple_choice' ) {
-                                $list = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) : json_decode($q->answers, true);
+                                $list = json_decode($question->answers, true);
+                                $answerwords = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true);
 
-                                $i=1;
-                                foreach ($list as $l) {
-                                    $thisanswer = $i == $answ->answer;
-                                    $row[] = $thisanswer ? '1' : '0';
-                                    $i++;
+                                foreach ($list as $k => $l) {
+                                    foreach ($qanswers as $qa) {
+                                        if($qa->scale == $k + 1) {
+                                            $row[] = $qa->answer;
+                                        }
+                                    }
                                 }
                             } else if($q->type == 'number') {
                                 $row[] = $answ->answer;

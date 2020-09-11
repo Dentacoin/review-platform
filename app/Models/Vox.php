@@ -112,7 +112,7 @@ class Vox extends Model {
     }
 
     public function stats_questions() {
-        return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->where('type', '!=', 'rank')->where('used_for_stats', '!=', '')->orderBy('order', 'ASC');
+        return $this->hasMany('App\Models\VoxQuestion', 'vox_id', 'id')->where('used_for_stats', '!=', '')->orderBy('order', 'ASC');
     }
     
     public function stats_main_question() {
@@ -758,6 +758,7 @@ class Vox extends Model {
 
         return $ret;
     }
+
 }
 
 class VoxTranslation extends Model {

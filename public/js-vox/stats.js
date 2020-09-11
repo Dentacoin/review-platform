@@ -227,7 +227,7 @@ $(document).ready(function(){
                     $(this).find('.second-chart').parent().removeClass('country-legend');
 
                     if (($(this).find('.multiple-stat').length || data.related_question_type == 'multiple') && data.related_question_type != 'single' ) {
-                        drawMultipleColumns(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, data.total, data.multiple_top_answers);
+                        drawMultipleColumns(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, data.total, data.multiple_top_answers, data.question_type);
                     } else {
                         drawChart(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, true, can_click_on_legend, scale == 'dependency' ? true : data.vox_scale_id, scale == 'dependency' ? 'single_choice' : data.question_type, scale);
                     }
@@ -257,6 +257,8 @@ $(document).ready(function(){
 
                     $(elm).find('.legend').show();
 
+                    var multiple_columns = data.question_type == 'multiple_choice' || data.question_type == 'rank' ? true : false;
+
                     if(scale=='dependency') {
 
                         drawDependencyColumns(converted_rows, $(this).find('.second-chart')[0], data.relation_info.answer+1, data.answer_id);
@@ -278,13 +280,13 @@ $(document).ready(function(){
 
                     } else if(scale=='gender') {
 
-                        if(data.question_type == 'multiple_choice' || data.answer_id) {
+                        if(multiple_columns || data.answer_id) {
                             $(this).find('.total-gender').show();
                         }
                         $(this).find('.total-m').show().find('b').html(data.totalm);
                         $(this).find('.total-f').show().find('b').html(data.totalf);
 
-                        if(data.question_type == 'multiple_choice' || data.answer_id) {
+                        if(multiple_columns || data.answer_id) {
                             drawGenderColumns(main_chart_data, data.second_chart, data.third_chart, $(this).find('.second-chart')[0], options, data.totalf, data.totalm, scale_options_arr, data.answer_id, main_chart_data, data.multiple_top_answers, data.vox_scale_id, data.question_type, );
                         } else {
                             drawChart(data.second_chart, $(this).find('.second-chart')[0], {
@@ -298,13 +300,13 @@ $(document).ready(function(){
                             $(this).find('.total.total-m').attr('for', $(this).find('.total.total-m').attr('custom-for') + '-1');
                         }
 
-                        if(data.question_type == 'multiple_choice') {
+                        if(multiple_columns) {
                             $(this).find('.legend').hide();
                         } else {
                             setupLegend(main_chart_data_clone, data.total ,$(this).find('.legend'), legend, data.answer_id, can_click_on_legend, data.vox_scale_id);
                         }
 
-                        if((data.question_type == 'multiple_choice' && $('.main-multiple-gender').length && data.answer_id) || (data.question_type != 'multiple_choice' && data.answer_id )) {
+                        if((multiple_columns && $('.main-multiple-gender').length && data.answer_id) || (data.question_type != 'multiple_choice' && data.question_type != 'rank' && data.answer_id )) {
 
                             $(this).find('.main-multiple-gender').find('.custom-legend').addClass('inactive');
                             $(this).find('.main-multiple-gender').find('.custom-legend[answer-id="'+data.answer_id+'"]').removeClass('inactive');
@@ -312,7 +314,7 @@ $(document).ready(function(){
                             drawAnswerGenderColumns($(this).find('.second-chart')[0], data.answer_id, data.question_type);
 
                             if ($(window).outerWidth() <= 768) {
-                                if (data.question_type == 'multiple_choice') {
+                                if (multiple_columns) {
                                     $(this).find('.gender-text').text($(this).find('.custom-legend:not(.inactive)').find('.group-heading').text());
                                     $(this).find('.nav-color').css('background-color', $(this).find('.custom-legend:not(.inactive)').find('.custombar span').css('background-color'));
                                 } else {
@@ -326,7 +328,7 @@ $(document).ready(function(){
                             }
                         } 
 
-                        if(data.question_type == 'multiple_choice' || data.answer_id) {
+                        if(multiple_columns || data.answer_id) {
                         } else {
                             drawChart(data.third_chart, $(this).find('.third-chart')[0], {
                                 pieHole: 0.6,
@@ -334,11 +336,11 @@ $(document).ready(function(){
                             }, can_click_on_legend, null, data.vox_scale_id, data.question_type);
                         }
 
-                        if (data.question_type != 'multiple_choice' && data.answer_id) {
+                        if (data.question_type != 'multiple_choice' && data.question_type != 'rank' && data.answer_id) {
                             $(this).find('.chart-3').hide();
                         }
 
-                        if(data.question_type == 'multiple_choice' || data.answer_id) {
+                        if(multiple_columns || data.answer_id) {
                             if (data.answer_id) {
                                 $(this).find('.hint').html('').html('Click on an answer to see data for it or <a href="javascript:;" class="to-all">see all</a>').show();
                             } else {
@@ -352,7 +354,7 @@ $(document).ready(function(){
                             }
                         }
 
-                        if (data.question_type!='multiple_choice' && data.answer_id) {
+                        if (data.question_type!='multiple_choice' && data.question_type != 'rank' && data.answer_id) {
                             $('.chart-2').addClass('chart-flex');
                             $('.total-f').hide();
                             $(this).find('.total-gender .total-f').show();
@@ -366,13 +368,17 @@ $(document).ready(function(){
                         $(this).find('.map-hint').html('Answers distribution by country').show();
 
                         setTimeout( (function() {
-                            drawMap(this.rows, $(this.container).find('.third-chart')[0], data.question_type == 'multiple_choice' ? data.multiple_top_answers : null);
+                            drawMap(this.rows, $(this.container).find('.third-chart')[0], data.question_type == 'multiple_choice' ? data.multiple_top_answers : null, data.question_type);
                         }).bind({
                             rows: data.second_chart,
                             container: this
                         }), 100 );
 
-                        drawMapColumns( converted_rows, $(this).find('.second-chart')[0], data.question_type == 'multiple_choice' ? data.multiple_top_answers : null);
+                        // if(data.question_type == 'rank') {
+                        //     drawMultipleColumns(main_chart_data, $(this).find('.second-chart')[0], main_chart_options, data.total, data.multiple_top_answers, data.question_type);
+                        // } else {
+                            drawMapColumns( converted_rows, $(this).find('.second-chart')[0], data.question_type == 'multiple_choice' ? data.multiple_top_answers : null, data.question_type);
+                        // }
                         
                         $('.mobile-button-legend').hide();
                         $(elm).find('.legend').hide();
@@ -380,7 +386,7 @@ $(document).ready(function(){
                     } else {
 
                         $(this).find('.third-chart').html('');
-                        if(data.question_type != 'multiple_choice') {
+                        if(data.question_type != 'multiple_choice' && data.question_type != 'rank') {
                             setupLegend(main_chart_data_clone, data.total, $(this).find('.legend'), legend, data.answer_id, can_click_on_legend, data.vox_scale_id);
                             if (data.answer_id) {
                                 $(this).find('.hint').html('').html('Click on a pie slice to see data <br/> only for the respective answer or <a href="javascript:;" class="to-all">see all</a>').show();
@@ -406,9 +412,9 @@ $(document).ready(function(){
 
                     $('input').prop('disabled', false);
 
-                    if ((data.question_type=='multiple_choice' && scale != 'country_id' && $(window).outerWidth() > 1200) || (data.question_type!='multiple_choice' && scale == 'gender' && data.answer_id) ) {
+                    if ((multiple_columns && scale != 'country_id' && $(window).outerWidth() > 1200) || (data.question_type!='multiple_choice' && data.question_type != 'rank' && scale == 'gender' && data.answer_id) ) {
                         $(elm).find('.third-chart').parent().hide();
-                        if (data.question_type=='multiple_choice' && scale != 'country_id' && $(window).outerWidth() > 1200) {
+                        if (multiple_columns && scale != 'country_id' && $(window).outerWidth() > 1200) {
                             $(elm).find('.main-chart').parent().css('max-width', '33.3%');
                         }
                         
@@ -1175,7 +1181,7 @@ $(document).ready(function(){
         }
     }
 
-    var drawMapColumns = function(rows, container, multiple_top_answers) {
+    var drawMapColumns = function(rows, container, multiple_top_answers, question_type) {
 
         $(container).html('<div class="mobile-chart"></div>');
         container = $(container).find('.mobile-chart');
@@ -1209,12 +1215,11 @@ $(document).ready(function(){
                     }
                 }
             }
-
             for(var j=1; j<rows[i].length; j++) {
                 var pl = 80*rows[i][j]/max + 1;
                 var color = chart_colors[i-1];
                 if( typeof(rows[0][j])!='object' ) {
-                    $(container).find('.sort-stat[answer-id="'+i+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+(pl ? parseInt(pl) : 1)+'%; background-color: '+color+';"></span> '+(!isNaN(rows[i][j]) ? (rows[i][j]*100).toFixed(1) : 0 ) +'%</div>');
+                    $(container).find('.sort-stat[answer-id="'+i+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+(pl ? parseInt(pl) : 1)+'%; background-color: '+color+';"></span> '+(question_type == 'rank' ? rows[i][j] : (!isNaN(rows[i][j]) ? (rows[i][j]*100).toFixed(1) : 0 ) +'%')+'</div>');
                 }
             }
         }
@@ -1338,7 +1343,7 @@ $(document).ready(function(){
         }
     }
 
-    var drawMultipleColumns = function(rows, container, more_options, totalCount, multiple_top_answers) {
+    var drawMultipleColumns = function(rows, container, more_options, totalCount, multiple_top_answers, question_type) {
 
         $(container).html('<div class="mobile-chart"></div>');
         container = $(container).find('.mobile-chart');
@@ -1375,7 +1380,7 @@ $(document).ready(function(){
             for(var j=1; j<rows[i].length; j++) {
                 var pl = 80*rows[i][j]/max + 1;
                 if( typeof(rows[0][j])!='object' ) {
-                    $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+chart_colors[i]+'"></span> '+((rows[i][j]/ totalCount)*100).toFixed(1)+'%</div>');
+                    $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar"> <span class="legend-color" style="width: '+parseInt(pl)+'%; background-color: '+chart_colors[i]+'"></span> '+(question_type == 'rank' ? rows[i][j] : ((rows[i][j]/ totalCount)*100).toFixed(1)+'%')+'</div>');
                 }
             }
         }
@@ -1408,56 +1413,29 @@ $(document).ready(function(){
         var width = $(window).width()<1200 && !$(container).closest('.st-download').length ? $(container).closest('.graphs').innerWidth() : 100+'%';
         $(container).css('width', width );
 
-        //Dependency + Answer ID
-        var globalfMax = null;
-
+        var maxf = null;
         if( rowsf.length && rowsf[0].length==2 ) {
-            var globalfMax = 0 ;
+            var maxf = 0 ;
             for(var i=0;i<rowsf.length;i++) {
-                if( rowsf[i][1] > globalfMax) {
-                    globalfMax = rowsf[i][1];
+                if( rowsf[i][1] > maxf) {
+                    maxf = rowsf[i][1];
                 }
             }
         }
-        var globalmMax = null;
 
+        var maxm = null;
         if( rowsm.length && rowsm[0].length==2 ) {
-            var globalmMax = 0 ;
+            var maxm = 0 ;
             for(var i=0;i<rowsm.length;i++) {
-                if( rowsm[i][1] > globalmMax) {
-                    globalmMax = rowsm[i][1];
+                if( rowsm[i][1] > maxm) {
+                    maxm = rowsm[i][1];
                 }
             }
         }
 
         for(var i=0; i<rowsf.length; i++) {
-            //$(container).append('<div answer-id="'+(i + 1)+'" class="custom-legend"><div class="group-heading">'+rowsf[i][0]+'</div></div>');
             $(container).append('<div answer-id="'+(i + 1)+'" class="custom-legend"></div>');
 
-            if( globalfMax ) {
-                var maxf = globalfMax;
-            } else {
-                var maxf = 0;
-                for(var j=1; j<rowsf[i].length; j++) {
-                    if(rowsf[i][j] > maxf) {
-                        maxf = rowsf[i][j];
-                    }
-                }
-            }
-
-            if( globalmMax ) {
-                var maxm = globalmMax;
-            } else {
-                var maxm = 0;
-                if(rowsm.length) {
-
-                    for(var j=1; j<rowsm[i].length; j++) {
-                        if(rowsm[i][j] > maxm) {
-                            maxm = rowsm[i][j];
-                        }
-                    }
-                }
-            }
             for(var j=1; j<rowsf[i].length; j++) {
 
                 if($(window).outerWidth() > 768) {
@@ -1465,7 +1443,6 @@ $(document).ready(function(){
                     if(rowsm[i]) {
                         var plm = 80*rowsm[i][j]/maxm + 1;
                     }
-                    
                 } else {
                     var plf = 72*rowsf[i][j]/maxf + 1;
                     if(rowsm[i]) {
@@ -1475,11 +1452,10 @@ $(document).ready(function(){
 
                 if( typeof(rowsf[0][j])!='object' ) {
                     // if(rowsf[i][j]){
-                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-f"> <img src="'+window.location.origin+'/new-vox-img/women-icon.svg"><span class="legend-color" style="width: '+parseInt(plf)+'%; opacity: 0.4; background-color: '+chart_colors[i]+';"></span> '+((rowsf[i][j]/ totalfCount)*100).toFixed(1)+'%</div>');
+                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-f"> <img src="'+window.location.origin+'/new-vox-img/women-icon.svg"><span class="legend-color" style="width: '+parseInt(plf)+'%; opacity: 0.4; background-color: '+chart_colors[i]+';"></span> '+(question_type == 'rank' ? rowsf[i][j] : ((rowsf[i][j]/ totalfCount)*100).toFixed(1)+'%')+'</div>');
                     // }
-
                     // if(rowsm[i][j]) {
-                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-m"> <img src="'+window.location.origin+'/new-vox-img/man-icon.svg"><span class="legend-color" style="width: '+parseInt(plm)+'%; opacity: 0.7; background-color: '+chart_colors[i]+';"></span> '+(( (rowsm[i] ? rowsm[i][j] : 0 )/ totalmCount)*100).toFixed(1)+'%</div>');
+                        $(container).find('.custom-legend[answer-id="'+(i + 1)+'"]').append('<div class="custombar clearfix legend-m"> <img src="'+window.location.origin+'/new-vox-img/man-icon.svg"><span class="legend-color" style="width: '+parseInt(plm)+'%; opacity: 0.7; background-color: '+chart_colors[i]+';"></span> '+(question_type == 'rank' ? rowsm[i][j] : ((rowsm[i][j]/ totalmCount)*100).toFixed(1)+'%')+'</div>');
                     // }
                 }
             }
@@ -1522,7 +1498,7 @@ $(document).ready(function(){
         $(container).find('.custom-legend[answer-id="'+a_id+'"]').addClass('verticle-gender').show();
         
         $(container).find('.custom-legend[answer-id="'+a_id+'"]').children().each( function() {
-            if (question_type == 'multiple_choice' || ($(container).closest('.more-q-content').length) || $(window).width() <= 768) {
+            if (question_type == 'multiple_choice' || question_type == 'rank' || ($(container).closest('.more-q-content').length) || $(window).width() <= 768) {
                 $(this).find('span').height($(this).find('span').outerWidth());
             } else {
                 $(this).find('span').height($(this).find('span').outerWidth() * 3 );
@@ -1537,7 +1513,7 @@ $(document).ready(function(){
         $(container).closest('.stat').find('.main-multiple-gender').addClass('lower-margin');
     }
 
-    var drawMap = function(rows, container, multiple_top_answers) {
+    var drawMap = function(rows, container, multiple_top_answers, question_type) {
 
         var map = am4core.create(container, am4maps.MapChart);
         map.geodata = am4geodata_worldLow;
@@ -1582,7 +1558,7 @@ $(document).ready(function(){
 
                     ev.target.setState("highlight");
                     if(map_country_data.pieData!== undefined) {
-                        drawMapColumns( map_country_data.pieData, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers);
+                        drawMapColumns( map_country_data.pieData, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers, question_type);
                         $(this).closest('.graphs').find('.map-hint').html('Answers distribution in <b>' + map_country + '</b>' ).show();
                     }
 
@@ -1590,7 +1566,7 @@ $(document).ready(function(){
                     map_country = null;
                     map_country_data = null;
 
-                    drawMapColumns( converted_rows, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers);
+                    drawMapColumns( converted_rows, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers, question_type);
                 }
             }
 
@@ -1607,7 +1583,7 @@ $(document).ready(function(){
                     ev.target.setState("hovered");                    
                     $(this).closest('.graphs').find('.map-hint').html('Answers distribution in <b>' + ev.target.tooltipDataItem.dataContext.name + '</b>' ).show();
                 }
-                drawMapColumns( ev.target.dataItem.dataContext.pieData, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers);
+                drawMapColumns( ev.target.dataItem.dataContext.pieData, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers, question_type);
                 
             }
         }).bind(container));
@@ -1623,7 +1599,7 @@ $(document).ready(function(){
             }
 
             
-            drawMapColumns( map_country_data ? map_country_data.pieData : converted_rows, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers);
+            drawMapColumns( map_country_data ? map_country_data.pieData : converted_rows, $(this).closest('.graphs').find('.second-chart')[0], multiple_top_answers, question_type);
         }).bind(container));
 
         polygonSeries.mapPolygons.template.adapter.add("tooltipText", function(text, target, key) {
@@ -1647,48 +1623,47 @@ $(document).ready(function(){
         // Remove Antarctica
         polygonSeries.exclude = ["AQ"];
 
-        // Add some data
-        var max = 0;
-        var total = rows.reduce(function (a, b) {
-            var rowTotal = b.reduce(function (c, d) {
-                return parseInt(d[1]) ? c + d[1] : c;
-            }, 0);
-            if(rowTotal>max) {
-                max = rowTotal;
-            }
-            return a + rowTotal;
-        }, 0);
+        //get total respondents
+        var max = rows[rows.length-1][1];
+        rows = rows.slice(0,-1);
+
+        var total = 0;
+        for (var i in rows) {
+            total+= rows[i][rows[i].length-1][1];
+        }
 
         var chartData = [];
         for(var i in rows) {
-            var rowTotal = rows[i].reduce(function (c, d) {
-                return parseInt(d[1]) ? c + d[1] : c;
-            }, 0);
+            var resp_total = 0;
+            resp_total+= rows[i][rows[i].length-1][1];
+            rows[i] = rows[i].slice(0,-1);
 
+            rowTotal = rows[i][rows[i].length-1][1];
+            rows[i] = rows[i].slice(0,-1);
 
             //20 - 96
             //var lummax
 
-            var rgb = hslToRgb(0, 0, 0.96 - (rowTotal/max)*0.76 ); // 20 == 100% // 96 == 0%
+            var rgb = hslToRgb(0, 0, 0.96 - ((question_type == 'rank' ? resp_total : rowTotal)/max)*0.76 ); // 20 == 100% // 96 == 0%
 
             var pieData = [
                 ['', '']
             ];
             for(var j = 2; j < rows[i].length; j++) {
-                pieData.push([ rows[i][j][0] , rows[i][j][1] / rowTotal ]);
+                pieData.push([ rows[i][j][0] , rows[i][j][1] / (question_type == 'rank' ? resp_total : rowTotal) ]);
             }
-            //console.log( pieData );
 
             chartData.push({
                 "id": rows[i][0], //rows[i][0],
                 "name": rows[i][1][1],
-                "value": (rowTotal/total*100).toFixed(1),
-                "count": rowTotal,
+                "value": ((question_type == 'rank' ? resp_total : rowTotal)/total*100).toFixed(1),
+                "count": question_type == 'rank' ? resp_total : rowTotal,
                 "fill": am4core.color(rgb),
                 "hoverColor": am4core.color("#119c88"),
                 "pieData": pieData,
             });
         }
+        
         polygonSeries.data = chartData;
 
         // Bind "fill" property to "fill" key in data

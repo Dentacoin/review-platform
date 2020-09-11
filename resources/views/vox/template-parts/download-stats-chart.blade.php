@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<div class="graphs flex {!! $question->type=='multiple_choice' ? 'multiple-stat' : '' !!}" style="background-color: #f5f5f53b !important;">
+<div class="graphs flex {!! $question->type=='multiple_choice' || $question->type=='rank' ? 'multiple-stat' : '' !!}" style="background-color: #f5f5f53b !important;">
 
 	<div class="loader-mask stats-mask">
 	    <img class="stats-loader" src="{{ url('new-vox-img/dentavox-statistics-loader.gif') }}" alt="Dentavox statistics loader">
@@ -21,7 +21,7 @@
 		</div>
 		<div class="hint"></div>
 	</div>
-	@if($question->type!='multiple_choice')
+	@if($question->type!='multiple_choice' && $question->type!='rank')
 		<a href="javascript:;" class="mobile-button-legend">
 			<img src="{{ url('new-vox-img/stats-legend.svg') }}"><i class="fas fa-arrow-up"></i>Check legend
 		</a>
@@ -56,7 +56,7 @@
 					{!! trans('vox.page.stats.total-men') !!}: <b></b>
 				</label>
 			</div>
-			@if($question->type!='multiple_choice')
+			@if($question->type!='multiple_choice' && $question->type!='rank')
 				<div class="total total-f">
 					{!! trans('vox.page.stats.total-women') !!}: <b></b>
 				</div>
@@ -75,7 +75,7 @@
 			<div class="total total-m">
 				{!! trans('vox.page.stats.total-men') !!}: <b></b>
 			</div>
-			@if($question->type!='multiple_choice')
+			@if($question->type!='multiple_choice' && $question->type!='rank')
 				<div class="icon total-m">
 				</div>
 			@endif

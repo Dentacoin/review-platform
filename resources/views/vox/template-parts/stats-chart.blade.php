@@ -27,7 +27,7 @@
 	</div>
 </div>
 
-<div class="graphs flex {!! $question->type=='multiple_choice' ? 'multiple-stat' : '' !!}">
+<div class="graphs flex {!! $question->type=='multiple_choice' || $question->type=='rank' ? 'multiple-stat' : '' !!}">
 
 	@if(false && count(json_decode($question->answers, true)) > 9)
 		<div class="legend flex more-q-legend">
@@ -47,7 +47,7 @@
 		<div class="hint"></div>
 		<div class="relation-hint" style="display: none;" for-single="Click on a pie slice to see data for the respective answer." for-multiple="Click on a column to see data for the respective answer.">Click on a pie slice to see data for the respective answer.</div>
 	</div>
-	@if($question->type!='multiple_choice')
+	@if($question->type!='multiple_choice' && $question->type!='rank')
 		<a href="javascript:;" class="mobile-button-legend">
 			<img src="{{ url('new-vox-img/stats-legend.svg') }}"><i class="fas fa-arrow-up"></i>Check legend
 		</a>
@@ -58,7 +58,7 @@
 			<a href="javascript:;" class="active" scale="dependency" scale-name="Relation">Relation</a>
 		@endif
 		@foreach( $question->stats_fields as $sk)
-			<a href="javascript:;" class="{!! $loop->first && $question->used_for_stats!='dependency' ? 'active' : '' !!} {!! array_key_exists($sk, config('vox.details_fields')) || $sk == 'age' || ($sk == 'gender' && $question->type == 'multiple_choice') ? 'with-children' : '' !!}" scale="{{ $sk }}"  scale-name="{{ trans('vox.page.stats.group-by-'.$sk) }}">
+			<a href="javascript:;" class="{!! $loop->first && $question->used_for_stats!='dependency' ? 'active' : '' !!} {!! array_key_exists($sk, config('vox.details_fields')) || $sk == 'age' || ($sk == 'gender' && ($question->type == 'multiple_choice' || $question->type == 'rank' )) ? 'with-children' : '' !!}" scale="{{ $sk }}"  scale-name="{{ trans('vox.page.stats.group-by-'.$sk) }}">
 				{{ trans('vox.page.stats.group-by-'.$sk) }}
 
 				@if(array_key_exists($sk, config('vox.details_fields')))
@@ -91,7 +91,7 @@
 							</label>
 						@endforeach
 					</div>
-				@elseif($sk == 'gender' && $question->type == 'multiple_choice')
+				@elseif($sk == 'gender' && ($question->type == 'multiple_choice' || $question->type == 'rank' ))
 					<div class="scales-filter">
 						<label for="scale-gender-all-{{ $question->id }}-1" class="select-all-scales-label active">
 							<i class="far fa-square"></i>
@@ -136,7 +136,7 @@
 				{!! trans('vox.page.stats.total-men') !!}: <b></b>
 			</label>
 		</div>
-		@if($question->type!='multiple_choice')
+		@if($question->type!='multiple_choice' && $question->type != 'rank')
 			<div class="total total-f">
 				{!! trans('vox.page.stats.total-women') !!}: <b></b>
 			</div>
@@ -151,7 +151,7 @@
 		<div class="total total-m">
 			{!! trans('vox.page.stats.total-men') !!}: <b></b>
 		</div>
-		@if($question->type!='multiple_choice')
+		@if($question->type!='multiple_choice' && $question->type != 'rank')
 			<div class="icon total-m">
 			</div>
 		@endif

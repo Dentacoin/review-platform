@@ -77,7 +77,7 @@
 												</div>
 											</div>
 
-											<div class="graphs flex {!! $question->type=='multiple_choice' ? 'multiple-stat' : '' !!}" style="background-color: #f5f5f53b !important;">
+											<div class="graphs flex {!! $question->type=='multiple_choice' || $question->type=='rank' ? 'multiple-stat' : '' !!}" style="background-color: #f5f5f53b !important;">
 												<div class="chart chart-1">
 													<div class="main-chart" chart></div>
 													<div class="total total-all">
@@ -139,7 +139,7 @@
 													</div>
 												</div>
 
-												<div class="graphs flex {!! $question->type=='multiple_choice' ? 'multiple-stat' : '' !!}" style="background-color: #f5f5f53b !important;">
+												<div class="graphs flex {!! $question->type=='multiple_choice' || $question->type=='rank' ? 'multiple-stat' : '' !!}" style="background-color: #f5f5f53b !important;">
 													<div class="chart chart-1">
 														<div class="main-chart" chart></div>
 														<div class="total total-all">
@@ -161,7 +161,7 @@
 																{!! trans('vox.page.stats.total-men') !!}: <b></b>
 															</label>
 														</div>
-														@if($question->type!='multiple_choice')
+														@if($question->type!='multiple_choice' && $question->type!='rank')
 															<div class="total total-f">
 																{!! trans('vox.page.stats.total-women') !!}: <b></b>
 															</div>
@@ -176,7 +176,7 @@
 														<div class="total total-m">
 															{!! trans('vox.page.stats.total-men') !!}: <b></b>
 														</div>
-														@if($question->type!='multiple_choice')
+														@if($question->type!='multiple_choice' && $question->type!='rank')
 															<div class="icon total-m">
 															</div>
 														@endif

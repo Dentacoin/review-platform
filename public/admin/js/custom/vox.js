@@ -145,14 +145,12 @@ $(document).ready(function(){
 				$('.answers-randomize').hide();
 				$('.question-scale-wrapper').hide();
 				$('.hint-for-scale').hide();
-				$('.question-stats').hide();
 				$('.question-control-wrap').hide();
 				$('.rank-explanation').show();
 			} else {
 				$('.answers-randomize').show();
 				$('.question-scale-wrapper').show();
 				$('.hint-for-scale').show();
-				$('.question-stats').show();
 				$('.question-control-wrap').show();
 				$('.rank-explanation').hide();
 			}
