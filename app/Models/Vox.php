@@ -647,64 +647,66 @@ class Vox extends Model {
 
                             //echo 'Trigger for: '.$triggerId.' / Valid answers '.var_export($triggerAnswers, true).' / Answer: '.$answers[$triggerId].'<br/>';
 
-                            if(!empty($givenAnswers[$triggerId]) && strpos(',',$givenAnswers[$triggerId]) !== false) {
-                                $given_answers_array = explode(',', $givenAnswers[$triggerId]);
+                            if(!empty($allowedAnswers)) {
+                                if(!empty($givenAnswers[$triggerId]) && strpos(',',$givenAnswers[$triggerId]) !== false) {
+                                    $given_answers_array = explode(',', $givenAnswers[$triggerId]);
 
-                                $found = false;
-                                foreach ($given_answers_array as $key => $value) {
-                                    if(in_array($value, $allowedAnswers)) {
-                                        $found = true;
-                                        break;
+                                    $found = false;
+                                    foreach ($given_answers_array as $key => $value) {
+                                        if(in_array($value, $allowedAnswers)) {
+                                            $found = true;
+                                            break;
+                                        }
                                     }
-                                }
 
-                                if($invert_trigger_logic) {
-                                    if(!$found) {
-                                        $triggerSuccess[] = true;
-                                    } else {
-                                        $triggerSuccess[] = false;
-                                    }
-                                } else {
-
-                                    if($found) {
-                                        $triggerSuccess[] = true;
-                                    } else {
-                                        $triggerSuccess[] = false;
-                                    }
-                                }
-
-                            } else {
-                                if(strpos($allowedAnswers[0], '>') !== false) {
-                                    $trg_ans = substr($allowedAnswers[0], 1);
-
-                                    if(intval($givenAnswers[$triggerId]) > intval($trg_ans)) {
-                                        $triggerSuccess[] = true;
-                                    } else {
-                                        $triggerSuccess[] = false;
-                                    }
-                                } else if(strpos($allowedAnswers[0], '<') !== false) {
-                                    $trg_ans = substr($allowedAnswers[0], 1);
-
-                                    if(intval($givenAnswers[$triggerId]) < intval($trg_ans)) {
-                                        $triggerSuccess[] = true;
-                                    } else {
-                                        $triggerSuccess[] = false;
-                                    }
-                                } else {
                                     if($invert_trigger_logic) {
-                                        if( !empty($givenAnswers[$triggerId]) && !in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                                        if(!$found) {
                                             $triggerSuccess[] = true;
                                         } else {
                                             $triggerSuccess[] = false;
                                         }
                                     } else {
 
-                                        if( !empty($givenAnswers[$triggerId]) && in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                                        if($found) {
                                             $triggerSuccess[] = true;
                                         } else {
                                             $triggerSuccess[] = false;
                                         }
-                                    }                                    
+                                    }
+
+                                } else {
+
+                                    if(strpos($allowedAnswers[0], '>') !== false) {
+                                        $trg_ans = substr($allowedAnswers[0], 1);
+
+                                        if(intval($givenAnswers[$triggerId]) > intval($trg_ans)) {
+                                            $triggerSuccess[] = true;
+                                        } else {
+                                            $triggerSuccess[] = false;
+                                        }
+                                    } else if(strpos($allowedAnswers[0], '<') !== false) {
+                                        $trg_ans = substr($allowedAnswers[0], 1);
+
+                                        if(intval($givenAnswers[$triggerId]) < intval($trg_ans)) {
+                                            $triggerSuccess[] = true;
+                                        } else {
+                                            $triggerSuccess[] = false;
+                                        }
+                                    } else {
+                                        if($invert_trigger_logic) {
+                                            if( !empty($givenAnswers[$triggerId]) && !in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                                                $triggerSuccess[] = true;
+                                            } else {
+                                                $triggerSuccess[] = false;
+                                            }
+                                        } else {
+                                            if( !empty($givenAnswers[$triggerId]) && in_array($givenAnswers[$triggerId], $allowedAnswers) ) {
+                                                $triggerSuccess[] = true;
+                                            } else {
+                                                $triggerSuccess[] = false;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
