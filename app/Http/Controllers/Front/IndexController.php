@@ -151,9 +151,11 @@ class IndexController extends FrontController
 	                $query->where('name', 'LIKE', $country_n);
 	            })->first();
 
-				$addMore = clone $featured;
-				$addMore = $addMore->where('country_id', $country->id)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
-				$homeDentists = $homeDentists->concat($addMore);
+				if(!empty($country)) {
+					$addMore = clone $featured;
+					$addMore = $addMore->where('country_id', $country->id)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
+					$homeDentists = $homeDentists->concat($addMore);
+				}
 			}
 
 		} else {
