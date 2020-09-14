@@ -453,7 +453,7 @@ class StatsController extends FrontController
 
                 foreach ($results_main_chart as $res_main) {
                     $answer_number = $this->getAnswerNumber($question->type, $answers, $res_main->$answerField);
-                    if(!isset( $answer_number )) {
+                    if(empty( $answer_number )) {
                         continue;
                     }
 
@@ -2218,6 +2218,8 @@ class StatsController extends FrontController
         } else {
             if(isset($answers[ $answerfield-1])) {
                 $answer_number = $answers[ $answerfield-1];
+            } else {
+                $answer_number = '';
             }
         }
 
