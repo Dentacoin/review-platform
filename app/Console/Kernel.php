@@ -547,6 +547,7 @@ NOT SEND TRANSACTIONS
                                     'title' => $currency.' balance is running low',
                                     'subtitle' => '',
                                     'platform' => 'reviews',
+                                    'unsubscribe' => 'javascript:;',
                                 ], function ($message) use ($currency) {
 
                                     $sender = config('mail.from.address');
