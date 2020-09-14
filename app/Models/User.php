@@ -1651,8 +1651,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 $reward->save();
             }
 
-            //Cookie::queue(Cookie::forget('first_test'));
-            setcookie('first_test', null, time()-600, '/');
+            Cookie::queue(Cookie::forget('first_test'));
+            //setcookie('first_test', null, time()-600, '/');
 
         }
     }
