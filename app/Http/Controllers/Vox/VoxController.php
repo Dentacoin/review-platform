@@ -499,9 +499,6 @@ class VoxController extends FrontController
         	} else {
 	        	$q = Request::input('question');
 
-        		$this->getNextQuestion($vox_id, $q);
-
-
 	        	if( !isset( $answered[$q] ) && $not_bot ) {
 
 		        	$found = $doing_asl ? true : false;
