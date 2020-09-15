@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
 use App\Models\DentistTestimonial;
+use App\Models\AnonymousUser;
 use App\Models\UserStrength;
 use App\Models\LeadMagnet;
 use App\Models\PageSeo;
