@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
-use App\Models\IncompleteRegistration;
 use App\Models\DentistTestimonial;
-use App\Models\DentistClaim;
 use App\Models\UserStrength;
 use App\Models\LeadMagnet;
 use App\Models\PageSeo;
@@ -21,12 +19,12 @@ use Response;
 use Request;
 use Cookie;
 use Mail;
-use Auth;
-use App;
 
-class IndexController extends FrontController
-{
+class IndexController extends FrontController {
 
+    /**
+     * Index page view for not logged users and for patients
+     */
 	public function home($locale=null) {
 		if(!empty($this->user) && $this->user->isBanned('trp')) {
 			return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
@@ -261,7 +259,6 @@ class IndexController extends FrontController
 		return $this->ShowView('index', $params);	
 	}
 
-
 	public function index_down($locale=null) {
 		if(!empty($this->user) && $this->user->isBanned('trp')) {
 			return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
@@ -290,6 +287,9 @@ class IndexController extends FrontController
 		return $this->ShowView('index-down', $params);	
 	}
 
+	/**
+     * Welcome dentist page view
+     */
 	public function dentist($locale=null, $session_id=null, $hash=null, $unsubscribe = false, $claim_id = false) {
 		
 		if(!empty($this->user) && $this->user->isBanned('trp')) {
@@ -328,6 +328,9 @@ class IndexController extends FrontController
         ));	
 	}
 
+	/**
+     * Old claim dentists profile link redirecting to the correct one
+     */
 	public function claim($locale=null, $id) {
 
 		$user = User::find($id);
@@ -337,9 +340,11 @@ class IndexController extends FrontController
 		} else {
 			return redirect( getLangUrl('page-not-found') );
 		}
-
 	}
 
+	/**
+     * Lead magnet form user details
+     */
 	public function lead_magnet_step1($locale=null) {
 
 		if (request('website') && mb_strpos(mb_strtolower(request('website')), 'http') !== 0) {
@@ -404,16 +409,17 @@ class IndexController extends FrontController
 	            ]
 	        ];
 
-
 	        session($sess);
 
             return Response::json([
                 'success' => true,
             ] );
-
         }
 	}
 
+	/**
+     * Lead magnet form answers
+     */
 	public function lead_magnet_step2($locale=null) {
 
 		$points = [
@@ -504,7 +510,6 @@ class IndexController extends FrontController
 			$lead->save();
 		}
 
-
 		session([
 			'lead_magnet' => $session
 		]);
@@ -516,6 +521,9 @@ class IndexController extends FrontController
         ] );
 	}
 
+	/**
+     * Lead magnet results page view
+     */
     public function lead_magnet_results($locale=null) {
 
     	if (!empty(session('lead_magnet')) && !empty(session('lead_magnet')['points'])) {
@@ -525,7 +533,6 @@ class IndexController extends FrontController
         	$from_month = Carbon::now()->modify('-1 months');
 
     		if(!empty($country_id)) {
-
 
 	            $country_reviews = Review::whereHas('user', function ($query) use ($country_id) {
 	                $query->where('country_id', $country_id);
@@ -549,7 +556,6 @@ class IndexController extends FrontController
     		} else {
     			$country_reviews = null;
     		}
-
 
             if (empty($country_reviews)) {
             	$country_reviews = Review::whereHas('user')

@@ -1,24 +1,18 @@
 <?php
 
 namespace App\Http\Controllers\Front;
+
 use App\Http\Controllers\FrontController;
 
 use App\Models\Country;
 use App\Models\User;
 
-use App;
+class SitemapController extends FrontController {
 
-class SitemapController extends FrontController
-{
+	/**
+     * sitemaps for TRP
+     */
 	public function links($locale=null) {
-
-		// $u = User::where('is_dentist', 1)->where('id','>=',70000)->where('id','<',80000)->get();
-		// $i=0;
-		// foreach ($u as $user) {
-		// 	echo ++$i.'<br/>';
-		// 	$user->address = $user->address.'';
-		// }
-		// exit;
 
 		$links = [
 			getLangUrl('/'),
@@ -62,12 +56,12 @@ class SitemapController extends FrontController
 		}
 		$content .= '</urlset>';
 
-		return response($content, 200)
-            ->header('Content-Type', 'application/xml');
-        
+		return response($content, 200)->header('Content-Type', 'application/xml');
 	}
 
-
+	/**
+     * sitemaps list for TRP & TRP blog
+     */
 	public function sitemap($locale=null) {
 
         $content = '<?xml version="1.0" encoding="UTF-8"?>

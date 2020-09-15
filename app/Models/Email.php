@@ -148,7 +148,7 @@ class Email extends Model
 			'[/invite-patients-button]',
 		);
 		$deafult_replaces = array(
-			$this->user->getName(),
+			$this->user->getNames(),
 			config('platforms.'.$this->platform.'.name'),
 			'<i>',
 			'</i>',

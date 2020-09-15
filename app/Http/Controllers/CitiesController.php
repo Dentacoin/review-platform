@@ -35,7 +35,7 @@ class CitiesController extends BaseController
 
 		foreach ($users as $user) {
 			$user_list[] = [
-				'name' => $user->getName().( $user->name_alternative && mb_strtolower($user->name)!=mb_strtolower($user->name_alternative) ? ' / '.$user->name_alternative : '' ) ,
+				'name' => $user->getNames().( $user->name_alternative && mb_strtolower($user->name)!=mb_strtolower($user->name_alternative) ? ' / '.$user->name_alternative : '' ) ,
 				'link' => $user->status=='dentist_no_email' ? User::find($user->invited_by)->getLink() : (!empty($user->slug) ? $user->getLink() : ''),
 				'type' => $user->is_clinic ? trans('front.common.clinic') : trans('front.common.dentist'),
 				'is_clinic' => $user->is_clinic,
@@ -45,7 +45,7 @@ class CitiesController extends BaseController
 				'lat' => $user->lat,
 				'lon' => $user->lon,
 				'status' => $user->status,
-				'team_clinic_name' => $user->status=='dentist_no_email' ? User::find($user->invited_by)->getName() : '',
+				'team_clinic_name' => $user->status=='dentist_no_email' ? User::find($user->invited_by)->getNames() : '',
 			];
 		}
 
@@ -207,7 +207,7 @@ class CitiesController extends BaseController
 		$clinic_list = [];
 		foreach ($clinics as $clinic) {
 			$clinic_list[] = [
-				'name' => $clinic->getName(),
+				'name' => $clinic->getNames(),
 				'id' => $clinic->id,
 			];
 		}
@@ -236,7 +236,7 @@ class CitiesController extends BaseController
 		$dentist_list = [];
 		foreach ($dentists as $dentist) {
 			$dentist_list[] = [
-				'name' => $dentist->getName(),
+				'name' => $dentist->getNames(),
 				'id' => $dentist->id,
 			];
 		}

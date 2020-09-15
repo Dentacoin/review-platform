@@ -1,24 +1,21 @@
 <?php
-
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\FrontController;
 
-use Illuminate\Support\Facades\Input;
-
-use App\Models\AnonymousUser;
 use App\Models\Country;
 use App\Models\User;
 
 use Validator;
 use Response;
 use Request;
-use Cookie;
-use Auth;
 use Mail;
 
 class AddDentistController extends FrontController {
     
+    /**
+     * Patient adds a new dentist
+     */
 	public function invite_new_dentist($locale=null) {
 
         if(Request::isMethod('post')) {
@@ -180,9 +177,7 @@ Link to invited dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/use
                 	'message' => trans('trp.page.invite.success', ['name' => $newdentist->name]),
                     'dentist_name' => $newdentist->name,
                 ] );
-
             }
         }
-
     }
 }

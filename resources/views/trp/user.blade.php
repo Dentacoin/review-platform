@@ -209,11 +209,11 @@
 				<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
 			@endif
 			<div class="avatar cover" style="background-image: url('{{ $item->getImageUrl(true) }}');">
-				<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getName(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" style="display: none !important;"> 
+				<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" style="display: none !important;"> 
 			</div>
 			<div class="profile-mobile-info tac">
 				<h3>
-					{{ $item->getName() }}
+					{{ $item->getNames() }}
 				</h3>
 				@if( $item->name_alternative )
 					<p class="alternative-name">({{ $item->name_alternative }})</p>
@@ -525,11 +525,11 @@
 
     		<div class="view-profile clearfix">
 				<div class="avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');">
-					<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getName(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" style="display: none !important;"> 
+					<img src="{{ $item->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $item->getNames(), 'location' => ($item->city_name ? $item->city_name.', ' : '').($item->state_name ? $item->state_name.', ' : '').($item->country->name) ]) }}" style="display: none !important;"> 
 				</div>
 				<div class="media-right">
 					<h3>
-						{{ $item->getName() }}
+						{{ $item->getNames() }}
 					</h3>
 					@if( $item->name_alternative )
 						<p class="alternative-name">({{ $item->name_alternative }})</p>
@@ -720,7 +720,7 @@
 			    			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
 			    			<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}: </span>
 							@if($review->verified)
-				    			<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
+				    			<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
 				    				{!! nl2br(trans('trp.common.trusted')) !!}
 				    				<i class="fas fa-info-circle"></i>
 				    			</div>
@@ -732,7 +732,7 @@
 			    			@endif
 							@if($review->verified)
 
-				    			<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
+				    			<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
 				    				{!! nl2br(trans('trp.common.trusted')) !!}
 				    				<i class="fas fa-info-circle"></i>
 				    			</div>
@@ -807,7 +807,7 @@
 								<div class="review">
 				    				<div class="review-header">
 						    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
-						    			<span class="review-name">{{ $item->getName() }}</span>
+						    			<span class="review-name">{{ $item->getNames() }}</span>
 					    			</div>
 									<div class="review-content">
 										<form method="post" action="{{ $item->getLink() }}reply/{{ $review->id }}" class="reply-form-element">
@@ -827,7 +827,7 @@
 								<div class="review">
 				    				<div class="review-header">
 						    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
-						    			<span class="review-name">{{ $item->getName() }}</span>
+						    			<span class="review-name">{{ $item->getNames() }}</span>
 						    			<span class="review-date">
 											{{ $review->replied_at ? $review->replied_at->toFormattedDateString() : '-' }}
 										</span>
@@ -886,7 +886,7 @@
 									</span>
 								</div>
 								@if($review->verified)
-									<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
+									<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
 					    				{!! nl2br(trans('trp.common.trusted')) !!}
 				    					<i class="fas fa-info-circle"></i>
 					    			</div>
@@ -938,7 +938,7 @@
 									<div class="review">
 					    				<div class="review-header">
 							    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
-							    			<span class="review-name">{{ $item->getName() }}</span>
+							    			<span class="review-name">{{ $item->getNames() }}</span>
 						    			</div>
 										<div class="review-content">
 											<form method="post" action="{{ $item->getLink() }}reply/{{ $review->id }}" class="reply-form-element">
@@ -958,7 +958,7 @@
 									<div class="review">
 					    				<div class="review-header">
 							    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
-							    			<span class="review-name">{{ $item->getName() }}</span>
+							    			<span class="review-name">{{ $item->getNames() }}</span>
 							    			<span class="review-date">
 												{{ $review->replied_at ? $review->replied_at->toFormattedDateString() : '-' }}
 											</span>
@@ -995,7 +995,7 @@
 		<div class="tab-container" id="about">
 			<h2 class="black-left-line section-title">
 				{!! nl2br(trans('trp.page.user.about-who',[
-					'name' => $item->getName()
+					'name' => $item->getNames()
 				])) !!}
 			</h2>
 
@@ -1167,13 +1167,13 @@
 										<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic }}"/>
 									@endif
 									@if( (!empty($user) && $item->id==$user->id) )
-										<div class="deleter" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getName() ]) !!}">
+										<div class="deleter" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
 											<i class="fas fa-times"></i>
 										</div>
 									@endif
 								</div>
 							    <div class="slider-container">
-							    	<h4>{{ $team->clinicTeam->getName() }}</h4>
+							    	<h4>{{ $team->clinicTeam->getNames() }}</h4>
 								    <div class="ratings">
 										<div class="stars">
 											<div class="bar" style="width: {{ $team->clinicTeam->avg_rating/5*100 }}%;">
@@ -1243,7 +1243,7 @@
 										@endif
 									</div>
 								    <div class="slider-container">
-								    	<h4>{{ $team->clinicTeam->getName() }}</h4>
+								    	<h4>{{ $team->clinicTeam->getNames() }}</h4>
 									    <div class="ratings">
 											<div class="stars">
 												<div class="bar" style="width: {{ $team->clinicTeam->avg_rating/5*100 }}%;">
@@ -1258,7 +1258,7 @@
 								    		<div class="yes" action="{{ getLangUrl('profile/dentists/accept/'.$team->clinicTeam->id) }}">
 								    			{!! nl2br(trans('trp.page.user.accept-dentist')) !!}
 								    		</div>
-								    		<div class="no" action="{{ getLangUrl('profile/dentists/reject/'.$team->clinicTeam->id) }}" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getName() ]) !!}">
+								    		<div class="no" action="{{ getLangUrl('profile/dentists/reject/'.$team->clinicTeam->id) }}" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
 								    			{!! nl2br(trans('trp.page.user.reject-dentist')) !!}
 								    		</div>
 								    	</div>

@@ -215,7 +215,7 @@ class FrontController extends BaseController {
                         $reward->save();
 
                         $substitutions = [
-                            'added_dentist_name' => $new_dentist->getName(),
+                            'added_dentist_name' => $new_dentist->getNames(),
                             'trp_added_dentist_prf' => $new_dentist->getLink().'?dcn-gateway-type=patient-login',
                         ];
 

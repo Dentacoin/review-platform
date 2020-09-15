@@ -1,26 +1,19 @@
 <?php
 
 namespace App\Http\Controllers\Front;
+
 use App\Http\Controllers\FrontController;
 
-use App\Models\Country;
 use App\Models\PageSeo;
-use App\Models\City;
 use App\Models\User;
 
-use CArbon\Carbon;
+class NotFoundController extends FrontController {
 
-use Validator;
-use Response;
-use Request;
-use Cookie;
-use Mail;
-use App;
-
-class NotFoundController extends FrontController
-{
-
+	/**
+     * 404 page view
+     */
 	public function home($locale=null) {
+
 		if(!empty($this->user) && $this->user->isBanned('trp')) {
 			return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
 		}

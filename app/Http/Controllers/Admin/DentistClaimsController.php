@@ -53,7 +53,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
                 $message->to( 'ali.hashem@dentacoin.com' );
                 $message->to( 'betina.bogdanova@dentacoin.com' );
                 $message->to( 'petya.ivanova@dentacoin.com' );
-                $message->replyTo($user->email, $user->getName());
+                $message->replyTo($user->email, $user->getNames());
                 $message->subject('Old Added by Patient Dentist claim request was approved');
                 $message->setBody($mtext, 'text/html'); // for HTML rich messages
             });
@@ -152,7 +152,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
             $message->to( 'betina.bogdanova@dentacoin.com' );
             $message->to( 'petya.ivanova@dentacoin.com' );
             //$message->to( 'dokinator@gmail.com' );
-            $message->replyTo($user->email, $user->getName());
+            $message->replyTo($user->email, $user->getNames());
             $message->subject('Dentist claim request was rejected');
             $message->setBody($mtext, 'text/html'); // for HTML rich messages
         });
@@ -202,7 +202,7 @@ Link to dentist\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/
             $message->to( 'ali.hashem@dentacoin.com' );
             $message->to( 'betina.bogdanova@dentacoin.com' );
             $message->to( 'petya.ivanova@dentacoin.com' );
-            $message->replyTo($user->email, $user->getName());
+            $message->replyTo($user->email, $user->getNames());
             $message->subject('Dentist claim request was suspicious');
             $message->setBody($mtext, 'text/html'); // for HTML rich messages
         });

@@ -170,11 +170,11 @@
 							@elseif($user)
 								<div class="user-and-price header-a">
 									@if( $user->platform=='external' )
-										<r style="display: block; color: #38ace5;">Hello, {{ $user->getName() }}</r>
+										<r style="display: block; color: #38ace5;">Hello, {{ $user->getNames() }}</r>
 										<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
 									@else
 										<a class="my-name" href="https://account.dentacoin.com/?platform=dentavox">
-											Hello, {{ $user->getName() }}
+											Hello, {{ $user->getNames() }}
 										</a>
 										<a href="https://account.dentacoin.com/?platform=dentavox">
 											<span id="header-balance">{{ $user->getTotalBalance() }}</span> DCN  | <span id="header-usd">${{ sprintf('%.2F', $user->getTotalBalance() * $dcn_price) }}</span>
@@ -256,7 +256,7 @@
 					<div class="inner">
 						<h2>
 							{!! nl2br(trans('vox.page.bans.unbanned-title', [
-								'name' => $user->getName()
+								'name' => $user->getNames()
 							])) !!}
 						</h2>
 						<p>

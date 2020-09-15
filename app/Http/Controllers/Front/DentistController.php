@@ -1,12 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Front;
+
 use App\Http\Controllers\FrontController;
 
 use DeviceDetector\DeviceDetector;
 use DeviceDetector\Parser\Device\DeviceParserAbstract;
-
-use Illuminate\Support\Facades\Input;
 
 use App\Models\DentistRecommendation;
 use App\Models\StopVideoReview;
@@ -14,7 +13,6 @@ use App\Models\DentistPageview;
 use App\Models\ReviewDownvote;
 use App\Models\DentistFbPage;
 use App\Models\AnonymousUser;
-use App\Models\EmailTemplate;
 use App\Models\ReviewUpvote;
 use App\Models\ReviewAnswer;
 use App\Models\DentistClaim;
@@ -33,21 +31,20 @@ use App\Models\PageSeo;
 use App\Models\Review;
 use App\Models\Reward;
 use App\Models\User;
-use App\Models\City;
-use App\Models\Dcn;
 
 use Carbon\Carbon;
 
 use Validator;
-use Socialite;
 use Response;
 use Request;
 use Auth;
 use Mail;
 
+class DentistController extends FrontController {
 
-class DentistController extends FrontController
-{
+    /**
+     * show dentist's full review
+     */
     public function fullReview($locale=null, $id) {
         $review = Review::find($id);
 
@@ -72,13 +69,14 @@ class DentistController extends FrontController
         }
     }
 
+    /**
+     * write a video review
+     */
     public function youtube($locale=null) {
 
         if(!empty($this->user)) {
             $fn = microtime(true).'-'.$this->user->id;
             $fileName   = storage_path(). '/app/public/'.$fn.'.webm';
-            //echo 'https://reviews.dentacoin.com/storage/qqfile.webm';
-            //dd($fileName);
 
             if ($this->request->hasFile('qqfile')) {
                 $image      = $this->request->file('qqfile');
@@ -106,9 +104,9 @@ class DentistController extends FrontController
                 $fileName,
                 array('snippet.categoryId' => '22',
                        'snippet.defaultLanguage' => '',
-                       'snippet.description' => $this->user->getName().'\'s video review on ',
+                       'snippet.description' => $this->user->getNames().'\'s video review on ',
                        'snippet.tags[]' => '',
-                       'snippet.title' => 'Dentist review by '.$this->user->getName(),
+                       'snippet.title' => 'Dentist review by '.$this->user->getNames(),
                        'status.embeddable' => '',
                        'status.license' => '',
                        'status.privacyStatus' => 'unlisted',
@@ -125,8 +123,10 @@ class DentistController extends FrontController
         exit;
     }
 
-
-
+    /**
+     * show dentist's profile
+     * white a review
+     */
     public function list($locale=null, $slug, $claim_id = false) {
 
         if(!empty($this->user) && $this->user->isBanned('trp')) {
@@ -136,15 +136,6 @@ class DentistController extends FrontController
         if ($slug == 'dr-vadivelan-jeyachandran') {
             return redirect( getLangUrl('dentist/vadivelan-jeyachandran'), 301 );
         }
-
-        // $cmt = $list = User::where('is_dentist', 1)->whereNotNull('zip')->whereNull('state_name')->count();
-        // echo 'TOTAL: '.$cmt.'<br/>';
-        // $list = User::where('is_dentist', 1)->whereNotNull('zip')->whereNull('state_name')->take(100)->get();
-        // foreach ($list as $user) {
-        //     echo $user->country->name.', '.$user->address.'<br/>';
-        //     $user->address = $user->address.'';
-        // }
-        // exit;
 
         $review_id = request('review_id');
 
@@ -167,15 +158,8 @@ class DentistController extends FrontController
             return redirect( getLangUrl('page-not-found') );
         }
 
-        // session([
-        //     'intended-sess' => $item->getLink(),
-        // ]);
-
-        //$item->recalculateRating();
         $isTrusted = !empty($this->user) ? $this->user->wasInvitedBy($item->id) : false;
-
         $canAskDentist = !empty($this->user) ? $this->user->canAskDentist($item->id) : true;
-
         $questions = Question::with('translations')->get();
 
         if(Request::isMethod('post')) {
@@ -188,9 +172,6 @@ class DentistController extends FrontController
                 'treatments' => ['required']
             ];
             foreach ($questions as $question) {
-                // if($question->id == 4 && $item->is_clinic && empty( Request::input( 'clinic_dentists' ) )  ) {
-                //     continue;
-                // }
 
                 if(!empty(Request::input( 'dentist_clinics' )) && Request::input('dentist_clinics') == 'own') {
                     $validator_arr['option.4.0'] = ['required', 'numeric', 'min:1', 'max:5'];
@@ -240,9 +221,6 @@ class DentistController extends FrontController
                 if( !$this->user->is_dentist) {
 
                     $old_review = $this->user->hasReviewTo($item->id);
-                    // if($old_review && $old_review->status=='accepted') {
-                    //     ; //dgd
-                    // }
                     if( $this->user->loggedFromBadIp() ) {
                         $ul = new UserLogin;
                         $ul->user_id = $this->user->id;
@@ -255,7 +233,6 @@ class DentistController extends FrontController
                         $dd->parse();
 
                         if ($dd->isBot()) {
-                            // handle bots,spiders,crawlers,...
                             $ul->device = $dd->getBot();
                         } else {
                             $ul->device = $dd->getDeviceName();
@@ -295,10 +272,6 @@ class DentistController extends FrontController
                         $ret['imgs_urls'] = $imgs_urls;
 
                         return Response::json( $ret );
-
-
-                    // } else if( $this->user->getReviewLimits() ) {
-                    //     ; //dgd
                     } else if( $this->user->cantSubmitReviewToSameDentist($item->id) ) {
                         ; //dgd
                     } else {
@@ -344,23 +317,15 @@ class DentistController extends FrontController
 
                             if ($question->id == 4 || $question->id == 6 || $question->id == 7) {
                                 $answer_three_qs_rates[$question->id] = 0;
-
                                 $options_three = json_decode($question['options'], true);
 
                                 foreach ($options_three as $i => $n) {
                                     $re = Request::input( 'option.'.$question->id.'.'.$i );
-
-                                    //if($r != null) {
-                                        $answer_three_qs_rates[$question->id] += $re;
-                                    //}
+                                    $answer_three_qs_rates[$question->id] += $re;
                                 }
 
                                 $answer_three_qs_rates[$question->id] /= count($options_three);
                             }
-
-                            // if($question->id == 4 && $item->is_clinic && empty( Request::input( 'clinic_dentists' ) )  ) {
-                            //     continue;
-                            // }
 
                             $crypto_data['question-'.$question->id] = [];
                             $answer_rates[$question->id] = 0;
@@ -369,11 +334,8 @@ class DentistController extends FrontController
 
                             foreach ($options as $i => $nosense) {
                                 $r = Request::input( 'option.'.$question->id.'.'.$i );
-
-                                //if($r != null) {
-                                    $option_answers[] = $r;
-                                    $answer_rates[$question->id] += $r;
-                                //}
+                                $option_answers[] = $r;
+                                $answer_rates[$question->id] += $r;
                             }
 
                             $answer_rates[$question->id] /= count($options);
@@ -391,7 +353,6 @@ class DentistController extends FrontController
                             $answer->options = json_encode($option_answers);
                             $crypto_data['question-'.$question->id] = $option_answers;
                             $answer->save();
-
                         }
 
                         $review->rating = array_sum($answer_rates) / (!empty(Request::input( 'dentist_clinics' )) && Request::input( 'dentist_clinics' ) == 'own' ? 3 : count($answer_rates));
@@ -477,20 +438,17 @@ class DentistController extends FrontController
                             $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
                             $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
 
-
                             $ret['success'] = false;
                             $ret['ban'] = true;
                         }
 
                         $ret['success'] = true;
-
                     }
                 }
             }
 
             return Response::json( $ret );
         }
-
 
         if (!empty($this->user) && ($this->user->id != $item->id)) {
 
@@ -526,7 +484,6 @@ class DentistController extends FrontController
 
                     if ($item->my_workplace_approved->isEmpty() || ($item->my_workplace_approved->isNotEmpty() && ($answer->question_id == 4 || $answer->question_id == 6 || $answer->question_id == 7))) {
 
-                        //echo $rev->answers->count().'  '.$answer->question['label'].' '.array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true)).'<br>';
                         if(!isset($aggregated[$answer->question['label']])) {
                             $aggregated[$answer->question['label']] = 0;
                         }
@@ -544,17 +501,6 @@ class DentistController extends FrontController
                         $aggregated[$answer->question['label']] += array_sum(json_decode($answer->options, true)) / count(json_decode($answer->options, true));
                     }
                 }
-
-                //dd($answer->question, $aggregated);
-
-                // if ($rev->answers->count() == 9) {
-                //     if (array_key_exists("Doctor",$aggregated)) {
-                //         $aggregated['Doctor'] += 5;
-                //     } else {
-                //         $aggregated['Doctor'] = 5;
-                //     }
-                    
-                // }
             }
 
             foreach ($aggregated_count_opt as $key => $value) {
@@ -594,8 +540,6 @@ class DentistController extends FrontController
                 $aggregated_rates_total[$key] = array_sum($value)/count($value);
             }
         }
-
-        //dd($aggregated_rates_total);
 
         $dentist_limit_reached = !empty($this->user) ? $this->user->cantReviewDentist($item->id) : null;
         $has_asked_dentist = $this->user ? $this->user->hasAskedDentist($item->id) : null;
@@ -652,7 +596,6 @@ class DentistController extends FrontController
             $writes_review = false;
         }       
 
-
         $view_params = [
             'strength_arr' => $strength_arr,
             'completed_strength' => $completed_strength,
@@ -703,14 +646,14 @@ class DentistController extends FrontController
         if( $is_review ) {
             $seos = PageSeo::find(33);
 
-            $seo_title = str_replace(':dentist_name', $item->getName(), $seos->seo_title);
-            $seo_title = str_replace(':user_name', $current_review->user->getName(), $seo_title);
+            $seo_title = str_replace(':dentist_name', $item->getNames(), $seos->seo_title);
+            $seo_title = str_replace(':user_name', $current_review->user->getNames(), $seo_title);
 
             $seo_description = str_replace(':review_title', $current_review->title, $seos->seo_description);
             $seo_description = str_replace(':review_text', $current_review->answer, $seo_description);
 
-            $social_title = str_replace(':dentist_name', $item->getName(), $seos->social_title);
-            $social_title = str_replace(':user_name', $current_review->user->getName(), $social_title);
+            $social_title = str_replace(':dentist_name', $item->getNames(), $seos->social_title);
+            $social_title = str_replace(':user_name', $current_review->user->getNames(), $social_title);
 
             $social_description = str_replace(':review_title', $current_review->title, $seos->social_description);
             $social_description = str_replace(':review_text', $current_review->answer, $social_description);
@@ -723,16 +666,16 @@ class DentistController extends FrontController
         } else {
             $seos = PageSeo::find(32);
 
-            $seo_title = str_replace(':name', $item->getName(), $seos->seo_title);
+            $seo_title = str_replace(':name', $item->getNames(), $seos->seo_title);
             $seo_title = str_replace(':country', $item->country ? $item->country->name : '', $seo_title);
             $seo_title = str_replace(':city', $item->city_name ? $item->city_name : '', $seo_title);
 
-            $seo_description = str_replace(':name', $item->getName(), $seos->seo_description);
+            $seo_description = str_replace(':name', $item->getNames(), $seos->seo_description);
             $seo_description = str_replace(':city', $item->city_name ? $item->city_name : '', $seo_description);
             $seo_description = str_replace(':reviews_number', intval($item->ratings), $seo_description);
 
-            $social_title = str_replace(':name', $item->getName(), $seos->social_title);
-            $social_description = str_replace(':name', $item->getName(), $seos->social_description);
+            $social_title = str_replace(':name', $item->getNames(), $seos->social_title);
+            $social_description = str_replace(':name', $item->getNames(), $seos->social_description);
 
             $view_params['seo_title'] = $seo_title;
             $view_params['seo_description'] = $seo_description;
@@ -774,7 +717,7 @@ class DentistController extends FrontController
         $view_params['schema'] = [
             "@context" => "http://schema.org",
             "@type" => 'Dentist',
-            "name" => $item->getName(),
+            "name" => $item->getNames(),
             "image" => $item->getImageUrl(true),
         ];
 
@@ -930,7 +873,9 @@ class DentistController extends FrontController
         return $this->ShowView('user', $view_params);
     }
 
-
+    /**
+     * dentist claims his profile
+     */
     public function claim_dentist($locale=null, $slug, $id) {
 
         $user = User::find($id);
@@ -1032,7 +977,7 @@ class DentistController extends FrontController
                             $message->to( 'ali.hashem@dentacoin.com' );
                             $message->to( 'betina.bogdanova@dentacoin.com' );
                             $message->to( 'petya.ivanova@dentacoin.com' );
-                            $message->replyTo($user->email, $user->getName());
+                            $message->replyTo($user->email, $user->getNames());
                             $message->subject('Invited Dentist Claimed His Profile');
                             $message->setBody($mtext, 'text/html'); // for HTML rich messages
                         });
@@ -1130,7 +1075,7 @@ class DentistController extends FrontController
                             if(!empty($dent) && $dent->status == 'approved') {
                                 
                                 $user->sendTemplate(34, [
-                                    'dentist-name' => $dent->getName()
+                                    'dentist-name' => $dent->getNames()
                                 ], 'trp');
                             }
                         }
@@ -1144,14 +1089,14 @@ class DentistController extends FrontController
                     }
                 }
             }
-
             return $this->list($locale, $slug, $user->status == 'admin_imported' && empty(request('long')) ? $id : false);
         }
-
         return redirect( getLangUrl('page-not-found') );
     }
 
-
+    /**
+     * patient asks a dentist for verification
+     */
     public function ask($locale=null, $slug, $verification=null) {
 
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
@@ -1201,12 +1146,14 @@ class DentistController extends FrontController
                     return Response::json( ['success' => true] );
                 }
             }
-
         }
 
         return Response::json( ['success' => false] );
     }
 
+    /**
+     * review upvote
+     */
     public function useful($locale=null, $review_id) {
         $review = Review::find($review_id);
         if(!empty($review) && !empty($this->user)) {
@@ -1256,7 +1203,9 @@ class DentistController extends FrontController
         ] );
     }
 
-
+    /**
+     * review downvote
+     */
     public function unuseful($locale=null, $review_id) {
         $review = Review::find($review_id);
         if(!empty($review)) {
@@ -1306,6 +1255,9 @@ class DentistController extends FrontController
         ] );
     }
 
+    /**
+     * review reply
+     */
     public function reply($locale=null, $slug, $review_id) {
         $item = User::where('slug', 'LIKE', $slug)->firstOrFail();
 
@@ -1322,13 +1274,9 @@ class DentistController extends FrontController
         return Response::json( ['success' => true, 'reply' => nl2br( $review->reply )] );
     }
 
-
-    //
-    //Youtube boilerplate
-    //
-
-
-
+    /**
+     * Youtube boilerplate
+     */
     function videosInsert($client, $service, $media_file, $properties, $part, $params) {
         $params = array_filter($params);
         $propertyObject = $this->createResource($properties); // See full sample for function
@@ -1340,8 +1288,9 @@ class DentistController extends FrontController
         return $response->id;
     }
 
-
-
+    /**
+     * Youtube boilerplate
+     */
     function getClient() {
         $client = new \Google_Client();
         $client->setApplicationName('API Samples');
@@ -1386,7 +1335,9 @@ class DentistController extends FrontController
         return $client;
     }
 
-    // Add a property to the resource.
+    /**
+     * Add a property to the resource.
+     */
     function addPropertyToResource(&$ref, $property, $value) {
         $keys = explode(".", $property);
         $is_array = false;
@@ -1412,7 +1363,9 @@ class DentistController extends FrontController
         }
     }
 
-    // Build a resource based on a list of properties given as key-value pairs.
+    /**
+     * Build a resource based on a list of properties given as key-value pairs.
+     */
     function createResource($properties) {
         $resource = array();
         foreach ($properties as $prop => $value) {
@@ -1455,8 +1408,7 @@ class DentistController extends FrontController
         return $status;
     }
 
-
-    public function patientSuspicious($p_id) {
+    private function patientSuspicious($p_id) {
         $patient = User::find($p_id);
 
         if (!empty($patient)) {
@@ -1497,7 +1449,9 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         return false;
     }
 
-
+    /**
+     * patient recommends dentist to a friend
+     */
     public function recommend_dentist() {
 
         $validator = Validator::make(Request::all(), [
@@ -1537,7 +1491,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                     'type' => $type,
                     'invited_user_name' => Request::Input('name'),
                     'inviting_user_name' => $this->user->name,
-                    'recommended_dentist' => $recommended_user->getName(),
+                    'recommended_dentist' => $recommended_user->getNames(),
                     'recommend_dentist_link' => $recommended_user->getLink(),
                     'image_recommended_dentist' => $recommended_user->getSocialCover(),
                 ];
@@ -1590,6 +1544,19 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         }
     }
 
+    /**
+     * dentist's facebook tab view
+     */
+    public function dentist_fb_tab($locale=null) {
+
+        return $this->showView('facebook-tab', [
+            'xframe' => true,
+        ]);
+    }
+
+    /**
+     * dentist's facebook tab view params
+     */
     public function dentist_fb_tab_reviews($locale=null) {
 
         if (!empty(Request::input('pageid'))) {
@@ -1654,14 +1621,9 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
         ] );
     }
 
-
-    public function dentist_fb_tab($locale=null) {
-
-        return $this->showView('facebook-tab', [
-            'xframe' => true,
-        ]);
-    }
-
+    /**
+     * dentist adds a facebook tab
+     */
     public function fb_tab($locale=null) {
 
         $validator = Validator::make(Request::all(), [
@@ -1706,7 +1668,7 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
 
             $dp->save();
 
-            $mtext = 'Dentist <a href="'.$this->user->getLink().'">'.$this->user->getName().'</a> add a FB Tab';
+            $mtext = 'Dentist <a href="'.$this->user->getLink().'">'.$this->user->getNames().'</a> add a FB Tab';
 
             Mail::send([], [], function ($message) use ($mtext) {
                 $sender = config('mail.from.address');
@@ -1723,9 +1685,11 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
                 'link' => 'https://www.facebook.com/dialog/pagetab?app_id=1906201509652855&redirect_uri='.$this->user->getLink().'?popup=facebook-tab-success',
             ] );
         }
-
     }
 
+    /**
+     * clinic's team reorder
+     */
     public function reorderTeams() {
 
         $list = Request::input('list');
@@ -1741,5 +1705,4 @@ Link to patients\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit
 
         return Response::json( ['success' => true] );
     }
-
-}
+} ?>

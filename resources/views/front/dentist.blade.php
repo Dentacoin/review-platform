@@ -157,7 +157,7 @@
 							</div>
 							<div class="media-body">
 								<h2 class="media-heading">
-									{{ $team->clinicTeam->getName() }}
+									{{ $team->clinicTeam->getNames() }}
 								</h2>
 
 								@if($team->clinicTeam->country)
@@ -211,7 +211,7 @@
 							</div>
 							<div class="media-body">
 								<h2 class="media-heading">
-									{{ $workplace->clinic->getName() }}
+									{{ $workplace->clinic->getNames() }}
 								</h2>
 
 								@if($workplace->clinic->country)
@@ -355,9 +355,9 @@
 											@if($review->answer)
 												<b>
 													@if(empty($reviews_out))
-														{{ trans('front.page.dentist.review-comment', ['name' => $review->user->getName()]) }}:
+														{{ trans('front.page.dentist.review-comment', ['name' => $review->user->getNames()]) }}:
 													@else
-														{{ trans('front.page.dentist.review-comment-out', ['name' => $review->user->getName()]) }}:
+														{{ trans('front.page.dentist.review-comment-out', ['name' => $review->user->getNames()]) }}:
 													@endif
 												</b> 
 												{!! nl2br($review->answer) !!}
@@ -366,9 +366,9 @@
 											@if($review->youtube_id)
 												<b>
 													@if(empty($reviews_out))
-														{{ trans('front.page.dentist.review-video', ['name' => $review->user->getName()]) }}:
+														{{ trans('front.page.dentist.review-video', ['name' => $review->user->getNames()]) }}:
 													@else
-														{{ trans('front.page.dentist.review-video-out', ['name' => $review->user->getName()]) }}:
+														{{ trans('front.page.dentist.review-video-out', ['name' => $review->user->getNames()]) }}:
 													@endif
 												</b> 
 												@if($review->youtube_approved || (!empty($user) && $user->id==$review->user_id ) )
@@ -419,9 +419,9 @@
 															<div class="col-md-12">
 																<p>
 																	@if(empty($reviews_out))
-																		{{ trans('front.page.dentist.review-write-reply', [ 'name' => $review->user->getName() ] ) }}
+																		{{ trans('front.page.dentist.review-write-reply', [ 'name' => $review->user->getNames() ] ) }}
 																	@else
-																		{{ trans('front.page.dentist.review-reply-out', [ 'name' => $review->user->getName() ] ) }}
+																		{{ trans('front.page.dentist.review-reply-out', [ 'name' => $review->user->getNames() ] ) }}
 																	@endif									
 																</p>
 
@@ -440,7 +440,7 @@
 												@endif
 												<div class="the-reply" {!! !$review->reply ? 'style="display: none;"' : '' !!} >
 													<b>
-														{{ trans('front.page.dentist.review-reply', ['name' => $review->dentist_id ? $review->dentist->getName() : $review->clinic->getName() ]) }}:
+														{{ trans('front.page.dentist.review-reply', ['name' => $review->dentist_id ? $review->dentist->getNames() : $review->clinic->getNames() ]) }}:
 													</b> 
 													<span class="reply-content">
 														{!! nl2br($review->reply) !!}
@@ -478,7 +478,7 @@
 			@endforeach
 			@else 
 		    	<div class="alert alert-info">
-		    		{{ trans('front.page.'.$current_page.'.no-reviews', ['name' => $item->getName()]) }}
+		    		{{ trans('front.page.'.$current_page.'.no-reviews', ['name' => $item->getNames()]) }}
 		    	</div>
 			@endif
     </div>
@@ -494,17 +494,17 @@
 						<div class="alert alert-info">
 							@if($has_asked_dentist)
 								@if($has_asked_dentist->status=='no')
-									{{ trans('front.page.'.$current_page.'.write-review-limit-dentists-denied', ['name' => $item->getName()]) }}
+									{{ trans('front.page.'.$current_page.'.write-review-limit-dentists-denied', ['name' => $item->getNames()]) }}
 								@else
-									{{ trans('front.page.'.$current_page.'.write-review-limit-dentists-waiting', ['name' => $item->getName()]) }}
+									{{ trans('front.page.'.$current_page.'.write-review-limit-dentists-waiting', ['name' => $item->getNames()]) }}
 								@endif
 							@else
-								{{ trans('front.page.'.$current_page.'.write-review-limit-dentists', ['name' => $item->getName()]) }}
+								{{ trans('front.page.'.$current_page.'.write-review-limit-dentists', ['name' => $item->getNames()]) }}
 								<br/>
 								<br/>
 								<a href="{{ $item->getLink().'/ask' }}" class="btn btn-primary btn-block">
 									{!! trans('front.page.'.$current_page.'.write-review-limit-dentists-ask', [
-										'name' => $item->getName(),
+										'name' => $item->getNames(),
 									]) !!}
 								</a>
 							@endif

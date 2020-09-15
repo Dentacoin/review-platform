@@ -172,7 +172,7 @@
 <div id="trp-widget">
 	<h2>
 		{!! trans('front.page.widget.title', [
-			'user' => $user->getName(),
+			'user' => $user->getNames(),
 			'link' => '<a target="_top" href="'.getLangUrl('/').'">',
 			'endlink' => '</a>',
 		]) !!}
@@ -181,7 +181,7 @@
 		@if($reviews->isEmpty())
 			<div class="alert alert-info">
 				{!! trans('front.page.widget.no-reviews', [
-					'user' => $user->getName(),
+					'user' => $user->getNames(),
 					'link' => '<a target="_top" href="'.$user->getLink().'">',
 					'endlink' => '</a>',
 				]) !!}
@@ -235,7 +235,7 @@
 							</div>
 							<div class="rating">
 								<b>
-									{{ trans('front.page.dentist.review-comment', ['name' => $review->user->getName()]) }}:
+									{{ trans('front.page.dentist.review-comment', ['name' => $review->user->getNames()]) }}:
 								</b> 
 								{!! nl2br($review->answer) !!}
 							</div>
@@ -247,7 +247,7 @@
 								<div class="rating">
 									<div class="the-reply" {!! !$review->reply ? 'style="display: none;"' : '' !!} >
 										<b>
-											{{ trans('front.page.dentist.review-reply', ['name' => $review->dentist_id ? $review->dentist->getName() : $review->clinic->getName() ]) }}:
+											{{ trans('front.page.dentist.review-reply', ['name' => $review->dentist_id ? $review->dentist->getNames() : $review->clinic->getNames() ]) }}:
 										</b> 
 										<span class="reply-content">
 											{!! nl2br($review->reply) !!}

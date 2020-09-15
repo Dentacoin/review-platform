@@ -52,15 +52,15 @@
 					@if($item->is_dentist && !$item->is_clinic && $item->my_workplace_approved->isNotEmpty())	
 						<div class="question skippable">
 							<h4 class="popup-title">
-								{!! nl2br(trans('trp.popup.submit-review-popup.dentist-visit', ['name' => $item->getName() ])) !!}
+								{!! nl2br(trans('trp.popup.submit-review-popup.dentist-visit', ['name' => $item->getNames() ])) !!}
 							</h4>
 							<div class="review-answers">
 								<div class="clearfix subquestion">
 								   <select name="dentist_clinics" class="input" id="dentist_clinics">
 										<option value="" disabled selected>{{ trans('trp.popup.submit-review-popup.select') }}</option>
-										<option value="own">{{ trans('trp.popup.submit-review-popup.dentist-cabinet', [ 'name' => $item->getName() ]) }}</option>
+										<option value="own">{{ trans('trp.popup.submit-review-popup.dentist-cabinet', [ 'name' => $item->getNames() ]) }}</option>
 										@foreach($item->my_workplace_approved as $workplace)
-											<option value="{{ $workplace->clinic->id }}">{{ $workplace->clinic->getName() }}</option>
+											<option value="{{ $workplace->clinic->id }}">{{ $workplace->clinic->getNames() }}</option>
 										@endforeach
 									</select>
 						        </div>
@@ -81,7 +81,7 @@
 												{!! nl2br(trans('trp.popup.submit-review-popup.dentist-dont-remember')) !!}
 											</option>
 											@foreach($item->teamApproved as $team)
-												<option value="{{ $team->clinicTeam->id }}">{{ $team->clinicTeam->getName() }}</option>
+												<option value="{{ $team->clinicTeam->id }}">{{ $team->clinicTeam->getNames() }}</option>
 											@endforeach
 										</select>
 							        </div>
@@ -176,7 +176,7 @@
 							<span class="blue">
 								{!! nl2br(trans('trp.popup.submit-review-popup.last-question')) !!}
 							</span>
-							{!! nl2br(trans('trp.popup.submit-review-popup.last-question-text', ['name' => $item->getName()])) !!}
+							{!! nl2br(trans('trp.popup.submit-review-popup.last-question-text', ['name' => $item->getNames()])) !!}
 						</h4>
 
 						<div class="reviews-wrapper">
@@ -353,7 +353,7 @@
 				            @endif
 			            </div>
 			            <div class="alert alert-success ask-success-alert" style="display: none;">
-							{!! nl2br(trans('trp.popup.popup-ask-dentist.sent', [ 'name' => $item->getName() ])) !!}
+							{!! nl2br(trans('trp.popup.popup-ask-dentist.sent', [ 'name' => $item->getNames() ])) !!}
 						</div>
 					</div>
 		        </div>

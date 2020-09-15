@@ -43,7 +43,7 @@
 								@endif
 								<div class="slider-image-wrapper">
 									<div class="slider-image" style="background-image: url('{{ $dentist->getImageUrl(true) }}')">
-										<img src="{{ $dentist->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $dentist->getName(), 'location' => ($dentist->city_name ? $dentist->city_name.', ' : '').($dentist->state_name ? $dentist->state_name.', ' : '').($dentist->country->name) ]) }}" style="display: none !important;"> 
+										<img src="{{ $dentist->getImageUrl(true) }}" alt="{{ trans('trp.alt-tags.reviews-for', [ 'name' => $dentist->getNames(), 'location' => ($dentist->city_name ? $dentist->city_name.', ' : '').($dentist->state_name ? $dentist->state_name.', ' : '').($dentist->country->name) ]) }}" style="display: none !important;"> 
 										@if($dentist->is_partner)
 											<img class="tooltip-text" src="{{ url('img-trp/mini-logo.png') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}" />
 										@endif
@@ -53,7 +53,7 @@
 									</div>
 								</div>
 							    <div class="slider-container">
-							    	<h4>{{ $dentist->getName() }}</h4>
+							    	<h4>{{ $dentist->getNames() }}</h4>
 							    	<div class="p">
 							    		<div class="img">
 							    			<img src="img-trp/map-pin.png">

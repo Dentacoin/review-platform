@@ -977,7 +977,7 @@
                                                 </td>
                                                 <td>
                                                     <a href="{{ url('/cms/users/edit/'.$team->clinicTeamWithTrashed->id) }}">
-                                                        {{ $team->clinicTeamWithTrashed->getName() }} {{ $team->clinicTeamWithTrashed->deleted_at ? '(deleted)' : '' }}
+                                                        {{ $team->clinicTeamWithTrashed->getNames() }} {{ $team->clinicTeamWithTrashed->deleted_at ? '(deleted)' : '' }}
                                                     </a>
                                                 </td>
                                                 <td>

@@ -1,3 +1,3 @@
 <a href="{{ url('/cms/users/edit/'.$item->id) }}">
-	{{ !empty($item) ? $item->getName() : 'Deleted user' }}
+	{{ !empty($item) ? $item->getNames() : 'Deleted user' }}
 </a>

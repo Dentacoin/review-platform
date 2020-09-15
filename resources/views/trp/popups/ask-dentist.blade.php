@@ -9,7 +9,7 @@
 		</div>
 
 		<div class="alert alert-info">
-			{!! nl2br(trans('trp.popup.popup-ask-dentist.hint', [ 'name' => $item->getName() ])) !!}
+			{!! nl2br(trans('trp.popup.popup-ask-dentist.hint', [ 'name' => $item->getNames() ])) !!}
 			
 			<br/>
 			<br/>
@@ -18,7 +18,7 @@
 			</a>
 		</div>
 		<div class="alert alert-success ask-success" style="display: none;">
-			{!! nl2br(trans('trp.popup.popup-ask-dentist.sent', [ 'name' => $item->getName() ])) !!}
+			{!! nl2br(trans('trp.popup.popup-ask-dentist.sent', [ 'name' => $item->getNames() ])) !!}
 		</div>
 
 	</div>

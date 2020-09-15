@@ -392,7 +392,7 @@
 							<p>
 								<b>
 									{!! trans('front.page.auth.after-login.dear', [
-										'name' => '<span class="blue">'.$user->getName().'</span>'
+										'name' => '<span class="blue">'.$user->getNames().'</span>'
 									]) !!}
 								</b><br/>
 								<br/>

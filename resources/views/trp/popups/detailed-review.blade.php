@@ -10,7 +10,7 @@
 			<a href="javascript:;" class="share-popup" data-popup="popup-share"><i class="fas fa-share-alt"></i> {!! nl2br(trans('trp.common.share')) !!}</a>
 		</div>
 		<h2>
-			{!! nl2br(trans('trp.popup.view-review-popup.title', [ 'name' => $item->getName() ])) !!}
+			{!! nl2br(trans('trp.popup.view-review-popup.title', [ 'name' => $item->getNames() ])) !!}
 		</h2>
 
 		<div id="the-detailed-review">

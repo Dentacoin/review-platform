@@ -26,7 +26,9 @@
         "propaganistas/laravel-phone": "^3.0",
         "rosell-dk/webp-convert": "^2.3",
         "sendgrid/sendgrid": "^7.3",
-        "torann/geoip": "^1.0"
+        "torann/geoip": "^1.0",
+        "apigen/apigen": "dev-master",
+        "roave/better-reflection": "dev-master#1efdfe5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

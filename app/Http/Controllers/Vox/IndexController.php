@@ -262,7 +262,7 @@ class IndexController extends FrontController {
 					$target_countries[] = Country::find($v)->name;
 				}
       
-            	$mtext = 'New survey request from '.$this->user->getName().'
+            	$mtext = 'New survey request from '.$this->user->getNames().'
 	                
 		        Link to CMS: '.url("/cms/users/edit/".$this->user->id).'
 		        Survey title: '.request('title').'
@@ -285,7 +285,7 @@ class IndexController extends FrontController {
 		            $message->from($sender, $sender_name);
 		            $message->to( 'dentavox@dentacoin.com' );
 		            $message->to( 'donika.kraeva@dentacoin.com' );
-		            $message->replyTo($this->user->email, $this->user->getName());
+		            $message->replyTo($this->user->email, $this->user->getNames());
 		            $message->subject('Survey Request');
 		        });
 

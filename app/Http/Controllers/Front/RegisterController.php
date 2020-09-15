@@ -8,37 +8,29 @@ use DeviceDetector\DeviceDetector;
 
 use Illuminate\Support\Facades\Input;
 
-use App\Models\IncompleteRegistration;
-use App\Models\AnonymousUser;
-use App\Models\UserCategory;
-use App\Models\UserAction;
-use App\Models\UserInvite;
-use App\Models\UserLogin;
 use App\Models\UserTeam;
 use App\Models\PageSeo;
-use App\Models\Country;
-use App\Models\Civic;
 use App\Models\User;
-
-use Carbon\Carbon;
 
 use Validator;
 use Response;
 use Redirect;
 use Request;
 use Image;
-use Auth;
-use Mail;
 
-class RegisterController extends FrontController
-{
+class RegisterController extends FrontController {
+
+    /**
+     * old link for registration
+     */
     public function register($locale=null) {
-
         return redirect( getLangUrl('welcome-dentist'), 301 );
     }
 
+    /**
+     * after register popup - add a team member photo
+     */
     public function upload($locale=null) {
-
         if( Request::file('image') && Request::file('image')->isValid() ) {
             $img = Image::make( Input::file('image') )->orientate();
             list($thumb, $full, $name) = User::addTempImage($img);
@@ -46,6 +38,9 @@ class RegisterController extends FrontController
         }
     }
 
+    /**
+     * after register popup - dentist sends a request for clinic team
+     */
     public function register_invite($locale=null) {
 
         if (request('user_id')) {
@@ -65,7 +60,7 @@ class RegisterController extends FrontController
                         $newclinic->save();
 
                         $clinic->sendTemplate(34, [
-                            'dentist-name' => $user->getName(),
+                            'dentist-name' => $user->getNames(),
                             'profile-link' => $user->getLink()
                         ], 'trp');
                     }
@@ -77,13 +72,16 @@ class RegisterController extends FrontController
                 }
             }
         }
+
         return Response::json( [
             'success' => false,
             'message' => trans('trp.popup.verification-popup.join-workplace.error'),
         ] );
-
     }
 
+    /**
+     * after register popup - clinic adds an existing dentist to team
+     */
     public function invite_dentist($locale=null) {
 
         if (request('user_id')) {
@@ -102,16 +100,11 @@ class RegisterController extends FrontController
                         $newdentist->approved = 0;
                         $newdentist->new_clinic = 1;
                         $newdentist->save();
-
-                        // $dentist->sendTemplate(33, [
-                        //     'clinic-name' => $user->getName(),
-                        //     'clinic-link' => $user->getLink()
-                        // ], 'trp');
                     }
 
                     return Response::json( [
                         'success' => true,
-                        'message' => trans('trp.popup.verification-popup.dentist-invite.success', ['dentist-name' => $dentist->getName()]),
+                        'message' => trans('trp.popup.verification-popup.dentist-invite.success', ['dentist-name' => $dentist->getNames()]),
                     ] );
                 }
             }
@@ -120,9 +113,11 @@ class RegisterController extends FrontController
             'success' => false,
             'message' => trans('trp.popup.verification-popup.dentist-invite.error'),
         ] );
-
     }
 
+    /**
+     * after register popup - add a description
+     */
     public function verification_dentist($locale=null) {
         if (request('user_id') && !empty(User::find(request('user_id'))) && !empty(request('user_hash'))) {
 
@@ -159,7 +154,6 @@ class RegisterController extends FrontController
                     ] );
                 }
             }
-
         }
 
         return Response::json( [
@@ -168,6 +162,9 @@ class RegisterController extends FrontController
         ] );
     }
 
+    /**
+     * after register popup - add work hours
+     */
     public function add_work_hours($locale=null) {
         if (request('last_user_id') && !empty(User::find(request('last_user_id'))) && !empty(request('last_user_hash'))) {
 
@@ -203,6 +200,5 @@ class RegisterController extends FrontController
             'success' => false,
             'message' => trans('trp.common.something-wrong'),
         ] );
-
     }
 }

@@ -84,7 +84,7 @@
 				@if($item->name)
 					<tr class="row">
 						<td> <b> Name </b> </td>
-						<td> {{ $item->getName() }} </td>
+						<td> {{ $item->getNames() }} </td>
 					</tr>
 				@endif
 				@if($item->hasimage)

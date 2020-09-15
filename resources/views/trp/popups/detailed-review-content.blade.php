@@ -4,7 +4,7 @@
 			<div class="review-avatar" style="background-image: url('{{ $review->user->getImageUrl(true) }}');"></div>
 			<span class="review-name">{{ !empty($review->user->self_deleted) ? ($review->verified ? trans('trp.common.verified-patient') : trans('trp.common.deleted-user')) : $review->user->name }}: </span>
 			@if($review->verified)
-				<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
+				<div class="trusted-sticker mobile-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
 					{!! nl2br(trans('trp.common.trusted-review')) !!}
 				    <i class="fas fa-info-circle"></i>
 				</div>
@@ -15,7 +15,7 @@
 				</span>
 			@endif
 			@if($review->verified)
-				<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getName() ])) !!}">
+				<div class="trusted-sticker tooltip-text" text="{!! nl2br(trans('trp.common.trusted-tooltip', ['name' => $item->getNames() ])) !!}">
 					{!! nl2br(trans('trp.common.trusted-review')) !!}
 				    <i class="fas fa-info-circle"></i>
 				</div>
@@ -89,7 +89,7 @@
 				<div class="review">
     				<div class="review-header">
 		    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
-		    			<span class="review-name">{{ $item->getName() }}</span>
+		    			<span class="review-name">{{ $item->getNames() }}</span>
 	    			</div>
 					<div class="review-content">
 						<form method="post" action="{{ $item->getLink() }}reply/{{ $review->id }}" class="reply-form-element">
@@ -108,7 +108,7 @@
 				<div class="review">
 					<div class="review-header">
 		    			<div class="review-avatar" style="background-image: url('{{ $item->getImageUrl(true) }}');"></div>
-		    			<span class="review-name">{{ $item->getName() }}</span>
+		    			<span class="review-name">{{ $item->getNames() }}</span>
 		    			<span class="review-date">
 							{{ $review->replied_at ? $review->replied_at->toFormattedDateString() : '-' }}
 						</span>
@@ -198,7 +198,7 @@
 						</div>
 					</div>
 					@if($answer->question_id == 4 && !empty($review->team_doctor_rating) && ($item->id == $review->clinic_id) && !empty($review->dentist_id) && !empty(App\Models\User::find($review->dentist_id)))
-						<div class="treating-dentist">{!! nl2br(trans('trp.popup.view-review-popup.treating-dentist')) !!}: <a href="{{ !empty(App\Models\User::find($review->dentist_id)->email) ? App\Models\User::find($review->dentist_id)->getLink() : 'javascript:;' }}">{{ App\Models\User::find($review->dentist_id)->getName() }}</a></div>
+						<div class="treating-dentist">{!! nl2br(trans('trp.popup.view-review-popup.treating-dentist')) !!}: <a href="{{ !empty(App\Models\User::find($review->dentist_id)->email) ? App\Models\User::find($review->dentist_id)->getLink() : 'javascript:;' }}">{{ App\Models\User::find($review->dentist_id)->getNames() }}</a></div>
 					@endif
 
 	            	@foreach(json_decode($answer->question['options'], true) as $i => $option)

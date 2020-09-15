@@ -245,7 +245,7 @@ class EmailsController extends AdminController
 
         // $top3_dentists = [];
         // foreach ($top3_dentists_query as $top3_dentist) {
-        //  $top3_dentists[] = '<a href="'.$top3_dentist->getLink().'">'.$top3_dentist->getName().'</a>';
+        //  $top3_dentists[] = '<a href="'.$top3_dentist->getLink().'">'.$top3_dentist->getNames().'</a>';
         // }
 
         $user->sendGridTemplate(90, [

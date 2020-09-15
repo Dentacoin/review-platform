@@ -37,17 +37,17 @@
                                     <td>
                                         {{ $review->created_at->toTimeString() }} {{ $review->created_at->toFormattedDateString() }}<br/>
                                         <a href="{{ url('cms/users/edit/'.$review->user->id) }}" target="_blank">
-                                            {{ $review->user->getName() }}
+                                            {{ $review->user->getNames() }}
                                         </a>
                                         ->
                                         @if($review->clinic_id)
                                             <a href="{{ url('cms/users/edit/'.$review->clinic->id) }}" target="_blank">
-                                                {{ $review->clinic->getName() }}
+                                                {{ $review->clinic->getNames() }}
                                             </a>
                                         @endif
                                         @if($review->dentist_id)
                                             <a href="{{ url('cms/users/edit/'.$review->dentist->id) }}" target="_blank">
-                                                {{ $review->dentist->getName() }}
+                                                {{ $review->dentist->getNames() }}
                                             </a>
                                         @endif
                                         <br/>

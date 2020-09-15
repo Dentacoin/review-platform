@@ -39,7 +39,7 @@ Link in CMS: https://dentavox.dentacoin.com/cms/users/edit/'.$user->id;
 	                $message->from($sender, $sender_name);
 	                $message->to( 'petya.ivanova@dentacoin.com' );
 	                $message->to( 'donika.kraeva@dentacoin.com' );
-	                $message->replyTo($user->email, $user->getName());
+	                $message->replyTo($user->email, $user->getNames());
 	                $message->subject('New unsubscribe request');
 	            });
 			}
@@ -80,7 +80,7 @@ Link in CMS: https://dentavox.dentacoin.com/cms/users/edit/'.$user->id;
 	                $message->from($sender, $sender_name);
 	                $message->to( 'petya.ivanova@dentacoin.com' );
 	                $message->to( 'donika.kraeva@dentacoin.com' );
-	                $message->replyTo($user->email, $user->getName());
+	                $message->replyTo($user->email, $user->getNames());
 	                $message->subject('New user unsubscribe');
 	            });
 			}

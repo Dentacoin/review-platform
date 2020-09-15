@@ -41,7 +41,7 @@
 						<div class="flex">
 							<div class="flex-7">
 								<a href="{{ $workplace->clinic->getLink() }}">
-									{{ $workplace->clinic->getName() }}
+									{{ $workplace->clinic->getNames() }}
 								</a>
 								@if( !$workplace->approved )
 									({!! nl2br(trans('trp.popup.popup-wokrplace.pending')) !!})

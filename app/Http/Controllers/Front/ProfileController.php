@@ -11,10 +11,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use App\Models\UserGuidedTour;
 use App\Models\AnonymousUser;
-use App\Models\EmailTemplate;
 use App\Models\UserCategory;
 use App\Models\UserInvite;
-use App\Models\DcnCashout;
 use App\Models\UserAction;
 use App\Models\DcnReward;
 use App\Models\UserPhoto;
@@ -23,9 +21,7 @@ use App\Models\Country;
 use App\Models\UserAsk;
 use App\Models\Reward;
 use App\Models\Review;
-use App\Models\Civic;
 use App\Models\User;
-use App\Models\Dcn;
 
 use App\Imports\Import;
 use Carbon\Carbon;
@@ -35,13 +31,11 @@ use Response;
 use Request;
 use Image;
 use Route;
-use Hash;
 use Mail;
 use Auth;
 use File;
 
-class ProfileController extends FrontController
-{
+class ProfileController extends FrontController {
 
     public function __construct(\Illuminate\Http\Request $request, Route $route, $locale=null) {
         parent::__construct($request, $route, $locale);
@@ -116,10 +110,9 @@ class ProfileController extends FrontController
         ];
     }
 
-    //
-    //Invites
-    //
-
+    /**
+     * dentist invites patients manually
+     */
     public function invite($locale=null) {
 
         if(!empty($this->user) && $this->user->canInvite('trp') ) {
@@ -290,11 +283,6 @@ class ProfileController extends FrontController
                             ], 'trp', $unsubscribed, Request::Input('email'));
                         }
 
-                        // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
-                        //     'friend_name' => $dentist_name,
-                        //     'invitation_id' => $invitation->id
-                        // ]);
-
                         //Back to original
                         $this->user->name = $dentist_name;
                         $this->user->email = $dentist_email;
@@ -306,7 +294,6 @@ class ProfileController extends FrontController
                         return Response::json(['success' => false, 'message' => trans('trp.page.profile.invite.yourself') ] );
                     }
                 }
-
                 return Response::json(['success' => true, 'message' => trans('trp.page.profile.invite.success') ] );
             }
         }
@@ -314,6 +301,9 @@ class ProfileController extends FrontController
         return null;
     }
 
+    /**
+     * dentist invites patients by whatsApp
+     */
     public function invite_whatsapp($locale=null) {
 
         if(!empty($this->user) && $this->user->canInvite('trp') ) {
@@ -324,7 +314,7 @@ class ProfileController extends FrontController
             $invitation->platform = 'trp';
             $invitation->save();
 
-            $text = trans('trp.page.profile.invite.whatsapp', ['name' => $this->user->getName() ]).rawurlencode($this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]));
+            $text = trans('trp.page.profile.invite.whatsapp', ['name' => $this->user->getNames() ]).rawurlencode($this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]));
 
             return Response::json([
                 'success' => true,
@@ -334,6 +324,9 @@ class ProfileController extends FrontController
         }
     }
 
+    /**
+     * dentist invites patients by copy/paste step 1
+     */
     public function invite_copypaste($locale=null) {
 
         if(!empty($this->user) && $this->user->canInvite('trp') ) {
@@ -396,6 +389,9 @@ class ProfileController extends FrontController
         }
     }
 
+    /**
+     * dentist invites patients from file and by copy/paste step 2 (merged method)
+     */
     public function invite_copypaste_emails($locale=null) {
 
         if(!empty($this->user) && $this->user->canInvite('trp') ) {
@@ -424,6 +420,9 @@ class ProfileController extends FrontController
         }
     }
 
+    /**
+     * dentist invites patients from file and by copy/paste step 3 (merged method)
+     */
     public function invite_copypaste_names($locale=null) {
 
         if(!empty($this->user) && $this->user->canInvite('trp') ) {
@@ -449,6 +448,9 @@ class ProfileController extends FrontController
         }
     }
 
+    /**
+     * dentist invites patients from file and by copy/paste - final step (merged method)
+     */
     public function invite_copypaste_final($locale=null) {
 
         if(!empty($this->user) && $this->user->canInvite('trp') ) {
@@ -583,9 +585,7 @@ class ProfileController extends FrontController
                                     $this->user->email = $email;
                                     $this->user->save();
 
-
                                     if ( $this->user->is_dentist) {
-
                                         $unsubscribed = User::isUnsubscribedAnonymous(106, 'trp', $email);
 
                                         if(!empty($existing_anonymous)) {
@@ -614,7 +614,6 @@ class ProfileController extends FrontController
                                             'invited_user_name' => $this->user->name,
                                             "invitation_link" => $this->user->getLink().'?'. http_build_query(['dcn-gateway-type'=>'patient-register', 'inviter' => User::encrypt($this->user->id), 'inviteid' => User::encrypt($invitation->id) ]),
                                         ];
-
 
                                         $this->user->sendGridTemplate(106, $substitutions, 'trp', $unsubscribed, $email);
                                     } else {
@@ -647,11 +646,6 @@ class ProfileController extends FrontController
                                         ], 'trp', $unsubscribed, $email);
                                     }
 
-                                    // $this->user->sendTemplate( $this->user->is_dentist ? 7 : 17 , [
-                                    //     'friend_name' => $dentist_name,
-                                    //     'invitation_id' => $invitation->id
-                                    // ]);
-
                                     //Back to original
                                     $this->user->name = $dentist_name;
                                     $this->user->email = $dentist_email;
@@ -659,8 +653,6 @@ class ProfileController extends FrontController
                                 }
                             }
                         }
-
-
                     }
                 }
 
@@ -682,6 +674,9 @@ class ProfileController extends FrontController
         }
     }
 
+    /**
+     * dentist invites patients from file step 1
+     */
     public function invite_file($locale=null) {
 
         if(!empty($this->user) && $this->user->canInvite('trp') ) {
@@ -775,7 +770,6 @@ class ProfileController extends FrontController
                     unlink($newName);
                 }
 
-
                 if (session('bulk_invites')) {
                     session()->pull('bulk_invites');
                 }                
@@ -789,7 +783,9 @@ class ProfileController extends FrontController
         }
     }
 
-
+    /**
+     * dentist invites patient again
+     */
     public function invite_patient_again($locale=null) {
         $id = Request::input('id');
 
@@ -838,7 +834,9 @@ class ProfileController extends FrontController
         }
     }
 
-
+    /**
+     * clinic invites team member
+     */
     public function invite_team_member($locale=null) {
 
         if( (!empty($this->user) && $this->user->canInvite('trp')) || (empty($this->user) && !empty(request('last_user_id')) && !empty(User::find(request('last_user_id'))) && !empty(request('last_user_hash')) && request('last_user_hash') == User::find(request('last_user_id'))->get_token() )) {
@@ -909,7 +907,7 @@ class ProfileController extends FrontController
                             
                             foreach ($dentists_with_same_name as $same_dentist) {
                                 $user_list[] = [
-                                    'name' => $same_dentist->getName().( $same_dentist->name_alternative && mb_strtolower($same_dentist->name)!=mb_strtolower($same_dentist->name_alternative) ? ' / '.$same_dentist->name_alternative : '' ),
+                                    'name' => $same_dentist->getNames().( $same_dentist->name_alternative && mb_strtolower($same_dentist->name)!=mb_strtolower($same_dentist->name_alternative) ? ' / '.$same_dentist->name_alternative : '' ),
                                     'id' => $same_dentist->id,
                                     'avatar' => $same_dentist->getImageUrl(),
                                     'location' => !empty($same_dentist->country) ? $same_dentist->city_name.', '.$same_dentist->country->name : '',
@@ -922,7 +920,6 @@ class ProfileController extends FrontController
                             ] );
                         }
                     }
-
 
                     if(!empty(Request::input('email'))) {
 
@@ -949,7 +946,6 @@ class ProfileController extends FrontController
 
                             } else if(empty($existing_dentist->self_deleted) && empty($existing_dentist->deleted_at) && ($existing_dentist->status == 'approved' || $existing_dentist->status == 'added_by_clinic_claimed' || $existing_dentist->status == 'added_by_clinic_unclaimed' || $existing_dentist->status == 'test' || $existing_dentist->status == 'added_approved' || $existing_dentist->status == 'added_new' || $existing_dentist->status == 'admin_imported' || $existing_dentist->status == 'added_by_clinic_new') ) {
 
-
                                 $newteam = new UserTeam;
                                 $newteam->dentist_id = $existing_dentist->id;
                                 $newteam->user_id = $current_user->id;
@@ -959,13 +955,13 @@ class ProfileController extends FrontController
                                 if(!empty($this->user) && ($existing_dentist->status == 'approved' || $existing_dentist->status == 'added_by_clinic_claimed' || $existing_dentist->status == 'test')) {
 
                                     $existing_dentist->sendTemplate(33, [
-                                        'clinic-name' => $this->user->getName(),
+                                        'clinic-name' => $this->user->getNames(),
                                         'clinic-link' => $this->user->getLink()
                                     ], 'trp');
                                 }
 
                                 if($existing_dentist->status == 'test') {
-                                    $mtext = 'Clinic '.$current_user->getName().' added a new team member that is with status Test.
+                                    $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is with status Test.
                                     Link to dentist\'s profile:
                                     '.url('https://reviews.dentacoin.com/cms/users/edit/'.$existing_dentist->id).'
                                     Link to clinic\'s profile: 
@@ -983,7 +979,7 @@ class ProfileController extends FrontController
                                         $message->to( 'donika.kraeva@dentacoin.com' );
                                         $message->to( 'ali.hashem@dentacoin.com' );
                                         $message->to( 'betina.bogdanova@dentacoin.com' );
-                                        $message->subject('Clinic '.$current_user->getName().' added a new team member that is with status Test');
+                                        $message->subject('Clinic '.$current_user->getNames().' added a new team member that is with status Test');
                                     });
                                 }
 
@@ -1004,7 +1000,7 @@ class ProfileController extends FrontController
                                     $newteam->save();
 
                                     $existing_dentist->sendTemplate(33, [
-                                        'clinic-name' => $this->user->getName(),
+                                        'clinic-name' => $this->user->getNames(),
                                         'clinic-link' => $this->user->getLink()
                                     ], 'trp');
                                 } else {
@@ -1022,7 +1018,7 @@ class ProfileController extends FrontController
 
                             } else if(!empty($existing_dentist->self_deleted) || !empty($existing_dentist->deleted_at) || $existing_dentist->status == 'rejected' || $existing_dentist->status == 'added_by_clinic_rejected' || $existing_dentist->status == 'added_rejected' || $existing_dentist->status == 'pending') {
 
-                                $mtext = 'Clinic '.$current_user->getName().' added a new team member that is deleted OR with status rejected/suspicious. Link to dentist\'s profile:
+                                $mtext = 'Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious. Link to dentist\'s profile:
                                 '.url('https://reviews.dentacoin.com/cms/users/edit/'.$existing_dentist->id).'
                                 Link to clinic\'s profile: 
                                 '.url('https://reviews.dentacoin.com/cms/users/edit/'.$current_user->id).'
@@ -1039,7 +1035,7 @@ class ProfileController extends FrontController
                                     $message->to( 'donika.kraeva@dentacoin.com' );
                                     $message->to( 'ali.hashem@dentacoin.com' );
                                     $message->to( 'betina.bogdanova@dentacoin.com' );
-                                    $message->subject('Clinic '.$current_user->getName().' added a new team member that is deleted OR with status rejected/suspicious');
+                                    $message->subject('Clinic '.$current_user->getNames().' added a new team member that is deleted OR with status rejected/suspicious');
                                 });
 
                                 return Response::json(['success' => false, 'message' => trans('trp.popup.verification-popup.clinic.suspicious-email-error') ] );
@@ -1085,13 +1081,12 @@ class ProfileController extends FrontController
                             $newuser->save();
 
                             $newuser->sendGridTemplate( 92 , [
-                                'clinic_name' => $current_user->getName(),
+                                'clinic_name' => $current_user->getNames(),
                                 "invitation_link" => getLangUrl( 'dentist/'.$newuser->slug.'/claim/'.$newuser->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
                             ], 'trp');
                         }
 
-
-                        $mtext = 'Clinic '.$current_user->getName().' added a new team member. Link to profile:
+                        $mtext = 'Clinic '.$current_user->getNames().' added a new team member. Link to profile:
                         '.(!empty(Auth::guard('admin')->user()) ? 'This is a Dentacoin ADMIN' : '').'
                         '.url('https://reviews.dentacoin.com/cms/users/edit/'.$newuser->id).'
 
@@ -1105,7 +1100,7 @@ class ProfileController extends FrontController
                             $message->from($sender, $sender_name);
                             $message->to( 'ali.hashem@dentacoin.com' );
                             $message->to( 'betina.bogdanova@dentacoin.com' );
-                            $message->subject('Clinic '.$current_user->getName().' added a new team member');
+                            $message->subject('Clinic '.$current_user->getNames().' added a new team member');
                         });
                     }
                 }
@@ -1117,7 +1112,9 @@ class ProfileController extends FrontController
         return Response::json(['success' => false, 'message' => trans('trp.common.something-wrong') ] );
     }
 
-
+    /**
+     * clinic invites existing user as team member
+     */
     public function invite_existing_team_member($locale=null) {
 
         if((!empty($this->user) && $this->user->canInvite('trp')) || (empty($this->user) && !empty(request('ex_d_id')) && !empty(User::find(request('ex_d_id')) ) && !empty(request('clinic_id')) && !empty(User::find(request('clinic_id')) ))) {
@@ -1137,23 +1134,20 @@ class ProfileController extends FrontController
             if(!empty($this->user) && ($dentist->status == 'approved' || $dentist->status == 'added_by_clinic_claimed' ) ) {
 
                 $dentist->sendTemplate(33, [
-                    'clinic-name' => $this->user->getName(),
+                    'clinic-name' => $this->user->getNames(),
                     'clinic-link' => $this->user->getLink()
                 ], 'trp');
             }
 
-            return Response::json(['success' => true, 'message' => trans('trp.popup.verification-popup.dentist-invite.success', ['dentist-name' => $dentist->getName()])] );
+            return Response::json(['success' => true, 'message' => trans('trp.popup.verification-popup.dentist-invite.success', ['dentist-name' => $dentist->getNames()])] );
         }
         
         return Response::json(['success' => false, 'message' => trans('trp.common.something-wrong') ] );
     }
 
-
-    
-    //
-    //Info
-    //
-
+    /**
+     * dentist uploads a profile photo
+     */
     public function upload($locale=null) {
         if($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test') {
             return Response::json(['success' => false ]);
@@ -1183,10 +1177,12 @@ class ProfileController extends FrontController
 
             return Response::json(['success' => true, 'thumb' => $this->user->getImageUrl(true), 'name' => '' ]);
         }
-        
     }
     
 
+    /**
+     * dentist profile edit
+     */
     public function info($locale=null) {
         if(empty($this->user) || ($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test')) {
             return redirect(getLangUrl('/'));
@@ -1400,10 +1396,9 @@ class ProfileController extends FrontController
         }
     }
 
-    //
-    //Patients ask dentist to confirm they are patients
-    //
-
+    /**
+     * dentist verifies patient
+     */
     public function asks_accept($locale=null, $ask_id) {
         if(empty($this->user) || ($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test') || !$this->user->is_dentist) {
             return redirect(getLangUrl('/'));
@@ -1432,7 +1427,7 @@ class ProfileController extends FrontController
 
             if ($ask->on_review) {
                 $ask->user->sendTemplate( $ask->on_review ? 64 : 24 ,[
-                    'dentist_name' => $this->user->getName(),
+                    'dentist_name' => $this->user->getNames(),
                     'dentist_link' => $this->user->getLink(),
                 ], 'trp');
             }
@@ -1483,6 +1478,9 @@ class ProfileController extends FrontController
         return redirect( getLangUrl('/').'?tab=asks');
     }
 
+    /**
+     * dentist denies patient's request
+     */
     public function asks_deny($locale=null, $ask_id) {
         if(empty($this->user) || ($this->user->is_dentist && $this->user->status!='approved' && $this->user->status!='added_by_clinic_claimed' && $this->user->status!='added_by_dentist_claimed' && $this->user->status!='test') || !$this->user->is_dentist) {
             return redirect(getLangUrl('/'));
@@ -1497,12 +1495,11 @@ class ProfileController extends FrontController
         Request::session()->flash('success-message', trans('trp.page.profile.asks.denied'));
         return redirect( getLangUrl('/').'?tab=asks');
     }
-
-    //
-    //TRP Reviews
-    //
-
-     public function trp($locale=null) {
+    
+    /**
+     * section TRP in accont.dentacoin.com
+     */
+    public function trp($locale=null) {
         if(!empty($this->user)) {
             
             $params = [
@@ -1533,11 +1530,9 @@ class ProfileController extends FrontController
         }
     }
 
-    //
-    //Gallery
-    //
-
-
+    /**
+     * dentist adds a gallery photos
+     */
     public function gallery($locale=null, $position=null) {
         if( Request::file('image') && Request::file('image')->isValid() ) {
             $dapic = new UserPhoto;
@@ -1557,6 +1552,9 @@ class ProfileController extends FrontController
         return Response::json( $ret );
     }    
 
+    /**
+     * dentist deletes a gallery photo
+     */
     public function gallery_delete($locale=null, $id) {
         UserPhoto::destroy($id);
 
@@ -1565,10 +1563,9 @@ class ProfileController extends FrontController
         ] );
     }
 
-    //
-    //Dentist <-> Clinic relationship
-    //
-
+    /**
+     * clinic removes team members
+     */
     public function dentists_delete( $locale=null, $id ) {
         $dentist = User::find( $id );
         $clinic = $this->user;
@@ -1577,7 +1574,7 @@ class ProfileController extends FrontController
             $action = new UserAction;
             $action->user_id = $dentist->id;
             $action->action = 'deleted';
-            $action->reason = 'Automatically - Clinic '.$clinic->getName().' remove from team this dentist with no email';
+            $action->reason = 'Automatically - Clinic '.$clinic->getNames().' remove from team this dentist with no email';
             $action->actioned_at = Carbon::now();
             $action->save();
 
@@ -1592,6 +1589,9 @@ class ProfileController extends FrontController
         ] );
     }
 
+    /**
+     * clinic rejects team member
+     */
     public function dentists_reject( $locale=null, $id ) {
 
         $res = UserTeam::where('user_id', $this->user->id)->where('dentist_id', $id)->delete();
@@ -1600,7 +1600,7 @@ class ProfileController extends FrontController
             $dentist = User::find( $id );
 
             $dentist->sendTemplate(36, [
-                'clinic-name' => $this->user->getName()
+                'clinic-name' => $this->user->getNames()
             ], 'trp');
         }
         
@@ -1609,6 +1609,9 @@ class ProfileController extends FrontController
         ] );
     }
 
+    /**
+     * clinic accepts team member
+     */
     public function dentists_accept( $locale=null, $id ) {
 
         $item = UserTeam::where('dentist_id', $id)->where('user_id', $this->user->id)->first();
@@ -1621,7 +1624,7 @@ class ProfileController extends FrontController
             $dentist = User::find( $id );
 
             $dentist->sendTemplate(35, [
-                'clinic-name' => $this->user->getName()
+                'clinic-name' => $this->user->getNames()
             ], 'trp');
         }
 
@@ -1630,6 +1633,9 @@ class ProfileController extends FrontController
         ] );
     }
     
+    /**
+     * clinic accepts team member
+     */
     public function clinics_delete( $locale=null, $id ) {
         $res = UserTeam::where('dentist_id', $this->user->id)->where('user_id', $id)->delete();
 
@@ -1637,7 +1643,7 @@ class ProfileController extends FrontController
             $clinic = User::find( $id );
 
             $clinic->sendTemplate(38, [
-                'dentist-name' => $this->user->getName()
+                'dentist-name' => $this->user->getNames()
             ], 'trp');
         }
 
@@ -1646,12 +1652,14 @@ class ProfileController extends FrontController
         ] );
     }
 
+    /**
+     * dentist sends a request for clinic team
+     */
     public function inviteClinic() {
 
         if(!empty(Request::input('joinclinicid'))) {
 
             $clinic = User::find( Request::input('joinclinicid') );
-
             if(!empty($clinic)) {
 
                 $newclinic = new UserTeam;
@@ -1661,12 +1669,12 @@ class ProfileController extends FrontController
                 $newclinic->save();
 
                 $clinic->sendTemplate(34, [
-                    'dentist-name' =>$this->user->getName()
+                    'dentist-name' =>$this->user->getNames()
                 ], 'trp');
 
                 return Response::json( [
                     'success' => true,
-                    'message' => trans('trp.page.user.clinic-invited', ['name' => $clinic->getName() ])
+                    'message' => trans('trp.page.user.clinic-invited', ['name' => $clinic->getNames() ])
                 ] );
             }
         } 
@@ -1677,6 +1685,9 @@ class ProfileController extends FrontController
         ] );
     }
 
+    /**
+     * clinic adds an existing dentist to team
+     */
     public function inviteDentist() {
 
         if(!empty(Request::input('invitedentistid')) && (!empty($this->user) || !empty(Request::input('user_id'))) ) {
@@ -1684,11 +1695,9 @@ class ProfileController extends FrontController
             $dentist = User::find( Request::input('invitedentistid') );
 
             if(!empty($dentist)) {
-
                 $user = !empty($this->user) ? $this->user : (!empty(Request::input('user_id')) && !empty(User::find(Request::input('user_id'))) ? User::find(Request::input('user_id')) : '');
 
                 if(!empty($user)) {
-
                     $newdentist = new UserTeam;
                     $newdentist->dentist_id = Request::input('invitedentistid');
                     $newdentist->user_id = $user->id;
@@ -1698,14 +1707,14 @@ class ProfileController extends FrontController
 
                     if(!empty($this->user)) {                        
                         $dentist->sendTemplate(33, [
-                            'clinic-name' => $this->user->getName(),
+                            'clinic-name' => $this->user->getNames(),
                             'clinic-link' => $this->user->getLink()
                         ], 'trp');
                     }
 
                     return Response::json( [
                         'success' => true,
-                        'message' => trans('trp.page.user.dentist-invited', ['name' => $dentist->getName() ])
+                        'message' => trans('trp.page.user.dentist-invited', ['name' => $dentist->getNames() ])
                     ] );
                 }
             }
@@ -1717,15 +1726,20 @@ class ProfileController extends FrontController
         ] );
     }
 
+    /**
+     * clinic deletes invite as his team member
+     */
     public function invites_delete( $locale=null, $id ) {
 
         UserInvite::destroy($id);
-
         return Response::json( [
             'success' => true,
         ] );
     }
 
+    /**
+     * dentist's strength scale action - check assurance.dentacoin.com
+     */
     public function checkAssurance( $locale=null ) {
 
         if(!empty($this->user) && $this->user->is_dentist) {
@@ -1744,6 +1758,9 @@ class ProfileController extends FrontController
         return redirect(getLangUrl('/'));
     }
 
+    /**
+     * dentist's strength scale action - check dentacare.dentacoin.com
+     */
     public function checkDentacare( $locale=null ) {
 
         if(!empty($this->user) && $this->user->is_dentist) {
@@ -1762,6 +1779,9 @@ class ProfileController extends FrontController
         return redirect(getLangUrl('/'));
     }
 
+    /**
+     * dentist's strength scale action - check reviews
+     */
     public function checkReviews( $locale=null ) {
 
         if(!empty($this->user) && $this->user->is_dentist) {
@@ -1780,6 +1800,9 @@ class ProfileController extends FrontController
         return redirect(getLangUrl('/'));
     }
 
+    /**
+     * starts guided tour after dentist's registration
+     */
     public function firstGuidedTour($locale=null) {
         session()->pull('first_guided_tour');
 
@@ -1868,7 +1891,6 @@ class ProfileController extends FrontController
                 }
 
                 session(['guided_tour_count' => count($arr)]);
-
                 session(['guided_tour' => $arr]);
             }
 
@@ -1884,6 +1906,9 @@ class ProfileController extends FrontController
         ]);
     }
 
+    /**
+     * remove first guided tour
+     */
     public function removeFirstGuidedTour($locale=null) {
 
         session()->pull('guided_tour');
@@ -1894,6 +1919,9 @@ class ProfileController extends FrontController
         ]);
     }
 
+    /**
+     * remove reviews guided tour
+     */
     public function removeReviewsGuidedTour($locale=null) {
 
         session()->pull('reviews_guided_tour');
@@ -1903,6 +1931,9 @@ class ProfileController extends FrontController
         ]);
     }
 
+    /**
+     * guided tour after first dentist's review
+     */
     public function reviewsGuidedTour($locale=null, $layout=null) {
         session()->pull('reviews_guided_tour');
         

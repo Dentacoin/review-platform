@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Front;
+
 use App\Http\Controllers\FrontController;
 
 use App\Models\IncompleteRegistration;
@@ -9,17 +10,13 @@ use App\Models\UserInvite;
 use App\Models\PageSeo;
 use App\Models\User;
 
-use CArbon\Carbon;
-
-use Validator;
-use Response;
-use Request;
 use Mail;
-use App;
 
-class UnsubscribeController extends FrontController
-{
+class UnsubscribeController extends FrontController {
 
+	/**
+     * oldest unsubscribe link
+     */
 	public function unsubscribe($locale=null, $user_id, $hash) {
 
 		$user = User::find($user_id);
@@ -39,7 +36,7 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 	                $message->from($sender, $sender_name);
 	                $message->to( 'petya.ivanova@dentacoin.com' );
 	                $message->to( 'donika.kraeva@dentacoin.com' );
-	                $message->replyTo($user->email, $user->getName());
+	                $message->replyTo($user->email, $user->getNames());
 	                $message->subject('New unsubscribe request');
 	            });
 			}
@@ -60,6 +57,9 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 		return redirect( getLangUrl('/') );
 	}
 
+	/**
+     * old unsubscribe link
+     */
 	public function new_unsubscribe($locale=null, $user_id, $hash) {
 
 		//в user anonymous също трябва да търся
@@ -82,7 +82,7 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 	                $message->from($sender, $sender_name);
 	                $message->to( 'petya.ivanova@dentacoin.com' );
 	                $message->to( 'donika.kraeva@dentacoin.com' );
-	                $message->replyTo($user->email, $user->getName());
+	                $message->replyTo($user->email, $user->getNames());
 	                $message->subject('New user unsubscribe');
 	            });
 			}
@@ -119,6 +119,9 @@ Link in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$user->id;
 		return redirect( getLangUrl('/') );
 	}
 
+	/**
+     * old unsubscribe link for incomplete registration
+     */
 	public function unsubscribe_incomplete($locale=null, $id, $hash) {
 
 		$ir = IncompleteRegistration::find($id);

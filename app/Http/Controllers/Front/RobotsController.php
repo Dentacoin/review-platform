@@ -1,12 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\Front;
+
 use App\Http\Controllers\FrontController;
+
 use Request;
 
+class RobotsController extends FrontController {
 
-class RobotsController extends FrontController
-{
+	/**
+     * robots.txt file content
+     */
 	public function content($locale=null) {
 
 		if (Request::getHost() == 'urgent.reviews.dentacoin.com' || Request::getHost() == 'dev.reviews.dentacoin.com') {
@@ -27,9 +31,6 @@ Disallow: /lead-magnet-results/
 ';
 		}
 
-		return response($content, 200)
-            ->header('Content-Type', 'text/plain');
-        
+		return response($content, 200)->header('Content-Type', 'text/plain');
 	}
-
 }

@@ -8,10 +8,12 @@ use App\Models\User;
 use Validator;
 use Response;
 use Request;
-use App;
 
 class MiscController extends FrontController {
 
+	/**
+     * share/send dentist's profile
+     */
 	public function share($locale=null) {
 
 		if( request('email') && request('address') && mb_strpos( request('address'),  request()->getHttpHost() )!==false ) {
@@ -38,12 +40,10 @@ class MiscController extends FrontController {
 		            'success' => true,
 		        ] );
             }
-
 		}
 
 		return Response::json( [
             'success' => false,
         ] );
 	}
-
 }

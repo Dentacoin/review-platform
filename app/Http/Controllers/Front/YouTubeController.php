@@ -41,18 +41,21 @@ use Mail;
 use Log;
 use DB;
 
-class YouTubeController extends FrontController
-{
+class YouTubeController extends FrontController {
+
+    /**
+     * recover token from admin for youtube video reviews
+     */
     public function test() {
 
         if(!empty($this->admin)) {
+
             $client = new \Google_Client();
             $client->setApplicationName('API Samples');
             $client->setScopes('https://www.googleapis.com/auth/youtube.force-ssl');
             // Set to name/location of your client_secrets.json file.
             $client->setAuthConfig( storage_path() . '/client_secrets.json');
             $client->setAccessType('offline');
-
 
             // Load previously authorized credentials from a file.
             $credentialsPath = storage_path() . '/yt-oauth2.json';
@@ -87,7 +90,6 @@ class YouTubeController extends FrontController
             }
 
             return $client;
-            
         }
     }
 }

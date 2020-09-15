@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Front;
 use App\Http\Controllers\FrontController;
 
-use Illuminate\Support\Facades\Input;
-
-use App\Models\UserPhoto;
 use App\Models\Country;
 use App\Models\PageSeo;
 use App\Models\User;
@@ -16,9 +13,9 @@ use Response;
 use Request;
 use App;
 
-class DentistsController extends FrontController
-{
-    public function getCorrectedQuery($query, $filter) {
+class DentistsController extends FrontController {
+
+    private function getCorrectedQuery($query, $filter) {
         $query = trim(urldecode($query));
         if(!empty($filter)) {
             $corrected_query = mb_strtolower(str_replace([',', "'", ' ', '.'], ['', '', '-'. ''], $query )).'/'.$filter;
@@ -29,10 +26,9 @@ class DentistsController extends FrontController
         return $corrected_query;
     }
 
-    public function paginate($locale=null, $query=null, $filter=null, $page) {
-        return $this->list($locale, $query, $filter, $page, true);
-    }
-
+    /**
+     * search dentists
+     */
     public function search($locale=null, $query=null, $filter=null, $page=null, $ajax=null) {
 
         if(!empty($this->user) && $this->user->isBanned('trp')) {
@@ -55,32 +51,6 @@ class DentistsController extends FrontController
             return redirect( getLangUrl($corrected_query) );
         }
 
-        // $noAddress = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->whereNotNull('city_id')->whereNull('lat')->take(300)->get();
-        // foreach ($noAddress as $user) {
-        //     $query = $user->country->name.', '.$user->city->name.', '.($user->zip ? $user->zip.', ' : null).$user->address;
-        //     echo $query.'<br/>';
-
-        //     $geores = \GoogleMaps::load('geocoding')
-        //     ->setParam ([
-        //         'address'    => $query,
-        //     ])
-        //     ->get();
-
-        //     $geores = json_decode($geores);
-        //     $lat = $lon = null;
-        //     if(!empty($geores->results[0]->geometry->location)) {
-        //         $lat = $geores->results[0]->geometry->location->lat;
-        //         $lon = $geores->results[0]->geometry->location->lng;
-        //     }
-
-        //     $user->lat = $lat;
-        //     $user->lon = $lon;
-        //     $user->save();
-
-        //     echo $lat.' '.$lon.'<br/><br/>';
-        // }
-        // dd('ok');
-
         $items = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->whereNull('self_deleted');
         $mode = 'map';
         $formattedAddress = $query;
@@ -98,13 +68,6 @@ class DentistsController extends FrontController
             $mode = 'name';
         } else {
 
-            // if($filter) {
-            //     $arr = explode(',', $filter);
-            //     if(count($arr)==2 && parseFloat($arr[0]) && parseFloat($arr[1])) {
-            //         $lat = parseFloat($arr[0]);
-            //         $lon = parseFloat($arr[1]);
-            //     }
-            // }
             if(empty($lat) || empty($lon)) {
                 $query = str_replace('-', ' ', $query);
 
@@ -204,14 +167,8 @@ class DentistsController extends FrontController
                     })->first();
                 }
 
-
-                // if (!empty($country) && !empty($country->id)) {
-                // }
                 $items->where('country_id', $country->id);
-
                 $country_search = true;
-                
-                
             } else {
                 list($range_lat, $range_lon) = $this->getRadiusInLatLon(50, $lat);
                 $items->whereBetween('lat', [$lat-$range_lat, $lat+$range_lat]);
@@ -219,9 +176,7 @@ class DentistsController extends FrontController
             }
         }
 
-        // dd($parsedAddress);
         $nonCannonicalUrl = true;
-
 
         if( !empty($parsedAddress['city_name']) && !empty($parsedAddress['state_name']) && !empty($parsedAddress['country_name']) && !$country_search) {
 
@@ -232,7 +187,6 @@ class DentistsController extends FrontController
             if($isValid) {
                 $nonCannonicalUrl = false;
             }
-
         }
 
         $page = max(1, $page);
@@ -256,7 +210,6 @@ class DentistsController extends FrontController
         }
         $items = $items->orderBy($order_to_field[$sort], 'DESC');
 
-
         if( Request::input('stars') ) {
             $stars = Request::input('stars');
             $items = $items->where('avg_rating', '>=', Request::input('stars'));
@@ -279,9 +232,6 @@ class DentistsController extends FrontController
             }
         }
 
-
-        // dd($searchCategories);
-        //dd($categories);
         if( Request::input('partner') ) {
             $partner = true;
             $items = $items->where('is_partner', true);
@@ -354,10 +304,7 @@ class DentistsController extends FrontController
             $bounds_lat = ($max_lat + $min_lat) / 2;
 
             $bounds_zoom = 8;
-            //dd($lonRange, $latRange);
         }
-
-        // dd($lat, $lon);
 
         $staticmap = 'https://maps.googleapis.com/maps/api/staticmap?center='.($bounds_lat ? $bounds_lat : $lat).','.($bounds_lon ? $bounds_lon : $lon).'&zoom='.($bounds_zoom ? $bounds_zoom : $zoom).'&size='.$size.'&maptype=roadmap&key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk';
         $i=1;
@@ -375,7 +322,7 @@ class DentistsController extends FrontController
 
         $search_title = '';
         if (!empty($query)) {
-                //dd('with filter eg worldwide, gen dentists');
+            //dd('with filter eg worldwide, gen dentists');
 
             $search_title = trans('trp.page.search.all-results.title', [
                 'name' => $formattedAddress,
@@ -441,9 +388,6 @@ class DentistsController extends FrontController
                         $categoryNames[] = $this->categories_dentists[$slug];
                     }
                 }
-
-                // dd(implode(', ', $categoryNames));
-                // implode(', ', $categoryNames)
 
                 $seos = PageSeo::find(27);
 
@@ -538,10 +482,11 @@ class DentistsController extends FrontController
         return $originalUrl.'&signature='.$encodedSignature;
     }
 
-
+    /**
+     * search dentist by country
+     */
     public function country($locale=null) {
 
-        
         if(!empty($this->user) && $this->user->isBanned('trp')) {
             return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
         }
@@ -606,25 +551,16 @@ class DentistsController extends FrontController
                 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en'
             ]
         ));
-
     }
 
+    /**
+     * search dentist by city
+     */
     public function city($locale=null, $country_slug, $state_slug) {
 
         if(!empty($this->user) && $this->user->isBanned('trp')) {
             return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
         }
-
-        // $user = User::find(1592);
-
-        // $info = User::validateAddress($user->country->name, $user->address);
-        // if(is_array($info)) {
-        //     echo 'country: '.$user->country->name.' | address: '.$user->address.' | city: '.$user->city_name.'<br/>';
-        //     foreach ($info as $key => $value) {
-        //         echo 'key-> '.$key.' | value-> '.$value.'<br/>';
-        //         $user->$key = $value;
-        //     }
-        // }
 
         $country = Country::where('slug', 'like', $country_slug )->first();
 
@@ -633,7 +569,6 @@ class DentistsController extends FrontController
         }
 
         $cities_name = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->groupBy('city_name')->orderBy('city_name', 'asc')->get();
-
 
         $all_dentists = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->where('country_id', $country->id)->where('state_slug', 'like', $state_slug)->whereNotNull('city_name')->count();
 
@@ -671,8 +606,6 @@ class DentistsController extends FrontController
             }
         }
 
-        // var_dump($breakpoints);
-
         $seos = PageSeo::find(30);
 
         $seo_title = str_replace(':country', $country->name, $seos->seo_title);
@@ -706,16 +639,14 @@ class DentistsController extends FrontController
         ));
     }
 
+    /**
+     * search dentist by state
+     */
     public function state($locale=null, $country_slug) {
 
         if(!empty($this->user) && $this->user->isBanned('trp')) {
             return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
         }
-
-        // $user = User::find(68738);
-
-        // $user->address = $user->address.'';
-        // exit;
 
         $country = Country::where('slug', 'like', $country_slug )->first();
 
@@ -726,7 +657,6 @@ class DentistsController extends FrontController
         $states = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->where('country_id', $country->id)->whereNotNull('city_name')->groupBy('state_name')->orderBy('state_name', 'asc')->get();
 
         $all_dentists = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->where('country_id', $country->id)->whereNotNull('city_name')->count();
-
 
         $states_groups = [];
         $letter = null;
@@ -740,7 +670,6 @@ class DentistsController extends FrontController
                 $total_rows++;
                 $letters[$letter] = true;
                 $states_groups[$total_rows] = $letter;
-
             }
 
             $total_rows++;
@@ -790,6 +719,4 @@ class DentistsController extends FrontController
             ]
         ));
     }
-
-
 }

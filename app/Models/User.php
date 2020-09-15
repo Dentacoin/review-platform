@@ -319,7 +319,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return mb_strpos( $this->website, 'http' )!==false ? $this->website : 'http://'.$this->website;
     }
 
-    public function getName() {
+    public function getNames() {
         return ($this->title && $this->is_dentist && !$this->is_clinic ? config('titles')[$this->title].' ' : '').$this->name;
     }
 
@@ -1750,10 +1750,10 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         if($this->my_workplace->isNotEmpty()) {
             foreach($this->my_workplace as $workplace) {
                 if( $workplace->approved ) {
-                    $ret[] = '<a href="'.$workplace->clinic->getLink().'">'.$workplace->clinic->getName().'</a>';
+                    $ret[] = '<a href="'.$workplace->clinic->getLink().'">'.$workplace->clinic->getNames().'</a>';
                 } else {
                     if( $isme ) {
-                        $ret[] = '<a href="'.$workplace->clinic->getLink().'">'.$workplace->clinic->getName().' ('.trans('trp.page.index.pending').')</a>';
+                        $ret[] = '<a href="'.$workplace->clinic->getLink().'">'.$workplace->clinic->getNames().' ('.trans('trp.page.index.pending').')</a>';
                     }
                 }
             }
@@ -1829,7 +1829,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
         }
 
 
-        $names = $this->getName();
+        $names = $this->getNames();
         $names = wordwrap($names, 30); 
         $lines = count(explode("\n", $names));
         $top = 205 + $above_pushing;

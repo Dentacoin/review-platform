@@ -1389,7 +1389,7 @@ class UsersController extends AdminController {
                                         $reward->save();
 
                                         $substitutions = [
-                                            'added_dentist_name' => $item->getName(),
+                                            'added_dentist_name' => $item->getNames(),
                                             'trp_added_dentist_prf' => $item->getLink().'?dcn-gateway-type=patient-login',
                                         ];
 
@@ -1475,12 +1475,12 @@ class UsersController extends AdminController {
                                                     $dent->save();
 
                                                     $dent->sendGridTemplate( 92 , [
-                                                        'clinic_name' => $item->getName(),
+                                                        'clinic_name' => $item->getNames(),
                                                         "invitation_link" => getLangUrl( 'dentist/'.$dent->slug.'/claim/'.$dent->id).'?'. http_build_query(['popup'=>'claim-popup']).'&without-info=true',
                                                     ], 'trp');
                                                 } else {
                                                     $dent->sendTemplate(33, [
-                                                        'clinic-name' => $item->getName(),
+                                                        'clinic-name' => $item->getNames(),
                                                         'clinic-link' => $item->getLink()
                                                     ], 'trp');
                                                 }
@@ -1493,7 +1493,7 @@ class UsersController extends AdminController {
                                             if($wp->clinic->status == 'approved' || $wp->clinic->status == 'added_by_dentist_claimed') {
                                                     
                                                 $wp->clinic->sendTemplate(34, [
-                                                    'dentist-name' => $item->getName()
+                                                    'dentist-name' => $item->getNames()
                                                 ], 'trp');
                                             }
                                         }
@@ -1546,7 +1546,7 @@ class UsersController extends AdminController {
                                         $dent = User::find($item->invited_by);
 
                                         if(!empty($dent)) {
-                                            $dent_name = $dent->getName();
+                                            $dent_name = $dent->getNames();
                                         }
                                     }
 

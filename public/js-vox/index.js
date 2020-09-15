@@ -47,11 +47,9 @@ $(document).ready(function(){
         }
     }
 
-
     if(typeof(vox)!='undefined') {
         VoxTest.handleNextQuestion();        
     }
-
 	
     $('.question-group label.answer, .question-group a.next-answer').click( function() {
         var group = $(this).closest('.question-group');
@@ -141,9 +139,6 @@ $(document).ready(function(){
                         }, 1000 );
                     }
                 }
-                
-
-                
             }
             // $("#first-test-done").modal({backdrop: 'static', keyboard: false});
 
@@ -203,18 +198,13 @@ $(document).ready(function(){
                     $(this).addClass('already-inited');
                 }
             });
-            
-
         });
 
         if($(window).scrollTop() > 0) {
             $('.inited-video').each( function() {
                 $(this).attr('src', $(this).attr('video-url') );
             });
-            
         }
     }
-
-
 
 });

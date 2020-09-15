@@ -397,10 +397,7 @@ $(document).ready(function(){
                         //console.log('MULTI SKIP');
                         var next_real = group.nextAll(':not([skipped="skipped"])').first().prev();
                         VoxTest.handleNextQuestion();
-
-                        ///console.log(group);
                         group = next_real;
-                        //console.log(group);
                     } 
 
                     if(data.ban) {
@@ -422,7 +419,6 @@ $(document).ready(function(){
                     if(data.wrong) {
                         $('.question-group').find('.loader').remove();
                         $('.question-group:visible a:nth-child('+parseInt(answer)+')').addClass('wrong');
-
 
                         var go_back_group = $('.question-group').first();
                         var i = 1;
@@ -487,23 +483,11 @@ $(document).ready(function(){
                             VoxTest.handleNextQuestion();
                             $("#question-meta").hide();
 
-                            // if (related) {
-                            //     $("#question-related-done").show();
-                            // } else {
-                            //     $("#question-done").show();
-                            // }
-                            // $('html, body').animate({
-                            //     scrollTop: $('body').offset().top
-                            // }, 500);
-
-                            // $("#other-surveys").show();
-                            // swiper.update();
                             if ($(window).outerWidth() <= 768) {
                                 $('#myVideoMobile')[0].play();
                             } else {
                                 $('#myVideo')[0].play();
                             }
-                            
                             
                             $("#question-done").show();
                             if (($('.swiper-container').length || $('.swipe-cont').length)  && typeof Swiper !== 'undefined' ) {
@@ -841,17 +825,6 @@ $(document).ready(function(){
         
     } );
     $('.question-group a.next-answer').click( sendAnswer );
-    // $('.question-group label.answer a').click( function(e) {
-    //     e.stopPropagation();
-    // });
-
-    // $('.question-group .answer-checkbox').click( function() {
-    //     if( $(this).find('input').prop('disabled') ) {
-    //         $(this).closest('.question-group').find('input.answer').prop('disabled', false).prop('checked', false);
-    //         $(this).prop('checked', 'checked');
-    //         $(this).closest('.question-group').find('input.disabler').closest('.answer-checkbox').removeClass('active');
-    //     }
-    // } )
 
     $('.question-group input.disabler').change( function() {
         $(this).closest('.question-group').find('input:not(.disabler)').prop('checked', false).prop('disabled', 'disabled');
@@ -881,12 +854,9 @@ $(document).ready(function(){
             }
         } );
 
-        //if (window.innerWidth < 768) {
-
-            if( $(this).closest('.flickity').length ) {
-                $(this).closest('.flickity').flickity('next');
-            }
-        //}
+        if( $(this).closest('.flickity').length ) {
+            $(this).closest('.flickity').flickity('next');
+        }
 
     } );
 

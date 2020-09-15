@@ -186,7 +186,7 @@ class Review extends Model {
                 $inv->save();
                 
                 $this->user->invitor->sendTemplate( 22, [
-                    'who_joined_name' => $this->user->getName()
+                    'who_joined_name' => $this->user->getNames()
                 ], 'trp' );
             }
         }
@@ -315,7 +315,7 @@ class Review extends Model {
         }
 
 
-        $names = $this->user->getName();
+        $names = $this->user->getNames();
         $img->text($names, $left_patient_name, 516, function($font) {
             $font->file(public_path().'/fonts/Calibri.ttf');
             $font->size(30);

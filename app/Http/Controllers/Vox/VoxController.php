@@ -497,8 +497,10 @@ class VoxController extends FrontController
 	            }
 
         	} else {
-
 	        	$q = Request::input('question');
+
+        		$this->getNextQuestion($vox_id, $q);
+
 
 	        	if( !isset( $answered[$q] ) && $not_bot ) {
 
@@ -729,7 +731,7 @@ class VoxController extends FrontController
 		        						trans('vox.page.bans.ban-mistakes-title-2'),
 		        						trans('vox.page.bans.ban-mistakes-title-3'),
 		        						trans('vox.page.bans.ban-mistakes-title-4', [
-		        							'name' => $this->user->getName()
+		        							'name' => $this->user->getNames()
 		        						]),
 		        					];
 		        					$ret['title'] = $titles[$prev_bans];
@@ -1014,7 +1016,7 @@ class VoxController extends FrontController
 		        							trans('vox.page.bans.ban-too-fast-title-2'),
 		        							trans('vox.page.bans.ban-too-fast-title-3'),
 		        							trans('vox.page.bans.ban-too-fast-title-4',[
-		        								'name' => $this->user->getName()
+		        								'name' => $this->user->getNames()
 		        							]),
 			        					];
 			        					$ret['title'] = $titles[$prev_bans];
@@ -1138,7 +1140,7 @@ class VoxController extends FrontController
 	                                    $inv->save();
 	                                    	
 	                                    $this->user->invitor->sendGridTemplate( 82, [
-	                                        'who_joined_name' => $this->user->getName()
+	                                        'who_joined_name' => $this->user->getNames()
 	                                    ], 'vox' );
 	                                }
 	                            }
@@ -1425,6 +1427,10 @@ class VoxController extends FrontController
 		}
 
 		return $agegroup;
+
+	}
+
+	private function getNextQuestion($vox_id, $question_id=null) {
 
 	}
 

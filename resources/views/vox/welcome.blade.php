@@ -175,7 +175,7 @@
 				</div>
 
 				<div class="flex-9 tac">
-					<h3 class="done-title">Good job, <span class="blue-text"> {{ $user->getName() }}!</span></h3>
+					<h3 class="done-title">Good job, <span class="blue-text"> {{ $user->getNames() }}!</span></h3>
 					<h4>
 						You’ve just earned <span class="coins-test">{{ $vox->getRewardTotal() }}</span> DCN! To withdraw your <br/> reward, just go to your <a href="https://account.dentacoin.com/?platform=dentavox">Wallet.</a> Ready to get more <br/> Dentacoin tokens?
 					</h4>
