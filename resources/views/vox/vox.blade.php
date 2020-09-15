@@ -217,7 +217,7 @@
 								@endif
 								<h3 class="done-title">
 									{!! trans('vox.page.questionnaire.well-done', [
-										'who' => '<span class="blue-text">'.$user->getName().'</span>'
+										'who' => '<span class="blue-text">'.$user->getNames().'</span>'
 									]) !!}
 								</h3>
 								@if($user->platform == 'external')
