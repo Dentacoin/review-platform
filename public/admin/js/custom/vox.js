@@ -603,7 +603,7 @@ $(document).ready(function(){
 
 	if($('#generate-stats').length) {
 		$('#generate-stats').click( function() {
-			if($('#has-stats-already').attr('data') == 'no') {
+			if($('#has-stats-already').attr('data') == 'no' && $('#has_stats').is(':checked')) {
 				$('#stats-loader').show();
 			}
 			$(this).closest('form').submit();
