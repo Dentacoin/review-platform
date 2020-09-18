@@ -1872,6 +1872,7 @@ NOT SEND TRANSACTIONS
             
         })->dailyAt('10:00');
 
+
         $schedule->call(function () {
 
             echo 'Gas Price Cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
@@ -1898,6 +1899,8 @@ NOT SEND TRANSACTIONS
 
         })->cron("*/1 * * * *");
 
+
+
         $schedule->call(function () {
             echo 'Video reviews cron - START'.PHP_EOL.PHP_EOL.PHP_EOL;
 
@@ -1918,6 +1921,7 @@ NOT SEND TRANSACTIONS
             echo 'Video reviews cron - Done'.PHP_EOL.PHP_EOL.PHP_EOL;
 
         })->cron('*/5 * * * *');
+
 
         $schedule->call(function () {
             echo 'TEST CRON END  '.date('Y-m-d H:i:s').PHP_EOL.PHP_EOL.PHP_EOL;

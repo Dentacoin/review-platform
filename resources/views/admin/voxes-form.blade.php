@@ -145,7 +145,7 @@
                             <input type="checkbox" name="featured" value="1" id="featured" {!! !empty($item) && $item->featured ? 'checked="checked"' : '' !!} >
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="has-stats-already" data="{!! empty($item) ? 'yes' : ($item->has_stats ? 'yes' : 'no') !!}">
                         <label for="has_stats" class="col-md-2 control-label" style="padding-top: 0px; max-width: 200px;">Stats Enabled</label>
                         <div class="col-md-10">
                             <input type="checkbox" name="has_stats" value="1" id="has_stats" {!! !empty($item) && $item->has_stats ? 'checked="checked"' : '' !!} >
@@ -427,7 +427,8 @@
 
                     <div class="form-group">
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-block">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}</button>
+                            <a href="javascript:;" id="generate-stats" class="btn btn-primary btn-block">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }} </a>
+                            <button type="submit" class="btn btn-primary btn-block" style="display: none;">{{ empty($item) ? trans('admin.page.'.$current_page.'.new.submit') : trans('admin.page.'.$current_page.'.edit.submit') }}</button>
                         </div>
                     </div>
                 </div>

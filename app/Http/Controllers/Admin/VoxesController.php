@@ -827,6 +827,16 @@ class VoxesController extends AdminController
             curl_close($curl);
         }
 
+        if(!empty($item) && !$item->has_stats && !empty($this->request->input('has_stats'))) {
+            $dependency_questions = VoxQuestion::where('vox_id', $item->id)->where('used_for_stats', 'dependency')->whereNotNull('stats_relation_id')->whereNull('dependency_caching')->get();
+
+            if($dependency_questions->isNotEmpty()) {
+                foreach ($dependency_questions as $dq) {
+                    $dq->generateDependencyCaching();
+                }
+            }
+        }
+
         $item->type = $this->request->input('type');
         $item->featured = $this->request->input('featured');
         $item->stats_featured = $this->request->input('stats_featured');

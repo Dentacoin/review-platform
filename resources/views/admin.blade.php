@@ -167,6 +167,10 @@
             
             <!-- begin #content -->
             <div id="content" class="content">
+                <div id="stats-loader" style="display: none;position: fixed;z-index: 10000;left: 0;right: 0;background: white;top: 0;bottom: 0;text-align: center;">
+                    <img style="max-width: 100%;" src="{{ url('new-vox-img/dentavox-statistics-loader.gif') }}"/>
+                    <p style="font-size: 20px;">Please, wait 3-4 minutes until stats are generated.</p>
+                </div>
                 @include('admin.errors')
 
 @endif

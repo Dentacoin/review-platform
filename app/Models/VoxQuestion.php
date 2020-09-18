@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\VoxAnswersDependency;
+use App\Models\VoxAnswer;
+
 use WebPConvert\WebPConvert;
 
 use DB;
@@ -33,6 +36,7 @@ class VoxQuestion extends Model {
         'order',
         'number_limit',
         'used_for_stats',
+        'dependency_caching',
         'stats_title',
         'stats_title_question',
         'stats_subtitle',
@@ -229,6 +233,68 @@ class VoxQuestion extends Model {
         } else {
             return false;
         }
+    }
+
+    public function generateDependencyCaching() {
+
+        $existing = VoxAnswersDependency::where('question_id', $this->id)->get();
+
+        if($existing->isNotEmpty()) {
+            foreach ($existing as $exist) {
+                $exist->delete();
+            }
+        }
+        
+        if(!empty($this->stats_answer_id)) {
+
+            $results = VoxAnswer::prepareQuery($this->id, null,[
+                'dependency_answer' => $this->stats_answer_id,
+                'dependency_question' => $this->stats_relation_id,
+            ]);
+
+            $results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
+            $results = $results->get();
+
+            foreach ($results as $result) {
+
+                $vda = new VoxAnswersDependency;
+                $vda->question_dependency_id = $this->stats_relation_id;
+                $vda->question_id = $this->id;
+                $vda->answer_id = $this->stats_answer_id;
+                $vda->answer = $result->answer;
+                $vda->cnt = $result->cnt;
+                $vda->save();
+            }
+        } else {
+            //да минат през всички отговори
+            foreach (json_decode($this->answers, true) as $key => $single_answ) {
+                $answer_number = $key + 1;
+                
+                $results = VoxAnswer::prepareQuery($this->id, null,[
+                    'dependency_answer' => $answer_number,
+                    'dependency_question' => $this->stats_relation_id,
+                ]);
+
+                $results = $results->groupBy('answer')->selectRaw('answer, COUNT(*) as cnt');
+                $results = $results->get();
+
+                $existing = VoxAnswersDependency::where('question_id', $this->id)->first();
+
+                foreach ($results as $result) {
+
+                    $vda = new VoxAnswersDependency;
+                    $vda->question_dependency_id = $this->stats_relation_id;
+                    $vda->question_id = $this->id;
+                    $vda->answer_id = $answer_number;
+                    $vda->answer = $result->answer;
+                    $vda->cnt = $result->cnt;
+                    $vda->save();
+                }
+            }
+        }
+
+        $this->dependency_caching = true;
+        $this->save();
     }
 }
 

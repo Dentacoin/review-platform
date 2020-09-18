@@ -599,4 +599,14 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+
+	if($('#generate-stats').length) {
+		$('#generate-stats').click( function() {
+			if($('#has-stats-already').attr('data') == 'no') {
+				$('#stats-loader').show();
+			}
+			$(this).closest('form').submit();
+		});
+	}
 });
