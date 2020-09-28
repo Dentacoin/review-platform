@@ -671,35 +671,38 @@ class StatsController extends FrontController
                         continue;
                     }
 
-        			if(!isset($main_chart[ $answer_number ])) {
-        				$main_chart[ $answer_number ] = 0;
-        			}
-                    if($question->type == 'rank') {
-                        $main_chart[ $answer_number ] += $res->weight;
-                    } else {
-                        $main_chart[ $answer_number ] += $res->cnt;
-                    }
+                    if($answer_number !== '') {
 
-        			if( $res->country_id ) {
-                        $country = $countries->get($res->country_id);
-                        $country->code = mb_strtoupper($country->code);
-        				if(!isset($second_chart_before[ $country->code ] )) {
-        					$second_chart_before[ $country->code ] = [
-                                'name' => $country->name
-                            ];
-                            foreach ($answers as $a) {
-                                $second_chart_before[ $country->code ][$a] = 0;
-                            }
-        				}
-                        if(empty($answer_id) || $res->$answerField==$answer_id) {
-                            if($question->type == 'rank') {
-                                $second_chart_before[ $country->code ][ $answer_number ] = intval($res->weight);
-                                $country_resp_count[ $country->code ][ $answer_number ] = $res->cnt;
-                            } else {
-                                $second_chart_before[ $country->code ][ $answer_number ] = $res->cnt;
-                            }
+            			if(!isset($main_chart[ $answer_number ])) {
+            				$main_chart[ $answer_number ] = 0;
+            			}
+                        if($question->type == 'rank') {
+                            $main_chart[ $answer_number ] += $res->weight;
+                        } else {
+                            $main_chart[ $answer_number ] += $res->cnt;
                         }
-        			}
+
+            			if( $res->country_id ) {
+                            $country = $countries->get($res->country_id);
+                            $country->code = mb_strtoupper($country->code);
+            				if(!isset($second_chart_before[ $country->code ] )) {
+            					$second_chart_before[ $country->code ] = [
+                                    'name' => $country->name
+                                ];
+                                foreach ($answers as $a) {
+                                    $second_chart_before[ $country->code ][$a] = 0;
+                                }
+            				}
+                            if(empty($answer_id) || $res->$answerField==$answer_id) {
+                                if($question->type == 'rank') {
+                                    $second_chart_before[ $country->code ][ $answer_number ] = intval($res->weight);
+                                    $country_resp_count[ $country->code ][ $answer_number ] = $res->cnt;
+                                } else {
+                                    $second_chart_before[ $country->code ][ $answer_number ] = $res->cnt;
+                                }
+                            }
+            			}
+                    }
         		}
 
                 $reorder = $this->reorderStats($main_chart, $question);
@@ -974,23 +977,24 @@ class StatsController extends FrontController
                     if(!isset( $answer_number )) {
                         continue;
                     }
-                    
-        			if(!isset($main_chart[ $answer_number ])) {
-        				$main_chart[ $answer_number ] = 0;
-        			}
-                    if($question->type == 'rank') {
-                        $main_chart[ $answer_number ] += $res->weight;
-                    } else {
-                        $main_chart[ $answer_number ] += $res->cnt;
-                    }
-
-        			if( $res->age ) {
+                    if($answer_number !== '') {
+            			if(!isset($main_chart[ $answer_number ])) {
+            				$main_chart[ $answer_number ] = 0;
+            			}
                         if($question->type == 'rank') {
-                            $second_chart_before[ $age_to_group[$res->age] ][ $answer_number ] = $res->weight; //m
+                            $main_chart[ $answer_number ] += $res->weight;
                         } else {
-                            $second_chart_before[ $age_to_group[$res->age] ][ $answer_number ] = $res->cnt; //m
+                            $main_chart[ $answer_number ] += $res->cnt;
                         }
-        			}
+
+            			if( $res->age ) {
+                            if($question->type == 'rank') {
+                                $second_chart_before[ $age_to_group[$res->age] ][ $answer_number ] = $res->weight; //m
+                            } else {
+                                $second_chart_before[ $age_to_group[$res->age] ][ $answer_number ] = $res->cnt; //m
+                            }
+            			}
+                    }
         		}
                 
         	} else {
@@ -1042,22 +1046,25 @@ class StatsController extends FrontController
                         continue;
                     }
 
-        			if(!isset($main_chart[ $answer_number ])) {
-        				$main_chart[ $answer_number ] = 0;
-        			}
-        			if($question->type == 'rank') {
-                        $main_chart[ $answer_number ] += $res->weight;
-                    } else {
-                        $main_chart[ $answer_number ] += $res->cnt;
-                    }
+                    if($answer_number !== '') {
 
-        			if( $res->$scale ) {
-    	        		if($question->type == 'rank') {
-                            $second_chart_before[ $age_to_group[$res->$scale] ][ $answer_number ] = $res->weight; //m
+            			if(!isset($main_chart[ $answer_number ])) {
+            				$main_chart[ $answer_number ] = 0;
+            			}
+            			if($question->type == 'rank') {
+                            $main_chart[ $answer_number ] += $res->weight;
                         } else {
-                            $second_chart_before[ $age_to_group[$res->$scale] ][ $answer_number ] = $res->cnt; //m
+                            $main_chart[ $answer_number ] += $res->cnt;
                         }
-        			}
+
+            			if( $res->$scale ) {
+        	        		if($question->type == 'rank') {
+                                $second_chart_before[ $age_to_group[$res->$scale] ][ $answer_number ] = $res->weight; //m
+                            } else {
+                                $second_chart_before[ $age_to_group[$res->$scale] ][ $answer_number ] = $res->cnt; //m
+                            }
+            			}
+                    }
     		    }
         	}
 
