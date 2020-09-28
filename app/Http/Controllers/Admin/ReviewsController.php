@@ -143,7 +143,7 @@ class ReviewsController extends AdminController
             }
 
             $request_body = new \stdClass();
-            $request_body->recipient_emails = [$this->email];
+            $request_body->recipient_emails = [$patient->email];
             
             $trp_group_id = config('email-preferences')['product_news']['trp']['sendgrid_group_id'];
             $response = $sg->client->asm()->groups()->_($trp_group_id)->suppressions()->post($request_body);
