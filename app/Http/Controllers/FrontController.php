@@ -419,14 +419,16 @@ class FrontController extends BaseController {
 
         if( session('unbanned') ) {
             session(['unbanned' => null]);
-            $params['unbanned'] = true;
-            $params['unbanned_times'] = $this->user->getPrevBansCount('vox');
-            if( $params['unbanned_times']==1 ) {
-                $params['unbanned_text'] = nl2br(trans('vox.page.bans.unbanned-text-1'));
-            } else if( $params['unbanned_times']==2 ) {
-                $params['unbanned_text'] = nl2br(trans('vox.page.bans.unbanned-text-2'));
-            } else {
-                $params['unbanned_text'] = nl2br(trans('vox.page.bans.unbanned-text-3'));
+            if(!empty($this->user)) {
+                $params['unbanned'] = true;
+                $params['unbanned_times'] = $this->user->getPrevBansCount('vox');
+                if( $params['unbanned_times']==1 ) {
+                    $params['unbanned_text'] = nl2br(trans('vox.page.bans.unbanned-text-1'));
+                } else if( $params['unbanned_times']==2 ) {
+                    $params['unbanned_text'] = nl2br(trans('vox.page.bans.unbanned-text-2'));
+                } else {
+                    $params['unbanned_text'] = nl2br(trans('vox.page.bans.unbanned-text-3'));
+                }
             }
         }
 
@@ -575,6 +577,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '2020091101';
+        $params['cache_version'] = '20200917';
     }
 }
