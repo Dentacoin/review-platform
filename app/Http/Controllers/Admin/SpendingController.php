@@ -51,7 +51,8 @@ class SpendingController extends AdminController
             FROM  `dcn_transactions` 
             WHERE
                 `created_at` > '".$search_from->format('Y.m.d')."' AND
-                `created_at` < '".$search_to->addDays(1)->format('Y.m.d')."'
+                `created_at` < '".$search_to->addDays(1)->format('Y.m.d')."' AND
+                `status` = 'completed'
             GROUP BY `period`, `type` 
             ORDER BY `id` DESC
         ");
