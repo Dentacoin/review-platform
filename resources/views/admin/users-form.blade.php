@@ -15,6 +15,12 @@
             <a href="{{ url('cms/users/reset-first-guided-tour/'.$item->id) }}" class="btn btn-primary" style="float: right;">Reset first guided tour</a>
         @endif
     @endif
+
+    @if($item->is_dentist)
+        <a href="{{ url('cms/users/convert-to-patient/'.$item->id) }}" class="btn btn-info" style="float: right; margin-right: 10px;" onclick="return confirm('Are you sure you want to convert this user to patient?');">Convert to patient</a>
+    @else
+        <a href="{{ url('cms/users/convert-to-dentist/'.$item->id) }}" class="btn btn-info" style="float: right;" onclick="return confirm('Are you sure you want to convert this user to dentist?');">Convert to dentist</a>
+    @endif
 </h1>
 <!-- end page-header -->
 
@@ -1225,6 +1231,7 @@
                                 'duration'              => array('template' => 'admin.parts.table-bans-duration'),
                                 //'domain'              => array(),
                                 'expires'              => array('template' => 'admin.parts.table-bans-expires'),
+                                'ban_for'              => array('template' => 'admin.parts.table-bans-for'),
                                 'delete'              => array('template' => 'admin.parts.table-bans-delete'),
                             ],
                             'table_data' => $item->bans,

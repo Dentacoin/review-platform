@@ -2200,6 +2200,71 @@ class UsersController extends AdminController {
         return redirect(!empty(Request::server('HTTP_REFERER')) ? Request::server('HTTP_REFERER') : 'cms/anonymous_users');
     }
 
+    public function convertToPatient($id) {
+
+        $item = User::find($id);
+
+        if(!empty($item)) {
+            $item->status = 'approved';
+            $item->is_dentist = 0;
+            $item->is_clinic = 0;
+            $item->is_partner = null;
+            $item->featured = null;
+            $item->top_dentist_month = null;
+            $item->title = null;
+            $item->slug = null;
+            $item->patient_status = 'new_not_verified';
+
+            $item->product_news = ['dentacoin', 'trp', 'vox'];
+            $item->save();
+
+            //create recipients
+            $item->removeFromSendgridSubscribes();
+            $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+
+            $user_info = new \stdClass();
+            $user_info->email = $item->email;
+            $user_info->first_name = explode(' ', $item->name)[0];
+            $user_info->last_name = isset(explode(' ', $item->name)[1]) ? explode(' ', $item->name)[1] : '';
+            $user_info->type = 'patient';
+
+            $request_body = [
+                $user_info
+            ];
+
+            $response = $sg->client->contactdb()->recipients()->post($request_body);
+            $recipient_id = isset(json_decode($response->body())->persisted_recipients) ? json_decode($response->body())->persisted_recipients[0] : null;
+
+            //add to list
+            if($recipient_id) {
+                $sg = new \SendGrid(env('SENDGRID_PASSWORD'));
+                $list_id = config('email-preferences')['product_news']['vox']['sendgrid_list_id'];
+                $response = $sg->client->contactdb()->lists()->_($list_id)->recipients()->_($recipient_id)->post();
+            }
+        }
+
+        return redirect('cms/users/edit/'.$id);
+    }
 
 
+    public function convertToDentist($id) {
+
+        $item = User::find($id);
+
+        if(!empty($item)) {
+            $item->status = 'new';
+            $item->is_dentist = 1;
+            $item->user_patient_type = null;
+            $item->is_clinic = 0;
+            $item->patient_status = null;
+
+            $item->product_news = null;
+            $item->save();
+            $item->removeFromSendgridSubscribes();
+
+            $this->request->session()->flash('warning-message', 'Please, check the following fields "user type", "title"! Set a password and send it to the dentist!! Add country and address!');
+        }
+
+        return redirect('cms/users/edit/'.$id);
+    }
 }
