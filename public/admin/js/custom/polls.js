@@ -87,10 +87,8 @@ $(document).ready(function(){
     $('.poll-answers').first().bind("paste", function(e) {
 
         catchPaste(e, this, function(clipData) {
-            var val = clipData.replace('\n', '<br/>');
+            var val = clipData.replace(/[\r\n]+/gm, '<br/>');
             textarea_val = val.split('<br/>');
-
-            console.log(textarea_val.length);
             if(textarea_val.length > 1) {
 
                 for( var i in textarea_val) {
@@ -104,9 +102,7 @@ $(document).ready(function(){
                     } );
                 }
             }
-
         });
-
     });
 
     var handleScaleChanges = function() {
