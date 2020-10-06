@@ -6537,6 +6537,12 @@ body.strength-pb {
 			padding-top: 70px;
 			top: auto !important;
 		}
+
+		form {
+			@media #{$phone} {
+				margin-bottom: 0px;
+			}
+		}
 	}
 
 	.flickity-oval {
@@ -7046,6 +7052,7 @@ body.strength-pb {
 
 	@media #{$tablet} {
 		margin-left: 0px;
+		margin-top: 40px;
 		text-align: center;
 	}
 

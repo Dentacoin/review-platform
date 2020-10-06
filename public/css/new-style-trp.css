@@ -4896,6 +4896,9 @@ body.strength-pb {
       .index-gradient .home-search-form {
         padding-top: 70px;
         top: auto !important; } }
+    @media screen and (max-width: 768px) {
+      .index-gradient .home-search-form form {
+        margin-bottom: 0px; } }
   .index-gradient .flickity-oval {
     background: none; }
     .index-gradient .flickity-oval::after {
@@ -5255,6 +5258,7 @@ body.strength-pb {
   @media screen and (max-width: 998px) {
     .flickity-dentists-form {
       margin-left: 0px;
+      margin-top: 40px;
       text-align: center; } }
   .flickity-dentists-form img {
     max-width: 13px; }
