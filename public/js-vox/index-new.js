@@ -165,7 +165,10 @@ $(document).ready(function(){
             });
         }
 
-        handleSwiper();
+        setTimeout( function() {
+
+            handleSwiper();
+        }, 500);
     }
 
     if($('#to-append').length) {
@@ -177,6 +180,8 @@ $(document).ready(function(){
                     url: lang + '/index-down/',
                     success: function(ret) {
                         if (!$('#to-append').hasClass('appended')) {
+                            $.getScript(window.location.origin+'/js-vox/swiper.min.js');
+                            $('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/swiper.min.css">');
                             $('#to-append').append(ret);
                             $('#to-append').addClass('appended');
 

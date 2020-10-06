@@ -201,12 +201,10 @@ class IndexController extends FrontController {
 	        	'js' => [
 					'all-surveys.js',
 	        		'index-new.js',
-					'swiper.min.js'
 	        	],
 	        	'css' => [
 	        		'vox-index.css',
 	        		'vox-index-home.css',
-					'swiper.min.css'
 	        	],
 	        ));
 		}
