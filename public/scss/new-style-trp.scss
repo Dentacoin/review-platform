@@ -6534,7 +6534,8 @@ body.strength-pb {
 	    padding-top: 100px;
 
 	    @media #{$phone} {
-			padding-top: 0px;
+			padding-top: 70px;
+			top: auto !important;
 		}
 	}
 

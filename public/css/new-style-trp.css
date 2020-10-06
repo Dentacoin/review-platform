@@ -4894,7 +4894,8 @@ body.strength-pb {
     padding-top: 100px; }
     @media screen and (max-width: 768px) {
       .index-gradient .home-search-form {
-        padding-top: 0px; } }
+        padding-top: 70px;
+        top: auto !important; } }
   .index-gradient .flickity-oval {
     background: none; }
     .index-gradient .flickity-oval::after {
