@@ -4879,13 +4879,22 @@ body.strength-pb {
   padding-bottom: 1px; }
   .index-gradient .main-top {
     background: none;
-    padding-bottom: 310px;
+    padding-bottom: 0px;
     margin-bottom: 7px; }
     @media screen and (max-width: 345px) {
       .index-gradient .main-top {
         margin-bottom: 27px; } }
   .index-gradient .home-search-form {
-    top: 100px; }
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    background: transparent;
+    margin: 0 auto;
+    padding-top: 100px; }
+    @media screen and (max-width: 768px) {
+      .index-gradient .home-search-form {
+        padding-top: 0px; } }
   .index-gradient .flickity-oval {
     background: none; }
     .index-gradient .flickity-oval::after {

@@ -6516,7 +6516,7 @@ body.strength-pb {
 
 	.main-top {
 		background: none;
-		padding-bottom: 310px;
+		padding-bottom: 0px;
 		margin-bottom: 7px;
 
 		@media screen and (max-width: 345px) {
@@ -6525,7 +6525,17 @@ body.strength-pb {
 	}
 
 	.home-search-form {
-		top: 100px;
+		position: relative;
+	    top: auto;
+	    left: auto;
+	    transform: none;
+	    background: transparent;
+	    margin: 0 auto;
+	    padding-top: 100px;
+
+	    @media #{$phone} {
+			padding-top: 0px;
+		}
 	}
 
 	.flickity-oval {

@@ -17,9 +17,6 @@
 		    @include('trp.parts.search-form')
 		</div>
 
-		<div class="main-top">
-	    </div>
-
 	    @if(!empty($_COOKIE['functionality_cookies']) && !empty($country_id))
 		    <div class="container">
 			    <div class="flickity-dentists-form">
