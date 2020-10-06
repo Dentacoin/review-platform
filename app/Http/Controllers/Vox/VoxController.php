@@ -1539,7 +1539,7 @@ class VoxController extends FrontController
 							//question order
 							//proverki za triguri, skipvane
 							$question = VoxQuestion::find($question_id);
-							$next_question = VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order + 1)->first();
+							$next_question = VoxQuestion::where('vox_id', $question->vox_id)->orderBy('order', 'asc')->where('order', '>', $question->order)->first();
 							$array['question'] = $next_question;
 						} else {
 							//first question
@@ -1574,7 +1574,7 @@ class VoxController extends FrontController
 
 						if(!empty($question_id) && is_numeric($question_id)) {
 							$question = VoxQuestion::find($question_id);
-							$next_question = VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order + 1)->first();
+							$next_question = VoxQuestion::where('vox_id', $question->vox_id)->orderBy('order', 'asc')->where('order', '>', $question->order)->first();
 
 							if(!empty($next_question->question_trigger)) {
 
@@ -1737,7 +1737,7 @@ class VoxController extends FrontController
 								$array['question'] = $question;
 							} else {
 								//first unanswered question
-								$array['question'] = VoxQuestion::where('vox_id', $vox_id)->where('order', VoxQuestion::find(array_key_last($answered))->order+1)->first();
+								$array['question'] = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'asc')->where('order','>', VoxQuestion::find(array_key_last($answered))->order)->first();
 							}
 						}
 					}
