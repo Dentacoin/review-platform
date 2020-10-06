@@ -48,9 +48,7 @@
 			}
 		</style>
 		
-		@if($current_page == 'questionnaire')
-			<script src='https://www.google.com/recaptcha/api.js'></script>
-		@endif
+		<script src='https://www.google.com/recaptcha/api.js'></script>
 
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108398439-2"></script>

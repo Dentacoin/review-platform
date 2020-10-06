@@ -6,22 +6,22 @@ var handlePopups;
 
 jQuery(document).ready(function($){
 
-	// if ($('.slider-wrapper').length <= 4 && $(window).outerWidth() > 998) {
-	// 	$('.flickity').addClass('flex');
-	// } else {
-	// 	$('.flickity').flickity({
-	// 		autoPlay: false,
-	// 		wrapAround: true,
-	// 		pageDots: false,
-	// 		groupCells: 1,
-	// 		cellAlign: $(window).width()<768 ? 'center' : 'left',
-	// 		freeScroll: false,
-	// 		contain: true,
-	// 		on: {
-	// 			ready: fixFlickty,
-	// 		}
-	// 	});
-	// }
+	if ($('.slider-wrapper').length <= 4 && $(window).outerWidth() > 998) {
+		$('.flickity').addClass('flex');
+	} else {
+		$('.flickity').flickity({
+			autoPlay: false,
+			wrapAround: true,
+			pageDots: false,
+			groupCells: 1,
+			cellAlign: $(window).width()<768 ? 'center' : 'left',
+			freeScroll: false,
+			contain: true,
+			on: {
+				ready: fixFlickty,
+			}
+		});
+	}
 
 	if( window.location.hash == '#invite-form' ) {
         $('html, body').animate({

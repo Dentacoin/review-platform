@@ -246,11 +246,11 @@ class IndexController extends FrontController {
 				'index.js',
                 'search.js',
                 'address.js',
-                // 'flickity.min.js',
+                'flickity.min.js',
 			],
-			// 'css' => [
-   //              'flickity.min.css',
-			// ]
+			'css' => [
+                'flickity.min.css',
+			]
         );
 
 		if (!empty($this->user)) {
