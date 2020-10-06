@@ -82,6 +82,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'address',
         'lat',
         'lon',
+        'custom_lat_lon',
         'phone',
         'website',
         'socials',
@@ -439,11 +440,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $times;
     }
 
-    public function banUser($domain, $reason='') {
+    public function banUser($domain, $reason='', $ban_for_id=null) {
         $times = $this->getPrevBansCount($domain, $reason);
         $ban = new UserBan;
         $ban->user_id = $this->id;
         $ban->domain = $domain;
+        $ban->ban_for_id = $ban_for_id;
         $days = 0;
         if($times==0) {
             $days = 1;
@@ -814,8 +816,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     // }
     public function setAddressAttribute($newvalue) {
         $this->attributes['address'] = $newvalue;
-        $this->attributes['lat'] = null;
-        $this->attributes['lon'] = null;
+        if(!$this->custom_lat_lon) {
+            $this->attributes['lat'] = null;
+            $this->attributes['lon'] = null;
+        }
         $this->attributes['city_name'] = null;
         $this->attributes['state_name'] = null;
         $this->attributes['state_slug'] = null;
@@ -823,8 +827,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $info = self::validateAddress($this->country->name, $newvalue);
             if(!empty($info)) {
                 foreach ($info as $key => $value) {
+                    
                     if( in_array($key, $this->fillable) ) {
-                        $this->attributes[$key] = $value;                        
+                        if(($key == 'lat' || $key == 'lon') && $this->custom_lat_lon) {
+
+                        } else {
+                            $this->attributes[$key] = $value;                        
+                        }
                     }
                 }
                 if(empty($this->attributes['state_name'])) {
@@ -1586,7 +1595,6 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
                 return false;
             }
         }
-
     }
 
     public static function lastLoginUserId() {
@@ -2033,7 +2041,7 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
     }
 
     public static function getAllVoxes() {
-        return Vox::with('translations');
+        return Vox::with('translations')->with('categories.category')->with('categories.category.translations');
     }
 
     public function voxesTargeting() {

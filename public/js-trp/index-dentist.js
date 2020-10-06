@@ -40,67 +40,70 @@ jQuery(document).ready(function($){
 		}
     }
 
-    var $carousel = $('.flickity-testimonial');
+	$(window).scroll( function() {
+		if (!$('#to-append').hasClass('appended')) {
+			$.ajax({
+	            type: "POST",
+	            url: lang + '/index-dentist-down/',
+	            success: function(ret) {
+	            	if (!$('#to-append').hasClass('appended')) {
+	            		$.getScript(window.location.origin+'/js-trp/flickity.min.js');
+	            		$('#to-append').append(ret);
+	            		$('#to-append').addClass('appended');
 
-	$('.testimonial img').on('load', function() {
-		$carousel.flickity({
-	    	autoPlay: true,
-			wrapAround: true,
-			cellAlign: 'left',
-			pageDots: false,
-			groupCells: 1,
-			adaptiveHeight: true,
-		});
+	            		handlePopups();
+	            		
+	            		var $carousel = $('.flickity-testimonial');
+
+						$('.testimonial img').on('load', function() {
+							$carousel.flickity({
+						    	autoPlay: true,
+								wrapAround: true,
+								cellAlign: 'left',
+								pageDots: false,
+								groupCells: 1,
+								adaptiveHeight: true,
+							});
+						});
+
+						setTimeout( function() {
+							$carousel.flickity({
+						    	autoPlay: true,
+								wrapAround: true,
+								cellAlign: 'left',
+								pageDots: false,
+								groupCells: 1,
+								adaptiveHeight: true,
+							});
+						}, 1000);
+
+						if ($(window).innerWidth() < 768) {
+							$('.mobile-flickity .left').children().appendTo('.mobile-flickity');
+							$('.mobile-flickity .left').remove();
+							$('.mobile-flickity .right').children().appendTo('.mobile-flickity');
+							$('.mobile-flickity .right').remove();
+
+							setTimeout( function() {
+		            			var $slider = $('.mobile-flickity');
+								$slider.flickity({
+							    	//autoPlay: true,
+									wrapAround: true,
+									cellAlign: 'left',
+									pageDots: true,
+									prevNextButtons: false,
+									groupCells: 1,
+									adaptiveHeight: true,
+								});
+							}, 1000);
+						}
+	            	}
+	                
+	            },
+	            error: function(ret) {
+	                console.log('error');
+	            }
+	        });
+		}
 	});
-
-	setTimeout( function() {
-
-		$carousel.flickity({
-	    	autoPlay: true,
-			wrapAround: true,
-			cellAlign: 'left',
-			pageDots: false,
-			groupCells: 1,
-			adaptiveHeight: true,
-		});
-	}, 1000);
-
-	if ($(window).innerWidth() < 768) {
-		$('.mobile-flickity .left').children().appendTo('.mobile-flickity');
-		$('.mobile-flickity .left').remove();
-		$('.mobile-flickity .right').children().appendTo('.mobile-flickity');
-		$('.mobile-flickity .right').remove();
-
-		$('.mobile-flickity').flickity({
-	    	//autoPlay: true,
-			wrapAround: true,
-			cellAlign: 'left',
-			pageDots: true,
-			prevNextButtons: false,
-			groupCells: 1,
-			adaptiveHeight: true,
-		});
-	}
-
-    $('.magnet-popup').click( function() {
-        var that = $(this);
-
-        $.ajax({
-            type: "GET",
-            url: that.attr('data-url'),
-            dataType: 'json',
-            success: function(ret) {
-                if(ret.session) {
-                    window.location.href = ret.url;
-                } else {
-                    showPopup('popup-lead-magnet');
-                }
-            },
-            error: function(ret) {
-                console.log('error');
-            }
-        });
-        
-    });
     
 });

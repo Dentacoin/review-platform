@@ -47,8 +47,10 @@
 				{!! config('langs')[App::getLocale()]['font_css'] !!}
 			}
 		</style>
-
-		<script src='https://www.google.com/recaptcha/api.js'></script>
+		
+		@if($current_page == 'questionnaire')
+			<script src='https://www.google.com/recaptcha/api.js'></script>
+		@endif
 
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108398439-2"></script>
@@ -148,8 +150,8 @@
 				<div class="container">
 					<div class="navbar clearfix {{ !empty($user) && $user->platform == 'external' ? 'external-navbar' : '' }}">
 						<a href="{{ getLangUrl('/') }}" class="logo">
-							<img src="{{ url('new-vox-img/logo-vox.png') }}" alt="Dentavox logo" class="desktop">
-							<img src="{{ url('new-vox-img/logo-vox-mobile.png') }}" alt="Dentavox logo mobile" class="mobile">
+							<img src="{{ url('new-vox-img/logo-vox.png') }}" alt="Dentavox logo" class="desktop" width="138" height="34">
+							<img src="{{ url('new-vox-img/logo-vox-mobile.png') }}" alt="Dentavox logo mobile" class="mobile" width="46" height="29">
 						</a>
 						<div class="header-title">
 							@if($current_page=='index')
@@ -183,7 +185,7 @@
 								</div>
 								@if( $user->platform!='external' )
 									<a class="header-a" href="https://account.dentacoin.com/?platform=dentavox" >
-										<img class="header-avatar" id="header-avatar" src="{{ $user->getImageUrl(true) }}">
+										<img class="header-avatar" id="header-avatar" src="{{ $user->getImageUrl(true) }}" width="46" height="46">
 									</a>
 								@endif
 
@@ -202,7 +204,7 @@
 											</a>
 										</div>
 										<a class="header-a open-dentacoin-gateway patient-login" href="javascript:;">
-											<img class="header-avatar" id="header-avatar" src="{{ $prev_user->getImageUrl(true) }}">
+											<img class="header-avatar" id="header-avatar" src="{{ $prev_user->getImageUrl(true) }}" width="46" height="46">
 										</a>
 									</div>
 
@@ -228,25 +230,8 @@
 			</div>
 		</div>
 
-
-		@if(!empty($user))
-			@include('vox.popups.recommend')
-		@else
-			@include('vox/popups/failed-reg-login')
-		@endif
-
-		<style type="text/css">
-			.page-profile .poll-bubble {
-				display: none !important;
-			}
-		</style>
-
-		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && $current_page != 'register' && $current_page != 'login' && request()->getHost() != 'vox.dentacoin.com' && request()->getHost() != 'account.dentacoin.com' && empty($session_polls)) || $current_page == 'daily-polls' || !empty($closed_daily_poll) && $current_page != 'questionnaire')
-			@if(!empty($user) && $user->loggedFromBadIp())
-
-			@else
-				@include('vox.popups.daily-poll')
-			@endif
+		@if((!empty($daily_poll) && empty($taken_daily_poll) && $current_page != 'questionnaire' && request()->getHost() != 'vox.dentacoin.com' && request()->getHost() != 'account.dentacoin.com' && empty($session_polls)) || $current_page == 'daily-polls' || !empty($closed_daily_poll) && $current_page != 'questionnaire')
+			@include('vox.popups.daily-poll')
 		@endif
 
 		@if(!empty($unbanned))
@@ -287,7 +272,7 @@
 			<footer>
 				<div class="container flex flex-end">
 					<a href="https://dentacoin.com/" target="_blank" class="footer-logo flex-3 flex flex-center">
-						<img src="{{ url('img-vox/dc-logo.png') }}" alt="Dentacoin logo">
+						<img src="{{ url('img-vox/dc-logo.png') }}" alt="Dentacoin logo" width="37" height="37">
 						<p class="bold">
 							{{ trans('vox.footer.company-name') }}
 						</p>
@@ -317,71 +302,9 @@
 			</footer>
 		</div>
 
-		<div class="bottom-drawer">
-
-			@if(empty($user) && empty($_COOKIE['performance_cookies']) && empty($_COOKIE['marketing_cookies']) && empty($_COOKIE['strictly_necessary_policy']) && empty($_COOKIE['functionality_cookies']))
-				<div class="privacy-policy-cookie">
-					<div class="container-cookie flex">
-						<div class="cookies-text">
-							This site uses cookies. Find out more on how we use cookies in our <a href="https://dentacoin.com/privacy-policy" target="_blank">Privacy Policy</a>. | <a href="javascript:;" class="adjust-cookies">Adjust cookies</a>
-						</div>
-						<a href="javascript:;" class="accept-all">Accept all cookies</a>
-					</div>
-					<div id="customize-cookies" class="customize-cookies" style="display: none;">
-						<button class="close-customize-cookies-icon close-customize-cookies-popup">×</button>
-						<div class="tac"><img src="/img-trp/cookie-icon.svg" alt="Cookie icon" class="cookie-icon"/></div>
-						<div class="tac cookie-popup-title">Select cookies to accept:</div>
-						<div class="cookies-options-list flex">
-							<div class="cookie-checkbox-wrapper">
-								<label class="cookie-label active" for="strictly-necessary-cookies">
-									<i class="far fa-square checkbox-icon"></i>
-									<input checked disabled id="strictly-necessary-cookies" type="checkbox" class="cookie-checkbox">
-									<span class="gray">Strictly necessary</span> 
-									<i class="fas fa-info-circle info-cookie tooltip-text" text="Cookies essential to navigate around the website and use its features. Without them, you wouldn’t be able to use basic services like signup or login."></i>
-								</label>
-							</div>
-							<div class="cookie-checkbox-wrapper">
-								<label class="cookie-label active" for="performance-cookies">
-									<i class="far fa-square checkbox-icon"></i>
-									<input checked id="performance-cookies" type="checkbox" class="cookie-checkbox">
-									<span>Performance cookies</span> 
-									<i class="fas fa-info-circle info-cookie tooltip-text" text="These cookies collect data for statistical purposes on how visitors use a website, they don’t contain personal data and are used to improve user experience."></i>
-								</label>
-							</div>
-							<div class="cookie-checkbox-wrapper">
-								<label class="cookie-label active" for="functionality-cookies">
-									<i class="far fa-square checkbox-icon"></i>
-									<input checked id="functionality-cookies" type="checkbox" class="cookie-checkbox">
-									<span>Functionality cookies</span> 
-									<i class="fas fa-info-circle info-cookie tooltip-text" text="These cookies allow users to customise how a website looks for them; they can remember usernames, preferences, etc."></i>
-								</label>
-							</div>
-							<div class="cookie-checkbox-wrapper">
-								<label class="cookie-label active" for="marketing-cookies">
-									<i class="far fa-square checkbox-icon"></i>
-									<input checked id="marketing-cookies" type="checkbox" class="cookie-checkbox">
-									<span>Marketing cookies</span> 
-									<i class="fas fa-info-circle info-cookie tooltip-text" text="Marketing cookies are used e.g. to deliver advertisements more relevant to you or limit the number of times you see an advertisement."></i>
-								</label>
-							</div>
-						</div>
-						<div class="flex actions">
-							<a href="javascript:;" class="close-cookie-button close-customize-cookies-popup">CANCEL</a>
-							<a href="javascript:;" class="custom-cookie-save">SAVE</a>
-						</div>
-						<div class="custom-triangle"></div>
-					</div>
-				</div>
-			@endif
-
-		</div>
-
-		<div class="tooltip-window" style="display: none;"></div>
-
-		<div class="doublecoin-tooltip" style="display: none;">
-			{!! nl2br( trans('vox.common.featured-tooltip') ) !!}
-			<span></span>
-		</div>
+		@if(false)
+			<div class="bottom-drawer"></div>
+		@endif
 
 		<script type='application/ld+json'> 
 			{
@@ -470,8 +393,8 @@
 			</script>
 		@else
 			@if($user->platform != 'external')
-				<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-mini-hub/css/style.css">
-				<script src="https://dentacoin.com/assets/libs/dentacoin-mini-hub/js/init.js"></script>
+				<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-package/css/style.css">
+				<script src="https://dentacoin.com/assets/libs/dentacoin-package/js/init.js"></script>
 
 				<script type="text/javascript">
 					if(typeof dcnHub !== 'undefined') {
@@ -482,11 +405,25 @@
 						};
 
 						miniHubParams.type_hub = '{{ $user->is_dentist ? 'mini-hub-dentists' : 'mini-hub-patients' }}';
-
 						dcnHub.initMiniHub(miniHubParams);
 					}
 				</script>
 			@endif
+		@endif
+
+		@if(empty($user) && empty($_COOKIE['performance_cookies']) && empty($_COOKIE['marketing_cookies']) && empty($_COOKIE['strictly_necessary_policy']) && empty($_COOKIE['functionality_cookies']))
+			<script src="https://dentacoin.com/assets/libs/dentacoin-package/js/init.js"></script>
+			<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-package/css/style-cookie.css">
+
+			<script type="text/javascript">
+				if (typeof dcnCookie !== 'undefined') {
+					dcnCookie.init({
+						'google_app_id': 'UA-108398439-2',
+						'fb_app_id': '2010503399201502',
+						'second_fb_app_id': '2366034370318681',
+					});
+				}
+			</script>
 		@endif
 
 		@if(!empty($trackEvents))
@@ -518,8 +455,7 @@
 		@endif
 
 		<script src="{{ url('/js/cookie.min.js') }}"></script>
-		<script src="{{ url('/js-vox/main.js').'?ver='.$cache_version }}"></script>
-		<script src="{{ url('/js/both.js').'?ver='.$cache_version }}"></script>
+		<script src="{{ url('/js-vox/main-new.js').'?ver='.$cache_version }}"></script>
         @if(!empty($js) && is_array($js))
             @foreach($js as $file)
                 <script src="{{ url('/js-vox/'.$file).'?ver='.$cache_version }}"></script>
@@ -542,6 +478,7 @@
         	var lang = '{{ App::getLocale() }}';
         	var user_id = {{ !empty($user) ? $user->id : 'null' }};
         	var user_type = '{{ !empty($user) ? ($user->is_dentist ? 'dentist' : 'patient') : 'null' }}';
+        	var featured_coin_text = '{!! nl2br( trans('vox.common.featured-tooltip') ) !!}';
         </script>
         <!-- endjs -->
     </body>

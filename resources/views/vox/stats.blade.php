@@ -28,18 +28,20 @@
 			</div>
 		</form>
 
-		<!-- <div class="questions-menu clearfix" style="display: none;">
-			<div class="sort-menu">
-				@foreach($sorts as $key => $val)
-					<a href="javascript:;" sort="{{ $key }}"  {!! $key == 'all' ? 'class="active"' : '' !!}>
-						@if($key == 'featured')
-							<i class="fas fa-star"></i>
-						@endif
-						{{ $val }}
-					</a>
-				@endforeach
-			</div>
-		</div> -->
+		@if(false)
+			<!-- <div class="questions-menu clearfix" style="display: none;">
+				<div class="sort-menu">
+					@foreach($sorts as $key => $val)
+						<a href="javascript:;" sort="{{ $key }}"  {!! $key == 'all' ? 'class="active"' : '' !!}>
+							@if($key == 'featured')
+								<i class="fas fa-star"></i>
+							@endif
+							{{ $val }}
+						</a>
+					@endforeach
+				</div>
+			</div> -->
+		@endif
 		<br/>
 		<br/>
 	</div>
@@ -69,7 +71,6 @@
 			@endif
 
 			@foreach($voxes as $vox)
-
 				<div 
 					class="vox-stat flex normal-stat" 
 					featured="{{ intval($vox->stats_featured) }}" 
@@ -80,10 +81,10 @@
 	      			sort-order="{{ $vox->sort_order }}"
 	      			>
 					@if($vox->stats_featured)
-						<img class="featured" src="{{ url('new-vox-img/star.svg') }}" alt="Dentavox featured statistic">
+						<img class="featured" src="{{ url('new-vox-img/star.svg') }}" alt="Dentavox featured statistic" width="50" height="48">
 					@endif
 					<a href="{{ $vox->getStatsList() }}">
-						<img class="cover" src="{{ $vox->getImageUrl(true) }}" alt="{{ $vox->title }} - Survey Statistics" />
+						<img class="cover" src="{{ $vox->getImageUrl(true) }}" alt="{{ $vox->title }} - Survey Statistics" width="260" height="176" />
 					</a>
 					<div class="stats-info flex">
 						<h3>
@@ -148,7 +149,7 @@
 				<a href="https://dentavox.dentacoin.com/blog" target="_blank" class="white-button">VISIT BLOG</a>
 			</div>
 			<div class="col">
-				<img src="{{ url('new-vox-img/dentavox-blog-preview.png') }}" alt="Dentavox blog preview">
+				<img src="{{ url('new-vox-img/dentavox-blog-preview.png') }}" alt="Dentavox blog preview" width="500" height="351">
 			</div>
 		</div>
 	</div>
@@ -156,7 +157,7 @@
 	@if(!empty($user))
 		<div class="section-take-surveys">
 			<div class="container">
-				<img src="{{ url('new-vox-img/custom-survey-vox.png') }}" alt="Dentavox custom survey">
+				<img src="{{ url('new-vox-img/custom-survey-vox.png') }}" alt="Dentavox custom survey" width="130" height="131">
 				<h3>
 					@if($user->is_dentist)
 						You  want to explore a topic <br> within a targeted audience?
@@ -175,14 +176,6 @@
 				@endif
 			</div>
 		</div>
-	@endif
-
-	@if(!empty($user))
-		@if($user->is_dentist && ($user->status == 'approved' || $user->status == 'test' || $user->status == 'added_by_clinic_claimed' || $user->status == 'added_by_dentist_claimed'))
-			@include('vox.popups.request-survey')
-		@elseif(!$user->is_dentist)
-			@include('vox.popups.request-survey-patients')
-		@endif
 	@endif
 
 @endsection

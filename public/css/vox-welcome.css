@@ -1,0 +1,75 @@
+.gradient-line {
+  position: relative; }
+  .gradient-line::after {
+    content: '';
+    z-index: -1;
+    border-radius: 10px;
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 490px;
+    height: 4px;
+    background: #007fff;
+    /* Old browsers */
+    background: -moz-linear-gradient(left, #007fff 0%, #75d5ff 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, #007fff 0%, #75d5ff 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, #007fff 0%, #75d5ff 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007fff', endColorstr='#75d5ff',GradientType=1 ); }
+    @media screen and (max-width: 768px) {
+      .gradient-line::after {
+        width: 80%; } }
+  .gradient-line::before {
+    position: absolute;
+    z-index: -1;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 5.5px 0 5.5px;
+    border-color: #34a8fb transparent transparent transparent; }
+
+.image-left {
+  position: absolute;
+  margin-left: -200px; }
+  @media screen and (max-width: 1080px) {
+    .image-left {
+      display: none; } }
+  .image-left.done-all-image {
+    max-width: 500px;
+    margin-left: -130px; }
+
+.section-welcome {
+  position: relative;
+  margin-top: 65px; }
+  @media screen and (max-width: 768px) {
+    .section-welcome {
+      margin-top: 0px; } }
+
+@media screen and (max-width: 1200px) {
+  .section-welcome-done .flex-3,
+  .section-welcome .flex-3 {
+    display: none; } }
+@media screen and (max-width: 1200px) {
+  .section-welcome-done .flex-9,
+  .section-welcome .flex-9 {
+    flex: 1; } }
+
+.section-welcome-done .gradient-line {
+  margin-top: 70px; }
+  .section-welcome-done .gradient-line:after {
+    top: -40px; }
+  .section-welcome-done .gradient-line:before {
+    top: -36px; }
+.section-welcome-done .section-stats {
+  margin-top: 175px;
+  margin-bottom: 30px; }
+
+.finish-test {
+  display: none; }

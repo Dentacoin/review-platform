@@ -242,7 +242,7 @@
 		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
 		<script src="{{ url('/js/cookie.min.js') }}"></script>
 		<script src="{{ url('/js-vox/dom-to-image.min.js') }}"></script>
-		<script src="{{ url('/js-vox/main.js').'?ver='.$cache_version }}"></script>
+		<script src="{{ url('/js-vox/main-new.js').'?ver='.$cache_version }}"></script>
 		<script src="{{ url('/js-vox/moment.js') }}"></script>
 		<script src="{{ url('/js-vox/daterangepicker.min.js') }}"></script>
 		<script src="{{ url('/js-vox/stats.js').'?ver='.$cache_version }}"></script>

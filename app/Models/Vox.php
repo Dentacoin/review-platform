@@ -28,6 +28,7 @@ class Vox extends Model {
         'title',
         'description',
         'stats_description',
+        'slug',
     ];
 
     protected $fillable = [

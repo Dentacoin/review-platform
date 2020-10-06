@@ -1,0 +1,51 @@
+$tablet: "screen and (max-width: 1080px)";
+$phone: "screen and (max-width: 768px)";
+$phone_up: "screen and (min-width: 769px)";
+
+$main-color: #38ace5;
+
+.page-index {
+	h2 {
+		font-size: 30px;
+
+		@media #{$phone} {
+	    	font-size: 26px;
+	    }
+	}
+
+	.blue-button {
+		padding: 10px 40px;
+    	display: inline-block;
+
+    	@media #{$phone} {
+    		font-size: 18px;
+    	}
+	}
+
+	.section-work {
+		@media #{$phone} {
+			padding-top: 40px;
+		}
+	}
+}
+
+#questions-wrapper {
+	margin-top: 30px;
+}
+
+.page-index.logged-out {
+	.site-content {
+		padding-top: 0px;
+
+		@media #{$phone} {
+			padding-top: 0px;
+		}
+	}
+
+	.footer-expander {
+		footer {
+			bottom: 0px;
+			opacity: 1;
+		}
+	}
+}

@@ -1,4 +1,4 @@
-<div class="popup fixed-popup popup-with-background failed-popup close-on-shield" id="failed-popup">
+<div class="popup fixed-popup popup-with-background failed-popup close-on-shield active" id="failed-popup">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="close-popup">
 			<i class="fas fa-times"></i>

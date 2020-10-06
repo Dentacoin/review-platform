@@ -21,6 +21,183 @@
   width: 40px;
   height: 40px; }
 
+.section-welcome-done .done-title,
+.page-questions-done .done-title {
+  margin-top: 100px;
+  margin-bottom: 30px; }
+  @media screen and (max-width: 768px) {
+    .section-welcome-done .done-title,
+    .page-questions-done .done-title {
+      font-size: 18px;
+      margin-top: 0px;
+      margin-bottom: 10px; } }
+  .section-welcome-done .done-title span,
+  .page-questions-done .done-title span {
+    font-size: 30px;
+    color: #53bae9;
+    font-weight: bold; }
+    @media screen and (max-width: 768px) {
+      .section-welcome-done .done-title span,
+      .page-questions-done .done-title span {
+        font-size: 18px; } }
+.section-welcome-done .done-desc,
+.page-questions-done .done-desc {
+  max-width: 560px;
+  margin-right: auto;
+  margin-left: auto; }
+.section-welcome-done .what-do-next,
+.page-questions-done .what-do-next {
+  font-size: 18px; }
+  @media screen and (max-width: 768px) {
+    .section-welcome-done .what-do-next,
+    .page-questions-done .what-do-next {
+      font-size: 14px; } }
+.section-welcome-done h4,
+.page-questions-done h4 {
+  color: #3b3c3b; }
+  @media screen and (max-width: 768px) {
+    .section-welcome-done h4,
+    .page-questions-done h4 {
+      font-size: 12px; } }
+  .section-welcome-done h4 span,
+  .page-questions-done h4 span {
+    color: #3b3c3b;
+    font-size: 20px; }
+    @media screen and (max-width: 768px) {
+      .section-welcome-done h4 span,
+      .page-questions-done h4 span {
+        font-size: 12px; } }
+  .section-welcome-done h4 a,
+  .page-questions-done h4 a {
+    color: #38a2e5; }
+    .section-welcome-done h4 a:hover,
+    .page-questions-done h4 a:hover {
+      color: #38a2e5;
+      text-decoration: underline !important; }
+.section-welcome-done .next-title,
+.page-questions-done .next-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 60px;
+  margin-bottom: 20px; }
+  @media screen and (max-width: 768px) {
+    .section-welcome-done .next-title,
+    .page-questions-done .next-title {
+      margin-top: 40px;
+      font-size: 18px;
+      font-weight: normal; } }
+  .section-welcome-done .next-title .gradient-line:before,
+  .page-questions-done .next-title .gradient-line:before {
+    top: -36px; }
+  .section-welcome-done .next-title .gradient-line:after,
+  .page-questions-done .next-title .gradient-line:after {
+    top: -40px; }
+.section-welcome-done .wrapper-buttons,
+.page-questions-done .wrapper-buttons {
+  display: inline-block;
+  position: relative;
+  width: auto; }
+  @media screen and (max-width: 768px) {
+    .section-welcome-done .wrapper-buttons,
+    .page-questions-done .wrapper-buttons {
+      display: block; } }
+  .section-welcome-done .wrapper-buttons.mt,
+  .page-questions-done .wrapper-buttons.mt {
+    margin-top: 40px; }
+  .section-welcome-done .wrapper-buttons .white-button,
+  .page-questions-done .wrapper-buttons .white-button {
+    display: block;
+    margin-bottom: 15px; }
+  .section-welcome-done .wrapper-buttons .invite-link,
+  .page-questions-done .wrapper-buttons .invite-link {
+    width: 231px;
+    position: relative; }
+    @media screen and (max-width: 768px) {
+      .section-welcome-done .wrapper-buttons .invite-link,
+      .page-questions-done .wrapper-buttons .invite-link {
+        width: 100%; } }
+    .section-welcome-done .wrapper-buttons .invite-link p,
+    .page-questions-done .wrapper-buttons .invite-link p {
+      position: absolute;
+      top: 3px;
+      right: -210px;
+      text-align: left;
+      width: 200px;
+      font-size: 12px;
+      color: #747171; }
+      @media screen and (max-width: 768px) {
+        .section-welcome-done .wrapper-buttons .invite-link p,
+        .page-questions-done .wrapper-buttons .invite-link p {
+          position: static;
+          text-align: center;
+          display: block;
+          width: 100%;
+          margin-bottom: 15px; } }
+    .section-welcome-done .wrapper-buttons .invite-link input,
+    .page-questions-done .wrapper-buttons .invite-link input {
+      border: 2px solid #41afff;
+      border-radius: 10px;
+      height: 40px; }
+    .section-welcome-done .wrapper-buttons .invite-link .share-wrap,
+    .page-questions-done .wrapper-buttons .invite-link .share-wrap {
+      border: 1px solid #61b1f6;
+      border-top: none;
+      width: 220px;
+      margin: 0 auto;
+      margin-top: -1px;
+      padding: 10px 15px;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px; }
+      @media screen and (max-width: 768px) {
+        .section-welcome-done .wrapper-buttons .invite-link .share-wrap,
+        .page-questions-done .wrapper-buttons .invite-link .share-wrap {
+          width: 100%;
+          margin-top: -10px;
+          padding-top: 20px; } }
+      .section-welcome-done .wrapper-buttons .invite-link .share-wrap a,
+      .page-questions-done .wrapper-buttons .invite-link .share-wrap a {
+        display: block;
+        margin-bottom: 5px;
+        cursor: pointer;
+        font-size: 12px;
+        color: #060606;
+        transition: all 0.3s ease; }
+        .section-welcome-done .wrapper-buttons .invite-link .share-wrap a:hover,
+        .page-questions-done .wrapper-buttons .invite-link .share-wrap a:hover {
+          color: #38a2e5;
+          transition: all 0.3s ease; }
+        .section-welcome-done .wrapper-buttons .invite-link .share-wrap a:last-child,
+        .page-questions-done .wrapper-buttons .invite-link .share-wrap a:last-child {
+          margin-bottom: 0px; }
+        .section-welcome-done .wrapper-buttons .invite-link .share-wrap a img,
+        .page-questions-done .wrapper-buttons .invite-link .share-wrap a img {
+          vertical-align: middle;
+          margin-right: 5px;
+          width: 17px; }
+        .section-welcome-done .wrapper-buttons .invite-link .share-wrap a.messenger,
+        .page-questions-done .wrapper-buttons .invite-link .share-wrap a.messenger {
+          display: none; }
+          @media screen and (max-width: 768px) {
+            .section-welcome-done .wrapper-buttons .invite-link .share-wrap a.messenger,
+            .page-questions-done .wrapper-buttons .invite-link .share-wrap a.messenger {
+              display: block; } }
+
+.checkbox input[type="checkbox"] {
+  display: none !important; }
+.checkbox label {
+  padding-left: 0px;
+  display: inline;
+  font-size: 18px; }
+  .checkbox label i {
+    padding-right: 2px;
+    font-size: 18px;
+    color: #40a0f4; }
+  .checkbox label.active > i:before {
+    content: "\f14a"; }
+  @media screen and (max-width: 768px) {
+    .checkbox label {
+      font-size: 12px; } }
+
 .questions h3 {
   color: #060606;
   margin-bottom: 10px; }
@@ -41,6 +218,10 @@
   max-width: 760px;
   margin-left: auto;
   margin-right: auto; }
+  .questions .quest-wrap .loader-survey {
+    text-align: center; }
+    .questions .quest-wrap .loader-survey img {
+      max-width: 340px; }
 .questions .answered-box {
   text-align: center;
   margin-top: -20px;
@@ -187,6 +368,7 @@
       position: relative; }
       .questions .question-group .question .question-image .q-img {
         max-width: 100%;
+        width: 90px;
         border: 2px solid #37a8ff;
         border-radius: 13px; }
       .questions .question-group .question .question-image .zoom-img {
@@ -199,12 +381,13 @@
         transform-origin: right bottom; }
     .questions .question-group .question .q-text {
       margin-left: 20px;
-      text-align: left; }
+      padding: 0px 100px 0px 10px;
+      margin-left: 0px; }
       @media screen and (max-width: 768px) {
         .questions .question-group .question .q-text {
+          width: 100%;
           font-size: 17px;
-          text-align: center;
-          margin-left: 0px;
+          padding: 0px;
           margin-top: 20px; } }
     .questions .question-group .question .tooltip-text {
       font-size: 25px;
@@ -217,67 +400,69 @@
     display: inline-block;
     position: relative;
     width: auto; }
-    @media screen and (max-width: 768px) {
-      .questions .question-group .answers.answers-draggable {
-        width: 100%; } }
-    .questions .question-group .answers.answers-draggable .answer-rank {
-      cursor: n-resize;
-      display: flex;
-      align-items: center;
-      border: 1px solid #9c9c9c;
-      border-radius: 9px;
-      margin-bottom: 13px;
-      font-size: 18px;
-      padding: 3px 14px;
-      background-color: white;
-      min-width: 500px;
-      text-align-last: center;
-      position: relative; }
+    .questions .question-group .answers.answers-draggable {
+      overflow: auto; }
       @media screen and (max-width: 768px) {
-        .questions .question-group .answers.answers-draggable .answer-rank {
-          min-width: auto;
-          width: 100%;
-          font-size: 16px; } }
-      .questions .question-group .answers.answers-draggable .answer-rank .rank-answer {
+        .questions .question-group .answers.answers-draggable {
+          width: 100%; } }
+      .questions .question-group .answers.answers-draggable .answer-rank {
+        cursor: n-resize;
+        display: flex;
+        align-items: center;
+        border: 1px solid #9c9c9c;
+        border-radius: 9px;
+        margin-bottom: 13px;
         font-size: 18px;
-        text-align: left;
-        text-align-last: left; }
+        padding: 3px 14px;
+        background-color: white;
+        min-width: 500px;
+        text-align-last: center;
+        position: relative; }
         @media screen and (max-width: 768px) {
-          .questions .question-group .answers.answers-draggable .answer-rank .rank-answer {
+          .questions .question-group .answers.answers-draggable .answer-rank {
+            min-width: auto;
+            width: 100%;
             font-size: 16px; } }
-      .questions .question-group .answers.answers-draggable .answer-rank a, .questions .question-group .answers.answers-draggable .answer-rank span {
-        color: #41afff;
-        font-size: 18px; }
-        @media screen and (max-width: 768px) {
-          .questions .question-group .answers.answers-draggable .answer-rank a, .questions .question-group .answers.answers-draggable .answer-rank span {
-            font-size: 16px; } }
-      .questions .question-group .answers.answers-draggable .answer-rank .answer-mobile-tooltip {
-        position: absolute;
-        right: -25px;
-        padding: 10px;
-        padding-right: 0px;
-        top: 50%;
-        transform: translateY(-50%); }
-        .questions .question-group .answers.answers-draggable .answer-rank .answer-mobile-tooltip i {
-          color: #41afff; }
-          .questions .question-group .answers.answers-draggable .answer-rank .answer-mobile-tooltip i:before {
-            font-size: 17px; }
-      .questions .question-group .answers.answers-draggable .answer-rank select {
-        padding: 0px 10px;
-        width: 68px;
-        height: 37px;
-        border-radius: 5px;
-        margin-top: 0px;
-        margin-bottom: 0px;
-        margin-left: 40px;
-        margin-right: 32px;
-        font-weight: normal;
-        border-color: #9c9c9c; }
-        @media screen and (max-width: 768px) {
-          .questions .question-group .answers.answers-draggable .answer-rank select {
-            width: 58px;
-            margin-left: 14px;
-            margin-right: 14px; } }
+        .questions .question-group .answers.answers-draggable .answer-rank .rank-answer {
+          font-size: 18px;
+          text-align: left;
+          text-align-last: left; }
+          @media screen and (max-width: 768px) {
+            .questions .question-group .answers.answers-draggable .answer-rank .rank-answer {
+              font-size: 16px; } }
+        .questions .question-group .answers.answers-draggable .answer-rank a, .questions .question-group .answers.answers-draggable .answer-rank span {
+          color: #41afff;
+          font-size: 18px; }
+          @media screen and (max-width: 768px) {
+            .questions .question-group .answers.answers-draggable .answer-rank a, .questions .question-group .answers.answers-draggable .answer-rank span {
+              font-size: 16px; } }
+        .questions .question-group .answers.answers-draggable .answer-rank .answer-mobile-tooltip {
+          position: absolute;
+          right: -25px;
+          padding: 10px;
+          padding-right: 0px;
+          top: 50%;
+          transform: translateY(-50%); }
+          .questions .question-group .answers.answers-draggable .answer-rank .answer-mobile-tooltip i {
+            color: #41afff; }
+            .questions .question-group .answers.answers-draggable .answer-rank .answer-mobile-tooltip i:before {
+              font-size: 17px; }
+        .questions .question-group .answers.answers-draggable .answer-rank select {
+          padding: 0px 10px;
+          width: 68px;
+          height: 37px;
+          border-radius: 5px;
+          margin-top: 0px;
+          margin-bottom: 0px;
+          margin-left: 40px;
+          margin-right: 32px;
+          font-weight: normal;
+          border-color: #9c9c9c; }
+          @media screen and (max-width: 768px) {
+            .questions .question-group .answers.answers-draggable .answer-rank select {
+              width: 58px;
+              margin-left: 14px;
+              margin-right: 14px; } }
     .questions .question-group .answers.question-pictures {
       display: flex;
       flex-wrap: wrap;
@@ -1100,3 +1285,190 @@
   .go-back-admin.refresh-q {
     background: #03d3f4;
     top: -26px; }
+
+.mobile-welcome-images {
+  display: none;
+  position: relative; }
+  @media screen and (max-width: 768px) {
+    .mobile-welcome-images {
+      display: block; } }
+  .mobile-welcome-images img {
+    position: absolute;
+    right: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0;
+    width: 100%; }
+    .mobile-welcome-images img.mobile-person-effect.effect-loaded {
+      animation: MoveRightPerson 2s ease-in-out; }
+    .mobile-welcome-images img.mobile-bubble-effect.effect-loaded {
+      animation: BubbleEffect 2s ease-in-out; }
+
+@keyframes MoveRightPerson {
+  0% {
+    opacity: 1;
+    left: -110%;
+    transform: scale(1);
+    z-index: 2; }
+  20% {
+    opacity: 1;
+    left: 0px;
+    transform: scale(1);
+    z-index: 2; }
+  80% {
+    opacity: 1;
+    left: 0px;
+    transform: scale(1);
+    z-index: 2; }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+    display: none;
+    z-index: 2; } }
+@keyframes BubbleEffect {
+  0% {
+    opacity: 1;
+    transform: scale(0);
+    z-index: 2; }
+  20% {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2; }
+  80% {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2; }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+    display: none;
+    z-index: 2; } }
+@media screen and (max-width: 768px) {
+  .question-done #invite-button:hover, .question-done #invite-button:focus {
+    color: #333333 !important;
+    background-color: white !important; } }
+.question-done .done-title {
+  margin-top: 0px; }
+  @media screen and (max-width: 768px) {
+    .question-done .done-title span {
+      font-size: 26px; } }
+.question-done .taken-survey-wrapper .taken-survey-description p {
+  max-width: 340px;
+  color: #333; }
+  @media screen and (max-width: 768px) {
+    .question-done .taken-survey-wrapper .taken-survey-description p {
+      max-width: 260px;
+      margin-left: auto;
+      margin-right: auto; } }
+.question-done video {
+  width: 100%;
+  margin-bottom: 25px;
+  pointer-events: none; }
+
+.vox-survey-title.fixed-t {
+  position: fixed;
+  background-color: white;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding: 20px 30px;
+  margin-top: 0px; }
+
+.answer-mobile-tooltip {
+  display: none; }
+  @media screen and (max-width: 768px) {
+    .answer-mobile-tooltip {
+      display: block; } }
+
+.sticky-invite {
+  position: fixed;
+  right: -50px;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: right;
+  background-color: #dab3f2;
+  border-radius: 50%;
+  width: 160px;
+  height: 160px;
+  display: block;
+  z-index: 10; }
+  @media screen and (max-width: 768px) {
+    .sticky-invite {
+      right: -15px;
+      width: 60px;
+      height: 60px; } }
+  .sticky-invite .sticky-box {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 59px; }
+    @media screen and (max-width: 768px) {
+      .sticky-invite .sticky-box {
+        right: 21px; } }
+    .sticky-invite .sticky-box p {
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 18px; }
+      @media screen and (max-width: 768px) {
+        .sticky-invite .sticky-box p {
+          display: none; } }
+    @media screen and (max-width: 768px) {
+      .sticky-invite .sticky-box img {
+        max-width: 25px; } }
+
+.vox-mode-wrapper {
+  font-size: 16px;
+  position: absolute;
+  right: 0px;
+  top: 34px; }
+  .vox-mode-wrapper .vox-mode.active {
+    color: #2196F3; }
+  .vox-mode-wrapper .vox-mode:first-child {
+    padding-right: 5px;
+    border-right: 1px solid black;
+    margin-right: 7px; }
+
+.ip-country {
+  margin-bottom: 20px;
+  font-size: 14px;
+  padding: 10px 20px 10px 50px; }
+  .ip-country + .ajax-alert {
+    margin-top: -20px; }
+  .ip-country:before {
+    font-size: 20px; }
+
+.popup.ban .wrapper .inner p {
+  margin-top: 55px;
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #060606; }
+  @media screen and (max-width: 768px) {
+    .popup.ban .wrapper .inner p {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 15px;
+      margin-bottom: 25px; } }
+  @media screen and (max-width: 310px) {
+    .popup.ban .wrapper .inner p {
+      margin-bottom: 15px; } }
+.popup.ban .wrapper .inner small {
+  display: block;
+  color: #353637;
+  font-size: 15px;
+  margin-bottom: 50px;
+  font-style: italic; }
+  @media screen and (max-width: 768px) {
+    .popup.ban .wrapper .inner small {
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center; } }
+  @media screen and (max-width: 310px) {
+    .popup.ban .wrapper .inner small {
+      margin-bottom: 20px; } }
+.popup.ban .wrapper .inner h3 span {
+  font-size: 30px; }
+  @media screen and (max-width: 768px) {
+    .popup.ban .wrapper .inner h3 span {
+      display: block;
+      font-size: 24px; } }

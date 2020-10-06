@@ -1,6 +1,49 @@
-@if(!empty($details_question_id))
-	<div class="question-group question-group-details question-group-{{ $details_question_id }} single-choice user-detail-question" data-id="{{ $details_question_id }}" demogr-id="{{ $details_question_id }}" custom-type="{{ $details_question_id }}" style="display: none;">
-		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
+@if(!empty($birthyear_q))
+	<div class="question-group birthyear-question tac user-detail-question" demogr-id="age_groups">
+		<div class="question">
+			{!! trans('vox.page.questionnaire.question-birth') !!}
+		</div>
+		<div class="answers">
+			<select class="answer" name="birthyear-answer" id="birthyear-answer">
+        		<option value="">-</option>
+				{!! App\Models\Vox::getBirthyearOptions() !!}
+        	</select>
+		</div>
+
+		<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
+	</div>
+@elseif(!empty($gender_q))
+	<div class="question-group gender-question single-choice user-detail-question" demogr-id="gender">
+		<div class="question">
+			{!! trans('vox.page.questionnaire.question-sex') !!}
+		</div>
+		<div class="answers">
+			<label class="answer answer" for="answer-gender-m" data-num="m">
+				<input id="answer-gender-m" type="radio" demogr-index="1" name="gender-answer" class="answer" value="m" style="display: none;">
+				{!! trans('vox.page.questionnaire.question-sex-m') !!}
+			</label>
+			<label class="answer answer" for="answer-gender-f" data-num="f">
+				<input id="answer-gender-f" type="radio" demogr-index="2" name="gender-answer" class="answer" value="f" style="display: none;">
+				{!! trans('vox.page.questionnaire.question-sex-f') !!}
+			</label>
+		</div>
+	</div>
+@elseif(!empty($country_id_q))
+	<div class="question-group location-question user-detail-question">
+		<div class="question">
+			{!! trans('vox.page.questionnaire.question-country') !!}
+		</div>
+		<div class="answers">
+			<div class="alert alert-warning ip-country mobile" style="display: none;">
+        		{!! trans('vox.common.different-ip') !!}
+            </div>
+			{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::with('translations')->get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'country-select form-control country-dropdown', 'real-country' => !empty($country_id) ? $country_id : '') ) }}
+		</div>
+
+		<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
+	</div>
+@elseif(!empty($details_question_id))
+	<div class="question-group question-group-details question-group-{{ $details_question_id }} single-choice user-detail-question" data-id="{{ $details_question_id }}" demogr-id="{{ $details_question_id }}" custom-type="{{ $details_question_id }}">
 		<div class="question">
 			{!! nl2br($details_question['label']) !!}
 		</div>
@@ -23,23 +66,13 @@
 		</div>
 
 		@if(count($details_question['values'])>4)
-			<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
+			<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
 		@endif
 	</div>
 @elseif($question->type == 'multiple_choice')
-	<div class="
-		question-group question-group-{{ $question->id }} multiple-choice 
-		{!! empty($question->dont_randomize_answers) ? 'shuffle' : ''  !!}
-	" 
-
-	{!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} 
-	data-id="{{ $question->id }}" 
-	{!! $question->id==$first_question ? '' : 'style="display: none;"' !!} 
-	{!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  
-	trigger-type="{{ $question->trigger_type }}" 
+	<div class="question-group question-group-{{ $question->id }} multiple-choice {!! empty($question->dont_randomize_answers) ? 'shuffle' : ''  !!}"  
+	data-id="{{ $question->id }}"
 	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
-
-		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 
 		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
 			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
@@ -97,19 +130,11 @@
 			@endif
 		</div>
 
-		<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
+		<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
 	</div>
 @elseif($question->type == 'scale')
-	<div class="question-group question-group-{{ $question->id }} scale"
+	<div class="question-group question-group-{{ $question->id }} scale" data-id="{{ $question->id }}" welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
 
-	data-id="{{ $question->id }}" 
-	{!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} 
-	{!! $question->id==$first_question ? '' : 'style="display: none;"' !!} 
-	{!! $question->question_trigger ? 'data-trigger="'.$question->question_trigger.'"' : "" !!} 
-	trigger-type="{{ $question->trigger_type }}" 
-	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
-
-		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
 			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">
@@ -163,23 +188,16 @@
 			</div>
 		</div>
 
-		<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
+		<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
 	</div>
 @elseif(array_key_exists($question->id, $cross_checks) && $question->cross_check == 'birthyear')
 	<div class="
 		question-group question-group-{{ $question->id }} birthyear-question 
 		{{ $question->is_control == -1 ? 'shuffle' : '' }} 
 	" 
-
-	data-answer="{!! $user->birthyear !!}" 
 	data-id="{{ $question->id }}" 
-	{!! $question->id==$first_question ? '' : 'style="display: none;"' !!} 
-	{!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  
-	trigger-type="{{ $question->trigger_type }}" 
 	{!! array_key_exists($question->id, $cross_checks) ? 'cross-check-correct="'.$cross_checks[$question->id].'" cross-check-id="'.$cross_checks_references[$question->id].'"' : '' !!} 
 	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
-
-		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 
 		<div class="question">
 			{!! nl2br($question->questionWithTooltips()) !!}
@@ -193,20 +211,14 @@
         	</select>
 		</div>
 
-		<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
+		<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
 	</div>
 @elseif($question->type == 'number')
 	<div class="question-group question-group-{{ $question->id }} number" 
 
-	{!! isset($answered[$question->id]) ? 'data-answer="'.$answered[$question->id].'"' : '' !!} 
 	data-id="{{ $question->id }}" 
-	{!! $question->id==$first_question ? '' : 'style="display: none;"' !!} 
-	{!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  
-	trigger-type="{{ $question->trigger_type }}" 
 	{!! array_key_exists($question->id, $cross_checks) ? 'cross-check-correct="'.$cross_checks[$question->id].'" cross-check-id="'.$cross_checks_references[$question->id].'"' : '' !!} 
 	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
-
-		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 
 		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
 			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
@@ -227,7 +239,7 @@
 			<input type="number" name="answer-number" class="answer-number" min="{{ explode(':',$question->number_limit)[0] }}" max="{{ explode(':',$question->number_limit)[1] }}">
 		</div>
 
-		<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
+		<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
 
 		<div style="display: none; margin-top: 10px;text-align: center;" class="answer-number-error alert alert-warning">
 			{!! trans('vox.page.questionnaire.answer-number-error', ['min' => explode(':',$question->number_limit)[0], 'max' => explode(':',$question->number_limit)[1] ]) !!}
@@ -236,15 +248,10 @@
 @elseif($question->type == 'rank')
 	<div class="question-group question-group-{{ $question->id }} rank" 
 
-	{!! isset($answered[$question->id]) ? 'data-answer="'.( is_array( $answered[$question->id] ) ? implode(',', $answered[$question->id]) : $answered[$question->id] ).'"' : '' !!} 
 	data-id="{{ $question->id }}" 
-	{!! $question->id==$first_question ? '' : 'style="display: none;"' !!} 
-	{!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  
-	trigger-type="{{ $question->trigger_type }}" 
 	{!! array_key_exists($question->id, $cross_checks) ? 'cross-check-correct="'.$cross_checks[$question->id].'" cross-check-id="'.$cross_checks_references[$question->id].'"' : '' !!} 
 	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
 	
-		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
 			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">
@@ -287,7 +294,7 @@
 			@endforeach
 		</div>
 
-		<a href="javascript:;" class="next-answer">{!! trans('vox.page.'.$current_page.'.next') !!}</a>
+		<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
 
 		<div style="display: none; margin-top: 10px;text-align: center;" class="answer-rank-error alert alert-warning">
 			Please rank all answers.
@@ -298,16 +305,10 @@
 		question-group question-group-{{ $question->id }} single-choice 
 		{{ $question->is_control == -1 || (empty($question->dont_randomize_answers) && empty($question->vox_scale_id) && empty($scales[$question->vox_scale_id])) ? 'shuffle' : '' }} 
 	" 
-
-	{!! isset($answered[$question->id]) ? 'data-answer="'.$answered[$question->id].'"' : '' !!} 
-	data-id="{{ $question->id }}" 
-	{!! $question->id==$first_question ? '' : 'style="display: none;"' !!} 
-	{!! $question->question_trigger ? "data-trigger='$question->question_trigger'" : "" !!}  
-	trigger-type="{{ $question->trigger_type }}" 
+	data-id="{{ $question->id }}"
 	{!! array_key_exists($question->id, $cross_checks) ? 'cross-check-correct="'.$cross_checks[$question->id].'" cross-check-id="'.$cross_checks_references[$question->id].'"' : '' !!} 
 	welcome="{!! $question->vox_id == 11 ? '1' : '' !!}">
 	
-		<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 		<div class="question {{ !empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()) ? 'question-with-image' : '' }}" {!! !empty($question->imageOnlyInTooltip()) || !empty($question->imageInTooltipAndQuestion()) ? 'tooltip-image="'.$question->getImageUrl(false).'"' : ''  !!}>
 			@if(!empty($question->imageOnlyInQuestion()) || !empty($question->imageInTooltipAndQuestion()))
 				<a class="question-image" data-lightbox="{{ $question->id }}" href="{{ $question->getImageUrl(false) }}">

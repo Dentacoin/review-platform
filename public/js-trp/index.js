@@ -78,7 +78,7 @@ jQuery(document).ready(function($){
 	$(window).scroll( function() {
 		if (!$('#to-append').hasClass('appended')) {
 			$.ajax({
-	            type: "GET",
+	            type: "POST",
 	            url: lang + '/index-down/',
 	            success: function(ret) {
 	            	if (!$('#to-append').hasClass('appended')) {

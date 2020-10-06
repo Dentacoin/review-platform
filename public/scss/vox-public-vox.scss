@@ -1,3 +1,4 @@
+$pc: "screen and (max-width: 1200px)";
 $tablet: "screen and (max-width: 1080px)";
 $phone: "screen and (max-width: 768px)";
 $phone_up: "screen and (min-width: 769px)";
@@ -116,7 +117,7 @@ body.vox-public {
 			font-size: 20px;
 			font-weight: 900;
 
-			@media screen and (max-width: 1200px) {
+			@media #{$pc} {
 				font-size: 15px;
 			}
 
@@ -142,8 +143,9 @@ body.vox-public {
 				vertical-align: sub;
 			    margin-right: 10px;
 
-			    @media screen and (max-width: 1200px) {
+			    @media #{$pc} {
 			    	max-width: 17px;
+			    	height: auto;
 			    }
 			}
 		}
@@ -154,7 +156,7 @@ body.vox-public {
 				border-right: 2px solid white;
 				padding-right: 60px;
 
-				@media screen and (max-width: 1200px) {
+				@media #{$pc} {
 					padding-right: 20px;
 				}
 
@@ -166,7 +168,7 @@ body.vox-public {
 			&:last-child {
 				padding-left: 60px;
 
-				@media screen and (max-width: 1200px) {
+				@media #{$pc} {
 					padding-left: 20px;
 				}
 
@@ -182,7 +184,7 @@ body.vox-public {
     	margin: 0 auto;
     	position: relative;
 
-    	@media screen and (max-width: 1200px) {
+    	@media #{$pc} {
     		max-width: 640px;
     	}
 
@@ -282,6 +284,7 @@ body.vox-public {
 
     			@media #{$phone} {
     				max-width: 30px;
+    				height: auto;
     			}
     		}
 

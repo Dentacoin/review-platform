@@ -70,7 +70,12 @@ class RecommendationsController extends AdminController
 
         $current_url = url('cms/vox/recommendations');
 
-        $pagination_link = (!empty($this->request->input('search-user-id')) ? '&search-user-id='.$this->request->input( 'search-user-id' ) : '').(!empty($this->request->input('search-name-user')) ? '&search-name-user='.$this->request->input( 'search-name-user' ) : '').(!empty($this->request->input('search-scale')) ? '&search-scale='.$this->request->input( 'search-scale' ) : '');
+        $pagination_link = "";
+        foreach (Request::all() as $key => $value) {
+            if($key != 'search') {
+                $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
+            }
+        }
 
         return $this->showView('recommendations', array(
             'recommendations' => $recommendations,

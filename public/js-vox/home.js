@@ -1,5 +1,6 @@
 var handleSorts;
 var ajax_is_running = false;
+var slice = 0;
 
 $(document).ready(function(){
 
@@ -116,9 +117,10 @@ $(document).ready(function(){
 			$('#survey-not-found').hide();
 			setupPagination();
 		}
-		
 	}
-	handleSorts();
+	if(user_id) {
+		handleSorts();
+	}
 
 	if($(window).outerWidth() <= 768) {
 		$('.another-questions .sort-menu').children().each( function() {
@@ -158,9 +160,6 @@ $(document).ready(function(){
 				sort: window.location.hash
 			},
 			dataType: 'json',
-			success: function( ) {
-				
-			}
 		});
 
 		handleSorts();
@@ -175,25 +174,16 @@ $(document).ready(function(){
 		surveyTitleHeight();
 	});
 
-	$.ajax( {
-		url: '/en/voxes-sort',
-		type: 'GET',
-		dataType: 'json',
-		success: function( data ) {
-			
-			if(data.sort) {
+	if(user_id) {
+		$.ajax( {
+			url: '/en/voxes-sort',
+			type: 'GET',
+			dataType: 'json',
+			success: function( data ) {
+				
+				if(data.sort) {
 
-				var parts = data.sort.substring(1).split('-');
-				if($('a[sort="'+parts[0]+'"]').length) {
-					$('a[sort="'+parts[0]+'"]').trigger( "click" );			
-					if(parts[1] && parts[1]=='asc') {
-						$('a[sort="'+parts[0]+'"]').trigger( "click" );			
-					}
-				}
-			} else {
-
-				if (window.location.hash.length) {
-					var parts = window.location.hash.substring(1).split('-');
+					var parts = data.sort.substring(1).split('-');
 					if($('a[sort="'+parts[0]+'"]').length) {
 						$('a[sort="'+parts[0]+'"]').trigger( "click" );			
 						if(parts[1] && parts[1]=='asc') {
@@ -201,11 +191,22 @@ $(document).ready(function(){
 						}
 					}
 				} else {
-					// $('.sort-menu a').first().trigger('click');
+
+					if (window.location.hash.length) {
+						var parts = window.location.hash.substring(1).split('-');
+						if($('a[sort="'+parts[0]+'"]').length) {
+							$('a[sort="'+parts[0]+'"]').trigger( "click" );			
+							if(parts[1] && parts[1]=='asc') {
+								$('a[sort="'+parts[0]+'"]').trigger( "click" );			
+							}
+						}
+					} else {
+						// $('.sort-menu a').first().trigger('click');
+					}
 				}
 			}
-		}
-	});
+		});
+	}
 
 	$('#survey-search').on('change keyup', function() {
 		handleSorts();
@@ -244,31 +245,37 @@ $(document).ready(function(){
 	        }, 500);
 		}
 
-	} );
+		// slice++;
 
+		// $.ajax( {
+		// 	url: '/en/voxes-get',
+		// 	type: 'POST',
+		// 	data: {
+		// 		// _token: $('meta[name="csrf-token"]').attr('content'),
+		// 		sort: window.location.hash,
+		// 		slice: slice
+		// 	},
+		// 	success: function(data) {
+		// 		if(data) {
+
+		// 			var last_el = $('#questions-inner').find('.swiper-slide').last();
+		// 			$('#questions-inner').append(data);
+		// 			surveyTitleHeight();
+		// 			$('html, body').animate({
+		// 	        	scrollTop: last_el.next().offset().top
+		// 	        }, 500);
+		// 		} else {
+		// 			$('#survey-more').hide();
+		// 		}
+		// 	}
+		// });
+
+	} );
 
 	$('.scroll-to-surveys').click( function() {
 		$('html, body').animate({
         	scrollTop: $('#strength-parent').offset().top
         }, 500);
 	});
-
-	$('input[name="target"]').change( function() {
-        $(this).closest('.modern-radios').removeClass('has-error');
-        $('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
-        var val = $('#target-specific:checked').length;
-        if(val) {
-            $('.target-row').show();
-        } else {
-            $('.target-row').hide();
-        }
-    } );
-
-    if ($('.select2').length) {
-        $(".select2").select2({
-            multiple: true,
-            placeholder: 'Select Country/ies',
-        });
-    }
 
 });

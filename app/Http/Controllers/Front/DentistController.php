@@ -624,24 +624,38 @@ class DentistController extends FrontController {
             'countries' => Country::with('translations')->get(),
             'video_reviews_stopped' => StopVideoReview::find(1)->stopped ? true : false,
             'js' => [
-                'videojs.record.min.js',
                 'user.js',
                 'search.js',
-                'amcharts-core.js',
-                'amcharts-animated.js',
-                'amcharts-charts.js',
-                'codemirror.min.js',
-                'codemirror-placeholder.js',
                 'flickity.min.js',
-                '../js/jquery-ui.min.js',
-                '../js/jquery-ui-touch.min.js',
             ],
             'css' => [
-                'codemirror.css',
                 'trp-users.css',
                 'flickity.min.css',
             ],
         ];
+
+        if(!empty($this->user)) {
+            $view_params['jscdn'][] = '//vjs.zencdn.net/6.4.0/video.min.js';
+            $view_params['jscdn'][] = '//cdn.WebRTC-Experiment.com/RecordRTC.js';
+            $view_params['jscdn'][] = '//webrtc.github.io/adapter/adapter-latest.js';
+            $view_params['js'][] = 'videojs.record.min.js';
+            $view_params['js'][] = 'codemirror.min.js';
+            $view_params['js'][] = 'codemirror-placeholder.js';
+            $view_params['css'][] = 'codemirror.css';
+        }
+
+        if($item->photos->isNotEmpty()) {
+            $view_params['css'][] = 'lightbox.css';
+            $view_params['js'][] = '../js/lightbox.js';
+        }
+
+        if(!empty($item->reviews_in())) {
+            $view_params['js'][] = '../js/jquery-ui.min.js';
+            $view_params['js'][] = '../js/jquery-ui-touch.min.js';
+            $view_params['js'][] = 'amcharts-core.js';
+            $view_params['js'][] = 'amcharts-animated.js';
+            $view_params['js'][] = 'amcharts-charts.js';
+        }
 
         if( $is_review ) {
             $seos = PageSeo::find(33);
@@ -712,7 +726,6 @@ class DentistController extends FrontController {
         if( $addGM ) {
             $view_params['jscdn'][] = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en';
         }
-
 
         $view_params['schema'] = [
             "@context" => "http://schema.org",

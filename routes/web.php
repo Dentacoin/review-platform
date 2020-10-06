@@ -231,6 +231,8 @@ $reviewRoutes = function () {
 
 	Route::get('user-logout',							'Auth\AuthenticateUser@getLogout');
 	Route::post('authenticate-user',					'Auth\AuthenticateUser@authenticateUser');
+
+	Route::post('get-popup', 							'Front\IndexController@getPopup');
 	
 	Route::group(['prefix' => '{locale?}'], function(){
 
@@ -243,7 +245,8 @@ $reviewRoutes = function () {
 		Route::group(['namespace' => 'Front'], function () {
 
 			Route::any('/', 									'IndexController@home');
-			Route::get('index-down', 							'IndexController@index_down');
+			Route::post('index-down', 							'IndexController@index_down');
+			Route::post('index-dentist-down', 					'IndexController@index_dentist_down');
 			Route::any('welcome-dentist/claim/{id}/',			'IndexController@claim');
 			Route::get('welcome-dentist/{session_id?}/{hash?}',	'IndexController@dentist');
 			
@@ -360,6 +363,8 @@ $voxRoutes = function () {
 	Route::get('sitemap.xml', 									'Vox\SitemapController@sitemap');
 	Route::get('robots.txt', 									'Vox\RobotsController@content');
 
+	Route::post('get-popup', 									'Vox\IndexController@getPopup');
+
 	Route::get('user-logout',									'Auth\AuthenticateUser@getLogout');
 
 	Route::post('authenticate-user',							'Auth\AuthenticateUser@authenticateUser');
@@ -370,6 +375,8 @@ $voxRoutes = function () {
 		Route::get('login', 									[ 'as' => 'login', 'uses' => 'Auth\AuthenticateUser@showLoginForm'] );
 
 		Route::group(['namespace' => 'Vox'], function () {
+
+			Route::get('registration', 							'RegisterController@list');
 
 			Route::get('unsubscribe/{user_id}/{hash}', 			'UnsubscribeController@unsubscribe');
 			Route::get('unsubscription/{user_id}/{hash}', 		'UnsubscribeController@new_unsubscribe');
@@ -393,8 +400,10 @@ $voxRoutes = function () {
 			Route::any('questionnaire/{id}', 					'VoxController@home');
 			Route::any('paid-dental-surveys', 					'IndexController@surveys_public');
 			Route::any('paid-dental-surveys/{id}', 				'VoxController@home_slug');
+			Route::post('get-next-question', 					'VoxController@getNextQuestion');
 			Route::any('get-started/{id}', 						'VoxController@home_slug');
 			Route::post('start-over', 							'VoxController@start_over');
+			Route::get('vox-public-down', 						'VoxController@vox_public_down');
 
 			Route::any('daily-polls', 							'PollsController@list');
 			Route::any('daily-polls/{date}', 					'PollsController@show_popup_poll');
@@ -411,7 +420,6 @@ $voxRoutes = function () {
 
 			Route::group(['middleware' => 'auth:web'], function () {
 				
-
 			});
 
 			Route::get('/', 									'IndexController@home');
@@ -420,6 +428,8 @@ $voxRoutes = function () {
 			Route::post('recommend', 							'IndexController@recommend');
 			Route::get('welcome-survey', 						'IndexController@welcome');
 			Route::any('voxes-sort', 							'IndexController@voxesSort');
+			Route::get('index-down', 							'IndexController@index_down');
+			Route::post('voxes-get', 							'IndexController@getVoxes');
 
 			Route::get('page-not-found', 						'NotFoundController@home');
 			Route::get('{catch?}', 								'NotFoundController@catch');

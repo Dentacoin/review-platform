@@ -1,3 +1,4 @@
+$pc: "screen and (max-width: 1200px)";
 $tablet: "screen and (max-width: 1080px)";
 $phone: "screen and (max-width: 768px)";
 $phone_up: "screen and (min-width: 769px)";
@@ -189,7 +190,7 @@ $main-color: #38ace5;
 		font-weight: bold;
 		color: white;
 
-		@media screen and (max-width: 1200px) {
+		@media #{$pc} {
 			font-size: 26px;
 			font-weight: normal;
 		}
@@ -324,6 +325,7 @@ $main-color: #38ace5;
     	max-width: 100%;
 
     	@media #{$phone} {
+    		height: auto;
     		margin-left: auto;
     		margin-right: auto;
     		display: block;
@@ -569,4 +571,90 @@ $main-color: #38ace5;
 	    	background-color: black;
 	    }
     }
+}
+
+.index-h1 {
+	@media #{$phone} {
+		font-size: 30px;
+	    font-weight: bold;
+	    text-align: center;
+	    padding: 0px 20px;
+	    margin-bottom: 20px;
+	    margin-top: 10px;
+	}
+}
+
+.black-button {
+	background-color: #090909;
+    color: #fbf9f9;
+    font-weight: 500;
+    font-size: 23px;
+    width: 320px;
+    height: 45px;
+    display: inline-block;
+    line-height: 45px;
+    text-transform: uppercase;
+    padding-left: 20px;
+    border-radius: 10px;
+    position: relative;
+    text-decoration: none;
+    text-align: left;
+    transition: all 0.3s ease;
+
+    &:hover {
+    	color: #fbf9f9;
+    	transition: all 0.3s ease;
+
+    	&:after {
+    		right: 37px;
+			transition: all 0.3s ease;
+    	}
+    }
+
+    &:after {
+    	content: "";
+    	background-image: url(../new-vox-img/right-arrow.png);
+		position: absolute;
+		right: 17px;
+		top: 9px;
+		width: 14px;
+		height: 24px;
+		background-size: cover;
+		transition: all 0.3s ease;
+    }
+
+
+	@media #{$phone} {
+		top: -57px;
+    	width: auto;
+	    margin: 0px auto;
+    	border-radius: 5px;
+    	font-size: 18px;
+    	padding: 0px 54px 0px 25px;
+    	border-radius: 8px;
+    	height: 44px;
+    	line-height: 45px;
+    
+    	&:after {
+		    background-image: url(../new-vox-img/right-arrow.png);
+		    width: 12px;
+		    height: 23px;
+		    right: 15px;
+		    top: 10px;
+    	}
+
+    	&:hover {
+
+	    	&:after {
+	    		right: 13px;
+	    	}
+	    }
+    }
+}
+
+.blue-button {
+	@media screen and (max-width: 1490px) {
+		padding: 10px 15px !important;
+		font-size: 16px;
+	}
 }

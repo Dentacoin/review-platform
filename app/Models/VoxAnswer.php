@@ -38,6 +38,10 @@ class VoxAnswer extends Model {
     public function user() {
         return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
+
+    public function question() {
+        return $this->hasOne('App\Models\VoxQuestion', 'id', 'question_id');
+    }
     
     public function country() {
         return $this->hasOne('App\Models\Country', 'id', 'country_id');

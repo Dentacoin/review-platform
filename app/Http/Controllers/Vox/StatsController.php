@@ -111,16 +111,12 @@ class StatsController extends FrontController
             'social_title' => $seos->social_title,
             'social_description' => $seos->social_description,
             'js' => [
-                'stats.js'
+                'stats.js',
+                'select2.min.js'
             ],
             'css' => [
-                'vox-stats.css'
-            ],
-            'jscdn' => [
-                'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js',
-            ],
-            'csscdn' => [
-                'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css',
+                'vox-stats.css',
+                'select2.min.css',
             ],
         ));
     }
@@ -134,12 +130,6 @@ class StatsController extends FrontController
 		if(empty($vox)) {
 			return redirect( getLangUrl('page-not-found') );
 		}
-
-        if(empty($this->user)) {
-            session([
-                'vox-redirect-workaround' => str_replace( getLangUrl('/').App::getLocale().'/', '', $vox->getLink())
-            ]);
-        }
 
         if(!$vox->has_stats && empty($this->admin)) {
             return redirect( getLangUrl('dental-survey-stats') );
@@ -1248,6 +1238,7 @@ class StatsController extends FrontController
                 'question_type' => $question->type,
                 'multiple_top_answers' => !empty($question->stats_top_answers) && $question->type == 'multiple_choice' ? intval(explode('_', $question->stats_top_answers)[1]) : null,
                 'q_id' => $question->id,
+                'available_dep_answer' => $question->stats_answer_id ? $question->stats_answer_id : null,
         	] );
         }
 
@@ -1534,15 +1525,13 @@ class StatsController extends FrontController
                                 }
                                 
                             } else if( $q->type == 'multiple_choice' ) {
-                                $list = json_decode($question->answers, true);
-                                $answerwords = $question->vox_scale_id && !empty($scales[$question->vox_scale_id]) ? explode(',', $scales[$question->vox_scale_id]->answers) : json_decode($question->answers, true);
+                                $list = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) : json_decode($q->answers, true);
 
-                                foreach ($list as $k => $l) {
-                                    foreach ($qanswers as $qa) {
-                                        if($qa->scale == $k + 1) {
-                                            $row[] = $qa->answer;
-                                        }
-                                    }
+                                $i=1;
+                                foreach ($list as $l) {
+                                    $thisanswer = $i == $answ->answer;
+                                    $row[] = $thisanswer ? '1' : '0';
+                                    $i++;
                                 }
                             } else if($q->type == 'number') {
                                 $row[] = $answ->answer;
@@ -1620,28 +1609,30 @@ class StatsController extends FrontController
 
                                 $cur_chart = [];
 
-                                $all_results = VoxAnswer::whereNull('is_admin')
-                                ->where('question_id', $q->id)
-                                ->where('is_completed', 1)
-                                ->where('is_skipped', 0)
-                                ->has('user');
+                                // $all_results = VoxAnswer::whereNull('is_admin')
+                                // ->where('question_id', $q->id)
+                                // ->where('is_completed', 1)
+                                // ->where('is_skipped', 0)
+                                // ->has('user');
 
-                                if (!empty(Request::input('download-date')) && Request::input('download-date') != 'all') {
-                                    $from = Carbon::parse(explode('-', Request::input('download-date'))[0]);
-                                    $to = Carbon::parse(explode('-', Request::input('download-date'))[1]);
+                                // if (!empty(Request::input('download-date')) && Request::input('download-date') != 'all') {
+                                //     $from = Carbon::parse(explode('-', Request::input('download-date'))[0]);
+                                //     $to = Carbon::parse(explode('-', Request::input('download-date'))[1]);
 
-                                    $all_results = $all_results->where('created_at', '>=', $from)
-                                    ->where('created_at', '<=', $to);
-                                }
+                                //     $all_results = $all_results->where('created_at', '>=', $from)
+                                //     ->where('created_at', '<=', $to);
+                                // }
 
                                 $a = $q->stats_answer_id;
 
-                                $all_results = $all_results->whereIn('user_id', function($query) use ($q, $a) {
-                                    $query->select('user_id')
-                                    ->from('vox_answers')
-                                    ->where('question_id', $q->related->id)
-                                    ->where('answer', $a);
-                                } );
+                                // $all_results = $all_results->whereIn('user_id', function($query) use ($q, $a) {
+                                //     $query->select('user_id')
+                                //     ->from('vox_answers')
+                                //     ->where('question_id', $q->related->id)
+                                //     ->where('answer', $a);
+                                // } );
+
+                                $all_results = VoxAnswersDependency::where('question_dependency_id', $q->related->id)->where('answer', $a)->first();
 
                                 $answers_array = $q->vox_scale_id && !empty($scales[$q->vox_scale_id]) ? explode(',', $scales[$q->vox_scale_id]->answers) :  json_decode($q->answers, true);
 
@@ -1650,18 +1641,20 @@ class StatsController extends FrontController
                                 foreach ($answers_array as $key => $value) {
                                     $cur_chart[$key][] = mb_strpos($value, '!')===0 || ($q->type != 'single_choice' && mb_strpos($value, '#')===0) ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
 
-                                    $count_people = 0;
-                                    foreach ($all_results->get() as $k => $v) {
+                                    // $count_people = 0;
+                                    // foreach ($all_results->get() as $k => $v) {
 
-                                        if($v->answer == ($key + 1)) {
-                                            $count_people++;
-                                        }
-                                    }
+                                    //     if($v->answer == ($key + 1)) {
+                                    //         $count_people++;
+                                    //     }
+                                    // }
 
-                                    $cur_chart[$key][] = $count_people;                        
+                                    $cur_chart[$key][] = $count_people;
                                 }
                                 
-                                $results_total = $all_results->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+                                // $results_total = $all_results->select(DB::raw('count(distinct `user_id`) as num'))->first()->num;
+                                $results_total = $all_results->cnt;
+
 
                                 $total = $results_total; 
 
@@ -1740,39 +1733,45 @@ class StatsController extends FrontController
 
                                     $breakdown_rows_count = count($answers_array);
 
-                                    $all_related_original_results = VoxAnswer::whereNull('is_admin')
-                                    ->where('question_id', $q->id)
-                                    ->where('is_skipped', 0)
-                                    ->has('user')
-                                    ->whereIn('user_id', function($query) use ($q, $i) {
-                                        $query->select('user_id')
-                                        ->from('vox_answers')
-                                        ->where('question_id', $q->related->id)
-                                        ->where('answer', $i);
-                                    });
+                                    $all_related_original_results = VoxAnswersDependency::where('question_dependency_id', $q->related->id)->get();
+                                    // $all_related_original_results = VoxAnswer::whereNull('is_admin')
+                                    // ->where('question_id', $q->id)
+                                    // ->where('is_skipped', 0)
+                                    // ->has('user')
+                                    // ->whereIn('user_id', function($query) use ($q, $i) {
+                                    //     $query->select('user_id')
+                                    //     ->from('vox_answers')
+                                    //     ->where('question_id', $q->related->id)
+                                    //     ->where('answer', $i);
+                                    // });
 
-                                    if (!empty(Request::input('download-date')) && Request::input('download-date') != 'all') {
-                                        $from = Carbon::parse(explode('-', Request::input('download-date'))[0]);
-                                        $to = Carbon::parse(explode('-', Request::input('download-date'))[1]);
+                                    // if (!empty(Request::input('download-date')) && Request::input('download-date') != 'all') {
+                                    //     $from = Carbon::parse(explode('-', Request::input('download-date'))[0]);
+                                    //     $to = Carbon::parse(explode('-', Request::input('download-date'))[1]);
 
-                                        $all_related_original_results = $all_related_original_results->where('created_at', '>=', $from)
-                                        ->where('created_at', '<=', $to);
-                                    }
-
+                                    //     $all_related_original_results = $all_related_original_results->where('created_at', '>=', $from)
+                                    //     ->where('created_at', '<=', $to);
+                                    // }
+                                    
                                     foreach ($answers_array as $key => $value) {
                                         $m_original_chart[$key][] = mb_strpos($value, '!')===0 || mb_strpos($value, '#')===0 ? mb_substr($q->removeAnswerTooltip($value), 1) : $q->removeAnswerTooltip($value);
 
-                                        $count_people = 0;
-                                        foreach ($all_related_original_results->get() as $k => $v) {
-                                            if($v->answer == ($key + 1)) {
-                                                $count_people++;
-                                            }
-                                        }
+                                        // $count_people = 0;
+                                        // foreach ($all_related_original_results->get() as $k => $v) {
+                                        //     if($v->answer == ($key + 1)) {
+                                        //         $count_people++;
+                                        //     }
+                                        // }
 
-                                        $m_original_chart[$key][] = $count_people;                        
+                                        $m_original_chart[$key][] = VoxAnswersDependency::where('question_dependency_id', $q->related->id)->where('answer', $key+1)->first()->cnt; 
+                                        // $m_original_chart[$key][] = $count_people;                        
                                     }
 
-                                    $total_count = $all_related_original_results->select(DB::raw('count(distinct `user_id`) as num'))->first()->num; 
+                                    $tr = 0;
+                                    foreach ($all_related_original_results as $alor) {
+                                        $tr+= $alor->cnt;
+                                    }
+                                    $total_count = $tr; 
 
                                     // if($q->type == 'multiple_choice') {
                                     //     $results_total = $all_related_original_results->count();
@@ -2084,7 +2083,6 @@ class StatsController extends FrontController
     }
 
     public function createPdf() {
-        
         if(!empty($this->user) && !empty(Request::input("hidden_html"))) {
 
             set_time_limit(300);
@@ -2112,7 +2110,7 @@ class StatsController extends FrontController
                 mkdir($dir);
             }
 
-            $pdf_title = strtolower(str_replace(['?', ' ', ':', '&'], [' ', '-', ' ', 'and'] ,$original_title)).'-dentavox'.mb_substr(microtime(true), 0, 10);
+            $pdf_title = strtolower(str_replace(['?', ' ', ':', '&'], ['', '-', '', 'and'] ,$original_title)).'-dentavox'.mb_substr(microtime(true), 0, 10);
 
             $pdf->save($dir.'/'.$pdf_title.'.pdf');
 
@@ -2140,14 +2138,14 @@ class StatsController extends FrontController
 
         $cur_time = mb_substr(microtime(true), 0, 10);
 
-        $png_title = strtolower(str_replace(['?', ' ', ':', '&'], [' ', '-', ' ', 'and'] ,Request::input("stat_title"))).'-dentavox'.$cur_time;
+        $png_title = strtolower(str_replace(['?', ' ', ':', '&'], ['', '-', '', 'and'] ,Request::input("stat_title"))).'-dentavox'.$cur_time;
 
         $folder = storage_path().'/app/public/png/'.$png_title;
         if(!is_dir($folder)) {
             mkdir($folder);
         }
 
-        $picture_title = strtolower(str_replace(['?', ' ', ':'], [' ', '-', ' '] ,Request::input("stat_title"))).'-dentavox-';
+        $picture_title = strtolower(str_replace(['?', ' ', ':', '&'], ['', '-', '', 'and'] ,Request::input("stat_title"))).'-dentavox-';
 
         $count_img = 0;
         for ($i=1; $i < 7; $i++) { 
@@ -2199,7 +2197,7 @@ class StatsController extends FrontController
         
     }
 
-    public function paginate($items, $perPage = 10, $page = null, $options = []) {
+    private function paginate($items, $perPage = 10, $page = null, $options = []) {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }

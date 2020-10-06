@@ -31,7 +31,6 @@ jQuery(document).ready(function($){
                         var gstring = results[0].formatted_address;
                         var country_name = this.find('.country-select option:selected').text();
                         gstring = gstring.replace(', '+country_name, '');
-                        console.log( gstring );
 
                         this.find('.address-suggester').val(gstring).blur();
                     } else {
@@ -153,6 +152,10 @@ jQuery(document).ready(function($){
             if ( (country_code_name == 'XK' && (address_country == 'XK' || typeof address_country === 'undefined') ) || (address_country == country_code_name) ) {
                 gstring = gstring.replace(', '+country_name, '');
                 conatiner.find('.address-suggester').val(gstring);
+                if(!$('#custom_lat_lon').is(':checked')) {
+                    conatiner.closest('form').find('[name="lat"]').val(place.geometry.location.lat());
+                    conatiner.closest('form').find('[name="lon"]').val(place.geometry.location.lng());
+                }
 
                 var coords = {
                     lat: place.geometry.location.lat(), 

@@ -6,7 +6,7 @@
 		<div class="container">
 			<div class="flex">
 				<div class="col">
-					<img class="taken-survey-image" src="{{ url('new-vox-img/dentavox-man-taken-survey.jpg') }}" alt="Dentavox man taken survey">
+					<img class="taken-survey-image" src="{{ url('new-vox-img/dentavox-man-taken-survey.jpg') }}" alt="Dentavox man taken survey" width="550" height="507">
 				</div>
 				<div class="col taken-survey-description">
 					<h3>Oops! Survey not available...</h3>

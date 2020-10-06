@@ -13,6 +13,7 @@ $phone: "screen and (max-width: 768px)";
          url('../fonts/Calibri-Bold.woff') format('woff');
     font-weight: 700;
     font-style: bold;
+    font-display: swap;
 }
 @font-face {
     font-family: 'Calibri';
@@ -20,6 +21,7 @@ $phone: "screen and (max-width: 768px)";
          url('../fonts/Calibri.woff') format('woff');
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -28,6 +30,7 @@ $phone: "screen and (max-width: 768px)";
          url('../fonts/Calibri-Light.woff') format('woff');
     font-weight: 300;
     font-style: bold;
+    font-display: swap;
 }
 
 html, body, div, span, applet, object, iframe,

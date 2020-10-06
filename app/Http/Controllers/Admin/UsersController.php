@@ -160,6 +160,15 @@ class UsersController extends AdminController {
     		'birthyear' => [
     			'type' => 'text'
     		],
+            'custom_lat_lon' => [
+                'type' => 'bool',
+            ],
+            'lat' => [
+                'type' => 'text',
+            ],
+            'lon' => [
+                'type' => 'text',
+            ],
     		'address' => [
     			'type' => 'text',
                 //'disabled' => true,

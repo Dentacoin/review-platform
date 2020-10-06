@@ -1164,7 +1164,7 @@
 							<a class="slider-wrapper approved-team {!! $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'no-upper' : '' !!}" href="{{ $team->clinicTeam->status == 'dentist_no_email' || $team->clinicTeam->status == 'added_new' ? 'javascript:;' : $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}" {!! !empty($user) && $item->id==$user->id ? 'team-id="'.$team->id.'"' : '' !!}>
 								<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 									@if( $team->clinicTeam->is_partner )
-										<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic }}"/>
+										<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
 									@endif
 									@if( (!empty($user) && $item->id==$user->id) )
 										<div class="deleter" sure="{!! trans('trp.page.user.delete-sure', ['name' => $team->clinicTeam->getNames() ]) !!}">
@@ -1239,7 +1239,7 @@
 								<a class="slider-wrapper pending " href="{{ $team->clinicTeam->getLink() }}" dentist-id="{{ $team->clinicTeam->id }}">
 									<div class="slider-image" style="background-image: url('{{ $team->clinicTeam->getImageUrl(true) }}')">
 										@if( $team->clinicTeam->is_partner )
-											<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic }}"/>
+											<img class="tooltip-text" src="img-trp/mini-logo.png" text="{!! nl2br(trans('trp.common.partner')) !!} Clinic"/>
 										@endif
 									</div>
 								    <div class="slider-container">
@@ -1469,8 +1469,6 @@
 	@include('trp/popups/claim-profile')
 @endif
 @include('trp.popups.detailed-review')
-@include('trp.popups.lead-magnet')
-
 
 <div class="popup fixed-popup first-guided-tour-done-popup tour-popup" id="first-guided-tour-done">
 	<div class="popup-inner-tour tac">

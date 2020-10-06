@@ -31,6 +31,9 @@ class NotFoundController extends FrontController
             'seo_description' => $seos->seo_description,
             'social_title' => $seos->social_title,
             'social_description' => $seos->social_description,
+            'css' => [
+            	'vox-404.css'
+            ],
 		), 404);	
 	}
 

@@ -101,7 +101,8 @@
         margin-right: 10px; }
         @media screen and (max-width: 1200px) {
           .section-vox-not-login .login-buttons .white-button img {
-            max-width: 17px; } }
+            max-width: 17px;
+            height: auto; } }
     .section-vox-not-login .login-buttons .col:first-child {
       border-right: 2px solid white;
       padding-right: 60px; }
@@ -198,7 +199,8 @@
         max-width: 42px; }
         @media screen and (max-width: 768px) {
           .section-vox-not-login .swiper-slide .wing img {
-            max-width: 30px; } }
+            max-width: 30px;
+            height: auto; } }
       .section-vox-not-login .swiper-slide .wing p {
         font-size: 30px;
         font-weight: bold; }

@@ -8,7 +8,6 @@
 			<h2 class="page-title">
 				<img src="{{ url('new-vox-img/profile-vox.png') }}" />
 				{{ trans('vox.page.profile.vox.title') }}
-				
 			</h2>
 
 	        <div class="history-section form-horizontal">
@@ -21,7 +20,6 @@
             		<thead>
             			<tr>
 	            			<th>
-	            				
 	            				{{ trans('vox.page.profile.vox.list-date') }}
 	            			</th>
 	            			<th>

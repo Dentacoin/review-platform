@@ -12,7 +12,6 @@
 
 	<div class="faq-wrapper">
 		<div class="container">
-			
 			@foreach($content as $block)
 				<h2>{{ $block['title'] }}</h2>
 				<div class="questions">
@@ -28,8 +27,6 @@
 					@endforeach
 				</div>
 			@endforeach
-		    	
-
 		</div>
 	</div>
 

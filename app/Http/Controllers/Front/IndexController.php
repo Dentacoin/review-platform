@@ -301,8 +301,6 @@ class IndexController extends FrontController {
 			return redirect( getLangUrl('/') );
 		}
 
-    	$testimonials = DentistTestimonial::with('translations')->orderBy('id', 'desc')->get();
-
 		$seos = PageSeo::find(23);
 
 		$claim_user = !empty($claim_id) ? User::find($claim_id) : null;
@@ -313,19 +311,33 @@ class IndexController extends FrontController {
 			'js' => [
 				'address.js',
 				'index-dentist.js',
-                'flickity.min.js',
 			],
 			'css' => [
 				'trp-index-dentist.css',
                 'flickity.min.css',
 			],
-			'testimonials' => $testimonials,
 			'social_image' => $seos->getImageUrl(),
             'seo_title' => $seos->seo_title,
             'seo_description' => $seos->seo_description,
             'social_title' => $seos->social_title,
             'social_description' => $seos->social_description,
 			'countries' => Country::with('translations')->get(),
+        ));	
+	}
+
+	public function index_dentist_down($locale=null) {
+		if(!empty($this->user) && $this->user->isBanned('trp')) {
+			return redirect('https://account.dentacoin.com/trusted-reviews?platform=trusted-reviews');
+		}
+
+		if(!empty($this->user)) {
+			return redirect( getLangUrl('/') );
+		}
+
+    	$testimonials = DentistTestimonial::with('translations')->orderBy('id', 'desc')->get();
+
+		return $this->ShowView('index-dentist-down', array(
+			'testimonials' => $testimonials,
         ));	
 	}
 
@@ -621,5 +633,47 @@ class IndexController extends FrontController {
 	        ] );
     	}
     }
+
+	public function getPopup() {
+
+		//dd(request('id'));
+		if(request('id') == 'popup-share') {
+
+			return $this->ShowView('popups/share');
+
+		} else if(request('id') == 'verification-popup' && empty($this->user)) {
+
+			return $this->ShowView('popups/dentist-verification');
+
+		} else if(request('id') == 'popup-wokring-time-waiting' && empty($this->user)) {
+
+			return $this->ShowView('popups/working-time-waiting');
+
+		} else if(request('id') == 'failed-popup' && empty($this->user)) {
+			
+			return $this->ShowView('popups/failed-reg-login');
+
+		} else if(request('id') == 'popup-existing-dentist' && empty($this->user)) {
+			
+			return $this->ShowView('popups/existing-team-dentist');
+
+		} else if(request('id') == 'invite-new-dentist-popup' && ((!empty($this->user) && !$this->user->is_dentist) || empty($this->user))) {
+
+			return $this->ShowView('popups/invite-new-dentist', [
+				'countries' => Country::with('translations')->get(),
+				'country_id' => $this->country_id
+			]);
+		} else if(request('id') == 'invite-new-dentist-success-popup' && ((!empty($this->user) && !$this->user->is_dentist) || empty($this->user))) {
+
+			return $this->ShowView('popups/invite-new-dentist-success', [
+				'user' => $this->user
+			]);
+		} else if(request('id') == 'popup-lead-magnet' && ((!empty($this->user) && $this->user->is_dentist) || empty($this->user))) {
+
+			return $this->ShowView('popups/lead-magnet', [
+				'countries' => Country::with('translations')->get(),
+			]);
+		}
+	}
 
 }

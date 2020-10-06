@@ -229,7 +229,7 @@ $(document).ready(function(){
                     if (($(this).find('.multiple-stat').length || data.related_question_type == 'multiple') && data.related_question_type != 'single' ) {
                         drawMultipleColumns(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, data.total, data.multiple_top_answers, data.question_type);
                     } else {
-                        drawChart(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, true, can_click_on_legend, scale == 'dependency' ? true : data.vox_scale_id, scale == 'dependency' ? 'single_choice' : data.question_type, scale);
+                        drawChart(main_chart_data, $(this).find('.main-chart')[0], main_chart_options, true, can_click_on_legend, scale == 'dependency' ? true : data.vox_scale_id, scale == 'dependency' ? 'single_choice' : data.question_type, scale, data.available_dep_answer);
                     }
 
                     if($(window).outerWidth() <= 768 && $('.mobile-button-legend').length && scale!='country_id') {
@@ -253,11 +253,12 @@ $(document).ready(function(){
                     $(this).find('.total-all b').html(data.total);
                     $(this).find('.total-all').show();
                     $(this).find('.chart-1').removeClass('with-relation-hint');
-                    $(this).find('.second-chart').removeClass('verticle-align-chart');
+                    $(this).find('.second-chart').removeClass('verticle-align-chart')
+                    $(this).find('.relation-hint').hide();
 
                     $(elm).find('.legend').show();
 
-                    var multiple_columns = data.question_type == 'multiple_choice' || data.question_type == 'rank' ? true : false;
+                    var multiple_columns = data.question_type == 'multiple_choice' || data.question_type == 'rank'  ? true : false;
 
                     if(scale=='dependency') {
 
@@ -270,6 +271,12 @@ $(document).ready(function(){
                             setupMultipleLegend($(this).find('.main-chart'), legend, data.answer_id, can_click_on_legend);
                         } else {
                             $(this).find('.relation-hint').html($(this).find('.relation-hint').attr('for-single'));
+                        }
+
+                        if(data.available_dep_answer) {
+                            $(this).find('.relation-hint').hide();
+                        } else {
+                            $(this).find('.relation-hint').show();
                         }
 
                         $(this).find('.chart-1').addClass('with-relation-hint');
@@ -326,6 +333,8 @@ $(document).ready(function(){
                                 $(this).find('.multiple-gender-nav').css('display', 'flex');
                                 $(this).find('.multiple-stat').removeClass('mobile-bottom-margin');
                             }
+
+                            setupMultipleLegend($(this).find('.main-chart'), legend, data.answer_id, can_click_on_legend);
                         } 
 
                         if(multiple_columns || data.answer_id) {
@@ -637,24 +646,6 @@ $(document).ready(function(){
     //         $('#survey-not-found').hide();
     //     }
     // }
-
-    $('input[name="target"]').change( function() {
-        $(this).closest('.modern-radios').removeClass('has-error');
-        $('.ajax-alert[error="'+$(this).attr('name')+'"]').remove();
-        var val = $('#target-specific:checked').length;
-        if(val) {
-            $('.target-row').show();
-        } else {
-            $('.target-row').hide();
-        }
-    } );
-
-    if ($('.select2').length) {
-        $(".select2").select2({
-            multiple: true,
-            placeholder: 'Select Country/ies',
-        });
-    }
 
     //Individual Survey
 
@@ -1062,7 +1053,7 @@ $(document).ready(function(){
 
     }
 
-    var drawChart = function(rows, container, more_options, is_main, can_click_on_legend, vox_scale_id, question_type, scale) {
+    var drawChart = function(rows, container, more_options, is_main, can_click_on_legend, vox_scale_id, question_type, scale, available_dep_answer=null) {
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Genders');
         data.addColumn('number', 'Answers');
@@ -1110,29 +1101,34 @@ $(document).ready(function(){
                 var selection = this.getSelection();
 
                 if( typeof selection[0] !='undefined' && typeof selection[0].row!='undefined' ) {
-                    var container = $(this.container).closest('.stat');
 
-                    if(  container.attr('answer-id')==(selection[0].row + 1) ) {
-                        container.removeAttr('answer-id');
+                    if(scale == 'dependency' && available_dep_answer) {
+                        
                     } else {
-                        container.attr('answer-id', selection[0].row + 1);                        
-                    }
+                        var container = $(this.container).closest('.stat');
 
-                    if (!can_click_on_legend) {
-                        container.find('.scales-filter label').addClass('active');
-                        container.find('.scales-filter input').prop('checked', true);
-                    }
+                        if(  container.attr('answer-id')==(selection[0].row + 1) ) {
+                            container.removeAttr('answer-id');
+                        } else {
+                            container.attr('answer-id', selection[0].row + 1);                        
+                        }
 
-                    if ($(window).outerWidth() <= 768 && container.find('.mobile-button-legend').length) {
-                        $('html, body').animate({
-                            scrollTop: container.find('.mobile-button-legend').offset().top
-                        }, 500);
+                        if (!can_click_on_legend) {
+                            container.find('.scales-filter label').addClass('active');
+                            container.find('.scales-filter input').prop('checked', true);
+                        }
+
+                        if ($(window).outerWidth() <= 768 && container.find('.mobile-button-legend').length) {
+                            $('html, body').animate({
+                                scrollTop: container.find('.mobile-button-legend').offset().top
+                            }, 500);
+                        }
+                        if(typeof scale !== 'undefined' && scale == 'dependency') {
+                            container.find('.loader').fadeIn();
+                            container.find('.loader-mask').fadeIn();
+                        }
+                        reloadGraph( container );
                     }
-                    if(typeof scale !== 'undefined' && scale == 'dependency') {
-                        container.find('.loader').fadeIn();
-                        container.find('.loader-mask').fadeIn();
-                    }
-                    reloadGraph( container );
                 }
             }).bind(chart));
 
@@ -1674,14 +1670,6 @@ $(document).ready(function(){
 
     $('.stats .stat:first-child').addClass('active');
 
-    $('.copy-invite-link').click( function() {
-        // var $temp = $("<input>");
-        // $("body").append($temp);
-        $('.select-me').select();
-        document.execCommand("copy");
-        $('.select-me').blur();        
-    } );
-
     $('.social-share').click( function() {
         $('.share-popup').addClass('active');
     });
@@ -1699,17 +1687,6 @@ $(document).ready(function(){
         window.open( url , 'ShareWindow', 'height=450, width=550, top=' + (jQuery(window).height() / 2 - 275) + ', left=' + (jQuery(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
     });
 
-    // $(window).resize( function() {
-    //     $('.stat.active').each( function() {
-    //         reloadGraph(this);
-    //     } );
-    // } );
-
-    // $('.blurred-button').click( function() {
-    //     $('#login-register-popup .reg-but').attr('href', 'https://vox.dentacoin.com/en/registration');
-    //     $('#login-register-popup').addClass('active');
-    // });
-
     $('.blurred-button').click( function(e) {
         if(dentacoin_down) {
             e.stopImmediatePropagation();
@@ -1721,7 +1698,6 @@ $(document).ready(function(){
                 $.event.trigger({type: 'openPatientRegister'});
             }
         }
-
     });
 
     $('.download-format-radio').change( function(e) {
@@ -1736,65 +1712,60 @@ $(document).ready(function(){
         }
     });
 
-    var popupDownloadAction = function() {
+    $('.download-demographic-checkbox').change( function(e) {
+        $(this).closest('label').addClass('active');
+        $(this).prop('checked', true);
+        $('.demogr-options').hide();
+    });
 
-        console.log('vliza');
+    $('.active-removal').click( function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $(this).closest('label').removeClass('active');
+        $(this).closest('label').find('.download-demographic-checkbox').prop('checked', false);
+        if($(this).closest('label').find('.demogr-options').length) {
+            $(this).closest('label').find('.demogr-options').hide();
+        }
+    });
 
-        $('.download-demographic-checkbox').change( function(e) {
+    $('.dem-arrow').click( function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!$(this).closest('label').hasClass('active')) {
             $(this).closest('label').addClass('active');
-            $(this).prop('checked', true);
-            $('.demogr-options').hide();
-        });
+            $(this).closest('label').find('.download-demographic-checkbox').prop('checked', true);
+        }
+        $('.demogr-options').hide();
+        $(this).closest('label').find('.demogr-options').show();
+    });
 
-        $('.active-removal').click( function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            $(this).closest('label').removeClass('active');
-            $(this).closest('label').find('.download-demographic-checkbox').prop('checked', false);
-            if($(this).closest('label').find('.demogr-options').length) {
-                $(this).closest('label').find('.demogr-options').hide();
-            }
-        });
-
-        $('.dem-arrow').click( function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            if (!$(this).closest('label').hasClass('active')) {
-                $(this).closest('label').addClass('active');
-                $(this).closest('label').find('.download-demographic-checkbox').prop('checked', true);
-            }
-            $('.demogr-options').hide();
-            $(this).closest('label').find('.demogr-options').show();
-        });
-
-        $('.dem-checkbox').change( function(e) {
+    $('.dem-checkbox').change( function(e) {
         console.log('smenq');
-            e.preventDefault();
-            e.stopPropagation();
-            
-            if ($(this).hasClass('select-all-dem')) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if ($(this).hasClass('select-all-dem')) {
+            $(this).closest('.demogr-options').find('label').addClass('active');
+            $(this).closest('.demogr-options').find('input').prop('checked', true);
+        } else {
+            console.log($(this).closest('label'));
+            $(this).closest('label').toggleClass('active');
+            $(this).closest('.demogr-options').find('.select-all-dem').prop('checked', false);
+            $(this).closest('.demogr-options').find('.select-all-dem-label').removeClass('active');
+
+            if (!$(this).closest('.demogr-options').find('input:checked').length) {
                 $(this).closest('.demogr-options').find('label').addClass('active');
                 $(this).closest('.demogr-options').find('input').prop('checked', true);
-            } else {
-                console.log($(this).closest('label'));
-                $(this).closest('label').toggleClass('active');
-                $(this).closest('.demogr-options').find('.select-all-dem').prop('checked', false);
-                $(this).closest('.demogr-options').find('.select-all-dem-label').removeClass('active');
-
-                if (!$(this).closest('.demogr-options').find('input:checked').length) {
-                    $(this).closest('.demogr-options').find('label').addClass('active');
-                    $(this).closest('.demogr-options').find('input').prop('checked', true);
-                }
             }
-        });
+        }
+    });
 
-        $('.close-dem-options').click( function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+    $('.close-dem-options').click( function(e) {
+        e.preventDefault();
+        e.stopPropagation();
 
-            $(this).closest('.demogr-options').hide();
-        });
-    }
+        $(this).closest('.demogr-options').hide();
+    });
 
     $('.download-date-radio').change( function(e) {
         e.preventDefault();
@@ -1861,28 +1832,6 @@ $(document).ready(function(){
         }
     });
 
-    $('.download-stats-popup-btn').click( function() {
-        showPopup('download-stats-popup');
-
-        if($('#download-stats-popup').find('.demogr-inner').length) {
-            $('#download-stats-popup').find('.demogr-inner').remove();
-        }
-        var inner = $(this).closest('.stat').next();
-        inner.show();
-        $('#download-stats-popup').find('.download-demographics').append(inner);
-
-        $('#stats-for').val($(this).attr('for-stat'));
-        if($(this).is('[for-scale]')) {
-            $('#scale-for').val($(this).attr('for-scale'));
-        }
-
-        if(!open_download_popup) {
-
-            open_download_popup = true;
-            popupDownloadAction();
-        }
-    });
-
     $('#download-form').submit( function(e) {
         e.preventDefault();
 
@@ -1923,9 +1872,26 @@ $(document).ready(function(){
             }, "json"
         );
     });
+    
+    $('.download-stats-popup-btn').click( function() {
+        showPopup('download-stats-popup');
+
+        if($('#download-stats-popup').find('.demogr-inner').length) {
+            $('#download-stats-popup').find('.demogr-inner').remove();
+        }
+        var inner = $(this).closest('.stat').next();
+        inner.show();
+
+        $('#download-stats-popup').find('.download-demographics').append(inner);
+
+        $('#stats-for').val($(this).attr('for-stat'));
+        if($(this).is('[for-scale]')) {
+            $('#scale-for').val($(this).attr('for-scale'));
+        }
+    });
 
     $('#make-stat-image-btn').click( function() {
-        
+            
         var generateImage = function() {
             var st_title = $('.st-title').first();
 
@@ -2004,7 +1970,6 @@ $(document).ready(function(){
                 setTimeout( function() {
                     $('#download-form-png').submit();
                 }, 300);
-                
             }
         }
 
@@ -2017,7 +1982,6 @@ $(document).ready(function(){
                 generateImage();
             }, 100);
         }        
-        
     });
 
 
@@ -2044,50 +2008,6 @@ $(document).ready(function(){
             }, "json"
         );
     });
-
-    var getBase64Image = function(img) {
-        var canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        var dataURL = canvas.toDataURL("image/png");
-        return dataURL.replace(/^data:image\/png;base64,/, "");
-
-        //
-    }
-
-    /**
-    * Convert a base64 string in a Blob according to the data and contentType.
-    * 
-    * @param b64Data {String} Pure base64 string without contentType
-    * @param contentType {String} the content type of the file i.e (image/jpeg - image/png - text/plain)
-    * @param sliceSize {Int} SliceSize to process the byteCharacters
-    * @see http://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
-    * @return Blob
-    */
-    function b64toBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-        var byteCharacters = atob(b64Data);
-        var byteArrays = [];
-
-        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-            var slice = byteCharacters.slice(offset, offset + sliceSize);
-
-            var byteNumbers = new Array(slice.length);
-            for (var i = 0; i < slice.length; i++) {
-                byteNumbers[i] = slice.charCodeAt(i);
-            }
-
-            var byteArray = new Uint8Array(byteNumbers);
-
-            byteArrays.push(byteArray);
-        }
-
-        var blob = new Blob(byteArrays, {type: contentType});
-        return blob;
-    }
 
     $('#download-form-png').submit( function(e) {
         e.preventDefault();
@@ -2138,12 +2058,55 @@ $(document).ready(function(){
         });
     });
 
-
     $('.scroll-to-blurred').click( function() {
         $('html, body').animate({
             scrollTop: $(".stats-blurred").offset().top
         }, 500);
     });
+
+    var getBase64Image = function(img) {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL("image/png");
+        return dataURL.replace(/^data:image\/png;base64,/, "");
+
+        //
+    }
+
+    /**
+    * Convert a base64 string in a Blob according to the data and contentType.
+    * 
+    * @param b64Data {String} Pure base64 string without contentType
+    * @param contentType {String} the content type of the file i.e (image/jpeg - image/png - text/plain)
+    * @param sliceSize {Int} SliceSize to process the byteCharacters
+    * @see http://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+    * @return Blob
+    */
+    function b64toBlob(b64Data, contentType, sliceSize) {
+        contentType = contentType || '';
+        sliceSize = sliceSize || 512;
+        var byteCharacters = atob(b64Data);
+        var byteArrays = [];
+
+        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
+        }
+
+        var blob = new Blob(byteArrays, {type: contentType});
+        return blob;
+    }
 
 
 });

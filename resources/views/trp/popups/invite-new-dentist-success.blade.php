@@ -1,4 +1,4 @@
-<div class="popup fixed-popup invite-new-dentist-success-popup" id="invite-new-dentist-success-popup">
+<div class="popup fixed-popup invite-new-dentist-success-popup active removable" id="invite-new-dentist-success-popup">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="close-popup">
 			<i class="fas fa-times"></i>

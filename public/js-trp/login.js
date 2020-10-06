@@ -15,10 +15,10 @@ $(document).ready(function(){
             type: 'POST',
             dataType: 'json',
             data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
                 invitedentist: $(this).val()
             },
             success: (function( data ) {
-                console.log(data);
                 var container = $(this).closest('.dentist-suggester-wrapper').find('.suggest-results');
                 
                 if (data.length) {
@@ -107,6 +107,7 @@ $(document).ready(function(){
             type: 'POST',
             dataType: 'json',
             data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
                 joinclinic: $(this).val()
             },
             success: (function( data ) {
@@ -220,12 +221,7 @@ $(document).ready(function(){
 
     });
 
-    $('.wh-btn').click( function() {
-        showPopup('popup-wokring-time-waiting');
-    });
-
     $('.verification-form').submit( function(e) {
-
         e.preventDefault();
 
         $('.popup .alert').hide();
@@ -261,7 +257,7 @@ $(document).ready(function(){
                         $('.verification-form').hide();
                     }
                     
-                    $('.popup .alert-success').html(ret.message).show();
+                    $('.popup .descr-success').html(ret.message).show();
 
                     if (ret.user == 'dentist') {
                         gtag('event', 'ClickSave', {

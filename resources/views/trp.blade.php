@@ -4,10 +4,7 @@
         <base href="{{ url('/') }}">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="height=device-height, 
-                      width=device-width, initial-scale=1.0, 
-                      minimum-scale=1.0, maximum-scale=1.0, 
-                      user-scalable=no, target-densitydpi=device-dpi">
+        <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densitydpi=device-dpi">
         <meta name="google-site-verification" content="b0VE72mRJqqUuxWJZklHQnvRZV4zdJkDymC0RD9hPhE" />
         
         @if(!empty($noIndex))
@@ -187,120 +184,43 @@
 			@yield('content')
 		</div>
 
-		<div class="footer-expander {{ !empty($gray_footer) ? 'gray-footer' : '' }}">
-			<footer>
-				<div class="container clearfix">
-					<a href="https://dentacoin.com/" target="_blank" class="footer-logo col-md-3 flex break-mobile flex-center">
-						<img src="{{ url('img-trp/dc-logo.png') }}" alt="Dentacoin logo">
-						<p class="bold">
-							{!! trans('trp.footer.powered') !!}
-						</p>
-					</a>
-					<div class="footer-text col-md-6 tac">
-						<div class="footer-menu">
-							<a href="https://reviews.dentacoin.com/blog/" target="_blank">Blog</a>
-							<a href="{{ getLangUrl('faq') }}">FAQ</a>
-							<a href="https://dentacoin.com/privacy-policy/" target="_blank">Privacy Policy</a>
-							<a href="https://dentavox.dentacoin.com/" target="_blank">Dentavox</a>
-							<a href="https://dentacare.dentacoin.com/" target="_blank">Dentacare App</a>
-						</div>
-						<small>
-							{!! trans('trp.footer.copyright', [
-								'year' => date('Y')
-							]) !!}
-						</small>
+		<footer class="{{ !empty($gray_footer) ? 'gray-footer' : '' }}">
+			<div class="container clearfix">
+				<a href="https://dentacoin.com/" target="_blank" class="footer-logo col-md-3 flex break-mobile flex-center">
+					<img src="{{ url('img-trp/dc-logo.png') }}" alt="Dentacoin logo">
+					<p class="bold">
+						{!! trans('trp.footer.powered') !!}
+					</p>
+				</a>
+				<div class="footer-text col-md-6 tac">
+					<div class="footer-menu">
+						<a href="https://reviews.dentacoin.com/blog/" target="_blank">Blog</a>
+						<a href="{{ getLangUrl('faq') }}">FAQ</a>
+						<a href="https://dentacoin.com/privacy-policy/" target="_blank">Privacy Policy</a>
+						<a href="https://dentavox.dentacoin.com/" target="_blank">Dentavox</a>
+						<a href="https://dentacare.dentacoin.com/" target="_blank">Dentacare App</a>
 					</div>
-					<div class="socials col-md-3">
-						{!! trans('trp.footer.stay') !!}: &nbsp;
-						<a class="social" href="https://t.me/dentacoin" target="_blank"><i class="fab fa-telegram-plane"></i></a>
-						<a class="social" href="https://www.facebook.com/dentacoin.trusted.reviews/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-					</div>
+					<small>
+						{!! trans('trp.footer.copyright', [
+							'year' => date('Y')
+						]) !!}
+					</small>
 				</div>
-			</footer>
-		</div>
-
-		@if($current_page != 'profile')
-			<div class="bottom-drawer">
-
-				@if(empty($user) && empty($_COOKIE['performance_cookies']) && empty($_COOKIE['marketing_cookies']) && empty($_COOKIE['strictly_necessary_policy']) && empty($_COOKIE['functionality_cookies']))
-					<div class="privacy-policy-cookie">
-						<div class="container-cookie flex">
-							<div class="cookies-text">
-								{!! trans('trp.cookiebar.text', [
-									'privacylink' => '<a href="https://dentacoin.com/privacy-policy" target="_blank">',
-									'adjustcookieslink' => '<a href="javascript:;" class="adjust-cookies">',
-									'endlink' => '</a>',
-								]) !!}
-							</div>
-							<a href="javascript:;" class="accept-all">{!! trans('trp.cookiebar.accept') !!}</a>
-						</div>
-						<div id="customize-cookies" class="customize-cookies" style="display: none;">
-							<button class="close-customize-cookies-icon close-customize-cookies-popup">×</button>
-							<div class="tac"><img src="/img-trp/cookie-icon.svg" alt="Cookie icon" class="cookie-icon"/></div>
-							<div class="tac cookie-popup-title">{!! trans('trp.cookiebar.select') !!}:</div>
-							<div class="cookies-options-list flex">
-								<div class="cookie-checkbox-wrapper">
-									<label class="cookie-label active" for="strictly-necessary-cookies">
-										<i class="far fa-square checkbox-icon"></i>
-										<input checked disabled id="strictly-necessary-cookies" type="checkbox" class="cookie-checkbox">
-										<span class="gray">{!! trans('trp.cookiebar.strictly') !!}</span> 
-										<i class="fas fa-info-circle info-cookie tooltip-text" text="{!! trans('trp.cookiebar.strictly.tooltip') !!}"></i>
-									</label>
-								</div>
-								<div class="cookie-checkbox-wrapper">
-									<label class="cookie-label active" for="performance-cookies">
-										<i class="far fa-square checkbox-icon"></i>
-										<input checked id="performance-cookies" type="checkbox" class="cookie-checkbox">
-										<span>{!! trans('trp.cookiebar.performance') !!}</span> 
-										<i class="fas fa-info-circle info-cookie tooltip-text" text="{!! trans('trp.cookiebar.performance.tooltip') !!}"></i>
-									</label>
-								</div>
-								<div class="cookie-checkbox-wrapper">
-									<label class="cookie-label active" for="functionality-cookies">
-										<i class="far fa-square checkbox-icon"></i>
-										<input checked id="functionality-cookies" type="checkbox" class="cookie-checkbox">
-										<span>{!! trans('trp.cookiebar.functionality') !!}</span> 
-										<i class="fas fa-info-circle info-cookie tooltip-text" text="{!! trans('trp.cookiebar.functionality.tooltip') !!}"></i>
-									</label>
-								</div>
-								<div class="cookie-checkbox-wrapper">
-									<label class="cookie-label active" for="marketing-cookies">
-										<i class="far fa-square checkbox-icon"></i>
-										<input checked id="marketing-cookies" type="checkbox" class="cookie-checkbox">
-										<span>{!! trans('trp.cookiebar.marketing') !!}</span> 
-										<i class="fas fa-info-circle info-cookie tooltip-text" text="{!! trans('trp.cookiebar.marketing.tooltip') !!}"></i>
-									</label>
-								</div>
-							</div>
-							<div class="flex actions">
-								<a href="javascript:;" class="close-cookie-button close-customize-cookies-popup">{!! trans('trp.cookiebar.cancel') !!}</a>
-								<a href="javascript:;" class="custom-cookie-save">{!! trans('trp.cookiebar.save') !!}</a>
-							</div>
-							<div class="custom-triangle"></div>
-						</div>
-					</div>
-				@endif
-
+				<div class="socials col-md-3">
+					{!! trans('trp.footer.stay') !!}: &nbsp;
+					<a class="social" href="https://t.me/dentacoin" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+					<a class="social" href="https://www.facebook.com/dentacoin.trusted.reviews/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+				</div>
 			</div>
+		</footer>
+
+		@if(false)
+			<div class="bottom-drawer"></div>
 		@endif
 
 		<div class="tooltip-window" style="display: none;"></div>
 
-		@include('trp/popups/share')
-		@if(empty($user))
-			@include('trp/popups/dentist-verification')
-			@include('trp/popups/failed-reg-login')			
-		@endif
-		@if(empty($user) || !$user->is_dentist)
-			@include('trp/popups/invite-new-dentist')
-			@include('trp/popups/invite-new-dentist-success')
-		@endif
-
 		<link rel="stylesheet" type="text/css" href="{{ url('/font-awesome/css/all.min.css') }}" />
-		
-		@if( $current_page=='dentist' )
-			<link rel="stylesheet" type="text/css" href="{{ url('/css/lightbox.css').'?ver='.$cache_version }}" />
-		@endif
 
         @if(!empty($csscdn) && is_array($csscdn))
             @foreach($csscdn as $file)
@@ -374,7 +294,6 @@
 
 		<script src="{{ url('/js/jquery-3.4.1.min.js') }}"></script>
 
-
 		@if(empty($user))
         	<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-login-gateway/css/dentacoin-login-gateway-style.css"/>
 			<script src="https://dentacoin.com/assets/libs/dentacoin-login-gateway/js/init.js"></script>
@@ -386,8 +305,8 @@
 			</script>
 		@else
 			@if($user->platform != 'external')
-				<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-mini-hub/css/style.css">
-				<script src="https://dentacoin.com/assets/libs/dentacoin-mini-hub/js/init.js"></script>
+				<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-package/css/style.css">
+				<script src="https://dentacoin.com/assets/libs/dentacoin-package/js/init.js"></script>
 
 				<script type="text/javascript">
 					if(typeof dcnHub !== 'undefined') {
@@ -399,12 +318,26 @@
 						};
 
 						miniHubParams.type_hub = '{{ $user->is_dentist ? 'mini-hub-dentists' : 'mini-hub-patients' }}';
-
 						dcnHub.initMiniHub(miniHubParams);
 					}
 				</script>
 			@endif
-		@endif	
+		@endif
+
+		@if(empty($user) && empty($_COOKIE['performance_cookies']) && empty($_COOKIE['marketing_cookies']) && empty($_COOKIE['strictly_necessary_policy']) && empty($_COOKIE['functionality_cookies']))
+			<script src="https://dentacoin.com/assets/libs/dentacoin-package/js/init.js"></script>
+			<link rel="stylesheet" type="text/css" href="https://dentacoin.com/assets/libs/dentacoin-package/css/style-cookie.css">
+
+			<script type="text/javascript">
+				if (typeof dcnCookie !== 'undefined') {
+					dcnCookie.init({
+						'google_app_id': 'UA-108398439-1',
+						'fb_app_id': '2010503399201502',
+						'second_fb_app_id': '2366034370318681',
+					});
+				}
+			</script>
+		@endif
 
 		@if(!empty($trackEvents))
 	        <script type="text/javascript">
@@ -428,22 +361,16 @@
 		
 		<script src="{{ url('/js/cookie.min.js') }}"></script>
 		<script src="{{ url('/js-trp/main.js').'?ver='.$cache_version }}"></script>
-		<script src="{{ url('/js/both.js').'?ver='.$cache_version }}"></script>
 		
-        @if( $current_page=='dentist' )
-			<script src="//vjs.zencdn.net/6.4.0/video.min.js"></script>
-			<script src="//cdn.WebRTC-Experiment.com/RecordRTC.js"></script>
-			<script src="//webrtc.github.io/adapter/adapter-latest.js"></script>
-			<script src="{{ url('/js/lightbox.js').'?ver='.$cache_version }}"></script>
-        @endif
-        @if(!empty($js) && is_array($js))
-            @foreach($js as $file)
-                <script src="{{ url('/js-trp/'.$file).'?ver='.$cache_version }}"></script>
-            @endforeach
-        @endif
         @if(!empty($jscdn) && is_array($jscdn))
             @foreach($jscdn as $file)
                 <script src="{{ $file }}"></script>
+            @endforeach
+        @endif
+		
+        @if(!empty($js) && is_array($js))
+            @foreach($js as $file)
+                <script src="{{ url('/js-trp/'.$file).'?ver='.$cache_version }}"></script>
             @endforeach
         @endif
         

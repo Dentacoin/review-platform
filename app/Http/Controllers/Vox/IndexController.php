@@ -26,6 +26,68 @@ use App;
 
 class IndexController extends FrontController {
 
+	private function getVoxList($slice_from=0) {
+		if( $this->user ) {
+			$voxes = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
+		} else {
+			$voxes = User::getAllVoxes();
+		}
+
+		if(!empty($this->user) && $this->user->is_dentist && !$slice_from) {
+			$slice_count = 5;
+		} else {
+			$slice_count = 6;
+		}
+
+		$voxList = $voxes->where('type', 'normal')->get();
+
+		$sort = 'featured';
+		$voxList = $voxList->sortByDesc(function ($voxlist) use ($sort) {
+
+            if(!empty($voxlist->$sort)) {
+                return 100000;
+            } else {
+                return 10000 - $voxlist->sort_order;
+            }
+        });
+		// $voxList = $voxList->slice($slice_from, $slice_count);
+
+		if ($this->user && !empty($this->user->country_id)) {
+			$user = $this->user;
+			$restricted_voxes = $voxList->filter(function($vox) use ($user) {
+	         	return !empty($vox->country_percentage) && !empty($vox->users_percentage) && array_key_exists($user->country_id, $vox->users_percentage) && $vox->users_percentage[$user->country_id] >= $vox->country_percentage;
+	       	});
+
+			$arr = [];
+
+			if($restricted_voxes->count()) {
+				foreach ($restricted_voxes as $vl) {
+					$has_started_the_survey = VoxAnswer::where('vox_id', $vl->id)->where('user_id', $this->user->id)->first();
+
+		            if(empty($has_started_the_survey)) {
+		                $arr[] = $vl->id;
+		            }
+				}
+
+				if (!empty($arr)) {
+					foreach ($arr as $ar) {
+						$voxList = $voxList->filter(function($item) use ($ar) {
+						    return $item->id != $ar;
+						});
+					}
+				}
+			}
+		}
+
+		//sort
+
+		// if($voxList->count() < 6) {
+
+		// }
+
+		return $voxList;
+	}
+
 	public function survey_list($locale=null) {
 		$sorts = [
 			// 'featured' => trans('vox.page.home.sort-featured'),
@@ -41,46 +103,15 @@ class IndexController extends FrontController {
 			'all' => trans('vox.page.home.sort-all'),
 		];
 
-		// $strength_arr = null;
-		// $completed_strength = null;
-		// if ($this->user) {
-		// 	$strength_arr = UserStrength::getStrengthPlatform('vox', $this->user);
-		// 	$completed_strength = $this->user->getStrengthCompleted('vox');
-		// }
+		$voxList = $this->getVoxList();
 
-		if( $this->user ) {
-			$voxList = !empty($this->admin) ? User::getAllVoxes() : $this->user->voxesTargeting();
-		} else {
-			$voxList = User::getAllVoxes();
-		}
-		$voxList = $voxList->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->orderBy('created_at', 'DESC')->get();
-
-		if ($this->user && !empty($this->user->country_id)) {
-			$arr = [];
-			foreach ($voxList as $vl) {
-				$has_started_the_survey = VoxAnswer::where('vox_id', $vl->id)->where('user_id', $this->user->id)->first();
-
-	            if(!empty($vl->country_percentage) && !empty($vl->users_percentage) && array_key_exists($this->user->country_id, $vl->users_percentage) && $vl->users_percentage[$this->user->country_id] >= $vl->country_percentage  && empty($has_started_the_survey)) {
-	                $arr[] = $vl->id;
-	            }
-			}
-
-			if (!empty($arr)) {
-				foreach ($arr as $ar) {
-					$voxList = $voxList->filter(function($item) use ($ar) {
-					    return $item->id != $ar;
-					});
-				}
-			}
-		}
+		// session('voxes-sort');
 
 		$seos = PageSeo::find(2);
         $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
 
-		return $this->ShowVoxView('home', array(
+        $arr = array(
             'is_warning_message_shown' => $is_warning_message_shown,
-			// 'strength_arr' => $strength_arr,
-			// 'completed_strength' => $completed_strength,
 			'countries' => Country::with('translations')->get(),
 			'keywords' => 'paid surveys, online surveys, dentavox, dentavox surveys',
 			'social_image' => $seos->getImageUrl(),
@@ -95,19 +126,33 @@ class IndexController extends FrontController {
         	'vox_categories' => VoxCategory::with('translations')->whereHas('voxes')->get()->pluck('name', 'id')->toArray(),
         	'js' => [
         		'home.js',
-                'flickity.min.js',
         	],
         	'css' => [
+	        	'vox-index-home.css',
         		'vox-home.css',
-        		'flickity.min.css'
         	],
-	        'jscdn' => [
-	            'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js',
-	        ],
-	        'csscdn' => [
-	            'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css',
-	        ],
-		));
+		);
+
+		if (!empty($this->user)) {
+			$arr['css'][] = 'select2.min.css';
+			$arr['js'][] = 'select2.min.js';
+		}
+
+		return $this->ShowVoxView('home', $arr);
+	}
+
+	public function getVoxes() {
+		$voxList = $this->getVoxList((request('slice') * 6) );
+
+		if($voxList->count()) {
+			return $this->ShowVoxView('template-parts.home-voxes', array(
+				'voxes' => $voxList,
+				'user' => $this->user,
+				'taken' => !empty($this->user) ? $this->user->filledVoxes() : null,
+	        ));
+		} else {
+			return '';
+		}
 	}
 	
 	public function home($locale=null) {
@@ -143,42 +188,48 @@ class IndexController extends FrontController {
 			}
 
 			$seos = PageSeo::find(3);
-
-			$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
-
-			if( $featured_voxes->count() < 9 ) {
-
-				$arr_v = [];
-				foreach ($featured_voxes as $fv) {
-					$arr_v[] = $fv->id;
-				}
-
-				$swiper_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
-
-				$featured_voxes = $featured_voxes->concat($swiper_voxes);
-			}
 			
 			return $this->ShowVoxView('index', array(
 				'subtitle' => $subtitle,
 				'title' => $title,
 				'users_count' => User::getCount('vox'),
-	        	'voxes' => $featured_voxes,
-	        	'taken' => $this->user ? $this->user->filledVoxes() : [],
 				'social_image' => $seos->getImageUrl(),
 	            'seo_title' => $seos->seo_title,
 	            'seo_description' => $seos->seo_description,
 	            'social_title' => $seos->social_title,
 	            'social_description' => $seos->social_description,
 	        	'js' => [
-	        		'index.js',
+					'all-surveys.js',
+	        		'index-new.js',
 					'swiper.min.js'
 	        	],
 	        	'css' => [
 	        		'vox-index.css',
+	        		'vox-index-home.css',
 					'swiper.min.css'
 	        	],
-	        ));			
+	        ));
 		}
+	}
+
+	public function index_down($locale=null) {
+		$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
+
+		if( $featured_voxes->count() < 9 ) {
+
+			$arr_v = [];
+			foreach ($featured_voxes as $fv) {
+				$arr_v[] = $fv->id;
+			}
+
+			$swiper_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
+
+			$featured_voxes = $featured_voxes->concat($swiper_voxes);
+		}
+		return $this->ShowVoxView('index-down', array(
+        	'voxes' => $featured_voxes,
+        	'taken' => $this->user ? $this->user->filledVoxes() : [],
+        ));	
 	}
 	
 	public function surveys_public($locale=null) {
@@ -208,17 +259,19 @@ class IndexController extends FrontController {
 			}
 
 			$total_questions = $first->questions->count() + 3;
-				
 			$seos = PageSeo::find(13);
 
 			return $this->ShowVoxView('welcome', array(
 				'vox' => $first,
 				'total_questions' => $total_questions,
 				'js' => [
-					'index.js'
+					'all-surveys.js',
+					'index-new.js',
+					'all-surveys.js',
 				],
 				'css' => [
-					'vox-questionnaries.css'
+					'vox-questionnaries.css',
+					'vox-welcome.css',
 				],
 				'social_image' => $seos->getImageUrl(),
 	            'seo_title' => $seos->seo_title,
@@ -239,7 +292,6 @@ class IndexController extends FrontController {
                 'target-countries' => array('required_if:target,==,specific'),
                 'other-specifics' => array('required'),
                 'topics' => array('required'),
-
             ]);
 
             if ($validator->fails()) {
@@ -318,7 +370,7 @@ class IndexController extends FrontController {
             return Response::json( $ret );
         } else {
         	$mtext = 'New survey request from '.(!empty($this->user) ? 'patient '.$this->user->name.' with User ID '.$this->user->id : 'not logged user').'
-	        Survey topics and the questions: '.request('topics');
+Survey topics and the questions: '.request('topics');
 
 	        Mail::raw($mtext, function ($message) {
 
@@ -328,7 +380,7 @@ class IndexController extends FrontController {
                 $message->from($sender, $sender_name);
                 $message->to( 'dentavox@dentacoin.com' );
                 $message->to( 'donika.kraeva@dentacoin.com' );
-	            $message->subject('Survey Request From Patient or Not Logged User');
+	            $message->subject('Survey Request From Patient');
 	        });
 
             return Response::json( [
@@ -408,8 +460,6 @@ class IndexController extends FrontController {
 	                'recommend' => false,
 		            'description' => false,
                 ] );
-
-
             }
 		}
 	}
@@ -425,4 +475,34 @@ class IndexController extends FrontController {
         ] );
 	}
 
+	public function getPopup() {
+
+		//dd(request('id'));
+		if(request('id') == 'request-survey-popup' && !empty($this->user) && $this->user->is_dentist && ($this->user->status == 'approved' || $this->user->status == 'test' || $this->user->status == 'added_by_clinic_claimed' || $this->user->status == 'added_by_dentist_claimed')) {
+
+			return $this->ShowVoxView('popups/request-survey', [
+				'countries' => Country::with('translations')->get(),
+			]);
+
+		} else if(request('id') == 'request-survey-patient-popup' && !empty($this->user) && !$this->user->is_dentist) {
+
+			return $this->ShowVoxView('popups/request-survey-patients');
+
+		} else if(request('id') == 'recommend-popup' && !empty($this->user)) {
+
+			return $this->ShowVoxView('popups/recommend');
+
+		} else if(request('id') == 'failed-popup' && empty($this->user)) {
+			
+			return $this->ShowVoxView('popups/failed-reg-login');
+
+		} else if(request('id') == 'login-register-popup' && empty($this->user)) {
+			
+			return $this->ShowVoxView('popups/login-register');
+
+		} else if(request('id') == 'poll-popup') {
+
+			return $this->ShowVoxView('popups/daily-poll-popup');
+		}
+	}
 }

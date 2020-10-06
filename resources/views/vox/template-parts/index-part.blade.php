@@ -11,7 +11,7 @@
 		<div class="flex">
 			<div class="col tac" style="{{ $user ? 'margin-left: 12%' : '' }}">
 				<div class="image-wrapper warm-image">
-					<img src="{{ url('new-vox-img/dentavox-surveys-warm-up-icon.png') }}" alt="Dentavox surveys warm-up icon">
+					<img src="{{ url('new-vox-img/dentavox-surveys-warm-up-icon.png') }}" alt="Dentavox surveys warm-up icon" width="112" height="112">
 				</div>
 				<div>
 					<h4>
@@ -25,7 +25,7 @@
 			@if(!$user)
 				<div class="col tac">
 					<div class="image-wrapper sign-image">
-						<img src="{{ url('new-vox-img/dentavox-surveys-signup-icon.png') }}" alt="Dentavox surveys signup icon">
+						<img src="{{ url('new-vox-img/dentavox-surveys-signup-icon.png') }}" alt="Dentavox surveys signup icon" width="112" height="112">
 					</div>
 					<div>
 						<h4>
@@ -39,7 +39,7 @@
 			@endif
 			<div class="col tac">
 				<div class="image-wrapper grab-image">
-					<img src="{{ url('new-vox-img/dentavox-surveys-rewards-icon.png') }}" alt="Dentavox surveys rewards icon">
+					<img src="{{ url('new-vox-img/dentavox-surveys-rewards-icon.png') }}" alt="Dentavox surveys rewards icon" width="112" height="112">
 				</div>
 				<div>
 					<h4>
@@ -59,7 +59,7 @@
 			</div>
 			<div class="col tac">
 				<div class="image-wrapper no-image">
-					<img src="{{ url('new-vox-img/dentavox-take-dental-surveys-icon.png') }}" alt="Dentavox take dental surveys icon">
+					<img src="{{ url('new-vox-img/dentavox-take-dental-surveys-icon.png') }}" alt="Dentavox take dental surveys icon" width="112" height="112">
 				</div>
 				<div>
 					<h4>

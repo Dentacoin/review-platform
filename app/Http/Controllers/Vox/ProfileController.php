@@ -97,7 +97,7 @@ class ProfileController extends FrontController {
 
             $params = [
                 'xframe' => true,
-                'latest_voxes' => Vox::where('type', 'normal')->orderBy('created_at', 'desc')->take(3)->get(),
+                'latest_voxes' => Vox::where('type', 'normal')->with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('created_at', 'desc')->take(3)->get(),
                 'more_surveys' => $more_surveys,
                 'prev_bans' => $prev_bans,
                 'current_ban' => $current_ban,
@@ -115,7 +115,6 @@ class ProfileController extends FrontController {
                     'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
                 ],
                 'css' => [
-                    'vox-profile-fix.css',
                     'vox-profile.css',
                     'swiper.min.css'
                 ],

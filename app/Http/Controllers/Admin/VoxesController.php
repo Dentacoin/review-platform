@@ -109,7 +109,7 @@ class VoxesController extends AdminController
         }
 
     	return $this->showView('voxes', array(
-            'voxes' => Vox::orderBy('sort_order', 'ASC')->get(),
+            'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
             'active_voxes_count' => Vox::where('type', '!=', 'hidden')->count(),
             'hidden_voxes_count' => Vox::where('type', 'hidden')->count(),
             'error_arr' => $error_arr,
@@ -1094,6 +1094,11 @@ class VoxesController extends AdminController
         if( Input::file('question-photo') ) {
             $img = Image::make( Input::file('question-photo') )->orientate();
             $question->addImage($img);
+
+            if(empty($question->image_in_question) && empty($question->image_in_tooltip)) {
+                $question->image_in_question = true;
+                $question->save();
+            }
         }
 
         session([
@@ -1511,7 +1516,12 @@ class VoxesController extends AdminController
 
             $current_url = url('cms/vox/explorer/'.$vox_id.($question_id ? '/'.$question_id : '') );
 
-            $pagination_link = (!empty(request()->input('show_all')) ? '&show_all='.request()->input( 'show_all' ) : '').(!empty(request()->input('country')) ? '&country='.request()->input( 'country' ) : '').(!empty(request()->input('name')) ? '&name='.request()->input( 'name' ) : '').(!empty(request()->input('taken')) ? '&taken='.request()->input( 'taken' ) : '').(!empty(request()->input('type')) ? '&type='.request()->input( 'type' ) : '');
+            $pagination_link = "";
+                foreach (Request::all() as $key => $value) {
+                    if($key != 'search') {
+                        $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
+                    }
+                }
 
             //dd( request()->input('country') );
 

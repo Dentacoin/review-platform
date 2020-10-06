@@ -225,7 +225,6 @@ class PollsController extends FrontController
 				}
 			}
 
-
 			if (!empty($poll) && $poll->status == 'open' && empty($taken_daily_poll) || !empty($this->admin)) {
 
 				$slist = VoxScale::get();
@@ -252,6 +251,7 @@ class PollsController extends FrontController
 		        	'title' => $poll->question,
 		        	'url' => getLangUrl('poll/'.$poll->id),
 		        	'answers' => $answers,
+		        	'date_href' => date('d-m-Y',$poll->launched_at->timestamp),
 		        	'randomize_answers' => $randomize_answers,
 		        ];
 			}
@@ -289,6 +289,7 @@ class PollsController extends FrontController
 		        'next_poll' => $more_polls_to_take ? $more_polls_to_take->id : false,
 		        'closed' => $poll->status == 'closed' ? true : false,
 		        'date' => !empty($time) ? date('d/m/Y',$time) : false,
+		        'date_href' => !empty($time) ? date('d-m-Y',$time) : false,
 		        'has_user' => !empty($this->user) ? true : false,
 		        'next_stat' => $next_stat->id,
 	        ];

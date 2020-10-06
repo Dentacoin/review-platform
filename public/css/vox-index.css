@@ -236,6 +236,7 @@
     max-width: 100%; }
     @media screen and (max-width: 768px) {
       .index-daily-polls .index-poll-man {
+        height: auto;
         margin-left: auto;
         margin-right: auto;
         display: block; } }
@@ -410,3 +411,69 @@
         width: 157px;
         height: 1px;
         background-color: black; } }
+
+@media screen and (max-width: 768px) {
+  .index-h1 {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    padding: 0px 20px;
+    margin-bottom: 20px;
+    margin-top: 10px; } }
+
+.black-button {
+  background-color: #090909;
+  color: #fbf9f9;
+  font-weight: 500;
+  font-size: 23px;
+  width: 320px;
+  height: 45px;
+  display: inline-block;
+  line-height: 45px;
+  text-transform: uppercase;
+  padding-left: 20px;
+  border-radius: 10px;
+  position: relative;
+  text-decoration: none;
+  text-align: left;
+  transition: all 0.3s ease; }
+  .black-button:hover {
+    color: #fbf9f9;
+    transition: all 0.3s ease; }
+    .black-button:hover:after {
+      right: 37px;
+      transition: all 0.3s ease; }
+  .black-button:after {
+    content: "";
+    background-image: url(../new-vox-img/right-arrow.png);
+    position: absolute;
+    right: 17px;
+    top: 9px;
+    width: 14px;
+    height: 24px;
+    background-size: cover;
+    transition: all 0.3s ease; }
+  @media screen and (max-width: 768px) {
+    .black-button {
+      top: -57px;
+      width: auto;
+      margin: 0px auto;
+      border-radius: 5px;
+      font-size: 18px;
+      padding: 0px 54px 0px 25px;
+      border-radius: 8px;
+      height: 44px;
+      line-height: 45px; }
+      .black-button:after {
+        background-image: url(../new-vox-img/right-arrow.png);
+        width: 12px;
+        height: 23px;
+        right: 15px;
+        top: 10px; }
+      .black-button:hover:after {
+        right: 13px; } }
+
+@media screen and (max-width: 1490px) {
+  .blue-button {
+    padding: 10px 15px !important;
+    font-size: 16px; } }

@@ -5,7 +5,7 @@
 	<div class="container">
 		{!! csrf_field() !!}
 
-		<a class="back-home" href="{{ getVoxUrl('/') }}">
+		<a class="back-home" href="{{ getLangUrl('/') }}">
 			{!! nl2br(trans('vox.daily-polls.popup.back')) !!}
 		</a>
 		<h1>{!! nl2br(trans('vox.daily-polls.title')) !!}</h1>

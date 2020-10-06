@@ -1,3 +1,4 @@
+$pc: "screen and (max-width: 1200px)";
 $tablet: "screen and (max-width: 1080px)";
 $phone: "screen and (max-width: 768px)";
 $phone_up: "screen and (min-width: 769px)";
@@ -95,7 +96,7 @@ $main-color: #38ace5;
 			-webkit-line-clamp: 3;
 			-webkit-box-orient: vertical;
 
-    		@media screen and (max-width: 1200px) {
+    		@media #{$pc} {
 				font-size: 13px;
 			}
 
@@ -109,7 +110,7 @@ $main-color: #38ace5;
 		.poll-image {
 			max-width: 28px;
 
-			@media screen and (max-width: 1200px) {
+			@media #{$pc} {
 				max-width: 18px;
 			}
 		}
@@ -147,7 +148,7 @@ $main-color: #38ace5;
 			font-size: 20px;
 			font-weight: 300;
 
-			@media screen and (max-width: 1200px) {
+			@media #{$pc} {
 				font-size: 14px;
 			}
 

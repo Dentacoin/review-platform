@@ -94,7 +94,12 @@ class PollsController extends AdminController {
 
         $current_url = url('cms/vox/polls');
 
-        $pagination_link = (!empty($this->request->input('search-polls-from')) ? '?search-polls-from='.$this->request->input( 'search-polls-from' ) : '').(!empty($this->request->input('search-polls-to')) ? '&search-polls-to='.$this->request->input( 'search-polls-to' ) : '');
+        $pagination_link = "";
+        foreach (Request::all() as $key => $value) {
+            if($key != 'search') {
+                $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
+            }
+        }
 
     	return $this->showView('polls', array(
             'search_polls_from' => $this->request->input('search-polls-from'),

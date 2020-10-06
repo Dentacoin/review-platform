@@ -203,92 +203,6 @@
 		@endif
 	@endif
 
-
-	<div class="popup fixed-popup results-popup" id="sort-popup">
-		<div class="popup-inner inner-white">
-			<div class="popup-pc-buttons">
-				<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
-			</div>
-
-			<div class="popup-mobile-buttons">
-				<a href="javascript:;" class="close-popup">< back</a>
-			</div>
-			<h2><img src="{{ url('img-trp/sort-gray.png') }}">
-				{!! nl2br(trans('trp.page.search.sort-filter')) !!}
-			</h2>
-
-			<form class="search-get-form" method="get" base-href="{{ getLangUrl($query) }}">
-
-				<div class="sort-stars">
-					<h4 class="popup-title">
-						{!! nl2br(trans('trp.page.search.stars')) !!}
-					</h4>
-
-					<div class="ratings average">
-						<div class="stars">
-							<div class="bar" style="width: {{ intval($stars)/5*100 }}%;">
-							</div>
-							<input type="hidden" name="stars" value="{{ $stars }}" />
-						</div>
-					</div>
-				</div>
-
-				<div class="sort-category">
-					<h4 class="popup-title">
-						{!! nl2br(trans('trp.page.search.category')) !!}
-					</h4>
-					@foreach( config('categories') as $cat_id => $cat )
-						<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat, $searchCategories) ? ' active' : '' !!}" for="checkbox-popup-{{ $cat }}">
-							<input type="checkbox" class="special-checkbox" id="checkbox-popup-{{ $cat }}" value="{{ $cat }}" {!! !empty($searchCategories) && in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
-							<i class="far fa-square"></i>
-							{{ trans('trp.categories.'.$cat) }}
-						</label>
-					@endforeach
-				</div>
-
-				<div class="sort-partners">
-					<h4 class="popup-title">
-						{!! nl2br(trans('trp.page.search.partners')) !!}
-						
-					</h4>
-
-					<label class="checkbox-label{!! $partner ? ' active' : '' !!}" for="checkbox-partner-popup">
-						<input type="checkbox" class="special-checkbox" id="checkbox-partner-popup" name="partner" value="1" {!! $partner ? 'checked="checked"' : '' !!}>
-						<i class="far fa-square"></i>
-						{!! nl2br(trans('trp.page.search.show-partners')) !!}
-						<img src="{{ url('img-trp/mini-logo-black.png') }}">
-					</label>
-				</div>
-
-				<div class="sort-by">
-					<h4 class="popup-title">
-						{!! nl2br(trans('trp.page.search.sort-by')) !!}
-						
-					</h4>
-
-					@foreach($orders as $order)
-						<a {!! $sort==$order ? 'class="active"' : '' !!} sort="{{ $order }}">
-							<i class="fas fa-sort"></i>
-							{{ trans('front.page.'.$current_page.'.order-'.$order) }}
-						</a>
-					@endforeach
-					<input type="hidden" name="sort" value="{{ $sort }}" />
-				</div>
-
-				<div class="tac">
-					<button type="submit" href="javascript:;" class="button">
-						{!! nl2br(trans('trp.page.search.apply')) !!}
-					</button>
-					
-					<a class="clear-filters" href="javascript:;">
-						{!! nl2br(trans('trp.page.search.reset')) !!}
-					</a>
-				</div>
-			</form>
-		</div>
-	</div>
-
-
 	<div class="popup fixed-popup results-popup" id="map-results-popup">
 		<div class="popup-inner inner-white">
 			<a href="javascript:;" class="close-popup close-map">
@@ -428,5 +342,88 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="popup fixed-popup results-popup" id="sort-popup">
+	<div class="popup-inner inner-white">
+		<div class="popup-pc-buttons">
+			<a href="javascript:;" class="close-popup"><i class="fas fa-times"></i></a>
+		</div>
+
+		<div class="popup-mobile-buttons">
+			<a href="javascript:;" class="close-popup">< back</a>
+		</div>
+		<h2><img src="{{ url('img-trp/sort-gray.png') }}">
+			{!! nl2br(trans('trp.page.search.sort-filter')) !!}
+		</h2>
+
+		<form class="search-get-form" method="get" base-href="{{ getLangUrl($query) }}">
+
+			<div class="sort-stars">
+				<h4 class="popup-title">
+					{!! nl2br(trans('trp.page.search.stars')) !!}
+				</h4>
+
+				<div class="ratings average">
+					<div class="stars">
+						<div class="bar" style="width: {{ intval($stars)/5*100 }}%;">
+						</div>
+						<input type="hidden" name="stars" value="{{ $stars }}" />
+					</div>
+				</div>
+			</div>
+
+			<div class="sort-category">
+				<h4 class="popup-title">
+					{!! nl2br(trans('trp.page.search.category')) !!}
+				</h4>
+
+				@foreach( config('categories') as $cat_id => $cat )
+					<label class="checkbox-label{!! !empty($searchCategories) && in_array($cat, $searchCategories) ? ' active' : '' !!}" for="checkbox-popup-{{ $cat }}">
+						<input type="checkbox" class="special-checkbox" id="checkbox-popup-{{ $cat }}" value="{{ $cat }}" {!! !empty($searchCategories) && in_array($cat, $searchCategories) ? 'checked="checked"' : '' !!}>
+						<i class="far fa-square"></i>
+						{{ trans('trp.categories.'.$cat) }}
+					</label>
+				@endforeach
+			</div>
+
+			<div class="sort-partners">
+				<h4 class="popup-title">
+					{!! nl2br(trans('trp.page.search.partners')) !!}
+				</h4>
+
+				<label class="checkbox-label{!! $partner ? ' active' : '' !!}" for="checkbox-partner-popup">
+					<input type="checkbox" class="special-checkbox" id="checkbox-partner-popup" name="partner" value="1" {!! $partner ? 'checked="checked"' : '' !!}>
+					<i class="far fa-square"></i>
+					{!! nl2br(trans('trp.page.search.show-partners')) !!}
+					<img src="{{ url('img-trp/mini-logo-black.png') }}">
+				</label>
+			</div>
+
+			<div class="sort-by">
+				<h4 class="popup-title">
+					{!! nl2br(trans('trp.page.search.sort-by')) !!}
+				</h4>
+
+				@foreach($orders as $order)
+					<a {!! $sort==$order ? 'class="active"' : '' !!} sort="{{ $order }}">
+						<i class="fas fa-sort"></i>
+						{{ trans('front.page.dentists.order-'.$order) }}
+					</a>
+				@endforeach
+				<input type="hidden" name="sort" value="{{ $sort }}" />
+			</div>
+
+			<div class="tac">
+				<button type="submit" href="javascript:;" class="button">
+					{!! nl2br(trans('trp.page.search.apply')) !!}
+				</button>
+				
+				<a class="clear-filters" href="javascript:;">
+					{!! nl2br(trans('trp.page.search.reset')) !!}
+				</a>
+			</div>
+		</form>
+	</div>
+</div>
 
 @endsection

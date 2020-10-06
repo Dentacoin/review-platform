@@ -23,9 +23,6 @@
 												@if($dentist->is_partner)
 													<img class="tooltip-text" src="{{ url('img-trp/mini-logo.png') }}" text="{!! nl2br(trans('trp.common.partner')) !!} {{ $dentist->is_clinic ? 'Clinic' : 'Dentist' }}" />
 												@endif
-												<!-- @if($dentist->status == 'added_approved' || $dentist->status == 'admin_imported' || $dentist->status == 'added_by_clinic_unclaimed' || $dentist->status == 'added_by_dentist_unclaimed')
-													<div class="invited-dentist">{!! nl2br(trans('trp.page.user.added-by-patient')) !!}</div>
-												@endif -->
 											</div>
 										</div>
 									    <div class="slider-container">
@@ -37,7 +34,6 @@
 												{{ $dentist->city_name ? $dentist->city_name.', ' : '' }}
 												{{ $dentist->state_name ? $dentist->state_name.', ' : '' }} 
 												{{ $dentist->country->name }} 
-									    		<!-- <span>(2 km away)</span> -->
 									    	</div>
 									    	@if( $time = $dentist->getWorkHoursText() )
 									    		<div class="p">

@@ -69,7 +69,6 @@
 
 					@foreach( $vox->questions as $question )
 						<div class="question-group" data-id="{{ $question->id }}" {!! $loop->first ? '' : 'style="display: none;"' !!} >
-							<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 							<div class="question">
 								{!! nl2br($question->question) !!}
 							</div>
@@ -83,7 +82,6 @@
 
 					@if(!$user || ($user && empty($user->birthyear)))
 						<div class="question-group birthyear-question" data-id="birthyear" style="display: none;">
-							<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 							<div class="question">
 								{!! trans('vox.page.questionnaire.question-birth') !!}
 							</div>
@@ -102,7 +100,6 @@
 
 					@if(!$user || ($user && !$user->gender))
 						<div class="question-group gender-question" data-id="gender" style="display: none;">
-							<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 							<div class="question">
 								{!! trans('vox.page.questionnaire.question-sex') !!}
 							</div>
@@ -122,7 +119,6 @@
 
 					@if(!$user || ($user && !$user->country_id))
 						<div class="question-group location-question" data-id="location" style="display: none;">
-							<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
 							<div class="question">
 								{!! trans('vox.page.questionnaire.question-country') !!}
 							</div>
@@ -162,7 +158,8 @@
 			reward: {{ $vox->getRewardTotal() }},
 			reward_single: {{ $vox->getRewardPerQuestion()->dcn }},
 			current: 1
-		}
+		};
+		var welcome_vox_now = true;
 	</script>
 
 

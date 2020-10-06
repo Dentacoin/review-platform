@@ -3,7 +3,7 @@
 @section('content')
 
 	<div class="error-wrapper container tac">
-		<img src="{{ url('new-vox-img/404.jpg') }}" alt="Dentavox page not found">
+		<img src="{{ url('new-vox-img/404.jpg') }}" alt="Dentavox page not found" width="1078" height="505">
 
 		<h2>Sorry, Page Was Not Found.</h2>
 

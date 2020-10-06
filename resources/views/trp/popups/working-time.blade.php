@@ -64,7 +64,7 @@
                     </div>
 
                     @if($day == 1)
-                        <a href="javascript:;" class="all-days-equal">{!! nl2br(trans('trp.popup.popup-wokring-time.user-same-hours')) !!}</a>
+                        <a href="javascript:;" class="all-days-equal" style="display: none;">{!! nl2br(trans('trp.popup.popup-wokring-time.user-same-hours')) !!}</a>
                     @endif
                 </div>
 

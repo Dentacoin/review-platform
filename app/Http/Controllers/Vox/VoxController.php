@@ -50,12 +50,13 @@ class VoxController extends FrontController
 	public function home($locale=null, $id) {
 		$vox = Vox::find($id);
 
-		if (empty($vox)) {
-			return redirect( getLangUrl('page-not-found') );
-		}		
+		if (!empty($vox)) {
+			return redirect( getLangUrl('paid-dental-surveys/'.$vox->slug) );
+		}
 
-		return $this->dovox($locale, $vox);
+		return redirect( getLangUrl('page-not-found') );
 	}
+
 	public function home_slug($locale=null, $slug) {
 		$vox = Vox::whereTranslationLike('slug', $slug)->with('questions.translations')->with('questions.vox')->with('categories.category')->with('categories.category.translations')->first();
 
@@ -65,6 +66,26 @@ class VoxController extends FrontController
 
 		return $this->dovox($locale, $vox);
 	}
+
+	public function vox_public_down($locale=null) {
+		$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
+
+		if( $featured_voxes->count() < 9 ) {
+
+			$arr_v = [];
+			foreach ($featured_voxes as $fv) {
+				$arr_v[] = $fv->id;
+			}
+
+			$swiper_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
+
+			$featured_voxes = $featured_voxes->concat($swiper_voxes);
+		}
+		return $this->ShowVoxView('template-parts.recent-surveys-vox-public', array(
+        	'voxes' => $featured_voxes
+        ));	
+	}
+
 	public function dovox($locale=null, $vox) {
         ini_set('max_execution_time', 0);
         set_time_limit(0);
@@ -88,14 +109,6 @@ class VoxController extends FrontController
 
 		if(!$this->user) {
 
-			session([
-	            'vox-redirect-workaround' => str_replace( getLangUrl('/').App::getLocale().'/', '', $vox->getLink())
-	        ]);
-
-	        session([
-	            'intended' => $vox->getLink(),
-	        ]);
-
 	        $seos = PageSeo::find(16);
 
 	        $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
@@ -103,35 +116,18 @@ class VoxController extends FrontController
 	        $social_title = str_replace(':title', $vox->title, $seos->social_title);
 	        $social_description = str_replace(':description', $vox->description, $seos->social_description);
 
-	        $featured_voxes = Vox::where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
-
-			if( $featured_voxes->count() < 9 ) {
-
-				$arr_v = [];
-				foreach ($featured_voxes as $fv) {
-					$arr_v[] = $fv->id;
-				}
-
-				$swiper_voxes = Vox::where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
-
-				$featured_voxes = $featured_voxes->concat($swiper_voxes);
-			}
-
 			return $this->ShowVoxView('vox-public', array(
-				'voxes' => $featured_voxes,
 				'vox' => $vox,
 				'custom_body_class' => 'vox-public',
 				'js' => [
-					'vox.js',
+					'all-surveys.js',
+					'vox-new.js',
 					'swiper.min.js'
 				],
 				'css' => [
 					'vox-public-vox.css',
 					'swiper.min.css'
 				],
-	            'csscdn' => [
-	                'https://fonts.googleapis.com/css?family=Lato:700&display=swap&subset=latin-ext',
-	            ],
 	            'canonical' => $vox->getLink(),
 	            'social_image' => $vox->getSocialImageUrl('survey'),
 	            'seo_title' => $seo_title,
@@ -140,6 +136,10 @@ class VoxController extends FrontController
 	            'social_description' => $social_description,
 	        ));
 		}
+
+        if($this->user->isBanned('vox')) {
+            return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
+        }
 
 		$taken = $this->user->filledVoxes();
 
@@ -275,10 +275,6 @@ class VoxController extends FrontController
                 ],
 			]);
 		}
-
-        if($this->user->isBanned('vox')) {
-            return redirect('https://account.dentacoin.com/dentavox?platform=dentavox');
-        }
 
 		if (!$testmode) {
 			$has_started_the_survey = VoxAnswer::where('vox_id', $vox->id)->where('user_id', $this->user->id)->first();
@@ -422,9 +418,6 @@ class VoxController extends FrontController
 	    	}
     	}
 
-    	// dd($cross_checks);
-
-
 		$list = VoxAnswer::where('vox_id', $vox->id)
 		->where('user_id', $this->user->id)
 		->orderBy('id', 'ASC')
@@ -441,13 +434,62 @@ class VoxController extends FrontController
 			}
 		}
 
+		$answered_without_skip = [];
+		foreach ($list as $l) {
+			if(!isset( $answered_without_skip[$l->question_id] )) {
+				$answered_without_skip[$l->question_id] = ($l->question->type == 'number' && $l->answer == 0) || $l->question->cross_check == 'birthyear' ? 1 : $l->answer; //3
+			} else {
+				if(!is_array($answered_without_skip[$l->question_id])) {
+					$answered_without_skip[$l->question_id] = [ $answered_without_skip[$l->question_id] ]; // [3]
+				}
+				$answered_without_skip[$l->question_id][] = ($l->question->type == 'number' && $l->answer == 0) || $l->question->cross_check == 'birthyear' ? 1 : $l->answer; // [3,5,7]
+			}
+		}
+
+		$answered_without_skip_count = 0;
+		foreach ($answered_without_skip as $key => $value) {
+			if($value != 0) {
+				$answered_without_skip_count++;
+			}
+		}
+
 		$not_bot = $testmode || session('not_not-'.$vox->id);
 
 		//dd($answered);
 		if(Request::input('goback') && $testmode) {
 			$q_id = $this->goBack($answered, $list, $vox);
 
-            return redirect( $vox->getLink().'?testmode=1&back-q='.$q_id );
+			if(!empty(VoxQuestion::find($q_id))) {
+
+				$vq = VoxQuestion::where('vox_id', $vox->id)->where('order', VoxQuestion::find($q_id)->order-1)->first();
+				if(!empty($vq)) {
+					$quest_id = $vq->id;
+				} else {
+					$quest_id = $q_id;
+				}
+			} else {
+				$quest_id = $q_id;
+			}
+
+            return redirect( $vox->getLink().'?testmode=1&q-id='.$quest_id );
+		}
+
+		if(Request::input('start-from') && $testmode) {
+			$q_id = $this->testAnswers($answered, Request::input('start-from'), $vox);
+
+			if(!empty(VoxQuestion::find($q_id))) {
+
+				$vq = VoxQuestion::where('vox_id', $vox->id)->where('order', VoxQuestion::find($q_id)->order-1)->first();
+				if(!empty($vq)) {
+					$quest_id = $vq->id;
+				} else {
+					$quest_id = $q_id;
+				}
+			} else {
+				$quest_id = $q_id;
+			}
+
+            return redirect( $vox->getLink().'?testmode=1&q-id='.$quest_id );
 		}
 
 		$slist = VoxScale::get();
@@ -456,6 +498,10 @@ class VoxController extends FrontController
 			$scales[$sitem->id] = $sitem;
 		}
 
+        	// session([
+        	// 	'not_not-'.$vox->id => false,
+        	// 	'reward-for-'.$vox->id => $vox->getRewardTotal()
+        	// ]);
         if(Request::isMethod('post')) {
 
             ini_set('max_execution_time', 0);
@@ -494,6 +540,7 @@ class VoxController extends FrontController
 	            		'not_not-'.$vox->id => true,
 	            		'reward-for-'.$vox->id => $vox->getRewardTotal()
 	            	]);
+	            	$ret['vox_id'] = $vox->id;
 	            }
 
         	} else {
@@ -718,7 +765,7 @@ class VoxController extends FrontController
 					            	session([
 					            		'wrongs' => null
 					            	]);
-	            					$ban = $this->user->banUser('vox', 'mistakes');
+	            					$ban = $this->user->banUser('vox', 'mistakes', $vox->id);
 	            					$ret['ban'] = true;
 	            					$ret['ban_duration'] = $ban['days'];
 	            					$ret['ban_times'] = $ban['times'];
@@ -761,28 +808,7 @@ class VoxController extends FrontController
 							        }
 							        $answer->save();
 							        $answered[$q] = 0;
-
-							        $skips = request('skips');
-							        if(is_array($skips)) {
-							        	foreach ($skips as $skip_id) {
-							        		$skipped = $vox->questions->find($skip_id);
-							        		if($skipped->question_trigger=='-1') {
-							        			$answer = new VoxAnswer;
-										        $answer->user_id = $this->user->id;
-										        $answer->vox_id = in_array($q, $welcome_vox_question_ids)===false ? $vox->id : 11;
-										        $answer->question_id = $skip_id;
-										        $answer->answer = 0;
-										        $answer->is_skipped = true;
-										        $answer->country_id = $this->user->country_id;
-										        
-										        if($testmode) {
-										        	$answer->is_admin = true;
-										        }
-										        $answer->save();
-										        $answered[$skip_id] = 0;
-							        		}
-							        	}
-							        }
+							        
 			        			} else if($type == 'single') {
 
 									$answer = new VoxAnswer;
@@ -1003,7 +1029,7 @@ class VoxController extends FrontController
 			        					$ret['content'] = $contents[$prev_bans];
 
 			        				} else {
-		            					$ban = $this->user->banUser('vox', 'too-fast');
+		            					$ban = $this->user->banUser('vox', 'too-fast', $vox->id);
 		            					$ret['ban'] = true;
 		            					$ret['ban_duration'] = $ban['days'];
 		            					$ret['ban_times'] = $ban['times'];
@@ -1166,8 +1192,6 @@ class VoxController extends FrontController
 	        	}
         	}
 
-			
-
     		if($this->user->isVoxRestricted($vox)) {
     			$ret['success'] = false;
     			$ret['restricted'] = true;
@@ -1183,6 +1207,8 @@ class VoxController extends FrontController
 				}
 
 				$ret['recommend'] = $open_recommend;
+				$ret['vox_id'] = $vox->id;
+				$ret['question_id'] = !empty($q) ? $q : null;
 			}
 
         	return Response::json( $ret );
@@ -1300,56 +1326,6 @@ class VoxController extends FrontController
 			}
 		}
 
-		$welcome_answers = VoxAnswer::where('vox_id', 11)->where('user_id', $this->user->id)->get();
-		$welcome_arr = [];
-		//dd($welcome_answers);
-		if (!empty($welcome_answers)) {
-			//$welcome_arr = $welcome_answers->pluck('question_id', 'answer')->toArray();
-
-			foreach ($welcome_answers as $wa) {
-				$welcome_arr[] = $wa->question_id.':'.$wa->answer;
-			}
-			$welcome_arr = implode(';', $welcome_arr);
-		}
-
-		$demogr_arr = [];
-		foreach (config('vox.details_fields') as $key => $value) {
-			if(!empty($this->user->$key) || $this->user->$key === '0') {
-				$i = 0;
-				foreach (config('vox.details_fields.'.$key.'.values') as $k => $v) {
-					$i++;
-					if($k == $this->user->$key) {
-						$demogr_arr[] = $key.':'.$i;
-					}
-				}
-				
-			}
-		}
-
-		if(!empty($this->user->gender)) {
-			$demogr_arr[] = 'gender:'.($this->user->gender == 'm' ? '1' : '2');
-		}
-
-		if(!empty($this->user->birthyear)) {			
-			$age = date('Y') - $this->user->birthyear;
-          
-            if ($age <= 24) {
-                $demogr_arr[] = 'age_groups:1';
-            } else if($age <= 34) {
-                $demogr_arr[] = 'age_groups:2';
-            } else if($age <= 44) {
-                $demogr_arr[] = 'age_groups:3';
-            } else if($age <= 54) {
-                $demogr_arr[] = 'age_groups:4';
-            } else if($age <= 64) {
-                $demogr_arr[] = 'age_groups:5';
-            } else if($age <= 74) {
-                $demogr_arr[] = 'age_groups:6';
-            } else if($age > 74) {
-                $demogr_arr[] = 'age_groups:7';
-            }
-		}
-
 		$seos = PageSeo::find(15);
 
         $seo_title = str_replace(':title', $vox->title, $seos->seo_title);
@@ -1359,8 +1335,6 @@ class VoxController extends FrontController
 
 		return $this->ShowVoxView('vox', array(
 			'welcome_vox' => $welcome_vox,
-			'welcome_arr' => $welcome_arr,
-			'demogr_arr' => !empty($demogr_arr) ? implode(';', $demogr_arr) : '',
 			'related_voxes' => $related_voxes,
             'suggested_voxes' => $suggested_voxes,
 			'cross_checks' => $cross_checks,
@@ -1375,8 +1349,10 @@ class VoxController extends FrontController
 			'total_questions' => $total_questions,
 			'first_question' => $first_question,
 			'first_question_num' => $first_question_num,
+			'answered_without_skip_count' => $answered_without_skip_count,
 			'js' => [
-				'vox.js',
+				'all-surveys.js',
+				'vox-new.js',
 				'../js/lightbox.js',
 				'../js/jquery-ui.min.js',
 				'../js/jquery-ui-touch.min.js',
@@ -1401,7 +1377,7 @@ class VoxController extends FrontController
             ],
             'done_all' => $done_all,
             'testmode' => $testmode,
-            'isAdmin' => $isAdmin
+            'isAdmin' => $isAdmin,
         ));
 	}
 
@@ -1424,10 +1400,6 @@ class VoxController extends FrontController
 		}
 
 		return $agegroup;
-
-	}
-
-	private function getNextQuestion($vox_id, $question_id=null) {
 
 	}
 
@@ -1461,7 +1433,46 @@ class VoxController extends FrontController
 			}
 		}
 
+		$lastest_key = VoxAnswer::where('vox_id', $vox->id)
+		->where('user_id', $this->user->id)
+		->where('question_id', $lastkey)
+		->first();
+
+		if(!empty($lastest_key) && $lastest_key->answer == 0) {
+			do {
+				$this->goBack($answered, $list, $vox);
+			} while ( $lastest_key->answer == 0);
+		}
+
 		return $lastkey;
+	}
+
+	private function testAnswers($answered, $q_id, $vox) {
+
+		if(!empty($answered)) {
+
+			foreach ($vox->questions as $question) {
+				if($question->id==$q_id) {
+					foreach ($vox->questions as $vq) {
+						if($vq->order >= $question->order) {
+							VoxAnswer::where('vox_id', $vox->id)
+							->where('user_id', $this->user->id)
+							->where('question_id', $vq->id)
+							->delete();
+
+							DcnReward::where('reference_id', $vox->id)
+							->where('platform', 'vox')
+							->where('type', 'survey')
+							->where('user_id', $this->user->id)
+							->delete();
+						}
+					}
+					break;
+				}
+			}
+		}
+
+		return $q_id;
 	}
 
 	private function setupAnswerStats(&$answer) {
@@ -1497,9 +1508,288 @@ class VoxController extends FrontController
 			];
 		}
 
-
 		return Response::json( $ret );
 	}
-	
-	
+
+
+	public function getNextQuestion() {
+
+		if(!empty($this->user)) {
+
+			$vox_id = request('vox_id');
+			$question_id = request('question_id');
+
+			$admin_ids = Admin::getAdminProfileIds();
+			$isAdmin = Auth::guard('admin')->user() || (!empty($this->user) && in_array($this->user->id, $admin_ids));
+			$testmode = session('testmode') && $isAdmin;
+
+			if(!empty($vox_id) && (!empty(Vox::where('id', $vox_id)->where('type', 'normal')->first()) || !empty($this->admin) )) {
+
+				$array = [];
+				$not_bot = $testmode || session('not_not-'.$vox_id);
+				$vox = Vox::find($vox_id);
+
+				if (!$this->user->madeTest($vox->id)) {
+
+					if (!$this->user->madeTest(Vox::where('type', 'home')->first()->id)) {
+						// welcome qs
+						$array['welcome_vox'] = true;
+
+						if(!empty($question_id)) {
+							//question order
+							//proverki za triguri, skipvane
+							$question = VoxQuestion::find($question_id);
+							$next_question = VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order + 1)->first();
+							$array['question'] = $next_question;
+						} else {
+							//first question
+							$question = VoxQuestion::where('vox_id', Vox::where('type', 'home')->first()->id)->orderBy('order', 'ASC')->first();
+							$array['question'] = $question;
+						}
+					} else if(empty($this->user->birthyear)) {
+						//demographic qs
+						$array['birthyear_q'] = true;
+					} else if(empty($this->user->gender)) {
+						//demographic qs
+						$array['gender_q'] = true;
+					} else if(empty($this->user->country_id)) {
+						//demographic qs
+						$array['country_id_q'] = true;
+					}
+
+					if(empty($array)) {
+						foreach ($this->details_fields as $key => $info) {
+							if($this->user->$key==null) {
+								$array['details_question'] = $info;
+								$array['details_question_id'] = $key;
+								break;
+							}
+						}
+					}
+
+					if(empty($array)) {
+						if(!empty($question_id) && is_numeric($question_id) && VoxQuestion::find($question_id)->vox_id == 11) {
+							$question_id=null;
+						}
+
+						if(!empty($question_id) && is_numeric($question_id)) {
+							$question = VoxQuestion::find($question_id);
+							$next_question = VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order + 1)->first();
+
+							if(!empty($next_question->question_trigger)) {
+
+								if($next_question->question_trigger=='-1') {
+				                    foreach ($vox->questions as $originalTrigger) {
+				                        if($originalTrigger->id == $next_question->id) {
+				                            break;
+				                        }
+
+				                        if( $originalTrigger->question_trigger && $originalTrigger->question_trigger!='-1' ) {
+				                           $triggers = $originalTrigger->question_trigger;
+				                        }
+				                    }
+				                } else {
+				                    $triggers = $next_question->question_trigger;
+				                }
+
+				                if(!empty($triggers)) {
+
+				                    $triggers = explode(';', $triggers);
+				                    $triggerSuccess = [];
+
+				                    foreach ($triggers as $trigger) {
+
+				                        list($triggerId, $triggerAnswers) = explode(':', $trigger);
+				                        if(is_numeric($triggerId)) {
+				                        	$trigger_question = VoxQuestion::find($triggerId);
+				                        } else {
+				                        	//demographic
+				                        	$trigger_question = $triggerId;
+				                        }
+
+			                            if(mb_strpos($triggerAnswers, '!')!==false) {
+			                                $invert_trigger_logic = true;
+			                                $triggerAnswers = substr($triggerAnswers, 1);
+			                            } else {
+			                                $invert_trigger_logic = false;
+			                            }
+
+			                            if(mb_strpos($triggerAnswers, '-')!==false) {
+			                                list($from, $to) = explode('-', $triggerAnswers);
+
+			                                $allowedAnswers = [];
+			                                for ($i=$from; $i <= $to ; $i++) { 
+			                                    $allowedAnswers[] = $i;
+			                                }
+
+			                            } else {
+			                                $allowedAnswers = explode(',', $triggerAnswers);
+			                            }
+
+			                            if(!empty($allowedAnswers)) {
+			                            	$givenAnswers = [];
+			                            	if(is_object($trigger_question)) {
+			                            		$user_answers = VoxAnswer::where('user_id', $this->user->id)->where('question_id', $trigger_question->id)->get();
+				                            	foreach ($user_answers as $ua) {
+				                            		$givenAnswers[] = $ua->answer;
+				                            	}
+			                            	} else {
+				                        		//demographic
+			                            		$givenAnswers[] = $this->user->$trigger_question;
+			                            	}
+
+			                            	foreach ($givenAnswers as $ga) {
+			                            		if(str_contains($ga,',') !== false) {
+				                                    $given_answers_array = explode(',', $ga);
+
+				                                    $found = false;
+				                                    foreach ($given_answers_array as $key => $value) {
+				                                        if(in_array($value, $allowedAnswers)) {
+				                                            $found = true;
+				                                            break;
+				                                        }
+				                                    }
+
+				                                    if($invert_trigger_logic) {
+				                                        if(!$found) {
+				                                            $triggerSuccess[] = true;
+				                                        } else {
+				                                            $triggerSuccess[] = false;
+				                                        }
+				                                    } else {
+
+				                                        if($found) {
+				                                            $triggerSuccess[] = true;
+				                                        } else {
+				                                            $triggerSuccess[] = false;
+				                                        }
+				                                    }
+				                                } else {
+				                                    if(strpos($allowedAnswers[0], '>') !== false) {
+				                                        $trg_ans = substr($allowedAnswers[0], 1);
+
+				                                        if($ga > intval($trg_ans)) {
+				                                            $triggerSuccess[] = true;
+				                                        } else {
+				                                            $triggerSuccess[] = false;
+				                                        }
+				                                    } else if(strpos($allowedAnswers[0], '<') !== false) {
+				                                        $trg_ans = substr($allowedAnswers[0], 1);
+
+				                                        if(intval($ga) < intval($trg_ans)) {
+				                                            $triggerSuccess[] = true;
+				                                        } else {
+				                                            $triggerSuccess[] = false;
+				                                        }
+				                                    } else {
+				                                        if($invert_trigger_logic) {
+				                                            if( !empty($ga) && !in_array($ga, $allowedAnswers) ) {
+				                                                $triggerSuccess[] = true;
+				                                            } else {
+				                                                $triggerSuccess[] = false;
+				                                            }
+				                                        } else {
+				                                            if( !empty($ga) && in_array($ga, $allowedAnswers) ) {
+				                                                $triggerSuccess[] = true;
+				                                            } else {
+				                                                $triggerSuccess[] = false;
+				                                            }
+				                                        }
+				                                    }
+			                            		}
+			                            	}
+			                            }
+				                    }
+
+				                    if( $next_question->trigger_type == 'or' ) { // ANY of the conditions should be met (A or B or C)
+				                        if( !in_array(true, $triggerSuccess) ) {
+				                            return 'skip:'.$next_question->id;
+				                        }
+				                    }  else { //ALL the conditions should be met (A and B and C)
+				                        if( in_array(false, $triggerSuccess) ) {
+				                            return 'skip:'.$next_question->id;
+				                        }
+				                    }
+				                }
+							}
+
+							$array['question'] = $next_question;
+						} else {
+							$list = VoxAnswer::where('vox_id', $vox->id)
+							->where('user_id', $this->user->id)
+							->orderBy('id', 'ASC')
+							->get();
+							$answered = [];
+							foreach ($list as $l) {
+								if(!isset( $answered[$l->question_id] )) {
+									$answered[$l->question_id] = $l->answer; //3
+								} else {
+									if(!is_array($answered[$l->question_id])) {
+										$answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
+									}
+									$answered[$l->question_id][] = $l->answer; // [3,5,7]
+								}
+							}
+
+							$question = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC')->first();
+							if(!isset($answered[$question->id])) {
+								//first question
+								$array['question'] = $question;
+							} else {
+								//first unanswered question
+								$array['question'] = VoxQuestion::where('vox_id', $vox_id)->where('order', VoxQuestion::find(array_key_last($answered))->order+1)->first();
+							}
+						}
+					}
+
+					$cross_checks = [];
+			    	$cross_checks_references = [];
+
+			    	foreach ($vox->questions as $vq) {
+				    	if (!empty($vq->cross_check)) {
+
+				    		if (is_numeric($vq->cross_check)) {
+				    			$va = VoxAnswer::where('user_id',$this->user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
+				    			$cross_checks[$vq->id] = $va ? $va->answer : null;
+				    			$cross_checks_references[$vq->id] = $vq->cross_check;
+				    		} else if($vq->cross_check == 'gender') {
+				    			$cc = $vq->cross_check;
+				    			$cross_checks[$vq->id] = $this->user->$cc == 'm' ? 1 : 2;
+				    			$cross_checks_references[$vq->id] = 'gender';
+				    		} else if($vq->cross_check == 'birthyear') {
+				    			$cc = $vq->cross_check;
+				    			$cross_checks[$vq->id] = $this->user->$cc;
+				    			$cross_checks_references[$vq->id] = 'birthyear';
+				    		} else {
+				    			$cc = $vq->cross_check;
+				    			$i=0;
+				    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
+				    				if($key==$this->user->$cc) {
+				    					$cross_checks[$vq->id] = $i;
+				    					$cross_checks_references[$vq->id] = $cc;
+				    					break;
+				    				}
+				    				$i++;
+				    			}
+				    		}
+				    	}
+			    	}
+
+			    	$slist = VoxScale::get();
+					$scales = [];
+					foreach ($slist as $sitem) {
+						$scales[$sitem->id] = $sitem;
+					}
+
+			    	$array['cross_checks'] = $cross_checks;
+			    	$array['cross_checks_references'] = $cross_checks_references;
+			    	$array['scales'] = $scales;
+
+					return $this->ShowVoxView('template-parts.vox-question', $array);
+				}
+			}
+		}
+
+		return '';
+	}
 }

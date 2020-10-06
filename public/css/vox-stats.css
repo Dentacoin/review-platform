@@ -580,8 +580,6 @@
       @media screen and (max-width: 768px) {
         .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .chart.chart-1 .main-chart .mobile-chart {
           margin-top: 30px; } }
-  .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .chart .mobile-chart {
-    padding: 20px !important; }
   .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .more-q-content .chart .second-chart {
     margin-left: 0px !important; }
   .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs {
@@ -603,16 +601,17 @@
       .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs.multiple-stat .hint {
         top: 46px; } }
     .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-1.with-relation-hint .relation-hint {
-      display: block !important;
       position: absolute;
-      top: 80px;
+      bottom: 80px;
       font-style: italic;
       font-size: 14px;
       padding: 0px 10px;
       width: 100%;
       text-align: center; }
-    .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-1.with-relation-hint .main-chart {
-      padding-top: 90px; }
+      @media screen and (max-width: 768px) {
+        .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-1.with-relation-hint .relation-hint {
+          bottom: auto;
+          top: 40px; } }
     .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-2[chart-scale="dependency"] {
       justify-content: unset; }
       .page-statistics .stats:not(.st-download) .stat[stat-type="dependency"] .contents .graphs .chart-2[chart-scale="dependency"].verticle-align-chart .second-chart {
@@ -1000,6 +999,7 @@
           .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat {
             padding-top: 0px; } }
         .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .total {
+          z-index: -1;
           top: -35px; }
           @media screen and (max-width: 1200px) {
             .page-statistics .stats:not(.st-download) .stat .contents .graphs.multiple-stat .total {
@@ -1235,7 +1235,7 @@
           height: 300px;
           margin-left: auto;
           margin-right: auto; }
-          @media (max-width: 1200px) {
+          @media screen and (max-width: 1200px) {
             .page-statistics .stats:not(.st-download) .stat .contents .graphs .chart .third-chart.country_id {
               width: 940px;
               height: 450px; } }
@@ -1866,12 +1866,14 @@
   font-family: 'Nunito';
   src: url("../fonts/Nunito-Bold.woff2") format("woff2"), url("../fonts/Nunito-Bold.woff") format("woff");
   font-weight: 700;
-  font-style: bold; }
+  font-style: bold;
+  font-display: swap; }
 @font-face {
   font-family: 'Nunito';
   src: url("../fonts/Nunito-Regular.woff2") format("woff2"), url("../fonts/Nunito-Regular.woff") format("woff");
   font-weight: normal;
-  font-style: normal; }
+  font-style: normal;
+  font-display: swap; }
 body {
   font-family: 'Nunito'; }
 
@@ -1953,8 +1955,6 @@ body {
       justify-content: normal; }
       .page-statistics.download-statistics .stats.st-download .stat[stat-type="dependency"] .chart.chart-1 .main-chart {
         height: 100%; }
-    .page-statistics.download-statistics .stats.st-download .stat[stat-type="dependency"] .chart .mobile-chart {
-      padding: 20px !important; }
     .page-statistics.download-statistics .stats.st-download .stat[stat-type="dependency"] .contents .graphs {
       min-height: 380px; }
       .page-statistics.download-statistics .stats.st-download .stat[stat-type="dependency"] .contents .graphs .total {
@@ -2356,11 +2356,69 @@ body {
 @media screen and (max-width: 768px) {
   .popup.login-register .wrapper {
     overflow-y: auto; } }
-.popup.login-register .wrapper .inner {
+.popup.login-register .wrapper .vox-not-logged {
   max-width: calc(100%);
-  padding: 20px; }
-  .popup.login-register .wrapper .inner.vox-not-logged {
-    box-shadow: none; }
+  padding: 20px;
+  border-radius: 8px;
+  clear: both;
+  text-align: center; }
+  .popup.login-register .wrapper .vox-not-logged h2 {
+    margin-bottom: 55px;
+    font-size: 30px;
+    font-weight: bold;
+    color: black; }
+    @media screen and (max-width: 768px) {
+      .popup.login-register .wrapper .vox-not-logged h2 {
+        margin-bottom: 30px;
+        font-size: 24px; } }
+  .popup.login-register .wrapper .vox-not-logged img {
+    margin-right: 23px;
+    min-width: 78px;
+    height: 64px; }
+    @media screen and (max-width: 768px) {
+      .popup.login-register .wrapper .vox-not-logged img {
+        margin: 0 auto 20px auto;
+        display: block; } }
+  .popup.login-register .wrapper .vox-not-logged h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #090909; }
+    @media screen and (max-width: 768px) {
+      .popup.login-register .wrapper .vox-not-logged h3 {
+        margin-bottom: 10px;
+        font-size: 18px; } }
+  .popup.login-register .wrapper .vox-not-logged p {
+    font-size: 18px;
+    color: #090909; }
+    @media screen and (max-width: 768px) {
+      .popup.login-register .wrapper .vox-not-logged p {
+        font-size: 14px; } }
+  .popup.login-register .wrapper .vox-not-logged .flex .col {
+    padding: 0px 15px;
+    display: flex;
+    text-align: left; }
+    @media screen and (max-width: 768px) {
+      .popup.login-register .wrapper .vox-not-logged .flex .col {
+        padding: 20px 0px;
+        display: block;
+        text-align: center; } }
+  .popup.login-register .wrapper .vox-not-logged a.btn {
+    height: 45px;
+    line-height: 45px;
+    background: #3daee6;
+    color: white;
+    min-width: 180px;
+    padding: 0px 20px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-top: 40px; }
+    @media screen and (max-width: 768px) {
+      .popup.login-register .wrapper .vox-not-logged a.btn {
+        margin-top: 10px; } }
 .popup.download-stats-popup {
   overflow-y: auto; }
   @media screen and (max-width: 768px) {

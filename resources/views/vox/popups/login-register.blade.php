@@ -1,9 +1,8 @@
-<div class="popup login-register" id="login-register-popup">
+<div class="popup login-register active" id="login-register-popup">
 	<div class="wrapper">
 		<div class="inner vox-not-logged">
 			<h2>
 				{{ trans('vox.page.questionnaire.not-logged-title') }}
-				
 			</h2>
 
 			<div class="flex break-mobile">

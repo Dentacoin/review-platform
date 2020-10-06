@@ -1,4 +1,4 @@
-<div class="popup fixed-popup popup-with-background request-survey-popup close-on-shield" id="request-survey-patient-popup">
+<div class="popup fixed-popup popup-with-background request-survey-popup close-on-shield active" id="request-survey-patient-popup">
 	<div class="popup-inner inner-white">
 		<a href="javascript:;" class="closer">
 			<img src="{{ url('new-vox-img/close-popup.png') }}">

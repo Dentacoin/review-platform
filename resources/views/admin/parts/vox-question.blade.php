@@ -7,9 +7,9 @@
         {!! $question->question !!}
         @endif
     </div>
-    @if(!empty($question))
+    @if(!empty($question) && empty($question->question_trigger) && $question->order != 1)
         <div class="col-md-1">
-            <a class="btn btn-block btn-info" href="{{ $item->getLink().'?testmode=1&q-id='.$question->id }}" target="_blank">
+            <a class="btn btn-block btn-info" href="{{ $item->getLink().'?testmode=1&start-from='.$question->id.'&q-id='.(!empty(App\Models\VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order -1)->first()) ? App\Models\VoxQuestion::where('vox_id', $question->vox_id)->where('order', $question->order -1)->first()->id : $question->id) }}" target="_blank">
                 Test
             </a>
         </div>
@@ -21,7 +21,6 @@
     <div class="col-md-12">
 
         {{ Form::open(array('id' => 'question-'.( !empty($question) ? 'edit' : 'add') , 'url' => url('cms/'.$current_page.'/edit/'.$item->id.'/question/'.( !empty($question) ? $question->id : 'add') ), 'class' => 'form-horizontal questions-form', 'method' => 'post', 'files' => true)) }}
-
 
             <div class="panel panel-inverse panel-with-tabs custom-tabs">
                 <div class="panel-heading p-0">

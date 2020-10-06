@@ -3,7 +3,7 @@
 	<a href="javascript:;" class="active" scale="dependency" scale-name="Relation">Relation</a>
 @endif
 @foreach( $question->stats_fields as $sk)
-	<a href="javascript:;" class="{!! $loop->first && $question->used_for_stats!='dependency' ? 'active' : '' !!} {!! array_key_exists($sk, config('vox.details_fields')) || $sk == 'age' || ($sk == 'gender' && ($question->type == 'multiple_choice' || $question->type == 'rank' )) ? 'with-children' : '' !!}" scale="{{ $sk }}" scale-name="{{ trans('vox.page.stats.group-by-'.$sk) }}">
+	<a href="javascript:;" class="{!! $loop->first && $question->used_for_stats!='dependency' ? 'active' : '' !!} {!! $sk == 'gender' && $question->used_for_stats=='dependency' ? '' : (array_key_exists($sk, config('vox.details_fields')) || $sk == 'age' || ($sk == 'gender' && ($question->type == 'multiple_choice' || $question->type == 'rank' )) ? 'with-children' : '') !!}" scale="{{ $sk }}" scale-name="{{ trans('vox.page.stats.group-by-'.$sk) }}">
 		{{ trans('vox.page.stats.group-by-'.$sk) }}
 
 		@if(array_key_exists($sk, config('vox.details_fields')))
@@ -36,7 +36,7 @@
 					</label>
 				@endforeach
 			</div>
-		@elseif($sk == 'gender' && ($question->type == 'multiple_choice' || $question->type == 'rank' ))
+		@elseif($sk == 'gender' && ($question->type == 'multiple_choice' || $question->type == 'rank' ) && $question->used_for_stats!='dependency')
 			<div class="scales-filter">
 				<label for="scale-gender-all-{{ $question->id }}" class="select-all-scales-label active">
 					<i class="far fa-square"></i>

@@ -6,7 +6,7 @@
 		<div class="container">
 			<div class="flex">
 				<div class="col">
-					<img class="taken-survey-image" src="{{ url('new-vox-img/dentavox-man-survey-taken.jpg') }}" alt="Dentavox man survey taken">
+					<img class="taken-survey-image" src="{{ url('new-vox-img/dentavox-man-survey-taken.jpg') }}" alt="Dentavox man survey taken" width="550" height="524">
 				</div>
 				<div class="col taken-survey-description">
 					<h3>Great! You've reached your daily limit.</h3>
@@ -32,7 +32,7 @@
 					<a href="https://dentavox.dentacoin.com/blog" target="_blank" class="white-button">VISIT BLOG</a>
 				</div>
 				<div class="col">
-					<img src="{{ url('new-vox-img/dentavox-blog-preview.png') }}" alt="Dentavox blog preview">
+					<img src="{{ url('new-vox-img/dentavox-blog-preview.png') }}" alt="Dentavox blog preview" width="500" height="351">
 				</div>
 			</div>
 		</div>

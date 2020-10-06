@@ -1,4 +1,4 @@
-<div class="popup fixed-popup" id="popup-lead-magnet">
+<div class="popup fixed-popup active removable" id="popup-lead-magnet">
 	<div class="popup-inner inner-white">
 		<div class="loader-mask">
 		    <div class="loader">

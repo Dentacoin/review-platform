@@ -1,0 +1,26 @@
+.page-index h2 {
+  font-size: 30px; }
+  @media screen and (max-width: 768px) {
+    .page-index h2 {
+      font-size: 26px; } }
+.page-index .blue-button {
+  padding: 10px 40px;
+  display: inline-block; }
+  @media screen and (max-width: 768px) {
+    .page-index .blue-button {
+      font-size: 18px; } }
+@media screen and (max-width: 768px) {
+  .page-index .section-work {
+    padding-top: 40px; } }
+
+#questions-wrapper {
+  margin-top: 30px; }
+
+.page-index.logged-out .site-content {
+  padding-top: 0px; }
+  @media screen and (max-width: 768px) {
+    .page-index.logged-out .site-content {
+      padding-top: 0px; } }
+.page-index.logged-out .footer-expander footer {
+  bottom: 0px;
+  opacity: 1; }

@@ -24,10 +24,6 @@
 						- {{ $vox->title }} -
 						@if($testmode)
 							<a href="{{ $vox->getLink() }}?testmode=1&goback=1&q-id={{ request('q-id') ?? '0' }}" class="go-back-admin">&laquo; Back</a>
-
-							@if(request('q-id') || request('back-q'))
-								<a href="javascript:;" class="refresh-q">Refresh</a>
-							@endif
 						@endif
 						@if($isAdmin)
 							<div class="vox-mode-wrapper">
@@ -95,97 +91,25 @@
 						{!! trans('vox.page.questionnaire.wrong-answer') !!}
 					</div>
 				</div>
-				<div class="quest-wrap">
-
-					@if(!$not_bot)
-						<div class="question-group" data-id="bot" id="bot-group">
-							<div class="question">
-								{!! trans('vox.page.questionnaire.not-robot') !!}
+				<div class="quest-wrap" id="q-wrap">
+					<div class="loader-survey" id="loader-survey" style="display: none;"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
+					<div id="questions-box">
+						@if(!$not_bot)
+							<div class="question-group" data-id="bot" id="bot-group">
+								<div class="question">
+									{!! trans('vox.page.questionnaire.not-robot') !!}
+								</div>
+								<div class="answers tac">
+									<div class="g-recaptcha" id="g-recaptcha" data-callback="sendReCaptcha" style="display: inline-block;" data-sitekey="6LfmCmEUAAAAAH20CTYH0Dg6LGOH7Ko7Wv1DZlO0"></div>
+									<div class="alert alert-warning" id="captcha-error" style="display: none;">
+										{!! trans('vox.page.questionnaire.not-robot-invalid') !!}
+									</div>					
+								</div>
 							</div>
-							<div class="answers tac">
-								<div class="g-recaptcha" id="g-recaptcha" data-callback="sendReCaptcha" style="display: inline-block;" data-sitekey="6LfmCmEUAAAAAH20CTYH0Dg6LGOH7Ko7Wv1DZlO0"></div>
-								<div class="alert alert-warning" id="captcha-error" style="display: none;">
-									{!! trans('vox.page.questionnaire.not-robot-invalid') !!}
-								</div>					
-							</div>
-						</div>
-					@endif
-
-					@if(!empty($welcome_vox))
-						@foreach( $welcome_vox->questions as $question )
-							@include('vox.template-parts.vox-question')
-						@endforeach
-					@endif
-
-					@if(empty($user->birthyear))
-						<div class="question-group birthyear-question tac user-detail-question" demogr-id="age_groups" style="display: none;">
-							<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
-							<div class="question">
-								{!! trans('vox.page.questionnaire.question-birth') !!}
-							</div>
-							<div class="answers">
-								<select class="answer" name="birthyear-answer" id="birthyear-answer">
-                            		<option value="">-</option>
-									{!! App\Models\Vox::getBirthyearOptions() !!}
-                            	</select>
-							</div>
-
-							<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
-						</div>
-					@endif
-
-					@if(!$user->gender)
-						<div class="question-group gender-question single-choice user-detail-question" demogr-id="gender" style="display: none;">
-							<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
-							<div class="question">
-								{!! trans('vox.page.questionnaire.question-sex') !!}
-							</div>
-							<div class="answers">
-								<label class="answer answer" for="answer-gender-m" data-num="m">
-									<input id="answer-gender-m" type="radio" demogr-index="1" name="gender-answer" class="answer" value="m" style="display: none;">
-									{!! trans('vox.page.questionnaire.question-sex-m') !!}
-								</label>
-								<label class="answer answer" for="answer-gender-f" data-num="f">
-									<input id="answer-gender-f" type="radio" demogr-index="2" name="gender-answer" class="answer" value="f" style="display: none;">
-									{!! trans('vox.page.questionnaire.question-sex-f') !!}
-								</label>
-							</div>
-						</div>
-					@endif
-
-					@if(!$user->country_id )
-						<div class="question-group location-question user-detail-question" style="display: none;">
-							<div class="loader-survey"><img src="{{ url('new-vox-img/survey-loader.gif') }}"></div>
-							<div class="question">
-								{!! trans('vox.page.questionnaire.question-country') !!}
-							</div>
-							<div class="answers">
-								<div class="alert alert-warning ip-country mobile" style="display: none;">
-	                        		{!! trans('vox.common.different-ip') !!}
-		                        </div>
-								{{ Form::select( 'country_id' , ['' => '-'] + \App\Models\Country::with('translations')->get()->pluck('name', 'id')->toArray() , $user->country_id , array('class' => 'country-select form-control country-dropdown', 'real-country' => !empty($country_id) ? $country_id : '') ) }}
-							</div>
-
-							<a href="javascript:;" class="next-answer">{!! trans('vox.page.questionnaire.next') !!}</a>
-						</div>
-					@endif
-
-					@foreach( $details_fields as $key => $info )
-						@if($user->$key==null)
-							@include('vox.template-parts.vox-question', [
-								'details_question' => $info,
-								'details_question_id' => $key
-							])
 						@endif
-					@endforeach
-
-					@foreach( $vox->questions as $question )
-						@include('vox.template-parts.vox-question')
-					@endforeach
+					</div>
  				</div>
 			</div>
-			<input type="hidden" name="welcome_answ" id="welcome_answ" value="{{ $welcome_arr }}">
-			<input type="hidden" name="demogr_answ" id="demogr_answ" value="{{ $demogr_arr }}">
 			<div style="display: none; margin-top: 10px;text-align: center;" class="answer-error alert alert-warning">
 				{!! trans('vox.page.questionnaire.answer-error') !!}
 			</div>
@@ -194,9 +118,7 @@
 			</div>
 		</div>
 
-
 		<div class="question-done page-questions-done" id="question-done" style="display: none;">
-
 			<div class="taken-survey-wrapper">
 				<div class="container">
 					<div class="flex">
@@ -268,7 +190,6 @@
 								</div>
 							</div>
 						@endif
-
 					</div>
 				@endif
 
@@ -282,7 +203,6 @@
 							<video id="myVideoMobile" playsinline muted loop src="{{ url('new-vox-img/stats-mobile.mp4') }}" type="video/mp4" controls=""></video>
 						</a>
 					</div>
-
 					<div class="tac">
 						<a href="{{ $vox->has_stats ? $vox->getStatsList() : getLangUrl('dental-survey-stats') }}" class="blue-button more-surveys">{!! trans('vox.common.check-statictics') !!}</a>
 					</div>
@@ -315,7 +235,6 @@
 		</div>
 	</div>
 
-
 	<script type="text/javascript">
 		var vox = {
 			count: {{ $total_questions }},
@@ -323,12 +242,18 @@
 			reward: {{ intval($vox->getRewardTotal()) }},
 			reward_single: {{ $vox->getRewardPerQuestion()->dcn }},
 			current: {{ $first_question_num }},
+			answered_without_skip_count: {{ $answered_without_skip_count }},
 			url: '{{ $vox->getLink() }}',
 		};
 
 		var welcome_vox = {{ !empty($welcome_vox) ? 'true' : 'false' }};
 		var welcome_vox_q_count = {{ !empty($welcome_vox) ? $welcome_vox->questions->count() : 'false' }};
 		var testmode = {{ $testmode ? $testmode : 'false' }};
+		var next_q_url = '{{ getLangUrl('get-next-question') }}';
+		var vox_id = {{ $vox->id }};
+		@if($testmode)
+			var question_id = {!! !empty(request('q-id')) ? request('q-id') : 'false' !!};
+		@endif
 	</script>
 
 	@if(!empty($cross_checks))
@@ -364,7 +289,7 @@
 					Return to DentaVox in: <span></span>
 				</h3>
 			</div>
-			<a class="closer x">
+			<a class="closer-pop x">
 				<i class="fas fa-times"></i>
 			</a>
 		</div>
@@ -379,7 +304,7 @@
 					
 				</p>
 				<div class="tac">
-					<a class="btn inactive closer simple-countdown" alt-text="Continue">
+					<a class="btn inactive closer-pop simple-countdown" alt-text="Continue">
 						Continue in: <span>10</span>
 					</a>
 				</div>
@@ -394,11 +319,11 @@
 			<p>
 				
 			</p>
-			<a class="btn back-btn btn-start-over closer">
+			<a class="btn back-btn btn-start-over">
 				<i class="fas fa-redo"></i>
 				Start over
 			</a>
-			<a class="btn back-btn btn-roll-back closer">
+			<a class="btn back-btn btn-roll-back">
 				<i class="far fa-arrow-alt-circle-left"></i> Roll Back
 			</a>
 		</div>

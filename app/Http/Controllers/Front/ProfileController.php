@@ -838,7 +838,7 @@ class ProfileController extends FrontController {
      * clinic invites team member
      */
     public function invite_team_member($locale=null) {
-
+        
         if( (!empty($this->user) && $this->user->canInvite('trp')) || (empty($this->user) && !empty(request('last_user_id')) && !empty(User::find(request('last_user_id'))) && !empty(request('last_user_hash')) && request('last_user_hash') == User::find(request('last_user_id'))->get_token() )) {
 
             if (!empty($this->user)) {

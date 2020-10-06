@@ -16,7 +16,7 @@
 
 			<div class="tac take-test">
 				@if(!in_array($vox->id, $taken))
-					<a class="blue-button" href="{!! !empty($user) ? $vox->getLink() : "javascript:$('#login-register-popup').addClass('active')" !!}">
+					<a class="blue-button" href="{!! !empty($user) ? $vox->getLink() : "javascript:showPopup('login-register-popup')" !!}">
 						{{ trans('vox.common.take-the-test') }}
 					</a>
 				@endif
@@ -190,7 +190,7 @@
 							@endif
 							@foreach( $question->stats_fields as $sk)
 								@if($sk == 'gender')
-									<label for="format-gender-{{ $question->id }}" class="{{ $loop->first ? 'active' : '' }} dem-label">
+									<label for="format-gender-{{ $question->id }}" class="{{ $loop->first && $question->used_for_stats!='dependency' ? 'active' : '' }} dem-label">
 										<input type="checkbox" name="download-demographic[]" value="gender" id="format-gender-{{ $question->id }}" class="download-demographic-checkbox" checked="checked">
 										Sex
 								@elseif($sk == 'country_id')
@@ -265,7 +265,7 @@
 			</div>
 			<div class="container">
 				<div class="blurred-stat">
-					<img class="pc-blurred" src="{{ url('new-vox-img/blurred-stats-1.jpg') }}">
+					<img class="pc-blurred" src="{{ url('new-vox-img/blurred-stats-1.jpg') }}" width="1140" height="516">
 					<img class="mobile-blurred" src="{{ url('new-vox-img/blurred-stats-mobile.jpg') }}">
 					<div class="blurred-text">
 						<div class="free-text">Free</div>
@@ -289,7 +289,6 @@
 	<div class="all-stats-section tac">
 		<div class="container">
 			<h2>STATS SUMMARY</h2>
-
 			<p>				
 				{{ $vox->translateorNew(App::getLocale())->stats_description }}
 			</p>
@@ -300,9 +299,8 @@
 	<a style="display: none;" id="download-link" class="{{ session('download_stat') ? 'for-download' : '' }}" href="{{ session('download_stat') ? getLangUrl('download-pdf/'.session('download_stat')) : 'javascript:;' }}">Download link</a>
 	<a style="display: none;" id="download-link-png" class="{{ session('download_stat_png') ? 'for-download' : '' }}" href="{{ session('download_stat_png') ? getLangUrl('download-png/'.session('download_stat_png')) : 'javascript:;' }}">Download png link</a>
 
-	@if(empty($user))
-		@include('vox.popups.login-register')
-	@else
+	@if(!empty($user))
+		<input type="hidden" name="current-stats-vox" id="current-stats-vox" value="{{ $vox->id }}">
 		@include('vox.popups.download-stats')
 	@endif
 

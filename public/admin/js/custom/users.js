@@ -140,6 +140,16 @@ $(document).ready(function(){
 		}
     }
 
+    $('#custom_lat_lon').change( function() {
+
+    	if ($(this).is(':checked')) {
+			$('#lat').removeAttr('disabled');
+			$('#lon').removeAttr('disabled');
+    	} else {
+    		$('#lat').prop('disabled', true);
+    		$('#lon').prop('disabled', true);
+    	}
+    });
 
     $('.preferences-button').click( function() {
     	var email = $(this).attr('email');

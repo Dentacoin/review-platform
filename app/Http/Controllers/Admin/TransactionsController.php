@@ -103,7 +103,12 @@ class TransactionsController extends AdminController
 
         $current_url = url('cms/transactions');
 
-        $pagination_link = (!empty($this->request->input('search-address')) ? '&search-address='.$this->request->input( 'search-address' ) : '').(!empty($this->request->input('search-tx')) ? '&search-tx='.$this->request->input( 'search-tx' ) : '').(!empty($this->request->input('search-user-id')) ? '&search-user-id='.$this->request->input( 'search-user-id' ) : '').(!empty($this->request->input('search-email')) ? '&search-email='.$this->request->input( 'search-email' ) : '').(!empty($this->request->input('search-status')) ? '&search-status='.$this->request->input( 'search-status' ) : '').(!empty($this->request->input('search-from')) ? '&search-from='.$this->request->input( 'search-from' ) : '').(!empty($this->request->input('search-to')) ? '&search-to='.$this->request->input( 'search-to' ) : '');
+        $pagination_link = "";
+        foreach (Request::all() as $key => $value) {
+            if($key != 'search') {
+                $pagination_link .= '&'.$key.'='.($value === null ? '' : $value);
+            }
+        }
 
         $are_transactions_stopped = StopTransaction::find(1)->stopped;
         $is_warning_message_shown = StopTransaction::find(1)->show_warning_text;
