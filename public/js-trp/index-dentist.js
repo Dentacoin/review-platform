@@ -48,6 +48,7 @@ jQuery(document).ready(function($){
 	            success: function(ret) {
 	            	if (!$('#to-append').hasClass('appended')) {
 	            		$.getScript(window.location.origin+'/js-trp/flickity.min.js');
+	            		$('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/flickity.min.css">');
 	            		$('#to-append').append(ret);
 	            		$('#to-append').addClass('appended');
 

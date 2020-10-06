@@ -314,7 +314,6 @@ class IndexController extends FrontController {
 			],
 			'css' => [
 				'trp-index-dentist.css',
-                'flickity.min.css',
 			],
 			'social_image' => $seos->getImageUrl(),
             'seo_title' => $seos->seo_title,
