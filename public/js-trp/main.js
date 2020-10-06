@@ -29,6 +29,10 @@ jQuery(document).ready(function($){
 		type: 'GET',
 		success: function( data ) {
 			dentacoin_down = false;
+
+			if (data && data.indexOf('We are performing scheduled maintenance. We should be back online shortly') !== -1) {
+				dentacoin_down = true;
+			}
 		},
 		error: function(data) {
 		    dentacoin_down = true;
