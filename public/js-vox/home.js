@@ -118,9 +118,7 @@ $(document).ready(function(){
 			setupPagination();
 		}
 	}
-	if(user_id) {
-		handleSorts();
-	}
+	handleSorts();
 
 	if($(window).outerWidth() <= 768) {
 		$('.another-questions .sort-menu').children().each( function() {

@@ -1,5 +1,5 @@
 @foreach( $voxes as $vox)
-	<div class="swiper-slide home-vox" 
+	<div class="swiper-slide home-vox" style="display: none;" 
 		featured="{{ intval($vox->featured) }}" 
 		published="{{ $vox->launched_at->timestamp }}" 
 		sort-order="{{ $vox->sort_order ? $vox->sort_order : 0 }}" 
