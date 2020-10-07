@@ -1528,286 +1528,289 @@ class VoxController extends FrontController
 
 	public function getNextQuestion() {
 
-		if(!empty($this->user)) {
+		if(Request::isMethod('post')) {
+			if(!empty($this->user)) {
 
-			$vox_id = request('vox_id');
-			$vox = Vox::where('id', $vox_id)->where('type', 'normal')->first();
-			$welcome_vox = Vox::where('type', 'home')->first();
-			$question_id = request('question_id');
-			if(!empty($question_id)) {
-				$cur_question = VoxQuestion::find($question_id);
-			}
+				$vox_id = request('vox_id');
+				if(!empty($vox_id)) {
+					$vox = Vox::where('id', $vox_id)->where('type', 'normal')->first();
+				}			
+				$welcome_vox = Vox::where('type', 'home')->first();
+				$question_id = request('question_id');
+				if(!empty($question_id)) {
+					$cur_question = VoxQuestion::find($question_id);
+				}
 
-			$admin_ids = Admin::getAdminProfileIds();
-			$isAdmin = Auth::guard('admin')->user() || (!empty($this->user) && in_array($this->user->id, $admin_ids));
-			$testmode = session('testmode') && $isAdmin;
+				$admin_ids = Admin::getAdminProfileIds();
+				$isAdmin = Auth::guard('admin')->user() || (!empty($this->user) && in_array($this->user->id, $admin_ids));
+				$testmode = session('testmode') && $isAdmin;
 
-			if(!empty($vox_id) && (!empty($vox) || !empty($this->admin) )) {
+				if(!empty($vox_id) && (!empty($vox) || !empty($this->admin) )) {
 
-				$array = [];
-				$not_bot = $testmode || session('not_not-'.$vox_id);
-				$vox = Vox::find($vox_id);
+					$array = [];
+					$not_bot = $testmode || session('not_not-'.$vox_id);
 
-				if (!$this->user->madeTest($vox->id)) {
+					if (!$this->user->madeTest($vox->id)) {
 
-					if (!$this->user->madeTest($welcome_vox->id)) {
-						// welcome qs
-						$array['welcome_vox'] = true;
+						if (!$this->user->madeTest($welcome_vox->id)) {
+							// welcome qs
+							$array['welcome_vox'] = true;
 
-						if(!empty($question_id)) {
-							//question order
-							//proverki za triguri, skipvane
-							$next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
-							$array['question'] = $next_question;
-						} else {
-							//first question
-							$question = VoxQuestion::where('vox_id', $welcome_vox)->orderBy('order', 'ASC')->first();
-							$array['question'] = $question;
-						}
-					} else if(empty($this->user->birthyear)) {
-						//demographic qs
-						$array['birthyear_q'] = true;
-					} else if(empty($this->user->gender)) {
-						//demographic qs
-						$array['gender_q'] = true;
-					} else if(empty($this->user->country_id)) {
-						//demographic qs
-						$array['country_id_q'] = true;
-					}
-
-					if(empty($array)) {
-						foreach ($this->details_fields as $key => $info) {
-							if($this->user->$key==null) {
-								$array['details_question'] = $info;
-								$array['details_question_id'] = $key;
-								break;
+							if(!empty($question_id)) {
+								//question order
+								//proverki za triguri, skipvane
+								$next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
+								$array['question'] = $next_question;
+							} else {
+								//first question
+								$question = VoxQuestion::where('vox_id', $welcome_vox)->orderBy('order', 'ASC')->first();
+								$array['question'] = $question;
 							}
+						} else if(empty($this->user->birthyear)) {
+							//demographic qs
+							$array['birthyear_q'] = true;
+						} else if(empty($this->user->gender)) {
+							//demographic qs
+							$array['gender_q'] = true;
+						} else if(empty($this->user->country_id)) {
+							//demographic qs
+							$array['country_id_q'] = true;
 						}
-					}
 
-					if(empty($array)) {
-
-						if(!empty($question_id) && is_numeric($question_id) && $cur_question->vox_id == 11) {
-							$question_id=null;
-						}
-
-						if(!empty($question_id) && is_numeric($question_id)) {
-							$next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
-
-							if(!empty($next_question->question_trigger)) {
-
-								if($next_question->question_trigger=='-1') {
-				                    foreach ($vox->questions as $originalTrigger) {
-				                        if($originalTrigger->id == $next_question->id) {
-				                            break;
-				                        }
-
-				                        if( $originalTrigger->question_trigger && $originalTrigger->question_trigger!='-1' ) {
-				                           $triggers = $originalTrigger->question_trigger;
-				                        }
-				                    }
-				                } else {
-				                    $triggers = $next_question->question_trigger;
-				                }
-
-				                if(!empty($triggers)) {
-
-				                    $triggers = explode(';', $triggers);
-				                    $triggerSuccess = [];
-
-				                    foreach ($triggers as $trigger) {
-
-				                        list($triggerId, $triggerAnswers) = explode(':', $trigger);
-				                        if(is_numeric($triggerId)) {
-				                        	$trigger_question = VoxQuestion::find($triggerId);
-				                        } else {
-				                        	//demographic
-				                        	$trigger_question = $triggerId;
-				                        }
-
-			                            if(mb_strpos($triggerAnswers, '!')!==false) {
-			                                $invert_trigger_logic = true;
-			                                $triggerAnswers = substr($triggerAnswers, 1);
-			                            } else {
-			                                $invert_trigger_logic = false;
-			                            }
-
-			                            if(mb_strpos($triggerAnswers, '-')!==false) {
-			                                list($from, $to) = explode('-', $triggerAnswers);
-
-			                                $allowedAnswers = [];
-			                                for ($i=$from; $i <= $to ; $i++) { 
-			                                    $allowedAnswers[] = $i;
-			                                }
-
-			                            } else {
-			                                $allowedAnswers = explode(',', $triggerAnswers);
-			                            }
-
-			                            if(!empty($allowedAnswers)) {
-			                            	$givenAnswers = [];
-			                            	if(is_object($trigger_question)) {
-			                            		$user_answers = VoxAnswer::where('user_id', $this->user->id)->where('question_id', $trigger_question->id)->get();
-				                            	foreach ($user_answers as $ua) {
-				                            		$givenAnswers[] = $ua->answer;
-				                            	}
-			                            	} else {
-				                        		//demographic
-			                            		$givenAnswers[] = $this->user->$trigger_question;
-			                            	}
-
-			                            	foreach ($givenAnswers as $ga) {
-			                            		if(str_contains($ga,',') !== false) {
-				                                    $given_answers_array = explode(',', $ga);
-
-				                                    $found = false;
-				                                    foreach ($given_answers_array as $key => $value) {
-				                                        if(in_array($value, $allowedAnswers)) {
-				                                            $found = true;
-				                                            break;
-				                                        }
-				                                    }
-
-				                                    if($invert_trigger_logic) {
-				                                        if(!$found) {
-				                                            $triggerSuccess[] = true;
-				                                        } else {
-				                                            $triggerSuccess[] = false;
-				                                        }
-				                                    } else {
-
-				                                        if($found) {
-				                                            $triggerSuccess[] = true;
-				                                        } else {
-				                                            $triggerSuccess[] = false;
-				                                        }
-				                                    }
-				                                } else {
-				                                    if(strpos($allowedAnswers[0], '>') !== false) {
-				                                        $trg_ans = substr($allowedAnswers[0], 1);
-
-				                                        if($ga > intval($trg_ans)) {
-				                                            $triggerSuccess[] = true;
-				                                        } else {
-				                                            $triggerSuccess[] = false;
-				                                        }
-				                                    } else if(strpos($allowedAnswers[0], '<') !== false) {
-				                                        $trg_ans = substr($allowedAnswers[0], 1);
-
-				                                        if(intval($ga) < intval($trg_ans)) {
-				                                            $triggerSuccess[] = true;
-				                                        } else {
-				                                            $triggerSuccess[] = false;
-				                                        }
-				                                    } else {
-				                                        if($invert_trigger_logic) {
-				                                            if( !empty($ga) && !in_array($ga, $allowedAnswers) ) {
-				                                                $triggerSuccess[] = true;
-				                                            } else {
-				                                                $triggerSuccess[] = false;
-				                                            }
-				                                        } else {
-				                                            if( !empty($ga) && in_array($ga, $allowedAnswers) ) {
-				                                                $triggerSuccess[] = true;
-				                                            } else {
-				                                                $triggerSuccess[] = false;
-				                                            }
-				                                        }
-				                                    }
-			                            		}
-			                            	}
-			                            }
-				                    }
-
-				                    if( $next_question->trigger_type == 'or' ) { // ANY of the conditions should be met (A or B or C)
-				                        if( !in_array(true, $triggerSuccess) ) {
-				                            return 'skip-dvq:'.$next_question->id;
-				                        }
-				                    }  else { //ALL the conditions should be met (A and B and C)
-				                        if( in_array(false, $triggerSuccess) ) {
-				                            return 'skip-dvq:'.$next_question->id;
-				                        }
-				                    }
-				                }
-							}
-
-							$array['question'] = $next_question;
-						} else {
-							$list = VoxAnswer::where('vox_id', $vox->id)->where('user_id', $this->user->id)->get();
-							$answered = [];
-
-							foreach ($list as $l) {
-								if(!isset( $answered[$l->question_id] )) {
-									$answered[$l->question_id] = $l->answer; //3
-								} else {
-									if(!is_array($answered[$l->question_id])) {
-										$answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
-									}
-									$answered[$l->question_id][] = $l->answer; // [3,5,7]
+						if(empty($array)) {
+							foreach ($this->details_fields as $key => $info) {
+								if($this->user->$key==null) {
+									$array['details_question'] = $info;
+									$array['details_question_id'] = $key;
+									break;
 								}
 							}
+						}
 
-							$questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
+						if(empty($array)) {
 
-							$question = $questions_list->first();
-							if(!isset($answered[$question->id])) {
-								//first question
-								$array['question'] = $question;
+							if(!empty($question_id) && is_numeric($question_id) && $cur_question->vox_id == 11) {
+								$question_id=null;
+							}
+
+							if(!empty($question_id) && is_numeric($question_id)) {
+								$next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
+
+								if(!empty($next_question->question_trigger)) {
+
+									if($next_question->question_trigger=='-1') {
+					                    foreach ($vox->questions as $originalTrigger) {
+					                        if($originalTrigger->id == $next_question->id) {
+					                            break;
+					                        }
+
+					                        if( $originalTrigger->question_trigger && $originalTrigger->question_trigger!='-1' ) {
+					                           $triggers = $originalTrigger->question_trigger;
+					                        }
+					                    }
+					                } else {
+					                    $triggers = $next_question->question_trigger;
+					                }
+
+					                if(!empty($triggers)) {
+
+					                    $triggers = explode(';', $triggers);
+					                    $triggerSuccess = [];
+
+					                    foreach ($triggers as $trigger) {
+
+					                        list($triggerId, $triggerAnswers) = explode(':', $trigger);
+					                        if(is_numeric($triggerId)) {
+					                        	$trigger_question = VoxQuestion::find($triggerId);
+					                        } else {
+					                        	//demographic
+					                        	$trigger_question = $triggerId;
+					                        }
+
+				                            if(mb_strpos($triggerAnswers, '!')!==false) {
+				                                $invert_trigger_logic = true;
+				                                $triggerAnswers = substr($triggerAnswers, 1);
+				                            } else {
+				                                $invert_trigger_logic = false;
+				                            }
+
+				                            if(mb_strpos($triggerAnswers, '-')!==false) {
+				                                list($from, $to) = explode('-', $triggerAnswers);
+
+				                                $allowedAnswers = [];
+				                                for ($i=$from; $i <= $to ; $i++) { 
+				                                    $allowedAnswers[] = $i;
+				                                }
+
+				                            } else {
+				                                $allowedAnswers = explode(',', $triggerAnswers);
+				                            }
+
+				                            if(!empty($allowedAnswers)) {
+				                            	$givenAnswers = [];
+				                            	if(is_object($trigger_question)) {
+				                            		$user_answers = VoxAnswer::where('user_id', $this->user->id)->where('question_id', $trigger_question->id)->get();
+					                            	foreach ($user_answers as $ua) {
+					                            		$givenAnswers[] = $ua->answer;
+					                            	}
+				                            	} else {
+					                        		//demographic
+				                            		$givenAnswers[] = $this->user->$trigger_question;
+				                            	}
+
+				                            	foreach ($givenAnswers as $ga) {
+				                            		if(str_contains($ga,',') !== false) {
+					                                    $given_answers_array = explode(',', $ga);
+
+					                                    $found = false;
+					                                    foreach ($given_answers_array as $key => $value) {
+					                                        if(in_array($value, $allowedAnswers)) {
+					                                            $found = true;
+					                                            break;
+					                                        }
+					                                    }
+
+					                                    if($invert_trigger_logic) {
+					                                        if(!$found) {
+					                                            $triggerSuccess[] = true;
+					                                        } else {
+					                                            $triggerSuccess[] = false;
+					                                        }
+					                                    } else {
+
+					                                        if($found) {
+					                                            $triggerSuccess[] = true;
+					                                        } else {
+					                                            $triggerSuccess[] = false;
+					                                        }
+					                                    }
+					                                } else {
+					                                    if(strpos($allowedAnswers[0], '>') !== false) {
+					                                        $trg_ans = substr($allowedAnswers[0], 1);
+
+					                                        if($ga > intval($trg_ans)) {
+					                                            $triggerSuccess[] = true;
+					                                        } else {
+					                                            $triggerSuccess[] = false;
+					                                        }
+					                                    } else if(strpos($allowedAnswers[0], '<') !== false) {
+					                                        $trg_ans = substr($allowedAnswers[0], 1);
+
+					                                        if(intval($ga) < intval($trg_ans)) {
+					                                            $triggerSuccess[] = true;
+					                                        } else {
+					                                            $triggerSuccess[] = false;
+					                                        }
+					                                    } else {
+					                                        if($invert_trigger_logic) {
+					                                            if( !empty($ga) && !in_array($ga, $allowedAnswers) ) {
+					                                                $triggerSuccess[] = true;
+					                                            } else {
+					                                                $triggerSuccess[] = false;
+					                                            }
+					                                        } else {
+					                                            if( !empty($ga) && in_array($ga, $allowedAnswers) ) {
+					                                                $triggerSuccess[] = true;
+					                                            } else {
+					                                                $triggerSuccess[] = false;
+					                                            }
+					                                        }
+					                                    }
+				                            		}
+				                            	}
+				                            }
+					                    }
+
+					                    if( $next_question->trigger_type == 'or' ) { // ANY of the conditions should be met (A or B or C)
+					                        if( !in_array(true, $triggerSuccess) ) {
+					                            return 'skip-dvq:'.$next_question->id;
+					                        }
+					                    }  else { //ALL the conditions should be met (A and B and C)
+					                        if( in_array(false, $triggerSuccess) ) {
+					                            return 'skip-dvq:'.$next_question->id;
+					                        }
+					                    }
+					                }
+								}
+
+								$array['question'] = $next_question;
 							} else {
-								//first unanswered question
-								$array['question'] = $questions_list->where('order','>', VoxQuestion::find(array_key_last($answered))->order)->first();
+								$list = VoxAnswer::where('vox_id', $vox->id)->where('user_id', $this->user->id)->get();
+								$answered = [];
+
+								foreach ($list as $l) {
+									if(!isset( $answered[$l->question_id] )) {
+										$answered[$l->question_id] = $l->answer; //3
+									} else {
+										if(!is_array($answered[$l->question_id])) {
+											$answered[$l->question_id] = [ $answered[$l->question_id] ]; // [3]
+										}
+										$answered[$l->question_id][] = $l->answer; // [3,5,7]
+									}
+								}
+
+								$questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
+
+								$question = $questions_list->first();
+								if(!isset($answered[$question->id])) {
+									//first question
+									$array['question'] = $question;
+								} else {
+									//first unanswered question
+									$array['question'] = $questions_list->where('order','>', VoxQuestion::find(array_key_last($answered))->order)->first();
+								}
 							}
 						}
-					}
 
-					$cross_checks = [];
-			    	$cross_checks_references = [];
+						$cross_checks = [];
+				    	$cross_checks_references = [];
 
-			    	foreach ($vox->questions as $vq) {
-				    	if (!empty($vq->cross_check)) {
+				    	foreach ($vox->questions as $vq) {
+					    	if (!empty($vq->cross_check)) {
 
-				    		if (is_numeric($vq->cross_check)) {
-				    			$va = VoxAnswer::where('user_id',$this->user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
-				    			$cross_checks[$vq->id] = $va ? $va->answer : null;
-				    			$cross_checks_references[$vq->id] = $vq->cross_check;
-				    		} else if($vq->cross_check == 'gender') {
-				    			$cc = $vq->cross_check;
-				    			$cross_checks[$vq->id] = $this->user->$cc == 'm' ? 1 : 2;
-				    			$cross_checks_references[$vq->id] = 'gender';
-				    		} else if($vq->cross_check == 'birthyear') {
-				    			$cc = $vq->cross_check;
-				    			$cross_checks[$vq->id] = $this->user->$cc;
-				    			$cross_checks_references[$vq->id] = 'birthyear';
-				    		} else {
-				    			$cc = $vq->cross_check;
-				    			$i=0;
-				    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
-				    				if($key==$this->user->$cc) {
-				    					$cross_checks[$vq->id] = $i;
-				    					$cross_checks_references[$vq->id] = $cc;
-				    					break;
-				    				}
-				    				$i++;
-				    			}
-				    		}
+					    		if (is_numeric($vq->cross_check)) {
+					    			$va = VoxAnswer::where('user_id',$this->user->id )->where('vox_id', 11)->where('question_id', $vq->cross_check )->first();
+					    			$cross_checks[$vq->id] = $va ? $va->answer : null;
+					    			$cross_checks_references[$vq->id] = $vq->cross_check;
+					    		} else if($vq->cross_check == 'gender') {
+					    			$cc = $vq->cross_check;
+					    			$cross_checks[$vq->id] = $this->user->$cc == 'm' ? 1 : 2;
+					    			$cross_checks_references[$vq->id] = 'gender';
+					    		} else if($vq->cross_check == 'birthyear') {
+					    			$cc = $vq->cross_check;
+					    			$cross_checks[$vq->id] = $this->user->$cc;
+					    			$cross_checks_references[$vq->id] = 'birthyear';
+					    		} else {
+					    			$cc = $vq->cross_check;
+					    			$i=0;
+					    			foreach (config('vox.details_fields.'.$cc.'.values') as $key => $value) {
+					    				if($key==$this->user->$cc) {
+					    					$cross_checks[$vq->id] = $i;
+					    					$cross_checks_references[$vq->id] = $cc;
+					    					break;
+					    				}
+					    				$i++;
+					    			}
+					    		}
+					    	}
 				    	}
-			    	}
 
-			    	$slist = VoxScale::get();
-					$scales = [];
-					foreach ($slist as $sitem) {
-						$scales[$sitem->id] = $sitem;
+				    	$slist = VoxScale::get();
+						$scales = [];
+						foreach ($slist as $sitem) {
+							$scales[$sitem->id] = $sitem;
+						}
+
+				    	$array['cross_checks'] = $cross_checks;
+				    	$array['cross_checks_references'] = $cross_checks_references;
+				    	$array['scales'] = $scales;
+
+				    	return response()->view('vox.template-parts.vox-question', $array, 200)->header('X-Frame-Options', 'DENY');
 					}
-
-			    	$array['cross_checks'] = $cross_checks;
-			    	$array['cross_checks_references'] = $cross_checks_references;
-			    	$array['scales'] = $scales;
-
-					return $this->ShowVoxView('template-parts.vox-question', $array);
 				}
 			}
-		}
 
-		return '';
+			return '';
+		}
 	}
 }

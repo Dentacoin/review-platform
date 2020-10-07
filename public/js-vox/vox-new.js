@@ -58,6 +58,7 @@ $(document).ready(function(){
                 _token: token ? token : $('input[name="_token"]').val(),
             },
             success: function( data ) {
+                $('.question-group').find('.loader').remove();
                 if(data) {
                     if(data.indexOf("skip-dvq") >= 0) {
                         var next_q_id = data.split(':')[1];
@@ -499,7 +500,6 @@ $(document).ready(function(){
 
                             vox.answered_without_skip_count++;
                             vox.current++;
-                            $('.question-group').find('.loader').remove();
                             VoxTest.handleNextQuestion();
                             getNextQuestion(data.vox_id, data.question_id, data.token);
                         }
