@@ -1517,13 +1517,18 @@ class VoxController extends FrontController
 		if(!empty($this->user)) {
 
 			$vox_id = request('vox_id');
+			$vox = Vox::where('id', $vox_id)->where('type', 'normal')->first();
+			$welcome_vox = Vox::where('type', 'home')->first();
 			$question_id = request('question_id');
+			if(!empty($question_id)) {
+				$cur_question = VoxQuestion::find($question_id);
+			}
 
 			$admin_ids = Admin::getAdminProfileIds();
 			$isAdmin = Auth::guard('admin')->user() || (!empty($this->user) && in_array($this->user->id, $admin_ids));
 			$testmode = session('testmode') && $isAdmin;
 
-			if(!empty($vox_id) && (!empty(Vox::where('id', $vox_id)->where('type', 'normal')->first()) || !empty($this->admin) )) {
+			if(!empty($vox_id) && (!empty($vox) || !empty($this->admin) )) {
 
 				$array = [];
 				$not_bot = $testmode || session('not_not-'.$vox_id);
@@ -1531,19 +1536,18 @@ class VoxController extends FrontController
 
 				if (!$this->user->madeTest($vox->id)) {
 
-					if (!$this->user->madeTest(Vox::where('type', 'home')->first()->id)) {
+					if (!$this->user->madeTest($welcome_vox->id)) {
 						// welcome qs
 						$array['welcome_vox'] = true;
 
 						if(!empty($question_id)) {
 							//question order
 							//proverki za triguri, skipvane
-							$question = VoxQuestion::find($question_id);
-							$next_question = VoxQuestion::where('vox_id', $question->vox_id)->orderBy('order', 'asc')->where('order', '>', $question->order)->first();
+							$next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
 							$array['question'] = $next_question;
 						} else {
 							//first question
-							$question = VoxQuestion::where('vox_id', Vox::where('type', 'home')->first()->id)->orderBy('order', 'ASC')->first();
+							$question = VoxQuestion::where('vox_id', $welcome_vox)->orderBy('order', 'ASC')->first();
 							$array['question'] = $question;
 						}
 					} else if(empty($this->user->birthyear)) {
@@ -1569,13 +1573,12 @@ class VoxController extends FrontController
 
 					if(empty($array)) {
 
-						if(!empty($question_id) && is_numeric($question_id) && VoxQuestion::find($question_id)->vox_id == 11) {
+						if(!empty($question_id) && is_numeric($question_id) && $cur_question->vox_id == 11) {
 							$question_id=null;
 						}
 
 						if(!empty($question_id) && is_numeric($question_id)) {
-							$question = VoxQuestion::find($question_id);
-							$next_question = VoxQuestion::where('vox_id', $question->vox_id)->orderBy('order', 'asc')->where('order', '>', $question->order)->first();
+							$next_question = VoxQuestion::where('vox_id', $cur_question->vox_id)->orderBy('order', 'asc')->where('order', '>', $cur_question->order)->first();
 
 							if(!empty($next_question->question_trigger)) {
 
@@ -1716,10 +1719,7 @@ class VoxController extends FrontController
 
 							$array['question'] = $next_question;
 						} else {
-							$list = VoxAnswer::where('vox_id', $vox->id)
-							->where('user_id', $this->user->id)
-							->orderBy('id', 'ASC')
-							->get();
+							$list = VoxAnswer::where('vox_id', $vox->id)->where('user_id', $this->user->id)->get();
 							$answered = [];
 
 							foreach ($list as $l) {
@@ -1733,13 +1733,15 @@ class VoxController extends FrontController
 								}
 							}
 
-							$question = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC')->first();
+							$questions_list = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'ASC');
+
+							$question = $questions_list->first();
 							if(!isset($answered[$question->id])) {
 								//first question
 								$array['question'] = $question;
 							} else {
 								//first unanswered question
-								$array['question'] = VoxQuestion::where('vox_id', $vox_id)->orderBy('order', 'asc')->where('order','>', VoxQuestion::find(array_key_last($answered))->order)->first();
+								$array['question'] = $questions_list->where('order','>', VoxQuestion::find(array_key_last($answered))->order)->first();
 							}
 						}
 					}
