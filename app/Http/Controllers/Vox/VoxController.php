@@ -1563,7 +1563,7 @@ class VoxController extends FrontController
 								$array['question'] = $next_question;
 							} else {
 								//first question
-								$question = VoxQuestion::where('vox_id', $welcome_vox)->orderBy('order', 'ASC')->first();
+								$question = VoxQuestion::where('vox_id', $welcome_vox->id)->orderBy('order', 'ASC')->first();
 								$array['question'] = $question;
 							}
 						} else if(empty($this->user->birthyear)) {
@@ -1586,7 +1586,6 @@ class VoxController extends FrontController
 								}
 							}
 						}
-
 						if(empty($array)) {
 
 							if(!empty($question_id) && is_numeric($question_id) && $cur_question->vox_id == 11) {
