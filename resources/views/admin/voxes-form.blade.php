@@ -10,6 +10,12 @@
 @if(!empty($error))
    <i class="fa fa-exclamation-triangle err-vox" data-toggle="modal" data-target="#errorsModal"></i>
 @endif
+
+@if(!empty($item) && !empty($questions_order_bug))
+    <div class="alert alert-danger m-b-15">
+        Please, reorder the questions. There are duplicate or missing order numbers.
+    </div>
+@endif
 <!-- end page-header -->
 
 <div class="row">

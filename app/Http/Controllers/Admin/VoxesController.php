@@ -356,6 +356,21 @@ class VoxesController extends AdminController
                 }
             }
 
+            $questions_order_bug = false;
+
+            //there are duplicated questions order
+
+            if($item->questions->isNotEmpty()) {
+
+                $count_qs = $item->questions->count();
+
+                for ($i=1; $i <= $count_qs ; $i++) { 
+                    if(empty(VoxQuestion::where('vox_id', $item->id)->where('order', $i)->first())) {
+                        $questions_order_bug = true;
+                    }
+                }
+            }
+
             return $this->showView('voxes-form', array(
                 'types' => $this->types,
                 'scales' => VoxScale::orderBy('id', 'DESC')->get()->pluck('title', 'id')->toArray(),
@@ -374,6 +389,7 @@ class VoxesController extends AdminController
                 'q_trigger_multiple_answ' => $q_trigger_multiple_answ,
                 'error_arr' => $error_arr,
                 'error' => $error,
+                'questions_order_bug' => $questions_order_bug,
             ));
         } else {
             return redirect('cms/'.$this->current_page);

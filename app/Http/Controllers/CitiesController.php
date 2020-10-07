@@ -149,8 +149,8 @@ class CitiesController extends BaseController
 	}
 
 	public function getQuestions() {
-        $dcn_price = file_get_contents('/tmp/dcn_price');
-        $dcn_change = file_get_contents('/tmp/dcn_change');
+        $dcn_price = @file_get_contents('/tmp/dcn_price');
+        $dcn_change = @file_get_contents('/tmp/dcn_change');
 
 		$ret = [
 			'question_count' => number_format( VoxAnswer::getCount() , 0, '', ' '),

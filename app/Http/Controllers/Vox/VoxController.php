@@ -1568,6 +1568,7 @@ class VoxController extends FrontController
 					}
 
 					if(empty($array)) {
+
 						if(!empty($question_id) && is_numeric($question_id) && VoxQuestion::find($question_id)->vox_id == 11) {
 							$question_id=null;
 						}
@@ -1703,11 +1704,11 @@ class VoxController extends FrontController
 
 				                    if( $next_question->trigger_type == 'or' ) { // ANY of the conditions should be met (A or B or C)
 				                        if( !in_array(true, $triggerSuccess) ) {
-				                            return 'skip:'.$next_question->id;
+				                            return 'skip-dvq:'.$next_question->id;
 				                        }
 				                    }  else { //ALL the conditions should be met (A and B and C)
 				                        if( in_array(false, $triggerSuccess) ) {
-				                            return 'skip:'.$next_question->id;
+				                            return 'skip-dvq:'.$next_question->id;
 				                        }
 				                    }
 				                }
@@ -1720,6 +1721,7 @@ class VoxController extends FrontController
 							->orderBy('id', 'ASC')
 							->get();
 							$answered = [];
+
 							foreach ($list as $l) {
 								if(!isset( $answered[$l->question_id] )) {
 									$answered[$l->question_id] = $l->answer; //3

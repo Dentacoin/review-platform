@@ -542,7 +542,7 @@ class FrontController extends BaseController {
     public function PrepareViewData($page, &$params, $text_domain) {
 
         $params['dcn_price'] = file_get_contents('/tmp/dcn_price');
-        $params['dcn_change'] = file_get_contents('/tmp/dcn_change');
+        $params['dcn_change'] = @file_get_contents('/tmp/dcn_change');
         $params['welcome_test'] = !empty($this->welcome_test) ? $this->welcome_test : null;
         $params['country_id'] = $this->country_id;
         $params['city_id'] = $this->city_id;
@@ -587,6 +587,6 @@ class FrontController extends BaseController {
             ]);
         }
 
-        $params['cache_version'] = '2020100606';
+        $params['cache_version'] = '20201007';
     }
 }

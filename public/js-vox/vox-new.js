@@ -59,7 +59,7 @@ $(document).ready(function(){
             },
             success: function( data ) {
                 if(data) {
-                    if(data.indexOf("skip") >= 0) {
+                    if(data.indexOf("skip-dvq") >= 0) {
                         var next_q_id = data.split(':')[1];
                         $('#loader-survey').show();
                         $('.question-group').hide();
