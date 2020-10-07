@@ -2347,4 +2347,8 @@ Link to user\'s profile in CMS: https://reviews.dentacoin.com/cms/users/edit/'.$
 
         return $level_name;
     }
+
+    public function getRewardForSurvey($vox_id) {
+        return DcnReward::where('user_id', $this->id)->where('type', 'survey')->where('platform', 'vox')->where('reference_id', $vox_id)->first();
+    }
 }
