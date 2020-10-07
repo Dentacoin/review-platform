@@ -67,49 +67,8 @@ class VoxesController extends AdminController
         $error = false;
         $error_arr = [];
 
-        $voxes_stats = Vox::where('has_stats', 1)->where('type', '!=', 'hidden')->get();
-
-        foreach ($voxes_stats as $voxes_stat) {
-
-            if(empty($voxes_stat->stats_description)) {
-                $error_arr[] = [
-                    'error' => 'Missing stats description',
-                    'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$voxes_stat->id,
-                ];
-
-                $error = true;
-            }
-
-            if($voxes_stat->stats_questions->isEmpty()) {
-                $error_arr[] = [
-                    'error' => 'Missing stats questions',
-                    'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$voxes_stat->id,
-                ];
-
-                $error = true;
-            } else {
-
-                foreach ($voxes_stat->stats_questions as $stat) {
-                    if(empty($stat->stats_title_question) && empty($stat->stats_title) && empty($stat->stats_title_question)) {
-                        $error_arr[] = [
-                            'error' => 'Missing stats question title',
-                            'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$voxes_stat->id.'/question/'.$stat->id.'/',
-                        ];
-                        $error = true;
-                    }
-                    if(empty($stat->stats_fields) && $stat->used_for_stats != 'dependency') {
-                        $error_arr[] = [
-                            'error' => 'Missing stats question demographics',
-                            'link' => 'https://dentavox.dentacoin.com/cms/vox/edit/'.$voxes_stat->id.'/question/'.$stat->id.'/',
-                        ];
-                        $error = true;
-                    }
-                }
-            }
-        }
-
     	return $this->showView('voxes', array(
-            'voxes' => Vox::with('translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
+            'voxes' => Vox::with('translations')->with('questions')->with('questions.translations')->with('categories.category')->with('categories.category.translations')->orderBy('sort_order', 'ASC')->get(),
             'active_voxes_count' => Vox::where('type', '!=', 'hidden')->count(),
             'hidden_voxes_count' => Vox::where('type', 'hidden')->count(),
             'error_arr' => $error_arr,
@@ -365,7 +324,7 @@ class VoxesController extends AdminController
                 $count_qs = $item->questions->count();
 
                 for ($i=1; $i <= $count_qs ; $i++) { 
-                    if(empty(VoxQuestion::where('vox_id', $item->id)->where('order', $i)->first())) {
+                    if(empty(VoxQuestion::with('translations')->where('vox_id', $item->id)->where('order', $i)->first())) {
                         $questions_order_bug = true;
                     }
                 }

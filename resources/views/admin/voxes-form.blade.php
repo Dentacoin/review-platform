@@ -330,7 +330,7 @@
                                     <label class="col-md-1 control-label">Countries</label>
                                     <div class="col-md-3">
                                         <select class="form-control select2" name="countries_ids[]" multiple>
-                                            @foreach( \App\Models\Country::get() as $country )
+                                            @foreach( \App\Models\Country::with('translations')->get() as $country )
                                                 <option value="{{ $country->id }}" {!! !empty($item) && !empty($item->countries_ids) && in_array($country->id, $item->countries_ids) ? 'selected="selected"' : null !!}>{{ $country->name }}</option>
                                             @endforeach
                                         </select>

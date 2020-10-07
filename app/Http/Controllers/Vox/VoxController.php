@@ -1803,6 +1803,8 @@ class VoxController extends FrontController
 				    	$array['cross_checks'] = $cross_checks;
 				    	$array['cross_checks_references'] = $cross_checks_references;
 				    	$array['scales'] = $scales;
+				    	$array['user'] = $this->user;
+				    	$array['country_id'] = $this->country_id;
 
 				    	return response()->view('vox.template-parts.vox-question', $array, 200)->header('X-Frame-Options', 'DENY');
 					}
