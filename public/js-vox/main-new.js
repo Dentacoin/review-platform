@@ -273,17 +273,6 @@ $(document).ready(function(){
 	}
 
 	showPopup = function(id, e) {
-		if(id=='poll-popup') {
-			$('.poll-bubble').hide();
-
-			if ($('#poll-popup').length && $('#poll-popup .poll-answers').hasClass('shuffle-answers')) {
-		        var divs = $('#poll-popup .poll-answers').children().not(".dont-shuffle");
-
-		        while (divs.length) {
-		            $('#poll-popup .poll-answers').prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
-		        }
-		    }
-		}
 
 		if(id=='download-stats-popup') {
 			$('.popup:not(.download-stats-popup)').remove();
@@ -306,6 +295,22 @@ $(document).ready(function(){
 	                	$('body').addClass('popup-visible');
 	                	$('.loader-mask').hide();
 	                	handleActivePopupFunctions();
+
+	                	if($('.popup.active').attr('id') == 'poll-popup') {
+
+	                		$('.poll-bubble').hide();
+
+							if ($('#poll-popup').length && $('#poll-popup .poll-answers').hasClass('shuffle-answers')) {
+						        var divs = $('#poll-popup .poll-answers').children().not(".dont-shuffle");
+
+						        while (divs.length) {
+						            $('#poll-popup .poll-answers').prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+						        }
+						    }
+
+	                		tooltipsFunction();
+		                	pollsFunction();
+	                	}
 	                }
 	            },
 	            error: function(data) {
@@ -313,7 +318,6 @@ $(document).ready(function(){
 	            }
 	        });
 		}
-
 	}
 
 	var handleActivePopupFunctions =  function() {
@@ -486,8 +490,6 @@ $(document).ready(function(){
 		} );
 
 		$('.popup .closer').click( function() {
-			console.log('dsfdf');
-
 			if($(this).hasClass('inactive')) {
 				return;
 			}
@@ -872,7 +874,6 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(ret) {
                 if(ret.success) {
-                	console.log('fff');
                 	showPopup('poll-popup');
 
                 	setTimeout( function() {
@@ -951,7 +952,6 @@ $(document).ready(function(){
 	            $(this).attr('action'), 
 	            $(this).serialize() , 
 	            function( data ) {
-	                	console.log(data);
 	                if(data.success) {
 
 	                	pollStats(data.chart);

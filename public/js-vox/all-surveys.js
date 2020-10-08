@@ -102,8 +102,6 @@ $(document).ready(function(){
 	}
 
     if($('#to-append-public').length) {
-        console.log('dsfdf');
-
         $(window).scroll( function() {
             if (!$('#to-append-public').hasClass('appended')) {
                 $.ajax({
