@@ -70,9 +70,9 @@ class FrontController extends BaseController {
         date_default_timezone_set("Europe/Sofia");
 
 
-        if(Request::getHost() == 'dentavox.dentacoin.com' || Request::getHost() == 'vox.dentacoin.com' ) {
-            exit;
-        }
+        // if(Request::getHost() == 'dentavox.dentacoin.com' || Request::getHost() == 'vox.dentacoin.com' ) {
+        //     exit;
+        // }
 
 
         $this->request = $request;
