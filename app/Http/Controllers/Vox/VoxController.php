@@ -82,7 +82,8 @@ class VoxController extends FrontController
 			$featured_voxes = $featured_voxes->concat($swiper_voxes);
 		}
 		return $this->ShowVoxView('template-parts.recent-surveys-vox-public', array(
-        	'voxes' => $featured_voxes
+        	'voxes' => $featured_voxes,
+        	'taken' => $this->user->filledVoxes(),
         ));	
 	}
 
