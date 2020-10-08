@@ -26,7 +26,7 @@
 					</div>
 		      		<div class="slider-inner">
 			    		<div class="slide-padding">
-			      			<a href="javascript:;" class="cover" style="background-image: url('{{ $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title]) }}'>
+			      			<a href="javascript:;" class="cover" style="background-image: url('{{ !empty($phone) ? $vox->getImageUrl(true) : $vox->getImageUrl() }}');" alt='{{ trans("vox.page.stats.title-single", ["name" => $vox->title]) }}'>
   								<img src="{{ $vox->getImageUrl(true) }}" alt="{{ $vox->title }} - Dental Survey" style="display: none !important;" width="520" height="352"> 
 			      			</a>							
 							<div class="vox-header clearfix">
