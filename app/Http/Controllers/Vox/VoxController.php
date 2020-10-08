@@ -1527,6 +1527,7 @@ class VoxController extends FrontController
 
 
 	public function getNextQuestion() {
+		exit;
 
 		if(Request::isMethod('post')) {
 			if(!empty($this->user)) {
