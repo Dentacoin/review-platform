@@ -69,6 +69,7 @@ class FrontController extends BaseController {
 
         date_default_timezone_set("Europe/Sofia");
 
+        exit;
         $this->request = $request;
         $path = explode('/', Request::path());
         $this->current_page = isset($path[1]) ? $path[1] : null;
