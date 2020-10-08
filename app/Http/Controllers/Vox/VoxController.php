@@ -87,8 +87,6 @@ class VoxController extends FrontController
 	}
 
 	public function dovox($locale=null, $vox) {
-
-		exit;
         ini_set('max_execution_time', 0);
         set_time_limit(0);
         ini_set('memory_limit','1024M');
@@ -1527,7 +1525,6 @@ class VoxController extends FrontController
 
 
 	public function getNextQuestion() {
-		exit;
 
 		if(Request::isMethod('post')) {
 			if(!empty($this->user)) {
