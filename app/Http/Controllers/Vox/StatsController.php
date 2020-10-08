@@ -112,11 +112,9 @@ class StatsController extends FrontController
             'social_description' => $seos->social_description,
             'js' => [
                 'stats.js',
-                'select2.min.js'
             ],
             'css' => [
                 'vox-stats.css',
-                'select2.min.css',
             ],
         ));
     }

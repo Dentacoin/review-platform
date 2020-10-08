@@ -191,7 +191,7 @@ $(document).ready(function(){
 	        }
 	    } );
 
-	    if ($('.select2').length) {
+	    if ($('.select2').length && typeof select2 !== 'undefined') {
 	        $(".select2").select2({
 	            multiple: true,
 	            placeholder: 'Select Country/ies',
@@ -366,6 +366,16 @@ $(document).ready(function(){
 				                	}
 	                			}
 	                		}
+	                	} else if($('.popup.active').attr('id') == 'request-survey-popup') {
+	                		$('head').append('<link rel="stylesheet" type="text/css" href="'+window.location.origin+'/css/select2.min.css">');
+	                		$.getScript(window.location.origin+'/js-vox/select2.min.js', function() {
+	                			if ($('.select2').length) {
+							        $(".select2").select2({
+							            multiple: true,
+							            placeholder: 'Select Country/ies',
+							        });
+							    }
+	                		});
 	                	}
 	                }
 	            },
