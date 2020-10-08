@@ -122,11 +122,9 @@ class VoxController extends FrontController
 				'js' => [
 					'all-surveys.js',
 					'vox-new.js',
-					'swiper.min.js'
 				],
 				'css' => [
 					'vox-public-vox.css',
-					'swiper.min.css'
 				],
 	            'canonical' => $vox->getLink(),
 	            'social_image' => $vox->getSocialImageUrl('survey'),
