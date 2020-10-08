@@ -3128,14 +3128,15 @@ body.dark-mode {
   body.dark-mode .page-stats .stats-list .stats-holder .vox-stat,
   body.dark-mode header {
     background-color: #242526; }
+  body.dark-mode .taken-survey-wrapper .taken-survey-description p .coins-test {
+    color: #46afda; }
+  body.dark-mode .questions .question-group .answers.answers-draggable .answer-rank select,
+  body.dark-mode .questions .question-group .answers.answers-draggable .answer-rank .rank-answer,
   body.dark-mode .taken-survey-wrapper .survey-time p,
   body.dark-mode .taken-survey-wrapper .survey-time p span,
   body.dark-mode .taken-survey-wrapper .section-recent-surveys .swiper-slide .vox-header .survey-title,
   body.dark-mode .taken-survey-wrapper .taken-title,
-  body.dark-mode .dentacoin-login-gateway-container * {
-    color: black; }
-  body.dark-mode .taken-survey-wrapper .taken-survey-description p .coins-test {
-    color: #46afda; }
+  body.dark-mode .dentacoin-login-gateway-container *,
   body.dark-mode .new-style-swiper .survey-time p,
   body.dark-mode .new-style-swiper .survey-time span,
   body.dark-mode .new-style-swiper .swiper-slide .vox-header .survey-title,

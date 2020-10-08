@@ -1532,9 +1532,6 @@ class VoxController extends FrontController
 			if(!empty($this->user)) {
 
 				$vox_id = request('vox_id');
-				if(!empty($vox_id)) {
-					$vox = Vox::where('id', $vox_id)->where('type', 'normal')->first();
-				}			
 				$welcome_vox = Vox::where('type', 'home')->first();
 				$question_id = request('question_id');
 				if(!empty($question_id)) {
@@ -1544,6 +1541,15 @@ class VoxController extends FrontController
 				$admin_ids = Admin::getAdminProfileIds();
 				$isAdmin = Auth::guard('admin')->user() || (!empty($this->user) && in_array($this->user->id, $admin_ids));
 				$testmode = session('testmode') && $isAdmin;
+
+				if(!empty($vox_id)) {
+					$vox = Vox::where('id', $vox_id);
+
+					if(empty($testmode)) {
+						$vox = $vox->where('type', 'normal');
+					}
+					$vox = $vox->first();
+				}			
 
 				if(!empty($vox_id) && (!empty($vox) || !empty($this->admin) )) {
 

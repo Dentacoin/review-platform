@@ -4348,18 +4348,17 @@ body.dark-mode {
 		background-color: #242526;
 	}
 
-	.taken-survey-wrapper .survey-time p,
-	.taken-survey-wrapper .survey-time p span,
-	.taken-survey-wrapper .section-recent-surveys .swiper-slide .vox-header .survey-title,
-	.taken-survey-wrapper .taken-title,
-	.dentacoin-login-gateway-container * {
-		color: black;
-	}
-
 	.taken-survey-wrapper .taken-survey-description p .coins-test {
     	color: #46afda;
     }
 
+    .questions .question-group .answers.answers-draggable .answer-rank select,
+	.questions .question-group .answers.answers-draggable .answer-rank .rank-answer,
+	.taken-survey-wrapper .survey-time p,
+	.taken-survey-wrapper .survey-time p span,
+	.taken-survey-wrapper .section-recent-surveys .swiper-slide .vox-header .survey-title,
+	.taken-survey-wrapper .taken-title,
+	.dentacoin-login-gateway-container *,
 	.new-style-swiper .survey-time p,
 	.new-style-swiper .survey-time span,
 	.new-style-swiper .swiper-slide .vox-header .survey-title,
