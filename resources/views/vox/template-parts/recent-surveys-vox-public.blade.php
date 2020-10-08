@@ -35,11 +35,9 @@
 									</div>
 									<div class="col right">
 										<div class="btns">
-											@if(empty($user) || (!empty($user) && !in_array($vox->id, $taken)) )
-												<a class="opinion blue-button" href="{{ $vox->getLink() }}">
-													{{ trans('vox.common.take-the-test') }}
-												</a>
-											@endif
+											<a class="opinion blue-button" href="{{ $vox->getLink() }}">
+												{{ trans('vox.common.take-the-test') }}
+											</a>
 										</div>
 									</div>
 								</div>

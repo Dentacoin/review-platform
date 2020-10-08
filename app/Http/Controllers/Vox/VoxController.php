@@ -83,7 +83,6 @@ class VoxController extends FrontController
 		}
 		return $this->ShowVoxView('template-parts.recent-surveys-vox-public', array(
         	'voxes' => $featured_voxes,
-        	'taken' => !empty($this->user) ? $this->user->filledVoxes() : [],
         ));	
 	}
 

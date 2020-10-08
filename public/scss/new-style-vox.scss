@@ -452,6 +452,74 @@ select:focus > option:checked {
 	}
 }
 
+.black-button {
+	background-color: #090909;
+    color: #fbf9f9;
+    font-weight: 500;
+    font-size: 23px;
+    width: 320px;
+    height: 45px;
+    display: inline-block;
+    line-height: 45px;
+    text-transform: uppercase;
+    padding-left: 20px;
+    border-radius: 10px;
+    position: relative;
+    text-decoration: none;
+    text-align: left;
+    transition: all 0.3s ease;
+
+    &:hover {
+    	color: #fbf9f9;
+    	transition: all 0.3s ease;
+
+    	&:after {
+    		right: 37px;
+			transition: all 0.3s ease;
+    	}
+    }
+
+    &:after {
+    	content: "";
+    	background-image: url(../new-vox-img/right-arrow.png);
+		position: absolute;
+		right: 17px;
+		top: 9px;
+		width: 14px;
+		height: 24px;
+		background-size: cover;
+		transition: all 0.3s ease;
+    }
+
+
+	@media #{$phone} {
+		top: -57px;
+    	width: auto;
+	    margin: 0px auto;
+    	border-radius: 5px;
+    	font-size: 18px;
+    	padding: 0px 54px 0px 25px;
+    	border-radius: 8px;
+    	height: 44px;
+    	line-height: 45px;
+    
+    	&:after {
+		    background-image: url(../new-vox-img/right-arrow.png);
+		    width: 12px;
+		    height: 23px;
+		    right: 15px;
+		    top: 10px;
+    	}
+
+    	&:hover {
+
+	    	&:after {
+	    		right: 13px;
+	    	}
+	    }
+    }
+}
+
 .modern-field {
 	margin-bottom: 25px;
 	position: relative;
@@ -4247,4 +4315,97 @@ svg:not(:root) {
     		font-size: 14px !important;
     	}
     }
+}
+
+body.dark-mode {
+	background-color: #18191a;
+
+	.popup.daily-poll .popup-inner .content {
+		background-color: #18191a;
+	}
+
+	.search-survey input {
+		background-color: transparent;
+		color: white;
+	}
+
+	.question-done .taken-survey-wrapper .taken-survey-description p,
+	.questions .demographic-questionnaire-description, .questions .questionnaire-description,
+	.questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list .answer-radio,
+	.questions .question-group .answers select,
+	.questions .question-group .answers .answer-radio,
+	.questions .question-group .answers .answer-checkbox,
+	.questions .question-group .answers .answer,
+	.questions .question-group .question,
+	.stats-list .stats-holder .vox-stat .stats-info p,
+	.stats-description,
+	div, span, h1, h2, h3, h4, h5, h6, p, a, b, u, i, ol, ul, li, form, label, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+		color: #e4e6eb;
+	}
+
+	.page-stats .stats-list .stats-holder .vox-stat,
+	header {
+		background-color: #242526;
+	}
+
+	.taken-survey-wrapper .survey-time p,
+	.taken-survey-wrapper .survey-time p span,
+	.taken-survey-wrapper .section-recent-surveys .swiper-slide .vox-header .survey-title,
+	.taken-survey-wrapper .taken-title,
+	.dentacoin-login-gateway-container * {
+		color: black;
+	}
+
+	.taken-survey-wrapper .taken-survey-description p .coins-test {
+    	color: #46afda;
+    }
+
+	.new-style-swiper .survey-time p,
+	.new-style-swiper .survey-time span,
+	.new-style-swiper .swiper-slide .vox-header .survey-title,
+	.full .first-absolute h1,
+	.full .first-absolute h2,
+	.poll-bubble .white-bubble .poll-reward,
+	.poll-bubble .white-bubble h4,
+	.section-vox-not-login .swiper-slide .wing p {
+		color: black;
+	}
+
+	.footer-expander footer .footer-menu a {
+    	color: #38a2e5;
+    }
+
+    .footer-expander footer .footer-menu a {
+	    border-right: 1px solid white;
+	}
+
+	.popup {
+	    background-color: rgba(0, 0, 0, 0.75);
+	}
+
+	.popup.daily-poll .popup-inner .content .poll-answers .poll-answer {
+		color: white;
+	}
+
+	.stats:not(.st-download) .stat .contents .graphs .main-chart {
+	    background: #6d6d6d;
+	}
+	.stats:not(.st-download) .stat .contents .graphs {
+	    background: #5d5d5d;
+	}
+	.stats:not(.st-download) .stat .title {
+	    background-color: #777777;
+	}
+
+	.popup .wrapper {
+	    background: #585858;
+	}
+
+	.questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 {
+		color: black;
+	}
+
+	.tooltip-window {
+		color: black;
+	}
 }

@@ -362,6 +362,58 @@ select:focus > option:checked {
       width: 100%;
       display: block; } }
 
+.black-button {
+  background-color: #090909;
+  color: #fbf9f9;
+  font-weight: 500;
+  font-size: 23px;
+  width: 320px;
+  height: 45px;
+  display: inline-block;
+  line-height: 45px;
+  text-transform: uppercase;
+  padding-left: 20px;
+  border-radius: 10px;
+  position: relative;
+  text-decoration: none;
+  text-align: left;
+  transition: all 0.3s ease; }
+  .black-button:hover {
+    color: #fbf9f9;
+    transition: all 0.3s ease; }
+    .black-button:hover:after {
+      right: 37px;
+      transition: all 0.3s ease; }
+  .black-button:after {
+    content: "";
+    background-image: url(../new-vox-img/right-arrow.png);
+    position: absolute;
+    right: 17px;
+    top: 9px;
+    width: 14px;
+    height: 24px;
+    background-size: cover;
+    transition: all 0.3s ease; }
+  @media screen and (max-width: 768px) {
+    .black-button {
+      top: -57px;
+      width: auto;
+      margin: 0px auto;
+      border-radius: 5px;
+      font-size: 18px;
+      padding: 0px 54px 0px 25px;
+      border-radius: 8px;
+      height: 44px;
+      line-height: 45px; }
+      .black-button:after {
+        background-image: url(../new-vox-img/right-arrow.png);
+        width: 12px;
+        height: 23px;
+        right: 15px;
+        top: 10px; }
+      .black-button:hover:after {
+        right: 13px; } }
+
 .modern-field {
   margin-bottom: 25px;
   position: relative; }
@@ -3053,3 +3105,63 @@ svg:not(:root) {
   margin-top: 5px !important; }
 .dcn-privacy-policy-cookie .tooltip-init .tooltip-label {
   font-size: 14px !important; }
+
+body.dark-mode {
+  background-color: #18191a; }
+  body.dark-mode .popup.daily-poll .popup-inner .content {
+    background-color: #18191a; }
+  body.dark-mode .search-survey input {
+    background-color: transparent;
+    color: white; }
+  body.dark-mode .question-done .taken-survey-wrapper .taken-survey-description p,
+  body.dark-mode .questions .demographic-questionnaire-description, body.dark-mode .questions .questionnaire-description,
+  body.dark-mode .questions .question-group .answers .answers-inner .flickity .answer-radios-group .buttons-list .answer-radio,
+  body.dark-mode .questions .question-group .answers select,
+  body.dark-mode .questions .question-group .answers .answer-radio,
+  body.dark-mode .questions .question-group .answers .answer-checkbox,
+  body.dark-mode .questions .question-group .answers .answer,
+  body.dark-mode .questions .question-group .question,
+  body.dark-mode .stats-list .stats-holder .vox-stat .stats-info p,
+  body.dark-mode .stats-description,
+  body.dark-mode div, body.dark-mode span, body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4, body.dark-mode h5, body.dark-mode h6, body.dark-mode p, body.dark-mode a, body.dark-mode b, body.dark-mode u, body.dark-mode i, body.dark-mode ol, body.dark-mode ul, body.dark-mode li, body.dark-mode form, body.dark-mode label, body.dark-mode table, body.dark-mode caption, body.dark-mode tbody, body.dark-mode tfoot, body.dark-mode thead, body.dark-mode tr, body.dark-mode th, body.dark-mode td, body.dark-mode article, body.dark-mode aside, body.dark-mode canvas, body.dark-mode details, body.dark-mode embed, body.dark-mode figure, body.dark-mode figcaption, body.dark-mode footer, body.dark-mode header, body.dark-mode hgroup, body.dark-mode menu, body.dark-mode nav, body.dark-mode output, body.dark-mode ruby, body.dark-mode section, body.dark-mode summary, body.dark-mode time, body.dark-mode mark, body.dark-mode audio, body.dark-mode video {
+    color: #e4e6eb; }
+  body.dark-mode .page-stats .stats-list .stats-holder .vox-stat,
+  body.dark-mode header {
+    background-color: #242526; }
+  body.dark-mode .taken-survey-wrapper .survey-time p,
+  body.dark-mode .taken-survey-wrapper .survey-time p span,
+  body.dark-mode .taken-survey-wrapper .section-recent-surveys .swiper-slide .vox-header .survey-title,
+  body.dark-mode .taken-survey-wrapper .taken-title,
+  body.dark-mode .dentacoin-login-gateway-container * {
+    color: black; }
+  body.dark-mode .taken-survey-wrapper .taken-survey-description p .coins-test {
+    color: #46afda; }
+  body.dark-mode .new-style-swiper .survey-time p,
+  body.dark-mode .new-style-swiper .survey-time span,
+  body.dark-mode .new-style-swiper .swiper-slide .vox-header .survey-title,
+  body.dark-mode .full .first-absolute h1,
+  body.dark-mode .full .first-absolute h2,
+  body.dark-mode .poll-bubble .white-bubble .poll-reward,
+  body.dark-mode .poll-bubble .white-bubble h4,
+  body.dark-mode .section-vox-not-login .swiper-slide .wing p {
+    color: black; }
+  body.dark-mode .footer-expander footer .footer-menu a {
+    color: #38a2e5; }
+  body.dark-mode .footer-expander footer .footer-menu a {
+    border-right: 1px solid white; }
+  body.dark-mode .popup {
+    background-color: rgba(0, 0, 0, 0.75); }
+  body.dark-mode .popup.daily-poll .popup-inner .content .poll-answers .poll-answer {
+    color: white; }
+  body.dark-mode .stats:not(.st-download) .stat .contents .graphs .main-chart {
+    background: #6d6d6d; }
+  body.dark-mode .stats:not(.st-download) .stat .contents .graphs {
+    background: #5d5d5d; }
+  body.dark-mode .stats:not(.st-download) .stat .title {
+    background-color: #777777; }
+  body.dark-mode .popup .wrapper {
+    background: #585858; }
+  body.dark-mode .questions .question-group .answers .answers-inner .flickity .answer-radios-group .answer-question h3 {
+    color: black; }
+  body.dark-mode .tooltip-window {
+    color: black; }
