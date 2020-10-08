@@ -253,6 +253,7 @@ class PollsController extends FrontController
 		        	'answers' => $answers,
 		        	'date_href' => date('d-m-Y',$poll->launched_at->timestamp),
 		        	'randomize_answers' => $randomize_answers,
+		        	'show_poll' => true,
 		        ];
 			}
 		}
@@ -292,6 +293,7 @@ class PollsController extends FrontController
 		        'date_href' => !empty($time) ? date('d-m-Y',$time) : false,
 		        'has_user' => !empty($this->user) ? true : false,
 		        'next_stat' => $next_stat->id,
+		        'show_stats' => true,
 	        ];
 
 		} else {

@@ -272,7 +272,7 @@ $(document).ready(function(){
 		}, 1000 );
 	}
 
-	showPopup = function(id, e) {
+	showPopup = function(id, ret, e) {
 
 		if(id=='download-stats-popup') {
 			$('.popup:not(.download-stats-popup)').remove();
@@ -307,9 +307,84 @@ $(document).ready(function(){
 						            $('#poll-popup .poll-answers').prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
 						        }
 						    }
+	                		if(ret) {
+	                			if(ret.show_poll) {
+		                			$('.loader-mask').remove();
+				                	$('#poll-popup .poll-answers').html('');
+				                	$('#poll-popup').find('.poll-question').html(ret.title);
+				                	$('#poll-popup').find('form').attr('action', ret.url);
 
-	                		tooltipsFunction();
-		                	pollsFunction();
+				                	for (var i in ret.answers ) {
+				                		$('#poll-popup .poll-answers').append('<label class="poll-answer '+(ret.answers[i].indexOf('#') > -1 ? 'dont-shuffle' : '')+'" for="ans-'+(parseInt(i) + 1)+'"><input type="radio" name="answer" class="answer" value="'+(parseInt(i) + 1)+'" id="ans-'+(parseInt(i) + 1)+'">'+(ret.answers[i].indexOf('#') > -1 ? ret.answers[i].substr(1) : ret.answers[i]) +'</label>');
+				                	}
+
+				                    if (ret.randomize_answers) {
+				                        $('#poll-popup .poll-answers').addClass('shuffle-answers');
+				                    } else {
+				                        $('#poll-popup .poll-answers').removeClass('shuffle-answers');
+				                    }
+
+				                    if ($('#poll-popup .poll-answers').hasClass('shuffle-answers')) {
+				                        var divs = $('#poll-popup .poll-answers').children().not(".dont-shuffle");
+
+				                        while (divs.length) {
+				                            $('#poll-popup .poll-answers').prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+				                        }
+				                    }
+
+				                	$('#poll-popup').find('.poll-stats-wrapper h3').html($('#poll-popup').find('.poll-stats-wrapper h3').attr('title'));
+				                	$('#poll-popup').find('.content').hide();
+				                	$('#poll-popup').find('.poll-form-wrapper').show();
+
+				                	tooltipsFunction();
+				                	pollStats();
+				                	pollsFunction();
+
+				                    var q = $('#poll-popup .poll-form-wrapper .poll-question').html();
+
+				                    gtag('event', 'Click', {
+				                        'event_category': 'DailyPollCallendar',
+				                        'event_label': q+'-DailyPollQuestion',
+				                    });
+
+				                    if(ret.date_href) {
+				                		cur_href = window.location.pathname;
+				                   		history.pushState({}, null, '/en/daily-polls/'+ret.date_href);
+				                	}
+	                			} else if(ret.show_stats) {
+	                				pollStats(ret.chart);
+				                	$('#poll-popup').find('.poll-stats-wrapper h3').html($('#poll-popup').find('.poll-stats-wrapper h3').attr('alternative-title'));
+				                    $('#poll-popup').find('.poll-question').html(ret.title);
+				                    $('#poll-popup').find('.poll-stats-wrapper p').remove();
+				                	$('#poll-popup').find('.content').hide();
+				                	$('#poll-popup').find('.poll-stats-wrapper').show();
+				                	pollsFunction();
+				                    pollStatsAnimate();
+				                    $('#poll-popup').find('.poll-stats-wrapper p').remove();
+				                    if (ret.closed) {
+				                        $('<p>'+ret.date+'</p>').insertAfter('.poll-stats-wrapper h3');
+
+				                        if (!ret.has_user) {
+				                            $('.get-reward-buttons').show();
+				                            $('.sign').hide();
+				                        }
+				                    }
+				                    $('.next-poll').removeClass('taken-all');
+				                	if (!ret.next_poll) {
+				                		$('.next-poll').addClass('taken-all');
+				                	} else {
+				                		$('.next-poll').attr('poll-id', ret.next_poll);
+				                	}
+				                	if ($('.next-stat').length) {
+				                		$('.next-stat').attr('stat-id', ret.next_stat);
+				                	}
+				                	
+				                	if(ret.date_href) {
+				                		cur_href = window.location.pathname;
+				                   		history.pushState({}, null, '/en/daily-polls/'+ret.date_href);
+				                	}
+	                			}
+	                		}
 	                	}
 	                }
 	            },
@@ -446,7 +521,7 @@ $(document).ready(function(){
 
 	handlePopups = function(id) {
 		var dataPopupClick = function(e) {
-			showPopup( $(this).attr('data-popup'), e );
+			showPopup( $(this).attr('data-popup'), null, e );
 		}
 		$('[data-popup]').off('click', dataPopupClick).click( dataPopupClick );
 
@@ -814,44 +889,7 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(ret) {
                 if(ret.success) {
-                	showPopup('poll-popup');
-
-                	setTimeout( function() {
-                		$('.loader-mask').remove();
-	                	pollStats(ret.chart);
-	                	$('#poll-popup').find('.poll-stats-wrapper h3').html($('#poll-popup').find('.poll-stats-wrapper h3').attr('alternative-title'));
-	                    $('#poll-popup').find('.poll-question').html(ret.title);
-	                    $('#poll-popup').find('.poll-stats-wrapper p').remove();
-	                	$('#poll-popup').find('.content').hide();
-	                	$('#poll-popup').find('.poll-stats-wrapper').show();
-	                	pollsFunction();
-	                    pollStatsAnimate();
-	                    $('#poll-popup').find('.poll-stats-wrapper p').remove();
-	                    if (ret.closed) {
-	                        $('<p>'+ret.date+'</p>').insertAfter('.poll-stats-wrapper h3');
-
-	                        if (!ret.has_user) {
-	                            $('.get-reward-buttons').show();
-	                            $('.sign').hide();
-	                        }
-	                    }
-	                    $('.next-poll').removeClass('taken-all');
-	                	if (!ret.next_poll) {
-	                		$('.next-poll').addClass('taken-all');
-	                	} else {
-	                		$('.next-poll').attr('poll-id', ret.next_poll);
-	                	}
-	                	if ($('.next-stat').length) {
-	                		$('.next-stat').attr('stat-id', ret.next_stat);
-	                	}
-	                	
-	                	if(ret.date_href) {
-	                		cur_href = window.location.pathname;
-	                   		history.pushState({}, null, '/en/daily-polls/'+ret.date_href);
-	                	}
-
-                	}.bind(ret), 500);
-
+                	showPopup('poll-popup', ret);
                 } else {
     				console.log('error');
                 }
@@ -874,53 +912,7 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(ret) {
                 if(ret.success) {
-                	showPopup('poll-popup');
-
-                	setTimeout( function() {
-                		$('.loader-mask').remove();
-	                	$('#poll-popup .poll-answers').html('');
-	                	$('#poll-popup').find('.poll-question').html(ret.title);
-	                	$('#poll-popup').find('form').attr('action', ret.url);
-
-	                	for (var i in ret.answers ) {
-	                		$('#poll-popup .poll-answers').append('<label class="poll-answer '+(ret.answers[i].indexOf('#') > -1 ? 'dont-shuffle' : '')+'" for="ans-'+(parseInt(i) + 1)+'"><input type="radio" name="answer" class="answer" value="'+(parseInt(i) + 1)+'" id="ans-'+(parseInt(i) + 1)+'">'+(ret.answers[i].indexOf('#') > -1 ? ret.answers[i].substr(1) : ret.answers[i]) +'</label>');
-	                	}
-
-	                    if (ret.randomize_answers) {
-	                        $('#poll-popup .poll-answers').addClass('shuffle-answers');
-	                    } else {
-	                        $('#poll-popup .poll-answers').removeClass('shuffle-answers');
-	                    }
-
-	                    if ($('#poll-popup .poll-answers').hasClass('shuffle-answers')) {
-	                        var divs = $('#poll-popup .poll-answers').children().not(".dont-shuffle");
-
-	                        while (divs.length) {
-	                            $('#poll-popup .poll-answers').prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
-	                        }
-	                    }
-
-	                	$('#poll-popup').find('.poll-stats-wrapper h3').html($('#poll-popup').find('.poll-stats-wrapper h3').attr('title'));
-	                	$('#poll-popup').find('.content').hide();
-	                	$('#poll-popup').find('.poll-form-wrapper').show();
-
-	                	tooltipsFunction();
-	                	pollStats();
-	                	pollsFunction();
-
-	                    var q = $('#poll-popup .poll-form-wrapper .poll-question').html();
-
-	                    gtag('event', 'Click', {
-	                        'event_category': 'DailyPollCallendar',
-	                        'event_label': q+'-DailyPollQuestion',
-	                    });
-
-	                    if(ret.date_href) {
-	                		cur_href = window.location.pathname;
-	                   		history.pushState({}, null, '/en/daily-polls/'+ret.date_href);
-	                	}
-
-	              	}.bind(ret), 500);
+                	showPopup('poll-popup', ret);
                 } else {
     				console.log('error');
                 }
