@@ -105,7 +105,7 @@ $(document).ready(function(){
         $(window).scroll( function() {
             if (!$('#to-append-public').hasClass('appended')) {
                 $.ajax({
-                    type: "GET",
+                    type: "POST",
                     url: lang + '/vox-public-down/',
                     success: function(ret) {
                         if (!$('#to-append-public').hasClass('appended')) {

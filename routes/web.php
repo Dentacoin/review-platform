@@ -403,7 +403,7 @@ $voxRoutes = function () {
 			Route::post('get-next-question', 					'VoxController@getNextQuestion');
 			Route::any('get-started/{id}', 						'VoxController@home_slug');
 			Route::post('start-over', 							'VoxController@start_over');
-			Route::get('vox-public-down', 						'VoxController@vox_public_down');
+			Route::post('vox-public-down', 						'VoxController@vox_public_down');
 
 			Route::any('daily-polls', 							'PollsController@list');
 			Route::any('daily-polls/{date}', 					'PollsController@show_popup_poll');
@@ -428,7 +428,7 @@ $voxRoutes = function () {
 			Route::post('recommend', 							'IndexController@recommend');
 			Route::get('welcome-survey', 						'IndexController@welcome');
 			Route::any('voxes-sort', 							'IndexController@voxesSort');
-			Route::get('index-down', 							'IndexController@index_down');
+			Route::post('index-down', 							'IndexController@index_down');
 			Route::post('voxes-get', 							'IndexController@getVoxes');
 
 			Route::get('page-not-found', 						'NotFoundController@home');

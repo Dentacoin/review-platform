@@ -48,6 +48,7 @@ class VerifyCsrfToken extends BaseVerifier
         '*/profile/invite',
         '*/index-down',
         '*/index-dentist-down',
+        '*/vox-public-down'
         // '*/voxes-get',
     ];
 
