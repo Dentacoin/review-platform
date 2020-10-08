@@ -2108,6 +2108,7 @@ class StatsController extends FrontController
                 mkdir($dir);
             }
 
+
             $pdf_title = strtolower(str_replace(['?', ' ', ':', '&'], ['', '-', '', 'and'] ,$original_title)).'-dentavox'.mb_substr(microtime(true), 0, 10);
 
             $pdf->save($dir.'/'.$pdf_title.'.pdf');
