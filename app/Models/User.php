@@ -182,7 +182,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasOne('App\Models\City', 'id', 'city_id');
     }
     public function country() {
-        return $this->hasOne('App\Models\Country', 'id', 'country_id');
+        return $this->hasOne('App\Models\Country', 'id', 'country_id')->with('translations');
     }
     public function categories() {
         return $this->hasMany('App\Models\UserCategory', 'user_id', 'id');

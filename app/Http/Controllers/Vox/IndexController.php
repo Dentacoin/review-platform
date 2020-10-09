@@ -188,25 +188,9 @@ class IndexController extends FrontController {
 			}
 
 			$seos = PageSeo::find(3);
-
-			$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
-
-			if( $featured_voxes->count() < 9 ) {
-
-				$arr_v = [];
-				foreach ($featured_voxes as $fv) {
-					$arr_v[] = $fv->id;
-				}
-
-				$swiper_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
-
-				$featured_voxes = $featured_voxes->concat($swiper_voxes);
-			}
 			
 			return $this->ShowVoxView('index', array(
-				'voxes' => $featured_voxes,
 				'subtitle' => $subtitle,
-				'taken' => $this->user ? $this->user->filledVoxes() : [],
 				'title' => $title,
 				'users_count' => User::getCount('vox'),
 				'social_image' => $seos->getImageUrl(),
@@ -217,36 +201,34 @@ class IndexController extends FrontController {
 	        	'js' => [
 					'all-surveys.js',
 	        		'index-new.js',
-	        		'swiper.min.js',
 	        	],
 	        	'css' => [
 	        		'vox-index.css',
 	        		'vox-index-home.css',
-	        		'swiper.min.css',
 	        	],
 	        ));
 		}
 	}
 
-	// public function index_down($locale=null) {
-	// 	$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
+	public function index_down($locale=null) {
+		$featured_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->where('featured', true)->orderBy('sort_order', 'ASC')->take(9)->get();
 
-	// 	if( $featured_voxes->count() < 9 ) {
+		if( $featured_voxes->count() < 9 ) {
 
-	// 		$arr_v = [];
-	// 		foreach ($featured_voxes as $fv) {
-	// 			$arr_v[] = $fv->id;
-	// 		}
+			$arr_v = [];
+			foreach ($featured_voxes as $fv) {
+				$arr_v[] = $fv->id;
+			}
 
-	// 		$swiper_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
+			$swiper_voxes = Vox::with('translations')->with('categories.category')->with('categories.category.translations')->where('type', 'normal')->whereNotIn('id', $arr_v)->orderBy('sort_order', 'ASC')->take( 9 - $featured_voxes->count() )->get();
 
-	// 		$featured_voxes = $featured_voxes->concat($swiper_voxes);
-	// 	}
-	// 	return $this->ShowVoxView('index-down', array(
- //        	'voxes' => $featured_voxes,
- //        	'taken' => $this->user ? $this->user->filledVoxes() : [],
- //        ));	
-	// }
+			$featured_voxes = $featured_voxes->concat($swiper_voxes);
+		}
+		return $this->ShowVoxView('index-down', array(
+        	'voxes' => $featured_voxes,
+        	'taken' => $this->user ? $this->user->filledVoxes() : [],
+        ));	
+	}
 	
 	public function surveys_public($locale=null) {
 

@@ -917,6 +917,7 @@ $(document).ready(function(){
 	pollsFunction = function() {
 
 		$('.poll-answer .answer').change( function(e) {
+			console.log('click');
 			$(this).closest('form').submit();
 		});
 
@@ -936,7 +937,7 @@ $(document).ready(function(){
 	            $(this).serialize() , 
 	            function( data ) {
 	                if(data.success) {
-
+	                	console.log('in-form');
 	                	pollStats(data.chart);
 	                	$('#poll-popup').find('.content').hide();
 	                	that.closest('#poll-popup').find('.poll-stats-wrapper').show();
