@@ -288,6 +288,7 @@ $(document).ready(function(){
 						            $('#poll-popup .poll-answers').prepend(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
 						        }
 						    }
+						    pollsFunction();
 	                		if(ret) {
 	                			if(ret.show_poll) {
 		                			$('.loader-mask').remove();
