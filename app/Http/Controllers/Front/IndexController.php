@@ -128,7 +128,7 @@ class IndexController extends FrontController {
 		$city_cookie = json_decode(Cookie::get('dentists_city'), true);
 		//dd($city_cookie);
 
-		$featured = User::where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->whereNull('self_deleted')->orderBy('avg_rating', 'DESC');
+		$featured = User::with('country')->where('is_dentist', 1)->whereIn('status', ['approved','added_approved','admin_imported','added_by_clinic_claimed','added_by_clinic_unclaimed','added_by_dentist_claimed','added_by_dentist_unclaimed'])->whereNull('self_deleted')->orderBy('avg_rating', 'DESC');
 		$homeDentists = collect();
 
 		if (!empty($city_cookie)) {
@@ -159,6 +159,12 @@ class IndexController extends FrontController {
 
 		} else {
 
+			if(!empty($this->city_id)) {
+				$city_id = City::with('translations')->find($this->city_id);
+			} else {
+				$city_id = null;
+			}
+
 			if( !empty($this->user) ) {
 				if( $homeDentists->count() < 12 && $this->user->city_name ) {
 					$addMore = clone $featured;
@@ -178,9 +184,9 @@ class IndexController extends FrontController {
 					$homeDentists = $homeDentists->concat($addMore);
 				}
 
-				if( $homeDentists->count() < 12 && $this->city_id && !empty(City::find($this->city_id)) ) {
+				if( $homeDentists->count() < 12 && $city_id ) {
 					$addMore = clone $featured;
-					$addMore = $addMore->where('city_name', 'LIKE', City::find($this->city_id)->name)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
+					$addMore = $addMore->where('city_name', 'LIKE', $city_id->name)->take( 12 - $homeDentists->count() )->whereNotIn('id', $homeDentists->pluck('id')->toArray())->get();
 					$homeDentists = $homeDentists->concat($addMore);
 				}
 
@@ -192,9 +198,9 @@ class IndexController extends FrontController {
 
 			} else {
 
-				if( $homeDentists->count() < 12 && $this->city_id && !empty(City::find($this->city_id)) ) {
+				if( $homeDentists->count() < 12 && $city_id ) {
 					$addMore = clone $featured;
-					$addMore = $addMore->where('city_name', 'LIKE', City::find($this->city_id)->name)->take( 12 - $homeDentists->count() )->get();
+					$addMore = $addMore->where('city_name', 'LIKE', $city_id->name)->take( 12 - $homeDentists->count() )->get();
 					$homeDentists = $homeDentists->concat($addMore);
 				}
 
