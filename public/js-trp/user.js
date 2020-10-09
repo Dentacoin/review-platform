@@ -13,6 +13,7 @@ var suggestClinicClick;
 var aggregated_reviews;
 var editor;
 var fb_page_error;
+var load_maps;
 
 $(document).ready(function(){
 
@@ -43,8 +44,8 @@ $(document).ready(function(){
             });
 
         } );
-   }
-   handleGalleryRemoved();
+    }
+    handleGalleryRemoved();
 
     showFullReview = function(id, d_id) {
         showPopup('view-review-popup');
@@ -147,6 +148,12 @@ $(document).ready(function(){
 
     $('.tab').click( function() {
         if( $(this).attr('data-tab')=='about' ) {
+
+            if (!load_maps && typeof google === 'undefined' ) {
+                $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCaVeHq_LOhQndssbmw-aDnlMwUG73yCdk&libraries=places&callback=initMap&language=en', function() {
+                    load_maps = true;
+                } );
+            }
 
             if( $('#profile-map').length && !$('#profile-map').attr('inited') ) {
                 $('#profile-map').attr('inited', 'done');

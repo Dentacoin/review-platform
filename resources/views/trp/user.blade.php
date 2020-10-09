@@ -1487,9 +1487,9 @@
 	{!! json_encode($schema, JSON_UNESCAPED_SLASHES) !!}
 </script>
 
-
 <script type="text/javascript">
 	var aggregated_reviews = {!! json_encode($aggregated, JSON_HEX_QUOT) !!};
+	var load_maps = {!! $load_maps !!};
 </script>
 
 @endsection
